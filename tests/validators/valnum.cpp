@@ -128,6 +128,17 @@ void NumValidatorTestCase::TransferUnsigned()
     m_text->ChangeValue("4294967296"); // == ULONG_MAX + 1
     CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
 
+#ifdef wxLongLong_t
+    // N.B. wxIntegerValidator is limited to hold up to a maximum LLONG_MAX
+    // (+9223372036854775807) even for 'unsigned long long' type!
+    wxULongLong_t hugeValue = 0;
+    wxIntegerValidator<unsigned long long> valUnsigned2(&hugeValue);
+    valUnsigned2.SetWindow(m_text);
+
+    m_text->ChangeValue("0");
+    CPPUNIT_ASSERT( valUnsigned2.TransferFromWindow() ); // <-- shouldn't fail, but it does!
+#endif // wxLongLong_t
+
     m_text->Clear();
     CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
 }
