@@ -184,6 +184,14 @@ public:
         max = GetMax();
     }
 
+    virtual bool IsInRange(LongestValueType value) const wxOVERRIDE
+    {
+        wxGCC_WARNING_SUPPRESS(sign-compare)
+        const bool isInRange = GetMin() <= value && value <= GetMax();
+        wxGCC_WARNING_RESTORE(sign-compare)
+        return isInRange;
+    }
+
     virtual bool TransferToWindow()  wxOVERRIDE
     {
         if ( m_value )
@@ -310,10 +318,8 @@ protected:
     void DoSetMax(LongestValueType max) { m_max = max; }
     LongestValueType DoGetMax() const { return m_max; }
 
-    bool IsInRange(LongestValueType value) const
-    {
-        return m_min <= value && value <= m_max;
-    }
+    // Implemented in wxNumValidator<>
+    virtual bool IsInRange(LongestValueType value) const = 0;
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
@@ -414,10 +420,8 @@ protected:
     void DoSetMax(LongestValueType max) { m_max = max; }
     LongestValueType DoGetMax() const { return m_max; }
 
-    bool IsInRange(LongestValueType value) const
-    {
-        return m_min <= value && value <= m_max;
-    }
+    // Implemented in wxNumValidator<>
+    virtual bool IsInRange(LongestValueType value) const = 0;
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
