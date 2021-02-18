@@ -215,10 +215,11 @@ public:
     gboolean drag_data_delete( GtkTreeDragSource *drag_source, GtkTreePath* path );
     gboolean drag_data_get( GtkTreeDragSource *drag_source, GtkTreePath *path,
         GtkSelectionData *selection_data );
-    gboolean drag_data_received( GtkTreeDragDest *drag_dest, GtkTreePath *dest,
-        GtkSelectionData *selection_data );
     gboolean row_drop_possible( GtkTreeDragDest *drag_dest, GtkTreePath *dest_path,
         GtkSelectionData *selection_data );
+
+    // dnd-related signal handlers
+    gboolean OnDragDataReceived(gint x, gint y, GtkSelectionData* selection_data);
 
     // May return null if the item is not present in this tree.
     wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
@@ -970,17 +971,15 @@ wxgtk_tree_model_drag_data_get (GtkTreeDragSource *drag_source,
 }
 
 static gboolean
-wxgtk_tree_model_drag_data_received (GtkTreeDragDest  *drag_dest,
-                                     GtkTreePath      *dest,
-                                     GtkSelectionData *selection_data)
+wxgtk_tree_model_drag_data_received (GtkTreeDragDest  *WXUNUSED(drag_dest),
+                                     GtkTreePath      *WXUNUSED(dest),
+                                     GtkSelectionData *WXUNUSED(selection_data))
 {
-    GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_dest;
-    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
-
-    if ( wxtree_model->stamp == 0 )
-        return FALSE;
-
-    return wxtree_model->internal->drag_data_received( drag_dest, dest, selection_data );
+    // Actual work now done by gtk_dataview_drag_data_received_callback(), but
+    // we need this function to assign something to drag_data_received field of
+    // GtkTreeDragDestIface -- if we don't do this, an assert about it being
+    // non-null fails inside gtk_tree_drag_source_drag_data_get().
+    return TRUE;
 }
 
 static gboolean
@@ -3839,17 +3838,74 @@ gboolean wxDataViewCtrlInternal::drag_data_get( GtkTreeDragSource *WXUNUSED(drag
     return res;
 }
 
-gboolean
-wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
-                                           GtkTreePath *path,
-                                           GtkSelectionData *selection_data)
+namespace
 {
+
+// Helper function to get the proposed drop index in the wx sense from the
+// given drop position.
+int
+GetProposedDropIndex(GtkTreePath* path, GtkTreeViewDropPosition pos)
+{
+    if ( !path )
+        return wxNOT_FOUND;
+
+    int adjustment = 0;
+    switch ( pos )
+    {
+        case GTK_TREE_VIEW_DROP_BEFORE:
+            // Nothing to do, adjustment is already set to 0.
+            break;
+
+        case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
+        case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
+            // We don't distinguish between dropping on the lower and upper
+            // half of this item, so we don't set the drop index to indicate
+            // that the drop is on this item itself.
+            return wxNOT_FOUND;
+
+        case GTK_TREE_VIEW_DROP_AFTER:
+            // We need to return the position after this item.
+            adjustment = 1;
+            break;
+    }
+
+    const gint* const indices = gtk_tree_path_get_indices(path);
+    const gint depth = gtk_tree_path_get_depth(path);
+
+    wxCHECK_MSG( depth, wxNOT_FOUND, "unexpectedly empty path" );
+
+    return indices[depth - 1] + adjustment;
+}
+
+} // anonymous namespace
+
+gboolean
+wxDataViewCtrlInternal::OnDragDataReceived(gint x, gint y,
+                                           GtkSelectionData* selection_data)
+{
+    wxGtkTreePath path;
+    GtkTreeViewDropPosition pos;
+
+    GtkTreeView* const tree = GTK_TREE_VIEW(GetOwner()->GtkGetTreeView());
+    gtk_tree_view_get_dest_row_at_pos(tree, x, y, path.ByRef(), &pos);
+
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
+
+    const int dropIndex = GetProposedDropIndex(path, pos);
+    if ( dropIndex != wxNOT_FOUND )
+    {
+        // As the drop is between items, use the parent item in the event, as
+        // the proposed drop index is relative to it and the item at (x, y).
+        item = GetOwner()->GetModel()->GetParent(item);
+    }
+
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, item);
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     event.SetDataSize(gtk_selection_data_get_length(selection_data));
     event.SetDataBuffer(const_cast<guchar*>(gtk_selection_data_get_data(selection_data)));
+    event.SetProposedDropIndex(dropIndex);
+
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
@@ -4529,6 +4585,22 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// "drag_data_received" signal
+//-----------------------------------------------------------------------------
+
+static void
+gtk_dataview_drag_data_received_callback(GtkWidget* WXUNUSED(widget),
+                                         GdkDragContext* WXUNUSED(context),
+                                         gint x, gint y,
+                                         GtkSelectionData* selection_data,
+                                         guint WXUNUSED(i),
+                                         guint WXUNUSED(t),
+                                         wxDataViewCtrl* dv)
+{
+    dv->GtkGetInternal()->OnDragDataReceived(x, y, selection_data);
+}
+
+//-----------------------------------------------------------------------------
 // "button_press_event"
 //-----------------------------------------------------------------------------
 
@@ -4718,6 +4790,9 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     g_signal_connect (m_treeview, "button_press_event",
                       G_CALLBACK (gtk_dataview_button_press_callback), this);
+
+    g_signal_connect (m_treeview, "drag-data-received",
+                      G_CALLBACK (gtk_dataview_drag_data_received_callback), this);
 
     return true;
 }
