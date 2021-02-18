@@ -736,7 +736,7 @@ protected:
     wxColour m_tool_active_background_top_gradient_colour;
     wxColour m_tool_active_background_colour;
     wxColour m_tool_active_background_gradient_colour;
-    
+
     wxBrush m_tab_ctrl_background_brush;
     wxBrush m_panel_label_background_brush;
     wxBrush m_panel_hover_label_background_brush;
