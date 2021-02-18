@@ -930,6 +930,8 @@ public:
 
     void SetColumn( int col ) { m_col = col; }
     void SetEditCancelled() { m_editCancelled = true; }
+    void SetDropPos(int pos) {  m_droppos = pos; }
+    int GetDropPos() {  return m_droppos; }
 
 protected:
     wxDataViewItem      m_item;
@@ -952,6 +954,7 @@ protected:
     int                 m_dragFlags;
     wxDragResult        m_dropEffect;
     int                 m_proposedDropIndex;
+    int                 m_droppos;
 #endif // wxUSE_DRAG_AND_DROP
 
 private:
