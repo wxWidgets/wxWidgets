@@ -966,8 +966,8 @@ wxgtk_tree_model_drag_data_get (GtkTreeDragSource *drag_source,
 
 static gboolean
 wxgtk_tree_model_drag_data_received (GtkTreeDragDest  *drag_dest,
-                                     GtkTreePath      *dest,
-                                     GtkSelectionData *selection_data)
+                                     GtkTreePath      *WXUNUSED(dest),
+                                     GtkSelectionData *WXUNUSED(selection_data))
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_dest;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
@@ -4634,8 +4634,8 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
     return FALSE;
 }
 
-static void evtDragDataGet(GtkWidget *widget, GdkDragContext *context,
-    GtkSelectionData *selection_data, guint i, guint t)
+static void evtDragDataGet(GtkWidget *widget, GdkDragContext *WXUNUSED(context),
+    GtkSelectionData *selection_data, guint WXUNUSED(i), guint WXUNUSED(t))
 {
     GtkTreeView *tree = (GtkTreeView*)widget;
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) gtk_tree_view_get_model(tree);
@@ -4646,8 +4646,9 @@ static void evtDragDataGet(GtkWidget *widget, GdkDragContext *context,
     wxtree_model->internal->drag_data_get((GtkTreeDragSource*)1, path, selection_data );
 }
 
-static void evtDragDataRecv(GtkWidget *widget, GdkDragContext *context, gint x, gint y,
-    GtkSelectionData *selection_data, guint i, guint t)
+static void evtDragDataRecv(GtkWidget *widget, GdkDragContext *WXUNUSED(context),
+    gint x, gint y, GtkSelectionData *selection_data, guint WXUNUSED(i),
+    guint WXUNUSED(t))
 {
      GtkTreePath *path;
      GtkTreeView *tree = (GtkTreeView*)widget;
