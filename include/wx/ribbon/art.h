@@ -90,6 +90,8 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TAB_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_BORDER_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
@@ -105,10 +107,8 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_BUTTON_FACE_COLOUR,
     wxRIBBON_ART_PANEL_BUTTON_HOVER_FACE_COLOUR,
-
     wxRIBBON_ART_PAGE_TOGGLE_FACE_COLOUR,
     wxRIBBON_ART_PAGE_TOGGLE_HOVER_FACE_COLOUR,
-
     wxRIBBON_ART_PAGE_BORDER_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
@@ -723,7 +723,6 @@ protected:
     wxColour m_gallery_button_hover_face_colour;
     wxColour m_gallery_button_active_face_colour;
     wxColour m_gallery_button_disabled_face_colour;
-
     wxColour m_tool_face_colour;
     wxColour m_tool_background_top_colour;
     wxColour m_tool_background_top_gradient_colour;
@@ -737,7 +736,6 @@ protected:
     wxColour m_tool_active_background_top_gradient_colour;
     wxColour m_tool_active_background_colour;
     wxColour m_tool_active_background_gradient_colour;
-
     wxBrush m_tab_ctrl_background_brush;
     wxBrush m_panel_label_background_brush;
     wxBrush m_panel_hover_label_background_brush;
@@ -756,6 +754,8 @@ protected:
     wxPen m_page_border_pen;
     wxPen m_panel_border_pen;
     wxPen m_panel_border_gradient_pen;
+    wxPen m_panel_hover_border_pen;
+    wxPen m_panel_hover_border_gradient_pen;
     wxPen m_panel_minimised_border_pen;
     wxPen m_panel_minimised_border_gradient_pen;
     wxPen m_panel_hover_button_border_pen;
