@@ -141,7 +141,7 @@ void NumValidatorTestCase::TransferUnsigned()
     m_text->ChangeValue("9223372036854775808"); // == LLONG_MAX + 1
     CPPUNIT_ASSERT( !valUnsigned2.TransferFromWindow() );
 
-    CPPUNIT_ASSERT( hugeValue == 9223372036854775807llu );
+    CPPUNIT_ASSERT( hugeValue == wxULL(9223372036854775807) );
 #endif // wxLongLong_t
 
     m_text->Clear();
