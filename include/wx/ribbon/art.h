@@ -90,6 +90,8 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TAB_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_BORDER_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
@@ -756,6 +758,8 @@ protected:
     wxPen m_page_border_pen;
     wxPen m_panel_border_pen;
     wxPen m_panel_border_gradient_pen;
+    wxPen m_panel_hover_border_pen;
+    wxPen m_panel_hover_border_gradient_pen;
     wxPen m_panel_minimised_border_pen;
     wxPen m_panel_minimised_border_gradient_pen;
     wxPen m_panel_hover_button_border_pen;
