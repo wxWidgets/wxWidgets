@@ -933,20 +933,6 @@ D2D1_COLOR_F wxD2DConvertColour(wxColour colour)
         colour.Alpha() / 255.0f);
 }
 
-D2D1_ANTIALIAS_MODE wxD2DConvertAntialiasMode(wxAntialiasMode antialiasMode)
-{
-    switch (antialiasMode)
-    {
-    case wxANTIALIAS_NONE:
-        return D2D1_ANTIALIAS_MODE_ALIASED;
-    case wxANTIALIAS_DEFAULT:
-        return D2D1_ANTIALIAS_MODE_PER_PRIMITIVE;
-    }
-
-    wxFAIL_MSG("unknown antialias mode");
-    return D2D1_ANTIALIAS_MODE_ALIASED;
-}
-
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
 bool wxD2DCompositionModeSupported(wxCompositionMode compositionMode)
 {
@@ -4170,8 +4156,7 @@ void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
 
     LayerData ld;
     ld.type = CLIP_LAYER;
-    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry,
-                                      wxD2DConvertAntialiasMode(m_antialias));
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry, GetRenderTarget()->GetAntialiasMode());
     ld.layer = clipLayer;
     ld.geometry = clipGeometry;
     // We need to store CTM to be able to re-apply
@@ -4390,7 +4375,27 @@ bool wxD2DContext::SetAntialiasMode(wxAntialiasMode antialias)
         return true;
     }
 
-    GetRenderTarget()->SetAntialiasMode(wxD2DConvertAntialiasMode(antialias));
+    D2D1_ANTIALIAS_MODE antialiasMode;
+    D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode;
+    switch ( antialias )
+    {
+    case wxANTIALIAS_DEFAULT:
+        antialiasMode = D2D1_ANTIALIAS_MODE_PER_PRIMITIVE;
+        textAntialiasMode = D2D1_TEXT_ANTIALIAS_MODE_DEFAULT;
+        break;
+
+    case wxANTIALIAS_NONE:
+        antialiasMode = D2D1_ANTIALIAS_MODE_ALIASED;
+        textAntialiasMode = D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
+        break;
+
+    default:
+        wxFAIL_MSG("Unknown antialias mode");
+        return false;
+    }
+
+    GetRenderTarget()->SetAntialiasMode(antialiasMode);
+    GetRenderTarget()->SetTextAntialiasMode(textAntialiasMode);
 
     m_antialias = antialias;
     return true;
@@ -4736,6 +4741,8 @@ void wxD2DContext::EnsureInitialized()
     {
         m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
         GetRenderTarget()->GetTransform(&m_initTransform);
+        GetRenderTarget()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+        GetRenderTarget()->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_DEFAULT);
         GetRenderTarget()->BeginDraw();
     }
     else
