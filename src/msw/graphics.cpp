@@ -2056,27 +2056,27 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     if (m_antialias == antialias)
         return true;
 
-    // MinGW currently doesn't provide InterpolationModeInvalid in its headers,
-    // so use our own definition.
-    static const SmoothingMode
-        wxSmoothingModeInvalid = static_cast<SmoothingMode>(-1);
-
-    SmoothingMode antialiasMode = wxSmoothingModeInvalid;
+    SmoothingMode antialiasMode;
+    TextRenderingHint textRenderingHint;
     switch (antialias)
     {
         case wxANTIALIAS_DEFAULT:
             antialiasMode = SmoothingModeHighQuality;
+            textRenderingHint = TextRenderingHintSystemDefault;
             break;
 
         case wxANTIALIAS_NONE:
             antialiasMode = SmoothingModeNone;
+            textRenderingHint = TextRenderingHintSingleBitPerPixel;
             break;
+
+        default:
+            wxFAIL_MSG("Unknown antialias mode");
+            return false;
     }
 
-    wxCHECK_MSG( antialiasMode != wxSmoothingModeInvalid, false,
-                 wxS("Unknown antialias mode") );
-
-    if ( m_context->SetSmoothingMode(antialiasMode) != Gdiplus::Ok )
+    if ( m_context->SetSmoothingMode(antialiasMode) != Gdiplus::Ok ||
+         m_context->SetTextRenderingHint(textRenderingHint) != Gdiplus::Ok )
         return false;
 
     m_antialias = antialias;
