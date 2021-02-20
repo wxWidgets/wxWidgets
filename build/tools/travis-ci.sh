@@ -16,10 +16,9 @@ launch_httpbin() {
     echo 'travis_fold:start:httpbin'
     echo 'Running httpbin...'
 
-    # Prefer to use docker if it's available as it's more robust than dealing
-    # with pip -- but we need to have a fallback as at least Mac builds don't
-    # have docker.
-    if command -v docker; then
+    # Use docker if configured to do so, this works around Python/pip problems
+    # on some platforms.
+    if [ "$wxUSE_DOCKER_HTTPBIN" = 1 ]; then
         docker pull kennethreitz/httpbin
         docker run -d -p 80:80 kennethreitz/httpbin
         WX_TEST_WEBREQUEST_URL="http://localhost"
