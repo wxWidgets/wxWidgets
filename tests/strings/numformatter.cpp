@@ -48,23 +48,23 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongToString", "[numformat
     if ( !CanRunTest() )
         return;
 
-    CPPUNIT_ASSERT_EQUAL(          "1", wxNumberFormatter::ToString(         1L));
-    CPPUNIT_ASSERT_EQUAL(         "-1", wxNumberFormatter::ToString(        -1L));
-    CPPUNIT_ASSERT_EQUAL(         "12", wxNumberFormatter::ToString(        12L));
-    CPPUNIT_ASSERT_EQUAL(        "-12", wxNumberFormatter::ToString(       -12L));
-    CPPUNIT_ASSERT_EQUAL(        "123", wxNumberFormatter::ToString(       123L));
-    CPPUNIT_ASSERT_EQUAL(       "-123", wxNumberFormatter::ToString(      -123L));
-    CPPUNIT_ASSERT_EQUAL(      "1,234", wxNumberFormatter::ToString(      1234L));
-    CPPUNIT_ASSERT_EQUAL(     "-1,234", wxNumberFormatter::ToString(     -1234L));
-    CPPUNIT_ASSERT_EQUAL(     "12,345", wxNumberFormatter::ToString(     12345L));
-    CPPUNIT_ASSERT_EQUAL(    "-12,345", wxNumberFormatter::ToString(    -12345L));
-    CPPUNIT_ASSERT_EQUAL(    "123,456", wxNumberFormatter::ToString(    123456L));
-    CPPUNIT_ASSERT_EQUAL(   "-123,456", wxNumberFormatter::ToString(   -123456L));
-    CPPUNIT_ASSERT_EQUAL(  "1,234,567", wxNumberFormatter::ToString(   1234567L));
-    CPPUNIT_ASSERT_EQUAL( "-1,234,567", wxNumberFormatter::ToString(  -1234567L));
-    CPPUNIT_ASSERT_EQUAL( "12,345,678", wxNumberFormatter::ToString(  12345678L));
-    CPPUNIT_ASSERT_EQUAL("-12,345,678", wxNumberFormatter::ToString( -12345678L));
-    CPPUNIT_ASSERT_EQUAL("123,456,789", wxNumberFormatter::ToString( 123456789L));
+    CHECK( wxNumberFormatter::ToString(         1L) ==           "1" );
+    CHECK( wxNumberFormatter::ToString(        -1L) ==          "-1" );
+    CHECK( wxNumberFormatter::ToString(        12L) ==          "12" );
+    CHECK( wxNumberFormatter::ToString(       -12L) ==         "-12" );
+    CHECK( wxNumberFormatter::ToString(       123L) ==         "123" );
+    CHECK( wxNumberFormatter::ToString(      -123L) ==        "-123" );
+    CHECK( wxNumberFormatter::ToString(      1234L) ==       "1,234" );
+    CHECK( wxNumberFormatter::ToString(     -1234L) ==      "-1,234" );
+    CHECK( wxNumberFormatter::ToString(     12345L) ==      "12,345" );
+    CHECK( wxNumberFormatter::ToString(    -12345L) ==     "-12,345" );
+    CHECK( wxNumberFormatter::ToString(    123456L) ==     "123,456" );
+    CHECK( wxNumberFormatter::ToString(   -123456L) ==    "-123,456" );
+    CHECK( wxNumberFormatter::ToString(   1234567L) ==   "1,234,567" );
+    CHECK( wxNumberFormatter::ToString(  -1234567L) ==  "-1,234,567" );
+    CHECK( wxNumberFormatter::ToString(  12345678L) ==  "12,345,678" );
+    CHECK( wxNumberFormatter::ToString( -12345678L) == "-12,345,678" );
+    CHECK( wxNumberFormatter::ToString( 123456789L) == "123,456,789" );
 }
 
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
@@ -74,15 +74,15 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongLongToString", "[numfo
     if ( !CanRunTest() )
         return;
 
-    CPPUNIT_ASSERT_EQUAL(          "1", wxNumberFormatter::ToString(wxLL(         1)));
-    CPPUNIT_ASSERT_EQUAL(         "12", wxNumberFormatter::ToString(wxLL(        12)));
-    CPPUNIT_ASSERT_EQUAL(        "123", wxNumberFormatter::ToString(wxLL(       123)));
-    CPPUNIT_ASSERT_EQUAL(      "1,234", wxNumberFormatter::ToString(wxLL(      1234)));
-    CPPUNIT_ASSERT_EQUAL(     "12,345", wxNumberFormatter::ToString(wxLL(     12345)));
-    CPPUNIT_ASSERT_EQUAL(    "123,456", wxNumberFormatter::ToString(wxLL(    123456)));
-    CPPUNIT_ASSERT_EQUAL(  "1,234,567", wxNumberFormatter::ToString(wxLL(   1234567)));
-    CPPUNIT_ASSERT_EQUAL( "12,345,678", wxNumberFormatter::ToString(wxLL(  12345678)));
-    CPPUNIT_ASSERT_EQUAL("123,456,789", wxNumberFormatter::ToString(wxLL( 123456789)));
+    CHECK( wxNumberFormatter::ToString(wxLL(         1)) ==           "1" );
+    CHECK( wxNumberFormatter::ToString(wxLL(        12)) ==          "12" );
+    CHECK( wxNumberFormatter::ToString(wxLL(       123)) ==         "123" );
+    CHECK( wxNumberFormatter::ToString(wxLL(      1234)) ==       "1,234" );
+    CHECK( wxNumberFormatter::ToString(wxLL(     12345)) ==      "12,345" );
+    CHECK( wxNumberFormatter::ToString(wxLL(    123456)) ==     "123,456" );
+    CHECK( wxNumberFormatter::ToString(wxLL(   1234567)) ==   "1,234,567" );
+    CHECK( wxNumberFormatter::ToString(wxLL(  12345678)) ==  "12,345,678" );
+    CHECK( wxNumberFormatter::ToString(wxLL( 123456789)) == "123,456,789" );
 }
 
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
@@ -92,26 +92,22 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleToString", "[numform
     if ( !CanRunTest() )
         return;
 
-    CPPUNIT_ASSERT_EQUAL("1.0", wxNumberFormatter::ToString(1., 1));
-    CPPUNIT_ASSERT_EQUAL("0.123456", wxNumberFormatter::ToString(0.123456, 6));
-    CPPUNIT_ASSERT_EQUAL("1.234567", wxNumberFormatter::ToString(1.234567, 6));
-    CPPUNIT_ASSERT_EQUAL("12.34567", wxNumberFormatter::ToString(12.34567, 5));
-    CPPUNIT_ASSERT_EQUAL("123.4567", wxNumberFormatter::ToString(123.4567, 4));
-    CPPUNIT_ASSERT_EQUAL("1,234.56", wxNumberFormatter::ToString(1234.56, 2));
-    CPPUNIT_ASSERT_EQUAL("12,345.6", wxNumberFormatter::ToString(12345.6, 1));
-    CPPUNIT_ASSERT_EQUAL("12,345.6", wxNumberFormatter::ToString(12345.6, 1));
-    CPPUNIT_ASSERT_EQUAL("123,456,789.0",
-                         wxNumberFormatter::ToString(123456789., 1));
-    CPPUNIT_ASSERT_EQUAL("123,456,789.012",
-                         wxNumberFormatter::ToString(123456789.012, 3));
-    CPPUNIT_ASSERT_EQUAL("12,345",
-                         wxNumberFormatter::ToString(12345.012, -1));
-    CPPUNIT_ASSERT_EQUAL("-123.1230",
-                         wxNumberFormatter::ToString(-123.123, 4, wxNumberFormatter::Style_None));
-    CPPUNIT_ASSERT_EQUAL("0.0",
-                         wxNumberFormatter::ToString(0.02, 1, wxNumberFormatter::Style_None));
-    CPPUNIT_ASSERT_EQUAL("-0.0",
-                         wxNumberFormatter::ToString(-0.02, 1, wxNumberFormatter::Style_None));
+    CHECK( wxNumberFormatter::ToString(1., 1) == "1.0" );
+    CHECK( wxNumberFormatter::ToString(0.123456, 6) == "0.123456" );
+    CHECK( wxNumberFormatter::ToString(1.234567, 6) == "1.234567" );
+    CHECK( wxNumberFormatter::ToString(12.34567, 5) == "12.34567" );
+    CHECK( wxNumberFormatter::ToString(123.4567, 4) == "123.4567" );
+    CHECK( wxNumberFormatter::ToString(1234.56, 2) == "1,234.56" );
+    CHECK( wxNumberFormatter::ToString(12345.6, 1) == "12,345.6" );
+    CHECK( wxNumberFormatter::ToString(123456789.012, 3) == "123,456,789.012" );
+    CHECK( wxNumberFormatter::ToString(12345.012, -1) == "12,345" );
+
+    CHECK( wxNumberFormatter::ToString(-123.123, 4, wxNumberFormatter::Style_None)
+            == "-123.1230" );
+    CHECK( wxNumberFormatter::ToString( 0.02, 1, wxNumberFormatter::Style_None)
+            == "0.0" );
+    CHECK( wxNumberFormatter::ToString(-0.02, 1, wxNumberFormatter::Style_None)
+            == "-0.0" );
 }
 
 TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::NoTrailingZeroes", "[numformatter]")
@@ -124,71 +120,36 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::NoTrailingZeroes", "[numfo
     if ( !CanRunTest() )
         return;
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123.000",
-        wxNumberFormatter::ToString(123., 3)
-    );
+    CHECK( wxNumberFormatter::ToString(123., 3) == "123.000" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123",
-        wxNumberFormatter::ToString(123., 3, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(123., 3, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "123" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123",
-        wxNumberFormatter::ToString(123., 9, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(123., 9, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "123" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123.456",
-        wxNumberFormatter::ToString(123.456, 3, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(123.456, 3, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "123.456" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123.456000000",
-        wxNumberFormatter::ToString(123.456, 9)
-    );
+    CHECK( wxNumberFormatter::ToString(123.456, 9) == "123.456000000" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123.456",
-        wxNumberFormatter::ToString(123.456, 9, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(123.456, 9, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "123.456" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123.12",
-        wxNumberFormatter::ToString(123.123, 2, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(123.123, 2, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "123.12" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123",
-        wxNumberFormatter::ToString(123.123, 0, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(123.123, 0, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "123" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "0",
-        wxNumberFormatter::ToString(-0.000123, 3, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(-0.000123, 3, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "0" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "123",
-        wxNumberFormatter::ToString(123., -1, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(123., -1, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "123" );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        "1e-120",
-        wxNumberFormatter::ToString(1e-120, -1, wxNumberFormatter::Style_NoTrailingZeroes)
-    );
+    CHECK( wxNumberFormatter::ToString(1e-120, -1, wxNumberFormatter::Style_NoTrailingZeroes)
+            == "1e-120" );
 }
 
 TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongFromString", "[numformatter]")
@@ -202,27 +163,27 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongFromString", "[numform
     );
 
     long l;
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("", &l) );
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("foo", &l) );
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("1.234", &l) );
+    CHECK( !wxNumberFormatter::FromString("", &l) );
+    CHECK( !wxNumberFormatter::FromString("foo", &l) );
+    CHECK( !wxNumberFormatter::FromString("1.234", &l) );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123", &l) );
-    CPPUNIT_ASSERT_EQUAL( 123, l );
+    CHECK( wxNumberFormatter::FromString("123", &l) );
+    CHECK( l == 123 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1234", &l) );
-    CPPUNIT_ASSERT_EQUAL( 1234, l );
+    CHECK( wxNumberFormatter::FromString("1234", &l) );
+    CHECK( l == 1234 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234", &l) );
-    CPPUNIT_ASSERT_EQUAL( 1234, l );
+    CHECK( wxNumberFormatter::FromString("1,234", &l) );
+    CHECK( l == 1234 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,345", &l) );
-    CPPUNIT_ASSERT_EQUAL( 12345, l );
+    CHECK( wxNumberFormatter::FromString("12,345", &l) );
+    CHECK( l == 12345 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123,456", &l) );
-    CPPUNIT_ASSERT_EQUAL( 123456, l );
+    CHECK( wxNumberFormatter::FromString("123,456", &l) );
+    CHECK( l == 123456 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234,567", &l) );
-    CPPUNIT_ASSERT_EQUAL( 1234567, l );
+    CHECK( wxNumberFormatter::FromString("1,234,567", &l) );
+    CHECK( l == 1234567 );
 }
 
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
@@ -238,27 +199,27 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongLongFromString", "[num
     );
 
     wxLongLong_t l;
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("", &l) );
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("foo", &l) );
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("1.234", &l) );
+    CHECK( !wxNumberFormatter::FromString("", &l) );
+    CHECK( !wxNumberFormatter::FromString("foo", &l) );
+    CHECK( !wxNumberFormatter::FromString("1.234", &l) );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123", &l) );
-    CPPUNIT_ASSERT_EQUAL( 123, l );
+    CHECK( wxNumberFormatter::FromString("123", &l) );
+    CHECK( l == 123 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1234", &l) );
-    CPPUNIT_ASSERT_EQUAL( 1234, l );
+    CHECK( wxNumberFormatter::FromString("1234", &l) );
+    CHECK( l == 1234 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234", &l) );
-    CPPUNIT_ASSERT_EQUAL( 1234, l );
+    CHECK( wxNumberFormatter::FromString("1,234", &l) );
+    CHECK( l == 1234 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,345", &l) );
-    CPPUNIT_ASSERT_EQUAL( 12345, l );
+    CHECK( wxNumberFormatter::FromString("12,345", &l) );
+    CHECK( l == 12345 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123,456", &l) );
-    CPPUNIT_ASSERT_EQUAL( 123456, l );
+    CHECK( wxNumberFormatter::FromString("123,456", &l) );
+    CHECK( l == 123456 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234,567", &l) );
-    CPPUNIT_ASSERT_EQUAL( 1234567, l );
+    CHECK( wxNumberFormatter::FromString("1,234,567", &l) );
+    CHECK( l == 1234567 );
 }
 
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
@@ -274,33 +235,33 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleFromString", "[numfo
     );
 
     double d;
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("", &d) );
-    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("bar", &d) );
+    CHECK( !wxNumberFormatter::FromString("", &d) );
+    CHECK( !wxNumberFormatter::FromString("bar", &d) );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123", &d) );
-    CPPUNIT_ASSERT_EQUAL( 123., d );
+    CHECK( wxNumberFormatter::FromString("123", &d) );
+    CHECK( d == 123. );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123.456789012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 123.456789012, d );
+    CHECK( wxNumberFormatter::FromString("123.456789012", &d) );
+    CHECK( d == 123.456789012 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234.56789012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 1234.56789012, d );
+    CHECK( wxNumberFormatter::FromString("1,234.56789012", &d) );
+    CHECK( d == 1234.56789012 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,345.6789012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 12345.6789012, d );
+    CHECK( wxNumberFormatter::FromString("12,345.6789012", &d) );
+    CHECK( d == 12345.6789012 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123,456.789012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 123456.789012, d );
+    CHECK( wxNumberFormatter::FromString("123,456.789012", &d) );
+    CHECK( d == 123456.789012 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234,567.89012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 1234567.89012, d );
+    CHECK( wxNumberFormatter::FromString("1,234,567.89012", &d) );
+    CHECK( d == 1234567.89012 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,345,678.9012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 12345678.9012, d );
+    CHECK( wxNumberFormatter::FromString("12,345,678.9012", &d) );
+    CHECK( d == 12345678.9012 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123,456,789.012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 123456789.012, d );
+    CHECK( wxNumberFormatter::FromString("123,456,789.012", &d) );
+    CHECK( d == 123456789.012 );
 
-    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123456789.012", &d) );
-    CPPUNIT_ASSERT_EQUAL( 123456789.012, d );
+    CHECK( wxNumberFormatter::FromString("123456789.012", &d) );
+    CHECK( d == 123456789.012 );
 }
