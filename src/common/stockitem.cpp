@@ -149,7 +149,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_BOLD,                _("&Bold"),               _("Bold"));
         STOCKITEM(wxID_BOTTOM,              _("&Bottom"),             _("Bottom"));
         STOCKITEM(wxID_CANCEL,              _("&Cancel"),             _("Cancel"));
-        STOCKITEM(wxID_CDROM,               _("&CD-Rom"),             _("CD-Rom"));
+        STOCKITEM(wxID_CDROM,               _("&CD-ROM"),             _("CD-ROM"));
         STOCKITEM(wxID_CLEAR,               _("&Clear"),              _("Clear"));
         STOCKITEM(wxID_CLOSE,               _("&Close"),              _("Close"));
         STOCKITEM(wxID_CONVERT,             _("&Convert"),            _("Convert"));
