@@ -22,55 +22,29 @@
 #include "testableframe.h"
 #include "wx/uiaction.h"
 
-class NumValidatorTestCase : public CppUnit::TestCase
+class NumValidatorTestCase
 {
 public:
-    NumValidatorTestCase() { }
+    NumValidatorTestCase();
+    ~NumValidatorTestCase();
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( NumValidatorTestCase );
-        CPPUNIT_TEST( TransferInt );
-        CPPUNIT_TEST( TransferUnsigned );
-        CPPUNIT_TEST( TransferFloat );
-        CPPUNIT_TEST( ZeroAsBlank );
-        CPPUNIT_TEST( NoTrailingZeroes );
-        WXUISIM_TEST( Interactive );
-    CPPUNIT_TEST_SUITE_END();
-
-    void TransferInt();
-    void TransferUnsigned();
-    void TransferFloat();
-    void ZeroAsBlank();
-    void NoTrailingZeroes();
-#if wxUSE_UIACTIONSIMULATOR
-    void Interactive();
-#endif // wxUSE_UIACTIONSIMULATOR
-
-    wxTextCtrl *m_text;
+protected:
+    wxTextCtrl* const m_text;
 
     wxDECLARE_NO_COPY_CLASS(NumValidatorTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( NumValidatorTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NumValidatorTestCase, "NumValidatorTestCase" );
-
-void NumValidatorTestCase::setUp()
+NumValidatorTestCase::NumValidatorTestCase()
+    : m_text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY))
 {
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-void NumValidatorTestCase::tearDown()
+NumValidatorTestCase::~NumValidatorTestCase()
 {
-    wxTheApp->GetTopWindow()->DestroyChildren();
+    delete m_text;
 }
 
-void NumValidatorTestCase::TransferInt()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferInt", "[valnum]")
 {
     int value = 0;
     wxIntegerValidator<int> valInt(&value);
@@ -98,7 +72,7 @@ void NumValidatorTestCase::TransferInt()
     CPPUNIT_ASSERT( !valInt.TransferFromWindow() );
 }
 
-void NumValidatorTestCase::TransferUnsigned()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferUnsigned", "[valnum]")
 {
     unsigned value = 0;
     wxIntegerValidator<unsigned> valUnsigned(&value);
@@ -129,7 +103,7 @@ void NumValidatorTestCase::TransferUnsigned()
     CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
 }
 
-void NumValidatorTestCase::TransferFloat()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferFloat", "[valnum]")
 {
     // We need a locale with point as decimal separator.
     wxLocale loc(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT);
@@ -161,7 +135,7 @@ void NumValidatorTestCase::TransferFloat()
     CPPUNIT_ASSERT( !valFloat.TransferFromWindow() );
 }
 
-void NumValidatorTestCase::ZeroAsBlank()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::ZeroAsBlank", "[valnum]")
 {
     long value = 0;
     m_text->SetValidator(
@@ -177,7 +151,7 @@ void NumValidatorTestCase::ZeroAsBlank()
     CPPUNIT_ASSERT_EQUAL( 0, value );
 }
 
-void NumValidatorTestCase::NoTrailingZeroes()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NoTrailingZeroes", "[valnum]")
 {
     // We need a locale with point as decimal separator.
     wxLocale loc(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT);
@@ -198,7 +172,7 @@ void NumValidatorTestCase::NoTrailingZeroes()
 
 #if wxUSE_UIACTIONSIMULATOR
 
-void NumValidatorTestCase::Interactive()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
 {
 #ifdef __WXMSW__
     // FIXME: This test fails on MSW buildbot slaves although works fine on
