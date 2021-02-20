@@ -2601,26 +2601,16 @@ public:
 
     wxD2DBitmapResourceHolder* GetSubBitmap(wxDouble x, wxDouble y, wxDouble w, wxDouble h) const
     {
+        wxCOMPtr<IWICBitmapClipper> clipper;
+        HRESULT hr = wxWICImagingFactory()->CreateBitmapClipper(&clipper);
+        wxCHECK2_HRESULT_RET(hr, NULL);
+
         WICRect r = { (INT)x, (INT)y, (INT)w, (INT)h };
-
-        WICPixelFormatGUID fmt;
-        m_srcBitmap->GetPixelFormat(&fmt);
-        wxASSERT_MSG(fmt == GUID_WICPixelFormat32bppPBGRA || fmt == GUID_WICPixelFormat32bppBGR, "Unsupported pixel format");
-
-        UINT bufStride = 4 * r.Width;
-        UINT bufSize = 4 * r.Width * r.Height;
-        BYTE* pixBuffer = new BYTE[bufSize];
-        HRESULT hr = m_srcBitmap->CopyPixels(&r, bufStride, bufSize, pixBuffer);
-        if ( FAILED(hr) )
-        {
-            delete[] pixBuffer;
-            wxFAILED_HRESULT_MSG(hr);
-            return NULL;
-        }
+        hr = clipper->Initialize(m_srcBitmap, &r);
+        wxCHECK2_HRESULT_RET(hr, NULL);
 
         wxCOMPtr<IWICBitmap> subBmp;
-        hr = wxWICImagingFactory()->CreateBitmapFromMemory(r.Width, r.Height, fmt, bufStride, bufSize, pixBuffer, &subBmp);
-        delete[] pixBuffer;
+        hr = wxWICImagingFactory()->CreateBitmapFromSource(clipper, WICBitmapNoCache, &subBmp);
         wxCHECK2_HRESULT_RET(hr, NULL);
 
         return new wxD2DBitmapResourceHolder(subBmp);
