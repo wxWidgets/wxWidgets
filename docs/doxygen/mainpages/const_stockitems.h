@@ -27,7 +27,7 @@ Also note that you can retrieve stock bitmaps using wxArtProvider.
 @stock{wxID_BOLD,bold,&Bold}
 @stock{wxID_BOTTOM,goto-bottom,&Bottom}
 @stock{wxID_CANCEL,cancel,&Cancel}
-@stock{wxID_CDROM,cdrom,&CD-Rom}
+@stock{wxID_CDROM,cdrom,&CD-ROM}
 @stock{wxID_CLEAR,clear,&Clear}
 @stock{wxID_CLOSE,close,&Close}
 @stock{wxID_CONVERT,convert,&Convert}
