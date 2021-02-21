@@ -234,9 +234,29 @@ wxString wxIntegerValidatorBase::ToString(LongestValueType value) const
 }
 
 bool
-wxIntegerValidatorBase::FromString(const wxString& s, LongestValueType *value)
+wxIntegerValidatorBase::FromString(const wxString& s,
+                                   LongestValueType *value) const
 {
-    return wxNumberFormatter::FromString(s, value);
+    if ( CanBeNegative() )
+    {
+        return wxNumberFormatter::FromString(s, value);
+    }
+    else
+    {
+        // Parse as unsigned to ensure we don't accept minus sign here.
+#ifdef wxULongLong_t
+        wxULongLong_t uvalue;
+#else
+        unsigned long uvalue;
+#endif
+        if ( !wxNumberFormatter::FromString(s, &uvalue) )
+            return false;
+
+        // This cast is lossless.
+        *value = static_cast<LongestValueType>(uvalue);
+
+        return true;
+    }
 }
 
 bool

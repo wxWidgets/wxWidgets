@@ -303,7 +303,7 @@ protected:
 
     // Provide methods for wxNumValidator use.
     wxString ToString(LongestValueType value) const;
-    static bool FromString(const wxString& s, LongestValueType *value);
+    bool FromString(const wxString& s, LongestValueType *value) const;
 
     void DoSetMin(LongestValueType min) { m_min = min; }
     LongestValueType DoGetMin() const { return m_min; }
