@@ -79,11 +79,6 @@ protected:
     // bits of our style to the corresponding wxNumberFormatter::Style values.
     int GetFormatFlags() const;
 
-    // Return true if pressing a '-' key is acceptable for the current control
-    // contents and insertion point. This is meant to be called from the
-    // derived class IsCharOk() implementation.
-    bool IsMinusOk(const wxString& val, int pos) const;
-
     // Return the string which would result from inserting the given character
     // at the specified position.
     wxString GetValueAfterInsertingChar(wxString val, int pos, wxChar ch) const
@@ -91,6 +86,11 @@ protected:
         val.insert(pos, ch);
         return val;
     }
+
+    // Return true if this control allows negative numbers in it.
+    //
+    // If it doesn't, we don't allow entering "-" at all.
+    virtual bool CanBeNegative() const = 0;
 
 private:
     // Check whether the specified character can be inserted in the control at
@@ -113,6 +113,11 @@ private:
 
     // Determine the current insertion point and text in the associated control.
     void GetCurrentValueAndInsertionPoint(wxString& val, int& pos) const;
+
+    // Return true if pressing a '-' key is acceptable for the current control
+    // contents and insertion point. This is used by OnChar() to handle '-' and
+    // relies on CanBeNegative() implementation in the derived class.
+    bool IsMinusOk(const wxString& val, int pos) const;
 
 
     // Combination of wxVAL_NUM_XXX values.
@@ -346,6 +351,9 @@ public:
 
     virtual wxObject *Clone() const wxOVERRIDE { return new wxIntegerValidator(*this); }
 
+protected:
+    virtual bool CanBeNegative() const wxOVERRIDE { return DoGetMin() < 0; }
+
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidator);
 };
@@ -457,6 +465,9 @@ public:
     {
         return new wxFloatingPointValidator(*this);
     }
+
+protected:
+    virtual bool CanBeNegative() const wxOVERRIDE { return DoGetMin() < 0; }
 
 private:
     typedef typename Base::LongestValueType LongestValueType;
