@@ -66,9 +66,18 @@ wxSize wxBitmapButton::DoGetBestSize() const
         // account for it here to prevent part of the image from being cut off.
         //
         // Note that the magic 20px comes from SetBezelStyleFromBorderFlags()
-        // defined in src/osx/cocoa/button.mm.
-        if ( bitmapSize.y < 20 )
-            best += wxSize(4,0);
+        // defined in src/osx/cocoa/button.mm and so do the style checks.
+        switch ( GetWindowStyle() & wxBORDER_MASK )
+        {
+            case wxBORDER_NONE:
+            case wxBORDER_SIMPLE:
+                break;
+
+            default:
+                if ( bitmapSize.y < 20 )
+                    best += wxSize(4,0);
+                break;
+        }
     }
 
     return best;
