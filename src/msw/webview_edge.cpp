@@ -27,6 +27,11 @@
 #include "wx/msw/private/webview_edge.h"
 
 #include <objbase.h>
+
+#ifdef __VISUALC__
+#include <wrl/event.h>
+using namespace Microsoft::WRL;
+#else
 #include <atomic>
 
 template <typename baseT, typename ...argTs>
@@ -116,6 +121,7 @@ wxCOMPtr<baseT> Callback(contextT* ctx, HRESULT(contextT::* mthd)(argTs...))
 {
     return wxCOMPtr<baseT>(new CInvokableMethod<baseT, contextT, argTs...>(ctx, mthd));
 }
+#endif // !__VISUALC__
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
 
