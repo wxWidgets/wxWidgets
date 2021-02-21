@@ -690,6 +690,11 @@ void* wxWebResponseImpl::GetDataBuffer(size_t sizeNeeded)
     return m_readBuffer.GetAppendBuf(sizeNeeded);
 }
 
+void wxWebResponseImpl::PreAllocBuffer(size_t sizeNeeded)
+{
+    m_readBuffer.SetBufSize(sizeNeeded);
+}
+
 void wxWebResponseImpl::ReportDataReceived(size_t sizeReceived)
 {
     m_readBuffer.UngetAppendBuf(sizeReceived);
