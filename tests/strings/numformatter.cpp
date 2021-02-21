@@ -20,72 +20,32 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class NumFormatterTestCase : public CppUnit::TestCase
+class NumFormatterTestCase
 {
 public:
-    NumFormatterTestCase() { m_locale = NULL; }
-
-    virtual void setUp() wxOVERRIDE
-    {
+    NumFormatterTestCase() :
         // We need to use a locale with known decimal point and which uses the
         // thousands separator for the tests to make sense.
-        m_locale = new wxLocale(wxLANGUAGE_ENGLISH_UK,
-                                wxLOCALE_DONT_LOAD_DEFAULT);
-        if ( !m_locale->IsOk() )
-            tearDown();
+        m_locale(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT)
+    {
     }
 
-    virtual void tearDown() wxOVERRIDE
-    {
-        delete m_locale;
-        m_locale = NULL;
-    }
+protected:
+    bool CanRunTest() const { return m_locale.IsOk(); }
 
 private:
-    CPPUNIT_TEST_SUITE( NumFormatterTestCase );
-        CPPUNIT_TEST( LongToString );
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-        CPPUNIT_TEST( LongLongToString );
-#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-        CPPUNIT_TEST( DoubleToString );
-        CPPUNIT_TEST( NoTrailingZeroes );
-        CPPUNIT_TEST( LongFromString );
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-        CPPUNIT_TEST( LongLongFromString );
-#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-        CPPUNIT_TEST( DoubleFromString );
-    CPPUNIT_TEST_SUITE_END();
-
-    void LongToString();
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-    void LongLongToString();
-#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-    void DoubleToString();
-    void NoTrailingZeroes();
-    void LongFromString();
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-    void LongLongFromString();
-#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-    void DoubleFromString();
-
-    wxLocale *m_locale;
+    wxLocale m_locale;
 
     wxDECLARE_NO_COPY_CLASS(NumFormatterTestCase);
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( NumFormatterTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NumFormatterTestCase, "NumFormatterTestCase" );
 
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
 
-void NumFormatterTestCase::LongToString()
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongToString", "[numformatter]")
 {
-    if ( !m_locale )
+    if ( !CanRunTest() )
         return;
 
     CPPUNIT_ASSERT_EQUAL(          "1", wxNumberFormatter::ToString(         1L));
@@ -109,9 +69,9 @@ void NumFormatterTestCase::LongToString()
 
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
-void NumFormatterTestCase::LongLongToString()
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongLongToString", "[numformatter]")
 {
-    if ( !m_locale )
+    if ( !CanRunTest() )
         return;
 
     CPPUNIT_ASSERT_EQUAL(          "1", wxNumberFormatter::ToString(wxLL(         1)));
@@ -127,9 +87,9 @@ void NumFormatterTestCase::LongLongToString()
 
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
-void NumFormatterTestCase::DoubleToString()
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleToString", "[numformatter]")
 {
-    if ( !m_locale )
+    if ( !CanRunTest() )
         return;
 
     CPPUNIT_ASSERT_EQUAL("1.0", wxNumberFormatter::ToString(1., 1));
@@ -154,14 +114,14 @@ void NumFormatterTestCase::DoubleToString()
                          wxNumberFormatter::ToString(-0.02, 1, wxNumberFormatter::Style_None));
 }
 
-void NumFormatterTestCase::NoTrailingZeroes()
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::NoTrailingZeroes", "[numformatter]")
 {
     WX_ASSERT_FAILS_WITH_ASSERT
     (
         wxNumberFormatter::ToString(123L, wxNumberFormatter::Style_NoTrailingZeroes)
     );
 
-    if ( !m_locale )
+    if ( !CanRunTest() )
         return;
 
     CPPUNIT_ASSERT_EQUAL
@@ -231,9 +191,9 @@ void NumFormatterTestCase::NoTrailingZeroes()
     );
 }
 
-void NumFormatterTestCase::LongFromString()
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongFromString", "[numformatter]")
 {
-    if ( !m_locale )
+    if ( !CanRunTest() )
         return;
 
     WX_ASSERT_FAILS_WITH_ASSERT
@@ -267,9 +227,9 @@ void NumFormatterTestCase::LongFromString()
 
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
-void NumFormatterTestCase::LongLongFromString()
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongLongFromString", "[numformatter]")
 {
-    if ( !m_locale )
+    if ( !CanRunTest() )
         return;
 
     WX_ASSERT_FAILS_WITH_ASSERT
@@ -303,9 +263,9 @@ void NumFormatterTestCase::LongLongFromString()
 
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
-void NumFormatterTestCase::DoubleFromString()
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleFromString", "[numformatter]")
 {
-    if ( !m_locale )
+    if ( !CanRunTest() )
         return;
 
     WX_ASSERT_FAILS_WITH_ASSERT
