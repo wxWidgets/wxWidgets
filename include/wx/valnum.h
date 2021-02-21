@@ -294,12 +294,7 @@ protected:
                       "This style doesn't make sense for integers." );
     }
 
-    wxIntegerValidatorBase(const wxIntegerValidatorBase& other)
-        : wxNumValidatorBase(other)
-    {
-        m_min = other.m_min;
-        m_max = other.m_max;
-    }
+    // Default copy ctor is ok.
 
     // Provide methods for wxNumValidator use.
     wxString ToString(LongestValueType value) const;
@@ -395,15 +390,7 @@ protected:
         m_factor = 1.0;
     }
 
-    wxFloatingPointValidatorBase(const wxFloatingPointValidatorBase& other)
-        : wxNumValidatorBase(other)
-    {
-        m_precision = other.m_precision;
-        m_factor = other.m_factor;
-
-        m_min = other.m_min;
-        m_max = other.m_max;
-    }
+    // Default copy ctor is ok.
 
     // Provide methods for wxNumValidator use.
     wxString ToString(LongestValueType value) const;
