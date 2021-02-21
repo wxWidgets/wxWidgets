@@ -20,6 +20,9 @@
 // test class
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
 class NumFormatterTestCase
 {
 public:
@@ -38,6 +41,29 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(NumFormatterTestCase);
 };
+
+// A couple of helpers to avoid writing over long expressions.
+wxString ToStringWithoutTrailingZeroes(double val, int precision)
+{
+    return wxNumberFormatter::ToString
+           (
+            val,
+            precision,
+            wxNumberFormatter::Style_NoTrailingZeroes
+           );
+}
+
+wxString ToStringWithTrailingZeroes(double val, int precision)
+{
+    return wxNumberFormatter::ToString
+           (
+            val,
+            precision,
+            wxNumberFormatter::Style_None
+           );
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // tests themselves
@@ -92,22 +118,19 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleToString", "[numform
     if ( !CanRunTest() )
         return;
 
-    CHECK( wxNumberFormatter::ToString(1., 1) == "1.0" );
-    CHECK( wxNumberFormatter::ToString(0.123456, 6) == "0.123456" );
-    CHECK( wxNumberFormatter::ToString(1.234567, 6) == "1.234567" );
-    CHECK( wxNumberFormatter::ToString(12.34567, 5) == "12.34567" );
-    CHECK( wxNumberFormatter::ToString(123.4567, 4) == "123.4567" );
-    CHECK( wxNumberFormatter::ToString(1234.56, 2) == "1,234.56" );
-    CHECK( wxNumberFormatter::ToString(12345.6, 1) == "12,345.6" );
-    CHECK( wxNumberFormatter::ToString(123456789.012, 3) == "123,456,789.012" );
-    CHECK( wxNumberFormatter::ToString(12345.012, -1) == "12,345" );
+    CHECK( wxNumberFormatter::ToString(           1.,  1) ==             "1.0" );
+    CHECK( wxNumberFormatter::ToString(     0.123456,  6) ==        "0.123456" );
+    CHECK( wxNumberFormatter::ToString(     1.234567,  6) ==        "1.234567" );
+    CHECK( wxNumberFormatter::ToString(     12.34567,  5) ==        "12.34567" );
+    CHECK( wxNumberFormatter::ToString(     123.4567,  4) ==        "123.4567" );
+    CHECK( wxNumberFormatter::ToString(      1234.56,  2) ==        "1,234.56" );
+    CHECK( wxNumberFormatter::ToString(      12345.6,  1) ==        "12,345.6" );
+    CHECK( wxNumberFormatter::ToString(123456789.012,  3) == "123,456,789.012" );
+    CHECK( wxNumberFormatter::ToString(    12345.012, -1) ==          "12,345" );
 
-    CHECK( wxNumberFormatter::ToString(-123.123, 4, wxNumberFormatter::Style_None)
-            == "-123.1230" );
-    CHECK( wxNumberFormatter::ToString( 0.02, 1, wxNumberFormatter::Style_None)
-            == "0.0" );
-    CHECK( wxNumberFormatter::ToString(-0.02, 1, wxNumberFormatter::Style_None)
-            == "-0.0" );
+    CHECK( ToStringWithTrailingZeroes(-123.123, 4) == "-123.1230" );
+    CHECK( ToStringWithTrailingZeroes(    0.02, 1) ==       "0.0" );
+    CHECK( ToStringWithTrailingZeroes(   -0.02, 1) ==      "-0.0" );
 }
 
 TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::NoTrailingZeroes", "[numformatter]")
@@ -120,36 +143,17 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::NoTrailingZeroes", "[numfo
     if ( !CanRunTest() )
         return;
 
-    CHECK( wxNumberFormatter::ToString(123., 3) == "123.000" );
-
-    CHECK( wxNumberFormatter::ToString(123., 3, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "123" );
-
-    CHECK( wxNumberFormatter::ToString(123., 9, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "123" );
-
-    CHECK( wxNumberFormatter::ToString(123.456, 3, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "123.456" );
-
-    CHECK( wxNumberFormatter::ToString(123.456, 9) == "123.456000000" );
-
-    CHECK( wxNumberFormatter::ToString(123.456, 9, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "123.456" );
-
-    CHECK( wxNumberFormatter::ToString(123.123, 2, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "123.12" );
-
-    CHECK( wxNumberFormatter::ToString(123.123, 0, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "123" );
-
-    CHECK( wxNumberFormatter::ToString(-0.000123, 3, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "0" );
-
-    CHECK( wxNumberFormatter::ToString(123., -1, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "123" );
-
-    CHECK( wxNumberFormatter::ToString(1e-120, -1, wxNumberFormatter::Style_NoTrailingZeroes)
-            == "1e-120" );
+    CHECK( ToStringWithTrailingZeroes   (      123., 3) ==       "123.000" );
+    CHECK( ToStringWithoutTrailingZeroes(      123., 3) ==           "123" );
+    CHECK( ToStringWithoutTrailingZeroes(      123., 9) ==           "123" );
+    CHECK( ToStringWithoutTrailingZeroes(   123.456, 3) ==       "123.456" );
+    CHECK( ToStringWithTrailingZeroes   (   123.456, 9) == "123.456000000" );
+    CHECK( ToStringWithoutTrailingZeroes(   123.456, 9) ==       "123.456" );
+    CHECK( ToStringWithoutTrailingZeroes(   123.123, 2) ==        "123.12" );
+    CHECK( ToStringWithoutTrailingZeroes(   123.123, 0) ==           "123" );
+    CHECK( ToStringWithoutTrailingZeroes( -0.000123, 3) ==             "0" );
+    CHECK( ToStringWithoutTrailingZeroes(     123., -1) ==           "123" );
+    CHECK( ToStringWithoutTrailingZeroes(   1e-120, -1) ==        "1e-120" );
 }
 
 TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongFromString", "[numformatter]")
