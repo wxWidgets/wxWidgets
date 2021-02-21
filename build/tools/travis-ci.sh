@@ -19,6 +19,7 @@ launch_httpbin() {
     # Use docker if configured to do so, this works around Python/pip problems
     # on some platforms.
     if [ "$wxUSE_DOCKER_HTTPBIN" = 1 ]; then
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         docker pull kennethreitz/httpbin
         docker run -d -p 80:80 kennethreitz/httpbin
         WX_TEST_WEBREQUEST_URL="http://localhost"
