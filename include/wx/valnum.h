@@ -159,22 +159,22 @@ public:
 
     void SetMin(ValueType min)
     {
-        this->DoSetMin(static_cast<LongestValueType>(min));
+        m_min = min;
     }
 
     ValueType GetMin() const
     {
-        return static_cast<ValueType>(this->DoGetMin());
+        return m_min;
     }
 
     void SetMax(ValueType max)
     {
-        this->DoSetMax(static_cast<LongestValueType>(max));
+        m_max = max;
     }
 
     ValueType GetMax() const
     {
-        return static_cast<ValueType>(this->DoGetMax());
+        return m_max;
     }
 
     void SetRange(ValueType min, ValueType max)
@@ -243,6 +243,9 @@ protected:
                                                     : wxString();
     }
 
+    virtual bool CanBeNegative() const wxOVERRIDE { return m_min < 0; }
+
+
     // This member is protected because it can be useful to the derived classes
     // in their Transfer{From,To}Window() implementations.
     ValueType * const m_value;
@@ -266,6 +269,8 @@ private:
         return s;
     }
 
+    // Minimal and maximal values accepted (inclusive).
+    ValueType m_min, m_max;
 
     wxDECLARE_NO_ASSIGN_CLASS(wxNumValidator);
 };
@@ -305,23 +310,12 @@ protected:
     wxString ToString(LongestValueType value) const;
     bool FromString(const wxString& s, LongestValueType *value) const;
 
-    void DoSetMin(LongestValueType min) { m_min = min; }
-    LongestValueType DoGetMin() const { return m_min; }
-    void DoSetMax(LongestValueType max) { m_max = max; }
-    LongestValueType DoGetMax() const { return m_max; }
-
-    bool IsInRange(LongestValueType value) const
-    {
-        return m_min <= value && value <= m_max;
-    }
+    virtual bool IsInRange(LongestValueType value) const = 0;
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
 
 private:
-    // Minimal and maximal values accepted (inclusive).
-    LongestValueType m_min, m_max;
-
     wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidatorBase);
 };
 
@@ -337,6 +331,8 @@ public:
 
     typedef
         wxPrivate::wxNumValidator<wxIntegerValidatorBase, T> Base;
+    typedef
+        wxIntegerValidatorBase::LongestValueType LongestValueType;
 
     // Ctor for an integer validator.
     //
@@ -345,14 +341,29 @@ public:
     wxIntegerValidator(ValueType *value = NULL, int style = wxNUM_VAL_DEFAULT)
         : Base(value, style)
     {
-        this->DoSetMin(std::numeric_limits<ValueType>::min());
-        this->DoSetMax(std::numeric_limits<ValueType>::max());
+        this->SetMin(std::numeric_limits<ValueType>::min());
+        this->SetMax(std::numeric_limits<ValueType>::max());
     }
 
     virtual wxObject *Clone() const wxOVERRIDE { return new wxIntegerValidator(*this); }
 
-protected:
-    virtual bool CanBeNegative() const wxOVERRIDE { return DoGetMin() < 0; }
+    virtual bool IsInRange(LongestValueType value) const wxOVERRIDE
+    {
+        // LongestValueType is used as a container for the values of any type
+        // which can be used in type-independent wxIntegerValidatorBase code,
+        // but we need to use the correct type for comparisons, notably for
+        // comparing unsigned values correctly, so cast to this type and check
+        // that we don't lose precision while doing it.
+        const ValueType valueT = static_cast<ValueType>(value);
+        if ( static_cast<LongestValueType>(valueT) != value )
+        {
+            // The conversion wasn't lossless, so the value must not be exactly
+            // representable in this type and so is definitely not in range.
+            return false;
+        }
+
+        return this->GetMin() <= valueT && valueT <= this->GetMax();
+    }
 
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidator);
@@ -404,15 +415,7 @@ protected:
     wxString ToString(LongestValueType value) const;
     bool FromString(const wxString& s, LongestValueType *value) const;
 
-    void DoSetMin(LongestValueType min) { m_min = min; }
-    LongestValueType DoGetMin() const { return m_min; }
-    void DoSetMax(LongestValueType max) { m_max = max; }
-    LongestValueType DoGetMax() const { return m_max; }
-
-    bool IsInRange(LongestValueType value) const
-    {
-        return m_min <= value && value <= m_max;
-    }
+    virtual bool IsInRange(LongestValueType value) const = 0;
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
@@ -423,9 +426,6 @@ private:
 
     // Factor applied for the displayed the value.
     double m_factor;
-
-    // Minimal and maximal values accepted (inclusive).
-    LongestValueType m_min, m_max;
 
     wxDECLARE_NO_ASSIGN_CLASS(wxFloatingPointValidatorBase);
 };
@@ -439,6 +439,8 @@ class wxFloatingPointValidator
 public:
     typedef T ValueType;
     typedef wxPrivate::wxNumValidator<wxFloatingPointValidatorBase, T> Base;
+    typedef wxFloatingPointValidatorBase::LongestValueType LongestValueType;
+
 
     // Ctor using implicit (maximal) precision for this type.
     wxFloatingPointValidator(ValueType *value = NULL,
@@ -466,19 +468,21 @@ public:
         return new wxFloatingPointValidator(*this);
     }
 
-protected:
-    virtual bool CanBeNegative() const wxOVERRIDE { return DoGetMin() < 0; }
+    virtual bool IsInRange(LongestValueType value) const wxOVERRIDE
+    {
+        const ValueType valueT = static_cast<ValueType>(value);
+
+        return this->GetMin() <= valueT && valueT <= this->GetMax();
+    }
 
 private:
-    typedef typename Base::LongestValueType LongestValueType;
-
     void DoSetMinMax()
     {
         // NB: Do not use min(), it's not the smallest representable value for
         //     the floating point types but rather the smallest representable
         //     positive value.
-        this->DoSetMin(static_cast<LongestValueType>(-std::numeric_limits<ValueType>::max()));
-        this->DoSetMax(static_cast<LongestValueType>( std::numeric_limits<ValueType>::max()));
+        this->SetMin(-std::numeric_limits<ValueType>::max());
+        this->SetMax( std::numeric_limits<ValueType>::max());
     }
 };
 
