@@ -198,6 +198,12 @@ wxString wxNumberFormatter::ToString(wxLongLong_t val, int style)
 
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
+wxString wxNumberFormatter::ToString(wxULongLong_t val, int style)
+{
+    return PostProcessIntString(wxString::Format("%" wxLongLongFmtSpec "u", val),
+                                style);
+}
+
 wxString wxNumberFormatter::ToString(double val, int precision, int style)
 {
     wxString s = wxString::FromDouble(val,precision);
@@ -299,6 +305,27 @@ bool wxNumberFormatter::FromString(wxString s, wxLongLong_t *val)
 }
 
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+bool wxNumberFormatter::FromString(wxString s, wxULongLong_t *val)
+{
+    RemoveThousandsSeparators(s);
+
+    // wxString::ToULongLong() does accept minus sign for unsigned integers,
+    // consistently with the standard functions behaviour, e.g. strtoul() does
+    // the same thing, but here we really want to accept the "true" unsigned
+    // numbers only, so check for leading minus, possibly preceded by some
+    // whitespace.
+    for ( wxString::const_iterator it = s.begin(); it != s.end(); ++it )
+    {
+        if ( *it == '-' )
+            return false;
+
+        if ( *it != ' ' && *it != '\t' )
+            break;
+    }
+
+    return s.ToULongLong(val);
+}
 
 bool wxNumberFormatter::FromString(wxString s, double *val)
 {

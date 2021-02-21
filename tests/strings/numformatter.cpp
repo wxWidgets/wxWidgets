@@ -206,6 +206,10 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongLongFromString", "[num
     CHECK( !wxNumberFormatter::FromString("", &l) );
     CHECK( !wxNumberFormatter::FromString("foo", &l) );
     CHECK( !wxNumberFormatter::FromString("1.234", &l) );
+    CHECK( !wxNumberFormatter::FromString("-", &l) );
+
+    CHECK( wxNumberFormatter::FromString("0", &l) );
+    CHECK( l == 0 );
 
     CHECK( wxNumberFormatter::FromString("123", &l) );
     CHECK( l == 123 );
@@ -224,9 +228,62 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongLongFromString", "[num
 
     CHECK( wxNumberFormatter::FromString("1,234,567", &l) );
     CHECK( l == 1234567 );
+
+    CHECK( wxNumberFormatter::FromString("-123", &l) );
+    CHECK( l == -123 );
+
+    CHECK( wxNumberFormatter::FromString("9223372036854775807", &l) );
+    CHECK( l == wxINT64_MAX );
+
+    CHECK( !wxNumberFormatter::FromString("9223372036854775808", &l) );
 }
 
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::ULongLongFromString", "[numformatter]")
+{
+    if ( !CanRunTest() )
+        return;
+
+    wxULongLong_t u;
+    CHECK( !wxNumberFormatter::FromString("", &u) );
+    CHECK( !wxNumberFormatter::FromString("bar", &u) );
+    CHECK( !wxNumberFormatter::FromString("1.234", &u) );
+    CHECK( !wxNumberFormatter::FromString("-2", &u) );
+    CHECK( !wxNumberFormatter::FromString("-", &u) );
+
+    CHECK( wxNumberFormatter::FromString("0", &u) );
+    CHECK( u == 0 );
+
+    CHECK( wxNumberFormatter::FromString("123", &u) );
+    CHECK( u == 123 );
+
+    CHECK( wxNumberFormatter::FromString("1234", &u) );
+    CHECK( u == 1234 );
+
+    CHECK( wxNumberFormatter::FromString("1,234", &u) );
+    CHECK( u == 1234 );
+
+    CHECK( wxNumberFormatter::FromString("12,345", &u) );
+    CHECK( u == 12345 );
+
+    CHECK( wxNumberFormatter::FromString("123,456", &u) );
+    CHECK( u == 123456 );
+
+    CHECK( wxNumberFormatter::FromString("1,234,567", &u) );
+    CHECK( u == 1234567 );
+
+    CHECK( wxNumberFormatter::FromString("9223372036854775807", &u) );
+    CHECK( u == static_cast<wxULongLong_t>(wxINT64_MAX) );
+
+    CHECK( wxNumberFormatter::FromString("9223372036854775808", &u) );
+    CHECK( u == static_cast<wxULongLong_t>(wxINT64_MAX) + 1 );
+
+    CHECK( wxNumberFormatter::FromString("18446744073709551615", &u) );
+    CHECK( u == wxUINT64_MAX );
+
+    CHECK( !wxNumberFormatter::FromString("18446744073709551616", &u) );
+}
 
 TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleFromString", "[numformatter]")
 {
