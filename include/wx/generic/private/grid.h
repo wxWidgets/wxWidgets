@@ -24,55 +24,9 @@
 WX_DEFINE_ARRAY_WITH_DECL_PTR(wxGridCellAttr *, wxArrayAttrs,
                                  class WXDLLIMPEXP_ADV);
 
-struct wxGridCellWithAttr
-{
-    wxGridCellWithAttr(int row, int col, wxGridCellAttr *attr_)
-        : coords(row, col), attr(attr_)
-    {
-        wxASSERT( attr );
-    }
-
-    wxGridCellWithAttr(const wxGridCellWithAttr& other)
-        : coords(other.coords),
-          attr(other.attr)
-    {
-        attr->IncRef();
-    }
-
-    wxGridCellWithAttr& operator=(const wxGridCellWithAttr& other)
-    {
-        coords = other.coords;
-        if (attr != other.attr)
-        {
-            attr->DecRef();
-            attr = other.attr;
-            attr->IncRef();
-        }
-        return *this;
-    }
-
-    void ChangeAttr(wxGridCellAttr* new_attr)
-    {
-        if (attr != new_attr)
-        {
-            // "Delete" (i.e. DecRef) the old attribute.
-            attr->DecRef();
-            attr = new_attr;
-            // Take ownership of the new attribute, i.e. no IncRef.
-        }
-    }
-
-    ~wxGridCellWithAttr()
-    {
-        attr->DecRef();
-    }
-
-    wxGridCellCoords coords;
-    wxGridCellAttr  *attr;
-};
-
-WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellWithAttr, wxGridCellWithAttrArray,
-                              class WXDLLIMPEXP_ADV);
+WX_DECLARE_HASH_MAP_WITH_DECL(wxLongLong_t, wxGridCellAttr*,
+                              wxIntegerHash, wxIntegerEqual,
+                              wxGridCoordsToAttrMap, class WXDLLIMPEXP_CORE);
 
 
 // ----------------------------------------------------------------------------
@@ -468,16 +422,18 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellAttrData
 {
 public:
+    ~wxGridCellAttrData();
+
     void SetAttr(wxGridCellAttr *attr, int row, int col);
     wxGridCellAttr *GetAttr(int row, int col) const;
     void UpdateAttrRows( size_t pos, int numRows );
     void UpdateAttrCols( size_t pos, int numCols );
 
 private:
-    // searches for the attr for given cell, returns wxNOT_FOUND if not found
-    int FindIndex(int row, int col) const;
+    // Tries to search for the attr for given cell.
+    wxGridCoordsToAttrMap::iterator FindIndex(int row, int col) const;
 
-    wxGridCellWithAttrArray m_attrs;
+    mutable wxGridCoordsToAttrMap m_attrs;
 };
 
 // this class stores attributes set for rows or columns

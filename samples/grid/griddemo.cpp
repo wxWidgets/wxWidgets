@@ -293,6 +293,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_CELLOVERFLOW, GridFrame::CellOverflow )
     EVT_MENU( ID_RESIZECELL, GridFrame::ResizeCell )
+    EVT_MENU( ID_TOGGLE_CHECKERED_CELLS, GridFrame::ToggleCheckeredCells )
+    EVT_MENU( ID_TOGGLE_COLOURED_CELLS, GridFrame::ToggleColouredCells )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_SETLABEL_FONT, GridFrame::SetLabelFont )
@@ -443,6 +445,10 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_AUTOSIZECOLS, "&Auto-size cols");
     viewMenu->AppendCheckItem(ID_CELLOVERFLOW, "&Overflow cells");
     viewMenu->AppendCheckItem(ID_RESIZECELL, "&Resize cell (7,1)");
+    viewMenu->AppendCheckItem(ID_TOGGLE_CHECKERED_CELLS,
+                              "Toggle Chec&kered Cells\tCtrl+Shift+K");
+    viewMenu->AppendCheckItem(ID_TOGGLE_COLOURED_CELLS,
+                              "Toggle Co&loured Cells\tCtrl+Shift+L");
     viewMenu->Append(ID_HIDECOL, "&Hide column A");
     viewMenu->Append(ID_SHOWCOL, "&Show column A");
     viewMenu->Append(ID_HIDEROW, "&Hide row 2");
@@ -589,7 +595,7 @@ GridFrame::GridFrame()
 
     grid->GetTable()->SetAttrProvider(new CustomColumnHeadersProvider());
 
-    grid->AppendRows(100);
+    grid->AppendRows(1000);
     grid->AppendCols(100);
 
     int ir = grid->GetNumberRows();
@@ -626,11 +632,14 @@ GridFrame::GridFrame()
 
     grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
 
-    grid->SetRowSize( 99, 4*grid->GetDefaultRowSize() );
-    grid->SetCellValue(98, 98, "Test background colour setting");
-    grid->SetCellBackgroundColour(98, 99, wxColour(255, 127, 127));
-    grid->SetCellBackgroundColour(99, 98, wxColour(255, 127, 127));
-    grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
+    const int endRow = grid->GetNumberRows() - 1,
+              endCol = grid->GetNumberCols() - 1;
+
+    grid->SetRowSize(endRow, 4 * grid->GetDefaultRowSize());
+    grid->SetCellValue(endRow - 1, endCol - 1, "Test background colour setting");
+    grid->SetCellBackgroundColour(endRow - 1, endCol, wxColour(255, 127, 127));
+    grid->SetCellBackgroundColour(endRow, endCol - 1, wxColour(255, 127, 127));
+    grid->SetCellValue(endRow, endCol, "Ctrl+End\nwill go to\nthis cell");
     grid->SetCellValue( 1, 0, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
 
     grid->SetCellValue(2, 0, "This one always overflows");
@@ -2849,4 +2858,87 @@ void GridFrame::HideRow( wxCommandEvent& WXUNUSED(event) )
 void GridFrame::ShowRow( wxCommandEvent& WXUNUSED(event) )
 {
     grid->ShowRow(1);
+}
+
+namespace
+{
+
+// Toggle status of either checkered or coloured cells in the grid.
+// Note that, for shared attribute testing purposes, with checkered cells
+// a cell's complete attribute is destructively overwritten (except merged
+// cells which are skipped). While with coloured cells only the background
+// colour changes.
+void ToggleGridCells(wxGrid* grid, bool useCheckered)
+{
+    static bool s_checkeredOn, s_colouredOn;
+    if ( useCheckered )
+        s_checkeredOn = !s_checkeredOn;
+    else
+        s_colouredOn = !s_colouredOn;
+
+    wxGridCellAttrPtr attr;
+    if ( useCheckered && s_checkeredOn )
+    {
+        attr = wxGridCellAttrPtr(new wxGridCellAttr);
+        attr->SetBackgroundColour(*wxLIGHT_GREY);
+    }
+
+    wxColour bgCol = grid->GetDefaultCellBackgroundColour();
+
+    for ( int row = 0; row < grid->GetNumberRows(); ++row )
+    {
+        for ( int col = 0; col < grid->GetNumberCols(); ++col )
+        {
+            if ( useCheckered && (row ^ col) & 1 )
+                continue;
+
+            // Skip overwriting attributes of merged cells.
+            int rows, cols;
+            if ( useCheckered
+                 && grid->GetCellSize(row, col, &rows, &cols)
+                    != wxGrid::CellSpan_None )
+            {
+                continue;
+            }
+
+            if ( useCheckered )
+            {
+                grid->SetAttr(row, col, attr.get());
+
+                if ( s_checkeredOn )
+                    attr->IncRef();
+            }
+            else
+            {
+                if ( s_colouredOn )
+                {
+                    const int factor = 256 / 64;
+                    unsigned char r, g, b;
+                    r = (127 + row * factor + col / factor) & 0xff;
+                    g = (col * factor + row / (factor * 2)) & 0xff;
+                    b = ((row ^ col) * factor) & 0xff;
+
+                    bgCol.Set(r < 128 ? r * 2 : 255 - r * 2,
+                              g < 128 ? g * 2 : 255 - g * 2,
+                              b < 128 ? b * 2 : 255 - b * 2);
+                }
+
+                grid->SetCellBackgroundColour(row, col, bgCol);
+            }
+        }
+    }
+
+    grid->Refresh();
+}
+
+} // anoymous namespace
+
+void GridFrame::ToggleCheckeredCells( wxCommandEvent& WXUNUSED(event) )
+{
+    ToggleGridCells(grid, /* useCheckered = */ true);
+}
+
+void GridFrame::ToggleColouredCells( wxCommandEvent& WXUNUSED(event) )
+{
+    ToggleGridCells(grid, /* useCheckered = */ false);
 }

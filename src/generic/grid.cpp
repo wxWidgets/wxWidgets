@@ -124,7 +124,6 @@ const int GRID_TEXT_MARGIN = 1;
 #include "wx/arrimpl.cpp"
 
 WX_DEFINE_OBJARRAY(wxGridCellCoordsArray)
-WX_DEFINE_OBJARRAY(wxGridCellWithAttrArray)
 
 // ----------------------------------------------------------------------------
 // events
@@ -762,33 +761,62 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(const wxGrid* grid, int row, int col
 // wxGridCellAttrData
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+// Helper functions to convert grid coords to a key for the attr map, and
+// vice versa.
+
+wxGridCoordsToAttrMap::key_type CoordsToKey(int row, int col)
+{
+    // Treat both row and col as unsigned to not cause havoc with (unsupported)
+    // negative coords.
+    return (static_cast<wxULongLong_t>(row) << 32) + static_cast<wxUint32>(col);
+}
+
+void KeyToCoords(wxGridCoordsToAttrMap::key_type key, int *pRow, int *pCol)
+{
+    *pRow = key >> 32;
+    *pCol = key & wxUINT32_MAX;
+}
+
+} // anonymous namespace
+
+wxGridCellAttrData::~wxGridCellAttrData()
+{
+    for ( wxGridCoordsToAttrMap::iterator it = m_attrs.begin();
+          it != m_attrs.end();
+          ++it )
+    {
+        it->second->DecRef();
+    }
+
+    m_attrs.clear();
+}
+
 void wxGridCellAttrData::SetAttr(wxGridCellAttr *attr, int row, int col)
 {
-    // Note: contrary to wxGridRowOrColAttrData::SetAttr, we must not
-    //       touch attribute's reference counting explicitly, since this
-    //       is managed by class wxGridCellWithAttr
-    int n = FindIndex(row, col);
-    if ( n == wxNOT_FOUND )
+    wxGridCoordsToAttrMap::iterator it = FindIndex(row, col);
+    if ( it == m_attrs.end() )
     {
         if ( attr )
         {
             // add the attribute
-            m_attrs.Add(new wxGridCellWithAttr(row, col, attr));
+            m_attrs[CoordsToKey(row, col)] = attr;
         }
         //else: nothing to do
     }
     else // we already have an attribute for this cell
     {
+        // See note near DecRef() in wxGridRowOrColAttrData::SetAttr for why
+        // this also works when old and new attribute are the same.
+        it->second->DecRef();
+
+        // Change or remove the attribute.
         if ( attr )
-        {
-            // change the attribute
-            m_attrs[(size_t)n].ChangeAttr(attr);
-        }
+            it->second = attr;
         else
-        {
-            // remove this attribute
-            m_attrs.RemoveAt((size_t)n);
-        }
+            m_attrs.erase(it);
     }
 }
 
@@ -796,10 +824,10 @@ wxGridCellAttr *wxGridCellAttrData::GetAttr(int row, int col) const
 {
     wxGridCellAttr *attr = NULL;
 
-    int n = FindIndex(row, col);
-    if ( n != wxNOT_FOUND )
+    wxGridCoordsToAttrMap::iterator it = FindIndex(row, col);
+    if ( it != m_attrs.end() )
     {
-        attr = m_attrs[(size_t)n].attr;
+        attr = it->second;
         attr->IncRef();
     }
 
@@ -809,7 +837,7 @@ wxGridCellAttr *wxGridCellAttrData::GetAttr(int row, int col) const
 namespace
 {
 
-void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
+void UpdateCellAttrRowsOrCols(wxGridCoordsToAttrMap& attrs, int editPos,
                               int editRowCount, int editColCount)
 {
     wxASSERT( !editRowCount || !editColCount );
@@ -817,17 +845,29 @@ void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
     const bool isEditingRows = (editRowCount != 0);
     const int editCount = (isEditingRows ? editRowCount : editColCount);
 
-    size_t count = attrs.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    // Copy updated attributes to a new map instead of attempting to edit attrs
+    // map in-place. This requires more memory but greatly simplifies the code
+    // and any attempt with in-place editing would likely also require a lot
+    // more attr lookups.
+    // The updated copy will contain an attrs map with, if applicable: adjusted
+    // coords and cell size, newly inserted attributes (for multicells), and
+    // without now deleted attributes.
+    wxGridCoordsToAttrMap newAttrs;
+
+    for ( wxGridCoordsToAttrMap::iterator it = attrs.begin();
+          it != attrs.end();
+          ++it )
     {
-        wxGridCellAttr* cellAttr = attrs[n].attr;
+        const wxGridCoordsToAttrMap::key_type oldCoords = it->first;
+        wxGridCellAttr* cellAttr = it->second;
+
         int cellRows, cellCols;
         cellAttr->GetSize(&cellRows, &cellCols);
 
-        wxGridCellCoords& coords = attrs[n].coords;
-        const wxCoord cellRow = coords.GetRow(),
-                      cellCol = coords.GetCol(),
-                      cellPos = (isEditingRows ? cellRow : cellCol);
+        int cellRow, cellCol;
+        KeyToCoords(oldCoords, &cellRow, &cellCol);
+
+        const int cellPos = isEditingRows ? cellRow : cellCol;
 
         if ( cellPos < editPos )
         {
@@ -894,6 +934,9 @@ void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
                 }
             }
 
+            // Set attribute at old/unmodified coords.
+            newAttrs[oldCoords] = cellAttr;
+
             continue;
         }
 
@@ -901,18 +944,19 @@ void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
         {
             // This row/col is deleted and the cell doesn't exist any longer:
             // Remove the attribute.
-            attrs.RemoveAt(n);
-            n--;
-            count--;
+            cellAttr->DecRef();
 
             continue;
         }
+
+        const wxGridCoordsToAttrMap::key_type newCoords
+            = CoordsToKey(cellRow + editRowCount, cellCol + editColCount);
 
         if ( GetCellSpan(cellRows, cellCols) != wxGrid::CellSpan_Inside )
         {
             // Rows/cols inserted or deleted (and this cell still exists):
             // Adjust cell coords.
-            coords.Set(cellRow + editRowCount, cellCol + editColCount);
+            newAttrs[newCoords] = cellAttr;
 
             // Nothing more to do: cell is not an inside cell of a multicell.
             continue;
@@ -928,16 +972,14 @@ void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
             // On a position that still exists after deletion but main cell
             // of multicell is within deletion range so the multicell is gone:
             // Remove the attribute.
-            attrs.RemoveAt(n);
-            n--;
-            count--;
+            cellAttr->DecRef();
 
             continue;
         }
 
         // Rows/cols inserted or deleted (and this inside cell still exists):
         // Adjust (inside) cell coords.
-        coords.Set(cellRow + editRowCount, cellCol + editColCount);
+        newAttrs[newCoords] = cellAttr;
 
         if ( mainPos >= editPos )
         {
@@ -962,15 +1004,17 @@ void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
                 wxGridCellAttr* attr = new wxGridCellAttr;
                 attr->SetSize(cellRows - adjustRows, cellCols - adjustCols);
 
-                attrs.Add(new wxGridCellWithAttr(cellRow + adjustRows,
-                                                  cellCol + adjustCols,
-                                                  attr));
+                const int row = cellRow + adjustRows,
+                          col = cellCol + adjustCols;
+                newAttrs[CoordsToKey(row, col)] = attr;
             }
         }
 
         // Let this inside cell's size point to the main cell of the multicell.
         cellAttr->SetSize(cellRows - editRowCount, cellCols - editColCount);
     }
+
+    attrs = newAttrs;
 }
 
 } // anonymous namespace
@@ -985,19 +1029,10 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
     UpdateCellAttrRowsOrCols(m_attrs, static_cast<int>(pos), 0, numCols);
 }
 
-int wxGridCellAttrData::FindIndex(int row, int col) const
+wxGridCoordsToAttrMap::iterator
+wxGridCellAttrData::FindIndex(int row, int col) const
 {
-    size_t count = m_attrs.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        const wxGridCellCoords& coords = m_attrs[n].coords;
-        if ( (coords.GetRow() == row) && (coords.GetCol() == col) )
-        {
-            return n;
-        }
-    }
-
-    return wxNOT_FOUND;
+    return m_attrs.find(CoordsToKey(row, col));
 }
 
 // ----------------------------------------------------------------------------
