@@ -175,7 +175,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             {
                 if ( !m_response->ReportAvailableData(dwStatusInformationLength)
                         && !WasCancelled() )
-                    SetFailedWithLastError();
+                    SetFailedWithLastError("Reading data");
             }
             else
             {
@@ -202,7 +202,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                     WasCancelled() )
                 SetState(wxWebRequest::State_Cancelled);
             else
-                SetFailed(asyncResult->dwError);
+                SetFailed("Async request", asyncResult->dwError);
             break;
         }
     }
@@ -233,7 +233,7 @@ void wxWebRequestWinHTTP::WriteData()
                 NULL    // [out] bytes written, must be null in async mode
             ) )
     {
-        SetFailedWithLastError();
+        SetFailedWithLastError("Writing data");
     }
 }
 
@@ -243,7 +243,7 @@ void wxWebRequestWinHTTP::CreateResponse()
 
     if ( !::WinHttpReceiveResponse(m_request, NULL) )
     {
-        SetFailedWithLastError();
+        SetFailedWithLastError("Receiving response");
         return;
     }
 
@@ -267,21 +267,23 @@ void wxWebRequestWinHTTP::CreateResponse()
         if ( m_authChallenge->Init() )
             SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
         else
-            SetFailedWithLastError();
+            SetFailedWithLastError("Initializing authentication challenge");
     }
     else
     {
         // Start reading the response
         if ( !m_response->ReadData() )
-            SetFailedWithLastError();
+            SetFailedWithLastError("Reading response data");
     }
 }
 
-void wxWebRequestWinHTTP::SetFailed(DWORD errorCode)
+void wxWebRequestWinHTTP::SetFailed(const wxString& operation, DWORD errorCode)
 {
     wxString failMessage = wxMSWFormatMessage(errorCode,
                                               GetModuleHandle(TEXT("WINHTTP")));
-    SetState(wxWebRequest::State_Failed, failMessage);
+    SetState(wxWebRequest::State_Failed,
+             wxString::Format("%s failed with error %08x (%s)",
+                              operation, errorCode, failMessage));
 }
 
 void wxWebRequestWinHTTP::Start()
@@ -308,7 +310,7 @@ void wxWebRequestWinHTTP::Start()
 
     if ( !::WinHttpCrackUrl(m_url.wc_str(), m_url.length(), 0, &urlComps) )
     {
-        SetFailedWithLastError();
+        SetFailedWithLastError("Parsing URL");
         return;
     }
 
@@ -322,7 +324,7 @@ void wxWebRequestWinHTTP::Start()
                 );
     if ( m_connect == NULL )
     {
-        SetFailedWithLastError();
+        SetFailedWithLastError("Connecting");
         return;
     }
 
@@ -345,7 +347,7 @@ void wxWebRequestWinHTTP::Start()
                   );
     if ( m_request == NULL )
     {
-        SetFailedWithLastError();
+        SetFailedWithLastError("Opening request");
         return;
     }
 
@@ -361,7 +363,7 @@ void wxWebRequestWinHTTP::Start()
                 wxRESERVED_PARAM
             ) == WINHTTP_INVALID_STATUS_CALLBACK )
     {
-        SetFailedWithLastError();
+        SetFailedWithLastError("Setting up callbacks");
         return;
     }
 
@@ -404,7 +406,7 @@ void wxWebRequestWinHTTP::SendRequest()
                 (DWORD_PTR)this
             ) )
     {
-        SetFailedWithLastError();
+        SetFailedWithLastError("Sending request");
         return;
     }
 }
@@ -549,7 +551,7 @@ wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
                 wxRESERVED_PARAM
             ) )
     {
-        m_request.SetFailedWithLastError();
+        m_request.SetFailedWithLastError("Setting credentials");
         return;
     }
 
