@@ -53,10 +53,8 @@ void wxSocketFDBasedManager::Install_Callback(wxSocketImpl *socket_,
     const wxFDIOManager::Direction d = GetDirForEvent(socket, event);
 
     int& fd = FD(socket, d);
-    if ( fd != -1 )
-        m_fdioManager->RemoveInput(socket, fd, d);
-
-    fd = m_fdioManager->AddInput(socket, socket->m_fd, d);
+    if ( fd != socket->m_fd )
+        fd = m_fdioManager->AddInput(socket, socket->m_fd, d);
 }
 
 void wxSocketFDBasedManager::Uninstall_Callback(wxSocketImpl *socket_,
