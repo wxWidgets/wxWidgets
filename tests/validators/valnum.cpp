@@ -20,6 +20,8 @@
 
 #include "asserthelper.h"
 #include "testableframe.h"
+
+#include "wx/scopeguard.h"
 #include "wx/uiaction.h"
 
 class NumValidatorTestCase
@@ -243,6 +245,7 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
     // Create a sibling text control to be able to switch focus and thus
     // trigger the control validation/normalization.
     wxTextCtrl * const text2 = new wxTextCtrl(m_text->GetParent(), wxID_ANY);
+    wxON_BLOCK_EXIT_OBJ0( *text2, wxWindow::Destroy );
     text2->Move(10, 80); // Just to see it better while debugging...
     wxFloatingPointValidator<float> valFloat(3);
     valFloat.SetRange(-10., 10.);
