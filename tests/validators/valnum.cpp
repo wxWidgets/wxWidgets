@@ -99,6 +99,8 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferUnsigned", "[valnum]")
     m_text->ChangeValue("4294967295"); // == ULONG_MAX in 32 bits
     CHECK( valUnsigned.TransferFromWindow() );
     CHECK( value == wxUINT32_MAX );
+    CHECK( valUnsigned.TransferToWindow() );
+    CHECK( m_text->GetValue() == "4294967295" );
 
     m_text->ChangeValue("4294967296"); // == ULONG_MAX + 1
     CHECK( !valUnsigned.TransferFromWindow() );
@@ -116,20 +118,41 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferULL", "[valnum]")
     wxIntegerValidator<unsigned long long> valULL(&value);
     valULL.SetWindow(m_text);
 
-    m_text->ChangeValue("9223372036854775807"); // == LLONG_MAX
-    CHECK( valULL.TransferFromWindow() );
-    CHECK( value == static_cast<wxULongLong_t>(wxINT64_MAX) );
+    SECTION("LLONG_MAX")
+    {
+        m_text->ChangeValue("9223372036854775807"); // == LLONG_MAX
+        REQUIRE( valULL.TransferFromWindow() );
+        CHECK( value == static_cast<wxULongLong_t>(wxINT64_MAX) );
 
-    m_text->ChangeValue("9223372036854775808"); // == LLONG_MAX + 1
-    CHECK( valULL.TransferFromWindow() );
-    CHECK( value == static_cast<wxULongLong_t>(wxINT64_MAX) + 1 );
+        REQUIRE( valULL.TransferToWindow() );
+        CHECK( m_text->GetValue() == "9223372036854775807" );
+    }
 
-    m_text->ChangeValue("18446744073709551615"); // == ULLONG_MAX
-    CHECK( valULL.TransferFromWindow() );
-    CHECK( value == wxUINT64_MAX );
+    SECTION("LLONG_MAX+1")
+    {
+        m_text->ChangeValue("9223372036854775808"); // == LLONG_MAX + 1
+        REQUIRE( valULL.TransferFromWindow() );
+        CHECK( value == static_cast<wxULongLong_t>(wxINT64_MAX) + 1 );
 
-    m_text->ChangeValue("18446744073709551616"); // == ULLONG_MAX + 1
-    CHECK( !valULL.TransferFromWindow() );
+        REQUIRE( valULL.TransferToWindow() );
+        CHECK( m_text->GetValue() == "9223372036854775808" );
+    }
+
+    SECTION("ULLONG_MAX")
+    {
+        m_text->ChangeValue("18446744073709551615"); // == ULLONG_MAX
+        REQUIRE( valULL.TransferFromWindow() );
+        CHECK( value == wxUINT64_MAX );
+
+        REQUIRE( valULL.TransferToWindow() );
+        CHECK( m_text->GetValue() == "18446744073709551615" );
+    }
+
+    SECTION("ULLONG_MAX+1")
+    {
+        m_text->ChangeValue("18446744073709551616"); // == ULLONG_MAX + 1
+        CHECK( !valULL.TransferFromWindow() );
+    }
 }
 
 TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferFloat", "[valnum]")

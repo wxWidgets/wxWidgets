@@ -230,7 +230,15 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 
 wxString wxIntegerValidatorBase::ToString(LongestValueType value) const
 {
-    return wxNumberFormatter::ToString(value, GetFormatFlags());
+    if ( CanBeNegative() )
+    {
+        return wxNumberFormatter::ToString(value, GetFormatFlags());
+    }
+    else
+    {
+        ULongestValueType uvalue = static_cast<ULongestValueType>(value);
+        return wxNumberFormatter::ToString(uvalue, GetFormatFlags());
+    }
 }
 
 bool
