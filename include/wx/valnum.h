@@ -293,8 +293,10 @@ protected:
     // on it.
 #ifdef wxLongLong_t
     typedef wxLongLong_t LongestValueType;
+    typedef wxULongLong_t ULongestValueType;
 #else
     typedef long LongestValueType;
+    typedef unsigned long ULongestValueType;
 #endif
 
     wxIntegerValidatorBase(int style)
