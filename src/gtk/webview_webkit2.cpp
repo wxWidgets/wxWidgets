@@ -53,6 +53,7 @@ wxgtk_webview_webkit_load_changed(GtkWidget *,
         wxWebViewEvent event(wxEVT_WEBVIEW_LOADED,
                              webKitCtrl->GetId(),
                              url, target);
+        event.SetEventObject(webKitCtrl);
 
         webKitCtrl->HandleWindowEvent(event);
     }
@@ -62,6 +63,7 @@ wxgtk_webview_webkit_load_changed(GtkWidget *,
         wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATED,
                              webKitCtrl->GetId(),
                              url, target);
+        event.SetEventObject(webKitCtrl);
 
         webKitCtrl->HandleWindowEvent(event);
     }
@@ -87,6 +89,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
                              webKitCtrl->GetId(),
                              wxString(uri, wxConvUTF8),
                              target);
+        event.SetEventObject(webKitCtrl);
 
         webKitCtrl->HandleWindowEvent(event);
 
@@ -100,6 +103,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
                          webKitCtrl->GetId(),
                          wxString( uri, wxConvUTF8 ),
                          target);
+    event.SetEventObject(webKitCtrl);
 
     webKitCtrl->HandleWindowEvent(event);
 
@@ -223,8 +227,10 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
     wxWebViewEvent event(wxEVT_WEBVIEW_ERROR,
                          webKitWindow->GetId(),
                          uri, "");
+    event.SetEventObject(webKitWindow);
     event.SetString(description);
     event.SetInt(type);
+
 
     webKitWindow->HandleWindowEvent(event);
 
@@ -245,6 +251,7 @@ wxgtk_webview_webkit_new_window(WebKitPolicyDecision *decision,
                                        webKitCtrl->GetId(),
                                        wxString( uri, wxConvUTF8 ),
                                        target);
+    event.SetEventObject(webKitCtrl);
 
     webKitCtrl->HandleWindowEvent(event);
 
@@ -261,6 +268,7 @@ wxgtk_webview_webkit_enter_fullscreen(WebKitWebView *WXUNUSED(web_view),
                                        webKitCtrl->GetId(),
                                        wxString(),
                                        wxString());
+    event.SetEventObject(webKitCtrl);
     event.SetInt(1);
     webKitCtrl->HandleWindowEvent(event);
 
@@ -275,6 +283,7 @@ wxgtk_webview_webkit_leave_fullscreen(WebKitWebView *WXUNUSED(web_view),
                                        webKitCtrl->GetId(),
                                        wxString(),
                                        wxString());
+    event.SetEventObject(webKitCtrl);
     event.SetInt(0);
     webKitCtrl->HandleWindowEvent(event);
 
@@ -310,6 +319,7 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                          webKitCtrl->GetId(),
                          webKitCtrl->GetCurrentURL(),
                          "");
+    event.SetEventObject(webKitCtrl);
     event.SetString(wxString(title, wxConvUTF8));
 
     webKitCtrl->HandleWindowEvent(event);
