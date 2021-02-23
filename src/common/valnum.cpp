@@ -117,6 +117,10 @@ wxNumValidatorBase::GetCurrentValueAndInsertionPoint(wxString& val,
 
 bool wxNumValidatorBase::IsMinusOk(const wxString& val, int pos) const
 {
+    // We need to know if we accept negative numbers at all.
+    if ( !CanBeNegative() )
+        return false;
+
     // Minus is only ever accepted in the beginning of the string.
     if ( pos != 0 )
         return false;
@@ -125,6 +129,15 @@ bool wxNumValidatorBase::IsMinusOk(const wxString& val, int pos) const
     if ( !val.empty() && val[0] == '-' )
         return false;
 
+    // Notice that entering '-' can make our value invalid, for example if
+    // we're limited to -5..15 range and the current value is 12, then the
+    // new value would be (invalid) -12. We consider it better to let the
+    // user do this because perhaps he is going to press Delete key next to
+    // make it -2 and forcing him to delete 1 first would be unnatural.
+    //
+    // TODO: It would be nice to indicate that the current control contents
+    //       is invalid (if it's indeed going to be the case) once
+    //       wxValidator supports doing this non-intrusively.
     return true;
 }
 
@@ -165,7 +178,10 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
     int pos;
     GetCurrentValueAndInsertionPoint(val, pos);
 
-    if ( !IsCharOk(val, pos, ch) )
+    // Minus is a special case because we can deal with it directly here, for
+    // all the rest call the derived class virtual function.
+    const bool ok = ch == '-' ? IsMinusOk(val, pos) : IsCharOk(val, pos, ch);
+    if ( !ok )
     {
         if ( !wxValidator::IsSilent() )
             wxBell();
@@ -214,33 +230,42 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 
 wxString wxIntegerValidatorBase::ToString(LongestValueType value) const
 {
-    return wxNumberFormatter::ToString(value, GetFormatFlags());
+    if ( CanBeNegative() )
+    {
+        return wxNumberFormatter::ToString(value, GetFormatFlags());
+    }
+    else
+    {
+        ULongestValueType uvalue = static_cast<ULongestValueType>(value);
+        return wxNumberFormatter::ToString(uvalue, GetFormatFlags());
+    }
 }
 
 bool
-wxIntegerValidatorBase::FromString(const wxString& s, LongestValueType *value)
+wxIntegerValidatorBase::FromString(const wxString& s,
+                                   LongestValueType *value) const
 {
-    return wxNumberFormatter::FromString(s, value);
+    if ( CanBeNegative() )
+    {
+        return wxNumberFormatter::FromString(s, value);
+    }
+    else
+    {
+        // Parse as unsigned to ensure we don't accept minus sign here.
+        ULongestValueType uvalue;
+        if ( !wxNumberFormatter::FromString(s, &uvalue) )
+            return false;
+
+        // This cast is lossless.
+        *value = static_cast<LongestValueType>(uvalue);
+
+        return true;
+    }
 }
 
 bool
 wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 {
-    // We may accept minus sign if we can represent negative numbers at all.
-    if ( ch == '-' )
-    {
-        // Notice that entering '-' can make our value invalid, for example if
-        // we're limited to -5..15 range and the current value is 12, then the
-        // new value would be (invalid) -12. We consider it better to let the
-        // user do this because perhaps he is going to press Delete key next to
-        // make it -2 and forcing him to delete 1 first would be unnatural.
-        //
-        // TODO: It would be nice to indicate that the current control contents
-        //       is invalid (if it's indeed going to be the case) once
-        //       wxValidator supports doing this non-intrusively.
-        return m_min < 0 && IsMinusOk(val, pos);
-    }
-
     // We only accept digits here (remember that '-' is taken care of by the
     // base class already).
     if ( ch < '0' || ch > '9' )
@@ -292,10 +317,6 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
                                        int pos,
                                        wxChar ch) const
 {
-    // We may accept minus sign if we can represent negative numbers at all.
-    if ( ch == '-' )
-        return m_min < 0 && IsMinusOk(val, pos);
-
     const wxChar separator = wxNumberFormatter::GetDecimalSeparator();
     if ( ch == separator )
     {

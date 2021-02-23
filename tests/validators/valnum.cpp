@@ -20,116 +20,144 @@
 
 #include "asserthelper.h"
 #include "testableframe.h"
+
+#include "wx/scopeguard.h"
 #include "wx/uiaction.h"
 
-class NumValidatorTestCase : public CppUnit::TestCase
+class NumValidatorTestCase
 {
 public:
-    NumValidatorTestCase() { }
+    NumValidatorTestCase();
+    ~NumValidatorTestCase();
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( NumValidatorTestCase );
-        CPPUNIT_TEST( TransferInt );
-        CPPUNIT_TEST( TransferUnsigned );
-        CPPUNIT_TEST( TransferFloat );
-        CPPUNIT_TEST( ZeroAsBlank );
-        CPPUNIT_TEST( NoTrailingZeroes );
-        WXUISIM_TEST( Interactive );
-    CPPUNIT_TEST_SUITE_END();
-
-    void TransferInt();
-    void TransferUnsigned();
-    void TransferFloat();
-    void ZeroAsBlank();
-    void NoTrailingZeroes();
-#if wxUSE_UIACTIONSIMULATOR
-    void Interactive();
-#endif // wxUSE_UIACTIONSIMULATOR
-
-    wxTextCtrl *m_text;
+protected:
+    wxTextCtrl* const m_text;
 
     wxDECLARE_NO_COPY_CLASS(NumValidatorTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( NumValidatorTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NumValidatorTestCase, "NumValidatorTestCase" );
-
-void NumValidatorTestCase::setUp()
+NumValidatorTestCase::NumValidatorTestCase()
+    : m_text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY))
 {
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-void NumValidatorTestCase::tearDown()
+NumValidatorTestCase::~NumValidatorTestCase()
 {
-    wxTheApp->GetTopWindow()->DestroyChildren();
+    delete m_text;
 }
 
-void NumValidatorTestCase::TransferInt()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferInt", "[valnum]")
 {
     int value = 0;
     wxIntegerValidator<int> valInt(&value);
     valInt.SetWindow(m_text);
 
-    CPPUNIT_ASSERT( valInt.TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "0", m_text->GetValue() );
+    CHECK( valInt.TransferToWindow() );
+    CHECK( m_text->GetValue() == "0" );
 
     value = 17;
-    CPPUNIT_ASSERT( valInt.TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "17", m_text->GetValue() );
+    CHECK( valInt.TransferToWindow() );
+    CHECK( m_text->GetValue() == "17" );
 
 
     m_text->ChangeValue("foobar");
-    CPPUNIT_ASSERT( !valInt.TransferFromWindow() );
+    CHECK( !valInt.TransferFromWindow() );
 
     m_text->ChangeValue("-234");
-    CPPUNIT_ASSERT( valInt.TransferFromWindow() );
-    CPPUNIT_ASSERT_EQUAL( -234, value );
+    CHECK( valInt.TransferFromWindow() );
+    CHECK( value == -234 );
 
     m_text->ChangeValue("9223372036854775808"); // == LLONG_MAX + 1
-    CPPUNIT_ASSERT( !valInt.TransferFromWindow() );
+    CHECK( !valInt.TransferFromWindow() );
 
     m_text->Clear();
-    CPPUNIT_ASSERT( !valInt.TransferFromWindow() );
+    CHECK( !valInt.TransferFromWindow() );
 }
 
-void NumValidatorTestCase::TransferUnsigned()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferUnsigned", "[valnum]")
 {
     unsigned value = 0;
     wxIntegerValidator<unsigned> valUnsigned(&value);
     valUnsigned.SetWindow(m_text);
 
-    CPPUNIT_ASSERT( valUnsigned.TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "0", m_text->GetValue() );
+    CHECK( valUnsigned.TransferToWindow() );
+    CHECK( m_text->GetValue() == "0" );
 
     value = 17;
-    CPPUNIT_ASSERT( valUnsigned.TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "17", m_text->GetValue() );
+    CHECK( valUnsigned.TransferToWindow() );
+    CHECK( m_text->GetValue() == "17" );
 
 
     m_text->ChangeValue("foobar");
-    CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
+    CHECK( !valUnsigned.TransferFromWindow() );
 
     m_text->ChangeValue("-234");
-    CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
+    CHECK( !valUnsigned.TransferFromWindow() );
 
     m_text->ChangeValue("234");
-    CPPUNIT_ASSERT( valUnsigned.TransferFromWindow() );
-    CPPUNIT_ASSERT_EQUAL( 234, value );
+    CHECK( valUnsigned.TransferFromWindow() );
+    CHECK( value == 234 );
+
+    m_text->ChangeValue("4294967295"); // == ULONG_MAX in 32 bits
+    CHECK( valUnsigned.TransferFromWindow() );
+    CHECK( value == wxUINT32_MAX );
+    CHECK( valUnsigned.TransferToWindow() );
+    CHECK( m_text->GetValue() == "4294967295" );
+
+    m_text->ChangeValue("4294967296"); // == ULONG_MAX + 1
+    CHECK( !valUnsigned.TransferFromWindow() );
 
     m_text->ChangeValue("18446744073709551616"); // == ULLONG_MAX + 1
-    CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
+    CHECK( !valUnsigned.TransferFromWindow() );
 
     m_text->Clear();
-    CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
+    CHECK( !valUnsigned.TransferFromWindow() );
 }
 
-void NumValidatorTestCase::TransferFloat()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferULL", "[valnum]")
+{
+    unsigned long long value = 0;
+    wxIntegerValidator<unsigned long long> valULL(&value);
+    valULL.SetWindow(m_text);
+
+    SECTION("LLONG_MAX")
+    {
+        m_text->ChangeValue("9223372036854775807"); // == LLONG_MAX
+        REQUIRE( valULL.TransferFromWindow() );
+        CHECK( value == static_cast<wxULongLong_t>(wxINT64_MAX) );
+
+        REQUIRE( valULL.TransferToWindow() );
+        CHECK( m_text->GetValue() == "9223372036854775807" );
+    }
+
+    SECTION("LLONG_MAX+1")
+    {
+        m_text->ChangeValue("9223372036854775808"); // == LLONG_MAX + 1
+        REQUIRE( valULL.TransferFromWindow() );
+        CHECK( value == static_cast<wxULongLong_t>(wxINT64_MAX) + 1 );
+
+        REQUIRE( valULL.TransferToWindow() );
+        CHECK( m_text->GetValue() == "9223372036854775808" );
+    }
+
+    SECTION("ULLONG_MAX")
+    {
+        m_text->ChangeValue("18446744073709551615"); // == ULLONG_MAX
+        REQUIRE( valULL.TransferFromWindow() );
+        CHECK( value == wxUINT64_MAX );
+
+        REQUIRE( valULL.TransferToWindow() );
+        CHECK( m_text->GetValue() == "18446744073709551615" );
+    }
+
+    SECTION("ULLONG_MAX+1")
+    {
+        m_text->ChangeValue("18446744073709551616"); // == ULLONG_MAX + 1
+        CHECK( !valULL.TransferFromWindow() );
+    }
+}
+
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferFloat", "[valnum]")
 {
     // We need a locale with point as decimal separator.
     wxLocale loc(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT);
@@ -138,30 +166,30 @@ void NumValidatorTestCase::TransferFloat()
     wxFloatingPointValidator<float> valFloat(3, &value);
     valFloat.SetWindow(m_text);
 
-    CPPUNIT_ASSERT( valFloat.TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "0.000", m_text->GetValue() );
+    CHECK( valFloat.TransferToWindow() );
+    CHECK( m_text->GetValue() == "0.000" );
 
     value = 1.234f;
-    CPPUNIT_ASSERT( valFloat.TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "1.234", m_text->GetValue() );
+    CHECK( valFloat.TransferToWindow() );
+    CHECK( m_text->GetValue() == "1.234" );
 
     value = 1.2345678f;
-    CPPUNIT_ASSERT( valFloat.TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "1.235", m_text->GetValue() );
+    CHECK( valFloat.TransferToWindow() );
+    CHECK( m_text->GetValue() == "1.235" );
 
 
     m_text->ChangeValue("foobar");
-    CPPUNIT_ASSERT( !valFloat.TransferFromWindow() );
+    CHECK( !valFloat.TransferFromWindow() );
 
     m_text->ChangeValue("-234.567");
-    CPPUNIT_ASSERT( valFloat.TransferFromWindow() );
-    CPPUNIT_ASSERT_EQUAL( -234.567f, value );
+    CHECK( valFloat.TransferFromWindow() );
+    CHECK( value == -234.567f );
 
     m_text->Clear();
-    CPPUNIT_ASSERT( !valFloat.TransferFromWindow() );
+    CHECK( !valFloat.TransferFromWindow() );
 }
 
-void NumValidatorTestCase::ZeroAsBlank()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::ZeroAsBlank", "[valnum]")
 {
     long value = 0;
     m_text->SetValidator(
@@ -169,15 +197,15 @@ void NumValidatorTestCase::ZeroAsBlank()
 
     wxValidator * const val = m_text->GetValidator();
 
-    CPPUNIT_ASSERT( val->TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "", m_text->GetValue() );
+    CHECK( val->TransferToWindow() );
+    CHECK( m_text->GetValue() == "" );
 
     value++;
-    CPPUNIT_ASSERT( val->TransferFromWindow() );
-    CPPUNIT_ASSERT_EQUAL( 0, value );
+    CHECK( val->TransferFromWindow() );
+    CHECK( value == 0 );
 }
 
-void NumValidatorTestCase::NoTrailingZeroes()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NoTrailingZeroes", "[valnum]")
 {
     // We need a locale with point as decimal separator.
     wxLocale loc(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT);
@@ -188,17 +216,17 @@ void NumValidatorTestCase::NoTrailingZeroes()
 
     wxValidator * const val = m_text->GetValidator();
 
-    CPPUNIT_ASSERT( val->TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "1.2", m_text->GetValue() );
+    CHECK( val->TransferToWindow() );
+    CHECK( m_text->GetValue() == "1.2" );
 
     value = 1.234;
-    CPPUNIT_ASSERT( val->TransferToWindow() );
-    CPPUNIT_ASSERT_EQUAL( "1.234", m_text->GetValue() );
+    CHECK( val->TransferToWindow() );
+    CHECK( m_text->GetValue() == "1.234" );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
 
-void NumValidatorTestCase::Interactive()
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
 {
 #ifdef __WXMSW__
     // FIXME: This test fails on MSW buildbot slaves although works fine on
@@ -217,6 +245,7 @@ void NumValidatorTestCase::Interactive()
     // Create a sibling text control to be able to switch focus and thus
     // trigger the control validation/normalization.
     wxTextCtrl * const text2 = new wxTextCtrl(m_text->GetParent(), wxID_ANY);
+    wxON_BLOCK_EXIT_OBJ0( *text2, wxWindow::Destroy );
     text2->Move(10, 80); // Just to see it better while debugging...
     wxFloatingPointValidator<float> valFloat(3);
     valFloat.SetRange(-10., 10.);
@@ -228,12 +257,12 @@ void NumValidatorTestCase::Interactive()
     m_text->SetFocus();
     sim.Char('-');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "", m_text->GetValue() );
+    CHECK( m_text->GetValue() == "" );
 
     // Neither is entering '.' or any non-digit character.
     sim.Text(".a+/");
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "", m_text->GetValue() );
+    CHECK( m_text->GetValue() == "" );
 
     // Entering digits should work though and after leaving the control the
     // contents should be normalized.
@@ -242,43 +271,43 @@ void NumValidatorTestCase::Interactive()
     text2->SetFocus();
     wxYield();
     if ( loc.IsOk() )
-        CPPUNIT_ASSERT_EQUAL( "1,234,567", m_text->GetValue() );
+        CHECK( m_text->GetValue() == "1,234,567" );
     else
-        CPPUNIT_ASSERT_EQUAL( "1234567", m_text->GetValue() );
+        CHECK( m_text->GetValue() == "1234567" );
 
 
     // Entering both '-' and '.' in this control should work but only in the
     // correct order.
     sim.Char('-');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "-", text2->GetValue() );
+    CHECK( text2->GetValue() == "-" );
 
     text2->SetInsertionPoint(0);
     sim.Char('.');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "-", text2->GetValue() );
+    CHECK( text2->GetValue() == "-" );
 
     text2->SetInsertionPointEnd();
     sim.Char('.');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "-.", text2->GetValue() );
+    CHECK( text2->GetValue() == "-." );
 
     // Adding up to three digits after the point should work.
     sim.Text("987");
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "-.987", text2->GetValue() );
+    CHECK( text2->GetValue() == "-.987" );
 
     // But no more.
     sim.Text("654");
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "-.987", text2->GetValue() );
+    CHECK( text2->GetValue() == "-.987" );
 
     // We can remove one digit and another one though.
     sim.Char(WXK_BACK);
     sim.Char(WXK_BACK);
     sim.Char('6');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "-.96", text2->GetValue() );
+    CHECK( text2->GetValue() == "-.96" );
 
 
     // Also test the range constraint.
@@ -286,11 +315,11 @@ void NumValidatorTestCase::Interactive()
 
     sim.Char('9');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "9", text2->GetValue() );
+    CHECK( text2->GetValue() == "9" );
 
     sim.Char('9');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "9", text2->GetValue() );
+    CHECK( text2->GetValue() == "9" );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
