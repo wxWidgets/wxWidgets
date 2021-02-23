@@ -409,17 +409,12 @@ bool wxDatePickerCtrlGeneric::Destroy()
 
 wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
 {
-    // A better solution would be to use a custom text control that would have
-    // the best size determined by the current date format and let m_combo take
-    // care of the best size computation, but this isn't easily possible with
-    // wxComboCtrl currently, so we compute our own best size here instead even
-    // if this means adding some extra margins to account for text control
-    // borders, space between it and the button and so on.
     wxSize size = m_combo->GetButtonSize();
 
     wxTextCtrl* const text = m_combo->GetTextCtrl();
-    size.x += text->GetTextExtent(text->GetValue()).x;
-    size.x += 2*text->GetCharWidth(); // This is the margin mentioned above.
+    int w;
+    text->GetTextExtent(text->GetValue(), &w, NULL);
+    size.x += text->GetSizeFromTextSize(w + 1).x;
 
     return size;
 }
