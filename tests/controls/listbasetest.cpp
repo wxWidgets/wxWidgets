@@ -175,14 +175,6 @@ void ListBaseTestCase::ChangeMode()
     CPPUNIT_ASSERT_EQUAL( "First", list->GetItemText(0) );
 }
 
-#ifdef __WXGTK__
-    #define wxGTK_TIMED_YIELD(t) \
-        if ( !IsRunningUnderXVFB() ) \
-            for ( wxStopWatch sw; sw.Time() < t; ) wxYield()
-#else // !__WXGTK__
-    #define wxGTK_TIMED_YIELD(t)
-#endif // __WXGTK__
-
 void ListBaseTestCase::MultiSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
@@ -219,8 +211,6 @@ void ListBaseTestCase::MultiSelect()
     sim.MouseClick(); // select the anchor
     wxYield();
 
-    wxGTK_TIMED_YIELD(50);
-
     list->GetItemRect(5, pos);
     point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 10);
 
@@ -231,8 +221,6 @@ void ListBaseTestCase::MultiSelect()
     sim.MouseClick();
     sim.KeyUp(WXK_SHIFT);
     wxYield();
-
-    wxGTK_TIMED_YIELD(10);
 
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
@@ -248,8 +236,6 @@ void ListBaseTestCase::MultiSelect()
     sim.Char(WXK_END, wxMOD_SHIFT); // extend the selection to the last item
     wxYield();
 
-    wxGTK_TIMED_YIELD(10);
-
     CPPUNIT_ASSERT_EQUAL(8, list->GetSelectedItemCount()); // item 2 to 9 (inclusive) are selected
     CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // focus is on the last item
     CPPUNIT_ASSERT_EQUAL(4, selected.GetCount()); // only newly selected items got the event
@@ -261,8 +247,6 @@ void ListBaseTestCase::MultiSelect()
 
     sim.Char(WXK_HOME, wxMOD_SHIFT); // select from anchor to the first item
     wxYield();
-
-    wxGTK_TIMED_YIELD(10);
 
     CPPUNIT_ASSERT_EQUAL(3, list->GetSelectedItemCount()); // item 0 to 2 (inclusive) are selected
     CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // focus is on item 0
