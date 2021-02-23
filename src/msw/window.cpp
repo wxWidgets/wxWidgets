@@ -4569,7 +4569,7 @@ bool wxWindowMSW::HandlePower(WXWPARAM wParam,
             break;
 
         default:
-            wxLogDebug(wxT("Unknown WM_POWERBROADCAST(%d) event"), wParam);
+            wxLogDebug(wxT("Unknown WM_POWERBROADCAST(%zd) event"), wParam);
             wxFALLTHROUGH;
 
         // these messages are currently not mapped to wx events
