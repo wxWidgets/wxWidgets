@@ -184,4 +184,30 @@ TEXT_VALIDATOR_TEST_CASE("wxTextValidator::IsValid", "[wxTextValidator][filters]
     }
 }
 
+TEXT_VALIDATOR_TEST_CASE("wxTextValidator::TransferToWindow", "[wxTextValidator][transferdata]")
+{
+    wxString value = "wxwidgets";
+    wxTextValidator val(wxFILTER_ALPHA, &value);
+    m_text->SetValidator(val);
+
+    CHECK( m_text->IsEmpty() );
+
+    REQUIRE( m_text->TransferDataToWindow() );
+
+    CHECK( m_text->GetValue() == "wxwidgets" );
+}
+
+TEXT_VALIDATOR_TEST_CASE("wxTextValidator::TransferFromWindow", "[wxTextValidator][transferdata]")
+{
+    wxString value;
+    wxTextValidator val(wxFILTER_ALPHA, &value);
+    m_text->SetValidator(val);
+
+    m_text->ChangeValue("wxwidgets");
+
+    REQUIRE( m_text->TransferDataFromWindow() );
+
+    CHECK( value == "wxwidgets" );
+}
+
 #endif // wxUSE_VALIDATORS && wxUSE_UIACTIONSIMULATOR
