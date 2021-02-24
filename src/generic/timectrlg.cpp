@@ -665,8 +665,14 @@ wxSize wxTimePickerCtrlGeneric::DoGetBestSize() const
     if ( !m_impl )
         return Base::DoGetBestSize();
 
-    wxSize size = m_impl->m_text->GetBestSize();
-    size.x += m_impl->m_btn->GetBestSize().x + HMARGIN_TEXT_SPIN;
+    wxTextCtrl* const text = m_impl->m_text;
+    int w;
+    text->GetTextExtent(text->GetValue(), &w, NULL);
+    wxSize size(text->GetSizeFromTextSize(w + 1));
+
+    const wxSize sizeBtn(m_impl->m_btn->GetBestSize());
+    size.y = wxMax(size.y, sizeBtn.y);
+    size.x += sizeBtn.x + HMARGIN_TEXT_SPIN;
 
     return size;
 }
