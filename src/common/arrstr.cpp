@@ -377,6 +377,29 @@ void wxArrayString::Shrink()
   }
 }
 
+// Binary search in the sorted array
+size_t wxArrayString::BinarySearch(const wxString& str, bool equal) const
+{
+    size_t
+        lo = 0,
+        hi = m_nCount;
+    while (lo < hi) {
+        size_t i;
+        i = (lo + hi) / 2;
+
+        int res;
+        res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
+        if (res < 0)
+            hi = i;
+        else if (res > 0)
+            lo = i + 1;
+        else
+            return i;
+    }
+    wxASSERT_MSG(lo == hi, wxT("binary search broken"));
+    return equal ? wxNOT_FOUND : lo;
+}
+
 // searches the array for an item (forward or backwards)
 int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
@@ -384,25 +407,7 @@ int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
     // use binary search in the sorted array
     wxASSERT_MSG( bCase && !bFromEnd,
                   wxT("search parameters ignored for auto sorted array") );
-
-    size_t
-           lo = 0,
-           hi = m_nCount;
-    while ( lo < hi ) {
-      size_t i;
-      i = (lo + hi)/2;
-
-      int res;
-      res = str.compare(m_pItems[i]);
-      if ( res < 0 )
-        hi = i;
-      else if ( res > 0 )
-        lo = i + 1;
-      else
-        return i;
-    }
-
-    return wxNOT_FOUND;
+    return BinarySearch(str, true);
   }
   else {
     // use linear search in unsorted array
@@ -432,30 +437,9 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
 {
   if ( m_autoSort ) {
     // insert the string at the correct position to keep the array sorted
-    size_t
-           lo = 0,
-           hi = m_nCount;
-    while ( lo < hi ) {
-      size_t i;
-      i = (lo + hi)/2;
-
-      int res;
-      res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
-      if ( res < 0 )
-        hi = i;
-      else if ( res > 0 )
-        lo = i + 1;
-      else {
-        lo = hi = i;
-        break;
-      }
-    }
-
-    wxASSERT_MSG( lo == hi, wxT("binary search broken") );
-
-    Insert(str, lo, nInsert);
-
-    return (size_t)lo;
+    size_t nIndex = BinarySearch(str);
+    Insert(str, nIndex, nInsert);
+    return nIndex;
   }
   else {
     // Now that we must postpone freeing the old memory until we don't need it

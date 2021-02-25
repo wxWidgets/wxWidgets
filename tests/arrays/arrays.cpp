@@ -399,6 +399,11 @@ void ArraysTestCase::SortedArray()
     ad.Add("Aa");
     CPPUNIT_ASSERT_EQUAL( "a", ad[0] );
     CPPUNIT_ASSERT_EQUAL( "Aa", ad[1] );
+    CPPUNIT_ASSERT_EQUAL( 0, ad.Index("a") );
+    CPPUNIT_ASSERT_EQUAL( 1, ad.Index("Aa") );
+    CPPUNIT_ASSERT_EQUAL( 2, ad.Index("AB") );
+    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, ad.Index("A") );
+    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, ad.Index("z") );
 }
 
 void ArraysTestCase::wxStringArraySplitTest()
