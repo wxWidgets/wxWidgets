@@ -41,14 +41,15 @@ public:
     CInvokable() : m_nRefCount(0) {}
     virtual ~CInvokable() {}
     // IUnknown methods
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID WXUNUSED(riid), void** ppvObj) override
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObj) override
     {
-        /**
-         * WebView2 Runtime apparently doesn't use this method, so it doesn't
-         * matter how we implement this. On the other hand, this method must be
-         * implemented to make this invokable type a concrete class instead of a
-         * abstract one.
-         */
+        if (riid == __uuidof(baseT) || riid == IID_IUnknown)
+        {
+            *ppvObj = this;
+            AddRef();
+            return S_OK;
+        }
+
         *ppvObj = NULL;
         return E_NOINTERFACE;
     }
