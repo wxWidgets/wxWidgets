@@ -3964,7 +3964,6 @@ public:
     void SetDataBuffer( void* buf );
     int GetDragFlags() const;
     void SetDropEffect( wxDragResult effect );
-    void SetDropPos(int pos);
 };
 
 
