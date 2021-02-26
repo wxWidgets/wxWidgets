@@ -180,6 +180,10 @@
         <if cond="TOOLKIT=='MSW'">$(TOP_SRCDIR)3rdparty/webview2/build/native/include</if>
     </set>
 
+    <set var="webview_additional_include_wrl">
+        <if cond="TOOLKIT=='MSW' and IS_MSVC=='0'">$(TOP_SRCDIR)include/wx/msw/wrl</if>
+    </set>
+
     <dll id="webviewdll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
@@ -189,6 +193,7 @@
         <library>basedll</library>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+        <include>$(webview_additional_include_wrl)</include>
         <include>$(webview_additional_include)</include>
     </dll>
 
@@ -196,6 +201,7 @@
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <sources>$(WEBVIEW_SRC)</sources>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+        <include>$(webview_additional_include_wrl)</include>
         <include>$(webview_additional_include)</include>
     </lib>
 
