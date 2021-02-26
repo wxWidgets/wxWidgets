@@ -117,6 +117,8 @@ public:
     virtual void ClearSelection() wxOVERRIDE;
 
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
+    virtual bool AddScriptMessageHandler(const wxString& name) wxOVERRIDE;
+    virtual bool RemoveScriptMessageHandler(const wxString& name) wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
