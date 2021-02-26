@@ -38,6 +38,8 @@ public:
     wxString m_pendingURL;
     int m_pendingContextMenuEnabled;
     int m_pendingAccessToDevToolsEnabled;
+    wxVector<wxString> m_pendingUserScripts;
+    wxVector<wxString> m_userScriptIds;
     wxString m_scriptMsgHandlerName;
 
     // WebView Events tokens
@@ -59,6 +61,7 @@ public:
     HRESULT OnContentLoading(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args);
     HRESULT OnContainsFullScreenElementChanged(ICoreWebView2* sender, IUnknown* args);
     HRESULT OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
+    HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);

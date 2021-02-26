@@ -423,6 +423,14 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         settings->put_IsWebMessageEnabled(!m_scriptMsgHandlerName.empty());
     }
 
+    if (!m_pendingUserScripts.empty())
+    {
+        for (wxVector<wxString>::iterator it = m_pendingUserScripts.begin();
+            it != m_pendingUserScripts.end(); ++it)
+            m_ctrl->AddUserScript(*it);
+        m_pendingUserScripts.clear();
+    }
+
     if (!m_pendingURL.empty())
     {
         m_ctrl->LoadURL(m_pendingURL);
@@ -832,6 +840,46 @@ bool wxWebViewEdge::RemoveScriptMessageHandler(const wxString& WXUNUSED(name))
     if (settings)
         settings->put_IsWebMessageEnabled(false);
     return true;
+}
+
+HRESULT wxWebViewEdgeImpl::OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id)
+{
+    if (SUCCEEDED(errorCode))
+        m_userScriptIds.push_back(id);
+    return S_OK;
+}
+
+bool wxWebViewEdge::AddUserScript(const wxString& javascript,
+    wxWebViewUserScriptInjectionTime injectionTime)
+{
+    // Currently only AT_DOCUMENT_START is supported
+    if (injectionTime != wxWEBVIEW_INJECT_AT_DOCUMENT_START)
+        return false;
+
+    if (m_impl->m_webView)
+    {
+        HRESULT hr = m_impl->m_webView->AddScriptToExecuteOnDocumentCreated(javascript.wc_str(),
+            Callback<ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler>(m_impl,
+            &wxWebViewEdgeImpl::OnAddScriptToExecuteOnDocumentedCreatedCompleted).Get());
+        if (FAILED(hr))
+            return false;
+    }
+    else
+        m_impl->m_pendingUserScripts.push_back(javascript);
+
+    return true;
+}
+
+void wxWebViewEdge::RemoveAllUserScripts()
+{
+    m_impl->m_pendingUserScripts.clear();
+    for (wxVector<wxString>::iterator it = m_impl->m_userScriptIds.begin();
+        it != m_impl->m_userScriptIds.end(); ++it)
+    {
+        HRESULT hr = m_impl->m_webView->RemoveScriptToExecuteOnDocumentCreated(it->wc_str());
+        if (FAILED(hr))
+            wxLogApiError("RemoveScriptToExecuteOnDocumentCreated", hr);
+    }
 }
 
 void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
