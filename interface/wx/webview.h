@@ -435,7 +435,8 @@ public:
        and is only available in wxWidgets 3.1.5 or later.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
-        only available in wxWidgets 3.1.5 or later.
+        only available in wxWidgets 3.1.5 or later for usage details see
+        AddScriptMessageHandler().
     @endEventTable
 
     @since 2.9.3
@@ -613,6 +614,44 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
+        Set the editable property of the web control. Enabling allows the user
+        to edit the page even if the @c contenteditable attribute is not set.
+        The exact capabilities vary with the backend being used.
+
+        @note This is not implemented on macOS.
+    */
+    virtual void SetEditable(bool enable = true) = 0;
+
+    /**
+        Set the displayed page source to the contents of the given string.
+        @param html    The string that contains the HTML data to display.
+        @param baseUrl URL assigned to the HTML data, to be used to resolve
+                    relative paths, for instance.
+        @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
+              page to finish loading before calling SetPage(). The baseURL
+              parameter is not used in this backend and the edge backend.
+    */
+    virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
+
+    /**
+        Set the displayed page source to the contents of the given stream.
+        @param html    The stream to read HTML data from.
+        @param baseUrl URL assigned to the HTML data, to be used to resolve
+                    relative paths, for instance.
+    */
+    virtual void SetPage(wxInputStream& html, wxString baseUrl);
+
+    /**
+        Stop the current page loading process, if any.
+        May trigger an error event of type @c wxWEBVIEW_NAV_ERR_USER_CANCELLED.
+        TODO: make @c wxWEBVIEW_NAV_ERR_USER_CANCELLED errors uniform across ports.
+    */
+    virtual void Stop() = 0;
+
+    /**
+        @name Scripting
+    */
+    /**
         Runs the given JavaScript code.
 
         JavaScript code is executed inside the browser control and has full
@@ -673,39 +712,30 @@ public:
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
 
     /**
-        Set the editable property of the web control. Enabling allows the user
-        to edit the page even if the @c contenteditable attribute is not set.
-        The exact capabilities vary with the backend being used.
+        Add a script message handler with the given name.
 
-        @note This is not implemented on macOS.
-    */
-    virtual void SetEditable(bool enable = true) = 0;
+        @return @true if the handler could be added, @false if it could not be added.
 
-    /**
-        Set the displayed page source to the contents of the given string.
-        @param html    The string that contains the HTML data to display.
-        @param baseUrl URL assigned to the HTML data, to be used to resolve
-                    relative paths, for instance.
-        @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling SetPage(). The baseURL
-              parameter is not used in this backend and the edge backend.
+        @see RemoveScriptMessageHandler()
+
+        @note The Edge (Chromium) backend only supports a single message handler and
+            the IE backend does not support script message handlers.
+
+        @since 3.1.5
     */
-    virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
+    virtual bool AddScriptMessageHandler(const wxString& name);
 
     /**
-        Set the displayed page source to the contents of the given stream.
-        @param html    The stream to read HTML data from.
-        @param baseUrl URL assigned to the HTML data, to be used to resolve
-                    relative paths, for instance.
-    */
-    virtual void SetPage(wxInputStream& html, wxString baseUrl);
+        Remove a script message handler with the given name that was previously added via
+        AddScriptMessageHandler().
 
-    /**
-        Stop the current page loading process, if any.
-        May trigger an error event of type @c wxWEBVIEW_NAV_ERR_USER_CANCELLED.
-        TODO: make @c wxWEBVIEW_NAV_ERR_USER_CANCELLED errors uniform across ports.
+        @return @true if the handler could be removed, @false if it could not be removed.
+
+        @see AddScriptMessageHandler()
+        
+        @since 3.1.5
     */
-    virtual void Stop() = 0;
+    virtual bool RemoveScriptMessageHandler(const wxString& name);
 
     /**
         @name Clipboard
