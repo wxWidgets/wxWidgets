@@ -121,6 +121,7 @@ public:
     void OnNewWindow(wxWebViewEvent& evt);
     void OnTitleChanged(wxWebViewEvent& evt);
     void OnFullScreenChanged(wxWebViewEvent& evt);
+    void OnScriptMessage(wxWebViewEvent& evt);
     void OnSetPage(wxCommandEvent& evt);
     void OnViewSourceRequest(wxCommandEvent& evt);
     void OnViewTextRequest(wxCommandEvent& evt);
@@ -539,6 +540,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_WEBVIEW_NEWWINDOW, &WebFrame::OnNewWindow, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_TITLE_CHANGED, &WebFrame::OnTitleChanged, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, &WebFrame::OnFullScreenChanged, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, &WebFrame::OnScriptMessage, this, m_browser->GetId());
 
     // Connect the menu events
     Bind(wxEVT_MENU, &WebFrame::OnSetPage, this, setPage->GetId());
@@ -904,6 +906,11 @@ void WebFrame::OnFullScreenChanged(wxWebViewEvent & evt)
 {
     wxLogMessage("Full screen changed; status = %d", evt.GetInt());
     ShowFullScreen(evt.GetInt() != 0);
+}
+
+void WebFrame::OnScriptMessage(wxWebViewEvent& evt)
+{
+    wxLogMessage("Script message recieved; value = %s", evt.GetString());
 }
 
 void WebFrame::OnSetPage(wxCommandEvent& WXUNUSED(evt))
