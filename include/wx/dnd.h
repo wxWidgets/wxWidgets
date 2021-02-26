@@ -50,7 +50,7 @@ enum wxDropFlags
 {
     wxDrop_Before = 0x01,
     wxDrop_After = 0x02,
-    wxDrop_Onto  = 0x04,
+    wxDrop_Onto  = 0x04
 };
 
 // return true if res indicates that something was done during a dnd operation,
