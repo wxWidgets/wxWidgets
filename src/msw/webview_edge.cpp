@@ -82,7 +82,7 @@ bool wxWebViewEdgeImpl::Create()
     m_initialized = false;
     m_isBusy = false;
     m_pendingContextMenuEnabled = -1;
-    m_pendingAccessToDevToolsEnabled = -1;
+    m_pendingAccessToDevToolsEnabled = 0;
 
     m_historyLoadingFromList = false;
     m_historyEnabled = true;

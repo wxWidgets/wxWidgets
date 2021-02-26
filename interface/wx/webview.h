@@ -775,8 +775,8 @@ public:
     /**
         Enable or disable access to dev tools for the user.
 
-        This is currently only implemented for the Edge (Chromium) backend
-        where the dev tools are enabled by default and the WebKit2GTK+ backend.
+        This is currently only implemented for the Edge (Chromium) backend and
+        the WebKit2GTK+ backend. Dev tools are disabled by default.
 
         @since 3.1.4
     */
