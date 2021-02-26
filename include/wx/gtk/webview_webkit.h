@@ -78,6 +78,8 @@ public:
     virtual wxString GetPageText() const wxOVERRIDE;
     virtual void Print() wxOVERRIDE;
     virtual bool IsBusy() const wxOVERRIDE;
+    virtual void EnableAccessToDevTools(bool enable = true) wxOVERRIDE;
+    virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
 
     void SetZoomType(wxWebViewZoomType) wxOVERRIDE;
     wxWebViewZoomType GetZoomType() const wxOVERRIDE;

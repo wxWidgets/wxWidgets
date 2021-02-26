@@ -698,6 +698,18 @@ float wxWebViewWebKit::GetWebkitZoom() const
     return webkit_web_view_get_zoom_level(m_web_view);
 }
 
+void wxWebViewWebKit::EnableAccessToDevTools(bool enable)
+{
+    WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
+    webkit_settings_set_enable_developer_extras(settings, enable);
+}
+
+bool wxWebViewWebKit::IsAccessToDevToolsEnabled() const
+{
+    WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
+    return webkit_settings_get_enable_developer_extras(settings);
+}
+
 void wxWebViewWebKit::Stop()
 {
      webkit_web_view_stop_loading(m_web_view);
