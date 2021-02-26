@@ -198,15 +198,16 @@ int wxSortedArrayString::Index(const wxString& str,
     wxASSERT_MSG( bCase && !bFromEnd,
                   "search parameters ignored for sorted array" );
 
+    SCMPFUNC function = GetCompareFunction();
     wxSortedArrayString::const_iterator
         it = std::lower_bound(begin(), end(), str,
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
-                              [](const wxString& s1, const wxString& s2)
+                              [function](const wxString& s1, const wxString& s2)
                               {
-                                  return s1 < s2;
+                                  return function(s1, s2) < 0;
                               }
 #else // C++98 version
-                              wxStringCompare(wxStringCmp())
+                              wxStringCompare(function)
 #endif // C++11/C++98
                               );
 
