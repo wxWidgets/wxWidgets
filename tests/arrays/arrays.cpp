@@ -156,60 +156,10 @@ struct Item
 WX_DEFINE_ARRAY_PTR(Item *, ItemPtrArray);
 
 // ----------------------------------------------------------------------------
-// test class
+// the tests
 // ----------------------------------------------------------------------------
 
-class ArraysTestCase : public CppUnit::TestCase
-{
-public:
-    ArraysTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( ArraysTestCase );
-        CPPUNIT_TEST( wxStringArrayTest );
-        CPPUNIT_TEST( SortedArray );
-        CPPUNIT_TEST( wxStringArraySplitTest );
-        CPPUNIT_TEST( wxStringArrayJoinTest );
-        CPPUNIT_TEST( wxStringArraySplitJoinTest );
-
-        CPPUNIT_TEST( wxObjArrayTest );
-        CPPUNIT_TEST( wxObjArrayPtrTest );
-        CPPUNIT_TEST( wxArrayUShortTest );
-        CPPUNIT_TEST( wxArrayIntTest );
-        CPPUNIT_TEST( wxArrayCharTest );
-        CPPUNIT_TEST( TestSTL );
-        CPPUNIT_TEST( Alloc );
-        CPPUNIT_TEST( Clear );
-        CPPUNIT_TEST( Swap );
-        CPPUNIT_TEST( IndexFromEnd );
-    CPPUNIT_TEST_SUITE_END();
-
-    void wxStringArrayTest();
-    void SortedArray();
-    void wxStringArraySplitTest();
-    void wxStringArrayJoinTest();
-    void wxStringArraySplitJoinTest();
-    void wxObjArrayTest();
-    void wxObjArrayPtrTest();
-    void wxArrayUShortTest();
-    void wxArrayIntTest();
-    void wxArrayCharTest();
-    void TestSTL();
-    void Alloc();
-    void Clear();
-    void Swap();
-    void IndexFromEnd();
-
-    wxDECLARE_NO_COPY_CLASS(ArraysTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ArraysTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ArraysTestCase, "ArraysTestCase" );
-
-void ArraysTestCase::wxStringArrayTest()
+TEST_CASE("wxArrayString", "[dynarray]")
 {
     wxArrayString a1;
     a1.Add(wxT("thermit"));
@@ -375,7 +325,7 @@ void ArraysTestCase::wxStringArrayTest()
     wxCLANG_WARNING_RESTORE(self-assign-overloaded)
 }
 
-void ArraysTestCase::SortedArray()
+TEST_CASE("wxSortedArrayString", "[dynarray]")
 {
     wxSortedArrayString a;
     a.Add("d");
@@ -406,7 +356,7 @@ void ArraysTestCase::SortedArray()
     CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, ad.Index("z") );
 }
 
-void ArraysTestCase::wxStringArraySplitTest()
+TEST_CASE("Arrays::Split", "[dynarray]")
 {
     // test wxSplit:
 
@@ -461,7 +411,7 @@ void ArraysTestCase::wxStringArraySplitTest()
     }
 }
 
-void ArraysTestCase::wxStringArrayJoinTest()
+TEST_CASE("Arrays::Join", "[dynarray]")
 {
     // test wxJoin:
 
@@ -506,7 +456,7 @@ void ArraysTestCase::wxStringArrayJoinTest()
     }
 }
 
-void ArraysTestCase::wxStringArraySplitJoinTest()
+TEST_CASE("Arrays::SplitJoin", "[dynarray]")
 {
     wxChar separators[] = { wxT('a'), wxT(','), wxT('_'), wxT(' '), wxT('\\'),
                             wxT('&'), wxT('{'), wxT('A'), wxT('<'), wxT('>'),
@@ -560,7 +510,7 @@ void ArraysTestCase::wxStringArraySplitJoinTest()
     CPPUNIT_ASSERT_EQUAL( 2, wxSplit(wxT(";"), wxT(';')).size() );
 }
 
-void ArraysTestCase::wxObjArrayTest()
+TEST_CASE("wxObjArray", "[dynarray]")
 {
     {
         ArrayBars bars;
@@ -588,7 +538,7 @@ void ArraysTestCase::wxObjArrayTest()
     CPPUNIT_ASSERT_EQUAL( 0, Bar::GetNumber() );
 }
 
-void ArraysTestCase::wxObjArrayPtrTest()
+TEST_CASE("wxObjArrayPtr", "[dynarray]")
 {
     // Just check that instantiating this class compiles.
     ArrayBarPtrs barptrs;
@@ -597,7 +547,7 @@ void ArraysTestCase::wxObjArrayPtrTest()
 
 #define TestArrayOf(name)                                                     \
                                                                               \
-void ArraysTestCase::wxArray ## name ## Test()                                \
+TEST_CASE("wxDynArray::" #name, "[dynarray]")                                 \
 {                                                                             \
     wxArray##name a;                                                          \
     a.Add(1);                                                                 \
@@ -642,7 +592,7 @@ TestArrayOf(Char)
 
 TestArrayOf(Int)
 
-void ArraysTestCase::Alloc()
+TEST_CASE("wxDynArray::Alloc", "[dynarray]")
 {
     wxArrayInt a;
     a.Add(17);
@@ -656,7 +606,7 @@ void ArraysTestCase::Alloc()
     CPPUNIT_ASSERT_EQUAL( 9, a[1] );
 }
 
-void ArraysTestCase::Clear()
+TEST_CASE("wxDynArray::Clear", "[dynarray]")
 {
     ItemPtrArray items;
 
@@ -702,7 +652,7 @@ void DoTestSwap(T v1, T v2, T v3)
 
 } // anonymous namespace
 
-void ArraysTestCase::Swap()
+TEST_CASE("wxDynArray::Swap", "[dynarray]")
 {
     DoTestSwap<wxArrayString>("Foo", "Bar", "Baz");
 
@@ -710,7 +660,7 @@ void ArraysTestCase::Swap()
     DoTestSwap<wxArrayLong>(6, 28, 496);
 }
 
-void ArraysTestCase::TestSTL()
+TEST_CASE("wxDynArray::TestSTL", "[dynarray]")
 {
     wxArrayInt list1;
     wxArrayInt::iterator it, en;
@@ -768,7 +718,7 @@ void ArraysTestCase::TestSTL()
     WX_CLEAR_ARRAY(items);
 }
 
-void ArraysTestCase::IndexFromEnd()
+TEST_CASE("wxDynArray::IndexFromEnd", "[dynarray]")
 {
     wxArrayInt a;
     a.push_back(10);
