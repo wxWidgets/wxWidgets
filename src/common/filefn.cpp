@@ -253,6 +253,8 @@ wxIsAbsolutePath (const wxString& filename)
         // Unix like or Windows
         if (filename[0] == wxT('/'))
             return true;
+        if (filename.length() < 2)
+            return false;
 #ifdef __VMS__
         if ((filename[0] == wxT('[') && filename[1] != wxT('.')))
             return true;
