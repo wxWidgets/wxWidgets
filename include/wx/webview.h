@@ -270,9 +270,10 @@ public:
     wxWebViewEvent() {}
     wxWebViewEvent(wxEventType type, int id, const wxString& url,
                    const wxString target,
-                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE)
+                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE,
+                   const wxString& messageHandler = wxString())
         : wxNotifyEvent(type, id), m_url(url), m_target(target),
-          m_actionFlags(flags)
+          m_actionFlags(flags), m_messageHandler(messageHandler)
     {}
 
 
@@ -280,12 +281,14 @@ public:
     const wxString& GetTarget() const { return m_target; }
 
     wxWebViewNavigationActionFlags GetNavigationAction() const { return m_actionFlags; }
+    const wxString& GetMessageHandler() const { return m_messageHandler; }
 
     virtual wxEvent* Clone() const wxOVERRIDE { return new wxWebViewEvent(*this); }
 private:
     wxString m_url;
     wxString m_target;
     wxWebViewNavigationActionFlags m_actionFlags;
+    wxString m_messageHandler;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
 };

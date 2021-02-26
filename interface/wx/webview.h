@@ -1111,7 +1111,8 @@ public:
     wxWebViewEvent();
     wxWebViewEvent(wxEventType type, int id, const wxString href,
                    const wxString target,
-                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE);
+                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE,
+                   const wxString& messageHandler = wxString());
 
     /**
         Get the name of the target frame which the url of this event
@@ -1132,6 +1133,14 @@ public:
         @since 3.1.2
     */
     wxWebViewNavigationActionFlags GetNavigationAction() const;
+
+    /**
+        Get the name of the script handler. Only valid for events of type
+        @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED
+
+        @since 3.1.5
+    */
+    const wxString& GetMessageHandler() const;
 };
 
 

@@ -910,7 +910,7 @@ void WebFrame::OnFullScreenChanged(wxWebViewEvent & evt)
 
 void WebFrame::OnScriptMessage(wxWebViewEvent& evt)
 {
-    wxLogMessage("Script message recieved; value = %s", evt.GetString());
+    wxLogMessage("Script message recieved; value = %s, handler = %s", evt.GetString(), evt.GetMessageHandler());
 }
 
 void WebFrame::OnSetPage(wxCommandEvent& WXUNUSED(evt))

@@ -923,7 +923,9 @@ WX_API_AVAILABLE_MACOS(10, 12)
     wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED,
                          webKitWindow->GetId(),
                          webKitWindow->GetCurrentURL(),
-                         "");
+                         "",
+                         wxWEBVIEW_NAV_ACTION_NONE,
+                         wxCFStringRef::AsString(message.name));
     if ([message.body isKindOfClass:NSString.class])
         event.SetString(wxCFStringRef::AsString(message.body));
     else if ([message.body isKindOfClass:NSNumber.class])
