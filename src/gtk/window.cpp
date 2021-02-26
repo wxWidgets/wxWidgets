@@ -2472,6 +2472,16 @@ bool wxGetKeyState(wxKeyCode WXUNUSED(key))
 }
 #endif // __WINDOWS__
 
+// Under Unix this is implemented using X11 functions in utilsx11.cpp but we
+// need to have this function under Wayland too, so provide at least a stub.
+#ifdef GDK_WINDOWING_WAYLAND
+bool wxGetKeyState(wxKeyCode WXUNUSED(key))
+{
+    wxFAIL_MSG(wxS("Not implemented under Wayland"));
+    return false;
+}
+#endif // __WAYLAND__
+
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;

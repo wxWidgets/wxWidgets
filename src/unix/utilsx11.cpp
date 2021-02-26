@@ -8,7 +8,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXX11__) || (defined(__WXGTK__) && defined(GDK_WINDOWING_X11)) || defined(__WXMOTIF__)
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"

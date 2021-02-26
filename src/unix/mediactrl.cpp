@@ -35,7 +35,12 @@
 
 #ifdef __WXGTK__
     #include "wx/gtk/private/wrapgtk.h"
+#ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+    #include <gdk/gdkwayland.h>
+#endif
 #endif
 
 //-----------------------------------------------------------------------------
@@ -308,7 +313,12 @@ static gint gtk_window_realize_callback(GtkWidget* widget,
 
 #if GST_CHECK_VERSION(1,0,0)
     gst_video_overlay_set_window_handle(be->m_xoverlay,
+#ifdef GDK_WINDOWING_X11
                                 GDK_WINDOW_XID(window)
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+                                (guintptr)gdk_wayland_window_get_wl_surface(window)
+#endif
                                 );
 #else
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
@@ -685,7 +695,12 @@ void wxGStreamerMediaBackend::SetupXOverlay()
         gst_x_overlay_set_xwindow_id(GST_X_OVERLAY(m_xoverlay),
 #endif
 #ifdef __WXGTK__
+#ifdef GDK_WINDOWING_X11
                         GDK_WINDOW_XID(window)
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+                        (guintptr)gdk_wayland_window_get_wl_surface(window)
+#endif
 #else
                         ctrl->GetHandle()
 #endif
