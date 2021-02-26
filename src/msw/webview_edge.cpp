@@ -319,15 +319,31 @@ HRESULT wxWebViewEdgeImpl::OnContainsFullScreenElementChanged(ICoreWebView2* WXU
     return S_OK;
 }
 
-HRESULT wxWebViewEdgeImpl::OnWebMessageReceived(ICoreWebView2* WXUNUSED(sender), ICoreWebView2WebMessageReceivedEventArgs* args)
+HRESULT
+wxWebViewEdgeImpl::OnWebMessageReceived(ICoreWebView2* WXUNUSED(sender),
+                                        ICoreWebView2WebMessageReceivedEventArgs* args)
 {
     wxCoTaskMemPtr<wchar_t> msgContent;
+
+    HRESULT hr = args->get_WebMessageAsJson(&msgContent);
+    if (FAILED(hr))
+    {
+        wxLogApiError("get_WebMessageAsJson", hr);
+        return hr;
+    }
 
     wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, m_ctrl->GetId(),
         m_ctrl->GetCurrentURL(), wxString());
     event.SetEventObject(m_ctrl);
-    if (SUCCEEDED(args->get_WebMessageAsJson(&msgContent)))
-        event.SetString(wxString(msgContent));
+
+    // Try to decode JSON string or return original
+    // result if it's not a valid JSON string
+    wxString msgStr;
+    wxString msgJson(msgContent);
+    if (!wxJSON::DecodeString(msgJson, &msgStr))
+        msgStr = msgJson;
+    event.SetString(msgStr);
+
     m_ctrl->HandleWindowEvent(event);
 
     return S_OK;
