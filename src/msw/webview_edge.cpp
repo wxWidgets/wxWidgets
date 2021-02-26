@@ -333,7 +333,8 @@ wxWebViewEdgeImpl::OnWebMessageReceived(ICoreWebView2* WXUNUSED(sender),
     }
 
     wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, m_ctrl->GetId(),
-        m_ctrl->GetCurrentURL(), wxString());
+        m_ctrl->GetCurrentURL(), wxString(),
+        wxWEBVIEW_NAV_ACTION_NONE, m_scriptMsgHandlerName);
     event.SetEventObject(m_ctrl);
 
     // Try to decode JSON string or return original
@@ -417,7 +418,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
 
     wxCOMPtr<ICoreWebView2Settings> settings(GetSettings());
     if (settings)
+    {
         settings->put_IsStatusBarEnabled(false);
+        settings->put_IsWebMessageEnabled(!m_scriptMsgHandlerName.empty());
+    }
 
     if (!m_pendingURL.empty())
     {
@@ -804,6 +808,29 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) cons
         return false;
     }
 
+    return true;
+}
+
+bool wxWebViewEdge::AddScriptMessageHandler(const wxString& name)
+{
+    // Edge only supports a single message handler
+    if (!m_impl->m_scriptMsgHandlerName.empty())
+        return false;
+
+    m_impl->m_scriptMsgHandlerName = name;
+    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
+    if (settings)
+        settings->put_IsWebMessageEnabled(true);
+
+    return true;
+}
+
+bool wxWebViewEdge::RemoveScriptMessageHandler(const wxString& WXUNUSED(name))
+{
+    m_impl->m_scriptMsgHandlerName.clear();
+    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
+    if (settings)
+        settings->put_IsWebMessageEnabled(false);
     return true;
 }
 

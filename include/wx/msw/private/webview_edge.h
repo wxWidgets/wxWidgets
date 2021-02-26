@@ -38,6 +38,7 @@ public:
     wxString m_pendingURL;
     int m_pendingContextMenuEnabled;
     int m_pendingAccessToDevToolsEnabled;
+    wxString m_scriptMsgHandlerName;
 
     // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
