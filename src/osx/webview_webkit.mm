@@ -394,10 +394,17 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) co
     return true;
 }
 
-void wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
+bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
 {
     [m_webView.configuration.userContentController addScriptMessageHandler:
         [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:wxCFStringRef(name).AsNSString()];
+    return true;
+}
+
+bool wxWebViewWebKit::RemoveScriptMessageHandler(const wxString& name)
+{
+    [m_webView.configuration.userContentController removeScriptMessageHandlerForName:wxCFStringRef(name).AsNSString()];
+    return true;
 }
 
 void wxWebViewWebKit::LoadURL(const wxString& url)

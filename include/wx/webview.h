@@ -182,7 +182,8 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
-    virtual void AddScriptMessageHandler(const wxString& WXUNUSED(name)) { }
+    virtual bool AddScriptMessageHandler(const wxString& WXUNUSED(name)) { return false; }
+    virtual bool RemoveScriptMessageHandler(const wxString& WXUNUSED(name)) { return false; }
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {
