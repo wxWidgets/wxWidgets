@@ -108,6 +108,19 @@ enum wxWebViewNavigationActionFlags
 };
 
 /**
+    Specifies at which place of documents an user script will be inserted.
+
+    @since 3.1.5
+*/
+enum wxWebViewUserScriptInjectionTime
+{
+    /** Insert the code of the user script at the beginning of loaded documents. */
+    wxWEBVIEW_INJECT_AT_DOCUMENT_START,
+    /** Insert the code of the user script at the end of the loaded documents. */
+    wxWEBVIEW_INJECT_AT_DOCUMENT_END
+};
+
+/**
     Internet Explorer emulation modes for wxWebViewIE.
 
     Elements of this enum can be used with wxWebView::MSWSetEmulationLevel().
@@ -736,6 +749,33 @@ public:
         @since 3.1.5
     */
     virtual bool RemoveScriptMessageHandler(const wxString& name);
+
+    /**
+        Injects the specified script into the webpage’s content.
+
+        @param javascript The java script code to add
+        @param injectionTime Specifies when the script could will be
+            executed.
+        @return Returns true if the script was added successfully
+
+        @note Please not that this is unsupported by the IE backend and
+            the Edge (Chromium) backend does only support wxWEBVIEW_INJECT_AT_DOCUMENT_START.
+
+        @see RemoveAllUserScripts()
+        
+        @since 3.1.5
+    */
+    virtual bool AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START);
+
+    /**
+        Removes all user scripts from the web view.
+
+        @see AddUserScript()
+        
+        @since 3.1.5
+    */
+    virtual void RemoveAllUserScripts();
 
     /**
         @name Clipboard

@@ -86,6 +86,12 @@ enum wxWebViewNavigationActionFlags
     wxWEBVIEW_NAV_ACTION_OTHER
 };
 
+enum wxWebViewUserScriptInjectionTime
+{
+    wxWEBVIEW_INJECT_AT_DOCUMENT_START,
+    wxWEBVIEW_INJECT_AT_DOCUMENT_END
+};
+
 //Base class for custom scheme handlers
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
@@ -181,9 +187,16 @@ public:
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
+
+    // Script
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
     virtual bool AddScriptMessageHandler(const wxString& WXUNUSED(name)) { return false; }
     virtual bool RemoveScriptMessageHandler(const wxString& WXUNUSED(name)) { return false; }
+    virtual bool AddUserScript(const wxString& WXUNUSED(javascript),
+        wxWebViewUserScriptInjectionTime WXUNUSED(injectionTime) = wxWEBVIEW_INJECT_AT_DOCUMENT_START)
+    { return false; }
+    virtual void RemoveAllUserScripts() {}
+
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {

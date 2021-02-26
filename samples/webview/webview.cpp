@@ -159,6 +159,7 @@ public:
     void OnRunScriptArrayWithEmulationLevel(wxCommandEvent& evt);
 #endif
     void OnRunScriptCustom(wxCommandEvent& evt);
+    void OnAddUserScript(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -488,6 +489,7 @@ WebFrame::WebFrame(const wxString& url) :
 #endif
     m_script_custom = script_menu->Append(wxID_ANY, "Custom script");
     m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
+    wxMenuItem* addUserScript = m_tools_menu->Append(wxID_ANY, _("Add user script"));
 
     //Selection menu
     wxMenu* selection = new wxMenu();
@@ -586,6 +588,7 @@ WebFrame::WebFrame(const wxString& url) :
     }
 #endif
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptCustom, this, m_script_custom->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnAddUserScript, this, addUserScript->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnDeleteSelection, this, m_selection_delete->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSelectAll, this, selectall->GetId());
@@ -1198,6 +1201,24 @@ void WebFrame::OnRunScriptCustom(wxCommandEvent& WXUNUSED(evt))
         return;
 
     RunScript(dialog.GetValue());
+}
+
+void WebFrame::OnAddUserScript(wxCommandEvent & WXUNUSED(evt))
+{
+    wxString userScript = "window.wx_test_var = 'wxWidgets webview sample';";
+    wxTextEntryDialog dialog
+    (
+        this,
+        "Enter the JavaScript code to run as the initialization script that runs before any script in the HTML document.",
+        wxGetTextFromUserPromptStr,
+        userScript,
+        wxOK | wxCANCEL | wxCENTRE | wxTE_MULTILINE
+    );
+    if (dialog.ShowModal() != wxID_OK)
+        return;
+
+    if (!m_browser->AddUserScript(dialog.GetValue()))
+        wxLogError("Could not add user script");
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
