@@ -255,6 +255,9 @@ public:
         Add(item);
     }
 
+protected:
+    SCMPFUNC GetCompareFunction() const wxNOEXCEPT { return m_fnCompare; }
+
 private:
     SCMPFUNC m_fnCompare;
 };
