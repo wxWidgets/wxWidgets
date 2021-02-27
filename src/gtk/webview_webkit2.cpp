@@ -1317,6 +1317,29 @@ bool wxWebViewWebKit::RemoveScriptMessageHandler(const wxString& name)
     return true;
 }
 
+bool wxWebViewWebKit::AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime)
+{
+    WebKitUserScript* userScript = webkit_user_script_new(
+        javascript.utf8_str(),
+        WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+        (injectionTime == wxWEBVIEW_INJECT_AT_DOCUMENT_START) ?
+            WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START : WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+        NULL, NULL
+    );
+    WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
+    webkit_user_content_manager_add_script(ucm, userScript);
+    webkit_user_script_unref(userScript);
+
+    return true;
+}
+
+void wxWebViewWebKit::RemoveAllUserScripts()
+{
+    WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
+    webkit_user_content_manager_remove_all_scripts(ucm);
+}
+
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     m_handlerList.push_back(handler);
