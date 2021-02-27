@@ -67,6 +67,12 @@ private:
     // Return the GtkLabel used by this button.
     GtkLabel *GTKGetLabel() const;
 
+#ifndef __WXGTK3__
+    // To mark if special GTK style for buttons with wxBU_EXACTFIT flag
+    // was already defined.
+    static bool m_exactFitStyleDefined;
+#endif // !__WXGTK3__
+
     wxDECLARE_DYNAMIC_CLASS(wxButton);
 };
 
