@@ -471,26 +471,6 @@ bool wxLocale::Init(int language, int flags)
         retloc = wxSetlocaleTryUTF8(LC_ALL, langOnly);
     }
 
-#if wxUSE_FONTMAP
-    // some systems (e.g. FreeBSD and HP-UX) don't have xx_YY aliases but
-    // require the full xx_YY.encoding form, so try using UTF-8 because this is
-    // the only thing we can do generically
-    //
-    // TODO: add encodings applicable to each language to the lang DB and try
-    //       them all in turn here
-    if ( !retloc )
-    {
-        const wxChar **names =
-            wxFontMapperBase::GetAllEncodingNames(wxFONTENCODING_UTF8);
-        while ( *names )
-        {
-            retloc = wxSetlocale(LC_ALL, locale + wxS('.') + *names++);
-            if ( retloc )
-                break;
-        }
-    }
-#endif // wxUSE_FONTMAP
-
     if ( !retloc )
     {
         // Some C libraries (namely glibc) still use old ISO 639,
