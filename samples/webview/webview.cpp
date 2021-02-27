@@ -158,6 +158,7 @@ public:
     void OnRunScriptDateWithEmulationLevel(wxCommandEvent& evt);
     void OnRunScriptArrayWithEmulationLevel(wxCommandEvent& evt);
 #endif
+    void OnRunScriptMessage(wxCommandEvent& evt);
     void OnRunScriptCustom(wxCommandEvent& evt);
     void OnAddUserScript(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
@@ -229,6 +230,7 @@ private:
     wxMenuItem* m_script_date_el;
     wxMenuItem* m_script_array_el;
 #endif
+    wxMenuItem* m_script_message;
     wxMenuItem* m_script_custom;
     wxMenuItem* m_selection_clear;
     wxMenuItem* m_selection_delete;
@@ -487,6 +489,7 @@ WebFrame::WebFrame(const wxString& url) :
         m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
     }
 #endif
+    m_script_message = script_menu->Append(wxID_ANY, "Send script message");
     m_script_custom = script_menu->Append(wxID_ANY, "Custom script");
     m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
     wxMenuItem* addUserScript = m_tools_menu->Append(wxID_ANY, _("Add user script"));
@@ -587,6 +590,7 @@ WebFrame::WebFrame(const wxString& url) :
         Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
     }
 #endif
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptMessage, this, m_script_message->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptCustom, this, m_script_custom->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnAddUserScript, this, addUserScript->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
@@ -1186,6 +1190,11 @@ void WebFrame::OnRunScriptArrayWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
     wxWebViewIE::MSWSetModernEmulationLevel(false);
 }
 #endif
+
+void WebFrame::OnRunScriptMessage(wxCommandEvent & evt)
+{
+    RunScript("window.wx.postMessage('This is a web message');");
+}
 
 void WebFrame::OnRunScriptCustom(wxCommandEvent& WXUNUSED(evt))
 {

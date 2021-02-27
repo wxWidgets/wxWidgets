@@ -1307,7 +1307,17 @@ bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
     WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
     g_signal_connect(ucm, wxString::Format("script-message-received::%s", name).utf8_str(),
                      G_CALLBACK(wxgtk_webview_webkit_script_message_received), this);
-    return webkit_user_content_manager_register_script_message_handler(ucm, name.utf8_str());
+    bool res = webkit_user_content_manager_register_script_message_handler(ucm, name.utf8_str());
+    if (res)
+    {
+        // Make webkit message handler available under common name
+        wxString js = wxString::Format("window.%s = window.webkit.messageHandlers.%s;",
+                name, name);
+        AddUserScript(js);
+        RunScript(js);
+    }
+
+    return res;
 }
 
 bool wxWebViewWebKit::RemoveScriptMessageHandler(const wxString& name)

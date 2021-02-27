@@ -75,6 +75,8 @@ public:
 
     ICoreWebView2Settings* GetSettings();
 
+    void UpdateWebMessageHandler();
+
     static wxDynamicLibrary ms_loaderDll;
     static wxString ms_browserExecutableDir;
     static wxString ms_version;

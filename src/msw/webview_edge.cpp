@@ -420,8 +420,8 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     if (settings)
     {
         settings->put_IsStatusBarEnabled(false);
-        settings->put_IsWebMessageEnabled(!m_scriptMsgHandlerName.empty());
     }
+    UpdateWebMessageHandler();
 
     if (!m_pendingUserScripts.empty())
     {
@@ -438,6 +438,24 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     }
 
     return S_OK;
+}
+
+void wxWebViewEdgeImpl::UpdateWebMessageHandler()
+{
+    wxCOMPtr<ICoreWebView2Settings> settings(GetSettings());
+    if (!settings)
+        return;
+
+    settings->put_IsWebMessageEnabled(!m_scriptMsgHandlerName.empty());
+
+    if (!m_scriptMsgHandlerName.empty())
+    {
+        // Make edge message handler available under common name
+        wxString js = wxString::Format("window.%s = window.chrome.webview;",
+            m_scriptMsgHandlerName);
+        m_ctrl->AddUserScript(js);
+        m_webView->ExecuteScript(js.wc_str(), NULL);
+    }
 }
 
 ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
@@ -826,9 +844,7 @@ bool wxWebViewEdge::AddScriptMessageHandler(const wxString& name)
         return false;
 
     m_impl->m_scriptMsgHandlerName = name;
-    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
-    if (settings)
-        settings->put_IsWebMessageEnabled(true);
+    m_impl->UpdateWebMessageHandler();
 
     return true;
 }
@@ -836,9 +852,7 @@ bool wxWebViewEdge::AddScriptMessageHandler(const wxString& name)
 bool wxWebViewEdge::RemoveScriptMessageHandler(const wxString& WXUNUSED(name))
 {
     m_impl->m_scriptMsgHandlerName.clear();
-    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
-    if (settings)
-        settings->put_IsWebMessageEnabled(false);
+    m_impl->UpdateWebMessageHandler();
     return true;
 }
 
