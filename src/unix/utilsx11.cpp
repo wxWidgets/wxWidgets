@@ -13,7 +13,9 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if defined(__WXX11__) || (defined(__WXGTK__) && defined(GDK_WINDOWING_X11)) || defined(__WXMOTIF__)
 #include "wx/unix/utilsx11.h"
+#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -29,9 +31,11 @@
 #ifdef __VMS
 #pragma message disable nosimpint
 #endif
+#if defined(__WXX11__) || (defined(__WXGTK__) && defined(GDK_WINDOWING_X11)) || defined(__WXMOTIF__)
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#endif
 #ifdef __VMS
 #pragma message enable nosimpint
 #endif
