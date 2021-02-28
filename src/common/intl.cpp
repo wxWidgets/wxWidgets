@@ -385,14 +385,16 @@ bool wxLocale::DoCommonPostInit(bool success,
     return success;
 }
 
-#if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WXMAC__)
+#if defined(__UNIX__)
 static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 {
     const char *l = NULL;
 
     // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
-    //     non-UTF-8 locale if it fails
-
+    //     non-UTF-8 locale if it fails, but this is not necessary under the
+    //     supported macOS versions where xx_YY locales are just aliases to
+    //     xx_YY.UTF-8 anyhow.
+#if wxUSE_UNICODE && !defined(__WXMAC__)
     if ( !lc.empty() )
     {
         wxString buf(lc);
@@ -418,13 +420,12 @@ static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 
     // if we can't set UTF-8 locale, try non-UTF-8 one:
     if ( !l )
+#endif // wxUSE_UNICODE && !__WXMAC__
         l = wxSetlocale(c, lc);
 
     return l;
 }
-#else
-#define wxSetlocaleTryUTF8(c, lc)  wxSetlocale(c, lc)
-#endif
+#endif // __UNIX__
 
 bool wxLocale::Init(int language, int flags)
 {
@@ -459,7 +460,7 @@ bool wxLocale::Init(int language, int flags)
     DoInit(name, info->CanonicalName, lang);
 
     // Set the locale:
-#if defined(__UNIX__) && !defined(__WXMAC__)
+#if defined(__UNIX__)
     const wxString& locale = info->CanonicalName;
 
     const char *retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
@@ -552,16 +553,6 @@ bool wxLocale::Init(int language, int flags)
         }
     }
 #endif // CRT not handling Unicode-only languages
-#elif defined(__WXMAC__)
-    const wxString& locale = info->CanonicalName;
-
-    const char *retloc = wxSetlocale(LC_ALL, locale);
-
-    if ( !retloc )
-    {
-        // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, ExtractLang(locale));
-    }
 #else
     wxUnusedVar(flags);
     return false;
