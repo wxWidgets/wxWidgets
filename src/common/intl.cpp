@@ -732,7 +732,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     {
         for ( i = 0; i < count; i++ )
         {
-            if ( ms_languagesDB->Item(i).CanonicalName == lang )
+            if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName) == lang )
             {
                 break;
             }
