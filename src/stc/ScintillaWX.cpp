@@ -616,7 +616,7 @@ bool ScintillaWX::CanPaste() {
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
     if (! ct.wCallTip.Created() ) {
         ct.wCallTip = new wxSTCCallTip(stc, &ct, this);
-        ct.wDraw = ct.wCallTip;
+        ct.wDraw = ct.wCallTip.GetID();
     }
 }
 
