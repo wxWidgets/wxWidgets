@@ -89,15 +89,12 @@ namespace
 {
 
 #if defined(__UNIX__)
+
 // get just the language part ("en" in "en_GB")
 inline wxString ExtractLang(const wxString& langFull)
 {
     return langFull.BeforeFirst('_');
 }
-#endif
-
-// helper functions of GetSystemLanguage()
-#ifdef __UNIX__
 
 // get everything else (including the leading '_')
 inline wxString ExtractNotLang(const wxString& langFull)
