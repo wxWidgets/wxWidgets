@@ -387,6 +387,12 @@ public:
     systems on macOS 10.13+. In order to use handlers two-step creation has to be used
     and RegisterHandler() has to be called before Create().
 
+    Starting with macOS 10.11 and iOS 9 an application cannot create unsecure
+    connections (this includes HTTP and unverified HTTPS). You have to include
+    additional fields in your Info.plist to enable such connections.
+    For further details see the documentation on NSAppTransportSecurity
+    <a target=_new href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
+
     @section async Asynchronous Notifications
 
     Many of the methods in wxWebView are asynchronous, i.e. they return
