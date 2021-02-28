@@ -427,43 +427,44 @@ static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 }
 #endif // __UNIX__
 
-bool wxLocale::Init(int language, int flags)
+bool wxLocale::Init(int lang, int flags)
 {
 #if WXWIN_COMPATIBILITY_2_8
     wxASSERT_MSG( !(flags & wxLOCALE_CONV_ENCODING),
                   wxS("wxLOCALE_CONV_ENCODING is no longer supported, add charset to your catalogs") );
 #endif
 
-    int lang = language;
-    if (lang == wxLANGUAGE_DEFAULT)
-    {
-        // auto detect the language
-        lang = GetSystemLanguage();
-    }
-
-    // We failed to detect system language, so we will use English:
-    if (lang == wxLANGUAGE_UNKNOWN)
-    {
-        return false;
-    }
+    wxString name, shortName;
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
 
     // Unknown language:
     if (info == NULL)
     {
-        wxLogError(wxS("Unknown language %i."), lang);
-        return false;
+        // This could have happened because some concrete language has been
+        // requested and we just don't know anything about it. In this case, we
+        // have no choice but to simply give up.
+        if ( lang != wxLANGUAGE_DEFAULT )
+        {
+            wxLogError(wxS("Unknown language %i."), lang);
+            return false;
+        }
+
+        // However in case we didn't recognize the default system language, we
+        // can still try to use it, even though we don't know anything about it
+        // because setlocale() still might.
+    }
+    else
+    {
+        name = info->Description;
+        shortName = info->CanonicalName;
     }
 
-    const wxString& name = info->Description;
-    DoInit(name, info->CanonicalName, lang);
+    DoInit(name, shortName, lang);
 
     // Set the locale:
 #if defined(__UNIX__)
-    const wxString& shortName = info->CanonicalName;
-
-    const char *retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
+    const char *retloc = wxSetlocaleTryUTF8(LC_ALL, shortName);
 
     const wxString langOnly = ExtractLang(shortName);
     if ( !retloc )
@@ -510,11 +511,18 @@ bool wxLocale::Init(int language, int flags)
 #endif // __AIX__
 
 #elif defined(__WIN32__)
-    const char *retloc = "C";
-    if ( info->WinLang == 0 )
+    const char *retloc;
+    if ( !info )
+    {
+        // We're using the system language, but we don't know what it is, so
+        // just use setlocale() to deal with it.
+        retloc = wxSetlocale(LC_ALL, "");
+    }
+    else if ( info->WinLang == 0 )
     {
         wxLogWarning(wxS("Locale '%s' not supported by OS."), name);
-        // retloc already set to "C"
+
+        retloc = "C";
     }
     else // language supported by Windows
     {
@@ -560,14 +568,11 @@ bool wxLocale::Init(int language, int flags)
 #endif
 
 #ifndef WX_NO_LOCALE_SUPPORT
-    // NB: don't use 'lang' here, 'language'
     return DoCommonPostInit
            (
                 retloc != NULL,
                 name,
-                language == wxLANGUAGE_DEFAULT
-                    ? wxString()
-                    : info->CanonicalName,
+                shortName,
                 flags & wxLOCALE_LOAD_DEFAULT
            );
 #endif // !WX_NO_LOCALE_SUPPORT
