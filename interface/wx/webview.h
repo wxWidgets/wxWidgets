@@ -454,7 +454,7 @@ public:
        and is only available in wxWidgets 3.1.5 or later.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
-        only available in wxWidgets 3.1.5 or later for usage details see
+        only available in wxWidgets 3.1.5 or later. For usage details see
         AddScriptMessageHandler().
     @endEventTable
 
@@ -755,7 +755,7 @@ public:
         @endcode
 
         @param name Name of the message handler that can be used from javascript
-        @return @true if the handler could be added, @false if it could not be added
+        @return @true if the handler could be added, @false if it could not be added.
 
         @see RemoveScriptMessageHandler()
 
@@ -781,12 +781,11 @@ public:
     /**
         Injects the specified script into the webpage’s content.
 
-        @param javascript The java script code to add
-        @param injectionTime Specifies when the script could will be
-            executed.
-        @return Returns true if the script was added successfully
+        @param javascript The javascript code to add.
+        @param injectionTime Specifies when the script will be executed.
+        @return Returns true if the script was added successfully.
 
-        @note Please not that this is unsupported by the IE backend and
+        @note Please note that this is unsupported by the IE backend and
             the Edge (Chromium) backend does only support wxWEBVIEW_INJECT_AT_DOCUMENT_START.
 
         @see RemoveAllUserScripts()
@@ -1197,7 +1196,7 @@ public:
        the page title changes. Use GetString to get the title.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
-        only available in wxWidgets 3.1.5 or later for usage details see
+        only available in wxWidgets 3.1.5 or later. For usage details see
         wxWebView::AddScriptMessageHandler().
     @endEventTable
 
