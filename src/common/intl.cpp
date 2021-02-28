@@ -952,6 +952,9 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     if ( lang == wxLANGUAGE_DEFAULT )
         lang = GetSystemLanguage();
 
+    if ( lang == wxLANGUAGE_UNKNOWN )
+        return NULL;
+
     const size_t count = ms_languagesDB->GetCount();
     for ( size_t i = 0; i < count; i++ )
     {
