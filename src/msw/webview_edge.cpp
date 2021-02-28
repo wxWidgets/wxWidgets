@@ -887,13 +887,13 @@ bool wxWebViewEdge::AddUserScript(const wxString& javascript,
 void wxWebViewEdge::RemoveAllUserScripts()
 {
     m_impl->m_pendingUserScripts.clear();
-    for (wxVector<wxString>::iterator it = m_impl->m_userScriptIds.begin();
-        it != m_impl->m_userScriptIds.end(); ++it)
+    for (auto& scriptId : m_impl->m_userScriptIds)
     {
-        HRESULT hr = m_impl->m_webView->RemoveScriptToExecuteOnDocumentCreated(it->wc_str());
+        HRESULT hr = m_impl->m_webView->RemoveScriptToExecuteOnDocumentCreated(scriptId.wc_str());
         if (FAILED(hr))
             wxLogApiError("RemoveScriptToExecuteOnDocumentCreated", hr);
     }
+    m_impl->m_userScriptIds.clear();
 }
 
 void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
