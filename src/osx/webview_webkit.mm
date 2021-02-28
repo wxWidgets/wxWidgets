@@ -407,6 +407,23 @@ bool wxWebViewWebKit::RemoveScriptMessageHandler(const wxString& name)
     return true;
 }
 
+bool wxWebViewWebKit::AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime)
+{
+    WKUserScript* userScript =
+        [[WKUserScript alloc] initWithSource:wxCFStringRef(javascript).AsNSString()
+            injectionTime:(injectionTime == wxWEBVIEW_INJECT_AT_DOCUMENT_START) ?
+                WKUserScriptInjectionTimeAtDocumentStart : WKUserScriptInjectionTimeAtDocumentEnd
+            forMainFrameOnly:NO];
+    [m_webView.configuration.userContentController addUserScript:userScript];
+    return true;
+}
+
+void wxWebViewWebKit::RemoveAllUserScripts()
+{
+    [m_webView.configuration.userContentController removeAllUserScripts];
+}
+
 void wxWebViewWebKit::LoadURL(const wxString& url)
 {
     [m_webView loadRequest:[NSURLRequest requestWithURL:
