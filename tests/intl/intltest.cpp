@@ -226,4 +226,11 @@ void IntlTestCase::IsAvailable()
     CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, NULL) );
 }
 
+TEST_CASE("wxLocale::Default", "[locale]")
+{
+    wxLocale loc;
+
+    REQUIRE( loc.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
+}
+
 #endif // wxUSE_INTL
