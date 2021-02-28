@@ -386,6 +386,9 @@ bool wxLocale::DoCommonPostInit(bool success,
 }
 
 #if defined(__UNIX__)
+
+// Helper of wxSetlocaleTryAll() below which tries setting the given locale
+// with and without UTF-8 suffix. Don't use this one directly.
 static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 {
     const char *l = NULL;
@@ -425,6 +428,22 @@ static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 
     return l;
 }
+
+// Try setting all possible versions of the given locale, i.e. with and without
+// UTF-8 encoding, and with or without the "_territory" part.
+static const char *wxSetlocaleTryAll(int c, const wxString& lc)
+{
+    const char* l = wxSetlocaleTryUTF8(c, lc);
+    if ( !l )
+    {
+        const wxString& lcOnlyLang = ExtractLang(lc);
+        if ( lcOnlyLang != lc )
+            l = wxSetlocaleTryUTF8(c, lcOnlyLang);
+    }
+
+    return l;
+}
+
 #endif // __UNIX__
 
 bool wxLocale::Init(int lang, int flags)
@@ -468,20 +487,14 @@ bool wxLocale::Init(int lang, int flags)
 
     // Set the locale:
 #if defined(__UNIX__)
-    const char *retloc = wxSetlocaleTryUTF8(LC_ALL, shortName);
-
-    const wxString langOnly = ExtractLang(shortName);
-    if ( !retloc )
-    {
-        // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocaleTryUTF8(LC_ALL, langOnly);
-    }
+    const char *retloc = wxSetlocaleTryAll(LC_ALL, shortName);
 
     if ( !retloc )
     {
         // Some C libraries (namely glibc) still use old ISO 639,
         // so will translate the abbrev for them
         wxString localeAlt;
+        const wxString& langOnly = ExtractLang(shortName);
         if ( langOnly == wxS("he") )
             localeAlt = wxS("iw") + ExtractNotLang(shortName);
         else if ( langOnly == wxS("id") )
@@ -494,11 +507,7 @@ bool wxLocale::Init(int lang, int flags)
             localeAlt = wxS("no_NY");
 
         if ( !localeAlt.empty() )
-        {
-            retloc = wxSetlocaleTryUTF8(LC_ALL, localeAlt);
-            if ( !retloc )
-                retloc = wxSetlocaleTryUTF8(LC_ALL, ExtractLang(localeAlt));
-        }
+            retloc = wxSetlocaleTryAll(LC_ALL, localeAlt);
     }
 
 #ifdef __AIX__
@@ -1096,11 +1105,7 @@ bool wxLocale::IsAvailable(int lang)
     // Test if setting the locale works, then set it back.
     char * const oldLocale = wxStrdupA(setlocale(LC_ALL, NULL));
 
-    // Some platforms don't like xx_YY form and require xx only so test for
-    // it too.
-    const bool
-        available = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName) ||
-                    wxSetlocaleTryUTF8(LC_ALL, ExtractLang(info->CanonicalName));
+    const bool available = wxSetlocaleTryAll(LC_ALL, info->CanonicalName);
 
     // restore the original locale
     wxSetlocale(LC_ALL, oldLocale);
