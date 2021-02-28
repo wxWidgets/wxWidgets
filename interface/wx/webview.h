@@ -446,7 +446,7 @@ public:
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
        Currently only implemented for the edge and WebKit2GTK+ backend
        and is only available in wxWidgets 3.1.5 or later.
-    @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED}
+    @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later for usage details see
         AddScriptMessageHandler().
@@ -727,7 +727,29 @@ public:
     /**
         Add a script message handler with the given name.
 
-        @return @true if the handler could be added, @false if it could not be added.
+        To use the script message handler from javascript use
+        @c window.<name>.postMessage(<messageBody>) where <name> corresponds the the value
+        of the name parameter. The <messageBody> will be available to the application
+        via a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event.
+
+        Sample C++ code receiving a script message:
+        @code
+            // Install message handler with the name wx_msg
+            m_webView->AddScriptMessageHandler('wx_msg');
+            // Bind handler
+            m_webView->Bind(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, [](wxWebViewEvent& evt) {
+                wxLogMessage("Script message received; value = %s, handler = %s", evt.GetString(), evt.GetMessageHandler());
+            });
+        @endcode
+
+        Sample javascript sending a script message:
+        @code
+            // Send sample message body
+            window.wx_msg.postMessage('This is a message body');
+        @endcode
+
+        @param name Name of the message handler that can be used from javascript
+        @return @true if the handler could be added, @false if it could not be added
 
         @see RemoveScriptMessageHandler()
 
@@ -1167,6 +1189,10 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
+        only available in wxWidgets 3.1.5 or later for usage details see
+        wxWebView::AddScriptMessageHandler().
     @endEventTable
 
     @since 2.9.3
