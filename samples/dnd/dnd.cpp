@@ -1270,10 +1270,10 @@ void DnDFrame::OnUsePrimary(wxCommandEvent& event)
 
 #if wxUSE_DRAG_AND_DROP
 
-void DnDFrame::OnBeginDrag(wxTreeEvent& WXUNUSED(event))
+void DnDFrame::OnBeginDrag(wxTreeEvent& event)
 {
     wxFileDataObject data;
-    data.AddFile(m_ctrlDir->GetPath());
+    data.AddFile(m_ctrlDir->GetPath(event.GetItem()));
 
     wxDropSource dragSource(this);
     dragSource.SetData(data);
