@@ -434,6 +434,10 @@ bool wxLocale::Init(int lang, int flags)
                   wxS("wxLOCALE_CONV_ENCODING is no longer supported, add charset to your catalogs") );
 #endif
 
+    wxCHECK_MSG( lang != wxLANGUAGE_UNKNOWN, false,
+                 wxS("Initializing unknown locale doesn't make sense, did you ")
+                 wxS("mean to use wxLANGUAGE_DEFAULT perhaps?") );
+
     wxString name, shortName;
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
