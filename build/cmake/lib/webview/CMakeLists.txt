@@ -69,6 +69,7 @@ elseif(WXMSW)
         wx_lib_include_directories(wxwebview PRIVATE "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
         if(NOT MSVC)
             wx_lib_include_directories(wxwebview PRIVATE "${wxSOURCE_DIR}/include/wx/msw/wrl")
+            target_compile_options(wxwebview PRIVATE -Wno-unknown-pragmas)
         endif()
 
         if (CMAKE_SIZEOF_VOID_P EQUAL 4)
