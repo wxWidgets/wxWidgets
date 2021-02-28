@@ -320,7 +320,7 @@ public:
     virtual filesystems, custom urls.
 
     This backend is not enabled by default, to build it follow these steps:
-    - Visual Studio 2015, or newer, is required
+    - Visual Studio 2015 or newer, or GCC/Clang with c++11 is required
     - With CMake just enable @c wxUSE_WEBVIEW_EDGE
     - When not using CMake:
         - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
