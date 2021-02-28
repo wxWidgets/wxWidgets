@@ -461,11 +461,11 @@ bool wxLocale::Init(int language, int flags)
 
     // Set the locale:
 #if defined(__UNIX__)
-    const wxString& locale = info->CanonicalName;
+    const wxString& shortName = info->CanonicalName;
 
     const char *retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
 
-    const wxString langOnly = ExtractLang(locale);
+    const wxString langOnly = ExtractLang(shortName);
     if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
@@ -478,11 +478,11 @@ bool wxLocale::Init(int language, int flags)
         // so will translate the abbrev for them
         wxString localeAlt;
         if ( langOnly == wxS("he") )
-            localeAlt = wxS("iw") + ExtractNotLang(locale);
+            localeAlt = wxS("iw") + ExtractNotLang(shortName);
         else if ( langOnly == wxS("id") )
-            localeAlt = wxS("in") + ExtractNotLang(locale);
+            localeAlt = wxS("in") + ExtractNotLang(shortName);
         else if ( langOnly == wxS("yi") )
-            localeAlt = wxS("ji") + ExtractNotLang(locale);
+            localeAlt = wxS("ji") + ExtractNotLang(shortName);
         else if ( langOnly == wxS("nb") )
             localeAlt = wxS("no_NO");
         else if ( langOnly == wxS("nn") )
