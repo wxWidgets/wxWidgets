@@ -2650,7 +2650,8 @@ bool wxGetKeyState(wxKeyCode key)
 #endif // GTK+ 3.4+
 
 #ifdef wxHAS_X11_SUPPORT
-    return wxGetKeyStateX11(key);
+    if ( wxGetKeyStateX11(key) )
+        return true;
 #endif
 
     return false;
