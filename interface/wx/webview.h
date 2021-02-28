@@ -745,7 +745,7 @@ public:
         @return @true if the handler could be removed, @false if it could not be removed.
 
         @see AddScriptMessageHandler()
-        
+
         @since 3.1.5
     */
     virtual bool RemoveScriptMessageHandler(const wxString& name);
@@ -762,7 +762,7 @@ public:
             the Edge (Chromium) backend does only support wxWEBVIEW_INJECT_AT_DOCUMENT_START.
 
         @see RemoveAllUserScripts()
-        
+
         @since 3.1.5
     */
     virtual bool AddUserScript(const wxString& javascript,
@@ -772,7 +772,7 @@ public:
         Removes all user scripts from the web view.
 
         @see AddUserScript()
-        
+
         @since 3.1.5
     */
     virtual void RemoveAllUserScripts();
