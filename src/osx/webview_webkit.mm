@@ -398,6 +398,11 @@ bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
 {
     [m_webView.configuration.userContentController addScriptMessageHandler:
         [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:wxCFStringRef(name).AsNSString()];
+    // Make webkit message handler available under common name
+    wxString js = wxString::Format("window.%s = window.webkit.messageHandlers.%s;",
+            name, name);
+    AddUserScript(js);
+    RunScript(js);
     return true;
 }
 
