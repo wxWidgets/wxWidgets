@@ -190,11 +190,13 @@ public:
 
     // Script
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
-    virtual bool AddScriptMessageHandler(const wxString& WXUNUSED(name)) { return false; }
-    virtual bool RemoveScriptMessageHandler(const wxString& WXUNUSED(name)) { return false; }
-    virtual bool AddUserScript(const wxString& WXUNUSED(javascript),
-        wxWebViewUserScriptInjectionTime WXUNUSED(injectionTime) = wxWEBVIEW_INJECT_AT_DOCUMENT_START)
-    { return false; }
+    virtual bool AddScriptMessageHandler(const wxString& name)
+    { wxUnusedVar(name); return false; }
+    virtual bool RemoveScriptMessageHandler(const wxString& name)
+    { wxUnusedVar(name); return false; }
+    virtual bool AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START)
+    {  wxUnusedVar(javascript); wxUnusedVar(injectionTime); return false; }
     virtual void RemoveAllUserScripts() {}
 
     virtual void SetEditable(bool enable = true) = 0;
