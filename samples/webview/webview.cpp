@@ -1191,7 +1191,7 @@ void WebFrame::OnRunScriptArrayWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
 }
 #endif
 
-void WebFrame::OnRunScriptMessage(wxCommandEvent & evt)
+void WebFrame::OnRunScriptMessage(wxCommandEvent& WXUNUSED(evt))
 {
     RunScript("window.wx.postMessage('This is a web message');");
 }
