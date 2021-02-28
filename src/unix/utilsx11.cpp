@@ -45,6 +45,7 @@
 #endif
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#define wxHAS_X11_SUPPORT
 #endif
 GdkWindow* wxGetTopLevelGDK();
 GtkWidget* wxGetTopLevelGTK();
@@ -52,11 +53,12 @@ GtkWidget* wxGetTopLevelGTK();
 #if GTK_CHECK_VERSION(3,4,0)
 #define wxHAS_GETKEYSTATE_GTK
 #endif //GTK+ 3.4
+#else
+// When not using GTK we always use X11, as we don't support anything else.
+#define wxHAS_X11_SUPPORT
 #endif // GTK
 
-// Only X11 backend is supported for wxGTK here (GTK < 2 has no others)
-#if !defined(__WXGTK__) || \
-    (!defined(__WXGTK20__) || defined(GDK_WINDOWING_X11))
+#ifdef wxHAS_X11_SUPPORT
 
 // Various X11 Atoms used in this file:
 static Atom _NET_WM_STATE = 0;
@@ -2593,7 +2595,7 @@ static bool wxGetKeyStateX11(wxKeyCode key)
     return (key_vector[keyCode >> 3] & (1 << (keyCode & 7))) != 0;
 }
 
-#endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+#endif // wxHAS_X11_SUPPORT
 
 // We need to use GDK functions when using wxGTK with a non-X11 backend, the
 // X11 code above can't work in this case.
@@ -2647,8 +2649,7 @@ bool wxGetKeyState(wxKeyCode key)
     }
 #endif // GTK+ 3.4+
 
-#if !defined(__WXGTK__) ||                                      \
-    (!defined(__WXGTK20__) || defined(GDK_WINDOWING_X11))
+#ifdef wxHAS_X11_SUPPORT
     return wxGetKeyStateX11(key);
 #endif
 
