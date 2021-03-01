@@ -26,10 +26,12 @@
 #include "wx/msw/private/cotaskmemptr.h"
 #include "wx/msw/private/webview_edge.h"
 
+#ifdef __VISUALC__
 #include <wrl/event.h>
-#include <Objbase.h>
-
 using namespace Microsoft::WRL;
+#else
+#include <wx/msw/wrl/event.h>
+#endif // !__VISUALC__
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
 
@@ -242,8 +244,8 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
     }
     else
     {
-        if (m_historyEnabled && !m_historyLoadingFromList &&
-            (uri == m_ctrl->GetCurrentURL()) ||
+        if ((m_historyEnabled && !m_historyLoadingFromList &&
+            (uri == m_ctrl->GetCurrentURL())) ||
             (m_ctrl->GetCurrentURL().substr(0, 4) == "file" &&
                 wxFileName::URLToFileName(m_ctrl->GetCurrentURL()).GetFullPath() == uri))
         {
@@ -896,7 +898,7 @@ void wxWebViewEdge::RemoveAllUserScripts()
     m_impl->m_userScriptIds.clear();
 }
 
-void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
+void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> WXUNUSED(handler))
 {
     // TODO: could maybe be implemented via IWebView2WebView5::add_WebResourceRequested
     wxLogDebug("Registering handlers is not supported");

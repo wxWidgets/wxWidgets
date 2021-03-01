@@ -398,6 +398,11 @@ private:
   // (if the old buffer is big enough, just return NULL).
   wxString *Grow(size_t nIncrement);
 
+  // Binary search in the sorted array: return the index of the string if it's
+  // present, otherwise, if lowerBound is true, return the position at which
+  // the string should be inserted and if it's false return wxNOT_FOUND.
+  size_t BinarySearch(const wxString& str, bool lowerBound) const;
+
   size_t  m_nSize,    // current size of the array
           m_nCount;   // current number of elements
 

@@ -2550,7 +2550,6 @@ int wxUnicodeCharXToWX(WXKeySym keySym)
 // check current state of a key
 // ----------------------------------------------------------------------------
 
-#ifndef wxHAS_GETKEYSTATE_GTK
 static bool wxGetKeyStateX11(wxKeyCode key)
 {
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
@@ -2595,7 +2594,6 @@ static bool wxGetKeyStateX11(wxKeyCode key)
     XQueryKeymap(pDisplay, key_vector);
     return (key_vector[keyCode >> 3] & (1 << (keyCode & 7))) != 0;
 }
-#endif
 
 #endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
 
@@ -2643,17 +2641,20 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
 bool wxGetKeyState(wxKeyCode key)
 {
 #ifdef wxHAS_GETKEYSTATE_GTK
-    bool ret = false;
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
     const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
     if (strcmp(name, "GdkX11Display") != 0)
     {
-        ret = wxGetKeyStateGTK(key);
+        return wxGetKeyStateGTK(key);
     }
-    return ret;
-#else
-    return wxGetKeyStateX11(key);
 #endif // GTK+ 3.4+
+
+#if !defined(__WXGTK__) ||                                      \
+    (!defined(__WXGTK20__) || defined(GDK_WINDOWING_X11))
+    return wxGetKeyStateX11(key);
+#endif
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------

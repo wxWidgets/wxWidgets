@@ -198,15 +198,16 @@ int wxSortedArrayString::Index(const wxString& str,
     wxASSERT_MSG( bCase && !bFromEnd,
                   "search parameters ignored for sorted array" );
 
+    SCMPFUNC function = GetCompareFunction();
     wxSortedArrayString::const_iterator
         it = std::lower_bound(begin(), end(), str,
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
-                              [](const wxString& s1, const wxString& s2)
+                              [function](const wxString& s1, const wxString& s2)
                               {
-                                  return s1 < s2;
+                                  return function(s1, s2) < 0;
                               }
 #else // C++98 version
-                              wxStringCompare(wxStringCmp())
+                              wxStringCompare(function)
 #endif // C++11/C++98
                               );
 
@@ -377,6 +378,29 @@ void wxArrayString::Shrink()
   }
 }
 
+// Binary search in the sorted array
+size_t wxArrayString::BinarySearch(const wxString& str, bool lowerBound) const
+{
+    size_t
+        lo = 0,
+        hi = m_nCount;
+    while (lo < hi) {
+        size_t i;
+        i = (lo + hi) / 2;
+
+        int res;
+        res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
+        if (res < 0)
+            hi = i;
+        else if (res > 0)
+            lo = i + 1;
+        else
+            return i;
+    }
+    wxASSERT_MSG(lo == hi, wxT("binary search broken"));
+    return lowerBound ? lo : wxNOT_FOUND;
+}
+
 // searches the array for an item (forward or backwards)
 int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
@@ -384,25 +408,7 @@ int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
     // use binary search in the sorted array
     wxASSERT_MSG( bCase && !bFromEnd,
                   wxT("search parameters ignored for auto sorted array") );
-
-    size_t
-           lo = 0,
-           hi = m_nCount;
-    while ( lo < hi ) {
-      size_t i;
-      i = (lo + hi)/2;
-
-      int res;
-      res = str.compare(m_pItems[i]);
-      if ( res < 0 )
-        hi = i;
-      else if ( res > 0 )
-        lo = i + 1;
-      else
-        return i;
-    }
-
-    return wxNOT_FOUND;
+    return BinarySearch(str, false /* not lower bound */);
   }
   else {
     // use linear search in unsorted array
@@ -432,30 +438,9 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
 {
   if ( m_autoSort ) {
     // insert the string at the correct position to keep the array sorted
-    size_t
-           lo = 0,
-           hi = m_nCount;
-    while ( lo < hi ) {
-      size_t i;
-      i = (lo + hi)/2;
-
-      int res;
-      res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
-      if ( res < 0 )
-        hi = i;
-      else if ( res > 0 )
-        lo = i + 1;
-      else {
-        lo = hi = i;
-        break;
-      }
-    }
-
-    wxASSERT_MSG( lo == hi, wxT("binary search broken") );
-
-    Insert(str, lo, nInsert);
-
-    return (size_t)lo;
+    size_t nIndex = BinarySearch(str, true /* return lower bound */);
+    Insert(str, nIndex, nInsert);
+    return nIndex;
   }
   else {
     // Now that we must postpone freeing the old memory until we don't need it
