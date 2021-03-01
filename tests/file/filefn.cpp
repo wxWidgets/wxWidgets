@@ -525,6 +525,12 @@ void FileFunctionsTestCase::IsAbsolutePath()
     CPPUNIT_ASSERT( filename.MakeAbsolute() );
     // wxFileName::GetFullPath returns absolute path
     CPPUNIT_ASSERT_MESSAGE( msg, wxIsAbsolutePath(filename.GetFullPath()));
+
+#ifdef __WINDOWS__
+    CPPUNIT_ASSERT( wxIsAbsolutePath("\\"));
+    CPPUNIT_ASSERT( wxIsAbsolutePath("c:"));
+    CPPUNIT_ASSERT( !wxIsAbsolutePath("c"));
+#endif
 }
 
 void FileFunctionsTestCase::PathOnly()
