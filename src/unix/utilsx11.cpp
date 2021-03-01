@@ -13,8 +13,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/unix/utilsx11.h"
-
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
@@ -25,16 +23,6 @@
 #include "wx/iconbndl.h"
 #include "wx/apptrait.h"
 #include "wx/private/launchbrowser.h"
-
-#ifdef __VMS
-#pragma message disable nosimpint
-#endif
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#ifdef __VMS
-#pragma message enable nosimpint
-#endif
 
 #ifdef __WXGTK__
 #ifdef __WXGTK20__
@@ -59,6 +47,17 @@ GtkWidget* wxGetTopLevelGTK();
 #endif // GTK
 
 #ifdef wxHAS_X11_SUPPORT
+
+#include "wx/unix/utilsx11.h"
+
+#ifdef __VMS
+#pragma message disable nosimpint
+#endif
+#include <X11/Xatom.h>
+#include <X11/Xutil.h>
+#ifdef __VMS
+#pragma message enable nosimpint
+#endif
 
 // Various X11 Atoms used in this file:
 static Atom _NET_WM_STATE = 0;
