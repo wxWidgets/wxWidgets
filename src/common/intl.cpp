@@ -508,8 +508,18 @@ bool wxLocale::Init(int lang, int flags)
     DoInit(name, shortName, lang);
 
     // Set the locale:
+
+#if defined(__UNIX__) || defined(__WIN32__)
+
+    // We prefer letting the CRT to set its locale on its own when using
+    // default locale, as it does a better job of it than we do. We also have
+    // to do this when we didn't recognize the default language at all.
+    const char *retloc = lang == wxLANGUAGE_DEFAULT ? wxSetlocale(LC_ALL, "")
+                                                    : NULL;
+
 #if defined(__UNIX__)
-    const char *retloc = wxSetlocaleTryAll(LC_ALL, shortName);
+    if ( !retloc )
+        retloc = wxSetlocaleTryAll(LC_ALL, shortName);
 
     if ( !retloc )
     {
@@ -546,16 +556,12 @@ bool wxLocale::Init(int lang, int flags)
 #endif // __AIX__
 
 #elif defined(__WIN32__)
-    const char *retloc;
     if ( lang == wxLANGUAGE_DEFAULT )
     {
         ::SetThreadLocale(LOCALE_USER_DEFAULT);
         wxMSWSetThreadUILanguage(LANG_USER_DEFAULT);
 
-        // We're using the system language, so let setlocale() deal with it: it
-        // does it better than we do and we might not even know about this
-        // language in the first place.
-        retloc = wxSetlocale(LC_ALL, "");
+        // CRT locale already set above.
     }
     else if ( info->WinLang == 0 )
     {
@@ -591,12 +597,9 @@ bool wxLocale::Init(int lang, int flags)
     }
 #endif // CRT not handling Unicode-only languages
 #else
-    wxUnusedVar(flags);
-    return false;
-    #define WX_NO_LOCALE_SUPPORT
+    #error "Unsupported platform"
 #endif
 
-#ifndef WX_NO_LOCALE_SUPPORT
     return DoCommonPostInit
            (
                 retloc != NULL,
@@ -604,7 +607,10 @@ bool wxLocale::Init(int lang, int flags)
                 shortName,
                 flags & wxLOCALE_LOAD_DEFAULT
            );
-#endif // !WX_NO_LOCALE_SUPPORT
+#else // !(__UNIX__ || __WIN32__)
+    wxUnusedVar(flags);
+    return false;
+#endif
 }
 
 namespace
