@@ -37,6 +37,7 @@
 #include "wx/sizer.h"
 #include "wx/dcmemory.h"
 #include "wx/commandlinkbutton.h"
+#include "wx/valnum.h"
 
 #include "widgets.h"
 
@@ -52,6 +53,7 @@ enum
     ButtonPage_Reset = wxID_HIGHEST,
     ButtonPage_ChangeLabel,
     ButtonPage_ChangeNote,
+    ButtonPage_ChangeImageMargins,
     ButtonPage_Button
 };
 
@@ -101,6 +103,7 @@ protected:
     void OnButtonReset(wxCommandEvent& event);
     void OnButtonChangeLabel(wxCommandEvent& event);
     void OnButtonChangeNote(wxCommandEvent& event);
+    void OnButtonChangeImageMargins(wxCommandEvent& event);
 
     // reset the wxButton parameters
     void Reset();
@@ -162,6 +165,13 @@ protected:
     wxSizer *m_sizerNote;
 #endif // wxUSE_COMMANDLINKBUTTON
 
+    // the text entries for image margins
+    wxTextCtrl* m_textImageMarginH;
+    wxTextCtrl* m_textImageMarginV;
+
+    int m_imageMarginH;
+    int m_imageMarginV;
+
 private:
     wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ButtonWidgetsPage)
@@ -177,6 +187,7 @@ wxBEGIN_EVENT_TABLE(ButtonWidgetsPage, WidgetsPage)
     EVT_BUTTON(ButtonPage_Reset, ButtonWidgetsPage::OnButtonReset)
     EVT_BUTTON(ButtonPage_ChangeLabel, ButtonWidgetsPage::OnButtonChangeLabel)
     EVT_BUTTON(ButtonPage_ChangeNote, ButtonWidgetsPage::OnButtonChangeNote)
+    EVT_BUTTON(ButtonPage_ChangeImageMargins, ButtonWidgetsPage::OnButtonChangeImageMargins)
 
     EVT_CHECKBOX(wxID_ANY, ButtonWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ButtonWidgetsPage::OnCheckOrRadioBox)
@@ -223,8 +234,14 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
 
     m_textLabel = (wxTextCtrl *)NULL;
 
+    m_textImageMarginH = NULL;
+    m_textImageMarginV = NULL;
+
     m_button = (wxButton *)NULL;
     m_sizerButton = (wxSizer *)NULL;
+
+    m_imageMarginH = 0;
+    m_imageMarginV = 0;
 }
 
 void ButtonWidgetsPage::CreateContent()
@@ -279,6 +296,25 @@ void ButtonWidgetsPage::CreateContent()
                                      wxDefaultPosition, wxDefaultSize,
                                      WXSIZEOF(dirs), dirs);
     sizerLeft->Add(m_radioImagePos, wxSizerFlags().Expand().Border());
+
+    wxSizer* sizerImageMarginsRow = CreateSizerWithTextAndButton(ButtonPage_ChangeImageMargins,
+                                           "Horizontal and vertical", wxID_ANY, &m_textImageMarginH);
+    wxIntegerValidator<int> validatorMargH;
+    validatorMargH.SetRange(0, 100);
+    m_textImageMarginH->SetValidator(validatorMargH);
+
+    wxIntegerValidator<int> validatorMargV;
+    validatorMargV.SetRange(0, 100);
+    m_textImageMarginV = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validatorMargV);
+    sizerImageMarginsRow->Add(m_textImageMarginV, wxSizerFlags(1).CentreVertical().Border(wxLEFT));
+
+    m_textImageMarginH->SetValue(wxString::Format("%d", m_imageMarginH));
+    m_textImageMarginV->SetValue(wxString::Format("%d", m_imageMarginV));
+
+    wxSizer* sizerImageMargins = new wxStaticBoxSizer(wxVERTICAL, this, "Image margins");
+    sizerImageMargins->Add(sizerImageMarginsRow, wxSizerFlags().Border().Centre());
+    sizerLeft->Add(sizerImageMargins, wxSizerFlags().Expand().Border());
+
     sizerLeft->AddSpacer(15);
 
     // should be in sync with enums Button[HV]Align!
@@ -379,6 +415,11 @@ void ButtonWidgetsPage::Reset()
     m_radioImagePos->SetSelection(ButtonImagePos_Left);
     m_radioHAlign->SetSelection(ButtonHAlign_Centre);
     m_radioVAlign->SetSelection(ButtonVAlign_Centre);
+
+    m_imageMarginH = 0;
+    m_imageMarginV = 0;
+    m_textImageMarginH->SetValue(wxString::Format("%d", m_imageMarginH));
+    m_textImageMarginV->SetValue(wxString::Format("%d", m_imageMarginV));
 }
 
 void ButtonWidgetsPage::CreateButton()
@@ -473,6 +514,8 @@ void ButtonWidgetsPage::CreateButton()
           bbtn = new wxButton(this, ButtonPage_Button);
           bbtn->SetBitmapLabel(CreateBitmap("normal", wxART_INFORMATION));
         }
+        bbtn->SetBitmapMargins((wxCoord)m_imageMarginH, (wxCoord)m_imageMarginV);
+
         if ( m_chkUsePressed->GetValue() )
             bbtn->SetBitmapPressed(CreateBitmap("pushed", wxART_HELP));
         if ( m_chkUseFocused->GetValue() )
@@ -526,6 +569,8 @@ void ButtonWidgetsPage::CreateButton()
         m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_BUTTON),
                             positions[m_radioImagePos->GetSelection()]);
 
+        m_button->SetBitmapMargins((wxCoord)m_imageMarginH, (wxCoord)m_imageMarginV);
+
         if ( m_chkUsePressed->GetValue() )
             m_button->SetBitmapPressed(wxArtProvider::GetIcon(wxART_HELP, wxART_BUTTON));
         if ( m_chkUseFocused->GetValue() )
@@ -548,6 +593,9 @@ void ButtonWidgetsPage::CreateButton()
     m_chkUseCurrent->Enable(showsBitmap);
     m_chkUseDisabled->Enable(showsBitmap);
     m_radioImagePos->Enable(m_chkTextAndBitmap->IsChecked());
+    m_textImageMarginH->Enable(showsBitmap);
+    m_textImageMarginV->Enable(showsBitmap);
+    wxWindow::FindWindowById(ButtonPage_ChangeImageMargins)->Enable(showsBitmap);
 
     if ( m_chkAuthNeeded->GetValue() )
         m_button->SetAuthNeeded();
@@ -612,6 +660,26 @@ void ButtonWidgetsPage::OnButtonChangeNote(wxCommandEvent& WXUNUSED(event))
 
     m_sizerButton->Layout();
 #endif // wxUSE_COMMANDLINKBUTTON
+}
+
+void ButtonWidgetsPage::OnButtonChangeImageMargins(wxCommandEvent& WXUNUSED(event))
+{
+    long margH = 0;
+    long margV = 0;
+    if ( !m_textImageMarginH->GetValue().ToLong(&margH) ||
+         !m_textImageMarginV->GetValue().ToLong(&margV) ||
+         margH < 0 || margV < 0 )
+    {
+        wxLogWarning("Invalid margin values for bitmap.");
+        return;
+    }
+
+    m_imageMarginH = (int)margH;
+    m_imageMarginV = (int)margV;
+
+    m_button->SetBitmapMargins((wxCoord)m_imageMarginH, (wxCoord)m_imageMarginV);
+    m_button->Refresh();
+    m_sizerButton->Layout();
 }
 
 void ButtonWidgetsPage::OnButton(wxCommandEvent& WXUNUSED(event))
