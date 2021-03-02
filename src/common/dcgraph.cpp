@@ -518,10 +518,36 @@ void wxGCDCImpl::SetFont( const wxFont &font )
 void wxGCDCImpl::SetPen( const wxPen &pen )
 {
     m_pen = pen;
-    if ( m_graphicContext )
+    if (m_graphicContext == NULL)
+        return;
+
+    wxPenStyle style;
+    if (!pen.IsOk() || (style = pen.GetStyle()) == wxPENSTYLE_TRANSPARENT)
     {
-        m_graphicContext->SetPen( m_pen );
+        m_graphicContext->SetPen(wxGraphicsPen());
+        return;
     }
+
+    // 0-width pen is 1 pixel wide with MSW wxDC
+    const int w = pen.GetWidth();
+    const double width = w ? double(w) : 1 / wxMin(m_scaleX, m_scaleY);
+
+    wxGraphicsPenInfo info(pen.GetColour(), width, style);
+    info.Join(pen.GetJoin()).Cap(pen.GetCap());
+
+    if (style == wxPENSTYLE_USER_DASH)
+    {
+        wxDash* dashes;
+        if (int n = pen.GetDashes(&dashes))
+            info.Dashes(n, dashes);
+    }
+    else if (style == wxPENSTYLE_STIPPLE)
+    {
+        if (const wxBitmap* stipple = pen.GetStipple())
+            info.Stipple(*stipple);
+    }
+
+    m_graphicContext->SetPen(m_graphicContext->CreatePen(info));
 }
 
 void wxGCDCImpl::SetBrush( const wxBrush &brush )
