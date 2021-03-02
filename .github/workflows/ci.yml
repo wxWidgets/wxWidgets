@@ -12,8 +12,12 @@ on:
       - 'distrib/**'
       - 'docs/**'
       - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'src/wx/msw/**'
       - '*.md'
       - '*.yml'
+      - 'wxwidgets.props'
   pull_request:
     branches:
       - master
