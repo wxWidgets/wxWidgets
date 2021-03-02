@@ -547,6 +547,7 @@ void ButtonWidgetsPage::CreateButton()
     m_chkUseFocused->Enable(showsBitmap);
     m_chkUseCurrent->Enable(showsBitmap);
     m_chkUseDisabled->Enable(showsBitmap);
+    m_radioImagePos->Enable(m_chkTextAndBitmap->IsChecked());
 
     if ( m_chkAuthNeeded->GetValue() )
         m_button->SetAuthNeeded();
