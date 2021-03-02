@@ -547,10 +547,14 @@ bool wxLocale::Init(int lang, int flags)
 
 #elif defined(__WIN32__)
     const char *retloc;
-    if ( !info )
+    if ( lang == wxLANGUAGE_DEFAULT )
     {
-        // We're using the system language, but we don't know what it is, so
-        // just use setlocale() to deal with it.
+        ::SetThreadLocale(LOCALE_USER_DEFAULT);
+        wxMSWSetThreadUILanguage(LANG_USER_DEFAULT);
+
+        // We're using the system language, so let setlocale() deal with it: it
+        // does it better than we do and we might not even know about this
+        // language in the first place.
         retloc = wxSetlocale(LC_ALL, "");
     }
     else if ( info->WinLang == 0 )
