@@ -50,6 +50,9 @@
     #ifndef LOCALE_SNAME
     #define LOCALE_SNAME 0x5c
     #endif
+    #ifndef LOCALE_CUSTOM_UI_DEFAULT
+    #define LOCALE_CUSTOM_UI_DEFAULT 0x1400
+    #endif
 #endif
 
 #include "wx/file.h"
@@ -768,11 +771,11 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         }
     }
 #elif defined(__WIN32__)
-    LCID lcid = GetUserDefaultLCID();
-    if ( lcid != 0 )
+    const LANGID langid = ::GetUserDefaultUILanguage();
+    if ( langid != LOCALE_CUSTOM_UI_DEFAULT )
     {
-        wxUint32 lang = PRIMARYLANGID(LANGIDFROMLCID(lcid));
-        wxUint32 sublang = SUBLANGID(LANGIDFROMLCID(lcid));
+        wxUint32 lang = PRIMARYLANGID(langid);
+        wxUint32 sublang = SUBLANGID(langid);
 
         for ( i = 0; i < count; i++ )
         {
