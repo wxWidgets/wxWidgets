@@ -446,6 +446,28 @@ static const char *wxSetlocaleTryAll(int c, const wxString& lc)
 
 #endif // __UNIX__
 
+#ifdef __WIN32__
+
+// Trivial wrapper for ::SetThreadUILanguage().
+//
+// TODO-XP: Drop this when we don't support XP any longer.
+static void wxMSWSetThreadUILanguage(LANGID langid)
+{
+    // SetThreadUILanguage() is available on XP, but with unclear
+    // behavior, so avoid calling it there.
+    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    {
+        wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
+        typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
+        SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
+        wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
+        if (pfnSetThreadUILanguage)
+            pfnSetThreadUILanguage(langid);
+    }
+}
+
+#endif // __WIN32__
+
 bool wxLocale::Init(int lang, int flags)
 {
 #if WXWIN_COMPATIBILITY_2_8
@@ -544,17 +566,7 @@ bool wxLocale::Init(int lang, int flags)
         // change locale used by Windows functions
         ::SetThreadLocale(lcid);
 
-        // SetThreadUILanguage() is available on XP, but with unclear
-        // behavior, so avoid calling it there.
-        if ( wxGetWinVersion() >= wxWinVersion_Vista )
-        {
-            wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
-            typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
-            SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
-            wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
-            if (pfnSetThreadUILanguage)
-                pfnSetThreadUILanguage(LANGIDFROMLCID(lcid));
-        }
+        wxMSWSetThreadUILanguage(LANGIDFROMLCID(lcid));
 
         // and also call setlocale() to change locale used by the CRT
         retloc = info->TrySetLocale();
