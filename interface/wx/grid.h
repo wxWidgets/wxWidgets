@@ -1857,7 +1857,7 @@ public:
     /**
         Gets an id
     */
-    int  GetId();
+    int GetId() const;
 
     /**
         Set the position after which the insertion/deletion occur
@@ -1867,7 +1867,7 @@ public:
     /**
         Get the position after which the insertion/deletion occur
     */
-    int  GetCommandInt();
+    int GetCommandInt() const;
 
     /**
         Set the number of rows to be inserted/deleted
@@ -1877,7 +1877,7 @@ public:
     /**
         Get the number of rows to be inserted/deleted
     */
-    int  GetCommandInt2();
+    int GetCommandInt2() const;
 };
 
 
@@ -4447,7 +4447,7 @@ public:
         may still be negative, see GetCellSize(int, int, int *, int *) for
         details.
      */
-    wxSize GetCellSize(const wxGridCellCoords& coords);
+    wxSize GetCellSize(const wxGridCellCoords& coords) const;
 
     //@}
 
@@ -6239,7 +6239,7 @@ public:
     /**
         Position in pixels at which the event occurred.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Row at which the event occurred.
@@ -6259,7 +6259,7 @@ public:
         Returns @true if the user is selecting grid cells, or @false if
         deselecting.
     */
-    bool Selecting();
+    bool Selecting() const;
 
     /**
         Returns @true if the Shift key was down at the time of the event.
@@ -6324,12 +6324,12 @@ public:
     /**
         Position in pixels at which the event occurred.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Row or column at that was resized.
     */
-    int GetRowOrCol();
+    int GetRowOrCol() const;
 
     /**
         Returns @true if the Meta key was down at the time of the event.
@@ -6416,32 +6416,32 @@ public:
     /**
         Top left corner of the rectangular area that was (de)selected.
     */
-    wxGridCellCoords GetBottomRightCoords();
+    wxGridCellCoords GetBottomRightCoords() const;
 
     /**
         Bottom row of the rectangular area that was (de)selected.
     */
-    int GetBottomRow();
+    int GetBottomRow() const;
 
     /**
         Left column of the rectangular area that was (de)selected.
     */
-    int GetLeftCol();
+    int GetLeftCol() const;
 
     /**
         Right column of the rectangular area that was (de)selected.
     */
-    int GetRightCol();
+    int GetRightCol() const;
 
     /**
         Top left corner of the rectangular area that was (de)selected.
     */
-    wxGridCellCoords GetTopLeftCoords();
+    wxGridCellCoords GetTopLeftCoords() const;
 
     /**
         Top row of the rectangular area that was (de)selected.
     */
-    int GetTopRow();
+    int GetTopRow() const;
 
     /**
         Returns @true if the Meta key was down at the time of the event.
@@ -6451,7 +6451,7 @@ public:
     /**
         Returns @true if the area was selected, @false otherwise.
     */
-    bool Selecting();
+    bool Selecting() const;
 
     /**
         Returns @true if the Shift key was down at the time of the event.
@@ -6492,7 +6492,7 @@ public:
     /**
         Returns the column at which the event occurred.
     */
-    int GetCol();
+    int GetCol() const;
 
     /**
         Returns the edit control.
@@ -6509,14 +6509,14 @@ public:
     /**
         Returns the row at which the event occurred.
     */
-    int GetRow();
+    int GetRow() const;
 
     /**
         Returns the edit window.
 
         @since 3.1.3
     */
-    wxWindow* GetWindow();
+    wxWindow* GetWindow() const;
 
     /**
         Sets the column at which the event occurred.

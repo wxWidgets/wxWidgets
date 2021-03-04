@@ -1323,11 +1323,11 @@ public:
     void SetTableObject( wxGridTableBase *table ) { m_table = table; }
     wxGridTableBase * GetTableObject() const { return m_table; }
     void SetId( int id ) { m_id = id; }
-    int  GetId() { return m_id; }
+    int GetId() const { return m_id; }
     void SetCommandInt( int comInt1 ) { m_comInt1 = comInt1; }
-    int  GetCommandInt() { return m_comInt1; }
+    int GetCommandInt() const { return m_comInt1; }
     void SetCommandInt2( int comInt2 ) { m_comInt2 = comInt2; }
-    int  GetCommandInt2() { return m_comInt2; }
+    int GetCommandInt2() const { return m_comInt2; }
 
 private:
     wxGridTableBase *m_table;
@@ -1625,7 +1625,7 @@ public:
                            const wxRect& rect,
                            const wxGridCellAttr& attr,
                            int defaultHAlign = wxALIGN_INVALID,
-                           int defaultVAlign = wxALIGN_INVALID);
+                           int defaultVAlign = wxALIGN_INVALID) const;
 
     // ------ grid render function for printing
     //
@@ -2016,7 +2016,7 @@ public:
 
     CellSpan GetCellSize( int row, int col, int *num_rows, int *num_cols ) const;
 
-    wxSize GetCellSize(const wxGridCellCoords& coords)
+    wxSize GetCellSize(const wxGridCellCoords& coords) const
     {
         wxSize s;
         GetCellSize(coords.GetRow(), coords.GetCol(), &s.x, &s.y);
@@ -3047,7 +3047,7 @@ private:
                          const wxGridCellCoords& bottomRight,
                          wxPoint& pointOffSet, wxSize& sizeGrid,
                          wxGridCellCoordsArray& renderCells,
-                         wxArrayInt& arrayCols, wxArrayInt& arrayRows );
+                         wxArrayInt& arrayCols, wxArrayInt& arrayRows ) const;
 
     // Helper of Render(): set the scale to draw the cells at the right size.
     void SetRenderScale( wxDC& dc, const wxPoint& pos, const wxSize& size,
@@ -3211,8 +3211,8 @@ public:
 
     virtual int GetRow() { return m_row; }
     virtual int GetCol() { return m_col; }
-    wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
-    bool        Selecting() { return m_selecting; }
+    wxPoint GetPosition() const { return wxPoint( m_x, m_y ); }
+    bool Selecting() const { return m_selecting; }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridEvent(*this); }
 
@@ -3271,8 +3271,8 @@ public:
                     bool alt = false,
                     bool meta = false) );
 
-    int         GetRowOrCol() { return m_rowOrCol; }
-    wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
+    int GetRowOrCol() const { return m_rowOrCol; }
+    wxPoint GetPosition() const { return wxPoint( m_x, m_y ); }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridSizeEvent(*this); }
 
@@ -3330,13 +3330,13 @@ public:
                            bool alt = false,
                            bool meta = false) );
 
-    wxGridCellCoords GetTopLeftCoords() { return m_topLeft; }
-    wxGridCellCoords GetBottomRightCoords() { return m_bottomRight; }
-    int         GetTopRow()    { return m_topLeft.GetRow(); }
-    int         GetBottomRow() { return m_bottomRight.GetRow(); }
-    int         GetLeftCol()   { return m_topLeft.GetCol(); }
-    int         GetRightCol()  { return m_bottomRight.GetCol(); }
-    bool        Selecting() { return m_selecting; }
+    wxGridCellCoords GetTopLeftCoords() const { return m_topLeft; }
+    wxGridCellCoords GetBottomRightCoords() const { return m_bottomRight; }
+    int GetTopRow() const { return m_topLeft.GetRow(); }
+    int GetBottomRow() const { return m_bottomRight.GetRow(); }
+    int GetLeftCol() const { return m_topLeft.GetCol(); }
+    int GetRightCol() const { return m_bottomRight.GetCol(); }
+    bool Selecting() const { return m_selecting; }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridRangeSelectEvent(*this); }
 
@@ -3372,9 +3372,9 @@ public:
     wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
                              int row, int col, wxWindow* window);
 
-    int GetRow()                        { return m_row; }
-    int GetCol()                        { return m_col; }
-    wxWindow* GetWindow()               { return m_window; }
+    int GetRow() const { return m_row; }
+    int GetCol() const { return m_col; }
+    wxWindow* GetWindow() const { return m_window; }
     void SetRow(int row)                { m_row = row; }
     void SetCol(int col)                { m_col = col; }
     void SetWindow(wxWindow* window)    { m_window = window; }

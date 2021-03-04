@@ -2477,7 +2477,7 @@ void wxGrid::GetRenderSizes( const wxGridCellCoords& topLeft,
                              const wxGridCellCoords& bottomRight,
                              wxPoint& pointOffSet, wxSize& sizeGrid,
                              wxGridCellCoordsArray& renderCells,
-                             wxArrayInt& arrayCols, wxArrayInt& arrayRows )
+                             wxArrayInt& arrayCols, wxArrayInt& arrayRows ) const
 {
     pointOffSet.x = 0;
     pointOffSet.y = 0;
@@ -7215,7 +7215,7 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
                                const wxRect& rect,
                                const wxGridCellAttr& attr,
                                int hAlign,
-                               int vAlign)
+                               int vAlign) const
 {
     attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
