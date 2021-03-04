@@ -107,18 +107,22 @@ void wxPickerBase::PostCreation()
 
     // For aesthetic reasons, make sure the picker is at least as high as the
     // associated text control and is always at least square, unless we are
-    // explicitly using wxPB_SMALL style to force it to take as little space as
-    // possible.
-    if ( !HasFlag(wxPB_SMALL) )
+    // explicitly using wxPB_SMALL style to force it to take as little
+    // horizontal space as possible.
+    const wxSize pickerBestSize(m_picker->GetBestSize());
+    const wxSize textBestSize( HasTextCtrl() ? m_text->GetBestSize() : wxSize());
+    wxSize pickerMinSize;
+    pickerMinSize.y = wxMax(pickerBestSize.y, textBestSize.y);
+    if ( HasFlag(wxPB_SMALL) )
     {
-        const wxSize pickerBestSize(m_picker->GetBestSize());
-        const wxSize textBestSize( HasTextCtrl() ? m_text->GetBestSize() : wxSize());
-        wxSize pickerMinSize;
-        pickerMinSize.y = wxMax(pickerBestSize.y, textBestSize.y);
-        pickerMinSize.x = wxMax(pickerBestSize.x, pickerMinSize.y);
-        if ( pickerMinSize != pickerBestSize )
-            m_picker->SetMinSize(pickerMinSize);
+        pickerMinSize.x = pickerBestSize.x;
     }
+    else
+    {
+        pickerMinSize.x = wxMax(pickerBestSize.x, pickerMinSize.y);
+    }
+    if ( pickerMinSize != pickerBestSize )
+        m_picker->SetMinSize(pickerMinSize);
 
     SetSizer(m_sizer);
 
