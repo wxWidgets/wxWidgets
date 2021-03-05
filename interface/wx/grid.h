@@ -6234,7 +6234,7 @@ public:
         column of the newly selected cell while the previously selected cell
         can be retrieved using wxGrid::GetGridCursorCol().
     */
-    virtual int GetCol();
+    int GetCol() const;
 
     /**
         Position in pixels at which the event occurred.
@@ -6248,7 +6248,7 @@ public:
         of the newly selected cell while the previously selected cell can be
         retrieved using wxGrid::GetGridCursorRow().
     */
-    virtual int GetRow();
+    int GetRow() const;
 
     /**
         Returns @true if the Meta key was down at the time of the event.

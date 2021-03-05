@@ -3209,8 +3209,8 @@ public:
                 bool control,
                 bool shift = false, bool alt = false, bool meta = false));
 
-    virtual int GetRow() { return m_row; }
-    virtual int GetCol() { return m_col; }
+    int GetRow() const { return m_row; }
+    int GetCol() const { return m_col; }
     wxPoint GetPosition() const { return wxPoint( m_x, m_y ); }
     bool Selecting() const { return m_selecting; }
 
