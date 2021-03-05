@@ -224,10 +224,7 @@ public:
         m_data.himl = GetHimagelistOf(&m_iml);
 
         // no margins by default
-        m_data.margin.left =
-        m_data.margin.right =
-        m_data.margin.top =
-        m_data.margin.bottom = 0;
+        ::SetRectEmpty(&m_data.margin);
 
         // use default alignment
         m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
@@ -260,10 +257,7 @@ public:
     virtual void SetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE
     {
         RECT& margin = m_data.margin;
-        margin.left =
-        margin.right = x;
-        margin.top =
-        margin.bottom = y;
+        ::SetRect(&margin, x, y, x, y);
 
         if ( !::SendMessage(m_hwndBtn, BCM_SETTEXTMARGIN, 0, (LPARAM)&margin) )
         {
