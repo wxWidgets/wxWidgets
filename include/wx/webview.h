@@ -86,6 +86,12 @@ enum wxWebViewNavigationActionFlags
     wxWEBVIEW_NAV_ACTION_OTHER
 };
 
+enum wxWebViewUserScriptInjectionTime
+{
+    wxWEBVIEW_INJECT_AT_DOCUMENT_START,
+    wxWEBVIEW_INJECT_AT_DOCUMENT_END
+};
+
 //Base class for custom scheme handlers
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
@@ -181,7 +187,18 @@ public:
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
+
+    // Script
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
+    virtual bool AddScriptMessageHandler(const wxString& name)
+    { wxUnusedVar(name); return false; }
+    virtual bool RemoveScriptMessageHandler(const wxString& name)
+    { wxUnusedVar(name); return false; }
+    virtual bool AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START)
+    {  wxUnusedVar(javascript); wxUnusedVar(injectionTime); return false; }
+    virtual void RemoveAllUserScripts() {}
+
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {
@@ -269,9 +286,10 @@ public:
     wxWebViewEvent() {}
     wxWebViewEvent(wxEventType type, int id, const wxString& url,
                    const wxString target,
-                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE)
+                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE,
+                   const wxString& messageHandler = wxString())
         : wxNotifyEvent(type, id), m_url(url), m_target(target),
-          m_actionFlags(flags)
+          m_actionFlags(flags), m_messageHandler(messageHandler)
     {}
 
 
@@ -279,12 +297,14 @@ public:
     const wxString& GetTarget() const { return m_target; }
 
     wxWebViewNavigationActionFlags GetNavigationAction() const { return m_actionFlags; }
+    const wxString& GetMessageHandler() const { return m_messageHandler; }
 
     virtual wxEvent* Clone() const wxOVERRIDE { return new wxWebViewEvent(*this); }
 private:
     wxString m_url;
     wxString m_target;
     wxWebViewNavigationActionFlags m_actionFlags;
+    wxString m_messageHandler;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
 };
@@ -296,6 +316,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_ERROR, wxWebViewEve
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);

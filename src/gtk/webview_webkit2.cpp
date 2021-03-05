@@ -31,6 +31,37 @@
 #include <JavaScriptCore/JSValueRef.h>
 #include <JavaScriptCore/JSStringRef.h>
 
+// Helper function to get string from Webkit JS result
+bool wxGetStringFromJSResult(WebKitJavascriptResult* js_result, wxString* output)
+{
+    JSGlobalContextRef context = webkit_javascript_result_get_global_context(js_result);
+    JSValueRef value = webkit_javascript_result_get_value(js_result);
+
+    JSValueRef exception = NULL;
+    wxJSStringRef js_value
+                  (
+                   JSValueIsObject(context, value)
+                       ? JSValueCreateJSONString(context, value, 0, &exception)
+                       : JSValueToStringCopy(context, value, &exception)
+                  );
+
+    if ( exception )
+    {
+        if ( output )
+        {
+            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+            *output = ex_value.ToWxString();
+        }
+
+        return false;
+    }
+
+    if ( output != NULL )
+        *output = js_value.ToWxString();
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // GTK callbacks
 // ----------------------------------------------------------------------------
@@ -288,6 +319,21 @@ wxgtk_webview_webkit_leave_fullscreen(WebKitWebView *WXUNUSED(web_view),
     webKitCtrl->HandleWindowEvent(event);
 
     return FALSE;
+}
+
+static void
+wxgtk_webview_webkit_script_message_received(WebKitUserContentManager *WXUNUSED(content_manager),
+                                             WebKitJavascriptResult *js_result,
+                                             wxWebViewWebKit *webKitCtrl)
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED,
+                         webKitCtrl->GetId(),
+                         webKitCtrl->GetCurrentURL(),
+                         "");
+    wxString msgStr;
+    if (wxGetStringFromJSResult(js_result, &msgStr))
+        event.SetString(msgStr);
+    webKitCtrl->HandleWindowEvent(event);
 }
 
 static gboolean
@@ -696,6 +742,18 @@ void wxWebViewWebKit::SetWebkitZoom(float level)
 float wxWebViewWebKit::GetWebkitZoom() const
 {
     return webkit_web_view_get_zoom_level(m_web_view);
+}
+
+void wxWebViewWebKit::EnableAccessToDevTools(bool enable)
+{
+    WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
+    webkit_settings_set_enable_developer_extras(settings, enable);
+}
+
+bool wxWebViewWebKit::IsAccessToDevToolsEnabled() const
+{
+    WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
+    return webkit_settings_get_enable_developer_extras(settings);
 }
 
 void wxWebViewWebKit::Stop()
@@ -1209,32 +1267,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
         return false;
     }
 
-    JSGlobalContextRef context = webkit_javascript_result_get_global_context(js_result);
-    JSValueRef value = webkit_javascript_result_get_value(js_result);
-
-    JSValueRef exception = NULL;
-    wxJSStringRef js_value
-                  (
-                   JSValueIsObject(context, value)
-                       ? JSValueCreateJSONString(context, value, 0, &exception)
-                       : JSValueToStringCopy(context, value, &exception)
-                  );
-
-    if ( exception )
-    {
-        if ( output )
-        {
-            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
-            *output = ex_value.ToWxString();
-        }
-
-        return false;
-    }
-
-    if ( output != NULL )
-        *output = js_value.ToWxString();
-
-    return true;
+    return wxGetStringFromJSResult(js_result, output);
 }
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
@@ -1264,6 +1297,57 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) co
     }
 
     return true;
+}
+
+bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
+{
+    if (!m_web_view)
+        return false;
+
+    WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
+    g_signal_connect(ucm, wxString::Format("script-message-received::%s", name).utf8_str(),
+                     G_CALLBACK(wxgtk_webview_webkit_script_message_received), this);
+    bool res = webkit_user_content_manager_register_script_message_handler(ucm, name.utf8_str());
+    if (res)
+    {
+        // Make webkit message handler available under common name
+        wxString js = wxString::Format("window.%s = window.webkit.messageHandlers.%s;",
+                name, name);
+        AddUserScript(js);
+        RunScript(js);
+    }
+
+    return res;
+}
+
+bool wxWebViewWebKit::RemoveScriptMessageHandler(const wxString& name)
+{
+    WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
+    webkit_user_content_manager_unregister_script_message_handler(ucm, name.utf8_str());
+    return true;
+}
+
+bool wxWebViewWebKit::AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime)
+{
+    WebKitUserScript* userScript = webkit_user_script_new(
+        javascript.utf8_str(),
+        WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+        (injectionTime == wxWEBVIEW_INJECT_AT_DOCUMENT_START) ?
+            WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START : WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+        NULL, NULL
+    );
+    WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
+    webkit_user_content_manager_add_script(ucm, userScript);
+    webkit_user_script_unref(userScript);
+
+    return true;
+}
+
+void wxWebViewWebKit::RemoveAllUserScripts()
+{
+    WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
+    webkit_user_content_manager_remove_all_scripts(ucm);
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

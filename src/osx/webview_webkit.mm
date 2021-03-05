@@ -87,6 +87,15 @@ wxEND_EVENT_TABLE()
 @end
 #endif // macOS 10.13+
 
+@interface WebViewScriptMessageHandler: NSObject<WKScriptMessageHandler>
+{
+    wxWebViewWebKit* webKitWindow;
+}
+
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow;
+
+@end
+
 //-----------------------------------------------------------------------------
 // wxWebViewFactoryWebKit
 //-----------------------------------------------------------------------------
@@ -383,6 +392,41 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) co
     }
 
     return true;
+}
+
+bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
+{
+    [m_webView.configuration.userContentController addScriptMessageHandler:
+        [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:wxCFStringRef(name).AsNSString()];
+    // Make webkit message handler available under common name
+    wxString js = wxString::Format("window.%s = window.webkit.messageHandlers.%s;",
+            name, name);
+    AddUserScript(js);
+    RunScript(js);
+    return true;
+}
+
+bool wxWebViewWebKit::RemoveScriptMessageHandler(const wxString& name)
+{
+    [m_webView.configuration.userContentController removeScriptMessageHandlerForName:wxCFStringRef(name).AsNSString()];
+    return true;
+}
+
+bool wxWebViewWebKit::AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime)
+{
+    WKUserScript* userScript =
+        [[WKUserScript alloc] initWithSource:wxCFStringRef(javascript).AsNSString()
+            injectionTime:(injectionTime == wxWEBVIEW_INJECT_AT_DOCUMENT_START) ?
+                WKUserScriptInjectionTimeAtDocumentStart : WKUserScriptInjectionTimeAtDocumentEnd
+            forMainFrameOnly:NO];
+    [m_webView.configuration.userContentController addUserScript:userScript];
+    return true;
+}
+
+void wxWebViewWebKit::RemoveAllUserScripts()
+{
+    [m_webView.configuration.userContentController removeAllUserScripts];
 }
 
 void wxWebViewWebKit::LoadURL(const wxString& url)
@@ -888,6 +932,47 @@ WX_API_AVAILABLE_MACOS(10, 12)
         completionHandler(nil);
 }
 #endif // __MAC_OS_X_VERSION_MAX_ALLOWED
+
+@end
+
+@implementation WebViewScriptMessageHandler
+
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
+{
+    if (self = [super init])
+    {
+        webKitWindow = inWindow;    // non retained
+    }
+    return self;
+}
+
+- (void)userContentController:(nonnull WKUserContentController *)userContentController
+      didReceiveScriptMessage:(nonnull WKScriptMessage *)message
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED,
+                         webKitWindow->GetId(),
+                         webKitWindow->GetCurrentURL(),
+                         "",
+                         wxWEBVIEW_NAV_ACTION_NONE,
+                         wxCFStringRef::AsString(message.name));
+    if ([message.body isKindOfClass:NSString.class])
+        event.SetString(wxCFStringRef::AsString(message.body));
+    else if ([message.body isKindOfClass:NSNumber.class])
+        event.SetString(wxCFStringRef::AsString(((NSNumber*)message.body).stringValue));
+    else if ([message.body isKindOfClass:NSDate.class])
+        event.SetString(wxCFStringRef::AsString(((NSDate*)message.body).description));
+    else if ([message.body isKindOfClass:NSNull.class])
+        event.SetString("null");
+    else if ([message.body isKindOfClass:NSDictionary.class] || [message.body isKindOfClass:NSArray.class])
+    {
+        NSError* error = nil;
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:message.body options:0 error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        event.SetString(wxCFStringRef::AsString(jsonString));
+    }
+
+    webKitWindow->ProcessWindowEvent(event);
+}
 
 @end
 

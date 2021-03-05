@@ -108,6 +108,19 @@ enum wxWebViewNavigationActionFlags
 };
 
 /**
+    Specifies at which place of documents an user script will be inserted.
+
+    @since 3.1.5
+*/
+enum wxWebViewUserScriptInjectionTime
+{
+    /** Insert the code of the user script at the beginning of loaded documents. */
+    wxWEBVIEW_INJECT_AT_DOCUMENT_START,
+    /** Insert the code of the user script at the end of the loaded documents. */
+    wxWEBVIEW_INJECT_AT_DOCUMENT_END
+};
+
+/**
     Internet Explorer emulation modes for wxWebViewIE.
 
     Elements of this enum can be used with wxWebView::MSWSetEmulationLevel().
@@ -374,6 +387,12 @@ public:
     systems on macOS 10.13+. In order to use handlers two-step creation has to be used
     and RegisterHandler() has to be called before Create().
 
+    Starting with macOS 10.11 and iOS 9 an application cannot create unsecure
+    connections (this includes HTTP and unverified HTTPS). You have to include
+    additional fields in your Info.plist to enable such connections.
+    For further details see the documentation on NSAppTransportSecurity
+    <a target=_new href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
+
     @section async Asynchronous Notifications
 
     Many of the methods in wxWebView are asynchronous, i.e. they return
@@ -433,6 +452,10 @@ public:
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
        Currently only implemented for the edge and WebKit2GTK+ backend
        and is only available in wxWidgets 3.1.5 or later.
+    @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
+        only available in wxWidgets 3.1.5 or later. For usage details see
+        AddScriptMessageHandler().
     @endEventTable
 
     @since 2.9.3
@@ -610,6 +633,44 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
+        Set the editable property of the web control. Enabling allows the user
+        to edit the page even if the @c contenteditable attribute is not set.
+        The exact capabilities vary with the backend being used.
+
+        @note This is not implemented on macOS.
+    */
+    virtual void SetEditable(bool enable = true) = 0;
+
+    /**
+        Set the displayed page source to the contents of the given string.
+        @param html    The string that contains the HTML data to display.
+        @param baseUrl URL assigned to the HTML data, to be used to resolve
+                    relative paths, for instance.
+        @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
+              page to finish loading before calling SetPage(). The baseURL
+              parameter is not used in this backend and the edge backend.
+    */
+    virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
+
+    /**
+        Set the displayed page source to the contents of the given stream.
+        @param html    The stream to read HTML data from.
+        @param baseUrl URL assigned to the HTML data, to be used to resolve
+                    relative paths, for instance.
+    */
+    virtual void SetPage(wxInputStream& html, wxString baseUrl);
+
+    /**
+        Stop the current page loading process, if any.
+        May trigger an error event of type @c wxWEBVIEW_NAV_ERR_USER_CANCELLED.
+        TODO: make @c wxWEBVIEW_NAV_ERR_USER_CANCELLED errors uniform across ports.
+    */
+    virtual void Stop() = 0;
+
+    /**
+        @name Scripting
+    */
+    /**
         Runs the given JavaScript code.
 
         JavaScript code is executed inside the browser control and has full
@@ -670,39 +731,78 @@ public:
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
 
     /**
-        Set the editable property of the web control. Enabling allows the user
-        to edit the page even if the @c contenteditable attribute is not set.
-        The exact capabilities vary with the backend being used.
+        Add a script message handler with the given name.
 
-        @note This is not implemented on macOS.
+        To use the script message handler from javascript use
+        @c window.<name>.postMessage(<messageBody>) where <name> corresponds the the value
+        of the name parameter. The <messageBody> will be available to the application
+        via a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event.
+
+        Sample C++ code receiving a script message:
+        @code
+            // Install message handler with the name wx_msg
+            m_webView->AddScriptMessageHandler('wx_msg');
+            // Bind handler
+            m_webView->Bind(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, [](wxWebViewEvent& evt) {
+                wxLogMessage("Script message received; value = %s, handler = %s", evt.GetString(), evt.GetMessageHandler());
+            });
+        @endcode
+
+        Sample javascript sending a script message:
+        @code
+            // Send sample message body
+            window.wx_msg.postMessage('This is a message body');
+        @endcode
+
+        @param name Name of the message handler that can be used from javascript
+        @return @true if the handler could be added, @false if it could not be added.
+
+        @see RemoveScriptMessageHandler()
+
+        @note The Edge (Chromium) backend only supports a single message handler and
+            the IE backend does not support script message handlers.
+
+        @since 3.1.5
     */
-    virtual void SetEditable(bool enable = true) = 0;
+    virtual bool AddScriptMessageHandler(const wxString& name);
 
     /**
-        Set the displayed page source to the contents of the given string.
-        @param html    The string that contains the HTML data to display.
-        @param baseUrl URL assigned to the HTML data, to be used to resolve
-                    relative paths, for instance.
-        @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling SetPage(). The baseURL
-              parameter is not used in this backend and the edge backend.
+        Remove a script message handler with the given name that was previously added via
+        AddScriptMessageHandler().
+
+        @return @true if the handler could be removed, @false if it could not be removed.
+
+        @see AddScriptMessageHandler()
+
+        @since 3.1.5
     */
-    virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
+    virtual bool RemoveScriptMessageHandler(const wxString& name);
 
     /**
-        Set the displayed page source to the contents of the given stream.
-        @param html    The stream to read HTML data from.
-        @param baseUrl URL assigned to the HTML data, to be used to resolve
-                    relative paths, for instance.
+        Injects the specified script into the webpage’s content.
+
+        @param javascript The javascript code to add.
+        @param injectionTime Specifies when the script will be executed.
+        @return Returns true if the script was added successfully.
+
+        @note Please note that this is unsupported by the IE backend and
+            the Edge (Chromium) backend does only support wxWEBVIEW_INJECT_AT_DOCUMENT_START.
+
+        @see RemoveAllUserScripts()
+
+        @since 3.1.5
     */
-    virtual void SetPage(wxInputStream& html, wxString baseUrl);
+    virtual bool AddUserScript(const wxString& javascript,
+        wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START);
 
     /**
-        Stop the current page loading process, if any.
-        May trigger an error event of type @c wxWEBVIEW_NAV_ERR_USER_CANCELLED.
-        TODO: make @c wxWEBVIEW_NAV_ERR_USER_CANCELLED errors uniform across ports.
+        Removes all user scripts from the web view.
+
+        @see AddUserScript()
+
+        @since 3.1.5
     */
-    virtual void Stop() = 0;
+    virtual void RemoveAllUserScripts();
 
     /**
         @name Clipboard
@@ -772,8 +872,8 @@ public:
     /**
         Enable or disable access to dev tools for the user.
 
-        This is currently only implemented for the Edge (Chromium) backend
-        where the dev tools are enabled by default.
+        This is currently only implemented for the Edge (Chromium) backend and
+        the WebKit2GTK+ backend. Dev tools are disabled by default.
 
         @since 3.1.4
     */
@@ -1094,6 +1194,10 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
+        only available in wxWidgets 3.1.5 or later. For usage details see
+        wxWebView::AddScriptMessageHandler().
     @endEventTable
 
     @since 2.9.3
@@ -1108,7 +1212,8 @@ public:
     wxWebViewEvent();
     wxWebViewEvent(wxEventType type, int id, const wxString href,
                    const wxString target,
-                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE);
+                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE,
+                   const wxString& messageHandler = wxString());
 
     /**
         Get the name of the target frame which the url of this event
@@ -1129,6 +1234,14 @@ public:
         @since 3.1.2
     */
     wxWebViewNavigationActionFlags GetNavigationAction() const;
+
+    /**
+        Get the name of the script handler. Only valid for events of type
+        @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED
+
+        @since 3.1.5
+    */
+    const wxString& GetMessageHandler() const;
 };
 
 

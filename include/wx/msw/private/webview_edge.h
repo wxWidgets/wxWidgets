@@ -55,6 +55,9 @@ public:
     wxString m_pendingURL;
     int m_pendingContextMenuEnabled;
     int m_pendingAccessToDevToolsEnabled;
+    wxVector<wxString> m_pendingUserScripts;
+    wxVector<wxString> m_userScriptIds;
+    wxString m_scriptMsgHandlerName;
 
     // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
@@ -64,6 +67,7 @@ public:
     EventRegistrationToken m_documentTitleChangedToken = { };
     EventRegistrationToken m_contentLoadingToken = { };
     EventRegistrationToken m_containsFullScreenElementChangedToken = { };
+    EventRegistrationToken m_webMessageReceivedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
@@ -73,6 +77,8 @@ public:
     HRESULT OnDocumentTitleChanged(ICoreWebView2* sender, IUnknown* args);
     HRESULT OnContentLoading(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args);
     HRESULT OnContainsFullScreenElementChanged(ICoreWebView2* sender, IUnknown* args);
+    HRESULT OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
+    HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);
@@ -85,6 +91,8 @@ public:
     void UpdateBounds();
 
     ICoreWebView2Settings* GetSettings();
+
+    void UpdateWebMessageHandler();
 
     static wxDynamicLibrary ms_loaderDll;
     static wxString ms_browserExecutableDir;

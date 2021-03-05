@@ -121,6 +121,7 @@ public:
     void OnNewWindow(wxWebViewEvent& evt);
     void OnTitleChanged(wxWebViewEvent& evt);
     void OnFullScreenChanged(wxWebViewEvent& evt);
+    void OnScriptMessage(wxWebViewEvent& evt);
     void OnSetPage(wxCommandEvent& evt);
     void OnViewSourceRequest(wxCommandEvent& evt);
     void OnViewTextRequest(wxCommandEvent& evt);
@@ -157,7 +158,9 @@ public:
     void OnRunScriptDateWithEmulationLevel(wxCommandEvent& evt);
     void OnRunScriptArrayWithEmulationLevel(wxCommandEvent& evt);
 #endif
+    void OnRunScriptMessage(wxCommandEvent& evt);
     void OnRunScriptCustom(wxCommandEvent& evt);
+    void OnAddUserScript(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -227,6 +230,7 @@ private:
     wxMenuItem* m_script_date_el;
     wxMenuItem* m_script_array_el;
 #endif
+    wxMenuItem* m_script_message;
     wxMenuItem* m_script_custom;
     wxMenuItem* m_selection_clear;
     wxMenuItem* m_selection_delete;
@@ -406,6 +410,8 @@ WebFrame::WebFrame(const wxString& url) :
     //And the memory: file system
     m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler("memory")));
 #endif
+    if (!m_browser->AddScriptMessageHandler("wx"))
+        wxLogError("Could not add script message handler");
 
     SetSizer(topsizer);
 
@@ -483,8 +489,10 @@ WebFrame::WebFrame(const wxString& url) :
         m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
     }
 #endif
+    m_script_message = script_menu->Append(wxID_ANY, "Send script message");
     m_script_custom = script_menu->Append(wxID_ANY, "Custom script");
     m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
+    wxMenuItem* addUserScript = m_tools_menu->Append(wxID_ANY, _("Add user script"));
 
     //Selection menu
     wxMenu* selection = new wxMenu();
@@ -538,6 +546,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_WEBVIEW_NEWWINDOW, &WebFrame::OnNewWindow, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_TITLE_CHANGED, &WebFrame::OnTitleChanged, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, &WebFrame::OnFullScreenChanged, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, &WebFrame::OnScriptMessage, this, m_browser->GetId());
 
     // Connect the menu events
     Bind(wxEVT_MENU, &WebFrame::OnSetPage, this, setPage->GetId());
@@ -581,7 +590,9 @@ WebFrame::WebFrame(const wxString& url) :
         Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
     }
 #endif
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptMessage, this, m_script_message->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptCustom, this, m_script_custom->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnAddUserScript, this, addUserScript->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnDeleteSelection, this, m_selection_delete->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSelectAll, this, selectall->GetId());
@@ -905,6 +916,11 @@ void WebFrame::OnFullScreenChanged(wxWebViewEvent & evt)
     ShowFullScreen(evt.GetInt() != 0);
 }
 
+void WebFrame::OnScriptMessage(wxWebViewEvent& evt)
+{
+    wxLogMessage("Script message received; value = %s, handler = %s", evt.GetString(), evt.GetMessageHandler());
+}
+
 void WebFrame::OnSetPage(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->SetPage
@@ -1175,6 +1191,11 @@ void WebFrame::OnRunScriptArrayWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
 }
 #endif
 
+void WebFrame::OnRunScriptMessage(wxCommandEvent& WXUNUSED(evt))
+{
+    RunScript("window.wx.postMessage('This is a web message');");
+}
+
 void WebFrame::OnRunScriptCustom(wxCommandEvent& WXUNUSED(evt))
 {
     wxTextEntryDialog dialog
@@ -1189,6 +1210,24 @@ void WebFrame::OnRunScriptCustom(wxCommandEvent& WXUNUSED(evt))
         return;
 
     RunScript(dialog.GetValue());
+}
+
+void WebFrame::OnAddUserScript(wxCommandEvent & WXUNUSED(evt))
+{
+    wxString userScript = "window.wx_test_var = 'wxWidgets webview sample';";
+    wxTextEntryDialog dialog
+    (
+        this,
+        "Enter the JavaScript code to run as the initialization script that runs before any script in the HTML document.",
+        wxGetTextFromUserPromptStr,
+        userScript,
+        wxOK | wxCANCEL | wxCENTRE | wxTE_MULTILINE
+    );
+    if (dialog.ShowModal() != wxID_OK)
+        return;
+
+    if (!m_browser->AddUserScript(dialog.GetValue()))
+        wxLogError("Could not add user script");
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
