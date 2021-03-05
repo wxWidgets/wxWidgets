@@ -25,7 +25,7 @@ skip_commits:
     - src/unix/
     - include/wx/x11/
     - src/x11/
-    - '*.md'
+    - '**/*.md'
     - .github/workflows/
     - .travis.yml
     - build/tools/travis-ci.sh
