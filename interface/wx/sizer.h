@@ -1892,7 +1892,7 @@ public:
     itself as a convenience. In any case, the sizer owns the wxStaticBox control
     and will delete it in the wxStaticBoxSizer destructor.
 
-    Note that since wxWidgets 2.9.1 you are encouraged to create the windows
+    Note that since wxWidgets 2.9.1 you are strongly encouraged to create the windows
     which are added to wxStaticBoxSizer as children of wxStaticBox itself, see
     this class documentation for more details.
 

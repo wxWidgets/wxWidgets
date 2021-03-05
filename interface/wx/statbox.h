@@ -13,12 +13,12 @@
 
     Note that while the previous versions required that windows appearing
     inside a static box be created as its siblings (i.e. use the same parent as
-    the static box itself), since wxWidgets 2.9.1 it is also possible to create
-    them as children of wxStaticBox itself and you are actually encouraged to
-    do it like this if compatibility with the previous versions is not
-    important.
+    the static box itself), since wxWidgets 2.9.1 it is possible to create
+    them as children of wxStaticBox itself and doing this is strongly
+    recommended and avoids several different repainting problems that could
+    happen when creating the other windows as siblings of the box.
 
-    So the new recommended way to create static box is:
+    So the recommended way to create static box and the controls inside it is:
     @code
         void MyFrame::CreateControls()
         {
@@ -30,13 +30,9 @@
         }
     @endcode
 
-    While the compatible -- and now deprecated -- way is
-    @code
-            wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, "StaticBox");
-
-            new wxStaticText(panel, wxID_ANY, "This window is a child of the panel");
-            ...
-    @endcode
+    Creating the windows with the static box parent (i.e. @c panel in the
+    example above) as parent still works but can result in refresh and repaint
+    problems.
 
     Also note that there is a specialized wxSizer class (wxStaticBoxSizer) which can
     be used as an easier way to pack items into a static box.
