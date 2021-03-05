@@ -226,4 +226,17 @@ void IntlTestCase::IsAvailable()
     CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, NULL) );
 }
 
+// The test may fail in ANSI builds because of unsupported encoding, but we
+// don't really care about this build anyhow, so just skip it there.
+#if wxUSE_UNICODE
+
+TEST_CASE("wxLocale::Default", "[locale]")
+{
+    wxLocale loc;
+
+    REQUIRE( loc.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
+}
+
+#endif // wxUSE_UNICODE
+
 #endif // wxUSE_INTL
