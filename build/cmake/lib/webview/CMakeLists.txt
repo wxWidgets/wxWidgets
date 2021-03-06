@@ -69,19 +69,23 @@ elseif(WXMSW)
         wx_lib_include_directories(wxwebview PRIVATE "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
         if(NOT MSVC)
             wx_lib_include_directories(wxwebview PRIVATE "${wxSOURCE_DIR}/include/wx/msw/wrl")
-            target_compile_options(wxwebview PRIVATE -Wno-unknown-pragmas)
+            if (NOT wxBUILD_MONOLITHIC)
+                target_compile_options(wxwebview PRIVATE -Wno-unknown-pragmas)
+            endif()
         endif()
 
-        if (CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set(WEBVIEW2_ARCH x86)
-        else()
-            set(WEBVIEW2_ARCH x64)
-        endif()
+        if (NOT wxBUILD_MONOLITHIC)
+            if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+                set(WEBVIEW2_ARCH x86)
+            else()
+                set(WEBVIEW2_ARCH x64)
+            endif()
 
-        add_custom_command(TARGET wxwebview POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
-            "$<TARGET_FILE_DIR:wxwebview>/WebView2Loader.dll")
+            add_custom_command(TARGET wxwebview POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
+                "$<TARGET_FILE_DIR:wxwebview>/WebView2Loader.dll")
+        endif()
     endif()
 elseif(WXGTK)
     if(LIBSOUP_FOUND)
