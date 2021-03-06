@@ -203,6 +203,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILES_OPEN_WINDOW_MODAL,       MyFrame::FilesOpenWindowModal)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
     EVT_MENU(DIALOGS_FILE_SAVE_WINDOW_MODAL,        MyFrame::FileSaveWindowModal)
+    EVT_MENU(DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,  MyFrame::MacToggleAlwaysShowTypes)
 #endif // wxUSE_FILEDLG
 
 #if USE_FILEDLG_GENERIC
@@ -503,6 +504,13 @@ bool MyApp::OnInit()
     filedlg_menu->Append(DIALOGS_FILES_OPEN_GENERIC, "Open &files (generic)");
     filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC, "Sa&ve file (generic)");
 #endif // USE_FILEDLG_GENERIC
+
+#ifdef __WXOSX_COCOA__
+    filedlg_menu->AppendSeparator();
+    filedlg_menu->AppendCheckItem(DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,
+                                  "macOS only: Toggle open file "
+                                    "\"Always show types\"\tRawCtrl+Ctrl+S");
+#endif
 
     menuDlg->Append(wxID_ANY,"&File operations",filedlg_menu);
 
@@ -1852,6 +1860,16 @@ void MyFrame::FileSaveWindowModalClosed(wxWindowModalDialogEvent& event)
 }
 
 #endif // wxUSE_FILEDLG
+
+void MyFrame::MacToggleAlwaysShowTypes(wxCommandEvent& event)
+{
+#ifdef wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES
+    wxSystemOptions::SetOption(wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES,
+                               event.IsChecked());
+#else
+    wxUnusedVar(event);
+#endif
+}
 
 #if USE_FILEDLG_GENERIC
 void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )

@@ -181,6 +181,9 @@ protected:
         { return m_extraControlCreator != NULL; }
     // get the size of the extra control by creating and deleting it
     wxSize GetExtraControlSize();
+    // Helper function for native file dialog usage where no wx events
+    // are processed.
+    void UpdateExtraControlUI();
 
 private:
     ExtraControlCreatorFunction m_extraControlCreator;

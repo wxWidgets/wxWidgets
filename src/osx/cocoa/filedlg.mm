@@ -246,25 +246,36 @@ void wxFileDialog::ShowWindowModal()
 
 }
 
-// Create a panel with the file type drop down list
-// If extra controls need to be added (see wxFileDialog::SetExtraControlCreator), add
-// them to the panel as well
-// Returns the newly created wxPanel
+// Fill a new or existing panel with the file type drop down list.
+// If extra controls need to be added (see wxFileDialog::SetExtraControlCreator),
+// use that as a panel if possible, otherwise add them to a new panel.
+// Returns a newly created wxPanel or extracontrol if it's suitable as a filter
+// panel.
 
 wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
 {
-    wxPanel *extrapanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    // Try to use extracontrol as a filter panel instead of creating a new one
+    // and then reparenting extracontrol. Reparenting is less desired as user
+    // code may expect the parent to be a wxFileDialog as on other platforms.
+    const bool useExtraControlAsPanel = extracontrol &&
+        wxDynamicCast(extracontrol, wxPanel) != NULL;
+
+    wxWindow* extrapanel = useExtraControlAsPanel
+                            ? extracontrol
+                            : static_cast<wxWindow*>(new wxPanel(this));
+
     wxBoxSizer *verticalSizer = new wxBoxSizer(wxVERTICAL);
-    extrapanel->SetSizer(verticalSizer);
     
     // the file type control
     {
         wxBoxSizer *horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
         verticalSizer->Add(horizontalSizer, 0, wxEXPAND, 0);
+        horizontalSizer->AddStretchSpacer();
         wxStaticText *stattext = new wxStaticText( extrapanel, wxID_ANY, _("File type:") );
         horizontalSizer->Add(stattext, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
         m_filterChoice = new wxChoice(extrapanel, wxID_ANY);
-        horizontalSizer->Add(m_filterChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+        horizontalSizer->Add(m_filterChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+        horizontalSizer->AddStretchSpacer();
         m_filterChoice->Append(m_filterNames);
         if( m_filterNames.GetCount() > 0)
         {
@@ -276,12 +287,28 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
         
     if(extracontrol)
     {
-        wxBoxSizer *horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
-        verticalSizer->Add(horizontalSizer, 0, wxEXPAND, 0);
+        // Either use an extra control's existing sizer or the extra control
+        // itself, to be in the vertical sizer.
 
-        extracontrol->Reparent(extrapanel);
-        horizontalSizer->Add(extracontrol);
+        wxSizer* existingSizer = extracontrol->GetSizer();
+        if ( useExtraControlAsPanel && existingSizer )
+        {
+            // Move extra control's sizer to verticalSizer.
+            extracontrol->SetSizer(NULL, /* deleteOld = */ false);
+            verticalSizer->Add(existingSizer);
+        }
+        else
+        {
+            wxBoxSizer* horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
+            verticalSizer->Add(horizontalSizer, 0, wxEXPAND, 0);
+
+            if ( !useExtraControlAsPanel )
+                extracontrol->Reparent(extrapanel);
+            horizontalSizer->Add(extracontrol);
+        }
     }
+
+    extrapanel->SetSizer(verticalSizer);
 
     verticalSizer->Layout();
     verticalSizer->SetSizeHints(extrapanel);
@@ -293,6 +320,10 @@ void wxFileDialog::DoOnFilterSelected(int index)
     NSArray* types = GetTypesFromExtension(m_filterExtensions[index],m_currentExtensions);
     NSSavePanel* panel = (NSSavePanel*) GetWXWindow();
     [panel setAllowedFileTypes:types];
+
+    m_currentlySelectedFilterIndex = index;
+
+    UpdateExtraControlUI();
 }
 
 // An item has been selected in the file filter wxChoice:

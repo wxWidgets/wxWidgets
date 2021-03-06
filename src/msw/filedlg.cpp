@@ -353,8 +353,7 @@ void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
     else
         m_currentlySelectedFilename.clear();
 
-    if ( m_extraControl )
-        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+    UpdateExtraControlUI();
 }
 
 void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
@@ -364,8 +363,7 @@ void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
     // circumstances, so take care before decrementing it.
     m_currentlySelectedFilterIndex = nFilterIndex ? nFilterIndex - 1 : 0;
 
-    if ( m_extraControl )
-        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+    UpdateExtraControlUI();
 }
 
 // helper used below in ShowCommFileDialog(): style is used to determine

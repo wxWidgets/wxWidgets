@@ -433,6 +433,7 @@ public:
     void FileSave(wxCommandEvent& event);
     void FileSaveWindowModal(wxCommandEvent& event);
     void FileSaveWindowModalClosed(wxWindowModalDialogEvent& event);
+    void MacToggleAlwaysShowTypes(wxCommandEvent& event);
 #endif // wxUSE_FILEDLG
 
 #if USE_FILEDLG_GENERIC
@@ -616,6 +617,7 @@ enum
     DIALOGS_FILE_OPEN_GENERIC,
     DIALOGS_FILES_OPEN_GENERIC,
     DIALOGS_FILE_SAVE_GENERIC,
+    DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,
     DIALOGS_DIR_CHOOSE,
     DIALOGS_DIR_CHOOSE_WINDOW_MODAL,
     DIALOGS_DIRNEW_CHOOSE,
