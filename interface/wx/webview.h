@@ -637,7 +637,7 @@ public:
         to edit the page even if the @c contenteditable attribute is not set.
         The exact capabilities vary with the backend being used.
 
-        @note This is not implemented on macOS.
+        @note This is not implemented for macOS and the Edge backend.
     */
     virtual void SetEditable(bool enable = true) = 0;
 
@@ -810,22 +810,16 @@ public:
 
     /**
         Returns @true if the current selection can be copied.
-
-        @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanCopy() const;
 
     /**
         Returns @true if the current selection can be cut.
-
-         @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanCut() const;
 
     /**
         Returns @true if data can be pasted.
-
-        @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanPaste() const;
 
@@ -1024,8 +1018,7 @@ public:
               @c wxWEBVIEW_FIND_ENTIRE_WORD or @c wxWEBVIEW_FIND_MATCH_CASE
               are changed, since this will require a new search. To reset the
               search, for example resetting the highlights call the function
-              with an empty search phrase. This always returns @c wxNOT_FOUND
-              on the macOS WebKit backend.
+              with an empty search phrase.
         @since 2.9.5
     */
     virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT);
