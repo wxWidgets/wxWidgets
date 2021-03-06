@@ -330,7 +330,7 @@ void wxWebRequestWinHTTP::Start()
 
     wxString objectName(urlComps.lpszUrlPath, urlComps.dwUrlPathLength);
     if ( urlComps.dwExtraInfoLength )
-        objectName += "?" + wxString(urlComps.lpszExtraInfo, urlComps.dwExtraInfoLength);
+        objectName += wxString(urlComps.lpszExtraInfo, urlComps.dwExtraInfoLength);
 
     // Open a request
     static const wchar_t* acceptedTypes[] = { L"*/*", NULL };

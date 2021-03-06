@@ -213,6 +213,21 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Get::Param", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/get?pi=3.14159265358979323");
+    Run();
+
+    // We ought to really parse the returned JSON object, but to keep things as
+    // simple as possible for now we just treat it as a string.
+    CHECK_THAT( request.GetResponse().AsString().ToStdString(),
+                Catch::Contains("\"pi\": \"3.14159265358979323\"") );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::File", "[net][webrequest][get]")
 {
     if ( !InitBaseURL() )
