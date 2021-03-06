@@ -44,13 +44,15 @@ elseif(WXMSW)
 
         set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
 
+        if(NOT EXISTS ${WEBVIEW2_PACKAGE_DIR})
+            unset(WEBVIEW2_PACKAGE_DIR CACHE)
+        endif()
         find_path(WEBVIEW2_PACKAGE_DIR
             NAMES build/native/include/WebView2.h
             PATHS
                 "${PROJECT_SOURCE_DIR}/3rdparty/webview2"
                 ${WEBVIEW2_DEFAULT_PACKAGE_DIR}
         )
-        mark_as_advanced(WEBVIEW2_PACKAGE_DIR)
 
         if (NOT WEBVIEW2_PACKAGE_DIR)
             message(STATUS "WebView2 SDK not found locally, downloading...")
@@ -65,6 +67,7 @@ elseif(WXMSW)
                 WORKING_DIRECTORY ${WEBVIEW2_PACKAGE_DIR}
             )
         endif()
+        set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_PACKAGE_DIR} CACHE INTERNAL "" FORCE)
 
         wx_lib_include_directories(wxwebview PRIVATE "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
         if(NOT MSVC)
