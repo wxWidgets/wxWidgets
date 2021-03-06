@@ -1715,6 +1715,8 @@ public:
             return wxString();
         return FromImpl(utf8);
     }
+
+    std::string utf8_string() const { return m_impl; }
 #endif
 
     const wxScopedCharBuffer utf8_str() const
@@ -1738,6 +1740,8 @@ public:
       { return FromUTF8(utf8.c_str(), utf8.length()); }
     static wxString FromUTF8Unchecked(const std::string& utf8)
       { return FromUTF8Unchecked(utf8.c_str(), utf8.length()); }
+
+    std::string utf8_string() const { return ToStdString(wxMBConvUTF8()); }
 #endif
     const wxScopedCharBuffer utf8_str() const { return mb_str(wxMBConvUTF8()); }
 #else // ANSI
@@ -1771,6 +1775,8 @@ public:
       { return FromUTF8(utf8.c_str(), utf8.length()); }
     static wxString FromUTF8Unchecked(const std::string& utf8)
       { return FromUTF8Unchecked(utf8.c_str(), utf8.length()); }
+
+    std::string utf8_string() const { return ToStdString(wxMBConvUTF8()); }
 #endif
     const wxScopedCharBuffer utf8_str() const
     {

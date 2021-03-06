@@ -571,10 +571,13 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
     std::string s9("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
     wxString s10 = wxString::FromUTF8(s9);
     CHECK( s10.ToStdString(wxConvUTF8) == s9 );
+    CHECK( s10.utf8_string() == s9 );
 #endif // wxUSE_UNICODE
 
     std::string s11("xyz\0\xFF", 5); /* an invalid UTF-8 sequence */
     CHECK( "" == wxString::FromUTF8(s11) );
+
+    CHECK( wxString("bye").utf8_string() == std::string("bye") );
 }
 #endif // wxUSE_STD_STRING
 

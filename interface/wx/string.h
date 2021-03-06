@@ -87,7 +87,8 @@
         wxMBConv object. This is also a potentially destructive operation.
         - Standard @c std::string using wxString::ToStdString(). The encoding
         of the returned string is specified with a wxMBConv object, so this
-        conversion is potentially destructive as well.
+        conversion is potentially destructive as well. To ensure that there is
+        no data loss, use @c wxConvUTF8 conversion or wxString::utf8_string().
         - Wide C string using wxString::wc_str().
         - Standard @c std::wstring using wxString::ToStdWstring().
 
@@ -680,6 +681,16 @@ public:
     const wxScopedCharBuffer utf8_str() const;
 
     /**
+        Return the string as an std::string using UTF-8 encoding.
+
+        This is a shorter and more readable equivalent of calling ToStdString()
+        with @c wxConvUTF8 argument.
+
+        @since 3.1.5
+     */
+    const std::string utf8_string() const;
+
+    /**
         Converts the strings contents to the wide character representation
         and returns it as a temporary wxWCharBuffer object (Unix and macOS)
         or returns a pointer to the internal string contents in wide character
@@ -749,7 +760,9 @@ public:
 
         Note that if the conversion of (Unicode) string contents using @e conv
         fails, the return string will be empty. Be sure to check for
-        this to avoid silent data loss.
+        this to avoid silent data loss. Alternatively, pass @c wxConvUTF8 as @a
+        conv or use utf8_string() to always use UTF-8 encoding, rather than the
+        current one.
 
         Instead of using this function it's also possible to write
         @code
