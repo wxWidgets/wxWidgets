@@ -126,6 +126,7 @@ Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 Classes for network access:
 
+@li wxWebRequest
 @li wxSocket classes (wxSocketClient, wxSocketServer and related classes)
 @li wxSocketOutputStream and wxSocketInputStream
 @li sockets-based IPC classes (wxTCPServer, wxTCPClient and wxTCPConnection)
