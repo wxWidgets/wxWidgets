@@ -63,7 +63,7 @@ bool wxCheckListBox::Create(
     if ( !wxCheckListBoxBase::Create( parent, id, pos, size, n, choices, style & ~(wxHSCROLL | wxVSCROLL), validator, name ) )
         return false;
 
-    int colwidth = 30;
+    int colwidth = 18;
     // TODO adapt the width according to the window variant
     m_checkColumn = GetListPeer()->InsertCheckColumn(0, wxEmptyString, true, wxALIGN_CENTER, colwidth);
 
