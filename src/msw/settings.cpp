@@ -179,7 +179,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // for most (simple) controls, e.g. buttons and such but other
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
-            const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+            const wxWindow* win = wxApp::GetMainTopWindow();
             const wxNativeFontInfo
                 info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
 
@@ -337,7 +337,7 @@ extern wxFont wxGetCCDefaultFont()
     // font which is also used for the icon titles and not the stock default
     // GUI font
     LOGFONT lf;
-    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxWindow* win = wxApp::GetMainTopWindow();
     if ( wxSystemParametersInfo
            (
                 SPI_GETICONTITLELOGFONT,

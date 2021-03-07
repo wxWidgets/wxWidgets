@@ -622,6 +622,10 @@ public:
         // there are none, will return NULL)
     virtual wxWindow *GetTopWindow() const;
 
+        // convenient helper which is safe to use even if there is no wxApp at
+        // all, it will just return NULL in this case
+    static wxWindow *GetMainTopWindow();
+
         // control the exit behaviour: by default, the program will exit the
         // main loop (and so, usually, terminate) when the last top-level
         // program window is deleted. Beware that if you disable this behaviour

@@ -264,7 +264,7 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
             sysY = 0;
     if ( flags & FALLBACK_SYSTEM )
     {
-        wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+        wxWindow* win = wxApp::GetMainTopWindow();
         sysX = wxSystemSettings::GetMetric(wxSYS_ICON_X, win);
         sysY = wxSystemSettings::GetMetric(wxSYS_ICON_Y, win);
     }

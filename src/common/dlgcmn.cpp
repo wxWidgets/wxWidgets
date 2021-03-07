@@ -183,8 +183,8 @@ wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
                     wxGetTopLevelParent(wxGetActiveWindow()));
 
     // and finally the application main window
-    if ( !parent && wxTheApp )
-        parent = CheckIfCanBeUsedAsParent(wxTheApp->GetTopWindow());
+    if ( !parent )
+        parent = CheckIfCanBeUsedAsParent(wxApp::GetMainTopWindow());
 
     return parent;
 }

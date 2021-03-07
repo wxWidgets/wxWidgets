@@ -4236,7 +4236,7 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
         return false;
 
     // only send once
-    if ( (this != wxTheApp->GetTopWindow()) )
+    if ( this != wxApp::GetMainTopWindow() )
         return false;
 
     wxCloseEvent event(wxEVT_END_SESSION, wxID_ANY);
@@ -4773,10 +4773,11 @@ static wxSize GetWindowDPI(HWND hwnd)
 }
 
 /*extern*/
-int wxGetSystemMetrics(int nIndex, const wxWindow* win)
+int wxGetSystemMetrics(int nIndex, const wxWindow* window)
 {
 #if wxUSE_DYNLIB_CLASS
-    const wxWindow* window = (!win && wxTheApp) ? wxTheApp->GetTopWindow() : win;
+    if ( !window )
+        window = wxApp::GetMainTopWindow();
 
     if ( window )
     {
@@ -4798,14 +4799,14 @@ int wxGetSystemMetrics(int nIndex, const wxWindow* win)
         }
     }
 #else
-    wxUnusedVar(win);
+    wxUnusedVar(window);
 #endif // wxUSE_DYNLIB_CLASS
 
     return ::GetSystemMetrics(nIndex);
 }
 
 /*extern*/
-bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, const wxWindow* win)
+bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, const wxWindow* window)
 {
     // Note that we can't use SystemParametersInfoForDpi() in non-Unicode build
     // because it always works with wide strings and we'd have to check for all
@@ -4813,7 +4814,8 @@ bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWi
     // for them, and convert the returned value to ANSI after the call. Instead
     // of doing all this, just don't use it at all in the deprecated ANSI build.
 #if wxUSE_DYNLIB_CLASS && wxUSE_UNICODE
-    const wxWindow* window = (!win && wxTheApp) ? wxTheApp->GetTopWindow() : win;
+    if ( !window )
+        window = wxApp::GetMainTopWindow();
 
     if ( window )
     {
@@ -4838,7 +4840,7 @@ bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWi
         }
     }
 #else
-    wxUnusedVar(win);
+    wxUnusedVar(window);
 #endif // wxUSE_DYNLIB_CLASS
 
     return ::SystemParametersInfo(uiAction, uiParam, pvParam, fWinIni) == TRUE;

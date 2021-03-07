@@ -189,6 +189,14 @@ wxWindow* wxAppBase::GetTopWindow() const
     return window;
 }
 
+/* static */
+wxWindow* wxAppBase::GetMainTopWindow()
+{
+    const wxAppBase* const app = static_cast<wxAppBase*>(GetInstance());
+
+    return app ? app->GetTopWindow() : NULL;
+}
+
 wxVideoMode wxAppBase::GetDisplayMode() const
 {
     return wxVideoMode();

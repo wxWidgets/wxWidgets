@@ -109,13 +109,13 @@ public:
 
 wxCoord wxCursorRefData::GetStandardWidth()
 {
-    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxWindow* win = wxApp::GetMainTopWindow();
     return wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
 }
 
 wxCoord wxCursorRefData::GetStandardHeight()
 {
-    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxWindow* win = wxApp::GetMainTopWindow();
     return wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, win);
 }
 
