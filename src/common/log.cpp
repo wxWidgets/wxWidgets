@@ -892,7 +892,7 @@ void wxLogStderr::DoLogText(const wxString& msg)
     // simply lost
     if ( m_fp == stderr )
     {
-        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        wxAppTraits *traits = wxApp::GetTraitsIfExists();
         if ( traits && !traits->HasStderr() )
         {
             wxMessageOutputDebug().Output(msg + wxS('\n'));

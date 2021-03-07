@@ -98,7 +98,7 @@ wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 wxConfigBase *wxConfigBase::Create()
 {
   if ( ms_bAutoCreate && ms_pConfig == NULL ) {
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     wxCHECK_MSG( traits, NULL, wxT("create wxApp before calling this") );
 
     ms_pConfig = traits->CreateConfig();

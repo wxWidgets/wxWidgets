@@ -1018,7 +1018,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         return pi.dwProcessId;
     }
 
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits *traits = wxApp::GetTraitsIfExists();
     wxCHECK_MSG( traits, -1, wxT("no wxAppTraits in wxExecute()?") );
 
     void *cookie = NULL;

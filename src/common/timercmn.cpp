@@ -54,7 +54,7 @@ wxTimer::~wxTimer()
 
 void wxTimer::Init()
 {
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     m_impl = traits ? traits->CreateTimerImpl(this) : NULL;
     if ( !m_impl )
     {
