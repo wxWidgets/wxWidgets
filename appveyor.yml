@@ -10,6 +10,7 @@ skip_commits:
     - demos/
     - docs/
     - interface/
+    - locale/
     - misc/
     - include/wx/dfb/
     - src/dfb/
