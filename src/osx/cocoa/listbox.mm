@@ -648,6 +648,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
 
     wxNSTableView* tableview = [[wxNSTableView alloc] init];
     [tableview setDelegate:tableview];
+    [tableview setFocusRingType:NSFocusRingTypeNone];
     // only one multi-select mode available
     if ( (style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE) )
         [tableview setAllowsMultipleSelection:YES];
