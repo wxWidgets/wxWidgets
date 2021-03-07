@@ -15,16 +15,18 @@
 #include "wx/module.h"
 #include "wx/wxcrt.h"       // for wxStrcat()
 
+static bool gs_wasInitialized = wxModule::AreInitialized();
+
 // ----------------------------------------------------------------------------
 // test classes derived from wxModule
 // ----------------------------------------------------------------------------
 
-char g_strLoadOrder[256] = "\0";
+wxString g_strLoadOrder;
 
 class Module : public wxModule
 {
 protected:
-    virtual bool OnInit() wxOVERRIDE { wxStrcat(g_strLoadOrder, GetClassInfo()->GetClassName()); return true; }
+    virtual bool OnInit() wxOVERRIDE { g_strLoadOrder += GetClassInfo()->GetClassName(); return true; }
     virtual void OnExit() wxOVERRIDE { }
 };
 
@@ -86,32 +88,17 @@ ModuleD::ModuleD()
 }
 
 // ----------------------------------------------------------------------------
-// test class
+// tests themselves
 // ----------------------------------------------------------------------------
 
-class ModuleTestCase : public CppUnit::TestCase
+TEST_CASE("wxModule::Initialized", "[module]")
 {
-public:
-    ModuleTestCase() { }
+    CHECK( !gs_wasInitialized );
+    CHECK( wxModule::AreInitialized() );
+}
 
-private:
-    CPPUNIT_TEST_SUITE( ModuleTestCase );
-        CPPUNIT_TEST( LoadOrder );
-    CPPUNIT_TEST_SUITE_END();
-
-    void LoadOrder();
-    wxDECLARE_NO_COPY_CLASS(ModuleTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ModuleTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ModuleTestCase, "ModuleTestCase" );
-
-void ModuleTestCase::LoadOrder()
+TEST_CASE("wxModule::LoadOrder", "[module]")
 {
     // module D is the only one with no dependencies and so should load as first (and so on):
-    CPPUNIT_ASSERT_EQUAL( std::string("ModuleDModuleCModuleBModuleA"),
-                          g_strLoadOrder );
+    CHECK( g_strLoadOrder == "ModuleDModuleCModuleBModuleA" );
 }

@@ -20,25 +20,32 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/listimpl.cpp"
-
 #define TRACE_MODULE wxT("module")
-
-WX_DEFINE_LIST(wxModuleList)
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxModule, wxObject)
 
-wxModuleList wxModule::m_modules;
+wxModuleList wxModule::ms_modules;
+bool wxModule::ms_areInitialized = false;
 
 void wxModule::RegisterModule(wxModule* module)
 {
     module->m_state = State_Registered;
-    m_modules.Append(module);
+    ms_modules.push_back(module);
 }
 
 void wxModule::UnregisterModule(wxModule* module)
 {
-    m_modules.DeleteObject(module);
+    for ( wxModuleList::iterator it = ms_modules.begin();
+          it != ms_modules.end();
+          ++it )
+    {
+        if ( *it == module )
+        {
+            ms_modules.erase(it);
+            break;
+        }
+    }
+
     delete module;
 }
 
@@ -87,23 +94,25 @@ bool wxModule::DoInitializeModule(wxModule *module,
         wxClassInfo * cinfo = dependencies[i];
 
         // Check if the module is already initialized
-        wxModuleList::compatibility_iterator node;
-        for ( node = initializedModules.GetFirst(); node; node = node->GetNext() )
+        wxModuleList::const_iterator it;
+        for ( it = initializedModules.begin();
+              it != initializedModules.end();
+              ++it )
         {
-            if ( node->GetData()->GetClassInfo() == cinfo )
+            if ( (*it)->GetClassInfo() == cinfo )
                 break;
         }
 
-        if ( node )
+        if ( it != initializedModules.end() )
         {
             // this dependency is already initialized, nothing to do
             continue;
         }
 
         // find the module in the registered modules list
-        for ( node = m_modules.GetFirst(); node; node = node->GetNext() )
+        for ( it = ms_modules.begin(); it != ms_modules.end(); ++it )
         {
-            wxModule *moduleDep = node->GetData();
+            wxModule *moduleDep = *it;
             if ( moduleDep->GetClassInfo() == cinfo )
             {
                 if ( !DoInitializeModule(moduleDep, initializedModules ) )
@@ -116,7 +125,7 @@ bool wxModule::DoInitializeModule(wxModule *module,
             }
         }
 
-        if ( !node )
+        if ( it == ms_modules.end() )
         {
             wxLogError(_("Dependency \"%s\" of module \"%s\" doesn't exist."),
                        cinfo->GetClassName(),
@@ -136,7 +145,7 @@ bool wxModule::DoInitializeModule(wxModule *module,
                module->GetClassInfo()->GetClassName());
 
     module->m_state = State_Initialized;
-    initializedModules.Append(module);
+    initializedModules.push_back(module);
 
     return true;
 }
@@ -146,11 +155,11 @@ bool wxModule::InitializeModules()
 {
     wxModuleList initializedModules;
 
-    for ( wxModuleList::compatibility_iterator node = m_modules.GetFirst();
-          node;
-          node = node->GetNext() )
+    for ( wxModuleList::const_iterator it = ms_modules.begin();
+          it != ms_modules.end();
+          ++it )
     {
-        wxModule *module = node->GetData();
+        wxModule *module = *it;
 
         // the module could have been already initialized as dependency of
         // another one
@@ -168,9 +177,18 @@ bool wxModule::InitializeModules()
     }
 
     // remember the real initialisation order
-    m_modules = initializedModules;
+    ms_modules = initializedModules;
+
+    ms_areInitialized = true;
 
     return true;
+}
+
+void wxModule::CleanUpModules()
+{
+    DoCleanUpModules(ms_modules);
+
+    ms_areInitialized = false;
 }
 
 // Clean up all currently initialized modules
@@ -178,14 +196,14 @@ void wxModule::DoCleanUpModules(const wxModuleList& modules)
 {
     // cleanup user-defined modules in the reverse order compared to their
     // initialization -- this ensures that dependencies are respected
-    for ( wxModuleList::compatibility_iterator node = modules.GetLast();
-          node;
-          node = node->GetPrevious() )
+    for ( wxModuleList::const_reverse_iterator rit = modules.rbegin();
+          rit != modules.rend();
+          ++rit )
     {
         wxLogTrace(TRACE_MODULE, wxT("Cleanup module %s"),
-                   node->GetData()->GetClassInfo()->GetClassName());
+                   (*rit)->GetClassInfo()->GetClassName());
 
-        wxModule * module = node->GetData();
+        wxModule * module = *rit;
 
         wxASSERT_MSG( module->m_state == State_Initialized,
                         wxT("not initialized module being cleaned up") );
@@ -195,7 +213,14 @@ void wxModule::DoCleanUpModules(const wxModuleList& modules)
     }
 
     // clear all modules, even the non-initialized ones
-    WX_CLEAR_LIST(wxModuleList, m_modules);
+    for ( wxModuleList::const_iterator it = ms_modules.begin();
+          it != ms_modules.end();
+          ++it )
+    {
+        delete *it;
+    }
+
+    ms_modules.clear();
 }
 
 bool wxModule::ResolveNamedDependencies()
@@ -214,7 +239,7 @@ bool wxModule::ResolveNamedDependencies()
         // add it even if it is not derived from wxModule because
         // DoInitializeModule() will make sure a module with the same class
         // info exists and fail if it doesn't
-        m_dependencies.Add(info);
+        m_dependencies.push_back(info);
     }
 
     return true;
