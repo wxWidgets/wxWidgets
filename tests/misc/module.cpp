@@ -15,6 +15,8 @@
 #include "wx/module.h"
 #include "wx/wxcrt.h"       // for wxStrcat()
 
+static bool gs_wasInitialized = wxModule::AreInitialized();
+
 // ----------------------------------------------------------------------------
 // test classes derived from wxModule
 // ----------------------------------------------------------------------------
@@ -88,6 +90,12 @@ ModuleD::ModuleD()
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
+
+TEST_CASE("wxModule::Initialized", "[module]")
+{
+    CHECK( !gs_wasInitialized );
+    CHECK( wxModule::AreInitialized() );
+}
 
 TEST_CASE("wxModule::LoadOrder", "[module]")
 {

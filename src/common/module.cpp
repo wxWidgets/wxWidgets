@@ -25,6 +25,7 @@
 wxIMPLEMENT_ABSTRACT_CLASS(wxModule, wxObject)
 
 wxModuleList wxModule::ms_modules;
+bool wxModule::ms_areInitialized = false;
 
 void wxModule::RegisterModule(wxModule* module)
 {
@@ -178,7 +179,16 @@ bool wxModule::InitializeModules()
     // remember the real initialisation order
     ms_modules = initializedModules;
 
+    ms_areInitialized = true;
+
     return true;
+}
+
+void wxModule::CleanUpModules()
+{
+    DoCleanUpModules(ms_modules);
+
+    ms_areInitialized = false;
 }
 
 // Clean up all currently initialized modules

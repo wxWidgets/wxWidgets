@@ -47,7 +47,8 @@ public:
     static void RegisterModule(wxModule *module);
     static void RegisterModules();
     static bool InitializeModules();
-    static void CleanUpModules() { DoCleanUpModules(ms_modules); }
+    static void CleanUpModules();
+    static bool AreInitialized() { return ms_areInitialized; }
 
     // used by wxObjectLoader when unloading shared libs's
 
@@ -55,6 +56,8 @@ public:
 
 protected:
     static wxModuleList ms_modules;
+
+    static bool ms_areInitialized;
 
     // the function to call from constructor of a deriving class add module
     // dependency which will be initialized before the module and unloaded
