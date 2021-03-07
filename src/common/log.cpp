@@ -183,7 +183,9 @@ private:
 void wxSafeShowMessage(const wxString& title, const wxString& text)
 {
 #ifdef __WINDOWS__
-    ::MessageBox(NULL, text.t_str(), title.t_str(), MB_OK | MB_ICONSTOP);
+    const wxAppTraits* const traits = wxApp::GetTraitsIfExists();
+    ::MessageBox(traits ? traits->GetMainHWND() : NULL,
+                 text.t_str(), title.t_str(), MB_OK | MB_ICONSTOP);
 #else
     wxFprintf(stderr, wxS("%s: %s\n"), title.c_str(), text.c_str());
     fflush(stderr);

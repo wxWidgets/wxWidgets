@@ -603,6 +603,12 @@ bool wxGUIAppTraits::WriteToStderr(const wxString& WXUNUSED(text))
 
 #endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 
+WXHWND wxGUIAppTraits::GetMainHWND() const
+{
+    const wxWindow* const w = wxApp::GetMainTopWindow();
+    return w ? w->GetHWND() : NULL;
+}
+
 // ===========================================================================
 // wxApp implementation
 // ===========================================================================

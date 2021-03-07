@@ -58,6 +58,9 @@ public:
     // write text to the console, return true if ok or false on error
     virtual bool WriteToStderr(const wxString& text) = 0;
 
+    // return the main application window or 0 if none
+    virtual WXHWND GetMainHWND() const = 0;
+
 protected:
 #if wxUSE_THREADS
     // implementation of WaitForThread() for the console applications which is
