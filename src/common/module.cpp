@@ -28,17 +28,17 @@ WX_DEFINE_LIST(wxModuleList)
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxModule, wxObject)
 
-wxModuleList wxModule::m_modules;
+wxModuleList wxModule::ms_modules;
 
 void wxModule::RegisterModule(wxModule* module)
 {
     module->m_state = State_Registered;
-    m_modules.Append(module);
+    ms_modules.Append(module);
 }
 
 void wxModule::UnregisterModule(wxModule* module)
 {
-    m_modules.DeleteObject(module);
+    ms_modules.DeleteObject(module);
     delete module;
 }
 
@@ -101,7 +101,7 @@ bool wxModule::DoInitializeModule(wxModule *module,
         }
 
         // find the module in the registered modules list
-        for ( node = m_modules.GetFirst(); node; node = node->GetNext() )
+        for ( node = ms_modules.GetFirst(); node; node = node->GetNext() )
         {
             wxModule *moduleDep = node->GetData();
             if ( moduleDep->GetClassInfo() == cinfo )
@@ -146,7 +146,7 @@ bool wxModule::InitializeModules()
 {
     wxModuleList initializedModules;
 
-    for ( wxModuleList::compatibility_iterator node = m_modules.GetFirst();
+    for ( wxModuleList::compatibility_iterator node = ms_modules.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -168,7 +168,7 @@ bool wxModule::InitializeModules()
     }
 
     // remember the real initialisation order
-    m_modules = initializedModules;
+    ms_modules = initializedModules;
 
     return true;
 }
@@ -195,7 +195,7 @@ void wxModule::DoCleanUpModules(const wxModuleList& modules)
     }
 
     // clear all modules, even the non-initialized ones
-    WX_CLEAR_LIST(wxModuleList, m_modules);
+    WX_CLEAR_LIST(wxModuleList, ms_modules);
 }
 
 bool wxModule::ResolveNamedDependencies()

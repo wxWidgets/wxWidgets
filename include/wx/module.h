@@ -54,14 +54,14 @@ public:
     static void RegisterModule(wxModule *module);
     static void RegisterModules();
     static bool InitializeModules();
-    static void CleanUpModules() { DoCleanUpModules(m_modules); }
+    static void CleanUpModules() { DoCleanUpModules(ms_modules); }
 
     // used by wxObjectLoader when unloading shared libs's
 
     static void UnregisterModule(wxModule *module);
 
 protected:
-    static wxModuleList m_modules;
+    static wxModuleList ms_modules;
 
     // the function to call from constructor of a deriving class add module
     // dependency which will be initialized before the module and unloaded
@@ -89,7 +89,7 @@ private:
 
     // cleanup the modules in the specified list (which may not contain all
     // modules if we're called during initialization because not all modules
-    // could be initialized) and also empty m_modules itself
+    // could be initialized) and also empty ms_modules itself
     static void DoCleanUpModules(const wxModuleList& modules);
 
     // resolve all named dependencies and add them to the normal m_dependencies
