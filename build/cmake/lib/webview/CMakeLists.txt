@@ -9,6 +9,24 @@
 
 include(../../source_groups.cmake)
 
+function(wx_webview_copy_webview2_loader target)
+    if(NOT WXMSW OR NOT wxUSE_WEBVIEW_EDGE OR NOT TARGET ${target})
+        return()
+    endif()
+
+    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set(WEBVIEW2_ARCH x86)
+    else()
+        set(WEBVIEW2_ARCH x64)
+    endif()
+
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
+        "$<TARGET_FILE_DIR:${target}>/WebView2Loader.dll")
+endfunction()
+
+
 wx_append_sources(WEBVIEW_FILES WEBVIEW_CMN)
 
 if(WXMSW)
@@ -77,18 +95,7 @@ elseif(WXMSW)
             endif()
         endif()
 
-        if (NOT wxBUILD_MONOLITHIC)
-            if (CMAKE_SIZEOF_VOID_P EQUAL 4)
-                set(WEBVIEW2_ARCH x86)
-            else()
-                set(WEBVIEW2_ARCH x64)
-            endif()
-
-            add_custom_command(TARGET wxwebview POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
-                "$<TARGET_FILE_DIR:wxwebview>/WebView2Loader.dll")
-        endif()
+        wx_webview_copy_webview2_loader(wxwebview)
     endif()
 elseif(WXGTK)
     if(LIBSOUP_FOUND)

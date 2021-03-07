@@ -99,6 +99,7 @@ if(wxBUILD_MONOLITHIC)
     foreach(file ${wxMONO_NONCOMPILED_CPP_FILES})
         set_source_files_properties(${file} PROPERTIES HEADER_FILE_ONLY TRUE)
     endforeach()
+    wx_webview_copy_webview2_loader(wxmono)
     wx_finalize_lib(wxmono)
 endif()
 
