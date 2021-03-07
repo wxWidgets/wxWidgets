@@ -944,6 +944,14 @@ bool wxConsoleAppTraitsBase::HasStderr()
     return true;
 }
 
+bool wxConsoleAppTraitsBase::SafeMessageBox(const wxString& WXUNUSED(text),
+                                            const wxString& WXUNUSED(title))
+{
+    // console applications don't show message boxes by default, although this
+    // can be done in platform-specific cases
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // wxAppTraits
 // ----------------------------------------------------------------------------

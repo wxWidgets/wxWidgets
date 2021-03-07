@@ -182,34 +182,11 @@ private:
 
 void wxSafeShowMessage(const wxString& title, const wxString& text)
 {
-#ifdef __WINDOWS__
-    const wxAppTraits* const traits = wxApp::GetTraitsIfExists();
-    const HWND hwndParent = traits ? traits->GetMainHWND() : NULL;
-    int flags = MB_OK | MB_ICONSTOP;
-
-    // Using MB_TASKMODAL with valid parent doesn't work well because it
-    // prevents the typical behaviour of modal message boxes, e.g. the message
-    // box doesn't come up to front when the parent is clicked. But if we don't
-    // have any parent anyhow, we can just as well use it, as we don't lose
-    // anything and it has a useful side effect of disabling any existing TLWs
-    // if there are any.
-    //
-    // Note that we also might have chosen to always use MB_TASKMODAL and NULL
-    // parent. This would have the advantage of always disabling all the window
-    // which, but at the cost of the behaviour mentioned above and other
-    // related problems, e.g. showing ugly default icon in Alt-Tab list and an
-    // extra taskbar button for the message box, so we don't do this, although
-    // perhaps we still should, at least in case when there is more than one
-    // TLW (but we can't check for this easily as this is non-GUI code and
-    // wxTopLevelWindows is not accessible from it).
-    if ( !hwndParent )
-        flags |= MB_TASKMODAL;
-
-    ::MessageBox(hwndParent, text.t_str(), title.t_str(), flags);
-#else
-    wxFprintf(stderr, wxS("%s: %s\n"), title.c_str(), text.c_str());
-    fflush(stderr);
-#endif
+    if ( !wxApp::GetValidTraits().SafeMessageBox(text, title) )
+    {
+        wxFprintf(stderr, wxS("%s: %s\n"), title.c_str(), text.c_str());
+        fflush(stderr);
+    }
 }
 
 // ----------------------------------------------------------------------------

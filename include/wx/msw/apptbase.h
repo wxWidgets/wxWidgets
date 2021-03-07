@@ -61,6 +61,10 @@ public:
     // return the main application window or 0 if none
     virtual WXHWND GetMainHWND() const = 0;
 
+    // implement this base class function for both console and GUI applications
+    virtual bool SafeMessageBox(const wxString& text,
+                                const wxString& title) wxOVERRIDE;
+
 protected:
 #if wxUSE_THREADS
     // implementation of WaitForThread() for the console applications which is

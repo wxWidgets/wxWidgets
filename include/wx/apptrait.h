@@ -88,6 +88,16 @@ public:
     // return true to suppress subsequent asserts, false to continue as before
     virtual bool ShowAssertDialog(const wxString& msg) = 0;
 
+    // show the message safely to the user, i.e. show it in a message box if
+    // possible (even in a console application!) or return false if we can't do
+    // it (e.g. GUI is not initialized at all)
+    //
+    // note that this function can be called even when wxApp doesn't exist, as
+    // it's supposed to be always safe to call -- hence the name
+    //
+    // return true if the message box was shown, false if nothing was done
+    virtual bool SafeMessageBox(const wxString& text, const wxString& title) = 0;
+
     // return true if fprintf(stderr) goes somewhere, false otherwise
     virtual bool HasStderr() = 0;
 
@@ -208,6 +218,8 @@ public:
 
     virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
     virtual bool HasStderr() wxOVERRIDE;
+    virtual bool SafeMessageBox(const wxString& text,
+                                const wxString& title) wxOVERRIDE;
 
     // the GetToolkitVersion for console application is always the same
     wxPortId GetToolkitVersion(int *verMaj = NULL,
@@ -247,6 +259,13 @@ public:
 
     virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
     virtual bool HasStderr() wxOVERRIDE;
+
+    // Win32 has its own implementation using native message box directly in
+    // the base class, don't override it.
+#ifndef __WIN32__
+    virtual bool SafeMessageBox(const wxString& text,
+                                const wxString& title) wxOVERRIDE;
+#endif // !__WIN32__
 
     virtual bool IsUsingUniversalWidgets() const wxOVERRIDE
     {

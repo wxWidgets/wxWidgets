@@ -133,5 +133,28 @@ public:
         Returns @true to suppress subsequent asserts, @false to continue as before.
     */
     virtual bool ShowAssertDialog(const wxString& msg) = 0;
+
+    /**
+        Shows a message box with the given text and title if possible.
+
+        In some ports, e.g. wxMSW, a message box will always be shown, while in
+        the other ones it will be only done if the GUI is available (e.g. X11
+        display was successfully opened for X11-based ports) and the function
+        simply returns @false without doing anything otherwise.
+
+        This function is safe in the sense that it can always be called, even
+        before creating wxApp, similarly to wxSafeShowMessage() which is
+        implemented by calling this function and then logging the message to
+        standard error stream if it returned @false.
+
+        @since 3.1.5
+
+        @param text
+            The text to show to the user.
+        @param title
+            The title of the message box shown to the user.
+        @return @true if the message box was shown or @false otherwise.
+     */
+    virtual bool SafeMessageBox(const wxString& text, const wxString& title) = 0;
 };
 
