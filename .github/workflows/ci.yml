@@ -12,8 +12,13 @@ on:
       - 'distrib/**'
       - 'docs/**'
       - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/wx/msw/**'
       - '*.md'
       - '*.yml'
+      - 'wxwidgets.props'
   pull_request:
     branches:
       - master
@@ -24,8 +29,13 @@ on:
       - 'distrib/**'
       - 'docs/**'
       - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/wx/msw/**'
       - '*.md'
       - '*.yml'
+      - 'wxwidgets.props'
 
 jobs:
   build:

@@ -7,11 +7,26 @@ branches:
 
 skip_commits:
   files:
+    - demos/
     - docs/
     - interface/
+    - locale/
     - misc/
+    - include/wx/dfb/
+    - src/dfb/
+    - include/wx/gtk/
+    - src/gtk/
+    - include/wx/gtk1/
+    - src/gtk1/
+    - include/wx/motif/
+    - src/motif/
     - include/wx/osx/
     - src/osx/
+    - include/wx/unix/
+    - src/unix/
+    - include/wx/x11/
+    - src/x11/
+    - '**/*.md'
     - .github/workflows/
     - .travis.yml
     - build/tools/travis-ci.sh
