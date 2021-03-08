@@ -933,6 +933,15 @@ WX_API_AVAILABLE_MACOS(10, 12)
 }
 #endif // __MAC_OS_X_VERSION_MAX_ALLOWED
 
+// The following WKUIDelegateMethods are undocumented as of macOS SDK 11.0,
+// but are documented in the WebKit cocoa interface headers:
+// https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/API/Cocoa/WKUIDelegatePrivate.h
+
+- (void)_webView:(WKWebView *)webView printFrame:(WKFrameInfo*)frame
+{
+    webKitWindow->Print();
+}
+
 @end
 
 @implementation WebViewScriptMessageHandler
