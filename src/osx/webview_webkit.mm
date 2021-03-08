@@ -123,6 +123,12 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     WKWebViewConfiguration* webViewConfig = [[WKWebViewConfiguration alloc] init];
+
+    // WebKit API available since macOS 10.11 and iOS 9.0
+    SEL fullScreenSelector = @selector(_setFullScreenEnabled:);
+    if ([webViewConfig.preferences respondsToSelector:fullScreenSelector])
+        [webViewConfig.preferences performSelector:fullScreenSelector withObject:[NSNumber numberWithBool:YES]];
+
     if (!m_handlers.empty())
     {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
@@ -161,6 +167,11 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
             [[WebViewUIDelegate alloc] initWithWxWindow: this];
 
     [m_webView setUIDelegate:uiDelegate];
+
+    // WebKit API available since macOS 10.13 and iOS 11.0
+    SEL fullScreenDelegateSelector = @selector(_setFullscreenDelegate:);
+    if ([m_webView respondsToSelector:fullScreenDelegateSelector])
+        [m_webView performSelector:fullScreenDelegateSelector withObject:uiDelegate];
 
     m_UIDelegate = uiDelegate;
 
@@ -940,6 +951,25 @@ WX_API_AVAILABLE_MACOS(10, 12)
 - (void)_webView:(WKWebView *)webView printFrame:(WKFrameInfo*)frame
 {
     webKitWindow->Print();
+}
+
+- (void)SendFullscreenChangedEvent:(int)status
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, webKitWindow->GetId(),
+        webKitWindow->GetCurrentURL(), wxString());
+    event.SetEventObject(webKitWindow);
+    event.SetInt(status);
+    webKitWindow->HandleWindowEvent(event);
+}
+
+- (void)_webViewDidEnterFullscreen:(WKWebView *)webView
+{
+    [self SendFullscreenChangedEvent:1];
+}
+
+- (void)_webViewDidExitFullscreen:(WKWebView *)webView
+{
+    [self SendFullscreenChangedEvent:0];
 }
 
 @end
