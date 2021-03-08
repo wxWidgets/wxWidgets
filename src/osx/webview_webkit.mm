@@ -308,6 +308,26 @@ bool wxWebViewWebKit::IsEditable() const
     return false;
 }
 
+bool wxWebViewWebKit::IsAccessToDevToolsEnabled() const
+{
+    // WebKit API available since macOS 10.11 and iOS 9.0
+    WKPreferences* prefs = m_webView.configuration.preferences;
+    SEL devToolsSelector = @selector(_developerExtrasEnabled);
+    id val = nil;
+    if ([prefs respondsToSelector:devToolsSelector])
+         val = [prefs performSelector:devToolsSelector];
+    return (val != nil);
+}
+
+void wxWebViewWebKit::EnableAccessToDevTools(bool enable)
+{
+    // WebKit API available since macOS 10.11 and iOS 9.0
+    WKPreferences* prefs = m_webView.configuration.preferences;
+    SEL devToolsSelector = @selector(_setDeveloperExtrasEnabled:);
+    if ([prefs respondsToSelector:devToolsSelector])
+        [prefs performSelector:devToolsSelector withObject:(id)enable];
+}
+
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType zoomType)
 {
     // there is only one supported zoom type at the moment so this setter

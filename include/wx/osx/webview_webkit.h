@@ -71,6 +71,9 @@ public:
 
     virtual bool IsBusy() const wxOVERRIDE;
 
+    virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
+    virtual void EnableAccessToDevTools(bool enable = true) wxOVERRIDE;
+
     //History functions
     virtual void ClearHistory() wxOVERRIDE;
     virtual void EnableHistory(bool enable = true) wxOVERRIDE;
