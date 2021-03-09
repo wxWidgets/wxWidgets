@@ -45,6 +45,14 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
     config->Write(wxString("long1"), 234L);
     config->Write("double1", 345.67);
     config->Write("bool1", true);
+
+    // See comment in regconf.cpp.
+    const wxLongLong_t val64 = wxLL(0x8000000000000008);
+    config->Write("ll", val64);
+
+    const wxULongLong_t uval64 = wxULL(0x9000000000000009);
+    config->Write("ull", uval64);
+
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
     config->Write("color1", wxColour(11,22,33,44));
 #endif // wxHAS_CONFIG_TEMPLATE_RW
@@ -92,6 +100,15 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
     CHECK( bool1 == true );
 
     CHECK( config->ReadBool("bool1", false) == bool1 );
+
+    wxLongLong_t ll;
+    CHECK( config->Read("ll", &ll) );
+    CHECK( ll == val64 );
+    CHECK( config->ReadLongLong("ll", 0) == val64 );
+
+    CHECK( config->Read("ull", &ll) );
+    CHECK( ll == static_cast<wxLongLong_t>(uval64) );
+    CHECK( config->ReadLongLong("ull", 0) == static_cast<wxLongLong_t>(uval64) );
 
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
     wxColour color1;

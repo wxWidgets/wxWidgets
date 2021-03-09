@@ -120,7 +120,7 @@ wxConfigBase *wxConfigBase::Create()
         if ( !DoRead##name(key, val) )                                      \
             return false;                                                   \
                                                                             \
-        *val = extra(*val);                                                 \
+        *val = (extra)(*val);                                               \
                                                                             \
         return true;                                                        \
     }                                                                       \
@@ -142,7 +142,7 @@ wxConfigBase *wxConfigBase::Create()
             *val = defVal;                                                  \
         }                                                                   \
                                                                             \
-        *val = extra(*val);                                                 \
+        *val = (extra)(*val);                                               \
                                                                             \
         return read;                                                        \
     }
@@ -150,6 +150,9 @@ wxConfigBase *wxConfigBase::Create()
 
 IMPLEMENT_READ_FOR_TYPE(String, wxString, const wxString&, ExpandEnvVars)
 IMPLEMENT_READ_FOR_TYPE(Long, long, long, long)
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+IMPLEMENT_READ_FOR_TYPE(LongLong, wxLongLong_t, wxLongLong_t, wxLongLong_t)
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 IMPLEMENT_READ_FOR_TYPE(Double, double, double, double)
 IMPLEMENT_READ_FOR_TYPE(Bool, bool, bool, bool)
 

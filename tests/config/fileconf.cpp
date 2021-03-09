@@ -626,5 +626,18 @@ TEST_CASE("wxFileConfig::ReadFloat", "[fileconfig][config]")
     CHECK( f == -9876.5432f );
 }
 
+TEST_CASE("wxFileConfig::LongLong", "[fileconfig][config][longlong]")
+{
+    wxFileConfig fc("", "", "", "", 0); // Don't use any files.
+
+    // See comment near val64 definition in regconf.cpp.
+    const wxLongLong_t val = wxLL(0x8000000000000008);
+    REQUIRE( fc.Write("ll", val) );
+
+    wxLongLong_t ll;
+    REQUIRE( fc.Read("ll", &ll) );
+    CHECK( ll == val );
+}
+
 #endif // wxUSE_FILECONFIG
 

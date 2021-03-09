@@ -49,9 +49,27 @@ bool TryGetValue(const wxRegKey& key, const wxString& str, long *plVal)
   return key.IsOpened() && key.HasValue(str) && key.QueryValue(str, plVal);
 }
 
+bool TryGetValue(const wxRegKey& key, const wxString& str, wxLongLong_t *pll)
+{
+  return key.IsOpened() && key.HasValue(str) && key.QueryValue64(str, pll);
+}
+
 bool TryGetValue(const wxRegKey& key, const wxString& str, wxMemoryBuffer* pBuf)
 {
   return key.IsOpened() && key.HasValue(str) && key.QueryValue(str, *pBuf);
+}
+
+// set value of the key in a homogeneous way to hide the differences between
+// wxRegKey::SetValue() and SetValue64()
+template <typename T>
+bool SetKeyValue(wxRegKey& key, const wxString& name, const T& value)
+{
+    return key.SetValue(name, value);
+}
+
+bool SetKeyValue(wxRegKey& key, const wxString& name, wxLongLong_t value)
+{
+    return key.SetValue64(name, value);
 }
 
 // ============================================================================
@@ -595,6 +613,11 @@ bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
   return DoReadValue(key, plResult);
 }
 
+bool wxRegConfig::DoReadLongLong(const wxString& key, wxLongLong_t *pll) const
+{
+  return DoReadValue(key, pll);
+}
+
 #if wxUSE_BASE64
 bool wxRegConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
 {
@@ -612,7 +635,7 @@ bool wxRegConfig::DoWriteValue(const wxString& key, const T& value)
     return false;
   }
 
-  return LocalKey().SetValue(path.Name(), value);
+  return SetKeyValue(LocalKey(), path.Name(), value);
 }
 
 bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
@@ -623,6 +646,11 @@ bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
 bool wxRegConfig::DoWriteLong(const wxString& key, long lValue)
 {
   return DoWriteValue(key, lValue);
+}
+
+bool wxRegConfig::DoWriteLongLong(const wxString& key, wxLongLong_t llValue)
+{
+  return DoWriteValue(key, llValue);
 }
 
 #if wxUSE_BASE64
