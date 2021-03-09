@@ -473,7 +473,9 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
 
 void wxListWidgetCocoaImpl::AdaptColumnWidth ( int w )
 {
-    NSTableColumn *col = [[m_tableView tableColumns] objectAtIndex:0];
+    // Note that the table can have more than one column as it's also used by
+    // wxCheckListBox, but the column containing the text is always the last one.
+    NSTableColumn *col = [[m_tableView tableColumns] lastObject];
     [col setWidth:w];
     m_maxWidth = w;
 }
@@ -488,7 +490,7 @@ void wxListWidgetCocoaImpl::ListInsert( unsigned int n )
 
     if ( m_autoSize )
     {
-        NSCell *cell = [m_tableView preparedCellAtColumn:0 row:n];
+        NSCell *cell = [m_tableView preparedCellAtColumn:[m_tableView numberOfColumns]-1 row:n];
         NSSize size = [cell cellSize];
         int width = (int) ceil(size.width);
 
@@ -648,6 +650,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
 
     wxNSTableView* tableview = [[wxNSTableView alloc] init];
     [tableview setDelegate:tableview];
+    [tableview setFocusRingType:NSFocusRingTypeNone];
     // only one multi-select mode available
     if ( (style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE) )
         [tableview setAllowsMultipleSelection:YES];
