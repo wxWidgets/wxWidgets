@@ -458,7 +458,7 @@ public:
     @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
        Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
-       Currently only implemented for the Edge and WebKit2GTK+ backends
+       Not implemented for the IE backend
        and is only available in wxWidgets 3.1.5 or later.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
@@ -874,8 +874,9 @@ public:
     /**
         Enable or disable access to dev tools for the user.
 
-        This is currently only implemented for the Edge backend and
-        the WebKit2GTK+ backend. Dev tools are disabled by default.
+        Dev tools are disabled by default.
+
+        @note This is not implemented for the IE backend.
 
         @since 3.1.4
     */
@@ -1221,7 +1222,7 @@ public:
     @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
        Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
-       Currently only implemented for the Edge and WebKit2GTK+ backend
+       Not implemented for the IE backend
        and is only available in wxWidgets 3.1.5 or later.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
