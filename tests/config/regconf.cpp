@@ -20,6 +20,8 @@
 
 #include "wx/msw/regconf.h"
 
+#include "wx/scopedptr.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -31,8 +33,8 @@ TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
 
     // NOTE: we use wxCONFIG_USE_LOCAL_FILE explicitly to test wxRegConfig
     //       with something different from the default value wxCONFIG_USE_GLOBAL_FILE
-    wxConfigBase *config = new wxRegConfig(app, vendor, wxT(""), wxT(""),
-                                           wxCONFIG_USE_LOCAL_FILE);
+    wxScopedPtr<wxConfigBase> config(new wxRegConfig(app, vendor, wxT(""), wxT(""),
+                                                     wxCONFIG_USE_LOCAL_FILE));
 
     // test writing
     config->SetPath(wxT("/group1"));
@@ -53,7 +55,6 @@ TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
     CHECK( config->Read(wxT("group2/entry1"), wxT("INVALID DEFAULT")) == "bar" );
 
     config->DeleteAll();
-    delete config;
 }
 
 TEST_CASE("wxRegKey::DeleteFromRedirectedView", "[registry][64bits]")

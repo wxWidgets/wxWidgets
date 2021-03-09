@@ -26,6 +26,7 @@
 
 #include "wx/config.h"
 #include "wx/colour.h"
+#include "wx/scopedptr.h"
 
 // --------------------------------------------------------------------------
 // the tests
@@ -35,8 +36,8 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
 {
     wxString app = wxT("wxConfigTestCase");
     wxString vendor = wxT("wxWidgets");
-    wxConfig *config = new wxConfig(app, vendor, wxT(""), wxT(""),
-                                    wxCONFIG_USE_LOCAL_FILE);
+    wxScopedPtr<wxConfig> config(new wxConfig(app, vendor, wxT(""), wxT(""),
+                                              wxCONFIG_USE_LOCAL_FILE));
     config->DeleteAll();
     config->Write(wxT("string1"), wxT("abc"));
     config->Write(wxT("string2"), wxString(wxT("def")));
@@ -48,10 +49,9 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
     config->Write(wxT("color1"), wxColour(11,22,33,44));
 #endif // wxHAS_CONFIG_TEMPLATE_RW
     config->Flush();
-    delete config;
 
-    config = new wxConfig(app, vendor, wxT(""), wxT(""),
-                                    wxCONFIG_USE_LOCAL_FILE);
+    config.reset(new wxConfig(app, vendor, wxT(""), wxT(""),
+                              wxCONFIG_USE_LOCAL_FILE));
     wxString string1 = config->Read(wxT("string1"));
     CHECK( string1 == "abc" );
     string1 = config->Read(wxT("string1"), wxT("defaultvalue"));
@@ -103,59 +103,58 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
 #endif // wxHAS_CONFIG_TEMPLATE_RW
 
     config->DeleteAll();
-    delete config;
 }
 
 // Helper of RecordingDefaultsTest() test.
 static
-size_t ReadValues(wxConfig *config, bool has_values)
+size_t ReadValues(const wxConfig& config, bool has_values)
 {
     size_t read = 0;
     bool r;
 
-    wxString string1 = config->Read(wxT("string1"), wxT("abc"));
+    wxString string1 = config.Read(wxT("string1"), wxT("abc"));
     read++;
 
-    wxString string2 = config->Read(wxT("string2"), wxString(wxT("def")));
+    wxString string2 = config.Read(wxT("string2"), wxString(wxT("def")));
     read++;
 
     wxString string3;
-    r = config->Read(wxT("string3"), &string3, wxT("abc"));
+    r = config.Read(wxT("string3"), &string3, wxT("abc"));
     CHECK( r == has_values );
     read++;
 
     wxString string4;
-    r = config->Read(wxT("string4"), &string4, wxString(wxT("def")));
+    r = config.Read(wxT("string4"), &string4, wxString(wxT("def")));
     CHECK( r == has_values );
     read++;
 
     int int1;
-    r = config->Read(wxT("int1"), &int1, 123);
+    r = config.Read(wxT("int1"), &int1, 123);
     CHECK( r == has_values );
     read++;
 
-    int int2 = config->Read(wxT("int2"), 1234);
+    int int2 = config.Read(wxT("int2"), 1234);
     CHECK( 1234 == int2 );
     read++;
 
     long long1;
-    r = config->Read(wxString(wxT("long1")), &long1, 234L);
+    r = config.Read(wxString(wxT("long1")), &long1, 234L);
     CHECK( r == has_values );
     read++;
 
     double double1;
-    r = config->Read(wxT("double1"), &double1, 345.67);
+    r = config.Read(wxT("double1"), &double1, 345.67);
     CHECK( r == has_values );
     read++;
 
     bool bool1;
-    r = config->Read(wxT("bool1"), &bool1, true);
+    r = config.Read(wxT("bool1"), &bool1, true);
     CHECK( r == has_values );
     read++;
 
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
     wxColour color1;
-    r = config->Read(wxT("color1"), &color1, wxColour(11,22,33,44));
+    r = config.Read(wxT("color1"), &color1, wxColour(11,22,33,44));
     CHECK( r == has_values );
     read++;
 #endif // wxHAS_CONFIG_TEMPLATE_RW
@@ -168,18 +167,17 @@ TEST_CASE("wxConfig::RecordingDefaults", "[config]")
 {
     wxString app = wxT("wxConfigTestCaseRD");
     wxString vendor = wxT("wxWidgets");
-    wxConfig *config = new wxConfig(app, vendor, wxT(""), wxT(""),
-                                    wxCONFIG_USE_LOCAL_FILE);
+    wxScopedPtr<wxConfig> config(new wxConfig(app, vendor, wxT(""), wxT(""),
+                                              wxCONFIG_USE_LOCAL_FILE));
     config->DeleteAll();
     config->SetRecordDefaults(false); // by default it is false
-    ReadValues(config, false);
+    ReadValues(*config, false);
     CHECK( config->GetNumberOfEntries() == 0 );
     config->SetRecordDefaults(true);
-    size_t read = ReadValues(config, false);
+    size_t read = ReadValues(*config, false);
     CHECK( config->GetNumberOfEntries() == read );
-    ReadValues(config, true);
+    ReadValues(*config, true);
     config->DeleteAll();
-    delete config;
 }
 
 #endif //wxUSE_CONFIG
