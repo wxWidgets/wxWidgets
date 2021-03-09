@@ -9,6 +9,24 @@
 
 include(../../source_groups.cmake)
 
+function(wx_webview_copy_webview2_loader target)
+    if(NOT WXMSW OR NOT wxUSE_WEBVIEW_EDGE OR NOT TARGET ${target})
+        return()
+    endif()
+
+    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set(WEBVIEW2_ARCH x86)
+    else()
+        set(WEBVIEW2_ARCH x64)
+    endif()
+
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
+        "$<TARGET_FILE_DIR:${target}>/WebView2Loader.dll")
+endfunction()
+
+
 wx_append_sources(WEBVIEW_FILES WEBVIEW_CMN)
 
 if(WXMSW)
@@ -44,13 +62,15 @@ elseif(WXMSW)
 
         set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
 
+        if(NOT EXISTS ${WEBVIEW2_PACKAGE_DIR})
+            unset(WEBVIEW2_PACKAGE_DIR CACHE)
+        endif()
         find_path(WEBVIEW2_PACKAGE_DIR
             NAMES build/native/include/WebView2.h
             PATHS
                 "${PROJECT_SOURCE_DIR}/3rdparty/webview2"
                 ${WEBVIEW2_DEFAULT_PACKAGE_DIR}
         )
-        mark_as_advanced(WEBVIEW2_PACKAGE_DIR)
 
         if (NOT WEBVIEW2_PACKAGE_DIR)
             message(STATUS "WebView2 SDK not found locally, downloading...")
@@ -65,23 +85,17 @@ elseif(WXMSW)
                 WORKING_DIRECTORY ${WEBVIEW2_PACKAGE_DIR}
             )
         endif()
+        set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_PACKAGE_DIR} CACHE INTERNAL "" FORCE)
 
         wx_lib_include_directories(wxwebview PRIVATE "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
         if(NOT MSVC)
             wx_lib_include_directories(wxwebview PRIVATE "${wxSOURCE_DIR}/include/wx/msw/wrl")
-            target_compile_options(wxwebview PRIVATE -Wno-unknown-pragmas)
+            if (NOT wxBUILD_MONOLITHIC)
+                target_compile_options(wxwebview PRIVATE -Wno-unknown-pragmas)
+            endif()
         endif()
 
-        if (CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set(WEBVIEW2_ARCH x86)
-        else()
-            set(WEBVIEW2_ARCH x64)
-        endif()
-
-        add_custom_command(TARGET wxwebview POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
-            "$<TARGET_FILE_DIR:wxwebview>/WebView2Loader.dll")
+        wx_webview_copy_webview2_loader(wxwebview)
     endif()
 elseif(WXGTK)
     if(LIBSOUP_FOUND)
