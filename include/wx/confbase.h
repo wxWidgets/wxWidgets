@@ -192,6 +192,9 @@ public:
   bool Read(const wxString& key, wxLongLong_t *pl, wxLongLong_t defVal) const;
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
+  bool Read(const wxString& key, size_t* val) const;
+  bool Read(const wxString& key, size_t* val, size_t defVal) const;
+
 #if wxUSE_BASE64
     // read a binary data block
   bool Read(const wxString& key, wxMemoryBuffer* data) const

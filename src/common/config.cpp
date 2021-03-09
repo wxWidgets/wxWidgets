@@ -177,6 +177,40 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
     return r;
 }
 
+// size_t is stored either as long or long long (Win64)
+#if SIZEOF_SIZE_T == SIZEOF_LONG
+    typedef long SizeSameSizeAsSizeT;
+#elif SIZEOF_SIZE_T == SIZEOF_LONG_LONG
+    typedef wxLongLong_t SizeSameSizeAsSizeT;
+#else
+    #error Unexpected sizeof(size_t)
+#endif
+
+bool wxConfigBase::Read(const wxString& key, size_t* val) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    SizeSameSizeAsSizeT tmp;
+    if ( !Read(key, &tmp) )
+        return false;
+
+    *val = static_cast<size_t>(tmp);
+    return true;
+}
+
+bool wxConfigBase::Read(const wxString& key, size_t* val, size_t defVal) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    if ( !Read(key, val) )
+    {
+        *val = defVal;
+        return false;
+    }
+
+    return true;
+}
+
 // Read floats as doubles then just type cast it down.
 bool wxConfigBase::Read(const wxString& key, float* val) const
 {

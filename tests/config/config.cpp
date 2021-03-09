@@ -53,6 +53,7 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
     const wxULongLong_t uval64 = wxULL(0x9000000000000009);
     config->Write("ull", uval64);
 
+    config->Write("size", size_t(UINT_MAX));
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
     config->Write("color1", wxColour(11,22,33,44));
 #endif // wxHAS_CONFIG_TEMPLATE_RW
@@ -109,6 +110,10 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
     CHECK( config->Read("ull", &ll) );
     CHECK( ll == static_cast<wxLongLong_t>(uval64) );
     CHECK( config->ReadLongLong("ull", 0) == static_cast<wxLongLong_t>(uval64) );
+
+    size_t size;
+    CHECK( config->Read("size", &size) );
+    CHECK( size == UINT_MAX );
 
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
     wxColour color1;

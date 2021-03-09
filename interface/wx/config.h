@@ -571,7 +571,29 @@ public:
         @endWxPerlOnly
     */
     bool Read(const wxString& key, wxLongLong_t* ll,
-              wxLongLong_t defaultVal) const;
+    /**
+        Reads a size_t value, returning @true if the value was found.
+        If the value was not found, @a value is not changed.
+
+        @since 3.1.5
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
+    bool Read(const wxString& key, size_t* value) const;
+    /**
+        Reads a size_t value, returning @true if the value was found.
+        If the value was not found, @a defaultVal is used instead.
+
+        @since 3.1.5
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
+    bool Read(const wxString& key, size_t* value,
+              size_t defaultVal) const;
     /**
         Reads a double value, returning @true if the value was found. If the
         value was not found, @a d is not changed.
