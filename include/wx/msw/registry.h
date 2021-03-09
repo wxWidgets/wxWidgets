@@ -42,7 +42,8 @@ public:
     Type_Multi_String,               // Multiple Unicode strings
     Type_Resource_list,              // Resource list in the resource map
     Type_Full_resource_descriptor,   // Resource list in the hardware description
-    Type_Resource_requirements_list  // ???
+    Type_Resource_requirements_list, // ???
+    Type_Qword                       // 64-bit number
   };
 
   // predefined registry keys
@@ -197,10 +198,14 @@ public:
     // retrieve either raw or expanded string value
   bool  QueryValue(const wxString& szValue, wxString& strValue, bool raw) const;
 
-    // set the numeric value
+    // set the 32-bit numeric value
   bool  SetValue(const wxString& szValue, long lValue);
-    // return the numeric value
+    // return the 32-bit numeric value
   bool  QueryValue(const wxString& szValue, long *plValue) const;
+    // set the 64-bit numeric value
+  bool  SetValue64(const wxString& szValue, wxLongLong_t llValue);
+    // return the 64-bit numeric value
+  bool  QueryValue64(const wxString& szValue, wxLongLong_t *pllValue) const;
     // set the binary value
   bool  SetValue(const wxString& szValue, const wxMemoryBuffer& buf);
     // return the binary value
