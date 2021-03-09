@@ -332,7 +332,7 @@ public:
     <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
     It is available for Windows 7 and newer.
 
-    This backend does not support for custom schemes and virtual file systems.
+    This backend does not support custom schemes and virtual file systems.
 
     This backend is not enabled by default, to build it follow these steps:
     - Visual Studio 2015 or newer, or GCC/Clang with c++11 is required
@@ -458,7 +458,7 @@ public:
     @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
        Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
-       Currently only implemented for the Edge and WebKit2GTK+ backend
+       Currently only implemented for the Edge and WebKit2GTK+ backends
        and is only available in wxWidgets 3.1.5 or later.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
