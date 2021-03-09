@@ -24,30 +24,7 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class RegConfigTestCase : public CppUnit::TestCase
-{
-public:
-    RegConfigTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( RegConfigTestCase );
-        CPPUNIT_TEST( ReadWrite );
-        CPPUNIT_TEST( DeleteRegistryKeyFromRedirectedView );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ReadWrite();
-    void DeleteRegistryKeyFromRedirectedView();
-
-    wxDECLARE_NO_COPY_CLASS(RegConfigTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RegConfigTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RegConfigTestCase, "RegConfigTestCase" );
-
-void RegConfigTestCase::ReadWrite()
+TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
 {
     wxString app = wxT("wxRegConfigTestCase");
     wxString vendor = wxT("wxWidgets");
@@ -59,27 +36,27 @@ void RegConfigTestCase::ReadWrite()
 
     // test writing
     config->SetPath(wxT("/group1"));
-    CPPUNIT_ASSERT( config->Write(wxT("entry1"), wxT("foo")) );
+    CHECK( config->Write(wxT("entry1"), wxT("foo")) );
     config->SetPath(wxT("/group2"));
-    CPPUNIT_ASSERT( config->Write(wxT("entry1"), wxT("bar")) );
+    CHECK( config->Write(wxT("entry1"), wxT("bar")) );
 
     // test reading
     wxString str;
     long dummy;
 
     config->SetPath(wxT("/"));
-    CPPUNIT_ASSERT( config->GetFirstGroup(str, dummy) );
-    CPPUNIT_ASSERT( str == "group1" );
-    CPPUNIT_ASSERT( config->Read(wxT("group1/entry1"), wxT("INVALID DEFAULT")) == "foo" );
-    CPPUNIT_ASSERT( config->GetNextGroup(str, dummy) );
-    CPPUNIT_ASSERT( str == "group2" );
-    CPPUNIT_ASSERT( config->Read(wxT("group2/entry1"), wxT("INVALID DEFAULT")) == "bar" );
+    CHECK( config->GetFirstGroup(str, dummy) );
+    CHECK( str == "group1" );
+    CHECK( config->Read(wxT("group1/entry1"), wxT("INVALID DEFAULT")) == "foo" );
+    CHECK( config->GetNextGroup(str, dummy) );
+    CHECK( str == "group2" );
+    CHECK( config->Read(wxT("group2/entry1"), wxT("INVALID DEFAULT")) == "bar" );
 
     config->DeleteAll();
     delete config;
 }
 
-void RegConfigTestCase::DeleteRegistryKeyFromRedirectedView()
+TEST_CASE("wxRegKey::DeleteFromRedirectedView", "[registry][64bits]")
 {
     if ( !wxIsPlatform64Bit() )
     {
@@ -94,9 +71,9 @@ void RegConfigTestCase::DeleteRegistryKeyFromRedirectedView()
             ? wxRegKey::WOW64ViewMode_64
             : wxRegKey::WOW64ViewMode_32);
 
-    CPPUNIT_ASSERT( key.Create() );
-    CPPUNIT_ASSERT( key.DeleteSelf() );
-    CPPUNIT_ASSERT( !key.Exists() );
+    REQUIRE( key.Create() );
+    CHECK( key.DeleteSelf() );
+    CHECK( !key.Exists() );
 }
 
 #endif // wxUSE_CONFIG && wxUSE_REGKEY
