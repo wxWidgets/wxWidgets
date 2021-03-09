@@ -22,14 +22,14 @@
 #include "wx/sstream.h"
 #include "wx/log.h"
 
-static const wxChar *testconfig =
-wxT("[root]\n")
-wxT("entry=value\n")
-wxT("[root/group1]\n")
-wxT("[root/group1/subgroup]\n")
-wxT("subentry=subvalue\n")
-wxT("subentry2=subvalue2\n")
-wxT("[root/group2]\n")
+static const char *testconfig =
+"[root]\n"
+"entry=value\n"
+"[root/group1]\n"
+"[root/group1/subgroup]\n"
+"subentry=subvalue\n"
+"subentry2=subvalue2\n"
+"[root/group2]\n"
 ;
 
 // ----------------------------------------------------------------------------
@@ -46,7 +46,7 @@ static wxString Dump(wxFileConfig& fc)
 // helper macro to test wxFileConfig contents
 #define wxVERIFY_FILECONFIG(t, fc) CHECK(Dump(fc) == t)
 
-static wxString ChangePath(wxFileConfig& fc, const wxChar *path)
+static wxString ChangePath(wxFileConfig& fc, const char *path)
 {
     fc.SetPath(path);
 
@@ -62,34 +62,34 @@ TEST_CASE("wxFileConfig::Path", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CHECK( ChangePath(fc, wxT("")) == wxT("") );
-    CHECK( ChangePath(fc, wxT("/")) == wxT("") );
-    CHECK( ChangePath(fc, wxT("root")) == wxT("/root") );
-    CHECK( ChangePath(fc, wxT("/root")) == wxT("/root") );
-    CHECK( ChangePath(fc, wxT("/root/group1/subgroup")) == wxT("/root/group1/subgroup") );
-    CHECK( ChangePath(fc, wxT("/root/group2")) == wxT("/root/group2") );
+    CHECK( ChangePath(fc, "") == "" );
+    CHECK( ChangePath(fc, "/") == "" );
+    CHECK( ChangePath(fc, "root") == "/root" );
+    CHECK( ChangePath(fc, "/root") == "/root" );
+    CHECK( ChangePath(fc, "/root/group1/subgroup") == "/root/group1/subgroup" );
+    CHECK( ChangePath(fc, "/root/group2") == "/root/group2" );
 }
 
 TEST_CASE("wxFileConfig::AddEntries", "[fileconfig][config]")
 {
     wxFileConfig fc;
 
-    wxVERIFY_FILECONFIG( wxT(""), fc  );
+    wxVERIFY_FILECONFIG( "", fc  );
 
-    fc.Write(wxT("/Foo"), wxT("foo"));
-    wxVERIFY_FILECONFIG( wxT("Foo=foo\n"), fc  );
+    fc.Write("/Foo", "foo");
+    wxVERIFY_FILECONFIG( "Foo=foo\n", fc  );
 
-    fc.Write(wxT("/Bar/Baz"), wxT("baz"));
-    wxVERIFY_FILECONFIG( wxT("Foo=foo\n[Bar]\nBaz=baz\n"), fc  );
+    fc.Write("/Bar/Baz", "baz");
+    wxVERIFY_FILECONFIG( "Foo=foo\n[Bar]\nBaz=baz\n", fc  );
 
     fc.DeleteAll();
-    wxVERIFY_FILECONFIG( wxT(""), fc  );
+    wxVERIFY_FILECONFIG( "", fc  );
 
-    fc.Write(wxT("/Bar/Baz"), wxT("baz"));
-    wxVERIFY_FILECONFIG( wxT("[Bar]\nBaz=baz\n"), fc  );
+    fc.Write("/Bar/Baz", "baz");
+    wxVERIFY_FILECONFIG( "[Bar]\nBaz=baz\n", fc  );
 
-    fc.Write(wxT("/Foo"), wxT("foo"));
-    wxVERIFY_FILECONFIG( wxT("Foo=foo\n[Bar]\nBaz=baz\n"), fc  );
+    fc.Write("/Foo", "foo");
+    wxVERIFY_FILECONFIG( "Foo=foo\n[Bar]\nBaz=baz\n", fc  );
 }
 
 namespace
@@ -97,11 +97,11 @@ namespace
 
 void
 CheckGroupEntries(const wxFileConfig& fc,
-                  const wxChar *path,
+                  const char *path,
                   size_t nEntries,
                   ...)
 {
-    wxConfigPathChanger change(&fc, wxString(path) + wxT("/"));
+    wxConfigPathChanger change(&fc, wxString(path) + "/");
 
     CHECK( fc.GetNumberOfEntries() == nEntries );
 
@@ -114,7 +114,7 @@ CheckGroupEntries(const wxFileConfig& fc,
           cont;
           cont = fc.GetNextEntry(name, cookie), nEntries-- )
     {
-        CHECK( name == va_arg(ap, wxChar *) );
+        CHECK( name == va_arg(ap, char *) );
     }
 
     CHECK( nEntries == 0 );
@@ -124,11 +124,11 @@ CheckGroupEntries(const wxFileConfig& fc,
 
 void
 CheckGroupSubgroups(const wxFileConfig& fc,
-                    const wxChar *path,
+                    const char *path,
                     size_t nGroups,
                     ...)
 {
-    wxConfigPathChanger change(&fc, wxString(path) + wxT("/"));
+    wxConfigPathChanger change(&fc, wxString(path) + "/");
 
     CHECK( fc.GetNumberOfGroups() == nGroups );
 
@@ -141,7 +141,7 @@ CheckGroupSubgroups(const wxFileConfig& fc,
           cont;
           cont = fc.GetNextGroup(name, cookie), nGroups-- )
     {
-        CHECK( name == va_arg(ap, wxChar *) );
+        CHECK( name == va_arg(ap, char *) );
     }
 
     CHECK( nGroups == 0 );
@@ -156,11 +156,11 @@ TEST_CASE("wxFileConfig::GetEntries", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CheckGroupEntries(fc, wxT(""), 0);
-    CheckGroupEntries(fc, wxT("/root"), 1, wxT("entry"));
-    CheckGroupEntries(fc, wxT("/root/group1"), 0);
-    CheckGroupEntries(fc, wxT("/root/group1/subgroup"),
-                        2, wxT("subentry"), wxT("subentry2"));
+    CheckGroupEntries(fc, "", 0);
+    CheckGroupEntries(fc, "/root", 1, "entry");
+    CheckGroupEntries(fc, "/root/group1", 0);
+    CheckGroupEntries(fc, "/root/group1/subgroup",
+                        2, "subentry", "subentry2");
 }
 
 TEST_CASE("wxFileConfig::GetGroups", "[fileconfig][config]")
@@ -168,10 +168,10 @@ TEST_CASE("wxFileConfig::GetGroups", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CheckGroupSubgroups(fc, wxT(""), 1, wxT("root"));
-    CheckGroupSubgroups(fc, wxT("/root"), 2, wxT("group1"), wxT("group2"));
-    CheckGroupSubgroups(fc, wxT("/root/group1"), 1, wxT("subgroup"));
-    CheckGroupSubgroups(fc, wxT("/root/group2"), 0);
+    CheckGroupSubgroups(fc, "", 1, "root");
+    CheckGroupSubgroups(fc, "/root", 2, "group1", "group2");
+    CheckGroupSubgroups(fc, "/root/group1", 1, "subgroup");
+    CheckGroupSubgroups(fc, "/root/group2", 0);
 }
 
 TEST_CASE("wxFileConfig::HasEntry", "[fileconfig][config]")
@@ -179,15 +179,15 @@ TEST_CASE("wxFileConfig::HasEntry", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CHECK( !fc.HasEntry(wxT("root")) );
-    CHECK( fc.HasEntry(wxT("root/entry")) );
-    CHECK( fc.HasEntry(wxT("/root/entry")) );
-    CHECK( fc.HasEntry(wxT("root/group1/subgroup/subentry")) );
-    CHECK( !fc.HasEntry(wxT("")) );
-    CHECK( !fc.HasEntry(wxT("root/group1")) );
-    CHECK( !fc.HasEntry(wxT("subgroup/subentry")) );
-    CHECK( !fc.HasEntry(wxT("/root/no_such_group/entry")) );
-    CHECK( !fc.HasGroup(wxT("/root/no_such_group")) );
+    CHECK( !fc.HasEntry("root") );
+    CHECK( fc.HasEntry("root/entry") );
+    CHECK( fc.HasEntry("/root/entry") );
+    CHECK( fc.HasEntry("root/group1/subgroup/subentry") );
+    CHECK( !fc.HasEntry("") );
+    CHECK( !fc.HasEntry("root/group1") );
+    CHECK( !fc.HasEntry("subgroup/subentry") );
+    CHECK( !fc.HasEntry("/root/no_such_group/entry") );
+    CHECK( !fc.HasGroup("/root/no_such_group") );
 }
 
 TEST_CASE("wxFileConfig::HasGroup", "[fileconfig][config]")
@@ -195,15 +195,15 @@ TEST_CASE("wxFileConfig::HasGroup", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CHECK( fc.HasGroup(wxT("root")) );
-    CHECK( fc.HasGroup(wxT("root/group1")) );
-    CHECK( fc.HasGroup(wxT("root/group1/subgroup")) );
-    CHECK( fc.HasGroup(wxT("root/group2")) );
-    CHECK( !fc.HasGroup(wxT("")) );
-    CHECK( !fc.HasGroup(wxT("root/group")) );
-    CHECK( !fc.HasGroup(wxT("root//subgroup")) );
-    CHECK( !fc.HasGroup(wxT("foot/subgroup")) );
-    CHECK( !fc.HasGroup(wxT("foot")) );
+    CHECK( fc.HasGroup("root") );
+    CHECK( fc.HasGroup("root/group1") );
+    CHECK( fc.HasGroup("root/group1/subgroup") );
+    CHECK( fc.HasGroup("root/group2") );
+    CHECK( !fc.HasGroup("") );
+    CHECK( !fc.HasGroup("root/group") );
+    CHECK( !fc.HasGroup("root//subgroup") );
+    CHECK( !fc.HasGroup("foot/subgroup") );
+    CHECK( !fc.HasGroup("foot") );
 }
 
 TEST_CASE("wxFileConfig::Binary", "[fileconfig][config]")
@@ -242,24 +242,24 @@ TEST_CASE("wxFileConfig::DeleteEntry", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CHECK( !fc.DeleteEntry(wxT("foo")) );
+    CHECK( !fc.DeleteEntry("foo") );
 
-    CHECK( fc.DeleteEntry(wxT("root/group1/subgroup/subentry")) );
-    wxVERIFY_FILECONFIG( wxT("[root]\n")
-                         wxT("entry=value\n")
-                         wxT("[root/group1]\n")
-                         wxT("[root/group1/subgroup]\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[root/group2]\n"),
+    CHECK( fc.DeleteEntry("root/group1/subgroup/subentry") );
+    wxVERIFY_FILECONFIG( "[root]\n"
+                         "entry=value\n"
+                         "[root/group1]\n"
+                         "[root/group1/subgroup]\n"
+                         "subentry2=subvalue2\n"
+                         "[root/group2]\n",
                          fc );
 
     // group should be deleted now as well as it became empty
-    wxConfigPathChanger change(&fc, wxT("root/group1/subgroup/subentry2"));
-    CHECK( fc.DeleteEntry(wxT("subentry2")) );
-    wxVERIFY_FILECONFIG( wxT("[root]\n")
-                         wxT("entry=value\n")
-                         wxT("[root/group1]\n")
-                         wxT("[root/group2]\n"),
+    wxConfigPathChanger change(&fc, "root/group1/subgroup/subentry2");
+    CHECK( fc.DeleteEntry("subentry2") );
+    wxVERIFY_FILECONFIG( "[root]\n"
+                         "entry=value\n"
+                         "[root/group1]\n"
+                         "[root/group2]\n",
                          fc );
 }
 
@@ -327,21 +327,21 @@ TEST_CASE("wxFileConfig::DeleteGroup", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CHECK( !fc.DeleteGroup(wxT("foo")) );
+    CHECK( !fc.DeleteGroup("foo") );
 
-    CHECK( fc.DeleteGroup(wxT("root/group1")) );
-    wxVERIFY_FILECONFIG( wxT("[root]\n")
-                         wxT("entry=value\n")
-                         wxT("[root/group2]\n"),
+    CHECK( fc.DeleteGroup("root/group1") );
+    wxVERIFY_FILECONFIG( "[root]\n"
+                         "entry=value\n"
+                         "[root/group2]\n",
                          fc );
 
     // notice trailing slash: it should be ignored
-    CHECK( fc.DeleteGroup(wxT("root/group2/")) );
-    wxVERIFY_FILECONFIG( wxT("[root]\n")
-                         wxT("entry=value\n"),
+    CHECK( fc.DeleteGroup("root/group2/") );
+    wxVERIFY_FILECONFIG( "[root]\n"
+                         "entry=value\n",
                          fc );
 
-    CHECK( fc.DeleteGroup(wxT("root")) );
+    CHECK( fc.DeleteGroup("root") );
     CHECK( Dump(fc).empty() );
 }
 
@@ -359,29 +359,29 @@ TEST_CASE("wxFileConfig::RenameEntry", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    fc.SetPath(wxT("root"));
-    CHECK( fc.RenameEntry(wxT("entry"), wxT("newname")) );
-    wxVERIFY_FILECONFIG( wxT("[root]\n")
-                         wxT("newname=value\n")
-                         wxT("[root/group1]\n")
-                         wxT("[root/group1/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[root/group2]\n"),
+    fc.SetPath("root");
+    CHECK( fc.RenameEntry("entry", "newname") );
+    wxVERIFY_FILECONFIG( "[root]\n"
+                         "newname=value\n"
+                         "[root/group1]\n"
+                         "[root/group1/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[root/group2]\n",
                          fc );
 
-    fc.SetPath(wxT("group1/subgroup"));
-    CHECK( !fc.RenameEntry(wxT("entry"), wxT("newname")) );
-    CHECK( !fc.RenameEntry(wxT("subentry"), wxT("subentry2")) );
+    fc.SetPath("group1/subgroup");
+    CHECK( !fc.RenameEntry("entry", "newname") );
+    CHECK( !fc.RenameEntry("subentry", "subentry2") );
 
-    CHECK( fc.RenameEntry(wxT("subentry"), wxT("subentry1")) );
-    wxVERIFY_FILECONFIG( wxT("[root]\n")
-                         wxT("newname=value\n")
-                         wxT("[root/group1]\n")
-                         wxT("[root/group1/subgroup]\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("subentry1=subvalue\n")
-                         wxT("[root/group2]\n"),
+    CHECK( fc.RenameEntry("subentry", "subentry1") );
+    wxVERIFY_FILECONFIG( "[root]\n"
+                         "newname=value\n"
+                         "[root/group1]\n"
+                         "[root/group1/subgroup]\n"
+                         "subentry2=subvalue2\n"
+                         "subentry1=subvalue\n"
+                         "[root/group2]\n",
                          fc );
 }
 
@@ -390,118 +390,118 @@ TEST_CASE("wxFileConfig::RenameGroup", "[fileconfig][config]")
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
 
-    CHECK( fc.RenameGroup(wxT("root"), wxT("foot")) );
-    wxVERIFY_FILECONFIG( wxT("[foot]\n")
-                         wxT("entry=value\n")
-                         wxT("[foot/group1]\n")
-                         wxT("[foot/group1/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[foot/group2]\n"),
+    CHECK( fc.RenameGroup("root", "foot") );
+    wxVERIFY_FILECONFIG( "[foot]\n"
+                         "entry=value\n"
+                         "[foot/group1]\n"
+                         "[foot/group1/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[foot/group2]\n",
                          fc );
 
     // renaming a path doesn't work, it must be the immediate group
-    CHECK( !fc.RenameGroup(wxT("foot/group1"), wxT("group2")) );
+    CHECK( !fc.RenameGroup("foot/group1", "group2") );
 
 
-    fc.SetPath(wxT("foot"));
+    fc.SetPath("foot");
 
     // renaming to a name of existing group doesn't work
-    CHECK( !fc.RenameGroup(wxT("group1"), wxT("group2")) );
+    CHECK( !fc.RenameGroup("group1", "group2") );
 
     // try exchanging the groups names and then restore them back
-    CHECK( fc.RenameGroup(wxT("group1"), wxT("groupTmp")) );
-    wxVERIFY_FILECONFIG( wxT("[foot]\n")
-                         wxT("entry=value\n")
-                         wxT("[foot/groupTmp]\n")
-                         wxT("[foot/groupTmp/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[foot/group2]\n"),
+    CHECK( fc.RenameGroup("group1", "groupTmp") );
+    wxVERIFY_FILECONFIG( "[foot]\n"
+                         "entry=value\n"
+                         "[foot/groupTmp]\n"
+                         "[foot/groupTmp/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[foot/group2]\n",
                          fc );
 
-    CHECK( fc.RenameGroup(wxT("group2"), wxT("group1")) );
-    wxVERIFY_FILECONFIG( wxT("[foot]\n")
-                         wxT("entry=value\n")
-                         wxT("[foot/groupTmp]\n")
-                         wxT("[foot/groupTmp/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[foot/group1]\n"),
+    CHECK( fc.RenameGroup("group2", "group1") );
+    wxVERIFY_FILECONFIG( "[foot]\n"
+                         "entry=value\n"
+                         "[foot/groupTmp]\n"
+                         "[foot/groupTmp/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[foot/group1]\n",
                          fc );
 
-    CHECK( fc.RenameGroup(wxT("groupTmp"), wxT("group2")) );
-    wxVERIFY_FILECONFIG( wxT("[foot]\n")
-                         wxT("entry=value\n")
-                         wxT("[foot/group2]\n")
-                         wxT("[foot/group2/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[foot/group1]\n"),
+    CHECK( fc.RenameGroup("groupTmp", "group2") );
+    wxVERIFY_FILECONFIG( "[foot]\n"
+                         "entry=value\n"
+                         "[foot/group2]\n"
+                         "[foot/group2/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[foot/group1]\n",
                          fc );
 
-    CHECK( fc.RenameGroup(wxT("group1"), wxT("groupTmp")) );
-    wxVERIFY_FILECONFIG( wxT("[foot]\n")
-                         wxT("entry=value\n")
-                         wxT("[foot/group2]\n")
-                         wxT("[foot/group2/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[foot/groupTmp]\n"),
+    CHECK( fc.RenameGroup("group1", "groupTmp") );
+    wxVERIFY_FILECONFIG( "[foot]\n"
+                         "entry=value\n"
+                         "[foot/group2]\n"
+                         "[foot/group2/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[foot/groupTmp]\n",
                          fc );
 
-    CHECK( fc.RenameGroup(wxT("group2"), wxT("group1")) );
-    wxVERIFY_FILECONFIG( wxT("[foot]\n")
-                         wxT("entry=value\n")
-                         wxT("[foot/group1]\n")
-                         wxT("[foot/group1/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[foot/groupTmp]\n"),
+    CHECK( fc.RenameGroup("group2", "group1") );
+    wxVERIFY_FILECONFIG( "[foot]\n"
+                         "entry=value\n"
+                         "[foot/group1]\n"
+                         "[foot/group1/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[foot/groupTmp]\n",
                          fc );
 
-    CHECK( fc.RenameGroup(wxT("groupTmp"), wxT("group2")) );
-    wxVERIFY_FILECONFIG( wxT("[foot]\n")
-                         wxT("entry=value\n")
-                         wxT("[foot/group1]\n")
-                         wxT("[foot/group1/subgroup]\n")
-                         wxT("subentry=subvalue\n")
-                         wxT("subentry2=subvalue2\n")
-                         wxT("[foot/group2]\n"),
+    CHECK( fc.RenameGroup("groupTmp", "group2") );
+    wxVERIFY_FILECONFIG( "[foot]\n"
+                         "entry=value\n"
+                         "[foot/group1]\n"
+                         "[foot/group1/subgroup]\n"
+                         "subentry=subvalue\n"
+                         "subentry2=subvalue2\n"
+                         "[foot/group2]\n",
                          fc );
 }
 
 TEST_CASE("wxFileConfig::CreateSubgroupAndEntries", "[fileconfig][config]")
 {
     wxFileConfig fc;
-    fc.Write(wxT("sub/sub_first"), wxT("sub_one"));
-    fc.Write(wxT("first"), wxT("one"));
+    fc.Write("sub/sub_first", "sub_one");
+    fc.Write("first", "one");
 
-    wxVERIFY_FILECONFIG( wxT("first=one\n")
-                         wxT("[sub]\n")
-                         wxT("sub_first=sub_one\n"),
+    wxVERIFY_FILECONFIG( "first=one\n"
+                         "[sub]\n"
+                         "sub_first=sub_one\n",
                          fc );
 }
 
 TEST_CASE("wxFileConfig::CreateEntriesAndSubgroup", "[fileconfig][config]")
 {
     wxFileConfig fc;
-    fc.Write(wxT("first"), wxT("one"));
-    fc.Write(wxT("second"), wxT("two"));
-    fc.Write(wxT("sub/sub_first"), wxT("sub_one"));
+    fc.Write("first", "one");
+    fc.Write("second", "two");
+    fc.Write("sub/sub_first", "sub_one");
 
-    wxVERIFY_FILECONFIG( wxT("first=one\n")
-                         wxT("second=two\n")
-                         wxT("[sub]\n")
-                         wxT("sub_first=sub_one\n"),
+    wxVERIFY_FILECONFIG( "first=one\n"
+                         "second=two\n"
+                         "[sub]\n"
+                         "sub_first=sub_one\n",
                          fc );
 }
 
 static void EmptyConfigAndWriteKey()
 {
-    wxFileConfig fc(wxT("deleteconftest"));
+    wxFileConfig fc("deleteconftest");
 
-    const wxString groupPath = wxT("/root");
+    const wxString groupPath = "/root";
 
     if ( fc.Exists(groupPath) )
     {
@@ -515,7 +515,7 @@ static void EmptyConfigAndWriteKey()
 
 
     // this crashes on second call of this function
-    CHECK( fc.Write(groupPath + wxT("/entry"), wxT("value")) );
+    CHECK( fc.Write(groupPath + "/entry", "value") );
 }
 
 TEST_CASE("wxFileConfig::DeleteLastGroup", "[fileconfig][config]")
@@ -535,47 +535,47 @@ TEST_CASE("wxFileConfig::DeleteLastGroup", "[fileconfig][config]")
 
     // clean up
     wxLogNull noLogging;
-    (void) ::wxRemoveFile(wxFileConfig::GetLocalFileName(wxT("deleteconftest")));
+    (void) ::wxRemoveFile(wxFileConfig::GetLocalFileName("deleteconftest"));
 }
 
 TEST_CASE("wxFileConfig::DeleteAndRecreateGroup", "[fileconfig][config]")
 {
-    static const wxChar *confInitial =
-        wxT("[First]\n")
-        wxT("Value1=Foo\n")
-        wxT("[Second]\n")
-        wxT("Value2=Bar\n");
+    static const char *confInitial =
+        "[First]\n"
+        "Value1=Foo\n"
+        "[Second]\n"
+        "Value2=Bar\n";
 
     wxStringInputStream sis(confInitial);
     wxFileConfig fc(sis);
 
-    fc.DeleteGroup(wxT("Second"));
-    wxVERIFY_FILECONFIG( wxT("[First]\n")
-                         wxT("Value1=Foo\n"),
+    fc.DeleteGroup("Second");
+    wxVERIFY_FILECONFIG( "[First]\n"
+                         "Value1=Foo\n",
                          fc );
 
-    fc.Write(wxT("Second/Value2"), wxT("New"));
-    wxVERIFY_FILECONFIG( wxT("[First]\n")
-                         wxT("Value1=Foo\n")
-                         wxT("[Second]\n")
-                         wxT("Value2=New\n"),
+    fc.Write("Second/Value2", "New");
+    wxVERIFY_FILECONFIG( "[First]\n"
+                         "Value1=Foo\n"
+                         "[Second]\n"
+                         "Value2=New\n",
                          fc );
 }
 
 TEST_CASE("wxFileConfig::AddToExistingRoot", "[fileconfig][config]")
 {
-    static const wxChar *confInitial =
-        wxT("[Group]\n")
-        wxT("value1=foo\n");
+    static const char *confInitial =
+        "[Group]\n"
+        "value1=foo\n";
 
     wxStringInputStream sis(confInitial);
     wxFileConfig fc(sis);
 
-    fc.Write(wxT("/value1"), wxT("bar"));
+    fc.Write("/value1", "bar");
     wxVERIFY_FILECONFIG(
-        wxT("value1=bar\n")
-        wxT("[Group]\n")
-        wxT("value1=foo\n"),
+        "value1=bar\n"
+        "[Group]\n"
+        "value1=foo\n",
         fc
     );
 }

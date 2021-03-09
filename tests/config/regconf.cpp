@@ -28,31 +28,31 @@
 
 TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
 {
-    wxString app = wxT("wxRegConfigTestCase");
-    wxString vendor = wxT("wxWidgets");
+    wxString app = "wxRegConfigTestCase";
+    wxString vendor = "wxWidgets";
 
     // NOTE: we use wxCONFIG_USE_LOCAL_FILE explicitly to test wxRegConfig
     //       with something different from the default value wxCONFIG_USE_GLOBAL_FILE
-    wxScopedPtr<wxConfigBase> config(new wxRegConfig(app, vendor, wxT(""), wxT(""),
+    wxScopedPtr<wxConfigBase> config(new wxRegConfig(app, vendor, "", "",
                                                      wxCONFIG_USE_LOCAL_FILE));
 
     // test writing
-    config->SetPath(wxT("/group1"));
-    CHECK( config->Write(wxT("entry1"), wxT("foo")) );
-    config->SetPath(wxT("/group2"));
-    CHECK( config->Write(wxT("entry1"), wxT("bar")) );
+    config->SetPath("/group1");
+    CHECK( config->Write("entry1", "foo") );
+    config->SetPath("/group2");
+    CHECK( config->Write("entry1", "bar") );
 
     // test reading
     wxString str;
     long dummy;
 
-    config->SetPath(wxT("/"));
+    config->SetPath("/");
     CHECK( config->GetFirstGroup(str, dummy) );
     CHECK( str == "group1" );
-    CHECK( config->Read(wxT("group1/entry1"), wxT("INVALID DEFAULT")) == "foo" );
+    CHECK( config->Read("group1/entry1", "INVALID DEFAULT") == "foo" );
     CHECK( config->GetNextGroup(str, dummy) );
     CHECK( str == "group2" );
-    CHECK( config->Read(wxT("group2/entry1"), wxT("INVALID DEFAULT")) == "bar" );
+    CHECK( config->Read("group2/entry1", "INVALID DEFAULT") == "bar" );
 
     config->DeleteAll();
 }
