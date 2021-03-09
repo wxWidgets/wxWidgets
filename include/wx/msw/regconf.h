@@ -88,6 +88,12 @@ protected:
       return self->m_keyLocal;
   }
 
+  // Type-independent implementation of Do{Read,Write}Foo().
+  template <typename T>
+  bool DoReadValue(const wxString& key, T* pValue) const;
+  template <typename T>
+  bool DoWriteValue(const wxString& key, const T& value);
+
   // implement read/write methods
   virtual bool DoReadString(const wxString& key, wxString *pStr) const wxOVERRIDE;
   virtual bool DoReadLong(const wxString& key, long *plResult) const wxOVERRIDE;

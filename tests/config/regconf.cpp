@@ -42,6 +42,8 @@ TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
     config->SetPath("/group2");
     CHECK( config->Write("entry1", "bar") );
 
+    CHECK( config->Write("int32", 1234567) );
+
     // test reading
     wxString str;
     long dummy;
@@ -53,6 +55,8 @@ TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
     CHECK( config->GetNextGroup(str, dummy) );
     CHECK( str == "group2" );
     CHECK( config->Read("group2/entry1", "INVALID DEFAULT") == "bar" );
+
+    CHECK( config->ReadLong("group2/int32", 0) == 1234567 );
 
     config->DeleteAll();
 }
