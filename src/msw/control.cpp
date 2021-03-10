@@ -542,34 +542,29 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
 
     // choose the values consistent with those used for native, non
     // owner-drawn, buttons
-    static const int MARGIN = 3;
-    int CXMENUCHECK = wxGetSystemMetrics(SM_CXMENUCHECK, m_win) + 1;
 
-    // the buttons were even bigger under Windows XP
-    if ( wxGetWinVersion() < wxWinVersion_6 )
-        CXMENUCHECK += 2;
+    const int spacing = m_win->FromDIP(3);
+    const wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(m_win, flags);
 
-    // The space between the button and the label
-    // is included in the button bitmap.
-    const int buttonSize = wxMin(CXMENUCHECK - MARGIN, m_win->GetSize().y);
+    const int buttonSize = wxMin(cbSize.y, m_win->GetSize().y);
     rectButton.top = rect.top + (rect.bottom - rect.top - buttonSize) / 2;
     rectButton.bottom = rectButton.top + buttonSize;
 
     const bool isRightAligned = m_win->HasFlag(wxALIGN_RIGHT);
     if ( isRightAligned )
     {
-        rectLabel.right = rect.right - CXMENUCHECK;
-        rectLabel.left = rect.left;
+        rectButton.right = rect.right;
+        rectButton.left = rectButton.right - buttonSize;
 
-        rectButton.left = rectLabel.right + ( CXMENUCHECK + MARGIN - buttonSize ) / 2;
-        rectButton.right = rectButton.left + buttonSize;
+        rectLabel.right = rectButton.left - spacing;
+        rectLabel.left = rect.left;
     }
     else // normal, left-aligned button
     {
-        rectButton.left = rect.left + ( CXMENUCHECK - MARGIN - buttonSize ) / 2;
+        rectButton.left = rect.left;
         rectButton.right = rectButton.left + buttonSize;
 
-        rectLabel.left = rect.left + CXMENUCHECK;
+        rectLabel.left = spacing + rectButton.right;
         rectLabel.right = rect.right;
     }
 
