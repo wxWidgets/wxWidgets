@@ -55,7 +55,7 @@ public:
         range.
 
         The @a InputIterator template parameter must be an input iterator type.
-        This constructor adds all elements from @a first until, not not
+        This constructor adds all elements from @a first until, not
         including, @a last to the vector.
 
         @since 2.9.5

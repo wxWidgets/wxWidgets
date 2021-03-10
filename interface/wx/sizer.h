@@ -400,7 +400,7 @@ public:
     virtual bool Detach(wxSizer* sizer);
 
     /**
-        Detach a item at position @a index from the sizer without destroying it.
+        Detach an item at position @a index from the sizer without destroying it.
 
         This method does not cause any layout or resizing to take place, call Layout()
         to update the layout "on screen" after detaching a child from the sizer.

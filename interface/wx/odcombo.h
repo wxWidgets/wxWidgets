@@ -89,7 +89,7 @@ public:
     wxOwnerDrawnComboBox();
 
     /**
-        Constructor, creating and showing a owner-drawn combobox.
+        Constructor, creating and showing an owner-drawn combobox.
 
         @param parent
             Parent window. Must not be @NULL.

@@ -4311,7 +4311,7 @@ public:
 /**
     @class wxMouseCaptureChangedEvent
 
-    An mouse capture changed event is sent to a window that loses its
+    A mouse capture changed event is sent to a window that loses its
     mouse capture. This is called even if wxWindow::ReleaseMouse
     was called by the application code. Handling this event allows
     an application to cater for unexpected capture releases which

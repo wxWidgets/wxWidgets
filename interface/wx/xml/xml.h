@@ -136,7 +136,7 @@ public:
     virtual ~wxXmlNode();
 
     /**
-        Appends a attribute with given @a name and @a value to the list of
+        Appends an attribute with given @a name and @a value to the list of
         attributes for this node.
     */
     virtual void AddAttribute(const wxString& name, const wxString& value);

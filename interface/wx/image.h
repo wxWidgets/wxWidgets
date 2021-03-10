@@ -1271,12 +1271,12 @@ public:
             (http://www.libpng.org/pub/png/libpng-1.2.5-manual.html) for possible values
             (e.g. PNG_FILTER_NONE, PNG_FILTER_SUB, PNG_FILTER_UP, etc).
         @li @c wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL: Compression level (0..9) for
-            saving a PNG file. An high value creates smaller-but-slower PNG file.
+            saving a PNG file. A high value creates smaller-but-slower PNG file.
             Note that unlike other formats (e.g. JPEG) the PNG format is always
             lossless and thus this compression level doesn't tradeoff the image
             quality.
         @li @c wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL: Compression memory usage
-            level (1..9) for saving a PNG file. An high value means the saving
+            level (1..9) for saving a PNG file. A high value means the saving
             process consumes more memory, but may create smaller PNG file.
         @li @c wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY: Possible values are 0 for
             default strategy, 1 for filter, and 2 for Huffman-only.

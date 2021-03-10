@@ -745,7 +745,7 @@ public:
     const TYPE ToAscii(char replaceWith = '_') const;
 
     /**
-        Return the string as an std::string using @e conv's wxMBConv::cWC2MB method.
+        Return the string as a std::string using @e conv's wxMBConv::cWC2MB method.
 
         Note that if the conversion of (Unicode) string contents using @e conv
         fails, the return string will be empty. Be sure to check for
@@ -768,7 +768,7 @@ public:
     std::string ToStdString(const wxMBConv& conv = wxConvLibc) const;
 
     /**
-        Return the string as an std::wstring.
+        Return the string as a std::wstring.
 
         Unlike ToStdString(), there is no danger of data loss when using this
         function.

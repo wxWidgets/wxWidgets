@@ -133,7 +133,7 @@ const char* wxART_EDIT;
 
     @section artprovider_identify Identifying art resources
 
-    Every bitmap and icon bundle are known to wxArtProvider under an unique ID that
+    Every bitmap and icon bundle are known to wxArtProvider under a unique ID that
     is used when requesting a resource from it. The ID is represented by the ::wxArtID type
     and can have one of these predefined values (you can see bitmaps represented by these
     constants in the @ref page_samples_artprov):

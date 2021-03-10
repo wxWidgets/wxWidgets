@@ -593,8 +593,8 @@ typedef wxVector<wxTaskBarJumpListCategory*> wxTaskBarJumpListCategories;
 /**
     @class wxTaskBarJumpList
 
-    This class is an transparent wrapper around Windows Jump Lists. Jump
-    Lists, as an new feature since Windows 7, are lists of recently opened
+    This class is a transparent wrapper around Windows Jump Lists. Jump
+    Lists, as a new feature since Windows 7, are lists of recently opened
     items, such as files, folders, or websites, which are organized by the
     program that the user use to open them. Jump Lists don't just show
     shortcuts to files. Sometimes they can also provide quick access to tasks.

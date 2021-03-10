@@ -481,7 +481,7 @@ public:
 
 /**
 
-    This is an helper template class primarily written to avoid memory leaks because
+    This is a helper template class primarily written to avoid memory leaks because
     of missing calls to wxRefCounter::DecRef() and wxObjectRefData::DecRef().
 
     Despite the name this template can actually be used as a smart pointer for any

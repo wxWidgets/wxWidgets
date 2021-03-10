@@ -851,7 +851,7 @@ public:
                                 const wxString& falseChoice );
 
     /**
-        Set proportion of a auto-stretchable column. wxPG_SPLITTER_AUTO_CENTER
+        Set proportion of an auto-stretchable column. wxPG_SPLITTER_AUTO_CENTER
         window style needs to be used to indicate that columns are auto-
         resizable.
 
@@ -1062,7 +1062,7 @@ public:
         @param maxLen
             Maximum number of characters of the text the user can enter in
             the text editor. If it is 0, the length is not limited and the text
-            can be as long as it is supported by the the underlying native text
+            can be as long as it is supported by the underlying native text
             control widget.
         @return
             Returns @true if maximum length was set.

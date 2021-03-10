@@ -269,7 +269,7 @@ public:
 
     /**
         Returns the header value for header @a header.
-        The search for @a header is case sensitive. If an @a domain is passed,
+        The search for @a header is case sensitive. If a @a domain is passed,
         this domain is searched. Else all domains will be searched until a
         header has been found.
 

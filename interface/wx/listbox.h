@@ -195,7 +195,7 @@ public:
         Fill an array of ints with the positions of the currently selected items.
 
         @param selections
-            A reference to an wxArrayInt instance that is used to store the result of
+            A reference to a wxArrayInt instance that is used to store the result of
             the query.
 
         @return The number of selections.

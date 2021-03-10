@@ -441,7 +441,7 @@ protected:
     wxEnumProperty with wxString value and writable combo box editor.
 
     @remarks
-    Uses int value, similar to wxEnumProperty, unless text entered by user is
+    Uses int value, similar to wxEnumProperty, unless text entered by user
     is not in choices (in which case string value is used).
 */
 class wxEditEnumProperty : public wxEnumProperty

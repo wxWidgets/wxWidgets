@@ -1403,7 +1403,7 @@ public:
     void ExpandAncestors( const wxDataViewItem & item );
 
     /**
-        Expand all all children of the given item recursively.
+        Expand all children of the given item recursively.
 
         This is the same as calling Expand() on the @a item itself and then
         calling it for all of its children, grandchildren etc recursively.

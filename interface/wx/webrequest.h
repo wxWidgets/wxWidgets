@@ -720,7 +720,7 @@ public:
         @a backend may be specified explicitly by using of the predefined @c
         wxWebSessionBackendWinHTTP, @c wxWebSessionBackendURLSession or @c
         wxWebSessionBackendCURL constants to select the corresponding backend
-        or left empty to select the default backend. The default depends on the
+        or left empty to select the default backend. The default depends on
         the current platform: WinHTTP-based implementation is used under MSW,
         NSURLSession-based one under macOS and libcurl-based otherwise.
 

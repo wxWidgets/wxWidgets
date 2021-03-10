@@ -160,7 +160,7 @@ public:
     Helper RAII class ensuring that power resources are released.
 
     A wxPowerResourceBlocker object acquires a power resource in the
-    constructor and releases it in the destructor making it impossible to to
+    constructor and releases it in the destructor making it impossible to
     forget to release the power resource (which would prevent suspending or
     screen power off until the application ends).
 

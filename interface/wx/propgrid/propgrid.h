@@ -1243,7 +1243,7 @@ public:
     bool IsEditorsValueModified() const;
 
     /**
-        Shows an brief error message that is related to a property.
+        Shows a brief error message that is related to a property.
     */
     void ShowPropertyError( wxPGPropArg id, const wxString& msg );
 

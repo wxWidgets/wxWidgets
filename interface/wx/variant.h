@@ -236,7 +236,7 @@ public:
     wxVariant(void* value, const wxString& name = wxEmptyString);
 
     /**
-        Constructs a variant from a pointer to an wxObject
+        Constructs a variant from a pointer to a wxObject
         derived class.
     */
     wxVariant(wxObject* value, const wxString& name = wxEmptyString);

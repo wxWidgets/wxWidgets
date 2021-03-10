@@ -118,7 +118,7 @@ class wxZipNotifier
 {
 public:
     /**
-        Override this to receive notifications when an wxZipEntry object changes.
+        Override this to receive notifications when a wxZipEntry object changes.
     */
     virtual void OnEntryUpdated(wxZipEntry& entry) = 0;
 };

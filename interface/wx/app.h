@@ -1246,7 +1246,7 @@ bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
     This function initializes wxWidgets in a platform-dependent way. Use this if you
     are not using the default wxWidgets entry code (e.g. main or WinMain).
 
-    For example, you can initialize wxWidgets from an Microsoft Foundation Classes
+    For example, you can initialize wxWidgets from a Microsoft Foundation Classes
     (MFC) application using this function.
 
     @note This overload of wxEntry is available under all platforms.

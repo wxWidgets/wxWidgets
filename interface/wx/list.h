@@ -278,7 +278,7 @@ public:
     const_iterator end() const;
 
     /**
-        Returns a iterator pointing at the end of the list.
+        Returns an iterator pointing at the end of the list.
     */
     iterator end() const;
 

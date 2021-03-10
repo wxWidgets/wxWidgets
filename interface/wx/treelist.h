@@ -500,7 +500,7 @@ public:
         @name Methods for the tree navigation.
 
         The tree has an invisible root item which is the hidden parent of all
-        top-level items in the tree. Starting from it it is possible to iterate
+        top-level items in the tree. Starting from it is possible to iterate
         over all tree items using GetNextItem().
 
         It is also possible to iterate over just the children of the given item
