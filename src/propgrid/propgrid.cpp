@@ -2129,8 +2129,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     wxBrush capbgbrush(m_colCapBack,wxBRUSHSTYLE_SOLID);
     wxPen linepen(m_colLine,1,wxPENSTYLE_SOLID);
 
-    wxColour selBackCol = isPgEnabled ? m_colSelBack : m_colMargin;
-
     // pen that has same colour as text
     wxPen outlinepen(m_colPropFore,1,wxPENSTYLE_SOLID);
 
@@ -2294,20 +2292,20 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 renderFlags |= wxPGCellRenderer::DontUseCellFgCol |
                                wxPGCellRenderer::DontUseCellBgCol;
 
-                if ( reallyFocused && p == firstSelected )
+                if ( reallyFocused )
                 {
-                    rowFgCol = m_colSelFore;
-                    rowBgCol = selBackCol;
+                    rowFgCol = (p == firstSelected) ? m_colSelFore : m_colPropFore;
+                    rowBgCol = m_colSelBack;
                 }
                 else if ( isPgEnabled )
                 {
                     rowFgCol = m_colPropFore;
-                    rowBgCol = p == firstSelected ? m_colMargin : selBackCol;
+                    rowBgCol = m_colMargin;
                 }
                 else
                 {
                     rowFgCol = m_colDisPropFore;
-                    rowBgCol = selBackCol;
+                    rowBgCol = m_colMargin;
                 }
             }
         }
@@ -6040,9 +6038,14 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
         }
 
         // Redraw selected
-        wxPGProperty* selected = GetSelection();
-        if ( selected && (m_iFlags & wxPG_FL_INITIALIZED) )
-            DrawItem( selected );
+        if ( m_iFlags & wxPG_FL_INITIALIZED )
+        {
+            const wxArrayPGProperty& sel = GetSelectedProperties();
+            for ( size_t i = 0; i < sel.size(); i++ )
+            {
+                DrawItem(sel[i]);
+            }
+        }
     }
 }
 
