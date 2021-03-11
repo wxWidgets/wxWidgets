@@ -973,10 +973,13 @@ void WidgetsFrame::OnSetVariant(wxCommandEvent& event)
     CurrentPage()->Layout();
 }
 
-void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent& event)
+void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent&)
 {
-    WidgetsPage::GetAttrs().m_dir = event.IsChecked() ? wxLayout_RightToLeft
-                                       : wxLayout_LeftToRight;
+    wxLayoutDirection dir = WidgetsPage::GetAttrs().m_dir;
+    if (dir == wxLayout_Default)
+        dir = GetLayoutDirection();
+    WidgetsPage::GetAttrs().m_dir =
+        (dir == wxLayout_LeftToRight) ? wxLayout_RightToLeft : wxLayout_LeftToRight;
 
     CurrentPage()->SetUpWidget();
 }
@@ -1354,7 +1357,8 @@ void WidgetsPage::SetUpWidget()
             (*it)->SetBackgroundColour(GetAttrs().m_colBg);
         }
 
-        (*it)->SetLayoutDirection(GetAttrs().m_dir);
+        if (GetAttrs().m_dir != wxLayout_Default)
+            (*it)->SetLayoutDirection(GetAttrs().m_dir);
         (*it)->Enable(GetAttrs().m_enabled);
         (*it)->Show(GetAttrs().m_show);
 
