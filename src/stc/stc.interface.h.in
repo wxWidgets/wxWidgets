@@ -1065,7 +1065,7 @@ public:
 
     @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
 
-    - Generated when a click over a hotspot has been released.
+    - Generated when a click-over hotspot has been released.
 
     - Valid event functions:
     @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
@@ -1087,7 +1087,7 @@ public:
 
     @c wxEVT_STC_INDICATOR_RELEASE
 
-    - Generated when a click over an indicator has been released.
+    - Generated when a click-over indicator has been released.
 
     - Valid event functions:
     @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
