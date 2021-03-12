@@ -420,6 +420,7 @@ enum
     ID_TESTREPLACE,
     ID_SETCOLUMNS,
     ID_SETVIRTWIDTH,
+    ID_SETPGDISABLED,
     ID_TESTXRC,
     ID_ENABLECOMMONVALUES,
     ID_SELECTSTYLE,
@@ -521,6 +522,7 @@ wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_CATCOLOURS, FormMain::OnCatColours )
     EVT_MENU( ID_SETCOLUMNS, FormMain::OnSetColumns )
     EVT_MENU( ID_SETVIRTWIDTH, FormMain::OnSetVirtualWidth )
+    EVT_MENU( ID_SETPGDISABLED, FormMain::OnSetGridDisabled )
     EVT_MENU( ID_TESTXRC, FormMain::OnTestXRC )
     EVT_MENU( ID_ENABLECOMMONVALUES, FormMain::OnEnableCommonValues )
     EVT_MENU( ID_SELECTSTYLE, FormMain::OnSelectStyle )
@@ -2056,6 +2058,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
         "Renders Boolean values as checkboxes");
     menuTry->Append(ID_SETCOLUMNS, "Set Number of Columns" );
     menuTry->Append(ID_SETVIRTWIDTH, "Set Virtual Width");
+    menuTry->AppendCheckItem(ID_SETPGDISABLED, "Disable Grid");
     menuTry->AppendSeparator();
     menuTry->Append(ID_TESTXRC, "Display XRC sample" );
 
@@ -2935,6 +2938,13 @@ void FormMain::OnSetVirtualWidth(wxCommandEvent& WXUNUSED(evt))
     {
         m_pPropGridManager->GetGrid()->SetVirtualWidth((int)newWidth);
     }
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnSetGridDisabled(wxCommandEvent& evt)
+{
+    m_pPropGridManager->Enable(!evt.IsChecked());
 }
 
 // -----------------------------------------------------------------------
