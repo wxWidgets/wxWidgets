@@ -1457,6 +1457,7 @@ protected:
     virtual void DoThaw() wxOVERRIDE;
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 
 #ifndef wxPG_ICON_WIDTH
     wxBitmap            *m_expandbmp, *m_collbmp;

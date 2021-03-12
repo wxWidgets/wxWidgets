@@ -1185,6 +1185,12 @@ wxSize wxPropertyGrid::DoGetBestSize() const
     return wxSize(width, lineHeight*numLines + 40);
 }
 
+void wxPropertyGrid::DoEnable(bool enable)
+{
+    wxControl::DoEnable(enable);
+    Refresh(false);
+}
+
 // -----------------------------------------------------------------------
 
 void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
