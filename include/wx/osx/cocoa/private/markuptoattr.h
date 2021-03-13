@@ -41,9 +41,7 @@ protected:
         // Apple documentation, attributed strings use "Helvetica 12" font by
         // default which is different from the system "Lucida Grande" font. So
         // we need to explicitly change the font for the entire string.
-        [m_attrString addAttribute:NSFontAttributeName
-                      value:font.OSXGetNSFont()
-                      range:NSMakeRange(0, [m_attrString length])];
+        ApplyFont(font, NSMakeRange(0, [m_attrString length]));
 
         // Now translate the markup tags to corresponding attributes.
         wxMarkupParser parser(*this);
@@ -56,6 +54,27 @@ protected:
     {
         if ( m_attrString )
             [m_attrString release];
+    }
+
+    void ApplyFont(const wxFont& font, const NSRange& range)
+    {
+        [m_attrString addAttribute:NSFontAttributeName
+                      value:font.OSXGetNSFont()
+                      range:range];
+
+        if ( font.GetStrikethrough() )
+        {
+            [m_attrString addAttribute:NSStrikethroughStyleAttributeName
+                                 value:@(NSUnderlineStyleSingle)
+                                 range:range];
+        }
+
+        if ( font.GetUnderlined() )
+        {
+            [m_attrString addAttribute:NSUnderlineStyleAttributeName
+                                 value:@(NSUnderlineStyleSingle)
+                                 range:range];
+        }
     }
 
     // prepare text chunk for display, e.g. strip mnemonics from it
@@ -91,9 +110,7 @@ public:
 
         const NSRange range = NSMakeRange(start, m_pos - start);
 
-        [m_attrString addAttribute:NSFontAttributeName
-                      value:attr.font.OSXGetNSFont()
-                      range:range];
+        ApplyFont(attr.font, range);
 
         if ( attr.foreground.IsOk() )
         {
