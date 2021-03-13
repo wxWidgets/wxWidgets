@@ -314,6 +314,9 @@
 				RelativePath=".\cmdline\cmdlinetest.cpp">
 			</File>
 			<File
+				RelativePath=".\config\config.cpp">
+			</File>
+			<File
 				RelativePath=".\mbconv\convautotest.cpp">
 			</File>
 			<File

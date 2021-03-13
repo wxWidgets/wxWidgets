@@ -478,6 +478,7 @@
     <ClCompile Include="arrays\arrays.cpp" />
     <ClCompile Include="base64\base64.cpp" />
     <ClCompile Include="cmdline\cmdlinetest.cpp" />
+    <ClCompile Include="config\config.cpp" />
     <ClCompile Include="config\fileconf.cpp" />
     <ClCompile Include="config\regconf.cpp" />
     <ClCompile Include="datetime\datetimetest.cpp" />

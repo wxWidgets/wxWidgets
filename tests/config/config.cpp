@@ -6,8 +6,9 @@
 // Copyright:   (c) 2007 Marcin Wojdyr
 ///////////////////////////////////////////////////////////////////////////////
 
-// NOTE: this test is compiled in test_gui because it uses wxColour for
-//       its testing purpose.
+// NOTE: this test is compiled both as part of the non-GUI test and test_gui
+//       because it can only use wxColour in the latter.
+//
 // See also tests/config/fileconf.cpp for wxFileConfig specific tests and
 // tests/config/regconf.cpp for wxRegConfig specific tests.
 
@@ -25,8 +26,17 @@
 #endif // WX_PRECOMP
 
 #include "wx/config.h"
-#include "wx/colour.h"
 #include "wx/scopedptr.h"
+
+// Tests using wxColour can only be done when using GUI library and they
+// require template functions that are not supported by some ancient compilers.
+#if wxUSE_GUI && defined(wxHAS_CONFIG_TEMPLATE_RW)
+    #define TEST_WXCOLOUR
+#endif
+
+#ifdef TEST_WXCOLOUR
+    #include "wx/colour.h"
+#endif
 
 // --------------------------------------------------------------------------
 // the tests
@@ -54,9 +64,9 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
     config->Write("ull", uval64);
 
     config->Write("size", size_t(UINT_MAX));
-#ifdef wxHAS_CONFIG_TEMPLATE_RW
+#ifdef TEST_WXCOLOUR
     config->Write("color1", wxColour(11,22,33,44));
-#endif // wxHAS_CONFIG_TEMPLATE_RW
+#endif // TEST_WXCOLOUR
     config->Flush();
 
     config.reset(new wxConfig(app, vendor, "", "",
@@ -115,14 +125,14 @@ TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
     CHECK( config->Read("size", &size) );
     CHECK( size == UINT_MAX );
 
-#ifdef wxHAS_CONFIG_TEMPLATE_RW
+#ifdef TEST_WXCOLOUR
     wxColour color1;
     r = config->Read("color1", &color1);
     CHECK( r );
     CHECK( color1 == wxColour(11,22,33,44) );
 
     CHECK( config->ReadObject("color1", wxNullColour) == color1 );
-#endif // wxHAS_CONFIG_TEMPLATE_RW
+#endif // TEST_WXCOLOUR
 
     config->DeleteAll();
 }
@@ -174,12 +184,12 @@ size_t ReadValues(const wxConfig& config, bool has_values)
     CHECK( r == has_values );
     read++;
 
-#ifdef wxHAS_CONFIG_TEMPLATE_RW
+#ifdef TEST_WXCOLOUR
     wxColour color1;
     r = config.Read("color1", &color1, wxColour(11,22,33,44));
     CHECK( r == has_values );
     read++;
-#endif // wxHAS_CONFIG_TEMPLATE_RW
+#endif // TEST_WXCOLOUR
 
     return read;
 }

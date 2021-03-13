@@ -38,6 +38,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_arrays.o \
 	$(OBJS)\test_base64.o \
 	$(OBJS)\test_cmdlinetest.o \
+	$(OBJS)\test_config.o \
 	$(OBJS)\test_fileconf.o \
 	$(OBJS)\test_regconf.o \
 	$(OBJS)\test_datetimetest.o \
@@ -588,6 +589,9 @@ $(OBJS)\test_base64.o: ./base64/base64.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_cmdlinetest.o: ./cmdline/cmdlinetest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_config.o: ./config/config.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_fileconf.o: ./config/fileconf.cpp
