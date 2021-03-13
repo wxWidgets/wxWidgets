@@ -5517,12 +5517,12 @@ public:
     int GetIndicatorValue() const;
 
     /**
-        Turn a indicator on over a range.
+        Turn an indicator on over a range.
     */
     void IndicatorFillRange(int start, int lengthFill);
 
     /**
-        Turn a indicator off over a range.
+        Turn an indicator off over a range.
     */
     void IndicatorClearRange(int start, int lengthClear);
 
@@ -8124,7 +8124,7 @@ public:
 
     @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
 
-    - Generated when a click over a hotspot has been released.
+    - Generated when a click-over hotspot has been released.
 
     - Valid event functions:
     @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
@@ -8146,7 +8146,7 @@ public:
 
     @c wxEVT_STC_INDICATOR_RELEASE
 
-    - Generated when a click over a indicator has been released.
+    - Generated when a click over an indicator has been released.
 
     - Valid event functions:
     @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,

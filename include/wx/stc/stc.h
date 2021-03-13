@@ -4584,10 +4584,10 @@ public:
     // Get the current indicator value
     int GetIndicatorValue() const;
 
-    // Turn a indicator on over a range.
+    // Turn an indicator on over a range.
     void IndicatorFillRange(int start, int lengthFill);
 
-    // Turn a indicator off over a range.
+    // Turn an indicator off over a range.
     void IndicatorClearRange(int start, int lengthClear);
 
     // Are any indicators present at pos?

@@ -3734,13 +3734,13 @@ int wxStyledTextCtrl::GetIndicatorValue() const
     return SendMsg(SCI_GETINDICATORVALUE, 0, 0);
 }
 
-// Turn a indicator on over a range.
+// Turn an indicator on over a range.
 void wxStyledTextCtrl::IndicatorFillRange(int start, int lengthFill)
 {
     SendMsg(SCI_INDICATORFILLRANGE, start, lengthFill);
 }
 
-// Turn a indicator off over a range.
+// Turn an indicator off over a range.
 void wxStyledTextCtrl::IndicatorClearRange(int start, int lengthClear)
 {
     SendMsg(SCI_INDICATORCLEARRANGE, start, lengthClear);

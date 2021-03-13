@@ -2150,10 +2150,10 @@ set void SetIndicatorValue=2502(int value,)
 # Get the current indicator value
 get int GetIndicatorValue=2503(,)
 
-# Turn a indicator on over a range.
+# Turn an indicator on over a range.
 fun void IndicatorFillRange=2504(position start, int lengthFill)
 
-# Turn a indicator off over a range.
+# Turn an indicator off over a range.
 fun void IndicatorClearRange=2505(position start, int lengthClear)
 
 # Are any indicators present at pos?
