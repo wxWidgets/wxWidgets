@@ -582,7 +582,7 @@ int wxStyledTextCtrl::GetIMEInteraction() const
     return SendMsg(SCI_GETIMEINTERACTION, 0, 0);
 }
 
-// Choose to display the the IME in a winow or inline.
+// Choose to display the IME in a winow or inline.
 void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction)
 {
     SendMsg(SCI_SETIMEINTERACTION, imeInteraction, 0);
@@ -1320,7 +1320,7 @@ void wxStyledTextCtrl::StyleSetChangeable(int style, bool changeable)
     SendMsg(SCI_STYLESETCHANGEABLE, style, changeable);
 }
 
-// Display a auto-completion list.
+// Display an auto-completion list.
 // The lengthEntered parameter indicates how many characters before
 // the caret should be used to provide context.
 void wxStyledTextCtrl::AutoCompShow(int lengthEntered, const wxString& itemList)
@@ -3734,13 +3734,13 @@ int wxStyledTextCtrl::GetIndicatorValue() const
     return SendMsg(SCI_GETINDICATORVALUE, 0, 0);
 }
 
-// Turn a indicator on over a range.
+// Turn an indicator on over a range.
 void wxStyledTextCtrl::IndicatorFillRange(int start, int lengthFill)
 {
     SendMsg(SCI_INDICATORFILLRANGE, start, lengthFill);
 }
 
-// Turn a indicator off over a range.
+// Turn an indicator off over a range.
 void wxStyledTextCtrl::IndicatorClearRange(int start, int lengthClear)
 {
     SendMsg(SCI_INDICATORCLEARRANGE, start, lengthClear);

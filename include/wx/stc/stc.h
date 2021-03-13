@@ -3056,7 +3056,7 @@ public:
     // Is the IME displayed in a window or inline?
     int GetIMEInteraction() const;
 
-    // Choose to display the the IME in a winow or inline.
+    // Choose to display the IME in a winow or inline.
     void SetIMEInteraction(int imeInteraction);
 
     // Set the symbol used for a particular marker number,
@@ -3377,7 +3377,7 @@ public:
     // Experimental feature, currently buggy.
     void StyleSetChangeable(int style, bool changeable);
 
-    // Display a auto-completion list.
+    // Display an auto-completion list.
     // The lengthEntered parameter indicates how many characters before
     // the caret should be used to provide context.
     void AutoCompShow(int lengthEntered, const wxString& itemList);
@@ -4584,10 +4584,10 @@ public:
     // Get the current indicator value
     int GetIndicatorValue() const;
 
-    // Turn a indicator on over a range.
+    // Turn an indicator on over a range.
     void IndicatorFillRange(int start, int lengthFill);
 
-    // Turn a indicator off over a range.
+    // Turn an indicator off over a range.
     void IndicatorClearRange(int start, int lengthClear);
 
     // Are any indicators present at pos?
