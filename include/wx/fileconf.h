@@ -196,12 +196,18 @@ public:
 protected:
   virtual bool DoReadString(const wxString& key, wxString *pStr) const wxOVERRIDE;
   virtual bool DoReadLong(const wxString& key, long *pl) const wxOVERRIDE;
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+  virtual bool DoReadLongLong(const wxString& key, wxLongLong_t *pll) const wxOVERRIDE;
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 #if wxUSE_BASE64
   virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const wxOVERRIDE;
 #endif // wxUSE_BASE64
 
   virtual bool DoWriteString(const wxString& key, const wxString& szValue) wxOVERRIDE;
   virtual bool DoWriteLong(const wxString& key, long lValue) wxOVERRIDE;
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+  virtual bool DoWriteLongLong(const wxString& key, wxLongLong_t value) wxOVERRIDE;
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 #if wxUSE_BASE64
   virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) wxOVERRIDE;
 #endif // wxUSE_BASE64

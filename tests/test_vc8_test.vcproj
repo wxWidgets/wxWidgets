@@ -855,6 +855,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\config\config.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\mbconv\convautotest.cpp"
 				>
 			</File>

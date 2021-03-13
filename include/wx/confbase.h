@@ -186,6 +186,15 @@ public:
   bool Read(const wxString& key, bool* val) const;
   bool Read(const wxString& key, bool* val, bool defVal) const;
 
+    // read a 64-bit number when long is 32 bits
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+  bool Read(const wxString& key, wxLongLong_t *pl) const;
+  bool Read(const wxString& key, wxLongLong_t *pl, wxLongLong_t defVal) const;
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+  bool Read(const wxString& key, size_t* val) const;
+  bool Read(const wxString& key, size_t* val, size_t defVal) const;
+
 #if wxUSE_BASE64
     // read a binary data block
   bool Read(const wxString& key, wxMemoryBuffer* data) const
@@ -234,6 +243,9 @@ public:
 
   long ReadLong(const wxString& key, long defVal) const
     { long l; (void)Read(key, &l, defVal); return l; }
+
+  wxLongLong_t ReadLongLong(const wxString& key, wxLongLong_t defVal) const
+    { wxLongLong_t ll; (void)Read(key, &ll, defVal); return ll; }
 
   double ReadDouble(const wxString& key, double defVal) const
     { double d; (void)Read(key, &d, defVal); return d; }
@@ -303,6 +315,14 @@ public:
 
   bool Write(const wxString& key, unsigned long value)
     { return DoWriteLong(key, value); }
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+  bool Write(const wxString& key, wxLongLong_t value)
+    { return DoWriteLongLong(key, value); }
+
+  bool Write(const wxString& key, wxULongLong_t value)
+    { return DoWriteLongLong(key, value); }
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
   bool Write(const wxString& key, float value)
     { return DoWriteDouble(key, double(value)); }
@@ -374,6 +394,9 @@ protected:
   // do read/write the values of different types
   virtual bool DoReadString(const wxString& key, wxString *pStr) const = 0;
   virtual bool DoReadLong(const wxString& key, long *pl) const = 0;
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+  virtual bool DoReadLongLong(const wxString& key, wxLongLong_t *pll) const = 0;
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
   virtual bool DoReadDouble(const wxString& key, double* val) const;
   virtual bool DoReadBool(const wxString& key, bool* val) const;
 #if wxUSE_BASE64
@@ -382,6 +405,9 @@ protected:
 
   virtual bool DoWriteString(const wxString& key, const wxString& value) = 0;
   virtual bool DoWriteLong(const wxString& key, long value) = 0;
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+  virtual bool DoWriteLongLong(const wxString& key, wxLongLong_t value) = 0;
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
   virtual bool DoWriteDouble(const wxString& key, double value);
   virtual bool DoWriteBool(const wxString& key, bool value);
 #if wxUSE_BASE64

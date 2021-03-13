@@ -913,6 +913,54 @@ bool wxRegKey::QueryValue(const wxString& szValue, long *plValue) const
     return false;
 }
 
+bool wxRegKey::SetValue64(const wxString& szValue, wxLongLong_t llValue)
+{
+  if ( CONST_CAST Open() ) {
+    m_dwLastError = RegSetValueEx((HKEY) m_hKey, RegValueStr(szValue),
+                                  wxRESERVED_PARAM, REG_QWORD,
+                                  (RegString)&llValue, sizeof(llValue));
+    if ( m_dwLastError == ERROR_SUCCESS )
+      return true;
+  }
+
+  wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
+                GetFullName(this, szValue));
+  return false;
+}
+
+bool wxRegKey::QueryValue64(const wxString& szValue, wxLongLong_t *pllValue) const
+{
+  if ( CONST_CAST Open(Read) ) {
+    DWORD dwType, dwSize = sizeof(wxLongLong_t); // QWORD doesn't exist.
+    RegString pBuf = (RegString)pllValue;
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, RegValueStr(szValue),
+                                    wxRESERVED_PARAM,
+                                    &dwType, pBuf, &dwSize);
+    if ( m_dwLastError != ERROR_SUCCESS ) {
+      wxLogSysError(m_dwLastError, _("Can't read value of key '%s'"),
+                    GetName().c_str());
+      return false;
+    }
+
+    // check that we read the value of right type
+    switch ( dwType )
+    {
+      case REG_DWORD_LITTLE_ENDIAN:
+      case REG_DWORD_BIG_ENDIAN:
+      case REG_QWORD:
+        break;
+
+      default:
+        wxLogError(_("Registry value \"%s\" is not numeric (but of type %s)"),
+          GetFullName(this, szValue), GetTypeString(dwType));
+        return false;
+    }
+
+    return true;
+  }
+  else
+    return false;
+}
 bool wxRegKey::SetValue(const wxString& szValue, const wxMemoryBuffer& buffer)
 {
   if ( CONST_CAST Open() ) {
@@ -1175,6 +1223,7 @@ bool wxRegKey::IsNumericValue(const wxString& szValue) const
         case Type_Dword:
         /* case Type_Dword_little_endian: == Type_Dword */
         case Type_Dword_big_endian:
+        case Type_Qword:
             return true;
 
         default:

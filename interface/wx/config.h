@@ -550,6 +550,51 @@ public:
     bool Read(const wxString& key, long* l,
               long defaultVal) const;
     /**
+        Reads a 64-bit long long value, returning @true if the value was found.
+        If the value was not found, @a ll is not changed.
+
+        @since 3.1.5
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
+    bool Read(const wxString& key, wxLongLong_t* ll) const;
+    /**
+        Reads a 64-bit long long value, returning @true if the value was found.
+        If the value was not found, @a defaultVal is used instead.
+
+        @since 3.1.5
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
+    bool Read(const wxString& key, wxLongLong_t* ll,
+    /**
+        Reads a size_t value, returning @true if the value was found.
+        If the value was not found, @a value is not changed.
+
+        @since 3.1.5
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
+    bool Read(const wxString& key, size_t* value) const;
+    /**
+        Reads a size_t value, returning @true if the value was found.
+        If the value was not found, @a defaultVal is used instead.
+
+        @since 3.1.5
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
+    bool Read(const wxString& key, size_t* value,
+              size_t defaultVal) const;
+    /**
         Reads a double value, returning @true if the value was found. If the
         value was not found, @a d is not changed.
 
@@ -663,6 +708,14 @@ public:
     long ReadLong(const wxString& key, long defaultVal) const;
 
     /**
+        Reads a 64-bit long long value from the key and returns it. @a
+        defaultVal is returned if the key is not found.
+
+        @since 3.1.5
+    */
+    wxLongLong_t ReadLongLong(const wxString& key, wxLongLong_t defaultVal) const;
+
+    /**
         Reads a value of type T (for which the function wxFromString() must be
         defined) from the key and returns it. @a defaultVal is returned if the
         key is not found.
@@ -678,6 +731,13 @@ public:
         Writes the long value to the config file and returns @true on success.
     */
     bool Write(const wxString& key, long value);
+    /**
+        Writes the 64-bit long long value to the config file and returns @true
+        on success.
+
+        @since 3.1.5
+    */
+    bool Write(const wxString& key, wxLongLong_t value);
     /**
         Writes the double value to the config file and returns @true on
         success.

@@ -120,7 +120,7 @@ wxConfigBase *wxConfigBase::Create()
         if ( !DoRead##name(key, val) )                                      \
             return false;                                                   \
                                                                             \
-        *val = extra(*val);                                                 \
+        *val = (extra)(*val);                                               \
                                                                             \
         return true;                                                        \
     }                                                                       \
@@ -142,7 +142,7 @@ wxConfigBase *wxConfigBase::Create()
             *val = defVal;                                                  \
         }                                                                   \
                                                                             \
-        *val = extra(*val);                                                 \
+        *val = (extra)(*val);                                               \
                                                                             \
         return read;                                                        \
     }
@@ -150,6 +150,9 @@ wxConfigBase *wxConfigBase::Create()
 
 IMPLEMENT_READ_FOR_TYPE(String, wxString, const wxString&, ExpandEnvVars)
 IMPLEMENT_READ_FOR_TYPE(Long, long, long, long)
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+IMPLEMENT_READ_FOR_TYPE(LongLong, wxLongLong_t, wxLongLong_t, wxLongLong_t)
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 IMPLEMENT_READ_FOR_TYPE(Double, double, double, double)
 IMPLEMENT_READ_FOR_TYPE(Bool, bool, bool, bool)
 
@@ -172,6 +175,40 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
     wxASSERT_MSG( l < INT_MAX, wxT("int overflow in wxConfig::Read") );
     *pi = (int)l;
     return r;
+}
+
+// size_t is stored either as long or long long (Win64)
+#if SIZEOF_SIZE_T == SIZEOF_LONG
+    typedef long SizeSameSizeAsSizeT;
+#elif SIZEOF_SIZE_T == SIZEOF_LONG_LONG
+    typedef wxLongLong_t SizeSameSizeAsSizeT;
+#else
+    #error Unexpected sizeof(size_t)
+#endif
+
+bool wxConfigBase::Read(const wxString& key, size_t* val) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    SizeSameSizeAsSizeT tmp;
+    if ( !Read(key, &tmp) )
+        return false;
+
+    *val = static_cast<size_t>(tmp);
+    return true;
+}
+
+bool wxConfigBase::Read(const wxString& key, size_t* val, size_t defVal) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    if ( !Read(key, val) )
+    {
+        *val = defVal;
+        return false;
+    }
+
+    return true;
 }
 
 // Read floats as doubles then just type cast it down.

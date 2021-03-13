@@ -68,6 +68,7 @@ TEST_OBJECTS =  \
 	test_arrays.o \
 	test_base64.o \
 	test_cmdlinetest.o \
+	test_config.o \
 	test_fileconf.o \
 	test_regconf.o \
 	test_datetimetest.o \
@@ -610,6 +611,9 @@ test_base64.o: $(srcdir)/base64/base64.cpp $(TEST_ODEP)
 
 test_cmdlinetest.o: $(srcdir)/cmdline/cmdlinetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/cmdline/cmdlinetest.cpp
+
+test_config.o: $(srcdir)/config/config.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/config/config.cpp
 
 test_fileconf.o: $(srcdir)/config/fileconf.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/config/fileconf.cpp

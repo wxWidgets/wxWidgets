@@ -351,6 +351,14 @@ public:
     bool QueryValue(const wxString& szValue, long* plValue) const;
 
     /**
+        Retrieves the 64-bit value. Returns @true if successful.
+        An empty @a szValue queries the default/unnamed key value.
+
+        @since 3.1.5
+    */
+    bool QueryValue64(const wxString& szValue, wxLongLong_t* plValue) const;
+
+    /**
         Retrieves the binary structure. Returns @true if successful.
         An empty @a szValue queries the default/unnamed key value.
     */
@@ -397,6 +405,17 @@ public:
         An empty @a szValue sets the default/unnamed key value.
     */
     bool SetValue(const wxString& szValue, long lValue);
+
+    /**
+        Sets a 64-bit value.
+
+        This function creates or modifies a field of @c QWORD type in the
+        registry.
+
+        @since 3.1.5
+     */
+    bool SetValue64(const wxString& szValue, wxLongLong_t lValue);
+
     /**
         Sets the given @a szValue which must be string. If the value doesn't
         exist, it is created. Returns @true if successful.
