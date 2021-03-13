@@ -241,6 +241,10 @@ protected:
     // was the wx event for the current native key down event sent
     bool WasKeyDownSent() const;
 
+
+    // Return the view to apply the font/colour to.
+    NSView* GetViewWithText() const;
+
     NSEvent* m_lastKeyDownEvent;
     bool m_lastKeyDownWXSent;
 #if !wxOSX_USE_NATIVE_FLIPPED
