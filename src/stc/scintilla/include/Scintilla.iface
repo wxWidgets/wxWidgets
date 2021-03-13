@@ -263,7 +263,7 @@ val SC_IME_INLINE=1
 # Is the IME displayed in a window or inline?
 get int GetIMEInteraction=2678(,)
 
-# Choose to display the the IME in a winow or inline.
+# Choose to display the IME in a winow or inline.
 set void SetIMEInteraction=2679(int imeInteraction,)
 
 enu MarkerSymbol=SC_MARK_
@@ -736,7 +736,7 @@ set void SetCaretLineBack=2098(colour back,)
 # Experimental feature, currently buggy.
 set void StyleSetChangeable=2099(int style, bool changeable)
 
-# Display a auto-completion list.
+# Display an auto-completion list.
 # The lengthEntered parameter indicates how many characters before
 # the caret should be used to provide context.
 fun void AutoCShow=2100(int lengthEntered, string itemList)

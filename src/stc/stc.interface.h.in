@@ -1076,7 +1076,7 @@ public:
 
     @c wxEVT_STC_INDICATOR_CLICK
 
-    - Generated when a indicator has been clicked.
+    - Generated when an indicator has been clicked.
 
     - Valid event functions:
     @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
