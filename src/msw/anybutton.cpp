@@ -341,6 +341,15 @@ private:
 
 #endif // wxUSE_UXTHEME
 
+// Right- and bottom-aligned images stored in the image list
+// (BUTTON_IMAGELIST) for some reasons are not drawn with proper
+// margins so for such alignments we need to switch to owner-drawn
+// mode a do the job on our own.
+static inline bool NeedsOwnerDrawnForImageLayout(wxDirection dir, int margH, int margV)
+{
+    return (dir == wxRIGHT && margH != 0) || (dir == wxBOTTOM && margV != 0);
+}
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -751,7 +760,10 @@ wxSize wxAnyButton::DoGetBitmapMargins() const
 void wxAnyButton::DoSetBitmapMargins(wxCoord x, wxCoord y)
 {
     wxCHECK_RET( m_imageData, "SetBitmap() must be called first" );
-
+    if ( NeedsOwnerDrawnForImageLayout(m_imageData->GetBitmapPosition(), x, y) )
+    {
+        MakeOwnerDrawn();
+    }
     m_imageData->SetBitmapMargins(x, y);
     InvalidateBestSize();
 }
@@ -759,7 +771,14 @@ void wxAnyButton::DoSetBitmapMargins(wxCoord x, wxCoord y)
 void wxAnyButton::DoSetBitmapPosition(wxDirection dir)
 {
     if ( m_imageData )
+    {
+        wxSize margs = m_imageData->GetBitmapMargins();
+        if ( NeedsOwnerDrawnForImageLayout(dir, margs.x, margs.y) )
+        {
+            MakeOwnerDrawn();
+        }
         m_imageData->SetBitmapPosition(dir);
+    }
     InvalidateBestSize();
 }
 
