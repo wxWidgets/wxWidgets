@@ -256,13 +256,9 @@ public:
 
     virtual void SetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE
     {
-        RECT& margin = m_data.margin;
-        ::SetRect(&margin, x, y, x, y);
+        ::SetRect(&m_data.margin, x, y, x, y);
 
-        if ( !::SendMessage(m_hwndBtn, BCM_SETTEXTMARGIN, 0, (LPARAM)&margin) )
-        {
-            wxLogDebug("SendMessage(BCM_SETTEXTMARGIN) failed");
-        }
+        UpdateImageInfo();
     }
 
     virtual wxDirection GetBitmapPosition() const wxOVERRIDE
