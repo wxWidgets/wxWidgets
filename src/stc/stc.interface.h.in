@@ -1087,7 +1087,7 @@ public:
 
     @c wxEVT_STC_INDICATOR_RELEASE
 
-    - Generated when a click-over indicator has been released.
+    - Generated when a click over an indicator has been released.
 
     - Valid event functions:
     @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
