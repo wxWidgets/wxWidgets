@@ -671,12 +671,12 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
                       "Must set normal bitmap with the new size first" );
 
 #if wxUSE_UXTHEME
-        if ( ShowsLabel() && wxUxThemeIsActive() )
+        // We can't change the size of the images stored in wxImageList
+        // in wxXPButtonImageData::m_iml so force recreating it below but
+        // keep the current data to copy its values into the new one.
+        oldData = dynamic_cast<wxXPButtonImageData*>(m_imageData);
+        if ( oldData )
         {
-            // We can't change the size of the images stored in wxImageList
-            // in wxXPButtonImageData::m_iml so force recreating it below but
-            // keep the current data to copy its values into the new one.
-            oldData = static_cast<wxXPButtonImageData *>(m_imageData);
             m_imageData = NULL;
         }
 #endif // wxUSE_UXTHEME
@@ -1162,6 +1162,24 @@ void wxAnyButton::MakeOwnerDrawn()
 {
     if ( !IsOwnerDrawn() )
     {
+        // We need to use owner-drawn specific data structure so we have
+        // to create it and copy the data from native data structure,
+        // if necessary.
+        if ( m_imageData && dynamic_cast<wxODButtonImageData*>(m_imageData) == NULL )
+        {
+            wxODButtonImageData* newData = new wxODButtonImageData(this, m_imageData->GetBitmap(State_Normal));
+            for ( int n = 0; n < State_Max; n++ )
+            {
+                State st = static_cast<State>(n);
+                newData->SetBitmap(m_imageData->GetBitmap(st), st);
+            }
+            newData->SetBitmapPosition(m_imageData->GetBitmapPosition());
+            wxSize margs = m_imageData->GetBitmapMargins();
+            newData->SetBitmapMargins(margs.x, margs.y);
+
+            delete m_imageData;
+            m_imageData = newData;
+        }
         // make it so
         wxMSWWinStyleUpdater(GetHwnd()).TurnOff(BS_TYPEMASK).TurnOn(BS_OWNERDRAW);
     }
