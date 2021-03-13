@@ -305,32 +305,34 @@ public:
     This control may be used to render web (HTML / CSS / javascript) documents.
     It is designed to allow the creation of multiple backends for each port,
     although currently just one is available. It differs from wxHtmlWindow in
-    that each backend is actually a full rendering engine, Trident on MSW and
-    Webkit on macOS and GTK. This allows the correct viewing of complex pages with
+    that each backend is actually a full rendering engine, Internet Explorer or Edge on MSW and
+    WebKit on macOS and GTK. This allows the correct viewing of complex pages with
     javascript and css.
 
     @section descriptions Backend Descriptions
 
-    @par wxWEBVIEW_BACKEND_IE (MSW)
-    @anchor wxWEBVIEW_BACKEND_IE
+    @subsection wxWEBVIEW_BACKEND_IE wxWEBVIEW_BACKEND_IE (MSW)
 
-    The IE backend uses Microsoft's Trident rendering engine, specifically the
-    version used by the locally installed copy of Internet Explorer. As such it
-    is only available for the MSW port. By default recent versions of the
+    The IE backend uses Microsoft's
     <a href="http://msdn.microsoft.com/en-us/library/aa752085%28v=VS.85%29.aspx">WebBrowser</a>
-    control, which this backend uses, emulate Internet Explorer 7. This can be
-    changed with a registry setting by wxWebView::MSWSetEmulationLevel() see
+    control, which depends the locally installed version of Internet Explorer.
+    By default this backend emulates Internet Explorer 7. This can be
+    changed with a registry setting by wxWebViewIE::MSWSetEmulationLevel() see
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
-    this</a> article for more information. This backend has full support for
-    custom schemes and virtual file systems.
+    this</a> article for more information.
 
-    @par wxWEBVIEW_BACKEND_EDGE (MSW)
+    This backend has full support for custom schemes and virtual file systems.
 
-    The Edge (Chromium) backend uses Microsoft's
+    @note If you plan to display any modern web content you should consider using @ref wxWEBVIEW_BACKEND_EDGE,
+          as Internet Explorer is not supported anymore by Microsoft.
+
+    @subsection wxWEBVIEW_BACKEND_EDGE wxWEBVIEW_BACKEND_EDGE (MSW)
+
+    The Edge backend uses Microsoft's
     <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
     It is available for Windows 7 and newer.
-    The following features are currently unsupported with this backend:
-    virtual filesystems, custom urls.
+
+    This backend does not support custom schemes and virtual file systems.
 
     This backend is not enabled by default, to build it follow these steps:
     - Visual Studio 2015 or newer, or GCC/Clang with c++11 is required
@@ -352,7 +354,7 @@ public:
     - Make sure to add a note about using the WebView2 SDK to your application
       documentation, as required by its licence
 
-    If enabled and available at runtime edge will be selected as the default
+    If enabled and available at runtime Edge will be selected as the default
     backend. If you require the IE backend use @c wxWEBVIEW_BACKEND_IE when
     using wxWebView::New().
 
@@ -360,30 +362,36 @@ public:
     <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution#fixed-version-distribution-mode">
     fixed version</a> of the WebView2 runtime you must use
     wxWebViewEdge::MSWSetBrowserExecutableDir() to specify its usage before
-    using the edge backend.
+    using the Edge backend.
 
-    @par wxWEBVIEW_WEBKIT (GTK)
+    @subsection wxWEBVIEW_WEBKIT wxWEBVIEW_WEBKIT (GTK)
 
     Under GTK the WebKit backend uses
     <a href="http://webkitgtk.org/">WebKitGTK+</a>. The current minimum version
     required is 1.3.1 which ships by default with Ubuntu Natty and Debian
-    Wheezy and has the package name libwebkitgtk-dev. Custom schemes and
+    Wheezy and has the package name libwebkitgtk-dev.
+
+    Custom schemes and
     virtual files systems are supported under this backend, however embedded
     resources such as images and stylesheets are currently loaded using the
     data:// scheme.
 
-    @par wxWEBVIEW_WEBKIT2 (GTK3)
+    @subsection wxWEBVIEW_WEBKIT2 wxWEBVIEW_WEBKIT2 (GTK3)
 
     Under GTK3 the WebKit2 version of <a href="http://webkitgtk.org/">WebKitGTK+</a>
     is used. In Ubuntu the required package name is libwebkit2gtk-4.0-dev
-    and under Fedora it is webkitgtk4-devel. All wxWEBVIEW_WEBKIT features are
+    and under Fedora it is webkitgtk4-devel.
+
+    All features are
     supported except for clearing and enabling / disabling the history.
 
-    @par wxWEBVIEW_WEBKIT (macOS)
+    @subsection wxWEBVIEW_WEBKIT_MACOS wxWEBVIEW_WEBKIT (macOS)
 
     The macOS WebKit backend uses Apple's
     <a href="https://developer.apple.com/documentation/webkit/wkwebview">WKWebView</a>
-    class. This backend has full support for custom schemes and virtual file
+    class.
+
+    This backend has full support for custom schemes and virtual file
     systems on macOS 10.13+. In order to use handlers two-step creation has to be used
     and RegisterHandler() has to be called before Create().
 
@@ -450,7 +458,7 @@ public:
     @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
        Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
-       Currently only implemented for the edge and WebKit2GTK+ backend
+       Not implemented for the IE backend
        and is only available in wxWidgets 3.1.5 or later.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
@@ -628,7 +636,7 @@ public:
     /**
         Reload the currently displayed URL.
         @param flags A bit array that may optionally contain reload options.
-        @note The flags are ignored by the edge backend.
+        @note The flags are ignored by the Edge backend.
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
@@ -637,7 +645,7 @@ public:
         to edit the page even if the @c contenteditable attribute is not set.
         The exact capabilities vary with the backend being used.
 
-        @note This is not implemented on macOS.
+        @note This is not implemented for macOS and the Edge backend.
     */
     virtual void SetEditable(bool enable = true) = 0;
 
@@ -648,7 +656,7 @@ public:
                     relative paths, for instance.
         @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling SetPage(). The baseURL
-              parameter is not used in this backend and the edge backend.
+              parameter is not used in this backend and the Edge backend.
     */
     virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
 
@@ -759,7 +767,7 @@ public:
 
         @see RemoveScriptMessageHandler()
 
-        @note The Edge (Chromium) backend only supports a single message handler and
+        @note The Edge backend only supports a single message handler and
             the IE backend does not support script message handlers.
 
         @since 3.1.5
@@ -786,7 +794,7 @@ public:
         @return Returns true if the script was added successfully.
 
         @note Please note that this is unsupported by the IE backend and
-            the Edge (Chromium) backend does only support wxWEBVIEW_INJECT_AT_DOCUMENT_START.
+            the Edge backend does only support wxWEBVIEW_INJECT_AT_DOCUMENT_START.
 
         @see RemoveAllUserScripts()
 
@@ -810,22 +818,16 @@ public:
 
     /**
         Returns @true if the current selection can be copied.
-
-        @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanCopy() const;
 
     /**
         Returns @true if the current selection can be cut.
-
-         @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanCut() const;
 
     /**
         Returns @true if data can be pasted.
-
-        @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanPaste() const;
 
@@ -872,8 +874,9 @@ public:
     /**
         Enable or disable access to dev tools for the user.
 
-        This is currently only implemented for the Edge (Chromium) backend and
-        the WebKit2GTK+ backend. Dev tools are disabled by default.
+        Dev tools are disabled by default.
+
+        @note This is not implemented for the IE backend.
 
         @since 3.1.4
     */
@@ -1024,8 +1027,7 @@ public:
               @c wxWEBVIEW_FIND_ENTIRE_WORD or @c wxWEBVIEW_FIND_MATCH_CASE
               are changed, since this will require a new search. To reset the
               search, for example resetting the highlights call the function
-              with an empty search phrase. This always returns @c wxNOT_FOUND
-              on the macOS WebKit backend.
+              with an empty search phrase.
         @since 2.9.5
     */
     virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT);
@@ -1158,6 +1160,29 @@ public:
     static bool MSWSetModernEmulationLevel(bool modernLevel = true);
 };
 
+/**
+    @class wxWebViewEdge
+
+    wxWebView using Edge backend, see @ref wxWEBVIEW_BACKEND_EDGE.
+
+    @onlyfor{wxmsw}
+    @since 3.1.5
+    @library{wxwebview}
+    @category{ctrl,webview}
+    @see wxWebView
+ */
+class wxWebViewEdge : public wxWebView
+{
+public:
+    /**
+        Set path to a fixed version of the WebView2 Edge runtime.
+
+        @param path Path to an extracted fixed version of the WebView2 Edge runtime.
+
+        @since 3.1.5
+    */
+    static void MSWSetBrowserExecutableDir(const wxString& path);
+};
 
 
 /**
@@ -1194,6 +1219,11 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
+       Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
+       the page wants to enter or leave fullscreen. Use GetInt to get the status.
+       Not implemented for the IE backend
+       and is only available in wxWidgets 3.1.5 or later.
     @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
