@@ -3559,13 +3559,19 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font)
 
     if ([targetView respondsToSelector:@selector(setFont:)])
         [targetView setFont: font.OSXGetNSFont()];
+    if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
+        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
+}
+
+void wxWidgetCocoaImpl::SetForegroundColour(const wxColour& col)
+{
+    NSView* const targetView = GetViewWithText();
+
     if ([targetView respondsToSelector:@selector(setTextColor:)])
     {
         wxColor col = GetWXPeer()->GetForegroundColour();
         [targetView setTextColor: col.OSXGetNSColor()];
     }
-    if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
-        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
 }
 
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)

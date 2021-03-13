@@ -101,6 +101,7 @@ public :
 
     virtual void        SetBackgroundColour(const wxColour&) wxOVERRIDE;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
+    virtual void        SetForegroundColour(const wxColour& col) wxOVERRIDE;
 
     virtual void        GetContentArea( int &left, int &top, int &width, int &height ) const wxOVERRIDE;
     virtual void        Move(int x, int y, int width, int height) wxOVERRIDE;
