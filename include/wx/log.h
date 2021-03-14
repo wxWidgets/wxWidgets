@@ -1459,7 +1459,7 @@ inline void wxLogNop() { }
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
 // i.e. without using wxMessageBox() for example because it could crash
-void WXDLLIMPEXP_BASE
+bool WXDLLIMPEXP_BASE
 wxSafeShowMessage(const wxString& title, const wxString& text);
 
 // ----------------------------------------------------------------------------

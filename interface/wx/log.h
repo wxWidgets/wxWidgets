@@ -1268,12 +1268,17 @@ public:
         message string.
     @param text
         The text to show to the user.
+    @return
+        @true If a message box was actually shown or @false if the message was
+        logged to the console because there is no safe to show it currently
+        (the return value is only available since wxWidgets 3.1.5, the function
+        doesn't return anything in the previous versions).
 
     @see wxLogFatalError()
 
     @header{wx/log.h}
 */
-void wxSafeShowMessage(const wxString& title, const wxString& text);
+bool wxSafeShowMessage(const wxString& title, const wxString& text);
 
 /**
     Returns the error code from the last system call. This function uses

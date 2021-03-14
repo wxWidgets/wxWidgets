@@ -180,13 +180,17 @@ private:
 // helper global functions
 // ----------------------------------------------------------------------------
 
-void wxSafeShowMessage(const wxString& title, const wxString& text)
+bool wxSafeShowMessage(const wxString& title, const wxString& text)
 {
     if ( !wxApp::GetValidTraits().SafeMessageBox(text, title) )
     {
         wxFprintf(stderr, wxS("%s: %s\n"), title.c_str(), text.c_str());
         fflush(stderr);
+        return false;
     }
+
+    // Message box actually shown.
+    return true;
 }
 
 // ----------------------------------------------------------------------------
