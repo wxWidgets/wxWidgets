@@ -48,7 +48,6 @@
 		0A2A4D2DC8F63FE1AC0BFAAF /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F2024D29170D3B50A4DFDE11 /* base64.cpp */; };
 		0A406D2D1ADA343891E3664C /* powercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */; };
 		0ADC8DBEE80D36B0BB9B058A /* LexASY.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A82C367B86F83981803D55DB /* LexASY.cxx */; };
-		0AEBA7389E223781A7A257A1 /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2456ED905357B8C1D74D9 /* webkit.mm */; };
 		0B4AF44DC0C439AD83CDC37E /* Indicator.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 4FDE5A962FA234FA83A605AD /* Indicator.cxx */; };
 		0B792C3F31713850818EEFEA /* LexDMAP.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AC62806DE67F33E18C386D4F /* LexDMAP.cxx */; };
 		0B98B6721DEE37A1ADEA382B /* quantize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B890199A37723EFD86C0ADA5 /* quantize.cpp */; };
@@ -1001,7 +1000,6 @@
 		2C904B4BA8273355869812B2 /* clntdata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clntdata.cpp; path = ../../src/common/clntdata.cpp; sourceTree = "<group>"; };
 		2D61240ABD70328BA5789663 /* colourcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = colourcmn.cpp; path = ../../src/common/colourcmn.cpp; sourceTree = "<group>"; };
 		2DBD5DB511C53218B3EF1625 /* helpwnd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpwnd.cpp; path = ../../src/html/helpwnd.cpp; sourceTree = "<group>"; };
-		2DF2456ED905357B8C1D74D9 /* webkit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = ../../src/html/htmlctrl/webkit/webkit.mm; sourceTree = "<group>"; };
 		2E00E14795F23A8392713A26 /* fontutilcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontutilcmn.cpp; path = ../../src/common/fontutilcmn.cpp; sourceTree = "<group>"; };
 		2E24C6F2A04E30EB95598305 /* chm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = chm.cpp; path = ../../src/html/chm.cpp; sourceTree = "<group>"; };
 		2EA275DD7D1138F9AE988E45 /* epolldispatcher.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = epolldispatcher.cpp; path = ../../src/unix/epolldispatcher.cpp; sourceTree = "<group>"; };
@@ -1982,7 +1980,6 @@
 				6C0129D2DB2D3431B66FD9C3 /* textctrl_osx.cpp */,
 				1B7308D9C4BA39F19223C82C /* tglbtn_osx.cpp */,
 				6CD29E47B69D3F3482665E77 /* toolbar_osx.cpp */,
-				2DF2456ED905357B8C1D74D9 /* webkit.mm */,
 				DAAED71A534135A9A61612A6 /* colordlgosx.mm */,
 				38CEA4A3579331EF808B8363 /* fontdlgosx.mm */,
 				8C78A1539462370CAA429508 /* accel.cpp */,
@@ -3034,7 +3031,6 @@
 				EDCA35F1555F3509895CCA69 /* textctrl_osx.cpp in Sources */,
 				664A54F914443110B7BB6928 /* tglbtn_osx.cpp in Sources */,
 				A569A33A2097316D8110C2C1 /* toolbar_osx.cpp in Sources */,
-				0AEBA7389E223781A7A257A1 /* webkit.mm in Sources */,
 				F5FF98C231B33E3EB7902C64 /* colordlgosx.mm in Sources */,
 				2386B575BC3931D2AF86CB33 /* fontdlgosx.mm in Sources */,
 				2EECB3C2F9523D0B95847A7F /* accel.cpp in Sources */,
