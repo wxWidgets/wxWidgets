@@ -49,22 +49,16 @@
 #include <string>
 #include <vector>
 
-using CppUnit::Test;
-using CppUnit::TestCase;
-using CppUnit::TestSuite;
-
 using std::string;
 using std::vector;
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case - an instance represents a single test
 
-class RegExTestCase : public TestCase
+class RegExTestCase
 {
 public:
-    // constructor - create a single testcase
     RegExTestCase(
-        const string& name,
         const char *mode,
         const char *id,
         const char *flags,
@@ -72,22 +66,14 @@ public:
         const char *data,
         const vector<const char *>& expected);
 
-protected:
-    // run this testcase
-    void runTest() wxOVERRIDE;
-
 private:
+    void runTest();
+
     // workers
     wxString Conv(const char *str);
-    void parseFlags(const wxString& flags);
+    bool parseFlags(const wxString& flags);
     void doTest(int flavor);
     static wxString quote(const wxString& arg);
-    const wxChar *convError() const { return wxT("<cannot convert>"); }
-
-    // assertions - adds some information about the test that failed
-    void fail(const wxString& msg) const;
-    void failIf(bool condition, const wxString& msg) const
-        { if (condition) fail(msg); }
 
     // mode, id, flags, pattern, test data, expected results...
     int m_mode;
@@ -108,7 +94,6 @@ private:
 // constructor - throws Exception on failure
 //
 RegExTestCase::RegExTestCase(
-    const string& name,
     const char *mode,
     const char *id,
     const char *flags,
@@ -116,7 +101,6 @@ RegExTestCase::RegExTestCase(
     const char *data,
     const vector<const char *>& expected)
   :
-    TestCase(name),
     m_mode(mode[0]),
     m_id(Conv(id)),
     m_flags(Conv(flags)),
@@ -128,22 +112,13 @@ RegExTestCase::RegExTestCase(
     m_extended(false),
     m_advanced(false)
 {
-    bool badconv = m_pattern == convError() || m_data == convError();
     vector<const char *>::const_iterator it;
 
     for (it = expected.begin(); it != expected.end(); ++it) {
         m_expected.push_back(Conv(*it));
-        badconv = badconv || *m_expected.rbegin() == convError();
     }
 
-    failIf(badconv, wxT("cannot convert to default character encoding"));
-
-    // the flags need further parsing...
-    parseFlags(m_flags);
-
-#ifndef wxHAS_REGEX_ADVANCED
-    failIf(!m_basic && !m_extended, wxT("advanced regexs not available"));
-#endif
+    runTest();
 }
 
 int wxWcscmp(const wchar_t* s1, const wchar_t* s2)
@@ -165,14 +140,16 @@ wxString RegExTestCase::Conv(const char *str)
     const wxWC2WXbuf buf = wxConvCurrent->cWC2WX(wstr);
 
     if (!buf || wxWcscmp(wxConvCurrent->cWX2WC(buf), wstr) != 0)
-        return convError();
+    {
+        FAIL( "Converting string \"" << str << "\" failed" );
+    }
 
     return buf;
 }
 
 // Parse flags
 //
-void RegExTestCase::parseFlags(const wxString& flags)
+bool RegExTestCase::parseFlags(const wxString& flags)
 {
     for ( wxString::const_iterator p = flags.begin(); p != flags.end(); ++p )
     {
@@ -205,16 +182,39 @@ void RegExTestCase::parseFlags(const wxString& flags)
 
             // anything else we must skip the test
             default:
-                fail(wxString::Format(
-                     wxT("requires unsupported flag '%c'"), *p));
+                return false;
         }
     }
+
+    return true;
 }
 
 // Try test for all flavours of expression specified
 //
 void RegExTestCase::runTest()
 {
+    // the flags need further parsing...
+    if (!parseFlags(m_flags)) {
+        // we just have to skip the unsupported flags now
+        return;
+    }
+
+    // Provide more information about the test case if it fails.
+    wxString str;
+    wxArrayString::const_iterator it;
+
+    str << (wxChar)m_mode << wxT(" ") << m_id << wxT(" ") << m_flags << wxT(" ")
+        << quote(m_pattern) << wxT(" ") << quote(m_data);
+
+    for (it = m_expected.begin(); it != m_expected.end(); ++it)
+        str << wxT(" ") << quote(*it);
+
+    if (str.length() > 77)
+        str = str.substr(0, 74) + wxT("...");
+
+    INFO( str );
+
+
     if (m_basic)
         doTest(wxRE_BASIC);
     if (m_extended)
@@ -233,38 +233,39 @@ void RegExTestCase::doTest(int flavor)
 
     // 'e' - test that the pattern fails to compile
     if (m_mode == 'e') {
-        failIf(re.IsValid(), wxT("compile succeeded (should fail)"));
-        return;
+        CHECK( !re.IsValid() );
+    } else {
+        CHECK( re.IsValid() );
     }
-    failIf(!re.IsValid(), wxT("compile failed"));
+
+    if (!re.IsValid())
+        return;
 
     bool matches = re.Matches(m_data, m_matchFlags);
 
     // 'f' or 'p' - test that the pattern does not match
     if (m_mode == 'f' || m_mode == 'p') {
-        failIf(matches, wxT("match succeeded (should fail)"));
-        return;
+        CHECK( !matches );
+    } else {
+        // otherwise 'm' or 'i' - test the pattern does match
+        CHECK( matches );
     }
 
-    // otherwise 'm' or 'i' - test the pattern does match
-    failIf(!matches, wxT("match failed"));
+    if (!matches)
+        return;
 
     if (m_compileFlags & wxRE_NOSUB)
         return;
 
     // check wxRegEx has correctly counted the number of subexpressions
-    wxString msg;
-    msg << wxT("GetMatchCount() == ") << re.GetMatchCount()
-        << wxT(", expected ") << m_expected.size();
-    failIf(m_expected.size() != re.GetMatchCount(), msg);
+    CHECK( m_expected.size() == re.GetMatchCount() );
 
     for (size_t i = 0; i < m_expected.size(); i++) {
         wxString result;
         size_t start, len;
 
-        msg.clear();
-        msg << wxT("wxRegEx::GetMatch failed for match ") << i;
-        failIf(!re.GetMatch(&start, &len, i), msg);
+        INFO( "Match " << i );
+        CHECK( re.GetMatch(&start, &len, i) );
 
         // m - check the match returns the strings given
         if (m_mode == 'm')
@@ -286,33 +287,8 @@ void RegExTestCase::doTest(int flavor)
                 result << start << wxT(" -1");
         }
 
-        msg.clear();
-        msg << wxT("match(") << i << wxT(") == ") << quote(result)
-            << wxT(", expected == ") << quote(m_expected[i]);
-        failIf(result != m_expected[i], msg);
+        CHECK( result == m_expected[i] );
     }
-}
-
-// assertion - adds some information about the test that failed
-//
-void RegExTestCase::fail(const wxString& msg) const
-{
-    wxString str;
-    wxArrayString::const_iterator it;
-
-    str << (wxChar)m_mode << wxT(" ") << m_id << wxT(" ") << m_flags << wxT(" ")
-        << quote(m_pattern) << wxT(" ") << quote(m_data);
-
-    for (it = m_expected.begin(); it != m_expected.end(); ++it)
-        str << wxT(" ") << quote(*it);
-
-    if (str.length() > 77)
-        str = str.substr(0, 74) + wxT("...");
-
-    str << wxT("\n ") << msg;
-
-    // no lossy convs so using utf8
-    CPPUNIT_FAIL(string(str.mb_str(wxConvUTF8)));
 }
 
 // quote a string so that it can be displayed (static)
@@ -339,30 +315,17 @@ wxString RegExTestCase::quote(const wxString& arg)
         str : wxT("\"") + str + wxT("\"");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Test suite
-
-class RegExTestSuite : public TestSuite
+// The helper function used by the tests in auto-generated regex.inc.
+static void
+CheckRE(
+        const char *mode,
+        const char *id,
+        const char *flags,
+        const char *pattern,
+        const char *data,
+        const char *expected,
+        ...)
 {
-public:
-    RegExTestSuite(string name) : TestSuite(name) { }
-    void add(const char *mode, const char *id, const char *flags,
-             const char *pattern, const char *data, const char *expected, ...);
-};
-
-// Add a testcase to the suite
-//
-void RegExTestSuite::add(
-    const char *mode,
-    const char *id,
-    const char *flags,
-    const char *pattern,
-    const char *data,
-    const char *expected, ...)
-{
-    string name = getName() + "." + id;
-
     vector<const char *> expected_results;
     va_list ap;
 
@@ -371,8 +334,7 @@ void RegExTestSuite::add(
 
     va_end(ap);
 
-    addTest(new RegExTestCase(
-        name, mode, id, flags, pattern, data, expected_results));
+    RegExTestCase(mode, id, flags, pattern, data, expected_results);
 }
 
 
