@@ -12,7 +12,7 @@
 		00F1531404F832C6AE0748F2 /* spinbutt_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F1BF8904635049BAFD6E1 /* spinbutt_osx.cpp */; };
 		014AF0BAB1783A5D9D75A7ED /* zstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9B5BC858CCF3477895D2786 /* zstream.cpp */; };
 		0164A65CDB7A334A8E9AA4BF /* dynload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93BA27DFFB023F2EBD6295E3 /* dynload.cpp */; };
-		01D4C5F2147F3942A7CE91AB /* icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DAF1F49F0F3F41A427A21E /* icon.cpp */; };
+		01D4C5F2147F3942A7CE91AA /* icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DAF1F49F0F3F41A427A21D /* icon.cpp */; };
 		020BBB417207393F8C60EFB6 /* LexFortran.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 86A0C3603C8A343AAFBD2CE0 /* LexFortran.cxx */; };
 		026F90F7492C316A94128916 /* logg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C64705CE9398316D87BAB4DC /* logg.cpp */; };
 		028257C52CAE3038AA862C35 /* stdstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE16011AD6323AAC8616F973 /* stdstream.cpp */; };
@@ -226,8 +226,8 @@
 		3E99016BDE043A08B4D6B3CE /* htmprint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194ADD28300E329E80F7892E /* htmprint.cpp */; };
 		3EB6B8528A0D3B6CADAE1256 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D2E8B5C89939CE90B99E2B /* archive.cpp */; };
 		3ED6F4B64C283232A79423CF /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC9B6DFBF2F73917A99361C5 /* dircmn.cpp */; };
-		400DE11324A9D41800F526FE /* menuitem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 400DE11124A9D41800F526FE /* menuitem.mm */; };
-		400DE11424A9D41800F526FE /* menu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 400DE11224A9D41800F526FE /* menu.mm */; };
+		127E255EE601383A9E0EF7EA /* menuitem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 61548D0FE1353D7C846DD721 /* menuitem.mm */; };
+		2A79B68D20FE3C9B98A15534 /* menu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1D799486AD7F336BB1F33DDC /* menu.mm */; };
 		403FBA20CEFE3EAFB4E6B905 /* dir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7332A03D93D3DABB050615D /* dir.cpp */; };
 		4040AE89BF9F34668091064A /* dragimgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A67053D16D63C588E555C84 /* dragimgg.cpp */; };
 		41943A8F82723027A151A468 /* fileconf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61DA2A4C0D143CBE804BB8A1 /* fileconf.cpp */; };
@@ -1058,8 +1058,8 @@
 		3FB6D34C3029357EB64AECAA /* scrlwing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrlwing.cpp; path = ../../src/generic/scrlwing.cpp; sourceTree = "<group>"; };
 		3FEBA7AC7F743EE88352AEBC /* htmlwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = htmlwin.cpp; path = ../../src/html/htmlwin.cpp; sourceTree = "<group>"; };
 		400275BE019D3E5BA47988BE /* inffast.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = inffast.c; path = ../../src/zlib/inffast.c; sourceTree = "<group>"; };
-		400DE11124A9D41800F526FE /* menuitem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = menuitem.mm; path = ../../src/osx/iphone/menuitem.mm; sourceTree = "<group>"; };
-		400DE11224A9D41800F526FE /* menu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = menu.mm; path = ../../src/osx/iphone/menu.mm; sourceTree = "<group>"; };
+		61548D0FE1353D7C846DD721 /* menuitem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = menuitem.mm; path = ../../src/osx/iphone/menuitem.mm; sourceTree = "<group>"; };
+		1D799486AD7F336BB1F33DDC /* menu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = menu.mm; path = ../../src/osx/iphone/menu.mm; sourceTree = "<group>"; };
 		4048A3523EC03409BD899BEF /* xtixml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xtixml.cpp; path = ../../src/common/xtixml.cpp; sourceTree = "<group>"; };
 		40586C8986443431A64EB066 /* LexLisp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLisp.cxx; path = ../../src/stc/scintilla/lexers/LexLisp.cxx; sourceTree = "<group>"; };
 		4071FF90F1D4336C836B2AE4 /* tif_pixarlog.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_pixarlog.c; path = ../../src/tiff/libtiff/tif_pixarlog.c; sourceTree = "<group>"; };
@@ -1680,7 +1680,7 @@
 		F4B85051B7C835A8BF4E3EE1 /* xh_panel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_panel.cpp; path = ../../src/xrc/xh_panel.cpp; sourceTree = "<group>"; };
 		F4C72C5C61A6335C8B418BA1 /* LexMetapost.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMetapost.cxx; path = ../../src/stc/scintilla/lexers/LexMetapost.cxx; sourceTree = "<group>"; };
 		F52DCBC0442233738B39138E /* CaseFolder.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CaseFolder.cxx; path = ../../src/stc/scintilla/src/CaseFolder.cxx; sourceTree = "<group>"; };
-		F5DAF1F49F0F3F41A427A21E /* icon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = icon.cpp; path = ../../src/generic/icon.cpp; sourceTree = "<group>"; };
+		F5DAF1F49F0F3F41A427A21D /* icon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = icon.cpp; path = ../../src/generic/icon.cpp; sourceTree = "<group>"; };
 		F6EA240B3DB93D398A990FAD /* tif_dirread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_dirread.c; path = ../../src/tiff/libtiff/tif_dirread.c; sourceTree = "<group>"; };
 		F6F01A84F4DE3C9FB9849004 /* tif_jbig.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_jbig.c; path = ../../src/tiff/libtiff/tif_jbig.c; sourceTree = "<group>"; };
 		F7332A03D93D3DABB050615D /* dir.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dir.cpp; path = ../../src/unix/dir.cpp; sourceTree = "<group>"; };
@@ -2018,15 +2018,15 @@
 				071FEABEA61E3B559A47A7DB /* statusbr.cpp */,
 				E9B31409EC6532FC83B0B957 /* textmeasure.cpp */,
 				FE538F33A1423FC2AC9E45F3 /* regiong.cpp */,
-				F5DAF1F49F0F3F41A427A21E /* icon.cpp */,
+				F5DAF1F49F0F3F41A427A21D /* icon.cpp */,
 				F4020D790AE7363CB29F1C2F /* anybutton.mm */,
 				C06FED83BF933DF98C2466AE /* button.mm */,
 				81708CFA21A03013ACB8DDD7 /* checkbox.mm */,
 				83B878A16ABC396E8C03A15E /* dialog.mm */,
 				8D2549709E0133C9A267E3A5 /* evtloop.mm */,
 				98A7F0605AAC3D28A8C9F253 /* gauge.mm */,
-				400DE11224A9D41800F526FE /* menu.mm */,
-				400DE11124A9D41800F526FE /* menuitem.mm */,
+				1D799486AD7F336BB1F33DDC /* menu.mm */,
+				61548D0FE1353D7C846DD721 /* menuitem.mm */,
 				33CFE51FD6F0362092DF1A85 /* msgdlg.mm */,
 				AECB45CEAC093CE4AB4B7E45 /* nonownedwnd.mm */,
 				CC2E24773D853A77B9FEFA4C /* scrolbar.mm */,
@@ -2827,7 +2827,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */;
+			buildConfigurationList = 1DEC7D4292B13CAE9FDCA1CE /* Build configuration list for PBXProject "wxiPhone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -3047,7 +3047,7 @@
 				774EB9F3F7E93A379E1F7551 /* graphics.cpp in Sources */,
 				5792675690843C6AA4125A72 /* font.cpp in Sources */,
 				BDAB44F5D017395D9D3A1F23 /* frame.cpp in Sources */,
-				400DE11324A9D41800F526FE /* menuitem.mm in Sources */,
+				127E255EE601383A9E0EF7EA /* menuitem.mm in Sources */,
 				27E2EABB117334CD89CFD2A4 /* mdi.cpp in Sources */,
 				73AA68AB9F1236ED9F1FBB2E /* metafile.cpp in Sources */,
 				805CCAE64D023561AD334B53 /* popupwin.cpp in Sources */,
@@ -3070,7 +3070,7 @@
 				A1AF8FF873D6383996995ECF /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D55969 /* textmeasure.cpp in Sources */,
 				9519D59421513FF28FF717B6 /* regiong.cpp in Sources */,
-				01D4C5F2147F3942A7CE91AB /* icon.cpp in Sources */,
+				01D4C5F2147F3942A7CE91AA /* icon.cpp in Sources */,
 				65AD3B31319C35F1AC9EC625 /* anybutton.mm in Sources */,
 				14D6D5F8F5ED3C71936DD2AF /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D12 /* checkbox.mm in Sources */,
@@ -3297,7 +3297,7 @@
 				8AA341CCFB8E3F6AB3523595 /* splash.cpp in Sources */,
 				98F52D5224B438DFA8887E06 /* timectrlg.cpp in Sources */,
 				77BC918AF05C30E8A0BD27F8 /* tipdlg.cpp in Sources */,
-				400DE11424A9D41800F526FE /* menu.mm in Sources */,
+				2A79B68D20FE3C9B98A15534 /* menu.mm in Sources */,
 				060E095718B03EF98C754799 /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266700 /* wizard.cpp in Sources */,
 				EC3D181D65F33E09A675FFF2 /* addremovectrl.cpp in Sources */,
@@ -3773,7 +3773,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */ = {
+		1DEC7D4292B13CAE9FDCA1CE /* Build configuration list for PBXProject "wxiPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				55C93151F6053EBCBDD70DF9 /* Debug */,
