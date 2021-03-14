@@ -18,287 +18,11 @@
 #include "wx/tokenzr.h"
 #include <string>
 
-using CppUnit::Test;
-using CppUnit::TestCase;
-using CppUnit::TestSuite;
 using std::string;
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Compile Test
-
-class RegExCompileTestCase : public TestCase
-{
-public:
-    RegExCompileTestCase(const char *name, const wxString& pattern,
-                         bool correct, int flags)
-    :   TestCase(name),
-        m_pattern(pattern),
-        m_correct(correct),
-        m_flags(flags)
-    { }
-
-protected:
-    void runTest() wxOVERRIDE;
-
-private:
-    wxString m_pattern;
-    bool m_correct;
-    int m_flags;
-};
-
-void RegExCompileTestCase::runTest()
-{
-    wxRegEx re;
-    bool ok = re.Compile(m_pattern, m_flags);
-
-    if (m_correct)
-        CPPUNIT_ASSERT_MESSAGE("compile failed", ok);
-    else
-        CPPUNIT_ASSERT_MESSAGE("compile succeeded (should fail)", !ok);
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Match Test
-
-class RegExMatchTestCase : public TestCase
-{
-public:
-    RegExMatchTestCase(const char *name, const wxString& pattern,
-                       const wxString& text, const char *expected,
-                       int flags)
-    :   TestCase(name),
-        m_pattern(pattern),
-        m_text(text),
-        m_expected(expected),
-        m_flags(flags)
-    { }
-
-protected:
-    void runTest() wxOVERRIDE;
-
-private:
-    wxString m_pattern;
-    wxString m_text;
-    const char *m_expected;
-    int m_flags;
-};
-
-void RegExMatchTestCase::runTest()
-{
-    int compileFlags = m_flags & ~(wxRE_NOTBOL | wxRE_NOTEOL);
-    int matchFlags = m_flags & (wxRE_NOTBOL | wxRE_NOTEOL);
-
-    wxRegEx re(m_pattern, compileFlags);
-    CPPUNIT_ASSERT_MESSAGE("compile failed", re.IsValid());
-
-    bool ok = re.Matches(m_text, matchFlags);
-
-    if (m_expected) {
-        CPPUNIT_ASSERT_MESSAGE("match failed", ok);
-
-        wxStringTokenizer tkz(wxString(m_expected, *wxConvCurrent),
-                              wxT("\t"), wxTOKEN_RET_EMPTY);
-        size_t i;
-
-        for (i = 0; i < re.GetMatchCount() && tkz.HasMoreTokens(); i++) {
-            wxString expected = tkz.GetNextToken();
-            wxString result = re.GetMatch(m_text, i);
-
-            wxString msgstr;
-            msgstr.Printf(wxT("\\%d == '%s' (expected '%s')"),
-                          (int)i, result.c_str(), expected.c_str());
-
-            CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(),
-                                   result == expected);
-        }
-
-        if ((m_flags & wxRE_NOSUB) == 0)
-            CPPUNIT_ASSERT(re.GetMatchCount() == i);
-    }
-    else {
-        CPPUNIT_ASSERT_MESSAGE("match succeeded (should fail)", !ok);
-    }
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Replacement Test
-
-class RegExReplaceTestCase : public TestCase
-{
-public:
-    RegExReplaceTestCase(const char *name, const wxString& pattern,
-                         const wxString& text, const wxString& repl,
-                         const wxString& expected, size_t count, int flags)
-    :   TestCase(name),
-        m_pattern(pattern),
-        m_text(text),
-        m_repl(repl),
-        m_expected(expected),
-        m_count(count),
-        m_flags(flags)
-    { }
-
-protected:
-    void runTest() wxOVERRIDE;
-
-private:
-    wxString m_pattern;
-    wxString m_text;
-    wxString m_repl;
-    wxString m_expected;
-    size_t m_count;
-    int m_flags;
-};
-
-void RegExReplaceTestCase::runTest()
-{
-    wxRegEx re(m_pattern, m_flags);
-
-    wxString text(m_text);
-    size_t nRepl = re.Replace(&text, m_repl);
-
-    wxString msgstr;
-    msgstr.Printf(wxT("returns '%s' (expected '%s')"), text.c_str(), m_expected.c_str());
-    CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), text == m_expected);
-
-    msgstr.Printf(wxT("matches %d times (expected %d)"), (int)nRepl, (int)m_count);
-    CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), nRepl == m_count);
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// The suite
-
-class wxRegExTestSuite : public TestSuite
-{
-public:
-    wxRegExTestSuite() : TestSuite("wxRegExTestSuite") { }
-    static Test *suite();
-
-private:
-    void add(const char *pattern, bool correct, int flags = wxRE_DEFAULT);
-    void add(const char *pattern, const char *text,
-             const char *expected = NULL, int flags = wxRE_DEFAULT);
-    void add(const char *pattern, const char *text, const char *replacement,
-             const char *expected, size_t count, int flags = wxRE_DEFAULT);
-
-    static wxString FlagStr(int flags);
-    static wxString Conv(const char *str) { return wxString(str, *wxConvCurrent); }
-};
-
-// Build the suite (static)
-//
-Test *wxRegExTestSuite::suite()
-{
-    wxRegExTestSuite *suite = new wxRegExTestSuite;
-
-    // Compile tests
-    // pattern, expected result
-    suite->add("foo", true);
-    suite->add("foo(", false);
-    suite->add("foo(bar", false);
-    suite->add("foo(bar)", true);
-    suite->add("foo[", false);
-    suite->add("foo[bar", false);
-    suite->add("foo[bar]", true);
-    suite->add("foo{1", false);
-    suite->add("foo{1}", true);
-    suite->add("foo{1,2}", true);
-    suite->add("foo*", true);
-    suite->add("foo+", true);
-    suite->add("foo?", true);
-
-    // Match tests
-    // pattern, text, expected results (match, followed by submatches
-    // tab separated, or NULL for no match expected)
-    suite->add("foo", "bar");
-    suite->add("foo", "foobar", "foo");
-    suite->add("^foo", "foobar", "foo");
-    suite->add("^foo", "barfoo");
-    suite->add("bar$", "barbar", "bar");
-    suite->add("bar$", "barbar ");
-    suite->add("OoBa", "FoObAr", "oObA", wxRE_ICASE);
-    suite->add("^[A-Z].*$", "AA\nbb\nCC", "AA\nbb\nCC");
-    suite->add("^[A-Z].*$", "AA\nbb\nCC", "AA", wxRE_NEWLINE);
-    suite->add("^[a-z].*$", "AA\nbb\nCC", "bb", wxRE_NEWLINE);
-    suite->add("^[A-Z].*$", "AA\nbb\nCC", "CC", wxRE_NEWLINE | wxRE_NOTBOL);
-    suite->add("^[A-Z].*$", "AA\nbb\nCC", NULL, wxRE_NEWLINE | wxRE_NOTBOL | wxRE_NOTEOL);
-    suite->add("([[:alpha:]]+) ([[:alpha:]]+) ([[:digit:]]+).* ([[:digit:]]+)$",
-        "Fri Jul 13 18:37:52 CEST 2001",
-        "Fri Jul 13 18:37:52 CEST 2001\tFri\tJul\t13\t2001");
-
-    // Replace tests
-    // pattern, text, replacement, expected result and number of matches
-    const char *patn = "([a-z]+)[^0-9]*([0-9]+)";
-    suite->add(patn, "foo123", "bar", "bar", 1);
-    suite->add(patn, "foo123", "\\2\\1", "123foo", 1);
-    suite->add(patn, "foo_123", "\\2\\1", "123foo", 1);
-    suite->add(patn, "123foo", "bar", "123foo", 0);
-    suite->add(patn, "123foo456foo", "&&", "123foo456foo456foo", 1);
-    suite->add(patn, "123foo456foo", "\\0\\0", "123foo456foo456foo", 1);
-    suite->add(patn, "foo123foo123", "bar", "barbar", 2);
-    suite->add(patn, "foo123_foo456_foo789", "bar", "bar_bar_bar", 3);
-
-    return suite;
-}
-
-// Add a compile test
-//
-void wxRegExTestSuite::add(
-    const char *pattern,
-    bool correct,
-    int flags /*=wxRE_DEFAULT*/)
-{
-    addTest(new RegExCompileTestCase(
-                (wxT("/") + Conv(pattern) + wxT("/") + FlagStr(flags)).mb_str(),
-                Conv(pattern), correct, flags));
-}
-
-// Add a match test
-//
-void wxRegExTestSuite::add(
-    const char *pattern,
-    const char *text,
-    const char *expected /*=NULL*/,
-    int flags /*=wxRE_DEFAULT*/)
-{
-    wxString name;
-
-    name << wxT("'") << Conv(text) << wxT("' =~ /") << Conv(pattern) << wxT("/")
-         << FlagStr(flags);
-    name.Replace(wxT("\n"), wxT("\\n"));
-
-    addTest(new RegExMatchTestCase(name.mb_str(), Conv(pattern),
-                                   Conv(text), expected, flags));
-}
-
-// Add a replace test
-//
-void wxRegExTestSuite::add(
-    const char *pattern,
-    const char *text,
-    const char *replacement,
-    const char *expected,
-    size_t count,
-    int flags /*=wxRE_DEFAULT*/)
-{
-    wxString name;
-
-    name << wxT("'") << Conv(text) << wxT("' =~ s/") << Conv(pattern) << wxT("/")
-         << Conv(replacement) << wxT("/g") << FlagStr(flags);
-    name.Replace(wxT("\n"), wxT("\\n"));
-
-    addTest(new RegExReplaceTestCase(
-                    name.mb_str(), Conv(pattern), Conv(text),
-                    Conv(replacement), Conv(expected), count, flags));
-}
 
 // Display string for the flags
 //
-wxString wxRegExTestSuite::FlagStr(int flags)
+static wxString FlagStr(int flags)
 {
     wxString str;
 
@@ -324,11 +48,112 @@ wxString wxRegExTestSuite::FlagStr(int flags)
     return wxT(" (") + str.Mid(3) + wxT(")");
 }
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION(wxRegExTestSuite);
+TEST_CASE("wxRegEx::Compile", "[regex][compile]")
+{
+    wxRegEx re;
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(wxRegExTestSuite, "wxRegExTestSuite");
+    CHECK      ( re.Compile("foo") );
+    CHECK_FALSE( re.Compile("foo(") );
+    CHECK_FALSE( re.Compile("foo(bar") );
+    CHECK      ( re.Compile("foo(bar)") );
+    CHECK_FALSE( re.Compile("foo[") );
+    CHECK_FALSE( re.Compile("foo[bar") );
+    CHECK      ( re.Compile("foo[bar]") );
+    CHECK_FALSE( re.Compile("foo{1") );
+    CHECK      ( re.Compile("foo{1}") );
+    CHECK      ( re.Compile("foo{1,2}") );
+    CHECK      ( re.Compile("foo*") );
+    CHECK      ( re.Compile("foo+") );
+    CHECK      ( re.Compile("foo?") );
+}
+
+static void
+CheckMatch(const char* pattern,
+           const char* text,
+           const char* expected = NULL,
+           int flags = wxRE_DEFAULT)
+{
+    int compileFlags = flags & ~(wxRE_NOTBOL | wxRE_NOTEOL);
+    int matchFlags = flags & (wxRE_NOTBOL | wxRE_NOTEOL);
+
+    INFO( "Pattern: " << pattern << FlagStr(flags) << ", match: " << text );
+
+    wxRegEx re(pattern, compileFlags);
+    REQUIRE( re.IsValid() );
+
+    bool ok = re.Matches(text, matchFlags);
+
+    if (expected) {
+        REQUIRE( ok );
+
+        wxStringTokenizer tkz(wxString(expected, *wxConvCurrent),
+                              wxT("\t"), wxTOKEN_RET_EMPTY);
+        size_t i;
+
+        for (i = 0; i < re.GetMatchCount() && tkz.HasMoreTokens(); i++) {
+            INFO( "Match #" << i );
+            CHECK( re.GetMatch(text, i) == tkz.GetNextToken() );
+        }
+
+        if ((flags & wxRE_NOSUB) == 0)
+            CHECK(re.GetMatchCount() == i);
+    }
+    else {
+        CHECK( !ok );
+    }
+}
+
+TEST_CASE("wxRegEx::Match", "[regex][match]")
+{
+    // Match tests
+    // pattern, text, expected results (match, followed by submatches
+    // tab separated, or NULL for no match expected)
+
+    CheckMatch("foo", "bar");
+    CheckMatch("foo", "foobar", "foo");
+    CheckMatch("^foo", "foobar", "foo");
+    CheckMatch("^foo", "barfoo");
+    CheckMatch("bar$", "barbar", "bar");
+    CheckMatch("bar$", "barbar ");
+    CheckMatch("OoBa", "FoObAr", "oObA", wxRE_ICASE);
+    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "AA\nbb\nCC");
+    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "AA", wxRE_NEWLINE);
+    CheckMatch("^[a-z].*$", "AA\nbb\nCC", "bb", wxRE_NEWLINE);
+    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "CC", wxRE_NEWLINE | wxRE_NOTBOL);
+    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", NULL, wxRE_NEWLINE | wxRE_NOTBOL | wxRE_NOTEOL);
+    CheckMatch("([[:alpha:]]+) ([[:alpha:]]+) ([[:digit:]]+).* ([[:digit:]]+)$",
+        "Fri Jul 13 18:37:52 CEST 2001",
+        "Fri Jul 13 18:37:52 CEST 2001\tFri\tJul\t13\t2001");
+}
+
+static void
+CheckReplace(const char* pattern,
+             const char* original,
+             const char* replacement,
+             const char* expected,
+             size_t numMatches)
+{
+    wxRegEx re(pattern);
+
+    wxString text(original);
+    CHECK( re.Replace(&text, replacement) == numMatches );
+    CHECK( text == expected );
+}
+
+TEST_CASE("wxRegEx::Replace", "[regex][replace]")
+{
+    // Replace tests
+    // pattern, text, replacement, expected result and number of matches
+    const char *patn = "([a-z]+)[^0-9]*([0-9]+)";
+    CheckReplace(patn, "foo123", "bar", "bar", 1);
+    CheckReplace(patn, "foo123", "\\2\\1", "123foo", 1);
+    CheckReplace(patn, "foo_123", "\\2\\1", "123foo", 1);
+    CheckReplace(patn, "123foo", "bar", "123foo", 0);
+    CheckReplace(patn, "123foo456foo", "&&", "123foo456foo456foo", 1);
+    CheckReplace(patn, "123foo456foo", "\\0\\0", "123foo456foo456foo", 1);
+    CheckReplace(patn, "foo123foo123", "bar", "barbar", 2);
+    CheckReplace(patn, "foo123_foo456_foo789", "bar", "bar_bar_bar", 3);
+}
 
 TEST_CASE("wxRegEx::QuoteMeta", "[regex][meta]")
 {
