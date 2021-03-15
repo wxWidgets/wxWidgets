@@ -195,67 +195,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
 
 @end // wxUIView
 
-/*
-- (void)drawRect: (CGRect) rect
-{
-    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl )
-    {
-        CGContextRef context = (CGContextRef) UIGraphicsGetCurrentContext();
-        CGContextSaveGState( context );
-        // draw background
-
-        CGContextSetFillColorWithColor( context, impl->GetWXPeer()->GetBackgroundColour().GetCGColor());
-        CGContextFillRect(context, rect );
-
-        impl->GetWXPeer()->MacSetCGContextRef( context );
-
-        impl->GetWXPeer()->GetUpdateRegion() =
-            wxRegion(rect.origin.x,rect.origin.y,rect.size.width,rect.size.height) ;
-
-        wxPaintEvent event;
-        event.SetTimestamp(0); //  todo
-        event.SetEventObject(impl->GetWXPeer());
-        impl->GetWXPeer()->HandleWindowEvent(event);
-
-        CGContextRestoreGState( context );
-    }
-
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self handleTouchEvent:touches withEvent:event];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self handleTouchEvent:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self handleTouchEvent:touches withEvent:event];
-}
-
--(void)handleTouchEvent:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    CGPoint clickLocation;
-    UITouch *touch = [touches anyObject];
-    clickLocation = [touch locationInView:self];
-
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent( wxevent , touches, event ) ;
-    wxevent.m_x = clickLocation.x;
-    wxevent.m_y = clickLocation.y;
-    wxevent.SetEventObject( impl->GetWXPeer() ) ;
-    wxevent.SetId( impl->GetWXPeer()->GetId() ) ;
-    impl->GetWXPeer()->HandleWindowEvent(wxevent);
-}
-
-*/
-
 void wxOSX_touchEvent(UIView* self, SEL _cmd, NSSet* touches, UIEvent *event )
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -712,29 +651,34 @@ bool wxWidgetIPhoneImpl::resignFirstResponder(WXWidget slf, void *_cmd)
 
 void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cmd))
 {
-    CGContextRef context = (CGContextRef) UIGraphicsGetCurrentContext();
-    CGContextSaveGState( context );
-    // draw background
-/*
-    CGContextSetFillColorWithColor( context, GetWXPeer()->GetBackgroundColour().GetCGColor());
-    CGContextFillRect(context, *rect );
-*/
-    GetWXPeer()->MacSetCGContextRef( context );
-
-    GetWXPeer()->GetUpdateRegion() =
-        wxRegion(rect->origin.x,rect->origin.y,rect->size.width,rect->size.height) ;
-
     wxRegion updateRgn( wxFromNSRect( slf, *rect ) );
 
     wxWindow* wxpeer = GetWXPeer();
     wxpeer->GetUpdateRegion() = updateRgn;
+
+    // note that context may be NULL in certain views
+    CGContextRef context = (CGContextRef) UIGraphicsGetCurrentContext();
+    if ( context != NULL )
+    {
+        CGContextSaveGState( context );
+    // draw background
+/*
+        CGContextSetFillColorWithColor( context, GetWXPeer()->GetBackgroundColour().GetCGColor());
+        CGContextFillRect(context, *rect );
+*/
+    }
+        GetWXPeer()->MacSetCGContextRef( context );
+
     wxpeer->MacSetCGContextRef( context );
 
     bool handled = wxpeer->MacDoRedraw( 0 );
 
-    CGContextRestoreGState( context );
+    if ( context != NULL )
+    {
+        CGContextRestoreGState( context );
+        CGContextSaveGState( context );
+    }
 
-    CGContextSaveGState( context );
     if ( !handled )
     {
         // call super
@@ -743,14 +687,21 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
         if ( superimpl != wxOSX_drawRect )
         {
             superimpl(slf, _cmd, *rect);
-            CGContextRestoreGState( context );
-            CGContextSaveGState( context );
+            if ( context != NULL )
+            {
+                CGContextRestoreGState( context );
+                CGContextSaveGState( context );
+            }
         }
     }
-    wxpeer->MacPaintChildrenBorders();
-    wxpeer->MacSetCGContextRef( NULL );
 
-    CGContextRestoreGState( context );
+    if ( context != NULL )
+    {
+        wxpeer->MacPaintChildrenBorders();
+        CGContextRestoreGState( context );
+    }
+    
+    wxpeer->MacSetCGContextRef( NULL );
 }
 
 void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf, void *WXUNUSED(_cmd))
