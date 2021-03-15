@@ -255,7 +255,12 @@
 
 #if wxUSE_MENUS
 #undef wxUSE_MENUS
+// we are basing our implementatino on UIMenuElement
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
 #define wxUSE_MENUS 1
+#else
+#define wxUSE_MENUS 0
+#endif
 #endif
 
 #if wxUSE_MENUBAR
