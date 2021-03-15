@@ -28,6 +28,8 @@
 
 #include "wx/menu.h"
 
+#if wxUSE_MENUS
+
 #include "wx/osx/private.h"
 
 // other standard headers
@@ -322,3 +324,5 @@ wxMenuImpl* wxMenuImpl::Create( wxMenu* peer, const wxString& title )
     wxMenuImpl* c = new wxMenuCocoaImpl( peer, nil );
     return c;
  }
+
+#endif

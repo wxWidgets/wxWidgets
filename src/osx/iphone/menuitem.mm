@@ -13,6 +13,8 @@
 #include "wx/menuitem.h"
 #include "wx/stockitem.h"
 
+#if wxUSE_MENUS
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
@@ -328,3 +330,5 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
     c = new wxMenuItemCocoaImpl( peer, item );
     return c;
 }
+
+#endif
