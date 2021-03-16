@@ -476,6 +476,24 @@ ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
     return settings;
 }
 
+wxWebViewEdge::wxWebViewEdge():
+    m_impl(new wxWebViewEdgeImpl(this))
+{
+
+}
+
+wxWebViewEdge::wxWebViewEdge(wxWindow* parent,
+    wxWindowID id,
+    const wxString& url,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name):
+    m_impl(new wxWebViewEdgeImpl(this))
+{
+    Create(parent, id, url, pos, size, style, name);
+}
+
 wxWebViewEdge::~wxWebViewEdge()
 {
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
@@ -501,7 +519,6 @@ bool wxWebViewEdge::Create(wxWindow* parent,
         return false;
     }
 
-    m_impl = new wxWebViewEdgeImpl(this);
     if (!m_impl->Create())
         return false;
     Bind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
@@ -774,6 +791,8 @@ void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
 bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     bool scriptExecuted = false;
+    if (!m_impl->m_webView)
+        return false;
 
     // Start script execution
     HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<ICoreWebView2ExecuteScriptCompletedHandler>(

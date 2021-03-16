@@ -23,7 +23,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewEdge : public wxWebView
 {
 public:
 
-    wxWebViewEdge() {}
+    wxWebViewEdge();
 
     wxWebViewEdge(wxWindow* parent,
         wxWindowID id,
@@ -31,10 +31,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxWebViewNameStr)
-    {
-        Create(parent, id, url, pos, size, style, name);
-    }
+        const wxString& name = wxWebViewNameStr);
 
     ~wxWebViewEdge();
 
