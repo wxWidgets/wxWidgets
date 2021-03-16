@@ -217,6 +217,13 @@ long wxWebView::Find(const wxString& text, int flags)
         return 1;
 }
 
+wxString wxWebView::GetUserAgent() const
+{
+    wxString userAgent;
+    RunScript("navigator.userAgent", &userAgent);
+    return userAgent;
+}
+
 // static
 wxWebView* wxWebView::New(const wxString& backend)
 {
