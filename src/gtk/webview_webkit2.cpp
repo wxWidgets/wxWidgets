@@ -651,6 +651,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     GTKCreateScrolledWindowWith(GTK_WIDGET(m_web_view));
     g_object_ref(m_widget);
 
+    if (!m_customUserAgent.empty())
+        SetUserAgent(m_customUserAgent);
+
     g_signal_connect(m_web_view, "decide-policy",
                      G_CALLBACK(wxgtk_webview_webkit_decide_policy),
                      this);
@@ -754,6 +757,18 @@ bool wxWebViewWebKit::IsAccessToDevToolsEnabled() const
 {
     WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
     return webkit_settings_get_enable_developer_extras(settings);
+}
+
+bool wxWebViewWebKit::SetUserAgent(const wxString& userAgent)
+{
+    if (m_web_view)
+    {
+        WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
+        webkit_settings_set_user_agent(settings, userAgent.utf8_str());
+    }
+    else
+        m_customUserAgent = userAgent;
+    return true;
 }
 
 void wxWebViewWebKit::Stop()
