@@ -29,6 +29,7 @@
 #ifdef __VISUALC__
 #include <wrl/event.h>
 using namespace Microsoft::WRL;
+#include "WebView2EnvironmentOptions.h"
 #else
 #include <wx/msw/wrl/event.h>
 #endif // !__VISUALC__
@@ -91,11 +92,23 @@ bool wxWebViewEdgeImpl::Create()
     m_historyPosition = -1;
 
     wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
+#ifdef __VISUALC__
+    auto options =
+        Make<CoreWebView2EnvironmentOptions>();
+
+    if (!m_customUserAgent.empty())
+        options->put_AdditionalBrowserArguments(
+            wxString::Format("--user-agent=\"%s\"", m_customUserAgent).wc_str());
+#endif
 
     HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
         ms_browserExecutableDir.wc_str(),
         userDataPath.wc_str(),
+#ifdef __VISUALC__
+        options.Get(),
+#else
         nullptr,
+#endif
         Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
             &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
     if (FAILED(hr))
@@ -776,6 +789,20 @@ bool wxWebViewEdge::IsAccessToDevToolsEnabled() const
     }
 
     return true;
+}
+
+bool wxWebViewEdge::SetUserAgent(const wxString& userAgent)
+{
+    m_impl->m_customUserAgent = userAgent;
+    // Can currently only be set before Create()
+    wxCHECK_MSG(!m_impl->m_webViewController, false, "Can't be called after Create()");
+    if (m_impl->m_webViewController)
+        return false;
+    else
+        return true;
+
+    // TODO: As of Edge SDK 1.0.790 an experimental API to set the user agent
+    // is available. Reimplement using m_impl->GetSettings() when it's stable.
 }
 
 void* wxWebViewEdge::GetNativeBackend() const
