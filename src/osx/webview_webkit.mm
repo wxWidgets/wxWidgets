@@ -151,6 +151,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     MacPostControlCreate(pos, size);
 
+    if (!m_customUserAgent.empty())
+        SetUserAgent(m_customUserAgent);
+
     [m_webView setHidden:false];
 
 
@@ -326,6 +329,21 @@ void wxWebViewWebKit::EnableAccessToDevTools(bool enable)
     SEL devToolsSelector = @selector(_setDeveloperExtrasEnabled:);
     if ([prefs respondsToSelector:devToolsSelector])
         [prefs performSelector:devToolsSelector withObject:(id)enable];
+}
+
+bool wxWebViewWebKit::SetUserAgent(const wxString& userAgent)
+{
+    if (WX_IS_MACOS_AVAILABLE(10, 11))
+    {
+        if (m_webView)
+            m_webView.customUserAgent = wxCFStringRef(userAgent).AsNSString();
+        else
+            m_customUserAgent = userAgent;
+
+        return true;
+    }
+    else
+        return false;
 }
 
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType zoomType)

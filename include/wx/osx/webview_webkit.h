@@ -73,6 +73,7 @@ public:
 
     virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
     virtual void EnableAccessToDevTools(bool enable = true) wxOVERRIDE;
+    virtual bool SetUserAgent(const wxString& userAgent) wxOVERRIDE;
 
     //History functions
     virtual void ClearHistory() wxOVERRIDE;
@@ -111,6 +112,7 @@ protected:
 private:
     OSXWebViewPtr m_webView;
     wxStringToWebHandlerMap m_handlers;
+    wxString m_customUserAgent;
 
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
