@@ -27,7 +27,7 @@
 
 #ifdef __WXGTK__
     #include "wx/gtk/private/wrapgtk.h"
-    #include <gdk/gdkx.h>
+    #include "wx/gtk/private/mediactrl.h"
 #endif
 
 wxGCC_WARNING_SUPPRESS(cast-qual)
@@ -175,13 +175,8 @@ expose_event_callback(GtkWidget* widget, GdkEventExpose* event, wxGStreamerMedia
 extern "C" {
 static void realize_callback(GtkWidget* widget, wxGStreamerMediaBackend* be)
 {
-    gdk_flush();
-
-    GdkWindow* window = gtk_widget_get_window(widget);
-    wxASSERT(window);
-
     gst_player_video_overlay_video_renderer_set_window_handle(GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
-                                (gpointer) GDK_WINDOW_XID(window)
+                                wxGtkGetIdFromWidget(widget)
                                 );
     GtkWidget* w = be->GetControl()->m_wxwindow;
 #ifdef __WXGTK3__
@@ -326,9 +321,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     }
     else
     {
-        GdkWindow* window = gtk_widget_get_window(m_ctrl->m_wxwindow);
-        wxASSERT(window);
-        window_handle = (gpointer) GDK_WINDOW_XID(window);
+        window_handle = wxGtkGetIdFromWidget(m_ctrl->m_wxwindow);
 
         GtkWidget* w = m_ctrl->m_wxwindow;
 #ifdef __WXGTK3__
