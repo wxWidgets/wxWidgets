@@ -1996,7 +1996,7 @@ void DnDShapeDataObject::CreateMetaFile() const
 
     wxMetafile *mf = dcMF.Close();
 
-    DnDShapeDataObject *self = (DnDShapeDataObject *)this; // const_cast
+    DnDShapeDataObject* self = const_cast<DnDShapeDataObject*>(this);
     self->m_dobjMetaFile.SetMetafile(*mf);
     self->m_hasMetaFile = true;
 

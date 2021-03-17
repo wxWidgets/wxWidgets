@@ -331,7 +331,7 @@ TEST_CASE("wxTextInputStream::GetChar", "[text][input][stream][char]")
         wxMemoryInputStream mis(buf, sizeof(buf));
         wxTextInputStream tis(mis);
 
-        wxCharTypeBuffer<wxChar> e = wxString::FromUTF8((char*)buf, sizeof(buf))
+        wxCharTypeBuffer<wxChar> e = wxString::FromUTF8((const char*)buf, sizeof(buf))
                                      .tchar_str<wxChar>();
         for ( size_t i = 0; i < e.length(); ++i )
         {
@@ -351,7 +351,7 @@ TEST_CASE("wxTextInputStream::GetChar", "[text][input][stream][char]")
         wxMemoryInputStream mis(buf, sizeof(buf));
         wxTextInputStream tis(mis);
 
-        wxCharTypeBuffer<wxChar> e = wxString((char*)buf, wxCSConv(wxFONTENCODING_ISO8859_1),
+        wxCharTypeBuffer<wxChar> e = wxString((const char*)buf, wxCSConv(wxFONTENCODING_ISO8859_1),
                                               sizeof(buf)).tchar_str<wxChar>();
         for ( size_t i = 0; i < e.length(); ++i )
         {

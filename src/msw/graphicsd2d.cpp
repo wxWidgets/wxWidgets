@@ -1277,7 +1277,7 @@ void wxD2DMatrixData::TransformDistance(wxDouble* dx, wxDouble* dy) const
 
 void* wxD2DMatrixData::GetNativeMatrix() const
 {
-    return (void*)&m_matrix;
+    return const_cast<void*>(static_cast<const void*>(&m_matrix));
 }
 
 D2D1::Matrix3x2F wxD2DMatrixData::GetMatrix3x2F() const
