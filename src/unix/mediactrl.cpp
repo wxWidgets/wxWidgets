@@ -35,7 +35,13 @@
 
 #ifdef __WXGTK__
     #include "wx/gtk/private/wrapgtk.h"
-    #include <gdk/gdkx.h>
+    #include "wx/gtk/private/mediactrl.h"
+#endif
+
+#if GST_CHECK_VERSION(1,0,0)
+    typedef guintptr window_id_type;
+#else
+    typedef gulong window_id_type;
 #endif
 
 //-----------------------------------------------------------------------------
@@ -301,19 +307,12 @@ extern "C" {
 static gint gtk_window_realize_callback(GtkWidget* widget,
                                         wxGStreamerMediaBackend* be)
 {
-    gdk_flush();
-
-    GdkWindow* window = gtk_widget_get_window(widget);
-    wxASSERT(window);
+    window_id_type window_id = (window_id_type)wxGtkGetIdFromWidget(widget);
 
 #if GST_CHECK_VERSION(1,0,0)
-    gst_video_overlay_set_window_handle(be->m_xoverlay,
-                                GDK_WINDOW_XID(window)
-                                );
+    gst_video_overlay_set_window_handle(be->m_xoverlay, window_id);
 #else
-    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
-                                GDK_WINDOW_XID(window)
-                                );
+    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay), window_id);
 #endif
     GtkWidget* w = be->GetControl()->m_wxwindow;
 #ifdef __WXGTK3__
@@ -663,6 +662,7 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     wxASSERT( wxIsMainThread() );
 
     // Use the xoverlay extension to tell gstreamer to play in our window
+    window_id_type window_id;
 #ifdef __WXGTK__
     if (!gtk_widget_get_realized(m_ctrl->m_wxwindow))
     {
@@ -674,22 +674,17 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     }
     else
     {
-        gdk_flush();
+        window_id = (window_id_type)wxGtkGetIdFromWidget(m_ctrl->m_wxwindow);
+#else
+        window_id = ctrl->GetHandle();
+#endif
 
-        GdkWindow* window = gtk_widget_get_window(m_ctrl->m_wxwindow);
-        wxASSERT(window);
-#endif
 #if GST_CHECK_VERSION(1,0,0)
-        gst_video_overlay_set_window_handle(m_xoverlay,
+        gst_video_overlay_set_window_handle(m_xoverlay, window_id);
 #else
-        gst_x_overlay_set_xwindow_id(GST_X_OVERLAY(m_xoverlay),
+        gst_x_overlay_set_xwindow_id(GST_X_OVERLAY(m_xoverlay), window_id);
 #endif
-#ifdef __WXGTK__
-                        GDK_WINDOW_XID(window)
-#else
-                        ctrl->GetHandle()
-#endif
-                                  );
+
 #ifdef __WXGTK__
         GtkWidget* w = m_ctrl->m_wxwindow;
 #ifdef __WXGTK3__
