@@ -559,18 +559,14 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     const int y = a.y;
 
     const size_t count = GetPageCount();
-    size_t i = 0;
 
-#ifndef __WXGTK3__
-    GtkNotebook * notebook = GTK_NOTEBOOK(m_widget);
-    if (gtk_notebook_get_scrollable(notebook))
-        i = g_list_position( notebook->children, notebook->first_tab );
-#endif
-
-    for ( ; i < count; i++ )
+    for (size_t i = 0; i < count; i++)
     {
         wxGtkNotebookPage* pageData = GetNotebookPage(i);
         GtkWidget* box = pageData->m_box;
+
+        if (!gtk_widget_get_child_visible(box))
+            continue;
 
         const gint border = gtk_container_get_border_width(GTK_CONTAINER(box));
 
