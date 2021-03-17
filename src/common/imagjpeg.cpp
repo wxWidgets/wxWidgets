@@ -182,6 +182,9 @@ CPP_METHODDEF(void) wx_ignore_message (j_common_ptr WXUNUSED(cinfo))
 {
 }
 
+} // extern "C"
+
+static
 void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
 {
     wx_src_ptr src;
@@ -203,8 +206,6 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
     src->pub.term_source = wx_term_source;
 }
-
-} // extern "C"
 
 static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 {
@@ -392,7 +393,9 @@ CPP_METHODDEF(void) wx_term_destination (j_compress_ptr cinfo)
         dest->stream->Write(dest->buffer, datacount);
 }
 
-GLOBAL(void) wx_jpeg_io_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
+} // extern "C"
+
+static void wx_jpeg_io_dest(j_compress_ptr cinfo, wxOutputStream& outfile)
 {
     wx_dest_ptr dest;
 
@@ -408,8 +411,6 @@ GLOBAL(void) wx_jpeg_io_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
     dest->pub.term_destination = wx_term_destination;
     dest->stream = &outfile;
 }
-
-} // extern "C"
 
 bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
