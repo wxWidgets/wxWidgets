@@ -185,7 +185,7 @@ public:
     // set this context as the current one
     virtual bool SetCurrent(const wxGLCanvas& win) const = 0;
 
-    bool IsOK() { return m_isOk; }
+    bool IsOK() const { return m_isOk; }
 
 protected:
     bool m_isOk;

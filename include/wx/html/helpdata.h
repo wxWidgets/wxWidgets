@@ -138,10 +138,10 @@ public:
                        bool case_sensitive, bool whole_words_only,
                        const wxString& book = wxEmptyString);
     bool Search();  // do the next iteration
-    bool IsActive() { return m_Active; }
-    int GetCurIndex() { return m_CurIndex; }
-    int GetMaxIndex() { return m_MaxIndex; }
-    const wxString& GetName() { return m_Name; }
+    bool IsActive() const { return m_Active; }
+    int GetCurIndex() const { return m_CurIndex; }
+    int GetMaxIndex() const { return m_MaxIndex; }
+    const wxString& GetName() const { return m_Name; }
 
     const wxHtmlHelpDataItem *GetCurItem() const { return m_CurItem; }
 

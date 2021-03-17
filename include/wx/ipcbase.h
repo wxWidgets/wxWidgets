@@ -58,7 +58,7 @@ public:
   virtual ~wxConnectionBase();
 
   void SetConnected( bool c ) { m_connected = c; }
-  bool GetConnected() { return m_connected; }
+  bool GetConnected() const { return m_connected; }
 
   // Calls that CLIENT can make
   bool Execute(const void *data, size_t size, wxIPCFormat fmt = wxIPC_PRIVATE)

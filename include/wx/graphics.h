@@ -876,7 +876,7 @@ public:
     virtual void EnableOffset(bool enable = true);
 
     void DisableOffset() { EnableOffset(false); }
-    bool OffsetEnabled() { return m_enableOffset; }
+    bool OffsetEnabled() const { return m_enableOffset; }
 
 protected:
     // These fields must be initialized in the derived class ctors.

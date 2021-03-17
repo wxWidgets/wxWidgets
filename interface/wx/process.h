@@ -305,12 +305,12 @@ public:
     /**
         Returns the exist status.
     */
-    int GetExitCode();
+    int GetExitCode() const;
 
     /**
         Returns the process id.
     */
-    int GetPid();
+    int GetPid() const;
 };
 
 

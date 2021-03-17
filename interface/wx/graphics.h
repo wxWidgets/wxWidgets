@@ -1154,7 +1154,7 @@ public:
     virtual void EnableOffset(bool enable = true);
 
     void DisableOffset();
-    bool OffsetEnabled();
+    bool OffsetEnabled() const;
 
     /** @}
     */

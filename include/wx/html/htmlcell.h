@@ -222,7 +222,7 @@ public:
 
     void SetScriptMode(wxHtmlScriptMode mode, long previousBase);
     wxHtmlScriptMode GetScriptMode() const { return m_ScriptMode; }
-    long GetScriptBaseline() { return m_ScriptBaseline; }
+    long GetScriptBaseline() const { return m_ScriptBaseline; }
 
     // Formatting cells are not visible on the screen, they only alter
     // renderer's state.
