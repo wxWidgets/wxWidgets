@@ -12,7 +12,7 @@
 
 #include "wx/webrequest.h"
 
-#if wxUSE_WEBREQUEST_URLSESSION
+#if wxUSE_WEBREQUEST && wxUSE_WEBREQUEST_URLSESSION
 
 #import <Foundation/Foundation.h>
 

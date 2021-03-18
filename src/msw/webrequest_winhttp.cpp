@@ -12,7 +12,7 @@
 
 #include "wx/webrequest.h"
 
-#if wxUSE_WEBREQUEST_WINHTTP
+#if wxUSE_WEBREQUEST && wxUSE_WEBREQUEST_WINHTTP
 
 #include "wx/mstream.h"
 #include "wx/msw/private.h"

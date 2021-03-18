@@ -12,7 +12,7 @@
 
 #include "wx/webrequest.h"
 
-#if wxUSE_WEBREQUEST_CURL
+#if wxUSE_WEBREQUEST && wxUSE_WEBREQUEST_CURL
 
 #include "wx/private/webrequest_curl.h"
 
