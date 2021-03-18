@@ -80,6 +80,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxShowEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMaximizeEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxIconizeEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxFullScreenEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMenuEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxJoystickEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent);
@@ -288,6 +289,7 @@ wxDEFINE_EVENT( wxEVT_DESTROY, wxWindowDestroyEvent );
 wxDEFINE_EVENT( wxEVT_SHOW, wxShowEvent );
 wxDEFINE_EVENT( wxEVT_ICONIZE, wxIconizeEvent );
 wxDEFINE_EVENT( wxEVT_MAXIMIZE, wxMaximizeEvent );
+wxDEFINE_EVENT( wxEVT_FULLSCREEN, wxFullScreenEvent );
 wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEvent );
 wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEvent );
 wxDEFINE_EVENT( wxEVT_PAINT, wxPaintEvent );

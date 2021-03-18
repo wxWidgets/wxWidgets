@@ -606,6 +606,19 @@ extern int wxOSXGetIdFromSelector(SEL action );
     return true;
 }
 
+static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscreen)
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        wxFullScreenEvent event(wxpeer->GetId(), fullscreen);
+        event.SetEventObject(wxpeer);
+        wxpeer->HandleWindowEvent(event);
+    }
+}
+
 // work around OS X bug, on a secondary monitor an already fully sized window
 // (eg maximized) will not be correctly put to full screen size and keeps a 22px
 // title band at the top free, therefore we force the correct content size
@@ -624,6 +637,13 @@ extern int wxOSXGetIdFromSelector(SEL action );
     {
         [view setFrameSize: expectedframerect.size];
     }
+
+    SendFullScreenWindowEvent(notification, true);
+}
+
+- (void)windowWillExitFullScreen:(NSNotification *)notification
+{
+    SendFullScreenWindowEvent(notification, false);
 }
 
 // from https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/CapturingScreenContents/CapturingScreenContents.html
