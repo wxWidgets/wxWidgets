@@ -161,6 +161,8 @@ protected:
 
 #if wxUSE_FILE_HISTORY
     void OnFileHistoryMenuItem(wxCommandEvent& event);
+
+    void OnFileHistoryStyleItem(wxCommandEvent& event);
 #endif
 
 private:
@@ -297,6 +299,11 @@ enum
 #if wxUSE_TEXTDLG
     Menu_Menu_FindItem,
 #endif
+#if wxUSE_FILE_HISTORY
+    Menu_Menu_FileHistory1,
+    Menu_Menu_FileHistory2,
+    Menu_Menu_FileHistory3,
+#endif
 
     Menu_Test_Normal = 400,
     Menu_Test_Check,
@@ -380,6 +387,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_FILE1,          MyFrame::OnFileHistoryMenuItem)
     EVT_MENU(wxID_FILE2,          MyFrame::OnFileHistoryMenuItem)
     EVT_MENU(wxID_FILE3,          MyFrame::OnFileHistoryMenuItem)
+
+    EVT_MENU(Menu_Menu_FileHistory1,     MyFrame::OnFileHistoryStyleItem)
+    EVT_MENU(Menu_Menu_FileHistory2,     MyFrame::OnFileHistoryStyleItem)
+    EVT_MENU(Menu_Menu_FileHistory3,     MyFrame::OnFileHistoryStyleItem)
 #endif
 
     EVT_UPDATE_UI(Menu_SubMenu_Normal,    MyFrame::OnUpdateSubMenuNormal)
@@ -646,6 +657,16 @@ MyFrame::MyFrame()
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_FindItem, "Find menu item from label",
                      "Find a menu item by searching for its label");
+#endif
+#if wxUSE_FILE_HISTORY
+    wxMenu* menuFileHistoryStyle = new wxMenu();
+
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory1, "Hide current path");
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory2, "Hide all paths");
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory3, "Show all paths");
+
+    menuMenu->AppendSeparator();
+    menuMenu->AppendSubMenu(menuFileHistoryStyle, "Select file history menu style");
 #endif
 
     wxMenu *testMenu = new wxMenu;
@@ -1366,6 +1387,24 @@ void MyFrame::OnFileHistoryMenuItem(wxCommandEvent& event)
                  wxOK | wxICON_INFORMATION);
 
     m_fileHistory->AddFileToHistory(fname);
+}
+
+void MyFrame::OnFileHistoryStyleItem(wxCommandEvent& event)
+{
+    switch( event.GetId() )
+    {
+    case Menu_Menu_FileHistory1:
+        m_fileHistory->SetMenuLabelStyle(wxFH_HIDE_CURRENT_PATH);
+        break;
+    case Menu_Menu_FileHistory2:
+        m_fileHistory->SetMenuLabelStyle(wxFH_HIDE_ALL_PATHS);
+        break;
+    case Menu_Menu_FileHistory3:
+        m_fileHistory->SetMenuLabelStyle(wxFH_SHOW_FULL_PATH);
+        break;
+    }
+
+    m_fileHistory->RefreshLabels();
 }
 #endif
 

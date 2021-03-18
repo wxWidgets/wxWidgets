@@ -70,6 +70,7 @@ wxFileHistoryBase::wxFileHistoryBase(size_t maxFiles, wxWindowID idBase)
 {
     m_fileMaxFiles = maxFiles;
     m_idBase = idBase;
+    m_menuLabelStyle = wxFH_HIDE_CURRENT_PATH;
 }
 
 /* static */
@@ -135,20 +136,43 @@ void wxFileHistoryBase::AddFileToHistory(const wxString& file)
     m_fileHistory.insert(m_fileHistory.begin(), file);
     numFiles++;
 
-    // update the labels in all menus
+    RefreshLabels();
+}
+
+void wxFileHistoryBase::RefreshLabels()
+{
+    size_t i;
+    size_t numFiles = m_fileHistory.size();
+
+    // If no files, then no need to refresh the menu
+    if ( numFiles == 0 )
+        return;
+
+    // Use the first file as the current path
+    wxFileName firstFn(m_fileHistory[0]);
+
+    // Update the labels in all menus
     for ( i = 0; i < numFiles; i++ )
     {
-        // if in same directory just show the filename; otherwise the full path
-        const wxFileName fnOld(m_fileHistory[i]);
+        const wxFileName currFn(m_fileHistory[i]);
 
         wxString pathInMenu;
-        if ( (fnOld.GetPath() == fnNew.GetPath()) && fnOld.HasName() )
+
+        if ( m_menuLabelStyle == wxFH_HIDE_ALL_PATHS )
         {
-            pathInMenu = fnOld.GetFullName();
+            // Only show the filename + extension and not the path
+            pathInMenu = currFn.GetFullName();
         }
-        else // file in different directory or it's not a file but a directory
+        else if ( ( m_menuLabelStyle == wxFH_HIDE_CURRENT_PATH ) &&
+                  ( currFn.GetPath() == firstFn.GetPath() ) && currFn.HasName() )
         {
-            // absolute path; could also set relative path
+            // Hide the path if it is in the same folder as the first file
+            pathInMenu = currFn.GetFullName();
+        }
+        else
+        {
+            // Either has wxFH_SHOW_FULL_PATH menu style, or the file is in a different directory
+            // from the first file
             pathInMenu = m_fileHistory[i];
         }
 

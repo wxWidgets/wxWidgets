@@ -6,6 +6,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ Styles for the labels on menu items for wxFileHistory menus
+
+ @since 3.1.5
+*/
+enum wxFileHistoryMenuLabelStyle
+{
+    /** Hide the file path if it matches the path of the first item */
+    wxFH_HIDE_CURRENT_PATH,
+
+    /** Hide all paths and show only filenames */
+    wxFH_HIDE_ALL_PATHS,
+
+    /** Show the full path for all files */
+    wxFH_SHOW_FULL_PATH
+};
+
+/**
     @class wxFileHistory
 
     The wxFileHistory encapsulates a user interface convenience, the list of
@@ -14,6 +31,8 @@
     wxFileHistory can manage one or more file menus. More than one menu may be
     required in an MDI application, where the file history should appear on
     each MDI child menu as well as the MDI parent frame.
+
+    By default, the menu item label style will be @c wxFH_HIDE_CURRENT_PATH.
 
     @library{wxcore}
     @category{docview}
@@ -91,6 +110,14 @@ public:
     virtual void Load(const wxConfigBase& config);
 
     /**
+        Refresh the labels on all the menu items in the menus used by this
+        file history.
+
+        @since 3.1.5
+    */
+    void RefreshLabels();
+
+    /**
         Removes the specified file from the history.
     */
     virtual void RemoveFileFromHistory(size_t i);
@@ -120,4 +147,20 @@ public:
         called, as this is not done automatically.
     */
     virtual void UseMenu(wxMenu* menu);
+
+    /**
+        Set the style of the menu item labels.
+
+        @remarks Use RefreshLabels() to update any existing menu items to the new style.
+        @since 3.1.5
+    */
+    void SetMenuLabelStyle(wxFileHistoryMenuLabelStyle style);
+
+    /**
+        Get the current style of the menu item labels.
+        @since 3.1.5
+    */
+    wxFileHistoryMenuLabelStyle GetMenuLabelStyle() const;
+
+
 };
