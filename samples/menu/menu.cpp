@@ -23,6 +23,8 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/bitmap.h"
+    #include "wx/filehistory.h"
+    #include "wx/filename.h"
     #include "wx/frame.h"
     #include "wx/image.h"
     #include "wx/menu.h"
@@ -157,6 +159,10 @@ protected:
 
     void OnSize(wxSizeEvent& event);
 
+#if wxUSE_FILE_HISTORY
+    void OnFileHistoryMenuItem(wxCommandEvent& event);
+#endif
+
 private:
 #if USE_LOG_WINDOW
     void LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxString& what);
@@ -176,6 +182,11 @@ private:
 #if USE_LOG_WINDOW
     // the control used for logging
     wxTextCtrl *m_textctrl;
+#endif
+
+#if wxUSE_FILE_HISTORY
+    wxMenu*        m_fileHistoryMenu;
+    wxFileHistory* m_fileHistory;
 #endif
 
     // the previous log target
@@ -365,6 +376,12 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Test_Radio2,    MyFrame::OnTestRadio)
     EVT_MENU(Menu_Test_Radio3,    MyFrame::OnTestRadio)
 
+#if wxUSE_FILE_HISTORY
+    EVT_MENU(wxID_FILE1,          MyFrame::OnFileHistoryMenuItem)
+    EVT_MENU(wxID_FILE2,          MyFrame::OnFileHistoryMenuItem)
+    EVT_MENU(wxID_FILE3,          MyFrame::OnFileHistoryMenuItem)
+#endif
+
     EVT_UPDATE_UI(Menu_SubMenu_Normal,    MyFrame::OnUpdateSubMenuNormal)
     EVT_UPDATE_UI(Menu_SubMenu_Check,     MyFrame::OnUpdateSubMenuCheck)
     EVT_UPDATE_UI(Menu_SubMenu_Radio1,    MyFrame::OnUpdateSubMenuRadio)
@@ -538,6 +555,27 @@ MyFrame::MyFrame()
     fileMenu->Append(Menu_File_ShowDialog, "Show &Dialog\tCtrl-D",
                         "Show a dialog");
     fileMenu->AppendSeparator();
+
+#if wxUSE_FILE_HISTORY
+    m_fileHistoryMenu = new wxMenu();
+
+    m_fileHistory = new wxFileHistory();
+    m_fileHistory->UseMenu(m_fileHistoryMenu);
+
+    wxFileName fn( "menu.cpp" );
+    fn.Normalize();
+    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+
+    fn = "Makefile.in";
+    fn.Normalize();
+    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+
+    fn.Assign("minimal", "minimal", "cpp");
+    fn.Normalize();
+    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+
+    fileMenu->AppendSubMenu(m_fileHistoryMenu, "Sample file history");
+#endif
 
     fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit menu sample");
 
@@ -1316,6 +1354,20 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
     PositionMenuBar();
 #endif // __WXUNIVERSAL__
 }
+
+#if wxUSE_FILE_HISTORY
+void MyFrame::OnFileHistoryMenuItem(wxCommandEvent& event)
+{
+    int eventID = event.GetId();
+
+    wxString fname = m_fileHistory->GetHistoryFile(eventID - wxID_FILE1);
+
+    wxMessageBox(wxString::Format("Selected file %s", fname), "File history activated",
+                 wxOK | wxICON_INFORMATION);
+
+    m_fileHistory->AddFileToHistory(fname);
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // MyDialog
