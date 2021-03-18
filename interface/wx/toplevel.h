@@ -68,6 +68,8 @@ enum
         See wxMoveEvent.
     @event{EVT_SHOW(func)}
         Process a @c wxEVT_SHOW event. See wxShowEvent.
+    @event{EVT_FULLSCREEN(id, func)}
+        Process a @c wxEVT_FULLSCREEN event. See wxFullScreenEvent.
     @endEventTable
 
     @library{wxcore}
@@ -632,17 +634,16 @@ public:
     virtual void ShowWithoutActivating();
 
     /**
-        Enables the maximize button to toggle full screen mode. Prior to
-        macOS 10.10 a full screen button is added to the right upper corner
-        of a window's title bar.
+        Enables the zoom button to toggle full screen mode.
 
-        Currently only available for wxOSX/Cocoa.
+        A wxFullScreenEvent is generated when the users enters or exits
+        full screen via the enter/exit full screen button.
 
         @param enable
-            If @true (default) adds the full screen button in the title bar;
-            if @false the button is removed.
+            If @true (default) make the zoom button toggle full screen;
+            if @false the button does only toggle zoom.
 
-        @return @true if the button was added or removed, @false if running
+        @return @true if the button behaviour has been changed, @false if running
         under another OS.
 
         @note Having the button is also required to let ShowFullScreen()
@@ -653,7 +654,7 @@ public:
 
         @onlyfor{wxosx}
 
-        @see ShowFullScreen()
+        @see ShowFullScreen(), wxFullScreenEvent
 
         @since 3.1.0
     */
@@ -718,4 +719,3 @@ public:
     */
     void UseNativeDecorationsByDefault(bool native = true);
 };
-

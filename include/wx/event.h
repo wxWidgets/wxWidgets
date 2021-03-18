@@ -681,6 +681,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowDestroyEvent;
 class WXDLLIMPEXP_FWD_CORE wxShowEvent;
 class WXDLLIMPEXP_FWD_CORE wxIconizeEvent;
 class WXDLLIMPEXP_FWD_CORE wxMaximizeEvent;
+class WXDLLIMPEXP_FWD_CORE wxFullScreenEvent;
 class WXDLLIMPEXP_FWD_CORE wxMouseCaptureChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxMouseCaptureLostEvent;
 class WXDLLIMPEXP_FWD_CORE wxPaintEvent;
@@ -832,6 +833,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DESTROY, wxWindowDestroyEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SHOW, wxShowEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_ICONIZE, wxIconizeEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MAXIMIZE, wxMaximizeEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_FULLSCREEN, wxFullScreenEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PAINT, wxPaintEvent);
@@ -2723,6 +2725,30 @@ public:
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMaximizeEvent);
+};
+
+/*
+ wxEVT_FULLSCREEN
+ */
+class WXDLLIMPEXP_CORE wxFullScreenEvent : public wxEvent
+{
+public:
+    wxFullScreenEvent(int winid = 0, bool fullscreen = true)
+        : wxEvent(winid, wxEVT_FULLSCREEN)
+        { m_fullscreen = fullscreen; }
+    wxFullScreenEvent(const wxFullScreenEvent& event)
+        : wxEvent(event)
+        { m_fullscreen = event.m_fullscreen; }
+
+    bool IsFullScreen() const { return m_fullscreen; }
+
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxFullScreenEvent(*this); }
+
+protected:
+    bool m_fullscreen;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFullScreenEvent);
 };
 
 // Joystick event class

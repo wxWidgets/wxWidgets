@@ -2263,6 +2263,46 @@ public:
 };
 
 /**
+    @class wxFullScreenEvent
+
+    An event being sent when the user enters or exits full screen mode.
+
+    Currently this event is only generated in the wxOSX/Cocoa port when
+    wxTopLevelWindow::EnableFullScreenView() is enabled and the user
+    the user enters or exits full screen. Note that this event is @e not
+    generated when wxTopLevelWindow::ShowFullScreen().
+
+    @beginEventTable{wxFullScreenEvent}
+    @event{EVT_FULLSCREEN(func)}
+        Process a @c wxEVT_FULLSCREEN event.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.1.5
+
+    @see @ref overview_events, wxTopLevelWindow::EnableFullScreenView,
+         wxTopLevelWindow::IsFullScreen
+*/
+class wxFullScreenEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxFullScreenEvent(int id = 0, bool fullscreen = true);
+
+    /**
+        Returns @true if the frame entered full screen, @false if exited
+        full screen.
+    */
+    bool IsFullScreen() const;
+};
+
+
+
+/**
     The possibles modes to pass to wxUpdateUIEvent::SetMode().
 */
 enum wxUpdateUIMode
@@ -5151,4 +5191,3 @@ wxEventType wxEVT_WINDOW_MODAL_DIALOG_CLOSED;
 #endif // wxUSE_GUI
 
 //@}
-
