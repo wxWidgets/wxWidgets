@@ -691,11 +691,7 @@
     #cmakedefine01 wxUSE_GRAPHICS_DIRECT2D
 #endif
 
-#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
-    #cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
-#else
-    #cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
-#endif
+#cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
 
 
 #cmakedefine01 wxUSE_OLE

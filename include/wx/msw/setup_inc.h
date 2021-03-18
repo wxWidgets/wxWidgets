@@ -44,11 +44,7 @@
 //
 // Recommended setting: 1, can be set to 0 if wxUSE_WEBREQUEST_CURL==1,
 // otherwise wxWebRequest won't be available at all.
-#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
-    #define wxUSE_WEBREQUEST_WINHTTP 1
-#else
-    #define wxUSE_WEBREQUEST_WINHTTP 0
-#endif
+#define wxUSE_WEBREQUEST_WINHTTP 1
 
 // ----------------------------------------------------------------------------
 // Windows-only settings
