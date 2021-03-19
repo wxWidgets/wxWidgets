@@ -643,7 +643,7 @@ public:
             If @true (default) make the zoom button toggle full screen;
             if @false the button does only toggle zoom.
 
-        @return @true if the button activated, @false if running
+        @return @true if the button behaviour has been changed, @false if running
         under another OS.
 
         @note Having the button is also required to let ShowFullScreen()
@@ -719,4 +719,3 @@ public:
     */
     void UseNativeDecorationsByDefault(bool native = true);
 };
-

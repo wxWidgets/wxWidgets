@@ -2738,7 +2738,7 @@ public:
         { m_fullscreen = fullscreen; }
     wxFullScreenEvent(const wxFullScreenEvent& event)
         : wxEvent(event)
-    { m_fullscreen = event.m_fullscreen; }
+        { m_fullscreen = event.m_fullscreen; }
 
     bool IsFullScreen() const { return m_fullscreen; }
 

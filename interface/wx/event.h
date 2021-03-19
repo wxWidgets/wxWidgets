@@ -2268,7 +2268,7 @@ public:
     An event being sent when the frame enters or exits fullscreen.
 
     Currently this event is only generated in the wxOSX/Cocoa port when
-    wxTopLevelWindow::EnableFullScreenView is enabled. It is not only
+    wxTopLevelWindow::EnableFullScreenView() is enabled. It is not only
     generated when wxTopLevelWindow::ShowFullScreen is called, but also
     when the user enters or exits full screen.
 
@@ -5191,4 +5191,3 @@ wxEventType wxEVT_WINDOW_MODAL_DIALOG_CLOSED;
 #endif // wxUSE_GUI
 
 //@}
-
