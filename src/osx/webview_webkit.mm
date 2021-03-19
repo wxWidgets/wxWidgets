@@ -514,7 +514,7 @@ void wxWebViewWebKit::DoSetPage(const wxString& src, const wxString& baseUrl)
                                     wxCFStringRef( baseUrl ).AsNSString()]];
 }
 
-void wxWebViewWebKit::EnableHistory(bool enable)
+void wxWebViewWebKit::EnableHistory(bool WXUNUSED(enable))
 {
     if ( !m_webView )
         return;
