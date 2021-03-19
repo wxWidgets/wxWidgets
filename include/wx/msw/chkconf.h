@@ -236,7 +236,7 @@
 #endif /* !wxUSE_ACTIVITYINDICATOR && !_MSC_VER */
 
 /* MinGW-w64 (32 and 64 bit) has winhttp.h available, legacy MinGW does not. */
-#if (!defined(_MSC_VER) && !defined(__MINGW64_VERSION_MAJOR))
+#if (!defined(_MSC_VER) && !defined(__MINGW64_VERSION_MAJOR)) || !wxUSE_DYNLIB_CLASS
     #undef wxUSE_WEBREQUEST_WINHTTP
     #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
