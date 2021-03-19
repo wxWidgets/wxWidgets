@@ -81,6 +81,7 @@ public:
 #if wxUSE_WEBVIEW_WEBKIT2
     virtual void EnableAccessToDevTools(bool enable = true) wxOVERRIDE;
     virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
+    virtual bool SetUserAgent(const wxString& userAgent) wxOVERRIDE;
 #endif
 
     void SetZoomType(wxWebViewZoomType) wxOVERRIDE;
@@ -176,6 +177,7 @@ private:
 #endif
 
     WebKitWebView *m_web_view;
+    wxString m_customUserAgent;
     int m_historyLimit;
 
     wxVector<wxSharedPtr<wxWebViewHandler> > m_handlerList;

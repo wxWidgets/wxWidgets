@@ -29,6 +29,7 @@
 #ifdef __VISUALC__
 #include <wrl/event.h>
 using namespace Microsoft::WRL;
+#include "WebView2EnvironmentOptions.h"
 #else
 #include <wx/msw/wrl/event.h>
 #endif // !__VISUALC__
@@ -91,11 +92,23 @@ bool wxWebViewEdgeImpl::Create()
     m_historyPosition = -1;
 
     wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
+#ifdef __VISUALC__
+    auto options =
+        Make<CoreWebView2EnvironmentOptions>();
+
+    if (!m_customUserAgent.empty())
+        options->put_AdditionalBrowserArguments(
+            wxString::Format("--user-agent=\"%s\"", m_customUserAgent).wc_str());
+#endif
 
     HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
         ms_browserExecutableDir.wc_str(),
         userDataPath.wc_str(),
+#ifdef __VISUALC__
+        options.Get(),
+#else
         nullptr,
+#endif
         Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
             &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
     if (FAILED(hr))
@@ -476,6 +489,24 @@ ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
     return settings;
 }
 
+wxWebViewEdge::wxWebViewEdge():
+    m_impl(new wxWebViewEdgeImpl(this))
+{
+
+}
+
+wxWebViewEdge::wxWebViewEdge(wxWindow* parent,
+    wxWindowID id,
+    const wxString& url,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name):
+    m_impl(new wxWebViewEdgeImpl(this))
+{
+    Create(parent, id, url, pos, size, style, name);
+}
+
 wxWebViewEdge::~wxWebViewEdge()
 {
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
@@ -501,7 +532,6 @@ bool wxWebViewEdge::Create(wxWindow* parent,
         return false;
     }
 
-    m_impl = new wxWebViewEdgeImpl(this);
     if (!m_impl->Create())
         return false;
     Bind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
@@ -761,6 +791,20 @@ bool wxWebViewEdge::IsAccessToDevToolsEnabled() const
     return true;
 }
 
+bool wxWebViewEdge::SetUserAgent(const wxString& userAgent)
+{
+    m_impl->m_customUserAgent = userAgent;
+    // Can currently only be set before Create()
+    wxCHECK_MSG(!m_impl->m_webViewController, false, "Can't be called after Create()");
+    if (m_impl->m_webViewController)
+        return false;
+    else
+        return true;
+
+    // TODO: As of Edge SDK 1.0.790 an experimental API to set the user agent
+    // is available. Reimplement using m_impl->GetSettings() when it's stable.
+}
+
 void* wxWebViewEdge::GetNativeBackend() const
 {
     return m_impl->m_webView;
@@ -774,6 +818,8 @@ void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
 bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     bool scriptExecuted = false;
+    if (!m_impl->m_webView)
+        return false;
 
     // Start script execution
     HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<ICoreWebView2ExecuteScriptCompletedHandler>(

@@ -23,7 +23,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewEdge : public wxWebView
 {
 public:
 
-    wxWebViewEdge() {}
+    wxWebViewEdge();
 
     wxWebViewEdge(wxWindow* parent,
         wxWindowID id,
@@ -31,10 +31,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxWebViewNameStr)
-    {
-        Create(parent, id, url, pos, size, style, name);
-    }
+        const wxString& name = wxWebViewNameStr);
 
     ~wxWebViewEdge();
 
@@ -88,6 +85,8 @@ public:
 
     virtual void EnableAccessToDevTools(bool enable = true) wxOVERRIDE;
     virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
+
+    virtual bool SetUserAgent(const wxString& userAgent) wxOVERRIDE;
 
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
     virtual bool AddScriptMessageHandler(const wxString& name) wxOVERRIDE;
