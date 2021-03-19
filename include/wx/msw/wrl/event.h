@@ -84,15 +84,15 @@ template <
     typename baseT, typename lambdaT, // base type & lambda type
     typename LT, typename ...argTs // for capturing argument types of lambda
 >
-wxCOMPtr<baseT> Callback_impl(lambdaT&& lambda, HRESULT(LT::*)(argTs...) const)
+wxCOMPtr<baseT> Callback_impl(const lambdaT& lambda, HRESULT(LT::*)(argTs...) const)
 {
     return wxCOMPtr<baseT>(new CInvokableLambda<baseT, argTs...>(lambda));
 }
 
 template <typename baseT, typename lambdaT>
-wxCOMPtr<baseT> Callback(lambdaT&& lambda)
+wxCOMPtr<baseT> Callback(const lambdaT& lambda)
 {
-    return Callback_impl<baseT>(std::move(lambda), &lambdaT::operator());
+    return Callback_impl<baseT>(lambda, &lambdaT::operator());
 }
 
 template <typename baseT, typename contextT, typename ...argTs>
