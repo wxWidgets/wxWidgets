@@ -227,6 +227,10 @@ protected:
     // wxGraphicsContext, in the expectation that the derived class will do it
     wxGCDCImpl(wxDC* owner, int);
 
+#ifdef __WXOSX__
+    virtual wxPoint OSXGetOrigin() const { return wxPoint(); }
+#endif
+
     // scaling variables
     bool m_logicalFunctionSupported;
     wxGraphicsMatrix m_matrixOriginal;

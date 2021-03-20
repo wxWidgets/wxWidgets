@@ -397,7 +397,11 @@ void wxGCDCImpl::DestroyClippingRegion()
     // so we must explicitly make sure it only covers the area we want it to draw
     int width, height ;
     GetOwner()->GetSize( &width , &height ) ;
-    m_graphicContext->Clip( DeviceToLogicalX(0) , DeviceToLogicalY(0) , DeviceToLogicalXRel(width), DeviceToLogicalYRel(height) );
+    wxPoint origin;
+#ifdef __WXOSX__
+    origin = OSXGetOrigin();
+#endif
+    m_graphicContext->Clip( DeviceToLogicalX(origin.x) , DeviceToLogicalY(origin.y) , DeviceToLogicalXRel(width), DeviceToLogicalYRel(height) );
 
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
