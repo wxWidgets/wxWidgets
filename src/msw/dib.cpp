@@ -638,6 +638,10 @@ wxPalette *wxDIB::CreatePalette() const
 bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
 {
     wxCHECK_MSG( image.IsOk(), false, wxT("invalid wxImage in wxDIB ctor") );
+#if !wxUSE_PALETTE
+    wxCHECK_MSG(dstDepth != 1, false,
+        "wxImage conversion to monochrome bitmap requires wxUSE_PALETTE");
+#endif
 
     const int h = image.GetHeight();
     const int w = image.GetWidth();
@@ -655,6 +659,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
 
     // if requested, convert wxImage's content to monochrome
     wxScopedArray<unsigned char> eightBitData;
+#if wxUSE_PALETTE
     if ( dstDepth == 1 )
     {
         wxImage quantized;
@@ -695,6 +700,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
             return false;
         }
     }
+#endif // wxUSE_PALETTE
 
     // DIBs are stored in bottom to top order (see also the comment above in
     // Create()) so we need to copy bits line by line and starting from the end
