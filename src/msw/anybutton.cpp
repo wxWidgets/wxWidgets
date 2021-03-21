@@ -93,7 +93,7 @@ extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
 
 // we use different data classes for owner drawn buttons and for themed XP ones
 
-class wxButtonImageData
+class wxButtonImageData: public wxObject
 {
 public:
     wxButtonImageData() { }
@@ -177,7 +177,10 @@ private:
     wxDirection m_dir;
 
     wxDECLARE_NO_COPY_CLASS(wxODButtonImageData);
+    wxDECLARE_ABSTRACT_CLASS(wxODButtonImageData);
 };
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxODButtonImageData, wxButtonImageData);
 
 #if wxUSE_UXTHEME
 
@@ -337,7 +340,10 @@ private:
 
 
     wxDECLARE_NO_COPY_CLASS(wxXPButtonImageData);
+    wxDECLARE_ABSTRACT_CLASS(wxXPButtonImageData);
 };
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxXPButtonImageData, wxButtonImageData);
 
 #endif // wxUSE_UXTHEME
 
@@ -683,7 +689,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         // We can't change the size of the images stored in wxImageList
         // in wxXPButtonImageData::m_iml so force recreating it below but
         // keep the current data to copy its values into the new one.
-        oldData = dynamic_cast<wxXPButtonImageData*>(m_imageData);
+        oldData = wxDynamicCast(m_imageData, wxXPButtonImageData);
         if ( oldData )
         {
             m_imageData = NULL;
@@ -1184,7 +1190,7 @@ void wxAnyButton::MakeOwnerDrawn()
         // We need to use owner-drawn specific data structure so we have
         // to create it and copy the data from native data structure,
         // if necessary.
-        if ( m_imageData && dynamic_cast<wxODButtonImageData*>(m_imageData) == NULL )
+        if ( m_imageData && wxDynamicCast(m_imageData, wxODButtonImageData) == NULL )
         {
             wxODButtonImageData* newData = new wxODButtonImageData(this, m_imageData->GetBitmap(State_Normal));
             for ( int n = 0; n < State_Max; n++ )
