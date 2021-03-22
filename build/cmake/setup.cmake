@@ -132,21 +132,6 @@ if(NOT MSVC)
     endif()
 endif()
 
-if(wxUSE_STL AND CMAKE_CXX_STANDARD EQUAL 98)
-    wx_check_cxx_source_compiles("
-        std::vector<int> moo;
-        std::list<int> foo;
-        std::vector<int>::iterator it =
-            std::find_if(moo.begin(), moo.end(),
-                std::bind2nd(std::less<int>(), 3));"
-        wxTEST_STL
-        string functional algorithm vector list
-        )
-    if(NOT wxTEST_STL)
-        message(FATAL_ERROR "Can't use wxUSE_STL as basic STL functionality is missing")
-    endif()
-endif()
-
 wx_check_cxx_source_compiles("
     std::string foo, bar;
     foo.compare(bar);
