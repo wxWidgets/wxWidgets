@@ -507,8 +507,6 @@ public:
     size_t operator()( wxLongLong_t x ) const wxNOEXCEPT { return longlongHash(x); }
     size_t operator()( wxULongLong_t x ) const wxNOEXCEPT { return longlongHash(x); }
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-    wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
 
 #else // wxNEEDS_WX_HASH_MAP
