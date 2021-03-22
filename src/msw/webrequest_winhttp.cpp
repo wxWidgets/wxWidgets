@@ -23,7 +23,6 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/translation.h"
-    #include "wx/module.h"
 #endif
 
 // Helper class used to dynamically load the required symbols from winhttp.dll
@@ -113,23 +112,6 @@ wxWinHTTP::WinHttpReadData_t wxWinHTTP::WinHttpReadData;
 wxWinHTTP::WinHttpQueryAuthSchemes_t wxWinHTTP::WinHttpQueryAuthSchemes;
 wxWinHTTP::WinHttpSetCredentials_t wxWinHTTP::WinHttpSetCredentials;
 wxWinHTTP::WinHttpOpen_t wxWinHTTP::WinHttpOpen;
-
-class wxWinHTTPModule : public wxModule
-{
-public:
-    virtual bool OnInit() wxOVERRIDE
-    {
-        return wxWinHTTP::LoadLibrary();
-    }
-
-    virtual void OnExit() wxOVERRIDE
-    {
-    }
-
-    wxDECLARE_DYNAMIC_CLASS(wxWinHTTPModule);
-};
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxWinHTTPModule, wxModule);
 
 
 // Define constants potentially missing in old SDKs
@@ -674,6 +656,11 @@ wxWebSessionWinHTTP::~wxWebSessionWinHTTP()
 {
     if ( m_handle )
         wxWinHTTPCloseHandle(m_handle);
+}
+
+bool wxWebSessionWinHTTP::Initialize()
+{
+    return wxWinHTTP::LoadLibrary();
 }
 
 bool wxWebSessionWinHTTP::Open()
