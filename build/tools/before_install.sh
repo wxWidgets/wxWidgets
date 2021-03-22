@@ -47,6 +47,8 @@ case $(uname -s) in
             $SUDO apt-get install -y $libtoolkit_dev $pkg_install
 
             if [ "$wxUSE_ASAN" = 1 ]; then
+                set -x
+
                 codename=$(lsb_release --codename --short)
                 # Enable the `-dbgsym` repositories.
                 echo "deb http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
@@ -58,10 +60,15 @@ case $(uname -s) in
                 # Note that this command works only on Ubuntu 18.04 LTS and newer.
                 $SUDO apt-get install -y ubuntu-dbgsym-keyring
 
+                $SUDO apt-key update || echo update failed
+                $SUDO apt-key net-update || echo net-update failed
+
                 $SUDO apt-get update
 
                 # Install the symbols to allow LSAN suppression list to work.
                 $SUDO apt-get install -y libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym
+
+                set +x
             fi
         fi
         ;;
