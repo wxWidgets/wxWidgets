@@ -51,19 +51,16 @@ case $(uname -s) in
 
                 codename=$(lsb_release --codename --short)
                 # Enable the `-dbgsym` repositories.
-                echo "deb http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
-                deb http://ddebs.ubuntu.com ${codename}-updates main restricted universe multiverse
-                deb http://ddebs.ubuntu.com ${codename}-proposed main restricted universe multiverse" | \
+                echo "deb [trusted=yes] http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
+                deb [trusted=yes] http://ddebs.ubuntu.com ${codename}-updates main restricted universe multiverse
+                deb [trusted=yes] http://ddebs.ubuntu.com ${codename}-proposed main restricted universe multiverse" | \
                 $SUDO tee --append /etc/apt/sources.list.d/ddebs.list
 
                 # Import the debug symbol archive signing key from the Ubuntu server.
                 # Note that this command works only on Ubuntu 18.04 LTS and newer.
                 $SUDO apt-get install -y ubuntu-dbgsym-keyring
 
-                $SUDO apt-key update || echo update failed
-                $SUDO apt-key net-update || echo net-update failed
-
-                $SUDO apt-get update
+                $SUDO apt-get update || $SUDO apt-get update --allow-unauthenticated
 
                 # Install the symbols to allow LSAN suppression list to work.
                 $SUDO apt-get install -y libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym
