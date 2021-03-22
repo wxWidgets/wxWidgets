@@ -58,9 +58,9 @@ case $(uname -s) in
 
                 # Import the debug symbol archive signing key from the Ubuntu server.
                 # Note that this command works only on Ubuntu 18.04 LTS and newer.
-                $SUDO apt-get install -y ubuntu-dbgsym-keyring
+                $SUDO apt-get install -y ubuntu-dbgsym-keyring faketime
 
-                $SUDO apt-get update || $SUDO apt-get update --allow-unauthenticated
+                $SUDO faketime '2021-03-19 00:00:00' apt-get update
 
                 # Install the symbols to allow LSAN suppression list to work.
                 $SUDO apt-get install -y libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym
