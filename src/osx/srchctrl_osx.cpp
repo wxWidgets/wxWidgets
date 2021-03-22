@@ -94,7 +94,9 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
 {
     if ( menu == m_menu )
     {
-        // no change
+        if ( m_menu )
+            GetSearchPeer()->SetSearchMenu( m_menu ); // menu template can be reset by user
+
         return;
     }
 
