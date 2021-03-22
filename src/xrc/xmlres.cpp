@@ -343,7 +343,8 @@ bool wxXmlResource::Load(const wxString& filemask_)
 {
     wxString filemask = ConvertFileNameToURL(filemask_);
 
-    bool allOK = true;
+    bool allOK = true,
+         anyOK = false;
 
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
@@ -356,32 +357,46 @@ bool wxXmlResource::Load(const wxString& filemask_)
     wxString fnd = wxXmlFindFirst;
     if ( fnd.empty() )
     {
-        wxLogError(_("Cannot load resources from '%s'."), filemask);
-        return false;
+        // Some file system handlers (e.g. wxInternetFSHandler) just don't
+        // implement FindFirst() at all, try using the original path as is.
+        fnd = filemask;
     }
 
     while (!fnd.empty())
     {
+        bool thisOK = true;
+
 #if wxUSE_FILESYSTEM
         if ( IsArchive(fnd) )
         {
             if ( !Load(fnd + wxT("#zip:*.xrc")) )
-                allOK = false;
+                thisOK = false;
         }
         else // a single resource URL
 #endif // wxUSE_FILESYSTEM
         {
             wxXmlDocument * const doc = DoLoadFile(fnd);
             if ( !doc )
-                allOK = false;
+                thisOK = false;
             else
                 Data().push_back(new wxXmlResourceDataRecord(fnd, doc));
         }
+
+        if ( thisOK )
+            anyOK = true;
+        else
+            allOK = false;
 
         fnd = wxXmlFindNext;
     }
 #   undef wxXmlFindFirst
 #   undef wxXmlFindNext
+
+    if ( !anyOK )
+    {
+        wxLogError(_("Cannot load resources from '%s'."), filemask);
+        return false;
+    }
 
     return allOK;
 }

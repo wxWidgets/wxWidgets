@@ -19,6 +19,7 @@
 
 #if wxUSE_XRC
 
+#include "wx/fs_inet.h"
 #include "wx/xml/xml.h"
 #include "wx/sstream.h"
 #include "wx/wfstream.h"
@@ -202,6 +203,33 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::IDRanges", "[xrc]")
         // Unload the xrc, so it can be reloaded and the tests rerun
         CHECK( wxXmlResource::Get()->Unload(TEST_XRC_FILE) );
     }
+}
+
+// This test is disabled by default as it requires the environment variable
+// below to be defined to point to a HTTP URL with the file to load.
+//
+// Use something like "python3 -m http.server samples/xrc/rc" and set
+// WX_TEST_XRC_URL to http://localhost/menu.xrc to run this test.
+TEST_CASE_METHOD(XrcTestCase, "XRC::LoadURL", "[xrc][.]")
+{
+    wxString url;
+    REQUIRE( wxGetEnv("WX_TEST_XRC_URL", &url) );
+
+    // Ensure that loading from HTTP URLs is supported.
+    struct InetHandler : wxInternetFSHandler
+    {
+        InetHandler()
+        {
+            wxFileSystem::AddHandler(this);
+        }
+
+        ~InetHandler()
+        {
+            wxFileSystem::RemoveHandler(this);
+        }
+    } inetHandler;
+
+    CHECK( wxXmlResource::Get()->Load(url) );
 }
 
 #endif // wxUSE_XRC
