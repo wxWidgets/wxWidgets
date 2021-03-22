@@ -58,6 +58,11 @@ case $(uname -s) in
                 # Note that this command works only on Ubuntu 18.04 LTS and newer.
                 $SUDO apt-get install -y ubuntu-dbgsym-keyring
 
+                # The key in the package above is currently (2021-03-22) out of
+                # date, so get the latest key manually (this is completely
+                # insecure, of course, but we don't care).
+                wget -O - http://ddebs.ubuntu.com/dbgsym-release-key.asc | $SUDO apt-key add -
+
                 $SUDO apt-get update
 
                 # Install the symbols to allow LSAN suppression list to work.
