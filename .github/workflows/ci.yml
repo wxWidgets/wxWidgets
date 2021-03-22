@@ -123,7 +123,7 @@ jobs:
           case "${{ matrix.compiler }}" in
             clang)
               echo CC=clang >> $GITHUB_ENV
-              echo CXX=clang++ >> $GITHUB_ENV
+              echo CXX='clang++ -stdlib=libc++' >> $GITHUB_ENV
               echo LD=clang++ >> $GITHUB_ENV
 
               allow_warn_opt="-Wno-error=#warnings"
