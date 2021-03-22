@@ -45,8 +45,11 @@
                 case wxWebRequest::State_Completed:
                 {
                     wxImage logoImage(*evt.GetResponse().GetStream());
-                    if (logoImage.IsOK())
-                        wxLogInfo("Image loaded");
+                    if (logoImage.IsOk())
+                        wxLogInfo("Image successfully downloaded");
+
+                    ... do something with it ...
+
                     break;
                 }
                 // Request failed
