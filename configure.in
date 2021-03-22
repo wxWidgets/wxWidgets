@@ -2002,28 +2002,6 @@ if test "$wxUSE_STD_IOSTREAM" = "yes"; then
 fi
 
 if test "$wxUSE_STL" = "yes"; then
-    dnl check for basic STL functionality
-    AC_CACHE_CHECK([for basic STL functionality],
-        wx_cv_lib_stl,
-        [AC_TRY_COMPILE([#include <string>
-            #include <functional>
-            #include <algorithm>
-            #include <vector>
-            #include <list>],
-            [std::vector<int> moo;
-             std::list<int> foo;
-             std::vector<int>::iterator it =
-                 std::find_if(moo.begin(), moo.end(),
-                              std::bind2nd(std::less<int>(), 3));],
-            wx_cv_lib_stl=yes,
-            wx_cv_lib_stl=no
-        )]
-    )
-
-    if test "$wx_cv_lib_stl" != yes; then
-         AC_MSG_ERROR([Can't use --enable-stl as basic STL functionality is missing])
-    fi
-
     dnl check for compliant std::string::compare
     AC_CACHE_CHECK([for compliant std::string::compare],
         wx_cv_func_stdstring_compare,
