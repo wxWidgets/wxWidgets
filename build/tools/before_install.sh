@@ -4,6 +4,8 @@
 # wxWidgets but can also be run by hand if necessary but currently it only
 # works for Ubuntu versions used by Travis builds.
 
+set -e
+
 SUDO=sudo
 
 case $(uname -s) in
