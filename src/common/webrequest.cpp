@@ -942,6 +942,13 @@ void
 wxWebSession::RegisterFactory(const wxString& backend,
                               wxWebSessionFactory* factory)
 {
+    if ( !factory->Initialize() )
+    {
+        delete factory;
+        factory = NULL;
+        return;
+    }
+
     // Note that we don't have to check here that there is no registered
     // backend with the same name yet because we're only called from
     // InitFactoryMap() below. If this function becomes public, we'd need to

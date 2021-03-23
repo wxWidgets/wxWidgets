@@ -136,6 +136,8 @@ public:
 
     ~wxWebSessionWinHTTP();
 
+    static bool Initialize();
+
     wxWebRequestImplPtr
     CreateRequest(wxWebSession& session,
                   wxEvtHandler* handler,
@@ -163,7 +165,14 @@ class wxWebSessionFactoryWinHTTP : public wxWebSessionFactory
 {
 public:
     wxWebSessionImpl* Create() wxOVERRIDE
-        { return new wxWebSessionWinHTTP(); }
+    {
+        return new wxWebSessionWinHTTP();
+    }
+
+    bool Initialize() wxOVERRIDE
+    {
+        return wxWebSessionWinHTTP::Initialize();
+    }
 };
 
 #endif // _WX_MSW_WEBREQUEST_WINHTTP_H

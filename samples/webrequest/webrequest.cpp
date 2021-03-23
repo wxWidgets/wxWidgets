@@ -10,10 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -27,6 +23,10 @@
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
+#endif
+
+#if !wxUSE_WEBREQUEST
+#error "wxUSE_WEBREQUEST must be 1 for this sample."
 #endif
 
 class WebRequestFrame : public wxFrame

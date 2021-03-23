@@ -212,6 +212,8 @@ class wxWebSessionFactory
 public:
     virtual wxWebSessionImpl* Create() = 0;
 
+    virtual bool Initialize() { return true; }
+
     virtual ~wxWebSessionFactory() { }
 };
 

@@ -12,7 +12,7 @@
 
 #include "wx/webrequest.h"
 
-#if wxUSE_WEBREQUEST_CURL
+#if wxUSE_WEBREQUEST && wxUSE_WEBREQUEST_CURL
 
 #include "wx/private/webrequest_curl.h"
 
@@ -461,7 +461,7 @@ wxDEFINE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
 class SocketPollerImpl
 {
 public:
-    virtual ~SocketPollerImpl(){};
+    virtual ~SocketPollerImpl(){}
     virtual bool StartPolling(wxSOCKET_T, int) = 0;
     virtual void StopPolling(wxSOCKET_T) = 0;
     virtual void ResumePolling(wxSOCKET_T) = 0;
