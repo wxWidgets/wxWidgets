@@ -210,12 +210,17 @@ function(wx_set_target_properties target_name is_base)
                 "-DWXDLLNAME=wx${lib_toolkit}${dll_version}${lib_unicode}$<$<CONFIG:Debug>:d>${dll_suffix}")
         endif()
     else()
+        set(cross_target "")
+        if (CMAKE_CROSSCOMPILING AND NOT IPHONE)
+            set(cross_target "-${CMAKE_SYSTEM_NAME}")
+        endif ()
+
         set_target_properties(${target_name}
             PROPERTIES
-                OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}
+                OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}${cross_target}
                 # NOTE: wx-config can not be used to connect the libraries with the debug suffix.
                 #OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_flavour}${lib_suffix}-${lib_version}
-                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}
+                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}${cross_target}
             )
     endif()
     if(CYGWIN)
