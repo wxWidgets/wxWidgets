@@ -196,6 +196,8 @@ jobs:
           python -m httpbin.core 2>&1 >httpbin.log &
           export WX_TEST_WEBREQUEST_URL=http://localhost:5000
 
+          export ASAN_OPTIONS=fast_unwind_on_malloc=0
+
           # Explicitly use bash because /bin/sh doesn't have pipefail option
           /bin/bash -o pipefail -c './test 2>&1 | tee test.out' || rc=$?
           if [ ${{ matrix.use_asan }} ]; then
