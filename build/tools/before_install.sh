@@ -9,6 +9,9 @@ SUDO=sudo
 case $(uname -s) in
     Linux)
         if [ -f /etc/apt/sources.list ]; then
+            # Disable some (but not all) output.
+            apt_quiet='-q -o=Dpkg::Use-Pty=0'
+
             if [ "$wxUSE_ASAN" = 1 ]; then
                 codename=$(lsb_release --codename --short)
                 # Enable the `-dbgsym` repositories.
@@ -19,7 +22,7 @@ case $(uname -s) in
 
                 # Import the debug symbol archive signing key from the Ubuntu server.
                 # Note that this command works only on Ubuntu 18.04 LTS and newer.
-                $SUDO apt-get install -y ubuntu-dbgsym-keyring
+                $SUDO apt-get $apt_quiet install -y ubuntu-dbgsym-keyring
 
                 # The key in the package above is currently (2021-03-22) out of
                 # date, so get the latest key manually (this is completely
@@ -30,7 +33,7 @@ case $(uname -s) in
                 pkg_install='libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym'
             fi
 
-            $SUDO apt-get update
+            $SUDO apt-get $apt_quiet update
 
             case "$wxCONFIGURE_FLAGS" in
                 *--with-directfb*) libtoolkit_dev='libdirectfb-dev'         ;;
@@ -67,7 +70,7 @@ case $(uname -s) in
                 fi
             done
 
-            $SUDO apt-get install -y $pkg_install
+            $SUDO apt-get $apt_quiet install -y $pkg_install
         fi
         ;;
 
