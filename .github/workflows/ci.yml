@@ -232,7 +232,15 @@ jobs:
             fi
             export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
           fi
-          xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui
+          ulimit -c unlimited
+          /bin/bash -o pipefail -c 'xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui 2>&1 | tee test_gui.out' || rc=$?
+          if [ -n "$rc" ]; then
+            if fgrep -q '(core dumped)' test_gui.out; then
+                echo '*** Test crashed, trying to get more information ***'
+                gdb --quiet --core=core -ex 'where' -ex 'thread apply all bt' -ex 'q' ./test_gui
+            fi
+            exit $rc
+          fi
 
       - name: Building samples
         if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.skip_samples != true
