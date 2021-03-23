@@ -16,8 +16,7 @@ case $(uname -s) in
                 codename=$(lsb_release --codename --short)
                 # Enable the `-dbgsym` repositories.
                 echo "deb http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
-                deb http://ddebs.ubuntu.com ${codename}-updates main restricted universe multiverse
-                deb http://ddebs.ubuntu.com ${codename}-proposed main restricted universe multiverse" | \
+                deb http://ddebs.ubuntu.com ${codename}-updates main restricted universe multiverse" | \
                 $SUDO tee --append /etc/apt/sources.list.d/ddebs.list
 
                 # Import the debug symbol archive signing key from the Ubuntu server.
