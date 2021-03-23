@@ -43,7 +43,7 @@ case $(uname -s) in
                 wget -O - http://ddebs.ubuntu.com/dbgsym-release-key.asc | $SUDO apt-key add -
 
                 # Install the symbols to allow LSAN suppression list to work.
-                pkg_install='libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym'
+                dbgsym_pkgs='libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym'
             fi
 
             run_apt update
@@ -85,7 +85,18 @@ case $(uname -s) in
                 fi
             done
 
-            run_apt install -y $pkg_install
+            if ! run_apt install -y $pkg_install $dbgsym_pkgs; then
+                if [ -z "$dbgsym_pkgs" ]; then
+                    exit $?
+                fi
+
+                # Retry without dbgsym packages that currently fail to install
+                # under Ubuntu Focal (20.04).
+                echo 'Installing with dbgsym packages failed, retrying without...'
+                run_apt install -y $pkg_install
+            else
+                touch wx_dbgsym_available
+            fi
         fi
         ;;
 
