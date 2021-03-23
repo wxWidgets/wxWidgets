@@ -219,6 +219,7 @@ jobs:
 
       - name: Testing GUI using Xvfb
         if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.use_xvfb
+        working-directory: tests
         run: |
           if [ ${{ matrix.use_asan }} ]; then
             # Leak suppression only works if we have debug symbols available,
@@ -231,9 +232,7 @@ jobs:
             fi
             export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
           fi
-          pushd tests
           xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui
-          popd
 
       - name: Building samples
         if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.skip_samples != true
