@@ -74,7 +74,7 @@ case $(uname -s) in
                             libglu1-mesa-dev"
             esac
 
-            pkg_install="$pkg_install $libtoolkit_dev"
+            pkg_install="$pkg_install $libtoolkit_dev gdb"
 
             extra_deps="$extra_deps libcurl4-openssl-dev libsecret-1-dev libnotify-dev"
             for pkg in $extra_deps; do
