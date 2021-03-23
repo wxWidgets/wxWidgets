@@ -7,7 +7,6 @@ on:
       - master
     paths-ignore:
       - 'build/tools/appveyor*.bat'
-      - 'build/tools/before_install.sh'
       - 'build/tools/travis-ci.sh'
       - 'distrib/**'
       - 'docs/**'
@@ -24,7 +23,6 @@ on:
       - master
     paths-ignore:
       - 'build/tools/appveyor*.bat'
-      - 'build/tools/before_install.sh'
       - 'build/tools/travis-ci.sh'
       - 'distrib/**'
       - 'docs/**'
