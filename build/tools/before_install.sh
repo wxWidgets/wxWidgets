@@ -66,6 +66,8 @@ case $(uname -s) in
             for pkg in $extra_deps; do
                 if $(apt-cache pkgnames | grep -q $pkg) ; then
                     pkg_install="$pkg_install $pkg"
+                else
+                    echo "Not installing non-existent package $pkg"
                 fi
             done
 
