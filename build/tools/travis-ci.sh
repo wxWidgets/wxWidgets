@@ -16,7 +16,15 @@ launch_httpbin() {
     echo 'travis_fold:start:httpbin'
     echo 'Running httpbin...'
 
-    pip install httpbin --user
+    # We need to disable SSL certificate checking under Trusty because Python
+    # version there is too old to support SNI.
+    case "$(lsb_release --codename --short)" in
+        trusty)
+            pip_args='--trusted-host files.pythonhosted.org'
+            ;;
+    esac
+
+    pip install httpbin --user $pip_args
     python -m httpbin.core &
     WX_TEST_WEBREQUEST_URL="http://localhost:5000"
 
