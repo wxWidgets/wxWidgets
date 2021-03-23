@@ -26,10 +26,8 @@ case $(uname -s) in
                 # insecure, of course, but we don't care).
                 wget -O - http://ddebs.ubuntu.com/dbgsym-release-key.asc | $SUDO apt-key add -
 
-                $SUDO apt-get update
-
                 # Install the symbols to allow LSAN suppression list to work.
-                $SUDO apt-get install -y libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym
+                pkg_install='libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym'
             fi
 
             $SUDO apt-get update
@@ -60,6 +58,8 @@ case $(uname -s) in
                             libglu1-mesa-dev"
             esac
 
+            pkg_install="$pkg_install $libtoolkit_dev"
+
             extra_deps="$extra_deps libcurl4-openssl-dev libsecret-1-dev libnotify-dev"
             for pkg in $extra_deps; do
                 if $(apt-cache pkgnames | grep -q $pkg) ; then
@@ -67,7 +67,7 @@ case $(uname -s) in
                 fi
             done
 
-            $SUDO apt-get install -y $libtoolkit_dev $pkg_install
+            $SUDO apt-get install -y $pkg_install
         fi
         ;;
 
