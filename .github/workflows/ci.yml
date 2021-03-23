@@ -187,17 +187,15 @@ jobs:
           fi
           make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
-      - name: Launching httpbin
-        if: matrix.skip_testing != true
-        run: |
-          pip install httpbin
-          python -m httpbin.core 2>&1 >httpbin.log &
-          echo 'WX_TEST_WEBREQUEST_URL=http://localhost:5000' >> $GITHUB_ENV
-
       - name: Testing
         if: matrix.skip_testing != true
         working-directory: tests
         run: |
+          echo "Launching httpbin"
+          pip install httpbin
+          python -m httpbin.core 2>&1 >httpbin.log &
+          export WX_TEST_WEBREQUEST_URL=http://localhost:5000
+
           # Explicitly use bash because /bin/sh doesn't have pipefail option
           /bin/bash -o pipefail -c './test 2>&1 | tee test.out' || rc=$?
           if [ ${{ matrix.use_asan }} ]; then
