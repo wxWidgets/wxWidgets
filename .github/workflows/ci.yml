@@ -222,8 +222,15 @@ jobs:
         if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.use_xvfb
         run: |
           if [ ${{ matrix.use_asan }} ]; then
-            export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
-            export ASAN_OPTIONS=fast_unwind_on_malloc=0
+            # Leak suppression only works if we have debug symbols available,
+            # otherwise we disable it to avoid tons of reports about leaks in
+            # libfontconfig etc.
+            if [ -f wx_dbgsym_available ]; then
+                export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
+            else
+                ASAN_OPTIONS=detect_leaks=0
+            fi
+            export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
           fi
           pushd tests
           xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui
