@@ -691,8 +691,8 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
 #if defined(__WXOSX_COCOA__)
                 // Try to find a 2x resolution image with @2x appended before the file extension.
                 wxWindow* win = m_WParser->GetWindowInterface() ? m_WParser->GetWindowInterface()->GetHTMLWindow() : NULL;
-                if (!win && wxTheApp)
-                    win = wxTheApp->GetTopWindow();
+                if (!win)
+                    win = wxApp::GetMainTopWindow();
                 if (win && win->GetContentScaleFactor() > 1.0)
                 {
                     if (tmp.Find('.') != wxNOT_FOUND)

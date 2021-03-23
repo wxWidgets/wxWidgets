@@ -413,7 +413,7 @@ wxFontMapperBase *wxFontMapperBase::Get()
 {
     if ( !sm_instance )
     {
-        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        wxAppTraits *traits = wxApp::GetTraitsIfExists();
         if ( traits )
         {
             sm_instance = traits->CreateFontMapper();

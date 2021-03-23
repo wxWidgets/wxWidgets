@@ -174,7 +174,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_initializedForCurrentPlatform = true;
 
     // autodetect all informations
-    const wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    const wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     if ( !traits )
     {
         wxFAIL_MSG( wxT("failed to initialize wxPlatformInfo") );

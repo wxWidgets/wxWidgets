@@ -105,7 +105,7 @@ void wxMessageOutputBest::Output(const wxString& str)
 {
 #ifdef __WINDOWS__
     // decide whether to use console output or not
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     const bool hasStderr = traits ? traits->CanUseStderr() : false;
 
     if ( !(m_flags & wxMSGOUT_PREFER_MSGBOX) )

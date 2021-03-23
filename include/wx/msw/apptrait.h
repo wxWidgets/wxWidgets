@@ -30,6 +30,7 @@ public:
 #endif // wxUSE_THREADS
     virtual bool CanUseStderr() wxOVERRIDE { return true; }
     virtual bool WriteToStderr(const wxString& text) wxOVERRIDE;
+    virtual WXHWND GetMainHWND() const wxOVERRIDE { return NULL; }
 };
 
 #if wxUSE_GUI
@@ -55,6 +56,7 @@ public:
 
     virtual bool CanUseStderr() wxOVERRIDE;
     virtual bool WriteToStderr(const wxString& text) wxOVERRIDE;
+    virtual WXHWND GetMainHWND() const wxOVERRIDE;
 };
 
 #elif defined(__WXGTK__)
@@ -85,6 +87,7 @@ public:
 
     virtual bool CanUseStderr() { return false; }
     virtual bool WriteToStderr(const wxString& WXUNUSED(text)) { return false; }
+    virtual WXHWND GetMainHWND() const wxOVERRIDE { return NULL; }
 };
 
 #elif defined(__WXQT__)
@@ -110,6 +113,7 @@ public:
 
     virtual bool CanUseStderr() { return false; }
     virtual bool WriteToStderr(const wxString&) { return false; }
+    virtual WXHWND GetMainHWND() const wxOVERRIDE { return NULL; }
 };
 
 #endif

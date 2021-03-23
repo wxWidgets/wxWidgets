@@ -358,7 +358,7 @@ wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
 wxAppTraits& wxAppConsoleBase::GetValidTraits()
 {
     static wxConsoleAppTraits s_traitsConsole;
-    wxAppTraits* const traits = (wxTheApp ? wxTheApp->GetTraits() : NULL);
+    wxAppTraits* const traits = GetTraitsIfExists();
 
     return *(traits ? traits : &s_traitsConsole);
 }
@@ -942,6 +942,14 @@ bool wxConsoleAppTraitsBase::HasStderr()
 {
     // console applications always have stderr, even under Mac/Windows
     return true;
+}
+
+bool wxConsoleAppTraitsBase::SafeMessageBox(const wxString& WXUNUSED(text),
+                                            const wxString& WXUNUSED(title))
+{
+    // console applications don't show message boxes by default, although this
+    // can be done in platform-specific cases
+    return false;
 }
 
 // ----------------------------------------------------------------------------

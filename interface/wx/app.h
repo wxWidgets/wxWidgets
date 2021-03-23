@@ -860,6 +860,18 @@ public:
     bool GetUseBestVisual() const;
 
     /**
+        Returns a pointer to the top application window if any.
+
+        This function is safe to call even before creating, or after
+        destroying, the application object, as it simply returns @NULL if it
+        doesn't exist. Otherwise it's equivalent to calling
+        @c wxTheApp->GetTopWindow().
+
+        @since 3.1.5
+     */
+    static wxWindow* GetMainTopWindow();
+
+    /**
         Returns a pointer to the top window.
 
         @remarks

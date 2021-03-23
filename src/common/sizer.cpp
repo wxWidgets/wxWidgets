@@ -104,7 +104,7 @@ float wxSizerFlags::DoGetDefaultBorderInPx()
     // We also have to use the DPI for the monitor showing the top window here
     // as we don't have any associated window -- but, again, without changes
     // in the API, there is nothing we can do about this.
-    const wxWindow* const win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxWindow* const win = wxApp::GetMainTopWindow();
     static wxPrivate::DpiDependentValue<float> s_defaultBorderInPx;
     if ( s_defaultBorderInPx.HasChanged(win) )
     {

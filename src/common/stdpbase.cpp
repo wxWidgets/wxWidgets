@@ -55,7 +55,7 @@ static wxStandardPathsDefault gs_stdPaths;
 /* static */
 wxStandardPaths& wxStandardPathsBase::Get()
 {
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     wxCHECK_MSG( traits, gs_stdPaths, wxT("create wxApp before calling this") );
 
     return traits->GetStandardPaths();

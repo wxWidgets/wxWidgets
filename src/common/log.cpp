@@ -180,14 +180,17 @@ private:
 // helper global functions
 // ----------------------------------------------------------------------------
 
-void wxSafeShowMessage(const wxString& title, const wxString& text)
+bool wxSafeShowMessage(const wxString& title, const wxString& text)
 {
-#ifdef __WINDOWS__
-    ::MessageBox(NULL, text.t_str(), title.t_str(), MB_OK | MB_ICONSTOP);
-#else
-    wxFprintf(stderr, wxS("%s: %s\n"), title.c_str(), text.c_str());
-    fflush(stderr);
-#endif
+    if ( !wxApp::GetValidTraits().SafeMessageBox(text, title) )
+    {
+        wxFprintf(stderr, wxS("%s: %s\n"), title.c_str(), text.c_str());
+        fflush(stderr);
+        return false;
+    }
+
+    // Message box actually shown.
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -892,7 +895,7 @@ void wxLogStderr::DoLogText(const wxString& msg)
     // simply lost
     if ( m_fp == stderr )
     {
-        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        wxAppTraits *traits = wxApp::GetTraitsIfExists();
         if ( traits && !traits->HasStderr() )
         {
             wxMessageOutputDebug().Output(msg + wxS('\n'));
