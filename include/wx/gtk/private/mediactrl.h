@@ -32,16 +32,19 @@ inline gpointer wxGtkGetIdFromWidget(GtkWidget* widget)
     GdkWindow* window = gtk_widget_get_window(widget);
     wxASSERT(window);
 
+#ifdef __WXGTK3__
+    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(window));
+#endif
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
-    if ( GDK_IS_X11_WINDOW(window) )
+    if (strcmp("GdkX11Window", name) == 0)
 #endif
     {
         return (gpointer)GDK_WINDOW_XID(window);
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-    if ( GDK_IS_WAYLAND_WINDOW(window) )
+    if (strcmp("GdkWaylandWindow", name) == 0)
     {
         return (gpointer)gdk_wayland_window_get_wl_surface(window);
     }
