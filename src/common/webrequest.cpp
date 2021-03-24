@@ -201,13 +201,34 @@ struct StateEventProcessor
     const wxString m_failMsg;
 };
 
+#if wxUSE_LOG_TRACE
+
+// Tiny helper to log states as strings rather than meaningless numbers.
+wxString StateName(wxWebRequest::State state)
+{
+    switch ( state )
+    {
+        case wxWebRequest::State_Idle:            return wxS("IDLE");
+        case wxWebRequest::State_Unauthorized:    return wxS("UNAUTHORIZED");
+        case wxWebRequest::State_Active:          return wxS("ACTIVE");
+        case wxWebRequest::State_Completed:       return wxS("COMPLETED");
+        case wxWebRequest::State_Failed:          return wxS("FAILED");
+        case wxWebRequest::State_Cancelled:       return wxS("CANCELLED");
+    }
+
+    return wxString::Format("invalid state %d", state);
+}
+
+#endif // wxUSE_LOG_TRACE
+
 } // anonymous namespace
 
 void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & failMsg)
 {
     wxCHECK_RET( state != m_state, "shouldn't switch to the same state" );
 
-    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: state %d => %d", this, m_state, state);
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: state %s => %s",
+               this, StateName(m_state), StateName(state));
 
     m_state = state;
 
