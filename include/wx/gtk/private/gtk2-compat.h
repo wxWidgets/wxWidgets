@@ -662,10 +662,6 @@ static inline void wx_gtk_widget_get_preferred_size(GtkWidget* widget, GtkRequis
 #define GDK_KEY_Up GDK_Up
 #endif
 
-// There is no equivalent in GTK+ 2, but it's not needed there anyhow as the
-// backend is determined at compile time in that version.
-#define GDK_IS_X11_DISPLAY(dpy) true
-
 // Do perform runtime checks for GTK+ 2 version: we only take the minor version
 // component here, major must be 2 and we never need to test for the micro one
 // anyhow.
