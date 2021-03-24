@@ -881,21 +881,6 @@ bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
     return str.ToLong(pl);
 }
 
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-bool wxFileConfig::DoReadLongLong(const wxString& key, wxLongLong_t *pll) const
-{
-    wxString str;
-    if ( !Read(key, &str) )
-        return false;
-
-    str.Trim();
-
-    return str.ToLongLong(pll);
-}
-
-#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
 #if wxUSE_BASE64
 
 bool wxFileConfig::DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const
@@ -976,15 +961,6 @@ bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
 {
   return Write(key, wxString::Format(wxT("%ld"), lValue));
 }
-
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-bool wxFileConfig::DoWriteLongLong(const wxString& key, wxLongLong_t llValue)
-{
-  return Write(key, wxString::Format("%" wxLongLongFmtSpec "d", llValue));
-}
-
-#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
 #if wxUSE_BASE64
 

@@ -395,7 +395,7 @@ protected:
   virtual bool DoReadString(const wxString& key, wxString *pStr) const = 0;
   virtual bool DoReadLong(const wxString& key, long *pl) const = 0;
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-  virtual bool DoReadLongLong(const wxString& key, wxLongLong_t *pll) const = 0;
+  virtual bool DoReadLongLong(const wxString& key, wxLongLong_t *pll) const;
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
   virtual bool DoReadDouble(const wxString& key, double* val) const;
   virtual bool DoReadBool(const wxString& key, bool* val) const;
@@ -406,7 +406,7 @@ protected:
   virtual bool DoWriteString(const wxString& key, const wxString& value) = 0;
   virtual bool DoWriteLong(const wxString& key, long value) = 0;
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-  virtual bool DoWriteLongLong(const wxString& key, wxLongLong_t value) = 0;
+  virtual bool DoWriteLongLong(const wxString& key, wxLongLong_t value);
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
   virtual bool DoWriteDouble(const wxString& key, double value);
   virtual bool DoWriteBool(const wxString& key, bool value);

@@ -266,6 +266,21 @@ bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
     return true;
 }
 
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+bool wxConfigBase::DoReadLongLong(const wxString& key, wxLongLong_t *pll) const
+{
+    wxString str;
+    if ( !Read(key, &str) )
+        return false;
+
+    str.Trim();
+
+    return str.ToLongLong(pll);
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
 bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
 {
     wxString str;
@@ -298,6 +313,15 @@ wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 // ----------------------------------------------------------------------------
 // wxConfigBase writing
 // ----------------------------------------------------------------------------
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+bool wxConfigBase::DoWriteLongLong(const wxString& key, wxLongLong_t llValue)
+{
+  return Write(key, wxString::Format("%" wxLongLongFmtSpec "d", llValue));
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
 bool wxConfigBase::DoWriteDouble(const wxString& key, double val)
 {
