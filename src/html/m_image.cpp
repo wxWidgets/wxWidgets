@@ -596,7 +596,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         dc.DrawRectangle(x + m_PosX, y + m_PosY, m_Width, m_Height);
         x++, y++;
     }
-    if ( m_bitmap )
+    if ( m_bitmap && m_Width && m_Height )
     {
         // We add in the scaling from the desired bitmap width
         // and height, so we only do the scaling once.
@@ -606,7 +606,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         // Optimisation for Windows: WIN32 scaling for window DCs is very poor,
         // so unless we're using a printer DC, do the scaling ourselves.
 #if defined(__WXMSW__) && wxUSE_IMAGE
-        if (m_Width >= 0 && m_Width != m_bitmap->GetWidth()
+        if (m_Width != m_bitmap->GetWidth()
     #if wxUSE_PRINTING_ARCHITECTURE
             && !dc.IsKindOf(CLASSINFO(wxPrinterDC))
     #endif
