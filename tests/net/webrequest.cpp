@@ -104,7 +104,7 @@ public:
             break;
 
         case wxWebRequest::State_Completed:
-            if ( request.GetStorage() == wxWebRequest::Storage_File )
+            if ( request.IsOk() && request.GetStorage() == wxWebRequest::Storage_File )
             {
                 wxFileName fn(evt.GetDataFile());
                 CHECK( fn.GetSize() == expectedFileSize );
@@ -436,6 +436,26 @@ TEST_CASE_METHOD(RequestFixture,
     request.Cancel();
     RunLoopWithTimeout();
     REQUIRE( request.GetState() == wxWebRequest::State_Cancelled );
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Destroy", "[net][webrequest]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/base64/U3RpbGwgYWxpdmUh");
+    request.Start();
+
+    // Destroy the original request: this shouldn't prevent it from running to
+    // the completion!
+    request = wxWebRequest();
+
+    RunLoopWithTimeout();
+
+    CHECK( stateFromEvent == wxWebRequest::State_Completed );
+    CHECK( statusFromEvent == 200 );
+    CHECK( responseStringFromEvent == "Still alive!" );
 }
 
 // This test is not run by default and has to be explicitly selected to run.
