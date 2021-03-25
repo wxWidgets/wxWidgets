@@ -211,7 +211,7 @@ function(wx_set_target_properties target_name is_base)
         endif()
     else()
         set(cross_target "")
-        if (CMAKE_CROSSCOMPILING)
+        if (CMAKE_CROSSCOMPILING AND NOT IPHONE)
             set(cross_target "-${CMAKE_SYSTEM_NAME}")
         endif ()
 
