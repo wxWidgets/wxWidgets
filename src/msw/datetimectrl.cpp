@@ -162,8 +162,6 @@ void wxDateTimePickerCtrl::SetNullText(const wxString& text)
 
 wxSize wxDateTimePickerCtrl::DoGetBestSize() const
 {
-    wxClientDC dc(const_cast<wxDateTimePickerCtrl *>(this));
-
     // Use the same native format as the underlying native control.
 #if wxUSE_INTL
     wxString s = wxDateTime::Now().Format(wxLocale::GetOSInfo(MSWGetFormat()));
@@ -177,7 +175,7 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
     // the width of the month string varies a lot, so try to account for it
     s += wxS("W");
 
-    wxSize size = dc.GetTextExtent(s);
+    wxSize size = GetTextExtent(s);
 
     // We can ask the control itself to compute its ideal size, but we only use
     // it for the horizontal component: the vertical size is not computed
