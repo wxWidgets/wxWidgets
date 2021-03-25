@@ -1167,7 +1167,7 @@ msgstr "A5 Quer 148 × 210 mm"
 
 #: ../src/common/paper.cpp:105
 msgid "A5 sheet, 148 x 210 mm"
-msgstr "A4 Blatt, 148 × 210 mm"
+msgstr "A5 Blatt, 148 × 210 mm"
 
 #: ../src/common/paper.cpp:161
 msgid "A6 105 x 148 mm"
