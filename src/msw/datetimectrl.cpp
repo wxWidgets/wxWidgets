@@ -162,20 +162,7 @@ void wxDateTimePickerCtrl::SetNullText(const wxString& text)
 
 wxSize wxDateTimePickerCtrl::DoGetBestSize() const
 {
-    // Use the same native format as the underlying native control.
-#if wxUSE_INTL
-    wxString s = wxDateTime::Now().Format(wxLocale::GetOSInfo(MSWGetFormat()));
-#else // !wxUSE_INTL
-    wxString s("XXX-YYY-ZZZZ");
-#endif // wxUSE_INTL/!wxUSE_INTL
-
-    // the best size for the control is bigger than just the string
-    // representation of the current value because the control must accommodate
-    // any date and while the widths of all digits are usually about the same,
-    // the width of the month string varies a lot, so try to account for it
-    s += wxS("W");
-
-    wxSize size = GetTextExtent(s);
+    wxSize size;
 
     // We can ask the control itself to compute its ideal size, but we only use
     // it for the horizontal component: the vertical size is not computed
@@ -192,9 +179,25 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
             && ::SendMessage(m_hWnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
     {
         size.x = idealSize.cx;
+        size.y = GetCharHeight();
     }
-    else // Adjust the size ourselves.
+    else // Compute the size ourselves.
     {
+        // Use the same native format as the underlying native control.
+#if wxUSE_INTL
+        wxString s = wxDateTime::Now().Format(wxLocale::GetOSInfo(MSWGetFormat()));
+#else // !wxUSE_INTL
+        wxString s("XXX-YYY-ZZZZ");
+#endif // wxUSE_INTL/!wxUSE_INTL
+
+        // the best size for the control is bigger than just the string
+        // representation of the current value because the control must accommodate
+        // any date and while the widths of all digits are usually about the same,
+        // the width of the month string varies a lot, so try to account for it
+        s += wxS("W");
+
+        size = GetTextExtent(s);
+
         // Account for the drop-down arrow or spin arrows.
         size.x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X, m_parent);
 
