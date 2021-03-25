@@ -635,6 +635,8 @@ wxImage wxImage::ResampleBox(int width, int height) const
     unsigned char* dst_data = ret_image.GetData();
     unsigned char* dst_alpha = NULL;
 
+    wxCHECK_MSG( dst_data, ret_image, wxS("unable to create image") );
+
     if ( src_alpha )
     {
         ret_image.SetAlpha();
@@ -781,6 +783,8 @@ wxImage wxImage::ResampleBilinear(int width, int height) const
     const unsigned char* src_alpha = M_IMGDATA->m_alpha;
     unsigned char* dst_data = ret_image.GetData();
     unsigned char* dst_alpha = NULL;
+
+    wxCHECK_MSG( dst_data, ret_image, wxS("unable to create image") );
 
     if ( src_alpha )
     {
@@ -960,6 +964,8 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
     const unsigned char* src_alpha = M_IMGDATA->m_alpha;
     unsigned char* dst_data = ret_image.GetData();
     unsigned char* dst_alpha = NULL;
+
+    wxCHECK_MSG( dst_data, ret_image, wxS("unable to create image") );
 
     if ( src_alpha )
     {
