@@ -200,11 +200,14 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
 
         // Account for the drop-down arrow or spin arrows.
         size.x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X, m_parent);
-
-        // We need to account for the checkbox, if we have one.
-        if ( MSWAllowsNone() )
-            size.x += 3 * GetCharWidth();
     }
+
+    // We need to account for the checkbox, if we have one -- DTM_GETIDEALSIZE
+    // doesn't take it into account (actually, it somehow returns _smaller_
+    // size when using DTS_SHOWNONE than when not using it, which doesn't make
+    // any sense at all).
+    if ( MSWAllowsNone() )
+        size.x += 3 * GetCharWidth();
 
     int scrollY = wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_Y, m_parent);
     size.y = wxMax(size.y, scrollY);
