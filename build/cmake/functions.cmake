@@ -214,7 +214,7 @@ function(wx_set_target_properties target_name is_base)
         if (CMAKE_CROSSCOMPILING)
             set(cross_target "-${CMAKE_SYSTEM_NAME}")
         endif ()
-        
+
         set_target_properties(${target_name}
             PROPERTIES
                 OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}${cross_target}
