@@ -44,6 +44,8 @@ public:
     {
         expectedFileSize = 0;
         dataSize = 0;
+        stateFromEvent = wxWebRequest::State_Idle;
+        statusFromEvent = 0;
     }
 
     // All tests should call this function first and skip the test entirely if
@@ -81,7 +83,17 @@ public:
 
     void OnRequestState(wxWebRequestEvent& evt)
     {
-        switch (evt.GetState())
+        stateFromEvent = evt.GetState();
+        const wxWebResponse& response = evt.GetResponse();
+        if ( response.IsOk() )
+        {
+            // Note that the response object itself may be deleted if request
+            // using it is, so we need to copy its data to use it later.
+            statusFromEvent = response.GetStatus();
+            responseStringFromEvent = response.AsString();
+        }
+
+        switch ( stateFromEvent )
         {
         case wxWebRequest::State_Idle:
             FAIL("should never get events with State_Idle");
@@ -92,7 +104,7 @@ public:
             break;
 
         case wxWebRequest::State_Completed:
-            if ( request.GetStorage() == wxWebRequest::Storage_File )
+            if ( request.IsOk() && request.GetStorage() == wxWebRequest::Storage_File )
             {
                 wxFileName fn(evt.GetDataFile());
                 CHECK( fn.GetSize() == expectedFileSize );
@@ -134,16 +146,22 @@ public:
         request.Start();
         RunLoopWithTimeout();
 
-        if ( request.GetState() != requiredState )
+        if ( stateFromEvent != requiredState )
         {
             errorDescription.Trim();
             if ( !errorDescription.empty() )
                 WARN("Error: " << errorDescription);
         }
 
-        REQUIRE( request.GetState() == requiredState );
+        REQUIRE( stateFromEvent == requiredState );
+
+        CHECK( request.GetState() == stateFromEvent );
+
         if (requiredStatus)
+        {
+            CHECK( statusFromEvent == requiredStatus );
             CHECK( request.GetResponse().GetStatus() == requiredStatus );
+        }
     }
 
     // Precondition: we must have an auth challenge.
@@ -156,6 +174,9 @@ public:
     wxString baseURL;
     wxEventLoop loop;
     wxWebRequest request;
+    wxWebRequest::State stateFromEvent;
+    int statusFromEvent;
+    wxString responseStringFromEvent;
     wxInt64 expectedFileSize;
     wxInt64 dataSize;
     wxString errorDescription;
@@ -415,6 +436,26 @@ TEST_CASE_METHOD(RequestFixture,
     request.Cancel();
     RunLoopWithTimeout();
     REQUIRE( request.GetState() == wxWebRequest::State_Cancelled );
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Destroy", "[net][webrequest]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/base64/U3RpbGwgYWxpdmUh");
+    request.Start();
+
+    // Destroy the original request: this shouldn't prevent it from running to
+    // the completion!
+    request = wxWebRequest();
+
+    RunLoopWithTimeout();
+
+    CHECK( stateFromEvent == wxWebRequest::State_Completed );
+    CHECK( statusFromEvent == 200 );
+    CHECK( responseStringFromEvent == "Still alive!" );
 }
 
 // This test is not run by default and has to be explicitly selected to run.

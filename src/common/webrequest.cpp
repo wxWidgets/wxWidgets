@@ -175,15 +175,6 @@ struct StateEventProcessor
                         const wxString& failMsg)
         : m_request(request), m_state(state), m_failMsg(failMsg)
     {
-        // Ensure that the request object stays alive until this event is
-        // processed.
-        m_request.IncRef();
-    }
-
-    StateEventProcessor(const StateEventProcessor& other)
-        : m_request(other.m_request), m_state(other.m_state), m_failMsg(other.m_failMsg)
-    {
-        m_request.IncRef();
     }
 
     void operator()()
@@ -191,23 +182,50 @@ struct StateEventProcessor
         m_request.ProcessStateEvent(m_state, m_failMsg);
     }
 
-    ~StateEventProcessor()
-    {
-        m_request.DecRef();
-    }
-
     wxWebRequestImpl& m_request;
     const wxWebRequest::State m_state;
     const wxString m_failMsg;
 };
 
+#if wxUSE_LOG_TRACE
+
+// Tiny helper to log states as strings rather than meaningless numbers.
+wxString StateName(wxWebRequest::State state)
+{
+    switch ( state )
+    {
+        case wxWebRequest::State_Idle:            return wxS("IDLE");
+        case wxWebRequest::State_Unauthorized:    return wxS("UNAUTHORIZED");
+        case wxWebRequest::State_Active:          return wxS("ACTIVE");
+        case wxWebRequest::State_Completed:       return wxS("COMPLETED");
+        case wxWebRequest::State_Failed:          return wxS("FAILED");
+        case wxWebRequest::State_Cancelled:       return wxS("CANCELLED");
+    }
+
+    return wxString::Format("invalid state %d", state);
+}
+
+#endif // wxUSE_LOG_TRACE
+
 } // anonymous namespace
 
 void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & failMsg)
 {
-    wxASSERT_MSG( state != m_state, "shouldn't switch to the same state" );
+    wxCHECK_RET( state != m_state, "shouldn't switch to the same state" );
 
-    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: state %d => %d", this, m_state, state);
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: state %s => %s",
+               this, StateName(m_state), StateName(state));
+
+    if ( state == wxWebRequest::State_Active )
+    {
+        // The request is now in progress (maybe not for the first time if the
+        // old state was State_Unauthorized and not State_Idle), ensure that it
+        // stays alive until it terminates, even if wxWebRequest object itself
+        // is deleted.
+        //
+        // Note that matching DecRef() is done by ProcessStateEvent() later.
+        IncRef();
+    }
 
     m_state = state;
 
@@ -322,6 +340,7 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
     wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
                           wxWebResponse(response), failMsg);
 
+    bool release = false;
     switch ( state )
     {
         case wxWebRequest::State_Idle:
@@ -329,7 +348,17 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
             break;
 
         case wxWebRequest::State_Active:
+            break;
+
         case wxWebRequest::State_Unauthorized:
+            // This one is tricky: we might not be done with the request yet,
+            // but we don't know if this is the case or not, i.e. if the
+            // application will call wxWebAuthChallenge::SetCredentials() or
+            // not later. So we release it now, as we assume that it still
+            // keeps a reference to the original request if it intends to do it
+            // anyhow, i.e. this won't actually destroy the request object in
+            // this case.
+            release = true;
             break;
 
         case wxWebRequest::State_Completed:
@@ -344,6 +373,8 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
         case wxWebRequest::State_Cancelled:
             if ( response )
                 response->Finalize();
+
+            release = true;
             break;
     }
 
@@ -353,6 +384,10 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
     // could have been deleted or moved away by the event handler.
     if ( !dataFile.empty() && wxFileExists(dataFile) )
         wxRemoveFile(dataFile);
+
+    // This may destroy this object if it's not used from elsewhere any longer.
+    if ( release )
+        DecRef();
 }
 
 //

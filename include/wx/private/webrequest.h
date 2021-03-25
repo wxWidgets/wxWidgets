@@ -106,6 +106,13 @@ public:
 
     wxEvtHandler* GetHandler() const { return m_handler; }
 
+    // Called to notify about the state change in the main thread by SetState()
+    // (which can itself be called from a different one).
+    //
+    // It also releases a reference added when switching to the active state by
+    // SetState() when leaving it.
+    //
+    // TODO-C++11: make private when we don't need StateEventProcessor any more.
     void ProcessStateEvent(wxWebRequest::State state, const wxString& failMsg);
 
 protected:
