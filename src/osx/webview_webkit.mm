@@ -568,6 +568,18 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     [m_webView goToBackForwardListItem:item->m_histItem];
 }
 
+void wxWebViewWebKit::Paste()
+{
+#if defined(__WXOSX_IPHONE__)
+    wxWebView::Paste();
+#else
+    // The default (javascript) implementation presents the user with a popup
+    // menu containing a single 'Paste' menu item.
+    // Send this action to directly paste as expected.
+    [[NSApplication sharedApplication] sendAction:@selector(paste:) to:nil from:m_webView];
+#endif
+}
+
 bool wxWebViewWebKit::CanUndo() const
 {
     return [[m_webView undoManager] canUndo];

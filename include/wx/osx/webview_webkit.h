@@ -82,6 +82,8 @@ public:
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory() wxOVERRIDE;
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) wxOVERRIDE;
 
+    virtual void Paste() wxOVERRIDE;
+
     //Undo / redo functionality
     virtual bool CanUndo() const wxOVERRIDE;
     virtual bool CanRedo() const wxOVERRIDE;
