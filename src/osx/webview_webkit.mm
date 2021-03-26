@@ -624,7 +624,30 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         return [super validRequestorForSendType:sendType returnType:returnType];
 }
 
-#endif
+- (BOOL)performKeyEquivalent:(NSEvent *)event
+{
+    if ([event modifierFlags] & NSCommandKeyMask)
+    {
+        switch ([event.characters characterAtIndex:0])
+        {
+            case 'a':
+                [self selectAll:nil];
+                return YES;
+            case 'c':
+                m_webView->Copy();
+                return YES;
+            case 'v':
+                m_webView->Paste();
+                return YES;
+            case 'x':
+                m_webView->Cut();
+                return YES;
+        }
+    }
+
+    return [super performKeyEquivalent:event];
+}
+#endif // !defined(__WXOSX_IPHONE__)
 
 @end
 
