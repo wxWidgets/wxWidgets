@@ -1976,6 +1976,9 @@ enum wxItemKind
     wxITEM_CHECK,
     wxITEM_RADIO,
     wxITEM_DROPDOWN,
+    wxITEM_CONTROL,
+    wxITEM_LABEL,
+    wxITEM_SPACER,
     wxITEM_MAX
 };
 

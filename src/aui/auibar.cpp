@@ -51,15 +51,6 @@ wxIMPLEMENT_CLASS(wxAuiToolBar, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiToolBarEvent, wxEvent);
 
 
-// missing wxITEM_* items
-enum
-{
-    wxITEM_CONTROL = wxITEM_MAX,
-    wxITEM_LABEL,
-    wxITEM_SPACER
-};
-
-
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
