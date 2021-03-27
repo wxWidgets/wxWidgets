@@ -207,7 +207,12 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
     // size when using DTS_SHOWNONE than when not using it, which doesn't make
     // any sense at all).
     if ( MSWAllowsNone() )
-        size.x += 3 * GetCharWidth();
+    {
+        // The extra 10px here was determined heuristically as the value which
+        // results in the same layout with and without DTS_SHOWNONE under
+        // Windows 7 and Windows 10 with 100%, 150% and 200% scaling.
+        size.x += wxGetSystemMetrics(SM_CXMENUCHECK, m_parent) + 10;
+    }
 
     int scrollY = wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_Y, m_parent);
     size.y = wxMax(size.y, scrollY);
