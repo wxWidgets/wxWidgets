@@ -1876,14 +1876,18 @@ public:
     @class wxSysColourChangedEvent
 
     This class is used for system colour change events, which are generated
-    when the user changes the colour settings using the control panel.
-    This is only appropriate under Windows.
+    when the user changes the colour settings or when the system theme changes
+    (e.g. automatic dark mode switching on macOS).
+
+    Event handlers for this event can access the new system colour settings through
+    wxSystemSettings::GetColour().
 
     @remarks
         The default event handler for this event propagates the event to child windows,
-        since Windows only sends the events to top-level windows.
-        If intercepting this event for a top-level window, remember to call the base
-        class handler, or to pass the event on to the window's children explicitly.
+        since the system events are only sent to top-level windows.
+        If intercepting this event for a top-level window, remember to either call
+        wxEvent::Skip() on the event, call the base class handler, or pass the event
+        on to the window's children explicitly.
 
     @beginEventTable{wxSysColourChangedEvent}
     @event{EVT_SYS_COLOUR_CHANGED(func)}
