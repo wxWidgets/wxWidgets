@@ -28,7 +28,7 @@ public:
     /**
         Constructor for a persistent window object.
 
-        The constructor uses wxEvtHandler::Connect() to catch
+        The constructor uses wxEvtHandler::Bind() to catch
         wxWindowDestroyEvent generated when the window is destroyed and call
         wxPersistenceManager::SaveAndUnregister() when this happens. This
         ensures that the window properties are saved and that this object

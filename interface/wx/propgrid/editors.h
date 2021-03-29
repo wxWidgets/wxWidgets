@@ -91,9 +91,8 @@ public:
             Initial size for control(s).
 
         @remarks
-        - Unlike in previous version of wxPropertyGrid, it is no longer
-          necessary to call wxEvtHandler::Connect() for interesting editor
-          events. Instead, all events from control are now automatically
+        - It is not necessary to call wxEvtHandler::Bind() for interesting
+          editor events. All events from controls are automatically
           forwarded to wxPGEditor::OnEvent() and wxPGProperty::OnEvent().
     */
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propgrid,

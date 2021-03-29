@@ -36,7 +36,7 @@
     and use the event table @c EVT_FSWATCHER macro to handle these events in a
     derived class method. Alternatively, you can use
     wxFileSystemWatcher::SetOwner() to send the events to another object. Or
-    you could use wxEvtHandler::Connect() with @c wxEVT_FSWATCHER to handle
+    you could use wxEvtHandler::Bind() with @c wxEVT_FSWATCHER to handle
     these events in any other object. See the fswatcher sample for an example
     of the latter approach.
 
