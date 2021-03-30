@@ -112,11 +112,11 @@ const char* wxART_EDIT;
       protected:
         wxBitmap CreateBitmap(const wxArtID& id,
                               const wxArtClient& client,
-                              const wxSize size)
+                              const wxSize& size);
 
         // optionally override this one as well
         wxIconBundle CreateIconBundle(const wxArtID& id,
-                                      const wxArtClient& client)
+                                      const wxArtClient& client);
         { ... }
       };
       ...
