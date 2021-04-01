@@ -266,8 +266,6 @@ wxULongLong wxInvalidSize;
     @li wxFileName::SetName()
     @li wxFileName::SetVolume()
 
-    You can initialize a wxFileName instance using one of the following functions:
-
 
     @section filename_operations File name operations
 
@@ -287,6 +285,24 @@ wxULongLong wxInvalidSize;
     @li wxFileName::Mkdir()
     @li wxFileName::Rmdir()
 
+    @section symlink_behavior Behavior with symlinks
+
+    wxFileName instances can store the path to symlinks on systems that support them.
+    When the path is for a symlink, the behavior of the following methods can be modified
+    to either operate on the symlink itself or on the file the link points to.
+
+    @li wxFileName::FileExists()
+    @li wxFileName::DirExists()
+    @li wxFileName::Exists()
+    @li wxFileName::SameAs()
+    @li wxFileName::GetTimes()
+
+    By default, those functions will operate on the target of the link, but they can be
+    made to operate on the link itself by calling wxFileName::DontFollowLink(). The current
+    link-following mode can be examined by calling wxFileName::ShouldFollowLink().
+
+    The wxFileName::ResolveLink() method can be used to get the absolute path for the target
+    of the symlink.
 
     @library{wxbase}
     @category{file}
