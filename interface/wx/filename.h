@@ -1138,6 +1138,24 @@ public:
     */
     bool ReplaceHomeDir(wxPathFormat format = wxPATH_NATIVE);
 
+    /**
+        Find the absolute path of the file/directory that is pointed to by this
+        path.
+
+        If this path isn't a symlink, then this function will return the current
+        path. If the path does not exist on disk, An empty wxFileName instance
+        will be returned.
+
+        @note This is only supported on Unix-like platforms (e.g. wxGTK, wxOSX),
+              on other platforms (e.g. wxMSW) this function just returns the
+              current path.
+
+        @since 3.1.5
+
+        @return The absolute path that the current symlink path points to.
+    */
+    wxFileName ResolveLink();
+
 
     /**
         Deletes the specified directory from the file system.

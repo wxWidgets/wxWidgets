@@ -381,7 +381,10 @@ enum wxPosixPermissions
     #define   wxCRT_Access     access
     #define   wxCRT_Chmod      chmod
 
+    #define   wxCRT_Readlink   readlink
+
     #define wxHAS_NATIVE_LSTAT
+    #define wxHAS_NATIVE_READLINK
 #endif // platforms
 
 // if the platform doesn't have symlinks, define wxCRT_Lstat to be the same as
@@ -405,6 +408,11 @@ inline int wxChmod(const wxString& path, mode_t mode)
     { return wxCRT_Chmod(path.fn_str(), mode); }
 inline int wxOpen(const wxString& path, int flags, mode_t mode)
     { return wxCRT_Open(path.fn_str(), flags, mode); }
+
+#if defined(wxHAS_NATIVE_READLINK)
+inline int wxReadlink(const wxString& path, char* buf, int size)
+    { return wxCRT_Readlink(path.fn_str(), buf, size); }
+#endif
 
 inline int wxStat(const wxString& path, wxStructStat *buf)
     { return wxCRT_Stat(path.fn_str(), buf); }
