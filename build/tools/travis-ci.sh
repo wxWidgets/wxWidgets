@@ -30,7 +30,9 @@ launch_httpbin() {
             ;;
     esac
 
-    pip install httpbin --user $pip_args
+    # decorator 5+ is incompatible with Python 2 which we still use under in
+    # some builds, so explicitly select version 4.4 which is known to work.
+    pip install decorator==4.4.2 httpbin --user $pip_args
     python -m httpbin.core &
     WX_TEST_WEBREQUEST_URL="http://localhost:5000"
 
