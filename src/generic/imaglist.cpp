@@ -132,8 +132,9 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
     {
 #if wxUSE_IMAGE
         wxImage img = bmp.ConvertToImage();
-        wxImage imgResized = img.Size(imgSize, wxPoint(0, 0), 0, 0, 0);
-        bmpResized = imgResized;
+        // We need image with new physical size
+        wxImage imgResized = img.Size(scaleFactor * imgSize, wxPoint(0, 0), 0, 0, 0);
+        bmpResized = wxBitmap(imgResized, -1, scaleFactor);
 #else
         bmpResized = bmp;
 #endif // wxUSE_IMAGE
