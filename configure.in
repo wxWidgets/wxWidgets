@@ -8008,7 +8008,7 @@ if test "$wxUSE_MAC" = 1 ; then
         if test "$wxUSE_OSX_IPHONE" = 1; then
             EXTRA_FRAMEWORKS="-framework IOKit -framework UIKit -framework CFNetwork -framework AudioToolbox -framework CoreFoundation -framework CoreGraphics -framework OpenGLES -framework Foundation -framework QuartzCore -framework GLKit -framework CoreText"
         else
-            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
+            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL"
 
             dnl The case of QuickTime framework is special: with Cocoa, we only
             dnl need it in 32 bit builds and not in 64 bit and, moreover,

@@ -884,6 +884,17 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     [super viewDidMoveToWindow];
 }
 
+- (void) viewWillDraw
+{
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        CALayer* layer = self.layer;
+        layer.contentsFormat = kCAContentsFormatRGBA8Uint;
+    }
+    
+    [super viewWillDraw];
+}
+
 @end // wxNSView
 
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
