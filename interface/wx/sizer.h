@@ -465,38 +465,41 @@ public:
        Returns the number of items in the sizer.
 
        If you just need to test whether the sizer is empty or not you can also
-       use IsEmpty() function.
+       use the IsEmpty() function.
     */
     size_t GetItemCount() const;
 
     /**
-        Finds wxSizerItem which holds the given @a window.
+        Finds the wxSizerItem which holds the given @a window.
         Use parameter @a recursive to search in subsizers too.
-        Returns pointer to item or @NULL.
+
+        @return Pointer to the item or @NULL if there is no item with the window.
     */
     wxSizerItem* GetItem(wxWindow* window, bool recursive = false);
 
     /**
-        Finds wxSizerItem which holds the given @a sizer.
+        Finds the wxSizerItem which holds the given @a sizer.
         Use parameter @a recursive to search in subsizers too.
-        Returns pointer to item or @NULL.
+
+        @return Pointer to the item or @NULL if the given sizer is not in the sizer.
     */
 
     wxSizerItem* GetItem(wxSizer* sizer, bool recursive = false);
 
     /**
-        Finds wxSizerItem which is located in the sizer at position @a index.
-        Use parameter @a recursive to search in subsizers too.
-        Returns pointer to item or @NULL.
+        Finds the wxSizerItem which is located in the sizer at position @a index.
+
+        @return Pointer to the item or @NULL if there is no item at that index.
     */
     wxSizerItem* GetItem(size_t index);
 
     /**
-        Finds item of the sizer which has the given @e id.
+        Finds the item in the sizer which has the given @e id.
         This @a id is not the window id but the id of the wxSizerItem itself.
         This is mainly useful for retrieving the sizers created from XRC resources.
         Use parameter @a recursive to search in subsizers too.
-        Returns pointer to item or @NULL.
+
+        @return Pointer to item or @NULL if no item has that id.
     */
     wxSizerItem* GetItemById(int id, bool recursive = false);
 
