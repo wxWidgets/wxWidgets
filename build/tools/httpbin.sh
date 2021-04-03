@@ -40,7 +40,10 @@ httpbin_launch() {
             # Running pip install fails with weird errors out of the box when
             # using old pip version because it attempts to use python rather
             # than python3, so upgrade it to fix this.
-            python3 -m pip install --upgrade pip setuptools wheel
+            #
+            # However don't upgrade to a version which is too new because then
+            # it may not support Python version that we actually have.
+            python3 -m pip install --upgrade pip==20
             ;;
     esac
 
