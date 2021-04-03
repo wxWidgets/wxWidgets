@@ -534,7 +534,7 @@ void wxGCDCImpl::SetPen( const wxPen &pen )
 
     // 0-width pen is 1 pixel wide with MSW wxDC
     const int w = pen.GetWidth();
-    const double width = w ? double(w) : 1 / wxMin(m_scaleX, m_scaleY);
+    const double width = w ? double(w) : 1 / (wxMin(m_scaleX, m_scaleY) * m_contentScaleFactor);
 
     wxGraphicsPenInfo info(pen.GetColour(), width, style);
     info.Join(pen.GetJoin()).Cap(pen.GetCap());
