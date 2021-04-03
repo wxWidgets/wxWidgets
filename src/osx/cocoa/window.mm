@@ -3062,7 +3062,24 @@ void SetSubviewsNeedDisplay( NSView *view )
         SetSubviewsNeedDisplay(sub);
     }
 }
-    
+
+void SetSubviewsNeedDisplay( NSView *view, NSRect rect )
+{
+    for ( NSView *sub in view.subviews )
+    {
+        if ( sub.isHidden )
+            continue;
+
+        NSRect intersect = NSIntersectionRect(sub.frame, rect);
+        if ( !NSIsEmptyRect(intersect) )
+        {
+            intersect = [view convertRect:intersect toView:sub];
+            [sub setNeedsDisplayInRect:intersect];
+            SetSubviewsNeedDisplay(sub, intersect);
+        }
+    }
+}
+
 }
 #endif
 
@@ -3081,7 +3098,12 @@ void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
     // do it manually here:
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
-        SetSubviewsNeedDisplay(m_osxView);
+    {
+        if ( where )
+            SetSubviewsNeedDisplay(m_osxView, wxToNSRect(m_osxView, *where ));
+        else
+            SetSubviewsNeedDisplay(m_osxView);
+    }
 #endif
 }
 
