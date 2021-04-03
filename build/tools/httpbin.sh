@@ -9,28 +9,38 @@ httpbin_launch() {
         Linux)
             dist_codename=$(lsb_release --codename --short)
             ;;
+
+        Darwin)
+            dist_codename='macOS'
+            ;;
     esac
 
-    # We need to disable SSL certificate checking under Trusty because Python
-    # version there is too old to support SNI.
     case "$dist_codename" in
         trusty)
-            # Here "decorator==4.4.2" doesn't work neither for some reason ("no
-            # matching distribution found"), so use an explicit URL.
+            # Current decorator (>= 5) is incompatible with Python 2 which we
+            # still use in some builds, so explicitly use a version which
+            # is known to work. Just specifying "decorator==4.4.2" doesn't work
+            # neither for some reason ("no matching distribution found"), so
+            # use an explicit URL.
             pip_decorator_arg='https://files.pythonhosted.org/packages/ed/1b/72a1821152d07cf1d8b6fce298aeb06a7eb90f4d6d41acec9861e7cc6df0/decorator-4.4.2-py2.py3-none-any.whl'
+
+            # We need to disable SSL certificate checking under Trusty because
+            # Python version there is too old to support SNI.
             pip_options='--trusted-host files.pythonhosted.org'
             ;;
 
-        *)
-            # Current decorator (>= 5) is incompatible with Python 2 which we
-            # still use under in some builds, so explicitly use a version which
-            # is known to work.
+        macOS)
             pip_decorator_arg='decorator==4.4.2'
+            ;;
+
+        *)
+            # Elsewhere just use Python 3.
+            PY3=3
             ;;
     esac
 
-    pip install $pip_decorator_arg httpbin --user $pip_options
-    python -m httpbin.core 2>&1 >httpbin.log &
+    python$PY3 -m pip install $pip_decorator_arg httpbin --user $pip_options
+    python$PY3 -m httpbin.core 2>&1 >httpbin.log &
     WX_TEST_WEBREQUEST_URL="http://localhost:5000"
 
     export WX_TEST_WEBREQUEST_URL
