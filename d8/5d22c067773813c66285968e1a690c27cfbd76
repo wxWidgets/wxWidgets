@@ -1,0 +1,1 @@
+wxMSW: Fix best size of wxDatePickerCtrl with wxDP_ALLOWNONE.
