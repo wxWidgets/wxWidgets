@@ -36,6 +36,11 @@ httpbin_launch() {
         *)
             # Elsewhere just use Python 3.
             PY3=3
+
+            # Running pip install fails with weird errors out of the box when
+            # using old pip version because it attempts to use python rather
+            # than python3, so upgrade it to fix this.
+            python3 -m pip install --upgrade pip setuptools wheel
             ;;
     esac
 
