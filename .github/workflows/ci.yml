@@ -190,7 +190,10 @@ jobs:
         working-directory: tests
         run: |
           echo "Launching httpbin"
-          pip install httpbin
+          # Current decorator (>= 5) is incompatible with Python 2 which we
+          # still use under in some builds, so explicitly use a version which
+          # is known to work.
+          pip install decorator==4.4.2 httpbin
           python -m httpbin.core 2>&1 >httpbin.log &
           export WX_TEST_WEBREQUEST_URL=http://localhost:5000
 
