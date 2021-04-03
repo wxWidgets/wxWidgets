@@ -43,7 +43,7 @@ httpbin_launch() {
             #
             # However don't upgrade to a version which is too new because then
             # it may not support Python version that we actually have.
-            python3 -m pip install --upgrade pip==20
+            python3 -m pip install --upgrade pip==20.0.1
             ;;
     esac
 
