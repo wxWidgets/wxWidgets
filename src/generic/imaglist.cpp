@@ -69,7 +69,7 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 #if wxUSE_IMAGE
                 wxImage img = bmp.ConvertToImage();
                 img.ClearAlpha();
-                bmp = img;
+                bmp = wxBitmap(img, -1, bmp.GetScaleFactor());
 #endif // wxUSE_IMAGE
             }
         }
@@ -81,7 +81,7 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 #if wxUSE_IMAGE
                 wxImage img = bmp.ConvertToImage();
                 img.ConvertAlphaToMask();
-                bmp = img;
+                bmp = wxBitmap(img, -1, bmp.GetScaleFactor());
 #endif // wxUSE_IMAGE
             }
             else
@@ -107,7 +107,7 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 #if wxUSE_IMAGE
                 wxImage img = bmp.ConvertToImage();
                 img.InitAlpha();
-                bmp = img;
+                bmp = wxBitmap(img, -1, bmp.GetScaleFactor());
 #else
                 bmp.SetMask(NULL);
 #endif // wxUSE_IMAGE
@@ -117,7 +117,7 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 
     // Ensure image size is the same as the size of the images on the image list.
     wxBitmap bmpResized;
-    const wxSize sz = bmp.GetSize();
+    const wxSize sz = bmp.GetScaledSize();
     if ( sz.x == imgSize.x && sz.y == imgSize.y )
     {
         bmpResized = bmp;
