@@ -16,9 +16,15 @@ launch_httpbin() {
     echo 'travis_fold:start:httpbin'
     echo 'Running httpbin...'
 
+    case "$(uname -s)" in
+        Linux)
+            dist_codename=$(lsb_release --codename --short)
+            ;;
+    esac
+
     # We need to disable SSL certificate checking under Trusty because Python
     # version there is too old to support SNI.
-    case "$(lsb_release --codename --short)" in
+    case "$dist_codename" in
         trusty)
             pip_args='--trusted-host files.pythonhosted.org'
             ;;
