@@ -14,6 +14,8 @@ wxBUILD_ARGS="-j$wxPROC_COUNT"
 # messages from WebKit tests that we're not interested in.
 export NO_AT_BRIDGE=1
 
+httpbin_launch
+
 case $wxTOOLSET in
     cmake)
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
@@ -45,7 +47,7 @@ case $wxTOOLSET in
 
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
             echo 'travis_fold:start:httpbin'
-            httpbin_launch
+            # httpbin_launch
             echo 'travis_fold:end:httpbin'
 
             echo 'travis_fold:start:testing'
@@ -135,7 +137,7 @@ case $wxTOOLSET in
         fi
 
         echo 'travis_fold:start:httpbin'
-        httpbin_launch
+        # httpbin_launch
         echo 'travis_fold:end:httpbin'
 
         echo 'travis_fold:start:testing'
