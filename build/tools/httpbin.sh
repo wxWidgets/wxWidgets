@@ -37,6 +37,11 @@ httpbin_launch() {
             # Elsewhere just use Python 3.
             PY3=3
 
+            # Ensure that we have at least some version of pip.
+            if ! python3 -m pip; then
+                sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-pip
+            fi
+
             # Running pip install fails with weird errors out of the box when
             # using old pip version because it attempts to use python rather
             # than python3, so upgrade it to fix this.
