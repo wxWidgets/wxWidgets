@@ -67,6 +67,7 @@ if(APPLE)
             "-framework Carbon"
             "-framework Cocoa"
             "-framework IOKit"
+            "-framework QuartzCore"
         )
     endif()
 elseif(UNIX)
