@@ -568,6 +568,18 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     [m_webView goToBackForwardListItem:item->m_histItem];
 }
 
+void wxWebViewWebKit::Paste()
+{
+#if defined(__WXOSX_IPHONE__)
+    wxWebView::Paste();
+#else
+    // The default (javascript) implementation presents the user with a popup
+    // menu containing a single 'Paste' menu item.
+    // Send this action to directly paste as expected.
+    [[NSApplication sharedApplication] sendAction:@selector(paste:) to:nil from:m_webView];
+#endif
+}
+
 bool wxWebViewWebKit::CanUndo() const
 {
     return [[m_webView undoManager] canUndo];
@@ -624,7 +636,30 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         return [super validRequestorForSendType:sendType returnType:returnType];
 }
 
-#endif
+- (BOOL)performKeyEquivalent:(NSEvent *)event
+{
+    if ([event modifierFlags] & NSCommandKeyMask)
+    {
+        switch ([event.characters characterAtIndex:0])
+        {
+            case 'a':
+                [self selectAll:nil];
+                return YES;
+            case 'c':
+                m_webView->Copy();
+                return YES;
+            case 'v':
+                m_webView->Paste();
+                return YES;
+            case 'x':
+                m_webView->Cut();
+                return YES;
+        }
+    }
+
+    return [super performKeyEquivalent:event];
+}
+#endif // !defined(__WXOSX_IPHONE__)
 
 @end
 
