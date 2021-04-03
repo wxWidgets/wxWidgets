@@ -1950,11 +1950,11 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
     double width;
 
     if (m_pen.GetWidth() <= 0)
-        width = 0.1;
+        width = 0.1; // Thin, scale-independent line.
     else
-        width = (double) m_pen.GetWidth();
+        width = (double) m_pen.GetWidth() * m_scaleX;
 
-    cairo_set_line_width( m_cairo, width * m_DEV2PS * m_scaleX );
+    cairo_set_line_width( m_cairo, width * m_DEV2PS );
     static const double dotted[] = {2.0, 5.0};
     static const double short_dashed[] = {4.0, 4.0};
     static const double long_dashed[] = {4.0, 8.0};
