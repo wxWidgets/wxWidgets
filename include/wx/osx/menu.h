@@ -44,8 +44,8 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    bool HandleCommandUpdateStatus( wxMenuItem* menuItem, wxWindow* senderWindow = NULL);
-    bool HandleCommandProcess( wxMenuItem* menuItem, wxWindow* senderWindow = NULL);
+    bool HandleCommandUpdateStatus( wxMenuItem* menuItem );
+    bool HandleCommandProcess( wxMenuItem* menuItem );
     void HandleMenuItemHighlighted( wxMenuItem* menuItem );
     void HandleMenuOpened();
     void HandleMenuClosed();
