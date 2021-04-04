@@ -53,7 +53,8 @@ enum
      ID_CANCEL_CB,
      ID_MENU_CB,
 
-     ID_SEARCHMENU
+     ID_SEARCHMENU,
+     ID_SEARCHMENU_LAST = ID_SEARCHMENU + 5
 };
 
 
@@ -81,6 +82,8 @@ protected:
 
     void OnText(wxCommandEvent& event);
     void OnTextEnter(wxCommandEvent& event);
+
+    void OnSearchMenu(wxCommandEvent& event);
 
     void OnSearch(wxCommandEvent& event);
     void OnSearchCancel(wxCommandEvent& event);
@@ -112,6 +115,9 @@ wxBEGIN_EVENT_TABLE(SearchCtrlWidgetsPage, WidgetsPage)
 
     EVT_TEXT(wxID_ANY, SearchCtrlWidgetsPage::OnText)
     EVT_TEXT_ENTER(wxID_ANY, SearchCtrlWidgetsPage::OnTextEnter)
+
+    EVT_MENU_RANGE(ID_SEARCHMENU, ID_SEARCHMENU_LAST,
+                   SearchCtrlWidgetsPage::OnSearchMenu)
 
     EVT_SEARCH(wxID_ANY, SearchCtrlWidgetsPage::OnSearch)
     EVT_SEARCH_CANCEL(wxID_ANY, SearchCtrlWidgetsPage::OnSearchCancel)
@@ -187,14 +193,13 @@ void SearchCtrlWidgetsPage::RecreateWidget()
 wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
 {
     wxMenu* menu = new wxMenu;
-    const int SEARCH_MENU_SIZE = 5;
     wxMenuItem* menuItem = menu->Append(wxID_ANY, "Recent Searches", "", wxITEM_NORMAL);
     menuItem->Enable(false);
-    for ( int i = 0; i < SEARCH_MENU_SIZE; i++ )
+    for ( int i = 0; i < ID_SEARCHMENU_LAST - ID_SEARCHMENU; i++ )
     {
         wxString itemText = wxString::Format("item %i",i);
         wxString tipText = wxString::Format("tip %i",i);
-        menu->Append(ID_SEARCHMENU+i, itemText, tipText, wxITEM_NORMAL);
+        menu->Append(ID_SEARCHMENU+i, itemText, tipText, wxITEM_CHECK);
     }
     return menu;
 }
@@ -233,6 +238,13 @@ void SearchCtrlWidgetsPage::OnTextEnter(wxCommandEvent& event)
 {
     wxLogMessage("Search control: enter pressed, contents is \"%s\".",
                  event.GetString());
+}
+
+void SearchCtrlWidgetsPage::OnSearchMenu(wxCommandEvent& event)
+{
+    int id = event.GetId() - ID_SEARCHMENU;
+    wxLogMessage("Search menu: \"item %i\" selected (%s).",
+                 id, event.IsChecked() ? "checked" : "unchecked");
 }
 
 void SearchCtrlWidgetsPage::OnSearch(wxCommandEvent& event)

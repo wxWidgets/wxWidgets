@@ -62,6 +62,10 @@ public:
 
     wxSearchWidgetImpl * GetSearchPeer() const;
 
+#if wxUSE_MENUS
+    virtual void OSXAfterMenuEvent() wxOVERRIDE;
+#endif  // wxUSE_MENUS
+
 protected:
 
     wxSize DoGetBestSize() const wxOVERRIDE;

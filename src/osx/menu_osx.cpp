@@ -318,7 +318,7 @@ void wxMenu::DoRearrange()
 }
 
 
-bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow )
+bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item )
 {
     int menuid = item ? item->GetId() : 0;
     wxUpdateUIEvent event(menuid);
@@ -328,11 +328,6 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
         event.DisallowCheck();
 
     bool processed = DoProcessEvent(this, event, GetWindow());
-
-    if ( !processed && senderWindow != NULL)
-    {
-        processed = senderWindow->HandleWindowEvent(event);
-    }
 
     if ( processed )
     {
@@ -348,7 +343,7 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
     return processed;
 }
 
-bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
+bool wxMenu::HandleCommandProcess( wxMenuItem* item )
 {
     int menuid = item ? item->GetId() : 0;
     bool processed = false;
@@ -357,24 +352,18 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
 
     if ( SendEvent( menuid , item->IsCheckable() ? item->IsChecked() : -1 ) )
         processed = true ;
-    else
-    {
-        if ( senderWindow != NULL )
-        {
-            wxCommandEvent event(wxEVT_MENU , menuid);
-            event.SetEventObject(this);
-            event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
-
-            if ( senderWindow->HandleWindowEvent(event) )
-                processed = true ;
-        }
-    }
 
     if(!processed && item)
     {
         processed = item->GetPeer()->DoDefault();  
     }
     
+    if (wxWindow* const w = GetInvokingWindow())
+    {
+        // Let the invoking window update itself if necessary.
+        w->OSXAfterMenuEvent();
+    }
+
     return processed;
 }
 
