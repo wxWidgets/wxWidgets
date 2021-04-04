@@ -73,7 +73,8 @@ wxImageList::wxImageList()
 // Creates an image list
 bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
-    m_size = wxSize(width, height);
+    // Prevent from storing negative dimensions
+    m_size = wxSize(wxMax(width, 0), wxMax(height, 0));
     UINT flags = 0;
 
     // as we want to be able to use 32bpp bitmaps in the image lists, we always
