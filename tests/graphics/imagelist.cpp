@@ -606,3 +606,147 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         CHECK(bmp2.GetHeight() == 32);
     }
 }
+
+TEST_CASE("ImageList:NegativeTests", "[imagelist][negative]")
+{
+    wxBitmap bmp(32, 32, 24);
+    {
+        wxMemoryDC mdc(bmp);
+        mdc.SetBackground(*wxBLUE_BRUSH);
+        mdc.Clear();
+        mdc.SetBrush(*wxRED_BRUSH);
+        mdc.DrawRectangle(4, 4, 24, 24);
+    }
+    REQUIRE(bmp.IsOk());
+
+    SECTION("Invalid size (negative)")
+    {
+        wxImageList il;
+        bool ok = il.Create(-1, -1);
+        CHECK_FALSE(ok);
+#ifdef __WXDEBUG__
+        REQUIRE_THROWS(il.GetImageCount());
+#else
+        CHECK(il.GetImageCount() == 0);
+#endif
+
+        wxSize sz = il.GetSize();
+        CHECK(sz.x == 0);
+        CHECK(sz.y == 0);
+
+        int w = -1;
+        int h = -1;
+#ifdef __WXDEBUG__
+        REQUIRE_THROWS(il.GetSize(0, w, h));
+#else
+        ok = il.GetSize(0, w, h);
+        CHECK_FALSE(ok);
+        CHECK(w == 0);
+        CHECK(h == 0);
+#endif
+
+        int idx = il.Add(bmp);
+        CHECK(idx == -1);
+#ifdef __WXDEBUG__
+        REQUIRE_THROWS(il.GetImageCount());
+#else
+        CHECK(il.GetImageCount() == 0);
+#endif
+    }
+
+    SECTION("Invalid size (zero)")
+    {
+        wxImageList il;
+        bool ok = il.Create(0, 0);
+        CHECK_FALSE(ok);
+#ifdef __WXDEBUG__
+        REQUIRE_THROWS(il.GetImageCount());
+#else
+        CHECK(il.GetImageCount() == 0);
+#endif
+
+        wxSize sz = il.GetSize();
+        CHECK(sz.x == 0);
+        CHECK(sz.y == 0);
+
+        int w = -1;
+        int h = -1;
+#ifdef __WXDEBUG__
+        REQUIRE_THROWS(ok = il.GetSize(0, w, h));
+#else
+        ok = il.GetSize(0, w, h);
+        CHECK_FALSE(ok);
+        CHECK(w == 0);
+        CHECK(h == 0);
+#endif
+
+        int idx = il.Add(bmp);
+        CHECK(idx == -1);
+#ifdef __WXDEBUG__
+        REQUIRE_THROWS(il.GetImageCount());
+#else
+        CHECK(il.GetImageCount() == 0);
+#endif
+
+        ok = il.Replace(0, bmp);
+        CHECK_FALSE(ok);
+#ifdef __WXDEBUG__
+        REQUIRE_THROWS(il.GetImageCount());
+#else
+        CHECK(il.GetImageCount() == 0);
+#endif
+    }
+
+    SECTION("Invalid Get/Replace/Remove indices")
+    {
+        wxImageList il(32, 32, false);
+        CHECK(il.GetImageCount() == 0);
+
+        wxSize sz = il.GetSize();
+        CHECK(sz.x == 32);
+        CHECK(sz.y == 32);
+
+        int w = -1;
+        int h = -1;
+        bool ok = il.GetSize(0, w, h);
+        CHECK(ok == true);
+        CHECK(w == 32);
+        CHECK(h == 32);
+
+        int idx = il.Add(bmp);
+        CHECK(idx == 0);
+        CHECK(il.GetImageCount() == 1);
+
+        wxBitmap bmp2 = il.GetBitmap(-1);
+        CHECK_FALSE(bmp2.IsOk());
+        CHECK(il.GetImageCount() == 1);
+
+        wxBitmap bmp3 = il.GetBitmap(5);
+        CHECK_FALSE(bmp3.IsOk());
+        CHECK(il.GetImageCount() == 1);
+
+        wxIcon icon2 = il.GetIcon(-1);
+        CHECK_FALSE(icon2.IsOk());
+        CHECK(il.GetImageCount() == 1);
+
+        wxBitmap icon3 = il.GetIcon(5);
+        CHECK_FALSE(icon3.IsOk());
+        CHECK(il.GetImageCount() == 1);
+
+        ok = il.Replace(-1, bmp);
+        CHECK_FALSE(ok);
+        CHECK(il.GetImageCount() == 1);
+
+        ok = il.Replace(5, bmp);
+        CHECK_FALSE(ok);
+        CHECK(il.GetImageCount() == 1);
+
+        ok = il.Remove(-1);
+        CHECK_FALSE(ok);
+        CHECK(il.GetImageCount() == 1);
+
+        ok = il.Remove(5);
+        CHECK_FALSE(ok);
+        CHECK(il.GetImageCount() == 1);
+    }
+}
