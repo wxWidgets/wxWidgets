@@ -504,33 +504,32 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     }
 }
 
-void wxWindowMac::MacUpdateControlFont()
-{
-    if ( GetPeer() )
-        GetPeer()->SetFont(GetFont()) ;
-
-    // do not trigger refreshes upon invisible and possible partly created objects
-    if ( IsShownOnScreen() )
-        Refresh() ;
-}
-
 bool wxWindowMac::SetFont(const wxFont& font)
 {
     bool retval = wxWindowBase::SetFont( font );
 
-    MacUpdateControlFont() ;
+    if (retval)
+    {
+        if ( GetPeer() )
+            GetPeer()->SetFont(GetFont()) ;
+
+        // do not trigger refreshes upon invisible and possible partly created objects
+        if ( IsShownOnScreen() )
+            Refresh() ;
+    }
 
     return retval;
 }
 
 bool wxWindowMac::SetForegroundColour(const wxColour& col )
 {
-    bool retval = wxWindowBase::SetForegroundColour( col );
+    if ( !wxWindowBase::SetForegroundColour( col ) )
+        return false;
 
-    if (retval)
-        MacUpdateControlFont();
+    if ( GetPeer() )
+        GetPeer()->SetForegroundColour(col);
 
-    return retval;
+    return true;
 }
 
 bool wxWindowMac::SetBackgroundStyle(wxBackgroundStyle style)

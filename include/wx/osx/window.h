@@ -342,7 +342,6 @@ protected:
     bool                MacHasScrollBarCorner() const;
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;
-    void                MacUpdateControlFont() ;
 
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,

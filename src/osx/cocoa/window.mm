@@ -3578,23 +3578,35 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
     }
 }
 
+NSView* wxWidgetCocoaImpl::GetViewWithText() const
+{
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        return [(NSScrollView*) m_osxView documentView];
+    else if ( [m_osxView isKindOfClass:[NSBox class] ] )
+        return [(NSBox*) m_osxView titleCell];
+
+    return m_osxView;
+}
+
 void wxWidgetCocoaImpl::SetFont(wxFont const& font)
 {
-    NSView* targetView = m_osxView;
-    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
-        targetView = [(NSScrollView*) m_osxView documentView];
-    else if ( [m_osxView isKindOfClass:[NSBox class] ] )
-        targetView = [(NSBox*) m_osxView titleCell];
+    NSView* const targetView = GetViewWithText();
 
     if ([targetView respondsToSelector:@selector(setFont:)])
         [targetView setFont: font.OSXGetNSFont()];
+    if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
+        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
+}
+
+void wxWidgetCocoaImpl::SetForegroundColour(const wxColour& col)
+{
+    NSView* const targetView = GetViewWithText();
+
     if ([targetView respondsToSelector:@selector(setTextColor:)])
     {
         wxColor col = GetWXPeer()->GetForegroundColour();
         [targetView setTextColor: col.OSXGetNSColor()];
     }
-    if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
-        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
 }
 
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)

@@ -421,6 +421,11 @@ void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
     m_osxView.backgroundColor = [UIColor colorWithCGColor:col.GetCGColor()];
 }
 
+void wxWidgetIPhoneImpl::SetForegroundColour( const wxColour &col )
+{
+    // TODO: use textColor if available?
+}
+
 bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 
 {
     if ( style == wxBG_STYLE_PAINT )

@@ -56,6 +56,7 @@ public :
 
     virtual void        SetBackgroundColour( const wxColour& col ) ;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) ;
+    virtual void        SetForegroundColour( const wxColour& col ) ;
 
     virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const;
     virtual void        Move(int x, int y, int width, int height);
