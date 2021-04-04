@@ -150,16 +150,14 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
-    // We use the scaled, i.e. logical, size here as image list images size is
-    // specified in logical pixels, just as window coordinates and sizes are.
-    const wxSize bitmapSize = bitmap.GetScaledSize();
-
+    // Cannot add image to invalid list
     if ( m_size == wxSize(0, 0) )
+        return -1;
+
+    if ( m_images.empty() )
     {
-        // This is the first time Add() is called and we hadn't had any fixed
-        // size: adopt the size of our first bitmap as image size.
-        m_size = bitmapSize;
-        // Save scale factor to check if all images have the same scaling
+        // This is the first time Add() is called so we should save
+        // scale factor to check if further images will have the same scaling
         m_scaleFactor = bitmap.GetScaleFactor();
     }
     else if ( bitmap.GetScaleFactor() != m_scaleFactor )
@@ -167,6 +165,10 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         // All images in the list should have the same scale factor
         return -1;
     }
+
+    // We use the scaled, i.e. logical, size here as image list images size is
+    // specified in logical pixels, just as window coordinates and sizes are.
+    const wxSize bitmapSize = bitmap.GetScaledSize();
 
     // There is a special case: a bitmap may contain more than one image,
     // in which case we're supposed to chop it in parts, just as Windows
