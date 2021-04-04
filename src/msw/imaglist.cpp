@@ -323,7 +323,7 @@ bool wxImageList::Replace(int i, const wxIcon& icon)
 // Removes the image at the given index.
 bool wxImageList::Remove(int index)
 {
-    bool ok = ImageList_Remove(GetHImageList(), index) != 0;
+    bool ok = index >= 0 && ImageList_Remove(GetHImageList(), index) != FALSE;
     if ( !ok )
     {
         wxLogLastError(wxT("ImageList_Remove()"));
@@ -336,7 +336,13 @@ bool wxImageList::Remove(int index)
 bool wxImageList::RemoveAll()
 {
     // don't use ImageList_RemoveAll() because mingw32 headers don't have it
-    return Remove(-1);
+    bool ok = ImageList_Remove(GetHImageList(), -1) != FALSE;
+    if ( !ok )
+    {
+        wxLogLastError(wxT("ImageList_Remove()"));
+    }
+
+    return ok;
 }
 
 // Draws the given image on a dc at the specified position.
