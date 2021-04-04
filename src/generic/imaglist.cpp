@@ -277,20 +277,12 @@ bool wxGenericImageList::RemoveAll()
     return true;
 }
 
-bool wxGenericImageList::GetSize( int index, int &width, int &height ) const
+bool wxGenericImageList::GetSize( int WXUNUSED(index), int &width, int &height ) const
 {
-    wxASSERT_MSG( m_size != wxSize(0, 0), "Invalid image list" );
+    width = m_size.x;
+    height = m_size.y;
 
-    const wxBitmap* bmp = DoGetPtr(index);
-    if ( !bmp )
-    {
-        width = 0;
-        height = 0;
-        return false;
-    }
-
-    width = bmp->GetScaledWidth();
-    height = bmp->GetScaledHeight();
+    wxCHECK_MSG( m_size != wxSize(0, 0), false, "Invalid image list" );
 
     return true;
 }
