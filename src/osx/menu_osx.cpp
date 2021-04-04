@@ -375,6 +375,12 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
         processed = item->GetPeer()->DoDefault();  
     }
     
+    if (wxWindow* const w = GetInvokingWindow())
+    {
+        // Let the invoking window update itself if necessary.
+        w->OSXAfterMenuEvent();
+    }
+
     return processed;
 }
 

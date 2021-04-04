@@ -199,7 +199,7 @@ wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
     {
         wxString itemText = wxString::Format("item %i",i);
         wxString tipText = wxString::Format("tip %i",i);
-        menu->Append(ID_SEARCHMENU+i, itemText, tipText, wxITEM_NORMAL);
+        menu->Append(ID_SEARCHMENU+i, itemText, tipText, wxITEM_CHECK);
     }
     return menu;
 }
@@ -243,7 +243,8 @@ void SearchCtrlWidgetsPage::OnTextEnter(wxCommandEvent& event)
 void SearchCtrlWidgetsPage::OnSearchMenu(wxCommandEvent& event)
 {
     int id = event.GetId() - ID_SEARCHMENU;
-    wxLogMessage("Search menu: \"item %i\" selected (%s).", id);
+    wxLogMessage("Search menu: \"item %i\" selected (%s).",
+                 id, event.IsChecked() ? "checked" : "unchecked");
 }
 
 void SearchCtrlWidgetsPage::OnSearch(wxCommandEvent& event)
