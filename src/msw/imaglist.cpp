@@ -405,7 +405,9 @@ wxBitmap wxImageList::GetBitmap(int index) const
     if ( ii.hbmMask )
     {
         // draw it the first time to find a suitable mask colour
-        const_cast<wxImageList*>(this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
+        if ( !const_cast<wxImageList*>(this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT) )
+            return wxNullBitmap;
+
         dc.SelectObject(wxNullBitmap);
 
         // find the suitable mask colour
@@ -431,7 +433,9 @@ wxBitmap wxImageList::GetBitmap(int index) const
     else // no mask
     {
         // Just draw it normally.
-        const_cast<wxImageList*>(this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL);
+        if ( !const_cast<wxImageList*>(this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL) )
+            return wxNullBitmap;
+
         dc.SelectObject(wxNullBitmap);
 
         // And adjust its alpha flag as the destination bitmap would get it if
