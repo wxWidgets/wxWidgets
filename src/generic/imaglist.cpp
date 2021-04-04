@@ -46,11 +46,13 @@ int wxGenericImageList::GetImageCount() const
 
 bool wxGenericImageList::Create( int width, int height, bool mask, int WXUNUSED(initialCount) )
 {
-    m_size = wxSize(width, height);
+    // Prevent from storing negative dimensions
+    m_size = wxSize(wxMax(width, 0), wxMax(height, 0));
     m_useMask = mask;
     m_scaleFactor = 1.0;
 
-    return true;
+    // Images must have proper size
+    return m_size != wxSize(0, 0);
 }
 
 namespace
