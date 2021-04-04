@@ -265,6 +265,9 @@ wxGenericImageList::Replace(int index,
 
 bool wxGenericImageList::Remove( int index )
 {
+    if ( index < 0 || (size_t)index >= m_images.size() )
+        return false;
+
     m_images.erase(m_images.begin() + index);
 
     return true;
