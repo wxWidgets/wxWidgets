@@ -41,6 +41,8 @@ wxGenericImageList::~wxGenericImageList()
 
 int wxGenericImageList::GetImageCount() const
 {
+    wxASSERT_MSG( m_size != wxSize(0, 0), "Invalid image list" );
+
     return static_cast<int>(m_images.size());
 }
 
@@ -275,6 +277,8 @@ bool wxGenericImageList::RemoveAll()
 
 bool wxGenericImageList::GetSize( int index, int &width, int &height ) const
 {
+    wxASSERT_MSG( m_size != wxSize(0, 0), "Invalid image list" );
+
     const wxBitmap* bmp = DoGetPtr(index);
     if ( !bmp )
     {
