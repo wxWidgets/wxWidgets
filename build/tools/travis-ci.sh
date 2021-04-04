@@ -4,6 +4,8 @@
 
 set -e
 
+. ./build/tools/httpbin.sh
+
 wxPROC_COUNT=`getconf _NPROCESSORS_ONLN`
 ((wxPROC_COUNT++))
 wxBUILD_ARGS="-j$wxPROC_COUNT"
@@ -11,42 +13,6 @@ wxBUILD_ARGS="-j$wxPROC_COUNT"
 # Setting this variable suppresses "Error retrieving accessibility bus address"
 # messages from WebKit tests that we're not interested in.
 export NO_AT_BRIDGE=1
-
-launch_httpbin() {
-    echo 'travis_fold:start:httpbin'
-    echo 'Running httpbin...'
-
-    case "$(uname -s)" in
-        Linux)
-            dist_codename=$(lsb_release --codename --short)
-            ;;
-    esac
-
-    # We need to disable SSL certificate checking under Trusty because Python
-    # version there is too old to support SNI.
-    case "$dist_codename" in
-        trusty)
-            # Here "decorator==4.4.2" doesn't work neither for some reason ("no
-            # matching distribution found"), so use an explicit URL.
-            pip_decorator_arg='https://files.pythonhosted.org/packages/ed/1b/72a1821152d07cf1d8b6fce298aeb06a7eb90f4d6d41acec9861e7cc6df0/decorator-4.4.2-py2.py3-none-any.whl'
-            pip_options='--trusted-host files.pythonhosted.org'
-            ;;
-
-        *)
-            # Current decorator (>= 5) is incompatible with Python 2 which we
-            # still use under in some builds, so explicitly use a version which
-            # is known to work.
-            pip_decorator_arg='decorator==4.4.2'
-            ;;
-    esac
-
-    pip install $pip_decorator_arg httpbin --user $pip_options
-    python -m httpbin.core &
-    WX_TEST_WEBREQUEST_URL="http://localhost:5000"
-
-    export WX_TEST_WEBREQUEST_URL
-    echo 'travis_fold:end:httpbin'
-}
 
 case $wxTOOLSET in
     cmake)
@@ -78,12 +44,18 @@ case $wxTOOLSET in
         echo 'travis_fold:end:install'
 
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
-            launch_httpbin
+            echo 'travis_fold:start:httpbin'
+            httpbin_launch
+            echo 'travis_fold:end:httpbin'
 
             echo 'travis_fold:start:testing'
             echo 'Testing...'
-            ctest -V -C Debug -E "test_drawing" --output-on-failure --interactive-debug-mode 0 .
+            ctest -V -C Debug -E "test_drawing" --output-on-failure --interactive-debug-mode 0 . || rc=$?
             echo 'travis_fold:end:testing'
+            if [ -n "$rc" ]; then
+                httpbin_show_log
+                exit $rc
+            fi
         fi
 
         echo 'travis_fold:start:testinstall'
@@ -162,14 +134,20 @@ case $wxTOOLSET in
             exit 0
         fi
 
-        launch_httpbin
+        echo 'travis_fold:start:httpbin'
+        httpbin_launch
+        echo 'travis_fold:end:httpbin'
 
         echo 'travis_fold:start:testing'
         echo 'Testing...'
         pushd tests
-        ./test
+        ./test || rc=$?
         popd
         echo 'travis_fold:end:testing'
+        if [ -n "$rc" ]; then
+            httpbin_show_log
+            exit $rc
+        fi
 
         if [ "$wxSKIP_GUI" = 1 ]; then
             echo 'Skipping the rest of tests for non-GUI build.'

@@ -189,13 +189,9 @@ jobs:
         if: matrix.skip_testing != true
         working-directory: tests
         run: |
-          echo "Launching httpbin"
-          # Current decorator (>= 5) is incompatible with Python 2 which we
-          # still use under in some builds, so explicitly use a version which
-          # is known to work.
-          pip install decorator==4.4.2 httpbin
-          python -m httpbin.core 2>&1 >httpbin.log &
-          export WX_TEST_WEBREQUEST_URL=http://localhost:5000
+          . ../build/tools/httpbin.sh
+
+          httpbin_launch
 
           export ASAN_OPTIONS=fast_unwind_on_malloc=0
 
@@ -210,11 +206,9 @@ jobs:
                 ./test || rc=$?
             fi
           fi
+
           if [ -n "$rc" ]; then
-            echo '*** Tests failed, contents of httpbin.log follows: ***'
-            echo '-----------------------------------------------------------'
-            cat httpbin.log
-            echo '-----------------------------------------------------------'
+            httpbin_show_log
             exit $rc
           fi
 
