@@ -141,6 +141,11 @@ void FileTestCase::TempFile()
 // Check that GetSize() works correctly for special files.
 TEST_CASE("wxFile::Special", "[file][linux][special-file]")
 {
+    // LXC containers don't (always) populate /proc and /sys, so skip these
+    // tests there.
+    if ( IsRunningInLXC() )
+        return;
+
     // We can't test /proc/kcore here, unlike in the similar
     // wxFileName::GetSize() test, as wxFile must be able to open it (at least
     // for reading) and usually we don't have the permissions to do it.
@@ -151,10 +156,7 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
 
     wxString s;
     CHECK( fileProc.ReadAll(&s) );
-
-    // /proc files seem to be always empty in LXC containers.
-    if ( !IsRunningInLXC() )
-        CHECK( !s.empty() );
+    CHECK( !s.empty() );
 
     // All files in /sys have the size of one kernel page, even if they don't
     // have that much data in them.
