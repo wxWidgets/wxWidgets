@@ -25,20 +25,25 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreFoundation/CFData.h>
 
-const wxString sCR((wxChar)13);
-const wxString sLF((wxChar)10);
-
 wxString wxMacConvertNewlines13To10(const wxString& data)
 {
     wxString string(data);
-    string.Replace(sCR, sLF);
+    for (auto&& c: string)
+    {
+        if (c == '\r')
+            c = '\n';
+    }
     return string;
 }
 
 wxString wxMacConvertNewlines10To13(const wxString& data)
 {
     wxString string(data);
-    string.Replace(sLF, sCR);
+    for (auto&& c: string)
+    {
+        if (c == '\n')
+            c = '\r';
+    }
     return string;
 }
 
