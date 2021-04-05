@@ -20,10 +20,12 @@ httpbin_launch() {
             # Python 2.7.6 is too old to support SNI and can't be used.
             PY3=3
 
-            # Current decorator (>= 5) is incompatible with Python 3.4 used
-            # here, so explicitly use a version which is known to work.
-            # Similarly, werkzeug >= 1 doesn't support 3.4 any longer.
-            pip_explicit_deps='decorator==4.4.2 werkzeug==0.16.1'
+            # Explicitly select the versions of dependencies that are still
+            # compatible with Python 3.4 used here as the latest versions of
+            # several of them are not.
+            pip_explicit_deps='Flask==1.0.4 Jinja2==2.10.3 MarkupSafe==1.1.1
+            blinker==1.4 brotlipy==0.7.0 cffi==1.14.5 click==7.0 decorator==4.4.2
+            itsdangerous==1.1.0 pycparser==2.20 raven==6.10.0 werkzeug==0.16.1'
             ;;
 
         macOS)
