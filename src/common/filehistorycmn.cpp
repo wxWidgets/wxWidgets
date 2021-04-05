@@ -147,8 +147,8 @@ void wxFileHistoryBase::DoRefreshLabels()
     if ( numFiles == 0 )
         return;
 
-    // Use the first file as the current path
-    wxFileName firstFn(m_fileHistory[0]);
+    // Remember the path in case we need to compare with it below.
+    const wxString firstPath(wxFileName(m_fileHistory[0]).GetPath());
 
     // Update the labels in all menus
     for ( size_t i = 0; i < numFiles; i++ )
@@ -156,23 +156,24 @@ void wxFileHistoryBase::DoRefreshLabels()
         const wxFileName currFn(m_fileHistory[i]);
 
         wxString pathInMenu;
+        switch ( m_menuPathStyle )
+        {
+            case wxFH_PATH_SHOW_IF_DIFFERENT:
+                if ( currFn.HasName() && currFn.GetPath() == firstPath )
+                    pathInMenu = currFn.GetFullName();
+                else
+                    pathInMenu = currFn.GetFullPath();
+                break;
 
-        if ( m_menuPathStyle == wxFH_PATH_SHOW_NEVER )
-        {
-            // Only show the filename + extension and not the path
-            pathInMenu = currFn.GetFullName();
-        }
-        else if ( ( m_menuPathStyle == wxFH_PATH_SHOW_IF_DIFFERENT ) &&
-                  ( currFn.GetPath() == firstFn.GetPath() ) && currFn.HasName() )
-        {
-            // Hide the path if it is in the same folder as the first file
-            pathInMenu = currFn.GetFullName();
-        }
-        else
-        {
-            // Either has wxFH_PATH_SHOW_ALWAYS menu style, or the file is in a different directory
-            // from the first file
-            pathInMenu = m_fileHistory[i];
+            case wxFH_PATH_SHOW_NEVER:
+                // Only show the filename + extension and not the path.
+                pathInMenu = currFn.GetFullName();
+                break;
+
+            case wxFH_PATH_SHOW_ALWAYS:
+                // Always show full path.
+                pathInMenu = currFn.GetFullPath();
+                break;
         }
 
         for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
