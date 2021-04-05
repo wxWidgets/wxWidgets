@@ -141,8 +141,7 @@ void wxFileHistoryBase::AddFileToHistory(const wxString& file)
 
 void wxFileHistoryBase::DoRefreshLabels()
 {
-    size_t i;
-    size_t numFiles = m_fileHistory.size();
+    const size_t numFiles = m_fileHistory.size();
 
     // If no files, then no need to refresh the menu
     if ( numFiles == 0 )
@@ -152,7 +151,7 @@ void wxFileHistoryBase::DoRefreshLabels()
     wxFileName firstFn(m_fileHistory[0]);
 
     // Update the labels in all menus
-    for ( i = 0; i < numFiles; i++ )
+    for ( size_t i = 0; i < numFiles; i++ )
     {
         const wxFileName currFn(m_fileHistory[i]);
 
