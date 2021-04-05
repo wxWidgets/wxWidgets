@@ -126,14 +126,6 @@ public:
     virtual void Load(const wxConfigBase& config);
 
     /**
-        Refresh the labels on all the menu items in the menus used by this
-        file history.
-
-        @since 3.1.5
-    */
-    void RefreshLabels();
-
-    /**
         Removes the specified file from the history.
     */
     virtual void RemoveFileFromHistory(size_t i);
@@ -169,7 +161,6 @@ public:
 
         By default, the menu item label style is ::wxFH_PATH_SHOW_IF_DIFFERENT.
 
-        @remarks Use RefreshLabels() to update any existing menu items to the new style.
         @since 3.1.5
     */
     void SetMenuPathStyle(wxFileHistoryMenuPathStyle style);

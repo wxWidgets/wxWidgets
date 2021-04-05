@@ -1403,8 +1403,6 @@ void MyFrame::OnFileHistoryStyleItem(wxCommandEvent& event)
         m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_ALWAYS);
         break;
     }
-
-    m_fileHistory->RefreshLabels();
 }
 #endif
 

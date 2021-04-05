@@ -67,10 +67,8 @@ public:
     void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
     wxWindowID GetBaseId() const { return m_idBase; }
 
-    void SetMenuPathStyle(wxFileHistoryMenuPathStyle style) { m_menuPathStyle = style; }
+    void SetMenuPathStyle(wxFileHistoryMenuPathStyle style);
     wxFileHistoryMenuPathStyle GetMenuPathStyle() const { return m_menuPathStyle; }
-
-    void RefreshLabels();
 
 protected:
     // Last n files
@@ -86,6 +84,9 @@ protected:
     wxFileHistoryMenuPathStyle m_menuPathStyle;
 
 private:
+    void DoRefreshLabels();
+
+
     // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
     wxWindowID m_idBase;
 

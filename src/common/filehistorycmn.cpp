@@ -136,10 +136,10 @@ void wxFileHistoryBase::AddFileToHistory(const wxString& file)
     m_fileHistory.insert(m_fileHistory.begin(), file);
     numFiles++;
 
-    RefreshLabels();
+    DoRefreshLabels();
 }
 
-void wxFileHistoryBase::RefreshLabels()
+void wxFileHistoryBase::DoRefreshLabels()
 {
     size_t i;
     size_t numFiles = m_fileHistory.size();
@@ -184,6 +184,15 @@ void wxFileHistoryBase::RefreshLabels()
 
             menu->SetLabel(m_idBase + i, GetMRUEntryLabel(i, pathInMenu));
         }
+    }
+}
+
+void wxFileHistoryBase::SetMenuPathStyle(wxFileHistoryMenuPathStyle style)
+{
+    if ( style != m_menuPathStyle )
+    {
+        m_menuPathStyle = style;
+        DoRefreshLabels();
     }
 }
 
