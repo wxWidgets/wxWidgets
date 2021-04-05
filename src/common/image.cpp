@@ -1943,6 +1943,52 @@ wxImage wxImage::ConvertToDisabled(unsigned char brightness) const
     return image;
 }
 
+wxImage wxImage::ChangeLightness(int ialpha) const
+{
+    wxASSERT (ialpha >= 0 && ialpha <= 200);
+    wxImage image;
+    wxCHECK_MSG(IsOk(), image, "invalid image");
+
+    const int width = M_IMGDATA->m_width;
+    const int height = M_IMGDATA->m_height;
+    const int nSize = width * height;
+    image.Create(width, height, false);
+    const unsigned char *pByAlpha = M_IMGDATA->m_alpha;
+
+    if ( pByAlpha )
+    {
+        image.SetAlpha();
+        memcpy(image.GetAlpha(), pByAlpha, nSize);
+    }
+
+    const unsigned char mask_r = M_IMGDATA->m_maskRed;
+    const unsigned char mask_g = M_IMGDATA->m_maskGreen;
+    const unsigned char mask_b = M_IMGDATA->m_maskBlue;
+    const bool hasMask = M_IMGDATA->m_hasMask;
+
+    if ( hasMask )
+        image.SetMaskColour(mask_r, mask_g, mask_b);
+
+    const unsigned char *pBySrc = M_IMGDATA->m_data;
+    unsigned char *pByDst = image.GetData();
+
+    for ( int i = 0; i < nSize; i++ )
+    {
+        unsigned char r = *pBySrc++;
+        unsigned char g = *pBySrc++;
+        unsigned char b = *pBySrc++;
+
+        if ( !hasMask || r != mask_r || g != mask_g || b != mask_b )
+             wxColour::ChangeLightness(&r, &g, &b, ialpha);
+
+        *pByDst++ = r;
+        *pByDst++ = g;
+        *pByDst++ = b;
+    }
+
+    return image;
+}
+
 int wxImage::GetWidth() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid image") );
@@ -3361,6 +3407,145 @@ void wxImage::RotateHue(double angle)
             *dstBytePtr++ = rgb.green;
             *dstBytePtr++ = rgb.blue;
         } while (--count != 0);
+    }
+}
+
+// Changes the saturation of each pixel of the image. factor is a double in the
+// range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+void wxImage::ChangeSaturation(double factor)
+{
+    wxASSERT (factor >= -1.0 && factor <= 1.0);
+    AllocExclusive();
+    const int nSize = M_IMGDATA->m_width * M_IMGDATA->m_height;
+
+    if ( !nSize || wxIsNullDouble(factor) )
+        return;
+
+    const unsigned char *pBySrc = M_IMGDATA->m_data;
+    unsigned char *pByDst = M_IMGDATA->m_data;
+    wxImage::RGBValue rgb;
+    wxImage::HSVValue hsv;
+
+    for ( int i = 0; i < nSize; i++ )
+    {
+        rgb.red = *pBySrc++;
+        rgb.green = *pBySrc++;
+        rgb.blue = *pBySrc++;
+        hsv = RGBtoHSV(rgb);
+
+        hsv.saturation += hsv.saturation * factor;
+
+        if (hsv.saturation > 1.0)
+            hsv.saturation = 1.0;
+        else if (hsv.saturation < 0.0)
+            hsv.saturation = 0.0;
+
+        rgb = HSVtoRGB(hsv);
+        *pByDst++ = rgb.red;
+        *pByDst++ = rgb.green;
+        *pByDst++ = rgb.blue;
+    }
+}
+
+// Changes the brightness (value) of each pixel of the image. factor is a double
+// in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+void wxImage::ChangeBrightness(double factor)
+{
+    wxASSERT (factor >= -1.0 && factor <= 1.0);
+    AllocExclusive();
+    const int nSize = M_IMGDATA->m_width * M_IMGDATA->m_height;
+
+    if ( !nSize || wxIsNullDouble(factor) )
+        return;
+
+    const unsigned char *pBySrc = M_IMGDATA->m_data;
+    unsigned char *pByDst = M_IMGDATA->m_data;
+    wxImage::RGBValue rgb;
+    wxImage::HSVValue hsv;
+
+    for ( int i = 0; i < nSize; i++ )
+    {
+        rgb.red = *pBySrc++;
+        rgb.green = *pBySrc++;
+        rgb.blue = *pBySrc++;
+        hsv = RGBtoHSV(rgb);
+
+        hsv.value += hsv.value * factor;
+
+        if (hsv.value > 1.0)
+            hsv.value = 1.0;
+        else if (hsv.value < 0.0)
+            hsv.value = 0.0;
+
+        rgb = HSVtoRGB(hsv);
+        *pByDst++ = rgb.red;
+        *pByDst++ = rgb.green;
+        *pByDst++ = rgb.blue;
+    }
+}
+
+// Changes the hue, the saturation and the brightness (value) of each pixel
+// of the image. angleH is a double in the range [-1.0..1.0] where -1.0 is
+// -360 degrees and 1.0 is 360 degrees, factorS is a double in the range
+// [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent and factorV
+// is a double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0
+// is 100 percent.
+void wxImage::ChangeHSV(double angleH, double factorS, double factorV)
+{
+    wxASSERT (angleH >= -1.0 && angleH <= 1.0 && factorS >= -1.0 &&
+              factorS <= 1.0 && factorV >= -1.0 && factorV <= 1.0);
+    AllocExclusive();
+    const int nSize = M_IMGDATA->m_width * M_IMGDATA->m_height;
+
+    if ( !nSize || (wxIsNullDouble(angleH) && wxIsNullDouble(factorS) && wxIsNullDouble(factorV)) )
+        return;
+
+    const unsigned char *pBySrc = M_IMGDATA->m_data;
+    unsigned char *pByDst = M_IMGDATA->m_data;
+    wxImage::RGBValue rgb;
+    wxImage::HSVValue hsv;
+
+    for ( int i = 0; i < nSize; i++ )
+    {
+        rgb.red = *pBySrc++;
+        rgb.green = *pBySrc++;
+        rgb.blue = *pBySrc++;
+        hsv = RGBtoHSV(rgb);
+
+        if ( !wxIsNullDouble(angleH) )
+        {
+            hsv.hue += angleH;
+
+            if (hsv.hue > 1.0)
+                hsv.hue -= 1.0;
+            else if (hsv.hue < 0.0)
+                hsv.hue += 1.0;
+        }
+
+        if ( !wxIsNullDouble(factorS) )
+        {
+            hsv.saturation += hsv.saturation * factorS;
+
+            if (hsv.saturation > 1.0)
+                hsv.saturation = 1.0;
+            else if (hsv.saturation < 0.0)
+                hsv.saturation = 0.0;
+        }
+
+        if ( !wxIsNullDouble(factorV) )
+        {
+            hsv.value += hsv.value * factorV;
+
+            if (hsv.value > 1.0)
+                hsv.value = 1.0;
+            else if (hsv.value < 0.0)
+                hsv.value = 0.0;
+        }
+
+        rgb = HSVtoRGB(hsv);
+        *pByDst++ = rgb.red;
+        *pByDst++ = rgb.green;
+        *pByDst++ = rgb.blue;
     }
 }
 

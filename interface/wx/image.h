@@ -904,6 +904,35 @@ public:
     void RotateHue(double angle);
 
     /**
+        Changes the saturation of each pixel of the image. factor is a double in
+        the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+
+        @since 3.1.5
+    */
+    void ChangeSaturation(double factor);
+
+    /**
+        Changes the brightness (value) of each pixel of the image. factor is a
+        double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100
+        percent.
+
+        @since 3.1.5
+    */
+    void ChangeBrightness(double factor);
+
+    /**
+        Changes the hue, the saturation and the brightness (value) of each pixel
+        of the image. angleH is a double in the range [-1.0..1.0] where -1.0 is
+        -360 degrees and 1.0 is 360 degrees, factorS is a double in the range
+        [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent and factorV
+        is a double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0
+        is 100 percent.
+
+        @since 3.1.5
+    */
+    void ChangeHSV(double angleH, double factorS, double factorV);
+
+    /**
         Returns a scaled version of the image.
 
         This is also useful for scaling bitmaps in general as the only other way
@@ -1042,6 +1071,16 @@ public:
         @since 2.9.0
     */
     wxImage ConvertToDisabled(unsigned char brightness = 255) const;
+
+    /**
+        Returns a changed version of the image based on the given lightness.
+        This utility function simply darkens or lightens a color, based on the
+        specified percentage @a ialpha. @a ialpha of 0 would make the color
+        completely black, 200 completely white and 100 would not change the color.
+
+        @since 3.1.5
+    */
+    wxImage ChangeLightness(int ialpha) const;
 
     //@}
 

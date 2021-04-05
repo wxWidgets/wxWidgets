@@ -411,6 +411,9 @@ public:
     // Convert to disabled (dimmed) image.
     wxImage ConvertToDisabled(unsigned char brightness = 255) const;
 
+    // Convert the image based on the given lightness.
+    wxImage ChangeLightness(int ialpha) const;
+
     // these routines are slow but safe
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
     void SetRGB( const wxRect& rect, unsigned char r, unsigned char g, unsigned char b );
@@ -558,6 +561,23 @@ public:
     // Rotates the hue of each pixel of the image. angle is a double in the range
     // -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
     void RotateHue(double angle);
+
+    // Changes the saturation of each pixel of the image. factor is a double in
+    // the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+    void ChangeSaturation(double factor);
+
+    // Changes the brightness (value) of each pixel of the image. factor is a
+    // double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100
+    // percent.
+    void ChangeBrightness(double factor);
+
+    // Changes the hue, the saturation and the brightness (value) of each pixel
+    // of the image. angleH is a double in the range [-1.0..1.0] where -1.0 is
+    // -360 degrees and 1.0 is 360 degrees, factorS is a double in the range
+    // [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent and factorV
+    // is a double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0
+    // is 100 percent.
+    void ChangeHSV(double angleH, double factorS, double factorV);
 
     static wxList& GetHandlers() { return sm_handlers; }
     static void AddHandler( wxImageHandler *handler );
