@@ -55,7 +55,7 @@ httpbin_launch() {
 
     echo "Installing using `python$PY3 -m pip --version`"
 
-    python$PY3 -m pip install $pip_decorator_arg httpbin
+    python$PY3 -m pip install --user $pip_decorator_arg httpbin
     python$PY3 -m httpbin.core 2>&1 >httpbin.log &
     WX_TEST_WEBREQUEST_URL="http://localhost:5000"
 
