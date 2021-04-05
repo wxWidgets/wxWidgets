@@ -70,7 +70,7 @@ wxFileHistoryBase::wxFileHistoryBase(size_t maxFiles, wxWindowID idBase)
 {
     m_fileMaxFiles = maxFiles;
     m_idBase = idBase;
-    m_menuLabelStyle = wxFH_HIDE_CURRENT_PATH;
+    m_menuPathStyle = wxFH_HIDE_CURRENT_PATH;
 }
 
 /* static */
@@ -158,12 +158,12 @@ void wxFileHistoryBase::RefreshLabels()
 
         wxString pathInMenu;
 
-        if ( m_menuLabelStyle == wxFH_HIDE_ALL_PATHS )
+        if ( m_menuPathStyle == wxFH_HIDE_ALL_PATHS )
         {
             // Only show the filename + extension and not the path
             pathInMenu = currFn.GetFullName();
         }
-        else if ( ( m_menuLabelStyle == wxFH_HIDE_CURRENT_PATH ) &&
+        else if ( ( m_menuPathStyle == wxFH_HIDE_CURRENT_PATH ) &&
                   ( currFn.GetPath() == firstFn.GetPath() ) && currFn.HasName() )
         {
             // Hide the path if it is in the same folder as the first file
