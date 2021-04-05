@@ -827,8 +827,6 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
 {
     Init();
     m_width = info.GetWidth();
-    if (m_width <= 0.0)
-        m_width = 0.1;
 
     m_pen = new Pen(wxColourToColor(info.GetColour()), m_width );
 
@@ -1827,21 +1825,29 @@ void * wxGDIPlusMatrixData::GetNativeMatrix() const
 class wxGDIPlusOffsetHelper
 {
 public :
-    wxGDIPlusOffsetHelper( Graphics* gr , bool offset )
+    wxGDIPlusOffsetHelper(Graphics* gr, double scaleFactor, bool offset)
     {
         m_gr = gr;
-        m_offset = offset;
-        if ( m_offset )
-            m_gr->TranslateTransform( 0.5, 0.5 );
+        m_offset = 0;
+        if (offset)
+        {
+            Matrix matrix;
+            gr->GetTransform(&matrix);
+            const float f = float(scaleFactor);
+            PointF pt(f, f);
+            matrix.TransformVectors(&pt);
+            m_offset = 0.5f / wxMin(std::abs(pt.X), std::abs(pt.Y));
+            m_gr->TranslateTransform(m_offset, m_offset);
+        }
     }
     ~wxGDIPlusOffsetHelper( )
     {
-        if ( m_offset )
-            m_gr->TranslateTransform( -0.5, -0.5 );
+        if (m_offset > 0)
+            m_gr->TranslateTransform(-m_offset, -m_offset);
     }
 public :
     Graphics* m_gr;
-    bool m_offset;
+    float m_offset;
 } ;
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height   )
@@ -1952,7 +1958,7 @@ void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+    wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
     Brush *brush = m_brush.IsNull() ? NULL : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
     Pen *pen = m_pen.IsNull() ? NULL : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
 
@@ -1991,7 +1997,7 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
 
    if ( !m_pen.IsNull() )
    {
-       wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+        wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
        PointF *cpoints = new PointF[n];
        for (size_t i = 0; i < n; i++)
        {
@@ -2009,7 +2015,7 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
    if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+    wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
     PointF *cpoints = new PointF[n];
     for (size_t i = 0; i < n; i++)
     {
@@ -2032,7 +2038,7 @@ void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
 
     if ( !m_pen.IsNull() )
     {
-        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+        wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
         m_context->DrawPath( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , (GraphicsPath*) path.GetNativePath() );
     }
 }
@@ -2044,7 +2050,7 @@ void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode 
 
     if ( !m_brush.IsNull() )
     {
-        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+        wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
         ((GraphicsPath*) path.GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
         m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() ,
             (GraphicsPath*) path.GetNativePath());
@@ -2429,17 +2435,24 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
 
 bool wxGDIPlusContext::ShouldOffset() const
 {
-    if ( !m_enableOffset )
+    if (!m_enableOffset || m_pen.IsNull())
         return false;
 
-    int penwidth = 0 ;
-    if ( !m_pen.IsNull() )
-    {
-        penwidth = (int)((wxGDIPlusPenData*)m_pen.GetRefData())->GetWidth();
-        if ( penwidth == 0 )
-            penwidth = 1;
-    }
-    return ( penwidth % 2 ) == 1;
+    double width = static_cast<wxGDIPlusPenData*>(m_pen.GetRefData())->GetWidth();
+
+    // always offset for 1-pixel width
+    if (width <= 0)
+        return true;
+
+    // no offset if overall scale is not odd integer
+    const wxGraphicsMatrix matrix(GetTransform());
+    double x = GetContentScaleFactor(), y = x;
+    matrix.TransformDistance(&x, &y);
+    if (!wxIsSameDouble(fmod(wxMin(fabs(x), fabs(y)), 2.0), 1.0))
+        return false;
+
+    // offset if pen width is odd integer
+    return wxIsSameDouble(fmod(width, 2.0), 1.0);
 }
 
 void* wxGDIPlusContext::GetNativeContext()

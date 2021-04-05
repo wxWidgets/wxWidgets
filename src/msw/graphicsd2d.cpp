@@ -1107,24 +1107,31 @@ wxCOMPtr<ID2D1Geometry> wxD2DConvertRegionToGeometry(ID2D1Factory* direct2dFacto
 class wxD2DOffsetHelper
 {
 public:
-    wxD2DOffsetHelper(wxGraphicsContext* g) : m_context(g)
+    wxD2DOffsetHelper(wxGraphicsContext* g, double scaleFactor)
+        : m_context(g)
     {
+        m_offset = 0;
         if (m_context->ShouldOffset())
         {
-            m_context->Translate(0.5, 0.5);
+            const wxGraphicsMatrix matrix(m_context->GetTransform());
+            double x = m_context->GetContentScaleFactor(), y = x;
+            matrix.TransformDistance(&x, &y);
+            m_offset = 0.5 / wxMin(fabs(x), fabs(y));
+            m_context->Translate(m_offset, m_offset);
         }
     }
 
     ~wxD2DOffsetHelper()
     {
-        if (m_context->ShouldOffset())
+        if (m_offset > 0)
         {
-            m_context->Translate(-0.5, -0.5);
+            m_context->Translate(-m_offset, -m_offset);
         }
     }
 
 private:
     wxGraphicsContext* m_context;
+    double m_offset;
 };
 
 bool operator==(const D2D1::Matrix3x2F& lhs, const D2D1::Matrix3x2F& rhs)
@@ -3033,6 +3040,8 @@ public:
     ID2D1Brush* GetBrush();
 
     FLOAT GetWidth();
+    bool IsZeroWidth() const;
+    void SetWidth(const wxGraphicsContext* context);
 
     ID2D1StrokeStyle* GetStrokeStyle();
 
@@ -3146,6 +3155,17 @@ void wxD2DPenData::CreateStrokeStyle(ID2D1Factory* const direct2dfactory)
     delete[] dashes;
 }
 
+void wxD2DPenData::SetWidth(const wxGraphicsContext* context)
+{
+    if (m_penInfo.GetWidth() <= 0)
+    {
+        const wxGraphicsMatrix matrix(context->GetTransform());
+        double x = context->GetContentScaleFactor(), y = x;
+        matrix.TransformDistance(&x, &y);
+        m_width = 1 / wxMin(fabs(x), fabs(y));
+    }
+}
+
 ID2D1Brush* wxD2DPenData::GetBrush()
 {
     return m_stippleBrush->GetBrush();
@@ -3154,6 +3174,11 @@ ID2D1Brush* wxD2DPenData::GetBrush()
 FLOAT wxD2DPenData::GetWidth()
 {
     return m_width;
+}
+
+bool wxD2DPenData::IsZeroWidth() const
+{
+    return m_penInfo.GetWidth() <= 0;
 }
 
 ID2D1StrokeStyle* wxD2DPenData::GetStrokeStyle()
@@ -4321,7 +4346,7 @@ void wxD2DContext::StrokePath(const wxGraphicsPath& p)
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this);
+    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
 
     EnsureInitialized();
     AdjustRenderTargetSize();
@@ -4332,6 +4357,7 @@ void wxD2DContext::StrokePath(const wxGraphicsPath& p)
     if (!m_pen.IsNull())
     {
         wxD2DPenData* penData = wxGetD2DPenData(m_pen);
+        penData->SetWidth(this);
         penData->Bind(this);
         ID2D1Brush* nativeBrush = penData->GetBrush();
         GetRenderTarget()->DrawGeometry((ID2D1Geometry*)pathData->GetNativePath(), nativeBrush, penData->GetWidth(), penData->GetStrokeStyle());
@@ -4690,19 +4716,24 @@ void wxD2DContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& wi
 
 bool wxD2DContext::ShouldOffset() const
 {
-    if (!m_enableOffset)
-    {
+    if (!m_enableOffset || m_pen.IsNull())
         return false;
-    }
 
-    int penWidth = 0;
-    if (!m_pen.IsNull())
-    {
-        penWidth = wxGetD2DPenData(m_pen)->GetWidth();
-        penWidth = wxMax(penWidth, 1);
-    }
+    wxD2DPenData* const penData = wxGetD2DPenData(m_pen);
 
-    return (penWidth % 2) == 1;
+    // always offset for 1-pixel width
+    if (penData->IsZeroWidth())
+        return true;
+
+    // no offset if overall scale is not odd integer
+    const wxGraphicsMatrix matrix(GetTransform());
+    double x = GetContentScaleFactor(), y = x;
+    matrix.TransformDistance(&x, &y);
+    if (!wxIsSameDouble(fmod(wxMin(fabs(x), fabs(y)), 2.0), 1.0))
+        return false;
+
+    // offset if pen width is odd integer
+    return wxIsSameDouble(fmod(double(penData->GetWidth()), 2.0), 1.0);
 }
 
 void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
@@ -4779,7 +4810,7 @@ void wxD2DContext::DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this);
+    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
 
     EnsureInitialized();
     AdjustRenderTargetSize();
@@ -4797,6 +4828,7 @@ void wxD2DContext::DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     if (!m_pen.IsNull())
     {
         wxD2DPenData* penData = wxGetD2DPenData(m_pen);
+        penData->SetWidth(this);
         penData->Bind(this);
         GetRenderTarget()->DrawRectangle(rect, penData->GetBrush(), penData->GetWidth(), penData->GetStrokeStyle());
     }
@@ -4807,7 +4839,7 @@ void wxD2DContext::DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDo
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this);
+    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
 
     EnsureInitialized();
     AdjustRenderTargetSize();
@@ -4826,6 +4858,7 @@ void wxD2DContext::DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDo
     if (!m_pen.IsNull())
     {
         wxD2DPenData* penData = wxGetD2DPenData(m_pen);
+        penData->SetWidth(this);
         penData->Bind(this);
         GetRenderTarget()->DrawRoundedRectangle(roundedRect, penData->GetBrush(), penData->GetWidth(), penData->GetStrokeStyle());
     }
@@ -4836,7 +4869,7 @@ void wxD2DContext::DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this);
+    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
 
     EnsureInitialized();
     AdjustRenderTargetSize();
@@ -4857,6 +4890,7 @@ void wxD2DContext::DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     if (!m_pen.IsNull())
     {
         wxD2DPenData* penData = wxGetD2DPenData(m_pen);
+        penData->SetWidth(this);
         penData->Bind(this);
         GetRenderTarget()->DrawEllipse(ellipse, penData->GetBrush(), penData->GetWidth(), penData->GetStrokeStyle());
     }

@@ -407,7 +407,7 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
         AdjustForRTL(cr);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
         cairo_destroy(cr);
-        gc->EnableOffset(m_contentScaleFactor <= 1);
+        gc->SetContentScaleFactor(m_contentScaleFactor);
         SetGraphicsContext(gc);
         GtkAllocation a;
         gtk_widget_get_allocation(widget, &a);
@@ -456,7 +456,7 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
         AdjustForRTL(cr);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
         cairo_destroy(cr);
-        gc->EnableOffset(m_contentScaleFactor <= 1);
+        gc->SetContentScaleFactor(m_contentScaleFactor);
         SetGraphicsContext(gc);
         if (!gtk_widget_get_has_window(widget))
         {
@@ -480,7 +480,7 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
     wxCHECK_RET(cr, "using wxPaintDC without being in a native paint event");
     InitSize(gtk_widget_get_window(window->m_wxwindow));
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-    gc->EnableOffset(m_contentScaleFactor <= 1);
+    gc->SetContentScaleFactor(m_contentScaleFactor);
     SetGraphicsContext(gc);
     // context is already adjusted for RTL
     m_layoutDir = window->GetLayoutDirection();
@@ -510,7 +510,7 @@ wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
     cairo_t* cr = gdk_cairo_create(window);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
     cairo_destroy(cr);
-    gc->EnableOffset(m_contentScaleFactor <= 1);
+    gc->SetContentScaleFactor(m_contentScaleFactor);
     SetGraphicsContext(gc);
 }
 
@@ -573,7 +573,7 @@ void wxMemoryDCImpl::Setup()
         AdjustForRTL(cr);
         gc = wxGraphicsContext::CreateFromNative(cr);
         cairo_destroy(cr);
-        gc->EnableOffset(m_contentScaleFactor <= 1);
+        gc->SetContentScaleFactor(m_contentScaleFactor);
     }
     SetGraphicsContext(gc);
 }
@@ -583,7 +583,7 @@ wxGTKCairoDC::wxGTKCairoDC(cairo_t* cr, wxWindow* window, wxLayoutDirection dir,
     : wxDC(new wxGTKCairoDCImpl(this, window, dir, width))
 {
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-    gc->EnableOffset(window->GetContentScaleFactor() <= 1);
+    gc->SetContentScaleFactor(window->GetContentScaleFactor());
     SetGraphicsContext(gc);
     if (dir == wxLayout_Default)
         SetLayoutDirection(window->GetLayoutDirection());

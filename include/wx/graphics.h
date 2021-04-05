@@ -878,6 +878,9 @@ public:
     void DisableOffset() { EnableOffset(false); }
     bool OffsetEnabled() const { return m_enableOffset; }
 
+    void SetContentScaleFactor(double contentScaleFactor);
+    double GetContentScaleFactor() const { return m_contentScaleFactor; }
+
 protected:
     // These fields must be initialized in the derived class ctors.
     wxDouble m_width,
@@ -912,6 +915,7 @@ private:
     // Create() or the associated window of the wxDC this context was created
     // from.
     wxWindow* const m_window;
+    double m_contentScaleFactor;
 
     wxDECLARE_NO_COPY_CLASS(wxGraphicsContext);
     wxDECLARE_ABSTRACT_CLASS(wxGraphicsContext);

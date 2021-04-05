@@ -572,6 +572,7 @@ wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer,
       m_enableOffset(false),
       m_window(window)
 {
+    m_contentScaleFactor = window ? window->GetContentScaleFactor() : 1.0;
 }
 
 wxGraphicsContext::~wxGraphicsContext()
@@ -603,6 +604,12 @@ void wxGraphicsContext::Flush()
 void wxGraphicsContext::EnableOffset(bool enable)
 {
     m_enableOffset = enable;
+}
+
+void wxGraphicsContext::SetContentScaleFactor(double contentScaleFactor)
+{
+    m_enableOffset = true;
+    m_contentScaleFactor = contentScaleFactor;
 }
 
 #if 0
