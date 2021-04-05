@@ -211,7 +211,7 @@ function(wx_set_target_properties target_name is_base)
         endif()
     else()
         set(cross_target "")
-        if (CMAKE_CROSSCOMPILING AND NOT IPHONE)
+        if (CMAKE_CROSSCOMPILING)
             set(cross_target "-${CMAKE_SYSTEM_NAME}")
         endif ()
 
@@ -219,7 +219,7 @@ function(wx_set_target_properties target_name is_base)
             PROPERTIES
                 OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}${cross_target}
                 # NOTE: wx-config can not be used to connect the libraries with the debug suffix.
-                #OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_flavour}${lib_suffix}-${lib_version}
+                #OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_flavour}${lib_suffix}-${lib_version}${cross_target}
                 OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}${cross_target}
             )
     endif()
