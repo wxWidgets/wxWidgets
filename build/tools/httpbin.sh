@@ -22,13 +22,14 @@ httpbin_launch() {
 
             # Current decorator (>= 5) is incompatible with Python 3.4 used
             # here, so explicitly use a version which is known to work.
-            pip_decorator_arg='decorator==4.4.2'
+            # Similarly, werkzeug >= 1 doesn't support 3.4 any longer.
+            pip_explicit_deps='decorator==4.4.2 werkzeug==0.16.1'
             ;;
 
         macOS)
             # We use Python 2 under macOS 10.11 which doesn't have Python 3,
             # and decorator >= 5 is incompatible with it too.
-            pip_decorator_arg='decorator==4.4.2'
+            pip_explicit_deps='decorator==4.4.2'
             ;;
 
         *)
@@ -55,7 +56,7 @@ httpbin_launch() {
 
     echo "Installing using `python$PY3 -m pip --version`"
 
-    python$PY3 -m pip install $pip_decorator_arg httpbin --user
+    python$PY3 -m pip install $pip_explicit_deps httpbin --user
     python$PY3 -m httpbin.core 2>&1 >httpbin.log &
     WX_TEST_WEBREQUEST_URL="http://localhost:5000"
 
