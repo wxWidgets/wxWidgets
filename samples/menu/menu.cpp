@@ -748,6 +748,7 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
+    delete m_fileHistory;
     delete m_menu;
 
     // delete the event handler installed in ctor
