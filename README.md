@@ -19,8 +19,9 @@ and read its documentation online at https://docs.wxwidgets.org/
 Platforms
 ---------
 
-[![AppVeyor](https://img.shields.io/appveyor/ci/wxWidgets/wxWidgets/master.svg?label=Windows)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
-[![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets/master.svg?label=Linux)](https://travis-ci.org/wxWidgets/wxWidgets)
+[![AppVeyor](https://img.shields.io/appveyor/build/wxWidgets/wxWidgets?label=AppVeyor&logo=appveyor)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
+[![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets?label=TravisCI&logo=travis)](https://travis-ci.org/wxWidgets/wxWidgets)
+[![Github](https://img.shields.io/github/checks-status/wxWidgets/wxWidgets/master?label=GitHub&logo=github)](https://github.com/wxWidgets/wxWidgets/actions)
 [![OSS-Fuzz](https://oss-fuzz-build-logs.storage.googleapis.com/badges/wxwidgets.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:wxwidgets)
 
 This version of wxWidgets supports the following primary platforms:
