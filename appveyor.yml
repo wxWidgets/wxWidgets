@@ -31,6 +31,7 @@ skip_commits:
     - .travis.yml
     - build/tools/travis-ci.sh
     - build/tools/before_install.sh
+    - build/tools/httpbin.sh
 
 environment:
   matrix:
