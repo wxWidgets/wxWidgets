@@ -913,10 +913,10 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
     double width = m_width;
     if (width <= 0)
     {
-        const double scaleFactor = context->GetContentScaleFactor();
-        CGSize s = { scaleFactor, scaleFactor };
+        const double f = 1 / context->GetContentScaleFactor();
+        CGSize s = { f, f };
         s = CGContextConvertSizeToUserSpace(cg, s);
-        width = 1 / wxMin(fabs(s.width), fabs(s.height));
+        width = wxMax(fabs(s.width), fabs(s.height));
     }
     CGContextSetLineWidth( cg, width );
     CGContextSetLineJoin( cg , m_join );
@@ -1484,10 +1484,10 @@ public:
             return true;
 
         // no offset if overall scale is not odd integer
-        const double scaleFactor = GetContentScaleFactor();
-        CGSize s = { scaleFactor, scaleFactor };
-        s = CGContextConvertSizeToUserSpace(m_cgContext, s);
-        if (!wxIsSameDouble(fmod(wxMin(fabs(s.width), fabs(s.height)), 2.0), 1.0))
+        const wxGraphicsMatrix matrix(GetTransform());
+        double x = GetContentScaleFactor(), y = x;
+        matrix.TransformDistance(&x, &y);
+        if (!wxIsSameDouble(fmod(wxMin(fabs(x), fabs(y)), 2.0), 1.0))
             return false;
 
         // offset if pen width is odd integer
@@ -1568,10 +1568,9 @@ public :
         m_offset = offset;
         if ( m_offset )
         {
-            const CGSize s = { scaleFactor, scaleFactor };
+            const double f = 0.5 / scaleFactor;
+            const CGSize s = { f, f };
             m_userOffset = CGContextConvertSizeToUserSpace(m_cg, s);
-            m_userOffset.width  = 0.5 / m_userOffset.width;
-            m_userOffset.height = 0.5 / m_userOffset.height;
             CGContextTranslateCTM( m_cg, m_userOffset.width , m_userOffset.height );
         }
         else
