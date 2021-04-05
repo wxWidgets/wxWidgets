@@ -97,13 +97,24 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
 
     m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
 
-    // FIXME: with this line the background is not erased at all under GTK1,
-    //        so temporary avoid it there
-#if !defined(__WXGTK__) || defined(__WXGTK20__)
-    // don't erase the splitter background, it's pointless as we overwrite it
-    // anyhow
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
+#ifdef __WXOSX__
+  #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(10, 16) )
+    {
+        // Nothing to do: see OnPaint()
+    }
+    else
+  #endif
 #endif
+    {
+        // FIXME: with this line the background is not erased at all under GTK1,
+        //        so temporary avoid it there
+#if !defined(__WXGTK__) || defined(__WXGTK20__)
+        // don't erase the splitter background, it's pointless as we overwrite it
+        // anyhow
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
+    }
 
     return true;
 }
