@@ -8,21 +8,36 @@
 /**
     Styles for the paths shown in wxFileHistory menus.
 
-    The default style is wxFH_HIDE_CURRENT_PATH, i.e. the path of the file is
-    only shown in the menu if it's different from the path of the first file.
+    The values of this enum determine whether the labels in the menu managed by
+    wxFileHistory show the full path for the corresponding file or just the
+    base name.
+
+    The default style is wxFH_PATH_SHOW_IF_DIFFERENT, i.e. the full path of the
+    file is only shown in the menu if it's different from the path of the first
+    file.
 
     @since 3.1.5
 */
 enum wxFileHistoryMenuPathStyle
 {
-    /** Hide the file path if it matches the path of the first item */
-    wxFH_HIDE_CURRENT_PATH,
+    /**
+        Show the full path if it's different from the path of the first file.
 
-    /** Hide all paths and show only filenames */
-    wxFH_HIDE_ALL_PATHS,
+        Otherwise show just the file name.
 
-    /** Show the full path for all files */
-    wxFH_SHOW_FULL_PATH
+        This value corresponds to the default behaviour.
+     */
+    wxFH_PATH_SHOW_IF_DIFFERENT,
+
+    /**
+        Never show full path, always show just the base file name.
+     */
+    wxFH_PATH_SHOW_NEVER,
+
+    /**
+        Always show the full path for all files.
+     */
+    wxFH_PATH_SHOW_ALWAYS
 };
 
 /**
@@ -152,7 +167,7 @@ public:
     /**
         Set the style of the menu item labels.
 
-        By default, the menu item label style is ::wxFH_HIDE_CURRENT_PATH.
+        By default, the menu item label style is ::wxFH_PATH_SHOW_IF_DIFFERENT.
 
         @remarks Use RefreshLabels() to update any existing menu items to the new style.
         @since 3.1.5
@@ -162,7 +177,7 @@ public:
     /**
         Get the current style of the menu item labels.
 
-        Initially returns ::wxFH_HIDE_CURRENT_PATH.
+        Initially returns ::wxFH_PATH_SHOW_IF_DIFFERENT.
 
         @see SetMenuPathStyle()
 

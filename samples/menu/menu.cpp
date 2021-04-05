@@ -1394,13 +1394,13 @@ void MyFrame::OnFileHistoryStyleItem(wxCommandEvent& event)
     switch( event.GetId() )
     {
     case Menu_Menu_FileHistory1:
-        m_fileHistory->SetMenuPathStyle(wxFH_HIDE_CURRENT_PATH);
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_IF_DIFFERENT);
         break;
     case Menu_Menu_FileHistory2:
-        m_fileHistory->SetMenuPathStyle(wxFH_HIDE_ALL_PATHS);
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_NEVER);
         break;
     case Menu_Menu_FileHistory3:
-        m_fileHistory->SetMenuPathStyle(wxFH_SHOW_FULL_PATH);
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_ALWAYS);
         break;
     }
 

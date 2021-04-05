@@ -26,9 +26,9 @@ class WXDLLIMPEXP_FWD_BASE wxFileName;
 
 enum wxFileHistoryMenuPathStyle
 {
-    wxFH_HIDE_CURRENT_PATH = 0,
-    wxFH_HIDE_ALL_PATHS = 1,
-    wxFH_SHOW_FULL_PATH = 2
+    wxFH_PATH_SHOW_IF_DIFFERENT,
+    wxFH_PATH_SHOW_NEVER,
+    wxFH_PATH_SHOW_ALWAYS
 };
 
 // ----------------------------------------------------------------------------
