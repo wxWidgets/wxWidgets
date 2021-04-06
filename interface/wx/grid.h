@@ -110,6 +110,23 @@ public:
 
 protected:
     /**
+        Helper function setting the correct colours and font.
+
+        This function can be useful in the derived classes Draw()
+        implementation as it takes care of setting the appropriate colours and
+        font for @a dc depending on the global @a grid attributes, cell
+        attributions specified in @a attr and whether @a isSelected is @true.
+
+        Simply call it before doing any drawing in the derived class version to
+        use consistent colours and font for all cells.
+
+        @since 3.1.5
+     */
+    void SetTextColoursAndFont(const wxGrid& grid,
+                               const wxGridCellAttr& attr,
+                               wxDC& dc,
+                               bool isSelected);
+    /**
         The destructor is private because only DecRef() can delete us.
     */
     virtual ~wxGridCellRenderer();

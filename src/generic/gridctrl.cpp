@@ -69,6 +69,42 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     dc.DrawRectangle(rect);
 }
 
+void wxGridCellRenderer::SetTextColoursAndFont(const wxGrid& grid,
+                                               const wxGridCellAttr& attr,
+                                               wxDC& dc,
+                                               bool isSelected)
+{
+    dc.SetBackgroundMode( wxBRUSHSTYLE_TRANSPARENT );
+
+    // TODO some special colours for attr.IsReadOnly() case?
+
+    // different coloured text when the grid is disabled
+    if ( grid.IsThisEnabled() )
+    {
+        if ( isSelected )
+        {
+            wxColour clr;
+            if ( grid.HasFocus() )
+                clr = grid.GetSelectionBackground();
+            else
+                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+            dc.SetTextBackground( clr );
+            dc.SetTextForeground( grid.GetSelectionForeground() );
+        }
+        else
+        {
+            dc.SetTextBackground( attr.GetBackgroundColour() );
+            dc.SetTextForeground( attr.GetTextColour() );
+        }
+    }
+    else
+    {
+        dc.SetTextBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+    }
+
+    dc.SetFont( attr.GetFont() );
+}
 
 // ----------------------------------------------------------------------------
 // wxGridCellDateTimeRenderer
@@ -572,43 +608,6 @@ wxGridCellAutoWrapStringRenderer::GetBestWidth(wxGrid& grid,
 // ----------------------------------------------------------------------------
 // wxGridCellStringRenderer
 // ----------------------------------------------------------------------------
-
-void wxGridCellStringRenderer::SetTextColoursAndFont(const wxGrid& grid,
-                                                     const wxGridCellAttr& attr,
-                                                     wxDC& dc,
-                                                     bool isSelected)
-{
-    dc.SetBackgroundMode( wxBRUSHSTYLE_TRANSPARENT );
-
-    // TODO some special colours for attr.IsReadOnly() case?
-
-    // different coloured text when the grid is disabled
-    if ( grid.IsThisEnabled() )
-    {
-        if ( isSelected )
-        {
-            wxColour clr;
-            if ( grid.HasFocus() )
-                clr = grid.GetSelectionBackground();
-            else
-                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
-            dc.SetTextBackground( clr );
-            dc.SetTextForeground( grid.GetSelectionForeground() );
-        }
-        else
-        {
-            dc.SetTextBackground( attr.GetBackgroundColour() );
-            dc.SetTextForeground( attr.GetTextColour() );
-        }
-    }
-    else
-    {
-        dc.SetTextBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
-    }
-
-    dc.SetFont( attr.GetFont() );
-}
 
 wxSize wxGridCellStringRenderer::DoGetBestSize(const wxGridCellAttr& attr,
                                                wxDC& dc,

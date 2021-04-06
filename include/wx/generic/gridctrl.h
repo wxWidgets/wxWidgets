@@ -41,12 +41,6 @@ public:
         { return new wxGridCellStringRenderer; }
 
 protected:
-    // set the text colours before drawing
-    void SetTextColoursAndFont(const wxGrid& grid,
-                               const wxGridCellAttr& attr,
-                               wxDC& dc,
-                               bool isSelected);
-
     // calc the string extent for given string/font
     wxSize DoGetBestSize(const wxGridCellAttr& attr,
                          wxDC& dc,

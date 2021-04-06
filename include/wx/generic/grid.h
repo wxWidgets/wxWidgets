@@ -228,6 +228,13 @@ public:
 
     // create a new object which is the copy of this one
     virtual wxGridCellRenderer *Clone() const = 0;
+
+protected:
+    // set the text colours before drawing
+    void SetTextColoursAndFont(const wxGrid& grid,
+                               const wxGridCellAttr& attr,
+                               wxDC& dc,
+                               bool isSelected);
 };
 
 // Smart pointer to wxGridCellRenderer, calling DecRef() on it automatically.
