@@ -344,7 +344,7 @@ public:
         }
     }
 
-    void AddNode( wxGtkTreeModelNode* child )
+    void AddNode( wxGtkTreeModelNode* child, bool allow_sort=true )
         {
             m_nodes.Add( child );
 
@@ -352,7 +352,7 @@ public:
 
             m_children.Add( id );
 
-            if (m_internal->ShouldBeSorted())
+            if (allow_sort && m_internal->ShouldBeSorted())
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
@@ -390,16 +390,16 @@ public:
             m_children.Insert( id, pos );
         }
 
-    void AddLeaf( void* id )
+    void AddLeaf( void* id, bool allow_sort=true )
         {
-            InsertLeaf(id, m_children.size());
+            InsertLeaf(id, m_children.size(), allow_sort);
         }
 
-    void InsertLeaf( void* id, unsigned pos )
+    void InsertLeaf( void* id, unsigned pos, bool allow_sort=true )
         {
             m_children.Insert( id, pos );
 
-            if (m_internal->ShouldBeSorted())
+            if (allow_sort && m_internal->ShouldBeSorted())
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
@@ -3722,12 +3722,13 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
         unsigned int pos;
         for (pos = 0; pos < count; pos++)
         {
+        	bool allow_sort=(pos==count-1) ;
             wxDataViewItem child = children[pos];
 
             if (m_wx_model->IsContainer( child ))
-                node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
+                node->AddNode( new wxGtkTreeModelNode( node, child, this ), allow_sort );
             else
-                node->AddLeaf( child.GetID() );
+                node->AddLeaf( child.GetID(), allow_sort );
 
             // Don't send any events here
         }
