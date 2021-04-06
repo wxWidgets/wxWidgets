@@ -89,7 +89,20 @@ case $wxTOOLSET in
         echo 'travis_fold:end:configure'
 
         if [ "$wxALLOW_WARNINGS" != 1 ]; then
-            case "$TRAVIS_COMPILER" in
+            # Under macOS TRAVIS_COMPILER is set to g++, but it's actually an
+            # alias for clang.
+            case "$(uname -s)" in
+                Darwin)
+                    real_compiler=clang
+                    ;;
+
+                *)
+                    # Elsewhere either gcc or clang can be used.
+                    real_compiler="$TRAVIS_COMPILER"
+                    ;;
+            esac
+
+            case "$real_compiler" in
                 clang)
                     allow_warn_opt="-Wno-error=#warnings"
                     ;;
@@ -99,7 +112,7 @@ case $wxTOOLSET in
                     ;;
 
                 *)
-                    echo "*** Unknown compiler: $TRAVIS_COMPILER ***"
+                    echo "*** Unknown compiler: $real_compiler ***"
                     ;;
             esac
 
