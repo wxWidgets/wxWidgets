@@ -28,7 +28,7 @@
 wxString wxMacConvertNewlines13To10(const wxString& data)
 {
     wxString string(data);
-    for (auto&& c: string)
+    for (wxUniCharRef c: string)
     {
         if (c == '\r')
             c = '\n';
@@ -39,7 +39,7 @@ wxString wxMacConvertNewlines13To10(const wxString& data)
 wxString wxMacConvertNewlines10To13(const wxString& data)
 {
     wxString string(data);
-    for (auto&& c: string)
+    for (wxUniCharRef c: string)
     {
         if (c == '\n')
             c = '\r';
