@@ -226,8 +226,10 @@ public:
     /**
         The function appends the names of all the files under directory
         @a dirname to the array @a files (note that its old content is
-        preserved). Only files matching the @a filespec are taken, with empty
-        spec matching all the files.
+        preserved).
+
+        Only files matching the @a filespec are taken, with empty spec matching
+        all non-hidden files (use ::wxDIR_HIDDEN to include them too).
 
         The @a flags parameter should always include ::wxDIR_FILES or the array
         would be unchanged and should include ::wxDIR_DIRS flag to recurse into
