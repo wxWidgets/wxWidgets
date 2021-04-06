@@ -612,6 +612,12 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
     wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
+        if (windowimpl->m_macIgnoreNextFullscreenChange)
+        {
+            windowimpl->m_macIgnoreNextFullscreenChange = false;
+            return;
+        }
+
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
         wxFullScreenEvent event(wxpeer->GetId(), fullscreen);
         event.SetEventObject(wxpeer);
@@ -1198,6 +1204,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
     {
         if ( show != IsFullScreen() )
         {
+            m_macIgnoreNextFullscreenChange = true;
             [m_macWindow toggleFullScreen: nil];
         }
 
