@@ -523,7 +523,18 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
     If the @a escape character is non-@NULL, then it's used as prefix for each
     occurrence of @a sep in the strings contained in @a arr before joining them
     which is necessary in order to be able to recover the original array
-    contents from the string later using wxSplit().
+    contents from the string later using wxSplit(). The @a escape characters
+    themselves are @e not escaped when they occur in the middle of the @a arr
+    elements, but @e are escaped when they occur at the end, i.e.
+    @code
+    wxArrayString arr;
+    arr.push_back("foo^");
+    arr.push_back("bar^baz");
+    wxPuts(wxJoin(arr, ':', '^')); // prints "foo^^:bar^baz"
+    @endcode
+
+    In any case, applying wxSplit() to the result of wxJoin() is guaranteed to
+    recover the original array.
 
     @see wxSplit()
 
