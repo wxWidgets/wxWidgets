@@ -155,6 +155,19 @@ struct Item
 
 WX_DEFINE_ARRAY_PTR(Item *, ItemPtrArray);
 
+std::ostream& operator<<(std::ostream& os, const wxArrayString& arr)
+{
+    os << "[ ";
+    for ( size_t n = 0; n < arr.size(); ++n )
+    {
+        if ( n )
+            os << ", ";
+        os << '"' << arr[n] << '"';
+    }
+    os << " ] (size=" << arr.size() << ")";
+    return os;
+}
+
 // ----------------------------------------------------------------------------
 // the tests
 // ----------------------------------------------------------------------------
@@ -481,6 +494,10 @@ TEST_CASE("Arrays::SplitJoin", "[dynarray]")
     for (i = 0; i < WXSIZEOF(separators); i++)
     {
         wxArrayString arr = wxSplit(str, separators[i]);
+
+        INFO("Using separator '" << static_cast<char>(separators[i]) << "' "
+             "and split array \"" << arr << "\"");
+
         CHECK( str == wxJoin(arr, separators[i]) );
     }
 
@@ -498,6 +515,10 @@ TEST_CASE("Arrays::SplitJoin", "[dynarray]")
     for (i = 0; i < WXSIZEOF(separators); i++)
     {
         wxString string = wxJoin(theArr, separators[i]);
+
+        INFO("Using separator '" << static_cast<char>(separators[i]) << "' "
+             "and joined string \"" << string << "\"");
+
         CHECK( theArr == wxSplit(string, separators[i]) );
     }
 
@@ -508,6 +529,20 @@ TEST_CASE("Arrays::SplitJoin", "[dynarray]")
     CHECK( wxSplit(string, wxT(';')).empty() );
 
     CHECK( wxSplit(wxT(";"), wxT(';')).size() == 2 );
+
+    // Check for bug with escaping the escape character at the end (but not in
+    // the middle).
+    wxArrayString withBackslashes;
+    withBackslashes.push_back("foo\\");
+    withBackslashes.push_back("bar\\baz");
+
+    string = wxJoin(withBackslashes, ':');
+    CHECK( string == "foo\\\\:bar\\baz" );
+
+    const wxArrayString withBackslashes2 = wxSplit(string, ':');
+    REQUIRE( withBackslashes2.size() == 2 );
+    CHECK( withBackslashes2[0] == withBackslashes[0] );
+    CHECK( withBackslashes2[1] == withBackslashes[1] );
 }
 
 TEST_CASE("wxObjArray", "[dynarray]")

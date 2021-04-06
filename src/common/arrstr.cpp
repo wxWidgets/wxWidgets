@@ -655,7 +655,17 @@ wxString wxJoin(const wxArrayString& arr, const wxChar sep, const wxChar escape)
         for ( size_t n = 0; n < count; n++ )
         {
             if ( n )
+            {
+                // We don't escape the escape characters in the middle of the
+                // string because this is not needed, strictly speaking, but we
+                // must do it if they occur at the end because otherwise we
+                // wouldn't split the string back correctly as the separator
+                // would appear to be escaped.
+                if ( !str.empty() && *str.rbegin() == escape )
+                    str += escape;
+
                 str += sep;
+            }
 
             for ( wxString::const_iterator i = arr[n].begin(),
                                          end = arr[n].end();
@@ -684,7 +694,6 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
 
     wxArrayString ret;
     wxString curr;
-    wxChar prev = wxT('\0');
 
     for ( wxString::const_iterator i = str.begin(),
                                  end = str.end();
@@ -693,30 +702,41 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
     {
         const wxChar ch = *i;
 
+        // Order of tests matters here in the uncommon, but possible, case when
+        // the separator is the same as the escape character: it has to be
+        // recognized as a separator in this case (escaping doesn't work at all
+        // in this case).
         if ( ch == sep )
         {
-            if ( prev == escape )
+            ret.push_back(curr);
+            curr.clear();
+        }
+        else if ( ch == escape )
+        {
+            ++i;
+            if ( i == end )
             {
-                // remove the escape character and don't consider this
-                // occurrence of 'sep' as a real separator
-                *curr.rbegin() = sep;
+                // Escape at the end of the string is not handled specially.
+                curr += ch;
+                break;
             }
-            else // real separator
-            {
-                ret.push_back(curr);
-                curr.clear();
-            }
+
+            // Separator or the escape character itself may be escaped,
+            // cancelling their special meaning, but escape character followed
+            // by anything else is not handled specially.
+            if ( *i != sep && *i != escape )
+                curr += ch;
+
+            curr += *i;
         }
         else // normal character
         {
             curr += ch;
         }
-
-        prev = ch;
     }
 
-    // add the last token
-    if ( !curr.empty() || prev == sep )
+    // add the last token, which we always have unless the string is empty
+    if ( !str.empty() )
         ret.Add(curr);
 
     return ret;
