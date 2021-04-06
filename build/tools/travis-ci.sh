@@ -94,7 +94,7 @@ case $wxTOOLSET in
                     allow_warn_opt="-Wno-error=#warnings"
                     ;;
 
-                gcc)
+                gcc | g++)
                     allow_warn_opt="-Wno-error=cpp"
                     ;;
 
