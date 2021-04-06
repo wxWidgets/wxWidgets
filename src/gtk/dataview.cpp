@@ -3725,7 +3725,7 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
             wxDataViewItem child = children[pos];
         	bool allow_sort = false ;
 
-        	if ( pos == count-1 )
+        	if ( pos == count - 1 )
         		allow_sort = true ;
 
             if (m_wx_model->IsContainer( child ))
