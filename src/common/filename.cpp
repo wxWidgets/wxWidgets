@@ -1674,11 +1674,11 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
 
 wxFileName wxFileName::ResolveLink()
 {
-    wxString link = GetFullPath();
     wxFileName linkTarget( *this );
 
 // Only resolve links on platforms with readlink (e.g. Unix-like platforms)
 #if defined(wxHAS_NATIVE_READLINK)
+    const wxString link = GetFullPath();
     wxStructStat st;
 
     // This means the link itself doesn't exist, so return an empty filename
