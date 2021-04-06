@@ -3723,10 +3723,10 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
         for (pos = 0; pos < count; pos++)
         {
             wxDataViewItem child = children[pos];
-        	bool allow_sort = false ;
+        	bool allow_sort = false;
 
-        	if ( pos == count - 1 )
-        		allow_sort = true ;
+        	if (pos == count - 1)
+        		allow_sort = true;
 
             if (m_wx_model->IsContainer( child ))
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ), allow_sort );
