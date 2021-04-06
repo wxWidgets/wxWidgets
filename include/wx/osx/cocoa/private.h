@@ -341,7 +341,7 @@ public :
     CGWindowLevel   GetWindowLevel() const wxOVERRIDE { return m_macWindowLevel; }
     void            RestoreWindowLevel() wxOVERRIDE;
 
-    bool m_macIgnoreNextFullscreenChange;
+    bool m_macIgnoreNextFullscreenChange = false;
 
     static WX_NSResponder GetNextFirstResponder() ;
     static WX_NSResponder GetFormerFirstResponder() ;
