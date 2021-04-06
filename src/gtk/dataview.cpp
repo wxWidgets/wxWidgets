@@ -3631,6 +3631,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataVie
     m_root = NULL;
     m_sort_order = GTK_SORT_ASCENDING;
     m_sort_column = -1;
+    m_allow_sort = true;
     m_dataview_sort_column = NULL;
 
     m_dragDataObject = NULL;
