@@ -477,7 +477,7 @@ public:
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
-    virtual bool ShouldOffset() const wxOVERRIDE;
+    virtual bool ShouldOffsetByValue(double* offset) const wxOVERRIDE;
     virtual void GetSize( wxDouble* width, wxDouble *height );
     virtual void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
 
@@ -1952,7 +1952,9 @@ void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+    double offsetAmount;
+    bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+    wxGDIPlusOffsetHelper helper( m_context , shouldOffset, offsetAmount );
     Brush *brush = m_brush.IsNull() ? NULL : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
     Pen *pen = m_pen.IsNull() ? NULL : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
 
@@ -1991,7 +1993,9 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
 
    if ( !m_pen.IsNull() )
    {
-       wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+        double offsetAmount;
+        bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+        wxGDIPlusOffsetHelper helper( m_context , shouldOffset, offsetAmount );
        PointF *cpoints = new PointF[n];
        for (size_t i = 0; i < n; i++)
        {
@@ -2009,7 +2013,9 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
    if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+    double offsetAmount;
+    bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+    wxGDIPlusOffsetHelper helper( m_context , shouldOffset, offsetAmount );
     PointF *cpoints = new PointF[n];
     for (size_t i = 0; i < n; i++)
     {
@@ -2032,7 +2038,9 @@ void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
 
     if ( !m_pen.IsNull() )
     {
-        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+        double offsetAmount;
+        bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+        wxGDIPlusOffsetHelper helper( m_context , shouldOffset, offsetAmount );
         m_context->DrawPath( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , (GraphicsPath*) path.GetNativePath() );
     }
 }
@@ -2044,7 +2052,9 @@ void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode 
 
     if ( !m_brush.IsNull() )
     {
-        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+        double offsetAmount;
+        bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+        wxGDIPlusOffsetHelper helper( m_context , shouldOffset, offsetAmount );
         ((GraphicsPath*) path.GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
         m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() ,
             (GraphicsPath*) path.GetNativePath());
@@ -2427,19 +2437,30 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
     delete[] regions;
 }
 
-bool wxGDIPlusContext::ShouldOffset() const
+bool wxGDIPlusContext::ShouldOffsetByValue(double* offset) const
 {
     if ( !m_enableOffset )
         return false;
 
-    int penwidth = 0 ;
     if ( !m_pen.IsNull() )
     {
-        penwidth = (int)((wxGDIPlusPenData*)m_pen.GetRefData())->GetWidth();
-        if ( penwidth == 0 )
-            penwidth = 1;
+        double halfPixelLogical = 0.5/GetContentScaleFactor();
+
+        double penwidth = (int)((wxGDIPlusPenData*)m_pen.GetRefData())->GetWidth();
+        // half of the pen is to the left, the other one to the right of the integer coordinates
+        // multiply the pen's logical dimension by the pixel resolution to arrive at real
+        // pixel values
+        double integer;
+        double pixelOverlap = modf(penwidth/2.0*GetContentScaleFactor(),&integer);
+        // if by offsetting we get everything to reside on the same pixel for a very thin line
+        // or we get an additional full black pixel, then do it
+        if ( ( pixelOverlap <= 0.5 && integer < 1 ) || pixelOverlap >= 0.5 )
+        {
+            *offset = halfPixelLogical;
+            return true;
+        }
     }
-    return ( penwidth % 2 ) == 1;
+    return false;
 }
 
 void* wxGDIPlusContext::GetNativeContext()
@@ -2621,7 +2642,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
-    context->EnableOffset(true);
+    context->EnableOffsetWithContentScaleFactor(dc.GetContentScaleFactor());
     return context;
 }
 
@@ -2702,7 +2723,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 #endif // wxUSE_WXDIB
 
     wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
-    context->EnableOffset(true);
+    context->EnableOffsetWithContentScaleFactor(dc.GetContentScaleFactor());
     return context;
 }
 
@@ -2711,7 +2732,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromImage(wxImage& image)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     wxGDIPlusContext* context = new wxGDIPlusImageContext(this, image);
-    context->EnableOffset(true);
+    context->EnableOffsetWithContentScaleFactor(1.0);
     return context;
 }
 

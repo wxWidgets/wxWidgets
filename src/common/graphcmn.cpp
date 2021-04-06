@@ -570,6 +570,7 @@ wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer,
       m_composition(wxCOMPOSITION_OVER),
       m_interpolation(wxINTERPOLATION_DEFAULT),
       m_enableOffset(false),
+      m_contentScaleFactor(0.0),
       m_window(window)
 {
 }
@@ -600,9 +601,15 @@ void wxGraphicsContext::Flush()
 {
 }
 
-void wxGraphicsContext::EnableOffset(bool enable)
+void wxGraphicsContext::DisableOffset()
 {
-    m_enableOffset = enable;
+    m_enableOffset = false;
+}
+
+void wxGraphicsContext::EnableOffsetWithContentScaleFactor( double contentScaleFactor)
+{
+    m_contentScaleFactor = contentScaleFactor;
+    m_enableOffset = true;
 }
 
 #if 0

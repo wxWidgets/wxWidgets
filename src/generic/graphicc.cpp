@@ -439,19 +439,30 @@ public:
 
     virtual ~wxCairoContext();
 
-    virtual bool ShouldOffset() const wxOVERRIDE
+    virtual bool ShouldOffsetByValue(double *offset) const wxOVERRIDE
     {
         if ( !m_enableOffset )
             return false;
 
-        int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
-            penwidth = (int)((wxCairoPenData*)m_pen.GetRefData())->GetWidth();
-            if ( penwidth == 0 )
-                penwidth = 1;
+            double halfPixelLogical = 0.5/GetContentScaleFactor();
+
+            double penwidth = (int)((wxCairoPenData*)m_pen.GetRefData())->GetWidth();
+            // half of the pen is to the left, the other one to the right of the integer coordinates
+            // multiply the pen's logical dimension by the pixel resolution to arrive at real
+            // pixel values
+            double integer;
+            double pixelOverlap = modf(penwidth/2.0*GetContentScaleFactor(),&integer);
+            // if by offsetting we get everything to reside on the same pixel for a very thin line
+            // or we get an additional full black pixel, then do it
+            if ( ( pixelOverlap <= 0.5 && integer < 1 ) || pixelOverlap >= 0.5 )
+            {
+                *offset = halfPixelLogical;
+                return true;
+            }
         }
-        return ( penwidth % 2 ) == 1;
+        return false;
     }
 
     virtual void Clip( const wxRegion &region ) wxOVERRIDE;
@@ -1912,21 +1923,23 @@ wxCairoBitmapData::~wxCairoBitmapData()
 class wxCairoOffsetHelper
 {
 public :
-    wxCairoOffsetHelper( cairo_t* ctx , bool offset )
+    wxCairoOffsetHelper( cairo_t* ctx , bool shouldOffset, double offset )
     {
         m_ctx = ctx;
-        m_offset = offset;
-        if ( m_offset )
-             cairo_translate( m_ctx, 0.5, 0.5 );
+        m_shouldOffset = shouldOffset;
+        m_offsetAmount = offset;
+        if ( m_shouldOffset )
+             cairo_translate( m_ctx, m_offsetAmount, m_offsetAmount );
     }
     ~wxCairoOffsetHelper( )
     {
-        if ( m_offset )
-            cairo_translate( m_ctx, -0.5, -0.5 );
+        if ( m_shouldOffset )
+            cairo_translate( m_ctx, -m_offsetAmount, -m_offsetAmount );
     }
 public :
     cairo_t* m_ctx;
-    bool m_offset;
+    bool m_shouldOffset;
+    double m_offsetAmount;
 } ;
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -2605,7 +2618,9 @@ void wxCairoContext::StrokePath( const wxGraphicsPath& path )
 {
     if ( !m_pen.IsNull() )
     {
-        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        double offsetAmount;
+        bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+        wxCairoOffsetHelper helper( m_context , shouldOffset, offsetAmount );
         cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
@@ -2618,7 +2633,9 @@ void wxCairoContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fi
 {
     if ( !m_brush.IsNull() )
     {
-        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        double offsetAmount;
+        bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+        wxCairoOffsetHelper helper( m_context , shouldOffset, offsetAmount );
         cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
@@ -2647,7 +2664,9 @@ void wxCairoContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble
     }
     if ( !m_pen.IsNull() )
     {
-        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        double offsetAmount;
+        bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+        wxCairoOffsetHelper helper( m_context , shouldOffset, offsetAmount );
         ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
         cairo_rectangle(m_context, x, y, w, h);
         cairo_stroke(m_context);

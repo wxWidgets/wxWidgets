@@ -1385,17 +1385,17 @@ public:
                               wxDouble height = 0,
                               wxWindow* window = NULL );
 
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc );
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
+#endif
+
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window );
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer);
 
     ~wxMacCoreGraphicsContext();
-
-    // Enable offset on non-high DPI displays, i.e. those with scale factor <= 1.
-    void SetEnableOffsetFromScaleFactor(double factor)
-    {
-        m_enableOffset = factor <= 1.0;
-    }
 
     void Init();
 
@@ -1472,19 +1472,30 @@ public:
     // paints a transparent rectangle (only useful for bitmaps or windows)
     virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
 
-    virtual bool ShouldOffset() const wxOVERRIDE
+    virtual bool ShouldOffsetByValue(double* offset) const wxOVERRIDE
     {
         if ( !m_enableOffset )
             return false;
 
-        int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
-            penwidth = (int)((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->GetWidth();
-            if ( penwidth == 0 )
-                penwidth = 1;
+            double halfPixelLogical = 0.5/GetContentScaleFactor();
+            
+            double penwidth = (int)((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->GetWidth();
+            // half of the pen is to the left, the other one to the right of the integer coordinates
+            // multiply the pen's logical dimension by the pixel resolution to arrive at real
+            // pixel values
+            double integer;
+            double pixelOverlap = modf(penwidth/2.0*GetContentScaleFactor(),&integer);
+            // if by offsetting we get everything to reside on the same pixel for a very thin line
+            // or we get an additional full black pixel, then do it
+            if ( ( pixelOverlap <= 0.5 && integer < 1 ) || pixelOverlap >= 0.5 )
+            {
+                *offset = halfPixelLogical;
+                return true;
+            }
         }
-        return ( penwidth % 2 ) == 1;
+        return false;
     }
     //
     // text
@@ -1555,13 +1566,13 @@ private:
 class wxQuartzOffsetHelper
 {
 public :
-    wxQuartzOffsetHelper( CGContextRef cg , bool offset )
+    wxQuartzOffsetHelper( CGContextRef cg , bool shouldOffset, double offset )
     {
         m_cg = cg;
-        m_offset = offset;
+        m_offset = shouldOffset;
         if ( m_offset )
         {
-            m_userOffset = CGContextConvertSizeToUserSpace( m_cg, CGSizeMake( 0.5 , 0.5 ) );
+            m_userOffset = CGContextConvertSizeToUserSpace( m_cg, CGSizeMake( offset , offset ) );
             CGContextTranslateCTM( m_cg, m_userOffset.width , m_userOffset.height );
         }
         else
@@ -1607,6 +1618,8 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     m_width = width;
     m_height = height;
     m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+    if ( window )
+        EnableOffsetWithContentScaleFactor(window->GetContentScaleFactor());
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
@@ -1615,7 +1628,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
 
-    SetEnableOffsetFromScaleFactor(window->GetContentScaleFactor());
+    EnableOffsetWithContentScaleFactor(window->GetContentScaleFactor());
     wxSize sz = window->GetSize();
     m_width = sz.x;
     m_height = sz.y;
@@ -1654,6 +1667,65 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer)
     m_initTransform = CGAffineTransformIdentity;
 }
 
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
+   : wxGraphicsContext(renderer, dc.GetWindow())
+{
+    Init();
+
+    wxWindow* const win = dc.GetWindow();
+    wxCHECK_RET( win, "Invalid wxWindowDC" );
+
+    const wxSize sz = win->GetSize();
+
+    m_width = sz.x;
+    m_height = sz.y;
+    SetNativeContext((CGContextRef)(win->MacGetCGContextRef()));
+    m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+    EnableOffsetWithContentScaleFactor(dc.GetContentScaleFactor());
+}
+
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
+   : wxGraphicsContext(renderer, NULL )
+{
+    Init();
+
+    const wxDCImpl* impl = dc.GetImpl();
+    wxMemoryDCImpl *mem_impl = wxDynamicCast( impl, wxMemoryDCImpl );
+    if (mem_impl)
+    {
+        int w, h;
+        mem_impl->GetSize( &w, &h );
+        m_width = w;
+        m_height = h;
+
+        SetNativeContext((CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()));
+        m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+        EnableOffsetWithContentScaleFactor(dc.GetContentScaleFactor());
+    }
+}
+
+#if wxUSE_PRINTING_ARCHITECTURE
+
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc )
+   : wxGraphicsContext(renderer, NULL)
+{
+    Init();
+
+    const wxDCImpl* impl = dc.GetImpl();
+    wxPrinterDCImpl *print_impl = wxDynamicCast( impl, wxPrinterDCImpl );
+    if (print_impl)
+    {
+        int w, h;
+        print_impl->GetSize( &w, &h );
+
+        SetNativeContext((CGContextRef)(print_impl->GetGraphicsContext()->GetNativeContext()));
+        m_width = w;
+        m_height = h;
+        m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+    }
+}
+
+#endif
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     SetNativeContext(NULL);
@@ -2136,7 +2208,9 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
+    double offsetAmount;
+    bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+    wxQuartzOffsetHelper helper( m_cgContext , shouldOffset, offsetAmount );
     wxMacCoreGraphicsPenData* penData = (wxMacCoreGraphicsPenData*)m_pen.GetRefData();
 
     penData->Apply(this);
@@ -2216,7 +2290,9 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
     if ( !m_pen.IsNull() )
         ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
 
-    wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
+    double offsetAmount;
+    bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+    wxQuartzOffsetHelper helper( m_cgContext , shouldOffset, offsetAmount );
 
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextDrawPath( m_cgContext , mode );
@@ -2624,9 +2700,11 @@ void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w
         CGContextFillRect(m_cgContext, rect);
     }
 
-    wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
     if ( !m_pen.IsNull() )
     {
+        double offsetAmount;
+        bool shouldOffset = ShouldOffsetByValue(&offsetAmount);
+        wxQuartzOffsetHelper helper( m_cgContext , shouldOffset, offsetAmount );
         ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
         CGContextStrokeRect(m_cgContext, rect);
     }
@@ -2840,51 +2918,23 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc )
 {
-    wxWindow* const win = dc.GetWindow();
-    wxCHECK_MSG( win, NULL, "Invalid wxWindowDC" );
-
-    const wxSize sz = win->GetSize();
-
-    // having a cgctx being NULL is fine (will be created on demand)
-    // this is the case for all wxWindowDCs except wxPaintDC
-    CGContextRef cgctx = (CGContextRef)(win->MacGetCGContextRef());
-    wxMacCoreGraphicsContext *context =
-        new wxMacCoreGraphicsContext( this, cgctx, sz.x, sz.y, win );
-    context->SetEnableOffsetFromScaleFactor(dc.GetContentScaleFactor());
-    return context;
+    return new wxMacCoreGraphicsContext( this, dc );
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& dc )
 {
 #ifdef __WXMAC__
-    const wxDCImpl* impl = dc.GetImpl();
-    wxMemoryDCImpl *mem_impl = wxDynamicCast( impl, wxMemoryDCImpl );
-    if (mem_impl)
-    {
-        int w, h;
-        mem_impl->GetSize( &w, &h );
-        wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext( this,
-            (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
-        context->SetEnableOffsetFromScaleFactor(dc.GetContentScaleFactor());
-        return context;
-    }
+    return new wxMacCoreGraphicsContext(this, dc);
 #endif
     return NULL;
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
+
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC& dc )
 {
 #ifdef __WXMAC__
-    const wxDCImpl* impl = dc.GetImpl();
-    wxPrinterDCImpl *print_impl = wxDynamicCast( impl, wxPrinterDCImpl );
-    if (print_impl)
-    {
-        int w, h;
-        print_impl->GetSize( &w, &h );
-        return new wxMacCoreGraphicsContext( this,
-            (CGContextRef)(print_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
-    }
+    return new wxMacCoreGraphicsContext(this, dc);
 #endif
     return NULL;
 }

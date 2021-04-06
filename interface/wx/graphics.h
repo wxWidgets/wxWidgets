@@ -1141,17 +1141,18 @@ public:
     */
 
     /**
-        Helper to determine if a 0.5 offset should be applied
+        Helper to determine if an offset (and by how much) should be applied
         for the drawing operation.
     */
-    virtual bool ShouldOffset() const;
+    virtual bool ShouldOffsetByValue(double *offset) const;
 
     /**
-        Indicates whether the context should try to offset for pixel
-        boundaries. This only makes sense on bitmap devices like screen.
+        Indicates the context should try to offset for pixel boundaries if the visual
+        appearance is improved, based on the content scale factor of the device.
+        This only makes sense on bitmap devices like screen.
         By default this is turned off.
     */
-    virtual void EnableOffset(bool enable = true);
+    virtual void EnableOffsetWithContentScaleFactor(double contentScaleFactor);
 
     void DisableOffset();
     bool OffsetEnabled() const;

@@ -703,7 +703,7 @@ public:
         m_height = sz.y;
     }
 
-    virtual bool ShouldOffset() const wxOVERRIDE
+    virtual bool ShouldOffsetByValue(double* WXUNUSED(offset)) const wxOVERRIDE
     {
         return false;
     }

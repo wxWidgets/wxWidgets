@@ -868,15 +868,32 @@ public:
 
      // wrappers using wxPoint2DDouble TODO
 
-    // helper to determine if a 0.5 offset should be applied for the drawing operation
-    virtual bool ShouldOffset() const { return false; }
+    // Offset indicates whether the context should try to offset for pixel boundaries, ie drawing a line
+    // so that it is shifted to use the least amount of pixels
+    // this only makes sense on bitmap devices like screen, by default this is turned off
 
-    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on
-    // bitmap devices like screen, by default this is turned off
-    virtual void EnableOffset(bool enable = true);
 
-    void DisableOffset() { EnableOffset(false); }
+#if WXWIN_COMPATIBILITY_3_0
+    virtual bool ShouldOffset() const { double dummy; return ShouldOffsetByValue(&dummy); }
+    virtual void EnableOffset(bool enable = true)
+    {
+        if (enable )
+            EnableOffsetWithContentScaleFactor(1.0);
+        else
+            m_enableOffset = false;
+    }
+#endif
+
+    // returns true if the current pen on the current resolution should be offset and by how much
+    virtual bool ShouldOffsetByValue(double* WXUNUSED(offset) ) const { return false; }
+
+    // indicate that offsetting should occur if needed, passing in the content scale factor of the device
+    virtual void EnableOffsetWithContentScaleFactor( double contentScaleFactor );
+
+    void DisableOffset();
     bool OffsetEnabled() const { return m_enableOffset; }
+
+    virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
 protected:
     // These fields must be initialized in the derived class ctors.
@@ -890,6 +907,7 @@ protected:
     wxCompositionMode m_composition;
     wxInterpolationQuality m_interpolation;
     bool m_enableOffset;
+    double m_contentScaleFactor;
 
 protected:
     // implementations of overloaded public functions: we use different names

@@ -1109,22 +1109,25 @@ class wxD2DOffsetHelper
 public:
     wxD2DOffsetHelper(wxGraphicsContext* g) : m_context(g)
     {
-        if (m_context->ShouldOffset())
+        m_shouldOffset = m_context->ShouldOffsetByValue(&m_offsetAmount);
+        if (m_shouldOffset)
         {
-            m_context->Translate(0.5, 0.5);
+            m_context->Translate(m_offsetAmount, m_offsetAmount);
         }
     }
 
     ~wxD2DOffsetHelper()
     {
-        if (m_context->ShouldOffset())
+        if (m_shouldOffset)
         {
-            m_context->Translate(-0.5, -0.5);
+            m_context->Translate(-m_offsetAmount, -m_offsetAmount);
         }
     }
 
 private:
     wxGraphicsContext* m_context;
+    bool m_shouldOffset;
+    double m_offsetAmount;
 };
 
 bool operator==(const D2D1::Matrix3x2F& lhs, const D2D1::Matrix3x2F& rhs)
@@ -3954,7 +3957,7 @@ public:
 
     void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
 
-    bool ShouldOffset() const wxOVERRIDE;
+    bool ShouldOffsetByValue(double* offset) const wxOVERRIDE;
 
     void SetPen(const wxGraphicsPen& pen) wxOVERRIDE;
 
@@ -4688,21 +4691,30 @@ void wxD2DContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& wi
         wxGetD2DFontData(m_font), text, widths);
 }
 
-bool wxD2DContext::ShouldOffset() const
+bool wxD2DContext::::ShouldOffsetByValue(double* offset) const
 {
-    if (!m_enableOffset)
-    {
+    if ( !m_enableOffset )
         return false;
-    }
 
-    int penWidth = 0;
-    if (!m_pen.IsNull())
+    if ( !m_pen.IsNull() )
     {
-        penWidth = wxGetD2DPenData(m_pen)->GetWidth();
-        penWidth = wxMax(penWidth, 1);
-    }
+        double halfPixelLogical = 0.5/GetContentScaleFactor();
 
-    return (penWidth % 2) == 1;
+        double penwidth = wxGetD2DPenData(m_pen)->GetWidth();
+        // half of the pen is to the left, the other one to the right of the integer coordinates
+        // multiply the pen's logical dimension by the pixel resolution to arrive at real
+        // pixel values
+        double integer;
+        double pixelOverlap = modf(penwidth/2.0*GetContentScaleFactor(),&integer);
+        // if by offsetting we get everything to reside on the same pixel for a very thin line
+        // or we get an additional full black pixel, then do it
+        if ( ( pixelOverlap <= 0.5 && integer < 1 ) || pixelOverlap >= 0.5 )
+        {
+            *offset = halfPixelLogical;
+            return true;
+        }
+    }
+    return false;
 }
 
 void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
