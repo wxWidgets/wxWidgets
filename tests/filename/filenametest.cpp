@@ -1019,7 +1019,7 @@ void FileNameTestCase::TestSymlinks()
     // Resolving a file that doesn't exist returns empty
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
-        "Non-existant file didn't resolve correctly",
+        "Non-existent file didn't resolve correctly",
         wxFileName(), targetfn.ResolveLink()
     );
 
