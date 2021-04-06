@@ -3734,8 +3734,8 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
         {
             wxDataViewItem child = children[pos];
 
-        	if (pos==count-1)
-        		node->AllowSort();
+            if (pos==count-1)
+                node->AllowSort();
 
             if (m_wx_model->IsContainer( child ))
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
@@ -3744,8 +3744,7 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
 
             // Don't send any events here
         }
-		node->AllowSort();	// in case ther is no child
-
+        node->AllowSort(); // in case there is no child
     }
 }
 
