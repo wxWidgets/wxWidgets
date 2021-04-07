@@ -1391,6 +1391,12 @@ public:
                               wxDouble height = 0,
                               wxWindow* window = NULL );
 
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc );
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
+#endif
+
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window );
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer);
@@ -1662,6 +1668,68 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer)
     m_initTransform = CGAffineTransformIdentity;
 }
 
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
+   : wxGraphicsContext(renderer, dc.GetWindow())
+{
+    Init();
+
+    wxWindow* const win = dc.GetWindow();
+    wxCHECK_RET( win, "Invalid wxWindowDC" );
+
+    const wxSize sz = win->GetSize();
+
+    // having a cgctx being NULL is fine (will be created on demand)
+    // this is the case for all wxWindowDCs except wxPaintDC
+
+    m_width = sz.x;
+    m_height = sz.y;
+    SetNativeContext((CGContextRef)(win->MacGetCGContextRef()));
+    m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+    SetContentScaleFactor(dc.GetContentScaleFactor());
+}
+
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
+   : wxGraphicsContext(renderer, NULL )
+{
+    Init();
+
+    const wxDCImpl* impl = dc.GetImpl();
+    wxMemoryDCImpl *mem_impl = wxDynamicCast( impl, wxMemoryDCImpl );
+    if (mem_impl)
+    {
+        int w, h;
+        mem_impl->GetSize( &w, &h );
+        m_width = w;
+        m_height = h;
+
+        SetNativeContext((CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()));
+        m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+        SetContentScaleFactor(dc.GetContentScaleFactor());
+    }
+}
+
+#if wxUSE_PRINTING_ARCHITECTURE
+
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc )
+   : wxGraphicsContext(renderer, NULL)
+{
+    Init();
+
+    const wxDCImpl* impl = dc.GetImpl();
+    wxPrinterDCImpl *print_impl = wxDynamicCast( impl, wxPrinterDCImpl );
+    if (print_impl)
+    {
+        int w, h;
+        print_impl->GetSize( &w, &h );
+
+        SetNativeContext((CGContextRef)(print_impl->GetGraphicsContext()->GetNativeContext()));
+        m_width = w;
+        m_height = h;
+        m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+    }
+}
+
+#endif
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     SetNativeContext(NULL);
@@ -2848,34 +2916,13 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc )
 {
-    wxWindow* const win = dc.GetWindow();
-    wxCHECK_MSG( win, NULL, "Invalid wxWindowDC" );
-
-    const wxSize sz = win->GetSize();
-
-    // having a cgctx being NULL is fine (will be created on demand)
-    // this is the case for all wxWindowDCs except wxPaintDC
-    CGContextRef cgctx = (CGContextRef)(win->MacGetCGContextRef());
-    wxMacCoreGraphicsContext *context =
-        new wxMacCoreGraphicsContext( this, cgctx, sz.x, sz.y, win );
-    context->SetContentScaleFactor(dc.GetContentScaleFactor());
-    return context;
+    return new wxMacCoreGraphicsContext( this, dc );
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& dc )
 {
 #ifdef __WXMAC__
-    const wxDCImpl* impl = dc.GetImpl();
-    wxMemoryDCImpl *mem_impl = wxDynamicCast( impl, wxMemoryDCImpl );
-    if (mem_impl)
-    {
-        int w, h;
-        mem_impl->GetSize( &w, &h );
-        wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext( this,
-            (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
-        context->SetContentScaleFactor(dc.GetContentScaleFactor());
-        return context;
-    }
+    return new wxMacCoreGraphicsContext(this, dc);
 #endif
     return NULL;
 }
@@ -2884,15 +2931,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC& dc )
 {
 #ifdef __WXMAC__
-    const wxDCImpl* impl = dc.GetImpl();
-    wxPrinterDCImpl *print_impl = wxDynamicCast( impl, wxPrinterDCImpl );
-    if (print_impl)
-    {
-        int w, h;
-        print_impl->GetSize( &w, &h );
-        return new wxMacCoreGraphicsContext( this,
-            (CGContextRef)(print_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
-    }
+    return new wxMacCoreGraphicsContext(this, dc);
 #endif
     return NULL;
 }
