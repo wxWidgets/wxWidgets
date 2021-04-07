@@ -131,7 +131,7 @@ static void TestAssertHandler(const wxString& file,
     {
         // Exceptions thrown from worker threads are not caught currently and
         // so we'd just die without any useful information -- abort instead.
-        abortReason << assertMessage << wxASCII_STR("in a worker thread.");
+        abortReason << assertMessage << wxASCII_STR(" in a worker thread.");
     }
 #if __cplusplus >= 201703L || wxCHECK_VISUALC_VERSION(14)
     else if ( uncaught_exceptions() )
@@ -163,6 +163,12 @@ static void TestAssertHandler(const wxString& file,
 
         throw TestAssertFailure(file, line, func, cond, msg);
     }
+
+#if wxUSE_STACKWALKER
+    const wxString& stackTrace = wxApp::GetValidTraits().GetAssertStackTrace();
+    if ( !stackTrace.empty() )
+        abortReason << wxASCII_STR("\n\nAssert call stack:\n") << stackTrace;
+#endif // wxUSE_STACKWALKER
 
     wxFputs(abortReason, stderr);
     fflush(stderr);

@@ -164,11 +164,13 @@ public:
     }
 
 
-protected:
 #if wxUSE_STACKWALKER
-    // utility function: returns the stack frame as a plain wxString
+    // Helper function mostly useful for derived classes ShowAssertDialog()
+    // implementation.
+    //
+    // Returns the stack frame as a plain (and possibly empty) wxString.
     virtual wxString GetAssertStackTrace();
-#endif
+#endif // wxUSE_STACKWALKER
 
 private:
     static wxSocketManager *ms_manager;
