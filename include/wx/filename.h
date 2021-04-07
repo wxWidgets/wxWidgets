@@ -389,6 +389,9 @@ public:
         return !m_dontFollowLinks;
     }
 
+    // Resolve a wxFileName object representing a link to its target
+    wxFileName ResolveLink();
+
 #if defined(__WIN32__) && wxUSE_OLE
         // if the path is a shortcut, return the target and optionally,
         // the arguments

@@ -1668,6 +1668,56 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
 
 #endif // __WIN32__
 
+// ----------------------------------------------------------------------------
+// Resolve links
+// ----------------------------------------------------------------------------
+
+wxFileName wxFileName::ResolveLink()
+{
+    wxFileName linkTarget( *this );
+
+// Only resolve links on platforms with readlink (e.g. Unix-like platforms)
+#if defined(wxHAS_NATIVE_READLINK)
+    const wxString link = GetFullPath();
+    wxStructStat st;
+
+    // This means the link itself doesn't exist, so return an empty filename
+    if ( !StatAny(st, link, wxFILE_EXISTS_NO_FOLLOW) )
+    {
+        linkTarget.Clear();
+        return linkTarget;
+    }
+
+    // If it isn't an actual link, bail out just and return the link as the result
+    if ( !S_ISLNK(st.st_mode) )
+        return linkTarget;
+
+    // Dynamically compute the buffer size from the stat call, but fallback if it isn't valid
+    int bufSize = 4096;
+    if( st.st_size != 0 )
+        bufSize = st.st_size + 1;
+
+    char buf[bufSize];
+    int result = wxReadlink(link, buf, bufSize - 1);
+
+    if ( result != -1 )
+    {
+        buf[result] = '\0'; // readlink() doesn't NULL-terminate the buffer
+        linkTarget.Assign( wxString(buf, wxConvLibc) );
+
+        // Ensure the resulting path is absolute since readlink can return paths relative to the link
+        if ( !linkTarget.IsAbsolute() )
+            linkTarget.MakeAbsolute(GetPath());
+    }
+    else
+    {
+        // This means the lookup failed for some reason
+        linkTarget.Clear();
+    }
+#endif
+
+    return linkTarget;
+}
 
 // ----------------------------------------------------------------------------
 // absolute/relative paths

@@ -842,24 +842,70 @@ void FileNameTestCase::TestSymlinks()
     wxFileName targetfn(wxFileName::CreateTempFileName(tempdir));
     CPPUNIT_ASSERT(targetfn.FileExists());
 
+    // Resolving a non-symlink will just return the same thing
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Non-symlink didn't resolve to the same file",
+        targetfn, targetfn.ResolveLink()
+    );
+
     // Create a symlink to that file
     wxFileName linktofile(tempdir, "linktofile");
     CPPUNIT_ASSERT_EQUAL(0, symlink(targetfn.GetFullPath().c_str(),
-                                        linktofile.GetFullPath().c_str()));
+                                    linktofile.GetFullPath().c_str()));
+
+    // Test resolving the filename to the symlink
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Failed to resolve symlink to file",
+        targetfn, linktofile.ResolveLink()
+    );
+
+    // Create a relative symlink to that file
+    wxFileName relativelinktofile(tempdir, "relativelinktofile");
+    wxString relativeFileName = "./" + targetfn.GetFullName();
+    CPPUNIT_ASSERT_EQUAL(0, symlink(relativeFileName.c_str(),
+                                    relativelinktofile.GetFullPath().c_str()));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Failed to resolve relative symlink to absolute file path",
+        targetfn, relativelinktofile.ResolveLink()
+    );
 
     // ... and another to the temporary directory
     const wxString linktodirName(tempdir + "/linktodir");
+    wxFileName linktodirfn(linktodirName);
     wxFileName linktodir(wxFileName::DirName(linktodirName));
     CPPUNIT_ASSERT_EQUAL(0, symlink(tmpfn.GetFullPath().c_str(),
-                                        linktodirName.c_str()));
+                                    linktodirName.c_str()));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Failed to resolve symlink to directory",
+        tmpfn, linktodirfn.ResolveLink()
+    );
 
     // And symlinks to both of those symlinks
     wxFileName linktofilelnk(tempdir, "linktofilelnk");
     CPPUNIT_ASSERT_EQUAL(0, symlink(linktofile.GetFullPath().c_str(),
                                     linktofilelnk.GetFullPath().c_str()));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Failed to resolve symlink to file symlink",
+        targetfn, linktofilelnk.ResolveLink()
+    );
+
     wxFileName linktodirlnk(tempdir, "linktodirlnk");
     CPPUNIT_ASSERT_EQUAL(0, symlink(linktodir.GetFullPath().c_str(),
                                     linktodirlnk.GetFullPath().c_str()));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Failed to resolve symlink to directory symlink",
+        tmpfn, linktodirlnk.ResolveLink()
+    );
 
     // Run the tests twice: once in the default symlink following mode and the
     // second time without following symlinks.
@@ -969,6 +1015,14 @@ void FileNameTestCase::TestSymlinks()
 
     // Finally test Exists() after removing the file.
     CPPUNIT_ASSERT(wxRemoveFile(targetfn.GetFullPath()));
+
+    // Resolving a file that doesn't exist returns empty
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Non-existent file didn't resolve correctly",
+        wxFileName(), targetfn.ResolveLink()
+    );
+
     // This should succeed, as the symlink still exists and
     // the default wxFILE_EXISTS_ANY implies wxFILE_EXISTS_NO_FOLLOW
     CPPUNIT_ASSERT(wxFileName(tempdir, "linktofile").Exists());
