@@ -109,7 +109,8 @@ protected:
         (void)stream_in.Read(buf, 10);
 
         CPPUNIT_ASSERT(!stream_in.Eof());
-        CPPUNIT_ASSERT(stream_in.IsOk());
+
+        DoCheckInputStream(stream_in);
 
         // Test the stream version as well.
         TStreamOut &stream_out = CreateOutStream();
@@ -451,6 +452,11 @@ protected:
     // Items that need to be implemented by a derived class!
     virtual TStreamIn  *DoCreateInStream() = 0;
     virtual TStreamOut *DoCreateOutStream() = 0;
+    virtual void DoCheckInputStream(TStreamIn& stream_in)
+    {
+        CPPUNIT_ASSERT(stream_in.IsOk());
+    }
+
     virtual void DoDeleteInStream()  { /* Depends on the base class */ }
     virtual void DoDeleteOutStream() { /* Depends on the base class */ }
 
