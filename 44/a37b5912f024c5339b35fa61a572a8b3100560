@@ -1,0 +1,1 @@
+wxMSW: Handle exception in wxEVT_CHAR_HOOK correctly.
