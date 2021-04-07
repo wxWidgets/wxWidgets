@@ -7184,7 +7184,9 @@ wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
                 wxEvtHandler * const handler = win ? win->GetEventHandler()
                                                    : wxTheApp;
 
-                if ( handler && handler->ProcessEvent(event) )
+                // Do not let exceptions propagate out of the hook, it's a
+                // module boundary.
+                if ( handler && handler->SafelyProcessEvent(event) )
                 {
                     if ( !event.IsNextEventAllowed() )
                     {
