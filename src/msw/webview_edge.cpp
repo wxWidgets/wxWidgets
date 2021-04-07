@@ -831,32 +831,37 @@ void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
     wxWebViewEdgeImpl::ms_browserExecutableDir = path;
 }
 
-bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) const
+bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) const
 {
-    bool scriptExecuted = false;
     if (!m_impl->m_webView)
         return false;
 
+    wxJSScriptWrapper wrapJS(javascript, wxJSScriptWrapper::JS_OUTPUT_STRING);
+
+    int scriptResult = -1;
+    wxString scriptOutput;
+
     // Start script execution
-    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
-        [&scriptExecuted, &executionResult, output](HRESULT error, PCWSTR result) -> HRESULT
+    HRESULT executionResult = m_impl->m_webView->ExecuteScript(wrapJS.GetWrappedCode().wc_str(), Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+        [&scriptResult, &executionResult, &scriptOutput](HRESULT error, PCWSTR result) -> HRESULT
     {
         // Handle script execution callback
         if (error == S_OK)
         {
-            if (output)
-                output->assign(result);
+            scriptOutput.assign(result);
+            scriptResult = 1;
         }
         else
+        {
             executionResult = error;
-
-        scriptExecuted = true;
+            scriptResult = 0;
+        }
 
         return S_OK;
     }).Get());
 
     // Wait for script exection
-    while (!scriptExecuted)
+    while (scriptResult == -1)
         wxYield();
 
     if (FAILED(executionResult))
@@ -865,40 +870,22 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) 
             output->Printf("%s (0x%08lx)", wxSysErrorMsgStr(executionResult), executionResult);
         return false;
     }
-    else
-        return true;
-}
 
-bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) const
-{
-    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+    wxString scriptDecodedResult;
+    // Try to decode JSON string or return original
+    // result if it's not a valid JSON string
+    if (!wxJSON::DecodeString(scriptOutput, &scriptDecodedResult))
+        scriptDecodedResult = scriptOutput;
 
-    // This string is also used as an error indicator: it's cleared if there is
-    // no error or used in the warning message below if there is one.
-    wxString result;
-    if (RunScriptSync(wrapJS.GetWrappedCode(), &result)
-        && result == wxS("true"))
-    {
-        if (RunScriptSync(wrapJS.GetUnwrappedOutputCode() + ";", &result))
-        {
-            if (output)
-                // Try to decode JSON string or return original
-                // result if it's not a valid JSON string
-                if (!wxJSON::DecodeString(result, output))
-                    *output = result;
-            result.clear();
-        }
+    wxString scriptExtractedOutput;
+    bool success = wxJSScriptWrapper::ExtractOutput(scriptDecodedResult, &scriptExtractedOutput);
+    if (!success)
+        wxLogWarning(_("Error running JavaScript: %s"), scriptExtractedOutput);
 
-        RunScriptSync(wrapJS.GetCleanUpCode());
-    }
+    if (output)
+        *output = scriptDecodedResult;
 
-    if (!result.empty())
-    {
-        wxLogWarning(_("Error running JavaScript: %s"), result);
-        return false;
-    }
-
-    return true;
+    return success;
 }
 
 bool wxWebViewEdge::AddScriptMessageHandler(const wxString& name)
