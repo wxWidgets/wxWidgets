@@ -659,6 +659,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
 };
 
+// Special pointer value which indicates that we're using SHAutoComplete().
+static wxTextAutoCompleteData* const wxDUMMY_SHAUTOCOMPLETE_DATA =
+    reinterpret_cast<wxTextAutoCompleteData*>(-1);
+
 #endif // HAS_AUTOCOMPLETE
 
 // ============================================================================
@@ -679,7 +683,8 @@ wxTextEntry::wxTextEntry()
 wxTextEntry::~wxTextEntry()
 {
 #ifdef HAS_AUTOCOMPLETE
-    delete m_autoCompleteData;
+    if ( MSWHasAutoCompleteData() )
+        delete m_autoCompleteData;
 #endif // HAS_AUTOCOMPLETE
 }
 
@@ -833,8 +838,11 @@ bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 
     // Disable the other kinds of completion now that we use the built-in file
     // names completion.
-    if ( m_autoCompleteData )
-        m_autoCompleteData->DisableCompletion();
+    if ( MSWHasAutoCompleteData() )
+        delete m_autoCompleteData;
+
+    // Set it to the special value indicating that we're using SHAutoComplete().
+    m_autoCompleteData = wxDUMMY_SHAUTOCOMPLETE_DATA;
 
     return true;
 }
@@ -846,9 +854,23 @@ void wxTextEntry::MSWProcessSpecialKey(wxKeyEvent& WXUNUSED(event))
     wxFAIL_MSG(wxS("Must be overridden if can be called"));
 }
 
+bool wxTextEntry::MSWUsesStandardAutoComplete() const
+{
+    return m_autoCompleteData == wxDUMMY_SHAUTOCOMPLETE_DATA;
+}
+
+bool wxTextEntry::MSWHasAutoCompleteData() const
+{
+    // We use special wxDUMMY_SHAUTOCOMPLETE_DATA for the pointer to indicate
+    // that we're using SHAutoComplete(), so we need to check for it too, and
+    // not just whether the pointer is non-NULL.
+    return m_autoCompleteData != NULL
+            && m_autoCompleteData != wxDUMMY_SHAUTOCOMPLETE_DATA;
+}
+
 bool wxTextEntry::MSWEnsureHasAutoCompleteData()
 {
-    if ( !m_autoCompleteData )
+    if ( !MSWHasAutoCompleteData() )
     {
         wxTextAutoCompleteData * const ac = new wxTextAutoCompleteData(this);
         if ( !ac->IsOk() )
@@ -878,7 +900,7 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
     // First deal with the case when we just want to disable auto-completion.
     if ( !completer )
     {
-        if ( m_autoCompleteData )
+        if ( MSWHasAutoCompleteData() )
             m_autoCompleteData->DisableCompletion();
         //else: Nothing to do, we hadn't used auto-completion even before.
     }
