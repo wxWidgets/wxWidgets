@@ -2206,7 +2206,8 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
 void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 {
     const int count = GetCount();
-    NSTableColumn *column = GetColumn(pos)->GetNativeData()->GetNativeColumnPtr();
+    wxDataViewColumnNativeData *nativeData = GetColumn(pos)->GetNativeData();
+    NSTableColumn *column = nativeData->GetNativeColumnPtr();
     UInt32 const noOfColumns = [[m_OutlineView tableColumns] count];
 
     class MaxWidthCalculator
@@ -2338,10 +2339,31 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
     if ( m_expanderWidth == 0 )
         m_expanderWidth = calculator.GetExpanderWidth();
 
-    if ( pos == noOfColumns - 1 )
+    const bool isLast = pos == noOfColumns - 1;
+
+    if ( isLast )
+    {
+        // Note that FitColumnWidthToContent() is called whenever a column is
+        // added, so we might also just temporarily become the last column;
+        // since we cannot know at this time whether we will just temporarily
+        // be the last column, we store our current column width in order to
+        // restore it later in case we suddenly are no longer the last column
+        // because new columns have been added --> we need to restore our
+        // previous width in that case because it must not get lost.
+        nativeData->SetPrevWidth(GetColumn(pos)->GetWidth());
+
         [m_OutlineView sizeLastColumnToFit];
-    else
+    }
+    else if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
+    {
         [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
+    }
+    else if ( nativeData->GetIsLast() )
+    {
+        [column setWidth:nativeData->GetPrevWidth()];
+    }
+
+    nativeData->SetIsLast(isLast);
 
     if ( !(GetDataViewCtrl()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) )
     {
