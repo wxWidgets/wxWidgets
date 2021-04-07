@@ -1569,8 +1569,7 @@ public :
         if ( m_offset )
         {
             const double f = 0.5 / scaleFactor;
-            const CGSize s = { f, f };
-            m_userOffset = CGContextConvertSizeToUserSpace(m_cg, s);
+            m_userOffset = CGSizeMake(f, f);
             CGContextTranslateCTM( m_cg, m_userOffset.width , m_userOffset.height );
         }
         else
