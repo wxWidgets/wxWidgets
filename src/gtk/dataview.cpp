@@ -244,8 +244,12 @@ public:
 
     bool IsSorted() const                       { return m_sort_column >= 0; }
 
-    void AllowSort(bool allowed)                { m_allow_sort = allowed; }
-    bool IsSortAllowed() const                  { return m_allow_sort; }
+    // Freezing sort temporarily disables sorting when inserting the items into
+    // the tree as an optimization when inserting many items. Sort must be
+    // thawed, by calling FreezeSort(false), before inserting the last item to
+    // ensure that the items still end up in the right order.
+    void FreezeSort(bool freeze)                { m_sort_frozen = freeze; }
+    bool IsSortFrozen() const                   { return m_sort_frozen; }
 
     // Should we be sorted either because we have a configured sort column or
     // because we have a default sort order?
@@ -289,7 +293,7 @@ private:
     GtkSortType           m_sort_order;
     wxDataViewColumn     *m_dataview_sort_column;
     int                   m_sort_column;
-    bool                  m_allow_sort;
+    bool                  m_sort_frozen;
 
     GtkTargetEntry        m_dragSourceTargetEntry;
     wxCharBuffer          m_dragSourceTargetEntryTarget;
@@ -356,7 +360,7 @@ public:
 
             m_children.Add( id );
 
-            if ( m_internal->IsSortAllowed() && m_internal->ShouldBeSorted() )
+            if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
@@ -403,7 +407,7 @@ public:
         {
             m_children.Insert( id, pos );
 
-            if (m_internal->IsSortAllowed() && m_internal->ShouldBeSorted() )
+            if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
@@ -455,7 +459,7 @@ public:
     wxDataViewItem &GetItem() { return m_item; }
     wxDataViewCtrlInternal *GetInternal() { return m_internal; }
 
-    void AllowSort(bool allow) { m_internal->AllowSort(allow); }
+    void FreezeSort(bool freeze) { m_internal->FreezeSort(freeze); }
 
     void Resort();
 
@@ -3630,7 +3634,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataVie
     m_root = NULL;
     m_sort_order = GTK_SORT_ASCENDING;
     m_sort_column = -1;
-    m_allow_sort = true;
+    m_sort_frozen = false;
     m_dataview_sort_column = NULL;
 
     m_dragDataObject = NULL;
@@ -3729,7 +3733,7 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
         // Avoid sorting children multiple times when inserting many nodes,
         // this results in O(N^2*log(N)) complexity.
         if ( count > 1 )
-            node->AllowSort(false);
+            node->FreezeSort(true);
 
         unsigned int pos;
         for (pos = 0; pos < count; pos++)
@@ -3739,7 +3743,7 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
             // Rr-enable sorting before inserting the last child if we had
             // disabled it above.
             if ( pos == count - 1 && pos != 0 )
-                node->AllowSort(true);
+                node->FreezeSort(false);
 
             if (m_wx_model->IsContainer( child ))
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
