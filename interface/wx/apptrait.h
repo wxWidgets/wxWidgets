@@ -156,5 +156,17 @@ public:
         @return @true if the message box was shown or @false otherwise.
      */
     virtual bool SafeMessageBox(const wxString& text, const wxString& title) = 0;
+
+    /**
+        Helper function mostly useful for derived classes ShowAssertDialog()
+        implementation.
+
+        Returns the stack frame as a plain (and possibly empty) wxString.
+
+        This function is only available when @c wxUSE_STACKWALKER is 1.
+
+        @since 3.1.5
+     */
+    virtual wxString GetAssertStackTrace();
 };
 
