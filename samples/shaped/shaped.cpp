@@ -138,7 +138,6 @@ public:
 
 private:
     // event handlers (these functions should _not_ be virtual)
-    void OnDoubleClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
 
     // any class wishing to process wxWidgets events must use this macro
@@ -472,14 +471,13 @@ void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 // ----------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
-    EVT_LEFT_DCLICK(SeeThroughFrame::OnDoubleClick)
     EVT_PAINT(SeeThroughFrame::OnPaint)
 wxEND_EVENT_TABLE()
 
 void SeeThroughFrame::Create()
 {
     SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-    wxFrame::Create(NULL, wxID_ANY, "Transparency test: double click here",
+    wxFrame::Create(NULL, wxID_ANY, "Transparency test",
            wxPoint(100, 30), wxSize(300, 300),
            wxDEFAULT_FRAME_STYLE |
            wxFULL_REPAINT_ON_RESIZE |
@@ -517,13 +515,3 @@ void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
         }
     }
 }
-
-void SeeThroughFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
-{
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
-    SetTransparent(255);
-    SetTitle("Opaque");
-
-    Refresh();
-}
-
