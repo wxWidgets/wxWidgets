@@ -1107,7 +1107,7 @@ wxCOMPtr<ID2D1Geometry> wxD2DConvertRegionToGeometry(ID2D1Factory* direct2dFacto
 class wxD2DOffsetHelper
 {
 public:
-    wxD2DOffsetHelper(wxGraphicsContext* g, double scaleFactor)
+    explicit wxD2DOffsetHelper(wxGraphicsContext* g)
         : m_context(g)
     {
         m_offset = 0;
@@ -4346,7 +4346,7 @@ void wxD2DContext::StrokePath(const wxGraphicsPath& p)
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
+    wxD2DOffsetHelper helper(this);
 
     EnsureInitialized();
     AdjustRenderTargetSize();
@@ -4810,7 +4810,7 @@ void wxD2DContext::DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
+    wxD2DOffsetHelper helper(this);
 
     EnsureInitialized();
     AdjustRenderTargetSize();
@@ -4839,7 +4839,7 @@ void wxD2DContext::DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDo
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
+    wxD2DOffsetHelper helper(this);
 
     EnsureInitialized();
     AdjustRenderTargetSize();
@@ -4869,7 +4869,7 @@ void wxD2DContext::DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxD2DOffsetHelper helper(this, GetContentScaleFactor());
+    wxD2DOffsetHelper helper(this);
 
     EnsureInitialized();
     AdjustRenderTargetSize();
