@@ -23,6 +23,8 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/bitmap.h"
+    #include "wx/filehistory.h"
+    #include "wx/filename.h"
     #include "wx/frame.h"
     #include "wx/image.h"
     #include "wx/menu.h"
@@ -157,6 +159,12 @@ protected:
 
     void OnSize(wxSizeEvent& event);
 
+#if wxUSE_FILE_HISTORY
+    void OnFileHistoryMenuItem(wxCommandEvent& event);
+
+    void OnFileHistoryStyleItem(wxCommandEvent& event);
+#endif
+
 private:
 #if USE_LOG_WINDOW
     void LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxString& what);
@@ -176,6 +184,11 @@ private:
 #if USE_LOG_WINDOW
     // the control used for logging
     wxTextCtrl *m_textctrl;
+#endif
+
+#if wxUSE_FILE_HISTORY
+    wxMenu*        m_fileHistoryMenu;
+    wxFileHistory* m_fileHistory;
 #endif
 
     // the previous log target
@@ -286,6 +299,11 @@ enum
 #if wxUSE_TEXTDLG
     Menu_Menu_FindItem,
 #endif
+#if wxUSE_FILE_HISTORY
+    Menu_Menu_FileHistory1,
+    Menu_Menu_FileHistory2,
+    Menu_Menu_FileHistory3,
+#endif
 
     Menu_Test_Normal = 400,
     Menu_Test_Check,
@@ -364,6 +382,16 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Test_Radio1,    MyFrame::OnTestRadio)
     EVT_MENU(Menu_Test_Radio2,    MyFrame::OnTestRadio)
     EVT_MENU(Menu_Test_Radio3,    MyFrame::OnTestRadio)
+
+#if wxUSE_FILE_HISTORY
+    EVT_MENU(wxID_FILE1,          MyFrame::OnFileHistoryMenuItem)
+    EVT_MENU(wxID_FILE2,          MyFrame::OnFileHistoryMenuItem)
+    EVT_MENU(wxID_FILE3,          MyFrame::OnFileHistoryMenuItem)
+
+    EVT_MENU(Menu_Menu_FileHistory1,     MyFrame::OnFileHistoryStyleItem)
+    EVT_MENU(Menu_Menu_FileHistory2,     MyFrame::OnFileHistoryStyleItem)
+    EVT_MENU(Menu_Menu_FileHistory3,     MyFrame::OnFileHistoryStyleItem)
+#endif
 
     EVT_UPDATE_UI(Menu_SubMenu_Normal,    MyFrame::OnUpdateSubMenuNormal)
     EVT_UPDATE_UI(Menu_SubMenu_Check,     MyFrame::OnUpdateSubMenuCheck)
@@ -539,6 +567,27 @@ MyFrame::MyFrame()
                         "Show a dialog");
     fileMenu->AppendSeparator();
 
+#if wxUSE_FILE_HISTORY
+    m_fileHistoryMenu = new wxMenu();
+
+    m_fileHistory = new wxFileHistory();
+    m_fileHistory->UseMenu(m_fileHistoryMenu);
+
+    wxFileName fn( "menu.cpp" );
+    fn.Normalize();
+    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+
+    fn = "Makefile.in";
+    fn.Normalize();
+    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+
+    fn.Assign("minimal", "minimal", "cpp");
+    fn.Normalize();
+    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+
+    fileMenu->AppendSubMenu(m_fileHistoryMenu, "Sample file history");
+#endif
+
     fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit menu sample");
 
     wxMenu *menubarMenu = new wxMenu;
@@ -608,6 +657,16 @@ MyFrame::MyFrame()
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_FindItem, "Find menu item from label",
                      "Find a menu item by searching for its label");
+#endif
+#if wxUSE_FILE_HISTORY
+    wxMenu* menuFileHistoryStyle = new wxMenu();
+
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory1, "Hide current path");
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory2, "Hide all paths");
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory3, "Show all paths");
+
+    menuMenu->AppendSeparator();
+    menuMenu->AppendSubMenu(menuFileHistoryStyle, "Select file history menu style");
 #endif
 
     wxMenu *testMenu = new wxMenu;
@@ -689,6 +748,7 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
+    delete m_fileHistory;
     delete m_menu;
 
     // delete the event handler installed in ctor
@@ -1316,6 +1376,36 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
     PositionMenuBar();
 #endif // __WXUNIVERSAL__
 }
+
+#if wxUSE_FILE_HISTORY
+void MyFrame::OnFileHistoryMenuItem(wxCommandEvent& event)
+{
+    int eventID = event.GetId();
+
+    wxString fname = m_fileHistory->GetHistoryFile(eventID - wxID_FILE1);
+
+    wxMessageBox(wxString::Format("Selected file %s", fname), "File history activated",
+                 wxOK | wxICON_INFORMATION);
+
+    m_fileHistory->AddFileToHistory(fname);
+}
+
+void MyFrame::OnFileHistoryStyleItem(wxCommandEvent& event)
+{
+    switch( event.GetId() )
+    {
+    case Menu_Menu_FileHistory1:
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_IF_DIFFERENT);
+        break;
+    case Menu_Menu_FileHistory2:
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_NEVER);
+        break;
+    case Menu_Menu_FileHistory3:
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_ALWAYS);
+        break;
+    }
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // MyDialog

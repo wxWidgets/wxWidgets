@@ -70,6 +70,7 @@ wxFileHistoryBase::wxFileHistoryBase(size_t maxFiles, wxWindowID idBase)
 {
     m_fileMaxFiles = maxFiles;
     m_idBase = idBase;
+    m_menuPathStyle = wxFH_PATH_SHOW_IF_DIFFERENT;
 }
 
 /* static */
@@ -135,21 +136,44 @@ void wxFileHistoryBase::AddFileToHistory(const wxString& file)
     m_fileHistory.insert(m_fileHistory.begin(), file);
     numFiles++;
 
-    // update the labels in all menus
-    for ( i = 0; i < numFiles; i++ )
+    DoRefreshLabels();
+}
+
+void wxFileHistoryBase::DoRefreshLabels()
+{
+    const size_t numFiles = m_fileHistory.size();
+
+    // If no files, then no need to refresh the menu
+    if ( numFiles == 0 )
+        return;
+
+    // Remember the path in case we need to compare with it below.
+    const wxString firstPath(wxFileName(m_fileHistory[0]).GetPath());
+
+    // Update the labels in all menus
+    for ( size_t i = 0; i < numFiles; i++ )
     {
-        // if in same directory just show the filename; otherwise the full path
-        const wxFileName fnOld(m_fileHistory[i]);
+        const wxFileName currFn(m_fileHistory[i]);
 
         wxString pathInMenu;
-        if ( (fnOld.GetPath() == fnNew.GetPath()) && fnOld.HasName() )
+        switch ( m_menuPathStyle )
         {
-            pathInMenu = fnOld.GetFullName();
-        }
-        else // file in different directory or it's not a file but a directory
-        {
-            // absolute path; could also set relative path
-            pathInMenu = m_fileHistory[i];
+            case wxFH_PATH_SHOW_IF_DIFFERENT:
+                if ( currFn.HasName() && currFn.GetPath() == firstPath )
+                    pathInMenu = currFn.GetFullName();
+                else
+                    pathInMenu = currFn.GetFullPath();
+                break;
+
+            case wxFH_PATH_SHOW_NEVER:
+                // Only show the filename + extension and not the path.
+                pathInMenu = currFn.GetFullName();
+                break;
+
+            case wxFH_PATH_SHOW_ALWAYS:
+                // Always show full path.
+                pathInMenu = currFn.GetFullPath();
+                break;
         }
 
         for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
@@ -160,6 +184,15 @@ void wxFileHistoryBase::AddFileToHistory(const wxString& file)
 
             menu->SetLabel(m_idBase + i, GetMRUEntryLabel(i, pathInMenu));
         }
+    }
+}
+
+void wxFileHistoryBase::SetMenuPathStyle(wxFileHistoryMenuPathStyle style)
+{
+    if ( style != m_menuPathStyle )
+    {
+        m_menuPathStyle = style;
+        DoRefreshLabels();
     }
 }
 

@@ -24,6 +24,13 @@ class WXDLLIMPEXP_FWD_CORE wxMenu;
 class WXDLLIMPEXP_FWD_BASE wxConfigBase;
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
+enum wxFileHistoryMenuPathStyle
+{
+    wxFH_PATH_SHOW_IF_DIFFERENT,
+    wxFH_PATH_SHOW_NEVER,
+    wxFH_PATH_SHOW_ALWAYS
+};
+
 // ----------------------------------------------------------------------------
 // File history management
 // ----------------------------------------------------------------------------
@@ -60,17 +67,26 @@ public:
     void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
     wxWindowID GetBaseId() const { return m_idBase; }
 
+    void SetMenuPathStyle(wxFileHistoryMenuPathStyle style);
+    wxFileHistoryMenuPathStyle GetMenuPathStyle() const { return m_menuPathStyle; }
+
 protected:
     // Last n files
-    wxArrayString     m_fileHistory;
+    wxArrayString              m_fileHistory;
 
     // Menus to maintain (may need several for an MDI app)
-    wxList            m_fileMenus;
+    wxList                      m_fileMenus;
 
     // Max files to maintain
-    size_t            m_fileMaxFiles;
+    size_t                      m_fileMaxFiles;
+
+    // Style of the paths in the menu labels
+    wxFileHistoryMenuPathStyle m_menuPathStyle;
 
 private:
+    void DoRefreshLabels();
+
+
     // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
     wxWindowID m_idBase;
 
