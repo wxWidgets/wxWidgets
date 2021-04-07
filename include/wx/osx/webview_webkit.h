@@ -118,8 +118,6 @@ private:
 
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
-
-    bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory
