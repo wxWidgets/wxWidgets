@@ -244,8 +244,8 @@ public:
 
     bool IsSorted() const                       { return m_sort_column >= 0; }
 
-    void SetAllowSort( bool allowed )         { m_allow_sort = allowed; }
-    bool GetAllowSort() const                  { return m_allow_sort; }
+    void AllowSort(bool allowed)                { m_allow_sort = allowed; }
+    bool IsSortAllowed() const                  { return m_allow_sort; }
 
     // Should we be sorted either because we have a configured sort column or
     // because we have a default sort order?
@@ -356,7 +356,7 @@ public:
 
             m_children.Add( id );
 
-            if (m_internal->GetAllowSort() && m_internal->ShouldBeSorted())
+            if ( m_internal->IsSortAllowed() && m_internal->ShouldBeSorted() )
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
@@ -403,7 +403,7 @@ public:
         {
             m_children.Insert( id, pos );
 
-            if (m_internal->GetAllowSort() && m_internal->ShouldBeSorted())
+            if (m_internal->IsSortAllowed() && m_internal->ShouldBeSorted() )
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
@@ -455,8 +455,7 @@ public:
     wxDataViewItem &GetItem() { return m_item; }
     wxDataViewCtrlInternal *GetInternal() { return m_internal; }
 
-    void AllowSort() { m_internal->SetAllowSort(true); }
-    void ForbidSort() { m_internal->SetAllowSort(false); }
+    void AllowSort(bool allow) { m_internal->AllowSort(allow); }
 
     void Resort();
 
@@ -3727,16 +3726,20 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
         wxDataViewItemArray children;
         unsigned int count = m_wx_model->GetChildren( node->GetItem(), children );
 
-        // node will be sorted after last child is inserted
-        node->ForbidSort();
+        // Avoid sorting children multiple times when inserting many nodes,
+        // this results in O(N^2*log(N)) complexity.
+        if ( count > 1 )
+            node->AllowSort(false);
 
         unsigned int pos;
         for (pos = 0; pos < count; pos++)
         {
             wxDataViewItem child = children[pos];
 
-            if (pos==count-1)
-                node->AllowSort();
+            // Rr-enable sorting before inserting the last child if we had
+            // disabled it above.
+            if ( pos == count - 1 && pos != 0 )
+                node->AllowSort(true);
 
             if (m_wx_model->IsContainer( child ))
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
@@ -3745,7 +3748,6 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
 
             // Don't send any events here
         }
-        node->AllowSort(); // in case there is no child
     }
 }
 
