@@ -100,9 +100,9 @@ private:
     // be called and the default implementation asserts if this is not the case.
     virtual void MSWProcessSpecialKey(wxKeyEvent& event);
 
-    // Get the auto-complete object creating it if necessary. Returns NULL if
-    // creating it failed.
-    wxTextAutoCompleteData *GetOrCreateCompleter();
+    // Check that we have auto-complete data, creating it if necessary. Returns
+    // false if creating it failed.
+    bool MSWEnsureHasAutoCompleteData();
 
     // Various auto-completion-related stuff, only used if any of AutoComplete()
     // methods are called. Use the function above to access it.

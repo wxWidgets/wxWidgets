@@ -846,27 +846,29 @@ void wxTextEntry::MSWProcessSpecialKey(wxKeyEvent& WXUNUSED(event))
     wxFAIL_MSG(wxS("Must be overridden if can be called"));
 }
 
-wxTextAutoCompleteData *wxTextEntry::GetOrCreateCompleter()
+bool wxTextEntry::MSWEnsureHasAutoCompleteData()
 {
     if ( !m_autoCompleteData )
     {
         wxTextAutoCompleteData * const ac = new wxTextAutoCompleteData(this);
-        if ( ac->IsOk() )
-            m_autoCompleteData = ac;
-        else
+        if ( !ac->IsOk() )
+        {
             delete ac;
+            return false;
+        }
+
+        m_autoCompleteData = ac;
     }
 
-    return m_autoCompleteData;
+    return true;
 }
 
 bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 {
-    wxTextAutoCompleteData * const ac = GetOrCreateCompleter();
-    if ( !ac )
+    if ( !MSWEnsureHasAutoCompleteData() )
         return false;
 
-    ac->ChangeStrings(choices);
+    m_autoCompleteData->ChangeStrings(choices);
 
     return true;
 }
@@ -882,8 +884,7 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
     }
     else // Have a valid completer.
     {
-        wxTextAutoCompleteData * const ac = GetOrCreateCompleter();
-        if ( !ac )
+        if ( !MSWEnsureHasAutoCompleteData() )
         {
             // Delete the custom completer for consistency with the case when
             // we succeed to avoid memory leaks in user code.
@@ -892,7 +893,7 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
         }
 
         // This gives ownership of the custom completer to m_autoCompleteData.
-        if ( !ac->ChangeCustomCompleter(completer) )
+        if ( !m_autoCompleteData->ChangeCustomCompleter(completer) )
             return false;
     }
 
