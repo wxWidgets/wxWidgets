@@ -318,10 +318,6 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
         }
     }
 
-#if defined(__WXGTK20__) && !defined(__WXGTK3__)
-    // Bitmaps with both alpha and a mask don't work well in wxGTK2 so skip the test in this case.
-    WARN("Skipping test known not to work in wxGTK2.");
-#else
     SECTION("RGBA bitmap with mask")
     {
         // RGBA Bitmap
@@ -436,7 +432,6 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
         }
         CHECK(unmaskedPixelsCount == numUnmaskedPixels);
     }
-#endif // !__WXGTK20__
 }
 
 TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")

@@ -836,7 +836,7 @@ wxImage wxBitmap::ConvertToImage() const
     // prefer pixbuf if available, it will preserve alpha and should be quicker
     if (HasPixbuf())
     {
-        GdkPixbuf *pixbuf = GetPixbuf();
+        GdkPixbuf *pixbuf = GetPixbufNoMask();
         unsigned char* alpha = NULL;
         if (gdk_pixbuf_get_has_alpha(pixbuf))
         {
