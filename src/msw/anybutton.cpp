@@ -75,6 +75,11 @@ using namespace wxMSWImpl;
     #endif
 #endif // wxUSE_UXTHEME
 
+// BCM_GETIDEALSIZE is defined since XP
+#ifndef BCM_GETIDEALSIZE
+    #define BCM_GETIDEALSIZE    0x1601
+#endif // BCM_GETIDEALSIZE
+
 #ifndef ODS_NOACCEL
     #define ODS_NOACCEL         0x0100
 #endif
@@ -519,6 +524,16 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
     // and also for the margins we always add internally (unless we have no
     // border at all in which case the button has exactly the same size as
     // bitmap and so no margins should be used)
+    AdjustForBitmapMargins(size);
+}
+
+void wxAnyButton::AdjustForBitmapMargins(wxSize& size) const
+{
+    wxCHECK_RET(m_imageData, wxT("shouldn't be called if no image"));
+
+    // and also for the margins we always add internally (unless we have no
+    // border at all in which case the button has exactly the same size as
+    // bitmap and so no margins should be used)
     if ( !HasFlag(wxBORDER_NONE) )
     {
         int marginH = 0,
@@ -565,32 +580,45 @@ wxSize wxAnyButton::DoGetBestSize() const
 
     wxSize size;
 
-    // Account for the text part if we have it.
-    if ( ShowsLabel() )
+    // BCM_GETIDEALSIZE works properly only it there is a text label in the button.
+    if ( !IsOwnerDrawn() && ShowsLabel() )
     {
-        int flags = 0;
-        if ( HasFlag(wxBU_EXACTFIT) )
-            flags |= wxMSWButton::Size_ExactFit;
-        if ( DoGetAuthNeeded() )
-            flags |= wxMSWButton::Size_AuthNeeded;
+        SIZE idealSize = { 0, 0 };
+        ::SendMessage(GetHwnd(), BCM_GETIDEALSIZE, 0, (LPARAM)&idealSize);
+        size.Set(idealSize.cx, idealSize.cy);
+
+        if ( m_imageData )
+            AdjustForBitmapMargins(size);
+    }
+    else
+    {
+        // Account for the text part if we have it.
+        if ( ShowsLabel() )
+        {
+            int flags = 0;
+            if ( HasFlag(wxBU_EXACTFIT) )
+                flags |= wxMSWButton::Size_ExactFit;
+            if ( DoGetAuthNeeded() )
+                flags |= wxMSWButton::Size_AuthNeeded;
 
 #if wxUSE_MARKUP
-        if ( m_markupText )
-        {
-            wxClientDC dc(self);
-            size = wxMSWButton::GetFittingSize(self,
-                                               m_markupText->Measure(dc),
-                                               flags);
-        }
-        else // Normal plain text (but possibly multiline) label.
+            if ( m_markupText )
+            {
+                wxClientDC dc(self);
+                size = wxMSWButton::GetFittingSize(self,
+                                                   m_markupText->Measure(dc),
+                                                   flags);
+            }
+            else // Normal plain text (but possibly multiline) label.
 #endif // wxUSE_MARKUP
-        {
-            size = wxMSWButton::ComputeBestFittingSize(self, flags);
+            {
+                size = wxMSWButton::ComputeBestFittingSize(self, flags);
+            }
         }
-    }
 
-    if ( m_imageData )
-        AdjustForBitmapSize(size);
+        if ( m_imageData )
+            AdjustForBitmapSize(size);
+    }
 
     return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
