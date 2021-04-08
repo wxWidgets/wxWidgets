@@ -371,41 +371,28 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
     }
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
+void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, void* clientData) const
 {
     wxJSScriptWrapper wrapJS(javascript, wxJSScriptWrapper::JS_OUTPUT_STRING);
-
-    __block int scriptResult = -1;
-    __block wxString result;
 
     // Start script execution
     [m_webView evaluateJavaScript:wxCFStringRef(wrapJS.GetWrappedCode()).AsNSString()
                 completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
         if (error)
         {
-            result.assign(wxCFStringRef(error.localizedDescription).AsString());
-            scriptResult = 0;
+            SendScriptResult(clientData, false, wxCFStringRef(error.localizedDescription).AsString());
         }
         else
         {
+            wxString scriptResult;
             if (obj)
-                result.assign(wxCFStringRef::AsString([NSString stringWithFormat:@"%@", obj]));
-            scriptResult = 1;
+                scriptResult = wxCFStringRef::AsString([NSString stringWithFormat:@"%@", obj]);
+            wxString scriptOutput;
+            bool success = wxJSScriptWrapper::ExtractOutput(scriptResult, &scriptOutput);
+
+            SendScriptResult(clientData, success, scriptOutput);
         }
     }];
-
-    // Wait for script exection
-    while (scriptResult == -1)
-        wxYield();
-
-    if (scriptResult == 0)
-    {
-        if (output)
-            output->assign(result);
-        return false;
-    }
-    else
-        return wxJSScriptWrapper::ExtractOutput(result, output);
 }
 
 bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
