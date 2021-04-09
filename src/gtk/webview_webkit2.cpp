@@ -1287,31 +1287,26 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
 {
-    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+    wxJSScriptWrapper wrapJS(javascript, wxJSScriptWrapper::JS_OUTPUT_STRING);
 
-    // This string is also used as an error indicator: it's cleared if there is
-    // no error or used in the warning message below if there is one.
+    bool success = false;
     wxString result;
-    if ( RunScriptSync(wrapJS.GetWrappedCode(), &result)
-            && result == wxS("true") )
+    wxString scriptOutput;
+    if (RunScriptSync(wrapJS.GetWrappedCode(), &result))
     {
-        if ( RunScriptSync(wrapJS.GetOutputCode(), &result) )
-        {
-            if ( output )
-                *output = result;
-            result.clear();
-        }
-
-        RunScriptSync(wrapJS.GetCleanUpCode());
+        success = wxJSScriptWrapper::ExtractOutput(result, &scriptOutput);
     }
 
-    if ( !result.empty() )
+    if (output)
+        output->assign(scriptOutput);
+
+    if (!success)
     {
-        wxLogWarning(_("Error running JavaScript: %s"), result);
+        wxLogWarning(_("Error running JavaScript: %s"), scriptOutput);
         return false;
     }
-
-    return true;
+    else
+        return true;
 }
 
 bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
