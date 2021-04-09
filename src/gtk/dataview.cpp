@@ -3834,6 +3834,14 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, item);
     int drop_flags = 0;
+    int drop_pos = wxNOT_FOUND;
+
+    if(path)
+        {
+        int *path_indices = gtk_tree_path_get_indices(path);
+        int path_depth = gtk_tree_path_get_depth(path);
+        drop_pos = path_indices[path_depth - 1] + 1;
+        }
     switch(pos)
         {
         case GTK_TREE_VIEW_DROP_BEFORE:
@@ -3841,9 +3849,11 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
             break;
         case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
             drop_flags = wxDrop_Onto | wxDrop_Before;
+            drop_pos = wxNOT_FOUND;
             break;
         case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
             drop_flags = wxDrop_Onto | wxDrop_After;
+            drop_pos = wxNOT_FOUND;
             break;
         case GTK_TREE_VIEW_DROP_AFTER:
             drop_flags = wxDrop_After;
@@ -3853,6 +3863,7 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     event.SetDataSize(gtk_selection_data_get_length(selection_data));
     event.SetDataBuffer(const_cast<guchar*>(gtk_selection_data_get_data(selection_data)));
+    event.SetProposedDropIndex( drop_pos );
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
@@ -3868,10 +3879,18 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
                                           GtkSelectionData *selection_data)
 {
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
+    int drop_pos = wxNOT_FOUND;
 
+    if(path)
+        {
+        int *path_indices = gtk_tree_path_get_indices(path);
+        int path_depth = gtk_tree_path_get_depth(path);
+        drop_pos = path_indices[path_depth - 1] + 1;
+        }
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner, item);
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     event.SetDataSize(gtk_selection_data_get_length(selection_data));
+    event.SetProposedDropIndex( drop_pos );
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
