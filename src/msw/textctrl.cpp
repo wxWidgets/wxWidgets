@@ -2116,6 +2116,10 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                             case VK_HOME:
                             case VK_END:
                                 return false;
+
+                            case VK_BACK:
+                                if ( MSWNeedsToHandleCtrlBackspace() )
+                                    return false;
                         }
                     }
                     else // Shift is pressed
@@ -2206,8 +2210,119 @@ void wxTextCtrl::MSWProcessSpecialKey(wxKeyEvent& event)
 
 #endif // wxUSE_OLE
 
+void wxTextCtrl::MSWDeleteWordBack()
+{
+    // Surprisingly the behaviour of Ctrl+Backspace is different in all three
+    // cases where it's supported by MSW itself:
+    //
+    //  1. Rich edit controls simply ignore selection and handle it as usual.
+    //  2. Plain edit controls don't do anything when there is selection.
+    //  3. Notepad in Windows 10 1809 and later deletes just the selection.
+    //
+    // The latter behaviour seems the most useful, so do it like this here too.
+    if ( HasSelection() )
+    {
+        RemoveSelection();
+        return;
+    }
+
+    // This variable contains one end of the range to delete, the rest of this
+    // function is concerned with finding the starting end of this range.
+    const long end = GetInsertionPoint();
+
+    long col, line;
+    if ( !PositionToXY(end, &col, &line) )
+        return;
+
+    // We stop at the start of line, so remember it.
+    const long start = XYToPosition(0, line);
+
+    const wxString& text = GetLineText(line);
+
+    // The way it works in rich text controls or when SHAutoComplete() is used
+    // is that it deletes everything until the first span of alphanumeric
+    // characters it finds (moving backwards). But the implementation of the
+    // same shortcut in in notepad in Windows 10 versions 1809 and later
+    // doesn't behave in quite the same way and doesn't handle alphanumeric
+    // characters specially, i.e. it just stops on space. This seems more
+    // useful and simpler to implement, and it probably will become standard in
+    // the future, so do it like this here too.
+
+    // First skip all space starting from the character to the left of the
+    // current one.
+    long current = end;
+    for ( ;; )
+    {
+        if ( current == start )
+        {
+            // When there is nothing but spaces to the left until the start of
+            // line, we need to delete these spaces (if any) as well as the new
+            // line separating this line from the previous one (if any).
+            if ( line > 0 )
+            {
+                // This function is only used with plain EDITs which use "\r\n"
+                // and so we need to subtract 2 to account for the new line.
+                current -= 2;
+            }
+
+            break;
+        }
+
+        // We start from the previous character.
+        --current;
+
+        // Did we find the end of the previous "word"?
+        if ( text[current - start] != ' ' )
+        {
+            for ( ;; )
+            {
+                if ( current == start )
+                {
+                    // We don't delete the new line in this case, as we're going to
+                    // delete some non-spaces in this line.
+                    break;
+                }
+
+                --current;
+
+                if ( text[current - start] == ' ' )
+                {
+                    // Don't delete the space itself.
+                    ++current;
+                    break;
+                }
+            }
+
+            break;
+        }
+    }
+
+    Remove(current, end);
+}
+
+bool wxTextCtrl::MSWNeedsToHandleCtrlBackspace() const
+{
+    // We want to handle the undocumented Ctrl+Backspace shortcut only if it's
+    // not handled by the control itself, which is a bit tricky because it's
+    // normally only handled by rich edit controls, but plain EDIT ones may
+    // also handle it if they use SHAutoComplete().
+    return !HasFlag(wxTE_READONLY) &&
+                !IsRich() &&
+                    !MSWUsesStandardAutoComplete();
+}
+
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
+    // Handle Ctrl+Backspace if necessary: this is not a documented standard
+    // shortcut, but it's a de facto standard and people expect it to work.
+    if ( MSWNeedsToHandleCtrlBackspace() &&
+                event.GetModifiers() == wxMOD_CONTROL &&
+                    event.GetKeyCode() == WXK_BACK )
+    {
+        MSWDeleteWordBack();
+        return;
+    }
+
     // richedit control doesn't send WM_PASTE, WM_CUT and WM_COPY messages
     // when Ctrl-V, X or C is pressed and this prevents wxClipboardTextEvent
     // from working. So we work around it by intercepting these shortcuts

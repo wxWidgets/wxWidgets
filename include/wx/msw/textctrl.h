@@ -294,6 +294,13 @@ private:
     virtual void MSWProcessSpecialKey(wxKeyEvent& event) wxOVERRIDE;
 #endif // wxUSE_OLE
 
+    // Do we need to handle Ctrl+Backspace ourselves?
+    bool MSWNeedsToHandleCtrlBackspace() const;
+
+    // Delete backwards until the start of the previous word before caret in a
+    // way compatible with the standard MSW Ctrl+Backspace shortcut.
+    void MSWDeleteWordBack();
+
     void OnKeyDown(wxKeyEvent& event);
 
     // Used by EN_MAXTEXT handler to increase the size limit (will do nothing

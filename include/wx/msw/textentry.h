@@ -81,6 +81,9 @@ protected:
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 #endif // wxUSE_OLE
 
+    // Returns true if this control uses standard file names completion.
+    bool MSWUsesStandardAutoComplete() const;
+
     // Helper for wxTE_PROCESS_ENTER handling: activates the default button in
     // the dialog containing this control if any.
     bool ClickDefaultButtonIfPossible();
@@ -100,9 +103,13 @@ private:
     // be called and the default implementation asserts if this is not the case.
     virtual void MSWProcessSpecialKey(wxKeyEvent& event);
 
-    // Get the auto-complete object creating it if necessary. Returns NULL if
-    // creating it failed.
-    wxTextAutoCompleteData *GetOrCreateCompleter();
+    // Check if we really have auto-complete data. This is not the same as just
+    // checking if m_autoCompleteData is NULL, see the code for more details.
+    bool MSWHasAutoCompleteData() const;
+
+    // Check that we have auto-complete data, creating it if necessary. Returns
+    // false if creating it failed.
+    bool MSWEnsureHasAutoCompleteData();
 
     // Various auto-completion-related stuff, only used if any of AutoComplete()
     // methods are called. Use the function above to access it.
