@@ -864,6 +864,7 @@ public:
         m_dataBuffer(event.m_dataBuffer),
         m_dataSize(event.m_dataSize),
         m_dragFlags(event.m_dragFlags),
+        m_dropFlags(event.m_dropFlags),
         m_dropEffect(event.m_dropEffect),
         m_proposedDropIndex(event.m_proposedDropIndex)
 #endif
@@ -905,7 +906,9 @@ public:
     void SetDataBuffer( void* buf ) { m_dataBuffer = buf;}
     void *GetDataBuffer() const { return m_dataBuffer; }
     void SetDragFlags( int flags ) { m_dragFlags = flags; }
+    void SetDropFlags( int flags ) { m_dropFlags = flags; }
     int GetDragFlags() const { return m_dragFlags; }
+    int GetDropFlags() const { return m_dropFlags; }
     void SetDropEffect( wxDragResult effect ) { m_dropEffect = effect; }
     wxDragResult GetDropEffect() const { return m_dropEffect; }
     // For platforms (currently generic and OSX) that support Drag/Drop
@@ -950,6 +953,7 @@ protected:
     size_t              m_dataSize;
 
     int                 m_dragFlags;
+    int                 m_dropFlags;
     wxDragResult        m_dropEffect;
     int                 m_proposedDropIndex;
 #endif // wxUSE_DRAG_AND_DROP
