@@ -16,3 +16,30 @@ leak:atk_bridge_adaptor_init
 # Leak in a function called from gtk_init_check() when using X RandR extension.
 # Requires debug symbols for libxrandr2.
 leak:doGetScreenResources
+
+# There seem to be several actual (although not unbound) leaks inside Cairo or
+# pixman resulting in memory leak reports when calling various drawing
+# functions using CSS internally.
+leak:_cairo_image_surface_create_for_pixman_image
+leak:_cairo_image_surface_create_with_pixman_format
+leak:_cairo_surface_create_similar_image
+leak:_cairo_surface_create_similar_image
+leak:gtk_css_image_surface_draw
+leak:_gtk_css_image_draw
+
+leak:create_bits
+leak:_pixman_bits_image_init
+leak:create_bits_image_internal
+leak:_cairo_image_surface_create_with_pixman_format
+leak:_cairo_surface_create_similar_image
+leak:_cairo_surface_create_similar_image
+leak:gtk_css_image_surface_draw
+leak:_gtk_css_image_draw
+
+leak:_pixman_image_allocate
+leak:create_bits_image_internal
+leak:_cairo_image_surface_create_with_pixman_format
+leak:_cairo_surface_create_similar_image
+leak:_cairo_surface_create_similar_image
+leak:gtk_css_image_surface_draw
+leak:_gtk_css_image_draw
