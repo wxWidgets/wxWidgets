@@ -32,6 +32,18 @@
 
 #include "testimage.h"
 
+
+#define CHECK_EQUAL_COLOUR_RGB(c1, c2) \
+    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
+    CHECK( (int)c1.Green() == (int)c2.Green() ); \
+    CHECK( (int)c1.Blue()  == (int)c2.Blue() )
+
+#define CHECK_EQUAL_COLOUR_RGBA(c1, c2) \
+    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
+    CHECK( (int)c1.Green() == (int)c2.Green() ); \
+    CHECK( (int)c1.Blue()  == (int)c2.Blue() ); \
+    CHECK( (int)c1.Alpha() == (int)c2.Alpha() )
+
 struct testData {
     const char* file;
     wxBitmapType type;
@@ -1454,34 +1466,55 @@ void ImageTestCase::ScaleCompare()
                                "image/cross_nearest_neighb_256x256.png");
 }
 
-const unsigned char toucan[] =
-{
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x01, 0xc0, 0x00,
-    0x00, 0x09, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x34, 0x00, 0x00, 0x00, 0x34, 0x00, 0x00,
-    0x00, 0x78, 0x00, 0x00, 0x00, 0x78, 0x00, 0x00, 0x08, 0xf8, 0x00, 0x00, 0x58, 0xf8, 0x00, 0x00,
-    0x2f, 0xf8, 0x00, 0x00, 0x50, 0x78, 0x00, 0x00, 0x64, 0x00, 0x01, 0x00, 0x61, 0x80, 0x00, 0x00,
-    0x7b, 0x00, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x0d, 0x20, 0x00, 0x00,
-    0x48, 0x10, 0x00, 0x00, 0x50, 0x80, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
 void ImageTestCase::CreateBitmapFromCursor()
 {
 #if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXMOTIF__ && !defined __WXX11__
-#ifdef __WXMSW__
-    wxImage image( 32, 32, toucan );
-#else
-    wxImage image( "../../samples/image/toucan.png" );
+
+    wxImage image("image/wx.png");
+    wxCursor cursor(image);
+    wxBitmap bitmap(cursor);
+
+#if defined(__WXGTK__)
+    // cursor to bitmap could fail depending on windowing system and cursor (gdk-cursor-get-image)
+    if ( !bitmap.IsOk() )
+        return;
 #endif
-    wxCursor cursor( image );
-    wxBitmap bitmap( cursor );
-    if( bitmap.IsOk() )
-#ifdef __WXOSX__
-        CHECK_THAT( image, RGBSimilarTo( bitmap.ConvertToImage(), 2 ) );
-#else
-        CHECK_THAT( image, RGBSameAs( bitmap.ConvertToImage() ) );
+
+    wxImage result = bitmap.ConvertToImage();
+
+    // on Windows the cursor is always scaled to 32x32px (96 DPI)
+    // on macOS the resulting bitmap size depends on the DPI
+    if ( image.GetSize() == result.GetSize() )
+    {
+        CHECK_THAT(image, RGBASimilarTo(result, 2));
+    }
+    else
+    {
+        wxVector<wxPoint> coords;
+        coords.push_back(wxPoint(14, 10)); // blue square
+        coords.push_back(wxPoint(8, 22));  // red square
+        coords.push_back(wxPoint(26, 18)); // yellow square
+        coords.push_back(wxPoint(25, 5));  // empty / tranparent
+
+        for ( size_t i = 0; i < coords.size(); ++i )
+        {
+            wxPoint const& p1 = coords[i];
+            wxPoint p2 = wxPoint(p1.x * (result.GetWidth() / (double)image.GetWidth()), p1.y * (result.GetHeight() / (double)image.GetHeight()));
+
+#if defined(__WXMSW__)
+            // when the cursor / result image is larger than the source image, the original image is centered in the result image
+            if ( result.GetWidth() > image.GetWidth() )
+                p2.x = (result.GetWidth() / 2) + (p1.x - (image.GetWidth() / 2));
+            if ( result.GetHeight() > image.GetHeight() )
+                p2.y = (result.GetHeight() / 2) + (p1.y - (image.GetHeight() / 2));
 #endif
+
+            wxColour cSrc(image.GetRed(p1.x, p1.y), image.GetGreen(p1.x, p1.y), image.GetBlue(p1.x, p1.y), image.GetAlpha(p1.x, p1.y));
+            wxColour cRes(result.GetRed(p2.x, p2.y), result.GetGreen(p2.x, p2.y), result.GetBlue(p2.x, p2.y), result.GetAlpha(p2.x, p2.y));
+
+            CHECK_EQUAL_COLOUR_RGBA(cRes, cSrc);
+        }
+    }
 #endif
 }
 
@@ -2003,17 +2036,6 @@ TEST_CASE("wxImage::Clipboard", "[image][clipboard]")
     CHECK_THAT(imgOriginal, RGBASameAs(imgRetrieved));
 #endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ
 }
-
-#define CHECK_EQUAL_COLOUR_RGB(c1, c2) \
-    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
-    CHECK( (int)c1.Green() == (int)c2.Green() ); \
-    CHECK( (int)c1.Blue()  == (int)c2.Blue() )
-
-#define CHECK_EQUAL_COLOUR_RGBA(c1, c2) \
-    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
-    CHECK( (int)c1.Green() == (int)c2.Green() ); \
-    CHECK( (int)c1.Blue()  == (int)c2.Blue() ); \
-    CHECK( (int)c1.Alpha() == (int)c2.Alpha() )
 
 TEST_CASE("wxImage::InitAlpha", "[image][initalpha]")
 {
