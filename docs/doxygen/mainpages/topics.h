@@ -23,15 +23,15 @@ topics related to building applications with wxWidgets.
 @li @subpage overview_cmake
 @li @subpage overview_referencenotes
 
-@section page_topics_programming Important wxWidgets Topics
+@section page_topics_programming Conceptual Overviews
 
 @li @subpage overview_app
-@li @subpage overview_unicode
-@li @subpage overview_i18n
 @li @subpage overview_events
 @li @subpage overview_windowsizing
 @li @subpage overview_windowids
 @li @subpage overview_log
+@li @subpage overview_unicode
+@li @subpage overview_i18n
 
 @section page_topics_nongui Non-GUI Classes
 
