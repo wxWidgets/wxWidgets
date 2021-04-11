@@ -1,8 +1,8 @@
-July 22, 2020 -- The wxWidgets team is pleased to announce a new
+April 14, 2021 -- The wxWidgets team is pleased to announce a new
 release of our open source framework for the development of native
 cross-platform applications in C++.
 
-wxWidgets 3.1.4 is the latest release in the 3.1 development
+wxWidgets 3.1.5 is the latest release in the 3.1 development
 branch and is now available at
 
     https://www.wxwidgets.org/downloads/
@@ -10,7 +10,7 @@ branch and is now available at
 Compared to the stable 3.0.x series, this version brings many
 improvements and even more bug fixes, please see the change log
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.4/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.5/docs/changes.txt
 
 for the incomplete list of the most important ones. Here is the
 maximally condensed summary of the changes compared to 3.0:
@@ -20,16 +20,17 @@ maximally condensed summary of the changes compared to 3.0:
   file, and OS versions as well as an entirely new CMake build system.
 - Support for native dark mode under macOS 10.14 Mojave and later and support
   for macOS 11 on ARM hardware.
-- New features: implement freezing rows/columns in wxGrid; support for mouse
-  gesture events (GSoC 2017 project); non-integer font sizes and arbitrary font
-  weights in wxFont; fractional pen widths in wxGraphicsContext; arbitrary
-  label windows in wxStaticBox; markup in wxDataViewCtrl items text; better
-  support for high DPI monitors and per-monitor DPI and dynamic DPI changes
-  support under MSW; support for ZIP 64 files; LZMA compression; much improved
-  accessibility support under MSW; new Edge-based wxWebView implementation.
-- New classes: wxActivityIndicator, wxAddRemoveCtrl,
-  wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker,
-  wxSecretStore, wxTempFFile and many new features in the existing classes.
+- New features: HTTPS and HTTP/2 support with wxWebRequest and friends;
+  support for freezing rows/columns in wxGrid; mouse gesture events (GSoC 2017
+  project); non-integer font sizes and arbitrary font weights in wxFont;
+  fractional pen widths in wxGraphicsContext; arbitrary label windows in
+  wxStaticBox; markup in wxDataViewCtrl items text; better support for high
+  DPI monitors and per-monitor DPI and dynamic DPI changes support under MSW;
+  support for ZIP 64 files; LZMA compression; much improved accessibility
+  support under MSW; new Edge-based wxWebView implementation.
+- New classes: wxActivityIndicator, wxAddRemoveCtrl, wxAppProgressIndicator,
+  wxNativeWindow, wxPersistentComboBox, wxPowerResourceBlocker, wxSecretStore,
+  wxTempFFile and many new features in the existing classes.
 - New XRC handlers for all the new and some of the existing classes.
 - Significant improvements to: wxBusyInfo, wxDataViewCtrl, wxDirDialog, wxGrid,
   wxNotificationMessage, wxSpinCtrl, wxStaticBox, wxStyledTextCtrl,
