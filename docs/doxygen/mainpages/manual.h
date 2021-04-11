@@ -14,7 +14,7 @@
 @author Julian Smart, Vadim Zeitlin, Robin Dunn, Stefan Csomor,
         Bryan Petty, Francesco Montorsi, Robert Roebling et al
 
-@date July 22, 2020
+@date April 14, 2021
 
 Welcome to wxWidgets, a stable and powerful open source framework for
 developing native cross-platform GUI applications in C++!
