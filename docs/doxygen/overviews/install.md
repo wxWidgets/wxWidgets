@@ -79,3 +79,39 @@ Otherwise, please use the appropriate instructions depending on your platform:
 
 The wxWidgets ports mentioned above are the main ones, however other variants
 also exist, see [platform details](@ref page_port) page for the full list.
+
+
+Verifying the Installation
+--------------------------
+
+After installing wxWidgets, it is recommended to check that the library can
+actually be used by building a minimal wxWidgets program using it, such as
+`samples/minimal/minimal.cpp` included in wxWidgets distributions.
+
+You may choose to build this program in any of the following ways:
+
+- Directly from command line under any Unix-like systems, including macOS and
+  Unix-like environments such as Cygwin or MSYS2 under MSW, just run
+
+    $ c++ -o minimal minimal.cpp `wx-config --cxxflags --libs`
+
+  Please note that you *must* use `wx-config` to obtain the compiler and linker
+  flags in this case.
+
+- Using CMake, and the provided `samples/minimal/CMakeLists.txt` file.
+
+- Using Microsoft Visual Studio IDE: simply create a new project and add the
+  provided `wxwidgets.props` property sheet file to it as explained in the
+  [instructions](@ref #msw_build_apps) and build the project as usual.
+
+- Using another IDE with wxWidgets support, such as [Code::Blocks][1] or
+  [CodeLite][2], please use the IDE wizards.
+
+[1]: https://www.codeblocks.org/
+[2]: https://codelite.org/
+
+- If you use another IDE, under Unix you should run `wx-config --cxxflags` and
+  `wx-config --libs` commands separately and copy-and-paste their output to the
+  "Additional preprocessor options" and "Additional linker options" fields in
+  your IDE, respectively. Under MSW systems you need to configure the IDE using
+  the instructions in the ["manual setup"](@ref #msw_build_apps) section.
