@@ -919,6 +919,13 @@ wxBitmap::wxBitmap(WXImage image)
     (void)Create(image);
 }
 
+#if wxOSX_USE_COCOA
+wxBitmap::wxBitmap(const wxCursor &cursor)
+{
+    m_refData = new wxBitmapRefData( wxOSXGetNSImageFromNSCursor( cursor.GetHCURSOR() ) );
+}
+#endif
+
 bool wxBitmap::Create(WXImage image)
 {
     UnRef();

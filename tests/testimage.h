@@ -175,6 +175,11 @@ inline ImageRGBMatcher RGBSimilarTo(const wxImage& image, int tolerance)
     return ImageRGBMatcher(image, tolerance, false);
 }
 
+inline ImageRGBMatcher RGBASimilarTo(const wxImage& image, int tolerance)
+{
+    return ImageRGBMatcher(image, tolerance, true);
+}
+
 class ImageAlphaMatcher : public Catch::MatcherBase<wxImage>
 {
 public:
