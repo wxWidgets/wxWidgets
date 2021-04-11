@@ -255,6 +255,11 @@ n:
    string iterators instead if possible or replace this expression with
    @code s.c_str() + n @endcode otherwise.
 
+ - When using C++11 range-based for loop, the natural construct for iterating
+   over wxString @code for ( auto& ch: s ) @endcode doesn't compile because of
+   the unusual iterator type and @code for ( wxUniCharRef ch: s ) @endcode
+   needs to be used instead.
+
 Another class of problems is related to the fact that the value returned by
 @c c_str() itself is also not just a pointer to a buffer but a value of helper
 class wxCStrData which is implicitly convertible to both narrow and wide
