@@ -18,10 +18,10 @@ topics related to building applications with wxWidgets.
 
 @section page_topics_starting Starting with wxWidgets
 
-@li @subpage overview_referencenotes
-@li @subpage overview_roughguide
 @li @subpage overview_helloworld
+@li @subpage overview_roughguide
 @li @subpage overview_cmake
+@li @subpage overview_referencenotes
 
 @section page_topics_programming Important wxWidgets Topics
 
