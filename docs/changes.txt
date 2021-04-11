@@ -184,35 +184,107 @@ Changes in behaviour which may result in build errors
 - wxGridEvent methods GetRow() and GetCol() are no longer virtual.
 
 
-3.1.5: (released 2020-10-??)
+3.1.5: (released 2021-04-14)
 ----------------------------
 
-NOTE: This file is updated only before the release, please use
+All:
 
-    $ git log --notes=changelog --format='%N' v3.1.4..|grep .
+- Add wxWebRequest with support for HTTPS and HTTP/2 (Tobias Taschner).
+- Add wxGetCpuArchitectureName() (Lauri Nurmi).
+- Add support for 64-bit integers to wxConfig.
+- Add wxFileName::ResolveLink() (Ian McInerney).
+- Add wxString::utf8_string().
+- Use millisecond resolution for wxLog timestamps.
+- Fix wrong FIFO/sockets detection in wxFileName (atbara46).
+- Fix search in wxSortedArrayString with custom comparator (Pavel Tyunin).
+- Allow translations for different versions to co-exist (Andriy Byelikov).
+- Eliminate really all gcc warnings from wx headers.
+- Avoid gcc -Wsuggest-override inside wx macros (Teodor Petrov).
+- Bug fixes and improvements in wxConvAuto (Pavel Tyunin).
 
-      to see all the change log entries since the last release.
+All (GUI):
 
-      To update the notes, fetch them first:
+- Add wxPersistentComboBox to save user input history easily.
+- Add alpha blending support to wxImage::Paste() (Rachel Mark, Eric Raijmakers).
+- Add wxImageDataObject for copying wxImage to/from clipboard (Artur Wieczorek).
+- Add support for user script messages to wxWebView (Tobias Taschner).
+- Add wxFileHistory::SetMenuPathStyle() (Ian McInerney).
+- Add wxEVT_GRID_RANGE_SELECT{ING,ED} (Daniel Kulp).
+- Add wxGrid::wxGridSelectNone selection mode (Gary Allen).
+- Fix changing in wxGrid with multicells (Dimitri Schoolwerth).
+- Fix custom date formats in wxGrid.
+- Improve wxGrid appearance in dark mode (Daniel Kulp).
+- Optimize handling of attributes in wxGrid (Dimitri Schoolwerth).
+- Fix infinite loop with auto-wrapped cells in wxGrid (Dimitri Schoolwerth).
+- Apply data transfer to the window itself too (Ali Kettab).
+- Add wxUpdateUIEvent::IsCheckable() (Ian McInerney).
+- Fix wxCaret default ctor (Stefan Brüns).
+- Improve tooltips handling in wxPropertyGrid (Pavel Tyunin).
+- Allow extending rules and zebra in wxListCtrl to the whole window (Marcos).
+- Implement new coordinates conversion functions in wxDC (Artur Wieczorek).
+- Improve high DPI handling in wxHtmlWindow (Maarten Bent).
+- Improve selection/focus event generation in wxGenericListCtrl (Ali Kettab).
+- Improve wxComboCtrl popup positioning (Oleksandra Yushchenka, Maarten Bent).
+- Add wxRIBBON_ART_PANEL_HOVER_BORDER_[GRADIENT_]COLOUR (Gary Allen).
+- Add wxRibbonToolBar GetToolByPos() and GetToolRect() (Gary Allen).
+- Improve tooltips behaviour in wxRibbon (Gary Allen).
+- Fix resorting wxDataViewCtrl with custom sort order (Jorge Moraleda).
+- Make combining alignment and centering in wxSizerFlags work in wxGridSizer.
+- Restore support for loading XRC files from URLs.
+- Improve support for using default system locale.
 
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+wxGTK:
 
-      then use the following command to update them locally
+- Implement EGL-based wxGLCanvas for Wayland (Scott Talbert).
+- Support Wayland in wxMediaCtrl (Pierluigi Passaro).
+- Improve wxDataViewCtrl item insertion performance (Sebastien Besombes).
+- Return more reasonable value from wxSlider::GetBetSize().
+- Avoid pixman debug warnings in wxGrid.
 
-    $ git notes --ref=changelog add -m 'wxPort: description.'
+wxMSW:
 
-      and finally push it to the server.
+- Fix infinite repaint loop in wxListCtrl with wxLC_HRULES.
+- Add real support for monochrome bitmaps to wxMSW (Bill Su).
+- Allow customizing invalid wxDatePickerCtrl text.
+- Allow using lower quality but faster pens.
+- Fix best size of wxDatePickerCtrl with wxDP_ALLOWNONE.
+- Fix build after STL changes in MSVS 2019 16.6
+- Fix using JS in wxWebViewIE with custom scheme (Maarten Bent).
+- Handle exception in wxEVT_CHAR_HOOK correctly.
+- Improve high DPI support and custom scheme handlers in IE-based wxWebView (michael).
+- Preserve ampersands in toolbar tool tooltips.
+- Support Ctrl-Backspace in non-rich text controls too.
 
-    $ git push origin refs/notes/changelog:refs/notes/changelog
+wxOSX:
 
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
+- Add wxFullScreenEvent (Tobias Taschner).
+- Add support for underline and strike-through in markup labels.
+- Implement wxBitmap ctor from wxCursor (Igor Korot, Maarten Bent).
+- Improve text controls focus ring appearance.
+- Improve wxPreferencesEditor appearance under macOS 11.
+- Significantly speed up wxDataViewCtrl::SetSelections().
+- Fix window background tinting on macOS 11 (Václav Slavík).
+- Fix cosmetic problem in wxSplitterWindow appearance (Andreas Falkenhahn).
+- Fix bug with double clicking on empty space in wxDataViewCtrl (kurisutsukato).
+- Fix handling of standard edit commands in context menu.
+- Fix key events codes for non-ASCII characters (Artur Sochirca).
+- Fix of accelerators defined in wxAcceleratorTable.
+- Fix selection after inserting items in wxListBox (Andreas Falkenhahn).
+- Fix system UI font handling on macOS 11.
+- Fix truncation of images in wxDataViewCtrl (Andreas Falkenhahn).
+- Fix wxDataViewCtrl columns resizing (Andreas Falkenhahn).
+- Generate wxEVT_DATAVIEW_ITEM_EDITING_DONE in wxDataViewCtrl (Andreas Falkenhahn).
+- Make setting tooltips for non-native windows work again.
+- Make wxCOL_WIDTH_AUTOSIZE work correctly in wxDataViewCtrl (Andreas Falkenhahn).
+- Mark wxTextCtrl as dirty before calling the event handler (Hartwig Wiesmann).
+- Send wxEVT_TEXT when wxComboBox selection changes (Andreas Falkenhahn).
+- Set and update wxListBox horizontal scrollbar correctly (Andreas Falkenhahn).
+- Switch to WKWebView for wxWebView implementation (Tobias Taschner).
 
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
+wxQt:
 
-      and then redo "git-notes add" and git-push.
+- Implement gesture events support (bdbcat).
+- Implement wxMenuItem::SetFont() (bdbcat).
 
 
 3.1.4: (released 2020-07-22)
