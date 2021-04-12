@@ -1051,6 +1051,9 @@ public:
         calculate the greyscale. Defaults to using the standard ITU-T BT.601
         when converting to YUV, where every pixel equals
         (R * @a weight_r) + (G * @a weight_g) + (B * @a weight_b).
+
+        @remarks
+            This function calls wxColour::MakeGrey() for each pixel in the image.
     */
     wxImage ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const;
 
@@ -1065,11 +1068,18 @@ public:
 
         The returned image has white colour where the original has @e (r,g,b)
         colour and black colour everywhere else.
+
+        @remarks
+            This function calls wxColour::MakeMono() for each pixel in the image.
     */
     wxImage ConvertToMono(unsigned char r, unsigned char g, unsigned char b) const;
 
     /**
         Returns disabled (dimmed) version of the image.
+
+        @remarks
+            This function calls wxColour::MakeDisabled() for each pixel in the image.
+
         @since 2.9.0
     */
     wxImage ConvertToDisabled(unsigned char brightness = 255) const;
@@ -1079,6 +1089,9 @@ public:
         This utility function simply darkens or lightens a color, based on the
         specified percentage @a ialpha. @a ialpha of 0 would make the color
         completely black, 200 completely white and 100 would not change the color.
+
+        @remarks
+            This function calls wxColour::ChangeLightness() for each pixel in the image.
 
         @since 3.1.5
     */
