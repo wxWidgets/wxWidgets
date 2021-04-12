@@ -141,6 +141,8 @@ public:
 #ifdef __WXGTK3__
     void GTKUpdateClientSizeIfNecessary();
 
+    virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
+
     virtual void WXSetInitialFittingClientSize(int flags) wxOVERRIDE;
 
 private:

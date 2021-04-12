@@ -1568,6 +1568,14 @@ void wxTopLevelWindowGTK::GTKUpdateClientSizeIfNecessary()
     }
 }
 
+void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
+{
+    wxTopLevelWindowBase::SetMinSize(minSize);
+
+    // Explicitly set minimum size should override the pending size, if any.
+    m_pendingFittingClientSizeFlags &= ~wxSIZE_SET_MIN;
+}
+
 void wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags)
 {
     // In any case, update the size immediately.
