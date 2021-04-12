@@ -445,9 +445,7 @@ gtk_frame_map_callback( GtkWidget*,
     // it is possible for m_isShown to be false here, see bug #9909
     if (win->wxWindowBase::Show(true))
     {
-        wxShowEvent eventShow(win->GetId(), true);
-        eventShow.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(eventShow);
+        win->GTKDoAfterShow();
     }
 
     // restore focus-on-map setting in case ShowWithoutActivating() was called
@@ -614,6 +612,10 @@ void wxTopLevelWindowGTK::Init()
     m_incWidth = m_incHeight = 0;
 
     m_urgency_hint = -2;
+
+#ifdef __WXGTK3__
+    m_pendingFittingClientSizeFlags = 0;
+#endif // __WXGTK3__
 }
 
 bool wxTopLevelWindowGTK::Create( wxWindow *parent,
@@ -1163,6 +1165,12 @@ bool wxTopLevelWindowGTK::Show( bool show )
     bool change = base_type::Show(show);
 
 #ifdef __WXGTK3__
+    if (change && show)
+    {
+        // We may need to redo it after showing the window.
+        GTKUpdateClientSizeIfNecessary();
+    }
+
     if (m_needSizeEvent)
     {
         m_needSizeEvent = false;
@@ -1271,6 +1279,19 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     {
         m_deferShowAllowed = true;
         m_useCachedClientSize = false;
+
+#ifdef __WXGTK3__
+        // Reset pending client size, it is not relevant any more and shouldn't
+        // be set when the window is shown, as we don't want it to replace the
+        // size explicitly specified here. Note that we do still want to set
+        // the minimum client size, as increasing the total size shouldn't
+        // allow shrinking the frame beyond its minimum fitting size.
+        //
+        // Also note that if we're called from WXSetInitialFittingClientSize()
+        // itself, this will be overwritten again with the pending flags when
+        // we return.
+        m_pendingFittingClientSizeFlags &= ~wxSIZE_SET_CURRENT;
+#endif // __WXGTK3__
 
         int w, h;
         GTKDoGetSize(&w, &h);
@@ -1499,9 +1520,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
             SendSizeEvent();
         }
 #endif
-        wxShowEvent showEvent(GetId(), true);
-        showEvent.SetEventObject(this);
-        HandleWindowEvent(showEvent);
+
+        GTKDoAfterShow();
     }
 #endif // GDK_WINDOWING_X11
 }
@@ -1522,6 +1542,54 @@ wxTopLevelWindowGTK::DecorSize& wxTopLevelWindowGTK::GetCachedDecorSize()
         index |= 4;
     return size[index];
 }
+
+void wxTopLevelWindowGTK::GTKDoAfterShow()
+{
+#ifdef __WXGTK3__
+    // Set the client size again if necessary, we should be able to do it
+    // correctly by now as the style cache should be up to date.
+    GTKUpdateClientSizeIfNecessary();
+#endif // __WXGTK3__
+
+    wxShowEvent showEvent(GetId(), true);
+    showEvent.SetEventObject(this);
+    HandleWindowEvent(showEvent);
+}
+
+#ifdef __WXGTK3__
+
+void wxTopLevelWindowGTK::GTKUpdateClientSizeIfNecessary()
+{
+    if ( m_pendingFittingClientSizeFlags )
+    {
+        WXSetInitialFittingClientSize(m_pendingFittingClientSizeFlags);
+
+        m_pendingFittingClientSizeFlags = 0;
+    }
+}
+
+void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
+{
+    wxTopLevelWindowBase::SetMinSize(minSize);
+
+    // Explicitly set minimum size should override the pending size, if any.
+    m_pendingFittingClientSizeFlags &= ~wxSIZE_SET_MIN;
+}
+
+void wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags)
+{
+    // In any case, update the size immediately.
+    wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags);
+
+    // But if we're not shown yet, the fitting size may be wrong because GTK
+    // style cache hasn't been updated yet and we need to do it again when the
+    // window becomes visible as we can be sure that by then we'll be able to
+    // compute the best size correctly.
+    if ( !IsShown() )
+        m_pendingFittingClientSizeFlags = flags;
+}
+
+#endif // __WXGTK3__
 
 // ----------------------------------------------------------------------------
 // frame title/icon

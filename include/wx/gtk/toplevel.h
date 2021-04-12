@@ -136,6 +136,20 @@ public:
 
     void GTKUpdateDecorSize(const DecorSize& decorSize);
 
+    void GTKDoAfterShow();
+
+#ifdef __WXGTK3__
+    void GTKUpdateClientSizeIfNecessary();
+
+    virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
+
+    virtual void WXSetInitialFittingClientSize(int flags) wxOVERRIDE;
+
+private:
+    // Flags to call WXSetInitialFittingClientSize() with if != 0.
+    int m_pendingFittingClientSizeFlags;
+#endif // __WXGTK3__
+
 protected:
     // give hints to the Window Manager for how the size
     // of the TLW can be changed by dragging
