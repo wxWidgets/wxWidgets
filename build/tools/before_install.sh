@@ -46,7 +46,7 @@ case $(uname -s) in
                 dbgsym_pkgs='libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym'
             fi
 
-            run_apt update
+            run_apt update || echo 'Failed to update packages, but continuing nevertheless.'
 
             case "$wxCONFIGURE_FLAGS" in
                 *--with-directfb*) libtoolkit_dev='libdirectfb-dev'         ;;
