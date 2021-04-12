@@ -1545,15 +1545,15 @@ wxTopLevelWindowGTK::DecorSize& wxTopLevelWindowGTK::GetCachedDecorSize()
 
 void wxTopLevelWindowGTK::GTKDoAfterShow()
 {
-    wxShowEvent showEvent(GetId(), true);
-    showEvent.SetEventObject(this);
-    HandleWindowEvent(showEvent);
-
 #ifdef __WXGTK3__
     // Set the client size again if necessary, we should be able to do it
     // correctly by now as the style cache should be up to date.
     GTKUpdateClientSizeIfNecessary();
 #endif // __WXGTK3__
+
+    wxShowEvent showEvent(GetId(), true);
+    showEvent.SetEventObject(this);
+    HandleWindowEvent(showEvent);
 }
 
 #ifdef __WXGTK3__
