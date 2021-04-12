@@ -1002,6 +1002,25 @@ wxSize wxWindowBase::WindowToClientSize(const wxSize& size) const
                   size.y == -1 ? -1 : size.y - diff.y);
 }
 
+void wxWindowBase::WXSetInitialFittingClientSize(int flags)
+{
+    wxSizer* const sizer = GetSizer();
+    if ( !sizer )
+        return;
+
+    const wxSize
+        size = sizer->ComputeFittingClientSize(static_cast<wxWindow *>(this));
+
+    // It is important to set the min client size before changing the size
+    // itself as the existing size hints could prevent SetClientSize() from
+    // working otherwise.
+    if ( flags & wxSIZE_SET_MIN )
+        SetMinClientSize(size);
+
+    if ( flags & wxSIZE_SET_CURRENT )
+        SetClientSize(size);
+}
+
 void wxWindowBase::SetWindowVariant( wxWindowVariant variant )
 {
     if ( m_windowVariant != variant )

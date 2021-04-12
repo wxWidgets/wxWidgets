@@ -612,6 +612,10 @@ void wxTopLevelWindowGTK::Init()
     m_incWidth = m_incHeight = 0;
 
     m_urgency_hint = -2;
+
+#ifdef __WXGTK3__
+    m_pendingFittingClientSizeFlags = 0;
+#endif // __WXGTK3__
 }
 
 bool wxTopLevelWindowGTK::Create( wxWindow *parent,
@@ -1161,6 +1165,12 @@ bool wxTopLevelWindowGTK::Show( bool show )
     bool change = base_type::Show(show);
 
 #ifdef __WXGTK3__
+    if (change && show)
+    {
+        // We may need to redo it after showing the window.
+        GTKUpdateClientSizeIfNecessary();
+    }
+
     if (m_needSizeEvent)
     {
         m_needSizeEvent = false;
@@ -1525,7 +1535,40 @@ void wxTopLevelWindowGTK::GTKDoAfterShow()
     wxShowEvent showEvent(GetId(), true);
     showEvent.SetEventObject(this);
     HandleWindowEvent(showEvent);
+
+#ifdef __WXGTK3__
+    // Set the client size again if necessary, we should be able to do it
+    // correctly by now as the style cache should be up to date.
+    GTKUpdateClientSizeIfNecessary();
+#endif // __WXGTK3__
 }
+
+#ifdef __WXGTK3__
+
+void wxTopLevelWindowGTK::GTKUpdateClientSizeIfNecessary()
+{
+    if ( m_pendingFittingClientSizeFlags )
+    {
+        WXSetInitialFittingClientSize(m_pendingFittingClientSizeFlags);
+
+        m_pendingFittingClientSizeFlags = 0;
+    }
+}
+
+void wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags)
+{
+    // In any case, update the size immediately.
+    wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags);
+
+    // But if we're not shown yet, the fitting size may be wrong because GTK
+    // style cache hasn't been updated yet and we need to do it again when the
+    // window becomes visible as we can be sure that by then we'll be able to
+    // compute the best size correctly.
+    if ( !IsShown() )
+        m_pendingFittingClientSizeFlags = flags;
+}
+
+#endif // __WXGTK3__
 
 // ----------------------------------------------------------------------------
 // frame title/icon
