@@ -1280,6 +1280,19 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
         m_deferShowAllowed = true;
         m_useCachedClientSize = false;
 
+#ifdef __WXGTK3__
+        // Reset pending client size, it is not relevant any more and shouldn't
+        // be set when the window is shown, as we don't want it to replace the
+        // size explicitly specified here. Note that we do still want to set
+        // the minimum client size, as increasing the total size shouldn't
+        // allow shrinking the frame beyond its minimum fitting size.
+        //
+        // Also note that if we're called from WXSetInitialFittingClientSize()
+        // itself, this will be overwritten again with the pending flags when
+        // we return.
+        m_pendingFittingClientSizeFlags &= ~wxSIZE_SET_CURRENT;
+#endif // __WXGTK3__
+
         int w, h;
         GTKDoGetSize(&w, &h);
         gtk_window_resize(GTK_WINDOW(m_widget), w, h);
