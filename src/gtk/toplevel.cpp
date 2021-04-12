@@ -445,9 +445,7 @@ gtk_frame_map_callback( GtkWidget*,
     // it is possible for m_isShown to be false here, see bug #9909
     if (win->wxWindowBase::Show(true))
     {
-        wxShowEvent eventShow(win->GetId(), true);
-        eventShow.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(eventShow);
+        win->GTKDoAfterShow();
     }
 
     // restore focus-on-map setting in case ShowWithoutActivating() was called
@@ -1499,9 +1497,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
             SendSizeEvent();
         }
 #endif
-        wxShowEvent showEvent(GetId(), true);
-        showEvent.SetEventObject(this);
-        HandleWindowEvent(showEvent);
+
+        GTKDoAfterShow();
     }
 #endif // GDK_WINDOWING_X11
 }
@@ -1521,6 +1518,13 @@ wxTopLevelWindowGTK::DecorSize& wxTopLevelWindowGTK::GetCachedDecorSize()
     if (m_windowStyle & wxFRAME_TOOL_WINDOW)
         index |= 4;
     return size[index];
+}
+
+void wxTopLevelWindowGTK::GTKDoAfterShow()
+{
+    wxShowEvent showEvent(GetId(), true);
+    showEvent.SetEventObject(this);
+    HandleWindowEvent(showEvent);
 }
 
 // ----------------------------------------------------------------------------

@@ -136,6 +136,8 @@ public:
 
     void GTKUpdateDecorSize(const DecorSize& decorSize);
 
+    void GTKDoAfterShow();
+
 protected:
     // give hints to the Window Manager for how the size
     // of the TLW can be changed by dragging
