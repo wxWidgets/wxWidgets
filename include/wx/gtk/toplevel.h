@@ -136,6 +136,8 @@ public:
 
     void GTKUpdateDecorSize(const DecorSize& decorSize);
 
+    virtual void UpdateClientSizeFrom(const wxSize& size, SizeFrom from) wxOVERRIDE;
+
 protected:
     // give hints to the Window Manager for how the size
     // of the TLW can be changed by dragging
@@ -161,6 +163,7 @@ protected:
 private:
     void Init();
     DecorSize& GetCachedDecorSize();
+    void OnShow(wxShowEvent& event);
 
     // size hint increments
     int m_incWidth, m_incHeight;
@@ -174,6 +177,7 @@ private:
     // is the frame currently grabbed explicitly by the application?
     wxGUIEventLoop* m_grabbedEventLoop;
 
+    SizeFrom m_sizeFrom;
     bool m_updateDecorSize;
     bool m_deferShowAllowed;
 };

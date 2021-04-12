@@ -28,6 +28,7 @@
     #include "wx/app.h"     // GetAppDisplayName()
     #include "wx/icon.h"
     #include "wx/log.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/evtloop.h"
@@ -612,6 +613,7 @@ void wxTopLevelWindowGTK::Init()
     m_updateDecorSize = true;
     m_netFrameExtentsTimerId = 0;
     m_incWidth = m_incHeight = 0;
+    m_sizeFrom = SizeFrom_None;
 
     m_urgency_hint = -2;
 }
@@ -863,6 +865,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // old colours etc.
     g_signal_connect_after(gtk_settings_get_default(), "notify::gtk-theme-name",
         G_CALLBACK(notify_gtk_theme_name), this);
+
+#ifdef __WXGTK3__
+    Bind(wxEVT_SHOW, &wxTopLevelWindowGTK::OnShow, this);
+#endif
 
     return true;
 }
@@ -1210,6 +1216,24 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
     wxFAIL_MSG( wxT("DoMoveWindow called for wxTopLevelWindowGTK") );
 }
 
+#ifdef __WXGTK3__
+void wxTopLevelWindowGTK::OnShow(wxShowEvent& event)
+{
+    if (m_windowSizer)
+    {
+        // GTK3 updates cached style information before showing a TLW, which may
+        // affect best size calculations used by wxSizer to set initial size
+
+        if (m_sizeFrom == SizeFrom_Fit)
+            m_windowSizer->Fit(this);
+        else if (m_sizeFrom == SizeFrom_SetSizeHints)
+            m_windowSizer->SetSizeHints(this);
+    }
+    Unbind(wxEVT_SHOW, &wxTopLevelWindowGTK::OnShow, this);
+    event.Skip();
+}
+#endif // __WXGTK3__
+
 // ----------------------------------------------------------------------------
 // window geometry
 // ----------------------------------------------------------------------------
@@ -1251,6 +1275,10 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     }
 
     const wxSize oldSize(m_width, m_height);
+
+    if (width >= 0 || height >= 0)
+        m_sizeFrom = SizeFrom_None;
+
     if (width >= 0)
         m_width = width;
     if (height >= 0)
@@ -1302,6 +1330,7 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
     // Has to be done after calling base because it calls SetSize,
     // which sets this true
     m_deferShowAllowed = false;
+    m_sizeFrom = SizeFrom_None;
 
     if (m_wxwindow)
     {
@@ -1322,6 +1351,12 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
             g_object_ref(m_wxwindow);
         }
     }
+}
+
+void wxTopLevelWindowGTK::UpdateClientSizeFrom(const wxSize& size, SizeFrom from)
+{
+    DoSetClientSize(size.x, size.y);
+    m_sizeFrom = from;
 }
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const

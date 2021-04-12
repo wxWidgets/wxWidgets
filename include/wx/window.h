@@ -610,6 +610,8 @@ public:
         wxDECLARE_NO_COPY_CLASS(ChildrenRepositioningGuard);
     };
 
+    enum SizeFrom { SizeFrom_None, SizeFrom_Fit, SizeFrom_SetSizeHints };
+    virtual void UpdateClientSizeFrom(const wxSize& size, SizeFrom from);
 
     // window state
     // ------------

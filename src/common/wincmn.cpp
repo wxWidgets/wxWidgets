@@ -1140,6 +1140,11 @@ bool wxWindowBase::HasScrollbar(int orient) const
                                   : sizeVirt.y > sizeClient.y;
 }
 
+void wxWindowBase::UpdateClientSizeFrom(const wxSize& size, SizeFrom /*from*/)
+{
+    DoSetClientSize(size.x, size.y);
+}
+
 // ----------------------------------------------------------------------------
 // show/hide/enable/disable the window
 // ----------------------------------------------------------------------------
