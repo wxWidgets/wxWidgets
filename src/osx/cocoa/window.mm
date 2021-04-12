@@ -1246,15 +1246,21 @@ namespace
 {
 
 unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
-    void *s, bool entered)
+                                          WXWidget slf, void *_cmd,
+                                          void *s, bool entered)
 {
     wxWindow* wxpeer = viewImpl->GetWXPeer();
-    if ( wxpeer == NULL )
-        return NSDragOperationNone;
-
-    wxDropTarget* target = wxpeer->GetDropTarget();
+    wxDropTarget* target = wxpeer ? wxpeer->GetDropTarget() : NULL;
     if ( target == NULL )
-        return NSDragOperationNone;
+    {
+        if ([[slf superclass] instancesRespondToSelector:(SEL)_cmd])
+        {
+            auto superimpl = (wxOSX_DraggingEnteredOrUpdatedHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+            return superimpl(slf, (SEL)_cmd, s);
+        }
+        else
+            return NSDragOperationNone;
+    }
 
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
     wxOSXPasteboard pb([sender draggingPasteboard]);
@@ -1338,20 +1344,24 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
 
 } // anonymous namespace
 
-unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
+unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget slf, void *_cmd)
 {
-    return wxOnDraggingEnteredOrUpdated(this, s, true /*entered*/);
+    return wxOnDraggingEnteredOrUpdated(this, slf, _cmd, s, true /*entered*/);
 }
 
-void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
+void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget slf, void *_cmd)
 {
     wxWindow* wxpeer = GetWXPeer();
-    if ( wxpeer == NULL )
-        return;
-
-    wxDropTarget* target = wxpeer->GetDropTarget();
+    wxDropTarget* target = wxpeer ? wxpeer->GetDropTarget() : NULL;
     if ( target == NULL )
+    {
+        if ([[slf superclass] instancesRespondToSelector:(SEL)_cmd])
+        {
+            auto superimpl = (wxOSX_DraggingExitedHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+            superimpl(slf, (SEL)_cmd, s);
+        }
         return;
+    }
 
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
     wxOSXPasteboard pb([sender draggingPasteboard]);
@@ -1360,19 +1370,25 @@ void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget WXUNUSED(slf), void *WX
     target->OnLeave();
  }
 
-unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
+unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget slf, void *_cmd)
 {
-    return wxOnDraggingEnteredOrUpdated(this, s, false /*updated*/);
+    return wxOnDraggingEnteredOrUpdated(this, slf, _cmd, s, false /*updated*/);
 }
 
-bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
+bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget slf, void *_cmd)
 {
     wxWindow* wxpeer = GetWXPeer();
-    if ( wxpeer == NULL )
-        return false;
-    wxDropTarget* target = wxpeer->GetDropTarget();
+    wxDropTarget* target = wxpeer ? wxpeer->GetDropTarget() : NULL;
     if ( target == NULL )
-        return false;
+    {
+        if ([[slf superclass] instancesRespondToSelector:(SEL)_cmd])
+        {
+            auto superimpl = (wxOSX_PerformDragOperationHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+            return superimpl(slf, (SEL)_cmd, s);
+        }
+        else
+            return false;
+    }
 
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
     wxOSXPasteboard pb([sender draggingPasteboard]);
