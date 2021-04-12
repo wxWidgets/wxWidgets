@@ -897,24 +897,25 @@ public:
     wxImage Rotate180() const;
 
     /**
-        Rotates the hue of each pixel in the image by @e angle, which is a double in
-        the range of -1.0 to +1.0, where -1.0 corresponds to -360 degrees and +1.0
+        Rotates the hue of each pixel in the image by @e angle, which is a double
+        in the range [-1.0..+1.0], where -1.0 corresponds to -360 degrees and +1.0
         corresponds to +360 degrees.
     */
     void RotateHue(double angle);
 
     /**
-        Changes the saturation of each pixel of the image. factor is a double in
-        the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+        Changes the saturation of each pixel in the image. factor is a double in
+        the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+        corresponds to +100 percent.
 
         @since 3.1.5
     */
     void ChangeSaturation(double factor);
 
     /**
-        Changes the brightness (value) of each pixel of the image. factor is a
-        double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100
-        percent.
+        Changes the brightness (value) of each pixel in the image. factor is a
+        double in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent
+        and +1.0 corresponds to +100 percent.
 
         @since 3.1.5
     */
@@ -922,11 +923,12 @@ public:
 
     /**
         Changes the hue, the saturation and the brightness (value) of each pixel
-        of the image. angleH is a double in the range [-1.0..1.0] where -1.0 is
-        -360 degrees and 1.0 is 360 degrees, factorS is a double in the range
-        [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent and factorV
-        is a double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0
-        is 100 percent.
+        in the image. angleH is a double in the range [-1.0..+1.0], where -1.0
+        corresponds to -360 degrees and +1.0 corresponds to +360 degrees, factorS
+        is a double in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent
+        and +1.0 corresponds to +100 percent and factorV is a double in the range
+        [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0 corresponds
+        to +100 percent.
 
         @since 3.1.5
     */
@@ -1080,7 +1082,7 @@ public:
 
         @since 3.1.5
     */
-    wxImage ChangeLightness(int ialpha) const;
+    wxImage ChangeLightness(int alpha) const;
 
     //@}
 

@@ -1827,165 +1827,74 @@ void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
         }
 }
 
-wxImage wxImage::ConvertToGreyscale(void) const
+wxImage wxImage::ConvertToGreyscale() const
 {
     return ConvertToGreyscale(0.299, 0.587, 0.114);
 }
 
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoMakeGrey(unsigned char *rgb, WeightValue weight)
+{
+    if ( !HasMask() || rgb[0] != GetMaskRed() || rgb[1] != GetMaskGreen() || rgb[2] != GetMaskBlue() )
+        wxColour::MakeGrey(rgb, rgb + 1, rgb + 2, weight.red, weight.green, weight.blue);
+}
+
 wxImage wxImage::ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const
 {
-    wxImage image;
-    wxCHECK_MSG(IsOk(), image, "invalid image");
-
-    const int w = M_IMGDATA->m_width;
-    const int h = M_IMGDATA->m_height;
-    size_t size = size_t(w) * h;
-    image.Create(w, h, false);
-    const unsigned char* alpha = M_IMGDATA->m_alpha;
-    if (alpha)
-    {
-        image.SetAlpha();
-        memcpy(image.GetAlpha(), alpha, size);
-    }
-    const unsigned char mask_r = M_IMGDATA->m_maskRed;
-    const unsigned char mask_g = M_IMGDATA->m_maskGreen;
-    const unsigned char mask_b = M_IMGDATA->m_maskBlue;
-    const bool hasMask = M_IMGDATA->m_hasMask;
-    if (hasMask)
-        image.SetMaskColour(mask_r, mask_g, mask_b);
-
-    const unsigned char* src = M_IMGDATA->m_data;
-    unsigned char* dst = image.GetData();
-    while (size--)
-    {
-        unsigned char r = *src++;
-        unsigned char g = *src++;
-        unsigned char b = *src++;
-        if (!hasMask || r != mask_r || g != mask_g || b != mask_b)
-            wxColour::MakeGrey(&r, &g, &b, weight_r, weight_g, weight_b);
-        *dst++ = r;
-        *dst++ = g;
-        *dst++ = b;
-    }
+    wxImage image = Copy();
+    image.ApplyToAllPixels(&wxImage::DoMakeGrey, WeightValue(weight_r, weight_g, weight_b));
     return image;
 }
 
-wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoMakeMono(unsigned char *rgb, RGBValue rgbValue)
 {
-    wxImage image;
+    const bool on = (rgb[0] == rgbValue.red) && (rgb[1] == rgbValue.green) && (rgb[2] == rgbValue.blue);
+    wxColour::MakeMono(rgb, rgb + 1, rgb + 2, on);
+}
 
-    wxCHECK_MSG( IsOk(), image, wxT("invalid image") );
+wxImage wxImage::ConvertToMono(unsigned char r, unsigned char g, unsigned char b) const
+{
+    wxImage image = Copy();
 
-    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
-
-    unsigned char *data = image.GetData();
-
-    wxCHECK_MSG( data, image, wxT("unable to create image") );
-
-    if (M_IMGDATA->m_hasMask)
+    if ( image.HasMask() )
     {
-        if (M_IMGDATA->m_maskRed == r && M_IMGDATA->m_maskGreen == g &&
-                                         M_IMGDATA->m_maskBlue == b)
-            image.SetMaskColour( 255, 255, 255 );
+        if ( image.GetMaskRed() == r && image.GetMaskGreen() == g && image.GetMaskBlue() == b)
+            image.SetMaskColour(255, 255, 255);
         else
-            image.SetMaskColour( 0, 0, 0 );
+            image.SetMaskColour(0, 0, 0);
     }
 
-    long size = M_IMGDATA->m_height * M_IMGDATA->m_width;
-
-    unsigned char *srcd = M_IMGDATA->m_data;
-    unsigned char *tard = image.GetData();
-
-    for ( long i = 0; i < size; i++, srcd += 3, tard += 3 )
-    {
-        bool on = (srcd[0] == r) && (srcd[1] == g) && (srcd[2] == b);
-        wxColourBase::MakeMono(tard + 0, tard + 1, tard + 2, on);
-    }
-
+    image.ApplyToAllPixels(&wxImage::DoMakeMono, RGBValue(r, g, b));
     return image;
+}
+
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoMakeDisabled(unsigned char *rgb, unsigned char brightness)
+{
+    if ( !HasMask() || rgb[0] != GetMaskRed() || rgb[1] != GetMaskGreen() || rgb[2] != GetMaskBlue() )
+        wxColour::MakeDisabled(rgb, rgb + 1, rgb + 2, brightness);
 }
 
 wxImage wxImage::ConvertToDisabled(unsigned char brightness) const
 {
-    wxImage image;
-    wxCHECK_MSG(IsOk(), image, "invalid image");
-
-    const int w = M_IMGDATA->m_width;
-    const int h = M_IMGDATA->m_height;
-    size_t size = size_t(w) * h;
-    image.Create(w, h, false);
-    const unsigned char* alpha = M_IMGDATA->m_alpha;
-    if (alpha)
-    {
-        image.SetAlpha();
-        memcpy(image.GetAlpha(), alpha, size);
-    }
-    const unsigned char mask_r = M_IMGDATA->m_maskRed;
-    const unsigned char mask_g = M_IMGDATA->m_maskGreen;
-    const unsigned char mask_b = M_IMGDATA->m_maskBlue;
-    const bool hasMask = M_IMGDATA->m_hasMask;
-    if (hasMask)
-        image.SetMaskColour(mask_r, mask_g, mask_b);
-
-    const unsigned char* src = M_IMGDATA->m_data;
-    unsigned char* dst = image.GetData();
-    while (size--)
-    {
-        unsigned char r = *src++;
-        unsigned char g = *src++;
-        unsigned char b = *src++;
-        if (!hasMask || r != mask_r || g != mask_g || b != mask_b)
-            wxColour::MakeDisabled(&r, &g, &b, brightness);
-        *dst++ = r;
-        *dst++ = g;
-        *dst++ = b;
-    }
+    wxImage image = Copy();
+    image.ApplyToAllPixels(&wxImage::DoMakeDisabled, brightness);
     return image;
 }
 
-wxImage wxImage::ChangeLightness(int ialpha) const
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoChangeLightness(unsigned char *rgb, int alpha)
 {
-    wxASSERT (ialpha >= 0 && ialpha <= 200);
-    wxImage image;
-    wxCHECK_MSG(IsOk(), image, "invalid image");
+    if ( !HasMask() || rgb[0] != GetMaskRed() || rgb[1] != GetMaskGreen() || rgb[2] != GetMaskBlue() )
+        wxColour::ChangeLightness(rgb, rgb + 1, rgb + 2, alpha);
+}
 
-    const int width = M_IMGDATA->m_width;
-    const int height = M_IMGDATA->m_height;
-    const int nSize = width * height;
-    image.Create(width, height, false);
-    const unsigned char *pByAlpha = M_IMGDATA->m_alpha;
-
-    if ( pByAlpha )
-    {
-        image.SetAlpha();
-        memcpy(image.GetAlpha(), pByAlpha, nSize);
-    }
-
-    const unsigned char mask_r = M_IMGDATA->m_maskRed;
-    const unsigned char mask_g = M_IMGDATA->m_maskGreen;
-    const unsigned char mask_b = M_IMGDATA->m_maskBlue;
-    const bool hasMask = M_IMGDATA->m_hasMask;
-
-    if ( hasMask )
-        image.SetMaskColour(mask_r, mask_g, mask_b);
-
-    const unsigned char *pBySrc = M_IMGDATA->m_data;
-    unsigned char *pByDst = image.GetData();
-
-    for ( int i = 0; i < nSize; i++ )
-    {
-        unsigned char r = *pBySrc++;
-        unsigned char g = *pBySrc++;
-        unsigned char b = *pBySrc++;
-
-        if ( !hasMask || r != mask_r || g != mask_g || b != mask_b )
-             wxColour::ChangeLightness(&r, &g, &b, ialpha);
-
-        *pByDst++ = r;
-        *pByDst++ = g;
-        *pByDst++ = b;
-    }
-
+wxImage wxImage::ChangeLightness(int alpha) const
+{
+    wxASSERT(alpha >= 0 && alpha <= 200);
+    wxImage image = Copy();
+    image.ApplyToAllPixels(&wxImage::DoChangeLightness, alpha);
     return image;
 }
 
@@ -3369,184 +3278,126 @@ wxImage::RGBValue wxImage::HSVtoRGB(const HSVValue& hsv)
                     (unsigned char)wxRound(blue * 255.0));
 }
 
-/*
- * Rotates the hue of each pixel of the image. angle is a double in the range
- * -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
- */
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoRotateHue(unsigned char *rgb, double angle)
+{
+    RGBValue rgbValue(rgb[0], rgb[1], rgb[2]);
+    HSVValue hsvValue = RGBtoHSV(rgbValue);
+
+    hsvValue.hue = hsvValue.hue + angle;
+
+    if (hsvValue.hue > 1.0)
+        hsvValue.hue = hsvValue.hue - 1.0;
+    else if (hsvValue.hue < 0.0)
+        hsvValue.hue = hsvValue.hue + 1.0;
+
+    rgbValue = HSVtoRGB(hsvValue);
+    rgb[0] = rgbValue.red;
+    rgb[1] = rgbValue.green;
+    rgb[2] = rgbValue.blue;
+}
+
+// Rotates the hue of each pixel in the image by angle, which is a double in the
+// range [-1.0..+1.0], where -1.0 corresponds to -360 degrees and +1.0 corresponds
+// to +360 degrees.
 void wxImage::RotateHue(double angle)
 {
-    AllocExclusive();
+    if ( wxIsNullDouble(angle) )
+        return;
 
-    unsigned long count;
-    wxImage::HSVValue hsv;
-    wxImage::RGBValue rgb;
-
-    wxASSERT (angle >= -1.0 && angle <= 1.0);
-    count = M_IMGDATA->m_width * M_IMGDATA->m_height;
-    if ( count > 0 && !wxIsNullDouble(angle) )
-    {
-        unsigned char* srcBytePtr;
-        unsigned char* dstBytePtr;
-        srcBytePtr = M_IMGDATA->m_data;
-        dstBytePtr = srcBytePtr;
-        do
-        {
-            rgb.red = *srcBytePtr++;
-            rgb.green = *srcBytePtr++;
-            rgb.blue = *srcBytePtr++;
-            hsv = RGBtoHSV(rgb);
-
-            hsv.hue = hsv.hue + angle;
-            if (hsv.hue > 1.0)
-                hsv.hue = hsv.hue - 1.0;
-            else if (hsv.hue < 0.0)
-                hsv.hue = hsv.hue + 1.0;
-
-            rgb = HSVtoRGB(hsv);
-            *dstBytePtr++ = rgb.red;
-            *dstBytePtr++ = rgb.green;
-            *dstBytePtr++ = rgb.blue;
-        } while (--count != 0);
-    }
+    wxASSERT(angle >= -1.0 && angle <= 1.0);
+    ApplyToAllPixels(&wxImage::DoRotateHue, angle);
 }
 
-// Changes the saturation of each pixel of the image. factor is a double in the
-// range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoChangeSaturation(unsigned char *rgb, double factor)
+{
+    RGBValue rgbValue(rgb[0], rgb[1], rgb[2]);
+    HSVValue hsvValue = RGBtoHSV(rgbValue);
+
+    hsvValue.saturation += hsvValue.saturation * factor;
+
+    if (hsvValue.saturation > 1.0)
+        hsvValue.saturation = 1.0;
+    else if (hsvValue.saturation < 0.0)
+        hsvValue.saturation = 0.0;
+
+    rgbValue = HSVtoRGB(hsvValue);
+    rgb[0] = rgbValue.red;
+    rgb[1] = rgbValue.green;
+    rgb[2] = rgbValue.blue;
+}
+
+// Changes the saturation of each pixel in the image. factor is a double in the
+// range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0 corresponds
+// to +100 percent.
 void wxImage::ChangeSaturation(double factor)
 {
-    wxASSERT (factor >= -1.0 && factor <= 1.0);
-    AllocExclusive();
-    const int nSize = M_IMGDATA->m_width * M_IMGDATA->m_height;
-
-    if ( !nSize || wxIsNullDouble(factor) )
+    if ( wxIsNullDouble(factor) )
         return;
 
-    const unsigned char *pBySrc = M_IMGDATA->m_data;
-    unsigned char *pByDst = M_IMGDATA->m_data;
-    wxImage::RGBValue rgb;
-    wxImage::HSVValue hsv;
-
-    for ( int i = 0; i < nSize; i++ )
-    {
-        rgb.red = *pBySrc++;
-        rgb.green = *pBySrc++;
-        rgb.blue = *pBySrc++;
-        hsv = RGBtoHSV(rgb);
-
-        hsv.saturation += hsv.saturation * factor;
-
-        if (hsv.saturation > 1.0)
-            hsv.saturation = 1.0;
-        else if (hsv.saturation < 0.0)
-            hsv.saturation = 0.0;
-
-        rgb = HSVtoRGB(hsv);
-        *pByDst++ = rgb.red;
-        *pByDst++ = rgb.green;
-        *pByDst++ = rgb.blue;
-    }
+    wxASSERT(factor >= -1.0 && factor <= 1.0);
+    ApplyToAllPixels(&wxImage::DoChangeSaturation, factor);
 }
 
-// Changes the brightness (value) of each pixel of the image. factor is a double
-// in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoChangeBrightness(unsigned char *rgb, double factor)
+{
+    RGBValue rgbValue(rgb[0], rgb[1], rgb[2]);
+    HSVValue hsvValue = RGBtoHSV(rgbValue);
+
+        hsvValue.value += hsvValue.value * factor;
+
+        if (hsvValue.value > 1.0)
+            hsvValue.value = 1.0;
+        else if (hsvValue.value < 0.0)
+            hsvValue.value = 0.0;
+
+    rgbValue = HSVtoRGB(hsvValue);
+    rgb[0] = rgbValue.red;
+    rgb[1] = rgbValue.green;
+    rgb[2] = rgbValue.blue;
+}
+
+// Changes the brightness (value) of each pixel in the image. factor is a double
+// in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+// corresponds to +100 percent.
 void wxImage::ChangeBrightness(double factor)
 {
-    wxASSERT (factor >= -1.0 && factor <= 1.0);
-    AllocExclusive();
-    const int nSize = M_IMGDATA->m_width * M_IMGDATA->m_height;
-
-    if ( !nSize || wxIsNullDouble(factor) )
+    if ( wxIsNullDouble(factor) )
         return;
 
-    const unsigned char *pBySrc = M_IMGDATA->m_data;
-    unsigned char *pByDst = M_IMGDATA->m_data;
-    wxImage::RGBValue rgb;
-    wxImage::HSVValue hsv;
-
-    for ( int i = 0; i < nSize; i++ )
-    {
-        rgb.red = *pBySrc++;
-        rgb.green = *pBySrc++;
-        rgb.blue = *pBySrc++;
-        hsv = RGBtoHSV(rgb);
-
-        hsv.value += hsv.value * factor;
-
-        if (hsv.value > 1.0)
-            hsv.value = 1.0;
-        else if (hsv.value < 0.0)
-            hsv.value = 0.0;
-
-        rgb = HSVtoRGB(hsv);
-        *pByDst++ = rgb.red;
-        *pByDst++ = rgb.green;
-        *pByDst++ = rgb.blue;
-    }
+    wxASSERT(factor >= -1.0 && factor <= 1.0);
+    ApplyToAllPixels(&wxImage::DoChangeBrightness, factor);
 }
 
-// Changes the hue, the saturation and the brightness (value) of each pixel
-// of the image. angleH is a double in the range [-1.0..1.0] where -1.0 is
-// -360 degrees and 1.0 is 360 degrees, factorS is a double in the range
-// [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent and factorV
-// is a double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0
-// is 100 percent.
+// TODO-C++11: Replace with a lambda function.
+void wxImage::DoChangeHSV(unsigned char *rgb, HSVValue hsvValue)
+{
+    if ( !wxIsNullDouble(hsvValue.hue) )
+        DoRotateHue(rgb, hsvValue.hue);
+
+    if ( !wxIsNullDouble(hsvValue.saturation) )
+        DoChangeSaturation(rgb, hsvValue.saturation);
+
+    if ( !wxIsNullDouble(hsvValue.value) )
+        DoChangeBrightness(rgb, hsvValue.value);
+}
+
+// Changes the hue, the saturation and the brightness (value) of each pixel in
+// the image. angleH is a double in the range [-1.0..+1.0], where -1.0 corresponds
+// to -360 degrees and +1.0 corresponds to +360 degrees, factorS is a double in
+// the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+// corresponds to +100 percent and factorV is a double in the range [-1.0..+1.0],
+// where -1.0 corresponds to -100 percent and +1.0 corresponds to +100 percent.
 void wxImage::ChangeHSV(double angleH, double factorS, double factorV)
 {
-    wxASSERT (angleH >= -1.0 && angleH <= 1.0 && factorS >= -1.0 &&
-              factorS <= 1.0 && factorV >= -1.0 && factorV <= 1.0);
-    AllocExclusive();
-    const int nSize = M_IMGDATA->m_width * M_IMGDATA->m_height;
-
-    if ( !nSize || (wxIsNullDouble(angleH) && wxIsNullDouble(factorS) && wxIsNullDouble(factorV)) )
+    if ( wxIsNullDouble(angleH) && wxIsNullDouble(factorS) && wxIsNullDouble(factorV) )
         return;
 
-    const unsigned char *pBySrc = M_IMGDATA->m_data;
-    unsigned char *pByDst = M_IMGDATA->m_data;
-    wxImage::RGBValue rgb;
-    wxImage::HSVValue hsv;
-
-    for ( int i = 0; i < nSize; i++ )
-    {
-        rgb.red = *pBySrc++;
-        rgb.green = *pBySrc++;
-        rgb.blue = *pBySrc++;
-        hsv = RGBtoHSV(rgb);
-
-        if ( !wxIsNullDouble(angleH) )
-        {
-            hsv.hue += angleH;
-
-            if (hsv.hue > 1.0)
-                hsv.hue -= 1.0;
-            else if (hsv.hue < 0.0)
-                hsv.hue += 1.0;
-        }
-
-        if ( !wxIsNullDouble(factorS) )
-        {
-            hsv.saturation += hsv.saturation * factorS;
-
-            if (hsv.saturation > 1.0)
-                hsv.saturation = 1.0;
-            else if (hsv.saturation < 0.0)
-                hsv.saturation = 0.0;
-        }
-
-        if ( !wxIsNullDouble(factorV) )
-        {
-            hsv.value += hsv.value * factorV;
-
-            if (hsv.value > 1.0)
-                hsv.value = 1.0;
-            else if (hsv.value < 0.0)
-                hsv.value = 0.0;
-        }
-
-        rgb = HSVtoRGB(hsv);
-        *pByDst++ = rgb.red;
-        *pByDst++ = rgb.green;
-        *pByDst++ = rgb.blue;
-    }
+    wxASSERT(angleH >= -1.0 && angleH <= 1.0 && factorS >= -1.0 &&
+             factorS <= 1.0 && factorV >= -1.0 && factorV <= 1.0);
+    ApplyToAllPixels(&wxImage::DoChangeHSV, HSVValue(angleH, factorS, factorV));
 }
 
 //-----------------------------------------------------------------------------
@@ -4043,7 +3894,20 @@ wxImage wxImage::Rotate(double angle,
 }
 
 
+// Helper function used internally by wxImage class only.
+template <typename T>
+void wxImage::ApplyToAllPixels(void (wxImage::*func)(unsigned char *, T), T value)
+{
+    AllocExclusive();
 
+    const size_t size = GetWidth() * GetHeight();
+    unsigned char *data = GetData();
+
+    for ( size_t i = 0; i < size; i++, data += 3 )
+    {
+        (this->*func)(data, value);
+    }
+}
 
 
 // A module to allow wxImage initialization/cleanup

@@ -412,7 +412,7 @@ public:
     wxImage ConvertToDisabled(unsigned char brightness = 255) const;
 
     // Convert the image based on the given lightness.
-    wxImage ChangeLightness(int ialpha) const;
+    wxImage ChangeLightness(int alpha) const;
 
     // these routines are slow but safe
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
@@ -558,25 +558,28 @@ public:
     // Returned value: # of entries in the histogram
     unsigned long ComputeHistogram( wxImageHistogram &h ) const;
 
-    // Rotates the hue of each pixel of the image. angle is a double in the range
-    // -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
+    // Rotates the hue of each pixel in the image by angle, which is a double in
+    // the range [-1.0..+1.0], where -1.0 corresponds to -360 degrees and +1.0
+    // corresponds to +360 degrees.
     void RotateHue(double angle);
 
-    // Changes the saturation of each pixel of the image. factor is a double in
-    // the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent.
+    // Changes the saturation of each pixel in the image. factor is a double in
+    // the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+    // corresponds to +100 percent.
     void ChangeSaturation(double factor);
 
-    // Changes the brightness (value) of each pixel of the image. factor is a
-    // double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100
-    // percent.
+    // Changes the brightness (value) of each pixel in the image. factor is a
+    // double in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent
+    // and +1.0 corresponds to +100 percent.
     void ChangeBrightness(double factor);
 
     // Changes the hue, the saturation and the brightness (value) of each pixel
-    // of the image. angleH is a double in the range [-1.0..1.0] where -1.0 is
-    // -360 degrees and 1.0 is 360 degrees, factorS is a double in the range
-    // [-1.0..1.0] where -1.0 is -100 percent and 1.0 is 100 percent and factorV
-    // is a double in the range [-1.0..1.0] where -1.0 is -100 percent and 1.0
-    // is 100 percent.
+    // in the image. angleH is a double in the range [-1.0..+1.0], where -1.0
+    // corresponds to -360 degrees and +1.0 corresponds to +360 degrees, factorS
+    // is a double in the range [-1.0..+1.0], where -1.0 corresponds to -100
+    // percent and +1.0 corresponds to +100 percent and factorV is a double in
+    // the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+    // corresponds to +100 percent.
     void ChangeHSV(double angleH, double factorS, double factorV);
 
     static wxList& GetHandlers() { return sm_handlers; }
@@ -689,6 +692,46 @@ private:
     // as this image itself. This is used by several functions creating
     // modified versions of this image.
     wxImage MakeEmptyClone(int flags = Clone_SameOrientation) const;
+
+    // Helper function used internally by wxImage class only.
+    template <typename T>
+    void ApplyToAllPixels(void (wxImage::*func)(unsigned char *, T), T value);
+
+    // Makes an RGB value disabled.
+    void DoMakeDisabled(unsigned char *rgb, unsigned char brightness);
+
+    // red, green and blue are weight doubles, they are used internally by
+    // DoMakeGrey() only.
+    class WeightValue
+    {
+    public:
+        WeightValue(double r = 0.0, double g = 0.0, double b = 0.0)
+            : red(r), green(g), blue(b) {}
+        double red;
+        double green;
+        double blue;
+    };
+
+    // Makes an RGB value grey.
+    void DoMakeGrey(unsigned char *rgb, WeightValue weight);
+
+    // Makes an RGB value mono.
+    void DoMakeMono(unsigned char *rgb, RGBValue rgbValue);
+
+    // Changes the lightness of an RGB value.
+    void DoChangeLightness(unsigned char *rgb, int alpha);
+
+    // Rotates the hue of an RGB value.
+    void DoRotateHue(unsigned char *rgb, double angle);
+
+    // Changes the saturation of an RGB value.
+    void DoChangeSaturation(unsigned char *rgb, double factor);
+
+    // Changes the brightness (value) of an RGB value.
+    void DoChangeBrightness(unsigned char *rgb, double factor);
+
+    // Changes the HSV of an RGB value.
+    void DoChangeHSV(unsigned char *rgb, HSVValue hsvValue);
 
 #if wxUSE_STREAMS
     // read the image from the specified stream updating image type if
