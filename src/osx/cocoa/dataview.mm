@@ -1735,7 +1735,7 @@ outlineView:(NSOutlineView*)outlineView
 // to pass if the wxEvent is not processed.
 
 // catch events routed here and feed them back before things get routed up the responder chain
-// otherwise we loose functionality like arrow keys etc.
+// otherwise we lose functionality like arrow keys etc.
 - (void)doCommandBySelector:(SEL)aSelector
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
