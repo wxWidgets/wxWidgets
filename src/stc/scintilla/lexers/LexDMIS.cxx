@@ -21,10 +21,9 @@
 #include "StyleContext.h"
 #include "CharacterSet.h"
 #include "LexerModule.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 
 static const char *const DMISWordListDesc[] = {
@@ -38,7 +37,7 @@ static const char *const DMISWordListDesc[] = {
 };
 
 
-class LexerDMIS : public ILexer
+class LexerDMIS : public DefaultLexer
 {
 	private:
 		char *m_wordListSets;
@@ -56,33 +55,37 @@ class LexerDMIS : public ILexer
 		LexerDMIS(void);
 		virtual ~LexerDMIS(void);
 
-		int SCI_METHOD Version() const {
-			return lvOriginal;
+		int SCI_METHOD Version() const override {
+			return lvIdentity;
 		}
 
-		void SCI_METHOD Release() {
+		void SCI_METHOD Release() override {
 			delete this;
 		}
 
-		const char * SCI_METHOD PropertyNames() {
+		const char * SCI_METHOD PropertyNames() override {
 			return NULL;
 		}
 
-		int SCI_METHOD PropertyType(const char *) {
+		int SCI_METHOD PropertyType(const char *) override {
 			return -1;
 		}
 
-		const char * SCI_METHOD DescribeProperty(const char *) {
+		const char * SCI_METHOD DescribeProperty(const char *) override {
 			return NULL;
 		}
 
-		Sci_Position SCI_METHOD PropertySet(const char *, const char *) {
+		Sci_Position SCI_METHOD PropertySet(const char *, const char *) override {
 			return -1;
 		}
 
-		Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
+		const char * SCI_METHOD PropertyGet(const char *) override {
+			return NULL;
+		}
 
-		void * SCI_METHOD PrivateCall(int, void *) {
+		Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+
+		void * SCI_METHOD PrivateCall(int, void *) override {
 			return NULL;
 		}
 
@@ -90,9 +93,9 @@ class LexerDMIS : public ILexer
 			return new LexerDMIS;
 		}
 
-		const char * SCI_METHOD DescribeWordListSets();
-		void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
-		void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
+		const char * SCI_METHOD DescribeWordListSets() override;
+		void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess) override;
+		void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess) override;
 };
 
 
@@ -130,7 +133,7 @@ void SCI_METHOD LexerDMIS::InitWordListSets(void)
 }
 
 
-LexerDMIS::LexerDMIS(void) {
+LexerDMIS::LexerDMIS(void) : DefaultLexer("DMIS", SCLEX_DMIS) {
 	this->InitWordListSets();
 
 	this->m_majorWords.Clear();

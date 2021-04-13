@@ -23,9 +23,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 //XXX Identical to Perl, put in common area
 static inline bool isEOLChar(char ch) {
@@ -346,7 +344,7 @@ static bool RE_CanFollowKeyword(const char *keyword) {
 // Look at chars up to but not including endPos
 // Don't look at styles in case we're looking forward
 
-static int skipWhitespace(Sci_Position startPos,
+static Sci_Position skipWhitespace(Sci_Position startPos,
                           Sci_Position endPos,
                           Accessor &styler) {
     for (Sci_Position i = startPos; i < endPos; i++) {
@@ -564,7 +562,7 @@ static bool sureThisIsNotHeredoc(Sci_Position lt2StartPos,
     bool allow_indent;
     Sci_Position target_start, target_end;
     // From this point on no more styling, since we're looking ahead
-    if (styler[j] == '-') {
+    if (styler[j] == '-' || styler[j] == '~') {
         allow_indent = true;
         j++;
     } else {
@@ -890,7 +888,7 @@ static void ColouriseRbDoc(Sci_PositionU startPos, Sci_Position length, int init
                 chNext = chNext2;
                 styler.ColourTo(i, SCE_RB_OPERATOR);
 
-                if (!(strchr("\"\'`_-", chNext2) || isSafeAlpha(chNext2))) {
+                if (!(strchr("\"\'`_-~", chNext2) || isSafeAlpha(chNext2))) {
                     // It's definitely not a here-doc,
                     // based on Ruby's lexer/parser in the
                     // heredoc_identifier routine.
@@ -1236,7 +1234,7 @@ static void ColouriseRbDoc(Sci_PositionU startPos, Sci_Position length, int init
             if (HereDoc.State == 0) { // '<<' encountered
                 HereDoc.State = 1;
                 HereDoc.DelimiterLength = 0;
-                if (ch == '-') {
+                if (ch == '-' || ch == '~') {
                     HereDoc.CanBeIndented = true;
                     advance_char(i, ch, chNext, chNext2); // pass by ref
                 } else {

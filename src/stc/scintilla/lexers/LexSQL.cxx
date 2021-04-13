@@ -31,10 +31,9 @@
 #include "LexerModule.h"
 #include "OptionSet.h"
 #include "SparseState.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsAWordChar(int ch, bool sqlAllowDottedWord) {
 	if (!sqlAllowDottedWord)
@@ -302,48 +301,52 @@ struct OptionSetSQL : public OptionSet<OptionsSQL> {
 	}
 };
 
-class LexerSQL : public ILexer {
+class LexerSQL : public DefaultLexer {
 public :
-	LexerSQL() {}
+	LexerSQL() : DefaultLexer("sql", SCLEX_SQL) {}
 
 	virtual ~LexerSQL() {}
 
-	int SCI_METHOD Version () const {
-		return lvOriginal;
+	int SCI_METHOD Version () const override {
+		return lvIdentity;
 	}
 
-	void SCI_METHOD Release() {
+	void SCI_METHOD Release() override {
 		delete this;
 	}
 
-	const char * SCI_METHOD PropertyNames() {
+	const char * SCI_METHOD PropertyNames() override {
 		return osSQL.PropertyNames();
 	}
 
-	int SCI_METHOD PropertyType(const char *name) {
+	int SCI_METHOD PropertyType(const char *name) override {
 		return osSQL.PropertyType(name);
 	}
 
-	const char * SCI_METHOD DescribeProperty(const char *name) {
+	const char * SCI_METHOD DescribeProperty(const char *name) override {
 		return osSQL.DescribeProperty(name);
 	}
 
-	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) {
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override {
 		if (osSQL.PropertySet(&options, key, val)) {
 			return 0;
 		}
 		return -1;
 	}
 
-	const char * SCI_METHOD DescribeWordListSets() {
+	const char * SCI_METHOD PropertyGet(const char *key) override {
+		return osSQL.PropertyGet(key);
+	}
+
+	const char * SCI_METHOD DescribeWordListSets() override {
 		return osSQL.DescribeWordListSets();
 	}
 
-	Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
-	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
-	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
+	Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-	void * SCI_METHOD PrivateCall(int, void *) {
+	void * SCI_METHOD PrivateCall(int, void *) override {
 		return 0;
 	}
 
@@ -443,9 +446,8 @@ void SCI_METHOD LexerSQL::Lex(Sci_PositionU startPos, Sci_Position length, int i
 	LexAccessor styler(pAccess);
 	StyleContext sc(startPos, length, initStyle, styler);
 	int styleBeforeDCKeyword = SCE_SQL_DEFAULT;
-	Sci_Position offset = 0;
 
-	for (; sc.More(); sc.Forward(), offset++) {
+	for (; sc.More(); sc.Forward()) {
 		// Determine if the current state should terminate.
 		switch (sc.state) {
 		case SCE_SQL_OPERATOR:
@@ -538,7 +540,7 @@ void SCI_METHOD LexerSQL::Lex(Sci_PositionU startPos, Sci_Position length, int i
 			if (options.sqlBackslashEscapes && sc.ch == '\\') {
 				sc.Forward();
 			} else if (sc.ch == '\'') {
-				if (sc.chNext == '\"') {
+				if (sc.chNext == '\'') {
 					sc.Forward();
 				} else {
 					sc.ForwardSetState(SCE_SQL_DEFAULT);
@@ -546,7 +548,7 @@ void SCI_METHOD LexerSQL::Lex(Sci_PositionU startPos, Sci_Position length, int i
 			}
 			break;
 		case SCE_SQL_STRING:
-			if (sc.ch == '\\') {
+			if (options.sqlBackslashEscapes && sc.ch == '\\') {
 				// Escape sequence
 				sc.Forward();
 			} else if (sc.ch == '\"') {

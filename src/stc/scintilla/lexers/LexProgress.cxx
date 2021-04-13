@@ -38,10 +38,9 @@ Differentiate between labels and variables
 #include "LexerModule.h"
 #include "OptionSet.h"
 #include "SparseState.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 namespace {
    // Use an unnamed namespace to protect the functions and classes from name conflicts
@@ -122,7 +121,7 @@ namespace {
    };
 }
 
-class LexerABL : public ILexer {
+class LexerABL : public DefaultLexer {
    CharacterSet setWord;
    CharacterSet setNegationOp;
    CharacterSet setArithmethicOp;
@@ -137,6 +136,7 @@ class LexerABL : public ILexer {
    OptionSetABL osABL;
 public:
    LexerABL() :
+      DefaultLexer("abl", SCLEX_PROGRESS),
       setWord(CharacterSet::setAlphaNum, "_", 0x80, true),
       setNegationOp(CharacterSet::setNone, "!"),
       setArithmethicOp(CharacterSet::setNone, "+-/*%"),
@@ -145,34 +145,37 @@ public:
    }
    virtual ~LexerABL() {
    }
-   void SCI_METHOD Release() {
+   void SCI_METHOD Release() override {
       delete this;
    }
-   int SCI_METHOD Version() const {
-      return lvOriginal;
+   int SCI_METHOD Version() const override {
+      return lvIdentity;
    }
-   const char * SCI_METHOD PropertyNames() {
+   const char * SCI_METHOD PropertyNames() override {
       return osABL.PropertyNames();
    }
-   int SCI_METHOD PropertyType(const char *name) {
+   int SCI_METHOD PropertyType(const char *name) override {
       return osABL.PropertyType(name);
    }
-   const char * SCI_METHOD DescribeProperty(const char *name) {
+   const char * SCI_METHOD DescribeProperty(const char *name) override {
       return osABL.DescribeProperty(name);
    }
-   Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) ;
+   Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override ;
+   const char * SCI_METHOD PropertyGet(const char *key) override {
+	   return osABL.PropertyGet(key);
+   }
 
-   const char * SCI_METHOD DescribeWordListSets() {
+   const char * SCI_METHOD DescribeWordListSets() override {
       return osABL.DescribeWordListSets();
    }
-   Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
-   void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
-   void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+   Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+   void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+   void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-   void * SCI_METHOD PrivateCall(int, void *) {
+   void * SCI_METHOD PrivateCall(int, void *) override {
       return 0;
    }
-   int SCI_METHOD LineEndTypesSupported() {
+   int SCI_METHOD LineEndTypesSupported() override {
       return SC_LINE_END_TYPE_DEFAULT;
    }
    static ILexer *LexerFactoryABL() {
@@ -278,10 +281,15 @@ void SCI_METHOD LexerABL::Lex(Sci_PositionU startPos, Sci_Position length, int i
 
          // commentNestingLevel is a non-visible state, used to identify the nesting level of a comment
          if (checkCommentNestingLevel) {
-            if (chPrev == '/' && ch == '*')
+            if (chPrev == '/' && ch == '*') {
                commentNestingLevel++;
+               // eat the '/' so we don't miscount a */ if we see /*/*
+               --back;
+            }
             if (chPrev == '*' && ch == '/') {
                commentNestingLevel--;
+               // eat the '*' so we don't miscount a /* if we see */*/
+               --back;
             }
          }
          --back;

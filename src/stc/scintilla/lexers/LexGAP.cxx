@@ -24,9 +24,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsGAPOperator(char ch) {
 	if (IsASCII(ch) && isalnum(ch)) return false;

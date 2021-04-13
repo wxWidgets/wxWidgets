@@ -42,9 +42,7 @@
 #define SET_UPPER "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define SET_DIGITS "0123456789"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static bool IsSpaceEquiv(int state) {
 	switch (state) {

@@ -27,10 +27,9 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 /* Nested comments require keeping the value of the nesting level for every
    position in the document.  But since scintilla always styles line by line,
@@ -145,7 +144,7 @@ struct OptionSetD : public OptionSet<OptionsD> {
 	}
 };
 
-class LexerD : public ILexer {
+class LexerD : public DefaultLexer {
 	bool caseSensitive;
 	WordList keywords;
 	WordList keywords2;
@@ -158,34 +157,38 @@ class LexerD : public ILexer {
 	OptionSetD osD;
 public:
 	LexerD(bool caseSensitive_) :
+		DefaultLexer("D", SCLEX_D),
 		caseSensitive(caseSensitive_) {
 	}
 	virtual ~LexerD() {
 	}
-	void SCI_METHOD Release() {
+	void SCI_METHOD Release() override {
 		delete this;
 	}
-	int SCI_METHOD Version() const {
-		return lvOriginal;
+	int SCI_METHOD Version() const override {
+		return lvIdentity;
 	}
-	const char * SCI_METHOD PropertyNames() {
+	const char * SCI_METHOD PropertyNames() override {
 		return osD.PropertyNames();
 	}
-	int SCI_METHOD PropertyType(const char *name) {
+	int SCI_METHOD PropertyType(const char *name) override {
 		return osD.PropertyType(name);
 	}
-	const char * SCI_METHOD DescribeProperty(const char *name) {
+	const char * SCI_METHOD DescribeProperty(const char *name) override {
 		return osD.DescribeProperty(name);
 	}
-	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val);
-	const char * SCI_METHOD DescribeWordListSets() {
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override;
+	const char * SCI_METHOD PropertyGet(const char *key) override {
+		return osD.PropertyGet(key);
+	}
+	const char * SCI_METHOD DescribeWordListSets() override {
 		return osD.DescribeWordListSets();
 	}
-	Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
-	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
-	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+	Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-	void * SCI_METHOD PrivateCall(int, void *) {
+	void * SCI_METHOD PrivateCall(int, void *) override {
 		return 0;
 	}
 

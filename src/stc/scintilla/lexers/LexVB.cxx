@@ -23,9 +23,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 // Internal state, highlighted as number
 #define SCE_B_FILENUMBER SCE_B_DEFAULT+100
@@ -55,7 +53,7 @@ static inline bool IsANumberChar(int ch) {
 	// but probably enough in most cases.
 	return (ch < 0x80) &&
 	        (isdigit(ch) || toupper(ch) == 'E' ||
-             ch == '.' || ch == '-' || ch == '+');
+             ch == '.' || ch == '-' || ch == '+' || ch == '_');
 }
 
 static void ColouriseVBDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
@@ -199,6 +197,10 @@ static void ColouriseVBDoc(Sci_PositionU startPos, Sci_Position length, int init
 				sc.Forward();
 			} else if (sc.ch == '&' && tolower(sc.chNext) == 'o') {
 				// Octal number
+				sc.SetState(SCE_B_NUMBER);
+				sc.Forward();
+			} else if (sc.ch == '&' && tolower(sc.chNext) == 'b') {
+				// Binary number
 				sc.SetState(SCE_B_NUMBER);
 				sc.Forward();
 			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {

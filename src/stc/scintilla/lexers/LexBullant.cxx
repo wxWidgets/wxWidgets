@@ -19,9 +19,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static int classifyWordBullant(Sci_PositionU start, Sci_PositionU end, WordList &keywords, Accessor &styler) {
 	char s[100];

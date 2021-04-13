@@ -30,10 +30,9 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsAWordChar(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '.' ||
@@ -81,6 +80,7 @@ struct OptionsAsm {
 	std::string foldExplicitEnd;
 	bool foldExplicitAnywhere;
 	bool foldCompact;
+	std::string commentChar;
 	OptionsAsm() {
 		delimiter = "";
 		fold = false;
@@ -91,6 +91,7 @@ struct OptionsAsm {
 		foldExplicitEnd   = "";
 		foldExplicitAnywhere = false;
 		foldCompact = true;
+		commentChar = "";
 	}
 };
 
@@ -135,11 +136,14 @@ struct OptionSetAsm : public OptionSet<OptionsAsm> {
 
 		DefineProperty("fold.compact", &OptionsAsm::foldCompact);
 
+		DefineProperty("lexer.as.comment.character", &OptionsAsm::commentChar,
+			"Overrides the default comment character (which is ';' for asm and '#' for as).");
+
 		DefineWordListSets(asmWordListDesc);
 	}
 };
 
-class LexerAsm : public ILexer {
+class LexerAsm : public DefaultLexer {
 	WordList cpuInstruction;
 	WordList mathInstruction;
 	WordList registers;
@@ -152,44 +156,47 @@ class LexerAsm : public ILexer {
 	OptionSetAsm osAsm;
 	int commentChar;
 public:
-	LexerAsm(int commentChar_) {
+	LexerAsm(const char *languageName_, int language_, int commentChar_) : DefaultLexer(languageName_, language_) {
 		commentChar = commentChar_;
 	}
 	virtual ~LexerAsm() {
 	}
-	void SCI_METHOD Release() {
+	void SCI_METHOD Release() override {
 		delete this;
 	}
-	int SCI_METHOD Version() const {
-		return lvOriginal;
+	int SCI_METHOD Version() const override {
+		return lvIdentity;
 	}
-	const char * SCI_METHOD PropertyNames() {
+	const char * SCI_METHOD PropertyNames() override {
 		return osAsm.PropertyNames();
 	}
-	int SCI_METHOD PropertyType(const char *name) {
+	int SCI_METHOD PropertyType(const char *name) override {
 		return osAsm.PropertyType(name);
 	}
-	const char * SCI_METHOD DescribeProperty(const char *name) {
+	const char * SCI_METHOD DescribeProperty(const char *name) override {
 		return osAsm.DescribeProperty(name);
 	}
-	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val);
-	const char * SCI_METHOD DescribeWordListSets() {
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override;
+	const char * SCI_METHOD PropertyGet(const char *key) override {
+		return osAsm.PropertyGet(key);
+	}
+	const char * SCI_METHOD DescribeWordListSets() override {
 		return osAsm.DescribeWordListSets();
 	}
-	Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
-	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
-	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+	Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-	void * SCI_METHOD PrivateCall(int, void *) {
+	void * SCI_METHOD PrivateCall(int, void *) override {
 		return 0;
 	}
 
 	static ILexer *LexerFactoryAsm() {
-		return new LexerAsm(';');
+		return new LexerAsm("asm", SCLEX_ASM, ';');
 	}
 
 	static ILexer *LexerFactoryAs() {
-		return new LexerAsm('#');
+		return new LexerAsm("as", SCLEX_AS, '#');
 	}
 };
 
@@ -242,6 +249,9 @@ Sci_Position SCI_METHOD LexerAsm::WordListSet(int n, const char *wl) {
 
 void SCI_METHOD LexerAsm::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) {
 	LexAccessor styler(pAccess);
+
+	const char commentCharacter = options.commentChar.empty() ?
+		commentChar : options.commentChar.front();
 
 	// Do not leak onto next line
 	if (initStyle == SCE_ASM_STRINGEOL)
@@ -348,7 +358,7 @@ void SCI_METHOD LexerAsm::Lex(Sci_PositionU startPos, Sci_Position length, int i
 
 		// Determine if a new state should be entered.
 		if (sc.state == SCE_ASM_DEFAULT) {
-			if (sc.ch == commentChar){
+			if (sc.ch == commentCharacter) {
 				sc.SetState(SCE_ASM_COMMENT);
 			} else if (IsASCII(sc.ch) && (isdigit(sc.ch) || (sc.ch == '.' && IsASCII(sc.chNext) && isdigit(sc.chNext)))) {
 				sc.SetState(SCE_ASM_NUMBER);

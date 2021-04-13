@@ -3,9 +3,9 @@ directories from the Scintilla source distribution. All other code
 needed to implement Scintilla on top of wxWidgets is located in the
 directory above this one.
 
-The current version of the Scintilla code is 3.7.2
+The current version of the Scintilla code is 3.21.1
 
-These are the basic steps needed to update the version of Scintilla used by wxSTC.  
+These are the basic steps needed to update the version of Scintilla used by wxSTC.
 
 1. Copy include, lexers, lexlib and src folders to src/stc/scintilla
 
@@ -15,9 +15,9 @@ new method names or constants because some of them may need to be
 tweaked to conform to similar naming patterns already used.  (See step
 #6 below.)
 
-3. Identify new source files and update build/bakefiles/scintilla.bkl
-accordingly so the new files will get built.  Use bakefile to
-regenerate the makefiles and project files.
+3. Identify new source files and update build/bakefiles/scintilla.bkl and
+build/cmake/lib/stc/CMakeLists.txt accordingly so the new files will get
+built. Use bakefile to regenerate the makefiles and project files.
 
 4. Examine changes in src/stc/scintilla/include/Platform.h and
 identify new or changed APIs that the wx "platform" will need to
@@ -60,17 +60,6 @@ Scintilla.iface and see if the existing docs for those items should be
 updated too.  For new functions in Scintilla.iface, an entry should be
 added to the docsMap and sinceAnnotations dictionaries in gen_docs.py.
 
-10. Apply the fix for scintilla/src/UniConversion.h based on commit by
-Vadim Zeitlin <vadim@wxwidgets.org> from March 5th, 2016.
+10. Build and test.
 
-This is required to avoid gcc warnings (and possibly errors with other
-compilers) about ambiguous comparison operators due to our (wchar_t,
-wxUniChar) overloads defined in wx/unichar.h.
-
--inline unsigned int UTF16CharLength(wchar_t uch) {
-+inline unsigned int UTF16CharLength(wchar_t wch) {
-+       const int uch = wch;
-
-11. Build and test.
-
-12. Submit patch to wxTrac.
+11. Submit a patch to wxTrac or create a Pull Request on GitHub.

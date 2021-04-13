@@ -5,7 +5,6 @@
 
 #if wxUSE_STC
 
-#include "wx/imaglist.h"
 #include "Platform.h"
 
 class wxStyledTextCtrl;
@@ -14,11 +13,11 @@ class wxSTCListBoxVisualData;
 
 
 
-wxRect wxRectFromPRectangle(PRectangle prc);
-PRectangle PRectangleFromwxRect(wxRect rc);
-wxColour wxColourFromCD(const ColourDesired& ca);
+wxRect wxRectFromPRectangle(Scintilla::PRectangle prc);
+Scintilla::PRectangle PRectangleFromwxRect(wxRect rc);
+wxColour wxColourFromCD(const Scintilla::ColourDesired& ca);
 
-class ListBoxImpl : public ListBox {
+class ListBoxImpl : public Scintilla::ListBox {
 private:
     wxSTCListBox*           m_listBox;
     wxSTCListBoxVisualData* m_visualData;
@@ -26,14 +25,14 @@ private:
 public:
     ListBoxImpl();
     ~ListBoxImpl();
-    static ListBox *Allocate();
+    static Scintilla::ListBox *Allocate();
 
-    virtual void SetFont(Font &font) wxOVERRIDE;
-    virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_) wxOVERRIDE;
+    virtual void SetFont(Scintilla::Font &font) wxOVERRIDE;
+    virtual void Create(Scintilla::Window &parent, int ctrlID, Scintilla::Point location_, int lineHeight_, bool unicodeMode_, int technology_) wxOVERRIDE;
     virtual void SetAverageCharWidth(int width) wxOVERRIDE;
     virtual void SetVisibleRows(int rows) wxOVERRIDE;
     virtual int GetVisibleRows() const wxOVERRIDE;
-    virtual PRectangle GetDesiredRect() wxOVERRIDE;
+    virtual Scintilla::PRectangle GetDesiredRect() wxOVERRIDE;
     virtual int CaretFromEdge() wxOVERRIDE;
     virtual void Clear() wxOVERRIDE;
     virtual void Append(char *s, int type = -1) wxOVERRIDE;
@@ -46,9 +45,8 @@ public:
             void RegisterImageHelper(int type, const wxBitmap& bmp);
     virtual void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) wxOVERRIDE;
     virtual void ClearRegisteredImages() wxOVERRIDE;
-    virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
+    virtual void SetDelegate(Scintilla::IListBoxDelegate *lbDelegate) wxOVERRIDE;
     virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
-            void SetListInfo(int*, int*, int*);
 };
 
 
@@ -203,22 +201,22 @@ private:
 class SurfaceFontDataD2D: public SurfaceData
 {
 public:
-    SurfaceFontDataD2D(const FontParameters& fp);
+    SurfaceFontDataD2D(const Scintilla::FontParameters& fp);
     bool Initialised() const;
 
-    XYPOSITION GetAscent() const { return m_ascent; }
-    XYPOSITION GetDescent() const { return m_descent; }
-    XYPOSITION GetInternalLeading() const { return m_internalLeading; }
-    XYPOSITION GetAverageCharWidth() const { return m_averageCharWidth; }
+    Scintilla::XYPOSITION GetAscent() const { return m_ascent; }
+    Scintilla::XYPOSITION GetDescent() const { return m_descent; }
+    Scintilla::XYPOSITION GetInternalLeading() const { return m_internalLeading; }
+    Scintilla::XYPOSITION GetAverageCharWidth() const { return m_averageCharWidth; }
 
     D2D1_TEXT_ANTIALIAS_MODE GetFontQuality() const { return m_aaMode; }
     IDWriteTextFormat* GetFormat() const { return m_pTextFormat.get(); }
 
 private:
-    XYPOSITION m_ascent;
-    XYPOSITION m_descent;
-    XYPOSITION m_internalLeading;
-    XYPOSITION m_averageCharWidth;
+    Scintilla::XYPOSITION m_ascent;
+    Scintilla::XYPOSITION m_descent;
+    Scintilla::XYPOSITION m_internalLeading;
+    Scintilla::XYPOSITION m_averageCharWidth;
     D2D1_TEXT_ANTIALIAS_MODE m_aaMode;
     wxCOMPtr<IDWriteTextFormat> m_pTextFormat;
 };

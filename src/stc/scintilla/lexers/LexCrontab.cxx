@@ -25,9 +25,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static void ColouriseNncrontabDoc(Sci_PositionU startPos, Sci_Position length, int, WordList
 *keywordLists[], Accessor &styler)

@@ -28,7 +28,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -49,7 +49,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -59,7 +59,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"/>
 			<Tool
@@ -85,7 +85,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -103,7 +103,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -113,7 +113,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"/>
 			<Tool
@@ -139,7 +139,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -160,7 +160,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -170,7 +170,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"/>
 			<Tool
@@ -196,7 +196,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -214,7 +214,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -224,7 +224,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE;LPEG_LEXER=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"/>
 			<Tool
@@ -281,7 +281,13 @@
 				RelativePath="..\..\src\stc\scintilla\src\ContractionState.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\DBCS.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\Decoration.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\DefaultLexer.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\Document.cxx">
@@ -353,6 +359,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexBullant.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCIL.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexCLW.cxx">
 			</File>
 			<File
@@ -390,6 +399,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexDMIS.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexDataflex.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexDiff.cxx">
@@ -437,6 +449,12 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexHex.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexHollywood.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexIndent.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexInno.cxx">
 			</File>
 			<File
@@ -447,6 +465,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexKix.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexLPeg.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexLaTeX.cxx">
@@ -482,6 +503,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexMatlab.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMaxima.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexMetapost.cxx">
 			</File>
 			<File
@@ -489,6 +513,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexMySQL.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexNim.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexNimrod.cxx">
@@ -545,6 +572,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexR.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexRaku.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexRebol.cxx">
 			</File>
 			<File
@@ -555,6 +585,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexRust.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSAS.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexSML.cxx">
@@ -579,6 +612,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexSpice.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexStata.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexTACL.cxx">
@@ -612,6 +648,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexVisualProlog.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexX12.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexYAML.cxx">
@@ -663,6 +702,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\UniConversion.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\UniqueString.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\ViewStyle.cxx">

@@ -104,7 +104,7 @@ case $wxTOOLSET in
 
             case "$real_compiler" in
                 clang)
-                    allow_warn_opt="-Wno-error=#warnings"
+                    allow_warn_opt="-Wno-error=#warnings -Wno-error=unknown-pragmas"
                     ;;
 
                 gcc | g++)

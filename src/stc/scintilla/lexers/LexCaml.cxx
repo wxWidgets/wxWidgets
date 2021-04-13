@@ -37,6 +37,10 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wcomma"
+#endif
+
 //	Since the Microsoft __iscsym[f] funcs are not ANSI...
 inline int  iscaml(int c) {return isalnum(c) || c == '_';}
 inline int iscamlf(int c) {return isalpha(c) || c == '_';}
@@ -46,9 +50,7 @@ static const int baseT[24] = {
 	0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0,16	/* M - X */
 };
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 #ifdef BUILD_AS_EXTERNAL_LEXER
 /*
@@ -368,6 +370,7 @@ void ColouriseCamlDoc(
 				break;
 			}/* else
 				// fall through for SML char literal (handle like string) */
+			// Falls through.
 
 		case SCE_CAML_STRING:
 			// [try to] interpret as [additional] [SML char/] string literal char
