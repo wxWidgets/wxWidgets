@@ -124,9 +124,9 @@
 
 #define PACKAGE_BUGREPORT "wx-dev@googlegroups.com"
 #define PACKAGE_NAME "wxWidgets"
-#define PACKAGE_STRING "wxWidgets 3.1.5"
+#define PACKAGE_STRING "wxWidgets 3.1.6"
 #define PACKAGE_TARNAME "wxwidgets"
-#define PACKAGE_VERSION "3.1.5"
+#define PACKAGE_VERSION "3.1.6"
 
 // for regex
 #define WX_NO_REGEX_ADVANCED 1

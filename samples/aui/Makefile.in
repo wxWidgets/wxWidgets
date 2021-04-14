@@ -45,7 +45,7 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 3.1
-WX_VERSION = $(WX_RELEASE).5
+WX_VERSION = $(WX_RELEASE).6
 LIBDIRNAME = $(wx_top_builddir)/lib
 AUIDEMO_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \

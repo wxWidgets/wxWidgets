@@ -1,4 +1,4 @@
 // update this file with new version numbers
 
 DYLIB_COMPATIBILITY_VERSION = 3.1
-DYLIB_CURRENT_VERSION = 3.1.5
+DYLIB_CURRENT_VERSION = 3.1.6
