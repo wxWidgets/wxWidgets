@@ -21,6 +21,7 @@
 
 #include "wx/fs_inet.h"
 #include "wx/xml/xml.h"
+#include "wx/scopedptr.h"
 #include "wx/sstream.h"
 #include "wx/wfstream.h"
 #include "wx/xrc/xmlres.h"
@@ -36,9 +37,19 @@ namespace
 
 static const char *TEST_XRC_FILE = "test.xrc";
 
+void LoadXrcFrom(const wxString& xrcText)
+{
+    wxStringInputStream sis(xrcText);
+    wxScopedPtr<wxXmlDocument> xmlDoc(new wxXmlDocument(sis, "UTF-8"));
+    REQUIRE( xmlDoc->IsOk() );
+
+    // Load the xrc we've just created
+    REQUIRE( wxXmlResource::Get()->LoadDocument(xmlDoc.release(), TEST_XRC_FILE) );
+}
+
 // I'm hard-wiring the xrc into this function for now
 // If different xrcs are wanted for future tests, it'll be easy to refactor
-void CreateXrc()
+void LoadTestXrc()
 {
     const char *xrcText =
     "<?xml version=\"1.0\" ?>"
@@ -116,13 +127,7 @@ void CreateXrc()
     "</resource>"
       ;
 
-    // afaict there's no elegant way to load xrc direct from a string
-    // So save it as a file, from which it can be loaded
-    wxStringInputStream sis(xrcText);
-    wxFFileOutputStream fos(TEST_XRC_FILE);
-    REQUIRE(fos.IsOk());
-    fos.Write(sis);
-    REQUIRE(fos.Close());
+    LoadXrcFrom(wxString::FromAscii(xrcText));
 }
 
 } // anon namespace
@@ -135,8 +140,7 @@ void CreateXrc()
 class XrcTestCase
 {
 public:
-    XrcTestCase() { CreateXrc(); }
-    ~XrcTestCase() { wxRemoveFile(TEST_XRC_FILE); }
+    XrcTestCase() { }
 
 private:
     wxDECLARE_NO_COPY_CLASS(XrcTestCase);
@@ -148,8 +152,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::ObjectReferences", "[xrc]")
 
     for ( int n = 0; n < 2; ++n )
     {
-        // Load the xrc file we're just created
-        REQUIRE( wxXmlResource::Get()->Load(TEST_XRC_FILE) );
+        LoadTestXrc();
 
         // In xrc there's now a dialog containing two panels, one an object
         // reference of the other
@@ -171,8 +174,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::IDRanges", "[xrc]")
     // Tests ID ranges
     for ( int n = 0; n < 2; ++n )
     {
-        // Load the xrc file we're just created
-        REQUIRE( wxXmlResource::Get()->Load(TEST_XRC_FILE) );
+        LoadTestXrc();
 
         // foo[start] should == foo[0]
         CHECK( XRCID("SecondCol[start]") == XRCID("SecondCol[0]") );
@@ -203,6 +205,19 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::IDRanges", "[xrc]")
         // Unload the xrc, so it can be reloaded and the tests rerun
         CHECK( wxXmlResource::Get()->Unload(TEST_XRC_FILE) );
     }
+}
+
+TEST_CASE("XRC::PathWithFragment", "[xrc][uri]")
+{
+    LoadXrcFrom
+    (
+        "<?xml version=\"1.0\" ?>"
+        "<resource>"
+        "  <object class=\"wxBitmap\" name=\"bitmap\">bitmap#1.png</object>"
+        "</resource>"
+    );
+
+    CHECK( wxXmlResource::Get()->LoadBitmap("bitmap").IsOk() );
 }
 
 // This test is disabled by default as it requires the environment variable
