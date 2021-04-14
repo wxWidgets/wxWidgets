@@ -7,6 +7,10 @@
     tag to it.
   -->
 <Project ToolsVersion="4.0" InitialTargets="CheckWXLibs" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PropertySheetDisplayName>wxWidgets</_PropertySheetDisplayName>
+  </PropertyGroup>
+
   <ImportGroup Label="PropertySheets">
     <Import Project="build/msw/wx_setup.props" />
     <Import Project="build/msw/wx_local.props" Condition="exists('build/msw/wx_local.props')" />
