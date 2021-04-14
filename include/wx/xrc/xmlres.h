@@ -131,6 +131,13 @@ public:
     // Loads all XRC files from a directory.
     bool LoadAllFiles(const wxString& dirname);
 
+    // Loads resources from the given XML document, taking ownership of it.
+    //
+    // The name argument is only used to Unload() the document later here and
+    // doesn't need to be an existing filename at all (but should be unique if
+    // specified, otherwise it's just synthesized internally).
+    bool LoadDocument(wxXmlDocument* doc, const wxString& name = wxString());
+
     // Unload resource from the given XML file (wildcards not allowed)
     bool Unload(const wxString& filename);
 
@@ -319,6 +326,9 @@ protected:
     // Load the contents of a single file and returns its contents as a new
     // wxXmlDocument (which will be owned by caller) on success or NULL.
     wxXmlDocument *DoLoadFile(const wxString& file);
+
+    // Load XRC from the given document and returns true on success.
+    bool DoLoadDocument(const wxXmlDocument& doc);
 
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.

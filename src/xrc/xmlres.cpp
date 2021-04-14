@@ -74,17 +74,43 @@ wxDateTime GetXRCFileModTime(const wxString& filename)
 // name.
 static void XRCID_Assign(const wxString& str_id, int value);
 
+// Flags indicating whether the XRC contents was loaded from file or URL, more
+// generally: this is usually true but is not set for the records created
+// directly from wxXmlDocument.
+namespace XRCWhence
+{
+
+enum
+{
+    From_URL = 0,
+    From_Doc = 1
+};
+
+} // namespace // XRCWhence
+
 class wxXmlResourceDataRecord
 {
 public:
     // Ctor takes ownership of the document pointer.
     wxXmlResourceDataRecord(const wxString& File_,
-                            wxXmlDocument *Doc_
+                            wxXmlDocument *Doc_,
+                            int flags = XRCWhence::From_URL
                            )
         : File(File_), Doc(Doc_)
     {
 #if wxUSE_DATETIME
-        Time = GetXRCFileModTime(File);
+        switch ( flags )
+        {
+            case XRCWhence::From_URL:
+                Time = GetXRCFileModTime(File);
+                break;
+
+            case XRCWhence::From_Doc:
+                // Leave Time invalid.
+                break;
+        }
+#else
+        wxUnusedVar(flags);
 #endif
     }
 
@@ -664,9 +690,14 @@ bool wxXmlResource::UpdateResources()
         if ( m_flags & wxXRC_NO_RELOADING )
             continue;
 
+        // And we don't do it for the records that were not loaded from a
+        // file/URI (or at least not directly) in the first place.
+        if ( !rec->Time.IsValid() )
+            continue;
+
         // Otherwise check its modification time if we can.
 #if wxUSE_DATETIME
-        const wxDateTime lastModTime = GetXRCFileModTime(rec->File);
+        wxDateTime lastModTime = GetXRCFileModTime(rec->File);
 
         if ( lastModTime.IsValid() && lastModTime <= rec->Time )
 #else // !wxUSE_DATETIME
@@ -749,7 +780,15 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
         return NULL;
     }
 
-    wxXmlNode * const root = doc->GetRoot();
+    if (!DoLoadDocument(*doc))
+        return NULL;
+
+    return doc.release();
+}
+
+bool wxXmlResource::DoLoadDocument(const wxXmlDocument& doc)
+{
+    wxXmlNode * const root = doc.GetRoot();
     if (root->GetName() != wxT("resource"))
     {
         ReportError
@@ -757,7 +796,7 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
             root,
             "invalid XRC resource, doesn't have root node <resource>"
         );
-        return NULL;
+        return false;
     }
 
     long version;
@@ -778,7 +817,34 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
     PreprocessForIdRanges(root);
     wxIdRangeManager::Get()->FinaliseRanges(root);
 
-    return doc.release();
+    return true;
+}
+
+bool wxXmlResource::LoadDocument(wxXmlDocument* doc, const wxString& name)
+{
+    wxCHECK_MSG( doc, false, wxS("must have a valid document") );
+
+    if ( !DoLoadDocument(*doc) )
+    {
+        // Still avoid memory leaks.
+        delete doc;
+        return false;
+    }
+
+    // We need to use something instead of the file name, so if we were not
+    // given a name synthesize something ourselves.
+    wxString docname = name;
+    if ( docname.empty() )
+    {
+        static unsigned long s_xrcDocument = 0;
+
+        // Make it look different from any real file name.
+        docname = wxString::Format(wxS("<XML document #%lu>"), ++s_xrcDocument);
+    }
+
+    Data().push_back(new wxXmlResourceDataRecord(docname, doc, XRCWhence::From_Doc));
+
+    return true;
 }
 
 wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
