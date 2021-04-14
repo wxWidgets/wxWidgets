@@ -8175,14 +8175,14 @@ void wxGrid::MakeCellVisible( int row, int col )
 
     if ( xpos != -1 )
     {
-        if (xpos == 0)
+        if (m_xScrollPixelsPerLine == 0)
             xpos = -1;
         else
             xpos /= m_xScrollPixelsPerLine;
     }
     if ( ypos != -1 )
     {
-        if (ypos == 0)
+        if (m_yScrollPixelsPerLine == 0)
             ypos = -1;
         else
             ypos /= m_yScrollPixelsPerLine;
