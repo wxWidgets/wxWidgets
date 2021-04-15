@@ -20,13 +20,17 @@
 #if wxUSE_XRC
 
 #include "wx/fs_inet.h"
+#include "wx/imagxpm.h"
 #include "wx/xml/xml.h"
 #include "wx/scopedptr.h"
 #include "wx/sstream.h"
 #include "wx/wfstream.h"
 #include "wx/xrc/xmlres.h"
+#include "wx/xrc/xh_bmp.h"
 
 #include <stdarg.h>
+
+#include "testfile.h"
 
 // ----------------------------------------------------------------------------
 // helpers to create/save some xrc
@@ -209,15 +213,48 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::IDRanges", "[xrc]")
 
 TEST_CASE("XRC::PathWithFragment", "[xrc][uri]")
 {
+    wxXmlResource::Get()->AddHandler(new wxBitmapXmlHandler);
+    wxImage::AddHandler(new wxXPMHandler);
+
+    const wxString filename = "image#1.xpm";
+    TempFile xpmFile(filename);
+
+    // Simplest possible XPM, just to have something to create a bitmap from.
+    static const char* xpm =
+        "/* XPM */\n"
+        "static const char *const xpm[] = {\n"
+        "/* columns rows colors chars-per-pixel */\n"
+        "\"1 1 1 1\",\n"
+        "\"  c None\",\n"
+        "/* pixels */\n"
+        "\" \"\n"
+        ;
+
+    wxFFile ff;
+    REQUIRE( ff.Open(filename, "w") );
+    REQUIRE( ff.Write(wxString::FromAscii(xpm)) );
+    REQUIRE( ff.Close() );
+
+    // Opening a percent-encoded URI should work.
+    wxString url = filename;
+    url.Replace("#", "%23");
+
     LoadXrcFrom
     (
-        "<?xml version=\"1.0\" ?>"
-        "<resource>"
-        "  <object class=\"wxBitmap\" name=\"bitmap\">bitmap#1.png</object>"
-        "</resource>"
+        wxString::Format
+        (
+            "<?xml version=\"1.0\" ?>"
+            "<resource>"
+            "  <object class=\"wxBitmap\" name=\"bad\">%s</object>"
+            "  <object class=\"wxBitmap\" name=\"good\">%s</object>"
+            "</resource>",
+            filename,
+            url
+        )
     );
 
-    CHECK( wxXmlResource::Get()->LoadBitmap("bitmap").IsOk() );
+    CHECK( wxXmlResource::Get()->LoadBitmap("good").IsOk() );
+    CHECK( !wxXmlResource::Get()->LoadBitmap("bad").IsOk() );
 }
 
 // This test is disabled by default as it requires the environment variable
