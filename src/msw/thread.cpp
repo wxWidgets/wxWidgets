@@ -90,8 +90,11 @@ enum wxThreadState
 // this module globals
 // ----------------------------------------------------------------------------
 
+// value for uninitialized TLS index
+const DWORD TLS_INDEX_NOT_SET = 0xFFFFFFFF;
+
 // TLS index of the slot where we store the pointer to the current thread
-static DWORD gs_tlsThisThread = 0xFFFFFFFF;
+static DWORD gs_tlsThisThread = TLS_INDEX_NOT_SET;
 
 // id of the main thread - the one which can call GUI functions without first
 // calling wxMutexGuiEnter()
@@ -525,6 +528,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
     wxTRY
     {
         // store the thread object in the TLS
+        wxASSERT_MSG( gs_tlsThisThread != TLS_INDEX_NOT_SET, "TLS index not set. Is wx initialized?" );
         if ( !::TlsSetValue(gs_tlsThisThread, thread) )
         {
             wxLogSysError(_("Cannot start thread: error writing TLS."));
@@ -913,6 +917,7 @@ bool wxThreadInternal::Resume()
 
 wxThread *wxThread::This()
 {
+    wxASSERT_MSG( gs_tlsThisThread != TLS_INDEX_NOT_SET, "TLS index not set. Is wx initialized?" );
     wxThread *thread = (wxThread *)::TlsGetValue(gs_tlsThisThread);
 
     // be careful, 0 may be a valid return value as well
@@ -1226,7 +1231,7 @@ bool wxThreadModule::OnInit()
 {
     // allocate TLS index for storing the pointer to the current thread
     gs_tlsThisThread = ::TlsAlloc();
-    if ( gs_tlsThisThread == 0xFFFFFFFF )
+    if ( gs_tlsThisThread == TLS_INDEX_NOT_SET )
     {
         // in normal circumstances it will only happen if all other
         // TLS_MINIMUM_AVAILABLE (>= 64) indices are already taken - in other
@@ -1241,7 +1246,7 @@ bool wxThreadModule::OnInit()
     if ( !::TlsSetValue(gs_tlsThisThread, (LPVOID)0) )
     {
         ::TlsFree(gs_tlsThisThread);
-        gs_tlsThisThread = 0xFFFFFFFF;
+        gs_tlsThisThread = TLS_INDEX_NOT_SET;
 
         wxLogSysError(_("Thread module initialization failed: cannot store value in thread local storage"));
 
@@ -1266,6 +1271,9 @@ void wxThreadModule::OnExit()
     {
         wxLogLastError(wxT("TlsFree failed."));
     }
+
+    // invalidate slot index to prevent wxThread from trying to use it
+    gs_tlsThisThread = TLS_INDEX_NOT_SET;
 
     wxDELETE(gs_critsectThreadDelete);
 
