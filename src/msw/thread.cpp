@@ -109,11 +109,6 @@ static wxCriticalSection *gs_critsectGui = NULL;
 // critical section which protects gs_nWaitingForGui variable
 static wxCriticalSection *gs_critsectWaitingForGui = NULL;
 
-// critical section which serializes WinThreadStart() and WaitForTerminate()
-// (this is a potential bottleneck, we use a single crit sect for all threads
-// in the system, but normally time spent inside it should be quite short)
-static wxCriticalSection *gs_critsectThreadDelete = NULL;
-
 // number of threads waiting for GUI in wxMutexGuiEnter()
 static size_t gs_nWaitingForGui = 0;
 
@@ -1259,8 +1254,6 @@ bool wxThreadModule::OnInit()
     gs_critsectGui = new wxCriticalSection();
     gs_critsectGui->Enter();
 
-    gs_critsectThreadDelete = new wxCriticalSection;
-
     wxThread::ms_idMainThread = wxThread::GetCurrentId();
 
     return true;
@@ -1276,8 +1269,6 @@ void wxThreadModule::OnExit()
     // invalidate slot index to prevent wxThread from trying to reuse it if the
     // library is initialized again later
     gs_tlsThisThread = TLS_OUT_OF_INDEXES;
-
-    wxDELETE(gs_critsectThreadDelete);
 
     if ( gs_critsectGui )
     {
