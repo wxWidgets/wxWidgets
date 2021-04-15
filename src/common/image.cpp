@@ -1841,7 +1841,7 @@ void wxImage::DoMakeGrey(unsigned char *rgb, WeightValue weight)
 
 wxImage wxImage::ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const
 {
-    wxImage image = Copy();
+    wxImage image = *this;
     image.ApplyToAllPixels(&wxImage::DoMakeGrey, WeightValue(weight_r, weight_g, weight_b));
     return image;
 }
@@ -1855,7 +1855,7 @@ void wxImage::DoMakeMono(unsigned char *rgb, RGBValue rgbValue)
 
 wxImage wxImage::ConvertToMono(unsigned char r, unsigned char g, unsigned char b) const
 {
-    wxImage image = Copy();
+    wxImage image = *this;
 
     if ( image.HasMask() )
     {
@@ -1878,7 +1878,7 @@ void wxImage::DoMakeDisabled(unsigned char *rgb, unsigned char brightness)
 
 wxImage wxImage::ConvertToDisabled(unsigned char brightness) const
 {
-    wxImage image = Copy();
+    wxImage image = *this;
     image.ApplyToAllPixels(&wxImage::DoMakeDisabled, brightness);
     return image;
 }
@@ -1893,7 +1893,7 @@ void wxImage::DoChangeLightness(unsigned char *rgb, int alpha)
 wxImage wxImage::ChangeLightness(int alpha) const
 {
     wxASSERT(alpha >= 0 && alpha <= 200);
-    wxImage image = Copy();
+    wxImage image = *this;
     image.ApplyToAllPixels(&wxImage::DoChangeLightness, alpha);
     return image;
 }
