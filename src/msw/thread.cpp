@@ -90,8 +90,9 @@ enum wxThreadState
 // this module globals
 // ----------------------------------------------------------------------------
 
-// TLS index of the slot where we store the pointer to the current thread
-static DWORD gs_tlsThisThread = 0xFFFFFFFF;
+// TLS index of the slot where we store the pointer to the current thread, the
+// initial value is special and means that it's not initialized yet
+static DWORD gs_tlsThisThread = TLS_OUT_OF_INDEXES;
 
 // id of the main thread - the one which can call GUI functions without first
 // calling wxMutexGuiEnter()
@@ -1226,7 +1227,7 @@ bool wxThreadModule::OnInit()
 {
     // allocate TLS index for storing the pointer to the current thread
     gs_tlsThisThread = ::TlsAlloc();
-    if ( gs_tlsThisThread == 0xFFFFFFFF )
+    if ( gs_tlsThisThread == TLS_OUT_OF_INDEXES )
     {
         // in normal circumstances it will only happen if all other
         // TLS_MINIMUM_AVAILABLE (>= 64) indices are already taken - in other
@@ -1241,7 +1242,7 @@ bool wxThreadModule::OnInit()
     if ( !::TlsSetValue(gs_tlsThisThread, (LPVOID)0) )
     {
         ::TlsFree(gs_tlsThisThread);
-        gs_tlsThisThread = 0xFFFFFFFF;
+        gs_tlsThisThread = TLS_OUT_OF_INDEXES;
 
         wxLogSysError(_("Thread module initialization failed: cannot store value in thread local storage"));
 
