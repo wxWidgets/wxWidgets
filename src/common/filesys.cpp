@@ -478,7 +478,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
     m_LastName.clear();
 
     // try relative paths first :
-    if (meta != wxT(':'))
+    if (meta != wxT(':') && !m_Path.empty())
     {
         node = m_Handlers.GetFirst();
         while (node)
