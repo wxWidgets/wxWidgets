@@ -526,6 +526,9 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
     wxTRY
     {
         // store the thread object in the TLS
+        wxASSERT_MSG( gs_tlsThisThread != TLS_OUT_OF_INDEXES,
+                      "TLS index not set. Is wx initialized?" );
+
         if ( !::TlsSetValue(gs_tlsThisThread, thread) )
         {
             wxLogSysError(_("Cannot start thread: error writing TLS."));
@@ -914,6 +917,8 @@ bool wxThreadInternal::Resume()
 
 wxThread *wxThread::This()
 {
+    wxASSERT_MSG( gs_tlsThisThread != TLS_OUT_OF_INDEXES,
+                  "TLS index not set. Is wx initialized?" );
     wxThread *thread = (wxThread *)::TlsGetValue(gs_tlsThisThread);
 
     // be careful, 0 may be a valid return value as well
@@ -1267,6 +1272,10 @@ void wxThreadModule::OnExit()
     {
         wxLogLastError(wxT("TlsFree failed."));
     }
+
+    // invalidate slot index to prevent wxThread from trying to reuse it if the
+    // library is initialized again later
+    gs_tlsThisThread = TLS_OUT_OF_INDEXES;
 
     wxDELETE(gs_critsectThreadDelete);
 
