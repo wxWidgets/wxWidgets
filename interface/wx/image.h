@@ -908,7 +908,7 @@ public:
         the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
         corresponds to +100 percent.
 
-        @since 3.1.5
+        @since 3.1.6
     */
     void ChangeSaturation(double factor);
 
@@ -917,7 +917,7 @@ public:
         double in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent
         and +1.0 corresponds to +100 percent.
 
-        @since 3.1.5
+        @since 3.1.6
     */
     void ChangeBrightness(double factor);
 
@@ -930,7 +930,7 @@ public:
         [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0 corresponds
         to +100 percent.
 
-        @since 3.1.5
+        @since 3.1.6
     */
     void ChangeHSV(double angleH, double factorS, double factorV);
 
@@ -1093,7 +1093,7 @@ public:
         @remarks
             This function calls wxColour::ChangeLightness() for each pixel in the image.
 
-        @since 3.1.5
+        @since 3.1.6
     */
     wxImage ChangeLightness(int alpha) const;
 
