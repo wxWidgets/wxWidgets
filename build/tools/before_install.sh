@@ -14,8 +14,6 @@ case $(uname -s) in
             # Show information about the repositories and priorities used.
             echo 'APT sources used:'
             $SUDO grep --no-messages '^[^#]' /etc/apt/sources.list /etc/apt/sources.list.d/* || true
-            echo 'APT preferences:'
-            $SUDO grep --no-messages '^[^#]' /etc/apt/preferences /etc/apt/preferences.d/* || true
             echo '--- End of APT files dump ---'
 
             run_apt() {
