@@ -660,6 +660,12 @@ wxSize wxGetHiconSize(HICON hicon)
                     size = wxSize(bm.bmWidth, bm.bmHeight);
                 }
             }
+            // For monochrome icon reported height is doubled
+            // because it contains both AND and XOR masks.
+            if ( info.hbmColor == NULL )
+            {
+                size.y /= 2;
+            }
         }
     }
 
