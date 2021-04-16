@@ -1688,10 +1688,7 @@ GetInfoFromLCID(LCID lcid,
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
-    const wxLanguageInfo * const
-        info = wxGetLocale() ? GetLanguageInfo(wxGetLocale()->GetLanguage())
-                             : NULL;
-    if ( !info )
+    if ( !wxGetLocale() )
     {
         // wxSetLocale() hadn't been called yet of failed, hence CRT must be
         // using "C" locale -- but check it to detect bugs that would happen if
@@ -1734,7 +1731,8 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         }
     }
 
-    return GetInfoFromLCID(info->GetLCID(), index, cat);
+    // wxSetLocale() succeeded and so thread locale was set together with CRT one.
+    return GetInfoFromLCID(::GetThreadLocale(), index, cat);
 }
 
 /* static */
