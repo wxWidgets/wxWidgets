@@ -37,11 +37,6 @@ case $(uname -s) in
                 # Note that this command works only on Ubuntu 18.04 LTS and newer.
                 run_apt install -y ubuntu-dbgsym-keyring
 
-                # The key in the package above is currently (2021-03-22) out of
-                # date, so get the latest key manually (this is completely
-                # insecure, of course, but we don't care).
-                wget -O - http://ddebs.ubuntu.com/dbgsym-release-key.asc | $SUDO apt-key add -
-
                 # Install the symbols to allow LSAN suppression list to work.
                 dbgsym_pkgs='libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym'
             fi
