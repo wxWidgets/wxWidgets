@@ -135,13 +135,9 @@ WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactory
 class WXDLLIMPEXP_WEBVIEW wxWebView : public wxControl
 {
 public:
-    wxWebView()
-    {
-        m_showMenu = true;
-        m_runScriptCount = 0;
-    }
+    wxWebView();
 
-    virtual ~wxWebView() {}
+    virtual ~wxWebView();
 
     virtual bool Create(wxWindow* parent,
            wxWindowID id,
@@ -191,7 +187,9 @@ public:
     virtual wxString GetUserAgent() const;
 
     // Script
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const;
+    virtual void RunScriptAsync(const wxString& javascript, wxWindowID id = -1,
+        void* clientData = NULL) const;
     virtual bool AddScriptMessageHandler(const wxString& name)
     { wxUnusedVar(name); return false; }
     virtual bool RemoveScriptMessageHandler(const wxString& name)
@@ -267,6 +265,9 @@ protected:
     bool QueryCommandEnabled(const wxString& command) const;
     void ExecCommand(const wxString& command);
 
+    void SendScriptResult(wxWindowID id, void* clientData, bool success,
+        const wxString& output) const;
+
     // Count the number of calls to RunScript() in order to prevent
     // the_same variable from being used twice in more than one call.
     mutable int m_runScriptCount;
@@ -276,8 +277,11 @@ private:
     static wxStringWebViewFactoryMap::iterator FindFactory(const wxString &backend);
 
     bool m_showMenu;
+    wxWindowID m_runScriptId;
     wxString m_findText;
     static wxStringWebViewFactoryMap m_factoryMap;
+
+    void OnSyncScriptResult(wxCommandEvent& evt);
 
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };
@@ -319,6 +323,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebVie
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);

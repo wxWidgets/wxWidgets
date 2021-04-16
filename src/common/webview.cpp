@@ -50,8 +50,25 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
+wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
+
+wxWebView::wxWebView()
+{
+    m_showMenu = true;
+    m_runScriptCount = 0;
+    m_runScriptId = wxWindow::NewControlId();
+    Bind(wxEVT_WEBVIEW_SCRIPT_RESULT, &wxWebView::OnSyncScriptResult,
+        this, m_runScriptId);
+}
+
+wxWebView::~wxWebView()
+{
+    Unbind(wxEVT_WEBVIEW_SCRIPT_RESULT, &wxWebView::OnSyncScriptResult,
+        this, m_runScriptId);
+    wxWindow::UnreserveControlId(m_runScriptId);
+}
 
 wxWebViewZoom wxWebView::GetZoom() const
 {
@@ -222,6 +239,53 @@ wxString wxWebView::GetUserAgent() const
     wxString userAgent;
     RunScript("navigator.userAgent", &userAgent);
     return userAgent;
+}
+
+class wxSyncScriptExecution
+{
+public:
+    int result;
+    wxString output;
+};
+
+void wxWebView::OnSyncScriptResult(wxCommandEvent& evt)
+{
+    wxSyncScriptExecution* exec = (wxSyncScriptExecution*) evt.GetClientData();
+    exec->output = evt.GetString();
+    exec->result = evt.GetInt();
+}
+
+bool wxWebView::RunScript(const wxString& javascript, wxString* output) const
+{
+    wxSyncScriptExecution exec;
+    exec.result = -1;
+    RunScriptAsync(javascript, m_runScriptId, &exec);
+
+    // Wait for script exection
+    while (exec.result == -1)
+        wxYield();
+
+    if (output)
+        *output = exec.output;
+    return exec.result == 1;
+}
+
+void wxWebView::RunScriptAsync(const wxString& WXUNUSED(javascript),
+    wxWindowID WXUNUSED(id), void* WXUNUSED(clientData)) const
+{
+    wxLogError(_("RunScriptAsync not supported"));
+}
+
+void wxWebView::SendScriptResult(wxWindowID id, void* clientData, bool success,
+    const wxString& output) const
+{
+    wxWebViewEvent evt(wxEVT_WEBVIEW_SCRIPT_RESULT, id, "", "",
+        wxWEBVIEW_NAV_ACTION_NONE);
+    evt.SetEventObject(const_cast<wxWebView*>(this));
+    evt.SetClientData(clientData);
+    evt.SetInt(success);
+    evt.SetString(output);
+    HandleWindowEvent(evt);
 }
 
 // static

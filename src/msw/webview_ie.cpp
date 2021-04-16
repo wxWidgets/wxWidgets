@@ -1045,40 +1045,25 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output) const
         return false;
     }
 
-    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+    wxJSScriptWrapper wrapJS(javascript, wxJSScriptWrapper::JS_OUTPUT_IE);
 
     wxAutomationObject scriptAO(scriptDispatch);
     wxVariant varResult;
 
-    wxString err;
-    if ( !CallEval(wrapJS.GetWrappedCode(), scriptAO, &varResult) )
-    {
-        err = _("failed to evaluate");
-    }
-    else if ( varResult.IsType("bool") && varResult.GetBool() )
-    {
-        if ( output != NULL )
-        {
-            if ( CallEval(wrapJS.GetOutputCode(), scriptAO, &varResult) )
-                *output = varResult.MakeString();
-            else
-                err = _("failed to retrieve execution result");
-        }
+    bool success = false;
+    wxString scriptOutput;
+    if ( CallEval(wrapJS.GetWrappedCode(), scriptAO, &varResult) )
+        success = wxJSScriptWrapper::ExtractOutput(varResult.MakeString(), &scriptOutput);
+    else
+        scriptOutput = _("failed to evaluate");
 
-        CallEval(wrapJS.GetCleanUpCode(), scriptAO, &varResult);
-    }
-    else // result available but not the expected "true"
-    {
-        err = varResult.MakeString();
-    }
+    if (!success)
+        wxLogWarning(_("Error running JavaScript: %s"), scriptOutput);
 
-    if ( !err.empty() )
-    {
-        wxLogWarning(_("Error running JavaScript: %s"), varResult.MakeString());
-        return false;
-    }
+    if (output)
+        *output = scriptOutput;
 
-    return true;
+    return success;
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
