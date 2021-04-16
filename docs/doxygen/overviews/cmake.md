@@ -99,7 +99,7 @@ Using find_package                     {#cmake_find_package}
 ------------------
 You can use `find_package(wxWidgets)` to use a compiled version of wxWidgets.
 Have a look at the [CMake Documentation](https://cmake.org/cmake/help/latest/module/FindwxWidgets.html)
-for detailed instructions.
+for detailed instructions. wxWidgets also provides an example CMake file in the minimal sample folder.
 
 Your *CMakeLists.txt* would look like this:
 ~~~
