@@ -1266,8 +1266,9 @@ void wxThreadModule::OnExit()
         wxLogLastError(wxT("TlsFree failed."));
     }
 
-    // invalidate slot index to prevent wxThread from trying to reuse it if the
-    // library is initialized again later
+    // invalidate slot index to make the errors more obvious if we try to use
+    // it from now on, e.g. if any wxThreads are still running (which shouldn't
+    // be the case, of course, but might still happen)
     gs_tlsThisThread = TLS_OUT_OF_INDEXES;
 
     if ( gs_critsectGui )
