@@ -182,7 +182,7 @@ public:
         Attach a Windows icon handle.
 
         This wxMSW-specific method allows assigning a native Windows @c HICON
-        (which must be castes to @c WXHICON opaque handle type) to wxIcon.
+        (which must be cast to @c WXHICON opaque handle type) to wxIcon.
         Notice that this means that the @c HICON will be destroyed by wxIcon
         when it is destroyed.
 
@@ -267,6 +267,9 @@ public:
                   int desiredWidth = -1, int desiredHeight = -1);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the depth member (does not affect the icon data).
 
         @param depth
@@ -275,6 +278,9 @@ public:
     void SetDepth(int depth);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the height member (does not affect the icon data).
 
         @param height
@@ -283,6 +289,9 @@ public:
     void SetHeight(int height);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the width member (does not affect the icon data).
 
         @param width
