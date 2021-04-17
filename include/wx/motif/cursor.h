@@ -32,6 +32,7 @@ public:
 
 #if wxUSE_IMAGE
     wxCursor(const wxImage& image);
+    wxCursor(const char* const* xpmData);
 #endif
 
     wxCursor(wxStockCursor id) { InitFromStock(id); }
@@ -51,6 +52,10 @@ protected:
 
 private:
     void InitFromStock(wxStockCursor);
+
+#if wxUSE_IMAGE
+    void InitFromImage(const wxImage& image);
+#endif
 
     void Create(const char bits[], int width, int height,
                 int hotSpotX = -1, int hotSpotY = -1,

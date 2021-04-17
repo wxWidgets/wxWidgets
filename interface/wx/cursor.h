@@ -191,6 +191,17 @@ public:
     wxCursor(const wxImage& image);
 
     /**
+        Constructs a cursor from XPM data.
+
+        In versions of wxWidgets until 3.1.6 constructing wxCursor from XPM
+        data implicitly used wxImage constructor from XPM data and wxCursor
+        constructor from wxImage. Since 3.1.6 this constructor overload is
+        available to allow constructing wxCursor from XPM to still work, even
+        though wxImage constructor from XPM is now @c explicit.
+     */
+    wxCursor(const char* const* xpmData);
+
+    /**
         Copy constructor, uses @ref overview_refcount "reference counting".
 
         @param cursor

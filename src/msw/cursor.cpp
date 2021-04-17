@@ -154,6 +154,16 @@ wxCursor::wxCursor()
 #if wxUSE_IMAGE
 wxCursor::wxCursor(const wxImage& image)
 {
+    InitFromImage(image);
+}
+
+wxCursor::wxCursor(const char* const* xpmData)
+{
+    InitFromImage(wxImage(xpmData));
+}
+
+void wxCursor::InitFromImage(const wxImage& image)
+{
     // image has to be of the standard cursor size, otherwise we won't be able
     // to create it
     const int w = wxCursorRefData::GetStandardWidth();

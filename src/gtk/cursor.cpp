@@ -76,6 +76,7 @@ wxCursor::wxCursor(const wxString& cursor_file,
                    wxBitmapType type,
                    int hotSpotX, int hotSpotY)
 {
+#if wxUSE_IMAGE
     wxImage img;
     if (!img.LoadFile(cursor_file, type))
         return;
@@ -94,6 +95,11 @@ wxCursor::wxCursor(const wxString& cursor_file,
 wxCursor::wxCursor(const wxImage& img)
 {
     InitFromImage(img);
+}
+
+wxCursor::wxCursor(const char* const* xpmData)
+{
+    InitFromImage(wxImage(xpmData));
 }
 #endif // wxUSE_IMAGE
 

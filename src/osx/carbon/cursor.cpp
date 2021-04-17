@@ -230,6 +230,11 @@ wxCursor::wxCursor( const wxImage &image )
 {
     InitFromImage( image ) ;
 }
+
+wxCursor::wxCursor(const char* const* xpmData)
+{
+    InitFromImage( wxImage(xpmData) ) ;
+}
 #endif // wxUSE_IMAGE
 
 wxGDIRefData *wxCursor::CreateGDIRefData() const

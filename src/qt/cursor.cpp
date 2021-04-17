@@ -83,6 +83,11 @@ wxCursor::wxCursor(const wxImage& img)
 {
     InitFromImage(img);
 }
+
+wxCursor::wxCursor(const char* const* xpmData)
+{
+    InitFromImage(wxImage(xpmData));
+}
 #endif // wxUSE_IMAGE
 
 wxPoint wxCursor::GetHotSpot() const
