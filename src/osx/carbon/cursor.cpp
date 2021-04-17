@@ -228,7 +228,7 @@ wxCursor::wxCursor()
 #if wxUSE_IMAGE
 wxCursor::wxCursor( const wxImage &image )
 {
-    CreateFromImage( image ) ;
+    InitFromImage( image ) ;
 }
 #endif // wxUSE_IMAGE
 
@@ -249,7 +249,7 @@ WXHCURSOR wxCursor::GetHCURSOR() const
 
 #if wxUSE_IMAGE
 
-void wxCursor::CreateFromImage(const wxImage & image)
+void wxCursor::InitFromImage(const wxImage & image)
 {
     m_refData = new wxCursorRefData;
     int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
@@ -287,7 +287,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
             image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY ) ;
             m_refData->DecRef() ;
             m_refData = NULL ;
-            CreateFromImage( image ) ;
+            InitFromImage( image ) ;
         }
 #endif
     }
