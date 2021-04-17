@@ -578,7 +578,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
   // CYGWIN also uses UNIX settings
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
-#elif defined(__MAC__)
+#elif defined(__APPLE)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
   #define wxPATH_SEP          wxPATH_SEP_MAC
 #else   // Windows
@@ -598,7 +598,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 inline bool wxIsPathSeparator(wxChar c)
 {
     // under DOS/Windows we should understand both Unix and DOS file separators
-#if defined(__UNIX__) || defined(__MAC__)
+#if defined(__UNIX__) || defined(__APPLE__)
     return c == wxFILE_SEP_PATH;
 #else
     return c == wxFILE_SEP_PATH_DOS || c == wxFILE_SEP_PATH_UNIX;
