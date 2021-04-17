@@ -190,9 +190,9 @@ public:
                             wxT("width can only be increased") );
 
             m_rectAll.width = w;
-            m_rectLabel.x = m_rectAll.x + (w - m_rectLabel.width) / 2;
-            m_rectIcon.x = m_rectAll.x + (w - m_rectIcon.width) / 2;
-            m_rectHighlight.x = m_rectAll.x + (w - m_rectHighlight.width) / 2;
+            m_rectLabel.x += (w - m_rectLabel.width) / 2;
+            m_rectIcon.x += (w - m_rectIcon.width) / 2;
+            m_rectHighlight.x += (w - m_rectHighlight.width) / 2;
         }
     }
     *m_gi;
