@@ -129,14 +129,14 @@ public:
 
 
     // Gets the column order from its index or index from its order
-    int GetColumnOrder(int col) const;
-    int GetColumnIndexFromOrder(int order) const;
+    int GetColumnOrder(int col) const wxOVERRIDE;
+    int GetColumnIndexFromOrder(int order) const wxOVERRIDE;
 
     // Gets the column order for all columns
-    wxArrayInt GetColumnsOrder() const;
+    wxArrayInt GetColumnsOrder() const wxOVERRIDE;
 
     // Sets the column order for all columns
-    bool SetColumnsOrder(const wxArrayInt& orders);
+    bool SetColumnsOrder(const wxArrayInt& orders) wxOVERRIDE;
 
 
     // Gets the number of items that can fit vertically in the

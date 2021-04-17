@@ -399,6 +399,14 @@ public:
     virtual int GetColumnWidth(int col) const = 0;
     virtual bool SetColumnWidth(int col, int width) = 0;
 
+    // Column ordering functions
+    virtual int GetColumnOrder(int col) const = 0;
+    virtual int GetColumnIndexFromOrder(int order) const = 0;
+
+    virtual wxArrayInt GetColumnsOrder() const = 0;
+    virtual bool SetColumnsOrder(const wxArrayInt& orders) = 0;
+
+
     // Other miscellaneous accessors.
     // ------------------------------
 
