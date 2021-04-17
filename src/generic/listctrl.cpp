@@ -5162,6 +5162,31 @@ bool wxGenericListCtrl::SetColumnWidth( int col, int width )
     return true;
 }
 
+// Column ordering functions
+int wxGenericListCtrl::GetColumnOrder(int col) const
+{
+    // TODO: Implement this on generic port
+    return col;
+}
+
+int wxGenericListCtrl::GetColumnIndexFromOrder(int order) const
+{
+    // TODO: Implement this on generic port
+    return order;
+}
+
+wxArrayInt wxGenericListCtrl::GetColumnsOrder() const
+{
+    // TODO: Implement this on generic port
+    return wxArrayInt();
+}
+
+bool wxGenericListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
+{
+    // TODO: Implement this on generic port
+    return false;
+}
+
 int wxGenericListCtrl::GetCountPerPage() const
 {
   return m_mainWin->GetCountPerPage();  // different from Windows ?
