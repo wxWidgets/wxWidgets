@@ -225,12 +225,12 @@ wxCursor::wxCursor()
 {
 }
 
+#if wxUSE_IMAGE
 wxCursor::wxCursor( const wxImage &image )
 {
-#if wxUSE_IMAGE
     CreateFromImage( image ) ;
-#endif
 }
+#endif // wxUSE_IMAGE
 
 wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
