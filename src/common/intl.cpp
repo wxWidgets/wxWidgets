@@ -253,6 +253,9 @@ void wxLocale::DoCommonInit()
     if ( m_pszOldLocale )
         m_pszOldLocale = wxStrdup(m_pszOldLocale);
 
+#ifdef __WIN32__
+    m_oldLCID = ::GetThreadLocale();
+#endif
 
     m_pOldLocale = wxSetLocale(this);
 
@@ -1098,6 +1101,11 @@ wxLocale::~wxLocale()
         wxSetlocale(LC_ALL, m_pszOldLocale);
         free(const_cast<char *>(m_pszOldLocale));
     }
+
+#ifdef __WIN32__
+    ::SetThreadLocale(m_oldLCID);
+    wxMSWSetThreadUILanguage(LANGIDFROMLCID(m_oldLCID));
+#endif
 }
 
 
