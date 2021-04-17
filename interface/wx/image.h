@@ -611,8 +611,10 @@ public:
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
+
+        This constructor has become @c explicit in wxWidgets 3.1.6.
     */
-    wxImage(const char* const* xpmData);
+    explicit wxImage(const char* const* xpmData);
 
     /**
         Creates an image from a file.
