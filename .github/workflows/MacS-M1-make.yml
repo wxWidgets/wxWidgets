@@ -1,0 +1,25 @@
+name: Mac make CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: configure
+      run: arch -arm64 ./configure
+    - name: make
+      run: arch -arm64 make
+    - name: make tests
+      run: arch -arm64 make -C tests
+    - name: make install
+      run: make install; make -C samples/minimal -f makefile.unx clean; make -C samples/minimal -f makefile.unx
