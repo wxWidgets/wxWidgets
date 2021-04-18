@@ -11,9 +11,9 @@ jobs:
     defaults:
       run:
         shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
-        
+
     runs-on: self-hosted
-    
+
     env:
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
       NSUnbufferedIO: YES
@@ -22,13 +22,21 @@ jobs:
       fail-fast: false
       matrix:
         arch: [arm64e, x86_64]
+        build: [debug, release]
+        cxx: [11, 17]
+
+    include:
+    - build: debug
+      config: --without-liblzma --enable-debug --with-zlib=builtin --with-osx_cocoa
+    - build: release
+      config: --without-liblzma -with-zlib=builtin --with-osx_cocoa
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
     - name: configure
-      run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure --prefix=$PWD/localbin_${{ matrix.arch }}
+      run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure --{{ matrix.config }} --with-cxx={{ matrix.cxx }} --prefix=$PWD/localbin_${{ matrix.arch }}
     - name: make
       run: make -j4
     - name: make install
