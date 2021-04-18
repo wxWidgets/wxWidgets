@@ -21,5 +21,5 @@ jobs:
       run: arch -arm64 make
     - name: make tests
       run: arch -arm64 make -C tests
-    - name: make install
+    - name: make install and minimal sample
       run: make install; make -C samples/minimal -f makefile.unx clean; make -C samples/minimal -f makefile.unx
