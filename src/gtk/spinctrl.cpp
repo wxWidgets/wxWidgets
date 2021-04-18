@@ -214,6 +214,13 @@ double wxSpinCtrlGTKBase::DoGetIncrement() const
     return inc;
 }
 
+wxString wxSpinCtrlGTKBase::GetTextValue() const
+{
+    wxCHECK_MSG(m_widget, wxEmptyString, "invalid spin button");
+
+    return gtk_entry_get_text( GTK_ENTRY(m_widget) );
+}
+
 bool wxSpinCtrlGTKBase::GetSnapToTicks() const
 {
     wxCHECK_MSG(m_widget, false, "invalid spin button");

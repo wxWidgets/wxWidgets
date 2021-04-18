@@ -35,6 +35,7 @@ public:
     wxSpinCtrlBase() {}
 
     // accessor functions that derived classes are expected to have
+    virtual wxString GetTextValue() const { return wxString(); }
     // T GetValue() const
     // T GetMin() const
     // T GetMax() const

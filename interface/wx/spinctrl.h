@@ -134,6 +134,13 @@ public:
     int GetMin() const;
 
     /**
+        Returns the text in the text entry part of the control.
+
+        @since 3.1.6
+    */
+    wxString GetTextValue() const;
+
+    /**
         Gets the value of the spin control.
     */
     int GetValue() const;
@@ -314,6 +321,13 @@ public:
         Gets minimal allowable value.
     */
     double GetMin() const;
+
+    /**
+        Returns the text in the text entry part of the control.
+
+        @since 3.1.6
+    */
+    wxString GetTextValue() const;
 
     /**
         Gets the value of the spin control.

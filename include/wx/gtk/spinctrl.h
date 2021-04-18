@@ -35,6 +35,7 @@ public:
     // wxSpinCtrl(Double) methods call DoXXX functions of the same name
 
     // accessors
+    virtual wxString GetTextValue() const wxOVERRIDE;
     // T GetValue() const
     // T GetMin() const
     // T GetMax() const

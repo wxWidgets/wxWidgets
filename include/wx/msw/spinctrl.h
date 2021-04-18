@@ -62,6 +62,7 @@ public:
     void SetSelection(long from, long to);
 
     // wxSpinCtrlBase methods
+    virtual wxString GetTextValue() const;
     virtual int GetBase() const;
     virtual bool SetBase(int base);
 

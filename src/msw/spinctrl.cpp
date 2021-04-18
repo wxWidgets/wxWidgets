@@ -442,6 +442,11 @@ bool wxSpinCtrl::SetBase(int base)
 // wxTextCtrl-like methods
 // ----------------------------------------------------------------------------
 
+wxString wxSpinCtrl::GetTextValue() const
+{
+    return wxGetWindowText(m_hwndBuddy);
+}
+
 void wxSpinCtrl::SetValue(const wxString& text)
 {
     if ( !::SetWindowText(GetBuddyHwnd(), text.c_str()) )
