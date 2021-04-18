@@ -363,6 +363,9 @@ private:
 
     const char  *m_pszOldLocale;      // previous locale from setlocale()
     wxLocale      *m_pOldLocale;      // previous wxLocale
+#ifdef __WIN32__
+    wxUint32       m_oldLCID;
+#endif
 
     bool           m_initialized;
 
