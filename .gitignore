@@ -225,7 +225,6 @@
 /lib/mswud
 /lib/png*.lib
 /lib/regex*.lib
-/lib/shell32_sc.lib
 /lib/tiff*.lib
 /lib/univ
 /lib/univd
@@ -233,9 +232,6 @@
 /lib/univdlld
 /lib/vc*_dll
 /lib/vc*_lib
-/lib/wat_lib
-/lib/winmm32_sc.lib
-/lib/wsock32_sc.lib
 /lib/wx_*.rsrc
 /lib/wxbase*.dll
 /lib/wxbase*.exp
