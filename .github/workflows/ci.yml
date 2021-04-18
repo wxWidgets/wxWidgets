@@ -6,6 +6,7 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.github/workflows/MacS-M1-make.yml'
       - 'build/tools/appveyor*.bat'
       - 'build/tools/travis-ci.sh'
       - 'distrib/**'
@@ -22,6 +23,7 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.github/workflows/MacS-M1-make.yml'
       - 'build/tools/appveyor*.bat'
       - 'build/tools/travis-ci.sh'
       - 'distrib/**'
