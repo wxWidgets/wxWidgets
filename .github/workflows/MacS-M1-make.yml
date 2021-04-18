@@ -7,21 +7,33 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  build-and-test:
+    defaults:
+      run:
+        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
+        
     runs-on: self-hosted
+    
+    env:
+      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+      NSUnbufferedIO: YES
+
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [arm64e, x86_64]
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
     - name: configure
-      run: arch -arm64 ./configure
+      run: ./configure
     - name: make
-      run: arch -arm64 make -j4
+      run: make -j4
     - name: make tests
-      run: arch -arm64 make -C tests
-    - name: run tests
-      run:  pushd tests;arch -arm64 ./test;popd
+      run: make -j4 -C tests
     - name: make minimal sample
-      run: arch -arm64 make -C samples/minimal -f makefile.unx clean;arch -arm64 make -C samples/minimal -f makefile.unx
+      run: make -j4 -C samples/minimal -f makefile.unx clean;make -j4 -C samples/minimal -f makefile.unx
+    - name: run tests
+      run:  pushd tests;./test;popd
