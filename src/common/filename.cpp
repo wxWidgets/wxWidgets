@@ -1698,7 +1698,7 @@ wxFileName wxFileName::ResolveLink()
         bufSize = st.st_size + 1;
 
     char buf[bufSize];
-    int result = wxReadlink(link, buf, bufSize - 1);
+    ssize_t result = wxReadlink(link, buf, bufSize - 1);
 
     if ( result != -1 )
     {

@@ -410,7 +410,7 @@ inline int wxOpen(const wxString& path, int flags, mode_t mode)
     { return wxCRT_Open(path.fn_str(), flags, mode); }
 
 #if defined(wxHAS_NATIVE_READLINK)
-inline int wxReadlink(const wxString& path, char* buf, int size)
+inline ssize_t wxReadlink(const wxString& path, char* buf, int size)
     { return wxCRT_Readlink(path.fn_str(), buf, size); }
 #endif
 
