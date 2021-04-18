@@ -150,9 +150,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_HEADER, MyFrame::OnToggleHeader)
     EVT_MENU(LIST_TOGGLE_BELL, MyFrame::OnToggleBell)
     EVT_MENU(LIST_CHECKVISIBILITY, MyFrame::OnCheckVisibility)
-#ifdef __WXOSX__
-    EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
-#endif // __WXOSX__
     EVT_MENU(LIST_FIND, MyFrame::OnFind)
     EVT_MENU(LIST_TOGGLE_CHECKBOX, MyFrame::OnToggleItemCheckBox)
     EVT_MENU(LIST_GET_CHECKBOX, MyFrame::OnGetItemCheckBox)
@@ -229,10 +226,6 @@ MyFrame::MyFrame(const wxString& title)
     menuView->Append(LIST_SMALL_VIRTUAL_VIEW, "Small virtual vie&w\tF8");
     menuView->AppendSeparator();
     menuView->Append(LIST_SET_ITEMS_COUNT, "Set &number of items");
-#ifdef __WXOSX__
-    menuView->AppendSeparator();
-    menuView->AppendCheckItem(LIST_MAC_USE_GENERIC, "Mac: Use Generic Control");
-#endif
 
     wxMenu *menuList = new wxMenu;
     menuList->Append(LIST_GOTO, "&Go to item #3\tCtrl-3");
@@ -391,15 +384,6 @@ void MyFrame::OnCheckVisibility(wxCommandEvent& WXUNUSED(event))
         wxLogMessage( "Line 9 is not visible" );
 }
 
-#ifdef __WXOSX__
-
-void MyFrame::OnToggleMacUseGeneric(wxCommandEvent& event)
-{
-    wxSystemOptions::SetOption("mac.listctrl.always_use_generic", event.IsChecked());
-}
-
-#endif // __WXOSX__
-
 void MyFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_listCtrl->IsEmpty() )
@@ -433,7 +417,7 @@ void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnToggleFirstSel(wxCommandEvent& WXUNUSED(event))
 {
     if ( !m_listCtrl->IsEmpty() )
-    { 
+    {
         m_listCtrl->SetItemState(0, (~m_listCtrl->GetItemState(0, wxLIST_STATE_SELECTED) ) & wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
     }
     else
