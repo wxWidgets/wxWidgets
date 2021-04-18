@@ -147,10 +147,9 @@ enum
     To intercept events from a list control, use the event table macros described
     in wxListEvent.
 
-    <b>wxMac Note</b>: Starting with wxWidgets 2.8, wxListCtrl uses a native
-    implementation for report mode, and uses a generic implementation for other
-    modes. You can use the generic implementation for report mode as well by setting
-    the @c mac.listctrl.always_use_generic system option (see wxSystemOptions) to 1.
+    @note The native wxOSX implementation for report mode that was added in wxWidgets
+    2.8 was removed in wxWidgets 3.1, meaning for wxWidgets 3.1+ wxOSX uses the generic
+    implementation for all modes.
 
     @subsection column_order Column Ordering
 
