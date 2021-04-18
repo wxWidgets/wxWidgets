@@ -234,11 +234,57 @@ public:
     bool Load(const wxString& filemask);
 
     /**
+        Load resources from the XML document containing them.
+
+        This can be useful when XRC contents comes from some place other than a
+        file or, more generally, an URL, as it can still be read into a
+        wxMemoryInputStream and then wxXmlDocument can be created from this
+        stream and used with this function.
+
+        For example:
+        @code
+        const char* const xrc_data = ...; // Retrieve it from wherever.
+        wxMemoryInputStream mis(xrc_data, strlen(xrc_data));
+        wxScopedPtr<wxXmlDocument> xmlDoc(new wxXmlDocument(mis, "UTF-8"));
+        if ( !xmlDoc->IsOk() )
+        {
+            ... handle invalid XML here ...
+            return;
+        }
+
+        if ( !wxXmlResource::Get()->LoadDocument(xmlDoc.release()) )
+        {
+            ... handle invalid XRC here ...
+            return;
+        }
+
+        ... use the just loaded XRC as usual ...
+        @endcode
+
+        @param doc A valid, i.e. non-null, document pointer ownership of which
+            is passed to wxXmlResource, i.e. this pointer can't be used after
+            this function rteturns.
+        @param name The name argument is optional, but may be provided if you
+            plan to call Unload() later. It doesn't need to be an existing file
+            or even conform to the usual form of file names as it is not
+            interpreted in any way by wxXmlResource, but it should be unique
+            among the other documents and file names used if specified.
+        @return @true on success, @false if the document couldn't be loaded
+            (note that @a doc is still destroyed in this case to avoid memory
+            leaks).
+
+        @see Load(), LoadFile()
+
+        @since 3.1.6
+     */
+    bool LoadDocument(wxXmlDocument* doc, const wxString& name = wxString());
+
+    /**
         Simpler form of Load() for loading a single XRC file.
 
         @since 2.9.0
 
-        @see Load(), LoadAllFiles()
+        @see Load(), LoadAllFiles(), LoadDocument()
     */
     bool LoadFile(const wxFileName& file);
 

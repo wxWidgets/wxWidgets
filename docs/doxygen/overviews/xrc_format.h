@@ -341,8 +341,8 @@ or translations are done.
 @subsection overview_xrcformat_type_bitmap Bitmap
 
 Bitmap properties contain specification of a single bitmap or icon. In the most
-basic form, their text value is simply a relative filename (or another
-wxFileSystem URL) of the bitmap to use. For example:
+basic form, their text value is simply a relative URL of the bitmap to use.
+For example:
 @code
 <object class="tool" name="wxID_NEW">
     <tooltip>New</tooltip>
@@ -350,7 +350,15 @@ wxFileSystem URL) of the bitmap to use. For example:
 </object>
 @endcode
 The value is interpreted as path relative to the location of XRC file where the
-reference occurs.
+reference occurs, but notice that it is still an URL and not just a filename,
+which means that the characters special in the URLs, such as @c '#' must be
+percent-encoded, e.g. here is the correct way to specify a bitmap with the path
+@c "images/#1/tool.png" in XRC:
+@code
+<object class="tool" name="first">
+    <bitmap>images/%231/tool.png</bitmap>
+</object>
+@endcode
 
 Bitmap file paths can include environment variables that are expanded if
 wxXRC_USE_ENVVARS was passed to the wxXmlResource constructor.
