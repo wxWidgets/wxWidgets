@@ -1,0 +1,1 @@
+wxMSW: Fix spurious assertions when using unknown Win32 locales.
