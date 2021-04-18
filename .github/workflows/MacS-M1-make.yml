@@ -31,9 +31,9 @@ jobs:
       run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure --prefix=$PWD/localbin_${{ matrix.arch }}
     - name: make
       run: make -j4
+    - name: make install
+      run: make install
     - name: make tests
       run: make -j4 -C tests
-    - name: make minimal sample
-      run: make install;make -j4 -C samples/minimal -f makefile.unx clean;make -j4 -C samples/minimal -f makefile.unx
     - name: run tests
-      run:  pushd tests;./test;popd
+      run: pushd tests;./test;popd
