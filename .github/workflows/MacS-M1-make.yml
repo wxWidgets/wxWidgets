@@ -24,12 +24,11 @@ jobs:
         arch: [arm64e, x86_64]
         build: [debug, release]
         cxx: [11, 17]
-
-    include:
-    - build: debug
-      config: --without-liblzma --enable-debug --with-zlib=builtin --with-osx_cocoa
-    - build: release
-      config: --without-liblzma -with-zlib=builtin --with-osx_cocoa
+        include:
+        - build: debug
+          config: --without-liblzma --enable-debug --with-zlib=builtin --with-osx_cocoa
+        - build: release
+          config: --without-liblzma -with-zlib=builtin --with-osx_cocoa
 
     steps:
     - uses: actions/checkout@v2
