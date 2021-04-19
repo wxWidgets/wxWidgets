@@ -43,10 +43,10 @@ jobs:
         include:
         - build: debug
           config: --without-liblzma --enable-debug --disable-sys-libs --with-osx_cocoa
-          name: debug, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
+          name: debug, arch ${{ arch }}, cxx${{ cxx }}
         - build: release
           config: --without-liblzma --disable-sys-libs --with-osx_cocoa
-          name: release, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
+          name: release, arch ${{ arch }}, cxx${{ cxx }}
 
     steps:
     - uses: actions/checkout@v2
