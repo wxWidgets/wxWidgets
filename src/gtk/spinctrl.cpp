@@ -67,11 +67,11 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
 
 extern "C" {
 static void
-gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
+gtk_changed(GtkSpinButton*, wxSpinCtrl* win)
 {
     wxCommandEvent event( wxEVT_TEXT, win->GetId() );
     event.SetEventObject( win );
-    event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
+    event.SetString(win->GetTextValue());
     event.SetInt(win->GetValue());
     win->HandleWindowEvent( event );
 }
@@ -343,9 +343,7 @@ void wxSpinCtrlGTKBase::OnChar( wxKeyEvent &event )
     {
         wxCommandEvent evt( wxEVT_TEXT_ENTER, m_windowId );
         evt.SetEventObject(this);
-        GtkSpinButton *gsb = GTK_SPIN_BUTTON(m_widget);
-        wxString val = wxGTK_CONV_BACK( gtk_entry_get_text( &gsb->entry ) );
-        evt.SetString( val );
+        evt.SetString(GetTextValue());
         if (HandleWindowEvent(evt)) return;
     }
 
