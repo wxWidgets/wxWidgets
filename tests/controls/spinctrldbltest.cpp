@@ -168,6 +168,17 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
     // Calling SetValue() shouldn't have generated any events.
     CHECK( updatedSpin.GetCount() == 0 );
     CHECK( updatedText.GetCount() == 0 );
+
+    // Also test that setting the text value works.
+    CHECK( m_spin->GetTextValue() == "49.10" );
+
+    m_spin->SetValue("57.30");
+    CHECK( m_spin->GetTextValue() == "57.30" );
+    CHECK( m_spin->GetValue() == 57.3 );
+
+    m_spin->SetValue("");
+    CHECK( m_spin->GetTextValue() == "" );
+    CHECK( m_spin->GetValue() == 57.3 );
 }
 
 #if wxUSE_UIACTIONSIMULATOR

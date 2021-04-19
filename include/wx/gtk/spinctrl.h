@@ -74,6 +74,9 @@ public:
     virtual void GTKValueChanged() = 0;
 
 protected:
+    wxSpinCtrlGTKBase();
+    ~wxSpinCtrlGTKBase();
+
     double DoGetValue() const;
     double DoGetMin() const;
     double DoGetMax() const;
@@ -97,6 +100,19 @@ protected:
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
+
+    // Set or reset m_textOverride.
+    void GTKSetTextOverride(const wxString& text);
+    void GTKResetTextOverride();
+
+private:
+    // This function does _not_ take into account m_textOverride, so it is
+    // private and normally shouldn't be used -- use DoGetValue() instead.
+    double GTKGetValue() const;
+
+    // Non-null when the text value is different from the numeric value.
+    class wxSpinCtrlGTKTextOverride* m_textOverride;
+
 
     friend class wxSpinCtrlEventDisabler;
 
