@@ -45,13 +45,17 @@ jobs:
           config: --without-liblzma --enable-debug --disable-sys-libs --with-osx_cocoa
         - build: release
           config: --without-liblzma --disable-sys-libs --with-osx_cocoa
+        - cxx: 17
+          cxxconfig: --with-macosx-version-min=10.12
+        - cxx: 11
+          cxxconfig:
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
     - name: configure
-      run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure ${{ matrix.config }} --with-cxx=${{ matrix.cxx }} --prefix=$PWD/localbin_${{ matrix.arch }}
+      run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure ${{ matrix.config }} ${{ matrix.cxxconfig }} --with-cxx=${{ matrix.cxx }} --prefix=$PWD/localbin_${{ matrix.arch }}
     - name: make
       run: make -j4
     - name: make install
