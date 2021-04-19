@@ -1389,6 +1389,7 @@ void wxNSTextViewControl::SetStyle(long start,
                     if ( ( style.HasFontFaceName() || style.HasFontFamily() || style.HasFontEncoding() ) && style.HasFontSize() )
                     {
                         // Change all the text in the range to have the exact same font, size, etc.
+                        // TODO: Handle setting font from PostScript name.
                         [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
                     }
                     else
@@ -1410,8 +1411,23 @@ void wxNSTextViewControl::SetStyle(long start,
                                 if ( style.HasFontSize() )
                                     newFont = [[NSFontManager sharedFontManager] convertFont:font toSize:style.GetFractionalFontSize()];
                                 else if ( style.HasFontFaceName() )
-                                    newFont = [[NSFontManager sharedFontManager] convertFont:font
-                                                                                    toFamily:wxCFStringRef(style.GetFontFaceName()).AsNSString()];
+                                {
+                                    switch ( style.GetFontNameType() )
+                                    {
+                                        case wxTEXT_ATTR_FONTNAME_TYPE_FULL: // TODO
+                                        case wxTEXT_ATTR_FONTNAME_TYPE_STYLE: // TODO
+                                        default:
+                                        case wxTEXT_ATTR_FONTNAME_TYPE_FAMILY:
+                                            newFont = [[NSFontManager sharedFontManager] convertFont:font
+                                                                                        toFamily:wxCFStringRef(style.GetFontFaceName()).AsNSString()];
+                                            break;
+                                        case wxTEXT_ATTR_FONTNAME_TYPE_POSTSCRIPT:
+                                            newFont = [[NSFontManager sharedFontManager] convertFont:font
+                                                                                        toFace:wxCFStringRef(style.GetFontFaceName()).AsNSString()];
+                                            break;
+                                      }
+
+                                }
 
                                 if ( newFont != nil )
                                     [storage addAttribute:NSFontAttributeName value:newFont range:foundRange];

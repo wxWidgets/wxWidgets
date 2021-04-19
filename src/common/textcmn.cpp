@@ -26,6 +26,7 @@
 #if wxUSE_TEXTCTRL
 
 #include "wx/textctrl.h"
+#include "wx/fontutil.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -180,6 +181,7 @@ void wxTextAttr::Init()
     m_paragraphUserData = 0;
 
     m_unitsPerPoint = pt2mm * 10.0;
+    m_FontNameType = wxTEXT_ATTR_FONTNAME_TYPE_FAMILY;
 }
 
 // Copy
@@ -224,6 +226,7 @@ void wxTextAttr::Copy(const wxTextAttr& attr)
     m_urlTarget = attr.m_urlTarget;
 
     m_unitsPerPoint = attr.m_unitsPerPoint;
+    m_FontNameType = attr.m_FontNameType;
 }
 
 // operators
@@ -474,21 +477,34 @@ wxFont wxTextAttr::GetFont() const
     if (HasFontFamily())
         fontFamily = GetFontFamily();
 
-    if (HasFontPixelSize())
+    wxFont font(wxSize(0, wxFontInfo::ToIntPointSize(fontSize)), fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+
+    if (HasFontFaceName())
     {
-        wxFont font(wxSize(0, wxFontInfo::ToIntPointSize(fontSize)), fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
-        if (strikethrough)
-            font.SetStrikethrough(true);
-        return font;
+        switch (m_FontNameType)
+        {
+            case wxTEXT_ATTR_FONTNAME_TYPE_FULL: // TODO
+            case wxTEXT_ATTR_FONTNAME_TYPE_STYLE: // TODO
+            default:
+            case wxTEXT_ATTR_FONTNAME_TYPE_FAMILY:
+                // already set family name
+                break;
+            case wxTEXT_ATTR_FONTNAME_TYPE_POSTSCRIPT:
+                wxNativeFontInfo nativeFontInfo = *font.GetNativeFontInfo();
+                nativeFontInfo.SetPostScriptName(fontFaceName);
+                nativeFontInfo.SetFaceName(wxEmptyString);
+                font.Create(nativeFontInfo);
+                break;
+        }
     }
-    else
-    {
-        wxFont font(fontSize, fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+
+    if (!HasFontPixelSize())
         font.SetFractionalPointSize(fontSize);
-        if (strikethrough)
-            font.SetStrikethrough(true);
-        return font;
-    }
+
+    if (strikethrough)
+        font.SetStrikethrough(true);
+
+    return font;
 }
 
 // Get attributes from font.
@@ -535,7 +551,20 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
         m_fontStrikethrough = font.GetStrikethrough();
 
     if (flags & wxTEXT_ATTR_FONT_FACE)
-        m_fontFaceName = font.GetFaceName();
+    {
+        switch (m_FontNameType)
+        {
+            case wxTEXT_ATTR_FONTNAME_TYPE_FULL: // TODO
+            case wxTEXT_ATTR_FONTNAME_TYPE_STYLE: // TODO
+            default:
+            case wxTEXT_ATTR_FONTNAME_TYPE_FAMILY:
+                m_fontFaceName = font.GetFaceName();
+                break;
+            case wxTEXT_ATTR_FONTNAME_TYPE_POSTSCRIPT:
+                m_fontFaceName = font.GetNativeFontInfo()->GetPostScriptName();
+                break;
+        }
+    }
 
     if (flags & wxTEXT_ATTR_FONT_ENCODING)
         m_fontEncoding = font.GetEncoding();

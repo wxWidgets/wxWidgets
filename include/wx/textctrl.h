@@ -287,6 +287,14 @@ enum wxTextAttrLineSpacingMode
     wxTEXT_ATTR_LINE_SPACING_MODE_EXACT,    // "absolute" leading: m_lineSpacing / m_unitsPerPoint points
 };
 
+enum wxTextAttrFontNameType
+{
+  wxTEXT_ATTR_FONTNAME_TYPE_FAMILY,     // family name (default), may be system- and language-dependent
+  wxTEXT_ATTR_FONTNAME_TYPE_POSTSCRIPT, // PostScript name
+  wxTEXT_ATTR_FONTNAME_TYPE_FULL,       // "full" name, may be system- and language-dependent
+  wxTEXT_ATTR_FONTNAME_TYPE_STYLE,      // style (subfamily) name, e.g. "Regular", "Bold", etc.; may be system- and language-dependent
+};
+
 // ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
@@ -512,6 +520,9 @@ public:
     void SetUnitsPerPoint(double units) { m_unitsPerPoint = units; }
     double GetUnitsPerPoint() const { return m_unitsPerPoint; }
 
+    void SetFontNameType(wxTextAttrFontNameType type) { m_FontNameType = type; }
+    wxTextAttrFontNameType GetFontNameType() const { return m_FontNameType; }
+
 private:
     long                m_flags;
 
@@ -565,6 +576,9 @@ private:
 
     // Units for spacing, indents, and tabs; defaults to (pt2mm * 10.0).
     double              m_unitsPerPoint;
+
+    // Which kind of font name to use to reference the font (family, PostScript, full, etc.).
+    wxTextAttrFontNameType m_FontNameType;
 };
 
 // ----------------------------------------------------------------------------
