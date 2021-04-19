@@ -218,7 +218,7 @@ wxString wxSpinCtrlGTKBase::GetTextValue() const
 {
     wxCHECK_MSG(m_widget, wxEmptyString, "invalid spin button");
 
-    return gtk_entry_get_text( GTK_ENTRY(m_widget) );
+    return wxGTK_CONV_BACK(gtk_entry_get_text( GTK_ENTRY(m_widget) ));
 }
 
 bool wxSpinCtrlGTKBase::GetSnapToTicks() const
