@@ -29,6 +29,8 @@ jobs:
         shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
 
     runs-on: self-hosted
+    
+    name: ${{ matrix.build }}, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
 
     env:
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
