@@ -197,6 +197,10 @@ public:
         Sets the value of the spin control.
 
         It is recommended to use the overload taking an integer value instead.
+        The behaviour of this function when @a text doesn't represent a valid
+        number currently differs between the platforms, however passing an
+        empty string does clear the text part contents, without affecting the
+        value returned by GetValue(), under all of them.
 
         Notice that, unlike wxTextCtrl::SetValue(), but like most of the other
         setter methods in wxWidgets, calling this method does not generate any
@@ -249,6 +253,14 @@ public:
 
     /**
         Constructor, creating and showing a spin control.
+
+        If @a value is non-empty, it will be shown in the text entry part of
+        the control and if it has numeric value, the initial numeric value of
+        the control, as returned by GetValue() will also be determined by it
+        instead of by @a initial. Hence, it only makes sense to specify @a
+        initial if @a value is an empty string or is not convertible to a
+        number, otherwise @a initial is simply ignored and the number specified
+        by @a value is used.
 
         @param parent
             Parent window. Must not be @NULL.
@@ -356,6 +368,10 @@ public:
         Sets the value of the spin control.
 
         It is recommended to use the overload taking a double value instead.
+        The behaviour of this function when @a text doesn't represent a valid
+        number currently differs between the platforms, however
+        passing an empty string does clear the text part contents, without
+        affecting the value returned by GetValue(), under all of them.
 
         Notice that, unlike wxTextCtrl::SetValue(), but like most of the other
         setter methods in wxWidgets, calling this method does not generate any
