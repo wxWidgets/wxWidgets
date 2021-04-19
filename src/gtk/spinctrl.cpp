@@ -37,27 +37,12 @@ extern bool   g_blockEventsOnDrag;
 
 extern "C" {
 static void
-gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
+gtk_value_changed(GtkSpinButton*, wxSpinCtrlGTKBase* win)
 {
     if (g_blockEventsOnDrag)
         return;
 
-    if (wxIsKindOf(win, wxSpinCtrl))
-    {
-        wxSpinEvent event(wxEVT_SPINCTRL, win->GetId());
-        event.SetEventObject( win );
-        event.SetPosition(static_cast<wxSpinCtrl*>(win)->GetValue());
-        event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
-        win->HandleWindowEvent( event );
-    }
-    else // wxIsKindOf(win, wxSpinCtrlDouble)
-    {
-        wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, win->GetId());
-        event.SetEventObject( win );
-        event.SetValue(static_cast<wxSpinCtrlDouble*>(win)->GetValue());
-        event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
-        win->HandleWindowEvent( event );
-    }
+    win->GTKValueChanged();
 }
 }
 
@@ -523,6 +508,15 @@ bool wxSpinCtrl::GTKOutput(wxString* text) const
     return true;
 }
 
+void wxSpinCtrl::GTKValueChanged()
+{
+    wxSpinEvent event(wxEVT_SPINCTRL, GetId());
+    event.SetEventObject( this );
+    event.SetPosition(GetValue());
+    event.SetString(GetTextValue());
+    HandleWindowEvent( event );
+}
+
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
@@ -566,6 +560,15 @@ wxSpinCtrlDouble::GTKInput(double* WXUNUSED(value)) const
 bool wxSpinCtrlDouble::GTKOutput(wxString* WXUNUSED(text)) const
 {
     return false;
+}
+
+void wxSpinCtrlDouble::GTKValueChanged()
+{
+    wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, GetId());
+    event.SetEventObject( this );
+    event.SetValue(GetValue());
+    event.SetString(GetTextValue());
+    HandleWindowEvent( event );
 }
 
 #endif // wxUSE_SPINCTRL

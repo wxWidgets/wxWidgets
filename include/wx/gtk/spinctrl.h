@@ -71,6 +71,8 @@ public:
     virtual GTKInputResult GTKInput(double* value) const = 0;
     virtual bool GTKOutput(wxString* text) const = 0;
 
+    virtual void GTKValueChanged() = 0;
+
 protected:
     double DoGetValue() const;
     double DoGetMin() const;
@@ -153,6 +155,7 @@ public:
 
     virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
     virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
+    virtual void GTKValueChanged() wxOVERRIDE;
 
 protected:
     virtual void GtkSetEntryWidth() wxOVERRIDE;
@@ -224,6 +227,7 @@ public:
 
     virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
     virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
+    virtual void GTKValueChanged() wxOVERRIDE;
 
 protected:
     virtual void GtkSetEntryWidth() wxOVERRIDE;
