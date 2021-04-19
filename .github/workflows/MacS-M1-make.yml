@@ -62,10 +62,6 @@ jobs:
 
     name: ${{ matrix.build }}, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
 
-    env:
-      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
-      NSUnbufferedIO: YES
-
     strategy:
       fail-fast: false
       matrix:
@@ -84,6 +80,8 @@ jobs:
 
     env:
       wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }} ${{ matrix.cxxconfig }} --with-cxx=${{ matrix.cxx }} --prefix=$PWD/localbin_${{ matrix.arch }}
+      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+      NSUnbufferedIO: YES
 
     steps:
     - name: Checkout
