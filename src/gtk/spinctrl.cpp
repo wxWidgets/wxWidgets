@@ -77,6 +77,47 @@ gtk_changed(GtkSpinButton*, wxSpinCtrl* win)
 }
 }
 
+//-----------------------------------------------------------------------------
+// "input" and "output"
+//-----------------------------------------------------------------------------
+
+extern "C"
+{
+
+static gint
+wx_gtk_spin_input(GtkSpinButton*, gdouble* val, wxSpinCtrlGTKBase* win)
+{
+    switch ( win->GTKInput(val) )
+    {
+        case wxSpinCtrl::GTKInput_Error:
+            return GTK_INPUT_ERROR;
+
+        case wxSpinCtrl::GTKInput_Default:
+            return FALSE;
+
+        case wxSpinCtrl::GTKInput_Converted:
+            return TRUE;
+    }
+
+    wxFAIL_MSG("unreachable");
+    return FALSE;
+}
+
+static gint
+wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrlGTKBase* win)
+{
+    wxString text;
+    if ( !win->GTKOutput(&text) )
+        return FALSE;
+
+    if ( text != win->GetTextValue() )
+        gtk_entry_set_text(GTK_ENTRY(spin), text.utf8_str());
+
+    return TRUE;
+}
+
+} // extern "C"
+
 // ----------------------------------------------------------------------------
 // wxSpinCtrlEventDisabler: helper to temporarily disable GTK+ events
 // ----------------------------------------------------------------------------
@@ -145,6 +186,9 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
 
     g_signal_connect_after(m_widget, "value_changed", G_CALLBACK(gtk_value_changed), this);
     g_signal_connect_after(m_widget, "changed", G_CALLBACK(gtk_changed), this);
+
+    g_signal_connect(m_widget, "input", G_CALLBACK(wx_gtk_spin_input), this);
+    g_signal_connect(m_widget, "output", G_CALLBACK(wx_gtk_spin_output), this);
 
     m_parent->DoAddChild( this );
 
@@ -399,42 +443,6 @@ wxSpinCtrlGTKBase::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
-extern "C"
-{
-
-static gboolean
-wx_gtk_spin_input(GtkSpinButton* spin, gdouble* val, wxSpinCtrl* win)
-{
-    // We might use g_ascii_strtoll() here but it's 2.12+ only, so use our own
-    // wxString function even if this requires an extra conversion.
-    const wxString
-        text(wxString::FromUTF8(gtk_entry_get_text(GTK_ENTRY(spin))));
-
-    long lval;
-    if ( !text.ToLong(&lval, win->GetBase()) )
-        return FALSE;
-
-    *val = lval;
-
-    return TRUE;
-}
-
-static gint
-wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
-{
-    const gint val = gtk_spin_button_get_value_as_int(spin);
-
-    gtk_entry_set_text
-    (
-        GTK_ENTRY(spin),
-        wxSpinCtrlImpl::FormatAsHex(val, win->GetMax()).utf8_str()
-    );
-
-    return TRUE;
-}
-
-} // extern "C"
-
 void wxSpinCtrl::GtkSetEntryWidth()
 {
     const int minVal = static_cast<int>(DoGetMin());
@@ -467,29 +475,50 @@ bool wxSpinCtrl::SetBase(int base)
     // We need to be able to enter letters for any base greater than 10.
     gtk_spin_button_set_numeric( GTK_SPIN_BUTTON(m_widget), m_base <= 10 );
 
-    if ( m_base != 10 )
-    {
-        g_signal_connect( m_widget, "input",
-                              G_CALLBACK(wx_gtk_spin_input), this);
-        g_signal_connect( m_widget, "output",
-                              G_CALLBACK(wx_gtk_spin_output), this);
-    }
-    else
-    {
-        g_signal_handlers_disconnect_by_func(m_widget,
-                                             (gpointer)wx_gtk_spin_input,
-                                             this);
-        g_signal_handlers_disconnect_by_func(m_widget,
-                                             (gpointer)wx_gtk_spin_output,
-                                             this);
-    }
-
     InvalidateBestSize();
 
     GtkSetEntryWidth();
 
     // Update the displayed text after changing the base it uses.
     SetValue(GetValue());
+
+    return true;
+}
+
+wxSpinCtrl::GTKInputResult
+wxSpinCtrl::GTKInput(double* value) const
+{
+    // Don't override the default logic unless really needed.
+    if ( GetBase() == 10 )
+        return GTKInput_Default;
+
+    long lval;
+    if ( !GetTextValue().ToLong(&lval, GetBase()) )
+        return GTKInput_Error;
+
+    *value = lval;
+
+    return GTKInput_Converted;
+}
+
+bool wxSpinCtrl::GTKOutput(wxString* text) const
+{
+    switch ( GetBase() )
+    {
+        default:
+            wxFAIL_MSG("unsupported base");
+            wxFALLTHROUGH;
+
+        case 10:
+            // Don't override the default output format unless really needed.
+            return false;
+
+        case 16:
+            const gint val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(m_widget));
+
+            *text = wxSpinCtrlImpl::FormatAsHex(val, GetMax());
+            break;
+    }
 
     return true;
 }
@@ -526,6 +555,17 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     InvalidateBestSize();
 
     GtkSetEntryWidth();
+}
+
+wxSpinCtrl::GTKInputResult
+wxSpinCtrlDouble::GTKInput(double* WXUNUSED(value)) const
+{
+    return GTKInput_Default;
+}
+
+bool wxSpinCtrlDouble::GTKOutput(wxString* WXUNUSED(text)) const
+{
+    return false;
 }
 
 #endif // wxUSE_SPINCTRL

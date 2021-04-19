@@ -58,6 +58,19 @@ public:
     // implementation
     void OnChar( wxKeyEvent &event );
 
+
+    // These values map to the possible return values of "input" GTK signal but
+    // are more readable and type-safe.
+    enum GTKInputResult
+    {
+        GTKInput_Error = -1,
+        GTKInput_Default,
+        GTKInput_Converted
+    };
+
+    virtual GTKInputResult GTKInput(double* value) const = 0;
+    virtual bool GTKOutput(wxString* text) const = 0;
+
 protected:
     double DoGetValue() const;
     double DoGetMin() const;
@@ -138,6 +151,9 @@ public:
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
 
+    virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
+    virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
+
 protected:
     virtual void GtkSetEntryWidth() wxOVERRIDE;
 
@@ -205,6 +221,9 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
+
+    virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
+    virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
 
 protected:
     virtual void GtkSetEntryWidth() wxOVERRIDE;
