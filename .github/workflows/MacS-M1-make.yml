@@ -2,6 +2,22 @@ name: Mac make CI
 
 on:
   push:
+    paths-ignore:
+    - 'include/wx/dfb/**'
+    - 'include/wx/gtk/**'
+    - 'include/wx/gtk1/**'
+    - 'include/wx/motif/**'
+    - 'include/wx/msw/**'
+    - 'include/wx/x11/**'
+    - 'src/dfb/**'
+    - 'src/gtk/**'
+    - 'src/gtk1/**'
+    - 'src/motif/**'
+    - 'src/msw/**'
+    - 'src/x11/**'
+    - 'build/tools/appveyor*.bat'
+    - 'build/tools/travis-ci.sh'
+    - 'distrib/**'
     branches: [ master ]
   pull_request:
     branches: [ master ]
@@ -26,16 +42,18 @@ jobs:
         cxx: [11, 17]
         include:
         - build: debug
-          config: --without-liblzma --enable-debug --with-zlib=builtin --with-osx_cocoa
+          config: --without-liblzma --enable-debug --disable-sys-libs --with-osx_cocoa
+          name: debug, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
         - build: release
-          config: --without-liblzma -with-zlib=builtin --with-osx_cocoa
+          config: --without-liblzma --disable-sys-libs --with-osx_cocoa
+          name: release, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
     - name: configure
-      run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure --{{ matrix.config }} --with-cxx={{ matrix.cxx }} --prefix=$PWD/localbin_${{ matrix.arch }}
+      run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure ${{ matrix.config }} --with-cxx=${{ matrix.cxx }} --prefix=$PWD/localbin_${{ matrix.arch }}
     - name: make
       run: make -j4
     - name: make install
