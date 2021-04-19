@@ -328,14 +328,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @end
 
-// Borrows from "ScalingScrollView.h" and "ScalingScrollView.h" in the TextEdit sources.
 @interface wxNSTextScrollView : NSScrollView
 - (void)setScaleFactor:(CGFloat)factor;
 - (CGFloat)scaleFactor;
-
-- (IBAction)zoomToActualSize:(id)sender;
-- (IBAction)zoomIn:(id)sender;
-- (IBAction)zoomOut:(id)sender;
 @end
 
 @implementation wxNSTextScrollView
@@ -347,24 +342,6 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (void)setScaleFactor:(CGFloat)newScaleFactor {
     //[[self animator] setMagnification:newScaleFactor];
     [self setMagnification:newScaleFactor];
-}
-
-/* Action methods
-*/
-- (IBAction)zoomToActualSize:(id)sender {
-    [[self animator] setMagnification:1.0];
-}
-
-- (IBAction)zoomIn:(id)sender {
-    CGFloat scaleFactor = [self scaleFactor];
-    scaleFactor = (scaleFactor > 0.4 && scaleFactor < 0.6) ? 1.0 : scaleFactor * 2.0;
-    [[self animator] setMagnification:scaleFactor];
-}
-
-- (IBAction)zoomOut:(id)sender {
-    CGFloat scaleFactor = [self scaleFactor];
-    scaleFactor = (scaleFactor > 1.8 && scaleFactor < 2.2) ? 1.0 : scaleFactor / 2.0;
-    [[self animator] setMagnification:scaleFactor];
 }
 
 /* Reassure AppKit that ScalingScrollView supports live resize content preservation, even though it's a subclass that could have modified NSScrollView in such a way as to make NSScrollView's live resize content preservation support inoperative. By default this is disabled for NSScrollView subclasses.
