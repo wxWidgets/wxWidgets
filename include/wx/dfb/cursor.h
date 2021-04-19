@@ -11,6 +11,7 @@
 #define _WX_DFB_CURSOR_H_
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxImage;
 
 //-----------------------------------------------------------------------------
 // wxCursor
@@ -24,6 +25,10 @@ public:
 #if WXWIN_COMPATIBILITY_2_8
     wxCursor(int id) { InitFromStock((wxStockCursor)id); }
 #endif
+#if wxUSE_IMAGE
+    wxCursor(const wxImage& image);
+    wxCursor(const char* const* xpmData);
+#endif // wxUSE_IMAGE
     wxCursor(const wxString& name,
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);

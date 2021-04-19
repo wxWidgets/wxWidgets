@@ -310,7 +310,7 @@ public:
         { LoadFile( name, type, index ); }
     wxImage( const wxString& name, const wxString& mimetype, int index = -1 )
         { LoadFile( name, mimetype, index ); }
-    wxImage( const char* const* xpmData )
+    explicit wxImage( const char* const* xpmData )
         { Create(xpmData); }
 
 #if wxUSE_STREAMS

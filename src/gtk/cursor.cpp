@@ -72,11 +72,11 @@ wxCursor::wxCursor()
 {
 }
 
-#if wxUSE_IMAGE
 wxCursor::wxCursor(const wxString& cursor_file,
                    wxBitmapType type,
                    int hotSpotX, int hotSpotY)
 {
+#if wxUSE_IMAGE
     wxImage img;
     if (!img.LoadFile(cursor_file, type))
         return;
@@ -88,13 +88,20 @@ wxCursor::wxCursor(const wxString& cursor_file,
         img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY);
 
     InitFromImage(img);
+#endif // wxUSE_IMAGE
 }
 
+#if wxUSE_IMAGE
 wxCursor::wxCursor(const wxImage& img)
 {
     InitFromImage(img);
 }
-#endif
+
+wxCursor::wxCursor(const char* const* xpmData)
+{
+    InitFromImage(wxImage(xpmData));
+}
+#endif // wxUSE_IMAGE
 
 wxCursor::wxCursor(const char bits[], int width, int height,
                    int hotSpotX, int hotSpotY,
