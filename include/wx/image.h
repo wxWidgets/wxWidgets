@@ -672,6 +672,10 @@ protected:
     virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
 
+    // Helper function used internally by wxImage class only.
+    template <typename T>
+    void ApplyToAllPixels(void (*filter)(wxImage *, unsigned char *, T), T value);
+
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxImageHandler;
 
@@ -692,10 +696,6 @@ private:
     // as this image itself. This is used by several functions creating
     // modified versions of this image.
     wxImage MakeEmptyClone(int flags = Clone_SameOrientation) const;
-
-    // Helper function used internally by wxImage class only.
-    template <typename T>
-    void ApplyToAllPixels(void (*filter)(wxImage *, unsigned char *, T), T value);
 
 #if wxUSE_STREAMS
     // read the image from the specified stream updating image type if
