@@ -263,6 +263,9 @@ bool wxFileExists(const wxString& filename);
     @true, filenames beginning with a dot are not matched with wildcard
     characters.
 
+    @note Matching is always case-sensitive, even on platforms where paths
+          are generally treated as case-insensitive.
+
     @see wxIsWild()
 
     @header{wx/filefn.h}
