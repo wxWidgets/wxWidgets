@@ -695,43 +695,7 @@ private:
 
     // Helper function used internally by wxImage class only.
     template <typename T>
-    void ApplyToAllPixels(void (wxImage::*func)(unsigned char *, T), T value);
-
-    // Makes an RGB value disabled.
-    void DoMakeDisabled(unsigned char *rgb, unsigned char brightness);
-
-    // red, green and blue are doubles in the range [0.0..1.0], they are used
-    // internally by DoMakeGrey() only.
-    class WeightValue
-    {
-    public:
-        WeightValue(double r = 0.0, double g = 0.0, double b = 0.0)
-            : red(r), green(g), blue(b) {}
-        double red;
-        double green;
-        double blue;
-    };
-
-    // Makes an RGB value grey.
-    void DoMakeGrey(unsigned char *rgb, WeightValue weight);
-
-    // Makes an RGB value mono.
-    void DoMakeMono(unsigned char *rgb, RGBValue rgbValue);
-
-    // Changes the lightness of an RGB value.
-    void DoChangeLightness(unsigned char *rgb, int alpha);
-
-    // Rotates the hue of an RGB value.
-    void DoRotateHue(unsigned char *rgb, double angle);
-
-    // Changes the saturation of an RGB value.
-    void DoChangeSaturation(unsigned char *rgb, double factor);
-
-    // Changes the brightness (value) of an RGB value.
-    void DoChangeBrightness(unsigned char *rgb, double factor);
-
-    // Changes the HSV of an RGB value.
-    void DoChangeHSV(unsigned char *rgb, HSVValue hsvValue);
+    void ApplyToAllPixels(void (*filter)(wxImage *, unsigned char *, T), T value);
 
 #if wxUSE_STREAMS
     // read the image from the specified stream updating image type if
