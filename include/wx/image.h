@@ -700,8 +700,8 @@ private:
     // Makes an RGB value disabled.
     void DoMakeDisabled(unsigned char *rgb, unsigned char brightness);
 
-    // red, green and blue are weight doubles, they are used internally by
-    // DoMakeGrey() only.
+    // red, green and blue are doubles in the range [0.0..1.0], they are used
+    // internally by DoMakeGrey() only.
     class WeightValue
     {
     public:
