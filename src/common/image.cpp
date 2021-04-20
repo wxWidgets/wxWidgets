@@ -3346,12 +3346,12 @@ void wxImage::DoChangeBrightness(unsigned char *rgb, double factor)
     RGBValue rgbValue(rgb[0], rgb[1], rgb[2]);
     HSVValue hsvValue = RGBtoHSV(rgbValue);
 
-        hsvValue.value += hsvValue.value * factor;
+    hsvValue.value += hsvValue.value * factor;
 
-        if (hsvValue.value > 1.0)
-            hsvValue.value = 1.0;
-        else if (hsvValue.value < 0.0)
-            hsvValue.value = 0.0;
+    if (hsvValue.value > 1.0)
+        hsvValue.value = 1.0;
+    else if (hsvValue.value < 0.0)
+        hsvValue.value = 0.0;
 
     rgbValue = HSVtoRGB(hsvValue);
     rgb[0] = rgbValue.red;
