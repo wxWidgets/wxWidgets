@@ -176,13 +176,21 @@ void wxSpinCtrlGTKBase::GTKSetTextOverride(const wxString& text)
     m_textOverride->m_text = text;
 }
 
-void wxSpinCtrlGTKBase::GTKResetTextOverride()
+bool wxSpinCtrlGTKBase::GTKResetTextOverrideOnly()
 {
     if ( !m_textOverride )
-        return;
+        return false;
 
     delete m_textOverride;
     m_textOverride = NULL;
+
+    return true;
+}
+
+void wxSpinCtrlGTKBase::GTKResetTextOverride()
+{
+    if ( !GTKResetTextOverrideOnly() )
+        return;
 
     // Update the text part to reflect the numeric value now that we don't
     // override it any longer, otherwise we'd keep showing the old one because
@@ -524,7 +532,10 @@ bool wxSpinCtrlGTKBase::GTKOutput(wxString* text) const
 
 void wxSpinCtrlGTKBase::GTKTextChanged()
 {
-    GTKResetTextOverride();
+    // We can't use GTKResetTextOverride() itself here because it would also
+    // reset the value and we do not want this to happen -- the value is being
+    // changed to correspond to the new text.
+    GTKResetTextOverrideOnly();
 
     wxCommandEvent event( wxEVT_TEXT, GetId() );
     event.SetEventObject( this );

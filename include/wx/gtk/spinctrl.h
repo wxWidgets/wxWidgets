@@ -102,9 +102,16 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
 
-    // Set or reset m_textOverride.
+    // Set m_textOverride to use the given text instead of the numeric value.
     void GTKSetTextOverride(const wxString& text);
+
+    // Reset the override and changing the value to correspond to the
+    // previously overridden numeric value.
     void GTKResetTextOverride();
+
+    // Just reset the override, without touching the value, returning true if
+    // we did it. In most cases, the function above should be used instead.
+    bool GTKResetTextOverrideOnly();
 
 private:
     // This function does _not_ take into account m_textOverride, so it is
