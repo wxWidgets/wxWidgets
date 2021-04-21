@@ -54,11 +54,7 @@ extern "C" {
 static void
 gtk_changed(GtkSpinButton*, wxSpinCtrl* win)
 {
-    wxCommandEvent event( wxEVT_TEXT, win->GetId() );
-    event.SetEventObject( win );
-    event.SetString(win->GetTextValue());
-    event.SetInt(win->GetValue());
-    win->HandleWindowEvent( event );
+    win->GTKTextChanged();
 }
 }
 
@@ -524,6 +520,15 @@ bool wxSpinCtrlGTKBase::GTKOutput(wxString* text) const
     }
 
     return false;
+}
+
+void wxSpinCtrlGTKBase::GTKTextChanged()
+{
+    wxCommandEvent event( wxEVT_TEXT, GetId() );
+    event.SetEventObject( this );
+    event.SetString(GetTextValue());
+    event.SetInt(static_cast<int>(DoGetValue()));
+    HandleWindowEvent( event );
 }
 
 //-----------------------------------------------------------------------------

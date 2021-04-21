@@ -72,6 +72,7 @@ public:
     virtual bool GTKOutput(wxString* text) const = 0;
 
     virtual void GTKValueChanged() = 0;
+    void GTKTextChanged();
 
 protected:
     wxSpinCtrlGTKBase();
