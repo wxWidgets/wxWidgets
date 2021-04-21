@@ -524,6 +524,8 @@ bool wxSpinCtrlGTKBase::GTKOutput(wxString* text) const
 
 void wxSpinCtrlGTKBase::GTKTextChanged()
 {
+    GTKResetTextOverride();
+
     wxCommandEvent event( wxEVT_TEXT, GetId() );
     event.SetEventObject( this );
     event.SetString(GetTextValue());
