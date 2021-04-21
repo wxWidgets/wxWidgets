@@ -81,37 +81,125 @@ The wxWidgets ports mentioned above are the main ones, however other variants
 also exist, see [platform details](@ref page_port) page for the full list.
 
 
-Verifying the Installation
---------------------------
+Building Your Application
+-------------------------
 
-After installing wxWidgets, it is recommended to check that the library can
-actually be used by building a minimal wxWidgets program using it, such as
-`samples/minimal/minimal.cpp` included in wxWidgets distributions.
+After installing wxWidgets, you need to set up your application to be built
+using it.
 
-You may choose to build this program in any of the following ways:
+As previously, if you're using CMake, please follow the instructions for
+[building your applications with CMake](@ref cmake_apps).
 
-- Directly from command line under any Unix-like systems, including macOS and
-  Unix-like environments such as Cygwin or MSYS2 under MSW, just run
+Note that you can use the provided `samples/minimal/CMakeLists.txt` file to
+test building the minimal sample using CMake to verify your installation.
 
-    $ c++ -o minimal minimal.cpp `wx-config --cxxflags --libs`
 
-  Please note that you *must* use `wx-config` to obtain the compiler and linker
-  flags in this case.
+Otherwise, choose the appropriate method for your platform and build system:
 
-- Using CMake, and the provided `samples/minimal/CMakeLists.txt` file.
+### Unix, command line
 
-- Using Microsoft Visual Studio IDE: simply create a new project and add the
-  provided `wxwidgets.props` property sheet file to it as explained in the
-  [instructions](@ref #msw_build_apps) and build the project as usual.
+On any Unix-like system, including macOS and Unix-like environments such as
+Cygwin or MSYS2 under MSW, very simple applications consisting of a single
+source file `hello.cpp` can be built directly from the command line using the
+following command:
 
-- Using another IDE with wxWidgets support, such as [Code::Blocks][1] or
-  [CodeLite][2], please use the IDE wizards.
+    $ c++ -o hello hello.cpp `wx-config --cxxflags --libs`
+
+Please note that you *must* use `wx-config` to obtain the compiler and linker
+flags in this case. Using this method with `samples/minimal/minimal.cpp` is a
+simple way of checking that wxWidgets is installed correctly and can be used
+and it is recommended to try building it, especially if you are new to
+wxWidgets.
+
+
+### Unix, with GNU Make
+
+For more realistic applications under Unix, a makefile is traditionally used
+for building. For a program consisting of the files `hello.cpp` and `bye.cpp` a
+minimal makefile could look like the following:
+
+~~~{make}
+# wx-config to use, may be overridden on make command line.
+WX_CONFIG := wx-config
+
+WX_CXXFLAGS := $(shell $(WX_CONFIG) --cxxflags)
+WX_LIBS := $(shell $(WX_CONFIG) --libs)
+
+OBJECTS := hello.o bye.o
+
+hello: $(OBJECTS)
+    $(CXX) -o $@ $(OBJECTS) $(LDFLAGS) $(WX_LIBS) $(LIBS)
+
+$(OBJECTS): %.o: %.cpp
+    $(CXX) -c -o $@ $(WX_CXXFLAGS) $(CXXFLAGS) $<
+~~~
+
+Please refer to [the manual][gnumake] for more information about writing makefiles
+for GNU make. Also notice that you need to replace the leading spaces with TABs
+if you are copy-pasting the makefile above into your own.
+
+[gnumake]: https://www.gnu.org/software/make/manual/make.html
+
+
+### Unix, with autoconf
+
+For building applications using autoconf, you need to have the following lines
+in your `configure.ac` file:
+
+~~~{configure}
+AC_INIT(...)
+
+dnl Add support for --wxdir, --wx-config and other options allowing to select
+dnl the version and location of wxWidgets to use.
+WX_CONFIG_OPTIONS
+
+... other preliminary macros ...
+
+dnl A C++ compiler is required.
+AC_PROG_CXX
+
+dnl Find wxWidgets 3.1.6 or exit with error. See documentation of this macro
+dnl in wxwin.m4 for more information, notably optional arguments allowing to
+dnl select the required libraries and optional libraries to detect.
+WX_CONFIG_CHECK([3.1.6], [], [AC_MSG_FAILURE([wxWidgets 3.1.6 or later not found])])
+
+dnl Use wxWidgets compilation flags for all files in the project. If you also
+dnl use automake, you may prefer to add WX_CXXFLAGS and WX_LIBS to the
+dnl individual target_CXXFLAGS and target_LIBADD or target_LDADD variables.
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
+CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+LIBS="$LIBS $WX_LIBS"
+
+... other macros checking for headers/libraries ...
+
+AC_OUTPUT
+~~~
+
+Note that this assumes that `wxwin.m4` file is available in a standard
+location, as is the case when using distribution-provided wxWidgets packages or
+after building wxWidgets from source and using `make install`. If this is not
+the case, you must copy this file from wxWidgets source directory to the
+directory containing autoconf macros used by your application (typically `m4`,
+e.g. if you use `AC_CONFIG_MACRO_DIRS([m4])`).
+
+
+### MSW, with Microsoft Visual Studio
+
+For applications using Microsoft Visual Studio IDE, simply add the provided
+`wxwidgets.props` property sheet file to your project as explained in the
+[instructions](@ref #msw_build_apps) and build the project as usual.
+
+
+### Other IDEs
+
+If you use an IDE with wxWidgets support, such as [Code::Blocks][1] or
+[CodeLite][2], please use the IDE wizards.
 
 [1]: https://www.codeblocks.org/
 [2]: https://codelite.org/
 
-- If you use another IDE, under Unix you should run `wx-config --cxxflags` and
-  `wx-config --libs` commands separately and copy-and-paste their output to the
-  "Additional preprocessor options" and "Additional linker options" fields in
-  your IDE, respectively. Under MSW systems you need to configure the IDE using
-  the instructions in the ["manual setup"](@ref #msw_build_apps) section.
+If you use another IDE, under Unix you should run `wx-config --cxxflags` and
+`wx-config --libs` commands separately and copy-and-paste their output to the
+"Additional preprocessor options" and "Additional linker options" fields in
+your IDE, respectively. Under MSW systems you need to configure the IDE using
+the instructions in the ["manual setup"](@ref #msw_build_apps) section.
