@@ -88,7 +88,7 @@ wx_gtk_spin_input(GtkSpinButton*, gdouble* val, wxSpinCtrlGTKBase* win)
     return FALSE;
 }
 
-static gint
+static gboolean
 wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrlGTKBase* win)
 {
     wxString text;
