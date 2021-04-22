@@ -119,6 +119,9 @@
     //  - Globally replace HANDLE_GCC_WARNING with GCC_TURN_ON.
     //  - Add v6 check for -Wabi, gcc < 6 don't seem to support turning it off
     //    once it's turned on and gives it for the standard library symbols.
+    //  - Remove GCC_TURN_ON(system-headers) from the list because this option
+    //    will enable the warnings to be thrown inside the system headers that
+    //    should instead be ignored.
     // {{{
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(abi)
@@ -307,7 +310,6 @@
     GCC_TURN_ON(switch-default)
     GCC_TURN_ON(switch-enum)
     GCC_TURN_ON(synth)
-    GCC_TURN_ON(system-headers)
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(templates)
 #endif // 6.1
