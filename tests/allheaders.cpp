@@ -68,6 +68,7 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <queue>
 #include <vector>
 
 #if defined(HAVE_STD_UNORDERED_MAP)
