@@ -60,6 +60,7 @@ public:
     virtual ~wxSpinCtrlGenericBase();
 
     // accessors
+    virtual wxString GetTextValue() const wxOVERRIDE;
     // T GetValue() const
     // T GetMin() const
     // T GetMax() const

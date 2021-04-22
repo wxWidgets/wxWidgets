@@ -203,6 +203,13 @@ int wxSpinCtrl::GetMax() const
     return (int)ceil(m_adjust->upper);
 }
 
+wxString wxSpinCtrl::GetTextValue() const
+{
+    wxCHECK_MSG(m_widget, wxEmptyString, "invalid spin button");
+
+    return gtk_entry_get_text( GTK_ENTRY(m_widget) );
+}
+
 int wxSpinCtrl::GetValue() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );

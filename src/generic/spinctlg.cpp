@@ -506,6 +506,11 @@ bool wxSpinCtrlGenericBase::SyncSpinToText(SendEvent sendEvent)
 // changing value and range
 // ----------------------------------------------------------------------------
 
+wxString wxSpinCtrlGenericBase::GetTextValue() const
+{
+    return m_textCtrl ? m_textCtrl->GetValue() : wxString();
+}
+
 void wxSpinCtrlGenericBase::SetValue(const wxString& text)
 {
     wxCHECK_RET( m_textCtrl, wxT("invalid call to wxSpinCtrl::SetValue") );

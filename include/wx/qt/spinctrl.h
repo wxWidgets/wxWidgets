@@ -29,6 +29,7 @@ public:
         T min, T max, T initial, T inc,
         const wxString& name );
 
+    virtual wxString GetTextValue() const wxOVERRIDE;
     virtual void SetValue(const wxString&) wxOVERRIDE {}
 
     virtual void SetSnapToTicks(bool snap_to_ticks) wxOVERRIDE;
