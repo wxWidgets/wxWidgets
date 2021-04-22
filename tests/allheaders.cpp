@@ -33,54 +33,8 @@
         _Pragma(STRINGIZE(GCC diagnostic ignored STRINGIZE(CONCAT(-W,warn))))
 #endif
 
-// Due to what looks like a bug in gcc, some warnings enabled after including
-// the standard headers still result in warnings being given when instantiating
-// some functions defined in these headers later and we need to explicitly
-// disable these warnings to avoid them, even if they're not enabled yet.
-#ifdef GCC_TURN_OFF
-    #pragma GCC diagnostic push
-
-    GCC_TURN_OFF(aggregate-return)
-    GCC_TURN_OFF(conversion)
-    GCC_TURN_OFF(format)
-    GCC_TURN_OFF(padded)
-    GCC_TURN_OFF(parentheses)
-    GCC_TURN_OFF(sign-compare)
-    GCC_TURN_OFF(sign-conversion)
-    GCC_TURN_OFF(unused-parameter)
-    GCC_TURN_OFF(zero-as-null-pointer-constant)
-#endif
-
 // We have to include this one first in order to check for HAVE_XXX below.
 #include "wx/setup.h"
-
-// Include all standard headers that are used in wx headers before enabling the
-// warnings below.
-#include <algorithm>
-#include <cmath>
-#include <exception>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <locale>
-#include <map>
-#include <set>
-#include <sstream>
-#include <string>
-#include <vector>
-
-#if defined(HAVE_STD_UNORDERED_MAP)
-    #include <unordered_map>
-#endif
-#if defined(HAVE_STD_UNORDERED_SET)
-    #include <unordered_set>
-#endif
-
-#if defined(HAVE_DLOPEN)
-    #include <dlfcn.h>
-#endif
-#include <fcntl.h>
 
 #include "catch.hpp"
 
@@ -99,9 +53,6 @@
     #include <QtGui/QFont>
 #endif
 
-#ifdef GCC_TURN_OFF
-    #pragma GCC diagnostic pop
-#endif
 
 // Enable max warning level for headers if possible, using gcc pragmas.
 #ifdef GCC_TURN_ON
@@ -119,6 +70,9 @@
     //  - Globally replace HANDLE_GCC_WARNING with GCC_TURN_ON.
     //  - Add v6 check for -Wabi, gcc < 6 don't seem to support turning it off
     //    once it's turned on and gives it for the standard library symbols.
+    //  - Remove GCC_TURN_ON(system-headers) from the list because this option
+    //    will enable the warnings to be thrown inside the system headers that
+    //    should instead be ignored.
     // {{{
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(abi)
@@ -307,7 +261,6 @@
     GCC_TURN_ON(switch-default)
     GCC_TURN_ON(switch-enum)
     GCC_TURN_ON(synth)
-    GCC_TURN_ON(system-headers)
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(templates)
 #endif // 6.1
