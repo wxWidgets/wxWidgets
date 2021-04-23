@@ -359,12 +359,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     SetRange(min, max);
     SetValue(initial);
 
-    // Also set the text part of the control if it was specified independently
-    // but don't generate an event for this, it would be unexpected.
-    m_blockEvent = true;
+    // Also set the text part of the control if it was specified independently.
     if ( !value.empty() )
         SetValue(value);
-    m_blockEvent = false;
 
     // Finally deal with the size: notice that this can only be done now both
     // windows are created and the text one is set up as buddy because
@@ -449,10 +446,14 @@ wxString wxSpinCtrl::GetTextValue() const
 
 void wxSpinCtrl::SetValue(const wxString& text)
 {
+    m_blockEvent = true;
+
     if ( !::SetWindowText(GetBuddyHwnd(), text.c_str()) )
     {
         wxLogLastError(wxT("SetWindowText(buddy)"));
     }
+
+    m_blockEvent = false;
 }
 
 void  wxSpinCtrl::SetValue(int val)
