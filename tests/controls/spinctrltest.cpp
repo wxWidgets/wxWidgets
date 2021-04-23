@@ -278,6 +278,7 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
 
     m_spin->SetValue("");
     CHECK( m_spin->GetTextValue() == "" );
+    CHECK( m_spin->GetValue() == 0 );
 }
 
 TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Base", "[spinctrl]")

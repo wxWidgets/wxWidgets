@@ -114,6 +114,9 @@ Changes in behaviour not resulting in compilation errors
 
 - wxChoice::GetString() now consistently asserts when passed an invalid index.
 
+- wxSpinCtrlDouble now always resets its value to GetMin() if an invalid text
+  string is passed to its SetValue() after its creation.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

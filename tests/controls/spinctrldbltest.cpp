@@ -179,7 +179,7 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
 
     m_spin->SetValue("");
     CHECK( m_spin->GetTextValue() == "" );
-    CHECK( m_spin->GetValue() == 57.3 );
+    CHECK( m_spin->GetValue() == 0 );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
