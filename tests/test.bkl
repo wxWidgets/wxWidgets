@@ -384,6 +384,16 @@
 
             wx.png
             wx.ico
+
+            toucan.png
+            toucan_hue_0.538.png
+            toucan_sat_-0.41.png
+            toucan_bright_-0.259.png
+            toucan_hsv_0.538_-0.41_-0.259.png
+            toucan_light_46.png
+            toucan_dis_240.png
+            toucan_grey.png
+            toucan_mono_255_255_255.png
         </files>
     </wx-data>
 
