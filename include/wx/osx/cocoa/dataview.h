@@ -573,6 +573,9 @@ public:
 
     virtual void SetFont(const wxFont& font) wxOVERRIDE;
 
+    virtual void keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd) wxOVERRIDE;
+    virtual bool doCommandBySelector(void* sel, WXWidget slf, void* _cmd) wxOVERRIDE;
+
 private:
     void InitOutlineView(long style);
     int GetDefaultRowHeight() const;
