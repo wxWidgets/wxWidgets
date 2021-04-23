@@ -23,8 +23,6 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/bitmap.h"
-    #include "wx/filehistory.h"
-    #include "wx/filename.h"
     #include "wx/frame.h"
     #include "wx/image.h"
     #include "wx/menu.h"
@@ -33,6 +31,9 @@
     #include "wx/textctrl.h"
     #include "wx/textdlg.h"
 #endif
+
+#include "wx/filehistory.h"
+#include "wx/filename.h"
 
 #if !wxUSE_MENUS
     // nice try...
