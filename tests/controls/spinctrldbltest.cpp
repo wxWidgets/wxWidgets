@@ -17,6 +17,7 @@
 
 #include "testableframe.h"
 #include "wx/uiaction.h"
+#include "wx/scopedptr.h"
 #include "wx/spinctrl.h"
 
 class SpinCtrlDoubleTestCase
@@ -54,10 +55,10 @@ TEST_CASE("SpinCtrlDouble::NoEventsInCtor", "[spinctrl][spinctrldouble]")
 {
     // Verify that creating the control does not generate any events. This is
     // unexpected and shouldn't happen.
-    wxSpinCtrlDouble *m_spin = new wxSpinCtrlDouble;
+    wxScopedPtr<wxSpinCtrlDouble> m_spin(new wxSpinCtrlDouble);
 
-    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRLDOUBLE);
-    EventCounter updatedText(m_spin, wxEVT_TEXT);
+    EventCounter updatedSpin(m_spin.get(), wxEVT_SPINCTRLDOUBLE);
+    EventCounter updatedText(m_spin.get(), wxEVT_TEXT);
 
     m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
                    wxDefaultPosition, wxDefaultSize, 0,
