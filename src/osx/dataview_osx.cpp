@@ -770,18 +770,11 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
     event.Skip();
 }
 
-void wxDataViewCtrl::OnChar(wxKeyEvent& event)
-{
-    // generic key handling can moved here
-    event.Skip();
-}
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl,wxDataViewCtrlBase);
 
 wxBEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_SIZE(wxDataViewCtrl::OnSize)
   EVT_MOTION(wxDataViewCtrl::OnMouse)
-  EVT_CHAR(wxDataViewCtrl::OnChar)
 wxEND_EVENT_TABLE()
 
 #endif // !wxHAS_GENERIC_DATAVIEWCTRL
