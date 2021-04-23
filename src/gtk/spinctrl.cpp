@@ -130,13 +130,9 @@ private:
 class wxSpinCtrlGTKTextOverride
 {
 public:
-    wxSpinCtrlGTKTextOverride()
-        : m_value(0.0)
-    {
-    }
-
+    // Text value used instead of the text representation of the actual numeric
+    // value. Notice that this string may be empty.
     wxString m_text;
-    double m_value;
 };
 
 //-----------------------------------------------------------------------------
@@ -160,19 +156,8 @@ wxSpinCtrlGTKBase::~wxSpinCtrlGTKBase()
 void wxSpinCtrlGTKBase::GTKSetTextOverride(const wxString& text)
 {
     if ( !m_textOverride )
-    {
-        // Remember the original numeric value, that we're going to keep using
-        // it while this override is valid, and do it before initializing
-        // m_textOverride as our own "input" handler called from GTKGetValue()
-        // would use it if it were non-null.
-        const double value = GTKGetValue();
-
         m_textOverride = new wxSpinCtrlGTKTextOverride();
-        m_textOverride->m_value = value;
-    }
-    //else: No need to change the value, it stays the same anyhow.
 
-    // Update the text in any case.
     m_textOverride->m_text = text;
 }
 
@@ -258,10 +243,8 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
 double wxSpinCtrlGTKBase::DoGetValue() const
 {
     // While using a text override, the text value is fixed by the program and
-    // shouldn't be used, just return the numeric value we had had before, as
-    // the text override is reset whenever it changes, so it must not have
-    // changed yet.
-    return m_textOverride ? m_textOverride->m_value : GTKGetValue();
+    // shouldn't be used, just return the minimum value (which is 0 by default).
+    return m_textOverride ? DoGetMin() : GTKGetValue();
 }
 
 double wxSpinCtrlGTKBase::GTKGetValue() const
@@ -512,7 +495,7 @@ wxSpinCtrlGTKBase::GTKInputResult wxSpinCtrlGTKBase::GTKInput(double* value) con
 {
     if ( m_textOverride )
     {
-        *value = m_textOverride->m_value;
+        *value = DoGetMin();
         return GTKInput_Converted;
     }
 
