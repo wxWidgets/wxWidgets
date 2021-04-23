@@ -37,6 +37,8 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/winstyle.h"
 
+#include "wx/scopeguard.h"
+
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
@@ -447,18 +449,18 @@ wxString wxSpinCtrl::GetTextValue() const
 void wxSpinCtrl::SetValue(const wxString& text)
 {
     m_blockEvent = true;
+    wxON_BLOCK_EXIT_SET(m_blockEvent, false);
 
     if ( !::SetWindowText(GetBuddyHwnd(), text.c_str()) )
     {
         wxLogLastError(wxT("SetWindowText(buddy)"));
     }
-
-    m_blockEvent = false;
 }
 
 void  wxSpinCtrl::SetValue(int val)
 {
     m_blockEvent = true;
+    wxON_BLOCK_EXIT_SET(m_blockEvent, false);
 
     wxSpinButton::SetValue(val);
 
@@ -487,8 +489,6 @@ void  wxSpinCtrl::SetValue(int val)
     }
 
     m_oldValue = GetValue();
-
-    m_blockEvent = false;
 }
 
 int wxSpinCtrl::GetValue() const
