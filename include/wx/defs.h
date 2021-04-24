@@ -1352,7 +1352,7 @@ enum wxStretch
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
     wxSHAPED                  = 0x4000,
-    wxTILE                    = wxSHAPED | wxFIXED_MINSIZE,
+    wxTILE                    = 0xc000, /* wxSHAPED | wxFIXED_MINSIZE */
 
     /*  a mask to extract stretch from the combination of flags */
     wxSTRETCH_MASK            = 0x7000 /* sans wxTILE */
