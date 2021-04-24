@@ -589,9 +589,6 @@ wxSize wxAnyButton::DoGetBestSize() const
         SIZE idealSize = { 0, 0 };
         if ( ::SendMessage(GetHwnd(), BCM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
             size.Set(idealSize.cx, idealSize.cy);
-
-            if ( m_imageData )
-                AdjustForBitmapMargins(size);
     }
 
     // If we failed to set the size using BCM_GETIDEALSIZE above, determine it
@@ -621,10 +618,10 @@ wxSize wxAnyButton::DoGetBestSize() const
                 size = wxMSWButton::ComputeBestFittingSize(self, flags);
             }
         }
-
-        if ( m_imageData )
-            AdjustForBitmapSize(size);
     }
+
+    if ( m_imageData )
+        AdjustForBitmapMargins(size);
 
     return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
