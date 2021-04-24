@@ -562,14 +562,10 @@
 
 // Set to 1 to use ipv6 socket classes (requires wxUSE_SOCKETS)
 //
-// Notice that currently setting this option under Windows will result in
-// programs which can only run on recent OS versions (with ws2_32.dll
-// installed) which is why it is disabled by default.
-//
 // Default is 1.
 //
-// Recommended setting: 1 if you need IPv6 support
-#define wxUSE_IPV6          0
+// Recommended setting: 1.
+#define wxUSE_IPV6          1
 
 // Set to 1 to enable virtual file systems (required by wxHTML)
 #define wxUSE_FILESYSTEM    1
@@ -1772,12 +1768,12 @@
 // Recommended setting: 0, nobody uses .INI files any more
 #define wxUSE_INICONF 0
 
-// Set to 1 if you need to include <winsock2.h> over <winsock.h>
+// Set to 0 if you need to include <winsock.h> rather than <winsock2.h>
 //
-// Default is 0.
+// Default is 1.
 //
-// Recommended setting: 0, set to 1 automatically if wxUSE_IPV6 is 1.
-#define wxUSE_WINSOCK2 0
+// Recommended setting: 1, required to be 1 if wxUSE_IPV6 is 1.
+#define wxUSE_WINSOCK2 1
 
 // ----------------------------------------------------------------------------
 // Generic versions of native controls

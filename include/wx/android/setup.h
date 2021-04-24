@@ -561,14 +561,10 @@
 
 // Set to 1 to use ipv6 socket classes (requires wxUSE_SOCKETS)
 //
-// Notice that currently setting this option under Windows will result in
-// programs which can only run on recent OS versions (with ws2_32.dll
-// installed) which is why it is disabled by default.
-//
 // Default is 1.
 //
-// Recommended setting: 1 if you need IPv6 support
-#define wxUSE_IPV6          0
+// Recommended setting: 1.
+#define wxUSE_IPV6          1
 
 // Set to 1 to enable virtual file systems (required by wxHTML)
 #define wxUSE_FILESYSTEM    1
