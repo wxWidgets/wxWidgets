@@ -522,6 +522,8 @@ void wxSpinCtrlGenericBase::SetValue(const wxString& text)
     }
     else // not a number at all or out of range
     {
+        m_value = m_min;
+
         m_textCtrl->ChangeValue(text);
         m_textCtrl->SelectAll();
     }

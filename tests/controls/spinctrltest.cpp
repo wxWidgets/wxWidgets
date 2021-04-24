@@ -276,8 +276,15 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
     CHECK( m_spin->GetTextValue() == "57" );
     CHECK( m_spin->GetValue() == 57 );
 
+    CHECK(updatedSpin.GetCount() == 0);
+    CHECK(updatedText.GetCount() == 0);
+
     m_spin->SetValue("");
     CHECK( m_spin->GetTextValue() == "" );
+    CHECK( m_spin->GetValue() == 0 );
+
+    CHECK(updatedSpin.GetCount() == 0);
+    CHECK(updatedText.GetCount() == 0);
 }
 
 TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Base", "[spinctrl]")
