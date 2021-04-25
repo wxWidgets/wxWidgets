@@ -425,7 +425,7 @@ bool wxFontBase::SetNativeFontInfoUserDesc(const wxString& info)
     return false;
 }
 
-bool wxFontBase::operator==(const wxFont& font) const
+bool wxFontBase::operator==(const wxFontBase& font) const
 {
     // either it is the same font, i.e. they share the same common data or they
     // have different ref datas but still describe the same font
