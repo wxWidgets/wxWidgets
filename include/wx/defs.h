@@ -741,6 +741,17 @@ typedef short int WXTYPE;
 #endif
 
 /*
+    Macros above don't work with gcc 11 due to a compiler bug, unless we also
+    use "override" in the function declaration -- but this breaks other
+    compilers, so define a specific macro for gcc 11 only.
+ */
+#if wxCHECK_GCC_VERSION(11, 0)
+#   define wxDUMMY_OVERRIDE wxOVERRIDE
+#else
+#   define wxDUMMY_OVERRIDE
+#endif
+
+/*
     Combination of the two variants above: should be used for deprecated
     functions which are defined inline and are used by wxWidgets itself.
  */

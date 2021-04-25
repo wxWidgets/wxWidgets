@@ -368,8 +368,6 @@ private:
 
 class WXDLLIMPEXP_BASE wxObject
 {
-    wxDECLARE_ABSTRACT_CLASS(wxObject);
-
 public:
     wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
@@ -392,6 +390,7 @@ public:
 
     bool IsKindOf(const wxClassInfo *info) const;
 
+    virtual wxClassInfo *GetClassInfo() const;
 
     // Turn on the correct set of new and delete operators
 
@@ -453,6 +452,8 @@ protected:
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
     wxObjectRefData *m_refData;
+
+    static wxClassInfo ms_classInfo;
 };
 
 inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
