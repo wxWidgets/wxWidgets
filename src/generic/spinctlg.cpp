@@ -759,11 +759,7 @@ void wxSpinCtrlDouble::SetIncrement(double inc)
     // could be undesirable, but we do increase it if the current number is not
     // high enough to show the numbers without losing precision.
     if ( digits > m_digits )
-    {
-        DoSetDigits(digits);
-
-        UpdateAfterDigitsChange();
-    }
+        DoSetDigitsAndUpdate(digits);
 }
 
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
@@ -773,13 +769,13 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     if ( digits == m_digits )
         return;
 
-    DoSetDigits(digits);
-
-    UpdateAfterDigitsChange();
+    DoSetDigitsAndUpdate(digits);
 }
 
-void wxSpinCtrlDouble::UpdateAfterDigitsChange()
+void wxSpinCtrlDouble::DoSetDigitsAndUpdate(unsigned digits)
 {
+    DoSetDigits(digits);
+
     ResetTextValidator();
     m_textCtrl->InvalidateBestSize();
 
