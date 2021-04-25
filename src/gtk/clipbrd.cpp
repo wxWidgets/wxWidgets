@@ -317,7 +317,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     // use UTF8_STRING format if requested in Unicode build but just plain
     // STRING one in ANSI or if explicitly asked in Unicode
 #if wxUSE_UNICODE
-    if (format == wxDataFormat(wxDF_UNICODETEXT))
+    if (format == wxDF_UNICODETEXT)
     {
         gtk_selection_data_set_text(
             selection_data,
