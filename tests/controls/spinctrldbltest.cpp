@@ -224,11 +224,18 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
 
 static inline unsigned int GetInitialDigits(double inc)
 {
-    wxSpinCtrlDouble* sc = new wxSpinCtrlDouble(wxTheApp->GetTopWindow(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
-        0, 50, 0, inc);
-    unsigned int digits = sc->GetDigits();
-    delete sc;
-    return digits;
+    wxScopedPtr<wxSpinCtrlDouble> sc(new wxSpinCtrlDouble
+        (
+            wxTheApp->GetTopWindow(),
+            wxID_ANY,
+            wxEmptyString,
+            wxDefaultPosition,
+            wxDefaultSize,
+            wxSP_ARROW_KEYS,
+            0, 50, 0,
+            inc
+        ));
+    return sc->GetDigits();
 }
 
 TEST_CASE("SpinCtrlDouble::InitialDigits", "[spinctrldouble][initialdigits]")
