@@ -423,11 +423,15 @@ private:
     // Common part of all ctors.
     void Init()
     {
-        m_digits = 0;
+        DoSetDigits(0);
     }
 
     // Update m_digits and m_format to correspond to the given increment.
     void DetermineDigits(double inc);
+
+    // Set the number of digits and the format unconditionally.
+    void DoSetDigits(unsigned digits);
+
 
     wxString m_format;
 
