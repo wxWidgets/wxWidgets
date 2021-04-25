@@ -643,6 +643,18 @@ void wxSpinCtrlDouble::GtkSetEntryWidth()
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), wxMax(lenMin, lenMax));
 }
 
+void wxSpinCtrlDouble::SetIncrement(double inc)
+{
+    DoSetIncrement(inc);
+
+    const unsigned digits = wxSpinCtrlImpl::DetermineDigits(inc);
+
+    // Increase the number of digits, if necessary, to show all numbers that
+    // can be obtained by using the new increment without loss of precision.
+    if ( digits > GetDigits() )
+        SetDigits(digits);
+}
+
 unsigned wxSpinCtrlDouble::GetDigits() const
 {
     wxCHECK_MSG( m_widget, 0, "invalid spin button" );
