@@ -753,14 +753,19 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     if ( digits == m_digits )
         return;
 
-    m_digits = digits;
-
-    m_format.Printf(wxT("%%0.%ulf"), digits);
+    DoSetDigits(digits);
 
     ResetTextValidator();
     m_textCtrl->InvalidateBestSize();
 
     DoSetValue(m_value, SendEvent_None);
+}
+
+void wxSpinCtrlDouble::DoSetDigits(unsigned digits)
+{
+    m_digits = digits;
+
+    m_format.Printf(wxT("%%0.%ulf"), digits);
 }
 
 void wxSpinCtrlDouble::ResetTextValidator()
@@ -774,17 +779,19 @@ void wxSpinCtrlDouble::ResetTextValidator()
 
 void wxSpinCtrlDouble::DetermineDigits(double inc)
 {
+    unsigned digits;
+
     inc = fabs(inc);
     if ( inc > 0.0 && inc < 1.0 )
     {
-        m_digits = wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
+        digits = wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
     }
     else
     {
-        m_digits = 0;
+        digits = 0;
     }
 
-    m_format.Printf("%%0.%ulf", m_digits);
+    DoSetDigits(digits);
 }
 
 #endif // wxUSE_SPINBTN
