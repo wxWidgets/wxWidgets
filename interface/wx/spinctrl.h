@@ -354,8 +354,15 @@ public:
 
     /**
         Sets the increment value.
-        @note You may also need to change the precision of the value
-        using SetDigits().
+
+        Using this method changes the number of digits used by the control to
+        at least match the value of @a inc, e.g. using the increment of @c 0.01
+        sets the number of digits to 2 if it had been less than 2 before.
+        However it doesn't change the number of digits if it had been already
+        high enough.
+
+        In any case, you may call SetDigits() explicitly to override the
+        automatic determination of the number of digits.
     */
     void SetIncrement(double inc);
 

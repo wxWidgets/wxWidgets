@@ -753,9 +753,17 @@ void wxSpinCtrlDouble::SetIncrement(double inc)
 
     DoSetIncrement(inc);
 
-    DetermineDigits(inc);
+    const unsigned digits = DetermineDigits(inc);
 
-    UpdateAfterDigitsChange();
+    // We don't decrease the number of digits here, as this is unnecessary and
+    // could be undesirable, but we do increase it if the current number is not
+    // high enough to show the numbers without losing precision.
+    if ( digits > m_digits )
+    {
+        DoSetDigits(digits);
+
+        UpdateAfterDigitsChange();
+    }
 }
 
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
@@ -794,21 +802,18 @@ void wxSpinCtrlDouble::ResetTextValidator()
 #endif // wxUSE_VALIDATORS
 }
 
-void wxSpinCtrlDouble::DetermineDigits(double inc)
+/* static */
+unsigned wxSpinCtrlDouble::DetermineDigits(double inc)
 {
-    unsigned digits;
-
     inc = fabs(inc);
     if ( inc > 0.0 && inc < 1.0 )
     {
-        digits = wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
+        return wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
     }
     else
     {
-        digits = 0;
+        return 0;
     }
-
-    DoSetDigits(digits);
 }
 
 #endif // wxUSE_SPINBTN

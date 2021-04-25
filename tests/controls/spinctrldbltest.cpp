@@ -231,6 +231,11 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
     CHECK( m_spin->GetDigits() == 5 );
     m_spin->SetValue(1.23456789);
     CHECK( m_spin->GetTextValue() == "1.23457" );
+
+    // The number of digits shouldn't (implicitly) decrease however.
+    m_spin->SetIncrement(0.001);
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.23457" );
 }
 
 static inline unsigned int GetInitialDigits(double inc)

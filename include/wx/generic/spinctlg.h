@@ -384,7 +384,7 @@ public:
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrlDouble"))
     {
-        DetermineDigits(inc);
+        DoSetDigits(DetermineDigits(inc));
         return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
                                              style, min, max, initial,
                                              inc, name);
@@ -426,8 +426,9 @@ private:
         DoSetDigits(0);
     }
 
-    // Update m_digits and m_format to correspond to the given increment.
-    void DetermineDigits(double inc);
+    // Return the number of digits required to show the numbers using the
+    // specified increment without loss of precision.
+    static unsigned DetermineDigits(double inc);
 
     // Set the number of digits and the format unconditionally.
     void DoSetDigits(unsigned digits);
