@@ -217,9 +217,20 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
 TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
                  "SpinCtrlDouble::Digits", "[spinctrl][spinctrldouble]")
 {
-    m_spin->SetDigits(5);
+    // Setting increment should adjust the number of digits shown to be big
+    // enough to show numbers with the corresponding granularity.
+    m_spin->SetIncrement(0.1);
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.2" );
 
+    m_spin->SetIncrement(0.01);
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.23" );
+
+    m_spin->SetDigits(5);
     CHECK( m_spin->GetDigits() == 5 );
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.23457" );
 }
 
 static inline unsigned int GetInitialDigits(double inc)
