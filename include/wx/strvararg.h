@@ -295,7 +295,7 @@ struct wxFormatStringArgumentFinder<wxScopedCharBuffer>
     : public wxFormatStringArgumentFinder<const wxScopedCharBuffer&> {
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
 private:
-    wxFormatStringArgumentFinder(); // Disabled
+    wxFormatStringArgumentFinder() wxMEMBER_DELETE;
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 };
 
@@ -308,7 +308,7 @@ struct wxFormatStringArgumentFinder<wxCharBuffer>
     : public wxFormatStringArgumentFinder<const wxCharBuffer&> {
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
 private:
-    wxFormatStringArgumentFinder(); // Disabled
+    wxFormatStringArgumentFinder() wxMEMBER_DELETE;
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 };
 
@@ -409,7 +409,7 @@ struct wxFormatStringSpecifier<const T*>
     template<> struct wxFormatStringSpecifier<T>                            \
     {                                                                       \
     private:                                                                \
-        wxFormatStringSpecifier(); /* Disabled */                           \
+        wxFormatStringSpecifier() wxMEMBER_DELETE;                          \
     };
 
 wxFORMAT_STRING_SPECIFIER(bool, wxFormatString::Arg_Int)
