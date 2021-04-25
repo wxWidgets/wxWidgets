@@ -424,7 +424,6 @@ private:
     void Init()
     {
         m_digits = 0;
-        m_format = wxASCII_STR("%0.0f");
     }
 
     // Update m_digits and m_format to correspond to the given increment.
