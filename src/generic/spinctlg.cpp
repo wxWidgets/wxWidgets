@@ -746,6 +746,18 @@ wxString wxSpinCtrlDouble::DoValueToText(double val)
     return wxString::Format(m_format, val);
 }
 
+void wxSpinCtrlDouble::SetIncrement(double inc)
+{
+    if ( inc == m_increment )
+        return;
+
+    DoSetIncrement(inc);
+
+    DetermineDigits(inc);
+
+    UpdateAfterDigitsChange();
+}
+
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
     wxCHECK_RET( digits <= SPINCTRLDBL_MAX_DIGITS, "too many digits for wxSpinCtrlDouble" );
@@ -755,6 +767,11 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 
     DoSetDigits(digits);
 
+    UpdateAfterDigitsChange();
+}
+
+void wxSpinCtrlDouble::UpdateAfterDigitsChange()
+{
     ResetTextValidator();
     m_textCtrl->InvalidateBestSize();
 

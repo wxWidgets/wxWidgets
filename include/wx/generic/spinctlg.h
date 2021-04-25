@@ -402,7 +402,7 @@ public:
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue(double value)                 { DoSetValue(value, SendEvent_None); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
-    void SetIncrement(double inc)               { DoSetIncrement(inc); }
+    void SetIncrement(double inc);
     void SetDigits(unsigned digits);
 
     // We don't implement bases support for floating point numbers, this is not
@@ -431,6 +431,9 @@ private:
 
     // Set the number of digits and the format unconditionally.
     void DoSetDigits(unsigned digits);
+
+    // Update the appearance after the number of digits has changed.
+    void UpdateAfterDigitsChange();
 
 
     wxString m_format;
