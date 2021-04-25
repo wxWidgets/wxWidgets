@@ -430,11 +430,11 @@ private:
     // specified increment without loss of precision.
     static unsigned DetermineDigits(double inc);
 
-    // Set the number of digits and the format unconditionally.
+    // Just set the number of digits and the format unconditionally.
     void DoSetDigits(unsigned digits);
 
-    // Update the appearance after the number of digits has changed.
-    void UpdateAfterDigitsChange();
+    // Call DoSetDigits() and update the appearance.
+    void DoSetDigitsAndUpdate(unsigned digits);
 
 
     wxString m_format;
