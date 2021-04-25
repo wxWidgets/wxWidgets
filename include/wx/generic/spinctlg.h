@@ -416,7 +416,6 @@ protected:
     virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
     virtual wxString DoValueToText(double val) wxOVERRIDE;
     virtual void ResetTextValidator() wxOVERRIDE;
-    void DetermineDigits(double inc);
 
     unsigned m_digits;
 
@@ -427,6 +426,9 @@ private:
         m_digits = 0;
         m_format = wxASCII_STR("%0.0f");
     }
+
+    // Update m_digits and m_format to correspond to the given increment.
+    void DetermineDigits(double inc);
 
     wxString m_format;
 
