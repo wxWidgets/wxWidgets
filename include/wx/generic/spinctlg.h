@@ -382,13 +382,7 @@ public:
                 long style = wxSP_ARROW_KEYS,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
-                const wxString& name = wxT("wxSpinCtrlDouble"))
-    {
-        DoSetDigits(DetermineDigits(inc));
-        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
-                                             style, min, max, initial,
-                                             inc, name);
-    }
+                const wxString& name = wxT("wxSpinCtrlDouble"));
 
     // accessors
     double GetValue(wxSPINCTRL_GETVALUE_FIX) const { return DoGetValue(); }
@@ -425,10 +419,6 @@ private:
     {
         DoSetDigits(0);
     }
-
-    // Return the number of digits required to show the numbers using the
-    // specified increment without loss of precision.
-    static unsigned DetermineDigits(double inc);
 
     // Just set the number of digits and the format unconditionally.
     void DoSetDigits(unsigned digits);

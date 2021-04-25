@@ -723,9 +723,25 @@ void wxSpinCtrl::ResetTextValidator()
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
 
-#define SPINCTRLDBL_MAX_DIGITS 20
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase);
+
+bool
+wxSpinCtrlDouble::Create(wxWindow *parent,
+                         wxWindowID id,
+                         const wxString& value,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         double min, double max, double initial,
+                         double inc,
+                         const wxString& name)
+{
+    DoSetDigits(wxSpinCtrlImpl::DetermineDigits(inc));
+
+    return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
+                                         style, min, max, initial,
+                                         inc, name);
+}
 
 void wxSpinCtrlDouble::DoSendEvent()
 {
@@ -753,7 +769,7 @@ void wxSpinCtrlDouble::SetIncrement(double inc)
 
     DoSetIncrement(inc);
 
-    const unsigned digits = DetermineDigits(inc);
+    const unsigned digits = wxSpinCtrlImpl::DetermineDigits(inc);
 
     // We don't decrease the number of digits here, as this is unnecessary and
     // could be undesirable, but we do increase it if the current number is not
@@ -764,7 +780,8 @@ void wxSpinCtrlDouble::SetIncrement(double inc)
 
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
-    wxCHECK_RET( digits <= SPINCTRLDBL_MAX_DIGITS, "too many digits for wxSpinCtrlDouble" );
+    wxCHECK_RET( digits <= wxSpinCtrlImpl::SPINCTRLDBL_MAX_DIGITS,
+                 "too many digits for wxSpinCtrlDouble" );
 
     if ( digits == m_digits )
         return;
@@ -796,22 +813,6 @@ void wxSpinCtrlDouble::ResetTextValidator()
     validator.SetRange(m_min, m_max);
     m_textCtrl->SetValidator(validator);
 #endif // wxUSE_VALIDATORS
-}
-
-/* static */
-unsigned wxSpinCtrlDouble::DetermineDigits(double inc)
-{
-    // TODO-C++11: Use std::modf() to get the fractional part.
-    inc = fabs(inc);
-    inc -= static_cast<int>(inc);
-    if ( inc > 0.0 )
-    {
-        return wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
-    }
-    else
-    {
-        return 0;
-    }
 }
 
 #endif // wxUSE_SPINBTN
