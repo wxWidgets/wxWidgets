@@ -236,6 +236,12 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
     m_spin->SetIncrement(0.001);
     m_spin->SetValue(1.23456789);
     CHECK( m_spin->GetTextValue() == "1.23457" );
+
+    // Check that using increment greater than 1 also works.
+    m_spin->SetDigits(0);
+    m_spin->SetIncrement(2.5);
+    m_spin->SetValue(7.5);
+    CHECK( m_spin->GetTextValue() == "7.5" );
 }
 
 static inline unsigned int GetInitialDigits(double inc)

@@ -805,8 +805,10 @@ void wxSpinCtrlDouble::ResetTextValidator()
 /* static */
 unsigned wxSpinCtrlDouble::DetermineDigits(double inc)
 {
+    // TODO-C++11: Use std::modf() to get the fractional part.
     inc = fabs(inc);
-    if ( inc > 0.0 && inc < 1.0 )
+    inc -= static_cast<int>(inc);
+    if ( inc > 0.0 )
     {
         return wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
     }
