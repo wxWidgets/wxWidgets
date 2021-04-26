@@ -1208,6 +1208,15 @@ wxString wxLocale::GetHeaderValue(const wxString& header,
 namespace
 {
 
+// Helper checking if the locale was not only set, but actually successfully
+// changed.
+bool HasSuccessfullyChangedLocale()
+{
+    const wxLocale* const locale = wxGetLocale();
+
+    return locale && locale->GetLanguage() != wxLANGUAGE_UNKNOWN;
+}
+
 bool IsAtTwoSingleQuotes(const wxString& fmt, wxString::const_iterator p)
 {
     if ( p != fmt.end() && *p == '\'')
@@ -1696,7 +1705,7 @@ GetInfoFromLCID(LCID lcid,
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
-    if ( !wxGetLocale() )
+    if ( !HasSuccessfullyChangedLocale() )
     {
         // wxSetLocale() hadn't been called yet of failed, hence CRT must be
         // using "C" locale -- but check it to detect bugs that would happen if
@@ -1755,7 +1764,7 @@ wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
     CFLocaleRef userLocaleRefRaw;
-    if ( wxGetLocale() )
+    if ( HasSuccessfullyChangedLocale() )
     {
         userLocaleRefRaw = CFLocaleCreate
                         (
