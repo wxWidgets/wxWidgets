@@ -368,10 +368,10 @@ public:
         Sets the value of the spin control.
 
         It is recommended to use the overload taking a double value instead.
-        The behaviour of this function when @a text doesn't represent a valid
-        number currently differs between the platforms, however
-        passing an empty string does clear the text part contents, without
-        affecting the value returned by GetValue(), under all of them.
+        If @a text doesn't represent a valid number, it may not be shown in the
+        text part of the control at all (only empty string is guaranteed to be
+        supported under all platforms) and the numeric value will be changed to
+        GetMin().
 
         Notice that, unlike wxTextCtrl::SetValue(), but like most of the other
         setter methods in wxWidgets, calling this method does not generate any
