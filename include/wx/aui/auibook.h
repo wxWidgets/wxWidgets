@@ -55,6 +55,7 @@ enum wxAuiNotebookOption
                              wxAUI_NB_MIDDLE_CLICK_CLOSE
 };
 
+wxALLOW_COMBINING_ENUMS(wxAuiNotebookOption, wxBorder)
 
 
 

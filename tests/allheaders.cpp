@@ -387,6 +387,33 @@
 
 #include "allheaders.h"
 
+// Check that using wx macros doesn't result in -Wsuggest-override or
+// equivalent warnings in classes using and not using "override".
+struct Base : wxEvtHandler
+{
+    virtual ~Base() { }
+
+    virtual void Foo() { }
+};
+
+struct DerivedWithoutOverride : Base
+{
+    void OnIdle(wxIdleEvent&) { }
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(DerivedWithoutOverride);
+    wxDECLARE_EVENT_TABLE();
+};
+
+struct DerivedWithOverride : Base
+{
+    virtual void Foo() wxOVERRIDE { }
+
+    void OnIdle(wxIdleEvent&) { }
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(DerivedWithOverride);
+    wxDECLARE_EVENT_TABLE();
+};
+
 #ifdef GCC_TURN_OFF
     // Just using REQUIRE() below triggers -Wparentheses, so avoid it.
     GCC_TURN_OFF(parentheses)

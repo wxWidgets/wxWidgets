@@ -741,6 +741,17 @@ typedef short int WXTYPE;
 #endif
 
 /*
+    Macros above don't work with gcc 11 due to a compiler bug, unless we also
+    use "override" in the function declaration -- but this breaks other
+    compilers, so define a specific macro for gcc 11 only.
+ */
+#if wxCHECK_GCC_VERSION(11, 0)
+#   define wxDUMMY_OVERRIDE wxOVERRIDE
+#else
+#   define wxDUMMY_OVERRIDE
+#endif
+
+/*
     Combination of the two variants above: should be used for deprecated
     functions which are defined inline and are used by wxWidgets itself.
  */
@@ -1255,6 +1266,28 @@ typedef double wxDouble;
 /*  Geometric flags */
 /*  ---------------------------------------------------------------------------- */
 
+/*
+    In C++20 operations on the elements of different enums are deprecated and
+    many compilers (clang 10+, gcc 11+, MSVS 2019) warn about combining them,
+    as a lot of existing code using them does, so we provide explicit operators
+    for doing this, that do the same thing as would happen without them, but
+    without the warnings.
+ */
+#if defined(__cplusplus) && (__cplusplus >= 202002L)
+    #define wxALLOW_COMBINING_ENUMS_IMPL(en1, en2)                            \
+        inline int operator|(en1 v1, en2 v2)                                  \
+            { return static_cast<int>(v1) | static_cast<int>(v2); }           \
+        inline int operator+(en1 v1, en2 v2)                                  \
+            { return static_cast<int>(v1) + static_cast<int>(v2); }
+
+    #define wxALLOW_COMBINING_ENUMS(en1, en2)                                 \
+        wxALLOW_COMBINING_ENUMS_IMPL(en1, en2)                                \
+        wxALLOW_COMBINING_ENUMS_IMPL(en2, en1)
+#else /* !C++ 20 */
+    /* Don't bother doing anything in this case. */
+    #define wxALLOW_COMBINING_ENUMS(en1, en2)
+#endif /* C++ 20 */
+
 enum wxGeometryCentre
 {
     wxCENTRE                  = 0x0001,
@@ -1379,6 +1412,16 @@ enum wxBorder
 
 /* This makes it easier to specify a 'normal' border for a control */
 #define wxDEFAULT_CONTROL_BORDER    wxBORDER_SUNKEN
+
+/*
+    Elements of these enums can be combined with each other when using
+    wxSizer::Add() overload not using wxSizerFlags.
+ */
+wxALLOW_COMBINING_ENUMS(wxAlignment, wxDirection)
+wxALLOW_COMBINING_ENUMS(wxAlignment, wxGeometryCentre)
+wxALLOW_COMBINING_ENUMS(wxAlignment, wxStretch)
+wxALLOW_COMBINING_ENUMS(wxDirection, wxStretch)
+wxALLOW_COMBINING_ENUMS(wxDirection, wxGeometryCentre)
 
 /*  ---------------------------------------------------------------------------- */
 /*  Window style flags */
