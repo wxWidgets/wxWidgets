@@ -283,7 +283,7 @@ function(wx_set_target_properties target_name is_base)
             rpcrt4
             advapi32
             version
-            wsock32
+            ws2_32
             wininet
             oleacc
             uxtheme

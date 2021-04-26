@@ -181,7 +181,7 @@
 
 #if !defined(WXUSINGDLL)
     #if !defined(wxNO_NET_LIB)
-        #pragma comment(lib, "wsock32")
+        #pragma comment(lib, "ws2_32")
     #endif
 
     #if wxUSE_XML && !defined(wxNO_XML_LIB) && !defined(wxNO_EXPAT_LIB)

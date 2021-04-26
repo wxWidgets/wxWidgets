@@ -661,7 +661,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                 <sys-lib>rpcrt4</sys-lib>
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>version</sys-lib>
-                <sys-lib>wsock32</sys-lib>
+                <sys-lib>ws2_32</sys-lib>
                 <!-- this one is only used if wxUSE_URL_NATIVE==1 but we don't
                      know if it is here so just add it unconditionally -->
                 <sys-lib>wininet</sys-lib>

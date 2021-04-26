@@ -32,6 +32,12 @@
 // support, for example), we must include it before winsock.h, and as windows.h
 // includes winsock.h, we have to do it before including it.
 #if wxUSE_WINSOCK2
+    // Avoid warnings about Winsock 1.x functions deprecated in Winsock 2 that
+    // we still use (and that will certainly remain available for the
+    // foreseeable future anyhow).
+    #ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
+        #define _WINSOCK_DEPRECATED_NO_WARNINGS
+    #endif
     #include <winsock2.h>
 #endif
 
