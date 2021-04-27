@@ -552,8 +552,7 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
 
             if ( item->HasImage() )
             {
-                m_gi->m_rectIcon.x = m_gi->m_rectAll.x + 4 +
-                    (m_gi->m_rectAll.width - m_gi->m_rectIcon.width) / 2;
+                m_gi->m_rectIcon.x = m_gi->m_rectAll.x + 4;
                 m_gi->m_rectIcon.y = m_gi->m_rectAll.y + 4;
             }
 
@@ -5161,6 +5160,31 @@ bool wxGenericListCtrl::SetColumnWidth( int col, int width )
 {
     m_mainWin->SetColumnWidth( col, width );
     return true;
+}
+
+// Column ordering functions
+int wxGenericListCtrl::GetColumnOrder(int col) const
+{
+    // TODO: Implement this on generic port
+    return col;
+}
+
+int wxGenericListCtrl::GetColumnIndexFromOrder(int order) const
+{
+    // TODO: Implement this on generic port
+    return order;
+}
+
+wxArrayInt wxGenericListCtrl::GetColumnsOrder() const
+{
+    // TODO: Implement this on generic port
+    return wxArrayInt();
+}
+
+bool wxGenericListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
+{
+    // TODO: Implement this on generic port
+    return false;
 }
 
 int wxGenericListCtrl::GetCountPerPage() const
