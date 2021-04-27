@@ -84,11 +84,11 @@ Microsoft Visual C++ Compilation       {#msw_build_msvs}
 
 * From the IDE using the provided project files:
 
-Ready to use project files are provided for VC++ versions 7, 8, 9,
-10, 11, 12, 14, 15 and 16 (also known as MSVS 2003, 2005, 2008, 2010, 2012,
+Ready to use project files are provided for VC++ versions 8, 9,
+10, 11, 12, 14, 15 and 16 (also known as MSVS 2005, 2008, 2010, 2012,
 2013, 2015, 2017 and 2019 respectively).
 
-Simply open `wx_vcN.sln` (for N=7, 8, 9, 10, 11, 12, 14, 15 or 16) file,
+Simply open `wx_vcN.sln` (for N=8, 9, 10, 11, 12, 14, 15 or 16) file,
 select the appropriate configuration (Debug or Release, static or DLL)
 and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects

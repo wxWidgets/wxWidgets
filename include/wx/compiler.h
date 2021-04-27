@@ -35,10 +35,8 @@
       define special symbols for different VC version instead of writing tests
       for magic numbers such as 1200, 1300 &c repeatedly
     */
-#if __VISUALC__ < 1300
-#   error "This Visual C++ version is not supported any longer (at least MSVC 2003 required)."
-#elif __VISUALC__ < 1400
-#   define __VISUALC7__
+#if __VISUALC__ < 1400
+#   error "This Visual C++ version is not supported any longer (at least MSVC 2005 required)."
 #elif __VISUALC__ < 1500
 #   define __VISUALC8__
 #elif __VISUALC__ < 1600
