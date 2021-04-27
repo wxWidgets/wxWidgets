@@ -8099,8 +8099,9 @@ void wxGrid::MakeCellVisible( int row, int col )
          col < -1 || col >= m_numCols )
         return;
 
-    const bool processRow = row != -1;
-    const bool processCol = col != -1;
+    // We don't scroll in the corresponding direction if "pixels per line" is 0.
+    const bool processRow = row != -1 && m_yScrollPixelsPerLine != 0;
+    const bool processCol = col != -1 && m_xScrollPixelsPerLine != 0;
 
     // Get the cell rectangle in logical coords.
     wxRect r;
