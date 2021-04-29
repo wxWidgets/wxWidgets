@@ -2406,13 +2406,19 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos, bool fitR
         }
         else
         {
-            [column setMinWidth:10];
+            int minW = GetColumn(pos)->GetMinWidth();
+            if (minW == 0) {
+                minW = 10;
+            }
+            [column setMinWidth:minW];
             [m_OutlineView sizeLastColumnToFit];
         }
     }
     else if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
     {
         [column setWidth:autoWidth];
+        int minW = GetColumn(pos)->GetMinWidth();
+        [column setMinWidth:minW];
     }
     else if ( nativeData->GetIsLast() )
     {
