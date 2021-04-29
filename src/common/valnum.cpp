@@ -31,6 +31,11 @@
 
 #include <math.h>
 
+// If true, IsCharOk() won't filter out the entered digit(s) even if the resulting
+// value is out of range (i.e. value < min). However, if no value in the range has
+// the initial(s) designated by the entered digit(s), then IsCharOk() will prevent
+// such digit(s) from being entered at all.
+static bool gs_valueIncomplete = false;
 // ============================================================================
 // wxNumValidatorBase implementation
 // ============================================================================
@@ -261,19 +266,11 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( ch < '0' || ch > '9' )
         return false;
 
-    LongestValueType value;
     const wxString newval = GetValueAfterInsertingChar(val, pos, ch);
 
-    if ( DoGetMin() > 0 && FromString(newval, &value) && value < DoGetMax() )
-    {
-        // Allow values less than m_min if we are still typing in the control.
-        // Values greater than m_max are (always) rejected immediately.
-        // See ticket: https://trac.wxwidgets.org/ticket/12968.
-        return true;
-    }
-
     const wxString& errormsg = IsValid(newval);
-    return errormsg.empty();
+
+    return errormsg.empty() || gs_valueIncomplete;
 }
 
 wxString
@@ -287,7 +284,11 @@ wxIntegerValidatorBase::IsValid(const wxString& newval) const
         return _("Invalid value");
 
     if ( !IsInRange(value) )
+    {
+        gs_valueIncomplete = !CanBeNegative() && IsIncomplete(value);
+
         return _("Value out of range");
+    }
 
     return wxString();
 }
@@ -355,19 +356,11 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( ch < '0' || ch > '9' )
         return false;
 
-    LongestValueType value;
     const wxString newval = GetValueAfterInsertingChar(val, pos, ch);
 
-    if ( DoGetMin() > 0 && FromString(newval, &value) && value < DoGetMax() )
-    {
-        // Allow values less than m_min if we are still typing in the control.
-        // Values greater than m_max are (always) rejected immediately.
-        // See ticket: https://trac.wxwidgets.org/ticket/12968.
-        return true;
-    }
-
     const wxString& errormsg = IsValid(newval);
-    return errormsg.empty();
+
+    return errormsg.empty() || gs_valueIncomplete;
 }
 
 wxString
@@ -386,7 +379,11 @@ wxFloatingPointValidatorBase::IsValid(const wxString& newval) const
         return _("Invalid value");
 
     if ( !IsInRange(value) )
+    {
+        gs_valueIncomplete = !CanBeNegative() && IsIncomplete(value);
+
         return _("Value out of range");
+    }
 
     return wxString();
 }
