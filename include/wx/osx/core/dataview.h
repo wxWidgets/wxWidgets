@@ -53,7 +53,7 @@ public:
   virtual int               GetColumnPosition  (wxDataViewColumn const* columnPtr) const       = 0; // returns the position of the passed column in the native control
   virtual bool              InsertColumn       (unsigned int pos, wxDataViewColumn* columnPtr) = 0; // inserts a column at pos in the native control;
                                                                                                     // the method can assume that the column's owner is already set
-  virtual void              FitColumnWidthToContent(unsigned int pos)                          = 0; // resizes column to fit its content
+  virtual void              FitColumnWidthToContent(unsigned int pos, bool fitRowHeight = false) = 0; // resizes column to fit its content, optionally adjust the row height
 
  //
  // item related methods
@@ -112,6 +112,8 @@ public:
   virtual void SetRowHeight(wxDataViewItem const& item, unsigned int height)                                = 0; // sets the height of the row containing the passed item in the native control
   virtual void OnSize()                                                                                     = 0; // updates the layout of the native control after a size event
   virtual void StartEditor( const wxDataViewItem & item, unsigned int column )                              = 0; // starts editing the passed in item and column
+
+  virtual int GetRowHeight()                                                                                = 0; // return the height of all rows
 };
 
 #endif // _WX_DATAVIEWCTRL_CORE_H_

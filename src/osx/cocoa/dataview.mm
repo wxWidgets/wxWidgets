@@ -2240,7 +2240,7 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
     return true;
 }
 
-void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
+void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos, bool fitRowHeight)
 {
     const int count = GetCount();
     wxDataViewColumnNativeData *nativeData = GetColumn(pos)->GetNativeData();
@@ -2305,7 +2305,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 
     MaxWidthCalculator calculator(m_OutlineView, column, pos);
 
-    bool calculateAllRows = ((GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE)
+    bool calculateAllRows = fitRowHeight || ((GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE)
         || (m_expanderWidth == 0 && column == [m_OutlineView outlineTableColumn]));
 
 
@@ -2751,6 +2751,9 @@ void wxCocoaDataViewControl::HitTest(const wxPoint& point, wxDataViewItem& item,
 void wxCocoaDataViewControl::SetRowHeight(int height)
 {
     [m_OutlineView setRowHeight:wxMax(height, GetDefaultRowHeight())];
+}
+int wxCocoaDataViewControl::GetRowHeight() {
+    return ceil([m_OutlineView rowHeight]);
 }
 
 int wxCocoaDataViewControl::GetDefaultRowHeight() const

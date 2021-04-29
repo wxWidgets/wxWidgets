@@ -501,7 +501,7 @@ public:
     virtual wxDataViewColumn* GetColumn(unsigned int pos) const wxOVERRIDE;
     virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const wxOVERRIDE;
     virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr) wxOVERRIDE;
-    virtual void FitColumnWidthToContent(unsigned int pos) wxOVERRIDE;
+    virtual void FitColumnWidthToContent(unsigned int pos, bool fitRowHeight = false) wxOVERRIDE;
 
     // item related methods (inherited from wxDataViewWidgetImpl)
     virtual bool Add(const wxDataViewItem& parent, const wxDataViewItem& item) wxOVERRIDE;
@@ -570,6 +570,7 @@ public:
 
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
+    virtual int GetRowHeight() wxOVERRIDE;
 
     virtual void SetFont(const wxFont& font) wxOVERRIDE;
 
