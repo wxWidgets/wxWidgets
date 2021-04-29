@@ -299,10 +299,13 @@ void wxOSXDataViewModelNotifier::AdjustRowHeights(wxDataViewItemArray const& ite
 
 void wxOSXDataViewModelNotifier::AdjustAutosizedColumns()
 {
-  unsigned count = m_DataViewCtrlPtr->GetColumnCount();
-  for ( unsigned col = 0; col < count; col++ )
+  if (!m_DataViewCtrlPtr->IsFrozen())
   {
-    m_DataViewCtrlPtr->GetDataViewPeer()->FitColumnWidthToContent(col);
+    unsigned count = m_DataViewCtrlPtr->GetColumnCount();
+    for ( unsigned col = 0; col < count; col++ )
+    {
+      m_DataViewCtrlPtr->GetDataViewPeer()->FitColumnWidthToContent(col);
+    }
   }
 }
 
@@ -703,6 +706,12 @@ void wxDataViewCtrl::AdjustAutosizedColumns() const
 {
   if ( m_ModelNotifier )
     m_ModelNotifier->AdjustAutosizedColumns();
+}
+
+void wxDataViewCtrl::DoThaw()
+{
+  AdjustAutosizedColumns();
+  wxDataViewCtrlBase::DoThaw();
 }
 
 /*static*/
