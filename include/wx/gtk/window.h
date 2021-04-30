@@ -493,6 +493,7 @@ public:
         return m_paintContext;
     }
     void GTKSizeRevalidate();
+    void GTKSendSizeEventIfNeeded();
 #endif
 
     wxDECLARE_DYNAMIC_CLASS(wxWindowGTK);

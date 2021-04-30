@@ -1171,11 +1171,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         GTKUpdateClientSizeIfNecessary();
     }
 
-    if (m_needSizeEvent)
-    {
-        m_needSizeEvent = false;
-        SendSizeEvent();
-    }
+    GTKSendSizeEventIfNeeded();
 #endif
 
     if (change && !show)
@@ -1514,13 +1510,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
         gtk_widget_show(m_widget);
 
 #ifdef __WXGTK3__
-        if (m_needSizeEvent)
-        {
-            m_needSizeEvent = false;
-            SendSizeEvent();
-        }
+        GTKSendSizeEventIfNeeded();
 #endif
-
         GTKDoAfterShow();
     }
 #endif // GDK_WINDOWING_X11

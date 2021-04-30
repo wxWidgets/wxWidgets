@@ -2335,6 +2335,11 @@ static void frame_clock_layout(GdkFrameClock*, wxWindow* win)
 {
     win->GTKSizeRevalidate();
 }
+
+static void frame_clock_layout_after(GdkFrameClock*, wxWindowGTK* win)
+{
+    win->GTKSendSizeEventIfNeeded();
+}
 #endif // GTK_CHECK_VERSION(3,8,0)
 
 } // extern "C"
@@ -2395,6 +2400,7 @@ void wxWindowGTK::GTKHandleRealized()
             !g_signal_handler_find(clock, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this))
         {
             g_signal_connect(clock, "layout", G_CALLBACK(frame_clock_layout), this);
+            g_signal_connect_after(clock, "layout", G_CALLBACK(frame_clock_layout_after), this);
         }
     }
 #endif
@@ -5862,20 +5868,30 @@ void wxWindowGTK::GTKSizeRevalidate()
     {
         next = p->next;
         wxWindow* win = static_cast<wxWindow*>(p->data);
-        if (wxGetTopLevelParent(win) == this)
+        wxWindow* w = win;
+        while (w && w->IsShown() && !w->IsTopLevel())
+            w = w->GetParent();
+        if (w == this)
         {
             win->InvalidateBestSize();
             gs_sizeRevalidateList = g_list_delete_link(gs_sizeRevalidateList, p);
-            for (;;)
+            do
             {
                 win = win->m_parent;
-                if (win == NULL || win->m_needSizeEvent)
+                if (win->m_needSizeEvent)
                     break;
                 win->m_needSizeEvent = true;
-                if (win->IsTopLevel())
-                    break;
-            }
+            } while (win != this);
         }
+    }
+}
+
+void wxWindowGTK::GTKSendSizeEventIfNeeded()
+{
+    if (m_needSizeEvent)
+    {
+        m_needSizeEvent = false;
+        SendSizeEvent();
     }
 }
 
