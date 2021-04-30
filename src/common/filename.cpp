@@ -91,6 +91,10 @@
 #include "wx/longlong.h"
 #include "wx/uri.h"
 
+#if defined(wxHAS_NATIVE_READLINK)
+    #include "wx/vector.h"
+#endif
+
 #if defined(__WIN32__) && defined(__MINGW32__)
     #include "wx/msw/gccpriv.h"
 #endif
@@ -1697,7 +1701,8 @@ wxFileName wxFileName::ResolveLink()
     if( st.st_size != 0 )
         bufSize = st.st_size + 1;
 
-    char buf[bufSize];
+    wxVector<char> bufData(bufSize);
+    char* const buf = &bufData[0];
     ssize_t result = wxReadlink(link, buf, bufSize - 1);
 
     if ( result != -1 )
