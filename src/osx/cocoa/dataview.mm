@@ -2402,16 +2402,24 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos, bool fitR
 
         if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
         {
-            [column setWidth:autoWidth];
+            [column setMinWidth:autoWidth];
+            [m_OutlineView sizeLastColumnToFit];
+            int minW = GetColumn(pos)->GetMinWidth();
+            [column setMinWidth:minW];
         }
         else
         {
             int minW = GetColumn(pos)->GetMinWidth();
             if (minW == 0) {
-                minW = 10;
+                [column setMinWidth:10];
+            } else {
+                [column setMinWidth:minW];
             }
             [column setMinWidth:minW];
             [m_OutlineView sizeLastColumnToFit];
+            if (minW == 0) {
+                [column setMinWidth:0];
+            }
         }
     }
     else if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
@@ -2781,7 +2789,10 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 
 void wxCocoaDataViewControl::OnSize()
 {
-    [m_OutlineView sizeLastColumnToFit];
+    UInt32 const noOfColumns = [[m_OutlineView tableColumns] count];
+    if (noOfColumns) {
+        FitColumnWidthToContent(noOfColumns - 1);
+    }
 }
 
 //
