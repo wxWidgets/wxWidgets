@@ -177,6 +177,15 @@ set(TEST_GUI_DATA
     image/paste_result_no_background_square_over_circle.png
     image/wx.png
     image/wx.ico
+    image/toucan.png
+    image/toucan_hue_0.538.png
+    image/toucan_sat_-0.41.png
+    image/toucan_bright_-0.259.png
+    image/toucan_hsv_0.538_-0.41_-0.259.png
+    image/toucan_light_46.png
+    image/toucan_dis_240.png
+    image/toucan_grey.png
+    image/toucan_mono_255_255_255.png
     intl/ja/internat.mo
     intl/ja/internat.po
     )
