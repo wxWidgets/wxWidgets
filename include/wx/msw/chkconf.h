@@ -472,20 +472,6 @@
 #   define wxUSE_POSTSCRIPT 1
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT && defined(__WXUNIVERSAL__) && !defined(wxUSE_GRAPHICS_GDIPLUS)
-#   define wxUSE_GRAPHICS_GDIPLUS 1
-#endif
-#if !wxUSE_GRAPHICS_GDIPLUS
-#   if wxUSE_GRAPHICS_CONTEXT
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_GRAPHICS_CONTEXT requires wxUSE_GRAPHICS_GDIPLUS"
-#       else
-#           undef wxUSE_GRAPHICS_GDIPLUS
-#           define wxUSE_GRAPHICS_GDIPLUS 1
-#       endif
-#   endif
-#endif
-
 /*
     IPv6 support requires winsock2.h, but the default of wxUSE_WINSOCK2 is 0.
     Don't require changing it explicitly and just turn it on automatically if
