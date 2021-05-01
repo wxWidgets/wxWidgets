@@ -1,0 +1,1 @@
+All (GUI): Add wxImage::Change{Saturation,Brightness,HSV,Lightness}() (Tomay).
