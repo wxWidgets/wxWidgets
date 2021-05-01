@@ -307,9 +307,15 @@ public:
     although currently just one is available. It differs from wxHtmlWindow in
     that each backend is actually a full rendering engine, Internet Explorer or Edge on MSW and
     WebKit on macOS and GTK. This allows the correct viewing of complex pages with
-    javascript and css.
+    JavaScript and CSS.
 
     @section descriptions Backend Descriptions
+
+    This class supports using multiple backends, corresponding to different
+    implementations of the same functionality. Under macOS and Unix platforms
+    only a single, WebKit-based, backend is currently provided, but under MSW
+    both the legacy IE backend and the new Edge backend exist. Backends are
+    identified by their names, documented in the backend descriptions below.
 
     @subsection wxWEBVIEW_BACKEND_IE wxWEBVIEW_BACKEND_IE (MSW)
 
@@ -322,6 +328,9 @@ public:
     this</a> article for more information.
 
     This backend has full support for custom schemes and virtual file systems.
+
+    The predefined @c wxWebViewBackendIE constant contains the name of this
+    backend and can be used to explicitly select it when using wxWebView::New().
 
     @note If you plan to display any modern web content you should consider using @ref wxWEBVIEW_BACKEND_EDGE,
           as Internet Explorer is not supported anymore by Microsoft.
@@ -355,7 +364,7 @@ public:
       documentation, as required by its licence
 
     If enabled and available at runtime Edge will be selected as the default
-    backend. If you require the IE backend use @c wxWEBVIEW_BACKEND_IE when
+    backend. If you require the IE backend use @c wxWebViewBackendIE when
     using wxWebView::New().
 
     If your application should use a
@@ -363,6 +372,9 @@ public:
     fixed version</a> of the WebView2 runtime you must use
     wxWebViewEdge::MSWSetBrowserExecutableDir() to specify its usage before
     using the Edge backend.
+
+    The predefined @c wxWebViewBackendEdge constant contains the name of this
+    backend.
 
     @subsection wxWEBVIEW_WEBKIT wxWEBVIEW_WEBKIT (GTK)
 
@@ -376,6 +388,9 @@ public:
     resources such as images and stylesheets are currently loaded using the
     data:// scheme.
 
+    The predefined @c wxWebViewBackendWebKit constant contains the name of this
+    backend.
+
     @subsection wxWEBVIEW_WEBKIT2 wxWEBVIEW_WEBKIT2 (GTK3)
 
     Under GTK3 the WebKit2 version of <a href="http://webkitgtk.org/">WebKitGTK+</a>
@@ -384,6 +399,9 @@ public:
 
     All features are
     supported except for clearing and enabling / disabling the history.
+
+    The predefined @c wxWebViewBackendWebKit constant contains the name of this
+    backend.
 
     @subsection wxWEBVIEW_WEBKIT_MACOS wxWEBVIEW_WEBKIT (macOS)
 
@@ -400,6 +418,9 @@ public:
     additional fields in your Info.plist to enable such connections.
     For further details see the documentation on NSAppTransportSecurity
     <a target=_new href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
+
+    The predefined @c wxWebViewBackendWebKit constant contains the name of this
+    backend.
 
     @section async Asynchronous Notifications
 
@@ -536,6 +557,14 @@ public:
 
     /**
         Allows to check if a specific backend is currently available.
+
+        For example, to check for Edge backend availability:
+        @code
+        if ( wxWebView::IsBackendAvailable(wxWebViewBackendEdge) )
+        {
+            ... enable some extra functionality not available with the IE backend ...
+        }
+        @endcode
 
         @since 3.1.4
     */
