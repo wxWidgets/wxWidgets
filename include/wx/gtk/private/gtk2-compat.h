@@ -51,6 +51,7 @@ static inline gpointer wx_g_object_ref_sink(gpointer object)
     gtk_object_sink(GTK_OBJECT(object));
     return object;
 }
+#undef g_object_ref_sink
 #define g_object_ref_sink wx_g_object_ref_sink
 
 // ----------------------------------------------------------------------------
