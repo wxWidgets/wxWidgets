@@ -5871,17 +5871,20 @@ void wxWindowGTK::GTKSizeRevalidate()
         wxWindow* w = win;
         while (w && w->IsShown() && !w->IsTopLevel())
             w = w->GetParent();
+        // If win is a child of this
         if (w == this)
         {
             win->InvalidateBestSize();
             gs_sizeRevalidateList = g_list_delete_link(gs_sizeRevalidateList, p);
-            do
+            // Mark parents as needing size event
+            m_needSizeEvent = true;
+            while (win != this)
             {
                 win = win->m_parent;
                 if (win->m_needSizeEvent)
                     break;
                 win->m_needSizeEvent = true;
-            } while (win != this);
+            }
         }
     }
 }
