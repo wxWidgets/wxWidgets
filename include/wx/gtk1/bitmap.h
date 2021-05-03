@@ -25,6 +25,7 @@ class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxCursor;
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -72,6 +73,7 @@ public:
     wxBitmap( const char* const* bits );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
     wxBitmap( const wxImage& image, int depth = -1, double WXUNUSED(scale) = 1.0 ) { (void)CreateFromImage(image, depth); }
+    explicit wxBitmap(const wxCursor& cursor);
     virtual ~wxBitmap();
 
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
