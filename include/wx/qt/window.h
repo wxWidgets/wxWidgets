@@ -135,6 +135,12 @@ public:
     virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
 
     QWidget *GetHandle() const wxOVERRIDE;
+ 
+    virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
+    virtual void SetMaxSize(const wxSize& maxSize) wxOVERRIDE;
+    virtual void DoSetSizeHints(int minW, int minH,
+        int maxW, int maxH,
+        int incW, int incH) wxOVERRIDE;
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
