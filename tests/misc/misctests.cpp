@@ -149,6 +149,18 @@ void MiscTestCase::StaticCast()
 #endif // wxUSE_TARSTREAM
 }
 
+TEST_CASE("RTTI::ClassInfo", "[rtti]")
+{
+    wxObject obj;
+    CHECK( obj.GetClassInfo()->IsKindOf(wxCLASSINFO(wxObject)) );
+    CHECK( !obj.GetClassInfo()->IsKindOf(wxCLASSINFO(wxArchiveEntry)) );
+
+#if wxUSE_ZIPSTREAM
+    wxZipEntry zipEntry;
+    CHECK( zipEntry.GetClassInfo()->IsKindOf(wxCLASSINFO(wxArchiveEntry)) );
+#endif // wxUSE_ZIPSTREAM
+}
+
 TEST_CASE("wxCTZ", "[math]")
 {
     CHECK( wxCTZ(1) == 0 );

@@ -436,6 +436,11 @@ public:
     // check if this object references the same data as the other one
     bool IsSameAs(const wxObject& o) const { return m_refData == o.m_refData; }
 
+    // RTTI information, usually declared by wxDECLARE_DYNAMIC_CLASS() or
+    // similar, but done manually for the hierarchy root. Note that it's public
+    // for compatibility reasons, but shouldn't be accessed directly.
+    static wxClassInfo ms_classInfo;
+
 protected:
     // ensure that our data is not shared with anybody else: if we have no
     // data, it is created using CreateRefData() below, if we have shared data
@@ -452,8 +457,6 @@ protected:
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
     wxObjectRefData *m_refData;
-
-    static wxClassInfo ms_classInfo;
 };
 
 inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
