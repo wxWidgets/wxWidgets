@@ -7,7 +7,9 @@ These building steps are NOT the normal way to build MSys2 MinGW packages.
 But, they are a way the wxWidgets developers can test that wxWidgets
 can build the wxMSW libraries under MSys2 MinGW.
 
-For the MSys2 way please see https://github.com/Alexpux/MINGW-packages
+For the MSys2 way please see
+  https://github.com/msys2/MINGW-packages and
+  https://www.msys2.org/wiki/Creating-Packages/
 
 Building steps:
 

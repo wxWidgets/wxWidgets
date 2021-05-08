@@ -13,8 +13,8 @@ But, they are a way the wxWidgets developers can test that wxWidgets
 can build the wxGTK/Win32 libraries under MSys2 MinGW.
 
 For the MSys2 way please see
-  https://github.com/Alexpux/MINGW-packages and
-  https://github.com/msys2/msys2/wiki/Creating-packages
+  https://github.com/msys2/MINGW-packages and
+  https://www.msys2.org/wiki/Creating-Packages/
 
 Building steps:
 
