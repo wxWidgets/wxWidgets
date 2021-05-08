@@ -4664,6 +4664,13 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
     {
         GtkTreeView* const treeview = GTK_TREE_VIEW(dv->GtkGetTreeView());
 
+        // Surprisingly, we can get the events not only from the "bin" window,
+        // containing the items, but also from the window containing the column
+        // headers, and we're not interested in them here, we already generate
+        // wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK for them, so just ignore.
+        if (gdk_event->window != gtk_tree_view_get_bin_window(treeview))
+            return FALSE;
+
         wxGtkTreePath path;
         GtkTreeViewColumn *column = NULL;
         gint cell_x = 0;
