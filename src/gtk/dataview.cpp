@@ -4662,13 +4662,15 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
 {
     if ((gdk_event->button == 3) && (gdk_event->type == GDK_BUTTON_PRESS))
     {
+        GtkTreeView* const treeview = GTK_TREE_VIEW(dv->GtkGetTreeView());
+
         wxGtkTreePath path;
         GtkTreeViewColumn *column = NULL;
         gint cell_x = 0;
         gint cell_y = 0;
         gtk_tree_view_get_path_at_pos
         (
-            GTK_TREE_VIEW(dv->GtkGetTreeView()),
+            treeview,
             (int) gdk_event->x, (int) gdk_event->y,
             path.ByRef(),
             &column,
@@ -4681,7 +4683,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         // because it could be a part of multi-item selection.
         if ( path )
         {
-            GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(dv->GtkGetTreeView()));
+            GtkTreeSelection *selection = gtk_tree_view_get_selection(treeview);
             if ( !gtk_tree_selection_path_is_selected(selection, path) )
             {
                 gtk_tree_selection_unselect_all(selection);
