@@ -50,7 +50,7 @@ enum wxCheckBoxState
     @style{wxCHK_2STATE}
            Create a 2-state checkbox. This is the default.
     @style{wxCHK_3STATE}
-           Create a 3-state checkbox. Not implemented in wxGTK1.
+           Create a 3-state checkbox.
     @style{wxCHK_ALLOW_3RD_STATE_FOR_USER}
            By default a user can't set a 3-state checkbox to the third state.
            It can only be done from code. Using this flags allows the user to

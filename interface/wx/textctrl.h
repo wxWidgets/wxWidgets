@@ -1029,7 +1029,7 @@ public:
            show it. It doesn't do anything under other platforms.
     @style{wxHSCROLL}
            A horizontal scrollbar will be created and used, so that text won't
-           be wrapped. No effect under wxGTK1.
+           be wrapped.
     @style{wxTE_NO_VSCROLL}
            For multiline controls only: vertical scrollbar will never be
            created. This limits the amount of text which can be entered into
