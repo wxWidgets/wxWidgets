@@ -60,13 +60,8 @@ notifications:
 
 before_install:
     - command -v python
-    - ls -l /usr/local/bin/python*
-    - ls -l /usr/local/Cellar/python/2.7.12_1/bin/python*
-    - ls -l /usr/local/Cellar/python/2.7.12_1/Frameworks/Python.framework/Versions/2.7/bin/python*
-    - ls -l /usr/local/opt/python/bin/python*
-    - ls -l /usr/local/opt/python/Frameworks/Python.framework/Versions/2.7/bin/python*
-    - /usr/local/bin/python -m pip --version
-    - /usr/local/opt/python/bin/python -m pip --version
+    - python -m pip install flask
+    - python -m flash --version
     - exit 1
 
 script: ./build/tools/travis-ci.sh
