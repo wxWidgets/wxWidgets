@@ -59,6 +59,8 @@ notifications:
         on_failure: change
 
 before_install:
+    - mkdir $HOME/goroot
+    - mkdir $HOME/go
     - GOROOT=$HOME/goroot GOPATH=$HOME/go go env GOBIN
     - GOROOT=$HOME/goroot GOPATH=$HOME/go go get github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin
     - GOROOT=$HOME/goroot GOPATH=$HOME/go PATH=$HOME/go/bin go-httpbin --help
