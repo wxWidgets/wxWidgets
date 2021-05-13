@@ -59,9 +59,9 @@ notifications:
         on_failure: change
 
 before_install:
-    - go env GOBIN
-    - go get github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin
-    - go-httpbin --help
+    - GOPATH=$HOME/go go env GOBIN
+    - GOPATH=$HOME/go go get github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin
+    - GOPATH=$HOME/go PATH=$HOME/go/bin go-httpbin --help
     - exit 1
 
 script: ./build/tools/travis-ci.sh
