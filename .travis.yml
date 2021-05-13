@@ -58,6 +58,9 @@ notifications:
         on_success: change
         on_failure: change
 
-before_install: ./build/tools/before_install.sh
+before_install:
+    - command -v python
+    - ls -l /usr/local/bin/python* /usr/local/opt/python/bin/python*
+    - exit 1
 
 script: ./build/tools/travis-ci.sh
