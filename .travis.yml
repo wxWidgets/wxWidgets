@@ -61,7 +61,7 @@ notifications:
 before_install:
     - command -v python
     - python -m pip install flask
-    - python -m flash --version
+    - python -m flask --version
     - exit 1
 
 script: ./build/tools/travis-ci.sh
