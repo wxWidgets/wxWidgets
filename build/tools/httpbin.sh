@@ -56,7 +56,7 @@ httpbin_launch() {
         python3 -m pip install --user --upgrade pip==19.1.1
     fi
 
-    echo "Installing using `python$PY3 -m pip --version`"
+    echo "Installing using `command -v python$PY3` and `python$PY3 -m pip --version`"
 
     python$PY3 -m pip install $pip_explicit_deps httpbin --user
     python$PY3 -m httpbin.core 2>&1 >httpbin.log &
