@@ -32,6 +32,11 @@ httpbin_launch() {
             # We use Python 2 under macOS 10.11 which doesn't have Python 3,
             # and decorator >= 5 is incompatible with it too.
             pip_explicit_deps='decorator==4.4.2'
+
+            # Somehow we get errors from /usr/local/opt/python/bin/python2.7
+            # when running launching httpbin below, even though Python used
+            # here is from /usr/local/bin, try to use this Python directly.
+            PYPATH=/usr/local/opt/python/bin/
             ;;
 
         *)
@@ -58,8 +63,8 @@ httpbin_launch() {
 
     echo "Installing using `command -v python$PY3` and `python$PY3 -m pip --version`"
 
-    python$PY3 -m pip install $pip_explicit_deps httpbin --user
-    python$PY3 -m httpbin.core 2>&1 >httpbin.log &
+    ${PYPATH}python$PY3 -m pip install $pip_explicit_deps httpbin --user
+    ${PYPATH}python$PY3 -m httpbin.core 2>&1 >httpbin.log &
     WX_TEST_WEBREQUEST_URL="http://localhost:5000"
 
     export WX_TEST_WEBREQUEST_URL
