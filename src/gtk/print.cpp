@@ -724,6 +724,19 @@ int wxGtkPrintDialog::ShowModal()
 
     // Now get the settings and save it.
     GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings(printOp);
+
+    // When embedding the page setup tab into the dialog, as we do, changes to
+    // the settings such as the paper size and orientation there are not
+    // reflected in the print settings, but must be retrieved from the page
+    // setup struct itself separately.
+    GtkPageSetup* defPageSetup = NULL;
+    g_object_get(printOp, "default-page-setup", &defPageSetup, NULL);
+    if ( defPageSetup )
+    {
+        native->SetPageSetupToSettings(newSettings, defPageSetup);
+        g_object_unref(defPageSetup);
+    }
+
     native->SetPrintConfig(newSettings);
     data.ConvertFromNative();
 
