@@ -992,6 +992,8 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         return false;
     }
 
+    m_printDialogData = dialog.GetPrintDialogData();
+
     sm_lastError = wxPRINTER_NO_ERROR;
     return true;
 }
