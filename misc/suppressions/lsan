@@ -43,3 +43,8 @@ leak:_cairo_surface_create_similar_image
 leak:_cairo_surface_create_similar_image
 leak:gtk_css_image_surface_draw
 leak:_gtk_css_image_draw
+
+# Avoid leak reports whenever GtkPrintOperation is used (hopefully this is just
+# a one off allocation not freed and not an unbounded leak).
+leak:cups_request_printer_list_cb
+leak:cups_dispatch_watch_dispatch
