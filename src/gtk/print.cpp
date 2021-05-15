@@ -977,19 +977,23 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     // doesn't necessarily show
     int ret = dialog.ShowModal();
-    if (ret == wxID_CANCEL)
-    {
-        sm_lastError = wxPRINTER_CANCELLED;
-    }
-    if (ret == wxID_NO)
-    {
-        sm_lastError = wxPRINTER_ERROR;
-    }
 
     printout->SetDC(NULL);
     wxDELETE(m_dc);
 
-    return (sm_lastError == wxPRINTER_NO_ERROR);
+    if (ret == wxID_CANCEL)
+    {
+        sm_lastError = wxPRINTER_CANCELLED;
+        return false;
+    }
+    if (ret == wxID_NO)
+    {
+        sm_lastError = wxPRINTER_ERROR;
+        return false;
+    }
+
+    sm_lastError = wxPRINTER_NO_ERROR;
+    return true;
 }
 
 void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation, GtkPrintContext *context)
