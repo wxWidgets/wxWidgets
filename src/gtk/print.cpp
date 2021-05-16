@@ -583,8 +583,11 @@ void wxGtkPrintNativeData::SetPrintConfig( GtkPrintSettings * config )
     }
 }
 
+namespace
+{
+
 // Extract page setup from settings.
-GtkPageSetup* wxGtkPrintNativeData::GetPageSetupFromSettings(GtkPrintSettings* settings)
+GtkPageSetup* GetPageSetupFromSettings(GtkPrintSettings* settings)
 {
     GtkPageSetup* page_setup = gtk_page_setup_new();
     gtk_page_setup_set_orientation (page_setup, gtk_print_settings_get_orientation (settings));
@@ -600,11 +603,13 @@ GtkPageSetup* wxGtkPrintNativeData::GetPageSetupFromSettings(GtkPrintSettings* s
 }
 
 // Insert page setup into a given GtkPrintSettings.
-void wxGtkPrintNativeData::SetPageSetupToSettings(GtkPrintSettings* settings, GtkPageSetup* page_setup)
+void SetPageSetupToSettings(GtkPrintSettings* settings, GtkPageSetup* page_setup)
 {
     gtk_print_settings_set_orientation ( settings, gtk_page_setup_get_orientation (page_setup));
     gtk_print_settings_set_paper_size ( settings, gtk_page_setup_get_paper_size (page_setup));
 }
+
+} // anonymous namespace
 
 //----------------------------------------------------------------------------
 // wxGtkPrintDialog
@@ -692,7 +697,7 @@ int wxGtkPrintDialog::ShowModal()
     // If the settings are OK, we restore it.
     if (settings != NULL)
         gtk_print_operation_set_print_settings (printOp, settings);
-    GtkPageSetup* pgSetup = native->GetPageSetupFromSettings(settings);
+    GtkPageSetup* pgSetup = GetPageSetupFromSettings(settings);
     gtk_print_operation_set_default_page_setup (printOp, pgSetup);
     g_object_unref(pgSetup);
 
@@ -724,6 +729,19 @@ int wxGtkPrintDialog::ShowModal()
 
     // Now get the settings and save it.
     GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings(printOp);
+
+    // When embedding the page setup tab into the dialog, as we do, changes to
+    // the settings such as the paper size and orientation there are not
+    // reflected in the print settings, but must be retrieved from the page
+    // setup struct itself separately.
+    GtkPageSetup* defPageSetup = NULL;
+    g_object_get(printOp, "default-page-setup", &defPageSetup, NULL);
+    if ( defPageSetup )
+    {
+        SetPageSetupToSettings(newSettings, defPageSetup);
+        g_object_unref(defPageSetup);
+    }
+
     native->SetPrintConfig(newSettings);
     data.ConvertFromNative();
 
@@ -803,7 +821,7 @@ int wxGtkPageSetupDialog::ShowModal()
     GtkPrintSettings* nativeData = native->GetPrintConfig();
 
     // We only need the pagesetup data which are part of the settings.
-    GtkPageSetup* oldPageSetup = native->GetPageSetupFromSettings(nativeData);
+    GtkPageSetup* oldPageSetup = GetPageSetupFromSettings(nativeData);
 
     // If the user used a custom paper format the last time he printed, we have to restore it too.
     wxPaperSize paperId = m_pageDialogData.GetPrintData().GetPaperId();
@@ -858,7 +876,7 @@ int wxGtkPageSetupDialog::ShowModal()
                 wxGtkObject<GtkPageSetup>
                     newPageSetup(gtk_page_setup_unix_dialog_get_page_setup(
                                         GTK_PAGE_SETUP_UNIX_DIALOG(dlg)));
-                native->SetPageSetupToSettings(nativeData, newPageSetup);
+                SetPageSetupToSettings(nativeData, newPageSetup);
 
                 m_pageDialogData.GetPrintData().ConvertFromNative();
 
@@ -977,19 +995,25 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     // doesn't necessarily show
     int ret = dialog.ShowModal();
-    if (ret == wxID_CANCEL)
-    {
-        sm_lastError = wxPRINTER_CANCELLED;
-    }
-    if (ret == wxID_NO)
-    {
-        sm_lastError = wxPRINTER_ERROR;
-    }
 
     printout->SetDC(NULL);
     wxDELETE(m_dc);
 
-    return (sm_lastError == wxPRINTER_NO_ERROR);
+    if (ret == wxID_CANCEL)
+    {
+        sm_lastError = wxPRINTER_CANCELLED;
+        return false;
+    }
+    if (ret == wxID_NO)
+    {
+        sm_lastError = wxPRINTER_ERROR;
+        return false;
+    }
+
+    m_printDialogData = dialog.GetPrintDialogData();
+
+    sm_lastError = wxPRINTER_NO_ERROR;
+    return true;
 }
 
 void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation, GtkPrintContext *context)
