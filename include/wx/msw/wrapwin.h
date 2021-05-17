@@ -27,6 +27,10 @@
     #define NOMINMAX
 #endif // NOMINMAX
 
+// Disable any warnings inside Windows headers.
+#ifdef __VISUALC__
+    #pragma warning(push, 1)
+#endif
 
 // When the application wants to use <winsock2.h> (this is required for IPv6
 // support, for example), we must include it before winsock.h, and as windows.h
@@ -38,12 +42,8 @@
     #ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
         #define _WINSOCK_DEPRECATED_NO_WARNINGS
     #endif
-    #include <winsock2.h>
-#endif
 
-// Disable any warnings inside Windows headers.
-#ifdef __VISUALC__
-    #pragma warning(push, 1)
+    #include <winsock2.h>
 #endif
 
 #include <windows.h>
