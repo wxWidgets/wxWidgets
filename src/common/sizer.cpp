@@ -147,6 +147,8 @@ static const int SIZER_FLAGS_MASK =
 namespace
 {
 
+bool gs_disableFlagChecks = false;
+
 wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
 {
     return wxString::Format
@@ -158,7 +160,9 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
              "reporting the problem to the program developers.\n"
              "\n"
              "If you're the developer, simply remove %s from your code to "
-             "avoid getting this message.\n",
+             "avoid getting this message. You can also call "
+             "wxSizerFlags::DisableConsistencyChecks() to globally disable "
+             "all such checks, but this is strongly not recommended.",
              start,
              whatToRemove
            );
@@ -171,7 +175,7 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
 #define ASSERT_NO_IGNORED_FLAGS_IMPL(f, value, name, explanation) \
     wxASSERT_MSG                                                  \
     (                                                             \
-      !((f) & (value)),                                           \
+      gs_disableFlagChecks || !((f) & (value)),                   \
       MakeFlagsCheckMessage                                       \
       (                                                           \
         name " will be ignored in this sizer: " explanation,      \
@@ -185,7 +189,7 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
 #define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2)       \
     wxASSERT_MSG                                                   \
     (                                                              \
-      ((f) & (f1 | f2)) != (f1 | f2),                              \
+      gs_disableFlagChecks || ((f) & (f1 | f2)) != (f1 | f2),      \
       MakeFlagsCheckMessage                                        \
       (                                                            \
         "One of " n1 " and " n2 " will be ignored in this sizer: " \
@@ -202,6 +206,14 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
     ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_HORIZONTAL, wxALIGN_RIGHT); \
     ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_VERTICAL, wxALIGN_BOTTOM)
 
+
+/* static */
+void wxSizerFlags::DisableConsistencyChecks()
+{
+#if wxDEBUG_LEVEL
+    gs_disableFlagChecks = true;
+#endif // wxDEBUG_LEVEL
+}
 
 void wxSizerItem::Init(const wxSizerFlags& flags)
 {
@@ -1515,7 +1527,8 @@ wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
         // Check that expansion will happen in at least one of the directions.
         wxASSERT_MSG
         (
-            !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
+            gs_disableFlagChecks ||
+              !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
                 !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
             MakeFlagsCheckMessage
             (
