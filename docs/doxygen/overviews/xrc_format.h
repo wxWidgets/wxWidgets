@@ -2452,7 +2452,7 @@ properties:
 @row3col{minsize, @ref overview_xrcformat_type_size,
     Minimal size of this item (default: no min size).}
 @row3col{ratio, @ref overview_xrcformat_type_pair_ints,
-    Item ratio, see wxSizer::SetRatio() (default: no ratio).}
+    Item ratio, see wxSizerItem::SetRatio() (default: no ratio).}
 @row3col{cellpos, @ref overview_xrcformat_type_pair_ints,
     (wxGridBagSizer only) Position, see wxGBSizerItem::SetPos() (required). }
 @row3col{cellspan, @ref overview_xrcformat_type_pair_ints,
