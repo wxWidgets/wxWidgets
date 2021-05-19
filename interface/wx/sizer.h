@@ -1499,6 +1499,10 @@ public:
         using this function, especially permanently, rather than a temporary
         workaround, is @e not recommended.
 
+        Notice that the same effect as calling this function can be achieved by
+        setting the environment variable @c WXSUPPRESS_SIZER_FLAGS_CHECK to any
+        value.
+
         @since 3.1.6
      */
     static void DisableConsistencyChecks();
