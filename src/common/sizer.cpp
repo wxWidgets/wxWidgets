@@ -144,18 +144,55 @@ static const int SIZER_FLAGS_MASK =
     wxADD_FLAG(wxSHAPED,
     0))))))))))))))))));
 
+namespace
+{
+
+wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
+{
+    return wxString::Format
+           (
+             "%s"
+             "\n\nDO NOT PANIC !!\n\n"
+             "If you're an end user running a program not developed by you, "
+             "please ignore this message, it is harmless, and please try "
+             "reporting the problem to the program developers.\n"
+             "\n"
+             "If you're the developer, simply remove %s from your code to "
+             "avoid getting this message.\n",
+             start,
+             whatToRemove
+           );
+}
+
+} // anonymous namespace
+
 #endif // wxDEBUG_LEVEL
 
 #define ASSERT_NO_IGNORED_FLAGS_IMPL(f, value, name, explanation) \
-    wxASSERT_MSG( !((f) & (value)), \
-                  name " will be ignored in this sizer: " explanation )
+    wxASSERT_MSG                                                  \
+    (                                                             \
+      !((f) & (value)),                                           \
+      MakeFlagsCheckMessage                                       \
+      (                                                           \
+        name " will be ignored in this sizer: " explanation,      \
+        "this flag"                                               \
+      )                                                           \
+    )
 
 #define ASSERT_NO_IGNORED_FLAGS(f, flags, explanation) \
     ASSERT_NO_IGNORED_FLAGS_IMPL(f, flags, #flags, explanation)
 
-#define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2) \
-    wxASSERT_MSG(((f) & (f1 | f2)) != (f1 | f2), \
-                 n1 " and " n2 " can't be used together")
+#define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2)       \
+    wxASSERT_MSG                                                   \
+    (                                                              \
+      ((f) & (f1 | f2)) != (f1 | f2),                              \
+      MakeFlagsCheckMessage                                        \
+      (                                                            \
+        "One of " n1 " and " n2 " will be ignored in this sizer: " \
+        "they are incompatible and cannot be used together",       \
+        "one of these flags"                                       \
+      )                                                            \
+    )
 
 #define ASSERT_INCOMPATIBLE_NOT_USED(f, f1, f2) \
     ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, #f1, f2, #f2)
@@ -1480,7 +1517,11 @@ wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
         (
             !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
                 !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
-            "wxEXPAND flag will be overridden by alignment flags"
+            MakeFlagsCheckMessage
+            (
+                "wxEXPAND flag will be overridden by alignment flags",
+                "either wxEXPAND or the alignment in at least one direction"
+            )
         );
     }
 
