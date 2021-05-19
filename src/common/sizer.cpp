@@ -146,6 +146,13 @@ static const int SIZER_FLAGS_MASK =
 
 #endif // wxDEBUG_LEVEL
 
+#define ASSERT_NO_IGNORED_FLAGS_IMPL(f, value, name, explanation) \
+    wxASSERT_MSG( !((f) & (value)), \
+                  name " will be ignored in this sizer: " explanation )
+
+#define ASSERT_NO_IGNORED_FLAGS(f, flags, explanation) \
+    ASSERT_NO_IGNORED_FLAGS_IMPL(f, flags, #flags, explanation)
+
 #define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2) \
     wxASSERT_MSG(((f) & (f1 | f2)) != (f1 | f2), \
                  n1 " and " n2 " can't be used together")
@@ -1473,7 +1480,7 @@ wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
         (
             !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
                 !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
-            wxS("wxEXPAND flag will be overridden by alignment flags")
+            "wxEXPAND flag will be overridden by alignment flags"
         );
     }
 
@@ -2083,10 +2090,10 @@ wxSizerItem *wxBoxSizer::DoInsert(size_t index, wxSizerItem *item)
     const int flags = item->GetFlag();
     if ( IsVertical() )
     {
-        wxASSERT_MSG
+        ASSERT_NO_IGNORED_FLAGS
         (
-            !(flags & wxALIGN_BOTTOM),
-            wxS("Vertical alignment flags are ignored in vertical sizers")
+            flags, wxALIGN_BOTTOM,
+            "only horizontal alignment flags can be used in vertical sizers"
         );
 
         // We need to accept wxALIGN_CENTRE_VERTICAL when it is combined with
@@ -2094,49 +2101,43 @@ wxSizerItem *wxBoxSizer::DoInsert(size_t index, wxSizerItem *item)
         // and we accept it historically in wxSizer API.
         if ( !(flags & wxALIGN_CENTRE_HORIZONTAL) )
         {
-            wxASSERT_MSG
+            ASSERT_NO_IGNORED_FLAGS
             (
-                !(flags & wxALIGN_CENTRE_VERTICAL),
-                wxS("Vertical alignment flags are ignored in vertical sizers")
-            );
-        }
-
-        // Note that using alignment with wxEXPAND can make sense if wxSHAPED
-        // is also used, as the item doesn't necessarily fully expand in the
-        // other direction in this case.
-        if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
-        {
-            wxASSERT_MSG
-            (
-                !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
-                wxS("Horizontal alignment flags are ignored with wxEXPAND")
+                flags, wxALIGN_CENTRE_VERTICAL,
+                "only horizontal alignment flags can be used in vertical sizers"
             );
         }
     }
     else // horizontal
     {
-        wxASSERT_MSG
+        ASSERT_NO_IGNORED_FLAGS
         (
-            !(flags & wxALIGN_RIGHT),
-            wxS("Horizontal alignment flags are ignored in horizontal sizers")
+            flags, wxALIGN_RIGHT,
+            "only vertical alignment flags can be used in horizontal sizers"
         );
 
         if ( !(flags & wxALIGN_CENTRE_VERTICAL) )
         {
-            wxASSERT_MSG
+            ASSERT_NO_IGNORED_FLAGS
             (
-                !(flags & wxALIGN_CENTRE_HORIZONTAL),
-                wxS("Horizontal alignment flags are ignored in horizontal sizers")
+                flags, wxALIGN_CENTRE_HORIZONTAL,
+                "only vertical alignment flags can be used in horizontal sizers"
             );
         }
+    }
 
-        if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
-        {
-            wxASSERT_MSG(
-                !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)),
-                wxS("Vertical alignment flags are ignored with wxEXPAND")
-            );
-        }
+    // Note that using alignment with wxEXPAND can make sense if wxSHAPED
+    // is also used, as the item doesn't necessarily fully expand in the
+    // other direction in this case.
+    if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
+    {
+        ASSERT_NO_IGNORED_FLAGS
+        (
+            flags,
+            wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL |
+            wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL,
+            "wxEXPAND overrides alignment flags in box sizers"
+        );
     }
 
     return wxSizer::DoInsert(index, item);
