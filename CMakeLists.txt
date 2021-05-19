@@ -9,6 +9,8 @@
 
 cmake_minimum_required(VERSION 2.8.12)
 
+set(CMAKE_CXX_STANDARD 11)
+
 if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
     # Set default configuration types for multi-config generators
