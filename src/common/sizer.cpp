@@ -147,7 +147,23 @@ static const int SIZER_FLAGS_MASK =
 namespace
 {
 
-bool gs_disableFlagChecks = false;
+int gs_disableFlagChecks = -1;
+
+// Check condition taking gs_disableFlagChecks into account.
+//
+// Note that because this is not a macro, the condition is always evaluated,
+// even if gs_disableFlagChecks is 0, but this shouldn't matter because the
+// conditions used with this function are just simple bit checks.
+bool CheckSizerFlags(bool cond)
+{
+    // Once-only initialization: check if disabled via environment.
+    if ( gs_disableFlagChecks == -1 )
+    {
+        gs_disableFlagChecks = wxGetEnv("WXSUPPRESS_SIZER_FLAGS_CHECK", NULL);
+    }
+
+    return gs_disableFlagChecks || cond;
+}
 
 wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
 {
@@ -158,6 +174,9 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
              "If you're an end user running a program not developed by you, "
              "please ignore this message, it is harmless, and please try "
              "reporting the problem to the program developers.\n"
+             "\n"
+             "You may also set WXSUPPRESS_SIZER_FLAGS_CHECK environment "
+             "variable to suppress all such checks when running this program.\n"
              "\n"
              "If you're the developer, simply remove %s from your code to "
              "avoid getting this message. You can also call "
@@ -175,7 +194,7 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
 #define ASSERT_NO_IGNORED_FLAGS_IMPL(f, value, name, explanation) \
     wxASSERT_MSG                                                  \
     (                                                             \
-      gs_disableFlagChecks || !((f) & (value)),                   \
+      CheckSizerFlags(!((f) & (value))),                          \
       MakeFlagsCheckMessage                                       \
       (                                                           \
         name " will be ignored in this sizer: " explanation,      \
@@ -189,7 +208,7 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
 #define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2)       \
     wxASSERT_MSG                                                   \
     (                                                              \
-      gs_disableFlagChecks || ((f) & (f1 | f2)) != (f1 | f2),      \
+      CheckSizerFlags(((f) & (f1 | f2)) != (f1 | f2)),             \
       MakeFlagsCheckMessage                                        \
       (                                                            \
         "One of " n1 " and " n2 " will be ignored in this sizer: " \
@@ -1527,9 +1546,11 @@ wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
         // Check that expansion will happen in at least one of the directions.
         wxASSERT_MSG
         (
-            gs_disableFlagChecks ||
-              !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
-                !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
+            CheckSizerFlags
+            (
+                !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
+                    !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL))
+            ),
             MakeFlagsCheckMessage
             (
                 "wxEXPAND flag will be overridden by alignment flags",
