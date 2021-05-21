@@ -58,7 +58,6 @@
            Windows 7 and later and the dock icon under macOS, ignored under
            the other platforms.
            This flag is only available in wxWidgets 3.1.0 and later.
-
     @endStyleTable
 
     @library{wxcore}
