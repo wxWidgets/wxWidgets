@@ -18,8 +18,6 @@
 void wxAbort();
 
 /**
-    @def wxDEBUG_LEVEL
-
     Preprocessor symbol defining the level of debug support available.
 
     This symbol is defined to 1 by default meaning that asserts are compiled in
@@ -40,8 +38,6 @@ void wxAbort();
 #define wxDEBUG_LEVEL
 
 /**
-    @def __WXDEBUG__
-
     Compatibility macro indicating presence of debug support.
 
     This symbol is defined if wxDEBUG_LEVEL is greater than 0 and undefined
@@ -275,8 +271,6 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
 void wxDisableAsserts();
 
 /**
-    @def wxDISABLE_ASSERTS_IN_RELEASE_BUILD
-
     Use this macro to disable asserts in release build when not using
     wxIMPLEMENT_APP().
 
