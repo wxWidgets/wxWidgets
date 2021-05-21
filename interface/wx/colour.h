@@ -9,9 +9,8 @@
 
 /**
     Flags for wxColour -> wxString conversion (see wxColour::GetAsString).
-
-    @{
 */
+//@{
 enum {
     wxC2S_NAME             = 1,   // return colour name, when possible
     wxC2S_CSS_SYNTAX       = 2,   // return colour in rgb(r,g,b) syntax
