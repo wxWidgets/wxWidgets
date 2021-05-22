@@ -3426,9 +3426,11 @@ static void DoNotifyWindowAboutCaptureLost(wxWindow *win)
 void wxWindowBase::NotifyCaptureLost()
 {
     // don't do anything if capture lost was expected, i.e. resulted from
-    // a wx call to ReleaseMouse or CaptureMouse:
-    wxRecursionGuard guard(wxMouseCapture::changing);
-    if ( guard.IsInside() )
+    // a wx call to ReleaseMouse or CaptureMouse (but note that we must not
+    // change the "changing" flag here as the user code is expected to call
+    // ReleaseMouse() from its wxMouseCaptureLostEvent handler and this
+    // shouldn't assert because the capture is already "changing")
+    if ( wxMouseCapture::changing )
         return;
 
     // if the capture was lost unexpectedly, notify every window that has
