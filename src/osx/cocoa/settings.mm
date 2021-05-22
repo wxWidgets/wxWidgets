@@ -122,6 +122,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor controlBackgroundColor];
         break;
     case wxSYS_COLOUR_BTNSHADOW:
+    case wxSYS_COLOUR_3DDKSHADOW:
         sysColor = [NSColor controlShadowColor];
         break;
     case wxSYS_COLOUR_BTNTEXT:
@@ -141,9 +142,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_GRAYTEXT:
         sysColor = [NSColor disabledControlTextColor];
-        break;
-    case wxSYS_COLOUR_3DDKSHADOW:
-        sysColor = [NSColor controlShadowColor];
         break;
     case wxSYS_COLOUR_3DLIGHT:
         sysColor = [NSColor controlHighlightColor];
