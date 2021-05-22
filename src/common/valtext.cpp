@@ -51,6 +51,53 @@ static bool wxIsNumeric(const wxString& val)
 }
 
 // ----------------------------------------------------------------------------
+// wxTextEntryValidator implementation
+// ----------------------------------------------------------------------------
+
+void wxTextEntryValidator::SetWindow(wxWindow *win)
+{
+    wxValidator::SetWindow(win);
+
+    if ( GetTextEntry() != NULL )
+    {
+        // Bind event handlers
+    }
+    else
+    {
+        wxFAIL_MSG(
+            "wxTextValidator can only be used with wxTextCtrl, wxComboBox "
+            "or wxComboCtrl"
+        );
+    }
+}
+
+wxTextEntry *wxTextEntryValidator::GetTextEntry() const
+{
+#if wxUSE_TEXTCTRL
+    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
+    {
+        return (wxTextCtrl*)m_validatorWindow;
+    }
+#endif
+
+#if wxUSE_COMBOBOX
+    if (wxDynamicCast(m_validatorWindow, wxComboBox))
+    {
+        return (wxComboBox*)m_validatorWindow;
+    }
+#endif
+
+#if wxUSE_COMBOCTRL
+    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
+    {
+        return (wxComboCtrl*)m_validatorWindow;
+    }
+#endif
+
+    return NULL;
+}
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
@@ -66,7 +113,7 @@ wxTextValidator::wxTextValidator(long style, wxString *val)
 }
 
 wxTextValidator::wxTextValidator(const wxTextValidator& val)
-    : wxValidator()
+    : wxTextEntryValidator()
 {
     Copy(val);
 }
@@ -91,40 +138,9 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     return true;
 }
 
-wxTextEntry *wxTextValidator::GetTextEntry()
-{
-#if wxUSE_TEXTCTRL
-    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
-    {
-        return (wxTextCtrl*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOBOX
-    if (wxDynamicCast(m_validatorWindow, wxComboBox))
-    {
-        return (wxComboBox*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOCTRL
-    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
-    {
-        return (wxComboCtrl*)m_validatorWindow;
-    }
-#endif
-
-    wxFAIL_MSG(
-        "wxTextValidator can only be used with wxTextCtrl, wxComboBox, "
-        "or wxComboCtrl"
-    );
-
-    return NULL;
-}
-
 // Called when the value in the window must be validated.
 // This function can pop up an error message.
-bool wxTextValidator::Validate(wxWindow *parent)
+bool wxTextValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     // If window is disabled, simply return
     if ( !m_validatorWindow->IsEnabled() )
