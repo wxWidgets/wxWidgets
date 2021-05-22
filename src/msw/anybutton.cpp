@@ -580,17 +580,20 @@ wxSize wxAnyButton::DoGetBestSize() const
 
     wxSize size;
 
-    // BCM_GETIDEALSIZE works properly only it there is a text label in the button.
-    if ( !IsOwnerDrawn() && ShowsLabel() )
+    // The preferred way is to use BCM_GETIDEALSIZE, but it only works properly
+    // if there is a text label in the button and can't be used under old
+    // systems or without a manifest.
+    if ( !IsOwnerDrawn() && ShowsLabel() &&
+            wxGetWinVersion() >= wxWinVersion_Vista )
     {
         SIZE idealSize = { 0, 0 };
-        ::SendMessage(GetHwnd(), BCM_GETIDEALSIZE, 0, (LPARAM)&idealSize);
-        size.Set(idealSize.cx, idealSize.cy);
-
-        if ( m_imageData )
-            AdjustForBitmapMargins(size);
+        if ( ::SendMessage(GetHwnd(), BCM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
+            size.Set(idealSize.cx, idealSize.cy);
     }
-    else
+
+    // If we failed to set the size using BCM_GETIDEALSIZE above, determine it
+    // ourselves.
+    if ( size == wxSize() )
     {
         // Account for the text part if we have it.
         if ( ShowsLabel() )
@@ -615,10 +618,10 @@ wxSize wxAnyButton::DoGetBestSize() const
                 size = wxMSWButton::ComputeBestFittingSize(self, flags);
             }
         }
-
-        if ( m_imageData )
-            AdjustForBitmapSize(size);
     }
+
+    if ( m_imageData )
+        AdjustForBitmapMargins(size);
 
     return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
