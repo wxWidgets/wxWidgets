@@ -2113,7 +2113,7 @@ bool wxWindowBase::Validate()
 
         virtual bool OnDo(wxValidator* validator) wxOVERRIDE
         {
-            return validator->Validate(m_win);
+            return validator->DoValidate(m_win);
         }
 
         virtual bool OnRecurse(wxWindow* child) wxOVERRIDE
@@ -3472,7 +3472,7 @@ bool wxWindowBase::TryBefore(wxEvent& event)
     if ( event.GetEventObject() == this )
     {
         wxValidator * const validator = GetValidator();
-        if ( validator && validator->ProcessEventLocally(event) )
+        if ( validator && validator->ProcessEvent(event) )
         {
             return true;
         }

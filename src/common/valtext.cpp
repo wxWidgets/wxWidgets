@@ -62,6 +62,7 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
     if ( GetTextEntry() != NULL )
     {
         Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPasteText, this);
+        Bind(wxEVT_VALIDATE_ERROR, &wxTextEntryValidator::OnValidate, this);
     }
     else
     {
@@ -140,6 +141,18 @@ void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
 #endif // wxUSE_CLIPBOARD
 }
 
+void wxTextEntryValidator::OnValidate(wxValidationStatusEvent& event)
+{
+    if ( !event.CanPopup() )
+        return;
+
+    const wxString& errormsg = event.GetErrorMessage();
+
+    m_validatorWindow->SetFocus();
+    wxMessageBox(errormsg, _("Validation conflict"),
+                 wxOK | wxICON_EXCLAMATION, NULL);
+}
+
 // ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
@@ -197,10 +210,7 @@ bool wxTextValidator::Validate(wxWindow *WXUNUSED(parent))
 
     if ( !errormsg.empty() )
     {
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
-
+        SendErrorEvent(errormsg);
         return false;
     }
 
