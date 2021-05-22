@@ -66,6 +66,9 @@ protected:
     // return NULL (and will assert if it does return it) but the caller should
     // still test the return value for safety.
     wxTextEntry *GetTextEntry() const;
+
+    // Events handlers
+    void OnPasteText(wxClipboardTextEvent& event);
 };
 
 // ----------------------------------------------------------------------------
