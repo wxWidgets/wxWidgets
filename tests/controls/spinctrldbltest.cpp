@@ -217,18 +217,47 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
 TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
                  "SpinCtrlDouble::Digits", "[spinctrl][spinctrldouble]")
 {
-    m_spin->SetDigits(5);
+    // Setting increment should adjust the number of digits shown to be big
+    // enough to show numbers with the corresponding granularity.
+    m_spin->SetIncrement(0.1);
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.2" );
 
+    m_spin->SetIncrement(0.01);
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.23" );
+
+    m_spin->SetDigits(5);
     CHECK( m_spin->GetDigits() == 5 );
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.23457" );
+
+    // The number of digits shouldn't (implicitly) decrease however.
+    m_spin->SetIncrement(0.001);
+    m_spin->SetValue(1.23456789);
+    CHECK( m_spin->GetTextValue() == "1.23457" );
+
+    // Check that using increment greater than 1 also works.
+    m_spin->SetDigits(0);
+    m_spin->SetIncrement(2.5);
+    m_spin->SetValue(7.5);
+    CHECK( m_spin->GetTextValue() == "7.5" );
 }
 
 static inline unsigned int GetInitialDigits(double inc)
 {
-    wxSpinCtrlDouble* sc = new wxSpinCtrlDouble(wxTheApp->GetTopWindow(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
-        0, 50, 0, inc);
-    unsigned int digits = sc->GetDigits();
-    delete sc;
-    return digits;
+    wxScopedPtr<wxSpinCtrlDouble> sc(new wxSpinCtrlDouble
+        (
+            wxTheApp->GetTopWindow(),
+            wxID_ANY,
+            wxEmptyString,
+            wxDefaultPosition,
+            wxDefaultSize,
+            wxSP_ARROW_KEYS,
+            0, 50, 0,
+            inc
+        ));
+    return sc->GetDigits();
 }
 
 TEST_CASE("SpinCtrlDouble::InitialDigits", "[spinctrldouble][initialdigits]")

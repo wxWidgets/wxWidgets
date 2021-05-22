@@ -28,6 +28,14 @@ extern wxSize GetBestSize(const wxControl* spin, int minVal, int maxVal, int bas
 
 // Helper function to check if given combination of range and base is valid.
 extern bool IsBaseCompatibleWithRange(int minVal, int maxVal, int base);
+
+// Maximum number of digits returned by DetermineDigits().
+const unsigned SPINCTRLDBL_MAX_DIGITS = 20;
+
+// Return the number of digits required to show the numbers using the
+// specified increment without loss of precision.
+extern unsigned DetermineDigits(double inc);
+
 } // namespace wxSpinCtrlImpl
 
 #endif // _WX_PRIVATE_SPINCTRL_H_

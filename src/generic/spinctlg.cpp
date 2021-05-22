@@ -723,9 +723,25 @@ void wxSpinCtrl::ResetTextValidator()
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
 
-#define SPINCTRLDBL_MAX_DIGITS 20
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase);
+
+bool
+wxSpinCtrlDouble::Create(wxWindow *parent,
+                         wxWindowID id,
+                         const wxString& value,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         double min, double max, double initial,
+                         double inc,
+                         const wxString& name)
+{
+    DoSetDigits(wxSpinCtrlImpl::DetermineDigits(inc));
+
+    return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
+                                         style, min, max, initial,
+                                         inc, name);
+}
 
 void wxSpinCtrlDouble::DoSendEvent()
 {
@@ -746,21 +762,48 @@ wxString wxSpinCtrlDouble::DoValueToText(double val)
     return wxString::Format(m_format, val);
 }
 
+void wxSpinCtrlDouble::SetIncrement(double inc)
+{
+    if ( inc == m_increment )
+        return;
+
+    DoSetIncrement(inc);
+
+    const unsigned digits = wxSpinCtrlImpl::DetermineDigits(inc);
+
+    // We don't decrease the number of digits here, as this is unnecessary and
+    // could be undesirable, but we do increase it if the current number is not
+    // high enough to show the numbers without losing precision.
+    if ( digits > m_digits )
+        DoSetDigitsAndUpdate(digits);
+}
+
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
-    wxCHECK_RET( digits <= SPINCTRLDBL_MAX_DIGITS, "too many digits for wxSpinCtrlDouble" );
+    wxCHECK_RET( digits <= wxSpinCtrlImpl::SPINCTRLDBL_MAX_DIGITS,
+                 "too many digits for wxSpinCtrlDouble" );
 
     if ( digits == m_digits )
         return;
 
-    m_digits = digits;
+    DoSetDigitsAndUpdate(digits);
+}
 
-    m_format.Printf(wxT("%%0.%ulf"), digits);
+void wxSpinCtrlDouble::DoSetDigitsAndUpdate(unsigned digits)
+{
+    DoSetDigits(digits);
 
     ResetTextValidator();
     m_textCtrl->InvalidateBestSize();
 
     DoSetValue(m_value, SendEvent_None);
+}
+
+void wxSpinCtrlDouble::DoSetDigits(unsigned digits)
+{
+    m_digits = digits;
+
+    m_format.Printf(wxT("%%0.%ulf"), digits);
 }
 
 void wxSpinCtrlDouble::ResetTextValidator()
@@ -770,16 +813,6 @@ void wxSpinCtrlDouble::ResetTextValidator()
     validator.SetRange(m_min, m_max);
     m_textCtrl->SetValidator(validator);
 #endif // wxUSE_VALIDATORS
-}
-
-void wxSpinCtrlDouble::DetermineDigits(double inc)
-{
-    inc = fabs(inc);
-    if ( inc > 0.0 && inc < 1.0 )
-    {
-        m_digits = wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
-        m_format.Printf("%%0.%ulf", m_digits);
-    }
 }
 
 #endif // wxUSE_SPINBTN
