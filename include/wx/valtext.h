@@ -15,9 +15,11 @@
 
 #if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
+class WXDLLIMPEXP_FWD_BASE wxRegEx;
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 #include "wx/validate.h"
+#include "wx/sharedptr.h"
 
 enum wxTextValidatorStyle
 {
@@ -190,6 +192,39 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxTextValidator);
     wxDECLARE_EVENT_TABLE();
 };
+
+#if wxUSE_REGEX
+// ----------------------------------------------------------------------------
+// wxRegexTextValidator declaration
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxRegexTextValidator : public wxTextValidator
+{
+public:
+    wxRegexTextValidator(long style = wxFILTER_NONE, wxString* str = NULL);
+    wxRegexTextValidator(const wxString& pattern, const wxString& intent,
+                         long style = wxFILTER_NONE, wxString* str = NULL);
+
+    // default ctor is ok
+
+    // Use one of these functions to initialize the validator if the first
+    // constructor was used to create it.
+    void SetRegEx(const wxString& pattern, const wxString& intent);
+    void SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& intent);
+
+    virtual wxObject *Clone() const wxOVERRIDE;
+
+    // Override base class function
+    virtual wxString IsValid(const wxString& str) const wxOVERRIDE;
+
+private:
+    wxSharedPtr<wxRegEx>   m_regex;
+    wxString               m_intent;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRegexTextValidator);
+};
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
