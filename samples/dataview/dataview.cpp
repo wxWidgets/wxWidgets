@@ -617,9 +617,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[Page_Music]->SetMinSize(wxSize(-1, 200));
     firstPanelSz->Add(m_ctrl[Page_Music], 1, wxGROW|wxALL, 5);
-    firstPanelSz->Add(
-        new wxStaticText(firstPanel, wxID_ANY, "Most of the cells above are editable!"),
-        0, wxGROW|wxALL, 5);
     firstPanelSz->Add(button_sizer);
     firstPanelSz->Add(sizerCurrent);
     firstPanel->SetSizerAndFit(firstPanelSz);
@@ -837,6 +834,8 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             // select initially the ninth symphony:
             m_ctrl[Page_Music]->Select(m_music_model->GetNinthItem());
+
+            m_ctrl[Page_Music]->SetToolTip("You may edit most of the cells here!");
         }
         break;
 

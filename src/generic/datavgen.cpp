@@ -5584,6 +5584,14 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     return true;
 }
 
+wxWindowList wxDataViewCtrl::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(m_headerArea); // It's ok to add it even if it's null.
+    parts.push_back(m_clientArea);
+    return parts;
+}
+
 wxBorder wxDataViewCtrl::GetDefaultBorder() const
 {
     return wxBORDER_THEME;
@@ -5679,15 +5687,11 @@ void wxDataViewCtrl::SetFocus()
 
 bool wxDataViewCtrl::SetFont(const wxFont & font)
 {
-    if (!wxControl::SetFont(font))
+    if (!BaseType::SetFont(font))
         return false;
-
-    if (m_headerArea)
-        m_headerArea->SetFont(font);
 
     if (m_clientArea)
     {
-        m_clientArea->SetFont(font);
         m_clientArea->SetRowHeight(m_clientArea->GetDefaultRowHeight());
     }
 
@@ -5696,6 +5700,35 @@ bool wxDataViewCtrl::SetFont(const wxFont & font)
         InvalidateColBestWidths();
         Layout();
     }
+
+    return true;
+}
+
+bool wxDataViewCtrl::SetForegroundColour(const wxColour& colour)
+{
+    // Previous versions of this class, not using wxCompositeWindow, as well as
+    // the native versions of this control, don't change the header foreground
+    // when this method is called and this could be more desirable in practice,
+    // as well we being more compatible, so skip calling the base class version
+    // that would change it as well and change only the main items area colour
+    // here too.
+    if ( !wxDataViewCtrlBase::SetForegroundColour(colour) )
+        return false;
+
+    if ( m_clientArea )
+        m_clientArea->SetForegroundColour(colour);
+
+    return true;
+}
+
+bool wxDataViewCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    // See SetForegroundColour() above.
+    if ( !wxDataViewCtrlBase::SetBackgroundColour(colour) )
+        return false;
+
+    if ( m_clientArea )
+        m_clientArea->SetBackgroundColour(colour);
 
     return true;
 }
