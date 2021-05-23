@@ -1197,6 +1197,35 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };
 
+// Helper class changing the event object to make the event appear as coming
+// from a different source: this is somewhat of a hack, but avoids copying the
+// events just to change their event object field.
+class wxEventObjectOriginSetter
+{
+public:
+    wxEventObjectOriginSetter(wxEvent& event, wxObject* source, int winid = 0)
+        : m_event(event),
+          m_sourceOrig(event.GetEventObject()),
+          m_idOrig(event.GetId())
+    {
+        m_event.SetEventObject(source);
+        m_event.SetId(winid);
+    }
+
+    ~wxEventObjectOriginSetter()
+    {
+        m_event.SetId(m_idOrig);
+        m_event.SetEventObject(m_sourceOrig);
+    }
+
+private:
+    wxEvent& m_event;
+    wxObject* const m_sourceOrig;
+    const int m_idOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxEventObjectOriginSetter);
+};
+
 // A helper object used to temporarily make wxEvent::ShouldProcessOnlyIn()
 // return true for the handler passed to its ctor.
 class wxEventProcessInHandlerOnly
