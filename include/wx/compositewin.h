@@ -223,6 +223,8 @@ private:
 
     void OnChar(wxKeyEvent& event)
     {
+        wxEventObjectOriginSetter setThis(event, this, this->GetId());
+
         if ( !this->ProcessWindowEvent(event) )
             event.Skip();
     }
