@@ -423,7 +423,7 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     if ( !EnableUITests() )
         return;
 
-    EventCounter keyEvents(m_dvc->GetMainWindow(), wxEVT_KEY_DOWN);
+    EventCounter keyEvents(m_dvc, wxEVT_KEY_DOWN);
 
     m_dvc->SetFocus();
 
