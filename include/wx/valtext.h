@@ -68,8 +68,10 @@ protected:
     wxTextEntry *GetTextEntry() const;
 
     // Events handlers
+    void OnText(wxCommandEvent& event);
     void OnPasteText(wxClipboardTextEvent& event);
     void OnValidate(wxValidationStatusEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
 };
 
 // ----------------------------------------------------------------------------

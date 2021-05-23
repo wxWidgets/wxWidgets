@@ -30,6 +30,8 @@ const wxValidator wxDefaultValidator;
 //     _annoying_
 bool wxValidator::ms_isSilent = false;
 
+int  wxValidator::ms_validationMethod;
+
 wxValidator::wxValidator()
 {
     m_validatorWindow  = NULL;

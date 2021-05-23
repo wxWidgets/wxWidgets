@@ -61,13 +61,19 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
 
     if ( GetTextEntry() != NULL )
     {
+        Bind(wxEVT_TEXT, &wxTextEntryValidator::OnText, this);
         Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPasteText, this);
         Bind(wxEVT_VALIDATE_ERROR, &wxTextEntryValidator::OnValidate, this);
+
+        if ( ShouldValidateOnFocusLost() )
+        {
+            Bind(wxEVT_KILL_FOCUS, &wxTextEntryValidator::OnKillFocus, this);
+        }
     }
     else
     {
         wxFAIL_MSG(
-            "wxTextValidator can only be used with wxTextCtrl, wxComboBox "
+            "wxTextEntryValidator can only be used with wxTextCtrl, wxComboBox "
             "or wxComboCtrl"
         );
     }
@@ -97,6 +103,18 @@ wxTextEntry *wxTextEntryValidator::GetTextEntry() const
 #endif
 
     return NULL;
+}
+
+void wxTextEntryValidator::OnText(wxCommandEvent& event)
+{
+    ClearValidationStatus();
+
+    if ( IsInteractive() )
+    {
+        DoValidate(NULL, wxVALIDATOR_NO_POPUP);
+    }
+
+    event.Skip();
 }
 
 void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
@@ -151,6 +169,12 @@ void wxTextEntryValidator::OnValidate(wxValidationStatusEvent& event)
     m_validatorWindow->SetFocus();
     wxMessageBox(errormsg, _("Validation conflict"),
                  wxOK | wxICON_EXCLAMATION, NULL);
+}
+
+void wxTextEntryValidator::OnKillFocus(wxFocusEvent& event)
+{
+    event.Skip();
+    DoValidate(NULL, wxVALIDATOR_NO_POPUP);
 }
 
 // ----------------------------------------------------------------------------
