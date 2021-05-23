@@ -17,6 +17,8 @@
 
 #include "wx/app.h"
 #include "wx/dataview.h"
+#include "wx/uiaction.h"
+
 #ifdef __WXGTK__
     #include "wx/stopwatch.h"
 #endif // __WXGTK__
@@ -411,5 +413,27 @@ TEST_CASE_METHOD(MultiColumnsDataViewCtrlTestCase,
     CHECK( m_lastColumn->GetWidth() <= lastColumnMaxWidth );
     CHECK( m_lastColumn->GetWidth() >= lastColumnMinWidth );
 }
+
+#if wxUSE_UIACTIONSIMULATOR
+
+TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
+                 "wxDVC::KeyEvents",
+                 "[wxDataViewCtrl][event]")
+{
+    if ( !EnableUITests() )
+        return;
+
+    EventCounter keyEvents(m_dvc->GetMainWindow(), wxEVT_KEY_DOWN);
+
+    m_dvc->SetFocus();
+
+    wxUIActionSimulator sim;
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    CHECK( keyEvents.GetCount() == 1 );
+}
+
+#endif // wxUSE_UIACTIONSIMULATOR
 
 #endif //wxUSE_DATAVIEWCTRL
