@@ -46,9 +46,8 @@ public:
     void SetStyle(int style) { m_style = style; }
 
 
-    // Override base class method to not do anything but always return success:
-    // we don't need this as we do our validation on the fly here.
-    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
+    // Override base class method.
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
 
 protected:
     wxNumValidatorBase(int style)
@@ -306,6 +305,11 @@ protected:
 
     virtual bool IsInRange(LongestValueType value) const = 0;
 
+    // In case IsInRange() returns false for a certain value 'VALUE', this
+    // function tries to figure out if any number in the specified range begins
+    // with the digits composing that value, returning true if it found one.
+    virtual bool IsIncomplete(LongestValueType value) const = 0;
+
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
     virtual wxString IsValid(const wxString& newval) const wxOVERRIDE;
@@ -361,6 +365,27 @@ public:
     }
 
 private:
+    virtual bool IsIncomplete(LongestValueType value) const wxOVERRIDE
+    {
+        ValueType valueT = static_cast<ValueType>(value);
+
+        if ( valueT > this->GetMax() )
+            return false;
+
+        const long exp = static_cast<long>(std::log10(static_cast<double>(this->GetMin()))) -
+                         static_cast<long>(std::log10(static_cast<double>(valueT)));
+        const long m10 = static_cast<long>(std::max(std::pow(10., exp), 10.));
+
+        valueT *= m10;
+
+        if ( IsInRange(valueT) )
+            return true;
+
+        valueT += this->GetMin() % m10;
+
+        return IsInRange(valueT);
+    }
+
     wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidator);
 };
 
@@ -411,6 +436,11 @@ protected:
     bool FromString(const wxString& s, LongestValueType *value) const;
 
     virtual bool IsInRange(LongestValueType value) const = 0;
+
+    // In case IsInRange() returns false for a certain value 'VALUE', this
+    // function tries to figure out if any number in the specified range begins
+    // with the digits composing that value, returning true if it found one.
+    virtual bool IsIncomplete(LongestValueType value) const = 0;
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
@@ -479,6 +509,33 @@ private:
         //     positive value.
         this->SetMin(-std::numeric_limits<ValueType>::max());
         this->SetMax( std::numeric_limits<ValueType>::max());
+    }
+
+    virtual bool IsIncomplete(LongestValueType value) const wxOVERRIDE
+    {
+        ValueType valueT = static_cast<ValueType>(value);
+
+        if ( valueT > this->GetMax() )
+            return false;
+
+        if ( valueT == 0. )
+            return this->GetMin() < 1.;
+
+        if ( valueT < 1. )
+            return this->GetMin() <= valueT;
+
+        const long exp = static_cast<long>(std::log10(this->GetMin())) -
+                         static_cast<long>(std::log10(valueT));
+        const long m10 = static_cast<long>(std::max(std::pow(10., exp), 10.));
+
+        valueT *= m10;
+
+        if ( IsInRange(valueT) )
+            return true;
+
+        valueT += static_cast<long>(this->GetMin()) % m10;
+
+        return IsInRange(valueT);
     }
 };
 

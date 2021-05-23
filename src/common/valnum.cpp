@@ -31,6 +31,11 @@
 
 #include <math.h>
 
+// If true, IsCharOk() won't filter out the entered digit(s) even if the resulting
+// value is out of range (i.e. value < min). However, if no value in the range has
+// the initial(s) designated by the entered digit(s), then IsCharOk() will prevent
+// such digit(s) from being entered at all.
+static bool gs_valueIncomplete = false;
 // ============================================================================
 // wxNumValidatorBase implementation
 // ============================================================================
@@ -192,6 +197,28 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
         text->MarkDirty();
 }
 
+bool wxNumValidatorBase::Validate(wxWindow* WXUNUSED(parent))
+{
+    // If window is disabled, simply return
+    if ( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry * const text = GetTextEntry();
+    if ( !text )
+        return false;
+
+    const wxString& newval   = text->GetValue();
+    const wxString& errormsg = IsValid(newval);
+
+    if ( !errormsg.empty() )
+    {
+        SendErrorEvent(wxString::Format("%s: %s", errormsg, newval));
+        return false;
+    }
+
+    return true;
+}
+
 // ============================================================================
 // wxIntegerValidatorBase implementation
 // ============================================================================
@@ -239,18 +266,30 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // And the value after insertion needs to be in the defined range.
-    LongestValueType value;
-    if ( !FromString(GetValueAfterInsertingChar(val, pos, ch), &value) )
-        return false;
+    const wxString newval = GetValueAfterInsertingChar(val, pos, ch);
 
-    return IsInRange(value);
+    const wxString& errormsg = IsValid(newval);
+
+    return errormsg.empty() || gs_valueIncomplete;
 }
 
 wxString
 wxIntegerValidatorBase::IsValid(const wxString& newval) const
 {
-    // Will be implemented.
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxString();
+
+    LongestValueType value;
+    if ( !FromString(newval, &value) )
+        return _("Invalid value");
+
+    if ( !IsInRange(value) )
+    {
+        gs_valueIncomplete = !CanBeNegative() && IsIncomplete(value);
+
+        return _("Value out of range");
+    }
+
     return wxString();
 }
 
@@ -317,26 +356,35 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // Check whether the value we'd obtain if we accepted this key is correct.
-    const wxString newval(GetValueAfterInsertingChar(val, pos, ch));
+    const wxString newval = GetValueAfterInsertingChar(val, pos, ch);
 
-    LongestValueType value;
-    if ( !FromString(newval, &value) )
-        return false;
+    const wxString& errormsg = IsValid(newval);
 
-    // Also check that it doesn't have too many decimal digits.
-    const size_t posSep = newval.find(separator);
-    if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
-        return false;
-
-    // Finally check whether it is in the range.
-    return IsInRange(value);
+    return errormsg.empty() || gs_valueIncomplete;
 }
 
 wxString
 wxFloatingPointValidatorBase::IsValid(const wxString& newval) const
 {
-    // Will be implemented.
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxString();
+
+    LongestValueType value;
+    if ( !FromString(newval, &value) )
+        return _("Invalid value");
+
+    // Also check that it doesn't have too many decimal digits.
+    const size_t posSep = newval.find(wxNumberFormatter::GetDecimalSeparator());
+    if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
+        return _("Invalid value");
+
+    if ( !IsInRange(value) )
+    {
+        gs_valueIncomplete = !CanBeNegative() && IsIncomplete(value);
+
+        return _("Value out of range");
+    }
+
     return wxString();
 }
 
