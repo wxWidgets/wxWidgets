@@ -25,13 +25,13 @@ if(wxUSE_XRC)
         BUNDLE DESTINATION "bin"
         )
 
-    if(IPHONE)
-        set(EXE_SUFFIX ".app")
-    else()
-        set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
-    endif()
+    if(NOT WIN32_MSVC_NAMING)
+        if(IPHONE)
+            set(EXE_SUFFIX ".app")
+        else()
+            set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
+        endif()
 
-    if(NOT MSVC)
         install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E rename \
             ${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX} \

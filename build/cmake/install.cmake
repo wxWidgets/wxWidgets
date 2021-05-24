@@ -12,13 +12,15 @@ if(NOT wxBUILD_INSTALL)
 endif()
 
 install(CODE "message(STATUS \"Installing: Headers...\")")
-if(MSVC)
+if(WIN32_MSVC_NAMING)
     wx_install(
         DIRECTORY "${wxSOURCE_DIR}/include/wx"
         DESTINATION "include")
-    wx_install(
-        DIRECTORY "${wxSOURCE_DIR}/include/msvc"
-        DESTINATION "include")
+    if(MSVC)
+        wx_install(
+            DIRECTORY "${wxSOURCE_DIR}/include/msvc"
+            DESTINATION "include")
+    endif()
 else()
     wx_install(
         DIRECTORY "${wxSOURCE_DIR}/include/wx"
@@ -26,7 +28,7 @@ else()
 endif()
 
 # setup header and wx-config
-if(MSVC)
+if(WIN32_MSVC_NAMING)
     wx_install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
         DESTINATION "lib${wxPLATFORM_LIB_DIR}")
@@ -60,11 +62,14 @@ else()
 endif()
 
 if(NOT TARGET ${UNINST_NAME})
-    # these files are not added to the install manifest
-    set(WX_EXTRA_UNINSTALL_FILES
-        "${CMAKE_INSTALL_PREFIX}/bin/wx-config"
-        "${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
+    # these symlinks are not included in the install manifest
+    set(WX_EXTRA_UNINSTALL_FILES)
+    if(NOT WIN32_MSVC_NAMING)
+        set(WX_EXTRA_UNINSTALL_FILES
+            "${CMAKE_INSTALL_PREFIX}/bin/wx-config"
+            "${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
         )
+    endif()
 
     configure_file(
         "${wxSOURCE_DIR}/build/cmake/uninstall.cmake.in"
