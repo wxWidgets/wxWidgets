@@ -23,6 +23,7 @@
 
 #include "validate.h"
 
+#include "wx/richtooltip.h"
 #include "wx/sizer.h"
 #include "wx/valgen.h"
 #include "wx/valtext.h"
@@ -30,6 +31,11 @@
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
+#endif
+
+#if wxUSE_RICHTOOLTIP
+// If true, use wxRichToolTip instead of dialogs to display error messages
+static bool gs_useRichTooltip = false;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -70,17 +76,25 @@ MyData::MyData()
 // MyComboBoxValidator
 // ----------------------------------------------------------------------------
 
+wxString MyComboBoxValidator::IsValid(const wxString& str) const
+{
+    // we accept any string != g_combobox_choices[1|2] !
+    if ( str == g_combobox_choices[1] ||
+         str == g_combobox_choices[2] )
+        return wxString("Invalid combo box text!");
+
+    return wxString();
+}
+
 bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     wxASSERT(GetWindow()->IsKindOf(CLASSINFO(wxComboBox)));
 
     wxComboBox* cb = (wxComboBox*)GetWindow();
-    if (cb->GetValue() == g_combobox_choices[1] ||
-        cb->GetValue() == g_combobox_choices[2])
+    const wxString errmsg = IsValid(cb->GetValue());
+    if ( !errmsg.empty() )
     {
-        // we accept any string != g_combobox_choices[1|2] !
-
-        wxLogError("Invalid combo box text!");
+        SendErrorEvent(errmsg);
         return false;
     }
 
@@ -149,6 +163,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
+    EVT_MENU(VALIDATE_MODE_DEFAULT, MyFrame::OnValidationMode)
+    EVT_MENU(VALIDATE_MODE_INTERACTIVE, MyFrame::OnValidationMode)
+    EVT_MENU(VALIDATE_MODE_ON_FOCUS_LOST, MyFrame::OnValidationMode)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
@@ -165,6 +182,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     file_menu->Append(VALIDATE_TEST_DIALOG, "&Test dialog...\tCtrl-T", "Demonstrate validators");
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, "&Bell on error", "Toggle bell on error");
+
+    wxMenu* valmodeMenu = new wxMenu;
+
+    file_menu->Append(wxID_ANY, "Validation mode", valmodeMenu, "Change validation mode");
+
+    valmodeMenu->AppendRadioItem(VALIDATE_MODE_DEFAULT, "&Default", "Reset validate mode");
+    valmodeMenu->AppendRadioItem(VALIDATE_MODE_INTERACTIVE, "&Interactive", "Validate interactively");
+    valmodeMenu->AppendRadioItem(VALIDATE_MODE_ON_FOCUS_LOST, "On &focus lost", "Validate on focus lost");
+
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, "E&xit");
 
@@ -189,6 +215,14 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_RICHTOOLTIP
+    if ( !gs_useRichTooltip )
+    {
+        gs_useRichTooltip = wxMessageBox("Use wxRichToolTip to show error messages?",
+                                         "Confirm", wxYES_NO, this) == wxYES;
+    }
+#endif // wxUSE_RICHTOOLTIP
+
     // The validators defined in the dialog implementation bind controls
     // and variables together. Values are transferred between them behind
     // the scenes, so here we don't have to query the controls for their
@@ -229,6 +263,24 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
     m_silent = !m_silent;
     wxValidator::SuppressBellOnError(m_silent);
     event.Skip();
+}
+
+void MyFrame::OnValidationMode(wxCommandEvent& event)
+{
+    switch ( event.GetId() )
+    {
+    case VALIDATE_MODE_INTERACTIVE:
+        wxValidator::ValidateInteractively();
+        break;
+
+    case VALIDATE_MODE_ON_FOCUS_LOST:
+        wxValidator::ValidateOnFocusLost();
+        break;
+
+    case VALIDATE_MODE_DEFAULT:
+    default:
+        wxValidator::ResetValidationMethod();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -382,6 +434,11 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // Now sets the focus to m_text
     m_text->SetFocus();
+
+    // Bind event handlers
+    Bind(wxEVT_VALIDATE_OK, &MyDialog::OnValidate, this);
+    Bind(wxEVT_VALIDATE_ERROR, &MyDialog::OnValidate, this);
+    Bind(wxEVT_UPDATE_UI, &MyDialog::OnUpdateUI, this);
 }
 
 void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
@@ -392,6 +449,63 @@ void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
     {
         dialog.ApplyValidator();
     }
+}
+
+void MyDialog::OnValidate(wxValidationStatusEvent& event)
+{
+    wxWindow* const win = event.GetWindow();
+
+    bool validationFailed = false;
+
+    if ( event.GetEventType() == wxEVT_VALIDATE_OK )
+    {
+        // Restore the default properties.
+        win->SetBackgroundColour(wxNullColour);
+    }
+    else if ( event.GetEventType() == wxEVT_VALIDATE_ERROR )
+    {
+        validationFailed = true;
+
+#if wxUSE_RICHTOOLTIP
+        if ( gs_useRichTooltip )
+        {
+            wxRichToolTip tip(wxS("Validation conflict"), event.GetErrorMessage());
+            tip.SetIcon(wxICON_ERROR);
+            tip.ShowFor(win);
+            return;
+        }
+#endif // wxUSE_RICHTOOLTIP
+
+        // Make the control reflect the invalid state.
+        win->SetBackgroundColour(wxColour("#ff4040")); // Coral Red
+
+        if ( event.GetId() == VALIDATE_COMBO )
+        {
+            if ( event.CanPopup() )
+                wxLogError(event.GetErrorMessage());
+        }
+        else
+        {
+            // Show the default error message box
+            event.Skip();
+        }
+    }
+
+    if ( wxValidator::IsInteractive() || wxValidator::ShouldValidateOnFocusLost() )
+    {
+        if ( validationFailed )
+            m_invalidWins.insert(win);
+        else
+            m_invalidWins.erase(win);
+    }
+}
+
+void MyDialog::OnUpdateUI(wxUpdateUIEvent& event)
+{
+    if ( event.GetId() == wxID_OK )
+        event.Enable(m_invalidWins.empty());
+    else
+        event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -489,6 +603,12 @@ TextValidatorDialog::TextValidatorDialog(wxWindow *parent, wxTextCtrl* txtCtrl)
         ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Allow spaces."));
 
+    // Regex
+    fgSizer->Add(new wxStaticText(this, wxID_ANY, "Use regex:"), center);
+    fgSizer->Add(new wxTextCtrl(this, Id_RegexTxt, wxString(), wxDefaultPosition,
+                                wxDefaultSize, 0, wxGenericValidator(&m_regexStr)),
+                 wxSizerFlags().Expand());
+
     // Set the main sizer.
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -572,7 +692,9 @@ void TextValidatorDialog::ApplyValidator()
     if ( !m_txtCtrl )
         return;
 
-    wxString tooltip = "uses wxTextValidator with ";
+    wxString tooltip = m_regexStr.empty()
+                     ? "uses wxTextValidator with "
+                     : "uses wxRegexTextValidator with ";
 
     if ( m_noValidation )
     {
@@ -626,14 +748,19 @@ void TextValidatorDialog::ApplyValidator()
     m_txtCtrl->SetToolTip(tooltip);
 
     // Prepare and set the wxTextValidator
-    wxTextValidator txtVal(m_validatorStyle, &g_data.m_string);
-    txtVal.SetCharIncludes(m_charIncludes);
-    txtVal.SetCharExcludes(m_charExcludes);
-    txtVal.SetIncludes(m_includes);
-    txtVal.SetExcludes(m_excludes);
+    wxTextValidator* txtVal = m_regexStr.empty()
+                            ? new wxTextValidator(m_validatorStyle, &g_data.m_string)
+                            : new wxRegexTextValidator(m_regexStr, wxS("input"),
+                                                  m_validatorStyle, &g_data.m_string);
+    txtVal->SetCharIncludes(m_charIncludes);
+    txtVal->SetCharExcludes(m_charExcludes);
+    txtVal->SetIncludes(m_includes);
+    txtVal->SetExcludes(m_excludes);
 
-    m_txtCtrl->SetValidator(txtVal);
+    m_txtCtrl->SetValidator(*txtVal);
     m_txtCtrl->SetFocus();
+
+    delete txtVal;
 }
 
 bool TextValidatorDialog::StyleValidator::TransferToWindow()
