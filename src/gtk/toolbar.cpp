@@ -463,7 +463,6 @@ bool wxToolBar::Create( wxWindow *parent,
     else
     {
         m_widget = gtk_event_box_new();
-        ConnectWidget( m_widget );
     }
     gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar));
     wxGCC_WARNING_RESTORE()

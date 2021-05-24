@@ -3692,10 +3692,18 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
         g_source_unref(source);
     }
 
-    g_signal_connect (widget, "key_press_event",
+    // When we're called for the main widget itself (but not when connecting
+    // events for some other widget, such as individual radio buttons in
+    // wxRadioBox::Create()), connect to m_focusWidget for the keyboard events
+    // instead, as it should be used for everything keyboard input-related.
+    GtkWidget* const focusWidget = widget == m_widget && m_focusWidget
+                                    ? m_focusWidget
+                                    : widget;
+    g_signal_connect (focusWidget, "key_press_event",
                       G_CALLBACK (gtk_window_key_press_callback), this);
-    g_signal_connect (widget, "key_release_event",
+    g_signal_connect (focusWidget, "key_release_event",
                       G_CALLBACK (gtk_window_key_release_callback), this);
+
     g_signal_connect (widget, "button_press_event",
                       G_CALLBACK (gtk_window_button_press_callback), this);
     g_signal_connect (widget, "button_release_event",
