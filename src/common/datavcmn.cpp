@@ -884,21 +884,19 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     wxTRY
     {
 
-    // Now check if we have a value and remember it for rendering it later.
-    // Notice that we do it even if it's null, as the cell should be empty then
-    // and not show the last used value.
+    // Now check if we have a value and remember it if we do.
     wxVariant value = CheckedGetValue(model, item, column);
-
-    if ( m_valueAdjuster )
-    {
-        if ( IsHighlighted() )
-            value = m_valueAdjuster->MakeHighlighted(value);
-    }
-
-    SetValue(value);
 
     if ( !value.IsNull() )
     {
+        if ( m_valueAdjuster )
+        {
+            if ( IsHighlighted() )
+                value = m_valueAdjuster->MakeHighlighted(value);
+        }
+
+        SetValue(value);
+
         // Also set up the attributes for this item if it's not empty.
         wxDataViewItemAttr attr;
         model->GetAttr(item, column, attr);
