@@ -364,7 +364,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     int resizingMask;
     if (column->IsResizeable())
     {
-        resizingMask = NSTableColumnUserResizingMask | NSTableColumnAutoresizingMask;
+        resizingMask = NSTableColumnUserResizingMask;
         [nativeColumn setMinWidth:column->GetMinWidth()];
         [nativeColumn setMaxWidth:column->GetMaxWidth()];
     }
@@ -2400,39 +2400,34 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos, bool fitR
         // previous width in that case because it must not get lost.
         nativeData->SetPrevWidth(GetColumn(pos)->GetWidth());
 
-        if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
-        {
-            [column setMinWidth:autoWidth];
-            [m_OutlineView sizeLastColumnToFit];
-            int minW = GetColumn(pos)->GetMinWidth();
-            [column setMinWidth:minW];
+        // Compute the remaining space for the last column; note that we
+        // deliberately don't use sizeLastColumnToFit() because it causes a
+        // refresh of the NSTableView; using sizeLastColumnToFit() would also
+        // require us to temporarily enable NSTableColumnAutoresizingMask on
+        // the NSTableColumn because it doesn't seem to work without it
+        NSSize size = [[m_OutlineView superview] bounds].size;
+        size.width -= (noOfColumns * [m_OutlineView intercellSpacing].width);
+        for ( UInt32 k = 0; k < noOfColumns - 1; k++ ) {
+            NSTableColumn *c = GetColumn(k)->GetNativeData()->GetNativeColumnPtr();
+            size.width -= [c width];
         }
-        else
-        {
-            int minW = GetColumn(pos)->GetMinWidth();
-            if (minW == 0) {
-                [column setMinWidth:10];
-            } else {
-                [column setMinWidth:minW];
-            }
-            [column setMinWidth:minW];
-            [m_OutlineView sizeLastColumnToFit];
-            if (minW == 0) {
-                [column setMinWidth:0];
-            }
-        }
+        
+        int lastColWidth = ceil(size.width);
+           
+        if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE && autoWidth > lastColWidth ) lastColWidth = autoWidth;
+
+        if ( lastColWidth > 0 )
+            [column setWidth:lastColWidth];
     }
     else if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
     {
         [column setWidth:autoWidth];
-        int minW = GetColumn(pos)->GetMinWidth();
-        [column setMinWidth:minW];
     }
     else if ( nativeData->GetIsLast() )
     {
         [column setWidth:nativeData->GetPrevWidth()];
     }
-
+        
     nativeData->SetIsLast(isLast);
 
     if ( !(GetDataViewCtrl()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) )
@@ -3911,7 +3906,7 @@ void wxDataViewColumn::SetResizeable(bool resizable)
 {
     wxDataViewColumnBase::SetResizeable(resizable);
     if (resizable)
-        [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask | NSTableColumnAutoresizingMask];
+        [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask];
     else
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];
 }
