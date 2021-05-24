@@ -30,6 +30,9 @@ public:
     NumValidatorTestCase();
     ~NumValidatorTestCase();
 
+    void OnValidate(wxValidationStatusEvent& WXUNUSED(event))
+        { /*No one will see the error messages, only the test*/ }
+
 protected:
     wxTextCtrl* const m_text;
 
@@ -39,6 +42,7 @@ protected:
 NumValidatorTestCase::NumValidatorTestCase()
     : m_text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY))
 {
+    m_text->Bind(wxEVT_VALIDATE_ERROR, &NumValidatorTestCase::OnValidate, this);
 }
 
 NumValidatorTestCase::~NumValidatorTestCase()
@@ -224,6 +228,54 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NoTrailingZeroes", "[valnum]")
     CHECK( m_text->GetValue() == "1.234" );
 }
 
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::ClipboardTest", "[valnum]")
+{
+    int value = 9;
+    wxIntegerValidator<int> valInt(&value);
+    valInt.SetRange(0, 999);
+
+    m_text->SetValidator(valInt);
+
+    wxWindow * const parent = m_text->GetParent();
+    CHECK( parent != NULL );
+
+    CHECK( parent->TransferDataToWindow() );
+    CHECK( parent->Validate() );
+    CHECK( m_text->GetValue() == "9" );
+
+    m_text->SelectAll();
+    m_text->Cut();
+
+    // The validator is created without wxNUM_VAL_ZERO_AS_BLANK
+    // therefore the validation should fail.
+    CHECK( m_text->GetValue() == "" );
+    CHECK( !parent->Validate() );
+
+    m_text->Paste();
+    m_text->Paste();
+
+    CHECK( m_text->GetValue() == "99" );
+    CHECK( parent->Validate() );
+
+    m_text->Paste();
+    m_text->Paste(); // Should not be allowed: 9999 is out-of-range.
+
+    CHECK( m_text->GetValue() == "999" );
+    CHECK( parent->Validate() );
+
+    m_text->SetValue("-1");
+
+    CHECK( m_text->GetValue() == "-1" );
+    CHECK( !parent->Validate() );
+
+    m_text->SelectAll();
+    m_text->Cut();
+    m_text->Paste(); // Should not be allowed: -1 is out-of-range.
+
+    CHECK( m_text->GetValue() == "" );
+    CHECK( !parent->Validate() );
+}
+
 #if wxUSE_UIACTIONSIMULATOR
 
 TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
@@ -245,6 +297,7 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
     // Create a sibling text control to be able to switch focus and thus
     // trigger the control validation/normalization.
     wxTextCtrl * const text2 = new wxTextCtrl(m_text->GetParent(), wxID_ANY);
+    text2->Bind(wxEVT_VALIDATE_ERROR, &NumValidatorTestCase::OnValidate, this);
     wxON_BLOCK_EXIT_OBJ0( *text2, wxWindow::Destroy );
     text2->Move(10, 80); // Just to see it better while debugging...
     wxFloatingPointValidator<float> valFloat(3);
@@ -311,15 +364,122 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
 
 
     // Also test the range constraint.
-    text2->Clear();
 
-    sim.Char('9');
-    wxYield();
-    CHECK( text2->GetValue() == "9" );
+    SECTION("With range [-10., 10.]")
+    {
+        text2->Clear();
 
-    sim.Char('9');
-    wxYield();
-    CHECK( text2->GetValue() == "9" );
+        sim.Char('9');
+        wxYield();
+        CHECK( text2->GetValue() == "9" );
+
+        sim.Char('9');
+        wxYield();
+        CHECK( text2->GetValue() == "9" );
+
+        text2->SetInsertionPoint(0);
+        sim.Char('-');
+        wxYield();
+        CHECK( text2->GetValue() == "-9" );
+
+        sim.Char('9');
+        wxYield();
+        CHECK( text2->GetValue() == "-9" );
+    }
+
+    SECTION("With range [0.2, 1.0]")
+    {
+        valFloat.SetRange(0.2, 1.0);
+        text2->SetValidator(valFloat);
+
+        text2->Clear();
+        wxYield();
+
+        sim.Text("0.1");
+        wxYield();
+        CHECK( text2->GetValue() == "0." ); // the validator should reject '1'
+        CHECK( !text2->Validate() );
+
+        sim.Char('5'); // We already have "0." in the control by the previous sim.
+        wxYield();
+        CHECK( text2->GetValue() == "0.5" );
+        CHECK( text2->Validate() );
+
+        text2->Clear();
+
+        sim.Char('2');
+        wxYield();
+        CHECK( text2->GetValue() == "" );
+        CHECK( !text2->Validate() );
+    }
+
+    // Now with integer validator...
+    SECTION("With ranges [3, 30] and [180, 360]")
+    {
+        // With range [3, 30]
+        wxIntegerValidator<unsigned> valInt;
+        valInt.SetRange(3, 30);
+        text2->SetValidator(valInt);
+
+        text2->Clear();
+        wxYield();
+
+        sim.Char('2');
+        wxYield();
+        CHECK( text2->GetValue() == "2" );
+        // Even if we could enter the first digit of 22, validation should fail.
+        CHECK( !text2->Validate() );
+
+        sim.Char('2');
+        wxYield();
+        CHECK( text2->GetValue() == "22" );
+        CHECK( text2->Validate() );
+
+        sim.Char('2');
+        wxYield();
+        CHECK( text2->GetValue() == "22" );
+        CHECK( text2->Validate() );
+
+        // With range [180, 360]
+        valInt.SetRange(180, 360);
+        text2->SetValidator(valInt);
+
+        text2->Clear();
+        wxYield();
+
+        // will be rejected, no possible values starting with 4 in the range (180, 360)
+        sim.Char('4');
+        wxYield();
+        CHECK( text2->GetValue() == "" );
+
+        sim.Char('1');
+        wxYield();
+        CHECK( text2->GetValue() == "1" );
+        CHECK( !text2->Validate() );
+
+        // will be rejected, no possible values of 17x in the range (180, 360)
+        sim.Char('7');
+        wxYield();
+        CHECK( text2->GetValue() == "1" );
+
+        sim.Text("850"); // 0 will be rejected
+        wxYield();
+        CHECK( text2->GetValue() == "185" );
+        CHECK( text2->Validate() );
+
+        text2->Clear();
+        wxYield();
+
+        sim.Text("361"); // 1 will be rejected
+        wxYield();
+        CHECK( text2->GetValue() == "36" );
+        CHECK( !text2->Validate() ); // 36 is not in the range (180, 360)
+
+        sim.Char('0');
+        wxYield();
+        CHECK( text2->GetValue() == "360" );
+        CHECK( text2->Validate() );
+    }
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
