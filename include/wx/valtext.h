@@ -74,6 +74,14 @@ protected:
     void OnPasteText(wxClipboardTextEvent& event);
     void OnValidate(wxValidationStatusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
+
+private:
+    // It needs to access our ms_skipTextEvent variable.
+    friend class WXDLLIMPEXP_FWD_CORE wxWindowBase;
+
+    // wxWindowBase::InitDialog() will ensure no wxEVT_TEXT event is generated
+    // while the dialog/panel is being initialised by setting this to false.
+    static bool ms_skipTextEvent;
 };
 
 // ----------------------------------------------------------------------------

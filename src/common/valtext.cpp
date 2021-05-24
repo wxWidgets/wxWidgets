@@ -55,6 +55,8 @@ static bool wxIsNumeric(const wxString& val)
 // ----------------------------------------------------------------------------
 // wxTextEntryValidator implementation
 // ----------------------------------------------------------------------------
+/*static*/
+bool wxTextEntryValidator::ms_skipTextEvent = true;
 
 void wxTextEntryValidator::SetWindow(wxWindow *win)
 {
@@ -115,7 +117,7 @@ void wxTextEntryValidator::OnText(wxCommandEvent& event)
         DoValidate(NULL, wxVALIDATOR_NO_POPUP);
     }
 
-    event.Skip();
+    event.Skip(ms_skipTextEvent);
 }
 
 void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
