@@ -1483,6 +1483,15 @@ wxMask::wxMask()
 wxMask::wxMask(const wxMask &mask)
       : wxObject()
 {
+    m_maskBitmap = 0;
+
+    if ( !mask.m_maskBitmap )
+    {
+        // Copying uninitialized mask shouldn't do anything, and notably not
+        // result in an assertion failure below.
+        return;
+    }
+
     BITMAP bmp;
 
     HDC srcDC = CreateCompatibleDC(0);
