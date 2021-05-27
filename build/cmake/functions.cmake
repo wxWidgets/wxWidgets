@@ -347,6 +347,11 @@ function(wx_set_target_properties target_name is_base)
 
     set_target_properties(${target_name} PROPERTIES FOLDER Libraries)
 
+    set_target_properties(${target_name} PROPERTIES
+        SOVERSION ${wxSOVERSION_MAJOR}
+        VERSION ${wxSOVERSION}
+    )
+
     wx_set_common_target_properties(${target_name})
 endfunction()
 
