@@ -615,7 +615,9 @@ bool wxLocale::Init(int lang, int flags)
            (
                 retloc != NULL,
                 name,
-                shortName,
+                // wxLANGUAGE_DEFAULT needs to be passed to wxTranslations as ""
+                // for correct detection of user's preferred language(s)
+                lang == wxLANGUAGE_DEFAULT ? wxString() : shortName,
                 flags & wxLOCALE_LOAD_DEFAULT
            );
 #else // !(__UNIX__ || __WIN32__)
