@@ -146,6 +146,6 @@ macOS
 
 DPI-aware applications must set their `NSPrincipalClass` to `wxNSApplication`
 (or at least `NSApplication`) in their `Info.plist` file. Also see Apple [high
-resolution guidelines][2] for more information.
+resolution guidelines][3] for more information.
 
-[2]: https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
+[3]: https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
