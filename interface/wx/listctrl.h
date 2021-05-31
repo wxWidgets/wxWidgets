@@ -151,7 +151,7 @@ enum
     2.8 was removed in wxWidgets 3.1, meaning for wxWidgets 3.1+ wxOSX uses the generic
     implementation for all modes.
 
-    @subsection column_order Column Ordering
+    @section column_order Column Ordering
 
     By default, the columns of a list control appear on the screen in order
     of their indices, i.e. column 0 appears first, then column 1 next,

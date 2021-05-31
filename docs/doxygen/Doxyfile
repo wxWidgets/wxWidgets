@@ -174,6 +174,12 @@ ALIASES += row3col{7}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7</td></tr>"
 ALIASES += row3col{8}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8</td></tr>"
 ALIASES += row3col{9}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += row3col{10}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
+ALIASES += row3col{11}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11</td></tr>"
+ALIASES += row3col{12}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12</td></tr>"
+ALIASES += row3col{13}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13</td></tr>"
+ALIASES += row3col{14}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13,\14</td></tr>"
+ALIASES += row3col{15}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13,\14,\15</td></tr>"
+ALIASES += row3col{16}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13,\14,\15,\16</td></tr>"
 ALIASES += hdr3col{3}="<tr><th>\1</th> <th>\2</th> <th>\3</th></tr>"
 ALIASES += endTable="</table>"
 
@@ -194,7 +200,7 @@ ALIASES += itemdef{8}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4
 ALIASES += itemdef{9}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += itemdef{10}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
 ALIASES += endDefList="</table>"
-ALIASES += stock{3}="<tr><td><span class='itemdef'>\1</span></td> <td> @image html gtk-\2.png\n</td><td>\3</td></tr>"
+ALIASES += stock{3}="<tr><td><span class='itemdef'>\1</span></td> <td>\2</td> <td> @image html gtk-\3.png </td></tr>"
 
 # Aliases for documenting wxPerl/wxPython-specific parts
 #---------------------------------------------------------------------------

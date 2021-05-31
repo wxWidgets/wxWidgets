@@ -187,7 +187,7 @@ e.g. if you use `AC_CONFIG_MACRO_DIRS([m4])`).
 
 For applications using Microsoft Visual Studio IDE, simply add the provided
 `wxwidgets.props` property sheet file to your project as explained in the
-[instructions](@ref #msw_build_apps) and build the project as usual.
+[instructions](@ref msw_build_apps) and build the project as usual.
 
 
 ### Other IDEs
@@ -202,4 +202,4 @@ If you use another IDE, under Unix you should run `wx-config --cxxflags` and
 `wx-config --libs` commands separately and copy-and-paste their output to the
 "Additional preprocessor options" and "Additional linker options" fields in
 your IDE, respectively. Under MSW systems you need to configure the IDE using
-the instructions in the ["manual setup"](@ref #msw_build_apps) section.
+the instructions in the ["manual setup"](@ref msw_build_apps) section.

@@ -309,7 +309,7 @@ public:
     WebKit on macOS and GTK. This allows the correct viewing of complex pages with
     JavaScript and CSS.
 
-    @section descriptions Backend Descriptions
+    @section backend_descriptions Backend Descriptions
 
     This class supports using multiple backends, corresponding to different
     implementations of the same functionality. Under macOS and Unix platforms
@@ -771,8 +771,8 @@ public:
         Add a script message handler with the given name.
 
         To use the script message handler from javascript use
-        @c window.<name>.postMessage(<messageBody>) where <name> corresponds the value
-        of the name parameter. The <messageBody> will be available to the application
+        @c `window.<name>.postMessage(<messageBody>)` where `<name>` corresponds the value
+        of the name parameter. The `<messageBody>` will be available to the application
         via a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event.
 
         Sample C++ code receiving a script message:
