@@ -312,7 +312,7 @@ void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                 wxDC& dc,
                                                 wxRect& rect) const
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)));
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
 
@@ -344,7 +344,7 @@ void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                    wxDC& dc,
                                                    wxRect& rect) const
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)));
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
     dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
@@ -373,7 +373,7 @@ void wxGridCornerHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                    wxDC& dc,
                                                    wxRect& rect) const
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)));
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight() - 1, rect.GetBottom() - 1,
                 rect.GetRight() - 1, rect.GetTop());
     dc.DrawLine(rect.GetRight() - 1, rect.GetBottom() - 1,
@@ -3012,7 +3012,7 @@ void wxGrid::Init()
     m_gridLinesEnabled = true;
     m_gridLinesClipHorz =
     m_gridLinesClipVert = true;
-    m_cellHighlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    m_cellHighlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     m_cellHighlightPenWidth = 2;
     m_cellHighlightROPenWidth = 1;
     if ( wxSystemSettings::GetAppearance().IsDark() )
