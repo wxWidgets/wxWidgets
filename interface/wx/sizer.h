@@ -1481,6 +1481,33 @@ public:
     wxSizerFlags& CentreVertical();
 
     /**
+        Globally disable checks for sizer flag consistency in debug builds.
+
+        By default, sizer classes such as wxBoxSizer and wxFlexGridSizer assert
+        when passed invalid flags, even though doing this usually doesn't
+        result in any catastrophic consequences and the invalid flags are
+        simply ignored later. Due to this, and the fact that these checks were
+        only added in wxWidgets 3.1, existing code may run into multiple
+        asserts warning about incorrect sizer flags use. Using this function
+        provides a temporary solution for avoiding such asserts when upgrading
+        to wxWidgets 3.1 from a previous version and will prevent such checks
+        from being done.
+
+        Please do note that correcting the code by removing the invalid flags
+        remains a much better solution as these asserts may be very helpful to
+        understand why some code using sizer flags doesn't work as expected, so
+        using this function, especially permanently, rather than a temporary
+        workaround, is @e not recommended.
+
+        Notice that the same effect as calling this function can be achieved by
+        setting the environment variable @c WXSUPPRESS_SIZER_FLAGS_CHECK to any
+        value.
+
+        @since 3.1.6
+     */
+    static void DisableConsistencyChecks();
+
+    /**
         Sets the border in the given @a direction having twice the default
         border size.
     */

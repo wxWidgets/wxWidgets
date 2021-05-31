@@ -25,7 +25,11 @@ Changes in behaviour not resulting in compilation errors
   (it used to succeed in wxMSW).
 
 - Using invalid flags with wxBoxSizer or wxGridSizer items now triggers asserts
-  when done from the code or error messages when done in XRC.
+  when done from the code or error messages when done in XRC. These asserts are
+  best avoided by fixing the flags, but wxSizerFlags::DisableConsistencyChecks()
+  can be used to globally suppress them until this can be done. Even less
+  intrusively, environment variable WXSUPPRESS_SIZER_FLAGS_CHECK can be set (to
+  any value) to achieve the same effect.
 
 - wxWS_EX_VALIDATE_RECURSIVELY is now the default behaviour, i.e. calling
   Validate() or TransferData{From,To}Window() will now also call the same

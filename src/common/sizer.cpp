@@ -144,11 +144,78 @@ static const int SIZER_FLAGS_MASK =
     wxADD_FLAG(wxSHAPED,
     0))))))))))))))))));
 
+namespace
+{
+
+int gs_disableFlagChecks = -1;
+
+// Check condition taking gs_disableFlagChecks into account.
+//
+// Note that because this is not a macro, the condition is always evaluated,
+// even if gs_disableFlagChecks is 0, but this shouldn't matter because the
+// conditions used with this function are just simple bit checks.
+bool CheckSizerFlags(bool cond)
+{
+    // Once-only initialization: check if disabled via environment.
+    if ( gs_disableFlagChecks == -1 )
+    {
+        gs_disableFlagChecks = wxGetEnv("WXSUPPRESS_SIZER_FLAGS_CHECK", NULL);
+    }
+
+    return gs_disableFlagChecks || cond;
+}
+
+wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
+{
+    return wxString::Format
+           (
+             "%s"
+             "\n\nDO NOT PANIC !!\n\n"
+             "If you're an end user running a program not developed by you, "
+             "please ignore this message, it is harmless, and please try "
+             "reporting the problem to the program developers.\n"
+             "\n"
+             "You may also set WXSUPPRESS_SIZER_FLAGS_CHECK environment "
+             "variable to suppress all such checks when running this program.\n"
+             "\n"
+             "If you're the developer, simply remove %s from your code to "
+             "avoid getting this message. You can also call "
+             "wxSizerFlags::DisableConsistencyChecks() to globally disable "
+             "all such checks, but this is strongly not recommended.",
+             start,
+             whatToRemove
+           );
+}
+
+} // anonymous namespace
+
 #endif // wxDEBUG_LEVEL
 
-#define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2) \
-    wxASSERT_MSG(((f) & (f1 | f2)) != (f1 | f2), \
-                 n1 " and " n2 " can't be used together")
+#define ASSERT_NO_IGNORED_FLAGS_IMPL(f, value, name, explanation) \
+    wxASSERT_MSG                                                  \
+    (                                                             \
+      CheckSizerFlags(!((f) & (value))),                          \
+      MakeFlagsCheckMessage                                       \
+      (                                                           \
+        name " will be ignored in this sizer: " explanation,      \
+        "this flag"                                               \
+      )                                                           \
+    )
+
+#define ASSERT_NO_IGNORED_FLAGS(f, flags, explanation) \
+    ASSERT_NO_IGNORED_FLAGS_IMPL(f, flags, #flags, explanation)
+
+#define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2)       \
+    wxASSERT_MSG                                                   \
+    (                                                              \
+      CheckSizerFlags(((f) & (f1 | f2)) != (f1 | f2)),             \
+      MakeFlagsCheckMessage                                        \
+      (                                                            \
+        "One of " n1 " and " n2 " will be ignored in this sizer: " \
+        "they are incompatible and cannot be used together",       \
+        "one of these flags"                                       \
+      )                                                            \
+    )
 
 #define ASSERT_INCOMPATIBLE_NOT_USED(f, f1, f2) \
     ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, #f1, f2, #f2)
@@ -158,6 +225,14 @@ static const int SIZER_FLAGS_MASK =
     ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_HORIZONTAL, wxALIGN_RIGHT); \
     ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_VERTICAL, wxALIGN_BOTTOM)
 
+
+/* static */
+void wxSizerFlags::DisableConsistencyChecks()
+{
+#if wxDEBUG_LEVEL
+    gs_disableFlagChecks = true;
+#endif // wxDEBUG_LEVEL
+}
 
 void wxSizerItem::Init(const wxSizerFlags& flags)
 {
@@ -1471,9 +1546,16 @@ wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
         // Check that expansion will happen in at least one of the directions.
         wxASSERT_MSG
         (
-            !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
-                !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
-            wxS("wxEXPAND flag will be overridden by alignment flags")
+            CheckSizerFlags
+            (
+                !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
+                    !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL))
+            ),
+            MakeFlagsCheckMessage
+            (
+                "wxEXPAND flag will be overridden by alignment flags",
+                "either wxEXPAND or the alignment in at least one direction"
+            )
         );
     }
 
@@ -2083,10 +2165,10 @@ wxSizerItem *wxBoxSizer::DoInsert(size_t index, wxSizerItem *item)
     const int flags = item->GetFlag();
     if ( IsVertical() )
     {
-        wxASSERT_MSG
+        ASSERT_NO_IGNORED_FLAGS
         (
-            !(flags & wxALIGN_BOTTOM),
-            wxS("Vertical alignment flags are ignored in vertical sizers")
+            flags, wxALIGN_BOTTOM,
+            "only horizontal alignment flags can be used in vertical sizers"
         );
 
         // We need to accept wxALIGN_CENTRE_VERTICAL when it is combined with
@@ -2094,49 +2176,43 @@ wxSizerItem *wxBoxSizer::DoInsert(size_t index, wxSizerItem *item)
         // and we accept it historically in wxSizer API.
         if ( !(flags & wxALIGN_CENTRE_HORIZONTAL) )
         {
-            wxASSERT_MSG
+            ASSERT_NO_IGNORED_FLAGS
             (
-                !(flags & wxALIGN_CENTRE_VERTICAL),
-                wxS("Vertical alignment flags are ignored in vertical sizers")
-            );
-        }
-
-        // Note that using alignment with wxEXPAND can make sense if wxSHAPED
-        // is also used, as the item doesn't necessarily fully expand in the
-        // other direction in this case.
-        if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
-        {
-            wxASSERT_MSG
-            (
-                !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
-                wxS("Horizontal alignment flags are ignored with wxEXPAND")
+                flags, wxALIGN_CENTRE_VERTICAL,
+                "only horizontal alignment flags can be used in vertical sizers"
             );
         }
     }
     else // horizontal
     {
-        wxASSERT_MSG
+        ASSERT_NO_IGNORED_FLAGS
         (
-            !(flags & wxALIGN_RIGHT),
-            wxS("Horizontal alignment flags are ignored in horizontal sizers")
+            flags, wxALIGN_RIGHT,
+            "only vertical alignment flags can be used in horizontal sizers"
         );
 
         if ( !(flags & wxALIGN_CENTRE_VERTICAL) )
         {
-            wxASSERT_MSG
+            ASSERT_NO_IGNORED_FLAGS
             (
-                !(flags & wxALIGN_CENTRE_HORIZONTAL),
-                wxS("Horizontal alignment flags are ignored in horizontal sizers")
+                flags, wxALIGN_CENTRE_HORIZONTAL,
+                "only vertical alignment flags can be used in horizontal sizers"
             );
         }
+    }
 
-        if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
-        {
-            wxASSERT_MSG(
-                !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)),
-                wxS("Vertical alignment flags are ignored with wxEXPAND")
-            );
-        }
+    // Note that using alignment with wxEXPAND can make sense if wxSHAPED
+    // is also used, as the item doesn't necessarily fully expand in the
+    // other direction in this case.
+    if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
+    {
+        ASSERT_NO_IGNORED_FLAGS
+        (
+            flags,
+            wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL |
+            wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL,
+            "wxEXPAND overrides alignment flags in box sizers"
+        );
     }
 
     return wxSizer::DoInsert(index, item);
