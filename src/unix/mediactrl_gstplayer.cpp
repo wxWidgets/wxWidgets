@@ -217,7 +217,35 @@ static void end_of_stream_callback(GstPlayer * WXUNUSED(player), wxGStreamerMedi
 {
     be->EndOfStream();
 }
+
+#define GST_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE "GstWaylandDisplayHandleContextType"
+static GstBusSyncReply bus_sync_handler(GstBus * WXUNUSED(bus), GstMessage* msg,  gpointer WXUNUSED(user_data))
+{
+    const gchar *type = NULL;
+
+    if (GST_MESSAGE_TYPE(msg) == GST_MESSAGE_NEED_CONTEXT &&
+        gst_message_parse_context_type(msg, &type) &&
+        !g_strcmp0 (type, GST_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE))
+    {
+        GstContext *context = gst_context_new (GST_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE, TRUE);
+        GstStructure *s = gst_context_writable_structure(context);
+        wxDisplayInfo display_info = wxGetDisplayInfo();
+        /* On wayland we need to explicitely transmit the display handle to gstreamer,
+         * but attribute expected depends on which video sink got selected.
+         * "display" will likely remain as the normal way of doing for gst 1.19+
+         * but there is no harm in setting both for compatibility
+         */
+        gst_structure_set(s, "handle", G_TYPE_POINTER, display_info.dpy, NULL);
+        gst_structure_set(s, "display", G_TYPE_POINTER, display_info.dpy, NULL);
+        gst_element_set_context(GST_ELEMENT(msg->src), context);
+
+        return GST_BUS_DROP;
+    }
+
+    return GST_BUS_PASS;
 }
+}
+
 
 bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                             wxWindowID id,
@@ -336,6 +364,16 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     m_video_renderer = gst_player_video_overlay_video_renderer_new(window_handle);
     m_player = gst_player_new(m_video_renderer, gst_player_g_main_context_signal_dispatcher_new(NULL));
+
+    wxDisplayInfo info = wxGetDisplayInfo();
+    if (info.type == wxDisplayWayland)
+    {
+        // wayland needs a specific handler to pass display to gstreamer
+        GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(gst_player_get_pipeline(m_player)));
+        gst_bus_add_signal_watch(bus);
+        gst_bus_set_sync_handler(bus, bus_sync_handler, this, NULL);
+        gst_object_unref(bus);
+    }
 
     g_signal_connect(m_player, "video-dimensions-changed", G_CALLBACK(video_dimensions_changed_callback), this);
     g_signal_connect(m_player, "state-changed", G_CALLBACK(state_changed_callback), this);
