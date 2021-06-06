@@ -175,9 +175,25 @@ expose_event_callback(GtkWidget* widget, GdkEventExpose* event, wxGStreamerMedia
 extern "C" {
 static void realize_callback(GtkWidget* widget, wxGStreamerMediaBackend* be)
 {
-    gst_player_video_overlay_video_renderer_set_window_handle(GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
-                                wxGtkGetIdFromWidget(widget)
-                                );
+    gst_player_video_overlay_video_renderer_set_window_handle(
+        GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
+        wxGtkGetIdFromWidget(widget)
+    );
+#ifdef __WXGTK3__
+    GdkWindow* window = gtk_widget_get_window(widget);
+    if (strcmp("GdkWaylandWindow", g_type_name(G_TYPE_FROM_INSTANCE(window))) == 0)
+    {
+        // on wayland we need to place the video
+        int x, y;
+        GtkAllocation allocation;
+        gdk_window_get_origin(window, &x, &y);
+        gtk_widget_get_allocation(widget, &allocation);
+        gst_player_video_overlay_video_renderer_set_render_rectangle(
+            GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
+            x, y, allocation.width, allocation.height
+        );
+    }
+#endif
     GtkWidget* w = be->GetControl()->m_wxwindow;
 #ifdef __WXGTK3__
     g_signal_connect(w, "draw", G_CALLBACK(draw_callback), be);
@@ -491,10 +507,22 @@ wxLongLong wxGStreamerMediaBackend::GetDuration()
 
 void wxGStreamerMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(w), int WXUNUSED(h))
 {
-    /* Nothing to be done here, at least for GTK+. For other toolkits we might
-     * have to call
-     * gst_player_video_overlay_video_renderer_set_render_rectangle() here
+    /* GTK+ on X11 does not require explicitely setting the video size.
+     * Other toolkits might need to do something similar to GTK wayland too.
      */
+#ifdef __WXGTK3__
+    GdkWindow* window = gtk_widget_get_window(m_ctrl->m_wxwindow);
+    if (window && strcmp("GdkWaylandWindow", g_type_name(G_TYPE_FROM_INSTANCE(window))) == 0) {
+        int x, y;
+        GtkAllocation allocation;
+        gdk_window_get_origin(window, &x, &y);
+        gtk_widget_get_allocation(m_ctrl->m_wxwindow, &allocation);
+        gst_player_video_overlay_video_renderer_set_render_rectangle(
+            GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(m_video_renderer),
+            x, y, allocation.width, allocation.height
+        );
+    }
+#endif
 }
 
 wxSize wxGStreamerMediaBackend::GetVideoSize() const
