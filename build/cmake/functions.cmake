@@ -81,6 +81,17 @@ macro(wx_install)
     endif()
 endmacro()
 
+# Get a valid flavour name with optional prefix
+macro(wx_get_flavour flavour prefix)
+    if(wxBUILD_FLAVOUR)
+        set(flav ${wxBUILD_FLAVOUR})
+        string(REPLACE "-" "_" flav ${flav})
+        set(${flavour} "${prefix}${flav}")
+    else()
+        set(${flavour})
+    endif()
+endmacro()
+
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
@@ -185,11 +196,8 @@ function(wx_set_target_properties target_name is_base)
         # Do not append library name for base or mono library
         set(lib_suffix "_${target_name_short}")
     endif()
-    if(wxBUILD_FLAVOUR)
-        set(lib_flavour "_${wxBUILD_FLAVOUR}")
-        string(REPLACE "-" "_" lib_flavour ${lib_flavour})
-        set(lib_suffix "${lib_flavour}${lib_suffix}")
-    endif()
+    wx_get_flavour(lib_flavour "_")
+    set(lib_suffix "${lib_flavour}${lib_suffix}")
 
     set(dll_suffix "${lib_suffix}")
     if(wxCOMPILER_PREFIX)
@@ -517,14 +525,16 @@ function(wx_set_builtin_target_properties target_name)
         set(lib_dbg "d")
     endif()
 
+    wx_get_flavour(lib_flavour "_")
+
     set(lib_version)
     if(NOT WIN32_MSVC_NAMING)
         set(lib_version "-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
     endif()
 
     set_target_properties(${target_name} PROPERTIES
-        OUTPUT_NAME       "${target_name}${lib_unicode}${lib_rls}${lib_version}"
-        OUTPUT_NAME_DEBUG "${target_name}${lib_unicode}${lib_dbg}${lib_version}"
+        OUTPUT_NAME       "${target_name}${lib_unicode}${lib_rls}${lib_flavour}${lib_version}"
+        OUTPUT_NAME_DEBUG "${target_name}${lib_unicode}${lib_dbg}${lib_flavour}${lib_version}"
     )
 
     if(wxUSE_UNICODE)
