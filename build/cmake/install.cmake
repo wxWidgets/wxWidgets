@@ -66,9 +66,15 @@ if(NOT TARGET ${UNINST_NAME})
     # these symlinks are not included in the install manifest
     set(WX_EXTRA_UNINSTALL_FILES)
     if(NOT WIN32_MSVC_NAMING)
+        if(IPHONE)
+            set(EXE_SUFFIX ".app")
+        else()
+            set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
+        endif()
+
         set(WX_EXTRA_UNINSTALL_FILES
             "${CMAKE_INSTALL_PREFIX}/bin/wx-config"
-            "${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
+            "${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX}"
         )
     endif()
 
