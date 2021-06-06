@@ -203,7 +203,7 @@ GtkPolicyType GtkPolicyFromWX(wxScrollbarVisibility visibility)
 
 bool wxScrollHelper::IsScrollbarShown(int orient) const
 {
-    GtkScrolledWindow * const scrolled = GTK_SCROLLED_WINDOW(m_win->m_widget);
+    GtkScrolledWindow * const scrolled = GTK_SCROLLED_WINDOW(m_win->GTKGetMainWidget());
     if ( !scrolled )
     {
         // By default, all windows are scrollable.
@@ -221,7 +221,7 @@ bool wxScrollHelper::IsScrollbarShown(int orient) const
 void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,
                                       wxScrollbarVisibility vert)
 {
-    GtkScrolledWindow * const scrolled = GTK_SCROLLED_WINDOW(m_win->m_widget);
+    GtkScrolledWindow * const scrolled = GTK_SCROLLED_WINDOW(m_win->GTKGetMainWidget());
     wxCHECK_RET( scrolled, "window must be created" );
 
     gtk_scrolled_window_set_policy(scrolled,

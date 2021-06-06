@@ -384,6 +384,10 @@ void MyFrame::ToggleFlag(int flag, bool enable)
     int pos = m_splitter->GetSashPosition();
     m_splitter->SetSashPosition(pos + 1);
     m_splitter->SetSashPosition(pos);
+#ifdef wxHAS_SPLITTER_USING_OVERLAYS
+    // Enable overlay for this window
+    m_splitter->GTKEnableOverlay();
+#endif
 }
 
 void MyFrame::OnSetPosition(wxCommandEvent& WXUNUSED(event) )

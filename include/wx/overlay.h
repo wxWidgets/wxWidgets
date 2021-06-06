@@ -17,6 +17,8 @@
     #define wxHAS_NATIVE_OVERLAY 1
 #elif defined(__WXOSX__) && wxOSX_USE_COCOA
     #define wxHAS_NATIVE_OVERLAY 1
+#elif defined(__WXGTK3__) // We should test for GTK_CHECK_VERSION(3,18,0)
+    #define wxHAS_NATIVE_OVERLAY 1
 #else
     // don't define wxHAS_NATIVE_OVERLAY
 #endif
@@ -29,6 +31,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxOverlayImpl;
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxRect;
 
 class WXDLLIMPEXP_CORE wxOverlay
 {
@@ -36,9 +39,17 @@ public:
     wxOverlay();
     ~wxOverlay();
 
+    // a more readable flags that can be passed to Reset().
+    enum { NO_DISPOSE = 0, DISPOSE };
+
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
-    void Reset();
+    // if @dispose is false the overlay will be only hidden and ready to be
+    // reused on the next run.
+    void Reset(bool dispose = true);
+
+    // sets the rectangle to be refreshed/updated within the overlay.
+    void SetUpdateRectangle(const wxRect& rect);
 
     // returns (port-specific) implementation of the overlay
     wxOverlayImpl *GetImpl() { return m_impl; }
