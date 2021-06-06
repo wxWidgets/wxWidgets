@@ -22,9 +22,10 @@ if(WIN32_MSVC_NAMING)
             DESTINATION "include")
     endif()
 else()
+    wx_get_flavour(lib_flavour "-")
     wx_install(
         DIRECTORY "${wxSOURCE_DIR}/include/wx"
-        DESTINATION "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+        DESTINATION "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
 endif()
 
 # setup header and wx-config
