@@ -2562,8 +2562,16 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
 bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
     wxBitmap bitmap;
-    if (value.GetType() == wxS("wxBitmap") || value.GetType() == wxS("wxIcon"))
+    if (value.GetType() == wxS("wxBitmap"))
+    {
         bitmap << value;
+    }
+    else if (value.GetType() == wxS("wxIcon"))
+    {
+        wxIcon icon;
+        icon << value;
+        bitmap.CopyFromIcon(icon);
+    }
 
 #ifdef __WXGTK3__
     WX_CELL_RENDERER_PIXBUF(m_renderer)->Set(bitmap);
