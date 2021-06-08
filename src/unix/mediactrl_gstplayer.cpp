@@ -389,6 +389,23 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         gst_bus_add_signal_watch(bus);
         gst_bus_set_sync_handler(bus, bus_sync_handler, this, NULL);
         gst_object_unref(bus);
+
+        // xvimagesink is known to crash gstreamer with a wayland window
+        // if display is set; try to make it not load.
+        GstPluginFeature *feature;
+        feature = gst_registry_find_feature(
+            gst_registry_get(), "xvimagesink", GST_TYPE_ELEMENT_FACTORY
+        );
+        if (feature) {
+            gst_plugin_feature_set_rank(feature, GST_RANK_NONE);
+        }
+        // same for ximagesink
+        feature = gst_registry_find_feature(
+            gst_registry_get(), "ximagesink", GST_TYPE_ELEMENT_FACTORY
+        );
+        if (feature) {
+            gst_plugin_feature_set_rank(feature, GST_RANK_NONE);
+        }
     }
 
     g_signal_connect(m_player, "video-dimensions-changed", G_CALLBACK(video_dimensions_changed_callback), this);
