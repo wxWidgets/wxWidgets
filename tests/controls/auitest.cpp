@@ -143,4 +143,12 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
     }
 }
 
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RTTI", "[aui][rtti]")
+{
+    wxBookCtrlBase* const book = nb;
+    CHECK( wxDynamicCast(book, wxAuiNotebook) == nb );
+
+    CHECK( wxDynamicCast(nb, wxBookCtrlBase) == book );
+}
+
 #endif
