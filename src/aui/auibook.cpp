@@ -53,7 +53,7 @@ wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent);
 
-wxIMPLEMENT_CLASS(wxAuiNotebook, wxControl);
+wxIMPLEMENT_CLASS(wxAuiNotebook, wxBookCtrlBase);
 wxIMPLEMENT_CLASS(wxAuiTabCtrl, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxBookCtrlEvent);
 
