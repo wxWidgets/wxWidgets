@@ -20,23 +20,38 @@
 #endif // WX_PRECOMP
 
 #include "wx/panel.h"
-#include "wx/scopedptr.h"
 
 #include "wx/aui/auibook.h"
 
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// test fixtures
 // ----------------------------------------------------------------------------
 
-TEST_CASE( "wxAuiNotebook::DoGetBestSize", "[aui]" )
+class AuiNotebookTestCase
 {
-    wxWindow *frame = wxTheApp->GetTopWindow();
-    REQUIRE( frame );
-    wxAuiNotebook *nb = new wxAuiNotebook(frame);
-    wxScopedPtr<wxAuiNotebook> cleanUp(nb);
+public:
+    AuiNotebookTestCase()
+        : nb(new wxAuiNotebook(wxTheApp->GetTopWindow()))
+    {
+    }
 
+    ~AuiNotebookTestCase()
+    {
+        delete nb;
+    }
+
+protected:
+    wxAuiNotebook* const nb;
+};
+
+// ----------------------------------------------------------------------------
+// the tests themselves
+// ----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
+{
     wxPanel *p = new wxPanel(nb);
     p->SetMinSize(wxSize(100, 100));
     REQUIRE( nb->AddPage(p, "Center Pane") );
@@ -126,6 +141,14 @@ TEST_CASE( "wxAuiNotebook::DoGetBestSize", "[aui]" )
 
         CHECK( nb->GetBestSize() == wxSize(250, 175 + 3*tabHeight) );
     }
+}
+
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RTTI", "[aui][rtti]")
+{
+    wxBookCtrlBase* const book = nb;
+    CHECK( wxDynamicCast(book, wxAuiNotebook) == nb );
+
+    CHECK( wxDynamicCast(nb, wxBookCtrlBase) == book );
 }
 
 #endif
