@@ -1,0 +1,1 @@
+wxGTK: Fix wxMediaCtrl support when using Wayland (Dominique Martinet).
