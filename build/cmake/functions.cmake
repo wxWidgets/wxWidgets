@@ -294,11 +294,14 @@ function(wx_set_target_properties target_name is_base)
             )
     endif()
 
+    file(RELATIVE_PATH wxSETUP_HEADER_REL ${wxOUTPUT_DIR} ${wxSETUP_HEADER_PATH})
     target_include_directories(${target_name}
         BEFORE
         PUBLIC
-            ${wxSETUP_HEADER_PATH}
-            ${wxSOURCE_DIR}/include
+            $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
+            $<BUILD_INTERFACE:${wxSOURCE_DIR}/include>
+            $<INSTALL_INTERFACE:lib/${wxSETUP_HEADER_REL}>
+            $<INSTALL_INTERFACE:include>
         )
 
     if(wxTOOLKIT_INCLUDE_DIRS AND NOT is_base)
@@ -422,11 +425,13 @@ macro(wx_add_library name)
             set(runtime_dir "bin")
         endif()
         wx_install(TARGETS ${name}
+            EXPORT ${name}Targets
             LIBRARY DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
             ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
             RUNTIME DESTINATION "${runtime_dir}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
+        wx_install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION "lib/${wxPLATFORM_LIB_DIR}/cmake")
     endif()
 endmacro()
 
@@ -555,11 +560,7 @@ function(wx_set_builtin_target_properties target_name)
         )
     endif()
 
-    target_include_directories(${target_name}
-        BEFORE
-        PUBLIC
-            ${wxSETUP_HEADER_PATH}
-        )
+    target_include_directories(${target_name} BEFORE PRIVATE ${wxSETUP_HEADER_PATH})
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
 
@@ -569,7 +570,8 @@ function(wx_set_builtin_target_properties target_name)
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
-        wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}")
+        wx_install(TARGETS ${name} EXPORT ${name}Targets ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}")
+        wx_install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION "lib/${wxPLATFORM_LIB_DIR}/cmake")
     endif()
 endfunction()
 
