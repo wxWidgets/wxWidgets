@@ -1639,7 +1639,7 @@ const int wxAuiBaseTabCtrlId = 5380;
 #define EVT_AUI_RANGE(id1, id2, event, func) \
     wx__DECLARE_EVT2(event, id1, id2, wxAuiNotebookEventHandler(func))
 
-wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
+wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxBookCtrlBase)
     EVT_SIZE(wxAuiNotebook::OnSize)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocusNotebook)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
