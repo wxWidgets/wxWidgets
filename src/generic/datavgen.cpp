@@ -1968,15 +1968,15 @@ wxDataViewTreeNode::PutChildInSortOrder(wxDataViewMainWindow* window,
     // Check if we actually need to move the node.
     bool locationChanged = false;
 
-    if ( oldLocation == 0 )
+    // Compare with next node
+    if ( oldLocation != hi - 1)
     {
-        // Compare with the next item (as we return early in the case of only a
-        // single child, we know that there is one) to check if the item is now
-        // out of order.
-        if ( !cmp(childNode, nodes[1]) )
+        if ( !cmp(childNode, nodes[oldLocation + 1]) )
             locationChanged = true;
     }
-    else // Compare with the previous item.
+
+    // Compare with previous node
+    if ( !locationChanged && oldLocation > 0 )
     {
         if ( !cmp(nodes[oldLocation - 1], childNode) )
             locationChanged = true;
