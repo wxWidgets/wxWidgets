@@ -242,7 +242,7 @@ bool wxPalette::GetRGB(int index,
     if ( !m_refData )
         return false;
 
-    if (index < 0 || index > 255)
+    if ( index < 0 || index >= GetColoursCount() )
         return false;
 
     wxList::compatibility_iterator node = M_PALETTEDATA->m_palettes.GetFirst();
