@@ -132,8 +132,8 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
         )
 
     target_include_directories(wxwebkit2_ext PUBLIC
-        ${LIBSOUP_INCLUDE_DIRS}
-        ${WEBKIT2_INCLUDE_DIR}
+        $<BUILD_INTERFACE:${LIBSOUP_INCLUDE_DIRS}>
+        $<BUILD_INTERFACE:${WEBKIT2_INCLUDE_DIR}>
         )
     target_link_libraries(wxwebkit2_ext PUBLIC
         ${LIBSOUP_LIBRARIES}

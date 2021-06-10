@@ -257,13 +257,14 @@ function(wx_set_target_properties target_name is_base)
     target_include_directories(${target_name}
         BEFORE
         PUBLIC
-            ${wxSETUP_HEADER_PATH}
-            ${wxSOURCE_DIR}/include
+            $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
+            $<BUILD_INTERFACE:${wxSOURCE_DIR}/include>
+            $<INSTALL_INTERFACE:include>
         )
 
     if(wxTOOLKIT_INCLUDE_DIRS)
         target_include_directories(${target_name}
-            PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
+            PUBLIC $<BUILD_INTERFACE:${wxTOOLKIT_INCLUDE_DIRS}>)
     endif()
 
     if (WIN32)
@@ -371,12 +372,14 @@ macro(wx_add_library name)
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install
-        wx_install(TARGETS ${name}
+        wx_install(TARGETS ${name} EXPORT ${name}Targets
             LIBRARY DESTINATION "lib${wxPLATFORM_LIB_DIR}"
             ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}"
             RUNTIME DESTINATION "lib${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
+            
+        install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION lib${wxPLATFORM_LIB_DIR}/cmake)
     endif()
 endmacro()
 
@@ -453,7 +456,15 @@ macro(wx_lib_include_directories name)
         if (_LIB_INCLUDE_DIRS_PRIVATE)
             set(INCLUDE_POS BEFORE)
         endif()
-        target_include_directories(${name};${INCLUDE_POS};${ARGN})
+        if (_LIB_INCLUDE_DIRS_PUBLIC)
+        foreach (PUBLIC_DIR ${_LIB_INCLUDE_DIRS_PUBLIC})
+            target_include_directories(${name};${INCLUDE_POS};PUBLIC;$<BUILD_INTERFACE:${PUBLIC_DIR}>)
+        endforeach()
+        endif()
+        if (_LIB_INCLUDE_DIRS_PRIVATE)
+            target_include_directories(${name};${INCLUDE_POS};PRIVATE;${_LIB_INCLUDE_DIRS_PRIVATE})
+        endif()
+        target_include_directories(${name};PUBLIC;$<INSTALL_INTERFACE:include>)
     endif()
 endmacro()
 
@@ -514,7 +525,8 @@ function(wx_set_builtin_target_properties target_name)
     target_include_directories(${target_name}
         BEFORE
         PUBLIC
-            ${wxSETUP_HEADER_PATH}
+            $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
+            $<INSTALL_INTERFACE:include>
         )
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")

@@ -182,6 +182,16 @@ if(wxBUILD_PRECOMP)
     wx_target_enable_precomp(wxscintilla ${wxSCINTILLA_PREC_HEADER})
 endif()
 
+
+install(TARGETS wxscintilla EXPORT wxscintillaTargets
+    LIBRARY DESTINATION "lib${wxPLATFORM_LIB_DIR}"
+    ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}"
+    RUNTIME DESTINATION "bin${wxPLATFORM_LIB_DIR}"
+    BUNDLE DESTINATION Applications/wxWidgets
+    )
+
+install(EXPORT wxscintillaTargets NAMESPACE wx:: DESTINATION lib${wxPLATFORM_LIB_DIR}/cmake)
+
 wx_add_library(wxstc ${STC_FILES})
 wx_lib_include_directories(wxstc PRIVATE
     ${wxSOURCE_DIR}/src/stc/scintilla/include

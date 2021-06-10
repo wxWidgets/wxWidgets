@@ -18,4 +18,13 @@ if(wxUSE_REGEX)
     target_include_directories(wxregex PRIVATE ${wxSETUP_HEADER_PATH} ${wxSOURCE_DIR}/include)
     set(REGEX_LIBRARIES wxregex)
     set(REGEX_INCLUDE_DIRS ${wxSOURCE_DIR}/src/regex)
+    
+    install(TARGETS wxregex EXPORT wxregexTargets
+        LIBRARY DESTINATION "lib${wxPLATFORM_LIB_DIR}"
+        ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}"
+        RUNTIME DESTINATION "bin${wxPLATFORM_LIB_DIR}"
+        BUNDLE DESTINATION Applications/wxWidgets
+        )
+
+    install(EXPORT wxregexTargets NAMESPACE wx:: DESTINATION share/lib${wxPLATFORM_LIB_DIR}/cmake)
 endif()
