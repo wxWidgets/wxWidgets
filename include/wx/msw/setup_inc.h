@@ -203,7 +203,7 @@
 // Default is 1 if the compiler supports it, 0 for old MinGW.
 //
 // Recommended setting: 1, there is not much gain in disabling this
-#if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
+#if defined(__VISUALC__) || defined(__MINGW64_VERSION_MAJOR)
     #define wxUSE_DBGHELP 1
 #else
     #define wxUSE_DBGHELP 0

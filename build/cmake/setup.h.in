@@ -738,7 +738,7 @@
 #cmakedefine01 wxUSE_TIMEPICKCTRL_GENERIC
 
 
-#if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
+#if defined(__VISUALC__) || defined(__MINGW64_VERSION_MAJOR)
     #cmakedefine01 wxUSE_DBGHELP
 #else
     #cmakedefine01 wxUSE_DBGHELP
