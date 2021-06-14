@@ -614,7 +614,6 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_art = new wxAuiDefaultDockArt;
     m_hintWnd = NULL;
     m_flags = flags;
-    m_skipping = false;
     m_hasMaximized = false;
     m_frame = NULL;
     m_dockConstraintX = 0.3;
@@ -3020,8 +3019,6 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
             }
             return ProcessDockResult(target, drop);
         }
-
-        m_skipping = false;
 
         m_lastRect = part->dock->rect;
         m_lastRect.Inflate( m_frame->FromDIP(wxSize(15, 15)) );
