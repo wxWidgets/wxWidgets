@@ -22528,6 +22528,7 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
       as_fn_append ax_args " '--disable-jbig'"
       as_fn_append ax_args " '--disable-webp'"
       as_fn_append ax_args " '--disable-zstd'"
+      as_fn_append ax_args " '--disable-libdeflate'"
       as_fn_append ax_args " '$tiff_lzma_option'"
       as_fn_append ax_args " '$tiff_jpeg_option'"
 

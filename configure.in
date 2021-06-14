@@ -2816,6 +2816,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             [[--disable-jbig],
              [--disable-webp],
              [--disable-zstd],
+             [--disable-libdeflate],
              [$tiff_lzma_option],
              [$tiff_jpeg_option]])
     fi
