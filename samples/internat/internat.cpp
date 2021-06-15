@@ -38,6 +38,12 @@
     #include "../sample.xpm"
 #endif
 
+// Under Linux we demonstrate loading an existing message catalog using
+// coreutils package (which is always installed) as an example.
+#ifdef __LINUX__
+    #define USE_COREUTILS_MO
+#endif // __LINUX__
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -265,9 +271,9 @@ bool MyApp::OnInit()
     // shows that you may make use of the standard message catalogs as well
     //
     // if it's not installed on your system, it is just silently ignored
-#ifdef __LINUX__
+#ifdef USE_COREUTILS_MO
     m_locale.AddCatalog("coreutils");
-#endif
+#endif // USE_COREUTILS_MO
 
     // Create the main frame window
     MyFrame *frame = new MyFrame(m_locale);
