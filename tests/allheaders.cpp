@@ -33,7 +33,7 @@
         _Pragma(STRINGIZE(GCC diagnostic ignored STRINGIZE(CONCAT(-W,warn))))
 #endif
 
-// We have to include this one first in order to check for HAVE_XXX below.
+// We have to include this one first in order to check for wxUSE_XXX below.
 #include "wx/setup.h"
 
 #include "catch.hpp"
