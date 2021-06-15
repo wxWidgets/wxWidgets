@@ -268,7 +268,7 @@ bool MyApp::OnInit()
 #ifdef __LINUX__
     {
         wxLogNull noLog;
-        m_locale.AddCatalog("fileutils");
+        m_locale.AddCatalog("coreutils");
     }
 #endif
 
