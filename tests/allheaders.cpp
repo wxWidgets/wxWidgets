@@ -38,18 +38,9 @@
 
 #include "catch.hpp"
 
-#if defined(__WXMSW__)
-    #include <windows.h>
-
-    // Avoid warnings about redeclaring standard functions such as chmod() in
-    // various standard headers when using MinGW/Cygwin.
-    #if defined(__MINGW32__) || defined(__CYGWIN__)
-        #include <stdio.h>
-        #include <unistd.h>
-        #include <sys/stat.h>
-        #include <io.h>
-    #endif
-#elif defined(__WXQT__)
+#if defined(__WXQT__)
+    // Include this one before enabling the warnings as doing it later, as it
+    // happens when it's included from wx/fontutil.h, results in -Wsign-promo.
     #include <QtGui/QFont>
 #endif
 
