@@ -266,10 +266,7 @@ bool MyApp::OnInit()
     //
     // if it's not installed on your system, it is just silently ignored
 #ifdef __LINUX__
-    {
-        wxLogNull noLog;
-        m_locale.AddCatalog("coreutils");
-    }
+    m_locale.AddCatalog("coreutils");
 #endif
 
     // Create the main frame window
