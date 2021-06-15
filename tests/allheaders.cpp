@@ -33,23 +33,21 @@
         _Pragma(STRINGIZE(GCC diagnostic ignored STRINGIZE(CONCAT(-W,warn))))
 #endif
 
-// We have to include this one first in order to check for HAVE_XXX below.
+// We have to include this one first in order to check for wxUSE_XXX below.
 #include "wx/setup.h"
+
+// Normally this is done in wx/defs.h, but as we don't include it here, we need
+// to do it manually to avoid warnings inside the standard headers included
+// from catch.hpp.
+#if defined(__CYGWIN__) && defined(__WINDOWS__)
+    #define __USE_W32_SOCKETS
+#endif
 
 #include "catch.hpp"
 
-#if defined(__WXMSW__)
-    #include <windows.h>
-
-    // Avoid warnings about redeclaring standard functions such as chmod() in
-    // various standard headers when using MinGW/Cygwin.
-    #if defined(__MINGW32__) || defined(__CYGWIN__)
-        #include <stdio.h>
-        #include <unistd.h>
-        #include <sys/stat.h>
-        #include <io.h>
-    #endif
-#elif defined(__WXQT__)
+#if defined(__WXQT__)
+    // Include this one before enabling the warnings as doing it later, as it
+    // happens when it's included from wx/fontutil.h, results in -Wsign-promo.
     #include <QtGui/QFont>
 #endif
 
