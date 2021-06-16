@@ -100,6 +100,15 @@ public:
     void Toggle()
         { Check(!IsChecked()); }
 
+protected:
+    virtual int MSWGetTextType() const wxOVERRIDE
+    {
+        // Don't handle mnemonics in the label specially, they don't make sense
+        // for the listbox items that can't be activated from keyboard using
+        // them.
+        return DST_TEXT;
+    }
+
 private:
     wxCheckListBox *m_parent;
     bool m_checked;
