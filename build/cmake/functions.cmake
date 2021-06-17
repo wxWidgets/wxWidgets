@@ -249,6 +249,11 @@ function(wx_set_target_properties target_name is_base)
         PREFIX                    "${lib_prefix}"
     )
 
+    if(WIN32_MSVC_NAMING AND NOT MSVC)
+        # match makefile.gcc, use .a instead of .dll.a for import libraries
+        set_target_properties(${target_name} PROPERTIES IMPORT_SUFFIX ".a")
+    endif()
+
     if(wxBUILD_SHARED)
         target_compile_definitions(${target_name} PRIVATE "WXDLLNAME=${wxDLLNAME}")
     endif()
