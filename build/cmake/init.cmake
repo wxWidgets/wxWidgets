@@ -183,6 +183,9 @@ else()
 endif()
 set(wxSETUP_HEADER_FILE ${wxSETUP_HEADER_PATH}/wx/setup.h)
 
+set(wxBUILD_FILE ${wxSETUP_HEADER_PATH}/build.cfg)
+set(wxBUILD_FILE_DEBUG ${wxSETUP_HEADER_PATH}d/build.cfg)
+
 if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     # Append configuration specific suffix to setup header path
     wx_string_append(wxSETUP_HEADER_PATH "$<$<CONFIG:Debug>:d>")
