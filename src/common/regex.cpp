@@ -258,6 +258,281 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
     return szError;
 }
 
+// Helper function for processing bracket expressions inside a regex.
+//
+// Advance the iterator until the closing bracket matching the opening one the
+// iterator currently points to, i.e.:
+//
+// Precondition: *it == '['
+// Postcondition: *it == ']' or it == end if failed to find matching ']'
+static
+wxString::const_iterator
+SkipBracketExpression(wxString::const_iterator it, wxString::const_iterator end)
+{
+    wxASSERT_MSG( *it == '[', "must be at the start of bracket expression" );
+
+    // Initial ']', possibly after the preceding '^', is different because it
+    // stands for a literal ']' and not the end of the bracket expression, so
+    // check for it first.
+    ++it;
+    if ( it != end && *it == '^' )
+        ++it;
+    if ( it != end && *it == ']' )
+        ++it;
+
+    // Any ']' from now on ends the bracket expression.
+    for ( ; it != end; ++it )
+    {
+        const wxUniChar c = *it;
+
+        if ( c == ']' )
+            break;
+
+        if ( c == '[' )
+        {
+            // Bare '[' on its own is not special, but collating elements and
+            // character classes are, so check for them and advance past them
+            // if necessary to avoid misinterpreting the matching closing ']'.
+            if ( ++it == end )
+                break;
+
+            const wxUniChar c = *it;
+            if ( c == ':' || c == '.' || c == '=' )
+            {
+                for ( ++it; it != end; ++it )
+                {
+                    if ( *it == c )
+                    {
+                        if ( ++it == end )
+                            break;
+
+                        if ( *it == ']' )
+                            break;
+                    }
+                }
+
+                if ( it == end )
+                    break;
+            }
+        }
+    }
+
+    return it;
+}
+
+/* static */
+wxString wxRegEx::ConvertFromBasic(const wxString& bre)
+{
+    /*
+        Quoting regex(7):
+
+        Obsolete ("basic") regular expressions differ in several respects.
+        '|', '+', and '?' are ordinary characters and there is no equivalent
+        for their functionality. The delimiters for bounds are "\{" and "\}",
+        with '{' and '}' by themselves ordinary characters. The parentheses
+        for nested subexpressions are "\(" and "\)", with '(' and ')' by
+        themselves ordinary characters. '^' is an ordinary character except at
+        the beginning of the RE or(!) the beginning of a parenthesized
+        subexpression, '$' is an ordinary character except at the end of the RE
+        or(!) the end of a parenthesized subexpression, and '*' is an ordinary
+        character if it appears at the beginning of the RE or the beginning of
+        a parenthesized subexpression (after a possible leading '^').
+
+        Finally, there is one new type of atom, a back reference: '\' followed
+        by a nonzero decimal digit d matches the same sequence of characters
+        matched by the dth parenthesized subexpression [...]
+     */
+    wxString ere;
+    ere.reserve(bre.length());
+
+    enum SinceStart
+    {
+        SinceStart_None,        // Just at the beginning.
+        SinceStart_OnlyCaret,   // Had just "^" since the beginning.
+        SinceStart_Some         // Had something else since the beginning.
+    };
+
+    struct State
+    {
+        explicit State(SinceStart sinceStart_)
+        {
+            isBackslash = false;
+            sinceStart = sinceStart_;
+        }
+
+        bool isBackslash;
+        SinceStart sinceStart;
+    };
+
+    State previous(SinceStart_None);
+    for ( wxString::const_iterator it = bre.begin(),
+                                  end = bre.end();
+          it != end;
+          ++it )
+    {
+        const wxUniChar c = *it;
+
+        // What should be done with the current character?
+        enum Disposition
+        {
+            Disposition_Skip,   // Nothing.
+            Disposition_Append, // Append to output.
+            Disposition_Escape  // ... after escaping it with backslash.
+        } disposition = Disposition_Append;
+
+        State current(SinceStart_Some);
+
+        if ( previous.isBackslash )
+        {
+            // By default, keep the backslash present in the BRE, it's still
+            // needed in the ERE too.
+            disposition = Disposition_Escape;
+
+            switch ( c.GetValue() )
+            {
+                case '(':
+                    // It's the start of a new subexpression.
+                    current.sinceStart = SinceStart_None;
+                    wxFALLTHROUGH;
+
+                case ')':
+                case '{':
+                case '}':
+                    // Do not escape to ensure they remain special in the ERE
+                    // as the escaped versions were special in the BRE.
+                    disposition = Disposition_Append;
+                    break;
+            }
+        }
+        else // This character is not escaped.
+        {
+            switch ( c.GetValue() )
+            {
+                case '\\':
+                    current.isBackslash = true;
+
+                    // Don't do anything with it yet, we'll deal with it later.
+                    disposition = Disposition_Skip;
+                    break;
+
+                case '^':
+                    // Escape unless it appears at the start.
+                    switch ( previous.sinceStart )
+                    {
+                        case SinceStart_None:
+                            // Don't escape, but do update the state.
+                            current.sinceStart = SinceStart_OnlyCaret;
+                            break;
+
+                        case SinceStart_OnlyCaret:
+                        case SinceStart_Some:
+                            disposition = Disposition_Escape;
+                            break;
+                    }
+                    break;
+
+                case '*':
+                    // Escape unless it appears at the start or right after "^".
+                    switch ( previous.sinceStart )
+                    {
+                        case SinceStart_None:
+                        case SinceStart_OnlyCaret:
+                            disposition = Disposition_Escape;
+                            break;
+
+                        case SinceStart_Some:
+                            break;
+                    }
+                    break;
+
+                case '$':
+                    // Escape unless it appears at the end or just before "\)".
+                    disposition = Disposition_Escape;
+                    {
+                        wxString::const_iterator next = it;
+                        ++next;
+                        if ( next == end )
+                        {
+                            // It is at the end, so has special meaning.
+                            disposition = Disposition_Append;
+                        }
+                        else // Not at the end, but maybe at subexpression end?
+                        {
+                            if ( *next == '\\' )
+                            {
+                                ++next;
+                                if ( next != end && *next == ')' )
+                                    disposition = Disposition_Append;
+                            }
+                        }
+                    }
+                    break;
+
+                case '|':
+                case '+':
+                case '?':
+                case '(':
+                case ')':
+                case '{':
+                case '}':
+                    // Escape these characters which are not special in a BRE,
+                    // but would be special in a ERE if left unescaped.
+                    disposition = Disposition_Escape;
+                    break;
+
+                case '[':
+                    // Rules are very different for the characters inside the
+                    // bracket expressions and we don't have to change anything
+                    // for them as the syntax is the same for BREs and EREs, so
+                    // just process the entire expression at once.
+                    {
+                        const wxString::const_iterator start = it;
+                        it = SkipBracketExpression(it, end);
+
+                        // Copy everything inside without any changes.
+                        ere += wxString(start, it);
+
+                        if ( it == end )
+                        {
+                            // If we reached the end without finding the
+                            // matching ']' there is nothing remaining anyhow.
+                            return ere;
+                        }
+
+                        // Note that default Disposition_Append here is fine,
+                        // we'll append the closing ']' to "ere" below.
+                    }
+                    break;
+            }
+        }
+
+        switch ( disposition )
+        {
+            case Disposition_Skip:
+                break;
+
+            case Disposition_Escape:
+                ere += '\\';
+                wxFALLTHROUGH;
+
+            case Disposition_Append:
+                // Note: don't use "c" here, iterator may have been advanced
+                // inside the loop.
+                ere += *it;
+                break;
+        }
+
+        previous = current;
+    }
+
+    // It's an error if a RE ends with a backslash, but we still need to
+    // preserve this error in the resulting RE.
+    if ( previous.isBackslash )
+        ere += '\\';
+
+    return ere;
+}
+
 bool wxRegExImpl::Compile(const wxString& expr, int flags)
 {
     Reinit();

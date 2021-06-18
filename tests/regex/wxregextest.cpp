@@ -170,4 +170,18 @@ TEST_CASE("wxRegEx::QuoteMeta", "[regex][meta]")
     CHECK( wxRegEx::QuoteMeta(":foo.*bar") == ":foo\\.\\*bar" );
 }
 
+TEST_CASE("wxRegEx::ConvertFromBasic", "[regex][basic]")
+{
+    CHECK( wxRegEx::ConvertFromBasic("\\(a\\)b") == "(a)b" );
+    CHECK( wxRegEx::ConvertFromBasic("a\\{0,1\\}b") == "a{0,1}b" );
+    CHECK( wxRegEx::ConvertFromBasic("*") == "\\*" );
+    CHECK( wxRegEx::ConvertFromBasic("**") == "\\**" );
+    CHECK( wxRegEx::ConvertFromBasic("^*") == "^\\*" );
+    CHECK( wxRegEx::ConvertFromBasic("^^") == "^\\^" );
+    CHECK( wxRegEx::ConvertFromBasic("x$y") == "x\\$y" );
+    CHECK( wxRegEx::ConvertFromBasic("$$") == "\\$$" );
+    CHECK( wxRegEx::ConvertFromBasic("\\(x$\\)") == "(x$)" );
+    CHECK( wxRegEx::ConvertFromBasic("[^$\\)]") == "[^$\\)]" );
+}
+
 #endif // wxUSE_REGEX

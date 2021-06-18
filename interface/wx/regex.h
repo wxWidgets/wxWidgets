@@ -276,5 +276,15 @@ public:
         @since 3.1.3
     */
     static wxString QuoteMeta(const wxString& str);
+
+    /**
+        Converts a basic regular expression to an extended regex syntax.
+
+        This function can be used to convert @a bre using deprecated wxRE_BASIC
+        syntax to default (extended) syntax.
+
+        @since 3.1.6
+     */
+    static wxString ConvertFromBasic(const wxString& bre);
 };
 
