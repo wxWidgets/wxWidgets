@@ -811,6 +811,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\regex.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\strings.cpp"
 				>
 			</File>
