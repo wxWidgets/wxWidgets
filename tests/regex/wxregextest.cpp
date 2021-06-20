@@ -79,28 +79,33 @@ CheckMatch(const char* pattern,
     INFO( "Pattern: " << pattern << FlagStr(flags) << ", match: " << text );
 
     wxRegEx re(pattern, compileFlags);
-    REQUIRE( re.IsValid() );
-
-    bool ok = re.Matches(text, matchFlags);
-
-    if (expected) {
-        REQUIRE( ok );
-
-        wxStringTokenizer tkz(wxString(expected, *wxConvCurrent),
-                              wxT("\t"), wxTOKEN_RET_EMPTY);
-        size_t i;
-
-        for (i = 0; i < re.GetMatchCount() && tkz.HasMoreTokens(); i++) {
-            INFO( "Match #" << i );
-            CHECK( re.GetMatch(text, i) == tkz.GetNextToken() );
-        }
-
-        if ((flags & wxRE_NOSUB) == 0)
-            CHECK(re.GetMatchCount() == i);
+    if ( !re.IsValid() )
+    {
+        FAIL("Regex compilation failed");
+        return;
     }
-    else {
-        CHECK( !ok );
+
+    if ( !re.Matches(text, matchFlags) )
+    {
+        CHECK( !expected );
+        return;
     }
+
+    CHECK( expected );
+    if ( !expected )
+        return;
+
+    wxStringTokenizer tkz(wxString(expected, *wxConvCurrent),
+                          wxT("\t"), wxTOKEN_RET_EMPTY);
+    size_t i;
+
+    for (i = 0; i < re.GetMatchCount() && tkz.HasMoreTokens(); i++) {
+        INFO( "Match #" << i );
+        CHECK( re.GetMatch(text, i) == tkz.GetNextToken() );
+    }
+
+    if ((flags & wxRE_NOSUB) == 0)
+        CHECK(re.GetMatchCount() == i);
 }
 
 TEST_CASE("wxRegEx::Match", "[regex][match]")
