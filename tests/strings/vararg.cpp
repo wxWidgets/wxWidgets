@@ -65,6 +65,11 @@ TEST_CASE("StringPrintf", "[wxString][Printf][vararg]")
 
     wxGCC_WARNING_RESTORE(write-strings)
     wxCLANG_WARNING_RESTORE(c++11-compat-deprecated-writable-strings)
+
+#ifdef __cpp_lib_string_view
+    CHECK( wxString::Format("%s", std::string_view{"foobar", 3}) == "foo" );
+    CHECK( wxString::Format("%s", std::string_view{"bar"}) == "bar" );
+#endif // __cpp_lib_string_view
 }
 
 TEST_CASE("CharPrintf", "[wxString][Printf][vararg]")
