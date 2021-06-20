@@ -305,7 +305,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     if ( errorcode )
     {
         wxLogError(_("Invalid regular expression '%s': %s"),
-                   expr.c_str(), GetErrorMsg(errorcode, !conv).c_str());
+                   expr, GetErrorMsg(errorcode, !conv));
 
         m_isCompiled = false;
     }
@@ -426,7 +426,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
         default:
             // an error occurred
             wxLogError(_("Failed to find match for regular expression: %s"),
-                       GetErrorMsg(rc, !str).c_str());
+                       GetErrorMsg(rc, !str));
             wxFALLTHROUGH;
 
         case REG_NOMATCH:
@@ -474,7 +474,7 @@ int wxRegExImpl::Replace(wxString *text,
     if (!textstr)
     {
         wxLogError(_("Failed to find match for regular expression: %s"),
-                   GetErrorMsg(0, true).c_str());
+                   GetErrorMsg(0, true));
         return 0;
     }
     size_t textlen = strlen(textstr);
