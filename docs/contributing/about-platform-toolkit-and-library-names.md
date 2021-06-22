@@ -24,11 +24,11 @@ obvious slot for new ports to slip into.
 The libraries use the following naming convention.
 When an item of the name is empty, `'_'` or `'-'` are omitted.
 
-*UNIX libraries* (using configure):
+*UNIX libraries* (configure, CMake on Linux/macOS/Cygwin):
 
     libwx_$(toolkit)$(widgetset)$(unicode)_$(flavour)_$(name)-$(version)-$(host).$(lib_extension)
 
-*Windows libraries* (using VS solution or makefile.gcc/vc):
+*Windows libraries* (VS solution, makefile.gcc/vc, CMake on Windows/MinGW, shared libraries on Windows):
 
     wx$(toolkit)$(widgetset)$(version)$(unicode)$(debug)_$(flavour)_$(name)_$(compiler)_$(arch)_$(vendor).$(lib_extension)
 
