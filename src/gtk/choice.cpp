@@ -78,6 +78,17 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
 #ifdef __WXGTK3__
     m_widget = gtk_combo_box_text_new();
+
+    // GTK 3 has a sizing issue with long combobox text: it needs ellipsization set
+    GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_widget));
+    if (cells)
+    {
+        GtkCellRenderer* cell = (GtkCellRenderer*) cells->data;
+        if (cell)
+            g_object_set(G_OBJECT(cell), "ellipsize", PANGO_ELLIPSIZE_END, NULL); 
+        // Only the list of cells must be freed, the renderer isn't ours to free
+        g_list_free(cells); 
+    }
 #else
     m_widget = gtk_combo_box_new_text();
 #endif
