@@ -40,16 +40,26 @@ macro(wx_get_dependencies var lib)
                     get_target_property(dep_name ${dep} OUTPUT_NAME)
                 endif()
             else()
-                get_filename_component(dep_name ${dep} NAME)
+                # For the vaule like $<$<CONFIG:DEBUG>:LIB_PATH>
+                # Or $<$<NOT:$<CONFIG:DEBUG>>:LIB_PATH>
+                string(REGEX REPLACE "^.+>:(.+)>$" "\\1" dep_name ${dep})
+                if (NOT dep_name)
+                    set(dep_name ${dep})
+                endif()
             endif()
             if(dep_name STREQUAL "libc.so")
                 # don't include this library
-            elseif(dep_name MATCHES "^-(.*)")   # -l, -framework, -weak_framework
+            elseif(dep_name MATCHES "^-(.*)$")   # -l, -framework, -weak_framework
                 wx_string_append(${var} "${dep_name} ")
-            elseif(dep_name MATCHES "^lib(.*)(.so|.dylib|.tbd|.a)")
+            elseif(dep_name MATCHES "^lib(.*)(.so|.dylib|.tbd|.a)$")
                 wx_string_append(${var} "-l${CMAKE_MATCH_1} ")
             elseif(dep_name)
-                wx_string_append(${var} "-l${dep_name} ")
+                get_filename_component(abs_path ${dep_name} PATH)
+                if (abs_path) # vaule contains path
+                    wx_string_append(${var} "${dep_name} ")
+                else()
+                    wx_string_append(${var} "-l${dep_name} ")
+                endif()
             endif()
         endforeach()
         string(STRIP ${${var}} ${var})
