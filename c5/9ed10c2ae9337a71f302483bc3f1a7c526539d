@@ -1,0 +1,1 @@
+All (GUI): Fix DPI change handling in wxGrid with hidden row/colum labels.
