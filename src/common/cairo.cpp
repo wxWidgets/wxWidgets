@@ -183,6 +183,8 @@
        (cairo_t *cr, const cairo_font_options_t* options), (cr, options) ) \
     m( cairo_get_font_options, \
        (cairo_t* cr, cairo_font_options_t* options), (cr, options) ) \
+    m( cairo_user_to_device_distance, \
+       (cairo_t* cr, double *dx, double* dy), (cr, dx, dy) )
 
 #ifdef __WXMAC__
 #define wxCAIRO_PLATFORM_METHODS(m) \
