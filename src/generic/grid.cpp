@@ -3240,8 +3240,17 @@ void wxGrid::CalcWindowSizes()
 
     // the grid may be too small to have enough space for the labels yet, don't
     // size the windows to negative sizes in this case
-    int gw = cw - m_rowLabelWidth - fgw;
-    int gh = ch - m_colLabelHeight - fgh;
+    int gw, gh;
+    if ( m_rowLabelWin->IsShown() )
+        gw = cw - m_rowLabelWidth - fgw;
+    else
+        gw = cw - fgw;
+
+    if ( m_colLabelWin->IsShown() )
+        gh = ch - m_colLabelHeight - fgh;
+    else
+        gh = ch - fgh;
+
     if (gw < 0)
         gw = 0;
     if (gh < 0)
@@ -3271,8 +3280,29 @@ void wxGrid::CalcWindowSizes()
     if ( m_frozenRowGridWin && m_frozenRowGridWin->IsShown() )
         m_frozenRowGridWin->SetSize( m_rowLabelWidth + fgw, m_colLabelHeight, gw, fgh);
 
-    if ( m_gridWin && m_gridWin->IsShown() )
+    // Adjust grid size with shown or not shown labels
+    if ( m_gridWin && m_gridWin->IsShown() && m_rowLabelWin->IsShown() )
+        m_gridWin->SetSize( m_rowLabelWidth + fgw, fgh, gw, gh );
+    
+    if ( m_gridWin && m_gridWin->IsShown() && m_colLabelWin->IsShown() )
+        m_gridWin->SetSize( fgw, m_colLabelHeight + fgh, gw, gh );
+    
+    if ( m_gridWin && m_gridWin->IsShown() && m_rowLabelWin->IsShown() && m_colLabelWin->IsShown() )
         m_gridWin->SetSize( m_rowLabelWidth + fgw, m_colLabelHeight + fgh, gw, gh );
+
+    if ( m_gridWin && m_gridWin->IsShown() && !m_rowLabelWin->IsShown() && !m_colLabelWin->IsShown() )
+        m_gridWin->SetSize( fgw, fgh, gw, gh );
+    
+    // Adjust the label sizes in this    
+    if ( m_rowLabelWin->IsShown() )
+        SetRowLabelSize( m_rowLabelWidth );
+    else
+        SetRowLabelSize( 0 );
+
+    if ( m_colLabelWin->IsShown() )
+        SetColLabelSize( m_colLabelHeight );
+    else
+        SetColLabelSize( 0 );
 }
 
 // this is called when the grid table sends a message
