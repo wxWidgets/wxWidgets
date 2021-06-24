@@ -2829,8 +2829,13 @@ void wxGrid::InitPixelFields()
     m_defaultRowHeight += 4;
 #endif
 
-    m_rowLabelWidth  = FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH);
-    m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
+    // Don't change the value when called from OnDPIChanged() later if the
+    // corresponding label window is hidden, these values should remain zeroes
+    // then.
+    if ( m_rowLabelWin->IsShown() )
+        m_rowLabelWidth  = FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH);
+    if ( m_colLabelWin->IsShown() )
+        m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
 
     m_defaultColWidth = FromDIP(WXGRID_DEFAULT_COL_WIDTH);
 
