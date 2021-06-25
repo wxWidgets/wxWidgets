@@ -40,7 +40,7 @@ macro(wx_get_dependencies var lib)
                     get_target_property(dep_name ${dep} OUTPUT_NAME)
                 endif()
             else()
-                # For the vaule like $<$<CONFIG:DEBUG>:LIB_PATH>
+                # For the value like $<$<CONFIG:DEBUG>:LIB_PATH>
                 # Or $<$<NOT:$<CONFIG:DEBUG>>:LIB_PATH>
                 string(REGEX REPLACE "^.+>:(.+)>$" "\\1" dep_name ${dep})
                 if (NOT dep_name)
