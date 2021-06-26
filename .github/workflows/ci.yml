@@ -208,11 +208,13 @@ jobs:
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
       - name: Building tests
+        if: matrix.skip_testing != true
+        working-directory: tests
         run: |
           if [ !${{ matrix.skip_gui }} ]; then
-            make -C tests $wxBUILD_ARGS failtest
+            make $wxBUILD_ARGS failtest
           fi
-          make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+          make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
       - name: Testing
         if: matrix.skip_testing != true
