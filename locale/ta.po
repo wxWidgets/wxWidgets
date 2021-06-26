@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 17:46+0200\n"
-"PO-Revision-Date: 2014-02-24 21:51+0530\n"
+"PO-Revision-Date: 2021-06-26 17:31+0530\n"
 "Last-Translator: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language-Team: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language: ta\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.11\n"
 
 #: ../include/wx/defs.h:2622
 msgid "All files (*.*)|*.*"
@@ -55,7 +55,7 @@ msgstr "சரி"
 #: ../src/motif/msgdlg.cpp:196 ../src/msw/msgdlg.cpp:448
 #: ../src/msw/progdlg.cpp:940 ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
-msgstr "விலக்குக"
+msgstr "விலக்கிடுக"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../include/wx/msgdlg.h:282 ../src/common/accelcmn.cpp:77
@@ -80,19 +80,20 @@ msgstr "\"%s\" அடைவினை கவனிப்பதற்காக த
 
 #: ../include/wx/msw/private/fswatcher.h:125
 msgid "Unable to close I/O completion port handle"
-msgstr "உள்ளிடு/வெளிடு முழுமை நுழைவாயில் handle மூட இயலவில்லை"
+msgstr "உள்ளீடு/வெளியீடு முழுமையடைதலின் நுழைவாயில் handle-ஐ மூட இயலவில்லை"
 
 #: ../include/wx/msw/private/fswatcher.h:142
 msgid "Unable to associate handle with I/O completion port"
-msgstr "உள்ளிடு/வெளியிடு முழுமை நுழைவாயில் handle உடன்தொடர்புப்படுத்த இயலவில்லை."
+msgstr "உள்ளீடு/வெளியீடு முழுமையடைதலின் நுழைவாயில் handle உடன்தொடர்புப்படுத்த இயலவில்லை."
 
 #: ../include/wx/msw/private/fswatcher.h:148
 msgid "Unexpectedly new I/O completion port was created"
-msgstr "புதிய உள்ளிடு/வெளியிடு முழுமை ணுழைவாயில் எதிர்பாரா வண்ணம் உருவாக்கப்பட்டது."
+msgstr ""
+"புதிய உள்ளீடு/வெளியீடு முழுமையடைதலின் ணுழைவாயில் எதிர்பாரா வண்ணம் உருவாக்கப்பட்டது."
 
 #: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
-msgstr "முழுமையடைந்த நிலைமையை இட இயலவில்லை"
+msgstr "முழுமையடைந்த நிலையை இட இயலவில்லை"
 
 #: ../include/wx/msw/private/fswatcher.h:262
 msgid "Unable to dequeue completion packet"
@@ -100,12 +101,12 @@ msgstr "முழுமையடைந்த பொதியை dequeue செ�
 
 #: ../include/wx/msw/private/fswatcher.h:273
 msgid "Unable to create I/O completion port"
-msgstr "உள்ளிடு/வெளியிடு முழுமை நுழைவாயிலை உருவாக்க இயலவில்லை"
+msgstr "உள்ளீடு/வெளியீடு முழுமையடைதலின் நுழைவாயிலை உருவாக்க இயலவில்லை"
 
 #: ../include/wx/prntbase.h:267 ../include/wx/richtext/richtextprint.h:109
 #: ../src/common/docview.cpp:2137
 msgid "Printout"
-msgstr "காகித அச்சு"
+msgstr "அச்செடுப்பு"
 
 #: ../include/wx/richmsgdlg.h:29
 msgid "&See details"
@@ -113,7 +114,7 @@ msgstr "விவரங்களைக் காண்க"
 
 #: ../include/wx/richmsgdlg.h:30
 msgid "&Hide details"
-msgstr "விவரங்களை மறை"
+msgstr "விவரங்களை மறைத்திடுக"
 
 #: ../include/wx/richtext/richtextbuffer.h:3863
 msgid "&Box"
@@ -150,21 +151,21 @@ msgstr "குழாய் உருவாக்கம் தோல்விய�
 
 #: ../include/wx/unix/private/displayx11.h:65
 msgid "Failed to enumerate video modes"
-msgstr "நிகழ்பட நிலைகளை கணக்கிடுவதில் தோல்வி."
+msgstr "காணொளி நிலைகளை கணக்கிடுவதில் தோல்வி."
 
 #: ../include/wx/unix/private/displayx11.h:89
 msgid "Failed to change video mode"
-msgstr "நிகழ்பட நிலையை மாற்றுவதில் தோல்வி"
+msgstr "காணொளி நிலையை மாற்றுவதில் தோல்வி"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
 msgid "Unable to open path '%s'"
-msgstr "'%s' வழியைத் திறக்க இயலவில்லை"
+msgstr "'%s' வழிதடத்தைத் திறக்க இயலவில்லை"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:74
 #, c-format
 msgid "Unable to close path '%s'"
-msgstr "'%s' வழியை மூட இயலவில்லை"
+msgstr "'%s' வழிதடத்தை மூட இயலவில்லை"
 
 #: ../include/wx/xtiprop.h:175
 msgid "SetProperty called w/o valid setter"
@@ -172,35 +173,35 @@ msgstr "w/o ஏற்க்கக்கூடிய அமைப்பியை 
 
 #: ../include/wx/xtiprop.h:184
 msgid "GetProperty called w/o valid getter"
-msgstr "w/o ஏற்புள்ள பெறுநர் என்கிற பொருளைப் பெறு"
+msgstr "w/o ஏற்புள்ள பெறுநர் என்கிற பொருளைப் பெறுக"
 
 #: ../include/wx/xtiprop.h:193
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr "w/o மதிப்புக் கூட்டி என்கிற AddToPropertyCollection உடன் ஏற்றுக"
+msgstr "w/o மதிப்புக் கூட்டி என்கிற AddToPropertyCollection உடன் ஏற்றிடுக"
 
 #: ../include/wx/xtiprop.h:202
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr "w/o ஏற்புள்ள பெறுநர் என்கிற பொருள் திரட்டினைப் பெறு"
+msgstr "w/o ஏற்புள்ள பெறுநர் என்கிற பொருள் திரட்டினைப் பெறுக"
 
 #: ../include/wx/xtiprop.h:255
 msgid "AddToPropertyCollection called on a generic accessor"
-msgstr "பொதுத் தரவு அணுகியின் மேலான AddToPropertyCollection உடன் ஏற்றுக"
+msgstr "பொதுத் தரவு அணுகியின் மேலான AddToPropertyCollection உடன் ஏற்றிடுக"
 
 #: ../include/wx/xtiprop.h:262
 msgid "GetPropertyCollection called on a generic accessor"
-msgstr "பொதுத் தரவு அணுகியின் மேலான பொருள் திரட்டினைப் பெறு"
+msgstr "பொதுத் தரவு அணுகியின் மேலான பொருள் திரட்டினைப் பெறுக"
 
 #: ../src/aui/tabmdi.cpp:106 ../src/generic/mdig.cpp:94
 msgid "Cl&ose"
-msgstr "மூடுக"
+msgstr "மூடுக (&O)"
 
 #: ../src/aui/tabmdi.cpp:107 ../src/generic/mdig.cpp:95
 msgid "Close All"
-msgstr "எல்லாவற்றையும் மூடுக"
+msgstr "அனைத்தையும் மூடுக"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
 msgid "&Next"
-msgstr "அடுத்து"
+msgstr "அடுத்தது"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
 msgid "&Previous"
@@ -221,7 +222,6 @@ msgstr "அழி"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48
-#, fuzzy
 msgid "Del"
 msgstr "அழி"
 
@@ -232,9 +232,8 @@ msgstr "பின்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgid "Backspace"
-msgstr "பின்"
+msgstr "பின்னழி"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:50 ../src/richtext/richtextsymboldlg.cpp:469
@@ -243,54 +242,48 @@ msgstr "செருகு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:51
-#, fuzzy
 msgid "Ins"
 msgstr "செருகு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgid "Enter"
-msgstr "அச்சுப் பொறி"
+msgstr "உள்ளிடு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
 msgid "Return"
-msgstr ""
+msgstr "உள்ளிடு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgid "PageUp"
-msgstr "பக்கங்கள்"
+msgstr "பக்கம் மேல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgid "Page Up"
-msgstr "பக்கம் %d"
+msgstr "பக்கம் மேல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "PageDown"
-msgstr "கீழ்"
+msgstr "பக்கம் கீழ்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "Page Down"
-msgstr "பக்கம் %d"
+msgstr "பக்கம் கீழ்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
 msgid "PgUp"
-msgstr ""
+msgstr "பக்கம் மேல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:57
 msgid "PgDn"
-msgstr ""
+msgstr "பக்கம் கீழ்"
 
 #. TRANSLATORS: Name of keyboard key
 #. TRANSLATORS: Keystroke for manipulating a tree control
@@ -334,30 +327,27 @@ msgstr "முகப்பு"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63
 msgid "End"
-msgstr ""
+msgstr "முடிவு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
-#, fuzzy
 msgid "Space"
-msgstr "இடைவெளியிடல்"
+msgstr "இடைவெளி"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgid "Tab"
-msgstr "தத்தல்கள்"
+msgstr "தத்தல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
 msgid "Esc"
-msgstr ""
+msgstr "விடுபடு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
-#, fuzzy
 msgid "Escape"
-msgstr "கிடநீளம்"
+msgstr "விடுபடு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:69 ../src/common/stockitem.cpp:153
@@ -373,17 +363,15 @@ msgstr "பட்டியல்"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:71
 msgid "Pause"
-msgstr ""
+msgstr "இடைநிறுத்தம்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:72
-#, fuzzy
 msgid "Capital"
-msgstr "முகப்புகள்"
+msgstr "முகப்பெழுத்து"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgid "Select"
 msgstr "தெரிவு"
 
@@ -393,327 +381,307 @@ msgstr "தெரிவு"
 #: ../src/generic/prntdlgg.cpp:150 ../src/gtk/print.cpp:621
 #: ../src/gtk/print.cpp:639
 msgid "Print"
-msgstr "அச்சிடுக"
+msgstr "அச்சிடு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:75 ../src/common/stockitem.cpp:161
 msgid "Execute"
-msgstr "செயலாக்குக"
+msgstr "செயற்படுத்துக"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:76
 msgid "Snapshot"
-msgstr ""
+msgstr "பிடிப்புப்படம்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:78 ../src/common/stockitem.cpp:146
 msgid "Add"
-msgstr "ஏற்றுக"
+msgstr "ஏற்று"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:79
 msgid "Separator"
-msgstr ""
+msgstr "பிரிப்பான்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:80
 msgid "Subtract"
-msgstr ""
+msgstr "கழித்தல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:81
 msgid "Decimal"
-msgstr ""
+msgstr "பதின்மம்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
 msgid "Multiply"
-msgstr ""
+msgstr "பெருக்கல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
 msgid "Divide"
-msgstr ""
+msgstr "வகுத்தல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num_lock"
-msgstr ""
+msgstr "எண் பூட்டு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num Lock"
-msgstr ""
+msgstr "எண் பூட்டு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll_lock"
-msgstr ""
+msgstr "உருள் பூட்டு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll Lock"
-msgstr ""
+msgstr "உருள் பூட்டு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "KP_Space"
-msgstr ""
+msgstr "KP_இடைவெளி"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "Num Space"
-msgstr ""
+msgstr "எண் இடைவெளி"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgid "KP_Tab"
 msgstr "KP_தத்தல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
 msgid "Num Tab"
-msgstr ""
+msgstr "எண் தத்தல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgid "KP_Enter"
-msgstr "அச்சுப் பொறி"
+msgstr "KP_உள்ளிடு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
 msgid "Num Enter"
-msgstr ""
+msgstr "எண் உள்ளிடு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "KP_Home"
-msgstr "முகப்பு"
+msgstr "KP_முகப்பு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "Num Home"
-msgstr "முகப்பு"
+msgstr "எண் முகப்பு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgid "KP_Left"
-msgstr "இடது"
+msgstr "KP_இடது"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
 msgid "Num left"
-msgstr ""
+msgstr "எண் இடது"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgid "KP_Up"
 msgstr "KP_மேல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
 msgid "Num Up"
-msgstr ""
+msgstr "எண் மேல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "KP_Right"
-msgstr "வலது"
+msgstr "KP_வலது"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "Num Right"
-msgstr "வலது"
+msgstr "எண் வலது"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "KP_Down"
-msgstr "கீழ்"
+msgstr "KP_கீழ்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "Num Down"
-msgstr "கீழ்"
+msgstr "எண் கீழ்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "KP_PageUp"
-msgstr ""
+msgstr "KP_பக்கம் மேல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "Num Page Up"
-msgstr ""
+msgstr "எண் பக்கம் மேல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "KP_PageDown"
-msgstr ""
+msgstr "KP_பக்கம் கீழ்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "Num Page Down"
-msgstr ""
+msgstr "எண் பக்கம் கீழ்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_முந்தையது"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgid "KP_Next"
-msgstr "அடுத்து"
+msgstr "KP_அடுத்தது"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgid "KP_End"
 msgstr "KP_முடிவு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
 msgid "Num End"
-msgstr ""
+msgstr "எண் முடிவு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_துவக்கம்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "Num Begin"
-msgstr ""
+msgstr "எண் துவக்கம்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "KP_Insert"
-msgstr "செருகு"
+msgstr "KP_செருகு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "Num Insert"
-msgstr "செருகு"
+msgstr "எண் செருகு"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "KP_Delete"
-msgstr "அழி"
+msgstr "KP_அழி"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "Num Delete"
-msgstr "அழி"
+msgstr "எண் அழி"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "KP_Equal"
-msgstr ""
+msgstr "KP_சமம்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "Num ="
-msgstr ""
+msgstr "எண்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "KP_Multiply"
-msgstr ""
+msgstr "KP_பெருக்கல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "Num *"
-msgstr ""
+msgstr "எண்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgid "KP_Add"
 msgstr "KP_ஏற்று"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
 msgid "Num +"
-msgstr ""
+msgstr "எண் +"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "KP_Separator"
-msgstr ""
+msgstr "KP_பிரிப்பான்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "Num ,"
-msgstr ""
+msgstr "எண் ,"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "KP_Subtract"
-msgstr ""
+msgstr "KP_கழித்தல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "Num -"
-msgstr ""
+msgstr "எண் -"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "KP_Decimal"
-msgstr ""
+msgstr "KP_பதின்மம்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "Num ."
-msgstr ""
+msgstr "எண் ."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "KP_Divide"
-msgstr ""
+msgstr "KP_வகுத்தல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "Num /"
-msgstr ""
+msgstr "எண் /"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgid "Windows_Left"
-msgstr "விண்டோஸ் 7"
+msgstr "இடது சாளரங்கள்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgid "Windows_Right"
-msgstr "விண்டோஸ் விஸ்டா"
+msgstr "வலது சாலரங்கள்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgid "Windows_Menu"
-msgstr "விண்டோஸ் ME"
+msgstr "சாளரங்கள் பட்டியல்"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
 msgid "Command"
-msgstr ""
+msgstr "கட்டளை"
 
 #: ../src/common/accelcmn.cpp:186
 msgid "ctrl"
@@ -733,7 +701,7 @@ msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgid "num "
-msgstr ""
+msgstr "எண்"
 
 #: ../src/common/accelcmn.cpp:259 ../src/common/accelcmn.cpp:358
 msgid "F"
@@ -741,7 +709,7 @@ msgstr "F"
 
 #: ../src/common/accelcmn.cpp:276 ../src/common/accelcmn.cpp:361
 msgid "KP_F"
-msgstr ""
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:279 ../src/common/accelcmn.cpp:364
 msgid "KP_"
@@ -769,7 +737,7 @@ msgstr "RawCtrl+"
 
 #: ../src/common/appbase.cpp:774
 msgid "show this help message"
-msgstr "இந்த உதவித் தகவலைக் காட்டுக"
+msgstr "இவ்வுதவித் தகவலைக் காட்டுக"
 
 #: ../src/common/appbase.cpp:784
 msgid "generate verbose log messages"
@@ -782,7 +750,7 @@ msgstr "பயன்படுத்தப்பட வேண்டிய கர�
 #: ../src/common/appcmn.cpp:264
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr ""
-"பயன்படுத்தப்பட வேண்டிய காட்சியளிப்பு நிலையைக் குறிப்பிடு (எடுத்துக்காட்டு: 640x480-16)"
+"பயன்படுத்தப்பட வேண்டிய காட்சியமைவு நிலையைக் குறிப்பிடுக (எடுத்துக்காட்டு: 640x480-16)"
 
 #: ../src/common/appcmn.cpp:286
 #, c-format
@@ -802,12 +770,12 @@ msgstr "'%s' விருப்பத் தேர்வினை இல்ல�
 #: ../src/common/cmdline.cpp:910
 #, c-format
 msgid "Unknown long option '%s'"
-msgstr "தெரியாத நீள் விருப்பத் தேர்வு '%s'"
+msgstr "அறியப்படாத நீள்விருப்பத்தேர்வு '%s'"
 
 #: ../src/common/cmdline.cpp:925 ../src/common/cmdline.cpp:947
 #, c-format
 msgid "Unknown option '%s'"
-msgstr "தெரியாத விருப்பத் தேர்வு '%s'"
+msgstr "அறியப்படாத விருப்பத்தேர்வு '%s'"
 
 #: ../src/common/cmdline.cpp:1025
 #, c-format
@@ -832,7 +800,7 @@ msgstr "'%s' எண் மதிப்பு, '%s' விருப்பத் �
 #: ../src/common/cmdline.cpp:1143
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
-msgstr "'%s' விருப்பத் தேர்வு: '%s'-யினை தேதியாக மாற்ற இயலாது."
+msgstr "'%s' விருப்பத் தேர்வு: '%s'-யினை ஒரு தேதியாக மாற்ற இயலாது."
 
 #: ../src/common/cmdline.cpp:1191
 #, c-format
@@ -886,7 +854,7 @@ msgstr "செயல் நீக்கம்"
 
 #: ../src/common/cmdproc.cpp:260
 msgid "Can't &Undo "
-msgstr "செய்நீக்கம் இயலவில்லை"
+msgstr "செயலைநீக்க இயலவில்லை"
 
 #: ../src/common/cmdproc.cpp:264 ../src/common/stockitem.cpp:209
 #: ../src/msw/textctrl.cpp:2896 ../src/osx/textctrl_osx.cpp:591
@@ -896,13 +864,13 @@ msgstr "செயல் நீக்கம்"
 
 #: ../src/common/cmdproc.cpp:282 ../src/common/cmdproc.cpp:302
 msgid "&Redo "
-msgstr "மீள் செயலாக்குக"
+msgstr "மீள்செயல்"
 
 #: ../src/common/cmdproc.cpp:286 ../src/common/cmdproc.cpp:293
 #: ../src/common/stockitem.cpp:191 ../src/msw/textctrl.cpp:2897
 #: ../src/osx/textctrl_osx.cpp:592 ../src/richtext/richtextctrl.cpp:329
 msgid "&Redo"
-msgstr "மீள் செயலாக்குக"
+msgstr "மீள்செயல்"
 
 #: ../src/common/colourcmn.cpp:42
 #, c-format
@@ -924,23 +892,22 @@ msgstr ""
 #: ../src/common/config.cpp:576 ../src/msw/regconf.cpp:273
 #, c-format
 msgid "'%s' has extra '..', ignored."
-msgstr "'%s' மிகையாகவுள்ளது '..', பொருட்படுத்தப்படவில்லை."
+msgstr "'%s' மிகையாகவுள்ளது '..', புறந்தள்ளப்பட்டது."
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2062 ../src/generic/datavgen.cpp:1397
 msgid "checked"
-msgstr ""
+msgstr "தேர்வானது"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2066 ../src/generic/datavgen.cpp:1399
 msgid "unchecked"
-msgstr ""
+msgstr "தேர்வாகாதது"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2070
-#, fuzzy
 msgid "undetermined"
-msgstr "அடிக்கோடிடப்பட்டது"
+msgstr "தீர்மானிக்கப்படாதது"
 
 #: ../src/common/datetimefmt.cpp:1781
 msgid "today"
@@ -1036,7 +1003,7 @@ msgstr "இருபதாம்"
 
 #: ../src/common/datetimefmt.cpp:2147
 msgid "noon"
-msgstr "நன்பகல்"
+msgstr "நண்பகல்"
 
 #: ../src/common/datetimefmt.cpp:2148
 msgid "midnight"
@@ -1059,11 +1026,11 @@ msgstr "\"%s\" வழுநீக்க அறிக்கையை நீக்
 #: ../src/common/debugrpt.cpp:240
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "\"%s\" வழுநீக்க அறிக்கை அடைவினை சுத்தஞ்செய்வதில் தோல்வி"
+msgstr "\"%s\" வழுநீக்க அறிக்கை அடைவினை தூய்மைப்படுத்துவதில் தோல்வி"
 
 #: ../src/common/debugrpt.cpp:515
 msgid "process context description"
-msgstr "செயல்முறை சூழமைவு விளக்கம்"
+msgstr "செயல்முறை சூழலமைவு விளக்கம்"
 
 #: ../src/common/debugrpt.cpp:539
 msgid "dump of the process state (binary)"
@@ -1094,11 +1061,11 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 "\n"
-"இந்த அறிக்கையை கருணைக் கூர்ந்து நிரல் காப்பாளரிடம் அனுப்பி வைக்கவும், நன்றி! \n"
+"இந்த அறிக்கையை அருள்கூர்ந்து நிரல் காப்பாளரிடம் அனுப்பி வைக்கவும், நன்றி! \n"
 
 #: ../src/common/debugrpt.cpp:730
 msgid "Failed to execute curl, please install it in PATH."
-msgstr "curl-இனை செயலாக்குவதில் தோல்வி. கருணைக்கூர்ந்து அதை தடத்தில் நிறுவவும்."
+msgstr "curl-இனை செயலாக்குவதில் தோல்வி. அருள்கூர்ந்து வழித்தடத்தில் அதை நிறுவவும்."
 
 #: ../src/common/debugrpt.cpp:743
 #, c-format
@@ -1107,7 +1074,7 @@ msgstr "வழுநீக்க அறிக்கையை தரவேற்�
 
 #: ../src/common/docview.cpp:359
 msgid "Save As"
-msgstr "இவ்வாறு சேமிக்கவும்"
+msgstr "இவ்வாறு சேமித்திடுக"
 
 #: ../src/common/docview.cpp:450
 msgid "Discard changes and reload the last saved version?"
@@ -1121,7 +1088,7 @@ msgstr "பெயரிடப்படாதது"
 #: ../src/common/docview.cpp:526
 #, c-format
 msgid "Do you want to save changes to %s?"
-msgstr "%s-இல் ஏற்பட்டுள்ள மாற்றங்களை சேமிக்க வேண்டுமா?"
+msgstr "%s-இல் ஏற்பட்டுள்ள மாற்றங்களை தாங்கள் சேமிக்க வேண்டுமா?"
 
 #: ../src/common/docview.cpp:641
 #, c-format
@@ -1149,7 +1116,7 @@ msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been removed from the most recently used files list."
 msgstr ""
-"கோப்பு '%s' இல்லையென்பதால், அதைத் திறக்க இயலாது.\n"
+"கோப்பு '%s' கிடைப்பிலில்லையென்பதால், அதைத் திறக்க இயலாது.\n"
 "மிக அண்மையில் பயன்படுத்தப்பட்ட கோப்புகளின் பட்டியலிலிருந்து அது நீக்கப்பட்டுள்ளது."
 
 #: ../src/common/docview.cpp:1256
@@ -1184,15 +1151,15 @@ msgstr "கோப்புப் பிழை"
 
 #: ../src/common/docview.cpp:1785
 msgid "Sorry, could not open this file."
-msgstr "மன்னிக்கவும், இந்தக் கோப்பினைத் திறக்க இயலவில்லை."
+msgstr "பொறுத்தருள்க, இந்தக் கோப்பினைத் திறக்க இயலவில்லை."
 
 #: ../src/common/docview.cpp:1819
 msgid "Sorry, the format for this file is unknown."
-msgstr "மன்னிக்கவும், இந்தக் கோப்பிற்கான வடிவூட்டம் தெரியாததாக உள்ளது."
+msgstr "பொறுத்தருள்க, இந்தக் கோப்பிற்கான வடிவூட்டம் அறியப்படாததாக உள்ளது."
 
 #: ../src/common/docview.cpp:1900
 msgid "Select a document template"
-msgstr "ஒரு ஆவண வார்ப்புருவைத் தேர்ந்தெடுக்கவும்"
+msgstr "ஒரு ஆவண வார்ப்புருவைத் தேர்ந்தெடுத்திடுக"
 
 #: ../src/common/docview.cpp:1901
 msgid "Templates"
@@ -1200,7 +1167,7 @@ msgstr "வார்ப்புருக்கள்"
 
 #: ../src/common/docview.cpp:1974
 msgid "Select a document view"
-msgstr "ஒரு ஆவணத் தோற்றத்தை தெரிவு செய்க"
+msgstr "ஒரு ஆவணத் தோற்றத்தை தெரிவுச் செய்க"
 
 #: ../src/common/docview.cpp:1975
 msgid "Views"
@@ -1229,17 +1196,17 @@ msgstr "'%s' கோப்பினை மூட இயலாது"
 #: ../src/common/ffile.cpp:107 ../src/common/ffile.cpp:132
 #, c-format
 msgid "Read error on file '%s'"
-msgstr "'%s' கோப்பிலுள்ள பிழையைப் படிக்கவும்"
+msgstr "'%s' கோப்பிலுள்ள பிழையைப் படித்திடுக"
 
 #: ../src/common/ffile.cpp:149
 #, c-format
 msgid "Write error on file '%s'"
-msgstr "'%s' கோப்பில் பிழையை எழுதுக"
+msgstr "'%s' கோப்பில் பிழையை எழுதிடுக"
 
 #: ../src/common/ffile.cpp:187
 #, c-format
 msgid "failed to flush the file '%s'"
-msgstr "'%s' கோப்பினை அலசுவதில் தோல்வி"
+msgstr "'%s' கோப்பினை வெளித்தள்ளுவதில் தோல்வி"
 
 #: ../src/common/ffile.cpp:227
 #, c-format
@@ -1298,7 +1265,7 @@ msgstr "%d கோப்பு விளக்கியில் எழுத இ
 #: ../src/common/file.cpp:407
 #, c-format
 msgid "can't flush file descriptor %d"
-msgstr "%d கோப்பு விளக்கியை அலச இயலாது"
+msgstr "%d கோப்பு விளக்கியை வெளித்தள்ள இயலாது"
 
 #: ../src/common/file.cpp:449
 #, c-format
@@ -1313,7 +1280,7 @@ msgstr "%d கோப்பு விளக்கியில் நாடு ந
 #: ../src/common/file.cpp:492
 #, c-format
 msgid "can't find length of file on file descriptor %d"
-msgstr "%d கோப்பு விளக்கியில் கோப்பின் நீளத்தை கண்டுபிடிக்க இயலாது."
+msgstr "%d கோப்பு விளக்கியில் கோப்பின் நீளத்தை கண்டறிய இயலாது."
 
 #: ../src/common/file.cpp:522
 #, c-format
@@ -1323,7 +1290,7 @@ msgstr "%d விளக்கியில் கோப்பின் இறு�
 #: ../src/common/fileconf.cpp:314
 #, c-format
 msgid "can't open global configuration file '%s'."
-msgstr "எல்லாமடங்கிய '%s' அமைவடிவ கோப்பினை திறக்க இயலாது"
+msgstr "'%s' முழுதளாவிய அமைவடிவ கோப்பினை திறக்க இயலாது"
 
 #: ../src/common/fileconf.cpp:330
 #, c-format
@@ -1343,31 +1310,30 @@ msgstr "அமைவடிவ விருப்பத் தேர்வுக�
 msgid "Failed to read config options."
 msgstr "அமைவடிவ விருப்பத் தேர்வுகளைப் படிப்பதில் தோல்வி."
 
-#: ../src/common/fileconf.cpp:543
-#, fuzzy, c-format
+#: ../src/common/fileconf.cpp:543 c-format
 msgid "file '%s': unexpected character %c at line %zu."
-msgstr "'%s' கோப்பு: எதிர்பாராத எழுத்து %c, %d வரியில்."
+msgstr "கோப்பு '%s': %zu வரியில் எதிர்பாராத வரியுரு %c."
 
 #: ../src/common/fileconf.cpp:579
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: '%s' ignored after group header."
-msgstr "கோப்பு '%s', வரி %d: '%s' குழுவிற்குப் பிறகான மேலுரை தவிர்க்கப்பட்டது."
+msgstr "கோப்பு '%s', வரி %zu: குழுத் தலைப்புரைக்குப் பிறகான '%s' புறந்தள்ளப்பட்டது."
 
 #: ../src/common/fileconf.cpp:608
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: '=' expected."
-msgstr "கோப்பு '%s', வரி %d: '=' எதிர்பார்க்கப்படுகிறது."
+msgstr "கோப்பு '%s', வரி %zu: '=' எதிர்பார்க்கப்படுகிறது."
 
 #: ../src/common/fileconf.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: value for immutable key '%s' ignored."
 msgstr ""
-"கோப்பு '%s', வரி %d: '%s' மாறும் தன்மையில்லாத விசையின் மதிப்பு தவிர்க்கப்படுகிறது."
+"கோப்பு '%s', வரி %zu: '%s' மாறுமியல்பிலா விசையின் மதிப்பு புறந்தள்ளப்படுகிறது."
 
 #: ../src/common/fileconf.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: key '%s' was first found at line %d."
-msgstr "கோப்பு '%s', வரி %d: '%s' விசை, %d வரியில் முதலாவதாக கண்டுபிடிக்கப்பட்டது ."
+msgstr "கோப்பு '%s', வரி %zu: '%s' விசை, %d வரியில் முதலாவதாக கண்டறியப்பட்டது."
 
 #: ../src/common/fileconf.cpp:934
 #, c-format
@@ -1403,17 +1369,16 @@ msgstr "'%s' உள்ளிடு '%s' குழுவில் ஒரு ம�
 #: ../src/common/fileconf.cpp:1849
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
-msgstr "மாறும் இயல்பில்லாத '%s' விசையை மாற்ற மேற்கொள்ளப்பட்ட முயற்சி புறந்தள்ளப்பட்டது."
+msgstr "மாறுமியல்பிலா '%s' விசையை மாற்ற மேற்கொள்ளப்பட்ட முயற்சி புறந்தள்ளப்பட்டது."
 
 #: ../src/common/fileconf.cpp:1946
 #, c-format
 msgid "trailing backslash ignored in '%s'"
-msgstr "'%s'-ல் பின்சாய்வுச் சுவடு தவிர்க்கப்படுகிறது"
+msgstr "'%s'-ல் பின்சாய்வுச் சுவடு புறந்தள்ளப்படுகிறது"
 
-#: ../src/common/fileconf.cpp:1981
-#, c-format
+#: ../src/common/fileconf.cpp:1981 c-format
 msgid "unexpected \" at position %d in '%s'."
-msgstr "எதிர்பாராத \" நிலை %d, '%s'-ல்."
+msgstr "'%s'ல் எதிர்பாராத \" நிலை %d."
 
 #: ../src/common/filefn.cpp:905
 #, c-format
@@ -1431,7 +1396,7 @@ msgid "Impossible to overwrite the file '%s'"
 msgstr "'%s' கோப்பினை அழித்தெழுத இயலவில்லை."
 
 #: ../src/common/filefn.cpp:939
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying the file '%s' to '%s'."
 msgstr "'%s' கோப்பினை '%s'-க்கு படியெடுப்பதில் தோல்வி."
 
@@ -1498,7 +1463,7 @@ msgstr "எழுதுவதற்கு '%s'-ஐ திறப்பதில�
 
 #: ../src/common/filename.cpp:193
 msgid "Failed to close file handle"
-msgstr "கோப்புப் பிடியை மூடுவதில் தோல்வி"
+msgstr "கோப்பு ஹேண்டிலை மூடுவதில் தோல்வி"
 
 #: ../src/common/filename.cpp:1028
 msgid "Failed to create a temporary file name"
@@ -1511,7 +1476,7 @@ msgstr "தற்காலிக கோப்பினைத் திறப்�
 #: ../src/common/filename.cpp:2713
 #, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "'%s'-ற்கான கோப்பு times மாற்றுவதில் தோல்வி"
+msgstr "'%s'-ற்கான கோப்பு டைம்ஸை மாற்றுவதில் தோல்வி"
 
 #: ../src/common/filename.cpp:2728
 #, c-format
@@ -1525,7 +1490,7 @@ msgstr "'%s'-ற்கான கோப்பு டைம்ஸை மீட்�
 
 #: ../src/common/filepickercmn.cpp:40 ../src/common/filepickercmn.cpp:41
 msgid "Browse"
-msgstr "உலாவு"
+msgstr "உலாவுக"
 
 #: ../src/common/fldlgcmn.cpp:104 ../src/generic/filectrlg.cpp:1186
 #, c-format
@@ -1540,12 +1505,12 @@ msgstr "%s கோப்புகள் (%s)|%s"
 #: ../src/common/fldlgcmn.cpp:343
 #, c-format
 msgid "Load %s file"
-msgstr "%s கோப்பினை ஏற்றுக"
+msgstr "%s கோப்பினை ஏற்றிடுக"
 
 #: ../src/common/fldlgcmn.cpp:345
 #, c-format
 msgid "Save %s file"
-msgstr "%s கோப்பினை சேமிக்கவும்"
+msgstr "%s கோப்பினை சேமித்திடுக"
 
 #: ../src/common/fmapbase.cpp:145
 msgid "Western European (ISO-8859-1)"
@@ -1553,7 +1518,7 @@ msgstr "மேற்கு ஐரோப்பா (ISO-8859-1)"
 
 #: ../src/common/fmapbase.cpp:146
 msgid "Central European (ISO-8859-2)"
-msgstr "நடு ஐரோப்பா (ISO-8859-2)"
+msgstr "மைய ஐரோப்பா (ISO-8859-2)"
 
 #: ../src/common/fmapbase.cpp:147
 msgid "Esperanto (ISO-8859-3)"
@@ -1581,7 +1546,7 @@ msgstr "ஹீப்ரு (ISO-8859-8)"
 
 #: ../src/common/fmapbase.cpp:153
 msgid "Turkish (ISO-8859-9)"
-msgstr "துருக்கிய (ISO-8859-9)"
+msgstr "துருக்கியம் (ISO-8859-9)"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Nordic (ISO-8859-10)"
@@ -1593,7 +1558,7 @@ msgstr "தாய் (ISO-8859-11)"
 
 #: ../src/common/fmapbase.cpp:156
 msgid "Indian (ISO-8859-12)"
-msgstr "இந்திய (ISO-8859-12)"
+msgstr "இந்தியன் (ISO-8859-12)"
 
 #: ../src/common/fmapbase.cpp:157
 msgid "Baltic (ISO-8859-13)"
@@ -1625,7 +1590,7 @@ msgstr "விண்டோஸ் தாய் (CP 874)"
 
 #: ../src/common/fmapbase.cpp:164
 msgid "Windows Japanese (CP 932) or Shift-JIS"
-msgstr "விண்டோஸ் ஜப்பானிய (CP 932) or Shift-JIS"
+msgstr "விண்டோஸ் ஜப்பானியம் (CP 932) or Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:165
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
@@ -1633,15 +1598,15 @@ msgstr "விண்டோஸ் எளிதாக்கப்பட்ட ச�
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Korean (CP 949)"
-msgstr "விண்டோஸ் கொரிய (CP 949)"
+msgstr "விண்டோஸ் கொரியம் (CP 949)"
 
 #: ../src/common/fmapbase.cpp:167
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
-msgstr "விண்டோஸ் பாரம்பரிய சீனம் (CP 950) or Big-5"
+msgstr "விண்டோஸ் மரபுச் சீனம் (CP 950) or Big-5"
 
 #: ../src/common/fmapbase.cpp:168
 msgid "Windows Central European (CP 1250)"
-msgstr "விண்டோஸ் நடு ஐரோப்பா (CP 1250)"
+msgstr "விண்டோஸ் மைய ஐரோப்பா (CP 1250)"
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Cyrillic (CP 1251)"
@@ -1657,7 +1622,7 @@ msgstr "விண்டோஸ் கிரேக்கம் (CP 1253)"
 
 #: ../src/common/fmapbase.cpp:172
 msgid "Windows Turkish (CP 1254)"
-msgstr "விண்டோஸ் துருக்கிய (CP 1254)"
+msgstr "விண்டோஸ் துருக்கியம் (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:173
 msgid "Windows Hebrew (CP 1255)"
@@ -1665,7 +1630,7 @@ msgstr "விண்டோஸ் ஹீப்ரு (CP 1255)"
 
 #: ../src/common/fmapbase.cpp:174
 msgid "Windows Arabic (CP 1256)"
-msgstr "விண்டோஸ் அரேபிய  (CP 1256)"
+msgstr "விண்டோஸ் அரேபியம் (CP 1256)"
 
 #: ../src/common/fmapbase.cpp:175
 msgid "Windows Baltic (CP 1257)"
@@ -1673,7 +1638,7 @@ msgstr "விண்டோஸ் பால்டிக் (CP 1257)"
 
 #: ../src/common/fmapbase.cpp:176
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "விண்டோஸ் வியட்நாமிய (CP 1258)"
+msgstr "விண்டோஸ் வியட்நாமியம் (CP 1258)"
 
 #: ../src/common/fmapbase.cpp:177
 msgid "Windows Johab (CP 1361)"
@@ -1894,7 +1859,7 @@ msgstr "இயல்புக் குறியாக்கம்"
 #: ../src/common/fmapbase.cpp:806
 #, c-format
 msgid "Unknown encoding (%d)"
-msgstr "தெரியாத குறியாக்கம் (%d)"
+msgstr "அறியப்படாதக் குறியாக்கம் (%d)"
 
 #: ../src/common/fmapbase.cpp:816 ../src/richtext/richtextstyles.cpp:777
 msgid "default"
@@ -1903,7 +1868,7 @@ msgstr "இயல்பிருப்பு"
 #: ../src/common/fmapbase.cpp:830
 #, c-format
 msgid "unknown-%d"
-msgstr "தெரியாத %d"
+msgstr "அறியப்படாத %d"
 
 #: ../src/common/fontcmn.cpp:935 ../src/common/fontcmn.cpp:1141
 msgid "underlined"
@@ -1915,12 +1880,11 @@ msgstr " ஊடாகக் கோடிடப்பட்டது"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr "சன்னமானது"
 
 #: ../src/common/fontcmn.cpp:957
-#, fuzzy
 msgid " extra light"
-msgstr "இலகு"
+msgstr "கூடுதல் இலகு"
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
@@ -1928,29 +1892,27 @@ msgstr "இலகு"
 
 #: ../src/common/fontcmn.cpp:965
 msgid " medium"
-msgstr ""
+msgstr "ஊடகம்"
 
 #: ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid " semi bold"
-msgstr "அடர்த்தி"
+msgstr "பாதி அடர்த்தி"
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
 msgstr "அடர்த்தி"
 
 #: ../src/common/fontcmn.cpp:977
-#, fuzzy
 msgid " extra bold"
-msgstr "அடர்த்தி"
+msgstr "கூடுதல் அடர்த்தி"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
-msgstr ""
+msgstr "கனமானது"
 
 #: ../src/common/fontcmn.cpp:985
 msgid " extra heavy"
-msgstr ""
+msgstr "கூடுதல் கனமானது"
 
 #: ../src/common/fontcmn.cpp:1001
 msgid " italic"
@@ -1962,12 +1924,11 @@ msgstr "ஊடாகக் கோடிடப்பட்டது"
 
 #: ../src/common/fontcmn.cpp:1154
 msgid "thin"
-msgstr ""
+msgstr "சன்னமானது"
 
 #: ../src/common/fontcmn.cpp:1167
-#, fuzzy
 msgid "extralight"
-msgstr "இலகுவானது"
+msgstr "கூடுதல் இலகு"
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
@@ -1979,29 +1940,27 @@ msgstr "இயல்பான"
 
 #: ../src/common/fontcmn.cpp:1185
 msgid "medium"
-msgstr ""
+msgstr "ஊடகம்"
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
-#, fuzzy
 msgid "semibold"
-msgstr "அடர்த்தி"
+msgstr "பாதி அடர்த்தி"
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
 msgstr "அடர்த்தி"
 
 #: ../src/common/fontcmn.cpp:1205
-#, fuzzy
 msgid "extrabold"
-msgstr "அடர்த்தி"
+msgstr "கூடுதல் அடர்த்தி"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
-msgstr ""
+msgstr "கனமானது"
 
 #: ../src/common/fontcmn.cpp:1223
 msgid "extraheavy"
-msgstr ""
+msgstr "கூடுதல் கனமானது"
 
 #: ../src/common/fontcmn.cpp:1228
 msgid "italic"
@@ -2009,7 +1968,7 @@ msgstr "வலப்பக்க சாய்வு"
 
 #: ../src/common/fontmap.cpp:196
 msgid ": unknown charset"
-msgstr "தெரியாத Charset"
+msgstr "அறியப்படாத Charset"
 
 #: ../src/common/fontmap.cpp:200
 #, c-format
@@ -2020,7 +1979,7 @@ msgid ""
 msgstr ""
 "'%s' Charset தெரியாதது. தாங்கள்\n"
 "மற்றொரு Charset-ஐ மாற்றமர்வாக தேர்ந்தெடுக்கவும், அல்லது அதை மாற்றியமைக்க இயலாதென்றால், \n"
-"[விலக்குக] பொத்தானை அழுத்தவும்."
+"[விலக்கிடுக] பொத்தானை அழுத்தவும்."
 
 #: ../src/common/fontmap.cpp:242
 #, c-format
@@ -2033,7 +1992,7 @@ msgstr "எந்த எழுத்துருவையும் ஏற்ற 
 
 #: ../src/common/fontmap.cpp:410
 msgid ": unknown encoding"
-msgstr "தெரியாத குறியாக்கம்"
+msgstr "அறியப்படாதக் குறியாக்கம்"
 
 #: ../src/common/fontmap.cpp:418
 #, c-format
@@ -2080,7 +2039,7 @@ msgstr "VFS நினைவகத்தில் '%s' படிமத்தை �
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
 msgstr ""
 "FTP வழங்கி இணைப்பிற்கு காத்திருக்கும்பொழுது நேரம் காலாவதியாகிவிட்டது, முடக்க நிலையை "
-"முயன்றுப் பார்க்கவும்."
+"முயன்றுபார்க்கவும்."
 
 #: ../src/common/ftp.cpp:399
 #, c-format
@@ -2114,19 +2073,18 @@ msgstr "OpenGL-க்கு நிறத்தை ஒதுக்குவதி
 
 #: ../src/common/headerctrlcmn.cpp:57
 msgid "Please select the columns to show and define their order:"
-msgstr ""
-"காட்டப்பட வேண்டிய செங்குத்து வரிசைகளை தேர்ந்தெடுத்து, அவைகளின் ஒழுங்கை வரையறுக்கவும்:"
+msgstr "காட்டப்பட வேண்டிய நெடுவரிசைகளை தேர்ந்தெடுத்து, அவைகளின் ஒழுங்கை வரையறுத்திடுக:"
 
 #: ../src/common/headerctrlcmn.cpp:58
 msgid "Customize Columns"
-msgstr "செங்குத்து வரிசைகளை தனிப் பயனாக்குக"
+msgstr "நெடுவரிசைகளை தனிப் பயனாக்குக"
 
 #: ../src/common/headerctrlcmn.cpp:304
 msgid "&Customize..."
 msgstr "தனிப் பயனாக்கு..."
 
 #: ../src/common/hyperlnkcmn.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open URL \"%s\" in the default browser"
 msgstr "\"%s\" இணைய முகவரியை இயல்புலாவியில் திறப்பதில் தோல்வி."
 
@@ -2141,9 +2099,9 @@ msgid "Failed to load image %d from stream."
 msgstr "ஓடையிலிருந்து %d படிமத்தை ஏற்றுவதில் தோல்வி."
 
 #: ../src/common/iconbndl.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr "\"%s\" படவுருவை வளத்திலிருந்து ஏற்றுவதில் தோல்வி."
+msgstr "படவுருக்களை '%s' வளத்திலிருந்து ஏற்றுவதில் தோல்வி."
 
 #: ../src/common/imagbmp.cpp:97
 msgid "BMP: Couldn't save invalid image."
@@ -2184,11 +2142,11 @@ msgstr "DIB மேலுரை: கோப்பிற்கான பட உய�
 
 #: ../src/common/imagbmp.cpp:1094
 msgid "DIB Header: Unknown bitdepth in file."
-msgstr "DIB மேலுரை: கோப்பில் தெரியாத bitdepth."
+msgstr "DIB மேலுரை: கோப்பில் அறியப்படாத bitdepth."
 
 #: ../src/common/imagbmp.cpp:1149
 msgid "DIB Header: Unknown encoding in file."
-msgstr "DIB மேலுரை: கோப்பில் தெரியாத குறியாக்கம்."
+msgstr "DIB மேலுரை: கோப்பில் அறியப்படாத குறியாக்கம்."
 
 #: ../src/common/imagbmp.cpp:1181
 msgid "DIB Header: Encoding doesn't match bitdepth."
@@ -2248,7 +2206,7 @@ msgstr "\"%s\" கோப்பிலிருந்து படிமத்த�
 #: ../src/common/image.cpp:2696
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "படிமத்தை '%s'- கோப்பில் சேமிக்க இயலாது: தெரியாத நீட்டிப்பு."
+msgstr "படிமத்தை '%s'- கோப்பில் சேமிக்க இயலாது: அறியப்படாத நீட்சி."
 
 #: ../src/common/image.cpp:2804
 msgid "No handler found for image type."
@@ -2271,7 +2229,7 @@ msgstr "நாடிச் செல்ல இயலாத உள்ளீட்
 
 #: ../src/common/image.cpp:2923
 msgid "Unknown image data format."
-msgstr "தெரியாத படிமத் தரவு வடிவூட்டம்"
+msgstr "அறியப்படாத படிமத் தரவு வடிவூட்டம்"
 
 #: ../src/common/image.cpp:2944
 #, c-format
@@ -2351,7 +2309,7 @@ msgstr "PCX: பதிப்பெண் மிகக் குறைந்த�
 
 #: ../src/common/imagpcx.cpp:458 ../src/common/imagpcx.cpp:480
 msgid "PCX: unknown error !!!"
-msgstr "PCX: தெரியாத பிழை"
+msgstr "PCX: அறியப்படாத பிழை"
 
 #: ../src/common/imagpcx.cpp:478
 msgid "PCX: invalid image"
@@ -2360,7 +2318,7 @@ msgstr "PCX: ஏற்கமுடியாத படிமம்"
 #: ../src/common/imagpng.cpp:383
 #, c-format
 msgid "Unknown PNG resolution unit %d"
-msgstr "தெரியாத PNG பிரிதிறன் தொகுதி %d"
+msgstr "அறியப்படாத PNG பிரிதிறன் தொகுதி %d"
 
 #: ../src/common/imagpng.cpp:437
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
@@ -2415,7 +2373,7 @@ msgstr "TIF: படிமத்தை படிப்பதில் பிழ�
 #: ../src/common/imagtiff.cpp:526
 #, c-format
 msgid "Unknown TIFF resolution unit %d ignored"
-msgstr "தெரியாத TIF பிரிதிறன் தொகுதி %d தவிர்க்கப்பட்டது"
+msgstr "அறியப்படாத TIF பிரிதிறன் தொகுதி %d தவிர்க்கப்பட்டது"
 
 #: ../src/common/imagtiff.cpp:605
 msgid "TIFF: Error saving image."
@@ -2454,18 +2412,18 @@ msgid "The previous message repeated once."
 msgstr "முந்தைய தகவல் ஒரு முறை மீண்டும் தோன்றியது."
 
 #: ../src/common/log.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "முந்தைய தகவல் %lu தடவை மீண்டும் தோன்றியது"
-msgstr[1] "முந்தைய தகவல் %lu தடவை மீண்டும் தோன்றின"
+msgstr[0] "முந்தைய தகவல் %u தடவை மீண்டும் தோன்றியது"
+msgstr[1] "முந்தைய தகவல் %u தடவை மீண்டும் தோன்றின"
 
 #: ../src/common/log.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] "கடைசியாக மறுஅறிவிப்பு செய்யப்பட்ட தகவல் (\"%s\", %lu தடவை) வெளியீடு இல்லை"
-msgstr[1] "Last repeated message (\"%s\", %lu times) wasn't output"
+msgstr[0] "கடைசியாக மறு அறிவிப்பு செய்யப்பட்ட தகவல் (\"%s\", %u தடவை) வெளியீடு இல்லை"
+msgstr[1] "கடைசியாக மறு அறிவிப்பு செய்யப்பட்ட தகவல் (\"%s\", %u தடவை) வெளியீடு இல்லை"
 
 #: ../src/common/log.cpp:443
 #, c-format
@@ -2473,46 +2431,43 @@ msgid " (error %ld: %s)"
 msgstr " (பிழை %ld: %s)"
 
 #: ../src/common/lzmastream.cpp:121
-#, fuzzy
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "OpenGL-க்கு நிறத்தை ஒதுக்குவதில் தோல்வி. "
+msgstr "LZMA விரிவாக்கத்திற்கு நினைவகத்தை ஒதுக்கீடு செய்வதில் தோல்வி. "
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr ""
+msgstr "LZMA விரிவாக்கத்தைத் துவக்குவதில் தோல்வி. எதிர்பாராத பிழை %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
-msgstr ""
+msgstr "உள்ளீடு XZ வடிவூட்டத்தில் இல்லை"
 
 #: ../src/common/lzmastream.cpp:183
 msgid "input compressed using unknown XZ option"
-msgstr ""
+msgstr "அறியப்படாத XZ விருப்பத் தேர்வினைப் பயன்படுத்தி உள்ளீடு குறுக்கப்பட்டது"
 
 #: ../src/common/lzmastream.cpp:188
 msgid "input is corrupted"
-msgstr ""
+msgstr "உள்ளீடு பழுதடைந்துள்ளது"
 
 #: ../src/common/lzmastream.cpp:192
-#, fuzzy
 msgid "unknown decompression error"
-msgstr "அமுக்க நீக்கப் பிழை"
+msgstr "அறியப்படாத விரிவாக்கப் பிழை"
 
 #: ../src/common/lzmastream.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA decompression error: %s"
-msgstr "அமுக்க நீக்கப் பிழை"
+msgstr "LZMA விரிவாக்கப் பிழை: %s"
 
 #: ../src/common/lzmastream.cpp:231
-#, fuzzy
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "OpenGL-க்கு நிறத்தை ஒதுக்குவதில் தோல்வி. "
+msgstr "LZMA குறுக்கத்திற்கு நினைவகத்தை ஒதுக்குவதில் தோல்வி. "
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr ""
+msgstr "LZMA விரிவாக்கத்தைத் துவக்குவதில் தோல்வி. எதிர்பாராத பிழை %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2520,19 +2475,18 @@ msgid "out of memory"
 msgstr "நினைவகத்திற்கு வெளியே"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
-#, fuzzy
 msgid "unknown compression error"
-msgstr "அமுக்கப் பிழை"
+msgstr "அறியப்படாத குறுக்கல் பிழை"
 
 #: ../src/common/lzmastream.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA compression error: %s"
-msgstr "அமுக்கப் பிழை"
+msgstr "LZMA குறுக்கல் பிழை: %s"
 
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
-msgstr ""
+msgstr "வெளியீட்டினை வெளித்தள்ளும்பொழுது LZMA விரிவாக்கப் பிழை: %s"
 
 #: ../src/common/mimecmn.cpp:221
 #, c-format
@@ -3056,7 +3010,7 @@ msgstr "பக்க அமைவு"
 
 #: ../src/common/prntbase.cpp:533
 msgid "Please wait while printing..."
-msgstr "அச்சிடப்பட்டுக் கொண்டிருக்கும்பொழுது கருணைக் கூர்ந்து காத்திருக்கவும்..."
+msgstr "அச்சிடப்பட்டுக் கொண்டிருக்கும்பொழுது அருள்கூர்ந்து காத்திருக்கவும்..."
 
 #: ../src/common/prntbase.cpp:537
 msgid "Document:"
@@ -3071,9 +3025,9 @@ msgid "Preparing"
 msgstr "ஆயத்தம் செய்யப்படுகிறது"
 
 #: ../src/common/prntbase.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d"
-msgstr "%d பக்கம் அச்சிடப்படுகிறது..."
+msgstr "%d பக்கம் அச்சிடப்படுகிறது"
 
 #: ../src/common/prntbase.cpp:565
 #, c-format
@@ -3129,7 +3083,7 @@ msgstr "அச்சு முன்தோற்றத் தோல்வி"
 
 #: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2087
 msgid "Sorry, not enough memory to create a preview."
-msgstr "மன்னிக்கவும், முன்தோற்றத்தை உருவாக்க போதுமான நினைவகம் இல்லை."
+msgstr "பொறுத்தருள்க, முன்தோற்றத்தை உருவாக்க போதுமான நினைவகம் இல்லை."
 
 #: ../src/common/prntbase.cpp:2094
 #, c-format
@@ -3166,22 +3120,22 @@ msgstr "\"%s\" வழங்கி ஒவ்வாத %d.%d பதிப்பை
 
 #: ../src/common/secretstore.cpp:168
 msgid "Not available for this platform"
-msgstr ""
+msgstr "இந்த இயங்குதளத்திற்கு கிடைப்பிலில்லை"
 
 #: ../src/common/secretstore.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Saving password for \"%s\" failed: %s."
-msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பது தோல்வியடைந்தது."
+msgstr "\"%s\"க்கு கடவுச்சொல்லினைச் சேமிப்பதில் தோல்வி: %s."
 
 #: ../src/common/secretstore.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Reading password for \"%s\" failed: %s."
-msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பது தோல்வியடைந்தது."
+msgstr "\"%s\"க்கு கடவுச்சொல்லினைப் படிப்பதில் தோல்வி: %s."
 
 #: ../src/common/secretstore.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting password for \"%s\" failed: %s."
-msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பது தோல்வியடைந்தது."
+msgstr "\"%s\"க்கான கடவுச்சொல்லினை அழிப்பதில் தோல்வி: %s."
 
 #: ../src/common/selectdispatcher.cpp:255
 msgid "Failed to monitor I/O channels"
@@ -3189,7 +3143,7 @@ msgstr "உள்ளிடு/வெளியிடு அலைத்தடத�
 
 #: ../src/common/sizer.cpp:2944 ../src/common/stockitem.cpp:196
 msgid "Save"
-msgstr "சேமிக்கவும்"
+msgstr "சேமித்திடுக"
 
 #: ../src/common/sizer.cpp:2946
 msgid "Don't Save"
@@ -3200,7 +3154,6 @@ msgid "Cannot initialize sockets"
 msgstr "பொருத்திகளை துவக்க நிலையாக்க இயலவில்லை"
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "உதவி"
@@ -3246,15 +3199,13 @@ msgstr "அடித்தளம்"
 #: ../src/generic/fontdlgg.cpp:485 ../src/generic/wizard.cpp:433
 #: ../src/osx/carbon/fontdlg.cpp:399 ../src/osx/cocoa/button.mm:200
 msgid "&Cancel"
-msgstr "விலக்குக"
+msgstr "விலக்கிடுக"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
-msgstr "குறுந்தட்டு நினைவகம்"
+msgstr "குறுந்தட்டு நினைவகம் (&C)"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
 msgstr "குறுந்தட்டு நினைவகம்"
 
@@ -3312,7 +3263,7 @@ msgstr "தொகு"
 
 #: ../src/common/stockitem.cpp:160
 msgid "Edit"
-msgstr "தொகுக்கவும்"
+msgstr "தொகுத்திடுக"
 
 #: ../src/common/stockitem.cpp:161
 msgid "&Execute"
@@ -3335,14 +3286,12 @@ msgid "File"
 msgstr "கோப்பு"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "&Find..."
-msgstr "கண்டுபிடி"
+msgstr "கண்டறிக"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "Find..."
-msgstr "கண்டுபிடி"
+msgstr "கண்டறிக"
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
@@ -3536,14 +3485,12 @@ msgid "Remove"
 msgstr "நீக்குக"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Rep&lace..."
-msgstr "மாற்றமர்வு"
+msgstr "மாற்றமர்வு... (&L)"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Replace..."
-msgstr "மாற்றமர்வு"
+msgstr "மாற்றமர்வு..."
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
@@ -3551,16 +3498,15 @@ msgstr "சேமிக்கப்பட்டதற்கு திரும�
 
 #: ../src/common/stockitem.cpp:196
 msgid "&Save"
-msgstr "சேமிக்கவும்"
+msgstr "சேமித்திடுக"
 
 #: ../src/common/stockitem.cpp:197 ../src/generic/logg.cpp:509
 msgid "Save &As..."
-msgstr "இவ்வாறு சேமிக்கவும்..."
+msgstr "இவ்வாறு சேமித்திடுக..."
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Save As..."
-msgstr "இவ்வாறு சேமிக்கவும்..."
+msgstr "இவ்வாறு சேமித்திடுக..."
 
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
 #: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
@@ -3710,13 +3656,12 @@ msgid "Delete selection"
 msgstr "தெரிவினை அழி"
 
 #: ../src/common/stockitem.cpp:267
-#, fuzzy
 msgid "Find in document"
-msgstr "HTML ஆவணத்தைத் திறவுக"
+msgstr "ஆவணத்தில் கண்டறிக"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Find and replace in document"
-msgstr ""
+msgstr "ஆவணத்தில் கண்டறிந்து மாற்றி அமர்த்திடுக"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Paste selection"
@@ -3735,14 +3680,12 @@ msgid "Undo last action"
 msgstr "கடைசி செயலை நீக்குக"
 
 #: ../src/common/stockitem.cpp:273
-#, fuzzy
 msgid "Create new document"
-msgstr "புதிய அடைவினை உருவாக்குக"
+msgstr "புதிய ஆவணத்தை உருவாக்குக"
 
 #: ../src/common/stockitem.cpp:274
-#, fuzzy
 msgid "Open an existing document"
-msgstr "HTML ஆவணத்தைத் திறவுக"
+msgstr "இருக்கும் ஆவணத்தைத் திறவுக"
 
 #: ../src/common/stockitem.cpp:275
 msgid "Close current document"
@@ -3750,11 +3693,11 @@ msgstr "தற்போதைய ஆவணத்தை மூடுக"
 
 #: ../src/common/stockitem.cpp:276
 msgid "Save current document"
-msgstr "தற்போதைய ஆவணத்தை சேமிக்கவும்"
+msgstr "தற்போதைய ஆவணத்தை சேமித்திடுக"
 
 #: ../src/common/stockitem.cpp:277
 msgid "Save current document with a different filename"
-msgstr "தற்போதைய ஆவணத்தை வேறு பெயர் கொண்டு சேமிக்கவும்"
+msgstr "தற்போதைய ஆவணத்தை மாற்றுப் பெயர் கொண்டு சேமித்திடுக"
 
 #: ../src/common/strconv.cpp:2208
 #, c-format
@@ -3806,9 +3749,9 @@ msgid "File couldn't be loaded."
 msgstr "கோப்பு ஏற்றப்பட இயலவில்லை."
 
 #: ../src/common/textfile.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "\"%s\" கோப்பிலிருந்து ஆவணத்தைப் படிப்பதில் தோல்வி."
+msgstr "\"%s\" உரைக் கோப்பினைப் படிப்பதில் தோல்வி."
 
 #: ../src/common/textfile.cpp:161
 #, c-format
@@ -3879,27 +3822,26 @@ msgid "'%s' is not one of the valid strings"
 msgstr "ஏற்கக்கூடிய சரங்களில் ஒன்றாக '%s' இல்லை"
 
 #: ../src/common/valtext.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains invalid character(s)"
 msgstr "'%s' ஏற்க முடியாதவரியுருக்களைக் கொண்டுள்ளது"
 
 #: ../src/common/webrequest.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s (%d)"
-msgstr "பிழை:"
+msgstr "பிழை: %s (%d)"
 
 #: ../src/common/webrequest.cpp:642
 msgid "Not enough free disk space for download."
-msgstr ""
+msgstr "தரவிறக்குவதற்கு வட்டில் போதிய இடமில்லை."
 
 #: ../src/common/webrequest_curl.cpp:884
-#, fuzzy
 msgid "libcurl could not be initialized"
-msgstr "செங்குத்து வரிசையின் விளக்கத்தை துவக்க நிலையாக்க இயலவில்லை."
+msgstr "Libcurl-ஐ துவக்கநிலையாக்க இயலவில்லை"
 
 #: ../src/common/wincmn.cpp:1673
 msgid "This platform does not support background transparency."
-msgstr "இந்தத் தளம் பின்னணி ஊடுருவி பார்த்தலை ஆதரிப்பதில்லை."
+msgstr "இத்தளம் பின்புலத் தெளிவினை ஆதரிப்பதில்லை."
 
 #: ../src/common/wincmn.cpp:2146
 msgid "Could not transfer data to window"
@@ -3965,7 +3907,7 @@ msgstr "ஏற்க முடியாத அல்லது இல்லாத
 
 #: ../src/common/xtistrm.cpp:407
 msgid "Unknown Object passed to GetObjectClassInfo"
-msgstr "தெரியாத பொருள் GetObjectClassInfo-விடம் அனுப்பி வைக்கப்பட்டது"
+msgstr "அறியப்படாத பொருள் GetObjectClassInfo-விடம் அனுப்பி வைக்கப்பட்டது"
 
 #: ../src/common/xtistrm.cpp:422
 msgid "Already Registered Object passed to SetObjectClassInfo"
@@ -3982,7 +3924,7 @@ msgstr "ஏற்கனவே பதிவு செய்யப்பட்ட 
 
 #: ../src/common/xtistrm.cpp:473
 msgid "Passing an unknown object to GetObject"
-msgstr "தெரியாத பொருளை GetObject-ற்கு அனுப்பி வைத்தல்"
+msgstr "அறியப்படாத பொருளை GetObject-ற்கு அனுப்பி வைத்தல்"
 
 #: ../src/common/xtixml.cpp:231
 msgid "Forward hrefs are not supported"
@@ -3991,7 +3933,7 @@ msgstr "hrefs முன்நகர்வுகள் ஆதரிக்கப�
 #: ../src/common/xtixml.cpp:249
 #, c-format
 msgid "unknown class %s"
-msgstr "தெரியாத உட்பிரிவு %s"
+msgstr "அறியப்படாத உட்பிரிவு %s"
 
 #: ../src/common/xtixml.cpp:255
 msgid "objects cannot have XML Text Nodes"
@@ -4009,7 +3951,7 @@ msgstr "இருமுறை பயன்படுத்தப்பட்ட�
 #: ../src/common/xtixml.cpp:323
 #, c-format
 msgid "Unknown Property %s"
-msgstr "தெரியாத பண்பு %s"
+msgstr "அறியப்படாத பண்பு %s"
 
 #: ../src/common/xtixml.cpp:414
 msgid "A non empty collection must consist of 'element' nodes"
@@ -4030,6 +3972,8 @@ msgstr "zlib விரியோடையை மறுதுவக்க நி�
 #: ../src/common/zipstrm.cpp:1043
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
 msgstr ""
+"தோற்றக்குறைகொண்ட கூடுதல் தரவுத் திரட்டினை புறந்தள்ளுகிறது. ZIP கோப்பு "
+"பழுதடைந்திருக்கலாம்."
 
 #: ../src/common/zipstrm.cpp:1522
 msgid "assuming this is a multi-part zip concatenated"
@@ -4074,9 +4018,9 @@ msgid "reading zip stream (entry %s): bad crc"
 msgstr "ஜிப் ஓடை படிக்கப்படுகிறது (உள்ளிடு %s): பழுதடைந்த crc"
 
 #: ../src/common/zipstrm.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
-msgstr "'%s' ஜிப் உள்ளீட்டை எழுதுவதில் பிழை: பழுதான crc அல்லது நீளம்"
+msgstr "'%s' ஜிப் உள்ளீட்டை எழுதுவதில் பிழை: ZIP64 இல்லாத மிகப் பெரிய கோப்பு."
 
 #: ../src/common/zipstrm.cpp:2615
 #, c-format
@@ -4209,72 +4153,70 @@ msgstr "அசைவூட்டக் கோப்பு %ld வகையில
 
 #: ../src/generic/colrdlgg.cpp:156 ../src/gtk/colordlg.cpp:49
 msgid "Choose colour"
-msgstr "நிறத்தைத் தேர்ந்தெடுக்கவும்"
+msgstr "நிறத்தைத் தேர்ந்தெடுத்திடுக"
 
 #: ../src/generic/colrdlgg.cpp:359
 msgid "Red:"
-msgstr ""
+msgstr "சிவப்பு:"
 
 #: ../src/generic/colrdlgg.cpp:362
-#, fuzzy
 msgid "Green:"
-msgstr "MAC கிரேக்கம்"
+msgstr "பச்சை:"
 
 #: ../src/generic/colrdlgg.cpp:365
 msgid "Blue:"
-msgstr ""
+msgstr "நீலம்:"
 
 #: ../src/generic/colrdlgg.cpp:374
 msgid "Opacity:"
-msgstr ""
+msgstr "தெளிவின்மை"
 
 #: ../src/generic/colrdlgg.cpp:386
 msgid "Add to custom colours"
-msgstr "தனிப்பயனாக்கப்பட்ட நிறங்களுடன் ஏற்றுக"
+msgstr "தனிப்பயனாக்கப்பட்ட நிறங்களுடன் ஏற்றிடுக"
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
-msgstr ""
+msgstr "பயனர் பெயர்:"
 
 #: ../src/generic/creddlgg.cpp:63
 msgid "Password:"
-msgstr ""
+msgstr "கடவுச்சொல்:"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/generic/datavgen.cpp:1161
 msgid "true"
-msgstr ""
+msgstr "மெய்யானது"
 
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/generic/datavgen.cpp:1163
-#, fuzzy
 msgid "false"
-msgstr "பொய்யானது"
+msgstr "பொய்யான மதிப்பு"
 
 #: ../src/generic/datavgen.cpp:6763
 #, c-format
 msgid "Row %i"
-msgstr ""
+msgstr "கிடைவரிசை %i"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6853
 msgid "Collapse"
-msgstr ""
+msgstr "குறுக்குக"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6856
 msgid "Expand"
-msgstr ""
+msgstr "விரிவாக்குக"
 
 #: ../src/generic/datavgen.cpp:6875
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%d items)"
-msgstr "%s (அல்லது %s)"
+msgstr "%s (%d உருப்படிகள்)"
 
 #: ../src/generic/datavgen.cpp:6924
-#, fuzzy, c-format
+#, c-format
 msgid "Column %u"
-msgstr "செங்குத்து வரிசையை சேர்க்கவும்"
+msgstr "நெடுவரிசை %u"
 
 #: ../src/generic/dbgrptg.cpp:160
 #, c-format
@@ -4301,7 +4243,7 @@ msgstr "ஒரு வழுநீக்க அறிக்கை, அடைவ�
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
-msgstr ""
+msgstr "பின்வரும் வழுநீக்க அறிக்கை உருவாக்கப்படும்\n"
 
 #: ../src/generic/dbgrptg.cpp:322
 msgid ""
@@ -4320,7 +4262,7 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"இந்த வழுநீக்க அறிக்கையை முழுமையாக மறைக்க தாங்கள் விரும்வினால், \"விலக்குக\" பொத்தானை "
+"இந்த வழுநீக்க அறிக்கையை முழுமையாக மறைக்க தாங்கள் விரும்வினால், \"விலக்கிடுக\" பொத்தானை "
 "அழுத்தவும்,\n"
 "ஆனால், இது நிரலை மேம்படுத்துவதில் இடைஞ்சலை ஏற்படுத்தும் என்று எச்சரிக்கப்படுகிறீர்கள். "
 "ஆகவே\n"
@@ -4447,7 +4389,7 @@ msgstr "புதுப் பெயர்"
 
 #: ../src/generic/editlbox.cpp:131
 msgid "Edit item"
-msgstr "உருப்படியை தொகுக்கவும்"
+msgstr "உருப்படியை தொகுத்திடுக"
 
 #: ../src/generic/editlbox.cpp:139
 msgid "New item"
@@ -4471,7 +4413,7 @@ msgstr "இதைத் தேடுக:"
 
 #: ../src/generic/fdrepdlg.cpp:121
 msgid "Replace with:"
-msgstr "இதைக் கொண்டு மாற்றியமைக்கவும்:"
+msgstr "மாற்றமர்வு:"
 
 #: ../src/generic/fdrepdlg.cpp:141
 msgid "Whole word"
@@ -4491,7 +4433,7 @@ msgstr "மாற்றமர்வு"
 
 #: ../src/generic/fdrepdlg.cpp:179
 msgid "Replace &all"
-msgstr "எல்லாவற்றையும் மாற்றியமைக்கவும்"
+msgstr "எல்லாவற்றையும் மாற்றியமைத்திடுக"
 
 #: ../src/generic/filectrlg.cpp:246 ../src/generic/filectrlg.cpp:269
 msgid "<DIR>"
@@ -4555,11 +4497,11 @@ msgstr "அடைவு கிடைப்பில் இல்லை"
 
 #: ../src/generic/filedlgg.cpp:197
 msgid "View files as a list view"
-msgstr "கோப்புகளை பட்டியல் வரிசைத் தோற்றத்தில் பார்க்கவும்"
+msgstr "கோப்புகளை வரிசைப் பட்டியலில் காண்க"
 
 #: ../src/generic/filedlgg.cpp:199
 msgid "View files as a detailed view"
-msgstr "கோப்புகளை விளக்கங்களுடனான தோற்றத்தில் பார்க்கவும்"
+msgstr "கோப்புகளை விளக்கங்களுடனான தோற்றத்தில் காண்க"
 
 #: ../src/generic/filedlgg.cpp:202
 msgid "Go to parent directory"
@@ -4576,7 +4518,7 @@ msgstr "உறுதிச் செய்க"
 
 #: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:73
 msgid "Please choose an existing file."
-msgstr "இருக்கும் கோப்பு ஒன்றினைத் தேர்ந்தெடுக்கவும்."
+msgstr "இருக்கும் கோப்பு ஒன்றினைத் தேர்ந்தெடுத்திடுக."
 
 #: ../src/generic/filepickerg.cpp:63
 msgid "..."
@@ -4601,7 +4543,7 @@ msgstr "நவீனம்"
 
 #: ../src/generic/fontdlgg.cpp:321
 msgid "Script"
-msgstr "நிரல்தொடர்"
+msgstr "குறுநிரல்"
 
 #: ../src/generic/fontdlgg.cpp:322
 msgid "Swiss"
@@ -4679,21 +4621,21 @@ msgstr "எழுத்துருவின் முன்தோற்றத�
 
 #: ../src/generic/fontdlgg.cpp:468 ../src/generic/fontdlgg.cpp:487
 msgid "Click to cancel the font selection."
-msgstr "எழுத்துரு தெரிவினை விலக்க, சொடுக்கவும்."
+msgstr "எழுத்துரு தெரிவினை விலக்கிட, சொடுக்கிடுக."
 
 #: ../src/generic/fontdlgg.cpp:473 ../src/generic/fontdlgg.cpp:475
 #: ../src/generic/fontdlgg.cpp:480 ../src/generic/fontdlgg.cpp:482
 msgid "Click to confirm the font selection."
-msgstr "எழுத்துரு தெரிவினை உறுதி செய்ய சொடுக்கவும்."
+msgstr "எழுத்துரு தெரிவினை உறுதி செய்ய சொடுக்கிடுக."
 
 #: ../src/generic/fontpickerg.cpp:47 ../src/gtk/fontdlg.cpp:77
 #: ../src/gtk1/fontdlg.cpp:125
 msgid "Choose font"
-msgstr "எழுத்துருவைத் தேர்ந்தெடுக்கவும்"
+msgstr "எழுத்துருவைத் தேர்ந்தெடுத்திடுக"
 
 #: ../src/generic/grid.cpp:6091
 msgid "Copying more than one selected block to clipboard is not supported."
-msgstr ""
+msgstr "ஒன்றுக்கும் மேற்பட்ட தெரிவான தொகுதியை பிடிப்புப்பலகைக்கு படியெடுக்க ஆதரவில்லை."
 
 #: ../src/generic/helpext.cpp:265
 #, c-format
@@ -5015,41 +4957,42 @@ msgid ""
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
+"எச்சரிக்கை: XIM உள்ளீட்டு முறை ஆதரிக்கப்படுவதில்லை. ஆகவே, உள்ளீட்டைக் கையாள்வதில் சிக்கலும், "
+"ஊசலாட்டமும் ஏற்படும். GTK_IM நிரற்கூறின் அமைப்பை நீக்கவும், அல்லது \"ibus\"க்கு அமைக்கவும்."
 
 #: ../src/gtk/app.cpp:431
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "GTK+ துவக்க நிலையாக்க இயலவில்லை, காட்சியமைவு சரியாக அமைந்துள்ளதா?"
 
 #: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "\"%s\" அடைவினை உருவாக்குவதில் தோல்வி."
+msgstr "\"%s\"க்கு அடைவினை மாற்றுவதில் தோல்வி."
 
 #: ../src/gtk/font.cpp:552
 msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
+"தனிப்பட்ட எழுத்துருக்களை இக்கணினியில் பயன்படுத்த ஆதரவில்லை. பாங்கோ நூலகம் மிகவும் "
+"பழமையானதாகவுள்ளது. 1.38, அல்லது அதற்கும் பிறகான பதிப்பு தேவைப்படுகிறது."
 
 #: ../src/gtk/font.cpp:562
-#, fuzzy
 msgid "Failed to create font configuration object."
-msgstr "பயனர் அமைவடிவக் கோப்பினை இற்றைப்படுத்துவதில் தோல்வி."
+msgstr "எழுத்துரு அமைவடிவப் பொருளை உருவாக்குவதில் தோல்வி."
 
 #: ../src/gtk/font.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "\"%s\" கோப்பிலிருந்து ஆவணத்தைப் படிப்பதில் தோல்வி."
+msgstr "\"%s\" தனிப்பயனாக்கப்பட்ட எழுத்துருவை கூட்டுவதில் தோல்வி."
 
 #: ../src/gtk/font.cpp:580
-#, fuzzy
 msgid "Failed to register font configuration using private fonts."
-msgstr "பயனர் அமைவடிவக் கோப்பினை இற்றைப்படுத்துவதில் தோல்வி."
+msgstr "தனிப்பட்ட எழுத்துருக்களைப் பயன்படுத்தி எழுத்துரு அமைவடிவத்தைப் பதிவதில் தோல்வி."
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
-#, fuzzy
 msgid "Fatal Error"
-msgstr "கோப்புப் பிழை"
+msgstr "முறிவுப் பிழை"
 
 #: ../src/gtk/glcanvas.cpp:181
 msgid ""
@@ -5058,6 +5001,9 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"வேலேண்டின் கீழ் தேவைப்படும் EGL ஆதரவுடன் இந்நிரல் தொகுக்கப்படவில்லை. \n"
+" EGL நூலகங்களை நிறுவி மீண்டும் கட்டமைக்கவும், அல்லது நிரலைத் துவக்குவதற்கு முன்,\n"
+" GDK_BACKEND=x11 சூழல் மாற்றியை அமைத்து, X11 பின்னிலையில் இயக்கவும். "
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5066,6 +5012,9 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
+"தற்போதைக்கு வேலேண்டிலும், X11லும் மட்டுமே wxGLCanvas ஆதரிக்கப்படுகிறது.\n"
+" தீர்வில்லாத இக்குறைபாட்டினைத் தவிர்க்க, தங்களின் நிரலைத் துவக்குவதற்கு முன்,\n"
+" GDK_BACKEND=x11 சூழல் மாற்றியை அமைக்கவும்."
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
@@ -5089,13 +5038,13 @@ msgstr "கட்டுப்பாட்டில் உரையை செர�
 
 #: ../src/gtk/webview_webkit.cpp:930
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
-msgstr ""
+msgstr "JavaScript குறுநிரல் வெளியீட்டின் மீட்டமைவை WebKit v1 ஆதரிப்பதில்லை"
 
 #: ../src/gtk/webview_webkit2.cpp:1310 ../src/msw/webview_edge.cpp:881
 #: ../src/msw/webview_ie.cpp:1077 ../src/osx/webview_webkit.mm:439
 #, c-format
 msgid "Error running JavaScript: %s"
-msgstr ""
+msgstr "ஜாவா குறுநிரலை இயக்குவதில் பிழை: %s"
 
 #: ../src/gtk/window.cpp:5664
 msgid ""
@@ -5103,15 +5052,15 @@ msgid ""
 "please install GTK+ 2.12 or later."
 msgstr ""
 "இந்த கணினியில் நிறுவப்பட்டிருக்கும் GTK+, திரைக் கலவையை ஆதரிக்க இயலாத அளவிற்கு "
-"பழமையாய் உள்ளது. GTK+ 2.12 அல்லது அதற்கும் பின்னரான பதிப்பினை கருணைக்கூர்ந்து நிறுவவும்."
+"பழமையாய் உள்ளது. GTK+ 2.12 அல்லது அதற்கும் பின்னரான பதிப்பினை அருள்கூர்ந்து நிறுவவும்."
 
 #: ../src/gtk/window.cpp:5682
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
-"தங்கள் கணினி கலக்குதலை ஆதரிப்பதில்லை. கருணைக்கூர்ந்து தங்களின் சாளர மேலாளரில் இதை "
-"செயற்படுத்தவும்."
+"தங்கள் கணினி கலக்குதலை ஆதரிப்பதில்லை. அருள்கூர்ந்து தங்களின் சாளர மேலாளரில் இதை "
+"முடுக்கவும்."
 
 #: ../src/gtk/window.cpp:5693
 msgid ""
@@ -5242,7 +5191,7 @@ msgstr "(ஏட்டுக் குறிகள்)"
 
 #: ../src/html/helpwnd.cpp:430
 msgid "Add current page to bookmarks"
-msgstr "தற்போதைய பக்கத்தை ஏட்டுக்குறிகளில் ஏற்றுக"
+msgstr "தற்போதைய பக்கத்தை ஏட்டுக்குறிகளில் ஏற்றிடுக"
 
 #: ../src/html/helpwnd.cpp:431
 msgid "Remove current page from bookmarks"
@@ -5422,15 +5371,14 @@ msgstr "HTML உதவிப் பணித் திட்டம் (*.hhp)|*.
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "குறுக்கப்பட்ட HTML உதவிக் கோப்பு (*.chm)|*.chm|"
 
-#: ../src/html/helpwnd.cpp:1676
-#, fuzzy, c-format
+#: ../src/html/helpwnd.cpp:1676 c-format
 msgid "%i of %u"
-msgstr "%i, மொத்தம் %i"
+msgstr "%uல் %i"
 
 #: ../src/html/helpwnd.cpp:1714
-#, fuzzy, c-format
+#, c-format
 msgid "%u of %u"
-msgstr "%lu, மொத்தம் %lu"
+msgstr "%u, மொத்தம் %u"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format
@@ -5710,7 +5658,7 @@ msgstr ""
 #: ../src/msw/dde.cpp:1238
 #, c-format
 msgid "Unknown DDE error %08x"
-msgstr "தெரியாத DDE பிழை %08x"
+msgstr "அறியப்படாத DDE பிழை %08x"
 
 #: ../src/msw/dialup.cpp:368
 msgid ""
@@ -5718,7 +5666,7 @@ msgid ""
 "not installed on this machine. Please install it."
 msgstr ""
 "தொலை அணுகுப் பணி (RAS) இக்கணினியில் நிறுவப்படவில்லையென்பதால், சுழல் செயல்கள் இல்லாமல் "
-"உள்ளது. கருணைக்கூர்ந்து RAS-ஐ நிறுவவும்."
+"உள்ளது. அருள்கூர்ந்து RAS-ஐ நிறுவவும்."
 
 #: ../src/msw/dialup.cpp:427
 #, c-format
@@ -5726,8 +5674,8 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is too "
 "old, please upgrade (the following required function is missing: %s)."
 msgstr ""
-"இந்தக் கணினியில் நிறுவப்பட்டுள்ள தொலை அணுகுப் பணி (RAS) பதிப்பு மிகப் பழையது, கருணைக் "
-"கூர்ந்து மேம்படுத்தவும்  (பின்வரும் தேவையான செயல் தவறவிடப்பட்டுள்ளது: %s)."
+"இந்தக் கணினியில் நிறுவப்பட்டுள்ள தொலை அணுகுப் பணி (RAS) பதிப்பு மிகப் பழையது, "
+"அருள்கூர்ந்துமேம்படுத்தவும்  (பின்வரும் தேவையான செயல் தவறவிடப்பட்டுள்ளது: %s)."
 
 #: ../src/msw/dialup.cpp:462
 msgid "Failed to retrieve text of RAS error message"
@@ -5811,9 +5759,9 @@ msgid "Couldn't obtain folder name"
 msgstr "கோப்புறையின் பெயரை பெற இயலவில்லை"
 
 #: ../src/msw/dlmsw.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "(error %d: %s)"
-msgstr " (பிழை %ld: %s)"
+msgstr "(பிழை %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
 #: ../src/msw/imaglist.cpp:224 ../src/msw/imaglist.cpp:246
@@ -5837,9 +5785,9 @@ msgid "File dialog failed with error code %0lx."
 msgstr "கோப்பு உரையாடல் தோல்வியடைந்தது. பிழைக் குறி %0lx."
 
 #: ../src/msw/font.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "கோப்பு ஏற்றப்பட இயலவில்லை."
+msgstr "\"%s\" எழுத்துருக் கோப்பினை ஏற்ற இயலவில்லை"
 
 #: ../src/msw/fontdlg.cpp:170
 #, c-format
@@ -5874,13 +5822,12 @@ msgstr "இல்லாத \"%s\" அடைவினை மாற்றங்க
 
 #: ../src/msw/glcanvas.cpp:592 ../src/unix/glx11.cpp:513
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
-msgstr ""
+msgstr "OpenGL 3.0, அல்லது அதற்கும் பிறகான பதிப்புகளை OpenGL இயக்கி ஆதரிப்பதில்லை."
 
 #: ../src/msw/glcanvas.cpp:616 ../src/osx/glcanvas_osx.cpp:411
 #: ../src/unix/glegl.cpp:315 ../src/unix/glx11.cpp:559
-#, fuzzy
 msgid "Couldn't create OpenGL context"
-msgstr "நேரங்காட்டியை உருவாக்க இயலவில்லை."
+msgstr "OpenGL சூழலமைவை உருவாக்க இயலவில்லை"
 
 #: ../src/msw/glcanvas.cpp:1376
 msgid "Failed to initialize OpenGL"
@@ -5888,7 +5835,7 @@ msgstr "OpenGL துவக்க நிலையாக்குவதில் 
 
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
-msgstr ""
+msgstr "தனிப்பயனாக்கப்பட்ட DirectWrite எழுத்துரு ஏற்றியைப் பதிவிட இயலவில்லை."
 
 #: ../src/msw/helpchm.cpp:53
 msgid ""
@@ -5896,7 +5843,7 @@ msgid ""
 "not installed on this machine. Please install it."
 msgstr ""
 "இந்தக் கணினியில் MS HTML உதவி நூலகம்  நிறுவப்படாததால், MS HTML உதவி செயல்கள் "
-"பயன்பாட்டில் இல்லை. கருணைக் கூர்ந்து அதை நிறுவவும்."
+"பயன்பாட்டில் இல்லை. அருள்கூர்ந்து அதை நிறுவவும்."
 
 #: ../src/msw/helpchm.cpp:60
 msgid "Failed to initialize MS HTML Help."
@@ -5959,7 +5906,7 @@ msgstr "\"%s\"-ற்காக OLE தானியங்கியைப் ப�
 
 #: ../src/msw/ole/automtn.cpp:622
 msgid "Unknown name or named argument."
-msgstr "தெரியாத பெயர் அல்லது பெயர் தர்க்கம்."
+msgstr "அறியப்படாத பெயர் அல்லது பெயர் தர்க்கம்."
 
 #: ../src/msw/ole/automtn.cpp:626
 msgid "Incorrect number of arguments."
@@ -5967,7 +5914,7 @@ msgstr "தர்க்கங்களின் தவறான எண்ணி�
 
 #: ../src/msw/ole/automtn.cpp:638
 msgid "Unknown exception"
-msgstr "தெரியாத விலக்கு"
+msgstr "அறியப்படாத விலக்கு"
 
 #: ../src/msw/ole/automtn.cpp:643
 msgid "Method or property not found."
@@ -6010,7 +5957,7 @@ msgstr "உட்பிரிவு பதிவு செய்யப்பட�
 #: ../src/msw/ole/automtn.cpp:679
 #, c-format
 msgid "Unknown error %08x"
-msgstr "தெரியாத பிழை %08x"
+msgstr "அறியப்படாத பிழை %08x"
 
 #: ../src/msw/ole/automtn.cpp:683
 #, c-format
@@ -6032,9 +5979,9 @@ msgid "Skip"
 msgstr "தவிர்"
 
 #: ../src/msw/registry.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "unknown (%lu)"
-msgstr "தெரியாதது"
+msgstr "அறியப்படாதது (%lu)"
 
 #: ../src/msw/registry.cpp:407
 #, c-format
@@ -6137,17 +6084,17 @@ msgstr "'%s'-இன் மதிப்பை அமைக்க இயலாத�
 #: ../src/msw/registry.cpp:905 ../src/msw/registry.cpp:954
 #, c-format
 msgid "Registry value \"%s\" is not numeric (but of type %s)"
-msgstr ""
+msgstr "பதிப்பக மதிப்பு \"%s\" எண்ணாக இல்லை (ஆனால், %s வகையாக உள்ளது)"
 
 #: ../src/msw/registry.cpp:990
 #, c-format
 msgid "Registry value \"%s\" is not binary (but of type %s)"
-msgstr ""
+msgstr "பதிப்பக மதிப்பு \"%s\" இருமமாக இல்லை (ஆனால், %s வகையாக உள்ளது)"
 
 #: ../src/msw/registry.cpp:1039
 #, c-format
 msgid "Registry value \"%s\" is not text (but of type %s)"
-msgstr ""
+msgstr "பதிப்பக மதிப்பு \"%s\" உரையாக இல்லை (ஆனால், %s வகையாக உள்ளது)"
 
 #: ../src/msw/registry.cpp:1100
 #, c-format
@@ -6301,38 +6248,35 @@ msgstr "'%s'-இருந்து படவுருக்களை ஏற்�
 
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
-msgstr ""
+msgstr "வலையத் தோற்றத்தின் நிகர்நிலை மட்டத்தை பதிவகத்தில் காண இயலவில்லை"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
-msgstr ""
+msgstr "வலைத் தோற்றத்தை நவீன நிகர்நிலை மட்டத்திற்கு அமைக்க இயலவில்லை"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
-msgstr ""
+msgstr "வலைத் தோற்றத்தை தகுதர நிகர்நிலை மட்டத்திற்கு அமைக்க இயலவில்லை"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
-msgstr ""
+msgstr "ஏற்புடைய HTML ஆவணமில்லாமல் JavaScript குறுநிரலை இயக்க இயலாது"
 
 #: ../src/msw/webview_ie.cpp:1044
-#, fuzzy
 msgid "Can't get the JavaScript object"
-msgstr "இழையின் முன்னுரிமையை அமைக்க இயலாது"
+msgstr "JavaScript பொருளைப் பெற இயலவில்லை"
 
 #: ../src/msw/webview_ie.cpp:1056
-#, fuzzy
 msgid "failed to evaluate"
-msgstr "'%s'-இனை செயலாக்குவதில் தோல்வி. \n"
+msgstr "மதிப்பிடுவதில் தோல்வி"
 
 #: ../src/msw/webview_ie.cpp:1065
-#, fuzzy
 msgid "failed to retrieve execution result"
-msgstr "RAS பிழையின் உரையை மீட்டெடுப்பதில் தோல்வி."
+msgstr "செயலாக்க முடிவினை மீட்டெடுப்பதில் தோல்வி"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
-msgstr "பின்னணி நிறம்"
+msgstr "பின்புல நிறம்"
 
 #: ../src/osx/carbon/fontdlg.cpp:326
 msgid "Font:"
@@ -6382,7 +6326,7 @@ msgstr "எழுத்துருவின் முன்தோற்றத�
 
 #: ../src/osx/carbon/fontdlg.cpp:400 ../src/osx/carbon/fontdlg.cpp:402
 msgid "Click to cancel changes to the font."
-msgstr "எழுத்துரு மாற்றங்களை விலக்க, சொடுக்கவும்."
+msgstr "எழுத்துரு மாற்றங்களை விலக்கிட, சொடுக்கிடுக."
 
 #: ../src/osx/carbon/fontdlg.cpp:407 ../src/osx/carbon/fontdlg.cpp:409
 msgid "Click to confirm changes to the font."
@@ -6410,7 +6354,7 @@ msgstr "<ஏதேனும் புதுமை>"
 #: ../src/osx/carbon/fontdlg.cpp:421 ../src/osx/carbon/fontdlg.cpp:629
 #: ../src/osx/carbon/fontdlg.cpp:649
 msgid "<Any Script>"
-msgstr "<ஏதேனுமொரு கட்டளைக் குறி>"
+msgstr "<ஏதேனுமொரு குறுநிரல்>"
 
 #: ../src/osx/carbon/fontdlg.cpp:422 ../src/osx/carbon/fontdlg.cpp:634
 #: ../src/osx/carbon/fontdlg.cpp:653
@@ -6423,33 +6367,30 @@ msgid "<Any Teletype>"
 msgstr "<ஏதேனுமொரு தொலைத் தட்டெழுத்து>"
 
 #: ../src/osx/cocoa/filedlg.mm:274
-#, fuzzy
 msgid "File type:"
-msgstr "தொலைத் தட்டெழுத்து"
+msgstr "கோப்பு வகை:"
 
 #: ../src/osx/cocoa/menu.mm:281
-#, fuzzy
 msgid "Minimize"
-msgstr "சிறிதாக்கு"
+msgstr "சிறிதாக்கிடுக"
 
 #: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
 msgid "Zoom"
-msgstr "உள்நோக்கிப் பெரிதாக்குக"
+msgstr "பெரிதாக்கிடுக"
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr ""
+msgstr "எல்லாவற்றையும் முன்னால் கொண்டுவருக"
 
 #: ../src/osx/core/sound.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "\"%s\" வளத்தை ஏற்றுவதில் தோல்வி."
+msgstr "\"%s\" இருந்து ஒலியை ஏற்ற இயலவில்லை (பிழை %d)."
 
 #: ../src/osx/fontutil.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr "கோப்பு கிடைப்பில் இல்லை!"
+msgstr "\"%s\" எழுத்துருக் கோப்பு கிடைப்பில் இல்லை"
 
 #: ../src/osx/fontutil.cpp:89
 #, c-format
@@ -6457,6 +6398,7 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
 "\"."
 msgstr ""
+"\"%s\" எழுத்துரு அடைவில் இல்லாததால், \"%s\" எழுத்துரு கோப்பினைப் பயன்படுத்த இயலாது."
 
 #: ../src/osx/menu_osx.cpp:441
 msgid "About..."
@@ -6489,14 +6431,12 @@ msgid "Quit %s"
 msgstr "%s-ஐ விட்டு வெளியேறுக"
 
 #: ../src/osx/webview_webkit.mm:278
-#, fuzzy
 msgid "Printing is not supported by the system web control"
-msgstr "Gzip இந்த பதிப்பு Zlib-னால் ஆதரிக்கப்படுவதில்லை"
+msgstr "அச்சிடுவதை கணினி வலைக் கட்டுப்பாடு ஆதரிப்பதில்லை"
 
 #: ../src/osx/webview_webkit.mm:287
-#, fuzzy
 msgid "Print operation could not be initialized"
-msgstr "செங்குத்து வரிசையின் விளக்கத்தை துவக்க நிலையாக்க இயலவில்லை."
+msgstr "அச்சிடும் செயலைத் துவக்கநிலையாக்க இயலவில்லை."
 
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:572
@@ -6526,349 +6466,330 @@ msgstr "குடும்பம்"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:773
 msgid "AppWorkspace"
-msgstr ""
+msgstr "பயன்பாட்டுப் பணிவெளி"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:774
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "எல்லை"
+msgstr "இயக்கத்த்ிலிருக்கும் எல்லை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:775
 msgid "ActiveCaption"
-msgstr ""
+msgstr "இயக்கத்திலுள்ள தலைப்பு"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:776
 msgid "ButtonFace"
-msgstr ""
+msgstr "பொத்தான் முகப்பு"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:777
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "பொத்தான் முன்னிலையாக்கம்"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:778
 msgid "ButtonShadow"
-msgstr ""
+msgstr "பொத்தான் நிழல்"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:779
 msgid "ButtonText"
-msgstr ""
+msgstr "பொத்தான் உரை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:780
 msgid "CaptionText"
-msgstr ""
+msgstr "தலைப்புரை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:781
 msgid "ControlDark"
-msgstr ""
+msgstr "கட்டுப்பாட்டு இருள்"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:782
 msgid "ControlLight"
-msgstr ""
+msgstr "கட்டுப்பாட்டு வெளிச்சம்"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:784
 msgid "GrayText"
-msgstr ""
+msgstr "சாம்பலுரை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:785
-#, fuzzy
 msgid "Highlight"
-msgstr "இலகுவானது"
+msgstr "துலக்கம்"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:786
-#, fuzzy
 msgid "HighlightText"
-msgstr "உரையை வலது ஒழுங்காக்கு."
+msgstr "உரையைத் துலக்கமாக்கிடுக"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:787
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "எல்லை"
+msgstr "இயக்கம் முடங்கிய எல்லை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:788
 msgid "InactiveCaption"
-msgstr ""
+msgstr "முடங்கிய தலைப்பு"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:789
 msgid "InactiveCaptionText"
-msgstr ""
+msgstr "முடங்கிய தலைப்புரை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:791
 msgid "Scrollbar"
-msgstr ""
+msgstr "உருள்பட்டை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:792
 msgid "Tooltip"
-msgstr ""
+msgstr "கருவிக்குறிப்பு"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:793
 msgid "TooltipText"
-msgstr ""
+msgstr "கருவிக்குறிப்புரை"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:794
-#, fuzzy
 msgid "Window"
 msgstr "சாளரம்"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:795
-#, fuzzy
 msgid "WindowFrame"
-msgstr "சாளரம்"
+msgstr "சாளரச் சட்டகம்"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:796
-#, fuzzy
 msgid "WindowText"
-msgstr "சாளரம்"
+msgstr "சாளரவுரை"
 
 #. TRANSLATORS: Custom colour choice entry
 #: ../src/propgrid/advprops.cpp:797 ../src/propgrid/advprops.cpp:1475
 #: ../src/propgrid/advprops.cpp:1518
-#, fuzzy
 msgid "Custom"
-msgstr "தனிப் பயனாக்கப்பட்ட அளவு"
+msgstr "தனிப்பயனாக்கப்பட்டது "
 
 #: ../src/propgrid/advprops.cpp:1500
 msgid "Black"
-msgstr ""
+msgstr "கருப்பு"
 
 #: ../src/propgrid/advprops.cpp:1501
 msgid "Maroon"
-msgstr ""
+msgstr "அரக்கு"
 
 #: ../src/propgrid/advprops.cpp:1502
 msgid "Navy"
-msgstr ""
+msgstr "கடற்படை நீலம்"
 
 #: ../src/propgrid/advprops.cpp:1503
 msgid "Purple"
-msgstr ""
+msgstr "ஊதா"
 
 #: ../src/propgrid/advprops.cpp:1504
 msgid "Teal"
-msgstr ""
+msgstr "இளம்பச்சை"
 
 #: ../src/propgrid/advprops.cpp:1505
 msgid "Gray"
-msgstr ""
+msgstr "சாம்பல்"
 
 #: ../src/propgrid/advprops.cpp:1506
-#, fuzzy
 msgid "Green"
-msgstr "MAC கிரேக்கம்"
+msgstr "பச்சை"
 
 #: ../src/propgrid/advprops.cpp:1507
 msgid "Olive"
-msgstr ""
+msgstr "ஆலிவ்"
 
 #: ../src/propgrid/advprops.cpp:1508
-#, fuzzy
 msgid "Brown"
-msgstr "உலாவு"
+msgstr "பிரௌன்"
 
 #: ../src/propgrid/advprops.cpp:1509
 msgid "Blue"
-msgstr ""
+msgstr "நீலம்"
 
 #: ../src/propgrid/advprops.cpp:1510
 msgid "Fuchsia"
-msgstr ""
+msgstr "ஃப்யூஷியா சிவப்பு"
 
 #: ../src/propgrid/advprops.cpp:1511
-#, fuzzy
 msgid "Red"
-msgstr "மீள்செயல்"
+msgstr "சிவப்பு"
 
 #: ../src/propgrid/advprops.cpp:1512
 msgid "Orange"
-msgstr ""
+msgstr "செம்மஞ்சள்"
 
 #: ../src/propgrid/advprops.cpp:1513
 msgid "Silver"
-msgstr ""
+msgstr "வெள்ளி"
 
 #: ../src/propgrid/advprops.cpp:1514
 msgid "Lime"
-msgstr ""
+msgstr "எலுமிச்சை"
 
 #: ../src/propgrid/advprops.cpp:1515
 msgid "Aqua"
-msgstr ""
+msgstr "நீலப்பச்சை"
 
 #: ../src/propgrid/advprops.cpp:1516
 msgid "Yellow"
-msgstr ""
+msgstr "மஞ்சள்"
 
 #: ../src/propgrid/advprops.cpp:1517
 msgid "White"
-msgstr ""
+msgstr "வெள்ளை"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1653
-#, fuzzy
 msgid "Default"
 msgstr "இயல்பிருப்பு"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgid "Arrow"
-msgstr "நாளை"
+msgstr "அம்பு"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgid "Right Arrow"
-msgstr "வலது"
+msgstr "வலதம்பு"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1656
 msgid "Blank"
-msgstr ""
+msgstr "வெற்று"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgid "Bullseye"
-msgstr "தோட்டாப் பாங்கு"
+msgstr "Bullseye"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgid "Character"
-msgstr "வரியுருக் குறி"
+msgstr "வரியுரு"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1659
 msgid "Cross"
-msgstr ""
+msgstr "சிலுவை "
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1660
 msgid "Hand"
-msgstr ""
+msgstr "கை"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1661
 msgid "I-Beam"
-msgstr ""
+msgstr "ஐபீம்"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1662
 msgid "Left Button"
-msgstr ""
+msgstr "இடது பொத்தான்"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1663
 msgid "Magnifier"
-msgstr ""
+msgstr "உருப்பெருக்கி"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1664
 msgid "Middle Button"
-msgstr ""
+msgstr "நடு பொத்தான்"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1665
 msgid "No Entry"
-msgstr ""
+msgstr "உள்ளீடு ஏதுமில்லை"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1666
 msgid "Paint Brush"
-msgstr ""
+msgstr "வண்ணத் தூரிகை"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1667
 msgid "Pencil"
-msgstr ""
+msgstr "பெண்சில்"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgid "Point Left"
-msgstr "குறியளவு"
+msgstr "இடமுனை"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgid "Point Right"
-msgstr "வலது ஒழுங்கு"
+msgstr "வலமுனை"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgid "Question Arrow"
-msgstr "கேள்வி"
+msgstr "கேள்வியம்பு"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1671
 msgid "Right Button"
-msgstr ""
+msgstr "வலது பொத்தான்"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1672
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "சைசிங் NE-SW"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1673
 msgid "Sizing N-S"
-msgstr ""
+msgstr "சைசிங் N-S"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1674
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "சைசிங் NW-SE"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1675
 msgid "Sizing W-E"
-msgstr ""
+msgstr "சைசிங் W-E"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1676
 msgid "Sizing"
-msgstr ""
+msgstr "சைசிங்"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1677
 msgid "Spraycan"
-msgstr ""
+msgstr "தெளிக்குவளை"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1678
 msgid "Wait"
-msgstr ""
+msgstr "காத்திரு"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1679
 msgid "Watch"
-msgstr ""
+msgstr "கவனி"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1680
 msgid "Wait Arrow"
-msgstr ""
+msgstr "காத்திரு அம்பு"
 
 #: ../src/propgrid/advprops.cpp:2050
 msgid "Make a selection:"
@@ -6913,8 +6834,8 @@ msgstr "பண்புப் பிழை"
 #: ../src/propgrid/propgrid.cpp:3283
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
-"ஏற்கமுடியாத மதிப்பை உள்ளிடு செய்துள்ளீர்கள், தொகுத்தலை விலக்க, 'விடுபடு' விசையை "
-"அழுத்தவும்."
+"ஏற்கமுடியாத மதிப்பை உள்ளிடு செய்துள்ளீர்கள், தொகுத்தலை விலக்கிட, 'விடுபடு' விசையை "
+"அழுத்திடுக."
 
 #: ../src/propgrid/propgrid.cpp:6681
 #, c-format
@@ -6933,7 +6854,7 @@ msgstr ""
 #: ../src/propgrid/props.cpp:155
 #, c-format
 msgid "Unknown base %d. Base 10 will be used."
-msgstr ""
+msgstr "அறியப்படாத அடிப்படை %d. அடிப்படை 10 பயன்படுத்தப்படும்."
 
 #: ../src/propgrid/props.cpp:309
 #, c-format
@@ -6966,46 +6887,43 @@ msgstr "ஒரு கோப்பினைத் தேர்ந்தெடு�
 #: ../src/richtext/richtextbackgroundpage.cpp:148
 #: ../src/richtext/richtextformatdlg.cpp:377
 msgid "Background"
-msgstr "பின்னணி"
+msgstr "பின்புலம்"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:160
 msgid "Background &colour:"
-msgstr "பின்னணி நிறம்:"
+msgstr "பின்புல நிறம்:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:162
 #: ../src/richtext/richtextbackgroundpage.cpp:164
 msgid "Enables a background colour."
-msgstr "ஒரு பின்னணி நிறத்தை செயற்படச் செய்கிறது"
+msgstr "ஒரு பின்புல நிறத்தை முடுக்குகிறது"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:168
 #: ../src/richtext/richtextbackgroundpage.cpp:170
 msgid "The background colour."
-msgstr "பின்னணி நிறம்"
+msgstr "பின்புல நிறம்"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:179
 msgid "Shadow"
-msgstr ""
+msgstr "நிழல்"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:194
 msgid "Use &shadow"
-msgstr ""
+msgstr "நிழலைப் பயன்படுத்துக"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:196
 #: ../src/richtext/richtextbackgroundpage.cpp:198
-#, fuzzy
 msgid "Enables a shadow."
-msgstr "ஒரு பின்னணி நிறத்தை செயற்படச் செய்கிறது"
+msgstr "ஒரு நிழலை முடுக்குகிறது."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:212
-#, fuzzy
 msgid "&Horizontal offset:"
-msgstr "செங்குத்து எதிரிடை"
+msgstr "கிடைமட்ட எதிரிடை"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:219
 #: ../src/richtext/richtextbackgroundpage.cpp:221
-#, fuzzy
 msgid "The horizontal offset."
-msgstr "செங்குத்து பெயர்ச்சியை செயற்படச் செய்க"
+msgstr "கிடைமட்ட எதிரிடை."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:225
 #: ../src/richtext/richtextbackgroundpage.cpp:228
@@ -7164,82 +7082,73 @@ msgstr "pt"
 #: ../src/richtext/richtextbackgroundpage.cpp:295
 #: ../src/richtext/richtextbackgroundpage.cpp:320
 #: ../src/richtext/richtextbackgroundpage.cpp:322
-#, fuzzy
 msgid "Units for this value."
-msgstr "இடக் கரைக்கான தொகுதிகள்."
+msgstr "இம்மதிப்பிற்கான அலகுகள்."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:235
-#, fuzzy
 msgid "&Vertical offset:"
 msgstr "செங்குத்து எதிரிடை"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:242
 #: ../src/richtext/richtextbackgroundpage.cpp:244
-#, fuzzy
 msgid "The vertical offset."
-msgstr "செங்குத்து பெயர்ச்சியை செயற்படச் செய்க"
+msgstr "செங்குத்து எதிரிடை."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:258
-#, fuzzy
 msgid "Shadow c&olour:"
-msgstr "நிறத்தைத் தேர்ந்தெடுக்கவும்"
+msgstr "நிழல் நிறம் (&O):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:260
 #: ../src/richtext/richtextbackgroundpage.cpp:262
-#, fuzzy
 msgid "Enables the shadow colour."
-msgstr "ஒரு பின்னணி நிறத்தை செயற்படச் செய்கிறது"
+msgstr "நிழல் நிறத்தை முடுக்குகிறது"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:266
 #: ../src/richtext/richtextbackgroundpage.cpp:268
-#, fuzzy
 msgid "The shadow colour."
-msgstr "எழுத்துரு நிறம்."
+msgstr "நிழல் நிறம்."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:271
 msgid "Sh&adow spread:"
-msgstr ""
+msgstr "நிழலின் பரவல் (&A):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:273
 #: ../src/richtext/richtextbackgroundpage.cpp:275
-#, fuzzy
 msgid "Enables the shadow spread."
-msgstr "அகலத்தின் மதிப்பை செயற்படச் செய்க"
+msgstr "நிழலின் பரவலை முடுக்குகிறது."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:282
 #: ../src/richtext/richtextbackgroundpage.cpp:284
 msgid "The shadow spread."
-msgstr ""
+msgstr "நிழலின் பரவல்."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:298
 msgid "&Blur distance:"
-msgstr ""
+msgstr "மங்கலாகும் தொலைவு (&B):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:300
 #: ../src/richtext/richtextbackgroundpage.cpp:302
-#, fuzzy
 msgid "Enables the blur distance."
-msgstr "அகலத்தின் மதிப்பை செயற்படச் செய்க"
+msgstr "மங்கலாகும் தொலைவை முடுக்குகிறது."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:309
 #: ../src/richtext/richtextbackgroundpage.cpp:311
 msgid "The shadow blur distance."
-msgstr ""
+msgstr "நிழல் மங்கலாகும் தொலைவு."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:325
 msgid "Opaci&ty:"
-msgstr ""
+msgstr "தெளிவின்மை (&T)"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:327
 #: ../src/richtext/richtextbackgroundpage.cpp:329
-#, fuzzy
 msgid "Enables the shadow opacity."
-msgstr "அகலத்தின் மதிப்பை செயற்படச் செய்க"
+msgstr "நிழல் தெளிவின்மையை முடுக்குகிறது."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:336
 #: ../src/richtext/richtextbackgroundpage.cpp:338
 msgid "The shadow opacity."
-msgstr ""
+msgstr "நிழல் தெளிவின்மை."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:341
 #: ../src/richtext/richtextsizepage.cpp:340
@@ -7530,7 +7439,7 @@ msgstr "கிடை வரிசையை அழிக்கவும்"
 
 #: ../src/richtext/richtextbuffer.cpp:11340
 msgid "Delete Column"
-msgstr "செங்குத்து வரிசையை அழிக்கவும்"
+msgstr "நெடுவரிசையை அழிக்கவும்"
 
 #: ../src/richtext/richtextbuffer.cpp:11391
 msgid "Add Row"
@@ -7538,7 +7447,7 @@ msgstr "கிடை வரிசையை சேர்க்கவும்"
 
 #: ../src/richtext/richtextbuffer.cpp:11454
 msgid "Add Column"
-msgstr "செங்குத்து வரிசையை சேர்க்கவும்"
+msgstr "நெடுவரிசையை சேர்க்கவும்"
 
 #: ../src/richtext/richtextbuffer.cpp:11497
 msgid "Table Properties"
@@ -7845,12 +7754,12 @@ msgstr "உரையின் நிறத்தை மாற்ற சொடு
 
 #: ../src/richtext/richtextfontpage.cpp:262
 msgid "&Bg colour:"
-msgstr "பின்னணி நிறம்:"
+msgstr "பின்புல நிறம்:"
 
 #: ../src/richtext/richtextfontpage.cpp:267
 #: ../src/richtext/richtextfontpage.cpp:269
 msgid "Click to change the text background colour."
-msgstr "உரையின் பின்னணி நிறத்தை மாற்ற சொடுக்கவும்."
+msgstr "உரையின் பின்புல நிறத்தை மாற்ற சொடுக்கவும்."
 
 #: ../src/richtext/richtextfontpage.cpp:277
 #: ../src/richtext/richtextfontpage.cpp:279
@@ -8326,7 +8235,7 @@ msgstr "செங்குத்து ஒழுங்கு"
 #: ../src/richtext/richtextsizepage.cpp:280
 #: ../src/richtext/richtextsizepage.cpp:282
 msgid "Enable vertical alignment."
-msgstr "செங்குத்து ஒழுங்கமைப்பினை செயற்படச் செய்க"
+msgstr "செங்குத்து ஒழுங்கமைவினை முடுக்குக"
 
 #: ../src/richtext/richtextsizepage.cpp:287
 msgid "Centred"
@@ -8345,7 +8254,7 @@ msgstr "அகலம்:"
 #: ../src/richtext/richtextsizepage.cpp:319
 #: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
-msgstr "அகலத்தின் மதிப்பை செயற்படச் செய்க"
+msgstr "அகலத்தின் மதிப்பை முடுக்குக"
 
 #: ../src/richtext/richtextsizepage.cpp:332
 #: ../src/richtext/richtextsizepage.cpp:334
@@ -8367,7 +8276,7 @@ msgstr "உயரம்:"
 #: ../src/richtext/richtextsizepage.cpp:465
 #: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
-msgstr "உயரத்தின் மதிப்பை செயல்படச் செய்க"
+msgstr "உயரத்தின் மதிப்பை முடுக்குக"
 
 #: ../src/richtext/richtextsizepage.cpp:366
 #: ../src/richtext/richtextsizepage.cpp:368
@@ -8386,7 +8295,7 @@ msgstr "குறைந்தபட்ச அகலம்:"
 #: ../src/richtext/richtextsizepage.cpp:384
 #: ../src/richtext/richtextsizepage.cpp:386
 msgid "Enable the minimum width value."
-msgstr "குறைந்தபட்ச அகலத்தின் மதிப்பை இயங்கச் செய்க"
+msgstr "குறைந்தபட்ச அகலத்தின் மதிப்பை முடுக்குக"
 
 #: ../src/richtext/richtextsizepage.cpp:393
 #: ../src/richtext/richtextsizepage.cpp:395
@@ -8405,7 +8314,7 @@ msgstr "குறைந்தபட்ச உயரம்:"
 #: ../src/richtext/richtextsizepage.cpp:411
 #: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
-msgstr "குறைந்தபட்ச உயரத்தின் மதிப்பை இயங்கச் செய்க"
+msgstr "குறைந்தபட்ச உயரத்தின் மதிப்பை முடுக்குக"
 
 #: ../src/richtext/richtextsizepage.cpp:420
 #: ../src/richtext/richtextsizepage.cpp:422
@@ -8424,7 +8333,7 @@ msgstr "உட்சபட்ச அகலம்:"
 #: ../src/richtext/richtextsizepage.cpp:438
 #: ../src/richtext/richtextsizepage.cpp:440
 msgid "Enable the maximum width value."
-msgstr "உட்சபட்ச அகலத்தின் மதிப்பை இயங்கச் செய்க"
+msgstr "உட்சபட்ச அகலத்தின் மதிப்பை முடுக்குக"
 
 #: ../src/richtext/richtextsizepage.cpp:447
 #: ../src/richtext/richtextsizepage.cpp:449
@@ -8870,13 +8779,12 @@ msgid "Already dialling ISP."
 msgstr "ISP ஏற்கனவே சுழற்றப்பட்டுள்ளது."
 
 #: ../src/unix/dlunix.cpp:90
-#, fuzzy
 msgid "Failed to unload shared library"
-msgstr "'%s' பகிர்வு நூலகத்தை ஏற்றுவதில் தோல்வி"
+msgstr "பகிர்வு நூலகத்தை இறக்குவதில் தோல்வி"
 
 #: ../src/unix/dlunix.cpp:118
 msgid "Unknown dynamic library error"
-msgstr "தெரியாத இயங்குநிலை நூலக பிழை"
+msgstr "அறியப்படாத இயங்குநிலை நூலக பிழை"
 
 #: ../src/unix/epolldispatcher.cpp:84
 msgid "Failed to create epoll descriptor"
@@ -8919,9 +8827,9 @@ msgid "Unable to add inotify watch"
 msgstr "inotify கவனிப்பை ஏற்ற இயலவில்லை."
 
 #: ../src/unix/fswatcher_inotify.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr "inotify கவனிப்பை நீக்க இயலவில்லை"
+msgstr "%I inotify கவனிப்பை  நீக்க இயலவில்லை"
 
 #: ../src/unix/fswatcher_inotify.cpp:271
 #, c-format
@@ -9084,8 +8992,8 @@ msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
 msgstr ""
-"ஒரு இழையுடன் சேர்வதில் தோல்வி, நினைவுக் கசிவாக இருக்கக்கூடும் - கருணைக்கூர்ந்து நிரலை "
-"மறுதுவக்கம் செய்யவும்"
+"ஒரு இழையுடன் சேர்வதில் தோல்வி, நினைவுக் கசிவாக இருக்கக்கூடும் - அருள்கூர்ந்து நிரலை "
+"மறுதுவக்கிடுக "
 
 #: ../src/unix/threadpsx.cpp:1347
 #, c-format
@@ -9195,9 +9103,9 @@ msgid "Cannot load resources from file '%s'."
 msgstr "'%s' கோப்பிலிருந்து வளங்களை ஏற்ற இயலவில்லை."
 
 #: ../src/xrc/xmlres.cpp:2589
-#, fuzzy, c-format
+#, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பது தோல்வியடைந்தது."
+msgstr "%s உருவாக்கப்படுகிறது. \"%s\" தோல்வியடைந்தது."
 
 #~ msgid "&Save as"
 #~ msgstr "இவ்வாறு சேமிக்கவும்"
@@ -9282,32 +9190,32 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgid ""
 #~ "Cannot create new column's ID. Probably max. number of columns reached."
 #~ msgstr ""
-#~ "புதிய செங்குத்து வரிசையின் அடையாளத்தை உருவாக்க இயலவில்லை. ஒரு வேளை செங்குத்து "
-#~ "வரிசை எண்ணிக்கையின் உட்ச அளவை எட்டியிருக்கலாம்."
+#~ "புதிய நெடுவரிசையின் அடையாளத்தை உருவாக்க இயலவில்லை. ஒரு வேளை செங்குத்து வரிசை "
+#~ "எண்ணிக்கையின் உட்ச அளவை எட்டியிருக்கலாம்."
 
 #~ msgid "Column could not be added."
-#~ msgstr "செங்குத்து வரிசையை சேர்க்க இயலவில்லை."
+#~ msgstr "நெடுவரிசையை சேர்க்க இயலவில்லை."
 
 #~ msgid "Column index not found."
-#~ msgstr "செங்குத்து வரிசையின் சுட்டெண் காணப்படவில்லை."
+#~ msgstr "நெடுவரிசையின் சுட்டெண் காணப்படவில்லை."
 
 #~ msgid "Column width could not be determined"
-#~ msgstr "செங்குத்து வரிசையின் அகலத்தை வரையறுக்க இயலவில்லை."
+#~ msgstr "நெடுவரிசையின் அகலத்தை வரையறுக்க இயலவில்லை."
 
 #~ msgid "Column width could not be set."
-#~ msgstr "செங்குத்து வரிசையின் அகலத்தை அமைக்க இயலவில்லை."
+#~ msgstr "நெடுவரிசையின் அகலத்தை அமைக்க இயலவில்லை."
 
 #~ msgid "Confirm registry update"
 #~ msgstr "பதிவகத்தின் புதுப்பித்தல்களை உறுதிச் செய்க"
 
 #~ msgid "Could not determine column index."
-#~ msgstr "செங்குத்து வரிசையின் சுட்டெண்ணை வரையறுக்க இயலவில்லை."
+#~ msgstr "நெடுவரிசையின் சுட்டெண்ணை வரையறுக்க இயலவில்லை."
 
 #~ msgid "Could not determine column's position"
-#~ msgstr "செங்குத்து வரிசையின் நிலையை தீர்மானிக்க இயலவில்லை"
+#~ msgstr "நெடுவரிசையின் நிலையை தீர்மானிக்க இயலவில்லை"
 
 #~ msgid "Could not determine number of columns."
-#~ msgstr "செங்குத்து வரிசையின் எண்ணிக்கையை தீர்மானிக்க இயலவில்லை"
+#~ msgstr "நெடுவரிசையின் எண்ணிக்கையை தீர்மானிக்க இயலவில்லை"
 
 #~ msgid "Could not determine number of items"
 #~ msgstr "உருப்படிகளின் எண்ணிக்கையை தீர்மானிக்க இயலவில்லை"
@@ -9325,13 +9233,13 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "தெரிவு செய்யப்பட்ட உருப்படிகளைப் பெற இயலவில்லை."
 
 #~ msgid "Could not remove column."
-#~ msgstr "செங்குத்து வரிசையை நீக்க இயலவில்லை."
+#~ msgstr "நெடுவரிசையை நீக்க இயலவில்லை."
 
 #~ msgid "Could not retrieve number of items"
 #~ msgstr "உருப்படிகளின் எண்ணிக்கையை மீட்க இயலவில்லை."
 
 #~ msgid "Could not set column width."
-#~ msgstr "செங்குத்து வரிசையின் அகலத்தை அமைக்க இயலவில்லை."
+#~ msgstr "நெடுவரிசையின் அகலத்தை அமைக்க இயலவில்லை."
 
 #~ msgid "Could not set header description."
 #~ msgstr "மேலுரையின் விளக்கத்தை அமைக்க இயலவில்லை."
@@ -9391,25 +9299,25 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "அடுத்து"
 
 #~ msgid "No column existing."
-#~ msgstr "செங்குத்து வரிசை கிடைப்பில் இல்லை."
+#~ msgstr "நெடுவரிசை கிடைப்பில் இல்லை."
 
 #~ msgid "No column for the specified column existing."
-#~ msgstr "குறிப்பிட்ட செங்குத்து வரிசைக்கு செங்குத்து வரிசை ஏதுமில்லை."
+#~ msgstr "குறிப்பிட்ட நெடுவரிசைக்கு நெடுவரிசை ஏதுமில்லை."
 
 #~ msgid "No column for the specified column position existing."
-#~ msgstr "குறிப்பிட்ட செங்குத்து வரிசை நிலைக்கான செங்குத்து வரிசை ஏதுமில்லை."
+#~ msgstr "குறிப்பிட்ட நெடுவரிசை நிலைக்கான நெடுவரிசை ஏதுமில்லை."
 
 #~ msgid ""
 #~ "No renderer or invalid renderer type specified for custom data column."
 #~ msgstr ""
-#~ "தனிப் பயனாக்கப்பட்ட தரவு செங்குத்து வரிசைக்கு, இல்லாத வழங்கி அல்லது ஏற்க முடியாத "
-#~ "வழங்கியின் வகை வரையறுக்கப்பட்டுள்ளது."
+#~ "தனிப் பயனாக்கப்பட்ட தரவு நெடுவரிசைக்கு, இல்லாத வழங்கி அல்லது ஏற்க முடியாத வழங்கியின் "
+#~ "வகை வரையறுக்கப்பட்டுள்ளது."
 
 #~ msgid "No renderer specified for column."
-#~ msgstr "செங்குத்து வரிசைக்கு வழங்கி வரையறுக்கப்படவில்லை."
+#~ msgstr "நெடுவரிசைக்கு வழங்கி வரையறுக்கப்படவில்லை."
 
 #~ msgid "Number of columns could not be determined."
-#~ msgstr "செங்குத்து வரிசையின் எண்ணிக்கையை வரையறுக்க இயலவில்லை."
+#~ msgstr "நெடுவரிசையின் எண்ணிக்கையை வரையறுக்க இயலவில்லை."
 
 #~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
 #~ msgstr "OpenGL \"%s\" செயல் தோல்வியடைந்தது: %s (பிழை %d)"
@@ -9447,8 +9355,7 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "உரை வழங்கி மதிப்பை வழங்க இயலாது; மதிப்பின் வகை:"
 
 #~ msgid "There is no column or renderer for the specified column index."
-#~ msgstr ""
-#~ "குறிப்பிடப்பட்ட செங்குத்து வரிசை சுட்டெண்ணிற்கு செங்குத்து வரிசையோ, வழங்கியோ இல்லை."
+#~ msgstr "குறிப்பிடப்பட்ட நெடுவரிசை சுட்டெண்ணிற்கு நெடுவரிசையோ, வழங்கியோ இல்லை."
 
 #~ msgid ""
 #~ "This system doesn't support date controls, please upgrade your version of "
@@ -9470,7 +9377,7 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "Hildon நிரலை துவக்க நிலையாக்க இயலவில்லை"
 
 #~ msgid "Unknown data format"
-#~ msgstr "தெரியாத தரவு வடிவூட்டம்"
+#~ msgstr "அறியப்படாத தரவு வடிவூட்டம்"
 
 #~ msgid "Valid pointer to native data view control does not exist"
 #~ msgstr "உள்ளக தரவு கட்டுப்பாடு தோற்றத்திற்கான ஏற்கக்கூடிய சுட்டி இல்லை"
@@ -9550,7 +9457,7 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "'%s' திறப்பதில் பிழை"
 
 #~ msgid "unknown seek origin"
-#~ msgstr "தெரியாத மூல நாட்டம்"
+#~ msgstr "அறியப்படாத மூல நாட்டம்"
 
 #~ msgid "wxWidget control pointer is not a data view pointer"
 #~ msgstr "wxWidget கட்டுப்பாட்டுச் சுட்டி ஒரு தரவுத் தோற்ற சுட்டியல்ல."
@@ -9559,13 +9466,13 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "wxWidget's கட்டுப்பாடு துவக்க நிலையாக்கப்படவில்லை."
 
 #~ msgid "ADD"
-#~ msgstr "ஏற்றுக"
+#~ msgstr "ஏற்றிடுக"
 
 #~ msgid "BACK"
 #~ msgstr "பின்"
 
 #~ msgid "CANCEL"
-#~ msgstr "விலக்குக"
+#~ msgstr "விலக்கிடுக"
 
 #~ msgid "CAPITAL"
 #~ msgstr "முகப்பு"
@@ -9738,7 +9645,7 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "உருள் பூட்டு"
 
 #~ msgid "SELECT"
-#~ msgstr "தெரிவு செய்க"
+#~ msgstr "தெரிவுச் செய்க"
 
 #~ msgid "SEPARATOR"
 #~ msgstr "பிரிப்பான்"
@@ -9780,7 +9687,7 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "விண்டோஸ் அடைவிற்கு இடையகம் மிகச் சிறியதாக உள்ளது."
 
 #~ msgid "not implemented"
-#~ msgstr "செயற்படுத்தப்படவில்லை"
+#~ msgstr "நடைமுறைப்படுத்தப்படவில்லை"
 
 #~ msgid "wxPrintout::GetPageInfo gives a null maxPage."
 #~ msgstr "wxPrintout::GetPageInfo ஒரு  வெற்று maxPage-ஐ தருகிறது."
@@ -9840,7 +9747,7 @@ msgstr "'%s', '%s'-ற்குள் பிரித்தெடுப்பத
 #~ msgstr "குறித்து..."
 
 #~ msgid "All files (*.*)|*"
-#~ msgstr "எல்லா கோப்புகளும் (*.*)|*"
+#~ msgstr "எல்லாக் கோப்புகளும் (*.*)|*"
 
 #~ msgid "Cannot start thread: error writing TLS"
 #~ msgstr "இழையை துவக்க இயலவில்லை: TLS எழுதுவதில் பிழை "
