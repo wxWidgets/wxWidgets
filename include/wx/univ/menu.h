@@ -190,6 +190,7 @@ protected:
     void OnMouseMove(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
+    void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
     // process the mouse move event, return true if we did, false to continue
     // processing as usual
