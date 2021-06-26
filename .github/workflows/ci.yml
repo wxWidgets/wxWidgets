@@ -92,6 +92,16 @@ jobs:
             runner: ubuntu-18.04
             configure_flags: --with-qt --enable-pch --without-opengl
             skip_samples: true
+          - name: macOS 10.15 wxMac
+            runner: macos-10.15
+            configure_flags: --disable-sys-libs
+          - name: macOS 10.15 wxiOS
+            runner: macos-10.15
+            configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
+            xcode_sdk: iphonesimulator
+            skip_samples: true
+            skip_testing: true
+            allow_warnings: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -154,6 +164,11 @@ jobs:
           wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
           if [ -n "${{ matrix.gtk_version }}" ]; then
             wxCONFIGURE_OPTIONS="--with-gtk=${{ matrix.gtk_version }} $wxCONFIGURE_OPTIONS"
+          fi
+
+          if [ -n "${{ matrix.xcode_sdk }}" ]; then
+            sdk_path=`xcrun --sdk ${{ matrix.xcode_sdk }} --show-sdk-path`
+            wxCONFIGURE_OPTIONS="--with-macosx-sdk=$sdk_path $wxCONFIGURE_OPTIONS"
           fi
 
           if [ ${{ matrix.use_asan }} ]; then
