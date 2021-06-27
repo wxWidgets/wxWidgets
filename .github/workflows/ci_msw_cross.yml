@@ -120,7 +120,10 @@ jobs:
           # way to change this, so just adjust the owner after checkout.
           sudo chown -R $normal_uid $GITHUB_WORKSPACE
 
-          echo "WINEPATH=$(winepath --windows $(pwd)/lib)" >> $GITHUB_ENV
+          # Add the directories containing MinGW and wx DLLs to Wine path.
+          winepath="$(winepath --windows /usr/lib/gcc/${HOST_TRIPLET}/$(${HOST_TRIPLET}-gcc -dumpversion|tr -d '\r'))"
+          winepath="${winepath};$(winepath --windows $(pwd)/lib)"
+          echo "WINEPATH=${winepath}" >> $GITHUB_ENV
 
           cpu_count=`nproc`
           ((cpu_count++))
