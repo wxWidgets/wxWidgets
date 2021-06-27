@@ -3994,15 +3994,8 @@ public:
         return GetRenderTarget();
     }
 
-    WXHDC GetNativeHDC() wxOVERRIDE
-    {
-        wxFAIL_MSG("Can't get HDC from Direct2D context");
-        return NULL;
-    };
-    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE
-    {
-        wxFAIL_MSG("Can't release HDC for Direct2D context");
-    };
+    WXHDC GetNativeHDC() wxOVERRIDE;
+    void ReleaseNativeHDC(WXHDC hdc) wxOVERRIDE;
 
 private:
     void Init();
@@ -4053,6 +4046,7 @@ private:
     wxStack<StateData> m_stateStack;
     wxStack<LayerData> m_layers;
     ID2D1RenderTarget* m_cachedRenderTarget;
+    wxCOMPtr<ID2D1GdiInteropRenderTarget> m_gdiRenderTarget;
     D2D1::Matrix3x2F m_initTransform;
     // Clipping box
     bool m_isClipBoxValid;
@@ -4976,6 +4970,24 @@ void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
             *dpiY = y;
     }
 }
+
+WXHDC wxD2DContext::GetNativeHDC()
+{
+    if ( !m_gdiRenderTarget )
+        GetRenderTarget()->QueryInterface(IID_ID2D1GdiInteropRenderTarget, reinterpret_cast<void**>(&m_gdiRenderTarget));
+    wxASSERT(m_gdiRenderTarget);
+    HDC hdc;
+    HRESULT hr = m_gdiRenderTarget->GetDC(D2D1_DC_INITIALIZE_MODE_COPY, &hdc);
+    wxCHECK_MSG(SUCCEEDED(hr), NULL, wxString::Format("Can't get HDC from Direct2D context (hr=%x)", hr));
+    return hdc;
+};
+
+void wxD2DContext::ReleaseNativeHDC(WXHDC WXUNUSED(hdc))
+{
+    wxCHECK_RET(m_gdiRenderTarget, "Can't release HDC for Direct2D context");
+    HRESULT hr = m_gdiRenderTarget->ReleaseDC(NULL);
+    wxCHECK_HRESULT_RET(hr);
+};
 
 //-----------------------------------------------------------------------------
 // wxD2DRenderer declaration
