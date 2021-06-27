@@ -44,7 +44,7 @@ httpbin_launch() {
     esac
 
     # Ensure that we have at least some version of pip.
-    if ! python3 -m pip; then
+    if ! python3 -c 'import pip'; then
         sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-pip
     fi
 
