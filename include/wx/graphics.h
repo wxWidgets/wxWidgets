@@ -881,6 +881,11 @@ public:
     void SetContentScaleFactor(double contentScaleFactor);
     double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
+#ifdef __WXMSW__
+    virtual WXHDC GetNativeHDC() = 0;
+    virtual void ReleaseNativeHDC(WXHDC hdc) = 0;
+#endif
+
 protected:
     // These fields must be initialized in the derived class ctors.
     wxDouble m_width,

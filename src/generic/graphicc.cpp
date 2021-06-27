@@ -512,6 +512,18 @@ public:
                                 wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
 
+#ifdef __WXMSW__
+    virtual WXHDC GetNativeHDC() wxOVERRIDE
+    {
+        wxFAIL_MSG("Can't get HDC from Cairo context");
+        return NULL;
+    };
+    virtual void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE
+    {
+        wxFAIL_MSG("Can't release HDC for Cairo context");
+    };
+#endif
+
 protected:
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
 

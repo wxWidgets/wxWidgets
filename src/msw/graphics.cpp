@@ -483,6 +483,9 @@ public:
 
     Graphics* GetGraphics() const { return m_context; }
 
+    virtual WXHDC GetNativeHDC() wxOVERRIDE;
+    virtual void ReleaseNativeHDC(WXHDC hdc) wxOVERRIDE;
+
 protected:
     // Used from ctors (including those in the derived classes) and takes
     // ownership of the graphics pointer that must be non-NULL.
@@ -2506,6 +2509,17 @@ void wxGDIPlusContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
     }
 }
 
+WXHDC wxGDIPlusContext::GetNativeHDC()
+{
+    return m_context->GetHDC();
+}
+
+void wxGDIPlusContext::ReleaseNativeHDC(WXHDC hdc)
+{
+    if ( hdc )
+        m_context->ReleaseHDC((HDC)hdc);
+}
+
 //-----------------------------------------------------------------------------
 // wxGDIPlusPrintingContext implementation
 //-----------------------------------------------------------------------------
@@ -3002,40 +3016,5 @@ private:
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxGDIPlusRendererModule, wxModule);
-
-// ----------------------------------------------------------------------------
-// wxMSW-specific parts of wxGCDC
-// ----------------------------------------------------------------------------
-
-WXHDC wxGCDC::AcquireHDC()
-{
-    wxGraphicsContext * const gc = GetGraphicsContext();
-    if ( !gc )
-        return NULL;
-
-    // we can't get the HDC if it is not a GDI+ context
-    wxCHECK_MSG(gc->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer(), NULL,
-                "can't get HDC because this is not GDI+ context");
-
-    Graphics * const g = static_cast<Graphics *>(gc->GetNativeContext());
-    return g ? g->GetHDC() : NULL;
-}
-
-void wxGCDC::ReleaseHDC(WXHDC hdc)
-{
-    if ( !hdc )
-        return;
-
-    wxGraphicsContext * const gc = GetGraphicsContext();
-    wxCHECK_RET( gc, "can't release HDC because there is no wxGraphicsContext" );
-
-    wxCHECK_RET(gc->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer(),
-                "can't release HDC because this is not GDI+ context");
-
-    Graphics * const g = static_cast<Graphics *>(gc->GetNativeContext());
-    wxCHECK_RET( g, "can't release HDC because there is no Graphics" );
-
-    g->ReleaseHDC((HDC)hdc);
-}
 
 #endif // wxUSE_GRAPHICS_GDIPLUS

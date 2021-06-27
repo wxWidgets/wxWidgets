@@ -110,6 +110,25 @@ wxGCDC::~wxGCDC()
 {
 }
 
+#ifdef __WXMSW__
+WXHDC wxGCDC::AcquireHDC()
+{
+    wxGraphicsContext* const gc = GetGraphicsContext();
+    wxCHECK_MSG(gc, NULL, "can't acquire HDC because there is no wxGraphicsContext");
+    return gc->GetNativeHDC();
+}
+
+void wxGCDC::ReleaseHDC(WXHDC hdc)
+{
+    if ( !hdc )
+        return;
+
+    wxGraphicsContext* const gc = GetGraphicsContext();
+    wxCHECK_RET(gc, "can't release HDC because there is no wxGraphicsContext");
+    gc->ReleaseNativeHDC(hdc);
+}
+#endif // __WXMSW__
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl);
 
 wxGCDCImpl::wxGCDCImpl(wxDC *owner, wxGraphicsContext* context) :

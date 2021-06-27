@@ -38,7 +38,7 @@ public:
 
 #ifdef __WXMSW__
     // override wxDC virtual functions to provide access to HDC associated with
-    // this Graphics object (implemented in src/msw/graphics.cpp)
+    // underlying wxGraphicsContext
     virtual WXHDC AcquireHDC() wxOVERRIDE;
     virtual void ReleaseHDC(WXHDC hdc) wxOVERRIDE;
 #endif // __WXMSW__
