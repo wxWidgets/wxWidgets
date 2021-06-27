@@ -187,6 +187,7 @@ protected:
 
     // event handlers
     void OnLeftDown(wxMouseEvent& event);
+    void OnLeftUp(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
