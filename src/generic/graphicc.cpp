@@ -513,15 +513,8 @@ public:
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
 
 #ifdef __WXMSW__
-    virtual WXHDC GetNativeHDC() wxOVERRIDE
-    {
-        wxFAIL_MSG("Can't get HDC from Cairo context");
-        return NULL;
-    };
-    virtual void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE
-    {
-        wxFAIL_MSG("Can't release HDC for Cairo context");
-    };
+    virtual WXHDC GetNativeHDC() wxOVERRIDE;
+    virtual void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE;
 #endif
 
 protected:
@@ -3085,6 +3078,21 @@ void wxCairoContext::EndLayer()
     cairo_pop_group_to_source(m_context);
     cairo_paint_with_alpha(m_context, double(opacity));
 }
+
+#ifdef __WXMSW__
+WXHDC wxCairoContext::GetNativeHDC()
+{
+    wxCHECK_MSG(m_mswSurface, NULL, "Can't get HDC from Cairo context");
+    cairo_surface_flush(m_mswSurface);
+    return cairo_win32_surface_get_dc(m_mswSurface);
+};
+
+void wxCairoContext::ReleaseNativeHDC(WXHDC WXUNUSED(hdc))
+{
+    wxCHECK_RET(m_mswSurface, "Can't release HDC for Cairo context");
+    cairo_surface_mark_dirty(m_mswSurface);
+};
+#endif // __WXMSW__
 
 //-----------------------------------------------------------------------------
 // wxCairoRenderer declaration

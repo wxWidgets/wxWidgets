@@ -306,9 +306,6 @@ public:
     it changes them, so it is safe to assume that the same pen, brush and colours
     that were active before the call to this function are still in effect after it.
 
-    @note Under wxMSW drawing on wxGCDC is possible only if it's associated with
-    GDI+ or Direct2D wxGraphicsContext.
-
     @library{wxcore}
     @category{gdi}
 */
