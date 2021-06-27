@@ -16,7 +16,9 @@ httpbin_launch() {
 
     case "$(uname -s)" in
         Linux)
-            dist_codename=$(lsb_release --codename --short)
+            if command -v lsb_release > /dev/null; then
+                dist_codename=$(lsb_release --codename --short)
+            fi
             ;;
 
         Darwin)
