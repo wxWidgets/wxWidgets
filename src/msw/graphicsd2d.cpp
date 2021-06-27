@@ -3836,6 +3836,8 @@ public:
     void PushState() wxOVERRIDE {}
     void PopState() wxOVERRIDE {}
     void Flush() wxOVERRIDE {}
+    WXHDC GetNativeHDC() wxOVERRIDE { return NULL; };
+    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE {};
 
 protected:
     void DoDrawText(const wxString&, wxDouble, wxDouble) wxOVERRIDE {}
@@ -3991,6 +3993,16 @@ public:
     {
         return GetRenderTarget();
     }
+
+    WXHDC GetNativeHDC() wxOVERRIDE
+    {
+        wxFAIL_MSG("Can't get HDC from Direct2D context");
+        return NULL;
+    };
+    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE
+    {
+        wxFAIL_MSG("Can't release HDC for Direct2D context");
+    };
 
 private:
     void Init();
