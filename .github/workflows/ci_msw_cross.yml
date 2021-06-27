@@ -86,7 +86,7 @@ jobs:
         run: |
           export DEBIAN_FRONTEND=noninteractive
 
-          packages="git make wine x11-xserver-utils xvfb"
+          packages="git make python3 python3-pip wine x11-xserver-utils xvfb"
 
           case "${HOST_TRIPLET}" in
             x86_64-w64-mingw32)
