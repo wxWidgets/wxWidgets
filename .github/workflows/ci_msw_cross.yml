@@ -91,12 +91,14 @@ jobs:
           case "${HOST_TRIPLET}" in
             x86_64-w64-mingw32)
               packages="$packages g++-mingw-w64-x86-64 wine64"
+              winerun=wine64
               ;;
 
             i686-w64-mingw32)
               sudo dpkg --add-architecture i386
               sudo apt-get -q -o=Dpkg::Use-Pty=0 update
               packages="$packages g++-mingw-w64-i686 wine32"
+              winerun=wine
               ;;
 
             *)
@@ -106,6 +108,8 @@ jobs:
           esac
 
           sudo apt-get -qq install $packages
+
+          echo "WINERUN=${winerun}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -164,7 +168,7 @@ jobs:
 
           httpbin_launch
 
-          wine ./test || rc=$?
+          $WINERUN ./test || rc=$?
 
           if [ -n "$rc" ]; then
             httpbin_show_log
@@ -199,4 +203,4 @@ jobs:
               sleep 3
           done
           echo 'Launching the GUI test:'
-          DISPLAY=:10 wine ./test_gui
+          DISPLAY=:10 $WINERUN ./test_gui
