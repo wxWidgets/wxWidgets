@@ -161,22 +161,7 @@ jobs:
           make $wxMAKE_ARGS failtest
           make $wxMAKE_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
-      - name: Run non-GUI tests
-        working-directory: tests
-        run: |
-          . ../build/tools/httpbin.sh
-
-          httpbin_launch
-
-          $WINERUN ./test || rc=$?
-
-          if [ -n "$rc" ]; then
-            httpbin_show_log
-            exit $rc
-          fi
-
-      - name: Run GUI tests
-        working-directory: tests
+      - name: Launch Xvfb
         run: |
           echo 'Launching Xvfb...'
           sudo mkdir /tmp/.X11-unix
@@ -202,5 +187,24 @@ jobs:
               echo "Still waiting for Xvfb (attempt #$num_tries)"
               sleep 3
           done
-          echo 'Launching the GUI test:'
-          DISPLAY=:10 $WINERUN ./test_gui
+          echo 'Xvfb is running on display :10'
+          echo 'DISPLAY=:10' >> $GITHUB_ENV
+
+      - name: Run non-GUI tests
+        working-directory: tests
+        run: |
+          . ../build/tools/httpbin.sh
+
+          httpbin_launch
+
+          $WINERUN ./test || rc=$?
+
+          if [ -n "$rc" ]; then
+            httpbin_show_log
+            exit $rc
+          fi
+
+      - name: Run GUI tests
+        working-directory: tests
+        run: |
+          $WINERUN ./test_gui
