@@ -25,6 +25,7 @@
     #include "wx/frame.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
+    #include "wx/dcgraph.h"
     #include "wx/panel.h"
     #include "wx/menu.h"
     #include "wx/textdlg.h"
@@ -146,6 +147,22 @@ private:
     void OnToggleDrawFlag(wxCommandEvent& event, int flag);
     void OnChangeAlign(int align);
 
+#if wxUSE_GRAPHICS_CONTEXT
+    void OnGraphicContextNone(wxCommandEvent& evt);
+    void OnGraphicContextDefault(wxCommandEvent& evt);
+#if wxUSE_CAIRO
+    void OnGraphicContextCairo(wxCommandEvent& evt);
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    void OnGraphicContextGDIPlus(wxCommandEvent& evt);
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    void OnGraphicContextDirect2D(wxCommandEvent& evt);
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
+
     class MyPanel *m_panel;
 
     // any class wishing to process wxWidgets events must use this macro
@@ -163,6 +180,9 @@ public:
         m_useIcon =
         m_useBitmap =
         m_useGeneric = false;
+#if wxUSE_GRAPHICS_CONTEXT
+        m_renderer = NULL;
+#endif
     }
 
     int GetFlags() const { return m_flags; }
@@ -172,11 +192,28 @@ public:
     void SetUseIcon(bool useIcon) { m_useIcon = useIcon; }
     void SetUseBitmap(bool useBitmap) { m_useBitmap = useBitmap; }
     void SetUseGeneric(bool useGeneric) { m_useGeneric = useGeneric; }
+#if wxUSE_GRAPHICS_CONTEXT
+    void UseGraphicRenderer(wxGraphicsRenderer* renderer);
+#endif
 
 private:
     void OnPaint(wxPaintEvent&)
     {
-        wxPaintDC dc(this);
+        wxPaintDC pdc(this);
+
+#if wxUSE_GRAPHICS_CONTEXT
+        wxGCDC gdc;
+        if ( m_renderer )
+        {
+            wxGraphicsContext* ctx = m_renderer->CreateContext(pdc);
+            gdc.SetBackground(GetBackgroundColour());
+            gdc.SetGraphicsContext(ctx);
+        }
+
+        wxDC& dc = m_renderer ? static_cast<wxDC&>(gdc) : pdc;
+#else
+        wxDC& dc = pdc;
+#endif
 
         wxRendererNative& renderer = m_useGeneric ? wxRendererNative::GetGeneric()
                                                   : wxRendererNative::Get();
@@ -325,9 +362,33 @@ private:
     bool m_useIcon,
          m_useBitmap,
          m_useGeneric;
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsRenderer* m_renderer;
+#endif
 
     wxDECLARE_EVENT_TABLE();
 };
+
+#if wxUSE_GRAPHICS_CONTEXT
+void MyPanel::UseGraphicRenderer(wxGraphicsRenderer* renderer)
+{
+    m_renderer = renderer;
+    if ( renderer )
+    {
+        int major, minor, micro;
+        renderer->GetVersion(&major, &minor, &micro);
+        wxString str = wxString::Format("Graphics renderer: %s %i.%i.%i",
+            renderer->GetName(), major, minor, micro);
+        reinterpret_cast<wxFrame*>(GetParent())->GetStatusBar()->SetStatusText(str, 1);
+    }
+    else
+    {
+        reinterpret_cast<wxFrame*>(GetParent())->GetStatusBar()->SetStatusText(wxEmptyString, 1);
+    }
+
+    Refresh();
+}
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_PAINT(MyPanel::OnPaint)
@@ -361,6 +422,22 @@ enum
     Render_Load,
     Render_Unload,
 #endif // wxUSE_DYNLIB_CLASS
+
+#if wxUSE_GRAPHICS_CONTEXT
+    DC_DC,
+    DC_GC_Default,
+#if wxUSE_CAIRO
+    DC_GC_Cairo,
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    DC_GC_GDIPlus,
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    DC_GC_Direct2D,
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     // standard menu items
     Render_Quit = wxID_EXIT,
@@ -399,6 +476,22 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_Unload,MyFrame::OnUnload)
 #endif // wxUSE_DYNLIB_CLASS
     EVT_MENU(Render_Quit,  MyFrame::OnQuit)
+
+#if wxUSE_GRAPHICS_CONTEXT
+    EVT_MENU(DC_DC, MyFrame::OnGraphicContextNone)
+    EVT_MENU(DC_GC_Default, MyFrame::OnGraphicContextDefault)
+#if wxUSE_CAIRO
+    EVT_MENU(DC_GC_Cairo, MyFrame::OnGraphicContextCairo)
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    EVT_MENU(DC_GC_GDIPlus, MyFrame::OnGraphicContextGDIPlus)
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    EVT_MENU(DC_GC_Direct2D, MyFrame::OnGraphicContextDirect2D)
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     EVT_MENU(Render_About, MyFrame::OnAbout)
 wxEND_EVENT_TABLE()
@@ -486,6 +579,25 @@ MyFrame::MyFrame()
 #endif // wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Quit);
 
+#if wxUSE_GRAPHICS_CONTEXT
+    wxMenu* menuDC = new wxMenu;
+    // Number the different renderer choices consecutively, starting from 0.
+    int accel = 0;
+    menuDC->AppendRadioItem(DC_DC, wxString::Format("Use wx&DC\t%i", accel++));
+    menuDC->AppendRadioItem(DC_GC_Default, wxString::Format("Use default wx&GraphicContext\t%i", accel++));
+#if wxUSE_CAIRO
+    menuDC->AppendRadioItem(DC_GC_Cairo, wxString::Format("Use &Cairo\t%i", accel++));
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    menuDC->AppendRadioItem(DC_GC_GDIPlus, wxString::Format("Use &GDI+\t%i", accel++));
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    menuDC->AppendRadioItem(DC_GC_Direct2D,wxString::Format("Use &Direct2D\t%i", accel++));
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
+
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Render_About);
@@ -493,6 +605,9 @@ MyFrame::MyFrame()
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
+#if wxUSE_GRAPHICS_CONTEXT
+    menuBar->Append(menuDC, "&DC");
+#endif // wxUSE_GRAPHICS_CONTEXT
     menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
@@ -627,3 +742,35 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION, this);
 }
 
+#if wxUSE_GRAPHICS_CONTEXT
+void MyFrame::OnGraphicContextNone(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(NULL);
+}
+
+void MyFrame::OnGraphicContextDefault(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
+}
+
+#if wxUSE_CAIRO
+void MyFrame::OnGraphicContextCairo(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetCairoRenderer());
+}
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+void MyFrame::OnGraphicContextGDIPlus(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetGDIPlusRenderer());
+}
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+void MyFrame::OnGraphicContextDirect2D(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetDirect2DRenderer());
+}
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
