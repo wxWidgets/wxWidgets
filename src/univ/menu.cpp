@@ -2139,10 +2139,7 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
 {
     if ( HasCapture() )
     {
-        if ( IsShowingMenu() )
-        {
-            DismissMenu();
-        }
+        OnDismiss();
         event.Skip();
     }
     else // we didn't have mouse capture, capture it now
@@ -2154,6 +2151,8 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
             {
                 DismissMenu(); // event outside menubar - dismiss
                 ReleaseMouseCapture(); // we could get capture back from popup window so release it
+                RefreshItem((size_t)m_current);
+                m_current = -1;
             }
         }
         else if ( item == m_current && IsShowingMenu() )
@@ -2161,6 +2160,8 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
             // double-click
             DismissMenu();
             ReleaseMouseCapture();
+            RefreshItem((size_t)m_current);
+            m_current = -1;
         }
         else // on item
         {
@@ -2184,6 +2185,8 @@ void wxMenuBar::OnLeftUp(wxMouseEvent& event)
     {
         DismissMenu();
         ReleaseMouseCapture();
+        RefreshItem((size_t)m_current);
+        m_current = -1;
     }
 }
 
