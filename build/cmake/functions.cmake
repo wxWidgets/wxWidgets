@@ -213,7 +213,7 @@ function(wx_set_target_properties target_name is_base)
     endif()
 
     set(lib_prefix "lib")
-    if(WIN32 AND wxBUILD_SHARED)
+    if(MSVC OR (WIN32 AND wxBUILD_SHARED))
         set(lib_prefix)
     endif()
 
