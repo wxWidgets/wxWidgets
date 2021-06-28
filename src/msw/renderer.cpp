@@ -1011,7 +1011,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
                                     const wxRect& rect,
                                     int flags)
 {
-    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
@@ -1038,7 +1038,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                                 int flags,
                                 wxEllipsizeMode ellipsizeMode)
 {
-    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
