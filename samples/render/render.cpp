@@ -68,6 +68,7 @@ public:
     {
         wxDCBrushChanger setBrush(dc, *wxBLUE_BRUSH);
         wxDCTextColourChanger setFgCol(dc, *wxWHITE);
+        wxDCTextBgModeChanger setBgMode(dc, wxBRUSHSTYLE_TRANSPARENT);
         dc.DrawRoundedRectangle(rect, 5);
 
         wxString label;
