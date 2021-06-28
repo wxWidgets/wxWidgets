@@ -109,7 +109,7 @@ jobs:
 
           sudo apt-get -qq install $packages
 
-          echo "WINERUN=${winerun}" >> $GITHUB_ENV
+          echo "wxTEST_RUNNER=${winerun}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -197,7 +197,7 @@ jobs:
 
           httpbin_launch
 
-          $WINERUN ./test || rc=$?
+          $wxTEST_RUNNER ./test || rc=$?
 
           if [ -n "$rc" ]; then
             httpbin_show_log
@@ -207,4 +207,4 @@ jobs:
       - name: Run GUI tests
         working-directory: tests
         run: |
-          $WINERUN ./test_gui
+          $wxTEST_RUNNER ./test_gui
