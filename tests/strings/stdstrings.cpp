@@ -43,6 +43,13 @@ TEST_CASE("StdString::Constructors", "[stdstring]")
 
     const wchar_t *pw = s2.c_str();
     CHECK( wxString(pw, pw + 1) == "a" );
+
+#ifdef wxHAS_RVALUE_REF
+    wxString s9(std::move(s1));
+    CHECK( s9 == wxT("abcdefgh"));
+    wxString s10(std::move(s3), 8);
+    CHECK( s10 == wxT("abcdefgh"));
+#endif
 }
 
 TEST_CASE("StdString::Iterators", "[stdstring]")
