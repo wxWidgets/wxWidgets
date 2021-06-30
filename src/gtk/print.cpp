@@ -1716,6 +1716,9 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
 #if wxUSE_SPLINES
 void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
 {
+    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points->GetCount() >= 2, "incomplete list of spline points?");
+
     SetPen (m_pen);
 
     double c, d, x1, y1, x3, y3;

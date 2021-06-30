@@ -903,16 +903,14 @@ static void wx_spline_draw_point_array(wxDC *dc)
 void wxDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
+    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points->GetCount() >= 2, "incomplete list of spline points?");
 
     const wxPoint *p;
     double cx1, cy1, cx2, cy2;
     double           x1, y1, x2, y2;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
-    if (!node)
-        // empty list
-        return;
-
     p = node->GetData();
 
     x1 = p->x;

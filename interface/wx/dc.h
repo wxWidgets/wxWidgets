@@ -714,7 +714,7 @@ public:
     /**
         Draws a spline between all given points using the current pen.
 
-        The number of points must be at least 3 for the spline to be drawn.
+        The number of points must be at least 2 for the spline to be drawn.
 
         @beginWxPerlOnly
         Not supported by wxPerl.
