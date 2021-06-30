@@ -1463,6 +1463,8 @@ void wxPostScriptDCImpl::SetLogicalFunction(wxRasterOperationMode WXUNUSED(funct
 void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points->GetCount() >= 2, "incomplete list of spline points?");
 
     SetPen( m_pen );
 
