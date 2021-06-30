@@ -151,6 +151,86 @@ TEST_CASE("StdString::Assign", "[stdstring]")
     CHECK( s1 == "e" );
 }
 
+TEST_CASE("StdString::AssignOp", "[stdstring]")
+{
+    wxString s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13;
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = s9 = s10 = s11 = s12 = s13 = wxT("abc");
+
+    // operator=
+    s1 = wxT("def");
+    CHECK(s1 == wxT("def"));
+
+    s2 = s1;
+    CHECK(s2 == wxT("def"));
+
+    const char* pc = s1.c_str();
+    s3 = pc;
+    CHECK(s3 == wxT("def"));
+
+    const wchar_t* pw = s1.c_str();
+    s4 = pw;
+    CHECK(s4 == wxT("def"));
+
+    s5 = std::move(s1);
+    CHECK(s5 == wxT("def"));
+    s1 = wxT("qwerty");
+    CHECK(s1 == wxT("qwerty"));
+
+    // assign()
+    s6.assign(wxT("def"));
+    CHECK(s6 == wxT("def"));
+
+    s7.assign(s6);
+    CHECK(s7 == wxT("def"));
+
+    pc = s6.c_str();
+    s8.assign(pc);
+    CHECK(s8 == wxT("def"));
+
+    pw = s6.c_str();
+    s9.assign(pw);
+    CHECK(s9 == wxT("def"));
+
+    s10.assign(std::move(s6));
+    CHECK(s10 == wxT("def"));
+    s6 = wxT("qwerty");
+    CHECK(s6 == wxT("qwerty"));
+
+    // swap
+    s11 = wxT("def");
+    std::swap(s11, s12);
+    CHECK(s11 == wxT("abc"));
+    CHECK(s12 == wxT("def"));
+    swap(s11, s12);
+    CHECK(s11 == wxT("def"));
+    CHECK(s12 == wxT("abc"));
+    s11.swap(s12);
+    CHECK(s11 == wxT("abc"));
+    CHECK(s12 == wxT("def"));
+
+    // Self-assignment
+    wxString& s13ref = s13;
+    s13ref = s13;
+    CHECK(s13 == wxT("abc"));
+    s13ref.assign(s13);
+    CHECK(s13 == wxT("abc"));
+    // Self-move may change the value, but shouldn't crash
+    // and reassignment should work
+    s13ref = std::move(s13);
+    s13 = "def";
+    CHECK(s13 == wxT("def"));
+    s13ref.assign(std::move(s13));
+    s13 = "qwerty";
+    CHECK(s13 == wxT("qwerty"));
+    // Self-swap
+    std::swap(s13, s13ref);
+    CHECK(s13 == wxT("qwerty"));
+    swap(s13, s13ref);
+    CHECK(s13 == wxT("qwerty"));
+    s13.swap(s13ref);
+    CHECK(s13 == wxT("qwerty"));
+}
+
 TEST_CASE("StdString::Compare", "[stdstring]")
 {
     wxString s1, s2, s3, s4, s5, s6, s7, s8;
