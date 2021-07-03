@@ -3828,13 +3828,10 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
             switch ( m_cursorMode )
             {
                 case WXGRID_CURSOR_RESIZE_ROW:
-                {
                     DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
-                }
-                break;
+                    break;
 
                 case WXGRID_CURSOR_SELECT_ROW:
-                {
                     if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
                         break;
 
@@ -3851,8 +3848,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                             event,
                             wxEVT_GRID_RANGE_SELECTING);
                     }
-                }
-                break;
+                    break;
 
                 // default label to suppress warnings about "enumeration value
                 // 'xxx' not handled in switch
@@ -4172,10 +4168,9 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
             {
                 case WXGRID_CURSOR_RESIZE_COL:
                     DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
-                break;
+                    break;
 
                 case WXGRID_CURSOR_SELECT_COL:
-                {
                     if ( col != -1 )
                     {
                         if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
@@ -4193,8 +4188,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                             event,
                             wxEVT_GRID_RANGE_SELECTING);
                     }
-                }
-                break;
+                    break;
 
                 case WXGRID_CURSOR_MOVE_COL:
                 {
