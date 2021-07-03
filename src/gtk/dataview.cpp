@@ -218,7 +218,7 @@ public:
     gboolean drag_data_get( GtkTreeDragSource *drag_source, GtkTreePath *path,
         GtkSelectionData *selection_data );
     gboolean drag_data_received( GtkTreeDragDest *drag_dest, GtkTreePath *dest,
-        GtkSelectionData *selection_data );
+        GtkSelectionData *selection_data, GtkTreeViewDropPosition pos );
     gboolean row_drop_possible( GtkTreeDragDest *drag_dest, GtkTreePath *dest_path,
         GtkSelectionData *selection_data );
 
@@ -945,46 +945,23 @@ wxgtk_tree_model_drag_data_delete (GtkTreeDragSource *drag_source,
 }
 
 static gboolean
-wxgtk_tree_model_drag_data_get (GtkTreeDragSource *drag_source,
-                                GtkTreePath       *path,
-                                GtkSelectionData  *selection_data)
+wxgtk_tree_model_drag_data_get (GtkTreeDragSource *WXUNUSED(drag_source),
+                                GtkTreePath       *WXUNUSED(path),
+                                GtkSelectionData  *WXUNUSED(selection_data))
 {
-    GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_source;
-    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
-
-#if 0
-    wxPrintf( "drag_get_data\n");
-
-    wxGtkString atom_selection(gdk_atom_name(selection_data->selection));
-    wxPrintf( "selection %s\n", wxString::FromAscii(atom_selection) );
-
-    wxGtkString atom_target(gdk_atom_name(selection_data->target));
-    wxPrintf( "target %s\n", wxString::FromAscii(atom_target) );
-
-    wxGtkString atom_type(gdk_atom_name(selection_data->type));
-    wxPrintf( "type %s\n", wxString::FromAscii(atom_type) );
-
-    wxPrintf( "format %d\n", selection_data->format );
-#endif
-
-    if ( wxtree_model->stamp == 0 )
-        return FALSE;
-
-    return wxtree_model->internal->drag_data_get( drag_source, path, selection_data );
+    // Actual work now done by gtk_dataview_drag_data_get_callback()
+    // This stub remains in place otherwise GTK will complain about
+    // (GtkTreeDragSourceIface*)->drag_data_get being NULL
+    return TRUE;
 }
 
 static gboolean
-wxgtk_tree_model_drag_data_received (GtkTreeDragDest  *drag_dest,
-                                     GtkTreePath      *dest,
-                                     GtkSelectionData *selection_data)
+wxgtk_tree_model_drag_data_received (GtkTreeDragDest  *WXUNUSED(drag_dest),
+                                     GtkTreePath      *WXUNUSED(dest),
+                                     GtkSelectionData *WXUNUSED(selection_data))
 {
-    GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_dest;
-    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
-
-    if ( wxtree_model->stamp == 0 )
-        return FALSE;
-
-    return wxtree_model->internal->drag_data_received( drag_dest, dest, selection_data );
+    // Actual work now done by gtk_dataview_drag_data_received_callback()
+    return TRUE;
 }
 
 static gboolean
@@ -3872,14 +3849,65 @@ gboolean wxDataViewCtrlInternal::drag_data_get( GtkTreeDragSource *WXUNUSED(drag
 gboolean
 wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
                                            GtkTreePath *path,
-                                           GtkSelectionData *selection_data)
+                                           GtkSelectionData *selection_data,
+                                           GtkTreeViewDropPosition pos
+                                           )
 {
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
+    int drop_flags = 0;
+    int drop_idx = wxNOT_FOUND;
+    int *path_indices;
+    int path_depth;
+
+    if(path)
+        {
+        path_indices = gtk_tree_path_get_indices(path);
+        path_depth = gtk_tree_path_get_depth(path);
+        drop_idx = path_indices[path_depth - 1] + 1;
+        }
+    switch(pos)
+        {
+        case GTK_TREE_VIEW_DROP_BEFORE:
+            drop_flags = wxDrop_Before;
+            if(drop_idx == 1)
+                {
+                // For compatibility with wxGeneric, a position of 0
+                // is a special case meaning before first item.
+                drop_idx = 0;
+                }
+            break;
+        case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
+            drop_flags = wxDrop_Onto | wxDrop_Before;
+            drop_idx = wxNOT_FOUND;
+            break;
+        case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
+            drop_flags = wxDrop_Onto | wxDrop_After;
+            drop_idx = wxNOT_FOUND;
+            break;
+        case GTK_TREE_VIEW_DROP_AFTER:
+            drop_flags = wxDrop_After;
+            break;
+        }
+
+    if(path && drop_idx != wxNOT_FOUND)
+        {
+        // If drop is between rows, return parent row.
+        // GetParent() isn't available here, so use GTK functions.
+        if( gtk_tree_path_up(path) )
+            {
+            wxDataViewItem newitem(GetOwner()->GTKPathToItem(path));
+            item = newitem;
+            }
+        else
+            item = wxDataViewItem();
+        }
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, item);
+    event.SetDropFlags(drop_flags);
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     event.SetDataSize(gtk_selection_data_get_length(selection_data));
     event.SetDataBuffer(const_cast<guchar*>(gtk_selection_data_get_data(selection_data)));
+    event.SetProposedDropIndex( drop_idx );
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
@@ -3895,10 +3923,20 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
                                           GtkSelectionData *selection_data)
 {
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
+    int drop_idx = wxNOT_FOUND;
 
+    if(path)
+        {
+        int *path_indices = gtk_tree_path_get_indices(path);
+        int path_depth = gtk_tree_path_get_depth(path);
+        drop_idx = path_indices[path_depth - 1] + 1;
+        }
+    // Ideally would also fill in event.SetDropFlags() but the required
+    // GtkTreeViewDropPosition data is not available..
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner, item);
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     event.SetDataSize(gtk_selection_data_get_length(selection_data));
+    event.SetProposedDropIndex( drop_idx );
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
@@ -4660,6 +4698,39 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// "drag_data_get" signal
+//-----------------------------------------------------------------------------
+
+static void gtk_dataview_drag_data_get_callback(GtkWidget *widget,
+    GdkDragContext *WXUNUSED(context), GtkSelectionData *selection_data,
+    guint WXUNUSED(i), guint WXUNUSED(t))
+{
+    GtkTreeView *tree = (GtkTreeView*)widget;
+    GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) gtk_tree_view_get_model(tree);
+    GtkTreeSelection *s = gtk_tree_view_get_selection(tree);
+    GtkTreeIter it;
+    gtk_tree_selection_get_selected(s, NULL, &it);
+    GtkTreePath *path = gtk_tree_model_get_path((GtkTreeModel*)wxtree_model,&it);
+    wxtree_model->internal->drag_data_get(NULL, path, selection_data );
+}
+
+//-----------------------------------------------------------------------------
+// "drag_data_received" signal
+//-----------------------------------------------------------------------------
+
+static void gtk_dataview_drag_data_received_callback(GtkWidget *widget,
+    GdkDragContext *WXUNUSED(context), gint x, gint y,
+    GtkSelectionData *selection_data, guint WXUNUSED(i), guint WXUNUSED(t))
+{
+     GtkTreePath *path;
+     GtkTreeView *tree = (GtkTreeView*)widget;
+     GtkTreeViewDropPosition pos;
+     gtk_tree_view_get_dest_row_at_pos((GtkTreeView*)widget, x, y, &path, &pos);
+     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) gtk_tree_view_get_model(tree);
+     wxtree_model->internal->drag_data_received(NULL, path, selection_data, pos );
+}
+
+//-----------------------------------------------------------------------------
 // "button_press_event"
 //-----------------------------------------------------------------------------
 
@@ -4844,6 +4915,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     g_signal_connect (m_treeview, "button_press_event",
                       G_CALLBACK (gtk_dataview_button_press_callback), this);
+    g_signal_connect (m_treeview, "drag-data-get",
+                      G_CALLBACK (gtk_dataview_drag_data_get_callback), this);
+    g_signal_connect (m_treeview, "drag-data-received",
+                      G_CALLBACK (gtk_dataview_drag_data_received_callback), this);
 
     return true;
 }
