@@ -2218,6 +2218,9 @@ public:
     // get the raw key flags (platform-dependent)
     wxUint32 GetRawKeyFlags() const { return m_rawFlags; }
 
+    // returns true if this is a key auto repeat event
+    bool IsAutoRepeat() const { return m_isRepeat; }
+
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
     {
@@ -2279,6 +2282,9 @@ public:
     wxUint32      m_rawCode;
     wxUint32      m_rawFlags;
 
+    // Indicates whether the key event is a repeat
+    bool          m_isRepeat;
+
 private:
     // Set the event to propagate if necessary, i.e. if it's of wxEVT_CHAR_HOOK
     // type. This is used by all ctors.
@@ -2305,6 +2311,7 @@ private:
 #if wxUSE_UNICODE
         m_uniChar = evt.m_uniChar;
 #endif
+        m_isRepeat = evt.m_isRepeat;
     }
 
     // Initialize m_x and m_y using the current mouse cursor position if

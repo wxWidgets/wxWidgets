@@ -1547,6 +1547,15 @@ public:
     */
     bool IsKeyInCategory(int category) const;
 
+    /**
+        Returns true if this event is an auto-repeat of the key, false if this
+        is the initial key press.
+
+        @since 3.1.6
+        @onlyfor{wxosx,wxmsw,wxQt}
+    */
+    bool IsAutoRepeat() const;
+
     //@{
     /**
         Obtains the position (in client coordinates) at which the key was pressed.
