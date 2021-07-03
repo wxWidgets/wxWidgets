@@ -1,5 +1,5 @@
-# Continuous integration workflow for wxWidgets.
-name: GitHub CI
+# CI workflow for wxWidgets builds using configure+make under Unix.
+name: Unix builds
 
 on:
   push:
