@@ -6303,6 +6303,8 @@ MSWInitAnyKeyEvent(wxKeyEvent& event,
     event.m_rawCode = (wxUint32) wParam;
     event.m_rawFlags = (wxUint32) lParam;
     event.SetTimestamp(::GetMessageTime());
+
+    event.m_isRepeat = (HIWORD(lParam) & KF_REPEAT) == KF_REPEAT;
 }
 
 } // anonymous namespace

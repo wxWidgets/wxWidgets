@@ -452,6 +452,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     wxevent.m_rawFlags = modifiers;
 
     wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
+    wxevent.m_isRepeat = (eventType == NSKeyDown) && [nsEvent isARepeat];
 
     wxString chars;
     if ( eventType != NSFlagsChanged )
