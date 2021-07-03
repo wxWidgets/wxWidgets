@@ -86,7 +86,7 @@ jobs:
         run: |
           export DEBIAN_FRONTEND=noninteractive
 
-          packages="git make python3 python3-pip winbind wine x11-xserver-utils xvfb"
+          packages="git make wine x11-xserver-utils xvfb"
 
           case "${HOST_TRIPLET}" in
             x86_64-w64-mingw32)
@@ -193,10 +193,6 @@ jobs:
       - name: Run non-GUI tests
         working-directory: tests
         run: |
-          . ../build/tools/httpbin.sh
-
-          httpbin_launch
-
           # Some tests are currently failing under Wine while they pass under
           # native MSW, just skip running them until they can be dealt with.
 
@@ -219,12 +215,7 @@ jobs:
           # Wine WinHTTP implementations seems buggy, there are many errors.
           excluded_tests+=('~[webrequest]')
 
-          $wxTEST_RUNNER ./test "${excluded_tests[@]}" || rc=$?
-
-          if [ -n "$rc" ]; then
-            httpbin_show_log
-            exit $rc
-          fi
+          $wxTEST_RUNNER ./test "${excluded_tests[@]}"
 
       - name: Run GUI tests
         working-directory: tests
