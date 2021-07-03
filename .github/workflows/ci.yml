@@ -1,11 +1,12 @@
-# Continuous integration workflow for wxWidgets.
-name: GitHub CI
+# CI workflow for wxWidgets builds using configure+make under Unix.
+name: Unix builds
 
 on:
   push:
     branches:
       - master
     paths-ignore:
+      - '.github/workflows/ci_msw_cross.yml'
       - 'build/tools/appveyor*.bat'
       - 'build/tools/travis-ci.sh'
       - 'distrib/**'
@@ -22,6 +23,7 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.github/workflows/ci_msw_cross.yml'
       - 'build/tools/appveyor*.bat'
       - 'build/tools/travis-ci.sh'
       - 'distrib/**'
