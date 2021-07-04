@@ -60,6 +60,11 @@ jobs:
       # Default to 64-bit build.
       HOST_TRIPLET: ${{ matrix.triplet || 'x86_64-w64-mingw32' }}
 
+      # While our tests should run in any locale natively, it seems that Wine
+      # requires the locale encoding to be UTF-8 for Unicode file names to work
+      # correctly, so set the locale explicitly for it.
+      LC_ALL: C.UTF-8
+
     # Run all commands as the normal user, created by the first step below.
     #
     # Note that the Bash options used here are the same as for the default
@@ -200,11 +205,11 @@ jobs:
           # to exclude the tests that are not run by default, so start with this.
           excluded_tests=('~[.]')
 
-          # Only TestSetTimes fails, but only the full test can be excluded.
-          excluded_tests+=('~FileNameTestCase')
+          # There is 1 day difference in creation time under Wine somehow.
+          excluded_tests+=('~wxFileName::SetTimes')
 
-          # Only FileError fails, but the whole test has to be excluded.
-          excluded_tests+=('~FileFunctionsTestCase')
+          # Closing the file fails for unknown reason under Wine.
+          excluded_tests+=('~FileFunctions::Error')
 
           # Sporadic failures due to extra events.
           excluded_tests+=('~wxFileSystemWatcher::EventCreate')
