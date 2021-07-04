@@ -1447,17 +1447,17 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
     wxCHECK_RET(points, "NULL pointer to spline points?");
-    wxCHECK_RET(points->GetCount() >= 2, "incomplete list of spline points?");
+    wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     SetPen( m_pen );
 
-    wxPointList::compatibility_iterator node = points->GetFirst();
-    wxPoint* p = node->GetData();
-    wxPoint2DDouble p1(*p);
+    wxPointList::const_iterator itPt = points->begin();
 
-    node = node->GetNext();
-    p = node->GetData();
-    wxPoint2DDouble p2(*p);
+    const wxPoint* pt = *itPt; ++itPt;
+    wxPoint2DDouble p1(*pt);
+
+    pt = *itPt; ++itPt;
+    wxPoint2DDouble p2(*pt);
     wxPoint2DDouble p3 = (p1 + p2) / 2.0;
 
     wxString buffer;
@@ -1472,14 +1472,13 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
     CalcBoundingBox( (wxCoord)p1.m_x, (wxCoord)p1.m_y );
     CalcBoundingBox( (wxCoord)p3.m_x, (wxCoord)p3.m_y );
 
-    node = node->GetNext();
-    while (node)
+    while ( itPt != points->end() )
     {
-        p = node->GetData();
+        pt = *itPt; ++itPt;
 
         wxPoint2DDouble p0 = p3;
         p1 = p2;
-        p2 = *p;
+        p2 = *pt;
         p3 = (p1 + p2) / 2.0;
 
         // Calculate using degree elevation to a cubic bezier
@@ -1495,8 +1494,6 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 
         CalcBoundingBox( (wxCoord)p0.m_x, (wxCoord)p0.m_y );
         CalcBoundingBox( (wxCoord)p3.m_x, (wxCoord)p3.m_y );
-
-        node = node->GetNext();
     }
 
     /*
