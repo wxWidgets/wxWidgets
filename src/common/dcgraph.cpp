@@ -856,31 +856,25 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 
     wxPointList::const_iterator itPt = points->begin();
     const wxPoint* p = *itPt; ++itPt;
-    wxCoord x1 = p->x;
-    wxCoord y1 = p->y;
+    wxPoint2DDouble p1(*p);
 
     p = *itPt; ++itPt;
-    wxCoord x2 = p->x;
-    wxCoord y2 = p->y;
-    wxCoord cx1 = ( x1 + x2 ) / 2;
-    wxCoord cy1 = ( y1 + y2 ) / 2;
+    wxPoint2DDouble p2(*p);
+    wxPoint2DDouble c1 = (p1 + p2) / 2.0;
 
-    path.MoveToPoint( x1 , y1 );
-    path.AddLineToPoint( cx1 , cy1 );
+    path.MoveToPoint(p1);
+    path.AddLineToPoint(c1);
     while ( itPt != points->end() )
     {
         p = *itPt; ++itPt;
-        x1 = x2;
-        y1 = y2;
-        x2 = p->x;
-        y2 = p->y;
-        wxCoord cx4 = (x1 + x2) / 2;
-        wxCoord cy4 = (y1 + y2) / 2;
+        p1 = p2;
+        p2 = *p;
+        wxPoint2DDouble c4 = (p1 + p2) / 2.0;
 
-        path.AddQuadCurveToPoint(x1 , y1 ,cx4 , cy4 );
+        path.AddQuadCurveToPoint(p1.m_x , p1.m_y, c4.m_x, c4.m_y);
     }
 
-    path.AddLineToPoint( x2 , y2 );
+    path.AddLineToPoint(p2);
 
     m_graphicContext->StrokePath( path );
 
