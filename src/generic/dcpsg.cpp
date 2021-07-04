@@ -102,23 +102,6 @@ static const char *wxPostScriptHeaderEllipticArc=
 "  { fill }{ stroke } ifelse\n" // -> fill or stroke
 "} def\n";
 
-static const char *wxPostScriptHeaderSpline = "\
-/DrawSplineSection {\n\
-    /y3 exch def\n\
-    /x3 exch def\n\
-    /y2 exch def\n\
-    /x2 exch def\n\
-    /y1 exch def\n\
-    /x1 exch def\n\
-    /xa x1 x2 x1 sub 0.666667 mul add def\n\
-    /ya y1 y2 y1 sub 0.666667 mul add def\n\
-    /xb x3 x2 x3 sub 0.666667 mul add def\n\
-    /yb y3 y2 y3 sub 0.666667 mul add def\n\
-    x1 y1 lineto\n\
-    xa ya xb yb x3 y3 curveto\n\
-    } def\n\
-";
-
 static const char *wxPostScriptHeaderColourImage = "\
 % define 'colorimage' if it isn't defined\n\
 %   ('colortogray' and 'mergeprocs' come from xwd2ps\n\
@@ -1468,8 +1451,6 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 
     SetPen( m_pen );
 
-    // a and b are not used
-    //double a, b;
     double c, d, x1, y1, x3, y3;
     wxPoint *p, *q;
 
@@ -1482,16 +1463,8 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
     p = node->GetData();
     c = p->x;
     d = p->y;
-    x3 =
-         #if 0
-         a =
-         #endif
-         (double)(x1 + c) / 2;
-    y3 =
-         #if 0
-         b =
-         #endif
-         (double)(y1 + d) / 2;
+    x3 = (double)(x1 + c) / 2;
+    y3 = (double)(y1 + d) / 2;
 
     wxString buffer;
     buffer.Printf( "newpath\n"
@@ -1520,10 +1493,16 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
         x3 = (double)(x2 + c) / 2;
         y3 = (double)(y2 + d) / 2;
 
-        buffer.Printf( "%f %f %f %f %f %f DrawSplineSection\n",
-            XLOG2DEV(wxRound(x1)), YLOG2DEV(wxRound(y1)),
-            XLOG2DEV(wxRound(x2)), YLOG2DEV(wxRound(y2)),
-            XLOG2DEV(wxRound(x3)), YLOG2DEV(wxRound(y3)) );
+        // Calculate using degree elevation to a cubic bezier
+        wxDouble c1x = (x1 + 2 * x2) / 3.0;
+        wxDouble c1y = (y1 + 2 * y2) / 3.0;
+        wxDouble c2x = (2 * x2 + x3) / 3.0;
+        wxDouble c2y = (2 * y2 + y3) / 3.0;
+
+        buffer.Printf("%f %f %f %f %f %f curveto\n",
+            XLOG2DEV(wxRound(c1x)), YLOG2DEV(wxRound(c1y)),
+            XLOG2DEV(wxRound(c2x)), YLOG2DEV(wxRound(c2y)),
+            XLOG2DEV(wxRound(x3)), YLOG2DEV(wxRound(y3)));
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
@@ -1718,8 +1697,6 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
     PsPrint( wxPostScriptHeaderColourImage );
     PsPrint( wxPostScriptHeaderReencodeISO1 );
     PsPrint( wxPostScriptHeaderReencodeISO2 );
-    if (wxPostScriptHeaderSpline)
-        PsPrint( wxPostScriptHeaderSpline );
     PsPrint( wxPostScriptHeaderStrSplit );
     PsPrint( "%%EndProlog\n" );
 
