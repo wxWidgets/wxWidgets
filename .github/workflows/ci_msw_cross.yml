@@ -200,8 +200,8 @@ jobs:
           # to exclude the tests that are not run by default, so start with this.
           excluded_tests=('~[.]')
 
-          # Only TestSetTimes fails, but only the full test can be excluded.
-          excluded_tests+=('~FileNameTestCase')
+          # There is 1 day difference in creation time under Wine somehow.
+          excluded_tests+=('~wxFileName::SetTimes')
 
           # Closing the file fails for unknown reason under Wine.
           excluded_tests+=('~FileFunctions::Error')
