@@ -847,22 +847,19 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawSpline - invalid DC") );
     wxCHECK_RET(points, "NULL pointer to spline points?");
-    wxCHECK_RET(points->GetCount() >= 2, "incomplete list of spline points?");
+    wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     if ( !m_logicalFunctionSupported )
         return;
 
     wxGraphicsPath path = m_graphicContext->CreatePath();
 
-    wxPointList::compatibility_iterator node = points->GetFirst();
-    const wxPoint *p = node->GetData();
-
+    wxPointList::const_iterator itPt = points->begin();
+    const wxPoint* p = *itPt; ++itPt;
     wxCoord x1 = p->x;
     wxCoord y1 = p->y;
 
-    node = node->GetNext();
-    p = node->GetData();
-
+    p = *itPt; ++itPt;
     wxCoord x2 = p->x;
     wxCoord y2 = p->y;
     wxCoord cx1 = ( x1 + x2 ) / 2;
@@ -870,16 +867,9 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 
     path.MoveToPoint( x1 , y1 );
     path.AddLineToPoint( cx1 , cy1 );
-#if !wxUSE_STD_CONTAINERS
-
-    while ((node = node->GetNext()) != NULL)
-#else
-
-    while ((node = node->GetNext()))
-#endif // !wxUSE_STD_CONTAINERS
-
+    while ( itPt != points->end() )
     {
-        p = node->GetData();
+        p = *itPt; ++itPt;
         x1 = x2;
         y1 = y2;
         x2 = p->x;
