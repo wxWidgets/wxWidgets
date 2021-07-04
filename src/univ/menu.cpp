@@ -369,7 +369,13 @@ void wxPopupMenuWindow::ChangeCurrent(wxMenuItemIter node)
         }
 
         if ( m_nodeCurrent )
-            RefreshItem(m_nodeCurrent->GetData());
+        {
+            wxMenuItem *item = m_nodeCurrent->GetData();
+            if ( item && item->GetMenu()->IsShown() )
+            {
+                RefreshItem(m_nodeCurrent->GetData());
+            }
+        }
     }
 }
 
