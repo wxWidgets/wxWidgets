@@ -1451,75 +1451,66 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 
     SetPen( m_pen );
 
-    double c, d, x1, y1, x3, y3;
-    wxPoint *p, *q;
-
     wxPointList::compatibility_iterator node = points->GetFirst();
-    p = node->GetData();
-    x1 = p->x;
-    y1 = p->y;
+    wxPoint* p = node->GetData();
+    wxPoint2DDouble p1(*p);
 
     node = node->GetNext();
     p = node->GetData();
-    c = p->x;
-    d = p->y;
-    x3 = (double)(x1 + c) / 2;
-    y3 = (double)(y1 + d) / 2;
+    wxPoint2DDouble p2(*p);
+    wxPoint2DDouble p3 = (p1 + p2) / 2.0;
 
     wxString buffer;
     buffer.Printf( "newpath\n"
                    "%f %f moveto\n"
                    "%f %f lineto\n",
-            XLOG2DEV(wxRound(x1)), YLOG2DEV(wxRound(y1)),
-            XLOG2DEV(wxRound(x3)), YLOG2DEV(wxRound(y3)) );
+            XLOG2DEV(wxRound(p1.m_x)), YLOG2DEV(wxRound(p1.m_y)),
+            XLOG2DEV(wxRound(p3.m_x)), YLOG2DEV(wxRound(p3.m_y)) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
-    CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+    CalcBoundingBox( (wxCoord)p1.m_x, (wxCoord)p1.m_y );
+    CalcBoundingBox( (wxCoord)p3.m_x, (wxCoord)p3.m_y );
 
     node = node->GetNext();
     while (node)
     {
-        double x2, y2;
-        q = node->GetData();
+        p = node->GetData();
 
-        x1 = x3;
-        y1 = y3;
-        x2 = c;
-        y2 = d;
-        c = q->x;
-        d = q->y;
-        x3 = (double)(x2 + c) / 2;
-        y3 = (double)(y2 + d) / 2;
+        wxPoint2DDouble p0 = p3;
+        p1 = p2;
+        p2 = *p;
+        p3 = (p1 + p2) / 2.0;
 
         // Calculate using degree elevation to a cubic bezier
-        wxDouble c1x = (x1 + 2 * x2) / 3.0;
-        wxDouble c1y = (y1 + 2 * y2) / 3.0;
-        wxDouble c2x = (2 * x2 + x3) / 3.0;
-        wxDouble c2y = (2 * y2 + y3) / 3.0;
+        wxPoint2DDouble c1 = (p0 + (p1 * 2.0)) / 3.0;
+        wxPoint2DDouble c2 = ((p1 * 2.0) + p3) / 3.0;
 
         buffer.Printf("%f %f %f %f %f %f curveto\n",
-            XLOG2DEV(wxRound(c1x)), YLOG2DEV(wxRound(c1y)),
-            XLOG2DEV(wxRound(c2x)), YLOG2DEV(wxRound(c2y)),
-            XLOG2DEV(wxRound(x3)), YLOG2DEV(wxRound(y3)));
+            XLOG2DEV(wxRound(c1.m_x)), YLOG2DEV(wxRound(c1.m_y)),
+            XLOG2DEV(wxRound(c2.m_x)), YLOG2DEV(wxRound(c2.m_y)),
+            XLOG2DEV(wxRound(p3.m_x)), YLOG2DEV(wxRound(p3.m_y)));
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
-        CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+        CalcBoundingBox( (wxCoord)p0.m_x, (wxCoord)p0.m_y );
+        CalcBoundingBox( (wxCoord)p3.m_x, (wxCoord)p3.m_y );
 
         node = node->GetNext();
     }
 
     /*
-       At this point, (x2,y2) and (c,d) are the position of the
+       At this point, p1 and p2 are the position of the
        next-to-last and last point respectively, in the point list
      */
 
-    buffer.Printf( "%f %f lineto\nstroke\n", XLOG2DEV(wxRound(c)), YLOG2DEV(wxRound(d)) );
+    buffer.Printf( "%f %f lineto\n"
+                   "stroke\n",
+                   XLOG2DEV(wxRound(p2.m_x)), YLOG2DEV(wxRound(p2.m_y)) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
+
+    CalcBoundingBox((wxCoord)p2.m_x, (wxCoord)p2.m_y);
 }
 #endif // wxUSE_SPLINES
 
