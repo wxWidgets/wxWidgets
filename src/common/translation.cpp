@@ -1140,7 +1140,7 @@ bool wxMsgCatalogFile::LoadFile(const wxString& filename,
               );
     if ( !ok )
     {
-        wxLogWarning(_("'%s' is not a valid message catalog."), filename.c_str());
+        wxLogWarning(_("'%s' is not a valid message catalog."), filename);
         return false;
     }
 
@@ -1939,8 +1939,8 @@ wxMsgCatalog *wxFileTranslationsLoader::LoadCatalog(const wxString& domain,
         return NULL;
 
     // open file and read its data
-    wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName.c_str());
-    wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
+    wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName);
+    wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName);
 
     return wxMsgCatalog::CreateFromFile(strFullName, domain);
 }

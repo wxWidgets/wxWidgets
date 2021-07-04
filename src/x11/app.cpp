@@ -125,7 +125,7 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
                 if (wxSscanf(argV[i], wxT("%dx%d"), &w, &h) != 2)
                 {
                     wxLogError( _("Invalid geometry specification '%s'"),
-                                wxString(argV[i]).c_str() );
+                                wxString(argV[i]) );
                 }
                 else
                 {
@@ -360,7 +360,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #if !wxUSE_NANOX
         case GraphicsExpose:
         {
-            wxLogTrace( wxT("expose"), wxT("GraphicsExpose from %s"), win->GetName().c_str());
+            wxLogTrace( wxT("expose"), wxT("GraphicsExpose from %s"), win->GetName());
 
             win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
                                           event->xgraphicsexpose.width, event->xgraphicsexpose.height);
@@ -387,7 +387,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
             wxTranslateKeyEvent(keyEvent, win, window, event);
 
-            // wxLogDebug( "OnKey from %s", win->GetName().c_str() );
+            // wxLogDebug( "OnKey from %s", win->GetName() );
 
             // We didn't process wxEVT_KEY_DOWN, so send wxEVT_CHAR
             if (win->HandleWindowEvent( keyEvent ))
@@ -590,7 +590,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     g_prevFocus = wxWindow::FindFocus();
                     g_nextFocus = win;
 
-                    wxLogTrace( wxT("focus"), wxT("About to call SetFocus on %s of type %s due to button press"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                    wxLogTrace( wxT("focus"), wxT("About to call SetFocus on %s of type %s due to button press"), win->GetName(), win->GetClassInfo()->GetClassName() );
 
                     // Record the fact that this window is
                     // getting the focus, because we'll need to
@@ -621,7 +621,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 (event->xfocus.mode == NotifyNormal))
 #endif
             {
-                wxLogTrace( wxT("focus"), wxT("FocusIn from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                wxLogTrace( wxT("focus"), wxT("FocusIn from %s of type %s"), win->GetName(), win->GetClassInfo()->GetClassName() );
 
                 extern wxWindow* g_GettingFocus;
                 if (g_GettingFocus && g_GettingFocus->GetParent() == win)
@@ -629,7 +629,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     // Ignore this, this can be a spurious FocusIn
                     // caused by a child having its focus set.
                     g_GettingFocus = NULL;
-                    wxLogTrace( wxT("focus"), wxT("FocusIn from %s of type %s being deliberately ignored"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                    wxLogTrace( wxT("focus"), wxT("FocusIn from %s of type %s being deliberately ignored"), win->GetName(), win->GetClassInfo()->GetClassName() );
                     return true;
                 }
                 else
@@ -650,7 +650,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 (event->xfocus.mode == NotifyNormal))
 #endif
             {
-                wxLogTrace( wxT("focus"), wxT("FocusOut from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                wxLogTrace( wxT("focus"), wxT("FocusOut from %s of type %s"), win->GetName(), win->GetClassInfo()->GetClassName() );
 
                 wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                 focusEvent.SetEventObject(win);

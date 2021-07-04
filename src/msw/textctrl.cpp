@@ -742,7 +742,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
         wxChar c;
         if ( wxSscanf(classname, wxT("RichEdit%d0%c"), &m_verRichEdit, &c) != 2 )
         {
-            wxLogDebug(wxT("Unknown edit control '%s'."), classname.c_str());
+            wxLogDebug(wxT("Unknown edit control '%s'."), classname);
 
             m_verRichEdit = 0;
         }

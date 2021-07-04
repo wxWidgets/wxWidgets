@@ -713,7 +713,7 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
     // set the first valid facename we can find on this system
     wxString validfacename = wxFontEnumerator::GetFacenames().Item(0);
-    wxLogTrace(wxT("font"), wxT("Falling back to '%s'"), validfacename.c_str());
+    wxLogTrace(wxT("font"), wxT("Falling back to '%s'"), validfacename);
     SetFaceName(validfacename);
 #else // !wxUSE_FONTENUM
     SetFaceName(facenames[0]);

@@ -570,7 +570,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         wxLogError(_("Can't save log contents to file."));
     }
     else {
-        wxLogStatus((wxFrame*)this, _("Log saved to the file '%s'."), filename.c_str());
+        wxLogStatus((wxFrame*)this, _("Log saved to the file '%s'."), filename);
     }
 }
 #endif // CAN_SAVE_FILES
@@ -1009,7 +1009,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
         bool bAppend = false;
         wxString strMsg;
         strMsg.Printf(_("Append log to file '%s' (choosing [No] will overwrite it)?"),
-                      filename.c_str());
+                      filename);
         switch ( wxMessageBox(strMsg, _("Question"),
                               wxICON_QUESTION | wxYES_NO | wxCANCEL) ) {
             case wxYES:

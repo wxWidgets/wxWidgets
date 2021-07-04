@@ -168,7 +168,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     // Add window's own scrollbars to main window, not to client window
     if (parent->GetInsertIntoMain())
     {
-        // wxLogDebug( "Inserted into main: %s", GetName().c_str() );
+        // wxLogDebug( "Inserted into main: %s", GetName() );
         xparent = (Window) parent->X11GetMainWindow();
     }
 
@@ -298,7 +298,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     }
     else
     {
-        // wxLogDebug( "No two windows needed %s", GetName().c_str() );
+        // wxLogDebug( "No two windows needed %s", GetName() );
 #if wxUSE_NANOX
         long backColor, foreColor;
         backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
@@ -502,12 +502,12 @@ bool wxWindowX11::Show(bool show)
     Display *xdisp = wxGlobalDisplay();
     if (show)
     {
-        // wxLogDebug( "Mapping window of type %s", GetName().c_str() );
+        // wxLogDebug( "Mapping window of type %s", GetName() );
         XMapWindow(xdisp, xwindow);
     }
     else
     {
-        // wxLogDebug( "Unmapping window of type %s", GetName().c_str() );
+        // wxLogDebug( "Unmapping window of type %s", GetName() );
         XUnmapWindow(xdisp, xwindow);
     }
 
@@ -592,7 +592,7 @@ void wxWindowX11::DoReleaseMouse()
         XUngrabPointer( wxGlobalDisplay(), CurrentTime );
     }
 
-    // wxLogDebug( "Ungrabbed pointer in %s", GetName().c_str() );
+    // wxLogDebug( "Ungrabbed pointer in %s", GetName() );
 
     m_winCaptured = false;
 }

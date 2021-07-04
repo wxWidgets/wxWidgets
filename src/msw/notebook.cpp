@@ -674,7 +674,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     // finally do insert it
     if ( TabCtrl_InsertItem(GetHwnd(), nPage, &tcItem) == -1 )
     {
-        wxLogError(wxT("Can't create the notebook page '%s'."), strText.c_str());
+        wxLogError(wxT("Can't create the notebook page '%s'."), strText);
 
         return false;
     }

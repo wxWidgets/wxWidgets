@@ -70,7 +70,7 @@ bool wxFFile::Close()
     {
         if ( fclose(m_fp) != 0 )
         {
-            wxLogSysError(_("can't close file '%s'"), m_name.c_str());
+            wxLogSysError(_("can't close file '%s'"), m_name);
 
             return false;
         }
@@ -104,7 +104,7 @@ bool wxFFile::ReadAll(wxString *str, const wxMBConv& conv)
 
     if ( Error() )
     {
-        wxLogSysError(_("Read error on file '%s'"), m_name.c_str());
+        wxLogSysError(_("Read error on file '%s'"), m_name);
 
         return false;
     }
@@ -129,7 +129,7 @@ size_t wxFFile::Read(void *pBuf, size_t nCount)
     size_t nRead = fread(pBuf, 1, nCount, m_fp);
     if ( (nRead < nCount) && Error() )
     {
-        wxLogSysError(_("Read error on file '%s'"), m_name.c_str());
+        wxLogSysError(_("Read error on file '%s'"), m_name);
     }
 
     return nRead;
@@ -146,7 +146,7 @@ size_t wxFFile::Write(const void *pBuf, size_t nCount)
     size_t nWritten = fwrite(pBuf, 1, nCount, m_fp);
     if ( nWritten < nCount )
     {
-        wxLogSysError(_("Write error on file '%s'"), m_name.c_str());
+        wxLogSysError(_("Write error on file '%s'"), m_name);
     }
 
     return nWritten;
@@ -184,7 +184,7 @@ bool wxFFile::Flush()
     {
         if ( fflush(m_fp) != 0 )
         {
-            wxLogSysError(_("failed to flush the file '%s'"), m_name.c_str());
+            wxLogSysError(_("failed to flush the file '%s'"), m_name);
 
             return false;
         }
@@ -224,7 +224,7 @@ bool wxFFile::Seek(wxFileOffset ofs, wxSeekMode mode)
 #ifndef wxHAS_LARGE_FFILES
     if ((long)ofs != ofs)
     {
-        wxLogError(_("Seek error on file '%s' (large files not supported by stdio)"), m_name.c_str());
+        wxLogError(_("Seek error on file '%s' (large files not supported by stdio)"), m_name);
 
         return false;
     }
@@ -234,7 +234,7 @@ bool wxFFile::Seek(wxFileOffset ofs, wxSeekMode mode)
     if ( wxFseek(m_fp, ofs, origin) != 0 )
 #endif
     {
-        wxLogSysError(_("Seek error on file '%s'"), m_name.c_str());
+        wxLogSysError(_("Seek error on file '%s'"), m_name);
 
         return false;
     }
@@ -250,8 +250,7 @@ wxFileOffset wxFFile::Tell() const
     wxFileOffset rc = wxFtell(m_fp);
     if ( rc == wxInvalidOffset )
     {
-        wxLogSysError(_("Can't find current position in file '%s'"),
-                      m_name.c_str());
+        wxLogSysError(_("Can't find current position in file '%s'"), m_name);
     }
 
     return rc;
@@ -374,12 +373,12 @@ bool wxTempFFile::Commit()
     m_file.Close();
 
     if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
-        wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't remove file '%s'"), m_strName);
         return false;
     }
 
     if ( !wxRenameFile(m_strTemp, m_strName)  ) {
-        wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
         return false;
     }
 
@@ -391,7 +390,7 @@ void wxTempFFile::Discard()
     m_file.Close();
     if ( wxRemove(m_strTemp) != 0 )
     {
-        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
+        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp);
     }
 }
 

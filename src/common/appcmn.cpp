@@ -283,7 +283,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         wxTheme *theme = wxTheme::Create(themeName);
         if ( !theme )
         {
-            wxLogError(_("Unsupported theme '%s'."), themeName.c_str());
+            wxLogError(_("Unsupported theme '%s'."), themeName);
             return false;
         }
 
@@ -298,9 +298,9 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
     if ( parser.Found(OPTION_MODE, &modeDesc) )
     {
         unsigned w, h, bpp;
-        if ( wxSscanf(modeDesc.c_str(), wxT("%ux%u-%u"), &w, &h, &bpp) != 3 )
+        if ( wxSscanf(modeDesc, wxT("%ux%u-%u"), &w, &h, &bpp) != 3 )
         {
-            wxLogError(_("Invalid display mode specification '%s'."), modeDesc.c_str());
+            wxLogError(_("Invalid display mode specification '%s'."), modeDesc);
             return false;
         }
 
