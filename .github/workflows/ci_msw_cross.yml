@@ -203,8 +203,8 @@ jobs:
           # Only TestSetTimes fails, but only the full test can be excluded.
           excluded_tests+=('~FileNameTestCase')
 
-          # Only FileError fails, but the whole test has to be excluded.
-          excluded_tests+=('~FileFunctionsTestCase')
+          # Closing the file fails for unknown reason under Wine.
+          excluded_tests+=('~FileFunctions::Error')
 
           # Sporadic failures due to extra events.
           excluded_tests+=('~wxFileSystemWatcher::EventCreate')
