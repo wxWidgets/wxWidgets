@@ -174,12 +174,12 @@ public:
             if ( mode == ReadAttr )
             {
                 wxLogSysError(_("Failed to open '%s' for reading"),
-                              filename.c_str());
+                              filename);
             }
             else
             {
                 wxLogSysError(_("Failed to open '%s' for writing"),
-                              filename.c_str());
+                              filename);
             }
         }
     }
@@ -2711,7 +2711,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
 #endif // platforms
 
     wxLogSysError(_("Failed to modify file times for '%s'"),
-                  GetFullPath().c_str());
+                  GetFullPath());
 
     return false;
 }
@@ -2725,7 +2725,7 @@ bool wxFileName::Touch() const
         return true;
     }
 
-    wxLogSysError(_("Failed to touch the file '%s'"), GetFullPath().c_str());
+    wxLogSysError(_("Failed to touch the file '%s'"), GetFullPath());
 
     return false;
 #else // other platform
@@ -2807,7 +2807,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 #endif // platforms
 
     wxLogSysError(_("Failed to retrieve file times for '%s'"),
-                  GetFullPath().c_str());
+                  GetFullPath());
 
     return false;
 }

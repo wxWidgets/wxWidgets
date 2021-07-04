@@ -326,7 +326,7 @@ wxString wxGridCellEnumRenderer::GetString(const wxGrid& grid, int row, int col)
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
     {
         int choiceno = table->GetValueAsLong(row, col);
-        text.Printf(wxT("%s"), m_choices[ choiceno ].c_str() );
+        text.Printf(wxT("%s"), m_choices[ choiceno ] );
     }
     else
     {
@@ -934,7 +934,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params);
             }
         }
 
@@ -948,7 +948,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params);
             }
         }
 

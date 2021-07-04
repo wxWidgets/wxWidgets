@@ -605,12 +605,12 @@ bool wxTempFile::Commit()
     m_file.Close();
 
     if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
-        wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't remove file '%s'"), m_strName);
         return false;
     }
 
     if ( !wxRenameFile(m_strTemp, m_strName)  ) {
-        wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
         return false;
     }
 
@@ -622,7 +622,7 @@ void wxTempFile::Discard()
     m_file.Close();
     if ( wxRemove(m_strTemp) != 0 )
     {
-        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
+        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp);
     }
 }
 

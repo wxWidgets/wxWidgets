@@ -1202,7 +1202,7 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
             // can't be the last character of the string
             if ( ++it == in.end() )
             {
-                wxLogDebug(wxT("Invalid menu string '%s'"), in.c_str());
+                wxLogDebug(wxT("Invalid menu string '%s'"), in);
                 break;
             }
             else

@@ -136,7 +136,7 @@ wxString wxControl::GTKRemoveMnemonics(const wxString& label)
             if ( i == len - 1 )
             {
                 // "&" at the end of string is an error
-                wxLogDebug(wxT("Invalid label \"%s\"."), label.c_str());
+                wxLogDebug(wxT("Invalid label \"%s\"."), label);
                 break;
             }
 

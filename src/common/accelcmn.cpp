@@ -149,7 +149,7 @@ static int IsNumberedAccelKey(const wxString& str,
     {
         // this must be a mistake, chances that this is a valid name of another
         // key are vanishingly small
-        wxLogDebug(wxT("Invalid key string \"%s\""), str.c_str());
+        wxLogDebug(wxT("Invalid key string \"%s\""), str);
         return 0;
     }
 
@@ -216,8 +216,7 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
                 }
                 else
                 {
-                    wxLogDebug(wxT("Unknown accel modifier: '%s'"),
-                               current.c_str());
+                    wxLogDebug(wxT("Unknown accel modifier: '%s'"), current);
                 }
             }
 
@@ -284,8 +283,7 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
 
             if ( !keyCode )
             {
-                wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
-                           current.c_str());
+                wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."), current);
                 return false;
             }
     }

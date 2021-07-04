@@ -367,7 +367,7 @@ void TempDir::RemoveDir(wxString& path)
 
     if (!wxRmdir(m_tmp))
     {
-        wxLogSysError(wxT("can't remove temporary dir '%s'"), m_tmp.c_str());
+        wxLogSysError(wxT("can't remove temporary dir '%s'"), m_tmp);
     }
 }
 
@@ -666,7 +666,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         wxString tmparc = fn.GetPath(wxPATH_GET_SEPARATOR) + fn.GetFullName();
 
         // call the archiver to create an archive file
-        if ( system(wxString::Format(archiver, tmparc.c_str()).mb_str()) == -1 )
+        if ( system(wxString::Format(archiver, tmparc).mb_str()) == -1 )
         {
             wxLogError("Failed to run acrhiver command \"%s\"", archiver);
         }
@@ -894,7 +894,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
         }
 
         // call unarchiver
-        if ( system(wxString::Format(unarchiver, tmparc.c_str()).mb_str()) == -1 )
+        if ( system(wxString::Format(unarchiver, tmparc).mb_str()) == -1 )
         {
             wxLogError("Failed to run unarchiver command \"%s\"", unarchiver);
         }

@@ -583,7 +583,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
         if (f == NULL)
         {
-            wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
+            wxLogError(_("Unable to open requested HTML document: %s"), location);
             m_tmpCanDrawLocks--;
             SetHTMLStatusText(wxEmptyString);
             return false;
@@ -688,7 +688,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
     const wxHtmlCell *c = m_Cell->Find(wxHTML_COND_ISANCHOR, &anchor);
     if (!c)
     {
-        wxLogWarning(_("HTML anchor %s does not exist."), anchor.c_str());
+        wxLogWarning(_("HTML anchor %s does not exist."), anchor);
         return false;
     }
     else
@@ -718,7 +718,7 @@ void wxHtmlWindow::OnSetTitle(const wxString& title)
     if (m_RelatedFrame)
     {
         wxString tit;
-        tit.Printf(m_TitleFormat, title.c_str());
+        tit.Printf(m_TitleFormat, title);
         m_RelatedFrame->SetTitle(tit);
     }
     m_OpenedPageTitle = title;
@@ -1017,7 +1017,7 @@ bool wxHtmlWindow::CopySelection(ClipboardType t)
             wxTheClipboard->SetData(new wxTextDataObject(txt));
             wxTheClipboard->Close();
             wxLogTrace(wxT("wxhtmlselection"),
-                       _("Copied to clipboard:\"%s\""), txt.c_str());
+                       _("Copied to clipboard:\"%s\""), txt);
 
             return true;
         }
