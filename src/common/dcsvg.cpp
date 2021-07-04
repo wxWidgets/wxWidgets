@@ -630,6 +630,57 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
     }
 }
 
+#if wxUSE_SPLINES
+void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
+{
+    wxCHECK_RET(points, "NULL pointer to spline points");
+    wxCHECK_RET(points->size() >= 2, "incomplete list of spline points");
+
+    NewGraphicsIfNeeded();
+
+    wxPointList::const_iterator itPt = points->begin();
+    const wxPoint* pt = *itPt; ++itPt;
+    wxPoint2DDouble p1(*pt);
+
+    pt = *itPt; ++itPt;
+    wxPoint2DDouble p2(*pt);
+    wxPoint2DDouble p3 = (p1 + p2) / 2.0;
+
+    wxString s = "  <path d=\"";
+
+    s += wxString::Format("M %s %s L %s %s",
+                          NumStr(p1.m_x), NumStr(p1.m_y), NumStr(p3.m_x), NumStr(p3.m_y));
+    CalcBoundingBox(wxRound(p1.m_x), wxRound(p1.m_y));
+    CalcBoundingBox(wxRound(p3.m_x), wxRound(p3.m_y));
+
+    while ( itPt != points->end() )
+    {
+        pt = *itPt; ++itPt;
+
+        wxPoint2DDouble p0 = p3;
+        p1 = p2;
+        p2 = *pt;
+        p3 = (p1 + p2) / 2.0;
+
+        // Calculate using degree elevation to a cubic bezier
+        wxPoint2DDouble c1 = (p0 + (p1 * 2.0)) / 3.0;
+        wxPoint2DDouble c2 = ((p1 * 2.0) + p3) / 3.0;
+
+        s += wxString::Format(" C %s %s, %s %s, %s %s",
+             NumStr(c1.m_x), NumStr(c1.m_y), NumStr(c2.m_x), NumStr(c2.m_y), NumStr(p3.m_x), NumStr(p3.m_y));
+
+        CalcBoundingBox(wxRound(p0.m_x), wxRound(p0.m_y));
+        CalcBoundingBox(wxRound(p3.m_x), wxRound(p3.m_y));
+    }
+    s += wxString::Format(" L %s %s", NumStr(p2.m_x), NumStr(p2.m_y));
+    CalcBoundingBox(wxRound(p2.m_x), wxRound(p2.m_y));
+
+    s += wxString::Format("\" style=\"fill:none\" %s %s/>\n",
+                          GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+    write(s);
+}
+#endif // wxUSE_SPLINES
+
 void wxSVGFileDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
     NewGraphicsIfNeeded();

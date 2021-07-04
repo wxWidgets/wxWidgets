@@ -198,6 +198,9 @@ private:
 
     virtual void DoDrawLines(int n, const wxPoint points[],
                              wxCoord xoffset, wxCoord yoffset) wxOVERRIDE;
+#if wxUSE_SPLINES
+    void DoDrawSpline(const wxPointList* points) wxOVERRIDE;
+#endif // wxUSE_SPLINES
 
     virtual void DoDrawPoint(wxCoord x, wxCoord y) wxOVERRIDE;
 
