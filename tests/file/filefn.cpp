@@ -465,16 +465,7 @@ void FileFunctionsTestCase::FileEof()
 
     CPPUNIT_ASSERT_MESSAGE( msg, file.Close() );
     // wxFFile::Eof after close should not cause crash but fail instead
-    bool failed = true;
-    try
-    {
-    file.Eof();
-        failed = false;
-    }
-    catch (...)
-    {
-    }
-    CPPUNIT_ASSERT_MESSAGE( msg, failed );
+    WX_ASSERT_FAILS_WITH_ASSERT( file.Eof() );
 }
 
 void FileFunctionsTestCase::FileError()
@@ -491,16 +482,7 @@ void FileFunctionsTestCase::FileError()
 
     CPPUNIT_ASSERT_MESSAGE( msg, file.Close() );
     // wxFFile::Error after close should not cause crash but fail instead
-    bool failed = true;
-    try
-    {
-        file.Error();
-        failed = false;
-    }
-    catch (...)
-    {
-    }
-    CPPUNIT_ASSERT_MESSAGE( msg, failed );
+    WX_ASSERT_FAILS_WITH_ASSERT( file.Error() );
 }
 
 
