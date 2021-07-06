@@ -25,7 +25,6 @@
     #include "wx/frame.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
-    #include "wx/dcgraph.h"
     #include "wx/panel.h"
     #include "wx/menu.h"
     #include "wx/textdlg.h"
@@ -38,6 +37,7 @@
 #include "wx/apptrait.h"
 #include "wx/artprov.h"
 #include "wx/renderer.h"
+#include "wx/dcgraph.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -68,6 +68,7 @@ public:
     {
         wxDCBrushChanger setBrush(dc, *wxBLUE_BRUSH);
         wxDCTextColourChanger setFgCol(dc, *wxWHITE);
+        wxDCTextBgModeChanger setBgMode(dc, wxBRUSHSTYLE_TRANSPARENT);
         dc.DrawRoundedRectangle(rect, 5);
 
         wxString label;
