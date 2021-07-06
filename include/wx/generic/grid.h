@@ -2951,6 +2951,8 @@ private:
                          wxGridWindow* gridWindow);
 
     // Update the width/height of the column/row being drag-resized.
+    // Should be only called when m_dragRowOrCol != -1, i.e. dragging is
+    // actually in progress.
     void DoGridDragResize(const wxPoint& position,
                           const wxGridOperations& oper,
                           wxGridWindow* gridWindow);
@@ -2989,6 +2991,8 @@ private:
     void DoStartResizeRowOrCol(int col);
     void DoStartMoveCol(int col);
 
+    // These functions should only be called when actually resizing/moving,
+    // i.e. m_dragRowOrCol and m_dragMoveCol, respectively, are valid.
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndMoveCol(int pos);

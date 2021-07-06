@@ -3828,13 +3828,10 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
             switch ( m_cursorMode )
             {
                 case WXGRID_CURSOR_RESIZE_ROW:
-                {
                     DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
-                }
-                break;
+                    break;
 
                 case WXGRID_CURSOR_SELECT_ROW:
-                {
                     if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
                         break;
 
@@ -3851,8 +3848,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                             event,
                             wxEVT_GRID_RANGE_SELECTING);
                     }
-                }
-                break;
+                    break;
 
                 // default label to suppress warnings about "enumeration value
                 // 'xxx' not handled in switch
@@ -4172,10 +4168,9 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
             {
                 case WXGRID_CURSOR_RESIZE_COL:
                     DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
-                break;
+                    break;
 
                 case WXGRID_CURSOR_SELECT_COL:
-                {
                     if ( col != -1 )
                     {
                         if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
@@ -4193,8 +4188,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                             event,
                             wxEVT_GRID_RANGE_SELECTING);
                     }
-                }
-                break;
+                    break;
 
                 case WXGRID_CURSOR_MOVE_COL:
                 {
@@ -4713,11 +4707,13 @@ bool wxGrid::DoGridDragEvent(wxMouseEvent& event,
             return DoGridCellDrag(event, coords, isFirstDrag);
 
         case WXGRID_CURSOR_RESIZE_ROW:
-            DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
+            if ( m_dragRowOrCol != -1 )
+                DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
             break;
 
         case WXGRID_CURSOR_RESIZE_COL:
-            DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
+            if ( m_dragRowOrCol != -1 )
+                DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
             break;
 
         default:
@@ -4870,12 +4866,14 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
     {
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-        DoEndDragResizeRow(event, gridWindow);
+        if ( m_dragRowOrCol != -1 )
+            DoEndDragResizeRow(event, gridWindow);
     }
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
     {
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-        DoEndDragResizeCol(event, gridWindow);
+        if ( m_dragRowOrCol != -1 )
+            DoEndDragResizeCol(event, gridWindow);
     }
 
     m_dragLastPos = -1;
@@ -5053,6 +5051,9 @@ void wxGrid::DoGridDragResize(const wxPoint& position,
                               const wxGridOperations& oper,
                               wxGridWindow* gridWindow)
 {
+    wxCHECK_RET( m_dragRowOrCol != -1,
+                 "shouldn't be called when not drag resizing" );
+
     // Get the logical position from the physical one we're passed.
     const wxPoint
         logicalPos = CalcGridWindowUnscrolledPosition(position, gridWindow);
