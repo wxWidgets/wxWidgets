@@ -517,11 +517,13 @@ bool wxComboPopupWindow::ProcessLeftDown(wxMouseEvent& event)
 // First thing that happens when a transient popup closes is that this method gets called.
 void wxComboPopupWindow::OnDismiss()
 {
+#ifndef __WXUNIVERSAL__
     wxComboCtrlBase* combo = (wxComboCtrlBase*) GetParent();
     wxASSERT_MSG( wxDynamicCast(combo, wxComboCtrlBase),
                   wxT("parent might not be wxComboCtrl, but check wxIMPLEMENT_DYNAMIC_CLASS2() macro for correctness") );
 
     combo->OnPopupDismiss(true);
+#endif
 }
 #endif // USES_WXPOPUPTRANSIENTWINDOW
 
