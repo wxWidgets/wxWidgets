@@ -8735,7 +8735,8 @@ for subdir in $SUBDIRS; do
                 makefiles=""
                 for util in ifacecheck wxrc ; do
                     if test -d $srcdir/utils/$util ; then
-                        if test -d $srcdir/utils/$util/src; then
+                        dnl Makefile.in could be in $util or in $util/src
+                        if test -f $srcdir/utils/$util/src/Makefile.in; then
                             makefiles="utils/$util/src/Makefile.in \
                                        $makefiles"
                         else
