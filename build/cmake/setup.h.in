@@ -310,7 +310,7 @@
 
 #cmakedefine01 wxUSE_XRC
 
-#define wxUSE_XML       wxUSE_XRC
+#cmakedefine01 wxUSE_XML
 
 #cmakedefine01 wxUSE_AUI
 

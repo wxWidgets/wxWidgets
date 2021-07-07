@@ -660,6 +660,7 @@ TOOLCHAIN_FULLNAME
 TOOLCHAIN_NAME
 TOOLKIT_DIR
 TOOLKIT
+USE_XML
 USE_GUI
 WX_LIBRARY_BASENAME_GUI
 WX_LIBRARY_BASENAME_NOGUI
@@ -674,6 +675,7 @@ COND_WXUNIV_1
 COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
 COND_USE_XRC_1
+COND_USE_XML_1
 COND_USE_WEBVIEW_WEBKIT2_1
 COND_USE_THREADS_1
 COND_USE_THREADS_0
@@ -790,6 +792,7 @@ COND_MONOLITHIC_1_SHARED_1
 COND_MONOLITHIC_1_SHARED_0
 COND_MONOLITHIC_1
 COND_MONOLITHIC_0_USE_XRC_1
+COND_MONOLITHIC_0_USE_XML_1
 COND_MONOLITHIC_0_USE_WEBVIEW_1
 COND_MONOLITHIC_0_USE_STC_1
 COND_MONOLITHIC_0_USE_RICHTEXT_1
@@ -801,9 +804,10 @@ COND_MONOLITHIC_0_USE_HTML_1
 COND_MONOLITHIC_0_USE_GUI_1_USE_MEDIA_1
 COND_MONOLITHIC_0_USE_GUI_1
 COND_MONOLITHIC_0_USE_AUI_1
-COND_MONOLITHIC_0_SHARED_1_USE_XRC_1
+COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1
+COND_MONOLITHIC_0_SHARED_1_USE_XML_1
 COND_MONOLITHIC_0_SHARED_1_USE_STC_1
-COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1
+COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1
 COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1
@@ -814,6 +818,7 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1
 COND_MONOLITHIC_0_SHARED_1_USE_AUI_1
 COND_MONOLITHIC_0_SHARED_1
 COND_MONOLITHIC_0_SHARED_0_USE_XRC_1
+COND_MONOLITHIC_0_SHARED_0_USE_XML_1
 COND_MONOLITHIC_0_SHARED_0_USE_STC_1
 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1
 COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1
@@ -919,6 +924,7 @@ wxUSE_LIBTIFF
 wxUSE_LIBPNG
 wxUSE_LIBJPEG
 wxUSE_EXPAT
+wxUSE_XML
 wxUSE_REGEX
 wxUSE_ZLIB
 STD_GUI_LIBS
@@ -22769,12 +22775,6 @@ fi
 
 
 if test "$wxUSE_EXPAT" != "no"; then
-    wxUSE_XML=yes
-    $as_echo "#define wxUSE_EXPAT 1" >>confdefs.h
-
-    $as_echo "#define wxUSE_XML 1" >>confdefs.h
-
-
     if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then
         ac_fn_c_check_header_compile "$LINENO" "expat.h" "ac_cv_header_expat_h" "
 "
@@ -23085,6 +23085,21 @@ fi
                 subdirs="$subdirs src/expat/expat"
 
     fi
+
+    wxUSE_XML=yes
+    $as_echo "#define wxUSE_XML 1" >>confdefs.h
+
+else
+    wxUSE_XML=no
+fi
+
+if test "$wxUSE_XML" != "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XML library not built, cannot build wxrc" >&5
+$as_echo "$as_me: WARNING: XML library not built, cannot build wxrc" >&2;}
+    USE_XML=0
+else
+    USE_XML=1
+    echo "${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}" >> change-install-names
 fi
 
 
@@ -37254,8 +37269,6 @@ $as_echo "$as_me: WARNING: XML library not built, XRC resources disabled" >&2;}
 
         USE_XRC=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xrc"
-
-        echo "${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}" >> change-install-names
     fi
 fi
 
@@ -38720,6 +38733,7 @@ _ACEOF
 else
     WXUNIV=0
 fi
+
 
 
 
@@ -40276,6 +40290,11 @@ EOF
         COND_MONOLITHIC_0_SHARED_0_USE_STC_1=""
     fi
 
+    COND_MONOLITHIC_0_SHARED_0_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_XML_1=""
+    fi
+
     COND_MONOLITHIC_0_SHARED_0_USE_XRC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_XRC" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_0_USE_XRC_1=""
@@ -40326,9 +40345,9 @@ EOF
         COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1=""
     fi
 
-    COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_RICHTEXT" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1=""
+    COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_RICHTEXT" = "x1" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1=""
     fi
 
     COND_MONOLITHIC_0_SHARED_1_USE_STC_1="#"
@@ -40336,9 +40355,14 @@ EOF
         COND_MONOLITHIC_0_SHARED_1_USE_STC_1=""
     fi
 
-    COND_MONOLITHIC_0_SHARED_1_USE_XRC_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_XRC" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_1_USE_XRC_1=""
+    COND_MONOLITHIC_0_SHARED_1_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_XML_1=""
+    fi
+
+    COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_XML" = "x1" -a "x$USE_XRC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1=""
     fi
 
     COND_MONOLITHIC_0_USE_AUI_1="#"
@@ -40394,6 +40418,11 @@ EOF
     COND_MONOLITHIC_0_USE_WEBVIEW_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_WEBVIEW" = "x1" ; then
         COND_MONOLITHIC_0_USE_WEBVIEW_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_USE_XML_1=""
     fi
 
     COND_MONOLITHIC_0_USE_XRC_1="#"
@@ -40976,6 +41005,11 @@ EOF
         COND_USE_WEBVIEW_WEBKIT2_1=""
     fi
 
+    COND_USE_XML_1="#"
+    if test "x$USE_XML" = "x1" ; then
+        COND_USE_XML_1=""
+    fi
+
     COND_USE_XRC_1="#"
     if test "x$USE_XRC" = "x1" ; then
         COND_USE_XRC_1=""
@@ -41182,6 +41216,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 $as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
 set x ${MAKE-make}
@@ -41303,10 +41338,14 @@ for subdir in $SUBDIRS; do
                 done
             elif test ${subdir} = "utils"; then
                 makefiles=""
-                for util in ifacecheck ; do
+                for util in ifacecheck wxrc ; do
                     if test -d $srcdir/utils/$util ; then
-                        makefiles="utils/$util/src/Makefile.in \
-                                   $makefiles"
+                                                if test -f $srcdir/utils/$util/src/Makefile.in; then
+                            makefiles="utils/$util/src/Makefile.in \
+                                       $makefiles"
+                        else
+                            makefiles="utils/$util/Makefile.in $makefiles"
+                        fi
                     fi
                 done
             else
