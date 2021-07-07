@@ -1478,7 +1478,7 @@ class WXDLLIMPEXP_CORE wxDCTextBgModeChanger
 public:
     wxDCTextBgModeChanger(wxDC& dc) : m_dc(dc), m_modeOld(wxBRUSHSTYLE_INVALID) { }
 
-    wxDCTextBgModeChanger(wxDC& dc, int mode) : m_dc(dc)
+    wxDCTextBgModeChanger(wxDC& dc, int mode) : m_dc(dc), m_modeOld(wxBRUSHSTYLE_INVALID)
     {
         Set(mode);
     }
