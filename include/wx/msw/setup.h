@@ -737,10 +737,10 @@
 // XML parsing classes. Note that their API will change in the future, so
 // using wxXmlDocument and wxXmlNode in your app is not recommended.
 //
-// Default is the same as wxUSE_XRC, i.e. 1 by default.
+// Default is 1
 //
 // Recommended setting: 1 (required by XRC)
-#define wxUSE_XML       wxUSE_XRC
+#define wxUSE_XML       1
 
 // Use wxWidget's AUI docking system
 //

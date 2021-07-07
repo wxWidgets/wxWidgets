@@ -146,6 +146,12 @@ dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_0_USE_STC_1[wx.bkl] ###
         COND_MONOLITHIC_0_SHARED_0_USE_STC_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_STC_1)
+dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_0_USE_XML_1[wx.bkl] ###
+    COND_MONOLITHIC_0_SHARED_0_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_XML_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_XML_1)
 dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_0_USE_XRC_1[wx.bkl] ###
     COND_MONOLITHIC_0_SHARED_0_USE_XRC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_XRC" = "x1" ; then
@@ -206,24 +212,30 @@ dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1[wx.bkl] ###
         COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1)
-dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1[wx.bkl] ###
-    COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_RICHTEXT" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1=""
+dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1[wx.bkl] ###
+    COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_RICHTEXT" = "x1" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1=""
     fi
-    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1)
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1)
 dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_STC_1[wx.bkl] ###
     COND_MONOLITHIC_0_SHARED_1_USE_STC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_STC" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_1_USE_STC_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_STC_1)
-dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_XRC_1[wx.bkl] ###
-    COND_MONOLITHIC_0_SHARED_1_USE_XRC_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_XRC" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_1_USE_XRC_1=""
+dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_XML_1[wx.bkl] ###
+    COND_MONOLITHIC_0_SHARED_1_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_XML_1=""
     fi
-    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_XRC_1)
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_XML_1)
+dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1[wx.bkl] ###
+    COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_XML" = "x1" -a "x$USE_XRC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1)
 dnl ### begin block 20_COND_MONOLITHIC_0_USE_AUI_1[wx.bkl] ###
     COND_MONOLITHIC_0_USE_AUI_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_AUI" = "x1" ; then
@@ -290,6 +302,12 @@ dnl ### begin block 20_COND_MONOLITHIC_0_USE_WEBVIEW_1[../../demos/bombs/bombs.b
         COND_MONOLITHIC_0_USE_WEBVIEW_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_USE_WEBVIEW_1)
+dnl ### begin block 20_COND_MONOLITHIC_0_USE_XML_1[wx.bkl] ###
+    COND_MONOLITHIC_0_USE_XML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_XML" = "x1" ; then
+        COND_MONOLITHIC_0_USE_XML_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_USE_XML_1)
 dnl ### begin block 20_COND_MONOLITHIC_0_USE_XRC_1[wx.bkl] ###
     COND_MONOLITHIC_0_USE_XRC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_XRC" = "x1" ; then
@@ -986,7 +1004,13 @@ dnl ### begin block 20_COND_USE_WEBVIEW_WEBKIT2_1[wx.bkl] ###
         COND_USE_WEBVIEW_WEBKIT2_1=""
     fi
     AC_SUBST(COND_USE_WEBVIEW_WEBKIT2_1)
-dnl ### begin block 20_COND_USE_XRC_1[../../utils/execmon/execmon.bkl,../../utils/wxrc/wxrc.bkl,wx.bkl] ###
+dnl ### begin block 20_COND_USE_XML_1[../../utils/wxrc/wxrc.bkl,wx.bkl] ###
+    COND_USE_XML_1="#"
+    if test "x$USE_XML" = "x1" ; then
+        COND_USE_XML_1=""
+    fi
+    AC_SUBST(COND_USE_XML_1)
+dnl ### begin block 20_COND_USE_XRC_1[../../utils/execmon/execmon.bkl] ###
     COND_USE_XRC_1="#"
     if test "x$USE_XRC" = "x1" ; then
         COND_USE_XRC_1=""

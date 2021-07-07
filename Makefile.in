@@ -12535,11 +12535,13 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1___qalib___depname = \
 @COND_USE_PCH_1@	= ./.pch/wxprec_qalib/wx/wxprec.h.gch
 @COND_SHARED_1@____wxqa_namedll_DEP = $(__qadll___depname)
 @COND_SHARED_0@____wxqa_namelib_DEP = $(__qalib___depname)
-COND_MONOLITHIC_0_SHARED_1___xmldll___depname = \
+COND_MONOLITHIC_0_SHARED_1_USE_XML_1___xmldll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1@__xmldll___depname = $(COND_MONOLITHIC_0_SHARED_1___xmldll___depname)
-@COND_MONOLITHIC_0_SHARED_1@__install_xmldll___depname = install_xmldll
-@COND_MONOLITHIC_0_SHARED_1@__uninstall_xmldll___depname = uninstall_xmldll
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@__xmldll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_XML_1___xmldll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@__install_xmldll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	= install_xmldll
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@__uninstall_xmldll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	= uninstall_xmldll
 COND_PLATFORM_MACOSX_1___xmldll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__xmldll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___xmldll___macinstnamecmd)
@@ -12600,11 +12602,13 @@ COND_USE_SOVERSOLARIS_1___xmldll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__xmldll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___xmldll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__xmldll___win32rc = xmldll_version_rc.o
-COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
+COND_MONOLITHIC_0_SHARED_0_USE_XML_1___xmllib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
-@COND_MONOLITHIC_0_SHARED_0@__xmllib___depname = $(COND_MONOLITHIC_0_SHARED_0___xmllib___depname)
-@COND_MONOLITHIC_0_SHARED_0@__install_xmllib___depname = install_xmllib
-@COND_MONOLITHIC_0_SHARED_0@__uninstall_xmllib___depname = uninstall_xmllib
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@__xmllib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_XML_1___xmllib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@__install_xmllib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	= install_xmllib
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@__uninstall_xmllib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	= uninstall_xmllib
 @COND_GCC_PCH_1@__xmllib_PCH_INC = -I./.pch/wxprec_xmllib
 @COND_ICC_PCH_1@__xmllib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
 @COND_ICC_PCH_1@	./.pch/wxprec_xmllib/wx/wxprec.h.gch
@@ -12612,13 +12616,13 @@ COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
 @COND_USE_PCH_1@	= ./.pch/wxprec_xmllib/wx/wxprec.h.gch
 @COND_SHARED_1@____wxxml_namedll_DEP = $(__xmldll___depname)
 @COND_SHARED_0@____wxxml_namelib_DEP = $(__xmllib___depname)
-COND_MONOLITHIC_0_SHARED_1_USE_XRC_1___xrcdll___depname = \
+COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1___xrcdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@__xrcdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_XRC_1___xrcdll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@__install_xrcdll___depname \
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	= install_xrcdll
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@__uninstall_xrcdll___depname \
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	= uninstall_xrcdll
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@__xrcdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1___xrcdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@__install_xrcdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	= install_xrcdll
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@__uninstall_xrcdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	= uninstall_xrcdll
 COND_PLATFORM_MACOSX_1___xrcdll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__xrcdll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___xrcdll___macinstnamecmd)
@@ -12950,13 +12954,16 @@ COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1___propgridlib___depname = \
 @COND_USE_PCH_1@	= ./.pch/wxprec_propgridlib/wx/wxprec.h.gch
 @COND_SHARED_1@____wxpropgrid_namedll_DEP = $(__propgriddll___depname)
 @COND_SHARED_0@____wxpropgrid_namelib_DEP = $(__propgridlib___depname)
-COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1___richtextdll___depname = \
+COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1___richtextdll___depname \
+	= \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@__richtextdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1___richtextdll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@__install_richtextdll___depname \
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	= install_richtextdll
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@__uninstall_richtextdll___depname \
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	= uninstall_richtextdll
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@__richtextdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1___richtextdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@__install_richtextdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	= \
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	install_richtextdll
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@__uninstall_richtextdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	= \
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	uninstall_richtextdll
 COND_PLATFORM_MACOSX_1___richtextdll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__richtextdll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___richtextdll___macinstnamecmd)
@@ -13269,9 +13276,9 @@ COND_USE_WEBVIEW_WEBKIT2_1___webkit2_ext___depname = \
 @COND_USE_WEBVIEW_WEBKIT2_1@	= install_webkit2_ext
 @COND_USE_WEBVIEW_WEBKIT2_1@__uninstall_webkit2_ext___depname \
 @COND_USE_WEBVIEW_WEBKIT2_1@	= uninstall_webkit2_ext
-@COND_USE_XRC_1@__wxrc___depname = wxrc
-@COND_USE_XRC_1@__clean_wxrc___depname = clean-wxrc
-@COND_USE_XRC_1@__install_wxrc___depname = install-wxrc
+@COND_USE_XML_1@__wxrc___depname = wxrc
+@COND_USE_XML_1@__clean_wxrc___depname = clean-wxrc
+@COND_USE_XML_1@__install_wxrc___depname = install-wxrc
 @COND_TOOLKIT_MSW@RCDEFS_H = msw/rcdefs.h
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
@@ -14473,59 +14480,59 @@ distclean: clean
 
 @COND_MONOLITHIC_0_USE_QA_1@wxqa: $(____wxqa_namedll_DEP) $(____wxqa_namelib_DEP)
 
-@COND_MONOLITHIC_0_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(XMLDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__xmldll___win32rc) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1@	$(SHARED_LD_CXX) $@ $(XMLDLL_OBJECTS) -L$(LIBDIRNAME)    -L$(LIBDIRNAME) $(__xmldll___macinstnamecmd) $(__xmldll___importlib) $(__xmldll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_XML) $(LIBS)
-@COND_MONOLITHIC_0_SHARED_1@	$(DYLIB_RPATH_POSTLINK)
-@COND_MONOLITHIC_0_SHARED_1@	
-@COND_MONOLITHIC_0_SHARED_1@	$(__xmldll___so_symlinks_cmd)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(XMLDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__xmldll___win32rc) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	$(SHARED_LD_CXX) $@ $(XMLDLL_OBJECTS) -L$(LIBDIRNAME)    -L$(LIBDIRNAME) $(__xmldll___macinstnamecmd) $(__xmldll___importlib) $(__xmldll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_XML) $(LIBS)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	$(DYLIB_RPATH_POSTLINK)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	$(__xmldll___so_symlinks_cmd)
 
-@COND_MONOLITHIC_0_SHARED_1@install_xmldll: $(__xmldll___depname)
-@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(dlldir)
-@COND_MONOLITHIC_0_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__xmldll___so_symlinks_inst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@install_xmldll: $(__xmldll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(dlldir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	(cd $(DESTDIR)$(libdir) ; $(__xmldll___so_symlinks_inst_cmd))
 
-@COND_MONOLITHIC_0_SHARED_1@uninstall_xmldll: 
-@COND_MONOLITHIC_0_SHARED_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
-@COND_MONOLITHIC_0_SHARED_1@	rm -f $(DESTDIR)$(dlldir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__xmldll___so_symlinks_uninst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@uninstall_xmldll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	rm -f $(DESTDIR)$(dlldir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1@	(cd $(DESTDIR)$(libdir) ; $(__xmldll___so_symlinks_uninst_cmd))
 
 @COND_USE_PCH_1@./.pch/wxprec_xmldll/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/wxprec_xmldll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XMLDLL_CXXFLAGS)
 
-@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(XMLLIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0@	rm -f $@
-@COND_MONOLITHIC_0_SHARED_0@	$(AR) $(AROPTIONS) $@ $(XMLLIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(XMLLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	$(AR) $(AROPTIONS) $@ $(XMLLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	$(RANLIB) $@
 
-@COND_MONOLITHIC_0_SHARED_0@install_xmllib: $(__xmllib___depname)
-@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@install_xmllib: $(__xmllib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
-@COND_MONOLITHIC_0_SHARED_0@uninstall_xmllib: 
-@COND_MONOLITHIC_0_SHARED_0@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@uninstall_xmllib: 
+@COND_MONOLITHIC_0_SHARED_0_USE_XML_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 
 @COND_USE_PCH_1@./.pch/wxprec_xmllib/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/wxprec_xmllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XMLLIB_CXXFLAGS)
 
-@COND_MONOLITHIC_0@wxxml: $(____wxxml_namedll_DEP) $(____wxxml_namelib_DEP)
+@COND_MONOLITHIC_0_USE_XML_1@wxxml: $(____wxxml_namedll_DEP) $(____wxxml_namelib_DEP)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(XRCDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__xrcdll___win32rc) $(__htmldll_library_link_DEP) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(SHARED_LD_CXX) $@ $(XRCDLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(__htmldll_library_link_LIBR)    -L$(LIBDIRNAME) $(__xrcdll___macinstnamecmd) $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__htmldll_library_link_LIBR_0) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(LIBS)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(DYLIB_RPATH_POSTLINK)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(__xrcdll___so_symlinks_cmd)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(XRCDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__xrcdll___win32rc) $(__htmldll_library_link_DEP) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	$(SHARED_LD_CXX) $@ $(XRCDLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(__htmldll_library_link_LIBR)    -L$(LIBDIRNAME) $(__xrcdll___macinstnamecmd) $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__htmldll_library_link_LIBR_0) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(LIBS)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	$(DYLIB_RPATH_POSTLINK)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	$(__xrcdll___so_symlinks_cmd)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@install_xrcdll: $(__xrcdll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(dlldir)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	(cd $(DESTDIR)$(libdir) ; $(__xrcdll___so_symlinks_inst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@install_xrcdll: $(__xrcdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(dlldir)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	(cd $(DESTDIR)$(libdir) ; $(__xrcdll___so_symlinks_inst_cmd))
 
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@uninstall_xrcdll: 
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	rm -f $(DESTDIR)$(dlldir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	(cd $(DESTDIR)$(libdir) ; $(__xrcdll___so_symlinks_uninst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@uninstall_xrcdll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	rm -f $(DESTDIR)$(dlldir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1_USE_XML_1_USE_XRC_1@	(cd $(DESTDIR)$(libdir) ; $(__xrcdll___so_symlinks_uninst_cmd))
 
 @COND_USE_PCH_1@./.pch/wxprec_xrcdll/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/wxprec_xrcdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XRCDLL_CXXFLAGS)
@@ -14658,22 +14665,22 @@ distclean: clean
 
 @COND_MONOLITHIC_0_USE_PROPGRID_1@wxpropgrid: $(____wxpropgrid_namedll_DEP) $(____wxpropgrid_namelib_DEP)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(RICHTEXTDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__richtextdll___win32rc) $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(SHARED_LD_CXX) $@ $(RICHTEXTDLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(__htmldll_library_link_LIBR)    -L$(LIBDIRNAME) $(__richtextdll___macinstnamecmd) $(__richtextdll___importlib) $(__richtextdll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__htmldll_library_link_LIBR_0) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(LIBS)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(DYLIB_RPATH_POSTLINK)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(__richtextdll___so_symlinks_cmd)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(RICHTEXTDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__richtextdll___win32rc) $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	$(SHARED_LD_CXX) $@ $(RICHTEXTDLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(__htmldll_library_link_LIBR)    -L$(LIBDIRNAME) $(__richtextdll___macinstnamecmd) $(__richtextdll___importlib) $(__richtextdll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__htmldll_library_link_LIBR_0) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(LIBS)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	$(DYLIB_RPATH_POSTLINK)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	$(__richtextdll___so_symlinks_cmd)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@install_richtextdll: $(__richtextdll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(dlldir)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	(cd $(DESTDIR)$(libdir) ; $(__richtextdll___so_symlinks_inst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@install_richtextdll: $(__richtextdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(dlldir)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	(cd $(DESTDIR)$(libdir) ; $(__richtextdll___so_symlinks_inst_cmd))
 
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@uninstall_richtextdll: 
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	rm -f $(DESTDIR)$(dlldir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	(cd $(DESTDIR)$(libdir) ; $(__richtextdll___so_symlinks_uninst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@uninstall_richtextdll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	rm -f $(DESTDIR)$(dlldir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1@	(cd $(DESTDIR)$(libdir) ; $(__richtextdll___so_symlinks_uninst_cmd))
 
 @COND_USE_PCH_1@./.pch/wxprec_richtextdll/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/wxprec_richtextdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(RICHTEXTDLL_CXXFLAGS)
@@ -14792,14 +14799,14 @@ distclean: clean
 samples: 
 	(cd samples && $(MAKE) all)
 
-@COND_USE_XRC_1@wxrc: $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__xmldll___depname) $(__xmllib___depname)
-@COND_USE_XRC_1@	(if test -f utils/wxrc/Makefile ; then cd utils/wxrc && $(MAKE) all ; fi)
+@COND_USE_XML_1@wxrc: $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__xmldll___depname) $(__xmllib___depname)
+@COND_USE_XML_1@	(if test -f utils/wxrc/Makefile ; then cd utils/wxrc && $(MAKE) all ; fi)
 
-@COND_USE_XRC_1@clean-wxrc: 
-@COND_USE_XRC_1@	(if test -f utils/wxrc/Makefile ; then cd utils/wxrc && $(MAKE) clean ; fi)
+@COND_USE_XML_1@clean-wxrc: 
+@COND_USE_XML_1@	(if test -f utils/wxrc/Makefile ; then cd utils/wxrc && $(MAKE) clean ; fi)
 
-@COND_USE_XRC_1@install-wxrc: $(__wxrc___depname)
-@COND_USE_XRC_1@	(if test -f utils/wxrc/Makefile ; then cd utils/wxrc && $(MAKE) install ; fi)
+@COND_USE_XML_1@install-wxrc: $(__wxrc___depname)
+@COND_USE_XML_1@	(if test -f utils/wxrc/Makefile ; then cd utils/wxrc && $(MAKE) install ; fi)
 
 install-wxconfig: 
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
