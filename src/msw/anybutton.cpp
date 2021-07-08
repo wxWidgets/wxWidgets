@@ -621,7 +621,7 @@ wxSize wxAnyButton::DoGetBestSize() const
     }
 
     if ( m_imageData )
-        AdjustForBitmapMargins(size);
+        AdjustForBitmapSize(size);
 
     return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
