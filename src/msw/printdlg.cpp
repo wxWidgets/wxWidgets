@@ -76,6 +76,24 @@ public:
         return result;
     }
 
+    wxMemoryBuffer GetData(int level) {
+        if (m_hPrinter)
+        {
+            DWORD buf_size = 0;
+            GetPrinter(m_hPrinter, level, NULL, 0, &buf_size);
+            if (buf_size)
+            {
+                wxMemoryBuffer buffer(buf_size);
+                if (GetPrinter(m_hPrinter, level, (LPBYTE) buffer.GetWriteBuf(buf_size), buf_size, &buf_size))
+                {
+                    buffer.SetDataLen(buf_size);
+                    return buffer;
+                }
+            }
+        }
+        return wxMemoryBuffer(0);
+    }
+
     operator HANDLE() { return m_hPrinter; }
     operator bool() { return m_hPrinter != (HANDLE)NULL; }
 
@@ -489,6 +507,60 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         }
     }
 
+    // try to switch devmode to user or system default
+    if (m_devMode)
+    {
+        LPDEVMODE tempDevMode = static_cast<LPDEVMODE>(GlobalLock(m_devMode));
+        if (tempDevMode)
+        {
+            wxString _printerName = tempDevMode->dmDeviceName;
+            WinPrinter _printer;
+            if (_printer.Open(_printerName))
+            {
+                bool devModeSwitched = false;
+
+                // try to switch to level 9 user data
+                if (!devModeSwitched) {
+                    wxMemoryBuffer buffer9 = _printer.GetData(9);
+                    if (!buffer9.IsEmpty()) {
+                        PRINTER_INFO_9* printerInfo9 = static_cast<PRINTER_INFO_9*>(buffer9.GetData());
+                        if (printerInfo9->pDevMode)
+                        {
+                            DWORD devmodeSize = printerInfo9->pDevMode->dmSize + printerInfo9->pDevMode->dmDriverExtra;
+                            LPDEVMODE newDevMode = static_cast<LPDEVMODE>(GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, devmodeSize));
+                            if (newDevMode)
+                            {
+                                memcpy(newDevMode, buffer9.GetData(), devmodeSize);
+                                GlobalFree(m_devMode);
+                                m_devMode = newDevMode;
+                                devModeSwitched = true;
+                            }
+                        }
+                    }
+                }
+
+                // try to switch to level 8 data
+                if (!devModeSwitched) {
+                    wxMemoryBuffer buffer8 = _printer.GetData(8);
+                    if (!buffer8.IsEmpty()) {
+                        PRINTER_INFO_8* printerInfo8 = static_cast<PRINTER_INFO_8*>(buffer8.GetData());
+                        if (printerInfo8->pDevMode)
+                        {
+                            DWORD devmodeSize = printerInfo8->pDevMode->dmSize + printerInfo8->pDevMode->dmDriverExtra;
+                            LPDEVMODE newDevMode = static_cast<LPDEVMODE>(GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, devmodeSize));
+                            if (newDevMode)
+                            {
+                                memcpy(newDevMode, buffer8.GetData(), devmodeSize);
+                                GlobalFree(m_devMode);
+                                m_devMode = newDevMode;
+                                devModeSwitched = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
