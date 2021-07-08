@@ -250,7 +250,7 @@ void wxOverlayImpl::Clear(wxDC* dc)
     dc->GetGraphicsContext()->ClearRectangle(m_x - 1, m_y - 1, m_width + 2, m_height + 2);
 }
 
-void wxOverlayImpl::Reset()
+void wxOverlayImpl::Reset(bool WXUNUSED(dispose))
 {
     if ( m_overlayContext )
     {

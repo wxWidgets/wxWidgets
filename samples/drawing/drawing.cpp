@@ -107,6 +107,8 @@ public:
     void OnMouseMove(wxMouseEvent &event);
     void OnMouseDown(wxMouseEvent &event);
     void OnMouseUp(wxMouseEvent &event);
+    void OnMouseWheel(wxMouseEvent &event);
+    void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
     void ToShow(int show) { m_show = show; Refresh(); }
     int GetPage() { return m_show; }
@@ -157,6 +159,8 @@ protected:
     void DrawSystemColours(wxDC& dc);
 
     void DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime);
+
+    void DrawRubberBand(const wxPoint& pos);
 
 private:
     MyFrame *m_owner;
@@ -502,6 +506,8 @@ wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOTION (MyCanvas::OnMouseMove)
     EVT_LEFT_DOWN (MyCanvas::OnMouseDown)
     EVT_LEFT_UP (MyCanvas::OnMouseUp)
+    EVT_MOUSEWHEEL (MyCanvas::OnMouseWheel)
+    EVT_MOUSE_CAPTURE_LOST (MyCanvas::OnCaptureLost)
 wxEND_EVENT_TABLE()
 
 #include "smile.xpm"
@@ -524,6 +530,11 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_showBBox = false;
     m_sizeX = 0;
     m_sizeY = 0;
+
+#ifdef __WXGTK3__
+    // Enable overlay for this window
+    GTKEnableOverlay();
+#endif
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -2002,6 +2013,36 @@ void MyCanvas::Draw(wxDC& pdc)
     }
 }
 
+void MyCanvas::DrawRubberBand(const wxPoint& pos)
+{
+    int xx, yy;
+    CalcUnscrolledPosition( pos.x, pos.y, &xx, &yy );
+    m_currentpoint = wxPoint( xx , yy ) ;
+    wxRect newrect ( m_anchorpoint , m_currentpoint );
+
+    wxClientDC dc( this );
+    PrepareDC( dc );
+
+    wxDCOverlay overlaydc( m_overlay, &dc );
+    overlaydc.Clear();
+
+#ifdef __WXGTK3__
+    // SetUpdateRectangle() expects 'newrect' in scrolled position
+    wxRect rect = newrect;
+    rect.SetPosition( CalcScrolledPosition(rect.GetPosition()) );
+    m_overlay.SetUpdateRectangle( rect );
+#endif // __WXGTK3__
+
+#if defined(__WXMAC__) || defined(__WXGTK3__)
+    dc.SetPen( *wxGREY_PEN );
+    dc.SetBrush( wxColour( 192,192,192,64 ) );
+#else
+    dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+#endif
+    dc.DrawRectangle( newrect );
+}
+
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
 {
 #if wxUSE_STATUSBAR
@@ -2018,25 +2059,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
     if ( m_rubberBand )
     {
-        int x,y, xx, yy ;
-        event.GetPosition(&x,&y);
-        CalcUnscrolledPosition( x, y, &xx, &yy );
-        m_currentpoint = wxPoint( xx , yy ) ;
-        wxRect newrect ( m_anchorpoint , m_currentpoint ) ;
-
-        wxClientDC dc( this ) ;
-        PrepareDC( dc ) ;
-
-        wxDCOverlay overlaydc( m_overlay, &dc );
-        overlaydc.Clear();
-#ifdef __WXMAC__
-        dc.SetPen( *wxGREY_PEN );
-        dc.SetBrush( wxColour( 192,192,192,64 ) );
-#else
-        dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-#endif
-        dc.DrawRectangle( newrect );
+        DrawRubberBand(event.GetPosition());
     }
 #else
     wxUnusedVar(event);
@@ -2078,6 +2101,23 @@ void MyCanvas::OnMouseUp(wxMouseEvent &event)
                          endpoint.x, endpoint.y);
         }
     }
+}
+
+void MyCanvas::OnMouseWheel(wxMouseEvent& event)
+{
+    if ( m_rubberBand )
+    {
+        // we should call DrawRubberBand after the window has finished
+        // scrolling.
+        CallAfter(&MyCanvas::DrawRubberBand, event.GetPosition());
+    }
+
+    event.Skip();
+}
+
+void MyCanvas::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    ReleaseMouse();
 }
 
 #if wxUSE_GRAPHICS_CONTEXT

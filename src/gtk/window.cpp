@@ -2277,24 +2277,33 @@ size_allocate(GtkWidget* WXUNUSED_IN_GTK2(widget), GtkAllocation* alloc, wxWindo
         win->m_x = a.x;
         win->m_y = a.y;
     }
-    win->m_useCachedClientSize = true;
-    win->m_isGtkPositionValid = true;
+    bool sendSizeEvent = false;
     if (win->m_clientWidth != w || win->m_clientHeight != h)
     {
-        win->m_clientWidth  = w;
-        win->m_clientHeight = h;
         // this callback can be connected to m_wxwindow,
         // so always get size from m_widget->allocation
         win->m_width  = a.width;
         win->m_height = a.height;
-        {
-            const bool save_inSizeAllocate = g_inSizeAllocate;
-            g_inSizeAllocate = true;
-            wxSizeEvent event(win->GetSize(), win->GetId());
-            event.SetEventObject(win);
-            win->GTKProcessEvent(event);
-            g_inSizeAllocate = save_inSizeAllocate;
-        }
+
+        // if win is scrollable, account for scrollbars
+        win->m_useCachedClientSize = false;
+        win->GetClientSize(&w, &h);
+        win->m_clientWidth  = w;
+        win->m_clientHeight = h;
+
+        sendSizeEvent = true;
+    }
+    win->m_useCachedClientSize = true;
+    win->m_isGtkPositionValid = true;
+
+    if (sendSizeEvent)
+    {
+        const bool save_inSizeAllocate = g_inSizeAllocate;
+        g_inSizeAllocate = true;
+        wxSizeEvent event(win->GetSize(), win->GetId());
+        event.SetEventObject(win);
+        win->GTKProcessEvent(event);
+        g_inSizeAllocate = save_inSizeAllocate;
     }
 }
 
@@ -2714,6 +2723,58 @@ bool wxWindowGTK::Create( wxWindow *parent,
     PostCreation();
 
     return true;
+}
+
+bool wxWindowGTK::GTKEnableOverlay()
+{
+    wxCHECK_MSG(m_widget, false, "invalid window");
+
+    if ( IsTopLevel() || IsOfStandardClass() )
+        return false;
+
+#ifdef __WXGTK3__
+
+    if ( GTK_IS_OVERLAY(m_widget) )
+    {
+        // The overlay is already enabled for this window
+        return true;
+    }
+
+    GtkWidget* overlay = gtk_overlay_new();
+
+    GtkWidget* parent = gtk_widget_get_parent(m_widget);
+    gtk_container_remove( GTK_CONTAINER(parent), m_widget );
+
+    gtk_container_add( GTK_CONTAINER(overlay), m_widget );
+
+    if ( WX_IS_PIZZA(parent) )
+        WX_PIZZA(parent)->put( overlay, m_x, m_y, m_width, m_height );
+    else
+        gtk_container_add( GTK_CONTAINER(parent), overlay );
+
+    m_widget = overlay;
+    g_object_ref(m_widget);
+
+    GTKConnectFreezeWidget(m_widget);
+
+    if (m_isShown)
+        gtk_widget_show(m_widget);
+
+    return true;
+
+#endif // __WXGTK3__
+
+  return false;
+}
+
+GtkWidget* wxWindowGTK::GTKGetMainWidget() const
+{
+#ifdef __WXGTK3__
+    if ( GTK_IS_OVERLAY(m_widget) )
+        return gtk_bin_get_child(GTK_BIN(m_widget));
+    else
+#endif
+        return m_widget;
 }
 
 void wxWindowGTK::GTKDisconnect(void* instance)
@@ -3946,22 +4007,24 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
 
     if ( m_wxwindow )
     {
+        GtkWidget* const widget = GTKGetMainWidget();
+
         // if window is scrollable, account for scrollbars
-        if ( GTK_IS_SCROLLED_WINDOW(m_widget) )
+        if ( GTK_IS_SCROLLED_WINDOW(widget) )
         {
             GtkPolicyType policy[ScrollDir_Max];
-            gtk_scrolled_window_get_policy(GTK_SCROLLED_WINDOW(m_widget),
+            gtk_scrolled_window_get_policy(GTK_SCROLLED_WINDOW(widget),
                                            &policy[ScrollDir_Horz],
                                            &policy[ScrollDir_Vert]);
 
             // get scrollbar spacing the same way the GTK-private function
             // _gtk_scrolled_window_get_scrollbar_spacing() does it
             int scrollbar_spacing =
-                GTK_SCROLLED_WINDOW_GET_CLASS(m_widget)->scrollbar_spacing;
+                GTK_SCROLLED_WINDOW_GET_CLASS(widget)->scrollbar_spacing;
             if (scrollbar_spacing < 0)
             {
                 gtk_widget_style_get(
-                    m_widget, "scrollbar-spacing", &scrollbar_spacing, NULL);
+                    widget, "scrollbar-spacing", &scrollbar_spacing, NULL);
             }
 
             for ( int i = 0; i < ScrollDir_Max; i++ )

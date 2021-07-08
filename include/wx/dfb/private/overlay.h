@@ -24,7 +24,7 @@ public:
     wxOverlayImpl();
     ~wxOverlayImpl();
 
-    void Reset();
+    void Reset(bool dispose);
     bool IsOk();
     void Init(wxDC* dc, int x , int y , int width , int height);
     void BeginDrawing(wxDC* dc);

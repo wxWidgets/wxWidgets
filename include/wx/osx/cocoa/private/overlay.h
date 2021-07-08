@@ -24,7 +24,7 @@ public:
 
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
-    void Reset();
+    void Reset(bool dispose);
 
     // returns true if it has been setup
     bool IsOk();

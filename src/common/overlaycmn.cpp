@@ -71,12 +71,20 @@ void wxOverlay::Clear( wxDC* dc)
     m_impl->Clear(dc);
 }
 
-void wxOverlay::Reset()
+void wxOverlay::Reset(bool dispose)
 {
     wxASSERT_MSG(m_inDrawing==false,wxT("cannot reset overlay during drawing"));
-    m_impl->Reset();
+    m_impl->Reset(dispose);
 }
 
+void wxOverlay::SetUpdateRectangle(const wxRect& rect)
+{
+#ifdef __WXGTK3__
+    m_impl->SetUpdateRectangle(rect);
+#else
+    wxUnusedVar(rect);
+#endif
+}
 
 // ----------------------------------------------------------------------------
 // wxDCOverlay
@@ -169,7 +177,7 @@ void wxOverlayImpl::Clear(wxDC* dc)
     dcMem.SelectObject( wxNullBitmap );
 }
 
-void wxOverlayImpl::Reset()
+void wxOverlayImpl::Reset(bool WXUNUSED(dispose))
 {
     m_bmpSaved = wxBitmap();
 }

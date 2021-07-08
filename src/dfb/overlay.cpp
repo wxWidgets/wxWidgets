@@ -44,7 +44,7 @@ wxOverlayImpl::wxOverlayImpl()
 
 wxOverlayImpl::~wxOverlayImpl()
 {
-    Reset();
+    Reset(true /*wxOverlay::DISPOSE*/);
 }
 
 bool wxOverlayImpl::IsOk()
@@ -111,7 +111,7 @@ void wxOverlayImpl::Clear(wxDC *WXUNUSED(dc))
     m_isEmpty = true;
 }
 
-void wxOverlayImpl::Reset()
+void wxOverlayImpl::Reset(bool WXUNUSED(dispose))
 {
     if ( m_window )
     {

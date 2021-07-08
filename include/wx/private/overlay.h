@@ -19,6 +19,8 @@
     #include "wx/osx/cocoa/private/overlay.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/private/overlay.h"
+#elif defined(__WXGTK3__)
+    #include "wx/gtk/private/overlay.h"
 #else
     #error "unknown native wxOverlay implementation"
 #endif
@@ -39,7 +41,7 @@ public:
 
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
-    void Reset();
+    void Reset(bool dispose);
 
     // returns true if it has been setup
     bool IsOk();

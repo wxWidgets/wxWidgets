@@ -207,6 +207,16 @@ public:
     virtual void GTKHandleRealized();
     void GTKHandleUnrealize();
 
+    // Returns false if the overlay couldn't be enabled for this window.
+    // m_widget is the overlay widget if this function returns true.
+    // wxOverlay calls this function to draw over this window.
+    bool GTKEnableOverlay();
+
+    // The main widget is 'm_widget' before GTKEnableOverlay() was called.
+    // i.e. after calling GTKEnableOverlay(), the main widget becomes the
+    // main child of the GtkOverlay.
+    GtkWidget* GTKGetMainWidget() const;
+
     // Apply the widget style to the given window. Should normally only be
     // called from the overridden DoApplyWidgetStyle() implementation in
     // another window and exists solely to provide access to protected

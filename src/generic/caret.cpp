@@ -142,7 +142,7 @@ void wxCaret::DoHide()
 void wxCaret::DoMove()
 {
 #ifdef wxHAS_CARET_USING_OVERLAYS
-    m_overlay.Reset();
+    m_overlay.Reset(wxOverlay::NO_DISPOSE);
 #endif
     if ( IsVisible() )
     {
@@ -169,7 +169,7 @@ void wxCaret::DoSize()
         DoHide();
     }
 #ifdef wxHAS_CARET_USING_OVERLAYS
-    m_overlay.Reset();
+    m_overlay.Reset(wxOverlay::NO_DISPOSE);
 #else
     // Change bitmap size
     if (m_width && m_height)

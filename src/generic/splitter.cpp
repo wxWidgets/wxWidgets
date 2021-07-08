@@ -271,6 +271,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // We can stop dragging now and see what we've got.
         m_dragMode = wxSPLIT_DRAG_NONE;
 
+#ifdef wxHAS_SPLITTER_USING_OVERLAYS
+        m_overlay.Reset();
+#endif
         // Release mouse and unset the cursor
         ReleaseMouse();
         SetCursor(* wxSTANDARD_CURSOR);
@@ -284,7 +287,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // Erase old tracker
         if ( !isLive )
         {
+#ifndef wxHAS_SPLITTER_USING_OVERLAYS
             DrawSashTracker(m_oldX, m_oldY);
+#endif
         }
 
         // the position of the click doesn't exactly correspond to
@@ -363,8 +368,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             m_sashPositionCurrent = posSashNew;
 
             // Erase old tracker
+#ifndef wxHAS_SPLITTER_USING_OVERLAYS
             DrawSashTracker(m_oldX, m_oldY);
-
+#endif
             m_oldX = (m_splitMode == wxSPLIT_VERTICAL ? m_sashPositionCurrent : x);
             m_oldY = (m_splitMode != wxSPLIT_VERTICAL ? m_sashPositionCurrent : y);
 
@@ -418,7 +424,11 @@ void wxSplitterWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
     // Erase old tracker
     if ( !IsLive(this) )
     {
+#ifdef wxHAS_SPLITTER_USING_OVERLAYS
+        m_overlay.Reset();
+#else
         DrawSashTracker(m_oldX, m_oldY);
+#endif
     }
 }
 
@@ -569,7 +579,13 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     int w, h;
     GetClientSize(&w, &h);
 
+#ifdef wxHAS_SPLITTER_USING_OVERLAYS
+    wxClientDC clientDC(this);
+    wxDCOverlay odc(m_overlay, &clientDC);
+    odc.Clear();
+#else // wxHAS_SPLITTER_USING_OVERLAYS
     wxScreenDC screenDC;
+#endif
     int x1, y1;
     int x2, y2;
 
@@ -586,6 +602,15 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
         x2 = w-2;
     }
 
+#ifdef wxHAS_SPLITTER_USING_OVERLAYS
+    clientDC.SetPen(*m_sashTrackerPen);
+    clientDC.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    clientDC.DrawLine(x1, y1, x2, y2);
+
+    wxRect rect = wxRect(x1, y1, abs(x2-x1)+2, abs(y2-y1)+2);
+    m_overlay.SetUpdateRectangle(rect.Inflate(2));
+#else // wxHAS_SPLITTER_USING_OVERLAYS
     ClientToScreen(&x1, &y1);
     ClientToScreen(&x2, &y2);
 
@@ -596,6 +621,7 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     screenDC.DrawLine(x1, y1, x2, y2);
 
     screenDC.SetLogicalFunction(wxCOPY);
+#endif // wxHAS_SPLITTER_USING_OVERLAYS
 }
 
 int wxSplitterWindow::GetWindowSize() const
