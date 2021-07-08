@@ -2,7 +2,7 @@
 // Name:        src/common/valgen.cpp
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
-// Modified by:
+// Modified by: Ali Kettab 2018-09-07
 // Created:     Jan 22 1999
 // Copyright:   (c) 1999 Kevin Smith
 // Licence:     wxWindows licence
@@ -29,22 +29,29 @@
     #include "wx/textctrl.h"
     #include "wx/button.h"
     #include "wx/listbox.h"
+    #include "wx/panel.h"
     #include "wx/slider.h"
     #include "wx/checklst.h"
 #endif
 
+#include "wx/calctrl.h"
+#include "wx/collheaderctrl.h"
+#include "wx/collpane.h"
+#include "wx/clrpicker.h"
+#include "wx/datectrl.h"
+#include "wx/timectrl.h"
+#include "wx/filepicker.h"
+#include "wx/fontpicker.h"
 #include "wx/spinctrl.h"
-// #include "wx/datectrl.h" -- can't use it in this (core) file for now
-
-#if wxUSE_SPINBTN
-    #include "wx/spinbutt.h"
-#endif
-#if wxUSE_TOGGLEBTN
-    #include "wx/tglbtn.h"
-#endif
+#include "wx/splitter.h"
+#include "wx/spinbutt.h"
+#include "wx/tglbtn.h"
 #include "wx/filename.h"
 
 #include "wx/valgen.h"
+
+#if !wxUSE_VALIDATOR_DATATRANSFER
+
 
 wxIMPLEMENT_CLASS(wxGenericValidator, wxValidator);
 
@@ -704,5 +711,970 @@ void wxGenericValidator::Initialize()
     m_pFloat = NULL;
     m_pDouble = NULL;
 }
+
+#else // wxUSE_VALIDATOR_DATATRANSFER
+
+wxIMPLEMENT_CLASS(wxGenericValidatorBase, wxValidator);
+
+wxGenericValidatorBase::wxGenericValidatorBase(const wxGenericValidatorBase& val)
+    : wxValidator(val), m_data(val.m_data)
+{
+}
+
+//=============================================================================
+
+#if wxUSE_BUTTON
+
+bool wxValidatorDataTransferImpl<wxButtonBase>::To(wxButtonBase* btn, wxString* data)
+{
+    btn->SetLabel(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxButtonBase>::From(wxButtonBase* btn, wxString* data)
+{
+    *data = btn->GetLabel();
+    return true;
+}
+
+#endif // wxUSE_BUTTON
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_CHECKBOX
+
+bool wxValidatorDataTransferImpl<wxCheckBoxBase>::To(wxCheckBoxBase* ctrl, bool* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxCheckBoxBase>::From(wxCheckBoxBase* ctrl, bool* data)
+{
+    *data = ctrl->GetValue();
+    return true;
+}
+
+#endif // wxUSE_CHECKBOX
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_CHECKLISTBOX
+
+bool wxValidatorDataTransferImpl<wxCheckListBoxBase>::To(wxCheckListBoxBase* ctrl, wxArrayInt* arr)
+{
+    size_t i, count = ctrl->GetCount();
+
+    for ( i = 0 ; i < count; ++i )
+        ctrl->Check(i, false);
+
+    count = arr->GetCount();
+    for ( i = 0 ; i < count; ++i )
+        ctrl->Check(arr->Item(i));
+
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxCheckListBoxBase>::From(wxCheckListBoxBase* ctrl, wxArrayInt* arr)
+{
+    arr->Clear();
+
+    for ( size_t i = 0, count = ctrl->GetCount(); i < count; ++i )
+    {
+        if ( ctrl->IsChecked(i) )
+            arr->Add(i);
+    }
+
+    return true;
+}
+
+#endif // wxUSE_CHECKLISTBOX
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_CHOICE
+
+bool wxValidatorDataTransferImpl<wxChoiceBase>::To(wxChoiceBase* ctrl, int* data)
+{
+    ctrl->SetSelection(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxChoiceBase>::To(wxChoiceBase* ctrl, wxString* data)
+{
+    return ctrl->SetStringSelection(*data);
+}
+
+bool wxValidatorDataTransferImpl<wxChoiceBase>::From(wxChoiceBase* ctrl, int* data)
+{
+    *data = ctrl->GetSelection();
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxChoiceBase>::From(wxChoiceBase* ctrl, wxString* data)
+{
+    *data = ctrl->GetStringSelection();
+    return true;
+}
+
+#endif // wxUSE_CHOICE
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_COLLPANE
+
+bool wxValidatorDataTransferImpl<wxCollapsibleHeaderCtrlBase>::To(wxCollapsibleHeaderCtrlBase* ctrl, bool* value)
+{
+    ctrl->SetCollapsed(*value);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxCollapsibleHeaderCtrlBase>::From(wxCollapsibleHeaderCtrlBase* ctrl, bool* value)
+{
+    *value = ctrl->IsCollapsed();
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool wxValidatorDataTransferImpl<wxCollapsiblePaneBase>::To(wxCollapsiblePaneBase* ctrl, bool* data)
+{
+    ctrl->Collapse(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxCollapsiblePaneBase>::From(wxCollapsiblePaneBase* ctrl, bool* data)
+{
+    *data = ctrl->IsCollapsed();
+    return true;
+}
+
+#endif // wxUSE_COLLPANE
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_COLOURPICKERCTRL
+
+bool wxValidatorDataTransferImpl<wxColourPickerCtrl>::To(wxColourPickerCtrl* ctrl, wxColour* data)
+{
+    ctrl->SetColour(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxColourPickerCtrl>::From(wxColourPickerCtrl* ctrl, wxColour* data)
+{
+    *data = ctrl->GetColour();
+    return true;
+}
+
+#endif // wxUSE_COLOURPICKERCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_COMBOBOX
+
+bool wxValidatorDataTransferImpl<wxComboBox>::To(wxComboBox* ctrl, int* data)
+{
+    ctrl->SetSelection(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxComboBox>::From(wxComboBox* ctrl, int* data)
+{
+    *data = ctrl->GetSelection();
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxComboBox>::To(wxComboBox* ctrl, wxString* data)
+{
+    if ( !ctrl->SetStringSelection(*data) )
+    {
+        if ( (ctrl->GetWindowStyle() & wxCB_READONLY) )
+            return false;
+
+        ctrl->SetValue(*data);
+    }
+
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxComboBox>::From(wxComboBox* ctrl, wxString* data)
+{
+    if ( ctrl->GetWindowStyle() & wxCB_READONLY )
+        *data = ctrl->GetStringSelection();
+    else
+        *data = ctrl->GetValue();
+
+    return true;
+}
+
+#endif // wxUSE_COMBOBOX
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
+
+bool wxValidatorDataTransferImpl<wxFileDirPickerCtrlBase>::To(wxFileDirPickerCtrlBase* ctrl, wxString* data)
+{
+    ctrl->SetPath(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxFileDirPickerCtrlBase>::From(wxFileDirPickerCtrlBase* ctrl, wxString* data)
+{
+    *data = ctrl->GetPath();
+    return true;
+}
+
+#endif // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_FILEPICKERCTRL
+
+bool wxValidatorDataTransferImpl<wxFilePickerCtrl>::To(wxFilePickerCtrl* ctrl, wxFileName* data)
+{
+    ctrl->SetFileName(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxFilePickerCtrl>::From(wxFilePickerCtrl* ctrl, wxFileName* data)
+{
+    *data = ctrl->GetFileName();
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxFilePickerCtrl>::To(wxFilePickerCtrl* ctrl, wxString* data)
+{
+    return wxValidatorDataTransferImpl<wxFileDirPickerCtrlBase>::To(ctrl, data);
+}
+
+bool wxValidatorDataTransferImpl<wxFilePickerCtrl>::From(wxFilePickerCtrl* ctrl, wxString* data)
+{
+    return wxValidatorDataTransferImpl<wxFileDirPickerCtrlBase>::From(ctrl, data);
+}
+
+#endif // wxUSE_FILEPICKERCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_DIRPICKERCTRL
+
+bool wxValidatorDataTransferImpl<wxDirPickerCtrl>::To(wxDirPickerCtrl* ctrl, wxFileName* data)
+{
+    ctrl->SetDirName(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxDirPickerCtrl>::From(wxDirPickerCtrl* ctrl, wxFileName* data)
+{
+    *data = ctrl->GetDirName();
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxDirPickerCtrl>::To(wxDirPickerCtrl* ctrl, wxString* data)
+{
+    return wxValidatorDataTransferImpl<wxFileDirPickerCtrlBase>::To(ctrl, data);
+}
+
+
+bool wxValidatorDataTransferImpl<wxDirPickerCtrl>::From(wxDirPickerCtrl* ctrl, wxString* data)
+{
+    return wxValidatorDataTransferImpl<wxFileDirPickerCtrlBase>::From(ctrl, data);
+}
+
+#endif // wxUSE_DIRPICKERCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_FONTPICKERCTRL
+
+bool wxValidatorDataTransferImpl<wxFontPickerCtrl>::To(wxFontPickerCtrl* ctrl, wxFont* data)
+{
+    ctrl->SetSelectedFont(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxFontPickerCtrl>::From(wxFontPickerCtrl* ctrl, wxFont* data)
+{
+    *data = ctrl->GetSelectedFont();
+    return true;
+}
+
+#endif // wxUSE_FONTPICKERCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_GAUGE
+
+bool wxValidatorDataTransferImpl<wxGaugeBase>::To(wxGaugeBase* ctrl, int* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxGaugeBase>::From(wxGaugeBase* ctrl, int* data)
+{
+    *data = ctrl->GetValue();
+    return true;
+}
+
+#endif // wxUSE_GAUGE
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_LISTBOX
+
+bool wxValidatorDataTransferImpl<wxListBoxBase>::To(wxListBoxBase* ctrl, int* data)
+{
+    wxASSERT( (ctrl->GetWindowStyle() & wxLB_SINGLE) );
+
+    ctrl->SetSelection(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxListBoxBase>::From(wxListBoxBase* ctrl, int* data)
+{
+    *data = ctrl->GetSelection();
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxListBoxBase>::To(wxListBoxBase* ctrl, wxArrayInt* arr)
+{
+    wxASSERT( (ctrl->GetWindowStyle() & wxLB_MULTIPLE) );
+
+    size_t i, count = ctrl->GetCount();
+    for ( i = 0 ; i < count; ++i )
+        ctrl->Deselect(i);
+
+    count = arr->GetCount();
+    for ( i = 0 ; i < count; ++i )
+        ctrl->SetSelection(arr->Item(i));
+
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxListBoxBase>::From(wxListBoxBase* ctrl, wxArrayInt* arr)
+{
+    arr->Clear();
+
+    for ( size_t i = 0, count = ctrl->GetCount(); i < count; ++i )
+    {
+        if ( ctrl->IsSelected(i) )
+            arr->Add(i);
+    }
+
+    return true;
+}
+
+#endif // wxUSE_LISTBOX
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_RADIOBOX
+
+bool wxValidatorDataTransferImpl<wxRadioBoxBase>::To(wxRadioBoxBase* ctrl, int* data)
+{
+    ctrl->SetSelection(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxRadioBoxBase>::From(wxRadioBoxBase* ctrl, int* data)
+{
+    *data = ctrl->GetSelection();
+    return true;
+}
+
+#endif // wxUSE_RADIOBOX
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_SCROLLBAR
+
+bool wxValidatorDataTransferImpl<wxScrollBarBase>::To(wxScrollBarBase* ctrl, int* data)
+{
+    ctrl->SetThumbPosition(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxScrollBarBase>::From(wxScrollBarBase* ctrl, int* data)
+{
+    *data = ctrl->GetThumbPosition();
+    return true;
+}
+
+#endif // wxUSE_SCROLLBAR
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_SLIDER
+
+bool wxValidatorDataTransferImpl<wxSliderBase>::To(wxSliderBase* ctrl, int* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxSliderBase>::From(wxSliderBase* ctrl, int* data)
+{
+    *data = ctrl->GetValue();
+    return true;
+}
+
+#endif // wxUSE_SLIDER
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_SPINBTN
+
+bool wxValidatorDataTransferImpl<wxSpinButtonBase>::To(wxSpinButtonBase* ctrl, int* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxSpinButtonBase>::From(wxSpinButtonBase* ctrl, int* data)
+{
+    *data = ctrl->GetValue();
+    return true;
+}
+
+#endif // wxUSE_SPINBTN
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_SPINCTRL
+
+#if defined(wxHAS_NATIVE_SPINCTRL)
+    #define WX_TRANSFER_DATA_FROM_SPINCTRL(ctrl, data) (*data = ctrl->GetValue())
+#else
+    #define WX_TRANSFER_DATA_FROM_SPINCTRL(ctrl, data) \
+            (*data = ctrl->GetValue(wxSPINCTRL_GETVALUE_FIX))
+#endif // defined(wxHAS_NATIVE_SPINCTRL)
+
+#if defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
+    #define WX_TRANSFER_DATA_FROM_SPINCTRLDOUBLE(ctrl, data) (*data = ctrl->GetValue())
+#else
+    #define WX_TRANSFER_DATA_FROM_SPINCTRLDOUBLE(ctrl, data) \
+            (*data = ctrl->GetValue(wxSPINCTRL_GETVALUE_FIX))
+#endif // defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
+
+// wxSpinCtrl
+
+bool wxValidatorDataTransferImpl<wxSpinCtrl>::To(wxSpinCtrl* ctrl, int* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxSpinCtrl>::From(wxSpinCtrl* ctrl, int* data)
+{
+    WX_TRANSFER_DATA_FROM_SPINCTRL(ctrl, data);
+    return true;
+}
+
+// wxSpinCtrlDouble
+
+bool wxValidatorDataTransferImpl<wxSpinCtrlDouble>::To(wxSpinCtrlDouble* ctrl, double* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxSpinCtrlDouble>::From(wxSpinCtrlDouble* ctrl, double* data)
+{
+    WX_TRANSFER_DATA_FROM_SPINCTRLDOUBLE(ctrl, data);
+    return true;
+}
+
+#endif // wxUSE_SPINCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_SPLITTER
+
+bool wxValidatorDataTransferImpl<wxSplitterWindow>::To(wxSplitterWindow* win, int* data)
+{
+    win->SetSashPosition(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxSplitterWindow>::From(wxSplitterWindow* win, int* data)
+{
+    *data = win->GetSashPosition();
+    return true;
+}
+
+#endif // wxUSE_SPLITTER
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_STATTEXT
+
+bool wxValidatorDataTransferImpl<wxStaticTextBase>::To(wxStaticTextBase* ctrl, wxString* data)
+{
+    ctrl->SetLabel(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxStaticTextBase>::From(wxStaticTextBase* ctrl, wxString* data)
+{
+    *data = ctrl->GetLabel();
+    return true;
+}
+
+#endif // wxUSE_STATTEXT
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_TEXTCTRL
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, wxString* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, wxString* data)
+{
+    *data = ctrl->GetValue();
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, int* data)
+{
+    const wxString str = wxString::Format("%d", *data);
+    ctrl->SetValue(str);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, int* data)
+{
+    *data = wxAtoi(ctrl->GetValue());
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, float* data)
+{
+    const wxString str = wxString::Format("%g", *data);
+    ctrl->SetValue(str);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, float* data)
+{
+    *data = static_cast<float>(wxAtof(ctrl->GetValue()));
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, double* data)
+{
+    const wxString str = wxString::Format("%g", *data);
+    ctrl->SetValue(str);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, double* data)
+{
+    *data = wxAtof(ctrl->GetValue());
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, wxFileName* data)
+{
+    ctrl->SetValue(data->GetFullPath());
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, wxFileName* data)
+{
+    *data = ctrl->GetValue();
+    return true;
+}
+
+#endif // wxUSE_TEXTCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_TOGGLEBTN
+
+bool wxValidatorDataTransferImpl<wxToggleButtonBase>::To(wxToggleButtonBase* btn, bool* data)
+{
+    btn->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxToggleButtonBase>::From(wxToggleButtonBase* btn, bool* data)
+{
+    *data = btn->GetValue();
+    return true;
+}
+
+#endif // wxUSE_TOGGLEBTN
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_CALENDARCTRL
+
+bool wxValidatorDataTransferImpl<wxCalendarCtrlBase>::To(wxCalendarCtrlBase* ctrl, wxDateTime* data)
+{
+    return ctrl->SetDate(*data);
+}
+
+bool wxValidatorDataTransferImpl<wxCalendarCtrlBase>::From(wxCalendarCtrlBase* ctrl, wxDateTime* data)
+{
+    *data = ctrl->GetDate();
+    return true;
+}
+
+#endif // wxUSE_CALENDARCTRL
+
+//-----------------------------------------------------------------------------
+
+#if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
+
+bool wxValidatorDataTransferImpl<wxDateTimePickerCtrlBase>::To(wxDateTimePickerCtrlBase* ctrl, wxDateTime* data)
+{
+    ctrl->SetValue(*data);
+    return true;
+}
+
+bool wxValidatorDataTransferImpl<wxDateTimePickerCtrlBase>::From(wxDateTimePickerCtrlBase* ctrl, wxDateTime* data)
+{
+    *data = ctrl->GetValue();
+    return true;
+}
+
+#endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
+
+//-----------------------------------------------------------------------------
+#ifdef wxNO_RTTI
+wxAny wxGenericValidatorBase::ToAny(bool* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(int* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(float* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(double* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxString* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxArrayInt* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxDateTime* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxFileName* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxColour* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxFont* data) { return wxAny(data); }
+#endif // wxNO_RTTI
+
+wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
+{
+#if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxDatePickerCtrl) ||
+            wxDynamicCast(m_validatorWindow, wxTimePickerCtrl) )
+    {
+        if ( any.CheckType<wxDateTime*>() )
+            return new wxGenValidatorSimpleType<wxDateTimePickerCtrlBase, wxDateTime>
+                    (any.As<wxDateTime*>());
+
+        return NULL;
+    }
+#endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
+
+#if wxUSE_CALENDARCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxCalendarCtrl) )
+    {
+        if ( any.CheckType<wxDateTime*>() )
+            return new wxGenValidatorSimpleType<wxCalendarCtrlBase, wxDateTime>
+                    (any.As<wxDateTime*>());
+
+        return NULL;
+    }
+#endif // wxUSE_CALENDARCTRL
+
+#if wxUSE_TOGGLEBTN
+    if ( wxDynamicCast(m_validatorWindow, wxToggleButton) )
+    {
+        if ( any.CheckType<bool*>() )
+            return new wxGenValidatorSimpleType<wxToggleButtonBase, bool>
+                    (any.As<bool*>());
+
+        return NULL;
+    }
+#endif // wxUSE_TOGGLEBTN
+
+#if wxUSE_TEXTCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
+    {
+        if ( any.CheckType<wxString*>() )
+            return new wxGenValidatorSimpleType<wxTextCtrlBase, wxString>
+                    (any.As<wxString*>());
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxTextCtrlBase, int>
+                    (any.As<int*>());
+        if ( any.CheckType<float*>() )
+            return new wxGenValidatorSimpleType<wxTextCtrlBase, float>
+                    (any.As<float*>());
+        if ( any.CheckType<double*>() )
+            return new wxGenValidatorSimpleType<wxTextCtrlBase, double>
+                    (any.As<double*>());
+        if ( any.CheckType<wxFileName*>() )
+            return new wxGenValidatorSimpleType<wxTextCtrlBase, wxFileName>
+                    (any.As<wxFileName*>());
+
+        return NULL;
+    }
+#endif // wxUSE_TEXTCTRL
+
+#if wxUSE_STATTEXT
+    if ( wxDynamicCast(m_validatorWindow, wxStaticText) )
+    {
+        if ( any.CheckType<wxString*>() )
+            return new wxGenValidatorSimpleType<wxStaticTextBase, wxString>
+                    (any.As<wxString*>());
+
+        return NULL;
+    }
+#endif // wxUSE_STATTEXT
+
+#if wxUSE_SPLITTER
+    if ( wxDynamicCast(m_validatorWindow, wxSplitterWindow) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxSplitterWindow, int>
+                    (any.As<int*>());
+
+        return NULL;
+    }
+#endif // wxUSE_SPLITTER
+
+#if wxUSE_SPINBTN
+    if ( wxDynamicCast(m_validatorWindow, wxSpinCtrlDouble) )
+    {
+        if ( any.CheckType<double*>() )
+            return new wxGenValidatorSimpleType<wxSpinCtrlDouble, double>
+                    (any.As<double*>());
+
+        return NULL;
+    }
+
+    if ( wxDynamicCast(m_validatorWindow, wxSpinCtrl) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxSpinCtrl, int>
+                    (any.As<int*>());
+
+        return NULL;
+    }
+
+    if ( wxDynamicCast(m_validatorWindow, wxSpinButton) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxSpinButtonBase, int>
+                    (any.As<int*>());
+
+        return NULL;
+    }
+#endif // wxUSE_SPINBTN
+
+#if wxUSE_SLIDER
+    if ( wxDynamicCast(m_validatorWindow, wxSlider) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxSliderBase, int>
+                    (any.As<int*>());
+
+        return NULL;
+    }
+#endif // wxUSE_SLIDER
+
+#if wxUSE_SCROLLBAR
+    if ( wxDynamicCast(m_validatorWindow, wxScrollBar) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxScrollBarBase, int>
+                    (any.As<int*>());
+
+        return NULL;
+    }
+#endif // wxUSE_SCROLLBAR
+
+#if wxUSE_RADIOBOX
+    if ( wxDynamicCast(m_validatorWindow, wxRadioBox) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxRadioBox, int>
+                    (any.As<int*>());
+
+        return NULL;
+    }
+#endif // wxUSE_RADIOBOX
+
+#if wxUSE_LISTBOX
+    if ( wxDynamicCast(m_validatorWindow, wxListBox) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxListBoxBase, int>
+                    (any.As<int*>());
+        if ( any.CheckType<wxArrayInt*>() )
+            return new wxGenValidatorSimpleType<wxListBoxBase, wxArrayInt>
+                    (any.As<wxArrayInt*>());
+
+        return NULL;
+    }
+#endif // wxUSE_LISTBOX
+
+#if wxUSE_GAUGE
+    if ( wxDynamicCast(m_validatorWindow, wxGauge) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxGaugeBase, int>
+                    (any.As<int*>());
+
+        return NULL;
+    }
+#endif // wxUSE_GAUGE
+
+#if wxUSE_FONTPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxFontPickerCtrl) )
+    {
+        if ( any.CheckType<wxFont*>() )
+            return new wxGenValidatorSimpleType<wxFontPickerCtrl, wxFont>
+                    (any.As<wxFont*>());
+
+        return NULL;
+    }
+#endif // wxUSE_FONTPICKERCTRL
+
+#if wxUSE_DIRPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxDirPickerCtrl) )
+    {
+        if ( any.CheckType<wxString*>() )
+            return new wxGenValidatorSimpleType<wxDirPickerCtrl, wxString>
+                    (any.As<wxString*>());
+        if ( any.CheckType<wxFileName*>() )
+            return new wxGenValidatorSimpleType<wxDirPickerCtrl, wxFileName>
+                    (any.As<wxFileName*>());
+
+        return NULL;
+    }
+#endif // wxUSE_DIRPICKERCTRL
+
+#if wxUSE_FILEPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxFilePickerCtrl) )
+    {
+        if ( any.CheckType<wxString*>() )
+            return new wxGenValidatorSimpleType<wxFilePickerCtrl, wxString>
+                    (any.As<wxString*>());
+        if ( any.CheckType<wxFileName*>() )
+            return new wxGenValidatorSimpleType<wxFilePickerCtrl, wxFileName>
+                    (any.As<wxFileName*>());
+
+        return NULL;
+    }
+#endif // wxUSE_FILEPICKERCTRL
+
+#if wxUSE_COMBOBOX
+    if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxComboBox, int>
+                    (any.As<int*>());
+        if ( any.CheckType<wxString*>() )
+            return new wxGenValidatorSimpleType<wxComboBox, wxString>
+                    (any.As<wxString*>());
+
+        return NULL;
+    }
+#endif // wxUSE_COMBOBOX
+
+#if wxUSE_COLOURPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxColourPickerCtrl) )
+    {
+        if ( any.CheckType<wxColour*>() )
+            return new wxGenValidatorSimpleType<wxColourPickerCtrl, wxColour>
+                    (any.As<wxColour*>());
+
+        return NULL;
+    }
+#endif // wxUSE_COLOURPICKERCTRL
+
+#if wxUSE_COLLPANE
+    if ( wxDynamicCast(m_validatorWindow, wxCollapsiblePane) )
+    {
+        if ( any.CheckType<bool*>() )
+            return new wxGenValidatorSimpleType<wxCollapsiblePaneBase, bool>
+                    (any.As<bool*>());
+
+        return NULL;
+    }
+
+    if ( wxDynamicCast(m_validatorWindow, wxCollapsibleHeaderCtrl) )
+    {
+        if ( any.CheckType<bool*>() )
+            return new wxGenValidatorSimpleType<wxCollapsibleHeaderCtrlBase, bool>
+                    (any.As<bool*>());
+
+        return NULL;
+    }
+#endif // wxUSE_COLLPANE
+
+#if wxUSE_CHOICE
+    if ( wxDynamicCast(m_validatorWindow, wxChoice) )
+    {
+        if ( any.CheckType<int*>() )
+            return new wxGenValidatorSimpleType<wxChoiceBase, int>
+                    (any.As<int*>());
+        if ( any.CheckType<wxString*>() )
+            return new wxGenValidatorSimpleType<wxChoiceBase, wxString>
+                    (any.As<wxString*>());
+
+        return NULL;
+    }
+#endif // wxUSE_CHOICE
+
+#if wxUSE_CHECKLISTBOX
+    if ( wxDynamicCast(m_validatorWindow, wxCheckListBox) )
+    {
+        if ( any.CheckType<wxArrayInt*>() )
+            return new wxGenValidatorSimpleType<wxCheckListBoxBase, wxArrayInt>
+                    (any.As<wxArrayInt*>());
+
+        return NULL;
+    }
+#endif // wxUSE_CHECKLISTBOX
+
+#if wxUSE_CHECKBOX
+    if ( wxDynamicCast(m_validatorWindow, wxCheckBox) )
+    {
+        if ( any.CheckType<bool*>() )
+            return new wxGenValidatorSimpleType<wxCheckBoxBase, bool>
+                    (any.As<bool*>());
+
+        return NULL;
+    }
+#endif // wxUSE_CHECKBOX
+
+#if wxUSE_BUTTON
+    if ( wxDynamicCast(m_validatorWindow, wxButton) )
+    {
+        if ( any.CheckType<wxString*>() )
+            return new wxGenValidatorSimpleType<wxButtonBase, wxString>
+                    (any.As<wxString*>());
+
+        return NULL;
+    }
+#endif // wxUSE_BUTTON
+
+    return NULL;
+}
+
+#if defined(HAVE_STD_VARIANT)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMonoValidationEvent, wxEvent);
+
+wxDEFINE_EVENT( wxEVT_SET_ALTERNATIVE, wxMonoValidationEvent );
+wxDEFINE_EVENT( wxEVT_UNSET_ALTERNATIVE, wxMonoValidationEvent );
+#endif // HAVE_STD_VARIANT
+
+void wxSetGenericValidator(wxPanel* panel, const wxValidator& val)
+{
+    panel->SetValidator(val);
+}
+
+#endif // !wxUSE_VALIDATOR_DATATRANSFER
 
 #endif // wxUSE_VALIDATORS

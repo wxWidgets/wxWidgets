@@ -1337,6 +1337,7 @@ enable_tooltips
 enable_splines
 enable_mousewheel
 enable_validators
+enable_datatransfer
 enable_busyinfo
 enable_hotkey
 enable_joystick
@@ -2302,6 +2303,7 @@ Optional Features:
   --enable-splines        use spline drawing code
   --enable-mousewheel     use mousewheel
   --enable-validators     use wxValidator and derived classes
+  --enable-datatransfer   use wxDataTransfer to impl. wxGenericValidator
   --enable-busyinfo       use wxBusyInfo
   --enable-hotkey         use wxWindow::RegisterHotKey()
   --enable-joystick       use wxJoystick
@@ -12084,6 +12086,35 @@ fi
 
 
           eval "$wx_cv_use_validators"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-datatransfer was given.
+if test "${enable_datatransfer+set}" = set; then :
+  enableval=$enable_datatransfer;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_datatransfer='wxUSE_DATATRANSFER=yes'
+                          else
+                            wx_cv_use_datatransfer='wxUSE_DATATRANSFER=no'
+                          fi
+
+else
+
+                          wx_cv_use_datatransfer='wxUSE_DATATRANSFER=${'DEFAULT_wxUSE_DATATRANSFER":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_datatransfer"
 
 
           enablestring=
@@ -37207,6 +37238,12 @@ fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
     $as_echo "#define wxUSE_VALIDATORS 1" >>confdefs.h
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+fi
+
+if test "$wxUSE_DATATRANSFER" = "yes"; then
+    $as_echo "#define wxUSE_DATATRANSFER 1" >>confdefs.h
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
 fi

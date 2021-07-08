@@ -15,6 +15,11 @@
 #include "wx/frame.h"
 #include "wx/listbox.h"
 #include "wx/string.h"
+#include "wx/scopedptr.h"
+#if defined(HAVE_STD_VARIANT)
+    #include <variant>
+    class WXDLLIMPEXP_FWD_CORE wxMonoValidationEvent;
+#endif // defined(HAVE_STD_VARIANT)
 
 // Define a new application type
 class MyApp : public wxApp
@@ -49,9 +54,13 @@ public:
             const long style = wxDEFAULT_DIALOG_STYLE);
 
     void OnChangeValidator(wxCommandEvent& event);
+#if defined(HAVE_STD_VARIANT)
+    void OnAlternativeChanged(wxMonoValidationEvent& event);
+#endif
 
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
+    wxComboBox *m_combobox2;
 
     wxTextCtrl *m_numericTextInt;
     wxTextCtrl *m_numericTextDouble;
@@ -150,6 +159,14 @@ public:
     // the string entered in the combobox's text-edit field.
     wxString m_combobox_choice;
 
+    // use wxScopedPtr<> for combobox2
+    wxScopedPtr<wxString> m_combobox2_choice;
+
+#if defined(HAVE_STD_VARIANT)
+    typedef std::variant<wxString, int, wxString, wxString> IntStrVariant;
+    IntStrVariant m_int_or_str;
+#endif
+
     // variables handled by wxNumericTextValidator
     int m_intValue;
     unsigned short m_smallIntValue;
@@ -160,23 +177,6 @@ public:
     int m_radiobox_choice;
 };
 
-class MyComboBoxValidator : public wxValidator
-{
-public:
-    MyComboBoxValidator(wxString* var) { m_var=var; }
-
-    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
-    virtual wxObject* Clone() const wxOVERRIDE { return new MyComboBoxValidator(*this); }
-
-    // Called to transfer data to the window
-    virtual bool TransferToWindow() wxOVERRIDE;
-
-    // Called to transfer data from the window
-    virtual bool TransferFromWindow() wxOVERRIDE;
-
-protected:
-    wxString* m_var;
-};
 
 enum
 {
@@ -187,8 +187,11 @@ enum
 
     VALIDATE_TEXT,
     VALIDATE_TEXT2,
+    VALIDATE_NAME,
     VALIDATE_LIST,
     VALIDATE_CHECK,
     VALIDATE_COMBO,
+    VALIDATE_COMBO2,
+    VALIDATE_COMBO3,
     VALIDATE_RADIO
 };

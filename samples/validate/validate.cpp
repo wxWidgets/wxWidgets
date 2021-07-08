@@ -27,6 +27,7 @@
 #include "wx/valgen.h"
 #include "wx/valtext.h"
 #include "wx/valnum.h"
+#include "wx/spinctrl.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -40,7 +41,7 @@ wxString g_listbox_choices[] =
     {"one",  "two",  "three"};
 
 wxString g_combobox_choices[] =
-    {"yes", "no (doesn't validate)", "maybe (doesn't validate)"};
+    {"yes", "no (doesn't validate)", "maybe", "accepted"};
 
 wxString g_radiobox_choices[] =
     {"green", "yellow", "red"};
@@ -66,9 +67,69 @@ MyData::MyData()
     m_percentValue = 0.25;
 }
 
+static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
+{
+    if (ptr)
+        return *ptr;
+
+    return wxString();
+}
+
+#if wxUSE_VALIDATOR_DATATRANSFER
+
+#if defined(HAVE_STD_VARIANT)
+static auto GetString(const MyData::IntStrVariant& var)
+{
+    return std::visit(wxVisitor{
+                [](int i){ return wxString::Format("item(%d)", i); },
+                [](const wxString& str){ return str; }
+           }, var);
+}
+#endif // defined(HAVE_STD_VARIANT)
+
+// we don't have to derive a whole new class from wxValidator
+// just to customize validation behaviour. All we have to do 
+// is specialize wxValidatorDataTransfer<W>::DoValidate() for this matter.
+template<>
+bool wxValidatorDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
+{
+    wxUnusedVar(parent);
+
+    if (cb->GetValue() == g_combobox_choices[1] ||
+          (cb->GetValue() == g_combobox_choices[2] && cb->GetId() != VALIDATE_COMBO2))
+    {
+        // we accept any string != g_combobox_choices[1|2] !
+
+        wxLogError("Invalid combo box text!");
+        return false;
+    }
+
+    return true;
+}
+
+#else // wxUSE_VALIDATOR_DATATRANSFER
+
 // ----------------------------------------------------------------------------
 // MyComboBoxValidator
 // ----------------------------------------------------------------------------
+
+class MyComboBoxValidator : public wxValidator
+{
+public:
+    MyComboBoxValidator(wxString* var) { m_var=var; }
+
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
+    virtual wxObject* Clone() const wxOVERRIDE { return new MyComboBoxValidator(*this); }
+
+    // Called to transfer data to the window
+    virtual bool TransferToWindow() wxOVERRIDE;
+
+    // Called to transfer data from the window
+    virtual bool TransferFromWindow() wxOVERRIDE;
+
+protected:
+    wxString* m_var;
+};
 
 bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
 {
@@ -121,6 +182,8 @@ bool MyComboBoxValidator::TransferFromWindow()
 
     return true;
 }
+
+#endif // wxUSE_VALIDATOR_DATATRANSFER
 
 // ----------------------------------------------------------------------------
 // MyApp
@@ -215,6 +278,10 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         wxString checkbox_state(g_data.m_checkbox_state ? "checked" : "unchecked");
         m_listbox->Append(wxString("checkbox: ") + checkbox_state);
         m_listbox->Append(wxString("combobox: ") + g_data.m_combobox_choice);
+        m_listbox->Append(wxString("combobox2: ") + GetString(g_data.m_combobox2_choice));
+        #if defined(HAVE_STD_VARIANT)
+        m_listbox->Append(wxString("Int or Str: ") + GetString(g_data.m_int_or_str));
+        #endif
         m_listbox->Append(wxString("radiobox: ") + g_radiobox_choices[g_data.m_radiobox_choice]);
 
         m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
@@ -260,16 +327,79 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
                         wxDefaultPosition, wxDefaultSize,
-                        3, g_listbox_choices, wxLB_MULTIPLE,
+                        WXSIZEOF(g_listbox_choices), g_listbox_choices, wxLB_MULTIPLE,
                         wxGenericValidator(&g_data.m_listbox_choices)),
                        1, wxGROW);
 
+    wxBoxSizer *combosizer = new wxBoxSizer( wxVERTICAL );
+
     m_combobox = new wxComboBox(this, VALIDATE_COMBO, wxEmptyString,
                                 wxDefaultPosition, wxDefaultSize,
-                                3, g_combobox_choices, 0L,
-                                MyComboBoxValidator(&g_data.m_combobox_choice));
+                                WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
+
+    m_combobox2 = new wxComboBox(this, VALIDATE_COMBO2, wxEmptyString,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
+
+#if wxUSE_VALIDATOR_DATATRANSFER
+    m_combobox->SetValidator(wxGenericValidator(&g_data.m_combobox_choice));
+    m_combobox->SetToolTip("uses generic validator (with validation)");
+
+    wxSetGenericValidator(m_combobox2, g_data.m_combobox2_choice);
+    m_combobox2->SetToolTip("uses generic validator (with validation, wxScopedPtr)");
+
+    #if defined(HAVE_STD_VARIANT)
+    wxPanel* const panel = new wxPanel(this, wxID_ANY);
+
+    wxSizer* const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Your name:"),
+                wxSizerFlags().Center().Right());
+    auto textName = new wxTextCtrl(panel, VALIDATE_NAME);
+    sizer->Add(textName, wxSizerFlags().Expand().CenterVertical());
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Your age:"),
+                wxSizerFlags().Center().Right());
+    auto spinAge = new wxSpinCtrl(panel, wxID_ANY);
+    sizer->Add(spinAge, wxSizerFlags().Expand().CenterVertical());
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Select any:"),
+                wxSizerFlags().Center().Right());
+    auto combobox = new wxComboBox(panel, wxID_ANY, wxEmptyString,
+                            wxDefaultPosition, wxDefaultSize,
+                            WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
+    sizer->Add(combobox, wxSizerFlags().Expand().CenterVertical());
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Your job:"),
+                wxSizerFlags().Center().Right());
+    auto textJob = new wxTextCtrl(panel, wxID_ANY);
+    sizer->Add(textJob, wxSizerFlags().Expand().CenterVertical());
+
+    wxStaticBoxSizer* const
+        box = new wxStaticBoxSizer(wxVERTICAL, panel, "Your Infos:");
+    box->Add(sizer, wxSizerFlags(1).Expand().Border(wxALL, 5));
+    panel->SetSizer(box);
+
+    wxSetGenericValidator(panel, g_data.m_int_or_str,
+            std::make_tuple(textName, spinAge, combobox, textJob));
+
+    combosizer->Add(panel, wxSizerFlags().Expand());
+    combosizer->AddSpacer(10);
+
+    panel->Bind(wxEVT_SET_ALTERNATIVE, &MyDialog::OnAlternativeChanged, this);
+    #endif // defined(HAVE_STD_VARIANT)
+
+#else
+    m_combobox->SetValidator(MyComboBoxValidator(&g_data.m_combobox_choice));
     m_combobox->SetToolTip("uses a custom validator (MyComboBoxValidator)");
-    flexgridsizer->Add(m_combobox, 1, wxALIGN_CENTER);
+
+    m_combobox2->Disable();
+#endif // wxUSE_VALIDATOR_DATATRANSFER
+
+    combosizer->Add(m_combobox, wxSizerFlags().CenterHorizontal());
+    combosizer->AddSpacer(10);
+    combosizer->Add(m_combobox2, wxSizerFlags().CenterHorizontal());
+
+    flexgridsizer->Add(combosizer, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
     // This wxCheckBox* doesn't need to be assigned to any pointer
     // because we don't use it elsewhere--it can be anonymous.
@@ -365,7 +495,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, "Pick a color",
                                     wxDefaultPosition, wxDefaultSize,
-                                    3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
+                                    WXSIZEOF(g_radiobox_choices), g_radiobox_choices,
+                                    1, wxRA_SPECIFY_ROWS,
                                     wxGenericValidator(&g_data.m_radiobox_choice)),
                    0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
 
@@ -393,6 +524,21 @@ void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
         dialog.ApplyValidator();
     }
 }
+
+#if defined(HAVE_STD_VARIANT)
+void MyDialog::OnAlternativeChanged(wxMonoValidationEvent& event)
+{
+    wxWindow* const win = event.GetWindow();
+
+    if ( !win )
+        return;
+
+    win->SetBackgroundColour(wxColour("#f2cc6d"));
+
+    if ( event.GetId() == VALIDATE_NAME )
+        win->SetValidator(wxTextValidator(wxFILTER_ALPHANUMERIC));
+}
+#endif // HAVE_STD_VARIANT
 
 // ----------------------------------------------------------------------------
 // TextValidatorDialog
