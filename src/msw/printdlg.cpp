@@ -522,7 +522,8 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                 // try to switch to level 9 user data
                 if (!devModeSwitched) {
                     wxMemoryBuffer buffer9 = _printer.GetData(9);
-                    if (!buffer9.IsEmpty()) {
+                    if (!buffer9.IsEmpty())
+                    {
                         PRINTER_INFO_9* printerInfo9 = static_cast<PRINTER_INFO_9*>(buffer9.GetData());
                         if (printerInfo9->pDevMode)
                         {
@@ -540,9 +541,11 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                 }
 
                 // try to switch to level 8 data
-                if (!devModeSwitched) {
+                if (!devModeSwitched)
+                {
                     wxMemoryBuffer buffer8 = _printer.GetData(8);
-                    if (!buffer8.IsEmpty()) {
+                    if (!buffer8.IsEmpty())
+                    {
                         PRINTER_INFO_8* printerInfo8 = static_cast<PRINTER_INFO_8*>(buffer8.GetData());
                         if (printerInfo8->pDevMode)
                         {
