@@ -208,9 +208,7 @@ bool wxWindowsPrintNativeData::IsOk() const
 
 bool wxWindowsPrintNativeData::CopyAndSetDevMode(LPDEVMODE pDevMode)
 {
-    if (!pDevMode) {
-        return false;
-    }
+    wxCHECK_MSG(pDevMode, false, "null DEVMODE pointer");
 
     DWORD devModeSize = pDevMode->dmSize + pDevMode->dmDriverExtra;
     LPDEVMODE newDevMode = static_cast<LPDEVMODE>(GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, devModeSize));
@@ -534,15 +532,14 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         LPDEVMODE tempDevMode = static_cast<LPDEVMODE>(lockDevMode.Get());
         if (tempDevMode)
         {
-            wxString _printerName = tempDevMode->dmDeviceName;
-            WinPrinter _printer;
-            if (_printer.Open(_printerName))
+            WinPrinter winPrinter;
+            if (winPrinter.Open(tempDevMode->dmDeviceName))
             {
                 bool devModeSwitched = false;
 
                 // try to switch to level 9 user data
                 if (!devModeSwitched) {
-                    wxMemoryBuffer buffer9 = _printer.GetData(9);
+                    wxMemoryBuffer buffer9 = winPrinter.GetData(9);
                     if (!buffer9.IsEmpty())
                     {
                         PRINTER_INFO_9* printerInfo9 = static_cast<PRINTER_INFO_9*>(buffer9.GetData());
@@ -553,10 +550,10 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                     }
                 }
 
-                // try to switch to level 8 data
+                // try to switch to level 8 system data if level 9 user data are not available
                 if (!devModeSwitched)
                 {
-                    wxMemoryBuffer buffer8 = _printer.GetData(8);
+                    wxMemoryBuffer buffer8 = winPrinter.GetData(8);
                     if (!buffer8.IsEmpty())
                     {
                         PRINTER_INFO_8* printerInfo8 = static_cast<PRINTER_INFO_8*>(buffer8.GetData());
