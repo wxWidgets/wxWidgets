@@ -770,6 +770,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 
 wxPrintData GetDefaultPrintData(const wxString& printerName = wxEmptyString) {
     wxPrintData defaultData;
+    defaultData.SetPrinterName(printerName);
     WinPrinter printer;
     wxWindowsPrintNativeData nativeData;
     nativeData.InitializeDevMode(printerName, &printer);
