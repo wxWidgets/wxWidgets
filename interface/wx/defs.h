@@ -767,26 +767,31 @@ enum wxStandardID
 */
 enum wxItemKind
 {
+    /**
+        Separator tool / menu item.
+
+        @see wxToolBar::AddSeparator(), wxMenu::AppendSeparator(), wxAuiToolBar::AddSeparator().
+    */
     wxITEM_SEPARATOR = -1,
 
     /**
         Normal tool button / menu item.
 
-        @see wxToolBar::AddTool(), wxMenu::AppendItem().
+        @see wxToolBar::AddTool(), wxMenu::AppendItem(), wxAuiToolBar::AddTool().
     */
     wxITEM_NORMAL,
 
     /**
         Check (or toggle) tool button / menu item.
 
-        @see wxToolBar::AddCheckTool(), wxMenu::AppendCheckItem().
+        @see wxToolBar::AddCheckTool(), wxMenu::AppendCheckItem(), wxAuiToolBar::AddTool().
     */
     wxITEM_CHECK,
 
     /**
         Radio tool button / menu item.
 
-        @see wxToolBar::AddRadioTool(), wxMenu::AppendRadioItem().
+        @see wxToolBar::AddRadioTool(), wxMenu::AppendRadioItem(), wxAuiToolBar::AddTool().
     */
     wxITEM_RADIO,
 
@@ -798,6 +803,30 @@ enum wxItemKind
         under MSW and GTK.
     */
     wxITEM_DROPDOWN,
+
+    /**
+        A wxControl toolbar item in an AUI toolbar.
+
+        @see wxAuiToolBar::AddControl()
+        @since 3.1.5
+    */
+    wxITEM_CONTROL,
+
+    /**
+        A text label item in an AUI toolbar
+
+        @see wxAuiToolBar::AddLabel()
+        @since 3.1.5
+    */
+    wxITEM_LABEL,
+
+    /**
+        A spacer in an AUI toolbar.
+
+        @see wxAuiToolBar::AddSpacer()
+        @since 3.1.5
+    */
+    wxITEM_SPACER,
 
     wxITEM_MAX
 };
