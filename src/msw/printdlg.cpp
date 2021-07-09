@@ -205,6 +205,25 @@ bool wxWindowsPrintNativeData::IsOk() const
     return (m_devMode != NULL) ;
 }
 
+bool wxWindowsPrintNativeData::CopyAndSetDevMode(LPDEVMODE pDevMode)
+{
+    if (!pDevMode) {
+        return false;
+    }
+
+    DWORD devModeSize = pDevMode->dmSize + pDevMode->dmDriverExtra;
+    LPDEVMODE newDevMode = static_cast<LPDEVMODE>(GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, devModeSize));
+    if (newDevMode)
+    {
+        memcpy(newDevMode, pDevMode, devModeSize);
+        GlobalFree(m_devMode);
+        m_devMode = newDevMode;
+        return true;
+    }
+
+    return false;
+}
+
 bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 {
     if ( !m_devMode )
@@ -510,7 +529,8 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
     // try to switch devmode to user or system default
     if (m_devMode)
     {
-        LPDEVMODE tempDevMode = static_cast<LPDEVMODE>(GlobalLock(m_devMode));
+        GlobalPtrLock lockDevMode(m_devMode);
+        LPDEVMODE tempDevMode = static_cast<LPDEVMODE>(lockDevMode.Get());
         if (tempDevMode)
         {
             wxString _printerName = tempDevMode->dmDeviceName;
@@ -527,15 +547,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                         PRINTER_INFO_9* printerInfo9 = static_cast<PRINTER_INFO_9*>(buffer9.GetData());
                         if (printerInfo9->pDevMode)
                         {
-                            DWORD devmodeSize = printerInfo9->pDevMode->dmSize + printerInfo9->pDevMode->dmDriverExtra;
-                            LPDEVMODE newDevMode = static_cast<LPDEVMODE>(GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, devmodeSize));
-                            if (newDevMode)
-                            {
-                                memcpy(newDevMode, buffer9.GetData(), devmodeSize);
-                                GlobalFree(m_devMode);
-                                m_devMode = newDevMode;
-                                devModeSwitched = true;
-                            }
+                            devModeSwitched = CopyAndSetDevMode(printerInfo9->pDevMode);
                         }
                     }
                 }
@@ -549,15 +561,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                         PRINTER_INFO_8* printerInfo8 = static_cast<PRINTER_INFO_8*>(buffer8.GetData());
                         if (printerInfo8->pDevMode)
                         {
-                            DWORD devmodeSize = printerInfo8->pDevMode->dmSize + printerInfo8->pDevMode->dmDriverExtra;
-                            LPDEVMODE newDevMode = static_cast<LPDEVMODE>(GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, devmodeSize));
-                            if (newDevMode)
-                            {
-                                memcpy(newDevMode, buffer8.GetData(), devmodeSize);
-                                GlobalFree(m_devMode);
-                                m_devMode = newDevMode;
-                                devModeSwitched = true;
-                            }
+                            devModeSwitched = CopyAndSetDevMode(printerInfo8->pDevMode);
                         }
                     }
                 }
@@ -762,6 +766,15 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
     m_devNames = wxCreateDevNames(wxEmptyString, data.GetPrinterName(), wxEmptyString);
 
     return true;
+}
+
+wxPrintData GetDefaultPrintData(const wxString& printerName = wxEmptyString) {
+    wxPrintData defaultData;
+    WinPrinter printer;
+    wxWindowsPrintNativeData nativeData;
+    nativeData.InitializeDevMode(printerName, &printer);
+    nativeData.TransferTo(defaultData);
+    return defaultData;
 }
 
 // ---------------------------------------------------------------------------

@@ -42,6 +42,7 @@ public:
     void SetDevMode(void* data) { m_devMode = data; }
     void* GetDevNames() const { return m_devNames; }
     void SetDevNames(void* data) { m_devNames = data; }
+    bool CopyAndSetDevMode(LPDEVMODE pDevMode);
 
 private:
     void* m_devMode;
