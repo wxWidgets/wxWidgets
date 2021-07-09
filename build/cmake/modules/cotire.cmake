@@ -2316,6 +2316,10 @@ function (cotire_generate_target_script _language _configurations _target _targe
 			"${_config}" "${_language}" "${_target}" COTIRE_TARGET_COMPILE_DEFINITIONS_${_upperConfig})
 		cotire_get_target_compiler_flags(
 			"${_config}" "${_language}" "${_target}" COTIRE_TARGET_COMPILE_FLAGS_${_upperConfig})
+		string(REPLACE
+			"<COMPILE_LANG_AND_ID:CUDA,NVIDIA>" "<COMPILE_LANGUAGE:CUDA>"
+			COTIRE_TARGET_COMPILE_FLAGS_${_upperConfig} "${COTIRE_TARGET_COMPILE_FLAGS_${_upperConfig}}"
+		)
 		cotire_get_source_files_compile_definitions(
 			"${_config}" "${_language}" COTIRE_TARGET_SOURCES_COMPILE_DEFINITIONS_${_upperConfig} ${_targetSources})
 	endforeach()
@@ -2371,7 +2375,7 @@ function (cotire_generate_target_script _language _configurations _target _targe
 		# use file(GENERATE ...) to expand generator expressions in the target script at CMake generate-time
 		set (_configNameOrNoneGeneratorExpression "$<$<CONFIG:>:None>$<$<NOT:$<CONFIG:>>:$<CONFIGURATION>>")
 		set (_targetCotireConfigScript "${CMAKE_CURRENT_BINARY_DIR}/${_target}_${_language}_${_configNameOrNoneGeneratorExpression}_${_moduleName}")
-		file (GENERATE OUTPUT "${_targetCotireConfigScript}" INPUT "${_targetCotireScript}" TARGET "${_target}")
+		file (GENERATE OUTPUT "${_targetCotireConfigScript}" INPUT "${_targetCotireScript}")
 	else()
 		set (_targetCotireConfigScript "${_targetCotireScript}")
 	endif()
