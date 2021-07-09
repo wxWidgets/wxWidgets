@@ -76,17 +76,18 @@ public:
         return result;
     }
 
-    wxMemoryBuffer GetData(int level) {
+    wxMemoryBuffer GetData(int level)
+    {
         if (m_hPrinter)
         {
-            DWORD buf_size = 0;
-            GetPrinter(m_hPrinter, level, NULL, 0, &buf_size);
-            if (buf_size)
+            DWORD bufSize = 0;
+            GetPrinter(m_hPrinter, level, NULL, 0, &bufSize);
+            if (bufSize)
             {
-                wxMemoryBuffer buffer(buf_size);
-                if (GetPrinter(m_hPrinter, level, (LPBYTE) buffer.GetWriteBuf(buf_size), buf_size, &buf_size))
+                wxMemoryBuffer buffer(bufSize);
+                if (GetPrinter(m_hPrinter, level, (LPBYTE) buffer.GetWriteBuf(bufSize), bufSize, &bufSize))
                 {
-                    buffer.SetDataLen(buf_size);
+                    buffer.SetDataLen(bufSize);
                     return buffer;
                 }
             }
