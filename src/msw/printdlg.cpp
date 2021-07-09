@@ -766,16 +766,6 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
     return true;
 }
 
-wxPrintData GetDefaultPrintData(const wxString& printerName = wxEmptyString) {
-    wxPrintData defaultData;
-    defaultData.SetPrinterName(printerName);
-    WinPrinter printer;
-    wxWindowsPrintNativeData nativeData;
-    nativeData.InitializeDevMode(printerName, &printer);
-    nativeData.TransferTo(defaultData);
-    return defaultData;
-}
-
 // ---------------------------------------------------------------------------
 // wxPrintDialog
 // ---------------------------------------------------------------------------
@@ -983,6 +973,17 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     data.EnableHelp( ((pd->Flags & PD_SHOWHELP) == PD_SHOWHELP) );
 
     return true;
+}
+
+wxPrintData wxWindowsPrintDialog::GetDefaultPrintData(const wxString& printerName)
+{
+    wxPrintData defaultData;
+    defaultData.SetPrinterName(printerName);
+    WinPrinter printer;
+    wxWindowsPrintNativeData nativeData;
+    nativeData.InitializeDevMode(printerName, &printer);
+    nativeData.TransferTo(defaultData);
+    return defaultData;
 }
 
 // ---------------------------------------------------------------------------

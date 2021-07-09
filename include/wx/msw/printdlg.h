@@ -73,6 +73,8 @@ public:
 
     virtual wxDC *GetPrintDC() wxOVERRIDE;
 
+    static wxPrintData GetDefaultPrintData(const wxString& printerName = wxEmptyString);
+
 private:
     wxPrintDialogData m_printDialogData;
     wxPrinterDC*      m_printerDC;
