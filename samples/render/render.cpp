@@ -219,9 +219,9 @@ private:
         wxRendererNative& renderer = m_useGeneric ? wxRendererNative::GetGeneric()
                                                   : wxRendererNative::Get();
 
-        int x1 = 10,    // text offset
-            x2 = 300,   // drawing offset
-            y = 10;
+        int x1 = FromDIP(10),    // text offset
+            x2 = FromDIP(300),   // drawing offset
+            y = FromDIP(10);
 
         const int lineHeight = dc.GetCharHeight();
         dc.DrawText("Demonstration of various wxRenderer functions:", x1, y);
@@ -247,7 +247,7 @@ private:
         y += lineHeight*3;
 
         const wxCoord heightHdr = renderer.GetHeaderButtonHeight(this);
-        const wxCoord width = 120;
+        const wxCoord width = 15*GetCharWidth();
 
         const wxHeaderSortIconType
             hdrSortIcon = m_useIcon ? wxHDR_SORT_ICON_UP
@@ -307,7 +307,7 @@ private:
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
         dc.DrawText("DrawTitleBarBitmap()", x1, y);
-        wxRect rBtn(x2, y, 21, 21);
+        wxRect rBtn(x2, y, FromDIP(21), FromDIP(21));
         renderer.DrawTitleBarBitmap(this, dc, rBtn,
                                     wxTITLEBAR_BUTTON_HELP, m_flags);
         rBtn.x += 2*rBtn.width;
@@ -327,21 +327,21 @@ private:
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
         // The meanings of those are reversed for the vertical gauge below.
-        const wxCoord heightGauge = 24;
-        const wxCoord widthGauge = 180;
+        const wxCoord heightGauge = FromDIP(24);
+        const wxCoord widthGauge = 30*GetCharWidth();
 
         dc.DrawText("DrawGauge()", x1, y);
         renderer.DrawGauge(this, dc,
             wxRect(x2, y, widthGauge, heightGauge), 25, 100, m_flags);
         renderer.DrawGauge(this, dc,
-            wxRect(x2 + widthGauge + 30, y + heightGauge - widthGauge,
+            wxRect(x2 + widthGauge + FromDIP(30), y + heightGauge - widthGauge,
                    heightGauge, widthGauge),
             25, 100, m_flags | wxCONTROL_SPECIAL);
 
         y += lineHeight + heightGauge;
 
-        const wxCoord heightListItem = 48;
-        const wxCoord widthListItem = 260;
+        const wxCoord heightListItem = FromDIP(48);
+        const wxCoord widthListItem = 30*GetCharWidth();
 
         dc.DrawText("DrawItemSelectionRect()", x1, y);
         renderer.DrawItemSelectionRect(this, dc,
@@ -356,8 +356,6 @@ private:
         dc.DrawText("DrawChoice()", x1, y);
         renderer.DrawChoice(this, dc,
                             wxRect(x2, y, width, 1.5*GetCharHeight()), m_flags);
-        y += 50;
-
     }
 
     int m_flags;
