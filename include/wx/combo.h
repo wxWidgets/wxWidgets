@@ -572,6 +572,9 @@ protected:
     void OnKeyEvent(wxKeyEvent& event);
     void OnCharEvent(wxKeyEvent& event);
 
+    void OnTextFocus(wxFocusEvent& event);
+    void OnTextKey(wxKeyEvent& event);
+
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
@@ -626,9 +629,6 @@ protected:
 
     // popup interface
     wxComboPopup*           m_popupInterface;
-
-    // this is input etc. handler for the text control
-    wxEvtHandler*           m_textEvtHandler;
 
     // this is for the top level window
     wxEvtHandler*           m_toplevEvtHandler;
