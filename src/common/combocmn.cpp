@@ -136,7 +136,6 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxMSW
 
 //#undef wxUSE_POPUPWIN
@@ -167,7 +166,6 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxGTK
 
 #elif defined(__WXMAC__)
@@ -180,7 +178,6 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    3 // Reserve room for the textctrl's focus ring to display
 
 #undef DEFAULT_DROPBUTTON_WIDTH
@@ -197,7 +194,6 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0
 
 #endif
@@ -1198,15 +1194,10 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
                 m_marginLeft + textCtrlXAdjust;
         }
 
-        // Centre textctrl vertically, if needed
-#if !TEXTCTRL_TEXT_CENTERED
+        // Centre textctrl vertically
         int tcSizeY = m_text->GetBestSize().y;
         int diff0 = sz.y - tcSizeY;
         int y = textCtrlYAdjust + (diff0/2);
-#else
-        wxUnusedVar(textCtrlYAdjust);
-        int y = 0;
-#endif
 
         if ( y < customBorder )
             y = customBorder;
