@@ -136,7 +136,6 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
-#define FOCUS_RING                    0 // No focus ring on wxMSW
 
 //#undef wxUSE_POPUPWIN
 //#define wxUSE_POPUPWIN 0
@@ -166,7 +165,6 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define FOCUS_RING                    0 // No focus ring on wxGTK
 
 #elif defined(__WXMAC__)
 
@@ -194,10 +192,13 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
-#define FOCUS_RING                    0
 
 #endif
 
+// No focus ring by default.
+#ifndef FOCUS_RING
+    #define FOCUS_RING 0
+#endif
 
 // Popupwin is really only supported on wxMSW and wxGTK, regardless
 // what the wxUSE_POPUPWIN says.
