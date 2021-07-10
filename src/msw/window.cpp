@@ -3772,13 +3772,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // it below if it fails.
                     RECT rcClient;
 
-                    wxClientDC dc((wxWindow *)this);
-                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+                    WindowHDC hdc(GetHwnd());
 
                     if ( ::GetThemeBackgroundContentRect
                                 (
                                  hTheme,
-                                 GetHdcOf(*impl),
+                                 hdc,
                                  EP_EDITTEXT,
                                  IsEnabled() ? ETS_NORMAL : ETS_DISABLED,
                                  rect,
