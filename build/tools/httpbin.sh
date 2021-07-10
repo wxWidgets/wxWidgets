@@ -35,15 +35,14 @@ httpbin_launch() {
             blinker==1.4 brotlipy==0.7.0 cffi==1.14.5 click==7.0 decorator==4.4.2
             itsdangerous==1.1.0 pycparser==2.20 raven==6.10.0 werkzeug==0.16.1'
             ;;
-
-        macOS)
-            # We use Python 2 under macOS 10.11 which doesn't have Python 3,
-            # and decorator >= 5 is incompatible with it too.
-            pip_explicit_deps='decorator==4.4.2'
-            ;;
     esac
 
-    # Ensure that we have at least some version of pip.
+    # Ensure that we have at least some version of pip and setuptools required
+    # for installing cffi.
+    if ! python3 -c 'import setuptools'; then
+        sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-setuptools
+    fi
+
     if ! python3 -c 'import pip'; then
         sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-pip
     fi
