@@ -726,9 +726,6 @@ private:
 
     wxByte                  m_ignoreEvtText;  // Number of next EVT_TEXTs to ignore
 
-    // Is popup window wxPopupTransientWindow, wxPopupWindow or wxDialog?
-    wxByte                  m_popupWinType;
-
     wxDECLARE_EVENT_TABLE();
 
     wxDECLARE_ABSTRACT_CLASS(wxComboCtrlBase);
