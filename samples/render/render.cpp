@@ -352,8 +352,10 @@ private:
 
         y += heightListItem;
 
-        dc.DrawText("DrawChoice()", x1, y + 20);
-        renderer.DrawChoice(this, dc, wxRect(x2, y, 80, 50), m_flags);
+        y += lineHeight;
+        dc.DrawText("DrawChoice()", x1, y);
+        renderer.DrawChoice(this, dc,
+                            wxRect(x2, y, width, 1.5*GetCharHeight()), m_flags);
         y += 50;
 
     }
