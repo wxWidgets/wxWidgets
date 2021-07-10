@@ -579,6 +579,8 @@ protected:
     void OnPopupKey(wxKeyEvent& event);
     void OnPopupSize(wxSizeEvent& event);
 
+    void OnPopupMouseEvent(wxMouseEvent& event);
+
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
@@ -636,9 +638,6 @@ protected:
 
     // this is for the top level window
     wxEvtHandler*           m_toplevEvtHandler;
-
-    // this is for the control in popup
-    wxEvtHandler*           m_popupEvtHandler;
 
     // main (ie. topmost) window of a composite control (default = this)
     wxWindow*               m_mainCtrlWnd;
@@ -717,6 +716,10 @@ protected:
 
     // is the text-area background colour overridden?
     bool                    m_hasTcBgCol;
+
+    // flags used while popup is shown
+    bool                    m_beenInsidePopup;
+    bool                    m_blockEventsToPopup;
 
 private:
     void Init();

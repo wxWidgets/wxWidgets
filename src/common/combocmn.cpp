@@ -720,62 +720,17 @@ void wxComboCtrlBase::OnTextFocus(wxFocusEvent& event)
 }
 
 
-//
-// This is pushed to the event handler queue of the control in popup.
-//
-
-class wxComboPopupEvtHandler : public wxEvtHandler
-{
-public:
-
-    wxComboPopupEvtHandler( wxComboCtrlBase* combo )
-        : wxEvtHandler()
-    {
-        m_combo = combo;
-        m_beenInside = false;
-
-        // Let's make it so that the popup control will not receive mouse
-        // events until mouse left button has been up.
-        m_blockEventsToPopup = true;
-    }
-    virtual ~wxComboPopupEvtHandler() { }
-
-    void OnMouseEvent( wxMouseEvent& event );
-
-    // Called from wxComboCtrlBase::OnPopupDismiss
-    void OnPopupDismiss()
-    {
-        m_beenInside = false;
-        m_blockEventsToPopup = true;
-    }
-
-protected:
-    wxComboCtrlBase*     m_combo;
-
-    bool                m_beenInside;
-    bool                m_blockEventsToPopup;
-
-private:
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxBEGIN_EVENT_TABLE(wxComboPopupEvtHandler, wxEvtHandler)
-    EVT_MOUSE_EVENTS(wxComboPopupEvtHandler::OnMouseEvent)
-wxEND_EVENT_TABLE()
-
-
-void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
+void wxComboCtrlBase::OnPopupMouseEvent( wxMouseEvent& event )
 {
     wxPoint pt = event.GetPosition();
-    wxSize sz = m_combo->GetPopupControl()->GetControl()->GetClientSize();
+    wxSize sz = GetPopupControl()->GetControl()->GetClientSize();
     int evtType = event.GetEventType();
     bool isInside = pt.x >= 0 && pt.y >= 0 && pt.x < sz.x && pt.y < sz.y;
     bool relayToButton = false;
 
     event.Skip();
 
-    if ( !isInside || !m_combo->IsPopupShown() )
+    if ( !isInside || !IsPopupShown() )
     {
         // Mouse is outside the popup or popup is not actually shown (yet)
 
@@ -792,7 +747,7 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
     {
         // Mouse is inside the popup, which is fully shown
 
-        m_beenInside = true;
+        m_beenInsidePopup = true;
 
         // Do not let the popup control respond to mouse events until
         // mouse press used to display the popup has been lifted. This
@@ -844,12 +799,12 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
     //
     if ( evtType == wxEVT_LEFT_UP )
     {
-        if ( !m_combo->IsPopupShown() )
+        if ( !IsPopupShown() )
         {
             event.Skip(false);
             relayToButton = true;
         }
-        else if ( !isInside && !m_beenInside )
+        else if ( !isInside && !m_beenInsidePopup )
         {
             // Popup is shown but the cursor is not inside, nor it has been
             relayToButton = true;
@@ -858,14 +813,14 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
 
     if ( relayToButton )
     {
-        wxWindow* btn = m_combo->GetButton();
+        wxWindow* btn = GetButton();
         if ( btn )
             btn->GetEventHandler()->ProcessEvent(event);
         else
             // Bypass the event handling mechanism. Using it would be
             // confusing for the platform-specific wxComboCtrl
             // implementations.
-            m_combo->HandleButtonMouseEvent(event, 0);
+            HandleButtonMouseEvent(event, 0);
     }
 }
 
@@ -918,8 +873,6 @@ void wxComboCtrlBase::Init()
     m_text = NULL;
     m_popupInterface = NULL;
 
-    m_popupEvtHandler = NULL;
-
 #if INSTALL_TOPLEV_HANDLER
     m_toplevEvtHandler = NULL;
 #endif
@@ -950,6 +903,12 @@ void wxComboCtrlBase::Init()
 
     m_resetFocus = false;
     m_hasTcBgCol = false;
+
+    m_beenInsidePopup = false;
+
+    // Let's make it so that the popup control will not receive mouse
+    // events until mouse left button has been up.
+    m_blockEventsToPopup = true;
 }
 
 bool wxComboCtrlBase::Create(wxWindow *parent,
@@ -2038,7 +1997,6 @@ void wxComboCtrlBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event
 void wxComboCtrlBase::CreatePopup()
 {
     wxComboPopup* popupInterface = m_popupInterface;
-    wxWindow* popup;
 
     if ( !m_winPopup )
     {
@@ -2082,10 +2040,39 @@ void wxComboCtrlBase::CreatePopup()
     }
 
     popupInterface->Create(m_winPopup);
-    m_popup = popup = popupInterface->GetControl();
+    m_popup = popupInterface->GetControl();
 
-    m_popupEvtHandler = new wxComboPopupEvtHandler(this);
-    popup->PushEventHandler( m_popupEvtHandler );
+    // Bind all mouse events, as used to be done by EVT_MOUSE_EVENTS() event
+    // table macro, to this handler.
+    const wxEventTypeTag<wxMouseEvent> allMouseEventTypes[] =
+    {
+        wxEVT_LEFT_DOWN,
+        wxEVT_LEFT_UP,
+        wxEVT_LEFT_DCLICK,
+        wxEVT_MIDDLE_DOWN,
+        wxEVT_MIDDLE_UP,
+        wxEVT_MIDDLE_DCLICK,
+        wxEVT_RIGHT_DOWN,
+        wxEVT_RIGHT_UP,
+        wxEVT_RIGHT_DCLICK,
+        wxEVT_AUX1_DOWN,
+        wxEVT_AUX1_UP,
+        wxEVT_AUX1_DCLICK,
+        wxEVT_AUX2_DOWN,
+        wxEVT_AUX2_UP,
+        wxEVT_AUX2_DCLICK,
+        wxEVT_MOTION,
+        wxEVT_LEAVE_WINDOW,
+        wxEVT_ENTER_WINDOW,
+        wxEVT_MOUSEWHEEL,
+        wxEVT_MAGNIFY,
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(allMouseEventTypes); ++n )
+    {
+        m_popup->Bind(allMouseEventTypes[n],
+                      &wxComboCtrlBase::OnPopupMouseEvent, this);
+    }
 
     // This may be helpful on some platforms
     //   (eg. it bypasses a wxGTK popupwindow bug where
@@ -2099,11 +2086,6 @@ void wxComboCtrlBase::CreatePopup()
 void wxComboCtrlBase::DestroyPopup()
 {
     HidePopup(true);
-
-    if ( m_popup )
-        m_popup->RemoveEventHandler(m_popupEvtHandler);
-
-    wxDELETE(m_popupEvtHandler);
 
     if ( m_popupInterface )
     {
@@ -2450,8 +2432,9 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
     // Inform popup control itself
     m_popupInterface->OnDismiss();
 
-    if ( m_popupEvtHandler )
-        ((wxComboPopupEvtHandler*)m_popupEvtHandler)->OnPopupDismiss();
+    // Reset popup-related flags.
+    m_beenInsidePopup = false;
+    m_blockEventsToPopup = true;
 
 #if INSTALL_TOPLEV_HANDLER
     // Remove top level window event handler
