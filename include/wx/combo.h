@@ -575,6 +575,10 @@ protected:
     void OnTextFocus(wxFocusEvent& event);
     void OnTextKey(wxKeyEvent& event);
 
+    void OnPopupActivate(wxActivateEvent& event);
+    void OnPopupKey(wxKeyEvent& event);
+    void OnPopupSize(wxSizeEvent& event);
+
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
@@ -635,9 +639,6 @@ protected:
 
     // this is for the control in popup
     wxEvtHandler*           m_popupEvtHandler;
-
-    // this is for the popup window
-    wxEvtHandler*           m_popupWinEvtHandler;
 
     // main (ie. topmost) window of a composite control (default = this)
     wxWindow*               m_mainCtrlWnd;
