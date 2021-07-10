@@ -1983,16 +1983,18 @@ public:
     /**
         Set the colour to use.
 
-        This method is meant to be called once only and only on the objects
-        created with the constructor overload not taking wxColour argument and
-        has the same effect as the other constructor, i.e. sets the colour to
-        the given @a col and ensures that the old value is restored when this
-        object is destroyed.
+        This method is meant to be called only on objects created with the
+        constructor overload not taking wxColour argument and has the same
+        effect as the other constructor, i.e. sets the colour to the given
+        @a col and ensures that the old value is restored when this object
+        is destroyed.
+        It's also safe to call on objects created with a wxColour argument
+        and to call it multiple times.
      */
     void Set(const wxColour& col);
 
     /**
-        Restores the colour originally selected in the DC passed to the ctor.
+        If stored, restores the colour originally selected in the DC.
     */
     ~wxDCTextColourChanger();
 };
