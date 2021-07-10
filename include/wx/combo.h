@@ -509,9 +509,6 @@ protected:
     // (e.g. from WriteText())
     void OnSetValue(const wxString& value);
 
-    // Installs standard input handler to combo (and optionally to the textctrl)
-    void InstallInputHandlers();
-
     // Flags for DrawButton
     enum
     {
