@@ -37,7 +37,12 @@ httpbin_launch() {
             ;;
     esac
 
-    # Ensure that we have at least some version of pip.
+    # Ensure that we have at least some version of pip and setuptools required
+    # for installing cffi.
+    if ! python3 -c 'import setuptools'; then
+        sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-setuptools
+    fi
+
     if ! python3 -c 'import pip'; then
         sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-pip
     fi
