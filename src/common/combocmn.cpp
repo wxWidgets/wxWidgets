@@ -527,63 +527,26 @@ void wxComboPopupWindow::OnDismiss()
 
 
 // ----------------------------------------------------------------------------
-// wxComboPopupWindowEvtHandler does bulk of the custom event handling
-// of a popup window. It is separate so we can have different types
-// of popup windows.
+// custom event handling for popup window is done in wxComboCtrlBase so we can
+// have different types of popup windows.
 // ----------------------------------------------------------------------------
 
-class wxComboPopupWindowEvtHandler : public wxEvtHandler
-{
-public:
-
-    wxComboPopupWindowEvtHandler( wxComboCtrlBase *parent )
-    {
-        m_combo = parent;
-    }
-
-    void OnSizeEvent( wxSizeEvent& event );
-    void OnKeyEvent(wxKeyEvent& event);
-#if USES_GENERICTLW
-    void OnActivate( wxActivateEvent& event );
-#endif
-
-private:
-#if USES_GENERICTLW
-    void HideOnDeactivate();
-#endif // USES_GENERICTLW
-    wxComboCtrlBase*    m_combo;
-
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxBEGIN_EVENT_TABLE(wxComboPopupWindowEvtHandler, wxEvtHandler)
-    EVT_KEY_DOWN(wxComboPopupWindowEvtHandler::OnKeyEvent)
-    EVT_KEY_UP(wxComboPopupWindowEvtHandler::OnKeyEvent)
-    EVT_CHAR(wxComboPopupWindowEvtHandler::OnKeyEvent)
-#if USES_GENERICTLW
-    EVT_ACTIVATE(wxComboPopupWindowEvtHandler::OnActivate)
-#endif
-    EVT_SIZE(wxComboPopupWindowEvtHandler::OnSizeEvent)
-wxEND_EVENT_TABLE()
-
-
-void wxComboPopupWindowEvtHandler::OnSizeEvent( wxSizeEvent& WXUNUSED(event) )
+void wxComboCtrlBase::OnPopupSize( wxSizeEvent& WXUNUSED(event) )
 {
     // Block the event so that the popup control does not get auto-resized.
 }
 
-void wxComboPopupWindowEvtHandler::OnKeyEvent( wxKeyEvent& event )
+void wxComboCtrlBase::OnPopupKey( wxKeyEvent& event )
 {
     // Relay keyboard event to the main child controls
-    wxWindowList children = m_combo->GetPopupWindow()->GetChildren();
+    wxWindowList children = GetPopupWindow()->GetChildren();
     wxWindowList::iterator node = children.begin();
     wxWindow* child = (wxWindow*)*node;
     child->GetEventHandler()->ProcessEvent(event);
 }
 
 #if USES_GENERICTLW
-void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
+void wxComboCtrlBase::OnPopupActivate( wxActivateEvent& event )
 {
     if ( !event.GetActive() )
     {
@@ -593,17 +556,12 @@ void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
         // event handler causes some side effects like calling this handler again (Win 7)
         // or setting the focus improperly (Win 10), so postpone it slightly.
         // See wxPopupTransientWindow::MSWHandleMessage().
-        CallAfter(&wxComboPopupWindowEvtHandler::HideOnDeactivate);
+        CallAfter(&wxComboCtrlBase::Dismiss);
 #else // !__WXMSW__
-        HideOnDeactivate();
+        Dismiss();
 #endif // __WXMSW__ / !__WXMSW__
         event.Skip();
     }
-}
-
-void wxComboPopupWindowEvtHandler::HideOnDeactivate()
-{
-    m_combo->HidePopup(true);
 }
 #endif
 
@@ -2113,8 +2071,14 @@ void wxComboCtrlBase::CreatePopup()
             m_winPopup = new wxComboPopupWindow( this, wxNO_BORDER );
             m_popupWinType = PRIMARY_POPUP_TYPE;
         }
-        m_popupWinEvtHandler = new wxComboPopupWindowEvtHandler(this);
-        m_winPopup->PushEventHandler(m_popupWinEvtHandler);
+
+        m_winPopup->Bind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnPopupKey, this);
+        m_winPopup->Bind(wxEVT_CHAR, &wxComboCtrlBase::OnPopupKey, this);
+        m_winPopup->Bind(wxEVT_KEY_UP, &wxComboCtrlBase::OnPopupKey, this);
+#if USES_GENERICTLW
+        m_winPopup->Bind(wxEVT_ACTIVATE, &wxComboCtrlBase::OnPopupActivate, this);
+#endif
+        m_winPopup->Bind(wxEVT_SIZE, &wxComboCtrlBase::OnPopupSize, this);
     }
 
     popupInterface->Create(m_winPopup);
@@ -2150,8 +2114,6 @@ void wxComboCtrlBase::DestroyPopup()
 
     if ( m_winPopup )
     {
-        m_winPopup->RemoveEventHandler(m_popupWinEvtHandler);
-        wxDELETE(m_popupWinEvtHandler);
         m_winPopup->Destroy();
         m_winPopup = NULL;
     }
