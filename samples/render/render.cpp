@@ -247,7 +247,7 @@ private:
         y += lineHeight*3;
 
         const wxCoord heightHdr = renderer.GetHeaderButtonHeight(this);
-        const wxCoord widthHdr = 120;
+        const wxCoord width = 120;
 
         const wxHeaderSortIconType
             hdrSortIcon = m_useIcon ? wxHDR_SORT_ICON_UP
@@ -266,13 +266,13 @@ private:
         // implementation.
         dc.DrawText("DrawHeaderButton() (default)", x1, y);
         wxRendererNative::GetDefault().DrawHeaderButton(this, dc,
-                                  wxRect(x2, y, widthHdr, heightHdr), m_flags,
+                                  wxRect(x2, y, width, heightHdr), m_flags,
                                   hdrSortIcon, &hdrParams);
         y += lineHeight + heightHdr;
 
         dc.DrawText("DrawHeaderButton() (overridden)", x1, y);
         renderer.DrawHeaderButton(this, dc,
-                                  wxRect(x2, y, widthHdr, heightHdr), m_flags,
+                                  wxRect(x2, y, width, heightHdr), m_flags,
                                   hdrSortIcon, &hdrParams);
         y += lineHeight + heightHdr;
 
