@@ -339,6 +339,7 @@ public:
                                                 wxSize(20,20),
                                                 style)
     #endif
+                       , m_combo(parent)
     {
         m_inShow = 0;
     }
@@ -351,7 +352,13 @@ protected:
 #endif
 
 private:
+    // This is the same as our parent, but has the right type, so that we can
+    // avoid using casts later.
+    wxComboCtrlBase* const m_combo;
+
     wxByte      m_inShow;
+
+    wxDECLARE_NO_COPY_CLASS(wxComboPopupWindow);
 };
 
 
@@ -391,11 +398,7 @@ bool wxComboPopupWindow::ProcessLeftDown(wxMouseEvent& event)
 // First thing that happens when a transient popup closes is that this method gets called.
 void wxComboPopupWindow::OnDismiss()
 {
-    wxComboCtrlBase* combo = (wxComboCtrlBase*) GetParent();
-    wxASSERT_MSG( wxDynamicCast(combo, wxComboCtrlBase),
-                  wxT("parent might not be wxComboCtrl, but check wxIMPLEMENT_DYNAMIC_CLASS2() macro for correctness") );
-
-    combo->OnPopupDismiss(true);
+    m_combo->OnPopupDismiss(true);
 }
 #endif // wxUSE_POPUPWIN
 
