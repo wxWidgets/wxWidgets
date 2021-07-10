@@ -721,65 +721,30 @@ void wxComboPopup::DestroyPopup()
 // input handling
 // ----------------------------------------------------------------------------
 
-//
-// This is pushed to the event handler queue of the child textctrl.
-//
-class wxComboBoxExtraInputHandler : public wxEvtHandler
-{
-public:
-
-    wxComboBoxExtraInputHandler( wxComboCtrlBase* combo )
-        : wxEvtHandler()
-    {
-        m_combo = combo;
-    }
-    virtual ~wxComboBoxExtraInputHandler() { }
-    void OnKey(wxKeyEvent& event);
-    void OnFocus(wxFocusEvent& event);
-
-protected:
-    wxComboCtrlBase*   m_combo;
-
-private:
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxBEGIN_EVENT_TABLE(wxComboBoxExtraInputHandler, wxEvtHandler)
-    EVT_KEY_DOWN(wxComboBoxExtraInputHandler::OnKey)
-    EVT_KEY_UP(wxComboBoxExtraInputHandler::OnKey)
-    EVT_CHAR(wxComboBoxExtraInputHandler::OnKey)
-    EVT_SET_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
-    EVT_KILL_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
-wxEND_EVENT_TABLE()
-
-
-void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
+void wxComboCtrlBase::OnTextKey(wxKeyEvent& event)
 {
     // Let the wxComboCtrl event handler have a go first.
-    wxComboCtrlBase* combo = m_combo;
-
     wxKeyEvent redirectedEvent(event);
-    redirectedEvent.SetId(combo->GetId());
-    redirectedEvent.SetEventObject(combo);
+    redirectedEvent.SetId(GetId());
+    redirectedEvent.SetEventObject(this);
 
-    if ( !combo->GetEventHandler()->ProcessEvent(redirectedEvent) )
+    if ( !GetEventHandler()->ProcessEvent(redirectedEvent) )
     {
         event.Skip();
     }
 }
 
-void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
+void wxComboCtrlBase::OnTextFocus(wxFocusEvent& event)
 {
     // FIXME: This code does run when control is clicked,
     //        yet on Windows it doesn't select all the text.
     if ( event.GetEventType() == wxEVT_SET_FOCUS &&
-        !(m_combo->GetInternalFlags() & wxCC_NO_TEXT_AUTO_SELECT) )
+        !(GetInternalFlags() & wxCC_NO_TEXT_AUTO_SELECT) )
     {
-        if ( m_combo->GetTextCtrl() )
-            m_combo->GetTextCtrl()->SelectAll();
+        if ( GetTextCtrl() )
+            GetTextCtrl()->SelectAll();
         else
-            m_combo->SelectAll();
+            SelectAll();
     }
 
     // Send focus indication to parent.
@@ -789,9 +754,9 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
     //     from combo's focus event handler), they should be quite
     //     harmless.
     wxFocusEvent evt2(event);
-    evt2.SetId(m_combo->GetId());
-    evt2.SetEventObject(m_combo);
-    m_combo->GetEventHandler()->ProcessEvent(evt2);
+    evt2.SetId(GetId());
+    evt2.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(evt2);
 
     event.Skip();
 }
@@ -996,7 +961,6 @@ void wxComboCtrlBase::Init()
     m_popupInterface = NULL;
 
     m_popupEvtHandler = NULL;
-    m_textEvtHandler = NULL;
 
 #if INSTALL_TOPLEV_HANDLER
     m_toplevEvtHandler = NULL;
@@ -1074,13 +1038,7 @@ wxComboCtrlBase::CreateTextCtrl(int style)
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
         if ( m_text )
-        {
-            m_text->RemoveEventHandler(m_textEvtHandler);
-            delete m_textEvtHandler;
-            m_textEvtHandler = NULL;
-
             m_text->Destroy();
-        }
 
         // wxTE_PROCESS_TAB is needed because on Windows, wxTAB_TRAVERSAL is
         // not used by the wxPropertyGrid and therefore the tab is processed by
@@ -1103,10 +1061,14 @@ wxComboCtrlBase::CreateTextCtrl(int style)
             m_text->Bind(wxEVT_TEXT_ENTER, &wxComboCtrlBase::OnTextCtrlEvent, this);
         }
 
-        m_text->SetHint(m_hintText);
+        m_text->Bind(wxEVT_SET_FOCUS, &wxComboCtrlBase::OnTextFocus, this);
+        m_text->Bind(wxEVT_KILL_FOCUS, &wxComboCtrlBase::OnTextFocus, this);
 
-        m_textEvtHandler = new wxComboBoxExtraInputHandler(this);
-        m_text->PushEventHandler(m_textEvtHandler);
+        m_text->Bind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnTextKey, this);
+        m_text->Bind(wxEVT_CHAR, &wxComboCtrlBase::OnTextKey, this);
+        m_text->Bind(wxEVT_KEY_UP, &wxComboCtrlBase::OnTextKey, this);
+
+        m_text->SetHint(m_hintText);
     }
 }
 
@@ -1152,11 +1114,6 @@ wxComboCtrlBase::~wxComboCtrlBase()
 #endif
 
     DestroyPopup();
-
-    if ( m_text )
-        m_text->RemoveEventHandler(m_textEvtHandler);
-
-    delete m_textEvtHandler;
 }
 
 
