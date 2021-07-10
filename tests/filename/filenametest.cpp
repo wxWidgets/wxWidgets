@@ -317,6 +317,13 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
         { ".\\foo", wxPATH_NORM_LONG, ".\\foo", wxPATH_DOS },
         { "..\\Makefile.in", wxPATH_NORM_LONG, "..\\Makefile.in", wxPATH_DOS },
         { "..\\foo", wxPATH_NORM_LONG, "..\\foo", wxPATH_DOS },
+
+        // test default behaviour with wxPATH_NORM_ALL
+#ifdef __WINDOWS__
+        { "%ABCDEF%/g/h/i", wxPATH_NORM_ALL, "CWD/%ABCDEF%/g/h/i", wxPATH_UNIX },
+#else
+        { "$(ABCDEF)/g/h/i", wxPATH_NORM_ALL, "CWD/$(ABCDEF)/g/h/i", wxPATH_UNIX },
+#endif
     };
 
     // set the env var ABCDEF

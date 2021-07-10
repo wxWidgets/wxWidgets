@@ -13,6 +13,10 @@ Changes in behaviour not resulting in compilation errors
 --------------------------------------------------------
 
 - wxRibbonButtonBar::DeleteButton() now deletes and not just removes the button.
+
+- wxFileName::Normalize() doesn't expand environment variables by default any
+  longer, specify wxPATH_NORM_ENV_VARS explicitly if this is what you need.
+
 - Default interpolation mode in wxGDIPlusContext under MSW is now
   wxINTERPOLATION_DEFAULT and not wxINTERPOLATION_GOOD as in 3.0 for
   consistency with OS X, call SetInterpolationQuality() explicitly if needed.

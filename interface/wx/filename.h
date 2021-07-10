@@ -54,10 +54,16 @@ enum wxSizeConvention
 */
 enum wxPathNormalize
 {
-    //! Replace environment variables with their values.
-    //! wxFileName understands both Unix and Windows (but only under Windows) environment
-    //! variables expansion: i.e. @c "$var", @c "$(var)" and @c "${var}" are always understood
-    //! and in addition under Windows @c "%var%" is also.
+    /**
+        Replace environment variables with their values.
+
+        wxFileName understands both Unix and Windows (but only under Windows) environment
+        variables expansion: i.e. @c "$var", @c "$(var)" and @c "${var}" are always understood
+        and in addition under Windows @c "%var%" is also.
+
+        Note that since wxWidgets 3.1.6 this flag is not used by
+        wxFileName::Normalize() by default any longer.
+     */
     wxPATH_NORM_ENV_VARS = 0x0001,
 
     wxPATH_NORM_DOTS     = 0x0002,  //!< Squeeze all @c ".." and @c ".".
@@ -67,8 +73,16 @@ enum wxPathNormalize
     wxPATH_NORM_LONG =     0x0020,  //!< Expand the path to the "long" form (Windows only).
     wxPATH_NORM_SHORTCUT = 0x0040,  //!< Resolve the shortcut, if it is a shortcut (Windows only).
 
-    //! A value indicating all normalization flags except for @c wxPATH_NORM_CASE.
-    wxPATH_NORM_ALL      = 0x00ff & ~wxPATH_NORM_CASE
+    /**
+        Flags used by wxFileName::Normalize() by default.
+
+        This includes all normalization flags except for @c wxPATH_NORM_CASE
+        and, since wxWidgets 3.1.6, @c wxPATH_NORM_ENV_VARS, i.e. by default,
+        the case won't be changed and environment variables are not expanded.
+        If these normalizations are needed, they must be specified explicitly
+        when calling wxFileName::Normalize().
+     */
+    wxPATH_NORM_ALL      = 0x00ff & ~(wxPATH_NORM_CASE | wxPATH_NORM_ENV_VARS)
 };
 
 /**
@@ -1067,7 +1081,9 @@ public:
         Normalize the path.
 
         With the default flags value, the path will be made absolute, without
-        any ".." and "." and all environment variables will be expanded in it.
+        any ".." and ".", and, for the Unix format paths, any occurrences of
+        tilde (@c ~) character will be replaced with the home directory of the
+        user following it.
 
         Notice that in some rare cases normalizing a valid path may result in
         an invalid wxFileName object. E.g. normalizing "./" path using
@@ -1078,6 +1094,9 @@ public:
         @param flags
             The kind of normalization to do with the file name. It can be
             any or-combination of the ::wxPathNormalize enumeration values.
+            By default, most, but not all, in spite of the name of the
+            constant, normalizations are applied, see wxPathNormalize enum for
+            more details.
         @param cwd
             If not empty, this directory will be used instead of current
             working directory in normalization (see @c wxPATH_NORM_ABSOLUTE).

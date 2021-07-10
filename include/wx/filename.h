@@ -72,7 +72,7 @@ enum wxPathNormalize
     wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
     wxPATH_NORM_LONG =     0x0020,  // make the path the long form
     wxPATH_NORM_SHORTCUT = 0x0040,  // resolve the shortcut, if it is a shortcut
-    wxPATH_NORM_ALL      = 0x00ff & ~wxPATH_NORM_CASE
+    wxPATH_NORM_ALL      = 0x00ff & ~(wxPATH_NORM_CASE | wxPATH_NORM_ENV_VARS)
 };
 
 // what exactly should GetPath() return?
