@@ -601,7 +601,7 @@ void AppFrame::CreateMenu ()
 
 void AppFrame::FileOpen (wxString fname)
 {
-    wxFileName w(fname); w.Normalize(); fname = w.GetFullPath();
+    wxFileName w(fname); w.MakeAbsolute(); fname = w.GetFullPath();
     m_edit->LoadFile (fname);
     m_edit->SelectNone();
 }
