@@ -1104,5 +1104,23 @@ extern wxRect WXDLLIMPEXP_CORE wxGetClientDisplayRect();
 // set global cursor
 extern void WXDLLIMPEXP_CORE wxSetCursor(const wxCursor& cursor);
 
+// Scale the given value by the ratio between 2 other values, with rounding.
+// Do not scale the value if it's -1, just return it unchanged in this case.
+extern int WXDLLIMPEXP_CORE wxRescaleCoord(int n, int newScale, int oldScale);
+
+inline wxPoint
+wxRescaleCoord(wxPoint pt, wxSize newScale, wxSize oldScale)
+{
+    return wxPoint(wxRescaleCoord(pt.x, newScale.x, oldScale.x),
+                   wxRescaleCoord(pt.y, newScale.y, oldScale.y));
+}
+
+inline wxSize
+wxRescaleCoord(wxSize sz, wxSize newScale, wxSize oldScale)
+{
+    return wxSize(wxRescaleCoord(sz.x, newScale.x, oldScale.x),
+                  wxRescaleCoord(sz.y, newScale.y, oldScale.y));
+}
+
 #endif
     // _WX_GDICMNH__

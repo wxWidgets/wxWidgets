@@ -16,6 +16,7 @@
 
 #include "wx/display.h"
 #include "wx/gdiobj.h"
+#include "wx/math.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -32,6 +33,10 @@
     #include "wx/math.h"
 #endif
 
+#ifdef __WINDOWS__
+    // Required in order to use wxMulDivInt32().
+    #include "wx/msw/wrapwin.h"
+#endif
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGDIObject, wxObject);
 
@@ -920,4 +925,9 @@ wxResourceCache::~wxResourceCache ()
 
         node = node->GetNext ();
     }
+}
+
+int wxRescaleCoord(int n, int newScale, int oldScale)
+{
+    return n == -1 ? -1 : wxMulDivInt32(n, newScale, oldScale);
 }
