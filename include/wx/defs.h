@@ -585,7 +585,10 @@ typedef short int WXTYPE;
 
 #if defined(__has_cpp_attribute)
     #if __has_cpp_attribute(deprecated)
-        #define wxHAS_DEPRECATED_ATTR
+        /* gcc 5 claims to support this attribute, but actually doesn't */
+        #if !defined(__GNUC__) || wxCHECK_GCC_VERSION(6, 0)
+            #define wxHAS_DEPRECATED_ATTR
+        #endif
     #endif
 #endif
 
