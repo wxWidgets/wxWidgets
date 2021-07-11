@@ -817,9 +817,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     // now work on the right location
     if (right.Contains(wxT("..")))
     {
-        wxFileName abs(right);
-        abs.MakeAbsolute(wxT("/"));
-        right = abs.GetFullPath();
+        right = wxFileName(right).GetAbsolutePath(wxT("/"));
     }
 
     // a workaround for absolute links to root

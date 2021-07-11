@@ -314,12 +314,7 @@ wxString wxXmlResource::ConvertFileNameToURL(const wxString& filename)
     {
         // Make the name absolute filename, because the app may
         // change working directory later:
-        wxFileName fn(fnd);
-        if (fn.IsRelative())
-        {
-            fn.MakeAbsolute();
-            fnd = fn.GetFullPath();
-        }
+        fnd = wxFileName(fnd).GetAbsolutePath();
 #if wxUSE_FILESYSTEM
         fnd = wxFileSystem::FileNameToURL(fnd);
 #endif
