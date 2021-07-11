@@ -1601,6 +1601,17 @@ template <typename T> void wxDELETE(T*& ptr);
 template <typename T> void wxDELETEA(T*& array);
 
 /**
+    Expands to the standard C++14 [[deprecated]] attribute if supported.
+
+    If not supported by the compiler, expands to nothing. If support for such
+    compilers is important, use wxDEPRECATED_MSG() which is almost universally
+    available.
+
+    @since 3.1.6
+ */
+#define wxDEPRECATED_ATTR(msg) [[deprecated(msg)]]
+
+/**
     Generate deprecation warning with the given message when a function is
     used.
 
