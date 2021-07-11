@@ -201,8 +201,8 @@ TEST_CASE("wxFileName::Comparison", "[filename]")
 {
     wxFileName fn1(wxT("/tmp/file1"));
     wxFileName fn2(wxT("/tmp/dir2/../file2"));
-    fn1.Normalize();
-    fn2.Normalize();
+    fn1.MakeAbsolute();
+    fn2.MakeAbsolute();
     CHECK(fn1.GetPath() == fn2.GetPath());
 }
 

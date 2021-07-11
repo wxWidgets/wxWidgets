@@ -575,15 +575,15 @@ MyFrame::MyFrame()
     m_fileHistory->UseMenu(m_fileHistoryMenu);
 
     wxFileName fn( "menu.cpp" );
-    fn.Normalize();
+    fn.MakeAbsolute();
     m_fileHistory->AddFileToHistory( fn.GetFullPath() );
 
     fn = "Makefile.in";
-    fn.Normalize();
+    fn.MakeAbsolute();
     m_fileHistory->AddFileToHistory( fn.GetFullPath() );
 
     fn.Assign("minimal", "minimal", "cpp");
-    fn.Normalize();
+    fn.MakeAbsolute();
     m_fileHistory->AddFileToHistory( fn.GetFullPath() );
 
     fileMenu->AppendSubMenu(m_fileHistoryMenu, "Sample file history");

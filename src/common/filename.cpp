@@ -1765,14 +1765,14 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
 
-    // Normalize both paths to be absolute but avoid expanding environment
-    // variables in them, this could be unexpected.
-    const int normFlags = wxPATH_NORM_DOTS |
-                          wxPATH_NORM_TILDE |
-                          wxPATH_NORM_ABSOLUTE |
-                          wxPATH_NORM_LONG;
-    Normalize(normFlags, cwd, format);
-    fnBase.Normalize(normFlags, cwd, format);
+    // Bring both paths to canonical form.
+    MakeAbsolute(cwd, format);
+    fnBase.MakeAbsolute(cwd, format);
+
+    // Do this here for compatibility, as we used to do it before.
+    Normalize(wxPATH_NORM_LONG, cwd, format);
+    fnBase.Normalize(wxPATH_NORM_LONG, cwd, format);
+
 
     bool withCase = IsCaseSensitive(format);
 
@@ -2620,7 +2620,7 @@ static wxString EscapeFileNameCharsInURL(const char *in)
 wxString wxFileName::FileNameToURL(const wxFileName& filename)
 {
     wxFileName fn = filename;
-    fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
+    fn.MakeAbsolute();
     wxString url = fn.GetFullPath(wxPATH_NATIVE);
 
 #ifndef __UNIX__
