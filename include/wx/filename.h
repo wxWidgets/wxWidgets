@@ -361,7 +361,7 @@ public:
     bool MakeRelativeTo(const wxString& pathBase = wxEmptyString,
                         wxPathFormat format = wxPATH_NATIVE);
 
-        // make the path absolute
+        // make the path absolute and resolve any "." and ".." in it
         //
         // this may be done using another (than current) value of cwd
     bool MakeAbsolute(const wxString& cwd = wxEmptyString,
