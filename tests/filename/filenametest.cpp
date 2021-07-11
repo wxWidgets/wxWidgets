@@ -356,6 +356,11 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
         );
     }
 
+    // Check that paths are made absolute, but environment variables are not
+    // expanded in them.
+    CHECK( wxFileName(pathWithEnvVar).GetAbsolutePath()
+            == wxFileName(wxGetCwd() + "/" + pathWithEnvVar).GetFullPath() );
+
     // MSW-only test for wxPATH_NORM_LONG: notice that we only run it if short
     // names generation is not disabled for this system as otherwise the file
     // MKINST~1 doesn't exist at all and normalizing it fails (it's possible

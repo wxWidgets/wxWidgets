@@ -634,6 +634,17 @@ public:
                                wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Returns full absolute path for this file.
+
+        This is just a convenient shortcut using MakeAbsolute() and
+        GetFullPath() internally.
+
+        @since 3.1.6
+     */
+    wxString GetAbsolutePath(const wxString& cwd = wxEmptyString,
+                             wxPathFormat format = wxPATH_NATIVE) const;
+
+    /**
         Retrieves the value of the current working directory on the specified volume.
         If the volume is empty, the program's current working directory is returned for
         the current volume.

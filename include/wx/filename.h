@@ -385,6 +385,15 @@ public:
         { return Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE |
                            wxPATH_NORM_TILDE, cwd, format); }
 
+        // Convenient helper for returning the absolute path corresponding to
+        // the given one.
+    wxString GetAbsolutePath(const wxString& cwd = wxEmptyString,
+                             wxPathFormat format = wxPATH_NATIVE) const
+        {
+            wxFileName fn(*this);
+            fn.MakeAbsolute(cwd, format);
+            return fn.GetFullPath();
+        }
 
     // If the path is a symbolic link (Unix-only), indicate that all
     // filesystem operations on this path should be performed on the link

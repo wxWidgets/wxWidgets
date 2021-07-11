@@ -2631,9 +2631,7 @@ static wxString EscapeFileNameCharsInURL(const char *in)
 // Returns the file URL for a native path
 wxString wxFileName::FileNameToURL(const wxFileName& filename)
 {
-    wxFileName fn = filename;
-    fn.MakeAbsolute();
-    wxString url = fn.GetFullPath(wxPATH_NATIVE);
+    wxString url = filename.GetAbsolutePath(wxString(), wxPATH_NATIVE);
 
 #ifndef __UNIX__
     // unc notation, wxMSW
