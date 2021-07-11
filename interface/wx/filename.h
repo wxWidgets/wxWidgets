@@ -64,7 +64,20 @@ enum wxPathNormalize
     wxPATH_NORM_TILDE    = 0x0004,  //!< Replace @c "~" and @c "~user" (Unix only).
     wxPATH_NORM_CASE     = 0x0008,  //!< If the platform is case insensitive, make lowercase the path.
     wxPATH_NORM_ABSOLUTE = 0x0010,  //!< Make the path absolute.
-    wxPATH_NORM_LONG =     0x0020,  //!< Expand the path to the "long" form (Windows only).
+
+    /**
+        Expand the path to the "long" form under Windows.
+
+        This flag converts DOS short paths in 8.3 format to long form under
+        Windows and does nothing under the other platforms. It is mostly
+        irrelevant nowadays as short paths are not used any longer in practice.
+
+        Notice that it only works for the existing file paths.
+
+        @see wxFileName::GetLongPath()
+     */
+    wxPATH_NORM_LONG     = 0x0020,
+
     wxPATH_NORM_SHORTCUT = 0x0040,  //!< Resolve the shortcut, if it is a shortcut (Windows only).
 
     //! A value indicating all normalization flags except for @c wxPATH_NORM_CASE.
