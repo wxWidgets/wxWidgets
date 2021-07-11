@@ -36,6 +36,10 @@
 #include "testfile.h"
 #include "testdate.h"
 
+// Use a hack to keep using wxPATH_NORM_ALL in this test code without getting
+// deprecation warnings for it.
+#define wxPATH_NORM_ALL wxPATH_NORM_DEPR_OLD_DEFAULT
+
 // ----------------------------------------------------------------------------
 // test data
 // ----------------------------------------------------------------------------
@@ -317,6 +321,13 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
         { ".\\foo", wxPATH_NORM_LONG, ".\\foo", wxPATH_DOS },
         { "..\\Makefile.in", wxPATH_NORM_LONG, "..\\Makefile.in", wxPATH_DOS },
         { "..\\foo", wxPATH_NORM_LONG, "..\\foo", wxPATH_DOS },
+
+        // test default behaviour with deprecated wxPATH_NORM_ALL
+#ifdef __WINDOWS__
+        { "%ABCDEF%/g/h/i", wxPATH_NORM_ALL, "CWD/abcdef/g/h/i", wxPATH_UNIX },
+#else
+        { "$(ABCDEF)/g/h/i", wxPATH_NORM_ALL, "CWD/abcdef/g/h/i", wxPATH_UNIX },
+#endif
     };
 
     // set the env var ABCDEF

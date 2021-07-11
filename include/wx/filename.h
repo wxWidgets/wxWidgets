@@ -72,7 +72,17 @@ enum wxPathNormalize
     wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
     wxPATH_NORM_LONG     = 0x0020,  // make the path the long form (MSW-only)
     wxPATH_NORM_SHORTCUT = 0x0040,  // resolve the shortcut, if it is a shortcut
-    wxPATH_NORM_ALL      = 0x00ff & ~wxPATH_NORM_CASE
+
+    // Don't use this constant, it used to correspond to the default
+    // Normalize() behaviour but this is deprecated now.
+    wxPATH_NORM_DEPR_OLD_DEFAULT= 0x00ff & ~wxPATH_NORM_CASE,
+
+    // This constant name is misleading, as it doesn't really include all the
+    // flags above, so its use is discouraged, please use the flags you want
+    // explicitly instead.
+    wxPATH_NORM_ALL
+    wxDEPRECATED_ATTR("specify the wanted flags explicitly to avoid surprises")
+        = wxPATH_NORM_DEPR_OLD_DEFAULT
 };
 
 // what exactly should GetPath() return?
@@ -341,14 +351,20 @@ public:
 
     // operations on the path
 
-        // normalize the path: with the default flags value, the path will be
-        // made absolute, without any ".." and "." and all environment
-        // variables will be expanded in it
+        // normalize the path using the specified normalizations, use
+        // MakeAbsolute() for a simpler form applying the standard ones
         //
         // this may be done using another (than current) value of cwd
-    bool Normalize(int flags = wxPATH_NORM_ALL,
+    bool Normalize(int flags,
                    const wxString& cwd = wxEmptyString,
                    wxPathFormat format = wxPATH_NATIVE);
+
+        // using wxPATH_NORM_ALL may give unexpected results, so avoid using
+        // this function and call Normalize(wxPATH_NORM_ENV_VARS | ...)
+        // explicitly if you really need environment variables expansion
+    wxDEPRECATED_MSG("specify the wanted flags explicitly to avoid surprises")
+    bool Normalize()
+        { return Normalize(wxPATH_NORM_DEPR_OLD_DEFAULT); }
 
         // get a path path relative to the given base directory, i.e. opposite
         // of Normalize
