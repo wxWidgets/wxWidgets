@@ -262,6 +262,14 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
     if (cwd.Contains(wxT(':')))
         cwd = cwd.AfterFirst(wxT(':'));
 
+    static const char* pathWithEnvVar =
+#ifdef __WINDOWS__
+        "%ABCDEF%/g/h/i"
+#else
+        "$(ABCDEF)/g/h/i"
+#endif
+        ;
+
     static const struct FileNameTest
     {
         const char *original;
@@ -271,11 +279,7 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
-#ifdef __WINDOWS__
-        { "%ABCDEF%/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
-#else
-        { "$(ABCDEF)/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
-#endif
+        { pathWithEnvVar, wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
 
         // test wxPATH_NORM_DOTS
         { "a/.././b/c/../../", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
@@ -323,11 +327,7 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
         { "..\\foo", wxPATH_NORM_LONG, "..\\foo", wxPATH_DOS },
 
         // test default behaviour with deprecated wxPATH_NORM_ALL
-#ifdef __WINDOWS__
-        { "%ABCDEF%/g/h/i", wxPATH_NORM_ALL, "CWD/abcdef/g/h/i", wxPATH_UNIX },
-#else
-        { "$(ABCDEF)/g/h/i", wxPATH_NORM_ALL, "CWD/abcdef/g/h/i", wxPATH_UNIX },
-#endif
+        { pathWithEnvVar, wxPATH_NORM_ALL, "CWD/abcdef/g/h/i", wxPATH_UNIX },
     };
 
     // set the env var ABCDEF
