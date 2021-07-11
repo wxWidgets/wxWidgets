@@ -54,10 +54,20 @@ enum wxSizeConvention
 */
 enum wxPathNormalize
 {
-    //! Replace environment variables with their values.
-    //! wxFileName understands both Unix and Windows (but only under Windows) environment
-    //! variables expansion: i.e. @c "$var", @c "$(var)" and @c "${var}" are always understood
-    //! and in addition under Windows @c "%var%" is also.
+    /**
+        Replace environment variables with their values.
+
+        wxFileName understands both Unix and Windows (but only under Windows) environment
+        variables expansion: i.e. @c "$var", @c "$(var)" and @c "${var}" are always understood
+        and in addition under Windows @c "%var%" is also.
+
+        Note that when this flag is used, dollar or percent signs may be
+        escaped with backslashes to prevent them from being used for the
+        variable expansion, meaning that normalizing any path with a directory
+        starting with a dollar sign under Windows can give unexpected results,
+        as normalizing @c c:\\foo\\$bar results in @c c:\\foo$bar. Because of
+        this, using this flag with arbitrary paths is not recommended.
+     */
     wxPATH_NORM_ENV_VARS = 0x0001,
 
     wxPATH_NORM_DOTS     = 0x0002,  //!< Squeeze all @c ".." and @c ".".
@@ -80,7 +90,16 @@ enum wxPathNormalize
 
     wxPATH_NORM_SHORTCUT = 0x0040,  //!< Resolve the shortcut, if it is a shortcut (Windows only).
 
-    //! A value indicating all normalization flags except for @c wxPATH_NORM_CASE.
+    /**
+        Flags used by wxFileName::Normalize() by default.
+
+        This includes all normalization flags except for @c wxPATH_NORM_CASE
+        and notably does include @c wxPATH_NORM_ENV_VARS which may yield
+        unexpected results, as described above. Because of this, this flag is
+        deprecated and shouldn't be used in the new code and the existing code
+        should be reviewed to check if expanding environment variables is
+        really needed.
+     */
     wxPATH_NORM_ALL      = 0x00ff & ~wxPATH_NORM_CASE
 };
 
@@ -1080,7 +1099,9 @@ public:
         Normalize the path.
 
         With the default flags value, the path will be made absolute, without
-        any ".." and "." and all environment variables will be expanded in it.
+        any ".." and ".", and, for the Unix format paths, any occurrences of
+        tilde (@c ~) character will be replaced with the home directory of the
+        user following it.
 
         Notice that in some rare cases normalizing a valid path may result in
         an invalid wxFileName object. E.g. normalizing "./" path using
@@ -1091,6 +1112,9 @@ public:
         @param flags
             The kind of normalization to do with the file name. It can be
             any or-combination of the ::wxPathNormalize enumeration values.
+            These values should be explicitly specified, omitting them uses the
+            deprecated wxPATH_NORM_ALL value which is not recommended, see
+            wxPathNormalize enum for more details.
         @param cwd
             If not empty, this directory will be used instead of current
             working directory in normalization (see @c wxPATH_NORM_ABSOLUTE).
@@ -1099,7 +1123,7 @@ public:
 
         @return @true if normalization was successfully or @false otherwise.
     */
-    bool Normalize(int flags = wxPATH_NORM_ALL,
+    bool Normalize(int flags,
                    const wxString& cwd = wxEmptyString,
                    wxPathFormat format = wxPATH_NATIVE);
 
