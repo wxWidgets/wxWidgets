@@ -115,5 +115,15 @@ bool wxIsSameDouble(double x, double y);
 */
 bool wxIsNullDouble(double x);
 
+/**
+    Computes the product of a number with a fraction with rounding.
+
+    This function returns @c n*numerator/denominator rounding the result. It is
+    similar to the standard Win32 @c MulDiv() function and, in fact, is
+    implemented by calling it under MSW, where @c wx/msw/wrapwin.h must be
+    included in addition to @c wx/math.h for it to be used.
+ */
+int wxMulDivInt32(int n, int numerator, int denominator);
+
 //@}
 
