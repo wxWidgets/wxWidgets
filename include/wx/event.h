@@ -3140,6 +3140,13 @@ public:
     wxSize GetOldDPI() const { return m_oldDPI; }
     wxSize GetNewDPI() const { return m_newDPI; }
 
+    // Scale the value by the ratio between new and old DPIs carried by this
+    // event.
+    int ScaleX(int x) const { return wxRescaleCoord(x, m_newDPI.x, m_oldDPI.x); }
+    int ScaleY(int y) const { return wxRescaleCoord(y, m_newDPI.y, m_oldDPI.y); }
+
+    wxSize Scale(wxSize sz) const { return wxSize(ScaleX(sz.x), ScaleY(sz.y)); }
+
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDPIChangedEvent(*this); }
 
 private:
