@@ -653,11 +653,7 @@ void wxSlider::OnDPIChanged(wxDPIChangedEvent& event)
 {
     int thumbLen = GetThumbLength();
 
-    const double scaleFactor = (double)event.GetNewDPI().x / event.GetOldDPI().x;
-    const double thumbLenScaled = thumbLen * scaleFactor;
-    thumbLen = (int)(scaleFactor > 1.0 ? ceil(thumbLenScaled) : floor(thumbLenScaled));
-
-    SetThumbLength(thumbLen);
+    SetThumbLength(event.ScaleX(thumbLen));
 }
 
 // ----------------------------------------------------------------------------

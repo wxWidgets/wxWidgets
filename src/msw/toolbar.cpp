@@ -1949,8 +1949,6 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
     // Manually scale the size of the controls. Even though the font has been
     // updated, the internal size of the controls does not.
-    const float scaleFactor = (float)event.GetNewDPI().y / event.GetOldDPI().y;
-
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
@@ -1961,7 +1959,7 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
         if ( wxControl* const control = tool->GetControl() )
         {
             const wxSize oldSize = control->GetSize();
-            wxSize newSize = oldSize * scaleFactor;
+            wxSize newSize = event.Scale(oldSize);
 
             // Use the best height for choice-based controls.
             // Scaling the current size does not work, because the control

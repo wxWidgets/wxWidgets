@@ -5781,7 +5781,7 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
             if ( height <= 0 )
                 continue;
 
-            height = height * event.GetNewDPI().x / event.GetOldDPI().x;
+            height = event.ScaleY(height);
             total += height;
 
             m_rowHeights[i] = height;
@@ -5804,7 +5804,7 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
             if ( width <= 0 )
                 continue;
 
-            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+            width = event.ScaleX(width);
             total += width;
 
             m_colWidths[i] = width;

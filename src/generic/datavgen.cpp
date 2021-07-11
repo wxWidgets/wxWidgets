@@ -5669,12 +5669,12 @@ void wxDataViewCtrl::OnDPIChanged(wxDPIChangedEvent& event)
     {
         int minWidth = m_cols[i]->GetMinWidth();
         if ( minWidth > 0 )
-            minWidth = minWidth * event.GetNewDPI().x / event.GetOldDPI().x;
+            minWidth = event.ScaleX(minWidth);
         m_cols[i]->SetMinWidth(minWidth);
 
         int width = m_cols[i]->WXGetSpecifiedWidth();
         if ( width > 0 )
-            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+            width = event.ScaleX(width);
         m_cols[i]->SetWidth(width);
     }
 }
