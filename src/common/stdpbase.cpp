@@ -78,7 +78,7 @@ wxString wxStandardPathsBase::GetExecutablePath() const
         return argv0;       // better than nothing
 
     wxFileName filename(path);
-    filename.Normalize();
+    filename.MakeAbsolute();
     return filename.GetFullPath();
 }
 
