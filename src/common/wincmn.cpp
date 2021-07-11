@@ -2907,10 +2907,7 @@ wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
 
     const int baseline = wxDisplay::GetStdPPIValue();
 
-    // Take care to not scale -1 because it has a special meaning of
-    // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, dpi.x, baseline),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, dpi.y, baseline));
+    return wxRescaleCoord(sz, dpi, wxSize(baseline, baseline));
 }
 
 /* static */
@@ -2921,10 +2918,7 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 
     const int baseline = wxDisplay::GetStdPPIValue();
 
-    // Take care to not scale -1 because it has a special meaning of
-    // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, baseline, dpi.x),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, baseline, dpi.y));
+    return wxRescaleCoord(sz, wxSize(baseline, baseline), dpi);
 }
 
 #endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
@@ -2963,28 +2957,14 @@ wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    // NB: wxMulDivInt32() is used, because it correctly rounds the result
-
-    wxPoint pt2 = wxDefaultPosition;
-    if (pt.x != wxDefaultCoord)
-        pt2.x = wxMulDivInt32(pt.x, 4, base.x);
-    if (pt.y != wxDefaultCoord)
-        pt2.y = wxMulDivInt32(pt.y, 8, base.y);
-
-    return pt2;
+    return wxRescaleCoord(pt, wxSize(4, 8), base);
 }
 
 wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    wxPoint pt2 = wxDefaultPosition;
-    if (pt.x != wxDefaultCoord)
-        pt2.x = wxMulDivInt32(pt.x, base.x, 4);
-    if (pt.y != wxDefaultCoord)
-        pt2.y = wxMulDivInt32(pt.y, base.y, 8);
-
-    return pt2;
+    return wxRescaleCoord(pt, base, wxSize(4, 8));
 }
 
 // ----------------------------------------------------------------------------

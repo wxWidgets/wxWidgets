@@ -185,11 +185,8 @@ wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
         // character width metadata stored in the font; see
         // http://support.microsoft.com/default.aspx/kb/145994 for detailed
         // discussion.
-        //
-        // NB: wxMulDivInt32() is used, because it correctly rounds the result
 
-        s_sizeBtn.SetAtNewDPI(wxSize(wxMulDivInt32(50, base.x, 4),
-                                     wxMulDivInt32(14, base.y, 8)));
+        s_sizeBtn.SetAtNewDPI(wxRescaleCoord(wxSize(50, 14), base, wxSize(4, 8)));
     }
 
     return s_sizeBtn.Get();

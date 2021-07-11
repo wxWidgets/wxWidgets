@@ -1345,3 +1345,20 @@ void wxDisplaySizeMM(int* width, int* height);
 wxSize wxGetDisplaySizeMM();
 //@}
 
+/**
+    Scale the given value by the ratio between 2 other values, with rounding.
+
+    Do not scale the value if it's -1, just return it unchanged in this case.
+
+    This simply calls wxMulDivInt32() with the provided arguments, but provides
+    a more clear name for this operation.
+
+    @since 3.1.6
+ */
+int wxRescaleCoord(int n, int newScale, int oldScale);
+
+/// @overload
+wxPoint wxRescaleCoord(wxPoint pt, wxSize newScale, wxSize oldScale);
+
+/// @overload
+wxSize wxRescaleCoord(wxSize sz, wxSize newScale, wxSize oldScale);
