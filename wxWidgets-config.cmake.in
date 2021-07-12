@@ -33,5 +33,5 @@ endif()
 
 list(APPEND TARGET_FILES wxregex wxscintilla wxbase wxcore wxgl wxxml wxhtml wxxrc wxstc wxwebview wxnet wxpropgrid wxqa wxribbon wxrichtext wxmedia wxadv wxaui)
 foreach (TARGET_FILE ${TARGET_FILES})
-    include("${CMAKE_CURRENT_LIST_DIR}/unofficial-${TARGET_FILE}Targets.cmake")
+    include("${CMAKE_CURRENT_LIST_DIR}/${TARGET_FILE}Targets.cmake")
 endforeach()
