@@ -1390,6 +1390,7 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
 
     e.m_rawCode = event->nativeVirtualKey();
     e.m_rawFlags = event->nativeModifiers();
+    e.m_isRepeat = event->isAutoRepeat();
 
     // Modifiers
     wxQtFillKeyboardModifiers( event->modifiers(), &e );

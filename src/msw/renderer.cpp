@@ -380,8 +380,8 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
         brush = *wxTRANSPARENT_BRUSH;
     }
 
-    dc.SetBrush(brush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
+    wxDCBrushChanger setBrush(dc, brush);
+    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     dc.DrawRectangle( rect );
 
     if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
@@ -1011,7 +1011,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
                                     const wxRect& rect,
                                     int flags)
 {
-    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
@@ -1038,7 +1038,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                                 int flags,
                                 wxEllipsizeMode ellipsizeMode)
 {
-    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
@@ -1165,8 +1165,8 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
                                               etsState, TMT_BORDERCOLOR, &cref);
     bdr = wxRGBToColour(cref);
 
-    dc.SetPen( bdr );
-    dc.SetBrush( fill );
+    wxDCPenChanger setPen(dc, bdr);
+    wxDCBrushChanger setBrush(dc, fill);
     dc.DrawRectangle(rect);
 }
 
@@ -1266,8 +1266,8 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
 {
     if ( !win->HasFlag(wxSP_NO_XP_THEME) )
     {
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)));
+        wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+        wxDCBrushChanger setBrush(dc, wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)));
         if ( orient == wxVERTICAL )
         {
             dc.DrawRectangle(position, 0, SASH_WIDTH, size.y);

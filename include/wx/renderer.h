@@ -178,6 +178,13 @@ public:
     // drawing functions
     // -----------------
 
+    /*
+        Note that all these functions don't, and shouldn't, change any
+        parameters of wxDC passed to them, i.e. pens, brushes or colours.
+        Their implementation must use wxDCXXXChanger classes instead of
+        calling wxDC::SetXXX() directly to ensure this.
+     */
+
     // draw the header control button (used by wxListCtrl) Returns optimal
     // width for the label contents.
     virtual int  DrawHeaderButton(wxWindow *win,

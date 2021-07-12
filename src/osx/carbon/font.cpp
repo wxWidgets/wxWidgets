@@ -885,27 +885,27 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
     wxString familyname;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(familyname);
     wxLogTrace(TRACE_CTFONT,"****** CreateCTFontDescriptor ******");
-    wxLogTrace(TRACE_CTFONT,"Descriptor FontFamilyName: %s",familyname.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor FontFamilyName: %s",familyname);
     
     wxString name;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(name);
-    wxLogTrace(TRACE_CTFONT,"Descriptor FontName: %s",name.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor FontName: %s",name);
     
     wxString display;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontDisplayNameAttribute)).GetValue(display);
-    wxLogTrace(TRACE_CTFONT,"Descriptor DisplayName: %s",display.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor DisplayName: %s",display);
     
     wxString style;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontStyleNameAttribute)).GetValue(style);
-    wxLogTrace(TRACE_CTFONT,"Descriptor StyleName: %s",style.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor StyleName: %s",style);
 
     wxString psname;
     wxCFTypeRef(CTFontCopyPostScriptName(font)).GetValue(psname);
-    wxLogTrace(TRACE_CTFONT,"Created Font PostScriptName: %s",psname.c_str());
+    wxLogTrace(TRACE_CTFONT,"Created Font PostScriptName: %s",psname);
     
     wxString fullname;
     wxCFTypeRef(CTFontCopyFullName(font)).GetValue(fullname);
-    wxLogTrace(TRACE_CTFONT,"Created Font FullName: %s",fullname.c_str());
+    wxLogTrace(TRACE_CTFONT,"Created Font FullName: %s",fullname);
     
     wxLogTrace(TRACE_CTFONT,"************************************");
 #endif

@@ -524,7 +524,7 @@ wxTCPServer::~wxTCPServer()
     {
         if ( remove(m_filename.fn_str()) != 0 )
         {
-            wxLogDebug(wxT("Stale AF_UNIX file '%s' left."), m_filename.c_str());
+            wxLogDebug(wxT("Stale AF_UNIX file '%s' left."), m_filename);
         }
     }
 #endif // __UNIX_LIKE__

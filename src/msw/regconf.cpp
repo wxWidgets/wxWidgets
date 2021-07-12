@@ -271,7 +271,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
                     if ( !totalSlashes )
                     {
                         wxLogWarning(_("'%s' has extra '..', ignored."),
-                                     strFullPath.c_str());
+                                     strFullPath);
                     }
                     else // return to the previous path component
                     {
@@ -583,7 +583,7 @@ bool wxRegConfig::DoReadValue(const wxString& key, T* pValue) const
     if ( TryGetValue(m_keyGlobal, path.Name(), pValue) ) {
       if ( m_keyLocal.Exists() && LocalKey().HasValue(path.Name()) ) {
         wxLogWarning(wxT("User value for immutable key '%s' ignored."),
-                   path.Name().c_str());
+                   path.Name());
       }
 
       return true;
@@ -631,7 +631,7 @@ bool wxRegConfig::DoWriteValue(const wxString& key, const T& value)
   wxConfigPathChanger path(this, key);
 
   if ( IsImmutable(path.Name()) ) {
-    wxLogError(wxT("Can't change immutable entry '%s'."), path.Name().c_str());
+    wxLogError(wxT("Can't change immutable entry '%s'."), path.Name());
     return false;
   }
 

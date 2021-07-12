@@ -452,7 +452,7 @@ bool wxIniConfig::DeleteAll()
   strFile << '\\' << m_strLocalFilename;
 
   if ( wxFile::Exists(strFile) && !wxRemoveFile(strFile) ) {
-    wxLogSysError(_("Can't delete the INI file '%s'"), strFile.c_str());
+    wxLogSysError(_("Can't delete the INI file '%s'"), strFile);
     return false;
   }
 

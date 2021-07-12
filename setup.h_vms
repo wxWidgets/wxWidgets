@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 28 January 2021                                                    *
+ * Date : 24 June 2021                                                       *
  *                                                                           *
  *****************************************************************************/
 
@@ -1457,8 +1457,10 @@ typedef pid_t GPid;
 #include <stdlib.h>
 
 #include <limits.h>
+#if __CRTL_VER <= 80400000
 #define LLONG_MIN __INT64_MIN
 #define LLONG_MAX __INT64_MAX
 #define ULLONG_MAX __UINT64_MAX
+#endif
 
 #endif /* __WX_SETUP_H__ */

@@ -167,7 +167,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     // Check the URL validity
     if( url == nil )
     {
-        wxLogDebug(wxT("wxCocoaLaunch Can't open path: %s"), path.c_str());
+        wxLogDebug(wxT("wxCocoaLaunch Can't open path: %s"), path);
         return false ;
     }
 

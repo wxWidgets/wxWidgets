@@ -1,0 +1,252 @@
+# CI workflow cross-building wxMSW under Linux.
+name: wxMSW cross-build
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/workflows/ci.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'build/tools/travis-ci.sh'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/workflows/ci.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'build/tools/travis-ci.sh'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+
+jobs:
+  msw-cross-build:
+    # Set up this job to run in a Debian Sid container because it has recent
+    # versions of MinGW and Wine and is simpler to test with locally than the
+    # bespoke container used by GitHub Actions by default.
+    runs-on: ubuntu-latest
+    container: debian:sid-slim
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: wxMSW 64 bits
+          - name: wxMSW 32 bits
+            triplet: i686-w64-mingw32
+    env:
+      # Default to 64-bit build.
+      HOST_TRIPLET: ${{ matrix.triplet || 'x86_64-w64-mingw32' }}
+
+      # While our tests should run in any locale natively, it seems that Wine
+      # requires the locale encoding to be UTF-8 for Unicode file names to work
+      # correctly, so set the locale explicitly for it.
+      LC_ALL: C.UTF-8
+
+    # Run all commands as the normal user, created by the first step below.
+    #
+    # Note that the Bash options used here are the same as for the default
+    # shell used by GitHub Actions to minimize any surprises.
+    defaults:
+      run:
+        shell: /usr/bin/setpriv --reuid=runner --regid=adm --clear-groups --inh-caps=-all bash --noprofile --norc -eo pipefail {0}
+
+    steps:
+      - name: Set up container user
+        # Specify the default shell explicitly to override the default value above.
+        shell: bash
+        run: |
+          apt-get -q -o=Dpkg::Use-Pty=0 update
+          apt-get -qq install sudo
+
+          # Create a user with the same UID/GID and name as the existing user
+          # outside of the container and allow it using sudo without password.
+          useradd --home-dir $HOME --no-create-home --gid adm --uid 1001 runner
+
+          echo 'runner ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
+
+      - name: Install prerequisites
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+
+          packages="git make wine x11-xserver-utils xvfb"
+
+          case "${HOST_TRIPLET}" in
+            x86_64-w64-mingw32)
+              packages="$packages g++-mingw-w64-x86-64 wine64"
+              winerun=wine64
+              ;;
+
+            i686-w64-mingw32)
+              sudo dpkg --add-architecture i386
+              sudo apt-get -q -o=Dpkg::Use-Pty=0 update
+              packages="$packages g++-mingw-w64-i686 wine32"
+              winerun=wine
+              ;;
+
+            *)
+              echo "Unknown host triplet \"${HOST_TRIPLET}\"."
+              exit 1
+              ;;
+          esac
+
+          sudo apt-get -qq install $packages
+
+          echo "wxTEST_RUNNER=${winerun}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: System and environment setup
+        run: |
+          normal_uid=`id --user`
+
+          # The checkout actions runs as root and there doesn't seem to be any
+          # way to change this, so just adjust the owner after checkout.
+          sudo chown -R $normal_uid $GITHUB_WORKSPACE
+
+          # Add the directories containing MinGW and wx DLLs to Wine path.
+          winepath="$(winepath --windows /usr/lib/gcc/${HOST_TRIPLET}/$(${HOST_TRIPLET}-gcc -dumpversion|tr -d '\r'))"
+          winepath="${winepath};$(winepath --windows $(pwd)/lib)"
+          echo "WINEPATH=${winepath}" >> $GITHUB_ENV
+
+          cpu_count=`nproc`
+          ((cpu_count++))
+          echo "wxMAKE_ARGS=-k -j$cpu_count" >> $GITHUB_ENV
+
+          echo "wxMAKEFILE_ERROR_CXXFLAGS=-Werror -Wno-error=cpp" >> $GITHUB_ENV
+
+      - name: Configure
+        run: |
+          ./configure --host=${HOST_TRIPLET} --disable-sys-libs --disable-optimise --disable-debug_info || rc=$?
+
+          if [ -n "$rc" ]; then
+            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat config.log
+            echo '-----------------------------------------------------------'
+            exit $rc
+          fi
+
+      - name: Build
+        run: |
+          make $wxMAKE_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
+
+      - name: Build samples
+        run: |
+          make $wxMAKE_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS" samples
+
+      - name: Build tests
+        working-directory: tests
+        run: |
+          make $wxMAKE_ARGS failtest
+          make $wxMAKE_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
+
+      - name: Launch Xvfb
+        run: |
+          echo 'Launching Xvfb...'
+          sudo mkdir /tmp/.X11-unix
+          sudo chmod 1777 /tmp/.X11-unix
+          Xvfb :10 -screen 0 1600x1200x24 &
+          num_tries=1
+          while true; do
+              if xset -d :10 -q >/dev/null 2>&1; then
+                  echo 'Xvfb has become available.'
+                  # Trying to use it immediately can still result in errors
+                  # when creating the windows, somehow, so give it some time
+                  # to settle.
+                  sleep 3
+                  break
+              fi
+
+              if [[ $num_tries -gt 10 ]]; then
+                  echo 'Timed out waiting for Xvfb'
+                  exit 1
+              fi
+
+              ((num_tries++))
+              echo "Still waiting for Xvfb (attempt #$num_tries)"
+              sleep 3
+          done
+          echo 'Xvfb is running on display :10'
+          echo 'DISPLAY=:10' >> $GITHUB_ENV
+
+      - name: Run non-GUI tests
+        working-directory: tests
+        run: |
+          # Some tests are currently failing under Wine while they pass under
+          # native MSW, just skip running them until they can be dealt with.
+
+          # As soon as we specify the tests to exclude explicitly, we also need
+          # to exclude the tests that are not run by default, so start with this.
+          excluded_tests=('~[.]')
+
+          # There is 1 day difference in creation time under Wine somehow.
+          excluded_tests+=('~wxFileName::SetTimes')
+
+          # Closing the file fails for unknown reason under Wine.
+          excluded_tests+=('~FileFunctions::Error')
+
+          # Sporadic failures due to extra events.
+          excluded_tests+=('~wxFileSystemWatcher::EventCreate')
+
+          # The test fails (even with wxTEST_RUNNER-related changes) and hangs.
+          excluded_tests+=('~ExecTestCase')
+
+          # Wine WinHTTP implementations seems buggy, there are many errors.
+          excluded_tests+=('~[webrequest]')
+
+          $wxTEST_RUNNER ./test "${excluded_tests[@]}"
+
+      - name: Run GUI tests
+        working-directory: tests
+        run: |
+          # Same as for the non-GUI test above, except many more GUI tests fail
+          # under Wine.
+          excluded_gui_tests=('~[.]')
+
+          excluded_gui_tests+=('~BitmapComboBoxTestCase') # TextChangeEvents
+          excluded_gui_tests+=('~ClippingBoxTestCase*')
+          excluded_gui_tests+=('~ComboBoxTestCase') # TextChangeEvents
+          excluded_gui_tests+=('~DatePickerCtrlTestCase') # Range
+          excluded_gui_tests+=('~wxDC::GetTextExtent')
+          excluded_gui_tests+=('~ExecTestCase')
+          excluded_gui_tests+=('~wxFont::GetSet')
+          excluded_gui_tests+=('~GraphicsPathTestCaseGDIPlus')
+          excluded_gui_tests+=('~ImageList*')
+          excluded_gui_tests+=('~RadioButton::Focus')
+          excluded_gui_tests+=('~SettingsTestCase') # GetFont fails
+          excluded_gui_tests+=('~SliderTestCase')   # Thumb
+          excluded_gui_tests+=('~TransformMatrixTestCase*')
+          excluded_gui_tests+=('~TreeCtrlTestCase') # LabelEdit
+          excluded_gui_tests+=('~TextCtrlTestCase') # many sub-tests
+          excluded_gui_tests+=('~wxTextCtrl::InitialCanUndo')
+          excluded_gui_tests+=('~[wxWebView]')
+          excluded_gui_tests+=('~Window::PositioningBeyondShortLimit')
+          excluded_gui_tests+=('~XRC::LoadURL')
+
+          $wxTEST_RUNNER ./test_gui "${excluded_gui_tests[@]}"

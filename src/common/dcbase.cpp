@@ -27,6 +27,7 @@
 #include "wx/dcprint.h"
 #include "wx/prntbase.h"
 #include "wx/scopeguard.h"
+#include "wx/stack.h"
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
@@ -791,7 +792,7 @@ void wx_quadratic_spline(double a1, double b1, double a2, double b2,
 static
 void wx_clear_stack();
 static
-int wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
+bool wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
         double *y3, double *x4, double *y4);
 static
 void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3,
@@ -837,47 +838,44 @@ typedef struct wx_spline_stack_struct {
     double           x1, y1, x2, y2, x3, y3, x4, y4;
 } Stack;
 
-#define         SPLINE_STACK_DEPTH             20
-static Stack    wx_spline_stack[SPLINE_STACK_DEPTH];
-static Stack   *wx_stack_top;
-static int      wx_stack_count;
+static wxStack<Stack> gs_wx_spline_stack;
 
 void wx_clear_stack()
 {
-    wx_stack_top = wx_spline_stack;
-    wx_stack_count = 0;
+    gs_wx_spline_stack = wxStack<Stack>();
 }
 
 void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
 {
-    wx_stack_top->x1 = x1;
-    wx_stack_top->y1 = y1;
-    wx_stack_top->x2 = x2;
-    wx_stack_top->y2 = y2;
-    wx_stack_top->x3 = x3;
-    wx_stack_top->y3 = y3;
-    wx_stack_top->x4 = x4;
-    wx_stack_top->y4 = y4;
-    wx_stack_top++;
-    wx_stack_count++;
+    Stack rec;
+    rec.x1 = x1;
+    rec.y1 = y1;
+    rec.x2 = x2;
+    rec.y2 = y2;
+    rec.x3 = x3;
+    rec.y3 = y3;
+    rec.x4 = x4;
+    rec.y4 = y4;
+    gs_wx_spline_stack.push(rec);
 }
 
-int wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
-                  double *x3, double *y3, double *x4, double *y4)
+bool wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
+                   double *x3, double *y3, double *x4, double *y4)
 {
-    if (wx_stack_count == 0)
-        return (0);
-    wx_stack_top--;
-    wx_stack_count--;
-    *x1 = wx_stack_top->x1;
-    *y1 = wx_stack_top->y1;
-    *x2 = wx_stack_top->x2;
-    *y2 = wx_stack_top->y2;
-    *x3 = wx_stack_top->x3;
-    *y3 = wx_stack_top->y3;
-    *x4 = wx_stack_top->x4;
-    *y4 = wx_stack_top->y4;
-    return (1);
+    if ( gs_wx_spline_stack.empty() )
+        return false;
+
+    const Stack& top = gs_wx_spline_stack.top();
+    *x1 = top.x1;
+    *y1 = top.y1;
+    *x2 = top.x2;
+    *y2 = top.y2;
+    *x3 = top.x3;
+    *y3 = top.y3;
+    *x4 = top.x4;
+    *y4 = top.y4;
+    gs_wx_spline_stack.pop();
+    return true;
 }
 
 static bool wx_spline_add_point(double x, double y)
@@ -903,49 +901,38 @@ static void wx_spline_draw_point_array(wxDC *dc)
 void wxDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
+    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     const wxPoint *p;
-    double cx1, cy1, cx2, cy2;
     double           x1, y1, x2, y2;
 
-    wxPointList::compatibility_iterator node = points->GetFirst();
-    if (!node)
-        // empty list
-        return;
-
-    p = node->GetData();
-
+    wxPointList::const_iterator itPt= points->begin();
+    p = *itPt; ++itPt;
     x1 = p->x;
     y1 = p->y;
 
-    node = node->GetNext();
-    p = node->GetData();
-
+    p = *itPt; ++itPt;
     x2 = p->x;
     y2 = p->y;
-    cx1 = (double)((x1 + x2) / 2);
-    cy1 = (double)((y1 + y2) / 2);
-    cx2 = (double)((cx1 + x2) / 2);
-    cy2 = (double)((cy1 + y2) / 2);
+    double cx1 = (double)((x1 + x2) / 2);
+    double cy1 = (double)((y1 + y2) / 2);
+    double cx2 = (double)((cx1 + x2) / 2);
+    double cy2 = (double)((cy1 + y2) / 2);
 
     wx_spline_add_point(x1, y1);
 
-    while ((node = node->GetNext())
-#if !wxUSE_STD_CONTAINERS
-           != NULL
-#endif // !wxUSE_STD_CONTAINERS
-          )
+    while ( itPt != points->end() )
     {
-        double cx3, cy3, cx4, cy4;
-        p = node->GetData();
         x1 = x2;
         y1 = y2;
+        p = *itPt; ++itPt;
         x2 = p->x;
         y2 = p->y;
-        cx4 = (double)(x1 + x2) / 2;
-        cy4 = (double)(y1 + y2) / 2;
-        cx3 = (double)(x1 + cx4) / 2;
-        cy3 = (double)(y1 + cy4) / 2;
+        double cx4 = (double)(x1 + x2) / 2;
+        double cy4 = (double)(y1 + y2) / 2;
+        double cx3 = (double)(x1 + cx4) / 2;
+        double cy3 = (double)(y1 + cy4) / 2;
 
         wx_quadratic_spline(cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4);
 
