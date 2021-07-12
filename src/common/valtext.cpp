@@ -30,7 +30,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/clipbrd.h"
 #include "wx/combo.h"
+#include "wx/regex.h"
 
 // ----------------------------------------------------------------------------
 // global helpers
@@ -51,6 +53,134 @@ static bool wxIsNumeric(const wxString& val)
 }
 
 // ----------------------------------------------------------------------------
+// wxTextEntryValidator implementation
+// ----------------------------------------------------------------------------
+/*static*/
+bool wxTextEntryValidator::ms_skipTextEvent = true;
+
+void wxTextEntryValidator::SetWindow(wxWindow *win)
+{
+    wxValidator::SetWindow(win);
+
+    if ( GetTextEntry() != NULL )
+    {
+        Bind(wxEVT_TEXT, &wxTextEntryValidator::OnText, this);
+        Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPasteText, this);
+        Bind(wxEVT_VALIDATE_ERROR, &wxTextEntryValidator::OnValidate, this);
+
+        if ( ShouldValidateOnFocusLost() )
+        {
+            Bind(wxEVT_KILL_FOCUS, &wxTextEntryValidator::OnKillFocus, this);
+        }
+    }
+    else
+    {
+        wxFAIL_MSG(
+            "wxTextEntryValidator can only be used with wxTextCtrl, wxComboBox "
+            "or wxComboCtrl"
+        );
+    }
+}
+
+wxTextEntry *wxTextEntryValidator::GetTextEntry() const
+{
+#if wxUSE_TEXTCTRL
+    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
+    {
+        return (wxTextCtrl*)m_validatorWindow;
+    }
+#endif
+
+#if wxUSE_COMBOBOX
+    if (wxDynamicCast(m_validatorWindow, wxComboBox))
+    {
+        return (wxComboBox*)m_validatorWindow;
+    }
+#endif
+
+#if wxUSE_COMBOCTRL
+    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
+    {
+        return (wxComboCtrl*)m_validatorWindow;
+    }
+#endif
+
+    return NULL;
+}
+
+void wxTextEntryValidator::OnText(wxCommandEvent& event)
+{
+    ClearValidationStatus();
+
+    if ( IsInteractive() )
+    {
+        DoValidate(NULL, wxVALIDATOR_NO_POPUP);
+    }
+
+    event.Skip(ms_skipTextEvent);
+}
+
+void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
+{
+    event.Skip();
+
+#if wxUSE_CLIPBOARD
+    wxTextEntry * const entry = GetTextEntry();
+    if ( !entry )
+        return;
+
+    wxClipboardLocker clipLock;
+    if ( !clipLock )
+        return;
+
+    wxTextDataObject data;
+
+    if ( wxTheClipboard->IsSupported(data.GetFormat())
+            && wxTheClipboard->GetData(data) )
+    {
+        wxString text = entry->GetValue();
+
+        long from, to;
+        entry->GetSelection(&from, &to);
+
+        if ( from != to )
+        {
+            // Replace selection with the pasted text.
+            text.replace(from, (to - from), data.GetText());
+        }
+        else
+        {
+            text.insert(entry->GetInsertionPoint(), data.GetText());
+        }
+
+        if ( !IsValid(text).empty() )
+        {
+            // Don't accept the pasted text.
+            event.Skip(false);
+        }
+    }
+#endif // wxUSE_CLIPBOARD
+}
+
+void wxTextEntryValidator::OnValidate(wxValidationStatusEvent& event)
+{
+    if ( !event.CanPopup() )
+        return;
+
+    const wxString& errormsg = event.GetErrorMessage();
+
+    m_validatorWindow->SetFocus();
+    wxMessageBox(errormsg, _("Validation conflict"),
+                 wxOK | wxICON_EXCLAMATION, NULL);
+}
+
+void wxTextEntryValidator::OnKillFocus(wxFocusEvent& event)
+{
+    event.Skip();
+    DoValidate(NULL, wxVALIDATOR_NO_POPUP);
+}
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
@@ -66,7 +196,7 @@ wxTextValidator::wxTextValidator(long style, wxString *val)
 }
 
 wxTextValidator::wxTextValidator(const wxTextValidator& val)
-    : wxValidator()
+    : wxTextEntryValidator()
 {
     Copy(val);
 }
@@ -91,40 +221,9 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     return true;
 }
 
-wxTextEntry *wxTextValidator::GetTextEntry()
-{
-#if wxUSE_TEXTCTRL
-    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
-    {
-        return (wxTextCtrl*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOBOX
-    if (wxDynamicCast(m_validatorWindow, wxComboBox))
-    {
-        return (wxComboBox*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOCTRL
-    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
-    {
-        return (wxComboCtrl*)m_validatorWindow;
-    }
-#endif
-
-    wxFAIL_MSG(
-        "wxTextValidator can only be used with wxTextCtrl, wxComboBox, "
-        "or wxComboCtrl"
-    );
-
-    return NULL;
-}
-
 // Called when the value in the window must be validated.
 // This function can pop up an error message.
-bool wxTextValidator::Validate(wxWindow *parent)
+bool wxTextValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     // If window is disabled, simply return
     if ( !m_validatorWindow->IsEnabled() )
@@ -138,10 +237,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     if ( !errormsg.empty() )
     {
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
-
+        SendErrorEvent(errormsg);
         return false;
     }
 
@@ -369,6 +465,70 @@ bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 
     return false;
 }
+
+#if wxUSE_REGEX
+// ----------------------------------------------------------------------------
+// wxRegexTextValidator implementation
+// ----------------------------------------------------------------------------
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegexTextValidator, wxTextValidator);
+
+wxRegexTextValidator::wxRegexTextValidator(long style, wxString* str)
+    : wxTextValidator(style, str)
+{
+}
+
+wxRegexTextValidator::wxRegexTextValidator(const wxString& pattern,
+                                           const wxString& intent,
+                                           long style, wxString* str)
+    : wxTextValidator(style, str)
+{
+    SetRegEx(pattern, intent);
+}
+
+void wxRegexTextValidator::SetRegEx(const wxString& pattern, const wxString& intent)
+{
+    m_intent = intent;
+    m_regex.reset(new wxRegEx);
+
+    // Use wxRE_ADVANCED flag if available
+#ifdef wxHAS_REGEX_ADVANCED
+    const int flag = wxRE_ADVANCED;
+#else
+    const int flag = wxRE_DEFAULT;
+#endif
+
+    // No need to check for a (possible) compilation error here
+    // as the object will be checked for validity when used anyhow.
+    m_regex->Compile(pattern, flag);
+}
+
+void wxRegexTextValidator::SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& intent)
+{
+    m_regex = regex;
+    m_intent = intent;
+}
+
+wxObject* wxRegexTextValidator::Clone() const
+{
+    return new wxRegexTextValidator(*this);
+}
+
+wxString wxRegexTextValidator::IsValid(const wxString& str) const
+{
+    wxASSERT_MSG( (m_regex && m_regex->IsValid()),
+        "wxRegexTextValidator not properly initialized!" );
+
+    wxString errmsg = wxTextValidator::IsValid(str);
+
+    if ( errmsg.empty() && !m_regex->Matches(str) )
+    {
+        errmsg = wxString::Format(_("'%s' is not a valid %s"), str, m_intent);
+    }
+
+    return errmsg;
+}
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)

@@ -15,9 +15,11 @@
 
 #if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
+class WXDLLIMPEXP_FWD_BASE wxRegEx;
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 #include "wx/validate.h"
+#include "wx/sharedptr.h"
 
 enum wxTextValidatorStyle
 {
@@ -42,10 +44,51 @@ enum wxTextValidatorStyle
 };
 
 // ----------------------------------------------------------------------------
+// wxTextEntryValidator: common base class for wxTextValidator & wxNumValidator
+// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxTextEntryValidator : public wxValidator
+{
+public:
+    wxTextEntryValidator() {}
+    wxTextEntryValidator(const wxTextEntryValidator& other)
+        : wxValidator(other)
+    {}
+
+    virtual ~wxTextEntryValidator() {}
+
+    // Override base class method to check whether the window does support
+    // this type of validators or not.
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE;
+
+    // returns the error message if the contents of 'str' are invalid.
+    virtual wxString IsValid(const wxString& str) const = 0;
+
+protected:
+    // Get the text entry of the associated control. Normally shouldn't ever
+    // return NULL (and will assert if it does return it) but the caller should
+    // still test the return value for safety.
+    wxTextEntry *GetTextEntry() const;
+
+    // Events handlers
+    void OnText(wxCommandEvent& event);
+    void OnPasteText(wxClipboardTextEvent& event);
+    void OnValidate(wxValidationStatusEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
+
+private:
+    // It needs to access our ms_skipTextEvent variable.
+    friend class WXDLLIMPEXP_FWD_CORE wxWindowBase;
+
+    // wxWindowBase::InitDialog() will ensure no wxEVT_TEXT event is generated
+    // while the dialog/panel is being initialised by setting this to false.
+    static bool ms_skipTextEvent;
+};
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxTextValidator: public wxTextEntryValidator
 {
 public:
     wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
@@ -76,8 +119,6 @@ public:
     // ACCESSORS
     inline long GetStyle() const { return m_validatorStyle; }
     void SetStyle(long style);
-
-    wxTextEntry *GetTextEntry();
 
     // strings & chars inclusions:
     // ---------------------------
@@ -110,7 +151,7 @@ public:
     // --------------------
 
     // returns the error message if the contents of 'str' are invalid
-    virtual wxString IsValid(const wxString& str) const;
+    virtual wxString IsValid(const wxString& str) const wxOVERRIDE;
 
 protected:
 
@@ -159,6 +200,39 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxTextValidator);
     wxDECLARE_EVENT_TABLE();
 };
+
+#if wxUSE_REGEX
+// ----------------------------------------------------------------------------
+// wxRegexTextValidator declaration
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxRegexTextValidator : public wxTextValidator
+{
+public:
+    wxRegexTextValidator(long style = wxFILTER_NONE, wxString* str = NULL);
+    wxRegexTextValidator(const wxString& pattern, const wxString& intent,
+                         long style = wxFILTER_NONE, wxString* str = NULL);
+
+    // default ctor is ok
+
+    // Use one of these functions to initialize the validator if the first
+    // constructor was used to create it.
+    void SetRegEx(const wxString& pattern, const wxString& intent);
+    void SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& intent);
+
+    virtual wxObject *Clone() const wxOVERRIDE;
+
+    // Override base class function
+    virtual wxString IsValid(const wxString& str) const wxOVERRIDE;
+
+private:
+    wxSharedPtr<wxRegEx>   m_regex;
+    wxString               m_intent;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRegexTextValidator);
+};
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
