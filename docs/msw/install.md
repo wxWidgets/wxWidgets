@@ -69,7 +69,7 @@ This needs to be done from the "Visual Studio Command Prompt" window, which can
 be opened using a shortcut installed to the "Start" menu or the "Start" screen
 by MSVS installation.
 
-In this window, change directory to `%WXWIN\%\build\msw` and type
+In this window, change directory to `%WXWIN%\build\msw` and type
 
         > nmake /f makefile.vc
 
@@ -91,7 +91,7 @@ to build a 64 bit release DLL version from an x64 command prompt.
 See "Configuring the Build" for more information about the additional
 parameters that can be specified on the command line.
 
-To verify your build, change the directory to `%WXWIN\%\samples\minimal` and
+To verify your build, change the directory to `%WXWIN%\samples\minimal` and
 run the same nmake command (with the same parameters there), this should create
 a working minimal wxWidgets sample.
 
@@ -130,11 +130,11 @@ your responsibility to monitor for such situations.
 Debug visualizers for Visual Studio 2012+ are provided which makes inspecting
 various wxWidgets classes easier to view while debugging. To use them:
 
-1. Open the folder \%WXWIN\%\misc\msvc
-2. Open the folder \%USERPROFILE\%\My Documents\Visual Studio 2012\Visualizers\
-   (or the corresponding location for newer versions, e.g. ...2013\Visualizers)
-3. Copy wxWidgets.natvis and autoexp.inc
-4. For Visual Studio 2013+ additionally copy wxWidgets.2013.natvis
+1. Open the folder `%WXWIN%\misc\msvc`
+2. Open the folder `%USERPROFILE%\My Documents\Visual Studio 2012\Visualizers`
+   (or the corresponding location for newer versions, e.g. `...2013\Visualizers`)
+3. Copy `wxWidgets.natvis` and `autoexp.inc`
+4. For Visual Studio 2013+ additionally copy `wxWidgets.2013.natvis`
 
 
 Cygwin/MinGW Compilation               {#msw_build_cygwin}
@@ -185,9 +185,9 @@ either MSYS or Cygwin.
         $ mkdir build-debug
         $ cd build-debug
 
-2. Run configure passing it any of the options shown by "configure
-   --help". Notice that configure builds shared libraries by default,
-   use --disable-shared to build static ones. For example:
+2. Run configure passing it any of the options shown by `configure
+   --help`. Notice that configure builds shared libraries by default,
+   use `--disable-shared` to build static ones. For example:
 
         $ ../configure --enable-debug
 
@@ -217,7 +217,7 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
 
 0. Open DOS command line window (cmd.exe, *not* Bash sh.exe).
 
-1. Change directory to \%WXWIN\%\build\msw and type
+1. Change directory to `%WXWIN%\build\msw` and type
 
         > mingw32-make -f makefile.gcc
 
@@ -226,7 +226,7 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
    in release configuration and/or as a shared library instead of the
    default static one.
 
-   NOTE: For parallel builds, i.e. using -jN make option, please run
+   NOTE: For parallel builds, i.e. using `-jN` make option, please run
          `mingw32-make -jN ... setup_h` first and then rerun the full
          make command without `setup_h` at the end to work around a bug
          in the current makefiles.
@@ -270,7 +270,7 @@ Library configuration
 ----------------------------------------------------------------
 
 While it is never necessary to do it, you may want to change some of
-the options in the \%WXWIN\%\\include\\wx\\msw\\setup.h file before building
+the options in the `%WXWIN%\include\wx\msw\setup.h` file before building
 wxWidgets. This file is heavily commented, please read it and enable or disable
 the features you would like to compile wxWidgets with[out].
 
@@ -413,7 +413,7 @@ The full list of the build settings follows:
   different setup.h settings coexisting in same tree. The value of
   this option is appended to the build directories names. This is
   useful for building the library in some non-default configuration,
-  e.g. you could change `wxUSE_STL` to 1 in `\%WXWIN\%\include\wx\msw\setup.h` and
+  e.g. you could change `wxUSE_STL` to 1 in `%WXWIN%\include\wx\msw\setup.h` and
   then build with `CFG=-stl`. Alternatively, you could build with e.g.
   `RUNTIME_LIBS=static CFG=-mt` when using MSVC.
 
