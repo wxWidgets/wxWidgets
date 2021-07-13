@@ -154,42 +154,32 @@ various wxWidgets classes easier to view while debugging. To use them:
 4. For Visual Studio 2013+ additionally copy `wxWidgets.2013.natvis`
 
 
-Cygwin/MinGW Compilation               {#msw_build_cygwin}
+MinGW Compilation               {#msw_build_mingw}
 ----------------------------------------------------------------
 
-wxWidgets supports Cygwin, MinGW, MinGW-w64 and TDM-GCC tool chains under
-Windows. They can be downloaded from:
+wxWidgets supports several different gcc-based toolchains under Windows,
+including:
 
-http://www.cygwin.com/
+- [MinGW-w64](http://mingw-w64.sourceforge.net/)
+- [TDM-GCC](http://tdm-gcc.tdragon.net/)
+- Classic [MinGW](http://www.mingw.org/)
 
-http://www.mingw.org/
+Please retrieve and install the latest version of your preferred
+tool chain by following the instructions provided by these packages.
 
-http://mingw-w64.sourceforge.net/
-
-http://tdm-gcc.tdragon.net/
-
-respectively. Please retrieve and install the latest version of your preferred
-tool chain by following the instructions provided by these packages. Notice
-that Cygwin includes both native Cygwin compiler, which produces binaries that
-require Cygwin during run-time, and MinGW[-w64] cross-compilers which can still
-be used in Cygwin environment themselves but produce plain Windows binaries
-without any special run-time requirements. You will probably want to use the
-latter for developing your applications.
-
-If using MinGW, you can download the add-on MSYS package to provide Unix-like
-tools that you'll need to build wxWidgets using configure.
+Additionally note that MinGW-w64 can be used as a cross-compiler from Unix
+systems, including [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux).
 
 All of these tool chains can be used either with Unix-like configure+make build
 process (preferred) or with the provided makefile.gcc makefiles without using
-configure:
+configure.
 
 ### Using configure
 
-This method works in exactly the same way as under Unix systems,
-including OS X, and requires a Unix-like environment to work, i.e.
-either MSYS or Cygwin.
-
-0. Open MSYS or Cygwin shell prompt.
+This method works in exactly the same way as under Unix systems, and requires a
+Unix-like environment to work, i.e. one of MSYS, [MSYS2](https://www.msys2.org/)
+or [Cygwin](https://www.cygwin.com/), so the following steps should be done
+from MSYS or Cygwin shell prompt:
 
 1. Create a build directory: it is is strongly recommended to not
    build the library in the directory containing the sources (`$WXWIN`)
@@ -225,14 +215,13 @@ either MSYS or Cygwin.
    so this step can usually be omitted.
 
 
-### Using plain makefiles:
+### Using makefiles from Windows command line
 
-NOTE: The makefile.gcc makefiles are for compilation under MinGW using
-      Windows command interpreter (command.com/cmd.exe), they won't work
-      if you use Unix shell, as is the case with MSYS. Follow the instructions
-      for using configure above instead if you prefer to use Unix shell.
-
-0. Open DOS command line window (cmd.exe, *not* Bash sh.exe).
+The `makefile.gcc` makefiles are for compilation using MinGW using Windows
+command interpreter (`cmd.exe`), they will *not* work if you use Unix
+shell, as is the case with MSYS. Follow the instructions for using configure
+above instead if you prefer to use Unix shell. The commands shown here must be
+executed from a DOS command line window (cmd.exe, *not* Bash sh.exe).
 
 1. Change directory to `%WXWIN%\build\msw` and type
 
@@ -262,7 +251,7 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
 Make Parameters                         {#msw_build_make_params}
 ================================================================
 
-NOTE: If you use configure to build the library with Cygwin/MinGW, the
+NOTE: If you use configure to build the library with MinGW, the
       contents of this section does not apply, just pass the arguments
       to configure directly in this case.
 
