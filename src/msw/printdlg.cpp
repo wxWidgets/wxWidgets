@@ -417,27 +417,26 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
             // is overwritten. So add a bit of extra memory to work around this.
             dwNeeded += 1024;
 
-            LPDEVMODE tempDevMode = static_cast<LPDEVMODE>( GlobalAlloc( GMEM_FIXED | GMEM_ZEROINIT, dwNeeded ) );
+            GlobalPtr tempDevMode(dwNeeded, GMEM_FIXED | GMEM_ZEROINIT);
+            HGLOBAL hDevMode = tempDevMode;
 
             // Step 2:
             // Get the default DevMode for the printer
             dwRet = DocumentProperties( NULL,
                 *printer,
                 szPrinterName,
-                tempDevMode,     // The address of the buffer to fill.
+                static_cast<LPDEVMODE>(hDevMode), // The buffer to fill.
                 NULL,            // Not using the input buffer.
                 DM_OUT_BUFFER ); // Have the output buffer filled.
 
             if ( dwRet != IDOK )
             {
                 // If failure, cleanup
-                GlobalFree( tempDevMode );
                 printer->Close();
             }
             else
             {
-                m_devMode = tempDevMode;
-                tempDevMode = NULL;
+                m_devMode = tempDevMode.Release();
             }
         }
     }
