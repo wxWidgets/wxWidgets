@@ -1078,27 +1078,22 @@ void wxListBox::DoSelect(int item, bool sel)
 
 void wxListBox::SelectAndNotify(int item)
 {
-    DoSelect(item);
-
-    SendEvent(wxEVT_LISTBOX);
+    if( item != -1 )
+    {
+        DoSelect(item);
+        SendEvent(wxEVT_LISTBOX);
+    }
 }
 
 void wxListBox::Activate(int item)
 {
     if ( item != -1 )
+    {
         SetCurrentItem(item);
-    else
-        item = m_current;
+        if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
+            DeselectAll(item);
 
-    if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
-    {
-        DeselectAll(item);
-    }
-
-    if ( item != -1 )
-    {
         DoSelect(item);
-
         SendEvent(wxEVT_LISTBOX_DCLICK);
     }
 }
