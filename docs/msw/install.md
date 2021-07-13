@@ -47,42 +47,7 @@ All makefiles and project are located in build\msw directory.
 Microsoft Visual C++ Compilation       {#msw_build_msvs}
 ----------------------------------------------------------------
 
-* From command line using the provided makefiles:
-
-0. Open a "Visual Studio Command Prompt" window shortcut to which
-   must have been installed to the "Start" menu or the "Start" screen
-   by MSVS installation.
-
-1. Change directory to \%WXWIN\%\build\msw and type
-
-        > nmake /f makefile.vc
-
-   to build wxWidgets in the default debug configuration as a static
-   library. You can also do
-
-        > nmake /f makefile.vc BUILD=release
-
-   to build a release version or
-
-        > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X86
-
-   to build a 32 bit release DLL version from an x86 command prompt, or
-
-        > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X64
-
-   to build a 64 bit release DLL version from an x64 command prompt.
-
-   See "Configuring the Build" for more information about the
-   additional parameters that can be specified on the command line.
-
-2. To verify your build, change the directory to \%WXWIN\%\samples\minimal and
-   run the same nmake command (with the same parameters there), this
-   should create a working minimal wxWidgets sample.
-
-3. If you need to rebuild, use "clean" target first or "nmake /a".
-
-
-* From the IDE using the provided project files:
+### From the IDE
 
 Ready to use project files are provided for VC++ versions 8, 9,
 10, 11, 12, 14, 15 and 16 (also known as MSVS 2005, 2008, 2010, 2012,
@@ -94,6 +59,43 @@ and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects
 are not always built in the correct order, and this may result in link
 errors. Simply do the build again, up to 3 times, to fix this.
+
+
+### From the command line
+
+wxWidgets can also be built from the command line using the provided makefiles.
+
+This needs to be done from the "Visual Studio Command Prompt" window, which can
+be opened using a shortcut installed to the "Start" menu or the "Start" screen
+by MSVS installation.
+
+In this window, change directory to `%WXWIN\%\build\msw` and type
+
+        > nmake /f makefile.vc
+
+to build wxWidgets in the default debug configuration as a static library. You
+can also do
+
+        > nmake /f makefile.vc BUILD=release
+
+to build a release version or
+
+        > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X86
+
+to build a 32 bit release DLL version from an x86 command prompt, or
+
+        > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X64
+
+to build a 64 bit release DLL version from an x64 command prompt.
+
+See "Configuring the Build" for more information about the additional
+parameters that can be specified on the command line.
+
+To verify your build, change the directory to `%WXWIN\%\samples\minimal` and
+run the same nmake command (with the same parameters there), this should create
+a working minimal wxWidgets sample.
+
+If you need to rebuild, use "clean" target first or "nmake /a".
 
 
 ### Special notes for Visual Studio 2010+
