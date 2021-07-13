@@ -58,15 +58,8 @@ public:
                                  const wxMouseEvent& event);
 
 protected:
-    // return the item under mouse, 0 if the mouse is above the listbox or
-    // GetCount() if it is below it
     int HitTest(const wxListBox *listbox, const wxMouseEvent& event);
 
-    // parts of HitTest(): first finds the pseudo (because not in range) index
-    // of the item and the second one adjusts it if necessary - that is if the
-    // third one returns false
-    int HitTestUnsafe(const wxListBox *listbox, const wxMouseEvent& event);
-    int FixItemIndex(const wxListBox *listbox, int item);
     bool IsValidIndex(const wxListBox *listbox, int item);
 
     // init m_btnCapture and m_actionMouse
@@ -1124,16 +1117,9 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
     CalcUnscrolledPosition(0, point.y, NULL, &y);
     index = y / GetLineHeight();
 
-    if ( index < 0 )
-    {
-        // mouse is above the first item
-        index = 0;
-    }
-    else if ( (unsigned int)index >= GetCount() )
-    {
-        // mouse is below the last item
-        index= GetCount() - 1;
-    }
+    // mouse is above the first item or below the last item
+    if ( index < 0 || (unsigned int)index >= GetCount() )
+        return wxNOT_FOUND;
 
     return index;
 }
@@ -1246,36 +1232,7 @@ wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler,
 int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
                                       const wxMouseEvent& event)
 {
-    int item = HitTestUnsafe(lbox, event);
-
-    return FixItemIndex(lbox, item);
-}
-
-int wxStdListboxInputHandler::HitTestUnsafe(const wxListBox *lbox,
-                                            const wxMouseEvent& event)
-{
-    wxPoint pt = event.GetPosition();
-    pt -= lbox->GetClientAreaOrigin();
-    int y;
-    lbox->CalcUnscrolledPosition(0, pt.y, NULL, &y);
-    return y / lbox->GetLineHeight();
-}
-
-int wxStdListboxInputHandler::FixItemIndex(const wxListBox *lbox,
-                                           int item)
-{
-    if ( item < 0 )
-    {
-        // mouse is above the first item
-        item = 0;
-    }
-    else if ( (unsigned int)item >= lbox->GetCount() )
-    {
-        // mouse is below the last item
-        item = lbox->GetCount() - 1;
-    }
-
-    return item;
+    return lbox->HitTest(event.GetPosition());
 }
 
 bool wxStdListboxInputHandler::IsValidIndex(const wxListBox *lbox, int item)
