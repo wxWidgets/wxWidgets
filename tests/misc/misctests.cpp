@@ -22,6 +22,11 @@
 #include "wx/tarstrm.h"
 #include "wx/zipstrm.h"
 
+#ifdef __WINDOWS__
+    // Needed for wxMulDivInt32().
+    #include "wx/msw/wrapwin.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -198,4 +203,13 @@ TEST_CASE("wxRound", "[math]")
         #pragma warning(pop)
     #endif
 #endif // WXWIN_COMPATIBILITY_3_0
+}
+
+TEST_CASE("wxMulDivInt32", "[math]")
+{
+    // Check that it rounds correctly.
+    CHECK( wxMulDivInt32(15, 3, 2) == 23 );
+
+    // Check that it doesn't overflow.
+    CHECK( wxMulDivInt32((INT_MAX - 1)/2, 200, 100) == INT_MAX - 1 );
 }

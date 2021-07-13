@@ -446,9 +446,10 @@ void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
     for ( int i = 0; i < numCols; ++i )
     {
         int width = GetColumnWidth(i);
-        if ( width > 0 )
-            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
-        SetColumnWidth(i, width);
+        if ( width <= 0 )
+            continue;
+
+        SetColumnWidth(i, event.ScaleX(width));
     }
 }
 
