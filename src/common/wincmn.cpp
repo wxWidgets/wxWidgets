@@ -74,11 +74,8 @@
 #include "wx/display.h"
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
+#include "wx/private/rescale.h"
 #include "wx/private/window.h"
-
-#ifdef __WINDOWS__
-    #include "wx/msw/wrapwin.h"
-#endif
 
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;

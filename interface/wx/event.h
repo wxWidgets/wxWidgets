@@ -3450,7 +3450,8 @@ public:
 
         This is a convenience function to use in wxEVT_DPI_CHANGED event
         handlers, as they often need to update some sizes to the new DPI.
-        It simply calls wxRescaleCoord() with GetNewDPI() and GetOldDPI().
+        It simply calls wxMulDivInt32() with new and old DPI values, but
+        is more readable and less error-prone.
 
         For example, the returned value will be twice bigger than the original
         one when switching from normal (96) DPI to high (2x, 192) DPI.
