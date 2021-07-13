@@ -88,8 +88,8 @@ to build a 32 bit release DLL version from an x86 command prompt, or
 
 to build a 64 bit release DLL version from an x64 command prompt.
 
-See "Configuring the Build" for more information about the additional
-parameters that can be specified on the command line.
+See [Make Parameters](#msw_build_make_params) for more information about the
+additional parameters that can be specified on the command line.
 
 To verify your build, change the directory to `%WXWIN%\samples\minimal` and
 run the same nmake command (with the same parameters there), this should create
@@ -241,7 +241,8 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
    to build wxWidgets in the default debug configuration as a static
    library. Add "BUILD=release" and/or "SHARED=1" to build the library
    in release configuration and/or as a shared library instead of the
-   default static one.
+   default static one, see [Make Parameters](#msw_build_make_params)
+   for more details.
 
    NOTE: For parallel builds, i.e. using `-jN` make option, please run
          `mingw32-make -jN ... setup_h` first and then rerun the full
@@ -258,7 +259,7 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
 
 
 
-Configuring the Build                  {#msw_build_config}
+Make Parameters                         {#msw_build_make_params}
 ================================================================
 
 NOTE: If you use configure to build the library with Cygwin/MinGW, the
