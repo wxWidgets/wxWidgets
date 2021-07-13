@@ -187,7 +187,7 @@ wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
         // http://support.microsoft.com/default.aspx/kb/145994 for detailed
         // discussion.
 
-        s_sizeBtn.SetAtNewDPI(wxRescaleCoord(wxSize(50, 14), base, wxSize(4, 8)));
+        s_sizeBtn.SetAtNewDPI(wxRescaleCoord(50, 14).From(4, 8).To(base));
     }
 
     return s_sizeBtn.Get();
