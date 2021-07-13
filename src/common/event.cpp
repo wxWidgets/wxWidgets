@@ -941,14 +941,9 @@ wxHelpEvent::Origin wxHelpEvent::GuessOrigin(Origin origin)
 // wxDPIChangedEvent
 // ----------------------------------------------------------------------------
 
-int wxDPIChangedEvent::ScaleX(int x) const
+wxSize wxDPIChangedEvent::Scale(wxSize sz) const
 {
-    return wxRescaleCoord(x, m_newDPI.x, m_oldDPI.x);
-}
-
-int wxDPIChangedEvent::ScaleY(int y) const
-{
-    return wxRescaleCoord(y, m_newDPI.y, m_oldDPI.y);
+    return wxRescaleCoord(sz).From(m_oldDPI).To(m_newDPI);
 }
 
 #endif // wxUSE_GUI

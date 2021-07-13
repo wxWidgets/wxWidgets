@@ -3142,10 +3142,10 @@ public:
 
     // Scale the value by the ratio between new and old DPIs carried by this
     // event.
-    int ScaleX(int x) const;
-    int ScaleY(int y) const;
+    wxSize Scale(wxSize sz) const;
 
-    wxSize Scale(wxSize sz) const { return wxSize(ScaleX(sz.x), ScaleY(sz.y)); }
+    int ScaleX(int x) const { return Scale(wxSize(x, -1)).x; }
+    int ScaleY(int y) const { return Scale(wxSize(-1, y)).y; }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDPIChangedEvent(*this); }
 

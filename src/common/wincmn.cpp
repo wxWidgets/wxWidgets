@@ -2902,9 +2902,9 @@ wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
-    const int baseline = wxDisplay::GetStdPPIValue();
+    const wxSize baseline = wxDisplay::GetStdPPI();
 
-    return wxRescaleCoord(sz, dpi, wxSize(baseline, baseline));
+    return wxRescaleCoord(sz).From(baseline).To(dpi);
 }
 
 /* static */
@@ -2913,9 +2913,9 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
-    const int baseline = wxDisplay::GetStdPPIValue();
+    const wxSize baseline = wxDisplay::GetStdPPI();
 
-    return wxRescaleCoord(sz, wxSize(baseline, baseline), dpi);
+    return wxRescaleCoord(sz).From(dpi).To(baseline);
 }
 
 #endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
@@ -2954,14 +2954,14 @@ wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    return wxRescaleCoord(pt, wxSize(4, 8), base);
+    return wxRescaleCoord(pt).From(base).To(4, 8);
 }
 
 wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    return wxRescaleCoord(pt, base, wxSize(4, 8));
+    return wxRescaleCoord(pt).From(4, 8).To(base);
 }
 
 // ----------------------------------------------------------------------------
