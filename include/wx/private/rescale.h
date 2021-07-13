@@ -29,8 +29,9 @@
 // order to allow calling To() on it.
 //
 // Another complication is that we want this to work for both wxSize and
-// wxPoint, so wxRescaleCoord() is a overloaded and the helper classes are
-// templates, with their template parameter being either one or the other.
+// wxPoint, as well as for just plain coordinate values, so wxRescaleCoord() is
+// an overloaded function and the helper classes are templates, with their
+// template parameter being either wxSize, wxPoint or int.
 
 namespace wxPrivate
 {
@@ -72,6 +73,31 @@ private:
     friend wxRescaleCoordWithValue<T>;
 };
 
+// Specialization for just a single value.
+template <>
+class wxRescaleCoordWithFrom<int>
+{
+public:
+    int To(wxSize newScale) const
+    {
+        return m_value == wxDefaultCoord
+                ? wxDefaultCoord
+                : wxMulDivInt32(m_value, newScale.x, m_oldScale.x);
+    }
+
+private:
+    wxRescaleCoordWithFrom(int value, wxSize oldScale)
+        : m_value(value), m_oldScale(oldScale)
+    {
+    }
+
+    const int m_value;
+    const wxSize m_oldScale;
+
+    // Only it can create objects of this class.
+    friend wxRescaleCoordWithValue<int>;
+};
+
 template <typename T>
 class wxRescaleCoordWithValue
 {
@@ -96,6 +122,11 @@ private:
 };
 
 } // namespace wxPrivate
+
+inline wxPrivate::wxRescaleCoordWithValue<int> wxRescaleCoord(int coord)
+{
+    return wxPrivate::wxRescaleCoordWithValue<int>(coord);
+}
 
 inline wxPrivate::wxRescaleCoordWithValue<wxSize> wxRescaleCoord(wxSize sz)
 {
