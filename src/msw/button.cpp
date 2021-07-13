@@ -42,6 +42,7 @@
 #include "wx/stockitem.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
+#include "wx/private/rescale.h"
 #include "wx/private/window.h"
 
 #if wxUSE_MARKUP
