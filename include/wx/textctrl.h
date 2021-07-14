@@ -57,11 +57,9 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl style flags
 // ----------------------------------------------------------------------------
 
-#define wxTE_NO_VSCROLL     0x0002
+// Some of wxTE_XXX are defined in wx/defs.h, they take 0x0C70 bits.
 
-#define wxTE_READONLY       0x0010
-#define wxTE_MULTILINE      0x0020
-#define wxTE_PROCESS_TAB    0x0040
+#define wxTE_NO_VSCROLL     0x0002
 
 // alignment flags
 #define wxTE_LEFT           0x0000                    // 0x0000
@@ -72,9 +70,6 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // this style means to use RICHEDIT control and does something only under wxMSW
 // and Win32 and is silently ignored under all other platforms
 #define wxTE_RICH           0x0080
-
-#define wxTE_PROCESS_ENTER  0x0400
-#define wxTE_PASSWORD       0x0800
 
 // automatically detect the URLs and generate the events when mouse is
 // moved/clicked over an URL

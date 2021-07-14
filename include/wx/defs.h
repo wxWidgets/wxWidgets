@@ -1736,6 +1736,19 @@ wxALLOW_COMBINING_ENUMS(wxDirection, wxGeometryCentre)
 #define wxLI_HORIZONTAL         wxHORIZONTAL
 #define wxLI_VERTICAL           wxVERTICAL
 
+/*
+    wxTextCtrl flags also used by other controls.
+
+    wxComboBox, wxSpinCtrl and maybe others can also use some of these flags,
+    so define them in common header. More wxTE_XXX are in wx/textctrl.h.
+ */
+#define wxTE_READONLY       0x0010
+#define wxTE_MULTILINE      0x0020
+#define wxTE_PROCESS_TAB    0x0040
+
+#define wxTE_PROCESS_ENTER  0x0400
+#define wxTE_PASSWORD       0x0800
+
 
 /*
  * extended dialog specifiers. these values are stored in a different
