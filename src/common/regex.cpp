@@ -906,7 +906,11 @@ wxString wxRegEx::GetMatch(const wxString& text, size_t index) const
     if ( !GetMatch(&start, &len, index) )
         return wxEmptyString;
 
+#ifndef WXREGEX_CONVERT_TO_MB
     return text.Mid(start, len);
+#else
+    return wxString::FromUTF8(text.utf8_str().data() + start, len);
+#endif
 }
 
 size_t wxRegEx::GetMatchCount() const
