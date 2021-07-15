@@ -365,16 +365,6 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
 
 extern bool IsNetworkAvailable()
 {
-    // Somehow even though network is available on Travis CI build machines,
-    // attempts to open remote URIs sporadically fail, so don't run these tests
-    // under Travis to avoid false positives.
-    static int s_isTravis = -1;
-    if ( s_isTravis == -1 )
-        s_isTravis = wxGetEnv(wxASCII_STR("TRAVIS"), NULL);
-
-    if ( s_isTravis )
-        return false;
-
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
 
@@ -414,8 +404,7 @@ extern bool IsAutomaticTest()
         // Also recognize various CI environments.
         if ( !s_isAutomatic )
         {
-            s_isAutomatic = wxGetEnv(wxASCII_STR("TRAVIS"), NULL) ||
-                              wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
+            s_isAutomatic = wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
                                 wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
         }
     }
