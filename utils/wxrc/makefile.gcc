@@ -66,7 +66,7 @@ endif
 ifeq ($(MONOLITHIC),1)
 EXTRALIBS_FOR_BASE =   
 endif
-ifeq ($(USE_XRC),1)
+ifeq ($(USE_XML),1)
 __wxrc___depname = $(OBJS)\wxrc.exe
 endif
 ifeq ($(BUILD),debug)
@@ -178,7 +178,7 @@ clean:
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\wxrc.exe del $(OBJS)\wxrc.exe
 
-ifeq ($(USE_XRC),1)
+ifeq ($(USE_XML),1)
 $(OBJS)\wxrc.exe: $(WXRC_OBJECTS)
 	$(foreach f,$(subst \,/,$(WXRC_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
