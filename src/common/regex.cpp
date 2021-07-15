@@ -161,7 +161,7 @@ public:
 
 private:
     // return the string containing the error message for the given err code
-    wxString GetErrorMsg(int errorcode, bool badconv) const;
+    wxString GetErrorMsg(int errorcode) const;
 
     // init the members
     void Init()
@@ -219,19 +219,8 @@ wxRegExImpl::~wxRegExImpl()
     Free();
 }
 
-wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
+wxString wxRegExImpl::GetErrorMsg(int errorcode) const
 {
-#ifdef WXREGEX_CONVERT_TO_MB
-    // currently only needed when using system library in Unicode mode
-    if ( badconv )
-    {
-        return _("conversion to 8-bit encoding failed");
-    }
-#else
-    // 'use' badconv to avoid a compiler warning
-    (void)badconv;
-#endif
-
     wxString szError;
 
     // first get the string length needed
@@ -562,20 +551,16 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
 
     // compile it
 #ifdef WXREGEX_USING_BUILTIN
-    bool conv = true;
     // FIXME-UTF8: use wc_str() after removing ANSI build
     int errorcode = wx_re_comp(&m_RegEx, expr.c_str(), expr.length(), flagsRE);
 #else
-    // FIXME-UTF8: this is potentially broken, we shouldn't even try it
-    //             and should always use builtin regex library (or PCRE?)
-    const wxWX2MBbuf conv = expr.mbc_str();
-    int errorcode = conv ? regcomp(&m_RegEx, conv, flagsRE) : REG_BADPAT;
+    int errorcode = wx_regcomp(&m_RegEx, expr.utf8_str(), flagsRE);
 #endif
 
     if ( errorcode )
     {
         wxLogError(_("Invalid regular expression '%s': %s"),
-                   expr, GetErrorMsg(errorcode, !conv));
+                   expr, GetErrorMsg(errorcode));
 
         m_isCompiled = false;
     }
@@ -682,9 +667,9 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
 #if defined WXREGEX_USING_BUILTIN
     int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, matches, flagsRE);
 #elif defined WXREGEX_USING_RE_SEARCH
-    int rc = str ? ReSearch(&self->m_RegEx, str, len, matches, flagsRE) : REG_BADPAT;
+    int rc = ReSearch(&self->m_RegEx, str, len, matches, flagsRE);
 #else
-    int rc = str ? wx_regexec(&self->m_RegEx, str, m_nMatches, matches, flagsRE) : REG_BADPAT;
+    int rc = wx_regexec(&self->m_RegEx, str, len, m_nMatches, matches, flagsRE);
 #endif
 
     switch ( rc )
@@ -696,7 +681,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
         default:
             // an error occurred
             wxLogError(_("Failed to find match for regular expression: %s"),
-                       GetErrorMsg(rc, !str));
+                       GetErrorMsg(rc));
             wxFALLTHROUGH;
 
         case REG_NOMATCH:
