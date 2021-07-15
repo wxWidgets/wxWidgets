@@ -391,22 +391,8 @@ extern bool IsAutomaticTest()
     static int s_isAutomatic = -1;
     if ( s_isAutomatic == -1 )
     {
-        // Allow setting an environment variable to emulate buildslave user for
-        // testing.
-        wxString username;
-        if ( !wxGetEnv(wxASCII_STR("WX_TEST_USER"), &username) )
-            username = wxGetUserId();
-
-        username.MakeLower();
-        s_isAutomatic = username == wxASCII_STR("buildbot") ||
-                            username.Matches(wxASCII_STR("sandbox*"));
-
-        // Also recognize various CI environments.
-        if ( !s_isAutomatic )
-        {
-            s_isAutomatic = wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
-                                wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
-        }
+        s_isAutomatic = wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
+                            wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
     }
 
     return s_isAutomatic == 1;
