@@ -41,25 +41,27 @@
 
 // WXREGEX_USING_BUILTIN    defined when using the built-in regex lib
 // WXREGEX_USING_RE_SEARCH  defined when using re_search in the GNU regex lib
-// WXREGEX_IF_NEED_LEN()    wrap the len parameter only used with the built-in
-//                          or GNU regex
 // WXREGEX_CONVERT_TO_MB    defined when the regex lib is using chars and
 //                          wxChar is wide, so conversion to UTF-8 must be done
 //
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
-#   define WXREGEX_IF_NEED_LEN(x) ,x
 #else
 #   ifdef HAVE_RE_SEARCH
-#       define WXREGEX_IF_NEED_LEN(x) ,x
 #       define WXREGEX_USING_RE_SEARCH
 #   else
-#       define WXREGEX_IF_NEED_LEN(x)
+        // We can't use length, so just drop it in this wrapper.
+        inline int
+        wx_regexec(const regex_t* preg, const char* string, size_t,
+                   size_t nmatch, regmatch_t* pmatch, int eflags)
+        {
+            return regexec(preg, string, nmatch, pmatch, eflags);
+        }
 #   endif
 #   if wxUSE_UNICODE
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
-#   define WXREGEX_CHAR(x) (x).mb_str()
+#   define wx_regcomp regcomp
 #   define wx_regfree regfree
 #   define wx_regerror regerror
 #endif
@@ -151,8 +153,7 @@ public:
 
     // RE operations
     bool Compile(const wxString& expr, int flags = 0);
-    bool Matches(const wxRegChar *str, int flags
-                 WXREGEX_IF_NEED_LEN(size_t len)) const;
+    bool Matches(const wxRegChar *str, int flags, size_t len) const;
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
     size_t GetMatchCount() const;
     int Replace(wxString *pattern, const wxString& replacement,
@@ -653,8 +654,8 @@ static int ReSearch(const regex_t *preg,
 #endif // WXREGEX_USING_RE_SEARCH
 
 bool wxRegExImpl::Matches(const wxRegChar *str,
-                          int flags
-                          WXREGEX_IF_NEED_LEN(size_t len)) const
+                          int flags,
+                          size_t len) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
@@ -683,7 +684,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
 #elif defined WXREGEX_USING_RE_SEARCH
     int rc = str ? ReSearch(&self->m_RegEx, str, len, matches, flagsRE) : REG_BADPAT;
 #else
-    int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, matches, flagsRE) : REG_BADPAT;
+    int rc = str ? wx_regexec(&self->m_RegEx, str, m_nMatches, matches, flagsRE) : REG_BADPAT;
 #endif
 
     switch ( rc )
@@ -777,8 +778,8 @@ int wxRegExImpl::Replace(wxString *text,
 #else
                     textstr.data() + matchStart,
 #endif
-                    countRepl ? wxRE_NOTBOL : 0
-                    WXREGEX_IF_NEED_LEN(textlen - matchStart)) )
+                    countRepl ? wxRE_NOTBOL : 0,
+                    textlen - matchStart) )
     {
         // the string possibly contains back references: we need to calculate
         // the replacement text anew after each match
@@ -922,8 +923,7 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
     const size_t textlen = textstr.length();
 #endif
 
-    return m_impl->Matches(textstr, flags
-                           WXREGEX_IF_NEED_LEN(textlen));
+    return m_impl->Matches(textstr, flags, textlen);
 }
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
