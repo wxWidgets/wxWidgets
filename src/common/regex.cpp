@@ -725,8 +725,9 @@ int wxRegExImpl::Replace(wxString *text,
     const wxChar *textstr = text->c_str();
     size_t textlen = text->length();
 #else
-    const wxScopedCharBuffer textstr = text->utf8_str();
-    size_t textlen = textstr.length();
+    const wxScopedCharBuffer textbuf = text->utf8_str();
+    const char* const textstr = textbuf.data();
+    size_t textlen = textbuf.length();
     text->clear();
 #endif
 
@@ -757,14 +758,9 @@ int wxRegExImpl::Replace(wxString *text,
     // note that "^" shouldn't match after the first call to Matches() so we
     // use wxRE_NOTBOL to prevent it from happening
     while ( (!maxMatches || countRepl < maxMatches) &&
-             Matches(
-#ifndef WXREGEX_CONVERT_TO_MB
-                    textstr + matchStart,
-#else
-                    textstr.data() + matchStart,
-#endif
-                    countRepl ? wxRE_NOTBOL : 0,
-                    textlen - matchStart) )
+             Matches(textstr + matchStart,
+                     countRepl ? wxRE_NOTBOL : 0,
+                     textlen - matchStart) )
     {
         // the string possibly contains back references: we need to calculate
         // the replacement text anew after each match
@@ -808,14 +804,8 @@ int wxRegExImpl::Replace(wxString *text,
                     }
                     else
                     {
-                        textNew += wxString(
-#ifndef WXREGEX_CONVERT_TO_MB
-                                textstr
-#else
-                                textstr.data()
-#endif
-                                + matchStart + start,
-                                wxConvUTF8, len);
+                        textNew += wxString(textstr + matchStart + start,
+                                            wxConvUTF8, len);
 
                         mayHaveBackrefs = true;
                     }
@@ -841,11 +831,7 @@ int wxRegExImpl::Replace(wxString *text,
         if (result.capacity() < result.length() + start + textNew.length())
             result.reserve(2 * result.length());
 
-#ifndef WXREGEX_CONVERT_TO_MB
-        result.append(*text, matchStart, start);
-#else
-        result.append(wxString(textstr.data() + matchStart, wxConvUTF8, start));
-#endif
+        result.append(wxString(textstr + matchStart, wxConvUTF8, start));
         matchStart += start;
         result.append(textNew);
 
@@ -854,11 +840,7 @@ int wxRegExImpl::Replace(wxString *text,
         matchStart += len;
     }
 
-#ifndef WXREGEX_CONVERT_TO_MB
-    result.append(*text, matchStart, wxString::npos);
-#else
-    result.append(wxString(textstr.data() + matchStart, wxConvUTF8));
-#endif
+    result.append(wxString(textstr + matchStart, wxConvUTF8));
     *text = result;
 
     return countRepl;
