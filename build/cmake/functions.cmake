@@ -296,7 +296,7 @@ function(wx_set_target_properties target_name is_base)
             ${wxSOURCE_DIR}/include
         )
 
-    if(wxTOOLKIT_INCLUDE_DIRS)
+    if(wxTOOLKIT_INCLUDE_DIRS AND NOT is_base)
         target_include_directories(${target_name}
             PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
@@ -327,7 +327,7 @@ function(wx_set_target_properties target_name is_base)
             PUBLIC ${WIN32_LIBRARIES})
     endif()
 
-    if(wxTOOLKIT_LIBRARIES AND NOT ${is_base})
+    if(wxTOOLKIT_LIBRARIES AND NOT is_base)
         target_link_libraries(${target_name}
             PUBLIC ${wxTOOLKIT_LIBRARIES})
     endif()
