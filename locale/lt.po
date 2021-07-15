@@ -902,9 +902,8 @@ msgstr ""
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2070
-#, fuzzy
 msgid "undetermined"
-msgstr "pabrauktas"
+msgstr ""
 
 #: ../src/common/datetimefmt.cpp:1781
 msgid "today"
@@ -1874,9 +1873,8 @@ msgid " thin"
 msgstr ""
 
 #: ../src/common/fontcmn.cpp:957
-#, fuzzy
 msgid " extra light"
-msgstr " lengvas"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
@@ -1887,18 +1885,16 @@ msgid " medium"
 msgstr ""
 
 #: ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid " semi bold"
-msgstr " pastorintas"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
 msgstr " pastorintas"
 
 #: ../src/common/fontcmn.cpp:977
-#, fuzzy
 msgid " extra bold"
-msgstr " pastorintas"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
@@ -1921,9 +1917,8 @@ msgid "thin"
 msgstr ""
 
 #: ../src/common/fontcmn.cpp:1167
-#, fuzzy
 msgid "extralight"
-msgstr "lengvas"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
@@ -1938,18 +1933,16 @@ msgid "medium"
 msgstr ""
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
-#, fuzzy
 msgid "semibold"
-msgstr "pastorintas"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
 msgstr "pastorintas"
 
 #: ../src/common/fontcmn.cpp:1205
-#, fuzzy
 msgid "extrabold"
-msgstr "pastorintas"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
@@ -2082,9 +2075,9 @@ msgid "Failed to load image %d from stream."
 msgstr ""
 
 #: ../src/common/iconbndl.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr "Nepavyko įkelti piktogramos \"%s\" iš resursų."
+msgstr ""
 
 #: ../src/common/imagbmp.cpp:97
 msgid "BMP: Couldn't save invalid image."
@@ -2400,16 +2393,15 @@ msgstr[0] "Ankstesnis pranešimas pakartotas %u kartą."
 msgstr[1] "Ankstesnis pranešimas pakartotas %u kartų."
 msgstr[2] "Ankstesnis pranešimas pakartotas %u kartų."
 
+
 #: ../src/common/log.cpp:327
 #, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] ""
-"Paskutinis pasikartojantis pranešimas (\"%s\", %u kartą) nebuvo išvestas"
-msgstr[1] ""
-"Paskutinis pasikartojantis pranešimas (\"%s\", %u kartų) nebuvo išvestas"
-msgstr[2] ""
-"Paskutinis pasikartojantis pranešimas (\"%s\", %u kartų) nebuvo išvestas"
+msgstr[0] "Paskutinis pasikartojantis pranešimas (\"%s\", %u kartą) nebuvo išvestas"
+msgstr[1] "Paskutinis pasikartojantis pranešimas (\"%s\", %u kartų) nebuvo išvestas"
+msgstr[2] "Paskutinis pasikartojantis pranešimas (\"%s\", %u kartų) nebuvo išvestas"
+
 
 #: ../src/common/log.cpp:443
 #, c-format
@@ -2438,14 +2430,13 @@ msgid "input is corrupted"
 msgstr ""
 
 #: ../src/common/lzmastream.cpp:192
-#, fuzzy
 msgid "unknown decompression error"
-msgstr "išspaudimo klaida"
+msgstr ""
 
 #: ../src/common/lzmastream.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA decompression error: %s"
-msgstr "išspaudimo klaida"
+msgstr ""
 
 #: ../src/common/lzmastream.cpp:231
 msgid "Failed to allocate memory for LZMA compression."
@@ -2462,14 +2453,13 @@ msgid "out of memory"
 msgstr ""
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
-#, fuzzy
 msgid "unknown compression error"
-msgstr "išspaudimo klaida"
+msgstr ""
 
 #: ../src/common/lzmastream.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA compression error: %s"
-msgstr "išspaudimo klaida"
+msgstr ""
 
 #: ../src/common/lzmastream.cpp:350
 #, c-format
@@ -3142,7 +3132,6 @@ msgid "Cannot initialize sockets"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "&Pagalba"
@@ -3275,14 +3264,12 @@ msgid "File"
 msgstr "Failas"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "&Find..."
-msgstr "&Ieškoti"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "Find..."
-msgstr "Rasti"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
@@ -3476,14 +3463,12 @@ msgid "Remove"
 msgstr "Pašalinti"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Rep&lace..."
-msgstr "Pakeisti"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Replace..."
-msgstr "Pakeisti"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
@@ -3498,9 +3483,8 @@ msgid "Save &As..."
 msgstr "Išs&augoti kaip..."
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Save As..."
-msgstr "Išs&augoti kaip..."
+msgstr ""
 
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
 #: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
@@ -3635,7 +3619,7 @@ msgstr "&Mažinti"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Show about dialog"
-msgstr ""
+msgstr "Rodyti apie dialogą"
 
 #: ../src/common/stockitem.cpp:264
 msgid "Copy selection"
@@ -3674,9 +3658,8 @@ msgid "Undo last action"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:273
-#, fuzzy
 msgid "Create new document"
-msgstr "Išsaugoti aktyvų dokumentą"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:274
 msgid "Open an existing document"
@@ -3744,9 +3727,9 @@ msgid "File couldn't be loaded."
 msgstr ""
 
 #: ../src/common/textfile.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "Nepavyko paruošti grojimui \"%s\"."
+msgstr ""
 
 #: ../src/common/textfile.cpp:161
 #, c-format
@@ -3822,9 +3805,9 @@ msgid "'%s' contains invalid character(s)"
 msgstr ""
 
 #: ../src/common/webrequest.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s (%d)"
-msgstr "Klaida: "
+msgstr ""
 
 #: ../src/common/webrequest.cpp:642
 msgid "Not enough free disk space for download."
@@ -4105,7 +4088,7 @@ msgstr "Versija "
 #: ../src/osx/menu_osx.cpp:439
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "Apie %s"
 
 #: ../src/generic/aboutdlgg.cpp:170
 msgid "License"
@@ -4150,14 +4133,12 @@ msgid "Red:"
 msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:362
-#, fuzzy
 msgid "Green:"
-msgstr "Žalia"
+msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:365
-#, fuzzy
 msgid "Blue:"
-msgstr "Mėlyna"
+msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:374
 msgid "Opacity:"
@@ -4182,9 +4163,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/generic/datavgen.cpp:1163
-#, fuzzy
 msgid "false"
-msgstr "Klaidingas"
+msgstr ""
 
 #: ../src/generic/datavgen.cpp:6763
 #, c-format
@@ -4202,9 +4182,9 @@ msgid "Expand"
 msgstr ""
 
 #: ../src/generic/datavgen.cpp:6875
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%d items)"
-msgstr "%s (iš %s)"
+msgstr ""
 
 #: ../src/generic/datavgen.cpp:6924
 #, c-format
@@ -4289,7 +4269,7 @@ msgstr "Pjūviai"
 
 #: ../src/generic/dirctrlg.cpp:490
 msgid "Home directory"
-msgstr ""
+msgstr "Pagrindinis aplankas"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/generic/dirctrlg.cpp:492 ../src/propgrid/advprops.cpp:783
@@ -4433,6 +4413,7 @@ msgid_plural "%ld bytes"
 msgstr[0] "%ld baitų"
 msgstr[1] "%ld baitų"
 msgstr[2] "%ld baitų"
+
 
 #: ../src/generic/filectrlg.cpp:420
 msgid "Name"
@@ -4956,18 +4937,17 @@ msgid "Failed to create font configuration object."
 msgstr ""
 
 #: ../src/gtk/font.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "Nepavyko įkelti piktogramos \"%s\" iš resursų."
+msgstr ""
 
 #: ../src/gtk/font.cpp:580
 msgid "Failed to register font configuration using private fonts."
 msgstr ""
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
-#, fuzzy
 msgid "Fatal Error"
-msgstr "Klaida"
+msgstr ""
 
 #: ../src/gtk/glcanvas.cpp:181
 msgid ""
@@ -5019,25 +4999,19 @@ msgstr ""
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
-msgstr ""
-"GTK+ įdiegtas šiame kompiuteryje yra per senas, kad palaikytų komponavimą "
-"ekrane, prašome instaliuoti GTK+ 2.12 arba naujesnį."
+msgstr "GTK+ įdiegtas šiame kompiuteryje yra per senas, kad palaikytų komponavimą ekrane, prašome instaliuoti GTK+ 2.12 arba naujesnį."
 
 #: ../src/gtk/window.cpp:5682
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
-msgstr ""
-"Komponavimas nėra įgalintas šioje sistemoje, prašome įgalinti tai Windows "
-"tvarkyklėje."
+msgstr "Komponavimas nėra įgalintas šioje sistemoje, prašome įgalinti tai Windows tvarkyklėje."
 
 #: ../src/gtk/window.cpp:5693
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
-msgstr ""
-"Ši programa buvo sukompiliuota su sena GKT+ versija, prašome sukompiliuoti "
-"ją su GTK+ 2.12 arba naujesne versija."
+msgstr "Ši programa buvo sukompiliuota su sena GKT+ versija, prašome sukompiliuoti ją su GTK+ 2.12 arba naujesne versija."
 
 #: ../src/gtk1/fontdlg.cpp:74
 msgid "Please choose a valid font."
@@ -5731,9 +5705,9 @@ msgid "File dialog failed with error code %0lx."
 msgstr ""
 
 #: ../src/msw/font.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "Failas '%s' negali būti pašalintas"
+msgstr ""
 
 #: ../src/msw/fontdlg.cpp:170
 #, c-format
@@ -5923,9 +5897,9 @@ msgid "Skip"
 msgstr "Praleisti"
 
 #: ../src/msw/registry.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "unknown (%lu)"
-msgstr "nežinomas"
+msgstr ""
 
 #: ../src/msw/registry.cpp:407
 #, c-format
@@ -6308,9 +6282,8 @@ msgid "Minimize"
 msgstr ""
 
 #: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
 msgid "Zoom"
-msgstr "Didinti"
+msgstr ""
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
@@ -6343,7 +6316,7 @@ msgstr ""
 
 #: ../src/osx/menu_osx.cpp:453
 msgid "Services"
-msgstr ""
+msgstr "Tarnybos"
 
 #: ../src/osx/menu_osx.cpp:458
 #, c-format
@@ -6352,7 +6325,7 @@ msgstr "Slėpti %s"
 
 #: ../src/osx/menu_osx.cpp:460
 msgid "Hide Others"
-msgstr ""
+msgstr "Slėpti kitus"
 
 #: ../src/osx/menu_osx.cpp:461
 msgid "Show All"
@@ -7359,7 +7332,7 @@ msgstr ""
 
 #: ../src/richtext/richtextbuffer.cpp:11216
 msgid "Set Cell Style"
-msgstr ""
+msgstr "Nustatyti langelio tipą"
 
 #: ../src/richtext/richtextbuffer.cpp:11290
 msgid "Delete Row"
@@ -9031,75 +9004,3 @@ msgstr ""
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr ""
-
-#~ msgid "&Save as"
-#~ msgstr "Iš&saugoti kaip"
-
-#~ msgid "Save as"
-#~ msgstr "Išsaugoti kaip"
-
-#~ msgid "Next"
-#~ msgstr "Kitas"
-
-#~ msgid "Rendering failed."
-#~ msgstr "Apdorojimas nepavyko."
-
-#~ msgid "Windows 10"
-#~ msgstr "&Langas"
-
-#~ msgid "Windows 2000"
-#~ msgstr "Windows 2000"
-
-#~ msgid "Windows 7"
-#~ msgstr "Windows 7"
-
-#~ msgid "Windows 8"
-#~ msgstr "&Langas"
-
-#~ msgid "Windows 8.1"
-#~ msgstr "&Langas"
-
-#~ msgid "Windows 95"
-#~ msgstr "Windows 95"
-
-#~ msgid "Windows 95 OSR2"
-#~ msgstr "Windows 95 OSR2"
-
-#~ msgid "Windows 98"
-#~ msgstr "Windows 98"
-
-#~ msgid "Windows 98 SE"
-#~ msgstr "Windows 98 SE"
-
-#~ msgid "Windows 9x (%d.%d)"
-#~ msgstr "Windows 9x (%d.%d)"
-
-#~ msgid "Windows ME"
-#~ msgstr "Windows ME"
-
-#~ msgid "Windows NT %lu.%lu"
-#~ msgstr "Windows NT %lu.%lu"
-
-#~ msgid "Windows Server 10"
-#~ msgstr "&Langas"
-
-#~ msgid "Windows Server 2003"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2008"
-#~ msgstr "Windows Server 2008"
-
-#~ msgid "Windows Server 2008 R2"
-#~ msgstr "Windows Server 2008 R2"
-
-#~ msgid "Windows Server 2012"
-#~ msgstr "Windows Server 2012"
-
-#~ msgid "Windows Server 2012 R2"
-#~ msgstr "Windows Server 2012 R2"
-
-#~ msgid "Windows Vista"
-#~ msgstr "Windows Vista"
-
-#~ msgid "Windows XP"
-#~ msgstr "Windows XP"
