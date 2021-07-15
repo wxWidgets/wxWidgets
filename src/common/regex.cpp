@@ -44,17 +44,11 @@
 // WXREGEX_IF_NEED_LEN()    wrap the len parameter only used with the built-in
 //                          or GNU regex
 // WXREGEX_CONVERT_TO_MB    defined when the regex lib is using chars and
-//                          wxChar is wide, so conversion must be done
-// WXREGEX_CHAR(x)          Convert wxChar to wxRegChar
+//                          wxChar is wide, so conversion to UTF-8 must be done
 //
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
 #   define WXREGEX_IF_NEED_LEN(x) ,x
-#   if wxUSE_UNICODE
-#       define WXREGEX_CHAR(x) (x).wc_str()
-#   else
-#       define WXREGEX_CHAR(x) (x).mb_str()
-#   endif
 #else
 #   ifdef HAVE_RE_SEARCH
 #       define WXREGEX_IF_NEED_LEN(x) ,x
@@ -745,14 +739,8 @@ int wxRegExImpl::Replace(wxString *text,
     const wxChar *textstr = text->c_str();
     size_t textlen = text->length();
 #else
-    const wxWX2MBbuf textstr = WXREGEX_CHAR(*text);
-    if (!textstr)
-    {
-        wxLogError(_("Failed to find match for regular expression: %s"),
-                   GetErrorMsg(0, true));
-        return 0;
-    }
-    size_t textlen = strlen(textstr);
+    const wxScopedCharBuffer textstr = text->utf8_str();
+    size_t textlen = textstr.length();
     text->clear();
 #endif
 
@@ -841,7 +829,7 @@ int wxRegExImpl::Replace(wxString *text,
                                 textstr.data()
 #endif
                                 + matchStart + start,
-                                *wxConvCurrent, len);
+                                wxConvUTF8, len);
 
                         mayHaveBackrefs = true;
                     }
@@ -870,7 +858,7 @@ int wxRegExImpl::Replace(wxString *text,
 #ifndef WXREGEX_CONVERT_TO_MB
         result.append(*text, matchStart, start);
 #else
-        result.append(wxString(textstr.data() + matchStart, *wxConvCurrent, start));
+        result.append(wxString(textstr.data() + matchStart, wxConvUTF8, start));
 #endif
         matchStart += start;
         result.append(textNew);
@@ -883,7 +871,7 @@ int wxRegExImpl::Replace(wxString *text,
 #ifndef WXREGEX_CONVERT_TO_MB
     result.append(*text, matchStart, wxString::npos);
 #else
-    result.append(wxString(textstr.data() + matchStart, *wxConvCurrent));
+    result.append(wxString(textstr.data() + matchStart, wxConvUTF8));
 #endif
     *text = result;
 
@@ -926,8 +914,16 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
-    return m_impl->Matches(WXREGEX_CHAR(str), flags
-                            WXREGEX_IF_NEED_LEN(str.length()));
+#ifndef WXREGEX_CONVERT_TO_MB
+    const wxChar* const textstr = str.c_str();
+    const size_t textlen = str.length();
+#else
+    const wxScopedCharBuffer textstr = str.utf8_str();
+    const size_t textlen = textstr.length();
+#endif
+
+    return m_impl->Matches(textstr, flags
+                           WXREGEX_IF_NEED_LEN(textlen));
 }
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
