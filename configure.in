@@ -2822,15 +2822,18 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
     fi
 fi
 
-dnl ------------------------------------------------------------------------
-dnl Check for expat libraries
-dnl ------------------------------------------------------------------------
-
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
     AC_DEFINE(wxUSE_EXPAT)
     AC_DEFINE(wxUSE_XML)
+else
+    wxUSE_XML=no
+fi
 
+dnl ------------------------------------------------------------------------
+dnl Check for expat libraries
+dnl ------------------------------------------------------------------------
+if test "$wxUSE_EXPAT" != "no"; then
     if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then
         AC_CHECK_HEADER([expat.h], [found_expat_h=1],, [ ])
         if test "x$found_expat_h" = "x1"; then
@@ -2896,12 +2899,13 @@ if test "$wxUSE_EXPAT" != "no"; then
 fi
 
 dnl ------------------------------------------------------------------------
-dnl wxrc
+dnl XML and wxrc
 dnl ------------------------------------------------------------------------
 if test "$wxUSE_XML" != "yes"; then
     AC_MSG_WARN([XML library not built, cannot build wxrc])
+    USE_XML=0
 else
-
+    USE_XML=1
     echo "${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}" >> change-install-names
 fi
 
@@ -8287,6 +8291,7 @@ fi
 
 AC_SUBST(wxUSE_ZLIB)
 AC_SUBST(wxUSE_REGEX)
+AC_SUBST(wxUSE_XML)
 AC_SUBST(wxUSE_EXPAT)
 AC_SUBST(wxUSE_LIBJPEG)
 AC_SUBST(wxUSE_LIBPNG)
@@ -8547,6 +8552,7 @@ AC_SUBST(WX_LIBRARY_BASENAME_GUI)
 
 dnl toolkit options
 AC_SUBST(USE_GUI)
+AC_SUBST(USE_XML)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLCHAIN_NAME)
@@ -8806,7 +8812,9 @@ echo "                                       xpm                ${wxUSE_LIBXPM-n
 fi
 echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
+if test "$wxUSE_XML" = "yes"; then
 echo "                                       expat              ${wxUSE_EXPAT}"
+fi
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 

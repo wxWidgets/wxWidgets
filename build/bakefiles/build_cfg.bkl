@@ -48,6 +48,7 @@
                 @echo USE_RICHTEXT=$(USE_RICHTEXT) >>$(BUILD_CFG_FILE)
                 @echo USE_STC=$(USE_STC) >>$(BUILD_CFG_FILE)
                 @echo USE_WEBVIEW=$(USE_WEBVIEW) >>$(BUILD_CFG_FILE)
+                @echo USE_XML=$(USE_XML) >>$(BUILD_CFG_FILE)
                 @echo USE_XRC=$(USE_XRC) >>$(BUILD_CFG_FILE)
                 @echo COMPILER=$(COMPILER) >>$(BUILD_CFG_FILE)
                 @echo COMPILER_VERSION=$(COMPILER_VERSION) >>$(BUILD_CFG_FILE)
