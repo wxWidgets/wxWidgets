@@ -179,13 +179,6 @@ void ListBaseTestCase::MultiSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
 
-#ifndef __WXMSW__
-    // FIXME: This test fails on Travis CI although works fine on
-    //        development machine, no idea why though!
-    if ( IsAutomaticTest() )
-        return;
-#endif // !__WXMSW__
-
     wxListCtrl* const list = GetList();
 
     EventCounter focused(list, wxEVT_LIST_ITEM_FOCUSED);
