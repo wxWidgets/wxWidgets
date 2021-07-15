@@ -341,11 +341,6 @@ void TextFileTestCase::ReadBig()
 // correspond to the real amount of data in them, works.
 TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
 {
-    // LXC containers don't (always) populate /proc and /sys, so skip these
-    // tests there.
-    if ( IsRunningInLXC() )
-        return;
-
     SECTION("/proc")
     {
         wxTextFile f;
