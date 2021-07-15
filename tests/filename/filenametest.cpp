@@ -949,9 +949,6 @@ TEST_CASE("wxFileName::Shortcuts", "[filename]")
 // Check that GetSize() works correctly for special files.
 TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
 {
-    if ( IsRunningInLXC() )
-        return;
-
     wxULongLong size = wxFileName::GetSize("/proc/kcore");
     INFO( "size of /proc/kcore=" << size );
     CHECK( size > 0 );

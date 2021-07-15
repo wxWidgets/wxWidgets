@@ -28,8 +28,6 @@ skip_commits:
     - src/x11/
     - '**/*.md'
     - .github/workflows/
-    - .travis.yml
-    - build/tools/travis-ci.sh
     - build/tools/before_install.sh
     - build/tools/httpbin.sh
 
