@@ -22122,6 +22122,7 @@ if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
                 LIBS="$LZMA_LINK $LIBS"
                 $as_echo "#define wxUSE_LIBLZMA 1" >>confdefs.h
 
+                wxUSE_LIBLZMA=sys
 
 fi
 

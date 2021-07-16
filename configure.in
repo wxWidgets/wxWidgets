@@ -2697,6 +2697,7 @@ if test "$wxUSE_LIBLZMA" != "no"; then
                 LZMA_LINK="-llzma"
                 LIBS="$LZMA_LINK $LIBS"
                 AC_DEFINE(wxUSE_LIBLZMA)
+                wxUSE_LIBLZMA=sys
             ])
     fi
 
