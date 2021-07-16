@@ -227,14 +227,14 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
     int len = wx_regerror(errorcode, &m_RegEx, NULL, 0);
     if ( len > 0 )
     {
-        char* szcmbError = new char[++len];
+        wxCharBuffer errbuf(len);
 
-        (void)wx_regerror(errorcode, &m_RegEx, szcmbError, len);
+        (void)wx_regerror(errorcode, &m_RegEx, errbuf.data(), errbuf.length());
 
-        szError = wxConvLibc.cMB2WX(szcmbError);
-        delete [] szcmbError;
+        szError = wxConvLibc.cMB2WX(errbuf);
     }
-    else // regerror() returned 0
+
+    if ( szError.empty() ) // regerror() returned 0 or conversion failed
     {
         szError = _("unknown error");
     }
