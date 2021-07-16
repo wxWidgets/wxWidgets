@@ -728,7 +728,6 @@ int wxRegExImpl::Replace(wxString *text,
     const wxScopedCharBuffer textbuf = text->utf8_str();
     const char* const textstr = textbuf.data();
     size_t textlen = textbuf.length();
-    text->clear();
 #endif
 
     // the replacement text
