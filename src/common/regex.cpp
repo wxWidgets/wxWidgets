@@ -549,12 +549,18 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     if ( flags & wxRE_NEWLINE )
         flagsRE |= REG_NEWLINE;
 
+#ifndef WXREGEX_CONVERT_TO_MB
+    const wxChar *exprstr = expr.wx_str();
+#else
+    const wxScopedCharBuffer exprbuf = expr.utf8_str();
+    const char* const exprstr = exprbuf.data();
+#endif
+
     // compile it
 #ifdef WXREGEX_USING_BUILTIN
-    // FIXME-UTF8: use wc_str() after removing ANSI build
-    int errorcode = wx_re_comp(&m_RegEx, expr.c_str(), expr.length(), flagsRE);
+    int errorcode = wx_re_comp(&m_RegEx, exprstr, expr.length(), flagsRE);
 #else
-    int errorcode = wx_regcomp(&m_RegEx, expr.utf8_str(), flagsRE);
+    int errorcode = wx_regcomp(&m_RegEx, exprstr, flagsRE);
 #endif
 
     if ( errorcode )
