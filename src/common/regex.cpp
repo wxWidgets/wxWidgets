@@ -37,6 +37,12 @@
 #   include <sys/types.h>
 #endif
 
+// Currently this is not an option as there is no simple way to switch between
+// PCRE and the old regex library implementation at makefile level, so we just
+// always use PCRE and the old code is only kept temporarily in case we decide
+// to revert these changes.
+#define wxUSE_PCRE 1
+
 // WXREGEX_USING_BUILTIN    defined when using the built-in regex lib
 // WXREGEX_USING_RE_SEARCH  defined when using re_search in the GNU regex lib
 // WXREGEX_CONVERT_TO_MB    defined when the regex lib is using chars and
