@@ -1,0 +1,1 @@
+All: Add convenient wxFileName::GetAbsolutePath() helper.
