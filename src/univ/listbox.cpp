@@ -1078,7 +1078,7 @@ void wxListBox::DoSelect(int item, bool sel)
 
 void wxListBox::SelectAndNotify(int item)
 {
-    if( item != -1 )
+    if ( item != -1 )
     {
         DoSelect(item);
         SendEvent(wxEVT_LISTBOX);
@@ -1156,7 +1156,10 @@ bool wxListBox::PerformAction(const wxControlAction& action,
             item = m_current;
 
         if ( IsSelected(item) )
+        {
             DoUnselect(item);
+            SendEvent(wxEVT_LISTBOX);
+        }
         else
             SelectAndNotify(item);
     }
