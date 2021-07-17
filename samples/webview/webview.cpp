@@ -748,9 +748,7 @@ void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
     pathlist.Add("../help");
     pathlist.Add("../../../samples/help");
 
-    wxFileName helpfile(pathlist.FindValidPath("doc.zip"));
-    helpfile.MakeAbsolute();
-    wxString path = helpfile.GetFullPath();
+    wxString path = wxFileName(pathlist.FindValidPath("doc.zip")).GetAbsolutePath();
     //Under MSW we need to flip the slashes
     path.Replace("\\", "/");
     path = "wxfs:///" + path + ";protocol=zip/doc.htm";

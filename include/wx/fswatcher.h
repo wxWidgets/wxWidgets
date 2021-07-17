@@ -370,15 +370,7 @@ protected:
 
     static wxString GetCanonicalPath(const wxFileName& path)
     {
-        wxFileName path_copy = wxFileName(path);
-        if ( !path_copy.Normalize() )
-        {
-            wxFAIL_MSG(wxString::Format(wxASCII_STR("Unable to normalize path '%s'"),
-                                         path.GetFullPath()));
-            return wxEmptyString;
-        }
-
-        return path_copy.GetFullPath();
+        return path.GetAbsolutePath();
     }
 
 
