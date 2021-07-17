@@ -12,7 +12,12 @@ INCOMPATIBLE CHANGES SINCE 3.0.x:
 Changes in behaviour not resulting in compilation errors
 --------------------------------------------------------
 
+- wxRegEx now uses PCRE library, changing the meaning of some exotic regular
+  expressions using wxRE_ADVANCED syntax, please see its documentation for more
+  details.
+
 - wxRibbonButtonBar::DeleteButton() now deletes and not just removes the button.
+
 - Default interpolation mode in wxGDIPlusContext under MSW is now
   wxINTERPOLATION_DEFAULT and not wxINTERPOLATION_GOOD as in 3.0 for
   consistency with OS X, call SetInterpolationQuality() explicitly if needed.
