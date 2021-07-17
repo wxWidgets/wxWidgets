@@ -60,7 +60,10 @@ enum
     wxRE_NOTBOL = 32,
 
     // '$' doesn't match at the end of line
-    wxRE_NOTEOL = 64
+    wxRE_NOTEOL = 64,
+
+    // don't accept empty string as valid match, try alternatives or fail
+    wxRE_NOTEMPTY = 128
 };
 
 // ----------------------------------------------------------------------------
