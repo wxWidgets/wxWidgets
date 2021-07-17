@@ -69,8 +69,6 @@
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
 
-#   define WX_NO_REGEX_ADVANCED
-
 // There is an existing pcre2posix library which provides regxxx()
 // implementations, but we don't use it because:
 //
@@ -1027,7 +1025,7 @@ bool wxRegExImpl::Compile(wxString expr, int flags)
 
 #if wxUSE_PCRE
 #   define FLAVORS (wxRE_ADVANCED | wxRE_BASIC)
-#elif defined(WX_NO_REGEX_ADVANCED)
+#elif !defined(WXREGEX_USING_BUILTIN)
 #   define FLAVORS wxRE_BASIC
 #else
 #   define FLAVORS (wxRE_ADVANCED | wxRE_BASIC)
@@ -1058,7 +1056,7 @@ bool wxRegExImpl::Compile(wxString expr, int flags)
     int flagsRE = 0;
     if ( !(flags & wxRE_BASIC) )
     {
-#ifndef WX_NO_REGEX_ADVANCED
+#ifdef WXREGEX_USING_BUILTIN
         if (flags & wxRE_ADVANCED)
             flagsRE |= REG_ADVANCED;
         else
