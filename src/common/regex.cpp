@@ -550,7 +550,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
         flagsRE |= REG_NEWLINE;
 
 #ifndef WXREGEX_CONVERT_TO_MB
-    const wxChar *exprstr = expr.wx_str();
+    const wxChar *exprstr = expr.c_str();
 #else
     const wxScopedCharBuffer exprbuf = expr.utf8_str();
     const char* const exprstr = exprbuf.data();
