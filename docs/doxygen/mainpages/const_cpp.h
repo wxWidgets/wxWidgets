@@ -201,7 +201,9 @@ Currently the following symbols exist:
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}
 @itemdef{wxHAS_RAW_BITMAP, Defined if direct access to bitmap data using the classes in @c wx/rawbmp.h is supported.}
 @itemdef{wxHAS_RAW_KEY_CODES, Defined if raw key codes (see wxKeyEvent::GetRawKeyCode are supported.}
-@itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in wxRegEx.}
+@itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in
+    wxRegEx. This is always the case in wxWidgets 3.1.6 and later, so this
+    symbol doesn't need to be tested any more.}
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
 @itemdef{wxHAS_WINDOW_LABEL_IN_STATIC_BOX, Defined if wxStaticBox::Create()
     overload taking @c wxWindow* instead of the text label is available on the current platform.}
