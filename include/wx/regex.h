@@ -16,6 +16,7 @@
 #if wxUSE_REGEX
 
 #include "wx/string.h"
+#include "wx/versioninfo.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -147,6 +148,9 @@ public:
 
     // return the extended RE corresponding to the given basic RE
     static wxString ConvertFromBasic(const wxString& bre);
+
+    // return version information for the underlying regex library
+    static wxVersionInfo GetLibraryVersionInfo();
 
     // dtor not virtual, don't derive from this class
     ~wxRegEx();
