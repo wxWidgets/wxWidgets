@@ -1494,4 +1494,13 @@ wxString wxRegEx::QuoteMeta(const wxString& str)
     return strEscaped;
 }
 
+/* static */
+wxVersionInfo wxRegEx::GetLibraryVersionInfo()
+{
+    wxRegChar buf[64];
+    pcre2_config(PCRE2_CONFIG_VERSION, buf);
+
+    return wxVersionInfo("PCRE2", PCRE2_MAJOR, PCRE2_MINOR, 0, buf);
+}
+
 #endif // wxUSE_REGEX

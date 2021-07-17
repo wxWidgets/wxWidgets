@@ -196,4 +196,13 @@ TEST_CASE("wxRegEx::Unicode", "[regex][unicode]")
     CHECK( re.GetMatch(cyrillicSmallA) == cyrillicSmallA );
 }
 
+// This pseudo test can be used just to see the version of PCRE being used.
+TEST_CASE("wxRegEx::GetLibraryVersionInfo", "[.]")
+{
+    const wxVersionInfo ver = wxRegEx::GetLibraryVersionInfo();
+    WARN("Using " << ver.GetName() << " " << ver.GetDescription()
+                  << " (major=" << ver.GetMajor()
+                  << ", minor=" << ver.GetMinor() << ")");
+}
+
 #endif // wxUSE_REGEX
