@@ -234,12 +234,18 @@ void RegExTestCase::doTest(int flavor)
     // 'e' - test that the pattern fails to compile
     if (m_mode == 'e') {
         CHECK( !re.IsValid() );
-    } else {
-        CHECK( re.IsValid() );
-    }
 
-    if (!re.IsValid())
+        // Never continue with this kind of test.
         return;
+    } else {
+        // Note: we don't use REQUIRE here because this would abort the entire
+        // test case on error instead of skipping just the rest of this regex
+        // test.
+        CHECK( re.IsValid() );
+
+        if (!re.IsValid())
+            return;
+    }
 
     bool matches = re.Matches(m_data, m_matchFlags);
 

@@ -36,6 +36,7 @@ BENCH_OBJECTS =  \
 	$(OBJS)\bench_ipcclient.o \
 	$(OBJS)\bench_log.o \
 	$(OBJS)\bench_mbconv.o \
+	$(OBJS)\bench_regex.o \
 	$(OBJS)\bench_strings.o \
 	$(OBJS)\bench_tls.o \
 	$(OBJS)\bench_printfbench.o
@@ -308,6 +309,9 @@ $(OBJS)\bench_log.o: ./log.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_mbconv.o: ./mbconv.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_regex.o: ./regex.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_strings.o: ./strings.cpp
