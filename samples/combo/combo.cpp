@@ -934,15 +934,15 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
 
     if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
-        wxLogDebug("EVT_COMBOBOX(id=%i,selection=%i)",event.GetId(),event.GetSelection());
+        wxLogMessage("EVT_COMBOBOX(id=%i,selection=%i)",event.GetId(),event.GetSelection());
     }
     else if ( event.GetEventType() == wxEVT_TEXT )
     {
-        wxLogDebug("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString());
+        wxLogMessage("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString());
     }
     else if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
-        wxLogDebug("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
+        wxLogMessage("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
                    event.GetId(), event.GetString());
     }
 }

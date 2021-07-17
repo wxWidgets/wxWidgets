@@ -132,16 +132,6 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define wxCC_GENERIC_TLW_IS_FRAME
 #define wxComboCtrlGenericTLW   wxFrame
 
-#define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
-#define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
-                                        // native controls work on it like normal.
-#define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
-#define FOCUS_RING                    0 // No focus ring on wxMSW
-
-//#undef wxUSE_POPUPWIN
-//#define wxUSE_POPUPWIN 0
-
 #elif defined(__WXGTK__)
 
 // NB: It is not recommended to use wxDialog as popup on wxGTK, because of
@@ -159,28 +149,12 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 # include "wx/gtk1/private.h"
 #endif
 
-// NB: Let's not be afraid to use wxGTK's wxPopupTransientWindow as a
-//     'perfect' popup, as it can successfully host child controls even in
-//     popups that are shown in modal dialogs.
-
-#define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
-#define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
-                                        // native controls work on it like normal.
-#define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
-#define FOCUS_RING                    0 // No focus ring on wxGTK
-
 #elif defined(__WXMAC__)
 
 #include "wx/nonownedwnd.h"
 #define wxCC_GENERIC_TLW_IS_NONOWNEDWINDOW
 #define wxComboCtrlGenericTLW   wxNonOwnedWindow
 
-#define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
-#define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
-                                        // native controls work on it like normal.
-#define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    3 // Reserve room for the textctrl's focus ring to display
 
 #undef DEFAULT_DROPBUTTON_WIDTH
@@ -193,124 +167,24 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #include "wx/dialog.h"
 #define wxComboCtrlGenericTLW   wxDialog
 
-#define USE_TRANSIENT_POPUP           0 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
-#define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
-                                        // native controls work on it like normal.
-#define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
-#define FOCUS_RING                    0
-
-#endif
-
-
-// Popupwin is really only supported on wxMSW and wxGTK, regardless
-// what the wxUSE_POPUPWIN says.
-// FIXME: Why isn't wxUSE_POPUPWIN reliable any longer? (it was in wxW2.6.2)
-#if (!defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMAC__))
+// Assume we can't use wxPopupTransientWindow on the other platforms.
 #undef wxUSE_POPUPWIN
 #define wxUSE_POPUPWIN 0
+
 #endif
 
+// No focus ring by default.
+#ifndef FOCUS_RING
+    #define FOCUS_RING 0
+#endif
 
 #if wxUSE_POPUPWIN
     #include "wx/popupwin.h"
-#else
-    #undef USE_TRANSIENT_POPUP
-    #define USE_TRANSIENT_POPUP 0
-#endif
-
-
-// Define different types of popup windows
-enum
-{
-    POPUPWIN_NONE                   = 0,
-    POPUPWIN_WXPOPUPTRANSIENTWINDOW = 1,
-    POPUPWIN_WXPOPUPWINDOW          = 2,
-    POPUPWIN_GENERICTLW             = 3
-};
-
-
-#if USE_TRANSIENT_POPUP
-    // wxPopupTransientWindow is implemented
 
     #define wxComboPopupWindowBase  wxPopupTransientWindow
-    #define PRIMARY_POPUP_TYPE      POPUPWIN_WXPOPUPTRANSIENTWINDOW
-    #define USES_WXPOPUPTRANSIENTWINDOW 1
-
-    #if TRANSIENT_POPUPWIN_IS_PERFECT
-        //
-    #elif POPUPWIN_IS_PERFECT
-        #define wxComboPopupWindowBase2     wxPopupWindow
-        #define SECONDARY_POPUP_TYPE        POPUPWIN_WXPOPUPWINDOW
-        #define USES_WXPOPUPWINDOW          1
-    #else
-        #define wxComboPopupWindowBase2     wxComboCtrlGenericTLW
-        #define SECONDARY_POPUP_TYPE        POPUPWIN_GENERICTLW
-        #define USES_GENERICTLW             1
-    #endif
-
-#elif wxUSE_POPUPWIN
-    // wxPopupWindow (but not wxPopupTransientWindow) is properly implemented
-
-    #define wxComboPopupWindowBase      wxPopupWindow
-    #define PRIMARY_POPUP_TYPE          POPUPWIN_WXPOPUPWINDOW
-    #define USES_WXPOPUPWINDOW          1
-
-    #if !POPUPWIN_IS_PERFECT
-        #define wxComboPopupWindowBase2     wxComboCtrlGenericTLW
-        #define SECONDARY_POPUP_TYPE        POPUPWIN_GENERICTLW
-        #define USES_GENERICTLW             1
-    #endif
-
 #else
-    // wxPopupWindow is not implemented
-
     #define wxComboPopupWindowBase      wxComboCtrlGenericTLW
-    #define PRIMARY_POPUP_TYPE          POPUPWIN_GENERICTLW
-    #define USES_GENERICTLW             1
-
 #endif
-
-
-#ifndef USES_WXPOPUPTRANSIENTWINDOW
-    #define USES_WXPOPUPTRANSIENTWINDOW 0
-#endif
-
-#ifndef USES_WXPOPUPWINDOW
-    #define USES_WXPOPUPWINDOW          0
-#endif
-
-#ifndef USES_GENERICTLW
-    #define USES_GENERICTLW             0
-#endif
-
-
-#if USES_WXPOPUPWINDOW
-    #define INSTALL_TOPLEV_HANDLER      1
-#else
-    #define INSTALL_TOPLEV_HANDLER      0
-#endif
-
-
-// Returns true if given popup window type can be classified as perfect
-// on this platform.
-static inline bool IsPopupWinTypePerfect( wxByte popupWinType )
-{
-#if POPUPWIN_IS_PERFECT && TRANSIENT_POPUPWIN_IS_PERFECT
-    wxUnusedVar(popupWinType);
-    return true;
-#else
-    return ( popupWinType == POPUPWIN_GENERICTLW
-        #if POPUPWIN_IS_PERFECT
-             || popupWinType == POPUPWIN_WXPOPUPWINDOW
-        #endif
-        #if TRANSIENT_POPUPWIN_IS_PERFECT
-             || popupWinType == POPUPWIN_WXPOPUPTRANSIENTWINDOW
-        #endif
-            );
-#endif
-}
-
 
 //
 // ** TODO **
@@ -323,7 +197,7 @@ static inline bool IsPopupWinTypePerfect( wxByte popupWinType )
 // in its top level parent.
 // ----------------------------------------------------------------------------
 
-#if INSTALL_TOPLEV_HANDLER
+#if !wxUSE_POPUPWIN
 
 //
 // This will no longer be necessary after wxTransientPopupWindow
@@ -441,7 +315,7 @@ void wxComboFrameEventHandler::OnMove( wxMoveEvent& event )
     event.Skip();
 }
 
-#endif // INSTALL_TOPLEV_HANDLER
+#endif // !wxUSE_POPUPWIN
 
 // ----------------------------------------------------------------------------
 // wxComboPopupWindow is, in essence, wxPopupWindow customized for
@@ -454,7 +328,7 @@ public:
 
     wxComboPopupWindow( wxComboCtrlBase *parent,
                         int style )
-    #if USES_WXPOPUPWINDOW || USES_WXPOPUPTRANSIENTWINDOW
+    #if wxUSE_POPUPWIN
                        : wxComboPopupWindowBase(parent,
                                                 style | wxPU_CONTAINS_CONTROLS)
     #else
@@ -465,11 +339,12 @@ public:
                                                 wxSize(20,20),
                                                 style)
     #endif
+                       , m_combo(parent)
     {
         m_inShow = 0;
     }
 
-#if USES_WXPOPUPTRANSIENTWINDOW
+#if wxUSE_POPUPWIN
     virtual bool Show( bool show ) wxOVERRIDE;
     virtual bool ProcessLeftDown(wxMouseEvent& event) wxOVERRIDE;
 protected:
@@ -477,11 +352,17 @@ protected:
 #endif
 
 private:
+    // This is the same as our parent, but has the right type, so that we can
+    // avoid using casts later.
+    wxComboCtrlBase* const m_combo;
+
     wxByte      m_inShow;
+
+    wxDECLARE_NO_COPY_CLASS(wxComboPopupWindow);
 };
 
 
-#if USES_WXPOPUPTRANSIENTWINDOW
+#if wxUSE_POPUPWIN
 bool wxComboPopupWindow::Show( bool show )
 {
     // Guard against recursion
@@ -517,73 +398,32 @@ bool wxComboPopupWindow::ProcessLeftDown(wxMouseEvent& event)
 // First thing that happens when a transient popup closes is that this method gets called.
 void wxComboPopupWindow::OnDismiss()
 {
-    wxComboCtrlBase* combo = (wxComboCtrlBase*) GetParent();
-    wxASSERT_MSG( wxDynamicCast(combo, wxComboCtrlBase),
-                  wxT("parent might not be wxComboCtrl, but check wxIMPLEMENT_DYNAMIC_CLASS2() macro for correctness") );
-
-    combo->OnPopupDismiss(true);
+    m_combo->OnPopupDismiss(true);
 }
-#endif // USES_WXPOPUPTRANSIENTWINDOW
+#endif // wxUSE_POPUPWIN
 
 
 // ----------------------------------------------------------------------------
-// wxComboPopupWindowEvtHandler does bulk of the custom event handling
-// of a popup window. It is separate so we can have different types
-// of popup windows.
+// custom event handling for popup window is done in wxComboCtrlBase so we can
+// have different types of popup windows.
 // ----------------------------------------------------------------------------
 
-class wxComboPopupWindowEvtHandler : public wxEvtHandler
-{
-public:
-
-    wxComboPopupWindowEvtHandler( wxComboCtrlBase *parent )
-    {
-        m_combo = parent;
-    }
-
-    void OnSizeEvent( wxSizeEvent& event );
-    void OnKeyEvent(wxKeyEvent& event);
-#if USES_GENERICTLW
-    void OnActivate( wxActivateEvent& event );
-#endif
-
-private:
-#if USES_GENERICTLW
-    void HideOnDeactivate();
-#endif // USES_GENERICTLW
-    wxComboCtrlBase*    m_combo;
-
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxBEGIN_EVENT_TABLE(wxComboPopupWindowEvtHandler, wxEvtHandler)
-    EVT_KEY_DOWN(wxComboPopupWindowEvtHandler::OnKeyEvent)
-    EVT_KEY_UP(wxComboPopupWindowEvtHandler::OnKeyEvent)
-    EVT_CHAR(wxComboPopupWindowEvtHandler::OnKeyEvent)
-#if USES_GENERICTLW
-    EVT_ACTIVATE(wxComboPopupWindowEvtHandler::OnActivate)
-#endif
-    EVT_SIZE(wxComboPopupWindowEvtHandler::OnSizeEvent)
-wxEND_EVENT_TABLE()
-
-
-void wxComboPopupWindowEvtHandler::OnSizeEvent( wxSizeEvent& WXUNUSED(event) )
+void wxComboCtrlBase::OnPopupSize( wxSizeEvent& WXUNUSED(event) )
 {
     // Block the event so that the popup control does not get auto-resized.
 }
 
-void wxComboPopupWindowEvtHandler::OnKeyEvent( wxKeyEvent& event )
+void wxComboCtrlBase::OnPopupKey( wxKeyEvent& event )
 {
     // Relay keyboard event to the main child controls
-    wxWindowList children = m_combo->GetPopupWindow()->GetChildren();
+    wxWindowList children = GetPopupWindow()->GetChildren();
     wxWindowList::iterator node = children.begin();
     wxWindow* child = (wxWindow*)*node;
     child->GetEventHandler()->ProcessEvent(event);
 }
 
-#if USES_GENERICTLW
-void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
+#if !wxUSE_POPUPWIN
+void wxComboCtrlBase::OnPopupActivate( wxActivateEvent& event )
 {
     if ( !event.GetActive() )
     {
@@ -593,17 +433,12 @@ void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
         // event handler causes some side effects like calling this handler again (Win 7)
         // or setting the focus improperly (Win 10), so postpone it slightly.
         // See wxPopupTransientWindow::MSWHandleMessage().
-        CallAfter(&wxComboPopupWindowEvtHandler::HideOnDeactivate);
+        CallAfter(&wxComboCtrlBase::Dismiss);
 #else // !__WXMSW__
-        HideOnDeactivate();
+        Dismiss();
 #endif // __WXMSW__ / !__WXMSW__
         event.Skip();
     }
-}
-
-void wxComboPopupWindowEvtHandler::HideOnDeactivate()
-{
-    m_combo->HidePopup(true);
 }
 #endif
 
@@ -721,65 +556,30 @@ void wxComboPopup::DestroyPopup()
 // input handling
 // ----------------------------------------------------------------------------
 
-//
-// This is pushed to the event handler queue of the child textctrl.
-//
-class wxComboBoxExtraInputHandler : public wxEvtHandler
-{
-public:
-
-    wxComboBoxExtraInputHandler( wxComboCtrlBase* combo )
-        : wxEvtHandler()
-    {
-        m_combo = combo;
-    }
-    virtual ~wxComboBoxExtraInputHandler() { }
-    void OnKey(wxKeyEvent& event);
-    void OnFocus(wxFocusEvent& event);
-
-protected:
-    wxComboCtrlBase*   m_combo;
-
-private:
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxBEGIN_EVENT_TABLE(wxComboBoxExtraInputHandler, wxEvtHandler)
-    EVT_KEY_DOWN(wxComboBoxExtraInputHandler::OnKey)
-    EVT_KEY_UP(wxComboBoxExtraInputHandler::OnKey)
-    EVT_CHAR(wxComboBoxExtraInputHandler::OnKey)
-    EVT_SET_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
-    EVT_KILL_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
-wxEND_EVENT_TABLE()
-
-
-void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
+void wxComboCtrlBase::OnTextKey(wxKeyEvent& event)
 {
     // Let the wxComboCtrl event handler have a go first.
-    wxComboCtrlBase* combo = m_combo;
-
     wxKeyEvent redirectedEvent(event);
-    redirectedEvent.SetId(combo->GetId());
-    redirectedEvent.SetEventObject(combo);
+    redirectedEvent.SetId(GetId());
+    redirectedEvent.SetEventObject(this);
 
-    if ( !combo->GetEventHandler()->ProcessEvent(redirectedEvent) )
+    if ( !GetEventHandler()->ProcessEvent(redirectedEvent) )
     {
         event.Skip();
     }
 }
 
-void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
+void wxComboCtrlBase::OnTextFocus(wxFocusEvent& event)
 {
     // FIXME: This code does run when control is clicked,
     //        yet on Windows it doesn't select all the text.
     if ( event.GetEventType() == wxEVT_SET_FOCUS &&
-        !(m_combo->GetInternalFlags() & wxCC_NO_TEXT_AUTO_SELECT) )
+        !(GetInternalFlags() & wxCC_NO_TEXT_AUTO_SELECT) )
     {
-        if ( m_combo->GetTextCtrl() )
-            m_combo->GetTextCtrl()->SelectAll();
+        if ( GetTextCtrl() )
+            GetTextCtrl()->SelectAll();
         else
-            m_combo->SelectAll();
+            SelectAll();
     }
 
     // Send focus indication to parent.
@@ -789,70 +589,25 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
     //     from combo's focus event handler), they should be quite
     //     harmless.
     wxFocusEvent evt2(event);
-    evt2.SetId(m_combo->GetId());
-    evt2.SetEventObject(m_combo);
-    m_combo->GetEventHandler()->ProcessEvent(evt2);
+    evt2.SetId(GetId());
+    evt2.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(evt2);
 
     event.Skip();
 }
 
 
-//
-// This is pushed to the event handler queue of the control in popup.
-//
-
-class wxComboPopupEvtHandler : public wxEvtHandler
-{
-public:
-
-    wxComboPopupEvtHandler( wxComboCtrlBase* combo )
-        : wxEvtHandler()
-    {
-        m_combo = combo;
-        m_beenInside = false;
-
-        // Let's make it so that the popup control will not receive mouse
-        // events until mouse left button has been up.
-        m_blockEventsToPopup = true;
-    }
-    virtual ~wxComboPopupEvtHandler() { }
-
-    void OnMouseEvent( wxMouseEvent& event );
-
-    // Called from wxComboCtrlBase::OnPopupDismiss
-    void OnPopupDismiss()
-    {
-        m_beenInside = false;
-        m_blockEventsToPopup = true;
-    }
-
-protected:
-    wxComboCtrlBase*     m_combo;
-
-    bool                m_beenInside;
-    bool                m_blockEventsToPopup;
-
-private:
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxBEGIN_EVENT_TABLE(wxComboPopupEvtHandler, wxEvtHandler)
-    EVT_MOUSE_EVENTS(wxComboPopupEvtHandler::OnMouseEvent)
-wxEND_EVENT_TABLE()
-
-
-void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
+void wxComboCtrlBase::OnPopupMouseEvent( wxMouseEvent& event )
 {
     wxPoint pt = event.GetPosition();
-    wxSize sz = m_combo->GetPopupControl()->GetControl()->GetClientSize();
+    wxSize sz = GetPopupControl()->GetControl()->GetClientSize();
     int evtType = event.GetEventType();
     bool isInside = pt.x >= 0 && pt.y >= 0 && pt.x < sz.x && pt.y < sz.y;
     bool relayToButton = false;
 
     event.Skip();
 
-    if ( !isInside || !m_combo->IsPopupShown() )
+    if ( !isInside || !IsPopupShown() )
     {
         // Mouse is outside the popup or popup is not actually shown (yet)
 
@@ -869,7 +624,7 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
     {
         // Mouse is inside the popup, which is fully shown
 
-        m_beenInside = true;
+        m_beenInsidePopup = true;
 
         // Do not let the popup control respond to mouse events until
         // mouse press used to display the popup has been lifted. This
@@ -921,12 +676,12 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
     //
     if ( evtType == wxEVT_LEFT_UP )
     {
-        if ( !m_combo->IsPopupShown() )
+        if ( !IsPopupShown() )
         {
             event.Skip(false);
             relayToButton = true;
         }
-        else if ( !isInside && !m_beenInside )
+        else if ( !isInside && !m_beenInsidePopup )
         {
             // Popup is shown but the cursor is not inside, nor it has been
             relayToButton = true;
@@ -935,14 +690,14 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
 
     if ( relayToButton )
     {
-        wxWindow* btn = m_combo->GetButton();
+        wxWindow* btn = GetButton();
         if ( btn )
             btn->GetEventHandler()->ProcessEvent(event);
         else
             // Bypass the event handling mechanism. Using it would be
             // confusing for the platform-specific wxComboCtrl
             // implementations.
-            m_combo->HandleButtonMouseEvent(event, 0);
+            HandleButtonMouseEvent(event, 0);
     }
 }
 
@@ -995,10 +750,7 @@ void wxComboCtrlBase::Init()
     m_text = NULL;
     m_popupInterface = NULL;
 
-    m_popupEvtHandler = NULL;
-    m_textEvtHandler = NULL;
-
-#if INSTALL_TOPLEV_HANDLER
+#if !wxUSE_POPUPWIN
     m_toplevEvtHandler = NULL;
 #endif
 
@@ -1014,7 +766,6 @@ void wxComboCtrlBase::Init()
     m_btnWidDefault = 0;
     m_blankButtonBg = false;
     m_ignoreEvtText = 0;
-    m_popupWinType = POPUPWIN_NONE;
     m_btnWid = m_btnHei = -1;
     m_btnSide = wxRIGHT;
     m_btnSpacingX = 0;
@@ -1028,6 +779,12 @@ void wxComboCtrlBase::Init()
 
     m_resetFocus = false;
     m_hasTcBgCol = false;
+
+    m_beenInsidePopup = false;
+
+    // Let's make it so that the popup control will not receive mouse
+    // events until mouse left button has been up.
+    m_blockEventsToPopup = true;
 }
 
 bool wxComboCtrlBase::Create(wxWindow *parent,
@@ -1068,15 +825,6 @@ bool wxComboCtrlBase::Create(wxWindow *parent,
     return true;
 }
 
-void wxComboCtrlBase::InstallInputHandlers()
-{
-    if ( m_text )
-    {
-        m_textEvtHandler = new wxComboBoxExtraInputHandler(this);
-        m_text->PushEventHandler(m_textEvtHandler);
-    }
-}
-
 void
 wxComboCtrlBase::CreateTextCtrl(int style)
 {
@@ -1094,14 +842,6 @@ wxComboCtrlBase::CreateTextCtrl(int style)
         if ( HasFlag(wxTE_PROCESS_ENTER) )
             style |= wxTE_PROCESS_ENTER;
 
-        // Ignore EVT_TEXT generated by the constructor (but only
-        // if the event redirector already exists)
-        // NB: This must be " = 1" instead of "++";
-        if ( m_textEvtHandler )
-            m_ignoreEvtText = 1;
-        else
-            m_ignoreEvtText = 0;
-
         m_text = new wxComboCtrlTextCtrl();
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
@@ -1113,6 +853,13 @@ wxComboCtrlBase::CreateTextCtrl(int style)
         {
             m_text->Bind(wxEVT_TEXT_ENTER, &wxComboCtrlBase::OnTextCtrlEvent, this);
         }
+
+        m_text->Bind(wxEVT_SET_FOCUS, &wxComboCtrlBase::OnTextFocus, this);
+        m_text->Bind(wxEVT_KILL_FOCUS, &wxComboCtrlBase::OnTextFocus, this);
+
+        m_text->Bind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnTextKey, this);
+        m_text->Bind(wxEVT_CHAR, &wxComboCtrlBase::OnTextKey, this);
+        m_text->Bind(wxEVT_KEY_UP, &wxComboCtrlBase::OnTextKey, this);
 
         m_text->SetHint(m_hintText);
     }
@@ -1154,17 +901,12 @@ wxComboCtrlBase::~wxComboCtrlBase()
     if ( HasCapture() )
         ReleaseMouse();
 
-#if INSTALL_TOPLEV_HANDLER
+#if !wxUSE_POPUPWIN
     delete ((wxComboFrameEventHandler*)m_toplevEvtHandler);
     m_toplevEvtHandler = NULL;
 #endif
 
     DestroyPopup();
-
-    if ( m_text )
-        m_text->RemoveEventHandler(m_textEvtHandler);
-
-    delete m_textEvtHandler;
 }
 
 
@@ -1332,15 +1074,10 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
                 m_marginLeft + textCtrlXAdjust;
         }
 
-        // Centre textctrl vertically, if needed
-#if !TEXTCTRL_TEXT_CENTERED
+        // Centre textctrl vertically
         int tcSizeY = m_text->GetBestSize().y;
         int diff0 = sz.y - tcSizeY;
         int y = textCtrlYAdjust + (diff0/2);
-#else
-        wxUnusedVar(textCtrlYAdjust);
-        int y = 0;
-#endif
 
         if ( y < customBorder )
             y = customBorder;
@@ -1931,15 +1668,12 @@ bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event,
     wxMilliClock_t t = ::wxGetLocalTimeMillis();
     int evtType = event.GetEventType();
 
-#if USES_WXPOPUPWINDOW || USES_GENERICTLW
-    if ( m_popupWinType != POPUPWIN_WXPOPUPTRANSIENTWINDOW )
+#if !wxUSE_POPUPWIN
+    if ( IsPopupWindowState(Visible) &&
+         ( evtType == wxEVT_LEFT_DOWN || evtType == wxEVT_RIGHT_DOWN ) )
     {
-        if ( IsPopupWindowState(Visible) &&
-             ( evtType == wxEVT_LEFT_DOWN || evtType == wxEVT_RIGHT_DOWN ) )
-        {
-            HidePopup(true);
-            return true;
-        }
+        HidePopup(true);
+        return true;
     }
 #endif
 
@@ -1962,10 +1696,9 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
     {
         if ( GetPopupWindowState() >= Animating )
         {
-    #if USES_WXPOPUPWINDOW
+    #if !wxUSE_POPUPWIN
             // Click here always hides the popup.
-            if ( m_popupWinType == POPUPWIN_WXPOPUPWINDOW )
-                HidePopup(true);
+            HidePopup(true);
     #endif
         }
         else
@@ -2131,48 +1864,54 @@ void wxComboCtrlBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event
 void wxComboCtrlBase::CreatePopup()
 {
     wxComboPopup* popupInterface = m_popupInterface;
-    wxWindow* popup;
 
     if ( !m_winPopup )
     {
-#ifdef wxComboPopupWindowBase2
-        if ( m_iFlags & wxCC_IFLAG_USE_ALT_POPUP )
-        {
-        #if !USES_GENERICTLW
-            m_winPopup = new wxComboPopupWindowBase2( this, wxNO_BORDER );
-        #else
-            int tlwFlags = wxNO_BORDER;
-          #ifdef wxCC_GENERIC_TLW_IS_FRAME
-            tlwFlags |= wxFRAME_NO_TASKBAR;
-          #endif
+        m_winPopup = new wxComboPopupWindow( this, wxNO_BORDER );
 
-          #ifdef wxCC_GENERIC_TLW_IS_NONOWNEDWINDOW
-            m_winPopup = new wxComboPopupWindowBase2( this, wxID_ANY,
-                                                      wxPoint(-21,-21), wxSize(20, 20),
-                                                      tlwFlags );
-          #else
-            m_winPopup = new wxComboPopupWindowBase2( this, wxID_ANY, wxEmptyString,
-                                                      wxPoint(-21,-21), wxSize(20, 20),
-                                                      tlwFlags );
-          #endif
-        #endif
-            m_popupWinType = SECONDARY_POPUP_TYPE;
-        }
-        else
-#endif // wxComboPopupWindowBase2
-        {
-            m_winPopup = new wxComboPopupWindow( this, wxNO_BORDER );
-            m_popupWinType = PRIMARY_POPUP_TYPE;
-        }
-        m_popupWinEvtHandler = new wxComboPopupWindowEvtHandler(this);
-        m_winPopup->PushEventHandler(m_popupWinEvtHandler);
+        m_winPopup->Bind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnPopupKey, this);
+        m_winPopup->Bind(wxEVT_CHAR, &wxComboCtrlBase::OnPopupKey, this);
+        m_winPopup->Bind(wxEVT_KEY_UP, &wxComboCtrlBase::OnPopupKey, this);
+#if !wxUSE_POPUPWIN
+        m_winPopup->Bind(wxEVT_ACTIVATE, &wxComboCtrlBase::OnPopupActivate, this);
+#endif
+        m_winPopup->Bind(wxEVT_SIZE, &wxComboCtrlBase::OnPopupSize, this);
     }
 
     popupInterface->Create(m_winPopup);
-    m_popup = popup = popupInterface->GetControl();
+    m_popup = popupInterface->GetControl();
 
-    m_popupEvtHandler = new wxComboPopupEvtHandler(this);
-    popup->PushEventHandler( m_popupEvtHandler );
+    // Bind all mouse events, as used to be done by EVT_MOUSE_EVENTS() event
+    // table macro, to this handler.
+    const wxEventTypeTag<wxMouseEvent> allMouseEventTypes[] =
+    {
+        wxEVT_LEFT_DOWN,
+        wxEVT_LEFT_UP,
+        wxEVT_LEFT_DCLICK,
+        wxEVT_MIDDLE_DOWN,
+        wxEVT_MIDDLE_UP,
+        wxEVT_MIDDLE_DCLICK,
+        wxEVT_RIGHT_DOWN,
+        wxEVT_RIGHT_UP,
+        wxEVT_RIGHT_DCLICK,
+        wxEVT_AUX1_DOWN,
+        wxEVT_AUX1_UP,
+        wxEVT_AUX1_DCLICK,
+        wxEVT_AUX2_DOWN,
+        wxEVT_AUX2_UP,
+        wxEVT_AUX2_DCLICK,
+        wxEVT_MOTION,
+        wxEVT_LEAVE_WINDOW,
+        wxEVT_ENTER_WINDOW,
+        wxEVT_MOUSEWHEEL,
+        wxEVT_MAGNIFY,
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(allMouseEventTypes); ++n )
+    {
+        m_popup->Bind(allMouseEventTypes[n],
+                      &wxComboCtrlBase::OnPopupMouseEvent, this);
+    }
 
     // This may be helpful on some platforms
     //   (eg. it bypasses a wxGTK popupwindow bug where
@@ -2187,11 +1926,6 @@ void wxComboCtrlBase::DestroyPopup()
 {
     HidePopup(true);
 
-    if ( m_popup )
-        m_popup->RemoveEventHandler(m_popupEvtHandler);
-
-    wxDELETE(m_popupEvtHandler);
-
     if ( m_popupInterface )
     {
         // NB: DestroyPopup() performs 'delete this'.
@@ -2201,8 +1935,6 @@ void wxComboCtrlBase::DestroyPopup()
 
     if ( m_winPopup )
     {
-        m_winPopup->RemoveEventHandler(m_popupWinEvtHandler);
-        wxDELETE(m_popupWinEvtHandler);
         m_winPopup->Destroy();
         m_winPopup = NULL;
     }
@@ -2413,18 +2145,15 @@ void wxComboCtrlBase::ShowPopup()
         showFlags |= ShowAbove;
     }
 
-#if INSTALL_TOPLEV_HANDLER
+#if !wxUSE_POPUPWIN
     // Put top level window event handler into place
-    if ( m_popupWinType == POPUPWIN_WXPOPUPWINDOW )
-    {
-        if ( !m_toplevEvtHandler )
-            m_toplevEvtHandler = new wxComboFrameEventHandler(this);
+    if ( !m_toplevEvtHandler )
+        m_toplevEvtHandler = new wxComboFrameEventHandler(this);
 
-        wxWindow* toplev = ::wxGetTopLevelParent( this );
-        wxASSERT( toplev );
-        ((wxComboFrameEventHandler*)m_toplevEvtHandler)->OnPopup();
-        toplev->PushEventHandler( m_toplevEvtHandler );
-    }
+    wxWindow* toplev = ::wxGetTopLevelParent( this );
+    wxASSERT( toplev );
+    ((wxComboFrameEventHandler*)m_toplevEvtHandler)->OnPopup();
+    toplev->PushEventHandler( m_toplevEvtHandler );
 #endif
 
     // Set string selection (must be this way instead of SetStringSelection)
@@ -2490,26 +2219,16 @@ void wxComboCtrlBase::DoShowPopup( const wxRect& rect, int WXUNUSED(flags) )
         // (though the bug was probably fixed).
         winPopup->SetSize( rect );
 
-#if USES_WXPOPUPTRANSIENTWINDOW
-        if ( m_popupWinType == POPUPWIN_WXPOPUPTRANSIENTWINDOW )
-            ((wxPopupTransientWindow*)winPopup)->Popup(m_popup);
-        else
+#if wxUSE_POPUPWIN
+        ((wxPopupTransientWindow*)winPopup)->Popup(m_popup);
+#else
+        winPopup->Show();
+#if !defined(__WXX11__)
+        m_popup->SetFocus();
 #endif
-            winPopup->Show();
+#endif
 
         m_popupWinState = Visible;
-
-        // If popup window was a generic top-level window, or the
-        // wxPopupWindow implementation on this platform is classified as
-        // perfect, then we should be able to safely set focus to the popup
-        // control.
-        // In x11 backend, popup window neither generic top-level nor
-        // perfect native window. So shouldn't be set focus to the popup control
-        // same in the OnPopupDismiss function.
-#if !defined(__WXX11__)
-        if ( IsPopupWinTypePerfect(m_popupWinType) )
-            m_popup->SetFocus();
-#endif
     }
     else if ( IsPopupWindowState(Hidden) )
     {
@@ -2539,10 +2258,11 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
     // Inform popup control itself
     m_popupInterface->OnDismiss();
 
-    if ( m_popupEvtHandler )
-        ((wxComboPopupEvtHandler*)m_popupEvtHandler)->OnPopupDismiss();
+    // Reset popup-related flags.
+    m_beenInsidePopup = false;
+    m_blockEventsToPopup = true;
 
-#if INSTALL_TOPLEV_HANDLER
+#if !wxUSE_POPUPWIN
     // Remove top level window event handler
     if ( m_toplevEvtHandler )
     {
@@ -2554,8 +2274,9 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
 
     m_timeCanAcceptClick = ::wxGetLocalTimeMillis();
 
-    if ( m_popupWinType == POPUPWIN_WXPOPUPTRANSIENTWINDOW )
-        m_timeCanAcceptClick += 150;
+#if wxUSE_POPUPWIN
+    m_timeCanAcceptClick += 150;
+#endif
 
     // If cursor not on dropdown button, then clear its state
     // (technically not required by all ports, but do it for all just in case)
