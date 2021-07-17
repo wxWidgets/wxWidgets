@@ -360,5 +360,17 @@ public:
         @since 3.1.6
      */
     static wxString ConvertFromBasic(const wxString& bre);
+
+    /**
+        Return the version of PCRE used.
+
+        The returned wxVersionInfo object currently always has its micro
+        version component set to 0, as PCRE uses only major and minor version
+        components. Its description component contains the version number,
+        release date and, for pre-release PCRE versions, a mention of it.
+
+        @since 3.1.6
+     */
+    static wxVersionInfo GetLibraryVersionInfo();
 };
 
