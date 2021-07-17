@@ -280,12 +280,12 @@ SkipBracketExpression(wxString::const_iterator it, wxString::const_iterator end)
             if ( ++it == end )
                 break;
 
-            const wxUniChar c = *it;
-            if ( c == ':' || c == '.' || c == '=' )
+            const wxUniChar c2 = *it;
+            if ( c2 == ':' || c2 == '.' || c2 == '=' )
             {
                 for ( ++it; it != end; ++it )
                 {
-                    if ( *it == c )
+                    if ( *it == c2 )
                     {
                         if ( ++it == end )
                             break;
