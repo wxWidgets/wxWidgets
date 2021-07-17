@@ -254,7 +254,7 @@
     <!-- ================================================================ -->
 
     <dll id="xmldll" template="wx_base_dll"
-         cond="SHARED=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='1' and USE_XML=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_XML</define>
         <sources>$(XML_SRC)</sources>
@@ -264,12 +264,12 @@
     </dll>
 
     <lib id="xmllib" template="wx_base_lib"
-         cond="SHARED=='0' and MONOLITHIC=='0'">
+         cond="SHARED=='0' and USE_XML=='1' and MONOLITHIC=='0'">
         <sources>$(XML_SRC)</sources>
         <msvc-headers>$(XML_HDR)</msvc-headers>
     </lib>
 
-    <wxshortcut id="wxxml" cond="MONOLITHIC=='0'"/>
+    <wxshortcut id="wxxml" cond="USE_XML=='1' and MONOLITHIC=='0'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">xml=xmllib+xmldll</set>
 
@@ -278,7 +278,7 @@
     <!-- ================================================================ -->
 
     <dll id="xrcdll" template="wx_dll"
-         cond="SHARED=='1' and USE_XRC=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='1' and USE_XML=='1' and USE_XRC=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_XRC</define>
         <sources>$(XRC_SRC)</sources>
@@ -376,7 +376,7 @@
     <!-- ================================================================ -->
 
     <dll id="richtextdll" template="wx_dll"
-         cond="SHARED=='1' and USE_RICHTEXT=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='1' and USE_RICHTEXT=='1' and USE_XML=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_RICHTEXT</define>
         <sources>$(RICHTEXT_SRC)</sources>

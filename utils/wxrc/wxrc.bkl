@@ -3,7 +3,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="wxrc" cond="USE_XRC=='1'"
+    <exe id="wxrc" cond="USE_XML=='1'"
          template="wx_util_console" template_append="wx_append_base">
         <sources>wxrc.cpp</sources>
         <wx-lib>xml</wx-lib>

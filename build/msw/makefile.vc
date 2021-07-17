@@ -20,8 +20,8 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	VISUALSTUDIOPLATFORM="$(VISUALSTUDIOPLATFORM)" DEBUG_INFO="$(DEBUG_INFO)" \
 	DEBUG_FLAG="$(DEBUG_FLAG)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
-	USE_WEBVIEW="$(USE_WEBVIEW)" USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" \
-	USE_AUI="$(USE_AUI)" USE_RIBBON="$(USE_RIBBON)" \
+	USE_WEBVIEW="$(USE_WEBVIEW)" USE_MEDIA="$(USE_MEDIA)" USE_XML="$(USE_XML)" \
+	USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" USE_RIBBON="$(USE_RIBBON)" \
 	USE_PROPGRID="$(USE_PROPGRID)" USE_RICHTEXT="$(USE_RICHTEXT)" \
 	USE_STC="$(USE_STC)" USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" \
@@ -5323,7 +5323,7 @@ ____wxqa_namedll_DEP = $(__qadll___depname)
 !if "$(SHARED)" == "0"
 ____wxqa_namelib_DEP = $(__qalib___depname)
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XML)" == "1"
 __xmldll___depname = \
 	$(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG).dll
 !endif
@@ -5345,7 +5345,7 @@ __RUNTIME_LIBS_395 = D
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_395 = $(__THREADSFLAG)
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_XML)" == "1"
 __xmllib___depname = \
 	$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
 !endif
@@ -5361,7 +5361,7 @@ ____wxxml_namedll_DEP = $(__xmldll___depname)
 !if "$(SHARED)" == "0"
 ____wxxml_namelib_DEP = $(__xmllib___depname)
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XML)" == "1" && "$(USE_XRC)" == "1"
 __xrcdll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG).dll
 !endif
@@ -5513,7 +5513,7 @@ ____wxpropgrid_namedll_DEP = $(__propgriddll___depname)
 !if "$(SHARED)" == "0"
 ____wxpropgrid_namelib_DEP = $(__propgridlib___depname)
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1" && "$(USE_XML)" == "1"
 __richtextdll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG).dll
 !endif
@@ -6185,14 +6185,14 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 wxqa: $(____wxqa_namedll_DEP) $(____wxqa_namelib_DEP)
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XML)" == "1"
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\xmldll_dummy.obj  $(XMLDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\xmldll_version.res $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_387)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
 	$(XMLDLL_OBJECTS) $(XMLDLL_RESOURCES)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  /IMPLIB:$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
 <<
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_XML)" == "1"
 $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib: $(OBJS)\xmllib_dummy.obj  $(XMLLIB_OBJECTS)
 	if exist $@ del $@
 	link /LIB /NOLOGO /OUT:$@ @<<
@@ -6200,11 +6200,11 @@ $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 <<
 !endif
 
-!if "$(MONOLITHIC)" == "0"
+!if "$(MONOLITHIC)" == "0" && "$(USE_XML)" == "1"
 wxxml: $(____wxxml_namedll_DEP) $(____wxxml_namelib_DEP)
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XML)" == "1" && "$(USE_XRC)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj  $(XRCDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(OBJS)\xrcdll_version.res $(__htmldll_library_link_DEP) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_418)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
 	$(XRCDLL_OBJECTS) $(XRCDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
@@ -6280,7 +6280,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 wxpropgrid: $(____wxpropgrid_namedll_DEP) $(____wxpropgrid_namelib_DEP)
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1" && "$(USE_XML)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\richtextdll_dummy.obj  $(RICHTEXTDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(OBJS)\richtextdll_version.res $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_542)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
 	$(RICHTEXTDLL_OBJECTS) $(RICHTEXTDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
@@ -6391,6 +6391,7 @@ build_cfg_file: $(SETUPHDIR)
 	@echo USE_RICHTEXT=$(USE_RICHTEXT) >>$(BUILD_CFG_FILE)
 	@echo USE_STC=$(USE_STC) >>$(BUILD_CFG_FILE)
 	@echo USE_WEBVIEW=$(USE_WEBVIEW) >>$(BUILD_CFG_FILE)
+	@echo USE_XML=$(USE_XML) >>$(BUILD_CFG_FILE)
 	@echo USE_XRC=$(USE_XRC) >>$(BUILD_CFG_FILE)
 	@echo COMPILER=vc >>$(BUILD_CFG_FILE)
 	@echo COMPILER_VERSION=$(COMPILER_VERSION) >>$(BUILD_CFG_FILE)

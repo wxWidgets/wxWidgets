@@ -2823,15 +2823,18 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
     fi
 fi
 
-dnl ------------------------------------------------------------------------
-dnl Check for expat libraries
-dnl ------------------------------------------------------------------------
-
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
     AC_DEFINE(wxUSE_EXPAT)
     AC_DEFINE(wxUSE_XML)
+else
+    wxUSE_XML=no
+fi
 
+dnl ------------------------------------------------------------------------
+dnl Check for expat libraries
+dnl ------------------------------------------------------------------------
+if test "$wxUSE_EXPAT" != "no"; then
     if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then
         AC_CHECK_HEADER([expat.h], [found_expat_h=1],, [ ])
         if test "x$found_expat_h" = "x1"; then
@@ -2894,6 +2897,17 @@ if test "$wxUSE_EXPAT" != "no"; then
         dnl Expat needs this:
         AC_CONFIG_SUBDIRS([src/expat/expat])
     fi
+fi
+
+dnl ------------------------------------------------------------------------
+dnl XML and wxrc
+dnl ------------------------------------------------------------------------
+if test "$wxUSE_XML" != "yes"; then
+    AC_MSG_WARN([XML library not built, cannot build wxrc])
+    USE_XML=0
+else
+    USE_XML=1
+    echo "${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}" >> change-install-names
 fi
 
 
@@ -7369,8 +7383,6 @@ if test "$wxUSE_XRC" = "yes"; then
         AC_DEFINE(wxUSE_XRC)
         USE_XRC=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xrc"
-
-        echo "${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}" >> change-install-names
     fi
 fi
 
@@ -8280,6 +8292,7 @@ fi
 
 AC_SUBST(wxUSE_ZLIB)
 AC_SUBST(wxUSE_REGEX)
+AC_SUBST(wxUSE_XML)
 AC_SUBST(wxUSE_EXPAT)
 AC_SUBST(wxUSE_LIBJPEG)
 AC_SUBST(wxUSE_LIBPNG)
@@ -8540,6 +8553,7 @@ AC_SUBST(WX_LIBRARY_BASENAME_GUI)
 
 dnl toolkit options
 AC_SUBST(USE_GUI)
+AC_SUBST(USE_XML)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLCHAIN_NAME)
@@ -8726,10 +8740,15 @@ for subdir in $SUBDIRS; do
                 done
             elif test ${subdir} = "utils"; then
                 makefiles=""
-                for util in ifacecheck ; do
+                for util in ifacecheck wxrc ; do
                     if test -d $srcdir/utils/$util ; then
-                        makefiles="utils/$util/src/Makefile.in \
-                                   $makefiles"
+                        dnl Makefile.in could be in $util or in $util/src
+                        if test -f $srcdir/utils/$util/src/Makefile.in; then
+                            makefiles="utils/$util/src/Makefile.in \
+                                       $makefiles"
+                        else
+                            makefiles="utils/$util/Makefile.in $makefiles"
+                        fi
                     fi
                 done
             else
@@ -8794,7 +8813,9 @@ echo "                                       xpm                ${wxUSE_LIBXPM-n
 fi
 echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
+if test "$wxUSE_XML" = "yes"; then
 echo "                                       expat              ${wxUSE_EXPAT}"
+fi
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 

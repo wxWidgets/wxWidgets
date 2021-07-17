@@ -47,7 +47,7 @@
         <!-- WXRC compiler is built by default: -->
         <!-- FIXME: this is dirty hack, better bakefile support for
              conditional and optional subprojects is needed -->
-        <action id="wxrc" cond="USE_XRC=='1'">
+        <action id="wxrc" cond="USE_XML=='1'">
             <dependency-of>all</dependency-of>
 
             <!-- some of these are not built in all configurations, <depends>
@@ -63,13 +63,13 @@
                 (if test -f utils/wxrc/Makefile ; then cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) all ; fi)
             </command>
         </action>
-        <action id="clean-wxrc" cond="USE_XRC=='1'">
+        <action id="clean-wxrc" cond="USE_XML=='1'">
             <dependency-of>clean</dependency-of>
             <command>
                 (if test -f utils/wxrc/Makefile ; then cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) clean ; fi)
             </command>
         </action>
-        <action id="install-wxrc" cond="USE_XRC=='1'">
+        <action id="install-wxrc" cond="USE_XML=='1'">
             <dependency-of>install</dependency-of>
             <depends>wxrc</depends>
             <command>
