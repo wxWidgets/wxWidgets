@@ -48,6 +48,10 @@ public:
     void OnQuit(wxCommandEvent&event);
     void OnAbout(wxCommandEvent&event);
     void OnFlush(wxCommandEvent &event);
+    void OnPasteHTML_Raw(wxCommandEvent &event);
+    void OnPasteHTML_HTML(wxCommandEvent &event);
+    void OnPasteHTML_Fragment(wxCommandEvent &event);
+    void OnUpdatePasteHTML(wxUpdateUIEvent &event);
     void OnWriteClipboardContents(wxCommandEvent&event);
     void OnUpdateUI(wxUpdateUIEvent&event);
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
@@ -70,13 +74,23 @@ enum
     ID_About  = wxID_ABOUT,
     ID_Write  = 100,
     ID_Text   = 101,
-    ID_Flush  = 102
+    ID_Flush  = 102,
+
+    ID_PasteHTML_Raw  = 103,
+    ID_PasteHTML_HTML  = 104,
+    ID_PasteHTML_Fragment  = 105
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Quit,  MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
     EVT_MENU(ID_Flush, MyFrame::OnFlush)
+    EVT_MENU(ID_PasteHTML_Raw, MyFrame::OnPasteHTML_Raw)
+    EVT_MENU(ID_PasteHTML_HTML, MyFrame::OnPasteHTML_HTML)
+    EVT_MENU(ID_PasteHTML_Fragment, MyFrame::OnPasteHTML_Fragment)
+    EVT_UPDATE_UI(ID_PasteHTML_Raw, MyFrame::OnUpdatePasteHTML)
+    EVT_UPDATE_UI(ID_PasteHTML_HTML, MyFrame::OnUpdatePasteHTML)
+    EVT_UPDATE_UI(ID_PasteHTML_Fragment, MyFrame::OnUpdatePasteHTML)
     EVT_BUTTON(ID_Write, MyFrame::OnWriteClipboardContents)
     EVT_UPDATE_UI(ID_Write, MyFrame::OnUpdateUI)
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
@@ -117,6 +131,11 @@ MyFrame::MyFrame(const wxString& title)
     helpMenu->Append(ID_About, "&About\tF1", "Show about dialog");
 
     fileMenu->Append(ID_Flush, "Flush the clipboard" );
+    fileMenu->AppendSeparator();
+    fileMenu->Append(ID_PasteHTML_HTML, "Paste HTML" );
+    fileMenu->Append(ID_PasteHTML_Raw, "Paste HTML (Raw)" );
+    fileMenu->Append(ID_PasteHTML_Fragment, "Paste HTML (Fragment)" );    
+    fileMenu->AppendSeparator();
     fileMenu->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
@@ -163,6 +182,62 @@ void MyFrame::OnFlush(wxCommandEvent &WXUNUSED(event))
 
     m_textctrl->AppendText("Clipboard flushed successfully, you should now "
                            "be able to paste text even after closing the sample.");
+}
+
+void MyFrame::OnPasteHTML_Raw(wxCommandEvent & WXUNUSED(event))
+{
+   if (wxTheClipboard->Open())
+   {
+        if (wxTheClipboard->IsSupported( wxDF_HTML))
+        {
+            wxHTMLDataObject data(wxEmptyString, wxHTMLDataObject::Raw);
+            wxTheClipboard->GetData(data);
+            m_textctrl->SetValue(data.GetHTML());
+        }
+        
+        wxTheClipboard->Close();
+   }
+}
+
+void MyFrame::OnPasteHTML_HTML(wxCommandEvent & WXUNUSED(event))
+{
+   if (wxTheClipboard->Open())
+   {
+        if (wxTheClipboard->IsSupported( wxDF_HTML))
+        {
+            wxHTMLDataObject data(wxEmptyString, wxHTMLDataObject::HTML);
+            wxTheClipboard->GetData(data);
+            m_textctrl->SetValue(data.GetHTML());
+        }
+        
+        wxTheClipboard->Close();
+   }
+}
+
+void MyFrame::OnPasteHTML_Fragment(wxCommandEvent & WXUNUSED(event))
+{
+   if (wxTheClipboard->Open())
+   {
+        if (wxTheClipboard->IsSupported( wxDF_HTML))
+        {
+            wxHTMLDataObject data(wxEmptyString, wxHTMLDataObject::Fragment);
+            wxTheClipboard->GetData(data);
+            m_textctrl->SetValue(data.GetHTML());
+        }
+        
+        wxTheClipboard->Close();
+   }
+}
+
+void MyFrame::OnUpdatePasteHTML(wxUpdateUIEvent &event)
+{
+   if (wxTheClipboard->Open())
+   {
+        event.Enable(wxTheClipboard->IsSupported( wxDF_HTML));
+        wxTheClipboard->Close();
+   }
+   else
+        event.Enable(false);
 }
 
 void MyFrame::OnWriteClipboardContents(wxCommandEvent& WXUNUSED(event))
