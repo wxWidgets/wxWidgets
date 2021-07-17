@@ -37,16 +37,234 @@
 #   include <sys/types.h>
 #endif
 
-#include <regex.h>
-
 // WXREGEX_USING_BUILTIN    defined when using the built-in regex lib
 // WXREGEX_USING_RE_SEARCH  defined when using re_search in the GNU regex lib
 // WXREGEX_CONVERT_TO_MB    defined when the regex lib is using chars and
 //                          wxChar is wide, so conversion to UTF-8 must be done
+// wxRegChar                the character type used by the regular expression engine
 //
+
+#if wxUSE_PCRE
+    // Use the same code unit width for PCRE as we use for wxString.
+#   if !wxUSE_UNICODE || wxUSE_UNICODE_UTF8
+#       define PCRE2_CODE_UNIT_WIDTH 8
+        typedef char wxRegChar;
+#   elif wxUSE_UNICODE_UTF16
+#       define PCRE2_CODE_UNIT_WIDTH 16
+        typedef wchar_t wxRegChar;
+#   else
+#       define PCRE2_CODE_UNIT_WIDTH 32
+        typedef wchar_t wxRegChar;
+#   endif
+    typedef wxRegChar wxRegErrorChar;
+
+    // We currently always use PCRE as a static library under MSW.
+#   ifdef __WINDOWS__
+#       define PCRE2_STATIC
+#   endif
+
+#   include <pcre2.h>
+
+#   if wxUSE_UNICODE_UTF8
+#       define WXREGEX_CONVERT_TO_MB
+#   endif
+
+#   define WX_NO_REGEX_ADVANCED
+
+// There is an existing pcre2posix library which provides regxxx()
+// implementations, but we don't use it because:
+//
+//  0. The plan is to stop using POSIX API soon anyhow.
+//  1. It's yet another system library to depend on.
+//  2. We can add non-standard "len" parameter to regexec().
+//  3. We want to use PCRE2_ALT_BSUX for compatibility, but we can't
+//     set it using just the POSIX API.
+//
+// So implement these functions ourselves.
+namespace
+{
+
+// Define POSIX constants and structs ourselves too.
+
+#define REG_EXTENDED  0         // Unused, for compatibility only.
+
+#define REG_ICASE     0x0001    // Same as PCRE2_CASELESS.
+#define REG_NEWLINE   0x0002    // Same as PCRE2_MULTILINE.
+#define REG_NOTBOL    0x0004    // Same as PCRE2_NOTBOL.
+#define REG_NOTEOL    0x0008    // Same as PCRE2_NOTEOL.
+#define REG_NOSUB     0x0020    // Don't return matches.
+#define REG_NOTEMPTY  0x0100    // Same as PCRE2_NOTEMPTY.
+
+enum
+{
+    REG_NOERROR = 0,    // Must be 0.
+    REG_NOMATCH,        // Returned from regexec().
+    REG_BADPAT,         // Catch-all error returned from regcomp().
+    REG_ESPACE          // Catch-all errir returned from regexec().
+};
+
+typedef size_t regoff_t;
+
+struct regex_t
+{
+    // This is the only "public" field -- not that it really matters anyhow for
+    // this private struct.
+    size_t re_nsub;
+
+    pcre2_code* code;
+    pcre2_match_data* match_data;
+
+    int errorcode;
+    regoff_t erroroffset;
+};
+
+struct regmatch_t
+{
+    regoff_t rm_so;
+    regoff_t rm_eo;
+};
+
+int wx_regcomp(regex_t* preg, const wxRegChar* pattern, int cflags)
+{
+    // PCRE2_UTF is required in order to handle non-ASCII characters when using
+    // 8-bit version of the library.
+    //
+    // Use PCRE2_ALT_BSUX because we want to handle \uXXXX for compatibility
+    // with the previously used regex library and because it's useful.
+    int options = PCRE2_UTF | PCRE2_ALT_BSUX;
+
+    if ( cflags & REG_ICASE )
+        options |= PCRE2_CASELESS;
+
+    // Default behaviour of the old regex library corresponds to DOTALL i.e.
+    // dot matches any character, but wxRE_NEWLINE enables both MULTILINE (so
+    // that ^/$ match after/before newline in addition to matching at the
+    // start/end of string) and disables the special handling of "\n", i.e. we
+    // must use DOTALL with it.
+    if ( cflags & REG_NEWLINE )
+        options |= PCRE2_MULTILINE;
+    else
+        options |= PCRE2_DOTALL;
+
+    preg->code = pcre2_compile
+                 (
+                    (PCRE2_SPTR)pattern,
+                    PCRE2_ZERO_TERMINATED,
+                    options,
+                    &preg->errorcode,
+                    &preg->erroroffset,
+                    NULL                    // use default context
+                 );
+
+    if ( !preg->code )
+    {
+        // Don't bother translating PCRE error to the most appropriate POSIX
+        // error code, there is no way to do it losslessly and the main thing
+        // that matters is the error message and not the error code anyhow.
+        return REG_BADPAT;
+    }
+
+    preg->match_data = pcre2_match_data_create_from_pattern(preg->code, NULL);
+
+    return REG_NOERROR;
+}
+
+int
+wx_regexec(const regex_t* preg, const wxRegChar* string, size_t len,
+           size_t nmatch, regmatch_t* pmatch, int eflags)
+{
+    int options = 0;
+
+    if ( eflags & REG_NOTBOL )
+        options |= PCRE2_NOTBOL;
+    if ( eflags & REG_NOTEOL )
+        options |= PCRE2_NOTEOL;
+    if ( eflags & REG_NOTEMPTY )
+        options |= PCRE2_NOTEMPTY;
+
+    const int rc = pcre2_match
+                   (
+                        preg->code,
+                        (PCRE2_SPTR)string,
+                        len,
+                        0,                      // start offset
+                        options,
+                        preg->match_data,
+                        NULL                    // use default context
+                   );
+
+    if ( rc == PCRE2_ERROR_NOMATCH )
+        return REG_NOMATCH;
+
+    if ( rc < 0 )
+        return REG_ESPACE;
+
+    // Successful match, fill in pmatch array if necessary.
+    if ( pmatch )
+    {
+        const PCRE2_SIZE* const
+            ovector = pcre2_get_ovector_pointer(preg->match_data);
+
+        const size_t nmatchActual = static_cast<size_t>(rc);
+        for ( size_t n = 0; n < nmatch; ++n )
+        {
+            regmatch_t& m = pmatch[n];
+
+            if ( n < nmatchActual )
+            {
+                m.rm_so = ovector[n*2] == PCRE2_UNSET ? -1 : ovector[n*2];
+                m.rm_eo = ovector[n*2+1] == PCRE2_UNSET ? -1 : ovector[n*2+1];
+            }
+            else
+            {
+                m.rm_so =
+                m.rm_eo = static_cast<regoff_t>(-1);
+            }
+        }
+    }
+
+    return REG_NOERROR;
+}
+
+size_t
+wx_regerror(int errcode, const regex_t* preg, wxRegErrorChar* errbuf, size_t errbuf_size)
+{
+    // We don't use the passed in POSIX error code other than to check that we
+    // do have an error but rely on PCRE error code from regex_t.
+    wxRegErrorChar buffer[256];
+    int len;
+    if ( errcode == REG_NOERROR )
+        len = wxSnprintf(buffer, WXSIZEOF(buffer), "no error");
+    else
+        len = pcre2_get_error_message(preg->errorcode, (PCRE2_UCHAR*)buffer, sizeof(buffer));
+
+    if ( len < 0 )
+        len = wxSnprintf(buffer, WXSIZEOF(buffer), "PCRE error %d", preg->errorcode);
+
+    if ( errbuf && errbuf_size )
+        wxStrlcpy(errbuf, buffer, errbuf_size);
+
+    return len;
+}
+
+void wx_regfree(regex_t* preg)
+{
+    pcre2_match_data_free(preg->match_data);
+    pcre2_code_free(preg->code);
+}
+
+} // anonymous namespace
+
+#else // !wxUSE_PCRE
+
+#include <regex.h>
+typedef char wxRegErrorChar;
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
+    typedef wxChar wxRegChar;
 #else
+    typedef char wxRegChar;
+
 #   ifdef HAVE_RE_SEARCH
 #       define WXREGEX_USING_RE_SEARCH
 #   else
@@ -65,6 +283,8 @@
 #   define wx_regfree regfree
 #   define wx_regerror regerror
 #endif
+
+#endif // wxUSE_PCRE/!wxUSE_PCRE
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -133,13 +353,6 @@ private:
 
 #endif // WXREGEX_USING_RE_SEARCH
 
-// the character type used by the regular expression engine
-#ifndef WXREGEX_CONVERT_TO_MB
-typedef wxChar wxRegChar;
-#else
-typedef char wxRegChar;
-#endif
-
 // the real implementation of wxRegEx
 class wxRegExImpl
 {
@@ -152,7 +365,7 @@ public:
     bool IsValid() const { return m_isCompiled; }
 
     // RE operations
-    bool Compile(const wxString& expr, int flags = 0);
+    bool Compile(wxString expr, int flags = 0);
     bool Matches(const wxRegChar *str, int flags, size_t len) const;
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
     size_t GetMatchCount() const;
@@ -227,11 +440,11 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
     int len = wx_regerror(errorcode, &m_RegEx, NULL, 0);
     if ( len > 0 )
     {
-        wxCharBuffer errbuf(len);
+        wxCharTypeBuffer<wxRegErrorChar> errbuf(len);
 
         (void)wx_regerror(errorcode, &m_RegEx, errbuf.data(), errbuf.length());
 
-        szError = wxConvLibc.cMB2WX(errbuf);
+        szError = errbuf;
     }
 
     if ( szError.empty() ) // regerror() returned 0 or conversion failed
@@ -386,6 +599,16 @@ wxString wxRegEx::ConvertFromBasic(const wxString& bre)
                     // as the escaped versions were special in the BRE.
                     disposition = Disposition_Append;
                     break;
+
+                case '<':
+                case '>':
+                    // Map word boundaries extensions to POSIX syntax
+                    // understood by PCRE.
+                    ere += "[[:";
+                    ere += c;
+                    ere += ":]]";
+                    disposition = Disposition_Skip;
+                    break;
             }
         }
         else // This character is not escaped.
@@ -517,11 +740,294 @@ wxString wxRegEx::ConvertFromBasic(const wxString& bre)
     return ere;
 }
 
-bool wxRegExImpl::Compile(const wxString& expr, int flags)
+#if wxUSE_PCRE
+
+// Small helper for converting selected PCRE compilation options to string.
+static wxString PCREOptionsToString(int opts)
+{
+    wxString s;
+
+    if ( opts & PCRE2_CASELESS )
+        s += 'i';
+    if ( opts & PCRE2_MULTILINE )
+        s += 'm';
+    if ( opts & PCRE2_DOTALL )
+        s += 's';
+    if ( opts & PCRE2_EXTENDED )
+        s += 'x';
+
+    return s;
+}
+
+// Convert metasyntax, i.e. directors and embedded options, to PCRE syntax.
+//
+// See TCL re_syntax man page for more details.
+static wxString ConvertMetasyntax(wxString expr, int& flags)
+{
+    // First check for directors that must occur only at the beginning.
+    const int DIRECTOR_PREFIX_LEN = 3;
+    if ( expr.length() > DIRECTOR_PREFIX_LEN && expr.StartsWith("***") )
+    {
+        switch ( expr[DIRECTOR_PREFIX_LEN].GetValue() )
+        {
+            // "***:" director indicates that the regex uses ARE syntax.
+            case ':':
+                flags &= ~wxRE_BASIC;
+                flags |= wxRE_ADVANCED;
+                expr.erase(0, DIRECTOR_PREFIX_LEN + 1);
+                break;
+
+            // "***=" director means that the rest is a literal string.
+            case '=':
+                // We could use PCRE2_LITERAL, but for now just use the "\Q"
+                // escape that should result in the same way -- maybe even less
+                // efficiently, but we probably don't really care about
+                // performance in this very special case.
+                flags &= ~(wxRE_BASIC | wxRE_ADVANCED);
+                expr.replace(0, DIRECTOR_PREFIX_LEN + 1, "\\Q");
+                break;
+
+            default:
+                // This is an invalid director that will result in a compile
+                // error anyhow, so don't bother special-casing it and just
+                // don't do anything to compile it and get an error later.
+                break;
+        }
+    }
+
+    // Then check for the embedded options that may occur at the beginning of
+    // an ARE, but possibly after a director (necessarily the "***:" one).
+    if ( (flags & wxRE_ADVANCED) && expr.StartsWith("(?") )
+    {
+        // String with the options: we use this for the options we don't know
+        // about.
+        wxString optsString;
+
+        // PCRE options to enable or disable.
+        int opts = 0,
+            negopts = 0;
+
+        // (Last) syntax selected by the options.
+        enum Syntax
+        {
+            Syntax_None,
+            Syntax_Basic,
+            Syntax_Extended,
+            Syntax_Literal
+        } syntax = Syntax_None;
+
+        const wxString::iterator end = expr.end();
+        const wxString::iterator start = expr.begin() + 2;
+
+        for ( wxString::iterator it = start; it != end; ++it )
+        {
+            if ( *it == ')' )
+            {
+                optsString += PCREOptionsToString(opts);
+
+                if ( negopts )
+                {
+                    optsString += "-";
+                    optsString += PCREOptionsToString(negopts);
+                }
+
+                size_t posAfterOpts;
+                if ( optsString.empty() )
+                {
+                    expr.erase(expr.begin(), ++it);
+                    posAfterOpts = 0;
+                }
+                else
+                {
+                    expr.replace(start, it, optsString);
+                    posAfterOpts = optsString.length() + 3; // (?opts)
+                }
+
+                // Finally deal with the syntax selection.
+                flags &= ~wxRE_ADVANCED;
+
+                switch ( syntax )
+                {
+                    case Syntax_None:
+                        flags |= wxRE_ADVANCED;
+                        break;
+
+                    case Syntax_Basic:
+                        flags |= wxRE_BASIC;
+                        break;
+
+                    case Syntax_Extended:
+                        flags |= wxRE_EXTENDED;
+                        break;
+
+                    case Syntax_Literal:
+                        // As above, we could also use the LITERAL option, but
+                        // this is simpler.
+                        expr.insert(posAfterOpts, "\\Q");
+                        break;
+                }
+
+                break;
+            }
+
+            // Avoid misinterpreting other constructs (non-capturing groups,
+            // look ahead assertions etc) as options, which always consist in
+            // alphabetic characters only.
+            if ( *it < 'a' || *it > 'z' )
+                break;
+
+            switch ( (*it).GetValue() )
+            {
+                case 'b':
+                    syntax = Syntax_Basic;
+                    break;
+
+                case 'e':
+                    syntax = Syntax_Extended;
+                    break;
+
+                case 'q':
+                    syntax = Syntax_Literal;
+                    break;
+
+                case 'm':
+                case 'n':
+                    // This option corresponds to MULTILINE PCRE option,
+                    // without DOTALL, so enable the former and disable the
+                    // latter.
+                    negopts &= ~PCRE2_MULTILINE;
+                    opts |= PCRE2_MULTILINE;
+                    wxFALLTHROUGH;
+
+                case 'p':
+                    // This option corresponds to the default PCRE behaviour,
+                    // but we use DOTALL by default, so turn it off (this might
+                    // be unnecessary if wxRE_NEWLINE is also used, but it does
+                    // no harm).
+                    negopts |= PCRE2_DOTALL;
+                    break;
+
+                case 'w':
+                    // This option corresponds to using both MULTILINE and
+                    // DOTALL with PCRE.
+                    negopts &= ~(PCRE2_MULTILINE | PCRE2_DOTALL);
+                    opts |= PCRE2_MULTILINE | PCRE2_DOTALL;
+                    break;
+
+                case 'c':
+                    // Disable case-insensitive matching.
+                    negopts |= PCRE2_CASELESS;
+                    break;
+
+                case 't':
+                    // Disable extended syntax.
+                    negopts |= PCRE2_EXTENDED;
+                    break;
+
+                case 's':
+                    // This option reverts to the default behaviour in the old
+                    // regex library or enables DOTALL in PCRE, which is much
+                    // more useful and common, so use it with PCRE meaning.
+                    negopts &= ~PCRE2_DOTALL;
+                    opts |= PCRE2_DOTALL;
+                    break;
+
+                    // These options have the same meaning as in PCRE.
+                case 'i':
+                    negopts &= ~PCRE2_CASELESS;
+                    opts |= PCRE2_CASELESS;
+                    break;
+
+                case 'x':
+                    negopts &= ~PCRE2_EXTENDED;
+                    opts |= PCRE2_EXTENDED;
+                    break;
+
+                default:
+                    // Keep the rest: could be a valid PCRE option or invalid
+                    // option for both libraries, in which case we'll get an
+                    // error, which is what we want.
+                    optsString += *it;
+                    break;
+            }
+        }
+    }
+
+    return expr;
+}
+
+// Convert "advanced" word boundary assertions to the syntax understood by PCRE.
+//
+// These extensions (known as "TCL extensions" because TCL uses the same regex
+// library previous wx versions used) worked before, so preserve them for
+// compatibility.
+//
+// Note that this does not take into account "\<" and "\>" (GNU extensions) as
+// those are only valid when using BREs and so are taken care of above.
+static wxString ConvertWordBoundaries(const wxString& expr)
+{
+    wxString out;
+    out.reserve(expr.length());
+
+    for ( wxString::const_iterator it = expr.begin(),
+                                  end = expr.end();
+          it != end;
+          ++it )
+    {
+        if ( *it == '\\' )
+        {
+            ++it;
+            if ( it == end )
+            {
+                out.append('\\');
+                break;
+            }
+
+            const char* replacement = NULL;
+            switch ( (*it).GetValue() )
+            {
+                case 'm':
+                    replacement = "[[:<:]]";
+                    break;
+
+                case 'M':
+                    replacement = "[[:>:]]";
+                    break;
+
+                case 'y':
+                    replacement = "\\b";
+                    break;
+
+                case 'Y':
+                    replacement = "\\B";
+                    break;
+            }
+
+            if ( replacement )
+            {
+                out.append(replacement);
+
+                continue;
+            }
+
+            out.append('\\');
+        }
+
+        out.append(*it);
+    }
+
+    return out;
+}
+
+#endif // wxUSE_PCRE
+
+bool wxRegExImpl::Compile(wxString expr, int flags)
 {
     Reinit();
 
-#ifdef WX_NO_REGEX_ADVANCED
+#if wxUSE_PCRE
+#   define FLAVORS (wxRE_ADVANCED | wxRE_BASIC)
+#elif defined(WX_NO_REGEX_ADVANCED)
 #   define FLAVORS wxRE_BASIC
 #else
 #   define FLAVORS (wxRE_ADVANCED | wxRE_BASIC)
@@ -530,6 +1036,23 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
 #endif
     wxASSERT_MSG( !(flags & ~(FLAVORS | wxRE_ICASE | wxRE_NOSUB | wxRE_NEWLINE)),
                   wxT("unrecognized flags in wxRegEx::Compile") );
+
+#if wxUSE_PCRE
+    // Deal with the directors and embedded options first (this can modify
+    // flags).
+    expr = ConvertMetasyntax(expr, flags);
+
+    // PCRE doesn't support BREs, translate them to EREs.
+    if ( flags & wxRE_BASIC )
+    {
+        expr = wxRegEx::ConvertFromBasic(expr);
+        flags &= ~wxRE_BASIC;
+    }
+    else if ( flags & wxRE_ADVANCED )
+    {
+        expr = ConvertWordBoundaries(expr);
+    }
+#endif // wxUSE_PCRE
 
     // translate our flags to regcomp() ones
     int flagsRE = 0;
@@ -605,7 +1128,11 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
                     // extended syntax. '(?' is used for extensions by perl-
                     // like REs (e.g. advanced), and is not valid for POSIX
                     // extended, so ignore them always.
-                    if ( cptr[1] != wxT('?') )
+                    if ( cptr[1] != wxT('?')
+#if wxUSE_PCRE
+                        && cptr[1] != wxT('*')
+#endif
+                            )
                         m_nMatches++;
                 }
             }
@@ -651,7 +1178,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
     // translate our flags to regexec() ones
-    wxASSERT_MSG( !(flags & ~(wxRE_NOTBOL | wxRE_NOTEOL)),
+    wxASSERT_MSG( !(flags & ~(wxRE_NOTBOL | wxRE_NOTEOL | wxRE_NOTEMPTY)),
                   wxT("unrecognized flags in wxRegEx::Matches") );
 
     int flagsRE = 0;
@@ -659,6 +1186,10 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
         flagsRE |= REG_NOTBOL;
     if ( flags & wxRE_NOTEOL )
         flagsRE |= REG_NOTEOL;
+#if wxUSE_PCRE
+    if ( flags & wxRE_NOTEMPTY )
+        flagsRE |= REG_NOTEMPTY;
+#endif // wxUSE_PCRE
 
     // allocate matches array if needed
     wxRegExImpl *self = wxConstCast(this, wxRegExImpl);
