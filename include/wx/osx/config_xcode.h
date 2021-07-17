@@ -128,9 +128,6 @@
 #define PACKAGE_TARNAME "wxwidgets"
 #define PACKAGE_VERSION "3.1.6"
 
-// for regex
-#define WX_NO_REGEX_ADVANCED 1
-
 // for jpeg
 
 #define HAVE_STDLIB_H 1

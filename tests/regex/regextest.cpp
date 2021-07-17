@@ -40,11 +40,6 @@
 #endif
 
 
-// many of the tests are specific to the builtin regex lib, so only attempts
-// to do them when using the builtin regex lib.
-//
-#ifdef wxHAS_REGEX_ADVANCED
-
 #include "wx/regex.h"
 #include <string>
 #include <vector>
@@ -347,10 +342,8 @@ void RegExTestCase::runTest()
         doTest(wxRE_BASIC);
     if (m_extended)
         doTest(wxRE_EXTENDED);
-#ifdef wxHAS_REGEX_ADVANCED
     if (m_advanced || (!m_basic && !m_extended))
         doTest(wxRE_ADVANCED);
-#endif
 }
 
 // Try the test for a single flavour of expression
@@ -491,7 +484,5 @@ CheckRE(
 //
 #include "regex.inc"
 
-
-#endif // wxHAS_REGEX_ADVANCED
 
 #endif // wxUSE_REGEX

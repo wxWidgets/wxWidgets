@@ -834,12 +834,6 @@
 #undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
 /*
- * The built-in regex supports advanced REs in additional to POSIX's basic
- * and extended. Your system regex probably won't support this, and in this
- * case WX_NO_REGEX_ADVANCED should be defined.
- */
-#undef WX_NO_REGEX_ADVANCED
-/*
  * On GNU systems use re_search instead of regexec, since the latter does a
  * strlen on the search text affecting the performance of some operations.
  */

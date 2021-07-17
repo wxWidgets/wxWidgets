@@ -184,8 +184,6 @@ TEST_CASE("wxRegEx::ConvertFromBasic", "[regex][basic]")
     CHECK( wxRegEx::ConvertFromBasic("[^$\\)]") == "[^$\\)]" );
 }
 
-#ifdef wxHAS_REGEX_ADVANCED
-
 TEST_CASE("wxRegEx::Unicode", "[regex][unicode]")
 {
     const wxString cyrillicCapitalA(L"\u0410");
@@ -197,7 +195,5 @@ TEST_CASE("wxRegEx::Unicode", "[regex][unicode]")
     REQUIRE( re.Matches(cyrillicSmallA) );
     CHECK( re.GetMatch(cyrillicSmallA) == cyrillicSmallA );
 }
-
-#endif // wxHAS_REGEX_ADVANCED
 
 #endif // wxUSE_REGEX
