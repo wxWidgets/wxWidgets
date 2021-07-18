@@ -509,6 +509,9 @@ protected:
     // (e.g. from WriteText())
     void OnSetValue(const wxString& value);
 
+    // Installs standard input handler to combo (and optionally to the textctrl)
+    void InstallInputHandlers();
+
     // Flags for DrawButton
     enum
     {
@@ -572,15 +575,6 @@ protected:
     void OnKeyEvent(wxKeyEvent& event);
     void OnCharEvent(wxKeyEvent& event);
 
-    void OnTextFocus(wxFocusEvent& event);
-    void OnTextKey(wxKeyEvent& event);
-
-    void OnPopupActivate(wxActivateEvent& event);
-    void OnPopupKey(wxKeyEvent& event);
-    void OnPopupSize(wxSizeEvent& event);
-
-    void OnPopupMouseEvent(wxMouseEvent& event);
-
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
@@ -636,8 +630,17 @@ protected:
     // popup interface
     wxComboPopup*           m_popupInterface;
 
+    // this is input etc. handler for the text control
+    wxEvtHandler*           m_textEvtHandler;
+
     // this is for the top level window
     wxEvtHandler*           m_toplevEvtHandler;
+
+    // this is for the control in popup
+    wxEvtHandler*           m_popupEvtHandler;
+
+    // this is for the popup window
+    wxEvtHandler*           m_popupWinEvtHandler;
 
     // main (ie. topmost) window of a composite control (default = this)
     wxWindow*               m_mainCtrlWnd;
@@ -717,14 +720,13 @@ protected:
     // is the text-area background colour overridden?
     bool                    m_hasTcBgCol;
 
-    // flags used while popup is shown
-    bool                    m_beenInsidePopup;
-    bool                    m_blockEventsToPopup;
-
 private:
     void Init();
 
     wxByte                  m_ignoreEvtText;  // Number of next EVT_TEXTs to ignore
+
+    // Is popup window wxPopupTransientWindow, wxPopupWindow or wxDialog?
+    wxByte                  m_popupWinType;
 
     wxDECLARE_EVENT_TABLE();
 
