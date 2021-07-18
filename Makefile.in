@@ -84,8 +84,8 @@ WX_RELEASE_NODOT = 31
 WX_VERSION = $(WX_RELEASE).6
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)6
 LIBDIRNAME = $(wx_top_builddir)/lib
-WXREGEX_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG -I$(INC_REGEX)/wx -D__WX__ \
-	-DHAVE_CONFIG_H $(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXREGEX_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG -D__WX__ -DHAVE_CONFIG_H $(WX_CFLAGS) \
+	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	wxregex_pcre2_auto_possess.o \
 	wxregex_pcre2_compile.o \
@@ -2213,7 +2213,6 @@ LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_
 @COND_PLATFORM_WIN32_1@	wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -$(WX_RELEASE)
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
-@COND_wxUSE_REGEX_builtin@INC_REGEX = $(top_srcdir)/3rdparty/pcre/src
 COND_wxUSE_REGEX_builtin___wxregex___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_wxUSE_REGEX_builtin@__wxregex___depname = $(COND_wxUSE_REGEX_builtin___wxregex___depname)
@@ -13845,7 +13844,8 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll_library_link_LIBR_0 \
 @COND_wxUSE_ZLIB_builtin@__INC_ZLIB_p_67 = \
 @COND_wxUSE_ZLIB_builtin@	--include-dir $(top_srcdir)/src/zlib
 @COND_wxUSE_REGEX_builtin@__INC_REGEX_p_65 = \
-@COND_wxUSE_REGEX_builtin@	--include-dir $(top_srcdir)/3rdparty/pcre/src
+@COND_wxUSE_REGEX_builtin@	--include-dir \
+@COND_wxUSE_REGEX_builtin@	$(top_srcdir)/3rdparty/pcre/src/wx
 @COND_wxUSE_EXPAT_builtin@__INC_EXPAT_p_65 = \
 @COND_wxUSE_EXPAT_builtin@	--include-dir $(top_srcdir)/src/expat/expat/lib
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_66 = --define __WXUNIVERSAL__
@@ -13888,7 +13888,8 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 @COND_wxUSE_LIBJPEG_builtin@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
 @COND_wxUSE_LIBPNG_builtin@__INC_PNG_p = -I$(top_srcdir)/src/png
 @COND_wxUSE_ZLIB_builtin@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
-@COND_wxUSE_REGEX_builtin@__INC_REGEX_p = -I$(top_srcdir)/3rdparty/pcre/src
+@COND_wxUSE_REGEX_builtin@__INC_REGEX_p = \
+@COND_wxUSE_REGEX_builtin@	-I$(top_srcdir)/3rdparty/pcre/src/wx
 @COND_wxUSE_EXPAT_builtin@__INC_EXPAT_p = \
 @COND_wxUSE_EXPAT_builtin@	-I$(top_srcdir)/src/expat/expat/lib
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__

@@ -19,7 +19,7 @@
         </set>
     </if>
     <set var="INC_REGEX">
-        <if cond="wxUSE_REGEX=='builtin'">$(TOP_SRCDIR)3rdparty/pcre/src</if>
+        <if cond="wxUSE_REGEX=='builtin'">$(TOP_SRCDIR)3rdparty/pcre/src/wx</if>
     </set>
 
     <lib id="wxregex" template="msvc_setup_h,3rdparty_lib"
@@ -32,7 +32,7 @@
         </libname>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
-        <include>$(INC_REGEX)/wx</include>
+        <include cond="FORMAT!='autoconf'">$(INC_REGEX)</include>
         <define>__WX__</define>
         <define>HAVE_CONFIG_H</define>
         <define>$(UNICODE_DEFINE)</define>
