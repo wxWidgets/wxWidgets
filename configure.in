@@ -2461,6 +2461,10 @@ if test "$wxUSE_REGEX" != "no"; then
             pcre_config_enable="--enable-pcre2-$pcre_suffix"
         fi
 
+        dnl We'll need to predefine this when building PCRE2.
+        wxPCRE2_CODE_UNIT_WIDTH=$pcre_suffix
+        AC_SUBST(wxPCRE2_CODE_UNIT_WIDTH)
+
         AX_SUBDIRS_CONFIGURE([3rdparty/pcre],
             [[$pcre_config_disable],[$pcre_config_enable]])
     fi

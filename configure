@@ -989,6 +989,7 @@ subdirs
 wxCFLAGS_C99
 LIBTIFF_LIBS
 LIBTIFF_CFLAGS
+wxPCRE2_CODE_UNIT_WIDTH
 LIBPCRE_LIBS
 LIBPCRE_CFLAGS
 PKG_CONFIG
@@ -21713,6 +21714,9 @@ $as_echo "yes" >&6; }
             pcre_config_disable="--disable-pcre2-8"
             pcre_config_enable="--enable-pcre2-$pcre_suffix"
         fi
+
+                wxPCRE2_CODE_UNIT_WIDTH=$pcre_suffix
+
 
 
 

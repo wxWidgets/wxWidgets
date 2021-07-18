@@ -4,6 +4,7 @@
 
     <if cond="FORMAT=='autoconf'">
         <option name="wxUSE_REGEX"/>
+        <option name="wxPCRE2_CODE_UNIT_WIDTH"/>
         <set var="LIB_REGEX">
             <if cond="wxUSE_REGEX=='builtin'">
                 wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -43,6 +44,7 @@
         <define>__WX__</define>
         <define>HAVE_CONFIG_H</define>
         <define>$(UNICODE_DEFINE)</define>
+        <define cond="FORMAT=='autoconf'">PCRE2_CODE_UNIT_WIDTH=$(wxPCRE2_CODE_UNIT_WIDTH)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
             3rdparty/pcre/src/pcre2_auto_possess.c
