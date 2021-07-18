@@ -38,8 +38,8 @@ if(wxUSE_REGEX)
         3rdparty/pcre/src/pcre2_xclass.c
         3rdparty/pcre/src/pcre2_chartables.c
     )
-    target_compile_definitions(wxregex PRIVATE __WX__ HAVE_CONFIG_H)
-    target_include_directories(wxregex PRIVATE ${wxSETUP_HEADER_PATH} ${wxSOURCE_DIR}/include)
     set(REGEX_LIBRARIES wxregex)
-    set(REGEX_INCLUDE_DIRS ${wxSOURCE_DIR}/3rdparty/pcre/src)
+    set(REGEX_INCLUDE_DIRS ${wxSOURCE_DIR}/3rdparty/pcre/src/wx)
+    target_compile_definitions(wxregex PRIVATE __WX__ HAVE_CONFIG_H)
+    target_include_directories(wxregex PRIVATE ${wxSETUP_HEADER_PATH} ${wxSOURCE_DIR}/include ${REGEX_INCLUDE_DIRS})
 endif()
