@@ -44,7 +44,9 @@ wxString AutoCaptureMechanism::default_dir = wxT("screenshots");
 /* static */
 wxString AutoCaptureMechanism::GetDefaultDirectoryAbsPath()
 {
-    return wxFileName::DirName(GetDefaultDirectory()).GetAbsolutePath();
+    wxFileName output = wxFileName::DirName(GetDefaultDirectory());
+    output.MakeAbsolute();
+    return output.GetFullPath();
 }
 
 /* static */

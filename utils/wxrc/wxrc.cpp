@@ -337,7 +337,9 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
     }
     if (!parOutput.empty())
     {
-        parOutput = wxFileName(parOutput).GetAbsolutePath();
+        wxFileName fn(parOutput);
+        fn.Normalize();
+        parOutput = fn.GetFullPath();
         parOutputPath = wxPathOnly(parOutput);
     }
     if (!parOutputPath) parOutputPath = wxT(".");

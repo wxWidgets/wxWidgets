@@ -1765,14 +1765,14 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
 
-    // Bring both paths to canonical form.
-    MakeAbsolute(cwd, format);
-    fnBase.MakeAbsolute(cwd, format);
-
-    // Do this here for compatibility, as we used to do it before.
-    Normalize(wxPATH_NORM_LONG, cwd, format);
-    fnBase.Normalize(wxPATH_NORM_LONG, cwd, format);
-
+    // Normalize both paths to be absolute but avoid expanding environment
+    // variables in them, this could be unexpected.
+    const int normFlags = wxPATH_NORM_DOTS |
+                          wxPATH_NORM_TILDE |
+                          wxPATH_NORM_ABSOLUTE |
+                          wxPATH_NORM_LONG;
+    Normalize(normFlags, cwd, format);
+    fnBase.Normalize(normFlags, cwd, format);
 
     bool withCase = IsCaseSensitive(format);
 
@@ -1841,20 +1841,8 @@ bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
-
-    // apply really all normalizations here
-    const int normAll =
-        wxPATH_NORM_ENV_VARS |
-        wxPATH_NORM_DOTS     |
-        wxPATH_NORM_TILDE    |
-        wxPATH_NORM_CASE     |
-        wxPATH_NORM_ABSOLUTE |
-        wxPATH_NORM_LONG     |
-        wxPATH_NORM_SHORTCUT
-        ;
-
-    fn1.Normalize(normAll, cwd, format);
-    fn2.Normalize(normAll, cwd, format);
+    fn1.Normalize(wxPATH_NORM_ALL | wxPATH_NORM_CASE, cwd, format);
+    fn2.Normalize(wxPATH_NORM_ALL | wxPATH_NORM_CASE, cwd, format);
 
     if ( fn1.GetFullPath() == fn2.GetFullPath() )
         return true;
@@ -2631,7 +2619,9 @@ static wxString EscapeFileNameCharsInURL(const char *in)
 // Returns the file URL for a native path
 wxString wxFileName::FileNameToURL(const wxFileName& filename)
 {
-    wxString url = filename.GetAbsolutePath(wxString(), wxPATH_NATIVE);
+    wxFileName fn = filename;
+    fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
+    wxString url = fn.GetFullPath(wxPATH_NATIVE);
 
 #ifndef __UNIX__
     // unc notation, wxMSW

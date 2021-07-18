@@ -36,10 +36,6 @@
 #include "testfile.h"
 #include "testdate.h"
 
-// Use a hack to keep using wxPATH_NORM_ALL in this test code without getting
-// deprecation warnings for it.
-#define wxPATH_NORM_ALL wxPATH_NORM_DEPR_OLD_DEFAULT
-
 // ----------------------------------------------------------------------------
 // test data
 // ----------------------------------------------------------------------------
@@ -205,8 +201,8 @@ TEST_CASE("wxFileName::Comparison", "[filename]")
 {
     wxFileName fn1(wxT("/tmp/file1"));
     wxFileName fn2(wxT("/tmp/dir2/../file2"));
-    fn1.MakeAbsolute();
-    fn2.MakeAbsolute();
+    fn1.Normalize();
+    fn2.Normalize();
     CHECK(fn1.GetPath() == fn2.GetPath());
 }
 
@@ -262,14 +258,6 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
     if (cwd.Contains(wxT(':')))
         cwd = cwd.AfterFirst(wxT(':'));
 
-    static const char* pathWithEnvVar =
-#ifdef __WINDOWS__
-        "%ABCDEF%/g/h/i"
-#else
-        "$(ABCDEF)/g/h/i"
-#endif
-        ;
-
     static const struct FileNameTest
     {
         const char *original;
@@ -279,7 +267,11 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
-        { pathWithEnvVar, wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
+#ifdef __WINDOWS__
+        { "%ABCDEF%/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
+#else
+        { "$(ABCDEF)/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
+#endif
 
         // test wxPATH_NORM_DOTS
         { "a/.././b/c/../../", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
@@ -325,9 +317,6 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
         { ".\\foo", wxPATH_NORM_LONG, ".\\foo", wxPATH_DOS },
         { "..\\Makefile.in", wxPATH_NORM_LONG, "..\\Makefile.in", wxPATH_DOS },
         { "..\\foo", wxPATH_NORM_LONG, "..\\foo", wxPATH_DOS },
-
-        // test default behaviour with deprecated wxPATH_NORM_ALL
-        { pathWithEnvVar, wxPATH_NORM_ALL, "CWD/abcdef/g/h/i", wxPATH_UNIX },
     };
 
     // set the env var ABCDEF
@@ -355,11 +344,6 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
             expected, fn.GetFullPath(fnt.fmt)
         );
     }
-
-    // Check that paths are made absolute, but environment variables are not
-    // expanded in them.
-    CHECK( wxFileName(pathWithEnvVar).GetAbsolutePath()
-            == wxFileName(wxGetCwd() + "/" + pathWithEnvVar).GetFullPath() );
 
     // MSW-only test for wxPATH_NORM_LONG: notice that we only run it if short
     // names generation is not disabled for this system as otherwise the file
