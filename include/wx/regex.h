@@ -144,9 +144,6 @@ public:
 
     static wxString QuoteMeta(const wxString& str);
 
-    // return the extended RE corresponding to the given basic RE
-    static wxString ConvertFromBasic(const wxString& bre);
-
     // dtor not virtual, don't derive from this class
     ~wxRegEx();
 

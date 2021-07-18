@@ -41,27 +41,31 @@
 
 // WXREGEX_USING_BUILTIN    defined when using the built-in regex lib
 // WXREGEX_USING_RE_SEARCH  defined when using re_search in the GNU regex lib
+// WXREGEX_IF_NEED_LEN()    wrap the len parameter only used with the built-in
+//                          or GNU regex
 // WXREGEX_CONVERT_TO_MB    defined when the regex lib is using chars and
-//                          wxChar is wide, so conversion to UTF-8 must be done
+//                          wxChar is wide, so conversion must be done
+// WXREGEX_CHAR(x)          Convert wxChar to wxRegChar
 //
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
+#   define WXREGEX_IF_NEED_LEN(x) ,x
+#   if wxUSE_UNICODE
+#       define WXREGEX_CHAR(x) (x).wc_str()
+#   else
+#       define WXREGEX_CHAR(x) (x).mb_str()
+#   endif
 #else
 #   ifdef HAVE_RE_SEARCH
+#       define WXREGEX_IF_NEED_LEN(x) ,x
 #       define WXREGEX_USING_RE_SEARCH
 #   else
-        // We can't use length, so just drop it in this wrapper.
-        inline int
-        wx_regexec(const regex_t* preg, const char* string, size_t,
-                   size_t nmatch, regmatch_t* pmatch, int eflags)
-        {
-            return regexec(preg, string, nmatch, pmatch, eflags);
-        }
+#       define WXREGEX_IF_NEED_LEN(x)
 #   endif
 #   if wxUSE_UNICODE
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
-#   define wx_regcomp regcomp
+#   define WXREGEX_CHAR(x) (x).mb_str()
 #   define wx_regfree regfree
 #   define wx_regerror regerror
 #endif
@@ -153,7 +157,8 @@ public:
 
     // RE operations
     bool Compile(const wxString& expr, int flags = 0);
-    bool Matches(const wxRegChar *str, int flags, size_t len) const;
+    bool Matches(const wxRegChar *str, int flags
+                 WXREGEX_IF_NEED_LEN(size_t len)) const;
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
     size_t GetMatchCount() const;
     int Replace(wxString *pattern, const wxString& replacement,
@@ -161,7 +166,7 @@ public:
 
 private:
     // return the string containing the error message for the given err code
-    wxString GetErrorMsg(int errorcode) const;
+    wxString GetErrorMsg(int errorcode, bool badconv) const;
 
     // init the members
     void Init()
@@ -219,302 +224,38 @@ wxRegExImpl::~wxRegExImpl()
     Free();
 }
 
-wxString wxRegExImpl::GetErrorMsg(int errorcode) const
+wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
 {
+#ifdef WXREGEX_CONVERT_TO_MB
+    // currently only needed when using system library in Unicode mode
+    if ( badconv )
+    {
+        return _("conversion to 8-bit encoding failed");
+    }
+#else
+    // 'use' badconv to avoid a compiler warning
+    (void)badconv;
+#endif
+
     wxString szError;
 
     // first get the string length needed
     int len = wx_regerror(errorcode, &m_RegEx, NULL, 0);
     if ( len > 0 )
     {
-        wxCharBuffer errbuf(len);
+        char* szcmbError = new char[++len];
 
-        (void)wx_regerror(errorcode, &m_RegEx, errbuf.data(), errbuf.length());
+        (void)wx_regerror(errorcode, &m_RegEx, szcmbError, len);
 
-        szError = wxConvLibc.cMB2WX(errbuf);
+        szError = wxConvLibc.cMB2WX(szcmbError);
+        delete [] szcmbError;
     }
-
-    if ( szError.empty() ) // regerror() returned 0 or conversion failed
+    else // regerror() returned 0
     {
         szError = _("unknown error");
     }
 
     return szError;
-}
-
-// Helper function for processing bracket expressions inside a regex.
-//
-// Advance the iterator until the closing bracket matching the opening one the
-// iterator currently points to, i.e.:
-//
-// Precondition: *it == '['
-// Postcondition: *it == ']' or it == end if failed to find matching ']'
-static
-wxString::const_iterator
-SkipBracketExpression(wxString::const_iterator it, wxString::const_iterator end)
-{
-    wxASSERT_MSG( *it == '[', "must be at the start of bracket expression" );
-
-    // Initial ']', possibly after the preceding '^', is different because it
-    // stands for a literal ']' and not the end of the bracket expression, so
-    // check for it first.
-    ++it;
-    if ( it != end && *it == '^' )
-        ++it;
-    if ( it != end && *it == ']' )
-        ++it;
-
-    // Any ']' from now on ends the bracket expression.
-    for ( ; it != end; ++it )
-    {
-        const wxUniChar c = *it;
-
-        if ( c == ']' )
-            break;
-
-        if ( c == '[' )
-        {
-            // Bare '[' on its own is not special, but collating elements and
-            // character classes are, so check for them and advance past them
-            // if necessary to avoid misinterpreting the matching closing ']'.
-            if ( ++it == end )
-                break;
-
-            const wxUniChar c2 = *it;
-            if ( c2 == ':' || c2 == '.' || c2 == '=' )
-            {
-                for ( ++it; it != end; ++it )
-                {
-                    if ( *it == c2 )
-                    {
-                        if ( ++it == end )
-                            break;
-
-                        if ( *it == ']' )
-                            break;
-                    }
-                }
-
-                if ( it == end )
-                    break;
-            }
-        }
-    }
-
-    return it;
-}
-
-/* static */
-wxString wxRegEx::ConvertFromBasic(const wxString& bre)
-{
-    /*
-        Quoting regex(7):
-
-        Obsolete ("basic") regular expressions differ in several respects.
-        '|', '+', and '?' are ordinary characters and there is no equivalent
-        for their functionality. The delimiters for bounds are "\{" and "\}",
-        with '{' and '}' by themselves ordinary characters. The parentheses
-        for nested subexpressions are "\(" and "\)", with '(' and ')' by
-        themselves ordinary characters. '^' is an ordinary character except at
-        the beginning of the RE or(!) the beginning of a parenthesized
-        subexpression, '$' is an ordinary character except at the end of the RE
-        or(!) the end of a parenthesized subexpression, and '*' is an ordinary
-        character if it appears at the beginning of the RE or the beginning of
-        a parenthesized subexpression (after a possible leading '^').
-
-        Finally, there is one new type of atom, a back reference: '\' followed
-        by a nonzero decimal digit d matches the same sequence of characters
-        matched by the dth parenthesized subexpression [...]
-     */
-    wxString ere;
-    ere.reserve(bre.length());
-
-    enum SinceStart
-    {
-        SinceStart_None,        // Just at the beginning.
-        SinceStart_OnlyCaret,   // Had just "^" since the beginning.
-        SinceStart_Some         // Had something else since the beginning.
-    };
-
-    struct State
-    {
-        explicit State(SinceStart sinceStart_)
-        {
-            isBackslash = false;
-            sinceStart = sinceStart_;
-        }
-
-        bool isBackslash;
-        SinceStart sinceStart;
-    };
-
-    State previous(SinceStart_None);
-    for ( wxString::const_iterator it = bre.begin(),
-                                  end = bre.end();
-          it != end;
-          ++it )
-    {
-        const wxUniChar c = *it;
-
-        // What should be done with the current character?
-        enum Disposition
-        {
-            Disposition_Skip,   // Nothing.
-            Disposition_Append, // Append to output.
-            Disposition_Escape  // ... after escaping it with backslash.
-        } disposition = Disposition_Append;
-
-        State current(SinceStart_Some);
-
-        if ( previous.isBackslash )
-        {
-            // By default, keep the backslash present in the BRE, it's still
-            // needed in the ERE too.
-            disposition = Disposition_Escape;
-
-            switch ( c.GetValue() )
-            {
-                case '(':
-                    // It's the start of a new subexpression.
-                    current.sinceStart = SinceStart_None;
-                    wxFALLTHROUGH;
-
-                case ')':
-                case '{':
-                case '}':
-                    // Do not escape to ensure they remain special in the ERE
-                    // as the escaped versions were special in the BRE.
-                    disposition = Disposition_Append;
-                    break;
-            }
-        }
-        else // This character is not escaped.
-        {
-            switch ( c.GetValue() )
-            {
-                case '\\':
-                    current.isBackslash = true;
-
-                    // Don't do anything with it yet, we'll deal with it later.
-                    disposition = Disposition_Skip;
-                    break;
-
-                case '^':
-                    // Escape unless it appears at the start.
-                    switch ( previous.sinceStart )
-                    {
-                        case SinceStart_None:
-                            // Don't escape, but do update the state.
-                            current.sinceStart = SinceStart_OnlyCaret;
-                            break;
-
-                        case SinceStart_OnlyCaret:
-                        case SinceStart_Some:
-                            disposition = Disposition_Escape;
-                            break;
-                    }
-                    break;
-
-                case '*':
-                    // Escape unless it appears at the start or right after "^".
-                    switch ( previous.sinceStart )
-                    {
-                        case SinceStart_None:
-                        case SinceStart_OnlyCaret:
-                            disposition = Disposition_Escape;
-                            break;
-
-                        case SinceStart_Some:
-                            break;
-                    }
-                    break;
-
-                case '$':
-                    // Escape unless it appears at the end or just before "\)".
-                    disposition = Disposition_Escape;
-                    {
-                        wxString::const_iterator next = it;
-                        ++next;
-                        if ( next == end )
-                        {
-                            // It is at the end, so has special meaning.
-                            disposition = Disposition_Append;
-                        }
-                        else // Not at the end, but maybe at subexpression end?
-                        {
-                            if ( *next == '\\' )
-                            {
-                                ++next;
-                                if ( next != end && *next == ')' )
-                                    disposition = Disposition_Append;
-                            }
-                        }
-                    }
-                    break;
-
-                case '|':
-                case '+':
-                case '?':
-                case '(':
-                case ')':
-                case '{':
-                case '}':
-                    // Escape these characters which are not special in a BRE,
-                    // but would be special in a ERE if left unescaped.
-                    disposition = Disposition_Escape;
-                    break;
-
-                case '[':
-                    // Rules are very different for the characters inside the
-                    // bracket expressions and we don't have to change anything
-                    // for them as the syntax is the same for BREs and EREs, so
-                    // just process the entire expression at once.
-                    {
-                        const wxString::const_iterator start = it;
-                        it = SkipBracketExpression(it, end);
-
-                        // Copy everything inside without any changes.
-                        ere += wxString(start, it);
-
-                        if ( it == end )
-                        {
-                            // If we reached the end without finding the
-                            // matching ']' there is nothing remaining anyhow.
-                            return ere;
-                        }
-
-                        // Note that default Disposition_Append here is fine,
-                        // we'll append the closing ']' to "ere" below.
-                    }
-                    break;
-            }
-        }
-
-        switch ( disposition )
-        {
-            case Disposition_Skip:
-                break;
-
-            case Disposition_Escape:
-                ere += '\\';
-                wxFALLTHROUGH;
-
-            case Disposition_Append:
-                // Note: don't use "c" here, iterator may have been advanced
-                // inside the loop.
-                ere += *it;
-                break;
-        }
-
-        previous = current;
-    }
-
-    // It's an error if a RE ends with a backslash, but we still need to
-    // preserve this error in the resulting RE.
-    if ( previous.isBackslash )
-        ere += '\\';
-
-    return ere;
 }
 
 bool wxRegExImpl::Compile(const wxString& expr, int flags)
@@ -549,24 +290,22 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     if ( flags & wxRE_NEWLINE )
         flagsRE |= REG_NEWLINE;
 
-#ifndef WXREGEX_CONVERT_TO_MB
-    const wxChar *exprstr = expr.c_str();
-#else
-    const wxScopedCharBuffer exprbuf = expr.utf8_str();
-    const char* const exprstr = exprbuf.data();
-#endif
-
     // compile it
 #ifdef WXREGEX_USING_BUILTIN
-    int errorcode = wx_re_comp(&m_RegEx, exprstr, expr.length(), flagsRE);
+    bool conv = true;
+    // FIXME-UTF8: use wc_str() after removing ANSI build
+    int errorcode = wx_re_comp(&m_RegEx, expr.c_str(), expr.length(), flagsRE);
 #else
-    int errorcode = wx_regcomp(&m_RegEx, exprstr, flagsRE);
+    // FIXME-UTF8: this is potentially broken, we shouldn't even try it
+    //             and should always use builtin regex library (or PCRE?)
+    const wxWX2MBbuf conv = expr.mbc_str();
+    int errorcode = conv ? regcomp(&m_RegEx, conv, flagsRE) : REG_BADPAT;
 #endif
 
     if ( errorcode )
     {
         wxLogError(_("Invalid regular expression '%s': %s"),
-                   expr, GetErrorMsg(errorcode));
+                   expr.c_str(), GetErrorMsg(errorcode, !conv).c_str());
 
         m_isCompiled = false;
     }
@@ -645,8 +384,8 @@ static int ReSearch(const regex_t *preg,
 #endif // WXREGEX_USING_RE_SEARCH
 
 bool wxRegExImpl::Matches(const wxRegChar *str,
-                          int flags,
-                          size_t len) const
+                          int flags
+                          WXREGEX_IF_NEED_LEN(size_t len)) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
@@ -673,9 +412,9 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
 #if defined WXREGEX_USING_BUILTIN
     int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, matches, flagsRE);
 #elif defined WXREGEX_USING_RE_SEARCH
-    int rc = ReSearch(&self->m_RegEx, str, len, matches, flagsRE);
+    int rc = str ? ReSearch(&self->m_RegEx, str, len, matches, flagsRE) : REG_BADPAT;
 #else
-    int rc = wx_regexec(&self->m_RegEx, str, len, m_nMatches, matches, flagsRE);
+    int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, matches, flagsRE) : REG_BADPAT;
 #endif
 
     switch ( rc )
@@ -687,7 +426,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
         default:
             // an error occurred
             wxLogError(_("Failed to find match for regular expression: %s"),
-                       GetErrorMsg(rc));
+                       GetErrorMsg(rc, !str).c_str());
             wxFALLTHROUGH;
 
         case REG_NOMATCH:
@@ -731,9 +470,15 @@ int wxRegExImpl::Replace(wxString *text,
     const wxChar *textstr = text->c_str();
     size_t textlen = text->length();
 #else
-    const wxScopedCharBuffer textbuf = text->utf8_str();
-    const char* const textstr = textbuf.data();
-    size_t textlen = textbuf.length();
+    const wxWX2MBbuf textstr = WXREGEX_CHAR(*text);
+    if (!textstr)
+    {
+        wxLogError(_("Failed to find match for regular expression: %s"),
+                   GetErrorMsg(0, true).c_str());
+        return 0;
+    }
+    size_t textlen = strlen(textstr);
+    text->clear();
 #endif
 
     // the replacement text
@@ -763,9 +508,14 @@ int wxRegExImpl::Replace(wxString *text,
     // note that "^" shouldn't match after the first call to Matches() so we
     // use wxRE_NOTBOL to prevent it from happening
     while ( (!maxMatches || countRepl < maxMatches) &&
-             Matches(textstr + matchStart,
-                     countRepl ? wxRE_NOTBOL : 0,
-                     textlen - matchStart) )
+             Matches(
+#ifndef WXREGEX_CONVERT_TO_MB
+                    textstr + matchStart,
+#else
+                    textstr.data() + matchStart,
+#endif
+                    countRepl ? wxRE_NOTBOL : 0
+                    WXREGEX_IF_NEED_LEN(textlen - matchStart)) )
     {
         // the string possibly contains back references: we need to calculate
         // the replacement text anew after each match
@@ -809,8 +559,14 @@ int wxRegExImpl::Replace(wxString *text,
                     }
                     else
                     {
-                        textNew += wxString(textstr + matchStart + start,
-                                            wxConvUTF8, len);
+                        textNew += wxString(
+#ifndef WXREGEX_CONVERT_TO_MB
+                                textstr
+#else
+                                textstr.data()
+#endif
+                                + matchStart + start,
+                                *wxConvCurrent, len);
 
                         mayHaveBackrefs = true;
                     }
@@ -836,7 +592,11 @@ int wxRegExImpl::Replace(wxString *text,
         if (result.capacity() < result.length() + start + textNew.length())
             result.reserve(2 * result.length());
 
-        result.append(wxString(textstr + matchStart, wxConvUTF8, start));
+#ifndef WXREGEX_CONVERT_TO_MB
+        result.append(*text, matchStart, start);
+#else
+        result.append(wxString(textstr.data() + matchStart, *wxConvCurrent, start));
+#endif
         matchStart += start;
         result.append(textNew);
 
@@ -845,7 +605,11 @@ int wxRegExImpl::Replace(wxString *text,
         matchStart += len;
     }
 
-    result.append(wxString(textstr + matchStart, wxConvUTF8));
+#ifndef WXREGEX_CONVERT_TO_MB
+    result.append(*text, matchStart, wxString::npos);
+#else
+    result.append(wxString(textstr.data() + matchStart, *wxConvCurrent));
+#endif
     *text = result;
 
     return countRepl;
@@ -887,15 +651,8 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
-#ifndef WXREGEX_CONVERT_TO_MB
-    const wxChar* const textstr = str.c_str();
-    const size_t textlen = str.length();
-#else
-    const wxScopedCharBuffer textstr = str.utf8_str();
-    const size_t textlen = textstr.length();
-#endif
-
-    return m_impl->Matches(textstr, flags, textlen);
+    return m_impl->Matches(WXREGEX_CHAR(str), flags
+                            WXREGEX_IF_NEED_LEN(str.length()));
 }
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
@@ -911,11 +668,7 @@ wxString wxRegEx::GetMatch(const wxString& text, size_t index) const
     if ( !GetMatch(&start, &len, index) )
         return wxEmptyString;
 
-#ifndef WXREGEX_CONVERT_TO_MB
     return text.Mid(start, len);
-#else
-    return wxString::FromUTF8(text.utf8_str().data() + start, len);
-#endif
 }
 
 size_t wxRegEx::GetMatchCount() const

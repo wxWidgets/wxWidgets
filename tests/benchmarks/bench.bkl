@@ -16,7 +16,6 @@
             ipcclient.cpp
             log.cpp
             mbconv.cpp
-            regex.cpp
             strings.cpp
             tls.cpp
             printfbench.cpp
