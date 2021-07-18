@@ -468,6 +468,12 @@ CheckRE(
         const char *expected,
         ...)
 {
+#if !wxUSE_UNICODE
+    // Skip tests requiring Unicode support, we can't do anything else.
+    if ( *data != '\0' && wxString::FromUTF8(data).empty() )
+        return;
+#endif // wxUSE_UNICODE
+
     vector<const char *> expected_results;
     va_list ap;
 
