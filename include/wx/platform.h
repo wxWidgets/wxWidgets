@@ -415,6 +415,7 @@
 #ifdef __WXOSX__
 /* setup precise defines according to sdk used */
 #   include <TargetConditionals.h>
+#   include <Availability.h>
 #   if defined(__WXOSX_IPHONE__)
 #       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
 #           error "incorrect SDK for an iPhone build"
