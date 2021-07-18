@@ -10,10 +10,8 @@
                 wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
             </if>
         </set>
-        <set var="INC_REGEX">
-            <if cond="wxUSE_REGEX=='builtin'">
-                $(wx_top_builddir)/3rdparty/pcre/src
-            </if>
+        <set var="INC_REGEX_BUILD">
+            $(wx_top_builddir)/3rdparty/pcre/src
         </set>
     </if>
     <if cond="FORMAT!='autoconf'">
@@ -23,12 +21,13 @@
                 wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(HOST_SUFFIX)
             </if>
         </set>
-        <set var="INC_REGEX">
-            <if cond="wxUSE_REGEX=='builtin'">
-                $(TOP_SRCDIR)3rdparty/pcre/src/wx
-            </if>
-        </set>
     </if>
+
+    <set var="INC_REGEX">
+        <if cond="wxUSE_REGEX=='builtin'">
+            $(TOP_SRCDIR)3rdparty/pcre/src/wx
+        </if>
+    </set>
 
     <lib id="wxregex" template="msvc_setup_h,3rdparty_lib"
          cond="wxUSE_REGEX=='builtin' and BUILDING_LIB=='1'">
@@ -40,7 +39,8 @@
         </libname>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
-        <include>$(INC_REGEX)</include>
+        <include cond="FORMAT!='autoconf'">$(INC_REGEX)</include>
+        <include cond="FORMAT=='autoconf'">$(INC_REGEX_BUILD)</include>
         <define>__WX__</define>
         <define>HAVE_CONFIG_H</define>
         <define>$(UNICODE_DEFINE)</define>
