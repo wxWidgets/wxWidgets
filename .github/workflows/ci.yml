@@ -206,7 +206,8 @@ jobs:
             export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
           fi
           ulimit -c unlimited
-          /bin/bash -o pipefail -c 'xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui -d 1 2>&1 | tee test_gui.out' || rc=$?
+          xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui -d 1 TreeCtrlTestCase
+          /bin/bash -o pipefail -c 'xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui -d 1 "~[TreeCtrlTestCase]~[.]" 2>&1 | tee test_gui.out' || rc=$?
           if [ -n "$rc" ]; then
             if fgrep -q '(core dumped)' test_gui.out; then
                 echo '*** Test crashed, trying to get more information ***'
