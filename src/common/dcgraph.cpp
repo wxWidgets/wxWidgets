@@ -420,7 +420,9 @@ void wxGCDCImpl::DestroyClippingRegion()
 #ifdef __WXOSX__
     origin = OSXGetOrigin();
 #endif
-    m_graphicContext->Clip( DeviceToLogicalX(origin.x) , DeviceToLogicalY(origin.y) , DeviceToLogicalXRel(width), DeviceToLogicalYRel(height) );
+    wxPoint clipOrig = DeviceToLogical(origin.x, origin.y);
+    wxSize clipDim = DeviceToLogicalRel(width, height);
+    m_graphicContext->Clip(clipOrig.x, clipOrig.y, clipDim.x, clipDim.y);
 
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
