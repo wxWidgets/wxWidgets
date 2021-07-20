@@ -6096,6 +6096,8 @@ if test "$wxUSE_XLOCALE" = "yes" ; then
         [
         locale_t t;
         strtod_l(NULL, NULL, t);
+        strtol_l(NULL, NULL, 0, t);
+        strtoul_l(NULL, NULL, 0, t);
         ],
         wx_cv_type_locale_t=yes,
         wx_cv_type_locale_t=no

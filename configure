@@ -35180,6 +35180,8 @@ main ()
 
         locale_t t;
         strtod_l(NULL, NULL, t);
+        strtol_l(NULL, NULL, 0, t);
+        strtoul_l(NULL, NULL, 0, t);
 
   ;
   return 0;
