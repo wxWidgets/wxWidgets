@@ -355,7 +355,18 @@ bool wxGCDCImpl::DoGetClippingRect(wxRect& rect) const
         self->UpdateClipBox();
     }
 
-    return wxDCImpl::DoGetClippingRect(rect);
+    // We shouldn't call wxDCImpl::DoGetClippingRect() here
+    // because it wouldn't return the correct result if there is
+    // affine transformation applied to this DC, as the base
+    // class is not aware of affine transformations.
+    // We can just use the value returned by our UpdateClipBox()
+    // which is already correct.
+    if ( m_clipX1 == m_clipX2 || m_clipY1 == m_clipY2 )
+        rect = wxRect(); // empty clip region
+    else
+        rect = wxRect(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
+
+    return m_clipping;
 }
 
 void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
