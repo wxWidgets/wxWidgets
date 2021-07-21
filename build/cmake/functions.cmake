@@ -97,9 +97,9 @@ function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
 
     set_target_properties(${target_name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
-        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
-        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
+        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}$<1:/>${wxPLATFORM_LIB_DIR}"
+        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}$<1:/>${wxPLATFORM_LIB_DIR}"
+        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}$<1:/>${wxPLATFORM_LIB_DIR}"
         )
 
     if(wxBUILD_PIC)
@@ -292,13 +292,14 @@ function(wx_set_target_properties target_name is_base)
     target_include_directories(${target_name}
         BEFORE
         PUBLIC
-            ${wxSETUP_HEADER_PATH}
-            ${wxSOURCE_DIR}/include
+            $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
+            $<BUILD_INTERFACE:${wxSOURCE_DIR}/include>
+            $<INSTALL_INTERFACE:include>
         )
 
     if(wxTOOLKIT_INCLUDE_DIRS)
         target_include_directories(${target_name}
-            PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
+            PUBLIC $<BUILD_INTERFACE:${wxTOOLKIT_INCLUDE_DIRS}>)
     endif()
 
     if (WIN32)
@@ -417,11 +418,14 @@ macro(wx_add_library name)
             set(runtime_dir "bin")
         endif()
         wx_install(TARGETS ${name}
-            LIBRARY DESTINATION "lib${wxPLATFORM_LIB_DIR}"
-            ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}"
-            RUNTIME DESTINATION "${runtime_dir}${wxPLATFORM_LIB_DIR}"
+            EXPORT ${name}Targets
+            LIBRARY DESTINATION "lib$<1:/>${wxPLATFORM_LIB_DIR}"
+            ARCHIVE DESTINATION "lib$<1:/>${wxPLATFORM_LIB_DIR}"
+            RUNTIME DESTINATION "${runtime_dir}$<1:/>${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
+            
+        install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION lib/${wxPLATFORM_LIB_DIR}/cmake)
     endif()
 endmacro()
 
@@ -498,7 +502,15 @@ macro(wx_lib_include_directories name)
         if (_LIB_INCLUDE_DIRS_PRIVATE)
             set(INCLUDE_POS BEFORE)
         endif()
-        target_include_directories(${name};${INCLUDE_POS};${ARGN})
+        if (_LIB_INCLUDE_DIRS_PUBLIC)
+            foreach (PUBLIC_DIR ${_LIB_INCLUDE_DIRS_PUBLIC})
+                target_include_directories(${name};PUBLIC;$<BUILD_INTERFACE:${PUBLIC_DIR}>)
+            endforeach()
+        endif()
+        if (_LIB_INCLUDE_DIRS_PRIVATE)
+            target_include_directories(${name};BEFORE;PRIVATE;${_LIB_INCLUDE_DIRS_PRIVATE})
+        endif()
+        target_include_directories(${name};PUBLIC;$<INSTALL_INTERFACE:include>)
     endif()
 endmacro()
 
@@ -563,7 +575,8 @@ function(wx_set_builtin_target_properties target_name)
     target_include_directories(${target_name}
         BEFORE
         PUBLIC
-            ${wxSETUP_HEADER_PATH}
+            $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
+            $<INSTALL_INTERFACE:include>
         )
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
@@ -574,7 +587,11 @@ function(wx_set_builtin_target_properties target_name)
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
-        wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}")
+        # Only install if we build as static libraries
+        wx_install(TARGETS ${name} EXPORT ${name}Targets
+            ARCHIVE DESTINATION "lib$<1:/>${wxPLATFORM_LIB_DIR}"
+            )
+        wx_install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION lib/${wxPLATFORM_LIB_DIR}/cmake)
     endif()
 endfunction()
 
@@ -628,14 +645,6 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
         if(NOT ${${lib_name_upper}_FOUND})
             wx_option_force_value(${var_name} builtin)
         endif()
-    endif()
-
-    if(${var_name} STREQUAL "builtin" AND NOT wxBUILD_SHARED)
-        # Only install if we build as static libraries
-        wx_install(TARGETS ${target_name}
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
-            )
     endif()
 
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} ${var_name} "${help_str}" PARENT_SCOPE)

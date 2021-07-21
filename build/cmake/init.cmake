@@ -153,8 +153,7 @@ if(WIN32_MSVC_NAMING)
         set(lib_suffix "_lib")
     endif()
 
-    # Include generator expression to suppress default Debug/Release pair
-    set(wxPLATFORM_LIB_DIR "$<1:/>${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}${lib_suffix}")
+    set(wxPLATFORM_LIB_DIR "${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}${lib_suffix}")
 endif()
 
 if(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
@@ -171,7 +170,7 @@ else()
             set(lib_unicode)
         endif()
         set(wxSETUP_HEADER_PATH
-            ${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}${lib_suffix}/${wxBUILD_TOOLKIT}${lib_unicode})
+            ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode})
         file(MAKE_DIRECTORY ${wxSETUP_HEADER_PATH}/wx)
         file(MAKE_DIRECTORY ${wxSETUP_HEADER_PATH}d/wx)
         set(wxSETUP_HEADER_FILE_DEBUG ${wxSETUP_HEADER_PATH}d/wx/setup.h)
