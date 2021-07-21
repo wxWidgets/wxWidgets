@@ -284,6 +284,8 @@ static void FlushDC(wxDC& dc)
             dc.SetGraphicsContext(NULL);
 #endif // __WXMSW__ && wxUSE_GRAPHICS_DIRECT2D
     }
+#else
+    wxUnusedVar(dc);
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
 
