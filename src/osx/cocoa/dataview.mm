@@ -364,7 +364,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     int resizingMask;
     if (column->IsResizeable())
     {
-        resizingMask = NSTableColumnUserResizingMask | NSTableColumnAutoresizingMask;
+        resizingMask = NSTableColumnUserResizingMask;
         [nativeColumn setMinWidth:column->GetMinWidth()];
         [nativeColumn setMaxWidth:column->GetMaxWidth()];
     }
@@ -2092,7 +2092,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
       ),
       m_DataSource(NULL),
       m_OutlineView([[wxCocoaOutlineView alloc] init]),
-      m_expanderWidth(0)
+      m_expanderWidth(-1)
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2240,7 +2240,7 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
     return true;
 }
 
-void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
+void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos, bool fitRowHeight)
 {
     const int count = GetCount();
     wxDataViewColumnNativeData *nativeData = GetColumn(pos)->GetNativeData();
@@ -2257,7 +2257,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
               m_view(view),
               m_column(columnIndex),
               m_indent(0),
-              m_expander(0),
+              m_expander(-1),
               m_tableColumn(column)
         {
             // account for indentation in the column with expander
@@ -2279,7 +2279,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
             if ( m_indent )
                 cellWidth += m_indent * [m_view levelForRow:row];
 
-            if ( m_expander == 0 && m_tableColumn == [m_view outlineTableColumn] )
+            if ( m_expander == -1 && m_tableColumn == [m_view outlineTableColumn] )
             {
                 NSRect rc = [m_view frameOfOutlineCellAtRow:row];
                 m_expander = ceil(rc.origin.x + rc.size.width);
@@ -2305,6 +2305,10 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 
     MaxWidthCalculator calculator(m_OutlineView, column, pos);
 
+    bool calculateAllRows = fitRowHeight || ((GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE)
+        || (m_expanderWidth == -1 && column == [m_OutlineView outlineTableColumn]));
+
+
     if ( [column headerCell] )
     {
         calculator.UpdateWithWidth(ceil([[column headerCell] cellSize].width));
@@ -2320,63 +2324,70 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
     // visible miscalculations, we also include all currently visible items
     // no matter what.  Finally, the value of N is determined dynamically by
     // measuring how much time we spent on the determining item widths so far.
-
+    if (calculateAllRows)
+    {
 #if wxUSE_STOPWATCH
-    int top_part_end = count;
-    static const long CALC_TIMEOUT = 20/*ms*/;
-    // don't call wxStopWatch::Time() too often
-    static const unsigned CALC_CHECK_FREQ = 100;
-    wxStopWatch timer;
+        int top_part_end = count;
+        static const long CALC_TIMEOUT = 20/*ms*/;
+        // don't call wxStopWatch::Time() too often
+        static const unsigned CALC_CHECK_FREQ = 100;
+        wxStopWatch timer;
 #else
-    // use some hard-coded limit, that's the best we can do without timer
-    int top_part_end = wxMin(500, count);
+        // use some hard-coded limit, that's the best we can do without timer
+        int top_part_end = wxMin(500, count);
 #endif // wxUSE_STOPWATCH/!wxUSE_STOPWATCH
 
-    int row = 0;
+        int row = 0;
 
-    for ( row = 0; row < top_part_end; row++ )
-    {
+        for ( row = 0; row < top_part_end; row++ )
+        {
 #if wxUSE_STOPWATCH
-        if ( row % CALC_CHECK_FREQ == CALC_CHECK_FREQ-1 &&
-             timer.Time() > CALC_TIMEOUT )
-            break;
+            if ( row % CALC_CHECK_FREQ == CALC_CHECK_FREQ-1 &&
+                timer.Time() > CALC_TIMEOUT )
+                break;
 #endif // wxUSE_STOPWATCH
-        calculator.UpdateWithRow(row);
-    }
-
-    // row is the first unmeasured item now; that's our value of N/2
-
-    if ( row < count )
-    {
-        top_part_end = row;
-
-        // add bottom N/2 items now:
-        const int bottom_part_start = wxMax(row, count - row);
-        for ( row = bottom_part_start; row < count; row++ )
             calculator.UpdateWithRow(row);
+        }
 
-        // finally, include currently visible items in the calculation:
-        const NSRange visible = [m_OutlineView rowsInRect:[m_OutlineView visibleRect]];
-        const int first_visible = wxMax(visible.location, top_part_end);
-        const int last_visible = wxMin(first_visible + visible.length, bottom_part_start);
+        // row is the first unmeasured item now; that's our value of N/2
 
-        for ( row = first_visible; row < last_visible; row++ )
-            calculator.UpdateWithRow(row);
+        if ( row < count )
+        {
+            top_part_end = row;
 
-        wxLogTrace("dataview",
-                   "determined best size from %d top, %d bottom plus %d more visible items out of %d total",
-                   top_part_end,
-                   count - bottom_part_start,
-                   wxMax(0, last_visible - first_visible),
-                   count);
+            // add bottom N/2 items now:
+            const int bottom_part_start = wxMax(row, count - row);
+            for ( row = bottom_part_start; row < count; row++ )
+                calculator.UpdateWithRow(row);
+
+            // finally, include currently visible items in the calculation:
+            const NSRange visible = [m_OutlineView rowsInRect:[m_OutlineView visibleRect]];
+            const int first_visible = wxMax(visible.location, top_part_end);
+            const int last_visible = wxMin(first_visible + visible.length, bottom_part_start);
+
+            for ( row = first_visible; row < last_visible; row++ )
+                calculator.UpdateWithRow(row);
+
+            wxLogTrace("dataview",
+                       "determined best size from %d top, %d bottom plus %d more visible items out of %d total",
+                       top_part_end,
+                       count - bottom_part_start,
+                       wxMax(0, last_visible - first_visible),
+                       count);
+        }
     }
-
     // there might not necessarily be an expander in the rows we've examined above so let's
     // globally store the expander width for re-use because it should always be the same
-    if ( m_expanderWidth == 0 )
+    if ( m_expanderWidth == -1 )
         m_expanderWidth = calculator.GetExpanderWidth();
 
     const bool isLast = pos == noOfColumns - 1;
+
+    int autoWidth = calculator.GetMaxWidth();
+    if (m_expanderWidth != -1 && column == [m_OutlineView outlineTableColumn])
+    {
+        autoWidth += m_expanderWidth;
+    }
 
     if ( isLast )
     {
@@ -2389,17 +2400,34 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
         // previous width in that case because it must not get lost.
         nativeData->SetPrevWidth(GetColumn(pos)->GetWidth());
 
-        [m_OutlineView sizeLastColumnToFit];
+        // Compute the remaining space for the last column; note that we
+        // deliberately don't use sizeLastColumnToFit() because it causes a
+        // refresh of the NSTableView; using sizeLastColumnToFit() would also
+        // require us to temporarily enable NSTableColumnAutoresizingMask on
+        // the NSTableColumn because it doesn't seem to work without it
+        NSSize size = [[m_OutlineView superview] bounds].size;
+        size.width -= (noOfColumns * [m_OutlineView intercellSpacing].width);
+        for ( UInt32 k = 0; k < noOfColumns - 1; k++ ) {
+            NSTableColumn *c = GetColumn(k)->GetNativeData()->GetNativeColumnPtr();
+            size.width -= [c width];
+        }
+        
+        int lastColWidth = ceil(size.width);
+           
+        if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE && autoWidth > lastColWidth ) lastColWidth = autoWidth;
+
+        if ( lastColWidth > 0 )
+            [column setWidth:lastColWidth];
     }
     else if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
     {
-        [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
+        [column setWidth:autoWidth];
     }
     else if ( nativeData->GetIsLast() )
     {
         [column setWidth:nativeData->GetPrevWidth()];
     }
-
+        
     nativeData->SetIsLast(isLast);
 
     if ( !(GetDataViewCtrl()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) )
@@ -2733,6 +2761,9 @@ void wxCocoaDataViewControl::SetRowHeight(int height)
 {
     [m_OutlineView setRowHeight:wxMax(height, GetDefaultRowHeight())];
 }
+int wxCocoaDataViewControl::GetRowHeight() {
+    return ceil([m_OutlineView rowHeight]);
+}
 
 int wxCocoaDataViewControl::GetDefaultRowHeight() const
 {
@@ -2753,7 +2784,10 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 
 void wxCocoaDataViewControl::OnSize()
 {
-    [m_OutlineView sizeLastColumnToFit];
+    UInt32 const noOfColumns = [[m_OutlineView tableColumns] count];
+    if (noOfColumns) {
+        FitColumnWidthToContent(noOfColumns - 1);
+    }
 }
 
 //
@@ -3872,7 +3906,7 @@ void wxDataViewColumn::SetResizeable(bool resizable)
 {
     wxDataViewColumnBase::SetResizeable(resizable);
     if (resizable)
-        [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask | NSTableColumnAutoresizingMask];
+        [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask];
     else
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];
 }
