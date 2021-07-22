@@ -2404,29 +2404,69 @@ dnl ------------------------------------------------------------------------
 if test "$wxUSE_REGEX" != "no"; then
     AC_DEFINE(wxUSE_REGEX)
 
-    if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
-        AC_MSG_WARN([Defaulting to the builtin regex library for Unicode build.])
-        wxUSE_REGEX=builtin
+    dnl Find the PCRE library we need.
+    if test "$wxUSE_UNICODE" = "yes"; then
+        if test "$wxUSE_UNICODE_UTF8" = "yes"; then
+            pcre_suffix=8
+        else
+            if test "$ac_cv_sizeof_wchar_t" = 2; then
+                pcre_suffix=16
+            elif test "$ac_cv_sizeof_wchar_t" = 4; then
+                pcre_suffix=32
+            else
+                AC_MSG_ERROR([unknown sizeof(wchar_t)])
+            fi
+        fi
+    else
+        pcre_suffix=8
     fi
 
-    if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
-        dnl according to Unix 98 specs, regcomp() is in libc but I believe that
-        dnl on some old systems it may be in libregex - check for it too?
-        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp re_search)],, [ ])
-
-        if test "x$ac_cv_func_regcomp" != "xyes"; then
-            if test "$wxUSE_REGEX" = "sys" ; then
-                AC_MSG_ERROR([system regex library not found! Use --with-regex to use built-in version])
-            else
-                AC_MSG_WARN([system regex library not found, will use built-in instead])
+    if test "$wxUSE_REGEX" != "builtin"; then
+        PKG_CHECK_MODULES(LIBPCRE, [libpcre2-$pcre_suffix],
+            [
+                PCRE_LINK=$LIBPCRE_LIBS
+                CXXFLAGS="$LIBPCRE_CFLAGS $CXXFLAGS"
+                wxUSE_REGEX=sys
+            ],
+            [
                 wxUSE_REGEX=builtin
-            fi
+            ]
+        )
+    fi
+
+    dnl If builtin library was explicitly requested or has to be used because
+    dnl the system one was not found, build it.
+    if test "$wxUSE_REGEX" = "builtin"; then
+        AC_MSG_CHECKING([whether pcre submodule exists])
+        if ! test -f "$ac_confdir/3rdparty/pcre/pcre2-config.in" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in PCRE library, but the file
+    $ac_confdir/3rdparty/pcre/pcre2-config.in couldn't be found.
+    You might need to run:
+
+        git submodule update --init 3rdparty/pcre
+
+    to fix this.])
         else
-            dnl we are using the system library
-            wxUSE_REGEX=sys
-            dnl only the built-in supports advanced REs
-            AC_DEFINE(WX_NO_REGEX_ADVANCED)
+            AC_MSG_RESULT([yes])
         fi
+
+        dnl By default 8 bit version is built, so we don't need to do
+        dnl anything if this is the one we want, but otherwise we must
+        dnl explicitly request building the version we use, and we also
+        dnl disable the 8 bit version if it's unnecessary.
+        if test $pcre_suffix != 8; then
+            pcre_config_disable="--disable-pcre2-8"
+            pcre_config_enable="--enable-pcre2-$pcre_suffix"
+        fi
+
+        dnl We'll need to predefine this when building PCRE2.
+        wxPCRE2_CODE_UNIT_WIDTH=$pcre_suffix
+        AC_SUBST(wxPCRE2_CODE_UNIT_WIDTH)
+
+        AX_SUBDIRS_CONFIGURE([3rdparty/pcre],
+            [[$pcre_config_disable],[$pcre_config_enable]])
     fi
 fi
 
@@ -8178,7 +8218,7 @@ if test "$SHARED" = 1; then
 fi
 
 LIBS=`echo $LIBS`
-EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
+EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $PCRE_LINK $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
@@ -8226,9 +8266,14 @@ if test "$wxUSE_GUI" = "yes"; then
             ;;
     esac
 fi
-if test "$wxUSE_REGEX" = "builtin" ; then
-    wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
-fi
+case "wxUSE_REGEX" in
+    builtin)
+        wxconfig_3rdparty="pcre $wxconfig_3rdparty"
+        ;;
+    sys)
+        WXCONFIG_LIBS="$PCRE_LINK $WXCONFIG_LIBS"
+        ;;
+esac
 if test "$wxUSE_STC" = "yes" ; then
     wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
 fi

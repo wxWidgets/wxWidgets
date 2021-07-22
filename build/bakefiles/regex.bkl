@@ -4,10 +4,14 @@
 
     <if cond="FORMAT=='autoconf'">
         <option name="wxUSE_REGEX"/>
+        <option name="wxPCRE2_CODE_UNIT_WIDTH"/>
         <set var="LIB_REGEX">
             <if cond="wxUSE_REGEX=='builtin'">
                 wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
             </if>
+        </set>
+        <set var="INC_REGEX_BUILD">
+            $(wx_top_builddir)/3rdparty/pcre/src
         </set>
     </if>
     <if cond="FORMAT!='autoconf'">
@@ -18,8 +22,11 @@
             </if>
         </set>
     </if>
+
     <set var="INC_REGEX">
-        <if cond="wxUSE_REGEX=='builtin'">$(TOP_SRCDIR)src/regex</if>
+        <if cond="wxUSE_REGEX=='builtin'">
+            $(TOP_SRCDIR)3rdparty/pcre/src/wx
+        </if>
     </set>
 
     <lib id="wxregex" template="msvc_setup_h,3rdparty_lib"
@@ -32,17 +39,41 @@
         </libname>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
-        <define>__WX$(TOOLKIT)__</define>
-        <define>$(WXUNIV_DEFINE)</define>
+        <include cond="FORMAT!='autoconf'">$(INC_REGEX)</include>
+        <include cond="FORMAT=='autoconf'">$(INC_REGEX_BUILD)</include>
+        <define>__WX__</define>
+        <define>HAVE_CONFIG_H</define>
         <define>$(UNICODE_DEFINE)</define>
+        <define cond="FORMAT=='autoconf'">PCRE2_CODE_UNIT_WIDTH=$(wxPCRE2_CODE_UNIT_WIDTH)</define>
         <dirname>$(LIBDIRNAME)</dirname>
-        <cflags-borland>-w-8008 -w-8012 -w-8057 -w-8064 -w-8066 -w-8070</cflags-borland>
-        <cflags-dmars>-w12</cflags-dmars>
         <sources>
-            src/regex/regcomp.c
-            src/regex/regexec.c
-            src/regex/regerror.c
-            src/regex/regfree.c
+            3rdparty/pcre/src/pcre2_auto_possess.c
+            3rdparty/pcre/src/pcre2_compile.c
+            3rdparty/pcre/src/pcre2_config.c
+            3rdparty/pcre/src/pcre2_context.c
+            3rdparty/pcre/src/pcre2_convert.c
+            3rdparty/pcre/src/pcre2_dfa_match.c
+            3rdparty/pcre/src/pcre2_error.c
+            3rdparty/pcre/src/pcre2_extuni.c
+            3rdparty/pcre/src/pcre2_find_bracket.c
+            3rdparty/pcre/src/pcre2_jit_compile.c
+            3rdparty/pcre/src/pcre2_maketables.c
+            3rdparty/pcre/src/pcre2_match.c
+            3rdparty/pcre/src/pcre2_match_data.c
+            3rdparty/pcre/src/pcre2_newline.c
+            3rdparty/pcre/src/pcre2_ord2utf.c
+            3rdparty/pcre/src/pcre2_pattern_info.c
+            3rdparty/pcre/src/pcre2_script_run.c
+            3rdparty/pcre/src/pcre2_serialize.c
+            3rdparty/pcre/src/pcre2_string_utils.c
+            3rdparty/pcre/src/pcre2_study.c
+            3rdparty/pcre/src/pcre2_substitute.c
+            3rdparty/pcre/src/pcre2_substring.c
+            3rdparty/pcre/src/pcre2_tables.c
+            3rdparty/pcre/src/pcre2_ucd.c
+            3rdparty/pcre/src/pcre2_valid_utf.c
+            3rdparty/pcre/src/pcre2_xclass.c
+            3rdparty/pcre/src/pcre2_chartables.c
         </sources>
     </lib>
 

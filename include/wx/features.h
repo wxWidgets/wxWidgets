@@ -53,13 +53,8 @@
     #undef wxHAS_CRASH_REPORT
 #endif
 
-/*  wxRE_ADVANCED is not always available, depending on regex library used
- *  (it's unavailable only if compiling via configure against system library) */
-#ifndef WX_NO_REGEX_ADVANCED
-    #define wxHAS_REGEX_ADVANCED
-#else
-    #undef wxHAS_REGEX_ADVANCED
-#endif
+/*  wxRE_ADVANCED is always defined now and kept for compatibility only. */
+#define wxHAS_REGEX_ADVANCED
 
 /* Pango-based ports and wxDFB use UTF-8 for text and font encodings
  * internally and so their fonts can handle any encodings: */
