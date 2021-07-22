@@ -259,7 +259,15 @@ jobs:
             export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
           fi
           ulimit -c unlimited
-          /bin/bash -o pipefail -c 'xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui 2>&1 | tee test_gui.out' || rc=$?
+          # Running all tests at once fails, apparently due to running out of
+          # memory when using ASAN, work around this problem by splitting them
+          # in 2 parts.
+          #
+          # Also, as a temporary workaround for a problem with ProcessEnter()
+          # test, run ButtonTestCase before running wx* tests. This should be
+          # reverted once the actual problem in the test is fixed.
+          /bin/bash -o pipefail -c 'xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui -d 1 ButtonTestCase,wx* ~[.] 2>&1 | tee -a test_gui.out' || rc=$?
+          /bin/bash -o pipefail -c 'xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui -d 1 ~wx* ~[.] 2>&1 | tee -a test_gui.out' || rc=$?
           if [ -n "$rc" ]; then
             if fgrep -q '(core dumped)' test_gui.out; then
                 echo '*** Test crashed, trying to get more information ***'
