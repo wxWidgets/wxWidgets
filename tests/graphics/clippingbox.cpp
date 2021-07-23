@@ -3740,7 +3740,16 @@ static void RegionsAndPushPopState(wxScopedPtr<wxGraphicsContext>& gc, const wxB
 {
     // Setting muliple rectangular clipping regions
     // for transformed wxGC and store/restore them.
-
+#ifdef __WXOSX__
+    if ( !wxCheckOsVersion(10, 13) )
+    {
+        // Due to the bug in resetting clipping region when graphics state
+        // is pushed on the stack we need to skip test on macOS < 10.13.
+        WARN("Skipping test known not to work under macOS < 10.13");
+        return;
+    }
+#endif
+    
     // Get rectangle of the entire drawing area.
     double x, y, w, h;
     gc->GetClipBox(&x, &y, &w, &h);
