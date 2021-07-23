@@ -123,7 +123,10 @@ bool wxChoice::Create(wxWindow *parent,
 
 bool wxChoice::MSWShouldPreProcessMessage(WXMSG *msg)
 {
-    if ( msg->message == WM_KEYDOWN )
+    if ( msg->message == WM_KEYDOWN &&
+            !(HIWORD(msg->lParam) & KF_ALTDOWN) &&
+                !wxIsShiftDown() &&
+                    !wxIsCtrlDown() )
     {
         switch ( msg->wParam )
         {
