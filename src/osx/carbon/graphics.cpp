@@ -1543,6 +1543,7 @@ private:
     CGAffineTransform m_initTransform;
     CGAffineTransform m_windowTransform;
     bool m_invisible;
+    int m_stateStackLevel;
 
 #if wxOSX_USE_COCOA_OR_CARBON
     wxCFRef<HIShapeRef> m_clipRgn;
@@ -1817,6 +1818,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
             CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
             m_contextSynthesized = true;
             CGContextSaveGState( m_cgContext );
+            m_stateStackLevel = 0;
 
 #if 0 // turn on for debugging of clientdc
             static float color = 0.5 ;
@@ -2375,6 +2377,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextSaveGState( m_cgContext );
         CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
         CGContextSaveGState( m_cgContext );
+        m_stateStackLevel = 0;
         m_contextSynthesized = false;
     }
 }
@@ -2485,6 +2488,7 @@ void wxMacCoreGraphicsContext::PushState()
         return;
 
     CGContextSaveGState( m_cgContext );
+    m_stateStackLevel++;
 }
 
 void wxMacCoreGraphicsContext::PopState()
@@ -2492,7 +2496,9 @@ void wxMacCoreGraphicsContext::PopState()
     if (!EnsureIsValid())
         return;
 
+    wxCHECK_RET(m_stateStackLevel > 0, "No state to pop");
     CGContextRestoreGState( m_cgContext );
+    m_stateStackLevel--;
 }
 
 void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDouble y )
