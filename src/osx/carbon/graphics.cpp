@@ -2141,6 +2141,12 @@ void wxMacCoreGraphicsContext::ResetClip()
         {
             // there is no way for clearing the clip, we can only revert to the stored
             // state, but then we have to make sure everything else is NOT restored
+            // Note: This trick works as expected only if a state with no clipping
+            // path is stored on the top of the stack. It's guaranteed to work only
+            // when no PushState() was called before because in this case a reference
+            // state (initial state without clipping region) is on the top of the stack.
+            wxASSERT_MSG(m_stateStackLevel == 0,
+                         "Resetting the clip may not work when PushState() was called before");
             CGAffineTransform transform = CGContextGetCTM( m_cgContext );
             CGContextRestoreGState( m_cgContext );
             CGContextSaveGState( m_cgContext );
