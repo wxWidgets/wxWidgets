@@ -128,7 +128,7 @@ jobs:
           sudo chown -R $normal_uid $GITHUB_WORKSPACE
 
           # Add the directories containing MinGW and wx DLLs to Wine path.
-          winepath="$(winepath --windows /usr/lib/gcc/${HOST_TRIPLET}/$(${HOST_TRIPLET}-gcc -dumpversion|tr -d '\r'))"
+          winepath="$(winepath --windows $(dirname $(${HOST_TRIPLET}-g++ -print-libgcc-file-name)))"
           winepath="${winepath};$(winepath --windows $(pwd)/lib)"
           echo "WINEPATH=${winepath}" >> $GITHUB_ENV
 
