@@ -1079,7 +1079,7 @@ wxSize wxSizer::Fit( wxWindow *window )
     wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
 
     // set client size
-    window->WXSetInitialFittingClientSize(wxSIZE_SET_CURRENT);
+    window->WXSetInitialFittingClientSize(wxSIZE_SET_CURRENT, this);
 
     // return entire size
     return window->GetSize();
@@ -1119,7 +1119,8 @@ void wxSizer::SetSizeHints( wxWindow *window )
 {
     // Preserve the window's max size hints, but set the
     // lower bound according to the sizer calculations.
-    window->WXSetInitialFittingClientSize(wxSIZE_SET_CURRENT | wxSIZE_SET_MIN);
+    window->WXSetInitialFittingClientSize(wxSIZE_SET_CURRENT | wxSIZE_SET_MIN,
+                                          this);
 }
 
 #if WXWIN_COMPATIBILITY_2_8

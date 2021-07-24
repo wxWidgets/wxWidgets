@@ -999,11 +999,17 @@ wxSize wxWindowBase::WindowToClientSize(const wxSize& size) const
                   size.y == -1 ? -1 : size.y - diff.y);
 }
 
-void wxWindowBase::WXSetInitialFittingClientSize(int flags)
+void wxWindowBase::WXSetInitialFittingClientSize(int flags, wxSizer* sizer)
 {
-    wxSizer* const sizer = GetSizer();
+    // Use the window sizer by default.
     if ( !sizer )
-        return;
+    {
+        sizer = GetSizer();
+
+        // If there is none, we can't compute the fitting size.
+        if ( !sizer )
+            return;
+    }
 
     const wxSize
         size = sizer->ComputeFittingClientSize(static_cast<wxWindow *>(this));
