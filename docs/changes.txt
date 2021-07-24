@@ -196,6 +196,9 @@ Changes in behaviour which may result in build errors
 - wxImage constructor from XPM data is now explicit, write "wxImage(xpmData)"
   instead of just "xpmData" if you really need to use it.
 
+- wxWindow::DoGetBorderSize() was removed, if you used this non-public function
+  in your code, you can replace it with public GetWindowBorderSize().
+
 - Microsoft Visual Studio 2003 (a.k.a. MSVC 7) is not supported any longer, the
   minimum required version is now 2005.
 

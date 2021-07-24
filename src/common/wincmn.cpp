@@ -892,18 +892,6 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
     return min;
 }
 
-wxSize wxWindowBase::DoGetBorderSize() const
-{
-    // there is one case in which we can implement it for all ports easily
-    if ( GetBorder() == wxBORDER_NONE )
-        return wxSize(0, 0);
-
-    // otherwise use the difference between the real size and the client size
-    // as a fallback: notice that this is incorrect in general as client size
-    // also doesn't take the scrollbars into account
-    return GetSize() - GetClientSize();
-}
-
 wxSize wxWindowBase::GetBestSize() const
 {
     if ( !m_windowSizer && m_bestSizeCache.IsFullySpecified() )
@@ -913,7 +901,7 @@ wxSize wxWindowBase::GetBestSize() const
     // it to be used
     wxSize size = DoGetBestClientSize();
     if ( size != wxDefaultSize )
-        size += DoGetBorderSize();
+        size += GetWindowBorderSize();
     else
         size = DoGetBestSize();
 
@@ -934,7 +922,7 @@ int wxWindowBase::GetBestHeight(int width) const
 
     return height == wxDefaultCoord
             ? GetBestSize().y
-            : height + DoGetBorderSize().y;
+            : height + GetWindowBorderSize().y;
 }
 
 int wxWindowBase::GetBestWidth(int height) const
@@ -943,7 +931,7 @@ int wxWindowBase::GetBestWidth(int height) const
 
     return width == wxDefaultCoord
             ? GetBestSize().x
-            : width + DoGetBorderSize().x;
+            : width + GetWindowBorderSize().x;
 }
 
 void wxWindowBase::SetMinSize(const wxSize& minSize)
