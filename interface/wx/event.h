@@ -5187,6 +5187,7 @@ wxEventType wxEVT_HELP;
 wxEventType wxEVT_DETAILED_HELP;
 wxEventType wxEVT_TOOL;
 wxEventType wxEVT_WINDOW_MODAL_DIALOG_CLOSED;
+wxEventType wxEVT_FULLSCREEN;
 
 #endif // wxUSE_GUI
 

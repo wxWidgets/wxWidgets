@@ -192,7 +192,6 @@ public:
      */
     wxPenInfo& HighQuality();
 
-    wxPenInfo& LowQuality();
     wxColour GetColour() const;
     wxBitmap GetStipple() const;
     wxPenStyle GetStyle() const;
