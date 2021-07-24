@@ -1132,8 +1132,17 @@ public:
 #define wxDECLARE_APP( className )
 
 /**
-    This is used in the application class implementation file to make the
-    application class known to wxWidgets for dynamic construction.
+    This macro defines the application entry point and tells wxWidgets which
+    application class should be used.
+
+    The two tasks performed by this macro can be done separately by using
+    wxIMPLEMENT_APP_NO_MAIN() and wxIMPLEMENT_WXWIN_MAIN() macros, but in a
+    typical GUI application it's simpler and more convenient to use this macro
+    to do both together.
+
+    The @a className passed to this macro must be a name of the class deriving
+    from wxApp.
+
     Note that this macro requires a final semicolon.
 
     @header{wx/app.h}
@@ -1147,6 +1156,24 @@ public:
     @see wxDECLARE_APP()
 */
 #define wxIMPLEMENT_APP( className )
+
+/**
+    This macro defines the application entry point appropriate for the current
+    platform.
+
+    Note that usually wxIMPLEMENT_APP() is used instead of this macro.
+
+    For most platforms, it defines @c main() function, but for GUI Windows
+    applications, it defines @c WinMain() instead.
+
+    In either case, the macro expansion includes the call to
+    wxDISABLE_DEBUG_SUPPORT() which disables debugging code in release builds.
+    If you don't use this macro, but define the entry point yourself, you
+    probably want to call wxDISABLE_DEBUG_SUPPORT() explicitly.
+
+    @header{wx/app.h}
+ */
+#define wxIMPLEMENT_WXWIN_MAIN
 
 //@}
 
