@@ -291,7 +291,7 @@ private:
         wxPropertyGrid* pg = m_manager->GetGrid();
 
         // Internal border width
-        int borderWidth = pg->DoGetBorderSize().x / 2;
+        int borderWidth = pg->GetWindowBorderSize().x / 2;
 
         const unsigned int colCount = m_page->GetColumnCount();
         for ( unsigned int i = 0; i < colCount; i++ )
@@ -327,7 +327,7 @@ private:
         wxPropertyGrid* pg = m_manager->GetGrid();
 
         // Internal border width
-        int borderWidth = pg->DoGetBorderSize().x / 2;
+        int borderWidth = pg->GetWindowBorderSize().x / 2;
 
         // Compensate for the internal border
         int x = -borderWidth;

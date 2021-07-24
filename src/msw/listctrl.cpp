@@ -1604,7 +1604,7 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
     // OTOH we have to subtract the size of our borders because the base class
     // public method already adds them, but ListView_ApproximateViewRect()
     // already takes the borders into account, so this would be superfluous.
-    return size - DoGetBorderSize();
+    return size - GetWindowBorderSize();
 }
 
 // ----------------------------------------------------------------------------

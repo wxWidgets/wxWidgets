@@ -712,7 +712,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
 #endif
 }
 
-wxSize wxWindow::DoGetBorderSize() const
+wxSize wxWindow::GetWindowBorderSize() const
 {
     return AdjustSize(wxSize(0, 0));
 }
