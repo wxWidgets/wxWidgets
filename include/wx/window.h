@@ -1571,7 +1571,11 @@ public:
     // that we really need to use is not known until the window is actually
     // shown, as is the case for TLWs with recent GTK versions, as it will
     // update the size again when it does become known, if necessary.
-    virtual void WXSetInitialFittingClientSize(int flags);
+    //
+    // The optional sizer argument can be passed to use the given sizer for
+    // laying out the window, which is useful if this function is called before
+    // SetSizer(). By default the window sizer is used.
+    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = NULL);
 
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
