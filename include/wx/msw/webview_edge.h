@@ -109,6 +109,8 @@ private:
 
     void OnSize(wxSizeEvent& event);
 
+    void OnSetFocus(wxFocusEvent& event);
+
     void OnTopLevelParentIconized(wxIconizeEvent& event);
 
     bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
