@@ -1567,10 +1567,11 @@ void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
     m_pendingFittingClientSizeFlags &= ~wxSIZE_SET_MIN;
 }
 
-void wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags)
+void
+wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags, wxSizer* sizer)
 {
     // In any case, update the size immediately.
-    wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags);
+    wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags, sizer);
 
     // But if we're not shown yet, the fitting size may be wrong because GTK
     // style cache hasn't been updated yet and we need to do it again when the
