@@ -143,7 +143,7 @@ public:
 
     virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
 
-    virtual void WXSetInitialFittingClientSize(int flags) wxOVERRIDE;
+    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = NULL) wxOVERRIDE;
 
 private:
     // Flags to call WXSetInitialFittingClientSize() with if != 0.
