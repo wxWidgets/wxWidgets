@@ -139,6 +139,10 @@ bool wxChoice::MSWShouldPreProcessMessage(WXMSG *msg)
                     return false;
                 }
                 break;
+
+            case VK_F4:
+                // This key can always be used to show the dropdown.
+                return false;
         }
     }
 
