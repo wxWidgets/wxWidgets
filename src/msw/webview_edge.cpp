@@ -535,6 +535,7 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     if (!m_impl->Create())
         return false;
     Bind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
+    Bind(wxEVT_SET_FOCUS, &wxWebViewEdge::OnSetFocus, this);
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
@@ -546,6 +547,13 @@ bool wxWebViewEdge::Create(wxWindow* parent,
 void wxWebViewEdge::OnSize(wxSizeEvent& event)
 {
     m_impl->UpdateBounds();
+    event.Skip();
+}
+
+void wxWebViewEdge::OnSetFocus(wxFocusEvent& event)
+{
+    if (m_impl && m_impl->m_webViewController)
+        m_impl->m_webViewController->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
     event.Skip();
 }
 
