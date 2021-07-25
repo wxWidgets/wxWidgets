@@ -7,8 +7,9 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-if(wxUSE_REGEX)
-    set(wxUSE_REGEX builtin)
+if(wxUSE_REGEX STREQUAL "builtin")
+    # TODO: implement building PCRE2 via its CMake file, using
+    # add_subdirectory or ExternalProject_Add
     wx_add_builtin_library(wxregex
         3rdparty/pcre/src/pcre2_auto_possess.c
         3rdparty/pcre/src/pcre2_compile.c
@@ -42,4 +43,8 @@ if(wxUSE_REGEX)
     set(REGEX_INCLUDE_DIRS ${wxSOURCE_DIR}/3rdparty/pcre/src/wx)
     target_compile_definitions(wxregex PRIVATE __WX__ HAVE_CONFIG_H)
     target_include_directories(wxregex PRIVATE ${wxSETUP_HEADER_PATH} ${wxSOURCE_DIR}/include ${REGEX_INCLUDE_DIRS})
+elseif(wxUSE_REGEX)
+    find_package(PCRE2 REQUIRED)
+    set(REGEX_LIBRARIES ${PCRE2_LIBRARIES})
+    set(REGEX_INCLUDE_DIRS ${PCRE2_INCLUDE_DIRS})
 endif()
