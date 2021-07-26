@@ -1159,6 +1159,14 @@ void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
     CalcBoundingBox(rect.x + rect.width, rect.y + rect.height);
 }
 
+void wxSVGFileDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
+{
+    wxRect clipBox = region.GetBox();
+    wxPoint logPos = DeviceToLogical(clipBox.x, clipBox.y);
+    wxSize logDim = DeviceToLogicalRel(clipBox.width, clipBox.height);
+    DoSetClippingRegion(logPos.x, logPos.y, logDim.x, logDim.y);
+}
+
 void wxSVGFileDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     // We need to have box definition in the standard form with (x,y)

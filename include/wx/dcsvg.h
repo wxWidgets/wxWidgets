@@ -239,11 +239,7 @@ private:
                                  wxCoord* externalLeading = NULL,
                                  const wxFont* theFont = NULL) const wxOVERRIDE;
 
-    virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE
-    {
-        DoSetClippingRegion(region.GetBox().x, region.GetBox().y,
-                            region.GetBox().width, region.GetBox().height);
-    }
+    virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE;
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord w, wxCoord h) wxOVERRIDE;
