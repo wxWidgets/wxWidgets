@@ -1263,6 +1263,11 @@ wxCoord wxSVGFileDCImpl::GetCharWidth() const
     return sDC.GetCharWidth();
 }
 
+void wxSVGFileDCImpl::ComputeScaleAndOrigin()
+{
+    wxDCImpl::ComputeScaleAndOrigin();
+    m_graphics_changed = true;
+}
 
 // ----------------------------------------------------------
 // wxSVGFileDCImpl - set functions
