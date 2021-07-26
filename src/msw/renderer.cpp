@@ -1104,13 +1104,16 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         such alignment use DT_TOP (0), which does work for multi-lines,
         and deal with the actual desired vertical alignment ourselves with
         the help of GetThemeTextExtent().
-        */
-        bool useTopDrawing =
-            s_GetThemeTextExtent
-            && ( align & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL) ) != 0
-            && text.Contains(wxS('\n'));
 
-        if ( useTopDrawing )
+        [TODO] Ideally text measurement should only be needed for the above
+        mentioned situations but because there can be a difference between
+        the extent from GetThemeTextExtent() and the rect received by this
+        function could have involved other text measurements (e.g. with wxDVC,
+        see #18487), use it in all cases for now.
+        */
+        bool useTopDrawing = false;
+
+        if ( s_GetThemeTextExtent != NULL )
         {
             /*
             Get the actual text extent using GetThemeTextExtent() and adjust
@@ -1152,6 +1155,30 @@ void wxRendererXP::DrawItemText(wxWindow* win,
             if ( SUCCEEDED(hr) )
             {
                 /*
+                Compensate for rare cases where the horizontal extents differ
+                slightly. Don't use the width of the passed rect here to deal
+                with horizontal alignment as it results in the text always
+                fitting and ellipsization then can't occur. Instead check for
+                width differences by comparing with the extent as calculated
+                by wxDC.
+                */
+                const int textWidthDc = dc.GetMultiLineTextExtent(text).x;
+                const int widthDiff = textWidthDc - rcExtent.right;
+                if ( widthDiff )
+                {
+                    if ( align & wxALIGN_CENTRE_HORIZONTAL )
+                    {
+                        const int widthOffset = widthDiff / 2;
+                        rc.left += widthOffset;
+                        rc.right -= widthOffset;
+                    }
+                    else if ( align & wxALIGN_RIGHT )
+                        rc.left += widthDiff;
+                    else // left aligned
+                        rc.right -= widthDiff;
+                }
+
+                /*
                 For height compare with the height of the passed rect and use
                 the difference for handling vertical alignment. This has
                 consequences for particularly multi-line text: it will now
@@ -1163,8 +1190,12 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 necessity) confines rendering to a cell's bounds.
                 */
                 const int heightDiff = rect.GetHeight() - rcExtent.bottom;
-                if ( heightDiff )
+                if ( heightDiff
+                     && (align & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL))
+                     && text.Contains(wxS('\n')) )
                 {
+                    useTopDrawing = true;
+
                     if ( align & wxALIGN_CENTRE_VERTICAL )
                     {
                         const int heightOffset = heightDiff / 2;
@@ -1176,10 +1207,6 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                     else // top aligned
                         rc.bottom -= heightDiff;
                 }
-            }
-            else
-            {
-                useTopDrawing = false;
             }
         }
 
