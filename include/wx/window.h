@@ -1909,15 +1909,6 @@ protected:
                                  int maxW, int maxH,
                                  int incW, int incH );
 
-    // return the total size of the window borders, i.e. the sum of the widths
-    // of the left and the right border in the x component of the returned size
-    // and the sum of the heights of the top and bottom borders in the y one
-    //
-    // NB: this is currently only implemented properly for wxMSW, wxGTK and
-    //     wxUniv and doesn't behave correctly in the presence of scrollbars in
-    //     the other ports
-    virtual wxSize DoGetBorderSize() const;
-
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just
     // reposition this window except for composite controls which will want to

@@ -4021,7 +4021,7 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
             }
         }
 
-        const wxSize sizeBorders = DoGetBorderSize();
+        const wxSize sizeBorders = GetWindowBorderSize();
         w -= sizeBorders.x;
         h -= sizeBorders.y;
 
@@ -4035,10 +4035,10 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
     if (height) *height = h;
 }
 
-wxSize wxWindowGTK::DoGetBorderSize() const
+wxSize wxWindowGTK::GetWindowBorderSize() const
 {
     if ( !m_wxwindow )
-        return wxWindowBase::DoGetBorderSize();
+        return wxWindowBase::GetWindowBorderSize();
 
     GtkBorder border;
     WX_PIZZA(m_wxwindow)->get_border(border);
