@@ -2459,7 +2459,7 @@ void wxTextCtrl::UpdateLastVisible()
         return;
 
     // use (efficient) HitTestLine to find the last visible character
-    wxString text = m_value.Mid((size_t)SData().m_colStart /* to the end */);
+    wxString text = m_value;//m_value.Mid((size_t)SData().m_colStart /* to the end */);
     wxTextCoord col;
     switch ( HitTestLine(text, m_rectText.width, &col) )
     {
@@ -3379,7 +3379,7 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
         SData().m_colStart = col;
 
         // after changing m_colStart, recalc the last visible position: we need
-        // to recalc the last visible position beore scrolling in order to make
+        // to recalc the last visible position before scrolling in order to make
         // it appear exactly at the right edge of the text area after scrolling
         UpdateLastVisible();
 
