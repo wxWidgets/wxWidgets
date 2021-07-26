@@ -2108,7 +2108,36 @@ wxSize wxDataViewCheckIconTextRenderer::GetSize() const
 
 bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
 {
-    // Draw the checkbox first.
+    /*
+    Draw the text first because if the item has a background colour set
+    then with wxGTK the entire cell is painted over during RenderText()
+    when attributes are applied.
+    */
+
+    const wxSize sizeCheck = GetCheckSize();
+
+    int xoffset = sizeCheck.x + MARGIN_CHECK_ICON;
+
+    wxRect rectIcon;
+    const wxIcon& icon = m_value.GetIcon();
+    const bool drawIcon = icon.IsOk();
+    if ( drawIcon )
+    {
+#ifdef __WXGTK3__
+        const wxSize sizeIcon = icon.GetScaledSize();
+#else
+        const wxSize sizeIcon = icon.GetSize();
+#endif
+        rectIcon = wxRect(cell.GetPosition(), sizeIcon);
+        rectIcon.x += xoffset;
+        rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);
+
+        xoffset += sizeIcon.x + MARGIN_ICON_TEXT;
+    }
+
+    RenderText(m_value.GetText(), xoffset, cell, dc, state);
+
+    // Then draw the checkbox.
     int renderFlags = 0;
     switch ( m_value.GetCheckedState() )
     {
@@ -2127,8 +2156,6 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
     if ( state & wxDATAVIEW_CELL_PRELIT )
         renderFlags |= wxCONTROL_CURRENT;
 
-    const wxSize sizeCheck = GetCheckSize();
-
     wxRect rectCheck(cell.GetPosition(), sizeCheck);
     rectCheck = rectCheck.CentreIn(cell, wxVERTICAL);
 
@@ -2137,28 +2164,9 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
                                 GetView(), *dc, rectCheck, renderFlags
                             );
 
-    // Then the icon, if any.
-    int xoffset = sizeCheck.x + MARGIN_CHECK_ICON;
-
-    const wxIcon& icon = m_value.GetIcon();
-    if ( icon.IsOk() )
-    {
-#ifdef __WXGTK3__
-        const wxSize sizeIcon = icon.GetScaledSize();
-#else
-        const wxSize sizeIcon = icon.GetSize();
-#endif
-        wxRect rectIcon(cell.GetPosition(), sizeIcon);
-        rectIcon.x += xoffset;
-        rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);
-
+    // Finally draw the icon, if any.
+    if ( drawIcon )
         dc->DrawIcon(icon, rectIcon.GetPosition());
-
-        xoffset += sizeIcon.x + MARGIN_ICON_TEXT;
-    }
-
-    // Finally the text.
-    RenderText(m_value.GetText(), xoffset, cell, dc, state);
 
     return true;
 }
