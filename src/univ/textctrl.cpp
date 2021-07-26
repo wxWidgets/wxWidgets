@@ -2884,16 +2884,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     dc.GetTextExtent(line, &width, NULL);
     if ( x >= width )
     {
-        // clicking beyond the end of line is equivalent to clicking at
-        // the end of it, so return the last line column
         col = line.length();
-        if ( col )
-        {
-            // unless the line is empty and so doesn't have any column at all -
-            // in this case return 0, what else can we do?
-            col--;
-        }
-
         res = wxTE_HT_BEYOND;
     }
     else if ( x < 0 )
