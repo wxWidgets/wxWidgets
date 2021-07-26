@@ -619,7 +619,7 @@ void wxGTKDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCo
     wxASSERT_MSG( width >= 0 && height >= 0,
                   "Clipping box size values cannot be negative" );
 
-    wxRect newRegion(x, y, width, height);
+    wxRect newRegion(LogicalToDevice(x, y), LogicalToDeviceRel(width, height));
 
     wxRect clipRegion;
     if ( m_clipping )
@@ -635,8 +635,7 @@ void wxGTKDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCo
         // of required clipping box and DC surface.
         int dcWidth, dcHeight;
         DoGetSize(&dcWidth, &dcHeight);
-        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
-                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
+        wxRect dcRect(0, 0, dcWidth, dcHeight);
         clipRegion = dcRect.Intersect(newRegion);
 
         m_clipping = true;
