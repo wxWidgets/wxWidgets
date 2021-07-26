@@ -742,7 +742,8 @@ protected:
 
     // bounding and clipping boxes
     wxCoord m_minX, m_minY, m_maxX, m_maxY; // Bounding box is stored in device units.
-    wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;  // Clipping box is stored in logical units.
+    wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;  // Clipping box is stored in device units.
+                                                     // Derived classes may store it in logical units.
 
     wxRasterOperationMode m_logicalFunction;
     int m_backgroundMode;
