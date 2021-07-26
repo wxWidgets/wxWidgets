@@ -377,8 +377,7 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
         // of required clipping box and DC surface.
         int dcWidth, dcHeight;
         DoGetSize(&dcWidth, &dcHeight);
-        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
-                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
+        wxRect dcRect(DeviceToLogical(0, 0), DeviceToLogicalRel(dcWidth, dcHeight));
         clipRegion.Intersect(dcRect);
 
         m_clipping = true;
@@ -400,10 +399,7 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 wxRect wxDCImpl::GetLogicalArea() const
 {
     const wxSize size = GetSize();
-    return wxRect(DeviceToLogicalX(0),
-                  DeviceToLogicalY(0),
-                  DeviceToLogicalXRel(size.x),
-                  DeviceToLogicalYRel(size.y));
+    return wxRect(DeviceToLogical(0, 0), DeviceToLogicalRel(size.x, size.y));
 }
 
 bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
