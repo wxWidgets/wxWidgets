@@ -437,7 +437,7 @@ void TextCtrlTestCase::ProcessEnter()
 
 void TextCtrlTestCase::Url()
 {
-#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
+#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // For some unfathomable reason, this test consistently fails when run in
     // AppVeyor CI environment, even though it passes locally, so skip it
     // there.
@@ -543,7 +543,11 @@ void TextCtrlTestCase::FontStyle()
     m_text->AppendText("Default font size 14");
 
     wxTextAttr attrOut;
-    m_text->GetStyle(5, attrOut);
+    if ( !m_text->GetStyle(5, attrOut) )
+    {
+        WARN("Retrieving text style not supported, skipping test.");
+        return;
+    }
 
     CPPUNIT_ASSERT( attrOut.HasFont() );
 
@@ -686,7 +690,7 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     const wxPoint pos0 = m_text->PositionToCoords(0);
     if ( pos0 == wxDefaultPosition )
     {
-#if defined(__WXMSW__) || defined(__WXGTK20__)
+#if ( defined(__WXMSW__) && !defined(__WXUNIVERSAL__) ) || defined(__WXGTK20__)
         CPPUNIT_FAIL( "PositionToCoords() unexpectedly failed." );
 #endif
         return;
