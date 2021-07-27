@@ -59,7 +59,7 @@ TEST_CASE("wxRegEx::Compile", "[regex][compile]")
     CHECK_FALSE( re.Compile("foo[") );
     CHECK_FALSE( re.Compile("foo[bar") );
     CHECK      ( re.Compile("foo[bar]") );
-    CHECK_FALSE( re.Compile("foo{1") );
+    // Not invalid for PCRE: CHECK_FALSE( re.Compile("foo{1") );
     CHECK      ( re.Compile("foo{1}") );
     CHECK      ( re.Compile("foo{1,2}") );
     CHECK      ( re.Compile("foo*") );
@@ -182,6 +182,27 @@ TEST_CASE("wxRegEx::ConvertFromBasic", "[regex][basic]")
     CHECK( wxRegEx::ConvertFromBasic("$$") == "\\$$" );
     CHECK( wxRegEx::ConvertFromBasic("\\(x$\\)") == "(x$)" );
     CHECK( wxRegEx::ConvertFromBasic("[^$\\)]") == "[^$\\)]" );
+}
+
+TEST_CASE("wxRegEx::Unicode", "[regex][unicode]")
+{
+    const wxString cyrillicCapitalA(L"\u0410");
+    const wxString cyrillicSmallA(L"\u0430");
+
+    wxRegEx re(cyrillicCapitalA, wxRE_ICASE);
+    REQUIRE( re.IsValid() );
+
+    REQUIRE( re.Matches(cyrillicSmallA) );
+    CHECK( re.GetMatch(cyrillicSmallA) == cyrillicSmallA );
+}
+
+// This pseudo test can be used just to see the version of PCRE being used.
+TEST_CASE("wxRegEx::GetLibraryVersionInfo", "[.]")
+{
+    const wxVersionInfo ver = wxRegEx::GetLibraryVersionInfo();
+    WARN("Using " << ver.GetName() << " " << ver.GetDescription()
+                  << " (major=" << ver.GetMajor()
+                  << ", minor=" << ver.GetMinor() << ")");
 }
 
 #endif // wxUSE_REGEX
