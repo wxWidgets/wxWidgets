@@ -790,10 +790,7 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 
         Replace(0, GetLastPosition(), value);
 
-        if ( IsSingleLine() )
-        {
-            SetInsertionPoint(0);
-        }
+        SetInsertionPoint(0);
     }
     else // nothing changed
     {
