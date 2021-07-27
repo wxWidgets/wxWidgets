@@ -742,8 +742,7 @@ protected:
 
     // bounding and clipping boxes
     wxCoord m_minX, m_minY, m_maxX, m_maxY; // Bounding box is stored in device units.
-    wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;  // Clipping box is stored in device units.
-                                                     // Derived classes may store it in logical units.
+    wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;  // Some derived classes operate directly on clipping box given in logical units.
 
     wxRasterOperationMode m_logicalFunction;
     int m_backgroundMode;
@@ -764,6 +763,9 @@ protected:
 private:
     // Return the full DC area in logical coordinates.
     wxRect GetLogicalArea() const;
+
+    wxCoord m_devClipX1, m_devClipY1, m_devClipX2, m_devClipY2;  // For proper calculations of clipping box we need to store it in device units.
+    bool m_useDevClipCoords;
 
     wxDECLARE_ABSTRACT_CLASS(wxDCImpl);
 };
