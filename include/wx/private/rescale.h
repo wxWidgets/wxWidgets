@@ -70,7 +70,7 @@ private:
     const wxSize m_oldScale;
 
     // Only it can create objects of this class.
-    friend wxRescaleCoordWithValue<T>;
+    friend class wxRescaleCoordWithValue<T>;
 };
 
 // Specialization for just a single value.
@@ -95,7 +95,7 @@ private:
     const wxSize m_oldScale;
 
     // Only it can create objects of this class.
-    friend wxRescaleCoordWithValue<int>;
+    friend class wxRescaleCoordWithValue<int>;
 };
 
 template <typename T>
