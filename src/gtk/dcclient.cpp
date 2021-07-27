@@ -1919,10 +1919,10 @@ void wxWindowDCImpl::UpdateClipBox()
     }
     else
     {
-        m_clipX1 = r.GetLeft();
-        m_clipY1 = r.GetTop();
-        m_clipX2 = r.GetRight() + 1;
-        m_clipY2 = r.GetBottom() + 1;
+        m_clipX1 = DeviceToLogicalX(r.GetLeft());
+        m_clipY1 = DeviceToLogicalY(r.GetTop());
+        m_clipX2 = m_clipX1 + DeviceToLogicalXRel(r.GetWidth());
+        m_clipY2 = m_clipY1 + DeviceToLogicalYRel(r.GetHeight());
     }
     m_isClipBoxValid = true;
 }
