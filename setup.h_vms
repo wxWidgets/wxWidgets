@@ -37,9 +37,6 @@
 #undef _GNU_SOURCE
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
-#undef gid_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
 #undef mode_t
 
 /* Define to `long' if <sys/types.h> doesn't define.  */
@@ -53,9 +50,6 @@
 
 /* Define if you have the ANSI C header files.  */
 #define STDC_HEADERS 1
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef uid_t
 
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
