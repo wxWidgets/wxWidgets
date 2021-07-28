@@ -26,9 +26,6 @@
 /* Define to `long' if <sys/types.h> doesn't define.  */
 #cmakedefine off_t long
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine pid_t int
-
 /* Define to `unsigned' if <sys/types.h> doesn't define.  */
 #cmakedefine size_t unsigned
 
