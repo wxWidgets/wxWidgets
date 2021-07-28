@@ -4088,8 +4088,6 @@ dnl   defines mode_t if not already defined
 AC_TYPE_MODE_T
 dnl   defines off_t if not already defined
 AC_TYPE_OFF_T
-dnl   defines pid_t if not already defined
-AC_TYPE_PID_T
 dnl   defines size_t if not already defined
 AC_TYPE_SIZE_T
 

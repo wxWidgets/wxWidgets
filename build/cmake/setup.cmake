@@ -648,7 +648,7 @@ endif()
 
 # Check size and availability of various types
 set(SYSTYPES
-    pid_t size_t
+    size_t
     wchar_t int long short
     gid_t uid_t
     )
