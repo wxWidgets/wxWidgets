@@ -17,15 +17,6 @@
 /* the installation location prefix from configure */
 #cmakedefine wxINSTALL_PREFIX "@wxINSTALL_PREFIX@"
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine mode_t int
-
-/* Define to `long' if <sys/types.h> doesn't define.  */
-#cmakedefine off_t long
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-#cmakedefine size_t unsigned
-
 /* Define if ssize_t type is available.  */
 #cmakedefine HAVE_SSIZE_T
 

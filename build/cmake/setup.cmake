@@ -646,14 +646,8 @@ if(wxUSE_XLOCALE)
     set(CMAKE_EXTRA_INCLUDE_FILES)
 endif()
 
-# Check size and availability of various types
-set(SYSTYPES
-    size_t
-    wchar_t int long short
-    )
-if(NOT MSVC)
-    list(APPEND SYSTYPES mode_t off_t)
-endif()
+# Check sizes of various types
+set(SYSTYPES size_t wchar_t int long short)
 
 foreach(SYSTYPE ${SYSTYPES})
     string(TOUPPER ${SYSTYPE} SYSTYPE_UPPER)
