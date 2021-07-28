@@ -18,9 +18,6 @@
 #cmakedefine wxINSTALL_PREFIX "@wxINSTALL_PREFIX@"
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine gid_t int
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
 #cmakedefine mode_t int
 
 /* Define to `long' if <sys/types.h> doesn't define.  */
@@ -39,9 +36,6 @@
 #ifndef _GNU_SOURCE
 #cmakedefine _GNU_SOURCE 1
 #endif
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine uid_t int
 
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */

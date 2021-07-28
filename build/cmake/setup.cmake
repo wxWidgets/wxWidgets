@@ -650,7 +650,6 @@ endif()
 set(SYSTYPES
     size_t
     wchar_t int long short
-    gid_t uid_t
     )
 if(NOT MSVC)
     list(APPEND SYSTYPES mode_t off_t)
