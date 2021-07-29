@@ -17,21 +17,6 @@
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef gid_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef mode_t
-
-/* Define to `long' if <sys/types.h> doesn't define.  */
-#undef off_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef pid_t
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-#undef size_t
-
 /* Define if ssize_t type is available.  */
 #undef HAVE_SSIZE_T
 
@@ -42,9 +27,6 @@
 #ifndef _GNU_SOURCE
 #undef _GNU_SOURCE
 #endif
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef uid_t
 
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
