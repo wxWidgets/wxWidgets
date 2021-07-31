@@ -15,6 +15,10 @@
 
 #include "wx/glcanvas.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/translation.h"
+#endif //WX_PRECOMP
+
 #include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/gdkwayland.h>

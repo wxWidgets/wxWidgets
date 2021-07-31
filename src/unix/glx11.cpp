@@ -20,11 +20,13 @@
 
 #if wxUSE_GLCANVAS && !wxUSE_GLCANVAS_EGL
 
+#include "wx/glcanvas.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/translation.h"
 #endif //WX_PRECOMP
 
-#include "wx/glcanvas.h"
 #include <GL/glx.h>
 
 // IRIX headers call this differently

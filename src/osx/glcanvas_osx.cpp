@@ -27,6 +27,7 @@
     #include "wx/frame.h"
     #include "wx/log.h"
     #include "wx/settings.h"
+    #include "wx/translation.h"
 #endif
 
 #include "wx/osx/private.h"
