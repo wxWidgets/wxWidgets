@@ -33,7 +33,7 @@ of files in build/files.
 If --no-xxx option is specified, the corresponding outputs are not updated.
 By default everything is.
 
-The version argument of --only-version can be 7, 8, 9 or 10 with the latter
+The version argument of --only-version can be 8, 9 or 10 with the latter
 selecting the MSBuild projects.
 EOF
 ;
@@ -89,7 +89,7 @@ if (!$only_bkl) {
         );
 
     # The versions of non-MSBuild projects (MSBuild ones all use version "10").
-    my @vcproj_versions = qw(7 8 9);
+    my @vcproj_versions = qw(8 9);
 
     # Return the "filter" to use for the given file.
     sub filter_cb
