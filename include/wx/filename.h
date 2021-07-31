@@ -14,7 +14,6 @@
 #include "wx/arrstr.h"
 #include "wx/filefn.h"
 #include "wx/datetime.h"
-#include "wx/intl.h"
 #include "wx/longlong.h"
 #include "wx/file.h"
 
