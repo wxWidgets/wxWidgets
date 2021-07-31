@@ -823,6 +823,7 @@
     <ClInclude Include="..\..\include\wx\secretstore.h" />
     <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
     <ClInclude Include="..\..\include\wx\lzmastream.h" />
+    <ClInclude Include="..\..\include\wx\localedef.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

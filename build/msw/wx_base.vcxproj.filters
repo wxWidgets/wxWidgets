@@ -598,6 +598,9 @@
     <ClInclude Include="..\..\include\wx\listimpl.cpp">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\localedef.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\log.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

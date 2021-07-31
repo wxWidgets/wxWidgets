@@ -2451,6 +2451,10 @@
 				RelativePath="..\..\include\wx\zstream.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\localedef.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

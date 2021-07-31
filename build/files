@@ -574,6 +574,7 @@ BASE_CMN_HDR =
     wx/link.h
     wx/list.h
     wx/listimpl.cpp
+    wx/localedef.h
     wx/log.h
     wx/longlong.h
     wx/lzmastream.h

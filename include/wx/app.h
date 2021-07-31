@@ -21,7 +21,7 @@
 #include "wx/build.h"
 #include "wx/cmdargs.h"     // for wxCmdLineArgsArray used by wxApp::argv
 #include "wx/init.h"        // we must declare wxEntry()
-#include "wx/intl.h"        // for wxLayoutDirection
+#include "wx/localedef.h"   // for wxLayoutDirection
 #include "wx/log.h"         // for wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
 class WXDLLIMPEXP_FWD_BASE wxAppConsole;

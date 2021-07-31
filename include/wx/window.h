@@ -24,7 +24,7 @@
 #include "wx/colour.h"
 #include "wx/region.h"
 #include "wx/utils.h"
-#include "wx/intl.h"
+#include "wx/localedef.h"
 
 #include "wx/validate.h"        // for wxDefaultValidator (always include it)
 #include "wx/windowid.h"

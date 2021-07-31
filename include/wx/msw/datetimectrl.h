@@ -10,7 +10,7 @@
 #ifndef _WX_MSW_DATETIMECTRL_H_
 #define _WX_MSW_DATETIMECTRL_H_
 
-#include "wx/intl.h"
+#include "wx/localedef.h"
 
 // Forward declare a struct from Platform SDK.
 struct tagNMDATETIMECHANGE;
