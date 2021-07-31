@@ -26,6 +26,8 @@
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
+#include "wx/scopedptr.h"
+
 #include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/gdkwayland.h>
