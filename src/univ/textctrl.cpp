@@ -1192,6 +1192,13 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         // update the (cached) last position first as refresh functions use it
         m_posLast += text.length() - to + from;
 
+#if defined(__WXMSW__)
+        // Take into account that every new line mark occupies
+        // two characters, not one.
+        if ( !HasFlag(wxTE_RICH | wxTE_RICH2) )
+            m_posLast += nReplaceCount - 1;
+#endif // WXMSW
+
         // we may optimize refresh if the number of rows didn't change - but if
         // it did we have to refresh everything below the part we chanegd as
         // well as it might have moved
@@ -1721,11 +1728,10 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
     }
     else // multiline
     {
-        if ( (size_t)y >= GetLineCount() )
-        {
-            // this position is below the text
-            return GetLastPosition();
-        }
+        size_t nLineCount = GetLineCount();
+
+        if ((size_t)y >= nLineCount)
+            return -1;
 
         wxTextPos pos = 0;
         for ( size_t nLine = 0; nLine < (size_t)y; nLine++ )
@@ -1733,14 +1739,16 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
             // +1 is because the positions at the end of this line and of the
             // start of the next one are different
             pos += GetLines()[nLine].length() + 1;
+
+#if defined(__WXMSW__)
+            if( !HasFlag(wxTE_RICH | wxTE_RICH2) && nLine + 1 != nLineCount)
+                pos += 1;
+#endif // WXMSW
         }
 
-        // take into account also the position in line
+        // out of the line
         if ( (size_t)x > GetLines()[y].length() )
-        {
-            // don't return position in the next line
-            x = GetLines()[y].length();
-        }
+            return -1;
 
         return pos + x;
     }
@@ -1767,14 +1775,23 @@ bool wxTextCtrl::PositionToXY(wxTextPos pos,
         size_t nLineCount = GetLineCount();
         for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
         {
-            // +1 is because the start the start of the next line is one
+            // +1 is because the start of the next line is one
             // position after the end of this one
             wxTextPos posNew = posCur + GetLines()[nLine].length() + 1;
+#if defined(__WXMSW__)
+            if( !HasFlag(wxTE_RICH | wxTE_RICH2) && nLine + 1 != nLineCount)
+                posNew += 1;
+#endif // WXMSW
             if ( posNew > pos )
             {
                 // we've found the line, now just calc the column
                 if ( x )
                     *x = pos - posCur;
+
+#if defined(__WXMSW__)
+                if ( !HasFlag(wxTE_RICH | wxTE_RICH2) && x && nLine + 1 != nLineCount && posNew - 1 == pos)
+                    *x = pos - posCur - 1;
+#endif // WXMSW
 
                 if ( y )
                     *y = nLine;
