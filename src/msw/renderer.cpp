@@ -1057,7 +1057,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         s_initDone = true;
     }
 
-    if ( s_DrawThemeTextEx && // Might be not available if we're under XP
+    if ( s_DrawThemeTextEx && // Not available under XP
             ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc = ConvertToRECT(dc, rect);
