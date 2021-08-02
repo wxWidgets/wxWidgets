@@ -1935,22 +1935,34 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:
-            if ( cat == wxLOCALE_CAT_NUMBER )
-                return lc->thousands_sep;
-            else if ( cat == wxLOCALE_CAT_MONEY )
-                return lc->mon_thousands_sep;
+            switch ( cat )
+            {
+                case wxLOCALE_CAT_DEFAULT:
+                case wxLOCALE_CAT_NUMBER:
+                    return lc->thousands_sep;
 
-            wxFAIL_MSG( "invalid wxLocaleCategory" );
+                case wxLOCALE_CAT_MONEY:
+                    return lc->mon_thousands_sep;
+
+                default:
+                    wxFAIL_MSG( "invalid wxLocaleCategory" );
+            }
             break;
 
 
         case wxLOCALE_DECIMAL_POINT:
-            if ( cat == wxLOCALE_CAT_NUMBER )
-                return lc->decimal_point;
-            else if ( cat == wxLOCALE_CAT_MONEY )
-                return lc->mon_decimal_point;
+            switch ( cat )
+            {
+                case wxLOCALE_CAT_DEFAULT:
+                case wxLOCALE_CAT_NUMBER:
+                    return lc->decimal_point;
 
-            wxFAIL_MSG( "invalid wxLocaleCategory" );
+                case wxLOCALE_CAT_MONEY:
+                    return lc->mon_decimal_point;
+
+                default:
+                    wxFAIL_MSG( "invalid wxLocaleCategory" );
+            }
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
