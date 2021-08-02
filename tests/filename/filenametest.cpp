@@ -22,6 +22,8 @@
 #include "wx/stdpaths.h"
 #include "wx/scopeguard.h"
 
+#include "wx/private/localeset.h"
+
 #ifdef __WINDOWS__
     #include "wx/msw/registry.h"
     #include "wx/msw/wrapshl.h"
@@ -493,7 +495,7 @@ TEST_CASE("wxFileName::GetHumanReadable", "[filename]")
         { "304 KB",    304351, 0, wxSIZE_CONV_SI          },
     };
 
-    CLocaleSetter loc;      // we want to use "C" locale for LC_NUMERIC
+    wxCLocaleSetter loc;    // we want to use "C" locale for LC_NUMERIC
                             // so that regardless of the system's locale
                             // the decimal point used by GetHumanReadableSize()
                             // is always '.'

@@ -147,38 +147,6 @@ extern bool IsAutomaticTest();
 
 extern bool IsRunningUnderXVFB();
 
-// Helper class setting the locale to the given one for its lifetime.
-class LocaleSetter
-{
-public:
-    LocaleSetter(const char *loc)
-        : m_locOld(wxStrdupA(setlocale(LC_ALL, NULL)))
-    {
-        setlocale(LC_ALL, loc);
-    }
-
-    ~LocaleSetter()
-    {
-        setlocale(LC_ALL, m_locOld);
-        free(m_locOld);
-    }
-
-private:
-    char * const m_locOld;
-
-    wxDECLARE_NO_COPY_CLASS(LocaleSetter);
-};
-
-// An even simpler helper for setting the locale to "C" one during its lifetime.
-class CLocaleSetter : private LocaleSetter
-{
-public:
-    CLocaleSetter() : LocaleSetter("C") { }
-
-private:
-    wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
-};
-
 #if wxUSE_GUI
 
 // Return true if the UI tests are enabled, used by WXUISIM_TEST().

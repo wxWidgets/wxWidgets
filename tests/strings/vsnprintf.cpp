@@ -24,6 +24,7 @@
     #include "wx/wxchar.h"
 #endif // WX_PRECOMP
 
+#include "wx/private/localeset.h"
 
 // NOTE: for more info about the specification of wxVsnprintf() behaviour you can
 //       refer to the following page of the GNU libc manual:
@@ -85,10 +86,10 @@ wxUnsafeSnprintf(T *buf, size_t len, const wxChar *fmt, ...)
 
 // Explicitly set C locale to avoid check failures when running on machines
 // with a locale where the decimal point is not '.'
-class VsnprintfTestCase : CLocaleSetter
+class VsnprintfTestCase : wxCLocaleSetter
 {
 public:
-    VsnprintfTestCase() : CLocaleSetter() { }
+    VsnprintfTestCase() : wxCLocaleSetter() { }
 
 protected:
     template<typename T>
