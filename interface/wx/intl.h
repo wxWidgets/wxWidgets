@@ -116,6 +116,9 @@ enum wxLocaleInfo
 
         This value can be used with either wxLOCALE_CAT_NUMBER or
         wxLOCALE_CAT_MONEY categories.
+
+        By default, i.e. when wxLOCALE_CAT_DEFAULT is used, the separator for
+        numbers is returned.
      */
     wxLOCALE_THOUSANDS_SEP,
 
@@ -124,6 +127,9 @@ enum wxLocaleInfo
 
         This value can be used with either wxLOCALE_CAT_NUMBER or
         wxLOCALE_CAT_MONEY categories.
+
+        By default, i.e. when wxLOCALE_CAT_DEFAULT is used, the decimal point
+        for numbers is returned.
      */
     wxLOCALE_DECIMAL_POINT,
 
