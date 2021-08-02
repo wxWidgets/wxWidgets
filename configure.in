@@ -8260,9 +8260,9 @@ if test "$wxUSE_GUI" = "yes"; then
             ;;
     esac
 fi
-case "wxUSE_REGEX" in
+case "$wxUSE_REGEX" in
     builtin)
-        wxconfig_3rdparty="pcre $wxconfig_3rdparty"
+        wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
         ;;
     sys)
         WXCONFIG_LIBS="$PCRE_LINK $WXCONFIG_LIBS"
