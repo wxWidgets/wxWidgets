@@ -21695,12 +21695,12 @@ fi
             if test "$wxUSE_REGEX" = "builtin"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether pcre submodule exists" >&5
 $as_echo_n "checking whether pcre submodule exists... " >&6; }
-        if ! test -f "$ac_confdir/3rdparty/pcre/pcre2-config.in" ; then
+        if ! test -f "$srcdir/3rdparty/pcre/pcre2-config.in" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             as_fn_error $? "
     Configured to use built-in PCRE library, but the file
-    $ac_confdir/3rdparty/pcre/pcre2-config.in couldn't be found.
+    $srcdir/3rdparty/pcre/pcre2-config.in couldn't be found.
     You might need to run:
 
         git submodule update --init 3rdparty/pcre
@@ -21953,12 +21953,12 @@ $as_echo "$as_me: WARNING: zlib library not found or too old, will use built-in 
                 if test "$wxUSE_ZLIB" = "builtin" ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether zlib.h file exists" >&5
 $as_echo_n "checking whether zlib.h file exists... " >&6; }
-        if ! test -f "$ac_confdir/src/zlib/zlib.h" ; then
+        if ! test -f "$srcdir/src/zlib/zlib.h" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             as_fn_error $? "
     Configured to use built-in zlib library, but the required file
-    $ac_confdir/src/zlib/zlib.h couldn't be found.
+    $srcdir/src/zlib/zlib.h couldn't be found.
     You might need to run
 
         git submodule update --init src/zlib
@@ -22089,12 +22089,12 @@ $as_echo "$as_me: WARNING: system png library not found or too old, will use bui
                 if test "$wxUSE_LIBPNG" = "builtin" ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether png.c file exists" >&5
 $as_echo_n "checking whether png.c file exists... " >&6; }
-        if ! test -f "$ac_confdir/src/png/png.c" ; then
+        if ! test -f "$srcdir/src/png/png.c" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             as_fn_error $? "
     Configured to use built-in png library, but the required file
-    $ac_confdir/src/png/png.c couldn't be found.
+    $srcdir/src/png/png.c couldn't be found.
     You might need to run
 
         git submodule update --init src/png
@@ -22264,12 +22264,12 @@ fi
                 if test "$wxUSE_LIBJPEG" = "builtin" ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether jpeglib.h file exists" >&5
 $as_echo_n "checking whether jpeglib.h file exists... " >&6; }
-        if ! test -f "$ac_confdir/src/jpeg/jpeglib.h" ; then
+        if ! test -f "$srcdir/src/jpeg/jpeglib.h" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             as_fn_error $? "
     Configured to use built-in jpeg library, but the required file
-    $ac_confdir/src/jpeg/jpeglib.h couldn't be found.
+    $srcdir/src/jpeg/jpeglib.h couldn't be found.
     You might need to run
 
         git submodule update --init src/jpeg
@@ -22619,12 +22619,12 @@ $as_echo "$as_me: WARNING: system tiff library not found, will use built-in inst
     if test "$wxUSE_LIBTIFF" = "builtin" ; then
                 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether tiff.h file exists" >&5
 $as_echo_n "checking whether tiff.h file exists... " >&6; }
-        if ! test -f "$ac_confdir/src/tiff/libtiff/tiff.h" ; then
+        if ! test -f "$srcdir/src/tiff/libtiff/tiff.h" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             as_fn_error $? "
     Configured to use built-in tiff library, but the required file
-    $ac_confdir/src/tiff/libtiff/tiff.h couldn't be found.
+    $srcdir/src/tiff/libtiff/tiff.h couldn't be found.
     You might need to run:
 
         git submodule update --init src/tiff
@@ -22883,12 +22883,12 @@ $as_echo "$as_me: WARNING: system expat library not found, will use built-in ins
     if test "$wxUSE_EXPAT" = "builtin" ; then
                 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether expat.h file exists" >&5
 $as_echo_n "checking whether expat.h file exists... " >&6; }
-        if ! test -f "$ac_confdir/src/expat/expat/lib/expat.h" ; then
+        if ! test -f "$srcdir/src/expat/expat/lib/expat.h" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
             as_fn_error $? "
     Configured to use built-in expat library, but the required file
-    $ac_confdir/src/expat/expat/lib/expat.h couldn't be found.
+    $srcdir/src/expat/expat/lib/expat.h couldn't be found.
     You might need to run:
 
         git submodule update --init src/expat
@@ -41255,12 +41255,12 @@ if test "$wxUSE_TESTS_SUBDIR" != "no"; then
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch.hpp file exists" >&5
 $as_echo_n "checking whether catch.hpp file exists... " >&6; }
-    if ! test -f "$ac_confdir/3rdparty/catch/include/catch.hpp" ; then
+    if ! test -f "$srcdir/3rdparty/catch/include/catch.hpp" ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
         as_fn_error $? "
     CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't be found.
+    $srcdir/3rdparty/catch/include/catch.hpp couldn't be found.
 
     You might need to run
 

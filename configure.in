@@ -2439,11 +2439,11 @@ if test "$wxUSE_REGEX" != "no"; then
     dnl the system one was not found, build it.
     if test "$wxUSE_REGEX" = "builtin"; then
         AC_MSG_CHECKING([whether pcre submodule exists])
-        if ! test -f "$ac_confdir/3rdparty/pcre/pcre2-config.in" ; then
+        if ! test -f "$srcdir/3rdparty/pcre/pcre2-config.in" ; then
             AC_MSG_RESULT([no])
             AC_MSG_ERROR([
     Configured to use built-in PCRE library, but the file
-    $ac_confdir/3rdparty/pcre/pcre2-config.in couldn't be found.
+    $srcdir/3rdparty/pcre/pcre2-config.in couldn't be found.
     You might need to run:
 
         git submodule update --init 3rdparty/pcre
@@ -2537,11 +2537,11 @@ if test "$wxUSE_ZLIB" != "no" ; then
     dnl Would be available when downloaded as a zipped or tarball release.
     if test "$wxUSE_ZLIB" = "builtin" ; then
         AC_MSG_CHECKING([whether zlib.h file exists])
-        if ! test -f "$ac_confdir/src/zlib/zlib.h" ; then
+        if ! test -f "$srcdir/src/zlib/zlib.h" ; then
             AC_MSG_RESULT([no])
             AC_MSG_ERROR([
     Configured to use built-in zlib library, but the required file
-    $ac_confdir/src/zlib/zlib.h couldn't be found.
+    $srcdir/src/zlib/zlib.h couldn't be found.
     You might need to run
 
         git submodule update --init src/zlib
@@ -2617,11 +2617,11 @@ if test "$wxUSE_LIBPNG" != "no" ; then
     dnl Would be available when downloaded as a zipped or tarball release.
     if test "$wxUSE_LIBPNG" = "builtin" ; then
         AC_MSG_CHECKING([whether png.c file exists])
-        if ! test -f "$ac_confdir/src/png/png.c" ; then
+        if ! test -f "$srcdir/src/png/png.c" ; then
             AC_MSG_RESULT([no])
             AC_MSG_ERROR([
     Configured to use built-in png library, but the required file
-    $ac_confdir/src/png/png.c couldn't be found.
+    $srcdir/src/png/png.c couldn't be found.
     You might need to run
 
         git submodule update --init src/png
@@ -2709,11 +2709,11 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
     dnl Would be available when downloaded as a zipped or tarball release.
     if test "$wxUSE_LIBJPEG" = "builtin" ; then
         AC_MSG_CHECKING([whether jpeglib.h file exists])
-        if ! test -f "$ac_confdir/src/jpeg/jpeglib.h" ; then
+        if ! test -f "$srcdir/src/jpeg/jpeglib.h" ; then
             AC_MSG_RESULT([no])
             AC_MSG_ERROR([
     Configured to use built-in jpeg library, but the required file
-    $ac_confdir/src/jpeg/jpeglib.h couldn't be found.
+    $srcdir/src/jpeg/jpeglib.h couldn't be found.
     You might need to run
 
         git submodule update --init src/jpeg
@@ -2818,11 +2818,11 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
     if test "$wxUSE_LIBTIFF" = "builtin" ; then
         dnl Test for built-in tiff library avalability.
         AC_MSG_CHECKING([whether tiff.h file exists])
-        if ! test -f "$ac_confdir/src/tiff/libtiff/tiff.h" ; then
+        if ! test -f "$srcdir/src/tiff/libtiff/tiff.h" ; then
             AC_MSG_RESULT([no])
             AC_MSG_ERROR([
     Configured to use built-in tiff library, but the required file
-    $ac_confdir/src/tiff/libtiff/tiff.h couldn't be found.
+    $srcdir/src/tiff/libtiff/tiff.h couldn't be found.
     You might need to run:
 
         git submodule update --init src/tiff
@@ -2907,11 +2907,11 @@ if test "$wxUSE_EXPAT" != "no"; then
     if test "$wxUSE_EXPAT" = "builtin" ; then
         dnl Test for built-in expat library avalability.
         AC_MSG_CHECKING([whether expat.h file exists])
-        if ! test -f "$ac_confdir/src/expat/expat/lib/expat.h" ; then
+        if ! test -f "$srcdir/src/expat/expat/lib/expat.h" ; then
             AC_MSG_RESULT([no])
             AC_MSG_ERROR([
     Configured to use built-in expat library, but the required file
-    $ac_confdir/src/expat/expat/lib/expat.h couldn't be found.
+    $srcdir/src/expat/expat/lib/expat.h couldn't be found.
     You might need to run:
 
         git submodule update --init src/expat
@@ -8706,11 +8706,11 @@ if test "$wxUSE_TESTS_SUBDIR" != "no"; then
 
     dnl Check for catch (C++ Automated Test Cases in Headers) availability.
     AC_MSG_CHECKING([whether catch.hpp file exists])
-    if ! test -f "$ac_confdir/3rdparty/catch/include/catch.hpp" ; then
+    if ! test -f "$srcdir/3rdparty/catch/include/catch.hpp" ; then
         AC_MSG_RESULT([no])
         AC_MSG_ERROR([
     CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't be found.
+    $srcdir/3rdparty/catch/include/catch.hpp couldn't be found.
 
     You might need to run
 
