@@ -184,7 +184,14 @@ enum
 
     - Backslash can be used to escape the character following it even inside
       square brackets now, while it loses its special meaning in POSIX regexes
-      when it occurs inside square brackets.
+      when it occurs inside square brackets. In particular, @c "\\]" escapes
+      the special meaning of the closing bracket, and so does @e not close the
+      character class. Please use @c "\\\\]" instead.
+
+    - Closing parenthesis without a matching open parenthesis is now a syntax
+      error instead of just being treated as a literal. To fix possible errors
+      due to it, escape parenthesis that are supposed to be taken literally
+      with a backslash, i.e. use @c "\\)" in C strings.
 
     - For completeness, PCRE syntax which previously resulted in errors, e.g.
       @c "(?:...)" and similar constructs, are now accepted and behave as

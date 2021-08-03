@@ -12,9 +12,9 @@ INCOMPATIBLE CHANGES SINCE 3.0.x:
 Changes in behaviour not resulting in compilation errors
 --------------------------------------------------------
 
-- wxRegEx now uses PCRE library, changing the meaning of some exotic regular
-  expressions using wxRE_ADVANCED syntax, please see its documentation for more
-  details.
+- wxRegEx now uses PCRE library, changing the meaning of some regular
+  expressions, please see the "Changes" section in wxRegEx documentation for
+  more details.
 
 - wxRibbonButtonBar::DeleteButton() now deletes and not just removes the button.
 
