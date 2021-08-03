@@ -444,7 +444,7 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
     int len = wx_regerror(errorcode, &m_RegEx, NULL, 0);
     if ( len > 0 )
     {
-        wxCharTypeBuffer<wxRegErrorChar> errbuf(len);
+        wxCharTypeBuffer<wxRegErrorChar> errbuf(len + 1);
 
         (void)wx_regerror(errorcode, &m_RegEx, errbuf.data(), errbuf.length());
 
