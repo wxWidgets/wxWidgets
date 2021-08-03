@@ -2332,19 +2332,12 @@ void wxListMainWindow::SendNotify( size_t line,
         le.m_pointDrag = GetPosition() + point;
     }
 
-    // don't try to get the line info for virtual list controls: the main
-    // program has it anyhow and if we did it would result in accessing all
-    // the lines, even those which are not visible now and this is precisely
-    // what we're trying to avoid
-    if ( !IsVirtual() )
+    // provide information about the (first column of the) item in the event if
+    // we have a valid item and any columns at all
+    if ( line != (size_t)-1 && GetColumnCount() )
     {
-        if ( line != (size_t)-1 )
-        {
-            GetLine(line)->GetItem( 0, le.m_item );
-        }
-        //else: this happens for wxEVT_LIST_ITEM_FOCUSED event
+        GetLine(line)->GetItem( 0, le.m_item );
     }
-    //else: there may be no more such item
 
     GetParent()->GetEventHandler()->ProcessEvent( le );
 }
