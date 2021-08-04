@@ -400,6 +400,8 @@ AC_ARG_ENABLE(vendor,  [  --enable-vendor=VENDOR  vendor name (win32 DLL only)],
 if test "x$VENDOR" = "x"; then
     VENDOR="custom"
 fi
+AC_ARG_ENABLE(silent-rules, [  --enable-silent-rules   no-op ], [SILENT_RULES="$enableval"])
+AC_ARG_WITH(libtool-sysroot,[  --with-libtool-sysroot=PATH   no-op], [LIBTOOL_SYSROOT="$withval"])
 
 WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
 WX_ARG_DISABLE(sys-libs,    [  --disable-sys-libs      disable use of system libraries for which built-in versions are available], wxUSE_SYS_LIBS)
