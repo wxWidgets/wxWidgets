@@ -173,9 +173,9 @@ enum
       empty string. The new ::wxRE_NOTEMPTY flag can be used to disable empty
       matches.
 
-    - Using @c \U to embed Unicode code points into the pattern is not
-      supported any more, use the still supported @c \u, followed by exactly
-      four hexadecimal digits, or @c \x, followed by exactly two hexadecimal
+    - Using @c \\U to embed Unicode code points into the pattern is not
+      supported any more, use the still supported @c \\u, followed by exactly
+      four hexadecimal digits, or @c \\x, followed by exactly two hexadecimal
       digits, instead.
 
     - POSIX collating elements inside square brackets, i.e. @c [.XXX.] and
@@ -195,7 +195,7 @@ enum
 
     - For completeness, PCRE syntax which previously resulted in errors, e.g.
       @c "(?:...)" and similar constructs, are now accepted and behave as
-      expected. Other regexes syntactically invalid according to POSIX are are
+      expected. Other regexes syntactically invalid according to POSIX are
       re-interpreted as sequences of literal characters with PCRE, e.g. @c "{1"
       is just a sequence of two literal characters now, where it previously was
       a compilation error.
