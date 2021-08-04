@@ -28,11 +28,13 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/calctrl.h"
 #include "wx/intl.h"
 #include "wx/file.h"
 #include "wx/log.h"
 #include "wx/cmdline.h"
 #include "wx/platinfo.h"
+#include "wx/spinctrl.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -80,6 +82,7 @@ public:
 
     void OnPlay(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
+    void OnSave(wxCommandEvent& event);
     void OnTest1(wxCommandEvent& event);
     void OnTest2(wxCommandEvent& event);
     void OnTest3(wxCommandEvent& event);
@@ -181,6 +184,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(INTERNAT_PLAY, MyFrame::OnPlay)
     EVT_MENU(wxID_OPEN, MyFrame::OnOpen)
+    EVT_MENU(wxID_SAVE, MyFrame::OnSave)
     EVT_MENU(INTERNAT_TEST_1, MyFrame::OnTest1)
     EVT_MENU(INTERNAT_TEST_2, MyFrame::OnTest2)
     EVT_MENU(INTERNAT_TEST_3, MyFrame::OnTest3)
@@ -323,6 +327,7 @@ MyFrame::MyFrame(wxLocale& locale)
 
     wxMenu *test_menu = new wxMenu;
     test_menu->Append(wxID_OPEN, _("&Open bogus file"), _("Shows a wxWidgets localized error message"));
+    test_menu->Append(wxID_SAVE, _("&Save dummy file"), _("Shows a localized standard dialog"));
     test_menu->Append(INTERNAT_PLAY, _("&Play a game"), _("A little game; hint: 17 is a lucky number for many"));
     test_menu->AppendSeparator();
     test_menu->Append(INTERNAT_TEST_1, _("&1 _() (gettext)"), _("Tests the _() macro"));
@@ -367,13 +372,27 @@ MyFrame::MyFrame(wxLocale& locale)
     // this demonstrates RTL support in wxStatusBar:
     CreateStatusBar(1);
 
-    // this demonstrates RTL layout mirroring for Arabic locales
+    // create some controls affected by the locale
+    wxSizer* const topSizer = new wxBoxSizer(wxVERTICAL);
+
+    // this demonstrates RTL layout mirroring for Arabic locales and using
+    // locale-specific decimal separator in wxSpinCtrlDouble.
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(new wxStaticText(this, wxID_ANY, _("First")),
-                wxSizerFlags().Border());
-    sizer->Add(new wxStaticText(this, wxID_ANY, _("Second")),
-                wxSizerFlags().Border());
-    SetSizer(sizer);
+    sizer->Add(new wxStaticText(this, wxID_ANY, _("Numeric input:")),
+               wxSizerFlags().Center().Border());
+
+    wxSpinCtrlDouble* const spin = new wxSpinCtrlDouble(this, wxID_ANY);
+    spin->SetDigits(2);
+    spin->SetValue(12.34);
+    sizer->Add(spin, wxSizerFlags().Center().Border());
+
+    topSizer->Add(sizer, wxSizerFlags().Center());
+
+    // show that week days and months names are translated too
+    topSizer->Add(new wxCalendarCtrl(this, wxID_ANY),
+                  wxSizerFlags().Center().Border());
+
+    SetSizer(topSizer);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
@@ -515,6 +534,13 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     // open a bogus file -- the error message should be also translated if
     // you've got wxstd.mo somewhere in the search path (see MyApp::OnInit)
     wxFile file("NOTEXIST.ING");
+}
+
+void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
+{
+    // show this file dialog just to check that the locale-specific elements in
+    // it (such as dates) follow the current locale convnetions
+    wxSaveFileSelector(_("Dummy file dialog"), ".ext", "dummy", this);
 }
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
