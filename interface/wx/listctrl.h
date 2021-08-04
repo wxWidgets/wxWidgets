@@ -1110,6 +1110,11 @@ public:
         This method does not take ownership of the image list, you have to
         delete it yourself.
 
+        Note that, unlike for most of the other methods of this class, it is
+        possible to call this function before the corresponding window is
+        created, i.e. do it in a constructor of a class derived from wxListCtrl
+        before calling Create().
+
         @see AssignImageList()
     */
     void SetImageList(wxImageList* imageList, int which);
