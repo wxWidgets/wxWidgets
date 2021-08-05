@@ -48,6 +48,7 @@ jobs:
         include:
           - name: Fedora Rawhide
             container: fedora:rawhide
+            redhat: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -56,6 +57,11 @@ jobs:
       wxUSE_XVFB: ${{ matrix.use_xvfb && 1 || 0 }}
 
     steps:
+      - name: Initial RedHat system setup
+        if: matrix.redhat
+        run: |
+            dnf install -y make g++ git-core
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
