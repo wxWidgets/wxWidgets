@@ -36,6 +36,7 @@
 #include "wx/numformatter.h"
 #include "wx/platinfo.h"
 #include "wx/spinctrl.h"
+#include "wx/translation.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -271,11 +272,15 @@ bool MyApp::OnInit()
     // in the default locations, but when the program is not installed the
     // catalogs are in the build directory where we wouldn't find them by
     // default
-    wxLocale::AddCatalogLookupPathPrefix(".");
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix(".");
+
+    // Create the object for message translation and set it up for global use.
+    wxTranslations* const trans = new wxTranslations();
+    wxTranslations::Set(trans);
 
     // Initialize the catalogs we'll be using
     const wxLanguageInfo* pInfo = wxLocale::GetLanguageInfo(m_lang);
-    if (!m_locale.AddCatalog("internat"))
+    if ( !trans->AddCatalog("internat") )
     {
         wxLogError(_("Couldn't find/load the 'internat' catalog for locale '%s'."),
                    pInfo ? pInfo->GetLocaleName() : _("unknown"));
@@ -283,7 +288,7 @@ bool MyApp::OnInit()
 
     // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
     // a localized error message:
-    m_locale.AddCatalog("wxstd");
+    trans->AddCatalog("wxstd");
         // NOTE: it's not an error if we couldn't find it!
 
     // this catalog is installed in standard location on Linux systems and
@@ -291,8 +296,8 @@ bool MyApp::OnInit()
     //
     // if it's not installed on your system, it is just silently ignored
 #ifdef USE_COREUTILS_MO
-    wxLocale::AddCatalogLookupPathPrefix("/usr/share/locale");
-    g_loadedCoreutilsMO = m_locale.AddCatalog("coreutils");
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("/usr/share/locale");
+    g_loadedCoreutilsMO = trans->AddCatalog("coreutils");
 #endif // USE_COREUTILS_MO
 
     // Create the main frame window
