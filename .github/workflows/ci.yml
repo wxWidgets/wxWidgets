@@ -48,10 +48,6 @@ jobs:
         include:
           - name: Fedora Rawhide
             container: fedora:rawhide
-          - name: Ubuntu 16.04 wxGTK 2
-            runner: ubuntu-16.04
-            gtk_version: 2
-            use_xvfb: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
