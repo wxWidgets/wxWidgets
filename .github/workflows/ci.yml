@@ -39,7 +39,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.runner || ubuntu-latest }}
+    runs-on: ${{ matrix.runner || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
     name: ${{ matrix.name }}
     strategy:
