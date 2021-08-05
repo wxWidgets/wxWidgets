@@ -33,6 +33,7 @@
 #include "wx/file.h"
 #include "wx/log.h"
 #include "wx/cmdline.h"
+#include "wx/numformatter.h"
 #include "wx/platinfo.h"
 #include "wx/spinctrl.h"
 
@@ -392,7 +393,23 @@ MyFrame::MyFrame(wxLocale& locale)
     topSizer->Add(new wxCalendarCtrl(this, wxID_ANY),
                   wxSizerFlags().Center().Border());
 
-    SetSizer(topSizer);
+    // show the difference between wxString::Format() and wxNumberFormatter:
+    // the former uses the current C locale, while the latter uses the UI
+    // locale
+    topSizer->Add(new wxStaticText
+                      (
+                        this,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                            _("Number in UI locale: %s; in C locale: %.2f"),
+                            wxNumberFormatter::ToString(5.67, 2),
+                            5.67
+                        )
+                      ),
+                  wxSizerFlags().Center().Border());
+
+    SetSizerAndFit(topSizer);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
