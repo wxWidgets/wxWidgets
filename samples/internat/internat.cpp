@@ -215,14 +215,21 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
     if ( parser.GetParamCount() )
     {
         const wxString loc = parser.GetParam();
-        const wxLanguageInfo * const lang = wxLocale::FindLanguageInfo(loc);
-        if ( !lang )
+        if ( loc.empty() )
         {
-            wxLogError(_("Locale \"%s\" is unknown."), loc);
-            return false;
+            m_lang = wxLANGUAGE_DEFAULT;
         }
+        else
+        {
+            const wxLanguageInfo * const lang = wxLocale::FindLanguageInfo(loc);
+            if ( !lang )
+            {
+                wxLogError(_("Locale \"%s\" is unknown."), loc);
+                return false;
+            }
 
-        m_lang = static_cast<wxLanguage>(lang->Language);
+            m_lang = static_cast<wxLanguage>(lang->Language);
+        }
     }
 
     return true;
