@@ -60,7 +60,7 @@ jobs:
       - name: Initial RedHat system setup
         if: matrix.redhat
         run: |
-            dnf install -y make g++ git-core
+            dnf install -y findutils g++ git-core gtk3-devel make npm
 
       - name: Checkout
         uses: actions/checkout@v2
