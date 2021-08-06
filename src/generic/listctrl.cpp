@@ -2061,7 +2061,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         // Calling Refresh() from inside OnPaint() doesn't work under macOS, so
         // don't do it immediately...
-        RecalculatePositions(true /* no refresh */);
+        RecalculatePositions();
 
         // ... but schedule it for later.
         CallAfter(&wxWindow::Refresh, true, (const wxRect*)NULL);
@@ -3873,8 +3873,7 @@ wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect,
     // ensure that we're laid out, otherwise we could return nonsense
     if ( m_dirty )
     {
-        wxConstCast(this, wxListMainWindow)->
-            RecalculatePositions(true /* no refresh */);
+        wxConstCast(this, wxListMainWindow)->RecalculatePositions();
     }
 
     rect = GetLineRect((size_t)item);
@@ -4009,7 +4008,7 @@ bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y)
 // geometry calculation
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::RecalculatePositions(bool noRefresh)
+void wxListMainWindow::RecalculatePositions()
 {
     const int lineHeight = GetLineHeight();
 
@@ -4217,15 +4216,13 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
         }
     }
 
-    if ( !noRefresh )
-    {
-        RefreshAll();
-    }
+    m_dirty = false;
 }
 
-void wxListMainWindow::RefreshAll()
+void wxListMainWindow::RecalculatePositionsAndRefresh()
 {
-    m_dirty = false;
+    RecalculatePositions();
+
     Refresh();
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
@@ -4449,7 +4446,7 @@ void wxListMainWindow::DeleteAllItems()
 {
     DoDeleteAllItems();
 
-    RecalculatePositions();
+    RecalculatePositionsAndRefresh();
 }
 
 void wxListMainWindow::DeleteEverything()
@@ -4472,7 +4469,7 @@ void wxListMainWindow::EnsureVisible( long index )
     // We have to call this here because the label in question might just have
     // been added and its position is not known yet
     if ( m_dirty )
-        RecalculatePositions(true /* no refresh */);
+        RecalculatePositions();
 
     MoveToItem((size_t)index);
 }
@@ -5649,7 +5646,7 @@ void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 
     Layout();
 
-    m_mainWin->RecalculatePositions();
+    m_mainWin->RecalculatePositionsAndRefresh();
 
     AdjustScrollbars();
 }
@@ -5659,7 +5656,7 @@ void wxGenericListCtrl::OnInternalIdle()
     wxWindow::OnInternalIdle();
 
     if (m_mainWin->m_dirty)
-        m_mainWin->RecalculatePositions();
+        m_mainWin->RecalculatePositionsAndRefresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -5804,7 +5801,7 @@ wxSize wxGenericListCtrl::DoGetBestClientSize() const
         // If we have the scrollbars we need to account for them too. And to
         // make sure the scrollbars status is up to date we need to call this
         // function to set them.
-        m_mainWin->RecalculatePositions(true /* no refresh */);
+        m_mainWin->RecalculatePositions();
 
         // Unfortunately we can't use wxWindow::HasScrollbar() here as we need
         // to use m_mainWin client/virtual size for determination of whether we
@@ -5905,7 +5902,7 @@ void wxGenericListCtrl::Update()
     if ( m_mainWin )
     {
         if ( m_mainWin->m_dirty )
-            m_mainWin->RecalculatePositions();
+            m_mainWin->RecalculatePositionsAndRefresh();
 
         m_mainWin->Update();
     }
