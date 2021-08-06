@@ -175,14 +175,10 @@ public:
 
     void UpdateLabel()
     {
-        // Use an empty string if we're not displaying text
-        wxString labelStr;
         wxToolBar *tbar = (wxToolBar*) GetToolBar();
         int style = (tbar ? tbar->GetWindowStyleFlag() : 0);
-        if ( (style & (wxTB_NOICONS | wxTB_TEXT)) != 0 )
-            labelStr = wxStripMenuCodes(m_label);
 
-        wxCFStringRef l(labelStr, GetToolBarFontEncoding());
+        wxCFStringRef l(wxStripMenuCodes(m_label), GetToolBarFontEncoding());
         wxCFStringRef sh( GetShortHelp(), GetToolBarFontEncoding() );
 #if wxOSX_USE_NATIVE_TOOLBAR
        if ( m_toolbarItem )
