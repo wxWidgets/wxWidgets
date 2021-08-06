@@ -178,14 +178,13 @@ public:
         wxToolBar *tbar = (wxToolBar*) GetToolBar();
         int style = (tbar ? tbar->GetWindowStyleFlag() : 0);
 
+        // strip mnemonics from the label for compatibility with the usual
+        // labels in wxStaticText sense
         wxCFStringRef l(wxStripMenuCodes(m_label), GetToolBarFontEncoding());
         wxCFStringRef sh( GetShortHelp(), GetToolBarFontEncoding() );
 #if wxOSX_USE_NATIVE_TOOLBAR
        if ( m_toolbarItem )
         {
-            // strip mnemonics from the label for compatibility with the usual
-            // labels in wxStaticText sense
-
             [m_toolbarItem setLabel:l.AsNSString()];
 
             [m_toolbarItem setToolTip:sh.AsNSString()];
