@@ -2058,7 +2058,19 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     if ( m_dirty )
-        RecalculatePositions( false );
+    {
+        // Calling Refresh() from inside OnPaint() doesn't work under macOS, so
+        // don't do it immediately...
+        RecalculatePositions(true /* no refresh */);
+
+        // ... but schedule it for later.
+        CallAfter(&wxWindow::Refresh, true, (const wxRect*)NULL);
+
+        // Don't bother redoing the relayout again the next time nor redrawing
+        // now, as we'll be refresh soon anyhow.
+        m_dirty = false;
+        return;
+    }
 
     GetListCtrl()->PrepareDC( dc );
 
