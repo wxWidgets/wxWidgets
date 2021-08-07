@@ -72,6 +72,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Set environment variables
+        shell: bash
         run: |
           wxPROC_COUNT=`./build/tools/proc_count.sh`
           if [ "${{ matrix.cmake_generator }}" == "Xcode" ]; then
