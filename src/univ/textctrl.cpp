@@ -4763,7 +4763,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 wxCommandEvent event(wxEVT_TEXT_ENTER, GetId());
                 InitCommandEvent(event);
                 event.SetString(GetValue());
-                GetEventHandler()->ProcessEvent(event);
+                if( GetEventHandler()->ProcessEvent(event) )
+                    return;
             }
 
             if ( IsSingleLine() )
