@@ -58,6 +58,9 @@ jobs:
             cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
             cmake_samples: OFF
             cmake_tests: OFF
+          - name: Windows MSVC
+            runner: windows-latest
+            cmake_generator: Ninja
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -94,6 +97,11 @@ jobs:
       - name: Before install
         run: |
           ./build/tools/before_install.sh
+
+      # required for CMake to find Ninja
+      - name: "[Windows] Set up MSVC Developer Command Prompt"
+        if: runner.os == 'Windows'
+        uses: seanmiddleditch/gha-setup-vsdevenv@v3
 
       - name: Configuring
         run: |
