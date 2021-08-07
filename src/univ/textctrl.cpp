@@ -4676,6 +4676,15 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         if ( CanRedo() )
             Redo();
     }
+    else if ( action == wxACTION_TEXT_RETURN )
+    {
+        // activate default button
+        if ( !HasFlag(wxTE_PROCESS_ENTER) && !HasFlag(wxTE_MULTILINE) )
+        {
+            return ClickDefaultButtonIfPossible();
+        }
+        return false;
+    }
     else
     {
         return wxControl::PerformAction(action, numArg, strArg);
@@ -4768,12 +4777,17 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #endif
         if ( keycode == WXK_RETURN )
         {
-            if ( IsSingleLine() || (GetWindowStyle() & wxTE_PROCESS_ENTER) )
+            if ( (GetWindowStyle() & wxTE_PROCESS_ENTER) )
             {
                 wxCommandEvent event(wxEVT_TEXT_ENTER, GetId());
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 GetEventHandler()->ProcessEvent(event);
+            }
+
+            if ( IsSingleLine() )
+            {
+                ClickDefaultButtonIfPossible();
             }
             else // interpret <Enter> normally: insert new line
             {
@@ -4803,6 +4817,23 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #endif // wxDEBUG_LEVEL >= 2
 
     event.Skip();
+}
+
+bool wxTextCtrl::ClickDefaultButtonIfPossible()
+{
+    wxTopLevelWindow* tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( tlw )
+    {
+        wxButton* btn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+        if ( btn )
+        {
+            wxCommandEvent evt(wxEVT_BUTTON, btn->GetId());
+            evt.SetEventObject(btn);
+            btn->Command(evt);
+            return true;
+        }
+    }
+    return false;
 }
 
 /* static */
@@ -4922,6 +4953,9 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
                 action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_LEFT;
             break;
 
+        case WXK_RETURN:
+            action << wxACTION_TEXT_RETURN;
+            break;
         // something else
         default:
             // reset the action as it could be already set to one of the
@@ -4957,7 +4991,11 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
 
     if ( (action != wxACTION_NONE) && (action != wxACTION_TEXT_PREFIX_SEL) )
     {
-        consumer->PerformAction(action, -1, str);
+        bool result = consumer->PerformAction(action, -1, str);
+        if ( !result && action == wxACTION_TEXT_RETURN )
+        {
+            return wxStdInputHandler::HandleKey(consumer, event, pressed);
+        }
 
         // the key down of WXK_UP/DOWN and WXK_PAGEUP/DOWN
         // must generate a wxEVT_TEXT event. For the controls
