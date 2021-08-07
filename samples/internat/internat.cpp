@@ -378,16 +378,18 @@ MyFrame::MyFrame(wxLocale& locale)
     // this demonstrates RTL support in wxStatusBar:
     CreateStatusBar(1);
 
+    wxPanel* const panel = new wxPanel(this);
+
     // create some controls affected by the locale
     wxSizer* const topSizer = new wxBoxSizer(wxVERTICAL);
 
     // this demonstrates RTL layout mirroring for Arabic locales and using
     // locale-specific decimal separator in wxSpinCtrlDouble.
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(new wxStaticText(this, wxID_ANY, _("Numeric input:")),
+    sizer->Add(new wxStaticText(panel, wxID_ANY, _("Numeric input:")),
                wxSizerFlags().Center().Border());
 
-    wxSpinCtrlDouble* const spin = new wxSpinCtrlDouble(this, wxID_ANY);
+    wxSpinCtrlDouble* const spin = new wxSpinCtrlDouble(panel, wxID_ANY);
     spin->SetDigits(2);
     spin->SetValue(12.34);
     sizer->Add(spin, wxSizerFlags().Center().Border());
@@ -395,7 +397,7 @@ MyFrame::MyFrame(wxLocale& locale)
     topSizer->Add(sizer, wxSizerFlags().Center());
 
     // show that week days and months names are translated too
-    topSizer->Add(new wxCalendarCtrl(this, wxID_ANY),
+    topSizer->Add(new wxCalendarCtrl(panel, wxID_ANY),
                   wxSizerFlags().Center().Border());
 
     // show the difference between wxString::Format() and wxNumberFormatter:
@@ -403,7 +405,7 @@ MyFrame::MyFrame(wxLocale& locale)
     // locale
     topSizer->Add(new wxStaticText
                       (
-                        this,
+                        panel,
                         wxID_ANY,
                         wxString::Format
                         (
@@ -414,7 +416,8 @@ MyFrame::MyFrame(wxLocale& locale)
                       ),
                   wxSizerFlags().Center().Border());
 
-    SetSizerAndFit(topSizer);
+    panel->SetSizer(topSizer);
+    topSizer->SetSizeHints(this);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
