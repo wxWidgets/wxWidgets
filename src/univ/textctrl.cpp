@@ -4805,28 +4805,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     event.Skip();
 }
 
-#ifdef __WXMSW__
-bool wxTextCtrl::MSWHandleMessage(WXLRESULT* result, WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-    bool processed = wxTextCtrlBase::MSWHandleMessage(result, message, wParam, lParam);
-    switch ( message )
-    {
-        case WM_GETDLGCODE:
-            {
-                long lDlgCode = 0;
-
-                // multiline controls should always get ENTER for themselves
-                if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
-                    lDlgCode |= DLGC_WANTMESSAGE;
-
-                *result |= lDlgCode;
-                return true;
-            }
-    }
-    return processed;
-}
-#endif // __WXMSW__
-
 /* static */
 wxInputHandler *wxTextCtrl::GetStdInputHandler(wxInputHandler *handlerDef)
 {

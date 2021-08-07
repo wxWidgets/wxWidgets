@@ -451,12 +451,6 @@ protected:
     bool DoCut();
     bool DoPaste();
 
-#ifdef __WXMSW__
-public:
-    // override MSWHandleMessage to process WM_GETDLGCODE
-    bool MSWHandleMessage(WXLRESULT *result, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-#endif // __WXMSW__
-
 private:
     // all these methods are for multiline text controls only
 
