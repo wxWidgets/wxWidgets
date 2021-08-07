@@ -57,7 +57,7 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp() { m_lang = wxLANGUAGE_UNKNOWN; }
+    MyApp() { m_lang = wxLANGUAGE_UNKNOWN; m_setLocale = true; }
 
     virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
@@ -65,6 +65,7 @@ public:
 
 protected:
     wxLanguage m_lang;  // language specified by user
+    bool m_setLocale;   // if false, skip setting locale entirely
     wxLocale m_locale;  // locale we'll be using
 };
 
@@ -204,8 +205,14 @@ wxIMPLEMENT_APP(MyApp);
 // ----------------------------------------------------------------------------
 
 // command line arguments handling
+
+static const char* OPTION_NO_LOCALE = "no-locale";
+
 void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
+    parser.AddSwitch("n", OPTION_NO_LOCALE,
+                     _("skip setting locale on startup"));
+
     parser.AddParam(_("locale"),
                     wxCMD_LINE_VAL_STRING,
                     wxCMD_LINE_PARAM_OPTIONAL);
@@ -218,8 +225,20 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
     if ( !wxApp::OnCmdLineParsed(parser) )
         return false;
 
+    if ( parser.Found(OPTION_NO_LOCALE) )
+    {
+        m_setLocale = false;
+    }
+
     if ( parser.GetParamCount() )
     {
+        if ( !m_setLocale )
+        {
+            wxLogError("Locale parameter ignored when %s option is used.",
+                       OPTION_NO_LOCALE);
+            return false;
+        }
+
         const wxString loc = parser.GetParam();
         if ( loc.empty() )
         {
@@ -247,25 +266,34 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    if ( m_lang == wxLANGUAGE_UNKNOWN )
+    if ( m_setLocale )
     {
-        int lng = wxGetSingleChoiceIndex
-                  (
-                    _("Please choose language:"),
-                    _("Language"),
-                    WXSIZEOF(langNames),
-                    langNames
-                  );
-        m_lang = lng == -1 ? wxLANGUAGE_DEFAULT : langIds[lng];
+        if ( m_lang == wxLANGUAGE_UNKNOWN )
+        {
+            int lng = wxGetSingleChoiceIndex
+                      (
+                        "Please choose a language or cancel to skip changing it:",
+                        "Language",
+                        WXSIZEOF(langNames),
+                        langNames
+                      );
+            if ( lng == -1 )
+                m_setLocale = false;
+            else
+                m_lang = langIds[lng];
+        }
     }
 
-    // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
-    // false just because it failed to load wxstd catalog
-    if ( !m_locale.Init(m_lang, wxLOCALE_DONT_LOAD_DEFAULT) )
+    if ( m_setLocale )
     {
-        wxLogWarning(_("This language is not supported by the system."));
+        // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
+        // false just because it failed to load wxstd catalog
+        if ( !m_locale.Init(m_lang, wxLOCALE_DONT_LOAD_DEFAULT) )
+        {
+            wxLogWarning(_("This language is not supported by the system."));
 
-        // continue nevertheless
+            // continue nevertheless
+        }
     }
 
     // normally this wouldn't be necessary as the catalog files would be found
