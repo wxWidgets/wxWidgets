@@ -1192,13 +1192,6 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         // update the (cached) last position first as refresh functions use it
         m_posLast += text.length() - to + from;
 
-#if defined(__WXMSW__)
-        // Take into account that every new line mark occupies
-        // two characters, not one.
-        if ( !HasFlag(wxTE_RICH | wxTE_RICH2) )
-            m_posLast += nReplaceCount - 1;
-#endif // WXMSW
-
         // we may optimize refresh if the number of rows didn't change - but if
         // it did we have to refresh everything below the part we chanegd as
         // well as it might have moved
@@ -1740,10 +1733,6 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
             // start of the next one are different
             pos += GetLines()[nLine].length() + 1;
 
-#if defined(__WXMSW__)
-            if( !HasFlag(wxTE_RICH | wxTE_RICH2) && nLine + 1 != nLineCount)
-                pos += 1;
-#endif // WXMSW
         }
 
         // out of the line
@@ -1778,20 +1767,12 @@ bool wxTextCtrl::PositionToXY(wxTextPos pos,
             // +1 is because the start of the next line is one
             // position after the end of this one
             wxTextPos posNew = posCur + GetLines()[nLine].length() + 1;
-#if defined(__WXMSW__)
-            if( !HasFlag(wxTE_RICH | wxTE_RICH2) && nLine + 1 != nLineCount)
-                posNew += 1;
-#endif // WXMSW
+
             if ( posNew > pos )
             {
                 // we've found the line, now just calc the column
                 if ( x )
                     *x = pos - posCur;
-
-#if defined(__WXMSW__)
-                if ( !HasFlag(wxTE_RICH | wxTE_RICH2) && x && nLine + 1 != nLineCount && posNew - 1 == pos)
-                    *x = pos - posCur - 1;
-#endif // WXMSW
 
                 if ( y )
                     *y = nLine;
