@@ -2676,104 +2676,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         }
     }
 #else // __WXUNIVERSAL__
-    // But it also handles clicks on default button
-    if ( m_hWnd &&
-            HasFlag(wxTAB_TRAVERSAL) &&
-                wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
-    {
-        MSG *msg = (MSG *)pMsg;
-
-        if ( msg->message == WM_KEYDOWN )
-        {
-            bool bCtrlDown = wxIsCtrlDown();
-
-            // WM_GETDLGCODE: ask the control if it wants the key for itself,
-            // don't process it if it's the case (except for Ctrl-Tab/Enter
-            // combinations which are always processed)
-            LONG lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
-
-            // surprisingly, DLGC_WANTALLKEYS bit mask doesn't contain the
-            // DLGC_WANTTAB nor DLGC_WANTARROWS bits although, logically,
-            // it, of course, implies them
-            if ( lDlgCode & DLGC_WANTALLKEYS )
-            {
-                lDlgCode |= DLGC_WANTTAB | DLGC_WANTARROWS;
-            }
-
-            switch ( msg->wParam )
-            {
-                case VK_RETURN:
-                    {
-#if wxUSE_BUTTON
-                        // currently active button should get enter press even
-                        // if there is a default button elsewhere so check if
-                        // this window is a button first
-                        wxButton *btn = NULL;
-                        if ( lDlgCode & DLGC_DEFPUSHBUTTON )
-                        {
-                            // let IsDialogMessage() handle this for all
-                            // buttons except the owner-drawn ones which it
-                            // just seems to ignore
-                            long style = ::GetWindowLong(msg->hwnd, GWL_STYLE);
-                            if ( (style & BS_OWNERDRAW) == BS_OWNERDRAW )
-                            {
-                                btn = wxDynamicCast
-                                      (
-                                        wxFindWinFromHandle(msg->hwnd),
-                                        wxButton
-                                      );
-                            }
-                        }
-                        else // not a button itself, do we have default button?
-                        {
-                            // check if this window or any of its ancestors
-                            // wants the message for itself (we always reserve
-                            // Ctrl-Enter for dialog navigation though)
-                            wxWindow *win = wxDynamicCast(this, wxWindow);
-                            if ( !bCtrlDown )
-                            {
-                                // this will contain the dialog code of this
-                                // window and all of its parent windows in turn
-                                LONG lDlgCode2 = lDlgCode;
-
-                                while ( win )
-                                {
-                                    if ( lDlgCode2 & DLGC_WANTMESSAGE )
-                                    {
-                                        // as it wants to process Enter itself,
-                                        // don't call IsDialogMessage() which
-                                        // would consume it
-                                        return false;
-                                    }
-
-                                    // don't propagate keyboard messages beyond
-                                    // the first top level window parent
-                                    if ( win->IsTopLevel() )
-                                        break;
-
-                                    win = win->GetParent();
-
-                                    lDlgCode2 = ::SendMessage
-                                                  (
-                                                    GetHwndOf(win),
-                                                    WM_GETDLGCODE,
-                                                    0,
-                                                    0
-                                                  );
-                                }
-                            }
-
-                            btn = MSWGetDefaultButtonFor(win);
-                        }
-
-                        if ( MSWClickButtonIfPossible(btn) )
-                            return true;
-#endif // wxUSE_BUTTON
-                    }
-                    break;
-            }
-        }
-    }
+    wxUnusedVar(pMsg);
 #endif // !__WXUNIVERSAL__/__WXUNIVERSAL__
 
 #if wxUSE_TOOLTIPS
@@ -2909,14 +2812,8 @@ bool wxWindowMSW::MSWClickButtonIfPossible(wxButton* btn)
 #if wxUSE_BUTTON
     if ( btn && btn->IsEnabled() && btn->IsShownOnScreen() )
     {
-#ifndef __WXUNIVERSAL__
         btn->MSWCommand(BN_CLICKED, 0 /* unused */);
         return true;
-#endif // !__WXUNIVERSAL
-
-        wxCommandEvent event(wxEVT_BUTTON, btn->GetId());
-        event.SetEventObject(btn);
-        return btn->HandleWindowEvent(event);
     }
 #endif // wxUSE_BUTTON
 

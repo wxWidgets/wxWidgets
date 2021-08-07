@@ -96,12 +96,8 @@ void wxDialog::OnOK(wxCommandEvent &WXUNUSED(event))
         }
         else
         {
-            // don't change return code from event char if it was set earlier
-            if (GetReturnCode() == 0)
-            {
-                SetReturnCode(wxID_OK);
-                Show(false);
-            }
+            SetReturnCode(wxID_OK);
+            Show(false);
         }
     }
 }
