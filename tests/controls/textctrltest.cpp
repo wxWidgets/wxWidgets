@@ -38,7 +38,11 @@
 
 static const int TEXT_HEIGHT = 200;
 
-#define wxHAS_2CHAR_NEWLINES defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#define wxHAS_2CHAR_NEWLINES 1
+#else
+#define wxHAS_2CHAR_NEWLINES 0
+#endif
 
 // ----------------------------------------------------------------------------
 // test class
