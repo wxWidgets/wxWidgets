@@ -2454,7 +2454,7 @@ void wxTextCtrl::UpdateLastVisible()
         return;
 
     // use (efficient) HitTestLine to find the last visible character
-    wxString text = m_value;//m_value.Mid((size_t)SData().m_colStart /* to the end */);
+    wxString text = m_value;
     wxTextCoord col;
     switch ( HitTestLine(text, m_rectText.width, &col) )
     {

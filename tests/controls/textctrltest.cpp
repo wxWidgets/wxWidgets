@@ -38,6 +38,8 @@
 
 static const int TEXT_HEIGHT = 200;
 
+#define wxHAS_2CHAR_NEWLINES defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -437,7 +439,7 @@ void TextCtrlTestCase::ProcessEnter()
 
 void TextCtrlTestCase::Url()
 {
-#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxUSE_UIACTIONSIMULATOR && wxHAS_2CHAR_NEWLINES
     // For some unfathomable reason, this test consistently fails when run in
     // AppVeyor CI environment, even though it passes locally, so skip it
     // there.
@@ -690,7 +692,7 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     const wxPoint pos0 = m_text->PositionToCoords(0);
     if ( pos0 == wxDefaultPosition )
     {
-#if ( defined(__WXMSW__) && !defined(__WXUNIVERSAL__) ) || defined(__WXGTK20__)
+#if ( wxHAS_2CHAR_NEWLINES ) || defined(__WXGTK20__)
         CPPUNIT_FAIL( "PositionToCoords() unexpectedly failed." );
 #endif
         return;
@@ -793,7 +795,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     delete m_text;
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
 #endif
 
@@ -844,7 +846,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     text = wxS("123\nab\nX");
     m_text->SetValue(text);
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     // Take into account that every new line mark occupies
     // two characters, not one.
     const long numChars_msw_2 = 8 + 2;
@@ -863,14 +865,14 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
           { 0, 2 }, { 1, 2 } };
 
     const long &ref_numChars_2 =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? numChars_2 : numChars_msw_2;
 #else
         numChars_2;
 #endif
 
     XYPos *ref_coords_2 =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? coords_2 : coords_2_msw;
 #else
         coords_2;
@@ -892,7 +894,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     text = wxS("\n\n\n");
     m_text->SetValue(text);
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     // Take into account that every new line mark occupies
     // two characters, not one.
     const long numChars_msw_3 = 3 + 3;
@@ -913,14 +915,14 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
           { 0, 3 } };
 
     const long &ref_numChars_3 =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? numChars_3 : numChars_msw_3;
 #else
         numChars_3;
 #endif
 
     XYPos *ref_coords_3 =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? coords_3 : coords_3_msw;
 #else
         coords_3;
@@ -942,7 +944,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     text = wxS("123\na\n\nX\n\n");
     m_text->SetValue(text);
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     // Take into account that every new line mark occupies
     // two characters, not one.
     const long numChars_msw_4 = 10 + 5;
@@ -967,14 +969,14 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
           { 0, 5 } };
 
     const long &ref_numChars_4 =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? numChars_4 : numChars_msw_4;
 #else
         numChars_4;
 #endif
 
     XYPos *ref_coords_4 =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? coords_4 : coords_4_msw;
 #else
         coords_4;
@@ -1015,7 +1017,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     delete m_text;
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
 #endif
 
@@ -1059,7 +1061,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     const long maxLineLength_2 = 4;
     const long numLines_2 = 3;
     CPPUNIT_ASSERT_EQUAL( numLines_2, m_text->GetNumberOfLines() );
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     // Note: New lines are occupied by two characters.
     long pos_2_msw[numLines_2 + 1][maxLineLength_2 + 1] =
         { {  0,  1,  2,  3, -1 },   // New line occupies positions 3, 4
@@ -1074,7 +1076,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
           { -1, -1, -1, -1, -1 } };
 
     long (&ref_pos_2)[numLines_2 + 1][maxLineLength_2 + 1] =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? pos_2 : pos_2_msw;
 #else
         pos_2;
@@ -1094,7 +1096,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     const long maxLineLength_3 = 1;
     const long numLines_3 = 4;
     CPPUNIT_ASSERT_EQUAL( numLines_3, m_text->GetNumberOfLines() );
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     // Note: New lines are occupied by two characters.
     long pos_3_msw[numLines_3 + 1][maxLineLength_3 + 1] =
         { {  0, -1 },    // New line occupies positions 0, 1
@@ -1111,7 +1113,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
           { -1, -1 } };
 
     long (&ref_pos_3)[numLines_3 + 1][maxLineLength_3 + 1] =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? pos_3 : pos_3_msw;
 #else
         pos_3;
@@ -1131,7 +1133,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     const long maxLineLength_4 = 4;
     const long numLines_4 = 6;
     CPPUNIT_ASSERT_EQUAL( numLines_4, m_text->GetNumberOfLines() );
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
     // Note: New lines are occupied by two characters.
     long pos_4_msw[numLines_4 + 1][maxLineLength_4 + 1] =
         { {  0,  1,  2,  3, -1 },    // New line occupies positions 3, 4
@@ -1152,7 +1154,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
           { -1, -1, -1, -1, -1 } };
 
     long (&ref_pos_4)[numLines_4 + 1][maxLineLength_4 + 1] =
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if wxHAS_2CHAR_NEWLINES
         isRichEdit ? pos_4 : pos_4_msw;
 #else
         pos_4;
