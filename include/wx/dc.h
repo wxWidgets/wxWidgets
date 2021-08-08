@@ -1398,37 +1398,77 @@ private:
 
 // wxDCXXXChanger implementation
 
-#define wxDC_CHANGER(classname, attr_type, const_attr_type,  \
-                     func_base, attr_is_ok, attr_init)       \
-class WXDLLIMPEXP_CORE classname                             \
-{                                                            \
-public:                                                      \
-    classname(wxDC& dc) : m_dc(dc), m_oldAttr(attr_init) { } \
-    classname(wxDC& dc, const_attr_type attr) : m_dc(dc)     \
-    {                                                        \
-        Set(attr);                                           \
-    }                                                        \
-    ~classname()                                             \
-    {                                                        \
-        if ( attr_is_ok )                                    \
-            m_dc.Set##func_base(m_oldAttr);                  \
-    }                                                        \
-    void Set(const_attr_type attr)                           \
-    {                                                        \
-        if ( !(attr_is_ok) )                                 \
-            m_oldAttr = m_dc.Get##func_base();               \
-        m_dc.Set##func_base(attr);                           \
-    }                                                        \
-private:                                                     \
-    wxDC& m_dc;                                              \
-    attr_type m_oldAttr;                                     \
-    wxDECLARE_NO_COPY_CLASS(classname);                      \
-}
+namespace wxPrivate
+{
 
-// Convenience macro for wxDC changer classes preserving GDI objects.
+template <typename AttrType, typename GetDCFunc, GetDCFunc,
+    typename SetDCFunc, SetDCFunc> class wxDCChanger;
+
+template <typename AttrType, typename ParamType,
+    ParamType (wxDC::*GetDCFunc)() const,
+    void (wxDC::*SetDCFunc)(ParamType)>
+class wxDCChanger<AttrType, ParamType (wxDC::*)() const, GetDCFunc,
+    void (wxDC::*)(ParamType), SetDCFunc>
+{
+public:
+    // Note: for wxDCTextBgModeChanger this inits m_oldAttr to 0!
+    wxDCChanger(wxDC& dc) : m_dc(dc), m_oldAttr() { }
+
+    wxDCChanger(wxDC& dc, ParamType attr) : m_dc(dc), m_oldAttr((m_dc.*GetDCFunc)())
+    {
+        (m_dc.*SetDCFunc)(attr);
+    }
+
+    ~wxDCChanger()
+    {
+        if ( AttrIsOk(m_oldAttr) )
+            (m_dc.*SetDCFunc)(m_oldAttr);
+    }
+
+    void Set(ParamType attr)
+    {
+        if ( !AttrIsOk(m_oldAttr) )
+            m_oldAttr = (m_dc.*GetDCFunc)();
+
+        (m_dc.*SetDCFunc)(attr);
+    }
+
+private:
+    static bool AttrIsOk(int mode)
+    {
+        /*
+        This function is only used by wxDCTextBgModeChanger which has an int
+        as attribute type that gets initialized to 0 by the (non-preserving)
+        ctor. This unused value can be used to check if the old attribute is
+        preserved or not.
+        Even though it's probably not needed, check for wxBRUSHSTYLE_INVALID
+        to conform with previous non-templated code.
+        */
+        return mode && mode != wxBRUSHSTYLE_INVALID;
+    }
+
+    static bool AttrIsOk(const wxGDIObject& attr)
+    {
+        return attr.IsOk();
+    }
+
+    static bool AttrIsOk(const wxColour& attr)
+    {
+        return attr.IsOk();
+    }
+
+    wxDC& m_dc;
+    AttrType m_oldAttr;
+
+    wxDECLARE_NO_COPY_CLASS(wxDCChanger);
+};
+
+} // namespace wxPrivate
+
 #define wxDC_CHANGER_GDI(classname, attr_type, func_base) \
-    wxDC_CHANGER( classname, attr_type, const attr_type&, \
-        func_base, m_oldAttr.IsOk(), )
+typedef wxPrivate::wxDCChanger<attr_type, \
+    const attr_type& (wxDC::*)() const, &wxDC::Get##func_base, \
+    void(wxDC::*)(const attr_type&), &wxDC::Set##func_base> classname
 
 // ----------------------------------------------------------------------------
 // Helper classes: you can use these to temporarily change a DC attribute and
@@ -1437,8 +1477,10 @@ private:                                                     \
 
 wxDC_CHANGER_GDI(wxDCTextColourChanger, wxColour, TextForeground);
 wxDC_CHANGER_GDI(wxDCTextBgColourChanger, wxColour, TextBackground);
-wxDC_CHANGER(wxDCTextBgModeChanger, int, int, BackgroundMode,
-    m_oldAttr != wxBRUSHSTYLE_INVALID, wxBRUSHSTYLE_INVALID);
+
+typedef wxPrivate::wxDCChanger<int,
+    int (wxDC::*)() const, &wxDC::GetBackgroundMode,
+    void (wxDC::*)(int), &wxDC::SetBackgroundMode> wxDCTextBgModeChanger;
 
 wxDC_CHANGER_GDI(wxDCPenChanger, wxPen, Pen);
 wxDC_CHANGER_GDI(wxDCBrushChanger, wxBrush, Brush);
