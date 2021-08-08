@@ -61,6 +61,8 @@ jobs:
           - name: Windows MSVC
             runner: windows-latest
             cmake_generator: Ninja
+            cmake_samples: SOME
+            cmake_tests: CONSOLE_ONLY
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
