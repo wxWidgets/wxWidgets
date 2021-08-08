@@ -3744,8 +3744,8 @@ wxImage wxImage::Rotate(double angle,
 
                     if (0 < src.x && src.x < w - 1)
                     {
-                        x1 = wxRound(floor(src.x));
-                        x2 = wxRound(ceil(src.x));
+                        x1 = (int) floor(src.x);
+                        x2 = (int) ceil(src.x);
                     }
                     else    // else means that x is near one of the borders (0 or width-1)
                     {
@@ -3754,8 +3754,8 @@ wxImage wxImage::Rotate(double angle,
 
                     if (0 < src.y && src.y < h - 1)
                     {
-                        y1 = wxRound(floor(src.y));
-                        y2 = wxRound(ceil(src.y));
+                        y1 = (int) floor(src.y);
+                        y2 = (int) ceil(src.y);
                     }
                     else
                     {
