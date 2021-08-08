@@ -17,8 +17,13 @@
 #include "wx/dcmemory.h"
 #include "wx/dcgraph.h"
 #include "wx/dcsvg.h"
+#include "wx/app.h"
+#include "wx/window.h"
+#include "wx/dcclient.h"
+#include "wx/scopedptr.h"
 
 #include "testfile.h"
+#include "waitforpaint.h"
 
 static const wxSize s_dcSize(100, 120);
 static const wxColour s_bgColour(*wxWHITE); // colour to draw outside clipping box
@@ -3706,6 +3711,327 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
     }
 }
 #endif // wxUSE_SVG
+
+TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
+{
+    wxBitmap bmp; // We need wxNullBitmap because we can't check the output
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    // Under wxGTK2 we need to have two children (at least) because if there
+    // is exactly one child its size is set to fill the whole parent frame
+    // and the window cannot be resized - see wxTopLevelWindowBase::Layout().
+    wxScopedPtr<wxWindow> w0(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+#endif // wxGTK 2
+    wxScopedPtr<wxWindow> win(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+
+    win->SetClientSize(s_dcSize);
+
+    // Wait for the first paint event to be sure
+    // that window really has its final size.
+    WaitForPaint waitForPaint(win.get());
+    win->Show();
+    waitForPaint.YieldUntilPainted();
+
+    wxClientDC dc(win.get());
+    REQUIRE(dc.GetSize().x == s_dcSize.x);
+    REQUIRE(dc.GetSize().y == s_dcSize.y);
+    dc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
+    dc.Clear();
+
+    SECTION("InitialState")
+    {
+        InitialState(dc, bmp);
+    }
+
+    SECTION("InitialStateWithTransformedDC 1")
+    {
+        InitialStateWithTransformedDC(dc, bmp, false, false);
+    }
+
+    SECTION("InitialStateWithTransformedDC 2")
+    {
+        InitialStateWithTransformedDC(dc, bmp, true, false);
+    }
+
+    SECTION("InitialStateWithTransformedDC Transform Matrix")
+    {
+        InitialStateWithTransformedDC(dc, bmp, true, true);
+    }
+
+    SECTION("InitialStateWithRotatedDC")
+    {
+        InitialStateWithRotatedDC(dc, bmp);
+    }
+
+    SECTION("SameRegionRepeatRotatedDC")
+    {
+        SameRegionRepeatRotatedDC(dc);
+    }
+
+    SECTION("OneRegion")
+    {
+        OneRegion(dc, bmp);
+    }
+
+    SECTION("OneLargeRegion")
+    {
+        OneLargeRegion(dc, bmp);
+    }
+
+    SECTION("OneOuterRegion")
+    {
+        OneOuterRegion(dc, bmp);
+    }
+
+    SECTION("OneRegionNegDim")
+    {
+        OneRegionNegDim(dc, bmp);
+    }
+
+    SECTION("OneRegionAndReset")
+    {
+        OneRegionAndReset(dc, bmp);
+    }
+
+    SECTION("OneRegionAndEmpty")
+    {
+        OneRegionAndEmpty(dc, bmp);
+    }
+
+    SECTION("OneRegionOverTransformedDC 1")
+    {
+        OneRegionOverTransformedDC(dc, bmp, false, false);
+    }
+
+    SECTION("OneRegionOverTransformedDC 2")
+    {
+        OneRegionOverTransformedDC(dc, bmp, true, false);
+    }
+
+    SECTION("OneRegionOverTransformedDC Transform Matrix")
+    {
+        OneRegionOverTransformedDC(dc, bmp, true, true);
+    }
+
+    SECTION("OneRegionOverRotatedDC")
+    {
+        OneRegionOverRotatedDC(dc);
+    }
+
+    SECTION("OneRegionAndDCTransformation 1")
+    {
+        OneRegionAndDCTransformation(dc, bmp, false, false);
+    }
+
+    SECTION("OneRegionAndDCTransformation 2")
+    {
+        OneRegionAndDCTransformation(dc, bmp, true, false);
+    }
+
+    SECTION("OneRegionAndDCTransformation Transform Matrix")
+    {
+        OneRegionAndDCTransformation(dc, bmp, true, true);
+    }
+
+    SECTION("TwoRegionsOverlapping")
+    {
+        TwoRegionsOverlapping(dc, bmp);
+    }
+
+    SECTION("TwoRegionsOverlappingNegDim")
+    {
+        TwoRegionsOverlappingNegDim(dc, bmp);
+    }
+
+    SECTION("TwoRegionsNonOverlapping")
+    {
+        TwoRegionsNonOverlapping(dc, bmp);
+    }
+
+    SECTION("TwoRegionsNonOverlappingNegDim")
+    {
+        TwoRegionsNonOverlappingNegDim(dc, bmp);
+    }
+
+    SECTION("OneDevRegion 1")
+    {
+        OneDevRegion(dc, bmp, false, false);
+    }
+
+    SECTION("OneDevRegion 2")
+    {
+        OneDevRegion(dc, bmp, true, false);
+    }
+
+    SECTION("OneDevRegion Transform Matrix")
+    {
+        OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneLargeDevRegion 1")
+    {
+        OneLargeDevRegion(dc, bmp, false, false);
+    }
+
+    SECTION("OneLargeDevRegion 2")
+    {
+        OneLargeDevRegion(dc, bmp, true, false);
+    }
+
+    SECTION("OneLargeDevRegion Transform Matrix")
+    {
+        OneLargeDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneOuterDevRegion")
+    {
+        OneOuterDevRegion(dc, bmp, false);
+    }
+
+    SECTION("OneOuterDevRegion Transform Matrix")
+    {
+        OneOuterDevRegion(dc, bmp, true);
+    }
+
+    SECTION("OneDevRegionNegDim 1")
+    {
+        OneDevRegionNegDim(dc, bmp, false, false);
+    }
+
+    SECTION("OneDevRegionNegDim 2")
+    {
+        OneDevRegionNegDim(dc, bmp, true, false);
+    }
+
+    SECTION("OneDevRegionNegDim Transform Matrix")
+    {
+        OneDevRegionNegDim(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionNonRect 1")
+    {
+        OneDevRegionNonRect(dc, bmp, false, false);
+    }
+
+    SECTION("OneDevRegionNonRect 2")
+    {
+        OneDevRegionNonRect(dc, bmp, true, false);
+    }
+
+    SECTION("OneDevRegionNonRect Transform Matrix")
+    {
+        OneDevRegionNonRect(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionAndReset 1")
+    {
+        OneDevRegionAndReset(dc, bmp, false, false);
+    }
+
+    SECTION("OneDevRegionAndReset 2")
+    {
+        OneDevRegionAndReset(dc, bmp, true, false);
+    }
+
+    SECTION("OneDevRegionAndReset Transform Matrix")
+    {
+        OneDevRegionAndReset(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionAndEmpty")
+    {
+        OneDevRegionAndEmpty(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionAndEmpty Transform Matrix")
+    {
+        OneDevRegionAndEmpty(dc, bmp, true);
+    }
+
+    SECTION("OneDevRegionOverTransformedDC 1")
+    {
+        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+    }
+
+    SECTION("OneDevRegionOverTransformedDC 2")
+    {
+        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+    }
+
+    SECTION("OneDevRegionOverTransformedDC Transform Matrix")
+    {
+        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionOverRotatedDC")
+    {
+        OneDevRegionOverRotatedDC(dc);
+    }
+
+    SECTION("OneDevRegionAndDCTransformation 1")
+    {
+        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+    }
+
+    SECTION("OneDevRegionAndDCTransformation 2")
+    {
+        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+    }
+
+    SECTION("OneDevRegionAndDCTransformation Transform Matrix")
+    {
+        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+    }
+
+    SECTION("TwoDevRegionsOverlapping 1")
+    {
+        TwoDevRegionsOverlapping(dc, bmp, false, false);
+    }
+
+    SECTION("TwoDevRegionsOverlapping 2")
+    {
+        TwoDevRegionsOverlapping(dc, bmp, true, false);
+    }
+
+    SECTION("TwoDevRegionsOverlapping Transform Matrix")
+    {
+        TwoDevRegionsOverlapping(dc, bmp, true, true);
+    }
+
+    SECTION("TwoDevRegionsOverlappingNegDim 1")
+    {
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+    }
+
+    SECTION("TwoDevRegionsOverlappingNegDim 2")
+    {
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+    }
+
+    SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
+    {
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+    }
+
+    SECTION("TwoDevRegionsNonOverlapping")
+    {
+        TwoDevRegionsNonOverlapping(dc, bmp, false);
+    }
+
+    SECTION("TwoDevRegionsNonOverlapping Transform Matrix")
+    {
+        TwoDevRegionsNonOverlapping(dc, bmp, true);
+    }
+
+    SECTION("TwoDevRegionsNonOverlappingNegDim")
+    {
+        TwoDevRegionsNonOverlappingNegDim(dc, bmp, false);
+    }
+
+    SECTION("TwoDevRegionsNonOverlappingNegDim Transform Matrix")
+    {
+        TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
+    }
+}
 
 #if wxUSE_GRAPHICS_CONTEXT
 // ========================
