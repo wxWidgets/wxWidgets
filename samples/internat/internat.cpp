@@ -57,14 +57,23 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp() { m_setLocale = true; }
+    MyApp() { m_setLocale = Locale_Ask; }
 
     virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
     virtual bool OnInit() wxOVERRIDE;
 
 protected:
-    bool m_setLocale;   // if false, skip setting locale entirely
+    // Specifies whether we should use the current locale or not. By default we
+    // ask the user about it, but it's possible to override this using the
+    // command line options.
+    enum
+    {
+        Locale_Ask,
+        Locale_Set,
+        Locale_Skip
+    } m_setLocale;
+
     wxLocale m_locale;  // locale we'll be using
 };
 
@@ -153,11 +162,14 @@ wxIMPLEMENT_APP(MyApp);
 // command line arguments handling
 
 static const char* OPTION_NO_LOCALE = "no-locale";
+static const char* OPTION_SET_LOCALE = "set-locale";
 
 void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
     parser.AddSwitch("n", OPTION_NO_LOCALE,
                      _("skip setting locale on startup"));
+    parser.AddSwitch("y", OPTION_SET_LOCALE,
+                     _("do set locale on startup without asking"));
 
     wxApp::OnInitCmdLine(parser);
 }
@@ -169,7 +181,18 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 
     if ( parser.Found(OPTION_NO_LOCALE) )
     {
-        m_setLocale = false;
+        m_setLocale = Locale_Skip;
+    }
+
+    if ( parser.Found(OPTION_SET_LOCALE) )
+    {
+        if ( m_setLocale == Locale_Skip )
+        {
+            wxLogWarning("--%s option overrides --%s",
+                         OPTION_SET_LOCALE, OPTION_NO_LOCALE);
+        }
+
+        m_setLocale = Locale_Set;
     }
 
     return true;
@@ -190,38 +213,34 @@ bool MyApp::OnInit()
     const wxString
         langDesc = langInfo ? langInfo->Description
                             : "the default system locale";
-    if ( m_setLocale )
+
+    if ( m_setLocale == Locale_Ask )
     {
-        if ( wxMessageBox
-             (
-                wxString::Format
-                (
-                    "Would you like to use the program in %s?",
-                    langDesc
-                ),
-                "wxWidgets i18n (internat) sample",
-                wxYES_NO
-             ) == wxYES )
-        {
-            // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
-            // false just because it failed to load wxstd catalog
-            if ( !m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) )
-            {
-                wxLogWarning("Failed to initialize the default system locale.");
-            }
-        }
-        else
-        {
-            m_setLocale = false;
-        }
+        m_setLocale = wxMessageBox
+                      (
+                        wxString::Format
+                        (
+                            "Would you like to use the program in %s?",
+                            langDesc
+                        ),
+                        "wxWidgets i18n (internat) sample",
+                        wxYES_NO
+                      ) == wxYES ? Locale_Set : Locale_Skip;
     }
 
-
-    // Independently of whether we succeeded to set the locale or not, try to
-    // load the translations (for the default system language) here. But don't
-    // do it if the user explicitly selected not to use the current locale.
-    if ( m_setLocale )
+    if ( m_setLocale == Locale_Set )
     {
+        // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
+        // false just because it failed to load wxstd catalog
+        if ( !m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) )
+        {
+            wxLogWarning("Failed to initialize the default system locale.");
+        }
+
+
+        // Independently of whether we succeeded to set the locale or not, try
+        // to load the translations (for the default system language) here.
+
         // normally this wouldn't be necessary as the catalog files would be found
         // in the default locations, but when the program is not installed the
         // catalogs are in the build directory where we wouldn't find them by
