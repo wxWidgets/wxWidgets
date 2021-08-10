@@ -2377,7 +2377,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 
     if ( pos == noOfColumns - 1 )
         [m_OutlineView sizeLastColumnToFit];
-    else if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
+    else
         [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
 
     if ( !(GetDataViewCtrl()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) )
