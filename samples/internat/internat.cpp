@@ -57,14 +57,13 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp() { m_lang = wxLANGUAGE_UNKNOWN; m_setLocale = true; }
+    MyApp() { m_setLocale = true; }
 
     virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
     virtual bool OnInit() wxOVERRIDE;
 
 protected:
-    wxLanguage m_lang;  // language specified by user
     bool m_setLocale;   // if false, skip setting locale entirely
     wxLocale m_locale;  // locale we'll be using
 };
@@ -120,59 +119,6 @@ enum
     INTERNAT_MACRO_9
 };
 
-// language data
-static const wxLanguage langIds[] =
-{
-    wxLANGUAGE_DEFAULT,
-    wxLANGUAGE_FRENCH,
-    wxLANGUAGE_ITALIAN,
-    wxLANGUAGE_GERMAN,
-    wxLANGUAGE_RUSSIAN,
-    wxLANGUAGE_BULGARIAN,
-    wxLANGUAGE_CZECH,
-    wxLANGUAGE_POLISH,
-    wxLANGUAGE_SWEDISH,
-#if wxUSE_UNICODE || defined(__WXMOTIF__)
-    wxLANGUAGE_JAPANESE,
-#endif
-#if wxUSE_UNICODE
-    wxLANGUAGE_GEORGIAN,
-    wxLANGUAGE_ENGLISH,
-    wxLANGUAGE_ENGLISH_US,
-    wxLANGUAGE_ARABIC,
-    wxLANGUAGE_ARABIC_EGYPT
-#endif
-};
-
-// note that it makes no sense to translate these strings, they are
-// shown before we set the locale anyhow
-const wxString langNames[] =
-{
-    "System default",
-    "French",
-    "Italian",
-    "German",
-    "Russian",
-    "Bulgarian",
-    "Czech",
-    "Polish",
-    "Swedish",
-#if wxUSE_UNICODE || defined(__WXMOTIF__)
-    "Japanese",
-#endif
-#if wxUSE_UNICODE
-    "Georgian",
-    "English",
-    "English (U.S.)",
-    "Arabic",
-    "Arabic (Egypt)"
-#endif
-};
-
-// the arrays must be in sync
-wxCOMPILE_TIME_ASSERT( WXSIZEOF(langNames) == WXSIZEOF(langIds),
-                       LangArraysMismatch );
-
 // ----------------------------------------------------------------------------
 // wxWidgets macros
 // ----------------------------------------------------------------------------
@@ -213,10 +159,6 @@ void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
     parser.AddSwitch("n", OPTION_NO_LOCALE,
                      _("skip setting locale on startup"));
 
-    parser.AddParam(_("locale"),
-                    wxCMD_LINE_VAL_STRING,
-                    wxCMD_LINE_PARAM_OPTIONAL);
-
     wxApp::OnInitCmdLine(parser);
 }
 
@@ -230,33 +172,6 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
         m_setLocale = false;
     }
 
-    if ( parser.GetParamCount() )
-    {
-        if ( !m_setLocale )
-        {
-            wxLogError("Locale parameter ignored when %s option is used.",
-                       OPTION_NO_LOCALE);
-            return false;
-        }
-
-        const wxString loc = parser.GetParam();
-        if ( loc.empty() )
-        {
-            m_lang = wxLANGUAGE_DEFAULT;
-        }
-        else
-        {
-            const wxLanguageInfo * const lang = wxLocale::FindLanguageInfo(loc);
-            if ( !lang )
-            {
-                wxLogError(_("Locale \"%s\" is unknown."), loc);
-                return false;
-            }
-
-            m_lang = static_cast<wxLanguage>(lang->Language);
-        }
-    }
-
     return true;
 }
 
@@ -266,35 +181,38 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    if ( m_setLocale )
-    {
-        if ( m_lang == wxLANGUAGE_UNKNOWN )
-        {
-            int lng = wxGetSingleChoiceIndex
-                      (
-                        "Please choose a language or cancel to skip changing it:",
-                        "Language",
-                        WXSIZEOF(langNames),
-                        langNames
-                      );
-            if ( lng == -1 )
-                m_setLocale = false;
-            else
-                m_lang = langIds[lng];
-        }
-    }
-
-    if ( m_setLocale )
+    // For demonstration purposes only, ask the user if they want to run the
+    // program using the current system language. In real programs, we would do
+    // it unconditionally for localized programs -- or never do it at all for
+    // the other ones.
+    const wxLanguageInfo* const
+        langInfo = wxLocale::GetLanguageInfo(wxLANGUAGE_DEFAULT);
+    const wxString
+        langDesc = langInfo ? langInfo->Description
+                            : "the default system locale";
+    if ( m_setLocale &&
+             wxMessageBox
+             (
+                wxString::Format
+                (
+                    "Would you like to use the program in %s?",
+                    langDesc
+                ),
+                "wxWidgets i18n (internat) sample",
+                wxYES_NO
+             ) == wxYES )
     {
         // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
         // false just because it failed to load wxstd catalog
-        if ( !m_locale.Init(m_lang, wxLOCALE_DONT_LOAD_DEFAULT) )
+        if ( !m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) )
         {
-            wxLogWarning(_("This language is not supported by the system."));
-
-            // continue nevertheless
+            wxLogWarning("Failed to initialize the default system locale.");
         }
     }
+
+
+    // Independently of whether we set the locale or not, we always load the
+    // translations (for the default system language) here.
 
     // normally this wouldn't be necessary as the catalog files would be found
     // in the default locations, but when the program is not installed the
@@ -306,12 +224,11 @@ bool MyApp::OnInit()
     wxTranslations* const trans = new wxTranslations();
     wxTranslations::Set(trans);
 
-    // Initialize the catalogs we'll be using
-    const wxLanguageInfo* pInfo = wxLocale::GetLanguageInfo(m_lang);
+    // Initialize the catalogs we'll be using.
     if ( !trans->AddCatalog("internat") )
     {
-        wxLogError(_("Couldn't find/load the 'internat' catalog for locale '%s'."),
-                   pInfo ? pInfo->GetLocaleName() : _("unknown"));
+        wxLogError(_("Couldn't find/load 'internat' catalog for %s."),
+                   langDesc);
     }
 
     // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
