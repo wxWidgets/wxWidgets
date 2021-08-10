@@ -302,7 +302,10 @@ void wxOSXDataViewModelNotifier::AdjustAutosizedColumns()
   unsigned count = m_DataViewCtrlPtr->GetColumnCount();
   for ( unsigned col = 0; col < count; col++ )
   {
-    m_DataViewCtrlPtr->GetDataViewPeer()->FitColumnWidthToContent(col);
+      wxDataViewColumn *column = m_DataViewCtrlPtr->GetColumnPtr(col);
+
+      if ( column->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
+        m_DataViewCtrlPtr->GetDataViewPeer()->FitColumnWidthToContent(col);
   }
 }
 
