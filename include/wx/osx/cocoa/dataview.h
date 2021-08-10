@@ -86,7 +86,7 @@ class wxCocoaDataViewControl;
 class wxDataViewColumnNativeData
 {
 public:
-    wxDataViewColumnNativeData() : m_NativeColumnPtr(NULL), m_isLast(false), m_prevWidth(0)
+    wxDataViewColumnNativeData() : m_NativeColumnPtr(NULL)
     {
     }
 
@@ -105,32 +105,9 @@ public:
         m_NativeColumnPtr = newNativeColumnPtr;
     }
 
-    bool GetIsLast() const
-    {
-        return m_isLast;
-    }
-
-    void SetIsLast(bool isLast)
-    {
-        m_isLast = isLast;
-    }
-
-    int GetPrevWidth() const
-    {
-        return m_prevWidth;
-    }
-
-    void SetPrevWidth(int prevWidth)
-    {
-        m_prevWidth = prevWidth;
-    }
-
 private:
     // not owned by us
     NSTableColumn* m_NativeColumnPtr;
-
-    bool m_isLast;
-    int m_prevWidth;
 };
 
 // ============================================================================
