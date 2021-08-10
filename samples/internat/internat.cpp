@@ -190,8 +190,9 @@ bool MyApp::OnInit()
     const wxString
         langDesc = langInfo ? langInfo->Description
                             : "the default system locale";
-    if ( m_setLocale &&
-             wxMessageBox
+    if ( m_setLocale )
+    {
+        if ( wxMessageBox
              (
                 wxString::Format
                 (
@@ -201,49 +202,57 @@ bool MyApp::OnInit()
                 "wxWidgets i18n (internat) sample",
                 wxYES_NO
              ) == wxYES )
-    {
-        // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
-        // false just because it failed to load wxstd catalog
-        if ( !m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) )
         {
-            wxLogWarning("Failed to initialize the default system locale.");
+            // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
+            // false just because it failed to load wxstd catalog
+            if ( !m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) )
+            {
+                wxLogWarning("Failed to initialize the default system locale.");
+            }
+        }
+        else
+        {
+            m_setLocale = false;
         }
     }
 
 
-    // Independently of whether we set the locale or not, we always load the
-    // translations (for the default system language) here.
-
-    // normally this wouldn't be necessary as the catalog files would be found
-    // in the default locations, but when the program is not installed the
-    // catalogs are in the build directory where we wouldn't find them by
-    // default
-    wxFileTranslationsLoader::AddCatalogLookupPathPrefix(".");
-
-    // Create the object for message translation and set it up for global use.
-    wxTranslations* const trans = new wxTranslations();
-    wxTranslations::Set(trans);
-
-    // Initialize the catalogs we'll be using.
-    if ( !trans->AddCatalog("internat") )
+    // Independently of whether we succeeded to set the locale or not, try to
+    // load the translations (for the default system language) here. But don't
+    // do it if the user explicitly selected not to use the current locale.
+    if ( m_setLocale )
     {
-        wxLogError(_("Couldn't find/load 'internat' catalog for %s."),
-                   langDesc);
-    }
+        // normally this wouldn't be necessary as the catalog files would be found
+        // in the default locations, but when the program is not installed the
+        // catalogs are in the build directory where we wouldn't find them by
+        // default
+        wxFileTranslationsLoader::AddCatalogLookupPathPrefix(".");
 
-    // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
-    // a localized error message:
-    trans->AddCatalog("wxstd");
-        // NOTE: it's not an error if we couldn't find it!
+        // Create the object for message translation and set it up for global use.
+        wxTranslations* const trans = new wxTranslations();
+        wxTranslations::Set(trans);
 
-    // this catalog is installed in standard location on Linux systems and
-    // shows that you may make use of the standard message catalogs as well
-    //
-    // if it's not installed on your system, it is just silently ignored
+        // Initialize the catalogs we'll be using.
+        if ( !trans->AddCatalog("internat") )
+        {
+            wxLogError(_("Couldn't find/load 'internat' catalog for %s."),
+                       langDesc);
+        }
+
+        // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
+        // a localized error message:
+        trans->AddCatalog("wxstd");
+            // NOTE: it's not an error if we couldn't find it!
+
+        // this catalog is installed in standard location on Linux systems and
+        // shows that you may make use of the standard message catalogs as well
+        //
+        // if it's not installed on your system, it is just silently ignored
 #ifdef USE_COREUTILS_MO
-    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("/usr/share/locale");
-    g_loadedCoreutilsMO = trans->AddCatalog("coreutils");
+        wxFileTranslationsLoader::AddCatalogLookupPathPrefix("/usr/share/locale");
+        g_loadedCoreutilsMO = trans->AddCatalog("coreutils");
 #endif // USE_COREUTILS_MO
+    }
 
     // Create the main frame window
     MyFrame *frame = new MyFrame(m_locale);
