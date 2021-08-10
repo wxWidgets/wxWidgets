@@ -2244,7 +2244,6 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 {
     const int count = GetCount();
     NSTableColumn *column = GetColumn(pos)->GetNativeData()->GetNativeColumnPtr();
-    UInt32 const noOfColumns = [[m_OutlineView tableColumns] count];
 
     class MaxWidthCalculator
     {
@@ -2375,10 +2374,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
     if ( m_expanderWidth == 0 )
         m_expanderWidth = calculator.GetExpanderWidth();
 
-    if ( pos == noOfColumns - 1 )
-        [m_OutlineView sizeLastColumnToFit];
-    else
-        [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
+    [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
 
     if ( !(GetDataViewCtrl()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) )
     {
