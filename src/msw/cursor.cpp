@@ -164,11 +164,6 @@ wxCursor::wxCursor(const char* const* xpmData)
 
 void wxCursor::InitFromImage(const wxImage& image)
 {
-    // image has to be of the standard cursor size, otherwise we won't be able
-    // to create it
-    const int w = wxCursorRefData::GetStandardWidth();
-    const int h = wxCursorRefData::GetStandardHeight();
-
     int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
     int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
     int image_w = image.GetWidth();
@@ -178,26 +173,7 @@ void wxCursor::InitFromImage(const wxImage& image)
                   hotSpotY >= 0 && hotSpotY < image_h,
                   wxT("invalid cursor hot spot coordinates") );
 
-    wxImage imageSized(image); // final image of correct size
-
-    // if image is too small then place it in the center, resize it if too big
-    if ((w > image_w) && (h > image_h))
-    {
-        wxPoint offset((w - image_w)/2, (h - image_h)/2);
-        hotSpotX = hotSpotX + offset.x;
-        hotSpotY = hotSpotY + offset.y;
-
-        imageSized = image.Size(wxSize(w, h), offset);
-    }
-    else if ((w != image_w) || (h != image_h))
-    {
-        hotSpotX = int(hotSpotX * double(w) / double(image_w));
-        hotSpotY = int(hotSpotY * double(h) / double(image_h));
-
-        imageSized = image.Scale(w, h);
-    }
-
-    HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(imageSized),
+    HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(image),
                                          hotSpotX, hotSpotY );
 
     if ( !hcursor )
@@ -219,12 +195,14 @@ wxCursor::wxCursor(const wxString& filename,
     switch ( kind )
     {
         case wxBITMAP_TYPE_CUR_RESOURCE:
-            hcursor = ::LoadCursor(wxGetInstance(), filename.t_str());
+            // Width and height of 0 specifies to use resource's width and height
+            hcursor = (HCURSOR)::LoadImage(wxGetInstance(), filename.t_str(), IMAGE_CURSOR, 0, 0, LR_DEFAULTCOLOR));
             break;
 
         case wxBITMAP_TYPE_ANI:
         case wxBITMAP_TYPE_CUR:
-            hcursor = ::LoadCursorFromFile(filename.t_str());
+            // Width and height of 0 specifies to use file's width and height
+            hcursor = (HCURSOR)::LoadImage(wxGetInstance(), filename.t_str(), IMAGE_CURSOR, 0, 0, LR_DEFAULTCOLOR | LR_LOADFROMFILE));
             break;
 
         case wxBITMAP_TYPE_ICO:
