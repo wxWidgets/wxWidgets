@@ -196,13 +196,13 @@ wxCursor::wxCursor(const wxString& filename,
     {
         case wxBITMAP_TYPE_CUR_RESOURCE:
             // Width and height of 0 specifies to use resource's width and height
-            hcursor = (HCURSOR)::LoadImage(wxGetInstance(), filename.t_str(), IMAGE_CURSOR, 0, 0, LR_DEFAULTCOLOR));
+            hcursor = (HCURSOR)::LoadImage(wxGetInstance(), filename.t_str(), IMAGE_CURSOR, 0, 0, LR_DEFAULTCOLOR);
             break;
 
         case wxBITMAP_TYPE_ANI:
         case wxBITMAP_TYPE_CUR:
             // Width and height of 0 specifies to use file's width and height
-            hcursor = (HCURSOR)::LoadImage(wxGetInstance(), filename.t_str(), IMAGE_CURSOR, 0, 0, LR_DEFAULTCOLOR | LR_LOADFROMFILE));
+            hcursor = (HCURSOR)::LoadImage(wxGetInstance(), filename.t_str(), IMAGE_CURSOR, 0, 0, LR_DEFAULTCOLOR | LR_LOADFROMFILE);
             break;
 
         case wxBITMAP_TYPE_ICO:
