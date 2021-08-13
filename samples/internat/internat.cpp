@@ -100,8 +100,6 @@ public:
     void OnTestMsgBox(wxCommandEvent& event);
 
     wxDECLARE_EVENT_TABLE();
-
-    wxLocale& m_locale;
 };
 
 // ----------------------------------------------------------------------------
@@ -290,8 +288,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(wxLocale& locale)
        : wxFrame(NULL,
                  wxID_ANY,
-                 _("International wxWidgets App")),
-         m_locale(locale)
+                 _("International wxWidgets App"))
 {
     SetIcon(wxICON(sample));
 
@@ -353,8 +350,19 @@ MyFrame::MyFrame(wxLocale& locale)
 
     wxPanel* const panel = new wxPanel(this);
 
-    // create some controls affected by the locale
     wxSizer* const topSizer = new wxBoxSizer(wxVERTICAL);
+
+    wxString localeInfo;
+    wxString locale = locale.GetLocale();
+    wxString sysname = locale.GetSysName();
+    wxString canname = locale.GetCanonicalName();
+    localeInfo.Printf("Current locale: %s (system name: %s, canonical name: %s)",
+                      locale, sysname, canname );
+
+    topSizer->Add(new wxStaticText(panel, wxID_ANY, localeInfo),
+                  wxSizerFlags().Center().Border());
+
+    // create some controls affected by the locale
 
     // this demonstrates RTL layout mirroring for Arabic locales and using
     // locale-specific decimal separator in wxSpinCtrlDouble.
@@ -400,20 +408,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxString localeInfo;
-    wxString locale = m_locale.GetLocale();
-    wxString sysname = m_locale.GetSysName();
-    wxString canname = m_locale.GetCanonicalName();
-
-    localeInfo.Printf(_("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
-                      locale, sysname, canname );
-
     wxMessageDialog dlg(
                         this,
-                        wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
-                                 + "\n\n"
-                                 + localeInfo,
-                                 _("About Internat"),
+                        _("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"),
+                        _("About Internat"),
                         wxOK | wxICON_INFORMATION
                        );
     dlg.ShowModal();
