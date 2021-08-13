@@ -651,6 +651,7 @@ set(BASE_CMN_HDR
     wx/fswatcher.h
     wx/generic/fswatcher.h
     wx/lzmastream.h
+    wx/localedefs.h
 )
 
 set(NET_UNIX_SRC

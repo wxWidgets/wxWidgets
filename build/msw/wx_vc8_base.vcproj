@@ -2104,6 +2104,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\localedefs.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\log.h"
 				>
 			</File>

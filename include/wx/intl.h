@@ -13,18 +13,9 @@
 #define _WX_INTL_H_
 
 #include "wx/defs.h"
+#include "wx/localedefs.h"
 #include "wx/string.h"
 #include "wx/translation.h"
-
-// Make wxLayoutDirection enum available without need for wxUSE_INTL so wxWindow, wxApp
-// and other classes are not distrubed by wxUSE_INTL
-
-enum wxLayoutDirection
-{
-    wxLayout_Default,
-    wxLayout_LeftToRight,
-    wxLayout_RightToLeft
-};
 
 #if wxUSE_INTL
 
@@ -82,52 +73,6 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
     // more than just calling setlocale() on some platforms, use wxLocale to
     // do everything that needs to be done instead of calling this method.
     const char* TrySetLocale() const;
-};
-
-// ----------------------------------------------------------------------------
-// wxLocaleCategory: the category of locale settings
-// ----------------------------------------------------------------------------
-
-enum wxLocaleCategory
-{
-    // (any) numbers
-    wxLOCALE_CAT_NUMBER,
-
-    // date/time
-    wxLOCALE_CAT_DATE,
-
-    // monetary value
-    wxLOCALE_CAT_MONEY,
-
-    // default category for wxLocaleInfo values which only apply to a single
-    // category (e.g. wxLOCALE_SHORT_DATE_FMT)
-    wxLOCALE_CAT_DEFAULT,
-
-    wxLOCALE_CAT_MAX
-};
-
-// ----------------------------------------------------------------------------
-// wxLocaleInfo: the items understood by wxLocale::GetInfo()
-// ----------------------------------------------------------------------------
-
-enum wxLocaleInfo
-{
-    // the thousands separator (for wxLOCALE_CAT_NUMBER or MONEY)
-    wxLOCALE_THOUSANDS_SEP,
-
-    // the character used as decimal point (for wxLOCALE_CAT_NUMBER or MONEY)
-    wxLOCALE_DECIMAL_POINT,
-
-    // the stftime()-formats used for short/long date and time representations
-    // (under some platforms short and long date formats are the same)
-    //
-    // NB: these elements should appear in this order, code in GetInfo() relies
-    //     on it
-    wxLOCALE_SHORT_DATE_FMT,
-    wxLOCALE_LONG_DATE_FMT,
-    wxLOCALE_DATE_TIME_FMT,
-    wxLOCALE_TIME_FMT
-
 };
 
 // ----------------------------------------------------------------------------
