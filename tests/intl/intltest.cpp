@@ -18,6 +18,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/intl.h"
+#include "wx/uilocale.h"
 
 #if wxUSE_INTL
 
@@ -238,5 +239,18 @@ TEST_CASE("wxLocale::Default", "[locale]")
 }
 
 #endif // wxUSE_UNICODE
+
+// This test doesn't run by default as it only works in locales using decimal
+// point as separator, which doesn't need to be the case.
+TEST_CASE("wxUILocale::GetInfo", "[.][uilocale]")
+{
+    REQUIRE( wxUILocale::UseDefault() );
+
+    const wxUILocale& loc = wxUILocale::GetCurrent();
+
+    WARN( "Using locale " << loc.GetName() );
+
+    CHECK( loc.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+}
 
 #endif // wxUSE_INTL

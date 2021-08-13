@@ -1601,6 +1601,10 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 
 #if defined(__WINDOWS__)
 
+// This function is also used by wxUILocaleImpl, so don't make it private.
+extern wxString
+wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
+
 namespace
 {
 
@@ -1624,10 +1628,38 @@ LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
     return 0;
 }
 
+// This private function additionally checks consistency of the decimal
+// separator settings between MSW and CRT.
 wxString
-GetInfoFromLCID(LCID lcid,
-                wxLocaleInfo index,
-                wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT)
+GetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
+{
+    const wxString str = wxGetInfoFromLCID(lcid, index, cat);
+
+    if ( !str.empty() && index == wxLOCALE_DECIMAL_POINT )
+    {
+        // As we get our decimal point separator from Win32 and not the
+        // CRT there is a possibility of mismatch between them and this
+        // can easily happen if the user code called setlocale()
+        // instead of using wxLocale to change the locale. And this can
+        // result in very strange bugs elsewhere in the code as the
+        // assumptions that formatted strings do use the decimal
+        // separator actually fail, so check for it here.
+        wxASSERT_MSG
+        (
+            wxString::Format("%.3f", 1.23).find(str) != wxString::npos,
+            "Decimal separator mismatch -- did you use setlocale()?"
+            "If so, use wxLocale to change the locale instead."
+        );
+    }
+
+    return str;
+}
+
+} // anonymous namespace
+
+// This function is also used by wxUILocaleImpl, so don't make it private.
+wxString
+wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
 {
     wxString str;
 
@@ -1650,20 +1682,6 @@ GetInfoFromLCID(LCID lcid,
                                  WXSIZEOF(buf)) )
             {
                 str = buf;
-
-                // As we get our decimal point separator from Win32 and not the
-                // CRT there is a possibility of mismatch between them and this
-                // can easily happen if the user code called setlocale()
-                // instead of using wxLocale to change the locale. And this can
-                // result in very strange bugs elsewhere in the code as the
-                // assumptions that formatted strings do use the decimal
-                // separator actually fail, so check for it here.
-                wxASSERT_MSG
-                (
-                    wxString::Format("%.3f", 1.23).find(str) != wxString::npos,
-                    "Decimal separator mismatch -- did you use setlocale()?"
-                    "If so, use wxLocale to change the locale instead."
-                );
             }
             break;
 
@@ -1686,12 +1704,12 @@ GetInfoFromLCID(LCID lcid,
             // alternate representation here)
             {
                 const wxString
-                    datefmt = GetInfoFromLCID(lcid, wxLOCALE_SHORT_DATE_FMT);
+                    datefmt = wxGetInfoFromLCID(lcid, wxLOCALE_SHORT_DATE_FMT, cat);
                 if ( datefmt.empty() )
                     break;
 
                 const wxString
-                    timefmt = GetInfoFromLCID(lcid, wxLOCALE_TIME_FMT);
+                    timefmt = wxGetInfoFromLCID(lcid, wxLOCALE_TIME_FMT, cat);
                 if ( timefmt.empty() )
                     break;
 
@@ -1705,8 +1723,6 @@ GetInfoFromLCID(LCID lcid,
 
     return str;
 }
-
-} // anonymous namespace
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
@@ -1766,34 +1782,19 @@ wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
 
 #elif defined(__WXOSX__)
 
-/* static */
-wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
+// This function is also used by wxUILocaleImpl, so don't make it private.
+extern wxString
+wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
-    CFLocaleRef userLocaleRefRaw;
-    if ( wxGetLocale() )
-    {
-        userLocaleRefRaw = CFLocaleCreate
-                        (
-                                kCFAllocatorDefault,
-                                wxCFStringRef(wxGetLocale()->GetCanonicalName())
-                        );
-    }
-    else // no current locale, use the default one
-    {
-        userLocaleRefRaw = CFLocaleCopyCurrent();
-    }
-
-    wxCFRef<CFLocaleRef> userLocaleRef(userLocaleRefRaw);
-
     CFStringRef cfstr = 0;
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:
-            cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleGroupingSeparator);
+            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleGroupingSeparator);
             break;
 
         case wxLOCALE_DECIMAL_POINT:
-            cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
+            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleDecimalSeparator);
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1823,7 +1824,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                         return wxString();
                 }
                 wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
-                    (NULL, userLocaleRef, dateStyle, timeStyle));
+                    (NULL, cfloc, dateStyle, timeStyle));
                 wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
                 wxString format = wxTranslateFromUnicodeFormat(cfs.AsString());
                 // we always want full years
@@ -1838,6 +1839,28 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
     wxCFStringRef str(wxCFRetain(cfstr));
     return str.AsString();
+}
+
+/* static */
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
+{
+    CFLocaleRef userLocaleRefRaw;
+    if ( wxGetLocale() )
+    {
+        userLocaleRefRaw = CFLocaleCreate
+                        (
+                                kCFAllocatorDefault,
+                                wxCFStringRef(wxGetLocale()->GetCanonicalName())
+                        );
+    }
+    else // no current locale, use the default one
+    {
+        userLocaleRefRaw = CFLocaleCopyCurrent();
+    }
+
+    wxCFRef<CFLocaleRef> userLocaleRef(userLocaleRefRaw);
+
+    return wxGetInfoFromCFLocale(userLocaleRef, index, cat);
 }
 
 #else // !__WINDOWS__ && !__WXOSX__, assume generic POSIX

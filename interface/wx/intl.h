@@ -69,7 +69,7 @@ struct wxLanguageInfo
 /**
     The category of locale settings.
 
-    @see wxLocale::GetInfo()
+    @see wxLocale::GetInfo(), wxUILocale::GetInfo()
 */
 enum wxLocaleCategory
 {
@@ -108,6 +108,8 @@ enum wxLocaleCategory
 
     All of these values are used with @c wxLOCALE_CAT_DATE in wxLocale::GetInfo() or,
     more typically, with @c wxLOCALE_CAT_DEFAULT as they only apply to a single category.
+
+    @see wxUILocale::GetInfo()
 */
 enum wxLocaleInfo
 {
@@ -171,6 +173,13 @@ enum wxLocaleInfo
 
     wxLocale class encapsulates all language-dependent settings and is a
     generalization of the C locale concept.
+
+    @note While this class can still be used in wxMSW and wxGTK ports, it
+        doesn't work in wxOSX where it is impossible to change the application
+        UI locale after launching it. Worse, since macOS 11 (Big Sur), using
+        wxLocale can break application display due to bugs in C locale support
+        in macOS itself. Because of this, it is recommended to use wxUILocale
+        instead of this class for the applications targeting macOS.
 
     In wxWidgets this class manages current locale. It also initializes and
     activates wxTranslations object that manages message catalogs.
@@ -440,6 +449,9 @@ public:
 
     /**
         Get the values of a locale datum in the OS locale.
+
+        This function shouldn't be used in the new code, use
+        wxUILocale::GetInfo() instead.
 
         This function is similar to GetInfo() and, in fact, identical to it
         under non-MSW systems. Under MSW it differs from it when no locale had

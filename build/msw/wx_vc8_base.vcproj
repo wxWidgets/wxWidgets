@@ -1250,6 +1250,74 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\uilocale.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud_x64\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu_x64\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll_x64\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll_x64\base\common_uilocale.obj"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\src\common\unichar.cpp"
 				>
 			</File>
@@ -1445,6 +1513,74 @@
 			<File
 				RelativePath="..\..\src\msw\timer.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\uilocale.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud_x64\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu_x64\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll_x64\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll_x64\base\msw_uilocale.obj"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\utils.cpp"
@@ -2345,6 +2481,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\types.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\uilocale.h"
 				>
 			</File>
 			<File
