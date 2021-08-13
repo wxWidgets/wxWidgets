@@ -3525,6 +3525,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #if WXWIN_COMPATIBILITY_3_0
     #define wxEVT_GRID_RANGE_SELECT wxEVT_GRID_RANGE_SELECTED
 
+    #define EVT_GRID_CMD_RANGE_SELECT EVT_GRID_CMD_RANGE_SELECTED
     #define EVT_GRID_RANGE_SELECT EVT_GRID_RANGE_SELECTED
 #endif // WXWIN_COMPATIBILITY_3_0
 

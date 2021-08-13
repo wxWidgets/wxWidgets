@@ -6398,7 +6398,7 @@ public:
         The user selected a group of contiguous cells; variant taking a window
         identifier. Processes a @c wxEVT_GRID_RANGE_SELECTED event type.
         This event is available in wxWidgets 3.1.5 and later only and was
-        called @c wxEVT_GRID_RANGE_SELECT in the previous versions.
+        called @c wxEVT_GRID_CMD_RANGE_SELECT in the previous versions.
     @endEventTable
 
     @library{wxcore}
