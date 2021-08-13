@@ -581,6 +581,7 @@ ALL_BASE_HEADERS =  \
 	wx/generic/fswatcher.h \
 	wx/secretstore.h \
 	wx/lzmastream.h \
+	wx/localedefs.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
@@ -766,6 +767,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/generic/fswatcher.h \
 	wx/secretstore.h \
 	wx/lzmastream.h \
+	wx/localedefs.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
