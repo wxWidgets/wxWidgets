@@ -115,6 +115,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/fswatcher_inotify.cpp
     src/unix/stdpaths.cpp
     src/unix/secretstore.cpp
+    src/unix/uilocale.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
@@ -146,6 +147,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/utilsexc.cpp
     src/msw/fswatcher.cpp
     src/msw/secretstore.cpp
+    src/msw/uilocale.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
     src/msw/main.cpp
@@ -187,6 +189,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
     src/osx/core/secretstore.cpp
+    src/osx/core/uilocale.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/osx/core/cfdataref.h
@@ -561,6 +564,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fswatcherg.cpp
     src/common/secretstore.cpp
     src/common/lzmastream.cpp
+    src/common/uilocale.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
     src/common/event.cpp
@@ -736,6 +740,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/secretstore.h
     wx/lzmastream.h
     wx/localedefs.h
+    wx/uilocale.h
 </set>
 
 

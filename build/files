@@ -71,6 +71,7 @@ BASE_UNIX_SRC =
     src/unix/fswatcher_inotify.cpp
     src/unix/secretstore.cpp
     src/unix/stdpaths.cpp
+    src/unix/uilocale.cpp
 
 BASE_UNIX_HDR =
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
@@ -98,6 +99,7 @@ BASE_WIN32_SRC =
     src/msw/stdpaths.cpp
     src/msw/thread.cpp
     src/msw/timer.cpp
+    src/msw/uilocale.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
     src/msw/fswatcher.cpp
@@ -139,6 +141,7 @@ BASE_COREFOUNDATION_SRC =
     src/osx/core/evtloop_cf.cpp
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
+    src/osx/core/uilocale.cpp
     src/osx/cocoa/utils_base.mm
 
 BASE_COREFOUNDATION_HDR =
@@ -481,6 +484,7 @@ BASE_CMN_SRC =
     src/common/tokenzr.cpp
     src/common/translation.cpp
     src/common/txtstrm.cpp
+    src/common/uilocale.cpp
     src/common/unichar.cpp
     src/common/uri.cpp
     src/common/ustring.cpp
@@ -633,6 +637,7 @@ BASE_CMN_HDR =
     wx/txtstrm.h
     wx/typeinfo.h
     wx/types.h
+    wx/uilocale.h
     wx/unichar.h
     wx/uri.h
     wx/ustring.h

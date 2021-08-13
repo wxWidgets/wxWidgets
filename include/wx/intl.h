@@ -90,6 +90,8 @@ enum wxLocaleInitFlags
 #endif
 };
 
+// NOTE: This class is deprecated, use wxUILocale and wxTranslations instead.
+
 class WXDLLIMPEXP_BASE wxLocale
 {
 public:

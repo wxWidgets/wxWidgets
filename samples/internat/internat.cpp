@@ -37,6 +37,7 @@
 #include "wx/platinfo.h"
 #include "wx/spinctrl.h"
 #include "wx/translation.h"
+#include "wx/uilocale.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -73,15 +74,13 @@ protected:
         Locale_Set,
         Locale_Skip
     } m_setLocale;
-
-    wxLocale m_locale;  // locale we'll be using
 };
 
 // Define a new frame type
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxLocale& m_locale);
+    MyFrame();
 
 public:
     void OnTestLocaleAvail(wxCommandEvent& event);
@@ -228,9 +227,7 @@ bool MyApp::OnInit()
 
     if ( m_setLocale == Locale_Set )
     {
-        // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
-        // false just because it failed to load wxstd catalog
-        if ( !m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) )
+        if ( !wxUILocale::UseDefault() )
         {
             wxLogWarning("Failed to initialize the default system locale.");
         }
@@ -272,7 +269,7 @@ bool MyApp::OnInit()
     }
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(m_locale);
+    MyFrame *frame = new MyFrame();
 
     // Show the frame
     frame->Show(true);
@@ -285,7 +282,7 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 // main frame constructor
-MyFrame::MyFrame(wxLocale& locale)
+MyFrame::MyFrame()
        : wxFrame(NULL,
                  wxID_ANY,
                  _("International wxWidgets App"))
@@ -352,14 +349,18 @@ MyFrame::MyFrame(wxLocale& locale)
 
     wxSizer* const topSizer = new wxBoxSizer(wxVERTICAL);
 
-    wxString localeInfo;
-    wxString locale = locale.GetLocale();
-    wxString sysname = locale.GetSysName();
-    wxString canname = locale.GetCanonicalName();
-    localeInfo.Printf("Current locale: %s (system name: %s, canonical name: %s)",
-                      locale, sysname, canname );
-
-    topSizer->Add(new wxStaticText(panel, wxID_ANY, localeInfo),
+    // create controls showing the locale being used
+    topSizer->Add(new wxStaticText
+                      (
+                        panel,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                         _("Current UI locale: %s; C locale: %s"),
+                         wxUILocale::GetCurrent().GetName(),
+                         setlocale(LC_ALL, NULL)
+                        )
+                      ),
                   wxSizerFlags().Center().Border());
 
     // create some controls affected by the locale
