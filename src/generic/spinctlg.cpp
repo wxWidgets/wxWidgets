@@ -41,6 +41,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent);
 
 #if wxUSE_SPINBTN
 
+#include "wx/numformatter.h"
 #include "wx/valnum.h"
 #include "wx/valtext.h"
 
@@ -754,12 +755,12 @@ void wxSpinCtrlDouble::DoSendEvent()
 
 bool wxSpinCtrlDouble::DoTextToValue(const wxString& text, double *val)
 {
-    return text.ToDouble(val);
+    return wxNumberFormatter::FromString(text, val);
 }
 
 wxString wxSpinCtrlDouble::DoValueToText(double val)
 {
-    return wxString::Format(m_format, val);
+    return wxNumberFormatter::ToString(val, m_digits);
 }
 
 void wxSpinCtrlDouble::SetIncrement(double inc)
@@ -802,8 +803,6 @@ void wxSpinCtrlDouble::DoSetDigitsAndUpdate(unsigned digits)
 void wxSpinCtrlDouble::DoSetDigits(unsigned digits)
 {
     m_digits = digits;
-
-    m_format.Printf(wxT("%%0.%ulf"), digits);
 }
 
 void wxSpinCtrlDouble::ResetTextValidator()
