@@ -527,6 +527,8 @@ public:
     virtual wxSize GetSize() const wxOVERRIDE;
 
 private:
+    wxString FormatDate() const;
+
     wxDateTime    m_date;
 };
 #else // !wxUSE_DATEPICKCTRL
