@@ -36,6 +36,7 @@
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 #include "wx/datectrl.h"
+#include "wx/uilocale.h"
 
 #include "wx/generic/gridsel.h"
 #include "wx/generic/grideditors.h"
@@ -1852,7 +1853,7 @@ wxGridCellDateEditor::wxGridCellDateEditor(const wxString& format)
 void wxGridCellDateEditor::SetParameters(const wxString& params)
 {
     if ( params.empty() )
-        m_format = "%x";
+        m_format = wxGetUIDateFormat();
     else
         m_format = params;
 }
