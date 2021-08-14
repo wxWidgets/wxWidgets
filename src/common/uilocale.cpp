@@ -54,6 +54,18 @@ bool wxUILocale::UseDefault()
 }
 
 /* static */
+bool wxUILocale::UseLanguage(const wxLanguageInfo& info)
+{
+    wxUILocaleImpl* const impl = wxUILocaleImpl::CreateForLanguage(info);
+    if ( !impl )
+        return false;
+
+    ms_current.SetImpl(impl);
+
+    return true;
+}
+
+/* static */
 const wxUILocale& wxUILocale::GetCurrent()
 {
     // We initialize it on demand.

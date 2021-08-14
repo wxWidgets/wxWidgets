@@ -22,21 +22,47 @@
 
 #include "wx/private/uilocale.h"
 
+#include "wx/msw/private/uilocale.h"
+
 #include "wx/dynlib.h"
-
-#include "wx/msw/private.h"
-
-#ifndef LOCALE_SNAME
-#define LOCALE_SNAME 0x5c
-#endif
-
-// This function is defined in src/common/intl.cpp, just declare it here for
-// now before refactoring the code.
-wxString wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Trivial wrapper for ::SetThreadUILanguage().
+//
+// TODO-XP: Drop this when we don't support XP any longer.
+static void wxMSWSetThreadUILanguage(LANGID langid)
+{
+    // SetThreadUILanguage() is available on XP, but with unclear
+    // behavior, so avoid calling it there.
+    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    {
+        wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
+        typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
+        SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
+        wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
+        if (pfnSetThreadUILanguage)
+            pfnSetThreadUILanguage(langid);
+    }
+}
+
+} // anonymous namespace
+
+void wxUseLCID(LCID lcid)
+{
+    ::SetThreadLocale(lcid);
+
+    wxMSWSetThreadUILanguage(LANGIDFROMLCID(lcid));
+}
 
 // ----------------------------------------------------------------------------
 // wxUILocale implementation for MSW
@@ -50,6 +76,7 @@ public:
     explicit wxUILocaleImplLCID(LCID lcid)
         : m_lcid(lcid)
     {
+        wxUseLCID(lcid);
     }
 
     wxString GetName() const wxOVERRIDE
@@ -96,6 +123,19 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 {
     return new wxUILocaleImplLCID(LOCALE_USER_DEFAULT);
+}
+
+/* static */
+wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
+{
+    if ( info.WinLang == 0 )
+    {
+        wxLogWarning(wxS("Locale '%s' not supported by OS."), info.Description);
+
+        return NULL;
+    }
+
+    return new wxUILocaleImplLCID(info.GetLCID());
 }
 
 #endif // wxUSE_INTL

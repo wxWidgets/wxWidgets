@@ -46,6 +46,15 @@ public:
     {
     }
 
+    static wxUILocaleImplCF* Create(const wxString& name)
+    {
+        CFLocaleRef cfloc = CFLocaleCreate(kCFAllocatorDefault, wxCFStringRef(name));
+        if ( !cfloc )
+            return NULL;
+
+        return new wxUILocaleImplCF(cfloc);
+    }
+
     wxString GetName() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
 
@@ -76,17 +85,19 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 {
-    CFLocaleRef cfloc = CFLocaleCreate(kCFAllocatorDefault, wxCFStringRef("C"));
-    if ( !cfloc )
-        return NULL;
-
-    return new wxUILocaleImplCF(cfloc);
+    return wxUILocaleImplCF::Create("C");
 }
 
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 {
     return new wxUILocaleImplCF(CFLocaleCopyCurrent());
+}
+
+/* static */
+wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
+{
+    return wxUILocaleImplCF::Create(info.CanonicalName);
 }
 
 #endif // wxUSE_INTL

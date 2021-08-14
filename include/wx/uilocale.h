@@ -29,6 +29,12 @@ public:
     // Configure the UI to use the default user locale.
     static bool UseDefault();
 
+    // Use the locale corresponding to the given language.
+    //
+    // This is a compatibility function used by wxWidgets itself, don't use it
+    // in the new code.
+    static bool UseLanguage(const wxLanguageInfo& info);
+
     // Get the object corresponding to the currently used locale.
     static const wxUILocale& GetCurrent();
 

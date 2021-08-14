@@ -43,18 +43,6 @@
     #include <langinfo.h>
 #endif
 
-#ifdef __WIN32__
-    #include "wx/dynlib.h"
-    #include "wx/msw/private.h"
-
-    #ifndef LOCALE_SNAME
-    #define LOCALE_SNAME 0x5c
-    #endif
-    #ifndef LOCALE_CUSTOM_UI_DEFAULT
-    #define LOCALE_CUSTOM_UI_DEFAULT 0x1400
-    #endif
-#endif
-
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
@@ -63,13 +51,18 @@
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
+#include "wx/uilocale.h"
 
-#if defined(__WXOSX__)
+#ifdef __WIN32__
+    #include "wx/msw/private/uilocale.h"
+#elif defined(__WXOSX__)
     #include "wx/osx/core/cfref.h"
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
     #include <CoreFoundation/CFDateFormatter.h>
     #include <CoreFoundation/CFString.h>
+#elif defined(__UNIX__)
+    #include "wx/unix/private/uilocale.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -87,31 +80,6 @@
 // ----------------------------------------------------------------------------
 
 static wxLocale *wxSetLocale(wxLocale *pLocale);
-
-namespace
-{
-
-#if defined(__UNIX__)
-
-// get just the language part ("en" in "en_GB")
-inline wxString ExtractLang(const wxString& langFull)
-{
-    return langFull.BeforeFirst('_');
-}
-
-// get everything else (including the leading '_')
-inline wxString ExtractNotLang(const wxString& langFull)
-{
-    size_t pos = langFull.find('_');
-    if ( pos != wxString::npos )
-        return langFull.substr(pos);
-    else
-        return wxString();
-}
-
-#endif // __UNIX__
-
-} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxLanguageInfo
@@ -396,89 +364,6 @@ bool wxLocale::DoCommonPostInit(bool success,
     return success;
 }
 
-#if defined(__UNIX__)
-
-// Helper of wxSetlocaleTryAll() below which tries setting the given locale
-// with and without UTF-8 suffix. Don't use this one directly.
-static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
-{
-    const char *l = NULL;
-
-    // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
-    //     non-UTF-8 locale if it fails, but this is not necessary under the
-    //     supported macOS versions where xx_YY locales are just aliases to
-    //     xx_YY.UTF-8 anyhow.
-#if wxUSE_UNICODE && !defined(__WXMAC__)
-    if ( !lc.empty() )
-    {
-        wxString buf(lc);
-        wxString buf2;
-        buf2 = buf + wxS(".UTF-8");
-        l = wxSetlocale(c, buf2);
-        if ( !l )
-        {
-            buf2 = buf + wxS(".utf-8");
-            l = wxSetlocale(c, buf2);
-        }
-        if ( !l )
-        {
-            buf2 = buf + wxS(".UTF8");
-            l = wxSetlocale(c, buf2);
-        }
-        if ( !l )
-        {
-            buf2 = buf + wxS(".utf8");
-            l = wxSetlocale(c, buf2);
-        }
-    }
-
-    // if we can't set UTF-8 locale, try non-UTF-8 one:
-    if ( !l )
-#endif // wxUSE_UNICODE && !__WXMAC__
-        l = wxSetlocale(c, lc);
-
-    return l;
-}
-
-// Try setting all possible versions of the given locale, i.e. with and without
-// UTF-8 encoding, and with or without the "_territory" part.
-static const char *wxSetlocaleTryAll(int c, const wxString& lc)
-{
-    const char* l = wxSetlocaleTryUTF8(c, lc);
-    if ( !l )
-    {
-        const wxString& lcOnlyLang = ExtractLang(lc);
-        if ( lcOnlyLang != lc )
-            l = wxSetlocaleTryUTF8(c, lcOnlyLang);
-    }
-
-    return l;
-}
-
-#endif // __UNIX__
-
-#ifdef __WIN32__
-
-// Trivial wrapper for ::SetThreadUILanguage().
-//
-// TODO-XP: Drop this when we don't support XP any longer.
-static void wxMSWSetThreadUILanguage(LANGID langid)
-{
-    // SetThreadUILanguage() is available on XP, but with unclear
-    // behavior, so avoid calling it there.
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
-    {
-        wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
-        typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
-        SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
-        wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
-        if (pfnSetThreadUILanguage)
-            pfnSetThreadUILanguage(langid);
-    }
-}
-
-#endif // __WIN32__
-
 bool wxLocale::Init(int lang, int flags)
 {
 #if WXWIN_COMPATIBILITY_2_8
@@ -522,62 +407,19 @@ bool wxLocale::Init(int lang, int flags)
 
 #if defined(__UNIX__) || defined(__WIN32__)
 
+    bool ok = lang == wxLANGUAGE_DEFAULT ? wxUILocale::UseDefault()
+                                         : wxUILocale::UseLanguage(*info);
+
+    // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
+    // the other platforms we still have to do it here.
+#if defined(__WIN32__) || defined(__WXOSX__)
+
     // We prefer letting the CRT to set its locale on its own when using
     // default locale, as it does a better job of it than we do. We also have
     // to do this when we didn't recognize the default language at all.
     const char *retloc = lang == wxLANGUAGE_DEFAULT ? wxSetlocale(LC_ALL, "")
-                                                    : NULL;
+                                                    : info->TrySetLocale();
 
-#if defined(__UNIX__)
-    if ( !retloc )
-        retloc = wxSetlocaleTryAll(LC_ALL, shortName);
-
-    if ( !retloc )
-    {
-        // Some C libraries (namely glibc) still use old ISO 639,
-        // so will translate the abbrev for them
-        wxString localeAlt;
-        const wxString& langOnly = ExtractLang(shortName);
-        if ( langOnly == wxS("he") )
-            localeAlt = wxS("iw") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("id") )
-            localeAlt = wxS("in") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("yi") )
-            localeAlt = wxS("ji") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("nb") )
-            localeAlt = wxS("no_NO");
-        else if ( langOnly == wxS("nn") )
-            localeAlt = wxS("no_NY");
-
-        if ( !localeAlt.empty() )
-            retloc = wxSetlocaleTryAll(LC_ALL, localeAlt);
-    }
-#elif defined(__WIN32__)
-    if ( lang == wxLANGUAGE_DEFAULT )
-    {
-        ::SetThreadLocale(LOCALE_USER_DEFAULT);
-        wxMSWSetThreadUILanguage(LANG_USER_DEFAULT);
-
-        // CRT locale already set above.
-    }
-    else if ( info->WinLang == 0 )
-    {
-        wxLogWarning(wxS("Locale '%s' not supported by OS."), name);
-
-        retloc = "C";
-    }
-    else // language supported by Windows
-    {
-        const wxUint32 lcid = info->GetLCID();
-
-        // change locale used by Windows functions
-        ::SetThreadLocale(lcid);
-
-        wxMSWSetThreadUILanguage(LANGIDFROMLCID(lcid));
-
-        // and also call setlocale() to change locale used by the CRT
-        retloc = info->TrySetLocale();
-    }
 #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
     // VC++ setlocale() (also used by Mingw) can't set locale to languages that
     // can only be written using Unicode, therefore wxSetlocale() call fails
@@ -593,13 +435,15 @@ bool wxLocale::Init(int lang, int flags)
         }
     }
 #endif // CRT not handling Unicode-only languages
-#else
-    #error "Unsupported platform"
-#endif
+
+    if ( !retloc )
+        ok = false;
+
+#endif // __WIN32__
 
     return DoCommonPostInit
            (
-                retloc != NULL,
+                ok,
                 name,
                 // wxLANGUAGE_DEFAULT needs to be passed to wxTranslations as ""
                 // for correct detection of user's preferred language(s)
@@ -1123,8 +967,7 @@ wxLocale::~wxLocale()
     }
 
 #ifdef __WIN32__
-    ::SetThreadLocale(m_oldLCID);
-    wxMSWSetThreadUILanguage(LANGIDFROMLCID(m_oldLCID));
+    wxUseLCID(m_oldLCID);
 #endif
 }
 
