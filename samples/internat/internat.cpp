@@ -31,6 +31,7 @@
 #include "wx/calctrl.h"
 #include "wx/intl.h"
 #include "wx/file.h"
+#include "wx/grid.h"
 #include "wx/log.h"
 #include "wx/cmdline.h"
 #include "wx/numformatter.h"
@@ -381,6 +382,23 @@ MyFrame::MyFrame()
     // show that week days and months names are translated too
     topSizer->Add(new wxCalendarCtrl(panel, wxID_ANY),
                   wxSizerFlags().Center().Border());
+
+    // another control using locale-specific number and date format
+    wxGrid* const grid = new wxGrid(panel, wxID_ANY,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxBORDER_SIMPLE);
+    grid->CreateGrid(2, 2);
+    grid->HideRowLabels();
+
+    grid->SetColLabelValue(0, _("Number"));
+    grid->SetColFormatFloat(0);
+    grid->SetCellValue(0, 0, wxNumberFormatter::ToString(3.14159265, -1));
+
+    grid->SetColLabelValue(1, _("Date"));
+    grid->SetColFormatDate(1);
+    grid->SetCellValue(0, 1, "Today");
+
+    topSizer->Add(grid, wxSizerFlags().Center().Border());
 
     // show the difference between wxString::Format() and wxNumberFormatter:
     // the former uses the current C locale, while the latter uses the UI
