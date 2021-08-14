@@ -104,3 +104,18 @@ public:
     wxString GetInfo(wxLocaleInfo index,
                      wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT) const;
 };
+
+/**
+    Return the format to use for formatting user-visible dates.
+
+    This is a simple wrapper function normally calling wxUILocale::GetInfo()
+    with wxLOCALE_SHORT_DATE_FMT argument, but which is also available when @c
+    wxUSE_INTL==0, i.e. support for internationalization is disabled at
+    compile-time, in which case it returns @c %x string, i.e. uses the current
+    C locale formatting rather than UI locale.
+
+    @see wxDateTime::Format()
+
+    @since 3.1.6
+ */
+wxString wxGetUIDateFormat();
