@@ -552,20 +552,6 @@ bool wxLocale::Init(int lang, int flags)
         if ( !localeAlt.empty() )
             retloc = wxSetlocaleTryAll(LC_ALL, localeAlt);
     }
-
-#ifdef __AIX__
-    // at least in AIX 5.2 libc is buggy and the string returned from
-    // setlocale(LC_ALL) can't be passed back to it because it returns 6
-    // strings (one for each locale category), i.e. for C locale we get back
-    // "C C C C C C"
-    //
-    // this contradicts IBM own docs but this is not of much help, so just work
-    // around it in the crudest possible manner
-    char* p = const_cast<char*>(wxStrchr(retloc, ' '));
-    if ( p )
-        *p = '\0';
-#endif // __AIX__
-
 #elif defined(__WIN32__)
     if ( lang == wxLANGUAGE_DEFAULT )
     {
