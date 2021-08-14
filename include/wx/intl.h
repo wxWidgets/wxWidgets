@@ -42,40 +42,6 @@ class WXDLLIMPEXP_FWD_BASE wxLanguageInfoArray;
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxLanguageInfo: encapsulates wxLanguage to OS native lang.desc.
-//                 translation information
-// ----------------------------------------------------------------------------
-
-struct WXDLLIMPEXP_BASE wxLanguageInfo
-{
-    int Language;                   // wxLanguage id
-    wxString CanonicalName;         // Canonical name, e.g. fr_FR
-#ifdef __WINDOWS__
-    wxUint32 WinLang,               // Win32 language identifiers
-             WinSublang;
-#endif // __WINDOWS__
-    wxString Description;           // human-readable name of the language
-    wxLayoutDirection LayoutDirection;
-
-#ifdef __WINDOWS__
-    // return the LCID corresponding to this language
-    wxUint32 GetLCID() const;
-#endif // __WINDOWS__
-
-    // return the locale name corresponding to this language usable with
-    // setlocale() on the current system or empty string if this locale is not
-    // supported
-    wxString GetLocaleName() const;
-
-    // Call setlocale() and return non-null value if it works for this language.
-    //
-    // This function is mostly for internal use, as changing locale involves
-    // more than just calling setlocale() on some platforms, use wxLocale to
-    // do everything that needs to be done instead of calling this method.
-    const char* TrySetLocale() const;
-};
-
-// ----------------------------------------------------------------------------
 // wxLocale: encapsulates all language dependent settings, including current
 //           message catalogs, date, time and currency formats (TODO) &c
 // ----------------------------------------------------------------------------
