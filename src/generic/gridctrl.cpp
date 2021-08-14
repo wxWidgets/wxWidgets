@@ -25,6 +25,7 @@
     #include "wx/checkbox.h"
 #endif // WX_PRECOMP
 
+#include "wx/numformatter.h"
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 
@@ -839,7 +840,7 @@ wxString wxGridCellFloatRenderer::GetString(const wxGrid& grid, int row, int col
     else
     {
         text = table->GetValue(row, col);
-        hasDouble = text.ToDouble(&val);
+        hasDouble = wxNumberFormatter::FromString(text, &val);
     }
 
     if ( hasDouble )
@@ -877,8 +878,7 @@ wxString wxGridCellFloatRenderer::GetString(const wxGrid& grid, int row, int col
                 m_format += wxT('f');
         }
 
-        text.Printf(m_format, val);
-
+        text = wxNumberFormatter::Format(m_format, val);
     }
     //else: text already contains the string
 
