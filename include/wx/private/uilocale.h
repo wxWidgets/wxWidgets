@@ -33,6 +33,15 @@ public:
     // It may return NULL in case of failure.
     static wxUILocaleImpl* CreateUserDefault();
 
+    // This function exists only for wxLocale compatibility and sets the locale
+    // corresponding to the given language.
+    //
+    // The language passed to this function is a valid language, i.e. neither
+    // wxLANGUAGE_UNKNOWN nor wxLANGUAGE_DEFAULT.
+    //
+    // It may return NULL in case of failure.
+    static wxUILocaleImpl* CreateForLanguage(const wxLanguageInfo& info);
+
     // Functions corresponding to wxUILocale ones.
     virtual wxString GetName() const = 0;
     virtual wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const = 0;
