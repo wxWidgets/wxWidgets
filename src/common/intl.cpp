@@ -1131,6 +1131,13 @@ bool wxLocale::IsAvailable(int lang)
     if ( !::IsValidLocale(info->GetLCID(), LCID_INSTALLED) )
         return false;
 
+#elif defined(__WXOSX__)
+    CFLocaleRef
+        cfloc = CFLocaleCreate(kCFAllocatorDefault, wxCFStringRef(info->CanonicalName));
+    if ( !cfloc )
+        return false;
+
+    CFRelease(cfloc);
 #elif defined(__UNIX__)
 
     // Test if setting the locale works, then set it back.
