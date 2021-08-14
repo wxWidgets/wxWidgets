@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/localedefs.h
-// Purpose:     Definitions of common locale-related constants
+// Purpose:     Definitions of common locale-related constants and structs.
 // Author:      Vadim Zeitlin
 // Created:     2021-07-31 (extracted from wx/intl.h)
 // Copyright:   (c) 2021 Vadim Zeitlin <vadim@wxwidgets.org>
@@ -25,6 +25,8 @@ enum wxLayoutDirection
 };
 
 #if wxUSE_INTL
+
+#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 // wxLocaleCategory: the category of locale settings
@@ -70,6 +72,40 @@ enum wxLocaleInfo
     wxLOCALE_DATE_TIME_FMT,
     wxLOCALE_TIME_FMT
 
+};
+
+// ----------------------------------------------------------------------------
+// wxLanguageInfo: encapsulates wxLanguage to OS native lang.desc.
+//                 translation information
+// ----------------------------------------------------------------------------
+
+struct WXDLLIMPEXP_BASE wxLanguageInfo
+{
+    int Language;                   // wxLanguage id
+    wxString CanonicalName;         // Canonical name, e.g. fr_FR
+#ifdef __WINDOWS__
+    wxUint32 WinLang,               // Win32 language identifiers
+             WinSublang;
+#endif // __WINDOWS__
+    wxString Description;           // human-readable name of the language
+    wxLayoutDirection LayoutDirection;
+
+#ifdef __WINDOWS__
+    // return the LCID corresponding to this language
+    wxUint32 GetLCID() const;
+#endif // __WINDOWS__
+
+    // return the locale name corresponding to this language usable with
+    // setlocale() on the current system or empty string if this locale is not
+    // supported
+    wxString GetLocaleName() const;
+
+    // Call setlocale() and return non-null value if it works for this language.
+    //
+    // This function is mostly for internal use, as changing locale involves
+    // more than just calling setlocale() on some platforms, use wxLocale to
+    // do everything that needs to be done instead of calling this method.
+    const char* TrySetLocale() const;
 };
 
 #endif // wxUSE_INTL
