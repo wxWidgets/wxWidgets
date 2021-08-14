@@ -93,6 +93,16 @@ public:
     static wxString
     ToString(double val, int precision, int flags = Style_WithThousandsSep);
 
+    /**
+        Format the given number using one of the floating point formats and
+        ensure that the result uses the correct decimal separator.
+
+        Prefer using ToString() if possible, i.e. if format is "%g" or "%.Nf"
+        which are supported by it directly.
+
+        @since 3.1.6
+     */
+    static wxString Format(const wxString& format, double val);
 
     /**
         Parse a string representation of a number possibly including thousands

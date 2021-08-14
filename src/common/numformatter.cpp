@@ -155,6 +155,23 @@ wxString wxNumberFormatter::ToString(double val, int precision, int style)
     return s;
 }
 
+wxString wxNumberFormatter::Format(const wxString& format, double val)
+{
+    wxString s = wxString::Format(format, val);
+
+    const wxChar sep = GetDecimalSeparator();
+    if ( s.find(sep) == wxString::npos )
+    {
+        const wxChar other = sep == '.' ? ',' : '.';
+        const size_t posSep = s.find(other);
+        if ( posSep != wxString::npos )
+            s[posSep] = sep;
+    }
+    //else: it already uses the correct separator
+
+    return s;
+}
+
 void wxNumberFormatter::AddThousandsSeparators(wxString& s)
 {
     // Thousands separators for numbers in scientific format are not relevant.
