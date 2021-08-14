@@ -67,6 +67,18 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxUILocale);
 };
 
-#endif // wxUSE_INTL
+inline wxString wxGetUIDateFormat()
+{
+    return wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT);
+}
+
+#else // !wxUSE_INTL
+
+inline wxString wxGetUIDateFormat()
+{
+    return wxString(wxS("%x"));
+}
+
+#endif // wxUSE_INTL/!wxUSE_INTL
 
 #endif // _WX_UILOCALE_H_
