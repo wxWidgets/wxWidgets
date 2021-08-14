@@ -28,6 +28,7 @@
 #include "wx/numformatter.h"
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
+#include "wx/uilocale.h"
 
 #include "wx/generic/private/grid.h"
 #include "wx/private/window.h"
@@ -160,7 +161,7 @@ wxGridCellDateRenderer::wxGridCellDateRenderer(const wxString& outformat)
 {
     if ( outformat.empty() )
     {
-        m_oformat = "%x"; // Localized date representation.
+        m_oformat = wxGetUIDateFormat();
     }
     else
     {
