@@ -49,6 +49,7 @@ jobs:
                 ':!install-sh' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
+                ':!**/Info*.plist*' \
                 ':!**/*.sln' \
                 ':!**/*.vcproj' \
                 ':!**/*.xpm'
