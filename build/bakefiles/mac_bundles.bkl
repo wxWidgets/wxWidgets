@@ -5,15 +5,15 @@
     <!--
     Support for application bundles, for wxWidgets samples.
     -->
-    
-    <!-- 
+
+    <!--
     Nasty hack: use $(srcdir) to obtain usable CFBundleIdentifier suffix;
     converts $(srcdir) like "../../samples/minimal" to "samples.minimal".
     -->
     <set var="BUNDLE_IDENTIFIER">
         `echo $(DOLLAR)(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`
     </set>
-    
+
     <set var="BUNDLE_PLIST" overwrite="0">
         $(TOP_SRCDIR)src/osx/carbon/Info.plist.in
     </set>
@@ -67,7 +67,7 @@
 
                 <!-- copy the application icon: -->
                 cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns
-	        </command>            
+                </command>
             <if cond="BUNDLE_RESOURCES!=''">
                 <command>
                     <!-- copy all other bundle resources: -->
@@ -84,9 +84,9 @@
                     cp -f $(BUNDLE_FONT_RESOURCES) $(BUNDLE)/Resources/Fonts
                 </command>
             </if>
- 
+
         </modify-target>
-        
+
         <!-- add pseudo target id_bundle: -->
         <add-target target="$(id)_bundle" type="phony"
                     cond="target and PLATFORM_MACOSX=='1'"/>
@@ -99,7 +99,7 @@
         <modify-target target="clean">
             <command>rm -rf $(id).app</command>
         </modify-target>
-        
+
     </define-tag>
 
 </makefile>
