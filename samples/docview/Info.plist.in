@@ -77,5 +77,7 @@
 	<string>VERSION</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright 2002-2021 wxWidgets</string>
+	<key>NSPrincipalClass</key>
+	<string>wxNSApplication</string>
 </dict>
 </plist>
