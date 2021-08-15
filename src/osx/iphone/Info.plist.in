@@ -34,8 +34,6 @@
 		<key>CFBundleIconName</key>
 		<string>AppIcon</string>
 	</dict>
-	<key>CFBundleSignature</key>
-	<string>????</string>
 	<key>CFBundleShortVersionString</key>
 	<string>VERSION</string>
 	<key>CFBundleVersion</key>
