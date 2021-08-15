@@ -302,7 +302,10 @@ void wxOSXDataViewModelNotifier::AdjustAutosizedColumns()
   unsigned count = m_DataViewCtrlPtr->GetColumnCount();
   for ( unsigned col = 0; col < count; col++ )
   {
-    m_DataViewCtrlPtr->GetDataViewPeer()->FitColumnWidthToContent(col);
+      wxDataViewColumn *column = m_DataViewCtrlPtr->GetColumnPtr(col);
+
+      if ( column->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
+        m_DataViewCtrlPtr->GetDataViewPeer()->FitColumnWidthToContent(col);
   }
 }
 
@@ -438,9 +441,6 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
      // otherwise ask the control to 'update' the data in the newly appended column:
       if (GetColumnCount() == 1)
         SetExpanderColumn(columnPtr);
-
-      AdjustAutosizedColumns();
-
      // done:
       return true;
     }
@@ -482,8 +482,6 @@ bool wxDataViewCtrl::DeleteColumn(wxDataViewColumn* columnPtr)
   {
     m_ColumnPtrs.Remove(columnPtr);
     delete columnPtr;
-
-    AdjustAutosizedColumns();
     return true;
   }
   else
