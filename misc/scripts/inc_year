@@ -27,6 +27,6 @@ run_sed src/msw/version.rc "s/1993-$old_year/1993-$new_year/"
 run_sed src/common/utilscmn.cpp "s/1995-$old_year/1995-$new_year/"
 
 # And Mac files are much newer than that.
-for f in samples/docview/Info.plist samples/minimal/Info_cocoa.plist; do
+for f in samples/minimal/Info_cocoa.plist; do
     run_sed $f "s/2005-$old_year/2005-$new_year/"
 done
