@@ -400,9 +400,10 @@ MyFrame::MyFrame()
 
     topSizer->Add(grid, wxSizerFlags().Center().Border());
 
-    // show the difference between wxString::Format() and wxNumberFormatter:
-    // the former uses the current C locale, while the latter uses the UI
-    // locale
+    // show the difference (in decimal and thousand separator, hence use a
+    // floating point number > 1000) between wxString::Format() and
+    // wxNumberFormatter: the former uses the current C locale, while the
+    // latter uses the UI locale
     topSizer->Add(new wxStaticText
                       (
                         panel,
@@ -410,8 +411,8 @@ MyFrame::MyFrame()
                         wxString::Format
                         (
                             _("Number in UI locale: %s; in C locale: %.2f"),
-                            wxNumberFormatter::ToString(5.67, 2),
-                            5.67
+                            wxNumberFormatter::ToString(1234567.89, 2),
+                            1234567.89
                         )
                       ),
                   wxSizerFlags().Center().Border());
