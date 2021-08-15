@@ -73,14 +73,8 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>VERSION</string>
-	<key>CFBundleSignature</key>
-	<string>WXMA</string>
 	<key>CFBundleVersion</key>
 	<string>VERSION</string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
-	<key>LSRequiresCarbon</key>
-	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright 2002-2008 wxWidgets</string>
 </dict>
