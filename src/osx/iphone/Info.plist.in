@@ -2,12 +2,16 @@
 <!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
 <plist version="0.9">
 <dict>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleIdentifier</key>
-	<string>org.wxwindows.IDENTIFIER</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>EXECUTABLE</string>
+	<key>CFBundleGetInfoString</key>
+	<string>EXECUTABLE version VERSION, (c) 2002-2019 wxWidgets</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.wxwindows.IDENTIFIER</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>de</string>
@@ -15,24 +19,12 @@
 		<string>fr</string>
 		<string>it</string>
 	</array>
-	<key>CFBundleExecutable</key>
-	<string>EXECUTABLE</string>
+	<key>CFBundleLongVersionString</key>
+	<string>VERSION, (c) 2002-2019 wxWidgets</string>
 	<key>CFBundleName</key>
 	<string>EXECUTABLE</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>VERSION</string>
-	<key>CFBundleShortVersionString</key>
-	<string>VERSION</string>
-	<key>CFBundleGetInfoString</key>
-	<string>EXECUTABLE version VERSION, (c) 2002-2019 wxWidgets</string>
-	<key>CFBundleLongVersionString</key>
-	<string>VERSION, (c) 2002-2019 wxWidgets</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2002-2019 wxWidgets</string>
 	<key>CFBundlePrimaryIcon</key>
 	<dict>
 		<key>CFBundleIconFiles</key>
@@ -42,5 +34,13 @@
 		<key>CFBundleIconName</key>
 		<string>AppIcon</string>
 	</dict>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleShortVersionString</key>
+	<string>VERSION</string>
+	<key>CFBundleVersion</key>
+	<string>VERSION</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright 2002-2019 wxWidgets</string>
 </dict>
 </plist>
