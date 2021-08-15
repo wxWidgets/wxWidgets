@@ -876,7 +876,7 @@ function(wx_add name group)
             MACOSX_BUNDLE_ICON_FILE wxmac.icns
             MACOSX_BUNDLE_LONG_VERSION_STRING "${wxVERSION}"
             MACOSX_BUNDLE_SHORT_VERSION_STRING "${wxVERSION}"
-            MACOSX_BUNDLE_VERSION "${wxVERSION}"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${wxVERSION}"
             MACOSX_BUNDLE_COPYRIGHT "${wxCOPYRIGHT}"
             MACOSX_BUNDLE_GUI_IDENTIFIER "org.wxwidgets.${target_name}"
             )
