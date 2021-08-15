@@ -71,7 +71,8 @@ public:
 
     void BuildDataViewCtrl(wxPanel* parent,
                            unsigned int nPanel,
-                           unsigned long style = 0);
+                           unsigned long style = 0,
+                           int modelFlags = wxALIGN_CENTRE);
 
 private:
     // event handlers
@@ -167,6 +168,13 @@ private:
     enum Lang { Lang_English, Lang_French };
     void FillIndexList(Lang lang);
 
+    // Helper for checking ModelFlags of current panel (either currently
+    // building or selected one).
+    bool HasModelFlag(int flag) const
+    {
+        return (m_modelFlags[m_currentPanel] & flag) != 0;
+    }
+
     // HasValue page.
     void OnHasValueValueChanged(wxDataViewEvent& event);
 
@@ -186,7 +194,9 @@ private:
         Page_Max
     };
 
+    unsigned int m_currentPanel;
     wxDataViewCtrl* m_ctrl[Page_Max];
+    int m_modelFlags[Page_Max];
 
     // Some of the models associated with the controls:
 
@@ -406,6 +416,18 @@ enum
     ID_HORIZ_RULES,
     ID_VERT_RULES,
 
+    ID_ALIGN_LEFT,
+    ID_ALIGN_CENTRE_H,
+    ID_ALIGN_RIGHT,
+
+    ID_ALIGN_TOP,
+    ID_ALIGN_CENTRE_V,
+    ID_ALIGN_BOTTOM,
+
+    ID_TOGGLE_USE_TALL_ROWS,
+    ID_TOGGLE_KEEP_LOGO_SMALL,
+    ID_TOGGLE_USE_MULTI_LINE_TEXT,
+
     ID_EXIT = wxID_EXIT,
 
     // about menu
@@ -449,7 +471,8 @@ enum
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU_RANGE( ID_MULTIPLE, ID_VERT_RULES, MyFrame::OnStyleChange )
+    EVT_MENU_RANGE( ID_MULTIPLE, ID_TOGGLE_USE_MULTI_LINE_TEXT,
+        MyFrame::OnStyleChange )
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
     EVT_MENU( ID_CLEARLOG, MyFrame::OnClearLog )
@@ -552,6 +575,23 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     style_menu->AppendCheckItem(ID_HORIZ_RULES, "Display horizontal rules");
     style_menu->AppendCheckItem(ID_VERT_RULES, "Display vertical rules");
 
+    wxMenu* align_menu = new wxMenu;
+    align_menu->AppendRadioItem(ID_ALIGN_LEFT, "Left\tCtrl-1");
+    align_menu->AppendRadioItem(ID_ALIGN_CENTRE_H, "Centre Horizontal\tCtrl-2");
+    align_menu->AppendRadioItem(ID_ALIGN_RIGHT, "Right\tCtrl-3");
+    align_menu->AppendSeparator();
+    align_menu->AppendRadioItem(ID_ALIGN_TOP, "Top\tCtrl-4");
+    align_menu->AppendRadioItem(ID_ALIGN_CENTRE_V, "Centre Vertical\tCtrl-5");
+    align_menu->AppendRadioItem(ID_ALIGN_BOTTOM, "Bottom\tCtrl-6");
+
+    wxMenu* size_menu = new wxMenu;
+    size_menu->AppendCheckItem(ID_TOGGLE_USE_TALL_ROWS,
+        "Use Tall Rows\tCtrl-7");
+    size_menu->AppendCheckItem(ID_TOGGLE_KEEP_LOGO_SMALL,
+        "Keep Logo Size Small\tCtrl-8");
+    size_menu->AppendCheckItem(ID_TOGGLE_USE_MULTI_LINE_TEXT,
+        "Use Multi-line Text\tCtrl-9");
+
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_GET_PAGE_INFO, "Show current &page info");
@@ -563,6 +603,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->AppendCheckItem(ID_CUSTOM_HEADER_HEIGHT, "Custom header &height");
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
     file_menu->Append(ID_STYLE_MENU, "&Style", style_menu);
+    file_menu->Append(wxID_ANY, "&Alignment", align_menu);
+    file_menu->Append(wxID_ANY, "Si&ze", size_menu);
     file_menu->Append(ID_INC_INDENT, "&Increase indent\tCtrl-I");
     file_menu->Append(ID_DEC_INDENT, "&Decrease indent\tShift-Ctrl-I");
     file_menu->AppendSeparator();
@@ -749,9 +791,13 @@ MyFrame::~MyFrame()
     delete wxLog::SetActiveTarget(m_logOld);
 }
 
-void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned long style)
+void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
+    unsigned long style, int modelFlags)
 {
     wxASSERT(!m_ctrl[nPanel]); // should only be initialized once
+
+    m_currentPanel = nPanel;
+    m_modelFlags[nPanel] = modelFlags;
 
     switch (nPanel)
     {
@@ -844,7 +890,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[Page_List] = new wxDataViewCtrl( parent, ID_ATTR_CTRL, wxDefaultPosition,
                                             wxDefaultSize, style );
 
-            m_list_model = new MyListModel;
+            m_list_model = new MyListModel(modelFlags);
             m_ctrl[Page_List]->AssociateModel( m_list_model.get() );
 
             wxDataViewColumn* const colCheckIconText = new wxDataViewColumn
@@ -855,13 +901,17 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                      wxCOL_WIDTH_AUTOSIZE
                 );
             m_ctrl[Page_List]->AppendColumn(colCheckIconText);
+            const int alignment = modelFlags & wxALIGN_MASK;
+            colCheckIconText->GetRenderer()->SetAlignment(alignment);
 
-            m_ctrl[Page_List]->AppendTextColumn("editable string",
+            wxDataViewColumn* const colEditable =
+                m_ctrl[Page_List]->AppendTextColumn("editable string",
                                         MyListModel::Col_EditableText,
                                         wxDATAVIEW_CELL_EDITABLE,
                                         wxCOL_WIDTH_AUTOSIZE,
                                         wxALIGN_NOT,
                                         wxDATAVIEW_COL_SORTABLE);
+            colEditable->GetRenderer()->SetAlignment(alignment);
 
             m_ctrl[Page_List]->AppendDateColumn("date",
                                         MyListModel::Col_Date);
@@ -936,7 +986,11 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                                         wxDefaultSize, style | wxDV_NO_HEADER );
             m_ctrl[Page_TreeStore] = tc;
 
-            wxImageList *ilist = new wxImageList( 16, 16 );
+            const bool useDefaultSize = !HasModelFlag(MODEL_USE_TALL_ROWS)
+                  || HasModelFlag(MODEL_KEEP_LOGO_SMALL);
+            const int imageSize = useDefaultSize ? 16 : 32;
+            wxImageList *ilist = new wxImageList( imageSize, imageSize );
+
             ilist->Add( wxIcon(wx_small_xpm) );
             tc->AssignImageList( ilist );
 
@@ -1045,6 +1099,8 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
         break;
     }
 
+    if ( HasModelFlag(MODEL_USE_TALL_ROWS) )
+        m_ctrl[nPanel]->SetRowHeight(32);
 }
 
 
@@ -1158,6 +1214,7 @@ void MyFrame::OnDecIndent(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPageChanged( wxBookCtrlEvent& WXUNUSED(event) )
 {
     unsigned int nPanel = m_notebook->GetSelection();
+    m_currentPanel = nPanel;
 
     GetMenuBar()->FindItem(ID_STYLE_MENU)->SetItemLabel(
                 wxString::Format("Style of panel #%d", nPanel+1));
@@ -1188,6 +1245,49 @@ void MyFrame::OnPageChanged( wxBookCtrlEvent& WXUNUSED(event) )
 
         GetMenuBar()->FindItem(id)->Check( m_ctrl[nPanel]->HasFlag(style) );
     }
+
+    const int modelFlags = m_modelFlags[nPanel];
+
+    for (unsigned int id = ID_ALIGN_LEFT; id <= ID_ALIGN_BOTTOM; ++id)
+    {
+        int align = wxALIGN_NOT;
+        bool check = false;
+        switch (id)
+        {
+        case ID_ALIGN_LEFT:
+            check = !(modelFlags & (wxALIGN_CENTRE_HORIZONTAL | wxALIGN_RIGHT));
+            break;
+        case ID_ALIGN_CENTRE_H:
+            align = wxALIGN_CENTRE_HORIZONTAL;
+            break;
+        case ID_ALIGN_RIGHT:
+            align = wxALIGN_RIGHT;
+            break;
+        case ID_ALIGN_TOP:
+            check = !(modelFlags & (wxALIGN_CENTRE_VERTICAL | wxALIGN_BOTTOM));
+            break;
+        case ID_ALIGN_CENTRE_V:
+            align = wxALIGN_CENTRE_VERTICAL;
+            break;
+        case ID_ALIGN_BOTTOM:
+            align = wxALIGN_BOTTOM;
+            break;
+        default:
+            wxFAIL;
+        }
+
+        if ( align != wxALIGN_NOT )
+            check = (modelFlags & align) != 0;
+
+        GetMenuBar()->FindItem(id)->Check(check);
+    }
+
+    GetMenuBar()->FindItem(ID_TOGGLE_USE_TALL_ROWS)->Check(
+        HasModelFlag(MODEL_USE_TALL_ROWS));
+    GetMenuBar()->FindItem(ID_TOGGLE_KEEP_LOGO_SMALL)->Check(
+        HasModelFlag(MODEL_KEEP_LOGO_SMALL));
+    GetMenuBar()->FindItem(ID_TOGGLE_USE_MULTI_LINE_TEXT)->Check(
+        HasModelFlag(MODEL_USE_MULTI_LINE_TEXT));
 
     GetMenuBar()->FindItem(ID_DISABLE)->Check(!m_ctrl[nPanel]->IsEnabled());
 }
@@ -1223,8 +1323,26 @@ void MyFrame::OnStyleChange( wxCommandEvent& WXUNUSED(event) )
     else if (nPanel == 4)
         m_long_music_model.reset(NULL);
 
+    int flags = 0;
+    if ( GetMenuBar()->FindItem(ID_ALIGN_CENTRE_H)->IsChecked() )
+        flags |= wxALIGN_CENTRE_HORIZONTAL;
+    if ( GetMenuBar()->FindItem(ID_ALIGN_RIGHT)->IsChecked() )
+        flags |= wxALIGN_RIGHT;
+    if ( GetMenuBar()->FindItem(ID_ALIGN_CENTRE_V)->IsChecked() )
+        flags |= wxALIGN_CENTRE_VERTICAL;
+    if ( GetMenuBar()->FindItem(ID_ALIGN_BOTTOM)->IsChecked() )
+        flags |= wxALIGN_BOTTOM;
+
+    if ( GetMenuBar()->FindItem(ID_TOGGLE_USE_TALL_ROWS)->IsChecked() )
+        flags |= MODEL_USE_TALL_ROWS;
+    if ( GetMenuBar()->FindItem(ID_TOGGLE_KEEP_LOGO_SMALL)->IsChecked() )
+        flags |= MODEL_KEEP_LOGO_SMALL;
+    if ( GetMenuBar()->FindItem(ID_TOGGLE_USE_MULTI_LINE_TEXT)->IsChecked() )
+        flags |= MODEL_USE_MULTI_LINE_TEXT;
+
     // rebuild the DVC for the selected panel:
-    BuildDataViewCtrl((wxPanel*)m_notebook->GetPage(nPanel), nPanel, style);
+    BuildDataViewCtrl((wxPanel*)m_notebook->GetPage(nPanel),
+        nPanel, style, flags);
 
     sz->Prepend(m_ctrl[nPanel], 1, wxGROW|wxALL, 5);
     sz->Layout();

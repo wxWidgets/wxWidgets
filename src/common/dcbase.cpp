@@ -1196,7 +1196,7 @@ void wxDC::DrawLabel(const wxString& text,
     wxCoord x, y;
     if ( alignment & wxALIGN_RIGHT )
     {
-        x = rect.GetRight() - width;
+        x = rect.GetRight() - width + 1;
     }
     else if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
     {
@@ -1209,7 +1209,7 @@ void wxDC::DrawLabel(const wxString& text,
 
     if ( alignment & wxALIGN_BOTTOM )
     {
-        y = rect.GetBottom() - height;
+        y = rect.GetBottom() - height + 1;
     }
     else if ( alignment & wxALIGN_CENTRE_VERTICAL )
     {

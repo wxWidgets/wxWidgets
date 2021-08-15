@@ -1279,13 +1279,13 @@ void wxGCDCImpl::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *
                       );
 
     if ( height )
-        *height = (wxCoord)wxRound(h);
+        *height = (wxCoord)ceil(h);
     if ( descent )
-        *descent = (wxCoord)wxRound(d);
+        *descent = (wxCoord)ceil(d);
     if ( externalLeading )
-        *externalLeading = (wxCoord)wxRound(e);
+        *externalLeading = (wxCoord)ceil(e);
     if ( width )
-        *width = (wxCoord)wxRound(w);
+        *width = (wxCoord)ceil(w);
 
     if ( theFont )
     {
