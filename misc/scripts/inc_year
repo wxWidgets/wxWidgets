@@ -27,9 +27,5 @@ run_sed src/msw/version.rc "s/1993-$old_year/1993-$new_year/"
 run_sed src/common/utilscmn.cpp "s/1995-$old_year/1995-$new_year/"
 
 # And Mac files are much newer than that.
-for f in samples/docview/Info.plist.in \
-         samples/minimal/Info_cocoa.plist \
-         src/osx/carbon/Info.plist.in \
-         ; do
-    run_sed $f "s/200[25]-$old_year/200[25]-$new_year/"
-done
+run_set build/bakefiles/mac_bundles.bkl "s/2002-$old_year/2002-$new_year/"
+run_sed samples/minimal/Info_cocoa.plist "s/2005-$old_year/2005-$new_year/"

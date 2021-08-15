@@ -5,11 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>EXECUTABLE</string>
+	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>EXECUTABLE version VERSION, (c) 2002-2019 wxWidgets</string>
+	<string>${MACOSX_BUNDLE_INFO_STRING}</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.wxwindows.IDENTIFIER</string>
+	<string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
@@ -20,9 +20,9 @@
 		<string>it</string>
 	</array>
 	<key>CFBundleLongVersionString</key>
-	<string>VERSION, (c) 2002-2019 wxWidgets</string>
+	<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}</string>
 	<key>CFBundleName</key>
-	<string>EXECUTABLE</string>
+	<string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundlePrimaryIcon</key>
@@ -35,11 +35,11 @@
 		<string>AppIcon</string>
 	</dict>
 	<key>CFBundleShortVersionString</key>
-	<string>VERSION</string>
+	<string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
 	<key>CFBundleVersion</key>
-	<string>VERSION</string>
+	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2002-2019 wxWidgets</string>
+	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMainNibFile</key>
