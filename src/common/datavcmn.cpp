@@ -1708,6 +1708,7 @@ wxDataObject* wxDataViewCtrlBase::CreateDataObject(const wxDataFormatArray& form
                 break;
 
             case wxDF_BITMAP:
+            case wxDF_PNG:
                 dataObject->Add(new wxBitmapDataObject);
                 break;
 
