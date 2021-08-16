@@ -689,7 +689,7 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
 
 #if wxUSE_DRAG_AND_DROP
 
-bool wxDataViewCtrl::DoEnableDropTarget(const wxDataFormatArray &formats)
+bool wxDataViewCtrl::DoEnableDropTarget(const wxVector<wxDataFormat> &formats)
 {
     wxDropTarget* dt = NULL;
     if (wxDataObject* dataObject = CreateDataObject(formats))

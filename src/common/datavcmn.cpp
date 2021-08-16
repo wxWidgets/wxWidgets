@@ -1690,17 +1690,17 @@ void wxDataViewCtrlBase::StartEditor(const wxDataViewItem& item, unsigned int co
 
 #if wxUSE_DRAG_AND_DROP
 
-wxDataObject* wxDataViewCtrlBase::CreateDataObject(const wxDataFormatArray& formats)
+wxDataObject* wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
 {
-    if (formats.GetCount() == 0)
+    if (formats.empty())
     {
          return NULL;
     }
 
     wxDataObjectComposite *dataObject(new wxDataObjectComposite);
-    for (size_t i = 0; i < formats.GetCount(); ++i)
+    for (size_t i = 0; i < formats.size(); ++i)
     {
-        switch (formats.Item(i).GetType())
+        switch (formats[i].GetType())
         {
             case wxDF_TEXT:
             case wxDF_OEMTEXT:
@@ -1733,7 +1733,7 @@ wxDataObject* wxDataViewCtrlBase::CreateDataObject(const wxDataFormatArray& form
             case wxDF_ENHMETAFILE:
             case wxDF_LOCALE:
             case wxDF_PRIVATE:
-                dataObject->Add(new wxCustomDataObject(formats.Item(i)));
+                dataObject->Add(new wxCustomDataObject(formats[i]));
                 break;
 
             case wxDF_INVALID:
