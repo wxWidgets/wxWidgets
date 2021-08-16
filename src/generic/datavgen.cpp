@@ -5801,7 +5801,7 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return m_clientArea->EnableDragSource( format );
 }
 
-bool wxDataViewCtrl::DoEnableDropTarget( const wxDataFormatArray &formats )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat> &formats )
 {
     wxDataViewDropTarget* dt = NULL;
     if (wxDataObject* dataObject = CreateDataObject(formats))

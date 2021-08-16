@@ -285,7 +285,7 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return false;
 }
 
-bool wxDataViewCtrl::DoEnableDropTarget( const wxDataFormatArray &formats )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat> &formats )
 {
     return false;
 }
