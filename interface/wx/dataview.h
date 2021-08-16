@@ -1381,10 +1381,11 @@ public:
 
     /**
         Enable drop operations for each @a format from passed array.
-        Currently this is fully implemented in the generic and native macOS versions.
-        On GTK the only first element of array will be used.
 
-        @note Passing empty array disables drop operations at all.
+        Currently this is fully implemented in the generic and native macOS
+        versions. In wxGTK only the first element of array is used.
+
+        @note Passing empty array disables drag and drop operations completely.
 
         @since 3.1.6
     */
@@ -1392,9 +1393,10 @@ public:
 
     /**
         Enable drop operations using the given @a format.
-        Under the hood just calls overloaded EnableDropTarget() with an array holds single passed format.
 
-        @note Since 3.1.5 wxDF_INVALID can be passed to disable drop operations at all.
+        See the overload above for providing more than one supported format.
+
+        @note Since 3.1.5 wxDF_INVALID can be passed to disable drag and drop support.
     */
     bool EnableDropTarget( const wxDataFormat &format );
 
