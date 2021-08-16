@@ -1386,7 +1386,7 @@ public:
 
         @note Passing empty array disables drop operations at all.
 
-        @since 3.1.5
+        @since 3.1.6
     */
     bool EnableDropTarget(const wxDataFormatArray& formats);
 
