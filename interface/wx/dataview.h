@@ -1396,7 +1396,7 @@ public:
 
         @note Passing empty array disables drop operations at all.
 
-        @since 3.1.5
+        @since 3.1.6
     */
     bool EnableDropTarget(const wxDataFormatArray& formats);
 
@@ -1404,7 +1404,7 @@ public:
         Enable drop operations using the given @a format.
         Under the hood just calls overloaded EnableDropTarget() with an array holds single passed format.
 
-        @note Since 3.1.5 wxDF_INVALID can be passed to disable drop operations at all.
+        @note Since 3.1.6 wxDF_INVALID can be passed to disable drop operations at all.
     */
     bool EnableDropTarget( const wxDataFormat &format );
 
