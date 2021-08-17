@@ -38,7 +38,7 @@ wx_add_sample(dialup nettest.cpp LIBRARIES wxnet DEPENDS wxUSE_DIALUP_MANAGER)
 wx_add_sample(display)
 wx_add_sample(dnd dnd.cpp RES dnd.rc DATA wxwin.png DEPENDS wxUSE_DRAG_AND_DROP)
 wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
-    RES docview.rc LIBRARIES wxaui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
+    RES docview.rc PLIST Info.plist.in LIBRARIES wxaui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
 wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DATA backgrnd.png shape01.png shape02.png shape03.png
     DEPENDS wxUSE_DRAGIMAGE)
@@ -75,7 +75,7 @@ wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
 foreach(lang ar bg cs de fr it ka pl ru sv ja ja_JP.EUC-JP)
     list(APPEND INTERNAT_DATA_FILES ${lang}/internat.po ${lang}/internat.mo)
 endforeach()
-wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} DEPENDS wxUSE_INTL)
+wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} PLIST Info.plist.in DEPENDS wxUSE_INTL)
 # IPC samples
 set(wxSAMPLE_FOLDER ipc)
 wx_add_sample(ipc client.cpp client.h connection.h ipcsetup.h NAME ipcclient LIBRARIES wxnet DEPENDS wxUSE_IPC)
