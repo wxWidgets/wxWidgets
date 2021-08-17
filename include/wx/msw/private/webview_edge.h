@@ -15,8 +15,8 @@
 
 #include <WebView2.h>
 
-#ifndef __ICoreWebView2Environment_INTERFACE_DEFINED__
-    #error "WebView2 SDK version 0.9.430 or newer is required"
+#ifndef __ICoreWebView2_2_INTERFACE_DEFINED__
+    #error "WebView2 SDK version 1.0.705.50 or newer is required"
 #endif
 
 #ifndef __VISUALC__
@@ -47,7 +47,7 @@ public:
     wxWebViewEdge* m_ctrl;
 
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
-    wxCOMPtr<ICoreWebView2> m_webView;
+    wxCOMPtr<ICoreWebView2_2> m_webView;
     wxCOMPtr<ICoreWebView2Controller> m_webViewController;
 
     bool m_initialized;
@@ -66,7 +66,7 @@ public:
     EventRegistrationToken m_navigationCompletedToken = { };
     EventRegistrationToken m_newWindowRequestedToken = { };
     EventRegistrationToken m_documentTitleChangedToken = { };
-    EventRegistrationToken m_contentLoadingToken = { };
+    EventRegistrationToken m_DOMContentLoadedToken = { };
     EventRegistrationToken m_containsFullScreenElementChangedToken = { };
     EventRegistrationToken m_webMessageReceivedToken = { };
 
@@ -76,7 +76,7 @@ public:
     HRESULT OnNavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
     HRESULT OnNewWindowRequested(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args);
     HRESULT OnDocumentTitleChanged(ICoreWebView2* sender, IUnknown* args);
-    HRESULT OnContentLoading(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args);
+    HRESULT OnDOMContentLoaded(ICoreWebView2* sender, ICoreWebView2DOMContentLoadedEventArgs* args);
     HRESULT OnContainsFullScreenElementChanged(ICoreWebView2* sender, IUnknown* args);
     HRESULT OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
