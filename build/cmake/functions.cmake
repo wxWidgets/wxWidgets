@@ -681,7 +681,7 @@ endfunction()
 # Add sample, test, demo or benchmark
 # wx_add(<name> <group> [CONSOLE|CONSOLE_GUI|DLL] [IMPORTANT] [SRC_FILES...]
 #    [LIBRARIES ...] [NAME target_name] [FOLDER folder]
-#    [DATA ...] [DEFINITIONS ...] [RES ...])
+#    [DATA ...] [DEFINITIONS ...] [RES ...] [PLIST ...)
 # name default target name
 # group can be Samples, Tests, Demos or Benchmarks
 # first parameter may be CONSOLE to indicate a console application or DLL to indicate a shared library
@@ -696,6 +696,7 @@ endfunction()
 #   DATA followed by required data files. Use a colon to separate different source and dest paths
 #   DEFINITIONS list of definitions for the target
 #   RES followed by WIN32 .rc files
+#   PLIST followed by macOS Info.plist.in file
 #
 # Additionally the following variables may be set before calling wx_add_sample:
 # wxSAMPLE_SUBDIR subdirectory in the samples/ folder to use as base
@@ -721,7 +722,7 @@ function(wx_add name group)
     cmake_parse_arguments(APP
         "CONSOLE;CONSOLE_GUI;DLL;IMPORTANT"
         "NAME;FOLDER"
-        "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES"
+        "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES;PLIST"
         ${ARGN}
         )
 
@@ -868,17 +869,23 @@ function(wx_add name group)
 
     if(APPLE)
         if(NOT IPHONE)
+            set(PLIST_FILE "${wxSOURCE_DIR}/src/osx/carbon/Info.plist.in")
+            if(APP_PLIST)
+                set(PLIST_FILE "${wxSOURCE_DIR}/${SUB_DIR}/${APP_PLIST}")
+            endif()
             set_target_properties(${target_name} PROPERTIES
-                MACOSX_BUNDLE_INFO_PLIST "${wxSOURCE_DIR}/samples/Info.plist.in"
+                MACOSX_BUNDLE_INFO_PLIST "${PLIST_FILE}"
                 RESOURCE "${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns")
         endif()
         set_target_properties(${target_name} PROPERTIES
-            MACOSX_BUNDLE_ICON_FILE wxmac.icns
-            MACOSX_BUNDLE_LONG_VERSION_STRING "${wxVERSION}"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "${wxVERSION}"
-            MACOSX_BUNDLE_VERSION "${wxVERSION}"
-            MACOSX_BUNDLE_COPYRIGHT "${wxCOPYRIGHT}"
             MACOSX_BUNDLE_GUI_IDENTIFIER "org.wxwidgets.${target_name}"
+            MACOSX_BUNDLE_EXECUTABLE_NAME "${target_name}"
+            MACOSX_BUNDLE_BUNDLE_NAME "${target_name}"
+            MACOSX_BUNDLE_COPYRIGHT "Copyright ${wxCOPYRIGHT}"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${wxVERSION}"
+            MACOSX_BUNDLE_INFO_STRING "${target_name} version ${wxVERSION}, (c) ${wxCOPYRIGHT}"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "${wxVERSION}, (c) ${wxCOPYRIGHT}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
             )
     endif()
 

@@ -52,10 +52,6 @@ run_sed include/wx/osx/config_xcode.h \
 run_sed samples/minimal/Info_cocoa.plist \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
 
-run_sed samples/docview/Info.plist \
-    "/versionon/s/$ver_for_sed/$ver_string_new/" \
-    "/<string>/s/$ver_for_sed/$ver_string_new/"
-
 run_sed build/msw/wx_setup.props \
     "/<wxVersionString>/s/\($ver_major$ver_minor\)$ver_release/\1$ver_release_new/"
 

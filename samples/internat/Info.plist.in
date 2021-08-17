@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -9,11 +9,26 @@
 	<key>CFBundleGetInfoString</key>
 	<string>${MACOSX_BUNDLE_INFO_STRING}</string>
 	<key>CFBundleIconFile</key>
-	<string>${MACOSX_BUNDLE_ICON_FILE}</string>
+	<string>wxmac.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ar</string>
+		<string>bg</string>
+		<string>cs</string>
+		<string>de</string>
+		<string>en</string>
+		<string>fr</string>
+		<string>it</string>
+		<string>ka</string>
+		<string>pl</string>
+		<string>ru</string>
+		<string>sv</string>
+		<string>ja</string>
+	</array>
 	<key>CFBundleLongVersionString</key>
 	<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}</string>
 	<key>CFBundleName</key>
@@ -22,14 +37,12 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
+	<key>ATSApplicationFontsPath</key>
+	<string>Fonts</string>
 	<key>NSPrincipalClass</key>
 	<string>wxNSApplication</string>
 </dict>
