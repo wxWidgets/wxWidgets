@@ -1379,7 +1379,7 @@ following properties (all of them optional):
 @row3col{text, @ref overview_xrcformat_type_text,
     The title of the column. }
 @row3col{width, integer,
-    The column width. }
+    The column width. @c wxLIST_DEFAULT_COL_WIDTH is used by default. }
 @row3col{image, integer,
     The zero-based index of the image associated with the item in the 'small' image list. }
 @endTable
