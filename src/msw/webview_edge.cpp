@@ -74,7 +74,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_NavigationStarting(m_navigationStartingToken);
         m_webView->remove_NewWindowRequested(m_newWindowRequestedToken);
         m_webView->remove_DocumentTitleChanged(m_documentTitleChangedToken);
-        m_webView->remove_ContentLoading(m_contentLoadingToken);
+        m_webView->remove_DOMContentLoaded(m_DOMContentLoadedToken);
         m_webView->remove_ContainsFullScreenElementChanged(m_containsFullScreenElementChangedToken);
         m_webView->remove_WebMessageReceived(m_webMessageReceivedToken);
     }
@@ -203,7 +203,7 @@ HRESULT wxWebViewEdgeImpl::OnSourceChanged(ICoreWebView2 * WXUNUSED(sender), ICo
         event.SetEventObject(m_ctrl);
         m_ctrl->HandleWindowEvent(event);
         OnNavigationCompleted(NULL, NULL);
-        OnContentLoading(NULL, NULL);
+        OnDOMContentLoaded(NULL, NULL);
     }
     return S_OK;
 }
@@ -309,7 +309,7 @@ HRESULT wxWebViewEdgeImpl::OnDocumentTitleChanged(ICoreWebView2* WXUNUSED(sender
     return S_OK;
 }
 
-HRESULT wxWebViewEdgeImpl::OnContentLoading(ICoreWebView2* WXUNUSED(sender), ICoreWebView2ContentLoadingEventArgs* WXUNUSED(args))
+HRESULT wxWebViewEdgeImpl::OnDOMContentLoaded(ICoreWebView2* WXUNUSED(sender), ICoreWebView2DOMContentLoadedEventArgs* WXUNUSED(args))
 {
     wxWebViewEvent event(wxEVT_WEBVIEW_LOADED, m_ctrl->GetId(),
         m_ctrl->GetCurrentURL(), "");
@@ -373,12 +373,20 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         return result;
     }
 
-    HRESULT hr = webViewController->get_CoreWebView2(&m_webView);
+    wxCOMPtr<ICoreWebView2> baseWebView;
+    HRESULT hr = webViewController->get_CoreWebView2(&baseWebView);
     if (FAILED(hr))
     {
         wxLogApiError("WebView2::WebViewCreated (get_CoreWebView2)", hr);
         return result;
     }
+    hr = baseWebView->QueryInterface(IID_PPV_ARGS(&m_webView));
+    if (FAILED(hr))
+    {
+        wxLogApiError("WebView2::WebViewCreated (QueryInterface)", hr);
+        return result;
+    }
+
     m_webViewController = webViewController;
 
     m_initialized = true;
@@ -406,10 +414,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         Callback<ICoreWebView2DocumentTitleChangedEventHandler>(
             this, &wxWebViewEdgeImpl::OnDocumentTitleChanged).Get(),
         &m_documentTitleChangedToken);
-    m_webView->add_ContentLoading(
-        Callback<ICoreWebView2ContentLoadingEventHandler>(
-            this, &wxWebViewEdgeImpl::OnContentLoading).Get(),
-        &m_contentLoadingToken);
+    m_webView->add_DOMContentLoaded(
+        Callback<ICoreWebView2DOMContentLoadedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnDOMContentLoaded).Get(),
+        &m_DOMContentLoadedToken);
     m_webView->add_ContainsFullScreenElementChanged(
         Callback<ICoreWebView2ContainsFullScreenElementChangedEventHandler>(
             this, &wxWebViewEdgeImpl::OnContainsFullScreenElementChanged).Get(),

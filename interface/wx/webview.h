@@ -348,7 +348,7 @@ public:
     - With CMake just enable @c wxUSE_WEBVIEW_EDGE
     - When not using CMake:
         - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
-        nuget package (Version 1.0.622.22 or newer)
+        nuget package (Version 1.0.705.50 or newer)
         - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
         (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
         file after unpacking it)
