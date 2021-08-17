@@ -124,6 +124,17 @@ TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Init4", "[spinctrl]")
     CHECK(m_spin->GetValue() == 99);
 }
 
+TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::InitOutOfRange", "[spinctrl]")
+{
+    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                   wxDefaultPosition, wxDefaultSize, 0,
+                   10, 20, 0);
+
+    // Recreate the control with another "initial" outside of the valid range:
+    // it shouldn't be taken into account.
+    CHECK(m_spin->GetValue() == 10);
+}
+
 TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::NoEventsInCtor", "[spinctrl]")
 {
     // Verify that creating the control does not generate any events. This is

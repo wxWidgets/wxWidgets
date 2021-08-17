@@ -222,10 +222,13 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
         return false;
     }
 
-    m_value = initial;
-    m_min   = min;
-    m_max   = max;
+    m_min = min;
+    m_max = max;
     m_increment = increment;
+
+    // Note that AdjustAndSnap() uses the variables set above, so only call it
+    // after assigning the values to them.
+    m_value = AdjustAndSnap(initial);
 
     // the string value overrides the numeric one (for backwards compatibility
     // reasons and also because it is simpler to specify the string value which
@@ -235,7 +238,7 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     {
         double d;
         if ( DoTextToValue(value, &d) )
-            m_value = d;
+            m_value = AdjustAndSnap(d);
     }
 
     m_textCtrl   = new wxSpinCtrlTextGeneric(this, DoValueToText(m_value), style);
@@ -529,10 +532,8 @@ void wxSpinCtrlGenericBase::SetValue(const wxString& text)
     }
 }
 
-bool wxSpinCtrlGenericBase::DoSetValue(double val, SendEvent sendEvent)
+double wxSpinCtrlGenericBase::AdjustAndSnap(double val) const
 {
-    wxCHECK_MSG( m_textCtrl, false, wxT("invalid call to wxSpinCtrl::SetValue") );
-
     if ( val < m_min )
         val = m_min;
     if ( val > m_max )
@@ -550,6 +551,15 @@ bool wxSpinCtrlGenericBase::DoSetValue(double val, SendEvent sendEvent)
                 val = ceil(snap_value) * m_increment;
         }
     }
+
+    return val;
+}
+
+bool wxSpinCtrlGenericBase::DoSetValue(double val, SendEvent sendEvent)
+{
+    wxCHECK_MSG( m_textCtrl, false, wxT("invalid call to wxSpinCtrl::SetValue") );
+
+    val = AdjustAndSnap(val);
 
     wxString str(DoValueToText(val));
 
