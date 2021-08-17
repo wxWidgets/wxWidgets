@@ -878,12 +878,14 @@ function(wx_add name group)
                 RESOURCE "${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns")
         endif()
         set_target_properties(${target_name} PROPERTIES
-            MACOSX_BUNDLE_ICON_FILE wxmac.icns
-            MACOSX_BUNDLE_LONG_VERSION_STRING "${wxVERSION}"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "${wxVERSION}"
-            MACOSX_BUNDLE_BUNDLE_VERSION "${wxVERSION}"
-            MACOSX_BUNDLE_COPYRIGHT "${wxCOPYRIGHT}"
             MACOSX_BUNDLE_GUI_IDENTIFIER "org.wxwidgets.${target_name}"
+            MACOSX_BUNDLE_EXECUTABLE_NAME "${target_name}"
+            MACOSX_BUNDLE_BUNDLE_NAME "${target_name}"
+            MACOSX_BUNDLE_COPYRIGHT "Copyright ${wxCOPYRIGHT}"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${wxVERSION}"
+            MACOSX_BUNDLE_INFO_STRING "${target_name} version ${wxVERSION}, (c) ${wxCOPYRIGHT}"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "${wxVERSION}, (c) ${wxCOPYRIGHT}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
             )
     endif()
 
