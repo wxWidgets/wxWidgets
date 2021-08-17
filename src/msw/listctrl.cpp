@@ -2057,7 +2057,7 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
         // always give some width to the new column: this one is compatible
         // with the generic version
         lvCol.mask |= LVCF_WIDTH;
-        lvCol.cx = 80;
+        lvCol.cx = wxLIST_DEFAULT_COL_WIDTH;
     }
 
     long n = ListView_InsertColumn(GetHwnd(), col, &lvCol);

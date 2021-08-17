@@ -96,9 +96,6 @@ static const int MARGIN_BETWEEN_ROWS = 6;
 // when autosizing the columns, add some slack
 static const int AUTOSIZE_COL_MARGIN = 10;
 
-// default width for the header columns
-static const int WIDTH_COL_DEFAULT = 80;
-
 // the space between the image and the text in the report mode
 static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
 
@@ -336,7 +333,7 @@ void wxListHeaderData::SetHeight( int h )
 
 void wxListHeaderData::SetWidth( int w )
 {
-    m_width = w < 0 ? WIDTH_COL_DEFAULT : w;
+    m_width = w < 0 ? wxLIST_DEFAULT_COL_WIDTH : w;
 }
 
 void wxListHeaderData::SetState( int flag )

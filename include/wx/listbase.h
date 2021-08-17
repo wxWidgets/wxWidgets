@@ -135,11 +135,12 @@ enum wxListColumnFormat
     wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
 };
 
-// Autosize values for SetColumnWidth
+// Values for SetColumnWidth()
 enum
 {
     wxLIST_AUTOSIZE = -1,
-    wxLIST_AUTOSIZE_USEHEADER = -2      // partly supported by generic version
+    wxLIST_AUTOSIZE_USEHEADER = -2,     // partly supported by generic version
+    wxLIST_DEFAULT_COL_WIDTH = 80
 };
 
 // Flag values for GetItemRect
