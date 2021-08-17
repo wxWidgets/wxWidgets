@@ -89,7 +89,7 @@ enum wxListColumnFormat
     wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
 };
 
-/// Autosize values for SetColumnWidth
+/// Values for SetColumnWidth()
 enum
 {
     wxLIST_AUTOSIZE = -1,
