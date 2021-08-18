@@ -13,6 +13,11 @@
 
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer
+#include "wx/overlay.h"
+
+#ifdef __WXGTK3__
+    #define wxHAS_SPLITTER_USING_OVERLAYS
+#endif // __WXGTK3__
 
 class WXDLLIMPEXP_FWD_CORE wxSplitterEvent;
 
@@ -294,6 +299,10 @@ protected:
     wxCursor    m_sashCursorWE;
     wxCursor    m_sashCursorNS;
     wxPen      *m_sashTrackerPen;
+
+#ifdef wxHAS_SPLITTER_USING_OVERLAYS
+    wxOverlay   m_overlay;
+#endif
 
     // when in live mode, set this to true to resize children in idle
     bool        m_needUpdating:1;

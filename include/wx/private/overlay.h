@@ -11,56 +11,63 @@
 #ifndef _WX_PRIVATE_OVERLAY_H_
 #define _WX_PRIVATE_OVERLAY_H_
 
-#include "wx/overlay.h"
-
-#ifdef wxHAS_NATIVE_OVERLAY
-
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
-    #include "wx/osx/cocoa/private/overlay.h"
-#elif defined(__WXDFB__)
-    #include "wx/dfb/private/overlay.h"
-#else
-    #error "unknown native wxOverlay implementation"
-#endif
-
-#else // !wxHAS_NATIVE_OVERLAY
-
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_FWD_CORE wxWindow;
-
-// generic implementation of wxOverlay
 class wxOverlayImpl
 {
 public:
-    wxOverlayImpl();
-    ~wxOverlayImpl();
+    wxOverlayImpl() { }
+    virtual ~wxOverlayImpl() { }
 
+    static wxOverlayImpl* Create();
+
+    // wxOverlayGenericImpl is the only not native implementation
+    // derived from this class.
+    virtual bool IsNative() const { return true; }
+
+    // Although wxOverlayGenericImpl is always available on all platforms,
+    // it is known that it doesn't work well under some of them (Wayland specifically)
+    // and therefore cannot be used if this function returns false even if a call to
+    // wxOverlay::UseGeneric() has been made, in which case the call should not be honored.
+    virtual bool IsGenericSupported() const { return true; }
+
+    void Init(wxDC* dc, int x, int y, int width, int height)
+    {
+        InitFromDC(dc, x, y, width, height);
+    }
+
+    void Init(wxWindow* win, bool fullscreen)
+    {
+        InitFromWindow(win, fullscreen);
+    }
+
+    // returns true if it has been setup
+    virtual bool IsOk() = 0;
 
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
-    void Reset();
+    virtual void Reset() = 0;
 
-    // returns true if it has been setup
-    bool IsOk();
+    virtual void Clear(wxDC* dc) = 0;
 
-    void Init(wxDC* dc, int x , int y , int width , int height);
+    virtual void BeginDrawing(wxDC* WXUNUSED(dc)) { }
 
-    void BeginDrawing(wxDC* dc);
+    virtual void EndDrawing(wxDC* WXUNUSED(dc)) { }
 
-    void EndDrawing(wxDC* dc);
+    virtual wxRect GetRect() const { return wxRect(); }
 
-    void Clear(wxDC* dc);
+    virtual void SetUpdateRectangle(const wxRect& WXUNUSED(rect)) { }
+
+    wxBitmap& GetBitmap() { return m_bitmap; }
+
+protected:
+    virtual void InitFromDC(wxDC* dc, int x, int y, int width, int height) = 0;
+    virtual void InitFromWindow(wxWindow* win, bool fullscreen) = 0;
 
 private:
-    wxBitmap m_bmpSaved ;
-    int m_x ;
-    int m_y ;
-    int m_width ;
-    int m_height ;
-    wxWindow* m_window ;
-};
+    wxBitmap m_bitmap;
 
-#endif // wxHAS_NATIVE_OVERLAY/!wxHAS_NATIVE_OVERLAY
+    wxDECLARE_NO_COPY_CLASS(wxOverlayImpl);
+};
 
 #endif // _WX_PRIVATE_OVERLAY_H_
