@@ -1184,18 +1184,15 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 consequences for particularly multi-line text: it will now
                 always try to fit vertically while a rect received from wxDVC
                 may have its extent based on calculations for a single line
-                only and therefore couldn't show more than one line.
-                As a result of the expanded height clipping may be needed
-                which at least already happens with wxDVC which (out of
-                necessity) confines rendering to a cell's bounds.
+                only and therefore couldn't show more than one line. This is
+                consistent with other major platforms where no clipping to
+                the rect takes places either, including non-themed MSW.
                 */
-                const int heightDiff = rect.GetHeight() - rcExtent.bottom;
-                if ( heightDiff
-                     && (align & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL))
-                     && text.Contains(wxS('\n')) )
+                if ( text.Contains(wxS('\n')) )
                 {
                     useTopDrawing = true;
 
+                    const int heightDiff = rect.GetHeight() - rcExtent.bottom;
                     if ( align & wxALIGN_CENTRE_VERTICAL )
                     {
                         const int heightOffset = heightDiff / 2;
