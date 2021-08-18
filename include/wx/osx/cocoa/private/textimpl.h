@@ -140,6 +140,7 @@ public:
     virtual void Undo() wxOVERRIDE;
     virtual bool CanRedo() const wxOVERRIDE;
     virtual void Redo() wxOVERRIDE;
+    virtual void EmptyUndoBuffer() wxOVERRIDE;
 
 protected:
     void DoUpdateTextStyle();

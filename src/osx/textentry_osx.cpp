@@ -293,6 +293,13 @@ bool wxTextEntry::CanRedo() const
     return GetTextPeer()->CanRedo() ;
 }
 
+void wxTextEntry::EmptyUndoBuffer()
+{
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
+    return GetTextPeer()->EmptyUndoBuffer() ;
+}
+
 wxTextWidgetImpl * wxTextEntry::GetTextPeer() const
 {
     wxWindow * const win = const_cast<wxTextEntry *>(this)->GetEditableWindow();

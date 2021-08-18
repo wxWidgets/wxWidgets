@@ -166,6 +166,16 @@ public:
     virtual bool CanUndo() const;
 
     /**
+        Delete the undo history.
+
+        Currently only implemented under macOS and only for multiline text
+        controls, does nothing in the other ports.
+
+        @since 3.1.6
+    */
+    virtual void EmptyUndoBuffer();
+
+    /**
         Sets the new text control value.
 
         It also marks the control as not-modified which means that IsModified()
