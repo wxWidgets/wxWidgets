@@ -1265,8 +1265,8 @@ bool wxNativeFontInfo::SetPostScriptName(const wxString& postScriptName)
 void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
     Free();
-    m_familyName.clear();
     m_family = family;
+    m_familyName = FamilyToFaceName(family);
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
