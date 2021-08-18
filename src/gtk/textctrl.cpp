@@ -32,6 +32,12 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
+#if wxUSE_SPELLCHECK
+extern "C" {
+#include <gtkspell-3.0/gtkspell/gtkspell.h>
+}
+#endif // wxUSE_SPELLCHECK
+
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
@@ -1016,6 +1022,57 @@ void wxTextCtrl::GTKSetJustification()
         gtk_entry_set_alignment(GTK_ENTRY(m_text), align);
     }
 }
+
+#if wxUSE_SPELLCHECK
+
+bool wxTextCtrl::EnableProofCheck(bool enable, const wxTextProofOptions& options)
+{
+    wxCHECK_MSG( IsMultiLine(), false,
+                "Unable to enable spell check on control "
+                "which does not have wxTE_MULTILINE style" );
+
+    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+    wxCHECK_MSG( textview, false, wxS("wxTextCtrl is not a GtkTextView"));
+
+    GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
+
+    if ( enable )
+    {
+        if ( !spell )
+        {
+            spell = gtk_spell_checker_new();
+            gtk_spell_checker_attach(spell, textview);
+        }
+
+        wxString lang = options.GetLang();
+
+        if ( !gtk_spell_checker_set_language(spell,
+                                    lang.empty() ? NULL : (const gchar *)lang.utf8_str(),
+                                    NULL) )
+            return false;
+    }
+    else
+    {
+        if ( spell )
+            gtk_spell_checker_detach(spell);
+    }
+
+   return IsProofCheckEnabled();
+}
+
+bool wxTextCtrl::IsProofCheckEnabled() const
+{
+    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+
+    if ( !IsMultiLine() || textview == NULL )
+        return false;
+
+    GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
+
+    return (spell != NULL);
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {

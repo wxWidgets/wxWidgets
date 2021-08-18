@@ -96,6 +96,14 @@ public:
     // Overridden wxWindow methods
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
+#if wxUSE_SPELLCHECK
+    // Use native spelling and grammar checking functions.
+    virtual bool EnableProofCheck(bool WXUNUSED(enable) = true,
+                                  const wxTextProofOptions& WXUNUSED(options) =
+                                  wxTextProofOptions()) wxOVERRIDE;
+    virtual bool IsProofCheckEnabled() const wxOVERRIDE;
+#endif // wxUSE_SPELLCHECK
+
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
     void OnChar( wxKeyEvent &event );

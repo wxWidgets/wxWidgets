@@ -216,6 +216,12 @@
 
 #cmakedefine01 wxUSE_SECRETSTORE
 
+#if (defined(__WXGTK3__) || defined(__WXMSW__))
+#cmakedefine01 wxUSE_SPELLCHECK
+#else
+#cmakedefine01 wxUSE_SPELLCHECK
+#endif
+
 #cmakedefine01 wxUSE_STDPATHS
 
 #cmakedefine01 wxUSE_TEXTBUFFER

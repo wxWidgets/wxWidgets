@@ -951,6 +951,8 @@ GTKPRINT_CFLAGS
 SDL_CONFIG
 SDL_LIBS
 SDL_CFLAGS
+GTKSPELL_LIBS
+GTKSPELL_CFLAGS
 LIBSECRET_LIBS
 LIBSECRET_CFLAGS
 GXX_VERSION
@@ -1203,6 +1205,7 @@ enable_printfposparam
 enable_secretstore
 enable_snglinst
 enable_sound
+enable_spellcheck
 enable_stdpaths
 enable_stopwatch
 enable_streams
@@ -1430,6 +1433,8 @@ MesaGL_CFLAGS
 MesaGL_LIBS
 LIBSECRET_CFLAGS
 LIBSECRET_LIBS
+GTKSPELL_CFLAGS
+GTKSPELL_LIBS
 SDL_CFLAGS
 SDL_LIBS
 GTKPRINT_CFLAGS
@@ -2170,6 +2175,7 @@ Optional Features:
   --enable-secretstore    use wxSecretStore class
   --enable-snglinst       use wxSingleInstanceChecker class
   --enable-sound          use wxSound class
+  --enable-spellcheck     enable spellchecking in wxTextCtrl class (MSW and GTK3 only)
   --enable-stdpaths       use wxStandardPaths class
   --enable-stopwatch      use wxStopWatch class
   --enable-streams        use wxStream etc classes
@@ -2467,6 +2473,10 @@ Some influential environment variables:
               C compiler flags for LIBSECRET, overriding pkg-config
   LIBSECRET_LIBS
               linker flags for LIBSECRET, overriding pkg-config
+  GTKSPELL_CFLAGS
+              C compiler flags for GTKSPELL, overriding pkg-config
+  GTKSPELL_LIBS
+              linker flags for GTKSPELL, overriding pkg-config
   SDL_CFLAGS  C compiler flags for SDL, overriding pkg-config
   SDL_LIBS    linker flags for SDL, overriding pkg-config
   GTKPRINT_CFLAGS
@@ -7861,6 +7871,35 @@ fi
 
 
           eval "$wx_cv_use_sound"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-spellcheck was given.
+if test "${enable_spellcheck+set}" = set; then :
+  enableval=$enable_spellcheck;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_spellcheck='wxUSE_SPELLCHECK=yes'
+                          else
+                            wx_cv_use_spellcheck='wxUSE_SPELLCHECK=no'
+                          fi
+
+else
+
+                          wx_cv_use_spellcheck='wxUSE_SPELLCHECK=${'DEFAULT_wxUSE_SPELLCHECK":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_spellcheck"
 
 
           enablestring=
@@ -33931,6 +33970,116 @@ fi
         $as_echo "#define wxUSE_SECRETSTORE 1" >>confdefs.h
 
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS secretstore"
+    fi
+fi
+
+
+
+if test "$wxUSE_SPELLCHECK" = "yes"; then
+
+    if test "$wxUSE_MSW" = 1 -o test "$wxUSE_OSX_COCOA" = 1; then
+                has_spellcheck_support=yes
+
+    elif test "$wxUSE_GTK" = 1; then
+        if test "$WXGTK3" = 1; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTKSPELL" >&5
+$as_echo_n "checking for GTKSPELL... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GTKSPELL_CFLAGS"; then
+        pkg_cv_GTKSPELL_CFLAGS="$GTKSPELL_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtkspell3-3.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gtkspell3-3.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GTKSPELL_CFLAGS=`$PKG_CONFIG --cflags "gtkspell3-3.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GTKSPELL_LIBS"; then
+        pkg_cv_GTKSPELL_LIBS="$GTKSPELL_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtkspell3-3.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gtkspell3-3.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GTKSPELL_LIBS=`$PKG_CONFIG --libs "gtkspell3-3.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GTKSPELL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gtkspell3-3.0"`
+        else
+	        GTKSPELL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtkspell3-3.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GTKSPELL_PKG_ERRORS" >&5
+
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&5
+$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&2;}
+                    has_spellcheck_support=no
+
+
+elif test $pkg_failed = untried; then
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&5
+$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&2;}
+                    has_spellcheck_support=no
+
+
+else
+	GTKSPELL_CFLAGS=$pkg_cv_GTKSPELL_CFLAGS
+	GTKSPELL_LIBS=$pkg_cv_GTKSPELL_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                    CXXFLAGS="$GTKSPELL_CFLAGS $CXXFLAGS"
+                    LIBS="$GTKSPELL_LIBS $LIBS"
+                    has_spellcheck_support=yes
+
+fi
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Spellchecking is not supported on GTK < 3" >&5
+$as_echo "$as_me: WARNING: Spellchecking is not supported on GTK < 3" >&2;}
+            has_spellcheck_support=no
+        fi
+
+    else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Spellchecking is not supported on this platform" >&5
+$as_echo "$as_me: WARNING: Spellchecking is not supported on this platform" >&2;}
+        has_spellcheck_support=no
+    fi
+
+    if test "$has_spellcheck_support" = "yes"; then
+        $as_echo "#define wxUSE_SPELLCHECK 1" >>confdefs.h
+
     fi
 fi
 

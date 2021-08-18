@@ -448,6 +448,18 @@
 // Recommended setting: 1 (but may be safely disabled if you don't use it)
 #define wxUSE_SECRETSTORE   1
 
+// Allow the use of the OS built-in spellchecker on wxTextCtrl (multiline
+// only). Currently only wxGTK3 and wxMSW are implemented.
+//
+// Default is 1 on wxGTK3 and wxMSW platforms and 0 otherwise.
+//
+// Recommended setting: 1 on supported platforms.
+#if (defined(__WXGTK3__) || defined(__WXMSW__))
+#define wxUSE_SPELLCHECK 1
+#else
+#define wxUSE_SPELLCHECK 0
+#endif
+
 // Use wxStandardPaths class which allows to retrieve some standard locations
 // in the file system
 //

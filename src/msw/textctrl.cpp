@@ -19,7 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-
 #if wxUSE_TEXTCTRL
 
 #ifndef WX_PRECOMP
@@ -77,6 +76,27 @@
     #include "wx/msw/ole/oleutils.h"
 
     #include "wx/msw/private/comptr.h"
+
+    #if wxUSE_SPELLCHECK
+        #include "wx/msw/wrapwin.h"
+
+        // Add defines that are missing in MinGW.
+        #ifndef IMF_SPELLCHECKING
+            #define IMF_SPELLCHECKING 0x0800
+        #endif
+        #ifndef SES_USECTF
+            #define SES_USECTF 0x00010000
+        #endif
+        #ifndef SES_CTFALLOWEMBED
+            #define SES_CTFALLOWEMBED 0x00200000
+        #endif
+        #ifndef SES_CTFALLOWSMARTTAG
+            #define SES_CTFALLOWSMARTTAG 0x00400000
+        #endif
+        #ifndef SES_CTFALLOWPROOFING
+            #define SES_CTFALLOWPROOFING 0x00800000
+        #endif
+    #endif // wxUSE_SPELLCHECK
 #endif // wxUSE_RICHEDIT
 
 #if wxUSE_INKEDIT
@@ -811,6 +831,39 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     return msStyle;
 }
+
+#if wxUSE_RICHEDIT && wxUSE_SPELLCHECK
+
+bool wxTextCtrl::EnableProofCheck(bool enable, const wxTextProofOptions& WXUNUSED(options))
+{
+    wxCHECK_MSG((m_windowStyle & wxTE_RICH2), false,
+            "Unable to enable proof checking on a control "
+            "that does not have wxTE_RICH2 style");
+
+    LPARAM editStyle = SES_USECTF | SES_CTFALLOWEMBED
+                        | SES_CTFALLOWSMARTTAG  | SES_CTFALLOWPROOFING;
+    ::SendMessage(GetHwnd(), EM_SETEDITSTYLE, editStyle, editStyle);
+
+    LRESULT langOptions = ::SendMessage(GetHwnd(), EM_GETLANGOPTIONS, 0, 0);
+
+    if ( enable )
+        langOptions |= IMF_SPELLCHECKING;
+    else
+        langOptions &= ~IMF_SPELLCHECKING;
+
+    ::SendMessage(GetHwnd(), EM_SETLANGOPTIONS, 0, langOptions);
+
+   return IsProofCheckEnabled();
+}
+
+bool wxTextCtrl::IsProofCheckEnabled() const
+{
+    LRESULT langOptions = ::SendMessage(GetHwnd(), EM_GETLANGOPTIONS, 0, 0);
+
+    return (langOptions & IMF_SPELLCHECKING);
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {

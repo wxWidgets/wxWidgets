@@ -1205,8 +1205,21 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_tab->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("tab"))));
 
     m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2 );
     m_enter->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("enter"))));
+
+#if wxUSE_SPELLCHECK
+    if ( !m_enter->EnableProofCheck(true, wxTextProofOptions("en_US").SpellCheck()) )
+    {
+        wxMessageDialog error(this,
+                                wxT("Spell checking is not available on this platform or control style."),
+                                wxT("Spell checker error"),
+                                wxOK | wxCENTER | wxICON_ERROR);
+        error.ShowModal();
+    }
+    else
+        (*m_enter) << wxT("\nSpell checking is enabled, try typing a misspelled word...");
+#endif
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, "Allows more than 30Kb of text\n"
                                 "(on all Windows versions)\n"

@@ -258,7 +258,6 @@ enum wxTextCtrlHitTestResult
     wxTE_HT_BEYOND
 };
 
-
 /**
     @class wxTextAttr
 
@@ -979,6 +978,62 @@ public:
     void operator=(const wxTextAttr& attr);
 };
 
+/**
+    @class wxTextProofOptions
+
+    This class provides a convenient means of passing multiple parameters to
+    wxTextCtrl::EnableProofCheck(). Typical (and the default) usage is:
+
+    @code
+    m_pText->EnableProofCheck(true, wxTextProofOptions(wxEmptyString).SpellCheck(true));
+    @endcode
+
+    If this is the exact behaviour desired, then the parameters can be omitted.
+    The following code will have the same result:
+
+    @code
+    m_pText->EnableProofCheck();
+    @endcode
+
+    Options can also be cascaded if required as follows:
+
+    @code
+    m_pText->EnableProofCheck(true, wxTextProofOptions("fr_FR").SpellCheck(false).GrammarCheck(true));
+    @endcode
+
+    @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::IsProofCheckEnabled().
+*/
+class WXDLLIMPEXP_CORE wxTextProofOptions
+{
+    /**
+       Default constructor. The proofing language is set to the current locale language,
+       spell checking is enabled and grammar checking is disabled.
+
+       @param lang
+        The ISO 639 / ISO 3166 canonical language name of the dictionary
+        to be used. See wxLocale::GetCanonicalName() for examples. If an
+        empty string is passed (default), then the current locale will be
+        used. This parameter is ignored and only the current locale
+        language (default option) is supported at this time.
+     */
+    wxTextProofOptions(const wxString& lang = wxEmptyString)
+
+    /**
+       Enable / disable spell checking for this control.
+
+       This option is currently hard coded to @true and is ignored.
+       Use the global enable parameter passed to
+       wxTextCtrl::EnableProofCheck() to enable / disable spell checking.
+     */
+    wxTextProofOptions& SpellCheck(bool enable = true)
+
+    /**
+       Enable / disable grammar checking for this control.
+
+       This option is not currently supported and is ignored.
+     */
+    wxTextProofOptions& GrammarCheck(bool enable = true)
+};
 
 /**
     @class wxTextCtrl
@@ -1337,6 +1392,34 @@ public:
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
 
     /**
+        Enable or disable native spell checking on this text control if it is
+        available on the current platform.
+
+        @onlyfor{wxmsw,wxgtk}
+        Currently wxMSW (>= Windows 7) and wxGTK3 are supported. In addition,
+        wxMSW use requires that the text control has the wxTE_RICH2 style
+        set. wxGTK3 requires that the control has the wxTE_MULTILINE style.
+
+        @param enable
+            Enables native proof checking if true, disables it otherwise.
+
+        @param options
+            A wxTextProofOptions object specifying the desired behaviour
+            of the proof checker (e.g. language to use, spell check, grammar
+            check, etc.). This parameter is currently unused and the control is
+            initialised with the default setting of current locale language /
+            spell check only.
+
+        @return
+            @true if proof checking has been successfully enabled (and true was
+            passed as the enable parameter), @false otherwise.
+
+        @since 3.1.6
+    */
+    virtual bool EnableProofCheck(bool enable = true,
+                                  const wxTextProofOptions& options = wxTextProofOptions());
+
+    /**
         Returns the style currently used for the new text.
 
         @see SetDefaultStyle()
@@ -1476,6 +1559,18 @@ public:
         @see IsSingleLine(), IsMultiLine()
     */
     bool IsSingleLine() const;
+
+    /**
+        Returns @true if proof (spell) checking is currently active on this
+        control, @false otherwise.
+
+        @onlyfor{wxmsw,wxgtk}
+
+        @see EnableProofCheck()
+
+        @since 3.1.6
+    */
+    virtual bool IsProofCheckEnabled();
 
     /**
         Loads and displays the named file, if it exists.

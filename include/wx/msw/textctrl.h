@@ -111,6 +111,15 @@ public:
     bool ShowNativeCaret(bool show = true);
     bool HideNativeCaret() { return ShowNativeCaret(false); }
 
+#if wxUSE_RICHEDIT && wxUSE_SPELLCHECK
+    // Use native spelling and grammar checking functions.
+    // This is only available in wxTE_RICH2 controls.
+    virtual bool EnableProofCheck(bool WXUNUSED(enable) = true,
+                                  const wxTextProofOptions& WXUNUSED(options) =
+                                  wxTextProofOptions()) wxOVERRIDE;
+    virtual bool IsProofCheckEnabled() const wxOVERRIDE;
+#endif // wxUSE_RICHEDIT && wxUSE_SPELLCHECK
+
     // Implementation from now on
     // --------------------------
 

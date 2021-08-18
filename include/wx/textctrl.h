@@ -126,6 +126,45 @@ enum wxTextCtrlHitTestResult
 };
 // ... the character returned
 
+#if wxUSE_SPELLCHECK
+
+// ----------------------------------------------------------------------------
+// wxTextCtrl proof options object
+// Passed to ::EnableProofCheck() to configure the proofing options for
+// this control
+// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxTextProofOptions
+{
+public:
+    wxTextProofOptions(const wxString& lang = wxEmptyString)
+    : m_lang(lang)
+    {
+        m_EnableSpellCheck = true;
+        m_EnableGrammarCheck = false;
+    }
+
+    wxTextProofOptions& SpellCheck(bool enable = true)
+    {
+        m_EnableSpellCheck = enable;
+        return *this;
+    }
+
+    wxTextProofOptions& GrammarCheck(bool enable = true)
+    {
+        m_EnableGrammarCheck = enable;
+        return *this;
+    }
+
+    const wxString& GetLang() const { return m_lang; }
+
+private:
+    wxString m_lang;
+    bool m_EnableSpellCheck;
+    bool m_EnableGrammarCheck;
+};
+
+#endif // wxUSE_SPELLCHECK
+
 // ----------------------------------------------------------------------------
 // Types for wxTextAttr
 // ----------------------------------------------------------------------------
@@ -757,6 +796,15 @@ public:
     }
 
     virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+
+#if wxUSE_SPELLCHECK
+    // Use native spelling and grammar checking functions.
+    virtual bool EnableProofCheck(bool WXUNUSED(enable) = true,
+                                  const wxTextProofOptions& WXUNUSED(options) =
+                                  wxTextProofOptions())
+                                  { return false; }
+    virtual bool IsProofCheckEnabled() const { return false; }
+#endif // wxUSE_SPELLCHECK
 
 protected:
     // Override wxEvtHandler method to check for a common problem of binding
