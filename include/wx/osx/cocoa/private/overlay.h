@@ -14,28 +14,32 @@
 #include "wx/osx/private.h"
 #include "wx/toplevel.h"
 #include "wx/graphics.h"
+#include "wx/private/overlay.h"
 
-class wxOverlayImpl
+
+class wxOverlayCocoaImpl : public wxOverlayImpl
 {
 public:
-    wxOverlayImpl() ;
-    ~wxOverlayImpl() ;
+    wxOverlayCocoaImpl() ;
+    ~wxOverlayCocoaImpl() ;
 
 
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
-    void Reset();
+    virtual void Reset() wxOVERRIDE;
 
     // returns true if it has been setup
-    bool IsOk();
+    virtual bool IsOk() wxOVERRIDE;
 
-    void Init( wxDC* dc, int x , int y , int width , int height );
+    virtual void InitFromDC( wxDC* dc, int x , int y , int width , int height ) wxOVERRIDE;
 
-    void BeginDrawing( wxDC* dc);
+    virtual void InitFromWindow(wxWindow* win, bool fullscreen) wxOVERRIDE;
 
-    void EndDrawing( wxDC* dc);
+    virtual void BeginDrawing( wxDC* dc) wxOVERRIDE;
 
-    void Clear( wxDC* dc);
+    virtual void EndDrawing( wxDC* dc) wxOVERRIDE;
+
+    virtual void Clear( wxDC* dc) wxOVERRIDE;
 
 private:
     void CreateOverlayWindow( wxDC* dc );

@@ -182,7 +182,7 @@ private:
     wxDfbOverlaysList *m_overlays;
 
     friend class wxNonOwnedWindow; // for HandleXXXEvent
-    friend class wxOverlayImpl; // for Add/RemoveOverlay
+    friend class wxOverlayDFBImpl; // for Add/RemoveOverlay
     friend class wxWindowDCImpl; // for PaintOverlays
 
     wxDECLARE_DYNAMIC_CLASS(wxWindowDFB);

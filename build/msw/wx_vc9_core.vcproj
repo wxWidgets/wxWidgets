@@ -1723,6 +1723,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\overlay.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\ownerdrw.cpp"
 				>
 			</File>

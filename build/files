@@ -2018,6 +2018,7 @@ MSW_SRC =
     src/msw/nativdlg.cpp
     src/msw/nativewin.cpp
     src/msw/notebook.cpp
+    src/msw/overlay.cpp
     src/msw/ownerdrw.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp

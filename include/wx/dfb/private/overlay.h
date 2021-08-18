@@ -11,29 +11,31 @@
 #define _WX_DFB_PRIVATE_OVERLAY_H_
 
 #include "wx/dfb/dfbptr.h"
-#include "wx/gdicmn.h"
+#include "wx/private/overlay.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
-class wxOverlayImpl
+class wxOverlayDFBImpl : public wxOverlayImpl
 {
 public:
-    wxOverlayImpl();
-    ~wxOverlayImpl();
+    wxOverlayDFBImpl();
+    ~wxOverlayDFBImpl();
 
-    void Reset();
-    bool IsOk();
-    void Init(wxDC* dc, int x , int y , int width , int height);
-    void BeginDrawing(wxDC* dc);
-    void EndDrawing(wxDC* dc);
-    void Clear(wxDC* dc);
+    virtual void Reset() wxOVERRIDE;
+    virtual bool IsOk() wxOVERRIDE;
+    virtual void InitFromDC(wxDC* dc, int x , int y , int width , int height) wxOVERRIDE;
+    virtual void InitFromWindow(wxWindow* win, bool fullscreen) wxOVERRIDE;
+    virtual void BeginDrawing(wxDC* dc) wxOVERRIDE;
+    virtual void EndDrawing(wxDC* dc) wxOVERRIDE;
+    virtual void Clear(wxDC* dc) wxOVERRIDE;
+
+    virtual wxRect GetRect() const wxOVERRIDE { return m_rect; }
 
     // wxDFB specific methods:
     bool IsEmpty() const { return m_isEmpty; }
-    wxRect GetRect() const { return m_rect; }
     wxIDirectFBSurfacePtr GetDirectFBSurface() const { return m_surface; }
 
 public:
