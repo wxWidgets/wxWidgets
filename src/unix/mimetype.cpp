@@ -11,9 +11,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MIMETYPE && wxUSE_FILE
 
@@ -61,7 +58,7 @@ public:
 
        size_t size = file.Length();
        wxCharBuffer buffer( size );
-       file.Read( (void*) (const char*) buffer, size );
+       file.Read(buffer.data(), size);
 
        // Check for valid UTF-8 here?
        wxString all = wxString::FromUTF8( buffer, size );
@@ -132,7 +129,7 @@ private:
 // Read a XDG *.desktop file of type 'Application'
 void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
 {
-    wxLogTrace(TRACE_MIME, wxT("loading XDG file %s"), filename.c_str());
+    wxLogTrace(TRACE_MIME, wxT("loading XDG file %s"), filename);
 
     wxMimeTextFile file(filename);
     if ( !file.Open() )
@@ -246,7 +243,7 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
     if ( !wxFileName::FileExists(filename) )
         return;
 
-    wxLogTrace(TRACE_MIME, wxT("loading XDG globs file from %s"), filename.c_str());
+    wxLogTrace(TRACE_MIME, wxT("loading XDG globs file from %s"), filename);
 
     wxMimeTextFile file(filename);
     if ( !file.Open() )

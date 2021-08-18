@@ -228,7 +228,7 @@ public:
         text constant in order to avoid jarring dialog size changes. You may
         also want to make the initial message, specified when creating the
         dialog, wide enough to avoid having to resize the dialog later, e.g. by
-        appending a long string of unbreakable spaces (@c wxString(L'\u00a0',
+        appending a long string of unbreakable spaces (@c wxString(L'\\u00a0',
         100)) to it.
 
         @param value

@@ -27,7 +27,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBoxNameStr)
+                const wxString& name = wxASCII_STR(wxStaticBoxNameStr))
         : wxCompositeWindowSettersOnly<wxStaticBoxBase>()
     {
         Create(parent, id, label, pos, size, style, name);
@@ -38,7 +38,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString &name = wxStaticBoxNameStr)
+                const wxString &name = wxASCII_STR(wxStaticBoxNameStr))
         : wxCompositeWindowSettersOnly<wxStaticBoxBase>()
     {
         Create(parent, id, label, pos, size, style, name);
@@ -49,14 +49,14 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBoxNameStr);
+                const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id,
                 wxWindow* label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBoxNameStr);
+                const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
     /// Implementation only
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const wxOVERRIDE;

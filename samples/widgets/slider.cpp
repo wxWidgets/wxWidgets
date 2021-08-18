@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SLIDER
 
@@ -119,7 +116,8 @@ protected:
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
-    void OnSlider(wxScrollEvent& event);
+    void OnSliderScroll(wxScrollEvent& event);
+    void OnSlider(wxCommandEvent& event);
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
@@ -161,6 +159,8 @@ protected:
     bool IsValidValue(int val) const
         { return (val >= m_min) && (val <= m_max); }
 
+    static int ms_numSliderEvents;
+
     // the slider range
     int m_min, m_max;
 
@@ -200,6 +200,8 @@ private:
     DECLARE_WIDGETS_PAGE(SliderWidgetsPage)
 };
 
+int SliderWidgetsPage::ms_numSliderEvents = 0;
+
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -229,7 +231,8 @@ wxBEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
 
     EVT_UPDATE_UI(SliderPage_CurValueText, SliderWidgetsPage::OnUpdateUICurValueText)
 
-    EVT_COMMAND_SCROLL(SliderPage_Slider, SliderWidgetsPage::OnSlider)
+    EVT_COMMAND_SCROLL(SliderPage_Slider, SliderWidgetsPage::OnSliderScroll)
+    EVT_SLIDER(SliderPage_Slider, SliderWidgetsPage::OnSlider)
 
     EVT_CHECKBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
@@ -801,7 +804,7 @@ void SliderWidgetsPage::OnUpdateUISelectRange(wxUpdateUIEvent& event)
 #endif // defined(__WXMSW__)
 }
 
-void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
+void SliderWidgetsPage::OnSliderScroll(wxScrollEvent& event)
 {
     wxASSERT_MSG( event.GetInt() == m_slider->GetValue(),
                   "slider value should be the same" );
@@ -835,14 +838,17 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
     wxASSERT_MSG(index >= 0 && (size_t)index < WXSIZEOF(eventNames),
                  "Unknown slider event" );
 
-
-    static int s_numSliderEvents = 0;
-
     wxLogMessage("Slider event #%d: %s (pos = %d, int value = %d)",
-                 s_numSliderEvents++,
+                 ms_numSliderEvents++,
                  eventNames[index],
                  event.GetPosition(),
                  event.GetInt());
+}
+
+void SliderWidgetsPage::OnSlider(wxCommandEvent& event)
+{
+    wxLogMessage("Slider event #%d: wxEVT_SLIDER (value = %d)",
+                 ms_numSliderEvents++, event.GetInt());
 }
 
 #endif // wxUSE_SLIDER

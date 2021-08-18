@@ -121,7 +121,7 @@ public:
     wxUint16 LowSurrogate() const { return LowSurrogate(m_value); }
 
     // Conversions to char and wchar_t types: all of those are needed to be
-    // able to pass wxUniChars to verious standard narrow and wide character
+    // able to pass wxUniChars to various standard narrow and wide character
     // functions
     operator char() const { return To8bit(m_value); }
     operator unsigned char() const { return (unsigned char)To8bit(m_value); }
@@ -144,7 +144,6 @@ public:
     bool operator&&(bool v) const { return (bool)*this && v; }
 
     // Assignment operators:
-    wxUniChar& operator=(const wxUniChar& c) { if (&c != this) m_value = c.m_value; return *this; }
     wxUniChar& operator=(const wxUniCharRef& c);
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
     wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
@@ -267,6 +266,10 @@ public:
 
     wxUniCharRef& operator=(const wxUniCharRef& c)
         { if (&c != this) *this = c.UniChar(); return *this; }
+
+#ifdef wxHAS_MEMBER_DEFAULT
+    wxUniCharRef(const wxUniCharRef&) = default;
+#endif
 
 #define wxUNICHAR_REF_DEFINE_OPERATOR_EQUAL(type) \
     wxUniCharRef& operator=(type c) { return *this = wxUniChar(c); }

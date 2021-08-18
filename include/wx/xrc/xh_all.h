@@ -45,6 +45,7 @@
 #include "wx/xrc/xh_html.h"
 #include "wx/xrc/xh_htmllbox.h"
 #include "wx/xrc/xh_hyperlink.h"
+#include "wx/xrc/xh_infobar.h"
 #include "wx/xrc/xh_listb.h"
 #include "wx/xrc/xh_listc.h"
 #include "wx/xrc/xh_listbk.h"

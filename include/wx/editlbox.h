@@ -41,7 +41,7 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = wxEL_DEFAULT_STYLE,
-                      const wxString& name = wxEditableListBoxNameStr)
+                      const wxString& name = wxASCII_STR(wxEditableListBoxNameStr))
     {
         Init();
         Create(parent, id, label, pos, size, style, name);
@@ -52,7 +52,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxEL_DEFAULT_STYLE,
-                const wxString& name = wxEditableListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxEditableListBoxNameStr));
 
     void SetStrings(const wxArrayString& strings);
     void GetStrings(wxArrayString& strings) const;

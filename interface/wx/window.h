@@ -488,6 +488,17 @@ public:
     virtual bool AcceptsFocusRecursively() const;
 
     /**
+        Disable giving focus to this window using the keyboard navigation keys.
+
+        Pressing @c TAB key will skip this window if this function was called
+        on it, but it will still be possible to focus it by clicking on it with
+        a pointing device.
+
+        @since 3.1.4
+     */
+    void DisableFocusFromKeyboard();
+
+    /**
      Can this window itself have focus?
     */
     bool IsFocusable() const;
@@ -528,6 +539,22 @@ public:
         @see wxFocusEvent, wxPanel::SetFocus, wxPanel::SetFocusIgnoringChildren
     */
     virtual void SetCanFocus(bool canFocus);
+
+    /**
+        Enables or disables visible indication of keyboard focus.
+
+        By default, controls behave in platform-appropriate way and show focus
+        in the same way native applications do. In some very rare circumstances
+        it may be desirable to change the default (notably multiline text
+        controls don't normally have a focus indicator on Mac), which this
+        method allows. It should only be used if you have a good understanding
+        of the native platform's guidelines and user expectations.
+
+        This method is only implemented on Mac.
+
+        @since 3.1.5
+    */
+    virtual void EnableVisibleFocus(bool enable);
 
     /**
         This sets the window to receive keyboard input.
@@ -1034,7 +1061,7 @@ public:
 
         A DPI-independent pixel is just a pixel at the standard 96 DPI
         resolution. To keep the same physical size at higher resolution, the
-        physical pixel value must be scaled by GetContentScaleFactor() but this
+        physical pixel value must be scaled by GetDPIScaleFactor() but this
         scaling may be already done by the underlying toolkit (GTK+, Cocoa,
         ...) automatically. This method performs the conversion only if it is
         not already done by the lower level toolkit and so by using it with
@@ -1110,7 +1137,7 @@ public:
 
     A DPI-independent pixel is just a pixel at the standard 96 DPI
     resolution. To keep the same physical size at higher resolution, the
-    physical pixel value must be scaled by GetContentScaleFactor() but this
+    physical pixel value must be scaled by GetDPIScaleFactor() but this
     scaling may be already done by the underlying toolkit (GTK+, Cocoa,
     ...) automatically. This method performs the conversion only if it is
     not already done by the lower level toolkit, For example, you may
@@ -1376,21 +1403,56 @@ public:
     virtual wxSize GetBestVirtualSize() const;
 
     /**
-       Returns the magnification of the backing store of this window, eg 2.0
-       for a window on a retina screen.
+       Returns the factor mapping logical pixels of this window to physical
+       pixels.
 
-       This factor should be used to determine the size of bitmaps and similar
-       "content-containing" windows appropriate for the current resolution.
-       E.g. the program may load a 32px bitmap if the content scale factor is
-       1.0 or 64px version of the same bitmap if it is 2.0 or bigger.
+       This function can be used to portably determine the number of physical
+       pixels in a window of the given size, by multiplying the window size by
+       the value returned from it. I.e. it returns the factor converting window
+       coordinates to "content view" coordinates, where the view can be just a
+       simple window displaying a wxBitmap or wxGLCanvas or any other kind of
+       window rendering arbitrary "content" on screen.
 
-       Notice that this method should @e not be used for window sizes, as they
-       are already scaled by this factor by the underlying toolkit under some
-       platforms. Use FromDIP() for anything window-related instead.
+       For the platforms not doing any pixel mapping, i.e. where logical and
+       physical pixels are one and the same, this function always returns 1.0
+       and so using it is, in principle, unnecessary and could be avoided by
+       using preprocessor check for @c wxHAVE_DPI_INDEPENDENT_PIXELS @e not
+       being defined, however using this function unconditionally under all
+       platforms is usually simpler and so preferable.
+
+       @note Current behaviour of this function is compatible with wxWidgets
+           3.0, but different from its behaviour in versions 3.1.0 to 3.1.3,
+           where it returned the same value as GetDPIScaleFactor(). Please use
+           the other function if you need to use a scaling factor greater than
+           1.0 even for the platforms without @c wxHAVE_DPI_INDEPENDENT_PIXELS,
+           such as wxMSW.
 
        @since 2.9.5
     */
     double GetContentScaleFactor() const;
+
+    /**
+       Returns the ratio of the DPI used by this window to the standard DPI.
+
+       The returned value is 1 for standard DPI screens or 2 for "200%
+       scaling" and, unlike for GetContentScaleFactor(), is the same under all
+       platforms.
+
+       This factor should be used to increase the size of icons and similar
+       windows whose best size is not based on text metrics when using DPI
+       scaling.
+
+       E.g. the program may load a 32px bitmap if the content scale factor is
+       1.0 or 64px version of the same bitmap if it is 2.0 or bigger.
+
+       Notice that this method should @e not be used for window sizes expressed
+       in pixels, as they are already scaled by this factor by the underlying
+       toolkit under some platforms. Use FromDIP() for anything window-related
+       instead.
+
+        @since 3.1.4
+     */
+    double GetDPIScaleFactor() const;
 
     /**
         Returns the size of the left/right and top/bottom borders of this window in x
@@ -1493,9 +1555,14 @@ public:
     void SetClientSize(const wxRect& rect);
 
     /**
-        This normally does not need to be called by user code.
-        It is called when a window is added to a sizer, and is used so the window
-        can remove itself from the sizer when it is destroyed.
+        Used by wxSizer internally to notify the window about being managed by
+        the given sizer.
+
+        This method should not be called from outside the library, unless
+        you're implementing a custom sizer class -- and in the latter case you
+        must call this method with the pointer to the sizer itself whenever a
+        window is added to it and with @NULL argument when the window is
+        removed from it.
     */
     void SetContainingSizer(wxSizer* sizer);
 
@@ -1851,10 +1918,10 @@ public:
         Converts to screen coordinates from coordinates relative to this window.
 
         @param x
-            A pointer to a integer value for the x coordinate. Pass the client
+            A pointer to an integer value for the x coordinate. Pass the client
             coordinate in, and a screen coordinate will be passed out.
         @param y
-            A pointer to a integer value for the y coordinate. Pass the client
+            A pointer to an integer value for the y coordinate. Pass the client
             coordinate in, and a screen coordinate will be passed out.
 
         @beginWxPerlOnly
@@ -1959,7 +2026,7 @@ public:
         Freezes the window or, in other words, prevents any updates from taking
         place on screen, the window is not redrawn at all.
 
-        Thaw() must be called to reenable window redrawing. Calls to these two
+        Thaw() must be called to re-enable window redrawing. Calls to these two
         functions may be nested but to ensure that the window is properly
         repainted again, you must thaw it exactly as many times as you froze it.
 
@@ -2107,7 +2174,7 @@ public:
 
     /**
         Returns the region specifying which parts of the window have been damaged.
-        Should only be called within an wxPaintEvent handler.
+        Should only be called within a wxPaintEvent handler.
 
         @see wxRegion, wxRegionIterator
     */
@@ -2129,13 +2196,14 @@ public:
     virtual bool HasTransparentBackground();
 
     /**
-        Causes this window, and all of its children recursively (except under wxGTK1
-        where this is not implemented), to be repainted. Note that repainting doesn't
-        happen immediately but only during the next event loop iteration, if you need
-        to update the window immediately you should use Update() instead.
+        Causes this window, and all of its children recursively, to be repainted.
+        Note that repainting doesn't happen immediately but only during the next
+        event loop iteration, if you need to update the window immediately you
+        should use Update() instead.
 
         @param eraseBackground
-            If @true, the background will be erased.
+            If @true, the background will be erased too. Note that in non-MSW
+            ports background is always erased.
         @param rect
             If non-@NULL, only the given rectangle will be treated as damaged.
 
@@ -2179,7 +2247,7 @@ public:
             The colour to be used as the background colour; pass
             wxNullColour to reset to the default colour.
             Note that you may want to use wxSystemSettings::GetColour() to retrieve
-            a suitable colour to use rather than setting an hard-coded one.
+            a suitable colour to use rather than setting a hard-coded one.
 
         @remarks The background colour is usually painted by the default
                  wxEraseEvent event handler function under Windows and
@@ -2401,10 +2469,15 @@ public:
 
         Dialogs, notebook pages and the status bar have this flag set to @true
         by default so that the default look and feel is simulated best.
+
+        @see GetThemeEnabled()
     */
     virtual void SetThemeEnabled(bool enable);
 
     /**
+        Returns @true if the window uses the system theme for drawing its background.
+
+        @see SetThemeEnabled()
      */
     virtual bool GetThemeEnabled() const;
 
@@ -2801,7 +2874,7 @@ public:
 
     /**
         Returns @true if the given point or rectangle area has been exposed since the
-        last repaint. Call this in an paint event handler to optimize redrawing by
+        last repaint. Call this in a paint event handler to optimize redrawing by
         only redrawing those areas, which have been exposed.
     */
     bool IsExposed(int x, int y) const;
@@ -2845,7 +2918,7 @@ public:
 
     /**
         Enable or disable the window for user input. Note that when a parent window is
-        disabled, all of its children are disabled as well and they are reenabled again
+        disabled, all of its children are disabled as well and they are re-enabled again
         when the parent is.
 
         A window can be created initially disabled by calling this method on it
@@ -3044,6 +3117,9 @@ public:
         The position where the menu will appear can be specified either as a
         wxPoint @a pos or by two integers (@a x and @a y).
 
+        Note that this function switches focus to this window before showing
+        the menu.
+
         @remarks Just before the menu is popped up, wxMenu::UpdateUI is called to
                  ensure that the menu items are in the correct state.
                  The menu does not get deleted by the window.
@@ -3224,9 +3300,9 @@ public:
         Chooses a different variant of the window display to use.
 
         Window variants currently just differ in size, as can be seen from
-        ::wxWindowVariant documentation. Under all platforms but OS X, this
+        ::wxWindowVariant documentation. Under all platforms but macOS, this
         function does nothing more than change the font used by the window.
-        However under OS X it is implemented natively and selects the
+        However under macOS it is implemented natively and selects the
         appropriate variant of the native widget, which has better appearance
         than just scaled down or up version of the normal variant, so it should
         be preferred to directly tweaking the font size.
@@ -3289,7 +3365,7 @@ public:
                 of a window, which may or may not be implemented by destroying
                 the window. The default implementation of wxDialog::OnCloseWindow
                 does not necessarily delete the dialog, since it will simply
-                simulate an wxID_CANCEL event which is handled by the appropriate
+                simulate a wxID_CANCEL event which is handled by the appropriate
                 button event handler and may do anything at all.
                 To guarantee that the window will be destroyed, call
                 wxWindow::Destroy instead
@@ -3478,6 +3554,13 @@ public:
     */
     void SetAutoLayout(bool autoLayout);
 
+    /**
+        Returns true if Layout() is called automatically when the window is
+        resized.
+
+        This function is mostly useful for wxWidgets itself and is rarely
+        needed in the application code.
+     */
     bool GetAutoLayout() const;
 
     //@}
@@ -3786,7 +3869,7 @@ public:
 
         @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
                  event. This function is currently only implemented under MSW
-                 and OS X and always returns false in the other ports.
+                 and macOS and always returns false in the other ports.
 
         @see UnregisterHotKey()
     */

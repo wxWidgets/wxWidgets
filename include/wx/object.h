@@ -150,7 +150,7 @@ name##PluginSentinel  m_pluginsentinel
 // The 'this' pointer is always true, so use this version
 // to cast the this pointer and avoid compiler warnings.
 #define wxDynamicCastThis(className) \
-     (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
+     (IsKindOf(&className::ms_classInfo) ? (className*)this : NULL)
 
 template <class T>
 inline T *wxCheckCast(const void *ptr)
@@ -278,6 +278,15 @@ public:
             m_ptr->IncRef();
     }
 
+    // generalized copy ctor: U must be convertible to T
+    template <typename U>
+    wxObjectDataPtr(const wxObjectDataPtr<U> &tocopy)
+        : m_ptr(tocopy.get())
+    {
+        if (m_ptr)
+            m_ptr->IncRef();
+    }
+
     ~wxObjectDataPtr()
     {
         if (m_ptr)
@@ -313,11 +322,29 @@ public:
         m_ptr = ptr;
     }
 
+    T* release()
+    {
+        T* const ptr = m_ptr;
+        m_ptr = NULL;
+        return ptr;
+    }
+
     wxObjectDataPtr& operator=(const wxObjectDataPtr &tocopy)
     {
         if (m_ptr)
             m_ptr->DecRef();
         m_ptr = tocopy.m_ptr;
+        if (m_ptr)
+            m_ptr->IncRef();
+        return *this;
+    }
+
+    template <typename U>
+    wxObjectDataPtr& operator=(const wxObjectDataPtr<U> &tocopy)
+    {
+        if (m_ptr)
+            m_ptr->DecRef();
+        m_ptr = tocopy.get();
         if (m_ptr)
             m_ptr->IncRef();
         return *this;
@@ -341,8 +368,6 @@ private:
 
 class WXDLLIMPEXP_BASE wxObject
 {
-    wxDECLARE_ABSTRACT_CLASS(wxObject);
-
 public:
     wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
@@ -365,6 +390,7 @@ public:
 
     bool IsKindOf(const wxClassInfo *info) const;
 
+    virtual wxClassInfo *GetClassInfo() const;
 
     // Turn on the correct set of new and delete operators
 
@@ -409,6 +435,11 @@ public:
 
     // check if this object references the same data as the other one
     bool IsSameAs(const wxObject& o) const { return m_refData == o.m_refData; }
+
+    // RTTI information, usually declared by wxDECLARE_DYNAMIC_CLASS() or
+    // similar, but done manually for the hierarchy root. Note that it's public
+    // for compatibility reasons, but shouldn't be accessed directly.
+    static wxClassInfo ms_classInfo;
 
 protected:
     // ensure that our data is not shared with anybody else: if we have no

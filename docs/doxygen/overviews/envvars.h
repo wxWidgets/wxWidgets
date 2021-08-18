@@ -26,5 +26,16 @@ wxWidgets programs.
         @c /usr/local or @c /usr). You can set WXPREFIX if you are for example
         distributing a binary version of an application and you don't know in advance
         where it will be installed.}
+@itemdef{WXWEBREQUEST_BACKEND,
+         This variable can be set to override the choice of the default backend
+         used by wxWebRequest, see wxWebSession::New(). Most common use is to
+         set it to @c "CURL" to force using libcurl-based implementation under
+         MSW or macOS platforms where the native implementation would be chosen
+         by default.}
+@itemdef{WXSUPPRESS_SIZER_FLAGS_CHECK,
+         If set, disables asserts about using invalid sizer flags in the code.
+         This can be helpful when running older programs recompiled with
+         wxWidgets 3.1 or later, as these asserts are mostly harmless and can
+         be safely ignored if the code works as expected.}
 */
 

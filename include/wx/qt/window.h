@@ -50,7 +50,7 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
  * found in winevent_qt.(h|cpp) to send all Qt events here to QtHandleXXXEvent()
  * methods. All these methods receive the Qt event and the handler. This is
  * done because events of the containers (the scrolled part of the window) are
- * sent to the same wxWindow instance, that must be able to differenciate them
+ * sent to the same wxWindow instance, that must be able to differentiate them
  * as some events need different handling (paintEvent) depending on that.
  * We pass the QWidget pointer to all event handlers for consistency.
  */
@@ -64,14 +64,14 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     bool Create(wxWindowQt *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     // Used by all window classes in the widget creation process.
     void PostCreation( bool generic = true );
@@ -168,6 +168,7 @@ public:
 
     static void QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window );
     static wxWindowQt *QtRetrieveWindowPointer( const QWidget *widget );
+    static void QtSendSetCursorEvent(wxWindowQt* win, wxPoint posClient);
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
@@ -215,6 +216,13 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y) wxOVERRIDE;
 #endif // wxUSE_MENUS
 
+    // Return the parent to use for children being reparented to us: this is
+    // overridden in wxFrame to use its central widget rather than the frame
+    // itself.
+    virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
+
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
+
     QWidget *m_qtWindow;
 
 private:
@@ -223,6 +231,11 @@ private:
 
     QScrollBar *m_horzScrollBar; // owned by m_qtWindow when allocated
     QScrollBar *m_vertScrollBar; // owned by m_qtWindow when allocated
+
+    // Return the viewport of m_qtContainer, if it's used, or just m_qtWindow.
+    //
+    // Always returns non-null pointer if the window has been already created.
+    QWidget *QtGetClientWidget() const;
 
     QScrollBar *QtGetScrollBar( int orientation ) const;
     QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=NULL );

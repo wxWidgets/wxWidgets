@@ -10,9 +10,6 @@
 
 #if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -23,6 +20,9 @@
 #include "asserthelper.h"
 #if wxUSE_WEBVIEW_IE
     #include "wx/msw/webview_ie.h"
+#endif
+#if wxUSE_WEBVIEW_WEBKIT2
+    #include "wx/stopwatch.h"
 #endif
 
 //Convenience macro
@@ -123,6 +123,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->CanGoForward());
     }
 
+#if !wxUSE_WEBVIEW_WEBKIT2 && !defined(__WXOSX__)
     SECTION("HistoryEnable")
     {
         LoadUrl();
@@ -136,7 +137,9 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(!m_browser->CanGoForward());
         CHECK(!m_browser->CanGoBack());
     }
+#endif
 
+#if !wxUSE_WEBVIEW_WEBKIT2 && !defined(__WXOSX__)
     SECTION("HistoryClear")
     {
         LoadUrl(2);
@@ -153,6 +156,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(!m_browser->CanGoForward());
         CHECK(!m_browser->CanGoBack());
     }
+#endif
 
     SECTION("HistoryList")
     {
@@ -170,6 +174,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->GetBackwardHistory().size() == 2);
     }
 
+#if !defined(__WXOSX__) && (!defined(wxUSE_WEBVIEW_EDGE) || !wxUSE_WEBVIEW_EDGE)
     SECTION("Editable")
     {
         CHECK(!m_browser->IsEditable());
@@ -182,6 +187,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
         CHECK(!m_browser->IsEditable());
     }
+#endif
 
     SECTION("Selection")
     {
@@ -191,9 +197,19 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
         m_browser->SelectAll();
 
+#if wxUSE_WEBVIEW_WEBKIT2
+        // With WebKit SelectAll() sends a request to perform the selection to
+        // another process via proxy and there doesn't seem to be any way to
+        // wait until this request is actually handled, so loop here for some a
+        // bit before giving up.
+        for ( wxStopWatch sw; !m_browser->HasSelection() && sw.Time() < 50; )
+            wxMilliSleep(1);
+#endif // wxUSE_WEBVIEW_WEBKIT2
+
         CHECK(m_browser->HasSelection());
         CHECK(m_browser->GetSelectedText() == "Some strong text");
 
+#if !defined(__WXOSX__) && (!defined(wxUSE_WEBVIEW_EDGE) || !wxUSE_WEBVIEW_EDGE)
         // The web engine doesn't necessarily represent the HTML in the same way as
         // we used above, e.g. IE uses upper case for all the tags while WebKit
         // under OS X inserts plenty of its own <span> tags, so don't test for
@@ -205,6 +221,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
             ("Unexpected selection source: \"%s\"", selSource),
             selSource.Lower().Matches("*some*<strong*strong</strong>*text*")
         );
+#endif // !defined(__WXOSX__)
 
         m_browser->ClearSelection();
         CHECK(!m_browser->HasSelection());
@@ -241,7 +258,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         ENSURE_LOADED;
 
         wxString result;
-    #if wxUSE_WEBVIEW_IE
+    #if wxUSE_WEBVIEW_IE && !wxUSE_WEBVIEW_EDGE
         CHECK(wxWebViewIE::MSWSetModernEmulationLevel());
 
         // Define a specialized scope guard ensuring that we reset the emulation
@@ -291,8 +308,8 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
         CHECK(result == _("Hello World!"));
 
-        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\vb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
-        CHECK(result == _("a\'aa\n\rb\vb\tb\\ccc\"ddd\b\fx"));
+        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
+        CHECK(result == _("a\'aa\n\rb\tb\\ccc\"ddd\b\fx"));
 
         CHECK(m_browser->RunScript("function f(a){return a;}f(123);", &result));
         CHECK(wxAtoi(result) == 123);
@@ -337,6 +354,13 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
             var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
             &result));
         CHECK(result == "\"2016-10-08T21:30:40.000Z\"");
+
+        // Check for C++-style comments which used to be broken.
+        CHECK(m_browser->RunScript("function f() {\n"
+                                   "    // A C++ style comment\n"
+                                   "    return 17;\n"
+                                   "}f();", &result));
+        CHECK(result == "17");
 
         // Check for errors too.
         CHECK(!m_browser->RunScript("syntax(error"));

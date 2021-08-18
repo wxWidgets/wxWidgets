@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -543,9 +540,9 @@ extern "C" {
 static int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item)
 {
 #if wxUSE_UNICODE_UTF8
-    return strcmp((char*)key, ((wxHtmlEntityInfo*)item)->name);
+    return strcmp(static_cast<const char*>(key), static_cast<const wxHtmlEntityInfo*>(item)->name);
 #else
-    return wxStrcmp((wxChar*)key, ((wxHtmlEntityInfo*)item)->name);
+    return wxStrcmp(static_cast<const wxChar*>(key), static_cast<const wxHtmlEntityInfo*>(item)->name);
 #endif
 }
 }

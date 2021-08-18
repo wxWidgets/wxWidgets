@@ -371,7 +371,7 @@ extern void WXDLLIMPEXP_BASE wxAbort();
         wxFAIL_COND_MSG(#cond, msg);                                      \
         op;                                                               \
     }                                                                     \
-    struct wxDummyCheckStruct /* just to force a semicolon */
+    struct wxMAKE_UNIQUE_NAME(wxDummyCheckStruct) /* to force a semicolon */
 
 // check which returns with the specified return code if the condition fails
 #define wxCHECK_MSG(cond, rc, msg)   wxCHECK2_MSG(cond, return rc, msg)

@@ -26,7 +26,7 @@
     CreateToolBar() functions, manages these windows and adjusts the value returned
     by GetClientSize() to reflect the remaining size available to application windows.
 
-    @remarks An application should normally define an wxCloseEvent handler for the
+    @remarks An application should normally define a wxCloseEvent handler for the
              frame to respond to system close events, for example so that related
              data and subwindows can be cleaned up.
 
@@ -119,7 +119,7 @@
            frames having this style (the dialogs don't have a minimize or a
            maximize box by default)
     @style{wxFRAME_EX_METAL}
-           On OS X, frames with this style will be shown with a metallic
+           On macOS, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endExtraStyleTable
 

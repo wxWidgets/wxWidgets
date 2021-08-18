@@ -12,9 +12,8 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#if wxUSE_DATAVIEWCTRL
+
 
 #include "testpersistence.h"
 
@@ -170,3 +169,5 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
         delete list->GetParent();
     }
 }
+
+#endif

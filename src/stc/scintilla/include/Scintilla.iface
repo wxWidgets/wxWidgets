@@ -263,7 +263,7 @@ val SC_IME_INLINE=1
 # Is the IME displayed in a window or inline?
 get int GetIMEInteraction=2678(,)
 
-# Choose to display the the IME in a winow or inline.
+# Choose to display the IME in a winow or inline.
 set void SetIMEInteraction=2679(int imeInteraction,)
 
 enu MarkerSymbol=SC_MARK_
@@ -331,7 +331,7 @@ set void MarkerSetBack=2042(int markerNumber, colour back)
 # Set the background colour used for a particular marker number when its folding block is selected.
 set void MarkerSetBackSelected=2292(int markerNumber, colour back)
 
-# Enable/disable highlight for current folding bloc (smallest one that contains the caret)
+# Enable/disable highlight for current folding block (smallest one that contains the caret)
 fun void MarkerEnableHighlight=2293(bool enabled,)
 
 # Add a marker to a line, returning an ID which can be used to find or delete the marker.
@@ -736,7 +736,7 @@ set void SetCaretLineBack=2098(colour back,)
 # Experimental feature, currently buggy.
 set void StyleSetChangeable=2099(int style, bool changeable)
 
-# Display a auto-completion list.
+# Display an auto-completion list.
 # The lengthEntered parameter indicates how many characters before
 # the caret should be used to provide context.
 fun void AutoCShow=2100(int lengthEntered, string itemList)
@@ -2150,10 +2150,10 @@ set void SetIndicatorValue=2502(int value,)
 # Get the current indicator value
 get int GetIndicatorValue=2503(,)
 
-# Turn a indicator on over a range.
+# Turn an indicator on over a range.
 fun void IndicatorFillRange=2504(position start, int lengthFill)
 
-# Turn a indicator off over a range.
+# Turn an indicator off over a range.
 fun void IndicatorClearRange=2505(position start, int lengthClear)
 
 # Are any indicators present at pos?

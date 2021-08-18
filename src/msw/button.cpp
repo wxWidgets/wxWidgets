@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BUTTON
 
@@ -45,6 +42,7 @@
 #include "wx/stockitem.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
+#include "wx/private/rescale.h"
 #include "wx/private/window.h"
 
 #if wxUSE_MARKUP
@@ -160,14 +158,25 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
 {
-    static wxSize s_sizeBtn;
+    static wxPrivate::DpiDependentValue<wxSize> s_sizeBtn;
 
-    if ( s_sizeBtn.x == 0 )
+    if ( s_sizeBtn.HasChanged(win) )
     {
-        wxScreenDC dc;
-        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+        wxSize base;
+        if ( win )
+        {
+            wxClientDC dc(win);
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
+        else
+        {
+            wxScreenDC dc;
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
 
         // The size of a standard button in the dialog units is 50x14,
         // translate this to pixels.
@@ -177,15 +186,11 @@ wxSize wxButtonBase::GetDefaultSize()
         // character width metadata stored in the font; see
         // http://support.microsoft.com/default.aspx/kb/145994 for detailed
         // discussion.
-        //
-        // NB: wxMulDivInt32() is used, because it correctly rounds the result
 
-        const wxSize base = wxPrivate::GetAverageASCIILetterSize(dc);
-        s_sizeBtn.x = wxMulDivInt32(50, base.x, 4);
-        s_sizeBtn.y = wxMulDivInt32(14, base.y, 8);
+        s_sizeBtn.SetAtNewDPI(wxRescaleCoord(50, 14).From(4, 8).To(base));
     }
 
-    return s_sizeBtn;
+    return s_sizeBtn.Get();
 }
 
 // ----------------------------------------------------------------------------

@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #ifdef __WINDOWS__
@@ -361,7 +358,7 @@ wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
 wxAppTraits& wxAppConsoleBase::GetValidTraits()
 {
     static wxConsoleAppTraits s_traitsConsole;
-    wxAppTraits* const traits = (wxTheApp ? wxTheApp->GetTraits() : NULL);
+    wxAppTraits* const traits = GetTraitsIfExists();
 
     return *(traits ? traits : &s_traitsConsole);
 }
@@ -845,12 +842,9 @@ bool wxAppConsoleBase::CheckBuildOptions(const char *optionsSignature,
         wxString lib = wxString::FromAscii(WX_BUILD_OPTIONS_SIGNATURE);
         wxString prog = wxString::FromAscii(optionsSignature);
         wxString progName = wxString::FromAscii(componentName);
-        wxString msg;
 
-        msg.Printf(wxT("Mismatch between the program and library build versions detected.\nThe library used %s,\nand %s used %s."),
-                   lib.c_str(), progName.c_str(), prog.c_str());
-
-        wxLogFatalError(msg.c_str());
+        wxLogFatalError(wxT("Mismatch between the program and library build versions detected.\nThe library used %s,\nand %s used %s."),
+                        lib, progName, prog);
 
         // normally wxLogFatalError doesn't return
         return false;
@@ -945,6 +939,14 @@ bool wxConsoleAppTraitsBase::HasStderr()
 {
     // console applications always have stderr, even under Mac/Windows
     return true;
+}
+
+bool wxConsoleAppTraitsBase::SafeMessageBox(const wxString& WXUNUSED(text),
+                                            const wxString& WXUNUSED(title))
+{
+    // console applications don't show message boxes by default, although this
+    // can be done in platform-specific cases
+    return false;
 }
 
 // ----------------------------------------------------------------------------

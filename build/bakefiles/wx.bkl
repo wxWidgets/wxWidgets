@@ -47,7 +47,7 @@
         <!-- WXRC compiler is built by default: -->
         <!-- FIXME: this is dirty hack, better bakefile support for
              conditional and optional subprojects is needed -->
-        <action id="wxrc" cond="USE_XRC=='1'">
+        <action id="wxrc" cond="USE_XML=='1'">
             <dependency-of>all</dependency-of>
 
             <!-- some of these are not built in all configurations, <depends>
@@ -63,13 +63,13 @@
                 (if test -f utils/wxrc/Makefile ; then cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) all ; fi)
             </command>
         </action>
-        <action id="clean-wxrc" cond="USE_XRC=='1'">
+        <action id="clean-wxrc" cond="USE_XML=='1'">
             <dependency-of>clean</dependency-of>
             <command>
                 (if test -f utils/wxrc/Makefile ; then cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) clean ; fi)
             </command>
         </action>
-        <action id="install-wxrc" cond="USE_XRC=='1'">
+        <action id="install-wxrc" cond="USE_XML=='1'">
             <dependency-of>install</dependency-of>
             <depends>wxrc</depends>
             <command>
@@ -95,7 +95,7 @@
             <command>
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
-                $(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
+                $(INSTALL_SCRIPT) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
                 (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) $(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
             </command>
         </action>
@@ -137,17 +137,11 @@
         <using module="gettext"/>
         <gettext-catalogs id="locale">
             <srcdir>$(SRCDIR)/locale</srcdir>
-            <catalog-name>wxstd</catalog-name>
+            <catalog-name>wxstd-$(WX_RELEASE)</catalog-name>
             <linguas>
                 ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk
                 zh zh_CN zh_TW
             </linguas>
-            <install-to>$(LOCALEDIR)</install-to>
-        </gettext-catalogs>
-        <gettext-catalogs id="locale_msw">
-            <srcdir>$(SRCDIR)/locale/msw</srcdir>
-            <catalog-name>wxmsw</catalog-name>
-            <linguas>it</linguas>
             <install-to>$(LOCALEDIR)</install-to>
         </gettext-catalogs>
     </if>
@@ -173,11 +167,6 @@
             <if cond="WXUNIV=='0'">$(TOOLKIT_LOWERCASE)</if>
         </set>
 
-        <copy-file-to-file-if-not-exist id="master_setup.h">
-            <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup0.h</src>
-            <dst>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</dst>
-            <dependency-of>setup_h</dependency-of>
-        </copy-file-to-file-if-not-exist>
         <copy-file-to-file-if-not-exist id="setup.h">
             <dependency-of>setup_h</dependency-of>
             <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</src>
@@ -205,7 +194,7 @@
             <depends-on-file>$(SRCDIR)/include/wx/msw/genrcdefs.h</depends-on-file>
 
             <command>
-                $(DOLLAR)(CPP) "$(nativePaths(SRCDIR))\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+                $(DOLLAR)(CPP) $(DOLLAR)(CPPFLAGS) "$(nativePaths(SRCDIR))\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
             </command>
 
         </action>

@@ -23,9 +23,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -35,10 +32,18 @@
 #include "wx/file.h"
 #include "wx/log.h"
 #include "wx/cmdline.h"
+#include "wx/platinfo.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
+
+// Under Linux we demonstrate loading an existing message catalog using
+// coreutils package (which is always installed) as an example.
+#ifdef __LINUX__
+    #define USE_COREUTILS_MO
+    static bool g_loadedCoreutilsMO = false;
+#endif // __LINUX__
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -68,6 +73,9 @@ public:
 public:
     void OnTestLocaleAvail(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+#ifdef USE_COREUTILS_MO
+    void OnCoreutilsHelp(wxCommandEvent& event);
+#endif // USE_COREUTILS_MO
     void OnQuit(wxCommandEvent& event);
 
     void OnPlay(wxCommandEvent& event);
@@ -166,6 +174,9 @@ wxCOMPILE_TIME_ASSERT( WXSIZEOF(langNames) == WXSIZEOF(langIds),
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(INTERNAT_TEST, MyFrame::OnTestLocaleAvail)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+#ifdef USE_COREUTILS_MO
+    EVT_MENU(wxID_HELP, MyFrame::OnCoreutilsHelp)
+#endif // USE_COREUTILS_MO
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
 
     EVT_MENU(INTERNAT_PLAY, MyFrame::OnPlay)
@@ -267,12 +278,10 @@ bool MyApp::OnInit()
     // shows that you may make use of the standard message catalogs as well
     //
     // if it's not installed on your system, it is just silently ignored
-#ifdef __LINUX__
-    {
-        wxLogNull noLog;
-        m_locale.AddCatalog("fileutils");
-    }
-#endif
+#ifdef USE_COREUTILS_MO
+    wxLocale::AddCatalogLookupPathPrefix("/usr/share/locale");
+    g_loadedCoreutilsMO = m_locale.AddCatalog("coreutils");
+#endif // USE_COREUTILS_MO
 
     // Create the main frame window
     MyFrame *frame = new MyFrame(m_locale);
@@ -301,10 +310,8 @@ MyFrame::MyFrame(wxLocale& locale)
     file_menu->Append(INTERNAT_TEST, _("&Test locale availability...\tCtrl-T"));
     file_menu->AppendSeparator();
 
-    // since wxID_ABOUT and wxID_EXIT are stock IDs they will automatically get
-    // translated help strings; nice isn't it?
-    file_menu->Append(wxID_ABOUT, _("&About"));
-    file_menu->AppendSeparator();
+    // since wxID_EXIT is a stock ID it will automatically get a translated help
+    // string; nice isn't it?
     file_menu->Append(wxID_EXIT, _("E&xit"));
 
     wxMenu *test_menu = new wxMenu;
@@ -330,10 +337,24 @@ MyFrame::MyFrame(wxLocale& locale)
     macro_menu->Append(INTERNAT_MACRO_8, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 1));
     macro_menu->Append(INTERNAT_MACRO_9, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 2));
 
+    wxMenu *help_menu = new wxMenu;
+#ifdef USE_COREUTILS_MO
+    help_menu->Append(wxID_HELP, _("Show coreutils &help"));
+    help_menu->AppendSeparator();
+#endif // USE_COREUTILS_MO
+    help_menu->Append(wxID_ABOUT, _("&About"));
+
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, _("&File"));
+    // Using stock label here means that it will be automatically translated.
+    menu_bar->Append(file_menu, wxGetStockLabel(wxID_FILE));
     menu_bar->Append(test_menu, _("&Test"));
     menu_bar->Append(macro_menu, _("&Macro"));
+    // We could have used wxGetStockLabel(wxID_HELP) here too, but show the
+    // special case of "Help" menu: it has a special, Windows-specific
+    // translation for some languages. Note that normally we would actually use
+    // it only under MSW, we're doing it here unconditionally just for
+    // demonstration purposes.
+    menu_bar->Append(help_menu, wxGETTEXT_IN_CONTEXT("standard Windows menu", "&Help"));
     SetMenuBar(menu_bar);
 
     // this demonstrates RTL support in wxStatusBar:
@@ -373,6 +394,29 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                        );
     dlg.ShowModal();
 }
+
+#ifdef USE_COREUTILS_MO
+
+void MyFrame::OnCoreutilsHelp(wxCommandEvent& WXUNUSED(event))
+{
+    if ( g_loadedCoreutilsMO )
+    {
+        // Try showing translation of a message used by coreutils: notice that
+        // this string isn't inside _(), as its translation is supposed to be
+        // already present in the coreutils catalog, we don't need to extract
+        // it from here.
+        const char* const msg = "      --help     display this help and exit\n";
+        wxLogMessage("Translation of coreutils help option description is:\n%s",
+                     wxGetTranslation(msg));
+    }
+    else
+    {
+        wxLogMessage("Loading coreutils message catalog failed, set "
+                     "WXTRACE=i18n to get more information about it.");
+    }
+}
+
+#endif // USE_COREUTILS_MO
 
 void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {

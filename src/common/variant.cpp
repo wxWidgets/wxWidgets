@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/variant.h"
 
@@ -29,11 +26,7 @@
 #endif
 
 #if wxUSE_STD_IOSTREAM
-    #if wxUSE_IOSTREAMH
-        #include <fstream.h>
-    #else
-        #include <fstream>
-    #endif
+    #include <fstream>
 #endif
 
 #if wxUSE_STREAMS
@@ -103,7 +96,7 @@ wxObjectRefData *wxVariant::CreateRefData() const
 
 wxObjectRefData *wxVariant::CloneRefData(const wxObjectRefData *data) const
 {
-    return ((wxVariantData*) data)->Clone();
+    return static_cast<const wxVariantData*>(data)->Clone();
 }
 
 // Assignment
@@ -480,7 +473,7 @@ bool wxVariantDoubleData::Write(wxOutputStream& str) const
 bool wxVariantDoubleData::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
-    m_value = (float)s.ReadDouble();
+    m_value = s.ReadDouble();
     return true;
 }
 #endif // wxUSE_STREAMS
@@ -1986,6 +1979,7 @@ wxVariantData* wxVariantDataList::VariantDataFactory(const wxAny& any)
 {
     wxAnyList src = any.As<wxAnyList>();
     wxVariantList dst;
+    dst.DeleteContents(true);
     wxAnyList::compatibility_iterator node = src.GetFirst();
     while (node)
     {

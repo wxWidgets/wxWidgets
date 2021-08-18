@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SEARCHCTRL
 
@@ -74,6 +71,10 @@
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
 {
+    wxUnusedVar(control);
+    wxUnusedVar(words);
+    wxUnusedVar(index);
+
     NSMutableArray* matches = NULL;
     NSString*       partialString;
     

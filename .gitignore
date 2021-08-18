@@ -173,11 +173,9 @@
 /include/wx/generic/Makefile.in
 
 # /include/wx/gtk/
-/include/wx/gtk/setup.h
 /include/wx/gtk/Makefile.in
 
 # /include/wx/gtk1/
-/include/wx/gtk1/setup.h
 /include/wx/gtk1/Makefile.in
 
 # /include/wx/html/
@@ -187,18 +185,11 @@
 /include/wx/motif/Makefile.in
 
 # /include/wx/msw/
-/include/wx/msw/setup.h
 /include/wx/msw/Makefile.in
 /include/wx/msw/Makefile
 
-# /include/wx/osx/
-/include/wx/osx/setup.h
-
 # /include/wx/protocol/
 /include/wx/protocol/Makefile.in
-
-# /include/wx/univ/
-/include/wx/univ/setup.h
 
 # /include/wx/unix/
 /include/wx/unix/Makefile.in
@@ -214,13 +205,11 @@
 /lib/bcc_lib
 /lib/cdef*.res
 /lib/dmc_lib
-/lib/evc_armv4_lib
-/lib/evc_emulator_lib
 /lib/expat*.lib
-/lib/gcc_dll
+/lib/gcc*_dll
 /lib/gcc_dll32
 /lib/gcc_dll64
-/lib/gcc_lib
+/lib/gcc*_lib
 /lib/gcc_lib32
 /lib/gcc_lib64
 /lib/jpeg*.lib
@@ -236,7 +225,6 @@
 /lib/mswud
 /lib/png*.lib
 /lib/regex*.lib
-/lib/shell32_sc.lib
 /lib/tiff*.lib
 /lib/univ
 /lib/univd
@@ -244,13 +232,6 @@
 /lib/univdlld
 /lib/vc*_dll
 /lib/vc*_lib
-/lib/vc*_x64_dll
-/lib/vc*_x64_lib
-/lib/vc*_arm64_dll
-/lib/vc*_arm64_lib
-/lib/wat_lib
-/lib/winmm32_sc.lib
-/lib/wsock32_sc.lib
 /lib/wx_*.rsrc
 /lib/wxbase*.dll
 /lib/wxbase*.exp
@@ -267,39 +248,6 @@
 
 # /locale/msw/
 /locale/msw/*.mo
-
-# /misc/
-/misc/system.list
-/misc/bin
-/misc/.gdb_history
-/misc/Test
-/misc/config.cache
-/misc/config.status
-/misc/system.list
-/misc/linux.system.cache
-/misc/wx-config
-/misc/config.log
-/misc/linux-gnu.system.cache
-/misc/*.dsp
-/misc/*.plg
-/misc/*.opt
-/misc/*.aps
-/misc/*.ncb
-/misc/*.pro
-/misc/*.opt
-/misc/Release
-/misc/Debug
-/misc/ReleaseDLL
-/misc/DebugDLL
-/misc/robert
-/misc/Makefile.in
-/misc/setup.h.in
-/misc/stamp-h.in
-/misc/Makefile
-/misc/configure
-/misc/setup.h
-/misc/stamp-h
-/misc/libtool
 
 # /samples/
 /samples/**/*c*_msw
@@ -475,3 +423,5 @@
 
 # /utils/wxrc/
 /utils/wxrc/wxrc_vc[789].sln
+
+/3rdparty/webview2

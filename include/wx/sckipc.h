@@ -71,7 +71,7 @@ public:
                                 wxIPCFormat format = wxIPC_TEXT) wxOVERRIDE;
     virtual bool StartAdvise(const wxString& item) wxOVERRIDE;
     virtual bool StopAdvise(const wxString& item) wxOVERRIDE;
-    virtual bool Disconnect(void) wxOVERRIDE;
+    virtual bool Disconnect() wxOVERRIDE;
 
     // Will be used in the future to enable the compression but does nothing
     // for now.

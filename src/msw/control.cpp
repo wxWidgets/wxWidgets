@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONTROLS
 
@@ -173,6 +170,29 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
     // set the size now if no initial size specified
     SetInitialSize(size);
+
+    if ( size.IsFullySpecified() )
+    {
+        // Usually all windows get WM_NCCALCSIZE when their size is set,
+        // however if the initial size is fixed, it's not going to change and
+        // this message won't be sent at all, meaning that we won't get a
+        // chance to tell Windows that we need extra space for our custom
+        // themed borders, when using them. So force sending this message by
+        // using SWP_FRAMECHANGED (and use SWP_NOXXX to avoid doing anything
+        // else) to fix themed borders when they're used (if they're not, this
+        // is harmless, and it's simpler and more fool proof to always do it
+        // rather than try to determine whether we need to do it or not).
+        ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+                       SWP_FRAMECHANGED |
+                       SWP_NOSIZE |
+                       SWP_NOMOVE |
+                       SWP_NOZORDER |
+                       SWP_NOREDRAW |
+                       SWP_NOACTIVATE |
+                       SWP_NOCOPYBITS |
+                       SWP_NOOWNERZORDER |
+                       SWP_NOSENDCHANGING);
+    }
 
     return true;
 }
@@ -522,34 +542,29 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
 
     // choose the values consistent with those used for native, non
     // owner-drawn, buttons
-    static const int MARGIN = 3;
-    int CXMENUCHECK = wxGetSystemMetrics(SM_CXMENUCHECK, m_win) + 1;
 
-    // the buttons were even bigger under Windows XP
-    if ( wxGetWinVersion() < wxWinVersion_6 )
-        CXMENUCHECK += 2;
+    const int spacing = m_win->FromDIP(3);
+    const wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(m_win, flags);
 
-    // The space between the button and the label
-    // is included in the button bitmap.
-    const int buttonSize = wxMin(CXMENUCHECK - MARGIN, m_win->GetSize().y);
+    const int buttonSize = wxMin(cbSize.y, m_win->GetSize().y);
     rectButton.top = rect.top + (rect.bottom - rect.top - buttonSize) / 2;
     rectButton.bottom = rectButton.top + buttonSize;
 
     const bool isRightAligned = m_win->HasFlag(wxALIGN_RIGHT);
     if ( isRightAligned )
     {
-        rectLabel.right = rect.right - CXMENUCHECK;
-        rectLabel.left = rect.left;
+        rectButton.right = rect.right;
+        rectButton.left = rectButton.right - buttonSize;
 
-        rectButton.left = rectLabel.right + ( CXMENUCHECK + MARGIN - buttonSize ) / 2;
-        rectButton.right = rectButton.left + buttonSize;
+        rectLabel.right = rectButton.left - spacing;
+        rectLabel.left = rect.left;
     }
     else // normal, left-aligned button
     {
-        rectButton.left = rect.left + ( CXMENUCHECK - MARGIN - buttonSize ) / 2;
+        rectButton.left = rect.left;
         rectButton.right = rectButton.left + buttonSize;
 
-        rectLabel.left = rect.left + CXMENUCHECK;
+        rectLabel.left = spacing + rectButton.right;
         rectLabel.right = rect.right;
     }
 

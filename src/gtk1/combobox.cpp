@@ -230,7 +230,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     combo->entry_change_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "changed",
                   (GtkSignalFunc) gtk_dummy_callback, combo);
 
-    // make it more useable
+    // make it more usable
     gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
 
     // and case-sensitive

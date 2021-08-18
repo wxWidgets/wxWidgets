@@ -26,9 +26,9 @@ public:
     virtual ~wxPrinterDCImpl();
 
     virtual bool StartDoc( const wxString& WXUNUSED(message) ) wxOVERRIDE;
-    virtual void EndDoc(void) wxOVERRIDE;
-    virtual void StartPage(void) wxOVERRIDE;
-    virtual void EndPage(void) wxOVERRIDE;
+    virtual void EndDoc() wxOVERRIDE;
+    virtual void StartPage() wxOVERRIDE;
+    virtual void EndPage() wxOVERRIDE;
 
     wxRect GetPaperRect() const wxOVERRIDE;
 

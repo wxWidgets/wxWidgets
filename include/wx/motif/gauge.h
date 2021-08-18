@@ -25,7 +25,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxGA_HORIZONTAL,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxGaugeNameStr)
+        const wxString& name = wxASCII_STR(wxGaugeNameStr))
     {
         Create(parent, id, range, pos, size, style, validator, name);
     }
@@ -36,7 +36,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxGA_HORIZONTAL,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxGaugeNameStr);
+        const wxString& name = wxASCII_STR(wxGaugeNameStr));
 
     void SetRange(int r);
     void SetValue(int pos);

@@ -34,11 +34,7 @@
 #endif
 
 #if wxUSE_STD_IOSTREAM
-    #if wxUSE_IOSTREAMH
-        #include <fstream.h>
-    #else
-        #include <fstream>
-    #endif
+    #include <fstream>
 #endif
 
 #include "wx/filefn.h"
@@ -430,7 +426,7 @@ void wxUITextViewControl::WriteText(const wxString& str)
     [m_textView setText:subst];
 }
 
-void wxUITextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSED(foreground) , long WXUNUSED(windowStyle), bool WXUNUSED(ignoreBlack) )
+void wxUITextViewControl::SetFont(const wxFont & font)
 {
     if ([m_textView respondsToSelector:@selector(setFont:)])
         [m_textView setFont: font.OSXGetUIFont()];

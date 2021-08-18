@@ -19,15 +19,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/bitmap.h"
     #include "wx/log.h"
+    #include "wx/module.h"
     #include "wx/msgdlg.h"
     #include "wx/confbase.h"
     #include "wx/utils.h"
@@ -192,6 +190,14 @@ wxWindow* wxAppBase::GetTopWindow() const
     return window;
 }
 
+/* static */
+wxWindow* wxAppBase::GetMainTopWindow()
+{
+    const wxAppBase* const app = static_cast<wxAppBase*>(GetInstance());
+
+    return app ? app->GetTopWindow() : NULL;
+}
+
 wxVideoMode wxAppBase::GetDisplayMode() const
 {
     return wxVideoMode();
@@ -277,7 +283,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         wxTheme *theme = wxTheme::Create(themeName);
         if ( !theme )
         {
-            wxLogError(_("Unsupported theme '%s'."), themeName.c_str());
+            wxLogError(_("Unsupported theme '%s'."), themeName);
             return false;
         }
 
@@ -292,9 +298,9 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
     if ( parser.Found(OPTION_MODE, &modeDesc) )
     {
         unsigned w, h, bpp;
-        if ( wxSscanf(modeDesc.c_str(), wxT("%ux%u-%u"), &w, &h, &bpp) != 3 )
+        if ( wxSscanf(modeDesc, wxT("%ux%u-%u"), &w, &h, &bpp) != 3 )
         {
-            wxLogError(_("Invalid display mode specification '%s'."), modeDesc.c_str());
+            wxLogError(_("Invalid display mode specification '%s'."), modeDesc);
             return false;
         }
 
@@ -579,3 +585,21 @@ bool wxGUIAppTraitsBase::HasStderr()
 #endif
 }
 
+#ifndef __WIN32__
+
+bool wxGUIAppTraitsBase::SafeMessageBox(const wxString& text,
+                                        const wxString& title)
+{
+    // The modules are initialized only after a successful call to
+    // wxApp::Initialize() in wxEntryStart, so it can be used as a proxy for
+    // GUI availability (note that the mere existence of wxTheApp is not enough
+    // for this).
+    if ( !wxModule::AreInitialized() )
+        return false;
+
+    wxMessageBox(text, title, wxOK | wxICON_ERROR);
+
+    return true;
+}
+
+#endif // !__WIN32__

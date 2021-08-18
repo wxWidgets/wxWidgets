@@ -24,8 +24,7 @@
 #endif
 
 // define wxHAVE_U_ESCAPE if the compiler supports \uxxxx character constants
-#if defined(__VISUALC__) || \
-    (defined(__GNUC__) && (__GNUC__ >= 3))
+#if defined(__VISUALC__) || defined(__GNUC__)
     #define wxHAVE_U_ESCAPE
 
     // and disable warning that using them results in with MSVC 8+
@@ -54,6 +53,31 @@
         (!defined(__USE_MINGW_ANSI_STDIO) || !__USE_MINGW_ANSI_STDIO))
     #define wxDEFAULT_MANTISSA_SIZE_3
 #endif
+
+// Many tests use wide characters or wide strings inside Catch macros, which
+// requires converting them to string if the check fails. This falls back to
+// std::ostream::operator<<() by default, which never worked correctly, as there
+// never was any overload for wchar_t and so it used something else, but in C++
+// 20 this overload is explicitly deleted, so it results in compile-time error.
+//
+// Hence define this specialization to allow compiling such comparisons.
+namespace Catch
+{
+
+template <>
+struct StringMaker<wchar_t>
+{
+    static std::string convert(wchar_t wc)
+    {
+        if ( wc < 0x7f )
+            return std::string(static_cast<char>(wc), 1);
+
+        return wxString::Format(wxASCII_STR("U+%06X"), wc).ToStdString(wxConvLibc);
+    }
+};
+
+} // namespace Catch
+
 
 // thrown when assert fails in debug build
 class TestAssertFailure

@@ -102,6 +102,9 @@ bool wxRadioBox::Create( wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, val, name ) )
         return false;
 
+    // The radio box itself never accepts focus, only its child buttons do.
+    m_container.DisableSelfFocus();
+
     // during construction we must keep this at 0, otherwise GetBestSize fails
     m_noItems = 0;
     m_noRowsOrCols = majorDim;

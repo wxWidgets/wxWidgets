@@ -77,7 +77,6 @@ public:
     virtual bool CanGetTextExtent() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual wxSize GetPPI() const wxOVERRIDE;
-    virtual double GetContentScaleFactor() const wxOVERRIDE;
 
 
     virtual void SetMapMode(wxMappingMode mode) wxOVERRIDE;
@@ -86,6 +85,11 @@ public:
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y) wxOVERRIDE;
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y) wxOVERRIDE;
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp) wxOVERRIDE;
+
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const wxOVERRIDE;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const wxOVERRIDE;
 
 #if wxUSE_DC_TRANSFORM_MATRIX
     virtual bool CanUseTransformMatrix() const wxOVERRIDE;

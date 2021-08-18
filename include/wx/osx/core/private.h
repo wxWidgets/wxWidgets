@@ -59,6 +59,13 @@ WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
 
 #endif
 
+// NSString<->wxString
+
+WXDLLIMPEXP_BASE wxString wxStringWithNSString(NSString *nsstring);
+WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
+
+WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
+
 #if wxUSE_GUI
 
 #if wxOSX_USE_IPHONE
@@ -108,7 +115,7 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRe
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
 
-WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace();
 
 WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 
@@ -269,6 +276,7 @@ public :
 
     virtual void        SetBackgroundColour( const wxColour& col ) = 0;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) = 0;
+    virtual void        SetForegroundColour( const wxColour& col ) = 0;
 
     // all coordinates in native parent widget relative coordinates
     virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const = 0;
@@ -294,8 +302,7 @@ public :
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) = 0;
     virtual bool        GetNeedsDisplay() const = 0;
 
-    virtual bool        NeedsFocusRect() const;
-    virtual void        SetNeedsFocusRect( bool needs );
+    virtual void        EnableFocusRing(bool WXUNUSED(enabled)) {}
 
     virtual bool        NeedsFrame() const;
     virtual void        SetNeedsFrame( bool needs );
@@ -342,7 +349,7 @@ public :
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
 
-    virtual void        SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) = 0;
+    virtual void        SetFont(const wxFont & font) = 0;
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 
@@ -591,7 +598,6 @@ protected :
     bool                m_wantsUserKey;
     bool                m_wantsUserMouse;
     wxWindowMac*        m_wxPeer;
-    bool                m_needsFocusRect;
     bool                m_needsFrame;
     bool                m_shouldSendEvents;
 
@@ -982,6 +988,8 @@ public :
 
     virtual void SetRepresentedFilename(const wxString& WXUNUSED(filename)) { }
 
+    virtual void SetBottomBorderThickness(int WXUNUSED(thickness)) { }
+
 #if wxOSX_USE_IPHONE
     virtual CGFloat GetWindowLevel() const { return 0.0; }
 #else
@@ -1093,6 +1101,18 @@ public:
 protected:
     T m_ptr;
 };
+
+// This macro checks if the evaluation of cond, having a return value of
+// OS Error type, is zero, ie no error occurred, and calls the assert handler
+// with the provided message if it isn't.
+#define wxOSX_VERIFY_NOERR(cond)                                          \
+    wxSTATEMENT_MACRO_BEGIN                                               \
+        const unsigned long evalOnce = (cond);                            \
+        if ( evalOnce != 0 )                                              \
+        {                                                                 \
+            wxFAIL_COND_MSG(#cond, GetMacOSStatusErrorString(evalOnce));  \
+        }                                                                 \
+    wxSTATEMENT_MACRO_END
 
 #endif
     // _WX_PRIVATE_CORE_H_

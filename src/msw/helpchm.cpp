@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP
 
@@ -72,8 +69,8 @@ HTMLHELP GetHtmlHelpFunction()
 // fall back to the top level app window and then the desktop if it's NULL
 static HWND GetSuitableHWND(wxWindow *win)
 {
-    if ( !win && wxTheApp )
-        win = wxTheApp->GetTopWindow();
+    if ( !win )
+        win = wxApp::GetMainTopWindow();
 
     return win ? GetHwndOf(win) : ::GetDesktopWindow();
 }

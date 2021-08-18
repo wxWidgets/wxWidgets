@@ -25,7 +25,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
-            const wxString& name = wxFrameNameStr)
+            const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Create(parent, id, title, pos, size, style, name);
     }
@@ -36,7 +36,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
     virtual bool Enable(bool enable = true) wxOVERRIDE;
@@ -45,14 +45,14 @@ public:
     virtual wxStatusBar* CreateStatusBar(int number = 1,
                                          long style = wxSTB_DEFAULT_STYLE,
                                          wxWindowID id = 0,
-                                         const wxString& name = wxStatusLineNameStr) wxOVERRIDE;
+                                         const wxString& name = wxASCII_STR(wxStatusLineNameStr)) wxOVERRIDE;
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
     // create main toolbar bycalling OnCreateToolBar()
     virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = wxID_ANY,
-                                     const wxString& name = wxToolBarNameStr) wxOVERRIDE;
+                                     const wxString& name = wxASCII_STR(wxToolBarNameStr)) wxOVERRIDE;
 #endif // wxUSE_TOOLBAR
 
     virtual wxSize GetMinSize() const wxOVERRIDE;

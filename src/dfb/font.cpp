@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/font.h"
 
@@ -94,7 +91,7 @@ wxIDirectFBFontPtr wxFont::GetDirectFBFont(bool antialiased) const
     return i ? i->GetDirectFBFont() : wxIDirectFBFontPtr();
 }
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
@@ -160,7 +157,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
     M_FONTDATA->SetFractionalPointSize(pointSize);

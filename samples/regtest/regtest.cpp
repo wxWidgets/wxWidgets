@@ -17,10 +17,6 @@
 // ----------------------------------------------------------------------------
 #include "wx/wxprec.h"
 
-#ifdef  __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #   include "wx/wx.h"
 #endif
@@ -1070,9 +1066,9 @@ bool RegTreeCtrl::TreeNode::OnExpand()
 
         case wxRegKey::Type_Dword:
         {
-            long l;
-            m_pKey->QueryValue(str, &l);
-            strItem << l;
+            long ldw;
+            m_pKey->QueryValue(str, &ldw);
+            strItem << ldw;
         }
         wxFALLTHROUGH;
 

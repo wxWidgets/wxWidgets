@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROPGRID
 
@@ -1855,8 +1852,8 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxDirProperty, wxEditorDialogProperty, TextCtrlAndButton)
 
-wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const wxString& value )
-    : wxEditorDialogProperty(name, label)
+wxDirProperty::wxDirProperty( const wxString& label, const wxString& name, const wxString& value )
+    : wxEditorDialogProperty(label, name)
 {
     m_flags &= ~wxPG_PROP_ACTIVE_BTN; // Property button enabled only in not read-only mode.
     SetValue(value);
@@ -2191,9 +2188,9 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
     wxASSERT_MSG(value.IsType(wxS("string")), "Function called for incompatible property");
 
-    wxString strVal = value.GetString();
-    wxFileName filename = strVal;
+    wxFileName filename(value.GetString());
     wxString path = filename.GetPath();
+    wxString file = filename.GetFullName();
 
     if ( path.empty() && !m_basePath.empty() )
         path = m_basePath;
@@ -2201,7 +2198,7 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
     wxFileDialog dlg(pg->GetPanel(),
         m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
         m_initialPath.empty() ? path : m_initialPath,
-        strVal,
+        file,
         m_wildcard.empty() ? wxALL_FILES : m_wildcard,
         m_dlgStyle,
         wxDefaultPosition);

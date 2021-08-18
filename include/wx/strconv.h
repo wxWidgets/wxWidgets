@@ -288,7 +288,7 @@ private:
 
     public:
         // the initial state is direct
-        DecoderState() { mode = Direct; }
+        DecoderState() { mode = Direct; accum = bit = msb = 0; isLSB = false; }
 
         // switch to/from shifted mode
         void ToDirect() { mode = Direct; }
@@ -317,7 +317,7 @@ private:
         Mode mode;
 
     public:
-        EncoderState() { mode = Direct; }
+        EncoderState() { mode = Direct; accum = bit = 0; }
 
         void ToDirect() { mode = Direct; }
         void ToShifted() { mode = Shifted; accum = bit = 0; }
@@ -718,6 +718,20 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
     #define wxSafeConvertMB2WX(s) (s)
     #define wxSafeConvertWX2MB(s) (s)
 #endif // Unicode/ANSI
+
+// Macro that indicates the default encoding for converting C strings
+// to wxString. It provides a default value for a const wxMBConv&
+// parameter (i.e. wxConvLibc) unless wxNO_IMPLICIT_WXSTRING_ENCODING
+// is defined.
+//
+// Intended use:
+// wxString(const char *data, ...,
+//          const wxMBConv &conv wxSTRING_DEFAULT_CONV_ARG);
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+#define wxSTRING_DEFAULT_CONV_ARG = wxConvLibc
+#else
+#define wxSTRING_DEFAULT_CONV_ARG
+#endif
 
 #endif // _WX_STRCONV_H_
 

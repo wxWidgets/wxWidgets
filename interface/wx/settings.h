@@ -68,7 +68,7 @@ enum wxSystemColour
     wxSYS_COLOUR_BTNSHADOW,           //!< Edge shading colour on push buttons.
     wxSYS_COLOUR_GRAYTEXT,            //!< Colour of greyed (disabled) text.
     wxSYS_COLOUR_BTNTEXT,             //!< Colour of the text on push buttons.
-    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in active captions.
+    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in inactive captions.
     wxSYS_COLOUR_BTNHIGHLIGHT,        //!< Highlight colour for buttons.
     wxSYS_COLOUR_3DDKSHADOW,          //!< Dark shadow colour for three-dimensional display elements.
     wxSYS_COLOUR_3DLIGHT,             //!< Light colour for three-dimensional display elements.
@@ -78,14 +78,14 @@ enum wxSystemColour
     wxSYS_COLOUR_HOTLIGHT,            //!< Colour for a hyperlink or hot-tracked item.
 
     /**
-        Right side colour in the color gradient of an active window's title bar.
-        @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an active window's title
+        bar. @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTACTIVECAPTION,
 
     /**
-        Right side colour in the color gradient of an inactive window's title bar.
-        @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an inactive window's title
+        bar. @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTINACTIVECAPTION,
 
@@ -97,7 +97,7 @@ enum wxSystemColour
 
     /**
         The background colour for the menu bar when menus appear as flat menus.
-        However, @c wxSYS_COLOUR_MENU continues to specify the background color of the menu popup.
+        However, @c wxSYS_COLOUR_MENU continues to specify the background colour of the menu popup.
     */
     wxSYS_COLOUR_MENUBAR,
 
@@ -274,7 +274,7 @@ public:
     /**
         Return the name if available or empty string otherwise.
 
-        This is currently only implemented for macOS 10.9 or later and returns
+        This is currently only implemented for macOS and returns
         a not necessarily user-readable string such as "NSAppearanceNameAqua"
         there and an empty string under all the other platforms.
      */

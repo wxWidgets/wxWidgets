@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -108,7 +105,7 @@ void wxMessageOutputBest::Output(const wxString& str)
 {
 #ifdef __WINDOWS__
     // decide whether to use console output or not
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     const bool hasStderr = traits ? traits->CanUseStderr() : false;
 
     if ( !(m_flags & wxMSGOUT_PREFER_MSGBOX) )
@@ -206,7 +203,7 @@ void wxMessageOutputLog::Output(const wxString& str)
 
     out.Replace(wxT("\t"), wxT("        "));
 
-    wxLogMessage(wxT("%s"), out.c_str());
+    wxLogMessage(wxT("%s"), out);
 }
 
 #endif // wxUSE_BASE

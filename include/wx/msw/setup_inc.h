@@ -2,13 +2,13 @@
 // Name:        wx/msw/setup_inc.h
 // Purpose:     MSW-specific setup.h options
 // Author:      Vadim Zeitlin
-// Created:     2007-07-21 (extracted from wx/msw/setup0.h)
+// Created:     2007-07-21 (extracted from wx/msw/setup.h)
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
-// Graphics backends choices for Windows
+// Windows-specific backends choices
 // ----------------------------------------------------------------------------
 
 // The options here are only taken into account if wxUSE_GRAPHICS_CONTEXT is 1.
@@ -35,6 +35,16 @@
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
+
+// wxWebRequest backend based on WinHTTP.
+//
+// This is only taken into account if wxUSE_WEBREQUEST==1.
+//
+// Default is 1 if supported by the compiler (MSVS or MinGW64).
+//
+// Recommended setting: 1, can be set to 0 if wxUSE_WEBREQUEST_CURL==1,
+// otherwise wxWebRequest won't be available at all.
+#define wxUSE_WEBREQUEST_WINHTTP 1
 
 // ----------------------------------------------------------------------------
 // Windows-only settings
@@ -156,12 +166,12 @@
 // Recommended setting: 0, nobody uses .INI files any more
 #define wxUSE_INICONF 0
 
-// Set to 1 if you need to include <winsock2.h> over <winsock.h>
+// Set to 0 if you need to include <winsock.h> rather than <winsock2.h>
 //
-// Default is 0.
+// Default is 1.
 //
-// Recommended setting: 0, set to 1 automatically if wxUSE_IPV6 is 1.
-#define wxUSE_WINSOCK2 0
+// Recommended setting: 1, required to be 1 if wxUSE_IPV6 is 1.
+#define wxUSE_WINSOCK2 1
 
 // ----------------------------------------------------------------------------
 // Generic versions of native controls

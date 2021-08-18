@@ -181,8 +181,8 @@ public:
             including the terminating @c NUL character.
 
         @return
-            If @dst is non-@NULL, the number of characters actually written to
-            it. If @dst is @NULL, the returned value is at least equal to the
+            If @a dst is non-@NULL, the number of characters actually written to
+            it. If @a dst is @NULL, the returned value is at least equal to the
             number of characters that would have been written out if it were
             non-@NULL, but can be larger than it under the platforms using
             UTF-16 as @c wchar_t encoding (this allows a useful optimization in

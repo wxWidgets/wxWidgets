@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TOGGLEBTN
 
@@ -39,8 +36,9 @@
 #endif
 
 #include "wx/artprov.h"
-#include "wx/sizer.h"
 #include "wx/dcmemory.h"
+#include "wx/log.h"
+#include "wx/sizer.h"
 
 #include "icons/toggle.xpm"
 
@@ -101,6 +99,8 @@ protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
     void OnButtonChangeLabel(wxCommandEvent& event);
+
+    void OnToggled(wxCommandEvent& event);
 
     // reset the toggle parameters
     void Reset();
@@ -165,6 +165,8 @@ wxBEGIN_EVENT_TABLE(ToggleWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, ToggleWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ToggleWidgetsPage::OnCheckOrRadioBox)
+
+    EVT_TOGGLEBUTTON(wxID_ANY, ToggleWidgetsPage::OnToggled)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -544,6 +546,13 @@ void ToggleWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
     if ( m_chkBitmapOnly->IsChecked() )
         CreateToggle();
 #endif // wxHAS_BITMAPTOGGLEBUTTON
+}
+
+void ToggleWidgetsPage::OnToggled(wxCommandEvent& event)
+{
+    wxLogMessage("Button toggled, currently %s (event) or %s (control)",
+                 event.IsChecked() ? "on" : "off",
+                 m_toggle->GetValue() ? "on" : "off");
 }
 
 #ifdef wxHAS_BITMAPTOGGLEBUTTON

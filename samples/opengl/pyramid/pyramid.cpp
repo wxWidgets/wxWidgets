@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -565,8 +562,9 @@ void MyGLCanvas::OnSize(wxSizeEvent& event)
     SetCurrent(*m_oglContext);
 
     // It's up to the application code to update the OpenGL viewport settings.
-    m_winHeight = event.GetSize().y;
-    m_oglManager->SetViewport(0, 0, event.GetSize().x, m_winHeight);
+    const wxSize size = event.GetSize() * GetContentScaleFactor();
+    m_winHeight = size.y;
+    m_oglManager->SetViewport(0, 0, size.x, m_winHeight);
 
     // Generate paint event without erasing the background.
     Refresh(false);

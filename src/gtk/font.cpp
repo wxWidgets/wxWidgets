@@ -49,7 +49,7 @@ public:
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
-    void SetFractionalPointSize(float pointSize);
+    void SetFractionalPointSize(double pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
@@ -134,7 +134,7 @@ wxFontRefData::wxFontRefData(const wxString& nativeFontInfoString)
 // wxFontRefData SetXXX()
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::SetFractionalPointSize(float pointSize)
+void wxFontRefData::SetFractionalPointSize(double pointSize)
 {
     m_nativeFontInfo.SetFractionalPointSize(pointSize);
 }
@@ -283,7 +283,7 @@ wxFont::~wxFont()
 // accessors
 // ----------------------------------------------------------------------------
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
@@ -356,7 +356,7 @@ bool wxFont::IsFixedWidth() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 

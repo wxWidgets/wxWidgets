@@ -11,7 +11,7 @@
 # Notes:
 #   See './regex.pl -h' for usage
 #
-#   Output at the moment is C++ using the cppunit testing framework. The
+#   Output at the moment is C++ using the CATCH testing framework. The
 #   language/framework specifics are separated, with the following 5
 #   subs as an interface: 'begin_output', 'begin_section', 'write_test',
 #   'end_section' and 'end_output'. So for a different language/framework,
@@ -87,15 +87,10 @@ $from$instructions */
 EOT
 }
 
-my @classes;
-
 # start a new section (C++ interface)
 #
 sub begin_section {
     my ($id, $title) = @_;
-    my $class = "regextest_$id";
-    $class =~ s/\W/_/g;
-    push @classes, [$id, $class];
 
     print <<EOT;
 
@@ -103,17 +98,8 @@ sub begin_section {
  * $id $title
  */
 
-class $class : public RegExTestSuite
+TEST_CASE("regex::$title", "[regex][regex_$id][builtin]")
 {
-public:
-    $class() : RegExTestSuite("regex.$id") { }
-    static Test *suite();
-};
-
-Test *$class\::suite()
-{
-    RegExTestSuite *suite = new $class;
-
 EOT
 }
 
@@ -122,20 +108,14 @@ EOT
 sub write_test {
     my @args = @_;
     $_ = quotecxx for @args;
-    print "    suite->add(" . (join ', ', @args) . ", NULL);\n"; 
+    print "    CheckRE(" . (join ', ', @args) . ", NULL);\n";
 }
 
 # end a section (C++ interface)
 #
 sub end_section {
-    my ($id, $class) = @{$classes[$#classes]};
-
     print <<EOT;
-
-    return suite;
 }
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION($class, "regex.$id");
 
 EOT
 }
@@ -144,32 +124,9 @@ EOT
 #
 sub end_output {
     print <<EOT;
-
 /*
- * A suite containing all the above suites
+ * End of generated test suite.
  */
-
-class regextest : public TestSuite
-{
-public:
-    regextest() : TestSuite("regex") { }
-    static Test *suite();
-};
-
-Test *regextest::suite()
-{
-    TestSuite *suite = new regextest;
-
-EOT
-    print "    suite->addTest(".$_->[1]."::suite());\n" for @classes;
-
-    print <<EOT;
-
-    return suite;
-}
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(regextest, "regex");
-CPPUNIT_TEST_SUITE_REGISTRATION(regextest);
 EOT
 }
 

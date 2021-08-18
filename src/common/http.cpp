@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROTOCOL_HTTP
 
@@ -430,7 +427,7 @@ bool wxHTTP::BuildRequest(const wxString& path, const wxString& method)
     return ret_value;
 }
 
-bool wxHTTP::Abort(void)
+bool wxHTTP::Abort()
 {
     return wxSocketClient::Close();
 }
@@ -454,7 +451,7 @@ public:
     }
 
     size_t GetSize() const wxOVERRIDE { return m_httpsize; }
-    virtual ~wxHTTPStream(void) { m_http->Abort(); }
+    virtual ~wxHTTPStream() { m_http->Abort(); }
 
 protected:
     size_t OnSysRead(void *buffer, size_t bufsize) wxOVERRIDE;

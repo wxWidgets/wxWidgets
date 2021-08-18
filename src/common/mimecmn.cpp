@@ -20,9 +20,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MIMETYPE
 
@@ -290,8 +287,7 @@ wxFileType::wxFileType()
 
 wxFileType::~wxFileType()
 {
-    if ( m_impl )
-        delete m_impl;
+    delete m_impl;
 }
 
 bool wxFileType::GetExtensions(wxArrayString& extensions)
@@ -589,8 +585,7 @@ wxMimeTypesManager::wxMimeTypesManager()
 
 wxMimeTypesManager::~wxMimeTypesManager()
 {
-    if ( m_impl )
-        delete m_impl;
+    delete m_impl;
 }
 
 bool wxMimeTypesManager::Unassociate(wxFileType *ft)

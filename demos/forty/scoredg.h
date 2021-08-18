@@ -24,9 +24,6 @@ protected:
     void OnCloseWindow(wxCloseEvent& event);
 
 private:
-    ScoreFile* m_scoreFile;
-    wxButton* m_OK;
-
     wxDECLARE_EVENT_TABLE();
 };
 

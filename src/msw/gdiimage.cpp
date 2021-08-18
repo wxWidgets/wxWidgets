@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -41,8 +38,8 @@
 // By default, use PNG resource handler if we can, i.e. have support for
 // loading PNG images in the library. This symbol could be predefined as 0 to
 // avoid doing this if anybody ever needs to do it for some reason.
-#if !defined(wxUSE_PNG_RESOURCE_HANDLER) && wxUSE_LIBPNG && wxUSE_IMAGE
-    #define wxUSE_PNG_RESOURCE_HANDLER 1
+#if !defined(wxUSE_PNG_RESOURCE_HANDLER)
+    #define wxUSE_PNG_RESOURCE_HANDLER wxUSE_LIBPNG && wxUSE_IMAGE
 #endif
 
 #if wxUSE_PNG_RESOURCE_HANDLER
@@ -474,7 +471,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     else
 #endif
     // were we asked for a large icon?
-    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxWindow* win = wxApp::GetMainTopWindow();
     if ( desiredWidth == wxGetSystemMetrics(SM_CXICON, win) &&
          desiredHeight == wxGetSystemMetrics(SM_CYICON, win) )
     {
@@ -629,7 +626,7 @@ bool wxPNGResourceHandler::LoadFile(wxBitmap *bitmap,
     *bitmap = wxBitmap::NewFromPNGData(pngData, pngSize);
     if ( !bitmap->IsOk() )
     {
-        wxLogError(wxS("Couldn't load resource bitmap \"%s\" as a PNG. "),
+        wxLogError(wxS("Couldn't load resource bitmap \"%s\" as a PNG. ")
                    wxS("Have you registered PNG image handler?"),
                    name);
 
@@ -663,13 +660,19 @@ wxSize wxGetHiconSize(HICON hicon)
                     size = wxSize(bm.bmWidth, bm.bmHeight);
                 }
             }
+            // For monochrome icon reported height is doubled
+            // because it contains both AND and XOR masks.
+            if ( info.hbmColor == NULL )
+            {
+                size.y /= 2;
+            }
         }
     }
 
     if ( !size.x )
     {
         // use default icon size on this hardware
-        const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+        const wxWindow* win = wxApp::GetMainTopWindow();
         size.x = wxGetSystemMetrics(SM_CXICON, win);
         size.y = wxGetSystemMetrics(SM_CYICON, win);
     }

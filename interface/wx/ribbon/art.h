@@ -85,6 +85,10 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TAB_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
+    /// @since 3.1.5
+    wxRIBBON_ART_PANEL_HOVER_BORDER_COLOUR,
+    /// @since 3.1.5
+    wxRIBBON_ART_PANEL_HOVER_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
@@ -1250,6 +1254,12 @@ public:
                         wxSize* button_size,
                         wxRect* normal_region,
                         wxRect* dropdown_region);
+
+    wxCoord GetButtonBarButtonTextWidth(
+                        wxDC& dc,
+                        const wxString& label,
+                        wxRibbonButtonKind kind,
+                        wxRibbonButtonBarButtonState size);
 
     wxSize GetMinimisedPanelMinimumSize(
                         wxDC& dc,

@@ -30,7 +30,7 @@ executing simultaneously (portably!) and so on.
 --------------------------------------
 
  wxBase can be compiled and used under Win32, mostly any modern Unix system
-(including OS X), VMS and BeOS (this release couldn't be tested under
+(including macOS), VMS and BeOS (this release couldn't be tested under
 these platforms so you might encounter some problems but they should be easy
 to solve -- please contact us in this case!)
 

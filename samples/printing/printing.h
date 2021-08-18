@@ -98,7 +98,7 @@ public:
     void DrawPageTwo();
 
     // Writes a header on a page. Margin units are in millimetres.
-    bool WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString& text, float mmToLogical);
+    bool WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString& text, double mmToLogical);
 
 private:
     MyFrame *m_frame;

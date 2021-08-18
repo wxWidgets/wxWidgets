@@ -39,7 +39,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr)
+                const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -52,7 +52,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr)
+                const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         return CreateUsingMSWClass(GetMSWClassName(style),
                                    parent, id, pos, size, style, name);
@@ -68,7 +68,7 @@ public:
                              const wxPoint& pos = wxDefaultPosition,
                              const wxSize& size = wxDefaultSize,
                              long style = 0,
-                             const wxString& name = wxPanelNameStr);
+                             const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     // implement base class pure virtuals
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
@@ -100,6 +100,9 @@ public:
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
     virtual wxSize GetDPI() const wxOVERRIDE;
+    virtual double GetDPIScaleFactor() const wxOVERRIDE;
+
+    virtual wxSize GetWindowBorderSize() const wxOVERRIDE;
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
@@ -167,6 +170,12 @@ public:
 
     void AssociateHandle(WXWidget handle) wxOVERRIDE;
     void DissociateHandle() wxOVERRIDE;
+
+    // returns the handle of the native window to focus when this wxWindow gets
+    // focus  (i.e. in composite windows: by default, this is just the HWND for
+    // this window itself, but it can be overridden to return something
+    // different for composite controls
+    virtual WXHWND MSWGetFocusHWND() const { return GetHWND(); }
 
     // does this window have deferred position and/or size?
     bool IsSizeDeferred() const;
@@ -447,7 +456,7 @@ public:
     // The brush returned from here must remain valid at least until the next
     // event loop iteration. Returning 0, as is done by default, indicates
     // there is no custom background brush.
-    virtual WXHBRUSH MSWGetCustomBgBrush() { return 0; }
+    virtual WXHBRUSH MSWGetCustomBgBrush() { return NULL; }
 
     // this function should return the brush to paint the children controls
     // background or 0 if this window doesn't impose any particular background
@@ -579,12 +588,11 @@ public:
     static bool MSWClickButtonIfPossible(wxButton* btn);
 
     // This method is used for handling wxRadioButton-related complications,
-    // see wxRadioButton::SetValue(). It calls WXDoUpdatePendingFocus() for
-    // this window and all its parents up to the enclosing TLW, recursively.
-    void WXSetPendingFocus(wxWindow* win);
-
-    // Should be overridden by all classes storing the "last focused" window.
-    virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
+    // see wxRadioButton::SetValue().
+    //
+    // It should be overridden by all classes storing the "last focused"
+    // window to avoid focusing an unset radio button when regaining focus.
+    virtual void WXSetPendingFocus(wxWindow* WXUNUSED(win)) {}
 
     // Called from WM_DPICHANGED handler for all windows to let them update
     // any sizes and fonts used internally when the DPI changes and generate
@@ -592,6 +600,8 @@ public:
     void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
 
 protected:
+    virtual void WXAdjustFontToOwnPPI(wxFont& font) const wxOVERRIDE;
+
     // Called from MSWUpdateOnDPIChange() specifically to update the control
     // font, as this may need to be done differently for some specific native
     // controls. The default version updates m_font of this window.
@@ -644,8 +654,6 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
-
-    virtual wxSize DoGetBorderSize() const wxOVERRIDE;
 
     virtual void DoCaptureMouse() wxOVERRIDE;
     virtual void DoReleaseMouse() wxOVERRIDE;

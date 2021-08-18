@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_VALIDATORS
 
@@ -128,7 +125,7 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
 }
 
 // Called to transfer data to the window
-bool wxGenericValidator::TransferToWindow(void)
+bool wxGenericValidator::TransferToWindow()
 {
     if ( !m_validatorWindow )
         return false;
@@ -349,7 +346,7 @@ bool wxGenericValidator::TransferToWindow(void)
         }
         else if (m_pFloat)
         {
-            pControl->SetValue(wxString::Format(wxT("%g"), *m_pFloat));
+            pControl->SetValue(wxString::Format(wxS("%g"), double(*m_pFloat)));
             return true;
         }
         else if (m_pDouble)
@@ -414,7 +411,7 @@ bool wxGenericValidator::TransferToWindow(void)
 }
 
 // Called to transfer data from the window
-bool wxGenericValidator::TransferFromWindow(void)
+bool wxGenericValidator::TransferFromWindow()
 {
     if ( !m_validatorWindow )
         return false;

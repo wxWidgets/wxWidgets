@@ -304,7 +304,7 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
 
 wxDialUpManagerImpl::~wxDialUpManagerImpl()
 {
-   if(m_timer) delete m_timer;
+   delete m_timer;
    if(m_DialProcess)
    {
       m_DialProcess->Disconnect();
@@ -420,7 +420,7 @@ void wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
     // which is OS - specific and then sends the events.
 
     NetConnection oldIsOnline = m_IsOnline;
-    ( /* non-const */ (wxDialUpManagerImpl *)this)->CheckStatusInternal();
+    const_cast<wxDialUpManagerImpl*>(this)->CheckStatusInternal();
 
     // now send the events as appropriate: i.e. if the status changed and
     // if we're in defined state

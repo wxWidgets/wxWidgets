@@ -30,6 +30,8 @@ class WXDLLIMPEXP_FWD_CORE wxFileDropTarget;
 
 class WXDLLIMPEXP_FWD_CORE wxDropSource;
 
+class WXDLLIMPEXP_FWD_CORE wxOSXDataSource;
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -58,9 +60,10 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
     virtual wxDataFormat GetMatchingPair();
 
     bool CurrentDragHasSupportedFormat() ;
-    void SetCurrentDragPasteboard( void* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
+    
+    void SetCurrentDragSource( wxOSXDataSource* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
   protected :
-    void* m_currentDragPasteboard ;
+    wxOSXDataSource* m_currentDragPasteboard ;
 };
 
 //-------------------------------------------------------------------------

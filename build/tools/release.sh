@@ -46,11 +46,6 @@ mkdir -p $destdir
 tar x -C $destdir -i
 
 cd $destdir
-# All setup0.h files are supposed to be renamed to just setup.h when checked
-# out and in the distribution.
-find $prefix/include/wx -type f -name setup0.h | while read f; do
-    mv $f ${f%0.h}.h
-done
 
 # Compile gettext catalogs.
 make -C $prefix/locale -s MSGFMT=msgfmt allmo

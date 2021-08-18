@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATUSBAR
 
@@ -194,12 +191,17 @@ void wxStatusBarGeneric::DoUpdateFieldWidths()
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const
 {
+    // Currently drawing size grip is implemented only in wxGTK.
+#ifdef __WXGTK20__
     if ( !HasFlag(wxSTB_SIZEGRIP) )
         return false;
 
     wxTopLevelWindow * const
         tlw = wxDynamicCast(wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
     return tlw && !tlw->IsMaximized() && tlw->HasFlag(wxRESIZE_BORDER);
+#else // !__WXGTK20__
+    return false;
+#endif // __WXGTK20__/!__WXGTK20__
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
@@ -263,9 +265,11 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
         SetEllipsizedFlag(i, text != GetStatusText(i));
     }
 
-#if defined( __WXGTK__ ) || defined(__WXMAC__)
+#if defined( __WXGTK__ )
     xpos++;
     ypos++;
+#elif defined(__WXMAC__)
+    xpos++;
 #endif
 
     // draw the text
@@ -283,7 +287,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
     if (rect.GetWidth() <= 0)
         return;     // happens when the status bar is shrunk in a very small area!
 
-    int style = m_panes[i].GetStyle();
+    int style = GetEffectiveFieldStyle(i);
     if (style == wxSB_RAISED || style == wxSB_SUNKEN)
     {
         // Draw border
@@ -385,9 +389,11 @@ wxRect wxStatusBarGeneric::GetSizeGripRect() const
     int width, height;
     wxWindow::DoGetClientSize(&width, &height);
 
+#ifndef __WXGTK3__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return wxRect(2, 2, height-2, height-4);
-    else
+#endif
+
         return wxRect(width-height-2, 2, height-2, height-4);
 }
 
@@ -415,10 +421,6 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
             GtkStyleContext* sc = gtk_widget_get_style_context(toplevel);
             gtk_style_context_save(sc);
             gtk_style_context_add_class(sc, GTK_STYLE_CLASS_GRIP);
-            GtkJunctionSides sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
-            if (GetLayoutDirection() == wxLayout_RightToLeft)
-                sides = GTK_JUNCTION_CORNER_BOTTOMLEFT;
-            gtk_style_context_set_junction_sides(sc, sides);
             gtk_render_handle(sc,
                 static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext()),
                 rc.x, rc.y, rc.width, rc.height);

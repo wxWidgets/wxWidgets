@@ -274,7 +274,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxDash *)Dash;
+    M_PENDATA->m_dash = const_cast<wxDash*>(Dash);
 
     RealizeResource();
 }

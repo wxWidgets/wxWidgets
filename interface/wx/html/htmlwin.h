@@ -504,7 +504,7 @@ protected:
     /**
         This method is called when a mouse button is clicked inside wxHtmlWindow.
         The default behaviour is to emit a wxHtmlCellEvent and, if the event was
-        not processed or skipped, call OnLinkClicked() if the cell contains an
+        not processed or skipped, call OnLinkClicked() if the cell contains a
         hypertext link.
 
         Overloading this method is deprecated; intercept the event instead.

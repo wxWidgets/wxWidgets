@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MENUS
 
@@ -29,7 +26,6 @@
 #include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
     #include "wx/dcmemory.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
@@ -235,28 +231,41 @@ public:
 
     bool Theme;                 // is data initialized for FullTheme?
 
-    static const MenuDrawData* Get()
+    int dpi;                    // DPI used for calculating sizes
+
+    static const MenuDrawData* Get(wxMenu* menu)
     {
+        const wxWindow* window = menu->GetWindow();
         // notice that s_menuData can't be created as a global variable because
         // it needs a window to initialize and no windows exist at the time of
         // globals initialization yet
         if ( !ms_instance )
         {
-            static MenuDrawData s_menuData;
+            static MenuDrawData s_menuData(window);
             ms_instance = &s_menuData;
         }
 
     #if wxUSE_UXTHEME
         bool theme = MenuLayout() == FullTheme;
         if ( ms_instance->Theme != theme )
-            ms_instance->Init();
+        {
+            ms_instance->Init(window);
+        }
+        else
     #endif // wxUSE_UXTHEME
+        {
+            if ( ms_instance->dpi != window->GetDPI().y )
+            {
+                ms_instance->Init(window);
+                menu->ResetMaxAccelWidth();
+            }
+        }
         return ms_instance;
     }
 
-    MenuDrawData()
+    MenuDrawData(const wxWindow* window)
     {
-        Init();
+        Init(window);
     }
 
 
@@ -296,17 +305,16 @@ public:
     }
 
 private:
-    void Init();
+    void Init(wxWindow const* window);
 
     static MenuDrawData* ms_instance;
 };
 
 MenuDrawData* MenuDrawData::ms_instance = NULL;
 
-void MenuDrawData::Init()
+void MenuDrawData::Init(wxWindow const* window)
 {
 #if wxUSE_UXTHEME
-    const wxWindow* window = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
     if ( IsUxThemeActive() )
     {
         wxUxThemeHandle hTheme(window, L"MENU");
@@ -348,7 +356,8 @@ void MenuDrawData::Init()
 
         wxUxThemeFont themeFont;
         ::GetThemeSysFont(hTheme, TMT_MENUFONT, themeFont.GetPtr());
-        Font = wxFont(themeFont.GetLOGFONT());
+        // Use NULL window for wxNativeFontInfo, height it is already at the correct ppi
+        Font = wxFont(wxNativeFontInfo(themeFont.GetLOGFONT(), NULL));
 
         Theme = true;
 
@@ -392,15 +401,7 @@ void MenuDrawData::Init()
 
         Offset = -12;
 
-        wxNativeFontInfo info(metrics.lfMenuFont);
-        // wxNativeFontInfo constructor calculates the pointSize using the
-        // main screen DPI. But lfHeight is based on the window DPI.
-        if ( window )
-        {
-            info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
-                                 info.lf.lfHeight, window->GetDPI().y);
-        }
-        Font = wxFont(info);
+        Font = wxFont(wxNativeFontInfo(metrics.lfMenuFont, window));
 
         Theme = false;
     }
@@ -415,6 +416,7 @@ void MenuDrawData::Init()
 
     AlwaysShowCues = value == 1;
 
+    dpi = window->GetDPI().y;
 }
 
 } // anonymous namespace
@@ -791,7 +793,7 @@ wxString wxMenuItem::GetName() const
 
 bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
 {
-    const MenuDrawData* data = MenuDrawData::Get();
+    const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
     if ( IsOwnerDrawn() )
     {
@@ -883,7 +885,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
 bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                             wxODAction WXUNUSED(act), wxODStatus stat)
 {
-    const MenuDrawData* data = MenuDrawData::Get();
+    const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hdc = GetHdcOf(*impl);
@@ -1175,7 +1177,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
 
-        const MenuDrawData* data = MenuDrawData::Get();
+        const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
         // rect for background must be without check margins
         RECT rcBg = *rc;
@@ -1242,7 +1244,8 @@ void wxMenuItem::GetFontToUse(wxFont& font) const
 {
     font = GetFont();
     if ( !font.IsOk() )
-        font = MenuDrawData::Get()->Font;
+        font = MenuDrawData::Get(GetMenu())->Font;
+    font.WXAdjustToPPI(GetMenu()->GetWindow()->GetDPI());
 }
 
 void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const

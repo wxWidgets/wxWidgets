@@ -30,9 +30,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -423,6 +420,7 @@ enum
     ID_TESTREPLACE,
     ID_SETCOLUMNS,
     ID_SETVIRTWIDTH,
+    ID_SETPGDISABLED,
     ID_TESTXRC,
     ID_ENABLECOMMONVALUES,
     ID_SELECTSTYLE,
@@ -524,6 +522,7 @@ wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_CATCOLOURS, FormMain::OnCatColours )
     EVT_MENU( ID_SETCOLUMNS, FormMain::OnSetColumns )
     EVT_MENU( ID_SETVIRTWIDTH, FormMain::OnSetVirtualWidth )
+    EVT_MENU( ID_SETPGDISABLED, FormMain::OnSetGridDisabled )
     EVT_MENU( ID_TESTXRC, FormMain::OnTestXRC )
     EVT_MENU( ID_ENABLECOMMONVALUES, FormMain::OnEnableCommonValues )
     EVT_MENU( ID_SELECTSTYLE, FormMain::OnSelectStyle )
@@ -954,15 +953,10 @@ static const wxString _fs_windowstyle_labels[] = {
     "wxTRANSPARENT_WINDOW",
     "wxTAB_TRAVERSAL",
     "wxWANTS_CHARS",
-#if wxNO_FULL_REPAINT_ON_RESIZE
-    "wxNO_FULL_REPAINT_ON_RESIZE",
-#endif
     "wxVSCROLL",
     "wxALWAYS_SHOW_SB",
     "wxCLIP_CHILDREN",
-#if wxFULL_REPAINT_ON_RESIZE
     "wxFULL_REPAINT_ON_RESIZE",
-#endif
     };
 
 static const long _fs_windowstyle_values[] = {
@@ -974,15 +968,10 @@ static const long _fs_windowstyle_values[] = {
     wxTRANSPARENT_WINDOW,
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
-#if wxNO_FULL_REPAINT_ON_RESIZE
-    wxNO_FULL_REPAINT_ON_RESIZE,
-#endif
     wxVSCROLL,
     wxALWAYS_SHOW_SB,
     wxCLIP_CHILDREN,
-#if wxFULL_REPAINT_ON_RESIZE
     wxFULL_REPAINT_ON_RESIZE
-#endif
 };
 
 static const wxString _fs_framestyle_labels[] = {
@@ -1159,8 +1148,7 @@ void FormMain::PopulateWithStandardItems ()
     // Set test information for cells in columns 3 and 4
     // (reserve column 2 for displaying units)
     wxPropertyGridIterator it;
-    int bmpH = pg->GetGrid()->GetRowHeight() - 2;
-    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(bmpH, bmpH));
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER);
 
     for ( it = pg->GetGrid()->GetIterator();
           !it.AtEnd();
@@ -1399,6 +1387,7 @@ void FormMain::PopulateWithExamples ()
     wxBitmap myTestBitmap(60, 15, 32);
     wxMemoryDC mdc;
     mdc.SelectObject(myTestBitmap);
+    mdc.SetBackground(*wxWHITE_BRUSH);
     mdc.Clear();
     mdc.SetPen(*wxBLACK);
     mdc.DrawLine(0, 0, 60, 15);
@@ -1832,45 +1821,6 @@ wxEND_EVENT_TABLE()
 
 // -----------------------------------------------------------------------
 
-void FormMain::InitPanel()
-{
-    if ( m_panel )
-        m_panel->Destroy();
-
-    wxWindow* panel = new wxPanel(this, wxID_ANY,
-                                  wxPoint(0, 0), wxSize(400, 400),
-                                  wxTAB_TRAVERSAL);
-    m_panel = panel;
-
-    // Column
-    wxBoxSizer* topSizer = new wxBoxSizer ( wxVERTICAL );
-
-    m_topSizer = topSizer;
-}
-
-void FormMain::FinalizePanel( bool wasCreated )
-{
-    // Button for tab traversal testing
-    m_topSizer->Add( new wxButton(m_panel, wxID_ANY,
-                     "Should be able to move here with Tab"),
-                     wxSizerFlags(0).Expand());
-    m_topSizer->Add( new wxButton(m_panel, ID_SHOWPOPUP,
-                     "Show Popup"),
-                     wxSizerFlags(0).Expand());
-
-    m_panel->SetSizer( m_topSizer );
-    m_topSizer->SetSizeHints( m_panel );
-
-    wxBoxSizer* panelSizer = new wxBoxSizer( wxHORIZONTAL );
-    panelSizer->Add( m_panel, wxSizerFlags(1).Expand().FixedMinSize());
-
-    SetSizer( panelSizer );
-    panelSizer->SetSizeHints( this );
-
-    if ( wasCreated )
-        FinalizeFramePosition();
-}
-
 void FormMain::PopulateGrid()
 {
     wxPropertyGridManager* pgman = m_pPropGridManager;
@@ -1921,10 +1871,6 @@ void FormMain::CreateGrid( int style, int extraStyle )
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
                 //| wxPG_EX_HELP_AS_TOOLTIPS
 
-    bool wasCreated = m_panel ? false : true;
-
-    InitPanel();
-
     //
     // This shows how to combine two static choice descriptors
     m_combinedFlags.Add( WXSIZEOF(_fs_windowstyle_labels), _fs_windowstyle_labels, _fs_windowstyle_values );
@@ -1970,25 +1916,32 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     //m_pPropGridManager->SetSplitterLeft(true);
     //m_pPropGridManager->SetSplitterPosition(137);
+}
 
-    m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
+void FormMain::ReplaceGrid(int style, int extraStyle)
+{
+    wxPropertyGridManager* pgmanOld = m_pPropGridManager;
+    CreateGrid(style, extraStyle);
+    m_topSizer->Replace(pgmanOld, m_pPropGridManager);
+    pgmanOld->Destroy();
+    m_pPropGridManager->SetFocus();
 
-    FinalizePanel(wasCreated);
+    m_panel->Layout();
 }
 
 // -----------------------------------------------------------------------
 
-FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size) :
-           wxFrame((wxFrame *)NULL, -1, title, pos, size,
+FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size)
+    : wxFrame((wxFrame *)NULL, -1, title, pos, size,
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
-                wxTAB_TRAVERSAL|wxCLOSE_BOX|wxNO_FULL_REPAINT_ON_RESIZE) )
+                wxTAB_TRAVERSAL|wxCLOSE_BOX) )
+    , m_pPropGridManager(NULL)
+    , m_propGrid(NULL)
+    , m_hasHeader(false)
+    , m_labelEditingEnabled(false)
 {
     SetIcon(wxICON(sample));
-
-    m_propGrid = NULL;
-    m_panel = NULL;
-    m_hasHeader = false;
-    m_labelEditingEnabled = false;
+    Centre();
 
 #ifdef __WXMAC__
     // we need this in order to allow the about menu relocation, since ABOUT is
@@ -2000,34 +1953,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     // This is here to really test the wxImageFileProperty.
     wxInitAllImageHandlers();
 #endif
-
-    // Register all editors (SpinCtrl etc.)
-    m_pPropGridManager->RegisterAdditionalEditors();
-
-    // Register our sample custom editors
-    m_pSampleMultiButtonEditor =
-        wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
-
-    CreateGrid( // style
-                wxPG_BOLD_MODIFIED |
-                wxPG_SPLITTER_AUTO_CENTER |
-                wxPG_AUTO_SORT |
-                //wxPG_HIDE_MARGIN|wxPG_STATIC_SPLITTER |
-                //wxPG_TOOLTIPS |
-                //wxPG_HIDE_CATEGORIES |
-                //wxPG_LIMITED_EDITING |
-                wxPG_TOOLBAR |
-                wxPG_DESCRIPTION,
-                // extra style
-#if wxALWAYS_NATIVE_DOUBLE_BUFFER
-                wxPG_EX_NATIVE_DOUBLE_BUFFERING |
-#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
-                wxPG_EX_MODE_BUTTONS |
-                wxPG_EX_MULTIPLE_SELECTION
-                //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
-                //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
-                //| wxPG_EX_HELP_AS_TOOLTIPS
-              );
 
     //
     // Create menu bar
@@ -2133,6 +2058,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
         "Renders Boolean values as checkboxes");
     menuTry->Append(ID_SETCOLUMNS, "Set Number of Columns" );
     menuTry->Append(ID_SETVIRTWIDTH, "Set Virtual Width");
+    menuTry->AppendCheckItem(ID_SETPGDISABLED, "Disable Grid");
     menuTry->AppendSeparator();
     menuTry->Append(ID_TESTXRC, "Display XRC sample" );
 
@@ -2160,7 +2086,54 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     SetStatusText(wxEmptyString);
 #endif // wxUSE_STATUSBAR
 
-    FinalizeFramePosition();
+    // Register all editors (SpinCtrl etc.)
+    wxPropertyGridInterface::RegisterAdditionalEditors();
+
+    // Register our sample custom editors
+    m_pSampleMultiButtonEditor =
+        wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
+
+    m_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+
+    CreateGrid( // style
+        wxPG_BOLD_MODIFIED |
+        wxPG_SPLITTER_AUTO_CENTER |
+        wxPG_AUTO_SORT |
+        //wxPG_HIDE_MARGIN|wxPG_STATIC_SPLITTER |
+        //wxPG_TOOLTIPS |
+        //wxPG_HIDE_CATEGORIES |
+        //wxPG_LIMITED_EDITING |
+        wxPG_TOOLBAR |
+        wxPG_DESCRIPTION,
+        // extra style
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+        wxPG_EX_NATIVE_DOUBLE_BUFFERING |
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
+        wxPG_EX_MODE_BUTTONS |
+        wxPG_EX_MULTIPLE_SELECTION
+        //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
+        //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
+        //| wxPG_EX_HELP_AS_TOOLTIPS
+    );
+
+    m_topSizer = new wxBoxSizer(wxVERTICAL);
+
+    m_topSizer->Add(m_pPropGridManager, wxSizerFlags(1).Expand());
+
+    // Button for tab traversal testing
+    wxBoxSizer* btnSizer = new wxBoxSizer(wxHORIZONTAL);
+    btnSizer->Add(new wxButton(m_panel, wxID_ANY,
+        "Should be able to move here with Tab"),
+        wxSizerFlags(1).Border(wxALL, 10));
+    btnSizer->Add(new wxButton(m_panel, ID_SHOWPOPUP,
+        "Show Popup"),
+        wxSizerFlags(1).Border(wxALL, 10));
+    m_topSizer->Add(btnSizer, wxSizerFlags(0).Border(wxALL, 5).Expand());
+
+    m_panel->SetSizer(m_topSizer);
+    m_topSizer->SetSizeHints(m_panel);
+
+    m_panel->Layout();
 
 #if wxUSE_LOGWINDOW
     // Create log window
@@ -2169,19 +2142,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                                   GetPosition().y);
     m_logWindow->Show();
 #endif
-}
-
-void FormMain::FinalizeFramePosition()
-{
-    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X)/10)*4,
-                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)/10)*8);
-
-    if ( frameSize.x > 500 )
-        frameSize.x = 500;
-
-    SetSize(frameSize);
-
-    Centre();
 }
 
 //
@@ -2328,18 +2288,19 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 
     for (;;)
     {
+        if ( p->GetChildCount() == 0 )
+            break;
+
+        unsigned int n = static_cast<unsigned int>(rand()) % p->GetChildCount();
+        p = p->Item(n);
+
         if ( !p->IsCategory() )
         {
-            m_pPropGridManager->DeleteProperty( p );
+            wxString label = p->GetLabel();
+            m_pPropGridManager->DeleteProperty(p);
+            wxLogMessage("Property deleted: %s", label);
             break;
         }
-
-        if ( !p->GetChildCount() )
-            break;
-
-        int n = rand() % ((int)p->GetChildCount());
-
-        p = p->Item(n);
     }
 }
 
@@ -2725,6 +2686,12 @@ void FormMain::OnShowHeader( wxCommandEvent& event )
 
 void FormMain::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+    wxPlatformInfo pi = wxPlatformInfo::Get();
+    wxString toolkit = wxString::Format("%s %i.%i.%i", pi.GetPortIdName(),
+                                        pi.GetToolkitMajorVersion(),
+                                        pi.GetToolkitMinorVersion(),
+                                        pi.GetToolkitMicroVersion());
+
     wxString msg;
     msg.Printf( "wxPropertyGrid Sample"
 #if wxUSE_UNICODE
@@ -2743,8 +2710,8 @@ void FormMain::OnAbout(wxCommandEvent& WXUNUSED(event))
 #endif
                 "\n\n"
                 "Programmed by %s\n\n"
-                "Using %s\n\n",
-            "Jaakko Salli", wxVERSION_STRING
+                "Using %s (%s)\n\n",
+            "Jaakko Salli", wxVERSION_STRING, toolkit
             );
 
     wxMessageBox(msg, "About", wxOK | wxICON_INFORMATION, this);
@@ -2936,9 +2903,7 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         extraStyle = flags;
     }
 
-    CreateGrid( style, extraStyle );
-
-    FinalizeFramePosition();
+    ReplaceGrid( style, extraStyle );
 }
 
 // -----------------------------------------------------------------------
@@ -2977,6 +2942,13 @@ void FormMain::OnSetVirtualWidth(wxCommandEvent& WXUNUSED(evt))
 
 // -----------------------------------------------------------------------
 
+void FormMain::OnSetGridDisabled(wxCommandEvent& evt)
+{
+    m_pPropGridManager->Enable(!evt.IsChecked());
+}
+
+// -----------------------------------------------------------------------
+
 void FormMain::OnSetPropertyValue( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
@@ -2994,21 +2966,23 @@ void FormMain::OnSetPropertyValue( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnInsertChoice( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
-
     wxPGProperty* selected = pg->GetSelection();
-    const wxPGChoices& choices = selected->GetChoices();
 
-    // Insert new choice to the center of list
+    if (selected)
+    {
+        const wxPGChoices& choices = selected->GetChoices();
 
-    if ( choices.IsOk() )
-    {
-        int pos = choices.GetCount() / 2;
-        selected->InsertChoice("New Choice", pos);
+        if ( choices.IsOk() )
+        {
+            // Insert new choice to the center of list
+
+            int pos = choices.GetCount() / 2;
+            selected->InsertChoice("New Choice", pos);
+            return;
+        }
     }
-    else
-    {
-        ::wxMessageBox("First select a property with some choices.");
-    }
+
+    wxMessageBox("First select a property with some choices.");
 }
 
 // -----------------------------------------------------------------------
@@ -3016,21 +2990,23 @@ void FormMain::OnInsertChoice( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnDeleteChoice( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
-
     wxPGProperty* selected = pg->GetSelection();
-    const wxPGChoices& choices = selected->GetChoices();
 
-    // Deletes choice from the center of list
+    if (selected)
+    {
+        const wxPGChoices& choices = selected->GetChoices();
 
-    if ( choices.IsOk() )
-    {
-        int pos = choices.GetCount() / 2;
-        selected->DeleteChoice(pos);
+        if ( choices.IsOk() )
+        {
+            // Deletes choice from the center of list
+
+            int pos = choices.GetCount() / 2;
+            selected->DeleteChoice(pos);
+            return;
+        }
     }
-    else
-    {
-        ::wxMessageBox("First select a property with some choices.");
-    }
+
+    wxMessageBox("First select a property with some choices.");
 }
 
 // -----------------------------------------------------------------------
@@ -3152,7 +3128,12 @@ bool cxApplication::OnInit()
     //wxLocale Locale;
     //Locale.Init(wxLANGUAGE_FINNISH);
 
-    FormMain* frame = Form1 = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), wxSize(300,500) );
+    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 10) * 4,
+                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 10) * 8);
+    if ( frameSize.x > 500 )
+        frameSize.x = 500;
+
+    FormMain* frame = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), frameSize);
     frame->Show(true);
 
     //

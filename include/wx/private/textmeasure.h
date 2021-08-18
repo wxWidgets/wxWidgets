@@ -128,6 +128,10 @@ protected:
                            wxCoord *descent = NULL,
                            wxCoord *externalLeading = NULL);
 
+    // Get line height: used when the line is empty because CallGetTextExtent()
+    // would just return (0, 0) in this case.
+    int GetEmptyLineHeight();
+
     // Return a valid font: if one was given to us in the ctor, use this one,
     // otherwise use the current font of the associated wxDC or wxWindow.
     wxFont GetFont() const;

@@ -65,11 +65,25 @@ public:
                                 validator, name);
     }
 
+    /*
+        Derived classes also need to declare, but not define, as it's done in
+        common code in bmpbtncmn.cpp, the following function:
+
+    bool CreateCloseButton(wxWindow* parent,
+                           wxWindowID winid,
+                           const wxString& name = wxString());
+
+        which is used used by NewCloseButton(), and, as Create(), must be
+        called on default-constructed wxBitmapButton object.
+    */
+
     // Special creation function for a standard "Close" bitmap. It allows to
     // simply create a close button with the image appropriate for the current
     // platform.
-    static wxBitmapButton* NewCloseButton(wxWindow* parent, wxWindowID winid);
-
+    static wxBitmapButton*
+    NewCloseButton(wxWindow* parent,
+                   wxWindowID winid,
+                   const wxString& name = wxString());
 
     // set/get the margins around the button
     virtual void SetMargins(int x, int y)

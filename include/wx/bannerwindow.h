@@ -54,7 +54,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxString& name = wxBannerWindowNameStr)
+                   const wxString& name = wxASCII_STR(wxBannerWindowNameStr))
     {
         Init();
 
@@ -68,7 +68,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxBannerWindowNameStr);
+                const wxString& name = wxASCII_STR(wxBannerWindowNameStr));
 
 
     // Provide an existing bitmap to show. For wxLEFT orientation the bitmap is

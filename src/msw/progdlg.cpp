@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROGRESSDLG && wxUSE_THREADS && wxUSE_NATIVE_PROGRESSDLG
 
@@ -442,7 +439,7 @@ wxProgressDialog::~wxProgressDialog()
         DWORD rc = ::MsgWaitForMultipleObjects
                      (
                        1,                   // number of objects to wait for
-                       (HANDLE *)&hThread,  // the objects
+                       &hThread,            // the objects
                        false,               // wait for any objects, not all
                        INFINITE,            // no timeout
                        QS_ALLINPUT |        // return as soon as there are any events

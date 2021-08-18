@@ -15,12 +15,12 @@ class WXDLLIMPEXP_CORE wxDirDialog : public wxDirDialogBase
 {
 public:
     wxDirDialog(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxEmptyString,
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr);
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr));
 
     void SetPath(const wxString& path) wxOVERRIDE;
 
@@ -30,7 +30,7 @@ private:
     // The real implementations of ShowModal(), used for Windows versions
     // before and since Vista.
     int ShowSHBrowseForFolder(WXHWND owner);
-    int ShowIFileDialog(WXHWND owner);
+    int ShowIFileOpenDialog(WXHWND owner);
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDirDialog);
 };

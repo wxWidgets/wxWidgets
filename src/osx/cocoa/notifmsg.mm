@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/notifmsg.h"
 
@@ -32,9 +29,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
-#include "wx/generic/notifmsg.h"
 #include "wx/private/notifmsg.h"
-#include "wx/generic/private/notifmsg.h"
 #include "wx/timer.h"
 #include "wx/platinfo.h"
 #include "wx/artprov.h"
@@ -44,7 +39,6 @@
 #include "wx/utils.h"
 #include <map>
 
-WX_API_AVAILABLE_MACOS(10, 8)
 @interface wxUserNotificationHandler : NSObject <NSUserNotificationCenterDelegate>
 
 @end
@@ -53,7 +47,7 @@ WX_API_AVAILABLE_MACOS(10, 8)
 // wxUserNotificationMsgImpl
 // ----------------------------------------------------------------------------
 
-class WX_API_AVAILABLE_MACOS(10, 8) wxUserNotificationMsgImpl : public wxNotificationMessageImpl
+class wxUserNotificationMsgImpl : public wxNotificationMessageImpl
 {
 public:
     wxUserNotificationMsgImpl(wxNotificationMessageBase* notification) :
@@ -121,11 +115,7 @@ public:
     
     virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-        // Additional icon in the notification is only supported on OS X 10.9+
-        if ( WX_IS_MACOS_AVAILABLE(10, 9) )
-            m_notif.contentImage = icon.GetNSImage();
-#endif
+        m_notif.contentImage = icon.GetNSImage();
     }
     
     virtual bool AddAction(wxWindowID actionid, const wxString &label) wxOVERRIDE
@@ -229,6 +219,7 @@ int wxUserNotificationMsgImpl::ms_notifIdBase = 1000;
 
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
+    wxUnusedVar(center);
     NSString* notifId = [notification.userInfo objectForKey:@"wxId"];
     if (notifId)
         wxUserNotificationMsgImpl::NotificationActivated(wxCFStringRef::AsString(notifId), notification.activationType);
@@ -247,12 +238,7 @@ int wxUserNotificationMsgImpl::ms_notifIdBase = 1000;
 
 void wxNotificationMessage::Init()
 {
-    // Native notifications are not available prior to 10.8, fallback
-    // to generic ones on 10.7
-    if ( WX_IS_MACOS_AVAILABLE(10, 8) )
-        m_impl = new wxUserNotificationMsgImpl(this);
-    else
-        m_impl = new wxGenericNotificationMessageImpl(this);
+    m_impl = new wxUserNotificationMsgImpl(this);
 }
 
 #endif // wxUSE_NOTIFICATION_MESSAGE && defined(wxHAS_NATIVE_NOTIFICATION_MESSAGE)

@@ -33,7 +33,7 @@ public:
             int n = 0, const wxString choices[] = NULL,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxComboBoxNameStr)
+            const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Init();
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
@@ -47,7 +47,7 @@ public:
             const wxArrayString& choices,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxComboBoxNameStr)
+            const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Init();
 
@@ -63,7 +63,7 @@ public:
                 const wxString choices[] = NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& value,
@@ -72,7 +72,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     // See wxComboBoxBase discussion of IsEmpty().
     bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
@@ -127,6 +127,8 @@ public:
 #endif // wxUSE_UXTHEME
 
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
+
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
 
 protected:
 #if wxUSE_TOOLTIPS

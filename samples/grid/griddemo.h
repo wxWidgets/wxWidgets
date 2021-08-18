@@ -36,6 +36,7 @@ class GridFrame : public wxFrame
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
     void ToggleColMoving( wxCommandEvent& );
+    void ToggleColHiding( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridDragCell ( wxCommandEvent& );
     void SetNativeColHeader ( wxCommandEvent& );
@@ -48,6 +49,8 @@ class GridFrame : public wxFrame
     void AutoSizeCols( wxCommandEvent& );
     void CellOverflow( wxCommandEvent& );
     void ResizeCell( wxCommandEvent& );
+    void ToggleCheckeredCells( wxCommandEvent& );
+    void ToggleColouredCells( wxCommandEvent& );
     void SetLabelColour( wxCommandEvent& );
     void SetLabelTextColour( wxCommandEvent& );
     void SetLabelFont(wxCommandEvent &);
@@ -68,12 +71,14 @@ class GridFrame : public wxFrame
     void DeleteSelectedRows( wxCommandEvent& );
     void DeleteSelectedCols( wxCommandEvent& );
     void ClearGrid( wxCommandEvent& );
+    void EditCell( wxCommandEvent& );
     void SetCornerLabelValue( wxCommandEvent& );
     void ShowSelection( wxCommandEvent& );
     void SelectCells( wxCommandEvent& );
     void SelectRows( wxCommandEvent& );
     void SelectCols( wxCommandEvent& );
     void SelectRowsOrCols( wxCommandEvent& );
+    void SelectNone( wxCommandEvent& );
 
     void FreezeOrThaw( wxCommandEvent& );
 
@@ -108,6 +113,7 @@ class GridFrame : public wxFrame
     void OnColAutoSize( wxGridSizeEvent& );
     void OnSelectCell( wxGridEvent& );
     void OnRangeSelected( wxGridRangeSelectEvent& );
+    void OnRangeSelecting( wxGridRangeSelectEvent& );
     void OnCellValueChanging( wxGridEvent& );
     void OnCellValueChanged( wxGridEvent& );
     void OnCellBeginDrag( wxGridEvent& );
@@ -120,12 +126,15 @@ class GridFrame : public wxFrame
 
     void OnGridCustomTab(wxGridEvent& event);
 
+    void OnGridContextMenu(wxContextMenuEvent& event);
+
 public:
     GridFrame();
     ~GridFrame();
 
     void OnQuit( wxCommandEvent& );
-    void About( wxCommandEvent& );
+    void OnClear( wxCommandEvent& );
+    void OnAbout( wxCommandEvent& );
     void OnVTable( wxCommandEvent& );
     void OnBugsTable( wxCommandEvent& );
     void OnTabularTable( wxCommandEvent& );
@@ -140,11 +149,14 @@ public:
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
         ID_TOGGLECOLMOVING,
+        ID_TOGGLECOLHIDING,
         ID_TOGGLEGRIDSIZING,
         ID_TOGGLEGRIDDRAGCELL,
         ID_TOGGLEGRIDLINES,
         ID_AUTOSIZECOLS,
         ID_CELLOVERFLOW,
+        ID_TOGGLE_CHECKERED_CELLS,
+        ID_TOGGLE_COLOURED_CELLS,
         ID_HIDECOL,
         ID_SHOWCOL,
         ID_HIDEROW,
@@ -177,6 +189,7 @@ public:
         ID_DELETEROW,
         ID_DELETECOL,
         ID_CLEARGRID,
+        ID_EDITCELL,
         ID_SETCORNERLABEL,
         ID_SHOWSEL,
         ID_CHANGESEL,
@@ -184,6 +197,7 @@ public:
         ID_SELROWS,
         ID_SELCOLS,
         ID_SELROWSORCOLS,
+        ID_SELNONE,
         ID_SET_CELL_FG_COLOUR,
         ID_SET_CELL_BG_COLOUR,
         ID_VTABLE,
@@ -290,13 +304,12 @@ class MyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
     MyGridCellAttrProvider();
-    virtual ~MyGridCellAttrProvider();
 
     virtual wxGridCellAttr *GetAttr(int row, int col,
                                     wxGridCellAttr::wxAttrKind  kind) const wxOVERRIDE;
 
 private:
-    wxGridCellAttr *m_attrForOddRows;
+    wxGridCellAttrPtr m_attrForOddRows;
 };
 
 // ----------------------------------------------------------------------------

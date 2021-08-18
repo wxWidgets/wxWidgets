@@ -42,12 +42,6 @@ public:
           m_icon(icon)
     { }
 
-    wxDataViewIconText( const wxDataViewIconText &other )
-        : wxObject(),
-          m_text(other.m_text),
-          m_icon(other.m_icon)
-    { }
-
     void SetText( const wxString &text ) { m_text = text; }
     wxString GetText() const             { return m_text; }
     void SetIcon( const wxIcon &icon )   { m_icon = icon; }
@@ -306,7 +300,7 @@ class WXDLLIMPEXP_CORE wxDataViewCustomRendererBase
 public:
     // Constructor must specify the usual renderer parameters which we simply
     // pass to the base class
-    wxDataViewCustomRendererBase(const wxString& varianttype = "string",
+    wxDataViewCustomRendererBase(const wxString& varianttype = wxASCII_STR("string"),
                                  wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                  int align = wxDVR_DEFAULT_ALIGNMENT)
         : wxDataViewCustomRendererRealBase(varianttype, mode, align)
@@ -545,6 +539,8 @@ typedef wxDataViewTextRenderer wxDataViewDateRenderer;
 // wxDataViewCheckIconTextRenderer: 3-state checkbox + text + optional icon
 // ----------------------------------------------------------------------------
 
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || !defined(__WXOSX__)
+
 class WXDLLIMPEXP_CORE wxDataViewCheckIconTextRenderer
     : public wxDataViewCustomRenderer
 {
@@ -595,6 +591,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCheckIconTextRenderer);
 };
 
+#endif // ! native __WXOSX__
 
 // this class is obsolete, its functionality was merged in
 // wxDataViewTextRenderer itself now, don't use it any more

@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_BOOKCTRL
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/panel.h"
@@ -163,3 +165,5 @@ void BookCtrlBaseTestCase::Image()
 
     CPPUNIT_ASSERT_EQUAL(2, base->GetPageImage(2));
 }
+
+#endif

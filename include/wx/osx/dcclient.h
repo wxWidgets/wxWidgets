@@ -32,9 +32,12 @@ public:
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const wxOVERRIDE;
 
 protected:
+    virtual wxPoint OSXGetOrigin() const wxOVERRIDE;
+
     bool m_release;
     int m_width;
     int m_height;
+    wxPoint m_origin;
 
     wxDECLARE_CLASS(wxWindowDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);

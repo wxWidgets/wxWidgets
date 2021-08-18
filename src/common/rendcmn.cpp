@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -68,8 +65,7 @@ private:
 
     void DoInit()
     {
-        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-        if ( traits )
+        if ( wxAppTraits *traits = wxApp::GetTraitsIfExists() )
         {
             // ask the traits object to create a renderer for us
             reset(traits->CreateRenderer());

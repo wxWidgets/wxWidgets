@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONTROLS
 
@@ -293,33 +290,62 @@ struct EllipsizeCalculator
           m_maxFinalWidthPx(maxFinalWidthPx),
           m_replacementWidthPx(replacementWidthPx)
     {
-        m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
-        wxASSERT( m_charOffsetsPx.GetCount() == s.length() );
+        size_t expectedOffsetsCount = s.length();
 
+        // Where ampersands are used as mnemonic indicator they should not
+        // affect the overall width of the string and must be removed from the
+        // measurement. Nonetheless, we need to keep them in the string and
+        // have a corresponding entry in m_charOffsetsPx.
         if ( flags & wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS )
         {
-            // The ampersand itself shouldn't count for the width calculation
-            // as it won't be displayed: either it's an ampersand before some
-            // other character in which case it indicates a mnemonic, or it's
-            // an escaped ampersand, in which case only the second one of the
-            // pair of ampersands will be displayed. But we can't just remove
-            // the ampersand as we still need it in the final label, in order
-            // not to lose the mnemonics. Hence we use this hack, and pretend
-            // that ampersands simply have zero width. Of course, it could be
-            // not completely precise, but this is the best we can do without
-            // completely changing this code structure.
+            // Create a copy of the string with the ampersands removed to get
+            // the correct widths.
+            const wxString cpy = wxControl::RemoveMnemonics(s);
+
+            m_isOk = dc.GetPartialTextExtents(cpy, m_charOffsetsPx);
+
+            // Iterate through the original string inserting a cumulative width
+            // value for each ampersand that is the same as the following
+            // character's cumulative width value. Except this is only done
+            // for the first ampersand in a pair (see RemoveMnemonics).
             size_t n = 0;
-            int delta = 0;
+            bool lastWasMnemonic = false;
             for ( wxString::const_iterator it = s.begin();
                   it != s.end();
                   ++it, ++n )
             {
-                if ( *it == '&' )
-                    delta += dc.GetTextExtent(wxS('&')).GetWidth();
-
-                m_charOffsetsPx[n] -= delta;
+                if ( *it == '&' && !lastWasMnemonic )
+                {
+                    if ( (it + 1) != s.end() )
+                    {
+                        int w = m_charOffsetsPx[n];
+                        m_charOffsetsPx.Insert(w, n);
+                        lastWasMnemonic = true;
+                    }
+                    else // Last character is an ampersand.
+                    {
+                        // This ampersand is removed by RemoveMnemonics() and
+                        // won't be displayed when this string is drawn
+                        // neither, so we intentionally don't use it for our
+                        // calculations neither -- just account for this in the
+                        // assert below.
+                        expectedOffsetsCount--;
+                    }
+                }
+                else // Not an ampersand used to introduce a mnemonic.
+                {
+                    lastWasMnemonic = false;
+                }
             }
         }
+        else
+        {
+            m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
+        }
+
+        // Either way, we should end up with the same number of offsets as
+        // characters in the original string.
+        wxASSERT( m_charOffsetsPx.GetCount() == expectedOffsetsCount );
     }
 
     bool IsOk() const { return m_isOk; }
@@ -567,6 +593,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
     {
         if ( pc == label.end() || *pc == wxS('\n') )
         {
+            curLine.Trim();
             curLine = DoEllipsizeSingleLine(curLine, dc, mode, maxFinalWidth,
                                             replacementWidth, flags);
 

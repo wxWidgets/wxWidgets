@@ -158,13 +158,11 @@ public:
 
 
     void CreateGrid( int style, int extraStyle );
-    void FinalizeFramePosition();
+    void ReplaceGrid(int style, int extraStyle);
 
     // These are used in CreateGrid(), and in tests to compose
     // grids for testing purposes.
-    void InitPanel();
     void PopulateGrid();
-    void FinalizePanel( bool wasCreated = true );
 
     void PopulateWithStandardItems();
     void PopulateWithExamples();
@@ -201,6 +199,7 @@ public:
     void OnCatColours( wxCommandEvent& event );
     void OnSetColumns( wxCommandEvent& event );
     void OnSetVirtualWidth(wxCommandEvent& evt);
+    void OnSetGridDisabled(wxCommandEvent& evt);
     void OnMisc( wxCommandEvent& event );
     void OnPopulateClick( wxCommandEvent& event );
     void OnSetSpinCtrlEditorClick( wxCommandEvent& event );
@@ -277,9 +276,6 @@ class cxApplication : public wxApp
 public:
 
     virtual bool OnInit() wxOVERRIDE;
-
-private:
-    FormMain    *Form1;
 };
 
 wxDECLARE_APP(cxApplication);

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
@@ -196,11 +193,11 @@ void wxFontsManager::AddFontsFromDir(const wxString& indexFile)
     if ( !fn.FileExists() )
     {
         wxLogWarning(_("Fonts index file %s disappeared while loading fonts."),
-                     indexFile.c_str());
+                     indexFile);
         return;
     }
 
-    wxLogTrace("font", "adding fonts from %s", dir.c_str());
+    wxLogTrace("font", "adding fonts from %s", dir);
 
     wxFileConfig cfg(wxEmptyString, wxEmptyString,
                      indexFile, wxEmptyString,
@@ -234,9 +231,9 @@ void wxFontsManager::AddFont(const wxString& dir,
                              const wxString& name,
                              wxFileConfig& cfg)
 {
-    wxLogTrace("font", "adding font '%s'", name.c_str());
+    wxLogTrace("font", "adding font '%s'", name);
 
-    wxConfigPathChanger ch(&cfg, wxString::Format("/%s/", name.c_str()));
+    wxConfigPathChanger ch(&cfg, wxString::Format("/%s/", name));
 
     AddBundle
     (

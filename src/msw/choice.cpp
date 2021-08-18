@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CHOICE
 
@@ -124,21 +121,32 @@ bool wxChoice::Create(wxWindow *parent,
                   style, validator, name);
 }
 
-bool wxChoice::MSWShouldPreProcessMessage(WXMSG *pMsg)
+bool wxChoice::MSWShouldPreProcessMessage(WXMSG *msg)
 {
-    MSG *msg = (MSG *) pMsg;
-
-    // if the dropdown list is visible, don't preprocess certain keys
-    if ( msg->message == WM_KEYDOWN
-        && (msg->wParam == VK_ESCAPE || msg->wParam == VK_RETURN) )
+    if ( msg->message == WM_KEYDOWN &&
+            !(HIWORD(msg->lParam) & KF_ALTDOWN) &&
+                !wxIsShiftDown() &&
+                    !wxIsCtrlDown() )
     {
-        if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
+        switch ( msg->wParam )
         {
-            return false;
+            case VK_ESCAPE:
+            case VK_RETURN:
+                // These keys are needed by the control itself when the
+                // dropdown list is visible, so don't preprocess them then.
+                if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
+                {
+                    return false;
+                }
+                break;
+
+            case VK_F4:
+                // This key can always be used to show the dropdown.
+                return false;
         }
     }
 
-    return wxControl::MSWShouldPreProcessMessage(pMsg);
+    return wxControl::MSWShouldPreProcessMessage(msg);
 }
 
 WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -365,10 +373,13 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
+    const int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
 
     wxString str;
-    if ( len != CB_ERR && len > 0 )
+
+    wxCHECK_MSG( len != CB_ERR, str, wxS("Invalid index") );
+
+    if ( len > 0 )
     {
         if ( ::SendMessage
                (
@@ -458,9 +469,18 @@ void wxChoice::MSWEndDeferWindowPos()
 
 void wxChoice::MSWUpdateDropDownHeight()
 {
+    int flags = wxSIZE_USE_EXISTING;
+    if ( wxApp::GetComCtl32Version() < 600 )
+    {
+        // Make sure our DoMoveWindow() will get called to update the dropdown
+        // height, this happens automatically with comctl32.dll v6, but not
+        // with earlier versions.
+        flags |= wxSIZE_FORCE;
+    }
+
     // be careful to not change the width here
     DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, GetSize().y,
-              wxSIZE_USE_EXISTING);
+              flags);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)

@@ -18,9 +18,6 @@
 
 #include  "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_DYNLIB_CLASS
 
@@ -34,10 +31,6 @@
 
 #ifdef HAVE_DLOPEN
     #include <dlfcn.h>
-#endif
-
-#ifdef __DARWIN__
-    #include <AvailabilityMacros.h>
 #endif
 
 // if some flags are not supported, just ignore them
@@ -54,9 +47,7 @@
 #endif
 
 
-#if defined(HAVE_DLOPEN) || defined(__DARWIN__)
-    #define USE_POSIX_DL_FUNCS
-#elif !defined(HAVE_SHL_LOAD)
+#ifndef HAVE_DLOPEN
     #error "Don't know how to load dynamic libraries on this platform!"
 #endif
 
@@ -70,11 +61,7 @@
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
-#ifdef USE_POSIX_DL_FUNCS
    return dlopen(0, RTLD_LAZY);
-#else
-   return PROG_HANDLE;
-#endif
 }
 
 /* static */
@@ -83,7 +70,6 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
     wxASSERT_MSG( !(flags & wxDL_NOW) || !(flags & wxDL_LAZY),
                   wxT("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
 
-#ifdef USE_POSIX_DL_FUNCS
     // we need to use either RTLD_NOW or RTLD_LAZY because if we call dlopen()
     // with flags == 0 recent versions of glibc just fail the call, so use
     // RTLD_NOW even if wxDL_NOW was not specified
@@ -93,54 +79,21 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
         rtldFlags |= RTLD_GLOBAL;
 
     return dlopen(libname.fn_str(), rtldFlags);
-#else // !USE_POSIX_DL_FUNCS
-    int shlFlags = 0;
-
-    if ( flags & wxDL_LAZY )
-    {
-        shlFlags |= BIND_DEFERRED;
-    }
-    else if ( flags & wxDL_NOW )
-    {
-        shlFlags |= BIND_IMMEDIATE;
-    }
-
-    return shl_load(libname.fn_str(), shlFlags, 0);
-#endif // USE_POSIX_DL_FUNCS/!USE_POSIX_DL_FUNCS
 }
 
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
-#ifdef wxHAVE_DYNLIB_ERROR
-    int rc =
-#endif
+    int rc = dlclose(handle);
 
-#ifdef USE_POSIX_DL_FUNCS
-    dlclose(handle);
-#else // !USE_POSIX_DL_FUNCS
-    shl_unload(handle);
-#endif // USE_POSIX_DL_FUNCS/!USE_POSIX_DL_FUNCS
-
-#if defined(USE_POSIX_DL_FUNCS) && defined(wxHAVE_DYNLIB_ERROR)
     if ( rc != 0 )
-        Error();
-#endif
+        ReportError(_("Failed to unload shared library"));
 }
 
 /* static */
 void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 {
-    void *symbol;
-
-#ifdef USE_POSIX_DL_FUNCS
-    symbol = dlsym(handle, name.fn_str());
-#else // !USE_POSIX_DL_FUNCS
-    // note that shl_findsym modifies the handle argument to indicate where the
-    // symbol was found, but it's ok to modify the local handle copy here
-    if ( shl_findsym(&handle, name.fn_str(), TYPE_UNDEFINED, &symbol) != 0 )
-        symbol = 0;
-#endif // USE_POSIX_DL_FUNCS/!USE_POSIX_DL_FUNCS
+    void *symbol = dlsym(handle, name.fn_str());
 
     return symbol;
 }
@@ -149,20 +102,24 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 // error handling
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAVE_DYNLIB_ERROR
-
 /* static */
-void wxDynamicLibrary::Error()
+void wxDynamicLibrary::ReportError(const wxString& message,
+                                   const wxString& name)
 {
+    wxString msg(message);
+    if ( name.IsEmpty() && msg.Find("%s") == wxNOT_FOUND )
+        msg += "%s";
+    // msg needs a %s for the name
+    wxASSERT(msg.Find("%s") != wxNOT_FOUND);
+
     wxString err(dlerror());
 
     if ( err.empty() )
         err = _("Unknown dynamic library error");
 
-    wxLogError(wxT("%s"), err);
+    wxLogError(msg + wxT(": %s"), name, err);
 }
 
-#endif // wxHAVE_DYNLIB_ERROR
 
 // ----------------------------------------------------------------------------
 // listing loaded modules
@@ -295,6 +252,9 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
         *path = di.dli_fname;
 
     return di.dli_fbase;
+#else
+    wxUnusedVar(addr);
+    wxUnusedVar(path);
 #endif // HAVE_DLADDR
 
     return NULL;

@@ -78,9 +78,11 @@ main ()
   /* HP/UX 9 (%@#!) writes to sscanf strings */
   tmp_version = g_strdup("$min_gtk_version");
   if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+     g_free(tmp_version);
      printf("%s, bad version string\n", "$min_gtk_version");
      exit(1);
    }
+  g_free(tmp_version);
 
   if ((gtk_major_version != $gtk_config_major_version) ||
       (gtk_minor_version != $gtk_config_minor_version) ||

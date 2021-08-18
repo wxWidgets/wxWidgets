@@ -13,7 +13,7 @@
 
 #include "wx/msw/ownerdrawnbutton.h"
 
-class WXDLLIMPEXP_CORE wxRadioButton : public wxMSWOwnerDrawnButton<wxControl>
+class WXDLLIMPEXP_CORE wxRadioButton : public wxMSWOwnerDrawnButton<wxRadioButtonBase>
 {
 public:
     // ctors and creation functions
@@ -26,7 +26,7 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxRadioButtonNameStr)
+                  const wxString& name = wxASCII_STR(wxRadioButtonNameStr))
     {
         Init();
 
@@ -40,11 +40,11 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRadioButtonNameStr);
+                const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
 
     // implement the radio button interface
-    virtual void SetValue(bool value);
-    virtual bool GetValue() const;
+    virtual void SetValue(bool value) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
     // implementation only from now on
     virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;

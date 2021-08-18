@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -24,7 +21,7 @@
 // Under Windows, change this to 1
 // to use wxGenericDragImage
 
-#define wxUSE_GENERIC_DRAGIMAGE 1
+#define wxUSE_GENERIC_DRAGIMAGE 0
 
 #if wxUSE_GENERIC_DRAGIMAGE
 #include "wx/generic/dragimgg.h"
@@ -429,7 +426,7 @@ int MyApp::OnExit()
     return 0;
 }
 
-bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
+bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
 {
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
@@ -488,6 +485,7 @@ bool DragShape::Draw(wxDC& dc, bool highlight)
         return false;
 }
 
+#if wxUSE_GENERIC_DRAGIMAGE
 // MyDragImage
 
 // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
@@ -503,4 +501,4 @@ bool MyDragImage::UpdateBackingFromWindow(wxDC& WXUNUSED(windowDC), wxMemoryDC& 
     m_canvas->DrawShapes(destDC);
     return true;
 }
-
+#endif

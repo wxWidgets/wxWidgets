@@ -23,7 +23,7 @@ enum wxOperatingSystemId
     wxOS_UNKNOWN = 0,                 //!< returned on error
 
     wxOS_MAC_OS         = 1 << 0,     //!< Apple Mac OS 8/9/X with Mac paths
-    wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple OS X with Unix paths
+    wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple macOS with Unix paths
 
     //! A combination of all @c wxOS_MAC_* values previously listed.
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
@@ -69,14 +69,30 @@ enum wxPortId
     wxPORT_X11      = 1 << 5,       //!< wxX11, using wxUniversal
     wxPORT_MAC      = 1 << 7,       //!< wxMac, using Carbon or Classic Mac API
     wxPORT_COCOA    = 1 << 8,       //!< wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_QT       = 1 << 10       //!< wxQT, using QT4
+    wxPORT_QT       = 1 << 10       //!< wxQT, using Qt 5+
 };
 
 
 /**
-    The architecture of the operating system
+    The architecture bitness of the operating system
     (regardless of the build environment of wxWidgets library - see ::wxIsPlatform64Bit()
     documentation for more info).
+
+    @since 3.1.5
+*/
+enum wxBitness
+{
+    wxBITNESS_INVALID = -1,        //!< returned on error
+
+    wxBITNESS_32,                  //!< 32 bit
+    wxBITNESS_64,                  //!< 64 bit
+
+    wxBITNESS_MAX
+};
+
+
+/**
+    @deprecated Use wxBitness instead.
 */
 enum wxArchitecture
 {
@@ -123,10 +139,49 @@ struct wxLinuxDistributionInfo
 
 
 /**
+    @class wxPlatformId
+
+    Defines a very broad platform categorization.
+
+    Usually you would use wxPlatformInfo to get all the platform details rather
+    than this class which only distinguishes between MSW, Mac and Unix
+    platforms.
+
+    This class is mostly useful if a short string describing the platform
+    corresponds to the current platform, i.e. the platform under which the
+    executable runs. The recognized strings are:
+
+    - "msw" (preferred) or "win" (for compatibility) for MSW.
+    - "mac" for Apple systems, i.e. macOS and iOS.
+    - "unix" for the (other) Unix-like systems.
+
+    @since 3.1.5
+ */
+class wxPlatformId
+{
+    /**
+        Returns the preferred current platform name.
+
+        Use MatchesCurrent() to check if the name is one of the possibly
+        several names corresponding to the current platform.
+
+        Returns one of "msw", "mac" or "unix" or an empty string if the current
+        platform is not recognized.
+     */
+    static wxString GetCurrent();
+
+    /**
+        Returns true if the given string matches the current platform.
+     */
+    static bool MatchesCurrent(const wxString& s);
+};
+
+
+/**
     @class wxPlatformInfo
 
     This class holds information about the operating system, the toolkit and the
-    basic architecture of the machine where the application is currently running.
+    basic architecture bitness of the machine where the application is currently running.
 
     This class does not only have @e getters for the information above, it also has
     @e setters. This allows you to e.g. save the current platform information in a
@@ -172,7 +227,7 @@ public:
                    wxOperatingSystemId id = wxOS_UNKNOWN,
                    int osMajor = -1,
                    int osMinor = -1,
-                   wxArchitecture arch = wxARCH_INVALID,
+                   wxBitness bitness = wxBITNESS_INVALID,
                    wxEndianness endian = wxENDIAN_INVALID);
 
 
@@ -226,9 +281,16 @@ public:
     //@{
 
     /**
-        Converts the given string to a wxArchitecture enum value or to
-        @c wxARCH_INVALID if the given string is not a valid architecture string
+        Converts the given string to a wxBitness enum value or to
+        @c wxBITNESS_INVALID if the given string is not a valid architecture bitness string
         (i.e. does not contain nor @c 32 nor @c 64 strings).
+
+        @since 3.1.5
+    */
+    static wxBitness GetBitness(const wxString& bitness);
+
+    /**
+        @deprecated Use GetBitness() instead.
     */
     static wxArchitecture GetArch(const wxString& arch);
 
@@ -263,9 +325,16 @@ public:
     //@{
 
     /**
-        Returns the name for the given wxArchitecture enumeration value.
+        @deprecated Use GetBitnessName() instead.
     */
     static wxString GetArchName(wxArchitecture arch);
+
+    /**
+        Returns the name for the given wxBitness enumeration value.
+
+        @since 3.1.5
+    */
+    static wxString GetBitnessName(wxBitness bitness);
 
     /**
         Returns name for the given wxEndianness enumeration value.
@@ -322,14 +391,30 @@ public:
     //@{
 
     /**
-        Returns the architecture ID of this wxPlatformInfo instance.
+        @deprecated Use GetBitness() instead.
     */
     wxArchitecture GetArchitecture() const;
+
+    /**
+        Returns the architecture bitness ID of this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    wxBitness GetBitness() const;
 
     /**
         Returns the endianness ID of this wxPlatformInfo instance.
     */
     wxEndianness GetEndianness() const;
+
+    /**
+        Returns the CPU architecture name, if available.
+
+        @see wxGetCpuArchitectureName()
+
+        @since 3.1.5
+     */
+    wxString GetCpuArchitectureName() const;
 
     /**
         Returns the run-time major version of the OS associated with this
@@ -440,9 +525,16 @@ public:
     //@{
 
     /**
-        Returns the name for the architecture of this wxPlatformInfo instance.
+        @deprecated Use GetBitnessName() instead.
     */
     wxString GetArchName() const;
+
+    /**
+        Returns the name for the architecture bitness of this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    wxString GetBitnessName() const;
 
     /**
         Returns the name for the endianness of this wxPlatformInfo instance.
@@ -483,9 +575,16 @@ public:
     //@{
 
     /**
-        Sets the architecture enum value associated with this wxPlatformInfo instance.
+        @deprecated Use SetBitness() instead.
     */
     void SetArchitecture(wxArchitecture n);
+
+    /**
+        Sets the architecture bitness enum value associated with this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    void SetBitness(wxBitness n);
 
     /**
         Sets the endianness enum value associated with this wxPlatformInfo instance.
@@ -530,4 +629,3 @@ public:
 
     //@}
 };
-

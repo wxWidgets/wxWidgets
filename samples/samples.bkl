@@ -89,6 +89,7 @@
     <subproject id="validate" template="sub"/>
     <subproject id="vscroll" template="sub"/>
     <subproject id="webview" template="sub" cond="USE_STC=='1'"/>
+    <subproject id="webrequest" template="sub"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>

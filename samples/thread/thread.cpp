@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -474,7 +471,7 @@ MyFrame::DoLogRecord(wxLogLevel level,
     DoLogLine
     (
         m_txtctrl,
-        wxDateTime(info.timestamp).FormatISOTime(),
+        wxDateTime(wxLongLong(info.timestampMS)).FormatISOTime(),
         info.threadId == wxThread::GetMainId()
             ? wxString("main")
             : wxString::Format("%lx", info.threadId),

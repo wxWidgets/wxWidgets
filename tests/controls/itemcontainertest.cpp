@@ -71,6 +71,7 @@ void ItemContainerTestCase::Count()
     wxItemContainer * const container = GetContainer();
 
     CPPUNIT_ASSERT(container->IsEmpty());
+    WX_ASSERT_FAILS_WITH_ASSERT( container->GetString(0) );
 
     wxArrayString testitems;
     testitems.Add("item 0");
@@ -95,6 +96,7 @@ void ItemContainerTestCase::Count()
     container->Insert(testitems, 1);
 
     CPPUNIT_ASSERT_EQUAL(5, container->GetCount());
+    WX_ASSERT_FAILS_WITH_ASSERT( container->GetString(10) );
 }
 
 void ItemContainerTestCase::ItemSelection()

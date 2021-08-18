@@ -10,9 +10,7 @@
 #ifndef _WX_WINDOWID_H_
 #define _WX_WINDOWID_H_
 
-// NB: do not include defs.h as we are included from it
-
-typedef int wxWindowID;
+#include "wx/defs.h"
 
 // ----------------------------------------------------------------------------
 // wxWindowIDRef: reference counted id value

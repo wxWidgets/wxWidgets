@@ -30,7 +30,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxControlNameStr)
+                    const wxString& name = wxASCII_STR(wxControlNameStr))
     {
         Init();
 
@@ -41,7 +41,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxControlNameStr);
+            const wxString& name = wxASCII_STR(wxControlNameStr));
 
     virtual void SetArtProvider(wxRibbonArtProvider* art);
     wxRibbonArtProvider* GetArtProvider() const {return m_art;}

@@ -87,7 +87,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxListCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxListCtrlNameStr))
     {
         Init();
 
@@ -102,7 +102,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxListCtrlNameStr));
 
 
     // Attributes
@@ -129,14 +129,14 @@ public:
 
 
     // Gets the column order from its index or index from its order
-    int GetColumnOrder(int col) const;
-    int GetColumnIndexFromOrder(int order) const;
+    int GetColumnOrder(int col) const wxOVERRIDE;
+    int GetColumnIndexFromOrder(int order) const wxOVERRIDE;
 
     // Gets the column order for all columns
-    wxArrayInt GetColumnsOrder() const;
+    wxArrayInt GetColumnsOrder() const wxOVERRIDE;
 
     // Sets the column order for all columns
-    bool SetColumnsOrder(const wxArrayInt& orders);
+    bool SetColumnsOrder(const wxArrayInt& orders) wxOVERRIDE;
 
 
     // Gets the number of items that can fit vertically in the
@@ -199,7 +199,7 @@ public:
     bool SetItemPosition(long item, const wxPoint& pos);
 
     // Gets the number of items in the list control
-    int GetItemCount() const;
+    int GetItemCount() const wxOVERRIDE;
 
     // Gets the number of columns in the list control
     int GetColumnCount() const wxOVERRIDE { return m_colCount; }
@@ -360,6 +360,11 @@ public:
     // Necessary for drawing hrules and vrules, if specified
     void OnPaint(wxPaintEvent& event);
 
+    // Override SetDoubleBuffered() to do nothing, its implementation in the
+    // base class is incompatible with the double buffering done by this native
+    // control.
+    virtual bool IsDoubleBuffered() const wxOVERRIDE;
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
 
     virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 
@@ -394,6 +399,10 @@ protected:
     virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;
 #endif // wxUSE_TOOLTIPS
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     wxSize MSWGetBestViewRect(int x, int y) const;
 
     // Implement base class pure virtual methods.
@@ -405,7 +414,7 @@ protected:
     // get the internal data object for this item (may return NULL)
     wxMSWListItemData *MSWGetItemData(long item) const;
 
-    // get the item attribute, either by quering it for virtual control, or by
+    // get the item attribute, either by querying it for virtual control, or by
     // returning the one previously set using setter methods for a normal one
     wxItemAttr *DoGetItemColumnAttr(long item, long column) const;
 

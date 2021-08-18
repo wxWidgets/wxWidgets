@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_EXTENDED_RTTI
 
@@ -163,7 +160,7 @@ void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo
         }
         else
         {
-            wxLogError( _("Create Parameter %s not found in declared RTTI Parameters"), name.c_str() );
+            wxLogError( _("Create Parameter %s not found in declared RTTI Parameters"), name );
         }
         map.erase( name );
     }

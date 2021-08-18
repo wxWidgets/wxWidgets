@@ -8,6 +8,10 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+    set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
+endif()
+
 if(MSVC)
     # Determine MSVC runtime library flag
     set(MSVC_LIB_USE "/MD")
@@ -118,11 +122,15 @@ if(NOT wxBUILD_SHARED)
     wx_string_append(wxBUILD_FILE_ID "-static")
 endif()
 wx_string_append(wxBUILD_FILE_ID "-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+wx_get_flavour(lib_flavour "-")
+wx_string_append(wxBUILD_FILE_ID "${lib_flavour}")
 
 set(wxARCH_SUFFIX)
+set(wxCOMPILER_PREFIX)
+set(wxPLATFORM_LIB_DIR)
 
-# TODO: include compiler version in wxCOMPILER_PREFIX ?
 if(WIN32)
+    # TODO: include compiler version in wxCOMPILER_PREFIX for official builds
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         set(wxCOMPILER_PREFIX "vc")
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -136,25 +144,17 @@ if(WIN32)
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(wxARCH_SUFFIX "_x64")
     endif()
-else()
-    set(wxCOMPILER_PREFIX)
 endif()
 
-if(MSVC OR MINGW)
+if(WIN32_MSVC_NAMING)
     if(wxBUILD_SHARED)
-        set(lib_suffix "dll")
+        set(lib_suffix "_dll")
     else()
-        set(lib_suffix "lib")
+        set(lib_suffix "_lib")
     endif()
 
-    if(MSVC)
-        # Include generator expression to suppress default Debug/Release pair
-        set(wxPLATFORM_LIB_DIR "$<1:/>${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}")
-    else()
-        set(wxPLATFORM_LIB_DIR "/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}")
-    endif()
-else()
-    set(wxPLATFORM_LIB_DIR)
+    # Include generator expression to suppress default Debug/Release pair
+    set(wxPLATFORM_LIB_DIR "$<1:/>${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}${lib_suffix}")
 endif()
 
 if(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
@@ -164,14 +164,14 @@ if(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
     set(wxSETUP_HEADER_PATH ${wxBUILD_CUSTOM_SETUP_HEADER_PATH})
 else()
     # Set path where setup.h will be created
-    if(MSVC OR MINGW)
+    if(WIN32_MSVC_NAMING)
         if(wxUSE_UNICODE)
             set(lib_unicode u)
         else()
             set(lib_unicode)
         endif()
         set(wxSETUP_HEADER_PATH
-            ${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}/${wxBUILD_TOOLKIT}${lib_unicode})
+            ${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}${lib_suffix}/${wxBUILD_TOOLKIT}${lib_unicode})
         file(MAKE_DIRECTORY ${wxSETUP_HEADER_PATH}/wx)
         file(MAKE_DIRECTORY ${wxSETUP_HEADER_PATH}d/wx)
         set(wxSETUP_HEADER_FILE_DEBUG ${wxSETUP_HEADER_PATH}d/wx/setup.h)
@@ -182,6 +182,9 @@ else()
     endif()
 endif()
 set(wxSETUP_HEADER_FILE ${wxSETUP_HEADER_PATH}/wx/setup.h)
+
+set(wxBUILD_FILE ${wxSETUP_HEADER_PATH}/build.cfg)
+set(wxBUILD_FILE_DEBUG ${wxSETUP_HEADER_PATH}d/build.cfg)
 
 if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     # Append configuration specific suffix to setup header path
@@ -194,9 +197,6 @@ endif()
 
 # Constants for setup.h creation
 set(wxUSE_STD_DEFAULT ON)
-if(wxUSE_UNICODE)
-    set(wxUSE_WCHAR_T ON)
-endif()
 if(NOT wxUSE_EXPAT)
     set(wxUSE_XRC OFF)
 endif()
@@ -204,6 +204,31 @@ set(wxUSE_XML ${wxUSE_XRC})
 
 if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
+endif()
+
+if(wxUSE_ACTIVEX AND DEFINED wxUSE_OLE AND NOT wxUSE_OLE)
+    message(WARNING "wxActiveXContainer requires wxUSE_OLE... disabled")
+    wx_option_force_value(wxUSE_ACTIVEX OFF)
+endif()
+
+if(wxUSE_DRAG_AND_DROP AND DEFINED wxUSE_OLE AND NOT wxUSE_OLE)
+    message(WARNING "wxUSE_DRAG_AND_DROP requires wxUSE_OLE... disabled")
+    wx_option_force_value(wxUSE_DRAG_AND_DROP OFF)
+endif()
+
+if(wxUSE_ACCESSIBILITY AND DEFINED wxUSE_OLE AND NOT wxUSE_OLE)
+    message(WARNING "wxUSE_ACCESSIBILITY requires wxUSE_OLE... disabled")
+    wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
+endif()
+
+if(wxUSE_MEDIACTRL AND DEFINED wxUSE_ACTIVEX AND NOT wxUSE_ACTIVEX)
+    message(WARNING "wxMediaCtl requires wxActiveXContainer... disabled")
+    wx_option_force_value(wxUSE_MEDIACTRL OFF)
+endif()
+
+if(wxUSE_WEBVIEW AND DEFINED wxUSE_ACTIVEX AND NOT wxUSE_ACTIVEX)
+    message(WARNING "wxWebView requires wxActiveXContainer... disabled")
+    wx_option_force_value(wxUSE_WEBVIEW OFF)
 endif()
 
 if(wxUSE_OPENGL)
@@ -250,6 +275,11 @@ if(wxUSE_TEXTFILE AND (NOT wxUSE_FILE OR NOT wxUSE_TEXTBUFFER))
     wx_option_force_value(wxUSE_TEXTFILE OFF)
 endif()
 
+if(wxUSE_MIMETYPE AND NOT wxUSE_TEXTFILE)
+    message(WARNING "wxUSE_MIMETYPE requires wxTextFile... disabled")
+    wx_option_force_value(wxUSE_MIMETYPE OFF)
+endif()
+
 if(wxUSE_CONFIG)
     if(NOT wxUSE_TEXTFILE)
         message(WARNING "wxConfig requires wxTextFile... disabled")
@@ -276,11 +306,38 @@ if(wxUSE_LIBLZMA)
     endif()
 endif()
 
+if (wxUSE_WEBREQUEST)
+    if(wxUSE_WEBREQUEST_CURL)
+        find_package(CURL)
+        if(NOT CURL_FOUND)
+            message(WARNING "CURL not found, wxWebSessionBackendCURL won't be available")
+            wx_option_force_value(wxUSE_WEBREQUEST_CURL OFF)
+        endif()
+    endif()
+
+    include(CheckCSourceCompiles)
+    if(wxUSE_WEBREQUEST_WINHTTP)
+        check_c_source_compiles("#include <windows.h>
+                                 #include <winhttp.h>
+                                 int main(){return 0;}"
+                                HAVE_WINHTTP_H)
+        if(NOT HAVE_WINHTTP_H)
+            message(WARNING "winhttp.h not found, wxWebSessionBackendWinHTTP won't be available")
+            wx_option_force_value(wxUSE_WEBREQUEST_WINHTTP OFF)
+        endif()
+    endif()
+
+    if (NOT(wxUSE_WEBREQUEST_WINHTTP OR wxUSE_WEBREQUEST_URLSESSION OR wxUSE_WEBREQUEST_CURL))
+        message(WARNING "wxUSE_WEBREQUEST requires at least one backend, it won't be available")
+        wx_option_force_value(wxUSE_WEBREQUEST OFF)
+    endif()
+endif()
+
 if(UNIX)
     if(wxUSE_SECRETSTORE AND NOT APPLE)
         # The required APIs are always available under MSW and OS X but we must
         # have GNOME libsecret under Unix to be able to compile this class.
-        find_package(Libsecret)
+        find_package(LIBSECRET)
         if(NOT LIBSECRET_FOUND)
             message(WARNING "libsecret not found, wxSecretStore won't be available")
             wx_option_force_value(wxUSE_SECRETSTORE OFF)
@@ -288,7 +345,7 @@ if(UNIX)
     endif()
 
     if(wxUSE_LIBICONV)
-        find_package(Iconv)
+        find_package(ICONV)
         if(NOT ICONV_FOUND)
             message(WARNING "iconv not found")
             wx_option_force_value(wxUSE_LIBICONV OFF)
@@ -348,23 +405,38 @@ if(wxUSE_GUI)
 
     # extra dependencies
     if(wxUSE_OPENGL)
-        find_package(OpenGL)
+        if(WXOSX_IPHONE)
+            set(OPENGL_FOUND TRUE)
+            set(OPENGL_LIBRARIES "-framework OpenGLES" "-framework QuartzCore" "-framework GLKit")
+        else()
+            find_package(OpenGL)
+            if(WXGTK3 AND OpenGL_EGL_FOUND AND wxUSE_GLCANVAS_EGL)
+                set(OPENGL_LIBRARIES OpenGL::OpenGL OpenGL::EGL)
+                find_package(WAYLANDEGL)
+                if(WAYLANDEGL_FOUND AND wxHAVE_GDK_WAYLAND)
+                    list(APPEND OPENGL_LIBRARIES ${WAYLANDEGL_LIBRARIES})
+                endif()
+            endif()
+        endif()
         if(NOT OPENGL_FOUND)
             message(WARNING "opengl not found, wxGLCanvas won't be available")
             wx_option_force_value(wxUSE_OPENGL OFF)
+        endif()
+        if(UNIX AND (NOT WXGTK3 OR NOT OpenGL_EGL_FOUND))
+            wx_option_force_value(wxUSE_GLCANVAS_EGL OFF)
         endif()
     endif()
 
     if(wxUSE_WEBVIEW)
         if(WXGTK)
             if(wxUSE_WEBVIEW_WEBKIT)
-                find_package(LibSoup)
+                find_package(LIBSOUP)
                 if(WXGTK2)
-                    find_package(Webkit 1.0)
+                    find_package(WEBKIT 1.0)
                 elseif(WXGTK3)
-                    find_package(Webkit2)
+                    find_package(WEBKIT2)
                     if(NOT WEBKIT2_FOUND)
-                        find_package(Webkit 3.0)
+                        find_package(WEBKIT 3.0)
                     endif()
                 endif()
             endif()
@@ -379,8 +451,8 @@ if(wxUSE_GUI)
                 wx_option_force_value(wxUSE_WEBVIEW OFF)
             endif()
         elseif(WXMSW)
-            if(NOT wxUSE_WEBVIEW_IE)
-                message(WARNING "WebviewIE not found or enabled, wxWebview won't be available")
+            if(NOT wxUSE_WEBVIEW_IE AND NOT wxUSE_WEBVIEW_EDGE)
+                message(WARNING "WebviewIE and WebviewEdge not found or enabled, wxWebview won't be available")
                 wx_option_force_value(wxUSE_WEBVIEW OFF)
             endif()
         elseif(APPLE)
@@ -392,17 +464,18 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_PRIVATE_FONTS AND WXGTK)
-        find_package(Fontconfig)
-        if(NOT FONTCONFIG_FOUND)
-            message(WARNING "Fontconfig not found, Private fonts won't be available")
+        find_package(FONTCONFIG)
+        find_package(PANGOFT2)
+        if(NOT FONTCONFIG_FOUND OR NOT PANGOFT2_FOUND)
+            message(WARNING "Fontconfig or PangoFT2 not found, Private fonts won't be available")
             wx_option_force_value(wxUSE_PRIVATE_FONTS OFF)
         endif()
     endif()
 
-    if(wxUSE_MEDIACTRL AND UNIX AND NOT APPLE AND NOT WIN32)
-        find_package(GStreamer 1.0 COMPONENTS video)
+    if(wxUSE_MEDIACTRL AND WXGTK AND NOT APPLE AND NOT WIN32)
+        find_package(GSTREAMER 1.0 COMPONENTS video)
         if(NOT GSTREAMER_FOUND)
-            find_package(GStreamer 0.10 COMPONENTS interfaces)
+            find_package(GSTREAMER 0.10 COMPONENTS interfaces)
         endif()
 
         set(wxUSE_GSTREAMER ${GSTREAMER_FOUND})
@@ -434,7 +507,7 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_NOTIFICATION_MESSAGE AND UNIX AND WXGTK2 AND wxUSE_LIBNOTIFY)
-        find_package(LibNotify)
+        find_package(LIBNOTIFY)
         if(NOT LIBNOTIFY_FOUND)
             message(WARNING "Libnotify not found, it won't be used for notifications")
             wx_option_force_value(wxUSE_LIBNOTIFY OFF)
@@ -447,7 +520,7 @@ if(wxUSE_GUI)
 
     if(wxUSE_UIACTIONSIMULATOR AND UNIX AND WXGTK)
         if(wxUSE_XTEST)
-            find_package(XTest)
+            find_package(XTEST)
             if(XTEST_FOUND)
                 list(APPEND wxTOOLKIT_INCLUDE_DIRS ${XTEST_INCLUDE_DIRS})
                 list(APPEND wxTOOLKIT_LIBRARIES ${XTEST_LIBRARIES})
@@ -480,7 +553,7 @@ if(wxUSE_GUI)
     endif()
 
     if(WXGTK2 AND wxUSE_MIMETYPE AND wxUSE_LIBGNOMEVFS)
-        find_package(GnomeVFS2)
+        find_package(GNOMEVFS2)
         if(GNOMEVFS2_FOUND)
             list(APPEND wxTOOLKIT_INCLUDE_DIRS ${GNOMEVFS2_INCLUDE_DIRS})
             list(APPEND wxTOOLKIT_LIBRARIES ${GNOMEVFS2_LIBRARIES})
@@ -492,3 +565,43 @@ if(wxUSE_GUI)
         set(wxUSE_LIBGNOMEVFS OFF)
     endif()
 endif()
+
+# test if precompiled headers are supported using the cotire test project
+if(DEFINED wxBUILD_PRECOMP_PREV AND NOT wxBUILD_PRECOMP STREQUAL wxBUILD_PRECOMP_PREV)
+    set(CLEAN_PRECOMP_TEST TRUE)
+endif()
+set(wxBUILD_PRECOMP_PREV ${wxBUILD_PRECOMP} CACHE INTERNAL "")
+
+if(wxBUILD_PRECOMP)
+    if(DEFINED CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED)
+        set(try_flags "-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=${CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED}")
+    endif()
+    if (CLEAN_PRECOMP_TEST)
+        try_compile(RESULT_VAR_CLEAN
+                    "${wxBINARY_DIR}/CMakeFiles/cotire_test"
+                    "${wxSOURCE_DIR}/build/cmake/modules/cotire_test"
+                    CotireExample clean_cotire
+                    CMAKE_FLAGS ${try_flags}
+        )
+    endif()
+    try_compile(RESULT_VAR
+                "${wxBINARY_DIR}/CMakeFiles/cotire_test"
+                "${wxSOURCE_DIR}/build/cmake/modules/cotire_test"
+                CotireExample
+                CMAKE_FLAGS ${try_flags}
+                OUTPUT_VARIABLE OUTPUT_VAR
+    )
+
+    # check if output has precompiled header warnings. The build can still succeed, so check the output
+    # likely caused by gcc hardening: https://bugzilla.redhat.com/show_bug.cgi?id=1721553
+    # cc1plus: warning /path/to/project/cotire/name_CXX_prefix.hxx.gch: had text segment at different address
+    string(FIND "${OUTPUT_VAR}" "had text segment at different address" HAS_MESSAGE)
+    if(${HAS_MESSAGE} GREATER -1)
+        set(RESULT_VAR FALSE)
+    endif()
+
+    if(NOT RESULT_VAR)
+        message(WARNING "precompiled header (PCH) test failed, it will be turned off")
+        wx_option_force_value(wxBUILD_PRECOMP OFF)
+    endif()
+endif(wxBUILD_PRECOMP)

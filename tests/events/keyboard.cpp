@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_UIACTIONSIMULATOR
 
@@ -26,6 +23,10 @@
 
 #include "wx/uiaction.h"
 #include "wx/vector.h"
+
+#ifdef __WXGTK__
+#include "wx/stopwatch.h"
+#endif
 
 namespace
 {
@@ -229,7 +230,11 @@ void KeyboardEventTestCase::setUp()
     m_win = new KeyboardTestWindow(wxTheApp->GetTopWindow());
     wxYield();
     m_win->SetFocus();
-    wxYield(); // needed to show the new window
+
+#ifdef __WXGTK__
+    for ( wxStopWatch sw; sw.Time() < 10; )
+#endif
+        wxYield(); // needed to show the new window
 
     // The window might get some key up events when it's being shown if the key
     // was pressed when the program was started and released after the window

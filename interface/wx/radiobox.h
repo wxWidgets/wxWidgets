@@ -317,6 +317,13 @@ public:
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& string);
+
+    /**
+        Returns the index of the selected item.
+
+        As radio boxes always have a selected item, the return value is never
+        @c wxNOT_FOUND for this class.
+     */
     virtual int GetSelection() const;
 
 };

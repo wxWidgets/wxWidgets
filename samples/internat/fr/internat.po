@@ -64,10 +64,6 @@ msgstr "&Ouvrir un fichier"
 msgid "&Play a game"
 msgstr "&Jouer"
 
-#: internat.cpp:114
-msgid "&File"
-msgstr "&Fichier"
-
 #: internat.cpp:115
 msgid "&Test"
 msgstr "&Test"

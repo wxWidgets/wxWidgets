@@ -144,7 +144,7 @@ public:
     wxDataObject *GetDataObject() const
         { return m_dataObject; }
     void SetDataObject(wxDataObject *dataObject)
-        { if (m_dataObject) delete m_dataObject;
+        { delete m_dataObject;
     m_dataObject = dataObject; }
 
     // these functions are called when data is moved over position (x, y) and
@@ -187,9 +187,9 @@ public:
     virtual bool GetData() = 0;
 
     // sets the default action for drag and drop:
-    // use wxDragMove or wxDragCopy to set deafult action to move or copy
+    // use wxDragMove or wxDragCopy to set default action to move or copy
     // and use wxDragNone (default) to set default action specified by
-    // initialization of draging (see wxDropSourceBase::DoDragDrop())
+    // initialization of dragging (see wxDropSourceBase::DoDragDrop())
     void SetDefaultAction(wxDragResult action)
         { m_defaultAction = action; }
 

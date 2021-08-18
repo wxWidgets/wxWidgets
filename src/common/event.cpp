@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/event.h"
 #include "wx/eventfilter.h"
@@ -37,11 +34,10 @@
 
     #if wxUSE_GUI
         #include "wx/window.h"
-        #include "wx/combobox.h"
         #include "wx/control.h"
         #include "wx/dc.h"
         #include "wx/spinbutt.h"
-        #include "wx/textctrl.h"
+        #include "wx/textentry.h"
         #include "wx/validate.h"
     #endif // wxUSE_GUI
 #endif
@@ -54,6 +50,10 @@
     wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
     wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
 #endif // wxUSE_BASE
+
+#if wxUSE_GUI
+    #include "wx/private/rescale.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -84,6 +84,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxShowEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMaximizeEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxIconizeEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxFullScreenEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMenuEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxJoystickEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent);
@@ -292,6 +293,7 @@ wxDEFINE_EVENT( wxEVT_DESTROY, wxWindowDestroyEvent );
 wxDEFINE_EVENT( wxEVT_SHOW, wxShowEvent );
 wxDEFINE_EVENT( wxEVT_ICONIZE, wxIconizeEvent );
 wxDEFINE_EVENT( wxEVT_MAXIMIZE, wxMaximizeEvent );
+wxDEFINE_EVENT( wxEVT_FULLSCREEN, wxFullScreenEvent );
 wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEvent );
 wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEvent );
 wxDEFINE_EVENT( wxEVT_PAINT, wxPaintEvent );
@@ -443,25 +445,36 @@ wxString wxCommandEvent::GetString() const
 {
     // This is part of the hack retrieving the event string from the control
     // itself only when/if it's really needed to avoid copying potentially huge
-    // strings coming from multiline text controls. For consistency we also do
-    // it for combo boxes, even though there are no real performance advantages
-    // in doing this for them.
+    // strings coming from multiline text controls.
     if (m_eventType == wxEVT_TEXT && m_eventObject)
     {
-#if wxUSE_TEXTCTRL
-        wxTextCtrl *txt = wxDynamicCast(m_eventObject, wxTextCtrl);
-        if ( txt )
-            return txt->GetValue();
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-        wxComboBox* combo = wxDynamicCast(m_eventObject, wxComboBox);
-        if ( combo )
-            return combo->GetValue();
-#endif // wxUSE_COMBOBOX
+        // Only windows generate wxEVT_TEXT events, so this cast should really
+        // succeed, but err on the side of caution just in case somebody
+        // created a bogus event of this type.
+        if ( wxWindow* const w = wxDynamicCast(m_eventObject, wxWindow) )
+        {
+            if ( const wxTextEntry* const entry = w->WXGetTextEntry() )
+                return entry->GetValue();
+        }
     }
 
     return m_cmdString;
+}
+
+// ----------------------------------------------------------------------------
+// wxPaintEvent and wxNcPaintEvent
+// ----------------------------------------------------------------------------
+
+wxPaintEvent::wxPaintEvent(wxWindowBase* window)
+    : wxEvent(window ? window->GetId() : 0, wxEVT_PAINT)
+{
+    SetEventObject(window);
+}
+
+wxNcPaintEvent::wxNcPaintEvent(wxWindowBase* window)
+    : wxEvent(window ? window->GetId() : 0, wxEVT_NC_PAINT)
+{
+    SetEventObject(window);
 }
 
 // ----------------------------------------------------------------------------
@@ -588,10 +601,7 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
 void wxMouseEvent::Assign(const wxMouseEvent& event)
 {
     wxEvent::operator=(event);
-
-    // Borland C++ 5.82 doesn't compile an explicit call to an implicitly
-    // defined operator=() so need to do it this way:
-    *static_cast<wxMouseState *>(this) = event;
+    wxMouseState::operator=(event);
 
     m_x = event.m_x;
     m_y = event.m_y;
@@ -797,10 +807,7 @@ wxKeyEvent& wxKeyEvent::operator=(const wxKeyEvent& evt)
     if ( &evt != this )
     {
         wxEvent::operator=(evt);
-
-        // Borland C++ 5.82 doesn't compile an explicit call to an
-        // implicitly defined operator=() so need to do it this way:
-        *static_cast<wxKeyboardState *>(this) = evt;
+        wxKeyboardState::operator=(evt);
 
         DoAssignMembers(evt);
     }
@@ -928,6 +935,15 @@ wxHelpEvent::Origin wxHelpEvent::GuessOrigin(Origin origin)
     }
 
     return origin;
+}
+
+// ----------------------------------------------------------------------------
+// wxDPIChangedEvent
+// ----------------------------------------------------------------------------
+
+wxSize wxDPIChangedEvent::Scale(wxSize sz) const
+{
+    return wxRescaleCoord(sz).From(m_oldDPI).To(m_newDPI);
 }
 
 #endif // wxUSE_GUI
@@ -1612,7 +1628,6 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
     if ( GetEventHashTable().HandleEvent(event, this) )
         return true;
 
-#ifdef wxHAS_CALL_AFTER
     // There is an implicit entry for async method calls processing in every
     // event handler:
     if ( event.GetEventType() == wxEVT_ASYNC_METHOD_CALL &&
@@ -1621,7 +1636,6 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
         static_cast<wxAsyncMethodCallEvent&>(event).Execute();
         return true;
     }
-#endif // wxHAS_CALL_AFTER
 
     // We don't have a handler for this event.
     return false;
@@ -1925,8 +1939,7 @@ void wxEvtHandler::DoSetClientObject( wxClientData *data )
     wxASSERT_MSG( m_clientDataType != wxClientData_Void,
                   wxT("can't have both object and void client data") );
 
-    if ( m_clientObject )
-        delete m_clientObject;
+    delete m_clientObject;
 
     m_clientObject = data;
     m_clientDataType = wxClientData_Object;

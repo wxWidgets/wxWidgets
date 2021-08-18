@@ -45,7 +45,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxComboBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxComboBoxNameStr))
         : wxComboCtrlBase()
     {
         Init();
@@ -60,7 +60,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     virtual ~wxComboCtrl();
 

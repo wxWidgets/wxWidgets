@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -263,7 +260,9 @@ void StringTestCase::StaticConstructors()
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello") );
 
+#if wxUSE_UNICODE
     CPPUNIT_ASSERT_EQUAL( 2, wxString::FromUTF8("h\xc3\xa9llo", 3).length() );
+#endif // wxUSE_UNICODE
 
 
     //CPPUNIT_ASSERT_EQUAL( 1, wxString::FromUTF8("", 1).length() );

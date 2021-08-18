@@ -29,6 +29,7 @@ public:
 #endif
 #if wxUSE_IMAGE
     wxCursor( const wxImage & image );
+    wxCursor(const char* const* xpmData);
 #endif
 
     wxCursor(const wxString& name,

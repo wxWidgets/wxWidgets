@@ -11,13 +11,11 @@
 #ifndef _WX_UNIV_RADIOBUT_H_
 #define _WX_UNIV_RADIOBUT_H_
 
-#include "wx/checkbox.h"
-
 // ----------------------------------------------------------------------------
 // wxRadioButton
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRadioButton : public wxCheckBox
+class WXDLLIMPEXP_CORE wxRadioButton : public wxRadioButtonBase
 {
 public:
     // constructors
@@ -30,7 +28,7 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxRadioButtonNameStr)
+                  const wxString& name = wxASCII_STR(wxRadioButtonNameStr))
     {
         Init();
 
@@ -44,7 +42,11 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRadioButtonNameStr);
+                const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
+
+    // (re)implement pure virtuals from wxRadioButtonBase
+    virtual void SetValue(bool value) wxOVERRIDE { return wxCheckBox::SetValue(value); }
+    virtual bool GetValue() const wxOVERRIDE { return wxCheckBox::GetValue(); }
 
     // override some base class methods
     virtual void ChangeValue(bool value) wxOVERRIDE;

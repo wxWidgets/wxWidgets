@@ -66,7 +66,7 @@ public:
     virtual bool IsFree() const { return false; }
 
     // Returns handle.
-    virtual WXHANDLE GetResourceHandle() const { return 0; }
+    virtual WXHANDLE GetResourceHandle() const { return NULL; }
 #endif // defined(__WXMSW__)
 
 protected:

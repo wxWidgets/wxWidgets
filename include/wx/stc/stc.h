@@ -235,7 +235,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
 #define wxSTC_FIND_POSIX 0x00400000
-#define wxSTC_FIND_CXX11REGEX 0x00800000
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
@@ -2528,6 +2527,14 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 #endif // WXWIN_COMPATIBILITY_3_0
 
+// wxSTC is currently built without c++11 regex support, but the search flag
+// wxSTC_FIND_CXX11REGEX was included with wxSTC any way. gen_iface.py has since
+// been changed so that this flag will no longer be generated or documented,
+// but the flag is preserved here so that any code using the flag before
+// gen_iface.py was changed will not be broken.
+
+#define wxSTC_FIND_CXX11REGEX 0x00800000
+
 //----------------------------------------------------------------------
 // Commands that can be bound to keystrokes section {{{
 
@@ -3049,7 +3056,7 @@ public:
     // Is the IME displayed in a window or inline?
     int GetIMEInteraction() const;
 
-    // Choose to display the the IME in a winow or inline.
+    // Choose to display the IME in a winow or inline.
     void SetIMEInteraction(int imeInteraction);
 
     // Set the symbol used for a particular marker number,
@@ -3067,7 +3074,7 @@ public:
     // Set the background colour used for a particular marker number when its folding block is selected.
     void MarkerSetBackgroundSelected(int markerNumber, const wxColour& back);
 
-    // Enable/disable highlight for current folding bloc (smallest one that contains the caret)
+    // Enable/disable highlight for current folding block (smallest one that contains the caret)
     void MarkerEnableHighlight(bool enabled);
 
     // Add a marker to a line, returning an ID which can be used to find or delete the marker.
@@ -3370,7 +3377,7 @@ public:
     // Experimental feature, currently buggy.
     void StyleSetChangeable(int style, bool changeable);
 
-    // Display a auto-completion list.
+    // Display an auto-completion list.
     // The lengthEntered parameter indicates how many characters before
     // the caret should be used to provide context.
     void AutoCompShow(int lengthEntered, const wxString& itemList);
@@ -4577,10 +4584,10 @@ public:
     // Get the current indicator value
     int GetIndicatorValue() const;
 
-    // Turn a indicator on over a range.
+    // Turn an indicator on over a range.
     void IndicatorFillRange(int start, int lengthFill);
 
-    // Turn a indicator off over a range.
+    // Turn an indicator off over a range.
     void IndicatorClearRange(int start, int lengthClear);
 
     // Are any indicators present at pos?
@@ -5230,6 +5237,15 @@ public:
     // Append a string to the end of the document without changing the selection.
     void AppendTextRaw(const char* text, int length=-1);
 
+    // Replace the selected text with the argument text.
+    void ReplaceSelectionRaw(const char* text);
+
+    // Replace the target text with the argument text.
+    int ReplaceTargetRaw(const char* text, int length=-1);
+
+    // Replace the target text with the argument text after \d processing.
+    int ReplaceTargetRERaw(const char* text, int length=-1);
+
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
 #endif
@@ -5463,6 +5479,7 @@ protected:
     void OnKeyDown(wxKeyEvent& evt);
     void OnLoseFocus(wxFocusEvent& evt);
     void OnGainFocus(wxFocusEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMenu(wxCommandEvent& evt);
@@ -5475,6 +5492,10 @@ protected:
     // Turn notifications from Scintilla into events
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
+
+#ifdef __WXMSW__
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+#endif // __WXMSW__
 
 private:
     wxDECLARE_EVENT_TABLE();

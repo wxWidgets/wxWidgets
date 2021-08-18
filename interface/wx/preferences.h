@@ -12,8 +12,8 @@
 
     This class encapsulates the differences -- both in appearance and
     behaviour -- between preferences dialogs on different platforms.  In
-    particular, OS X preferences look very different from the typical notebook
-    control used on other platforms, and both OS X and GTK+ preferences windows
+    particular, macOS preferences look very different from the typical notebook
+    control used on other platforms, and both macOS and GTK+ preferences windows
     are modeless unlike Windows options dialogs that are typically modal.
 
     wxPreferencesEditor is able to hide the differences by hiding the creation
@@ -90,12 +90,12 @@ public:
         Returns whether changes to values in preferences pages should be
         applied immediately or only when the user clicks the OK button.
 
-        Currently, changes are applied immediately on OS X and GTK+.
+        Currently, changes are applied immediately on macOS and GTK+.
 
         The preprocessor macro `wxHAS_PREF_EDITOR_APPLY_IMMEDIATELY` is defined
         in this case as well.
      */
-    static bool ShouldApplyChangesImmediately()
+    static bool ShouldApplyChangesImmediately();
 
     /**
         Returns whether the preferences dialog is shown modally.
@@ -149,10 +149,10 @@ public:
     /**
         Return 32x32 icon used for the page on some platforms.
 
-        Currently only used on OS X.
+        Currently only used on macOS.
 
         @note This method is only pure virtual on platforms that require it
-              (OS X). On other platforms, it has default implementation that
+              (macOS). On other platforms, it has default implementation that
               returns an invalid bitmap. The preprocessor symbol
               `wxHAS_PREF_EDITOR_ICONS` is defined if this method must be
               implemented.
@@ -182,7 +182,7 @@ public:
     Specialization of wxPreferencesPage useful for certain commonly used
     preferences page.
 
-    On OS X, preferences pages named "General" and "Advanced" are commonly used
+    On macOS, preferences pages named "General" and "Advanced" are commonly used
     in apps and the OS provides stock icons for them that should be used.
     Instead of reimplementing this behaviour yourself, you can inherit from
     wxStockPreferencesPage and get correct title and icon.
@@ -214,6 +214,6 @@ public:
 
     /// Reimplemented to return suitable name for the page's kind.
     virtual wxString GetName() const;
-    /// Reimplemented to return stock icon on OS X.
+    /// Reimplemented to return stock icon on macOS.
     virtual wxBitmap GetLargeIcon() const;
 };

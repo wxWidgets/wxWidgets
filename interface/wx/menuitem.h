@@ -31,8 +31,10 @@
         A menu has been just closed.
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT(id, func)}
-        The menu item with the specified id has been highlighted: used to show
-        help prompts in the status bar by wxFrame
+        The menu item with the specified id has been highlighted. If the id is
+        ::wxID_NONE, highlighting has been removed from the previously
+        highlighted menu item and there is no highlighted item any more.
+        This is used by wxFrame to show help prompts in the status bar.
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT_ALL(func)}
         A menu item has been highlighted, i.e. the currently selected menu item has changed.
@@ -416,7 +418,7 @@ public:
         "ALT" and @c "SHIFT" strings (case doesn't matter) separated by either
         @c '-' or @c '+' characters and followed by the accelerator itself.
         Notice that @c CTRL corresponds to the "Ctrl" key on most platforms but
-        not under OS X where it is mapped to "Cmd" key on Mac keyboard.
+        not under macOS where it is mapped to "Cmd" key on Mac keyboard.
         Usually this is exactly what you want in portable code but if you
         really need to use the (rarely used for this purpose) "Ctrl" key even
         under Mac, you may use @c RAWCTRL to prevent this mapping. Under the

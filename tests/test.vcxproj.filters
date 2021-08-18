@@ -70,6 +70,9 @@
     <ClCompile Include="streams\fileback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="config\config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="config\fileconf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -263,6 +266,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="streams\lzmastream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="net\webrequest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

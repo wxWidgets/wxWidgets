@@ -14,9 +14,6 @@
 // and "catch.hpp"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // Suppress some warnings in catch_impl.hpp.
 wxCLANG_WARNING_SUPPRESS(missing-braces)
@@ -109,9 +106,10 @@ static wxString FormatAssertMessage(const wxString& file,
                                     const wxString& msg)
 {
     wxString str;
-    str << "wxWidgets assert: " << cond << " failed "
-           "at " << file << ":" << line << " in " << func
-        << " with message '" << msg << "'";
+    str << wxASCII_STR("wxWidgets assert: ") << cond
+        << wxASCII_STR(" failed at ") << file << wxASCII_STR(":") << line
+        << wxASCII_STR(" in ") << func << wxASCII_STR(" with message '")
+        << msg << wxASCII_STR("'");
     return str;
 }
 
@@ -133,21 +131,27 @@ static void TestAssertHandler(const wxString& file,
     {
         // Exceptions thrown from worker threads are not caught currently and
         // so we'd just die without any useful information -- abort instead.
-        abortReason << assertMessage << "in a worker thread.";
+        abortReason << assertMessage << wxASCII_STR(" in a worker thread.");
     }
+#if __cplusplus >= 201703L || wxCHECK_VISUALC_VERSION(14)
+    else if ( uncaught_exceptions() )
+#else
     else if ( uncaught_exception() )
+#endif
     {
         // Throwing while already handling an exception would result in
         // terminate() being called and we wouldn't get any useful information
         // about why the test failed then.
         if ( s_lastAssertMessage.empty() )
         {
-            abortReason << assertMessage << "while handling an exception";
+            abortReason << assertMessage
+                        << wxASCII_STR("while handling an exception");
         }
         else // In this case the exception is due to a previous assert.
         {
-            abortReason << s_lastAssertMessage << "\n  and another "
-                        << assertMessage << " while handling it.";
+            abortReason << s_lastAssertMessage
+                        << wxASCII_STR("\n  and another ") << assertMessage
+                        << wxASCII_STR(" while handling it.");
         }
     }
     else // Can "safely" throw from here.
@@ -160,6 +164,12 @@ static void TestAssertHandler(const wxString& file,
         throw TestAssertFailure(file, line, func, cond, msg);
     }
 
+#if wxUSE_STACKWALKER
+    const wxString& stackTrace = wxApp::GetValidTraits().GetAssertStackTrace();
+    if ( !stackTrace.empty() )
+        abortReason << wxASCII_STR("\n\nAssert call stack:\n") << stackTrace;
+#endif // wxUSE_STACKWALKER
+
     wxFputs(abortReason, stderr);
     fflush(stderr);
     _exit(-1);
@@ -167,7 +177,13 @@ static void TestAssertHandler(const wxString& file,
 
 CATCH_TRANSLATE_EXCEPTION(TestAssertFailure& e)
 {
-    return e.m_msg.ToStdString(wxConvUTF8);
+    wxString desc = e.m_msg;
+    if ( desc.empty() )
+        desc.Printf(wxASCII_STR("Condition \"%s\" failed"), e.m_cond);
+
+    desc += wxString::Format(wxASCII_STR(" in %s() at %s:%d"), e.m_func, e.m_file, e.m_line);
+
+    return desc.ToStdString(wxConvUTF8);
 }
 
 #endif // wxDEBUG_LEVEL
@@ -225,8 +241,8 @@ public:
     // show some details about the exception along the way.
     virtual bool OnExceptionInMainLoop() wxOVERRIDE
     {
-        wxFprintf(stderr, "Unhandled exception in the main loop: %s\n",
-                  Catch::translateActiveException());
+        wxFprintf(stderr, wxASCII_STR("Unhandled exception in the main loop: %s\n"),
+                  wxASCII_STR(Catch::translateActiveException().c_str()));
 
         throw;
     }
@@ -349,23 +365,13 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
 
 extern bool IsNetworkAvailable()
 {
-    // Somehow even though network is available on Travis CI build machines,
-    // attempts to open remote URIs sporadically fail, so don't run these tests
-    // under Travis to avoid false positives.
-    static int s_isTravis = -1;
-    if ( s_isTravis == -1 )
-        s_isTravis = wxGetEnv("TRAVIS", NULL);
-
-    if ( s_isTravis )
-        return false;
-
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
 
     wxSocketBase::Initialize();
 
     wxIPV4address addr;
-    if (!addr.Hostname("www.google.com") || !addr.Service("www"))
+    if (!addr.Hostname(wxASCII_STR("www.google.com")) || !addr.Service(wxASCII_STR("www")))
     {
         wxSocketBase::Shutdown();
         return false;
@@ -385,22 +391,8 @@ extern bool IsAutomaticTest()
     static int s_isAutomatic = -1;
     if ( s_isAutomatic == -1 )
     {
-        // Allow setting an environment variable to emulate buildslave user for
-        // testing.
-        wxString username;
-        if ( !wxGetEnv("WX_TEST_USER", &username) )
-            username = wxGetUserId();
-
-        username.MakeLower();
-        s_isAutomatic = username == "buildbot" ||
-                            username.Matches("sandbox*");
-
-        // Also recognize Travis and AppVeyor CI environments.
-        if ( !s_isAutomatic )
-        {
-            s_isAutomatic = wxGetEnv("TRAVIS", NULL) ||
-                                wxGetEnv("APPVEYOR", NULL);
-        }
+        s_isAutomatic = wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
+                            wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
     }
 
     return s_isAutomatic == 1;
@@ -412,7 +404,7 @@ extern bool IsRunningUnderXVFB()
     if ( s_isRunningUnderXVFB == -1 )
     {
         wxString value;
-        s_isRunningUnderXVFB = wxGetEnv("wxUSE_XVFB", &value) && value == "1";
+        s_isRunningUnderXVFB = wxGetEnv(wxASCII_STR("wxUSE_XVFB"), &value) && value == wxASCII_STR("1");
     }
 
     return s_isRunningUnderXVFB == 1;
@@ -428,23 +420,23 @@ bool EnableUITests()
         // Allow explicitly configuring this via an environment variable under
         // all platforms.
         wxString enabled;
-        if ( wxGetEnv("WX_UI_TESTS", &enabled) )
+        if ( wxGetEnv(wxASCII_STR("WX_UI_TESTS"), &enabled) )
         {
-            if ( enabled == "1" )
+            if ( enabled == wxASCII_STR("1") )
                 s_enabled = 1;
-            else if ( enabled == "0" )
+            else if ( enabled == wxASCII_STR("0") )
                 s_enabled = 0;
             else
-                wxFprintf(stderr, "Unknown \"WX_UI_TESTS\" value \"%s\" ignored.\n", enabled);
+                wxFprintf(stderr, wxASCII_STR("Unknown \"WX_UI_TESTS\" value \"%s\" ignored.\n"), enabled);
         }
 
         if ( s_enabled == -1 )
         {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK__)
             s_enabled = 1;
-#else // !__WXMSW__
+#else // !(__WXMSW__ || __WXGTK__)
             s_enabled = 0;
-#endif // __WXMSW__/!__WXMSW__
+#endif // (__WXMSW__ || __WXGTK__)
         }
     }
 
@@ -490,12 +482,30 @@ wxTestGLogHandler(const gchar* domain,
                   const gchar* message,
                   gpointer data)
 {
+    // Check if debug messages in this domain will be logged.
+    if ( level == G_LOG_LEVEL_DEBUG )
+    {
+        static const char* const allowed = getenv("G_MESSAGES_DEBUG");
+
+        // By default debug messages are dropped, but if G_MESSAGES_DEBUG is
+        // defined, they're logged for the domains specified in it and if it
+        // has the special value "all", then all debug messages are shown.
+        //
+        // Note that the check here can result in false positives, e.g. domain
+        // "foo" would pass it even if G_MESSAGES_DEBUG only contains "foobar",
+        // but such cases don't seem to be important enough to bother
+        // accounting for them.
+        if ( !allowed ||
+                (strcmp(allowed, "all") != 0 && !strstr(allowed, domain)) )
+        {
+            return;
+        }
+    }
+
     fprintf(stderr, "\n*** GTK log message while running %s(): ",
             wxGetCurrentTestName().c_str());
 
     g_log_default_handler(domain, level, message, data);
-
-    fprintf(stderr, "\n");
 }
 
 #endif // __WXGTK__
@@ -577,11 +587,13 @@ bool TestApp::ProcessEvent(wxEvent& event)
 int TestApp::RunTests()
 {
 #if wxUSE_LOG
-    // Switch off logging unless --verbose
-    bool verbose = wxLog::GetVerbose();
-    wxLog::EnableLogging(verbose);
-#else
-    bool verbose = false;
+    // Switch off logging to avoid interfering with the tests output unless
+    // WXTRACE is set, as otherwise setting it would have no effect while
+    // running the tests.
+    if ( !wxGetEnv(wxASCII_STR("WXTRACE"), NULL) )
+        wxLog::EnableLogging(false);
+    else
+        wxLog::SetTimestamp("%Y-%m-%d %H:%M:%S.%l");
 #endif
 
     // Cast is needed under MSW where Catch also provides an overload taking

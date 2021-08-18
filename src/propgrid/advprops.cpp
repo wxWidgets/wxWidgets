@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROPGRID
 
@@ -273,7 +270,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
         wnd2 = NULL;
     }
 
-    wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).m_primary;
+    wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).GetPrimary();
 #if wxUSE_VALIDATORS
     // Let's add validator to make sure only numbers can be entered
     wxTextValidator validator(wxFILTER_NUMERIC, &m_tempString);
@@ -1889,13 +1886,19 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
     if ( m_pBitmap || (m_pImage && m_pImage->IsOk() ) )
     {
         // Draw the thumbnail
-
         // Create the bitmap here because required size is not known in OnSetValue().
+
+        // Delete the cache if required size changed
+        if ( m_pBitmap && (m_pBitmap->GetWidth() != rect.width || m_pBitmap->GetHeight() != rect.height) )
+        {
+            delete m_pBitmap;
+            m_pBitmap = NULL;
+        }
+
         if ( !m_pBitmap )
         {
             m_pImage->Rescale( rect.width, rect.height );
             m_pBitmap = new wxBitmap( *m_pImage );
-            wxDELETE(m_pImage);
         }
 
         dc.DrawBitmap( *m_pBitmap, rect.x, rect.y, false );

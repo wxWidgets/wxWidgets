@@ -13,7 +13,7 @@
 
 In addition to the wxWidgets libraries (see @ref page_libs), some utilities
 are available to the users in the @c utils hierarchy (even if some of them are
-explicitly conceived for wxWidgets maintainance and will probably be of
+explicitly conceived for wxWidgets maintenance and will probably be of
 little use to others).
 
 Please note that these utilities only represent the utilities developed and

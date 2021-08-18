@@ -18,8 +18,8 @@ enum
     /**
         Size the column automatically to fit all values.
 
-        @note On OS X, this style is only implemented in the Cocoa build on
-              OS X >= 10.5; it behaves identically to wxCOL_WIDTH_DEFAULT otherwise.
+        @note On macOS, this style is only implemented in the Cocoa build on
+              macOS >= 10.5; it behaves identically to wxCOL_WIDTH_DEFAULT otherwise.
      */
     wxCOL_WIDTH_AUTOSIZE = -2
 };

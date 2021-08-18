@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dialog.h"
 
@@ -99,8 +96,12 @@ void wxDialog::OnOK(wxCommandEvent &WXUNUSED(event))
         }
         else
         {
-            SetReturnCode(wxID_OK);
-            Show(false);
+            // don't change return code from event char if it was set earlier
+            if (GetReturnCode() == 0)
+            {
+                SetReturnCode(wxID_OK);
+                Show(false);
+            }
         }
     }
 }

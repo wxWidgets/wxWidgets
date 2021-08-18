@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -134,7 +131,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
 
     if (s == NULL)
     {
-        wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().c_str());
+        wxLogError(_("Cannot open HTML document: %s"), file.GetLocation());
         return wxEmptyString;
     }
 
@@ -173,7 +170,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     {
         wxString hdr;
         wxString mime = file.GetMimeType();
-        hdr.Printf(wxT("<meta http-equiv=\"Content-Type\" content=\"%s\">"), mime.c_str());
+        hdr.Printf(wxT("<meta http-equiv=\"Content-Type\" content=\"%s\">"), mime);
         return hdr+doc;
     }
 #endif

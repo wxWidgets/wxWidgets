@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SPINBTN
 
@@ -458,23 +455,12 @@ void SpinBtnWidgetsPage::OnButtonSetMinAndMax(wxCommandEvent& WXUNUSED(event))
 
     m_min = minNew;
     m_max = maxNew;
-    wxString smax('9', m_textMax->GetValue().length());
-    wxSize
-      size = m_spinctrl->GetSizeFromTextSize(m_spinctrl->GetTextExtent(smax));
-
-    m_spinctrl->SetMinSize(size);
-    m_spinctrl->SetSize(size);
-
-    smax += ".0";
-    size = m_spinctrldbl->GetSizeFromTextSize(
-                m_spinctrldbl->GetTextExtent(smax)
-            );
-    m_spinctrldbl->SetMinSize(size);
-    m_spinctrldbl->SetSize(size);
 
     m_spinbtn->SetRange(minNew, maxNew);
     m_spinctrl->SetRange(minNew, maxNew);
     m_spinctrldbl->SetRange(minNew, maxNew);
+
+    m_sizerSpin->Layout();
 }
 
 void SpinBtnWidgetsPage::OnButtonSetBase(wxCommandEvent& WXUNUSED(event))
@@ -491,10 +477,20 @@ void SpinBtnWidgetsPage::OnButtonSetBase(wxCommandEvent& WXUNUSED(event))
     {
         wxLogWarning("Setting base %d failed.", m_base);
     }
+
+    m_sizerSpin->Layout();
 }
 
 void SpinBtnWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
 {
+    if ( m_textValue->IsEmpty() )
+    {
+        m_spinctrl->SetValue( wxEmptyString );
+        m_spinctrldbl->SetValue( wxEmptyString );
+
+        return;
+    }
+
     long val;
     if ( !m_textValue->GetValue().ToLong(&val) || !IsValidValue(val) )
     {
@@ -511,7 +507,8 @@ void SpinBtnWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
 void SpinBtnWidgetsPage::OnUpdateUIValueButton(wxUpdateUIEvent& event)
 {
     long val;
-    event.Enable( m_textValue->GetValue().ToLong(&val) && IsValidValue(val) );
+    event.Enable( m_textValue->IsEmpty() ||
+                  ( m_textValue->GetValue().ToLong(&val) && IsValidValue(val) ) );
 }
 
 void SpinBtnWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)

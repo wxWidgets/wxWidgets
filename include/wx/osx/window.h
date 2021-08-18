@@ -40,7 +40,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr );
+                const wxString& name = wxASCII_STR(wxPanelNameStr) );
 
     virtual ~wxWindowMac();
 
@@ -49,7 +49,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr );
+                const wxString& name = wxASCII_STR(wxPanelNameStr) );
 
     virtual void SendSizeEvent(int flags = 0) wxOVERRIDE;
 
@@ -71,8 +71,6 @@ public:
     {
         return OSXShowWithEffect(false, effect, timeout);
     }
-
-    virtual bool IsShownOnScreen() const wxOVERRIDE;
 
     virtual void SetFocus() wxOVERRIDE;
 
@@ -122,6 +120,9 @@ public:
     virtual bool UnregisterHotKey(int hotkeyId) wxOVERRIDE;
 #endif // wxUSE_HOTKEY
 
+    virtual wxSize GetDPI() const wxOVERRIDE;
+    virtual double GetDPIScaleFactor() const wxOVERRIDE;
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
 
@@ -151,10 +152,12 @@ public:
     // --------------
 
     void OnMouseEvent( wxMouseEvent &event );
+    void OnDPIChanged( wxDPIChangedEvent& event );
 
     void MacOnScroll( wxScrollEvent&event );
 
     virtual bool AcceptsFocus() const wxOVERRIDE;
+    virtual void EnableVisibleFocus(bool enabled) wxOVERRIDE;
 
     virtual bool IsDoubleBuffered() const wxOVERRIDE { return true; }
 
@@ -293,6 +296,14 @@ public:
     // internal response to size events
     virtual void MacOnInternalSize() {}
 
+    // Return the DPI corresponding to the given scale factor.
+    static wxSize       OSXMakeDPIFromScaleFactor(double scaleFactor);
+
+#if wxUSE_MENUS
+    // Called on the invoking window after handling the menu event.
+    virtual void        OSXAfterMenuEvent() { }
+#endif // wxUSE_MENUS
+
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;
@@ -336,7 +347,6 @@ protected:
     bool                MacHasScrollBarCorner() const;
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;
-    void                MacUpdateControlFont() ;
 
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,

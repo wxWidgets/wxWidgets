@@ -14,7 +14,7 @@
     wxTreeItemId handles, which may be tested for validity by calling
     wxTreeItemId::IsOk().
 
-    A similar control with a fully native implementation for GTK+ and OS X
+    A similar control with a fully native implementation for GTK+ and macOS
     as well is wxDataViewTreeCtrl.
 
     To intercept events from a tree control, use the event table macros
@@ -507,6 +507,12 @@ public:
     virtual unsigned int GetIndent() const;
 
     /**
+        Returns the current tree control spacing.  This is the number of
+        horizontal pixels between the buttons and the state images.
+    */
+    unsigned int GetSpacing() const;
+
+    /**
         Returns the background colour of the item.
     */
     virtual wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
@@ -849,6 +855,13 @@ public:
         Sets the indentation for the tree control.
     */
     virtual void SetIndent(unsigned int indent);
+
+    /**
+        Sets the spacing for the tree control. Spacing is the number of
+        horizontal pixels between the buttons and the state images.
+        This has no effect under wxMSW.
+    */
+    void SetSpacing(unsigned int spacing);
 
     /**
         Sets the colour of the item's background.

@@ -40,7 +40,7 @@ class WXDLLIMPEXP_CORE wxMetafile : public wxGDIObject
 {
 public:
     wxMetafile(const wxString& file = wxEmptyString);
-    virtual ~wxMetafile(void);
+    virtual ~wxMetafile();
 
     // After this is called, the metafile cannot be used for anything
     // since it is now owned by the clipboard.
@@ -77,7 +77,7 @@ public:
     virtual wxMetafile *Close();
 
     // Implementation
-    wxMetafile *GetMetaFile(void) const { return m_metaFile; }
+    wxMetafile *GetMetaFile() const { return m_metaFile; }
     void SetMetaFile(wxMetafile *mf) { m_metaFile = mf; }
 
 protected:
@@ -122,10 +122,10 @@ private:
 
 // No origin or extent
 #define wxMakeMetaFilePlaceable wxMakeMetafilePlaceable
-bool WXDLLIMPEXP_CORE wxMakeMetafilePlaceable(const wxString& filename, float scale = 1.0);
+bool WXDLLIMPEXP_CORE wxMakeMetafilePlaceable(const wxString& filename, float scale = 1.0f);
 
 // Optional origin and extent
-bool WXDLLIMPEXP_CORE wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale = 1.0, bool useOriginAndExtent = true);
+bool WXDLLIMPEXP_CORE wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale = 1.0f, bool useOriginAndExtent = true);
 
 // ----------------------------------------------------------------------------
 // wxMetafileDataObject is a specialization of wxDataObject for metafile data

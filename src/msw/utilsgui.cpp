@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/cursor.h"
@@ -206,9 +203,38 @@ void PixelToHIMETRIC(LONG *x, LONG *y)
 
 void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2)
 {
-    MoveToEx(hdc, x1, y1, NULL); LineTo((HDC) hdc, x2, y2);
+    MoveToEx(hdc, x1, y1, NULL); LineTo(hdc, x2, y2);
 }
 
+// Function dedicated to drawing horizontal/vertical lines with solid color
+// It fills rectangle representing the line with ::ExtTextOut() API which
+// apparently is faster than ::MoveTo()/::LineTo() on DC with a non-rotated
+// coordinate system.
+void wxDrawHVLine(HDC hdc, int x1, int y1, int x2, int y2, COLORREF color, int width)
+{
+    wxASSERT(x1 == x2 || y1 == y2);
+
+    int w1 = width / 2;
+    int w2 = width - w1;
+    RECT r;
+    if ( y1 == y2 )
+    {
+        if ( x1 == x2 )
+            return;
+        ::SetRect(&r, x1, y1 - w1, x2, y1 + w2);
+    }
+    else
+    {
+        ::SetRect(&r, x1 - w1, y1, x2 + w2, y2);
+    }
+
+    COLORREF bgColorOrig = ::GetBkColor(hdc);
+    ::SetBkColor(hdc, color);
+
+    ::ExtTextOutW(hdc, 0, 0, ETO_OPAQUE, &r, L"", 0, NULL);
+
+    ::SetBkColor(hdc, bgColorOrig);
+}
 
 // ----------------------------------------------------------------------------
 // Shell API wrappers

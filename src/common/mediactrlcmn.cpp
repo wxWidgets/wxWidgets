@@ -20,9 +20,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MEDIACTRL
 
@@ -269,8 +266,7 @@ const wxClassInfo* wxMediaCtrl::NextBackend(wxClassInfo::const_iterator* it)
 //---------------------------------------------------------------------------
 wxMediaCtrl::~wxMediaCtrl()
 {
-    if (m_imp)
-        delete m_imp;
+    delete m_imp;
 }
 
 //---------------------------------------------------------------------------

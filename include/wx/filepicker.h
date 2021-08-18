@@ -126,7 +126,7 @@ protected:
 // under the name "wxFilePickerWidget" and "wxDirPickerWidget".
 // NOTE: wxFileDirPickerCtrlBase will allocate a wx{File|Dir}PickerWidget and this
 //       requires that all classes being mapped as wx{File|Dir}PickerWidget have the
-//       same prototype for the contructor...
+//       same prototype for the constructor...
 // since GTK >= 2.6, there is GtkFileButton
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/filepicker.h"
@@ -235,13 +235,13 @@ public:
     wxFilePickerCtrl(wxWindow *parent,
                      wxWindowID id,
                      const wxString& path = wxEmptyString,
-                     const wxString& message = wxFileSelectorPromptStr,
-                     const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
+                     const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),
+                     const wxString& wildcard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxFLP_DEFAULT_STYLE,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxFilePickerCtrlNameStr)
+                     const wxString& name = wxASCII_STR(wxFilePickerCtrlNameStr))
     {
         Create(parent, id, path, message, wildcard, pos, size, style,
                validator, name);
@@ -250,13 +250,13 @@ public:
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& path = wxEmptyString,
-                const wxString& message = wxFileSelectorPromptStr,
-                const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
+                const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),
+                const wxString& wildcard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxFLP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxFilePickerCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxFilePickerCtrlNameStr));
 
     void SetFileName(const wxFileName &filename)
         { SetPath(filename.GetFullPath()); }
@@ -339,24 +339,24 @@ public:
 
     wxDirPickerCtrl(wxWindow *parent, wxWindowID id,
                     const wxString& path = wxEmptyString,
-                    const wxString& message = wxDirSelectorPromptStr,
+                    const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDIRP_DEFAULT_STYLE,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxDirPickerCtrlNameStr)
+                    const wxString& name = wxASCII_STR(wxDirPickerCtrlNameStr))
     {
         Create(parent, id, path, message, pos, size, style, validator, name);
     }
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& path = wxEmptyString,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDIRP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxDirPickerCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxDirPickerCtrlNameStr));
 
     void SetDirName(const wxFileName &dirname)
         { SetPath(dirname.GetPath()); }

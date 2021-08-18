@@ -81,8 +81,6 @@
     // ABI-compatible with the corresponding version of the MSVC and we want to
     // allow using it compile the application code using MSVC-built DLLs.
     #define __WX_BO_COMPILER ",Intel C++"
-#elif defined(__BORLANDC__)
-    #define __WX_BO_COMPILER ",Borland C++"
 #else
     #define __WX_BO_COMPILER
 #endif

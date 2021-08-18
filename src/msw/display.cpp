@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/private/display.h"
 
@@ -67,13 +64,6 @@ public:
     {
         return wxGetHDCDepth(ScreenHDC());
     }
-
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        ScreenHDC dc;
-
-        return wxSize(::GetDeviceCaps(dc, HORZSIZE), ::GetDeviceCaps(dc, VERTSIZE));
-    }
 };
 
 class wxDisplayFactorySingleMSW : public wxDisplayFactorySingle
@@ -111,9 +101,14 @@ namespace
 // Simple struct storing the information needed by wxDisplayMSW.
 struct wxDisplayInfo
 {
-    wxDisplayInfo(HMONITOR hmon_, int depth_) : hmon(hmon_), depth(depth_) {}
+    wxDisplayInfo(HMONITOR hmon_,
+                  const MONITORINFOEX& monInfo_,
+                  int depth_)
+        : hmon(hmon_), monInfo(monInfo_), depth(depth_)
+    {}
 
     HMONITOR hmon;
+    MONITORINFOEX monInfo;
     int depth;
 };
 
@@ -136,6 +131,7 @@ public:
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual wxSize GetPPI() const wxOVERRIDE;
+    virtual double GetScaleFactor() const wxOVERRIDE;
 
     virtual wxString GetName() const wxOVERRIDE;
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -156,10 +152,6 @@ protected:
                            dm.dmBitsPerPel,
                            dm.dmDisplayFrequency > 1 ? dm.dmDisplayFrequency : 0);
     }
-
-    // Call GetMonitorInfo() and fill in the provided struct and return true if
-    // it succeeded, otherwise return false.
-    bool GetMonInfo(MONITORINFOEX& monInfo) const;
 
     wxDisplayInfo m_info;
 
@@ -298,37 +290,14 @@ wxDisplayFactoryMSW::GetDpiForMonitorData
 // wxDisplayMSW implementation
 // ----------------------------------------------------------------------------
 
-bool wxDisplayMSW::GetMonInfo(MONITORINFOEX& monInfo) const
-{
-    if ( !::GetMonitorInfo(m_info.hmon, &monInfo) )
-    {
-        wxLogLastError(wxT("GetMonitorInfo"));
-        return false;
-    }
-
-    return true;
-}
-
 wxRect wxDisplayMSW::GetGeometry() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
-
-    wxRect rect;
-    if ( GetMonInfo(monInfo) )
-        wxCopyRECTToRect(monInfo.rcMonitor, rect);
-
-    return rect;
+    return wxRectFromRECT(m_info.monInfo.rcMonitor);
 }
 
 wxRect wxDisplayMSW::GetClientArea() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
-
-    wxRect rectClient;
-    if ( GetMonInfo(monInfo) )
-        wxCopyRECTToRect(monInfo.rcWork, rectClient);
-
-    return rectClient;
+    return wxRectFromRECT(m_info.monInfo.rcWork);
 }
 
 int wxDisplayMSW::GetDepth() const
@@ -354,25 +323,20 @@ wxSize wxDisplayMSW::GetPPI() const
     return IsPrimary() ? wxDisplayImplSingleMSW().GetPPI() : wxSize(0, 0);
 }
 
+double wxDisplayMSW::GetScaleFactor() const
+{
+    const int ppi = GetPPI().y;
+    return ppi ? ppi / (double)wxDisplay::GetStdPPIValue() : 1.0;
+}
+
 wxString wxDisplayMSW::GetName() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
-
-    wxString name;
-    if ( GetMonInfo(monInfo) )
-        name = monInfo.szDevice;
-
-    return name;
+    return m_info.monInfo.szDevice;
 }
 
 bool wxDisplayMSW::IsPrimary() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
-
-    if ( !GetMonInfo(monInfo) )
-        return false;
-
-    return (monInfo.dwFlags & MONITORINFOF_PRIMARY) != 0;
+    return (m_info.monInfo.dwFlags & MONITORINFOF_PRIMARY) != 0;
 }
 
 wxVideoMode wxDisplayMSW::GetCurrentMode() const
@@ -423,6 +387,14 @@ wxArrayVideoModes wxDisplayMSW::GetModes(const wxVideoMode& modeMatch) const
           ::EnumDisplaySettings(deviceName, iModeNum, &dm);
           iModeNum++ )
     {
+        // Only care about the default display output, this prevents duplicate
+        // entries in the modes list.
+        if ( dm.dmFields & DM_DISPLAYFIXEDOUTPUT &&
+             dm.dmDisplayFixedOutput != DMDFO_DEFAULT )
+        {
+            continue;
+        }
+
         const wxVideoMode mode = ConvertToVideoMode(dm);
         if ( mode.Matches(modeMatch) )
         {
@@ -482,7 +454,7 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
              (
                 GetName().t_str(),  // display name
                 pDevMode,           // dev mode or NULL to reset
-                NULL,               // reserved
+                wxRESERVED_PARAM,
                 flags,
                 NULL                // pointer to video parameters (not used)
              ) )
@@ -623,7 +595,7 @@ wxDisplayFactoryMSW::MultimonEnumProc(
     const int hdcDepth = wxGetHDCDepth(hdcMonitor);
     ::DeleteDC(hdcMonitor);
 
-    self->m_displays.push_back(wxDisplayInfo(hMonitor, hdcDepth));
+    self->m_displays.push_back(wxDisplayInfo(hMonitor, monInfo, hdcDepth));
 
     // continue the enumeration
     return TRUE;

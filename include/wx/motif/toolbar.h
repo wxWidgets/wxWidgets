@@ -22,7 +22,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxTB_DEFAULT_STYLE,
-        const wxString& name = wxToolBarNameStr)
+        const wxString& name = wxASCII_STR(wxToolBarNameStr))
     {
         Init();
 
@@ -34,7 +34,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxTB_DEFAULT_STYLE,
-        const wxString& name = wxToolBarNameStr);
+        const wxString& name = wxASCII_STR(wxToolBarNameStr));
 
     virtual ~wxToolBar();
 

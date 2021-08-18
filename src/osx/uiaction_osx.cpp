@@ -60,11 +60,9 @@ CGEventType CGEventTypeForMouseDrag(int button)
     {
         case wxMOUSE_BTN_LEFT:
             return kCGEventLeftMouseDragged;
-            break;
             
         case wxMOUSE_BTN_RIGHT:
             return kCGEventRightMouseDragged;
-            break;
             
             // All the other buttons use the constant OtherMouseDown but we still
             // want to check for invalid parameters so assert first
@@ -74,7 +72,6 @@ CGEventType CGEventTypeForMouseDrag(int button)
             
         case wxMOUSE_BTN_MIDDLE:
             return kCGEventOtherMouseDragged;
-            break;
     }
 
 }

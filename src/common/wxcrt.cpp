@@ -15,9 +15,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/crt.h"
 #include "wx/strconv.h" // wxMBConv::cWC2MB()
@@ -719,7 +716,7 @@ size_t wxStrlen(const wxChar16 *s )
 {
     if (!s) return 0;
     size_t i=0;
-    while (*s!=0) { ++i; ++s; };
+    while (*s!=0) { ++i; ++s; }
     return i;
 }
 
@@ -908,7 +905,7 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
                 {
                     // Then it's an error.
                     if ( endptr )
-                        *endptr = (T*) nptr;
+                        *endptr = const_cast<T*>(nptr);
                     errno = EINVAL;
                     return sum;
                 }
@@ -1259,7 +1256,7 @@ int wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap)
 #define ANDROID_WCSTO_END \
     if(endptr) { \
         if(dstendp) \
-            *endptr = (wchar_t*)(nptr + (dstendp - dst) * sizeof(wchar_t)); \
+            *endptr = (wchar_t*)(nptr + (dstendp - dst)); \
         else \
             *endptr = NULL; \
     } \

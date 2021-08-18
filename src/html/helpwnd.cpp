@@ -12,9 +12,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_WXHTML_HELP
 
@@ -605,15 +602,15 @@ wxHtmlHelpWindow::~wxHtmlHelpWindow()
     // PopEventHandler(); // wxhtmlhelpcontroller (not any more!)
     if (m_DataCreated)
         delete m_Data;
-    if (m_NormalFonts) delete m_NormalFonts;
-    if (m_FixedFonts) delete m_FixedFonts;
+    delete m_NormalFonts;
+    delete m_FixedFonts;
     if (m_PagesHash)
     {
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
         delete m_PagesHash;
     }
 #if wxUSE_PRINTING_ARCHITECTURE
-    if (m_Printer) delete m_Printer;
+    delete m_Printer;
 #endif
 }
 
@@ -877,7 +874,7 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
 #if wxUSE_PROGRESSDLG
                 progress.Update(status.GetCurIndex(), foundstr);
 #endif
-                m_SearchList->Append(status.GetName(), (void*)status.GetCurItem());
+                m_SearchList->Append(status.GetName(), const_cast<wxHtmlHelpDataItem*>(status.GetCurItem()));
             }
         }
 

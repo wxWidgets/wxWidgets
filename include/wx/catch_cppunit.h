@@ -90,7 +90,7 @@ namespace Catch
             {
 #if wxUSE_UNICODE
                 if ( !iswprint(*i) )
-                    s += wxString::Format("\\u%04X", *i).ToStdString();
+                    s += wxString::Format(wxASCII_STR("\\u%04X"), *i).ToAscii();
                 else
 #endif // wxUSE_UNICODE
                     s += *i;
@@ -278,10 +278,10 @@ inline std::string wxGetCurrentTestName()
 // Use this macro to assert with the given formatted message (it should contain
 // the format string and arguments in a separate pair of parentheses)
 #define WX_ASSERT_MESSAGE(msg, cond) \
-    CPPUNIT_ASSERT_MESSAGE(std::string(wxString::Format msg .mb_str()), (cond))
+    CPPUNIT_ASSERT_MESSAGE(std::string(wxString::Format msg .mb_str(wxConvLibc)), (cond))
 
 #define WX_ASSERT_EQUAL_MESSAGE(msg, expected, actual) \
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(std::string(wxString::Format msg .mb_str()), \
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(std::string(wxString::Format msg .mb_str(wxConvLibc)), \
                                  (expected), (actual))
 
 #endif // _WX_CATCH_CPPUNIT_H_

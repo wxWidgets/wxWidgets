@@ -257,7 +257,7 @@ public:
             // pg is one of wxPAGE_ODD, wxPAGE_EVEN and wx_PAGE_ALL constants.
             // You can set different header/footer for odd and even pages
 
-    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = 0);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int* sizes = NULL);
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used)
 
     // Sets font sizes to be relative to the given size or the system

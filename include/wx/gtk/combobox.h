@@ -35,7 +35,7 @@ public:
                int n = 0, const wxString choices[] = NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxComboBoxNameStr)
+               const wxString& name = wxASCII_STR(wxComboBoxNameStr))
         : wxChoice(), wxTextEntry()
     {
         Init();
@@ -49,7 +49,7 @@ public:
                const wxArrayString& choices,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxComboBoxNameStr)
+               const wxString& name = wxASCII_STR(wxComboBoxNameStr))
         : wxChoice(), wxTextEntry()
     {
         Init();
@@ -64,7 +64,7 @@ public:
                 int n = 0, const wxString choices[] = (const wxString *) NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value,
                 const wxPoint& pos,
@@ -72,7 +72,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     // Set/GetSelection() from wxTextEntry and wxChoice
 
@@ -127,6 +127,8 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
 
 protected:
     // From wxWindowGTK:

@@ -46,7 +46,6 @@
 #include "wx/bitmap.h" // wxBitmap used by-value
 #include "wx/textentry.h"
 #include "wx/time.h" // needed for wxMilliClock_t
-#include "wx/compositewin.h" // wxComboCtrlBase declaration
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxComboPopup;
@@ -141,14 +140,14 @@ struct wxComboCtrlFeatures
 };
 
 
-class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxCompositeWindow<wxControl>,
+class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl,
                                          public wxTextEntry
 {
     friend class wxComboPopup;
     friend class wxComboPopupEvtHandler;
 public:
     // ctors and such
-    wxComboCtrlBase() : wxCompositeWindow<wxControl>(), wxTextEntry() { Init(); }
+    wxComboCtrlBase() : wxControl(), wxTextEntry() { Init(); }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -473,6 +472,7 @@ public:
         { return m_mainCtrlWnd; }
 
     // also set the embedded wxTextCtrl colours
+    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
     virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
 
 protected:
@@ -482,8 +482,8 @@ protected:
     {
         return ( !m_text &&
                  !(flags & wxCONTROL_ISSUBMENU) &&
-                 !m_valueString.length() &&
-                 m_hintText.length() &&
+                 m_valueString.empty() &&
+                 !m_hintText.empty() &&
                  !ShouldDrawFocus() );
     }
 
@@ -508,9 +508,6 @@ protected:
     // Called when text was changed programmatically
     // (e.g. from WriteText())
     void OnSetValue(const wxString& value);
-
-    // Installs standard input handler to combo (and optionally to the textctrl)
-    void InstallInputHandlers();
 
     // Flags for DrawButton
     enum
@@ -575,6 +572,15 @@ protected:
     void OnKeyEvent(wxKeyEvent& event);
     void OnCharEvent(wxKeyEvent& event);
 
+    void OnTextFocus(wxFocusEvent& event);
+    void OnTextKey(wxKeyEvent& event);
+
+    void OnPopupActivate(wxActivateEvent& event);
+    void OnPopupKey(wxKeyEvent& event);
+    void OnPopupSize(wxSizeEvent& event);
+
+    void OnPopupMouseEvent(wxMouseEvent& event);
+
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
@@ -598,6 +604,10 @@ protected:
     // Flags are same as for DoShowPopup.
     virtual bool AnimateShow( const wxRect& rect, int flags );
 
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE;
+#endif
+
     // protected wxTextEntry methods
     virtual void DoSetValue(const wxString& value, int flags) wxOVERRIDE;
     virtual wxString DoGetValue() const wxOVERRIDE;
@@ -606,8 +616,6 @@ protected:
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt) wxOVERRIDE;
     virtual wxPoint DoGetMargins() const wxOVERRIDE;
-
-    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
 
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;
@@ -628,17 +636,8 @@ protected:
     // popup interface
     wxComboPopup*           m_popupInterface;
 
-    // this is input etc. handler for the text control
-    wxEvtHandler*           m_textEvtHandler;
-
     // this is for the top level window
     wxEvtHandler*           m_toplevEvtHandler;
-
-    // this is for the control in popup
-    wxEvtHandler*           m_popupEvtHandler;
-
-    // this is for the popup window
-    wxEvtHandler*           m_popupWinEvtHandler;
 
     // main (ie. topmost) window of a composite control (default = this)
     wxWindow*               m_mainCtrlWnd;
@@ -718,13 +717,14 @@ protected:
     // is the text-area background colour overridden?
     bool                    m_hasTcBgCol;
 
+    // flags used while popup is shown
+    bool                    m_beenInsidePopup;
+    bool                    m_blockEventsToPopup;
+
 private:
     void Init();
 
     wxByte                  m_ignoreEvtText;  // Number of next EVT_TEXTs to ignore
-
-    // Is popup window wxPopupTransientWindow, wxPopupWindow or wxDialog?
-    wxByte                  m_popupWinType;
 
     wxDECLARE_EVENT_TABLE();
 

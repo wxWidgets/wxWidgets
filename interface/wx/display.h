@@ -17,6 +17,12 @@ class wxDisplay
 {
 public:
     /**
+        Default constructor creating wxDisplay object representing the primary
+        display.
+     */
+    wxDisplay();
+
+    /**
         Constructor, setting up a wxDisplay instance with the specified
         display.
 
@@ -24,7 +30,7 @@ public:
             The index of the display to use. This must be non-negative and
             lower than the value returned by GetCount().
     */
-    wxDisplay(unsigned int index = 0);
+    explicit wxDisplay(unsigned int index);
 
     /**
         Constructor creating the display object associated with the given
@@ -136,6 +142,46 @@ public:
         @since 3.1.2
      */
     wxSize GetPPI() const;
+
+    /**
+        Returns scaling factor used by this display.
+
+        The scaling factor is the ratio between GetPPI() and GetStdPPI()
+        (it is implicitly assumed that this ratio is the same for both
+        horizontal and vertical components).
+
+        @see wxWindow::GetContentScaleFactor(), wxWindow::GetDPIScaleFactor()
+
+        @since 3.1.5
+     */
+    double GetScaleFactor() const;
+
+    /**
+        Returns default display resolution for the current platform in pixels
+        per inch.
+
+        This function mostly used internally, use GetPPI() to get the actual
+        display resolution.
+
+        Currently the standard PPI is the same in both horizontal and vertical
+        directions on all platforms and its value is 96 everywhere except under
+        Apple devices (those running macOS, iOS, watchOS etc), where it is 72.
+
+        @see GetStdPPI()
+
+        @since 3.1.5
+     */
+    static int GetStdPPIValue();
+
+    /**
+        Returns default display resolution for the current platform as wxSize.
+
+        This function is equivalent to constructing wxSize object with both
+        components set to GetStdPPIValue().
+
+        @since 3.1.5
+     */
+    static wxSize GetStdPPI();
 
     /**
         Returns @true if the display is the primary display. The primary

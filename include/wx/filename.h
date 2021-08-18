@@ -70,9 +70,19 @@ enum wxPathNormalize
     wxPATH_NORM_TILDE    = 0x0004,  // Unix only: replace ~ and ~user
     wxPATH_NORM_CASE     = 0x0008,  // if case insensitive => tolower
     wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
-    wxPATH_NORM_LONG =     0x0020,  // make the path the long form
+    wxPATH_NORM_LONG     = 0x0020,  // make the path the long form (MSW-only)
     wxPATH_NORM_SHORTCUT = 0x0040,  // resolve the shortcut, if it is a shortcut
-    wxPATH_NORM_ALL      = 0x00ff & ~wxPATH_NORM_CASE
+
+    // Don't use this constant, it used to correspond to the default
+    // Normalize() behaviour but this is deprecated now.
+    wxPATH_NORM_DEPR_OLD_DEFAULT= 0x00ff & ~wxPATH_NORM_CASE,
+
+    // This constant name is misleading, as it doesn't really include all the
+    // flags above, so its use is discouraged, please use the flags you want
+    // explicitly instead.
+    wxPATH_NORM_ALL
+    wxDEPRECATED_ATTR("specify the wanted flags explicitly to avoid surprises")
+        = wxPATH_NORM_DEPR_OLD_DEFAULT
 };
 
 // what exactly should GetPath() return?
@@ -105,8 +115,8 @@ enum
                                        // also sets wxFILE_EXISTS_NO_FOLLOW as
                                        // it would never be satisfied otherwise
     wxFILE_EXISTS_DEVICE    = 0x0008,  // check for existence of a device
-    wxFILE_EXISTS_FIFO      = 0x0016,  // check for existence of a FIFO
-    wxFILE_EXISTS_SOCKET    = 0x0032,  // check for existence of a socket
+    wxFILE_EXISTS_FIFO      = 0x0010,  // check for existence of a FIFO
+    wxFILE_EXISTS_SOCKET    = 0x0020,  // check for existence of a socket
                                        // gap for future types
     wxFILE_EXISTS_NO_FOLLOW = 0x1000,  // don't dereference a contained symlink
     wxFILE_EXISTS_ANY       = 0x1FFF   // check for existence of anything
@@ -133,7 +143,7 @@ public:
     wxFileName(const wxFileName& filepath) { Assign(filepath); }
 
         // from a full filename: if it terminates with a '/', a directory path
-        // is contructed (the name will be empty), otherwise a file name and
+        // is constructed (the name will be empty), otherwise a file name and
         // extension are extracted from it
     wxFileName( const wxString& fullpath, wxPathFormat format = wxPATH_NATIVE )
         { Assign( fullpath, format ); m_dontFollowLinks = false; }
@@ -341,14 +351,20 @@ public:
 
     // operations on the path
 
-        // normalize the path: with the default flags value, the path will be
-        // made absolute, without any ".." and "." and all environment
-        // variables will be expanded in it
+        // normalize the path using the specified normalizations, use
+        // MakeAbsolute() for a simpler form applying the standard ones
         //
         // this may be done using another (than current) value of cwd
-    bool Normalize(int flags = wxPATH_NORM_ALL,
+    bool Normalize(int flags,
                    const wxString& cwd = wxEmptyString,
                    wxPathFormat format = wxPATH_NATIVE);
+
+        // using wxPATH_NORM_ALL may give unexpected results, so avoid using
+        // this function and call Normalize(wxPATH_NORM_ENV_VARS | ...)
+        // explicitly if you really need environment variables expansion
+    wxDEPRECATED_MSG("specify the wanted flags explicitly to avoid surprises")
+    bool Normalize()
+        { return Normalize(wxPATH_NORM_DEPR_OLD_DEFAULT); }
 
         // get a path path relative to the given base directory, i.e. opposite
         // of Normalize
@@ -361,7 +377,7 @@ public:
     bool MakeRelativeTo(const wxString& pathBase = wxEmptyString,
                         wxPathFormat format = wxPATH_NATIVE);
 
-        // make the path absolute
+        // make the path absolute and resolve any "." and ".." in it
         //
         // this may be done using another (than current) value of cwd
     bool MakeAbsolute(const wxString& cwd = wxEmptyString,
@@ -369,6 +385,15 @@ public:
         { return Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE |
                            wxPATH_NORM_TILDE, cwd, format); }
 
+        // Convenient helper for returning the absolute path corresponding to
+        // the given one.
+    wxString GetAbsolutePath(const wxString& cwd = wxEmptyString,
+                             wxPathFormat format = wxPATH_NATIVE) const
+        {
+            wxFileName fn(*this);
+            fn.MakeAbsolute(cwd, format);
+            return fn.GetFullPath();
+        }
 
     // If the path is a symbolic link (Unix-only), indicate that all
     // filesystem operations on this path should be performed on the link
@@ -389,6 +414,9 @@ public:
         return !m_dontFollowLinks;
     }
 
+    // Resolve a wxFileName object representing a link to its target
+    wxFileName ResolveLink();
+
 #if defined(__WIN32__) && wxUSE_OLE
         // if the path is a shortcut, return the target and optionally,
         // the arguments
@@ -406,7 +434,7 @@ public:
         //    fn.ReplaceEnvVariable("OPENWINHOME");
         //         // now fn.GetFullPath() == "$OPENWINHOME/lib/someFile"
     bool ReplaceEnvVariable(const wxString& envname,
-                            const wxString& replacementFmtString = "$%s",
+                            const wxString& replacementFmtString = wxS("$%s"),
                             wxPathFormat format = wxPATH_NATIVE);
 
         // replaces, if present in the path, the home directory for the given user
@@ -575,12 +603,12 @@ public:
 
         // returns the size in a human readable form
     wxString
-    GetHumanReadableSize(const wxString& nullsize = wxGetTranslation("Not available"),
+    GetHumanReadableSize(const wxString& nullsize = wxGetTranslation(wxASCII_STR("Not available")),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL) const;
     static wxString
     GetHumanReadableSize(const wxULongLong& sz,
-                         const wxString& nullsize = wxGetTranslation("Not available"),
+                         const wxString& nullsize = wxGetTranslation(wxASCII_STR("Not available")),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
 #endif // wxUSE_LONGLONG

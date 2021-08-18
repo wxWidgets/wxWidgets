@@ -16,6 +16,7 @@
 #if wxUSE_REGEX
 
 #include "wx/string.h"
+#include "wx/versioninfo.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -27,10 +28,8 @@ enum
     // use extended regex syntax
     wxRE_EXTENDED = 0,
 
-    // use advanced RE syntax (built-in regex only)
-#ifdef wxHAS_REGEX_ADVANCED
+    // use advanced RE syntax (deprecated, same as wxRE_EXTENDED now)
     wxRE_ADVANCED = 1,
-#endif
 
     // use basic RE syntax
     wxRE_BASIC    = 2,
@@ -60,7 +59,10 @@ enum
     wxRE_NOTBOL = 32,
 
     // '$' doesn't match at the end of line
-    wxRE_NOTEOL = 64
+    wxRE_NOTEOL = 64,
+
+    // don't accept empty string as valid match, try alternatives or fail
+    wxRE_NOTEMPTY = 128
 };
 
 // ----------------------------------------------------------------------------
@@ -143,6 +145,12 @@ public:
         { return Replace(text, replacement, 0); }
 
     static wxString QuoteMeta(const wxString& str);
+
+    // return the extended RE corresponding to the given basic RE
+    static wxString ConvertFromBasic(const wxString& bre);
+
+    // return version information for the underlying regex library
+    static wxVersionInfo GetLibraryVersionInfo();
 
     // dtor not virtual, don't derive from this class
     ~wxRegEx();

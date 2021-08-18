@@ -378,6 +378,12 @@ public:
     virtual bool DeleteColumn(int col) = 0;
     virtual bool DeleteAllColumns() = 0;
 
+    // Return the current number of items.
+    virtual int GetItemCount() const = 0;
+
+    // Check if the control is empty, i.e. doesn't contain any items.
+    bool IsEmpty() const { return GetItemCount() == 0; }
+
     // Return the current number of columns.
     virtual int GetColumnCount() const = 0;
 
@@ -392,6 +398,14 @@ public:
     // column width.
     virtual int GetColumnWidth(int col) const = 0;
     virtual bool SetColumnWidth(int col, int width) = 0;
+
+    // Column ordering functions
+    virtual int GetColumnOrder(int col) const = 0;
+    virtual int GetColumnIndexFromOrder(int order) const = 0;
+
+    virtual wxArrayInt GetColumnsOrder() const = 0;
+    virtual bool SetColumnsOrder(const wxArrayInt& orders) = 0;
+
 
     // Other miscellaneous accessors.
     // ------------------------------
@@ -410,6 +424,8 @@ public:
     void EnableAlternateRowColours(bool enable = true);
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
+
+    virtual void ExtendRulesAndAlternateColour(bool WXUNUSED(extend) = true) { }
 
     // Header attributes support: only implemented in wxMSW currently.
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }

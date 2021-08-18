@@ -376,7 +376,7 @@ public:
     */
     inline unsigned int GetActualVirtualHeight() const;
 
-    unsigned int GetColumnCount() const'
+    unsigned int GetColumnCount() const;
 
     int GetColumnMinWidth( int column ) const;
 
@@ -524,4 +524,4 @@ public:
     bool DoExpand( wxPGProperty* p );
 
     void CalculateFontAndBitmapStuff( int vspacing );
-}:
+};

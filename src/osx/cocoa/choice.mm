@@ -88,6 +88,9 @@ public:
         
         switch( size )
         {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+            case NSControlSizeLarge:
+#endif
             case NSRegularControlSize:
                 left = right = 3;
                 top = 2;
@@ -113,16 +116,16 @@ public:
     }
 
     size_t GetNumberOfItems() const wxOVERRIDE
-	{
+    {
         return m_popUpMenu->GetMenuItemCount();
-	}
+    }
 
     void RemoveItem( size_t pos ) wxOVERRIDE
     {
         m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( pos ) );
     }
 
-	void SetItem(int pos, const wxString& s) wxOVERRIDE
+    void SetItem(int pos, const wxString& s) wxOVERRIDE
     {
         m_popUpMenu->FindItemByPosition( pos )->SetItemLabel( s ) ;
     }
@@ -134,7 +137,7 @@ private:
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    wxMenu* menu,
+                                    wxMenu* WXUNUSED(menu),
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long WXUNUSED(style),

@@ -100,6 +100,11 @@ public:
         return m_ptr;
     }
 
+    T* Get() const
+    {
+        return m_ptr;
+    }
+
     bool operator<(T* ptr) const
     {
         return get() < ptr;

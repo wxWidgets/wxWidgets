@@ -36,7 +36,9 @@
    wxTextDataObject    |     wxBitmapDataObject
                        |
                wxCustomDataObject
-
+                       |
+                       |
+               wxImageDataObject
 */
 // ============================================================================
 
@@ -427,6 +429,11 @@ public:
 #endif // different wxTextDataObject implementations
 
 private:
+#if defined(__WXQT__)
+    // Overridden to set text directly instead of extracting byte array
+    void QtSetDataSingleFormat(const class QMimeData &mimeData, const wxDataFormat &format) wxOVERRIDE;
+#endif
+
     wxString m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxTextDataObject);
@@ -538,6 +545,22 @@ private:
     void  *m_data;
 
     wxDECLARE_NO_COPY_CLASS(wxCustomDataObject);
+};
+
+// ----------------------------------------------------------------------------
+// wxImageDataObject - data object for wxImage
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxImageDataObject : public wxCustomDataObject
+{
+public:
+    explicit wxImageDataObject(const wxImage& image = wxNullImage);
+
+    void SetImage(const wxImage& image);
+    wxImage GetImage() const;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxImageDataObject);
 };
 
 // ----------------------------------------------------------------------------

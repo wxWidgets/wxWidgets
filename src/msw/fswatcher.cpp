@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FSWATCHER
 
@@ -388,6 +385,8 @@ int wxIOCPThread::Native2WatcherFlags(int flags)
 
         // ignored as it should always be matched with ***_OLD_NAME
         { FILE_ACTION_RENAMED_NEW_NAME, 0 },
+        // ignore invalid event
+        { 0, 0 },
     };
 
     for (unsigned int i=0; i < WXSIZEOF(flag_mapping); ++i) {

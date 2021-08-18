@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SECRETSTORE
 
@@ -161,6 +158,19 @@ wxSecretStore::~wxSecretStore()
 // ----------------------------------------------------------------------------
 // Methods forwarded to wxSecretStoreImpl
 // ----------------------------------------------------------------------------
+
+bool
+wxSecretStore::IsOk(wxString* errmsg) const
+{
+    if ( !m_impl )
+    {
+        if ( errmsg )
+            *errmsg = _("Not available for this platform");
+        return false;
+    }
+
+    return m_impl->IsOk(errmsg);
+}
 
 bool
 wxSecretStore::Save(const wxString& service,

@@ -54,13 +54,6 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxPoint& WXUNUSED(pos))
                : wxMessageDialogBase(parent, message, caption, style)
 {
-    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
-    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
-}
-
-wxMessageDialog::~wxMessageDialog()
-{
-    [m_sheetDelegate release];
 }
 
 int wxMessageDialog::ShowModal()
@@ -196,9 +189,11 @@ void wxMessageDialog::ShowWindowModal()
         NSAlert* alert = (NSAlert*)ConstructNSAlert();
         
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        [alert beginSheetModalForWindow: nativeParent modalDelegate: m_sheetDelegate
-            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
+        [alert beginSheetModalForWindow:nativeParent  completionHandler:
+         ^(NSModalResponse returnCode)
+        {
+            this->ModalFinishedCallback(alert, returnCode);
+        }];
     }
 }
 
@@ -321,7 +316,7 @@ void* wxMessageDialog::ConstructNSAlert()
         m_buttonId[ m_buttonCount++ ] = wxID_HELP;
     }
 
-    wxASSERT_MSG( m_buttonCount <= WXSIZEOF(m_buttonId), "Too many buttons" );
+    wxASSERT_MSG( m_buttonCount <= (int)WXSIZEOF(m_buttonId), "Too many buttons" );
 
     return alert;
 }

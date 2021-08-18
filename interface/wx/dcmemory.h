@@ -109,5 +109,12 @@ public:
         safely.
     */
     void SelectObjectAsSource(const wxBitmap& bitmap);
+
+    /**
+       Get the selected bitmap.
+    */
+    const wxBitmap& GetSelectedBitmap() const;
+    wxBitmap& GetSelectedBitmap();
+
 };
 

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/window.h"
 
@@ -715,7 +712,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
 #endif
 }
 
-wxSize wxWindow::DoGetBorderSize() const
+wxSize wxWindow::GetWindowBorderSize() const
 {
     return AdjustSize(wxSize(0, 0));
 }

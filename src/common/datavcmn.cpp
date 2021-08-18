@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DATAVIEWCTRL
 
@@ -34,6 +31,10 @@
 #if wxUSE_ACCESSIBILITY
     #include "wx/access.h"
 #endif // wxUSE_ACCESSIBILITY
+
+// Uncomment this line to, for custom renderers, visually show the extent
+// of both a cell and its item.
+//#define DEBUG_RENDER_EXTENTS
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
@@ -62,6 +63,8 @@ protected:
     void OnIdle( wxIdleEvent &event );
 
 private:
+    bool IsEditorSubControl(wxWindow* win) const;
+
     wxDataViewRenderer     *m_owner;
     wxWindow               *m_editorCtrl;
     bool                    m_finished;
@@ -332,8 +335,13 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
                               unsigned int column, bool ascending ) const
 {
     wxVariant value1,value2;
-    GetValue( value1, item1, column );
-    GetValue( value2, item2, column );
+
+    // Avoid calling GetValue() for the cells that are not supposed to have any
+    // value, this might be unexpected.
+    if ( HasValue(item1, column) )
+        GetValue( value1, item1, column );
+    if ( HasValue(item2, column) )
+        GetValue( value2, item2, column );
 
     if (!ascending)
     {
@@ -880,21 +888,19 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     wxTRY
     {
 
-    // Now check if we have a value and remember it for rendering it later.
-    // Notice that we do it even if it's null, as the cell should be empty then
-    // and not show the last used value.
+    // Now check if we have a value and remember it if we do.
     wxVariant value = CheckedGetValue(model, item, column);
-
-    if ( m_valueAdjuster )
-    {
-        if ( IsHighlighted() )
-            value = m_valueAdjuster->MakeHighlighted(value);
-    }
-
-    SetValue(value);
 
     if ( !value.IsNull() )
     {
+        if ( m_valueAdjuster )
+        {
+            if ( IsHighlighted() )
+                value = m_valueAdjuster->MakeHighlighted(value);
+        }
+
+        SetValue(value);
+
         // Also set up the attributes for this item if it's not empty.
         wxDataViewItemAttr attr;
         model->GetAttr(item, column, attr);
@@ -1033,6 +1039,20 @@ wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
     if ( m_attr.HasFont() )
         changeFont.Set(m_attr.GetEffectiveFont(dc->GetFont()));
 
+#ifdef DEBUG_RENDER_EXTENTS
+    {
+
+    wxDCBrushChanger changeBrush(*dc, *wxTRANSPARENT_BRUSH);
+    wxDCPenChanger changePen(*dc, *wxRED);
+
+    dc->DrawRectangle(rectCell);
+
+    dc->SetPen(*wxGREEN);
+    dc->DrawRectangle(rectItem);
+
+    }
+#endif
+
     Render(rectItem, dc, state);
 }
 
@@ -1070,17 +1090,12 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     if ( !(GetOwner()->GetOwner()->IsEnabled() && GetEnabled()) )
         flags |= wxCONTROL_DISABLED;
 
-    // Notice that we intentionally don't use any alignment here: it is not
-    // necessary because the cell rectangle had been already adjusted to
-    // account for the alignment in WXCallRender() and using the alignment here
-    // results in problems with ellipsization when using native MSW renderer,
-    // see https://trac.wxwidgets.org/ticket/17363, so just don't do it.
     wxRendererNative::Get().DrawItemText(
         GetOwner()->GetOwner(),
         *dc,
         text,
         rectText,
-        wxALIGN_NOT,
+        GetEffectiveAlignment(),
         flags,
         GetEllipsizeMode());
 }
@@ -1113,8 +1128,13 @@ void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
     if (m_focusOnIdle)
     {
         m_focusOnIdle = false;
-        if (wxWindow::FindFocus() != m_editorCtrl)
+
+        // Ignore focused items within the compound editor control
+        wxWindow* win = wxWindow::FindFocus();
+        if ( !IsEditorSubControl(win) )
+        {
             m_editorCtrl->SetFocus();
+        }
     }
 
     event.Skip();
@@ -1151,6 +1171,14 @@ void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
 
 void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
 {
+    // Ignore focus changes within the compound editor control
+    wxWindow* win = event.GetWindow();
+    if ( IsEditorSubControl(win) )
+    {
+        event.Skip();
+        return;
+    }
+
     if (!m_finished)
     {
         m_finished = true;
@@ -1158,6 +1186,23 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
     }
 
     event.Skip();
+}
+
+bool wxDataViewEditorCtrlEvtHandler::IsEditorSubControl(wxWindow* win) const
+{
+    // Checks whether the given window belongs to the editor control
+    // (is either the editor itself or a child of the compound editor).
+    while ( win )
+    {
+        if ( win == m_editorCtrl )
+        {
+            return true;
+        }
+
+        win = win->GetParent();
+    }
+
+    return false;
 }
 
 // ---------------------------------------------------------
@@ -1231,7 +1276,14 @@ void wxDataViewCtrlBase::Expand(const wxDataViewItem& item)
 {
     ExpandAncestors(item);
 
-    DoExpand(item);
+    DoExpand(item, false);
+}
+
+void wxDataViewCtrlBase::ExpandChildren(const wxDataViewItem& item)
+{
+    ExpandAncestors(item);
+
+    DoExpand(item, true);
 }
 
 void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
@@ -1253,7 +1305,7 @@ void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
     // then we expand the parents, starting at the root
     while (!parentChain.empty())
     {
-         DoExpand(parentChain.back());
+         DoExpand(parentChain.back(), false);
          parentChain.pop_back();
     }
 }
@@ -1972,6 +2024,8 @@ wxSize wxDataViewDateRenderer::GetSize() const
 // wxDataViewCheckIconTextRenderer implementation
 // ----------------------------------------------------------------------------
 
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || !defined(__WXOSX__)
+
 IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_ADV)
 
 wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
@@ -2041,7 +2095,11 @@ wxSize wxDataViewCheckIconTextRenderer::GetSize() const
 
     if ( m_value.GetIcon().IsOk() )
     {
+#ifdef __WXGTK3__
+        const wxSize sizeIcon = m_value.GetIcon().GetScaledSize();
+#else
         const wxSize sizeIcon = m_value.GetIcon().GetSize();
+#endif
         if ( sizeIcon.y > size.y )
             size.y = sizeIcon.y;
 
@@ -2063,7 +2121,36 @@ wxSize wxDataViewCheckIconTextRenderer::GetSize() const
 
 bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
 {
-    // Draw the checkbox first.
+    /*
+    Draw the text first because if the item has a background colour set
+    then with wxGTK the entire cell is painted over during RenderText()
+    when attributes are applied.
+    */
+
+    const wxSize sizeCheck = GetCheckSize();
+
+    int xoffset = sizeCheck.x + MARGIN_CHECK_ICON;
+
+    wxRect rectIcon;
+    const wxIcon& icon = m_value.GetIcon();
+    const bool drawIcon = icon.IsOk();
+    if ( drawIcon )
+    {
+#ifdef __WXGTK3__
+        const wxSize sizeIcon = icon.GetScaledSize();
+#else
+        const wxSize sizeIcon = icon.GetSize();
+#endif
+        rectIcon = wxRect(cell.GetPosition(), sizeIcon);
+        rectIcon.x += xoffset;
+        rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);
+
+        xoffset += sizeIcon.x + MARGIN_ICON_TEXT;
+    }
+
+    RenderText(m_value.GetText(), xoffset, cell, dc, state);
+
+    // Then draw the checkbox.
     int renderFlags = 0;
     switch ( m_value.GetCheckedState() )
     {
@@ -2082,8 +2169,6 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
     if ( state & wxDATAVIEW_CELL_PRELIT )
         renderFlags |= wxCONTROL_CURRENT;
 
-    const wxSize sizeCheck = GetCheckSize();
-
     wxRect rectCheck(cell.GetPosition(), sizeCheck);
     rectCheck = rectCheck.CentreIn(cell, wxVERTICAL);
 
@@ -2092,24 +2177,9 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
                                 GetView(), *dc, rectCheck, renderFlags
                             );
 
-    // Then the icon, if any.
-    int xoffset = sizeCheck.x + MARGIN_CHECK_ICON;
-
-    const wxIcon& icon = m_value.GetIcon();
-    if ( icon.IsOk() )
-    {
-        const wxSize sizeIcon = icon.GetSize();
-        wxRect rectIcon(cell.GetPosition(), sizeIcon);
-        rectIcon.x += xoffset;
-        rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);
-
+    // Finally draw the icon, if any.
+    if ( drawIcon )
         dc->DrawIcon(icon, rectIcon.GetPosition());
-
-        xoffset += sizeIcon.x + MARGIN_ICON_TEXT;
-    }
-
-    // Finally the text.
-    RenderText(m_value.GetText(), xoffset, cell, dc, state);
 
     return true;
 }
@@ -2161,6 +2231,8 @@ wxSize wxDataViewCheckIconTextRenderer::GetCheckSize() const
 {
     return wxRendererNative::Get().GetCheckBoxSize(GetView());
 }
+
+#endif // ! native __WXOSX__
 
 //-----------------------------------------------------------------------------
 // wxDataViewListStore
@@ -2449,8 +2521,7 @@ wxDataViewTreeStoreNode::wxDataViewTreeStoreNode(
 
 wxDataViewTreeStoreNode::~wxDataViewTreeStoreNode()
 {
-    if (m_data)
-        delete m_data;
+    delete m_data;
 }
 
 wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(

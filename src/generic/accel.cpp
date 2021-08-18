@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ACCEL
 
@@ -213,7 +210,7 @@ wxObjectRefData *wxAcceleratorTable::CreateRefData() const
 
 wxObjectRefData *wxAcceleratorTable::CloneRefData(const wxObjectRefData *data) const
 {
-    return new wxAccelRefData(*(wxAccelRefData *)data);
+    return new wxAccelRefData(*static_cast<const wxAccelRefData*>(data));
 }
 
 #endif // wxUSE_ACCEL

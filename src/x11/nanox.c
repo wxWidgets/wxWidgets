@@ -84,8 +84,8 @@ int XCopyArea(Display* display, Drawable src, Drawable dest, GC gc,
               int dest_x, int dest_y)
 {
     GrCopyArea(dest, gc, dest_x, dest_y,
-			width, height, src,
-			src_x, src_y, 0);
+               width, height, src,
+               src_x, src_y, 0);
     return Success;
 }
 
@@ -94,55 +94,55 @@ int XCopyPlane(Display* display, Drawable src, Drawable dest, GC gc,
               int dest_x, int dest_y, unsigned long plane)
 {
     GrCopyArea(dest, gc, dest_x, dest_y,
-			width, height, src,
-			src_x, src_y, 0);
+               width, height, src,
+               src_x, src_y, 0);
     return Success;
 }
 
 #if 0
 typedef struct {
-  GR_WINDOW_ID wid;		/* window id (or 0 if no such window) */
-  GR_WINDOW_ID parent;		/* parent window id */
-  GR_WINDOW_ID child;		/* first child window id (or 0) */
-  GR_WINDOW_ID sibling;		/* next sibling window id (or 0) */
-  GR_BOOL inputonly;		/* TRUE if window is input only */
-  GR_BOOL mapped;		/* TRUE if window is mapped */
-  GR_COUNT unmapcount;		/* reasons why window is unmapped */
-  GR_COORD x;			/* absolute x position of window */
-  GR_COORD y;			/* absolute y position of window */
-  GR_SIZE width;		/* width of window */
-  GR_SIZE height;		/* height of window */
-  GR_SIZE bordersize;		/* size of border */
-  GR_COLOR bordercolor;		/* color of border */
-  GR_COLOR background;		/* background color */
-  GR_EVENT_MASK eventmask;	/* current event mask for this client */
-  GR_WM_PROPS props;		/* window properties */
-  GR_CURSOR_ID cursor;		/* cursor id*/
-  unsigned long processid;	/* process id of owner*/
+  GR_WINDOW_ID wid;           /* window id (or 0 if no such window) */
+  GR_WINDOW_ID parent;        /* parent window id */
+  GR_WINDOW_ID child;         /* first child window id (or 0) */
+  GR_WINDOW_ID sibling;       /* next sibling window id (or 0) */
+  GR_BOOL inputonly;          /* TRUE if window is input only */
+  GR_BOOL mapped;             /* TRUE if window is mapped */
+  GR_COUNT unmapcount;        /* reasons why window is unmapped */
+  GR_COORD x;                 /* absolute x position of window */
+  GR_COORD y;                 /* absolute y position of window */
+  GR_SIZE width;              /* width of window */
+  GR_SIZE height;             /* height of window */
+  GR_SIZE bordersize;         /* size of border */
+  GR_COLOR bordercolor;       /* color of border */
+  GR_COLOR background;        /* background color */
+  GR_EVENT_MASK eventmask;    /* current event mask for this client */
+  GR_WM_PROPS props;          /* window properties */
+  GR_CURSOR_ID cursor;        /* cursor id*/
+  unsigned long processid;    /* process id of owner*/
 } GR_WINDOW_INFO;
 
 typedef struct {
-     int x, y;		      /* location of window */
+     int x, y;                /* location of window */
      int width, height;       /* width and height of window */
-     int border_width;	      /* border width of window */
-     int depth; 	      /* depth of window */
-     Visual *visual;	      /* the associated visual structure */
-     Window root;	      /* root of screen containing window */
-     int class; 	      /* InputOutput, InputOnly*/
-     int bit_gravity;	      /* one of the bit gravity values */
-     int win_gravity;	      /* one of the window gravity values */
+     int border_width;        /* border width of window */
+     int depth;               /* depth of window */
+     Visual *visual;          /* the associated visual structure */
+     Window root;             /* root of screen containing window */
+     int class;               /* InputOutput, InputOnly*/
+     int bit_gravity;         /* one of the bit gravity values */
+     int win_gravity;         /* one of the window gravity values */
      int backing_store;       /* NotUseful, WhenMapped, Always */
      unsigned long backing_planes;/* planes to be preserved if possible */
      unsigned long backing_pixel;/* value to be used when restoring planes */
-     Bool save_under;	      /* boolean, should bits under be saved? */
+     Bool save_under;         /* boolean, should bits under be saved? */
      Colormap colormap;       /* color map to be associated with window */
      Bool map_installed;      /* boolean, is color map currently installed*/
-     int map_state;	      /* IsUnmapped, IsUnviewable, IsViewable */
+     int map_state;           /* IsUnmapped, IsUnviewable, IsViewable */
      long all_event_masks;    /* set of events all people have interest in*/
      long your_event_mask;    /* my event mask */
      long do_not_propagate_mask;/* set of events that should not propagate */
      Bool override_redirect;  /* boolean value for override-redirect */
-     Screen *screen;	      /* back pointer to correct screen */
+     Screen *screen;          /* back pointer to correct screen */
 } XWindowAttributes;
 
 #endif
@@ -222,7 +222,7 @@ XErrorHandler XSetErrorHandler (XErrorHandler handler)
 }
 
 static Screen s_screen;
-Screen *XScreenOfDisplay(Display*		display,
+Screen *XScreenOfDisplay(Display* display,
                          int screen_number)
 {
     /* TODO: fill in the members. See Xlib.h */

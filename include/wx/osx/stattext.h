@@ -21,7 +21,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxStaticTextNameStr)
+           const wxString& name = wxASCII_STR(wxStaticTextNameStr))
   {
     Create(parent, id, label, pos, size, style, name);
   }
@@ -31,7 +31,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxStaticTextNameStr);
+           const wxString& name = wxASCII_STR(wxStaticTextNameStr));
 
   // accessors
   void SetLabel( const wxString &str ) wxOVERRIDE;

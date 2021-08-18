@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONTROLS
 
@@ -168,10 +165,9 @@ void wxItemContainer::SetClientObject(unsigned int n, wxClientData *data)
 
     if ( HasClientObjectData() )
     {
-        wxClientData * clientDataOld
-            = static_cast<wxClientData *>(DoGetItemClientData(n));
-        if ( clientDataOld )
-            delete clientDataOld;
+        wxClientData * clientDataOld =
+            static_cast<wxClientData *>(DoGetItemClientData(n));
+        delete clientDataOld;
     }
     else // didn't have any client data so far
     {

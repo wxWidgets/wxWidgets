@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/pen.h"
 
@@ -56,6 +53,7 @@ public:
                m_width == data.m_width &&
                m_join == data.m_join &&
                m_cap == data.m_cap &&
+               m_quality == data.m_quality &&
                m_colour == data.m_colour &&
                (m_style != wxPENSTYLE_STIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
                (m_style != wxPENSTYLE_USER_DASH ||
@@ -72,6 +70,7 @@ public:
     wxPenStyle GetStyle() const { return m_style; }
     wxPenJoin GetJoin() const { return m_join; }
     wxPenCap GetCap() const { return m_cap; }
+    wxPenQuality GetQuality() const { return m_quality; }
     wxDash* GetDash() const { return m_dash; }
     int GetDashCount() const { return m_nbDash; }
     wxBitmap* GetStipple() const { return const_cast<wxBitmap *>(&m_stipple); }
@@ -97,6 +96,7 @@ public:
 
     void SetJoin(wxPenJoin join) { Free(); m_join = join; }
     void SetCap(wxPenCap cap) { Free(); m_cap = cap; }
+    void SetQuality(wxPenQuality quality) { Free(); m_quality = quality; }
 
 
     // HPEN management
@@ -122,6 +122,7 @@ private:
     {
         m_join = wxJOIN_ROUND;
         m_cap = wxCAP_ROUND;
+        m_quality = wxPEN_QUALITY_DEFAULT;
         m_nbDash = 0;
         m_dash = NULL;
         m_hPen = 0;
@@ -131,6 +132,7 @@ private:
     wxPenStyle    m_style;
     wxPenJoin     m_join;
     wxPenCap      m_cap;
+    wxPenQuality  m_quality;
     wxBitmap      m_stipple;
     int           m_nbDash;
     wxDash *      m_dash;
@@ -164,6 +166,7 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_width = data.m_width;
     m_join = data.m_join;
     m_cap = data.m_cap;
+    m_quality = data.m_quality;
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
     m_hPen = 0;
@@ -179,6 +182,7 @@ wxPenRefData::wxPenRefData(const wxPenInfo& info)
     m_width = info.GetWidth();
     m_join = info.GetJoin();
     m_cap = info.GetCap();
+    m_quality = info.GetQuality();
     m_nbDash = info.GetDashes(&m_dash);
 }
 
@@ -281,12 +285,54 @@ bool wxPenRefData::Alloc()
    const COLORREF col = m_colour.GetPixel();
 
    // check if it's a standard kind of pen which can be created with just
-   // CreatePen()
-   if ( m_join == wxJOIN_ROUND &&
-            m_cap == wxCAP_ROUND &&
-                m_style != wxPENSTYLE_USER_DASH &&
-                    m_style != wxPENSTYLE_STIPPLE &&
-                        (m_width <= 1 || m_style == wxPENSTYLE_SOLID) )
+   // CreatePen(), which always creates cosmetic pens that don't support all
+   // wxPen features and are less precise (e.g. draw dotted lines as dashes
+   // rather than real dots), but much, much faster than geometric pens created
+   // by ExtCreatePen(), see #18875, so we still prefer to use them if possible
+   // unless it's explicitly disabled by setting the quality to "high"
+   bool useCreatePen = m_quality != wxPEN_QUALITY_HIGH;
+
+   if ( useCreatePen )
+   {
+       switch ( m_style )
+       {
+           case wxPENSTYLE_SOLID:
+               // No problem with using cosmetic pens for solid lines.
+               break;
+
+           case wxPENSTYLE_DOT:
+           case wxPENSTYLE_LONG_DASH:
+           case wxPENSTYLE_SHORT_DASH:
+           case wxPENSTYLE_DOT_DASH:
+               if ( m_width > 1 )
+               {
+                   // Cosmetic pens with these styles would result in solid
+                   // lines for pens wider than a single pixel, so never use
+                   // them in this case.
+                   useCreatePen = false;
+               }
+               else
+               {
+                   // For the single pixel pens we can use cosmetic pens, but
+                   // they look ugly, so we prefer to not do it by default,
+                   // however this can be explicitly requested if speed is more
+                   // important than the exact appearance.
+                   useCreatePen = m_quality == wxPEN_QUALITY_LOW;
+               }
+               break;
+
+           default:
+               // Other styles are not supported by cosmetic pens at all.
+               useCreatePen = false;
+               break;
+       }
+   }
+
+   // Join and cap styles are also not supported for cosmetic pens.
+   if ( m_join != wxJOIN_ROUND || m_cap != wxCAP_ROUND )
+       useCreatePen = false;
+
+   if ( useCreatePen )
    {
        m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);
    }
@@ -358,7 +404,10 @@ bool wxPenRefData::Alloc()
            dash = NULL;
        }
 
-       m_hPen = ::ExtCreatePen(styleMSW, m_width, &lb, m_nbDash, (LPDWORD)dash);
+       // Note that width can't be 0 for ExtCreatePen(), unlike for CreatePen().
+       int width = m_width == 0 ? 1 : m_width;
+
+       m_hPen = ::ExtCreatePen(styleMSW, width, &lb, m_nbDash, (LPDWORD)dash);
 
        delete [] dash;
    }
@@ -507,6 +556,13 @@ void wxPen::SetCap(wxPenCap cap)
     M_PENDATA->SetCap(cap);
 }
 
+void wxPen::SetQuality(wxPenQuality quality)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetQuality(quality);
+}
+
 wxColour wxPen::GetColour() const
 {
     wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid pen") );
@@ -540,6 +596,13 @@ wxPenCap wxPen::GetCap() const
     wxCHECK_MSG( IsOk(), wxCAP_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->GetCap();
+}
+
+wxPenQuality wxPen::GetQuality() const
+{
+    wxCHECK_MSG( IsOk(), wxPEN_QUALITY_DEFAULT, wxT("invalid pen") );
+
+    return M_PENDATA->GetQuality();
 }
 
 int wxPen::GetDashes(wxDash** ptr) const

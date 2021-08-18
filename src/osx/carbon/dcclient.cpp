@@ -76,7 +76,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
             CGContextTranslateCTM( cg , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
 
         wxGraphicsContext* context = wxGraphicsContext::CreateFromNative( cg );
-        context->EnableOffset(m_contentScaleFactor <= 1);
+        context->SetContentScaleFactor(m_contentScaleFactor);
         SetGraphicsContext( context );
     }
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
@@ -105,6 +105,11 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
         *height = m_height;
 }
 
+wxPoint wxWindowDCImpl::OSXGetOrigin() const
+{
+    return m_origin;
+}
+
 /*
  * wxClientDCImpl
  */
@@ -120,14 +125,14 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
     wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
-    wxPoint origin = window->GetClientAreaOrigin() ;
+    m_origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
     
     int x0,y0;
     DoGetDeviceOrigin(&x0,&y0);
-    SetDeviceOrigin( origin.x + x0, origin.y + y0 );
+    SetDeviceOrigin( m_origin.x + x0, m_origin.y + y0 );
     
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
@@ -152,9 +157,9 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
-    wxPoint origin = window->GetClientAreaOrigin() ;
+    m_origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
-    SetDeviceOrigin( origin.x, origin.y );
+    SetDeviceOrigin( m_origin.x, m_origin.y );
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 

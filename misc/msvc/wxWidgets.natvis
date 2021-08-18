@@ -41,6 +41,14 @@ http://code.msdn.microsoft.com/windowsdesktop/Writing-type-visualizers-2eae77a2#
         <DisplayString>{m_ll}</DisplayString>
     </Type>
 
+    <Type Name="wxGridCellCoords">
+        <DisplayString>R{m_row + 1}C{m_col + 1}</DisplayString>
+    </Type>
+
+    <Type Name="wxGridBlockCoords">
+        <DisplayString>R{m_topRow + 1}C{m_leftCol + 1}:R{m_bottomRow + 1}C{m_rightCol + 1}</DisplayString>
+    </Type>
+
     <Type Name="wxArrayString">
         <DisplayString Condition="m_nCount==0">empty</DisplayString>
         <DisplayString Condition="m_nCount==1">{m_pItems[0]}</DisplayString>

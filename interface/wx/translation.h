@@ -96,7 +96,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -119,7 +119,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -269,7 +269,7 @@ public:
 
     /**
         Returns the header value for header @a header.
-        The search for @a header is case sensitive. If an @a domain is passed,
+        The search for @a header is case sensitive. If a @a domain is passed,
         this domain is searched. Else all domains will be searched until a
         header has been found.
 
@@ -333,7 +333,7 @@ public:
 
     Catalogs are searched for in standard places (system locales directory,
     `LC_PATH` on Unix systems, Resources subdirectory of the application bundle
-    on OS X, executable's directory on Windows), but you may also prepend
+    on macOS, executable's directory on Windows), but you may also prepend
     additional directories to the search path with
     AddCatalogLookupPathPrefix().
 

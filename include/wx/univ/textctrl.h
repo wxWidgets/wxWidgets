@@ -36,6 +36,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrlCommandProcessor;
 #define wxACTION_TEXT_WORD_RIGHT    wxT("wordright")
 #define wxACTION_TEXT_PAGE_UP       wxT("pageup")
 #define wxACTION_TEXT_PAGE_DOWN     wxT("pagedown")
+#define wxACTION_TEXT_RETURN        wxT("return")
 
 // clipboard operations
 #define wxACTION_TEXT_COPY          wxT("copy")
@@ -81,7 +82,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxTextCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTextCtrlNameStr))
         : wxScrollHelper(this)
     {
         Init();
@@ -96,7 +97,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxTextCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxTextCtrlNameStr));
 
     virtual ~wxTextCtrl();
 
@@ -450,6 +451,8 @@ protected:
     // return code)
     bool DoCut();
     bool DoPaste();
+
+    bool ClickDefaultButtonIfPossible();
 
 private:
     // all these methods are for multiline text controls only

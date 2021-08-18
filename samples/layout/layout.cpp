@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -207,7 +204,7 @@ void MyFrame::TestFlexSizers(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
 {
-    MySizerDialog dialog( this, "Notebook Sizer Test Dialog" );
+    MyNotebookWithSizerDialog dialog( this, "Notebook Sizer Test Dialog" );
 
     dialog.ShowModal();
 }
@@ -396,11 +393,13 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
 }
 
 // ----------------------------------------------------------------------------
-// MySizerDialog
+// MyNotebookWithSizerDialog
 // ----------------------------------------------------------------------------
 
-MySizerDialog::MySizerDialog(wxWindow *parent, const wxString &title)
-             : wxDialog(parent, wxID_ANY, wxString(title))
+MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxString &title)
+             : wxDialog(parent, wxID_ANY, wxString(title),
+                        wxDefaultPosition, wxDefaultSize,
+                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     // Begin with first hierarchy: a notebook at the top and
     // and OK button at the bottom.

@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if !wxUSE_TREELISTCTRL
     #error "wxUSE_TREELISTCTRL must be 1 for this sample."
@@ -373,7 +370,7 @@ void MyFrame::InitImageList()
     m_imageList = new wxImageList(iconSize.x, iconSize.y);
 
     // The order should be the same as for the enum elements.
-    static const char* const icons[] =
+    static const wxString icons[] =
     {
         wxART_NORMAL_FILE,
         wxART_FOLDER,

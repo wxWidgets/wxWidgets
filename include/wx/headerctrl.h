@@ -62,14 +62,14 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHD_DEFAULT_STYLE,
-                 const wxString& name = wxHeaderCtrlNameStr);
+                 const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxHD_DEFAULT_STYLE,
-                const wxString& name = wxHeaderCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr));
      */
 
     // column-related methods
@@ -158,6 +158,12 @@ public:
 
     // compute column title width
     int GetColumnTitleWidth(const wxHeaderColumn& col);
+
+    // compute column title width for the column with the given index
+    int GetColumnTitleWidth(unsigned int idx)
+    {
+        return GetColumnTitleWidth(GetColumn(idx));
+    }
 
     // implementation only from now on
     // -------------------------------
@@ -267,7 +273,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxHD_DEFAULT_STYLE,
-                       const wxString& name = wxHeaderCtrlNameStr)
+                       const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr))
     {
         Init();
 

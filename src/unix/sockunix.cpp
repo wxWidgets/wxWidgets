@@ -90,17 +90,18 @@ wxSocketError wxSocketImplUnix::GetLastError() const
 
 void wxSocketImplUnix::DoEnableEvents(int flags, bool enable)
 {
-    // No events for blocking sockets, they should be usable from the other
-    // threads and the events only work for the sockets used by the main one.
-    if ( GetSocketFlags() & wxSOCKET_BLOCK )
-        return;
-
     wxSocketManager * const manager = wxSocketManager::Get();
     if (!manager)
         return;
 
     if ( enable )
     {
+        // We should never try to enable events for the blocking sockets, they
+        // should be usable from the other threads and the events only work for
+        // the sockets used by the main one.
+        wxASSERT_MSG( !(GetSocketFlags() & wxSOCKET_BLOCK),
+                      "enabling events for a blocking socket?" );
+
         if ( flags & wxSOCKET_INPUT_FLAG )
             manager->Install_Callback(this, wxSOCKET_INPUT);
         if ( flags & wxSOCKET_OUTPUT_FLAG )

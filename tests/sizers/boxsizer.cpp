@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -23,6 +20,8 @@
 #endif // WX_PRECOMP
 
 #include "asserthelper.h"
+
+#include "wx/scopedptr.h"
 
 // ----------------------------------------------------------------------------
 // test fixture
@@ -287,6 +286,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::SetMinSize", "[sizer]")
     CHECK(m_sizer->GetMinSize().x == 100);
 }
 
+#if wxUSE_LISTBOX
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::BestSizeRespectsMaxSize", "[sizer]")
 {
     m_sizer->Clear();
@@ -332,6 +332,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize1", "[si
 
     CHECK(listbox2->GetSize().GetWidth() == maxWidth);
 }
+#endif
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize2", "[sizer]")
 {
@@ -365,7 +366,9 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
 #define ASSERT_SIZER_INVALID_FLAGS(f, msg) \
     WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE( \
             "Expected assertion not generated for " msg, \
-            sizer->Add(10, 10, 0, f) \
+            wxScopedPtr<wxSizerItem> item(new wxSizerItem(10, 10, 0, f)); \
+            sizer->Add(item.get()); \
+            item.release() \
         )
 
 #define ASSERT_SIZER_INCOMPATIBLE_FLAGS(f1, f2) \
@@ -437,4 +440,10 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
 
 #undef ASSERT_SIZER_INCOMPATIBLE_FLAGS
 #undef ASSERT_SIZER_INVALID_FLAGS
+}
+
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Replace", "[sizer]")
+{
+    m_sizer->AddSpacer(1);
+    m_sizer->Replace(0, new wxSizerItem(new wxWindow(m_win, wxID_ANY)));
 }

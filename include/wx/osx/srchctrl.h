@@ -27,7 +27,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxSearchCtrlNameStr);
+               const wxString& name = wxASCII_STR(wxSearchCtrlNameStr));
 
     virtual ~wxSearchCtrl();
 
@@ -37,7 +37,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSearchCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxSearchCtrlNameStr));
 
 #if wxUSE_MENUS
     // get/set search button menu
@@ -61,6 +61,10 @@ public:
     virtual bool    HandleSearchFieldCancelHit() ;
 
     wxSearchWidgetImpl * GetSearchPeer() const;
+
+#if wxUSE_MENUS
+    virtual void OSXAfterMenuEvent() wxOVERRIDE;
+#endif  // wxUSE_MENUS
 
 protected:
 

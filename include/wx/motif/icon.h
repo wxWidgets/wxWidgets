@@ -24,9 +24,6 @@ public:
 
     // Initialize with XPM data
     wxIcon(const char* const* data);
-#ifdef wxNEEDS_CHARPP
-    wxIcon(char **data);
-#endif
 
     wxIcon(const wxString& name, wxBitmapType type = wxICON_DEFAULT_TYPE,
            int desiredWidth = -1, int desiredHeight = -1)

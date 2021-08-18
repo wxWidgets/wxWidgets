@@ -6,7 +6,7 @@
     The formats below are disabled because wxWidgets doesn't support these
     compilers any longer (although bakefile still does).
     -->
-    <disable-formats>dmars,dmars_smake,msvc6prj,watcom</disable-formats>
+    <disable-formats>borland,dmars,dmars_smake,msvc6prj,msvs2003prj,watcom</disable-formats>
 
 
     <!-- These wildcards match all .bkl files in wxWidgets tree: -->
@@ -44,11 +44,6 @@
     </del-formats>
     <del-formats files="../../utils/*.bkl">
         msvc6prj,msvs2003prj,msvs2005prj,msvs2008prj
-    </del-formats>
-
-    <!-- HtmlCtrl sample is Cocoa only (autoconf format) -->
-    <del-formats files="../../samples/html/htmlctrl/htmlctrl.bkl">
-        borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msvs2003prj,msvs2005prj,msvs2008prj,watcom
     </del-formats>
 
     <!-- Some samples use MSVC-specific stuff -->

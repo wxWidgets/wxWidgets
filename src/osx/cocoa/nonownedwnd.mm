@@ -321,6 +321,7 @@ static void *EffectiveAppearanceContext = &EffectiveAppearanceContext;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
 - (void)windowWillEnterFullScreen:(NSNotification *)notification;
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification;
 
 @end
 
@@ -334,8 +335,20 @@ extern int wxOSXGetIdFromSelector(SEL action );
     return self;
 }
 
-- (BOOL) triggerMenu:(SEL) action
+- (BOOL) triggerMenu:(SEL) action sender:(id)sender
 {
+    // feed back into menu item, if it is ours
+    if ( [sender isKindOfClass:wxNSMenuItem.class] )
+    {
+        wxNSMenuItem* nsMenuItem = (wxNSMenuItem*) sender;
+        wxMenuItemImpl* impl = [nsMenuItem implementation];
+        if ( impl )
+        {
+            wxMenuItem* menuitem = impl->GetWXPeer();
+            return menuitem->GetMenu()->HandleCommandProcess(menuitem);
+        }
+    }
+    // otherwise feed back command into common menubar
     wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
     if ( mbar )
     {
@@ -368,43 +381,43 @@ extern int wxOSXGetIdFromSelector(SEL action );
 - (void)undo:(id)sender 
 {
     wxUnusedVar(sender);
-    [self triggerMenu:_cmd];
+    [self triggerMenu:_cmd sender:sender];
 }
 
 - (void)redo:(id)sender 
 {
     wxUnusedVar(sender);
-    [self triggerMenu:_cmd];
+    [self triggerMenu:_cmd sender:sender];
 }
 
 - (void)cut:(id)sender 
 {
     wxUnusedVar(sender);
-    [self triggerMenu:_cmd];
+    [self triggerMenu:_cmd sender:sender];
 }
 
 - (void)copy:(id)sender
 {
     wxUnusedVar(sender);
-    [self triggerMenu:_cmd];
+    [self triggerMenu:_cmd sender:sender];
 }
 
 - (void)paste:(id)sender
 {
     wxUnusedVar(sender);
-    [self triggerMenu:_cmd];
+    [self triggerMenu:_cmd sender:sender];
 }
 
 - (void)delete:(id)sender 
 {
     wxUnusedVar(sender);
-    [self triggerMenu:_cmd];
+    [self triggerMenu:_cmd sender:sender];
 }
 
 - (void)selectAll:(id)sender 
 {
     wxUnusedVar(sender);
-    [self triggerMenu:_cmd];
+    [self triggerMenu:_cmd sender:sender];
 }
 
 - (void)windowDidMiniaturize:(NSNotification *)notification
@@ -593,6 +606,25 @@ extern int wxOSXGetIdFromSelector(SEL action );
     return true;
 }
 
+static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscreen)
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if (windowimpl->m_macIgnoreNextFullscreenChange)
+        {
+            windowimpl->m_macIgnoreNextFullscreenChange = false;
+            return;
+        }
+
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        wxFullScreenEvent event(wxpeer->GetId(), fullscreen);
+        event.SetEventObject(wxpeer);
+        wxpeer->HandleWindowEvent(event);
+    }
+}
+
 // work around OS X bug, on a secondary monitor an already fully sized window
 // (eg maximized) will not be correctly put to full screen size and keeps a 22px
 // title band at the top free, therefore we force the correct content size
@@ -611,8 +643,51 @@ extern int wxOSXGetIdFromSelector(SEL action );
     {
         [view setFrameSize: expectedframerect.size];
     }
+
+    SendFullScreenWindowEvent(notification, true);
 }
- 
+
+- (void)windowWillExitFullScreen:(NSNotification *)notification
+{
+    SendFullScreenWindowEvent(notification, false);
+}
+
+// from https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/CapturingScreenContents/CapturingScreenContents.html
+
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification
+{
+    NSWindow* theWindow = (NSWindow*)[notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [theWindow WX_implementation];
+    wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : NULL;
+    if (wxpeer)
+    {
+        CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
+        CGFloat oldBackingScaleFactor = [[[notification userInfo]
+                                          objectForKey:@"NSBackingPropertyOldScaleFactorKey"]
+                                         doubleValue];
+        if (newBackingScaleFactor != oldBackingScaleFactor)
+        {
+            const wxSize oldDPI = wxWindow::OSXMakeDPIFromScaleFactor(oldBackingScaleFactor);
+            const wxSize newDPI = wxWindow::OSXMakeDPIFromScaleFactor(newBackingScaleFactor);
+
+            wxDPIChangedEvent event(oldDPI, newDPI);
+            event.SetEventObject(wxpeer);
+            wxpeer->HandleWindowEvent(event);
+
+        }
+
+        NSColorSpace *newColorSpace = [theWindow colorSpace];
+        NSColorSpace *oldColorSpace = [[notification userInfo]
+                                       objectForKey:@"NSBackingPropertyOldColorSpaceKey"];
+        if (![newColorSpace isEqual:oldColorSpace])
+        {
+            wxSysColourChangedEvent event;
+            event.SetEventObject(wxpeer);
+            wxpeer->HandleWindowEvent(event);
+        }
+    }
+}
+
 - (void)addObservers:(NSWindow*)win
 {
     [win addObserver:self forKeyPath:@"effectiveAppearance"
@@ -626,6 +701,9 @@ extern int wxOSXGetIdFromSelector(SEL action );
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    wxUnusedVar(keyPath);
+    wxUnusedVar(change);
+
     if (context == EffectiveAppearanceContext)
     {
         wxNonOwnedWindowCocoaImpl* windowimpl = [(NSWindow*)object WX_implementation];
@@ -682,7 +760,7 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
     }
 }
 
-void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
+void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
     static wxNonOwnedWindowController* controller = NULL;
@@ -706,10 +784,6 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     if ( style & wxFRAME_TOOL_WINDOW )
     {
         windowstyle |= NSUtilityWindowMask;
-    }
-    else if ( ( style & wxPOPUP_WINDOW ) )
-    {
-        level = NSPopUpMenuWindowLevel;
     }
     else if ( ( style & wxFRAME_DRAWER ) )
     {
@@ -743,6 +817,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     if ( ( style & wxSTAY_ON_TOP ) )
         level = NSModalPanelWindowLevel;
+
+    if ( ( style & wxPOPUP_WINDOW ) )
+        level = NSPopUpMenuWindowLevel;
 
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
 
@@ -940,9 +1017,13 @@ void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
             level = NSModalPanelWindowLevel;
         else if (( style & wxFRAME_FLOAT_ON_PARENT ) || ( style & wxFRAME_TOOL_WINDOW ))
             level = NSFloatingWindowLevel;
-        
-        [m_macWindow setLevel: level];
-        m_macWindowLevel = level;
+
+        // Only update the level when it has changed, setting a level can cause the OS to reorder the windows in the level
+        if ( level != m_macWindowLevel )
+        {
+            [m_macWindow setLevel: level];
+            m_macWindowLevel = level;
+        }
     }
 }
 
@@ -994,6 +1075,13 @@ void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width,
 
 bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& WXUNUSED(region))
 {
+    // macOS caches the contour of the drawn area, so when the region is changed and the content view redrawn
+    // the shape of the tlw does not change, this is a workaround I found that leads to a contour-refresh ...
+    NSRect formerFrame = [m_macWindow frame];
+    NSSize formerSize = [NSWindow contentRectForFrameRect:formerFrame styleMask:[m_macWindow styleMask]].size;
+    [m_macWindow setContentSize:NSMakeSize(10,10)];
+    [m_macWindow setContentSize:formerSize];
+
     [m_macWindow setOpaque:NO];
     [m_macWindow setBackgroundColor:[NSColor clearColor]];
 
@@ -1116,6 +1204,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
     {
         if ( show != IsFullScreen() )
         {
+            m_macIgnoreNextFullscreenChange = true;
             [m_macWindow toggleFullScreen: nil];
         }
 
@@ -1236,6 +1325,12 @@ bool wxNonOwnedWindowCocoaImpl::IsModified() const
 void wxNonOwnedWindowCocoaImpl::SetRepresentedFilename(const wxString& filename)
 {
     [m_macWindow setRepresentedFilename:wxCFStringRef(filename).AsNSString()];
+}
+
+void wxNonOwnedWindowCocoaImpl::SetBottomBorderThickness(int thickness)
+{
+    [m_macWindow setAutorecalculatesContentBorderThickness:(thickness ? NO : YES) forEdge:NSMinYEdge];
+    [m_macWindow setContentBorderThickness:thickness forEdge:NSMinYEdge];
 }
 
 void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()

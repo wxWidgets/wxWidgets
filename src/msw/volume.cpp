@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FSVOLUME
 
@@ -515,7 +512,7 @@ bool wxFSVolumeBase::Create(const wxString& name)
     long rc = SHGetFileInfo(m_volName.t_str(), 0, &fi, sizeof(fi), SHGFI_DISPLAYNAME);
     if (!rc)
     {
-        wxLogError(_("Cannot read typename from '%s'!"), m_volName.c_str());
+        wxLogError(_("Cannot read typename from '%s'!"), m_volName);
         return false;
     }
     m_dispName = fi.szDisplayName;
@@ -627,7 +624,7 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
         long rc = SHGetFileInfo(m_volName.t_str(), 0, &fi, sizeof(fi), flags);
         if (!rc || !fi.hIcon)
         {
-            wxLogError(_("Cannot load icon from '%s'."), m_volName.c_str());
+            wxLogError(_("Cannot load icon from '%s'."), m_volName);
         }
         else
         {

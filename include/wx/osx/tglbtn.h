@@ -23,7 +23,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -35,7 +35,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     virtual void SetValue(bool value) wxOVERRIDE;
     virtual bool GetValue() const wxOVERRIDE;
@@ -63,7 +63,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -75,7 +75,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton);

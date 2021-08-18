@@ -40,7 +40,7 @@
     backing store for the window contents. In this case, the associated @e DC
     may be @NULL but a valid backing store bitmap should be specified.
 
-    Finally, please note that GTK+ 2.0 as well as OS X provide double buffering
+    Finally, please note that GTK+ 2.0 as well as macOS provide double buffering
     themselves natively. You can either use wxWindow::IsDoubleBuffered() to
     determine whether you need to use buffering or not, or use
     wxAutoBufferedPaintDC to avoid needless double buffering on the systems

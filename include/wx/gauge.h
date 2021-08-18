@@ -24,7 +24,7 @@
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
 
-// Available since Windows 7 only. With this style, the value of guage will
+// Available since Windows 7 only. With this style, the value of gauge will
 // reflect on the taskbar button.
 #define wxGA_PROGRESS        0x0010
 // Win32 only, is default (and only) on some other platforms
@@ -52,6 +52,9 @@ class WXDLLIMPEXP_CORE wxGaugeBase : public wxControl
 {
 public:
     wxGaugeBase() : m_rangeMax(0), m_gaugePos(0),
+#if wxGAUGE_EMULATE_INDETERMINATE_MODE
+        m_nDirection(wxRIGHT),
+#endif
         m_appProgressIndicator(NULL) { }
 
     virtual ~wxGaugeBase();
@@ -63,7 +66,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxGA_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxGaugeNameStr);
+                const wxString& name = wxASCII_STR(wxGaugeNameStr));
 
     // determinate mode API
 

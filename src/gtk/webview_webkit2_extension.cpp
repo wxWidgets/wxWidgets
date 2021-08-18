@@ -13,6 +13,12 @@
 #include <webkitdom/WebKitDOMDOMSelection.h>
 #include <webkitdom/WebKitDOMDOMWindowUnstable.h>
 
+// We can't easily avoid deprecation warnings about many WebKit functions, e.g.
+// webkit_dom_document_get_default_view() and just about everything related to
+// the selection, so for now just disable the warnings as we can't do anything
+// about them anyhow.
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
 static const char introspection_xml[] =
   "<node>"
   " <interface name='org.wxwidgets.wxGTK.WebExtension'>"

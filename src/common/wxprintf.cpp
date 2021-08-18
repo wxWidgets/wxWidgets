@@ -15,9 +15,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -28,6 +25,7 @@
 
 #include "wx/private/wxprintf.h"
 
+#include <errno.h>
 
 // ============================================================================
 // printf() implementation
@@ -109,6 +107,9 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
     if (parser.posarg_present && parser.nonposarg_present)
     {
         buf[0] = 0;
+        // Indicate to the caller that it's an unrecoverable error and not just
+        // due to the buffer being too small.
+        errno = EINVAL;
         return -1;      // format strings with both positional and
     }                   // non-positional conversion specifier are unsupported !!
 
@@ -134,6 +135,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
     if (!ok)
     {
         buf[0] = 0;
+        errno = EINVAL;
         return -1;
     }
 
@@ -157,7 +159,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
         if (lenCur == lenMax)
         {
             buf[lenMax - 1] = 0;
-            return lenMax+1;      // not enough space in the output buffer !
+            return -1;      // not enough space in the output buffer !
         }
 
         // process this specifier directly in the output buffer
@@ -166,7 +168,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
         if (n == -1)
         {
             buf[lenMax-1] = wxT('\0');  // be sure to always NUL-terminate the string
-            return lenMax+1;      // not enough space in the output buffer !
+            return -1;      // not enough space in the output buffer !
         }
         lenCur += n;
 
@@ -186,7 +188,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
     if (buf[lenCur])
     {
         buf[lenCur] = 0;
-        return lenMax+1;     // not enough space in the output buffer !
+        return -1;     // not enough space in the output buffer !
     }
 
     // Don't do:

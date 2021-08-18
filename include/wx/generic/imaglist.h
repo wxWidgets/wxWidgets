@@ -58,9 +58,12 @@ private:
     const wxBitmap *DoGetPtr(int index) const;
 
     wxVector<wxBitmap> m_images;
+    bool m_useMask;
 
     // Size of a single bitmap in the list.
     wxSize m_size;
+    // Images in the list should have the same scale factor.
+    double m_scaleFactor;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericImageList);
 };

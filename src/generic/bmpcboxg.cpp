@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BITMAPCOMBOBOX
 
@@ -133,6 +130,11 @@ bool wxBitmapComboBox::Create(wxWindow *parent,
 wxBitmapComboBox::~wxBitmapComboBox()
 {
     DoClear();
+}
+
+wxString wxBitmapComboBox::GetStringSelection() const
+{
+    return wxItemContainer::GetStringSelection();
 }
 
 // ----------------------------------------------------------------------------

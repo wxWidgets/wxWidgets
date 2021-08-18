@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMER
 
@@ -57,7 +54,7 @@ wxTimer::~wxTimer()
 
 void wxTimer::Init()
 {
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     m_impl = traits ? traits->CreateTimerImpl(this) : NULL;
     if ( !m_impl )
     {

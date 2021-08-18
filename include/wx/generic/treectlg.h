@@ -13,8 +13,9 @@
 
 #if wxUSE_TREECTRL
 
-#include "wx/scrolwin.h"
+#include "wx/brush.h"
 #include "wx/pen.h"
+#include "wx/scrolwin.h"
 
 // -----------------------------------------------------------------------------
 // forward declaration
@@ -47,7 +48,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = wxTreeCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
         : wxTreeCtrlBase(),
           wxScrollHelper(this)
     {
@@ -62,7 +63,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_DEFAULT_STYLE,
                 const wxValidator &validator = wxDefaultValidator,
-                const wxString& name = wxTreeCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxTreeCtrlNameStr));
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -243,8 +244,8 @@ protected:
     unsigned short       m_indent;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
-    wxBrush             *m_hilightBrush,
-                        *m_hilightUnfocusedBrush;
+    wxBrush              m_hilightBrush,
+                         m_hilightUnfocusedBrush;
     bool                 m_hasFocus;
     bool                 m_dirty;
     bool                 m_ownsImageListButtons;
@@ -351,9 +352,26 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 private:
+    void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+    {
+        InitVisualAttributes();
+    }
+
+    // (Re)initialize colours, fonts, pens, brushes used by the control using
+    // the current system colours and font.
+    void InitVisualAttributes();
+
     // Reset the state of the last find (i.e. keyboard incremental search)
     // operation.
     void ResetFindState();
+
+
+    // True if we're using custom colours/font, respectively, or false if we're
+    // using the default colours and should update them whenever system colours
+    // change.
+    bool m_hasExplicitFgCol:1,
+         m_hasExplicitBgCol:1,
+         m_hasExplicitFont:1;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl);
@@ -380,7 +398,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = wxTreeCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
     : wxGenericTreeCtrl(parent, id, pos, size, style, validator, name)
     {
     }

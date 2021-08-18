@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SPLITTER
 
@@ -32,6 +29,10 @@
     #include "wx/frame.h"
 
     #include "wx/settings.h"
+#endif
+
+#ifdef __WXOSX__
+    #include "wx/osx/private/available.h"
 #endif
 
 #include "wx/renderer.h"
@@ -96,13 +97,24 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
 
     m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
 
-    // FIXME: with this line the background is not erased at all under GTK1,
-    //        so temporary avoid it there
-#if !defined(__WXGTK__) || defined(__WXGTK20__)
-    // don't erase the splitter background, it's pointless as we overwrite it
-    // anyhow
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
+#ifdef __WXOSX__
+  #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(10, 16) )
+    {
+        // Nothing to do: see OnPaint()
+    }
+    else
+  #endif
 #endif
+    {
+        // FIXME: with this line the background is not erased at all under GTK1,
+        //        so temporary avoid it there
+#if !defined(__WXGTK__) || defined(__WXGTK20__)
+        // don't erase the splitter background, it's pointless as we overwrite it
+        // anyhow
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
+    }
 
     return true;
 }
@@ -178,11 +190,23 @@ void wxSplitterWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 #ifdef __WXOSX__
-    // as subpanels might have a transparent background we must erase the background
-    // at least on OSX, otherwise traces of the sash will remain
-    // test with: splitter sample->replace right window
-    dc.Clear();
-#endif
+  #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(10, 16) )
+    {
+        // Nothing to do: since macOS 10.14, views are layer-backed or using a shared
+        // layer and explicitly clearing the background isn't needed. This only
+        // started mattering here with macOS 11 (aka 10.16 when built with older SDK),
+        // where we must avoid explicitly painting window backgrounds
+    }
+    else
+  #endif
+    {
+        // as subpanels might have a transparent background we must erase the background
+        // at least on OSX, otherwise traces of the sash will remain
+        // test with: splitter sample->replace right window
+        dc.Clear();
+    }
+#endif // __WXOSX__
 
     DrawSash(dc);
 }

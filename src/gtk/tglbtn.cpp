@@ -22,6 +22,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/eventsdisabler.h"
+#include "wx/gtk/private/image.h"
 #include "wx/gtk/private/list.h"
 
 extern bool      g_blockEventsOnDrag;
@@ -103,7 +104,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
     {
         m_widget = gtk_toggle_button_new();
 
-        GtkWidget *image = gtk_image_new();
+        GtkWidget* image = wxGtkImage::New(this);
         gtk_widget_show(image);
         gtk_container_add(GTK_CONTAINER(m_widget), image);
     }
@@ -148,6 +149,7 @@ void wxToggleButton::SetValue(bool state)
     wxGtkEventsDisabler<wxToggleButton> noEvents(this);
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
+    GTKUpdateBitmap();
 }
 
 // bool GetValue() const

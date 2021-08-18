@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_NOTEBOOK
 
@@ -331,9 +328,6 @@ bool wxNotebook::InsertPage(size_t nPage,
     // it's enough to just redraw the tabs
     if ( nPages == 0 )
     {
-        // always select the first tab to have at least some selection
-        bSelect = true;
-
         Relayout();
         Refresh();
     }
@@ -348,7 +342,11 @@ bool wxNotebook::InsertPage(size_t nPage,
     }
     else // pages added to the notebook are initially hidden
     {
-        pPage->Hide();
+        // always select the first tab to have at least some selection
+        if ( nPages == 0 )
+            ChangeSelection(0);
+        else
+            pPage->Hide();
     }
 
     return true;

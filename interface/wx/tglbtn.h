@@ -16,7 +16,7 @@ wxEventType wxEVT_TOGGLEBUTTON;
 
     Since wxWidgets version 2.9.0 this control emits an update UI event.
 
-    You can see wxToggleButton in action in @ref page_samples_controls.
+    You can see wxToggleButton in action in @ref page_samples_widgets.
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}

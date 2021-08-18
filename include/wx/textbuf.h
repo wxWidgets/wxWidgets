@@ -115,16 +115,14 @@ public:
     // lines, i.e. you may write something like:
     //  for ( str = GetFirstLine(); !Eof(); str = GetNextLine() ) { ... }
 
-    // NB: const is commented out because not all compilers understand
-    //     'mutable' keyword yet (m_nCurLine should be mutable)
-    wxString& GetFirstLine() /* const */
+    wxString& GetFirstLine()
         { return m_aLines.empty() ? ms_eof : m_aLines[m_nCurLine = 0]; }
-    wxString& GetNextLine()  /* const */
+    wxString& GetNextLine()
         { return ++m_nCurLine == m_aLines.size() ? ms_eof
                                                  : m_aLines[m_nCurLine]; }
-    wxString& GetPrevLine()  /* const */
+    wxString& GetPrevLine()
         { wxASSERT(m_nCurLine > 0); return m_aLines[--m_nCurLine]; }
-    wxString& GetLastLine() /* const */
+    wxString& GetLastLine()
         { return m_aLines.empty() ? ms_eof : m_aLines[m_nCurLine = m_aLines.size() - 1]; }
 
     // get the type of the line (see also GetEOL)

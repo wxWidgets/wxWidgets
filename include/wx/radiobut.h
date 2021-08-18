@@ -15,22 +15,41 @@
 
 #if wxUSE_RADIOBTN
 
-/*
-   There is no wxRadioButtonBase class as wxRadioButton interface is the same
-   as wxCheckBox(Base), but under some platforms wxRadioButton really
-   derives from wxCheckBox and on the others it doesn't.
-
-   The pseudo-declaration of wxRadioButtonBase would look like this:
-
-   class wxRadioButtonBase : public ...
-   {
-   public:
-        virtual void SetValue(bool value);
-        virtual bool GetValue() const;
-   };
- */
-
 #include "wx/control.h"
+
+class WXDLLIMPEXP_FWD_CORE wxRadioButton;
+
+// TODO: In wxUniv, wxRadioButton must derive from wxCheckBox as it reuses
+// much of its code. This should be fixed by refactoring wxCheckBox to allow
+// this class to reuse its functionality without inheriting from it, but for
+// now use this hack to allow the existing code to compile.
+#ifdef __WXUNIVERSAL__
+    #include "wx/checkbox.h"
+
+    typedef wxCheckBox wxRadioButtonBaseBase;
+#else
+    typedef wxControl wxRadioButtonBaseBase;
+#endif
+
+class WXDLLIMPEXP_CORE wxRadioButtonBase : public wxRadioButtonBaseBase
+{
+public:
+    wxRadioButtonBase() { }
+
+    // Methods to be implemented by the derived classes:
+    virtual void SetValue(bool value) = 0;
+    virtual bool GetValue() const = 0;
+
+
+    // Methods implemented by this class itself.
+    wxRadioButton* GetFirstInGroup() const;
+    wxRadioButton* GetLastInGroup() const;
+    wxRadioButton* GetPreviousInGroup() const;
+    wxRadioButton* GetNextInGroup() const;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxRadioButtonBase);
+};
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxRadioButtonNameStr[];
 

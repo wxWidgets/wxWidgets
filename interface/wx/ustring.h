@@ -19,7 +19,7 @@
 
     The main purpose of wxUString is a to give users a Unicode string
     class that has O(1) access to its content, to be identical on all
-    platforms and to be easily convertable to wxString as well as other
+    platforms and to be easily convertible to wxString as well as other
     ways to store strings (C string literals, wide character
     string literals, character buffer, etc) by providing several overloads
     and built-in conversions to and from the various string formats.

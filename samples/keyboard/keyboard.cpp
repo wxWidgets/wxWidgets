@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -238,7 +235,7 @@ MyFrame::MyFrame(const wxString& title)
                                             wxTE_READONLY);
     headerText->SetValue(
                " event          key     KeyCode mod   UnicodeKey  "
-               "  RawKeyCode RawKeyFlags  Position");
+               "  RawKeyCode RawKeyFlags  Position      Repeat");
 
 
     m_logText = new wxTextCtrl(this, wxID_ANY, "",
@@ -541,6 +538,7 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
                    "  not-set    not-set"
 #endif
                    "  (%5d,%5d)"
+                   "  %s"
                    "\n",
                name,
                GetKeyName(event),
@@ -559,6 +557,7 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
 #endif
                , event.GetX()
                , event.GetY()
+               , event.IsAutoRepeat() ? "Yes" : "No"
                );
 
     m_logText->AppendText(msg);

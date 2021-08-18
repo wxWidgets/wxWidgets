@@ -10,9 +10,6 @@
 
 #if wxUSE_HYPERLINKCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -92,7 +89,7 @@ void HyperlinkCtrlTestCase::Url()
 
 void HyperlinkCtrlTestCase::Click()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     EventCounter hyperlink(m_hyperlink, wxEVT_HYPERLINK);
 
     wxUIActionSimulator sim;

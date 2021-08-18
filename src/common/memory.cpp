@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MEMORY_TRACING || wxUSE_DEBUG_CONTEXT
 
@@ -455,11 +452,11 @@ int wxDebugContext::m_balignmask = (int)((char *)&markerCalc[1] - (char*)&marker
 // Pointer to global function to call at shutdown
 wxShutdownNotifyFunction wxDebugContext::sm_shutdownFn;
 
-wxDebugContext::wxDebugContext(void)
+wxDebugContext::wxDebugContext()
 {
 }
 
-wxDebugContext::~wxDebugContext(void)
+wxDebugContext::~wxDebugContext()
 {
 }
 
@@ -573,14 +570,14 @@ void wxDebugContext::TraverseList (PmSFV func, wxMemStruct *from)
 /*
   Print out the list.
   */
-bool wxDebugContext::PrintList (void)
+bool wxDebugContext::PrintList()
 {
   TraverseList ((PmSFV)&wxMemStruct::PrintNode, (checkPoint ? checkPoint->m_next : NULL));
 
   return true;
 }
 
-bool wxDebugContext::Dump(void)
+bool wxDebugContext::Dump()
 {
   {
     const wxChar* appName = wxT("application");
@@ -720,7 +717,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   return true;
 }
 
-bool wxDebugContext::PrintClasses(void)
+bool wxDebugContext::PrintClasses()
 {
   {
     const wxChar* appName = wxT("application");

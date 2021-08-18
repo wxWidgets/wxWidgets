@@ -58,7 +58,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxCheckBoxNameStr)
+               const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Init();
 
@@ -72,7 +72,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     // implement the checkbox interface
     virtual void SetValue(bool value) wxOVERRIDE;

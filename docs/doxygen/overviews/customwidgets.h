@@ -12,7 +12,7 @@
 @tableofcontents
 
 Typically combining the existing @ref group_class_ctrl controls in wxDialogs
-and wxFrames is sufficient to fullfill any GUI design. Using the wxWidgets
+and wxFrames is sufficient to fulfill any GUI design. Using the wxWidgets
 standard controls makes your GUI looks native on all ports and is obviously
 easier and faster.
 

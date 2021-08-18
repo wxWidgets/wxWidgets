@@ -24,7 +24,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE,
-        const wxString& name = wxDialogNameStr)
+        const wxString& name = wxASCII_STR(wxDialogNameStr))
     {
         Create(parent, id, title, pos, size, style, name);
     }
@@ -34,7 +34,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE,
-        const wxString& name = wxDialogNameStr);
+        const wxString& name = wxASCII_STR(wxDialogNameStr));
 
     virtual ~wxDialog();
 

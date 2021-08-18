@@ -55,12 +55,6 @@ public:
 
     // Initialize with XPM data
     wxBitmap(const char* const* data);
-#ifdef wxNEEDS_CHARPP
-    wxBitmap(char** data)
-    {
-        *this = wxBitmap(const_cast<const char* const*>(data));
-    }
-#endif
 
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
@@ -204,6 +198,9 @@ public:
     // Set alpha flag to true if this is a 32bpp bitmap which has any non-0
     // values in its alpha channel.
     void MSWUpdateAlpha();
+
+    // Blend mask with alpha channel and remove the mask
+    void MSWBlendMaskWithAlpha();
 
 public:
 #if WXWIN_COMPATIBILITY_3_0

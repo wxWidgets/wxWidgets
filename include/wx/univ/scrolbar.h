@@ -62,7 +62,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxScrollBarNameStr);
+                const wxString& name = wxASCII_STR(wxScrollBarNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -70,7 +70,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxScrollBarNameStr);
+                const wxString& name = wxASCII_STR(wxScrollBarNameStr));
 
     virtual ~wxScrollBar();
 
@@ -131,7 +131,7 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
-    // forces update of thumb's visual appearence (does nothing if m_dirty=false)
+    // forces update of thumb's visual appearance (does nothing if m_dirty=false)
     void UpdateThumb();
 
     // SetThumbPosition() helper

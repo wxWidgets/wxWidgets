@@ -2,7 +2,7 @@
 // Name:        wx/univ/setup_inc.h
 // Purpose:     wxUniversal-specific setup.h options (this file is not used
 //              directly, it is injected by build/update-setup-h in the
-//              generated include/wx/univ/setup0.h)
+//              generated include/wx/univ/setup.h)
 // Author:      Vadim Zeitlin
 // Created:     2008-02-03
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>

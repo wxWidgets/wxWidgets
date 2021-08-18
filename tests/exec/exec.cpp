@@ -15,9 +15,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/utils.h"
 #include "wx/process.h"
@@ -119,7 +116,13 @@ private:
                      wxProcess* callback_ = NULL)
         {
             forceExitLoop = forceExitLoop_;
-            command = command_;
+
+            // Prepend the command with the value of wxTEST_RUNNER if it's
+            // defined to make this test work when using Wine too.
+            if ( wxGetEnv("wxTEST_RUNNER", &command) )
+                command += ' ';
+            command += command_;
+
             flags = flags_;
             callback = callback_;
 

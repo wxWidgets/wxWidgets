@@ -14,6 +14,15 @@
     and the corresponding @e dst destination pixel gets combined together to produce
     the final pixel. E.g. @c wxCLEAR and @c wxSET completely ignore the source
     and the destination pixel and always put zeroes or ones in the final surface.
+
+    Note that not all modes are supported under all platforms. Notably wxGTK3
+    and wxMac only support the following modes:
+    - wxCOPY
+    - wxOR
+    - wxNO_OP
+    - wxCLEAR
+    - wxXOR
+    and, in particular, do @em not support the commonly used @c wxINVERT.
 */
 enum wxRasterOperationMode
 {
@@ -155,7 +164,7 @@ struct wxFontMetrics
     In general wxDC methods don't support alpha transparency and the alpha
     component of wxColour is simply ignored and you need to use wxGraphicsContext
     for full transparency support. There are, however, a few exceptions: first,
-    under OS X and GTK+ 3 colours with alpha channel are supported in all the normal
+    under macOS and GTK+ 3 colours with alpha channel are supported in all the normal
     wxDC-derived classes as they use wxGraphicsContext internally. Second,
     under all platforms wxSVGFileDC also fully supports alpha channel. In both
     of these cases the instances of wxPen or wxBrush that are built from
@@ -164,7 +173,7 @@ struct wxFontMetrics
 
     @section dc_transform_support Support for Transformation Matrix
 
-    On some platforms (currently under MSW, GTK+ 3, OS X) wxDC has support for
+    On some platforms (currently under MSW, GTK+ 3, macOS) wxDC has support for
     applying an arbitrary affine transformation matrix to its coordinate system
     (since 3.1.1 this feature is also supported by wxGCDC in all ports).
     Call CanUseTransformMatrix() to check if this support is available and then
@@ -197,54 +206,150 @@ public:
     /**
         Convert @e device X coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalX(wxCoord x) const;
 
     /**
         Convert @e device X coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalXRel(wxCoord x) const;
 
     /**
         Converts @e device Y coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalY(wxCoord y) const;
 
     /**
         Convert @e device Y coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalYRel(wxCoord y) const;
 
     /**
         Converts logical X coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceX(wxCoord x) const;
 
     /**
         Converts logical X coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceXRel(wxCoord x) const;
 
     /**
         Converts logical Y coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceY(wxCoord y) const;
 
     /**
         Converts logical Y coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceYRel(wxCoord y) const;
+
+    /**
+        Converts device (@a x, @a y) coordinates to logical coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(const wxPoint& pt) const;
+
+    /**
+        Converts device @a x, @a y coordinates to relative logical coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(const wxSize& dim) const;
+
+    /**
+        Converts logical (@a x, @a y) coordinates to device coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(const wxPoint& pt) const;
+
+    /**
+        Converts logical @a x, @a y coordinates to relative device coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(const wxSize& dim) const;
 
     //@}
 
@@ -257,6 +362,13 @@ public:
 
     /**
         Clears the device context using the current background brush.
+
+        Note that SetBackground() method must be used to set the brush used by
+        Clear(), the brush used for filling the shapes set by SetBrush() is
+        ignored by it.
+
+        If no background brush was set, solid white brush is used to clear the
+        device context.
     */
     void Clear();
 
@@ -289,7 +401,7 @@ public:
 
     /**
         Draw a bitmap on the device context at the specified point. If
-        @a transparent is @true and the bitmap has a transparency mask, the
+        @a useMask is @true and the bitmap has a transparency mask, the
         bitmap will be drawn transparently.
 
         When drawing a mono-bitmap, the current text foreground colour will be
@@ -602,9 +714,16 @@ public:
     /**
         Draws a spline between all given points using the current pen.
 
+        The number of points must be at least 2 for the spline to be drawn.
+
+        @note Drawn curve is not an interpolating curve - it does not go
+        through all points. It may be considered a smoothing curve.
+
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
+
+        @image html drawing-spline.png
     */
     void DrawSpline(int n, const wxPoint points[]);
 
@@ -876,6 +995,12 @@ public:
         used for the text extent calculation, otherwise the currently selected
         font is used.
 
+        If @a string is empty, its horizontal extent is 0 but, for convenience
+        when using this function for allocating enough space for a possibly
+        multi-line string, its vertical extent is the same as the height of an
+        empty line of text. Please note that this behaviour differs from that
+        of GetTextExtent().
+
         @note This function works with both single-line and multi-line strings.
 
         @beginWxPerlOnly
@@ -938,6 +1063,8 @@ public:
         used for the text extent calculation. Otherwise the currently selected
         font is.
 
+        If @a string is empty, its extent is 0 in both directions, as expected.
+
         @note This function only works with single-line strings.
 
         @beginWxPerlOnly
@@ -973,7 +1100,7 @@ public:
     //@{
 
     /**
-        Returns the current background mode: @c wxPENSTYLE_SOLID or @c wxPENSTYLE_TRANSPARENT.
+        Returns the current background mode: @c wxBRUSHSTYLE_SOLID or @c wxBRUSHSTYLE_TRANSPARENT.
 
         @see SetBackgroundMode()
     */
@@ -1013,10 +1140,15 @@ public:
     const wxColour& GetTextForeground() const;
 
     /**
-        @a mode may be one of @c wxPENSTYLE_SOLID and @c wxPENSTYLE_TRANSPARENT.
+        Change the current background mode.
 
         This setting determines whether text will be drawn with a background
         colour or not.
+
+        Default is @c wxBRUSHSTYLE_TRANSPARENT, i.e. text background is not
+        drawn.
+
+        @param mode one of @c wxBRUSHSTYLE_SOLID and @c wxBRUSHSTYLE_TRANSPARENT.
     */
     void SetBackgroundMode(int mode);
 
@@ -1497,6 +1629,14 @@ public:
 
     /**
         Sets the current logical function for the device context.
+
+        @note This function is not fully supported in all ports, due to the
+        limitations of the underlying drawing model. Notably, @c wxINVERT which
+        was commonly used for drawing rubber bands or other moving outlines in
+        the past, is not, and will not, be supported by wxGTK3 and wxMac. The
+        suggested alternative is to draw temporarily objects normally and
+        refresh the (affected part of the) window to remove them later.
+
         It determines how a @e source pixel (from a pen or brush colour, or source
         device context if using Blit()) combines with a @e destination pixel in
         the current device context.
@@ -1506,8 +1646,7 @@ public:
 
         The default is @c wxCOPY, which simply draws with the current colour.
         The others combine the current colour and the background using a logical
-        operation. @c wxINVERT is commonly used for drawing rubber bands or moving
-        outlines, since drawing twice reverts to the original colour.
+        operation.
     */
     void SetLogicalFunction(wxRasterOperationMode function);
 
@@ -1617,7 +1756,7 @@ public:
        context, if this wxDC has something that could be thought of in that
        way.  (Not all of them do.)
 
-       For example, on Windows the return value is an HDC, on OS X it is a
+       For example, on Windows the return value is an HDC, on macOS it is a
        CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
        wxGCDC then the return value will be the value returned from
        wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
@@ -1664,6 +1803,21 @@ public:
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
     wxPoint GetLogicalOrigin() const;
     //@}
+
+    /**
+       If supported by the platform and the @a wxDC implementation, this method
+       will return the @a wxGraphicsContext associated with the DC. Otherwise
+       @NULL is returned.
+    */
+    virtual wxGraphicsContext* GetGraphicsContext() const;
+
+    /**
+       Associate a wxGraphicsContext with the DC. Ignored if not supported by
+       the specific @a wxDC implementation. It is unlikely that this will need to
+       be used in application code.
+    */
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx );
+
 };
 
 
@@ -1934,7 +2088,8 @@ public:
         @param dc
             The DC where the mode must be temporary set.
         @param mode
-            The background mode to set.
+            The background mode to set, one of @c wxBRUSHSTYLE_SOLID or @c
+            wxBRUSHSTYLE_TRANSPARENT.
     */
     wxDCBgModeChanger(wxDC& dc, int mode);
 

@@ -77,7 +77,7 @@ public:
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
 
     // adding a CFType object to be released only at the end of the current event cycle (increases the
-    // refcount of the object passed), needed in case we are in the middle of an event concering an object
+    // refcount of the object passed), needed in case we are in the middle of an event concerning an object
     // we want to delete and cannot do it immediately
     // TODO change semantics to be in line with cocoa (make autrelease NOT increase the count)
     void                  MacAddToAutorelease( void* cfrefobj );
@@ -138,6 +138,9 @@ public:
 
     // override this to return false from a non-bundled console app in order to stay in background ...
     virtual bool         OSXIsGUIApplication() { return true; }
+
+    // Allow the user to disable the tab bar support in the application
+    void                 OSXEnableAutomaticTabbing(bool enable);
 
 #if wxOSX_USE_COCOA_OR_IPHONE
     // immediately before the native event loop launches

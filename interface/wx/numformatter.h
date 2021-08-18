@@ -70,7 +70,11 @@ public:
             Combination of values from the Style enumeration (except for
             Style_NoTrailingZeroes which can't be used with this overload).
     */
+    //@{
     static wxString ToString(long val, int flags = Style_WithThousandsSep);
+    static wxString ToString(long long val, int flags = Style_WithThousandsSep);
+    static wxString ToString(unsigned long long val, int flags = Style_WithThousandsSep);
+    //@}
 
     /**
         Returns string representation of a floating point number.
@@ -94,10 +98,18 @@ public:
         success they return @true and store the result at the location pointed
         to by @a val (which can't be @NULL), otherwise @false is returned.
 
+        Note that the overload taking unsigned long long value is only
+        available since wxWidgets 3.1.5. Also, unlike wxString::ToULongLong()
+        and the standard functions such as @c strtoul(), this overload does
+        @em not accept, i.e. returns @false, for the strings starting with the
+        minus sign.
+
         @see wxString::ToLong(), wxString::ToDouble()
      */
     //@{
     static bool FromString(wxString s, long *val);
+    static bool FromString(wxString s, long long *val);
+    static bool FromString(wxString s, unsigned long long *val);
     static bool FromString(wxString s, double *val);
     //@}
 

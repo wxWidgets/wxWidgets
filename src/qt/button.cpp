@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -61,7 +58,7 @@ wxWindow *wxButton::SetDefault()
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 {
     static wxSize size = wxDefaultSize;
     if (size == wxDefaultSize)

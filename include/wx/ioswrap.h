@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/ioswrap.h
-// Purpose:     includes the correct iostream headers for current compiler
+// Purpose:     This file is obsolete, include <iostream> directly instead.
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     03.02.99
@@ -12,11 +12,7 @@
 
 #include "wx/beforestd.h"
 
-#if wxUSE_IOSTREAMH
-#   include <iostream.h>
-#else
-#   include <iostream>
-#endif
+#include <iostream>
 
 #include "wx/afterstd.h"
 

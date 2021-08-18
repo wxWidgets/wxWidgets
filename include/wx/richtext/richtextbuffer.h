@@ -345,6 +345,8 @@ enum wxTextBoxAttrPosition
     wxTEXT_BOX_ATTR_POSITION_MASK           = 0x00F0
 };
 
+wxALLOW_COMBINING_ENUMS(wxTextAttrUnits, wxTextAttrValueFlags)
+
 /**
     @class wxTextAttrDimension
 
@@ -1311,11 +1313,6 @@ public:
         Default constructor.
     */
     wxTextBoxAttr() { Init(); }
-
-    /**
-        Copy constructor.
-    */
-    wxTextBoxAttr(const wxTextBoxAttr& attr) { Init(); (*this) = attr; }
 
     /**
         Initialises this object.

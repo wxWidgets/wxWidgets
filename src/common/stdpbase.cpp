@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -58,7 +55,7 @@ static wxStandardPathsDefault gs_stdPaths;
 /* static */
 wxStandardPaths& wxStandardPathsBase::Get()
 {
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     wxCHECK_MSG( traits, gs_stdPaths, wxT("create wxApp before calling this") );
 
     return traits->GetStandardPaths();
@@ -80,9 +77,7 @@ wxString wxStandardPathsBase::GetExecutablePath() const
     if ( path.empty() )
         return argv0;       // better than nothing
 
-    wxFileName filename(path);
-    filename.Normalize();
-    return filename.GetFullPath();
+    return wxFileName(path).GetAbsolutePath();
 }
 
 wxStandardPaths& wxAppTraitsBase::GetStandardPaths()

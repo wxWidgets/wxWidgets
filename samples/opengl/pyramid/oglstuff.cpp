@@ -1187,16 +1187,16 @@ void myOGLManager::SetStringOnPyr(const unsigned char* strImage, int iWidth, int
     double edgeLen = MyDistance(myVec3(gVerts[0], gVerts[1], gVerts[2]),
                                  myVec3(gVerts[6], gVerts[7], gVerts[8]));
     GLfloat prop = ((GLfloat) iHeigh) / ((GLfloat) iWidth);
-    GLfloat rw = (GLfloat) (edgeLen / (1 + 4.0 * prop / sqrt(3.0)));
+    GLfloat rw = float(edgeLen) / (1 + 4 * prop / std::sqrt(3.0f));
     GLfloat h = prop * rw;
-    GLfloat de = (GLfloat)(2.0 * h / sqrt(3.0));
+    GLfloat de = 2 * h / std::sqrt(3.0f);
     // A bit of separation of the face so as to avoid z-fighting
-    GLfloat rY = gVerts[1] - (GLfloat)0.01; // Towards outside
+    GLfloat rY = gVerts[1] - 0.01f; // Towards outside
     GLfloat sVerts[12];
     // The image was created top to bottom, but OpenGL axis are bottom to top.
     // The image would display upside down. We avoid it choosing the right
     // order of vertices and texture coords. See myOGLString::SetStringWithVerts()
-    sVerts[0] = gVerts[6] + de;  sVerts[1] = rY;   sVerts[2] = gVerts[8] + h / (GLfloat)2.0;
+    sVerts[0] = gVerts[6] + de;  sVerts[1] = rY;   sVerts[2] = gVerts[8] + h / 2;
     sVerts[3] = sVerts[0]     ;  sVerts[4] = rY;   sVerts[5] = sVerts[2] + h;
     sVerts[6] = sVerts[0] + rw;  sVerts[7] = rY;   sVerts[8] = sVerts[2];
     sVerts[9] = sVerts[6]     ; sVerts[10] = rY;  sVerts[11] = sVerts[5];

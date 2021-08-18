@@ -12,9 +12,6 @@
 // ----------------------------------------------------------------------------
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -22,9 +19,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/hashmap.h"
-
-// Not needed, included in defs.h
-// #include "wx/windowid.h"
+#include "wx/windowid.h"
 
 namespace
 {

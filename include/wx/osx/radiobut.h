@@ -11,7 +11,7 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 
@@ -22,7 +22,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr)
+           const wxString& name = wxASCII_STR(wxRadioButtonNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -33,10 +33,10 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr);
+           const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
 
-    virtual void SetValue(bool val);
-    virtual bool GetValue() const ;
+    virtual void SetValue(bool val) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
     // implementation
 

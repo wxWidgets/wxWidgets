@@ -9,6 +9,6 @@
 
 include(../../source_groups.cmake)
 
-wx_add_library(adv "${wxSOURCE_DIR}/src/common/dummy.cpp")
+wx_add_library(wxadv "${wxSOURCE_DIR}/src/common/dummy.cpp")
 
-wx_finalize_lib(adv)
+wx_finalize_lib(wxadv)

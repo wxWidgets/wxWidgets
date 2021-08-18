@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -188,7 +185,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
     {
         if ( alignment & wxALIGN_RIGHT )
         {
-            x = rect.GetRight() - width;
+            x = rect.GetRight() - width + 1;
         }
         else if ( alignment & wxALIGN_CENTRE )
         {
@@ -201,7 +198,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
 
         if ( alignment & wxALIGN_BOTTOM )
         {
-            y = rect.GetBottom() - height;
+            y = rect.GetBottom() - height + 1;
         }
         else if ( alignment & wxALIGN_CENTRE_VERTICAL )
         {

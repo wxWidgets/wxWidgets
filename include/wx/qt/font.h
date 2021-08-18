@@ -51,7 +51,7 @@ public:
 
     // accessors: get the font characteristics
     virtual int GetPointSize() const wxOVERRIDE;
-    virtual float GetFractionalPointSize() const wxOVERRIDE;
+    virtual double GetFractionalPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
@@ -62,7 +62,7 @@ public:
     virtual bool GetStrikethrough() const wxOVERRIDE;
 
     // change the font characteristics
-    virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
+    virtual void SetFractionalPointSize(double pointSize) wxOVERRIDE;
     virtual void SetPixelSize(const wxSize& pixelSize) wxOVERRIDE;
     virtual void SetFamily( wxFontFamily family ) wxOVERRIDE;
     virtual void SetStyle( wxFontStyle style ) wxOVERRIDE;

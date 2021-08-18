@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 12 December 2017                                                    *
+# Date : 19 November 2019                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -52,7 +52,7 @@ all :
 .endif
 .endif
 
-OBJS=event.obj,gestures.obj
+OBJS=event.obj,gestures.obj,chessboard.obj
 
 .ifdef __WXMOTIF__
 event.exe : $(OBJS)
@@ -76,3 +76,4 @@ event_x11.exe : $(OBJS)
 
 event.obj : event.cpp
 gestures.obj : gestures.cpp
+chessboard.obj : chessboard.cpp

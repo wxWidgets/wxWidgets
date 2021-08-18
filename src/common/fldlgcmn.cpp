@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEDLG
 
@@ -193,6 +190,12 @@ wxSize wxFileDialogBase::GetExtraControlSize()
     // creating the native dialog and this seems to be the only way
     wxDialog dlg(NULL, wxID_ANY, wxString());
     return (*m_extraControlCreator)(&dlg)->GetSize();
+}
+
+void wxFileDialogBase::UpdateExtraControlUI()
+{
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
 void wxFileDialogBase::SetPath(const wxString& path)

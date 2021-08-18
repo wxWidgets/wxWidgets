@@ -86,8 +86,8 @@ public:
 /**
     @class wxMediaCtrl
 
-    wxMediaCtrl is a class for displaying types of media, such as videos, audio
-    files, natively through native codecs.
+    wxMediaCtrl is a class for displaying various types of media, such as videos,
+    audio files, natively through native codecs.
 
     wxMediaCtrl uses native backends to render media, for example on Windows
     there is a ActiveMovie/DirectShow backend, and on Macintosh there is a
@@ -120,18 +120,15 @@ public:
     Example:
 
     @code
-    //connect to the media event
-    this->Connect(wxMY_ID, wxEVT_MEDIA_STOP, (wxObjectEventFunction)
-    (wxEventFunction)(wxMediaEventFunction) &MyFrame::OnMediaStop);
+    // bind the media event
+    Bind(wxMY_ID, wxEVT_MEDIA_STOP, &MyFrame::OnMediaStop, this);
 
     //...
-    void MyFrame::OnMediaStop(const wxMediaEvent& evt)
+    void MyFrame::OnMediaStop(wxMediaEvent& evt)
     {
-        if(bUserWantsToSeek)
+        if( userWantsToSeek )
         {
-            m_mediactrl->SetPosition(
-                m_mediactrl->GetDuration() << 1
-                                    );
+            m_mediactrl->Seek(m_mediactrl->Length() - 1);
             evt.Veto();
         }
     }
@@ -147,7 +144,7 @@ public:
 
     Note that when changing the state of the media through Play() and other methods,
     the media may not actually be in the @c wxMEDIASTATE_PLAYING, for example.
-    If you are relying on the media being in certain state catch the event relevant
+    If you are relying on the media being in certain state, catch the event relevant
     to the state. See wxMediaEvent for the kinds of events that you can catch.
 
 
@@ -200,18 +197,14 @@ public:
       Default backend on Windows and supported by nearly all Windows versions.
       May display a windows media player logo while inactive.
     - @b wxMEDIABACKEND_QUICKTIME: Use QuickTime. Mac Only.
-      WARNING: May not working correctly embedded in a wxNotebook.
+      WARNING: May not work correctly when embedded in a wxNotebook.
     - @b wxMEDIABACKEND_GSTREAMER, Use GStreamer. Unix Only.
       Requires GStreamer 0.10 along with at the very least the xvimagesink,
       xoverlay and gst-play modules of gstreamer to function.
       You need the correct modules to play the relevant files, for example the
       mad module to play mp3s, etc.
-    - @b wxMEDIABACKEND_WMP10, Uses Windows Media Player 10 (Windows only) -
-      works on mobile machines with Windows Media Player 10 and desktop machines
-      with either Windows Media Player 9 or 10.
-
-    Note that other backends such as wxMEDIABACKEND_MCI can now be found at
-    wxCode (http://wxcode.sourceforge.net/).
+    - @b wxMEDIABACKEND_WMP10, Use Windows Media Player 10 (Windows only).
+      Works on systems with either Windows Media Player 9 or 10 installed.
 
 
     @section mediactrl_creating_backend Creating a backend
@@ -226,9 +219,9 @@ public:
 
     The only real tricky part is that you need to make sure the file in compiled in,
     which if there are just backends in there will not happen and you may need to
-    use a force link hack (see https://wiki.wxwidgets.org/RTTI).
+    use a force link hack (see @c wxFORCE_LINK_MODULE usage in the mediactrl sample).
 
-    This is a rather simple example of how to create a backend in the
+    There is a rather simple example of how to create a backend in the
     wxActiveXContainer documentation.
 
 
@@ -278,8 +271,8 @@ public:
 
     /**
         Creates this control.
-        Returns @false if it can't load the movie located at @a fileName
-        or it cannot load one of its native backends.
+        Returns @false if it can't load the media located at @a fileName
+        or it can't create a backend.
 
         If you specify a file to open via @a fileName and you don't specify a
         backend to use, wxMediaCtrl tries each of its backends until one that
@@ -330,9 +323,9 @@ public:
         Obtains the state the playback of the media is in.
 
         @beginTable
-        @row2col{wxMEDIASTATE_STOPPED, The movie has stopped.}
-        @row2col{wxMEDIASTATE_PAUSED, The movie is paused.}
-        @row2col{wxMEDIASTATE_PLAYING, The movie is currently playing.}
+        @row2col{wxMEDIASTATE_STOPPED, The media has stopped.}
+        @row2col{wxMEDIASTATE_PAUSED, The media is paused.}
+        @row2col{wxMEDIASTATE_PLAYING, The media is currently playing.}
         @endTable
     */
     wxMediaState GetState();
@@ -346,7 +339,7 @@ public:
     double GetVolume();
 
     /**
-        Obtains the length - the total amount of time the movie has in milliseconds.
+        Obtains the length - the total amount of time the media has in milliseconds.
     */
     wxFileOffset Length();
 
@@ -381,17 +374,17 @@ public:
     bool LoadURIWithProxy(const wxString& uri, const wxString& proxy);
 
     /**
-        Pauses playback of the movie.
+        Pauses playback of the media.
     */
     bool Pause();
 
     /**
-        Resumes playback of the movie.
+        Resumes playback of the media.
     */
     bool Play();
 
     /**
-        Seeks to a position within the movie.
+        Seeks to a position within the media.
 
         @todo Document the wxSeekMode parameter @a mode, and perhaps also the
               wxFileOffset and wxSeekMode themselves.
@@ -421,7 +414,7 @@ public:
         A special feature to wxMediaCtrl. Applications using native toolkits such as
         QuickTime usually have a scrollbar, play button, and more provided to
         them by the toolkit. By default wxMediaCtrl does not do this. However, on
-        the directshow and quicktime backends you can show or hide the native controls
+        the DirectShow and QuickTime backends you can show or hide the native controls
         provided by the underlying toolkit at will using ShowPlayerControls(). Simply
         calling the function with default parameters tells wxMediaCtrl to use the
         default controls provided by the toolkit. The function takes a
@@ -442,7 +435,7 @@ public:
     bool Stop();
 
     /**
-        Obtains the current position in time within the movie in milliseconds.
+        Obtains the current position in time within the media in milliseconds.
     */
     wxFileOffset Tell();
 };

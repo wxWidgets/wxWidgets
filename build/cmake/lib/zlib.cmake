@@ -8,6 +8,8 @@
 #############################################################################
 
 if(wxUSE_ZLIB STREQUAL "builtin")
+    # TODO: implement building zlib via its CMake file, using
+    # add_subdirectory or ExternalProject_Add
     wx_add_builtin_library(wxzlib
         src/zlib/adler32.c
         src/zlib/compress.c

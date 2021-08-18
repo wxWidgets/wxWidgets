@@ -28,7 +28,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxSliderNameStr)
+             const wxString& name = wxASCII_STR(wxSliderNameStr))
     {
         Init();
 
@@ -44,7 +44,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSL_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSliderNameStr);
+                const wxString& name = wxASCII_STR(wxSliderNameStr));
 
     virtual ~wxSlider();
 
@@ -122,6 +122,9 @@ protected:
 
     WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd) wxOVERRIDE;
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // the labels windows, if any
     wxSubwindows  *m_labels;

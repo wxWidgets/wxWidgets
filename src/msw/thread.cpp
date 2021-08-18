@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_THREADS
 
@@ -46,22 +43,9 @@
     #define _MT
 #endif
 
-#if defined(__BORLANDC__)
-    #if !defined(__MT__)
-        // I can't set -tWM in the IDE (anyone?) so have to do this
-        #define __MT__
-    #endif
-
-    #if !defined(__MFC_COMPAT__)
-        // Needed to know about _beginthreadex etc..
-        #define __MFC_COMPAT__
-    #endif
-#endif // BC++
-
 // define wxUSE_BEGIN_THREAD if the compiler has _beginthreadex() function
 // which should be used instead of Win32 ::CreateThread() if possible
 #if defined(__VISUALC__) || \
-    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
     (defined(__GNUG__) && defined(__MSVCRT__))
 
     #undef wxUSE_BEGIN_THREAD
@@ -106,8 +90,9 @@ enum wxThreadState
 // this module globals
 // ----------------------------------------------------------------------------
 
-// TLS index of the slot where we store the pointer to the current thread
-static DWORD gs_tlsThisThread = 0xFFFFFFFF;
+// TLS index of the slot where we store the pointer to the current thread, the
+// initial value is special and means that it's not initialized yet
+static DWORD gs_tlsThisThread = TLS_OUT_OF_INDEXES;
 
 // id of the main thread - the one which can call GUI functions without first
 // calling wxMutexGuiEnter()
@@ -123,11 +108,6 @@ static wxCriticalSection *gs_critsectGui = NULL;
 
 // critical section which protects gs_nWaitingForGui variable
 static wxCriticalSection *gs_critsectWaitingForGui = NULL;
-
-// critical section which serializes WinThreadStart() and WaitForTerminate()
-// (this is a potential bottleneck, we use a single crit sect for all threads
-// in the system, but normally time spent inside it should be quite short)
-static wxCriticalSection *gs_critsectThreadDelete = NULL;
 
 // number of threads waiting for GUI in wxMutexGuiEnter()
 static size_t gs_nWaitingForGui = 0;
@@ -541,6 +521,9 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
     wxTRY
     {
         // store the thread object in the TLS
+        wxASSERT_MSG( gs_tlsThisThread != TLS_OUT_OF_INDEXES,
+                      "TLS index not set. Is wx initialized?" );
+
         if ( !::TlsSetValue(gs_tlsThisThread, thread) )
         {
             wxLogSysError(_("Cannot start thread: error writing TLS."));
@@ -605,6 +588,14 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
 void wxThreadInternal::SetPriority(unsigned int priority)
 {
     m_priority = priority;
+
+    if ( !m_hThread )
+    {
+        // The thread hasn't been created yet, so calling SetThreadPriority()
+        // right now would just result in an error -- just skip doing this, as
+        // the priority will be set when Create() is called later.
+        return;
+    }
 
     // translate wxWidgets priority to the Windows one
     int win_priority;
@@ -921,6 +912,8 @@ bool wxThreadInternal::Resume()
 
 wxThread *wxThread::This()
 {
+    wxASSERT_MSG( gs_tlsThisThread != TLS_OUT_OF_INDEXES,
+                  "TLS index not set. Is wx initialized?" );
     wxThread *thread = (wxThread *)::TlsGetValue(gs_tlsThisThread);
 
     // be careful, 0 may be a valid return value as well
@@ -1234,7 +1227,7 @@ bool wxThreadModule::OnInit()
 {
     // allocate TLS index for storing the pointer to the current thread
     gs_tlsThisThread = ::TlsAlloc();
-    if ( gs_tlsThisThread == 0xFFFFFFFF )
+    if ( gs_tlsThisThread == TLS_OUT_OF_INDEXES )
     {
         // in normal circumstances it will only happen if all other
         // TLS_MINIMUM_AVAILABLE (>= 64) indices are already taken - in other
@@ -1249,7 +1242,7 @@ bool wxThreadModule::OnInit()
     if ( !::TlsSetValue(gs_tlsThisThread, (LPVOID)0) )
     {
         ::TlsFree(gs_tlsThisThread);
-        gs_tlsThisThread = 0xFFFFFFFF;
+        gs_tlsThisThread = TLS_OUT_OF_INDEXES;
 
         wxLogSysError(_("Thread module initialization failed: cannot store value in thread local storage"));
 
@@ -1260,8 +1253,6 @@ bool wxThreadModule::OnInit()
 
     gs_critsectGui = new wxCriticalSection();
     gs_critsectGui->Enter();
-
-    gs_critsectThreadDelete = new wxCriticalSection;
 
     wxThread::ms_idMainThread = wxThread::GetCurrentId();
 
@@ -1275,7 +1266,10 @@ void wxThreadModule::OnExit()
         wxLogLastError(wxT("TlsFree failed."));
     }
 
-    wxDELETE(gs_critsectThreadDelete);
+    // invalidate slot index to make the errors more obvious if we try to use
+    // it from now on, e.g. if any wxThreads are still running (which shouldn't
+    // be the case, of course, but might still happen)
+    gs_tlsThisThread = TLS_OUT_OF_INDEXES;
 
     if ( gs_critsectGui )
     {

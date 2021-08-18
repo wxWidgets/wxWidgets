@@ -115,7 +115,7 @@ These come in two varieties:
     ("\<label\>Cancel\</label\>"), but they may use nested subelements too (e.g.
     @ref overview_xrcformat_type_font "font property"). A property can only be
     listed once in an object's definition.
- -# Child objects. Window childs, sizers, sizer items or notebook pages
+ -# Child objects. Window children, sizers, sizer items or notebook pages
     are all examples of child objects. They are represented using nested
     @c \<object\> elements and are can be repeated more than once. The specifics
     of which object classes are allowed as children are class-specific and
@@ -341,8 +341,8 @@ or translations are done.
 @subsection overview_xrcformat_type_bitmap Bitmap
 
 Bitmap properties contain specification of a single bitmap or icon. In the most
-basic form, their text value is simply a relative filename (or another
-wxFileSystem URL) of the bitmap to use. For example:
+basic form, their text value is simply a relative URL of the bitmap to use.
+For example:
 @code
 <object class="tool" name="wxID_NEW">
     <tooltip>New</tooltip>
@@ -350,7 +350,15 @@ wxFileSystem URL) of the bitmap to use. For example:
 </object>
 @endcode
 The value is interpreted as path relative to the location of XRC file where the
-reference occurs.
+reference occurs, but notice that it is still an URL and not just a filename,
+which means that the characters special in the URLs, such as @c '#' must be
+percent-encoded, e.g. here is the correct way to specify a bitmap with the path
+@c "images/#1/tool.png" in XRC:
+@code
+<object class="tool" name="first">
+    <bitmap>images/%231/tool.png</bitmap>
+</object>
+@endcode
 
 Bitmap file paths can include environment variables that are expanded if
 wxXRC_USE_ENVVARS was passed to the wxXmlResource constructor.
@@ -389,6 +397,16 @@ Examples:
 @code
 <style>wxCAPTION|wxSYSTEM_MENU | wxRESIZE_BORDER</style>
 <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
+@endcode
+
+
+@subsection overview_xrcformat_type_showeffect Show Effect
+
+One of the @ref wxShowEffect values.
+
+Example:
+@code
+<showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
 @endcode
 
 
@@ -759,6 +777,11 @@ Refer to the section @ref xrc_wxtoolbar for more details.
 @hdr3col{property, type, description}
 @row3col{default, @ref overview_xrcformat_type_bool,
      Should this button be the default button in dialog (default: 0)?}
+@row3col{close, @ref overview_xrcformat_type_bool,
+     If set, this is a special "Close" button using system-defined appearance,
+     see wxBitmapButton::NewCloseButton(). If this property is set, @c bitmap
+     and @c style are ignored and shouldn't be used. Available since wxWidgets
+     3.1.5.}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap to show on the button (default: none).}
 @row3col{selected, @ref overview_xrcformat_type_bitmap,
@@ -947,6 +970,9 @@ The wxCommandLinkButton contains a main title-like @c label and an optional
 concatenated into a single string using a new line character between them
 (notice that the @c note part can have more new lines in it).
 
+Since wxWidgets 3.1.5 it also supports @c default and @c bitmap properties,
+just as @ref xrc_wxbutton wxButton.
+
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
@@ -954,6 +980,10 @@ concatenated into a single string using a new line character between them
     will be made when the button is pressed (default: empty). }
 @row3col{note, @ref overview_xrcformat_type_text,
     Second line of text describing the action performed when the button is pressed (default: none).  }
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to display in the button (optional).}
+@row3col{default, @ref overview_xrcformat_type_bool,
+    Should this button be the default button in dialog (default: 0)?}
 @endTable
 
 
@@ -1175,6 +1205,14 @@ objects. If sizer child is used, it sets
     Ignored, preserved only for compatibility.}
 @endTable
 
+@subsubsection xrc_wxgenericanimationctrl wxGenericAnimationCtrl
+
+This handler is identical to the one for @ref xrc_wxanimationctrl
+"wxAnimationCtrl", please see it for more information. The only difference is
+that, for the platforms with a native wxAnimationCtrl implementation, using
+this handler creates a generic control rather than a native one.
+
+
 @subsubsection xrc_wxgenericdirctrl wxGenericDirCtrl
 
 @beginTable
@@ -1219,6 +1257,40 @@ page.
 @row3col{url, @ref overview_xrcformat_type_url,
      URL to open when the link is clicked (default: empty).}
 @endTable
+
+
+@subsubsection xrc_wxinfobar wxInfoBar
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{showeffect, @ref overview_xrcformat_type_showeffect,
+     The effect to use when showing the bar (optional).}
+@row3col{hideeffect, @ref overview_xrcformat_type_showeffect,
+     The effect to use when hiding the bar (optional).}
+@row3col{effectduration, integer,
+     The duration of the animation used when showing or hiding the bar
+     (optional).}
+@row3col{button, object,
+     Add a button to be shown in the info bar (see wxInfoBar::AddButton);
+     this property is of class "button" has name (can be one of standard
+     button ID) and has optional label property. If no buttons are added
+     to the info bar, the default "Close" button will be shown.}
+@endTable
+
+Example:
+@code
+<object class="wxInfoBar">
+    <effectduration>1000</effectduration>
+    <showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
+    <hideeffect>wxSHOW_EFFECT_SLIDE_TO_RIGHT</hideeffect>
+    <object class="button" name="wxID_UNDO"/>
+    <object class="button" name="wxID_REDO">
+        <label>Redo Custom Label</label>
+    </object>
+</object>
+@endcode
+
+@since 3.1.3
 
 
 @subsubsection xrc_wxlistbox wxListBox
@@ -1767,7 +1839,7 @@ objects have the following properties:
 @endTable
 
 A wxRibbonPage may have children of any type derived from wxRibbonControl.
-Most commontly, wxRibbonPanel is used. As a special case, the @c panel
+Most commonly, wxRibbonPanel is used. As a special case, the @c panel
 pseudo-class may be used instead of @c wxRibbonPanel when used as wxRibbonPage
 children.
 
@@ -2380,7 +2452,7 @@ properties:
 @row3col{minsize, @ref overview_xrcformat_type_size,
     Minimal size of this item (default: no min size).}
 @row3col{ratio, @ref overview_xrcformat_type_pair_ints,
-    Item ratio, see wxSizer::SetRatio() (default: no ratio).}
+    Item ratio, see wxSizerItem::SetRatio() (default: no ratio).}
 @row3col{cellpos, @ref overview_xrcformat_type_pair_ints,
     (wxGridBagSizer only) Position, see wxGBSizerItem::SetPos() (required). }
 @row3col{cellspan, @ref overview_xrcformat_type_pair_ints,
@@ -2610,16 +2682,17 @@ should be processed on. It is filtered out and ignored on any other platforms.
 
 Possible elemental values are:
 @beginDefList
-@itemdef{ @c win, Windows }
-@itemdef{ @c mac, OS X (or Mac Classic in wxWidgets version supporting it) }
-@itemdef{ @c unix, Any Unix platform @em except OS X }
+@itemdef{ @c msw, Windows, preferred platform name }
+@itemdef{ @c win, Windows, alternative synonym }
+@itemdef{ @c mac, macOS or iOS }
+@itemdef{ @c unix, Any Unix platform @em except macOS }
 @endDefList
 
 Examples:
 @code
-<label platform="win">Windows</label>
+<label platform="msw">Windows</label>
 <label platform="unix">Unix</label>
-<label platform="mac">OS X</label>
+<label platform="mac">macOS</label>
 <help platform="mac|unix">Not a Windows machine</help>
 @endcode
 

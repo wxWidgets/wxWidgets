@@ -420,16 +420,16 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 // See wxPGProperty::SetAutoUnspecified().
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
-// Indicates the bit useable by derived properties.
+// Indicates the bit usable by derived properties.
 wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
 
-// Indicates the bit useable by derived properties.
+// Indicates the bit usable by derived properties.
 wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
 
 // Indicates that the property is being deleted and should be ignored.
 wxPG_PROP_BEING_DELETED             = 0x00200000,
 
-// Indicates the bit useable by derived properties.
+// Indicates the bit usable by derived properties.
 wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
 };
@@ -1037,7 +1037,7 @@ public:
                                 wxPGValidationInfo& validationInfo ) const;
 
     // Converts text into wxVariant value appropriate for this property.
-    // Prameters:
+    // Parameters:
     // variant - On function entry this is the old value (should not be
     //   wxNullVariant in normal cases). Translated value must be assigned
     //   back to it.

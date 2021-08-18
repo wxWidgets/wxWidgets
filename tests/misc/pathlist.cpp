@@ -12,10 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #include "wx/filefn.h"
 
 TEST_CASE("wxPathList::FindValidPath", "[file][path]")

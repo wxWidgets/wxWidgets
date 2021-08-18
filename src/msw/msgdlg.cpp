@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MSGDLG
 
@@ -396,16 +393,9 @@ void wxMessageDialog::AdjustButtonLabels()
 /* static */
 wxFont wxMessageDialog::GetMessageFont()
 {
-    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-    wxNativeFontInfo info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont);
-
-    // wxNativeFontInfo constructor calculates the pointSize using the
-    // main screen DPI. But lfHeight is based on the window DPI.
-    if ( win )
-    {
-        info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
-                             info.lf.lfHeight, win->GetDPI().y);
-    }
+    const wxWindow* win = wxApp::GetMainTopWindow();
+    const wxNativeFontInfo
+        info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
 
     return info;
 }

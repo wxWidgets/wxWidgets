@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROPGRID
 
@@ -294,7 +291,7 @@ private:
         wxPropertyGrid* pg = m_manager->GetGrid();
 
         // Internal border width
-        int borderWidth = pg->DoGetBorderSize().x / 2;
+        int borderWidth = pg->GetWindowBorderSize().x / 2;
 
         const unsigned int colCount = m_page->GetColumnCount();
         for ( unsigned int i = 0; i < colCount; i++ )
@@ -330,7 +327,7 @@ private:
         wxPropertyGrid* pg = m_manager->GetGrid();
 
         // Internal border width
-        int borderWidth = pg->DoGetBorderSize().x / 2;
+        int borderWidth = pg->GetWindowBorderSize().x / 2;
 
         // Compensate for the internal border
         int x = -borderWidth;
@@ -505,7 +502,6 @@ void wxPropertyGridManager::Init1()
 
 // These flags are always used in wxPropertyGrid integrated in wxPropertyGridManager.
 #define wxPG_MAN_PROPGRID_FORCED_FLAGS (  wxBORDER_THEME | \
-                                          wxNO_FULL_REPAINT_ON_RESIZE| \
                                           wxCLIP_CHILDREN)
 
 // Which flags can be passed to underlying wxPropertyGrid.
@@ -552,6 +548,7 @@ void wxPropertyGridManager::Init2( int style )
 
    propGridFlags &= ~wxBORDER_MASK;
 
+   long pgManExStyle = 0;
    if ((style & wxPG_NO_INTERNAL_BORDER) == 0)
    {
        propGridFlags |= wxBORDER_THEME;
@@ -559,7 +556,7 @@ void wxPropertyGridManager::Init2( int style )
    else
    {
        propGridFlags |= wxBORDER_NONE;
-       wxWindow::SetExtraStyle(wxPG_EX_TOOLBAR_SEPARATOR);
+       pgManExStyle |= wxPG_EX_TOOLBAR_SEPARATOR;
    }
 
     // Create propertygrid.
@@ -574,11 +571,12 @@ void wxPropertyGridManager::Init2( int style )
     m_pState = m_pPropGrid->m_pState;
 
     // Rely on native double-buffering by default.
+    long pgExStyle = wxPG_EX_INIT_NOCAT;
 #if wxALWAYS_NATIVE_DOUBLE_BUFFER
-    m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT | wxPG_EX_NATIVE_DOUBLE_BUFFERING);
-#else
-    m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT);
-#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER/!wxALWAYS_NATIVE_DOUBLE_BUFFER
+    pgExStyle |= wxPG_EX_NATIVE_DOUBLE_BUFFERING;
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
+    m_pPropGrid->SetExtraStyle(pgExStyle);
+    wxWindow::SetExtraStyle(pgManExStyle | pgExStyle);
 
     // Connect to property grid onselect event.
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
@@ -2202,7 +2200,7 @@ private:
 
 wxPGVIterator wxPropertyGridManager::GetVIterator( int flags ) const
 {
-    return wxPGVIterator( new wxPGVIteratorBase_Manager( (wxPropertyGridManager*)this, flags ) );
+    return wxPGVIterator(new wxPGVIteratorBase_Manager(const_cast<wxPropertyGridManager*>(this), flags));
 }
 
 #endif  // wxUSE_PROPGRID

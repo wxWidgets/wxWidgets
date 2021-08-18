@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SCROLLBAR
 
@@ -44,7 +41,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-wxScrollBar::~wxScrollBar(void)
+wxScrollBar::~wxScrollBar()
 {
 }
 
@@ -153,7 +150,7 @@ void wxScrollBar::SetThumbPosition(int viewStart)
     ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, TRUE);
 }
 
-int wxScrollBar::GetThumbPosition(void) const
+int wxScrollBar::GetThumbPosition() const
 {
     WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.fMask = SIF_POS;

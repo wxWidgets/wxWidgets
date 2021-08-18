@@ -26,7 +26,7 @@ public:
     wxStatusBar(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr)
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr))
     {
         m_pDC = NULL;
         (void)Create(parent, id, style, name);
@@ -35,7 +35,7 @@ public:
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr);
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     virtual ~wxStatusBar();
 
@@ -71,6 +71,8 @@ protected:
 
     // implementation of the public SetStatusWidths()
     void MSWUpdateFieldsWidths();
+
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // used by DoUpdateStatusText()
     wxClientDC *m_pDC;

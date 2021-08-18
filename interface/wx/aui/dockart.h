@@ -209,6 +209,11 @@ public:
     virtual ~wxAuiDockArt();
 
     /**
+       Create a copy of this wxAuiDockArt instance.
+    */
+    virtual wxAuiDockArt* Clone() = 0;
+
+    /**
         Draws a background.
     */
     virtual void DrawBackground(wxDC& dc, wxWindow* window, int orientation,
@@ -297,6 +302,7 @@ public:
 
     wxAuiDefaultDockArt();
 
+    virtual wxAuiDockArt* Clone();
     int GetMetric(int metricId);
     void SetMetric(int metricId, int newVal);
     wxColour GetColour(int id);

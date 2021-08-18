@@ -45,7 +45,7 @@ digraph Dependencies
     wxNet -> wxBase;
     wxXML -> wxBase;
 
-    wxAUI -> wxCore; wxAUI -> wxHTML;
+    wxAUI -> wxCore;
     wxGL -> wxCore;
     wxHTML -> wxCore;
     wxMedia -> wxCore;
@@ -74,8 +74,7 @@ libraries), and all green libraries depend on the @ref page_libs_wxcore library
 
 This contains the Advanced User Interface docking library.
 
-Requires @ref page_libs_wxhtml, @ref page_libs_wxxml,
-@ref page_libs_wxcore, @ref page_libs_wxbase.
+Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
 @section page_libs_wxbase wxBase
@@ -126,6 +125,7 @@ Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 Classes for network access:
 
+@li wxWebRequest
 @li wxSocket classes (wxSocketClient, wxSocketServer and related classes)
 @li wxSocketOutputStream and wxSocketInputStream
 @li sockets-based IPC classes (wxTCPServer, wxTCPClient and wxTCPConnection)

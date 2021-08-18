@@ -16,10 +16,6 @@ msgstr "wxウィンドウズについて"
 msgid "E&xit"
 msgstr "終了"
 
-#: ..\internat.cpp:189
-msgid "&File"
-msgstr "ファイル"
-
 #: ..\internat.cpp:233
 msgid "About Internat"
 msgstr "インターナットについて"

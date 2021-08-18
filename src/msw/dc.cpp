@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcdlg.h"
@@ -645,13 +642,29 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
         h = -h;
         y -= (h - 1);
     }
-    HRGN hrgn = ::CreateRectRgn(LogicalToDeviceX(x),
-                                LogicalToDeviceY(y),
-                                LogicalToDeviceX(x + w),
-                                LogicalToDeviceY(y + h));
+    // Because world transform can be applied to HDC and its coordiante
+    // system may be e.g. rotated we shouldn't assume that axis-aligned
+    // clipping box in local coordinates will remain axis-aligned box in
+    // device coordinates. Therefore we need to take into account all
+    // 4 corners of the rectangle to create a polygonal clipping region
+    // in device coordinates.
+    POINT rect[4];
+    wxPoint p = LogicalToDevice(x, y);
+    rect[0].x = p.x;
+    rect[0].y = p.y;
+    p = LogicalToDevice(x + w, y);
+    rect[1].x = p.x;
+    rect[1].y = p.y;
+    p = LogicalToDevice(x + w, y + h);
+    rect[2].x = p.x;
+    rect[2].y = p.y;
+    p = LogicalToDevice(x, y + h);
+    rect[3].x = p.x;
+    rect[3].y = p.y;
+    HRGN hrgn = ::CreatePolygonRgn(rect, WXSIZEOF(rect), WINDING);
     if ( !hrgn )
     {
-        wxLogLastError(wxT("CreateRectRgn"));
+        wxLogLastError(wxT("CreatePolygonRgn"));
     }
     else
     {
@@ -729,8 +742,23 @@ void wxMSWDCImpl::Clear()
             return;
     }
 
+    HBRUSH hbr;
     if ( !m_backgroundBrush.IsOk() )
+    {
+        // By default, use the stock white brush for compatibility with the
+        // previous wx versions.
+        hbr = WHITE_BRUSH;
+    }
+    else if ( !m_backgroundBrush.IsTransparent() )
+    {
+        hbr = GetHbrushOf(m_backgroundBrush);
+    }
+    else // Using transparent background brush.
+    {
+        // Clearing with transparent brush doesn't do anything, just as drawing
+        // with transparent pen doesn't.
         return;
+    }
 
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
@@ -738,7 +766,7 @@ void wxMSWDCImpl::Clear()
     // to compensate rounding errors if DC is the subject
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
-    ::FillRect(GetHdc(), &rect, GetHbrushOf(m_backgroundBrush));
+    ::FillRect(GetHdc(), &rect, hbr);
 
     RealizeScaleAndOrigin();
 }
@@ -786,23 +814,91 @@ bool wxMSWDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
     return true;
 }
 
+// Check whether DC is not rotated and not scaled
+static bool IsNonTransformedDC(HDC hdc)
+{
+    // Ensure DC is not rotated
+    if ( ::GetGraphicsMode(hdc) == GM_ADVANCED )
+        return false;
+    // and not scaled
+    SIZE devExt;
+    ::GetViewportExtEx(hdc, &devExt);
+    SIZE logExt;
+    ::GetWindowExtEx(hdc, &logExt);
+    return devExt.cx == logExt.cx && devExt.cy == logExt.cy;
+}
+
 void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
-    wxCoord x1 = x-VIEWPORT_EXTENT;
-    wxCoord y1 = y-VIEWPORT_EXTENT;
-    wxCoord x2 = x+VIEWPORT_EXTENT;
-    wxCoord y2 = y+VIEWPORT_EXTENT;
+    RECT rect;
+    ::GetClipBox(GetHdc(), &rect);
+    // Inflate the box by 1 unit in each direction
+    // to compensate rounding errors if DC is the subject
+    // of complex transformation (is e.g. rotated).
+    ::InflateRect(&rect, 1, 1);
 
-    wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y));
-    wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(y1), XLOG2DEV(x), YLOG2DEV(y2));
+    // We have optimized function to draw physical vertical or horizontal lines
+    // with solid color and square ends so it can be used to draw a cross hair
+    // for:
+    // - Any shape of the lines ends because non-square line ends are drawn
+    //   outside the view and visible line ends are always square.
+    // - DC which coordinate system is not rotated (graphics mode
+    //   of the DC != GM_ADVANCED) and not scaled.
+    // - wxCOPY raster operation mode becaue it is based on ExtTextOut() API.
+    if ( IsNonTransformedDC(GetHdc()) &&
+         m_logicalFunction == wxCOPY &&
+         m_pen.IsNonTransparent() && // this calls IsOk() too
+         m_pen.GetStyle() == wxPENSTYLE_SOLID
+       )
+    {
+        // Since we are drawing on a non-scaled DC, a 0-pixel width line
+        // can be safely drawn as a 1-pixel wide one.
+        int w = m_pen.GetWidth() > 0 ? m_pen.GetWidth() : 1;
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+        COLORREF color = wxColourToRGB(m_pen.GetColour());
+        wxDrawHVLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y),
+                     color, w);
+        wxDrawHVLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom),
+                     color, w);
+    }
+    else
+    {
+        wxDrawLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y));
+        wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
+    }
+
+    CalcBoundingBox(rect.left, rect.top);
+    CalcBoundingBox(rect.right, rect.bottom);
 }
 
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
+    // We have optimized function to draw physical vertical or horizontal lines
+    // with solid color and square ends. It is based on ExtTextOut() API
+    // so it can be used only with wxCOPY raster operation mode.
+    // Because checking wheteher the line would be horizontal/vertical
+    // in the device coordinate system is complex so we only check whether
+    // the line is horizontal/vertical in the logical coordinates and use
+    // optimized function only for DC which coordinate system is for sure
+    // not rotated (graphics mode of the DC != GM_ADVANCED) and not scaled.
+    if ( (x1 == x2 || y1 == y2) &&
+         m_logicalFunction == wxCOPY &&
+         IsNonTransformedDC(GetHdc()) &&
+         m_pen.IsNonTransparent() && // this calls IsOk() too
+         m_pen.GetStyle() == wxPENSTYLE_SOLID &&
+         (m_pen.GetWidth() <= 1 || m_pen.GetCap() == wxCAP_BUTT)
+       )
+    {
+        // Since we are drawing on a non-scaled DC, a 0-pixel width line
+        // can be safely drawn as a 1-pixel wide one.
+        wxDrawHVLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2),
+                     wxColourToRGB(m_pen.GetColour()),
+                     m_pen.GetWidth() > 0 ? m_pen.GetWidth() : 1);
+    }
+    else
+    {
+        wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
+    }
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
@@ -906,7 +1002,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
             CalcBoundingBox(points[i].x, points[i].y);
 
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)Polygon(GetHdc(), (POINT*) points, n);
+        Polygon(GetHdc(), reinterpret_cast<const POINT*>(points), n);
         SetPolyFillMode(GetHdc(),prev);
     }
 }
@@ -946,7 +1042,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
             CalcBoundingBox(points[i].x, points[i].y);
 
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)PolyPolygon(GetHdc(), (POINT*) points, count, n);
+        PolyPolygon(GetHdc(), reinterpret_cast<const POINT*>(points), count, n);
         SetPolyFillMode(GetHdc(),prev);
     }
 }
@@ -974,7 +1070,7 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
         for (i = 0; i < n; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        (void)Polyline(GetHdc(), (POINT*) points, n);
+        Polyline(GetHdc(), reinterpret_cast<const POINT*>(points), n);
     }
 }
 
@@ -1078,18 +1174,18 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     // B2 = (2*P1 + P2)/3
     // B3 = P2
 
-    wxASSERT_MSG( points, wxT("NULL pointer to spline points?") );
+    wxCHECK_RET( points, "NULL pointer to spline points?" );
 
-    const size_t n_points = points->GetCount();
-    wxASSERT_MSG( n_points > 2 , wxT("incomplete list of spline points?") );
+    const size_t n_points = points->size();
+    wxCHECK_RET( n_points >= 2 , "incomplete list of spline points?" );
 
     const size_t n_bezier_points = n_points * 3 + 1;
     POINT *lppt = new POINT[n_bezier_points];
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1;
 
-    wxPointList::compatibility_iterator node = points->GetFirst();
-    wxPoint *p = node->GetData();
+    wxPointList::const_iterator itPt = points->begin();
+    wxPoint* p = *itPt; ++itPt;
     lppt[ bezier_pos ].x = x1 = p->x;
     lppt[ bezier_pos ].y = y1 = p->y;
     bezier_pos++;
@@ -1097,9 +1193,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     CalcBoundingBox(x1, y1);
 
-    node = node->GetNext();
-    p = node->GetData();
-
+    p = *itPt; ++itPt;
     x2 = p->x;
     y2 = p->y;
     cx1 = ( x1 + x2 ) / 2;
@@ -1111,20 +1205,15 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     CalcBoundingBox(x2, y2);
 
-#if !wxUSE_STD_CONTAINERS
-    while ((node = node->GetNext()) != NULL)
-#else
-    while ((node = node->GetNext()))
-#endif // !wxUSE_STD_CONTAINERS
+    while ( itPt != points->end() )
     {
-        int cx4, cy4;
-        p = (wxPoint *)node->GetData();
+        p = *itPt; ++itPt;
         x1 = x2;
         y1 = y2;
         x2 = p->x;
         y2 = p->y;
-        cx4 = (x1 + x2) / 2;
-        cy4 = (y1 + y2) / 2;
+        int cx4 = (x1 + x2) / 2;
+        int cy4 = (y1 + y2) / 2;
         // B0 is B3 of previous segment
         // B1:
         lppt[ bezier_pos ].x = XLOG2DEV((x1*2+cx1)/3);
@@ -1242,10 +1331,31 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
     if ( bmp.HasAlpha() )
     {
-        MemoryHDC hdcMem;
-        SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
+        // Make a copy in case we would neeed to remove its mask.
+        // If this will not be necessary, the copy is cheap as bitmaps are reference-counted.
+        wxBitmap curBmp(bmp);
 
-        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, bmp) )
+        // For bitmap with both alpha channel and mask we have to apply mask on our own
+        // because MaskBlt() API doesn't work properly with 32 bpp RGBA bitmaps.
+        // To do so we will create a temporary bitmap with copy of RGB data and with alpha channel
+        // being a superposition of the original alpha values and the mask - for non-masked pixels
+        // alpha channel values will remain intact and for masked pixels they will be set to the transparent value.
+        if ( curBmp.GetMask() )
+        {
+            if ( useMask )
+            {
+                curBmp.MSWBlendMaskWithAlpha();
+            }
+            else
+            {
+                curBmp.SetMask(NULL);
+            }
+        }
+
+        MemoryHDC hdcMem;
+        SelectInHDC select(hdcMem, GetHbitmapOf(curBmp));
+
+        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, curBmp) )
         {
             CalcBoundingBox(x, y);
             CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
@@ -1417,7 +1527,18 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     // NB: don't take DEFAULT_GUI_FONT (a.k.a. wxSYS_DEFAULT_GUI_FONT)
     //     because it's not TrueType and so can't have non zero
     //     orientation/escapement
-    wxFont font = m_font.IsOk() ? m_font : *wxSWISS_FONT;
+    wxFont font;
+    if ( m_font.IsOk() )
+    {
+        font = m_font;
+    }
+    else // Use default font appropriate for rotated text.
+    {
+        font = *wxSWISS_FONT;
+        if ( m_window )
+            font.WXAdjustToPPI(m_window->GetDPI());
+    }
+
     LOGFONT lf;
     if ( ::GetObject(GetHfontOf(font), sizeof(lf), &lf) == 0 )
     {
@@ -1544,7 +1665,11 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
 
     if ( font.IsOk() )
     {
-        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(font));
+        wxFont f(font);
+        if ( m_window )
+            f.WXAdjustToPPI(m_window->GetDPI());
+
+        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(f));
         if ( hfont == HGDI_ERROR )
         {
             wxLogLastError(wxT("SelectObject(font)"));
@@ -1554,7 +1679,7 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
             if ( !m_oldFont )
                 m_oldFont = (WXHFONT)hfont;
 
-            m_font = font;
+            m_font = f;
         }
     }
     else // invalid font, reset the current font
@@ -1979,6 +2104,46 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
 
     m_isClipBoxValid = false;
+}
+
+wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    POINT p[1];
+    p[0].x = x;
+    p[0].y = y;
+    ::DPtoLP(GetHdc(), p, WXSIZEOF(p));
+    return wxPoint(p[0].x, p[0].y);
+}
+
+wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    POINT p[1];
+    p[0].x = x;
+    p[0].y = y;
+    ::LPtoDP(GetHdc(), p, WXSIZEOF(p));
+    return wxPoint(p[0].x, p[0].y);
+}
+
+wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    POINT p[2];
+    p[0].x = 0;
+    p[0].y = 0;
+    p[1].x = x;
+    p[1].y = y;
+    ::DPtoLP(GetHdc(), p, WXSIZEOF(p));
+    return wxSize(p[1].x-p[0].x, p[1].y-p[0].y);
+}
+
+wxSize wxMSWDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    POINT p[2];
+    p[0].x = 0;
+    p[0].y = 0;
+    p[1].x = x;
+    p[1].y = y;
+    ::LPtoDP(GetHdc(), p, WXSIZEOF(p));
+    return wxSize(p[1].x-p[0].x, p[1].y-p[0].y);
 }
 
 // ----------------------------------------------------------------------------
@@ -2416,15 +2581,24 @@ void wxMSWDCImpl::DoGetSizeMM(int *w, int *h) const
 
 wxSize wxMSWDCImpl::GetPPI() const
 {
-    int x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
-    int y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+    // As documented by MSDN, GetDeviceCaps() returns the same value for all
+    // HDCs on the system, and so can't be used to retrieve the correct value
+    // for the HDCs associated with the windows on monitors other than the
+    // primary one if they use different DPI. Hence prefer to get this
+    // information from the associated window, if possible.
+    wxSize ppi;
+    if ( m_window )
+    {
+        ppi = m_window->GetDPI();
+    }
 
-    return wxSize(x, y);
-}
+    if ( !ppi.x || !ppi.y )
+    {
+        ppi.x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
+        ppi.y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+    }
 
-double wxMSWDCImpl::GetContentScaleFactor() const
-{
-    return GetPPI().y / 96.0;
+    return ppi;
 }
 
 // ----------------------------------------------------------------------------

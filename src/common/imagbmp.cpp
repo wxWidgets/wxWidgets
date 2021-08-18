@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE
 
@@ -586,10 +583,12 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     // Reading the palette, if it exists:
     if ( bpp < 16 && ncolors != 0 )
     {
+#if wxUSE_PALETTE
         wxScopedArray<unsigned char>
              r(ncolors),
              g(ncolors),
              b(ncolors);
+#endif // wxUSE_PALETTE
         for (int j = 0; j < ncolors; j++)
         {
             if (hasPalette)
@@ -600,18 +599,19 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 cmap[j].b = bbuf[0];
                 cmap[j].g = bbuf[1];
                 cmap[j].r = bbuf[2];
-
-                r[j] = cmap[j].r;
-                g[j] = cmap[j].g;
-                b[j] = cmap[j].b;
             }
             else
             {
                 //used in reading .ico file mask
-                r[j] = cmap[j].r =
-                g[j] = cmap[j].g =
-                b[j] = cmap[j].b = ( j ? 255 : 0 );
+                cmap[j].r =
+                cmap[j].g =
+                cmap[j].b = ( j ? 255 : 0 );
             }
+#if wxUSE_PALETTE
+            r[j] = cmap[j].r;
+            g[j] = cmap[j].g;
+            b[j] = cmap[j].b;
+#endif // wxUSE_PALETTE
         }
 
 #if wxUSE_PALETTE
@@ -1057,7 +1057,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
         height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
     }
-    if ( !IsBmp)height = height  / 2; // for icons divide by 2
+    if ( !IsBmp) height /= 2; // for icons divide by 2
 
     if ( width > 32767 )
     {
@@ -1156,6 +1156,18 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
         ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
         res.Init(dbuf[2]/100, dbuf[3]/100);
+
+        // We've read BITMAPINFOHEADER data but for BITMAPV4HEADER or BITMAPV5HEADER
+        // we have to forward stream position to after the actual bitmap header.
+        //
+        // Note: hardcode its size as struct BITMAPINFOHEADER is not defined on
+        // non-MSW platforms.
+        const wxInt32 sizeBITMAPINFOHEADER = 40;
+        if ( hdrSize > sizeBITMAPINFOHEADER )
+        {
+            if ( stream.SeekI(hdrSize - sizeBITMAPINFOHEADER, wxFromCurrent) == wxInvalidOffset )
+                return false;
+        }
     }
     if (ncolors == 0)
         ncolors = 1 << bpp;

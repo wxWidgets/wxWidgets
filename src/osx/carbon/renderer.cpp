@@ -13,9 +13,6 @@
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -90,7 +87,7 @@ public:
                               const wxRect& rect,
                               int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow* win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow* win, int flags = 0) wxOVERRIDE;
 
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
@@ -181,7 +178,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
 
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
@@ -270,7 +267,7 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
 
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
@@ -351,11 +348,14 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
     height = wxRendererNative::Get().GetSplitterParams(win).widthSash;
 
+    // Do not draw over border drawn by wxRendererGeneric::DrawSplitterBorder()
+    const wxCoord borderAdjust = win->HasFlag(wxSP_3DBORDER) ? 2 : 0;
+
     HIRect splitterRect;
     if (orient == wxVERTICAL)
-        splitterRect = CGRectMake( position, 0, height, size.y );
+        splitterRect = CGRectMake( position, borderAdjust, height, size.y - 2*borderAdjust );
     else
-        splitterRect = CGRectMake( 0, position, size.x, height );
+        splitterRect = CGRectMake( borderAdjust, position, size.x - 2*borderAdjust, height );
 
     // under compositing we should only draw when called by the OS, otherwise just issue a redraw command
     // strange redraw errors occur if we don't do this
@@ -415,8 +415,8 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
                                                                              : kThemeBrushSecondaryHighlightColor ) );
     wxBrush selBrush( col );
 
-    dc.SetPen( *wxTRANSPARENT_PEN );
-    dc.SetBrush( selBrush );
+    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+    wxDCBrushChanger setBrush(dc, selBrush);
     dc.DrawRectangle( rect );
 }
 
@@ -435,7 +435,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
 
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
@@ -491,7 +491,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                        kind, kThemeAdornmentNone);
 }
 
-wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win)
+wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int WXUNUSED(flags))
 {
     // Even though we don't use the window in this implementation, still check
     // that it's valid to avoid surprises when running the same code under the
@@ -681,10 +681,12 @@ void wxRendererMac::DrawTextCtrl(wxWindow* win, wxDC& dc,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxWHITE_BRUSH );
-    dc.SetPen( *wxTRANSPARENT_PEN );
+    wxDCBrushChanger setBrush(dc, *wxWHITE_BRUSH);
+    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     dc.DrawRectangle(rect);
 
+    // Note that calling SetBrush() here is fine as we already have
+    // wxDCBrushChanger above, so the original brush will get restored.
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     HIRect hiRect = CGRectMake( x, y, w, h );
@@ -733,19 +735,20 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
     // The following hard coded RGB values are based the close button in
     // XCode 6+ welcome screen
     bool drawCircle;
+    wxColour circleBorderCol, circleInteriorCol;
     if ( flags & wxCONTROL_PRESSED )
     {
         drawCircle = true;
         glyphColor = wxColour(104, 104, 104);
-        dc.SetPen(wxPen(wxColour(70, 70, 71), 1));
-        dc.SetBrush(wxColour(78, 78, 78));
+        circleBorderCol = wxColour(70, 70, 71);
+        circleInteriorCol = wxColour(78, 78, 78);
     }
     else if ( flags & wxCONTROL_CURRENT )
     {
         drawCircle = true;
         glyphColor = *wxWHITE;
-        dc.SetPen(wxPen(wxColour(163, 165, 166), 1));
-        dc.SetBrush(wxColour(182, 184, 187));
+        circleBorderCol = wxColour(163, 165, 166);
+        circleInteriorCol = wxColour(182, 184, 187);
     }
     else
     {
@@ -755,13 +758,16 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
 
     if ( drawCircle )
     {
+        wxDCPenChanger setPen(dc, circleBorderCol);
+        wxDCBrushChanger setBrush(dc, circleInteriorCol);
+
         wxRect circleRect(rect);
         circleRect.Deflate(2);
 
         dc.DrawEllipse(circleRect);
     }
 
-    dc.SetPen(wxPen(glyphColor, 1));
+    wxDCPenChanger setPen(dc, glyphColor);
 
     wxRect centerRect(rect);
     centerRect.Deflate(5);

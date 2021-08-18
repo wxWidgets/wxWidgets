@@ -26,7 +26,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxDEFAULT_FRAME_STYLE,
-               const wxString& name = wxFrameNameStr)
+               const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -40,7 +40,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual void SetMenuBar(wxMenuBar *menubar) wxOVERRIDE;
     virtual void SetStatusBar(wxStatusBar *statusBar ) wxOVERRIDE;
@@ -56,6 +56,9 @@ public:
 
 protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
+
+    virtual QWidget* QtGetParentWidget() const wxOVERRIDE;
 
 private:
     // Common part of all ctors.

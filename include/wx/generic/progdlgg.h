@@ -120,7 +120,7 @@ protected:
     // called to disable the other windows while this dialog is shown
     void DisableOtherWindows();
 
-    // must be called to reenable the other windows temporarily disabled while
+    // must be called to re-enable the other windows temporarily disabled while
     // the dialog was shown
     void ReenableOtherWindows();
 

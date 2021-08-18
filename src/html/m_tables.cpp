@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -556,7 +553,7 @@ void wxHtmlTableCell::Layout(int w)
             {
                 // Assign with, make sure not to drop below minWidth
                 if (maxWidth)
-                    m_ColsInfo[i].pixwidth = (int)(wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5);
+                    m_ColsInfo[i].pixwidth = (int)(wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5f);
                 else
                     m_ColsInfo[i].pixwidth = wpix / j;
 
@@ -568,13 +565,14 @@ void wxHtmlTableCell::Layout(int w)
                     if (!m_ColsInfo[r].width)
                         minRequired += m_ColsInfo[r].minWidth;
                 }
+                const int pixwidthPrev = m_ColsInfo[i].pixwidth;
                 m_ColsInfo[i].pixwidth = wxMax(wxMin(wpix - minRequired, m_ColsInfo[i].pixwidth), m_ColsInfo[i].minWidth);
 
                 if (maxWidth)
                 {
-                    if (m_ColsInfo[i].pixwidth > (wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5))
+                    if (m_ColsInfo[i].pixwidth > pixwidthPrev)
                     {
-                        int diff = (int)(m_ColsInfo[i].pixwidth - (wpix * m_ColsInfo[i].maxWidth / (float)maxWidth + 0.5));
+                        int diff = m_ColsInfo[i].pixwidth - pixwidthPrev;
                         maxWidth += diff - m_ColsInfo[i].maxWidth;
                     }
                     else

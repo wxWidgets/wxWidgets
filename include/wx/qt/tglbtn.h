@@ -22,7 +22,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr);
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -30,13 +30,13 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     virtual void SetValue(bool state) wxOVERRIDE;
     virtual bool GetValue() const wxOVERRIDE;
 
     // implementation only
-    virtual int GetEventType() const wxOVERRIDE { return wxEVT_TOGGLEBUTTON; }
+    virtual int QtGetEventType() const wxOVERRIDE { return wxEVT_TOGGLEBUTTON; }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
@@ -56,7 +56,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr);
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -64,7 +64,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
 
 private:

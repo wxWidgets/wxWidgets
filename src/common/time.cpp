@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/time.h"
 
@@ -64,8 +61,12 @@ namespace
 {
 
 const int MILLISECONDS_PER_SECOND = 1000;
+#if !defined(__WINDOWS__)
 const int MICROSECONDS_PER_MILLISECOND = 1000;
+#ifdef HAVE_GETTIMEOFDAY
 const int MICROSECONDS_PER_SECOND = 1000*1000;
+#endif
+#endif
 
 } // anonymous namespace
 
@@ -86,12 +87,6 @@ struct tm *wxLocaltime_r(const time_t* ticks, struct tm* temp)
   wxMutexLocker locker(timeLock);
 #endif
 
-  // Borland CRT crashes when passed 0 ticks for some reason, see SF bug 1704438
-#ifdef __BORLANDC__
-  if ( !*ticks )
-      return NULL;
-#endif
-
   const tm * const t = localtime(ticks);
   if ( !t )
       return NULL;
@@ -108,11 +103,6 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
   // No need to waste time with a mutex on windows since it's
   // using thread local storage for gmtime anyway.
   wxMutexLocker locker(timeLock);
-#endif
-
-#ifdef __BORLANDC__
-  if ( !*ticks )
-      return NULL;
 #endif
 
   const tm * const t = gmtime(ticks);
@@ -161,9 +151,11 @@ int wxGetTimeZone()
     ftime(&tb);
     return tb.timezone*60;
 #elif defined(__VISUALC__)
-    // We must initialize the time zone information before using it (this will
-    // be done only once internally).
-    _tzset();
+    // We must initialize the time zone information before using it. It's not a
+    // problem if we do it twice due to a race condition, as it's idempotent
+    // anyhow, so don't bother with any locks here.
+    static bool s_tzSet = (_tzset(), true);
+    wxUnusedVar(s_tzSet);
 
     // Starting with VC++ 8 timezone variable is deprecated and is not even
     // available in some standard library version so use the new function for
@@ -177,11 +169,12 @@ int wxGetTimeZone()
     #endif
 #else // Use some kind of time zone variable.
     // In any case we must initialize the time zone before using it.
-    tzset();
+    static bool s_tzSet = (tzset(), true);
+    wxUnusedVar(s_tzSet);
 
     #if defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
         return WX_TIMEZONE;
-    #elif defined(__BORLANDC__) || defined(__MINGW32__)
+    #elif defined(__MINGW32__)
         #if defined(__MINGW32_TOOLCHAIN__) && defined(__STRICT_ANSI__)
             extern long _timezone;
         #endif
@@ -307,8 +300,6 @@ wxLongLong wxGetUTCTimeMillis()
 
     #if defined(__VISUALC__)
         #pragma message("wxStopWatch will be up to second resolution!")
-    #elif defined(__BORLANDC__)
-        #pragma message "wxStopWatch will be up to second resolution!"
     #else
         #warning "wxStopWatch will be up to second resolution!"
     #endif // compiler
@@ -327,9 +318,9 @@ wxLongLong wxGetLocalTimeMillis()
 
 #else // !wxUSE_LONGLONG
 
-double wxGetLocalTimeMillis(void)
+double wxGetLocalTimeMillis()
 {
-    return (double(clock()) / double(CLOCKS_PER_SEC)) * 1000.0;
+    return (double(clock()) / double(CLOCKS_PER_SEC)) * MILLISECONDS_PER_SECOND;
 }
 
 #endif // wxUSE_LONGLONG/!wxUSE_LONGLONG

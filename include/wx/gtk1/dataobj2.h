@@ -45,7 +45,7 @@ protected:
     void DoConvertToPng();
 
 private:
-    // virtual function hiding supression
+    // virtual function hiding suppression
     size_t GetDataSize(const wxDataFormat& format) const
         { return(wxDataObjectSimple::GetDataSize(format)); }
     bool GetDataHere(const wxDataFormat& format, void* pBuf) const
@@ -71,7 +71,7 @@ public:
     virtual bool SetData(size_t len, const void *buf);
 
 private:
-    // virtual function hiding supression
+    // virtual function hiding suppression
     size_t GetDataSize(const wxDataFormat& format) const
         { return(wxDataObjectSimple::GetDataSize(format)); }
     bool GetDataHere(const wxDataFormat& format, void* pBuf) const

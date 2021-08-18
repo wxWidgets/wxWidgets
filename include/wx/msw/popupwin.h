@@ -25,6 +25,8 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
+    virtual ~wxPopupWindow();
+
     virtual void SetFocus() wxOVERRIDE;
     virtual bool Show(bool show = true) wxOVERRIDE;
 
@@ -39,6 +41,10 @@ public:
 
     // Return the top level window parent of this popup or null.
     wxWindow* MSWGetOwner() const { return m_owner; }
+
+    // This is a way to notify non-wxPU_CONTAINS_CONTROLS windows about the
+    // events that should result in their dismissal.
+    virtual void MSWDismissUnfocusedPopup() { }
 
 private:
     wxWindow* m_owner;

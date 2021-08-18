@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MENUS
 
@@ -450,6 +447,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 {
                     mii.fMask |= MIIM_STATE;
                     mii.fState = MFS_CHECKED;
+                }
+
+                if ( flags & MF_MENUBREAK )
+                {
+                    mii.fMask |= MIIM_FTYPE;
+                    mii.fType = MFT_MENUBREAK;
                 }
 
                 mii.dwItemData = reinterpret_cast<ULONG_PTR>(pItem);

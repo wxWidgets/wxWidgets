@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wxcrt.h"
@@ -315,7 +312,7 @@ wxDbgHelpDLL::DumpBaseType(BasicType bt, DWORD64 length, PVOID pAddress)
 
         if ( bt == BASICTYPE_FLOAT )
         {
-            s.Printf(wxT("%f"), *(PFLOAT)pAddress);
+            s.Printf(wxS("%f"), double(*(PFLOAT)pAddress));
 
             handled = true;
         }

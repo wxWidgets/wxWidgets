@@ -17,57 +17,61 @@ if(WIN32)
     wx_append_sources(BASE_FILES BASE_AND_GUI_WIN32)
 elseif(APPLE)
     wx_append_sources(BASE_FILES BASE_OSX_SHARED)
-    if(wxBUILD_TOOLKIT MATCHES "osx_iphone")
-        wx_append_sources(BASE_FILES BASE_AND_GUI_OSX_IPHONE)
-    else()
+    if(WXOSX_COCOA)
         wx_append_sources(BASE_FILES BASE_AND_GUI_OSX_COCOA)
     endif()
 elseif(UNIX)
     wx_append_sources(BASE_FILES BASE_UNIX)
 endif()
 
-wx_add_library(base IS_BASE ${BASE_FILES})
+wx_add_library(wxbase IS_BASE ${BASE_FILES})
 
 if(NOT wxBUILD_MONOLITHIC)
-    wx_lib_compile_definitions(base PRIVATE wxUSE_BASE=1)
+    wx_lib_compile_definitions(wxbase PRIVATE wxUSE_BASE=1)
 endif()
 
 if(wxUSE_ZLIB)
-    wx_lib_include_directories(base PRIVATE ${ZLIB_INCLUDE_DIRS})
-    wx_lib_link_libraries(base PRIVATE ${ZLIB_LIBRARIES})
+    wx_lib_include_directories(wxbase PRIVATE ${ZLIB_INCLUDE_DIRS})
+    wx_lib_link_libraries(wxbase PRIVATE ${ZLIB_LIBRARIES})
 endif()
 if(wxUSE_REGEX)
-    wx_lib_include_directories(base PRIVATE ${REGEX_INCLUDE_DIRS})
-    wx_lib_link_libraries(base PRIVATE ${REGEX_LIBRARIES})
+    wx_lib_include_directories(wxbase PRIVATE ${REGEX_INCLUDE_DIRS})
+    wx_lib_link_libraries(wxbase PRIVATE ${REGEX_LIBRARIES})
 endif()
 if(wxUSE_LIBLZMA)
-    wx_lib_include_directories(base PRIVATE ${LIBLZMA_INCLUDE_DIRS})
-    wx_lib_link_libraries(base PRIVATE ${LIBLZMA_LIBRARIES})
+    wx_lib_include_directories(wxbase PRIVATE ${LIBLZMA_INCLUDE_DIRS})
+    wx_lib_link_libraries(wxbase PRIVATE ${LIBLZMA_LIBRARIES})
 endif()
 if(UNIX AND wxUSE_SECRETSTORE)
-    wx_lib_include_directories(base PRIVATE ${LIBSECRET_INCLUDE_DIRS})
-    wx_lib_link_libraries(base PRIVATE ${LIBSECRET_LIBRARIES})
+    wx_lib_include_directories(wxbase PRIVATE ${LIBSECRET_INCLUDE_DIRS})
+    wx_lib_link_libraries(wxbase PRIVATE ${LIBSECRET_LIBRARIES})
 endif()
 if(wxUSE_LIBICONV)
-    wx_lib_include_directories(base PRIVATE ${ICONV_INCLUDE_DIR})
-    wx_lib_link_libraries(base PRIVATE ${ICONV_LIBRARIES})
+    wx_lib_include_directories(wxbase PRIVATE ${ICONV_INCLUDE_DIR})
+    wx_lib_link_libraries(wxbase PRIVATE ${ICONV_LIBRARIES})
 endif()
 if(wxUSE_THREADS AND CMAKE_THREAD_LIBS_INIT)
-    wx_lib_link_libraries(base PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+    wx_lib_link_libraries(wxbase PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
 if(APPLE)
-    wx_lib_link_libraries(base
-        PRIVATE
-        "-framework Security"
+    wx_lib_link_libraries(wxbase
         PUBLIC
-        "-framework Carbon"
-        "-framework Cocoa"
         "-framework CoreFoundation"
-        "-framework IOKit"
     )
+    if(WXOSX_COCOA)
+        wx_lib_link_libraries(wxbase
+            PRIVATE
+            "-framework Security"
+            PUBLIC
+            "-framework Carbon"
+            "-framework Cocoa"
+            "-framework IOKit"
+            "-framework QuartzCore"
+        )
+    endif()
 elseif(UNIX)
-    wx_lib_link_libraries(base PRIVATE dl)
+    wx_lib_link_libraries(wxbase PRIVATE dl)
 endif()
 
-wx_finalize_lib(base)
+wx_finalize_lib(wxbase)

@@ -90,7 +90,7 @@ enum wxAuiToolBarStyle
 enum wxAuiToolBarArtSetting
 {
     /**
-      wxAuiToolBar seperator size.
+      wxAuiToolBar separator size.
     */
     wxAUI_TBART_SEPARATOR_SIZE = 0,
 
@@ -259,15 +259,22 @@ public:
 
     /**
       Returns the toolbar item kind.
+
+      @return one of @c wxITEM_NORMAL, @c wxITEM_CHECK or @c wxITEM_RADIO,
+      @c wxITEM_SEPARATOR, @c wxITEM_CONTROL, @c wxITEM_SPACER, @c wxITEM_LABEL,
     */
     int GetKind() const;
 
     /**
+      Set the current state of the toolbar item.
 
+      @param new_state is an or'd combination of flags from wxAuiPaneButtonState
     */
     void SetState(int new_state);
     /**
+      Gets the current state of the toolbar item.
 
+      @return an or'd combination of flags from wxAuiPaneButtonState representing the current state
     */
     int GetState() const;
 
@@ -407,6 +414,13 @@ public:
 
     */
     int GetAlignment() const;
+
+    /**
+        Returns whether the toolbar item can be toggled.
+
+        @since 3.1.5
+     */
+    bool CanBeToggled() const;
 };
 
 /**
@@ -603,26 +617,34 @@ public:
 
     @beginStyleTable
     @style{wxAUI_TB_TEXT}
+        Display the label strings on the toolbar buttons.
     @style{wxAUI_TB_NO_TOOLTIPS}
+        Do not show tooltips for the toolbar items.
     @style{wxAUI_TB_NO_AUTORESIZE}
+        Do not automatically resize the toolbar when new tools are added.
     @style{wxAUI_TB_GRIPPER}
+        Show the toolbar's gripper control. If the toolbar is added to
+        an AUI pane that contains a gripper, this style will be automatically
+        set.
     @style{wxAUI_TB_OVERFLOW}
+        Show an overflow menu containing toolbar items that can't fit on the
+        toolbar if it is too small.
     @style{wxAUI_TB_VERTICAL}
-        using this style forces the toolbar to be vertical and
+        Using this style forces the toolbar to be vertical and
         be only dockable to the left or right sides of the window
         whereas by default it can be horizontal or vertical and
-        be docked anywhere
+        be docked anywhere.
     @style{wxAUI_TB_HORZ_LAYOUT}
     @style{wxAUI_TB_HORIZONTAL}
-        analogous to wxAUI_TB_VERTICAL, but forces the toolbar
-        to be horizontal
+        Analogous to wxAUI_TB_VERTICAL, but forces the toolbar
+        to be horizontal.
     @style{wxAUI_TB_PLAIN_BACKGROUND}
         Draw a plain background (based on parent) instead of the
         default gradient background.
     @style{wxAUI_TB_HORZ_TEXT}
         Equivalent to wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT
     @style{wxAUI_TB_DEFAULT_STYLE}
-        The default is to have no styles
+        The default is to have no styles.
     @endStyleTable
 
     @beginEventEmissionTable{wxAuiToolBarEvent}
@@ -681,13 +703,13 @@ public:
     bool SetFont(const wxFont& font);
 
 
-    wxAuiToolBarItem* AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmap& bitmap,
                  const wxString& short_help_string = wxEmptyString,
                  wxItemKind kind = wxITEM_NORMAL);
 
-    wxAuiToolBarItem* AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmap& bitmap,
                  const wxBitmap& disabled_bitmap,
@@ -696,7 +718,7 @@ public:
                  const wxString& long_help_string,
                  wxObject* client_data);
 
-    wxAuiToolBarItem* AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int toolId,
                  const wxBitmap& bitmap,
                  const wxBitmap& disabled_bitmap,
                  bool toggle = false,
@@ -704,7 +726,7 @@ public:
                  const wxString& short_help_string = wxEmptyString,
                  const wxString& long_help_string = wxEmptyString);
 
-    wxAuiToolBarItem* AddLabel(int tool_id,
+    wxAuiToolBarItem* AddLabel(int toolId,
                   const wxString& label = wxEmptyString,
                   const int width = -1);
     wxAuiToolBarItem* AddControl(wxControl* control,
@@ -718,19 +740,67 @@ public:
     wxControl* FindControl(int window_id);
     wxAuiToolBarItem* FindToolByPosition(wxCoord x, wxCoord y) const;
     wxAuiToolBarItem* FindToolByIndex(int idx) const;
-    wxAuiToolBarItem* FindTool(int tool_id) const;
+    wxAuiToolBarItem* FindTool(int toolId) const;
 
     void ClearTools();
     void Clear();
-    bool DeleteTool(int tool_id);
-    bool DeleteByIndex(int tool_id);
+
+    /**
+        Destroys the tool with the given ID and its associated window, if any.
+
+        @param toolId ID of a previously added tool.
+        @return @true if the tool was destroyed or @false otherwise, e.g. if
+            the tool with the given ID was not found.
+
+        @since 3.1.4
+     */
+    bool DestroyTool(int toolId);
+
+    /**
+        Destroys the tool at the given position and its associated window, if
+        any.
+
+        @param idx The index, or position, of a previously added tool.
+        @return @true if the tool was destroyed or @false otherwise, e.g. if
+            the provided index is out of range.
+     */
+    bool DestroyToolByIndex(int idx);
+
+    /**
+        Removes the tool with the given ID from the toolbar.
+
+        Note that if this tool was added by AddControl(), the associated
+        control is @e not deleted and must either be reused (e.g. by
+        reparenting it under a different window) or destroyed by caller.
+        If this behaviour is unwanted, prefer using DestroyTool() instead.
+
+        @param toolId ID of a previously added tool.
+        @return @true if the tool was removed or @false otherwise, e.g. if the
+            tool with the given ID was not found.
+     */
+    bool DeleteTool(int toolId);
+
+    /**
+        Removes the tool at the given position from the toolbar.
+
+        Note that if this tool was added by AddControl(), the associated
+        control is @e not deleted and must either be reused (e.g. by
+        reparenting it under a different window) or destroyed by caller.
+        If this behaviour is unwanted, prefer using DestroyToolByIndex()
+        instead.
+
+        @param idx The index, or position, of a previously added tool.
+        @return @true if the tool was removed or @false otherwise, e.g. if the
+            provided index is out of range.
+     */
+    bool DeleteByIndex(int idx);
 
     size_t GetToolCount() const;
-    int GetToolPos(int tool_id) const;
-    int GetToolIndex(int tool_id) const;
-    bool GetToolFits(int tool_id) const;
-    wxRect GetToolRect(int tool_id) const;
-    bool GetToolFitsByIndex(int tool_id) const;
+    int GetToolPos(int toolId) const;
+    int GetToolIndex(int toolId) const;
+    bool GetToolFits(int toolId) const;
+    wxRect GetToolRect(int toolId) const;
+    bool GetToolFitsByIndex(int toolId) const;
     bool GetToolBarFits() const;
 
     void SetMargins(const wxSize& size);
@@ -746,11 +816,11 @@ public:
     bool GetGripperVisible() const;
     void SetGripperVisible(bool visible);
 
-    void ToggleTool(int tool_id, bool state);
-    bool GetToolToggled(int tool_id) const;
+    void ToggleTool(int toolId, bool state);
+    bool GetToolToggled(int toolId) const;
 
-    void EnableTool(int tool_id, bool state);
-    bool GetToolEnabled(int tool_id) const;
+    void EnableTool(int toolId, bool state);
+    bool GetToolEnabled(int toolId) const;
 
     /**
         Set whether the specified toolbar item has a drop down button.
@@ -759,7 +829,7 @@ public:
 
         @see wxAuiToolBarItem::SetHasDropDown()
     */
-    void SetToolDropDown(int tool_id, bool dropdown);
+    void SetToolDropDown(int toolId, bool dropdown);
 
     /**
         Returns whether the specified toolbar item has an associated drop down
@@ -767,7 +837,7 @@ public:
 
         @see wxAuiToolBarItem::HasDropDown()
     */
-    bool GetToolDropDown(int tool_id) const;
+    bool GetToolDropDown(int toolId) const;
 
     void SetToolBorderPadding(int padding);
     int  GetToolBorderPadding() const;
@@ -778,27 +848,39 @@ public:
     void SetToolPacking(int packing);
     int  GetToolPacking() const;
 
-    void SetToolProportion(int tool_id, int proportion);
-    int  GetToolProportion(int tool_id) const;
+    void SetToolProportion(int toolId, int proportion);
+    int  GetToolProportion(int toolId) const;
 
     void SetToolSeparation(int separation);
     int GetToolSeparation() const;
 
-    void SetToolSticky(int tool_id, bool sticky);
-    bool GetToolSticky(int tool_id) const;
+    void SetToolSticky(int toolId, bool sticky);
+    bool GetToolSticky(int toolId) const;
 
-    wxString GetToolLabel(int tool_id) const;
-    void SetToolLabel(int tool_id, const wxString& label);
+    wxString GetToolLabel(int toolId) const;
+    void SetToolLabel(int toolId, const wxString& label);
 
-    wxBitmap GetToolBitmap(int tool_id) const;
-    void SetToolBitmap(int tool_id, const wxBitmap& bitmap);
+    wxBitmap GetToolBitmap(int toolId) const;
+    void SetToolBitmap(int toolId, const wxBitmap& bitmap);
 
-    wxString GetToolShortHelp(int tool_id) const;
-    void SetToolShortHelp(int tool_id, const wxString& help_string);
+    wxString GetToolShortHelp(int toolId) const;
+    void SetToolShortHelp(int toolId, const wxString& help_string);
 
-    wxString GetToolLongHelp(int tool_id) const;
-    void SetToolLongHelp(int tool_id, const wxString& help_string);
+    wxString GetToolLongHelp(int toolId) const;
+    void SetToolLongHelp(int toolId, const wxString& help_string);
 
+    /**
+      Add toolbar items that are always displayed in the overflow menu.
+
+      If there are custom items set, then the overflow menu will be
+      displayed even if there are no items from the main toolbar that
+      overflow.
+
+      @param prepend are the items to show before any overflow items
+      @param append are the items to show after any overflow items
+
+      @note The toolbar must have the @c wxAUI_TB_OVERFLOW style.
+     */
     void SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
                                 const wxAuiToolBarItemArray& append);
 

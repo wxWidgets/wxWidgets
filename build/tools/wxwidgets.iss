@@ -37,6 +37,7 @@ OutputDir={#WXW_DIR}\..
 OutputBaseFilename={#SETUPFILENAME}
 PrivilegesRequired=none
 SetupIconFile={#WXW_DIR}\art\wxwin.ico
+UninstallDisplayIcon={#WXW_DIR}\art\wxwin.ico
 Compression=lzma
 SolidCompression=yes
 

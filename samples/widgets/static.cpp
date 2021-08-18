@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -105,6 +102,11 @@ public:
 
 protected:
     // event handlers
+    void OnRecreate(wxCommandEvent& WXUNUSED(event))
+    {
+        CreateStatic();
+    }
+
     void OnCheckEllipsize(wxCommandEvent& event);
 #ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     void OnBoxCheckBox(wxCommandEvent& event);
@@ -225,11 +227,19 @@ void StaticWidgetsPage::CreateContent()
 
     m_chkGeneric = CreateCheckBoxAndAddToSizer(sizerLeft,
                                                "&Generic wxStaticText");
+    m_chkGeneric->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
+
 #ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     m_chkBoxWithCheck = CreateCheckBoxAndAddToSizer(sizerLeft, "Checkable &box");
+    m_chkBoxWithCheck->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
 #endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, "&Vertical line");
+    m_chkVert->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
+
     m_chkAutoResize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit to text");
+    m_chkAutoResize->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
+
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
     static const wxString halign[] =
@@ -249,9 +259,13 @@ void StaticWidgetsPage::CreateContent()
     m_radioHAlign = new wxRadioBox(this, wxID_ANY, "&Horz alignment",
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(halign), halign, 3);
+    m_radioHAlign->Bind(wxEVT_RADIOBOX, &StaticWidgetsPage::OnRecreate, this);
+
     m_radioVAlign = new wxRadioBox(this, wxID_ANY, "&Vert alignment",
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(valign), valign, 3);
+    m_radioVAlign->SetToolTip("Relevant for Generic wxStaticText only");
+    m_radioVAlign->Bind(wxEVT_RADIOBOX, &StaticWidgetsPage::OnRecreate, this);
 
     sizerLeft->Add(m_radioHAlign, 0, wxGROW | wxALL, 5);
     sizerLeft->Add(m_radioVAlign, 0, wxGROW | wxALL, 5);
@@ -274,6 +288,7 @@ void StaticWidgetsPage::CreateContent()
                                       wxDefaultPosition, wxDefaultSize,
                                       WXSIZEOF(ellipsizeMode), ellipsizeMode,
                                       3);
+    m_radioEllipsize->Bind(wxEVT_RADIOBOX, &StaticWidgetsPage::OnRecreate, this);
 
     sizerLeft->Add(m_radioEllipsize, 0, wxGROW | wxALL, 5);
 
@@ -311,6 +326,7 @@ void StaticWidgetsPage::CreateContent()
 
     m_chkGreen = CreateCheckBoxAndAddToSizer(sizerMiddle,
                                              "Decorated label on g&reen");
+    m_chkGreen->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
 #endif // wxUSE_MARKUP
 
     // final initializations

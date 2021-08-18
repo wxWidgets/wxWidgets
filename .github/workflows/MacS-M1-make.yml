@@ -1,0 +1,39 @@
+name: Mac make CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-test:
+    defaults:
+      run:
+        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
+        
+    runs-on: self-hosted
+    
+    env:
+      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+      NSUnbufferedIO: YES
+
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [arm64e, x86_64]
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: configure
+      run: mkdir -p $PWD/localbin_${{ matrix.arch }}; ./configure --prefix=$PWD/localbin_${{ matrix.arch }}
+    - name: make
+      run: make -j4
+    - name: make install
+      run: make install
+    - name: make tests
+      run: make -j4 -C tests
+    - name: run tests
+      run: pushd tests;./test;popd

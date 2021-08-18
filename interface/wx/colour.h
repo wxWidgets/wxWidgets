@@ -9,9 +9,8 @@
 
 /**
     Flags for wxColour -> wxString conversion (see wxColour::GetAsString).
-
-    @{
 */
+//@{
 enum {
     wxC2S_NAME             = 1,   // return colour name, when possible
     wxC2S_CSS_SYNTAX       = 2,   // return colour in rgb(r,g,b) syntax
@@ -113,10 +112,14 @@ public:
         @c wxC2S_HTML_SYNTAX, to obtain the colour as "#" followed by 6
         hexadecimal digits (e.g. wxColour(255,0,0) == "#FF0000").
 
-        This function never fails and always returns a non-empty string but
-        asserts if the colour has alpha channel (i.e. is non opaque) but
-        @c wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
-        specified in flags.
+        This function returns empty string if the colour is not initialized
+        (see IsOk()). Otherwise, the returned string is always non-empty, but
+        the function asserts if the colour has alpha channel (i.e. is non
+        opaque) but @c wxC2S_CSS_SYNTAX (which is the only one supporting
+        alpha) is not specified in @a flags.
+
+        @note For non-solid (i.e. non-RGB) colour this function returns
+        "rgb(??, ?? ??)" or "#??????".
 
         @since 2.7.0
     */
@@ -198,6 +201,8 @@ public:
     /**
         Returns @true if the color can be described using RGB values, i.e. is solid,
         @false if it is a pattern (currently only possible on macOS)
+
+        @since 3.1.2
     */
     virtual bool IsSolid() const;
     //@{

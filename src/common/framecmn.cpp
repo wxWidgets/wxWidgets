@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/frame.h"
 
@@ -148,7 +145,7 @@ wxCONSTRUCTOR_6( wxFrame, wxWindow*, Parent, wxWindowID, Id, wxString, Title, \
 
 wxFrameBase::wxFrameBase()
 {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     m_frameMenuBar = NULL;
 #endif // wxUSE_MENUS
 
@@ -183,7 +180,7 @@ wxFrame *wxFrameBase::New(wxWindow *parent,
 
 void wxFrameBase::DeleteAllBars()
 {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     wxDELETE(m_frameMenuBar);
 #endif // wxUSE_MENUS
 
@@ -198,7 +195,7 @@ void wxFrameBase::DeleteAllBars()
 
 bool wxFrameBase::IsOneOfBars(const wxWindow *win) const
 {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     if ( win == GetMenuBar() )
         return true;
 #endif // wxUSE_MENUS
@@ -258,11 +255,15 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
 
 bool wxFrameBase::ProcessCommand(int id)
 {
+#if wxUSE_MENUBAR
     wxMenuItem* const item = FindItemInMenuBar(id);
     if ( !item )
         return false;
 
     return ProcessCommand(item);
+#else
+    return false;
+#endif
 }
 
 bool wxFrameBase::ProcessCommand(wxMenuItem *item)
@@ -308,7 +309,7 @@ void wxFrameBase::UpdateWindowUI(long flags)
         GetToolBar()->UpdateWindowUI(flags);
 #endif
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     if (GetMenuBar())
     {
         // If coming from an idle event, we only want to update the menus if
@@ -635,13 +636,17 @@ void wxFrameBase::DoMenuUpdates(wxMenu* menu)
     {
         menu->UpdateUI();
     }
+#if wxUSE_MENUBAR
     else
     {
         wxMenuBar* bar = GetMenuBar();
         if (bar != NULL)
             bar->UpdateMenus();
     }
+#endif
 }
+
+#if wxUSE_MENUBAR
 
 void wxFrameBase::DetachMenuBar()
 {
@@ -680,5 +685,7 @@ wxMenuItem *wxFrameBase::FindItemInMenuBar(int menuId) const
 
     return menuBar ? menuBar->FindItem(menuId) : NULL;
 }
+
+#endif // wxUSE_MENUBAR
 
 #endif // wxUSE_MENUS

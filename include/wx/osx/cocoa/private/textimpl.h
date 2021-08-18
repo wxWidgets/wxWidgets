@@ -32,6 +32,12 @@ public :
     virtual ~wxNSTextBase() { }
 
     virtual bool ShouldHandleKeyNavigation(const wxKeyEvent &event) const wxOVERRIDE;
+
+    virtual void SetInitialLabel(const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding)) wxOVERRIDE
+    {
+        // Don't do anything here, text controls don't have any label and
+        // setting it would overwrite the string value set when creating it.
+    }
 };
 
 // implementation exposed, so that search control can pull it
@@ -112,7 +118,7 @@ public:
     virtual long XYToPosition(long x, long y) const wxOVERRIDE;
     virtual void ShowPosition(long pos) wxOVERRIDE;
     virtual void WriteText(const wxString& str) wxOVERRIDE ;
-    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) wxOVERRIDE;
+    virtual void SetFont(const wxFont & font) wxOVERRIDE;
 
     virtual bool GetStyle(long position, wxTextAttr& style) wxOVERRIDE;
     virtual void SetStyle(long start, long end, const wxTextAttr& style) wxOVERRIDE;

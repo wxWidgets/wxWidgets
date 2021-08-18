@@ -74,7 +74,7 @@ int wxMacPrintDialog::ShowModal()
 
     OSXBeginModalDialog();
 
-    if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSOKButton )
+    if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSModalResponseOK )
     {
         result = wxID_OK;
         m_printDialogData.GetPrintData().ConvertFromNative();
@@ -100,7 +100,7 @@ int wxMacPageSetupDialog::ShowModal()
     
     OSXBeginModalDialog();
 
-    if ( [pageLayout runModalWithPrintInfo:printInfo] == NSOKButton )
+    if ( [pageLayout runModalWithPrintInfo:printInfo] == NSModalResponseOK )
     {
         result = wxID_OK;
         m_pageSetupData.GetPrintData().ConvertFromNative();

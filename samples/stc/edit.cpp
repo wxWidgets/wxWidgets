@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all 'standard' wxWidgets headers)
@@ -55,8 +52,8 @@ const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
 // A small image of a hashtag symbol used in the autocompletion window.
 const char* hashtag_xpm[] = {
 "10 10 2 1",
-" 	c None",
-".	c #BD08F9",
+"  c None",
+". c #BD08F9",
 "  ..  ..  ",
 "  ..  ..  ",
 "..........",
@@ -128,6 +125,8 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU(myID_MULTI_PASTE,                  Edit::OnMultiPaste)
     EVT_MENU(myID_MULTIPLE_SELECTIONS_TYPING,   Edit::OnMultipleSelectionsTyping)
     EVT_MENU(myID_CUSTOM_POPUP,                 Edit::OnCustomPopup)
+    EVT_MENU(myID_TECHNOLOGY_DEFAULT,           Edit::OnTechnology)
+    EVT_MENU(myID_TECHNOLOGY_DIRECTWRITE,       Edit::OnTechnology)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
@@ -196,7 +195,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
 
     // miscellaneous
     m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, "_999999");
-    m_FoldingMargin = 16;
+    m_FoldingMargin = FromDIP(16);
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
     SetLayoutCache (wxSTC_CACHE_PAGE);
     UsePopUp(wxSTC_POPUP_ALL);
@@ -478,6 +477,11 @@ void Edit::OnMultipleSelectionsTyping(wxCommandEvent& WXUNUSED(event)) {
 void Edit::OnCustomPopup(wxCommandEvent& evt)
 {
     UsePopUp(evt.IsChecked() ? wxSTC_POPUP_NEVER : wxSTC_POPUP_ALL);
+}
+
+void Edit::OnTechnology(wxCommandEvent& event)
+{
+    SetTechnology(event.GetId() == myID_TECHNOLOGY_DIRECTWRITE ? wxSTC_TECHNOLOGY_DIRECTWRITE : wxSTC_TECHNOLOGY_DEFAULT);
 }
 
 //! misc

@@ -241,7 +241,6 @@
     <template id="wx-lib">
         <!--                    MISCELLANEOUS                       -->
         <if cond="FORMAT=='mingw'">
-            <define>HAVE_W32API_H</define>
             <ldflags>-mthreads</ldflags>
         </if>
 
@@ -294,7 +293,7 @@
             <sys-lib>uuid</sys-lib>
             <sys-lib>rpcrt4</sys-lib>
             <sys-lib>advapi32</sys-lib>
-            <sys-lib>wsock32</sys-lib>
+            <sys-lib>ws2_32</sys-lib>
         </if>
 
         <!-- Libs common to both borland and MSVC               -->

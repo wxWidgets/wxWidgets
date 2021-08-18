@@ -80,7 +80,7 @@ class WXDLLIMPEXP_HTML wxHtmlHelpWindow : public wxWindow
 
 public:
     wxHtmlHelpWindow(wxHtmlHelpData* data = NULL) { Init(data); }
-    wxHtmlHelpWindow(wxWindow* parent, wxWindowID wxWindowID,
+    wxHtmlHelpWindow(wxWindow* parent, wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     int style = wxTAB_TRAVERSAL|wxNO_BORDER,

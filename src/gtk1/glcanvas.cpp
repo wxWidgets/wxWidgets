@@ -65,8 +65,7 @@ extern "C" {
 static gint
 gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
+    wxPaintEvent event( win );
     win->HandleWindowEvent( event );
 
     win->GetUpdateRegion().Clear();
@@ -302,8 +301,7 @@ void wxGLCanvas::OnInternalIdle()
 {
     if (!m_updateRegion.IsEmpty())
     {
-        wxPaintEvent event( GetId() );
-        event.SetEventObject( this );
+        wxPaintEvent event( this );
         HandleWindowEvent( event );
 
         GetUpdateRegion().Clear();

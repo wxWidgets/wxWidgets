@@ -9,9 +9,6 @@
 
 #if wxUSE_VALIDATORS && wxUSE_UIACTIONSIMULATOR
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -185,6 +182,32 @@ TEXT_VALIDATOR_TEST_CASE("wxTextValidator::IsValid", "[wxTextValidator][filters]
 
         CHECK( !val.IsValid("0.6/t").empty() ); // t still excluded
     }
+}
+
+TEXT_VALIDATOR_TEST_CASE("wxTextValidator::TransferToWindow", "[wxTextValidator][transferdata]")
+{
+    wxString value = "wxwidgets";
+    wxTextValidator val(wxFILTER_ALPHA, &value);
+    m_text->SetValidator(val);
+
+    CHECK( m_text->IsEmpty() );
+
+    REQUIRE( m_text->TransferDataToWindow() );
+
+    CHECK( m_text->GetValue() == "wxwidgets" );
+}
+
+TEXT_VALIDATOR_TEST_CASE("wxTextValidator::TransferFromWindow", "[wxTextValidator][transferdata]")
+{
+    wxString value;
+    wxTextValidator val(wxFILTER_ALPHA, &value);
+    m_text->SetValidator(val);
+
+    m_text->ChangeValue("wxwidgets");
+
+    REQUIRE( m_text->TransferDataFromWindow() );
+
+    CHECK( value == "wxwidgets" );
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_UIACTIONSIMULATOR

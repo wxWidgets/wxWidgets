@@ -12,10 +12,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
@@ -442,7 +438,7 @@ bool hvConnection::OnPoke(const wxString& WXUNUSED(topic),
 {
     const wxString data = GetTextFromData(buf, size, format);
 
-    //    wxLogStatus("Poke command: %s = %s", item.c_str(), data);
+    //    wxLogStatus("Poke command: %s = %s", item, data);
     //topic is not tested
 
     if ( wxGetApp().GetHelpController() )

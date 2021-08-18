@@ -34,6 +34,9 @@
              A list of filenames.}
     @itemdef{wxDF_HTML,
              An HTML string. This is currently only valid on Mac and MSW.}
+    @itemdef{wxDF_PNG,
+             A PNG file. This is valid only on MSW. This constant is available
+             since wxWidgets 3.1.5.}
     @endDefList
 
     As mentioned above, these standard formats may be passed to any function
@@ -616,6 +619,42 @@ public:
         override this function.
     */
     virtual void SetBitmap(const wxBitmap& bitmap);
+};
+
+
+
+/**
+    @class wxImageDataObject
+
+    wxImageDataObject is a specialization of wxDataObject for image data.
+    It can be used e.g. when you need to put on and retrieve from the clipboard
+    a wxImage with its metadata (like image resolution).
+
+    @since 3.1.5
+
+    @library{wxcore}
+    @category{dnd}
+
+    @see @ref overview_dnd, wxDataObject, wxCustomDataObject, wxBitmapDataObject
+*/
+class wxImageDataObject : public wxCustomDataObject
+{
+public:
+    /**
+        Constructor, optionally passing an image (otherwise use SetImage()
+        later).
+    */
+    explicit wxImageDataObject(const wxImage& image = wxNullImage);
+
+    /**
+        Returns the image associated with the data object.
+    */
+    wxImage GetImage() const;
+
+    /**
+        Sets the image stored by the data object.
+    */
+    void SetImage(const wxImage& image);
 };
 
 

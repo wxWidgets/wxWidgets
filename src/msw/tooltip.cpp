@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TOOLTIPS
 
@@ -466,7 +463,7 @@ void wxToolTip::DoAddHWND(WXHWND hWnd)
 
     if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
     {
-        wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text.c_str());
+        wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text);
 
         return;
     }
@@ -482,7 +479,7 @@ void wxToolTip::DoAddHWND(WXHWND hWnd)
 
         if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
         {
-            wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text.c_str());
+            wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text);
         }
     }
 }

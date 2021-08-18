@@ -3,7 +3,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="wxrc" cond="USE_XRC=='1'"
+    <exe id="wxrc" cond="USE_XML=='1'"
          template="wx_util_console" template_append="wx_append_base">
         <sources>wxrc.cpp</sources>
         <wx-lib>xml</wx-lib>
@@ -13,11 +13,11 @@
 
     <if cond="FORMAT=='autoconf'">
 
-        <!-- Install wxrc as $prefix/bin/wxrc-$version with a wxrc symlink
-             pointing to it, so that users can use wxrc from different
+        <!-- Install wxrc as $prefix/bin/wxrc-$version$flavour with a wxrc
+             symlink pointing to it, so that users can use wxrc from different
              versions. -->
 
-        <set var="versioned_name">wxrc-$(WX_RELEASE)</set>
+        <set var="versioned_name">wxrc-$(WX_RELEASE)$(WX_FLAVOUR)$(EXEEXT)</set>
         <modify-target target="install_wxrc">
             <command>
                 rm -f $(DESTDIR)$(BINDIR)/wxrc$(EXEEXT) $(DESTDIR)$(BINDIR)/$(versioned_name)

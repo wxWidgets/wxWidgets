@@ -18,14 +18,7 @@
     WXDLLIMPEXP_BASE unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs);
 
     // helper macro for wxSEH_HANDLE
-#if defined(__BORLANDC__)
-    // some compilers don't understand that this code is unreachable and warn
-    // about no value being returned from the function without it, so calm them
-    // down
-    #define wxSEH_DUMMY_RETURN(rc) return rc;
-#else
     #define wxSEH_DUMMY_RETURN(rc)
-#endif
 
     // macros which allow to avoid many #if wxUSE_ON_FATAL_EXCEPTION in the code
     // which uses them

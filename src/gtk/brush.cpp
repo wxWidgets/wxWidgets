@@ -87,7 +87,7 @@ wxGDIRefData *wxBrush::CreateGDIRefData() const
 
 wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxBrushRefData(*(wxBrushRefData *)data);
+    return new wxBrushRefData(*static_cast<const wxBrushRefData*>(data));
 }
 
 bool wxBrush::operator==(const wxBrush& brush) const

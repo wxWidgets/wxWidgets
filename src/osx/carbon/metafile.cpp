@@ -95,9 +95,7 @@ wxMetafileRefData::wxMetafileRefData( const wxString& filename )
 
     if ( !filename.empty() )
     {
-        wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(filename)));
-        CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-        wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+        wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(filename));
         m_pdfDoc.reset(CGPDFDocumentCreateWithURL(url));
     }
 }
@@ -189,7 +187,8 @@ wxMetaFile::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 
 WXHMETAFILE wxMetaFile::GetHMETAFILE() const
 {
-    return (WXHMETAFILE) (CFDataRef) M_METAFILEDATA->GetData();
+    const void* p = M_METAFILEDATA->GetData();
+    return static_cast<WXHMETAFILE>(const_cast<void*>(p));
 }
 
 bool wxMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
@@ -342,7 +341,7 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
 
 bool wxMetafileDataObject::SetData(size_t len, const void *buf)
 {
-    wxMetafileRefData* metafiledata = new wxMetafileRefData(wxCFRefFromGet(wxCFDataRef((UInt8*)buf, len).get()));
+    wxMetafileRefData* metafiledata = new wxMetafileRefData(wxCFRefFromGet(wxCFDataRef(static_cast<const UInt8*>(buf), len).get()));
     m_metafile.UnRef();
     m_metafile.SetRefData( metafiledata );
     return true;

@@ -112,7 +112,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxDataViewCtrlNameStr )
+           const wxString& name = wxASCII_STR(wxDataViewCtrlNameStr) )
     {
         Init();
 
@@ -123,7 +123,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxDataViewCtrlNameStr);
+           const wxString& name = wxASCII_STR(wxDataViewCtrlNameStr));
 
     virtual ~wxDataViewCtrl();
 
@@ -218,7 +218,7 @@ protected:
     virtual void DoSetExpanderColumn() wxOVERRIDE;
     virtual void DoSetIndent() wxOVERRIDE;
 
-    virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
+    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) wxOVERRIDE;
 
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
     virtual GdkWindow* GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;

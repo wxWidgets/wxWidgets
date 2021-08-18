@@ -333,8 +333,8 @@ public:
     static void DestroyLanguagesDB();
 
 private:
-    // This method is trivial and just updates the corresponding member
-    // variables without doing anything else.
+    // This method updates the member fields when this locale is actually set
+    // as active.
     void DoInit(const wxString& name,
                 const wxString& shortName,
                 int language);
@@ -343,7 +343,8 @@ private:
     // m_langugagesInfo, called by InitLanguagesDB
     static void InitLanguagesDB();
 
-    // initialize the member fields to default values
+    // This method is trivial and just initializes the member fields to default
+    // values.
     void DoCommonInit();
 
     // After trying to set locale, call this method to give the appropriate
@@ -363,6 +364,9 @@ private:
 
     const char  *m_pszOldLocale;      // previous locale from setlocale()
     wxLocale      *m_pOldLocale;      // previous wxLocale
+#ifdef __WIN32__
+    wxUint32       m_oldLCID;
+#endif
 
     bool           m_initialized;
 

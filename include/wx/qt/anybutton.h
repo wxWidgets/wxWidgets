@@ -29,7 +29,7 @@ public:
 
     // implementation only
     void QtUpdateState();
-    virtual int GetEventType() const = 0;
+    virtual int QtGetEventType() const = 0;
 
 protected:
     virtual wxBitmap DoGetBitmap(State state) const wxOVERRIDE;

@@ -26,6 +26,8 @@ public:
     virtual void SetValue(const wxDateTime& dt) wxOVERRIDE;
     virtual wxDateTime GetValue() const wxOVERRIDE;
 
+    virtual void SetNullText(const wxString& text) wxOVERRIDE;
+
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
@@ -46,43 +48,34 @@ protected:
                                  const wxValidator& validator,
                                  const wxString& name);
 
-    // Notice that the methods below must be overridden in all native MSW
-    // classes inheriting from this one but they can't be pure virtual because
-    // the generic implementations, not needing nor able to implement them, is
-    // also derived from this class currently. The real problem is, of course,
-    // this wrong class structure because the generic classes also inherit the
-    // wrong implementations of Set/GetValue() and DoGetBestSize() but as they
-    // override these methods anyhow, it does work -- but is definitely ugly
-    // and need to be changed (but how?) in the future.
-
 #if wxUSE_INTL
     // Override to return the date/time format used by this control.
-    virtual wxLocaleInfo MSWGetFormat() const /* = 0 */
-    {
-        wxFAIL_MSG( "Unreachable" );
-        return wxLOCALE_TIME_FMT;
-    }
+    virtual wxLocaleInfo MSWGetFormat() const = 0;
 #endif // wxUSE_INTL
 
     // Override to indicate whether we can have no date at all.
-    virtual bool MSWAllowsNone() const /* = 0 */
-    {
-        wxFAIL_MSG( "Unreachable" );
-        return false;
-    }
+    virtual bool MSWAllowsNone() const = 0;
 
     // Override to update m_date and send the event when the control contents
     // changes, return true if the event was handled.
-    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch) /* = 0 */
-    {
-        wxUnusedVar(dtch);
-        wxFAIL_MSG( "Unreachable" );
-        return false;
-    }
+    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch) = 0;
 
 
     // the date currently shown by the control, may be invalid
     wxDateTime m_date;
+
+private:
+    // Helper setting the appropriate format depending on the passed in state.
+    void MSWUpdateFormat(bool valid);
+
+    // Same thing, but only doing if the validity differs from the date
+    // validity, i.e. avoiding useless work if nothing needs to be done.
+    void MSWUpdateFormatIfNeeded(bool valid);
+
+
+    // shown when there is no valid value (so only used with wxDP_ALLOWNONE),
+    // always non-empty if SetNullText() was called, see the comments there
+    wxString m_nullText;
 };
 
 #endif // _WX_MSW_DATETIMECTRL_H_

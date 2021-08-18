@@ -13,9 +13,6 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dcprint.h"
 
@@ -320,7 +317,7 @@ bool wxPrinterDCImpl::StartDoc( const wxString& message )
     return m_ok ;
 }
 
-void wxPrinterDCImpl::EndDoc(void)
+void wxPrinterDCImpl::EndDoc()
 {
     if ( !m_ok )
         return ;

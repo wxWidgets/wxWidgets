@@ -6,6 +6,41 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Styles for the paths shown in wxFileHistory menus.
+
+    The values of this enum determine whether the labels in the menu managed by
+    wxFileHistory show the full path for the corresponding file or just the
+    base name.
+
+    The default style is wxFH_PATH_SHOW_IF_DIFFERENT, i.e. the full path of the
+    file is only shown in the menu if it's different from the path of the first
+    file.
+
+    @since 3.1.5
+*/
+enum wxFileHistoryMenuPathStyle
+{
+    /**
+        Show the full path if it's different from the path of the first file.
+
+        Otherwise show just the file name.
+
+        This value corresponds to the default behaviour.
+     */
+    wxFH_PATH_SHOW_IF_DIFFERENT,
+
+    /**
+        Never show full path, always show just the base file name.
+     */
+    wxFH_PATH_SHOW_NEVER,
+
+    /**
+        Always show the full path for all files.
+     */
+    wxFH_PATH_SHOW_ALWAYS
+};
+
+/**
     @class wxFileHistory
 
     The wxFileHistory encapsulates a user interface convenience, the list of
@@ -120,4 +155,26 @@ public:
         called, as this is not done automatically.
     */
     virtual void UseMenu(wxMenu* menu);
+
+    /**
+        Set the style of the menu item labels.
+
+        By default, the menu item label style is ::wxFH_PATH_SHOW_IF_DIFFERENT.
+
+        @since 3.1.5
+    */
+    void SetMenuPathStyle(wxFileHistoryMenuPathStyle style);
+
+    /**
+        Get the current style of the menu item labels.
+
+        Initially returns ::wxFH_PATH_SHOW_IF_DIFFERENT.
+
+        @see SetMenuPathStyle()
+
+        @since 3.1.5
+    */
+    wxFileHistoryMenuPathStyle GetMenuPathStyle() const;
+
+
 };

@@ -38,7 +38,7 @@ public:
                      const wxString choices[] = NULL,
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxBitmapComboBoxNameStr)
+                     const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr))
         : wxComboBox(),
           wxBitmapComboBoxBase()
     {
@@ -56,7 +56,7 @@ public:
                      const wxArrayString& choices,
                      long style,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxBitmapComboBoxNameStr);
+                     const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -67,7 +67,7 @@ public:
                 const wxString choices[],
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxBitmapComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -77,7 +77,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxBitmapComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr));
 
     virtual ~wxBitmapComboBox();
 
@@ -104,6 +104,7 @@ protected:
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) wxOVERRIDE;
     virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // Event handlers
     void OnSize(wxSizeEvent& event);

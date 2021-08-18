@@ -1,6 +1,10 @@
 # Configure paths for GTK+
 # Owen Taylor     1997-2001
 
+# Version number used by aclocal, see `info automake Serials`.
+# Increment on every change.
+#serial 1
+
 dnl AM_PATH_GTK_3_0([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [, MODULES]]]])
 dnl Test for GTK+, and define GTK_CFLAGS and GTK_LIBS, if gthread is specified in MODULES, 
 dnl pass to pkg-config
@@ -25,23 +29,15 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
 
   no_gtk=""
 
-  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+  PKG_PROG_PKG_CONFIG([0.16])
 
-  if test x$PKG_CONFIG != xno ; then
-    if $PKG_CONFIG --atleast-pkgconfig-version 0.7 ; then
-      :
-    else
-      echo "*** pkg-config too old; version 0.7 or better required."
-      no_gtk=yes
-      PKG_CONFIG=no
-    fi
-  else
+  if test -z "$PKG_CONFIG"; then
     no_gtk=yes
   fi
 
   AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
 
-  if test x$PKG_CONFIG != xno ; then
+  if test -n "$PKG_CONFIG"; then
     ## don't try to run the test against uninstalled libtool libs
     if $PKG_CONFIG --uninstalled $pkg_config_args; then
 	  echo "Will use uninstalled version of GTK+ found in PKG_CONFIG_PATH"
@@ -152,7 +148,7 @@ main ()
      ifelse([$2], , :, [$2])
   else
      AC_MSG_RESULT(no)
-     if test "$PKG_CONFIG" = "no" ; then
+     if test -z "$PKG_CONFIG"; then
        echo "*** A new enough version of pkg-config was not found."
        echo "*** See http://pkgconfig.sourceforge.net"
      else
@@ -201,7 +197,8 @@ AC_DEFUN([GTK_CHECK_BACKEND],
   min_gtk_version=ifelse([$2],,3.0.0,$2)
   pkg_config_args="$pkg_config_args >= $min_gtk_version"
 
-  AC_PATH_PROG(PKG_CONFIG, [pkg-config], [AC_MSG_ERROR([No pkg-config found])])
+  PKG_PROG_PKG_CONFIG([0.16])
+  AS_IF([test -z "$PKG_CONFIG"], [AC_MSG_ERROR([No pkg-config found])])
 
   if $PKG_CONFIG $pkg_config_args ; then
     target_found=yes

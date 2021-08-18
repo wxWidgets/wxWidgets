@@ -25,6 +25,8 @@
 #include "wx/fontutil.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/image.h"
+#include "wx/gtk/private/stylecontext.h"
 
 //-----------------------------------------------------------------------------
 // wxGtkNotebookPage
@@ -284,23 +286,18 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     if (image >= 0)
     {
         wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
-        const wxBitmap bitmap = GetImageList()->GetBitmap(image);
-        if (pageData->m_image)
+        if (pageData->m_image == NULL)
         {
-            gtk_image_set_from_pixbuf(
-                GTK_IMAGE(pageData->m_image), bitmap.GetPixbuf());
-        }
-        else
-        {
-            pageData->m_image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
+            pageData->m_image = wxGtkImage::New();
             gtk_widget_show(pageData->m_image);
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
         }
+        WX_GTK_IMAGE(pageData->m_image)->Set(GetImageList()->GetBitmap(image));
     }
     else if (pageData->m_image)
     {
-        gtk_widget_destroy(pageData->m_image);
+        gtk_container_remove(GTK_CONTAINER(pageData->m_box), pageData->m_image);
         pageData->m_image = NULL;
     }
     pageData->m_imageIndex = image;
@@ -320,20 +317,68 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
         sizeTabMax.IncTo(wxSize(req.width, req.height));
     }
 
-    // Unfortunately this doesn't account for the real tab size and I don't
-    // know how to find it, e.g. where do the margins below come from.
-    const int PAGE_MARGIN = 3;
-    const int TAB_MARGIN = 4;
-
-    sizeTabMax.IncBy(3*TAB_MARGIN);
-
     wxSize sizeFull(sizePage);
+#ifdef __WXGTK3__
+    GtkBorder b;
+    if (gtk_check_version(3,20,0) == NULL)
+    {
+        wxGtkStyleContext sc;
+        sc.Add(GTK_TYPE_NOTEBOOK, "notebook", "notebook", "frame", NULL);
+        gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeFull.IncBy(b.left + b.right, b.top + b.bottom);
+
+        sc.Add(G_TYPE_NONE, "header", IsVertical() ? "top" : "left", NULL);
+        sc.Add(G_TYPE_NONE, "tabs", NULL);
+        sc.Add(G_TYPE_NONE, "tab", NULL);
+
+        wxSize tabMin;
+        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
+            "min-width", &tabMin.x, "min-height", &tabMin.y, NULL);
+        sizeTabMax.IncTo(tabMin);
+
+        gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+        gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+        gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+    }
+    else
+    {
+        // Size of tab labels may be reported as zero if we're called too early.
+        // 17 is observed value for text-only label with default Adwaita theme.
+        sizeTabMax.IncTo(wxSize(17, 17));
+
+        GtkStyleContext* sc = gtk_widget_get_style_context(m_widget);
+        gtk_style_context_save(sc);
+        gtk_style_context_add_region(sc, "tab", GtkRegionFlags(0));
+        gtk_style_context_add_class(sc, "top");
+        gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+        gtk_style_context_restore(sc);
+
+        sizeFull.IncBy(2 * gtk_container_get_border_width(GTK_CONTAINER(m_widget)));
+    }
+#else // !__WXGTK3__
+    // Size of tab labels may be reported as zero if we're called too early.
+    // 21 is observed value for text-only label with default Adwaita theme.
+    sizeTabMax.IncTo(wxSize(21, 21));
+
+    int tab_hborder, tab_vborder, focus_width;
+    g_object_get(G_OBJECT(m_widget),
+        "tab-hborder", &tab_hborder, "tab-vborder", &tab_vborder, NULL);
+    gtk_widget_style_get(m_widget, "focus-line-width", &focus_width, NULL);
+    sizeTabMax.x += 2 * (tab_hborder + focus_width + m_widget->style->xthickness);
+    sizeTabMax.y += 2 * (tab_vborder + focus_width + m_widget->style->ythickness);
+
+    sizeFull.x += 2 * m_widget->style->xthickness;
+    sizeFull.y += 2 * m_widget->style->ythickness;
+#endif // !__WXGTK3__
+
     if ( IsVertical() )
         sizeFull.y += sizeTabMax.y;
     else
         sizeFull.x += sizeTabMax.x;
-
-    sizeFull.IncBy(2*PAGE_MARGIN);
 
     return sizeFull;
 }
@@ -442,7 +487,8 @@ bool wxNotebook::InsertPage( size_t position,
         if (HasImageList())
         {
             const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
-            pageData->m_image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
+            pageData->m_image = wxGtkImage::New();
+            WX_GTK_IMAGE(pageData->m_image)->Set(bitmap);
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
         }
@@ -513,18 +559,14 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     const int y = a.y;
 
     const size_t count = GetPageCount();
-    size_t i = 0;
 
-#ifndef __WXGTK3__
-    GtkNotebook * notebook = GTK_NOTEBOOK(m_widget);
-    if (gtk_notebook_get_scrollable(notebook))
-        i = g_list_position( notebook->children, notebook->first_tab );
-#endif
-
-    for ( ; i < count; i++ )
+    for (size_t i = 0; i < count; i++)
     {
         wxGtkNotebookPage* pageData = GetNotebookPage(i);
         GtkWidget* box = pageData->m_box;
+
+        if (!gtk_widget_get_child_visible(box))
+            continue;
 
         const gint border = gtk_container_get_border_width(GTK_CONTAINER(box));
 

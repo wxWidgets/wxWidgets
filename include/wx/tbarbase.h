@@ -295,10 +295,10 @@ public:
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString,
-                               wxObject *data = NULL)
+                               wxObject *clientData = NULL)
     {
         return DoAddTool(toolid, label, bitmap, bmpDisabled, kind,
-                         shortHelp, longHelp, data);
+                         shortHelp, longHelp, clientData);
     }
 
     // the most common AddTool() version
@@ -318,10 +318,10 @@ public:
                                     const wxBitmap& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *data = NULL)
+                                    wxObject *clientData = NULL)
     {
         return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_CHECK,
-                       shortHelp, longHelp, data);
+                       shortHelp, longHelp, clientData);
     }
 
     // add a radio tool, i.e. a tool which can be toggled and releases any
@@ -332,10 +332,10 @@ public:
                                     const wxBitmap& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *data = NULL)
+                                    wxObject *clientData = NULL)
     {
         return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_RADIO,
-                       shortHelp, longHelp, data);
+                       shortHelp, longHelp, clientData);
     }
 
 
@@ -481,6 +481,10 @@ public:
 
     // return true if this is a vertical toolbar, otherwise false
     bool IsVertical() const;
+
+    // returns one of wxTB_TOP, wxTB_BOTTOM, wxTB_LEFT, wxTB_RIGHT
+    // indicating where the toolbar is placed in the associated frame
+    int GetDirection() const;
 
     // these methods allow to access tools by their index in the toolbar
     size_t GetToolsCount() const { return m_tools.GetCount(); }

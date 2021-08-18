@@ -83,26 +83,26 @@ class WXDLLIMPEXP_CORE wxGenericDirCtrl: public wxControl
 public:
     wxGenericDirCtrl();
     wxGenericDirCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
-              const wxString &dir = wxDirDialogDefaultFolderStr,
+              const wxString &dir = wxASCII_STR(wxDirDialogDefaultFolderStr),
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxDIRCTRL_DEFAULT_STYLE,
               const wxString& filter = wxEmptyString,
               int defaultFilter = 0,
-              const wxString& name = wxTreeCtrlNameStr )
+              const wxString& name = wxASCII_STR(wxTreeCtrlNameStr) )
     {
         Init();
         Create(parent, id, dir, pos, size, style, filter, defaultFilter, name);
     }
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
-              const wxString &dir = wxDirDialogDefaultFolderStr,
+              const wxString &dir = wxASCII_STR(wxDirDialogDefaultFolderStr),
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxDIRCTRL_DEFAULT_STYLE,
               const wxString& filter = wxEmptyString,
               int defaultFilter = 0,
-              const wxString& name = wxTreeCtrlNameStr );
+              const wxString& name = wxASCII_STR(wxTreeCtrlNameStr) );
 
     virtual void Init();
 

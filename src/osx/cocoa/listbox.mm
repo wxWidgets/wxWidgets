@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 // forward decls
 
@@ -148,9 +149,15 @@ public :
 
 
 protected :
+    void                    AdaptColumnWidth ( int w );
+
     wxNSTableView*          m_tableView ;
 
     wxNSTableDataSource*    m_dataSource;
+
+    NSMutableArray*         m_widths;
+    int                     m_maxWidth;
+    bool                    m_autoSize;
 } ;
 
 //
@@ -332,10 +339,14 @@ wxListWidgetCocoaImpl::wxListWidgetCocoaImpl( wxWindowMac* peer, NSScrollView* v
     wxWidgetCocoaImpl( peer, view ), m_tableView(tableview), m_dataSource(data)
 {
     InstallEventHandler( tableview );
+    m_widths = [[NSMutableArray alloc] init];
+    m_maxWidth = 0;
+    m_autoSize = false;
 }
 
 wxListWidgetCocoaImpl::~wxListWidgetCocoaImpl()
 {
+    [m_widths release];
     [m_dataSource release];
 }
 
@@ -370,11 +381,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
     }
     else
     {
-        [col1 setMaxWidth:1000];
-        [col1 setMinWidth:10];
-        // temporary hack, because I cannot get the automatic column resizing
-        // to work properly
-        [col1 setWidth:1000];
+        m_autoSize = true;
     }
     [col1 setResizingMask: NSTableColumnAutoresizingMask];
 
@@ -422,6 +429,11 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
                 break ;
 
             case wxWINDOW_VARIANT_LARGE :
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+                if ( WX_IS_MACOS_AVAILABLE( 10, 16 ))
+                    size = NSControlSizeLarge;
+                else
+#endif
                 size = NSRegularControlSize;
                 break ;
 
@@ -459,24 +471,67 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
     return wxcol;
 }
 
+void wxListWidgetCocoaImpl::AdaptColumnWidth ( int w )
+{
+    // Note that the table can have more than one column as it's also used by
+    // wxCheckListBox, but the column containing the text is always the last one.
+    NSTableColumn *col = [[m_tableView tableColumns] lastObject];
+    [col setWidth:w];
+    m_maxWidth = w;
+}
 
 //
 // inserting / removing lines
 //
 
-void wxListWidgetCocoaImpl::ListInsert( unsigned int WXUNUSED(n) )
+void wxListWidgetCocoaImpl::ListInsert( unsigned int n )
 {
     [m_tableView reloadData];
+
+    if ( m_autoSize )
+    {
+        NSCell *cell = [m_tableView preparedCellAtColumn:[m_tableView numberOfColumns]-1 row:n];
+        NSSize size = [cell cellSize];
+        int width = (int) ceil(size.width);
+
+        [m_widths insertObject:[NSNumber numberWithInteger:width] atIndex:n];
+
+        if ( width > m_maxWidth )
+            AdaptColumnWidth( width );
+    }
 }
 
-void wxListWidgetCocoaImpl::ListDelete( unsigned int WXUNUSED(n) )
+void wxListWidgetCocoaImpl::ListDelete( unsigned int n )
 {
     [m_tableView reloadData];
+
+    if ( m_autoSize )
+    {
+        [m_widths removeObjectAtIndex:n];
+
+        int maxWidth = 0;
+        for ( NSNumber *number in m_widths )
+        {
+            int n = [number intValue];
+
+            if ( n > maxWidth )
+                maxWidth = n;
+        }
+
+        if ( maxWidth < m_maxWidth )
+            AdaptColumnWidth( maxWidth );
+    }
 }
 
 void wxListWidgetCocoaImpl::ListClear()
 {
     [m_tableView reloadData];
+
+    if ( m_autoSize )
+    {
+        [m_widths removeAllObjects];
+        AdaptColumnWidth( 100 );
+    }
 }
 
 // selecting
@@ -595,6 +650,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
 
     wxNSTableView* tableview = [[wxNSTableView alloc] init];
     [tableview setDelegate:tableview];
+    [tableview setFocusRingType:NSFocusRingTypeNone];
     // only one multi-select mode available
     if ( (style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE) )
         [tableview setAllowsMultipleSelection:YES];

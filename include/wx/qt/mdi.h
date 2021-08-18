@@ -18,7 +18,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr);
+                     const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -26,7 +26,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     // override/implement base class [pure] virtual methods
     // ----------------------------------------------------
@@ -54,7 +54,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr);
+                    const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     bool Create(wxMDIParentFrame *parent,
                 wxWindowID id,
@@ -62,7 +62,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual void Activate() wxOVERRIDE;
 

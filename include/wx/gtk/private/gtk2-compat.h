@@ -51,6 +51,7 @@ static inline gpointer wx_g_object_ref_sink(gpointer object)
     gtk_object_sink(GTK_OBJECT(object));
     return object;
 }
+#undef g_object_ref_sink
 #define g_object_ref_sink wx_g_object_ref_sink
 
 // ----------------------------------------------------------------------------
@@ -94,6 +95,20 @@ static inline gdouble wx_gtk_adjustment_get_upper(GtkAdjustment* adjustment)
     return adjustment->upper;
 }
 #define gtk_adjustment_get_upper wx_gtk_adjustment_get_upper
+
+static inline void wx_gtk_adjustment_set_step_increment(GtkAdjustment* adjustment, gdouble step_increment)
+{
+    adjustment->step_increment = step_increment;
+    gtk_adjustment_changed(adjustment);
+}
+#define gtk_adjustment_set_step_increment wx_gtk_adjustment_set_step_increment
+
+static inline void wx_gtk_adjustment_set_page_increment(GtkAdjustment* adjustment, gdouble page_increment)
+{
+    adjustment->page_increment = page_increment;
+    gtk_adjustment_changed(adjustment);
+}
+#define gtk_adjustment_set_page_increment wx_gtk_adjustment_set_page_increment
 
 static inline void wx_gtk_adjustment_set_page_size(GtkAdjustment* adjustment, gdouble page_size)
 {
@@ -647,10 +662,6 @@ static inline void wx_gtk_widget_get_preferred_size(GtkWidget* widget, GtkRequis
 #define GDK_KEY_Tab GDK_Tab
 #define GDK_KEY_Up GDK_Up
 #endif
-
-// There is no equivalent in GTK+ 2, but it's not needed there anyhow as the
-// backend is determined at compile time in that version.
-#define GDK_IS_X11_DISPLAY(dpy) true
 
 // Do perform runtime checks for GTK+ 2 version: we only take the minor version
 // component here, major must be 2 and we never need to test for the micro one

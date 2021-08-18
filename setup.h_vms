@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 31 January 2019                                                    *
+ * Date : 24 June 2021                                                       *
  *                                                                           *
  *****************************************************************************/
 
@@ -36,42 +36,24 @@
 /* Define this to get extra features from GNU libc. */
 #undef _GNU_SOURCE
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef gid_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef mode_t
-
-/* Define to `long' if <sys/types.h> doesn't define.  */
-#undef off_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef pid_t
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-#undef size_t
-
 /* Define if ssize_t type is available.  */
 #define HAVE_SSIZE_T 1
 
 /* Define if you have the ANSI C header files.  */
 #define STDC_HEADERS 1
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef uid_t
-
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
 /* Define this if you want to use GPE features */
-/* #undef __WXGPE__ */
+#undef __WXGPE__
 
 /* Define this if your version of Motif is greater than 2.0 */
-/* #undef __WXMOTIF20__ */
+#undef __WXMOTIF20__
 
 /* Define this if you are using Lesstif */
-/* #undef __WXLESSTIF__ */
+#undef __WXLESSTIF__
 
 #ifdef __WXGTK__
 
@@ -101,6 +83,12 @@
 /* Define this if your version of GTK+ is greater than 2.20 */
 #undef __WXGTK220__
 
+/* Define this if your version of GTK+ is >= 3.0 */
+#undef __WXGTK3__
+
+/* Define this if your version of GTK+ is >= 3.90.0 */
+#undef __WXGTK4__
+
 #include <types.h>
 typedef pid_t GPid;
 
@@ -109,7 +97,7 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#ifdef VMS_GTK2
+#if defined( VMS_GTK2 ) || defined( __WXX11__ ) 
 #define wxUSE_CAIRO 1
 #else
 #define wxUSE_CAIRO 0
@@ -218,8 +206,6 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#define wxUSE_WCHAR_T 1
-
 
 #define wxUSE_EXCEPTIONS 1
 
@@ -260,8 +246,6 @@ typedef pid_t GPid;
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
 
-#define wxUSE_IOSTREAMH     1
-
 #define wxUSE_LONGLONG      1
 
 #define wxUSE_BASE64        1
@@ -273,7 +257,7 @@ typedef pid_t GPid;
 
 #define wxUSE_FSVOLUME      1
 
-#define wxUSE_SECRETSTORE   1
+#define wxUSE_SECRETSTORE   0
 
 #define wxUSE_STDPATHS      1
 
@@ -341,6 +325,16 @@ typedef pid_t GPid;
 
 #define wxUSE_MIMETYPE 1
 
+#define wxUSE_WEBREQUEST 1
+
+#ifdef __APPLE__
+#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
+#else
+#define wxUSE_WEBREQUEST_URLSESSION 0
+#endif
+
+#define wxUSE_WEBREQUEST_CURL 1
+
 #define wxUSE_PROTOCOL 1
 
 #define wxUSE_PROTOCOL_FILE 1
@@ -404,11 +398,7 @@ typedef pid_t GPid;
 
 #define wxUSE_MARKUP       1
 
-#ifdef __WXMOTIF__
-#define wxUSE_POPUPWIN 0
-#else
 #define wxUSE_POPUPWIN 1
-#endif
 
 #define wxUSE_PREFERENCES_EDITOR 1
 
@@ -467,6 +457,8 @@ typedef pid_t GPid;
 #define wxUSE_TREECTRL     1
 #define wxUSE_TREELISTCTRL  1
 
+#define wxUSE_NATIVE_DATAVIEWCTRL 0
+
 #define wxUSE_STATUSBAR    1
 
 #define wxUSE_NATIVE_STATUSBAR        0
@@ -519,6 +511,8 @@ typedef pid_t GPid;
 #define wxUSE_INFOBAR 1
 
 #define wxUSE_MENUS         1
+
+#define wxUSE_MENUBAR  1
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
@@ -583,6 +577,8 @@ typedef pid_t GPid;
 
 #define wxUSE_NUMBERDLG 1
 
+#define wxUSE_CREDENTIALDLG 1
+
 #define wxUSE_SPLASH 1
 
 #define wxUSE_WIZARDDLG 1
@@ -607,6 +603,8 @@ typedef pid_t GPid;
 #define wxUSE_HTML          1
 
 #define wxUSE_GLCANVAS       1
+
+#define wxUSE_GLCANVAS_EGL   0
 
 #define wxUSE_RICHTEXT       1
 
@@ -734,6 +732,12 @@ typedef pid_t GPid;
     #define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
 
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+    #define wxUSE_WEBREQUEST_WINHTTP 0
+#else
+    #define wxUSE_WEBREQUEST_WINHTTP 0
+#endif
+
 #define wxUSE_OLE           0
 
 #define wxUSE_OLE_AUTOMATION 0
@@ -796,11 +800,6 @@ typedef pid_t GPid;
  * Define if va_list type is an array
  */
 #undef VA_LIST_IS_ARRAY
-
-/*
- * Define if the compiler supports variadic macros
- */
-#undef HAVE_VARIADIC_MACROS
 
 #if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
 /*
@@ -884,12 +883,6 @@ typedef pid_t GPid;
  */
 #undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
-/*
- * The built-in regex supports advanced REs in additional to POSIX's basic
- * and extended. Your system regex probably won't support this, and in this
- * case WX_NO_REGEX_ADVANCED should be defined.
- */
-#undef WX_NO_REGEX_ADVANCED
 /*
  * On GNU systems use re_search instead of regexec, since the latter does a
  * strlen on the search text affecting the performance of some operations.
@@ -1078,9 +1071,6 @@ typedef pid_t GPid;
 #undef HAVE_SETENV
 #endif
 
-/* Define if you have shl_load() */
-#undef HAVE_SHL_LOAD
-
 #if __CRTL_VER >= 70312000
 /* Define if you have snprintf() */
 #define HAVE_SNPRINTF 1
@@ -1198,9 +1188,6 @@ typedef pid_t GPid;
 
 /* Define if wchar_t is distinct type in your compiler. */
 #define wxWCHAR_T_IS_REAL_TYPE 1
-
-/* Define if you have the dlerror function.  */
-#define HAVE_DLERROR 1
 
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
@@ -1329,9 +1316,6 @@ typedef pid_t GPid;
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
 
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#undef HAVE_W32API_H
-
 /* Define if you have the <esd.h> header file.  */
 /* #undef HAVE_ESD_H */
 
@@ -1449,8 +1433,10 @@ typedef pid_t GPid;
 #include <stdlib.h>
 
 #include <limits.h>
+#if __CRTL_VER <= 80400000
 #define LLONG_MIN __INT64_MIN
 #define LLONG_MAX __INT64_MAX
 #define ULLONG_MAX __UINT64_MAX
+#endif
 
 #endif /* __WX_SETUP_H__ */

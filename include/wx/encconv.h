@@ -53,7 +53,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
     public:
 
             wxEncodingConverter();
-            virtual ~wxEncodingConverter() { if (m_Table) delete[] m_Table; }
+            virtual ~wxEncodingConverter() { delete[] m_Table; }
 
             // Initialize conversion. Both output or input encoding may
             // be wxFONTENCODING_UNICODE.
@@ -96,7 +96,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             bool Convert(wchar_t* str) const { return Convert(str, str); }
 
             // Return equivalent(s) for given font that are used
-            // under given platform. wxPLATFORM_CURRENT means the plaform
+            // under given platform. wxPLATFORM_CURRENT means the platform
             // this binary was compiled for
             //
             // Examples:

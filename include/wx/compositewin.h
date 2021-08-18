@@ -218,11 +218,17 @@ private:
             win = win->GetParent();
         }
 
-        child->Bind(wxEVT_CHAR, &wxCompositeWindow::OnChar, this);
+        // Make all keyboard events occurring in sub-windows appear as coming
+        // from the main window itself.
+        child->Bind(wxEVT_KEY_DOWN, &wxCompositeWindow::OnKeyEvent, this);
+        child->Bind(wxEVT_CHAR, &wxCompositeWindow::OnKeyEvent, this);
+        child->Bind(wxEVT_KEY_UP, &wxCompositeWindow::OnKeyEvent, this);
     }
 
-    void OnChar(wxKeyEvent& event)
+    void OnKeyEvent(wxKeyEvent& event)
     {
+        wxEventObjectOriginSetter setThis(event, this, this->GetId());
+
         if ( !this->ProcessWindowEvent(event) )
             event.Skip();
     }

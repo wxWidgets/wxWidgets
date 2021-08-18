@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COMBOCTRL
 
@@ -179,9 +176,6 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
 
     // Create textctrl, if necessary
     CreateTextCtrl( tcBorder );
-
-    // Add keyboard input handlers for main control and textctrl
-    InstallInputHandlers();
 
     // Set background style for double-buffering, when needed
     // (cannot use when system draws background automatically)
@@ -422,12 +416,7 @@ void wxGenericComboCtrl::SetCustomPaintWidth( int width )
         // Common textctrl re-creation code
         if ( tcCreateStyle != -1 )
         {
-            tc->RemoveEventHandler(m_textEvtHandler);
-            delete m_textEvtHandler;
-
             CreateTextCtrl( tcCreateStyle );
-
-            InstallInputHandlers();
         }
     }
 #endif // UNRELIABLE_TEXTCTRL_BORDER
@@ -457,6 +446,13 @@ bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
 
     return false;
 }
+
+#if defined(__WXOSX__)
+wxTextWidgetImpl * wxGenericComboCtrl::GetTextPeer() const
+{
+    return m_text ? m_text->GetTextPeer() : NULL;
+}
+#endif
 
 #ifdef __WXUNIVERSAL__
 

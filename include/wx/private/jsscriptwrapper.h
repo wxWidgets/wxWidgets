@@ -34,12 +34,39 @@ public:
         // Note that we use a different name for it for each call to
         // RunScript() (which creates a new wxJSScriptWrapper every time) to
         // avoid any possible conflict between different calls.
-        m_outputVarName = wxString::Format("__wxOut%i", (*runScriptCount)++);
+        m_outputVarName = wxString::Format(wxASCII_STR("__wxOut%i"), (*runScriptCount)++);
 
-        // Adds one escape level if there is a single quote, double quotes or
-        // escape characters
-        wxRegEx escapeDoubleQuotes("(\\\\*)([\\'\"\n\r\v\t\b\f])");
-        escapeDoubleQuotes.Replace(&m_escapedCode,"\\1\\1\\\\\\2");
+        // Adds one escape level.
+        const char *charsNeededToBeEscaped = "\\\"\n\r\v\t\b\f";
+        for (
+            size_t pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, 0);
+            pos != wxString::npos;
+            pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, pos)
+        ) {
+            switch (m_escapedCode[pos].GetValue())
+            {
+            case 0x0A: // '\n'
+                m_escapedCode[pos] = 'n';
+                break;
+            case 0x0D: // '\r'
+                m_escapedCode[pos] = 'r';
+                break;
+            case 0x0B: // '\v'
+                m_escapedCode[pos] = 'v';
+                break;
+            case 0x09: // '\t'
+                m_escapedCode[pos] = 't';
+                break;
+            case 0x08: // '\b'
+                m_escapedCode[pos] = 'b';
+                break;
+            case 0x0C: // '\f'
+                m_escapedCode[pos] = 'f';
+                break;
+            }
+            m_escapedCode.insert(pos, '\\');
+            pos += 2;
+        }
     }
 
     // Get the code to execute, its returned value will be either boolean true,
@@ -52,8 +79,8 @@ public:
     {
         return wxString::Format
                (
-                "try { var %s = eval(\"%s\"); true; } "
-                "catch (e) { e.name + \": \" + e.message; }",
+                wxASCII_STR("try { var %s = eval(\"%s\"); true; } "
+                "catch (e) { e.name + \": \" + e.message; }"),
                 m_outputVarName,
                 m_escapedCode
                );
@@ -66,9 +93,9 @@ public:
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
         return wxString::Format
                (
-                "if (typeof %s == 'object') JSON.stringify(%s);"
+                wxASCII_STR("if (typeof %s == 'object') JSON.stringify(%s);"
                 "else if (typeof %s == 'undefined') 'undefined';"
-                "else %s;",
+                "else %s;"),
                 m_outputVarName,
                 m_outputVarName,
                 m_outputVarName,
@@ -77,7 +104,7 @@ public:
 #elif wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
         return wxString::Format
                (
-                "try {"
+                wxASCII_STR("try {"
                     "(%s == null || typeof %s != 'object') ? String(%s)"
                                                           ": JSON.stringify(%s);"
                 "}"
@@ -138,7 +165,7 @@ public:
                         "__wx$stringifyJSON(%s);"
                     "}"
                     "catch (e) { e.name + \": \" + e.message; }"
-                "}",
+                "}"),
                 m_outputVarName,
                 m_outputVarName,
                 m_outputVarName,
@@ -150,11 +177,13 @@ public:
 #endif
     }
 
+    const wxString& GetUnwrappedOutputCode() { return m_outputVarName; }
+
     // Execute the code returned by this function to let the output of the code
     // we executed be garbage-collected.
     wxString GetCleanUpCode() const
     {
-        return wxString::Format("%s = undefined;", m_outputVarName);
+        return wxString::Format(wxASCII_STR("%s = undefined;"), m_outputVarName);
     }
 
 private:

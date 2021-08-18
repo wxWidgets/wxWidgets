@@ -84,6 +84,25 @@ public:
                  cannot be converted to a specific data type, wxAny will then
                  hold and manage reference to wxVariantData* similar to how
                  wxVariant does.
+
+                 Note that objects constructed from list-valued variants
+                 require the list to be explicitly cleared using `WX_CLEAR_LIST`
+                 to avoid leaking memory. This unfortunate behaviour will not
+                 be changed to prevent breaking the existing code relying on it.
+
+                 @code
+                 wxVariant vList;
+                 vList.NullList();
+                 vList.Append(15);
+                 vList.Append("abc");
+
+                 // Create wxAny from the list variant.
+                 wxAny any = wxAny(vList);
+
+                 // Clear the list to avoid the memory leak.
+                 wxAnyList anyList = any.As<wxAnyList>();
+                 WX_CLEAR_LIST(wxAnyList, anyList);
+                 @endcode
     */
     wxAny(const wxVariant& variant);
 

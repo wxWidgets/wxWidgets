@@ -131,8 +131,11 @@ status_icon_popup_menu(GtkStatusIcon*, guint, guint, wxTaskBarIcon* taskBarIcon)
 bool wxTaskBarIconBase::IsAvailable()
 {
 #ifdef GDK_WINDOWING_X11
-    if (!GDK_IS_X11_DISPLAY(gdk_display_get_default()))
+#ifdef __WXGTK3__
+    GdkDisplay* display = gdk_display_get_default();
+    if (strcmp("GdkX11Display", g_type_name(G_TYPE_FROM_INSTANCE(display))) != 0)
         return false;
+#endif
 
     char name[32];
     g_snprintf(name, sizeof(name), "_NET_SYSTEM_TRAY_S%d",

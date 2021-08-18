@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ABOUTDLG
 
@@ -84,10 +81,10 @@ wxString wxAboutDialogInfo::GetDescriptionAndCredits() const
 wxIcon wxAboutDialogInfo::GetIcon() const
 {
     wxIcon icon = m_icon;
-    if ( !icon.IsOk() && wxTheApp )
+    if ( !icon.IsOk() )
     {
         const wxTopLevelWindow * const
-            tlw = wxDynamicCast(wxTheApp->GetTopWindow(), wxTopLevelWindow);
+            tlw = wxDynamicCast(wxApp::GetMainTopWindow(), wxTopLevelWindow);
         if ( tlw )
             icon = tlw->GetIcon();
     }

@@ -538,7 +538,7 @@ public:
         @param min_width_medium
             Requested minimum width of the button text in pixel
             if the button is medium size.
-        @param min_width_medium
+        @param min_width_large
             Requested minimum width of the button text in pixel
             if the button is large size.
 

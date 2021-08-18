@@ -118,7 +118,6 @@ protected:
         if ( pobj )
         {
             // Add ourselves to object tracker list
-            wxASSERT( ptbase );
             ptbase->AddNode( this );
             m_pobj = pobj;
             m_ptbase = ptbase;
@@ -153,8 +152,8 @@ public:
     virtual ~wxWeakRefDynamic() { Release(); }
 
     // Smart pointer functions
-    T& operator*() const    { wxASSERT(m_pobj); return *m_pobj; }
-    T* operator->() const   { wxASSERT(m_pobj); return m_pobj; }
+    T& operator*() const    { return *m_pobj; }
+    T* operator->() const   { return m_pobj; }
 
     T* get() const          { return m_pobj; }
     operator T* () const    { return m_pobj; }
@@ -171,7 +170,6 @@ public:
         {
             // Remove ourselves from object tracker list
             wxTrackable *pt = dynamic_cast<wxTrackable*>(m_pobj);
-            wxASSERT(pt);
             pt->RemoveNode(this);
             m_pobj = NULL;
         }

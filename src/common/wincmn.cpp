@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -77,11 +74,8 @@
 #include "wx/display.h"
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
+#include "wx/private/rescale.h"
 #include "wx/private/window.h"
-
-#ifdef __WINDOWS__
-    #include "wx/msw/wrapwin.h"
-#endif
 
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
@@ -100,10 +94,6 @@ namespace wxMouseCapture
 bool IsInCaptureStack(wxWindowBase* win);
 
 } // wxMouseCapture
-
-// We consider 96 DPI to be the standard value, this is correct at least for
-// MSW, but could conceivably need adjustment for the other platforms.
-static const int BASELINE_DPI = 96;
 
 // ----------------------------------------------------------------------------
 // static data
@@ -319,6 +309,8 @@ wxWindowBase::wxWindowBase()
     m_windowSizer = NULL;
     m_containingSizer = NULL;
     m_autoLayout = false;
+
+    m_disableFocusFromKbd = false;
 
 #if wxUSE_DRAG_AND_DROP
     m_dropTarget = NULL;
@@ -788,33 +780,19 @@ wxSize wxWindowBase::DoGetBestSize() const
     return best;
 }
 
-namespace
-{
-
-static wxSize GetDPIHelper(const wxWindowBase* w)
-{
-    wxSize dpi;
-
-    if ( w )
-        dpi = w->GetDPI();
-    if ( !dpi.x || !dpi.y )
-        dpi = wxScreenDC().GetPPI();
-    if ( !dpi.x || !dpi.y )
-        dpi = wxSize(BASELINE_DPI, BASELINE_DPI);
-
-    return dpi;
-}
-
-}
-
 double wxWindowBase::GetContentScaleFactor() const
 {
-    const wxSize dpi = GetDPIHelper(this);
+    // By default, we assume that there is no mapping between logical and
+    // physical pixels and so the content scale factor is just 1. Only the
+    // platforms that do perform such mapping (currently ports for Apple
+    // platforms and GTK 3) override this function to return something
+    // different.
+    return 1.0;
+}
 
-    // We use just the vertical component of the DPI because it's the one
-    // that counts most and, in practice, it's equal to the horizontal one
-    // anyhow.
-    return dpi.y / (double)BASELINE_DPI;
+double wxWindowBase::GetDPIScaleFactor() const
+{
+    return wxDisplay(static_cast<const wxWindow*>(this)).GetScaleFactor();
 }
 
 // helper of GetWindowBorderSize(): as many ports don't implement support for
@@ -914,18 +892,6 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
     return min;
 }
 
-wxSize wxWindowBase::DoGetBorderSize() const
-{
-    // there is one case in which we can implement it for all ports easily
-    if ( GetBorder() == wxBORDER_NONE )
-        return wxSize(0, 0);
-
-    // otherwise use the difference between the real size and the client size
-    // as a fallback: notice that this is incorrect in general as client size
-    // also doesn't take the scrollbars into account
-    return GetSize() - GetClientSize();
-}
-
 wxSize wxWindowBase::GetBestSize() const
 {
     if ( !m_windowSizer && m_bestSizeCache.IsFullySpecified() )
@@ -935,7 +901,7 @@ wxSize wxWindowBase::GetBestSize() const
     // it to be used
     wxSize size = DoGetBestClientSize();
     if ( size != wxDefaultSize )
-        size += DoGetBorderSize();
+        size += GetWindowBorderSize();
     else
         size = DoGetBestSize();
 
@@ -956,7 +922,7 @@ int wxWindowBase::GetBestHeight(int width) const
 
     return height == wxDefaultCoord
             ? GetBestSize().y
-            : height + DoGetBorderSize().y;
+            : height + GetWindowBorderSize().y;
 }
 
 int wxWindowBase::GetBestWidth(int height) const
@@ -965,7 +931,7 @@ int wxWindowBase::GetBestWidth(int height) const
 
     return width == wxDefaultCoord
             ? GetBestSize().x
-            : width + DoGetBorderSize().x;
+            : width + GetWindowBorderSize().x;
 }
 
 void wxWindowBase::SetMinSize(const wxSize& minSize)
@@ -1021,6 +987,31 @@ wxSize wxWindowBase::WindowToClientSize(const wxSize& size) const
                   size.y == -1 ? -1 : size.y - diff.y);
 }
 
+void wxWindowBase::WXSetInitialFittingClientSize(int flags, wxSizer* sizer)
+{
+    // Use the window sizer by default.
+    if ( !sizer )
+    {
+        sizer = GetSizer();
+
+        // If there is none, we can't compute the fitting size.
+        if ( !sizer )
+            return;
+    }
+
+    const wxSize
+        size = sizer->ComputeFittingClientSize(static_cast<wxWindow *>(this));
+
+    // It is important to set the min client size before changing the size
+    // itself as the existing size hints could prevent SetClientSize() from
+    // working otherwise.
+    if ( flags & wxSIZE_SET_MIN )
+        SetMinClientSize(size);
+
+    if ( flags & wxSIZE_SET_CURRENT )
+        SetClientSize(size);
+}
+
 void wxWindowBase::SetWindowVariant( wxWindowVariant variant )
 {
     if ( m_windowVariant != variant )
@@ -1036,22 +1027,22 @@ void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
     // adjust the font height to correspond to our new variant (notice that
     // we're only called if something really changed)
     wxFont font = GetFont();
-    float size = font.GetFractionalPointSize();
+    double size = font.GetFractionalPointSize();
     switch ( variant )
     {
         case wxWINDOW_VARIANT_NORMAL:
             break;
 
         case wxWINDOW_VARIANT_SMALL:
-            size /= 1.2f;
+            size /= 1.2;
             break;
 
         case wxWINDOW_VARIANT_MINI:
-            size /= 1.2f * 1.2f;
+            size /= 1.2 * 1.2;
             break;
 
         case wxWINDOW_VARIANT_LARGE:
-            size *= 1.2f;
+            size *= 1.2;
             break;
 
         default:
@@ -1726,7 +1717,7 @@ wxFont wxWindowBase::GetFont() const
         if ( !font.IsOk() )
             font = GetClassDefaultAttributes().font;
 
-        font.WXAdjustToPPI(GetDPI());
+        WXAdjustFontToOwnPPI(font);
 
         return font;
     }
@@ -1747,7 +1738,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
     m_inheritFont = m_hasFont;
 
     if ( m_hasFont )
-        m_font.WXAdjustToPPI(GetDPI());
+        WXAdjustFontToOwnPPI(m_font);
 
     InvalidateBestSize();
 
@@ -1768,7 +1759,7 @@ void wxWindowBase::SetPalette(const wxPalette& pal)
 
 wxWindow *wxWindowBase::GetAncestorWithCustomPalette() const
 {
-    wxWindow *win = (wxWindow *)this;
+    wxWindow* win = const_cast<wxWindow*>(static_cast<const wxWindow*>(this));
     while ( win && !win->HasCustomPalette() )
     {
         win = win->GetParent();
@@ -1782,11 +1773,7 @@ wxWindow *wxWindowBase::GetAncestorWithCustomPalette() const
 #if wxUSE_CARET
 void wxWindowBase::SetCaret(wxCaret *caret)
 {
-    if ( m_caret )
-    {
-        delete m_caret;
-    }
-
+    delete m_caret;
     m_caret = caret;
 
     if ( m_caret )
@@ -1804,8 +1791,7 @@ void wxWindowBase::SetCaret(wxCaret *caret)
 
 void wxWindowBase::SetValidator(const wxValidator& validator)
 {
-    if ( m_windowValidator )
-        delete m_windowValidator;
+    delete m_windowValidator;
 
     m_windowValidator = static_cast<wxValidator *>(validator.Clone());
 
@@ -1858,7 +1844,7 @@ void wxWindowBase::ClearBackground()
 wxWindow *wxWindowBase::FindWindow(long id) const
 {
     if ( id == m_windowId )
-        return (wxWindow *)this;
+        return const_cast<wxWindow*>(static_cast<const wxWindow*>(this));
 
     wxWindowBase *res = NULL;
     wxWindowList::compatibility_iterator node;
@@ -1874,13 +1860,13 @@ wxWindow *wxWindowBase::FindWindow(long id) const
         res = child->FindWindow( id );
     }
 
-    return (wxWindow *)res;
+    return static_cast<wxWindow*>(res);
 }
 
 wxWindow *wxWindowBase::FindWindow(const wxString& name) const
 {
     if ( name == m_windowName )
-        return (wxWindow *)this;
+        return const_cast<wxWindow*>(static_cast<const wxWindow*>(this));
 
     wxWindowBase *res = NULL;
     wxWindowList::compatibility_iterator node;
@@ -1895,7 +1881,7 @@ wxWindow *wxWindowBase::FindWindow(const wxString& name) const
         res = child->FindWindow(name);
     }
 
-    return (wxWindow *)res;
+    return static_cast<wxWindow*>(res);
 }
 
 
@@ -1939,7 +1925,7 @@ wxWindow *wxFindWindowRecursively(const wxWindow *parent,
 {
     // see if this is the one we're looking for
     if ( (*cmp)(parent, label, id) )
-        return (wxWindow *)parent;
+        return const_cast<wxWindow*>(parent);
 
     // It wasn't, so check all its children
     for ( wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
@@ -1947,7 +1933,7 @@ wxWindow *wxFindWindowRecursively(const wxWindow *parent,
           node = node->GetNext() )
     {
         // recursively check each child
-        wxWindow *win = (wxWindow *)node->GetData();
+        wxWindow* win = static_cast<wxWindow*>(node->GetData());
         wxWindow *retwin = wxFindWindowRecursively(win, label, id, cmp);
         if (retwin)
             return retwin;
@@ -2055,19 +2041,20 @@ public:
 
     // Traverse all the direct children calling OnDo() on them and also all
     // grandchildren, calling OnRecurse() for them.
-    bool DoForAllChildren()
+    bool DoForSelfAndChildren()
     {
+        wxValidator* const validator = m_win->GetValidator();
+        if ( validator && !OnDo(validator) )
+        {
+            return false;
+        }
+
         wxWindowList& children = m_win->GetChildren();
         for ( wxWindowList::iterator i = children.begin();
               i != children.end();
               ++i )
         {
             wxWindow* const child = static_cast<wxWindow*>(*i);
-            wxValidator* const validator = child->GetValidator();
-            if ( validator && !OnDo(validator) )
-            {
-                return false;
-            }
 
             // Notice that validation should never recurse into top level
             // children, e.g. some other dialog which might happen to be
@@ -2126,7 +2113,7 @@ bool wxWindowBase::Validate()
         }
     };
 
-    return ValidateTraverser(this).DoForAllChildren();
+    return ValidateTraverser(this).DoForSelfAndChildren();
 #else // !wxUSE_VALIDATORS
     return true;
 #endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
@@ -2164,7 +2151,7 @@ bool wxWindowBase::TransferDataToWindow()
         }
     };
 
-    return DataToWindowTraverser(this).DoForAllChildren();
+    return DataToWindowTraverser(this).DoForSelfAndChildren();
 #else // !wxUSE_VALIDATORS
     return true;
 #endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
@@ -2192,7 +2179,7 @@ bool wxWindowBase::TransferDataFromWindow()
         }
     };
 
-    return DataFromWindowTraverser(this).DoForAllChildren();
+    return DataFromWindowTraverser(this).DoForSelfAndChildren();
 #else // !wxUSE_VALIDATORS
     return true;
 #endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
@@ -2321,9 +2308,7 @@ void wxWindowBase::DoSetToolTip(wxToolTip *tooltip)
 {
     if ( m_tooltip != tooltip )
     {
-        if ( m_tooltip )
-            delete m_tooltip;
-
+        delete m_tooltip;
         m_tooltip = tooltip;
     }
 }
@@ -2886,16 +2871,34 @@ wxSize wxWindowBase::GetDPI() const
 
 #ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
 
+namespace
+{
+
+static wxSize GetDPIHelper(const wxWindowBase* w)
+{
+    wxSize dpi;
+
+    if ( w )
+        dpi = w->GetDPI();
+    if ( !dpi.x || !dpi.y )
+        dpi = wxScreenDC().GetPPI();
+    if ( !dpi.x || !dpi.y )
+        dpi = wxDisplay::GetStdPPI();
+
+    return dpi;
+}
+
+}
+
 /* static */
 wxSize
 wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
-    // Take care to not scale -1 because it has a special meaning of
-    // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, dpi.x, BASELINE_DPI),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, dpi.y, BASELINE_DPI));
+    const wxSize baseline = wxDisplay::GetStdPPI();
+
+    return wxRescaleCoord(sz).From(baseline).To(dpi);
 }
 
 /* static */
@@ -2904,10 +2907,9 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
-    // Take care to not scale -1 because it has a special meaning of
-    // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, BASELINE_DPI, dpi.x),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, BASELINE_DPI, dpi.y));
+    const wxSize baseline = wxDisplay::GetStdPPI();
+
+    return wxRescaleCoord(sz).From(dpi).To(baseline);
 }
 
 #endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
@@ -2921,7 +2923,8 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 // using them.
 wxSize wxWindowBase::GetDlgUnitBase() const
 {
-    const wxWindowBase * const parent = wxGetTopLevelParent((wxWindow*)this);
+    const wxWindowBase* const parent =
+        wxGetTopLevelParent(const_cast<wxWindow*>(static_cast<const wxWindow*>(this)));
 
     wxCHECK_MSG( parent, wxDefaultSize, wxS("Must have TLW parent") );
 
@@ -2929,10 +2932,10 @@ wxSize wxWindowBase::GetDlgUnitBase() const
     {
         // Default GUI font is used. This is the most common case, so
         // cache the results.
-        static wxSize s_defFontSize;
-        if ( s_defFontSize.x == 0 )
-            s_defFontSize = wxPrivate::GetAverageASCIILetterSize(*parent);
-        return s_defFontSize;
+        static wxPrivate::DpiDependentValue<wxSize> s_defFontSize;
+        if ( s_defFontSize.HasChanged(parent) )
+            s_defFontSize.SetAtNewDPI(wxPrivate::GetAverageASCIILetterSize(*parent));
+        return s_defFontSize.Get();
     }
     else
     {
@@ -2945,28 +2948,14 @@ wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    // NB: wxMulDivInt32() is used, because it correctly rounds the result
-
-    wxPoint pt2 = wxDefaultPosition;
-    if (pt.x != wxDefaultCoord)
-        pt2.x = wxMulDivInt32(pt.x, 4, base.x);
-    if (pt.y != wxDefaultCoord)
-        pt2.y = wxMulDivInt32(pt.y, 8, base.y);
-
-    return pt2;
+    return wxRescaleCoord(pt).From(base).To(4, 8);
 }
 
 wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    wxPoint pt2 = wxDefaultPosition;
-    if (pt.x != wxDefaultCoord)
-        pt2.x = wxMulDivInt32(pt.x, base.x, 4);
-    if (pt.y != wxDefaultCoord)
-        pt2.y = wxMulDivInt32(pt.y, base.y, 8);
-
-    return pt2;
+    return wxRescaleCoord(pt).From(4, 8).To(base);
 }
 
 // ----------------------------------------------------------------------------
@@ -3068,6 +3057,20 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 }
 
 #endif // wxUSE_MENUS
+
+bool wxWindowBase::WXSendContextMenuEvent(const wxPoint& posInScreenCoords)
+{
+    // When the mouse click happens in a subwindow of a composite control,
+    // the user-visible event should seem to originate from the main window
+    // and, notably, use its ID and not the (usually auto-generated and so
+    // not very useful) ID of the subwindow.
+    wxWindow* const mainWin = GetMainWindowOfCompositeControl();
+
+    wxContextMenuEvent
+        evtCtx(wxEVT_CONTEXT_MENU, mainWin->GetId(), posInScreenCoords);
+    evtCtx.SetEventObject(mainWin);
+    return mainWin->HandleWindowEvent(evtCtx);
+}
 
 // methods for drawing the sizers in a visible way: this is currently only
 // enabled for "full debug" builds with wxDEBUG_LEVEL==2 as it doesn't work
@@ -3394,9 +3397,11 @@ static void DoNotifyWindowAboutCaptureLost(wxWindow *win)
 void wxWindowBase::NotifyCaptureLost()
 {
     // don't do anything if capture lost was expected, i.e. resulted from
-    // a wx call to ReleaseMouse or CaptureMouse:
-    wxRecursionGuard guard(wxMouseCapture::changing);
-    if ( guard.IsInside() )
+    // a wx call to ReleaseMouse or CaptureMouse (but note that we must not
+    // change the "changing" flag here as the user code is expected to call
+    // ReleaseMouse() from its wxMouseCaptureLostEvent handler and this
+    // shouldn't assert because the capture is already "changing")
+    if ( wxMouseCapture::changing )
         return;
 
     // if the capture was lost unexpectedly, notify every window that has
@@ -3485,7 +3490,7 @@ wxWindow *wxWindowBase::DoGetSibling(WindowOrder order) const
                     wxT("GetPrev/NextSibling() don't work for TLWs!") );
 
     wxWindowList& siblings = GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator i = siblings.Find((wxWindow *)this);
+    wxWindowList::compatibility_iterator i = siblings.Find(static_cast<const wxWindow*>(this));
     wxCHECK_MSG( i, NULL, wxT("window not a child of its parent?") );
 
     if ( order == OrderBefore )
@@ -3647,8 +3652,9 @@ void wxWindowBase::DragAcceptFiles(bool accept)
 // global functions
 // ----------------------------------------------------------------------------
 
-wxWindow* wxGetTopLevelParent(wxWindow *win)
+wxWindow* wxGetTopLevelParent(wxWindowBase *win_)
 {
+    wxWindow* win = static_cast<wxWindow *>(win_);
     while ( win && !win->IsTopLevel() )
          win = win->GetParent();
 

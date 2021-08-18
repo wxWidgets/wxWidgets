@@ -14,9 +14,6 @@
 
 #include  "wx/wxprec.h"
 
-#ifdef    __BORLANDC__
-    #pragma hdrstop
-#endif  //__BORLANDC__
 
 #if !wxUSE_FILE || !wxUSE_TEXTBUFFER
     #undef wxUSE_TEXTFILE

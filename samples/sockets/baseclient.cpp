@@ -677,8 +677,8 @@ wxThread::ExitCode ThreadWorker::Entry()
     } else {
         //wxLogMessage("ThreadWorker: Connected. Sending %d bytes of data",m_outsize);
         etype = WorkerEvent::SENDING;
-        WorkerEvent e(this,etype);
-        wxGetApp().AddPendingEvent(e);
+        WorkerEvent e1(this,etype);
+        wxGetApp().AddPendingEvent(e1);
         int to_process = m_outsize;
         do {
             m_clientSocket->Write(m_outbuf,m_outsize);
@@ -692,8 +692,8 @@ wxThread::ExitCode ThreadWorker::Entry()
 
         if (!failed) {
             etype = WorkerEvent::RECEIVING;
-            WorkerEvent e(this,etype);
-            wxGetApp().AddPendingEvent(e);
+            WorkerEvent e2(this,etype);
+            wxGetApp().AddPendingEvent(e2);
             to_process = m_insize;
             do {
                 m_clientSocket->Read(m_inbuf,m_insize);

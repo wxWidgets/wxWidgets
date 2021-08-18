@@ -8,6 +8,8 @@
 #############################################################################
 
 if(wxUSE_EXPAT STREQUAL "builtin")
+    # TODO: implement building expat via its CMake file, using
+    # add_subdirectory or ExternalProject_Add
     wx_add_builtin_library(wxexpat
         src/expat/expat/lib/xmlparse.c
         src/expat/expat/lib/xmlrole.c

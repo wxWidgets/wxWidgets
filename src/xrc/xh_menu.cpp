@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_MENUS
 
@@ -47,12 +44,14 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
         CreateChildren(menu, true/*only this handler*/);
         m_insideMenu = oldins;
 
+#if wxUSE_MENUBAR
         wxMenuBar *p_bar = wxDynamicCast(m_parent, wxMenuBar);
         if (p_bar)
         {
             p_bar->Append(menu, title);
         }
         else
+#endif // wxUSE_MENUBAR
         {
             wxMenu *p_menu = wxDynamicCast(m_parent, wxMenu);
             if (p_menu)
@@ -145,6 +144,8 @@ bool wxMenuXmlHandler::CanHandle(wxXmlNode *node)
            );
 }
 
+#if wxUSE_MENUBAR
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxMenuBarXmlHandler, wxXmlResourceHandler);
 
 wxMenuBarXmlHandler::wxMenuBarXmlHandler() : wxXmlResourceHandler()
@@ -183,5 +184,7 @@ bool wxMenuBarXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxMenuBar"));
 }
+
+#endif // wxUSE_MENUBAR
 
 #endif // wxUSE_XRC && wxUSE_MENUS

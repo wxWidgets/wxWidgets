@@ -95,8 +95,8 @@ public:
     using this control instead of just creating and managing the buttons
     directly is that the correct buttons and layout for the current platform
     are used by this class. E.g. the buttons are positioned under the list
-    control under OS X and GTK+ but to its right under MSW and the buttons
-    themselves use system-specific bitmaps under OS X.
+    control under macOS and GTK+ but to its right under MSW and the buttons
+    themselves use system-specific bitmaps under macOS.
 
     This class is always used in conjunction with wxAddRemoveAdaptor which is
     used to actually add items to or remove them from the control containing

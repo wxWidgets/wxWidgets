@@ -97,7 +97,7 @@ public:
     virtual wxSize GetPPI() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
 
-    // overrriden here for RTL
+    // overridden here for RTL
     virtual void SetDeviceOrigin( wxCoord x, wxCoord y ) wxOVERRIDE;
     virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp ) wxOVERRIDE;
 

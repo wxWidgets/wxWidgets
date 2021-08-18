@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_INICONF
 
@@ -455,7 +452,7 @@ bool wxIniConfig::DeleteAll()
   strFile << '\\' << m_strLocalFilename;
 
   if ( wxFile::Exists(strFile) && !wxRemoveFile(strFile) ) {
-    wxLogSysError(_("Can't delete the INI file '%s'"), strFile.c_str());
+    wxLogSysError(_("Can't delete the INI file '%s'"), strFile);
     return false;
   }
 

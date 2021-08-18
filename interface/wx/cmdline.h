@@ -224,7 +224,7 @@ struct wxCmdLineEntryDesc
 class wxCmdLineArg
 {
 public:
-    virtual ~wxCmdLineArg() {}
+    virtual ~wxCmdLineArg();
 
     /**
         Returns the command line argument value as a wxDateTime.

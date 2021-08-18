@@ -360,7 +360,7 @@ public:
     // ------------------
 
     // get the dimensions of the border: rect.x/y contain the width/height of
-    // the left/top side, width/heigh - of the right/bottom one
+    // the left/top side, width/height - of the right/bottom one
     virtual wxRect GetBorderDimensions(wxBorder border) const = 0;
 
     // the scrollbars may be drawn either inside the window border or outside
@@ -397,7 +397,7 @@ public:
 
 #if wxUSE_TEXTCTRL
     // convert between text rectangle and client rectangle for text controls:
-    // the former is typicall smaller to leave margins around text
+    // the former is typically smaller to leave margins around text
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
                                     const wxRect& rectText) const = 0;
 

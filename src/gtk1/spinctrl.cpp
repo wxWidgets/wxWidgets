@@ -21,6 +21,8 @@
     #include "wx/crt.h"
 #endif
 
+#include "wx/private/spinctrl.h"
+
 #include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
@@ -69,7 +71,7 @@ wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
     gtk_entry_set_text
     (
         GTK_ENTRY(spin),
-        wxPrivate::wxSpinCtrlFormatAsHex(val, win->GetMax()).utf8_str()
+        wxSpinCtrlImpl::FormatAsHex(val, win->GetMax()).utf8_str()
     );
 
     return TRUE;
@@ -199,6 +201,13 @@ int wxSpinCtrl::GetMax() const
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
     return (int)ceil(m_adjust->upper);
+}
+
+wxString wxSpinCtrl::GetTextValue() const
+{
+    wxCHECK_MSG(m_widget, wxEmptyString, "invalid spin button");
+
+    return gtk_entry_get_text( GTK_ENTRY(m_widget) );
 }
 
 int wxSpinCtrl::GetValue() const

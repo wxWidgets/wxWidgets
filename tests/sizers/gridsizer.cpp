@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -28,23 +25,11 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class GridSizerTestCase : public CppUnit::TestCase
+class GridSizerTestCase
 {
-public:
-    GridSizerTestCase() { }
-
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( GridSizerTestCase );
-        CPPUNIT_TEST( Expand );
-        CPPUNIT_TEST( IncompatibleFlags );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Expand();
-    void IncompatibleFlags();
-
+protected:
+    GridSizerTestCase();
+    ~GridSizerTestCase();
     // Clear the current sizer contents and add the specified windows to it,
     // using the same flags for all of them.
     void SetChildren(const wxVector<wxWindow*>& children,
@@ -56,17 +41,11 @@ private:
     wxDECLARE_NO_COPY_CLASS(GridSizerTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( GridSizerTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GridSizerTestCase, "GridSizerTestCase" );
-
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
 
-void GridSizerTestCase::setUp()
+GridSizerTestCase::GridSizerTestCase()
 {
     m_win = new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY);
     m_win->SetClientSize(127, 35);
@@ -75,7 +54,7 @@ void GridSizerTestCase::setUp()
     m_win->SetSizer(m_sizer);
 }
 
-void GridSizerTestCase::tearDown()
+GridSizerTestCase::~GridSizerTestCase()
 {
     delete m_win;
     m_win = NULL;
@@ -105,7 +84,9 @@ void GridSizerTestCase::SetChildren(const wxVector<wxWindow*>& children,
 // tests themselves
 // ----------------------------------------------------------------------------
 
-void GridSizerTestCase::Expand()
+TEST_CASE_METHOD(GridSizerTestCase,
+                 "wxGridSizer::Layout",
+                 "[grid-sizer][sizer]")
 {
     const wxSize sizeTotal = m_win->GetClientSize();
     const wxSize sizeChild(sizeTotal.x / 4, sizeTotal.y / 4);
@@ -123,43 +104,74 @@ void GridSizerTestCase::Expand()
     m_sizer->AddGrowableCol(1);
 
     // Without Expand() windows have their initial size.
-    SetChildren(children, wxSizerFlags());
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[0]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[1]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[2]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[3]->GetSize() );
+    SECTION("No flags")
+    {
+        SetChildren(children, wxSizerFlags());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == sizeChild );
+        CHECK( children[2]->GetSize() == sizeChild );
+        CHECK( children[3]->GetSize() == sizeChild );
+    }
 
     // With just expand, they expand to fill the entire column and the row
     // containing them (which may or not expand on its own).
-    SetChildren(children, wxSizerFlags().Expand());
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[0]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeRest.x, sizeChild.y),
-                          children[1]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeChild.x, sizeRest.y),
-                          children[2]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( sizeRest, children[3]->GetSize() );
+    SECTION("Expand")
+    {
+        SetChildren(children, wxSizerFlags().Expand());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
+        CHECK( children[2]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+        CHECK( children[3]->GetSize() == sizeRest );
+    }
 
     // With expand and another alignment flag, they should expand only in the
     // direction in which the alignment is not given.
-    SetChildren(children, wxSizerFlags().Expand().CentreVertical());
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[0]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeRest.x, sizeChild.y),
-                          children[1]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[2]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeRest.x, sizeChild.y),
-                          children[3]->GetSize() );
+    SECTION("Expand and center vertically")
+    {
+        SetChildren(children, wxSizerFlags().Expand().CentreVertical());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
+        CHECK( children[2]->GetSize() == sizeChild );
+        CHECK( children[3]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
+    }
 
     // Same as above but mirrored.
-    SetChildren(children, wxSizerFlags().Expand().CentreHorizontal());
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[0]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( sizeChild, children[1]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeChild.x, sizeRest.y),
-                          children[2]->GetSize() );
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeChild.x, sizeRest.y),
-                          children[3]->GetSize() );
+    SECTION("Expand and center horizontally")
+    {
+        SetChildren(children, wxSizerFlags().Expand().CentreHorizontal());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == sizeChild );
+        CHECK( children[2]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+        CHECK( children[3]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+    }
+
+    // Test alignment flag too.
+    SECTION("Right align")
+    {
+        SetChildren(children, wxSizerFlags().Right());
+        CHECK( children[0]->GetPosition() == wxPoint(         0,           0) );
+        CHECK( children[1]->GetPosition() == wxPoint(sizeRest.x,           0) );
+        CHECK( children[2]->GetPosition() == wxPoint(         0, sizeChild.y) );
+        CHECK( children[3]->GetPosition() == wxPoint(sizeRest.x, sizeChild.y) );
+    }
+
+    // Also test combining centering in one direction and aligning in another.
+    SECTION("Right align and center vertically")
+    {
+        SetChildren(children, wxSizerFlags().Right().CentreVertical());
+
+        const int yMid = sizeChild.y + (sizeRest.y - sizeChild.y) / 2;
+
+        CHECK( children[0]->GetPosition() == wxPoint(         0,    0) );
+        CHECK( children[1]->GetPosition() == wxPoint(sizeRest.x,    0) );
+        CHECK( children[2]->GetPosition() == wxPoint(         0, yMid) );
+        CHECK( children[3]->GetPosition() == wxPoint(sizeRest.x, yMid) );
+    }
 }
 
-void GridSizerTestCase::IncompatibleFlags()
+TEST_CASE_METHOD(GridSizerTestCase,
+                 "wxGridSizer::IncompatibleFlags",
+                 "[grid-sizer][sizer]")
 {
     WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE
     (

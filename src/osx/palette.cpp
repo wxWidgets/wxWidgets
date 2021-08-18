@@ -122,7 +122,7 @@ bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsi
     if ( !m_refData )
         return false;
 
-    if (index < 0 || index >= M_PALETTEDATA->m_count)
+    if ( index < 0 || index >= M_PALETTEDATA->m_count )
         return false;
 
     const wxColour& col = M_PALETTEDATA->m_palette[index] ;

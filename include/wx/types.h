@@ -247,10 +247,6 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "I64"
-#elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
-    #define wxLongLong_t __int64
-    #define wxLongLongSuffix i64
-    #define wxLongLongFmtSpec "L"
 #elif defined(__MINGW32__) && \
     (defined(__USE_MINGW_ANSI_STDIO) && (__USE_MINGW_ANSI_STDIO != 1))
     #define wxLongLong_t long long
@@ -277,17 +273,8 @@ typedef wxUint32 wxDword;
         wxLL() and wxULL() macros allow to define 64 bit constants in a
         portable way.
      */
-    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-        #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
-        #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
-    #else
-        /*
-            Currently only Borland compiler has broken concatenation operator
-            and this compiler is known to use [u]i64 suffix.
-         */
-        #define wxLL(x) wxAPPEND_i64(x)
-        #define wxULL(x) wxAPPEND_ui64(x)
-    #endif
+    #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
+    #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
 
     typedef wxLongLong_t wxInt64;
     typedef wxULongLong_t wxUint64;
@@ -360,7 +347,7 @@ typedef wxUint32 wxDword;
     each time we cast it to a pointer or a handle (which results in hundreds
     of warnings as Win32 API often passes pointers in them)
  */
-#ifdef __VISUALC__
+#if defined(__VISUALC__) && (_MSC_VER < 1800)
     #define wxW64 __w64
 #else
     #define wxW64

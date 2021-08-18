@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COMBOCTRL
 
@@ -122,9 +119,6 @@ bool wxComboCtrl::Create(wxWindow *parent,
 
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
-
-    // Add keyboard input handlers for main control and textctrl
-    InstallInputHandlers();
 
     // SetInitialSize should be called last
     SetInitialSize(size);

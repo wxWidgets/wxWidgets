@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ACTIVEX
 
@@ -768,7 +765,7 @@ namespace
 const int invalid_entry_marker = 0;
 }
 
-wxVariant wxActiveXEvents::ms_invalidEntryMarker((void*)&invalid_entry_marker);
+wxVariant wxActiveXEvents::ms_invalidEntryMarker(const_cast<void*>(static_cast<const void*>(&invalid_entry_marker)));
 
 size_t wxActiveXEvent::ParamCount() const
 {

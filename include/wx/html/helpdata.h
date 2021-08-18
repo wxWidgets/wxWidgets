@@ -138,10 +138,10 @@ public:
                        bool case_sensitive, bool whole_words_only,
                        const wxString& book = wxEmptyString);
     bool Search();  // do the next iteration
-    bool IsActive() { return m_Active; }
-    int GetCurIndex() { return m_CurIndex; }
-    int GetMaxIndex() { return m_MaxIndex; }
-    const wxString& GetName() { return m_Name; }
+    bool IsActive() const { return m_Active; }
+    int GetCurIndex() const { return m_CurIndex; }
+    int GetMaxIndex() const { return m_MaxIndex; }
+    const wxString& GetName() const { return m_Name; }
 
     const wxHtmlHelpDataItem *GetCurItem() const { return m_CurItem; }
 
@@ -203,7 +203,7 @@ protected:
     wxHtmlBookRecArray m_bookRecords;
 
     wxHtmlHelpDataItems m_contents; // list of all available books and pages
-    wxHtmlHelpDataItems m_index; // list of index itesm
+    wxHtmlHelpDataItems m_index; // list of index items
 
 protected:
     // Imports .hhp files (MS HTML Help Workshop)

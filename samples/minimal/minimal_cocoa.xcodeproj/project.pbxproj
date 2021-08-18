@@ -132,9 +132,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		405B1ABF10EF253300676938 /* static */ = {
+		405B1ABF10EF253300676938 /* app-static */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "static" */;
+			buildConfigurationList = 405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "app-static" */;
 			buildPhases = (
 				405B1AC210EF253300676938 /* Sources */,
 				405B1AC410EF253300676938 /* Frameworks */,
@@ -144,15 +144,15 @@
 			dependencies = (
 				405B1ADE10EF25B100676938 /* PBXTargetDependency */,
 			);
-			name = static;
+			name = "app-static";
 			productInstallPath = "$(HOME)/Applications";
 			productName = minimal_cocoa;
 			productReference = 405B1ACB10EF253300676938 /* minimal_cocoa.app */;
 			productType = "com.apple.product-type.application";
 		};
-		8D1107260486CEB800E47090 /* dynamic */ = {
+		8D1107260486CEB800E47090 /* app-dynamic */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "dynamic" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "app-dynamic" */;
 			buildPhases = (
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
@@ -163,7 +163,7 @@
 			dependencies = (
 				405B1A9110EF207D00676938 /* PBXTargetDependency */,
 			);
-			name = dynamic;
+			name = "app-dynamic";
 			productInstallPath = "$(HOME)/Applications";
 			productName = minimal_cocoa;
 			productReference = 8D1107320486CEB800E47090 /* minimal_cocoa.app */;
@@ -174,6 +174,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "minimal_cocoa" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -194,8 +196,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* dynamic */,
-				405B1ABF10EF253300676938 /* static */,
+				8D1107260486CEB800E47090 /* app-dynamic */,
+				405B1ABF10EF253300676938 /* app-static */,
 			);
 		};
 /* End PBXProject section */
@@ -308,7 +310,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "static" */ = {
+		405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "app-static" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				405B1AC910EF253300676938 /* Debug */,
@@ -317,7 +319,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "dynamic" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "app-dynamic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,

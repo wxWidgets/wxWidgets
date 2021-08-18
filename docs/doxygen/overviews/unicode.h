@@ -182,7 +182,7 @@ aware of the potential problems covered by the following section.
 wxWidgets uses the system @c wchar_t in wxString implementation by default
 under all systems. Thus, under Microsoft Windows, UCS-2 (simplified version of
 UTF-16 without support for surrogate characters) is used as @c wchar_t is 2
-bytes on this platform. Under Unix systems, including OS X, UCS-4 (also
+bytes on this platform. Under Unix systems, including macOS, UCS-4 (also
 known as UTF-32) is used by default, however it is also possible to build
 wxWidgets to use UTF-8 internally by passing @c \--enable-utf8 option to
 configure.
@@ -254,6 +254,11 @@ n:
    not pass it to functions expecting @c char* or @c wchar_t*. Consider using
    string iterators instead if possible or replace this expression with
    @code s.c_str() + n @endcode otherwise.
+
+ - When using C++11 range-based for loop, the natural construct for iterating
+   over wxString @code for ( auto& ch: s ) @endcode doesn't compile because of
+   the unusual iterator type and @code for ( wxUniCharRef ch: s ) @endcode
+   needs to be used instead.
 
 Another class of problems is related to the fact that the value returned by
 @c c_str() itself is also not just a pointer to a buffer but a value of helper

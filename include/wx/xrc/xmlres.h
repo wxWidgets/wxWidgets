@@ -131,6 +131,13 @@ public:
     // Loads all XRC files from a directory.
     bool LoadAllFiles(const wxString& dirname);
 
+    // Loads resources from the given XML document, taking ownership of it.
+    //
+    // The name argument is only used to Unload() the document later here and
+    // doesn't need to be an existing filename at all (but should be unique if
+    // specified, otherwise it's just synthesized internally).
+    bool LoadDocument(wxXmlDocument* doc, const wxString& name = wxString());
+
     // Unload resource from the given XML file (wildcards not allowed)
     bool Unload(const wxString& filename);
 
@@ -250,7 +257,7 @@ public:
     // wxWindow::NewControlId(). Otherwise value_if_not_found is used.
     // Macro XRCID(name) is provided for convenient use in event tables.
     static int GetXRCID(const wxString& str_id, int value_if_not_found = wxID_NONE)
-        { return DoGetXRCID(str_id.mb_str(), value_if_not_found); }
+        { return DoGetXRCID(str_id.utf8_str(), value_if_not_found); }
 
     // version for internal use only
     static int DoGetXRCID(const char *str_id, int value_if_not_found = wxID_NONE);
@@ -319,6 +326,9 @@ protected:
     // Load the contents of a single file and returns its contents as a new
     // wxXmlDocument (which will be owned by caller) on success or NULL.
     wxXmlDocument *DoLoadFile(const wxString& file);
+
+    // Load XRC from the given document and returns true on success.
+    bool DoLoadDocument(const wxXmlDocument& doc);
 
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
@@ -565,34 +575,36 @@ public:
 
     // Gets a bitmap.
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets a bitmap from an XmlNode.
     wxBitmap GetBitmap(const wxXmlNode* node,
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon.
     wxIcon GetIcon(const wxString& param = wxT("icon"),
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon from an XmlNode.
     wxIcon GetIcon(const wxXmlNode* node,
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon bundle.
     wxIconBundle GetIconBundle(const wxString& param,
-                               const wxArtClient& defaultArtClient = wxART_OTHER) wxOVERRIDE;
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER)) wxOVERRIDE;
 
     // Gets an image list.
     wxImageList *GetImageList(const wxString& param = wxT("imagelist")) wxOVERRIDE;
 
 #if wxUSE_ANIMATIONCTRL
-    // Gets an animation.
-    wxAnimation* GetAnimation(const wxString& param = wxT("animation")) wxOVERRIDE;
+    // Gets an animation creating it using the provided control (so that it
+    // will be compatible with it) if any.
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                              wxAnimationCtrlBase* ctrl = NULL) wxOVERRIDE;
 #endif
 
     // Gets a font.
@@ -603,7 +615,7 @@ public:
 
     // Gets a file path from the given node, expanding environment variables in
     // it if wxXRC_USE_ENVVARS is in use.
-    wxString GetFilePath(const wxXmlNode* node);
+    wxString GetFilePath(const wxXmlNode* node) wxOVERRIDE;
 
     // Returns the window associated with the handler (may be NULL).
     wxWindow* GetParentAsWindow() const { return m_handler->GetParentAsWindow(); }

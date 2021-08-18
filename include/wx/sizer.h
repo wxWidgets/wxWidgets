@@ -69,14 +69,26 @@ public:
         return *this;
     }
 
-    // some shortcuts for Align()
+    // this is just a shortcut for Align()
     wxSizerFlags& Centre() { return Align(wxALIGN_CENTRE); }
     wxSizerFlags& Center() { return Centre(); }
 
-    wxSizerFlags& CentreVertical() { return Align(wxALIGN_CENTRE_VERTICAL); }
+    // but all the remaining methods turn on the corresponding alignment flag
+    // without affecting the existing ones
+    wxSizerFlags& CentreVertical()
+    {
+        m_flags = (m_flags & ~wxALIGN_BOTTOM) | wxALIGN_CENTRE_VERTICAL;
+        return *this;
+    }
+
     wxSizerFlags& CenterVertical() { return CentreVertical(); }
 
-    wxSizerFlags& CentreHorizontal() { return Align(wxALIGN_CENTRE_HORIZONTAL); }
+    wxSizerFlags& CentreHorizontal()
+    {
+        m_flags = (m_flags & ~wxALIGN_RIGHT) | wxALIGN_CENTRE_HORIZONTAL;
+        return *this;
+    }
+
     wxSizerFlags& CenterHorizontal() { return CentreHorizontal(); }
 
     wxSizerFlags& Top()
@@ -107,6 +119,11 @@ public:
     // default border size used by Border() below
     static int GetDefaultBorder()
     {
+        return wxRound(GetDefaultBorderFractional());
+    }
+
+    static float GetDefaultBorderFractional()
+    {
 #if wxUSE_BORDER_BY_DEFAULT
     #ifdef __WXGTK20__
         // GNOME HIG says to use 6px as the base unit:
@@ -120,13 +137,7 @@ public:
         // current DPI, do it once (and cache the result) in another function.
         #define wxNEEDS_BORDER_IN_PX
 
-        // We don't react to dynamic DPI changes, so we can cache the values of
-        // the border in on-screen pixels after computing it once. This
-        // could/should change in the future.
-        if ( !ms_defaultBorderInPx )
-            ms_defaultBorderInPx = DoGetDefaultBorderInPx();
-
-        return ms_defaultBorderInPx;
+        return DoGetDefaultBorderInPx();
     #endif
 #else
         return 0;
@@ -151,7 +162,7 @@ public:
     wxSizerFlags& Border(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, GetDefaultBorder());
+        return Border(direction, wxRound(GetDefaultBorderFractional()));
 #else
         // no borders by default on limited size screen
         wxUnusedVar(direction);
@@ -163,7 +174,7 @@ public:
     wxSizerFlags& DoubleBorder(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, 2*GetDefaultBorder());
+        return Border(direction, wxRound(2 * GetDefaultBorderFractional()));
 #else
         wxUnusedVar(direction);
 
@@ -174,7 +185,7 @@ public:
     wxSizerFlags& TripleBorder(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, 3*GetDefaultBorder());
+        return Border(direction, wxRound(3 * GetDefaultBorderFractional()));
 #else
         wxUnusedVar(direction);
 
@@ -185,7 +196,7 @@ public:
     wxSizerFlags& HorzBorder()
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(wxLEFT | wxRIGHT, GetDefaultBorder());
+        return Border(wxLEFT | wxRIGHT, wxRound(GetDefaultBorderFractional()));
 #else
         return *this;
 #endif
@@ -194,7 +205,7 @@ public:
     wxSizerFlags& DoubleHorzBorder()
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(wxLEFT | wxRIGHT, 2*GetDefaultBorder());
+        return Border(wxLEFT | wxRIGHT, wxRound(2 * GetDefaultBorderFractional()));
 #else
         return *this;
 #endif
@@ -227,11 +238,12 @@ public:
     int GetFlags() const { return m_flags; }
     int GetBorderInPixels() const { return m_borderInPixels; }
 
+    // Disablee sizer flags (in)consistency asserts.
+    static void DisableConsistencyChecks();
+
 private:
 #ifdef wxNEEDS_BORDER_IN_PX
-    static int DoGetDefaultBorderInPx();
-
-    static int ms_defaultBorderInPx;
+    static float DoGetDefaultBorderInPx();
 #endif // wxNEEDS_BORDER_IN_PX
 
     int m_proportion;
@@ -323,6 +335,10 @@ public:
 
     // Enable deleting the SizerItem without destroying the contained sizer.
     void DetachSizer() { m_sizer = NULL; }
+
+    // Enable deleting the SizerItem without resetting the sizer in the
+    // contained window.
+    void DetachWindow() { m_window = NULL; m_kind = Item_None; }
 
     virtual wxSize GetSize() const;
     virtual wxSize CalcMin();

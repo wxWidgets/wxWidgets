@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ZIPSTREAM
 
@@ -251,13 +248,11 @@ wxZipHeader::wxZipHeader(const char* data, size_t size)
 
 inline wxUint8 wxZipHeader::Read8()
 {
-    wxASSERT(m_pos < m_size);
     return m_data[m_pos++];
 }
 
 inline wxUint16 wxZipHeader::Read16()
 {
-    wxASSERT(m_pos + 2 <= m_size);
     wxUint16 n = CrackUint16(m_data + m_pos);
     m_pos += 2;
     return n;
@@ -265,7 +260,6 @@ inline wxUint16 wxZipHeader::Read16()
 
 inline wxUint32 wxZipHeader::Read32()
 {
-    wxASSERT(m_pos + 4 <= m_size);
     wxUint32 n = CrackUint32(m_data + m_pos);
     m_pos += 4;
     return n;
@@ -273,7 +267,6 @@ inline wxUint32 wxZipHeader::Read32()
 
 inline wxUint64 wxZipHeader::Read64()
 {
-    wxASSERT(m_pos + 8 <= m_size);
     wxUint64 n = CrackUint64(m_data + m_pos);
     m_pos += 8;
     return n;
@@ -1542,6 +1535,8 @@ bool wxZipEndRec::Read(wxInputStream& stream, wxMBConv& conv)
         if (stream.SeekI(z64EndOffset) == wxInvalidOffset)
             return false;
         wxZipHeader dsEnd(stream, Z64_END_SIZE);
+        if ( !dsEnd )
+            return false;
         if ( dsEnd.Read32() != Z64_END_MAGIC ||
             dsEnd.Read64() < Z64_END_SIZE - 12 ) // Check record size
             return false;
@@ -1854,8 +1849,20 @@ wxStreamError wxZipInputStream::ReadCentral()
     m_position += size;
     m_signature = ReadSignature();
 
-    if (m_offsetAdjustment)
-        m_entry.SetOffset(m_entry.GetOffset() + m_offsetAdjustment);
+    if (m_offsetAdjustment) {
+        // Offset read from the stream is 4 bytes independently of the
+        // platform, but it's not clear if it can become greater than max
+        // 32-bit value after adjustment. For now consider that it can't.
+        wxFileOffset ofs = wxUint32(m_entry.GetOffset());
+        ofs += m_offsetAdjustment;
+        if (ofs > wxUINT32_MAX) {
+            m_signature = 0;
+            return wxSTREAM_READ_ERROR;
+        }
+
+        m_entry.SetOffset(ofs);
+    }
+
     m_entry.SetKey(m_entry.GetOffset());
 
     return wxSTREAM_NO_ERROR;
@@ -2641,7 +2648,7 @@ size_t wxZipOutputStream::OnSysWrite(const void *buffer, size_t size)
 
     if (m_comp->Write(buffer, size).LastWrite() != size)
         m_lasterror = wxSTREAM_WRITE_ERROR;
-    m_crcAccumulator = crc32(m_crcAccumulator, (Byte*)buffer, size);
+    m_crcAccumulator = crc32(m_crcAccumulator, static_cast<const Byte*>(buffer), size);
     m_entrySize += m_comp->LastWrite();
 
     return m_comp->LastWrite();

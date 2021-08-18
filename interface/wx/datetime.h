@@ -274,7 +274,7 @@ public:
 
         This struct is analogous to standard C <code>struct tm</code> and uses
         the same, not always immediately obvious, conventions for its members:
-        notably its mon and mday fields count from 0 while yday counts from 1.
+        notably its mon and yday fields count from 0 while mday counts from 1.
      */
     struct Tm
     {
@@ -489,7 +489,7 @@ public:
 
         Here are the trivial accessors. Other functions, which might have to
         perform some more complicated calculations to find the answer are under
-        the "Date Arithmetics" section.
+        the "Date Arithmetic" section.
     */
     //@{
 
@@ -738,10 +738,10 @@ public:
 
 
     /**
-        @name Date Arithmetics
+        @name Date Arithmetic
 
         These functions carry out
-        @ref overview_datetime_arithmetics "arithmetics" on the wxDateTime
+        @ref overview_datetime_arithmetics "arithmetic" on the wxDateTime
         objects. As explained in the overview, either wxTimeSpan or wxDateSpan
         may be added to wxDateTime, hence all functions are overloaded to
         accept both arguments.
@@ -1527,7 +1527,7 @@ public:
     static bool IsWestEuropeanCountry(Country country = Country_Default);
 
     /**
-        Returns the object corresponding to the current time.
+        Returns the object corresponding to the current time in local time zone.
 
         Example:
 
@@ -1572,11 +1572,11 @@ public:
     static wxDateTime Today();
 
     /**
-        Returns the object corresponding to the current UTC time including the
+        Returns the object corresponding to the current time including the
         milliseconds.
 
-        Notice that unlike Now(), this method creates a wxDateTime object
-        corresponding to UTC, not local, time.
+        Like Now(), this method creates the wxDateTime object corresponding to
+        the current moment in local time.
 
         @see Now(), wxGetUTCTimeMillis()
     */

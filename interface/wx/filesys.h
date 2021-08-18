@@ -493,7 +493,7 @@ public:
 
         Use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
-    wxFileInputStream(const wxString& filename, int flags = 0);
+    wxFSInputStream(const wxString& filename, int flags = 0);
 
     /**
         Returns @true if the stream is initialized and ready.

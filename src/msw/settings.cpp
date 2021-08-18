@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/settings.h"
 
@@ -150,7 +147,7 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info(lf);
+            wxNativeFontInfo info(lf, NULL);
             font.Create(info);
         }
         else
@@ -182,17 +179,9 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // for most (simple) controls, e.g. buttons and such but other
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
-            const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-            wxNativeFontInfo
-                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont);
-
-            // wxNativeFontInfo constructor calculates the pointSize using the
-            // main screen DPI. But lfHeight is based on the window DPI.
-            if ( win )
-            {
-                info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
-                                     info.lf.lfHeight, win->GetDPI().y);
-            }
+            const wxWindow* win = wxApp::GetMainTopWindow();
+            const wxNativeFontInfo
+                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
 
             gs_fontDefault = new wxFont(info);
         }
@@ -348,7 +337,7 @@ extern wxFont wxGetCCDefaultFont()
     // font which is also used for the icon titles and not the stock default
     // GUI font
     LOGFONT lf;
-    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxWindow* win = wxApp::GetMainTopWindow();
     if ( wxSystemParametersInfo
            (
                 SPI_GETICONTITLELOGFONT,
@@ -358,7 +347,7 @@ extern wxFont wxGetCCDefaultFont()
                 win
            ) )
     {
-        return wxFont(lf);
+        return wxFont(wxNativeFontInfo(lf, win));
     }
     else
     {

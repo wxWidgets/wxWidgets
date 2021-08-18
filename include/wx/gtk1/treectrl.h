@@ -129,7 +129,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = "wxTreeCtrl") {
+             const wxString& name = wxASCII_STR("wxTreeCtrl")) {
       Create(parent, id, pos, size, style, validator, name);
   }
 
@@ -140,7 +140,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "wxTreeCtrl");
+                const wxString& name = wxASCII_STR("wxTreeCtrl"));
 
     // accessors
     // ---------
@@ -317,7 +317,7 @@ public:
 
         // sort the children of this item using the specified callback function
         // (it should return -1, 0 or +1 as usual), if it's not specified
-        // alphabetical comparaison is performed.
+        // alphabetical comparison is performed.
         //
         // NB: this function is not reentrant!
     void SortChildren(const wxTreeItemId& item,

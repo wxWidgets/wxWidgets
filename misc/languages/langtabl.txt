@@ -63,6 +63,7 @@ wxLANGUAGE_ENGLISH_CANADA              en_CA  LANG_ENGLISH     SUBLANG_ENGLISH_C
 wxLANGUAGE_ENGLISH_CARIBBEAN           en_CB  LANG_ENGLISH     SUBLANG_ENGLISH_CARIBBEAN           LTR    "English (Caribbean)"
 wxLANGUAGE_ENGLISH_DENMARK             en_DK  -                -                                   LTR    "English (Denmark)"
 wxLANGUAGE_ENGLISH_EIRE                en_IE  LANG_ENGLISH     SUBLANG_ENGLISH_EIRE                LTR    "English (Eire)"
+wxLANGUAGE_ENGLISH_ISRAEL              en_IL  -                -                                   LTR    "English (Israel)"
 wxLANGUAGE_ENGLISH_JAMAICA             en_JM  LANG_ENGLISH     SUBLANG_ENGLISH_JAMAICA             LTR    "English (Jamaica)"
 wxLANGUAGE_ENGLISH_NEW_ZEALAND         en_NZ  LANG_ENGLISH     SUBLANG_ENGLISH_NZ                  LTR    "English (New Zealand)"
 wxLANGUAGE_ENGLISH_PHILIPPINES         en_PH  LANG_ENGLISH     SUBLANG_ENGLISH_PHILIPPINES         LTR    "English (Philippines)"

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -596,7 +593,7 @@ bool GenerateFrameRTTICode(const wxString &inFileName, const wxString &outFileNa
 
     // header preamble
     tos <<
-        "#include \"wx/wxprec.h\" \n#ifdef __BORLANDC__\n#pragma hdrstop\n#endif\n#ifndef WX_PRECOMP\n#include \"wx/wx.h\" \n#endif\n\n";
+        "#include \"wx/wxprec.h\" \n#ifndef WX_PRECOMP\n#include \"wx/wx.h\" \n#endif\n\n";
     // add object includes
     tos.WriteString( headerincludes );
 

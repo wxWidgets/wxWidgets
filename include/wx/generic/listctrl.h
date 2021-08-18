@@ -32,8 +32,9 @@ class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxNavigationEnabled<wxListCtrlBase>,
                                           public wxScrollHelper
 {
-public:
+    typedef wxNavigationEnabled<wxListCtrlBase> BaseType;
 
+public:
     wxGenericListCtrl() : wxScrollHelper(this)
     {
         Init();
@@ -45,7 +46,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxListCtrlNameStr)
+                const wxString &name = wxASCII_STR(wxListCtrlNameStr))
             : wxScrollHelper(this)
     {
         Create(parent, winid, pos, size, style, validator, name);
@@ -61,12 +62,20 @@ public:
                  const wxSize &size = wxDefaultSize,
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString &name = wxListCtrlNameStr);
+                 const wxString &name = wxASCII_STR(wxListCtrlNameStr));
 
     bool GetColumn( int col, wxListItem& item ) const wxOVERRIDE;
     bool SetColumn( int col, const wxListItem& item ) wxOVERRIDE;
     int GetColumnWidth( int col ) const wxOVERRIDE;
     bool SetColumnWidth( int col, int width) wxOVERRIDE;
+
+    // Column ordering functions
+    int GetColumnOrder(int col) const wxOVERRIDE;
+    int GetColumnIndexFromOrder(int order) const wxOVERRIDE;
+
+    wxArrayInt GetColumnsOrder() const wxOVERRIDE;
+    bool SetColumnsOrder(const wxArrayInt& orders) wxOVERRIDE;
+
     int GetCountPerPage() const; // not the same in wxGLC as in Windows, I think
     wxRect GetViewRect() const;
 
@@ -86,7 +95,7 @@ public:
     bool GetSubItemRect( long item, long subItem, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
-    int GetItemCount() const;
+    int GetItemCount() const wxOVERRIDE;
     int GetColumnCount() const wxOVERRIDE;
     void SetItemSpacing( int spacing, bool isSmall = false );
     wxSize GetItemSpacing() const;
@@ -188,6 +197,8 @@ public:
     virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
     virtual bool SetCursor( const wxCursor &cursor ) wxOVERRIDE;
 
+    virtual void ExtendRulesAndAlternateColour(bool extend = true) wxOVERRIDE;
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
     virtual wxDropTarget *GetDropTarget() const wxOVERRIDE;
@@ -257,7 +268,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString &name = wxListCtrlNameStr)
+               const wxString &name = wxASCII_STR(wxListCtrlNameStr))
     : wxGenericListCtrl(parent, winid, pos, size, style, validator, name)
     {
     }

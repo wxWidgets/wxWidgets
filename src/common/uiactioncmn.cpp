@@ -74,10 +74,8 @@ bool wxUIActionSimulatorImpl::MouseClick(int button)
 
 bool wxUIActionSimulatorImpl::MouseDblClick(int button)
 {
-    MouseDown(button);
-    MouseUp(button);
-    MouseDown(button);
-    MouseUp(button);
+    MouseClick(button);
+    MouseClick(button);
 
     return true;
 }

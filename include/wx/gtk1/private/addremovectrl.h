@@ -68,7 +68,7 @@ private:
         // GTK UI guidelines recommend using "symbolic" versions of the icons
         // for these buttons, so try them first but fall back to the normal
         // ones if symbolic theme is not installed.
-        wxBitmap bmp = wxArtProvider::GetBitmap(name + "-symbolic", wxART_MENU);
+        wxBitmap bmp = wxArtProvider::GetBitmap(name + wxASCII_STR("-symbolic"), wxART_MENU);
         if ( !bmp.IsOk() )
             bmp = wxArtProvider::GetBitmap(name, wxART_MENU);
         return bmp;

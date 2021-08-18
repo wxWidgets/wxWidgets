@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 22 February 2017                                                    *
+# Date : 4 March 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 
@@ -12,35 +12,35 @@
 .suffixes : .cpp
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,__USE_STD_IOSTREAM=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)\
 	   /include=([],[-.src],[-.include],[-.lexlib])\
 	   /warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXMOTIF__=1)/name=(as_is,short)\
+CC_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)\
 	/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,__USE_STD_IOSTREAM=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)\
 	   /include=([],[-.src],[-.include],[-.lexlib])\
 	   /warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,__USE_STD_IOSTREAM=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)\
 	   /include=([],[-.src],[-.include],[-.lexlib])\
 	   /warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)\
+CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,WXBUILDING=1)/float=ieee/name=(as_is,short)\
 	/ieee=denorm/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,__USE_STD_IOSTREAM=1)/float=ieee\
+CXX_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)\
 	/include=([],[-.src],[-.include],[-.lexlib])\
 	/warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/include=([],[-.src],[-.include],[-.lexlib])
 .else
 CXX_DEFINE =

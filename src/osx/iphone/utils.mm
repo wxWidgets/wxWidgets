@@ -58,7 +58,7 @@
     return YES;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {	
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
     wxTheApp->OSXOnDidFinishLaunching();
 }
 

@@ -106,7 +106,7 @@ public:
         used for anything, but the wxMetafile object must still be destroyed by
         the application.
 
-        Below is a example of metafile, metafile device context and clipboard use
+        Below is an example of metafile, metafile device context and clipboard use
         from the @c hello.cpp example. Note the way the metafile dimensions
         are passed to the clipboard, making use of the device context's ability
         to keep track of the maximum extent of drawing commands.

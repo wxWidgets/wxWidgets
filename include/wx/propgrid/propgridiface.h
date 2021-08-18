@@ -27,7 +27,7 @@ class WXDLLIMPEXP_PROPGRID wxPGPropArgCls
 public:
     wxPGPropArgCls( const wxPGProperty* property )
     {
-        m_ptr.property = (wxPGProperty*) property;
+        m_ptr.property = const_cast<wxPGProperty*>(property);
         m_flags = IsProperty;
     }
     wxPGPropArgCls( const wxString& str )
@@ -540,7 +540,7 @@ public:
 
     // Hides or reveals a property.
     // hide - If true, hides property, otherwise reveals it.
-    // flags - By default changes are applied recursively. Set this paramter
+    // flags - By default changes are applied recursively. Set this parameter
     //   wxPG_DONT_RECURSE to prevent this.
     bool HideProperty( wxPGPropArg id,
                        bool hide = true,

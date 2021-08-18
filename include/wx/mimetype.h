@@ -32,7 +32,7 @@ class WXDLLIMPEXP_FWD_BASE wxIconLocation;
 class WXDLLIMPEXP_FWD_BASE wxFileTypeImpl;
 class WXDLLIMPEXP_FWD_BASE wxMimeTypesManagerImpl;
 
-// these constants define the MIME informations source under UNIX and are used
+// these constants define the MIME information source under UNIX and are used
 // by wxMimeTypesManager::Initialize()
 enum wxMailcapStyle
 {
@@ -138,11 +138,15 @@ public:
     //     Do not use, it's used by the ctor only.
     struct CtorString
     {
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
         CtorString(const char *str) : m_str(str) {}
+#endif
         CtorString(const wchar_t *str) : m_str(str) {}
         CtorString(const wxString& str) : m_str(str) {}
         CtorString(const wxCStrData& str) : m_str(str) {}
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
         CtorString(const wxScopedCharBuffer& str) : m_str(str) {}
+#endif
         CtorString(const wxScopedWCharBuffer& str) : m_str(str) {}
 
         operator const wxString*() const { return &m_str; }

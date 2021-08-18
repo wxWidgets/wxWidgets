@@ -17,7 +17,7 @@
 // wxToolBar style flags
 // ----------------------------------------------------------------------------
 
-enum
+enum wxToolBarStyleFlags
 {
     // lay out the toolbar horizontally
     wxTB_HORIZONTAL  = wxHORIZONTAL,    // == 0x0004
@@ -60,6 +60,8 @@ enum
 
     wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL
 };
+
+wxALLOW_COMBINING_ENUMS(wxToolBarStyleFlags, wxBorder)
 
 #if wxUSE_TOOLBAR
     #include "wx/tbarbase.h"     // the base class for all toolbars

@@ -12,9 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/colour.h"
 
@@ -218,46 +215,63 @@ bool wxColourBase::FromString(const wxString& str)
 
 wxString wxColourBase::GetAsString(long flags) const
 {
+    if ( !IsOk() )
+        return wxString();
+
     wxString colName;
 
-    const int alpha = Alpha();
-    const bool isOpaque = alpha == wxALPHA_OPAQUE;
-
-    // we can't use the name format if the colour is not opaque as the alpha
-    // information would be lost
-    if ( (flags & wxC2S_NAME) && isOpaque )
+    if ( IsSolid() )
     {
-        colName = wxTheColourDatabase->FindName(
-                    static_cast<const wxColour &>(*this)).MakeLower();
+        const int alpha = Alpha();
+        const bool isOpaque = alpha == wxALPHA_OPAQUE;
+
+        // we can't use the name format if the colour is not opaque as the alpha
+        // information would be lost
+        if ( (flags & wxC2S_NAME) && isOpaque )
+        {
+            colName = wxTheColourDatabase->FindName(
+                        static_cast<const wxColour &>(*this)).MakeLower();
+        }
+
+        if ( colName.empty() )
+        {
+            const int red = Red(),
+                      green = Green(),
+                      blue = Blue();
+
+            if ( flags & wxC2S_CSS_SYNTAX )
+            {
+                // no name for this colour; return it in CSS syntax
+                if ( isOpaque )
+                {
+                    colName.Printf(wxT("rgb(%d, %d, %d)"), red, green, blue);
+                }
+                else // use rgba() form
+                {
+                    colName.Printf(wxT("rgba(%d, %d, %d, %s)"),
+                                   red, green, blue,
+                                   wxString::FromCDouble(alpha / 255., 3));
+                }
+            }
+            else if ( flags & wxC2S_HTML_SYNTAX )
+            {
+                // no name for this colour; return it in HTML syntax
+                if ( isOpaque )
+                    colName.Printf(wxT("#%02X%02X%02X"), red, green, blue);
+                else
+                    colName.Printf(wxT("#%02X%02X%02X%02X"), red, green, blue, alpha);
+            }
+        }
     }
-
-    if ( colName.empty() )
+    else
     {
-        const int red = Red(),
-                  green = Green(),
-                  blue = Blue();
-
         if ( flags & wxC2S_CSS_SYNTAX )
         {
-            // no name for this colour; return it in CSS syntax
-            if ( isOpaque )
-            {
-                colName.Printf(wxT("rgb(%d, %d, %d)"), red, green, blue);
-            }
-            else // use rgba() form
-            {
-                colName.Printf(wxT("rgba(%d, %d, %d, %s)"),
-                               red, green, blue,
-                               wxString::FromCDouble(alpha / 255., 3));
-            }
+            colName = wxS("rgb(??, ??, \?\?)"); // \? form to avoid ??) trigraph
         }
         else if ( flags & wxC2S_HTML_SYNTAX )
         {
-            // no name for this colour; return it in HTML syntax
-            if ( isOpaque )
-                colName.Printf(wxT("#%02X%02X%02X"), red, green, blue);
-            else
-                colName.Printf(wxT("#%02X%02X%02X%02X"), red, green, blue, alpha);
+            colName = wxS("#??????");
         }
     }
 

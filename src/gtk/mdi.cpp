@@ -371,6 +371,17 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
     gtk_notebook_set_tab_label_text(notebook, m_widget, wxGTK_CONV( title ) );
 }
 
+void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
+{
+    // Pages of notebook always have position (0, 0) in its client area, so
+    // override this method to return this instead of the actual offset from
+    // the parent top left corner that the base class version returns.
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+}
+
 //-----------------------------------------------------------------------------
 // wxMDIClientWindow
 //-----------------------------------------------------------------------------

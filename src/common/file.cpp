@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_FILE
 
@@ -479,7 +476,8 @@ wxFileOffset wxFile::Length() const
         wxFileOffset iLen = const_cast<wxFile *>(this)->SeekEnd();
         if ( iLen != wxInvalidOffset ) {
             // restore old position
-            if ( ((wxFile *)this)->Seek(iRc) == wxInvalidOffset ) {
+            if (const_cast<wxFile*>(this)->Seek(iRc) == wxInvalidOffset)
+            {
                 // error
                 iLen = wxInvalidOffset;
             }
@@ -607,12 +605,12 @@ bool wxTempFile::Commit()
     m_file.Close();
 
     if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
-        wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't remove file '%s'"), m_strName);
         return false;
     }
 
     if ( !wxRenameFile(m_strTemp, m_strName)  ) {
-        wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
         return false;
     }
 
@@ -624,7 +622,7 @@ void wxTempFile::Discard()
     m_file.Close();
     if ( wxRemove(m_strTemp) != 0 )
     {
-        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
+        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp);
     }
 }
 

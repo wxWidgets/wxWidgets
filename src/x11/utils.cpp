@@ -12,9 +12,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #include "wx/private/eventloopsourcesmanager.h"
 
@@ -171,7 +168,7 @@ void wxCloseDisplay()
         if ( XCloseDisplay(gs_currentDisplay) != 0 )
         {
             wxLogWarning(_("Failed to close the display \"%s\""),
-                         gs_displayName.c_str());
+                         gs_displayName);
         }
 
         gs_currentDisplay = NULL;
@@ -189,7 +186,7 @@ bool wxSetDisplay(const wxString& displayName)
 
     if ( !dpy )
     {
-        wxLogError(_("Failed to open display \"%s\"."), displayName.c_str());
+        wxLogError(_("Failed to open display \"%s\"."), displayName);
         return false;
     }
 

@@ -15,9 +15,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #include "wx/artprov.h"
 
@@ -329,7 +326,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
 /*static*/
 wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
 {
-    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxWindow* win = wxApp::GetMainTopWindow();
     if ( client == wxART_TOOLBAR )
     {
         return wxWindow::FromDIP(wxSize(24, 24), win);

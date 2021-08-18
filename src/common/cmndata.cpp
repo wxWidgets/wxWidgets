@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
@@ -107,8 +104,7 @@ wxPrintData::~wxPrintData()
     if (m_nativeData->m_ref == 0)
         delete m_nativeData;
 
-    if (m_privData)
-        delete [] m_privData;
+    delete[] m_privData;
 }
 
 void wxPrintData::ConvertToNative()

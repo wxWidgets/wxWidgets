@@ -80,6 +80,7 @@ bool wxSlider::Create(wxWindow *parent,
     m_qtSlider->blockSignals(true);
     SetRange( minValue, maxValue );
     m_qtSlider->blockSignals(false);
+    SetPageSize(wxMax(1, (maxValue - minValue) / 10));
 
 #if 0 // there are not normally ticks for a wxSlider
     // draw ticks marks (default bellow if horizontal, right if vertical):

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 #include "wx/grid.h"
@@ -115,8 +112,6 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER);
-
-    ~MyFrame();
 
     wxAuiDockArt* GetDockArt();
     void DoUpdate();
@@ -709,7 +704,9 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendCheckItem(ID_NoVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
-    options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
+    // Only show "live resize" toggle if it's actually functional.
+    if ( !wxAuiManager::AlwaysUsesLiveResize() )
+        options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
     options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_NoGradient, _("No Caption Gradient"));
     options_menu->AppendRadioItem(ID_VerticalGradient, _("Vertical Caption Gradient"));
@@ -846,7 +843,9 @@ MyFrame::MyFrame(wxWindow* parent,
     wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+24, "Item 3", tb4_bmp1);
+    tb4->SetToolSticky(ID_SampleItem+23, true);
+    tb4->AddTool(ID_SampleItem+24, "Disabled", tb4_bmp1);
+    tb4->EnableTool(ID_SampleItem+24, false); // Just to show disabled items look
     tb4->AddTool(ID_SampleItem+25, "Item 4", tb4_bmp1);
     tb4->AddSeparator();
     tb4->AddTool(ID_SampleItem+26, "Item 5", tb4_bmp1);
@@ -1010,11 +1009,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // "commit" all changes made to wxAuiManager
     m_mgr.Update();
-}
-
-MyFrame::~MyFrame()
-{
-    m_mgr.UnInit();
 }
 
 wxAuiDockArt* MyFrame::GetDockArt()

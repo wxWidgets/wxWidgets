@@ -78,7 +78,8 @@ notMappedSciValues = set([
     'INDIC0_MASK',
     'INDIC1_MASK',
     'INDIC2_MASK',
-    'INDICS_MASK'
+    'INDICS_MASK',
+    'SCFIND_CXX11REGEX'
 ])
 
 # Map some generic typenames to wx types, using return value syntax
@@ -551,7 +552,7 @@ methodOverrideMap = {
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
-            ft.lpstrText = (char*)(const char*)buf;
+            ft.lpstrText = buf;
 
             int pos = SendMsg(%s, flags, (sptr_t)&ft);
             if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);
@@ -1173,11 +1174,20 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     ih_text = ih_text % data
 
     # write out destination files
-    open(h_dest, 'w').write(h_text)
-    open(cpp_dest, 'w').write(cpp_text)
+    # Use 'wb' with Python 2 to enforce LF newlines. This does not work with
+    # Python 3, use 'newline':'\n' there (which in turn does not work with 2).
+    if sys.version_info[0] == 2:
+        acc = 'wb'
+        eol = {}
+    else:
+        acc = 'wt'
+        eol = {'newline':'\n'}
+
+    open(h_dest, acc, **eol).write(h_text)
+    open(cpp_dest, acc, **eol).write(cpp_text)
     if docstr_dest:
-        open(docstr_dest, 'w').write(docstrings)
-    open(ih_dest, 'w').write(ih_text)
+        open(docstr_dest, acc, **eol).write(docstrings)
+    open(ih_dest, acc, **eol).write(ih_text)
 
 
 def joinWithNewLines(values):

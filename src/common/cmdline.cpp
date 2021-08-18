@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -1433,9 +1430,8 @@ wxString wxCmdLineParser::GetUsageString() const
     count = namesOptions.size();
 
     // get option names & descriptions for standard options, if any:
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
     wxString stdDesc;
-    if ( traits )
+    if ( wxAppTraits *traits = wxApp::GetTraitsIfExists() )
         stdDesc = traits->GetStandardCmdLineOptions(namesOptions, descOptions);
 
     // now construct the detailed help message

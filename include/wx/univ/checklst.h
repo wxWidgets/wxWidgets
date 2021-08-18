@@ -35,7 +35,7 @@ public:
                    const wxString choices[] = NULL,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxListBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Init();
 
@@ -48,7 +48,7 @@ public:
                    const wxArrayString& choices,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxListBoxNameStr);
+                   const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -58,7 +58,7 @@ public:
                 const wxString choices[] = (const wxString *) NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxListBoxNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos,
@@ -66,7 +66,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     // implement check list box methods
     virtual bool IsChecked(unsigned int item) const wxOVERRIDE;

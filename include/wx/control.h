@@ -42,7 +42,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxControlNameStr);
+                const wxString& name = wxASCII_STR(wxControlNameStr));
 
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
@@ -114,6 +114,11 @@ public:
         { return DoGetSizeFromTextSize(xlen, ylen); }
     wxSize GetSizeFromTextSize(const wxSize& tsize) const
         { return DoGetSizeFromTextSize(tsize.x, tsize.y); }
+
+    wxSize GetSizeFromText(const wxString& text) const
+    {
+        return GetSizeFromTextSize(GetTextExtent(text).GetWidth());
+    }
 
 
     // static utilities for mnemonics char (&) handling

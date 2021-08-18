@@ -13,7 +13,7 @@
 
 The wxHTML library provides classes for parsing and displaying HTML.
 It is not intended to be a high-end HTML browser. If you are looking for
-something like that try <http://www.mozilla.org/>.
+something like that use wxWebView.
 
 wxHTML can be used as a generic rich text viewer - for example to display
 a nice About Box (like those of GNOME apps) or to display the result of

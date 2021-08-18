@@ -52,6 +52,7 @@ set(TEST_SRC
     misc/typeinfotest.cpp
     net/ipc.cpp
     net/socket.cpp
+    net/webrequest.cpp
     regex/regextest.cpp
     regex/wxregextest.cpp
     scopeguard/scopeguardtest.cpp
@@ -116,14 +117,12 @@ set(TEST_DATA
     testdata.fc
     )
 
-wx_add_test(test_base ${TEST_SRC}
+wx_add_test(test_base CONSOLE ${TEST_SRC}
     DATA ${TEST_DATA}
     )
-target_compile_definitions(test_base PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
 if(wxUSE_SOCKETS)
-    wx_exe_link_libraries(test_base net)
+    wx_exe_link_libraries(test_base wxnet)
 endif()
 if(wxUSE_XML)
-    wx_exe_link_libraries(test_base xml)
+    wx_exe_link_libraries(test_base wxxml)
 endif()
-wx_test_enable_precomp(test_base)

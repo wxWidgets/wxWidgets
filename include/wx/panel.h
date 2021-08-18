@@ -39,7 +39,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
     */
 
     // Pseudo ctor
@@ -48,7 +48,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
 
 
     // implementation from now on

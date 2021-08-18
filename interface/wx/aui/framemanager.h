@@ -208,6 +208,19 @@ public:
     //@}
 
     /**
+        Returns true if live resize is always used on the current platform.
+
+        If this function returns true, ::wxAUI_MGR_LIVE_RESIZE flag is ignored
+        and live resize is always used, whether it's specified or not.
+
+        Currently this is the case for wxOSX and wxGTK3 ports, as live resizing
+        is the only implemented method there.
+
+        @since 3.1.4
+     */
+    static bool AlwaysUsesLiveResize();
+
+    /**
         This function is used by controls to calculate the drop hint rectangle.
 
         The method first calls DoDrop() to determine the exact position the
@@ -311,6 +324,20 @@ public:
     //@}
 
     /**
+        Returns true if windows are resized live.
+
+        This function combines the check for AlwaysUsesLiveResize() and, for
+        the platforms where live resizing is optional, the check for
+        wxAUI_MGR_LIVE_RESIZE flag.
+
+        Using this accessor allows to verify whether live resizing is being
+        actually used.
+
+        @since 3.1.4
+    */
+    bool HasLiveResize() const;
+
+    /**
         HideHint() hides any docking hint that may be visible.
     */
     virtual void HideHint();
@@ -337,7 +364,7 @@ public:
         This method writes the serialized data into the passed pane. Pointers to
         UI elements are not modified.
 
-        @notice This operation also changes the name in the pane information!
+        @note This operation also changes the name in the pane information!
 
         @sa LoadPerspective
         @sa SavePaneInfo().
@@ -457,11 +484,12 @@ public:
     void StartPaneDrag(wxWindow* paneWindow, const wxPoint& offset);
 
     /**
-        Uninitializes the framework and should be called before a managed frame or
-        window is destroyed. UnInit() is usually called in the managed wxFrame's
-        destructor.  It is necessary to call this function before the managed frame
-        or window is destroyed, otherwise the manager cannot remove its custom event
-        handlers from a window.
+        Dissociate the managed window from the manager.
+
+        This function may be called before the managed frame or window is
+        destroyed, but, since wxWidgets 3.1.4, it's unnecessary to call it
+        explicitly, as it will be called automatically when this window is
+        destroyed, as well as when the manager itself is.
     */
     void UnInit();
 
@@ -1004,9 +1032,6 @@ public:
     /// proportion while docked
     int dock_proportion;
 
-    /// buttons on the pane
-    wxAuiPaneButtonArray buttons;
-
     /// current rectangle (populated by wxAUI)
     wxRect rect;
 
@@ -1175,16 +1200,8 @@ public:
     int orientation;         // orientation (either wxHORIZONTAL or wxVERTICAL)
     wxAuiDockInfo* dock;        // which dock the item is associated with
     wxAuiPaneInfo* pane;        // which pane the item is associated with
-    wxAuiPaneButton* button;    // which pane button the item is associated with
+    int button;              // which pane button the item is associated with
     wxSizer* cont_sizer;     // the part's containing sizer
     wxSizerItem* sizer_item; // the sizer item of the part
     wxRect rect;             // client coord rectangle of the part itself
-};
-
-
-
-class wxAuiPaneButton
-{
-public:
-    int button_id;        // id of the button (e.g. buttonClose)
 };

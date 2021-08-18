@@ -18,7 +18,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_GLCANVAS
+#if wxUSE_GLCANVAS && !wxUSE_GLCANVAS_EGL
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -502,7 +502,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     if (fbc)
     {
         wx_glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
-            glXGetProcAddress((GLubyte*)"glXCreateContextAttribsARB");
+            glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXCreateContextAttribsARB"));
     }
 
     glXDestroyContext( dpy, tempContext );

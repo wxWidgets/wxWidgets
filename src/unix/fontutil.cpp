@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/fontutil.h"
 
@@ -91,9 +88,9 @@ void wxNativeFontInfo::Free()
         pango_font_description_free(description);
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
-    return ((float) pango_font_description_get_size( description )) / PANGO_SCALE;
+    return double(pango_font_description_get_size(description)) / PANGO_SCALE;
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -215,7 +212,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_SYSTEM;
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     pango_font_description_set_size( description, wxRound(pointsize * PANGO_SCALE) );
 }
@@ -232,7 +229,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
             break;
         default:
             wxFAIL_MSG( "unknown font style" );
-            // fall through
+            wxFALLTHROUGH;
         case wxFONTSTYLE_NORMAL:
             pango_font_description_set_style( description, PANGO_STYLE_NORMAL );
             break;
@@ -489,7 +486,7 @@ static wxHashTable *g_fontHash = NULL;
 
 static bool wxTestFontSpec(const wxString& fontspec);
 
-static wxNativeFont wxLoadQueryFont(float pointSize,
+static wxNativeFont wxLoadQueryFont(double pointSize,
                                     wxFontFamily family,
                                     wxFontStyle style,
                                     int weight,
@@ -693,7 +690,7 @@ void wxNativeFontInfo::SetXFontName(const wxString& xFontName_)
     m_isDefault = false;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     const wxString s = GetXFontComponent(wxXLFD_POINTSIZE);
 
@@ -785,7 +782,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_MAX;
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     wxString s;
     if ( pointsize < 0 )
@@ -1029,7 +1026,7 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 // X-specific functions
 // ----------------------------------------------------------------------------
 
-wxNativeFont wxLoadQueryNearestFont(float pointSize,
+wxNativeFont wxLoadQueryNearestFont(double pointSize,
                                     wxFontFamily family,
                                     wxFontStyle style,
                                     int weight,
@@ -1252,7 +1249,7 @@ static bool wxTestFontSpec(const wxString& fontspec)
     }
 }
 
-static wxNativeFont wxLoadQueryFont(float pointSize,
+static wxNativeFont wxLoadQueryFont(double pointSize,
                                     wxFontFamily family,
                                     wxFontStyle style,
                                     int weight,

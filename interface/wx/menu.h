@@ -445,8 +445,8 @@ public:
     @note
     Please note that @e wxID_ABOUT and @e wxID_EXIT are predefined by wxWidgets
     and have a special meaning since entries using these IDs will be taken out
-    of the normal menus under OS X and will be inserted into the system menu
-    (following the appropriate OS X interface guideline).
+    of the normal menus under macOS and will be inserted into the system menu
+    (following the appropriate macOS interface guideline).
 
     Menu items may be either @e normal items, @e check items or @e radio items.
     Normal items don't have any special properties while the check items have a
@@ -665,6 +665,9 @@ public:
     /**
         Inserts a break in a menu, causing the next appended item to appear in
         a new column.
+
+        This function only actually inserts a break in wxMSW and does nothing
+        under the other platforms.
     */
     virtual void Break();
 
@@ -927,6 +930,33 @@ public:
         @see Enable()
     */
     bool IsEnabled(int id) const;
+
+    /**
+        Allows handling native MSW menu command messages.
+
+        This is a low-level function which allows handling MSW @c WM_COMMAND
+        messages generated when menu items are selected. It is particularly
+        useful for the popup menus, as specific handling can then be defined in
+        a wxMenu-derived class directly, instead of in the wxWindow-derived
+        owner class.
+
+        The base class version of this function generates @c wxEVT_MENU command
+        events.
+
+        @param param
+            The MSW command parameter.
+
+        @param id
+            The id of the command.
+
+        @return
+            @true if the command was handled, @false otherwise.
+
+        @onlyfor{wxmsw}
+
+        @since 3.1.5
+    */
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
 
     /**
         Inserts the given @a item at position 0, i.e.\ before all the other

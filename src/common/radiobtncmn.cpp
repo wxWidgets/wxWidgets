@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RADIOBTN
 
@@ -91,5 +88,97 @@ wxEMPTY_HANDLERS_TABLE(wxRadioButton)
 wxCONSTRUCTOR_6( wxRadioButton, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
 
+
+// ----------------------------------------------------------------------------
+// wxRadioButton group navigation
+// ----------------------------------------------------------------------------
+
+wxRadioButton* wxRadioButtonBase::GetFirstInGroup() const
+{
+    wxRadioButton*
+        btn = static_cast<wxRadioButton*>(const_cast<wxRadioButtonBase*>(this));
+    while (true)
+    {
+        wxRadioButton* prevBtn = btn->GetPreviousInGroup();
+        if (!prevBtn)
+            return btn;
+
+        btn = prevBtn;
+    }
+}
+
+wxRadioButton* wxRadioButtonBase::GetLastInGroup() const
+{
+    wxRadioButton*
+        btn = static_cast<wxRadioButton*>(const_cast<wxRadioButtonBase*>(this));
+    while (true)
+    {
+        wxRadioButton* nextBtn = btn->GetNextInGroup();
+        if (!nextBtn)
+            return btn;
+
+        btn = nextBtn;
+    }
+}
+
+wxRadioButton* wxRadioButtonBase::GetPreviousInGroup() const
+{
+    if ( HasFlag(wxRB_GROUP) || HasFlag(wxRB_SINGLE) )
+        return NULL;
+
+    const wxWindowList& siblings = GetParent()->GetChildren();
+    wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
+    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
+
+    // Iterate over all previous siblings until we find the next radio button
+    wxWindowList::compatibility_iterator nodeBefore = nodeThis->GetPrevious();
+    wxRadioButton *prevBtn = 0;
+    while (nodeBefore)
+    {
+        prevBtn = wxDynamicCast(nodeBefore->GetData(), wxRadioButton);
+        if (prevBtn)
+            break;
+
+        nodeBefore = nodeBefore->GetPrevious();
+    }
+
+    if (!prevBtn || prevBtn->HasFlag(wxRB_SINGLE))
+    {
+        // no more buttons in group
+        return NULL;
+    }
+
+    return prevBtn;
+}
+
+wxRadioButton* wxRadioButtonBase::GetNextInGroup() const
+{
+    if ( HasFlag(wxRB_SINGLE) )
+        return NULL;
+
+    const wxWindowList& siblings = GetParent()->GetChildren();
+    wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
+    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
+
+    // Iterate over all previous siblings until we find the next radio button
+    wxWindowList::compatibility_iterator nodeNext = nodeThis->GetNext();
+    wxRadioButton *nextBtn = 0;
+    while (nodeNext)
+    {
+        nextBtn = wxDynamicCast(nodeNext->GetData(), wxRadioButton);
+        if (nextBtn)
+            break;
+
+        nodeNext = nodeNext->GetNext();
+    }
+
+    if ( !nextBtn || nextBtn->HasFlag(wxRB_GROUP) || nextBtn->HasFlag(wxRB_SINGLE) )
+    {
+        // no more buttons or the first button of the next group
+        return NULL;
+    }
+
+    return nextBtn;
+}
 
 #endif // wxUSE_RADIOBTN

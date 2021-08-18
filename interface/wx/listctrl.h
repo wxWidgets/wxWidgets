@@ -147,10 +147,43 @@ enum
     To intercept events from a list control, use the event table macros described
     in wxListEvent.
 
-    <b>wxMac Note</b>: Starting with wxWidgets 2.8, wxListCtrl uses a native
-    implementation for report mode, and uses a generic implementation for other
-    modes. You can use the generic implementation for report mode as well by setting
-    the @c mac.listctrl.always_use_generic system option (see wxSystemOptions) to 1.
+    @note The native wxOSX implementation for report mode that was added in wxWidgets
+    2.8 was removed in wxWidgets 3.1, meaning for wxWidgets 3.1+ wxOSX uses the generic
+    implementation for all modes.
+
+    @section column_order Column Ordering
+
+    By default, the columns of a list control appear on the screen in order
+    of their indices, i.e. column 0 appears first, then column 1 next,
+    and so on. However this can be changed by using the SetColumnsOrder() function
+    to arbitrarily reorder the columns visual order.
+
+    The user can also rearrange the columns interactively by dragging them.
+    In this case, the index of the column is not the same as its order and
+    the functions GetColumnOrder() and GetColumnIndexFromOrder() should be
+    used to translate between them.
+
+    @note All the other functions still work with the column indices,
+    i.e. the visual positioning of the columns on screen doesn't affect the
+    code setting or getting their values for example.
+
+    Example of reordering columns:
+    @code
+        wxListCtrl *list = new wxListCtrl(...);
+        for ( int i = 0; i < 3; i++ )
+            list->InsertColumn(i, wxString::Format("Column %d", i));
+
+        wxArrayInt order(3);
+        order[0] = 2;
+        order[1] = 0;
+        order[2] = 1;
+        list->SetColumnsOrder(order);
+
+        // now list->GetColumnsOrder() will return order and
+        // list->GetColumnIndexFromOrder(n) will return order[n] and
+        // list->GetColumnOrder() will return 1, 2 and 0 for the column 0,
+        // 1 and 2 respectively
+    @endcode
 
 
     @beginStyleTable
@@ -213,7 +246,9 @@ enum
            All items were deleted.
            Processes a @c wxEVT_LIST_DELETE_ALL_ITEMS event type.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-           The item has been selected.
+           The item has been selected. Notice that the mouse is captured by the
+           control itself when this event is generated, see @ref
+           overview_events_with_mouse_capture "event handling overview".
            Processes a @c wxEVT_LIST_ITEM_SELECTED event type.
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
            The item has been deselected.
@@ -536,8 +571,10 @@ public:
         corresponds to the value of the element number @a pos in the array
         returned by GetColumnsOrder().
 
-        Please see SetColumnsOrder() documentation for an example and
-        additional remarks about the columns ordering.
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
+        support for the column reordering is added there.
 
         @see GetColumnOrder()
     */
@@ -550,8 +587,10 @@ public:
         given visual position, e.g. calling it with @a col equal to 0 returns
         the index of the first shown column.
 
-        Please see SetColumnsOrder() documentation for an example and
-        additional remarks about the columns ordering.
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
+        support for the column reordering is added there.
 
         @see GetColumnsOrder(), GetColumnIndexFromOrder()
     */
@@ -567,8 +606,10 @@ public:
 
         On error, an empty array is returned.
 
-        Please see SetColumnsOrder() documentation for an example and
-        additional remarks about the columns ordering.
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
+        support for the column reordering is added there.
 
         @see GetColumnOrder(), GetColumnIndexFromOrder()
     */
@@ -586,7 +627,7 @@ public:
         Returns @NULL if no label is being edited.
 
         @note It is currently only implemented for wxMSW and the generic version,
-              not for the native OS X version.
+              not for the native macOS version.
     */
     wxTextCtrl* GetEditControl() const;
 
@@ -615,7 +656,7 @@ public:
     /**
         Returns the colour for this item.
         If the item has no specific colour, returns an invalid colour
-        (and not the default background control of the control itself).
+        (and not the default background colour of the control itself).
 
         @see GetItemTextColour()
     */
@@ -688,7 +729,7 @@ public:
         Returns the colour for this item.
 
         If the item has no specific colour, returns an invalid colour (and not the
-        default foreground control of the control itself as this wouldn't allow
+        default foreground colour of the control itself as this wouldn't allow
         distinguishing between items having the same colour as the current control
         foreground and items with default colour which, hence, have always the
         same colour as the control).
@@ -755,6 +796,11 @@ public:
 
         @a code can be one of @c wxLIST_RECT_BOUNDS, @c wxLIST_RECT_ICON or
         @c wxLIST_RECT_LABEL.
+
+        Note that using @c wxLIST_RECT_ICON with any sub-item but the first one
+        isn't very useful as only the first sub-item can have an icon in
+        wxListCtrl. In this case, i.e. for @c subItem > 0, this function simply
+        returns an empty rectangle in @a rect.
 
         @since 2.7.0
     */
@@ -899,7 +945,7 @@ public:
     long InsertItem(wxListItem& info);
 
     /**
-        Insert an string item.
+        Insert a string item.
 
         @param index
             Index of the new item, supplied by the application
@@ -942,6 +988,16 @@ public:
     */
     long InsertItem(long index, const wxString& label,
                     int imageIndex);
+
+    /**
+        Returns true if the control doesn't currently contain any items.
+
+        Note that the control with some columns is still considered to be empty
+        if it has no rows.
+
+        @since 3.1.3
+     */
+    bool IsEmpty() const;
 
     /**
         Returns true if the control is currently in virtual report view.
@@ -1010,17 +1066,6 @@ public:
     /**
         Changes the order in which the columns are shown.
 
-        By default, the columns of a list control appear on the screen in order
-        of their indices, i.e. the column 0 appears first, the column 1 next
-        and so on. However by using this function it is possible to arbitrarily
-        reorder the columns visual order and the user can also rearrange the
-        columns interactively by dragging them. In this case, the index of the
-        column is not the same as its order and the functions GetColumnOrder()
-        and GetColumnIndexFromOrder() should be used to translate between them.
-        Notice that all the other functions still work with the column indices,
-        i.e. the visual positioning of the columns on screen doesn't affect the
-        code setting or getting their values for example.
-
         The @a orders array must have the same number elements as the number of
         columns and contain each position exactly once. Its n-th element
         contains the index of the column to be shown in n-th position, so for a
@@ -1028,28 +1073,9 @@ public:
         results in the third column being displayed first, the first one next
         and the second one last.
 
-        Example of using it:
-        @code
-            wxListCtrl *list = new wxListCtrl(...);
-            for ( int i = 0; i < 3; i++ )
-                list->InsertColumn(i, wxString::Format("Column %d", i));
-
-            wxArrayInt order(3);
-            order[0] = 2;
-            order[1] = 0;
-            order[2] = 1;
-            list->SetColumnsOrder(order);
-
-            // now list->GetColumnsOrder() will return order and
-            // list->GetColumnIndexFromOrder(n) will return order[n] and
-            // list->GetColumnOrder() will return 1, 2 and 0 for the column 0,
-            // 1 and 2 respectively
-        @endcode
-
-        Please notice that this function makes sense for report view only and
-        currently is only implemented in wxMSW port. To avoid explicit tests
-        for @c __WXMSW__ in your code, please use @c wxHAS_LISTCTRL_COLUMN_ORDER
-        as this will allow it to start working under the other platforms when
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
         support for the column reordering is added there.
 
         @see GetColumnsOrder()
@@ -1083,6 +1109,11 @@ public:
 
         This method does not take ownership of the image list, you have to
         delete it yourself.
+
+        Note that, unlike for most of the other methods of this class, it is
+        possible to call this function before the corresponding window is
+        created, i.e. do it in a constructor of a class derived from wxListCtrl
+        before calling Create().
 
         @see AssignImageList()
     */
@@ -1316,6 +1347,33 @@ public:
     */
     void CheckItem(long item, bool check);
 
+    /**
+        Extend rules and alternate rows background to the entire client area.
+
+        Bu default, the rules (when enabled with wxLC_HRULES and wxLC_VRULES)
+        and alternate row background (when EnableAlternateRowColours() was
+        called) are only shown in the part of the control occupied by the
+        items, which can be smaller than the entire window if there are few
+        items in the control.
+
+        Calling this function extends the display of the rules and alternate
+        background rows to the entire client area.
+
+        Similarly to EnableAlternateRowColours(), this method can only be used
+        with controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+
+        Note that this method is currently not implemented in the native MSW
+        version and does nothing there.
+
+        @param extend
+            if @true, draws horizontal rules and vertical rules on empty rows
+            and uses the colour parameter to paint the background of
+            alternate rows when those rows are blank, empty, with no data.
+
+        @since 3.1.5
+    */
+    void ExtendRulesAndAlternateColour(bool extend = true);
+
 protected:
 
     /**
@@ -1421,9 +1479,11 @@ protected:
     @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
         Delete all items.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-        The item has been selected.
+        The item has been selected. Notice that the mouse is captured by the
+        control itself when this event is generated, see @ref
+        overview_events_with_mouse_capture "event handling overview".
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
-        The item has been deselected.
+        The item has been deselected. GetIndex() may be -1 with virtual lists.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
         The item has been activated (ENTER or double click).
     @event{EVT_LIST_ITEM_FOCUSED(id, func)}
@@ -1640,7 +1700,7 @@ public:
 
         @param parent
             Parent window. Must not be @NULL.
-        @param id
+        @param winid
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
             Window position.
@@ -1764,7 +1824,7 @@ public:
       This is a bitlist of the following flags:
         - @c wxLIST_STATE_FOCUSED: The item has the focus.
         - @c wxLIST_STATE_SELECTED: The item is selected.
-        - @c wxLIST_STATE_DONTCARE: Don't care what the state is. Win32 only.
+        - @c wxLIST_STATE_DONTCARE: No special flags (the value of this constant is 0).
         - @c wxLIST_STATE_DROPHILITED: The item is highlighted to receive a drop event. Win32 only.
         - @c wxLIST_STATE_CUT: The item is in the cut state. Win32 only.
     - A mask indicating which state flags are valid; this is a bitlist of the
@@ -1856,7 +1916,7 @@ public:
         Returns a bit field representing the state of the item.
 
         Can be any combination of:
-        - wxLIST_STATE_DONTCARE: Don't care what the state is. Win32 only.
+        - wxLIST_STATE_DONTCARE: No special flags (the values of this constant is 0).
         - wxLIST_STATE_DROPHILITED: The item is highlighted to receive a drop event. Win32 only.
         - wxLIST_STATE_FOCUSED: The item has the focus.
         - wxLIST_STATE_SELECTED: The item is selected.

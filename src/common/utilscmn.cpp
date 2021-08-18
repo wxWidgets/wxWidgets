@@ -21,9 +21,6 @@
 
 #include "wx/debug.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // This is a needed to get the declaration of the global "environ" variable
 // from MinGW headers which don't declare it there when in strict ANSI mode. We
@@ -86,6 +83,7 @@
 #include <errno.h>
 
 #if wxUSE_GUI
+    #include "wx/filename.h"
     #include "wx/filesys.h"
     #include "wx/notebook.h"
     #include "wx/statusbr.h"
@@ -181,12 +179,12 @@ void wxUsleep(unsigned long milliseconds)
 }
 #endif
 
-const wxChar *wxGetInstallPrefix()
+wxString wxGetInstallPrefix()
 {
     wxString prefix;
 
     if ( wxGetEnv(wxT("WXPREFIX"), &prefix) )
-        return prefix.c_str();
+        return prefix;
 
 #ifdef wxINSTALL_PREFIX
     return wxT(wxINSTALL_PREFIX);
@@ -696,9 +694,9 @@ long wxExecute(const wxString& command,
 // ----------------------------------------------------------------------------
 
 // Id generation
-static int wxCurrentId = 100;
+static wxWindowID wxCurrentId = 100;
 
-int wxNewId()
+wxWindowID wxNewId()
 {
     // skip the part of IDs space that contains hard-coded values:
     if (wxCurrentId == wxID_LOWEST)
@@ -707,11 +705,11 @@ int wxNewId()
     return wxCurrentId++;
 }
 
-int
+wxWindowID
 wxGetCurrentId(void) { return wxCurrentId; }
 
 void
-wxRegisterId (int id)
+wxRegisterId (wxWindowID id)
 {
   if (id >= wxCurrentId)
     wxCurrentId = id + 1;
@@ -1204,7 +1202,7 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
             // can't be the last character of the string
             if ( ++it == in.end() )
             {
-                wxLogDebug(wxT("Invalid menu string '%s'"), in.c_str());
+                wxLogDebug(wxT("Invalid menu string '%s'"), in);
                 break;
             }
             else
@@ -1260,15 +1258,15 @@ wxFindMenuItemId(wxFrame *frame,
                  const wxString& menuString,
                  const wxString& itemString)
 {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     wxMenuBar *menuBar = frame->GetMenuBar ();
     if ( menuBar )
         return menuBar->FindMenuItem (menuString, itemString);
-#else // !wxUSE_MENUS
+#else // !wxUSE_MENUBAR
     wxUnusedVar(frame);
     wxUnusedVar(menuString);
     wxUnusedVar(itemString);
-#endif // wxUSE_MENUS/!wxUSE_MENUS
+#endif // wxUSE_MENUBAR/!wxUSE_MENUBAR
 
     return wxNOT_FOUND;
 }
@@ -1431,7 +1429,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1995-2019 wxWidgets team"));
+                         wxS("Copyright (c) 1995-2021 wxWidgets team"));
 }
 
 void wxInfoMessageBox(wxWindow* parent)
@@ -1509,12 +1507,6 @@ void wxEnableTopLevelWindows(bool enable)
         node->GetData()->Enable(enable);
 }
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
-
-// defined in evtloop.mm
-
-#else
-
 wxWindowDisabler::wxWindowDisabler(bool disable)
 {
     m_disabled = disable;
@@ -1532,8 +1524,6 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
 {
     // remember the top level windows which were already disabled, so that we
     // don't reenable them later
-    m_winDisabled = NULL;
-
     wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
@@ -1548,14 +1538,13 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
         }
         else
         {
-            if ( !m_winDisabled )
-            {
-                m_winDisabled = new wxWindowList;
-            }
-
-            m_winDisabled->Append(winTop);
+            m_winDisabled.push_back(winTop);
         }
     }
+
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    AfterDisable(winToSkip);
+#endif
 }
 
 wxWindowDisabler::~wxWindowDisabler()
@@ -1563,21 +1552,21 @@ wxWindowDisabler::~wxWindowDisabler()
     if ( !m_disabled )
         return;
 
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    BeforeEnable();
+#endif
+
     wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();
-        if ( !m_winDisabled || !m_winDisabled->Find(winTop) )
+        if ( !wxVectorContains(m_winDisabled, winTop) )
         {
             winTop->Enable();
         }
         //else: had been already disabled, don't reenable
     }
-
-    delete m_winDisabled;
 }
-
-#endif
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one

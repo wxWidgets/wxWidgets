@@ -15,22 +15,36 @@
 
 #if wxUSE_IMAGE
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
 #include "wx/anidecod.h" // wxImageArray
+#include "wx/bitmap.h"
+#include "wx/cursor.h"
+#include "wx/icon.h"
 #include "wx/palette.h"
 #include "wx/url.h"
 #include "wx/log.h"
 #include "wx/mstream.h"
 #include "wx/zstream.h"
 #include "wx/wfstream.h"
+#include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 
 #include "testimage.h"
+
+
+#define CHECK_EQUAL_COLOUR_RGB(c1, c2) \
+    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
+    CHECK( (int)c1.Green() == (int)c2.Green() ); \
+    CHECK( (int)c1.Blue()  == (int)c2.Blue() )
+
+#define CHECK_EQUAL_COLOUR_RGBA(c1, c2) \
+    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
+    CHECK( (int)c1.Green() == (int)c2.Green() ); \
+    CHECK( (int)c1.Blue()  == (int)c2.Blue() ); \
+    CHECK( (int)c1.Alpha() == (int)c2.Alpha() )
 
 struct testData {
     const char* file;
@@ -72,7 +86,9 @@ private:
         CPPUNIT_TEST( CompareLoadedImage );
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SavePNG );
+#if wxUSE_LIBTIFF
         CPPUNIT_TEST( SaveTIFF );
+#endif // wxUSE_LIBTIFF
         CPPUNIT_TEST( ReadCorruptedTGA );
 #if wxUSE_GIF
         CPPUNIT_TEST( SaveAnimatedGIF );
@@ -81,6 +97,7 @@ private:
         CPPUNIT_TEST( DibPadding );
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
         CPPUNIT_TEST( ScaleCompare );
+        CPPUNIT_TEST( CreateBitmapFromCursor );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -90,7 +107,9 @@ private:
     void CompareLoadedImage();
     void CompareSavedImage();
     void SavePNG();
+#if wxUSE_LIBTIFF
     void SaveTIFF();
+#endif // wxUSE_LIBTIFF
     void ReadCorruptedTGA();
 #if wxUSE_GIF
     void SaveAnimatedGIF();
@@ -99,6 +118,7 @@ private:
     void DibPadding();
     void BMPFlippingAndRLECompression();
     void ScaleCompare();
+    void CreateBitmapFromCursor();
 
     wxDECLARE_NO_COPY_CLASS(ImageTestCase);
 };
@@ -124,7 +144,9 @@ ImageTestCase::ImageTestCase()
     wxImage::AddHandler(new wxPCXHandler);
     wxImage::AddHandler(new wxPNMHandler);
     wxImage::AddHandler(new wxTGAHandler);
+#if wxUSE_LIBTIFF
     wxImage::AddHandler(new wxTIFFHandler);
+#endif // wxUSE_LIBTIFF
 }
 
 ImageTestCase::~ImageTestCase()
@@ -1084,6 +1106,7 @@ void ImageTestCase::SavePNG()
 
 }
 
+#if wxUSE_LIBTIFF
 static void TestTIFFImage(const wxString& option, int value,
     const wxImage *compareImage = NULL)
 {
@@ -1139,6 +1162,7 @@ void ImageTestCase::SaveTIFF()
     alphaImage.SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
     TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
 }
+#endif // wxUSE_LIBTIFF
 
 void ImageTestCase::ReadCorruptedTGA()
 {
@@ -1444,8 +1468,786 @@ void ImageTestCase::ScaleCompare()
                                "image/cross_nearest_neighb_256x256.png");
 }
 
+void ImageTestCase::CreateBitmapFromCursor()
+{
+#if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXMOTIF__ && !defined __WXX11__
+
+    wxImage image("image/wx.png");
+    wxCursor cursor(image);
+    wxBitmap bitmap(cursor);
+
+#if defined(__WXGTK__)
+    // cursor to bitmap could fail depending on windowing system and cursor (gdk-cursor-get-image)
+    if ( !bitmap.IsOk() )
+        return;
+#endif
+
+    wxImage result = bitmap.ConvertToImage();
+
+    // on Windows the cursor is always scaled to 32x32px (96 DPI)
+    // on macOS the resulting bitmap size depends on the DPI
+    if ( image.GetSize() == result.GetSize() )
+    {
+        CHECK_THAT(image, RGBASimilarTo(result, 2));
+    }
+    else
+    {
+        wxVector<wxPoint> coords;
+        coords.push_back(wxPoint(14, 10)); // blue square
+        coords.push_back(wxPoint(8, 22));  // red square
+        coords.push_back(wxPoint(26, 18)); // yellow square
+        coords.push_back(wxPoint(25, 5));  // empty / tranparent
+
+        for ( size_t i = 0; i < coords.size(); ++i )
+        {
+            wxPoint const& p1 = coords[i];
+            wxPoint p2 = wxPoint(p1.x * (result.GetWidth() / (double)image.GetWidth()), p1.y * (result.GetHeight() / (double)image.GetHeight()));
+
+#if defined(__WXMSW__)
+            // when the cursor / result image is larger than the source image, the original image is centered in the result image
+            if ( result.GetWidth() > image.GetWidth() )
+                p2.x = (result.GetWidth() / 2) + (p1.x - (image.GetWidth() / 2));
+            if ( result.GetHeight() > image.GetHeight() )
+                p2.y = (result.GetHeight() / 2) + (p1.y - (image.GetHeight() / 2));
+#endif
+
+            wxColour cSrc(image.GetRed(p1.x, p1.y), image.GetGreen(p1.x, p1.y), image.GetBlue(p1.x, p1.y), image.GetAlpha(p1.x, p1.y));
+            wxColour cRes(result.GetRed(p2.x, p2.y), result.GetGreen(p2.x, p2.y), result.GetBlue(p2.x, p2.y), result.GetAlpha(p2.x, p2.y));
+
+            CHECK_EQUAL_COLOUR_RGBA(cRes, cSrc);
+        }
+    }
+#endif
+}
+
 #endif //wxUSE_IMAGE
 
+TEST_CASE("wxImage::Paste", "[image][paste]")
+{
+    const static char* squares_xpm[] =
+    {
+        "9 9 7 1",
+        "   c None",
+        "y  c #FFFF00",
+        "r  c #FF0000",
+        "g  c #00FF00",
+        "b  c #0000FF",
+        "o  c #FF6600",
+        "w  c #FFFFFF",
+        "rrrrwgggg",
+        "rrrrwgggg",
+        "rrrrwgggg",
+        "rrrrwgggg",
+        "wwwwwwwww",
+        "bbbbwoooo",
+        "bbbbwoooo",
+        "bbbbwoooo",
+        "bbbbwoooo"
+    };
+
+    const static char* toggle_equal_size_xpm[] =
+    {
+        "9 9 2 1",
+        "   c None",
+        "y  c #FFFF00",
+        "y y y y y",
+        " y y y y ",
+        "y y y y y",
+        " y y y y ",
+        "y y y y y",
+        " y y y y ",
+        "y y y y y",
+        " y y y y ",
+        "y y y y y",
+    };
+
+    const static char* transparent_image_xpm[] =
+    {
+        "5 5 2 1",
+        "   c None", // Mask
+        "y  c #FFFF00",
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+    };
+
+    const static char* light_image_xpm[] =
+    {
+        "5 5 2 1",
+        "   c None",
+        "y  c #FFFF00",
+        "yyyyy",
+        "yyyyy",
+        "yyyyy",
+        "yyyyy",
+        "yyyyy",
+    };
+
+    const static char* black_image_xpm[] =
+    {
+        "5 5 2 1",
+        "   c #000000",
+        "y  c None", // Mask
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+    };
+
+    // Execute AddHandler() just once.
+    static const bool
+        registeredHandler = (wxImage::AddHandler(new wxPNGHandler()), true);
+
+    SECTION("Paste same size image")
+    {
+        wxImage actual(squares_xpm);
+        wxImage paste(toggle_equal_size_xpm);
+        wxImage expected(toggle_equal_size_xpm);
+        actual.Paste(paste, 0, 0);
+        CHECK_THAT(actual, RGBSameAs(expected));
+
+        // Without alpha using "compose" doesn't change anything.
+        actual.Paste(paste, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+
+    SECTION("Paste larger image")
+    {
+        const static char* toggle_larger_size_xpm[] =
+        {
+            "13 13 2 1",
+            "   c None",
+            "y  c #FFFF00",
+            "y y y y y y y",
+            " y y y y y y ",
+            "y y y y y y y",
+            " y y y y y y ",
+            "y y y y y y y",
+            " y y y y y y ",
+            "y y y y y y y",
+            " y y y y y y ",
+            "y y y y y y y",
+            " y y y y y y ",
+            "y y y y y y y",
+            " y y y y y y ",
+            "y y y y y y y",
+        };
+
+        wxImage actual(squares_xpm);
+        wxImage paste(toggle_larger_size_xpm);
+        wxImage expected(toggle_equal_size_xpm);
+        actual.Paste(paste, -2, -2);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+
+    SECTION("Paste smaller image")
+    {
+        const static char* toggle_smaller_size_xpm[] =
+        {
+            "5 5 2 1",
+            "   c None",
+            "y  c #FFFF00",
+            "y y y",
+            " y y ",
+            "y y y",
+            " y y ",
+            "y y y",
+        };
+
+        const static char* expected_xpm[] =
+        {
+            "9 9 7 1",
+            "   c None",
+            "y  c #FFFF00",
+            "r  c #FF0000",
+            "g  c #00FF00",
+            "b  c #0000FF",
+            "o  c #FF6600",
+            "w  c #FFFFFF",
+            "rrrrwgggg",
+            "rrrrwgggg",
+            "rry y ygg",
+            "rr y y gg",
+            "wwy y yww",
+            "bb y y oo",
+            "bby y yoo",
+            "bbbbwoooo",
+            "bbbbwoooo"
+        };
+
+        wxImage actual(squares_xpm);
+        wxImage paste(toggle_smaller_size_xpm);
+        wxImage expected(expected_xpm);
+        actual.Paste(paste, 2, 2);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+
+    SECTION("Paste beyond top left corner")
+    {
+        const static char* expected_xpm[] =
+        {
+            "9 9 7 1",
+            "   c None",
+            "y  c #FFFF00",
+            "r  c #FF0000",
+            "g  c #00FF00",
+            "b  c #0000FF",
+            "o  c #FF6600",
+            "w  c #FFFFFF",
+            "oooowgggg",
+            "oooowgggg",
+            "oooowgggg",
+            "oooowgggg",
+            "wwwwwwwww",
+            "bbbbwoooo",
+            "bbbbwoooo",
+            "bbbbwoooo",
+            "bbbbwoooo"
+        };
+
+        wxImage actual(squares_xpm);
+        wxImage paste(squares_xpm);
+        wxImage expected(expected_xpm);
+        actual.Paste(paste, -5, -5);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+
+    SECTION("Paste beyond top right corner")
+    {
+        const static char* expected_xpm[] =
+        {
+            "9 9 7 1",
+            "   c None",
+            "y  c #FFFF00",
+            "r  c #FF0000",
+            "g  c #00FF00",
+            "b  c #0000FF",
+            "o  c #FF6600",
+            "w  c #FFFFFF",
+            "rrrrwbbbb",
+            "rrrrwbbbb",
+            "rrrrwbbbb",
+            "rrrrwbbbb",
+            "wwwwwwwww",
+            "bbbbwoooo",
+            "bbbbwoooo",
+            "bbbbwoooo",
+            "bbbbwoooo"
+        };
+        wxImage actual(squares_xpm);
+        wxImage paste(squares_xpm);
+        wxImage expected(expected_xpm);
+        actual.Paste(paste, 5, -5);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+
+    SECTION("Paste beyond bottom right corner")
+    {
+        const static char* expected_xpm[] =
+        {
+            "9 9 7 1",
+            "   c None",
+            "y  c #FF0000",
+            "r  c #FF0000",
+            "g  c #00FF00",
+            "b  c #0000FF",
+            "o  c #FF6600",
+            "w  c #FFFFFF",
+            "rrrrwgggg",
+            "rrrrwgggg",
+            "rrrrwgggg",
+            "rrrrwgggg",
+            "wwwwwwwww",
+            "bbbbwrrrr",
+            "bbbbwrrrr",
+            "bbbbwrrrr",
+            "bbbbwrrrr"
+        };
+        wxImage actual(squares_xpm);
+        wxImage paste(squares_xpm);
+        wxImage expected(expected_xpm);
+        actual.Paste(paste, 5, 5);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+
+    SECTION("Paste beyond bottom left corner")
+    {
+        const static char* expected_xpm[] =
+        {
+            "9 9 7 1",
+            "   c None",
+            "y  c #FFFF00",
+            "r  c #FF0000",
+            "g  c #00FF00",
+            "b  c #0000FF",
+            "o  c #FF6600",
+            "w  c #FFFFFF",
+            "rrrrwgggg",
+            "rrrrwgggg",
+            "rrrrwgggg",
+            "rrrrwgggg",
+            "wwwwwwwww",
+            "ggggwoooo",
+            "ggggwoooo",
+            "ggggwoooo",
+            "ggggwoooo"
+        };
+        wxImage actual(squares_xpm);
+        wxImage paste(squares_xpm);
+        wxImage expected(expected_xpm);
+        actual.Paste(paste, -5, 5);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+
+    SECTION("Paste fully opaque image onto blank image without alpha")
+    {
+        const wxImage background("image/paste_input_background.png");
+        REQUIRE(background.IsOk());
+
+        wxImage actual(background.GetSize());
+        actual.Paste(background, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(background));
+        CHECK(!actual.HasAlpha());
+    }
+    SECTION("Paste fully opaque image onto blank image with alpha")
+    {
+        const wxImage background("image/paste_input_background.png");
+        REQUIRE(background.IsOk());
+
+        wxImage actual(background.GetSize());
+        actual.InitAlpha();
+        actual.Paste(background, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(background));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
+    }
+    SECTION("Paste fully transparent image")
+    {
+        const wxImage background("image/paste_input_background.png");
+        REQUIRE(background.IsOk());
+
+        wxImage actual = background.Copy();
+        wxImage transparent(actual.GetSize());
+        transparent.InitAlpha();
+        memset(transparent.GetAlpha(), 0, transparent.GetWidth() * transparent.GetHeight());
+        actual.Paste(transparent, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(background));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
+    }
+    SECTION("Paste image with transparent region")
+    {
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage opaque_square("image/paste_input_overlay_transparent_border_opaque_square.png");
+        REQUIRE(opaque_square.IsOk());
+
+        actual.Paste(opaque_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_background_plus_overlay_transparent_border_opaque_square.png")));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
+    }
+    SECTION("Paste image with semi transparent region")
+    {
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
+        actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png")));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
+    }
+    SECTION("Paste two semi transparent images on top of background")
+    {
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
+        const wxImage transparent_circle("image/paste_input_overlay_transparent_border_semitransparent_circle.png");
+        REQUIRE(transparent_circle.IsOk());
+
+        actual.Paste(transparent_circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_background_plus_circle_plus_square.png"), 1));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
+    }
+    SECTION("Paste two semi transparent images together first, then on top of background")
+    {
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
+        const wxImage transparent_circle("image/paste_input_overlay_transparent_border_semitransparent_circle.png");
+        REQUIRE(transparent_circle.IsOk());
+
+        wxImage circle = transparent_circle.Copy();
+        circle.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        actual.Paste(circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        // When applied in this order, two times a rounding difference is triggered.
+        CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_background_plus_circle_plus_square.png"), 2));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
+    }
+    SECTION("Paste semitransparent image over transparent image")
+    {
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
+        const wxImage transparent_circle("image/paste_input_overlay_transparent_border_semitransparent_circle.png");
+        REQUIRE(transparent_circle.IsOk());
+
+        wxImage actual(transparent_circle.GetSize());
+        actual.InitAlpha();
+        memset(actual.GetAlpha(), 0, actual.GetWidth() * actual.GetHeight());
+        actual.Paste(transparent_circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, CenterAlphaPixelEquals(192));
+        actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_no_background_square_over_circle.png"), 1));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(224));
+    }
+    SECTION("Paste fully transparent (masked) image over light image") // todo make test case for 'blend with mask'
+    {
+        wxImage actual(light_image_xpm);
+        actual.InitAlpha();
+        wxImage paste(transparent_image_xpm);
+        wxImage expected(light_image_xpm);
+        actual.Paste(paste, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+    SECTION("Paste fully black (masked) image over light image") // todo make test case for 'blend with mask'
+    {
+        wxImage actual(light_image_xpm);
+        actual.InitAlpha();
+        wxImage paste(black_image_xpm);
+        wxImage expected(black_image_xpm);
+        actual.Paste(paste, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+    SECTION("Paste dark image over light image")
+    {
+        wxImage black("image/paste_input_black.png");
+        wxImage actual("image/paste_input_background.png");
+        actual.InitAlpha();
+        actual.Paste(black, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        CHECK_THAT(actual, RGBSameAs(black));
+    }
+    SECTION("Paste large image with negative vertical offset")
+    {
+        wxImage target(442, 249);
+        wxImage to_be_pasted(345, 24900);
+        target.InitAlpha();
+        target.Paste(to_be_pasted, 48, -12325, wxIMAGE_ALPHA_BLEND_COMPOSE);
+    }
+    SECTION("Paste large image with negative horizontal offset")
+    {
+        wxImage target(249, 442);
+        wxImage to_be_pasted(24900, 345);
+        target.InitAlpha();
+        target.Paste(to_be_pasted, -12325, 48, wxIMAGE_ALPHA_BLEND_COMPOSE);
+    }
+
+}
+
+TEST_CASE("wxImage::RGBtoHSV", "[image][rgb][hsv]")
+{
+    SECTION("RGB(0,0,0) (Black) to HSV")
+    {
+       wxImage::RGBValue rgbBlack(0, 0, 0);
+       wxImage::HSVValue hsvBlack = wxImage::RGBtoHSV(rgbBlack);
+
+       CHECK(hsvBlack.value == Approx(0.0));
+       // saturation and hue are undefined
+    }
+    SECTION("RGB(255,255,255) (White) to HSV")
+    {
+       wxImage::RGBValue rgbWhite(255, 255, 255);
+       wxImage::HSVValue hsvWhite = wxImage::RGBtoHSV(rgbWhite);
+
+       CHECK(hsvWhite.saturation == Approx(0.0));
+       CHECK(hsvWhite.value == Approx(1.0));
+       // hue is undefined
+    }
+    SECTION("RGB(0,255,0) (Green) to HSV")
+    {
+       wxImage::RGBValue rgbGreen(0, 255, 0);
+       wxImage::HSVValue hsvGreen = wxImage::RGBtoHSV(rgbGreen);
+
+       CHECK(hsvGreen.hue == Approx(1.0/3.0));
+       CHECK(hsvGreen.saturation == Approx(1.0));
+       CHECK(hsvGreen.value == Approx(1.0));
+    }
+
+    SECTION("RGB to HSV to RGB")
+    {
+        const wxImage::RGBValue rgbValues[] =
+        {
+            wxImage::RGBValue(   0,   0,   0 ),
+            wxImage::RGBValue(  10,  10,  10 ),
+            wxImage::RGBValue( 255, 255, 255 ),
+            wxImage::RGBValue( 255,   0,   0 ),
+            wxImage::RGBValue(   0, 255,   0 ),
+            wxImage::RGBValue(   0,   0, 255 ),
+            wxImage::RGBValue(   1,   2,   3 ),
+            wxImage::RGBValue(  10,  20,  30 ),
+            wxImage::RGBValue(   0,   1,   6 ),
+            wxImage::RGBValue(   9,   0,  99 ),
+        };
+
+        for (unsigned i = 0; i < WXSIZEOF(rgbValues); i++)
+        {
+            wxImage::RGBValue rgbValue = rgbValues[i];
+            wxImage::HSVValue hsvValue = wxImage::RGBtoHSV(rgbValue);
+            wxImage::RGBValue rgbRoundtrip = wxImage::HSVtoRGB(hsvValue);
+
+            CHECK(rgbRoundtrip.red == rgbValue.red);
+            CHECK(rgbRoundtrip.green == rgbValue.green);
+            CHECK(rgbRoundtrip.blue == rgbValue.blue);
+        }
+    }
+}
+
+TEST_CASE("wxImage::Clipboard", "[image][clipboard]")
+{
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+    wxInitAllImageHandlers();
+
+    wxImage imgOriginal;
+    REQUIRE(imgOriginal.LoadFile("horse.png") == true);
+
+    wxImageDataObject* dobj1 = new wxImageDataObject(imgOriginal);
+    {
+        wxClipboardLocker lockClip;
+        REQUIRE(wxTheClipboard->SetData(dobj1) == true);
+    }
+
+    wxImageDataObject dobj2;
+    {
+        wxClipboardLocker lockClip;
+        REQUIRE(wxTheClipboard->GetData(dobj2) == true);
+    }
+    wxImage imgRetrieved = dobj2.GetImage();
+    REQUIRE(imgRetrieved.IsOk());
+
+    CHECK_THAT(imgOriginal, RGBASameAs(imgRetrieved));
+#endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+}
+
+TEST_CASE("wxImage::InitAlpha", "[image][initalpha]")
+{
+    const wxColour maskCol(*wxRED);
+    const wxColour fillCol(*wxGREEN);
+
+    SECTION("RGB image without mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        REQUIRE_FALSE(img.HasAlpha());
+        REQUIRE_FALSE(img.HasMask());
+
+        wxImage imgRes = img;
+        imgRes.InitAlpha();
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE_FALSE(imgRes.HasMask());
+
+        for (int y = 0; y < img.GetHeight(); y++)
+            for (int x = 0; x < img.GetWidth(); x++)
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGB(cRes, cSrc);
+                CHECK((int)cRes.Alpha() == (int)wxIMAGE_ALPHA_OPAQUE);
+            }
+    }
+
+    SECTION("RGB image with mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetMaskColour(maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        REQUIRE_FALSE(img.HasAlpha());
+        REQUIRE(img.HasMask() == true);
+
+        wxImage imgRes = img;
+        imgRes.InitAlpha();
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE_FALSE(imgRes.HasMask());
+
+        for ( int y = 0; y < img.GetHeight(); y++ )
+            for ( int x = 0; x < img.GetWidth(); x++ )
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGB(cRes, cSrc);
+                if ( cSrc == maskCol )
+                {
+                    CHECK((int)cRes.Alpha() == (int)wxIMAGE_ALPHA_TRANSPARENT);
+                }
+                else
+                {
+                    CHECK((int)cRes.Alpha() == (int)wxIMAGE_ALPHA_OPAQUE);
+                }
+            }
+    }
+
+    SECTION("RGBA image without mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetAlpha();
+        img.SetAlpha(0, 0, 128);
+        img.SetAlpha(0, 1, 0);
+        img.SetAlpha(1, 0, 128);
+        img.SetAlpha(1, 1, 0);
+        REQUIRE(img.HasAlpha() == true);
+        REQUIRE_FALSE(img.HasMask());
+
+        wxImage imgRes = img;
+        CHECK_THROWS(imgRes.InitAlpha());
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE_FALSE(imgRes.HasMask());
+
+        for ( int y = 0; y < img.GetHeight(); y++ )
+            for ( int x = 0; x < img.GetWidth(); x++ )
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y), img.GetAlpha(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGBA(cRes, cSrc);
+            }
+    }
+
+    SECTION("RGBA image with mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetAlpha();
+        img.SetAlpha(0, 0, 128);
+        img.SetAlpha(0, 1, 0);
+        img.SetAlpha(1, 0, 128);
+        img.SetAlpha(1, 1, 0);
+        img.SetMaskColour(maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        REQUIRE(img.HasAlpha() == true);
+        REQUIRE(img.HasMask() == true);
+
+        wxImage imgRes = img;
+        CHECK_THROWS(imgRes.InitAlpha());
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE(imgRes.HasMask() == true);
+
+        for ( int y = 0; y < img.GetHeight(); y++ )
+            for ( int x = 0; x < img.GetWidth(); x++ )
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y), img.GetAlpha(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGBA(cRes, cSrc);
+            }
+    }
+}
+
+TEST_CASE("wxImage::XPM", "[image][xpm]")
+{
+   static const char * dummy_xpm[] = {
+      "16 16 2 1",
+      "@ c Black",
+      "  c None",
+      "@               ",
+      " @              ",
+      "  @             ",
+      "   @            ",
+      "    @           ",
+      "     @          ",
+      "      @         ",
+      "       @        ",
+      "        @       ",
+      "         @      ",
+      "          @     ",
+      "           @    ",
+      "            @   ",
+      "             @  ",
+      "              @ ",
+      "               @"
+   };
+
+   wxImage image(dummy_xpm);
+   CHECK( image.IsOk() );
+
+   // The goal here is mostly just to check that this code compiles, i.e. that
+   // creating all these classes from XPM works.
+   CHECK( wxBitmap(dummy_xpm).IsOk() );
+   CHECK( wxCursor(dummy_xpm).IsOk() );
+   CHECK( wxIcon(dummy_xpm).IsOk() );
+}
+
+TEST_CASE("wxImage::ChangeColours", "[image]")
+{
+    wxImage original;
+    REQUIRE(original.LoadFile("image/toucan.png", wxBITMAP_TYPE_PNG));
+
+    wxImage test;
+    wxImage expected;
+
+    test = original;
+    test.RotateHue(0.538);
+    REQUIRE(expected.LoadFile("image/toucan_hue_0.538.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test.ChangeSaturation(-0.41);
+    REQUIRE(expected.LoadFile("image/toucan_sat_-0.41.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test.ChangeBrightness(-0.259);
+    REQUIRE(expected.LoadFile("image/toucan_bright_-0.259.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test.ChangeHSV(0.538, -0.41, -0.259);
+    REQUIRE(expected.LoadFile("image/toucan_hsv_0.538_-0.41_-0.259.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ChangeLightness(46);
+    REQUIRE(expected.LoadFile("image/toucan_light_46.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ConvertToDisabled(240);
+    REQUIRE(expected.LoadFile("image/toucan_dis_240.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ConvertToGreyscale();
+    REQUIRE(expected.LoadFile("image/toucan_grey.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ConvertToMono(255, 255, 255);
+    REQUIRE(expected.LoadFile("image/toucan_mono_255_255_255.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+}
 
 /*
     TODO: add lots of more tests to wxImage functions

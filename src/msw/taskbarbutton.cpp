@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
@@ -29,6 +26,7 @@
 #include "wx/msw/taskbarbutton.h"
 #include "wx/scopedptr.h"
 #include "wx/msw/private/comptr.h"
+#include "wx/msw/private/cotaskmemptr.h"
 
 #include <shlwapi.h>
 #include <initguid.h>
@@ -498,10 +496,9 @@ wxTaskBarJumpListItem* GetItemFromIShellItem(IShellItem *shellItem)
     wxTaskBarJumpListItem *item =
         new wxTaskBarJumpListItem(NULL, wxTASKBAR_JUMP_LIST_DESTINATION);
 
-    wchar_t *name;
+    wxCoTaskMemPtr<wchar_t> name;
     shellItem->GetDisplayName(SIGDN_FILESYSPATH, &name);
     item->SetFilePath(wxString(name));
-    CoTaskMemFree(name);
     return item;
 }
 

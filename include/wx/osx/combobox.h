@@ -47,7 +47,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
            int n = 0, const wxString choices[] = NULL,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr)
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
     }
@@ -59,7 +59,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
            const wxArrayString& choices,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr)
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
@@ -71,7 +71,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
            int n = 0, const wxString choices[] = NULL,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr);
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
@@ -80,7 +80,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
            const wxArrayString& choices,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr);
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     virtual int GetSelection() const wxOVERRIDE;
     virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
@@ -101,6 +101,8 @@ class WXDLLIMPEXP_CORE wxComboBox :
     virtual void Dismiss() wxOVERRIDE;
 #endif // wxOSX_USE_COCOA
 
+
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
 
     // osx specific event handling common for all osx-ports
 

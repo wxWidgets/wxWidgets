@@ -401,6 +401,24 @@ wxSize wxSlider::DoGetBestSize() const
 
 void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 {
+    if ( w == -1 || h == -1 ||
+            (!(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) && (x == -1 || y == -1)) )
+    {
+        const wxRect currentRect = GetRect();
+        if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        {
+            if ( x == -1 )
+                x = currentRect.x;
+            if ( y == -1 )
+                y = currentRect.y;
+        }
+
+        if ( w == -1 )
+            w = currentRect.width;
+        if ( h == -1 )
+            h = currentRect.height;
+    }
+
     int minValWidth, maxValWidth, textheight;
     int width = w;
 

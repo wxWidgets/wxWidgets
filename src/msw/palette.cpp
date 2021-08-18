@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PALETTE
 
@@ -159,7 +156,7 @@ bool wxPalette::GetRGB(int index,
     if ( !m_refData )
         return false;
 
-    if (index < 0 || index > 255)
+    if ( index < 0 || index >= GetColoursCount() )
         return false;
 
     PALETTEENTRY entry;

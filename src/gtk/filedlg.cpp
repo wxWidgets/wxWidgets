@@ -213,9 +213,6 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
-#ifndef __WXGTK4__
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-#endif
     wxString ok_btn_stock;
     if ( style & wxFD_SAVE )
     {
@@ -223,7 +220,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE));
 #else
-        ok_btn_stock = GTK_STOCK_SAVE;
+        ok_btn_stock = "gtk-save";
 #endif
     }
     else
@@ -232,7 +229,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN));
 #else
-        ok_btn_stock = GTK_STOCK_OPEN;
+        ok_btn_stock = "gtk-open";
 #endif
     }
 
@@ -243,14 +240,12 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
                    static_cast<const gchar*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
 #else
-                   GTK_STOCK_CANCEL,
+                   "gtk-cancel",
 #endif
                    GTK_RESPONSE_CANCEL,
                    static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
                    NULL);
-#ifndef __WXGTK4__
-    wxGCC_WARNING_RESTORE()
-#endif
+
     g_object_ref(m_widget);
     GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
 
@@ -401,6 +396,7 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 
 wxString wxFileDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetPaths() instead" );
     return m_fc.GetPath();
 }
 
@@ -433,9 +429,7 @@ void wxFileDialog::SetPath(const wxString& path)
     // we need an absolute path for GTK native chooser so ensure that we have
     // it: use the initial directory if it was set or just CWD otherwise (this
     // is the default behaviour if m_dir is empty)
-    wxFileName fn(path);
-    fn.MakeAbsolute(m_dir);
-    m_fc.SetPath(fn.GetFullPath());
+    m_fc.SetPath(wxFileName(path).GetAbsolutePath(m_dir));
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
@@ -468,6 +462,8 @@ void wxFileDialog::SetFilename(const wxString& name)
 
 wxString wxFileDialog::GetFilename() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
+
     wxString currentFilename( m_fc.GetFilename() );
     if (currentFilename.empty())
     {
@@ -498,8 +494,7 @@ void wxFileDialog::GTKSelectionChanged(const wxString& filename)
 {
     m_currentlySelectedFilename = filename;
 
-    if (m_extraControl)
-        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+    UpdateExtraControlUI();
 }
 
 #endif // wxUSE_FILEDLG

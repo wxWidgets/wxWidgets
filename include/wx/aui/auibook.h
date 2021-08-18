@@ -55,6 +55,7 @@ enum wxAuiNotebookOption
                              wxAUI_NB_MIDDLE_CLICK_CLOSE
 };
 
+wxALLOW_COMBINING_ENUMS(wxAuiNotebookOption, wxBorder)
 
 
 
@@ -352,6 +353,10 @@ public:
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
+    wxAuiTabCtrl* GetTabCtrlFromPoint(const wxPoint& pt);
+    wxAuiTabCtrl* GetActiveTabCtrl();
+    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
+
 protected:
     // Common part of all ctors.
     void Init();
@@ -381,10 +386,7 @@ protected:
 
     void DoSizing();
     void InitNotebook(long style);
-    wxAuiTabCtrl* GetTabCtrlFromPoint(const wxPoint& pt);
     wxWindow* GetTabFrameFromTabCtrl(wxWindow* tabCtrl);
-    wxAuiTabCtrl* GetActiveTabCtrl();
-    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
     void RemoveEmptyTabFrames();
     void UpdateHintWindowSize();
 

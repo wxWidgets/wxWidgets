@@ -9,6 +9,7 @@
 #ifndef _WX_TESTS_TESTWINDOW_H_
 #define _WX_TESTS_TESTWINDOW_H_
 
+#include "wx/scopedptr.h"
 #include "wx/window.h"
 
 // We need to wrap wxWindow* in a class as specializing StringMaker for
@@ -17,6 +18,8 @@ class wxWindowPtr
 {
 public:
     explicit wxWindowPtr(wxWindow* win) : m_win(win) {}
+    template <typename W>
+    explicit wxWindowPtr(const wxScopedPtr<W>& win) : m_win(win.get()) {}
 
     wxString Dump() const
     {
@@ -44,7 +47,9 @@ private:
 
 // Macro providing more information about the current focus if comparison
 // fails.
-#define CHECK_FOCUS_IS(w) CHECK(wxWindowPtr(wxWindow::FindFocus()) == wxWindowPtr(w))
+#define CHECK_SAME_WINDOW(w1, w2) CHECK(wxWindowPtr(w1) == wxWindowPtr(w2))
+
+#define CHECK_FOCUS_IS(w) CHECK_SAME_WINDOW(wxWindow::FindFocus(), w)
 
 namespace Catch
 {

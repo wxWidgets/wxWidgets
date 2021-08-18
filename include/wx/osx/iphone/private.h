@@ -56,6 +56,7 @@ public :
 
     virtual void        SetBackgroundColour( const wxColour& col ) ;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) ;
+    virtual void        SetForegroundColour( const wxColour& col ) ;
 
     virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const;
     virtual void        Move(int x, int y, int width, int height);
@@ -102,7 +103,7 @@ public :
     void                PulseGauge();
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
-    void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+    void                SetFont(const wxFont & font);
 
     void                InstallEventHandler( WXWidget control = NULL );
     bool                EnableTouchEvents(int WXUNUSED(eventsMask)) { return false; }

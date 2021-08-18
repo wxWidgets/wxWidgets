@@ -99,19 +99,19 @@ private:
 
 #define wxVALIDATOR_PARAM(val) val
 
+extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
+
 #else // !wxUSE_VALIDATORS
     // wxWidgets is compiled without support for wxValidator, but we still
     // want to be able to pass wxDefaultValidator to the functions which take
     // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
     // everywhere
-    class WXDLLIMPEXP_FWD_CORE wxValidator;
+    class wxValidator { };
+    #define wxDefaultValidator wxValidator()
 
     // this macro allows to avoid warnings about unused parameters when
     // wxUSE_VALIDATORS == 0
     #define wxVALIDATOR_PARAM(val)
 #endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 
-extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
-
 #endif // _WX_VALIDATE_H_
-

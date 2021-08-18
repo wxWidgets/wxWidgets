@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FONTMAP
 
@@ -407,8 +404,7 @@ wxFontMapperBase::wxFontMapperBase()
 wxFontMapperBase::~wxFontMapperBase()
 {
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    if ( m_configDummy )
-        delete m_configDummy;
+    delete m_configDummy;
 #endif // wxUSE_CONFIG
 }
 
@@ -417,7 +413,7 @@ wxFontMapperBase *wxFontMapperBase::Get()
 {
     if ( !sm_instance )
     {
-        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        wxAppTraits *traits = wxApp::GetTraitsIfExists();
         if ( traits )
         {
             sm_instance = traits->CreateFontMapper();

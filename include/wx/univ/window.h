@@ -62,7 +62,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxPanelNameStr)
+             const wxString& name = wxASCII_STR(wxPanelNameStr))
         : wxWindowNative(parent, id, pos, size, style | wxCLIP_CHILDREN, name)
         { Init(); }
 
@@ -71,7 +71,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     virtual ~wxWindow();
 
@@ -197,6 +197,8 @@ public:
         return wxWindowNative::IsClientAreaChild(child);
     }
 
+    virtual wxSize GetWindowBorderSize() const wxOVERRIDE;
+
 protected:
     // common part of all ctors
     void Init();
@@ -233,9 +235,6 @@ protected:
 
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);
-
-    // override the base class method to return the size of the window borders
-    virtual wxSize DoGetBorderSize() const wxOVERRIDE;
 
     // adjust the size of the window to take into account its borders
     wxSize AdjustSize(const wxSize& size) const;

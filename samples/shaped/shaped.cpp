@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -141,7 +138,6 @@ public:
 
 private:
     // event handlers (these functions should _not_ be virtual)
-    void OnDoubleClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
 
     // any class wishing to process wxWidgets events must use this macro
@@ -475,14 +471,13 @@ void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 // ----------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
-    EVT_LEFT_DCLICK(SeeThroughFrame::OnDoubleClick)
     EVT_PAINT(SeeThroughFrame::OnPaint)
 wxEND_EVENT_TABLE()
 
 void SeeThroughFrame::Create()
 {
     SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-    wxFrame::Create(NULL, wxID_ANY, "Transparency test: double click here",
+    wxFrame::Create(NULL, wxID_ANY, "Transparency test",
            wxPoint(100, 30), wxSize(300, 300),
            wxDEFAULT_FRAME_STYLE |
            wxFULL_REPAINT_ON_RESIZE |
@@ -499,15 +494,15 @@ void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
     int xcount = 8;
     int ycount = 8;
 
-    float xstep = 1. / xcount;
-    float ystep = 1. / ycount;
+    double xstep = 1.0 / xcount;
+    double ystep = 1.0 / ycount;
 
     int width = GetClientSize().GetWidth();
     int height = GetClientSize().GetHeight();
 
-    for ( float x = 0.; x < 1.; x += xstep )
+    for ( double x = 0; x < 1; x += xstep )
     {
-        for ( float y = 0.; y < 1.; y += ystep )
+        for ( double y = 0; y < 1; y += ystep )
         {
             wxImage::RGBValue v = wxImage::HSVtoRGB(wxImage::HSVValue(x, 1., 1.));
             dc.SetBrush(wxBrush(wxColour(v.red, v.green, v.blue,
@@ -520,13 +515,3 @@ void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
         }
     }
 }
-
-void SeeThroughFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
-{
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
-    SetTransparent(255);
-    SetTitle("Opaque");
-
-    Refresh();
-}
-

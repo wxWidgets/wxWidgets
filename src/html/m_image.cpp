@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -269,7 +266,7 @@ const wxHtmlCell *wxHtmlImageMapCell::Find( int cond, const void *param ) const
 {
     if (cond == wxHTML_COND_ISIMAGEMAP)
     {
-        if (m_Name == *((wxString*)(param)))
+        if (m_Name == *static_cast<const wxString*>(param))
             return this;
     }
     return wxHtmlCell::Find(cond, param);
@@ -331,8 +328,8 @@ private:
     size_t              m_nCurrFrame;
 #endif
     double              m_scale;
-    wxHtmlImageMapCell *m_imageMap;
-    wxString            m_mapName;
+    mutable const wxHtmlImageMapCell* m_imageMap;
+    mutable wxString    m_mapName;
     wxString            m_alt;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageCell);
@@ -599,7 +596,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         dc.DrawRectangle(x + m_PosX, y + m_PosY, m_Width, m_Height);
         x++, y++;
     }
-    if ( m_bitmap )
+    if ( m_bitmap && m_Width && m_Height )
     {
         // We add in the scaling from the desired bitmap width
         // and height, so we only do the scaling once.
@@ -609,7 +606,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         // Optimisation for Windows: WIN32 scaling for window DCs is very poor,
         // so unless we're using a printer DC, do the scaling ourselves.
 #if defined(__WXMSW__) && wxUSE_IMAGE
-        if (m_Width >= 0 && m_Width != m_bitmap->GetWidth()
+        if (m_Width != m_bitmap->GetWidth()
     #if wxUSE_PRINTING_ARCHITECTURE
             && !dc.IsKindOf(CLASSINFO(wxPrinterDC))
     #endif
@@ -655,18 +652,14 @@ wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
             p = p->GetParent();
         }
         p = op;
-        wxHtmlCell *cell = (wxHtmlCell*)p->Find(wxHTML_COND_ISIMAGEMAP,
+        const wxHtmlCell* cell = p->Find(wxHTML_COND_ISIMAGEMAP,
                                                 (const void*)(&m_mapName));
         if (!cell)
         {
-            ((wxString&)m_mapName).Clear();
+            m_mapName.Clear();
             return wxHtmlCell::GetLink( x, y );
         }
-        {   // dirty hack, ask Joel why he fills m_ImageMap in this place
-            // THE problem is that we're in const method and we can't modify m_ImageMap
-            wxHtmlImageMapCell **cx = (wxHtmlImageMapCell**)(&m_imageMap);
-            *cx = (wxHtmlImageMapCell*)cell;
-        }
+        m_imageMap = static_cast<const wxHtmlImageMapCell*>(cell);
     }
     return m_imageMap->GetLink(x, y);
 }
@@ -698,8 +691,8 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
 #if defined(__WXOSX_COCOA__)
                 // Try to find a 2x resolution image with @2x appended before the file extension.
                 wxWindow* win = m_WParser->GetWindowInterface() ? m_WParser->GetWindowInterface()->GetHTMLWindow() : NULL;
-                if (!win && wxTheApp)
-                    win = wxTheApp->GetTopWindow();
+                if (!win)
+                    win = wxApp::GetMainTopWindow();
                 if (win && win->GetContentScaleFactor() > 1.0)
                 {
                     if (tmp.Find('.') != wxNOT_FOUND)
@@ -761,8 +754,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
                 cel->SetAlt(tag.GetParam(wxT("alt")));
                 m_WParser->GetContainer()->InsertCell(cel);
-                if (str)
-                    delete str;
+                delete str;
             }
         }
         if (tag.GetName() == wxT("MAP"))

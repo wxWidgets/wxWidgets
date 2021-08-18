@@ -15,9 +15,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DYNAMIC_LOADER
 
@@ -299,7 +296,7 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
     if ( entry )
     {
         wxLogTrace(wxT("dll"),
-                   wxT("LoadLibrary(%s): already loaded."), realname.c_str());
+                   wxT("LoadLibrary(%s): already loaded."), realname);
 
         entry->RefLib();
     }
@@ -312,13 +309,13 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
             (*ms_manifest)[realname] = entry;
 
             wxLogTrace(wxT("dll"),
-                       wxT("LoadLibrary(%s): loaded ok."), realname.c_str());
+                       wxT("LoadLibrary(%s): loaded ok."), realname);
 
         }
         else
         {
             wxLogTrace(wxT("dll"),
-                       wxT("LoadLibrary(%s): failed to load."), realname.c_str());
+                       wxT("LoadLibrary(%s): failed to load."), realname);
 
             // we have created entry just above
             if ( !entry->UnrefLib() )
@@ -350,12 +347,12 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
     if ( !entry )
     {
         wxLogDebug(wxT("Attempt to unload library '%s' which is not loaded."),
-                   libname.c_str());
+                   libname);
 
         return false;
     }
 
-    wxLogTrace(wxT("dll"), wxT("UnloadLibrary(%s)"), realname.c_str());
+    wxLogTrace(wxT("dll"), wxT("UnloadLibrary(%s)"), realname);
 
     if ( !entry->UnrefLib() )
     {

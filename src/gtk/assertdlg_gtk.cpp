@@ -711,7 +711,7 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
 
             /* icon */
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+            image = gtk_image_new_from_stock("gtk-dialog-error", GTK_ICON_SIZE_DIALOG);
             wxGCC_WARNING_RESTORE()
             gtk_box_pack_start (GTK_BOX(hbox), image, FALSE, FALSE, 12);
 
@@ -768,15 +768,11 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
             gtk_button_box_set_layout (GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
 
             /* add the buttons */
-            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Save to _file", GTK_STOCK_SAVE);
-            wxGCC_WARNING_RESTORE()
+            button = gtk_assert_dialog_add_button_to(GTK_BOX(hbox), "Save to _file", "gtk-save");
             g_signal_connect (button, "clicked",
                                 G_CALLBACK(gtk_assert_dialog_save_backtrace_callback), dlg);
 
-            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Copy to clip_board", GTK_STOCK_COPY);
-            wxGCC_WARNING_RESTORE()
+            button = gtk_assert_dialog_add_button_to(GTK_BOX(hbox), "Copy to clip_board", "gtk-copy");
             g_signal_connect (button, "clicked", G_CALLBACK(gtk_assert_dialog_copy_callback), dlg);
         }
 #endif // wxUSE_STACKWALKER
@@ -789,14 +785,10 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
         wxGCC_WARNING_RESTORE()
 
         /* add the stop button */
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_assert_dialog_add_button (dlg, "_Stop", GTK_STOCK_QUIT, GTK_ASSERT_DIALOG_STOP);
-        wxGCC_WARNING_RESTORE()
+        gtk_assert_dialog_add_button(dlg, "_Stop", "gtk-quit", GTK_ASSERT_DIALOG_STOP);
 
         /* add the continue button */
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        continuebtn = gtk_assert_dialog_add_button (dlg, "_Continue", GTK_STOCK_YES, GTK_ASSERT_DIALOG_CONTINUE);
-        wxGCC_WARNING_RESTORE()
+        continuebtn = gtk_assert_dialog_add_button(dlg, "_Continue", "gtk-yes", GTK_ASSERT_DIALOG_CONTINUE);
         gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_ASSERT_DIALOG_CONTINUE);
         g_signal_connect (continuebtn, "clicked", G_CALLBACK(gtk_assert_dialog_continue_callback), dlg);
 

@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STDPATHS
 
@@ -36,6 +33,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
+#include "wx/msw/private/cotaskmemptr.h"
 #include <initguid.h>
 
 // ----------------------------------------------------------------------------
@@ -98,7 +96,7 @@ void ResolveShellFunctions()
     wxDynamicLibrary dllShellFunctions( shellDllName );
     if ( !dllShellFunctions.IsLoaded() )
     {
-        wxLogTrace(TRACE_MASK, wxT("Failed to load %s.dll"), shellDllName.c_str() );
+        wxLogTrace(TRACE_MASK, wxT("Failed to load %s.dll"), shellDllName );
     }
 
     // don't give errors if the functions are unavailable, we're ready to deal
@@ -171,12 +169,11 @@ wxString wxStandardPaths::DoGetKnownFolder(const GUID& rfid)
 
     if ( gs_shellFuncs.pSHGetKnownFolderPath )
     {
-        PWSTR pDir;
+        wxCoTaskMemPtr<wchar_t> pDir;
         HRESULT hr = gs_shellFuncs.pSHGetKnownFolderPath(rfid, 0, 0, &pDir);
         if ( SUCCEEDED(hr) )
         {
             dir = pDir;
-            CoTaskMemFree(pDir);
         }
     }
 
@@ -264,10 +261,13 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     // there can also be an architecture-dependent parent directory, ignore it
     // as well
 #ifdef __WIN64__
+    IgnoreAppSubDir("Win64");
     IgnoreAppSubDir("x64");
+    IgnoreAppSubDir("x86_64");
     IgnoreAppSubDir("ARM64");
 #else // __WIN32__
     IgnoreAppSubDir("Win32");
+    IgnoreAppSubDir("x86");
 #endif // __WIN64__/__WIN32__
 
     wxString compilerPrefix;
@@ -275,8 +275,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "vc";
 #elif defined(__GNUG__)
     compilerPrefix = "gcc";
-#elif defined(__BORLANDC__)
-    compilerPrefix = "bcc";
 #else
     return;
 #endif

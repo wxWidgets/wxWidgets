@@ -115,7 +115,6 @@ public:
     virtual wxRect GetItemRect( const wxDataViewItem &item,
                                 const wxDataViewColumn *column = NULL ) const;
 
-    virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
     virtual bool IsExpanded( const wxDataViewItem & item ) const;
 
@@ -132,6 +131,7 @@ public:
 protected:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
+    virtual void DoExpand( const wxDataViewItem & item, bool expandChildren );
 
 private:
     virtual wxDataViewItem DoGetCurrentItem() const;

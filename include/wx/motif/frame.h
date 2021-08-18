@@ -21,7 +21,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE,
-        const wxString& name = wxFrameNameStr)
+        const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -34,7 +34,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE,
-        const wxString& name = wxFrameNameStr);
+        const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxFrame();
 
@@ -57,7 +57,7 @@ public:
 #if wxUSE_TOOLBAR
     virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = wxID_ANY,
-                                     const wxString& name = wxToolBarNameStr);
+                                     const wxString& name = wxASCII_STR(wxToolBarNameStr));
     virtual void SetToolBar(wxToolBar *toolbar);
     virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR

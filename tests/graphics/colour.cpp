@@ -12,107 +12,144 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/colour.h"
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
-// helpers
+// helpers for checking wxColour RGB[A] values
 // ----------------------------------------------------------------------------
 
-// Check the colour components, with and without alpha.
-//
-// NB: These are macros and not functions to have correct line numbers in case
-//     of failure.
-#define ASSERT_EQUAL_RGB(c, r, g, b) \
-    CPPUNIT_ASSERT_EQUAL( r, (int)c.Red() ); \
-    CPPUNIT_ASSERT_EQUAL( g, (int)c.Green() ); \
-    CPPUNIT_ASSERT_EQUAL( b, (int)c.Blue() )
+typedef wxColour::ChannelType ChannelType;
 
-#define ASSERT_EQUAL_RGBA(c, r, g, b, a) \
-    ASSERT_EQUAL_RGB(c, r, g, b); \
-    CPPUNIT_ASSERT_EQUAL( a, (int)c.Alpha() )
-
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class ColourTestCase : public CppUnit::TestCase
+class ColourRGBMatcher : public Catch::MatcherBase<wxColour>
 {
 public:
-    ColourTestCase() { }
+    ColourRGBMatcher(ChannelType red, ChannelType green, ChannelType blue)
+        : m_red(red),
+          m_green(green),
+          m_blue(blue)
+    {
+    }
 
-private:
-    CPPUNIT_TEST_SUITE( ColourTestCase );
-        CPPUNIT_TEST( GetSetRGB );
-        CPPUNIT_TEST( FromString );
-    CPPUNIT_TEST_SUITE_END();
+    bool match(const wxColour& c) const wxOVERRIDE
+    {
+        return c.Red() == m_red && c.Green() == m_green && c.Blue() == m_blue;
+    }
 
-    void GetSetRGB();
-    void FromString();
+    std::string describe() const wxOVERRIDE
+    {
+        return wxString::Format("!= RGB(%#02x, %#02x, %#02x)",
+                                m_red, m_green, m_blue).ToStdString();
+    }
 
-    wxDECLARE_NO_COPY_CLASS(ColourTestCase);
+protected:
+    const ChannelType m_red, m_green, m_blue;
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ColourTestCase );
+class ColourRGBAMatcher : public ColourRGBMatcher
+{
+public:
+    ColourRGBAMatcher(ChannelType red, ChannelType green, ChannelType blue,
+                      ChannelType alpha)
+        : ColourRGBMatcher(red, green, blue),
+          m_alpha(alpha)
+    {
+    }
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ColourTestCase, "ColourTestCase" );
+    bool match(const wxColour& c) const wxOVERRIDE
+    {
+        return ColourRGBMatcher::match(c) && c.Alpha() == m_alpha;
+    }
 
-void ColourTestCase::GetSetRGB()
+    std::string describe() const wxOVERRIDE
+    {
+        return wxString::Format("!= RGBA(%#02x, %#02x, %#02x, %#02x)",
+                                m_red, m_green, m_blue, m_alpha).ToStdString();
+    }
+
+private:
+    const ChannelType m_alpha;
+};
+
+inline
+ColourRGBMatcher
+RGBSameAs(ChannelType red, ChannelType green, ChannelType blue)
+{
+    return ColourRGBMatcher(red, green, blue);
+}
+
+inline
+ColourRGBAMatcher
+RGBASameAs(ChannelType red, ChannelType green, ChannelType blue, ChannelType alpha)
+{
+    return ColourRGBAMatcher(red, green, blue, alpha);
+}
+
+// ----------------------------------------------------------------------------
+// tests
+// ----------------------------------------------------------------------------
+
+TEST_CASE("wxColour::GetSetRGB", "[colour][rgb]")
 {
     wxColour c;
     c.SetRGB(0x123456);
 
-    CPPUNIT_ASSERT_EQUAL( 0x56, (int)c.Red() );
-    CPPUNIT_ASSERT_EQUAL( 0x34, (int)c.Green() );
-    CPPUNIT_ASSERT_EQUAL( 0x12, (int)c.Blue() );
-    CPPUNIT_ASSERT_EQUAL( wxALPHA_OPAQUE, c.Alpha() );
+    CHECK( c.Red()   == 0x56 );
+    CHECK( c.Green() == 0x34 );
+    CHECK( c.Blue()  == 0x12 );
+    CHECK( c.Alpha() == wxALPHA_OPAQUE );
 
-    CPPUNIT_ASSERT_EQUAL( wxColour(0x123456), c );
-    CPPUNIT_ASSERT_EQUAL( 0x123456, c.GetRGB() );
+    CHECK( c == wxColour(0x123456) );
+    CHECK( c.GetRGB() == 0x123456 );
 
     c.SetRGBA(0xaabbccdd);
 
-    CPPUNIT_ASSERT_EQUAL( 0xdd, (int)c.Red() );
-    CPPUNIT_ASSERT_EQUAL( 0xcc, (int)c.Green() );
-    CPPUNIT_ASSERT_EQUAL( 0xbb, (int)c.Blue() );
+    CHECK( c.Red()   == 0xdd);
+    CHECK( c.Green() == 0xcc);
+    CHECK( c.Blue()  == 0xbb);
 
     // wxX11 doesn't support alpha at all currently.
 #ifndef __WXX11__
-    CPPUNIT_ASSERT_EQUAL( 0xaa, (int)c.Alpha() );
+    CHECK( c.Alpha() == 0xaa );
 #endif // __WXX11__
 
     // FIXME: at least under wxGTK wxColour ctor doesn't take alpha channel
     //        into account: bug or feature?
-    //CPPUNIT_ASSERT_EQUAL( wxColour(0xaabbccdd), c );
-    CPPUNIT_ASSERT_EQUAL( 0xbbccdd, c.GetRGB() );
+    //CHECK( c == wxColour(0xaabbccdd) );
+    CHECK( c.GetRGB() == 0xbbccdd );
 #ifndef __WXX11__
-    CPPUNIT_ASSERT_EQUAL( 0xaabbccdd, c.GetRGBA() );
+    CHECK( c.GetRGBA() == 0xaabbccdd );
 #endif // __WXX11__
 }
 
-void ColourTestCase::FromString()
+TEST_CASE("wxColour::FromString", "[colour][string]")
 {
-    ASSERT_EQUAL_RGB( wxColour("rgb(11, 22, 33)"), 11, 22, 33 );
+    CHECK_THAT( wxColour("rgb(11, 22, 33)"), RGBSameAs(11, 22, 33) );
     // wxX11 doesn't support alpha at all currently.
 #ifndef __WXX11__
-    ASSERT_EQUAL_RGBA( wxColour("rgba(11, 22, 33, 0.5)"), 11, 22, 33, 128 );
-    ASSERT_EQUAL_RGBA( wxColour("rgba( 11, 22, 33, 0.5 )"), 11, 22, 33, 128 );
+    CHECK_THAT( wxColour("rgba(11, 22, 33, 0.5)"), RGBASameAs(11, 22, 33, 128) );
+    CHECK_THAT( wxColour("rgba( 11, 22, 33, 0.5 )"), RGBASameAs(11, 22, 33, 128) );
 #endif // __WXX11__
 
-    ASSERT_EQUAL_RGB( wxColour("#aabbcc"), 0xaa, 0xbb, 0xcc );
+    CHECK_THAT( wxColour("#aabbcc"), RGBSameAs(0xaa, 0xbb, 0xcc) );
 
-    ASSERT_EQUAL_RGB( wxColour("red"), 0xff, 0, 0 );
+    CHECK_THAT( wxColour("red"), RGBSameAs(0xff, 0, 0) );
 
     wxColour col;
-    CPPUNIT_ASSERT( !wxFromString("rgb(1, 2)", &col) );
-    CPPUNIT_ASSERT( !wxFromString("rgba(1, 2, 3.456)", &col) );
-    CPPUNIT_ASSERT( !wxFromString("rgba(1, 2, 3.456, foo)", &col) );
+    CHECK( !wxFromString("rgb(1, 2)", &col) );
+    CHECK( !wxFromString("rgba(1, 2, 3.456)", &col) );
+    CHECK( !wxFromString("rgba(1, 2, 3.456, foo)", &col) );
+}
+
+TEST_CASE("wxColour::GetAsString", "[colour][string]")
+{
+    CHECK( wxColour().GetAsString() == "" );
+
+    wxColour red("red");
+    CHECK( red.GetAsString() == "red" );
+    CHECK( red.GetAsString(wxC2S_CSS_SYNTAX) == "rgb(255, 0, 0)" );
+    CHECK( red.GetAsString(wxC2S_HTML_SYNTAX) == "#FF0000" );
 }
 
 TEST_CASE("wxColour::GetLuminance", "[colour][luminance]")

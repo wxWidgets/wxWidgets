@@ -39,13 +39,35 @@ void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetSystemImage(const wxString& name);
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref );
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCFURL( CFURLRef urlref );
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetIconForType(OSType type );
 void WXDLLIMPEXP_CORE wxOSXSetImageSize(WX_NSImage image, CGFloat width, CGFloat height);
 wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
 WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
+WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromNSCursor(const WXHCURSOR cursor);
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
+
+class WXDLLIMPEXP_FWD_CORE wxWidgetCocoaImpl;
+
+// a class which disables sending wx keydown events useful when adding text programmatically, for wx-internal use only
+class wxWidgetCocoaNativeKeyDownSuspender
+{
+public:
+    // stops sending keydown events for text inserted into this widget
+    explicit wxWidgetCocoaNativeKeyDownSuspender(wxWidgetCocoaImpl *target);
+    
+    // resumes sending keydown events
+    ~wxWidgetCocoaNativeKeyDownSuspender();
+    
+private:
+    wxWidgetCocoaImpl *m_target;
+    NSEvent* m_nsevent;
+    bool m_wxsent;
+
+    wxDECLARE_NO_COPY_CLASS(wxWidgetCocoaNativeKeyDownSuspender);
+};
 
 class WXDLLIMPEXP_CORE wxWidgetCocoaImpl : public wxWidgetImpl
 {
@@ -80,6 +102,7 @@ public :
 
     virtual void        SetBackgroundColour(const wxColour&) wxOVERRIDE;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
+    virtual void        SetForegroundColour(const wxColour& col) wxOVERRIDE;
 
     virtual void        GetContentArea( int &left, int &top, int &width, int &height ) const wxOVERRIDE;
     virtual void        Move(int x, int y, int width, int height) wxOVERRIDE;
@@ -89,6 +112,8 @@ public :
 
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) wxOVERRIDE;
     virtual bool        GetNeedsDisplay() const wxOVERRIDE;
+
+    virtual void        EnableFocusRing(bool enabled) wxOVERRIDE;
 
     virtual void        SetDrawingEnabled(bool enabled) wxOVERRIDE;
 
@@ -127,7 +152,7 @@ public :
     void                PulseGauge() wxOVERRIDE;
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) wxOVERRIDE;
 
-    void                SetFont( const wxFont & font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true ) wxOVERRIDE;
+    void                SetFont(const wxFont & font) wxOVERRIDE;
     void                SetToolTip( wxToolTip* tooltip ) wxOVERRIDE;
 
     void                InstallEventHandler( WXWidget control = NULL ) wxOVERRIDE;
@@ -147,23 +172,13 @@ public :
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    #ifdef API_AVAILABLE
-        #define WX_AVAILABLE_10_10 API_AVAILABLE(macos(10.10))
-    #else
-        #define WX_AVAILABLE_10_10
-    #endif
-
-    WX_AVAILABLE_10_10 virtual void        PanGestureEvent(NSPanGestureRecognizer *panGestureRecognizer);
-    WX_AVAILABLE_10_10 virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
-    WX_AVAILABLE_10_10 virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
-    WX_AVAILABLE_10_10 virtual void        LongPressEvent(NSPressGestureRecognizer *pressGestureRecognizer);
-    WX_AVAILABLE_10_10 virtual void        TouchesBegan(NSEvent *event);
-    WX_AVAILABLE_10_10 virtual void        TouchesMoved(NSEvent *event);
-    WX_AVAILABLE_10_10 virtual void        TouchesEnded(NSEvent *event);
-
-    #undef WX_AVAILABLE_10_10
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    virtual void        PanGestureEvent(NSPanGestureRecognizer *panGestureRecognizer);
+    virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
+    virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
+    virtual void        LongPressEvent(NSPressGestureRecognizer *pressGestureRecognizer);
+    virtual void        TouchesBegan(NSEvent *event);
+    virtual void        TouchesMoved(NSEvent *event);
+    virtual void        TouchesEnded(NSEvent *event);
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
@@ -184,8 +199,8 @@ public :
     virtual void                cursorUpdate(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                insertText(NSString* text, WXWidget slf, void* _cmd);
-    virtual void                doCommandBySelector(void* sel, WXWidget slf, void* _cmd);
-    virtual bool                performKeyEquivalent(WX_NSEvent event, WXWidget slf, void* _cmd);
+    // Returns true if the event was processed by a user-defined event handler.
+    virtual bool                doCommandBySelector(void* sel, WXWidget slf, void* _cmd);
     virtual bool                acceptsFirstResponder(WXWidget slf, void* _cmd);
     virtual bool                becomeFirstResponder(WXWidget slf, void* _cmd);
     virtual bool                resignFirstResponder(WXWidget slf, void* _cmd);
@@ -203,7 +218,28 @@ public :
 
 protected:
     WXWidget m_osxView;
+    
+    // begins processing of native key down event, storing the native event for later wx event generation
+    void BeginNativeKeyDownEvent( NSEvent* event );
+    // done with the current native key down event
+    void EndNativeKeyDownEvent();
+    // allow executing text changes without triggering key down events
+
+    // is currently processing a native key down event
+    bool IsInNativeKeyDown() const;
+    // the native key event
+    NSEvent* GetLastNativeKeyDownEvent();
+    // did send the wx event for the current native key down event
+    void SetKeyDownSent();
+    // was the wx event for the current native key down event sent
+    bool WasKeyDownSent() const;
+
+
+    // Return the view to apply the font/colour to.
+    NSView* GetViewWithText() const;
+
     NSEvent* m_lastKeyDownEvent;
+    bool m_lastKeyDownWXSent;
 #if !wxOSX_USE_NATIVE_FLIPPED
     bool m_isFlipped;
 #endif
@@ -211,6 +247,8 @@ protected:
     // events, don't resend them
     bool m_hasEditor;
 
+    friend class wxWidgetCocoaNativeKeyDownSuspender;
+    
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 
@@ -288,10 +326,14 @@ public :
 
     virtual void SetRepresentedFilename(const wxString& filename) wxOVERRIDE;
 
+    virtual void SetBottomBorderThickness(int thickness) wxOVERRIDE;
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
     CGWindowLevel   GetWindowLevel() const wxOVERRIDE { return m_macWindowLevel; }
     void            RestoreWindowLevel() wxOVERRIDE;
+
+    bool m_macIgnoreNextFullscreenChange = false;
 
     static WX_NSResponder GetNextFirstResponder() ;
     static WX_NSResponder GetFormerFirstResponder() ;
@@ -331,7 +373,9 @@ public:
     typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
     typedef BOOL (*wxOSX_PerformKeyEventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
     typedef BOOL (*wxOSX_FocusHandlerPtr)(NSView* self, SEL _cmd);
-
+    typedef NSDragOperation (*wxOSX_DraggingEnteredOrUpdatedHandlerPtr)(NSView *self, SEL _cmd, void *sender);
+    typedef void (*wxOSX_DraggingExitedHandlerPtr)(NSView *self, SEL _cmd, void *sender);
+    typedef BOOL (*wxOSX_PerformDragOperationHandlerPtr)(NSView *self, SEL _cmd, void *sender);
 
     WXDLLIMPEXP_CORE NSScreen* wxOSXGetMenuScreen();
     WXDLLIMPEXP_CORE NSRect wxToNSRect( NSView* parent, const wxRect& r );
@@ -518,11 +562,6 @@ extern ClassicCursor gMacCursors[];
 
 extern NSLayoutManager* gNSLayoutManager;
 
-// NSString<->wxString
-
-wxString wxStringWithNSString(NSString *nsstring);
-NSString* wxNSStringWithWxString(const wxString &wxstring);
-
 // helper class for setting the current appearance to the
 // effective appearance and restore when exiting scope
 
@@ -539,4 +578,3 @@ private:
 
 #endif
     // _WX_PRIVATE_COCOA_H_
-

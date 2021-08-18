@@ -1,5 +1,5 @@
 #############################################################################
-# Name:        build/cmake/main.cmake
+# Name:        build/cmake/source_groups.cmake
 # Purpose:     CMake source groups file
 # Author:      Tobias Taschner
 # Created:     2016-10-14

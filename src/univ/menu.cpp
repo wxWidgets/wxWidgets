@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MENUS
 
@@ -183,10 +180,12 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // event handlers
+    void OnLeftDown(wxMouseEvent& event);
     void OnLeftUp(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
+    void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
     // reset the current item and node
     void ResetCurrent();
@@ -283,9 +282,11 @@ private:
 wxBEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
     EVT_KEY_DOWN(wxPopupMenuWindow::OnKeyDown)
 
+    EVT_LEFT_DOWN(wxPopupMenuWindow::OnLeftDown)
     EVT_LEFT_UP(wxPopupMenuWindow::OnLeftUp)
     EVT_MOTION(wxPopupMenuWindow::OnMouseMove)
     EVT_LEAVE_WINDOW(wxPopupMenuWindow::OnMouseLeave)
+    EVT_MOUSE_CAPTURE_LOST(wxPopupMenuWindow::OnCaptureLost)
 #ifdef __WXMSW__
     EVT_IDLE(wxPopupMenuWindow::OnIdle)
 #endif
@@ -293,11 +294,11 @@ wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
     EVT_KILL_FOCUS(wxMenuBar::OnKillFocus)
-
     EVT_KEY_DOWN(wxMenuBar::OnKeyDown)
-
     EVT_LEFT_DOWN(wxMenuBar::OnLeftDown)
+    EVT_LEFT_UP(wxMenuBar::OnLeftUp)
     EVT_MOTION(wxMenuBar::OnMouseMove)
+    EVT_MOUSE_CAPTURE_LOST(wxMenuBar::OnCaptureLost)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -358,7 +359,7 @@ void wxPopupMenuWindow::ChangeCurrent(wxMenuItemIter node)
             wxCHECK_RET( item, wxT("no current item?") );
 
             // if it was the currently opened menu, close it
-            if ( item->IsSubMenu() && item->GetSubMenu()->IsShown() )
+            if ( node && item->IsSubMenu() && item->GetSubMenu()->IsShown() )
             {
                 item->GetSubMenu()->Dismiss();
                 OnSubmenuDismiss( false );
@@ -368,7 +369,13 @@ void wxPopupMenuWindow::ChangeCurrent(wxMenuItemIter node)
         }
 
         if ( m_nodeCurrent )
-            RefreshItem(m_nodeCurrent->GetData());
+        {
+            wxMenuItem *item = m_nodeCurrent->GetData();
+            if ( item && item->GetMenu()->IsShown() )
+            {
+                RefreshItem(m_nodeCurrent->GetData());
+            }
+        }
     }
 }
 
@@ -473,6 +480,9 @@ void wxPopupMenuWindow::Dismiss()
         win->Dismiss();
         OnSubmenuDismiss( false );
     }
+
+    if ( HasCapture() )
+        ReleaseMouse();
 
     wxPopupTransientWindow::Dismiss();
 
@@ -720,12 +730,35 @@ bool wxPopupMenuWindow::ProcessLeftDown(wxMouseEvent& event)
     return false;
 }
 
+void wxPopupMenuWindow::OnLeftDown(wxMouseEvent& event)
+{
+    wxMenuBar* menubar = m_menu->GetMenuBar();
+    if ( menubar && !GetMenuItemFromPoint(event.GetPosition()) && !ProcessLeftDown(event) )
+    {
+        wxPoint pos = event.GetPosition();
+        wxPoint posScreen = ClientToScreen(pos);
+        event.SetPosition(menubar->ScreenToClient(posScreen));
+        menubar->ProcessEvent(event);
+    }
+}
+
 void wxPopupMenuWindow::OnLeftUp(wxMouseEvent& event)
 {
     wxMenuItemIter node = GetMenuItemFromPoint(event.GetPosition());
     if ( node )
     {
         ActivateItem(node->GetData(), WithMouse);
+    }
+    else
+    {
+        wxMenuBar* menubar = m_menu->GetMenuBar();
+        if ( menubar && !ProcessLeftDown(event) )
+        {
+            wxPoint pos = event.GetPosition();
+            wxPoint posScreen = ClientToScreen(pos);
+            event.SetPosition(menubar->ScreenToClient(posScreen));
+            menubar->ProcessEvent(event);
+        }
     }
 }
 
@@ -1042,6 +1075,11 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
     }
 
     return processed;
+}
+
+void wxPopupMenuWindow::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    DismissAndNotify();
 }
 
 // ----------------------------------------------------------------------------
@@ -2108,20 +2146,33 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
     if ( HasCapture() )
     {
         OnDismiss();
-
         event.Skip();
     }
     else // we didn't have mouse capture, capture it now
     {
-        m_current = GetMenuFromPoint(event.GetPosition());
-        if ( m_current == -1 )
+        int item = GetMenuFromPoint(event.GetPosition());
+        if ( item == -1 )
         {
-            // unfortunately, we can't prevent wxMSW from giving us the focus,
-            // so we can only give it back
-            GiveAwayFocus();
+            if ( IsShowingMenu() )
+            {
+                DismissMenu(); // event outside menubar - dismiss
+                ReleaseMouseCapture(); // we could get capture back from popup window so release it
+                RefreshItem((size_t)m_current);
+                m_current = -1;
+            }
+        }
+        else if ( item == m_current && IsShowingMenu() )
+        {
+            // double-click
+            DismissMenu();
+            ReleaseMouseCapture();
+            RefreshItem((size_t)m_current);
+            m_current = -1;
         }
         else // on item
         {
+            m_current = item;
+
             wxLogTrace(wxT("mousecapture"), wxT("Capturing mouse from wxMenuBar::OnLeftDown"));
             CaptureMouse();
 
@@ -2131,6 +2182,17 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
             // show the menu
             PopupCurrentMenu(false /* don't select first item - as Windows does */);
         }
+    }
+}
+
+void wxMenuBar::OnLeftUp(wxMouseEvent& event)
+{
+    if ( !HasCapture() && IsShowingMenu() && GetMenuFromPoint(event.GetPosition()) == -1 )
+    {
+        DismissMenu();
+        ReleaseMouseCapture();
+        RefreshItem((size_t)m_current);
+        m_current = -1;
     }
 }
 
@@ -2314,6 +2376,14 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
             }
 
             event.Skip();
+    }
+}
+
+void wxMenuBar::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    if ( IsShowingMenu() )
+    {
+        DismissMenu();
     }
 }
 

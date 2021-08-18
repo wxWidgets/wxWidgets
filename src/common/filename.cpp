@@ -71,10 +71,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
     #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h" // For GetShort/LongPathName
@@ -94,6 +90,10 @@
 #include "wx/dir.h"
 #include "wx/longlong.h"
 #include "wx/uri.h"
+
+#if defined(wxHAS_NATIVE_READLINK)
+    #include "wx/vector.h"
+#endif
 
 #if defined(__WIN32__) && defined(__MINGW32__)
     #include "wx/msw/gccpriv.h"
@@ -174,12 +174,12 @@ public:
             if ( mode == ReadAttr )
             {
                 wxLogSysError(_("Failed to open '%s' for reading"),
-                              filename.c_str());
+                              filename);
             }
             else
             {
                 wxLogSysError(_("Failed to open '%s' for writing"),
-                              filename.c_str());
+                              filename);
             }
         }
     }
@@ -945,7 +945,7 @@ static wxString wxCreateTempImpl(
     wxCharBuffer buf(path.fn_str());
 
     // cast is safe because the string length doesn't change
-    int fdTemp = mkstemp( (char*)(const char*) buf );
+    int fdTemp = mkstemp(const_cast<char*>(static_cast<const char*>(buf)));
     if ( fdTemp == -1 )
     {
         // this might be not necessary as mkstemp() on most systems should have
@@ -1518,10 +1518,13 @@ bool wxFileName::Normalize(int flags,
                         continue;
 
                 }
-                else // Normal case, go one step up.
+                else // Normal case, go one step up unless it's .. as well.
                 {
-                    m_dirs.pop_back();
-                    continue;
+                    if (m_dirs.back() != wxT("..") )
+                    {
+                        m_dirs.pop_back();
+                        continue;
+                    }
                 }
             }
         }
@@ -1669,6 +1672,57 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
 
 #endif // __WIN32__
 
+// ----------------------------------------------------------------------------
+// Resolve links
+// ----------------------------------------------------------------------------
+
+wxFileName wxFileName::ResolveLink()
+{
+    wxFileName linkTarget( *this );
+
+// Only resolve links on platforms with readlink (e.g. Unix-like platforms)
+#if defined(wxHAS_NATIVE_READLINK)
+    const wxString link = GetFullPath();
+    wxStructStat st;
+
+    // This means the link itself doesn't exist, so return an empty filename
+    if ( !StatAny(st, link, wxFILE_EXISTS_NO_FOLLOW) )
+    {
+        linkTarget.Clear();
+        return linkTarget;
+    }
+
+    // If it isn't an actual link, bail out just and return the link as the result
+    if ( !S_ISLNK(st.st_mode) )
+        return linkTarget;
+
+    // Dynamically compute the buffer size from the stat call, but fallback if it isn't valid
+    int bufSize = 4096;
+    if( st.st_size != 0 )
+        bufSize = st.st_size + 1;
+
+    wxVector<char> bufData(bufSize);
+    char* const buf = &bufData[0];
+    ssize_t result = wxReadlink(link, buf, bufSize - 1);
+
+    if ( result != -1 )
+    {
+        buf[result] = '\0'; // readlink() doesn't NULL-terminate the buffer
+        linkTarget.Assign( wxString(buf, wxConvLibc) );
+
+        // Ensure the resulting path is absolute since readlink can return paths relative to the link
+        if ( !linkTarget.IsAbsolute() )
+            linkTarget.MakeAbsolute(GetPath());
+    }
+    else
+    {
+        // This means the lookup failed for some reason
+        linkTarget.Clear();
+    }
+#endif
+
+    return linkTarget;
+}
 
 // ----------------------------------------------------------------------------
 // absolute/relative paths
@@ -1711,14 +1765,14 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
 
-    // Normalize both paths to be absolute but avoid expanding environment
-    // variables in them, this could be unexpected.
-    const int normFlags = wxPATH_NORM_DOTS |
-                          wxPATH_NORM_TILDE |
-                          wxPATH_NORM_ABSOLUTE |
-                          wxPATH_NORM_LONG;
-    Normalize(normFlags, cwd, format);
-    fnBase.Normalize(normFlags, cwd, format);
+    // Bring both paths to canonical form.
+    MakeAbsolute(cwd, format);
+    fnBase.MakeAbsolute(cwd, format);
+
+    // Do this here for compatibility, as we used to do it before.
+    Normalize(wxPATH_NORM_LONG, cwd, format);
+    fnBase.Normalize(wxPATH_NORM_LONG, cwd, format);
+
 
     bool withCase = IsCaseSensitive(format);
 
@@ -1787,8 +1841,20 @@ bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
-    fn1.Normalize(wxPATH_NORM_ALL | wxPATH_NORM_CASE, cwd, format);
-    fn2.Normalize(wxPATH_NORM_ALL | wxPATH_NORM_CASE, cwd, format);
+
+    // apply really all normalizations here
+    const int normAll =
+        wxPATH_NORM_ENV_VARS |
+        wxPATH_NORM_DOTS     |
+        wxPATH_NORM_TILDE    |
+        wxPATH_NORM_CASE     |
+        wxPATH_NORM_ABSOLUTE |
+        wxPATH_NORM_LONG     |
+        wxPATH_NORM_SHORTCUT
+        ;
+
+    fn1.Normalize(normAll, cwd, format);
+    fn2.Normalize(normAll, cwd, format);
 
     if ( fn1.GetFullPath() == fn2.GetFullPath() )
         return true;
@@ -2565,9 +2631,7 @@ static wxString EscapeFileNameCharsInURL(const char *in)
 // Returns the file URL for a native path
 wxString wxFileName::FileNameToURL(const wxFileName& filename)
 {
-    wxFileName fn = filename;
-    fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
-    wxString url = fn.GetFullPath(wxPATH_NATIVE);
+    wxString url = filename.GetAbsolutePath(wxString(), wxPATH_NATIVE);
 
 #ifndef __UNIX__
     // unc notation, wxMSW
@@ -2657,7 +2721,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
 #endif // platforms
 
     wxLogSysError(_("Failed to modify file times for '%s'"),
-                  GetFullPath().c_str());
+                  GetFullPath());
 
     return false;
 }
@@ -2671,7 +2735,7 @@ bool wxFileName::Touch() const
         return true;
     }
 
-    wxLogSysError(_("Failed to touch the file '%s'"), GetFullPath().c_str());
+    wxLogSysError(_("Failed to touch the file '%s'"), GetFullPath());
 
     return false;
 #else // other platform
@@ -2753,7 +2817,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 #endif // platforms
 
     wxLogSysError(_("Failed to retrieve file times for '%s'"),
-                  GetFullPath().c_str());
+                  GetFullPath());
 
     return false;
 }

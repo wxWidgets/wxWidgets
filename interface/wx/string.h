@@ -87,7 +87,8 @@
         wxMBConv object. This is also a potentially destructive operation.
         - Standard @c std::string using wxString::ToStdString(). The encoding
         of the returned string is specified with a wxMBConv object, so this
-        conversion is potentially destructive as well.
+        conversion is potentially destructive as well. To ensure that there is
+        no data loss, use @c wxConvUTF8 conversion or wxString::utf8_string().
         - Wide C string using wxString::wc_str().
         - Standard @c std::wstring using wxString::ToStdWstring().
 
@@ -680,8 +681,18 @@ public:
     const wxScopedCharBuffer utf8_str() const;
 
     /**
+        Return the string as an std::string using UTF-8 encoding.
+
+        This is a shorter and more readable equivalent of calling ToStdString()
+        with @c wxConvUTF8 argument.
+
+        @since 3.1.5
+     */
+    const std::string utf8_string() const;
+
+    /**
         Converts the strings contents to the wide character representation
-        and returns it as a temporary wxWCharBuffer object (Unix and OS X)
+        and returns it as a temporary wxWCharBuffer object (Unix and macOS)
         or returns a pointer to the internal string contents in wide character
         mode (Windows).
 
@@ -745,11 +756,13 @@ public:
     const TYPE ToAscii(char replaceWith = '_') const;
 
     /**
-        Return the string as an std::string using @e conv's wxMBConv::cWC2MB method.
+        Return the string as a std::string using @e conv's wxMBConv::cWC2MB method.
 
         Note that if the conversion of (Unicode) string contents using @e conv
         fails, the return string will be empty. Be sure to check for
-        this to avoid silent data loss.
+        this to avoid silent data loss. Alternatively, pass @c wxConvUTF8 as @a
+        conv or use utf8_string() to always use UTF-8 encoding, rather than the
+        current one.
 
         Instead of using this function it's also possible to write
         @code
@@ -768,7 +781,7 @@ public:
     std::string ToStdString(const wxMBConv& conv = wxConvLibc) const;
 
     /**
-        Return the string as an std::wstring.
+        Return the string as a std::wstring.
 
         Unlike ToStdString(), there is no danger of data loss when using this
         function.
@@ -1776,6 +1789,12 @@ public:
     /**
         Converts the string or character from an ASCII, 7-bit form
         to the native wxString representation.
+
+        Input must consist only of 7-bit (i.e. less than 128) ASCII characters,
+        the behaviour in presence of non-ASCII characters is undefined but will
+        result in assert failures.
+
+        @see wxASCII_STR()
     */
     static wxString FromAscii(const char* s);
     static wxString FromAscii(const unsigned char* s);
@@ -2068,5 +2087,15 @@ public:
 */
 template<bool (T)(const wxUniChar& c)>
     inline bool wxStringCheck(const wxString& val);
+
+/**
+    Convenience macro for explicitly constructing wxString from ASCII strings.
+
+    This macro simply expands to a call to wxString::FromAscii() but is
+    slightly shorter.
+
+    @since 3.1.4
+ */
+wxString wxASCII_STR(const char* s);
 
 //@}

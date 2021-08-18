@@ -40,7 +40,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxToolBarNameStr)
+              const wxString& name = wxASCII_STR(wxToolBarNameStr))
     {
         Init();
 
@@ -52,7 +52,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxToolBarNameStr );
+                 const wxString& name = wxASCII_STR(wxToolBarNameStr) );
 
     virtual ~wxToolBar();
 
@@ -101,9 +101,6 @@ protected:
                                           const wxString& label) wxOVERRIDE;
 
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
     // get the bounding rect for the given tool

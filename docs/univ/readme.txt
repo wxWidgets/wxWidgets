@@ -41,9 +41,6 @@ toolkit.
 2. Installing under Win32
 -------------------------
 
-If compiling from CVS, please copy include/wx/univ/setup0.h
-to include/wx/univ/setup.h before following these steps.
-
 a) Using Visual C++ 6.0/7.x
 
    Follow wxMSW instructions but make sure to choose one of the "Universal"
@@ -58,14 +55,6 @@ b) Cygwin
    --disable-precomp-headers configure option.
 
 ** the instructions may be out of date as for wxWidgets 2.5.2+ **
-
-c) Other compilers
-   Borland:
-   in the wxwindows\src\msw directory run
-   'make -f makefile.b32 WXUSINGUNIV=1' to build the library and then run
-   'make -f makefile.b32 WXUSINGUNIV=1' in the sample directory  which you wish
-   to build using the wxUniversal widgets. Use 'SET WXTHEME=GTK' [or  WIN32 or METAL]
-   to test the existing themes
 
 Unfortunately we don't have makefiles for any other compilers yet.
 Please contact us if you would like to help us with creating one for the
@@ -83,9 +72,6 @@ Please refer to the installation instructions for wxGTK or wxX11. The only
 change for wxUniversal is that you must add "--enable-universal" switch to
 the configure command line and for wxX11 even this is unnecessary, i.e. it
 is enabled by default.
-
-If compiling from CVS, please copy include/wx/univ/setup0.h
-to include/wx/univ/setup.h before configuring.
 
 4. Running wxUniv programs
 --------------------------

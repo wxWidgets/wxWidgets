@@ -37,7 +37,7 @@
         aboutInfo.SetName("MyApp");
         aboutInfo.SetVersion(MY_APP_VERSION_STRING);
         aboutInfo.SetDescription(_("My wxWidgets-based application!"));
-        aboutInfo.SetCopyright("(C) 1992-2019");
+        aboutInfo.SetCopyright("(C) 1992-2021");
         aboutInfo.SetWebSite("http://myapp.org");
         aboutInfo.AddDeveloper("My Self");
 
@@ -230,7 +230,7 @@ public:
         "Version " to @a version).
 
         The generic about dialog and native GTK+ dialog use @a version only,
-        as a suffix to the program name. The native MSW and OS X about dialogs
+        as a suffix to the program name. The native MSW and macOS about dialogs
         use the long version.
     */
     void SetVersion(const wxString& version, const wxString& longVersion = wxString());

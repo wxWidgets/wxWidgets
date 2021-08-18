@@ -45,7 +45,7 @@ void wxQtPushButton::clicked(bool checked)
     wxAnyButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( handler->GetEventType(), handler->GetId() );
+        wxCommandEvent event( handler->QtGetEventType(), handler->GetId() );
         if ( isCheckable() ) // toggle buttons
         {
             event.SetInt(checked);
@@ -85,8 +85,9 @@ wxAnyButton::wxAnyButton() :
 
 void wxAnyButton::QtCreate(wxWindow *parent)
 {
-    // create the default push button (used in button and bmp button)
-    m_qtPushButton = new wxQtPushButton( parent, this );
+    // create the basic push button (used in button and bmp button)
+    m_qtPushButton = new wxQtPushButton(parent, this);
+    m_qtPushButton->setAutoDefault(false);
 }
 
 void wxAnyButton::QtSetBitmap( const wxBitmap &bitmap )

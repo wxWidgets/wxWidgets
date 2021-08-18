@@ -1206,7 +1206,7 @@ public:
     bool EndParagraphSpacing();
 
     /**
-        Begins appling line spacing. @e spacing is a multiple, where 10 means
+        Begins applying line spacing. @e spacing is a multiple, where 10 means
         single-spacing, 15 means 1.5 spacing, and 20 means double spacing.
 
         The ::wxTextAttrLineSpacing constants are defined for convenience.

@@ -10,7 +10,7 @@
 
     This class allows showing the user a message non intrusively.
 
-    Currently it is implemented natively for Windows, OS X, GTK and uses
+    Currently it is implemented natively for Windows, macOS, GTK and uses
     generic toast notifications under the other platforms. It's not recommended
     but @c wxGenericNotificationMessage can be used instead of the native ones.
     This might make sense if your application requires features not available in
@@ -30,8 +30,8 @@
     recommended to call MSWUseToasts() before showing the first notification
     message.
 
-    @par OS X
-    The OS X implementation uses Notification Center to display native notifications.
+    @par macOS
+    The macOS implementation uses Notification Center to display native notifications.
     In order to use actions your notifications must use the alert style. This can
     be enabled by the user in system settings or by setting the
     @c NSUserNotificationAlertStyle value in Info.plist to @c alert. Please note
@@ -39,13 +39,13 @@
 
 
     @beginEventEmissionTable{wxCommandEvent}
-    @event{wxEVT_NOTIFICATION_MESSAGE_CLICK(id, func)}
+    @event{EVT_NOTIFICATION_MESSAGE_CLICK(id, func)}
            Process a @c wxEVT_NOTIFICATION_MESSAGE_CLICK event, when a notification
            is clicked.
-    @event{wxEVT_NOTIFICATION_MESSAGE_DISMISSED(id, func)}
+    @event{EVT_NOTIFICATION_MESSAGE_DISMISSED(id, func)}
            Process a @c wxEVT_NOTIFICATION_MESSAGE_DISMISSED event, when a notification
            is dismissed by the user or times out.
-    @event{wxEVT_NOTIFICATION_MESSAGE_ACTION(id, func)}
+    @event{EVT_NOTIFICATION_MESSAGE_ACTION(id, func)}
            Process a @c wxEVT_NOTIFICATION_MESSAGE_ACTION event, when the user
            selects on of the actions added by AddAction()
     @endEventTable

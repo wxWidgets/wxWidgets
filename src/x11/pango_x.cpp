@@ -57,7 +57,7 @@ x11_pango_get_item_properties( PangoItem      *item,
 
 void
 x11_draw_glyphs( Drawable            drawable,
-                 GC                  gc,
+                 GC                  WXUNUSED(gc),
                  PangoFont          *font,
                  int                 x,
                  int                 y,
@@ -96,11 +96,8 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
     PangoRectangle overall_rect;
     PangoRectangle logical_rect;
     PangoRectangle ink_rect;
-    PangoContext *context;
     gint x_off = 0;
     gint rise = 0;
-
-    context = pango_layout_get_context (line->layout);
 
     pango_layout_line_get_extents (line,NULL, &overall_rect);
 

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COLOURDLG
 
@@ -60,6 +57,7 @@ wxBEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
     EVT_SLIDER(wxID_GREEN_SLIDER, wxGenericColourDialog::OnGreenSlider)
     EVT_SLIDER(wxID_BLUE_SLIDER, wxGenericColourDialog::OnBlueSlider)
 #endif
+    EVT_DPI_CHANGED(wxGenericColourDialog::OnDPIChanged)
     EVT_PAINT(wxGenericColourDialog::OnPaint)
     EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
     EVT_CLOSE(wxGenericColourDialog::OnCloseWindow)
@@ -155,12 +153,17 @@ void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 bool wxGenericColourDialog::Create(wxWindow *parent, const wxColourData *data)
 {
     if ( !wxDialog::Create(GetParentForModalDialog(parent, 0), wxID_ANY,
-                           _("Choose colour"),
-                           wxPoint(0, 0), wxSize(900, 900)) )
+                           _("Choose colour")) )
         return false;
 
     if (data)
         m_colourData = *data;
+
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    m_customColourBmp = NULL;
+    for ( unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++ )
+        m_customColoursBmp[i] = NULL;
+#endif
 
     InitializeColours();
     CalculateMeasurements();
@@ -225,6 +228,41 @@ void wxGenericColourDialog::OnCustomColourMouseClick(wxMouseEvent& event)
 
     event.Skip();
 }
+
+void wxGenericColourDialog::CreateCustomBitmaps()
+{
+    // Bitmap to preview selected colour (with alpha channel)
+    wxBitmap customColourBmp(m_singleCustomColourRect.GetSize(), 32);
+    customColourBmp.UseAlpha();
+    DoPreviewBitmap(customColourBmp, m_colourData.GetColour());
+
+    if ( !m_customColourBmp )
+    {
+        m_customColourBmp = new wxStaticBitmap(this, wxID_ANY, customColourBmp);
+    }
+    m_customColourBmp->SetSize(m_singleCustomColourRect);
+    m_customColourBmp->SetBitmap(customColourBmp);
+
+    // 16 bitmaps to preview custom colours (with alpha channel)
+    for ( unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++ )
+    {
+        int x = ((i % 8) * (m_smallRectangleSize.x + m_gridSpacing)) + m_customColoursRect.x;
+        int y = ((i / 8) * (m_smallRectangleSize.y + m_gridSpacing)) + m_customColoursRect.y;
+
+        wxBitmap bmp(m_smallRectangleSize, 32);
+        bmp.UseAlpha();
+        DoPreviewBitmap(bmp, m_customColours[i]);
+
+        if ( !m_customColoursBmp[i] )
+        {
+            m_customColoursBmp[i] = new wxStaticBitmap(this, wxID_ANY, bmp);
+            m_customColoursBmp[i]->Bind(wxEVT_LEFT_DOWN,
+                                        &wxGenericColourDialog::OnCustomColourMouseClick, this);
+        }
+        m_customColoursBmp[i]->SetSize(x, y, m_smallRectangleSize.x, m_smallRectangleSize.y);
+        m_customColoursBmp[i]->SetBitmap(bmp);
+    }
+}
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
 void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -240,33 +278,38 @@ void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
     PaintHighlight(dc, true);
 }
 
+void wxGenericColourDialog::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    CalculateMeasurements();
+
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    CreateCustomBitmaps();
+#endif
+}
+
 void wxGenericColourDialog::CalculateMeasurements()
 {
     // For single customizable colour
-    const wxSize customRectangleSize(40, 40);
+    const wxSize customRectangleSize = FromDIP(wxSize(40, 40));
 
-    m_smallRectangleSize.Set(18, 14);
+    m_smallRectangleSize = FromDIP(wxSize(18, 14));
 
-    m_gridSpacing = 6;
-    m_sectionSpacing = 15;
+    m_gridSpacing = FromDIP(6);
+    m_sectionSpacing = FromDIP(15);
 
-    m_standardColoursRect.x = 10;
-    m_standardColoursRect.y = 15;
+    m_standardColoursRect.x = FromDIP(10);
+    m_standardColoursRect.y = FromDIP(15);
     m_standardColoursRect.width = (8*m_smallRectangleSize.x) + (7*m_gridSpacing);
     m_standardColoursRect.height = (6*m_smallRectangleSize.y) + (5*m_gridSpacing);
 
     m_customColoursRect.x = m_standardColoursRect.x;
-    m_customColoursRect.y = m_standardColoursRect.y + m_standardColoursRect.height  + 20;
+    m_customColoursRect.y = m_standardColoursRect.y + m_standardColoursRect.height  + FromDIP(20);
     m_customColoursRect.width = (8*m_smallRectangleSize.x) + (7*m_gridSpacing);
     m_customColoursRect.height = (2*m_smallRectangleSize.y) + (1*m_gridSpacing);
 
     m_singleCustomColourRect.x = m_customColoursRect.width + m_customColoursRect.x + m_sectionSpacing;
-    m_singleCustomColourRect.y = 80;
+    m_singleCustomColourRect.y = FromDIP(80);
     m_singleCustomColourRect.SetSize(customRectangleSize);
-
-    m_okButtonX = 10;
-    m_customButtonX = m_singleCustomColourRect.x ;
-    m_buttonY = m_customColoursRect.y + m_customColoursRect.height + 10;
 }
 
 void wxGenericColourDialog::CreateWidgets()
@@ -274,35 +317,12 @@ void wxGenericColourDialog::CreateWidgets()
     wxBeginBusyCursor();
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
-    // Bitmap to preview selected colour (with alpha channel)
-    wxBitmap customColourBmp(m_singleCustomColourRect.GetSize(), 32);
-    customColourBmp.UseAlpha();
-    DoPreviewBitmap(customColourBmp, m_colourData.GetColour());
-    m_customColourBmp = new wxStaticBitmap(this, wxID_ANY, customColourBmp,
-                                           m_singleCustomColourRect.GetLeftTop(),
-                                           m_singleCustomColourRect.GetSize(),
-                                           wxBORDER_SUNKEN);
-
-    // 16 bitmaps to preview custom colours (with alpha channel)
-    for (unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
-    {
-        int x = ((i % 8)*(m_smallRectangleSize.x+m_gridSpacing)) + m_customColoursRect.x;
-        int y = ((i / 8)*(m_smallRectangleSize.y+m_gridSpacing)) + m_customColoursRect.y;
-
-        wxBitmap bmp(m_smallRectangleSize, 32);
-        bmp.UseAlpha();
-        DoPreviewBitmap(bmp, m_customColours[i]);
-        m_customColoursBmp[i] = new wxStaticBitmap(this, wxID_ANY, bmp,
-                                                   wxPoint(x, y), m_smallRectangleSize);
-        m_customColoursBmp[i]->Bind(wxEVT_LEFT_DOWN,
-                                    &wxGenericColourDialog::OnCustomColourMouseClick, this);
-
-    }
-#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    CreateCustomBitmaps();
+#endif
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
 
-    const int sliderHeight = 160;
+    const int sliderHeight = FromDIP(160);
 
     // first sliders
 #if wxUSE_SLIDER
@@ -332,8 +352,8 @@ void wxGenericColourDialog::CreateWidgets()
 
     const wxSizerFlags sliderLabelFlags = wxSizerFlags().Right().Border();
     const wxSizerFlags onesliderFlags = wxSizerFlags().CenterHorizontal();
-    const wxSizerFlags sliderFlags
-        = wxSizerFlags().CentreVertical().DoubleBorder();
+    const wxSizerFlags sliderFlags =
+        wxSizerFlags().CentreVertical().DoubleBorder();
 
     wxBoxSizer *redSliderSizer = new wxBoxSizer(wxVERTICAL);
     redSliderSizer->Add(new wxStaticText(this, wxID_ANY, _("Red:")), sliderLabelFlags);

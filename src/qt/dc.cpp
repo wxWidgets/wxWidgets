@@ -8,13 +8,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <QtGui/QBitmap>
 #include <QtGui/QPen>
 #include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"

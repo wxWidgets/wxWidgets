@@ -6404,6 +6404,10 @@ protected:
 // in a larger document
 #define wxRICHTEXT_HANDLER_CONVERT_FACENAMES        0x0100
 
+// Use CSS where possible in the HTML handler, otherwise use workarounds that will
+// show in wxHtmlWindow.
+#define wxRICHTEXT_HANDLER_USE_CSS                  0x1000
+
 /**
     @class wxRichTextFileHandler
 

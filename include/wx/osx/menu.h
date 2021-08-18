@@ -34,8 +34,6 @@ public:
 
     virtual ~wxMenu();
 
-    virtual void Break() wxOVERRIDE;
-
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
     bool ProcessCommand(wxCommandEvent& event);
@@ -46,8 +44,8 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    bool HandleCommandUpdateStatus( wxMenuItem* menuItem, wxWindow* senderWindow = NULL);
-    bool HandleCommandProcess( wxMenuItem* menuItem, wxWindow* senderWindow = NULL);
+    bool HandleCommandUpdateStatus( wxMenuItem* menuItem );
+    bool HandleCommandProcess( wxMenuItem* menuItem );
     void HandleMenuItemHighlighted( wxMenuItem* menuItem );
     void HandleMenuOpened();
     void HandleMenuClosed();
@@ -104,7 +102,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxMenu);
 };
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxUSE_MENUBAR
 
 // the iphone only has popup-menus
 

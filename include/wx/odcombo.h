@@ -93,6 +93,7 @@ public:
     virtual void OnComboDoubleClick() wxOVERRIDE;
     virtual bool LazyCreate() wxOVERRIDE;
     virtual bool FindItem(const wxString& item, wxString* trueItem) wxOVERRIDE;
+    virtual void OnDPIChanged(wxDPIChangedEvent& event);
 
     // Item management
     void SetSelection( int item );
@@ -251,7 +252,7 @@ public:
                          const wxString choices[],
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
-                         const wxString& name = wxComboBoxNameStr)
+                         const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Init();
 
@@ -266,7 +267,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     wxOwnerDrawnComboBox(wxWindow *parent,
                          wxWindowID id,
@@ -276,7 +277,7 @@ public:
                          const wxArrayString& choices = wxArrayString(),
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
-                         const wxString& name = wxComboBoxNameStr);
+                         const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -287,7 +288,7 @@ public:
                 const wxString choices[],
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -297,7 +298,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     virtual ~wxOwnerDrawnComboBox();
 
@@ -369,7 +370,7 @@ protected:
     // NULL popup can be used to indicate default interface
     virtual void DoSetPopupControl(wxComboPopup* popup) wxOVERRIDE;
 
-    // clears all allocated client datas
+    // clears all allocated client data
     void ClearClientDatas();
 
     wxVListBoxComboPopup* GetVListBoxComboPopup() const

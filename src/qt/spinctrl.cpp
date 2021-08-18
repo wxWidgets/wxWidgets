@@ -59,6 +59,12 @@ bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
 }
 
 template< typename T, typename Widget >
+wxString wxSpinCtrlQt< T, Widget >::GetTextValue() const
+{
+    return wxQtConvertString(m_qtSpinBox->text());
+}
+
+template< typename T, typename Widget >
 void wxSpinCtrlQt< T, Widget >::SetValue( T val )
 {
     m_qtSpinBox->blockSignals(true);

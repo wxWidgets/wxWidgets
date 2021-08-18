@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -351,7 +348,7 @@ void wxListBase::DoDeleteNode(wxNodeBase *node)
     // free node's data
     if ( m_keyType == wxKEY_STRING )
     {
-        free(node->m_key.string);
+        wxDELETE(node->m_key.string);
     }
 
     if ( m_destroy )
@@ -689,10 +686,10 @@ static int LINKAGEMODE
 
 wx_comparestrings(const void *arg1, const void *arg2)
 {
-  wxChar **s1 = (wxChar **) arg1;
-  wxChar **s2 = (wxChar **) arg2;
+    const wxChar* s1 = *static_cast<wxChar* const*>(arg1);
+    const wxChar* s2 = *static_cast<wxChar* const*>(arg2);
 
-  return wxStrcmp (*s1, *s2);
+    return wxStrcmp(s1, s2);
 }
 
 }   // end of extern "C" (required because of GCC Bug c++/33078

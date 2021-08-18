@@ -15,10 +15,6 @@
 
 #if wxUSE_COMBOBOX
 
-// For compatibility with 2.8 include this header to allow using wxTE_XXX
-// styles with wxComboBox without explicitly including it in the user code.
-#include "wx/textctrl.h"
-
 extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
 // ----------------------------------------------------------------------------
@@ -35,8 +31,8 @@ public:
     // override these methods to disambiguate between two base classes versions
     virtual void Clear() wxOVERRIDE
     {
-        wxTextEntry::Clear();
         wxItemContainer::Clear();
+        wxTextEntry::Clear();
     }
 
     // IsEmpty() is ambiguous because we inherit it from both wxItemContainer

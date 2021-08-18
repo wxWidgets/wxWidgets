@@ -363,7 +363,8 @@ public:
     This function can be used with wxSortedArrayString::Sort() or passed as an
     argument to wxSortedArrayString constructor.
 
-    @see wxStringSortDescending(), wxDictionaryStringSortAscending()
+    @see wxStringSortDescending(), wxDictionaryStringSortAscending(),
+         wxNaturalStringSortAscending()
 
     @since 3.1.0
  */
@@ -375,7 +376,8 @@ int wxStringSortAscending(const wxString& s1, const wxString& s2);
     This function can be used with wxSortedArrayString::Sort() or passed as an
     argument to wxSortedArrayString constructor.
 
-    @see wxStringSortAscending(), wxDictionaryStringSortAscending()
+    @see wxStringSortAscending(), wxDictionaryStringSortDescending(),
+         wxNaturalStringSortDescending()
 
     @since 3.1.0
  */
@@ -392,7 +394,9 @@ int wxStringSortDescending(const wxString& s1, const wxString& s2);
     This function can be used with wxSortedArrayString::Sort() or passed as an
     argument to wxSortedArrayString constructor.
 
-    @see wxStringSortAscending(), wxDictionaryStringSortDescending()
+    @see wxDictionaryStringSortDescending(),
+         wxStringSortAscending(),
+         wxNaturalStringSortAscending()
 
     @since 3.1.0
  */
@@ -403,11 +407,91 @@ int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
 
     See wxDictionaryStringSortAscending() for the dictionary sort description.
 
-    @see wxStringSortDescending()
+    @see wxDictionaryStringSortAscending(),
+         wxStringSortDescending(),
+         wxNaturalStringSortDescending()
 
     @since 3.1.0
  */
-int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
+int wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2);
+
+
+/**
+    Comparison function comparing strings in natural order.
+
+    This function can be used with wxSortedArrayString::Sort()
+    or passed as an argument to wxSortedArrayString constructor.
+
+    See wxCmpNatural() for more information about how natural
+    sort order is implemented.
+
+    @see wxNaturalStringSortDescending(),
+         wxStringSortAscending(), wxDictionaryStringSortAscending()
+
+    @since 3.1.4
+*/
+int wxNaturalStringSortAscending(const wxString& s1, const wxString& s2);
+
+/**
+    Comparison function comparing strings in reverse natural order.
+
+    This function can be used with wxSortedArrayString::Sort()
+    or passed as an argument to wxSortedArrayString constructor.
+
+    See wxCmpNatural() for more information about how natural
+    sort order is implemented.
+
+    @see wxNaturalStringSortAscending(),
+         wxStringSortDescending(), wxDictionaryStringSortDescending()
+
+    @since 3.1.4
+*/
+int wxNaturalStringSortDescending(const wxString& s1, const wxString& s2);
+
+/**
+    This function compares strings using case-insensitive collation and
+    additionally, numbers within strings are recognised and compared
+    numerically, rather than alphabetically. When used for sorting,
+    the result is that e.g. file names containing numbers are sorted
+    in a natural way.
+
+    For example, sorting with a simple string comparison results in:
+    - file1.txt
+    - file10.txt
+    - file100.txt
+    - file2.txt
+    - file20.txt
+    - file3.txt
+
+    But sorting the same strings in natural sort order results in:
+    - file1.txt
+    - file2.txt
+    - file3.txt
+    - file10.txt
+    - file20.txt
+    - file100.txt
+
+    wxCmpNatural() uses an OS native natural sort function when available
+    (currently only under Microsoft Windows), wxCmpNaturalGeneric() otherwise.
+
+    Be aware that OS native implementations might differ from each other,
+    and might change behaviour from release to release.
+
+    @see wxNaturalStringSortAscending(), wxNaturalStringSortDescending()
+
+    @since 3.1.4
+*/
+int wxCmpNatural(const wxString& s1, const wxString& s2);
+
+/**
+    This is wxWidgets' own implementation of the natural sort comparison function.
+
+    @see wxCmpNatural()
+
+    @since 3.1.4
+*/
+int wxCmpNaturalGeneric(const wxString& s1, const wxString& s2);
+
 
 // ============================================================================
 // Global functions/macros
@@ -439,7 +523,18 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
     If the @a escape character is non-@NULL, then it's used as prefix for each
     occurrence of @a sep in the strings contained in @a arr before joining them
     which is necessary in order to be able to recover the original array
-    contents from the string later using wxSplit().
+    contents from the string later using wxSplit(). The @a escape characters
+    themselves are @e not escaped when they occur in the middle of the @a arr
+    elements, but @e are escaped when they occur at the end, i.e.
+    @code
+    wxArrayString arr;
+    arr.push_back("foo^");
+    arr.push_back("bar^baz");
+    wxPuts(wxJoin(arr, ':', '^')); // prints "foo^^:bar^baz"
+    @endcode
+
+    In any case, applying wxSplit() to the result of wxJoin() is guaranteed to
+    recover the original array.
 
     @see wxSplit()
 

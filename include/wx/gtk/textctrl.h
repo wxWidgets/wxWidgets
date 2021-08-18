@@ -27,7 +27,7 @@ public:
                const wxSize &size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString &name = wxTextCtrlNameStr);
+               const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
     virtual ~wxTextCtrl();
 
@@ -38,7 +38,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxTextCtrlNameStr);
+                const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -143,6 +143,7 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     void GTKOnTextChanged() wxOVERRIDE;
+    void GTKAfterLayout();
 
 protected:
     // overridden wxWindow virtual methods
@@ -216,8 +217,9 @@ private:
     // a dummy one when frozen
     GtkTextBuffer *m_buffer;
 
-    GtkTextMark* m_showPositionOnThaw;
+    GtkTextMark* m_showPositionDefer;
     GSList* m_anonymousMarkList;
+    unsigned m_afterLayoutId;
 
     // For wxTE_AUTO_URL
     void OnUrlMouseEvent(wxMouseEvent&);

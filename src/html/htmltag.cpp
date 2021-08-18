@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML
 
@@ -662,7 +659,7 @@ wxHtmlTag *wxHtmlTag::GetFirstSibling() const
         return m_Parent->m_FirstChild;
     else
     {
-        wxHtmlTag *cur = (wxHtmlTag*)this;
+        wxHtmlTag* cur = const_cast<wxHtmlTag*>(this);
         while (cur->m_Prev)
             cur = cur->m_Prev;
         return cur;
@@ -675,7 +672,7 @@ wxHtmlTag *wxHtmlTag::GetLastSibling() const
         return m_Parent->m_LastChild;
     else
     {
-        wxHtmlTag *cur = (wxHtmlTag*)this;
+        wxHtmlTag* cur = const_cast<wxHtmlTag*>(this);
         while (cur->m_Next)
             cur = cur->m_Next;
         return cur;

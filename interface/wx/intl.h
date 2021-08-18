@@ -131,7 +131,7 @@ enum wxLocaleInfo
         Short date format.
 
         Notice that short and long date formats may be the same under POSIX
-        systems currently but may, and typically are, different under MSW or OS X.
+        systems currently but may, and typically are, different under MSW or macOS.
 
         @since 2.9.0
      */
@@ -459,9 +459,11 @@ public:
         try to translate the messages using the message catalogs for this locale.
 
         @param language
-            ::wxLanguage identifier of the locale.
-            @c wxLANGUAGE_DEFAULT has special meaning -- wxLocale will use system's
-            default language (see GetSystemLanguage()).
+            ::wxLanguage identifier of the locale. It can be either some
+            concrete language, e.g. @c wxLANGUAGE_ESPERANTO, or a special value
+            @c wxLANGUAGE_DEFAULT which means that wxLocale should use system's
+            default language (see GetSystemLanguage()). Notice that the value
+            @c wxLANGUAGE_UNKNOWN is not allowed here.
         @param flags
             Combination of the following:
             - wxLOCALE_LOAD_DEFAULT: Load the message catalog for the given locale

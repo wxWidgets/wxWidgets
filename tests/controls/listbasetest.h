@@ -26,6 +26,7 @@ protected:
         CPPUNIT_TEST( ChangeMode ); \
         WXUISIM_TEST( ItemClick ); \
         WXUISIM_TEST( KeyDown ); \
+        WXUISIM_TEST( MultiSelect ); \
         CPPUNIT_TEST( DeleteItems ); \
         CPPUNIT_TEST( InsertItem ); \
         CPPUNIT_TEST( Find ); \
@@ -40,6 +41,7 @@ protected:
     void ItemRect();
     void ItemText();
     void ChangeMode();
+    void MultiSelect();
     void ItemClick();
     void KeyDown();
     void DeleteItems();

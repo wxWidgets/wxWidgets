@@ -23,9 +23,6 @@ public:
     wxIcon();
 
     wxIcon(const char* const* bits);
-#ifdef wxNEEDS_CHARPP
-    wxIcon(char **bits);
-#endif
 
     // For compatibility with wxMSW where desired size is sometimes required to
     // distinguish between multiple icons in a resource.

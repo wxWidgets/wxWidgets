@@ -62,7 +62,7 @@ public:
         if (!DoAdd(watch))
             return false;
 
-        // add watch to our map (always succeedes, checked above)
+        // add watch to our map (always succeeds, checked above)
         wxFSWatchEntries::value_type val(watch->GetPath(), watch);
         return m_watches.insert(val).second;
     }

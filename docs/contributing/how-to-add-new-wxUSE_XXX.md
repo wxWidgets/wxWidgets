@@ -51,7 +51,7 @@ The following files need to be modified when adding a new `wxUSE_FOO`:
    section. Please keep the alphabetic order.
 
    If there are any dependencies, i.e. `wxUSE_FOO` requires `wxUSE_BAR` and
-   `wxUSE_BAZ`, check for thme here too.
+   `wxUSE_BAZ`, check for them here too.
 
 - `include/wx/msw/chkconf.h` for MSW-specific options
 

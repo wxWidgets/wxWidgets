@@ -40,7 +40,7 @@ public:
                             long style = 0,
                             const wxValidator& validator =
                                 wxDefaultValidator,
-                            const wxString& name = wxButtonNameStr)
+                            const wxString& name = wxASCII_STR(wxButtonNameStr))
         : wxButton(parent,
                    id,
                    mainLabel + '\n' + note,
@@ -103,7 +103,7 @@ public:
                                const wxSize& size = wxDefaultSize,
                                long style = 0,
                                const wxValidator& validator = wxDefaultValidator,
-                               const wxString& name = wxButtonNameStr)
+                               const wxString& name = wxASCII_STR(wxButtonNameStr))
         : wxCommandLinkButtonBase()
     {
         Create(parent, id, mainLabel, note, pos, size, style, validator, name);
@@ -117,7 +117,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+                const wxString& name = wxASCII_STR(wxButtonNameStr));
 
     virtual void SetMainLabelAndNote(const wxString& mainLabel,
                                      const wxString& note) wxOVERRIDE
@@ -147,7 +147,7 @@ private:
                             const wxSize& size = wxDefaultSize,
                             long style = 0,
                             const wxValidator& validator = wxDefaultValidator,
-                            const wxString& name = wxButtonNameStr)
+                            const wxString& name = wxASCII_STR(wxButtonNameStr))
             : wxGenericCommandLinkButton(parent,
                                          id,
                                          mainLabel,

@@ -32,6 +32,13 @@ public:
     // Set/get the date or time (in the latter case, time part is ignored).
     virtual void SetValue(const wxDateTime& dt) = 0;
     virtual wxDateTime GetValue() const = 0;
+
+    // For the controls with wxDP_ALLOWNONE style, set the string displayed
+    // when the control doesn't have any valid value. Currently this is only
+    // actually used under MSW, where it can be used to override the previous
+    // value which is still displayed by the control in this case, and ignored
+    // elsewhere.
+    virtual void SetNullText(const wxString& WXUNUSED(text)) { }
 };
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)

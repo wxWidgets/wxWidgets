@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILESYSTEM && wxUSE_STREAMS
 
@@ -123,6 +120,10 @@ wxFSFile * wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs),
 
 wxString wxMemoryFSHandlerBase::FindFirst(const wxString& url, int flags)
 {
+    // Make sure to reset the find iterator, so that calling FindNext() doesn't
+    // reuse its value from the last search that could well be invalid.
+    m_findIter = m_Hash.end();
+
     if ( (flags & wxDIR) && !(flags & wxFILE) )
     {
         // we only store files, not directories, so we don't risk finding

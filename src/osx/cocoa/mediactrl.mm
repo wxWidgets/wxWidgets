@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 //---------------------------------------------------------------------------
 // Compilation guard
@@ -33,7 +30,7 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
-#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9 && defined(__LP64__)
+#if wxOSX_USE_COCOA && defined(__LP64__)
     #define wxOSX_USE_AVKIT 1
 #else
     #define wxOSX_USE_AVKIT 0
@@ -212,6 +209,7 @@ private:
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification
 {
+    wxUnusedVar(notification);
     if ( m_backend )
     {
         if ( m_backend->SendStopEvent() )
@@ -277,7 +275,6 @@ private:
 
 #if wxOSX_USE_AVKIT
 
-WX_API_AVAILABLE_MACOS(10, 10)
 @interface wxAVPlayerView : AVPlayerView
 {
 }
@@ -397,17 +394,11 @@ bool wxAVMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
 
     WXWidget view = NULL;
 #if wxOSX_USE_AVKIT
-    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
-    {
-        view = [[wxAVPlayerView alloc] initWithFrame: r player:m_player];
-        [(wxAVPlayerView*) view setControlsStyle:AVPlayerViewControlsStyleNone];
-    }
+    view = [[wxAVPlayerView alloc] initWithFrame: r player:m_player];
+    [(wxAVPlayerView*) view setControlsStyle:AVPlayerViewControlsStyleNone];
+#else
+    view = [[wxAVView alloc] initWithFrame: r player:m_player];
 #endif
-
-    if ( view == NULL )
-    {
-        view = [[wxAVView alloc] initWithFrame: r player:m_player];
-    }
 
 #if wxOSX_USE_IPHONE
     wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl(mediactrl,view);
@@ -502,7 +493,7 @@ bool wxAVMediaBackend::SetPlaybackRate(double dRate)
 
 bool wxAVMediaBackend::SetPosition(wxLongLong where)
 {
-    [m_player seekToTime:CMTimeMakeWithSeconds(where.GetValue() / 1000.0, 1)
+    [m_player seekToTime:CMTimeMakeWithSeconds(where.GetValue() / 1000.0, 60000)
               toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 
     return true;
@@ -548,7 +539,7 @@ wxSize wxAVMediaBackend::GetVideoSize() const
     return m_bestSize;
 }
 
-void wxAVMediaBackend::Move(int x, int y, int w, int h)
+void wxAVMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(w), int WXUNUSED(h))
 {
     // as we have a native player, no need to move the video area
 }
@@ -565,17 +556,14 @@ bool wxAVMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 void wxAVMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
 {
 #if wxOSX_USE_AVKIT
-    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+    NSView* view = m_ctrl->GetHandle();
+    if ( [view isKindOfClass:[wxAVPlayerView class]] )
     {
-        NSView* view = m_ctrl->GetHandle();
-        if ( [view isKindOfClass:[wxAVPlayerView class]] )
-        {
-            wxAVPlayerView* playerView = (wxAVPlayerView*) view;
-            if (flags == wxMEDIACTRLPLAYERCONTROLS_NONE )
-                playerView.controlsStyle = AVPlayerViewControlsStyleNone;
-            else
-                playerView.controlsStyle = AVPlayerViewControlsStyleDefault;
-        }
+        wxAVPlayerView* playerView = (wxAVPlayerView*) view;
+        if (flags == wxMEDIACTRLPLAYERCONTROLS_NONE )
+            playerView.controlsStyle = AVPlayerViewControlsStyleNone;
+        else
+            playerView.controlsStyle = AVPlayerViewControlsStyleDefault;
     }
 #endif
 }

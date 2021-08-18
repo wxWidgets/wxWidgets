@@ -131,12 +131,6 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">$(wxToolkitDllNamePrefix)$(ProjectName)$(wxToolkitDllNameSuffix)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">$(wxToolkitDllNamePrefix)$(ProjectName)$(wxToolkitDllNameSuffix)</TargetName>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="!Exists('..\..\include\wx\msw\setup.h')">
-    <PreBuildEvent>
-      <Message>Didn't find "include\wx\setup.h", copying setup0.h</Message>
-      <Command>copy ..\..\include\wx\msw\setup0.h ..\..\include\wx\msw\setup.h</Command>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

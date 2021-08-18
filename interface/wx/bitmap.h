@@ -359,9 +359,6 @@ public:
         This can be useful to display a cursor as it cannot be drawn directly
         on a window.
 
-        This constructor only exists in wxMSW and wxGTK (where it is
-        implemented for GTK+ 2.8 or later) only.
-
         @param cursor A valid wxCursor.
 
         @since 3.1.0
@@ -445,7 +442,7 @@ public:
         @param height
             The height of the bitmap in pixels, must be strictly positive.
         @param dc
-            DC from wich the scaling factor is inherited
+            DC from which the scaling factor is inherited
 
         @return @true if the creation was successful.
 
@@ -469,7 +466,7 @@ public:
 
         @since 3.1.0
     */
-    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale);
+    bool CreateScaled(int width, int height, int depth, double logicalScale);
 
     /*
         Creates a bitmap from the given data, which can be of arbitrary type.
@@ -665,7 +662,7 @@ public:
         @endcode
         in your application startup code.
 
-        However under OS X this function uses native image loading and so
+        However under macOS this function uses native image loading and so
         doesn't require wxWidgets PNG support.
 
         @since 2.9.5
@@ -734,6 +731,10 @@ public:
 
         @remarks The bitmap object owns the mask once this has been called.
 
+        @note A mask can be set also for bitmap with an alpha channel but
+        doing so under wxMSW is not recommended because performance of drawing
+        such bitmap is not very good.
+
         @see GetMask(), wxMask
     */
     virtual void SetMask(wxMask* mask);
@@ -776,6 +777,10 @@ wxBitmap wxNullBitmap;
 
     When associated with a bitmap and drawn in a device context, the unmasked
     area of the bitmap will be drawn, and the masked area will not be drawn.
+
+    @note A mask can be associated also with a bitmap with an alpha channel
+    but drawing such bitmaps under wxMSW may be slow so using them should be
+    avoided if drawing performance is an important factor.
 
     @library{wxcore}
     @category{gdi}

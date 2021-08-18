@@ -45,14 +45,14 @@ protected:
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
     virtual void DoSetBitmapPosition(wxDirection dir) wxOVERRIDE;
 
+    // update the bitmap to correspond to the current button state
+    void GTKUpdateBitmap();
+
 private:
     typedef wxAnyButtonBase base_type;
 
     // focus event handler: calls GTKUpdateBitmap()
     void GTKOnFocus(wxFocusEvent& event);
-
-    // update the bitmap to correspond to the current button state
-    void GTKUpdateBitmap();
 
     // return the state whose bitmap is being currently shown (so this is
     // different from the real current state, e.g. it could be State_Normal

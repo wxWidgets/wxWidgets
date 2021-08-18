@@ -23,7 +23,7 @@
  */
 #define wxDFB_DECLARE_INTERFACE(name)            \
     class wx##name;                              \
-    typedef wxDfbPtr<wx##name> wx##name##Ptr;
+    typedef wxDfbPtr<wx##name> wx##name##Ptr
 
 
 //-----------------------------------------------------------------------------

@@ -146,12 +146,31 @@ bool wxCheckBox::Create(wxWindow *parent,
     g_object_ref(m_widget);
     SetLabel( label );
 
+    if ( style & wxNO_BORDER )
+    {
+        gtk_container_set_border_width(GTK_CONTAINER(m_widgetCheckbox), 0);
+    }
+
     g_signal_connect (m_widgetCheckbox, "toggled",
                       G_CALLBACK (gtk_checkbox_toggled_callback), this);
 
     m_parent->DoAddChild( this );
 
+#ifdef __WXGTK3__
+    // CSS added if the window has wxNO_BORDER inside base class PostCreation()
+    // makes checkbox look broken in the default GTK 3 theme, so avoid doing
+    // this by temporarily turning this flag off.
+    if ( style & wxNO_BORDER )
+        ToggleWindowStyle(wxNO_BORDER);
+#endif
+
     PostCreation(size);
+
+#ifdef __WXGTK3__
+    // Turn it back on if necessary.
+    if ( style & wxNO_BORDER )
+        ToggleWindowStyle(wxNO_BORDER);
+#endif
 
     return true;
 }

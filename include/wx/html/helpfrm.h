@@ -71,7 +71,7 @@ class WXDLLIMPEXP_HTML wxHtmlHelpFrame : public wxFrame
 
 public:
     wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
-    wxHtmlHelpFrame(wxWindow* parent, wxWindowID wxWindowID,
+    wxHtmlHelpFrame(wxWindow* parent, wxWindowID id,
                     const wxString& title = wxEmptyString,
                     int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL
 #if wxUSE_CONFIG

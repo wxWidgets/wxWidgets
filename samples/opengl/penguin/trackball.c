@@ -113,7 +113,7 @@ vcross(const float *v1, const float *v2, float *cross)
 float
 vlength(const float *v)
 {
-    return (float) sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    return (float) sqrt((double)(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]));
 }
 
 void
@@ -192,9 +192,9 @@ trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
     /*
      * Avoid problems with out-of-control values...
      */
-    if (t > 1.0) t = 1.0;
-    if (t < -1.0) t = -1.0;
-    phi = 2.0f * (float) asin(t);
+    if (t > 1) t = 1;
+    if (t < -1) t = -1;
+    phi = 2 * (float) asin((double)t);
 
     axis_to_quat(a,phi,q);
 }
@@ -207,8 +207,8 @@ axis_to_quat(float a[3], float phi, float q[4])
 {
     vnormal(a);
     vcopy(a, q);
-    vscale(q, (float) sin(phi/2.0));
-    q[3] = (float) cos(phi/2.0);
+    vscale(q, (float) sin((double)phi / 2));
+    q[3] = (float) cos((double)phi / 2);
 }
 
 /*
@@ -220,9 +220,9 @@ tb_project_to_sphere(float r, float x, float y)
 {
     float d, t, z;
 
-    d = (float) sqrt(x*x + y*y);
-    if (d < r * 0.70710678118654752440) {    /* Inside sphere */
-        z = (float) sqrt(r*r - d*d);
+    d = (float) sqrt((double)(x*x + y*y));
+    if (d < r * 0.70710678118654752440f) {    /* Inside sphere */
+        z = (float) sqrt((double)(r*r - d*d));
     } else {           /* On hyperbola */
         t = r / 1.41421356237309504880f;
         z = t*t / d;

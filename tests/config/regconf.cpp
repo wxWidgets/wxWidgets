@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONFIG && wxUSE_REGKEY
 
@@ -23,66 +20,55 @@
 
 #include "wx/msw/regconf.h"
 
+#include "wx/scopedptr.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class RegConfigTestCase : public CppUnit::TestCase
+TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
 {
-public:
-    RegConfigTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( RegConfigTestCase );
-        CPPUNIT_TEST( ReadWrite );
-        CPPUNIT_TEST( DeleteRegistryKeyFromRedirectedView );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ReadWrite();
-    void DeleteRegistryKeyFromRedirectedView();
-
-    wxDECLARE_NO_COPY_CLASS(RegConfigTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RegConfigTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RegConfigTestCase, "RegConfigTestCase" );
-
-void RegConfigTestCase::ReadWrite()
-{
-    wxString app = wxT("wxRegConfigTestCase");
-    wxString vendor = wxT("wxWidgets");
+    wxString app = "wxRegConfigTestCase";
+    wxString vendor = "wxWidgets";
 
     // NOTE: we use wxCONFIG_USE_LOCAL_FILE explicitly to test wxRegConfig
     //       with something different from the default value wxCONFIG_USE_GLOBAL_FILE
-    wxConfigBase *config = new wxRegConfig(app, vendor, wxT(""), wxT(""),
-                                           wxCONFIG_USE_LOCAL_FILE);
+    wxScopedPtr<wxConfigBase> config(new wxRegConfig(app, vendor, "", "",
+                                                     wxCONFIG_USE_LOCAL_FILE));
 
     // test writing
-    config->SetPath(wxT("/group1"));
-    CPPUNIT_ASSERT( config->Write(wxT("entry1"), wxT("foo")) );
-    config->SetPath(wxT("/group2"));
-    CPPUNIT_ASSERT( config->Write(wxT("entry1"), wxT("bar")) );
+    config->SetPath("/group1");
+    CHECK( config->Write("entry1", "foo") );
+    config->SetPath("/group2");
+    CHECK( config->Write("entry1", "bar") );
+
+    CHECK( config->Write("int32", 1234567) );
+
+    // Note that type of wxLL(0x8000000000000008) literal is somehow unsigned
+    // long long with MinGW, not sure if it's a bug or not, but work around it
+    // by specifying the type explicitly.
+    const wxLongLong_t val64 = wxLL(0x8000000000000008);
+    CHECK( config->Write("int64", val64) );
 
     // test reading
     wxString str;
     long dummy;
 
-    config->SetPath(wxT("/"));
-    CPPUNIT_ASSERT( config->GetFirstGroup(str, dummy) );
-    CPPUNIT_ASSERT( str == "group1" );
-    CPPUNIT_ASSERT( config->Read(wxT("group1/entry1"), wxT("INVALID DEFAULT")) == "foo" );
-    CPPUNIT_ASSERT( config->GetNextGroup(str, dummy) );
-    CPPUNIT_ASSERT( str == "group2" );
-    CPPUNIT_ASSERT( config->Read(wxT("group2/entry1"), wxT("INVALID DEFAULT")) == "bar" );
+    config->SetPath("/");
+    CHECK( config->GetFirstGroup(str, dummy) );
+    CHECK( str == "group1" );
+    CHECK( config->Read("group1/entry1", "INVALID DEFAULT") == "foo" );
+    CHECK( config->GetNextGroup(str, dummy) );
+    CHECK( str == "group2" );
+    CHECK( config->Read("group2/entry1", "INVALID DEFAULT") == "bar" );
+
+    CHECK( config->ReadLong("group2/int32", 0) == 1234567 );
+    CHECK( config->ReadLongLong("group2/int64", 0) == val64 );
 
     config->DeleteAll();
-    delete config;
 }
 
-void RegConfigTestCase::DeleteRegistryKeyFromRedirectedView()
+TEST_CASE("wxRegKey::DeleteFromRedirectedView", "[registry][64bits]")
 {
     if ( !wxIsPlatform64Bit() )
     {
@@ -97,9 +83,9 @@ void RegConfigTestCase::DeleteRegistryKeyFromRedirectedView()
             ? wxRegKey::WOW64ViewMode_64
             : wxRegKey::WOW64ViewMode_32);
 
-    CPPUNIT_ASSERT( key.Create() );
-    CPPUNIT_ASSERT( key.DeleteSelf() );
-    CPPUNIT_ASSERT( !key.Exists() );
+    REQUIRE( key.Create() );
+    CHECK( key.DeleteSelf() );
+    CHECK( !key.Exists() );
 }
 
 #endif // wxUSE_CONFIG && wxUSE_REGKEY

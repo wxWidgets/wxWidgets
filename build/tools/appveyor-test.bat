@@ -15,9 +15,10 @@ goto :eof
 
 :nmake
 if "%BUILD%"=="debug" set debug_suffix=d
-.\vc_mswu%debug_suffix%\test.exe
+if "%ARCH%"=="amd64" set arch_suffix=_x64
+.\vc_mswu%debug_suffix%%arch_suffix%\test.exe
 if %errorlevel% NEQ 0 goto :error
-.\vc_mswu%debug_suffix%\test_gui.exe
+.\vc_mswu%debug_suffix%%arch_suffix%\test_gui.exe
 goto :eof
 
 :mingw
@@ -43,14 +44,14 @@ echo.
 exit /b 0
 
 :cmake_qt
-set CMAKE_TEST_REGEX="test_base"
+set CMAKE_TEST_REGEX="test_[drawing^|gui^|headers]"
 goto :cmake
 
 :cmake
 if "%CONFIGURATION%"=="" set CONFIGURATION=Release
-if "%CMAKE_TEST_REGEX%"=="" set CMAKE_TEST_REGEX="test_[base|gui]"
+if "%CMAKE_TEST_REGEX%"=="" set CMAKE_TEST_REGEX="test_drawing"
 cd ..\build_cmake
-ctest -V -C %CONFIGURATION% -R %CMAKE_TEST_REGEX% --output-on-failure --interactive-debug-mode 0 .
+ctest -V -C %CONFIGURATION% -E %CMAKE_TEST_REGEX% --output-on-failure --interactive-debug-mode 0 .
 if %errorlevel% NEQ 0 goto :error
 goto :eof
 
@@ -58,4 +59,7 @@ goto :eof
 echo.
 echo !!! Non-GUI test failed.
 echo.
-goto :eof
+echo --- httpbin output ---
+type c:\projects\wxwidgets\httpbin.log
+echo --- httpbin output end ---
+exit /b 1

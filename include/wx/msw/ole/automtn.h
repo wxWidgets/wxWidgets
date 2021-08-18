@@ -67,7 +67,7 @@ public:
     // Low-level invocation function. Pass either an array of variants,
     // or an array of pointers to variants.
     bool Invoke(const wxString& member, int action,
-        wxVariant& retValue, int noArgs, wxVariant args[], const wxVariant* ptrArgs[] = 0) const;
+        wxVariant& retValue, int noArgs, wxVariant args[], const wxVariant* ptrArgs[] = NULL) const;
 
     // Invoke a member function
     wxVariant CallMethod(const wxString& method, int noArgs, wxVariant args[]);

@@ -20,6 +20,7 @@
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/osx/private/available.h"
 #include "wx/osx/cocoa/private/textimpl.h"
 
 // work in progress
@@ -138,23 +139,30 @@
 - (void)comboBoxSelectionDidChange:(NSNotification *)notification
 {
     wxUnusedVar(notification);
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    wxNSComboBoxControl* const
+        impl = (wxNSComboBoxControl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl && impl->ShouldSendEvents())
     {
         wxComboBox* wxpeer = static_cast<wxComboBox*>(impl->GetWXPeer());
         if ( wxpeer ) {
             const int sel = wxpeer->GetSelection();
+            const wxString& val = wxpeer->GetString(sel);
+
+            // We need to manually set the new value because at this time it
+            // still contains the old value, but we want GetValue() to return
+            // the new one if it's called from an event handler invoked below.
+            impl->SetStringValue(val);
 
             wxCommandEvent event(wxEVT_COMBOBOX, wxpeer->GetId());
             event.SetEventObject( wxpeer );
             event.SetInt( sel );
-            event.SetString( wxpeer->GetString(sel) );
-            // For some reason, wxComboBox::GetValue will not return the newly selected item 
-            // while we're inside this callback, so use AddPendingEvent to make sure
-            // GetValue() returns the right value.
+            event.SetString( val );
+            wxpeer->HandleWindowEvent( event );
 
-            wxpeer->GetEventHandler()->AddPendingEvent( event );
-
+            wxCommandEvent eventText(wxEVT_TEXT, wxpeer->GetId());
+            eventText.SetEventObject( wxpeer );
+            eventText.SetString( val );
+            wxpeer->HandleWindowEvent( eventText );
         }
     }
 }
@@ -318,22 +326,22 @@ int wxNSComboBoxControl::FindString(const wxString& text) const
 void wxNSComboBoxControl::Popup()
 {
     id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
-    [ax accessibilitySetValue: [NSNumber numberWithBool: YES] forAttribute: NSAccessibilityExpandedAttribute];
+    [ax setAccessibilityExpanded: YES];
 }
 
 void wxNSComboBoxControl::Dismiss()
 {
     id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
-    [ax accessibilitySetValue: [NSNumber numberWithBool: NO] forAttribute: NSAccessibilityExpandedAttribute];
+    [ax setAccessibilityExpanded: NO];
 }
 
 void wxNSComboBoxControl::SetEditable(bool editable)
 {
-    // TODO: unfortunately this does not work, setEditable just means the same as CB_READONLY
-    // I don't see a way to access the text field directly
-    
-    // Behavior NONE <- SELECTECTABLE
     [m_comboBox setEditable:editable];
+
+    // When the combobox isn't editable, make sure it is still selectable so the text can be copied
+    if ( !editable )
+        [m_comboBox setSelectable:YES];
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
@@ -347,10 +355,16 @@ wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSComboBox* v = [[wxNSComboBox alloc] initWithFrame:r];
-    [v setNumberOfVisibleItems:13];
-    if (style & wxCB_READONLY)
-        [v setEditable:NO];
+    if (WX_IS_MACOS_AVAILABLE(10, 13))
+        [v setNumberOfVisibleItems:999];
+    else
+        [v setNumberOfVisibleItems:13];
+
     wxNSComboBoxControl* c = new wxNSComboBoxControl( wxpeer, v );
+
+    if (style & wxCB_READONLY)
+        c->SetEditable(false);
+
     return c;
 }
 

@@ -205,7 +205,6 @@ public:
 
     /**
         Replaces the existing image with the new image.
-        Windows only.
 
         @param index
             The index of the bitmap to be replaced.

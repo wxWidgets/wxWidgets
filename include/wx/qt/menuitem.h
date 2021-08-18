@@ -12,6 +12,7 @@
 #include "wx/bitmap.h"
 
 class QAction;
+class wxQtAction;
 
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
@@ -35,13 +36,14 @@ public:
     virtual bool IsChecked() const wxOVERRIDE;
 
     virtual void SetBitmap(const wxBitmap& bitmap);
-    virtual const wxBitmap& GetBitmap() const { return m_bitmap; };
+    virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
     virtual QAction *GetHandle() const;
 
+    virtual void SetFont(const wxFont& font);
 private:
     // Qt is using an action instead of a menu item.
-    QAction *m_qtAction;
+    wxQtAction *m_qtAction;
     wxBitmap m_bitmap;
 
     wxDECLARE_DYNAMIC_CLASS( wxMenuItem );

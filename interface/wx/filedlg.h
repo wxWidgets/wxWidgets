@@ -108,6 +108,18 @@ const char wxFileSelectorDefaultWildcardStr[];
     descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif" and "Image files|*.bmp;*.gif"
     are errors.
+    On Mac macOS in the open file dialog the filter choice box is not shown by default.
+    Instead all given wildcards are appplied at the same time: So in the above
+    example all bmp, gif and png files are displayed. To enforce the
+    display of the filter choice set the corresponding wxSystemOptions before calling
+    the file open dialog:
+    @code
+         wxSystemOptions::SetOption(wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1)
+    @endcode
+    But in contrast to Windows and Unix, where the file type choice filters only
+    the selected files, on Mac macOS even in this case the dialog shows all files
+    matching all file types. The files which does not match the currently selected
+    file type are greyed out and are not selectable.
 
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}
@@ -121,6 +133,7 @@ const char wxFileSelectorDefaultWildcardStr[];
     @style{wxFD_OVERWRITE_PROMPT}
            For save dialog only: prompt for a confirmation if a file will be
            overwritten.
+           This style is always enabled on wxOSX and cannot be disabled.
     @style{wxFD_NO_FOLLOW}
            Directs the dialog to return the path and file name of the selected
            shortcut file, not its target as it does by default. Currently this
@@ -131,9 +144,9 @@ const char wxFileSelectorDefaultWildcardStr[];
            3.1.0.
     @style{wxFD_FILE_MUST_EXIST}
            For open dialog only: the user may only select files that actually
-           exist. Notice that under OS X the file dialog with @c wxFD_OPEN
+           exist. Notice that under macOS the file dialog with @c wxFD_OPEN
            style always behaves as if this style was specified, because it is
-           impossible to choose a file that doesn't exist from a standard OS X
+           impossible to choose a file that doesn't exist from a standard macOS
            file dialog.
     @style{wxFD_MULTIPLE}
            For open dialog only: allows selecting multiple files.
@@ -223,10 +236,11 @@ public:
         control to update its state depending on the currently selected file
         type filter.
 
-        Currently this function is fully implemented only under MSW and
+        Currently this function is fully implemented under macOS and MSW and
         always returns @c wxNOT_FOUND elsewhere.
 
-        @since 3.1.3
+        @since 3.1.3 - MSW
+        @since 3.1.5 - macOS
 
         @return The 0-based index of the currently selected file type filter or
             wxNOT_FOUND if nothing is selected.
@@ -252,6 +266,9 @@ public:
 
     /**
         Returns the default filename.
+
+        @note This function can't be used with dialogs which have the @c wxFD_MULTIPLE style,
+              use GetFilenames() instead.
     */
     virtual wxString GetFilename() const;
 
@@ -286,6 +303,9 @@ public:
 
     /**
         Returns the full path (directory and filename) of the selected file.
+
+        @note This function can't be used with dialogs which have the @c wxFD_MULTIPLE style,
+              use GetPaths() instead.
     */
     virtual wxString GetPath() const;
 

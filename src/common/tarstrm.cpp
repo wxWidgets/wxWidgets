@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_TARSTREAM
 
@@ -61,9 +58,7 @@ enum {
     TAR_NUMFIELDS
 };
 
-enum {
-    TAR_BLOCKSIZE = 512
-};
+static const int TAR_BLOCKSIZE = 512;
 
 // checksum type
 enum {
@@ -1474,7 +1469,7 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
             m_extendedHdr = new char[m_extendedSize];
             if (oldHdr) {
                 strcpy(m_extendedHdr, oldHdr);
-                delete oldHdr;
+                delete [] oldHdr;
             } else {
                 *m_extendedHdr = 0;
             }

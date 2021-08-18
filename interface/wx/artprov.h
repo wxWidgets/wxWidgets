@@ -16,80 +16,80 @@ typedef wxString wxArtClient;
 typedef wxString wxArtID;
 
 
-wxArtClient wxART_TOOLBAR;
-wxArtClient wxART_MENU;
-wxArtClient wxART_FRAME_ICON;
+const char* wxART_TOOLBAR;
+const char* wxART_MENU;
+const char* wxART_FRAME_ICON;
 
-wxArtClient wxART_CMN_DIALOG;
-wxArtClient wxART_HELP_BROWSER;
-wxArtClient wxART_MESSAGE_BOX;
-wxArtClient wxART_BUTTON;
-wxArtClient wxART_LIST;
+const char* wxART_CMN_DIALOG;
+const char* wxART_HELP_BROWSER;
+const char* wxART_MESSAGE_BOX;
+const char* wxART_BUTTON;
+const char* wxART_LIST;
 
-wxArtClient wxART_OTHER;
+const char* wxART_OTHER;
 
 
-wxArtID wxART_ADD_BOOKMARK;
-wxArtID wxART_DEL_BOOKMARK;
-wxArtID wxART_HELP_SIDE_PANEL;
-wxArtID wxART_HELP_SETTINGS;
-wxArtID wxART_HELP_BOOK;
-wxArtID wxART_HELP_FOLDER;
-wxArtID wxART_HELP_PAGE;
-wxArtID wxART_GO_BACK;
-wxArtID wxART_GO_FORWARD;
-wxArtID wxART_GO_UP;
-wxArtID wxART_GO_DOWN;
-wxArtID wxART_GO_TO_PARENT;
-wxArtID wxART_GO_HOME;
-wxArtID wxART_GOTO_FIRST;
-wxArtID wxART_GOTO_LAST;
-wxArtID wxART_FILE_OPEN;
-wxArtID wxART_FILE_SAVE;
-wxArtID wxART_FILE_SAVE_AS;
-wxArtID wxART_PRINT;
-wxArtID wxART_HELP;
-wxArtID wxART_TIP;
-wxArtID wxART_REPORT_VIEW;
-wxArtID wxART_LIST_VIEW;
-wxArtID wxART_NEW_DIR;
-wxArtID wxART_HARDDISK;
-wxArtID wxART_FLOPPY;
-wxArtID wxART_CDROM;
-wxArtID wxART_REMOVABLE;
-wxArtID wxART_FOLDER;
-wxArtID wxART_FOLDER_OPEN;
-wxArtID wxART_GO_DIR_UP;
-wxArtID wxART_EXECUTABLE_FILE;
-wxArtID wxART_NORMAL_FILE;
-wxArtID wxART_TICK_MARK;
-wxArtID wxART_CROSS_MARK;
-wxArtID wxART_ERROR;
-wxArtID wxART_QUESTION;
-wxArtID wxART_WARNING;
-wxArtID wxART_INFORMATION;
-wxArtID wxART_MISSING_IMAGE;
+const char* wxART_ADD_BOOKMARK;
+const char* wxART_DEL_BOOKMARK;
+const char* wxART_HELP_SIDE_PANEL;
+const char* wxART_HELP_SETTINGS;
+const char* wxART_HELP_BOOK;
+const char* wxART_HELP_FOLDER;
+const char* wxART_HELP_PAGE;
+const char* wxART_GO_BACK;
+const char* wxART_GO_FORWARD;
+const char* wxART_GO_UP;
+const char* wxART_GO_DOWN;
+const char* wxART_GO_TO_PARENT;
+const char* wxART_GO_HOME;
+const char* wxART_GOTO_FIRST;
+const char* wxART_GOTO_LAST;
+const char* wxART_FILE_OPEN;
+const char* wxART_FILE_SAVE;
+const char* wxART_FILE_SAVE_AS;
+const char* wxART_PRINT;
+const char* wxART_HELP;
+const char* wxART_TIP;
+const char* wxART_REPORT_VIEW;
+const char* wxART_LIST_VIEW;
+const char* wxART_NEW_DIR;
+const char* wxART_HARDDISK;
+const char* wxART_FLOPPY;
+const char* wxART_CDROM;
+const char* wxART_REMOVABLE;
+const char* wxART_FOLDER;
+const char* wxART_FOLDER_OPEN;
+const char* wxART_GO_DIR_UP;
+const char* wxART_EXECUTABLE_FILE;
+const char* wxART_NORMAL_FILE;
+const char* wxART_TICK_MARK;
+const char* wxART_CROSS_MARK;
+const char* wxART_ERROR;
+const char* wxART_QUESTION;
+const char* wxART_WARNING;
+const char* wxART_INFORMATION;
+const char* wxART_MISSING_IMAGE;
 
-wxArtID wxART_COPY;
-wxArtID wxART_CUT;
-wxArtID wxART_PASTE;
-wxArtID wxART_DELETE;
-wxArtID wxART_NEW;
+const char* wxART_COPY;
+const char* wxART_CUT;
+const char* wxART_PASTE;
+const char* wxART_DELETE;
+const char* wxART_NEW;
 
-wxArtID wxART_UNDO;
-wxArtID wxART_REDO;
+const char* wxART_UNDO;
+const char* wxART_REDO;
 
-wxArtID wxART_PLUS;
-wxArtID wxART_MINUS;
+const char* wxART_PLUS;
+const char* wxART_MINUS;
 
-wxArtID wxART_CLOSE;
-wxArtID wxART_QUIT;
+const char* wxART_CLOSE;
+const char* wxART_QUIT;
 
-wxArtID wxART_FIND;
-wxArtID wxART_FIND_AND_REPLACE;
+const char* wxART_FIND;
+const char* wxART_FIND_AND_REPLACE;
 
-wxArtID wxART_FULL_SCREEN;
-wxArtID wxART_EDIT;
+const char* wxART_FULL_SCREEN;
+const char* wxART_EDIT;
 
 
 /**
@@ -112,11 +112,11 @@ wxArtID wxART_EDIT;
       protected:
         wxBitmap CreateBitmap(const wxArtID& id,
                               const wxArtClient& client,
-                              const wxSize size)
+                              const wxSize& size);
 
         // optionally override this one as well
         wxIconBundle CreateIconBundle(const wxArtID& id,
-                                      const wxArtClient& client)
+                                      const wxArtClient& client);
         { ... }
       };
       ...
@@ -133,7 +133,7 @@ wxArtID wxART_EDIT;
 
     @section artprovider_identify Identifying art resources
 
-    Every bitmap and icon bundle are known to wxArtProvider under an unique ID that
+    Every bitmap and icon bundle are known to wxArtProvider under a unique ID that
     is used when requesting a resource from it. The ID is represented by the ::wxArtID type
     and can have one of these predefined values (you can see bitmaps represented by these
     constants in the @ref page_samples_artprov):
@@ -199,6 +199,10 @@ wxArtID wxART_EDIT;
      @li @c wxART_REMOVABLE
     </td></tr>
     </table>
+
+    @note When building with @c wxNO_IMPLICIT_WXSTRING_ENCODING defined (see
+          @ref overview_string for more details), you need to explicitly use
+          wxASCII_STR() around these constants.
 
     Additionally, any string recognized by custom art providers registered using
     wxArtProvider::Push may be used.

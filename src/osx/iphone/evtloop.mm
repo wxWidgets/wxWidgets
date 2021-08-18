@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 
@@ -44,35 +41,33 @@
 /*
 static int CalculateUIEventMaskFromEventCategory(wxEventCategory cat)
 {
-	NSLeftMouseDownMask	|
-	NSLeftMouseUpMask |
-	NSRightMouseDownMask |
-	NSRightMouseUpMask		= 1 << NSRightMouseUp,
-	NSMouseMovedMask		= 1 << NSMouseMoved,
-	NSLeftMouseDraggedMask		= 1 << NSLeftMouseDragged,
-	NSRightMouseDraggedMask		= 1 << NSRightMouseDragged,
-	NSMouseEnteredMask		= 1 << NSMouseEntered,
-	NSMouseExitedMask		= 1 << NSMouseExited,
-        NSScrollWheelMask		= 1 << NSScrollWheel,
-	NSTabletPointMask		= 1 << NSTabletPoint,
-	NSTabletProximityMask		= 1 << NSTabletProximity,
-	NSOtherMouseDownMask		= 1 << NSOtherMouseDown,
-	NSOtherMouseUpMask		= 1 << NSOtherMouseUp,
-	NSOtherMouseDraggedMask		= 1 << NSOtherMouseDragged,
+    NSLeftMouseDownMask      |
+    NSLeftMouseUpMask        |
+    NSRightMouseDownMask     |
+    NSRightMouseUpMask       = 1 << NSRightMouseUp,
+    NSMouseMovedMask         = 1 << NSMouseMoved,
+    NSLeftMouseDraggedMask   = 1 << NSLeftMouseDragged,
+    NSRightMouseDraggedMask  = 1 << NSRightMouseDragged,
+    NSMouseEnteredMask       = 1 << NSMouseEntered,
+    NSMouseExitedMask        = 1 << NSMouseExited,
+    NSScrollWheelMask        = 1 << NSScrollWheel,
+    NSTabletPointMask        = 1 << NSTabletPoint,
+    NSTabletProximityMask    = 1 << NSTabletProximity,
+    NSOtherMouseDownMask     = 1 << NSOtherMouseDown,
+    NSOtherMouseUpMask       = 1 << NSOtherMouseUp,
+    NSOtherMouseDraggedMask  = 1 << NSOtherMouseDragged,
 
+    NSKeyDownMask            = 1 << NSKeyDown,
+    NSKeyUpMask              = 1 << NSKeyUp,
+    NSFlagsChangedMask       = 1 << NSFlagsChanged,
 
+    NSAppKitDefinedMask      = 1 << NSAppKitDefined,
+    NSSystemDefinedMask      = 1 << NSSystemDefined,
+    UIApplicationDefinedMask = 1 << UIApplicationDefined,
+    NSPeriodicMask           = 1 << NSPeriodic,
+    NSCursorUpdateMask       = 1 << NSCursorUpdate,
 
-	NSKeyDownMask			= 1 << NSKeyDown,
-	NSKeyUpMask			= 1 << NSKeyUp,
-	NSFlagsChangedMask		= 1 << NSFlagsChanged,
-
-	NSAppKitDefinedMask		= 1 << NSAppKitDefined,
-	NSSystemDefinedMask		= 1 << NSSystemDefined,
-	UIApplicationDefinedMask	= 1 << UIApplicationDefined,
-	NSPeriodicMask			= 1 << NSPeriodic,
-	NSCursorUpdateMask		= 1 << NSCursorUpdate,
-
-	NSAnyEventMask			= 0xffffffffU
+    NSAnyEventMask           = 0xffffffffU
 }
 */
 
@@ -90,7 +85,7 @@ void wxGUIEventLoop::OSXDoRun()
     {
         wxMacAutoreleasePool pool;
         const char* appname = "app";
-        UIApplicationMain( 1, (char**) &appname, nil, @"wxAppDelegate" );
+        UIApplicationMain( 1, (char**) &appname, @"UIApplication", @"wxAppDelegate" );
     }
     else 
     {

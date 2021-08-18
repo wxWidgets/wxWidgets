@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROPGRID
 
@@ -97,6 +94,8 @@
 
 #endif
 
+#define wxPG_BUTTON_BORDER_WIDTH (-wxPG_BUTTON_SIZEDEC + wxPG_NAT_BUTTON_BORDER_Y)
+
 // for odcombo
 #ifdef __WXMAC__
 #define wxPG_CHOICEXADJUST           -3 // required because wxComboCtrl reserves 3pixels for wxTextCtrl's focus ring
@@ -159,9 +158,11 @@ int wxPGEditor::InsertItem( wxWindow*, const wxString&, int ) const
 
 void wxPGEditor::DeleteItem( wxWindow*, int ) const
 {
-    return;
 }
 
+void wxPGEditor::SetItems(wxWindow* WXUNUSED(ctrl), const wxArrayString& WXUNUSED(labels)) const
+{
+}
 
 void wxPGEditor::OnFocus( wxPGProperty*, wxWindow* ) const
 {
@@ -637,7 +638,8 @@ public:
         }
         else
         {
-            pg->OnComboItemPaint( this, item, &dc, (wxRect&)rect, flags );
+            wxRect r(rect);
+            pg->OnComboItemPaint(this, item, &dc, r, flags);
         }
     }
 
@@ -718,11 +720,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     int comValIndex = -1;
 
     const int choiceCount = choices.IsOk()? choices.GetCount(): 0;
-
     if ( item >= choiceCount && p->GetDisplayedCommonValueCount() > 0 )
     {
         comValIndex = item - choiceCount;
-        if ( !p->IsValueUnspecified() )
+        if ( !p->IsValueUnspecified() || !(flags & wxODCB_PAINTING_CONTROL) )
         {
             const wxPGCommonValue* cv = GetCommonValue(comValIndex);
             text = cv->GetLabel();
@@ -746,7 +747,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
+    if ( comValIndex == -1 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() )
         itemBitmap = &choices.Item(item).GetBitmap();
 
     //
@@ -798,14 +799,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                 rect.y + 1);
 
     int renderFlags = wxPGCellRenderer::DontUseCellColours;
-    bool useCustomPaintProcedure;
 
     // If custom image had some size, we will start from the assumption
     // that custom paint procedure is required
-    if ( cis.x > 0 )
-        useCustomPaintProcedure = true;
-    else
-        useCustomPaintProcedure = false;
+    bool useCustomPaintProcedure =  cis.x > 0;
 
     if ( flags & wxODCB_PAINTING_SELECTED )
         renderFlags |= wxPGCellRenderer::Selected;
@@ -1093,6 +1090,15 @@ void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
     cb->Delete(index);
 }
 
+void wxPGChoiceEditor::SetItems(wxWindow* ctrl, const wxArrayString& labels) const
+{
+    wxASSERT( ctrl );
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxASSERT( cb );
+
+    cb->Set(labels);
+}
+
 bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property,
     wxWindow* ctrl, wxEvent& event ) const
 {
@@ -1317,8 +1323,8 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
     ch_sz.x -= wxPG_TEXTCTRL_AND_BUTTON_SPACING;
 #endif
 
-    wxWindow* ch = wxPGEditor_Choice->CreateControls(propGrid,property,
-        pos,ch_sz).m_primary;
+    wxWindow* ch = wxPGChoiceEditor::CreateControls(propGrid,property,
+        pos,ch_sz).GetPrimary();
 
 #ifdef __WXMSW__
     bt->Show();
@@ -1888,7 +1894,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
    // Need to reduce width of text control on Mac
 #if defined(__WXMAC__)
-    s.x -= 8;
+    s.x -= 4;
 #endif
 
     // For label editors, trim the size to allow better splitter grabbing
@@ -1977,52 +1983,28 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     wxPGProperty* selected = GetSelection();
     wxASSERT(selected);
 
-#ifdef __WXMAC__
-   // Decorations are chunky on Mac, and we can't make the button square, so
-   // do things a bit differently on this platform.
+    const wxString label = wxString::FromUTF8("\xe2\x80\xa6"); // "Horizontal ellipsis" character
 
-   wxPoint p(pos.x+sz.x,
-             pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
-   wxSize s(25, wxDefaultCoord);
+    int dim = sz.y + 2*wxPG_BUTTON_BORDER_WIDTH;
 
-   wxButton* but = new wxButton();
-   but->Create(GetPanel(),wxID_ANY,wxS("..."),p,s,wxWANTS_CHARS);
-
-   // Now that we know the size, move to the correct position
-   p.x = pos.x + sz.x - but->GetSize().x - 2;
-   but->Move(p);
-
-#else
-    wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
-        sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
-
-    // Reduce button width to line height
-    if ( s.x > m_lineHeight )
-        s.x = m_lineHeight;
-
-#ifdef __WXGTK__
-    // On wxGTK, take fixed button margins into account
-    if ( s.x < 25 )
-        s.x = 25;
-#endif
-
-    wxPoint p(pos.x+sz.x-s.x,
-        pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
+    wxPoint p(pos.x + sz.x, pos.y - wxPG_BUTTON_BORDER_WIDTH);
+    wxSize s(wxDefaultCoord, dim);
 
     wxButton* but = new wxButton();
   #ifdef __WXMSW__
     but->Hide();
   #endif
-    but->Create(GetPanel(),wxID_ANY,wxS("..."),p,s,wxWANTS_CHARS);
-
-  #ifdef __WXGTK__
-    wxFont font = GetFont();
-    font.SetFractionalPointSize(font.GetFractionalPointSize()-2);
-    but->SetFont(font);
-  #else
-    but->SetFont(GetFont());
-  #endif
-#endif
+    but->Create(GetPanel(),wxID_ANY,label,p,s,wxWANTS_CHARS|wxBU_EXACTFIT);
+    but->SetFont(GetFont().GetBaseFont().Smaller());
+    // If button is narrow make it a square and move it to the correct position
+    s = but->GetSize();
+    if ( s.x < s.y )
+    {
+        s.x = s.y;
+        but->SetSize(s);
+    }
+    p.x = pos.x + sz.x - s.x;
+    but->Move(p);
 
     if ( selected->HasFlag(wxPG_PROP_READONLY) && !selected->HasFlag(wxPG_PROP_ACTIVE_BTN) )
         but->Disable();
@@ -2089,12 +2071,13 @@ wxTextCtrl* wxPropertyGrid::GetEditorTextCtrl() const
     if ( !wnd )
         return NULL;
 
-    if ( wxDynamicCast(wnd, wxTextCtrl) )
-        return wxStaticCast(wnd, wxTextCtrl);
+    wxTextCtrl* tc = wxDynamicCast(wnd, wxTextCtrl);
+    if ( tc )
+        return tc;
 
-    if ( wxDynamicCast(wnd, wxOwnerDrawnComboBox) )
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(wnd, wxOwnerDrawnComboBox);
+    if ( cb )
     {
-        wxOwnerDrawnComboBox* cb = wxStaticCast(wnd, wxOwnerDrawnComboBox);
         return cb->GetTextCtrl();
     }
 
@@ -2140,16 +2123,17 @@ bool wxPGEditorDialogAdapter::ShowDialog( wxPropertyGrid* propGrid, wxPGProperty
 // -----------------------------------------------------------------------
 
 wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
-    : wxWindow( pg->GetPanel(), wxID_ANY, wxPoint(-100,-100), wxSize(0, sz.y) ),
+    : wxWindow( pg->GetPanel(), wxID_ANY, wxPoint(-100,-100), wxSize(0, sz.y + 2*wxPG_BUTTON_BORDER_WIDTH) ),
       m_fullEditorSize(sz), m_buttonsWidth(0)
 {
     SetBackgroundColour(pg->GetCellBackgroundColour());
+    SetFont(pg->GetFont().GetBaseFont().Smaller());
 }
 
 void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
                                 const wxPoint& pos )
 {
-    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y );
+    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y - wxPG_BUTTON_BORDER_WIDTH, wxSIZE_ALLOW_MINUS_ONE);
 }
 
 int wxPGMultiButton::GenId( int itemid ) const
@@ -2158,13 +2142,102 @@ int wxPGMultiButton::GenId( int itemid ) const
 }
 
 #if wxUSE_BMPBUTTON
+
+#if defined(__WXGTK__)
+// Dedicated wxBitmapButton with reduced internal borders
+#if defined( __WXGTK127__ )
+#include "wx/gtk1/private.h"
+#else
+#include "wx/gtk/private.h"
+#endif
+
+class wxPGEditorBitmapButton : public wxBitmapButton
+{
+public:
+    wxPGEditorBitmapButton(wxWindow *parent, wxWindowID id,
+                     const wxBitmap& bitmap, const wxPoint& pos,
+                     const wxSize& size, long style = 0)
+        : wxBitmapButton(parent, id, bitmap, pos, size, style)
+    {
+#if defined(__WXGTK3__)
+        GTKApplyCssStyle("*{ padding:0 }");
+#else
+        // Define a special button style without inner border
+        // if it's not yet done.
+        if ( !m_exactFitStyleDefined )
+        {
+            gtk_rc_parse_string(
+              "style \"wxPGEditorBitmapButton_style\"\n"
+              "{ GtkButton::inner-border = { 0, 0, 0, 0 } }\n"
+              "widget \"*wxPGEditorBitmapButton*\" style \"wxPGEditorBitmapButton_style\"\n"
+            );
+            m_exactFitStyleDefined = true;
+        }
+
+        // Assign the button to the GTK style without inner border.
+        gtk_widget_set_name(m_widget, "wxPGEditorBitmapButton");
+#endif
+    }
+
+    virtual ~wxPGEditorBitmapButton() { }
+
+private:
+#ifndef __WXGTK3__
+    // To mark if special GTK style was already defined.
+    static bool m_exactFitStyleDefined;
+#endif // !__WXGTK3__
+};
+
+#ifndef __WXGTK3__
+bool wxPGEditorBitmapButton::m_exactFitStyleDefined = false;
+#endif // !__WXGTK3__
+
+#else // !__WXGTK__
+
+typedef wxBitmapButton wxPGEditorBitmapButton;
+
+#endif // __WXGTK__ / !__WXGTK__
+
 void wxPGMultiButton::Add( const wxBitmap& bitmap, int itemid )
 {
     itemid = GenId(itemid);
     wxSize sz = GetSize();
-    wxButton* button = new wxBitmapButton( this, itemid, bitmap,
-                                           wxPoint(sz.x, 0),
-                                           wxSize(sz.y, sz.y) );
+
+    // Internal margins around the bitmap inside the button
+    const int margins =
+#if defined(__WXMSW__)
+            2*4;
+#elif defined(__WXGTK3__)
+            2*2;
+#elif defined(__WXGTK__)
+            2*6;
+#elif defined(__WXOSX__)
+            2*3;
+#else
+            0;
+#endif
+    // Maximal heigth of the bitmap
+    const int hMax = wxMax(4, sz.y - margins);
+
+    wxBitmap scaledBmp;
+    // Scale bitmap down if necessary
+    if ( bitmap.GetHeight() > hMax )
+    {
+        double scale = (double)hMax / bitmap.GetHeight();
+        scaledBmp = wxPropertyGrid::RescaleBitmap(bitmap, scale, scale);
+    }
+    else
+    {
+        scaledBmp = bitmap;
+    }
+
+    wxBitmapButton* button = new wxPGEditorBitmapButton(this, itemid, scaledBmp,
+                           wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y));
+    // If button is narrow make it a square
+    wxSize szBtn = button->GetSize();
+    if ( szBtn.x < szBtn.y )
+        button->SetSize(wxSize(szBtn.y, szBtn.y));
+
     DoAddButton( button, sz );
 }
 #endif
@@ -2173,8 +2246,13 @@ void wxPGMultiButton::Add( const wxString& label, int itemid )
 {
     itemid = GenId(itemid);
     wxSize sz = GetSize();
-    wxButton* button = new wxButton( this, itemid, label, wxPoint(sz.x, 0),
-                                     wxSize(sz.y, sz.y) );
+    wxButton* button = new wxButton(this, itemid, label,
+                    wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y), wxBU_EXACTFIT);
+    // If button is narrow make it a square
+    wxSize szBtn = button->GetSize();
+    if ( szBtn.x < szBtn.y )
+        button->SetSize(wxSize(szBtn.y, szBtn.y));
+
     DoAddButton( button, sz );
 }
 

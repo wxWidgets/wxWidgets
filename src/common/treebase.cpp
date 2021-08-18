@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TREECTRL
 
@@ -357,6 +354,7 @@ void wxTreeCtrlBase::OnCharHook(wxKeyEvent& event)
                 wxFALLTHROUGH;
 
             case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
                 EndEditLabel(GetFocusedItem(), discardChanges);
 
                 // Do not call Skip() below.

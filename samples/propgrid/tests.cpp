@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -482,7 +479,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         }
 
         // Recreate grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
 
@@ -502,7 +499,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         }
 
         // Recreate grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
 
@@ -634,7 +631,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman->SetPropertyValue("ArrayStringProperty",test_arrstr_1);
         wxColour emptyCol;
         pgman->SetPropertyValue("ColourProperty",emptyCol);
-        pgman->SetPropertyValue("ColourProperty",(wxObject*)wxBLACK);
+        pgman->SetPropertyValue("ColourProperty", const_cast<wxObject*>(static_cast<const wxObject*>(wxBLACK)));
         pgman->SetPropertyValue("Size",WXVARIANT(wxSize(150,150)));
         pgman->SetPropertyValue("Position",WXVARIANT(wxPoint(150,150)));
         pgman->SetPropertyValue("MultiChoiceProperty",test_arrint_1);
@@ -690,7 +687,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pg->SetPropertyValue("BoolProperty",true);
         pg->SetPropertyValue("EnumProperty",80);
         pg->SetPropertyValue("ArrayStringProperty",test_arrstr_2);
-        pg->SetPropertyValue("ColourProperty",(wxObject*)wxWHITE);
+        pg->SetPropertyValue("ColourProperty", const_cast<wxObject*>(static_cast<const wxObject*>(wxWHITE)));
         pg->SetPropertyValue("Size",WXVARIANT(wxSize(300,300)));
         pg->SetPropertyValue("Position",WXVARIANT(wxPoint(300,300)));
         pg->SetPropertyValue("MultiChoiceProperty",test_arrint_2);
@@ -812,7 +809,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // Test multiple selection
         RT_START_TEST(MULTIPLE_SELECTION)
         if ( !(pgman->GetExtraStyle() & wxPG_EX_MULTIPLE_SELECTION) )
-            CreateGrid( -1, wxPG_EX_MULTIPLE_SELECTION);
+            ReplaceGrid( -1, wxPG_EX_MULTIPLE_SELECTION);
         pgman = m_pPropGridManager;
 
         pg = pgman->GetGrid();
@@ -942,7 +939,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pg->EndLabelEdit(0);
 
         // Recreate grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
 
@@ -1231,7 +1228,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         enumProp->DeleteChoice(ind);
 
         // Recreate the original grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
 
@@ -1364,7 +1361,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
 
         // Recreate the original grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
 
         // Grid clear
@@ -1375,32 +1372,23 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
 
         // Recreate the original grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
 
     {
         RT_START_TEST(SetSplitterPosition)
 
-        InitPanel();
-
         const int trySplitterPos = 50;
 
         int style = wxPG_AUTO_SORT;  // wxPG_SPLITTER_AUTO_CENTER;
-        pgman = m_pPropGridManager =
-            new wxPropertyGridManager(m_panel, wxID_ANY,
-                                      wxDefaultPosition,
-                                      wxDefaultSize,
-                                      style );
+        ReplaceGrid(style, -1);
+        pgman = m_pPropGridManager;
 
-        PopulateGrid();
         pgman->SetSplitterPosition(trySplitterPos);
 
         if ( pgman->GetGrid()->GetSplitterPosition() != trySplitterPos )
             RT_FAILURE_MSG(wxString::Format("Splitter position was %i (should have been %i)",(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos));
-
-        m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
-        FinalizePanel();
 
         wxSize origSz = GetSize();
 
@@ -1414,7 +1402,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         SetSize(origSz);
 
         // Recreate the original grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
 
@@ -1525,7 +1513,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         }
 
         // Recreate the original grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
 
@@ -1773,8 +1761,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         RT_START_TEST(MultipleColumns)
 
         // Test with multiple columns
-        CreateGrid( -1, -1 );
-        FinalizeFramePosition();
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
         for ( i=3; i<12; i+=2 )
         {
@@ -1797,7 +1784,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         {
             int flag = 1<<i;
             RT_MSG(wxString::Format("Style: 0x%X",flag));
-            CreateGrid( flag, -1 );
+            ReplaceGrid( flag, -1 );
             pgman = m_pPropGridManager;
             Update();
             wxMilliSleep(500);
@@ -1809,19 +1796,16 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         {
             int flag = 1<<i;
             RT_MSG(wxString::Format("ExStyle: 0x%X",flag));
-            CreateGrid( -1, flag );
+            ReplaceGrid( -1, flag );
             pgman = m_pPropGridManager;
             Update();
             wxMilliSleep(500);
         }
 
         // Recreate the original grid
-        CreateGrid( -1, -1 );
+        ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
-
-    // Restore original grid size
-    FinalizeFramePosition();
 
     RT_START_TEST(none)
 

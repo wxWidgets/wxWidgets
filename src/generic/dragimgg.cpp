@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DRAGIMAGE
 
@@ -58,10 +55,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxGenericDragImage, wxObject);
 
 wxGenericDragImage::~wxGenericDragImage()
 {
-    if (m_windowDC)
-    {
-        delete m_windowDC;
-    }
+    delete m_windowDC;
 }
 
 void wxGenericDragImage::Init()

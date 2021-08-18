@@ -173,7 +173,7 @@ public:
     /**
         Assignment operator.
     */
-    void operator operator=(const wxRichTextHeaderFooterData& data);
+    void operator=(const wxRichTextHeaderFooterData& data);
 };
 
 

@@ -24,7 +24,7 @@ public:
                int n = 0, const wxString choices[] = NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxComboBoxNameStr);
+               const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     wxComboBox(wxWindow *parent, wxWindowID id,
                const wxString& value,
@@ -33,7 +33,7 @@ public:
                const wxArrayString& choices,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxComboBoxNameStr);
+               const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value = wxEmptyString,
@@ -42,7 +42,7 @@ public:
                 int n = 0, const wxString choices[] = (const wxString *) NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value,
                 const wxPoint& pos,
@@ -50,7 +50,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     virtual void SetSelection(int n) wxOVERRIDE;
     virtual void SetSelection(long from, long to) wxOVERRIDE;
@@ -79,6 +79,8 @@ public:
 
     virtual void Popup();
     virtual void Dismiss();
+
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
 
     virtual bool QtHandleFocusEvent(QWidget *handler, QFocusEvent *event) wxOVERRIDE;
 protected:

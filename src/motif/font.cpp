@@ -93,7 +93,7 @@ public:
 
 protected:
     // common part of all ctors
-    void Init(float size,
+    void Init(double size,
               wxFontFamily family,
               wxFontStyle style,
               int weight,
@@ -102,7 +102,7 @@ protected:
               wxFontEncoding encoding);
 
     // font attributes
-    float         m_pointSize;
+    double        m_pointSize;
     wxFontFamily  m_family;
     wxFontStyle   m_style;
     int           m_weight;
@@ -163,7 +163,7 @@ wxXFont::~wxXFont()
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::Init(float pointSize,
+void wxFontRefData::Init(double pointSize,
                          wxFontFamily family,
                          wxFontStyle style,
                          int weight,
@@ -171,7 +171,7 @@ void wxFontRefData::Init(float pointSize,
                          const wxString& faceName,
                          wxFontEncoding encoding)
 {
-    if (family == wxDEFAULT)
+    if (family == wxFONTFAMILY_DEFAULT)
         m_family = wxFONTFAMILY_SWISS;
     else
         m_family = family;
@@ -381,7 +381,7 @@ void wxFont::Unshare()
     }
 }
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     Unshare();
 
@@ -449,7 +449,7 @@ void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 // query font attributes
 // ----------------------------------------------------------------------------
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 

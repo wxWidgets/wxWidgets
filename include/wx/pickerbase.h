@@ -50,7 +50,7 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxButtonNameStr);
+                    const wxString& name = wxASCII_STR(wxButtonNameStr));
 
 public:     // public API
 
@@ -147,7 +147,8 @@ protected:
     wxDEPRECATED_MSG("useless and will be removed in the future")
     int GetDefaultTextCtrlFlag() const
     {
-        return wxALIGN_CENTER_VERTICAL | wxRIGHT;
+        // Cast to avoid warnings about mixing elements of different enums.
+        return wxALIGN_CENTER_VERTICAL | static_cast<int>(wxRIGHT);
     }
 #endif // WXWIN_COMPATIBILITY_3_0
 

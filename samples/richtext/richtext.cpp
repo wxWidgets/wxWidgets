@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -1190,17 +1187,17 @@ void MyFrame::WriteInitialText()
 
         r.Newline();
 
-        wxRichTextAttr attr;
-        attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetRight().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetBottom().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        wxRichTextAttr attr1;
+        attr1.GetTextBoxAttr().GetMargins().GetLeft().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetTop().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetRight().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetBottom().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
 
-        attr.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
-        attr.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
+        attr1.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
+        attr1.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
 
-        wxRichTextBox* textBox = r.WriteTextBox(attr);
+        wxRichTextBox* textBox = r.WriteTextBox(attr1);
         r.SetFocusObject(textBox);
 
         r.WriteText("This is a text box. Just testing! Once more unto the breach, dear friends, once more...");
@@ -1216,22 +1213,22 @@ void MyFrame::WriteInitialText()
 
         r.Newline();
 
-        wxRichTextAttr attr;
-        attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetRight().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetBottom().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetPadding() = attr.GetTextBoxAttr().GetMargins();
+        wxRichTextAttr attr1;
+        attr1.GetTextBoxAttr().GetMargins().GetLeft().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetTop().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetRight().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetBottom().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetPadding() = attr.GetTextBoxAttr().GetMargins();
 
-        attr.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
-        attr.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
+        attr1.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
+        attr1.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
 
-        wxRichTextAttr cellAttr = attr;
+        wxRichTextAttr cellAttr = attr1;
         cellAttr.GetTextBoxAttr().GetWidth().SetValue(200, wxTEXT_ATTR_UNITS_PIXELS);
         cellAttr.GetTextBoxAttr().GetHeight().SetValue(150, wxTEXT_ATTR_UNITS_PIXELS);
 
-        wxRichTextTable* table = r.WriteTable(6, 4, attr, cellAttr);
+        wxRichTextTable* table = r.WriteTable(6, 4, attr1, cellAttr);
 
         int i, j;
         for (j = 0; j < table->GetRowCount(); j++)
@@ -1382,15 +1379,15 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxString path = dialog.GetPath();
+        wxString path1 = dialog.GetPath();
 
-        if (!path.empty())
+        if (!path1.empty())
         {
             int filterIndex = dialog.GetFilterIndex();
             int fileType = (filterIndex < (int) fileTypes.GetCount())
                            ? fileTypes[filterIndex]
                            : wxRICHTEXT_TYPE_TEXT;
-            m_richTextCtrl->LoadFile(path, fileType);
+            m_richTextCtrl->LoadFile(path1, fileType);
         }
     }
 }
@@ -1420,14 +1417,14 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxString path = dialog.GetPath();
+        wxString path1 = dialog.GetPath();
 
-        if (!path.empty())
+        if (!path1.empty())
         {
             wxBusyCursor busy;
             wxStopWatch stopwatch;
 
-            m_richTextCtrl->SaveFile(path);
+            m_richTextCtrl->SaveFile(path1);
 
             long t = stopwatch.Time();
             wxLogDebug("Saving took %ldms", t);
@@ -2315,10 +2312,10 @@ wxRichTextTable* MyRichTextCtrl::FindTable() const
     while (obj)
     {
         obj = obj->GetParent();
-        wxRichTextTable* table = wxDynamicCast(obj, wxRichTextTable);
-        if (table)
+        wxRichTextTable* table1 = wxDynamicCast(obj, wxRichTextTable);
+        if (table1)
         {
-            return table;
+            return table1;
         }
     }
 

@@ -19,7 +19,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxDEFAULT_FRAME_STYLE,
-               const wxString& name = wxFrameNameStr);
+               const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -27,7 +27,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual bool Show(bool show = true) wxOVERRIDE;
     virtual void Maximize(bool maximize = true) wxOVERRIDE;

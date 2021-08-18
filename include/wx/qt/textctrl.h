@@ -22,7 +22,7 @@ public:
                const wxSize &size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString &name = wxTextCtrlNameStr);
+               const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
     virtual ~wxTextCtrl();
 
@@ -33,7 +33,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxTextCtrlNameStr);
+                const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
     virtual int GetLineLength(long lineNo) const wxOVERRIDE;
     virtual wxString GetLineText(long lineNo) const wxOVERRIDE;

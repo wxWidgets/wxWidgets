@@ -57,7 +57,7 @@ public:
     // several items at once, return true if any of them were selected
     bool OnItemsDeleted(unsigned item, unsigned numItems);
 
-    // select one item, use SelectRange() insted if possible!
+    // select one item, use SelectRange() instead if possible!
     //
     // returns true if the items selection really changed
     bool SelectItem(unsigned item, bool select = true);

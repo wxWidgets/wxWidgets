@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #if wxUSE_STATBMP
 
@@ -44,7 +41,7 @@ public :
     {
     }
 
-	void SetLabel( const wxString& title, wxFontEncoding encoding ) wxOVERRIDE
+    void SetLabel( const wxString& title, wxFontEncoding encoding ) wxOVERRIDE
     {
         // although NSControl has this method, NSImageView throws an exception if it is called
     }

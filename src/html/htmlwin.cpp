@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -493,7 +490,7 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
 
     double pixelScale = 1.0;
 #ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
-    pixelScale = GetContentScaleFactor();
+    pixelScale = GetDPIScaleFactor();
 #endif
 
     m_Parser->SetDC(&dc, pixelScale, 1.0);
@@ -586,7 +583,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
         if (f == NULL)
         {
-            wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
+            wxLogError(_("Unable to open requested HTML document: %s"), location);
             m_tmpCanDrawLocks--;
             SetHTMLStatusText(wxEmptyString);
             return false;
@@ -629,6 +626,13 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             if (!f->GetAnchor().empty())
             {
                 ScrollToAnchor(f->GetAnchor());
+            }
+            else
+            {
+                // Without anchor, go to the top of the page, instead of
+                // possibly remaining at non-zero scroll position and scrolling
+                // the top out of view.
+                Scroll(0, 0);
             }
 
             delete f;
@@ -684,7 +688,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
     const wxHtmlCell *c = m_Cell->Find(wxHTML_COND_ISANCHOR, &anchor);
     if (!c)
     {
-        wxLogWarning(_("HTML anchor %s does not exist."), anchor.c_str());
+        wxLogWarning(_("HTML anchor %s does not exist."), anchor);
         return false;
     }
     else
@@ -714,7 +718,7 @@ void wxHtmlWindow::OnSetTitle(const wxString& title)
     if (m_RelatedFrame)
     {
         wxString tit;
-        tit.Printf(m_TitleFormat, title.c_str());
+        tit.Printf(m_TitleFormat, title);
         m_RelatedFrame->SetTitle(tit);
     }
     m_OpenedPageTitle = title;
@@ -1013,7 +1017,7 @@ bool wxHtmlWindow::CopySelection(ClipboardType t)
             wxTheClipboard->SetData(new wxTextDataObject(txt));
             wxTheClipboard->Close();
             wxLogTrace(wxT("wxhtmlselection"),
-                       _("Copied to clipboard:\"%s\""), txt.c_str());
+                       _("Copied to clipboard:\"%s\""), txt);
 
             return true;
         }
@@ -1112,6 +1116,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc = &dcm;
     }
 
+    dc->GetImpl()->SetWindow(this);
     PrepareDC(*dc);
 
     // Erase the background: for compatibility, we must generate the event to
@@ -1138,7 +1143,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc->SetLayoutDirection(GetLayoutDirection());
 
     wxHtmlRenderingInfo rinfo;
-    wxDefaultHtmlRenderingStyle rstyle;
+    wxDefaultHtmlRenderingStyle rstyle(this);
     rinfo.SetSelection(m_selection);
     rinfo.SetStyle(&rstyle);
     m_Cell->Draw(*dc, 0, 0,
@@ -1184,7 +1189,115 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 }
 
+namespace
+{
 
+// Returns true if leftCell is an ancestor of rightCell.
+bool IsAncestor(const wxHtmlCell* leftCell, const wxHtmlCell* rightCell)
+{
+    for ( const wxHtmlCell* parent = rightCell->GetParent();
+          parent; parent = parent->GetParent() )
+    {
+        if ( leftCell == parent )
+            return true;
+    }
+    return false;
+}
+
+// Returns minimum bounding rectangle of all the cells between fromCell
+// and toCell, inclusive.
+wxRect GetBoundingRect(const wxHtmlCell* const fromCell,
+                       const wxHtmlCell* const toCell)
+{
+    wxCHECK_MSG(fromCell || toCell, wxRect(), "At least one cell is required");
+
+    // Check if we have only one cell or the cells are equal.
+    if ( !fromCell )
+        return toCell->GetRect();
+    else if ( !toCell || fromCell == toCell )
+        return fromCell->GetRect();
+
+    // Check if one of the cells is an ancestor of the other.
+    if ( IsAncestor(fromCell, toCell) )
+        return fromCell->GetRect();
+    else if ( IsAncestor(toCell, fromCell) )
+        return toCell->GetRect();
+
+    // Combine MBRs, starting with the fromCell.
+    wxRect boundingRect = fromCell->GetRect();
+
+    // For each subtree toward the lowest common ancestor,
+    // combine MBRs until the (subtree of) toCell is reached.
+    for ( const wxHtmlCell *startCell = fromCell,
+                           *parent = fromCell->GetParent();
+          parent;
+          startCell = parent, parent = parent->GetParent() )
+    {
+        if ( IsAncestor(parent, toCell) )
+        {
+            // Combine all the cells up to the toCell or its subtree.
+            for ( const wxHtmlCell* nextCell = startCell->GetNext();
+                  nextCell;
+                  nextCell = nextCell->GetNext() )
+            {
+                if ( nextCell == toCell )
+                    return boundingRect.Union(toCell->GetRect());
+
+                if ( IsAncestor(nextCell, toCell) )
+                {
+                    return boundingRect.Union(GetBoundingRect(
+                        nextCell->GetFirstTerminal(), toCell));
+                }
+
+                boundingRect.Union(nextCell->GetRect());
+            }
+
+            wxFAIL_MSG("Unexpected: toCell is not reachable from the fromCell");
+            return GetBoundingRect(toCell, fromCell);
+        }
+        else
+        {
+            // Combine rest of current container.
+            for ( const wxHtmlCell* nextCell = startCell->GetNext();
+                  nextCell;
+                  nextCell = nextCell->GetNext() )
+            {
+                boundingRect.Union(nextCell->GetRect());
+            }
+        }
+    }
+
+    wxFAIL_MSG("The cells have no common ancestor");
+    return wxRect();
+}
+
+} // namespace
+
+void wxHtmlWindow::OnFocusEvent(wxFocusEvent& event)
+{
+    event.Skip();
+
+    // Redraw selection, because its background colour depends on
+    // whether the window has keyboard focus or not.
+
+    if ( !m_selection || m_selection->IsEmpty() )
+        return;
+
+    const wxHtmlCell* fromCell = m_selection->GetFromCell();
+    const wxHtmlCell* toCell = m_selection->GetToCell();
+    wxCHECK_RET(fromCell || toCell,
+                "Unexpected: selection is set but cells are not");
+
+    wxRect boundingRect = GetBoundingRect(fromCell, toCell);
+
+    boundingRect = wxRect
+    (
+        CalcScrolledPosition(boundingRect.GetTopLeft()),
+        CalcScrolledPosition(boundingRect.GetBottomRight())
+    );
+
+    RefreshRect(boundingRect);
+}
 
 
 void wxHtmlWindow::OnSize(wxSizeEvent& event)
@@ -1206,6 +1319,10 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
     Refresh();
 }
 
+void wxHtmlWindow::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    DoSetPage(*(m_Parser->GetSource()));
+}
 
 void wxHtmlWindow::OnMouseMove(wxMouseEvent& WXUNUSED(event))
 {
@@ -1502,14 +1619,12 @@ void wxHtmlWindow::OnMouseLeave(wxMouseEvent& event)
 
 void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
 {
-    if ( IsSelectionEnabled() &&
-            (event.GetKeyCode() == 'C' && event.CmdDown()) )
+    if ( IsSelectionEnabled() && event.GetModifiers() == wxMOD_CONTROL &&
+         (event.GetKeyCode() == 'C' || event.GetKeyCode() == WXK_INSERT) )
     {
         wxClipboardTextEvent evt(wxEVT_TEXT_COPY, GetId());
-
         evt.SetEventObject(this);
-
-        GetEventHandler()->ProcessEvent(evt);
+        ProcessWindowEvent(evt);
     }
     else
     {
@@ -1650,12 +1765,15 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow, "wx/html/htmlwin.h
 
 wxBEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)
+    EVT_DPI_CHANGED(wxHtmlWindow::OnDPIChanged)
     EVT_LEFT_DOWN(wxHtmlWindow::OnMouseDown)
     EVT_LEFT_UP(wxHtmlWindow::OnMouseUp)
     EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)
     EVT_MOTION(wxHtmlWindow::OnMouseMove)
     EVT_PAINT(wxHtmlWindow::OnPaint)
     EVT_ERASE_BACKGROUND(wxHtmlWindow::OnEraseBackground)
+    EVT_SET_FOCUS(wxHtmlWindow::OnFocusEvent)
+    EVT_KILL_FOCUS(wxHtmlWindow::OnFocusEvent)
 #if wxUSE_CLIPBOARD
     EVT_LEFT_DCLICK(wxHtmlWindow::OnDoubleClick)
     EVT_ENTER_WINDOW(wxHtmlWindow::OnMouseEnter)

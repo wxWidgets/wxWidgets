@@ -37,7 +37,6 @@ public:
     virtual int CaretFromEdge() wxOVERRIDE;
     virtual void Clear() wxOVERRIDE;
     virtual void Append(char *s, int type = -1) wxOVERRIDE;
-            void Append(const wxString& text, int type);
     virtual int Length() wxOVERRIDE;
     virtual void Select(int n) wxOVERRIDE;
     virtual int GetSelection() wxOVERRIDE;
@@ -150,7 +149,8 @@ protected:
     #endif
 
 private:
-    wxPoint   m_lastKnownPosition;
+    wxPoint   m_relPos;
+    wxPoint   m_absPos;
     wxWindow* m_tlw;
 };
 

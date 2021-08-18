@@ -35,6 +35,7 @@ public:
     // wxSpinCtrl(Double) methods call DoXXX functions of the same name
 
     // accessors
+    virtual wxString GetTextValue() const wxOVERRIDE;
     // T GetValue() const
     // T GetMin() const
     // T GetMax() const
@@ -57,7 +58,26 @@ public:
     // implementation
     void OnChar( wxKeyEvent &event );
 
+
+    // These values map to the possible return values of "input" GTK signal but
+    // are more readable and type-safe.
+    enum GTKInputResult
+    {
+        GTKInput_Error = -1,
+        GTKInput_Default,
+        GTKInput_Converted
+    };
+
+    virtual GTKInputResult GTKInput(double* value) const = 0;
+    virtual bool GTKOutput(wxString* text) const = 0;
+
+    virtual void GTKValueChanged() = 0;
+    void GTKTextChanged();
+
 protected:
+    wxSpinCtrlGTKBase();
+    ~wxSpinCtrlGTKBase();
+
     double DoGetValue() const;
     double DoGetMin() const;
     double DoGetMax() const;
@@ -68,16 +88,39 @@ protected:
     void DoSetRange(double min_val, double max_val);
     void DoSetIncrement(double inc);
 
-    void GtkDisableEvents() const;
-    void GtkEnableEvents() const;
+    void GtkDisableEvents();
+    void GtkEnableEvents();
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    // Update the width of the entry field to fit the current range (and also
+    // base or number of digits depending on the derived class).
+    virtual void GtkSetEntryWidth() = 0;
+
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
+
+    // Set m_textOverride to use the given text instead of the numeric value.
+    void GTKSetTextOverride(const wxString& text);
+
+    // Reset the override and changing the value to correspond to the
+    // previously overridden numeric value.
+    void GTKResetTextOverride();
+
+    // Just reset the override, without touching the value, returning true if
+    // we did it. In most cases, the function above should be used instead.
+    bool GTKResetTextOverrideOnly();
+
+private:
+    // This function does _not_ take into account m_textOverride, so it is
+    // private and normally shouldn't be used -- use DoGetValue() instead.
+    double GTKGetValue() const;
+
+    // Non-null when the text value is different from the numeric value.
+    class wxSpinCtrlGTKTextOverride* m_textOverride;
+
 
     friend class wxSpinCtrlEventDisabler;
 
@@ -133,6 +176,13 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
+
+    virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
+    virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
+    virtual void GTKValueChanged() wxOVERRIDE;
+
+protected:
+    virtual void GtkSetEntryWidth() wxOVERRIDE;
 
 private:
     // Common part of all ctors.
@@ -193,11 +243,18 @@ public:
     void SetValue(const wxString& value) wxOVERRIDE        { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
     void SetValue(double value)                 { DoSetValue(value); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
-    void SetIncrement(double inc)               { DoSetIncrement(inc); }
+    void SetIncrement(double inc);
     void SetDigits(unsigned digits);
 
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
+
+    virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
+    virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
+    virtual void GTKValueChanged() wxOVERRIDE;
+
+protected:
+    virtual void GtkSetEntryWidth() wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };

@@ -191,6 +191,14 @@ void wxListBox::DoSetSelection(int n, bool select)
     wxCHECK_RET( n == wxNOT_FOUND || IsValid(n),
         wxT("invalid index in wxListBox::SetSelection") );
 
+    DoSetSelectionWithoutEnsureVisible(n, select);
+
+    if (select)
+        EnsureVisible(n);
+}
+
+void wxListBox::DoSetSelectionWithoutEnsureVisible(int n, bool select)
+{
     m_blockEvents = true;
 
     if ( n == wxNOT_FOUND )
@@ -201,9 +209,6 @@ void wxListBox::DoSetSelection(int n, bool select)
     m_blockEvents = false;
 
     UpdateOldSelections();
-
-    if (select)
-        EnsureVisible(n);
 }
 
 bool wxListBox::IsSelected(int n) const
@@ -349,6 +354,23 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 {
     int idx = wxNOT_FOUND;
     unsigned int startpos = pos;
+    wxArrayInt selections;
+
+    if ( !IsSorted() )
+    {
+        if ( HasMultipleSelection() )
+        {
+            GetSelections(selections);
+        }
+        else
+        {
+            int sel = GetSelection();
+            if ( sel != wxNOT_FOUND )
+            {
+                selections.Add(sel);
+            }
+        }
+    }
 
     const unsigned int numItems = items.GetCount();
     for ( unsigned int i = 0; i < numItems; ++i )
@@ -367,13 +389,29 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 
     GetListPeer()->UpdateLineToEnd(startpos);
 
-    // Inserting the items may scroll the listbox down to show the last
-    // selected one but we don't want to do it as it could result in e.g. the
-    // first items of a listbox be hidden immediately after its creation so
-    // show the first selected item instead. Ideal would probably be to
-    // preserve the old selection unchanged, in fact, but I don't know how to
-    // get the first visible item so for now do at least this.
-    SetFirstItem(startpos);
+    const size_t numSelections = selections.size();
+    for ( size_t i = 0; i < numSelections; ++i )
+    {
+        if ( int(startpos) <= selections[i] )
+        {
+            if ( HasMultipleSelection() )
+            {
+                size_t j;
+
+                // Do not deselect item if it is to be selected below
+                for ( j = 0; j < numSelections; ++j )
+                {
+                    if ( selections[i] == selections[j] + int(numItems) )
+                        break;
+                }
+
+                if ( j == numSelections )
+                    Deselect(selections[i]);
+            }
+
+            DoSetSelectionWithoutEnsureVisible(selections[i] + numItems, true);
+        }
+    }
 
     InvalidateBestSize();
 

@@ -394,7 +394,7 @@ protected:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
-                   const wxString& name = wxFrameNameStr)
+                   const wxString& name = wxASCII_STR(wxFrameNameStr))
             : wxTopLevelWindowNative(parent, winid, title,
                                      pos, size, style, name)
         {

@@ -71,13 +71,6 @@ private:
 class WXDLLIMPEXP_NET wxIPaddress : public wxSockAddress
 {
 public:
-    wxIPaddress() : wxSockAddress() { }
-    wxIPaddress(const wxIPaddress& other)
-        : wxSockAddress(other),
-          m_origHostname(other.m_origHostname)
-    {
-    }
-
     bool operator==(const wxIPaddress& addr) const;
 
     bool Hostname(const wxString& name);
@@ -120,9 +113,6 @@ private:
 class WXDLLIMPEXP_NET wxIPV4address : public wxIPaddress
 {
 public:
-    wxIPV4address() : wxIPaddress() { }
-    wxIPV4address(const wxIPV4address& other) : wxIPaddress(other) { }
-
     // implement wxSockAddress pure virtuals:
     virtual Family Type() wxOVERRIDE { return IPV4; }
     virtual wxSockAddress *Clone() const wxOVERRIDE { return new wxIPV4address(*this); }
@@ -155,9 +145,6 @@ private:
 class WXDLLIMPEXP_NET wxIPV6address : public wxIPaddress
 {
 public:
-    wxIPV6address() : wxIPaddress() { }
-    wxIPV6address(const wxIPV6address& other) : wxIPaddress(other) { }
-
     // implement wxSockAddress pure virtuals:
     virtual Family Type() wxOVERRIDE { return IPV6; }
     virtual wxSockAddress *Clone() const wxOVERRIDE { return new wxIPV6address(*this); }
@@ -192,9 +179,6 @@ private:
 class WXDLLIMPEXP_NET wxUNIXaddress : public wxSockAddress
 {
 public:
-    wxUNIXaddress() : wxSockAddress() { }
-    wxUNIXaddress(const wxUNIXaddress& other) : wxSockAddress(other) { }
-
     void Filename(const wxString& name);
     wxString Filename() const;
 

@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DATEPICKCTRL
 
@@ -167,7 +164,7 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
                                            const wxDateTime& dt,
                                            const wxPoint& pos,
                                            const wxSize& size,
-                                           long style,
+                                           long WXUNUSED(style),
                                            wxDateTimeWidgetKind kind)
 {
     NSRect r = wxOSXGetFrameForControl(wxpeer, pos, size);

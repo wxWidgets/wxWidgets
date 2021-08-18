@@ -723,7 +723,7 @@ public:
         // get the broken down date/time representation in the given timezone
         //
         // If you wish to get several time components (day, month and year),
-        // consider getting the whole Tm strcuture first and retrieving the
+        // consider getting the whole Tm structure first and retrieving the
         // value from it - this is much more efficient
     Tm GetTm(const TimeZone& tz = Local) const;
 
@@ -861,7 +861,7 @@ public:
         return m_time != dt.m_time;
     }
 
-    // arithmetics with dates (see also below for more operators)
+    // arithmetic with dates (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of the date with a time span (positive or negative)
@@ -955,7 +955,7 @@ public:
     bool ParseFormat(const wxString& date,
                      wxString::const_iterator *end)
     {
-        return ParseFormat(date, wxDefaultDateTimeFormat, wxDefaultDateTime, end);
+        return ParseFormat(date, wxASCII_STR(wxDefaultDateTimeFormat), wxDefaultDateTime, end);
     }
 
         // parse a string containing date, time or both in ISO 8601 format
@@ -1000,7 +1000,7 @@ public:
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxString& format = wxDefaultDateTimeFormat,
+    wxString Format(const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                     const TimeZone& tz = Local) const;
         // preferred date representation for the current locale
     wxString FormatDate() const { return Format(wxS("%x")); }
@@ -1035,7 +1035,7 @@ public:
     }
 
     wxAnyStrPtr ParseFormat(const wxString& date,
-                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                             const wxDateTime& dateDef = wxDefaultDateTime)
     {
         wxString::const_iterator end;
@@ -1084,14 +1084,14 @@ public:
     const wchar_t* ParseRfc822Date(const wchar_t* date);
 
     void ParseFormat(const wxCStrData& date,
-                     const wxString& format = wxDefaultDateTimeFormat,
+                     const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                      const wxDateTime& dateDef = wxDefaultDateTime)
         { ParseFormat(wxString(date), format, dateDef); }
     const char* ParseFormat(const char* date,
-                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                             const wxDateTime& dateDef = wxDefaultDateTime);
     const wchar_t* ParseFormat(const wchar_t* date,
-                               const wxString& format = wxDefaultDateTimeFormat,
+                               const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                                const wxDateTime& dateDef = wxDefaultDateTime);
 
     void ParseDateTime(const wxCStrData& datetime)
@@ -1207,7 +1207,7 @@ public:
 
         // no dtor
 
-    // arithmetics with time spans (see also below for more operators)
+    // arithmetic with time spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of two timespans
@@ -1337,7 +1337,7 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxString& format = wxDefaultTimeSpanFormat) const;
+    wxString Format(const wxString& format = wxASCII_STR(wxDefaultTimeSpanFormat)) const;
 
     // implementation
     // ------------------------------------------------------------------------
@@ -1448,7 +1448,7 @@ public:
         // returns 7*GetWeeks() + GetDays()
     int GetTotalDays() const { return 7*m_weeks + m_days; }
 
-    // arithmetics with date spans (see also below for more operators)
+    // arithmetic with date spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return sum of two date spans
@@ -1848,7 +1848,7 @@ inline bool wxDateTime::IsEqualUpTo(const wxDateTime& dt,
 }
 
 // ----------------------------------------------------------------------------
-// wxDateTime arithmetics
+// wxDateTime arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxDateTime wxDateTime::Add(const wxTimeSpan& diff) const
@@ -1997,7 +1997,7 @@ inline int wxTimeSpan::GetWeeks() const
 }
 
 // ----------------------------------------------------------------------------
-// wxTimeSpan arithmetics
+// wxTimeSpan arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxTimeSpan wxTimeSpan::Add(const wxTimeSpan& diff) const

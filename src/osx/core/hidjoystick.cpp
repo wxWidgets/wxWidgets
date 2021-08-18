@@ -808,6 +808,21 @@ void* wxJoystickThread::Entry()
 // 5) Sends the event to the polling window (if any)
 // 6) Gets the next event and goes back to (1)
 //---------------------------------------------------------------------------
+
+// from https://developer.apple.com/documentation/apple_silicon/addressing_architectural_differences_in_your_macos_code
+
+uint64_t MachTimeToNanoseconds(uint64_t machTime)
+{
+    uint64_t nanoseconds = 0;
+    static mach_timebase_info_data_t sTimebase;
+    if (sTimebase.denom == 0)
+        (void)mach_timebase_info(&sTimebase);
+
+    nanoseconds = ((machTime * sTimebase.numer) / sTimebase.denom);
+
+    return nanoseconds;
+}
+
 /*static*/ void wxJoystickThread::HIDCallback(void* WXUNUSED(target),
                                               IOReturn WXUNUSED(res),
                                               void* context,
@@ -894,9 +909,9 @@ void* wxJoystickThread::Entry()
         else
             wxevent.SetEventType(wxEVT_JOY_MOVE);
 
-        Nanoseconds timestamp = AbsoluteToNanoseconds(hidevent.timestamp);
+        uint64_t timestamp = MachTimeToNanoseconds(*((uint64_t*) &hidevent.timestamp));
 
-        wxULongLong llTime(timestamp.hi, timestamp.lo);
+        wxULongLong llTime(timestamp);
 
         llTime /= 1000000;
 

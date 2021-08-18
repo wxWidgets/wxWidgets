@@ -55,7 +55,7 @@ public:
     void SetDC(wxDC *dc, double pixel_scale, double font_scale);
 
     wxDC *GetDC() {return m_DC;}
-    double GetPixelScale() {return m_PixelScale;}
+    double GetPixelScale() const { return m_PixelScale; }
     int GetCharHeight() const {return m_CharHeight;}
     int GetCharWidth() const {return m_CharWidth;}
 
@@ -249,7 +249,7 @@ private:
 
 //-----------------------------------------------------------------------------
 // wxHtmlWinTagHandler
-//                  This is basicly wxHtmlTagHandler except
+//                  This is basically wxHtmlTagHandler except
 //                  it is extended with protected member m_Parser pointing to
 //                  the wxHtmlWinParser object
 //-----------------------------------------------------------------------------

@@ -10,8 +10,8 @@ wxWidgets.
 Releases
 --------
 
-General overview of releases can be found in tn0012.txt, but for
-completeness the wxWidgets release version number is as follows:
+General overview of releases can be found in [wxWidgets naming conventions](about-platform-toolkit-and-library-names.md),
+but for completeness the wxWidgets release version number is as follows:
 
 	2.6.2
 
@@ -20,9 +20,9 @@ Where
 	  2      6      2
 	Major  Minor Release
 
-(I.E. Major.Minor.Release).
+(i.e. Major.Minor.Release).
 
-All versions with EVEN minor version component (e.g. 2.4.x, 2.6.x etc.)
+All versions with EVEN minor version component (e.g. 2.8.x, 3.0.x etc.)
 are expected to be binary compatible (ODD minors are development versions
 and the compatibility constraints don't apply to them). Note that by
 preserving binary compatibility we mean BACKWARDS compatibility only,
@@ -37,8 +37,7 @@ also the section about `wxABI_VERSION`.
 What kind of changes are NOT binary compatible
 ----------------------------------------------
 
-If it's still up, the
-[KDE guide](http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C++)
+[The KDE guide](https://community.kde.org/Policies/Binary_Compatibility_Issues_With_C%2B%2B)
 is a good reference.
 
 
@@ -68,8 +67,8 @@ Changes which are compatible
 - Adding a new non-virtual method to an existing class
 - Adding a new constructor to an existing class
 - Overriding the implementation of an existing virtual function
-(this is considered to be backwards binary compatible until we find a
- counter example; currently it's known to work with Apple gcc at least)
+  (this is considered to be backwards binary compatible until we find a
+  counter example; currently it's known to work with Apple gcc at least)
 - Anything which doesn't result in ABI change at all, e.g. adding new
   macros, constants and, of course, private changes in the implementation
 
@@ -99,7 +98,7 @@ where
 	 2     06     02
 	Major Minor Release
 
-I.E. it corresponds to the wxWidgets release in (1).
+I.e. it corresponds to the wxWidgets release in section Releases.
 
 An example of using `wxABI_VERSION` is as follows for symbols
 only in a 2.6.2 release:
@@ -178,11 +177,11 @@ anything which fits the conditions of being `#if`'ed via `wxABI_VERSION`
 needs to go here also.
 
 See 'info ld scripts version' on a GNU system, it's online here:
-http://www.gnu.org/software/binutils/manual/ld-2.9.1/html_node/ld_25.html
+https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_25.html
 
 Or see chapter 5 of the 'Linker and Libraries Guide' for Solaris, available
 online here:
-http://docsun.cites.uiuc.edu/sun_docs/C/solaris_9/SUNWdev/LLM/p1.html
+https://docs.oracle.com/cd/E19120-01/open.solaris/819-0690/chapter5-84101/index.html
 
 The file has the layout as follows:
 
@@ -210,7 +209,7 @@ so a line like this could be added to version-script.in:
     \*wxGenericListCtrl*GetItemFont*;
 
 Allow for the fact that the name mangling is going to vary from compiler to
-complier.
+compiler.
 
 When adding a class you can match all the symbols it adds with a single
 pattern, so long as that pattern is not likely to also match other symbols.

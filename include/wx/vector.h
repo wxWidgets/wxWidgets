@@ -26,6 +26,12 @@ inline void wxVectorSort(wxVector<T>& v)
     std::sort(v.begin(), v.end());
 }
 
+template<typename T>
+inline bool wxVectorContains(const wxVector<T>& v, const T& obj)
+{
+    return std::find(v.begin(), v.end(), obj) != v.end();
+}
+
 #else // !wxUSE_STD_CONTAINERS
 
 #include "wx/scopeguard.h"
@@ -163,9 +169,8 @@ private:
     // This cryptic expression means "typedef Ops to wxVectorMemOpsMovable if
     // type T is movable type, otherwise to wxVectorMemOpsGeneric".
     //
-    // Note that bcc needs the extra parentheses for non-type template
-    // arguments to compile this expression.
-    typedef typename wxIf< (wxIsMovable<T>::value),
+
+    typedef typename wxIf< wxIsMovable<T>::value,
                            wxPrivate::wxVectorMemOpsMovable<T>,
                            wxPrivate::wxVectorMemOpsGeneric<T> >::value
             Ops;
@@ -194,12 +199,11 @@ public:
 
         reverse_iterator() : m_ptr(NULL) { }
         explicit reverse_iterator(iterator it) : m_ptr(it) { }
-        reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
 
         reference operator*() const { return *m_ptr; }
         pointer operator->() const { return m_ptr; }
 
-        iterator base() const { return m_ptr; }
+        iterator base() const { return m_ptr + 1; }
 
         reverse_iterator& operator++()
             { --m_ptr; return *this; }
@@ -262,7 +266,7 @@ public:
         const_reference operator*() const { return *m_ptr; }
         const_pointer operator->() const { return m_ptr; }
 
-        const_iterator base() const { return m_ptr; }
+        const_iterator base() const { return m_ptr + 1; }
 
         const_reverse_iterator& operator++()
             { --m_ptr; return *this; }
@@ -690,7 +694,17 @@ void wxVectorSort(wxVector<T>& v)
             wxPrivate::wxVectorComparator<T>::Compare, NULL);
 }
 
+template<typename T>
+inline bool wxVectorContains(const wxVector<T>& v, const T& obj)
+{
+    for ( size_t n = 0; n < v.size(); ++n )
+    {
+        if ( v[n] == obj )
+            return true;
+    }
 
+    return false;
+}
 
 #endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 

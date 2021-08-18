@@ -33,8 +33,13 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 class wxItemAttr;
 class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 
-#if !(defined(__WXGTK20__) || defined(__WXOSX__) ) || defined(__WXUNIVERSAL__)
-// #if !(defined(__WXOSX__)) || defined(__WXUNIVERSAL__)
+#if wxUSE_NATIVE_DATAVIEWCTRL && !defined(__WXUNIVERSAL__)
+    #if defined(__WXGTK20__) || defined(__WXOSX__)
+        #define wxHAS_NATIVE_DATAVIEWCTRL
+    #endif
+#endif
+
+#ifndef wxHAS_NATIVE_DATAVIEWCTRL
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif
 
@@ -203,7 +208,7 @@ public:
     // return true if the given item has a value to display in the given
     // column: this is always true except for container items which by default
     // only show their label in the first column (but see HasContainerColumns())
-    bool HasValue(const wxDataViewItem& item, unsigned col) const
+    virtual bool HasValue(const wxDataViewItem& item, unsigned col) const
     {
         return col == 0 || !IsContainer(item) || HasContainerColumns(item);
     }
@@ -509,6 +514,12 @@ public:
     virtual void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE { m_bitmap = bitmap; }
     virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
 
+    // Special accessor for use by wxWidgets only returning the width that was
+    // explicitly set, either by the application, using SetWidth(), or by the
+    // user, resizing the column interactively. It is usually the same as
+    // GetWidth(), but can be different for the last column.
+    virtual int WXGetSpecifiedWidth() const { return GetWidth(); }
+
 protected:
     wxDataViewRenderer      *m_renderer;
     int                      m_model_column;
@@ -704,7 +715,7 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
-    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(0); }
+    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(NULL); }
     virtual int GetCountPerPage() const { return wxNOT_FOUND; }
 
     // Currently focused column of the current item or NULL if no column has focus
@@ -729,6 +740,7 @@ public:
     virtual void UnselectAll() = 0;
 
     void Expand( const wxDataViewItem & item );
+    void ExpandChildren( const wxDataViewItem & item );
     void ExpandAncestors( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item ) = 0;
     virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
@@ -782,7 +794,9 @@ protected:
 
     // Just expand this item assuming it is already shown, i.e. its parent has
     // been already expanded using ExpandAncestors().
-    virtual void DoExpand(const wxDataViewItem & item) = 0;
+    //
+    // If expandChildren is true, also expand all its children recursively.
+    virtual void DoExpand(const wxDataViewItem & item, bool expandChildren) = 0;
 
 private:
     // Implementation of the public Set/GetCurrentItem() methods which are only
@@ -894,10 +908,10 @@ public:
     int GetDragFlags() const { return m_dragFlags; }
     void SetDropEffect( wxDragResult effect ) { m_dropEffect = effect; }
     wxDragResult GetDropEffect() const { return m_dropEffect; }
-    // for plaforms (currently only OSX) that support Drag/Drop insertion of items,
-	// this is the proposed child index for the insertion
-	void SetProposedDropIndex(int index) { m_proposedDropIndex = index; }
-	int GetProposedDropIndex() const { return m_proposedDropIndex;}
+    // For platforms (currently generic and OSX) that support Drag/Drop
+    // insertion of items, this is the proposed child index for the insertion.
+    void SetProposedDropIndex(int index) { m_proposedDropIndex = index; }
+    int GetProposedDropIndex() const { return m_proposedDropIndex;}
 #endif // wxUSE_DRAG_AND_DROP
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDataViewEvent(*this); }
@@ -1208,12 +1222,12 @@ public:
     const wxIcon &GetIcon() const
         { return m_icon; }
     void SetData( wxClientData *data )
-        { if (m_data) delete m_data; m_data = data; }
+        { delete m_data; m_data = data; }
     wxClientData *GetData() const
         { return m_data; }
 
     wxDataViewItem GetItem() const
-        { return wxDataViewItem( (void*) this ); }
+        { return wxDataViewItem(const_cast<void*>(static_cast<const void*>(this))); }
 
     virtual bool IsContainer()
         { return false; }

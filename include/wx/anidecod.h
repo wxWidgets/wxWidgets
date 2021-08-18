@@ -53,11 +53,12 @@ public:
     wxAnimationType GetType() const wxOVERRIDE
         { return wxANIMATION_TYPE_ANI; }
 
-private:
+protected:
     // wxAnimationDecoder pure virtual:
     virtual bool DoCanRead( wxInputStream& stream ) const wxOVERRIDE;
             // modifies current stream position (see wxAnimationDecoder::CanRead)
 
+private:
     // frames stored as wxImage(s): ANI files are meant to be used mostly for animated
     // cursors and thus they do not use any optimization to encode differences between
     // two frames: they are just a list of images to display sequentially.

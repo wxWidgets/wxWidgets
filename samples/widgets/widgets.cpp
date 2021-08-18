@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -462,6 +459,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_LayoutDirection,
                                 "Toggle &layout direction\tCtrl-L");
+    menuWidget->Check(Widgets_LayoutDirection,
+                      GetLayoutDirection() == wxLayout_RightToLeft);
 
     menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_GlobalBusyCursor,
@@ -974,10 +973,13 @@ void WidgetsFrame::OnSetVariant(wxCommandEvent& event)
     CurrentPage()->Layout();
 }
 
-void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent& event)
+void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent&)
 {
-    WidgetsPage::GetAttrs().m_dir = event.IsChecked() ? wxLayout_RightToLeft
-                                       : wxLayout_LeftToRight;
+    wxLayoutDirection dir = WidgetsPage::GetAttrs().m_dir;
+    if (dir == wxLayout_Default)
+        dir = GetLayoutDirection();
+    WidgetsPage::GetAttrs().m_dir =
+        (dir == wxLayout_LeftToRight) ? wxLayout_RightToLeft : wxLayout_LeftToRight;
 
     CurrentPage()->SetUpWidget();
 }
@@ -992,8 +994,8 @@ void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
 
 void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
 {
-    WidgetsPage::GetAttrs().m_cursor = *(event.IsChecked() ? wxHOURGLASS_CURSOR
-                                                          : wxSTANDARD_CURSOR);
+    WidgetsPage::GetAttrs().m_cursor = (event.IsChecked() ? *wxHOURGLASS_CURSOR
+                                                          : wxNullCursor);
 
     CurrentPage()->SetUpWidget();
 }
@@ -1236,7 +1238,8 @@ void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
     // only log these events in our own logger.
     if ( wxGetApp().IsUsingLogWindow() )
     {
-        wxLogMessage("Widgets %s focus",
+        wxWindow* win = (wxWindow*)event.GetEventObject();
+        wxLogMessage("Widget '%s' %s focus", win->GetClassInfo()->GetClassName(),
                      event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
     }
 
@@ -1311,7 +1314,6 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          const char *const icon[])
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
-                     wxNO_FULL_REPAINT_ON_RESIZE |
                      wxCLIP_CHILDREN |
                      wxTAB_TRAVERSAL)
 {
@@ -1355,14 +1357,12 @@ void WidgetsPage::SetUpWidget()
             (*it)->SetBackgroundColour(GetAttrs().m_colBg);
         }
 
-        (*it)->SetLayoutDirection(GetAttrs().m_dir);
+        if (GetAttrs().m_dir != wxLayout_Default)
+            (*it)->SetLayoutDirection(GetAttrs().m_dir);
         (*it)->Enable(GetAttrs().m_enabled);
         (*it)->Show(GetAttrs().m_show);
 
-        if ( GetAttrs().m_cursor.IsOk() )
-        {
-            (*it)->SetCursor(GetAttrs().m_cursor);
-        }
+        (*it)->SetCursor(GetAttrs().m_cursor);
 
         (*it)->SetWindowVariant(GetAttrs().m_variant);
 

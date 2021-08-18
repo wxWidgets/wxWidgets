@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
@@ -239,7 +236,7 @@ void wxPrintPaperDatabase::AddPaperType(wxPaperSize paperId, int platformId, con
     m_list->push_back(tmp);
 }
 
-wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxString& name)
+wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxString& name) const
 {
     wxStringToPrintPaperTypeHashMap::iterator it = m_map->find(name);
     if (it != m_map->end())
@@ -248,7 +245,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxString& name)
         return NULL;
 }
 
-wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(wxPaperSize id)
+wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(wxPaperSize id) const
 {
     typedef wxStringToPrintPaperTypeHashMap::iterator iterator;
 
@@ -262,7 +259,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(wxPaperSize id)
     return NULL;
 }
 
-wxPrintPaperType *wxPrintPaperDatabase::FindPaperTypeByPlatformId(int id)
+wxPrintPaperType *wxPrintPaperDatabase::FindPaperTypeByPlatformId(int id) const
 {
     typedef wxStringToPrintPaperTypeHashMap::iterator iterator;
 
@@ -276,7 +273,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperTypeByPlatformId(int id)
     return NULL;
 }
 
-wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxSize& sz)
+wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxSize& sz) const
 {
     // Take the item ordering into account so that the more common types
     // are likely to be taken into account first. This fixes problems with,
@@ -294,7 +291,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxSize& sz)
 }
 
 // Convert name to size id
-wxPaperSize wxPrintPaperDatabase::ConvertNameToId(const wxString& name)
+wxPaperSize wxPrintPaperDatabase::ConvertNameToId(const wxString& name) const
 {
     wxPrintPaperType* type = FindPaperType(name);
     if (type)
@@ -304,7 +301,7 @@ wxPaperSize wxPrintPaperDatabase::ConvertNameToId(const wxString& name)
 }
 
 // Convert size id to name
-wxString wxPrintPaperDatabase::ConvertIdToName(wxPaperSize paperId)
+wxString wxPrintPaperDatabase::ConvertIdToName(wxPaperSize paperId) const
 {
     wxPrintPaperType* type = FindPaperType(paperId);
     if (type)
@@ -314,7 +311,7 @@ wxString wxPrintPaperDatabase::ConvertIdToName(wxPaperSize paperId)
 }
 
 // Get the paper size
-wxSize wxPrintPaperDatabase::GetSize(wxPaperSize paperId)
+wxSize wxPrintPaperDatabase::GetSize(wxPaperSize paperId) const
 {
     wxPrintPaperType* type = FindPaperType(paperId);
     if (type)
@@ -324,7 +321,7 @@ wxSize wxPrintPaperDatabase::GetSize(wxPaperSize paperId)
 }
 
 // Get the paper size
-wxPaperSize wxPrintPaperDatabase::GetSize(const wxSize& size)
+wxPaperSize wxPrintPaperDatabase::GetSize(const wxSize& size) const
 {
     wxPrintPaperType* type = FindPaperType(size);
     if (type)

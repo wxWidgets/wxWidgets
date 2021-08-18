@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SEARCHCTRL
 
@@ -120,6 +117,14 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
 wxMenu* wxSearchCtrl::GetMenu()
 {
     return m_menu;
+}
+
+void wxSearchCtrl::OSXAfterMenuEvent()
+{
+    // The menu is used as a template for creating the actual menu shown by the
+    // control, so update this template with the latest menu state after a menu
+    // command as the state of check/radio items could have changed after it.
+    GetSearchPeer()->SetSearchMenu( m_menu );
 }
 
 #endif  // wxUSE_MENUS

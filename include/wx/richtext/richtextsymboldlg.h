@@ -205,7 +205,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxPanelNameStr)
+               const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         Init();
 
@@ -221,7 +221,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     // dtor does some internal cleanup
     virtual ~wxSymbolListCtrl();

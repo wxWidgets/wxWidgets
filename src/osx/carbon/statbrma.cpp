@@ -76,115 +76,30 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
 
 void wxStatusBarMac::InitColours()
 {
-    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
-        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+        if ( wxSystemSettings::GetAppearance().IsDark() )
         {
-            // FIXME: None of this is correct and is only very loose
-            //        approximation. 10.14's dark mode uses dynamic colors that
-            //        use desktop tinting. The only correct way to render the
-            //        statusbar is to use windowBackgroundColor in a NSBox.
-            wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
-            m_textActive = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
-            m_textInactive = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
-
-            if ( wxSystemSettings::GetAppearance().IsDark() )
-            {
-                // dark mode appearance
-                m_textActive = wxColour(0xB0, 0xB0, 0xB0);
-                m_bgActiveFrom = wxColour(0x32, 0x32, 0x34);
-                m_bgActiveTo = wxColour(0x29, 0x29, 0x2A);
-                m_borderActive = wxColour(0x00, 0x00, 0x00);
-                m_borderInactive = wxColour(0x00, 0x00, 0x00);
-            }
-            else
-            {
-                m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
-                m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
-                m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
-                m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
-            }
-            SetBackgroundColour(bg); // inactive bg
+            m_textActive = wxColour(0xA9, 0xA9, 0xA9);
+            m_textInactive = wxColour(0x67, 0x67, 0x67);
         }
         else
         {
-            // 10.10 Yosemite to 10.13 :
-            m_textActive = wxColour(0x40, 0x40, 0x40);
-            m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
-            m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
-            m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
-            m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
-            m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
-            SetBackgroundColour(wxColour(0xF4, 0xF4, 0xF4)); // inactive bg
+            m_textActive = wxColour(0x4B, 0x4B, 0x4B);
+            m_textInactive = wxColour(0xB1, 0xB1, 0xB1);
         }
     }
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
-    else
+    else // 10.10 Yosemite to 10.13:
     {
-        // 10.9 Mavericks and older:
-        m_textActive = wxColour(0x2F, 0x2F, 0x2F);
-        m_textInactive = wxColour(0x4D, 0x4D, 0x4D);
-        m_bgActiveFrom = wxColour(0xDA, 0xDA, 0xDA);
-        m_bgActiveTo = wxColour(0xA0, 0xA0, 0xA0);
-        m_borderActive = wxColour(0x6E, 0x6E, 0x6E);
-        m_borderInactive = wxColour(0xA3, 0xA3, 0xA3);
-        SetBackgroundColour(wxColour(0xE1, 0xE1, 0xE1)); // inactive bg
+
+        m_textActive = wxColour(0x40, 0x40, 0x40);
+        m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
     }
-#endif // MAC_OS_X_VERSION_MIN_REQUIRED < 101000
-}
-
-void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
-{
-    int w, h;
-    GetSize( &w , &h );
-
-    wxString text(GetStatusText( i ));
-
-    int xpos = rect.x + wxFIELD_TEXT_MARGIN + 1;
-    int ypos = 2 + (rect.height - textHeight) / 2;
-
-    if ( MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
-        ypos++;
-
-    dc.SetClippingRegion(rect.x, 0, rect.width, h);
-    dc.DrawText(text, xpos, ypos);
-    dc.DestroyClippingRegion();
-}
-
-void wxStatusBarMac::DrawField(wxDC& dc, int i, int textHeight)
-{
-    wxRect rect;
-    GetFieldRect(i, rect);
-
-    DrawFieldText(dc, rect, i, textHeight);
-}
-
-void wxStatusBarMac::DoUpdateStatusText(int number)
-{
-    wxRect rect;
-    GetFieldRect(number, rect);
-
-    int w, h;
-    GetSize( &w, &h );
-
-    rect.y = 0;
-    rect.height = h ;
-
-    Refresh( true, &rect );
-    // we should have to force the update here
-    // TODO Remove if no regressions occur
-#if 0
-    Update();
-#endif
 }
 
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
-    dc.Clear();
-
-    int w, h;
-    GetSize( &w, &h );
 
     // Notice that wxOSXGetKeyWindow (aka [NSApp keyWindow] used below is
     // subtly different from IsActive() (aka [NSWindow iskeyWindow]): the
@@ -204,22 +119,9 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
             break;
     }
 
-    if ( tlw == keyWindow )
-    {
-        dc.GradientFillLinear(dc.GetSize(), m_bgActiveFrom, m_bgActiveTo, wxBOTTOM);
+    // Don't paint any background, that's handled by the OS. Only draw text:
 
-        // Finder statusbar border color
-        dc.SetPen(wxPen(m_borderActive, 2, wxPENSTYLE_SOLID));
-        dc.SetTextForeground(m_textActive);
-    }
-    else
-    {
-        // Finder statusbar border color
-        dc.SetPen(wxPen(m_borderInactive, 2, wxPENSTYLE_SOLID));
-        dc.SetTextForeground(m_textInactive);
-    }
-
-    dc.DrawLine(0, 0, w, 0);
+    dc.SetTextForeground(tlw == keyWindow ? m_textActive : m_textInactive);
 
     if ( GetFont().IsOk() )
         dc.SetFont(GetFont());

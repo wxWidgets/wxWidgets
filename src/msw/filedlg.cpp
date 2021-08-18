@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEDLG
 
@@ -44,9 +41,11 @@
 
 #include "wx/dynlib.h"
 #include "wx/filename.h"
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
+#include "wx/msw/private/dpiaware.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -82,11 +81,11 @@ namespace
 typedef BOOL (WINAPI *GetProcessUserModeExceptionPolicy_t)(LPDWORD);
 typedef BOOL (WINAPI *SetProcessUserModeExceptionPolicy_t)(DWORD);
 
-GetProcessUserModeExceptionPolicy_t gs_pfnGetProcessUserModeExceptionPolicy
-    = (GetProcessUserModeExceptionPolicy_t) -1;
+GetProcessUserModeExceptionPolicy_t gs_pfnGetProcessUserModeExceptionPolicy =
+    (GetProcessUserModeExceptionPolicy_t) -1;
 
-SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy
-    = (SetProcessUserModeExceptionPolicy_t) -1;
+SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy =
+    (SetProcessUserModeExceptionPolicy_t) -1;
 
 DWORD gs_oldExceptionPolicyFlags = 0;
 
@@ -354,8 +353,7 @@ void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
     else
         m_currentlySelectedFilename.clear();
 
-    if ( m_extraControl )
-        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+    UpdateExtraControlUI();
 }
 
 void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
@@ -365,8 +363,7 @@ void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
     // circumstances, so take care before decrementing it.
     m_currentlySelectedFilterIndex = nFilterIndex ? nFilterIndex - 1 : 0;
 
-    if ( m_extraControl )
-        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+    UpdateExtraControlUI();
 }
 
 // helper used below in ShowCommFileDialog(): style is used to determine
@@ -375,6 +372,12 @@ void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
 // err is filled with the CDERR_XXX constant
 static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
+    // Extra controls do not handle per-monitor DPI, fall back to system DPI
+    // so entire file-dialog is resized.
+    wxScopedPtr<wxMSWImpl::AutoSystemDpiAware> dpiAwareness;
+    if ( of->Flags & OFN_ENABLEHOOK )
+        dpiAwareness.reset(new wxMSWImpl::AutoSystemDpiAware());
+
     if ( style & wxFD_SAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
         return true;
 

@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
@@ -341,7 +338,9 @@ namespace
 // Poor man's lambda: helper for binding ConvertToUpperCase() to the event
 struct ForceUpperFunctor
 {
-    explicit ForceUpperFunctor(wxTextEntryBase* entry)
+    // This class must have default ctor in wxNO_RTTI case, so allow creating
+    // it with null entry even if this never actually happens in practice.
+    explicit ForceUpperFunctor(wxTextEntryBase* entry = NULL)
         : m_entry(entry)
     {
     }

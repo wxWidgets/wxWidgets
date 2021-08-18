@@ -41,8 +41,8 @@ public:
 
 #ifdef __WXMSW__
     // create a DIB from the DDB
-    wxDIB(const wxBitmap& bmp)
-        { Init(); (void)Create(bmp); }
+    wxDIB(const wxBitmap& bmp, int depth = -1)
+        { Init(); (void)Create(bmp, depth); }
 #endif // __WXMSW__
 
     // create a DIB from the Windows DDB
@@ -58,9 +58,9 @@ public:
     // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
 #ifdef __WXMSW__
-    bool Create(const wxBitmap& bmp) { return Create(GetHbitmapOf(bmp)); }
+    bool Create(const wxBitmap& bmp, int depth = -1) { return Create(GetHbitmapOf(bmp), depth); }
 #endif
-    bool Create(HBITMAP hbmp);
+    bool Create(HBITMAP hbmp, int depth = -1);
     bool Load(const wxString& filename);
 
     // dtor is not virtual, this class is not meant to be used polymorphically
@@ -73,11 +73,11 @@ public:
     // create a bitmap compatible with the given HDC (or screen by default) and
     // return its handle, the caller is responsible for freeing it (using
     // DeleteObject())
-    HBITMAP CreateDDB(HDC hdc = 0) const;
+    HBITMAP CreateDDB(HDC hdc = NULL) const;
 
     // get the handle from the DIB and reset it, i.e. this object won't destroy
     // the DIB after this (but the caller should do it)
-    HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = 0; return hbmp; }
+    HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = NULL; return hbmp; }
 
 #if defined(__WXMSW__) && wxUSE_PALETTE
     // create a palette for this DIB (always a trivial/default one for 24bpp)
@@ -92,7 +92,7 @@ public:
     // ---------
 
     // return true if DIB was successfully created, false otherwise
-    bool IsOk() const { return m_handle != 0; }
+    bool IsOk() const { return m_handle != NULL; }
 
     // get the bitmap size
     wxSize GetSize() const { DoGetObject(); return wxSize(m_width, m_height); }
@@ -121,11 +121,11 @@ public:
     // a plain DIB or a DIB section (in which case the last parameter must be
     // non NULL)
     static HBITMAP ConvertToBitmap(const BITMAPINFO *pbi,
-                                   HDC hdc = 0,
-                                   void *bits = NULL);
+                                   HDC hdc = NULL,
+                                   const void *bits = NULL);
 
     // create a plain DIB (not a DIB section) from a DDB, the caller is
-    // responsable for freeing it using ::GlobalFree()
+    // responsible for freeing it using ::GlobalFree()
     static HGLOBAL ConvertFromBitmap(HBITMAP hbmp);
 
     // creates a DIB from the given DDB or calculates the space needed by it:
@@ -154,14 +154,14 @@ public:
     // can be used with ::AlphaBlend() but it is also possible to disable
     // pre-multiplication for the DIB to be usable with ImageList_Draw() which
     // does pre-multiplication internally.
-    wxDIB(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied)
+    wxDIB(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied, int depth = -1)
     {
         Init();
-        (void)Create(image, pf);
+        (void)Create(image, pf, depth);
     }
 
     // same as the above ctor but with the return code
-    bool Create(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied);
+    bool Create(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied, int depth = -1);
 
     // create wxImage having the same data as this DIB
 
@@ -242,7 +242,7 @@ private:
 inline
 void wxDIB::Init()
 {
-    m_handle = 0;
+    m_handle = NULL;
     m_ownsHandle = true;
 
     m_data = NULL;

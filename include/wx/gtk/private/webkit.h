@@ -29,7 +29,8 @@ public:
 
     ~wxWebKitJavascriptResult()
     {
-        webkit_javascript_result_unref(m_jsresult);
+        if ( m_jsresult != NULL )
+            webkit_javascript_result_unref(m_jsresult);
     }
 
     operator WebKitJavascriptResult *() const { return m_jsresult; }

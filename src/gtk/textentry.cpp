@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
@@ -1003,14 +1000,21 @@ int wxTextEntry::GTKEntryIMFilterKeypress(GdkEventKey* event) const
 
 void wxTextEntry::EnableTextChangedEvents(bool enable)
 {
+    // Check that we have the associated text, as it may happen (for e.g.
+    // read-only wxBitmapComboBox) and shouldn't result in any errors, we just
+    // don't have any events to enable or disable in this case.
+    void* const entry = GetTextObject();
+    if ( !entry )
+        return;
+
     if ( enable )
     {
-        g_signal_handlers_unblock_by_func(GetTextObject(),
+        g_signal_handlers_unblock_by_func(entry,
             (gpointer)wx_gtk_text_changed_callback, this);
     }
     else // disable events
     {
-        g_signal_handlers_block_by_func(GetTextObject(),
+        g_signal_handlers_block_by_func(entry,
             (gpointer)wx_gtk_text_changed_callback, this);
     }
 }
@@ -1142,6 +1146,8 @@ wxString wxTextEntry::GetHint() const
 bool wxTextEntry::ClickDefaultButtonIfPossible()
 {
     GtkWidget* const widget = GTK_WIDGET(GetEntry());
+    if (widget == NULL)
+        return false;
 
     // This does the same thing as gtk_entry_real_activate() in GTK itself.
     //

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -28,7 +25,7 @@
 #include "artbrows.h"
 
 #define ART_CLIENT(id) \
-    choice->Append(#id, (void*)id);
+    choice->Append(#id, new wxStringClientData(id));
 #define ART_ICON(id) \
     { \
         int ind; \
@@ -38,7 +35,7 @@
         else \
             ind = 0; \
         list->InsertItem(index, #id, ind); \
-        list->SetItemPtrData(index, wxPtrToUInt(id)); \
+        list->SetItemPtrData(index, wxPtrToUInt(new wxString(id))); \
         index++; \
     }
 
@@ -227,9 +224,9 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
 
 void wxArtBrowserDialog::OnSelectItem(wxListEvent &event)
 {
-    const char *data = (const char*)event.GetData();
-    m_currentArtId = wxString( data );
-    SetArtBitmap(data, m_client, GetSelectedBitmapSize());
+    const wxString *data = (const wxString*)event.GetData();
+    m_currentArtId = *data;
+    SetArtBitmap(*data, m_client, GetSelectedBitmapSize());
 }
 
 void wxArtBrowserDialog::OnChangeSize(wxCommandEvent& WXUNUSED(event))
@@ -239,8 +236,8 @@ void wxArtBrowserDialog::OnChangeSize(wxCommandEvent& WXUNUSED(event))
 
 void wxArtBrowserDialog::OnChooseClient(wxCommandEvent &event)
 {
-    const char *data = (const char*)event.GetClientData();
-    SetArtClient(data);
+    wxStringClientData *data = (wxStringClientData *)event.GetClientObject();
+    SetArtClient(data->GetData());
 }
 
 void wxArtBrowserDialog::SetArtBitmap(const wxArtID& id, const wxArtClient& client, const wxSize& size)

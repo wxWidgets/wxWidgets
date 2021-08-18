@@ -134,7 +134,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = wxDataViewCtrlNameStr )
+                 const wxString& name = wxASCII_STR(wxDataViewCtrlNameStr) )
   {
     Init();
     Create(parent, winid, pos, size, style, validator, name);
@@ -148,7 +148,7 @@ public:
               const wxSize& size = wxDefaultSize,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxDataViewCtrlNameStr);
+              const wxString& name = wxASCII_STR(wxDataViewCtrlNameStr));
 
   virtual wxWindow* GetMainWindow() // not used for the native implementation
   {
@@ -261,6 +261,8 @@ public:
     m_Deleting = deleting;
   }
 
+  void AdjustAutosizedColumns() const;
+
   virtual wxDataViewColumn *GetCurrentColumn() const wxOVERRIDE;
 
   virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
@@ -276,13 +278,12 @@ protected:
   virtual void DoSetExpanderColumn() wxOVERRIDE;
   virtual void DoSetIndent() wxOVERRIDE;
 
-  virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
+  virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) wxOVERRIDE;
 
   virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
  // event handling
   void OnSize(wxSizeEvent &event);
-  void OnMouse(wxMouseEvent &event);
 
 private:
  // initializing of local variables:
@@ -306,7 +307,7 @@ private:
 
   wxDataViewColumnPtrArrayType m_ColumnPtrs; // all column pointers are stored in an array
 
-  wxDataViewModelNotifier* m_ModelNotifier; // stores the model notifier for the control (does not own the notifier)
+  class wxOSXDataViewModelNotifier* m_ModelNotifier; // stores the model notifier for the control (does not own the notifier)
 
  // wxWidget internal stuff:
   wxDECLARE_DYNAMIC_CLASS(wxDataViewCtrl);

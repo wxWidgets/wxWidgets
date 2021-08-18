@@ -59,6 +59,7 @@ protected:
     // Should only be called if we do have a button, i.e. if m_imageData is
     // non-NULL.
     void AdjustForBitmapSize(wxSize& size) const;
+    void AdjustForBitmapMargins(wxSize& size) const;
 
     class wxButtonImageData *m_imageData;
 

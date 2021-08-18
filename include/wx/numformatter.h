@@ -34,6 +34,8 @@ public:
     static wxString ToString(wxLongLong_t val,
                              int style = Style_WithThousandsSep);
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    static wxString ToString(wxULongLong_t val,
+                             int style = Style_WithThousandsSep);
     static wxString ToString(double val,
                              int precision,
                              int style = Style_WithThousandsSep);
@@ -46,6 +48,7 @@ public:
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
     static bool FromString(wxString s, wxLongLong_t *val);
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    static bool FromString(wxString s, wxULongLong_t *val);
     static bool FromString(wxString s, double *val);
 
 

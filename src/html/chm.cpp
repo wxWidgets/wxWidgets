@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LIBMSPACK
 
@@ -139,7 +136,7 @@ wxChmTools::wxChmTools(const wxFileName &archive)
     else
     {
         wxLogError(_("Failed to open CHM archive '%s'."),
-                   archive.GetFullPath().c_str());
+                   archive.GetFullPath());
         m_lasterror = (chmd->last_error(chmd));
         return;
     }
@@ -271,9 +268,9 @@ size_t wxChmTools::Extract(const wxString& pattern, const wxString& filename)
                 // Error
                 m_lasterror = d->last_error(d);
                 wxLogError(_("Could not extract %s into %s: %s"),
-                           wxString::FromAscii(f->filename).c_str(),
-                           filename.c_str(),
-                           ChmErrorMsg(m_lasterror).c_str());
+                           wxString::FromAscii(f->filename),
+                           filename,
+                           ChmErrorMsg(m_lasterror));
                 return 0;
             }
             else
@@ -393,10 +390,6 @@ private:
     // this void* is handle of archive . I'm sorry it is void and not proper
     // type but I don't want to make unzip.h header public.
 
-
-    // locates the file and returns a mspack_file *
-    mspack_file *LocateFile(wxString filename);
-
     // should store pointer to current file
     mspack_file *m_file;
 
@@ -441,7 +434,7 @@ wxChmInputStream::wxChmInputStream(const wxString& archive,
         }
         else
         {
-            wxLogError(_("Could not locate file '%s'."), filename.c_str());
+            wxLogError(_("Could not locate file '%s'."), filename);
             m_lasterror = wxSTREAM_READ_ERROR;
             return;
         }
@@ -471,14 +464,14 @@ bool wxChmInputStream::Eof() const
     return (m_content==NULL ||
             m_contentStream==NULL ||
             m_contentStream->Eof() ||
-            m_pos>m_size);
+            (size_t)m_pos>m_size);
 }
 
 
 
 size_t wxChmInputStream::OnSysRead(void *buffer, size_t bufsize)
 {
-    if ( m_pos >= m_size )
+    if ( (size_t)m_pos >= m_size )
     {
         m_lasterror = wxSTREAM_EOF;
         return 0;
@@ -715,7 +708,7 @@ bool wxChmInputStream::CreateFileStream(const wxString& pattern)
 
     if ( tmpfile.empty() )
     {
-        wxLogError(_("Could not create temporary file '%s'"), tmpfile.c_str());
+        wxLogError(_("Could not create temporary file '%s'"), tmpfile);
         return false;
     }
 
@@ -723,7 +716,7 @@ bool wxChmInputStream::CreateFileStream(const wxString& pattern)
     if ( m_chm->Extract(pattern, tmpfile) <= 0 )
     {
         wxLogError(_("Extraction of '%s' into '%s' failed."),
-                   pattern.c_str(), tmpfile.c_str());
+                   pattern, tmpfile);
         if ( wxFileExists(tmpfile) )
             wxRemoveFile(tmpfile);
         return false;
@@ -824,9 +817,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     // now work on the right location
     if (right.Contains(wxT("..")))
     {
-        wxFileName abs(right);
-        abs.MakeAbsolute(wxT("/"));
-        right = abs.GetFullPath();
+        right = wxFileName(right).GetAbsolutePath(wxT("/"));
     }
 
     // a workaround for absolute links to root
@@ -861,7 +852,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 /**
  * Doku see wxFileSystemHandler
  */
-wxString wxChmFSHandler::FindFirst(const wxString& spec, int flags)
+wxString wxChmFSHandler::FindFirst(const wxString& spec, int WXUNUSED(flags))
 {
     wxString right = GetRightLocation(spec);
     wxString left = GetLeftLocation(spec);
@@ -884,7 +875,7 @@ wxString wxChmFSHandler::FindFirst(const wxString& spec, int flags)
         !m_pattern.Contains(wxT(".hhp.cached")))
     {
         m_found.Printf(wxT("%s#chm:%s.hhp"),
-                       left.c_str(), m_pattern.BeforeLast(wxT('.')).c_str());
+                       left, m_pattern.BeforeLast(wxT('.')));
     }
 
     return m_found;

@@ -16,7 +16,12 @@
 #include "wx/glcanvas.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 #ifdef __WXGTK3__
 extern "C" {
@@ -43,6 +48,7 @@ static gboolean draw(GtkWidget* widget, cairo_t* cr, wxGLCanvas* win)
 // emission hook for "parent-set"
 //-----------------------------------------------------------------------------
 
+#if !wxUSE_GLCANVAS_EGL
 extern "C" {
 static gboolean
 parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void* data)
@@ -70,6 +76,7 @@ parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void*
     return true;
 }
 }
+#endif
 
 //---------------------------------------------------------------------------
 // wxGlCanvas
@@ -160,15 +167,34 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
 
 static bool IsAvailable()
 {
+#if defined(__WXGTK3__) && (defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11))
+    GdkDisplay* display = gdk_display_get_default();
+    const char* displayTypeName = g_type_name(G_TYPE_FROM_INSTANCE(display));
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+    if (strcmp("GdkWaylandDisplay", displayTypeName) == 0)
+    {
+#if wxUSE_GLCANVAS_EGL
+        return true;
+#else
+        wxSafeShowMessage(_("Fatal Error"), _("This program wasn't compiled with EGL support required under Wayland, either\ninstall EGL libraries and rebuild or run it under X11 backend by setting\nenvironment variable GDK_BACKEND=x11 before starting your program."));
+        return false;
+#endif // wxUSE_GLCANVAS_EGL
+    }
+#endif // GDK_WINDOWING_WAYLAND
+
 #ifdef GDK_WINDOWING_X11
-    if ( !GDK_IS_X11_DISPLAY(gdk_display_get_default()) )
+#ifdef __WXGTK3__
+    if (strcmp("GdkX11Display", displayTypeName) == 0)
 #endif
     {
-        wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before starting\nyour program."));
-        return false;
+        return true;
     }
+#endif
 
-    return true;
+    wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on Wayland and X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before\nstarting your program."));
+    return false;
 }
 
 bool wxGLCanvas::Create(wxWindow *parent,
@@ -221,8 +247,10 @@ bool wxGLCanvas::Create(wxWindow *parent,
     // watch for the "parent-set" signal on m_wxwindow so we can set colormap
     // before m_wxwindow is realized (which will occur before
     // wxWindow::Create() returns if parent is already visible)
+#if !wxUSE_GLCANVAS_EGL
     unsigned sig_id = g_signal_lookup("parent-set", GTK_TYPE_WIDGET);
     g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, NULL);
+#endif
 
     wxWindow::Create( parent, id, pos, size, style, name );
 #ifdef __WXGTK3__
@@ -241,8 +269,12 @@ bool wxGLCanvas::SetBackgroundStyle(wxBackgroundStyle /* style */)
 
 unsigned long wxGLCanvas::GetXWindow() const
 {
+#if defined(GDK_WINDOWING_X11)
     GdkWindow* window = GTKGetDrawingWindow();
     return window ? GDK_WINDOW_XID(window) : 0;
+#else
+    return 0;
+#endif
 }
 
 void wxGLCanvas::GTKHandleRealized()
@@ -251,6 +283,9 @@ void wxGLCanvas::GTKHandleRealized()
 
 #if WXWIN_COMPATIBILITY_2_8
     GTKInitImplicitContext();
+#endif
+#if wxUSE_GLCANVAS_EGL
+    CreateSurface();
 #endif
     SendSizeEvent();
 }

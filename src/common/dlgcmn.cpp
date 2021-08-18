@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dialog.h"
 
@@ -186,8 +183,8 @@ wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
                     wxGetTopLevelParent(wxGetActiveWindow()));
 
     // and finally the application main window
-    if ( !parent && wxTheApp )
-        parent = CheckIfCanBeUsedAsParent(wxTheApp->GetTopWindow());
+    if ( !parent )
+        parent = CheckIfCanBeUsedAsParent(wxApp::GetMainTopWindow());
 
     return parent;
 }

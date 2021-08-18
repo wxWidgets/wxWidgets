@@ -32,12 +32,12 @@ public:
     // Called by wxProtocol-derived classes to actually log something
     virtual void LogRequest(const wxString& str)
     {
-        DoLogString("==> " + str);
+        DoLogString(wxASCII_STR("==> ") + str);
     }
 
     virtual void LogResponse(const wxString& str)
     {
-        DoLogString("<== " + str);
+        DoLogString(wxASCII_STR("<== ") + str);
     }
 
 protected:

@@ -46,13 +46,8 @@ public:
 
     // test for pointer validity: defining conversion to unspecified_bool_type
     // and not more obvious bool to avoid implicit conversions to integer types
-#ifdef __BORLANDC__
-    // this compiler is too dumb to use unspecified_bool_type operator in tests
-    // of the form "if ( !ptr )"
-    typedef bool unspecified_bool_type;
-#else
     typedef T *(wxScopedPtr<T>::*unspecified_bool_type)() const;
-#endif // __BORLANDC__
+
     operator unspecified_bool_type() const
     {
         return m_ptr ? &wxScopedPtr<T>::get : NULL;

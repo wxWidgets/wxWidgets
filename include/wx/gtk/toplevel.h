@@ -27,7 +27,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
-                        const wxString& name = wxFrameNameStr)
+                        const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -40,7 +40,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxTopLevelWindowGTK();
 
@@ -74,6 +74,7 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE { SetTitle( label ); }
     virtual wxString GetLabel() const wxOVERRIDE            { return GetTitle(); }
 
+    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE;
 
     virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
     virtual bool CanSetTransparent() wxOVERRIDE;
@@ -124,7 +125,7 @@ public:
     };
     DecorSize m_decorSize;
 
-    // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
+    // private gtk_timeout_add result for mimicking wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
     int m_urgency_hint;
     // timer for detecting WM with broken _NET_REQUEST_FRAME_EXTENTS handling
@@ -134,6 +135,20 @@ public:
     void GTKDoGetSize(int *width, int *height) const;
 
     void GTKUpdateDecorSize(const DecorSize& decorSize);
+
+    void GTKDoAfterShow();
+
+#ifdef __WXGTK3__
+    void GTKUpdateClientSizeIfNecessary();
+
+    virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
+
+    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = NULL) wxOVERRIDE;
+
+private:
+    // Flags to call WXSetInitialFittingClientSize() with if != 0.
+    int m_pendingFittingClientSizeFlags;
+#endif // __WXGTK3__
 
 protected:
     // give hints to the Window Manager for how the size

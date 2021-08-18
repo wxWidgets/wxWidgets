@@ -136,7 +136,7 @@ public:
     virtual ~wxXmlNode();
 
     /**
-        Appends a attribute with given @a name and @a value to the list of
+        Appends an attribute with given @a name and @a value to the list of
         attributes for this node.
     */
     virtual void AddAttribute(const wxString& name, const wxString& value);
@@ -494,11 +494,11 @@ public:
     /**
         Creates and possible initializes the DOCTYPE.
 
-        @param name
+        @param rootName
             The root name.
-        @param sysid
+        @param systemId
             The system identifier.
-        @param pubid
+        @param publicId
             The public identifier.
     */
     wxXmlDoctype(const wxString& rootName = wxString(),
@@ -715,7 +715,7 @@ public:
         Loads the given filename using the given encoding. See Load().
     */
     wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8"));
+                  const wxString& encoding = "UTF-8");
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().

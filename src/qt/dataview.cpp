@@ -267,7 +267,7 @@ wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem &item,
     return wxRect();
 }
 
-void wxDataViewCtrl::Expand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren )
 {
 }
 

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/private/fontmgr.h"
 
@@ -280,7 +277,7 @@ wxFontMgrFontRefData::GetFontInstance(float scale, bool antialiased) const
                                        antialiased);
 }
 
-void wxFontMgrFontRefData::SetFractionalPointSize(float pointSize)
+void wxFontMgrFontRefData::SetFractionalPointSize(double pointSize)
 {
     m_info.pointSize = pointSize;
     m_fontValid = false;

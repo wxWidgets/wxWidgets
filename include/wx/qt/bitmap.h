@@ -22,7 +22,6 @@ class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 public:
     wxBitmap();
     wxBitmap(QPixmap pix);
-    wxBitmap(const wxBitmap& bmp);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
@@ -109,6 +108,8 @@ public:
     wxMask(const wxBitmap& bitmap);
     virtual ~wxMask();
 
+    wxBitmap GetBitmap() const;
+
     // Implementation
     QBitmap *GetHandle() const;
 
@@ -118,8 +119,6 @@ protected:
     // by the public wrappers
     bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour) wxOVERRIDE;
     bool InitFromMonoBitmap(const wxBitmap& bitmap) wxOVERRIDE;
-
-    wxBitmap GetBitmap() const;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxMask);

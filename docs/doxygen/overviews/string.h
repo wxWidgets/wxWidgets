@@ -135,7 +135,7 @@ to buffer overflows. At last, C++ has a standard string class (@c std::string). 
 why the need for wxString? There are several advantages:
 
 @li <b>Efficiency:</b> Since wxWidgets 3.0 wxString uses @c std::string (in UTF8
-    mode under Linux, Unix and OS X) or @c std::wstring (in UTF16 mode under Windows)
+    mode under Linux, Unix and macOS) or @c std::wstring (in UTF16 mode under Windows)
     internally by default to store its contents. wxString will therefore inherit the
     performance characteristics from @c std::string.
 @li <b>Compatibility:</b> This class tries to combine almost full compatibility
@@ -236,12 +236,40 @@ arguments should take <tt>const wxString&</tt> (this makes assignment to the
 strings inside the function faster) and all functions returning strings
 should return wxString - this makes it safe to return local variables.
 
-Finally note that wxString uses the current locale encoding to convert any C string
+Note that wxString uses by default the current locale encoding to convert any C string
 literal to Unicode. The same is done for converting to and from @c std::string
 and for the return value of c_str().
 For this conversion, the @a wxConvLibc class instance is used.
 See wxCSConv and wxMBConv.
 
+It is also possible to disable any automatic conversions from C
+strings to Unicode. This can be useful when the @a wxConvLibc encoding
+is not appropriate for the current software and platform. The macro @c
+wxNO_IMPLICIT_WXSTRING_ENCODING disables all implicit conversions, and
+forces the code to explicitly indicate the encoding of all C strings.
+
+Finally note that encodings, either implicitly or explicitly selected,
+may not be able to represent all the string's characters. The result
+in this case is undefined: the string may be empty, or the
+unrepresentable characters may be missing or wrong.
+
+@code
+wxString s;
+// s = "world"; does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+s = wxString::FromAscii("world"); // Always compiles
+s = wxASCII_STR("world"); // shorthand for the above
+s = wxString::FromUTF8("world"); // Always compiles
+s = wxString("world", wxConvLibc); // Always compiles, explicit encoding
+s = wxASCII_STR("Grüße"); // Always compiles but encoding fails
+
+const char *c;
+// c = s.c_str();  does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+// c = s.mb_str(); does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+c = s.ToAscii(); // Always compiles, encoding may fail
+c = s.ToUTF8(); // Always compiles, encoding never fails
+c = s.utf8_str(); // Alias for the above
+c = s.mb_str(wxConvLibc); // Always compiles, explicit encoding
+@endcode
 
 @subsection overview_string_iterating Iterating wxString Characters
 

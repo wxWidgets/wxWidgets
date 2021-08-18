@@ -17,10 +17,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif // __BORLANDC__
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
@@ -224,7 +220,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
         m_listbox->Append(wxString::Format("small int value: %u", g_data.m_smallIntValue));
         m_listbox->Append(wxString::Format("double value: %.3f", g_data.m_doubleValue));
-        m_listbox->Append(wxString::Format("percent value: %.4f", g_data.m_percentValue));
+        m_listbox->Append(wxString::Format("percent value: %.4f", double(g_data.m_percentValue)));
     }
 }
 

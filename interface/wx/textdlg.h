@@ -109,9 +109,10 @@ public:
             The default value, which may be the empty string.
         @param style
             A dialog style, specifying the buttons (wxOK, wxCANCEL)
-            and an optional wxCENTRE style. Additionally, wxTextCtrl styles
-            (such as @c wxTE_PASSWORD or @c wxTE_MULTILINE) may be specified
-            here.
+            and an optional wxCENTRE style. Additionally, most wxTextCtrl
+            styles (such as @c wxTE_PASSWORD or @c wxTE_MULTILINE) may be
+            specified here, but @c wxTE_READONLY may not be used, as it doesn't
+            make sense for this dialog, used for text input.
         @param pos
             Dialog position.
 

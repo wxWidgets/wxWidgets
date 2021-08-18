@@ -1,4 +1,10 @@
 set MSBUILD_LOGGER=/logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
+if "%wxUSE_WEBVIEW_EDGE%"=="1" (
+    curl -L -o 3rdparty/webview2.zip https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2
+    7z x 3rdparty/webview2.zip -o3rdparty/webview2 -aoa
+)
+
 goto %TOOLSET%
 
 :msbuild
@@ -7,6 +13,8 @@ msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc12.
 cd ..\..\tests
 msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc12.sln %MSBUILD_LOGGER%
 msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc12.sln %MSBUILD_LOGGER%
+cd  ..\samples\minimal
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" minimal_vc12.sln %MSBUILD_LOGGER%
 goto :eof
 
 :nmake
@@ -14,6 +22,8 @@ cd build\msw
 call "C:\Program Files (x86)\Microsoft Visual Studio %VS%\VC\vcvarsall.bat" %ARCH%
 nmake -f makefile.vc BUILD=%BUILD%
 cd ..\..\tests
+nmake -f makefile.vc BUILD=%BUILD%
+cd  ..\samples\minimal
 nmake -f makefile.vc BUILD=%BUILD%
 goto :eof
 

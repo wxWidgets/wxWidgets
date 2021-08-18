@@ -13,7 +13,7 @@ public:
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
                           long style = 0,
-                          const wxString& name = wxStaticBitmapNameStr)
+                          const wxString& name = wxASCII_STR(wxStaticBitmapNameStr))
     {
         Create(parent, id, bitmap, pos, size, style, name);
     }
@@ -24,7 +24,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBitmapNameStr);
+                const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
     virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
 

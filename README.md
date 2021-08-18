@@ -19,22 +19,23 @@ and read its documentation online at https://docs.wxwidgets.org/
 Platforms
 ---------
 
-[![AppVeyor](https://img.shields.io/appveyor/ci/wxWidgets/wxWidgets/master.svg?label=Windows)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
-[![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets/master.svg?label=Linux)](https://travis-ci.org/wxWidgets/wxWidgets)
+[![AppVeyor](https://img.shields.io/appveyor/build/wxWidgets/wxWidgets/master?label=AppVeyor&logo=appveyor)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
+[![Github](https://img.shields.io/github/checks-status/wxWidgets/wxWidgets/master?label=GitHub&logo=github)](https://github.com/wxWidgets/wxWidgets/actions)
+[![OSS-Fuzz](https://oss-fuzz-build-logs.storage.googleapis.com/badges/wxwidgets.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:wxwidgets)
 
 This version of wxWidgets supports the following primary platforms:
 
 - Windows XP, Vista, 7, 8 and 10 (32/64 bits).
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer or 3.x).
-- OS X (10.7 or newer) using Cocoa (32/64 bits).
+- macOS (10.10 or newer) using Cocoa under both amd64 and ARM platforms.
 
 Most popular C++ compilers are supported including but not limited to:
 
-- Microsoft Visual C++ 2003 or later (up to 2019).
-- g++ 3.4 or later, including MinGW/MinGW-64/TDM under Windows.
-- Clang under OS X and Linux.
+- Microsoft Visual C++ 2005 or later (up to 2019).
+- g++ 4 or later, including MinGW/MinGW-64/TDM under Windows.
+- Clang under macOS and Linux.
 - Intel icc compiler.
-- Oracle (ex-Sun) aCC.
+- Oracle (ex-Sun) CC.
 
 
 Licence

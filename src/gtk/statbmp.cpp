@@ -14,6 +14,7 @@
 #include "wx/statbmp.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/image.h"
 
 //-----------------------------------------------------------------------------
 // wxStaticBitmap
@@ -41,9 +42,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         return false;
     }
 
-    m_bitmap = bitmap;
-
-    m_widget = gtk_image_new();
+    m_widget = wxGtkImage::New(this);
     g_object_ref(m_widget);
 
     if (bitmap.IsOk())
@@ -57,17 +56,17 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
 void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
 {
+    const wxSize sizeOld(m_bitmap.IsOk() ? m_bitmap.GetSize() : wxSize());
+    const wxSize sizeNew(bitmap.IsOk() ? bitmap.GetSize() : wxSize());
+
     m_bitmap = bitmap;
+    WX_GTK_IMAGE(m_widget)->Set(bitmap);
 
-    // always use pixbuf, because pixmap mask does not
-    // work with disabled images in some themes
-    if (m_bitmap.IsOk())
-        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), m_bitmap.GetPixbuf());
-    else
-        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), NULL);
-
-    InvalidateBestSize();
-    SetSize(GetBestSize());
+    if (sizeNew != sizeOld)
+    {
+        InvalidateBestSize();
+        SetSize(GetBestSize());
+    }
 }
 
 // static
