@@ -700,6 +700,10 @@ void wxTextWidgetImpl::Redo()
 {
 }
 
+void wxTextWidgetImpl::EmptyUndoBuffer()
+{
+}
+
 long wxTextWidgetImpl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
 {
     return 0 ;

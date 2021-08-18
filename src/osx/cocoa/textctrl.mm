@@ -1070,6 +1070,14 @@ void wxNSTextViewControl::Redo()
     [m_undoManager redo];
 }
 
+void wxNSTextViewControl::EmptyUndoBuffer()
+{
+    if ( !m_undoManager )
+        return;
+
+    [m_undoManager removeAllActions];
+}
+
 void wxNSTextViewControl::DoUpdateTextStyle()
 {
     if ( m_useCharWrapping )
