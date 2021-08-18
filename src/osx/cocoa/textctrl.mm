@@ -773,6 +773,12 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
 
     [tv setDelegate: tv];
 
+    m_undoManager = nil;
+    if ( wxPeer && wxPeer->GetParent() && wxPeer->GetParent()->GetPeer() && wxPeer->GetParent()->GetPeer()->GetWXWidget() )
+        m_undoManager = [wxPeer->GetParent()->GetPeer()->GetWXWidget() undoManager];
+
+    [tv setAllowsUndo:YES];
+
     InstallEventHandler(tv);
 }
 
@@ -1017,6 +1023,38 @@ void wxNSTextViewControl::controlTextDidChange()
     wxNSTextBase::controlTextDidChange();
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
+}
+
+bool wxNSTextViewControl::CanUndo() const
+{
+    if ( !m_undoManager )
+        return false;
+
+    return [m_undoManager canUndo];
+}
+
+void wxNSTextViewControl::Undo()
+{
+    if ( !m_undoManager )
+        return;
+
+    [m_undoManager undo];
+}
+
+bool wxNSTextViewControl::CanRedo() const
+{
+    if ( !m_undoManager )
+        return false;
+
+    return [m_undoManager canRedo];
+}
+
+void wxNSTextViewControl::Redo()
+{
+    if ( !m_undoManager )
+        return;
+
+    [m_undoManager redo];
 }
 
 void wxNSTextViewControl::DoUpdateTextStyle()
