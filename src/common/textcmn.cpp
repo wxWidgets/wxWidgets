@@ -23,6 +23,7 @@
 #if wxUSE_TEXTCTRL
 
 #include "wx/textctrl.h"
+#include "wx/fontutil.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -167,12 +168,17 @@ void wxTextAttr::Init()
     m_paragraphSpacingAfter = 0;
     m_paragraphSpacingBefore = 0;
     m_lineSpacing = 0;
+    m_lineSpacingMode = wxTEXT_ATTR_LINE_SPACING_MODE_MULTIPLE;
     m_bulletStyle = wxTEXT_ATTR_BULLET_STYLE_NONE;
     m_textEffects = wxTEXT_ATTR_EFFECT_NONE;
     m_textEffectFlags = wxTEXT_ATTR_EFFECT_NONE;
     m_outlineLevel = 0;
     m_bulletNumber = 0;
     m_colUnderline = wxNullColour;
+    m_paragraphUserData = 0;
+
+    m_unitsPerPoint = pt2mm * 10.0;
+    m_FontNameType = wxTEXT_ATTR_FONTNAME_TYPE_FAMILY;
 }
 
 // Copy
@@ -202,6 +208,7 @@ void wxTextAttr::Copy(const wxTextAttr& attr)
     m_paragraphSpacingAfter = attr.m_paragraphSpacingAfter;
     m_paragraphSpacingBefore = attr.m_paragraphSpacingBefore;
     m_lineSpacing = attr.m_lineSpacing;
+    m_lineSpacingMode = attr.m_lineSpacingMode;
     m_characterStyleName = attr.m_characterStyleName;
     m_paragraphStyleName = attr.m_paragraphStyleName;
     m_listStyleName = attr.m_listStyleName;
@@ -211,8 +218,12 @@ void wxTextAttr::Copy(const wxTextAttr& attr)
     m_bulletFont = attr.m_bulletFont;
     m_bulletName = attr.m_bulletName;
     m_outlineLevel = attr.m_outlineLevel;
+    m_paragraphUserData = attr.m_paragraphUserData;
 
     m_urlTarget = attr.m_urlTarget;
+
+    m_unitsPerPoint = attr.m_unitsPerPoint;
+    m_FontNameType = attr.m_FontNameType;
 }
 
 // operators
@@ -238,6 +249,7 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
             (!HasParagraphSpacingAfter() || (GetParagraphSpacingAfter() == attr.GetParagraphSpacingAfter())) &&
             (!HasParagraphSpacingBefore() || (GetParagraphSpacingBefore() == attr.GetParagraphSpacingBefore())) &&
             (!HasLineSpacing() || (GetLineSpacing() == attr.GetLineSpacing())) &&
+            (!HasLineSpacing() || (GetLineSpacingMode() == attr.GetLineSpacingMode())) &&
             (!HasCharacterStyleName() || (GetCharacterStyleName() == attr.GetCharacterStyleName())) &&
             (!HasParagraphStyleName() || (GetParagraphStyleName() == attr.GetParagraphStyleName())) &&
             (!HasListStyleName() || (GetListStyleName() == attr.GetListStyleName())) &&
@@ -253,6 +265,8 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
 
             (!HasOutlineLevel() || (GetOutlineLevel() == attr.GetOutlineLevel())) &&
 
+            (!HasParagraphUserData() || (GetParagraphUserData() == attr.GetParagraphUserData())) &&
+
             (!HasFontSize() || (GetFontSize() == attr.GetFontSize())) &&
             (!HasFontItalic() || (GetFontStyle() == attr.GetFontStyle())) &&
             (!HasFontWeight() || (GetFontWeight() == attr.GetFontWeight())) &&
@@ -261,6 +275,8 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
             (!HasFontFaceName() || (GetFontFaceName() == attr.GetFontFaceName())) &&
             (!HasFontEncoding() || (GetFontEncoding() == attr.GetFontEncoding())) &&
             (!HasFontFamily() || (GetFontFamily() == attr.GetFontFamily())) &&
+
+            (GetUnitsPerPoint() == attr.GetUnitsPerPoint()) &&
 
             (!HasURL() || (GetURL() == attr.GetURL()));
 }
@@ -296,6 +312,7 @@ bool wxTextAttr::EqPartial(const wxTextAttr& attr, bool weakTest) const
          (!HasBulletName() && attr.HasBulletName()) ||
          (!HasTabs() && attr.HasTabs()) ||
          (!HasTextEffects() && attr.HasTextEffects()) ||
+         (!HasParagraphUserData() && attr.HasParagraphUserData()) ||
          (!HasOutlineLevel() && attr.HasOutlineLevel())))
     {
         return false;
@@ -339,6 +356,12 @@ bool wxTextAttr::EqPartial(const wxTextAttr& attr, bool weakTest) const
     if (HasFontFamily() && attr.HasFontFamily() && GetFontFamily() != attr.GetFontFamily())
         return false;
 
+    if (GetUnitsPerPoint() != attr.GetUnitsPerPoint())
+        return false;
+
+    if (HasParagraphUserData() && attr.HasParagraphUserData() && GetParagraphUserData() != attr.GetParagraphUserData())
+        return false;
+
     if (HasURL() && attr.HasURL() && GetURL() != attr.GetURL())
         return false;
 
@@ -361,6 +384,9 @@ bool wxTextAttr::EqPartial(const wxTextAttr& attr, bool weakTest) const
         return false;
 
     if (HasLineSpacing() && attr.HasLineSpacing() && (GetLineSpacing() != attr.GetLineSpacing()))
+        return false;
+
+    if (HasLineSpacing() && attr.HasLineSpacing() && (GetLineSpacingMode() != attr.GetLineSpacingMode()))
         return false;
 
     if (HasCharacterStyleName() && attr.HasCharacterStyleName() && (GetCharacterStyleName() != attr.GetCharacterStyleName()))
@@ -416,9 +442,9 @@ wxFont wxTextAttr::GetFont() const
     if ( !HasFont() )
         return wxNullFont;
 
-    int fontSize = 10;
+    float fontSize = 10.0;
     if (HasFontSize())
-        fontSize = GetFontSize();
+        fontSize = GetFractionalFontSize();
 
     wxFontStyle fontStyle = wxFONTSTYLE_NORMAL;
     if (HasFontItalic())
@@ -448,20 +474,34 @@ wxFont wxTextAttr::GetFont() const
     if (HasFontFamily())
         fontFamily = GetFontFamily();
 
-    if (HasFontPixelSize())
+    wxFont font(wxSize(0, wxFontInfo::ToIntPointSize(fontSize)), fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+
+    if (HasFontFaceName())
     {
-        wxFont font(wxSize(0, fontSize), fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
-        if (strikethrough)
-            font.SetStrikethrough(true);
-        return font;
+        switch (m_FontNameType)
+        {
+            case wxTEXT_ATTR_FONTNAME_TYPE_FULL: // TODO
+            case wxTEXT_ATTR_FONTNAME_TYPE_STYLE: // TODO
+            default:
+            case wxTEXT_ATTR_FONTNAME_TYPE_FAMILY:
+                // already set family name
+                break;
+            case wxTEXT_ATTR_FONTNAME_TYPE_POSTSCRIPT:
+                wxNativeFontInfo nativeFontInfo = *font.GetNativeFontInfo();
+                nativeFontInfo.SetPostScriptName(fontFaceName);
+                nativeFontInfo.SetFaceName(wxEmptyString);
+                font.Create(nativeFontInfo);
+                break;
+        }
     }
-    else
-    {
-        wxFont font(fontSize, fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
-        if (strikethrough)
-            font.SetStrikethrough(true);
-        return font;
-    }
+
+    if (!HasFontPixelSize())
+        font.SetFractionalPointSize(fontSize);
+
+    if (strikethrough)
+        font.SetStrikethrough(true);
+
+    return font;
 }
 
 // Get attributes from font.
@@ -476,23 +516,23 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
     {
         if (font.IsUsingSizeInPixels())
         {
-            m_fontSize = font.GetPixelSize().y;
+            m_PixelSize = font.GetPixelSize().y;
             flags &= ~wxTEXT_ATTR_FONT_POINT_SIZE;
         }
         else
         {
-            m_fontSize = font.GetPointSize();
+            m_fontSize = font.GetFractionalPointSize();
             flags &= ~wxTEXT_ATTR_FONT_PIXEL_SIZE;
         }
     }
     else if (flags & wxTEXT_ATTR_FONT_POINT_SIZE)
     {
-        m_fontSize = font.GetPointSize();
+        m_fontSize = font.GetFractionalPointSize();
         flags &= ~wxTEXT_ATTR_FONT_PIXEL_SIZE;
     }
     else if (flags & wxTEXT_ATTR_FONT_PIXEL_SIZE)
     {
-        m_fontSize = font.GetPixelSize().y;
+        m_PixelSize = font.GetPixelSize().y;
     }
 
     if (flags & wxTEXT_ATTR_FONT_ITALIC)
@@ -508,7 +548,20 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
         m_fontStrikethrough = font.GetStrikethrough();
 
     if (flags & wxTEXT_ATTR_FONT_FACE)
-        m_fontFaceName = font.GetFaceName();
+    {
+        switch (m_FontNameType)
+        {
+            case wxTEXT_ATTR_FONTNAME_TYPE_FULL: // TODO
+            case wxTEXT_ATTR_FONTNAME_TYPE_STYLE: // TODO
+            default:
+            case wxTEXT_ATTR_FONTNAME_TYPE_FAMILY:
+                m_fontFaceName = font.GetFaceName();
+                break;
+            case wxTEXT_ATTR_FONTNAME_TYPE_POSTSCRIPT:
+                m_fontFaceName = font.GetNativeFontInfo()->GetPostScriptName();
+                break;
+        }
+    }
 
     if (flags & wxTEXT_ATTR_FONT_ENCODING)
         m_fontEncoding = font.GetEncoding();
@@ -654,6 +707,9 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
     {
         if (!(compareWith && compareWith->HasLineSpacing() && compareWith->GetLineSpacing() == style.GetLineSpacing()))
             destStyle.SetLineSpacing(style.GetLineSpacing());
+
+        if (!(compareWith && compareWith->HasLineSpacing() && compareWith->GetLineSpacingMode() == style.GetLineSpacingMode()))
+            destStyle.SetLineSpacingMode(style.GetLineSpacingMode());
     }
 
     if (style.HasCharacterStyleName())
@@ -699,6 +755,15 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
     {
         if (!(compareWith && compareWith->HasBulletName() && compareWith->GetBulletName() == style.GetBulletName()))
             destStyle.SetBulletName(style.GetBulletName());
+    }
+
+    if (!(compareWith && compareWith->GetUnitsPerPoint() == style.GetUnitsPerPoint()))
+        destStyle.SetUnitsPerPoint(style.GetUnitsPerPoint());
+
+    if (style.HasParagraphUserData())
+    {
+        if (!(compareWith && compareWith->HasParagraphUserData() && compareWith->GetParagraphUserData() == style.GetParagraphUserData()))
+            destStyle.SetParagraphUserData(style.GetParagraphUserData());
     }
 
     if (style.HasURL())
@@ -779,7 +844,7 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
     {
         colFg = attrDef.GetTextColour();
 
-        if ( text && !colFg.IsOk() )
+        if ( text && !colFg.IsOk() && text->UseForegroundColour() )
             colFg = text->GetForegroundColour();
     }
 
@@ -788,7 +853,7 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
     {
         colBg = attrDef.GetBackgroundColour();
 
-        if ( text && !colBg.IsOk() )
+        if ( text && !colBg.IsOk() && text->UseBackgroundColour() )
             colBg = text->GetBackgroundColour();
     }
 

@@ -192,6 +192,8 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE = 0x20000000,
     wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER =  0x40000000,
 
+    wxTEXT_ATTR_PARAGRAPH_USER_DATA  = 0x80000000,
+
     /*!
     * Character and paragraph combined styles
     */
@@ -204,7 +206,7 @@ enum wxTextAttrFlags
         (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
             wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL|\
-            wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE|wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER),
+            wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE|wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER|wxTEXT_ATTR_PARAGRAPH_USER_DATA),
 
     wxTEXT_ATTR_ALL = (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 };
@@ -252,7 +254,8 @@ enum wxTextAttrEffects
     wxTEXT_ATTR_EFFECT_SUPERSCRIPT           = 0x00000100,
     wxTEXT_ATTR_EFFECT_SUBSCRIPT             = 0x00000200,
     wxTEXT_ATTR_EFFECT_RTL                   = 0x00000400,
-    wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION  = 0x00001000
+    wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION  = 0x00001000,
+    wxTEXT_ATTR_EFFECT_KERNING               = 0x00002000,
 };
 
 /*!
@@ -271,6 +274,20 @@ enum wxTextAttrUnderlineType
      wxTEXT_ATTR_UNDERLINE_SOLID,
      wxTEXT_ATTR_UNDERLINE_DOUBLE,
      wxTEXT_ATTR_UNDERLINE_SPECIAL
+};
+
+enum wxTextAttrLineSpacingMode
+{
+    wxTEXT_ATTR_LINE_SPACING_MODE_MULTIPLE, // "auto" leading (single, double, etc.): m_lineSpacing / 10.0 lines
+    wxTEXT_ATTR_LINE_SPACING_MODE_EXACT,    // "absolute" leading: m_lineSpacing / m_unitsPerPoint points
+};
+
+enum wxTextAttrFontNameType
+{
+  wxTEXT_ATTR_FONTNAME_TYPE_FAMILY,     // family name (default), may be system- and language-dependent
+  wxTEXT_ATTR_FONTNAME_TYPE_POSTSCRIPT, // PostScript name
+  wxTEXT_ATTR_FONTNAME_TYPE_FULL,       // "full" name, may be system- and language-dependent
+  wxTEXT_ATTR_FONTNAME_TYPE_STYLE,      // style (subfamily) name, e.g. "Regular", "Bold", etc.; may be system- and language-dependent
 };
 
 // ----------------------------------------------------------------------------
@@ -317,9 +334,10 @@ public:
     void SetLeftIndent(int indent, int subIndent = 0) { m_leftIndent = indent; m_leftSubIndent = subIndent; m_flags |= wxTEXT_ATTR_LEFT_INDENT; }
     void SetRightIndent(int indent) { m_rightIndent = indent; m_flags |= wxTEXT_ATTR_RIGHT_INDENT; }
 
-    void SetFontSize(int pointSize) { m_fontSize = pointSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_POINT_SIZE; }
-    void SetFontPointSize(int pointSize) { m_fontSize = pointSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_POINT_SIZE; }
-    void SetFontPixelSize(int pixelSize) { m_fontSize = pixelSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_PIXEL_SIZE; }
+    void SetFontSize(int pointSize) { m_fontSize = wxFontInfo::ToFloatPointSize(pointSize); m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_POINT_SIZE; }
+    void SetFractionalFontSize(float pointSize) { m_fontSize = pointSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_POINT_SIZE; }
+    void SetFontPointSize(int pointSize) { m_fontSize = wxFontInfo::ToFloatPointSize(pointSize); m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_POINT_SIZE; }
+    void SetFontPixelSize(int pixelSize) { m_PixelSize = pixelSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_PIXEL_SIZE; }
     void SetFontStyle(wxFontStyle fontStyle) { m_fontStyle = fontStyle; m_flags |= wxTEXT_ATTR_FONT_ITALIC; }
     void SetFontWeight(wxFontWeight fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
     void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
@@ -345,6 +363,7 @@ public:
     void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_AFTER; }
     void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_BEFORE; }
     void SetLineSpacing(int spacing) { m_lineSpacing = spacing; m_flags |= wxTEXT_ATTR_LINE_SPACING; }
+    void SetLineSpacingMode(wxTextAttrLineSpacingMode mode) { m_lineSpacingMode = mode; m_flags |= wxTEXT_ATTR_LINE_SPACING; }
     void SetBulletStyle(int style) { m_bulletStyle = style; m_flags |= wxTEXT_ATTR_BULLET_STYLE; }
     void SetBulletNumber(int n) { m_bulletNumber = n; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
     void SetBulletText(const wxString& text) { m_bulletText = text; m_flags |= wxTEXT_ATTR_BULLET_TEXT; }
@@ -352,9 +371,12 @@ public:
     void SetBulletName(const wxString& name) { m_bulletName = name; m_flags |= wxTEXT_ATTR_BULLET_NAME; }
     void SetURL(const wxString& url) { m_urlTarget = url; m_flags |= wxTEXT_ATTR_URL; }
     void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
+    void SetTextEffect(int effect, bool enable) { AddFlag(wxTEXT_ATTR_EFFECTS); m_textEffectFlags |= effect;
+                                                  enable ?  m_textEffects |= effect : m_textEffects &= ~effect; }
     void SetTextEffects(int effects) { m_textEffects = effects; SetFlags(GetFlags() | wxTEXT_ATTR_EFFECTS); }
     void SetTextEffectFlags(int effects) { m_textEffectFlags = effects; }
     void SetOutlineLevel(int level) { m_outlineLevel = level; SetFlags(GetFlags() | wxTEXT_ATTR_OUTLINE_LEVEL); }
+    void SetParagraphUserData(long data) { m_paragraphUserData = data; SetFlags(GetFlags() | wxTEXT_ATTR_PARAGRAPH_USER_DATA); }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -365,7 +387,8 @@ public:
     long GetRightIndent() const { return m_rightIndent; }
     long GetFlags() const { return m_flags; }
 
-    int GetFontSize() const { return m_fontSize; }
+    int GetFontSize() const { return wxFontInfo::ToIntPointSize(m_fontSize); }
+    float GetFractionalFontSize() const { return m_fontSize; }
     wxFontStyle GetFontStyle() const { return m_fontStyle; }
     wxFontWeight GetFontWeight() const { return m_fontWeight; }
     bool GetFontUnderlined() const { return m_fontUnderlineType != wxTEXT_ATTR_UNDERLINE_NONE; }
@@ -385,6 +408,7 @@ public:
     int GetParagraphSpacingBefore() const { return m_paragraphSpacingBefore; }
 
     int GetLineSpacing() const { return m_lineSpacing; }
+    wxTextAttrLineSpacingMode GetLineSpacingMode() const { return m_lineSpacingMode; }
     int GetBulletStyle() const { return m_bulletStyle; }
     int GetBulletNumber() const { return m_bulletNumber; }
     const wxString& GetBulletText() const { return m_bulletText; }
@@ -394,6 +418,7 @@ public:
     int GetTextEffects() const { return m_textEffects; }
     int GetTextEffectFlags() const { return m_textEffectFlags; }
     int GetOutlineLevel() const { return m_outlineLevel; }
+    long GetParagraphUserData() const { return m_paragraphUserData; }
 
     // accessors
     bool HasTextColour() const { return m_colText.IsOk() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
@@ -429,6 +454,7 @@ public:
     bool HasTextEffects() const { return HasFlag(wxTEXT_ATTR_EFFECTS); }
     bool HasTextEffect(int effect) const { return HasFlag(wxTEXT_ATTR_EFFECTS) && ((GetTextEffectFlags() & effect) != 0); }
     bool HasOutlineLevel() const { return HasFlag(wxTEXT_ATTR_OUTLINE_LEVEL); }
+    bool HasParagraphUserData() const { return HasFlag(wxTEXT_ATTR_PARAGRAPH_USER_DATA); }
 
     bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
     void RemoveFlag(long flag) { m_flags &= ~flag; }
@@ -486,6 +512,12 @@ public:
     // Split into paragraph and character styles
     static bool SplitParaCharStyles(const wxTextAttr& style, wxTextAttr& parStyle, wxTextAttr& charStyle);
 
+    void SetUnitsPerPoint(double units) { m_unitsPerPoint = units; }
+    double GetUnitsPerPoint() const { return m_unitsPerPoint; }
+
+    void SetFontNameType(wxTextAttrFontNameType type) { m_FontNameType = type; }
+    wxTextAttrFontNameType GetFontNameType() const { return m_FontNameType; }
+
 private:
     long                m_flags;
 
@@ -500,7 +532,8 @@ private:
 
     int                 m_paragraphSpacingAfter;
     int                 m_paragraphSpacingBefore;
-    int                 m_lineSpacing;
+    int                 m_lineSpacing; // see wxTextAttrLineSpacingMode
+    wxTextAttrLineSpacingMode m_lineSpacingMode;
     int                 m_bulletStyle;
     int                 m_bulletNumber;
     int                 m_textEffects;
@@ -512,10 +545,13 @@ private:
     wxString            m_urlTarget;
     wxFontEncoding      m_fontEncoding;
 
+    long                m_paragraphUserData;
+
     // Character styles
     wxColour            m_colText,
                         m_colBack;
-    int                 m_fontSize;
+    float               m_fontSize;
+    int                 m_PixelSize;
     wxFontStyle         m_fontStyle;
     wxFontWeight        m_fontWeight;
     wxFontFamily        m_fontFamily;
@@ -532,6 +568,12 @@ private:
 
     // List style
     wxString            m_listStyleName;
+
+    // Units for spacing, indents, and tabs; defaults to (pt2mm * 10.0).
+    double              m_unitsPerPoint;
+
+    // Which kind of font name to use to reference the font (family, PostScript, full, etc.).
+    wxTextAttrFontNameType m_FontNameType;
 };
 
 // ----------------------------------------------------------------------------

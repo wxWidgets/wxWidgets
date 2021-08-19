@@ -324,7 +324,11 @@ void wxFontRefData::AllocIfNeeded() const
 
 void wxFontRefData::Alloc()
 {
-    wxCHECK_RET(m_info.GetPointSize() > 0, wxT("Point size should not be zero."));
+    wxCHECK_RET(m_info.GetFractionalPointSize() > 0.0, wxT("Point size should not be zero."));
+
+    // make sure the font descriptor has been processed properly
+    // otherwise the Post Script Name may not be valid yet
+    m_info.RealizeResource();
     
     // use font caching, we cache a font with a certain size and a font with just any size for faster creation
     wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetPostScriptName(), (int)m_info.GetStyle(), m_info.GetNumericWeight());
@@ -344,7 +348,7 @@ void wxFontRefData::Alloc()
         CachedFontEntry& entryNoSize = fontcache[lookupnameNoSize];
         if ( entryNoSize.used )
         {
-            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetPointSize(), NULL, NULL);
+            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetFractionalPointSize(), NULL, NULL);
             m_ctFontAttributes = entryNoSize.fontAttributes.CreateCopy();
             m_ctFontAttributes.SetValue(kCTFontAttributeName,m_ctFont.get());
             m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
@@ -361,7 +365,7 @@ void wxFontRefData::Alloc()
             if ( m_info.GetStyle() != wxFONTSTYLE_NORMAL && m_info.GetCTSlant(m_info.GetCTFontDescriptor()) < 0.01 )
                 remainingTransform = &kSlantTransform;
 
-            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetPointSize(), remainingTransform);
+            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetFractionalPointSize(), remainingTransform);
 
             // emulate weigth if necessary
             int difference = m_info.GetNumericWeight() - CTWeightToWX(wxNativeFontInfo::GetCTWeight(font));
