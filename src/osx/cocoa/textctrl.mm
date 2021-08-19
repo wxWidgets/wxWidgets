@@ -426,12 +426,27 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     }
 }
 
+- (instancetype)initWithFrame:(NSRect)frameRect
+{
+    self = [super initWithFrame:frameRect];
+    if ( self )
+    {
+        self.undoManager = [[[NSUndoManager alloc] init] autorelease];
+    }
+    return self;
+}
+
 - (void)textDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
         impl->controlTextDidChange();
+}
+
+- (nullable NSUndoManager *)undoManagerForTextView:(NSTextView *)view
+{
+    return self.undoManager;
 }
 
 
@@ -773,9 +788,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
 
     [tv setDelegate: tv];
 
-    m_undoManager = nil;
-    if ( wxPeer && wxPeer->GetParent() && wxPeer->GetParent()->GetPeer() && wxPeer->GetParent()->GetPeer()->GetWXWidget() )
-        m_undoManager = [wxPeer->GetParent()->GetPeer()->GetWXWidget() undoManager];
+    m_undoManager = tv.undoManager;
 
     [tv setAllowsUndo:YES];
 
