@@ -154,7 +154,7 @@ clean:
 	rm -rf docview.app
 
 distclean: clean
-	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 docview$(EXEEXT): $(DOCVIEW_OBJECTS) $(__docview___win32rc)
 	$(CXX) -o $@ $(DOCVIEW_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_AUI_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
@@ -166,9 +166,14 @@ docview$(EXEEXT): $(DOCVIEW_OBJECTS) $(__docview___win32rc)
 @COND_PLATFORM_MACOSX_1@	mkdir -p docview.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/docview/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.docview/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/docview/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/docview/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2021 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/docview version $(WX_VERSION), (c) 2002-2021 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2021 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1@	$(srcdir)/Info.plist.in >docview.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	

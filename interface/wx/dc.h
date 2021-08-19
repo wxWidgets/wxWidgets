@@ -714,9 +714,16 @@ public:
     /**
         Draws a spline between all given points using the current pen.
 
+        The number of points must be at least 2 for the spline to be drawn.
+
+        @note Drawn curve is not an interpolating curve - it does not go
+        through all points. It may be considered a smoothing curve.
+
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
+
+        @image html drawing-spline.png
     */
     void DrawSpline(int n, const wxPoint points[]);
 

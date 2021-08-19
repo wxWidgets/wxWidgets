@@ -18,6 +18,14 @@ if(wxUSE_XRC)
     endif()
     wx_exe_link_libraries(wxrc wxbase)
 
+    set(wxrc_output_name "wxrc")
+    if(NOT WIN32_MSVC_NAMING)
+        wx_get_flavour(lib_flavour "-")
+        set(wxrc_output_name "wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
+    endif()
+
+    set_target_properties(wxrc PROPERTIES OUTPUT_NAME ${wxrc_output_name})
+
     set_target_properties(wxrc PROPERTIES FOLDER "Utilities")
 
     wx_install(TARGETS wxrc
@@ -25,22 +33,16 @@ if(wxUSE_XRC)
         BUNDLE DESTINATION "bin"
         )
 
-    if(IPHONE)
-        set(EXE_SUFFIX ".app")
-    else()
-        set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
-    endif()
+    if(NOT WIN32_MSVC_NAMING)
+        if(IPHONE)
+            set(EXE_SUFFIX ".app")
+        else()
+            set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
+        endif()
 
-    if(NOT MSVC)
-        install(CODE "execute_process( \
-            COMMAND ${CMAKE_COMMAND} -E rename \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX} \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${EXE_SUFFIX} \
-            )"
-        )
         install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E create_symlink \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${EXE_SUFFIX} \
+            ${CMAKE_INSTALL_PREFIX}/bin/${wxrc_output_name}${EXE_SUFFIX} \
             ${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX} \
             )"
         )

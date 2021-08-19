@@ -1,14 +1,18 @@
-# Continuous integration workflow for wxWidgets.
-name: GitHub CI
+# CI workflow for wxWidgets builds using configure+make under Unix.
+name: Unix builds
 
 on:
   push:
     branches:
       - master
     paths-ignore:
+<<<<<<< osx-selfhosted-M1
       - '.github/workflows/MacS-M1-make.yml'
+=======
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+>>>>>>> master
       - 'build/tools/appveyor*.bat'
-      - 'build/tools/travis-ci.sh'
       - 'distrib/**'
       - 'docs/**'
       - 'interface/**'
@@ -23,9 +27,13 @@ on:
     branches:
       - master
     paths-ignore:
+<<<<<<< osx-selfhosted-M1
       - '.github/workflows/MacS-M1-make.yml'
+=======
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+>>>>>>> master
       - 'build/tools/appveyor*.bat'
-      - 'build/tools/travis-ci.sh'
       - 'distrib/**'
       - 'docs/**'
       - 'interface/**'
@@ -94,6 +102,16 @@ jobs:
             runner: ubuntu-18.04
             configure_flags: --with-qt --enable-pch --without-opengl
             skip_samples: true
+          - name: macOS 10.15 wxMac
+            runner: macos-10.15
+            configure_flags: --disable-sys-libs
+          - name: macOS 10.15 wxiOS
+            runner: macos-10.15
+            configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
+            xcode_sdk: iphonesimulator
+            skip_samples: true
+            skip_testing: true
+            allow_warnings: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -111,9 +129,7 @@ jobs:
         run: |
           echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
 
-          wxPROC_COUNT=`nproc`
-          ((wxPROC_COUNT++))
-          echo wxPROC_COUNT=$wxPROC_COUNT >> $GITHUB_ENV
+          wxPROC_COUNT=`./build/tools/proc_count.sh`
           echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
 
           # Setting this variable suppresses "Error retrieving accessibility bus address"
@@ -158,6 +174,11 @@ jobs:
             wxCONFIGURE_OPTIONS="--with-gtk=${{ matrix.gtk_version }} $wxCONFIGURE_OPTIONS"
           fi
 
+          if [ -n "${{ matrix.xcode_sdk }}" ]; then
+            sdk_path=`xcrun --sdk ${{ matrix.xcode_sdk }} --show-sdk-path`
+            wxCONFIGURE_OPTIONS="--with-macosx-sdk=$sdk_path $wxCONFIGURE_OPTIONS"
+          fi
+
           if [ ${{ matrix.use_asan }} ]; then
             wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
             wxASAN_CXXFLAGS=$wxASAN_CFLAGS
@@ -181,11 +202,13 @@ jobs:
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
       - name: Building tests
+        if: matrix.skip_testing != true
+        working-directory: tests
         run: |
           if [ !${{ matrix.skip_gui }} ]; then
-            make -C tests $wxBUILD_ARGS failtest
+            make $wxBUILD_ARGS failtest
           fi
-          make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+          make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
       - name: Testing
         if: matrix.skip_testing != true
@@ -228,9 +251,14 @@ jobs:
                 ASAN_OPTIONS=detect_leaks=0
             fi
             export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
+
+            # Running all tests at once fails, apparently due to running out of
+            # memory when using ASAN, work around this problem by excluding
+            # RichTextCtrlTestCase whose Table sub-test seems to be problematic.
+            wx_tests_selection='~[.] ~RichTextCtrlTestCase'
           fi
           ulimit -c unlimited
-          /bin/bash -o pipefail -c 'xvfb-run -a -s "-screen 0 1600x1200x24" ./test_gui 2>&1 | tee test_gui.out' || rc=$?
+          /bin/bash -o pipefail -c "xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection 2>&1 | tee -a test_gui.out" || rc=$?
           if [ -n "$rc" ]; then
             if fgrep -q '(core dumped)' test_gui.out; then
                 echo '*** Test crashed, trying to get more information ***'

@@ -33,75 +33,24 @@
         _Pragma(STRINGIZE(GCC diagnostic ignored STRINGIZE(CONCAT(-W,warn))))
 #endif
 
-// Due to what looks like a bug in gcc, some warnings enabled after including
-// the standard headers still result in warnings being given when instantiating
-// some functions defined in these headers later and we need to explicitly
-// disable these warnings to avoid them, even if they're not enabled yet.
-#ifdef GCC_TURN_OFF
-    #pragma GCC diagnostic push
-
-    GCC_TURN_OFF(aggregate-return)
-    GCC_TURN_OFF(conversion)
-    GCC_TURN_OFF(format)
-    GCC_TURN_OFF(padded)
-    GCC_TURN_OFF(parentheses)
-    GCC_TURN_OFF(sign-compare)
-    GCC_TURN_OFF(sign-conversion)
-    GCC_TURN_OFF(unused-parameter)
-    GCC_TURN_OFF(zero-as-null-pointer-constant)
-#endif
-
-// We have to include this one first in order to check for HAVE_XXX below.
+// We have to include this one first in order to check for wxUSE_XXX below.
 #include "wx/setup.h"
 
-// Include all standard headers that are used in wx headers before enabling the
-// warnings below.
-#include <algorithm>
-#include <cmath>
-#include <exception>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <locale>
-#include <map>
-#include <set>
-#include <sstream>
-#include <string>
-#include <vector>
-
-#if defined(HAVE_STD_UNORDERED_MAP)
-    #include <unordered_map>
+// Normally this is done in wx/defs.h, but as we don't include it here, we need
+// to do it manually to avoid warnings inside the standard headers included
+// from catch.hpp.
+#if defined(__CYGWIN__) && defined(__WINDOWS__)
+    #define __USE_W32_SOCKETS
 #endif
-#if defined(HAVE_STD_UNORDERED_SET)
-    #include <unordered_set>
-#endif
-
-#if defined(HAVE_DLOPEN)
-    #include <dlfcn.h>
-#endif
-#include <fcntl.h>
 
 #include "catch.hpp"
 
-#if defined(__WXMSW__)
-    #include <windows.h>
-
-    // Avoid warnings about redeclaring standard functions such as chmod() in
-    // various standard headers when using MinGW/Cygwin.
-    #if defined(__MINGW32__) || defined(__CYGWIN__)
-        #include <stdio.h>
-        #include <unistd.h>
-        #include <sys/stat.h>
-        #include <io.h>
-    #endif
-#elif defined(__WXQT__)
+#if defined(__WXQT__)
+    // Include this one before enabling the warnings as doing it later, as it
+    // happens when it's included from wx/fontutil.h, results in -Wsign-promo.
     #include <QtGui/QFont>
 #endif
 
-#ifdef GCC_TURN_OFF
-    #pragma GCC diagnostic pop
-#endif
 
 // Enable max warning level for headers if possible, using gcc pragmas.
 #ifdef GCC_TURN_ON
@@ -119,6 +68,9 @@
     //  - Globally replace HANDLE_GCC_WARNING with GCC_TURN_ON.
     //  - Add v6 check for -Wabi, gcc < 6 don't seem to support turning it off
     //    once it's turned on and gives it for the standard library symbols.
+    //  - Remove GCC_TURN_ON(system-headers) from the list because this option
+    //    will enable the warnings to be thrown inside the system headers that
+    //    should instead be ignored.
     // {{{
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(abi)
@@ -307,7 +259,6 @@
     GCC_TURN_ON(switch-default)
     GCC_TURN_ON(switch-enum)
     GCC_TURN_ON(synth)
-    GCC_TURN_ON(system-headers)
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(templates)
 #endif // 6.1
@@ -433,6 +384,33 @@
 #include "testprec.h"
 
 #include "allheaders.h"
+
+// Check that using wx macros doesn't result in -Wsuggest-override or
+// equivalent warnings in classes using and not using "override".
+struct Base : wxEvtHandler
+{
+    virtual ~Base() { }
+
+    virtual void Foo() { }
+};
+
+struct DerivedWithoutOverride : Base
+{
+    void OnIdle(wxIdleEvent&) { }
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(DerivedWithoutOverride);
+    wxDECLARE_EVENT_TABLE();
+};
+
+struct DerivedWithOverride : Base
+{
+    virtual void Foo() wxOVERRIDE { }
+
+    void OnIdle(wxIdleEvent&) { }
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(DerivedWithOverride);
+    wxDECLARE_EVENT_TABLE();
+};
 
 #ifdef GCC_TURN_OFF
     // Just using REQUIRE() below triggers -Wparentheses, so avoid it.

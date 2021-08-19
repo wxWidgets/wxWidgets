@@ -310,7 +310,7 @@ public:
         { LoadFile( name, type, index ); }
     wxImage( const wxString& name, const wxString& mimetype, int index = -1 )
         { LoadFile( name, mimetype, index ); }
-    wxImage( const char* const* xpmData )
+    explicit wxImage( const char* const* xpmData )
         { Create(xpmData); }
 
 #if wxUSE_STREAMS
@@ -410,6 +410,9 @@ public:
 
     // Convert to disabled (dimmed) image.
     wxImage ConvertToDisabled(unsigned char brightness = 255) const;
+
+    // Convert the image based on the given lightness.
+    wxImage ChangeLightness(int alpha) const;
 
     // these routines are slow but safe
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
@@ -555,9 +558,29 @@ public:
     // Returned value: # of entries in the histogram
     unsigned long ComputeHistogram( wxImageHistogram &h ) const;
 
-    // Rotates the hue of each pixel of the image. angle is a double in the range
-    // -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
+    // Rotates the hue of each pixel in the image by angle, which is a double in
+    // the range [-1.0..+1.0], where -1.0 corresponds to -360 degrees and +1.0
+    // corresponds to +360 degrees.
     void RotateHue(double angle);
+
+    // Changes the saturation of each pixel in the image. factor is a double in
+    // the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+    // corresponds to +100 percent.
+    void ChangeSaturation(double factor);
+
+    // Changes the brightness (value) of each pixel in the image. factor is a
+    // double in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent
+    // and +1.0 corresponds to +100 percent.
+    void ChangeBrightness(double factor);
+
+    // Changes the hue, the saturation and the brightness (value) of each pixel
+    // in the image. angleH is a double in the range [-1.0..+1.0], where -1.0
+    // corresponds to -360 degrees and +1.0 corresponds to +360 degrees, factorS
+    // is a double in the range [-1.0..+1.0], where -1.0 corresponds to -100
+    // percent and +1.0 corresponds to +100 percent and factorV is a double in
+    // the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+    // corresponds to +100 percent.
+    void ChangeHSV(double angleH, double factorS, double factorV);
 
     static wxList& GetHandlers() { return sm_handlers; }
     static void AddHandler( wxImageHandler *handler );
@@ -648,6 +671,10 @@ protected:
 
     virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
+
+    // Helper function used internally by wxImage class only.
+    template <typename T>
+    void ApplyToAllPixels(void (*filter)(wxImage *, unsigned char *, T), T value);
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxImageHandler;

@@ -197,10 +197,6 @@ public:
     GtkPrintContext *GetPrintContext() { return m_context; }
     void SetPrintContext(GtkPrintContext *context) {m_context = context; }
 
-
-    GtkPageSetup* GetPageSetupFromSettings(GtkPrintSettings* settings);
-    void SetPageSetupToSettings(GtkPrintSettings* settings, GtkPageSetup* page_setup);
-
 private:
     // NB: m_config is created and owned by us, but the other objects are not
     //     and their accessors don't change their ref count.

@@ -2057,6 +2057,8 @@ public:
     /**
         Set the value of the renderer (and thus its cell) to @a value.
         The internal code will then render this cell with this data.
+
+        @param value A valid, i.e. non-null, value to be shown.
     */
     virtual bool SetValue(const wxVariant& value) = 0;
 
@@ -4026,6 +4028,9 @@ public:
         (selected) row, typically on a dark background.
 
         Default implementation returns @a value unmodified.
+
+        The @a value passed to this method is always non-null and it must
+        return a non-null value too.
     */
     virtual wxVariant MakeHighlighted(const wxVariant& value) const;
 };

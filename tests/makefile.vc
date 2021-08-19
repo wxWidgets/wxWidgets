@@ -951,34 +951,34 @@ clean:
 
 $(OBJS)\test.exe: $(OBJS)\test_dummy.obj  $(TEST_OBJECTS)
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_5) /pdb:"$(OBJS)\test.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(TEST_OBJECTS)   $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib
+	$(TEST_OBJECTS)   $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_drawing.exe: $(OBJS)\test_drawing_dummy.obj  $(TEST_DRAWING_OBJECTS)
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_5) /pdb:"$(OBJS)\test_drawing.pdb" $(__DEBUGINFO_19)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(TEST_DRAWING_OBJECTS)   $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib
+	$(TEST_DRAWING_OBJECTS)   $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_5) /pdb:"$(OBJS)\test_drawingplugin.pdb" $(__DEBUGINFO_37)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(TEST_DRAWINGPLUGIN_OBJECTS)   $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib
+	$(TEST_DRAWINGPLUGIN_OBJECTS)   $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_5) /pdb:"$(OBJS)\test_gui.pdb" $(__DEBUGINFO_51)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(TEST_GUI_OBJECTS) $(TEST_GUI_RESOURCES)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) imm32.lib $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib
+	$(TEST_GUI_OBJECTS) $(TEST_GUI_RESOURCES)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) imm32.lib $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_allheaders.exe: $(OBJS)\test_allheaders_dummy.obj  $(TEST_ALLHEADERS_OBJECTS) $(OBJS)\test_allheaders_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_5) /pdb:"$(OBJS)\test_allheaders.pdb" $(__DEBUGINFO_68)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(TEST_ALLHEADERS_OBJECTS) $(TEST_ALLHEADERS_RESOURCES)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) imm32.lib $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib
+	$(TEST_ALLHEADERS_OBJECTS) $(TEST_ALLHEADERS_RESOURCES)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) imm32.lib $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
@@ -988,7 +988,7 @@ data:
 
 data-images: 
 	if not exist image mkdir image
-	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png paste_input_background.png paste_input_black.png paste_input_overlay_transparent_border_opaque_square.png paste_input_overlay_transparent_border_semitransparent_circle.png paste_input_overlay_transparent_border_semitransparent_square.png paste_result_background_plus_circle_plus_square.png paste_result_background_plus_overlay_transparent_border_opaque_square.png paste_result_background_plus_overlay_transparent_border_semitransparent_square.png paste_result_no_background_square_over_circle.png wx.png wx.ico) do if not exist image\%f copy .\image\%f image
+	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png paste_input_background.png paste_input_black.png paste_input_overlay_transparent_border_opaque_square.png paste_input_overlay_transparent_border_semitransparent_circle.png paste_input_overlay_transparent_border_semitransparent_square.png paste_result_background_plus_circle_plus_square.png paste_result_background_plus_overlay_transparent_border_opaque_square.png paste_result_background_plus_overlay_transparent_border_semitransparent_square.png paste_result_no_background_square_over_circle.png wx.png wx.ico toucan.png toucan_hue_0.538.png toucan_sat_-0.41.png toucan_bright_-0.259.png toucan_hsv_0.538_-0.41_-0.259.png toucan_light_46.png toucan_dis_240.png toucan_grey.png toucan_mono_255_255_255.png) do if not exist image\%f copy .\image\%f image
 
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr

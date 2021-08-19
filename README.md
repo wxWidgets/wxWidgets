@@ -19,8 +19,7 @@ and read its documentation online at https://docs.wxwidgets.org/
 Platforms
 ---------
 
-[![AppVeyor](https://img.shields.io/appveyor/build/wxWidgets/wxWidgets?label=AppVeyor&logo=appveyor)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
-[![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets?label=TravisCI&logo=travis)](https://travis-ci.org/wxWidgets/wxWidgets)
+[![AppVeyor](https://img.shields.io/appveyor/build/wxWidgets/wxWidgets/master?label=AppVeyor&logo=appveyor)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
 [![Github](https://img.shields.io/github/checks-status/wxWidgets/wxWidgets/master?label=GitHub&logo=github)](https://github.com/wxWidgets/wxWidgets/actions)
 [![OSS-Fuzz](https://oss-fuzz-build-logs.storage.googleapis.com/badges/wxwidgets.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:wxwidgets)
 
@@ -32,7 +31,7 @@ This version of wxWidgets supports the following primary platforms:
 
 Most popular C++ compilers are supported including but not limited to:
 
-- Microsoft Visual C++ 2003 or later (up to 2019).
+- Microsoft Visual C++ 2005 or later (up to 2019).
 - g++ 4 or later, including MinGW/MinGW-64/TDM under Windows.
 - Clang under macOS and Linux.
 - Intel icc compiler.

@@ -47,6 +47,8 @@ if(NOT MSVC OR MSVC_VERSION GREATER 1800)
     # support setting the C++ standard, present it an option to the user
     if(DEFINED CMAKE_CXX_STANDARD)
         set(wxCXX_STANDARD_DEFAULT ${CMAKE_CXX_STANDARD})
+    elseif(APPLE)
+        set(wxCXX_STANDARD_DEFAULT 11)
     else()
         set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
     endif()
@@ -94,8 +96,19 @@ wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)
 # ---------------------------------------------------------------------------
 # external libraries
 # ---------------------------------------------------------------------------
+set(PCRE2_CODE_UNIT_WIDTH 8)
+if(wxUSE_UNICODE AND (NOT DEFINED wxUSE_UNICODE_UTF8 OR NOT wxUSE_UNICODE_UTF8))
+    # This is also checked in setup.cmake, but setup.cmake will run after options.cmake.
+    include(CheckTypeSize)
+    check_type_size(wchar_t SIZEOF_WCHAR_T)
+    if(HAVE_SIZEOF_WCHAR_T AND SIZEOF_WCHAR_T EQUAL 2)
+        set(PCRE2_CODE_UNIT_WIDTH 16)
+    elseif(HAVE_SIZEOF_WCHAR_T AND SIZEOF_WCHAR_T EQUAL 4)
+        set(PCRE2_CODE_UNIT_WIDTH 32)
+    endif()
+endif()
 
-wx_add_thirdparty_library(wxUSE_REGEX REGEX "enable support for wxRegEx class" DEFAULT builtin)
+wx_add_thirdparty_library(wxUSE_REGEX PCRE2 "enable support for wxRegEx class")
 wx_add_thirdparty_library(wxUSE_ZLIB ZLIB "use zlib for LZW compression" DEFAULT_APPLE sys)
 wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing" DEFAULT_APPLE sys)
 wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)")

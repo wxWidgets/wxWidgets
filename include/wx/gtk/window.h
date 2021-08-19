@@ -76,6 +76,8 @@ public:
 
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
 
+    virtual wxSize GetWindowBorderSize() const wxOVERRIDE;
+
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
 #ifdef __WXGTK3__
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
@@ -384,7 +386,6 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
-    virtual wxSize DoGetBorderSize() const wxOVERRIDE;
     virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
     virtual void DoEnable(bool enable) wxOVERRIDE;
 
@@ -493,6 +494,7 @@ public:
         return m_paintContext;
     }
     void GTKSizeRevalidate();
+    void GTKSendSizeEventIfNeeded();
 #endif
 
     wxDECLARE_DYNAMIC_CLASS(wxWindowGTK);

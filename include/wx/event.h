@@ -31,14 +31,10 @@
 #include "wx/vector.h"
 
 #include "wx/meta/convertible.h"
+#include "wx/meta/removeref.h"
 
-// Currently VC7 is known to not be able to compile CallAfter() code, so
-// disable it for it (FIXME-VC7).
-#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(8)
-    #include "wx/meta/removeref.h"
-
-    #define wxHAS_CALL_AFTER
-#endif
+// This is now always defined, but keep it for backwards compatibility.
+#define wxHAS_CALL_AFTER
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -1201,6 +1197,35 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };
 
+// Helper class changing the event object to make the event appear as coming
+// from a different source: this is somewhat of a hack, but avoids copying the
+// events just to change their event object field.
+class wxEventObjectOriginSetter
+{
+public:
+    wxEventObjectOriginSetter(wxEvent& event, wxObject* source, int winid = 0)
+        : m_event(event),
+          m_sourceOrig(event.GetEventObject()),
+          m_idOrig(event.GetId())
+    {
+        m_event.SetEventObject(source);
+        m_event.SetId(winid);
+    }
+
+    ~wxEventObjectOriginSetter()
+    {
+        m_event.SetId(m_idOrig);
+        m_event.SetEventObject(m_sourceOrig);
+    }
+
+private:
+    wxEvent& m_event;
+    wxObject* const m_sourceOrig;
+    const int m_idOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxEventObjectOriginSetter);
+};
+
 // A helper object used to temporarily make wxEvent::ShouldProcessOnlyIn()
 // return true for the handler passed to its ctor.
 class wxEventProcessInHandlerOnly
@@ -1372,8 +1397,6 @@ private:
 // specified method. The difference with a simple method call is that this is
 // done asynchronously, i.e. at some later time, instead of immediately when
 // the event object is constructed.
-
-#ifdef wxHAS_CALL_AFTER
 
 // This is a base class used to process all method calls.
 class wxAsyncMethodCallEvent : public wxEvent
@@ -1554,9 +1577,6 @@ public:
 private:
     FunctorType m_fn;
 };
-
-#endif // wxHAS_CALL_AFTER
-
 
 #if wxUSE_GUI
 
@@ -2198,6 +2218,9 @@ public:
     // get the raw key flags (platform-dependent)
     wxUint32 GetRawKeyFlags() const { return m_rawFlags; }
 
+    // returns true if this is a key auto repeat event
+    bool IsAutoRepeat() const { return m_isRepeat; }
+
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
     {
@@ -2259,6 +2282,9 @@ public:
     wxUint32      m_rawCode;
     wxUint32      m_rawFlags;
 
+    // Indicates whether the key event is a repeat
+    bool          m_isRepeat;
+
 private:
     // Set the event to propagate if necessary, i.e. if it's of wxEVT_CHAR_HOOK
     // type. This is used by all ctors.
@@ -2285,6 +2311,7 @@ private:
 #if wxUSE_UNICODE
         m_uniChar = evt.m_uniChar;
 #endif
+        m_isRepeat = evt.m_isRepeat;
     }
 
     // Initialize m_x and m_y using the current mouse cursor position if
@@ -3113,6 +3140,13 @@ public:
     wxSize GetOldDPI() const { return m_oldDPI; }
     wxSize GetNewDPI() const { return m_newDPI; }
 
+    // Scale the value by the ratio between new and old DPIs carried by this
+    // event.
+    wxSize Scale(wxSize sz) const;
+
+    int ScaleX(int x) const { return Scale(wxSize(x, -1)).x; }
+    int ScaleY(int y) const { return Scale(wxSize(-1, y)).y; }
+
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDPIChangedEvent(*this); }
 
 private:
@@ -3705,7 +3739,6 @@ public:
     static void WXConsumeException();
 #endif // wxUSE_EXCEPTIONS
 
-#ifdef wxHAS_CALL_AFTER
     // Asynchronous method calls: these methods schedule the given method
     // pointer for a later call (during the next idle event loop iteration).
     //
@@ -3749,7 +3782,6 @@ public:
     {
         QueueEvent(new wxAsyncMethodCallEventFunctor<T>(this, fn));
     }
-#endif // wxHAS_CALL_AFTER
 
 
     // Connecting and disconnecting
@@ -4322,8 +4354,8 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
         static const wxEventTableEntry sm_eventTableEntries[];          \
     protected:                                                          \
         wxWARNING_SUPPRESS_MISSING_OVERRIDE()                           \
-        const wxEventTable* GetEventTable() const;                      \
-        wxEventHashTable& GetEventHashTable() const;                    \
+        const wxEventTable* GetEventTable() const wxDUMMY_OVERRIDE;     \
+        wxEventHashTable& GetEventHashTable() const wxDUMMY_OVERRIDE;   \
         wxWARNING_RESTORE_MISSING_OVERRIDE()                            \
         static const wxEventTable        sm_eventTable;                 \
         static wxEventHashTable          sm_eventHashTable

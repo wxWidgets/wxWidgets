@@ -1968,15 +1968,15 @@ wxDataViewTreeNode::PutChildInSortOrder(wxDataViewMainWindow* window,
     // Check if we actually need to move the node.
     bool locationChanged = false;
 
-    if ( oldLocation == 0 )
+    // Compare with next node
+    if ( oldLocation != hi - 1)
     {
-        // Compare with the next item (as we return early in the case of only a
-        // single child, we know that there is one) to check if the item is now
-        // out of order.
-        if ( !cmp(childNode, nodes[1]) )
+        if ( !cmp(childNode, nodes[oldLocation + 1]) )
             locationChanged = true;
     }
-    else // Compare with the previous item.
+
+    // Compare with previous node
+    if ( !locationChanged && oldLocation > 0 )
     {
         if ( !cmp(nodes[oldLocation - 1], childNode) )
             locationChanged = true;
@@ -5584,6 +5584,14 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     return true;
 }
 
+wxWindowList wxDataViewCtrl::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(m_headerArea); // It's ok to add it even if it's null.
+    parts.push_back(m_clientArea);
+    return parts;
+}
+
 wxBorder wxDataViewCtrl::GetDefaultBorder() const
 {
     return wxBORDER_THEME;
@@ -5661,12 +5669,12 @@ void wxDataViewCtrl::OnDPIChanged(wxDPIChangedEvent& event)
     {
         int minWidth = m_cols[i]->GetMinWidth();
         if ( minWidth > 0 )
-            minWidth = minWidth * event.GetNewDPI().x / event.GetOldDPI().x;
+            minWidth = event.ScaleX(minWidth);
         m_cols[i]->SetMinWidth(minWidth);
 
         int width = m_cols[i]->WXGetSpecifiedWidth();
         if ( width > 0 )
-            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+            width = event.ScaleX(width);
         m_cols[i]->SetWidth(width);
     }
 }
@@ -5679,15 +5687,11 @@ void wxDataViewCtrl::SetFocus()
 
 bool wxDataViewCtrl::SetFont(const wxFont & font)
 {
-    if (!wxControl::SetFont(font))
+    if (!BaseType::SetFont(font))
         return false;
-
-    if (m_headerArea)
-        m_headerArea->SetFont(font);
 
     if (m_clientArea)
     {
-        m_clientArea->SetFont(font);
         m_clientArea->SetRowHeight(m_clientArea->GetDefaultRowHeight());
     }
 
@@ -5696,6 +5700,35 @@ bool wxDataViewCtrl::SetFont(const wxFont & font)
         InvalidateColBestWidths();
         Layout();
     }
+
+    return true;
+}
+
+bool wxDataViewCtrl::SetForegroundColour(const wxColour& colour)
+{
+    // Previous versions of this class, not using wxCompositeWindow, as well as
+    // the native versions of this control, don't change the header foreground
+    // when this method is called and this could be more desirable in practice,
+    // as well we being more compatible, so skip calling the base class version
+    // that would change it as well and change only the main items area colour
+    // here too.
+    if ( !wxDataViewCtrlBase::SetForegroundColour(colour) )
+        return false;
+
+    if ( m_clientArea )
+        m_clientArea->SetForegroundColour(colour);
+
+    return true;
+}
+
+bool wxDataViewCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    // See SetForegroundColour() above.
+    if ( !wxDataViewCtrlBase::SetBackgroundColour(colour) )
+        return false;
+
+    if ( m_clientArea )
+        m_clientArea->SetBackgroundColour(colour);
 
     return true;
 }

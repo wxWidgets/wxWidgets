@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 28 January 2021                                                    *
+ * Date : 24 June 2021                                                       *
  *                                                                           *
  *****************************************************************************/
 
@@ -36,29 +36,11 @@
 /* Define this to get extra features from GNU libc. */
 #undef _GNU_SOURCE
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef gid_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef mode_t
-
-/* Define to `long' if <sys/types.h> doesn't define.  */
-#undef off_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef pid_t
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-#undef size_t
-
 /* Define if ssize_t type is available.  */
 #define HAVE_SSIZE_T 1
 
 /* Define if you have the ANSI C header files.  */
 #define STDC_HEADERS 1
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef uid_t
 
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
@@ -902,12 +884,6 @@ typedef pid_t GPid;
 #undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
 /*
- * The built-in regex supports advanced REs in additional to POSIX's basic
- * and extended. Your system regex probably won't support this, and in this
- * case WX_NO_REGEX_ADVANCED should be defined.
- */
-#undef WX_NO_REGEX_ADVANCED
-/*
  * On GNU systems use re_search instead of regexec, since the latter does a
  * strlen on the search text affecting the performance of some operations.
  */
@@ -1457,8 +1433,10 @@ typedef pid_t GPid;
 #include <stdlib.h>
 
 #include <limits.h>
+#if __CRTL_VER <= 80400000
 #define LLONG_MIN __INT64_MIN
 #define LLONG_MAX __INT64_MAX
 #define ULLONG_MAX __UINT64_MAX
+#endif
 
 #endif /* __WX_SETUP_H__ */

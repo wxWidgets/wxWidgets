@@ -1547,6 +1547,15 @@ public:
     */
     bool IsKeyInCategory(int category) const;
 
+    /**
+        Returns true if this event is an auto-repeat of the key, false if this
+        is the initial key press.
+
+        @since 3.1.6
+        @onlyfor{wxosx,wxmsw,wxQt}
+    */
+    bool IsAutoRepeat() const;
+
     //@{
     /**
         Obtains the position (in client coordinates) at which the key was pressed.
@@ -3435,6 +3444,39 @@ public:
         Returns the new DPI.
     */
     wxSize GetNewDPI() const;
+
+    /**
+        Rescale a value in pixels to match the new DPI.
+
+        This is a convenience function to use in wxEVT_DPI_CHANGED event
+        handlers, as they often need to update some sizes to the new DPI.
+        It simply calls wxMulDivInt32() with new and old DPI values, but
+        is more readable and less error-prone.
+
+        For example, the returned value will be twice bigger than the original
+        one when switching from normal (96) DPI to high (2x, 192) DPI.
+
+        @since 3.1.6
+     */
+    wxSize Scale(wxSize sz) const;
+
+    /**
+        Rescale horizontal component to match the new DPI.
+
+        This is the same as Scale(), but for the horizontal component only.
+
+        @since 3.1.6
+     */
+    int ScaleX(int x) const;
+
+    /**
+        Rescale vertical component to match the new DPI.
+
+        This is the same as Scale(), but for the vertical component only.
+
+        @since 3.1.6
+     */
+    int ScaleY(int y) const;
 };
 
 

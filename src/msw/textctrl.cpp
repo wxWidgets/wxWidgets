@@ -742,7 +742,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
         wxChar c;
         if ( wxSscanf(classname, wxT("RichEdit%d0%c"), &m_verRichEdit, &c) != 2 )
         {
-            wxLogDebug(wxT("Unknown edit control '%s'."), classname.c_str());
+            wxLogDebug(wxT("Unknown edit control '%s'."), classname);
 
             m_verRichEdit = 0;
         }
@@ -2058,80 +2058,29 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
 {
-    // check for our special keys here: if we don't do it and the parent frame
-    // uses them as accelerators, they wouldn't work at all, so we disable
-    // usual preprocessing for them
-    if ( msg->message == WM_KEYDOWN )
+    // Handle keys specific to (multiline) text controls here.
+    if ( msg->message == WM_KEYDOWN && !(HIWORD(msg->lParam) & KF_ALTDOWN) )
     {
-        const WPARAM vkey = msg->wParam;
-        if ( HIWORD(msg->lParam) & KF_ALTDOWN )
+        switch ( msg->wParam )
         {
-            // Alt-Backspace is accelerator for "Undo"
-            if ( vkey == VK_BACK )
-                return false;
-        }
-        else // no Alt
-        {
-            // we want to process some Ctrl-foo and Shift-bar but no key
-            // combinations without either Ctrl or Shift nor with both of them
-            // pressed
-            const int ctrl = wxIsCtrlDown(),
-                      shift = wxIsShiftDown();
-            switch ( ctrl + shift )
-            {
-                default:
-                    wxFAIL_MSG( wxT("how many modifiers have we got?") );
-                    wxFALLTHROUGH;
+            case VK_RETURN:
+                // This key must be handled only by multiline controls and only
+                // if it's pressed on its own, not with some modifier.
+                if ( !wxIsShiftDown() && !wxIsCtrlDown() && IsMultiLine() )
+                    return false;
+                break;
 
-                case 0:
-                    switch ( vkey )
-                    {
-                        case VK_RETURN:
-                            // This one is only special for multi line controls.
-                            if ( !IsMultiLine() )
-                                break;
-                            wxFALLTHROUGH;
-
-                        case VK_DELETE:
-                        case VK_HOME:
-                        case VK_END:
-                            return false;
-                    }
-                    wxFALLTHROUGH;
-                case 2:
-                    break;
-
-                case 1:
-                    // either Ctrl or Shift pressed
-                    if ( ctrl )
-                    {
-                        switch ( vkey )
-                        {
-                            case 'A':
-                            case 'C':
-                            case 'V':
-                            case 'X':
-                            case VK_INSERT:
-                            case VK_DELETE:
-                            case VK_HOME:
-                            case VK_END:
-                                return false;
-
-                            case VK_BACK:
-                                if ( MSWNeedsToHandleCtrlBackspace() )
-                                    return false;
-                        }
-                    }
-                    else // Shift is pressed
-                    {
-                        if ( vkey == VK_INSERT || vkey == VK_DELETE )
-                            return false;
-                    }
-            }
+            case VK_BACK:
+                if ( wxIsCtrlDown() && !wxIsShiftDown() &&
+                        MSWNeedsToHandleCtrlBackspace() )
+                    return false;
+                break;
         }
     }
 
-    return wxControl::MSWShouldPreProcessMessage(msg);
+    // Delegate all the other checks to the base classes.
+    return wxTextEntry::MSWShouldPreProcessMessage(msg) &&
+                wxControl::MSWShouldPreProcessMessage(msg);
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)

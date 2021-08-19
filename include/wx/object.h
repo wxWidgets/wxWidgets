@@ -368,8 +368,6 @@ private:
 
 class WXDLLIMPEXP_BASE wxObject
 {
-    wxDECLARE_ABSTRACT_CLASS(wxObject);
-
 public:
     wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
@@ -392,6 +390,7 @@ public:
 
     bool IsKindOf(const wxClassInfo *info) const;
 
+    virtual wxClassInfo *GetClassInfo() const;
 
     // Turn on the correct set of new and delete operators
 
@@ -436,6 +435,11 @@ public:
 
     // check if this object references the same data as the other one
     bool IsSameAs(const wxObject& o) const { return m_refData == o.m_refData; }
+
+    // RTTI information, usually declared by wxDECLARE_DYNAMIC_CLASS() or
+    // similar, but done manually for the hierarchy root. Note that it's public
+    // for compatibility reasons, but shouldn't be accessed directly.
+    static wxClassInfo ms_classInfo;
 
 protected:
     // ensure that our data is not shared with anybody else: if we have no

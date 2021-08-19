@@ -383,26 +383,9 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
 
 bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 {
-    // prevent command accelerators from stealing editing
-    // hotkeys when we have the focus
-    if (wxIsCtrlDown())
-    {
-        WPARAM vkey = pMsg->wParam;
-
-        switch (vkey)
-        {
-            case 'C':
-            case 'V':
-            case 'X':
-            case VK_INSERT:
-            case VK_DELETE:
-            case VK_HOME:
-            case VK_END:
-                return false;
-        }
-    }
-
-    return wxChoice::MSWShouldPreProcessMessage(pMsg);
+    return (HasFlag(wxCB_READONLY) ||
+            wxTextEntry::MSWShouldPreProcessMessage(pMsg)) &&
+                wxChoice::MSWShouldPreProcessMessage(pMsg);
 }
 
 #if wxUSE_OLE

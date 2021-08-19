@@ -716,6 +716,14 @@ public:
         }
     }
 
+    // Give ownership of our handle to the caller.
+    HGLOBAL Release()
+    {
+        HGLOBAL h = m_hGlobal;
+        m_hGlobal = NULL;
+        return h;
+    }
+
     // implicit conversion
     operator HGLOBAL() const { return m_hGlobal; }
 

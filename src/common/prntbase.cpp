@@ -1058,7 +1058,7 @@ void wxPreviewCanvas::OnMouseWheel(wxMouseEvent& event)
             else
                 delta = 50;
 
-            if ( event.GetWheelRotation() > 0 )
+            if ( event.GetWheelRotation() < 0 )
                 delta = -delta;
 
             int newZoom = currentZoom + delta;

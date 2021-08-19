@@ -642,13 +642,29 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
         h = -h;
         y -= (h - 1);
     }
-    HRGN hrgn = ::CreateRectRgn(LogicalToDeviceX(x),
-                                LogicalToDeviceY(y),
-                                LogicalToDeviceX(x + w),
-                                LogicalToDeviceY(y + h));
+    // Because world transform can be applied to HDC and its coordiante
+    // system may be e.g. rotated we shouldn't assume that axis-aligned
+    // clipping box in local coordinates will remain axis-aligned box in
+    // device coordinates. Therefore we need to take into account all
+    // 4 corners of the rectangle to create a polygonal clipping region
+    // in device coordinates.
+    POINT rect[4];
+    wxPoint p = LogicalToDevice(x, y);
+    rect[0].x = p.x;
+    rect[0].y = p.y;
+    p = LogicalToDevice(x + w, y);
+    rect[1].x = p.x;
+    rect[1].y = p.y;
+    p = LogicalToDevice(x + w, y + h);
+    rect[2].x = p.x;
+    rect[2].y = p.y;
+    p = LogicalToDevice(x, y + h);
+    rect[3].x = p.x;
+    rect[3].y = p.y;
+    HRGN hrgn = ::CreatePolygonRgn(rect, WXSIZEOF(rect), WINDING);
     if ( !hrgn )
     {
-        wxLogLastError(wxT("CreateRectRgn"));
+        wxLogLastError(wxT("CreatePolygonRgn"));
     }
     else
     {
@@ -1158,18 +1174,18 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     // B2 = (2*P1 + P2)/3
     // B3 = P2
 
-    wxASSERT_MSG( points, wxT("NULL pointer to spline points?") );
+    wxCHECK_RET( points, "NULL pointer to spline points?" );
 
-    const size_t n_points = points->GetCount();
-    wxASSERT_MSG( n_points > 2 , wxT("incomplete list of spline points?") );
+    const size_t n_points = points->size();
+    wxCHECK_RET( n_points >= 2 , "incomplete list of spline points?" );
 
     const size_t n_bezier_points = n_points * 3 + 1;
     POINT *lppt = new POINT[n_bezier_points];
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1;
 
-    wxPointList::compatibility_iterator node = points->GetFirst();
-    wxPoint *p = node->GetData();
+    wxPointList::const_iterator itPt = points->begin();
+    wxPoint* p = *itPt; ++itPt;
     lppt[ bezier_pos ].x = x1 = p->x;
     lppt[ bezier_pos ].y = y1 = p->y;
     bezier_pos++;
@@ -1177,9 +1193,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     CalcBoundingBox(x1, y1);
 
-    node = node->GetNext();
-    p = node->GetData();
-
+    p = *itPt; ++itPt;
     x2 = p->x;
     y2 = p->y;
     cx1 = ( x1 + x2 ) / 2;
@@ -1191,20 +1205,15 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     CalcBoundingBox(x2, y2);
 
-#if !wxUSE_STD_CONTAINERS
-    while ((node = node->GetNext()) != NULL)
-#else
-    while ((node = node->GetNext()))
-#endif // !wxUSE_STD_CONTAINERS
+    while ( itPt != points->end() )
     {
-        int cx4, cy4;
-        p = (wxPoint *)node->GetData();
+        p = *itPt; ++itPt;
         x1 = x2;
         y1 = y2;
         x2 = p->x;
         y2 = p->y;
-        cx4 = (x1 + x2) / 2;
-        cy4 = (y1 + y2) / 2;
+        int cx4 = (x1 + x2) / 2;
+        int cy4 = (y1 + y2) / 2;
         // B0 is B3 of previous segment
         // B1:
         lppt[ bezier_pos ].x = XLOG2DEV((x1*2+cx1)/3);

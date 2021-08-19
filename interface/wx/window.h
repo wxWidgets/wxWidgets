@@ -2196,13 +2196,14 @@ public:
     virtual bool HasTransparentBackground();
 
     /**
-        Causes this window, and all of its children recursively (except under wxGTK1
-        where this is not implemented), to be repainted. Note that repainting doesn't
-        happen immediately but only during the next event loop iteration, if you need
-        to update the window immediately you should use Update() instead.
+        Causes this window, and all of its children recursively, to be repainted.
+        Note that repainting doesn't happen immediately but only during the next
+        event loop iteration, if you need to update the window immediately you
+        should use Update() instead.
 
         @param eraseBackground
-            If @true, the background will be erased.
+            If @true, the background will be erased too. Note that in non-MSW
+            ports background is always erased.
         @param rect
             If non-@NULL, only the given rectangle will be treated as damaged.
 

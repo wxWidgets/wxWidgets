@@ -102,6 +102,7 @@ public:
     virtual wxSize GetDPI() const wxOVERRIDE;
     virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
+    virtual wxSize GetWindowBorderSize() const wxOVERRIDE;
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
@@ -653,8 +654,6 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
-
-    virtual wxSize DoGetBorderSize() const wxOVERRIDE;
 
     virtual void DoCaptureMouse() wxOVERRIDE;
     virtual void DoReleaseMouse() wxOVERRIDE;

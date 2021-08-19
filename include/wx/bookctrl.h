@@ -339,7 +339,7 @@ protected:
     void OnSize(wxSizeEvent& event);
 
     // controller buddy if available, NULL otherwise (usually for native book controls like wxNotebook)
-    wxControl *m_bookctrl;
+    wxWindow *m_bookctrl;
 
     // Whether to shrink to fit current page
     bool m_fitToCurrentPage;

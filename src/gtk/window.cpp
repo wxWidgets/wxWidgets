@@ -2335,6 +2335,11 @@ static void frame_clock_layout(GdkFrameClock*, wxWindow* win)
 {
     win->GTKSizeRevalidate();
 }
+
+static void frame_clock_layout_after(GdkFrameClock*, wxWindowGTK* win)
+{
+    win->GTKSendSizeEventIfNeeded();
+}
 #endif // GTK_CHECK_VERSION(3,8,0)
 
 } // extern "C"
@@ -2395,6 +2400,7 @@ void wxWindowGTK::GTKHandleRealized()
             !g_signal_handler_find(clock, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this))
         {
             g_signal_connect(clock, "layout", G_CALLBACK(frame_clock_layout), this);
+            g_signal_connect_after(clock, "layout", G_CALLBACK(frame_clock_layout_after), this);
         }
     }
 #endif
@@ -3686,10 +3692,18 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
         g_source_unref(source);
     }
 
-    g_signal_connect (widget, "key_press_event",
+    // When we're called for the main widget itself (but not when connecting
+    // events for some other widget, such as individual radio buttons in
+    // wxRadioBox::Create()), connect to m_focusWidget for the keyboard events
+    // instead, as it should be used for everything keyboard input-related.
+    GtkWidget* const focusWidget = widget == m_widget && m_focusWidget
+                                    ? m_focusWidget
+                                    : widget;
+    g_signal_connect (focusWidget, "key_press_event",
                       G_CALLBACK (gtk_window_key_press_callback), this);
-    g_signal_connect (widget, "key_release_event",
+    g_signal_connect (focusWidget, "key_release_event",
                       G_CALLBACK (gtk_window_key_release_callback), this);
+
     g_signal_connect (widget, "button_press_event",
                       G_CALLBACK (gtk_window_button_press_callback), this);
     g_signal_connect (widget, "button_release_event",
@@ -4007,7 +4021,7 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
             }
         }
 
-        const wxSize sizeBorders = DoGetBorderSize();
+        const wxSize sizeBorders = GetWindowBorderSize();
         w -= sizeBorders.x;
         h -= sizeBorders.y;
 
@@ -4021,10 +4035,10 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
     if (height) *height = h;
 }
 
-wxSize wxWindowGTK::DoGetBorderSize() const
+wxSize wxWindowGTK::GetWindowBorderSize() const
 {
     if ( !m_wxwindow )
-        return wxWindowBase::DoGetBorderSize();
+        return wxWindowBase::GetWindowBorderSize();
 
     GtkBorder border;
     WX_PIZZA(m_wxwindow)->get_border(border);
@@ -5862,20 +5876,33 @@ void wxWindowGTK::GTKSizeRevalidate()
     {
         next = p->next;
         wxWindow* win = static_cast<wxWindow*>(p->data);
-        if (wxGetTopLevelParent(win) == this)
+        wxWindow* w = win;
+        while (w && w->IsShown() && !w->IsTopLevel())
+            w = w->GetParent();
+        // If win is a child of this
+        if (w == this)
         {
             win->InvalidateBestSize();
             gs_sizeRevalidateList = g_list_delete_link(gs_sizeRevalidateList, p);
-            for (;;)
+            // Mark parents as needing size event
+            m_needSizeEvent = true;
+            while (win != this)
             {
                 win = win->m_parent;
-                if (win == NULL || win->m_needSizeEvent)
+                if (win->m_needSizeEvent)
                     break;
                 win->m_needSizeEvent = true;
-                if (win->IsTopLevel())
-                    break;
             }
         }
+    }
+}
+
+void wxWindowGTK::GTKSendSizeEventIfNeeded()
+{
+    if (m_needSizeEvent)
+    {
+        m_needSizeEvent = false;
+        SendSizeEvent();
     }
 }
 

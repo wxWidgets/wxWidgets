@@ -1,6 +1,7 @@
 name: Mac make CI
 
 on:
+<<<<<<< osx-selfhosted-M1
   push:
     branches: [ master ]
     paths-ignore:
@@ -51,6 +52,13 @@ on:
     - '*.md'
     - '*.yml'
     - 'wxwidgets.props'
+=======
+  workflow_dispatch:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+>>>>>>> master
 
 jobs:
   build-and-test:

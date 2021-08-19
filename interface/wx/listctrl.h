@@ -147,10 +147,43 @@ enum
     To intercept events from a list control, use the event table macros described
     in wxListEvent.
 
-    <b>wxMac Note</b>: Starting with wxWidgets 2.8, wxListCtrl uses a native
-    implementation for report mode, and uses a generic implementation for other
-    modes. You can use the generic implementation for report mode as well by setting
-    the @c mac.listctrl.always_use_generic system option (see wxSystemOptions) to 1.
+    @note The native wxOSX implementation for report mode that was added in wxWidgets
+    2.8 was removed in wxWidgets 3.1, meaning for wxWidgets 3.1+ wxOSX uses the generic
+    implementation for all modes.
+
+    @section column_order Column Ordering
+
+    By default, the columns of a list control appear on the screen in order
+    of their indices, i.e. column 0 appears first, then column 1 next,
+    and so on. However this can be changed by using the SetColumnsOrder() function
+    to arbitrarily reorder the columns visual order.
+
+    The user can also rearrange the columns interactively by dragging them.
+    In this case, the index of the column is not the same as its order and
+    the functions GetColumnOrder() and GetColumnIndexFromOrder() should be
+    used to translate between them.
+
+    @note All the other functions still work with the column indices,
+    i.e. the visual positioning of the columns on screen doesn't affect the
+    code setting or getting their values for example.
+
+    Example of reordering columns:
+    @code
+        wxListCtrl *list = new wxListCtrl(...);
+        for ( int i = 0; i < 3; i++ )
+            list->InsertColumn(i, wxString::Format("Column %d", i));
+
+        wxArrayInt order(3);
+        order[0] = 2;
+        order[1] = 0;
+        order[2] = 1;
+        list->SetColumnsOrder(order);
+
+        // now list->GetColumnsOrder() will return order and
+        // list->GetColumnIndexFromOrder(n) will return order[n] and
+        // list->GetColumnOrder() will return 1, 2 and 0 for the column 0,
+        // 1 and 2 respectively
+    @endcode
 
 
     @beginStyleTable
@@ -538,8 +571,10 @@ public:
         corresponds to the value of the element number @a pos in the array
         returned by GetColumnsOrder().
 
-        Please see SetColumnsOrder() documentation for an example and
-        additional remarks about the columns ordering.
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
+        support for the column reordering is added there.
 
         @see GetColumnOrder()
     */
@@ -552,8 +587,10 @@ public:
         given visual position, e.g. calling it with @a col equal to 0 returns
         the index of the first shown column.
 
-        Please see SetColumnsOrder() documentation for an example and
-        additional remarks about the columns ordering.
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
+        support for the column reordering is added there.
 
         @see GetColumnsOrder(), GetColumnIndexFromOrder()
     */
@@ -569,8 +606,10 @@ public:
 
         On error, an empty array is returned.
 
-        Please see SetColumnsOrder() documentation for an example and
-        additional remarks about the columns ordering.
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
+        support for the column reordering is added there.
 
         @see GetColumnOrder(), GetColumnIndexFromOrder()
     */
@@ -617,7 +656,7 @@ public:
     /**
         Returns the colour for this item.
         If the item has no specific colour, returns an invalid colour
-        (and not the default background control of the control itself).
+        (and not the default background colour of the control itself).
 
         @see GetItemTextColour()
     */
@@ -690,7 +729,7 @@ public:
         Returns the colour for this item.
 
         If the item has no specific colour, returns an invalid colour (and not the
-        default foreground control of the control itself as this wouldn't allow
+        default foreground colour of the control itself as this wouldn't allow
         distinguishing between items having the same colour as the current control
         foreground and items with default colour which, hence, have always the
         same colour as the control).
@@ -1027,17 +1066,6 @@ public:
     /**
         Changes the order in which the columns are shown.
 
-        By default, the columns of a list control appear on the screen in order
-        of their indices, i.e. the column 0 appears first, the column 1 next
-        and so on. However by using this function it is possible to arbitrarily
-        reorder the columns visual order and the user can also rearrange the
-        columns interactively by dragging them. In this case, the index of the
-        column is not the same as its order and the functions GetColumnOrder()
-        and GetColumnIndexFromOrder() should be used to translate between them.
-        Notice that all the other functions still work with the column indices,
-        i.e. the visual positioning of the columns on screen doesn't affect the
-        code setting or getting their values for example.
-
         The @a orders array must have the same number elements as the number of
         columns and contain each position exactly once. Its n-th element
         contains the index of the column to be shown in n-th position, so for a
@@ -1045,28 +1073,9 @@ public:
         results in the third column being displayed first, the first one next
         and the second one last.
 
-        Example of using it:
-        @code
-            wxListCtrl *list = new wxListCtrl(...);
-            for ( int i = 0; i < 3; i++ )
-                list->InsertColumn(i, wxString::Format("Column %d", i));
-
-            wxArrayInt order(3);
-            order[0] = 2;
-            order[1] = 0;
-            order[2] = 1;
-            list->SetColumnsOrder(order);
-
-            // now list->GetColumnsOrder() will return order and
-            // list->GetColumnIndexFromOrder(n) will return order[n] and
-            // list->GetColumnOrder() will return 1, 2 and 0 for the column 0,
-            // 1 and 2 respectively
-        @endcode
-
-        Please notice that this function makes sense for report view only and
-        currently is only implemented in wxMSW port. To avoid explicit tests
-        for @c __WXMSW__ in your code, please use @c wxHAS_LISTCTRL_COLUMN_ORDER
-        as this will allow it to start working under the other platforms when
+        @note This function makes sense for report view only and currently is only
+        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
+        of this function so that they will start working under the other platforms when
         support for the column reordering is added there.
 
         @see GetColumnsOrder()
@@ -1100,6 +1109,11 @@ public:
 
         This method does not take ownership of the image list, you have to
         delete it yourself.
+
+        Note that, unlike for most of the other methods of this class, it is
+        possible to call this function before the corresponding window is
+        created, i.e. do it in a constructor of a class derived from wxListCtrl
+        before calling Create().
 
         @see AssignImageList()
     */

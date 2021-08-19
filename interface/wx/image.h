@@ -611,8 +611,10 @@ public:
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
+
+        This constructor has become @c explicit in wxWidgets 3.1.6.
     */
-    wxImage(const char* const* xpmData);
+    explicit wxImage(const char* const* xpmData);
 
     /**
         Creates an image from a file.
@@ -895,11 +897,42 @@ public:
     wxImage Rotate180() const;
 
     /**
-        Rotates the hue of each pixel in the image by @e angle, which is a double in
-        the range of -1.0 to +1.0, where -1.0 corresponds to -360 degrees and +1.0
+        Rotates the hue of each pixel in the image by @e angle, which is a double
+        in the range [-1.0..+1.0], where -1.0 corresponds to -360 degrees and +1.0
         corresponds to +360 degrees.
     */
     void RotateHue(double angle);
+
+    /**
+        Changes the saturation of each pixel in the image. factor is a double in
+        the range [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0
+        corresponds to +100 percent.
+
+        @since 3.1.6
+    */
+    void ChangeSaturation(double factor);
+
+    /**
+        Changes the brightness (value) of each pixel in the image. factor is a
+        double in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent
+        and +1.0 corresponds to +100 percent.
+
+        @since 3.1.6
+    */
+    void ChangeBrightness(double factor);
+
+    /**
+        Changes the hue, the saturation and the brightness (value) of each pixel
+        in the image. angleH is a double in the range [-1.0..+1.0], where -1.0
+        corresponds to -360 degrees and +1.0 corresponds to +360 degrees, factorS
+        is a double in the range [-1.0..+1.0], where -1.0 corresponds to -100 percent
+        and +1.0 corresponds to +100 percent and factorV is a double in the range
+        [-1.0..+1.0], where -1.0 corresponds to -100 percent and +1.0 corresponds
+        to +100 percent.
+
+        @since 3.1.6
+    */
+    void ChangeHSV(double angleH, double factorS, double factorV);
 
     /**
         Returns a scaled version of the image.
@@ -1018,6 +1051,9 @@ public:
         calculate the greyscale. Defaults to using the standard ITU-T BT.601
         when converting to YUV, where every pixel equals
         (R * @a weight_r) + (G * @a weight_g) + (B * @a weight_b).
+
+        @remarks
+            This function calls wxColour::MakeGrey() for each pixel in the image.
     */
     wxImage ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const;
 
@@ -1032,14 +1068,34 @@ public:
 
         The returned image has white colour where the original has @e (r,g,b)
         colour and black colour everywhere else.
+
+        @remarks
+            This function calls wxColour::MakeMono() for each pixel in the image.
     */
     wxImage ConvertToMono(unsigned char r, unsigned char g, unsigned char b) const;
 
     /**
         Returns disabled (dimmed) version of the image.
+
+        @remarks
+            This function calls wxColour::MakeDisabled() for each pixel in the image.
+
         @since 2.9.0
     */
     wxImage ConvertToDisabled(unsigned char brightness = 255) const;
+
+    /**
+        Returns a changed version of the image based on the given lightness.
+        This utility function simply darkens or lightens a color, based on the
+        specified percentage @a ialpha. @a ialpha of 0 would make the color
+        completely black, 200 completely white and 100 would not change the color.
+
+        @remarks
+            This function calls wxColour::ChangeLightness() for each pixel in the image.
+
+        @since 3.1.6
+    */
+    wxImage ChangeLightness(int alpha) const;
 
     //@}
 

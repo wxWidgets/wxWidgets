@@ -425,7 +425,7 @@ bool wxFontBase::SetNativeFontInfoUserDesc(const wxString& info)
     return false;
 }
 
-bool wxFontBase::operator==(const wxFont& font) const
+bool wxFontBase::operator==(const wxFontBase& font) const
 {
     // either it is the same font, i.e. they share the same common data or they
     // have different ref datas but still describe the same font
@@ -713,7 +713,7 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
     // set the first valid facename we can find on this system
     wxString validfacename = wxFontEnumerator::GetFacenames().Item(0);
-    wxLogTrace(wxT("font"), wxT("Falling back to '%s'"), validfacename.c_str());
+    wxLogTrace(wxT("font"), wxT("Falling back to '%s'"), validfacename);
     SetFaceName(validfacename);
 #else // !wxUSE_FONTENUM
     SetFaceName(facenames[0]);

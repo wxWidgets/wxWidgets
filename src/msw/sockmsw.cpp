@@ -29,7 +29,6 @@
 #include "wx/private/fd.h"
 #include "wx/apptrait.h"
 #include "wx/thread.h"
-#include "wx/dynlib.h"
 #include "wx/link.h"
 
 #ifdef _MSC_VER
@@ -50,8 +49,6 @@
 #error "MAXSOCKETS is too big!"
 #endif
 
-typedef int (PASCAL *WSAAsyncSelect_t)(SOCKET,HWND,u_int,long);
-
 LRESULT CALLBACK wxSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 
 /* Global variables */
@@ -60,8 +57,6 @@ static HWND hWin;
 wxCRIT_SECT_DECLARE_MEMBER(gs_critical);
 static wxSocketImplMSW *socketList[MAXSOCKETS];
 static int firstAvailable;
-
-static WSAAsyncSelect_t gs_WSAAsyncSelect = NULL;
 
 // ----------------------------------------------------------------------------
 // MSW implementation of wxSocketManager
@@ -81,12 +76,7 @@ public:
                                   wxSocketNotify event = wxSOCKET_LOST) wxOVERRIDE;
     virtual void Uninstall_Callback(wxSocketImpl *socket,
                                     wxSocketNotify event = wxSOCKET_LOST) wxOVERRIDE;
-
-private:
-    static wxDynamicLibrary gs_wsock32dll;
 };
-
-wxDynamicLibrary wxSocketMSWManager::gs_wsock32dll;
 
 bool wxSocketMSWManager::OnInit()
 {
@@ -105,19 +95,6 @@ bool wxSocketMSWManager::OnInit()
   }
   firstAvailable = 0;
 
-  // we don't link with wsock32.dll statically to avoid
-  // dependencies on it for all the application using wx even if they don't use
-  // sockets
-    #define WINSOCK_DLL_NAME wxT("wsock32.dll")
-
-    gs_wsock32dll.Load(WINSOCK_DLL_NAME, wxDL_VERBATIM | wxDL_QUIET);
-    if ( !gs_wsock32dll.IsLoaded() )
-        return false;
-
-    wxDL_INIT_FUNC(gs_, WSAAsyncSelect, gs_wsock32dll);
-    if ( !gs_WSAAsyncSelect )
-        return false;
-
   // finally initialize WinSock
   WSADATA wsaData;
   return WSAStartup((1 << 8) | 1, &wsaData) == 0;
@@ -130,8 +107,6 @@ void wxSocketMSWManager::OnExit()
   UnregisterClass(CLASSNAME, wxGetInstance());
 
   WSACleanup();
-
-  gs_wsock32dll.Unload();
 }
 
 /* Per-socket GUI initialization / cleanup */
@@ -269,7 +244,7 @@ void wxSocketMSWManager::Install_Callback(wxSocketImpl *socket_,
      */
     long lEvent = socket->m_server?
                   FD_ACCEPT : (FD_READ | FD_WRITE | FD_CONNECT | FD_CLOSE);
-    gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, lEvent);
+    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, lEvent);
 }
 
 /*
@@ -280,7 +255,7 @@ void wxSocketMSWManager::Uninstall_Callback(wxSocketImpl *socket_,
 {
     wxSocketImplMSW * const socket = static_cast<wxSocketImplMSW *>(socket_);
 
-    gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
+    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
 }
 
 // set the wxBase variable to point to our wxSocketManager implementation

@@ -53,7 +53,7 @@ wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent);
 
-wxIMPLEMENT_CLASS(wxAuiNotebook, wxControl);
+wxIMPLEMENT_CLASS(wxAuiNotebook, wxBookCtrlBase);
 wxIMPLEMENT_CLASS(wxAuiTabCtrl, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxBookCtrlEvent);
 
@@ -1639,7 +1639,7 @@ const int wxAuiBaseTabCtrlId = 5380;
 #define EVT_AUI_RANGE(id1, id2, event, func) \
     wx__DECLARE_EVT2(event, id1, id2, wxAuiNotebookEventHandler(func))
 
-wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
+wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxBookCtrlBase)
     EVT_SIZE(wxAuiNotebook::OnSize)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocusNotebook)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,

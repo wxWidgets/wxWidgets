@@ -870,7 +870,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         }
 #endif // wxUSE_STREAMS
 
-        wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
+        wxLogSysError(_("Execution of command '%s' failed"), command);
 
         return flags & wxEXEC_SYNC ? -1 : 0;
     }
@@ -1005,7 +1005,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         if ( !ddeOK )
         {
             wxLogDebug(wxT("Failed to send DDE request to the process \"%s\"."),
-                       cmd.c_str());
+                       cmd);
         }
     }
 #endif // wxUSE_IPC

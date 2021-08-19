@@ -91,9 +91,6 @@ public:
             Initial size.
         @param name
             Control name.
-
-        @return @true if the control was successfully created or @false if
-                 creation failed.
     */
 
     wxFileCtrl(wxWindow* parent, wxWindowID id,
@@ -107,6 +104,9 @@ public:
 
     /**
         Create function for two-step construction. See wxFileCtrl() for details.
+
+        @return @true if the control was successfully created or @false if
+                 creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& defaultDirectory = wxEmptyString,

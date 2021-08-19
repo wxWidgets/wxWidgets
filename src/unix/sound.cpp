@@ -456,7 +456,7 @@ bool wxSound::Create(const wxString& fileName,
     if ( fileWave.Read(data, len) != lenOrig )
     {
         delete [] data;
-        wxLogError(_("Couldn't load sound data from '%s'."), fileName.c_str());
+        wxLogError(_("Couldn't load sound data from '%s'."), fileName);
         return false;
     }
 
@@ -464,7 +464,7 @@ bool wxSound::Create(const wxString& fileName,
     {
         delete [] data;
         wxLogError(_("Sound file '%s' is in unsupported format."),
-                   fileName.c_str());
+                   fileName);
         return false;
     }
 
@@ -498,12 +498,12 @@ bool wxSound::Create(size_t size, const void* data)
 #else
             wxString dllname;
             dllname.Printf(wxT("%s/%s"),
-                wxDynamicLibrary::GetPluginsDirectory().c_str(),
+                wxDynamicLibrary::GetPluginsDirectory(),
                 wxDynamicLibrary::CanonicalizePluginName(
-                    wxT("sound_sdl"), wxDL_PLUGIN_BASE).c_str());
+                    wxT("sound_sdl"), wxDL_PLUGIN_BASE));
             wxLogTrace(wxT("sound"),
                        wxT("trying to load SDL plugin from '%s'..."),
-                       dllname.c_str());
+                       dllname);
             wxLogNull null;
             ms_backendSDL = new wxDynamicLibrary(dllname, wxDL_NOW);
             if (!ms_backendSDL->IsLoaded())
@@ -546,7 +546,7 @@ bool wxSound::Create(size_t size, const void* data)
             ms_backend = new wxSoundSyncOnlyAdaptor(ms_backend);
 
         wxLogTrace(wxT("sound"),
-                   wxT("using backend '%s'"), ms_backend->GetName().c_str());
+                   wxT("using backend '%s'"), ms_backend->GetName());
     }
 }
 

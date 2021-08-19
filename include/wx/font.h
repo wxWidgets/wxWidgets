@@ -395,8 +395,8 @@ public:
 #endif // wxUSE_PRIVATE_FONTS
 
     // comparison
-    bool operator==(const wxFont& font) const;
-    bool operator!=(const wxFont& font) const { return !(*this == font); }
+    bool operator==(const wxFontBase& font) const;
+    bool operator!=(const wxFontBase& font) const { return !(*this == font); }
 
     // accessors: get the font characteristics
     virtual int GetPointSize() const;

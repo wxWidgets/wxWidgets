@@ -23,8 +23,6 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/bitmap.h"
-    #include "wx/filehistory.h"
-    #include "wx/filename.h"
     #include "wx/frame.h"
     #include "wx/image.h"
     #include "wx/menu.h"
@@ -33,6 +31,9 @@
     #include "wx/textctrl.h"
     #include "wx/textdlg.h"
 #endif
+
+#include "wx/filehistory.h"
+#include "wx/filename.h"
 
 #if !wxUSE_MENUS
     // nice try...
@@ -573,17 +574,9 @@ MyFrame::MyFrame()
     m_fileHistory = new wxFileHistory();
     m_fileHistory->UseMenu(m_fileHistoryMenu);
 
-    wxFileName fn( "menu.cpp" );
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
-
-    fn = "Makefile.in";
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
-
-    fn.Assign("minimal", "minimal", "cpp");
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+    m_fileHistory->AddFileToHistory( wxFileName("menu.cpp").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("Makefile.in").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("minimal", "minimal", "cpp").GetAbsolutePath() );
 
     fileMenu->AppendSubMenu(m_fileHistoryMenu, "Sample file history");
 #endif

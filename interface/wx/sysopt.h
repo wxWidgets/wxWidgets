@@ -105,9 +105,6 @@
     @flag{window-default-variant}
         The default variant used by windows (cast to integer from the wxWindowVariant enum).
         Also known as wxWINDOW_DEFAULT_VARIANT.
-    @flag{mac.listctrl.always_use_generic}
-        Tells wxListCtrl to use the generic control even when it is capable of
-        using the native control instead. Also known as wxMAC_ALWAYS_USE_GENERIC_LISTCTRL.
     @flag{mac.textcontrol-use-spell-checker}
         If 1 activates the spell checking in wxTextCtrl.
     @flag{osx.openfiledialog.always-show-types}

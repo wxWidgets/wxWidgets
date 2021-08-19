@@ -148,9 +148,6 @@ protected:
     void OnToggleLines(wxCommandEvent& event);
     void OnToggleHeader(wxCommandEvent& event);
     void OnToggleBell(wxCommandEvent& event);
-#ifdef __WXOSX__
-    void OnToggleMacUseGeneric(wxCommandEvent& event);
-#endif // __WXOSX__
     void OnFind(wxCommandEvent& event);
     void OnToggleItemCheckBox(wxCommandEvent& event);
     void OnGetItemCheckBox(wxCommandEvent& event);
@@ -245,9 +242,6 @@ enum
     LIST_FREEZE,
     LIST_THAW,
     LIST_TOGGLE_LINES,
-#ifdef __WXOSX__
-    LIST_MAC_USE_GENERIC,
-#endif
     LIST_CHECKVISIBILITY,
     LIST_CTRL                   = 1000
 };

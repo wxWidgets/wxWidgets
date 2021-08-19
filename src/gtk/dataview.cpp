@@ -2562,8 +2562,16 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
 bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
     wxBitmap bitmap;
-    if (value.GetType() == wxS("wxBitmap") || value.GetType() == wxS("wxIcon"))
+    if (value.GetType() == wxS("wxBitmap"))
+    {
         bitmap << value;
+    }
+    else if (value.GetType() == wxS("wxIcon"))
+    {
+        wxIcon icon;
+        icon << value;
+        bitmap.CopyFromIcon(icon);
+    }
 
 #ifdef __WXGTK3__
     WX_CELL_RENDERER_PIXBUF(m_renderer)->Set(bitmap);
@@ -4662,13 +4670,22 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
 {
     if ((gdk_event->button == 3) && (gdk_event->type == GDK_BUTTON_PRESS))
     {
+        GtkTreeView* const treeview = GTK_TREE_VIEW(dv->GtkGetTreeView());
+
+        // Surprisingly, we can get the events not only from the "bin" window,
+        // containing the items, but also from the window containing the column
+        // headers, and we're not interested in them here, we already generate
+        // wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK for them, so just ignore.
+        if (gdk_event->window != gtk_tree_view_get_bin_window(treeview))
+            return FALSE;
+
         wxGtkTreePath path;
         GtkTreeViewColumn *column = NULL;
         gint cell_x = 0;
         gint cell_y = 0;
         gtk_tree_view_get_path_at_pos
         (
-            GTK_TREE_VIEW(dv->GtkGetTreeView()),
+            treeview,
             (int) gdk_event->x, (int) gdk_event->y,
             path.ByRef(),
             &column,
@@ -4681,7 +4698,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         // because it could be a part of multi-item selection.
         if ( path )
         {
-            GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(dv->GtkGetTreeView()));
+            GtkTreeSelection *selection = gtk_tree_view_get_selection(treeview);
             if ( !gtk_tree_selection_path_is_selected(selection, path) )
             {
                 gtk_tree_selection_unselect_all(selection);

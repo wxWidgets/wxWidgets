@@ -121,21 +121,32 @@ bool wxChoice::Create(wxWindow *parent,
                   style, validator, name);
 }
 
-bool wxChoice::MSWShouldPreProcessMessage(WXMSG *pMsg)
+bool wxChoice::MSWShouldPreProcessMessage(WXMSG *msg)
 {
-    MSG *msg = (MSG *) pMsg;
-
-    // if the dropdown list is visible, don't preprocess certain keys
-    if ( msg->message == WM_KEYDOWN
-        && (msg->wParam == VK_ESCAPE || msg->wParam == VK_RETURN) )
+    if ( msg->message == WM_KEYDOWN &&
+            !(HIWORD(msg->lParam) & KF_ALTDOWN) &&
+                !wxIsShiftDown() &&
+                    !wxIsCtrlDown() )
     {
-        if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
+        switch ( msg->wParam )
         {
-            return false;
+            case VK_ESCAPE:
+            case VK_RETURN:
+                // These keys are needed by the control itself when the
+                // dropdown list is visible, so don't preprocess them then.
+                if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
+                {
+                    return false;
+                }
+                break;
+
+            case VK_F4:
+                // This key can always be used to show the dropdown.
+                return false;
         }
     }
 
-    return wxControl::MSWShouldPreProcessMessage(pMsg);
+    return wxControl::MSWShouldPreProcessMessage(msg);
 }
 
 WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const

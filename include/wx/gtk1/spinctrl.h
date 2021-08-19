@@ -48,6 +48,7 @@ public:
     void SetValue(const wxString& text);
     void SetSelection(long from, long to);
 
+    virtual wxString GetTextValue() const;
     virtual int GetValue() const;
     virtual void SetValue( int value );
     virtual void SetRange( int minVal, int maxVal );

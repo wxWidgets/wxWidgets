@@ -131,8 +131,11 @@ bool wxPalette::GetRGB(int pixel,
                        unsigned char *green,
                        unsigned char *blue) const
 {
-    if (!m_refData) return false;
-    if (pixel >= M_PALETTEDATA->m_count) return false;
+    if ( !m_refData )
+        return false;
+
+    if ( pixel < 0 || pixel >= M_PALETTEDATA->m_count )
+        return false;
 
     wxPaletteEntry& p = M_PALETTEDATA->m_entries[pixel];
     if (red) *red = p.red;

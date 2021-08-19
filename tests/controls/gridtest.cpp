@@ -760,7 +760,11 @@ TEST_CASE_METHOD(GridTestCase, "Grid::KeyboardSelection", "[grid][selection]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
 {
+    EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECTED);
+
     m_grid->SelectAll();
+
+    CHECK(select.GetCount() == 1);
 
     CHECK(m_grid->IsSelection());
     CHECK(m_grid->IsInSelection(0, 0));
@@ -779,13 +783,21 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
     CHECK(bottomright.Item(0).GetCol() == 1);
     CHECK(bottomright.Item(0).GetRow() == 3);
 
+    // Note that calling SelectCol() results in 2 events because there is a
+    // deselection event first.
+    select.Clear();
     m_grid->SelectCol(1);
+    CHECK(select.GetCount() == 2);
 
     CHECK(m_grid->IsInSelection(0, 1));
     CHECK(m_grid->IsInSelection(9, 1));
     CHECK(!m_grid->IsInSelection(3, 0));
 
+    // But if we explicitly avoid deselecting the existing selection, we should
+    // get exactly one event.
+    select.Clear();
     m_grid->SelectRow(4, true /* add to selection */);
+    CHECK(select.GetCount() == 1);
 
     CHECK(m_grid->IsInSelection(4, 0));
     CHECK(m_grid->IsInSelection(4, 1));

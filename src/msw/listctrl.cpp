@@ -320,6 +320,15 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( HasFlag(wxLC_LIST) )
         m_colCount = 1;
 
+    // If SetImageList() had been called before the control was created, take
+    // it into account now.
+    if ( m_imageListNormal )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(m_imageListNormal), LVSIL_NORMAL);
+    if ( m_imageListSmall )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(m_imageListSmall), LVSIL_SMALL);
+    if ( m_imageListState )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(m_imageListState), LVSIL_STATE);
+
     return true;
 }
 
@@ -446,9 +455,10 @@ void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
     for ( int i = 0; i < numCols; ++i )
     {
         int width = GetColumnWidth(i);
-        if ( width > 0 )
-            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
-        SetColumnWidth(i, width);
+        if ( width <= 0 )
+            continue;
+
+        SetColumnWidth(i, event.ScaleX(width));
     }
 }
 
@@ -1550,6 +1560,13 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
         m_imageListState = imageList;
         m_ownsImageListState = false;
     }
+
+    // It's possible that this function is called before the control is
+    // created, don't do anything else in this case -- the image list will be
+    // really set after creating it.
+    if ( !GetHwnd() )
+        return;
+
     (void) ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 
     // For ComCtl32 prior 6.0 we need to re-assign all existing
@@ -1603,7 +1620,7 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
     // OTOH we have to subtract the size of our borders because the base class
     // public method already adds them, but ListView_ApproximateViewRect()
     // already takes the borders into account, so this would be superfluous.
-    return size - DoGetBorderSize();
+    return size - GetWindowBorderSize();
 }
 
 // ----------------------------------------------------------------------------

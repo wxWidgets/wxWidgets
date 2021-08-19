@@ -1171,11 +1171,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         GTKUpdateClientSizeIfNecessary();
     }
 
-    if (m_needSizeEvent)
-    {
-        m_needSizeEvent = false;
-        SendSizeEvent();
-    }
+    GTKSendSizeEventIfNeeded();
 #endif
 
     if (change && !show)
@@ -1514,13 +1510,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
         gtk_widget_show(m_widget);
 
 #ifdef __WXGTK3__
-        if (m_needSizeEvent)
-        {
-            m_needSizeEvent = false;
-            SendSizeEvent();
-        }
+        GTKSendSizeEventIfNeeded();
 #endif
-
         GTKDoAfterShow();
     }
 #endif // GDK_WINDOWING_X11
@@ -1576,10 +1567,11 @@ void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
     m_pendingFittingClientSizeFlags &= ~wxSIZE_SET_MIN;
 }
 
-void wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags)
+void
+wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags, wxSizer* sizer)
 {
     // In any case, update the size immediately.
-    wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags);
+    wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags, sizer);
 
     // But if we're not shown yet, the fitting size may be wrong because GTK
     // style cache hasn't been updated yet and we need to do it again when the

@@ -76,6 +76,31 @@ public:
         return result;
     }
 
+    // Try to get printer information at the specified level.
+    //
+    // Fills in the provided buffer and returns true on success, otherwise just
+    // returns false.
+    bool GetData(wxMemoryBuffer& buffer, int level)
+    {
+        if ( !m_hPrinter )
+            return false;
+
+        DWORD bufSize = 0;
+        if ( !::GetPrinter(m_hPrinter, level, NULL, 0, &bufSize) || !bufSize )
+            return false;
+
+        if ( !::GetPrinter(m_hPrinter,
+                           level,
+                           (LPBYTE) buffer.GetWriteBuf(bufSize),
+                           bufSize,
+                           &bufSize) )
+            return false;
+
+        buffer.SetDataLen(bufSize);
+
+        return true;
+    }
+
     operator HANDLE() { return m_hPrinter; }
     operator bool() { return m_hPrinter != (HANDLE)NULL; }
 
@@ -417,27 +442,26 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
             // is overwritten. So add a bit of extra memory to work around this.
             dwNeeded += 1024;
 
-            LPDEVMODE tempDevMode = static_cast<LPDEVMODE>( GlobalAlloc( GMEM_FIXED | GMEM_ZEROINIT, dwNeeded ) );
+            GlobalPtr tempDevMode(dwNeeded, GMEM_FIXED | GMEM_ZEROINIT);
+            HGLOBAL hDevMode = tempDevMode;
 
             // Step 2:
             // Get the default DevMode for the printer
             dwRet = DocumentProperties( NULL,
                 *printer,
                 szPrinterName,
-                tempDevMode,     // The address of the buffer to fill.
+                static_cast<LPDEVMODE>(hDevMode), // The buffer to fill.
                 NULL,            // Not using the input buffer.
                 DM_OUT_BUFFER ); // Have the output buffer filled.
 
             if ( dwRet != IDOK )
             {
                 // If failure, cleanup
-                GlobalFree( tempDevMode );
                 printer->Close();
             }
             else
             {
-                m_devMode = tempDevMode;
-                tempDevMode = NULL;
+                m_devMode = tempDevMode.Release();
             }
         }
     }
@@ -489,6 +513,47 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         }
     }
 
+    // Try to initialize devmode to user or system default.
+    if (m_devMode)
+    {
+        GlobalPtrLock lockDevMode(m_devMode);
+        LPDEVMODE tempDevMode = static_cast<LPDEVMODE>(lockDevMode.Get());
+        if (tempDevMode)
+        {
+            WinPrinter winPrinter;
+            if (winPrinter.Open(tempDevMode->dmDeviceName))
+            {
+                DEVMODE* pDevMode = NULL;
+
+                wxMemoryBuffer buffer;
+
+                // Try level 9 (per-user default printer settings) first.
+                if ( winPrinter.GetData(buffer, 9) )
+                    pDevMode = static_cast<PRINTER_INFO_9*>(buffer.GetData())->pDevMode;
+
+                // If not available, try level 8 (global default printer
+                // settings).
+                if ( !pDevMode )
+                {
+                    if ( winPrinter.GetData(buffer, 8) )
+                        pDevMode = static_cast<PRINTER_INFO_8*>(buffer.GetData())->pDevMode;
+                }
+
+                if ( pDevMode )
+                {
+                    DWORD devModeSize = pDevMode->dmSize + pDevMode->dmDriverExtra;
+                    GlobalPtr newDevMode(devModeSize, GMEM_FIXED | GMEM_ZEROINIT);
+                    if ( newDevMode )
+                    {
+                        memcpy(newDevMode, pDevMode, devModeSize);
+
+                        ::GlobalFree(m_devMode);
+                        m_devMode = newDevMode.Release();
+                    }
+                }
+            }
+        }
+    }
 }
 
 bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )

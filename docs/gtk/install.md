@@ -17,9 +17,8 @@ install instructions just do the following in wxWidgets directory:
     > cd buildgtk
     > ../configure --with-gtk
     > make
-    > su <type root password>
-    > make install
-    > ldconfig
+    > sudo make install
+    > sudo ldconfig
 
 [if you get "ldconfig: command not found", try using "/sbin/ldconfig"]
 
@@ -28,9 +27,8 @@ the buildgtk directory, but they may not be available to other users.
 
 If you want to remove wxWidgets on Unix you can do this:
 
-    > su <type root password>
-    > make uninstall
-    > ldconfig
+    > sudo make uninstall
+    > sudo ldconfig
 
 Note that by default, GTK 3 is used. GTK 2 can be specified
 with --with-gtk=2.

@@ -1344,4 +1344,3 @@ void wxDisplaySizeMM(int* width, int* height);
 */
 wxSize wxGetDisplaySizeMM();
 //@}
-

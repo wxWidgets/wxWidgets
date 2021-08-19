@@ -37,27 +37,12 @@ extern bool   g_blockEventsOnDrag;
 
 extern "C" {
 static void
-gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
+gtk_value_changed(GtkSpinButton*, wxSpinCtrlGTKBase* win)
 {
     if (g_blockEventsOnDrag)
         return;
 
-    if (wxIsKindOf(win, wxSpinCtrl))
-    {
-        wxSpinEvent event(wxEVT_SPINCTRL, win->GetId());
-        event.SetEventObject( win );
-        event.SetPosition(static_cast<wxSpinCtrl*>(win)->GetValue());
-        event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
-        win->HandleWindowEvent( event );
-    }
-    else // wxIsKindOf(win, wxSpinCtrlDouble)
-    {
-        wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, win->GetId());
-        event.SetEventObject( win );
-        event.SetValue(static_cast<wxSpinCtrlDouble*>(win)->GetValue());
-        event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
-        win->HandleWindowEvent( event );
-    }
+    win->GTKValueChanged();
 }
 }
 
@@ -67,15 +52,52 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
 
 extern "C" {
 static void
-gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
+gtk_changed(GtkSpinButton*, wxSpinCtrl* win)
 {
-    wxCommandEvent event( wxEVT_TEXT, win->GetId() );
-    event.SetEventObject( win );
-    event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
-    event.SetInt(win->GetValue());
-    win->HandleWindowEvent( event );
+    win->GTKTextChanged();
 }
 }
+
+//-----------------------------------------------------------------------------
+// "input" and "output"
+//-----------------------------------------------------------------------------
+
+extern "C"
+{
+
+static gint
+wx_gtk_spin_input(GtkSpinButton*, gdouble* val, wxSpinCtrlGTKBase* win)
+{
+    switch ( win->GTKInput(val) )
+    {
+        case wxSpinCtrl::GTKInput_Error:
+            return GTK_INPUT_ERROR;
+
+        case wxSpinCtrl::GTKInput_Default:
+            return FALSE;
+
+        case wxSpinCtrl::GTKInput_Converted:
+            return TRUE;
+    }
+
+    wxFAIL_MSG("unreachable");
+    return FALSE;
+}
+
+static gboolean
+wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrlGTKBase* win)
+{
+    wxString text;
+    if ( !win->GTKOutput(&text) )
+        return FALSE;
+
+    if ( text != win->GetTextValue() )
+        gtk_entry_set_text(GTK_ENTRY(spin), text.utf8_str());
+
+    return TRUE;
+}
+
+} // extern "C"
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrlEventDisabler: helper to temporarily disable GTK+ events
@@ -101,6 +123,18 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxSpinCtrlEventDisabler);
 };
 
+// ----------------------------------------------------------------------------
+// wxSpinCtrlGTKTextOverride: extra data for using a separate string value
+// ----------------------------------------------------------------------------
+
+class wxSpinCtrlGTKTextOverride
+{
+public:
+    // Text value used instead of the text representation of the actual numeric
+    // value. Notice that this string may be empty.
+    wxString m_text;
+};
+
 //-----------------------------------------------------------------------------
 // wxSpinCtrlGTKBase
 //-----------------------------------------------------------------------------
@@ -108,6 +142,51 @@ private:
 wxBEGIN_EVENT_TABLE(wxSpinCtrlGTKBase, wxSpinCtrlBase)
     EVT_CHAR(wxSpinCtrlGTKBase::OnChar)
 wxEND_EVENT_TABLE()
+
+wxSpinCtrlGTKBase::wxSpinCtrlGTKBase()
+    : m_textOverride(NULL)
+{
+}
+
+wxSpinCtrlGTKBase::~wxSpinCtrlGTKBase()
+{
+    delete m_textOverride;
+}
+
+void wxSpinCtrlGTKBase::GTKSetTextOverride(const wxString& text)
+{
+    if ( !m_textOverride )
+        m_textOverride = new wxSpinCtrlGTKTextOverride();
+
+    m_textOverride->m_text = text;
+}
+
+bool wxSpinCtrlGTKBase::GTKResetTextOverrideOnly()
+{
+    if ( !m_textOverride )
+        return false;
+
+    delete m_textOverride;
+    m_textOverride = NULL;
+
+    return true;
+}
+
+void wxSpinCtrlGTKBase::GTKResetTextOverride()
+{
+    if ( !GTKResetTextOverrideOnly() )
+        return;
+
+    // Update the text part to reflect the numeric value now that we don't
+    // override it any longer, otherwise we'd keep showing the old one because
+    // the text is updated by GTK before "value" is generated.
+    wxSpinCtrlEventDisabler disable(this);
+    gtk_spin_button_set_value
+    (
+        GTK_SPIN_BUTTON(m_widget),
+        gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget))
+    );
+}
 
 bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,
@@ -146,6 +225,9 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
     g_signal_connect_after(m_widget, "value_changed", G_CALLBACK(gtk_value_changed), this);
     g_signal_connect_after(m_widget, "changed", G_CALLBACK(gtk_changed), this);
 
+    g_signal_connect(m_widget, "input", G_CALLBACK(wx_gtk_spin_input), this);
+    g_signal_connect(m_widget, "output", G_CALLBACK(wx_gtk_spin_output), this);
+
     m_parent->DoAddChild( this );
 
     PostCreation(size);
@@ -159,6 +241,13 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
 }
 
 double wxSpinCtrlGTKBase::DoGetValue() const
+{
+    // While using a text override, the text value is fixed by the program and
+    // shouldn't be used, just return the minimum value (which is 0 by default).
+    return m_textOverride ? DoGetMin() : GTKGetValue();
+}
+
+double wxSpinCtrlGTKBase::GTKGetValue() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
@@ -214,6 +303,13 @@ double wxSpinCtrlGTKBase::DoGetIncrement() const
     return inc;
 }
 
+wxString wxSpinCtrlGTKBase::GetTextValue() const
+{
+    wxCHECK_MSG(m_widget, wxEmptyString, "invalid spin button");
+
+    return wxGTK_CONV_BACK(gtk_entry_get_text( GTK_ENTRY(m_widget) ));
+}
+
 bool wxSpinCtrlGTKBase::GetSnapToTicks() const
 {
     wxCHECK_MSG(m_widget, false, "invalid spin button");
@@ -233,7 +329,12 @@ void wxSpinCtrlGTKBase::SetValue( const wxString& value )
         return;
     }
 
-    // invalid number - set text as is (wxMSW compatible)
+    // invalid number - set text as is (wxMSW compatible) and remember that it
+    // is set to avoid overwriting it later, which is notably important when
+    // we're called before the window is realized as the default "realize"
+    // handler will call our "output" handler
+    GTKSetTextOverride(value);
+
     wxSpinCtrlEventDisabler disable(this);
     gtk_entry_set_text( GTK_ENTRY(m_widget), wxGTK_CONV( value ) );
 }
@@ -241,6 +342,8 @@ void wxSpinCtrlGTKBase::SetValue( const wxString& value )
 void wxSpinCtrlGTKBase::DoSetValue( double value )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
+
+    GTKResetTextOverride();
 
     wxSpinCtrlEventDisabler disable(this);
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_widget), value);
@@ -336,9 +439,7 @@ void wxSpinCtrlGTKBase::OnChar( wxKeyEvent &event )
     {
         wxCommandEvent evt( wxEVT_TEXT_ENTER, m_windowId );
         evt.SetEventObject(this);
-        GtkSpinButton *gsb = GTK_SPIN_BUTTON(m_widget);
-        wxString val = wxGTK_CONV_BACK( gtk_entry_get_text( &gsb->entry ) );
-        evt.SetString( val );
+        evt.SetString(GetTextValue());
         if (HandleWindowEvent(evt)) return;
     }
 
@@ -390,45 +491,45 @@ wxSpinCtrlGTKBase::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_spin_button_new_with_range(0, 100, 1), true);
 }
 
+wxSpinCtrlGTKBase::GTKInputResult wxSpinCtrlGTKBase::GTKInput(double* value) const
+{
+    if ( m_textOverride )
+    {
+        *value = DoGetMin();
+        return GTKInput_Converted;
+    }
+
+    return GTKInput_Default;
+}
+
+bool wxSpinCtrlGTKBase::GTKOutput(wxString* text) const
+{
+    if ( m_textOverride )
+    {
+        *text = m_textOverride->m_text;
+        return true;
+    }
+
+    return false;
+}
+
+void wxSpinCtrlGTKBase::GTKTextChanged()
+{
+    // We can't use GTKResetTextOverride() itself here because it would also
+    // reset the value and we do not want this to happen -- the value is being
+    // changed to correspond to the new text.
+    GTKResetTextOverrideOnly();
+
+    wxCommandEvent event( wxEVT_TEXT, GetId() );
+    event.SetEventObject( this );
+    event.SetString(GetTextValue());
+    event.SetInt(static_cast<int>(DoGetValue()));
+    HandleWindowEvent( event );
+}
+
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
-
-extern "C"
-{
-
-static gboolean
-wx_gtk_spin_input(GtkSpinButton* spin, gdouble* val, wxSpinCtrl* win)
-{
-    // We might use g_ascii_strtoll() here but it's 2.12+ only, so use our own
-    // wxString function even if this requires an extra conversion.
-    const wxString
-        text(wxString::FromUTF8(gtk_entry_get_text(GTK_ENTRY(spin))));
-
-    long lval;
-    if ( !text.ToLong(&lval, win->GetBase()) )
-        return FALSE;
-
-    *val = lval;
-
-    return TRUE;
-}
-
-static gint
-wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
-{
-    const gint val = gtk_spin_button_get_value_as_int(spin);
-
-    gtk_entry_set_text
-    (
-        GTK_ENTRY(spin),
-        wxSpinCtrlImpl::FormatAsHex(val, win->GetMax()).utf8_str()
-    );
-
-    return TRUE;
-}
-
-} // extern "C"
 
 void wxSpinCtrl::GtkSetEntryWidth()
 {
@@ -462,23 +563,6 @@ bool wxSpinCtrl::SetBase(int base)
     // We need to be able to enter letters for any base greater than 10.
     gtk_spin_button_set_numeric( GTK_SPIN_BUTTON(m_widget), m_base <= 10 );
 
-    if ( m_base != 10 )
-    {
-        g_signal_connect( m_widget, "input",
-                              G_CALLBACK(wx_gtk_spin_input), this);
-        g_signal_connect( m_widget, "output",
-                              G_CALLBACK(wx_gtk_spin_output), this);
-    }
-    else
-    {
-        g_signal_handlers_disconnect_by_func(m_widget,
-                                             (gpointer)wx_gtk_spin_input,
-                                             this);
-        g_signal_handlers_disconnect_by_func(m_widget,
-                                             (gpointer)wx_gtk_spin_output,
-                                             this);
-    }
-
     InvalidateBestSize();
 
     GtkSetEntryWidth();
@@ -487,6 +571,61 @@ bool wxSpinCtrl::SetBase(int base)
     SetValue(GetValue());
 
     return true;
+}
+
+wxSpinCtrl::GTKInputResult wxSpinCtrl::GTKInput(double* value) const
+{
+    GTKInputResult res = wxSpinCtrlGTKBase::GTKInput(value);
+    if ( res != GTKInput_Default )
+        return res;
+
+    // Don't override the default logic unless really needed.
+    if ( GetBase() == 10 )
+        return GTKInput_Default;
+
+    long lval;
+    if ( !GetTextValue().ToLong(&lval, GetBase()) )
+        return GTKInput_Error;
+
+    *value = lval;
+
+    return GTKInput_Converted;
+}
+
+bool wxSpinCtrl::GTKOutput(wxString* text) const
+{
+    if ( wxSpinCtrlGTKBase::GTKOutput(text) )
+        return true;
+
+    switch ( GetBase() )
+    {
+        default:
+            wxFAIL_MSG("unsupported base");
+            wxFALLTHROUGH;
+
+        case 10:
+            // Don't override the default output format unless really needed.
+            return false;
+
+        case 16:
+            const gint val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(m_widget));
+
+            *text = wxSpinCtrlImpl::FormatAsHex(val, GetMax());
+            break;
+    }
+
+    return true;
+}
+
+void wxSpinCtrl::GTKValueChanged()
+{
+    GTKResetTextOverride();
+
+    wxSpinEvent event(wxEVT_SPINCTRL, GetId());
+    event.SetEventObject( this );
+    event.SetPosition(GetValue());
+    event.SetString(GetTextValue());
+    HandleWindowEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -502,6 +641,18 @@ void wxSpinCtrlDouble::GtkSetEntryWidth()
     const int lenMax = wxString::Format("%.*f", digits, GetMax()).length();
 
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), wxMax(lenMin, lenMax));
+}
+
+void wxSpinCtrlDouble::SetIncrement(double inc)
+{
+    DoSetIncrement(inc);
+
+    const unsigned digits = wxSpinCtrlImpl::DetermineDigits(inc);
+
+    // Increase the number of digits, if necessary, to show all numbers that
+    // can be obtained by using the new increment without loss of precision.
+    if ( digits > GetDigits() )
+        SetDigits(digits);
 }
 
 unsigned wxSpinCtrlDouble::GetDigits() const
@@ -521,6 +672,30 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     InvalidateBestSize();
 
     GtkSetEntryWidth();
+}
+
+wxSpinCtrl::GTKInputResult wxSpinCtrlDouble::GTKInput(double* value) const
+{
+    return wxSpinCtrlGTKBase::GTKInput(value);
+}
+
+bool wxSpinCtrlDouble::GTKOutput(wxString* text) const
+{
+    if ( wxSpinCtrlGTKBase::GTKOutput(text) )
+        return true;
+
+    return false;
+}
+
+void wxSpinCtrlDouble::GTKValueChanged()
+{
+    GTKResetTextOverride();
+
+    wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, GetId());
+    event.SetEventObject( this );
+    event.SetValue(GetValue());
+    event.SetString(GetTextValue());
+    HandleWindowEvent( event );
 }
 
 #endif // wxUSE_SPINCTRL

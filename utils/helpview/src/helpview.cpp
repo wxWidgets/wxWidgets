@@ -438,7 +438,7 @@ bool hvConnection::OnPoke(const wxString& WXUNUSED(topic),
 {
     const wxString data = GetTextFromData(buf, size, format);
 
-    //    wxLogStatus("Poke command: %s = %s", item.c_str(), data);
+    //    wxLogStatus("Poke command: %s = %s", item, data);
     //topic is not tested
 
     if ( wxGetApp().GetHelpController() )

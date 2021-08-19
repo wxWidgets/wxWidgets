@@ -44,8 +44,8 @@ wx_option(wxBUILD_TOOLKIT "Toolkit used by wxWidgets" ${wxDEFAULT_TOOLKIT}
 set(wxBUILD_WIDGETSET "")
 
 # Create shortcut variable for easy toolkit tests
-string(TOUPPER ${wxBUILD_TOOLKIT} toolkit_upper)
-set(WX${toolkit_upper} ON)
+string(TOUPPER ${wxBUILD_TOOLKIT} wxBUILD_TOOLKIT_UPPER)
+set(WX${wxBUILD_TOOLKIT_UPPER} ON)
 if(wxBUILD_TOOLKIT MATCHES "^gtk*")
     set(WXGTK ON)
 elseif(wxBUILD_TOOLKIT MATCHES "^osx*")
@@ -54,13 +54,13 @@ elseif(wxBUILD_TOOLKIT MATCHES "qt")
     set(WXQT ON)
 endif()
 
-set(wxTOOLKIT_DEFINITIONS __WX${toolkit_upper}__)
+set(wxTOOLKIT_DEFINITIONS __WX${wxBUILD_TOOLKIT_UPPER}__)
 
 if(NOT wxUSE_GUI)
     set(wxBUILD_TOOLKIT "base")
-    string(TOUPPER ${wxBUILD_TOOLKIT} toolkit_upper)
-    set(WX${toolkit_upper} ON)
-    set(wxTOOLKIT_DEFINITIONS __WX${toolkit_upper}__)
+    string(TOUPPER ${wxBUILD_TOOLKIT} wxBUILD_TOOLKIT_UPPER)
+    set(WX${wxBUILD_TOOLKIT_UPPER} ON)
+    set(wxTOOLKIT_DEFINITIONS __WX${wxBUILD_TOOLKIT_UPPER}__)
 endif()
 
 # Initialize toolkit variables

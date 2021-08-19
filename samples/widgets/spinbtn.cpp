@@ -483,6 +483,14 @@ void SpinBtnWidgetsPage::OnButtonSetBase(wxCommandEvent& WXUNUSED(event))
 
 void SpinBtnWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
 {
+    if ( m_textValue->IsEmpty() )
+    {
+        m_spinctrl->SetValue( wxEmptyString );
+        m_spinctrldbl->SetValue( wxEmptyString );
+
+        return;
+    }
+
     long val;
     if ( !m_textValue->GetValue().ToLong(&val) || !IsValidValue(val) )
     {
@@ -499,7 +507,8 @@ void SpinBtnWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
 void SpinBtnWidgetsPage::OnUpdateUIValueButton(wxUpdateUIEvent& event)
 {
     long val;
-    event.Enable( m_textValue->GetValue().ToLong(&val) && IsValidValue(val) );
+    event.Enable( m_textValue->IsEmpty() ||
+                  ( m_textValue->GetValue().ToLong(&val) && IsValidValue(val) ) );
 }
 
 void SpinBtnWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)

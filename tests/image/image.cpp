@@ -21,6 +21,8 @@
 
 #include "wx/anidecod.h" // wxImageArray
 #include "wx/bitmap.h"
+#include "wx/cursor.h"
+#include "wx/icon.h"
 #include "wx/palette.h"
 #include "wx/url.h"
 #include "wx/log.h"
@@ -2162,6 +2164,89 @@ TEST_CASE("wxImage::InitAlpha", "[image][initalpha]")
                 CHECK_EQUAL_COLOUR_RGBA(cRes, cSrc);
             }
     }
+}
+
+TEST_CASE("wxImage::XPM", "[image][xpm]")
+{
+   static const char * dummy_xpm[] = {
+      "16 16 2 1",
+      "@ c Black",
+      "  c None",
+      "@               ",
+      " @              ",
+      "  @             ",
+      "   @            ",
+      "    @           ",
+      "     @          ",
+      "      @         ",
+      "       @        ",
+      "        @       ",
+      "         @      ",
+      "          @     ",
+      "           @    ",
+      "            @   ",
+      "             @  ",
+      "              @ ",
+      "               @"
+   };
+
+   wxImage image(dummy_xpm);
+   CHECK( image.IsOk() );
+
+   // The goal here is mostly just to check that this code compiles, i.e. that
+   // creating all these classes from XPM works.
+   CHECK( wxBitmap(dummy_xpm).IsOk() );
+   CHECK( wxCursor(dummy_xpm).IsOk() );
+   CHECK( wxIcon(dummy_xpm).IsOk() );
+}
+
+TEST_CASE("wxImage::ChangeColours", "[image]")
+{
+    wxImage original;
+    REQUIRE(original.LoadFile("image/toucan.png", wxBITMAP_TYPE_PNG));
+
+    wxImage test;
+    wxImage expected;
+
+    test = original;
+    test.RotateHue(0.538);
+    REQUIRE(expected.LoadFile("image/toucan_hue_0.538.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test.ChangeSaturation(-0.41);
+    REQUIRE(expected.LoadFile("image/toucan_sat_-0.41.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test.ChangeBrightness(-0.259);
+    REQUIRE(expected.LoadFile("image/toucan_bright_-0.259.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test.ChangeHSV(0.538, -0.41, -0.259);
+    REQUIRE(expected.LoadFile("image/toucan_hsv_0.538_-0.41_-0.259.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ChangeLightness(46);
+    REQUIRE(expected.LoadFile("image/toucan_light_46.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ConvertToDisabled(240);
+    REQUIRE(expected.LoadFile("image/toucan_dis_240.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ConvertToGreyscale();
+    REQUIRE(expected.LoadFile("image/toucan_grey.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
+
+    test = original;
+    test = test.ConvertToMono(255, 255, 255);
+    REQUIRE(expected.LoadFile("image/toucan_mono_255_255_255.png", wxBITMAP_TYPE_PNG));
+    CHECK_THAT(test, RGBSameAs(expected));
 }
 
 /*

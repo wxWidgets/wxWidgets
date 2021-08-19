@@ -897,14 +897,34 @@ public:
         This method first calls Fit() and then wxTopLevelWindow::SetSizeHints()
         on the @a window passed to it.
 
-        This only makes sense when @a window is actually a wxTopLevelWindow such
+        This function is only when @a window is actually a wxTopLevelWindow such
         as a wxFrame or a wxDialog, since SetSizeHints only has any effect in these classes.
         It does nothing in normal windows or controls.
 
-        This method is implicitly used by wxWindow::SetSizerAndFit() which is
-        commonly invoked in the constructor of a toplevel window itself (see
-        the sample in the description of wxBoxSizer) if the toplevel window is
-        resizable.
+        Note that @a window does @e not need to be the window using this sizer
+        and it is, in fact, common to call this function on the sizer
+        associated with the panel covering the client area of a frame passing
+        it the frame pointer, as this has the desired effect of adjusting the
+        frame size to the size fitting the panel, e.g.:
+        @code
+        MyFrame::MyFrame(...) : wxFrame(...)
+        {
+            wxPanel* panel = new wxPanel(this);
+            wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+            sizer->Add(...);
+            sizer->Add(...);
+            panel->SetSizer(sizer);
+
+            // Use the panel sizer to set the initial and minimal size of the
+            // frame to fit its contents.
+            sizer->SetSizeHints(this);
+        }
+        @endcode
+
+        This function is also used by wxWindow::SetSizerAndFit() which is
+        commonly invoked in the constructor of wxDialog-derived classes, which
+        don't need to use an intermediate panel, see the example in @ref
+        overview_sizer_programming_box "wxBoxSizer overview".
     */
     void SetSizeHints(wxWindow* window);
 
@@ -1479,6 +1499,33 @@ public:
         @since 3.1.0
      */
     wxSizerFlags& CentreVertical();
+
+    /**
+        Globally disable checks for sizer flag consistency in debug builds.
+
+        By default, sizer classes such as wxBoxSizer and wxFlexGridSizer assert
+        when passed invalid flags, even though doing this usually doesn't
+        result in any catastrophic consequences and the invalid flags are
+        simply ignored later. Due to this, and the fact that these checks were
+        only added in wxWidgets 3.1, existing code may run into multiple
+        asserts warning about incorrect sizer flags use. Using this function
+        provides a temporary solution for avoiding such asserts when upgrading
+        to wxWidgets 3.1 from a previous version and will prevent such checks
+        from being done.
+
+        Please do note that correcting the code by removing the invalid flags
+        remains a much better solution as these asserts may be very helpful to
+        understand why some code using sizer flags doesn't work as expected, so
+        using this function, especially permanently, rather than a temporary
+        workaround, is @e not recommended.
+
+        Notice that the same effect as calling this function can be achieved by
+        setting the environment variable @c WXSUPPRESS_SIZER_FLAGS_CHECK to any
+        value.
+
+        @since 3.1.6
+     */
+    static void DisableConsistencyChecks();
 
     /**
         Sets the border in the given @a direction having twice the default

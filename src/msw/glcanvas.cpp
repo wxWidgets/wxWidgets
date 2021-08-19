@@ -167,23 +167,8 @@ inline T wxWGLProcCast(PROC proc)
 // libraries
 // ----------------------------------------------------------------------------
 
-/*
-  The following two compiler directives are specific to the Microsoft Visual
-  C++ family of compilers
-
-  Fundementally what they do is instruct the linker to use these two libraries
-  for the resolution of symbols. In essence, this is the equivalent of adding
-  these two libraries to either the Makefile or project file.
-
-  This is NOT a recommended technique, and certainly is unlikely to be used
-  anywhere else in wxWidgets given it is so specific to not only wxMSW, but
-  also the VC compiler. However, in the case of opengl support, it's an
-  applicable technique as opengl is optional in setup.h This code (wrapped by
-  wxUSE_GLCANVAS), now allows opengl support to be added purely by modifying
-  setup.h rather than by having to modify either the project or DSP fle.
-
-  See MSDN for further information on the exact usage of these commands.
-*/
+// For MSVC we can link in the required library explicitly, for the other
+// compilers (e.g. MinGW) this needs to be done at makefiles level.
 #ifdef _MSC_VER
 #  pragma comment( lib, "opengl32" )
 #  pragma comment( lib, "glu32" )

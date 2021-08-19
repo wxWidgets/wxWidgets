@@ -29,18 +29,15 @@ public:
 #endif
 #if wxUSE_IMAGE
     wxCursor( const wxImage & image );
+    wxCursor(const char* const* xpmData);
 #endif
+    wxCursor(const wxString& name,
+             wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
+             int hotSpotX = 0, int hotSpotY = 0);
     wxCursor( const char bits[], int width, int  height,
               int hotSpotX=-1, int hotSpotY=-1,
               const char maskBits[] = NULL,
               const wxColour* fg = NULL, const wxColour* bg = NULL);
-
-    /* WARNING: the following ctor is missing:
-
-        wxCursor(const wxString& name,
-                wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
-                int hotSpotX = 0, int hotSpotY = 0);
-    */
 
     virtual ~wxCursor();
 
@@ -50,6 +47,9 @@ public:
 
 protected:
     void InitFromStock(wxStockCursor);
+#if wxUSE_IMAGE
+    void InitFromImage(const wxImage& image);
+#endif
 
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;

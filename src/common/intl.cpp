@@ -248,36 +248,15 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 
 void wxLocale::DoCommonInit()
 {
-    // Store the current locale in order to be able to restore it in the dtor.
-    m_pszOldLocale = wxSetlocale(LC_ALL, NULL);
-    if ( m_pszOldLocale )
-        m_pszOldLocale = wxStrdup(m_pszOldLocale);
+    m_language = wxLANGUAGE_UNKNOWN;
+
+    m_pszOldLocale = NULL;
+    m_pOldLocale = NULL;
 
 #ifdef __WIN32__
-    m_oldLCID = ::GetThreadLocale();
+    m_oldLCID = 0;
 #endif
 
-    m_pOldLocale = wxSetLocale(this);
-
-    // Set translations object, but only if the user didn't do so yet.
-    // This is to preserve compatibility with wx-2.8 where wxLocale was
-    // the only API for translations. wxLocale works as a stack, with
-    // latest-created one being the active one:
-    //     wxLocale loc_fr(wxLANGUAGE_FRENCH);
-    //     // _() returns French
-    //     {
-    //         wxLocale loc_cs(wxLANGUAGE_CZECH);
-    //         // _() returns Czech
-    //     }
-    //     // _() returns French again
-    wxTranslations *oldTrans = wxTranslations::Get();
-    if ( !oldTrans ||
-         (m_pOldLocale && oldTrans == &m_pOldLocale->m_translations) )
-    {
-        wxTranslations::SetNonOwned(&m_translations);
-    }
-
-    m_language = wxLANGUAGE_UNKNOWN;
     m_initialized = false;
 }
 
@@ -356,6 +335,35 @@ void wxLocale::DoInit(const wxString& name,
     m_strLocale = name;
     m_strShort = shortName;
     m_language = language;
+
+    // Store the current locale in order to be able to restore it in the dtor.
+    m_pszOldLocale = wxSetlocale(LC_ALL, NULL);
+    if ( m_pszOldLocale )
+        m_pszOldLocale = wxStrdup(m_pszOldLocale);
+
+#ifdef __WIN32__
+    m_oldLCID = ::GetThreadLocale();
+#endif
+
+    m_pOldLocale = wxSetLocale(this);
+
+    // Set translations object, but only if the user didn't do so yet.
+    // This is to preserve compatibility with wx-2.8 where wxLocale was
+    // the only API for translations. wxLocale works as a stack, with
+    // latest-created one being the active one:
+    //     wxLocale loc_fr(wxLANGUAGE_FRENCH);
+    //     // _() returns French
+    //     {
+    //         wxLocale loc_cs(wxLANGUAGE_CZECH);
+    //         // _() returns Czech
+    //     }
+    //     // _() returns French again
+    wxTranslations *oldTrans = wxTranslations::Get();
+    if ( !oldTrans ||
+         (m_pOldLocale && oldTrans == &m_pOldLocale->m_translations) )
+    {
+        wxTranslations::SetNonOwned(&m_translations);
+    }
 }
 
 bool wxLocale::DoCommonPostInit(bool success,
@@ -607,7 +615,9 @@ bool wxLocale::Init(int lang, int flags)
            (
                 retloc != NULL,
                 name,
-                shortName,
+                // wxLANGUAGE_DEFAULT needs to be passed to wxTranslations as ""
+                // for correct detection of user's preferred language(s)
+                lang == wxLANGUAGE_DEFAULT ? wxString() : shortName,
                 flags & wxLOCALE_LOAD_DEFAULT
            );
 #else // !(__UNIX__ || __WIN32__)
@@ -1082,6 +1092,11 @@ wxString wxLocale::GetSysName() const
 // clean up
 wxLocale::~wxLocale()
 {
+    // Nothing here needs to be done if the object had never been initialized
+    // successfully.
+    if ( !m_initialized )
+        return;
+
     // Restore old translations object.
     // See DoCommonInit() for explanation of why this is needed for backward
     // compatibility.

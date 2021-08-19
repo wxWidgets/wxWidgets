@@ -51,6 +51,10 @@
     wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
 #endif // wxUSE_BASE
 
+#if wxUSE_GUI
+    #include "wx/private/rescale.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -933,6 +937,15 @@ wxHelpEvent::Origin wxHelpEvent::GuessOrigin(Origin origin)
     return origin;
 }
 
+// ----------------------------------------------------------------------------
+// wxDPIChangedEvent
+// ----------------------------------------------------------------------------
+
+wxSize wxDPIChangedEvent::Scale(wxSize sz) const
+{
+    return wxRescaleCoord(sz).From(m_oldDPI).To(m_newDPI);
+}
+
 #endif // wxUSE_GUI
 
 
@@ -1615,7 +1628,6 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
     if ( GetEventHashTable().HandleEvent(event, this) )
         return true;
 
-#ifdef wxHAS_CALL_AFTER
     // There is an implicit entry for async method calls processing in every
     // event handler:
     if ( event.GetEventType() == wxEVT_ASYNC_METHOD_CALL &&
@@ -1624,7 +1636,6 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
         static_cast<wxAsyncMethodCallEvent&>(event).Execute();
         return true;
     }
-#endif // wxHAS_CALL_AFTER
 
     // We don't have a handler for this event.
     return false;

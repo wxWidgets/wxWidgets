@@ -552,8 +552,7 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
 
             if ( item->HasImage() )
             {
-                m_gi->m_rectIcon.x = m_gi->m_rectAll.x + 4 +
-                    (m_gi->m_rectAll.width - m_gi->m_rectIcon.width) / 2;
+                m_gi->m_rectIcon.x = m_gi->m_rectAll.x + 4;
                 m_gi->m_rectIcon.y = m_gi->m_rectAll.y + 4;
             }
 
@@ -2059,7 +2058,19 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     if ( m_dirty )
-        RecalculatePositions( false );
+    {
+        // Calling Refresh() from inside OnPaint() doesn't work under macOS, so
+        // don't do it immediately...
+        RecalculatePositions();
+
+        // ... but schedule it for later.
+        CallAfter(&wxWindow::Refresh, true, (const wxRect*)NULL);
+
+        // Don't bother redoing the relayout again the next time nor redrawing
+        // now, as we'll be refresh soon anyhow.
+        m_dirty = false;
+        return;
+    }
 
     GetListCtrl()->PrepareDC( dc );
 
@@ -2321,19 +2332,12 @@ void wxListMainWindow::SendNotify( size_t line,
         le.m_pointDrag = GetPosition() + point;
     }
 
-    // don't try to get the line info for virtual list controls: the main
-    // program has it anyhow and if we did it would result in accessing all
-    // the lines, even those which are not visible now and this is precisely
-    // what we're trying to avoid
-    if ( !IsVirtual() )
+    // provide information about the (first column of the) item in the event if
+    // we have a valid item and any columns at all
+    if ( line != (size_t)-1 && GetColumnCount() )
     {
-        if ( line != (size_t)-1 )
-        {
-            GetLine(line)->GetItem( 0, le.m_item );
-        }
-        //else: this happens for wxEVT_LIST_ITEM_FOCUSED event
+        GetLine(line)->GetItem( 0, le.m_item );
     }
-    //else: there may be no more such item
 
     GetParent()->GetEventHandler()->ProcessEvent( le );
 }
@@ -3862,8 +3866,7 @@ wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect,
     // ensure that we're laid out, otherwise we could return nonsense
     if ( m_dirty )
     {
-        wxConstCast(this, wxListMainWindow)->
-            RecalculatePositions(true /* no refresh */);
+        wxConstCast(this, wxListMainWindow)->RecalculatePositions();
     }
 
     rect = GetLineRect((size_t)item);
@@ -3998,7 +4001,7 @@ bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y)
 // geometry calculation
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::RecalculatePositions(bool noRefresh)
+void wxListMainWindow::RecalculatePositions()
 {
     const int lineHeight = GetLineHeight();
 
@@ -4206,15 +4209,13 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
         }
     }
 
-    if ( !noRefresh )
-    {
-        RefreshAll();
-    }
+    m_dirty = false;
 }
 
-void wxListMainWindow::RefreshAll()
+void wxListMainWindow::RecalculatePositionsAndRefresh()
 {
-    m_dirty = false;
+    RecalculatePositions();
+
     Refresh();
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
@@ -4438,7 +4439,7 @@ void wxListMainWindow::DeleteAllItems()
 {
     DoDeleteAllItems();
 
-    RecalculatePositions();
+    RecalculatePositionsAndRefresh();
 }
 
 void wxListMainWindow::DeleteEverything()
@@ -4461,7 +4462,7 @@ void wxListMainWindow::EnsureVisible( long index )
     // We have to call this here because the label in question might just have
     // been added and its position is not known yet
     if ( m_dirty )
-        RecalculatePositions(true /* no refresh */);
+        RecalculatePositions();
 
     MoveToItem((size_t)index);
 }
@@ -5163,6 +5164,31 @@ bool wxGenericListCtrl::SetColumnWidth( int col, int width )
     return true;
 }
 
+// Column ordering functions
+int wxGenericListCtrl::GetColumnOrder(int col) const
+{
+    // TODO: Implement this on generic port
+    return col;
+}
+
+int wxGenericListCtrl::GetColumnIndexFromOrder(int order) const
+{
+    // TODO: Implement this on generic port
+    return order;
+}
+
+wxArrayInt wxGenericListCtrl::GetColumnsOrder() const
+{
+    // TODO: Implement this on generic port
+    return wxArrayInt();
+}
+
+bool wxGenericListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
+{
+    // TODO: Implement this on generic port
+    return false;
+}
+
 int wxGenericListCtrl::GetCountPerPage() const
 {
   return m_mainWin->GetCountPerPage();  // different from Windows ?
@@ -5613,7 +5639,7 @@ void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 
     Layout();
 
-    m_mainWin->RecalculatePositions();
+    m_mainWin->RecalculatePositionsAndRefresh();
 
     AdjustScrollbars();
 }
@@ -5623,7 +5649,7 @@ void wxGenericListCtrl::OnInternalIdle()
     wxWindow::OnInternalIdle();
 
     if (m_mainWin->m_dirty)
-        m_mainWin->RecalculatePositions();
+        m_mainWin->RecalculatePositionsAndRefresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -5768,7 +5794,7 @@ wxSize wxGenericListCtrl::DoGetBestClientSize() const
         // If we have the scrollbars we need to account for them too. And to
         // make sure the scrollbars status is up to date we need to call this
         // function to set them.
-        m_mainWin->RecalculatePositions(true /* no refresh */);
+        m_mainWin->RecalculatePositions();
 
         // Unfortunately we can't use wxWindow::HasScrollbar() here as we need
         // to use m_mainWin client/virtual size for determination of whether we
@@ -5869,7 +5895,7 @@ void wxGenericListCtrl::Update()
     if ( m_mainWin )
     {
         if ( m_mainWin->m_dirty )
-            m_mainWin->RecalculatePositions();
+            m_mainWin->RecalculatePositionsAndRefresh();
 
         m_mainWin->Update();
     }

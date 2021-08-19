@@ -297,11 +297,11 @@ if (in->IsOk())
 
         // list the contents of the archive
         while ((entry.reset(arc->GetNextEntry())), entry.get() != NULL)
-            std::wcout << entry->GetName().c_str() << "\n";
+            std::wcout << entry->GetName() << "\n";
     }
     else
     {
-        wxLogError(wxT("can't handle '%s'"), filename.c_str());
+        wxLogError(wxT("can't handle '%s'"), filename);
     }
 }
 @endcode

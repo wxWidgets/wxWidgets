@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# This script is used by both GitHub and Travis CI to install the dependencies
+# This script is used by GitHub to install the dependencies
 # before building wxWidgets but can also be run by hand if necessary (but
 # currently it only works for Ubuntu versions used by the CI builds).
 

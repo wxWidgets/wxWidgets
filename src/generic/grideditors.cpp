@@ -653,7 +653,7 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
         }
         else
         {
-            wxLogDebug( wxT("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params.c_str() );
+            wxLogDebug( wxT("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params );
         }
     }
 }
@@ -934,7 +934,7 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
             }
         }
 
-        wxLogDebug(wxT("Invalid wxGridCellNumberEditor parameter string '%s' ignored"), params.c_str());
+        wxLogDebug(wxT("Invalid wxGridCellNumberEditor parameter string '%s' ignored"), params);
     }
 }
 
@@ -1107,7 +1107,7 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params);
             }
         }
 
@@ -1121,7 +1121,7 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params);
             }
         }
 

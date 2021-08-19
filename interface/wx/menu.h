@@ -952,7 +952,7 @@ public:
         @return
             @true if the command was handled, @false otherwise.
 
-        @onlyfor{wxMSW}
+        @onlyfor{wxmsw}
 
         @since 3.1.5
     */

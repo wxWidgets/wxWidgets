@@ -40,6 +40,7 @@ jobs:
             git fetch --depth=1 origin master
             git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol,tab-in-indent \
                 diff --check origin/master \
+                ':!.gitmodules' \
                 ':!Makefile.in' \
                 ':!config.guess' \
                 ':!config.sub' \
@@ -48,6 +49,7 @@ jobs:
                 ':!install-sh' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
+                ':!**/Info*.plist*' \
                 ':!**/*.sln' \
                 ':!**/*.vcproj' \
                 ':!**/*.xpm'
