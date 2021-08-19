@@ -1,6 +1,7 @@
 name: Mac make CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths-ignore:
