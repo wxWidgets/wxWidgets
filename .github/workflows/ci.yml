@@ -6,12 +6,9 @@ on:
     branches:
       - master
     paths-ignore:
-<<<<<<< osx-selfhosted-M1
       - '.github/workflows/MacS-M1-make.yml'
-=======
       - '.github/workflows/ci_cmake.yml'
       - '.github/workflows/ci_msw_cross.yml'
->>>>>>> master
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -27,12 +24,9 @@ on:
     branches:
       - master
     paths-ignore:
-<<<<<<< osx-selfhosted-M1
       - '.github/workflows/MacS-M1-make.yml'
-=======
       - '.github/workflows/ci_cmake.yml'
       - '.github/workflows/ci_msw_cross.yml'
->>>>>>> master
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
