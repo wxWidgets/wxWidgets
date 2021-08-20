@@ -263,7 +263,7 @@ bool wxTextMeasureBase::DoGetPartialTextExtents(const wxString& text,
     int totalWidth = 0;
 
     // reset the cache if font or horizontal scale have changed
-    const wxFont font = GetFont();
+    const wxFont& font = GetFont();
     if ( !s_fontWidthCache.m_widths ||
          !wxIsSameDouble(s_fontWidthCache.m_scaleX, scaleX) ||
          (s_fontWidthCache.m_font != font) )
