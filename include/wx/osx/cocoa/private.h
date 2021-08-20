@@ -436,6 +436,8 @@ public:
     - (void)textDidChange:(NSNotification *)aNotification;
     - (void)changeColor:(id)sender;
 
+    @property (retain) NSUndoManager* undoManager;
+
     @end
 
     @interface wxNSComboBox : NSComboBox

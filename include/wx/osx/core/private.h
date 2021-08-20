@@ -730,6 +730,7 @@ public :
     virtual void Undo() ;
     virtual bool CanRedo() const;
     virtual void Redo() ;
+    virtual void EmptyUndoBuffer() ;
     virtual int GetNumberOfLines() const ;
     virtual long XYToPosition(long x, long y) const;
     virtual bool PositionToXY(long pos, long *x, long *y) const ;

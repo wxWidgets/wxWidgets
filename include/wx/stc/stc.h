@@ -3642,7 +3642,7 @@ public:
     bool CanUndo() const wxOVERRIDE;
 
     // Delete the undo history.
-    void EmptyUndoBuffer();
+    void EmptyUndoBuffer() wxOVERRIDE;
 
     // Undo one action in the undo history.
     void Undo() wxOVERRIDE;

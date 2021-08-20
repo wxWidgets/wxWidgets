@@ -426,12 +426,27 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     }
 }
 
+- (instancetype)initWithFrame:(NSRect)frameRect
+{
+    self = [super initWithFrame:frameRect];
+    if ( self )
+    {
+        self.undoManager = [[[NSUndoManager alloc] init] autorelease];
+    }
+    return self;
+}
+
 - (void)textDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
         impl->controlTextDidChange();
+}
+
+- (nullable NSUndoManager *)undoManagerForTextView:(NSTextView *)view
+{
+    return self.undoManager;
 }
 
 
@@ -773,6 +788,10 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
 
     [tv setDelegate: tv];
 
+    m_undoManager = tv.undoManager;
+
+    [tv setAllowsUndo:YES];
+
     InstallEventHandler(tv);
 }
 
@@ -1017,6 +1036,46 @@ void wxNSTextViewControl::controlTextDidChange()
     wxNSTextBase::controlTextDidChange();
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
+}
+
+bool wxNSTextViewControl::CanUndo() const
+{
+    if ( !m_undoManager )
+        return false;
+
+    return [m_undoManager canUndo];
+}
+
+void wxNSTextViewControl::Undo()
+{
+    if ( !m_undoManager )
+        return;
+
+    [m_undoManager undo];
+}
+
+bool wxNSTextViewControl::CanRedo() const
+{
+    if ( !m_undoManager )
+        return false;
+
+    return [m_undoManager canRedo];
+}
+
+void wxNSTextViewControl::Redo()
+{
+    if ( !m_undoManager )
+        return;
+
+    [m_undoManager redo];
+}
+
+void wxNSTextViewControl::EmptyUndoBuffer()
+{
+    if ( !m_undoManager )
+        return;
+
+    [m_undoManager removeAllActions];
 }
 
 void wxNSTextViewControl::DoUpdateTextStyle()

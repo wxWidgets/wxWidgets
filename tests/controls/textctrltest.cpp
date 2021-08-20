@@ -20,6 +20,7 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/platinfo.h"
 #include "wx/scopedptr.h"
 #include "wx/uiaction.h"
 
@@ -1471,5 +1472,43 @@ TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
         CHECK( !text->CanUndo() );
     }
 }
+
+// This test would always fail with MinGW-32 for the same reason as described
+// above.
+#ifndef __MINGW32_TOOLCHAIN__
+
+TEST_CASE("wxTextCtrl::EmptyUndoBuffer", "[wxTextCtrl][undo]")
+{
+    if ( wxIsRunningUnderWine() )
+    {
+        // Wine doesn't implement EM_GETOLEINTERFACE and related stuff currently
+        WARN("Skipping test known to fail under Wine.");
+        return;
+    }
+
+    wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(wxTheApp->GetTopWindow(),
+                                                wxID_ANY, "",
+                                                wxDefaultPosition,
+                                                wxDefaultSize,
+                                                wxTE_MULTILINE | wxTE_RICH2));
+
+    text->AppendText("foo");
+
+    if ( !text->CanUndo() )
+    {
+        WARN("Skipping test as Undo() is not supported on this platform.");
+        return;
+    }
+
+    text->EmptyUndoBuffer();
+
+    CHECK_FALSE( text->CanUndo() );
+
+    CHECK_NOTHROW( text->Undo() );
+
+    CHECK( text->GetValue() == "foo" );
+}
+
+#endif // __MINGW32_TOOLCHAIN__
 
 #endif //wxUSE_TEXTCTRL
