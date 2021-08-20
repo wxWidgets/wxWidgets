@@ -80,7 +80,7 @@ jobs:
           cxxconfig:
 
     env:
-      wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }} ${{ matrix.cxxconfig }} --with-cxx=${{ matrix.cxx }} --prefix=`pwd`/localbin_${{ matrix.arch }}
+      wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }} ${{ matrix.cxxconfig }} --with-cxx=${{ matrix.cxx }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
       NSUnbufferedIO: YES
 
