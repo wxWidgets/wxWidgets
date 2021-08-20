@@ -429,6 +429,11 @@ protected:
     wxString m_cpuArch;
 };
 
-
+// Returns true only for MSW programs running under Wine.
+#ifdef __WINDOWS__
+WXDLLIMPEXP_BASE bool wxIsRunningUnderWine();
+#else // !__WINDOWS__
+inline bool wxIsRunningUnderWine() { return false; }
+#endif // __WINDOWS__/!__WINDOWS__
 
 #endif // _WX_PLATINFO_H_

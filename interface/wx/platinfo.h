@@ -629,3 +629,16 @@ public:
 
     //@}
 };
+
+/**
+    Returns true only for MSW programs running under Wine.
+
+    This function can be used to check for some functionality not implemented
+    when using Wine.
+
+    @since 3.1.6
+
+    @library{wxbase}
+    @category{cfg}
+*/
+bool wxIsRunningUnderWine();
