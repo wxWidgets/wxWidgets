@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 28 January 2021                                                     *
+# Date : 18 August 2021                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -656,6 +656,7 @@ geometry.obj : geometry.cpp
 matrix.obj : matrix.cpp
 radiocmn.obj : radiocmn.cpp
 regex.obj : regex.cpp
+	cxx$(CXX_DEFINE)/warn=disable=(INTSIGNCHANGE)/obj=regex.obj regex.cpp
 taskbarcmn.obj : taskbarcmn.cpp
 xti.obj : xti.cpp
 xtistrm.obj : xtistrm.cpp
