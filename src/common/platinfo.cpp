@@ -29,6 +29,10 @@
 
 #include "wx/apptrait.h"
 
+#ifdef __WINDOWS__
+    #include "wx/dynlib.h"
+#endif
+
 // global object
 // VERY IMPORTANT: do not use the default constructor since it would
 //                 try to init the wxPlatformInfo instance using
@@ -373,3 +377,12 @@ wxEndianness wxPlatformInfo::GetEndianness(const wxString& end)
 
     return wxENDIAN_INVALID;
 }
+
+#ifdef __WINDOWS__
+
+bool wxIsRunningUnderWine()
+{
+    return wxLoadedDLL("ntdll.dll").HasSymbol(wxS("wine_get_version"));
+}
+
+#endif // __WINDOWS__
