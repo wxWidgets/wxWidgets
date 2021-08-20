@@ -74,6 +74,8 @@ public:
     virtual void MarkDirty() wxOVERRIDE;
     virtual void DiscardEdits() wxOVERRIDE;
 
+    virtual void EmptyUndoBuffer() wxOVERRIDE;
+
     // text control under some platforms supports the text styles: these
     // methods apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
