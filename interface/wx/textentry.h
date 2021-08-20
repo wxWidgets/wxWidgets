@@ -168,8 +168,9 @@ public:
     /**
         Delete the undo history.
 
-        Currently only implemented under macOS and only for multiline text
-        controls, does nothing in the other ports.
+        Currently only implemented in wxMSW (for controls using wxTE_RICH2
+        style only) and wxOSX (for multiline text controls only), does nothing
+        in the other ports or for the controls not using the appropriate styles.
 
         @since 3.1.6
     */

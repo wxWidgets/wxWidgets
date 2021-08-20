@@ -690,33 +690,16 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
     }
 
-#if wxUSE_RICHEDIT && wxUSE_OLE && defined(wxHAS_TOM_H)
+#if wxUSE_RICHEDIT
     // For RichEdit >= 4, SetFont(), called above from MSWCreateControl(), uses
     // EM_SETCHARFORMAT which affects the undo buffer, meaning that CanUndo()
-    // for a newly created control returns true, which is unexpected. To avoid
-    // this, we explicitly use Undo(tomFalse) here to clear the undo buffer.
-    // And since Undo(tomFalse) also disables the undo buffer, we need to
-    // enable it again immediately after clearing by calling Undo(tomTrue).
+    // for a newly created control returns true, which is unexpected, so clear
+    // the undo buffer.
     if ( GetRichVersion() >= 4 )
     {
-        wxCOMPtr<IRichEditOle> pRichEditOle;
-        if ( SendMessage(GetHwnd(), EM_GETOLEINTERFACE,
-                         0, (LPARAM)&pRichEditOle) && pRichEditOle )
-        {
-            wxCOMPtr<ITextDocument> pDoc;
-            HRESULT hr = pRichEditOle->QueryInterface
-                                       (
-                                        wxIID_PPV_ARGS(ITextDocument, &pDoc)
-                                       );
-            if ( SUCCEEDED(hr) )
-            {
-                hr = pDoc->Undo(tomFalse, NULL);
-                if ( SUCCEEDED(hr) )
-                    pDoc->Undo(tomTrue, NULL);
-            }
-        }
+        EmptyUndoBuffer();
     }
-#endif // wxUSE_RICHEDIT && wxHAS_TOM_H
+#endif // wxUSE_RICHEDIT
 
     return true;
 }
@@ -2011,6 +1994,37 @@ bool wxTextCtrl::CanRedo() const
 
     return wxTextEntry::CanRedo();
 }
+
+#if wxUSE_RICHEDIT
+
+void wxTextCtrl::EmptyUndoBuffer()
+{
+#if wxUSE_OLE && defined(wxHAS_TOM_H)
+    // We need to use Undo(tomFalse) to clear the undo buffer, but calling it
+    // also disables the undo buffer, so we need to enable it again immediately
+    // after clearing by calling Undo(tomTrue).
+    if ( GetRichVersion() >= 4 )
+    {
+        wxCOMPtr<IRichEditOle> pRichEditOle;
+        if ( SendMessage(GetHwnd(), EM_GETOLEINTERFACE,
+                         0, (LPARAM)&pRichEditOle) && pRichEditOle )
+        {
+            wxCOMPtr<ITextDocument> pDoc;
+            HRESULT hr = pRichEditOle->QueryInterface
+                                       (
+                                        wxIID_PPV_ARGS(ITextDocument, &pDoc)
+                                       );
+            if ( SUCCEEDED(hr) )
+            {
+                hr = pDoc->Undo(tomFalse, NULL);
+                if ( SUCCEEDED(hr) )
+                    pDoc->Undo(tomTrue, NULL);
+            }
+        }
+    }
+#endif // wxUSE_OLE && wxHAS_TOM_H
+}
+#endif // wxUSE_RICHEDIT
 
 // ----------------------------------------------------------------------------
 // caret handling (Windows only)
