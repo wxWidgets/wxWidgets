@@ -81,8 +81,6 @@ public:
     virtual bool CanUndo() const = 0;
     virtual bool CanRedo() const = 0;
 
-    virtual void EmptyUndoBuffer() { }
-
 
     // insertion point
     // ---------------

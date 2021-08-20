@@ -259,6 +259,13 @@ void wxTextCtrl::DiscardEdits()
     m_dirty = false;
 }
 
+void wxTextCtrl::EmptyUndoBuffer()
+{
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
+    GetTextPeer()->EmptyUndoBuffer() ;
+}
+
 int wxTextCtrl::GetNumberOfLines() const
 {
     return GetTextPeer()->GetNumberOfLines() ;

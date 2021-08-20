@@ -1313,6 +1313,17 @@ public:
     virtual void DiscardEdits();
 
     /**
+        Delete the undo history.
+
+        Currently only implemented in wxMSW (for controls using wxTE_RICH2
+        style only) and wxOSX (for multiline text controls only), does nothing
+        in the other ports or for the controls not using the appropriate styles.
+
+        @since 3.1.6
+    */
+    virtual void EmptyUndoBuffer();
+
+    /**
         This function inserts into the control the character which would have
         been inserted if the given key event had occurred in the text control.
 

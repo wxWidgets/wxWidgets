@@ -574,6 +574,8 @@ public:
             DiscardEdits();
     }
 
+    virtual void EmptyUndoBuffer() { }
+
 
     // styles handling
     // ---------------

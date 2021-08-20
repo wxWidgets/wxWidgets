@@ -72,8 +72,6 @@ public:
     virtual bool CanUndo() const wxOVERRIDE;
     virtual bool CanRedo() const wxOVERRIDE;
 
-    virtual void EmptyUndoBuffer() wxOVERRIDE;
-
     // Insertion point
     virtual void SetInsertionPoint(long pos) wxOVERRIDE;
     virtual void SetInsertionPointEnd() wxOVERRIDE;
