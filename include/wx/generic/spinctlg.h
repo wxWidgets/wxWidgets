@@ -145,6 +145,9 @@ protected:
     // check if the value is in range
     bool InRange(double n) const { return (n >= m_min) && (n <= m_max); }
 
+    // adjust the value to fit the range and snap it to ticks if necessary
+    double AdjustAndSnap(double value) const;
+
     // ensure that the value is in range wrapping it round if necessary
     double AdjustToFitInRange(double value) const;
 
