@@ -2503,12 +2503,27 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         {
             StretchBltModeChanger stretchModeChanger(GetHdc());
 
+            /*
+            Workaround for #19190. See (reverted) 6614aa496d: "For some reason
+            in RTL mode, source offset has to be -1, otherwise the right
+            border (physical) remains unpainted." [note that the offset
+            actually is applied not only to the source but also dest]
+
+            Be conservative about using the offset and only do it for
+            currently currently known failing cases: when xdest and xsrc are
+            equal and only when not actually stretching.
+            */
+            const wxCoord ofs = (GetLayoutDirection() == wxLayout_RightToLeft
+                                 && xdest == xsrc
+                                 && srcWidth == dstWidth
+                                 && srcHeight == dstHeight) ? -1 : 0;
+
             if ( !::StretchBlt
                     (
                         GetHdc(),
-                        xdest, ydest, dstWidth, dstHeight,
+                        xdest + ofs, ydest, dstWidth, dstHeight,
                         hdcSrc,
-                        xsrc, ysrc, srcWidth, srcHeight,
+                        xsrc + ofs, ysrc, srcWidth, srcHeight,
                         dwRop
                     ) )
             {
