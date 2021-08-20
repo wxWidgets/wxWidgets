@@ -20,6 +20,7 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/platinfo.h"
 #include "wx/scopedptr.h"
 #include "wx/uiaction.h"
 
@@ -1478,6 +1479,13 @@ TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
 
 TEST_CASE("wxTextCtrl::EmptyUndoBuffer", "[wxTextCtrl][undo]")
 {
+    if ( wxIsRunningUnderWine() )
+    {
+        // Wine doesn't implement EM_GETOLEINTERFACE and related stuff currently
+        WARN("Skipping test known to fail under Wine.");
+        return;
+    }
+
     wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(wxTheApp->GetTopWindow(),
                                                 wxID_ANY, "",
                                                 wxDefaultPosition,
