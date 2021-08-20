@@ -182,6 +182,10 @@ Changes in behaviour which may result in build errors
 - Under macOS, 10.11 SDK is the minimum SDK, building and deploying under 10.10.5 and
   higher is supported, you must use at least Xcode 7.2.1.
 
+- wxOSX Xcode projects no longer include the i386 target by default and,
+  with Xcode 12 or later, build for the arm64 architecture in addition to
+  existing x86_64. See build/osx/wxcocoa.xcconfig for more information.
+
 - wxPGProperty ctors are not longer public since this class is intended to be
   a base class and should not be instantiated directly.
 
