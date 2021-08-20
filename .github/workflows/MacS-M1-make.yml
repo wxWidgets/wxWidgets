@@ -92,6 +92,7 @@ jobs:
 
     - name: Set environment variables
       run: |
+        echo TZ=UTC >> $GITHUB_ENV
         echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
         wxPROC_COUNT=`nproc`
         ((wxPROC_COUNT++))
