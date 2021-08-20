@@ -634,9 +634,6 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     size_t i = 0,
         count = ms_languagesDB->GetCount();
 
-#if defined(__UNIX__)
-    // first get the string identifying the language from the environment
-    wxString langFull;
 #ifdef __WXOSX__
     wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
 
@@ -644,10 +641,34 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     // az_Cyrl_AZ@calendar=buddhist;currency=JPY we just recreate the base info as expected by wx here
 
     wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
-    langFull = str.AsString()+"_";
+    const wxString langPrefix = str.AsString() + "_";
+
     str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
-    langFull += str.AsString();
-#else
+    const wxString langFull = langPrefix + str.AsString();
+
+    int langOnlyMatchIndex = wxNOT_FOUND;
+    for ( i = 0; i < count; i++ )
+    {
+        const wxString& fullname = ms_languagesDB->Item(i).CanonicalName;
+        if ( langFull == fullname )
+        {
+            // Exact match, no need to look any further.
+            break;
+        }
+
+        if ( fullname.StartsWith(langPrefix) )
+        {
+            // Matched just the language, keep looking, but we'll keep this if
+            // we don't find an exact match later.
+            langOnlyMatchIndex = i;
+        }
+    }
+
+    if ( i == count && langOnlyMatchIndex != wxNOT_FOUND )
+        i = langOnlyMatchIndex;
+#elif defined(__UNIX__)
+    // first get the string identifying the language from the environment
+    wxString langFull;
     if (!wxGetNonEmptyEnvVar(wxS("LC_ALL"), &langFull) &&
         !wxGetNonEmptyEnvVar(wxS("LC_MESSAGES"), &langFull) &&
         !wxGetNonEmptyEnvVar(wxS("LANG"), &langFull))
@@ -655,8 +676,6 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         // no language specified, treat it as English
         return wxLANGUAGE_ENGLISH_US;
     }
-
-#endif
 
     // the language string has the following form
     //
