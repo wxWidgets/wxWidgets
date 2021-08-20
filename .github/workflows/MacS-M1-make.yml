@@ -173,7 +173,7 @@ jobs:
     - name: Installing
       if: matrix.skip_testing != true
       run: |
-        sudo make install
+        make install
 
     - name: Testing installation
       if: matrix.skip_testing != true
