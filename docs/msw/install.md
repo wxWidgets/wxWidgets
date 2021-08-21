@@ -181,7 +181,7 @@ Unix-like environment to work, i.e. one of MSYS, [MSYS2](https://www.msys2.org/)
 or [Cygwin](https://www.cygwin.com/), so the following steps should be done
 from MSYS or Cygwin shell prompt:
 
-1. Create a build directory: it is is strongly recommended to not
+1. Create a build directory: it is strongly recommended to not
    build the library in the directory containing the sources (`$WXWIN`)
    but to create a separate build directory instead. The build
    directory can be placed anywhere (using the fastest available disk
