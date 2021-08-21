@@ -1,5 +1,5 @@
 # CI workflow cross-building wxMSW under Linux.
-name: wxMSW cross-build
+name: MSW cross-builds
 
 on:
   push:
