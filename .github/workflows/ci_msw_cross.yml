@@ -7,6 +7,8 @@ on:
       - master
     paths-ignore:
       - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac_selfhosted.yml'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -25,6 +27,8 @@ on:
       - master
     paths-ignore:
       - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac_selfhosted.yml'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
