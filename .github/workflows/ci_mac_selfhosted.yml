@@ -73,16 +73,18 @@ jobs:
         include:
         - name: ARM C++11
           arch: arm64
-          configure_flags: --with-cxx=11 --disable-debug
+          configure_flags: --with-cxx=11
+          use_asan: true
         - name: Intel C++17
           arch: x86_64
           configure_flags: --with-cxx=17 --with-macosx-version-min=10.12 --enable-debug
         - name: Universal C++14
           arch: arm64
-          configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug
+          configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug --enable-optimise
 
     env:
       wxCONFIGURE_FLAGS: --disable-sys-libs --without-liblzma ${{ matrix.configure_flags }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
+      wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
       NSUnbufferedIO: YES
 
@@ -134,6 +136,15 @@ jobs:
       run: |
         wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
         ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+        if [ ${{ matrix.use_asan }} ]; then
+          wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+          wxASAN_CXXFLAGS=$wxASAN_CFLAGS
+          wxASAN_LDFLAGS="-fsanitize=address"
+
+          ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+        else
+          ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+        fi
         if [ -n "$rc" ]; then
           echo '*** Configuring failed, contents of config.log follows: ***'
           echo '-----------------------------------------------------------'
