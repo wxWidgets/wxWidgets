@@ -34,6 +34,10 @@ class WXDLLIMPEXP_FWD_CORE wxFileDialogBase;
 #include "wx/msgdlg.h"
 #include "wx/filedlg.h"
 
+#ifndef __WXDEBUG__
+    #include "wx/crt.h"
+#endif // !__WXDEBUG__
+
 #include <typeinfo>
 
 class wxTestingModalHook;
@@ -421,10 +425,20 @@ protected:
     // course, can itself be customized.
     virtual void ReportFailure(const wxString& msg)
     {
+#ifdef __WXDEBUG__
         wxFAIL_MSG_AT( msg,
                        m_file ? m_file : __FILE__,
                        m_line ? m_line : __LINE__,
                        m_func ? m_func : __WXFUNCTION__ );
+#else // !__WXDEBUG__
+        // We still need to report the failure somehow when wx asserts are
+        // disabled.
+        wxFprintf(stderr, wxASCII_STR("%s at %s:%d in %s()\n"),
+                  msg,
+                  wxASCII_STR(m_file ? m_file : __FILE__),
+                  m_line ? m_line : __LINE__,
+                  wxASCII_STR(m_func ? m_func : __WXFUNCTION__));
+#endif // __WXDEBUG__/!__WXDEBUG__
     }
 
 private:

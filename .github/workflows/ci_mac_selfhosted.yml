@@ -1,12 +1,14 @@
-name: Mac make CI
+name: Mac builds
 
 on:
   workflow_dispatch:
   push:
     branches: [ master ]
     paths-ignore:
+    - '.github/workflows/ci.yml'
+    - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw_cross.yml'
     - 'build/tools/appveyor*.bat'
-    - 'build/tools/travis-ci.sh'
     - 'distrib/**'
     - 'docs/**'
     - 'interface/**'
@@ -30,8 +32,10 @@ on:
   pull_request:
     branches: [ master ]
     paths-ignore:
+    - '.github/workflows/ci.yml'
+    - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw_cross.yml'
     - 'build/tools/appveyor*.bat'
-    - 'build/tools/travis-ci.sh'
     - 'distrib/**'
     - 'docs/**'
     - 'interface/**'
@@ -61,26 +65,26 @@ jobs:
 
     runs-on: self-hosted
 
-    name: ${{ matrix.build }}, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
+    name: ${{ matrix.name }}
 
     strategy:
       fail-fast: false
       matrix:
-        arch: [arm64e, x86_64]
-        build: [debug, release]
-        cxx: [11, 17]
         include:
-        - build: debug
-          configure_flags: --without-liblzma --enable-debug --disable-sys-libs --with-osx_cocoa
-        - build: release
-          configure_flags: --without-liblzma --disable-sys-libs --with-osx_cocoa
-        - cxx: 17
-          cxxconfig: --with-macosx-version-min=10.12
-        - cxx: 11
-          cxxconfig:
+        - name: ARM C++11
+          arch: arm64
+          configure_flags: --with-cxx=11
+          use_asan: true
+        - name: Intel C++17
+          arch: x86_64
+          configure_flags: --with-cxx=17 --with-macosx-version-min=10.12 --enable-debug
+        - name: Universal C++14
+          arch: arm64
+          configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug --enable-optimise
 
     env:
-      wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }} ${{ matrix.cxxconfig }} --with-cxx=${{ matrix.cxx }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
+      wxCONFIGURE_FLAGS: --disable-sys-libs --without-liblzma ${{ matrix.configure_flags }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
+      wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
       NSUnbufferedIO: YES
 
@@ -132,6 +136,15 @@ jobs:
       run: |
         wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
         ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+        if [ ${{ matrix.use_asan }} ]; then
+          wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+          wxASAN_CXXFLAGS=$wxASAN_CFLAGS
+          wxASAN_LDFLAGS="-fsanitize=address"
+
+          ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+        else
+          ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+        fi
         if [ -n "$rc" ]; then
           echo '*** Configuring failed, contents of config.log follows: ***'
           echo '-----------------------------------------------------------'
