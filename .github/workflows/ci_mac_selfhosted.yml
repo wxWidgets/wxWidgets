@@ -1,12 +1,14 @@
-name: Mac make CI
+name: Mac builds
 
 on:
   workflow_dispatch:
   push:
     branches: [ master ]
     paths-ignore:
+    - '.github/workflows/ci.yml'
+    - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw_cross.yml'
     - 'build/tools/appveyor*.bat'
-    - 'build/tools/travis-ci.sh'
     - 'distrib/**'
     - 'docs/**'
     - 'interface/**'
@@ -30,8 +32,10 @@ on:
   pull_request:
     branches: [ master ]
     paths-ignore:
+    - '.github/workflows/ci.yml'
+    - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw_cross.yml'
     - 'build/tools/appveyor*.bat'
-    - 'build/tools/travis-ci.sh'
     - 'distrib/**'
     - 'docs/**'
     - 'interface/**'
