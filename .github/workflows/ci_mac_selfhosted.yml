@@ -65,26 +65,24 @@ jobs:
 
     runs-on: self-hosted
 
-    name: ${{ matrix.build }}, arch ${{ matrix.arch }}, cxx${{ matrix.cxx }}
+    name: ${{ matrix.name }}
 
     strategy:
       fail-fast: false
       matrix:
-        arch: [arm64e, x86_64]
-        build: [debug, release]
-        cxx: [11, 17]
         include:
-        - build: debug
-          configure_flags: --without-liblzma --enable-debug --disable-sys-libs --with-osx_cocoa
-        - build: release
-          configure_flags: --without-liblzma --disable-sys-libs --with-osx_cocoa
-        - cxx: 17
-          cxxconfig: --with-macosx-version-min=10.12
-        - cxx: 11
-          cxxconfig:
+        - name: ARM C++11
+          arch: arm64
+          configure_flags: --with-cxx=11 --disable-debug
+        - name: Intel C++17
+          arch: x86_64
+          configure_flags: --with-cxx=17 --with-macosx-version-min=10.12 --enable-debug
+        - name: Universal C++14
+          arch: arm64
+          configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug
 
     env:
-      wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }} ${{ matrix.cxxconfig }} --with-cxx=${{ matrix.cxx }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
+      wxCONFIGURE_FLAGS: --disable-sys-libs --without-liblzma ${{ matrix.configure_flags }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
       NSUnbufferedIO: YES
 
