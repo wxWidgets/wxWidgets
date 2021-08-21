@@ -125,12 +125,16 @@ void MiscTestCase::Delete()
 namespace
 {
 
+#ifdef __WXDEBUG__
+
 // helper function used just to avoid warnings about value computed not being
 // used in WX_ASSERT_FAILS_WITH_ASSERT() in StaticCast() below
 bool IsNull(void *p)
 {
     return p == NULL;
 }
+
+#endif // __WXDEBUG__
 
 } // anonymous namespace
 
