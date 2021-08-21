@@ -216,3 +216,6 @@ public:
         const wxString& appId = wxString());
 };
 
+wxEventType wxEVT_NOTIFICATION_MESSAGE_CLICK;
+wxEventType wxEVT_NOTIFICATION_MESSAGE_DISMISSED;
+wxEventType wxEVT_NOTIFICATION_MESSAGE_ACTION;
