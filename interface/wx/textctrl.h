@@ -1002,6 +1002,8 @@ public:
     @endcode
 
     @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::IsProofCheckEnabled().
+
+    @since 3.1.6
 */
 class WXDLLIMPEXP_CORE wxTextProofOptions
 {
