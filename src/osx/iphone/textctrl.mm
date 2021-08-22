@@ -500,19 +500,6 @@ void wxUITextViewControl::SetStyle(long start,
     }
 }
 
-#if wxUSE_SPELLCHECK
-
-void wxUITextViewControl::CheckSpelling(const wxTextProofOptions& WXUNUSED(options))
-{
-}
-
-bool wxUITextViewControl::IsSpellingCheckEnabled() const
-{
-    return false;
-}
-
-#endif // wxUSE_SPELLCHECK
-
 wxSize wxUITextViewControl::GetBestSize() const
 {
     wxRect r;
