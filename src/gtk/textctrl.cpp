@@ -32,11 +32,11 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
-#if wxUSE_SPELLCHECK
+#if wxUSE_SPELLCHECK && defined(__WXGTK3__)
 extern "C" {
 #include <gtkspell-3.0/gtkspell/gtkspell.h>
 }
-#endif // wxUSE_SPELLCHECK
+#endif // wxUSE_SPELLCHECK && __WXGTK3__
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -1023,7 +1023,7 @@ void wxTextCtrl::GTKSetJustification()
     }
 }
 
-#if wxUSE_SPELLCHECK
+#if wxUSE_SPELLCHECK && defined(__WXGTK3__)
 
 bool wxTextCtrl::EnableProofCheck(bool enable, const wxTextProofOptions& options)
 {
@@ -1072,7 +1072,7 @@ bool wxTextCtrl::IsProofCheckEnabled() const
     return (spell != NULL);
 }
 
-#endif // wxUSE_SPELLCHECK
+#endif // wxUSE_SPELLCHECK && __WXGTK3__
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {

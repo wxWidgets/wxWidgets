@@ -216,11 +216,7 @@
 
 #define wxUSE_SECRETSTORE   0
 
-#if (defined(__WXGTK3__) || defined(__WXMSW__))
 #define wxUSE_SPELLCHECK 0
-#else
-#define wxUSE_SPELLCHECK 0
-#endif
 
 #define wxUSE_STDPATHS      0
 
