@@ -480,7 +480,8 @@ public:
     // this enum declares which methods should not be overridden in the native view classes
     enum wxOSXSkipOverrides {
         wxOSXSKIP_NONE = 0x0,
-        wxOSXSKIP_DRAW = 0x1
+        wxOSXSKIP_DRAW = 0x1,
+        wxOSXSKIP_DND = 0x2
     };
 
     void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags = wxOSXSKIP_NONE);
