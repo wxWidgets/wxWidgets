@@ -2682,9 +2682,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         // Multi-selections should not be cleared if a selected item is clicked.
         if (!IsHighlighted(current))
         {
-            HighlightAll(false);
+            size_t oldCurrent = m_current;
             ChangeCurrent(current);
-            HighlightOnly(m_current);
+            HighlightOnly(m_current, oldCurrent);
         }
 
         SendNotify( current, wxEVT_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
