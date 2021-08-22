@@ -344,12 +344,9 @@ void wxTextCtrl::Paste()
 
 #if wxUSE_SPELLCHECK
 
-bool wxTextCtrl::EnableProofCheck(
-        bool enable,
-        const wxTextProofOptions& WXUNUSED(options)
-    )
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
 {
-    GetTextPeer()->CheckSpelling(enable);
+    GetTextPeer()->CheckSpelling(options.IsSpellCheckingEnabled());
 
     return true;
 }

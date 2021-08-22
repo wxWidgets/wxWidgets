@@ -982,24 +982,27 @@ public:
     @class wxTextProofOptions
 
     This class provides a convenient means of passing multiple parameters to
-    wxTextCtrl::EnableProofCheck(). Typical (and the default) usage is:
+    wxTextCtrl::EnableProofCheck().
+
+    By default, i.e. when calling EnableProofCheck() without any parameters,
+    Default() proof options are used, which enable spelling (but not grammar)
+    checks for the current language.
+
+    However it is also possible to customize the options:
 
     @code
-    m_pText->EnableProofCheck(true, wxTextProofOptions(wxEmptyString).SpellCheck(true));
+    textctrl->EnableProofCheck(wxTextProofOptions::Default().Language("fr").GrammarCheck());
     @endcode
 
-    If this is the exact behaviour desired, then the parameters can be omitted.
-    The following code will have the same result:
+    or disable the all checks entirely:
 
     @code
-    m_pText->EnableProofCheck();
+    textctrl->EnableProofCheck(wxTextProofOptions::Disable());
     @endcode
 
-    Options can also be cascaded if required as follows:
-
-    @code
-    m_pText->EnableProofCheck(true, wxTextProofOptions("fr_FR").SpellCheck(false).GrammarCheck(true));
-    @endcode
+    Note that this class has no public constructor, except for the copy
+    constructor, so its objects can only be created using the static factory
+    methods Default() or Disable().
 
     @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::IsProofCheckEnabled().
 
@@ -1008,24 +1011,22 @@ public:
 class WXDLLIMPEXP_CORE wxTextProofOptions
 {
     /**
-       Default constructor. The proofing language is set to the current locale language,
-       spell checking is enabled and grammar checking is disabled.
+       Create an object corresponding to the default checks.
 
-       @param lang
-        The ISO 639 / ISO 3166 canonical language name of the dictionary
-        to be used. See wxLocale::GetCanonicalName() for examples. If an
-        empty string is passed (default), then the current locale will be
-        used. This parameter is ignored and only the current locale
-        language (default option) is supported at this time.
+       The returned object enables spelling checks and disables grammar checks.
      */
-    wxTextProofOptions(const wxString& lang = wxEmptyString)
+    static wxTextProofOptions Default()
+
+    /**
+       Create an object disabling all checks.
+
+       The returned object can be passed to wxTextCtrl::EnableProofCheck() to
+       disable all checks in the text control.
+     */
+    static wxTextProofOptions Disable()
 
     /**
        Enable / disable spell checking for this control.
-
-       This option is currently hard coded to @true and is ignored.
-       Use the global enable parameter passed to
-       wxTextCtrl::EnableProofCheck() to enable / disable spell checking.
      */
     wxTextProofOptions& SpellCheck(bool enable = true)
 
@@ -1035,6 +1036,12 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
        This option is not currently supported and is ignored.
      */
     wxTextProofOptions& GrammarCheck(bool enable = true)
+
+    /// Return true if spell checking is enabled.
+    bool IsSpellCheckingEnabled() const;
+
+    /// Return true if grammar checking is enabled.
+    bool IsGrammarCheckingEnabled() const;
 };
 
 /**
@@ -1402,24 +1409,23 @@ public:
         that the text control has the wxTE_RICH2 style set. wxGTK3 and wxOSX
         require that the control has the wxTE_MULTILINE style.
 
-        @param enable
-            Enables native proof checking if true, disables it otherwise.
-
         @param options
             A wxTextProofOptions object specifying the desired behaviour
             of the proof checker (e.g. language to use, spell check, grammar
-            check, etc.). This parameter is currently unused and the control is
-            initialised with the default setting of current locale language /
-            spell check only.
+            check, etc.) and whether the proof checks should be enabled at all.
+            By default, spelling checks for the current language are enabled.
+            Passing wxTextProofOptions::Disable() disables all the checks.
 
         @return
-            @true if proof checking has been successfully enabled (and true was
-            passed as the enable parameter), @false otherwise.
+            @true if proof checking has been successfully enabled or disabled,
+            @false otherwise (usually because the corresponding functionality
+            is not available under the current platform or for this type of
+            text control).
 
         @since 3.1.6
     */
-    virtual bool EnableProofCheck(bool enable = true,
-                                  const wxTextProofOptions& options = wxTextProofOptions());
+    virtual bool EnableProofCheck(const wxTextProofOptions& options
+                                    = wxTextProofOptions::Default());
 
     /**
         Returns the style currently used for the new text.

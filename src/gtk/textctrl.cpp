@@ -1025,7 +1025,7 @@ void wxTextCtrl::GTKSetJustification()
 
 #if wxUSE_SPELLCHECK && defined(__WXGTK3__)
 
-bool wxTextCtrl::EnableProofCheck(bool enable, const wxTextProofOptions& options)
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
 {
     wxCHECK_MSG( IsMultiLine(), false,
                 "Unable to enable spell check on control "
@@ -1036,7 +1036,7 @@ bool wxTextCtrl::EnableProofCheck(bool enable, const wxTextProofOptions& options
 
     GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
 
-    if ( enable )
+    if ( options.IsSpellCheckingEnabled() )
     {
         if ( !spell )
         {

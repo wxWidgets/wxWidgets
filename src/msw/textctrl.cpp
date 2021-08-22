@@ -834,7 +834,7 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 #if wxUSE_RICHEDIT && wxUSE_SPELLCHECK
 
-bool wxTextCtrl::EnableProofCheck(bool enable, const wxTextProofOptions& WXUNUSED(options))
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
 {
     wxCHECK_MSG((m_windowStyle & wxTE_RICH2), false,
             "Unable to enable proof checking on a control "
@@ -846,7 +846,7 @@ bool wxTextCtrl::EnableProofCheck(bool enable, const wxTextProofOptions& WXUNUSE
 
     LRESULT langOptions = ::SendMessage(GetHwnd(), EM_GETLANGOPTIONS, 0, 0);
 
-    if ( enable )
+    if ( options.IsSpellCheckingEnabled() )
         langOptions |= IMF_SPELLCHECKING;
     else
         langOptions &= ~IMF_SPELLCHECKING;

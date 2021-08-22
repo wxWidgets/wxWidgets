@@ -114,10 +114,8 @@ public:
 #if wxUSE_RICHEDIT && wxUSE_SPELLCHECK
     // Use native spelling and grammar checking functions.
     // This is only available in wxTE_RICH2 controls.
-    virtual bool EnableProofCheck(
-            bool enable = true,
-            const wxTextProofOptions& options = wxTextProofOptions()
-        ) wxOVERRIDE;
+    virtual bool EnableProofCheck(const wxTextProofOptions& options
+                                    = wxTextProofOptions::Default()) wxOVERRIDE;
     virtual bool IsProofCheckEnabled() const wxOVERRIDE;
 #endif // wxUSE_RICHEDIT && wxUSE_SPELLCHECK
 

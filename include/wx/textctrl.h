@@ -129,20 +129,29 @@ enum wxTextCtrlHitTestResult
 #if wxUSE_SPELLCHECK
 
 // ----------------------------------------------------------------------------
-// wxTextCtrl proof options object
-// Passed to ::EnableProofCheck() to configure the proofing options for
-// this control
+// This object can be passed to wxTextCtrl::EnableProofCheck() to configure the
+// proofing options for this control.
 // ----------------------------------------------------------------------------
 class wxTextProofOptions
 {
 public:
-    wxTextProofOptions(const wxString& lang = wxEmptyString)
-    : m_lang(lang)
+    // Return the object corresponding to the default options: current
+    // language, spell checking enabled, grammar checking disabled.
+    static wxTextProofOptions Default()
     {
-        m_EnableSpellCheck = true;
-        m_EnableGrammarCheck = false;
+        wxTextProofOptions opts;
+        return opts.SpellCheck(true);
     }
 
+    // Return the object with all checks disabled.
+    static wxTextProofOptions Disable()
+    {
+        return wxTextProofOptions();
+    }
+
+    // Default copy ctor, assignment operator and dtor are ok
+
+    // Methods that can be used to set the various options.
     wxTextProofOptions& SpellCheck(bool enable = true)
     {
         m_EnableSpellCheck = enable;
@@ -155,9 +164,26 @@ public:
         return *this;
     }
 
+    wxTextProofOptions& Language(const wxString& lang)
+    {
+        m_lang = lang;
+        return *this;
+    }
+
+    // And the corresponding accessors.
+    bool IsSpellCheckingEnabled() const { return m_EnableSpellCheck; }
+    bool IsGrammarCheckingEnabled() const { return m_EnableGrammarCheck; }
     const wxString& GetLang() const { return m_lang; }
 
 private:
+    // Ctor is private, use static factory methods to create objects of this
+    // class.
+    wxTextProofOptions()
+    {
+        m_EnableSpellCheck =
+        m_EnableGrammarCheck = false;
+    }
+
     wxString m_lang;
     bool m_EnableSpellCheck;
     bool m_EnableGrammarCheck;
@@ -799,10 +825,8 @@ public:
 
 #if wxUSE_SPELLCHECK
     // Use native spelling and grammar checking functions.
-    virtual bool EnableProofCheck(
-            bool WXUNUSED(enable) = true,
-            const wxTextProofOptions& WXUNUSED(options) = wxTextProofOptions()
-        )
+    virtual bool EnableProofCheck(const wxTextProofOptions& WXUNUSED(options)
+                                    = wxTextProofOptions::Default())
     {
         return false;
     }

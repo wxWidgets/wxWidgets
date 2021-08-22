@@ -1209,7 +1209,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_enter->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("enter"))));
 
 #if wxUSE_SPELLCHECK
-    if ( !m_enter->EnableProofCheck(true, wxTextProofOptions("en_US").SpellCheck()) )
+    // Enable grammar check just for demonstration purposes (note that it's
+    // only supported under Mac, but spell checking will be enabled under the
+    // other platforms too, if supported). If we didn't want to enable it, we
+    // could omit the EnableProofCheck() argument entirely.
+    if ( !m_enter->EnableProofCheck(wxTextProofOptions::Default().GrammarCheck()) )
     {
         wxMessageDialog error(this,
                                 wxT("Spell checking is not available on this platform or control style."),
