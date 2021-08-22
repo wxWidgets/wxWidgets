@@ -1086,7 +1086,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
         }
     }
 
-    return wxStdInputHandler::HandleMouse(consumer, event);
+    return true;
 }
 
 bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
