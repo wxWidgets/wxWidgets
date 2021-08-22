@@ -133,7 +133,7 @@ enum wxTextCtrlHitTestResult
 // Passed to ::EnableProofCheck() to configure the proofing options for
 // this control
 // ----------------------------------------------------------------------------
-class WXDLLIMPEXP_CORE wxTextProofOptions
+class wxTextProofOptions
 {
 public:
     wxTextProofOptions(const wxString& lang = wxEmptyString)
