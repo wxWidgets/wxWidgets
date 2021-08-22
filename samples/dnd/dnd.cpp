@@ -1095,7 +1095,11 @@ void DnDFrame::OnUpdateUIPasteText(wxUpdateUIEvent& event)
     wxLogNull nolog;
 #endif
 
-    event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT) );
+    event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT)
+#if wxUSE_UNICODE
+        || wxTheClipboard->IsSupported(wxDF_UNICODETEXT)
+#endif
+    );
 }
 
 void DnDFrame::OnUpdateUIPasteBitmap(wxUpdateUIEvent& event)
@@ -1535,7 +1539,11 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    if ( !wxTheClipboard->IsSupported(wxDF_TEXT) )
+    if ( !wxTheClipboard->IsSupported(wxDF_TEXT)
+#if wxUSE_UNICODE
+        && !wxTheClipboard->IsSupported(wxDF_UNICODETEXT)
+#endif
+    )
     {
         wxLogWarning("No text data on clipboard");
 
