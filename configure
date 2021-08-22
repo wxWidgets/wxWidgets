@@ -33977,11 +33977,7 @@ fi
 
 if test "$wxUSE_SPELLCHECK" = "yes"; then
 
-    if test "$wxUSE_MSW" = 1 -o test "$wxUSE_OSX_COCOA" = 1; then
-                has_spellcheck_support=yes
-
-    elif test "$wxUSE_GTK" = 1; then
-        if test "$WXGTK3" = 1; then
+    if test "$WXGTK3" = 1; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTKSPELL" >&5
@@ -34042,16 +34038,16 @@ fi
 	echo "$GTKSPELL_PKG_ERRORS" >&5
 
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&5
-$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&2;}
-                    has_spellcheck_support=no
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&5
+$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&2;}
+                wxUSE_SPELLCHECK=no
 
 
 elif test $pkg_failed = untried; then
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&5
-$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spellchecking won't be available" >&2;}
-                    has_spellcheck_support=no
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&5
+$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&2;}
+                wxUSE_SPELLCHECK=no
 
 
 else
@@ -34060,24 +34056,13 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    CXXFLAGS="$GTKSPELL_CFLAGS $CXXFLAGS"
-                    LIBS="$GTKSPELL_LIBS $LIBS"
-                    has_spellcheck_support=yes
+                CXXFLAGS="$GTKSPELL_CFLAGS $CXXFLAGS"
+                LIBS="$GTKSPELL_LIBS $LIBS"
 
 fi
-        else
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Spellchecking is not supported on GTK < 3" >&5
-$as_echo "$as_me: WARNING: Spellchecking is not supported on GTK < 3" >&2;}
-            has_spellcheck_support=no
-        fi
-
-    else
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Spellchecking is not supported on this platform" >&5
-$as_echo "$as_me: WARNING: Spellchecking is not supported on this platform" >&2;}
-        has_spellcheck_support=no
     fi
 
-    if test "$has_spellcheck_support" = "yes"; then
+    if test "$wxUSE_SPELLCHECK" = "yes"; then
         $as_echo "#define wxUSE_SPELLCHECK 1" >>confdefs.h
 
     fi

@@ -5768,38 +5768,24 @@ dnl Spellchecking for wxTextCtrl
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_SPELLCHECK" = "yes"; then
-    dnl The required APIs are always available under MSW and OS X but we must
-    dnl have GTK3 and GNOME gtkspell under Unix to be able to compile this feature.
+    dnl The required APIs are always available under MSW and OS X and we don't
+    dnl implement support for spell checking in the other ports, but for GTK 3
+    dnl we need to check for gtkspell library.
 
-    if test "$wxUSE_MSW" = 1 -o test "$wxUSE_OSX_COCOA" = 1; then
-        dnl Always available under these systems
-        has_spellcheck_support=yes
-
-    elif test "$wxUSE_GTK" = 1; then
-        if test "$WXGTK3" = 1; then
-            PKG_CHECK_MODULES(GTKSPELL, [gtkspell3-3.0],
-                [
-                    CXXFLAGS="$GTKSPELL_CFLAGS $CXXFLAGS"
-                    LIBS="$GTKSPELL_LIBS $LIBS"
-                    has_spellcheck_support=yes
-                ],
-                [
-                    AC_MSG_WARN([gtkspell3-3.0 not found, spellchecking won't be available])
-                    has_spellcheck_support=no
-                ]
-            )
-        else
-            AC_MSG_WARN([Spellchecking is not supported on GTK < 3])
-            has_spellcheck_support=no
-        fi
-
-    else
-        dnl Not implemented in the other ports yet.
-        AC_MSG_WARN([Spellchecking is not supported on this platform])
-        has_spellcheck_support=no
+    if test "$WXGTK3" = 1; then
+        PKG_CHECK_MODULES(GTKSPELL, [gtkspell3-3.0],
+            [
+                CXXFLAGS="$GTKSPELL_CFLAGS $CXXFLAGS"
+                LIBS="$GTKSPELL_LIBS $LIBS"
+            ],
+            [
+                AC_MSG_WARN([gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available])
+                wxUSE_SPELLCHECK=no
+            ]
+        )
     fi
 
-    if test "$has_spellcheck_support" = "yes"; then
+    if test "$wxUSE_SPELLCHECK" = "yes"; then
         AC_DEFINE(wxUSE_SPELLCHECK)
     fi
 fi
