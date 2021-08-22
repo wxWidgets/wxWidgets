@@ -1398,9 +1398,9 @@ public:
         available on the current platform.
 
         Currently this is supported in wxMSW (when running under Windows 8 or
-        later) and wxGTK when using GTK 3. In addition, wxMSW requires that the
-        text control has the wxTE_RICH2 style set. wxGTK3 requires that the
-        control has the wxTE_MULTILINE style.
+        later), wxGTK when using GTK 3 and wxOSX. In addition, wxMSW requires
+        that the text control has the wxTE_RICH2 style set. wxGTK3 and wxOSX
+        require that the control has the wxTE_MULTILINE style.
 
         @param enable
             Enables native proof checking if true, disables it otherwise.
@@ -1566,9 +1566,8 @@ public:
         Returns @true if proof (spell) checking is currently active on this
         control, @false otherwise.
 
-        @onlyfor{wxmsw,wxgtk}
-
-        @see EnableProofCheck()
+        This function is implemented for the same platforms as
+        EnableProofCheck() and returns @false for the other ones.
 
         @since 3.1.6
     */

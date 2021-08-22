@@ -97,6 +97,15 @@ public:
     virtual void Cut() wxOVERRIDE;
     virtual void Paste() wxOVERRIDE;
 
+#if wxUSE_SPELLCHECK
+    // Use native spelling and grammar checking functions (multiline only).
+    virtual bool EnableProofCheck(
+            bool enable = true,
+            const wxTextProofOptions& options = wxTextProofOptions()
+        ) wxOVERRIDE;
+    virtual bool IsProofCheckEnabled() const wxOVERRIDE;
+#endif // wxUSE_SPELLCHECK
+
     // Implementation
     // --------------
     virtual void Command(wxCommandEvent& event) wxOVERRIDE;
@@ -130,7 +139,11 @@ public:
 
     virtual void MacVisibilityChanged() wxOVERRIDE;
     virtual void MacSuperChangedPosition() wxOVERRIDE;
-    virtual void MacCheckSpelling(bool check);
+
+    // Use portable EnableProofCheck() instead now.
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED( virtual void MacCheckSpelling(bool check) );
+#endif // WXWIN_COMPATIBILITY_3_0
 
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
     void OSXEnableAutomaticDashSubstitution(bool enable);

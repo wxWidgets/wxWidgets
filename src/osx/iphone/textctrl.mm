@@ -504,6 +504,11 @@ void wxUITextViewControl::CheckSpelling(bool check)
 {
 }
 
+bool wxUITextViewControl::IsSpellingCheckEnabled() const
+{
+    return false;
+}
+
 wxSize wxUITextViewControl::GetBestSize() const
 {
     wxRect r;

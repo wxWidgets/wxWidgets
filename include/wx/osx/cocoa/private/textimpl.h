@@ -128,6 +128,7 @@ public:
     virtual bool HasOwnContextMenu() const wxOVERRIDE { return true; }
 
     virtual void CheckSpelling(bool check) wxOVERRIDE;
+    virtual bool IsSpellingCheckEnabled() const wxOVERRIDE;
     virtual void EnableAutomaticQuoteSubstitution(bool enable) wxOVERRIDE;
     virtual void EnableAutomaticDashSubstitution(bool enable) wxOVERRIDE;
 

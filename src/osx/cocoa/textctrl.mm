@@ -1283,6 +1283,11 @@ void wxNSTextViewControl::CheckSpelling(bool check)
         [m_textView setContinuousSpellCheckingEnabled: check];
 }
 
+bool wxNSTextViewControl::IsSpellingCheckEnabled() const
+{
+    return m_textView && m_textView.continuousSpellCheckingEnabled;
+}
+
 void wxNSTextViewControl::EnableAutomaticQuoteSubstitution(bool enable)
 {
     if (m_textView)

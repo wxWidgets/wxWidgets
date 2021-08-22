@@ -72,6 +72,8 @@ public:
     virtual bool HasOwnContextMenu() const { return true; }
 
     virtual void CheckSpelling(bool check);
+    virtual bool IsSpellingCheckEnabled() const;
+
     virtual wxSize GetBestSize() const;
 
 protected:
