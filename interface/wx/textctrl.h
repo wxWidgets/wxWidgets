@@ -1397,10 +1397,10 @@ public:
         Enable or disable native spell checking on this text control if it is
         available on the current platform.
 
-        @onlyfor{wxmsw,wxgtk}
-        Currently wxMSW (>= Windows 7) and wxGTK3 are supported. In addition,
-        wxMSW use requires that the text control has the wxTE_RICH2 style
-        set. wxGTK3 requires that the control has the wxTE_MULTILINE style.
+        Currently this is supported in wxMSW (when running under Windows 8 or
+        later) and wxGTK when using GTK 3. In addition, wxMSW requires that the
+        text control has the wxTE_RICH2 style set. wxGTK3 requires that the
+        control has the wxTE_MULTILINE style.
 
         @param enable
             Enables native proof checking if true, disables it otherwise.
