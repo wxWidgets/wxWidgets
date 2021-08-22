@@ -5544,9 +5544,12 @@ long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& pt,
     return m_mainWin->FindItem( pt );
 }
 
-// TODO: sub item hit testing
-long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *) const
+long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *col) const
 {
+    // TODO: sub item hit testing
+    if ( col )
+        *col = -1;
+
     return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
 }
 
