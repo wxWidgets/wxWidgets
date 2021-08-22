@@ -799,10 +799,13 @@ public:
 
 #if wxUSE_SPELLCHECK
     // Use native spelling and grammar checking functions.
-    virtual bool EnableProofCheck(bool WXUNUSED(enable) = true,
-                                  const wxTextProofOptions& WXUNUSED(options) =
-                                  wxTextProofOptions())
-                                  { return false; }
+    virtual bool EnableProofCheck(
+            bool WXUNUSED(enable) = true,
+            const wxTextProofOptions& WXUNUSED(options) = wxTextProofOptions()
+        )
+    {
+        return false;
+    }
     virtual bool IsProofCheckEnabled() const { return false; }
 #endif // wxUSE_SPELLCHECK
 
