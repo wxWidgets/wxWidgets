@@ -2563,6 +2563,7 @@ void wxMenuBar::OnDismiss()
         m_current = -1;
 
         RefreshItem(current);
+        Update();
     }
 
     GiveAwayFocus();
