@@ -101,7 +101,7 @@ public:
     // Use native spelling and grammar checking functions (multiline only).
     virtual bool EnableProofCheck(const wxTextProofOptions& options
                                     = wxTextProofOptions::Default()) wxOVERRIDE;
-    virtual bool IsProofCheckEnabled() const wxOVERRIDE;
+    virtual wxTextProofOptions GetProofCheckOptions() const wxOVERRIDE;
 #endif // wxUSE_SPELLCHECK
 
     // Implementation

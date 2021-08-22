@@ -846,21 +846,26 @@ bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
 
     LRESULT langOptions = ::SendMessage(GetHwnd(), EM_GETLANGOPTIONS, 0, 0);
 
-    if ( options.IsSpellCheckingEnabled() )
+    if ( options.IsSpellCheckEnabled() )
         langOptions |= IMF_SPELLCHECKING;
     else
         langOptions &= ~IMF_SPELLCHECKING;
 
     ::SendMessage(GetHwnd(), EM_SETLANGOPTIONS, 0, langOptions);
 
-   return IsProofCheckEnabled();
+   return GetProofCheckOptions().IsSpellCheckEnabled();
 }
 
-bool wxTextCtrl::IsProofCheckEnabled() const
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
 {
+    wxTextProofOptions opts = wxTextProofOptions::Disable();
+
     LRESULT langOptions = ::SendMessage(GetHwnd(), EM_GETLANGOPTIONS, 0, 0);
 
-    return (langOptions & IMF_SPELLCHECKING);
+    if (langOptions & IMF_SPELLCHECKING)
+        opts.SpellCheck();
+
+    return opts;
 }
 
 #endif // wxUSE_SPELLCHECK

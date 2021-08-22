@@ -116,7 +116,7 @@ public:
     // This is only available in wxTE_RICH2 controls.
     virtual bool EnableProofCheck(const wxTextProofOptions& options
                                     = wxTextProofOptions::Default()) wxOVERRIDE;
-    virtual bool IsProofCheckEnabled() const wxOVERRIDE;
+    virtual wxTextProofOptions GetProofCheckOptions() const wxOVERRIDE;
 #endif // wxUSE_RICHEDIT && wxUSE_SPELLCHECK
 
     // Implementation from now on

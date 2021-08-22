@@ -1283,13 +1283,20 @@ void wxNSTextViewControl::CheckSpelling(const wxTextProofOptions& options)
 {
     wxCHECK_RET( m_textView, "control must be created first" );
 
-    m_textView.continuousSpellCheckingEnabled = options.IsSpellCheckingEnabled();
-    m_textView.grammarCheckingEnabled = options.IsGrammarCheckingEnabled();
+    m_textView.continuousSpellCheckingEnabled = options.IsSpellCheckEnabled();
+    m_textView.grammarCheckingEnabled = options.IsGrammarCheckEnabled();
 }
 
-bool wxNSTextViewControl::IsSpellingCheckEnabled() const
+wxTextProofOptions wxNSTextViewControl::GetCheckingOptions() const
 {
-    return m_textView && m_textView.continuousSpellCheckingEnabled;
+    wxTextProofOptions opts = wxTextProofOptions::Disable();
+    if ( m_textView )
+    {
+        opts.SpellCheck(m_textView.continuousSpellCheckingEnabled);
+        opts.GrammarCheck(m_textView.grammarCheckingEnabled);
+    }
+
+    return opts;
 }
 
 #endif // wxUSE_SPELLCHECK

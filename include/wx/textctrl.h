@@ -171,9 +171,14 @@ public:
     }
 
     // And the corresponding accessors.
-    bool IsSpellCheckingEnabled() const { return m_EnableSpellCheck; }
-    bool IsGrammarCheckingEnabled() const { return m_EnableGrammarCheck; }
+    bool IsSpellCheckEnabled() const { return m_EnableSpellCheck; }
+    bool IsGrammarCheckEnabled() const { return m_EnableGrammarCheck; }
     const wxString& GetLang() const { return m_lang; }
+
+    bool AnyChecksEnabled() const
+    {
+        return IsSpellCheckEnabled() || IsGrammarCheckEnabled();
+    }
 
 private:
     // Ctor is private, use static factory methods to create objects of this
@@ -830,7 +835,10 @@ public:
     {
         return false;
     }
-    virtual bool IsProofCheckEnabled() const { return false; }
+    virtual wxTextProofOptions GetProofCheckOptions() const
+    {
+        return wxTextProofOptions::Disable();
+    }
 #endif // wxUSE_SPELLCHECK
 
 protected:

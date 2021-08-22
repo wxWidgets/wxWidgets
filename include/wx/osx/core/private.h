@@ -741,7 +741,7 @@ public :
     virtual wxString GetLineText(long lineNo) const ;
 #if wxUSE_SPELLCHECK
     virtual void CheckSpelling(const wxTextProofOptions& WXUNUSED(options)) { }
-    virtual bool IsSpellingCheckEnabled() const { return false; }
+    virtual wxTextProofOptions GetCheckingOptions() const;
 #endif // wxUSE_SPELLCHECK
     virtual void EnableAutomaticQuoteSubstitution(bool WXUNUSED(enable)) {}
     virtual void EnableAutomaticDashSubstitution(bool WXUNUSED(enable)) {}

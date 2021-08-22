@@ -1036,7 +1036,7 @@ bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
 
     GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
 
-    if ( options.IsSpellCheckingEnabled() )
+    if ( options.IsSpellCheckEnabled() )
     {
         if ( !spell )
         {
@@ -1057,19 +1057,22 @@ bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
             gtk_spell_checker_detach(spell);
     }
 
-   return IsProofCheckEnabled();
+   return GetProofCheckOptions().IsSpellCheckEnabled();
 }
 
-bool wxTextCtrl::IsProofCheckEnabled() const
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
 {
+    wxTextProofOptions opts = wxTextProofOptions::Disable();
+
     GtkTextView *textview = GTK_TEXT_VIEW(m_text);
 
-    if ( !IsMultiLine() || textview == NULL )
-        return false;
+    if ( IsMultiLine() && textview )
+    {
+        if ( gtk_spell_checker_get_from_text_view(textview) )
+            opts.SpellCheck();
+    }
 
-    GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
-
-    return (spell != NULL);
+    return opts;
 }
 
 #endif // wxUSE_SPELLCHECK && __WXGTK3__

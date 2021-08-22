@@ -129,7 +129,7 @@ public:
 
 #if wxUSE_SPELLCHECK
     virtual void CheckSpelling(const wxTextProofOptions& options) wxOVERRIDE;
-    virtual bool IsSpellingCheckEnabled() const wxOVERRIDE;
+    virtual wxTextProofOptions GetCheckingOptions() const wxOVERRIDE;
 #endif // wxUSE_SPELLCHECK
     virtual void EnableAutomaticQuoteSubstitution(bool enable) wxOVERRIDE;
     virtual void EnableAutomaticDashSubstitution(bool enable) wxOVERRIDE;

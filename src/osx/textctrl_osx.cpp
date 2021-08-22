@@ -352,9 +352,9 @@ bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
     return true;
 }
 
-bool wxTextCtrl::IsProofCheckEnabled() const
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
 {
-    return GetTextPeer()->IsSpellingCheckEnabled();
+    return GetTextPeer()->GetCheckingOptions();
 }
 
 #endif // wxUSE_SPELLCHECK
@@ -826,6 +826,15 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
 
     return -1 ;
 }
+
+#if wxUSE_SPELLCHECK
+
+wxTextProofOptions wxTextWidgetImpl::GetCheckingOptions() const
+{
+    return wxTextProofOptions::Disable();
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextWidgetImpl::SetJustification()
 {

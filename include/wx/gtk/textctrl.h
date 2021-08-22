@@ -100,7 +100,7 @@ public:
     // Use native spelling and grammar checking functions.
     virtual bool EnableProofCheck(const wxTextProofOptions& options
                                     = wxTextProofOptions::Default()) wxOVERRIDE;
-    virtual bool IsProofCheckEnabled() const wxOVERRIDE;
+    virtual wxTextProofOptions GetProofCheckOptions() const wxOVERRIDE;
 #endif // wxUSE_SPELLCHECK && __WXGTK3__
 
     // Implementation from now on

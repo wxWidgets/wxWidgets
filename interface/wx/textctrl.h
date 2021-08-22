@@ -1004,7 +1004,7 @@ public:
     constructor, so its objects can only be created using the static factory
     methods Default() or Disable().
 
-    @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::IsProofCheckEnabled().
+    @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::GetProofCheckOptions().
 
     @since 3.1.6
 */
@@ -1039,10 +1039,13 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
     wxTextProofOptions& GrammarCheck(bool enable = true)
 
     /// Return true if spell checking is enabled.
-    bool IsSpellCheckingEnabled() const;
+    bool IsSpellCheckEnabled() const;
 
     /// Return true if grammar checking is enabled.
-    bool IsGrammarCheckingEnabled() const;
+    bool IsGrammarCheckEnabled() const;
+
+    /// Returns true if any checks are enabled.
+    bool AnyChecksEnabled() const
 };
 
 /**
@@ -1570,15 +1573,16 @@ public:
     bool IsSingleLine() const;
 
     /**
-        Returns @true if proof (spell) checking is currently active on this
-        control, @false otherwise.
+        Returns the current text proofing options.
 
         This function is implemented for the same platforms as
-        EnableProofCheck() and returns @false for the other ones.
+        EnableProofCheck() and returns wxTextProofOptions with all checks
+        disabled, i.e. such that wxTextProofOptions::AnyChecksEnabled() returns
+        @false.
 
         @since 3.1.6
     */
-    virtual bool IsProofCheckEnabled();
+    virtual wxTextProofOptions GetProofCheckOptions();
 
     /**
         Loads and displays the named file, if it exists.
