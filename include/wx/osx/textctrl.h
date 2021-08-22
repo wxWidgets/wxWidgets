@@ -139,9 +139,9 @@ public:
     virtual void MacSuperChangedPosition() wxOVERRIDE;
 
     // Use portable EnableProofCheck() instead now.
-#if WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
     wxDEPRECATED( virtual void MacCheckSpelling(bool check) );
-#endif // WXWIN_COMPATIBILITY_3_0
+#endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
     void OSXEnableAutomaticDashSubstitution(bool enable);

@@ -127,8 +127,10 @@ public:
 
     virtual bool HasOwnContextMenu() const wxOVERRIDE { return true; }
 
-    virtual void CheckSpelling(bool check) wxOVERRIDE;
+#if wxUSE_SPELLCHECK
+    virtual void CheckSpelling(const wxTextProofOptions& options) wxOVERRIDE;
     virtual bool IsSpellingCheckEnabled() const wxOVERRIDE;
+#endif // wxUSE_SPELLCHECK
     virtual void EnableAutomaticQuoteSubstitution(bool enable) wxOVERRIDE;
     virtual void EnableAutomaticDashSubstitution(bool enable) wxOVERRIDE;
 

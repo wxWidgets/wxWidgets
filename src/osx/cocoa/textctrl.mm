@@ -1277,16 +1277,22 @@ void wxNSTextViewControl::SetStyle(long start,
     }
 }
 
-void wxNSTextViewControl::CheckSpelling(bool check)
+#if wxUSE_SPELLCHECK
+
+void wxNSTextViewControl::CheckSpelling(const wxTextProofOptions& options)
 {
-    if (m_textView)
-        [m_textView setContinuousSpellCheckingEnabled: check];
+    wxCHECK_RET( m_textView, "control must be created first" );
+
+    m_textView.continuousSpellCheckingEnabled = options.IsSpellCheckingEnabled();
+    m_textView.grammarCheckingEnabled = options.IsGrammarCheckingEnabled();
 }
 
 bool wxNSTextViewControl::IsSpellingCheckEnabled() const
 {
     return m_textView && m_textView.continuousSpellCheckingEnabled;
 }
+
+#endif // wxUSE_SPELLCHECK
 
 void wxNSTextViewControl::EnableAutomaticQuoteSubstitution(bool enable)
 {

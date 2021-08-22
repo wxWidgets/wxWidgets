@@ -1033,7 +1033,8 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
     /**
        Enable / disable grammar checking for this control.
 
-       This option is not currently supported and is ignored.
+       This option is currently only supported under macOS and is ignored under
+       the other platforms.
      */
     wxTextProofOptions& GrammarCheck(bool enable = true)
 

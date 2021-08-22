@@ -124,12 +124,13 @@ void wxTextCtrl::MacVisibilityChanged()
 {
 }
 
-#if WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 void wxTextCtrl::MacCheckSpelling(bool check)
 {
-    GetTextPeer()->CheckSpelling(check);
+    GetTextPeer()->CheckSpelling(check ? wxTextProofOptions::Default()
+                                       : wxTextProofOptions::Disable());
 }
-#endif // WXWIN_COMPATIBILITY_3_0
+#endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 
 void wxTextCtrl::OSXEnableAutomaticQuoteSubstitution(bool enable)
 {
@@ -346,7 +347,7 @@ void wxTextCtrl::Paste()
 
 bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
 {
-    GetTextPeer()->CheckSpelling(options.IsSpellCheckingEnabled());
+    GetTextPeer()->CheckSpelling(options);
 
     return true;
 }
