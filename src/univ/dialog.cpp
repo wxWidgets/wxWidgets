@@ -181,10 +181,8 @@ int wxDialog::ShowModal()
     {
         m_parent = parent;
     }
-
-    Show(true);
-
     m_isShowingModal = true;
+    Show(true);
 
     wxASSERT_MSG( !m_windowDisabler, wxT("disabling windows twice?") );
 
