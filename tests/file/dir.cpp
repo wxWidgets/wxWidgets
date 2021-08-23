@@ -21,30 +21,16 @@
 #define SEP                 wxFileName::GetPathSeparator()
 
 // ----------------------------------------------------------------------------
-// test class
+// test fixture
 // ----------------------------------------------------------------------------
 
-class DirTestCase : public CppUnit::TestCase
+class DirTestCase
 {
 public:
-    DirTestCase() { }
+    DirTestCase();
+    ~DirTestCase();
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( DirTestCase );
-        CPPUNIT_TEST( DirExists );
-        CPPUNIT_TEST( Traverse );
-        CPPUNIT_TEST( Enum );
-        CPPUNIT_TEST( GetName );
-    CPPUNIT_TEST_SUITE_END();
-
-    void DirExists();
-    void Traverse();
-    void Enum();
-    void GetName();
-
+protected:
     void CreateTempFile(const wxString& path);
     wxArrayString DirEnumHelper(wxDir& dir,
                                int flags = wxDIR_DEFAULT,
@@ -54,14 +40,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// CppUnit macros
-// ----------------------------------------------------------------------------
-
-CPPUNIT_TEST_SUITE_REGISTRATION( DirTestCase );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DirTestCase, "DirTestCase" );
-
-// ----------------------------------------------------------------------------
-// tests implementation
+// test fixture implementation
 // ----------------------------------------------------------------------------
 
 void DirTestCase::CreateTempFile(const wxString& path)
@@ -71,7 +50,7 @@ void DirTestCase::CreateTempFile(const wxString& path)
     f.Close();
 }
 
-void DirTestCase::setUp()
+DirTestCase::DirTestCase()
 {
     // create a test directory hierarchy
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
@@ -85,7 +64,7 @@ void DirTestCase::setUp()
     CreateTempFile(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
 }
 
-void DirTestCase::tearDown()
+DirTestCase::~DirTestCase()
 {
     wxRemove(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
     wxRemove(DIRTEST_FOLDER + SEP + "dummy");
@@ -99,7 +78,7 @@ wxArrayString DirTestCase::DirEnumHelper(wxDir& dir,
                                          const wxString& filespec)
 {
     wxArrayString ret;
-    CPPUNIT_ASSERT( dir.IsOpened() );
+    CHECK( dir.IsOpened() );
 
     wxString filename;
     bool cont = dir.GetFirst(&filename, filespec, flags);
@@ -112,31 +91,35 @@ wxArrayString DirTestCase::DirEnumHelper(wxDir& dir,
     return ret;
 }
 
-void DirTestCase::Enum()
+// ----------------------------------------------------------------------------
+// tests themselves start here
+// ----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(DirTestCase, "Dir::Enum", "[dir]")
 {
     wxDir dir(DIRTEST_FOLDER);
-    CPPUNIT_ASSERT( dir.IsOpened() );
+    CHECK( dir.IsOpened() );
 
     // enumerating everything in test directory
-    CPPUNIT_ASSERT_EQUAL(4, DirEnumHelper(dir).size());
+    CHECK( DirEnumHelper(dir).size() == 4 );
 
     // enumerating really everything in test directory recursively
-    CPPUNIT_ASSERT_EQUAL(6, DirEnumHelper(dir, wxDIR_DEFAULT | wxDIR_DOTDOT).size());
+    CHECK( DirEnumHelper(dir, wxDIR_DEFAULT | wxDIR_DOTDOT).size() == 6 );
 
     // enumerating object files in test directory
-    CPPUNIT_ASSERT_EQUAL(0, DirEnumHelper(dir, wxDIR_DEFAULT, "*.o*").size());
+    CHECK( DirEnumHelper(dir, wxDIR_DEFAULT, "*.o*").size() == 0 );
 
     // enumerating directories in test directory
-    CPPUNIT_ASSERT_EQUAL(3, DirEnumHelper(dir, wxDIR_DIRS).size());
+    CHECK( DirEnumHelper(dir, wxDIR_DIRS).size() == 3 );
 
     // enumerating files in test directory
-    CPPUNIT_ASSERT_EQUAL(1, DirEnumHelper(dir, wxDIR_FILES).size());
+    CHECK( DirEnumHelper(dir, wxDIR_FILES).size() == 1 );
 
     // enumerating files including hidden in test directory
-    CPPUNIT_ASSERT_EQUAL(1, DirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN).size());
+    CHECK( DirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN).size() == 1 );
 
     // enumerating files and folders in test directory
-    CPPUNIT_ASSERT_EQUAL(4, DirEnumHelper(dir, wxDIR_FILES | wxDIR_DIRS).size());
+    CHECK( DirEnumHelper(dir, wxDIR_FILES | wxDIR_DIRS).size() == 4 );
 }
 
 class TestDirTraverser : public wxDirTraverser
@@ -156,23 +139,23 @@ public:
     }
 };
 
-void DirTestCase::Traverse()
+TEST_CASE_METHOD(DirTestCase, "Dir::Traverse", "[dir]")
 {
     // enum all files
     wxArrayString files;
-    CPPUNIT_ASSERT_EQUAL(4, wxDir::GetAllFiles(DIRTEST_FOLDER, &files));
+    CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files) == 4 );
 
     // enum all files according to the filter
-    CPPUNIT_ASSERT_EQUAL(1, wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo"));
+    CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo") == 1 );
 
     // enum again with custom traverser
     wxDir dir(DIRTEST_FOLDER);
     TestDirTraverser traverser;
     dir.Traverse(traverser, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN);
-    CPPUNIT_ASSERT_EQUAL(6, traverser.dirs.size());
+    CHECK( traverser.dirs.size() == 6 );
 }
 
-void DirTestCase::DirExists()
+TEST_CASE_METHOD(DirTestCase, "Dir::Exists", "[dir]")
 {
     struct
     {
@@ -222,29 +205,30 @@ void DirTestCase::DirExists()
         dirname.Replace("$MSW_DRIVE", homedrive);
 #endif // __WINDOWS__
 
-        std::string errDesc = wxString::Format("failed on directory '%s'", dirname).ToStdString();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(errDesc, testData[n].shouldExist, wxDir::Exists(dirname));
+        const bool shouldExist = testData[n].shouldExist;
+
+        INFO("Directory " << dirname << ", should exist: " << shouldExist);
+        CHECK( wxDir::Exists(dirname) == shouldExist );
 
         wxDir d(dirname);
-        CPPUNIT_ASSERT_EQUAL(testData[n].shouldExist, d.IsOpened());
+        CHECK( d.IsOpened() == shouldExist );
     }
 
-    CPPUNIT_ASSERT( wxDir::Exists(wxGetCwd()) );
+    CHECK( wxDir::Exists(wxGetCwd()) );
 }
 
-void DirTestCase::GetName()
+TEST_CASE_METHOD(DirTestCase, "Dir::GetName", "[dir]")
 {
     wxDir d;
 
-    CPPUNIT_ASSERT( d.Open(".") );
-    CPPUNIT_ASSERT( d.GetName().Last() != wxFILE_SEP_PATH );
-    CPPUNIT_ASSERT( d.GetNameWithSep().Last() == wxFILE_SEP_PATH );
-    CPPUNIT_ASSERT_EQUAL( d.GetName() + wxFILE_SEP_PATH,
-                          d.GetNameWithSep() );
+    CHECK( d.Open(".") );
+    CHECK( d.GetName().Last() != wxFILE_SEP_PATH );
+    CHECK( d.GetNameWithSep().Last() == wxFILE_SEP_PATH );
+    CHECK( d.GetNameWithSep() == d.GetName() + wxFILE_SEP_PATH );
 
 #ifdef __UNIX__
-    CPPUNIT_ASSERT( d.Open("/") );
-    CPPUNIT_ASSERT_EQUAL( "/", d.GetName() );
-    CPPUNIT_ASSERT_EQUAL( "/", d.GetNameWithSep() );
+    CHECK( d.Open("/") );
+    CHECK( d.GetName() == "/" );
+    CHECK( d.GetNameWithSep() == "/" );
 #endif
 }
