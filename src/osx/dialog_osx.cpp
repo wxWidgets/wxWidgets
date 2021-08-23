@@ -145,8 +145,19 @@ bool wxDialog::Show(bool show)
                 SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
                 break;
             default:
+                // wxDIALOG_MODALITY_APP_MODAL is not handled and modal dialog
+                // will not be closed. But m_modality is set back to default
+                // when the modal dialog is hidden. Must be restored in case
+                // of modal dialog is shown again. See below.
                 break;
         }
+    }
+    else if(m_eventLoop) {
+      // In case of Modal Dialog had been hidden, the dialog is not closed, but
+      // m_modality had been changed. When Show(true) is called again, the value
+      // must be restored, so wxDialogBase::EndDialog() is calling EndModal()
+      // instead of Hide() to avoid event loop is never finished.
+      m_modality = wxDIALOG_MODALITY_APP_MODAL;
     }
 
     return true;
