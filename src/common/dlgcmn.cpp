@@ -128,7 +128,9 @@ wxDialogBase::wxDialogBase()
     SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
 }
 
-wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
+wxWindow *
+wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
+                                       wxWindow *parent) const
 {
     if ( !parent )
         return NULL;
@@ -148,10 +150,21 @@ wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
         return NULL;
     }
 
-    if ( !parent->IsShownOnScreen() )
+    // This check is done for modal dialogs only because modeless dialogs can
+    // be created before their parent is shown and only shown later.
+    switch ( modality )
     {
-        // using hidden parent won't work correctly neither
-        return NULL;
+        case wxDIALOG_MODALITY_NONE:
+            break;
+
+        case wxDIALOG_MODALITY_APP_MODAL:
+        case wxDIALOG_MODALITY_WINDOW_MODAL:
+            if ( !parent->IsShownOnScreen() )
+            {
+                // using hidden parent won't work correctly neither
+                return NULL;
+            }
+            break;
     }
 
     if ( parent == this )
@@ -165,7 +178,9 @@ wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
 }
 
 wxWindow *
-wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
+wxDialogBase::DoGetParentForDialog(wxDialogModality modality,
+                                   wxWindow *parent,
+                                   long style) const
 {
     // creating a parent-less modal dialog will result (under e.g. wxGTK2)
     // in an unfocused dialog, so try to find a valid parent for it unless we
@@ -175,16 +190,16 @@ wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
 
     // first try the given parent
     if ( parent )
-        parent = CheckIfCanBeUsedAsParent(wxGetTopLevelParent(parent));
+        parent = CheckIfCanBeUsedAsParent(modality, wxGetTopLevelParent(parent));
 
     // then the currently active window
     if ( !parent )
-        parent = CheckIfCanBeUsedAsParent(
+        parent = CheckIfCanBeUsedAsParent(modality,
                     wxGetTopLevelParent(wxGetActiveWindow()));
 
     // and finally the application main window
     if ( !parent )
-        parent = CheckIfCanBeUsedAsParent(wxApp::GetMainTopWindow());
+        parent = CheckIfCanBeUsedAsParent(modality, wxApp::GetMainTopWindow());
 
     return parent;
 }
