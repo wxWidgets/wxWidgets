@@ -51,6 +51,9 @@ TEST_CASE("GraphicsPathTestCaseGDIPlus", "[path][gdi+]")
 #if wxUSE_GRAPHICS_DIRECT2D
 TEST_CASE("GraphicsPathTestCaseDirect2D", "[path][d2d]")
 {
+    if ( wxIsRunningUnderWine() )
+        return;
+
     wxBitmap bmp(500, 500);
     wxMemoryDC mdc(bmp);
     wxScopedPtr<wxGraphicsContext> gc(wxGraphicsRenderer::GetDirect2DRenderer()->CreateContext(mdc));
