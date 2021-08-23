@@ -338,6 +338,9 @@ TEST_CASE("GraphicsBitmapTestCase::Create", "[graphbitmap][create]")
 #if wxUSE_GRAPHICS_DIRECT2D
         SECTION("Direct2D GC")
         {
+            if ( wxIsRunningUnderWine() )
+                return;
+
             wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
             REQUIRE(gr != NULL);
             CheckCreateGraphBitmap(gr, bmp, image);
@@ -445,6 +448,9 @@ TEST_CASE("GraphicsBitmapTestCase::Create", "[graphbitmap][create]")
 #if wxUSE_GRAPHICS_DIRECT2D
         SECTION("Direct2D GC")
         {
+            if ( wxIsRunningUnderWine() )
+                return;
+
             wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
             REQUIRE(gr != NULL);
             CheckCreateGraphBitmap(gr, bmp, image);
@@ -550,6 +556,9 @@ TEST_CASE("GraphicsBitmapTestCase::Create", "[graphbitmap][create]")
 #if wxUSE_GRAPHICS_DIRECT2D
         SECTION("Direct2D GC")
         {
+            if ( wxIsRunningUnderWine() )
+                return;
+
             wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
             REQUIRE(gr != NULL);
             CheckCreateGraphBitmap(gr, bmp, image);
@@ -665,6 +674,9 @@ TEST_CASE("GraphicsBitmapTestCase::SubBitmap", "[graphbitmap][subbitmap][create]
 #if wxUSE_GRAPHICS_DIRECT2D
         SECTION("Direct2D GC")
         {
+            if ( wxIsRunningUnderWine() )
+                return;
+
             wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
             REQUIRE(gr != NULL);
             CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
@@ -796,6 +808,9 @@ TEST_CASE("GraphicsBitmapTestCase::SubBitmap", "[graphbitmap][subbitmap][create]
 #if wxUSE_GRAPHICS_DIRECT2D
         SECTION("Direct2D GC")
         {
+            if ( wxIsRunningUnderWine() )
+                return;
+
             wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
             REQUIRE(gr != NULL);
             CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
@@ -909,6 +924,9 @@ TEST_CASE("GraphicsBitmapTestCase::SubBitmap", "[graphbitmap][subbitmap][create]
 #if wxUSE_GRAPHICS_DIRECT2D
         SECTION("Direct2D GC")
         {
+            if ( wxIsRunningUnderWine() )
+                return;
+
             wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
             REQUIRE(gr != NULL);
             CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
