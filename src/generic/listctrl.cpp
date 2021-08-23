@@ -2682,8 +2682,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         // Multi-selections should not be cleared if a selected item is clicked.
         if (!IsHighlighted(current))
         {
+            size_t oldCurrent = m_current;
             ChangeCurrent(current);
-            HighlightOnly(m_current);
+            HighlightOnly(m_current, oldCurrent);
         }
 
         SendNotify( current, wxEVT_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
@@ -5543,9 +5544,12 @@ long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& pt,
     return m_mainWin->FindItem( pt );
 }
 
-// TODO: sub item hit testing
-long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *) const
+long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *col) const
 {
+    // TODO: sub item hit testing
+    if ( col )
+        *col = -1;
+
     return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
 }
 

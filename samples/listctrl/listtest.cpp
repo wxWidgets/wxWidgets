@@ -1465,7 +1465,7 @@ void MyListCtrl::OnRightClick(wxMouseEvent& event)
         default: where = "not clear exactly where on"; break;
     }
 
-    wxLogMessage("Right double click %s item %ld, subitem %ld",
+    wxLogMessage("Right click %s item %ld, subitem %ld",
                  where, item, subitem);
 }
 
