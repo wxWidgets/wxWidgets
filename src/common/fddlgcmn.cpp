@@ -90,7 +90,8 @@ void wxFindReplaceDialogBase::Send(wxFindDialogEvent& event)
         // because the dialog is a top level window, so do it manually as
         // in 9 cases out of 10 the message must be processed by the dialog
         // owner and not the dialog itself
-        (void)GetParent()->ProcessWindowEvent(event);
+        if ( GetParent() )
+            (void)GetParent()->ProcessWindowEvent(event);
     }
 }
 
