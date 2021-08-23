@@ -123,6 +123,22 @@ private:
     long m_startupProgressStyle;
 };
 
+// Property sheet dialog
+class TestHideModalDialog: public wxPropertySheetDialog
+{
+    wxDECLARE_CLASS(TestHideModalDialog);
+public:
+    TestHideModalDialog(wxWindow *parent);
+
+    void OnButton(wxCommandEvent& event);
+    void OnOk(wxCommandEvent& event);
+
+private:
+    wxButton *m_btnTest;
+
+    DECLARE_EVENT_TABLE();
+};
+
 #if USE_MODAL_PRESENTATION
 
 // A custom modeless dialog
@@ -466,6 +482,7 @@ public:
     void DlgCenteredParent(wxCommandEvent& event);
     void MiniFrame(wxCommandEvent& event);
     void DlgOnTop(wxCommandEvent& event);
+    void DlgHideModal(wxCommandEvent& event);
 
 #if wxUSE_PROGRESSDLG
     void ShowProgress(wxCommandEvent& event);
@@ -635,6 +652,7 @@ enum
     DIALOGS_CENTRE_PARENT,
     DIALOGS_MINIFRAME,
     DIALOGS_ONTOP,
+    DIALOGS_HIDEMODAL,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
     DIALOGS_PROGRESS_GENERIC,

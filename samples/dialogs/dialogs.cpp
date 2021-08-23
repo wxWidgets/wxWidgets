@@ -229,6 +229,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_MINIFRAME,                     MyFrame::MiniFrame)
 #endif // wxUSE_MINIFRAME
     EVT_MENU(DIALOGS_ONTOP,                         MyFrame::DlgOnTop)
+    EVT_MENU(DIALOGS_HIDEMODAL,                     MyFrame::DlgHideModal)
 
 #if wxUSE_STARTUP_TIPS
     EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
@@ -304,6 +305,11 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 wxEND_EVENT_TABLE()
+
+    wxBEGIN_EVENT_TABLE(TestHideModalDialog, wxDialog)
+        EVT_BUTTON(wxID_ANY, TestHideModalDialog::OnButton)
+        EVT_BUTTON(wxID_OK, TestHideModalDialog::OnOk)
+   wxEND_EVENT_TABLE()
 
 #if USE_MODAL_PRESENTATION
 
@@ -598,6 +604,7 @@ bool MyApp::OnInit()
     dialogs_menu->Append(DIALOGS_MINIFRAME, "&Mini frame");
 #endif // wxUSE_MINIFRAME
     dialogs_menu->Append(DIALOGS_ONTOP, "Dialog staying on &top");
+    dialogs_menu->Append(DIALOGS_HIDEMODAL, "Test &Hide Modal Dialog");
     menuDlg->Append(wxID_ANY, "&Generic dialogs", dialogs_menu);
 
 #if USE_SETTINGS_DIALOG
@@ -2128,6 +2135,12 @@ void MyFrame::DlgOnTop(wxCommandEvent& WXUNUSED(event))
     dlg.ShowModal();
 }
 
+void MyFrame::DlgHideModal(wxCommandEvent& WXUNUSED(event))
+{
+    TestHideModalDialog dlg(this);
+    dlg.ShowModal();
+}
+
 #if wxUSE_STARTUP_TIPS
 void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
 {
@@ -3420,6 +3433,56 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
                 " test application"
                 , 10, 10);
 }
+
+// ----------------------------------------------------------------------------
+// TestHideModalDialog
+// ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(TestHideModalDialog, wxPropertySheetDialog);
+
+TestHideModalDialog::TestHideModalDialog(wxWindow *parent)
+    : wxPropertySheetDialog(parent, wxID_ANY, wxString("Test Hide Modal dialog"))
+{
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
+
+    m_btnTest = new wxButton(this, wxID_ANY, "&Hide Modal dialog...");
+
+    sizerTop->Add(m_btnTest, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(new wxButton(this, wxID_CANCEL), 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(new wxButton(this, wxID_OK), 0, wxALIGN_CENTER | wxALL, 5);
+
+    SetSizerAndFit(sizerTop);
+
+    SetEscapeId(wxID_CANCEL);
+
+    m_btnTest->SetFocus();
+    m_btnTest->SetDefault();
+}
+
+void TestHideModalDialog::OnButton(wxCommandEvent& event)
+{
+    if ( event.GetEventObject() == m_btnTest )
+    {
+      Show(false);
+      wxMessageBox("Pressed OK to continue", "Info",
+                   wxOK | wxICON_INFORMATION, this);
+      Show(true);
+      Raise();
+      Update();
+      // Raise();
+      wxSafeYield();
+    }
+    else
+    {
+        event.Skip();
+    }
+}
+
+void TestHideModalDialog::OnOk(wxCommandEvent& /*event*/)
+{
+    EndModal(wxID_OK);
+}
+
 
 #if USE_MODAL_PRESENTATION
 
