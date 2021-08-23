@@ -828,6 +828,10 @@ if test "$wxUSE_MAC" != 1; then
 WX_ARG_FEATURE(graphics_ctx,[  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
 fi
 
+if test "$wxUSE_MSW" = 1 ; then
+WX_ARG_FEATURE(graphics_d2d,[  --enable-graphics-d2d   use Direct2D-based graphics context], wxUSE_GRAPHICS_DIRECT2D)
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
 dnl ---------------------------------------------------------------------------
@@ -7835,6 +7839,28 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         )
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
+        fi
+
+        AC_CACHE_CHECK([if Direct2D is available], wx_cv_lib_direct2d,
+            [
+                dnl same as above, we need to test only for the headers
+                AC_LANG_PUSH(C++)
+                AC_TRY_COMPILE(
+                    [#include <windows.h>
+                     #include <d2d1.h>
+                     #include <dwrite.h>
+                    ],
+                    [
+                        ID2D1Factory* factory = NULL;
+                    ],
+                    wx_cv_lib_direct2d=yes,
+                    wx_cv_lib_direct2d=no
+                )
+                AC_LANG_POP()
+            ]
+        )
+        if test "$wx_cv_lib_direct2d" = "yes"; then
+            AC_DEFINE(wxUSE_GRAPHICS_DIRECT2D)
         fi
     elif test "$WXGTK1" = "1"; then
         AC_MSG_WARN([wxGraphicsContext not supported with GTK +1])

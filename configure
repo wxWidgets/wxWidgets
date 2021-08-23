@@ -1245,6 +1245,7 @@ enable_printarch
 enable_svg
 enable_webview
 enable_graphics_ctx
+enable_graphics_d2d
 enable_clipboard
 enable_dnd
 enable_controls
@@ -2212,6 +2213,7 @@ Optional Features:
   --enable-svg            use wxSVGFileDC device context
   --enable-webview        use wxWebView library
   --enable-graphics_ctx   use graphics context 2D drawing API
+  --enable-graphics-d2d   use Direct2D-based graphics context
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
   --disable-controls      disable compilation of all standard controls
@@ -9091,6 +9093,38 @@ fi
 
 
           eval "$wx_cv_use_graphics_ctx"
+
+fi
+
+if test "$wxUSE_MSW" = 1 ; then
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-graphics_d2d was given.
+if test "${enable_graphics_d2d+set}" = set; then :
+  enableval=$enable_graphics_d2d;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_graphics_d2d='wxUSE_GRAPHICS_DIRECT2D=yes'
+                          else
+                            wx_cv_use_graphics_d2d='wxUSE_GRAPHICS_DIRECT2D=no'
+                          fi
+
+else
+
+                          wx_cv_use_graphics_d2d='wxUSE_GRAPHICS_DIRECT2D=${'DEFAULT_wxUSE_GRAPHICS_DIRECT2D":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_graphics_d2d"
 
 fi
 
@@ -38019,6 +38053,57 @@ fi
 $as_echo "$wx_cv_lib_gdiplus" >&6; }
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
+        fi
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if Direct2D is available" >&5
+$as_echo_n "checking if Direct2D is available... " >&6; }
+if ${wx_cv_lib_direct2d+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                                ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+                     #include <d2d1.h>
+                     #include <dwrite.h>
+
+int
+main ()
+{
+
+                        ID2D1Factory* factory = NULL;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  wx_cv_lib_direct2d=yes
+else
+  wx_cv_lib_direct2d=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_lib_direct2d" >&5
+$as_echo "$wx_cv_lib_direct2d" >&6; }
+        if test "$wx_cv_lib_direct2d" = "yes"; then
+            $as_echo "#define wxUSE_GRAPHICS_DIRECT2D 1" >>confdefs.h
+
         fi
     elif test "$WXGTK1" = "1"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxGraphicsContext not supported with GTK +1" >&5
