@@ -66,12 +66,12 @@ jobs:
       - name: Add MSBuild to PATH for MSVS 2022
         if: matrix.vsversion == 2022
         run: |
-            Write-Output 'C:\Program Files (x86)\Microsoft Visual Studio\${{ matrix.vsversion }}\Enterprise\MSBuild\Current\Bin' | Out-File -Append $env:GITHUB_PATH
+            Write-Output 'C:\Program Files\Microsoft Visual Studio\${{ matrix.vsversion }}\Enterprise\MSBuild\Current\Bin' | Out-File -Append $env:GITHUB_PATH
 
       - name: Show system information
         run: |
             Write-Output $env:PATH
-            Get-ChildItem 'C:\Program Files (x86)\Microsoft Visual Studio\${{ matrix.vsversion }}\Enterprise\MSBuild\Current\Bin' | Out-String -width 1000
+            Get-ChildItem 'C:\Program Files\Microsoft Visual Studio\${{ matrix.vsversion }}\Enterprise\MSBuild\Current\Bin' | Out-String -width 1000
 
       - name: Build
         run: |
