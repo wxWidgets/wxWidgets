@@ -444,7 +444,7 @@ void TextCtrlTestCase::ProcessEnter()
 
 void TextCtrlTestCase::Url()
 {
-#if wxUSE_UIACTIONSIMULATOR && wxHAS_2CHAR_NEWLINES
+#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // For some unfathomable reason, this test consistently fails when run in
     // AppVeyor CI environment, even though it passes locally, so skip it
     // there.
