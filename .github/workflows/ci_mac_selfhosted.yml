@@ -7,6 +7,7 @@ on:
     paths-ignore:
     - '.github/workflows/ci.yml'
     - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
@@ -34,6 +35,7 @@ on:
     paths-ignore:
     - '.github/workflows/ci.yml'
     - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
