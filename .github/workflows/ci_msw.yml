@@ -44,7 +44,7 @@ on:
 jobs:
   msw-msvs:
     runs-on: windows-${{ matrix.vsversion }}
-    name: wxMSW vs${{ matrix.vsversion }} ${{ matrix.configuration }}/${{ matrix.platform }}
+    name: wxMSW vs${{ matrix.vsversion }} ${{ matrix.configuration }} ${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
