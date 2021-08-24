@@ -74,6 +74,11 @@ jobs:
         run: |
             Write-Output 'C:\Program Files (x86)\Microsoft Visual Studio\${{ matrix.vsversion }}\Enterprise\MSBuild\Current\Bin' | Out-File -Append $env:GITHUB_PATH
 
+      - name: Show system information
+        run: |
+            Get-ChildItem env:
+            Get-Command msbuild | Out-String -width 1000
+
       - name: Build
         run: |
             msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
