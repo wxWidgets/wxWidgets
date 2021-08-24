@@ -52,12 +52,6 @@ jobs:
           - configuration: 'DLL Debug'
             platform: 'x64'
             vsversion: 2022
-          - configuration: 'Debug'
-            platform: 'Win32'
-            vsversion: 2019
-          - configuration: 'DLL Release'
-            platform: 'x64'
-            vsversion: 2019
 
     steps:
       - name: Checkout
@@ -76,8 +70,8 @@ jobs:
 
       - name: Show system information
         run: |
-            Get-ChildItem env:
-            Get-Command msbuild | Out-String -width 1000
+            Write-Output $env:PATH
+            Get-ChildItem 'C:\Program Files (x86)\Microsoft Visual Studio\${{ matrix.vsversion }}\Enterprise\MSBuild\Current\Bin' | Out-String -width 1000
 
       - name: Build
         run: |
