@@ -51,6 +51,8 @@ jobs:
         include:
           - configuration: 'Debug'
             platform: 'Win32'
+          - configuration: 'DLL Release'
+            platform: 'x64'
 
     steps:
       - name: Checkout
@@ -63,15 +65,20 @@ jobs:
 
       - name: Build
         run: |
-            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
+            if ( '${{ matrix.configuration }}'.IndexOf('DLL') -ne -1 ) {
+                $dlldir = Join-Path (Get-Location) 'lib\vc_${{ matrix.platform }}_dll'
+                Write-Output "Adding $dlldir to the PATH"
+                $dlldir | Out-File -Append $env:GITHUB_PATH
+            }
 
       - name: Build minimal sample
         run: |
-            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} samples\minimal\minimal_vc16.sln
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\minimal\minimal_vc16.sln
 
       - name: Build tests
         run: |
-            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
 
       - name: Run tests
         working-directory: tests
@@ -80,7 +87,7 @@ jobs:
 
       - name: Build GUI tests
         run: |
-            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
 
       - name: Run GUI tests
         working-directory: tests
