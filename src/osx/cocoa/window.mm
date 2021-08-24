@@ -3619,8 +3619,7 @@ void wxWidgetCocoaImpl::SetForegroundColour(const wxColour& col)
 
     if ([targetView respondsToSelector:@selector(setTextColor:)])
     {
-        wxColor col = GetWXPeer()->GetForegroundColour();
-        [targetView setTextColor: col.OSXGetNSColor()];
+        [targetView setTextColor: col.IsOk() ? col.OSXGetNSColor() : nil];
     }
 }
 

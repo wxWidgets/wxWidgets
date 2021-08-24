@@ -527,7 +527,12 @@ bool wxWindowMac::SetForegroundColour(const wxColour& col )
         return false;
 
     if ( GetPeer() )
-        GetPeer()->SetForegroundColour(col);
+    {
+        // Note that we use GetForegroundColour() and not "col" itself here in
+        // case we're now inheriting our parent foreground rather than passing
+        // the (null) colour argument.
+        GetPeer()->SetForegroundColour(GetForegroundColour());
+    }
 
     return true;
 }
