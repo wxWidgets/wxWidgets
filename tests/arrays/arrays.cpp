@@ -769,7 +769,7 @@ TEST_CASE("wxDynArray::IndexFromEnd", "[dynarray]")
 }
 
 
-TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
+TEST_CASE("wxCmpNaturalGeneric", "[wxString][compare]")
 {
     // simple string comparison
     CHECK(wxCmpNaturalGeneric("a", "a") == 0);
