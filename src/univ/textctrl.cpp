@@ -128,6 +128,7 @@
     #include "wx/dcclient.h"
     #include "wx/validate.h"
     #include "wx/dataobj.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include <ctype.h>
