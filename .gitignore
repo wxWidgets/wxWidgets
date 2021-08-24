@@ -385,7 +385,6 @@
 /tests/*c*_mswunivuddll_arm64
 /tests/test.opt
 /tests/test*.dsw
-/tests/test*.sln
 /tests/test.suo
 /tests/test_test.vcproj
 
