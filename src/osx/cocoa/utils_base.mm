@@ -266,3 +266,10 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
 }
 
 #endif
+
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+{
+    // The values of NSOrdered{Ascending,Same,Descending} are the same as
+    // expected return values of wxCmpNatural(), so we don't need to convert.
+    return [wxCFStringRef(s1).AsNSString() localizedStandardCompare: wxCFStringRef(s2).AsNSString()];
+}
