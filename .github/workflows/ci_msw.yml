@@ -1,0 +1,90 @@
+# CI workflow building wxMSW under Windows.
+name: MSW builds
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac_selfhosted.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/gtk/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac_selfhosted.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/gtk/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+
+jobs:
+  msw-vs2019:
+    runs-on: windows-2019
+    name: wxMSW ${{ matrix.configuration }}/${{ matrix.platform }} MSVS 2019
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - configuration: 'Debug'
+            platform: 'Win32'
+          - configuration: '"DLL Release"'
+            platform: 'x64'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Build
+        run: |
+            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
+
+      - name: Build minimal sample
+        run: |
+            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} samples\minimal\minimal_vc16.sln
+
+      - name: Build tests
+        run: |
+            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
+
+      - name: Run tests
+        working-directory: tests
+        run: |
+            .\vc*msw*\test.exe
+
+      - name: Build GUI tests
+        run: |
+            msbuild /noLogo /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
+
+      - name: Run GUI tests
+        working-directory: tests
+        run: |
+            .\vc*msw*\test_gui.exe
