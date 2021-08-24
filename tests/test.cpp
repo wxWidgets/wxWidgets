@@ -559,7 +559,6 @@ bool TestApp::OnInit()
          << "\n"
          << "running under " << wxGetOsDescription()
          << " as " << wxGetUserId()
-         << ", locale is " << setlocale(LC_ALL, NULL)
          << std::endl;
 
 #if wxUSE_GUI
