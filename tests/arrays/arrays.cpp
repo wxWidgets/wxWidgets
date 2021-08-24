@@ -844,3 +844,9 @@ TEST_CASE("wxCmpNaturalGeneric", "[wxString][compare]")
     CHECK(wxCmpNaturalGeneric("a5th 5", "a 10th 10") > 0);
 }
 
+TEST_CASE("wxCmpNatural", "[wxString][compare]")
+{
+    // We can't expect much from the native natural comparison function as it's
+    // locale-dependent, so just run a simple sanity test
+    CHECK(wxCmpNatural("same", "same") == 0);
+}
