@@ -44,15 +44,13 @@ on:
 jobs:
   msw-vs2019:
     runs-on: windows-2019
-    name: wxMSW ${{ matrix.configuration }}/${{ matrix.platform }} MSVS 2019
+    name: wxMSW vs2019 ${{ matrix.configuration }}/${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - configuration: 'Debug'
             platform: 'Win32'
-          - configuration: '"DLL Release"'
-            platform: 'x64'
 
     steps:
       - name: Checkout
