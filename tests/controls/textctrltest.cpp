@@ -445,10 +445,9 @@ void TextCtrlTestCase::ProcessEnter()
 void TextCtrlTestCase::Url()
 {
 #if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    // For some unfathomable reason, this test consistently fails when run in
-    // AppVeyor CI environment, even though it passes locally, so skip it
-    // there.
-    if ( wxGetEnv("APPVEYOR", NULL) )
+    // For some reason, this test sporadically fails when run in AppVeyor or
+    // GitHub Actions CI environments, even though it passes locally.
+    if ( IsAutomaticTest() )
         return;
 
     delete m_text;
