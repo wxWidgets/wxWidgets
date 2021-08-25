@@ -248,7 +248,7 @@ with the vcXXX version number:
     Visual Studio 2014  vc120
     Visual Studio 2015  vc14x
 
-The Visual Studio 2015, 2017 and 2019 are binary compatible, allowing the
+The Visual Studio 2015, 2017, 2019 and 2022 are binary compatible, allowing the
 vc14x binary to be used with any of them.
 
 This will build all of the x86 and x64 binaries for the selected compiler version,
