@@ -95,6 +95,22 @@
 // For wxKillAllChildren
 #include <tlhelp32.h>
 
+// For wxCmpNatural()
+#include <shlwapi.h>
+
+// In some distributions of MinGW32, this function is exported in the library,
+// but not declared in shlwapi.h. Therefore we declare it here.
+#if defined( __MINGW32_TOOLCHAIN__ )
+    extern "C" __declspec(dllimport) int WINAPI StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
+#endif
+
+// For MSVC we can also link the library containing StrCmpLogicalW()
+// directly from here, for the other compilers this needs to be done at
+// makefiles level.
+#ifdef __VISUALC__
+    #pragma comment(lib, "shlwapi")
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -1582,4 +1598,9 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc)
     }
 
     return hwnd;
+}
+
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+{
+    return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
 }
