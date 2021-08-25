@@ -1038,6 +1038,10 @@ public:
 
         Note that the wxWindow::GetBackgroundColour() function of wxWindow base
         class can be used to retrieve the current background colour.
+
+        @note If alternate row colouring is enabled, then call
+        EnableAlternateRowColours() again after changing the background colour. This
+        will update the alternate row color to match the new background colour.
     */
     virtual bool SetBackgroundColour(const wxColour& col);
 
