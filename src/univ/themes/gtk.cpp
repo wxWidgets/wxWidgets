@@ -825,14 +825,10 @@ void wxGTKRenderer::DrawTextBorder(wxDC& dc,
 
     if ( border != wxBORDER_NONE )
     {
+        DrawRect(dc, &rect, m_penBlack);
         if ( flags & wxCONTROL_FOCUSED )
         {
-            DrawRect(dc, &rect, m_penBlack);
             DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-        }
-        else // !focused
-        {
-            DrawInnerShadedRect(dc, &rect);
         }
     }
 
