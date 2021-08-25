@@ -42,17 +42,22 @@ on:
       - '*.yml'
 
 jobs:
-  msw-vs2019:
-    runs-on: windows-2019
-    name: wxMSW vs2019 ${{ matrix.configuration }} ${{ matrix.platform }}
+  msw-msvs:
+    runs-on: windows-${{ matrix.vsversion }}
+    name: wxMSW vs${{ matrix.vsversion }} ${{ matrix.configuration }} ${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
         include:
+          - configuration: 'DLL Debug'
+            platform: 'x64'
+            vsversion: 2022
           - configuration: 'Debug'
             platform: 'Win32'
+            vsversion: 2019
           - configuration: 'DLL Release'
             platform: 'x64'
+            vsversion: 2019
 
     steps:
       - name: Checkout
@@ -61,7 +66,9 @@ jobs:
           submodules: 'recursive'
 
       - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v1.0.3
+        with:
+            vs-prerelease: true
 
       - name: Build
         run: |

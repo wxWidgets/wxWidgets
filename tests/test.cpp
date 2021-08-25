@@ -541,9 +541,24 @@ bool TestApp::OnInit()
     cout << "Test program for wxWidgets non-GUI features\n"
 #endif
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << "\n"
+         << "compiled using "
+#if defined(__clang__)
+         << "clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__
+#elif defined(__INTEL_COMPILER)
+         << "icc " << __INTEL_COMPILER
+#elif defined(__GNUG__)
+         << "gcc " << __GNUC__ << "." << __GNUC_MINOR__
+#elif defined(_MSC_VER)
+         << "msvc " << _MSC_VER
+    #if defined(_MSC_FULL_VER)
+                                << " (full: " << _MSC_FULL_VER << ")"
+    #endif
+#else
+         << "unidentified compiler"
+#endif
+         << "\n"
          << "running under " << wxGetOsDescription()
          << " as " << wxGetUserId()
-         << ", locale is " << setlocale(LC_ALL, NULL)
          << std::endl;
 
 #if wxUSE_GUI
