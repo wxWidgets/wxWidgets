@@ -351,10 +351,7 @@ static void InitialStateWithTransformedDC(wxDC& dc, const wxBitmap& bmp, bool ch
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Initial clipping box with transformed DC.
@@ -398,65 +395,61 @@ static void InitialStateWithRotatedDC(wxDC& dc, const wxBitmap& bmp)
 {
     // Initial clipping box with rotated DC.
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( dc.CanUseTransformMatrix() )
-    {
-        // Apply rotation to DC.
-        wxAffineMatrix2D m = dc.GetTransformMatrix();
-        m.Rotate(wxDegToRad(6));
-        dc.SetTransformMatrix(m);
+    if ( !dc.CanUseTransformMatrix() )
+        return;
 
-        // Calculate expected clipping box.
-        m.Invert();
-        double x1, y1, x2, y2;
-        double x, y;
-        // Top-left corner
-        x = 0.0;
-        y = 0.0;
-        m.TransformPoint(&x, &y);
-        x1 = x;
-        y1 = y;
-        x2 = x;
-        y2 = y;
-        // Top-right corner
-        x = s_dcSize.GetWidth();
-        y = 0.0;
-        m.TransformPoint(&x, &y);
-        x1 = wxMin(x1, x);
-        y1 = wxMin(y1, y);
-        x2 = wxMax(x2, x);
-        y2 = wxMax(y2, y);
-        // Bottom-right corner
-        x = s_dcSize.GetWidth();
-        y = s_dcSize.GetHeight();
-        m.TransformPoint(&x, &y);
-        x1 = wxMin(x1, x);
-        y1 = wxMin(y1, y);
-        x2 = wxMax(x2, x);
-        y2 = wxMax(y2, y);
-        // Bottom-left corner
-        x = 0.0;
-        y = s_dcSize.GetHeight();
-        m.TransformPoint(&x, &y);
-        x1 = wxMin(x1, x);
-        y1 = wxMin(y1, y);
-        x2 = wxMax(x2, x);
-        y2 = wxMax(y2, y);
+    // Apply rotation to DC.
+    wxAffineMatrix2D m = dc.GetTransformMatrix();
+    m.Rotate(wxDegToRad(6));
+    dc.SetTransformMatrix(m);
 
-        int clipX = wxRound(x1);
-        int clipY = wxRound(y1);
-        int clipW = wxRound(x2) - wxRound(x1);
-        int clipH = wxRound(y2) - wxRound(y1);
+    // Calculate expected clipping box.
+    m.Invert();
+    double x1, y1, x2, y2;
+    double x, y;
+    // Top-left corner
+    x = 0.0;
+    y = 0.0;
+    m.TransformPoint(&x, &y);
+    x1 = x;
+    y1 = y;
+    x2 = x;
+    y2 = y;
+    // Top-right corner
+    x = s_dcSize.GetWidth();
+    y = 0.0;
+    m.TransformPoint(&x, &y);
+    x1 = wxMin(x1, x);
+    y1 = wxMin(y1, y);
+    x2 = wxMax(x2, x);
+    y2 = wxMax(y2, y);
+    // Bottom-right corner
+    x = s_dcSize.GetWidth();
+    y = s_dcSize.GetHeight();
+    m.TransformPoint(&x, &y);
+    x1 = wxMin(x1, x);
+    y1 = wxMin(y1, y);
+    x2 = wxMax(x2, x);
+    y2 = wxMax(y2, y);
+    // Bottom-left corner
+    x = 0.0;
+    y = s_dcSize.GetHeight();
+    m.TransformPoint(&x, &y);
+    x1 = wxMin(x1, x);
+    y1 = wxMin(y1, y);
+    x2 = wxMax(x2, x);
+    y2 = wxMax(y2, y);
 
-        dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
-        dc.Clear();
-        CheckClipBox(dc, bmp,
-                     clipX, clipY, clipW, clipH,
-                     0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
-    }
-    else
-    {
-        WARN("Skipping test because transform matrix is not supported.");
-    }
+    int clipX = wxRound(x1);
+    int clipY = wxRound(y1);
+    int clipW = wxRound(x2) - wxRound(x1);
+    int clipH = wxRound(y2) - wxRound(y1);
+
+    dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    dc.Clear();
+    CheckClipBox(dc, bmp,
+                 clipX, clipY, clipW, clipH,
+                 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
@@ -465,67 +458,63 @@ static void SameRegionRepeatRotatedDC(wxDC& dc)
     // While setting the same clipping region several times
     // the same clipping box should be should be returned.
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( dc.CanUseTransformMatrix() )
-    {
-        // Apply rotation to DC.
-        wxAffineMatrix2D m = dc.GetTransformMatrix();
-        m.Rotate(wxDegToRad(6));
-        dc.SetTransformMatrix(m);
+    if ( !dc.CanUseTransformMatrix() )
+        return;
 
-        // Calculate expected clipping box.
-        m.Invert();
-        double x1, y1, x2, y2;
-        double x, y;
-        // Top-left corner
-        x = 0.0;
-        y = 0.0;
-        m.TransformPoint(&x, &y);
-        x1 = x;
-        y1 = y;
-        x2 = x;
-        y2 = y;
-        // Top-right corner
-        x = s_dcSize.GetWidth();
-        y = 0.0;
-        m.TransformPoint(&x, &y);
-        x1 = wxMin(x1, x);
-        y1 = wxMin(y1, y);
-        x2 = wxMax(x2, x);
-        y2 = wxMax(y2, y);
-        // Bottom-right corner
-        x = s_dcSize.GetWidth();
-        y = s_dcSize.GetHeight();
-        m.TransformPoint(&x, &y);
-        x1 = wxMin(x1, x);
-        y1 = wxMin(y1, y);
-        x2 = wxMax(x2, x);
-        y2 = wxMax(y2, y);
-        // Bottom-left corner
-        x = 0.0;
-        y = s_dcSize.GetHeight();
-        m.TransformPoint(&x, &y);
-        x1 = wxMin(x1, x);
-        y1 = wxMin(y1, y);
-        x2 = wxMax(x2, x);
-        y2 = wxMax(y2, y);
+    // Apply rotation to DC.
+    wxAffineMatrix2D m = dc.GetTransformMatrix();
+    m.Rotate(wxDegToRad(6));
+    dc.SetTransformMatrix(m);
 
-        int clipX = wxRound(x1);
-        int clipY = wxRound(y1);
-        int clipW = wxRound(x2) - wxRound(x1);
-        int clipH = wxRound(y2) - wxRound(y1);
+    // Calculate expected clipping box.
+    m.Invert();
+    double x1, y1, x2, y2;
+    double x, y;
+    // Top-left corner
+    x = 0.0;
+    y = 0.0;
+    m.TransformPoint(&x, &y);
+    x1 = x;
+    y1 = y;
+    x2 = x;
+    y2 = y;
+    // Top-right corner
+    x = s_dcSize.GetWidth();
+    y = 0.0;
+    m.TransformPoint(&x, &y);
+    x1 = wxMin(x1, x);
+    y1 = wxMin(y1, y);
+    x2 = wxMax(x2, x);
+    y2 = wxMax(y2, y);
+    // Bottom-right corner
+    x = s_dcSize.GetWidth();
+    y = s_dcSize.GetHeight();
+    m.TransformPoint(&x, &y);
+    x1 = wxMin(x1, x);
+    y1 = wxMin(y1, y);
+    x2 = wxMax(x2, x);
+    y2 = wxMax(y2, y);
+    // Bottom-left corner
+    x = 0.0;
+    y = s_dcSize.GetHeight();
+    m.TransformPoint(&x, &y);
+    x1 = wxMin(x1, x);
+    y1 = wxMin(y1, y);
+    x2 = wxMax(x2, x);
+    y2 = wxMax(y2, y);
 
-        dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
-        dc.Clear();
-        CheckClipPos(dc, clipX, clipY, clipW, clipH);
-        dc.SetClippingRegion(clipX, clipY, clipW, clipH);
-        CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
-        dc.SetClippingRegion(clipX, clipY, clipW, clipH);
-        CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
-    }
-    else
-    {
-        WARN("Skipping test because transform matrix is not supported.");
-    }
+    int clipX = wxRound(x1);
+    int clipY = wxRound(y1);
+    int clipW = wxRound(x2) - wxRound(x1);
+    int clipH = wxRound(y2) - wxRound(y1);
+
+    dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    dc.Clear();
+    CheckClipPos(dc, clipX, clipY, clipW, clipH);
+    dc.SetClippingRegion(clipX, clipY, clipW, clipH);
+    CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
+    dc.SetClippingRegion(clipX, clipY, clipW, clipH);
+    CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
@@ -623,10 +612,7 @@ static void OneRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool check
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region inside DC area
@@ -694,92 +680,88 @@ static void OneRegionOverRotatedDC(wxDC& dc)
     // Setting one clipping region inside DC area
     // with applied rotation transformation.
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( dc.CanUseTransformMatrix() )
-    {
-        // Setting one clipping region inside DC area.
-        const int x = 0;
-        const int y = 0;
-        const int w = 40;
-        const int h = 30;
+    if ( !dc.CanUseTransformMatrix() )
+        return;
 
-        // Apply transformation to DC.
-        wxAffineMatrix2D m;
-        m.Translate(30, 20);
-        m.Scale(1.5, 1.5);
-        m.Rotate(wxDegToRad(15));
-        dc.SetTransformMatrix(m);
+    // Setting one clipping region inside DC area.
+    const int x = 0;
+    const int y = 0;
+    const int w = 40;
+    const int h = 30;
 
-        dc.SetClippingRegion(x, y, w, h);
-        dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
-        dc.Clear();
+    // Apply transformation to DC.
+    wxAffineMatrix2D m;
+    m.Translate(30, 20);
+    m.Scale(1.5, 1.5);
+    m.Rotate(wxDegToRad(15));
+    dc.SetTransformMatrix(m);
 
-        // Currently only wxGCDC with Direct2D renderer returns
-        // exact clipping box (+/- 1 pixel) for rotated DC.
-        // For other DCs returned clipping box is not the smallest one.
+    dc.SetClippingRegion(x, y, w, h);
+    dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    dc.Clear();
+
+    // Currently only wxGCDC with Direct2D renderer returns
+    // exact clipping box (+/- 1 pixel) for rotated DC.
+    // For other DCs returned clipping box is not the smallest one.
 #if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
-        wxGraphicsContext* gc = dc.GetGraphicsContext();
-        if ( gc && gc->GetRenderer() == wxGraphicsRenderer::GetDirect2DRenderer() )
-        {
-            CheckClipPos(dc, x, y, w, h, 1);
-        }
-        else
-#endif // __WXMSW__ && wxUSE_GRAPHICS_DIRECT2D
-        {
-            wxRect clipRect;
-            dc.GetClippingBox(clipRect);
-            wxRect minRect(x, y, w, h);
-            CHECK(clipRect.Contains(minRect));
-        }
-
-        // Check clipping box coordinates in unrotated coordinate system
-        dc.ResetTransformMatrix();
-
-        // Calculate expected clipping box.
-        double x1, y1, x2, y2;
-        double xx, yy;
-        // Top-left corner
-        xx = x;
-        yy = y;
-        m.TransformPoint(&xx, &yy);
-        x1 = xx;
-        y1 = yy;
-        x2 = xx;
-        y2 = yy;
-        // Top-right corner
-        xx = x + w;
-        yy = y;
-        m.TransformPoint(&xx, &yy);
-        x1 = wxMin(x1, xx);
-        y1 = wxMin(y1, yy);
-        x2 = wxMax(x2, xx);
-        y2 = wxMax(y2, yy);
-        // Bottom-right corner
-        xx = x + w;
-        yy = y + h;
-        m.TransformPoint(&xx, &yy);
-        x1 = wxMin(x1, xx);
-        y1 = wxMin(y1, yy);
-        x2 = wxMax(x2, xx);
-        y2 = wxMax(y2, yy);
-        // Bottom-left corner
-        xx = x;
-        yy = y + h;
-        m.TransformPoint(&xx, &yy);
-        x1 = wxMin(x1, xx);
-        y1 = wxMin(y1, yy);
-        x2 = wxMax(x2, xx);
-        y2 = wxMax(y2, yy);
-
-        int clipX = wxRound(x1);
-        int clipY = wxRound(y1);
-        int clipW = wxRound(x2) - wxRound(x1);
-        int clipH = wxRound(y2) - wxRound(y1);
-        CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
+    wxGraphicsContext* gc = dc.GetGraphicsContext();
+    if ( gc && gc->GetRenderer() == wxGraphicsRenderer::GetDirect2DRenderer() )
+    {
+        CheckClipPos(dc, x, y, w, h, 1);
     }
     else
+#endif // __WXMSW__ && wxUSE_GRAPHICS_DIRECT2D
     {
-        WARN("Skipping test because transform matrix is not supported.");
+        wxRect clipRect;
+        dc.GetClippingBox(clipRect);
+        wxRect minRect(x, y, w, h);
+        CHECK(clipRect.Contains(minRect));
     }
+
+    // Check clipping box coordinates in unrotated coordinate system
+    dc.ResetTransformMatrix();
+
+    // Calculate expected clipping box.
+    double x1, y1, x2, y2;
+    double xx, yy;
+    // Top-left corner
+    xx = x;
+    yy = y;
+    m.TransformPoint(&xx, &yy);
+    x1 = xx;
+    y1 = yy;
+    x2 = xx;
+    y2 = yy;
+    // Top-right corner
+    xx = x + w;
+    yy = y;
+    m.TransformPoint(&xx, &yy);
+    x1 = wxMin(x1, xx);
+    y1 = wxMin(y1, yy);
+    x2 = wxMax(x2, xx);
+    y2 = wxMax(y2, yy);
+    // Bottom-right corner
+    xx = x + w;
+    yy = y + h;
+    m.TransformPoint(&xx, &yy);
+    x1 = wxMin(x1, xx);
+    y1 = wxMin(y1, yy);
+    x2 = wxMax(x2, xx);
+    y2 = wxMax(y2, yy);
+    // Bottom-left corner
+    xx = x;
+    yy = y + h;
+    m.TransformPoint(&xx, &yy);
+    x1 = wxMin(x1, xx);
+    y1 = wxMin(y1, yy);
+    x2 = wxMax(x2, xx);
+    y2 = wxMax(y2, yy);
+
+    int clipX = wxRound(x1);
+    int clipY = wxRound(y1);
+    int clipW = wxRound(x2) - wxRound(x1);
+    int clipH = wxRound(y2) - wxRound(y1);
+    CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
@@ -787,10 +769,7 @@ static void OneRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool che
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region inside DC area
@@ -958,10 +937,7 @@ static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, boo
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates
@@ -1014,10 +990,7 @@ static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates larger
@@ -1067,10 +1040,7 @@ static void OneOuterDevRegion(wxDC& dc, const wxBitmap& bmp, bool useTransformMa
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates
@@ -1105,10 +1075,7 @@ static void OneDevRegionNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoord
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates
@@ -1175,10 +1142,7 @@ static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoor
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one triangular clipping region in device coordinates.
@@ -1263,10 +1227,7 @@ static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoo
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates
@@ -1316,10 +1277,7 @@ static void OneDevRegionAndEmpty(wxDC& dc, const wxBitmap& bmp, bool useTransfor
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates
@@ -1356,10 +1314,7 @@ static void OneDevRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool ch
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Set one clipping region in device coordinates inside
@@ -1415,72 +1370,68 @@ static void OneDevRegionOverRotatedDC(wxDC& dc)
     // Set one clipping region in device coordinates inside
     // DC area with applied rotation transformation.
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( dc.CanUseTransformMatrix() )
-    {
-        // Setting one clipping region inside DC area.
-        const int x = 8;
-        const int y = 15;
-        const int w = 60;
-        const int h = 75;
+    if ( !dc.CanUseTransformMatrix() )
+        return;
 
-        wxAffineMatrix2D m;
-        m.Translate(30, 20);
-        m.Scale(1.5, 1.5);
-        m.Rotate(wxDegToRad(15));
-        dc.SetTransformMatrix(m);
+    // Setting one clipping region inside DC area.
+    const int x = 8;
+    const int y = 15;
+    const int w = 60;
+    const int h = 75;
 
-        wxRegion reg(wxRect(x, y, w, h));
-        dc.SetDeviceClippingRegion(reg);
-        dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
-        dc.Clear();
+    wxAffineMatrix2D m;
+    m.Translate(30, 20);
+    m.Scale(1.5, 1.5);
+    m.Rotate(wxDegToRad(15));
+    dc.SetTransformMatrix(m);
 
-        // Calculate expected clipping box.
-        m.Invert();
-        double x1, y1, x2, y2;
-        double xx, yy;
-        // Top-left corner
-        xx = x;
-        yy = y;
-        m.TransformPoint(&xx, &yy);
-        x1 = xx;
-        y1 = yy;
-        x2 = xx;
-        y2 = yy;
-        // Top-right corner
-        xx = x + w;
-        yy = y;
-        m.TransformPoint(&xx, &yy);
-        x1 = wxMin(x1, xx);
-        y1 = wxMin(y1, yy);
-        x2 = wxMax(x2, xx);
-        y2 = wxMax(y2, yy);
-        // Bottom-right corner
-        xx = x + w;
-        yy = y + h;
-        m.TransformPoint(&xx, &yy);
-        x1 = wxMin(x1, xx);
-        y1 = wxMin(y1, yy);
-        x2 = wxMax(x2, xx);
-        y2 = wxMax(y2, yy);
-        // Bottom-left corner
-        xx = x;
-        yy = y + h;
-        m.TransformPoint(&xx, &yy);
-        x1 = wxMin(x1, xx);
-        y1 = wxMin(y1, yy);
-        x2 = wxMax(x2, xx);
-        y2 = wxMax(y2, yy);
+    wxRegion reg(wxRect(x, y, w, h));
+    dc.SetDeviceClippingRegion(reg);
+    dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    dc.Clear();
 
-        int clipX = wxRound(x1);
-        int clipY = wxRound(y1);
-        int clipW = wxRound(x2) - wxRound(x1);
-        int clipH = wxRound(y2) - wxRound(y1);
-        CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
-    }
-    else
-    {
-        WARN("Skipping test because transform matrix is not supported.");
-    }
+    // Calculate expected clipping box.
+    m.Invert();
+    double x1, y1, x2, y2;
+    double xx, yy;
+    // Top-left corner
+    xx = x;
+    yy = y;
+    m.TransformPoint(&xx, &yy);
+    x1 = xx;
+    y1 = yy;
+    x2 = xx;
+    y2 = yy;
+    // Top-right corner
+    xx = x + w;
+    yy = y;
+    m.TransformPoint(&xx, &yy);
+    x1 = wxMin(x1, xx);
+    y1 = wxMin(y1, yy);
+    x2 = wxMax(x2, xx);
+    y2 = wxMax(y2, yy);
+    // Bottom-right corner
+    xx = x + w;
+    yy = y + h;
+    m.TransformPoint(&xx, &yy);
+    x1 = wxMin(x1, xx);
+    y1 = wxMin(y1, yy);
+    x2 = wxMax(x2, xx);
+    y2 = wxMax(y2, yy);
+    // Bottom-left corner
+    xx = x;
+    yy = y + h;
+    m.TransformPoint(&xx, &yy);
+    x1 = wxMin(x1, xx);
+    y1 = wxMin(y1, yy);
+    x2 = wxMax(x2, xx);
+    y2 = wxMax(y2, yy);
+
+    int clipX = wxRound(x1);
+    int clipY = wxRound(y1);
+    int clipW = wxRound(x2) - wxRound(x1);
+    int clipH = wxRound(y2) - wxRound(y1);
+    CheckClipPos(dc, clipX, clipY, clipW, clipH, 1);
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
@@ -1488,10 +1439,7 @@ static void OneDevRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool 
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Set one clipping region in device coordinates inside
@@ -1568,10 +1516,7 @@ static void TwoDevRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, bool checkEx
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates
@@ -1627,10 +1572,7 @@ static void TwoDevRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool c
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates with negative size values
@@ -1696,10 +1638,7 @@ static void TwoDevRegionsNonOverlapping(wxDC& dc, const wxBitmap& bmp, bool useT
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates
@@ -1740,10 +1679,7 @@ static void TwoDevRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, boo
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
-    {
-        WARN("Skipping test because transform matrix is not supported.");
         return;
-    }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // Setting one clipping region in device coordinates with negative size values
