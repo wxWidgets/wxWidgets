@@ -205,8 +205,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BEE0510EC7BF20080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = minimal_iphone;
 			};
 			name = Debug;
@@ -215,7 +213,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BEE0510EC7BF20080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				PRODUCT_NAME = minimal_iphone;
 			};
 			name = Release;
