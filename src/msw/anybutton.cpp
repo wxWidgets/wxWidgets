@@ -590,8 +590,8 @@ wxSize wxAnyButton::DoGetBestSize() const
         if ( ::SendMessage(GetHwnd(), BCM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
             size.Set(idealSize.cx, idealSize.cy);
 
-            if ( m_imageData )
-                AdjustForBitmapMargins(size);
+        if ( m_imageData )
+            AdjustForBitmapMargins(size);
     }
 
     // If we failed to set the size using BCM_GETIDEALSIZE above, determine it
