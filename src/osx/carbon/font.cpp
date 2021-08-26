@@ -50,6 +50,8 @@ public:
 
     wxFontRefData(CTFontRef font);
 
+    wxFontRefData(CTFontUIFontType);
+
     double GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
 
     wxFontFamily GetFamily() const { return m_info.GetFamily(); }
@@ -282,6 +284,24 @@ wxFontRefData::wxFontRefData(CTFontRef font)
     m_info.InitFromFont(font);
 }
 
+wxFontRefData::wxFontRefData(CTFontUIFontType uifont)
+{
+    static std::map<CTFontUIFontType, wxCFRef<CTFontRef> >  s_UIFontCache;
+
+    wxCFRef<CTFontRef> ctfont;
+
+    auto item = s_UIFontCache.find(uifont);
+    if ( item != s_UIFontCache.end() )
+        ctfont = item->second;
+    else
+    {
+        ctfont = CTFontCreateUIFontForLanguage(uifont, 0.0, NULL);
+        s_UIFontCache.emplace(std::make_pair(uifont, ctfont));
+    }
+    SetFont(ctfont);
+    m_info.InitFromFont(ctfont);
+}
+
 void wxFontRefData::SetFont(CTFontRef font)
 {
     m_ctFont.reset(wxCFRetain(font));
@@ -476,8 +496,7 @@ wxFont::wxFont(wxOSXSystemFont font)
         default:
             break;
     }
-    wxCFRef<CTFontRef> ctfont(CTFontCreateUIFontForLanguage(uifont, 0.0, NULL));
-    m_refData = new wxFontRefData(ctfont);
+    m_refData = new wxFontRefData(uifont);
 }
 
 #if wxOSX_USE_COCOA
