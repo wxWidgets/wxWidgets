@@ -19,6 +19,7 @@
 #include "wx/gdicmn.h"
 #include "wx/log.h"
 #include "wx/math.h"
+#include "wx/module.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -29,6 +30,7 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
+#include <array>
 #include <map>
 #include <string>
 
@@ -440,44 +442,115 @@ bool wxFont::Create(const wxNativeFontInfo& info)
     return true;
 }
 
+// Module maintaining and, most importantly, cleaning up, a cache wxFontRefData
+// objects corresponding to the system fonts, as recreating them every time is
+// too expensive.
+class wxOSXSystemFontsCacheModule : public wxModule
+{
+public:
+    wxOSXSystemFontsCacheModule() { }
+
+    bool OnInit() wxOVERRIDE
+    {
+        for ( auto& p: ms_systemFontsCache )
+            p = nullptr;
+
+        return true;
+    }
+
+    void OnExit() wxOVERRIDE
+    {
+        for ( auto& p: ms_systemFontsCache )
+        {
+            if ( p )
+            {
+                p->DecRef();
+                p = nullptr;
+            }
+        }
+    }
+
+    // The returned pointer must be DecRef()'d by caller if non-null.
+    static wxFontRefData* Get(wxOSXSystemFont font)
+    {
+        wxCHECK(font != wxOSX_SYSTEM_FONT_NONE, nullptr);
+
+        wxFontRefData*& cached = ms_systemFontsCache[font - 1];
+        if ( !cached )
+        {
+            CTFontUIFontType uifont;
+            switch (font)
+            {
+                // This case is unreachable because of the precondition check
+                // above and is only present to avoid -Wswitch warnings.
+                case wxOSX_SYSTEM_FONT_NONE:
+                    wxFALLTHROUGH;
+
+                case wxOSX_SYSTEM_FONT_NORMAL:
+                    uifont = kCTFontSystemFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_BOLD:
+                    uifont = kCTFontEmphasizedSystemFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_SMALL:
+                    uifont = kCTFontSmallSystemFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_SMALL_BOLD:
+                    uifont = kCTFontSmallEmphasizedSystemFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_MINI:
+                    uifont = kCTFontMiniSystemFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_MINI_BOLD:
+                    uifont = kCTFontMiniEmphasizedSystemFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_LABELS:
+                    uifont = kCTFontLabelFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_VIEWS:
+                    uifont = kCTFontViewsFontType;
+                    break;
+                case wxOSX_SYSTEM_FONT_FIXED:
+                    uifont = kCTFontUIFontUserFixedPitch;
+                    break;
+
+                // Remember to update Cache array size when adding new cases to
+                // this switch statement!
+            }
+            wxCFRef<CTFontRef> ctfont(CTFontCreateUIFontForLanguage(uifont, 0.0, NULL));
+            cached = new wxFontRefData(ctfont);
+        }
+
+        cached->IncRef();
+
+        return cached;
+    }
+
+private:
+    // This relies on wxOSX_SYSTEM_FONT_FIXED being the last element of enum,
+    // which should rename true until a new enum element is added, at which
+    // stage we should get a warning about the missing case in the switch above
+    // and the size of this array will need to be modified when adding the new
+    // case.
+    //
+    // Notice that we don't need "+ 1" here because we never cache the font for
+    // wxOSX_SYSTEM_FONT_NONE which should be never used, so we use the index
+    // of "enum value - 1" in the cache.
+    using Cache = std::array<wxFontRefData*, wxOSX_SYSTEM_FONT_FIXED>;
+
+    // Cache owns the pointers, i.e. calls DecRef() on them when it's destroyed.
+    static Cache ms_systemFontsCache;
+
+    wxDECLARE_DYNAMIC_CLASS(wxOSXSystemFontsCacheModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxOSXSystemFontsCacheModule, wxModule);
+
+wxOSXSystemFontsCacheModule::Cache wxOSXSystemFontsCacheModule::ms_systemFontsCache;
+
 wxFont::wxFont(wxOSXSystemFont font)
 {
-    wxASSERT(font != wxOSX_SYSTEM_FONT_NONE);
-    CTFontUIFontType uifont = kCTFontSystemFontType;
-    switch (font)
-    {
-        case wxOSX_SYSTEM_FONT_NORMAL:
-            uifont = kCTFontSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_BOLD:
-            uifont = kCTFontEmphasizedSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_SMALL:
-            uifont = kCTFontSmallSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_SMALL_BOLD:
-            uifont = kCTFontSmallEmphasizedSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_MINI:
-            uifont = kCTFontMiniSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_MINI_BOLD:
-            uifont = kCTFontMiniEmphasizedSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_LABELS:
-            uifont = kCTFontLabelFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_VIEWS:
-            uifont = kCTFontViewsFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_FIXED:
-            uifont = kCTFontUIFontUserFixedPitch;
-            break;
-        default:
-            break;
-    }
-    wxCFRef<CTFontRef> ctfont(CTFontCreateUIFontForLanguage(uifont, 0.0, NULL));
-    m_refData = new wxFontRefData(ctfont);
+    m_refData = wxOSXSystemFontsCacheModule::Get(font);
 }
 
 #if wxOSX_USE_COCOA
