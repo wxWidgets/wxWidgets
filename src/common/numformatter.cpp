@@ -16,84 +16,7 @@
 
 
 #include "wx/numformatter.h"
-#include "wx/intl.h"
-
-#include <locale.h> // for setlocale and LC_ALL
-
-// ----------------------------------------------------------------------------
-// local helpers
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-// Contains information about the locale which was used to initialize our
-// cached values of the decimal and thousands separators. Notice that it isn't
-// enough to store just wxLocale because the user code may call setlocale()
-// directly and storing just C locale string is not enough because we can use
-// the OS API directly instead of the CRT ones on some platforms. So just store
-// both.
-class LocaleId
-{
-public:
-    LocaleId()
-    {
-#if wxUSE_INTL
-        m_wxloc = NULL;
-#endif // wxUSE_INTL
-        m_cloc = NULL;
-    }
-
-    ~LocaleId()
-    {
-        Free();
-    }
-
-#if wxUSE_INTL
-    // Return true if this is the first time this function is called for this
-    // object or if the program locale has changed since the last time it was
-    // called. Otherwise just return false indicating that updating locale-
-    // dependent information is not necessary.
-    bool NotInitializedOrHasChanged()
-    {
-        wxLocale * const wxloc = wxGetLocale();
-        const char * const cloc = setlocale(LC_ALL, NULL);
-        if ( m_wxloc || m_cloc )
-        {
-            if ( m_wxloc == wxloc && strcmp(m_cloc, cloc) == 0 )
-                return false;
-
-            Free();
-        }
-        //else: Not initialized yet.
-
-        m_wxloc = wxloc;
-        m_cloc = wxCRT_StrdupA(cloc);
-
-        return true;
-    }
-#endif // wxUSE_INTL
-
-private:
-    void Free()
-    {
-#if wxUSE_INTL
-        free(m_cloc);
-#endif // wxUSE_INTL
-    }
-
-#if wxUSE_INTL
-    // Non-owned pointer to wxLocale which was used.
-    wxLocale *m_wxloc;
-#endif // wxUSE_INTL
-
-    // Owned pointer to the C locale string.
-    char *m_cloc;
-
-    wxDECLARE_NO_COPY_CLASS(LocaleId);
-};
-
-} // anonymous namespace
+#include "wx/uilocale.h"
 
 // ============================================================================
 // wxNumberFormatter implementation
@@ -111,14 +34,10 @@ wxChar wxNumberFormatter::GetDecimalSeparator()
     // concurrently from more than one thread so it's not a real problem.
     static wxChar s_decimalSeparator = 0;
 
-    // Remember the locale which was current when we initialized, we must redo
-    // the initialization if the locale changed.
-    static LocaleId s_localeUsedForInit;
-
-    if ( s_localeUsedForInit.NotInitializedOrHasChanged() )
+    if ( !s_decimalSeparator )
     {
         const wxString
-            s = wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
+            s = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
         if ( s.length() == 1 )
         {
             s_decimalSeparator = s[0];
@@ -141,12 +60,14 @@ bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
 {
 #if wxUSE_INTL
     static wxChar s_thousandsSeparator = 0;
-    static LocaleId s_localeUsedForInit;
+    static bool s_thousandsSeparatorInitialized = false;
 
-    if ( s_localeUsedForInit.NotInitializedOrHasChanged() )
+    if ( !s_thousandsSeparatorInitialized )
     {
+        s_thousandsSeparatorInitialized = true;
+
         const wxString
-            s = wxLocale::GetInfo(wxLOCALE_THOUSANDS_SEP, wxLOCALE_CAT_NUMBER);
+            s = wxUILocale::GetCurrent().GetInfo(wxLOCALE_THOUSANDS_SEP, wxLOCALE_CAT_NUMBER);
         if ( s.length() == 1 )
         {
             s_thousandsSeparator = s[0];
@@ -171,6 +92,21 @@ bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
 // ----------------------------------------------------------------------------
 // Conversion to string and helpers
 // ----------------------------------------------------------------------------
+
+namespace
+{
+
+void ReplaceSeparatorIfNecessary(wxString& s, wxChar sepOld, wxChar sepNew)
+{
+    if ( sepNew != sepOld )
+    {
+        const size_t posSep = s.find(sepOld);
+        if ( posSep != wxString::npos )
+            s[posSep] = sepNew;
+    }
+}
+
+} // anonymous namespace
 
 wxString wxNumberFormatter::PostProcessIntString(wxString s, int style)
 {
@@ -206,13 +142,32 @@ wxString wxNumberFormatter::ToString(wxULongLong_t val, int style)
 
 wxString wxNumberFormatter::ToString(double val, int precision, int style)
 {
-    wxString s = wxString::FromDouble(val,precision);
+    wxString s = wxString::FromCDouble(val,precision);
+
+    ReplaceSeparatorIfNecessary(s, '.', GetDecimalSeparator());
 
     if ( style & Style_WithThousandsSep )
         AddThousandsSeparators(s);
 
     if ( style & Style_NoTrailingZeroes )
         RemoveTrailingZeroes(s);
+
+    return s;
+}
+
+wxString wxNumberFormatter::Format(const wxString& format, double val)
+{
+    wxString s = wxString::Format(format, val);
+
+    const wxChar sep = GetDecimalSeparator();
+    if ( s.find(sep) == wxString::npos )
+    {
+        const wxChar other = sep == '.' ? ',' : '.';
+        const size_t posSep = s.find(other);
+        if ( posSep != wxString::npos )
+            s[posSep] = sep;
+    }
+    //else: it already uses the correct separator
 
     return s;
 }
@@ -330,5 +285,6 @@ bool wxNumberFormatter::FromString(wxString s, wxULongLong_t *val)
 bool wxNumberFormatter::FromString(wxString s, double *val)
 {
     RemoveThousandsSeparators(s);
-    return s.ToDouble(val);
+    ReplaceSeparatorIfNecessary(s, GetDecimalSeparator(), '.');
+    return s.ToCDouble(val);
 }

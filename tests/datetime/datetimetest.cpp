@@ -22,6 +22,8 @@
 
 #include "wx/wxcrt.h"       // for wxStrstr()
 
+#include "wx/private/localeset.h"
+
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
 // the macro below to do it
@@ -1304,7 +1306,7 @@ void DateTimeTestCase::TestDateTimeParse()
 
     // the test strings here use "PM" which is not available in all locales so
     // we need to use "C" locale for them
-    CLocaleSetter cloc;
+    wxCLocaleSetter cloc;
 
     wxDateTime dt;
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )

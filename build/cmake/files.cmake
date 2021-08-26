@@ -47,6 +47,7 @@ set(BASE_UNIX_SRC
     src/unix/fswatcher_inotify.cpp
     src/unix/secretstore.cpp
     src/unix/stdpaths.cpp
+    src/unix/uilocale.cpp
 )
 
 set(BASE_UNIX_HDR
@@ -76,6 +77,7 @@ set(BASE_WIN32_SRC
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
     src/msw/fswatcher.cpp
+    src/msw/uilocale.cpp
 )
 
 set(BASE_AND_GUI_WIN32_SRC
@@ -114,6 +116,7 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
+    src/osx/core/uilocale.cpp
 )
 
 set(BASE_COREFOUNDATION_HDR
@@ -475,6 +478,7 @@ set(BASE_CMN_SRC
     src/common/fswatchercmn.cpp
     src/generic/fswatcherg.cpp
     src/common/lzmastream.cpp
+    src/common/uilocale.cpp
 )
 
 set(BASE_AND_GUI_CMN_SRC
@@ -651,6 +655,8 @@ set(BASE_CMN_HDR
     wx/fswatcher.h
     wx/generic/fswatcher.h
     wx/lzmastream.h
+    wx/localedefs.h
+    wx/uilocale.h
 )
 
 set(NET_UNIX_SRC

@@ -581,6 +581,8 @@ ALL_BASE_HEADERS =  \
 	wx/generic/fswatcher.h \
 	wx/secretstore.h \
 	wx/lzmastream.h \
+	wx/localedefs.h \
+	wx/uilocale.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
@@ -766,6 +768,8 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/generic/fswatcher.h \
 	wx/secretstore.h \
 	wx/lzmastream.h \
+	wx/localedefs.h \
+	wx/uilocale.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -905,6 +909,7 @@ ALL_BASE_SOURCES =  \
 	src/generic/fswatcherg.cpp \
 	src/common/secretstore.cpp \
 	src/common/lzmastream.cpp \
+	src/common/uilocale.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -924,6 +929,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/fswatcher_inotify.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/secretstore.cpp \
+	src/unix/uilocale.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
 	src/msw/debughlp.cpp \
@@ -944,6 +950,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/utilsexc.cpp \
 	src/msw/fswatcher.cpp \
 	src/msw/secretstore.cpp \
+	src/msw/uilocale.cpp \
 	$(BASE_OSX_SRC) \
 	src/common/event.cpp \
 	src/common/fs_mem.cpp \
@@ -1093,6 +1100,7 @@ MONODLL_OBJECTS =  \
 	monodll_fswatcherg.o \
 	monodll_common_secretstore.o \
 	monodll_lzmastream.o \
+	monodll_common_uilocale.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS) \
 	monodll_event.o \
 	monodll_fs_mem.o \
@@ -1235,6 +1243,7 @@ MONOLIB_OBJECTS =  \
 	monolib_fswatcherg.o \
 	monolib_common_secretstore.o \
 	monolib_lzmastream.o \
+	monolib_common_uilocale.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_1) \
 	monolib_event.o \
 	monolib_fs_mem.o \
@@ -1365,6 +1374,7 @@ BASEDLL_OBJECTS =  \
 	basedll_fswatcherg.o \
 	basedll_common_secretstore.o \
 	basedll_lzmastream.o \
+	basedll_common_uilocale.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_2) \
 	basedll_event.o \
 	basedll_fs_mem.o \
@@ -1477,6 +1487,7 @@ BASELIB_OBJECTS =  \
 	baselib_fswatcherg.o \
 	baselib_common_secretstore.o \
 	baselib_lzmastream.o \
+	baselib_common_uilocale.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_3) \
 	baselib_event.o \
 	baselib_fs_mem.o \
@@ -2357,6 +2368,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2382,6 +2394,7 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2421,7 +2434,8 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.cpp
 @COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2444,7 +2458,8 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.cpp
 @COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2467,7 +2482,8 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.cpp
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
 COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2490,7 +2506,8 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.cpp
 @COND_TOOLKIT_MOTIF@BASE_OSX_SRC = $(COND_TOOLKIT_MOTIF_BASE_OSX_SRC)
 COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2513,7 +2530,8 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.cpp
 @COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfdataref.h \
@@ -4259,6 +4277,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_strconv_cf.o \
 	monodll_utils_base.o \
 	monodll_core_secretstore.o \
+	monodll_core_uilocale.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -4296,7 +4315,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_unix_mimetype.o \
 	monodll_fswatcher_inotify.o \
 	monodll_unix_stdpaths.o \
-	monodll_unix_secretstore.o
+	monodll_unix_secretstore.o \
+	monodll_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -4318,7 +4338,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_msw_utils.o \
 	monodll_utilsexc.o \
 	monodll_fswatcher.o \
-	monodll_msw_secretstore.o
+	monodll_msw_secretstore.o \
+	monodll_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_volume.o
@@ -6252,6 +6273,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_strconv_cf.o \
 	monolib_utils_base.o \
 	monolib_core_secretstore.o \
+	monolib_core_uilocale.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -6289,7 +6311,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_unix_mimetype.o \
 	monolib_fswatcher_inotify.o \
 	monolib_unix_stdpaths.o \
-	monolib_unix_secretstore.o
+	monolib_unix_secretstore.o \
+	monolib_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -6311,7 +6334,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_msw_utils.o \
 	monolib_utilsexc.o \
 	monolib_fswatcher.o \
-	monolib_msw_secretstore.o
+	monolib_msw_secretstore.o \
+	monolib_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_volume.o
@@ -8297,6 +8321,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_strconv_cf.o \
 	basedll_utils_base.o \
 	basedll_core_secretstore.o \
+	basedll_core_uilocale.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -8334,7 +8359,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_unix_mimetype.o \
 	basedll_fswatcher_inotify.o \
 	basedll_unix_stdpaths.o \
-	basedll_unix_secretstore.o
+	basedll_unix_secretstore.o \
+	basedll_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -8356,7 +8382,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_msw_utils.o \
 	basedll_utilsexc.o \
 	basedll_fswatcher.o \
-	basedll_msw_secretstore.o
+	basedll_msw_secretstore.o \
+	basedll_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_volume.o
@@ -8380,6 +8407,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_strconv_cf.o \
 	baselib_utils_base.o \
 	baselib_core_secretstore.o \
+	baselib_core_uilocale.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -8417,7 +8445,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_unix_mimetype.o \
 	baselib_fswatcher_inotify.o \
 	baselib_unix_stdpaths.o \
-	baselib_unix_secretstore.o
+	baselib_unix_secretstore.o \
+	baselib_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -8439,7 +8468,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_msw_utils.o \
 	baselib_utilsexc.o \
 	baselib_fswatcher.o \
-	baselib_msw_secretstore.o
+	baselib_msw_secretstore.o \
+	baselib_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_volume.o
@@ -15995,6 +16025,9 @@ monodll_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(MONODLL_ODE
 monodll_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
 
+monodll_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/uilocale.cpp
+
 monodll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -16006,6 +16039,9 @@ monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
 
 monodll_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+monodll_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -16067,6 +16103,9 @@ monodll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONODLL_ODEP)
 monodll_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
 
+monodll_msw_uilocale.o: $(srcdir)/src/msw/uilocale.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/uilocale.cpp
+
 monodll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -16084,6 +16123,9 @@ monodll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONODLL_ODEP)
 
 monodll_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
+
+monodll_core_uilocale.o: $(srcdir)/src/osx/core/uilocale.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/uilocale.cpp
 
 monodll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -21272,6 +21314,9 @@ monolib_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(MONOLIB_ODE
 monolib_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
 
+monolib_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/uilocale.cpp
+
 monolib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -21283,6 +21328,9 @@ monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
 
 monolib_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+monolib_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -21344,6 +21392,9 @@ monolib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONOLIB_ODEP)
 monolib_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
 
+monolib_msw_uilocale.o: $(srcdir)/src/msw/uilocale.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/uilocale.cpp
+
 monolib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -21361,6 +21412,9 @@ monolib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONOLIB_ODEP)
 
 monolib_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
+
+monolib_core_uilocale.o: $(srcdir)/src/osx/core/uilocale.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/uilocale.cpp
 
 monolib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -26549,6 +26603,9 @@ basedll_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(BASEDLL_ODE
 basedll_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
 
+basedll_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/uilocale.cpp
+
 basedll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -26560,6 +26617,9 @@ basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
 
 basedll_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+basedll_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -26621,6 +26681,9 @@ basedll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASEDLL_ODEP)
 basedll_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
 
+basedll_msw_uilocale.o: $(srcdir)/src/msw/uilocale.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/uilocale.cpp
+
 basedll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -26638,6 +26701,9 @@ basedll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASEDLL_ODEP)
 
 basedll_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
+
+basedll_core_uilocale.o: $(srcdir)/src/osx/core/uilocale.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/uilocale.cpp
 
 basedll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -27023,6 +27089,9 @@ baselib_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(BASELIB_ODE
 baselib_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
 
+baselib_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/uilocale.cpp
+
 baselib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -27034,6 +27103,9 @@ baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
 
 baselib_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+baselib_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -27095,6 +27167,9 @@ baselib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASELIB_ODEP)
 baselib_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
 
+baselib_msw_uilocale.o: $(srcdir)/src/msw/uilocale.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/uilocale.cpp
+
 baselib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -27112,6 +27187,9 @@ baselib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASELIB_ODEP)
 
 baselib_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
+
+baselib_core_uilocale.o: $(srcdir)/src/osx/core/uilocale.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/uilocale.cpp
 
 baselib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp

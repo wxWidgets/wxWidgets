@@ -43,18 +43,6 @@
     #include <langinfo.h>
 #endif
 
-#ifdef __WIN32__
-    #include "wx/dynlib.h"
-    #include "wx/msw/private.h"
-
-    #ifndef LOCALE_SNAME
-    #define LOCALE_SNAME 0x5c
-    #endif
-    #ifndef LOCALE_CUSTOM_UI_DEFAULT
-    #define LOCALE_CUSTOM_UI_DEFAULT 0x1400
-    #endif
-#endif
-
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
@@ -63,13 +51,18 @@
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
+#include "wx/uilocale.h"
 
-#if defined(__WXOSX__)
+#ifdef __WIN32__
+    #include "wx/msw/private/uilocale.h"
+#elif defined(__WXOSX__)
     #include "wx/osx/core/cfref.h"
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
     #include <CoreFoundation/CFDateFormatter.h>
     #include <CoreFoundation/CFString.h>
+#elif defined(__UNIX__)
+    #include "wx/unix/private/uilocale.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -87,31 +80,6 @@
 // ----------------------------------------------------------------------------
 
 static wxLocale *wxSetLocale(wxLocale *pLocale);
-
-namespace
-{
-
-#if defined(__UNIX__)
-
-// get just the language part ("en" in "en_GB")
-inline wxString ExtractLang(const wxString& langFull)
-{
-    return langFull.BeforeFirst('_');
-}
-
-// get everything else (including the leading '_')
-inline wxString ExtractNotLang(const wxString& langFull)
-{
-    size_t pos = langFull.find('_');
-    if ( pos != wxString::npos )
-        return langFull.substr(pos);
-    else
-        return wxString();
-}
-
-#endif // __UNIX__
-
-} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxLanguageInfo
@@ -396,89 +364,6 @@ bool wxLocale::DoCommonPostInit(bool success,
     return success;
 }
 
-#if defined(__UNIX__)
-
-// Helper of wxSetlocaleTryAll() below which tries setting the given locale
-// with and without UTF-8 suffix. Don't use this one directly.
-static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
-{
-    const char *l = NULL;
-
-    // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
-    //     non-UTF-8 locale if it fails, but this is not necessary under the
-    //     supported macOS versions where xx_YY locales are just aliases to
-    //     xx_YY.UTF-8 anyhow.
-#if wxUSE_UNICODE && !defined(__WXMAC__)
-    if ( !lc.empty() )
-    {
-        wxString buf(lc);
-        wxString buf2;
-        buf2 = buf + wxS(".UTF-8");
-        l = wxSetlocale(c, buf2);
-        if ( !l )
-        {
-            buf2 = buf + wxS(".utf-8");
-            l = wxSetlocale(c, buf2);
-        }
-        if ( !l )
-        {
-            buf2 = buf + wxS(".UTF8");
-            l = wxSetlocale(c, buf2);
-        }
-        if ( !l )
-        {
-            buf2 = buf + wxS(".utf8");
-            l = wxSetlocale(c, buf2);
-        }
-    }
-
-    // if we can't set UTF-8 locale, try non-UTF-8 one:
-    if ( !l )
-#endif // wxUSE_UNICODE && !__WXMAC__
-        l = wxSetlocale(c, lc);
-
-    return l;
-}
-
-// Try setting all possible versions of the given locale, i.e. with and without
-// UTF-8 encoding, and with or without the "_territory" part.
-static const char *wxSetlocaleTryAll(int c, const wxString& lc)
-{
-    const char* l = wxSetlocaleTryUTF8(c, lc);
-    if ( !l )
-    {
-        const wxString& lcOnlyLang = ExtractLang(lc);
-        if ( lcOnlyLang != lc )
-            l = wxSetlocaleTryUTF8(c, lcOnlyLang);
-    }
-
-    return l;
-}
-
-#endif // __UNIX__
-
-#ifdef __WIN32__
-
-// Trivial wrapper for ::SetThreadUILanguage().
-//
-// TODO-XP: Drop this when we don't support XP any longer.
-static void wxMSWSetThreadUILanguage(LANGID langid)
-{
-    // SetThreadUILanguage() is available on XP, but with unclear
-    // behavior, so avoid calling it there.
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
-    {
-        wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
-        typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
-        SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
-        wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
-        if (pfnSetThreadUILanguage)
-            pfnSetThreadUILanguage(langid);
-    }
-}
-
-#endif // __WIN32__
-
 bool wxLocale::Init(int lang, int flags)
 {
 #if WXWIN_COMPATIBILITY_2_8
@@ -522,76 +407,19 @@ bool wxLocale::Init(int lang, int flags)
 
 #if defined(__UNIX__) || defined(__WIN32__)
 
+    bool ok = lang == wxLANGUAGE_DEFAULT ? wxUILocale::UseDefault()
+                                         : wxUILocale::UseLanguage(*info);
+
+    // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
+    // the other platforms we still have to do it here.
+#if defined(__WIN32__) || defined(__WXOSX__)
+
     // We prefer letting the CRT to set its locale on its own when using
     // default locale, as it does a better job of it than we do. We also have
     // to do this when we didn't recognize the default language at all.
     const char *retloc = lang == wxLANGUAGE_DEFAULT ? wxSetlocale(LC_ALL, "")
-                                                    : NULL;
+                                                    : info->TrySetLocale();
 
-#if defined(__UNIX__)
-    if ( !retloc )
-        retloc = wxSetlocaleTryAll(LC_ALL, shortName);
-
-    if ( !retloc )
-    {
-        // Some C libraries (namely glibc) still use old ISO 639,
-        // so will translate the abbrev for them
-        wxString localeAlt;
-        const wxString& langOnly = ExtractLang(shortName);
-        if ( langOnly == wxS("he") )
-            localeAlt = wxS("iw") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("id") )
-            localeAlt = wxS("in") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("yi") )
-            localeAlt = wxS("ji") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("nb") )
-            localeAlt = wxS("no_NO");
-        else if ( langOnly == wxS("nn") )
-            localeAlt = wxS("no_NY");
-
-        if ( !localeAlt.empty() )
-            retloc = wxSetlocaleTryAll(LC_ALL, localeAlt);
-    }
-
-#ifdef __AIX__
-    // at least in AIX 5.2 libc is buggy and the string returned from
-    // setlocale(LC_ALL) can't be passed back to it because it returns 6
-    // strings (one for each locale category), i.e. for C locale we get back
-    // "C C C C C C"
-    //
-    // this contradicts IBM own docs but this is not of much help, so just work
-    // around it in the crudest possible manner
-    char* p = const_cast<char*>(wxStrchr(retloc, ' '));
-    if ( p )
-        *p = '\0';
-#endif // __AIX__
-
-#elif defined(__WIN32__)
-    if ( lang == wxLANGUAGE_DEFAULT )
-    {
-        ::SetThreadLocale(LOCALE_USER_DEFAULT);
-        wxMSWSetThreadUILanguage(LANG_USER_DEFAULT);
-
-        // CRT locale already set above.
-    }
-    else if ( info->WinLang == 0 )
-    {
-        wxLogWarning(wxS("Locale '%s' not supported by OS."), name);
-
-        retloc = "C";
-    }
-    else // language supported by Windows
-    {
-        const wxUint32 lcid = info->GetLCID();
-
-        // change locale used by Windows functions
-        ::SetThreadLocale(lcid);
-
-        wxMSWSetThreadUILanguage(LANGIDFROMLCID(lcid));
-
-        // and also call setlocale() to change locale used by the CRT
-        retloc = info->TrySetLocale();
-    }
 #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
     // VC++ setlocale() (also used by Mingw) can't set locale to languages that
     // can only be written using Unicode, therefore wxSetlocale() call fails
@@ -607,13 +435,15 @@ bool wxLocale::Init(int lang, int flags)
         }
     }
 #endif // CRT not handling Unicode-only languages
-#else
-    #error "Unsupported platform"
-#endif
+
+    if ( !retloc )
+        ok = false;
+
+#endif // __WIN32__
 
     return DoCommonPostInit
            (
-                retloc != NULL,
+                ok,
                 name,
                 // wxLANGUAGE_DEFAULT needs to be passed to wxTranslations as ""
                 // for correct detection of user's preferred language(s)
@@ -648,9 +478,6 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     size_t i = 0,
         count = ms_languagesDB->GetCount();
 
-#if defined(__UNIX__)
-    // first get the string identifying the language from the environment
-    wxString langFull;
 #ifdef __WXOSX__
     wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
 
@@ -658,10 +485,34 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     // az_Cyrl_AZ@calendar=buddhist;currency=JPY we just recreate the base info as expected by wx here
 
     wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
-    langFull = str.AsString()+"_";
+    const wxString langPrefix = str.AsString() + "_";
+
     str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
-    langFull += str.AsString();
-#else
+    const wxString langFull = langPrefix + str.AsString();
+
+    int langOnlyMatchIndex = wxNOT_FOUND;
+    for ( i = 0; i < count; i++ )
+    {
+        const wxString& fullname = ms_languagesDB->Item(i).CanonicalName;
+        if ( langFull == fullname )
+        {
+            // Exact match, no need to look any further.
+            break;
+        }
+
+        if ( fullname.StartsWith(langPrefix) )
+        {
+            // Matched just the language, keep looking, but we'll keep this if
+            // we don't find an exact match later.
+            langOnlyMatchIndex = i;
+        }
+    }
+
+    if ( i == count && langOnlyMatchIndex != wxNOT_FOUND )
+        i = langOnlyMatchIndex;
+#elif defined(__UNIX__)
+    // first get the string identifying the language from the environment
+    wxString langFull;
     if (!wxGetNonEmptyEnvVar(wxS("LC_ALL"), &langFull) &&
         !wxGetNonEmptyEnvVar(wxS("LC_MESSAGES"), &langFull) &&
         !wxGetNonEmptyEnvVar(wxS("LANG"), &langFull))
@@ -669,8 +520,6 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         // no language specified, treat it as English
         return wxLANGUAGE_ENGLISH_US;
     }
-
-#endif
 
     // the language string has the following form
     //
@@ -1118,8 +967,7 @@ wxLocale::~wxLocale()
     }
 
 #ifdef __WIN32__
-    ::SetThreadLocale(m_oldLCID);
-    wxMSWSetThreadUILanguage(LANGIDFROMLCID(m_oldLCID));
+    wxUseLCID(m_oldLCID);
 #endif
 }
 
@@ -1145,6 +993,13 @@ bool wxLocale::IsAvailable(int lang)
     if ( !::IsValidLocale(info->GetLCID(), LCID_INSTALLED) )
         return false;
 
+#elif defined(__WXOSX__)
+    CFLocaleRef
+        cfloc = CFLocaleCreate(kCFAllocatorDefault, wxCFStringRef(info->CanonicalName));
+    if ( !cfloc )
+        return false;
+
+    CFRelease(cfloc);
 #elif defined(__UNIX__)
 
     // Test if setting the locale works, then set it back.
@@ -1601,6 +1456,10 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 
 #if defined(__WINDOWS__)
 
+// This function is also used by wxUILocaleImpl, so don't make it private.
+extern wxString
+wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
+
 namespace
 {
 
@@ -1624,10 +1483,38 @@ LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
     return 0;
 }
 
+// This private function additionally checks consistency of the decimal
+// separator settings between MSW and CRT.
 wxString
-GetInfoFromLCID(LCID lcid,
-                wxLocaleInfo index,
-                wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT)
+GetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
+{
+    const wxString str = wxGetInfoFromLCID(lcid, index, cat);
+
+    if ( !str.empty() && index == wxLOCALE_DECIMAL_POINT )
+    {
+        // As we get our decimal point separator from Win32 and not the
+        // CRT there is a possibility of mismatch between them and this
+        // can easily happen if the user code called setlocale()
+        // instead of using wxLocale to change the locale. And this can
+        // result in very strange bugs elsewhere in the code as the
+        // assumptions that formatted strings do use the decimal
+        // separator actually fail, so check for it here.
+        wxASSERT_MSG
+        (
+            wxString::Format("%.3f", 1.23).find(str) != wxString::npos,
+            "Decimal separator mismatch -- did you use setlocale()?"
+            "If so, use wxLocale to change the locale instead."
+        );
+    }
+
+    return str;
+}
+
+} // anonymous namespace
+
+// This function is also used by wxUILocaleImpl, so don't make it private.
+wxString
+wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
 {
     wxString str;
 
@@ -1650,20 +1537,6 @@ GetInfoFromLCID(LCID lcid,
                                  WXSIZEOF(buf)) )
             {
                 str = buf;
-
-                // As we get our decimal point separator from Win32 and not the
-                // CRT there is a possibility of mismatch between them and this
-                // can easily happen if the user code called setlocale()
-                // instead of using wxLocale to change the locale. And this can
-                // result in very strange bugs elsewhere in the code as the
-                // assumptions that formatted strings do use the decimal
-                // separator actually fail, so check for it here.
-                wxASSERT_MSG
-                (
-                    wxString::Format("%.3f", 1.23).find(str) != wxString::npos,
-                    "Decimal separator mismatch -- did you use setlocale()?"
-                    "If so, use wxLocale to change the locale instead."
-                );
             }
             break;
 
@@ -1686,12 +1559,12 @@ GetInfoFromLCID(LCID lcid,
             // alternate representation here)
             {
                 const wxString
-                    datefmt = GetInfoFromLCID(lcid, wxLOCALE_SHORT_DATE_FMT);
+                    datefmt = wxGetInfoFromLCID(lcid, wxLOCALE_SHORT_DATE_FMT, cat);
                 if ( datefmt.empty() )
                     break;
 
                 const wxString
-                    timefmt = GetInfoFromLCID(lcid, wxLOCALE_TIME_FMT);
+                    timefmt = wxGetInfoFromLCID(lcid, wxLOCALE_TIME_FMT, cat);
                 if ( timefmt.empty() )
                     break;
 
@@ -1705,8 +1578,6 @@ GetInfoFromLCID(LCID lcid,
 
     return str;
 }
-
-} // anonymous namespace
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
@@ -1766,34 +1637,19 @@ wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
 
 #elif defined(__WXOSX__)
 
-/* static */
-wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
+// This function is also used by wxUILocaleImpl, so don't make it private.
+extern wxString
+wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
-    CFLocaleRef userLocaleRefRaw;
-    if ( wxGetLocale() )
-    {
-        userLocaleRefRaw = CFLocaleCreate
-                        (
-                                kCFAllocatorDefault,
-                                wxCFStringRef(wxGetLocale()->GetCanonicalName())
-                        );
-    }
-    else // no current locale, use the default one
-    {
-        userLocaleRefRaw = CFLocaleCopyCurrent();
-    }
-
-    wxCFRef<CFLocaleRef> userLocaleRef(userLocaleRefRaw);
-
     CFStringRef cfstr = 0;
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:
-            cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleGroupingSeparator);
+            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleGroupingSeparator);
             break;
 
         case wxLOCALE_DECIMAL_POINT:
-            cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
+            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleDecimalSeparator);
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1823,7 +1679,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                         return wxString();
                 }
                 wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
-                    (NULL, userLocaleRef, dateStyle, timeStyle));
+                    (NULL, cfloc, dateStyle, timeStyle));
                 wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
                 wxString format = wxTranslateFromUnicodeFormat(cfs.AsString());
                 // we always want full years
@@ -1838,6 +1694,28 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
     wxCFStringRef str(wxCFRetain(cfstr));
     return str.AsString();
+}
+
+/* static */
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
+{
+    CFLocaleRef userLocaleRefRaw;
+    if ( wxGetLocale() )
+    {
+        userLocaleRefRaw = CFLocaleCreate
+                        (
+                                kCFAllocatorDefault,
+                                wxCFStringRef(wxGetLocale()->GetCanonicalName())
+                        );
+    }
+    else // no current locale, use the default one
+    {
+        userLocaleRefRaw = CFLocaleCopyCurrent();
+    }
+
+    wxCFRef<CFLocaleRef> userLocaleRef(userLocaleRefRaw);
+
+    return wxGetInfoFromCFLocale(userLocaleRef, index, cat);
 }
 
 #else // !__WINDOWS__ && !__WXOSX__, assume generic POSIX
@@ -1935,22 +1813,34 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:
-            if ( cat == wxLOCALE_CAT_NUMBER )
-                return lc->thousands_sep;
-            else if ( cat == wxLOCALE_CAT_MONEY )
-                return lc->mon_thousands_sep;
+            switch ( cat )
+            {
+                case wxLOCALE_CAT_DEFAULT:
+                case wxLOCALE_CAT_NUMBER:
+                    return lc->thousands_sep;
 
-            wxFAIL_MSG( "invalid wxLocaleCategory" );
+                case wxLOCALE_CAT_MONEY:
+                    return lc->mon_thousands_sep;
+
+                default:
+                    wxFAIL_MSG( "invalid wxLocaleCategory" );
+            }
             break;
 
 
         case wxLOCALE_DECIMAL_POINT:
-            if ( cat == wxLOCALE_CAT_NUMBER )
-                return lc->decimal_point;
-            else if ( cat == wxLOCALE_CAT_MONEY )
-                return lc->mon_decimal_point;
+            switch ( cat )
+            {
+                case wxLOCALE_CAT_DEFAULT:
+                case wxLOCALE_CAT_NUMBER:
+                    return lc->decimal_point;
 
-            wxFAIL_MSG( "invalid wxLocaleCategory" );
+                case wxLOCALE_CAT_MONEY:
+                    return lc->mon_decimal_point;
+
+                default:
+                    wxFAIL_MSG( "invalid wxLocaleCategory" );
+            }
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:

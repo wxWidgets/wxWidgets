@@ -28,6 +28,8 @@
 #include "wx/choice.h"
 #include "wx/imaglist.h"
 #include "wx/renderer.h"
+#include "wx/uilocale.h"
+
 #if wxUSE_ACCESSIBILITY
     #include "wx/access.h"
 #endif // wxUSE_ACCESSIBILITY
@@ -1999,23 +2001,28 @@ bool wxDataViewDateRenderer::GetValue(wxVariant& value) const
     return true;
 }
 
+wxString wxDataViewDateRenderer::FormatDate() const
+{
+    return m_date.Format(wxGetUIDateFormat());
+}
+
 #if wxUSE_ACCESSIBILITY
 wxString wxDataViewDateRenderer::GetAccessibleDescription() const
 {
-    return m_date.FormatDate();
+    return FormatDate();
 }
 #endif // wxUSE_ACCESSIBILITY
 
 bool wxDataViewDateRenderer::Render(wxRect cell, wxDC* dc, int state)
 {
-    wxString tmp = m_date.FormatDate();
+    wxString tmp = FormatDate();
     RenderText( tmp, 0, cell, dc, state );
     return true;
 }
 
 wxSize wxDataViewDateRenderer::GetSize() const
 {
-    return GetTextExtent(m_date.FormatDate());
+    return GetTextExtent(FormatDate());
 }
 
 #endif // (defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)) && wxUSE_DATEPICKCTRL

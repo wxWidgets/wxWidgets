@@ -33,6 +33,8 @@
     #include "wx/stopwatch.h"
 #endif
 
+#include "wx/private/localeset.h"
+
 #include "textentrytest.h"
 #include "testableframe.h"
 #include "asserthelper.h"
@@ -295,7 +297,7 @@ void TextCtrlTestCase::StreamInput()
 #ifndef __WXOSX__
     {
         // Ensure we use decimal point and not a comma.
-        LocaleSetter setCLocale("C");
+        wxCLocaleSetter setCLocale;
 
         *m_text << "stringinput"
                 << 10

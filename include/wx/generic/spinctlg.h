@@ -430,8 +430,6 @@ private:
     void DoSetDigitsAndUpdate(unsigned digits);
 
 
-    wxString m_format;
-
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };
 
