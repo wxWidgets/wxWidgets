@@ -487,28 +487,28 @@ public:
                     wxFALLTHROUGH;
 
                 case wxOSX_SYSTEM_FONT_NORMAL:
-                    uifont = kCTFontSystemFontType;
+                    uifont = kCTFontUIFontSystem;
                     break;
                 case wxOSX_SYSTEM_FONT_BOLD:
-                    uifont = kCTFontEmphasizedSystemFontType;
+                    uifont = kCTFontUIFontEmphasizedSystem;
                     break;
                 case wxOSX_SYSTEM_FONT_SMALL:
-                    uifont = kCTFontSmallSystemFontType;
+                    uifont = kCTFontUIFontSmallSystem;
                     break;
                 case wxOSX_SYSTEM_FONT_SMALL_BOLD:
-                    uifont = kCTFontSmallEmphasizedSystemFontType;
+                    uifont = kCTFontUIFontSmallEmphasizedSystem;
                     break;
                 case wxOSX_SYSTEM_FONT_MINI:
-                    uifont = kCTFontMiniSystemFontType;
+                    uifont = kCTFontUIFontMiniSystem;
                     break;
                 case wxOSX_SYSTEM_FONT_MINI_BOLD:
-                    uifont = kCTFontMiniEmphasizedSystemFontType;
+                    uifont = kCTFontUIFontMiniEmphasizedSystem;
                     break;
                 case wxOSX_SYSTEM_FONT_LABELS:
-                    uifont = kCTFontLabelFontType;
+                    uifont = kCTFontUIFontLabel;
                     break;
                 case wxOSX_SYSTEM_FONT_VIEWS:
-                    uifont = kCTFontViewsFontType;
+                    uifont = kCTFontUIFontViews;
                     break;
                 case wxOSX_SYSTEM_FONT_FIXED:
                     uifont = kCTFontUIFontUserFixedPitch;
