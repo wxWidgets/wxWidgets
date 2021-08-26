@@ -412,8 +412,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="vc_mswud_x64"
-			IntermediateDirectory="vc_mswud_x64\isosurf"
+			OutputDirectory="vc_x64_mswud"
+			IntermediateDirectory="vc_x64_mswud\isosurf"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -447,8 +447,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud_x64\isosurf\"
-				ProgramDataBaseFileName="vc_mswud_x64\isosurf.pdb"
+				ObjectFile="vc_x64_mswud\isosurf\"
+				ProgramDataBaseFileName="vc_x64_mswud\isosurf.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -470,13 +470,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_gl.lib opengl32.lib glu32.lib wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswud_x64\isosurf.exe"
+				OutputFile="vc_x64_mswud\isosurf.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswud_x64\isosurf.pdb"
+				ProgramDatabaseFile="vc_x64_mswud\isosurf.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -491,7 +491,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswud_x64\isosurf_vc8.bsc"
+				OutputFile="vc_x64_mswud\isosurf_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -509,8 +509,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="vc_mswu_x64"
-			IntermediateDirectory="vc_mswu_x64\isosurf"
+			OutputDirectory="vc_x64_mswu"
+			IntermediateDirectory="vc_x64_mswu\isosurf"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -541,8 +541,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu_x64\isosurf\"
-				ProgramDataBaseFileName="vc_mswu_x64\isosurf.pdb"
+				ObjectFile="vc_x64_mswu\isosurf\"
+				ProgramDataBaseFileName="vc_x64_mswu\isosurf.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -564,13 +564,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_gl.lib opengl32.lib glu32.lib wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswu_x64\isosurf.exe"
+				OutputFile="vc_x64_mswu\isosurf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswu_x64\isosurf.pdb"
+				ProgramDatabaseFile="vc_x64_mswu\isosurf.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -587,7 +587,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswu_x64\isosurf_vc8.bsc"
+				OutputFile="vc_x64_mswu\isosurf_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -605,8 +605,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Debug|x64"
-			OutputDirectory="vc_mswuddll_x64"
-			IntermediateDirectory="vc_mswuddll_x64\isosurf"
+			OutputDirectory="vc_x64_mswuddll"
+			IntermediateDirectory="vc_x64_mswuddll\isosurf"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -640,8 +640,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\isosurf\"
-				ProgramDataBaseFileName="vc_mswuddll_x64\isosurf.pdb"
+				ObjectFile="vc_x64_mswuddll\isosurf\"
+				ProgramDataBaseFileName="vc_x64_mswuddll\isosurf.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -663,13 +663,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_gl.lib opengl32.lib glu32.lib wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswuddll_x64\isosurf.exe"
+				OutputFile="vc_x64_mswuddll\isosurf.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll_x64\isosurf.pdb"
+				ProgramDatabaseFile="vc_x64_mswuddll\isosurf.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -684,7 +684,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll_x64\isosurf_vc8.bsc"
+				OutputFile="vc_x64_mswuddll\isosurf_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -702,8 +702,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Release|x64"
-			OutputDirectory="vc_mswudll_x64"
-			IntermediateDirectory="vc_mswudll_x64\isosurf"
+			OutputDirectory="vc_x64_mswudll"
+			IntermediateDirectory="vc_x64_mswudll\isosurf"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -734,8 +734,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\isosurf\"
-				ProgramDataBaseFileName="vc_mswudll_x64\isosurf.pdb"
+				ObjectFile="vc_x64_mswudll\isosurf\"
+				ProgramDataBaseFileName="vc_x64_mswudll\isosurf.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -757,13 +757,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_gl.lib opengl32.lib glu32.lib wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswudll_x64\isosurf.exe"
+				OutputFile="vc_x64_mswudll\isosurf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll_x64\isosurf.pdb"
+				ProgramDatabaseFile="vc_x64_mswudll\isosurf.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -780,7 +780,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll_x64\isosurf_vc8.bsc"
+				OutputFile="vc_x64_mswudll\isosurf_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
