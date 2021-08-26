@@ -286,7 +286,7 @@ wxFontRefData::wxFontRefData(CTFontRef font)
 
 wxFontRefData::wxFontRefData(CTFontUIFontType uifont)
 {
-    static std::map<CTFontUIFontType, wxCFRef<CTFontRef> >  s_UIFontCache;
+    static std::map<CTFontUIFontType, wxCFRef<CTFontRef>>  s_UIFontCache;
 
     wxCFRef<CTFontRef> ctfont;
 
