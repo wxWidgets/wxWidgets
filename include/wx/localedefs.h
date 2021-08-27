@@ -108,6 +108,63 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
     const char* TrySetLocale() const;
 };
 
+// ----------------------------------------------------------------------------
+// wxLocaleIdent: allows to fully identify a locale under all platforms
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxLocaleIdent
+{
+public:
+    // Leave language empty
+    wxLocaleIdent() { }
+
+    // Construct name from language
+    wxLocaleIdent(const wxString& language) : m_language(language) { }
+
+    // Set language
+    wxLocaleIdent& Language(const wxString& language)
+    {
+        m_language = language;
+        return *this;
+    }
+
+    // Set region
+    wxLocaleIdent& Region(const wxString& region)
+    {
+        m_region = region;
+        return *this;
+    }
+
+    // Set script
+    wxLocaleIdent& Script(const wxString& script)
+    {
+        m_script = script;
+        return *this;
+    }
+
+    // Set modifier
+    wxLocaleIdent& Modifier(const wxString& modifier)
+    {
+        m_modifier = modifier;
+        return *this;
+    }
+
+    // Construct platform dependent name
+    wxString GetName() const;
+
+    // Empty language represents user's default language
+    bool IsDefault() const
+    {
+        return m_language.empty();
+    }
+
+private:
+    wxString m_language;
+    wxString m_region;
+    wxString m_script;
+    wxString m_modifier;
+};
+
 #endif // wxUSE_INTL
 
 #endif // _WX_LOCALEDEFS_H_

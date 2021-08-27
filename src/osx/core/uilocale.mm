@@ -20,6 +20,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/uilocale.h"
 #include "wx/private/uilocale.h"
 
 #include "wx/osx/core/cfref.h"
@@ -28,8 +29,39 @@
 #include <CoreFoundation/CFLocale.h>
 #include <CoreFoundation/CFString.h>
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSLocale.h>
+
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
+
+// ----------------------------------------------------------------------------
+// wxLocaleIdent::GetName() implementation using Foundation
+// ----------------------------------------------------------------------------
+
+wxString wxLocaleIdent::GetName() const
+{
+    // Construct name in right format:
+    // MacOS: <language>-<script>_<REGION>
+
+    wxString name;
+    if ( !m_language.empty() )
+    {
+        name << m_language;
+
+        if ( !m_script.empty() )
+        {
+            name << "-" << m_script;
+        }
+
+        if ( !m_region.empty() )
+        {
+            name << "_" << m_region;
+        }
+    }
+
+    return name;
+}
 
 namespace
 {
@@ -98,6 +130,36 @@ wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
 {
     return wxUILocaleImplCF::Create(info.CanonicalName);
+}
+
+/* static */
+int wxUILocale::CompareStrings(const wxString& lhs, const wxString& rhs, const wxLocaleIdent& locale_id)
+{
+    NSString *ns_lhs = [NSString stringWithCString:lhs.ToStdString(wxConvUTF8).c_str()
+                                 encoding:NSUTF8StringEncoding];
+    NSString *ns_rhs = [NSString stringWithCString:rhs.ToStdString(wxConvUTF8).c_str()
+                                 encoding:NSUTF8StringEncoding];
+    NSString *ns_locale_id = [NSString stringWithCString:locale_id.GetName().ToStdString(wxConvUTF8).c_str()
+                                       encoding:NSUTF8StringEncoding];
+    NSInteger options = NSCaseInsensitiveSearch; // Maybe also NSDiacriticInsensitiveSearch?
+    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:ns_locale_id];
+
+    NSComparisonResult ret = [ns_lhs compare:ns_rhs
+                                     options:options
+                                     range:(NSRange){0, [ns_lhs length]}
+                                     locale:locale];
+
+    switch (ret)
+    {
+        case NSOrderedAscending:
+            return -1;
+        case NSOrderedSame:
+            return 0;
+        case NSOrderedDescending:
+            return 1;
+    }
+
+    return 0;
 }
 
 #endif // wxUSE_INTL

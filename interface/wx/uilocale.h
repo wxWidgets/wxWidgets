@@ -81,6 +81,24 @@ public:
     static const wxUILocale& GetCurrent();
 
     /**
+        Compares two strings using comparison rules of the given locale.
+
+        @param lhs
+            First comparing string.
+        @param rhs
+            Second comparing string.
+        @param localeId
+            Represents platform dependent language name.
+            @see wxLocaleIdent for details.
+        @return
+            -1 if lhs less than rhs.
+            0 if lhs equal to rhs.
+            1 if lhs greater than rhs.
+     */
+    static int CompareStrings(const wxString& lhs, const wxString& rhs,
+                              const wxLocaleIdent& localeId = wxLocaleIdent());
+
+    /**
         Get the platform-dependent name of the current locale.
 
         This name can be used in diagnostic messages.
@@ -119,3 +137,93 @@ public:
     @since 3.1.6
  */
 wxString wxGetUIDateFormat();
+
+/**
+    Allows to construct the full locale identifier in a portable way.
+
+    Parts of the locale not supported by the current platform (e.g. modifier under non-Unix platforms) are ignored.
+    The remaining parts are used to construct a string uniquely identifying the locale in a platform-specific name.
+
+    Usage example:
+    @code
+      auto loc = wxLocaleIdent("fr").Region("BE").Modifier("euro");
+    #if defined(__WINDOWS__) || defined(__WXOSX__)
+      wxASSERT( loc.GetName() == "fr_BE" );
+    #elif defined(__UNIX__)
+      wxASSERT( loc.GetName() == "fr_BE@euro" );
+    #endif
+    @endcode
+    @since 3.1.6
+*/
+class wxLocaleIdent
+{
+public:
+    /**
+        This is the default constructor and it leaves language empty.
+    */
+    wxLocaleIdent();
+
+    /**
+        Constructor with language.
+
+        @param language
+            ISO 639 language code.
+            See Language() for more detailed info.
+    */
+    wxLocaleIdent(const wxString& language);
+
+    /**
+        Set language.
+        Return reference to @this for method chaining.
+
+        @param language
+            It is a lowercase ISO 639 language code.
+            The codes from ISO 639-1 are used when available.
+            Otherwise, codes from ISO 639-2/T are used.
+    */
+    wxLocaleIdent& Language(const wxString& language);
+
+    /**
+        Set region.
+        Return reference to @this for method chaining.
+
+        @param region
+            It specifies an uppercase ISO 3166-1 country/region identifier.
+    */
+    wxLocaleIdent& Region(const wxString& region);
+
+    /**
+        Set script.
+        Return reference to @this for method chaining.
+
+        @param script
+            It is an initial-uppercase ISO 15924 script code.
+    */
+    wxLocaleIdent& Script(const wxString& script);
+
+    /**
+        Set modifier.
+        Return reference to @this for method chaining.
+
+        @param modifier
+            Modifier is defined by ISO/IEC 15897.
+            It is a semi-colon separated list of identifiers, or name=value pairs.
+    */
+    wxLocaleIdent& Modifier(const wxString& modifier);
+
+    /**
+        Construct platform dependent name.
+        Format:
+        Windows: <language>-<script>-<REGION>
+        Unix:    <language>_<REGION>@<modifier>
+        MacOS:   <language>-<script>_<REGION>
+    */
+    wxString GetName() const;
+
+    /**
+        Empty language represents user's default language.
+
+        @return @true if language is empty, @false otherwise.
+    */
+    bool IsDefault() const;
+};

@@ -54,6 +54,26 @@ private:
 // implementation
 // ============================================================================
 
+wxString wxLocaleIdent::GetName() const
+{
+    // Construct name in the standard Unix format:
+    // language[_territory][.codeset][@modifier]
+
+    wxString name;
+    if ( !m_language.empty() )
+    {
+        name << m_language;
+
+        if ( !m_region.empty() )
+            name << "_" << m_region;
+
+        if ( !m_modifier.empty() )
+            name << "@" << m_modifier;
+    }
+
+    return name;
+}
+
 // Helper of wxSetlocaleTryAll() below which tries setting the given locale
 // with and without UTF-8 suffix. Don't use this one directly.
 static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
