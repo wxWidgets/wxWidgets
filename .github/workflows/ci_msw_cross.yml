@@ -106,7 +106,7 @@ jobs:
             i686-w64-mingw32)
               sudo dpkg --add-architecture i386
               sudo apt-get -q -o=Dpkg::Use-Pty=0 update
-              packages="$packages g++-mingw-w64-i686 wine32"
+              packages="$packages g++-mingw-w64-i686 wine32 libgl1:i386"
               winerun=wine
               ;;
 
