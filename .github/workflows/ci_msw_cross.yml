@@ -83,7 +83,7 @@ jobs:
         shell: bash
         run: |
           apt-get -q -o=Dpkg::Use-Pty=0 update
-          apt-get -qq install sudo
+          apt-get -q -o=Dpkg::Use-Pty=0 -y install sudo
 
           # Create a user with the same UID/GID and name as the existing user
           # outside of the container and allow it using sudo without password.
@@ -114,7 +114,7 @@ jobs:
               ;;
           esac
 
-          sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install $packages
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -q -o=Dpkg::Use-Pty=0 -y install $packages
 
           echo "wxTEST_RUNNER=${winerun}" >> $GITHUB_ENV
 
