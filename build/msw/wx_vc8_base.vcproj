@@ -381,7 +381,7 @@
 		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="..\..\lib\vc_x64_lib"
-			IntermediateDirectory="vc_mswud_x64\base"
+			IntermediateDirectory="vc_x64_mswud\base"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -417,8 +417,8 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswud_x64\wxprec_baselib.pch"
-				ObjectFile="vc_mswud_x64\base\"
+				PrecompiledHeaderFile="vc_x64_mswud\wxprec_baselib.pch"
+				ObjectFile="vc_x64_mswud\base\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_lib\wxbase31ud.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
@@ -466,7 +466,7 @@
 		<Configuration
 			Name="Release|x64"
 			OutputDirectory="..\..\lib\vc_x64_lib"
-			IntermediateDirectory="vc_mswu_x64\base"
+			IntermediateDirectory="vc_x64_mswu\base"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -499,8 +499,8 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswu_x64\wxprec_baselib.pch"
-				ObjectFile="vc_mswu_x64\base\"
+				PrecompiledHeaderFile="vc_x64_mswu\wxprec_baselib.pch"
+				ObjectFile="vc_x64_mswu\base\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_lib\wxbase31u.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
@@ -548,7 +548,7 @@
 		<Configuration
 			Name="DLL Debug|x64"
 			OutputDirectory="..\..\lib\vc_x64_dll"
-			IntermediateDirectory="vc_mswuddll_x64\base"
+			IntermediateDirectory="vc_x64_mswuddll\base"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -584,8 +584,8 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswuddll_x64\wxprec_basedll.pch"
-				ObjectFile="vc_mswuddll_x64\base\"
+				PrecompiledHeaderFile="vc_x64_mswuddll\wxprec_basedll.pch"
+				ObjectFile="vc_x64_mswuddll\base\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxbase316ud_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
@@ -642,7 +642,7 @@
 		<Configuration
 			Name="DLL Release|x64"
 			OutputDirectory="..\..\lib\vc_x64_dll"
-			IntermediateDirectory="vc_mswudll_x64\base"
+			IntermediateDirectory="vc_x64_mswudll\base"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -675,8 +675,8 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswudll_x64\wxprec_basedll.pch"
-				ObjectFile="vc_mswudll_x64\base\"
+				PrecompiledHeaderFile="vc_x64_mswudll\wxprec_basedll.pch"
+				ObjectFile="vc_x64_mswudll\base\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxbase316u_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
@@ -1137,7 +1137,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud_x64\base\common_secretstore.obj"
+						ObjectFile="vc_x64_mswud\base\common_secretstore.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1145,7 +1145,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu_x64\base\common_secretstore.obj"
+						ObjectFile="vc_x64_mswu\base\common_secretstore.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1153,7 +1153,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll_x64\base\common_secretstore.obj"
+						ObjectFile="vc_x64_mswuddll\base\common_secretstore.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1161,7 +1161,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll_x64\base\common_secretstore.obj"
+						ObjectFile="vc_x64_mswudll\base\common_secretstore.obj"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1289,7 +1289,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud_x64\base\common_uilocale.obj"
+						ObjectFile="vc_x64_mswud\base\common_uilocale.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1297,7 +1297,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu_x64\base\common_uilocale.obj"
+						ObjectFile="vc_x64_mswu\base\common_uilocale.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1305,7 +1305,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll_x64\base\common_uilocale.obj"
+						ObjectFile="vc_x64_mswuddll\base\common_uilocale.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1313,7 +1313,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll_x64\base\common_uilocale.obj"
+						ObjectFile="vc_x64_mswudll\base\common_uilocale.obj"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1466,7 +1466,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud_x64\base\msw_secretstore.obj"
+						ObjectFile="vc_x64_mswud\base\msw_secretstore.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1474,7 +1474,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu_x64\base\msw_secretstore.obj"
+						ObjectFile="vc_x64_mswu\base\msw_secretstore.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1482,7 +1482,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll_x64\base\msw_secretstore.obj"
+						ObjectFile="vc_x64_mswuddll\base\msw_secretstore.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1490,7 +1490,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll_x64\base\msw_secretstore.obj"
+						ObjectFile="vc_x64_mswudll\base\msw_secretstore.obj"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1554,7 +1554,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud_x64\base\msw_uilocale.obj"
+						ObjectFile="vc_x64_mswud\base\msw_uilocale.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1562,7 +1562,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu_x64\base\msw_uilocale.obj"
+						ObjectFile="vc_x64_mswu\base\msw_uilocale.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1570,7 +1570,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll_x64\base\msw_uilocale.obj"
+						ObjectFile="vc_x64_mswuddll\base\msw_uilocale.obj"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1578,7 +1578,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll_x64\base\msw_uilocale.obj"
+						ObjectFile="vc_x64_mswudll\base\msw_uilocale.obj"
 					/>
 				</FileConfiguration>
 			</File>

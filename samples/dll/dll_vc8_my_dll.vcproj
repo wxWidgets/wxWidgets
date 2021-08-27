@@ -388,8 +388,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="vc_mswud_x64"
-			IntermediateDirectory="vc_mswud_x64\my_dll"
+			OutputDirectory="vc_x64_mswud"
+			IntermediateDirectory="vc_x64_mswud\my_dll"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -423,8 +423,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud_x64\my_dll\"
-				ProgramDataBaseFileName="vc_mswud_x64\my_dll.pdb"
+				ObjectFile="vc_x64_mswud\my_dll\"
+				ProgramDataBaseFileName="vc_x64_mswud\my_dll.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -446,14 +446,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswud_x64\my_dll.dll"
+				OutputFile="vc_x64_mswud\my_dll.dll"
 				LinkIncremental="2"
-				ImportLibrary="vc_mswud_x64\my_dll.lib"
+				ImportLibrary="vc_x64_mswud\my_dll.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswud_x64\my_dll.pdb"
+				ProgramDatabaseFile="vc_x64_mswud\my_dll.pdb"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -467,7 +467,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswud_x64\dll_vc8_my_dll.bsc"
+				OutputFile="vc_x64_mswud\dll_vc8_my_dll.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -479,8 +479,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="vc_mswu_x64"
-			IntermediateDirectory="vc_mswu_x64\my_dll"
+			OutputDirectory="vc_x64_mswu"
+			IntermediateDirectory="vc_x64_mswu\my_dll"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -511,8 +511,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu_x64\my_dll\"
-				ProgramDataBaseFileName="vc_mswu_x64\my_dll.pdb"
+				ObjectFile="vc_x64_mswu\my_dll\"
+				ProgramDataBaseFileName="vc_x64_mswu\my_dll.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -534,14 +534,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswu_x64\my_dll.dll"
+				OutputFile="vc_x64_mswu\my_dll.dll"
 				LinkIncremental="1"
-				ImportLibrary="vc_mswu_x64\my_dll.lib"
+				ImportLibrary="vc_x64_mswu\my_dll.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswu_x64\my_dll.pdb"
+				ProgramDatabaseFile="vc_x64_mswu\my_dll.pdb"
 				TargetMachine="17"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -557,7 +557,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswu_x64\dll_vc8_my_dll.bsc"
+				OutputFile="vc_x64_mswu\dll_vc8_my_dll.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -569,8 +569,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Debug|x64"
-			OutputDirectory="vc_mswuddll_x64"
-			IntermediateDirectory="vc_mswuddll_x64\my_dll"
+			OutputDirectory="vc_x64_mswuddll"
+			IntermediateDirectory="vc_x64_mswuddll\my_dll"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -604,8 +604,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\my_dll\"
-				ProgramDataBaseFileName="vc_mswuddll_x64\my_dll.pdb"
+				ObjectFile="vc_x64_mswuddll\my_dll\"
+				ProgramDataBaseFileName="vc_x64_mswuddll\my_dll.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -627,14 +627,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswuddll_x64\my_dll.dll"
+				OutputFile="vc_x64_mswuddll\my_dll.dll"
 				LinkIncremental="2"
-				ImportLibrary="vc_mswuddll_x64\my_dll.lib"
+				ImportLibrary="vc_x64_mswuddll\my_dll.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll_x64\my_dll.pdb"
+				ProgramDatabaseFile="vc_x64_mswuddll\my_dll.pdb"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -648,7 +648,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll_x64\dll_vc8_my_dll.bsc"
+				OutputFile="vc_x64_mswuddll\dll_vc8_my_dll.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -660,8 +660,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Release|x64"
-			OutputDirectory="vc_mswudll_x64"
-			IntermediateDirectory="vc_mswudll_x64\my_dll"
+			OutputDirectory="vc_x64_mswudll"
+			IntermediateDirectory="vc_x64_mswudll\my_dll"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -692,8 +692,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\my_dll\"
-				ProgramDataBaseFileName="vc_mswudll_x64\my_dll.pdb"
+				ObjectFile="vc_x64_mswudll\my_dll\"
+				ProgramDataBaseFileName="vc_x64_mswudll\my_dll.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -715,14 +715,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswudll_x64\my_dll.dll"
+				OutputFile="vc_x64_mswudll\my_dll.dll"
 				LinkIncremental="1"
-				ImportLibrary="vc_mswudll_x64\my_dll.lib"
+				ImportLibrary="vc_x64_mswudll\my_dll.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll_x64\my_dll.pdb"
+				ProgramDatabaseFile="vc_x64_mswudll\my_dll.pdb"
 				TargetMachine="17"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -738,7 +738,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll_x64\dll_vc8_my_dll.bsc"
+				OutputFile="vc_x64_mswudll\dll_vc8_my_dll.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

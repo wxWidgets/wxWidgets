@@ -211,7 +211,7 @@
         <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
 
         <set var="OBJS" make_var="1">
-            $(COMPILER_PREFIX)$(COMPILER_VERSION)_$(CFG_NAME_PART)$(ARCH_SUFFIX)
+            $(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(CFG_NAME_PART)
         </set>
 
         <set var="BUILDDIR">$(OBJS)</set>
