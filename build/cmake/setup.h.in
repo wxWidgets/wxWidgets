@@ -216,6 +216,8 @@
 
 #cmakedefine01 wxUSE_SECRETSTORE
 
+#cmakedefine01 wxUSE_SPELLCHECK
+
 #cmakedefine01 wxUSE_STDPATHS
 
 #cmakedefine01 wxUSE_TEXTBUFFER

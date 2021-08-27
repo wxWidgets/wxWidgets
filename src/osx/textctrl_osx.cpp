@@ -124,10 +124,13 @@ void wxTextCtrl::MacVisibilityChanged()
 {
 }
 
+#if WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 void wxTextCtrl::MacCheckSpelling(bool check)
 {
-    GetTextPeer()->CheckSpelling(check);
+    GetTextPeer()->CheckSpelling(check ? wxTextProofOptions::Default()
+                                       : wxTextProofOptions::Disable());
 }
+#endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 
 void wxTextCtrl::OSXEnableAutomaticQuoteSubstitution(bool enable)
 {
@@ -339,6 +342,22 @@ void wxTextCtrl::Paste()
         }
     }
 }
+
+#if wxUSE_SPELLCHECK
+
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
+{
+    GetTextPeer()->CheckSpelling(options);
+
+    return true;
+}
+
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
+{
+    return GetTextPeer()->GetCheckingOptions();
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 {
@@ -807,6 +826,15 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
 
     return -1 ;
 }
+
+#if wxUSE_SPELLCHECK
+
+wxTextProofOptions wxTextWidgetImpl::GetCheckingOptions() const
+{
+    return wxTextProofOptions::Disable();
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextWidgetImpl::SetJustification()
 {

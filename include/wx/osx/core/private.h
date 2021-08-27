@@ -77,6 +77,8 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 #include "wx/bitmap.h"
 #include "wx/window.h"
 
+class wxTextProofOptions;
+
 class WXDLLIMPEXP_CORE wxMacCGContextStateSaver
 {
     wxDECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver);
@@ -737,7 +739,10 @@ public :
     virtual void ShowPosition(long pos) ;
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
-    virtual void CheckSpelling(bool WXUNUSED(check)) { }
+#if wxUSE_SPELLCHECK
+    virtual void CheckSpelling(const wxTextProofOptions& WXUNUSED(options)) { }
+    virtual wxTextProofOptions GetCheckingOptions() const;
+#endif // wxUSE_SPELLCHECK
     virtual void EnableAutomaticQuoteSubstitution(bool WXUNUSED(enable)) {}
     virtual void EnableAutomaticDashSubstitution(bool WXUNUSED(enable)) {}
 

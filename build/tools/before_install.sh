@@ -50,7 +50,7 @@ case $(uname -s) in
                 *)
                     case "$wxGTK_VERSION" in
                         3)  libtoolkit_dev=libgtk-3-dev
-                            extra_deps='libwebkit2gtk-4.0-dev libwebkitgtk-3.0-dev'
+                            extra_deps='libwebkit2gtk-4.0-dev libwebkitgtk-3.0-dev libgtkspell3-3-dev'
                             ;;
                         2)  libtoolkit_dev=libgtk2.0-dev
                             extra_deps='libwebkitgtk-dev'

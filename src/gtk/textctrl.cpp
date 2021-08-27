@@ -32,6 +32,12 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
+#if wxUSE_SPELLCHECK && defined(__WXGTK3__)
+extern "C" {
+#include <gtkspell-3.0/gtkspell/gtkspell.h>
+}
+#endif // wxUSE_SPELLCHECK && __WXGTK3__
+
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
@@ -1016,6 +1022,60 @@ void wxTextCtrl::GTKSetJustification()
         gtk_entry_set_alignment(GTK_ENTRY(m_text), align);
     }
 }
+
+#if wxUSE_SPELLCHECK && defined(__WXGTK3__)
+
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
+{
+    wxCHECK_MSG( IsMultiLine(), false,
+                "Unable to enable spell check on control "
+                "which does not have wxTE_MULTILINE style" );
+
+    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+    wxCHECK_MSG( textview, false, wxS("wxTextCtrl is not a GtkTextView"));
+
+    GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
+
+    if ( options.IsSpellCheckEnabled() )
+    {
+        if ( !spell )
+        {
+            spell = gtk_spell_checker_new();
+            gtk_spell_checker_attach(spell, textview);
+        }
+
+        wxString lang = options.GetLang();
+
+        if ( !gtk_spell_checker_set_language(spell,
+                                    lang.empty() ? NULL : (const gchar *)lang.utf8_str(),
+                                    NULL) )
+            return false;
+    }
+    else
+    {
+        if ( spell )
+            gtk_spell_checker_detach(spell);
+    }
+
+   return GetProofCheckOptions().IsSpellCheckEnabled();
+}
+
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
+{
+    wxTextProofOptions opts = wxTextProofOptions::Disable();
+
+    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+
+    if ( IsMultiLine() && textview )
+    {
+        if ( gtk_spell_checker_get_from_text_view(textview) )
+            opts.SpellCheck();
+    }
+
+    return opts;
+}
+
+#endif // wxUSE_SPELLCHECK && __WXGTK3__
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {

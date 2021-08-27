@@ -126,6 +126,76 @@ enum wxTextCtrlHitTestResult
 };
 // ... the character returned
 
+#if wxUSE_SPELLCHECK
+
+// ----------------------------------------------------------------------------
+// This object can be passed to wxTextCtrl::EnableProofCheck() to configure the
+// proofing options for this control.
+// ----------------------------------------------------------------------------
+class wxTextProofOptions
+{
+public:
+    // Return the object corresponding to the default options: current
+    // language, spell checking enabled, grammar checking disabled.
+    static wxTextProofOptions Default()
+    {
+        wxTextProofOptions opts;
+        return opts.SpellCheck(true);
+    }
+
+    // Return the object with all checks disabled.
+    static wxTextProofOptions Disable()
+    {
+        return wxTextProofOptions();
+    }
+
+    // Default copy ctor, assignment operator and dtor are ok
+
+    // Methods that can be used to set the various options.
+    wxTextProofOptions& SpellCheck(bool enable = true)
+    {
+        m_EnableSpellCheck = enable;
+        return *this;
+    }
+
+    wxTextProofOptions& GrammarCheck(bool enable = true)
+    {
+        m_EnableGrammarCheck = enable;
+        return *this;
+    }
+
+    wxTextProofOptions& Language(const wxString& lang)
+    {
+        m_lang = lang;
+        return *this;
+    }
+
+    // And the corresponding accessors.
+    bool IsSpellCheckEnabled() const { return m_EnableSpellCheck; }
+    bool IsGrammarCheckEnabled() const { return m_EnableGrammarCheck; }
+    const wxString& GetLang() const { return m_lang; }
+
+    bool AnyChecksEnabled() const
+    {
+        return IsSpellCheckEnabled() || IsGrammarCheckEnabled();
+    }
+
+private:
+    // Ctor is private, use static factory methods to create objects of this
+    // class.
+    wxTextProofOptions()
+    {
+        m_EnableSpellCheck =
+        m_EnableGrammarCheck = false;
+    }
+
+    wxString m_lang;
+    bool m_EnableSpellCheck;
+    bool m_EnableGrammarCheck;
+};
+
+#endif // wxUSE_SPELLCHECK
+
 // ----------------------------------------------------------------------------
 // Types for wxTextAttr
 // ----------------------------------------------------------------------------
@@ -757,6 +827,19 @@ public:
     }
 
     virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+
+#if wxUSE_SPELLCHECK
+    // Use native spelling and grammar checking functions.
+    virtual bool EnableProofCheck(const wxTextProofOptions& WXUNUSED(options)
+                                    = wxTextProofOptions::Default())
+    {
+        return false;
+    }
+    virtual wxTextProofOptions GetProofCheckOptions() const
+    {
+        return wxTextProofOptions::Disable();
+    }
+#endif // wxUSE_SPELLCHECK
 
 protected:
     // Override wxEvtHandler method to check for a common problem of binding

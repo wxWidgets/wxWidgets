@@ -216,6 +216,8 @@
 
 #define wxUSE_SECRETSTORE   0
 
+#define wxUSE_SPELLCHECK 0
+
 #define wxUSE_STDPATHS      0
 
 #define wxUSE_TEXTBUFFER    0

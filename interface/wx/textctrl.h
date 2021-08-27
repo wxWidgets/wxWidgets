@@ -258,7 +258,6 @@ enum wxTextCtrlHitTestResult
     wxTE_HT_BEYOND
 };
 
-
 /**
     @class wxTextAttr
 
@@ -979,6 +978,75 @@ public:
     void operator=(const wxTextAttr& attr);
 };
 
+/**
+    @class wxTextProofOptions
+
+    This class provides a convenient means of passing multiple parameters to
+    wxTextCtrl::EnableProofCheck().
+
+    By default, i.e. when calling EnableProofCheck() without any parameters,
+    Default() proof options are used, which enable spelling (but not grammar)
+    checks for the current language.
+
+    However it is also possible to customize the options:
+
+    @code
+    textctrl->EnableProofCheck(wxTextProofOptions::Default().Language("fr").GrammarCheck());
+    @endcode
+
+    or disable the all checks entirely:
+
+    @code
+    textctrl->EnableProofCheck(wxTextProofOptions::Disable());
+    @endcode
+
+    Note that this class has no public constructor, except for the copy
+    constructor, so its objects can only be created using the static factory
+    methods Default() or Disable().
+
+    @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::GetProofCheckOptions().
+
+    @since 3.1.6
+*/
+class WXDLLIMPEXP_CORE wxTextProofOptions
+{
+    /**
+       Create an object corresponding to the default checks.
+
+       The returned object enables spelling checks and disables grammar checks.
+     */
+    static wxTextProofOptions Default()
+
+    /**
+       Create an object disabling all checks.
+
+       The returned object can be passed to wxTextCtrl::EnableProofCheck() to
+       disable all checks in the text control.
+     */
+    static wxTextProofOptions Disable()
+
+    /**
+       Enable / disable spell checking for this control.
+     */
+    wxTextProofOptions& SpellCheck(bool enable = true)
+
+    /**
+       Enable / disable grammar checking for this control.
+
+       This option is currently only supported under macOS and is ignored under
+       the other platforms.
+     */
+    wxTextProofOptions& GrammarCheck(bool enable = true)
+
+    /// Return true if spell checking is enabled.
+    bool IsSpellCheckEnabled() const;
+
+    /// Return true if grammar checking is enabled.
+    bool IsGrammarCheckEnabled() const;
+
+    /// Returns true if any checks are enabled.
+    bool AnyChecksEnabled() const
+};
 
 /**
     @class wxTextCtrl
@@ -1337,6 +1405,33 @@ public:
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
 
     /**
+        Enable or disable native spell checking on this text control if it is
+        available on the current platform.
+
+        Currently this is supported in wxMSW (when running under Windows 8 or
+        later), wxGTK when using GTK 3 and wxOSX. In addition, wxMSW requires
+        that the text control has the wxTE_RICH2 style set. wxGTK3 and wxOSX
+        require that the control has the wxTE_MULTILINE style.
+
+        @param options
+            A wxTextProofOptions object specifying the desired behaviour
+            of the proof checker (e.g. language to use, spell check, grammar
+            check, etc.) and whether the proof checks should be enabled at all.
+            By default, spelling checks for the current language are enabled.
+            Passing wxTextProofOptions::Disable() disables all the checks.
+
+        @return
+            @true if proof checking has been successfully enabled or disabled,
+            @false otherwise (usually because the corresponding functionality
+            is not available under the current platform or for this type of
+            text control).
+
+        @since 3.1.6
+    */
+    virtual bool EnableProofCheck(const wxTextProofOptions& options
+                                    = wxTextProofOptions::Default());
+
+    /**
         Returns the style currently used for the new text.
 
         @see SetDefaultStyle()
@@ -1476,6 +1571,18 @@ public:
         @see IsSingleLine(), IsMultiLine()
     */
     bool IsSingleLine() const;
+
+    /**
+        Returns the current text proofing options.
+
+        This function is implemented for the same platforms as
+        EnableProofCheck() and returns wxTextProofOptions with all checks
+        disabled, i.e. such that wxTextProofOptions::AnyChecksEnabled() returns
+        @false.
+
+        @since 3.1.6
+    */
+    virtual wxTextProofOptions GetProofCheckOptions();
 
     /**
         Loads and displays the named file, if it exists.
