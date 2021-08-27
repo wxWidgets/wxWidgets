@@ -93,8 +93,6 @@ jobs:
 
       - name: Install prerequisites
         run: |
-          export DEBIAN_FRONTEND=noninteractive
-
           packages="git make wine x11-xserver-utils xvfb"
 
           case "${HOST_TRIPLET}" in
@@ -116,7 +114,7 @@ jobs:
               ;;
           esac
 
-          sudo apt-get -qq install $packages
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install $packages
 
           echo "wxTEST_RUNNER=${winerun}" >> $GITHUB_ENV
 
