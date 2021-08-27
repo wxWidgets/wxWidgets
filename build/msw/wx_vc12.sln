@@ -78,6 +78,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xrc", "wx_xrc.vcxproj", "{0
 	ProjectSection(ProjectDependencies) = postProject
 		{3E6DCA27-5FA3-53EC-BBD6-2D42294B7AE6} = {3E6DCA27-5FA3-53EC-BBD6-2D42294B7AE6}
 		{24C45343-FD20-5C92-81C1-35A2AE841E79} = {24C45343-FD20-5C92-81C1-35A2AE841E79}
+		{33CC42F9-7756-5587-863C-8D4461B7C5DD} = {33CC42F9-7756-5587-863C-8D4461B7C5DD}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aui", "wx_aui.vcxproj", "{A16D3832-0F42-57CE-8F48-50E06649ADE8}"
@@ -512,5 +513,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9573173-F5F1-495A-BF75-ACA8F75AF11A}
 	EndGlobalSection
 EndGlobal
