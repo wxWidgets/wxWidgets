@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/core/uilocale.cpp
+// Name:        src/osx/core/uilocale.mm
 // Purpose:     wxUILocale implementation for macOS
 // Author:      Vadim Zeitlin
 // Created:     2021-08-01

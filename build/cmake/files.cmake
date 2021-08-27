@@ -116,7 +116,7 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
-    src/osx/core/uilocale.cpp
+    src/osx/core/uilocale.mm
 )
 
 set(BASE_COREFOUNDATION_HDR
