@@ -83,7 +83,7 @@ jobs:
         shell: bash
         run: |
           apt-get -q -o=Dpkg::Use-Pty=0 update
-          apt-get -qq install sudo
+          apt-get -q -o=Dpkg::Use-Pty=0 -y install sudo
 
           # Create a user with the same UID/GID and name as the existing user
           # outside of the container and allow it using sudo without password.
@@ -93,8 +93,6 @@ jobs:
 
       - name: Install prerequisites
         run: |
-          export DEBIAN_FRONTEND=noninteractive
-
           packages="git make wine x11-xserver-utils xvfb"
 
           case "${HOST_TRIPLET}" in
@@ -106,7 +104,7 @@ jobs:
             i686-w64-mingw32)
               sudo dpkg --add-architecture i386
               sudo apt-get -q -o=Dpkg::Use-Pty=0 update
-              packages="$packages g++-mingw-w64-i686 wine32"
+              packages="$packages g++-mingw-w64-i686 wine32 libgl1:i386"
               winerun=wine
               ;;
 
@@ -116,7 +114,7 @@ jobs:
               ;;
           esac
 
-          sudo apt-get -qq install $packages
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -q -o=Dpkg::Use-Pty=0 -y install $packages
 
           echo "wxTEST_RUNNER=${winerun}" >> $GITHUB_ENV
 
