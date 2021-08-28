@@ -253,4 +253,46 @@ TEST_CASE("wxUILocale::GetInfo", "[.][uilocale]")
     CHECK( loc.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
 }
 
+TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
+{
+    SECTION("English")
+    {
+        const wxLocaleIdent l("en");
+
+        // This is not very interesting, but check that comparison works at all.
+        CHECK( wxUILocale::CompareStrings("x", "x", l) ==  0 );
+        CHECK( wxUILocale::CompareStrings("x", "y", l) == -1 );
+        CHECK( wxUILocale::CompareStrings("z", "y", l) == +1 );
+
+        // Also check for some degenerate cases.
+        CHECK( wxUILocale::CompareStrings("", "",  l) ==  0 );
+        CHECK( wxUILocale::CompareStrings("", "a", l) == -1 );
+
+        // And for case handling.
+        CHECK( wxUILocale::CompareStrings("a", "A",  l) == 0 );
+        CHECK( wxUILocale::CompareStrings("b", "A",  l) == 1 );
+        CHECK( wxUILocale::CompareStrings("B", "a",  l) == 1 );
+    }
+
+    SECTION("German")
+    {
+        const wxLocaleIdent l = wxLocaleIdent("de").Region("DE");
+
+        // This is more interesting and shows that CompareStrings() uses German
+        // dictionary rules (DIN 5007-1 variant 1).
+        CHECK( wxUILocale::CompareStrings(L"a", L"ä", l) == -1 );
+        CHECK( wxUILocale::CompareStrings(L"ä", "ae", l) == -1 );
+        CHECK( wxUILocale::CompareStrings(L"ß", "ss", l) ==  0 );
+    }
+
+    SECTION("Swedish")
+    {
+        const wxLocaleIdent l("sv");
+
+        // And this shows that sort order really depends on the language.
+        CHECK( wxUILocale::CompareStrings(L"ä", "ae", l) == 1 );
+        CHECK( wxUILocale::CompareStrings(L"ö", "z" , l) == 1 );
+    }
+}
+
 #endif // wxUSE_INTL
