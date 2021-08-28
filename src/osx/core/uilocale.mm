@@ -133,13 +133,13 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
 }
 
 /* static */
-int wxUILocale::CompareStrings(const wxString& lhs, const wxString& rhs, const wxLocaleIdent& locale_id)
+int wxUILocale::CompareStrings(const wxString& lhs, const wxString& rhs, const wxLocaleIdent& localeId)
 {
     NSString *ns_lhs = [NSString stringWithCString:lhs.ToStdString(wxConvUTF8).c_str()
                                  encoding:NSUTF8StringEncoding];
     NSString *ns_rhs = [NSString stringWithCString:rhs.ToStdString(wxConvUTF8).c_str()
                                  encoding:NSUTF8StringEncoding];
-    NSString *ns_locale_id = [NSString stringWithCString:locale_id.GetName().ToStdString(wxConvUTF8).c_str()
+    NSString *ns_locale_id = [NSString stringWithCString:localeId.GetName().ToStdString(wxConvUTF8).c_str()
                                        encoding:NSUTF8StringEncoding];
     NSInteger options = NSCaseInsensitiveSearch; // Maybe also NSDiacriticInsensitiveSearch?
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:ns_locale_id];
