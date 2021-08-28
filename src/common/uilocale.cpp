@@ -48,6 +48,7 @@ bool wxUILocale::UseDefault()
     if ( !impl )
         return false;
 
+    impl->Use();
     ms_current.SetImpl(impl);
 
     return true;
@@ -59,6 +60,12 @@ bool wxUILocale::UseLanguage(const wxLanguageInfo& info)
     wxUILocaleImpl* const impl = wxUILocaleImpl::CreateForLanguage(info);
     if ( !impl )
         return false;
+
+    if ( !impl->Use() )
+    {
+        delete impl;
+        return false;
+    }
 
     ms_current.SetImpl(impl);
 

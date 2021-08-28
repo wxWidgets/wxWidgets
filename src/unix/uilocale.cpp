@@ -43,11 +43,16 @@ class wxUILocaleImplUnix : public wxUILocaleImpl
 public:
     // Locale argument may be NULL to not change it at all.
     explicit wxUILocaleImplUnix(const char* locale);
+    ~wxUILocaleImplUnix() wxOVERRIDE;
 
+    bool Use() wxOVERRIDE;
     wxString GetName() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
 
 private:
+    // This pointer is owned by this class and may be NULL.
+    char* const m_name;
+
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplUnix);
 };
 
@@ -142,15 +147,54 @@ const char *wxSetlocaleTryAll(int c, const wxString& lc)
 // ----------------------------------------------------------------------------
 
 wxUILocaleImplUnix::wxUILocaleImplUnix(const char* locale)
+                  : m_name(locale ? strdup(locale) : NULL)
 {
-    if ( locale )
-        setlocale(LC_ALL, locale);
+}
+
+wxUILocaleImplUnix::~wxUILocaleImplUnix()
+{
+    free(m_name);
+}
+
+bool
+wxUILocaleImplUnix::Use()
+{
+    if ( !m_name )
+    {
+        // This is the default locale, it is already in use.
+        return true;
+    }
+
+    const wxString& shortName = wxString::FromAscii(m_name);
+
+    if ( !wxSetlocaleTryAll(LC_ALL, shortName) )
+    {
+        // Some C libraries (namely glibc) still use old ISO 639,
+        // so will translate the abbrev for them
+        wxString localeAlt;
+        const wxString& langOnly = ExtractLang(shortName);
+        if ( langOnly == wxS("he") )
+            localeAlt = wxS("iw") + ExtractNotLang(shortName);
+        else if ( langOnly == wxS("id") )
+            localeAlt = wxS("in") + ExtractNotLang(shortName);
+        else if ( langOnly == wxS("yi") )
+            localeAlt = wxS("ji") + ExtractNotLang(shortName);
+        else if ( langOnly == wxS("nb") )
+            localeAlt = wxS("no_NO");
+        else if ( langOnly == wxS("nn") )
+            localeAlt = wxS("no_NY");
+
+        if ( localeAlt.empty() || !wxSetlocaleTryAll(LC_ALL, localeAlt) )
+            return false;
+    }
+
+    return true;
 }
 
 wxString
 wxUILocaleImplUnix::GetName() const
 {
-    return wxString::FromAscii(setlocale(LC_ALL, NULL));
+    return wxString::FromAscii(m_name ? m_name : setlocale(LC_ALL, NULL));
 }
 
 wxString
@@ -217,33 +261,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
 {
-    // Set the locale before creating the wxUILocaleImplUnix object in order to
-    // check if we succeed in doing it.
-
-    const wxString& shortName = info.CanonicalName;
-
-    if ( !wxSetlocaleTryAll(LC_ALL, shortName) )
-    {
-        // Some C libraries (namely glibc) still use old ISO 639,
-        // so will translate the abbrev for them
-        wxString localeAlt;
-        const wxString& langOnly = ExtractLang(shortName);
-        if ( langOnly == wxS("he") )
-            localeAlt = wxS("iw") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("id") )
-            localeAlt = wxS("in") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("yi") )
-            localeAlt = wxS("ji") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("nb") )
-            localeAlt = wxS("no_NO");
-        else if ( langOnly == wxS("nn") )
-            localeAlt = wxS("no_NY");
-
-        if ( localeAlt.empty() || !wxSetlocaleTryAll(LC_ALL, localeAlt) )
-            return NULL;
-    }
-
-    return new wxUILocaleImplUnix(NULL);
+    return new wxUILocaleImplUnix(info.CanonicalName);
 }
 
 #endif // wxUSE_INTL

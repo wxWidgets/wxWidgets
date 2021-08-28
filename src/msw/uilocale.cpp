@@ -142,7 +142,14 @@ public:
     explicit wxUILocaleImplLCID(LCID lcid)
         : m_lcid(lcid)
     {
-        wxUseLCID(lcid);
+    }
+
+    bool Use() wxOVERRIDE
+    {
+        wxUseLCID(m_lcid);
+
+        // As long as we use a valid LCID (and we always do), it shouldn't fail.
+        return true;
     }
 
     wxString GetName() const wxOVERRIDE

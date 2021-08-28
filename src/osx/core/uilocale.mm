@@ -87,6 +87,7 @@ public:
         return new wxUILocaleImplCF(cfloc);
     }
 
+    bool Use() wxOVERRIDE;
     wxString GetName() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
 
@@ -101,6 +102,13 @@ private:
 // ============================================================================
 // implementation
 // ============================================================================
+
+bool
+wxUILocaleImplCF::Use()
+{
+    // There is no way to start using a locale other than default.
+    return false;
+}
 
 wxString
 wxUILocaleImplCF::GetName() const
