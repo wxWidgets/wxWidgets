@@ -185,9 +185,7 @@ jobs:
       - name: Building tests
         working-directory: tests
         run: |
-          if [ !${{ matrix.skip_gui }} ]; then
-            make $wxBUILD_ARGS failtest
-          fi
+          make $wxBUILD_ARGS failtest
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
       - name: Testing
@@ -217,7 +215,7 @@ jobs:
           fi
 
       - name: Testing GUI using Xvfb
-        if: matrix.skip_gui != true && matrix.use_xvfb
+        if: matrix.use_xvfb
         working-directory: tests
         run: |
           if [ ${{ matrix.use_asan }} ]; then
@@ -247,7 +245,7 @@ jobs:
           fi
 
       - name: Building samples
-        if: matrix.skip_gui != true && matrix.skip_samples != true
+        if: matrix.skip_samples != true
         run: |
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS" samples
 
