@@ -8,6 +8,20 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
+    Flags for wxUILocale::CompareStrings() function.
+
+    @since 3.1.6
+ */
+enum
+{
+    /// Compare strings case-sensitively, this is the default.
+    wxCompare_CaseSensitive   = 0,
+
+    /// Ignore strings case when comparing.
+    wxCompare_CaseInsensitive = 1
+};
+
+/**
     Query and modify locale used for the UI by the current platform.
 
     UI locale determines all culture-dependent conventions used in the user
@@ -90,13 +104,17 @@ public:
         @param localeId
             Represents platform dependent language name.
             @see wxLocaleIdent for details.
+        @param flags
+            Can be used to specify whether to compare strings case-sensitively
+            (default) or not, by specifying ::wxCompare_CaseInsensitive.
         @return
             -1 if lhs less than rhs.
             0 if lhs equal to rhs.
             1 if lhs greater than rhs.
      */
     static int CompareStrings(const wxString& lhs, const wxString& rhs,
-                              const wxLocaleIdent& localeId = wxLocaleIdent());
+                              const wxLocaleIdent& localeId = wxLocaleIdent(),
+                              int flags = wxCompare_CaseSensitive);
 
     /**
         Get the platform-dependent name of the current locale.

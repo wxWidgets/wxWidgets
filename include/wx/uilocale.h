@@ -19,6 +19,13 @@
 
 class wxUILocaleImpl;
 
+// Flags for wxUILocale::CompareStrings().
+enum
+{
+    wxCompare_CaseSensitive   = 0,
+    wxCompare_CaseInsensitive = 1
+};
+
 // ----------------------------------------------------------------------------
 // wxUILocale allows to use the default UI locale and get information about it
 // ----------------------------------------------------------------------------
@@ -47,7 +54,8 @@ public:
 
     // Compares two strings, for a locale specified by wxLocaleIdent.
     static int CompareStrings(const wxString& lhs, const wxString& rhs,
-                              const wxLocaleIdent& localeId = wxLocaleIdent());
+                              const wxLocaleIdent& localeId = wxLocaleIdent(),
+                              int flags = wxCompare_CaseSensitive);
 
     // Note that this class is not supposed to be used polymorphically, hence
     // its dtor is not virtual.

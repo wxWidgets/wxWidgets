@@ -205,12 +205,21 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
 }
 
 /* static */
-int wxUILocale::CompareStrings(const wxString& lhs, const wxString& rhs, const wxLocaleIdent& localeId)
+int
+wxUILocale::CompareStrings(const wxString& lhs,
+                           const wxString& rhs,
+                           const wxLocaleIdent& localeId,
+                           int flags)
 {
+    DWORD dwFlags = 0;
+
+    if ( flags & wxCompare_CaseInsensitive )
+        dwFlags |= NORM_IGNORECASE;
+
     int ret = wxMSWCompareStringEx(
         localeId.IsDefault() ? LOCALE_NAME_USER_DEFAULT
                              : static_cast<LPCWSTR>(localeId.GetName().wc_str()),
-        0, // Maybe we need LINGUISTIC_IGNORECASE here
+        dwFlags,
         static_cast<LPCWSTR>(lhs.wc_str()), -1,
         static_cast<LPCWSTR>(rhs.wc_str()), -1,
         NULL,               // [out] version information -- not needed

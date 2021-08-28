@@ -253,6 +253,9 @@ TEST_CASE("wxUILocale::GetInfo", "[.][uilocale]")
     CHECK( loc.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
 }
 
+// Just a small helper to make the test below shorter.
+static inline wxString u8(const char* s) { return wxString::FromUTF8(s); }
+
 TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 {
     SECTION("English")
@@ -269,9 +272,11 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         CHECK( wxUILocale::CompareStrings("", "a", l) == -1 );
 
         // And for case handling.
-        CHECK( wxUILocale::CompareStrings("a", "A",  l) == 0 );
-        CHECK( wxUILocale::CompareStrings("b", "A",  l) == 1 );
-        CHECK( wxUILocale::CompareStrings("B", "a",  l) == 1 );
+        CHECK( wxUILocale::CompareStrings("a", "A",  l) == -1 );
+        CHECK( wxUILocale::CompareStrings("a", "A",  l,
+                                          wxCompare_CaseInsensitive) == 0 );
+        CHECK( wxUILocale::CompareStrings("b", "A",  l) ==  1 );
+        CHECK( wxUILocale::CompareStrings("B", "a",  l) ==  1 );
     }
 
     SECTION("German")
@@ -280,9 +285,10 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 
         // This is more interesting and shows that CompareStrings() uses German
         // dictionary rules (DIN 5007-1 variant 1).
-        CHECK( wxUILocale::CompareStrings(L"a", L"ä", l) == -1 );
-        CHECK( wxUILocale::CompareStrings(L"ä", "ae", l) == -1 );
-        CHECK( wxUILocale::CompareStrings(L"ß", "ss", l) ==  0 );
+        CHECK( wxUILocale::CompareStrings("a",  u8("ä"), l) == -1 );
+        CHECK( wxUILocale::CompareStrings(u8("ä"), "ae", l) == -1 );
+        CHECK( wxUILocale::CompareStrings(u8("ß"), "ss", l,
+                                          wxCompare_CaseInsensitive) == 0 );
     }
 
     SECTION("Swedish")
@@ -290,8 +296,8 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         const wxLocaleIdent l("sv");
 
         // And this shows that sort order really depends on the language.
-        CHECK( wxUILocale::CompareStrings(L"ä", "ae", l) == 1 );
-        CHECK( wxUILocale::CompareStrings(L"ö", "z" , l) == 1 );
+        CHECK( wxUILocale::CompareStrings(u8("ä"), "ae", l) == 1 );
+        CHECK( wxUILocale::CompareStrings(u8("ö"), "z" , l) == 1 );
     }
 }
 
