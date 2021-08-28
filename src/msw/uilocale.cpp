@@ -213,7 +213,9 @@ int wxUILocale::CompareStrings(const wxString& lhs, const wxString& rhs, const w
         0, // Maybe we need LINGUISTIC_IGNORECASE here
         static_cast<LPCWSTR>(lhs.wc_str()), -1,
         static_cast<LPCWSTR>(rhs.wc_str()), -1,
-        NULL, NULL, 0);
+        NULL,               // [out] version information -- not needed
+        wxRESERVED_PARAM,
+        wxRESERVED_PARAM);
 
     switch (ret)
     {
