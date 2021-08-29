@@ -260,44 +260,49 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 {
     SECTION("English")
     {
-        const wxLocaleIdent l("en");
+        const wxUILocale l("en");
 
         // This is not very interesting, but check that comparison works at all.
-        CHECK( wxUILocale::CompareStrings("x", "x", l) ==  0 );
-        CHECK( wxUILocale::CompareStrings("x", "y", l) == -1 );
-        CHECK( wxUILocale::CompareStrings("z", "y", l) == +1 );
+        CHECK( l.CompareStrings("x", "x") ==  0 );
+        CHECK( l.CompareStrings("x", "y") == -1 );
+        CHECK( l.CompareStrings("z", "y") == +1 );
 
         // Also check for some degenerate cases.
-        CHECK( wxUILocale::CompareStrings("", "",  l) ==  0 );
-        CHECK( wxUILocale::CompareStrings("", "a", l) == -1 );
+        CHECK( l.CompareStrings("", "")  ==  0 );
+        CHECK( l.CompareStrings("", "a") == -1 );
 
         // And for case handling.
-        CHECK( wxUILocale::CompareStrings("a", "A",  l) == -1 );
-        CHECK( wxUILocale::CompareStrings("a", "A",  l,
-                                          wxCompare_CaseInsensitive) == 0 );
-        CHECK( wxUILocale::CompareStrings("b", "A",  l) ==  1 );
-        CHECK( wxUILocale::CompareStrings("B", "a",  l) ==  1 );
+        CHECK( l.CompareStrings("a", "A") == -1 );
+        CHECK( l.CompareStrings("b", "A") ==  1 );
+        CHECK( l.CompareStrings("B", "a") ==  1 );
+
+        // Case insensitive comparison is not supported with POSIX APIs.
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+        CHECK( l.CompareStrings("a", "A", wxCompare_CaseInsensitive) == 0 );
+#endif
     }
 
     SECTION("German")
     {
-        const wxLocaleIdent l = wxLocaleIdent("de").Region("DE");
+        const wxUILocale l(wxLocaleIdent("de").Region("DE"));
 
         // This is more interesting and shows that CompareStrings() uses German
         // dictionary rules (DIN 5007-1 variant 1).
-        CHECK( wxUILocale::CompareStrings("a",  u8("ä"), l) == -1 );
-        CHECK( wxUILocale::CompareStrings(u8("ä"), "ae", l) == -1 );
-        CHECK( wxUILocale::CompareStrings(u8("ß"), "ss", l,
-                                          wxCompare_CaseInsensitive) == 0 );
+        CHECK( l.CompareStrings("a",  u8("ä")) == -1 );
+        CHECK( l.CompareStrings(u8("ä"), "ae") == -1 );
+
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+        CHECK( l.CompareStrings(u8("ß"), "ss", wxCompare_CaseInsensitive) == 0 );
+#endif
     }
 
     SECTION("Swedish")
     {
-        const wxLocaleIdent l("sv");
+        const wxUILocale l("sv");
 
         // And this shows that sort order really depends on the language.
-        CHECK( wxUILocale::CompareStrings(u8("ä"), "ae", l) == 1 );
-        CHECK( wxUILocale::CompareStrings(u8("ö"), "z" , l) == 1 );
+        CHECK( l.CompareStrings(u8("ä"), "ae") == 1 );
+        CHECK( l.CompareStrings(u8("ö"), "z" ) == 1 );
     }
 }
 

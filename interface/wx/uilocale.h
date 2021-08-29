@@ -17,7 +17,12 @@ enum
     /// Compare strings case-sensitively, this is the default.
     wxCompare_CaseSensitive   = 0,
 
-    /// Ignore strings case when comparing.
+    /**
+        Ignore strings case when comparing.
+
+        Note that this flag is not supported under POSIX systems, where it is
+        simply ignored.
+     */
     wxCompare_CaseInsensitive = 1
 };
 
@@ -99,10 +104,9 @@ public:
 
         In the simplest case, this can be used as following:
         @code
-            const wxUILocale loc("fr");
+            const wxUILocale loc(wxLocaleIdent("fr"));
         @endcode
-        but more precise locale identifiers can be used, see wxLocaleIdent
-        description for more details.
+        see wxLocaleIdent description for more details.
 
         If @a localeId is not recognized or not supported, default ("C") locale
         is used instead.
@@ -110,26 +114,24 @@ public:
     explicit wxUILocale(const wxLocaleIdent& localeId);
 
     /**
-        Compares two strings using comparison rules of the given locale.
+        Compares two strings using comparison rules of this locale.
 
         @param lhs
             First comparing string.
         @param rhs
             Second comparing string.
-        @param localeId
-            Represents platform dependent language name.
-            @see wxLocaleIdent for details.
         @param flags
             Can be used to specify whether to compare strings case-sensitively
-            (default) or not, by specifying ::wxCompare_CaseInsensitive.
+            (default) or not, by specifying ::wxCompare_CaseInsensitive (note
+            that this flag only works under MSW and Mac and is simply ignored
+            under the other platforms).
         @return
             -1 if lhs less than rhs.
             0 if lhs equal to rhs.
             1 if lhs greater than rhs.
      */
-    static int CompareStrings(const wxString& lhs, const wxString& rhs,
-                              const wxLocaleIdent& localeId = wxLocaleIdent(),
-                              int flags = wxCompare_CaseSensitive);
+    int CompareStrings(const wxString& lhs, const wxString& rhs,
+                       int flags = wxCompare_CaseSensitive) const;
 
     /**
         Get the platform-dependent name of the current locale.

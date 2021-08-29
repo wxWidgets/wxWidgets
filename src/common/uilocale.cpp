@@ -133,6 +133,14 @@ wxString wxUILocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
     return m_impl->GetInfo(index, cat);
 }
 
+int
+wxUILocale::CompareStrings(const wxString& lhs,
+                           const wxString& rhs,
+                           int flags) const
+{
+    return m_impl->CompareStrings(lhs, rhs, flags);
+}
+
 wxUILocale::~wxUILocale()
 {
     delete m_impl;

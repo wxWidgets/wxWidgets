@@ -64,43 +64,6 @@ static void wxMSWSetThreadUILanguage(LANGID langid)
     }
 }
 
-// Trivial wrapper for ::CompareStringEx().
-//
-// TODO-XP: Drop this when we don't support XP any longer.
-static int wxMSWCompareStringEx(LPCWSTR lpLocaleName,
-                                 DWORD dwCmpFlags,
-                                 LPCWSTR lpString1, //_In_NLS_string_(cchCount1)LPCWCH lpString1,
-                                 int cchCount1,
-                                 LPCWSTR lpString2, //_In_NLS_string_(cchCount2)LPCWCH lpString2,
-                                 int cchCount2,
-                                 LPNLSVERSIONINFO lpVersionInformation,
-                                 LPVOID lpReserved,
-                                 LPARAM lParam)
-{
-    typedef int(WINAPI *CompareStringEx_t)(LPCWSTR,DWORD,LPCWSTR,int,LPCWSTR,int,LPNLSVERSIONINFO,LPVOID,LPARAM);
-    static const CompareStringEx_t INVALID_FUNC_PTR = (CompareStringEx_t)-1;
-
-    static CompareStringEx_t pfnCompareStringEx = INVALID_FUNC_PTR;
-
-    if (pfnCompareStringEx == INVALID_FUNC_PTR)
-    {
-        // Avoid calling CompareStringEx() on XP.
-        if (wxGetWinVersion() >= wxWinVersion_Vista)
-        {
-            wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
-            wxDL_INIT_FUNC(pfn, CompareStringEx, dllKernel32);
-        }
-    }
-
-    if (pfnCompareStringEx)
-    {
-        return pfnCompareStringEx(lpLocaleName, dwCmpFlags, lpString1, cchCount1, lpString2,
-                                    cchCount2, lpVersionInformation, lpReserved, lParam);
-    }
-
-    return 0;
-}
-
 } // anonymous namespace
 
 void wxUseLCID(LCID lcid)
@@ -185,6 +148,16 @@ public:
         return wxGetInfoFromLCID(m_lcid, index, cat);
     }
 
+    int CompareStrings(const wxString& lhs, const wxString& rhs,
+                       int flags) const wxOVERRIDE
+    {
+        // Can't be really implemented on the OS versions where this class is
+        // used.
+        return flags & wxCompare_CaseInsensitive
+                ? lhs.CmpNoCase(rhs)
+                : lhs.Cmp(rhs) ;
+    }
+
 private:
     const LCID m_lcid;
 
@@ -215,6 +188,10 @@ public:
                 return false;
             wxDL_INIT_FUNC(ms_, SetThreadPreferredUILanguages, dllKernel32);
             if ( !ms_SetThreadPreferredUILanguages )
+                return false;
+
+            wxDL_INIT_FUNC(ms_, CompareStringEx, dllKernel32);
+            if ( !ms_CompareStringEx )
                 return false;
 
             s_canUse = 1;
@@ -301,12 +278,58 @@ public:
         return str;
     }
 
+    int CompareStrings(const wxString& lhs, const wxString& rhs,
+                       int flags) const wxOVERRIDE
+    {
+        DWORD dwFlags = 0;
+
+        if ( flags & wxCompare_CaseInsensitive )
+            dwFlags |= NORM_IGNORECASE;
+
+        const int ret = ms_CompareStringEx
+            (
+                m_name,
+                dwFlags,
+                lhs.wc_str(), -1,
+                rhs.wc_str(), -1,
+                NULL,               // [out] version information -- not needed
+                wxRESERVED_PARAM,
+                wxRESERVED_PARAM
+            );
+
+        switch ( ret )
+        {
+            case CSTR_LESS_THAN:
+                return -1;
+            case CSTR_EQUAL:
+                return 0;
+            case CSTR_GREATER_THAN:
+                return 1;
+        }
+
+        wxFAIL_MSG(wxS("Unreachable"));
+        return 0;
+    }
+
 private:
     typedef int (WINAPI *GetLocaleInfoEx_t)(LPCWSTR, LCTYPE, LPWSTR, int);
     static GetLocaleInfoEx_t ms_GetLocaleInfoEx;
 
     typedef BOOL (WINAPI *SetThreadPreferredUILanguages_t)(DWORD, CONST WCHAR*, ULONG*);
     static SetThreadPreferredUILanguages_t ms_SetThreadPreferredUILanguages;
+
+    // Note: we currently don't use NLSVERSIONINFO output parameter and so we
+    // don't bother dealing with the different sizes of this struct under
+    // different OS versions and define the function type as using "void*" to
+    // avoid using this parameter accidentally. If we ever really need to use
+    // it, we'd need to check the OS version/struct size during run-time.
+    typedef int (WINAPI *CompareStringEx_t)(LPCWSTR, DWORD,
+                                            CONST WCHAR*, int,
+                                            CONST WCHAR*, int,
+                                            void*, // actually LPNLSVERSIONINFO
+                                            void*,
+                                            LPARAM);
+    static CompareStringEx_t ms_CompareStringEx;
 
     wxString DoGetInfo(LCTYPE lctype) const
     {
@@ -327,6 +350,7 @@ private:
 
 wxUILocaleImplName::GetLocaleInfoEx_t wxUILocaleImplName::ms_GetLocaleInfoEx;
 wxUILocaleImplName::SetThreadPreferredUILanguages_t wxUILocaleImplName::ms_SetThreadPreferredUILanguages;
+wxUILocaleImplName::CompareStringEx_t wxUILocaleImplName::ms_CompareStringEx;
 
 // ----------------------------------------------------------------------------
 // wxUILocaleImpl implementation
@@ -380,41 +404,6 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
     }
 
     return new wxUILocaleImplName(locId.GetName());
-}
-
-/* static */
-int
-wxUILocale::CompareStrings(const wxString& lhs,
-                           const wxString& rhs,
-                           const wxLocaleIdent& localeId,
-                           int flags)
-{
-    DWORD dwFlags = 0;
-
-    if ( flags & wxCompare_CaseInsensitive )
-        dwFlags |= NORM_IGNORECASE;
-
-    int ret = wxMSWCompareStringEx(
-        localeId.IsDefault() ? LOCALE_NAME_USER_DEFAULT
-                             : static_cast<LPCWSTR>(localeId.GetName().wc_str()),
-        dwFlags,
-        static_cast<LPCWSTR>(lhs.wc_str()), -1,
-        static_cast<LPCWSTR>(rhs.wc_str()), -1,
-        NULL,               // [out] version information -- not needed
-        wxRESERVED_PARAM,
-        wxRESERVED_PARAM);
-
-    switch (ret)
-    {
-    case CSTR_LESS_THAN:
-        return -1;
-    case CSTR_EQUAL:
-        return 0;
-    case CSTR_GREATER_THAN:
-        return 1;
-    }
-
-    return 0;
 }
 
 #endif // wxUSE_INTL

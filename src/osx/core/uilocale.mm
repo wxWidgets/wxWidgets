@@ -91,6 +91,8 @@ public:
     bool Use() wxOVERRIDE;
     wxString GetName() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
+    int CompareStrings(const wxString& lhs, const wxString& rhs,
+                       int flags) const wxOVERRIDE;
 
 private:
     wxCFRef<CFLocaleRef> m_cfloc;
@@ -141,29 +143,22 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
     return wxUILocaleImplCF::Create(locId);
 }
 
-/* static */
 int
-wxUILocale::CompareStrings(const wxString& lhs,
-                           const wxString& rhs,
-                           const wxLocaleIdent& localeId,
-                           int flags)
+wxUILocaleImplCF::CompareStrings(const wxString& lhs, const wxString& rhs,
+                                 int flags) const
 {
     NSString *ns_lhs = [NSString stringWithCString:lhs.ToStdString(wxConvUTF8).c_str()
                                  encoding:NSUTF8StringEncoding];
     NSString *ns_rhs = [NSString stringWithCString:rhs.ToStdString(wxConvUTF8).c_str()
                                  encoding:NSUTF8StringEncoding];
-    NSString *ns_locale_id = [NSString stringWithCString:localeId.GetName().ToStdString(wxConvUTF8).c_str()
-                                       encoding:NSUTF8StringEncoding];
     NSInteger options = 0;
     if ( flags & wxCompare_CaseInsensitive )
         options |= NSCaseInsensitiveSearch;
 
-    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:ns_locale_id];
-
     NSComparisonResult ret = [ns_lhs compare:ns_rhs
                                      options:options
                                      range:(NSRange){0, [ns_lhs length]}
-                                     locale:locale];
+                                     locale:(id)(CFLocaleRef)m_cfloc];
 
     switch (ret)
     {

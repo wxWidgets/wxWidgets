@@ -47,6 +47,8 @@ public:
     bool Use() wxOVERRIDE;
     wxString GetName() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
+    int CompareStrings(const wxString& lhs, const wxString& rhs,
+                       int flags) const wxOVERRIDE;
 
 private:
 #ifdef HAVE_LANGINFO_H
@@ -324,6 +326,28 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
     // differs from the expected one).
     return wxLocale::GetInfo(index, cat);
 #endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
+}
+
+int
+wxUILocaleImplUnix::CompareStrings(const wxString& lhs, const wxString& rhs,
+                                   int WXUNUSED(flags)) const
+{
+    int rc;
+
+#ifdef HAVE_LOCALE_T
+    if ( m_locale )
+        rc = wcscoll_l(lhs.wc_str(), rhs.wc_str(), m_locale);
+    else
+#endif // HAVE_LOCALE_T
+        rc = wcscoll(lhs.wc_str(), rhs.wc_str());
+
+    if ( rc < 0 )
+        return -1;
+
+    if ( rc > 0 )
+        return 1;
+
+    return 0;
 }
 
 /* static */

@@ -60,6 +60,8 @@ public:
     // Functions corresponding to wxUILocale ones.
     virtual wxString GetName() const = 0;
     virtual wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const = 0;
+    virtual int CompareStrings(const wxString& lhs, const wxString& rhs,
+                               int flags) const = 0;
 
     virtual ~wxUILocaleImpl() { }
 };
