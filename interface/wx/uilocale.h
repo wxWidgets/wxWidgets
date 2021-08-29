@@ -192,12 +192,15 @@ public:
 
     /**
         Set language.
+
         Return reference to @this for method chaining.
 
+        See https://www.loc.gov/standards/iso639-2/php/English_list.php for the
+        list of all language codes.
+
         @param language
-            It is a lowercase ISO 639 language code.
-            The codes from ISO 639-1 are used when available.
-            Otherwise, codes from ISO 639-2/T are used.
+            A two-letter ISO 639-1 language code or a three-letter ISO 639-2
+            code for the languages without ISO 639-1 codes.
     */
     wxLocaleIdent& Language(const wxString& language);
 
