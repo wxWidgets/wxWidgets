@@ -67,6 +67,9 @@ wxString wxLocaleIdent::GetName() const
         if ( !m_region.empty() )
             name << "_" << m_region;
 
+        if ( !m_charset.empty() )
+            name << "." << m_charset;
+
         if ( !m_modifier.empty() )
             name << "@" << m_modifier;
     }

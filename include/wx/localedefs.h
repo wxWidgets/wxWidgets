@@ -140,19 +140,33 @@ public:
         return *this;
     }
 
-    // Set script
+    // Set script (not supported under Unix)
     wxLocaleIdent& Script(const wxString& script)
     {
         m_script = script;
         return *this;
     }
 
-    // Set modifier
+    // Set charset (only supported under Unix)
+    wxLocaleIdent& Charset(const wxString& charset)
+    {
+        m_charset = charset;
+        return *this;
+    }
+
+    // Set modifier (only supported under Unix)
     wxLocaleIdent& Modifier(const wxString& modifier)
     {
         m_modifier = modifier;
         return *this;
     }
+
+    // Accessors for the individual fields.
+    const wxString& GetLanguage() const { return m_language; }
+    const wxString& GetRegion() const { return m_region; }
+    const wxString& GetScript() const { return m_script; }
+    const wxString& GetCharset() const { return m_charset; }
+    const wxString& GetModifier() const { return m_modifier; }
 
     // Construct platform dependent name
     wxString GetName() const;
@@ -167,6 +181,7 @@ private:
     wxString m_language;
     wxString m_region;
     wxString m_script;
+    wxString m_charset;
     wxString m_modifier;
 };
 

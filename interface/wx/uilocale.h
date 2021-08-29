@@ -218,6 +218,9 @@ public:
 
     /**
         Set script.
+
+        Note that script value is currently ignored under Unix systems.
+
         Return reference to @this for method chaining.
 
         @param script
@@ -226,7 +229,25 @@ public:
     wxLocaleIdent& Script(const wxString& script);
 
     /**
+        Set charset.
+
+        Note that this value is only used under Unix systems and simply ignored
+        under the other ones.
+
+        Return reference to @this for method chaining.
+
+        @param charset
+            Charset is a string such as "UTF-8", "ISO855915" or "KOI8R".
+            Supported charsets depend on the implementation and installation.
+    */
+    wxLocaleIdent& Charset(const wxString& charset);
+
+    /**
         Set modifier.
+
+        Note that this value is only used under Unix systems and simply ignored
+        under the other ones.
+
         Return reference to @this for method chaining.
 
         @param modifier
@@ -235,11 +256,26 @@ public:
     */
     wxLocaleIdent& Modifier(const wxString& modifier);
 
+    /// Return the language part of the locale identifier.
+    const wxString& GetLanguage() const;
+
+    /// Return the region part of the locale identifier.
+    const wxString& GetRegion() const;
+
+    /// Return the script part of the locale identifier.
+    const wxString& GetScript() const;
+
+    /// Return the charset part of the locale identifier.
+    const wxString& GetCharset() const;
+
+    /// Return the modifier part of the locale identifier.
+    const wxString& GetModifier() const;
+
     /**
         Construct platform dependent name.
         Format:
         Windows: <language>-<script>-<REGION>
-        Unix:    <language>_<REGION>@<modifier>
+        Unix:    <language>_<REGION>.<charset>@<modifier>
         MacOS:   <language>-<script>_<REGION>
     */
     wxString GetName() const;
