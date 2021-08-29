@@ -184,11 +184,14 @@ public:
     /**
         Constructor with language.
 
+        Note that this constructor is non-explicit, allowing to pass just a
+        simple string, such as "en", to functions taking wxLocaleIdent.
+
         @param language
             ISO 639 language code.
             See Language() for more detailed info.
     */
-    wxLocaleIdent(const wxString& language);
+    wxLocaleIdent(const char* language);
 
     /**
         Set language.

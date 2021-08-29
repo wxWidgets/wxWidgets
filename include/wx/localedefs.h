@@ -118,8 +118,13 @@ public:
     // Leave language empty
     wxLocaleIdent() { }
 
-    // Construct name from language
-    wxLocaleIdent(const wxString& language) : m_language(language) { }
+    // Construct from language, i.e. a two-letter ISO 639-1 code (or a
+    // three-letter ISO 639-2 code if there is no ISO 639-1 code for this
+    // language).
+    wxLocaleIdent(const char* language)
+        : m_language(wxString::FromAscii(language))
+    {
+    }
 
     // Set language
     wxLocaleIdent& Language(const wxString& language)
