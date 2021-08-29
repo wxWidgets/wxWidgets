@@ -404,7 +404,11 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
     // it could happen that we don't have a valid parent if we hadn't been ever
     // really created -- but in this case there is nothing else to do neither
     if ( parent )
+    {
         parent->WXRemoveChild(this);
+        if ( m_pMenuBar )
+            parent->RemoveChild(m_pMenuBar);
+    }
 
 #if wxUSE_MENUS
     delete m_pMenuBar;
