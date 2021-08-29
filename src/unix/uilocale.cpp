@@ -41,8 +41,7 @@ namespace
 class wxUILocaleImplUnix : public wxUILocaleImpl
 {
 public:
-    // Locale argument may be NULL to not change it at all.
-    explicit wxUILocaleImplUnix(const char* locale);
+    explicit wxUILocaleImplUnix(wxLocaleIdent locId);
     ~wxUILocaleImplUnix() wxOVERRIDE;
 
     bool Use() wxOVERRIDE;
@@ -50,8 +49,23 @@ public:
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
 
 private:
-    // This pointer is owned by this class and may be NULL.
-    char* const m_name;
+#ifdef HAVE_LANGINFO_H
+    // Call nl_langinfo_l() if available, or nl_langinfo() otherwise.
+    const char* GetLangInfo(nl_item item) const;
+#endif // HAVE_LANGINFO_H
+
+#ifdef HAVE_LOCALE_T
+    // On success, set m_locale and change m_locId to the given one.
+    // Otherwise just return false.
+    bool TryCreateLocale(const wxLocaleIdent& locId);
+#endif // HAVE_LOCALE_T
+
+    wxLocaleIdent m_locId;
+
+#ifdef HAVE_LOCALE_T
+    // Initially null, allocated on demand when needed, use GetLocale().
+    locale_t m_locale;
+#endif // HAVE_LOCALE_T
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplUnix);
 };
@@ -146,26 +160,76 @@ const char *wxSetlocaleTryAll(int c, const wxString& lc)
 // wxUILocale implementation for Unix
 // ----------------------------------------------------------------------------
 
-wxUILocaleImplUnix::wxUILocaleImplUnix(const char* locale)
-                  : m_name(locale ? strdup(locale) : NULL)
+#ifdef HAVE_LOCALE_T
+
+bool
+wxUILocaleImplUnix::TryCreateLocale(const wxLocaleIdent& locId)
 {
+    m_locale = newlocale(LC_ALL_MASK, locId.GetName(), NULL);
+    if ( !m_locale )
+        return false;
+
+    m_locId = locId;
+    return true;
+}
+
+#endif // HAVE_LOCALE_T
+
+wxUILocaleImplUnix::wxUILocaleImplUnix(wxLocaleIdent locId)
+                  : m_locId(locId)
+{
+#ifdef HAVE_LOCALE_T
+    if ( !TryCreateLocale(locId) )
+    {
+        // Try to find a variant of this locale available on this system: first
+        // of all, using just the language, without the territory, typically
+        // does _not_ work under Linux, so try adding one if we don't have it.
+        if ( locId.GetRegion().empty() )
+        {
+            const wxLanguageInfo* const info =
+                wxLocale::FindLanguageInfo(locId.GetLanguage());
+            if ( info )
+            {
+                wxString region = info->CanonicalName.AfterFirst('_');
+                if ( !region.empty() )
+                {
+                    // We never have encoding in our canonical names, but we
+                    // can have modifiers, so get rid of them if necessary.
+                    region = region.BeforeFirst('@');
+
+                    TryCreateLocale(locId.Region(region));
+                }
+            }
+        }
+
+        // And sometimes the locale without encoding is not available, but one
+        // with UTF-8 encoding is, so try this too.
+        if ( !m_locale && locId.GetCharset().empty() )
+        {
+            TryCreateLocale(locId.Charset("UTF-8"));
+        }
+    }
+#endif // HAVE_LOCALE_T
 }
 
 wxUILocaleImplUnix::~wxUILocaleImplUnix()
 {
-    free(m_name);
+#ifdef HAVE_LOCALE_T
+    if ( m_locale )
+        freelocale(m_locale);
+#endif // HAVE_LOCALE_T
 }
 
 bool
 wxUILocaleImplUnix::Use()
 {
-    if ( !m_name )
+    if ( m_locId.IsDefault() )
     {
         // This is the default locale, it is already in use.
         return true;
     }
 
-    const wxString& shortName = wxString::FromAscii(m_name);
+    const wxString& shortName = m_locId.GetName();
 
     if ( !wxSetlocaleTryAll(LC_ALL, shortName) )
     {
@@ -194,8 +258,24 @@ wxUILocaleImplUnix::Use()
 wxString
 wxUILocaleImplUnix::GetName() const
 {
-    return wxString::FromAscii(m_name ? m_name : setlocale(LC_ALL, NULL));
+    return m_locId.GetName();
 }
+
+#ifdef HAVE_LANGINFO_H
+
+const char*
+wxUILocaleImplUnix::GetLangInfo(nl_item item) const
+{
+#ifdef HAVE_LOCALE_T
+    // We assume that we have nl_langinfo_l() if we have locale_t.
+    if ( m_locale )
+        return nl_langinfo_l(item, m_locale);
+#endif // HAVE_LOCALE_T
+
+    return nl_langinfo(item);
+}
+
+#endif // HAVE_LANGINFO_H
 
 wxString
 wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
@@ -206,29 +286,29 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
         case wxLOCALE_THOUSANDS_SEP:
 #ifdef MON_THOUSANDS_SEP
             if ( cat == wxLOCALE_CAT_MONEY )
-                return nl_langinfo(MON_THOUSANDS_SEP);
+                return GetLangInfo(MON_THOUSANDS_SEP);
 #endif
-            return nl_langinfo(THOUSEP);
+            return GetLangInfo(THOUSEP);
 
         case wxLOCALE_DECIMAL_POINT:
 #ifdef MON_DECIMAL_POINT
             if ( cat == wxLOCALE_CAT_MONEY )
-                return nl_langinfo(MON_DECIMAL_POINT);
+                return GetLangInfo(MON_DECIMAL_POINT);
 #endif
 
-            return nl_langinfo(RADIXCHAR);
+            return GetLangInfo(RADIXCHAR);
 
         case wxLOCALE_SHORT_DATE_FMT:
-            return nl_langinfo(D_FMT);
+            return GetLangInfo(D_FMT);
 
         case wxLOCALE_DATE_TIME_FMT:
-            return nl_langinfo(D_T_FMT);
+            return GetLangInfo(D_T_FMT);
 
         case wxLOCALE_TIME_FMT:
-            return nl_langinfo(T_FMT);
+            return GetLangInfo(T_FMT);
 
         case wxLOCALE_LONG_DATE_FMT:
-            return wxGetDateFormatOnly(nl_langinfo(D_T_FMT));
+            return wxGetDateFormatOnly(GetLangInfo(D_T_FMT));
 
         default:
             wxFAIL_MSG( "unknown wxLocaleInfo value" );
@@ -249,19 +329,19 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 {
-    return new wxUILocaleImplUnix(NULL);
+    return new wxUILocaleImplUnix("C");
 }
 
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 {
-    return new wxUILocaleImplUnix("");
+    return new wxUILocaleImplUnix(wxLocaleIdent());
 }
 
 /* static */
-wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
+wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
 {
-    return new wxUILocaleImplUnix(info.CanonicalName);
+    return new wxUILocaleImplUnix(locId);
 }
 
 #endif // wxUSE_INTL

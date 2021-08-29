@@ -33,8 +33,16 @@ public:
     // It may return NULL in case of failure.
     static wxUILocaleImpl* CreateUserDefault();
 
+    // Create locale object for the given locale.
+    //
+    // It may return NULL in case of failure.
+    static wxUILocaleImpl* CreateForLocale(const wxLocaleIdent& locId);
+
     // This function exists only for wxLocale compatibility and creates the
     // locale corresponding to the given language.
+    //
+    // It is implemented in terms of CreateForLocale() for non-MSW platforms,
+    // but under MSW it is different for compatibility reasons.
     //
     // The language passed to this function is a valid language, i.e. neither
     // wxLANGUAGE_UNKNOWN nor wxLANGUAGE_DEFAULT.

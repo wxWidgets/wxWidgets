@@ -95,6 +95,21 @@ public:
     static const wxUILocale& GetCurrent();
 
     /**
+        Creates the locale corresponding to the given locale identifier.
+
+        In the simplest case, this can be used as following:
+        @code
+            const wxUILocale loc("fr");
+        @endcode
+        but more precise locale identifiers can be used, see wxLocaleIdent
+        description for more details.
+
+        If @a localeId is not recognized or not supported, default ("C") locale
+        is used instead.
+     */
+    explicit wxUILocale(const wxLocaleIdent& localeId);
+
+    /**
         Compares two strings using comparison rules of the given locale.
 
         @param lhs

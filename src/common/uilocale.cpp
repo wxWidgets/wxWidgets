@@ -37,6 +37,31 @@ wxUILocale wxUILocale::ms_current;
 // implementation
 // ============================================================================
 
+#ifndef __WINDOWS__
+
+/* static */
+wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
+{
+    wxLocaleIdent locId;
+
+    // Strings in our language database are of the form "lang[_region[@mod]]".
+    wxString rest;
+    locId.Language(info.CanonicalName.BeforeFirst('_', &rest));
+
+    if ( !rest.empty() )
+    {
+        wxString mod;
+        locId.Region(rest.BeforeFirst('@', &mod));
+
+        if ( !mod.empty() )
+            locId.Modifier(mod);
+    }
+
+    return CreateForLocale(locId);
+}
+
+#endif // !__WINDOWS__
+
 /* static */
 bool wxUILocale::UseDefault()
 {
@@ -82,6 +107,13 @@ const wxUILocale& wxUILocale::GetCurrent()
     }
 
     return ms_current;
+}
+
+wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
+{
+    m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    if ( !m_impl )
+        m_impl = wxUILocaleImpl::CreateStdC();
 }
 
 void wxUILocale::SetImpl(wxUILocaleImpl* impl)

@@ -240,17 +240,17 @@ TEST_CASE("wxLocale::Default", "[locale]")
 
 #endif // wxUSE_UNICODE
 
-// This test doesn't run by default as it only works in locales using decimal
-// point as separator, which doesn't need to be the case.
-TEST_CASE("wxUILocale::GetInfo", "[.][uilocale]")
+TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
-    REQUIRE( wxUILocale::UseDefault() );
+    CHECK( wxUILocale("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    CHECK( wxUILocale("de").GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
+    CHECK( wxUILocale("ru").GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
 
-    const wxUILocale& loc = wxUILocale::GetCurrent();
-
-    WARN( "Using locale " << loc.GetName() );
-
-    CHECK( loc.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    // This one shows that "Swiss High German" locale (de_CH) correctly uses
+    // dot, and not comma, as decimal separator, even under macOS, where POSIX
+    // APIs use incorrect (identical to "German") definitions for this locale.
+    CHECK( wxUILocale(wxLocaleIdent("de").Region("CH")).
+            GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
 }
 
 // Just a small helper to make the test below shorter.

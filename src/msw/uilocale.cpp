@@ -142,7 +142,7 @@ wxString wxLocaleIdent::GetName() const
 // LCID-based wxUILocale implementation for MSW
 // ----------------------------------------------------------------------------
 
-// TODO-XP: Drop it when we don't support XP any longer.
+// TODO-XP: Replace with wxUILocaleImplName when we don't support XP any longer.
 class wxUILocaleImplLCID : public wxUILocaleImpl
 {
 public:
@@ -365,6 +365,21 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
     }
 
     return new wxUILocaleImplLCID(info.GetLCID());
+}
+
+/* static */
+wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
+{
+    if ( !wxUILocaleImplName::CanUse() )
+    {
+        // We could try finding the LCID matching the name, but support for XP
+        // will be dropped soon, so it just doesn't seem worth to do it (note
+        // that LocaleNameToLCID() itself is not available in XP neither, so we
+        // can't just use it here).
+        return NULL;
+    }
+
+    return new wxUILocaleImplName(locId.GetName());
 }
 
 /* static */

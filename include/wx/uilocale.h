@@ -45,6 +45,9 @@ public:
     // Get the object corresponding to the currently used locale.
     static const wxUILocale& GetCurrent();
 
+    // Create the object corresponding to the given locale.
+    explicit wxUILocale(const wxLocaleIdent& localeId);
+
     // Get the platform-dependent name of the current locale.
     wxString GetName() const;
 
@@ -62,7 +65,8 @@ public:
     ~wxUILocale();
 
 private:
-    // Ctor is private, use static accessor to get objects of this class.
+    // Default ctor is private and exists only for implementation reasons,
+    // wxUILocale objects can't be invalid.
     wxUILocale() : m_impl(NULL) { }
 
     // Used by UseDefault().
