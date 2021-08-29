@@ -1720,34 +1720,10 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 
 #else // !__WINDOWS__ && !__WXOSX__, assume generic POSIX
 
-namespace
-{
-
-wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
-{
 #ifdef HAVE_LANGINFO_H
-    // array containing parameters for nl_langinfo() indexes by offset of index
-    // from wxLOCALE_SHORT_DATE_FMT
-    static const nl_item items[] =
-    {
-        D_FMT, D_T_FMT, D_T_FMT, T_FMT,
-    };
 
-    const int nlidx = index - wxLOCALE_SHORT_DATE_FMT;
-    if ( nlidx < 0 || nlidx >= (int)WXSIZEOF(items) )
-    {
-        wxFAIL_MSG( "logic error in GetInfo() code" );
-        return wxString();
-    }
-
-    const wxString fmt(nl_langinfo(items[nlidx]));
-
-    // just return the format returned by nl_langinfo() except for long date
-    // format which we need to recover from date/time format ourselves (but not
-    // if we failed completely)
-    if ( fmt.empty() || index != wxLOCALE_LONG_DATE_FMT )
-        return fmt;
-
+wxString wxGetDateFormatOnly(const wxString& fmt)
+{
     // this is not 100% precise but the idea is that a typical date/time format
     // under POSIX systems is a combination of a long date format with time one
     // so we should be able to get just the long date format by removing all
@@ -1789,19 +1765,9 @@ wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
     }
 
     return fmtDateOnly;
-#else // !HAVE_LANGINFO_H
-    wxUnusedVar(index);
-
-    // no fallback, let the application deal with unavailability of
-    // nl_langinfo() itself as there is no good way for us to do it (well, we
-    // could try to reverse engineer the format from strftime() output but this
-    // looks like too much trouble considering the relatively small number of
-    // systems without nl_langinfo() still in use)
-    return wxString();
-#endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
 }
 
-} // anonymous namespace
+#endif // HAVE_LANGINFO_H/
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
@@ -1843,18 +1809,30 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             }
             break;
 
+#ifdef HAVE_LANGINFO_H
+        case wxLOCALE_SHORT_DATE_FMT:
+            return nl_langinfo(D_FMT);
+
+        case wxLOCALE_DATE_TIME_FMT:
+            return nl_langinfo(D_T_FMT);
+
+        case wxLOCALE_TIME_FMT:
+            return nl_langinfo(T_FMT);
+
+        case wxLOCALE_LONG_DATE_FMT:
+            return wxGetDateFormatOnly(nl_langinfo(D_T_FMT));
+#else // !HAVE_LANGINFO_H
         case wxLOCALE_SHORT_DATE_FMT:
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_DATE_TIME_FMT:
         case wxLOCALE_TIME_FMT:
-            if ( cat != wxLOCALE_CAT_DATE && cat != wxLOCALE_CAT_DEFAULT )
-            {
-                wxFAIL_MSG( "invalid wxLocaleCategory" );
-                break;
-            }
-
-            return GetDateFormatFromLangInfo(index);
-
+            // no fallback, let the application deal with unavailability of
+            // nl_langinfo() itself as there is no good way for us to do it (well, we
+            // could try to reverse engineer the format from strftime() output but this
+            // looks like too much trouble considering the relatively small number of
+            // systems without nl_langinfo() still in use)
+            break;
+#endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
 
         default:
             wxFAIL_MSG( "unknown wxLocaleInfo value" );

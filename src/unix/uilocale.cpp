@@ -27,6 +27,9 @@
 #include "wx/intl.h"
 
 #include <locale.h>
+#ifdef HAVE_LANGINFO_H
+    #include <langinfo.h>
+#endif
 
 namespace
 {
@@ -153,6 +156,42 @@ wxUILocaleImplUnix::GetName() const
 wxString
 wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 {
+#ifdef HAVE_LANGINFO_H
+    switch ( index )
+    {
+        case wxLOCALE_THOUSANDS_SEP:
+#ifdef MON_THOUSANDS_SEP
+            if ( cat == wxLOCALE_CAT_MONEY )
+                return nl_langinfo(MON_THOUSANDS_SEP);
+#endif
+            return nl_langinfo(THOUSEP);
+
+        case wxLOCALE_DECIMAL_POINT:
+#ifdef MON_DECIMAL_POINT
+            if ( cat == wxLOCALE_CAT_MONEY )
+                return nl_langinfo(MON_DECIMAL_POINT);
+#endif
+
+            return nl_langinfo(RADIXCHAR);
+
+        case wxLOCALE_SHORT_DATE_FMT:
+            return nl_langinfo(D_FMT);
+
+        case wxLOCALE_DATE_TIME_FMT:
+            return nl_langinfo(D_T_FMT);
+
+        case wxLOCALE_TIME_FMT:
+            return nl_langinfo(T_FMT);
+
+        case wxLOCALE_LONG_DATE_FMT:
+            return wxGetDateFormatOnly(nl_langinfo(D_T_FMT));
+
+        default:
+            wxFAIL_MSG( "unknown wxLocaleInfo value" );
+    }
+
+    return wxString();
+#else // !HAVE_LANGINFO_H
     // Currently we rely on the user code not calling setlocale() itself, so
     // that the current locale is still the same as was set in the ctor.
     //
@@ -160,6 +199,7 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
     // temporarily change the locale here (maybe only if setlocale(NULL) result
     // differs from the expected one).
     return wxLocale::GetInfo(index, cat);
+#endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
 }
 
 /* static */
