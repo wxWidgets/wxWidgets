@@ -407,7 +407,15 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
         parent->WXRemoveChild(this);
 
 #if wxUSE_MENUS
-    delete m_pMenuBar;
+    if ( m_pMenuBar )
+    {
+        // calling WXRemoveChild() above broke the link between the menu bar
+        // and the parent, so we need to also remove it explicitly
+        if ( parent )
+            parent->RemoveChild(m_pMenuBar);
+
+        delete m_pMenuBar;
+    }
 #endif // wxUSE_MENUS
 }
 
