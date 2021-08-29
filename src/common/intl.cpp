@@ -1102,7 +1102,7 @@ bool IsAtTwoSingleQuotes(const wxString& fmt, wxString::const_iterator p)
 // our best.
 
 // The function is only exported because it is used in the unit test, it is not
-// part of the public API.
+// part of the public API (but it is also used by wxUILocaleImpl).
 WXDLLIMPEXP_BASE
 wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 {
@@ -1456,14 +1456,11 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 
 #if defined(__WINDOWS__)
 
-// This function is also used by wxUILocaleImpl, so don't make it private.
+// These functions are also used by wxUILocaleImpl, so don't make them private.
 extern wxString
 wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
 
-namespace
-{
-
-LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
+LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 {
     switch ( index )
     {
@@ -1482,6 +1479,9 @@ LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 
     return 0;
 }
+
+namespace
+{
 
 // This private function additionally checks consistency of the decimal
 // separator settings between MSW and CRT.
@@ -1543,7 +1543,7 @@ wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
         case wxLOCALE_SHORT_DATE_FMT:
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_TIME_FMT:
-            if ( ::GetLocaleInfo(lcid, GetLCTYPEFormatFromLocalInfo(index),
+            if ( ::GetLocaleInfo(lcid, wxGetLCTYPEFormatFromLocalInfo(index),
                                  buf, WXSIZEOF(buf)) )
             {
                 return wxTranslateFromUnicodeFormat(buf);

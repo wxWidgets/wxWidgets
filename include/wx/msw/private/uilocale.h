@@ -22,7 +22,10 @@
 // Use the specific LCID for the current thread.
 void wxUseLCID(LCID lcid);
 
-// This function is defined in src/common/intl.cpp
+// These functions are defined in src/common/intl.cpp
 wxString wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
+LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index);
+
+WXDLLIMPEXP_BASE wxString wxTranslateFromUnicodeFormat(const wxString& fmt);
 
 #endif // _WX_MSW_PRIVATE_UILOCALE_H_

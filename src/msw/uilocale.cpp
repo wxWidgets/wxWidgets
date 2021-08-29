@@ -27,6 +27,14 @@
 
 #include "wx/dynlib.h"
 
+#ifndef LOCALE_NAME_USER_DEFAULT
+    #define LOCALE_NAME_USER_DEFAULT NULL
+#endif
+
+#ifndef MUI_LANGUAGE_NAME
+    #define MUI_LANGUAGE_NAME 8
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -131,11 +139,10 @@ wxString wxLocaleIdent::GetName() const
 }
 
 // ----------------------------------------------------------------------------
-// wxUILocale implementation for MSW
+// LCID-based wxUILocale implementation for MSW
 // ----------------------------------------------------------------------------
 
-// TODO-XP: Replace this with an implementation using GetLocaleInfoEx() when we
-// don't support XP any longer.
+// TODO-XP: Drop it when we don't support XP any longer.
 class wxUILocaleImplLCID : public wxUILocaleImpl
 {
 public:
@@ -184,18 +191,167 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplLCID);
 };
 
+// ----------------------------------------------------------------------------
+// Name-based wxUILocale implementation for MSW
+// ----------------------------------------------------------------------------
+
+class wxUILocaleImplName : public wxUILocaleImpl
+{
+public:
+    // TODO-XP: Get rid of this function and all the code branches handling the
+    // return value of "false" from it and just always use this class.
+    static bool CanUse()
+    {
+        static int s_canUse = -1;
+
+        if ( s_canUse == -1 )
+        {
+            // One time only initialization.
+            s_canUse = 0;
+
+            wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
+            wxDL_INIT_FUNC(ms_, GetLocaleInfoEx, dllKernel32);
+            if ( !ms_GetLocaleInfoEx )
+                return false;
+            wxDL_INIT_FUNC(ms_, SetThreadPreferredUILanguages, dllKernel32);
+            if ( !ms_SetThreadPreferredUILanguages )
+                return false;
+
+            s_canUse = 1;
+        }
+
+        return s_canUse == 1;
+    }
+
+    // Note that "name" can be NULL here (LOCALE_NAME_USER_DEFAULT).
+    explicit wxUILocaleImplName(const wchar_t* name)
+        : m_name(name ? wxStrdup(name) : NULL)
+    {
+    }
+
+    ~wxUILocaleImplName() wxOVERRIDE
+    {
+        free(const_cast<wchar_t*>(m_name));
+    }
+
+    bool Use() wxOVERRIDE
+    {
+        // Construct a double NUL-terminated buffer.
+        wchar_t buf[256];
+        if ( m_name )
+            wxStrlcpy(buf, m_name, WXSIZEOF(buf) - 1);
+        else
+            buf[0] = L'\0';
+        buf[wxWcslen(buf) + 1] = L'\0';
+
+        ULONG num = 1;
+
+        if ( !ms_SetThreadPreferredUILanguages(MUI_LANGUAGE_NAME, buf, &num) )
+            return false;
+
+        return true;
+    }
+
+    wxString GetName() const wxOVERRIDE
+    {
+        return DoGetInfo(LOCALE_SNAME);
+    }
+
+    wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE
+    {
+        // TODO-XP: This duplicates code from in wxGetInfoFromLCID(), but
+        // it's only temporary because we will drop all code using LCID soon.
+        wxString str;
+        switch ( index )
+        {
+            case wxLOCALE_THOUSANDS_SEP:
+                str = DoGetInfo(LOCALE_STHOUSAND);
+                break;
+
+            case wxLOCALE_DECIMAL_POINT:
+                str = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                                    ? LOCALE_SMONDECIMALSEP
+                                    : LOCALE_SDECIMAL);
+                break;
+
+            case wxLOCALE_SHORT_DATE_FMT:
+            case wxLOCALE_LONG_DATE_FMT:
+            case wxLOCALE_TIME_FMT:
+                str = DoGetInfo(wxGetLCTYPEFormatFromLocalInfo(index));
+                if ( !str.empty() )
+                    str = wxTranslateFromUnicodeFormat(str);
+                break;
+
+            case wxLOCALE_DATE_TIME_FMT:
+                // there doesn't seem to be any specific setting for this, so just
+                // combine date and time ones
+                //
+                // we use the short date because this is what "%c" uses by default
+                // ("%#c" uses long date but we have no way to specify the
+                // alternate representation here)
+                str << GetInfo(wxLOCALE_SHORT_DATE_FMT, cat)
+                    << wxS(' ')
+                    << GetInfo(wxLOCALE_TIME_FMT, cat);
+                break;
+
+            default:
+                wxFAIL_MSG( "unknown wxLocaleInfo" );
+        }
+
+        return str;
+    }
+
+private:
+    typedef int (WINAPI *GetLocaleInfoEx_t)(LPCWSTR, LCTYPE, LPWSTR, int);
+    static GetLocaleInfoEx_t ms_GetLocaleInfoEx;
+
+    typedef BOOL (WINAPI *SetThreadPreferredUILanguages_t)(DWORD, CONST WCHAR*, ULONG*);
+    static SetThreadPreferredUILanguages_t ms_SetThreadPreferredUILanguages;
+
+    wxString DoGetInfo(LCTYPE lctype) const
+    {
+        wchar_t buf[256];
+        if ( !ms_GetLocaleInfoEx(m_name, lctype, buf, WXSIZEOF(buf)) )
+        {
+            wxLogLastError(wxT("GetLocaleInfoEx"));
+            return wxString();
+        }
+
+        return buf;
+    }
+
+    const wchar_t* const m_name;
+
+    wxDECLARE_NO_COPY_CLASS(wxUILocaleImplName);
+};
+
+wxUILocaleImplName::GetLocaleInfoEx_t wxUILocaleImplName::ms_GetLocaleInfoEx;
+wxUILocaleImplName::SetThreadPreferredUILanguages_t wxUILocaleImplName::ms_SetThreadPreferredUILanguages;
+
+// ----------------------------------------------------------------------------
+// wxUILocaleImpl implementation
+// ----------------------------------------------------------------------------
+
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 {
-    // There is no LCID for "C" locale, but US English is basically the same.
-    LCID lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
-    return new wxUILocaleImplLCID(lcid);
+    if ( !wxUILocaleImplName::CanUse() )
+    {
+        // There is no LCID for "C" locale, but US English is basically the same.
+        LCID lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
+        return new wxUILocaleImplLCID(lcid);
+    }
+
+    return new wxUILocaleImplName(L"en-US");
 }
 
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 {
-    return new wxUILocaleImplLCID(LOCALE_USER_DEFAULT);
+    if ( !wxUILocaleImplName::CanUse() )
+        return new wxUILocaleImplLCID(LOCALE_USER_DEFAULT);
+
+    return new wxUILocaleImplName(LOCALE_NAME_USER_DEFAULT);
 }
 
 /* static */
