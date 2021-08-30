@@ -292,12 +292,20 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         CHECK( l.CompareStrings(u8("ä"), "ae") == -1 );
 
 #if defined(__WINDOWS__) || defined(__WXOSX__)
+        // Unfortunately CompareStringsEx() doesn't seem to work correctly
+        // under Wine.
+        if ( wxIsRunningUnderWine() )
+            return;
+
         CHECK( l.CompareStrings(u8("ß"), "ss", wxCompare_CaseInsensitive) == 0 );
 #endif
     }
 
     SECTION("Swedish")
     {
+        if ( wxIsRunningUnderWine() )
+            return;
+
         const wxUILocale l("sv");
 
         // And this shows that sort order really depends on the language.
