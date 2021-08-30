@@ -1454,6 +1454,35 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 
 #endif // __WINDOWS__ || __WXOSX__
 
+wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
+{
+    switch ( index )
+    {
+        case wxLOCALE_THOUSANDS_SEP:
+            return wxString();
+
+        case wxLOCALE_DECIMAL_POINT:
+            return ".";
+
+        case wxLOCALE_SHORT_DATE_FMT:
+            return "%m/%d/%y";
+
+        case wxLOCALE_LONG_DATE_FMT:
+            return "%A, %B %d, %Y";
+
+        case wxLOCALE_TIME_FMT:
+            return "%H:%M:%S";
+
+        case wxLOCALE_DATE_TIME_FMT:
+            return "%m/%d/%y %H:%M:%S";
+
+        default:
+            wxFAIL_MSG( "unknown wxLocaleInfo" );
+    }
+
+    return wxString();
+}
+
 #if defined(__WINDOWS__)
 
 // These functions are also used by wxUILocaleImpl, so don't make them private.
@@ -1600,29 +1629,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         // case, even LOCALE_INVARIANT is not quite the same as C locale (the
         // only difference is that it uses %Y instead of %y in the date format
         // but this difference is significant enough).
-        switch ( index )
-        {
-            case wxLOCALE_THOUSANDS_SEP:
-                return wxString();
-
-            case wxLOCALE_DECIMAL_POINT:
-                return ".";
-
-            case wxLOCALE_SHORT_DATE_FMT:
-                return "%m/%d/%y";
-
-            case wxLOCALE_LONG_DATE_FMT:
-                return "%A, %B %d, %Y";
-
-            case wxLOCALE_TIME_FMT:
-                return "%H:%M:%S";
-
-            case wxLOCALE_DATE_TIME_FMT:
-                return "%m/%d/%y %H:%M:%S";
-
-            default:
-                wxFAIL_MSG( "unknown wxLocaleInfo" );
-        }
+        return wxGetStdCLocaleInfo(index, cat);
     }
 
     // wxSetLocale() succeeded and so thread locale was set together with CRT one.
