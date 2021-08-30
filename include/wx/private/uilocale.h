@@ -13,6 +13,9 @@
 #include "wx/localedefs.h"
 #include "wx/string.h"
 
+// Function returning hard-coded values for the "C" locale.
+wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory cat);
+
 // ----------------------------------------------------------------------------
 // wxUILocaleImpl provides the implementation of public wxUILocale functions
 // ----------------------------------------------------------------------------
@@ -53,9 +56,9 @@ public:
     // Use this locale in the UI.
     //
     // This is not implemented for all platforms, notably not for Mac where the
-    // UI locale is determined at application startup, and so this function
-    // always returns false there.
-    virtual bool Use() = 0;
+    // UI locale is determined at application startup, but we can't do anything
+    // about it anyhow, so we don't even bother returning an error code from it.
+    virtual void Use() = 0;
 
     // Functions corresponding to wxUILocale ones.
     virtual wxString GetName() const = 0;

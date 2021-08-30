@@ -88,7 +88,7 @@ public:
         return new wxUILocaleImplCF(cfloc);
     }
 
-    bool Use() wxOVERRIDE;
+    void Use() wxOVERRIDE;
     wxString GetName() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
     int CompareStrings(const wxString& lhs, const wxString& rhs,
@@ -106,11 +106,11 @@ private:
 // implementation
 // ============================================================================
 
-bool
+void
 wxUILocaleImplCF::Use()
 {
-    // There is no way to start using a locale other than default.
-    return false;
+    // There is no way to start using a locale other than default, so there is
+    // nothing to do here.
 }
 
 wxString

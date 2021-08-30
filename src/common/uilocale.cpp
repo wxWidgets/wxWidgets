@@ -86,12 +86,7 @@ bool wxUILocale::UseLanguage(const wxLanguageInfo& info)
     if ( !impl )
         return false;
 
-    if ( !impl->Use() )
-    {
-        delete impl;
-        return false;
-    }
-
+    impl->Use();
     ms_current.SetImpl(impl);
 
     return true;
@@ -112,8 +107,6 @@ const wxUILocale& wxUILocale::GetCurrent()
 wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
 {
     m_impl = wxUILocaleImpl::CreateForLocale(localeId);
-    if ( !m_impl )
-        m_impl = wxUILocaleImpl::CreateStdC();
 }
 
 void wxUILocale::SetImpl(wxUILocaleImpl* impl)
@@ -125,11 +118,17 @@ void wxUILocale::SetImpl(wxUILocaleImpl* impl)
 
 wxString wxUILocale::GetName() const
 {
+    if ( !m_impl )
+        return wxString();
+
     return m_impl->GetName();
 }
 
 wxString wxUILocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 {
+    if ( !m_impl )
+        return wxGetStdCLocaleInfo(index, cat);
+
     return m_impl->GetInfo(index, cat);
 }
 
@@ -138,6 +137,17 @@ wxUILocale::CompareStrings(const wxString& lhs,
                            const wxString& rhs,
                            int flags) const
 {
+    if ( !m_impl )
+    {
+        const int rc = flags & wxCompare_CaseInsensitive ? lhs.CmpNoCase(rhs)
+                                                         : lhs.Cmp(rhs);
+        if ( rc < 0 )
+            return -1;
+        if ( rc > 0 )
+            return 1;
+        return 0;
+    }
+
     return m_impl->CompareStrings(lhs, rhs, flags);
 }
 

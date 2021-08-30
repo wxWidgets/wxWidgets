@@ -114,12 +114,9 @@ public:
     {
     }
 
-    bool Use() wxOVERRIDE
+    void Use() wxOVERRIDE
     {
         wxUseLCID(m_lcid);
-
-        // As long as we use a valid LCID (and we always do), it shouldn't fail.
-        return true;
     }
 
     wxString GetName() const wxOVERRIDE
@@ -200,18 +197,31 @@ public:
         return s_canUse == 1;
     }
 
-    // Note that "name" can be NULL here (LOCALE_NAME_USER_DEFAULT).
-    explicit wxUILocaleImplName(const wchar_t* name)
-        : m_name(name ? wxStrdup(name) : NULL)
+    // Create object corresponding to the default user locale.
+    static wxUILocaleImplName* CreateDefault()
     {
+        return new wxUILocaleImplName(LOCALE_NAME_USER_DEFAULT);
     }
+
+    // Create object corresponding to the given locale, return NULL if not
+    // supported.
+    static wxUILocaleImplName* Create(const wchar_t* name)
+    {
+        // Getting the locale name seems to be the simplest way to see if it's
+        // really supported: unknown locale result in an error here.
+        if ( !ms_GetLocaleInfoEx(name, LOCALE_SNAME, NULL, 0) )
+            return NULL;
+
+        return new wxUILocaleImplName(name);
+    }
+
 
     ~wxUILocaleImplName() wxOVERRIDE
     {
         free(const_cast<wchar_t*>(m_name));
     }
 
-    bool Use() wxOVERRIDE
+    void Use() wxOVERRIDE
     {
         // Construct a double NUL-terminated buffer.
         wchar_t buf[256];
@@ -224,9 +234,7 @@ public:
         ULONG num = 1;
 
         if ( !ms_SetThreadPreferredUILanguages(MUI_LANGUAGE_NAME, buf, &num) )
-            return false;
-
-        return true;
+            wxLogLastError(wxT("SetThreadPreferredUILanguages"));
     }
 
     wxString GetName() const wxOVERRIDE
@@ -331,6 +339,15 @@ private:
                                             LPARAM);
     static CompareStringEx_t ms_CompareStringEx;
 
+
+    // Ctor is private, use CreateDefault() or Create() instead.
+    //
+    // Note that "name" can be NULL here (LOCALE_NAME_USER_DEFAULT).
+    explicit wxUILocaleImplName(const wchar_t* name)
+        : m_name(name ? wxStrdup(name) : NULL)
+    {
+    }
+
     wxString DoGetInfo(LCTYPE lctype) const
     {
         wchar_t buf[256];
@@ -366,7 +383,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
         return new wxUILocaleImplLCID(lcid);
     }
 
-    return new wxUILocaleImplName(L"en-US");
+    return wxUILocaleImplName::Create(L"en-US");
 }
 
 /* static */
@@ -375,7 +392,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
     if ( !wxUILocaleImplName::CanUse() )
         return new wxUILocaleImplLCID(LOCALE_USER_DEFAULT);
 
-    return new wxUILocaleImplName(LOCALE_NAME_USER_DEFAULT);
+    return wxUILocaleImplName::CreateDefault();
 }
 
 /* static */
@@ -403,7 +420,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
         return NULL;
     }
 
-    return new wxUILocaleImplName(locId.GetName());
+    return wxUILocaleImplName::Create(locId.GetName().wc_str());
 }
 
 #endif // wxUSE_INTL

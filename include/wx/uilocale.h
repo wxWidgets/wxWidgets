@@ -65,7 +65,7 @@ public:
 
 private:
     // Default ctor is private and exists only for implementation reasons,
-    // wxUILocale objects can't be invalid.
+    // creating invalid wxUILocale objects doesn't make much sense.
     wxUILocale() : m_impl(NULL) { }
 
     // Used by UseDefault().
