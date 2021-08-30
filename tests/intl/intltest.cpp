@@ -240,24 +240,45 @@ TEST_CASE("wxLocale::Default", "[locale]")
 
 #endif // wxUSE_UNICODE
 
+// Under MSW and macOS all the locales used below should be supported, but
+// under Linux some locales may be unavailable.
+static inline bool CheckSupported(const wxUILocale& loc, const char* desc)
+{
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+    wxUnusedVar(loc);
+    wxUnusedVar(desc);
+#else // Unix (not Darwin)
+    if ( !loc.IsSupported() )
+    {
+        WARN(desc << " locale not supported.");
+        return false;
+    }
+#endif
+
+    return true;
+}
+
 TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 {
-    CHECK( wxUILocale("en").IsSupported() );
-    CHECK( wxUILocale(wxLocaleIdent("fr").Region("FR")).IsSupported() );
+    CheckSupported(wxUILocale("en"), "English");
+    CheckSupported(wxUILocale(wxLocaleIdent("fr").Region("FR")), "French");
     CHECK( !wxUILocale("bloordyblop").IsSupported() );
 }
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
     CHECK( wxUILocale("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
-    CHECK( wxUILocale("de").GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
-    CHECK( wxUILocale("ru").GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
+
+    const wxUILocale locDE("de");
+    if ( CheckSupported(locDE, "German") )
+        CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses
     // dot, and not comma, as decimal separator, even under macOS, where POSIX
     // APIs use incorrect (identical to "German") definitions for this locale.
-    CHECK( wxUILocale(wxLocaleIdent("de").Region("CH")).
-            GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    const wxUILocale locDE_CH(wxLocaleIdent("de").Region("CH"));
+    if ( CheckSupported(locDE_CH, "Swiss German") )
+        CHECK( locDE_CH.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
 }
 
 // Just a small helper to make the test below shorter.
@@ -278,6 +299,11 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         CHECK( l.CompareStrings("", "")  ==  0 );
         CHECK( l.CompareStrings("", "a") == -1 );
 
+        // The rest of the tests won't work unless it's really English locale
+        // and not the default "C" one.
+        if ( !CheckSupported(l, "English") )
+            return;
+
         // And for case handling.
         CHECK( l.CompareStrings("a", "A") == -1 );
         CHECK( l.CompareStrings("b", "A") ==  1 );
@@ -292,6 +318,9 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
     SECTION("German")
     {
         const wxUILocale l(wxLocaleIdent("de").Region("DE"));
+
+        if ( !CheckSupported(l, "German") )
+            return;
 
         // This is more interesting and shows that CompareStrings() uses German
         // dictionary rules (DIN 5007-1 variant 1).
@@ -314,6 +343,9 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
             return;
 
         const wxUILocale l("sv");
+
+        if ( !CheckSupported(l, "Swedish") )
+            return;
 
         // And this shows that sort order really depends on the language.
         CHECK( l.CompareStrings(u8("ä"), "ae") == 1 );
