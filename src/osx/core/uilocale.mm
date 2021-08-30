@@ -80,8 +80,17 @@ public:
 
     static wxUILocaleImplCF* Create(const wxLocaleIdent& locId)
     {
-        CFLocaleRef cfloc = CFLocaleCreate(kCFAllocatorDefault,
-                                           wxCFStringRef(locId.GetName()));
+        // Surprisingly, CFLocaleCreate() always succeeds, even for completely
+        // invalid strings, so we need to check if the name is actually in the
+        // list of the supported locales ourselves.
+        static wxCFRef<CFArrayRef>
+            all = CFLocaleCopyAvailableLocaleIdentifiers();
+
+        wxCFStringRef cfName(locId.GetName());
+        if ( !CFArrayContainsValue(all, CFRangeMake(0, CFArrayGetCount(all)), cfName) )
+            return NULL;
+
+        CFLocaleRef cfloc = CFLocaleCreate(kCFAllocatorDefault, cfName);
         if ( !cfloc )
             return NULL;
 

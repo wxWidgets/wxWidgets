@@ -240,6 +240,13 @@ TEST_CASE("wxLocale::Default", "[locale]")
 
 #endif // wxUSE_UNICODE
 
+TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
+{
+    CHECK( wxUILocale("en").IsSupported() );
+    CHECK( wxUILocale(wxLocaleIdent("fr").Region("FR")).IsSupported() );
+    CHECK( !wxUILocale("bloordyblop").IsSupported() );
+}
+
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
     CHECK( wxUILocale("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );

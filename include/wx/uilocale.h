@@ -48,6 +48,10 @@ public:
     // Create the object corresponding to the given locale.
     explicit wxUILocale(const wxLocaleIdent& localeId);
 
+    // Check if the locale is actually supported by the current system: if it's
+    // not supported, the other functions will behave as for the "C" locale.
+    bool IsSupported() const;
+
     // Get the platform-dependent name of the current locale.
     wxString GetName() const;
 

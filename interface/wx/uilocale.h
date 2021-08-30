@@ -156,6 +156,17 @@ public:
      */
     wxString GetInfo(wxLocaleInfo index,
                      wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT) const;
+
+    /**
+        Return true if locale is supported on the current system.
+
+        If this function returns @a false, the other functions of this class,
+        such as GetInfo() and CompareStrings(), behave as in "C" locale, i.e.
+        it's still safe to call them, but their results don't reflect the rules
+        for the locale in question, but just use the default (i.e. US English)
+        conventions.
+     */
+    bool IsSupported() const;
 };
 
 /**

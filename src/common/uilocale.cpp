@@ -116,6 +116,11 @@ void wxUILocale::SetImpl(wxUILocaleImpl* impl)
     m_impl = impl;
 }
 
+bool wxUILocale::IsSupported() const
+{
+    return m_impl != NULL;
+}
+
 wxString wxUILocale::GetName() const
 {
     if ( !m_impl )
