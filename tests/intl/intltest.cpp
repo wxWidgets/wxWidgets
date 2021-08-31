@@ -315,6 +315,8 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 #endif
     }
 
+    // UTF-8 strings are not supported in ASCII build.
+#if wxUSE_UNICODE
     SECTION("German")
     {
         const wxUILocale l(wxLocaleIdent("de").Region("DE"));
@@ -351,6 +353,7 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         CHECK( l.CompareStrings(u8("ä"), "ae") == 1 );
         CHECK( l.CompareStrings(u8("ö"), "z" ) == 1 );
     }
+#endif // wxUSE_UNICODE
 }
 
 #endif // wxUSE_INTL
