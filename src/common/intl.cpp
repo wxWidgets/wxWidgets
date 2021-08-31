@@ -24,7 +24,6 @@
 #if wxUSE_INTL
 
 #ifndef WX_PRECOMP
-    #include "wx/dynarray.h"
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -52,6 +51,7 @@
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
 #include "wx/uilocale.h"
+#include "wx/vector.h"
 
 #ifdef __WIN32__
     #include "wx/msw/private/uilocale.h"
@@ -193,24 +193,26 @@ wxString wxLanguageInfo::GetLocaleName() const
 // wxLocale
 // ----------------------------------------------------------------------------
 
-#include "wx/arrimpl.cpp"
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray, WXDLLIMPEXP_BASE);
-WX_DEFINE_OBJARRAY(wxLanguageInfoArray)
-
-wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
+static wxVector<wxLanguageInfo> gs_languagesDB;
+static bool gs_languagesDBInitialized = false;
 
 /*static*/ void wxLocale::CreateLanguagesDB()
 {
-    if (ms_languagesDB == NULL)
+    if (!gs_languagesDBInitialized)
     {
-        ms_languagesDB = new wxLanguageInfoArray;
+        gs_languagesDBInitialized = true;
+
         InitLanguagesDB();
     }
 }
 
 /*static*/ void wxLocale::DestroyLanguagesDB()
 {
-    wxDELETE(ms_languagesDB);
+    if (gs_languagesDBInitialized)
+    {
+        gs_languagesDB.clear();
+        gs_languagesDBInitialized = false;
+    }
 }
 
 
@@ -476,7 +478,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
 
     // init i to avoid compiler warning
     size_t i = 0,
-        count = ms_languagesDB->GetCount();
+        count = gs_languagesDB.size();
 
 #ifdef __WXOSX__
     wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
@@ -493,7 +495,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     int langOnlyMatchIndex = wxNOT_FOUND;
     for ( i = 0; i < count; i++ )
     {
-        const wxString& fullname = ms_languagesDB->Item(i).CanonicalName;
+        const wxString& fullname = gs_languagesDB[i].CanonicalName;
         if ( langFull == fullname )
         {
             // Exact match, no need to look any further.
@@ -599,7 +601,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         wxString langFullWithModifier = langFull + modifier;
         for ( i = 0; i < count; i++ )
         {
-            if ( ms_languagesDB->Item(i).CanonicalName == langFullWithModifier )
+            if ( gs_languagesDB[i].CanonicalName == langFullWithModifier )
                 break;
         }
     }
@@ -609,7 +611,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     {
         for ( i = 0; i < count; i++ )
         {
-            if ( ms_languagesDB->Item(i).CanonicalName == langFull )
+            if ( gs_languagesDB[i].CanonicalName == langFull )
                 break;
         }
     }
@@ -619,7 +621,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     {
         for ( i = 0; i < count; i++ )
         {
-            if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName) == lang )
+            if ( ExtractLang(gs_languagesDB[i].CanonicalName) == lang )
             {
                 break;
             }
@@ -631,8 +633,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     {
         for ( i = 0; i < count; i++ )
         {
-            if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName)
-                    == langFull )
+            if ( ExtractLang(gs_languagesDB[i].CanonicalName) == langFull )
             {
                 break;
             }
@@ -648,7 +649,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         // find the name in verbose description.
         for ( i = 0; i < count; i++ )
         {
-            if (ms_languagesDB->Item(i).Description.CmpNoCase(langFull) == 0)
+            if (gs_languagesDB[i].Description.CmpNoCase(langFull) == 0)
             {
                 break;
             }
@@ -663,8 +664,8 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
 
         for ( i = 0; i < count; i++ )
         {
-            if (ms_languagesDB->Item(i).WinLang == lang &&
-                ms_languagesDB->Item(i).WinSublang == sublang)
+            if (gs_languagesDB[i].WinLang == lang &&
+                gs_languagesDB[i].WinSublang == sublang)
             {
                 break;
             }
@@ -676,7 +677,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     if ( i < count )
     {
         // we did find a matching entry, use it
-        return ms_languagesDB->Item(i).Language;
+        return gs_languagesDB[i].Language;
     }
 
     // no info about this language in the database
@@ -841,7 +842,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
 void wxLocale::AddLanguage(const wxLanguageInfo& info)
 {
     CreateLanguagesDB();
-    ms_languagesDB->Add(info);
+    gs_languagesDB.push_back(info);
 }
 
 /* static */
@@ -857,11 +858,11 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     if ( lang == wxLANGUAGE_UNKNOWN )
         return NULL;
 
-    const size_t count = ms_languagesDB->GetCount();
+    const size_t count = gs_languagesDB.size();
     for ( size_t i = 0; i < count; i++ )
     {
-        if ( ms_languagesDB->Item(i).Language == lang )
-            return &ms_languagesDB->Item(i);
+        if ( gs_languagesDB[i].Language == lang )
+            return &gs_languagesDB[i];
     }
 
     return NULL;
@@ -904,10 +905,10 @@ const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
 
     const wxLanguageInfo *infoRet = NULL;
 
-    const size_t count = ms_languagesDB->GetCount();
+    const size_t count = gs_languagesDB.size();
     for ( size_t i = 0; i < count; i++ )
     {
-        const wxLanguageInfo *info = &ms_languagesDB->Item(i);
+        const wxLanguageInfo *info = &gs_languagesDB[i];
 
         if ( wxStricmp(locale, info->CanonicalName) == 0 ||
                 wxStricmp(locale, info->Description) == 0 )
@@ -924,7 +925,7 @@ const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
             //
             // OTOH, maybe we had already found a language match and in this
             // case don't overwrite it because the entry for the default
-            // country always appears first in ms_languagesDB
+            // country always appears first in gs_languagesDB
             if ( !infoRet )
                 infoRet = info;
         }

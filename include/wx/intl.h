@@ -35,7 +35,6 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_BASE wxLocale;
-class WXDLLIMPEXP_FWD_BASE wxLanguageInfoArray;
 
 // ============================================================================
 // locale support
@@ -284,8 +283,6 @@ private:
     bool           m_initialized;
 
     wxTranslations m_translations;
-
-    static wxLanguageInfoArray *ms_languagesDB;
 
     wxDECLARE_NO_COPY_CLASS(wxLocale);
 };
