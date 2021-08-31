@@ -80,6 +80,22 @@ inline locale_t TryCreateLocale(const wxLocaleIdent& locId)
     return newlocale(LC_ALL_MASK, locId.GetName().mb_str(), NULL);
 }
 
+// Wrapper around newlocale() also trying to append UTF-8 codeset (and
+// modifying its wxLocaleIdent argument if it succeeds).
+locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
+{
+    locale_t loc = TryCreateLocale(locId);
+    if ( !loc && locId.GetCharset().empty() )
+    {
+        wxLocaleIdent locIdUTF8 = wxLocaleIdent(locId).Charset("UTF-8");
+        loc = TryCreateLocale(locIdUTF8);
+        if ( loc )
+            locId = locIdUTF8;
+    }
+
+    return loc;
+}
+
 #endif // HAVE_LOCALE_T
 
 } // anonymous namespace
@@ -337,7 +353,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locIdOrig)
     // Make a copy of it because it can be modified below.
     wxLocaleIdent locId = locIdOrig;
 
-    locale_t loc = TryCreateLocale(locId);
+    locale_t loc = TryCreateLocaleWithUTF8(locId);
     if ( !loc )
     {
         // Try to find a variant of this locale available on this system: first
@@ -345,27 +361,37 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locIdOrig)
         // does _not_ work under Linux, so try adding one if we don't have it.
         if ( locId.GetRegion().empty() )
         {
-            const wxLanguageInfo* const info =
-                wxLocale::FindLanguageInfo(locId.GetLanguage());
-            if ( info )
+            const wxString lang = locId.GetLanguage();
+
+            const wxLanguageInfos& infos = wxGetLanguageInfos();
+            for ( wxLanguageInfos::const_iterator it = infos.begin();
+                  it != infos.end();
+                  ++it )
             {
-                wxString region = info->CanonicalName.AfterFirst('_');
-                if ( !region.empty() )
+                const wxString& fullname = it->CanonicalName;
+                if ( fullname.BeforeFirst('_') == lang )
                 {
                     // We never have encoding in our canonical names, but we
                     // can have modifiers, so get rid of them if necessary.
-                    region = region.BeforeFirst('@');
+                    const wxString&
+                        region = fullname.AfterFirst('_').BeforeFirst('@');
+                    if ( !region.empty() )
+                    {
+                        loc = TryCreateLocaleWithUTF8(locId.Region(region));
+                        if ( loc )
+                        {
+                            // We take the first available region, we don't
+                            // have enough data to know how to prioritize them
+                            // (and wouldn't want to start any geopolitical
+                            // disputes).
+                            break;
+                        }
+                    }
 
-                    loc = TryCreateLocale(locId.Region(region));
+                    // Don't bother reverting region to the old value as it will
+                    // be overwritten during the next loop iteration anyhow.
                 }
             }
-        }
-
-        // And sometimes the locale without encoding is not available, but one
-        // with UTF-8 encoding is, so try this too.
-        if ( !loc && locId.GetCharset().empty() )
-        {
-            loc = TryCreateLocale(locId.Charset("UTF-8"));
         }
     }
 

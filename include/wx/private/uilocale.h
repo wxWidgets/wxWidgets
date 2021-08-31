@@ -12,6 +12,12 @@
 
 #include "wx/localedefs.h"
 #include "wx/string.h"
+#include "wx/vector.h"
+
+typedef wxVector<wxLanguageInfo> wxLanguageInfos;
+
+// Return the vector of all known languages.
+const wxLanguageInfos& wxGetLanguageInfos();
 
 // Function returning hard-coded values for the "C" locale.
 wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory cat);

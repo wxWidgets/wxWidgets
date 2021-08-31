@@ -51,7 +51,8 @@
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
 #include "wx/uilocale.h"
-#include "wx/vector.h"
+
+#include "wx/private/uilocale.h"
 
 #ifdef __WIN32__
     #include "wx/msw/private/uilocale.h"
@@ -193,8 +194,15 @@ wxString wxLanguageInfo::GetLocaleName() const
 // wxLocale
 // ----------------------------------------------------------------------------
 
-static wxVector<wxLanguageInfo> gs_languagesDB;
+static wxLanguageInfos gs_languagesDB;
 static bool gs_languagesDBInitialized = false;
+
+const wxLanguageInfos& wxGetLanguageInfos()
+{
+    wxLocale::CreateLanguagesDB();
+
+    return gs_languagesDB;
+}
 
 /*static*/ void wxLocale::CreateLanguagesDB()
 {
