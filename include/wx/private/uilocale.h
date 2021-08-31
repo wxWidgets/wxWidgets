@@ -50,7 +50,9 @@ public:
     // The language passed to this function is a valid language, i.e. neither
     // wxLANGUAGE_UNKNOWN nor wxLANGUAGE_DEFAULT.
     //
-    // It may return NULL in case of failure.
+    // It may return NULL in case of failure, but never does so for English
+    // languages because wxLocale(wxLANGUAGE_ENGLISH) is always supposed to
+    // work, so it just falls back on CreateStdC() if it fails to create it.
     static wxUILocaleImpl* CreateForLanguage(const wxLanguageInfo& info);
 
     // Use this locale in the UI.

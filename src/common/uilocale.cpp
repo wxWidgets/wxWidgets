@@ -22,6 +22,10 @@
 
 #include "wx/uilocale.h"
 
+#ifndef __WINDOWS__
+    #include "wx/language.h"
+#endif
+
 #include "wx/private/uilocale.h"
 
 // ----------------------------------------------------------------------------
@@ -57,7 +61,17 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
             locId.Modifier(mod);
     }
 
-    return CreateForLocale(locId);
+    wxUILocaleImpl* impl = CreateForLocale(locId);
+    if ( !impl &&
+            (info.Language == wxLANGUAGE_ENGLISH ||
+             info.Language == wxLANGUAGE_ENGLISH_US) )
+    {
+        // For compatibility, never fail creating locale for neutral or US
+        // English, even if it's unavailable on the current system somehow.
+        impl = CreateStdC();
+    }
+
+    return impl;
 }
 
 #endif // !__WINDOWS__
