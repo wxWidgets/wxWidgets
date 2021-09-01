@@ -389,7 +389,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // does not as the user should be able to resize the window)
     //
     // note that we can't use IsTopLevel() from ctor
-    if ( size != wxDefaultSize && !wxTopLevelWindows.Find((wxWindow *)this) )
+    if ( size != wxDefaultSize && !wxTopLevelWindows.Find(this) )
         SetMinSize(size);
 
     SetName(name);
@@ -458,7 +458,7 @@ wxWindowBase::~wxWindowBase()
 
     // Just in case we've loaded a top-level window via LoadNativeDialog but
     // we weren't a dialog class
-    wxTopLevelWindows.DeleteObject((wxWindow*)this);
+    wxTopLevelWindows.DeleteObject(this);
 
     // Any additional event handlers should be popped before the window is
     // deleted as otherwise the last handler will be left with a dangling
@@ -1383,7 +1383,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
     else
     {
-        wxTopLevelWindows.DeleteObject((wxWindow *)this);
+        wxTopLevelWindows.DeleteObject(this);
     }
 
     // add it to the new one
@@ -1393,7 +1393,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
     else
     {
-        wxTopLevelWindows.Append((wxWindow *)this);
+        wxTopLevelWindows.Append(this);
     }
 
     // We need to notify window (and its subwindows) if by changing the parent
