@@ -158,15 +158,14 @@ int
 wxUILocaleImplCF::CompareStrings(const wxString& lhs, const wxString& rhs,
                                  int flags) const
 {
-    NSString *ns_lhs = [NSString stringWithCString:lhs.ToStdString(wxConvUTF8).c_str()
-                                 encoding:NSUTF8StringEncoding];
-    NSString *ns_rhs = [NSString stringWithCString:rhs.ToStdString(wxConvUTF8).c_str()
-                                 encoding:NSUTF8StringEncoding];
+    const wxCFStringRef cfstr(lhs);
+    auto ns_lhs = cfstr.AsNSString();
+
     NSInteger options = 0;
     if ( flags & wxCompare_CaseInsensitive )
         options |= NSCaseInsensitiveSearch;
 
-    NSComparisonResult ret = [ns_lhs compare:ns_rhs
+    NSComparisonResult ret = [ns_lhs compare:wxCFStringRef(rhs).AsNSString()
                                      options:options
                                      range:(NSRange){0, [ns_lhs length]}
                                      locale:m_nsloc];
