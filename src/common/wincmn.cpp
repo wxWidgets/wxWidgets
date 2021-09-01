@@ -1393,7 +1393,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
     else
     {
-        wxTopLevelWindows.Append(this);
+        wxTopLevelWindows.Append(static_cast<wxWindow*>(this));
     }
 
     // We need to notify window (and its subwindows) if by changing the parent
