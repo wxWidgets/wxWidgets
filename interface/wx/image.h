@@ -972,6 +972,11 @@ public:
         }
         @endcode
 
+        @note The algorithm used for the default (normal) quality value doesn't
+        work with images larger than 65536 (2^16) pixels in either dimension
+        for 32-bit programs. For 64-bit programs the limit is 2^48 and so not
+        relevant in practice.
+
         @see Rescale()
     */
     wxImage Scale(int width, int height,

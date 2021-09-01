@@ -2249,6 +2249,18 @@ TEST_CASE("wxImage::ChangeColours", "[image]")
     CHECK_THAT(test, RGBSameAs(expected));
 }
 
+TEST_CASE("wxImage::SizeLimits", "[image]")
+{
+#if SIZEOF_VOID_P == 8
+    // Check that we can resample an image of size greater than 2^16, which is
+    // the limit used in 32-bit code to avoid integer overflows.
+    wxImage image(100000, 2);
+    REQUIRE_NOTHROW( image = image.ResampleNearest(100000, 1) );
+    CHECK( image.GetWidth() == 100000 );
+    CHECK( image.GetHeight() == 1 );
+#endif // SIZEOF_VOID_P == 8
+}
+
 /*
     TODO: add lots of more tests to wxImage functions
 */

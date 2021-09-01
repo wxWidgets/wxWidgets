@@ -503,10 +503,19 @@ wxImage wxImage::ResampleNearest(int width, int height) const
 {
     wxImage image;
 
-    const unsigned long old_width  = M_IMGDATA->m_width;
-    const unsigned long old_height = M_IMGDATA->m_height;
-    wxCHECK_MSG(old_width  <= (ULONG_MAX >> 16) &&
-                old_height <= (ULONG_MAX >> 16), image, "image dimension too large");
+    // We use wxUIntPtr to rescale images of larger size in 64-bit builds:
+    // using long wouldn't allow using images larger than 2^16 in either
+    // direction because of the check below, as sizeof(long) == 4 even in 64
+    // bit builds under MSW, but sizeof(wxUIntPtr) == 8 in this case.
+    const wxUIntPtr old_width  = M_IMGDATA->m_width;
+    const wxUIntPtr old_height = M_IMGDATA->m_height;
+
+    // We use "x << 16" in the code below, so check that this doesn't wrap
+    // around, as the code wouldn't work correctly if it did.
+    static const wxUIntPtr SIZE_LIMIT = static_cast<wxUIntPtr>(-1) >> 16;
+
+    wxCHECK_MSG(old_width  <= SIZE_LIMIT &&
+                old_height <= SIZE_LIMIT, image, "image dimension too large");
 
     image.Create( width, height, false );
 
@@ -529,18 +538,18 @@ wxImage wxImage::ResampleNearest(int width, int height) const
         }
     }
 
-    const unsigned long x_delta = (old_width  << 16) / width;
-    const unsigned long y_delta = (old_height << 16) / height;
+    const wxUIntPtr x_delta = (old_width  << 16) / width;
+    const wxUIntPtr y_delta = (old_height << 16) / height;
 
     unsigned char* dest_pixel = target_data;
 
-    unsigned long y = 0;
+    wxUIntPtr y = 0;
     for (int j = 0; j < height; j++)
     {
         const unsigned char* src_line = &source_data[(y>>16)*old_width*3];
         const unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : 0 ;
 
-        unsigned long x = 0;
+        wxUIntPtr x = 0;
         for (int i = 0; i < width; i++)
         {
             const unsigned char* src_pixel = &src_line[(x>>16)*3];
