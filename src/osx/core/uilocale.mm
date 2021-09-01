@@ -26,9 +26,6 @@
 #include "wx/osx/core/cfref.h"
 #include "wx/osx/core/cfstring.h"
 
-#include <CoreFoundation/CFLocale.h>
-#include <CoreFoundation/CFString.h>
-
 #import <Foundation/NSString.h>
 #import <Foundation/NSLocale.h>
 
@@ -73,28 +70,33 @@ namespace
 class wxUILocaleImplCF : public wxUILocaleImpl
 {
 public:
-    explicit wxUILocaleImplCF(const wxCFRef<CFLocaleRef>& cfloc)
-        : m_cfloc(cfloc)
+    explicit wxUILocaleImplCF(NSLocale* nsloc)
+        : m_nsloc([nsloc retain])
     {
+    }
+
+    ~wxUILocaleImplCF() wxOVERRIDE
+    {
+        [m_nsloc release];
     }
 
     static wxUILocaleImplCF* Create(const wxLocaleIdent& locId)
     {
-        // Surprisingly, CFLocaleCreate() always succeeds, even for completely
-        // invalid strings, so we need to check if the name is actually in the
-        // list of the supported locales ourselves.
+        // Surprisingly, localeWithLocaleIdentifier: always succeeds, even for
+        // completely invalid strings, so we need to check if the name is
+        // actually in the list of the supported locales ourselves.
         static wxCFRef<CFArrayRef>
-            all = CFLocaleCopyAvailableLocaleIdentifiers();
+            all((CFArrayRef)[NSLocale availableLocaleIdentifiers]);
 
         wxCFStringRef cfName(locId.GetName());
-        if ( !CFArrayContainsValue(all, CFRangeMake(0, CFArrayGetCount(all)), cfName) )
+        if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
             return NULL;
 
-        CFLocaleRef cfloc = CFLocaleCreate(kCFAllocatorDefault, cfName);
-        if ( !cfloc )
+        auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
+        if ( !nsloc )
             return NULL;
 
-        return new wxUILocaleImplCF(cfloc);
+        return new wxUILocaleImplCF(nsloc);
     }
 
     void Use() wxOVERRIDE;
@@ -104,7 +106,7 @@ public:
                        int flags) const wxOVERRIDE;
 
 private:
-    wxCFRef<CFLocaleRef> m_cfloc;
+    NSLocale* const m_nsloc;
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplCF);
 };
@@ -125,13 +127,13 @@ wxUILocaleImplCF::Use()
 wxString
 wxUILocaleImplCF::GetName() const
 {
-    return wxCFStringRef::AsString(CFLocaleGetIdentifier(m_cfloc));
+    return wxCFStringRef::AsString([m_nsloc localeIdentifier]);
 }
 
 wxString
 wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 {
-    return wxGetInfoFromCFLocale(m_cfloc, index, cat);
+    return wxGetInfoFromCFLocale((CFLocaleRef)m_nsloc, index, cat);
 }
 
 /* static */
@@ -143,7 +145,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 {
-    return new wxUILocaleImplCF(CFLocaleCopyCurrent());
+    return new wxUILocaleImplCF([NSLocale currentLocale]);
 }
 
 /* static */
@@ -167,7 +169,7 @@ wxUILocaleImplCF::CompareStrings(const wxString& lhs, const wxString& rhs,
     NSComparisonResult ret = [ns_lhs compare:ns_rhs
                                      options:options
                                      range:(NSRange){0, [ns_lhs length]}
-                                     locale:(id)(CFLocaleRef)m_cfloc];
+                                     locale:m_nsloc];
 
     switch (ret)
     {
