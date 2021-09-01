@@ -116,6 +116,15 @@ public:
     /**
         Compares two strings using comparison rules of this locale.
 
+        This function is useful for sorting the strings in the order expected
+        by the user, e.g. by correctly sorting "ä" in the same way as "a" when
+        using German locale, but not when using Swedish one, in which "ä" is
+        sorted after "z".
+
+        It can be used both with the current locale, and with any other
+        supported locale, even under systems not supporting changing the UI
+        locale, such as macOS.
+
         @param lhs
             First comparing string.
         @param rhs
@@ -126,9 +135,9 @@ public:
             that this flag only works under MSW and Mac and is simply ignored
             under the other platforms).
         @return
-            -1 if lhs less than rhs.
-            0 if lhs equal to rhs.
-            1 if lhs greater than rhs.
+            -1 if @a lhs is less than @a rhs.
+            0 if @a lhs is equal to @a rhs.
+            1 if @a lhs is greater than @a rhs.
      */
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags = wxCompare_CaseSensitive) const;
