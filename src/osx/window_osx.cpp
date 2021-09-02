@@ -1269,6 +1269,11 @@ bool wxWindowMac::OSXShowWithEffect(bool show,
 
 void wxWindowMac::DoEnable(bool enable)
 {
+    // We can be called before the window is created in order to create it in
+    // the initially disabled state.
+    if ( !GetPeer() )
+        return;
+
     GetPeer()->Enable( enable ) ;
     MacInvalidateBorders();
 }
