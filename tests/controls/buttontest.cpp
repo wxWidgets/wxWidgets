@@ -160,6 +160,11 @@ TEST_CASE_METHOD(ButtonTestCase, "Button::Bitmap", "[button]")
     // updating the bitmap later, as it used to be the case in wxGTK (#18898).
     m_button->SetLabel(wxString());
     CHECK_NOTHROW( m_button->Disable() );
+
+    // Also check that setting an invalid bitmap doesn't do anything untoward,
+    // such as crashing, as it used to do in wxOSX (#19257).
+    CHECK_NOTHROW( m_button->SetBitmapPressed(wxNullBitmap) );
+    CHECK( !m_button->GetBitmapPressed().IsOk() );
 }
 
 #endif //wxUSE_BUTTON

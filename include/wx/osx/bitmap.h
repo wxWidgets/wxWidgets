@@ -204,6 +204,7 @@ public:
     // returns a CGImageRef which must released after usage with CGImageRelease
     CGImageRef CreateCGImage() const ;
 
+    // returns nil for invalid bitmap
     WXImage GetImage() const;
 #if wxOSX_USE_COCOA
     // returns an autoreleased version of the image

@@ -951,7 +951,7 @@ bool wxBitmap::Create(CGContextRef bitmapcontext)
 
 WXImage wxBitmap::GetImage() const
 {
-    return GetBitmapData()->GetImage();
+    return IsOk() ? GetBitmapData()->GetImage() : NULL;
 }
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
