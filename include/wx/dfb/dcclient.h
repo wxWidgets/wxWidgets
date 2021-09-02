@@ -35,7 +35,7 @@ private:
 
     bool m_shouldFlip; // flip the surface when done?
 
-    friend class wxOverlayImpl; // for m_shouldFlip;
+    friend class wxOverlayDFBImpl; // for m_shouldFlip;
 
     wxDECLARE_DYNAMIC_CLASS(wxWindowDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);
