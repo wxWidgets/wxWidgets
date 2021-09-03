@@ -101,11 +101,45 @@ extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
 class wxButtonImageData: public wxObject
 {
 public:
-    wxButtonImageData() { }
+    wxButtonImageData()
+    {
+        for ( int n = 0; n < wxAnyButton::State_Max; ++n )
+        {
+            // The normal bitmap is always set explicitly when the image data
+            // is created, but the others ones are not (yet).
+            m_bitmapSetExplicitly[n] = n == wxAnyButton::State_Normal;
+        }
+    }
+
     virtual ~wxButtonImageData() { }
 
-    virtual wxBitmap GetBitmap(wxAnyButton::State which) const = 0;
-    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) = 0;
+    // Bitmap can be set either explicitly, when the bitmap for the given state
+    // is specified by the application, or implicitly, when the bitmap for some
+    // state is set as a side effect of setting another bitmap.
+    //
+    // These functions check the flags stored in the base class remembering
+    // whether each bitmap is implicit or explicit and behave accordingly.
+    wxBitmap GetExplicitBitmap(wxAnyButton::State which) const
+    {
+        return m_bitmapSetExplicitly[which] ? GetBitmap(which) : wxBitmap();
+    }
+
+    void SetExplicitBitmap(const wxBitmap& bitmap, wxAnyButton::State which)
+    {
+        SetBitmap(bitmap, which);
+        m_bitmapSetExplicitly[which] = true;
+    }
+
+    wxBitmap GetImplicitBitmap(wxAnyButton::State which) const
+    {
+        return GetBitmap(which);
+    }
+
+    void SetImplicitBitmap(const wxBitmap& bitmap, wxAnyButton::State which)
+    {
+        SetBitmap(bitmap, which);
+        m_bitmapSetExplicitly[which] = false;
+    }
 
     virtual wxSize GetBitmapMargins() const = 0;
     virtual void SetBitmapMargins(wxCoord x, wxCoord y) = 0;
@@ -114,6 +148,13 @@ public:
     virtual void SetBitmapPosition(wxDirection dir) = 0;
 
 private:
+    // These functions are private to force using explicit/implicit versions of
+    // them in the code to make it clear which bitmap is needed.
+    virtual wxBitmap GetBitmap(wxAnyButton::State which) const = 0;
+    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) = 0;
+
+    bool m_bitmapSetExplicitly[wxAnyButton::State_Max];
+
     wxDECLARE_NO_COPY_CLASS(wxButtonImageData);
 };
 
@@ -129,7 +170,7 @@ class wxODButtonImageData : public wxButtonImageData
 public:
     wxODButtonImageData(wxAnyButton *btn, const wxBitmap& bitmap)
     {
-        SetBitmap(bitmap, wxAnyButton::State_Normal);
+        SetExplicitBitmap(bitmap, wxAnyButton::State_Normal);
 #if wxUSE_IMAGE
         SetBitmap(bitmap.ConvertToDisabled(), wxAnyButton::State_Disabled);
 #endif
@@ -505,7 +546,7 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
     wxCHECK_RET( m_imageData, wxT("shouldn't be called if no image") );
 
     // account for the bitmap size, including the user-specified margins
-    const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize()
+    const wxSize sizeBmp = m_imageData->GetImplicitBitmap(State_Normal).GetSize()
                                 + 2*m_imageData->GetBitmapMargins();
     const wxDirection dirBmp = m_imageData->GetBitmapPosition();
     if ( dirBmp == wxLEFT || dirBmp == wxRIGHT )
@@ -660,7 +701,7 @@ WXLRESULT wxAnyButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
         if (
                 IsEnabled() &&
                 ( wxUxThemeIsActive() ||
-                 (m_imageData && m_imageData->GetBitmap(State_Current).IsOk())
+                 (m_imageData && m_imageData->GetImplicitBitmap(State_Current).IsOk())
                 )
            )
         {
@@ -678,7 +719,7 @@ WXLRESULT wxAnyButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const
 {
-    return m_imageData ? m_imageData->GetBitmap(which) : wxBitmap();
+    return m_imageData ? m_imageData->GetExplicitBitmap(which) : wxBitmap();
 }
 
 void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
@@ -697,8 +738,8 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
             else
             {
                 // Replace the removed bitmap with the normal one.
-                wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
-                m_imageData->SetBitmap(which == State_Disabled
+                wxBitmap bmpNormal = m_imageData->GetImplicitBitmap(State_Normal);
+                m_imageData->SetImplicitBitmap(which == State_Disabled
                                             ? bmpNormal.ConvertToDisabled()
                                             : bmpNormal,
                                        which);
@@ -714,7 +755,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 
     // Check if we already had bitmaps of different size.
     if ( m_imageData &&
-          bitmap.GetSize() != m_imageData->GetBitmap(State_Normal).GetSize() )
+          bitmap.GetSize() != m_imageData->GetImplicitBitmap(State_Normal).GetSize() )
     {
         wxASSERT_MSG( which == State_Normal,
                       "Must set normal bitmap with the new size first" );
@@ -767,7 +808,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     }
     else
     {
-        m_imageData->SetBitmap(bitmap, which);
+        m_imageData->SetExplicitBitmap(bitmap, which);
 
         // if the focus bitmap is specified but current one isn't, use
         // the focus bitmap for hovering as well if this is consistent
@@ -777,9 +818,9 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         // and also makes it much easier to do "the right thing" for
         // all platforms (some of them, such as Windows, have "hot"
         // buttons while others don't)
-        if ( which == State_Focused && !m_imageData->GetBitmap(State_Current).IsOk() )
+        if ( which == State_Focused && !m_imageData->GetExplicitBitmap(State_Current).IsOk() )
         {
-            m_imageData->SetBitmap(bitmap, State_Current);
+            m_imageData->SetImplicitBitmap(bitmap, State_Current);
         }
     }
 
@@ -1226,11 +1267,16 @@ void wxAnyButton::MakeOwnerDrawn()
         // if necessary.
         if ( m_imageData && wxDynamicCast(m_imageData, wxODButtonImageData) == NULL )
         {
-            wxODButtonImageData* newData = new wxODButtonImageData(this, m_imageData->GetBitmap(State_Normal));
+            wxODButtonImageData* newData = new wxODButtonImageData(this, m_imageData->GetImplicitBitmap(State_Normal));
             for ( int n = 0; n < State_Max; n++ )
             {
                 State st = static_cast<State>(n);
-                newData->SetBitmap(m_imageData->GetBitmap(st), st);
+
+                wxBitmap bmp = m_imageData->GetExplicitBitmap(st);
+                if ( bmp.IsOk() )
+                    newData->SetExplicitBitmap(bmp, st);
+                else
+                    newData->SetImplicitBitmap(m_imageData->GetImplicitBitmap(st), st);
             }
             newData->SetBitmapPosition(m_imageData->GetBitmapPosition());
             wxSize margs = m_imageData->GetBitmapMargins();
@@ -1390,9 +1436,9 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     // draw the image, if any
     if ( m_imageData )
     {
-        wxBitmap bmp = m_imageData->GetBitmap(GetButtonState(this, state));
+        wxBitmap bmp = m_imageData->GetImplicitBitmap(GetButtonState(this, state));
         if ( !bmp.IsOk() )
-            bmp = m_imageData->GetBitmap(State_Normal);
+            bmp = m_imageData->GetImplicitBitmap(State_Normal);
 
         const wxSize sizeBmp = bmp.GetSize();
         const wxSize margin = m_imageData->GetBitmapMargins();

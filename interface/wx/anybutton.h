@@ -41,10 +41,10 @@ public:
     wxBitmap GetBitmap() const;
 
     /**
-        Returns the bitmap used when the mouse is over the button, which may be
-        invalid.
+        Returns the bitmap used when the mouse is over the button.
 
-        @see SetBitmapCurrent()
+        The returned bitmap is only valid if SetBitmapCurrent() had been
+        previously called.
 
         @since 2.9.1 (available as wxBitmapButton::GetBitmapHover() in previous
             versions)
@@ -52,18 +52,20 @@ public:
     wxBitmap GetBitmapCurrent() const;
 
     /**
-        Returns the bitmap for the disabled state, which may be invalid.
+        Returns the bitmap used for the disabled state.
 
-        @see SetBitmapDisabled()
+        The returned bitmap is only valid if SetBitmapDisabled() had been
+        previously called.
 
         @since 2.9.1 (available in wxBitmapButton only in previous versions)
     */
     wxBitmap GetBitmapDisabled() const;
 
     /**
-        Returns the bitmap for the focused state, which may be invalid.
+        Returns the bitmap used for the focused state.
 
-        @see SetBitmapFocus()
+        The returned bitmap is only valid if SetBitmapFocus() had been
+        previously called.
 
         @since 2.9.1 (available in wxBitmapButton only in previous versions)
     */
@@ -82,9 +84,10 @@ public:
     wxBitmap GetBitmapLabel() const;
 
     /**
-        Returns the bitmap for the pressed state, which may be invalid.
+        Returns the bitmap used when the button is pressed.
 
-        @see SetBitmapPressed()
+        The returned bitmap is only valid if SetBitmapPressed() had been
+        previously called.
 
         @since 2.9.1 (available as wxBitmapButton::GetBitmapSelected() in
             previous versions)

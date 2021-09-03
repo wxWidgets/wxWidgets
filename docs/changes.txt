@@ -129,6 +129,10 @@ Changes in behaviour not resulting in compilation errors
 - wxSpinCtrl::SetValue(wxString) overload doesn't generate any events with
   wxMSW, which was already the documented behaviour.
 
+- wxButton::GetBitmap{Current,Disabled,Focus,Pressed}() only return valid
+  bitmaps in wxMSW if the corresponding Set had been called before, as in the
+  other ports, instead of returning the normal bitmap as fallback in this case.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
