@@ -716,7 +716,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     if ( m_imageData &&
           bitmap.GetSize() != m_imageData->GetBitmap(State_Normal).GetSize() )
     {
-        wxASSERT_MSG( (which == State_Normal) || bitmap.IsNull(),
+        wxASSERT_MSG( which == State_Normal,
                       "Must set normal bitmap with the new size first" );
 
 #if wxUSE_UXTHEME
