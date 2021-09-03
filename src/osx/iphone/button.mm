@@ -111,7 +111,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     v.frame = r;
 
     if (bitmap.IsOk())
-        [v setImage:bitmap.GetImage() forState:UIControlStateNormal];
+        [v setImage:bitmap.GetUIImage() forState:UIControlStateNormal];
 
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
