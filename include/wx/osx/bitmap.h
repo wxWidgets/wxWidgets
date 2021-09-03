@@ -205,16 +205,16 @@ public:
     CGImageRef CreateCGImage() const ;
 
     // returns nil for invalid bitmap
-    WXImage GetImage() const;
+    WXImage OSXGetImage() const;
 #if wxOSX_USE_COCOA
     // returns an autoreleased version of the image
     WX_NSImage GetNSImage() const
-        { return GetImage(); }
+        { return OSXGetImage(); }
 #endif
 #if wxOSX_USE_IPHONE
     // returns an autoreleased version of the image
     WX_UIImage GetUIImage() const
-        { return GetImage(); }
+        { return OSXGetImage(); }
 #endif
 
 #if WXWIN_COMPATIBILITY_3_0
