@@ -16,7 +16,7 @@
 
 typedef wxVector<wxLanguageInfo> wxLanguageInfos;
 
-// Return the vector of all known languages.
+// Return the vector of all languages known to wx.
 const wxLanguageInfos& wxGetLanguageInfos();
 
 // Function returning hard-coded values for the "C" locale.
@@ -48,7 +48,8 @@ public:
     static wxUILocaleImpl* CreateForLocale(const wxLocaleIdent& locId);
 
     // This function exists only for wxLocale compatibility and creates the
-    // locale corresponding to the given language.
+    // locale corresponding to the given language. It shouldn't be used
+    // anywhere else.
     //
     // It is implemented in terms of CreateForLocale() for non-MSW platforms,
     // but under MSW it is different for compatibility reasons.
