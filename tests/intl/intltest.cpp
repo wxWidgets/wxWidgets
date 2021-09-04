@@ -260,23 +260,23 @@ static inline bool CheckSupported(const wxUILocale& loc, const char* desc)
 
 TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 {
-    CheckSupported(wxUILocale("en"), "English");
-    CheckSupported(wxUILocale(wxLocaleIdent("fr").Region("FR")), "French");
-    CHECK( !wxUILocale("bloordyblop").IsSupported() );
+    CheckSupported(wxUILocale(wxLocaleIdent::FromTag("en")), "English");
+    CheckSupported(wxUILocale(wxLocaleIdent().Language("fr").Region("FR")), "French");
+    CHECK( !wxUILocale(wxLocaleIdent::FromTag("bloordyblop")).IsSupported() );
 }
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
-    CHECK( wxUILocale("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    CHECK( wxUILocale(wxLocaleIdent::FromTag("en")).GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
 
-    const wxUILocale locDE("de");
+    const wxUILocale locDE(wxLocaleIdent::FromTag("de"));
     if ( CheckSupported(locDE, "German") )
         CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses
     // dot, and not comma, as decimal separator, even under macOS, where POSIX
     // APIs use incorrect (identical to "German") definitions for this locale.
-    const wxUILocale locDE_CH(wxLocaleIdent("de").Region("CH"));
+    const wxUILocale locDE_CH(wxLocaleIdent().Language("de").Region("CH"));
     if ( CheckSupported(locDE_CH, "Swiss German") )
         CHECK( locDE_CH.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
 }
@@ -288,7 +288,7 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 {
     SECTION("English")
     {
-        const wxUILocale l("en");
+        const wxUILocale l(wxLocaleIdent::FromTag("en"));
 
         // This is not very interesting, but check that comparison works at all.
         CHECK( l.CompareStrings("x", "x") ==  0 );
@@ -319,7 +319,7 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 #if wxUSE_UNICODE
     SECTION("German")
     {
-        const wxUILocale l(wxLocaleIdent("de").Region("DE"));
+        const wxUILocale l(wxLocaleIdent().Language("de").Region("DE"));
 
         if ( !CheckSupported(l, "German") )
             return;
@@ -344,7 +344,7 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         if ( wxIsRunningUnderWine() )
             return;
 
-        const wxUILocale l("sv");
+        const wxUILocale l(wxLocaleIdent::FromTag("sv"));
 
         if ( !CheckSupported(l, "Swedish") )
             return;

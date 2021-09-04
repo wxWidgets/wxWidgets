@@ -33,16 +33,13 @@ enum
 class WXDLLIMPEXP_BASE wxLocaleIdent
 {
 public:
+    // Create the object from BCP 47-like language tag: the string must contain
+    // at least the language part (2 or 3 ASCII letters) and may contain script
+    // and region separated by dashes.
+    static wxLocaleIdent FromTag(const wxString& tag);
+
     // Default ctor creates an empty, invalid identifier.
     wxLocaleIdent() { }
-
-    // Construct from language, i.e. a two-letter ISO 639-1 code (or a
-    // three-letter ISO 639-2 code if there is no ISO 639-1 code for this
-    // language).
-    wxLocaleIdent(const char* language)
-        : m_language(wxString::FromAscii(language))
-    {
-    }
 
     // Set language
     wxLocaleIdent& Language(const wxString& language);
@@ -69,6 +66,11 @@ public:
     // Construct platform dependent name
     wxString GetName() const;
 
+    // Get the language tag: for the objects created with FromTag() returns the
+    // string passed to it directly, otherwise reconstructs this string from
+    // the components.
+    wxString GetTag() const;
+
     // Empty locale identifier is invalid. at least Language() must be called.
     bool IsEmpty() const
     {
@@ -76,6 +78,8 @@ public:
     }
 
 private:
+    wxString m_tag;
+
     wxString m_language;
     wxString m_region;
     wxString m_script;

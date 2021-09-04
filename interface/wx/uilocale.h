@@ -195,43 +195,72 @@ public:
 wxString wxGetUIDateFormat();
 
 /**
-    Allows to construct the full locale identifier in a portable way.
+    Represents a locale in a portable way.
 
-    Parts of the locale not supported by the current platform (e.g. modifier under non-Unix platforms) are ignored.
-    The remaining parts are used to construct a string uniquely identifying the locale in a platform-specific name.
+    There are two possible ways to construct wxLocaleIdent:
 
-    Usage example:
+        - You can either use fromTag() to create it from a string in the form
+          @code language ["-" script] ["-" region] @endcode, corresponding to
+          the subset of BCP 47 (https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
+          syntax.
+        - Or you can create it from the different parts of this string by using
+          the default constructor and then chaining calls to Language(),
+          Region(), Script() and other methods.
+
+    The first method is useful for interoperating with the other software using
+    BCP 47 language tags, while the second one may may result in more readable
+    code and allows to specify Unix-specific locale description parts such as
+    charset and modifier that are not part of the BCP 47 strings.
+
+    Example of using wxLocaleIdent in the second way:
     @code
-      auto loc = wxLocaleIdent("fr").Region("BE").Modifier("euro");
+      auto loc = wxLocaleIdent().Language("fr").Region("BE").Modifier("euro");
     #if defined(__WINDOWS__) || defined(__WXOSX__)
       wxASSERT( loc.GetName() == "fr_BE" );
     #elif defined(__UNIX__)
       wxASSERT( loc.GetName() == "fr_BE@euro" );
     #endif
     @endcode
+
+    For the first way, it is enough to just write
+    @code
+      auto loc = wxLocaleIdent::FromTag("fr-BE"); // Dash, not underscore!
+    @endcode
+
     @since 3.1.6
 */
 class wxLocaleIdent
 {
 public:
     /**
+        Return the locale identifier corresponding to the given BCP 47-like tag.
+
+        The string must contain at least the language part (2 or 3 ASCII
+        letters) and may contain script and region separated by dashes, i.e.
+        all of the following are valid:
+
+            - "mn"
+            - "mn-MN"
+            - "mn-Cyrl-MN"
+
+        Note that while BCP 47 extlangs, variants, extensions, private use and
+        grandfathered tags are currently not directly supported, they may still
+        work for creating wxUILocale on platforms with native support for BCP
+        47 strings.
+
+        If the input argument uses an unrecognized syntax (e.g. is empty), an
+        empty wxLocaleIdent is returned. Of course, even if this function
+        returns a non-empty object, the resulting locale may still be invalid
+        or unsupported, use wxUILocale::IsSupported() to check for this.
+     */
+    static wxLocaleIdent FromTag(const wxString& tag);
+
+    /**
         Default constructor creates an empty and invalid locale identifier.
 
         At least Language() must be called to make the identifier valid.
     */
     wxLocaleIdent();
-
-    /**
-        Constructor with language.
-
-        Note that this constructor is non-explicit, allowing to pass just a
-        simple string, such as "en", to functions taking wxLocaleIdent.
-
-        @param language
-            ISO 639 language code.
-            See Language() for more detailed info.
-    */
-    wxLocaleIdent(const char* language);
 
     /**
         Set language.

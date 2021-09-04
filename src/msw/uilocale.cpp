@@ -420,7 +420,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
         return NULL;
     }
 
-    return wxUILocaleImplName::Create(locId.GetName().wc_str());
+    return wxUILocaleImplName::Create(locId.GetTag().wc_str());
 }
 
 #endif // wxUSE_INTL

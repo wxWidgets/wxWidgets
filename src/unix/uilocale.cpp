@@ -387,7 +387,7 @@ wxUILocaleImplUnix::CompareStrings(const wxString& lhs, const wxString& rhs,
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 {
-    return new wxUILocaleImplUnix("C");
+    return new wxUILocaleImplUnix(wxLocaleIdent().Language("C"));
 }
 
 /* static */

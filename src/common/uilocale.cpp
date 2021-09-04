@@ -22,6 +22,8 @@
 
 #include "wx/uilocale.h"
 
+#include "wx/arrstr.h"
+
 #ifndef __WINDOWS__
     #include "wx/language.h"
 #endif
@@ -44,6 +46,96 @@ wxUILocale wxUILocale::ms_current;
 // ----------------------------------------------------------------------------
 // wxLocaleIdent
 // ----------------------------------------------------------------------------
+
+/* static */
+wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
+{
+    // See section 2.01 of https://www.rfc-editor.org/rfc/bcp/bcp47.txt for the
+    // full syntax. Here we fully support just the subset we're interested in:
+    //
+    //  - Normal language tags (not private use or grandfathered ones).
+    //  - Only script and region, but not the extensions or extlangs.
+
+    // Language tags must always use ASCII.
+    if ( tag != tag.ToAscii() )
+        return wxLocaleIdent();
+
+    const wxArrayString& parts = wxSplit(tag, '-', '\0');
+    wxArrayString::const_iterator it = parts.begin();
+    if ( it == parts.end() )
+        return wxLocaleIdent();
+
+    // We have at least the language, so we'll return a valid object.
+    wxLocaleIdent locId;
+    locId.m_language = *it;
+
+    // Also store the full string, so that the platforms that support BCP 47
+    // natively can use it instead of reconstructing the string from our fields.
+    locId.m_tag = tag;
+
+    if ( ++it == parts.end() )
+        return locId;
+
+    // Advance to the next component we know about.
+    switch ( locId.m_language.length() )
+    {
+        case 2:
+        case 3:
+            // Looks like an ISO 639 code.
+            break;
+
+        default:
+            // It may be private use or grandfathered tag or just invalid
+            // syntax, but in any case we can't parse it further.
+            return locId;
+    }
+
+    // Skip extlangs that are 3 letters long, in contrast to 3 digit region
+    // codes.
+    while ( it->length() == 3 && !isdigit((*it)[0]) )
+    {
+        if ( ++it == parts.end() )
+            return locId;
+    }
+
+    switch ( it->length() )
+    {
+        case 2:
+        case 3:
+            // Either an ISO 3166-1 or UN M.49 region code.
+            locId.m_region = *it;
+            break;
+
+        case 4:
+            // Must be an ISO 15924 script.
+            locId.m_script = *it;
+            break;
+
+        default:
+            // This looks to be completely invalid.
+            return wxLocaleIdent();
+    }
+
+    // If we got the language and the region, we can't parse anything else
+    // (variants, extensions, private use) anyhow.
+    if ( !locId.m_region.empty() )
+        return locId;
+
+    // Otherwise we must have got the script above, so check if we have the
+    // region too.
+    if ( ++it == parts.end() )
+        return locId;
+
+    switch ( it->length() )
+    {
+        case 2:
+        case 3:
+            locId.m_region = *it;
+            break;
+    }
+
+    return locId;
+}
 
 wxLocaleIdent& wxLocaleIdent::Language(const wxString& language)
 {
@@ -73,6 +165,22 @@ wxLocaleIdent& wxLocaleIdent::Modifier(const wxString& modifier)
 {
     m_modifier = modifier;
     return *this;
+}
+
+wxString wxLocaleIdent::GetTag() const
+{
+    if ( !m_tag.empty() )
+        return m_tag;
+
+    wxString tag = m_language;
+
+    if ( !m_script.empty() )
+        tag << '-' << m_script;
+
+    if ( !m_region.empty() )
+        tag << '-' << m_region;
+
+    return tag;
 }
 
 // ----------------------------------------------------------------------------

@@ -139,7 +139,7 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 {
-    return wxUILocaleImplCF::Create(wxLocaleIdent("C"));
+    return wxUILocaleImplCF::Create(wxLocaleIdent().Language("C"));
 }
 
 /* static */
