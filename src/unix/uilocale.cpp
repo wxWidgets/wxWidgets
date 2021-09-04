@@ -20,6 +20,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/uilocale.h"
 #include "wx/private/uilocale.h"
 
 #include "wx/unix/private/uilocale.h"
