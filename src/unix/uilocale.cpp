@@ -96,6 +96,55 @@ locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
     return loc;
 }
 
+// Try finding a locale for the given identifier, modifying the argument to
+// match the found locale if necessary.
+locale_t TryCreateMatchingLocale(wxLocaleIdent& locId)
+{
+    locale_t loc = TryCreateLocaleWithUTF8(locId);
+    if ( !loc )
+    {
+        // Try to find a variant of this locale available on this system: first
+        // of all, using just the language, without the territory, typically
+        // does _not_ work under Linux, so try adding one if we don't have it.
+        if ( locId.GetRegion().empty() )
+        {
+            const wxString lang = locId.GetLanguage();
+
+            const wxLanguageInfos& infos = wxGetLanguageInfos();
+            for ( wxLanguageInfos::const_iterator it = infos.begin();
+                  it != infos.end();
+                  ++it )
+            {
+                const wxString& fullname = it->CanonicalName;
+                if ( fullname.BeforeFirst('_') == lang )
+                {
+                    // We never have encoding in our canonical names, but we
+                    // can have modifiers, so get rid of them if necessary.
+                    const wxString&
+                        region = fullname.AfterFirst('_').BeforeFirst('@');
+                    if ( !region.empty() )
+                    {
+                        loc = TryCreateLocaleWithUTF8(locId.Region(region));
+                        if ( loc )
+                        {
+                            // We take the first available region, we don't
+                            // have enough data to know how to prioritize them
+                            // (and wouldn't want to start any geopolitical
+                            // disputes).
+                            break;
+                        }
+                    }
+
+                    // Don't bother reverting region to the old value as it will
+                    // be overwritten during the next loop iteration anyhow.
+                }
+            }
+        }
+    }
+
+    return loc;
+}
+
 #endif // HAVE_LOCALE_T
 
 } // anonymous namespace
@@ -353,48 +402,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locIdOrig)
     // Make a copy of it because it can be modified below.
     wxLocaleIdent locId = locIdOrig;
 
-    locale_t loc = TryCreateLocaleWithUTF8(locId);
-    if ( !loc )
-    {
-        // Try to find a variant of this locale available on this system: first
-        // of all, using just the language, without the territory, typically
-        // does _not_ work under Linux, so try adding one if we don't have it.
-        if ( locId.GetRegion().empty() )
-        {
-            const wxString lang = locId.GetLanguage();
-
-            const wxLanguageInfos& infos = wxGetLanguageInfos();
-            for ( wxLanguageInfos::const_iterator it = infos.begin();
-                  it != infos.end();
-                  ++it )
-            {
-                const wxString& fullname = it->CanonicalName;
-                if ( fullname.BeforeFirst('_') == lang )
-                {
-                    // We never have encoding in our canonical names, but we
-                    // can have modifiers, so get rid of them if necessary.
-                    const wxString&
-                        region = fullname.AfterFirst('_').BeforeFirst('@');
-                    if ( !region.empty() )
-                    {
-                        loc = TryCreateLocaleWithUTF8(locId.Region(region));
-                        if ( loc )
-                        {
-                            // We take the first available region, we don't
-                            // have enough data to know how to prioritize them
-                            // (and wouldn't want to start any geopolitical
-                            // disputes).
-                            break;
-                        }
-                    }
-
-                    // Don't bother reverting region to the old value as it will
-                    // be overwritten during the next loop iteration anyhow.
-                }
-            }
-        }
-    }
-
+    const locale_t loc = TryCreateMatchingLocale(locId);
     if ( !loc )
         return NULL;
 
