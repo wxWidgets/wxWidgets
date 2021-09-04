@@ -106,6 +106,12 @@ public:
     // Get the object corresponding to the currently used locale.
     static const wxUILocale& GetCurrent();
 
+    // A helper just to avoid writing wxUILocale(wxLocaleIdent::FromTag(...)).
+    static wxUILocale FromTag(const wxString& tag)
+    {
+        return wxUILocale(wxLocaleIdent::FromTag(tag));
+    }
+
     // Create the object corresponding to the given locale.
     explicit wxUILocale(const wxLocaleIdent& localeId);
 

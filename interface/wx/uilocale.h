@@ -100,6 +100,18 @@ public:
     static const wxUILocale& GetCurrent();
 
     /**
+        Creates the local corresponding to the given language tag.
+
+        This is exactly equivalent to using wxUILocale constructor with
+        the locale identifier returned by wxLocaleIdent::FromTag(), but
+        shorter.
+
+        See wxLocaleIdent::FromTag() for more information about the syntax of
+        the @a tag string.
+     */
+    static wxUILocale FromTag(const wxString& tag);
+
+    /**
         Creates the locale corresponding to the given locale identifier.
 
         In the simplest case, this can be used as following:

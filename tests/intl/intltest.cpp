@@ -260,16 +260,16 @@ static inline bool CheckSupported(const wxUILocale& loc, const char* desc)
 
 TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 {
-    CheckSupported(wxUILocale(wxLocaleIdent::FromTag("en")), "English");
+    CheckSupported(wxUILocale::FromTag("en"), "English");
     CheckSupported(wxUILocale(wxLocaleIdent().Language("fr").Region("FR")), "French");
-    CHECK( !wxUILocale(wxLocaleIdent::FromTag("bloordyblop")).IsSupported() );
+    CHECK( !wxUILocale::FromTag("bloordyblop").IsSupported() );
 }
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
-    CHECK( wxUILocale(wxLocaleIdent::FromTag("en")).GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    CHECK( wxUILocale::FromTag("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
 
-    const wxUILocale locDE(wxLocaleIdent::FromTag("de"));
+    const wxUILocale locDE(wxUILocale::FromTag("de"));
     if ( CheckSupported(locDE, "German") )
         CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
 
@@ -288,7 +288,7 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 {
     SECTION("English")
     {
-        const wxUILocale l(wxLocaleIdent::FromTag("en"));
+        const wxUILocale l(wxUILocale::FromTag("en"));
 
         // This is not very interesting, but check that comparison works at all.
         CHECK( l.CompareStrings("x", "x") ==  0 );
@@ -344,7 +344,7 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         if ( wxIsRunningUnderWine() )
             return;
 
-        const wxUILocale l(wxLocaleIdent::FromTag("sv"));
+        const wxUILocale l(wxUILocale::FromTag("sv"));
 
         if ( !CheckSupported(l, "Swedish") )
             return;
