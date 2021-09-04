@@ -245,8 +245,8 @@ TEST_CASE("wxLocale::Default", "[locale]")
 static inline bool CheckSupported(const wxUILocale& loc, const char* desc)
 {
 #if defined(__WINDOWS__) || defined(__WXOSX__)
-    wxUnusedVar(loc);
-    wxUnusedVar(desc);
+    INFO(desc << " locale");
+    CHECK( loc.IsSupported() );
 #else // Unix (not Darwin)
     if ( !loc.IsSupported() )
     {
