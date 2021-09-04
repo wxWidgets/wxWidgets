@@ -32,6 +32,42 @@ If you want to use CMake, please see @ref overview_cmake for
 building wxWidgets using it.
 
 
+Prerequisites                      {#gtk_prereq}
+-------------
+
+To build wxWidgets, you need to have a number of libraries on your system.
+While all of them may be compiled from source, under Linux systems it is much
+more common to install the development packages containing the headers and
+library files.
+
+At the very least, you will need GTK libraries themselves. Unfortunately the
+exact package names differ between different Linux distributions, but for
+Debian and Debian-based distribution these libraries are part of `libgtk-3-dev`
+package, while in Fedora and other RPM-based distributions the same package is
+known as `gtk3-devel`.
+
+For OpenGL support, you need `libgl1-mesa-dev` and `libglu1-mesa-dev` packages
+under Debian and `mesa-libGL-devel` and `mesa-libGLU-devel` under Fedora. For
+EGL support, `libegl1-mesa-dev` or `mesa-libEGL-devel` is needed.
+
+wxMediaCtrl implementation requires GStreamer and its plugins development
+packages, i.e. either `libgstreamer-plugins-baseVERSION-dev` or
+`gstreamerVERSION-plugins-base-devel`, where `VERSION` should be 1.0, but 0.10
+is still supported as well for compatibility with old systems.
+
+wxWebRequest requites libcurl development package, e.g. `libcurl4-openssl-dev`
+or `libcurl-devel`.
+
+wxWebView requires `libwebkit2gtk-4.0-dev` under Debian and `webkit2gtk3-devel`
+under Fedora.
+
+For the different image format libraries (PNG, JPEG, TIFF) as well as zlib, you
+may install the corresponding `libNAME-dev` or `-devel` libraries or use the
+built-in versions of them, i.e. the same libraries compiled as part of
+wxWidgets, instead if you prefer.
+
+
+
 Troubleshooting                    {#gtk_errors_simple}
 ---------------
 
@@ -99,20 +135,25 @@ of libraries to build:
                             the default since wxWidgets 2.5.0).
 
 Options for third party dependencies: wxWidgets may use other
-libraries present on the current system. For some of these
-libraries, wxWidgets also provides built-in versions, that can be
+libraries present on the current system, see the @ref gtk_prereq
+"prerequisites section above". For some of these libraries,
+wxWidgets also provides built-in versions, that can be
 linked into wx libraries themselves, which can be useful to
-minimize external dependencies.
+minimize external dependencies. By default, system versions will be
+used if available, but `--with-xxx=builtin` configure option may be
+used to override this.
 
     --disable-sys-libs      Don't use system libraries when there is
                             a built-in version included in wxWidgets.
+                            This is equivalent to using --with-xxx=builtin
+                            for all libraries that have built-in versions.
                             Note that other system libraries can,
                             and typically will, still be used if
                             found.
 
     --without-libpng        Disables PNG image format code.
-                            Don't use libpng (although GTK
-                            itself still uses it).
+                            Don't use neither the system nor the builtin
+                            libpng (although GTK itself still uses it).
 
     --without-libjpeg       Disables JPEG image format code.
                             Don't use libjpeg.
