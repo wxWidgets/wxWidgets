@@ -156,10 +156,26 @@ TEST_CASE_METHOD(ButtonTestCase, "Button::Bitmap", "[button]")
 
     CHECK(m_button->GetBitmap().IsOk());
 
+    // The call above shouldn't affect any other bitmaps as returned by the API
+    // even though the same (normal) bitmap does appear for all the states.
+    CHECK( !m_button->GetBitmapCurrent().IsOk() );
+    CHECK( !m_button->GetBitmapDisabled().IsOk() );
+    CHECK( !m_button->GetBitmapFocus().IsOk() );
+    CHECK( !m_button->GetBitmapPressed().IsOk() );
+
+    // Do set one of the bitmaps now.
+    m_button->SetBitmapPressed(wxArtProvider::GetBitmap(wxART_ERROR));
+    CHECK( m_button->GetBitmapPressed().IsOk() );
+
     // Check that resetting the button label doesn't result in problems when
     // updating the bitmap later, as it used to be the case in wxGTK (#18898).
     m_button->SetLabel(wxString());
     CHECK_NOTHROW( m_button->Disable() );
+
+    // Also check that setting an invalid bitmap doesn't do anything untoward,
+    // such as crashing, as it used to do in wxOSX (#19257).
+    CHECK_NOTHROW( m_button->SetBitmapPressed(wxNullBitmap) );
+    CHECK( !m_button->GetBitmapPressed().IsOk() );
 }
 
 #endif //wxUSE_BUTTON

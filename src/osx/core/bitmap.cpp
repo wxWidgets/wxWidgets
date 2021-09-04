@@ -782,7 +782,7 @@ wxBitmapRefData::~wxBitmapRefData()
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    return Create( icon.GetImage() );
+    return Create( icon.OSXGetImage() );
 }
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
@@ -949,9 +949,9 @@ bool wxBitmap::Create(CGContextRef bitmapcontext)
     return GetBitmapData()->IsOk() ;
 }
 
-WXImage wxBitmap::GetImage() const
+WXImage wxBitmap::OSXGetImage() const
 {
-    return GetBitmapData()->GetImage();
+    return IsOk() ? GetBitmapData()->GetImage() : NULL;
 }
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const

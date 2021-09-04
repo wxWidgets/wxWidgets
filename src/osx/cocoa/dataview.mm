@@ -3438,10 +3438,7 @@ bool wxDataViewIconTextRenderer::MacRender()
 
     cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
     iconText << GetValue();
-    if (iconText.GetIcon().IsOk())
-        [cell setImage:wxBitmap(iconText.GetIcon()).GetNSImage()];
-    else
-        [cell setImage:nil];
+    [cell setImage:iconText.GetIcon().GetNSImage()];
     [cell setStringValue:wxCFStringRef(iconText.GetText()).AsNSString()];
     return true;
 }
