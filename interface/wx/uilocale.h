@@ -214,7 +214,9 @@ class wxLocaleIdent
 {
 public:
     /**
-        This is the default constructor and it leaves language empty.
+        Default constructor creates an empty and invalid locale identifier.
+
+        At least Language() must be called to make the identifier valid.
     */
     wxLocaleIdent();
 
@@ -318,9 +320,9 @@ public:
     wxString GetName() const;
 
     /**
-        Empty language represents user's default language.
+        Check if the locale is empty.
 
-        @return @true if language is empty, @false otherwise.
+        @return @true if this is an empty, invalid object.
     */
-    bool IsDefault() const;
+    bool IsEmpty() const;
 };

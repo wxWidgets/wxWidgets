@@ -261,7 +261,7 @@ wxUILocaleImplUnix::~wxUILocaleImplUnix()
 void
 wxUILocaleImplUnix::Use()
 {
-    if ( m_locId.IsDefault() )
+    if ( m_locId.IsEmpty() )
     {
         // This is the default locale, it is already in use.
         return;

@@ -33,7 +33,7 @@ enum
 class WXDLLIMPEXP_BASE wxLocaleIdent
 {
 public:
-    // Leave language empty
+    // Default ctor creates an empty, invalid identifier.
     wxLocaleIdent() { }
 
     // Construct from language, i.e. a two-letter ISO 639-1 code (or a
@@ -69,8 +69,8 @@ public:
     // Construct platform dependent name
     wxString GetName() const;
 
-    // Empty language represents user's default language
-    bool IsDefault() const
+    // Empty locale identifier is invalid. at least Language() must be called.
+    bool IsEmpty() const
     {
         return m_language.empty();
     }
