@@ -184,10 +184,8 @@ static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
     const char *l = NULL;
 
     // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
-    //     non-UTF-8 locale if it fails, but this is not necessary under the
-    //     supported macOS versions where xx_YY locales are just aliases to
-    //     xx_YY.UTF-8 anyhow.
-#if wxUSE_UNICODE && !defined(__WXMAC__)
+    //     non-UTF-8 locale if it fails.
+#if wxUSE_UNICODE
     if ( !lc.empty() )
     {
         wxString buf(lc);
@@ -213,7 +211,7 @@ static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 
     // if we can't set UTF-8 locale, try non-UTF-8 one:
     if ( !l )
-#endif // wxUSE_UNICODE && !__WXMAC__
+#endif // wxUSE_UNICODE
         l = wxSetlocale(c, lc);
 
     return l;
