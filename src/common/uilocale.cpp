@@ -234,7 +234,7 @@ bool wxUILocale::UseDefault()
         return false;
 
     impl->Use();
-    ms_current.SetImpl(impl);
+    ms_current = wxUILocale(impl);
 
     return true;
 }
@@ -247,7 +247,7 @@ bool wxUILocale::UseLanguage(const wxLanguageInfo& info)
         return false;
 
     impl->Use();
-    ms_current.SetImpl(impl);
+    ms_current = wxUILocale(impl);
 
     return true;
 }
@@ -258,7 +258,7 @@ const wxUILocale& wxUILocale::GetCurrent()
     // We initialize it on demand.
     if ( !ms_current.m_impl )
     {
-        ms_current.SetImpl(wxUILocaleImpl::CreateStdC());
+        ms_current = wxUILocale(wxUILocaleImpl::CreateStdC());
     }
 
     return ms_current;
@@ -276,11 +276,23 @@ wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
     m_impl = wxUILocaleImpl::CreateForLocale(localeId);
 }
 
-void wxUILocale::SetImpl(wxUILocaleImpl* impl)
+wxUILocale::wxUILocale(const wxUILocale& loc)
 {
-    delete m_impl;
+    m_impl = loc.m_impl;
+    if ( m_impl )
+        m_impl->IncRef();
+}
 
-    m_impl = impl;
+wxUILocale& wxUILocale::operator=(const wxUILocale& loc)
+{
+    if ( m_impl )
+        m_impl->DecRef();
+
+    m_impl = loc.m_impl;
+    if ( m_impl )
+        m_impl->IncRef();
+
+    return *this;
 }
 
 bool wxUILocale::IsSupported() const
@@ -325,7 +337,8 @@ wxUILocale::CompareStrings(const wxString& lhs,
 
 wxUILocale::~wxUILocale()
 {
-    delete m_impl;
+    if ( m_impl )
+        m_impl->DecRef();
 }
 
 #endif // wxUSE_INTL

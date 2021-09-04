@@ -109,6 +109,10 @@ public:
     // Create the object corresponding to the given locale.
     explicit wxUILocale(const wxLocaleIdent& localeId);
 
+    // Objects of this class can be (cheaply) copied.
+    wxUILocale(const wxUILocale& loc);
+    wxUILocale& operator=(const wxUILocale& loc);
+
     // Check if the locale is actually supported by the current system: if it's
     // not supported, the other functions will behave as for the "C" locale.
     bool IsSupported() const;
@@ -129,22 +133,14 @@ public:
     ~wxUILocale();
 
 private:
-    // Default ctor is private and exists only for implementation reasons,
-    // creating invalid wxUILocale objects doesn't make much sense.
-    wxUILocale() : m_impl(NULL) { }
-
-    // Used by UseDefault().
-    //
-    // Note that this object takes ownership of the provided pointer and will
-    // delete it in dtor.
-    void SetImpl(wxUILocaleImpl* impl);
+    // This ctor is private and exists only for implementation reasons.
+    // It takes ownership of the provided pointer.
+    explicit wxUILocale(wxUILocaleImpl* impl = NULL) : m_impl(impl) { }
 
 
     static wxUILocale ms_current;
 
     wxUILocaleImpl* m_impl;
-
-    wxDECLARE_NO_COPY_CLASS(wxUILocale);
 };
 
 inline wxString wxGetUIDateFormat()

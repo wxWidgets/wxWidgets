@@ -11,6 +11,7 @@
 #define _WX_PRIVATE_UILOCALE_H_
 
 #include "wx/localedefs.h"
+#include "wx/object.h"
 #include "wx/string.h"
 #include "wx/vector.h"
 
@@ -26,7 +27,7 @@ wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory cat);
 // wxUILocaleImpl provides the implementation of public wxUILocale functions
 // ----------------------------------------------------------------------------
 
-class wxUILocaleImpl
+class wxUILocaleImpl : public wxRefCounter
 {
 public:
     // This function is implemented in platform-specific code and returns the
