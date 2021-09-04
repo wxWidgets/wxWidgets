@@ -13,38 +13,31 @@ The simplest case                      {#gtk_simple}
 If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do the following in wxWidgets directory:
 
-    > mkdir buildgtk
-    > cd buildgtk
-    > ../configure --with-gtk
-    > make
-    > sudo make install
-    > sudo ldconfig
+    $ mkdir buildgtk
+    $ cd buildgtk
+    $ ../configure --with-gtk
+    $ make
+    $ sudo make install
+    $ sudo ldconfig
 
-[if you get "ldconfig: command not found", try using "/sbin/ldconfig"]
+(if you get "ldconfig: command not found", try using `/sbin/ldconfig`)
 
-If you don't do the 'make install' part, you can still use the libraries from
-the buildgtk directory, but they may not be available to other users.
-
-If you want to remove wxWidgets on Unix you can do this:
-
-    > sudo make uninstall
-    > sudo ldconfig
+If you don't do the `make install` part, you can still use the libraries from
+the `buildgtk` directory, but they may not be available to other users.
 
 Note that by default, GTK 3 is used. GTK 2 can be specified
-with --with-gtk=2.
+with `--with-gtk=2` configure option.
 
-If you use CMake, please see @ref overview_cmake for
+If you want to use CMake, please see @ref overview_cmake for
 building wxWidgets using it.
 
 
 Troubleshooting                    {#gtk_errors_simple}
 ---------------
 
-IMPORTANT NOTE:
-
-  When sending bug reports tell us what version of wxWidgets you are
-  using (including the beta) and what compiler on what system. One
-  example: wxGTK 3.0.5, GCC 9.3.1, Fedora 31.
+*IMPORTANT NOTE:* When sending bug reports tell us the exact version of
+wxWidgets you are using as well as what compiler on what system. One example:
+wxGTK 3.0.5, GCC 9.3.1, Fedora 31.
 
 For any configure errors: please look at `config.log` file which was generated
 during configure run, it usually contains some useful information.
@@ -75,20 +68,6 @@ Now create your super-application myfoo.cpp and compile anywhere with
     g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 
 
-
-Building wxGTK on Cygwin               {#gtk_cygwin}
---------------------------
-
-The normal build instructions should work fine on Cygwin. The one difference
-with Cygwin is that when using the "--enable-shared" configure option (which
-is the default) the API is exported explicitly using `__declspec(dllexport)`
-rather than all global symbols being available.
-
-This shouldn't make a difference using the library and should be a little
-more efficient. However if an export attribute has been missed somewhere you
-will see linking errors. If this happens then you can work around the
-problem by setting `LDFLAGS=-Wl,--export-all-symbols`. Please also let us know
-about it on the wx-dev mailing list.
 
 
 Configure options                        {#gtk_options}
@@ -257,7 +236,7 @@ Then you may install the library and its header files under
 have to perform the following command as root, using either `su`
 or `sudo`:
 
-        make install
+    $ make install
 
 After installing, you can run `make clean` in the original
 directory or just remove it entirely if you don't plan to build
@@ -283,17 +262,15 @@ in the following way (note that if you are copying and pasting
 this into your makefile, the leading spaces must be replaced by a
 `TAB` character):
 
-```make
-program: program.o
-    $(CXX) -o program program.o `wx-config --libs`
+    program: program.o
+        $(CXX) -o program program.o `wx-config --libs`
 
-program.o: program.cpp
-    $(CXX) `wx-config --cxxflags` -c program.cpp -o program.o
+    program.o: program.cpp
+        $(CXX) `wx-config --cxxflags` -c program.cpp -o program.o
 
-clean:
-    $(RM) program.o program
-.PHONY: clean
-```
+    clean:
+        $(RM) program.o program
+    .PHONY: clean
 
 If your application uses only some of wxWidgets libraries, you can
 specify required libraries when running wx-config. For example,
