@@ -179,54 +179,53 @@ wxString wxLocaleIdent::GetName() const
 
 // Helper of wxSetlocaleTryAll() below which tries setting the given locale
 // with and without UTF-8 suffix. Don't use this one directly.
-static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
+static const char *wxSetlocaleTryUTF8(int c, const wxLocaleIdent& locId)
 {
     const char *l = NULL;
 
     // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
     //     non-UTF-8 locale if it fails.
 #if wxUSE_UNICODE
-    if ( !lc.empty() )
+    if ( locId.GetCharset().empty() )
     {
-        wxString buf(lc);
-        wxString buf2;
-        buf2 = buf + wxS(".UTF-8");
-        l = wxSetlocale(c, buf2);
+        wxLocaleIdent locIdUTF8(locId);
+        locIdUTF8.Charset(wxS(".UTF-8"));
+
+        l = wxSetlocale(c, locIdUTF8.GetName());
         if ( !l )
         {
-            buf2 = buf + wxS(".utf-8");
-            l = wxSetlocale(c, buf2);
+            locIdUTF8.Charset(wxS(".utf-8"));
+            l = wxSetlocale(c, locIdUTF8.GetName());
         }
         if ( !l )
         {
-            buf2 = buf + wxS(".UTF8");
-            l = wxSetlocale(c, buf2);
+            locIdUTF8.Charset(wxS(".UTF8"));
+            l = wxSetlocale(c, locIdUTF8.GetName());
         }
         if ( !l )
         {
-            buf2 = buf + wxS(".utf8");
-            l = wxSetlocale(c, buf2);
+            locIdUTF8.Charset(wxS(".utf8"));
+            l = wxSetlocale(c, locIdUTF8.GetName());
         }
     }
 
     // if we can't set UTF-8 locale, try non-UTF-8 one:
     if ( !l )
 #endif // wxUSE_UNICODE
-        l = wxSetlocale(c, lc);
+        l = wxSetlocale(c, locId.GetName());
 
     return l;
 }
 
 // Try setting all possible versions of the given locale, i.e. with and without
 // UTF-8 encoding, and with or without the "_territory" part.
-const char *wxSetlocaleTryAll(int c, const wxString& lc)
+const char *wxSetlocaleTryAll(int c, const wxLocaleIdent& locId)
 {
-    const char* l = wxSetlocaleTryUTF8(c, lc);
+    const char* l = wxSetlocaleTryUTF8(c, locId);
     if ( !l )
     {
-        const wxString& lcOnlyLang = ExtractLang(lc);
-        if ( lcOnlyLang != lc )
-            l = wxSetlocaleTryUTF8(c, lcOnlyLang);
+        if ( !locId.GetRegion().empty() )
+            l = wxSetlocaleTryUTF8(c, wxLocaleIdent(locId).Region(wxString()));
     }
 
     return l;
@@ -265,27 +264,31 @@ wxUILocaleImplUnix::Use()
         return;
     }
 
-    const wxString& shortName = m_locId.GetName();
-
-    if ( !wxSetlocaleTryAll(LC_ALL, shortName) )
+    if ( !wxSetlocaleTryAll(LC_ALL, m_locId) )
     {
         // Some C libraries (namely glibc) still use old ISO 639,
         // so will translate the abbrev for them
-        wxString localeAlt;
-        const wxString& langOnly = ExtractLang(shortName);
-        if ( langOnly == wxS("he") )
-            localeAlt = wxS("iw") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("id") )
-            localeAlt = wxS("in") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("yi") )
-            localeAlt = wxS("ji") + ExtractNotLang(shortName);
-        else if ( langOnly == wxS("nb") )
-            localeAlt = wxS("no_NO");
-        else if ( langOnly == wxS("nn") )
-            localeAlt = wxS("no_NY");
+        wxLocaleIdent locIdAlt(m_locId);
 
-        if ( !localeAlt.empty() )
-            wxSetlocaleTryAll(LC_ALL, localeAlt);
+        const wxString& langOnly = m_locId.GetLanguage();
+        if ( langOnly == wxS("he") )
+            locIdAlt.Language(wxS("iw"));
+        else if ( langOnly == wxS("id") )
+            locIdAlt.Language(wxS("in"));
+        else if ( langOnly == wxS("yi") )
+            locIdAlt.Language(wxS("ji"));
+        else if ( langOnly == wxS("nb") || langOnly == wxS("nn") )
+        {
+            locIdAlt.Language(wxS("no"));
+            locIdAlt.Region(langOnly == wxS("nb") ? wxS("NO") : wxS("NY"));
+        }
+        else
+        {
+            // Nothing else to try.
+            return;
+        }
+
+        wxSetlocaleTryAll(LC_ALL, locIdAlt);
     }
 }
 

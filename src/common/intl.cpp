@@ -1014,7 +1014,21 @@ bool wxLocale::IsAvailable(int lang)
     // Test if setting the locale works, then set it back.
     char * const oldLocale = wxStrdupA(setlocale(LC_ALL, NULL));
 
-    const bool available = wxSetlocaleTryAll(LC_ALL, info->CanonicalName);
+    wxLocaleIdent locId;
+    wxString region;
+    locId.Language(info->CanonicalName.BeforeFirst('_', &region));
+    if ( !region.empty() )
+    {
+        // We never have encoding in our canonical names, but we can have
+        // modifiers, so take them into account.
+        wxString mod;
+        locId.Region(region.BeforeFirst('@', &mod));
+
+        if ( !mod.empty() )
+            locId.Modifier(mod);
+    }
+
+    const bool available = wxSetlocaleTryAll(LC_ALL, locId);
 
     // restore the original locale
     wxSetlocale(LC_ALL, oldLocale);

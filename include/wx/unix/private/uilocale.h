@@ -28,7 +28,7 @@ inline wxString ExtractNotLang(const wxString& langFull)
         return wxString();
 }
 
-const char *wxSetlocaleTryAll(int c, const wxString& lc);
+const char *wxSetlocaleTryAll(int c, const wxLocaleIdent& lc);
 
 // Extract date format from D_T_FMT value.
 wxString wxGetDateFormatOnly(const wxString& fmt);
