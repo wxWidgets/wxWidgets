@@ -66,7 +66,7 @@ private:
     wxLocaleIdent m_locId;
 
 #ifdef HAVE_LOCALE_T
-    // Initially null, allocated on demand when needed, use GetLocale().
+    // Only null for the default locale.
     locale_t m_locale;
 #endif // HAVE_LOCALE_T
 
