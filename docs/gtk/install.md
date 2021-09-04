@@ -127,12 +127,12 @@ more information).
 The following options can be used to specify the kind and number
 of libraries to build:
 
-    --disable-shared        Do not create shared libraries, but
-                            build static libraries instead.
+ *  `--disable-shared` \n
+    Do not create shared libraries, but build static libraries instead.
 
-    --enable-monolithic     Build wxWidgets as single library instead
-                            of as several smaller libraries (which is
-                            the default since wxWidgets 2.5.0).
+ * `--enable-monolithic` \n
+   Build wxWidgets as single library instead of as several smaller libraries
+   (which is the default since wxWidgets 2.5.0).
 
 Options for third party dependencies: wxWidgets may use other
 libraries present on the current system, see the @ref gtk_prereq
@@ -143,121 +143,114 @@ minimize external dependencies. By default, system versions will be
 used if available, but `--with-xxx=builtin` configure option may be
 used to override this.
 
-    --disable-sys-libs      Don't use system libraries when there is
-                            a built-in version included in wxWidgets.
-                            This is equivalent to using --with-xxx=builtin
-                            for all libraries that have built-in versions.
-                            Note that other system libraries can,
-                            and typically will, still be used if
-                            found.
+ * `--disable-sys-libs` \n
+   Don't use system libraries when there is a built-in version included in
+   wxWidgets. This is equivalent to using --with-xxx=builtin for all libraries
+   that have built-in versions. Note that other system libraries can, and
+   typically will, still be used if found.
 
-    --without-libpng        Disables PNG image format code.
-                            Don't use neither the system nor the builtin
-                            libpng (although GTK itself still uses it).
+ * `--without-libpng` \n
+   Disables PNG image format code. Don't use neither the system nor the builtin
+   libpng (although GTK itself still uses it).
 
-    --without-libjpeg       Disables JPEG image format code.
-                            Don't use libjpeg.
+ * `--without-libjpeg` \n
+   Disables JPEG image format code. Don't use libjpeg.
 
-    --without-libtiff       Disables TIFF image format code.
-                            Don't use libtiff.
+ * `--without-libtiff` \n
+   Disables TIFF image format code. Don't use libtiff.
 
-    --without-expat         Disable XML classes based on Expat parser.
-                            Don't use expat library.
+ * `--without-expat` \n
+   Disable XML classes based on Expat parser. Don't use expat library.
 
-    --without-liblzma       Disable LZMA compression support.
-                            Don't use liblzma.
+ * `--without-liblzma` \n
+   Disable LZMA compression support. Don't use liblzma.
 
-    --without-libcurl       Don't use libcurl even if it's available.
-                            Disables wxWebRequest.
+ * `--without-libcurl` \n
+   Don't use libcurl even if it's available. Disables wxWebRequest.
 
-    --without-opengl        Disable OpenGL integration with wxGLCanvas.
-                            Don't use OpenGL or EGL libraries.
+ * `--without-opengl` \n
+   Disable OpenGL integration with wxGLCanvas. Don't use OpenGL or EGL libraries.
 
-    --disable-glcanvasegl   Disable EGL support even if it is available
-                            (it would be used if it is, by default).
+ * `--disable-glcanvasegl` \n
+   Disable EGL support even if it is available (it would be used if it is, by default).
 
-    --disable-mediactrl     Disable wxMediaCtrl.
-                            Don't use GStreamer libraries.
+ * `--disable-mediactrl` \n
+   Disable wxMediaCtrl. Don't use GStreamer libraries.
 
-    --disable-webview       Disable wxWebView.
-                            Don't use webkit2gtk and its multiple
-                            dependencies.
+ * `--disable-webview` \n
+   Disable wxWebView. Don't use webkit2gtk and its multiple dependencies.
 
 Normally, you won't have to choose a toolkit, because configure
 defaults to wxGTK anyhow. However you need to use this option to
 explicitly specify the version of GTK to use, e.g.:
 
-    --with-gtk=3            Use GTK 3. Default.
-    --with-gtk=2            Use GTK 2.
-    --with-gtk=1            Use GTK 1.2. Obsolete.
+ * `--with-gtk=3` \n            Use GTK 3. Default.
+ * `--with-gtk=2` \n            Use GTK 2.
+ * `--with-gtk=1` \n            Use GTK 1.2. Obsolete.
 
 Some other general compilation options:
 
-    --disable-optimise      Do not optimise the code. Can be useful
-                            for debugging but shouldn't be used
-                            for production builds.
+ * `--disable-optimise` \n
+   Do not optimise the code. Can be useful for debugging but shouldn't be used
+   for production builds.
 
-    --disable-unicode       Disable Unicode support. Not recommended.
+ * `--disable-unicode` \n
+   Disable Unicode support. Not recommended.
 
-    --enable-no_rtti        Enable compilation without creation of
-                            C++ RTTI information in object files.
-                            This will speed-up compilation and reduce
-                            binary size.
+ * `--enable-no_rtti` \n
+   Enable compilation without creation of C++ RTTI information in object files.
+   This will speed-up compilation and reduce binary size.
 
-    --enable-no_exceptions  Enable compilation without creation of
-                            C++ exception information in object files.
-                            This will speed-up compilation and reduce
-                            binary size.
+ * `--enable-no_exceptions` \n
+   Enable compilation without creation of C++ exception information in object
+   files. This will speed-up compilation and reduce binary size.
 
-    --enable-debug_info     Add debug info to object files and
-                            executables for use with debuggers
-                            such as gdb (or its many frontends).
+ * `--enable-debug_info` \n
+   Add debug info to object files and executables for use with debuggers such
+   as gdb (or its many frontends).
 
-    --enable-debug_flag     Define __DEBUG__ and __WXDEBUG__ when
-                            compiling. This enable wxWidgets' very
-                            useful internal debugging tricks (such
-                            as automatically reporting illegal calls)
-                            to work. Note that program and library
-                            must be compiled with the same debug
-                            options.
+ * `--enable-debug_flag` \n
+   Define __DEBUG__ and __WXDEBUG__ when compiling. This enable wxWidgets' very
+   useful internal debugging tricks (such as automatically reporting illegal
+   calls) to work. Note that program and library must be compiled with the same
+   debug options.
 
-    --enable-debug          Same as --enable-debug_info and
-                            --enable-debug_flag together. Unless you have
-                            some very specific needs, you should use this
-                            option instead of --enable-debug_info/flag ones
-                            separately.
+ * `--enable-debug` \n
+   Same as --enable-debug_info and --enable-debug_flag together. Unless you
+   have some very specific needs, you should use this option instead of
+   --enable-debug_info/flag ones separately.
 
 To reduce the final libraries (or executables, when linking
 statically) size, many wxWidgets features may be disabled. Here
 is a list of some of them:
 
-    --disable-pnm           Disables PNM image format code.
+ * `--disable-pnm` \n           Disables PNM image format code.
 
-    --disable-gif           Disables GIF image format code.
+ * `--disable-gif` \n           Disables GIF image format code.
 
-    --disable-pcx           Disables PCX image format code.
+ * `--disable-pcx` \n           Disables PCX image format code.
 
-    --disable-iff           Disables IFF image format code.
+ * `--disable-iff` \n           Disables IFF image format code.
 
-    --disable-resources     Disables the use of *.wxr type resources.
+ * `--disable-resources` \n     Disables the use of *.wxr type resources.
 
-    --disable-threads       Disables threads. Will also disable sockets.
+ * `--disable-threads` \n       Disables threads. Will also disable sockets.
 
-    --disable-sockets       Disables sockets.
+ * `--disable-sockets` \n       Disables sockets.
 
-    --disable-dnd           Disables Drag'n'Drop.
+ * `--disable-dnd` \n           Disables Drag'n'Drop.
 
-    --disable-clipboard     Disables Clipboard.
+ * `--disable-clipboard` \n     Disables Clipboard.
 
-    --disable-streams       Disables the wxStream classes.
+ * `--disable-streams` \n       Disables the wxStream classes.
 
-    --disable-file          Disables the wxFile class.
+ * `--disable-file` \n          Disables the wxFile class.
 
-    --disable-textfile      Disables the wxTextFile class.
+ * `--disable-textfile` \n      Disables the wxTextFile class.
 
-    --disable-intl          Disables the internationalisation.
+ * `--disable-intl` \n          Disables the internationalisation.
 
-    --disable-validators    Disables validators.
+ * `--disable-validators` \n    Disables validators.
 
 Please remember that the full list of options can be seen in
 `configure --help` output.
