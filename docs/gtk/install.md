@@ -210,15 +210,13 @@ Some other general compilation options:
    as gdb (or its many frontends).
 
  * `--enable-debug_flag` \n
-   Define __DEBUG__ and __WXDEBUG__ when compiling. This enable wxWidgets' very
-   useful internal debugging tricks (such as automatically reporting illegal
-   calls) to work. Note that program and library must be compiled with the same
-   debug options.
+   Enable internal debugging checks, that are very useful during development
+   and allow to diagnose illegal parameters to wxWidgets functions as long as
+   the application doesn't predefine `NDEBUG` (see @ref overview_debugging).
 
  * `--enable-debug` \n
-   Same as --enable-debug_info and --enable-debug_flag together. Unless you
-   have some very specific needs, you should use this option instead of
-   --enable-debug_info/flag ones separately.
+   Same as `--enable-debug_info` and `--enable-debug_flag` together. Typically
+   this is the option you want to use.
 
 To reduce the final libraries (or executables, when linking
 statically) size, many wxWidgets features may be disabled. Here
