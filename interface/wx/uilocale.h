@@ -109,7 +109,8 @@ public:
         see wxLocaleIdent description for more details.
 
         If @a localeId is not recognized or not supported, default ("C") locale
-        is used instead.
+        is used instead. Additionally, if @a localeId is empty (see
+        wxLocaleIdent::IsEmpty()), an assertion failure is triggered.
      */
     explicit wxUILocale(const wxLocaleIdent& localeId);
 

@@ -158,6 +158,13 @@ const wxUILocale& wxUILocale::GetCurrent()
 
 wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
 {
+    if ( localeId.IsEmpty() )
+    {
+        wxFAIL_MSG( "Locale identifier must be initialized" );
+        m_impl = NULL;
+        return;
+    }
+
     m_impl = wxUILocaleImpl::CreateForLocale(localeId);
 }
 
