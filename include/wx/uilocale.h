@@ -45,39 +45,19 @@ public:
     }
 
     // Set language
-    wxLocaleIdent& Language(const wxString& language)
-    {
-        m_language = language;
-        return *this;
-    }
+    wxLocaleIdent& Language(const wxString& language);
 
     // Set region
-    wxLocaleIdent& Region(const wxString& region)
-    {
-        m_region = region;
-        return *this;
-    }
+    wxLocaleIdent& Region(const wxString& region);
 
-    // Set script (not supported under Unix)
-    wxLocaleIdent& Script(const wxString& script)
-    {
-        m_script = script;
-        return *this;
-    }
+    // Set script (not supported and ignored under Unix)
+    wxLocaleIdent& Script(const wxString& script);
 
     // Set charset (only supported under Unix)
-    wxLocaleIdent& Charset(const wxString& charset)
-    {
-        m_charset = charset;
-        return *this;
-    }
+    wxLocaleIdent& Charset(const wxString& charset);
 
     // Set modifier (only supported under Unix)
-    wxLocaleIdent& Modifier(const wxString& modifier)
-    {
-        m_modifier = modifier;
-        return *this;
-    }
+    wxLocaleIdent& Modifier(const wxString& modifier);
 
     // Accessors for the individual fields.
     const wxString& GetLanguage() const { return m_language; }

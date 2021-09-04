@@ -41,6 +41,44 @@ wxUILocale wxUILocale::ms_current;
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// wxLocaleIdent
+// ----------------------------------------------------------------------------
+
+wxLocaleIdent& wxLocaleIdent::Language(const wxString& language)
+{
+    m_language = language;
+    return *this;
+}
+
+wxLocaleIdent& wxLocaleIdent::Region(const wxString& region)
+{
+    m_region = region;
+    return *this;
+}
+
+wxLocaleIdent& wxLocaleIdent::Script(const wxString& script)
+{
+    m_script = script;
+    return *this;
+}
+
+wxLocaleIdent& wxLocaleIdent::Charset(const wxString& charset)
+{
+    m_charset = charset;
+    return *this;
+}
+
+wxLocaleIdent& wxLocaleIdent::Modifier(const wxString& modifier)
+{
+    m_modifier = modifier;
+    return *this;
+}
+
+// ----------------------------------------------------------------------------
+// wxUILocale
+// ----------------------------------------------------------------------------
+
 #ifndef __WINDOWS__
 
 /* static */
