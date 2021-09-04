@@ -1123,13 +1123,23 @@ bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
                             case VK_DELETE:
                             case VK_HOME:
                             case VK_END:
+                            case VK_LEFT:
+                            case VK_RIGHT:
                                 return false;
                         }
                     }
                     else // Shift is pressed
                     {
-                        if ( vkey == VK_INSERT || vkey == VK_DELETE )
-                            return false;
+                        switch ( vkey )
+                        {
+                            case VK_INSERT:
+                            case VK_DELETE:
+                            case VK_HOME:
+                            case VK_END:
+                            case VK_LEFT:
+                            case VK_RIGHT:
+                                return false;
+                        }
                     }
                     break;
 
