@@ -356,4 +356,20 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 #endif // wxUSE_UNICODE
 }
 
+// Test which can be used to check if the given locale tag is supported.
+TEST_CASE("wxUILocale::FromTag", "[uilocale][.]")
+{
+    wxString tag;
+    if ( !wxGetEnv("WX_TEST_LOCALE_TAG", &tag) )
+    {
+        FAIL("Specify WX_TEST_LOCALE_TAG");
+    }
+
+    const wxLocaleIdent locId = wxLocaleIdent::FromTag(tag);
+    REQUIRE( !locId.IsEmpty() );
+
+    const wxUILocale loc(locId);
+    WARN("Locale \"" << tag << "\" supported: " << loc.IsSupported() );
+}
+
 #endif // wxUSE_INTL
