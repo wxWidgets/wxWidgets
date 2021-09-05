@@ -5628,7 +5628,7 @@ bool wxGenericListCtrl::SortItems( wxListCtrlCompare fn, wxIntPtr data )
 // event handlers
 // ----------------------------------------------------------------------------
 
-void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxGenericListCtrl::OnSize(wxSizeEvent& event)
 {
     if (!m_mainWin) return;
 
@@ -5644,6 +5644,8 @@ void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
     m_mainWin->RecalculatePositionsAndRefresh();
 
     AdjustScrollbars();
+
+    event.Skip();
 }
 
 void wxGenericListCtrl::OnInternalIdle()
