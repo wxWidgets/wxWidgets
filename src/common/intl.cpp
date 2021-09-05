@@ -24,7 +24,6 @@
 #if wxUSE_INTL
 
 #ifndef WX_PRECOMP
-    #include "wx/dynarray.h"
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -52,6 +51,8 @@
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
 #include "wx/uilocale.h"
+
+#include "wx/private/uilocale.h"
 
 #ifdef __WIN32__
     #include "wx/msw/private/uilocale.h"
@@ -193,24 +194,33 @@ wxString wxLanguageInfo::GetLocaleName() const
 // wxLocale
 // ----------------------------------------------------------------------------
 
-#include "wx/arrimpl.cpp"
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray, WXDLLIMPEXP_BASE);
-WX_DEFINE_OBJARRAY(wxLanguageInfoArray)
+static wxLanguageInfos gs_languagesDB;
+static bool gs_languagesDBInitialized = false;
 
-wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
+const wxLanguageInfos& wxGetLanguageInfos()
+{
+    wxLocale::CreateLanguagesDB();
+
+    return gs_languagesDB;
+}
 
 /*static*/ void wxLocale::CreateLanguagesDB()
 {
-    if (ms_languagesDB == NULL)
+    if (!gs_languagesDBInitialized)
     {
-        ms_languagesDB = new wxLanguageInfoArray;
+        gs_languagesDBInitialized = true;
+
         InitLanguagesDB();
     }
 }
 
 /*static*/ void wxLocale::DestroyLanguagesDB()
 {
-    wxDELETE(ms_languagesDB);
+    if (gs_languagesDBInitialized)
+    {
+        gs_languagesDB.clear();
+        gs_languagesDBInitialized = false;
+    }
 }
 
 
@@ -476,7 +486,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
 
     // init i to avoid compiler warning
     size_t i = 0,
-        count = ms_languagesDB->GetCount();
+        count = gs_languagesDB.size();
 
 #ifdef __WXOSX__
     wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
@@ -493,7 +503,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     int langOnlyMatchIndex = wxNOT_FOUND;
     for ( i = 0; i < count; i++ )
     {
-        const wxString& fullname = ms_languagesDB->Item(i).CanonicalName;
+        const wxString& fullname = gs_languagesDB[i].CanonicalName;
         if ( langFull == fullname )
         {
             // Exact match, no need to look any further.
@@ -599,7 +609,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         wxString langFullWithModifier = langFull + modifier;
         for ( i = 0; i < count; i++ )
         {
-            if ( ms_languagesDB->Item(i).CanonicalName == langFullWithModifier )
+            if ( gs_languagesDB[i].CanonicalName == langFullWithModifier )
                 break;
         }
     }
@@ -609,7 +619,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     {
         for ( i = 0; i < count; i++ )
         {
-            if ( ms_languagesDB->Item(i).CanonicalName == langFull )
+            if ( gs_languagesDB[i].CanonicalName == langFull )
                 break;
         }
     }
@@ -619,7 +629,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     {
         for ( i = 0; i < count; i++ )
         {
-            if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName) == lang )
+            if ( ExtractLang(gs_languagesDB[i].CanonicalName) == lang )
             {
                 break;
             }
@@ -631,8 +641,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     {
         for ( i = 0; i < count; i++ )
         {
-            if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName)
-                    == langFull )
+            if ( ExtractLang(gs_languagesDB[i].CanonicalName) == langFull )
             {
                 break;
             }
@@ -648,7 +657,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         // find the name in verbose description.
         for ( i = 0; i < count; i++ )
         {
-            if (ms_languagesDB->Item(i).Description.CmpNoCase(langFull) == 0)
+            if (gs_languagesDB[i].Description.CmpNoCase(langFull) == 0)
             {
                 break;
             }
@@ -663,8 +672,8 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
 
         for ( i = 0; i < count; i++ )
         {
-            if (ms_languagesDB->Item(i).WinLang == lang &&
-                ms_languagesDB->Item(i).WinSublang == sublang)
+            if (gs_languagesDB[i].WinLang == lang &&
+                gs_languagesDB[i].WinSublang == sublang)
             {
                 break;
             }
@@ -676,7 +685,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     if ( i < count )
     {
         // we did find a matching entry, use it
-        return ms_languagesDB->Item(i).Language;
+        return gs_languagesDB[i].Language;
     }
 
     // no info about this language in the database
@@ -841,7 +850,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
 void wxLocale::AddLanguage(const wxLanguageInfo& info)
 {
     CreateLanguagesDB();
-    ms_languagesDB->Add(info);
+    gs_languagesDB.push_back(info);
 }
 
 /* static */
@@ -857,11 +866,11 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     if ( lang == wxLANGUAGE_UNKNOWN )
         return NULL;
 
-    const size_t count = ms_languagesDB->GetCount();
+    const size_t count = gs_languagesDB.size();
     for ( size_t i = 0; i < count; i++ )
     {
-        if ( ms_languagesDB->Item(i).Language == lang )
-            return &ms_languagesDB->Item(i);
+        if ( gs_languagesDB[i].Language == lang )
+            return &gs_languagesDB[i];
     }
 
     return NULL;
@@ -904,10 +913,10 @@ const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
 
     const wxLanguageInfo *infoRet = NULL;
 
-    const size_t count = ms_languagesDB->GetCount();
+    const size_t count = gs_languagesDB.size();
     for ( size_t i = 0; i < count; i++ )
     {
-        const wxLanguageInfo *info = &ms_languagesDB->Item(i);
+        const wxLanguageInfo *info = &gs_languagesDB[i];
 
         if ( wxStricmp(locale, info->CanonicalName) == 0 ||
                 wxStricmp(locale, info->Description) == 0 )
@@ -924,7 +933,7 @@ const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
             //
             // OTOH, maybe we had already found a language match and in this
             // case don't overwrite it because the entry for the default
-            // country always appears first in ms_languagesDB
+            // country always appears first in gs_languagesDB
             if ( !infoRet )
                 infoRet = info;
         }
@@ -1005,7 +1014,21 @@ bool wxLocale::IsAvailable(int lang)
     // Test if setting the locale works, then set it back.
     char * const oldLocale = wxStrdupA(setlocale(LC_ALL, NULL));
 
-    const bool available = wxSetlocaleTryAll(LC_ALL, info->CanonicalName);
+    wxLocaleIdent locId;
+    wxString region;
+    locId.Language(info->CanonicalName.BeforeFirst('_', &region));
+    if ( !region.empty() )
+    {
+        // We never have encoding in our canonical names, but we can have
+        // modifiers, so take them into account.
+        wxString mod;
+        locId.Region(region.BeforeFirst('@', &mod));
+
+        if ( !mod.empty() )
+            locId.Modifier(mod);
+    }
+
+    const bool available = wxSetlocaleTryAll(LC_ALL, locId);
 
     // restore the original locale
     wxSetlocale(LC_ALL, oldLocale);
@@ -1102,7 +1125,7 @@ bool IsAtTwoSingleQuotes(const wxString& fmt, wxString::const_iterator p)
 // our best.
 
 // The function is only exported because it is used in the unit test, it is not
-// part of the public API.
+// part of the public API (but it is also used by wxUILocaleImpl).
 WXDLLIMPEXP_BASE
 wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 {
@@ -1454,16 +1477,42 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 
 #endif // __WINDOWS__ || __WXOSX__
 
+wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
+{
+    switch ( index )
+    {
+        case wxLOCALE_THOUSANDS_SEP:
+            return wxString();
+
+        case wxLOCALE_DECIMAL_POINT:
+            return ".";
+
+        case wxLOCALE_SHORT_DATE_FMT:
+            return "%m/%d/%y";
+
+        case wxLOCALE_LONG_DATE_FMT:
+            return "%A, %B %d, %Y";
+
+        case wxLOCALE_TIME_FMT:
+            return "%H:%M:%S";
+
+        case wxLOCALE_DATE_TIME_FMT:
+            return "%m/%d/%y %H:%M:%S";
+
+        default:
+            wxFAIL_MSG( "unknown wxLocaleInfo" );
+    }
+
+    return wxString();
+}
+
 #if defined(__WINDOWS__)
 
-// This function is also used by wxUILocaleImpl, so don't make it private.
+// These functions are also used by wxUILocaleImpl, so don't make them private.
 extern wxString
 wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
 
-namespace
-{
-
-LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
+LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 {
     switch ( index )
     {
@@ -1482,6 +1531,9 @@ LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 
     return 0;
 }
+
+namespace
+{
 
 // This private function additionally checks consistency of the decimal
 // separator settings between MSW and CRT.
@@ -1543,7 +1595,7 @@ wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
         case wxLOCALE_SHORT_DATE_FMT:
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_TIME_FMT:
-            if ( ::GetLocaleInfo(lcid, GetLCTYPEFormatFromLocalInfo(index),
+            if ( ::GetLocaleInfo(lcid, wxGetLCTYPEFormatFromLocalInfo(index),
                                  buf, WXSIZEOF(buf)) )
             {
                 return wxTranslateFromUnicodeFormat(buf);
@@ -1600,29 +1652,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         // case, even LOCALE_INVARIANT is not quite the same as C locale (the
         // only difference is that it uses %Y instead of %y in the date format
         // but this difference is significant enough).
-        switch ( index )
-        {
-            case wxLOCALE_THOUSANDS_SEP:
-                return wxString();
-
-            case wxLOCALE_DECIMAL_POINT:
-                return ".";
-
-            case wxLOCALE_SHORT_DATE_FMT:
-                return "%m/%d/%y";
-
-            case wxLOCALE_LONG_DATE_FMT:
-                return "%A, %B %d, %Y";
-
-            case wxLOCALE_TIME_FMT:
-                return "%H:%M:%S";
-
-            case wxLOCALE_DATE_TIME_FMT:
-                return "%m/%d/%y %H:%M:%S";
-
-            default:
-                wxFAIL_MSG( "unknown wxLocaleInfo" );
-        }
+        return wxGetStdCLocaleInfo(index, cat);
     }
 
     // wxSetLocale() succeeded and so thread locale was set together with CRT one.
@@ -1720,34 +1750,10 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 
 #else // !__WINDOWS__ && !__WXOSX__, assume generic POSIX
 
-namespace
-{
-
-wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
-{
 #ifdef HAVE_LANGINFO_H
-    // array containing parameters for nl_langinfo() indexes by offset of index
-    // from wxLOCALE_SHORT_DATE_FMT
-    static const nl_item items[] =
-    {
-        D_FMT, D_T_FMT, D_T_FMT, T_FMT,
-    };
 
-    const int nlidx = index - wxLOCALE_SHORT_DATE_FMT;
-    if ( nlidx < 0 || nlidx >= (int)WXSIZEOF(items) )
-    {
-        wxFAIL_MSG( "logic error in GetInfo() code" );
-        return wxString();
-    }
-
-    const wxString fmt(nl_langinfo(items[nlidx]));
-
-    // just return the format returned by nl_langinfo() except for long date
-    // format which we need to recover from date/time format ourselves (but not
-    // if we failed completely)
-    if ( fmt.empty() || index != wxLOCALE_LONG_DATE_FMT )
-        return fmt;
-
+wxString wxGetDateFormatOnly(const wxString& fmt)
+{
     // this is not 100% precise but the idea is that a typical date/time format
     // under POSIX systems is a combination of a long date format with time one
     // so we should be able to get just the long date format by removing all
@@ -1789,19 +1795,9 @@ wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
     }
 
     return fmtDateOnly;
-#else // !HAVE_LANGINFO_H
-    wxUnusedVar(index);
-
-    // no fallback, let the application deal with unavailability of
-    // nl_langinfo() itself as there is no good way for us to do it (well, we
-    // could try to reverse engineer the format from strftime() output but this
-    // looks like too much trouble considering the relatively small number of
-    // systems without nl_langinfo() still in use)
-    return wxString();
-#endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
 }
 
-} // anonymous namespace
+#endif // HAVE_LANGINFO_H/
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
@@ -1843,18 +1839,30 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             }
             break;
 
+#ifdef HAVE_LANGINFO_H
+        case wxLOCALE_SHORT_DATE_FMT:
+            return nl_langinfo(D_FMT);
+
+        case wxLOCALE_DATE_TIME_FMT:
+            return nl_langinfo(D_T_FMT);
+
+        case wxLOCALE_TIME_FMT:
+            return nl_langinfo(T_FMT);
+
+        case wxLOCALE_LONG_DATE_FMT:
+            return wxGetDateFormatOnly(nl_langinfo(D_T_FMT));
+#else // !HAVE_LANGINFO_H
         case wxLOCALE_SHORT_DATE_FMT:
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_DATE_TIME_FMT:
         case wxLOCALE_TIME_FMT:
-            if ( cat != wxLOCALE_CAT_DATE && cat != wxLOCALE_CAT_DEFAULT )
-            {
-                wxFAIL_MSG( "invalid wxLocaleCategory" );
-                break;
-            }
-
-            return GetDateFormatFromLangInfo(index);
-
+            // no fallback, let the application deal with unavailability of
+            // nl_langinfo() itself as there is no good way for us to do it (well, we
+            // could try to reverse engineer the format from strftime() output but this
+            // looks like too much trouble considering the relatively small number of
+            // systems without nl_langinfo() still in use)
+            break;
+#endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
 
         default:
             wxFAIL_MSG( "unknown wxLocaleInfo value" );

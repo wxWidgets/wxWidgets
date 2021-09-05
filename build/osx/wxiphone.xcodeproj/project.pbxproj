@@ -538,8 +538,8 @@
 		99E7A46106C03484BA70D29E /* tif_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F8259CC99380CB8217DEF /* tif_unix.c */; };
 		99F7D7BFBB543A04AB728375 /* m_hline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECA4A44BEC2F3AED8CF0C911 /* m_hline.cpp */; };
 		9A178ED42D96329D8CBF9B89 /* tif_predict.c in Sources */ = {isa = PBXBuildFile; fileRef = 2FA01C426EAF38D3B9ED35AC /* tif_predict.c */; };
-		9A63148F193E33B5964DD029 /* uilocale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E4466371B7E3265AE7B1E0C /* uilocale.cpp */; };
-		9A63148F193E33B5964DD02A /* uilocale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E4466371B7E3265AE7B1E0D /* uilocale.cpp */; };
+		9A63148F193E33B5964DD029 /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E4466371B7E3265AE7B1E0C /* uilocale.mm */; };
+		9A63148F193E33B5964DD02A /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E4466371B7E3265AE7B1E0D /* uilocale.mm */; };
 		9A83D365AD1F37FA9C7030C2 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF330EAACFA53877BE289896 /* matrix.cpp */; };
 		9B3F9D04FB533D99B58BD519 /* jfdctfst.c in Sources */ = {isa = PBXBuildFile; fileRef = 029486D6A2EC3DE0902A6A24 /* jfdctfst.c */; };
 		9B6A35E706543CDAA6A5014A /* LexGui4Cli.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FFB767BD2C7235F293F45796 /* LexGui4Cli.cxx */; };
@@ -1148,8 +1148,8 @@
 		4BFEBC5061693DA0B52BC4AC /* pcre2_ord2utf.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_ord2utf.c; path = ../../3rdparty/pcre/src/pcre2_ord2utf.c; sourceTree = "<group>"; };
 		4C4649974D8B3A109D1BF145 /* art_internal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_internal.cpp; path = ../../src/ribbon/art_internal.cpp; sourceTree = "<group>"; };
 		4CB467F9898C3952A68D988B /* zutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = zutil.c; path = ../../src/zlib/zutil.c; sourceTree = "<group>"; };
-		4E4466371B7E3265AE7B1E0C /* uilocale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uilocale.cpp; path = ../../src/common/uilocale.cpp; sourceTree = "<group>"; };
-		4E4466371B7E3265AE7B1E0D /* uilocale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uilocale.cpp; path = ../../src/osx/core/uilocale.cpp; sourceTree = "<group>"; };
+		4E4466371B7E3265AE7B1E0C /* uilocale.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uilocale.mm; path = ../../src/common/uilocale.mm; sourceTree = "<group>"; };
+		4E4466371B7E3265AE7B1E0D /* uilocale.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uilocale.mm; path = ../../src/osx/core/uilocale.mm; sourceTree = "<group>"; };
 		4E74E9E53454331F8E10ECC5 /* pcre2_match_data.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_match_data.c; path = ../../3rdparty/pcre/src/pcre2_match_data.c; sourceTree = "<group>"; };
 		4EB3B255D20F3AE5A95230F6 /* LexCSS.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCSS.cxx; path = ../../src/stc/scintilla/lexers/LexCSS.cxx; sourceTree = "<group>"; };
 		4F58B88D42A93BD0B74ADF75 /* CallTip.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CallTip.cxx; path = ../../src/stc/scintilla/src/CallTip.cxx; sourceTree = "<group>"; };
@@ -2726,14 +2726,14 @@
 				47783A330B2A3B4EBB1CD95D /* fswatcherg.cpp */,
 				5BE1FB352696346BB642C044 /* secretstore.cpp */,
 				99A9D5F9254D35BE8F4176A4 /* lzmastream.cpp */,
-				4E4466371B7E3265AE7B1E0C /* uilocale.cpp */,
+				4E4466371B7E3265AE7B1E0C /* uilocale.mm */,
 				7C97C1F26B5A38C49543060C /* mimetype.cpp */,
 				5168ADF7BE39351F8F24E1E6 /* cfstring.cpp */,
 				5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */,
 				D5F9383D1CE931499F339D85 /* strconv_cf.cpp */,
 				2ED0C0702D2734D9B08FC31D /* utils_base.mm */,
 				5BE1FB352696346BB642C045 /* secretstore.cpp */,
-				4E4466371B7E3265AE7B1E0D /* uilocale.cpp */,
+				4E4466371B7E3265AE7B1E0D /* uilocale.mm */,
 				47F784C2BB5A3B5DAD276583 /* fdiodispatcher.cpp */,
 				A5D569A4DE643DC8B0C28087 /* selectdispatcher.cpp */,
 				B40E0F6AA0273ACD9BDEAD72 /* appunix.cpp */,
@@ -3066,14 +3066,14 @@
 				E49F0D43B5A63EF1A57A7112 /* fswatcherg.cpp in Sources */,
 				B0FD1B96EAE635AFBFCF2C91 /* secretstore.cpp in Sources */,
 				A486A28E216D320AB57452D3 /* lzmastream.cpp in Sources */,
-				9A63148F193E33B5964DD029 /* uilocale.cpp in Sources */,
+				9A63148F193E33B5964DD029 /* uilocale.mm in Sources */,
 				4657E7382E9E3EDC8DE2401E /* mimetype.cpp in Sources */,
 				1DBDF75500D73A3098015E7F /* cfstring.cpp in Sources */,
 				9FBC642677C63D01AA2511BC /* evtloop_cf.cpp in Sources */,
 				AAAB5DF8E60736D88273DCFE /* strconv_cf.cpp in Sources */,
 				68C300D096BF39239876D043 /* utils_base.mm in Sources */,
 				B0FD1B96EAE635AFBFCF2C92 /* secretstore.cpp in Sources */,
-				9A63148F193E33B5964DD02A /* uilocale.cpp in Sources */,
+				9A63148F193E33B5964DD02A /* uilocale.mm in Sources */,
 				D36E76A4CAF5352D9397E1FF /* fdiodispatcher.cpp in Sources */,
 				D3FB75C8E3A73AE38EE8A6F6 /* selectdispatcher.cpp in Sources */,
 				BAAB6B1D80A33843A8436B10 /* appunix.cpp in Sources */,

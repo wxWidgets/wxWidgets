@@ -111,7 +111,7 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Set environment variables
+      - name: Set up build system
         run: |
           echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
 
@@ -149,8 +149,10 @@ jobs:
 
           echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
 
-      - name: Before install
-        run: |
+          # Install locales used by our tests to run all the tests instead of
+          # skipping them.
+          sudo locale-gen de_DE.utf8 de_CH.utf8 en_US.utf8 fr_FR.utf8 sv_SE.utf8
+
           ./build/tools/before_install.sh
 
       - name: Configuring
