@@ -808,7 +808,7 @@ void wxFileListCtrl::OnListColClick( wxListEvent &event )
 
 void wxFileListCtrl::OnSize( wxSizeEvent &event )
 {
-    event.Skip();
+    wxWindow::OnSize(event);
 
     if ( InReportView() )
     {
