@@ -439,7 +439,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     wxRibbonButtonBarButtonBase* base = new wxRibbonButtonBarButtonBase;
     base->id = button_id;
     base->label = label;
-    base->SetBitmaps(GetAncestorRibbonBar(), m_bitmap_size_large, m_bitmap_size_small,
+    base->SetBitmaps(m_ribbonBar, m_bitmap_size_large, m_bitmap_size_small,
                      bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     base->kind = kind;
     base->help_string = help_string;
@@ -679,7 +679,7 @@ void wxRibbonButtonBar::SetButtonIcon(
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     if(base == NULL)
         return;
-    base->SetBitmaps(GetAncestorRibbonBar(), m_bitmap_size_large, m_bitmap_size_small,
+    base->SetBitmaps(m_ribbonBar, m_bitmap_size_large, m_bitmap_size_small,
                      bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     Refresh();
 }
@@ -933,8 +933,6 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
 
-    wxRibbonBar* const ribbon = GetAncestorRibbonBar();
-
     size_t btn_count = layout->buttons.Count();
     size_t btn_i;
     for(btn_i = 0; btn_i < btn_count; ++btn_i)
@@ -944,7 +942,7 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         wxRect rect(button.position + m_layout_offset, base->sizes[button.size].size);
 
         wxBitmap bitmap, bitmap_small;
-        base->GetBitmaps(ribbon,
+        base->GetBitmaps(m_ribbonBar,
                          m_bitmap_size_large, m_bitmap_size_small, bitmap,
                          bitmap_small);
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
@@ -975,6 +973,9 @@ void wxRibbonButtonBar::OnSize(wxSizeEvent& evt)
 
 void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
 {
+    if ( m_parent )
+        m_ribbonBar = GetAncestorRibbonBar();
+
     m_bitmap_size_large = wxSize(32, 32);
     m_bitmap_size_small = wxSize(16, 16);
 
