@@ -973,8 +973,10 @@ void wxRibbonButtonBar::OnSize(wxSizeEvent& evt)
 
 void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
 {
-    if ( m_parent )
-        m_ribbonBar = GetAncestorRibbonBar();
+    // This can initialize it to NULL when we're called from the default ctor,
+    // but will set it to the correct value when used from non-default ctor or
+    // Create() later.
+    m_ribbonBar = GetAncestorRibbonBar();
 
     m_bitmap_size_large = wxSize(32, 32);
     m_bitmap_size_small = wxSize(16, 16);
