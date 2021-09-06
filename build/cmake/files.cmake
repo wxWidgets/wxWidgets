@@ -2244,6 +2244,7 @@ set(DFB_LOWLEVEL_SRC
     src/dfb/utils.cpp
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
+    src/generic/desktopenv.cpp
 )
 
 set(DFB_LOWLEVEL_HDR
