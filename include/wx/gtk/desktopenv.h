@@ -1,0 +1,23 @@
+//////////////////////////////////////////////////////////////////////////////
+// Name:        wx/gtk/desktopenv.h
+// Purpose:     wxDesktopEnv class interface
+// Author:      Igor Korot
+// Created:     2021-09-05
+// Copyright:   (c) 2021 wxWidgets development team
+// Licence:     wxWidgets licence
+///////////////////////////////////////////////////////////////////////////////
+
+#ifndef _WX_GTK_DESKTOPENV_H_
+#define _WX_GTK_DESKTOPENV_H_
+
+// ----------------------------------------------------------------------------
+// Desktop Environment
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDesktopEnv : public wxDesktopEnvBase
+{
+public:
+    virtual static bool MoveFileToRecycleBin(const wxString &fileName) wxOVERRIDE;
+};
+
+#endif
