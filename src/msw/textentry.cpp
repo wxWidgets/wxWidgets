@@ -1132,7 +1132,6 @@ bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
                     {
                         switch ( vkey )
                         {
-                            case ' ':
                             case VK_INSERT:
                             case VK_DELETE:
                             case VK_HOME:
