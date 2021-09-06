@@ -149,7 +149,7 @@ public:
     // this is currently used only to take into account the border flags
     virtual void RecreateWidget() = 0;
 
-    // apply current atrributes to the widget(s)
+    // apply current attributes to the widget(s)
     void SetUpWidget();
 
     // the default attributes for the widget

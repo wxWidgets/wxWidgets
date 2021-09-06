@@ -2773,7 +2773,7 @@ void FormMain::OnColourScheme( wxCommandEvent& event )
 void FormMain::OnCatColoursUpdateUI(wxUpdateUIEvent& WXUNUSED(event))
 {
     // Prevent menu item from being checked
-    // if it is selected from imroper page.
+    // if it is selected from improper page.
     const wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
     m_itemCatColours->SetCheckable(
          pg->GetPropertyByName("Appearance") &&

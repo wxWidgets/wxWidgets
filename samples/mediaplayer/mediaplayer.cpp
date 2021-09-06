@@ -15,7 +15,7 @@
 // of the wxMediaCtrl class in wxWidgets.
 //
 // To use this sample, simply select Open File from the file menu,
-// select the file you want to play - and MediaPlayer will play the file in a
+// select the file you want to play - and MediaPlayer will play the file in
 // the current notebook page, showing video if necessary.
 //
 // You can select one of the menu options, or move the slider around
@@ -906,7 +906,7 @@ void wxMediaPlayerFrame::DoOpenFile(const wxString& path, bool bNewPage)
 // ----------------------------------------------------------------------------
 // wxMediaPlayerFrame::DoPlayFile
 //
-// Pauses the file if its the currently playing file,
+// Pauses the file if it's the currently playing file,
 // otherwise it plays the file
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
@@ -1499,7 +1499,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
                                    szBackend);
 // you could change the cursor here like
 //    m_mediactrl->SetCursor(wxCURSOR_BLANK);
-// note that this may not effect it if SetPlayerControls
+// note that this may not affect it if SetPlayerControls
 // is set to something else than wxMEDIACTRLPLAYERCONTROLS_NONE
     wxASSERT_MSG(bOK, "Could not create media control!");
     wxUnusedVar(bOK);

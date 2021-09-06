@@ -427,7 +427,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
 
     // Sort in descending order so that the last
     // row will be deleted first. Otherwise the
-    // remaining indeces would all be wrong.
+    // remaining indices would all be wrong.
     rows.Sort( my_sort_reverse );
     for (i = 0; i < rows.GetCount(); i++)
     {

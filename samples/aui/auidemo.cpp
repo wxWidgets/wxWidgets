@@ -1401,7 +1401,7 @@ void MyFrame::OnNotebookPageChanging(wxAuiNotebookEvent& evt)
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
 {
     // for the purpose of this test application, explicitly
-    // allow all noteboko drag and drop events
+    // allow all notebook drag and drop events
     evt.Allow();
 }
 

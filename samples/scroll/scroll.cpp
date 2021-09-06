@@ -325,7 +325,7 @@ private:
         GetClientSize( &size_x, &size_y );
 
         // First cell: (0,0)(100,25)
-        // It it on screen?
+        // Is it on screen?
         if ((0+100-scroll_x > 0) && (0+25-scroll_y > 0) &&
             (0-scroll_x < size_x) && (0-scroll_y < size_y))
         {
@@ -339,7 +339,7 @@ private:
 
 
         // Second cell: (200,0)(100,25)
-        // It it on screen?
+        // Is it on screen?
         if ((200+100-scroll_x > 0) && (0+25-scroll_y > 0) &&
             (200-scroll_x < size_x) && (0-scroll_y < size_y))
         {
