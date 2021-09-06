@@ -213,7 +213,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 {
     // This reduces flicker effects - even better would be to define
     // OnEraseBackground to do nothing. When the tree control's scrollbars are
-    // show or hidden, the frame is sent a background erase event.
+    // shown or hidden, the frame is sent a background erase event.
     SetBackgroundColour(*wxWHITE);
 
     // Give it an icon
@@ -1039,7 +1039,7 @@ void MyTreeCtrl::CreateStateImageList(bool del)
         int width  = icons[0].GetWidth(),
             height = icons[0].GetHeight();
 
-        // Make an state image list containing small icons
+        // Make a state image list containing small icons
         states = new wxImageList(width, height, true);
 
         for ( size_t i = 0; i < WXSIZEOF(icons); i++ )

@@ -78,9 +78,9 @@ protected:
     long GetHeaderStyleFlags() const;
     // reset column style
     void ResetColumnStyle(int col);
-    // compose columnm style flags based on selections
+    // compose column style flags based on selections
     int GetColumnStyleFlags(int col) const;
-    // get columnm alignment flags based on selection
+    // get column alignment flags based on selection
     wxAlignment GetColumnAlignmentFlag(int col) const;
 
     // the control itself and the sizer it is in

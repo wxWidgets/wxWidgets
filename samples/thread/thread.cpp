@@ -260,7 +260,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// an helper dialog used by MyFrame::OnStartGUIThread
+// a helper dialog used by MyFrame::OnStartGUIThread
 // ----------------------------------------------------------------------------
 
 class MyImageDialog: public wxDialog

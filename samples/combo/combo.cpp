@@ -331,7 +331,7 @@ public:
     }
 
     //
-    // Utilies for item manipulation
+    // Utilities for item manipulation
     //
 
     void AddSelection( const wxString& selstr )
