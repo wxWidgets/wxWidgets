@@ -298,6 +298,11 @@ wxListHeaderData::wxListHeaderData( const wxListItem &item )
     Init();
 
     SetItem( item );
+
+    // Always give some initial width to the new columns (it's still possible
+    // to set the width to 0 explicitly, however).
+    if ( !(m_mask & wxLIST_MASK_WIDTH) )
+        SetWidth(wxLIST_DEFAULT_COL_WIDTH);
 }
 
 void wxListHeaderData::SetItem( const wxListItem &item )
@@ -313,9 +318,8 @@ void wxListHeaderData::SetItem( const wxListItem &item )
     if ( m_mask & wxLIST_MASK_FORMAT )
         m_format = item.m_format;
 
-    // Always give some initial width to the new columns (it's still possible
-    // to set the width to 0 explicitly, however).
-    SetWidth(m_mask & wxLIST_MASK_WIDTH ? item.m_width : wxLIST_DEFAULT_COL_WIDTH);
+    if ( m_mask & wxLIST_MASK_WIDTH )
+        SetWidth(item.m_width);
 
     if ( m_mask & wxLIST_MASK_STATE )
         SetState(item.m_state);
