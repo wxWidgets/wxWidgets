@@ -199,6 +199,14 @@ jobs:
           exit $rc
         fi
 
+    - name: Testing GUI
+      if: matrix.skip_testing != true
+      working-directory: tests
+      run: |
+        export ASAN_OPTIONS=fast_unwind_on_malloc=0
+        # Explicitly use bash because /bin/sh doesn't have pipefail option
+        /bin/bash -o pipefail -c "./test_gui"
+
     - name: Building samples
       if: matrix.skip_testing != true && matrix.skip_samples != true
       run: |
