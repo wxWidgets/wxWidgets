@@ -2037,7 +2037,7 @@ wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
             return wxGRID_VALUE_NUMBER;
 
         case Col_Severity:
-            // fall through (TODO should be a list)
+            wxFALLTHROUGH;
 
         case Col_Summary:
             return wxString::Format("%s:80", wxGRID_VALUE_STRING);
