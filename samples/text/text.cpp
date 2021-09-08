@@ -1126,17 +1126,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if wxUSE_SPELLCHECK
     (*m_text) << "\n";
 
-    // Enable grammar check just for demonstration purposes (note that it's
-    // only supported under Mac, but spell checking will be enabled under the
-    // other platforms too, if supported). If we didn't want to enable it, we
-    // could omit the EnableProofCheck() argument entirely.
-    if ( !m_text->EnableProofCheck(wxTextProofOptions::Default().GrammarCheck()) )
+    if ( m_text->EnableProofCheck(wxTextProofOptions::Default()) )
     {
-        (*m_text) << "Spell checking is not available on this platform, sorry.";
-    }
-    else
-    {
-        // Break the string in several parts to avoid misspellings in the sources.
         (*m_text) << "Spell checking is enabled, mis"
                       "s"
                       "spelled words should be highlighted.";
