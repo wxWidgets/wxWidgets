@@ -1410,8 +1410,11 @@ public:
 
         Currently this is supported in wxMSW (when running under Windows 8 or
         later), wxGTK when using GTK 3 and wxOSX. In addition, wxMSW requires
-        that the text control has the wxTE_RICH2 style set. wxGTK3 and wxOSX
-        require that the control has the wxTE_MULTILINE style.
+        that the text control has the wxTE_RICH2 style set, while wxOSX
+        requires that the control has the wxTE_MULTILINE style.
+
+        When using wxGTK, this method only works if gspell library was
+        available during the library build.
 
         @param options
             A wxTextProofOptions object specifying the desired behaviour

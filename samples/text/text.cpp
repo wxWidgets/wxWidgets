@@ -1123,6 +1123,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_text->SetInsertionPoint(0);
     m_text->WriteText( "Prepended. " );
 
+#if wxUSE_SPELLCHECK
+    if ( m_text->EnableProofCheck(wxTextProofOptions::Default()) )
+    {
+        // Break the string in several parts to avoid misspellings in the sources.
+        (*m_text) << " Mis"
+                      "s"
+                      "spelled.";
+    }
+#endif
+
     m_password = new MyTextCtrl( this, wxID_ANY, "",
       wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
     m_password->SetHint("Don't use 12345 here");
@@ -1221,7 +1231,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     }
     else
     {
-        // Break the string in several parts to avoid misspellings in the sources.
         (*m_enter) << "Spell checking is enabled, mis"
                       "s"
                       "spelled words should be highlighted.";

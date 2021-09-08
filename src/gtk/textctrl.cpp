@@ -34,7 +34,7 @@
 
 #if wxUSE_SPELLCHECK && defined(__WXGTK3__)
 extern "C" {
-#include <gtkspell-3.0/gtkspell/gtkspell.h>
+#include <gspell-1/gspell/gspell.h>
 }
 #endif // wxUSE_SPELLCHECK && __WXGTK3__
 
@@ -1027,48 +1027,52 @@ void wxTextCtrl::GTKSetJustification()
 
 bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
 {
-    wxCHECK_MSG( IsMultiLine(), false,
-                "Unable to enable spell check on control "
-                "which does not have wxTE_MULTILINE style" );
-
-    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
-    wxCHECK_MSG( textview, false, wxS("wxTextCtrl is not a GtkTextView"));
-
-    GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
-
-    if ( options.IsSpellCheckEnabled() )
+    if ( IsMultiLine() )
     {
+        GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+        wxCHECK_MSG( textview, false, wxS("wxTextCtrl is not a GtkTextView") );
+
+        GspellTextView *spell = gspell_text_view_get_from_gtk_text_view (textview);
         if ( !spell )
-        {
-            spell = gtk_spell_checker_new();
-            gtk_spell_checker_attach(spell, textview);
-        }
-
-        wxString lang = options.GetLang();
-
-        if ( !gtk_spell_checker_set_language(spell,
-                                    lang.empty() ? NULL : (const gchar *)lang.utf8_str(),
-                                    NULL) )
             return false;
+
+        gspell_text_view_basic_setup(spell);
+        gspell_text_view_set_inline_spell_checking(spell, options.IsSpellCheckEnabled());
+        gspell_text_view_set_enable_language_menu(spell, options.IsSpellCheckEnabled());
     }
     else
     {
-        if ( spell )
-            gtk_spell_checker_detach(spell);
+        GtkEntry *entry = GTK_ENTRY(m_text);
+        wxCHECK_MSG( entry, false, wxS("wxTextCtrl is not a GtkEntry") );
+
+        GspellEntry *spell = gspell_entry_get_from_gtk_entry(entry);
+        if ( !spell )
+            return false;
+
+        gspell_entry_basic_setup(spell);
+        gspell_entry_set_inline_spell_checking(spell, options.IsSpellCheckEnabled());
     }
 
-   return GetProofCheckOptions().IsSpellCheckEnabled();
+    return GetProofCheckOptions().IsSpellCheckEnabled();
 }
 
 wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
 {
     wxTextProofOptions opts = wxTextProofOptions::Disable();
 
-    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
-
-    if ( IsMultiLine() && textview )
+    if ( IsMultiLine() )
     {
-        if ( gtk_spell_checker_get_from_text_view(textview) )
+        GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+
+        if ( textview && gspell_text_view_get_from_gtk_text_view(textview) )
+            opts.SpellCheck();
+    }
+
+    else
+    {
+        GtkEntry *entry = GTK_ENTRY(m_text);
+
+        if ( entry && gspell_entry_get_from_gtk_entry(entry) )
             opts.SpellCheck();
     }
 
