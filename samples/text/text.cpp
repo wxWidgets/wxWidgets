@@ -1123,6 +1123,26 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_text->SetInsertionPoint(0);
     m_text->WriteText( "Prepended. " );
 
+#if wxUSE_SPELLCHECK
+    (*m_text) << "\n";
+
+    // Enable grammar check just for demonstration purposes (note that it's
+    // only supported under Mac, but spell checking will be enabled under the
+    // other platforms too, if supported). If we didn't want to enable it, we
+    // could omit the EnableProofCheck() argument entirely.
+    if ( !m_text->EnableProofCheck(wxTextProofOptions::Default().GrammarCheck()) )
+    {
+        (*m_text) << "Spell checking is not available on this platform, sorry.";
+    }
+    else
+    {
+        // Break the string in several parts to avoid misspellings in the sources.
+        (*m_text) << "Spell checking is enabled, mis"
+                      "s"
+                      "spelled words should be highlighted.";
+    }
+#endif
+
     m_password = new MyTextCtrl( this, wxID_ANY, "",
       wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
     m_password->SetHint("Don't use 12345 here");
