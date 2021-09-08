@@ -2120,7 +2120,11 @@ TEST_CASE("wxImage::InitAlpha", "[image][initalpha]")
         REQUIRE_FALSE(img.HasMask());
 
         wxImage imgRes = img;
+#ifdef __WXDEBUG__
         CHECK_THROWS(imgRes.InitAlpha());
+#else
+        imgRes.InitAlpha();
+#endif
         REQUIRE(imgRes.HasAlpha() == true);
         REQUIRE_FALSE(imgRes.HasMask());
 
@@ -2151,7 +2155,11 @@ TEST_CASE("wxImage::InitAlpha", "[image][initalpha]")
         REQUIRE(img.HasMask() == true);
 
         wxImage imgRes = img;
+#ifdef __WXDEBUG__
         CHECK_THROWS(imgRes.InitAlpha());
+#else
+        imgRes.InitAlpha();
+#endif
         REQUIRE(imgRes.HasAlpha() == true);
         REQUIRE(imgRes.HasMask() == true);
 
