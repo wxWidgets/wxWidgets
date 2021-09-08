@@ -197,6 +197,10 @@ public:
     // get the popup window containing the popup control
     wxWindow *GetPopupWindow() const { return m_winPopup; }
 
+    // Set the control to use instead of the default text control for the main
+    // (always visible) part of the combobox.
+    void SetMainControl(wxWindow* win);
+
     // Get the text control which is part of the combobox.
     wxTextCtrl *GetTextCtrl() const { return m_text; }
 
@@ -623,8 +627,12 @@ protected:
     // This is used when control is unfocused and m_valueString is empty
     wxString                m_hintText;
 
-    // the text control and button we show all the time
+    // This pointer is non-null if we use a text control, and not some other
+    // window, as the main control.
     wxTextCtrl*             m_text;
+
+    // the window and button we show all the time
+    wxWindow*               m_mainWindow;
     wxWindow*               m_btn;
 
     // wxPopupWindow or similar containing the window managed by the interface.

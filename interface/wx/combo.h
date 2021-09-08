@@ -751,6 +751,47 @@ public:
     */
     virtual void SetInsertionPointEnd();
 
+    /**
+        Uses the given window instead of the default text control as the main
+        window of the combo control.
+
+        By default, combo controls without @c wxCB_READONLY style create a
+        wxTextCtrl which shows the current value and allows to edit it. This
+        method allows to use some other window instead of this wxTextCtrl.
+
+        This method can be called after creating the combo fully, however in
+        this case a wxTextCtrl is unnecessarily created just to be immediately
+        destroyed when it's replaced by a custom window. If you wish to avoid
+        this, you can use the following approach, also shown in the combo
+        sample:
+
+        @code
+            // Create the combo control using its default ctor.
+            wxComboCtrl* combo = new wxComboCtrl();
+
+            // Create the custom main control using its default ctor too.
+            SomeWindow* main = new SomeWindow();
+
+            // Set the custom main control before creating the combo.
+            combo->SetMainControl(main);
+
+            // And only create it now: wxTextCtrl won't be unnecessarily
+            // created because the combo already has a main window.
+            combo->Create(panel, wxID_ANY, wxEmptyString);
+
+            // Finally create the main window itself, now that its parent was
+            // created.
+            main->Create(combo, ...);
+        @endcode
+
+        Note that when a custom main window is used, none of the methods of
+        this class inherited from wxTextEntry, such as SetValue(), Replace(),
+        SetInsertionPoint() etc do anything and simply return.
+
+        @since 3.1.6
+    */
+    void SetMainControl(wxWindow* win);
+
     //@{
     /**
         Attempts to set the control margins. When margins are given as wxPoint,

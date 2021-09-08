@@ -748,6 +748,7 @@ void wxComboCtrlBase::Init()
     m_popupWinState = Hidden;
     m_btn = NULL;
     m_text = NULL;
+    m_mainWindow = NULL;
     m_popupInterface = NULL;
 
 #if !wxUSE_POPUPWIN
@@ -826,8 +827,33 @@ bool wxComboCtrlBase::Create(wxWindow *parent,
 }
 
 void
+wxComboCtrlBase::SetMainControl(wxWindow* win)
+{
+    // We can't have both a custom window and a text control, so get rid of the
+    // latter if we have it.
+    if ( m_text )
+    {
+        m_text->Destroy();
+
+        // Note that we currently always set it to NULL, even if the custom
+        // window is a (subclass of) wxTextCtrl because our m_text must be a
+        // wxComboCtrlTextCtrl for things to work correctly.
+        m_text = NULL;
+    }
+
+    // We don't do anything with the previous main window, if any, it's the
+    // caller's responsibility to delete or hide it, as needed.
+    m_mainWindow = win;
+}
+
+void
 wxComboCtrlBase::CreateTextCtrl(int style)
 {
+    // If we're using a custom main window explicitly set using
+    // SetMainControl(), don't recreate it and just keep using it.
+    if ( m_mainWindow && !m_text )
+        return;
+
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
         if ( m_text )
@@ -843,6 +869,8 @@ wxComboCtrlBase::CreateTextCtrl(int style)
             style |= wxTE_PROCESS_ENTER;
 
         m_text = new wxComboCtrlTextCtrl();
+        m_mainWindow = m_text;
+
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
                        style);
@@ -1036,7 +1064,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     m_tcArea.height = sz.y - ((m_widthCustomBorder+FOCUS_RING)*2);
 
 /*
-    if ( m_text )
+    if ( m_mainWindow )
     {
         ::wxMessageBox(wxString::Format(wxT("ButtonArea (%i,%i,%i,%i)\n"),m_btnArea.x,m_btnArea.y,m_btnArea.width,m_btnArea.height) +
                        wxString::Format(wxT("TextCtrlArea (%i,%i,%i,%i)"),m_tcArea.x,m_tcArea.y,m_tcArea.width,m_tcArea.height));
@@ -1046,12 +1074,14 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
 
 void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust )
 {
-    if ( !m_text )
+    if ( !m_mainWindow || !m_mainWindow->GetHandle() )
         return;
 
     wxSize sz = GetClientSize();
 
-    if ( (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
+    // This function actually positions any main window, not just a text
+    // control, but it only does any special adjustments for m_text.
+    if ( m_text && (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
     {
         int x;
 
@@ -1096,10 +1126,11 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     }
     else
     {
-        // If it has border, have textctrl fill the entire text field.
+        // If the main window has border or is not a text control at all, have
+        // it fill the entire available space.
         int w = m_tcArea.width - m_widthCustomPaint;
         if (w < 0) w = 0;
-        m_text->SetSize( m_tcArea.x + m_widthCustomPaint,
+        m_mainWindow->SetSize( m_tcArea.x + m_widthCustomPaint,
                          m_tcArea.y,
                          w,
                          m_tcArea.height );
@@ -1108,7 +1139,8 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
 
 wxSize wxComboCtrlBase::DoGetBestSize() const
 {
-    int width = m_text ? m_text->GetBestSize().x : FromDIP(80);
+    int width = m_mainWindow && m_mainWindow->GetHandle()
+                    ? m_mainWindow->GetBestSize().x : FromDIP(80);
 
     return GetSizeFromTextSize(width);
 }
@@ -1229,8 +1261,8 @@ bool wxComboCtrlBase::Enable(bool enable)
 
     if ( m_btn )
         m_btn->Enable(enable);
-    if ( m_text )
-        m_text->Enable(enable);
+    if ( m_mainWindow )
+        m_mainWindow->Enable(enable);
 
     Refresh();
 
@@ -1245,8 +1277,8 @@ bool wxComboCtrlBase::Show(bool show)
     if (m_btn)
         m_btn->Show(show);
 
-    if (m_text)
-        m_text->Show(show);
+    if (m_mainWindow)
+        m_mainWindow->Show(show);
 
     return true;
 }
@@ -1256,14 +1288,14 @@ bool wxComboCtrlBase::SetFont ( const wxFont& font )
     if ( !wxControl::SetFont(font) )
         return false;
 
-    if ( m_text )
+    if ( m_mainWindow )
     {
         // Without hiding the wxTextCtrl there would be some
         // visible 'flicker' (at least on Windows XP).
-        m_text->Hide();
-        m_text->SetFont(font);
+        m_mainWindow->Hide();
+        m_mainWindow->SetFont(font);
         OnResize();
-        m_text->Show();
+        m_mainWindow->Show();
     }
 
     return true;
@@ -1278,12 +1310,12 @@ void wxComboCtrlBase::DoSetToolTip(wxToolTip *tooltip)
     if ( tooltip )
     {
         const wxString &tip = tooltip->GetTip();
-        if ( m_text ) m_text->SetToolTip(tip);
+        if ( m_mainWindow ) m_mainWindow->SetToolTip(tip);
         if ( m_btn ) m_btn->SetToolTip(tip);
     }
     else
     {
-        if ( m_text ) m_text->SetToolTip( NULL );
+        if ( m_mainWindow ) m_mainWindow->SetToolTip( NULL );
         if ( m_btn ) m_btn->SetToolTip( NULL );
     }
 }
@@ -1293,8 +1325,8 @@ bool wxComboCtrlBase::SetForegroundColour(const wxColour& colour)
 {
     if ( wxControl::SetForegroundColour(colour) )
     {
-        if ( m_text )
-            m_text->SetForegroundColour(colour);
+        if ( m_mainWindow )
+            m_mainWindow->SetForegroundColour(colour);
         return true;
     }
     return false;
@@ -1302,8 +1334,8 @@ bool wxComboCtrlBase::SetForegroundColour(const wxColour& colour)
 
 bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
 {
-    if ( m_text )
-        m_text->SetBackgroundColour(colour);
+    if ( m_mainWindow )
+        m_mainWindow->SetBackgroundColour(colour);
     m_tcBgCol = colour;
     m_hasTcBgCol = true;
     return true;
@@ -1311,8 +1343,8 @@ bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
 
 wxColour wxComboCtrlBase::GetBackgroundColour() const
 {
-    if ( m_text )
-        return m_text->GetBackgroundColour();
+    if ( m_mainWindow )
+        return m_mainWindow->GetBackgroundColour();
     return m_tcBgCol;
 }
 
@@ -1824,10 +1856,10 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
-        if ( !m_resetFocus && GetTextCtrl() && !GetTextCtrl()->HasFocus() )
+        if ( !m_resetFocus && m_mainWindow && !m_mainWindow->HasFocus() )
         {
             m_resetFocus = true;
-            GetTextCtrl()->SetFocus();
+            m_mainWindow->SetFocus();
             m_resetFocus = false;
         }
     }
@@ -1840,8 +1872,8 @@ void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )
     if ( m_resetFocus )
     {
         m_resetFocus = false;
-        if ( GetTextCtrl() )
-            GetTextCtrl()->SetFocus();
+        if ( m_mainWindow )
+            m_mainWindow->SetFocus();
     }
 }
 
@@ -2387,14 +2419,14 @@ void wxComboCtrlBase::SetButtonBitmaps( const wxBitmap& bmpNormal,
 
 void wxComboCtrlBase::SetCustomPaintWidth( int width )
 {
-    if ( m_text )
+    if ( m_mainWindow )
     {
-        // move textctrl accordingly
-        wxRect r = m_text->GetRect();
+        // move the main window accordingly
+        wxRect r = m_mainWindow->GetRect();
         int inc = width - m_widthCustomPaint;
         r.x += inc;
         r.width -= inc;
-        m_text->SetSize( r );
+        m_mainWindow->SetSize( r );
     }
 
     m_widthCustomPaint = width;
