@@ -918,7 +918,6 @@ wxComboCtrlBase::~wxComboCtrlBase()
 void wxComboCtrlBase::CalculateAreas( int btnWidth )
 {
     wxSize sz = GetClientSize();
-    int customBorder = m_widthCustomBorder;
     int btnBorder; // border for button only
 
     // check if button should really be outside the border: we'll do it it if
@@ -941,7 +940,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     else
     {
         m_iFlags &= ~(wxCC_IFLAG_BUTTON_OUTSIDE);
-        btnBorder = customBorder;
+        btnBorder = m_widthCustomBorder;
     }
 
     // Defaul indentation
@@ -1008,9 +1007,9 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
             butHeight = bmpReqHeight;
 
         // Need to fix height?
-        if ( (sz.y-(customBorder*2)) < butHeight && btnWidth == 0 )
+        if ( (sz.y-(m_widthCustomBorder*2)) < butHeight && btnWidth == 0 )
         {
-            int newY = butHeight+(customBorder*2);
+            int newY = butHeight+(m_widthCustomBorder*2);
             SetClientSize(wxDefaultCoord,newY);
             if ( m_bmpNormal.IsOk() || m_btnArea.width != butWidth || m_btnArea.height != butHeight )
                 m_iFlags |= wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
@@ -1031,10 +1030,10 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     m_btnArea.width = butAreaWid;
     m_btnArea.height = sz.y - ((btnBorder+FOCUS_RING)*2);
 
-    m_tcArea.x = ( m_btnSide==wxRIGHT ? 0 : butAreaWid ) + customBorder;
-    m_tcArea.y = customBorder + FOCUS_RING;
-    m_tcArea.width = sz.x - butAreaWid - (customBorder*2) - FOCUS_RING;
-    m_tcArea.height = sz.y - ((customBorder+FOCUS_RING)*2);
+    m_tcArea.x = ( m_btnSide==wxRIGHT ? 0 : butAreaWid ) + m_widthCustomBorder;
+    m_tcArea.y = m_widthCustomBorder + FOCUS_RING;
+    m_tcArea.width = sz.x - butAreaWid - (m_widthCustomBorder*2) - FOCUS_RING;
+    m_tcArea.height = sz.y - ((m_widthCustomBorder+FOCUS_RING)*2);
 
 /*
     if ( m_text )
@@ -1052,7 +1051,6 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
 
     wxSize sz = GetClientSize();
 
-    int customBorder = m_widthCustomBorder;
     if ( (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
     {
         int x;
@@ -1079,8 +1077,8 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         int diff0 = sz.y - tcSizeY;
         int y = textCtrlYAdjust + (diff0/2);
 
-        if ( y < customBorder )
-            y = customBorder;
+        if ( y < m_widthCustomBorder )
+            y = m_widthCustomBorder;
 
         m_text->SetSize(x,
                         y,
@@ -1089,7 +1087,7 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
 
         // Make sure textctrl doesn't exceed the bottom custom border
         wxSize tsz = m_text->GetSize();
-        int diff1 = (y + tsz.y) - (sz.y - customBorder);
+        int diff1 = (y + tsz.y) - (sz.y - m_widthCustomBorder);
         if ( diff1 >= 0 )
         {
             tsz.y = tsz.y - diff1 - 1;
