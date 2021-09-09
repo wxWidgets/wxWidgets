@@ -34,7 +34,6 @@
 
 #if wxUSE_SPELLCHECK && defined(__WXGTK3__)
 extern "C" {
-#include <gtkspell-3.0/gtkspell/gtkspell.h>
 #include <gspell-1/gspell/gspell.h>
 }
 #endif // wxUSE_SPELLCHECK && __WXGTK3__
