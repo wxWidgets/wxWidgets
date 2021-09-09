@@ -1124,13 +1124,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_text->WriteText( "Prepended. " );
 
 #if wxUSE_SPELLCHECK
-    (*m_text) << "\n";
-
     if ( m_text->EnableProofCheck(wxTextProofOptions::Default()) )
     {
-        (*m_text) << "Spell checking is enabled, mis"
+        // Break the string in several parts to avoid misspellings in the sources.
+        (*m_text) << " Mis"
                       "s"
-                      "spelled words should be highlighted.";
+                      "spelled.";
     }
 #endif
 
@@ -1232,7 +1231,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     }
     else
     {
-        // Break the string in several parts to avoid misspellings in the sources.
         (*m_enter) << "Spell checking is enabled, mis"
                       "s"
                       "spelled words should be highlighted.";
