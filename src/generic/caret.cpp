@@ -137,6 +137,9 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
+    if ( m_overlay.IsNative() )
+        m_overlay.Reset();
+
     if ( IsVisible() )
     {
         if ( !m_blinkedOut )
@@ -215,32 +218,33 @@ void wxCaret::Blink()
 
 void wxCaret::Refresh()
 {
+    if ( DoRefresh() )
+        m_overlay.Reset();
+}
+
+bool wxCaret::DoRefresh()
+{
     wxWindow* const win = GetWindow();
 
     if ( !win->IsShownOnScreen() )
     {
-        return;
+        return false;
     }
 
-    // Extra-block: we can't reset the overlay while dcOverlay is still alive!
-    {
-        wxDCOverlay dcOverlay( m_overlay, win, m_x, m_y, m_width , m_height );
-
-        if ( m_blinkedOut )
-        {
-            dcOverlay.Clear();
-        }
-        else
-        {
-            wxDC& dc = dcOverlay;
-            DoDraw( &dc, win );
-        }
-    }
+    wxDCOverlay dcOverlay( m_overlay, win, m_x, m_y, m_width , m_height );
 
     if ( m_blinkedOut )
     {
-        m_overlay.Reset();
+        dcOverlay.Clear();
+        return !m_overlay.IsNative();
     }
+    else
+    {
+        wxDC& dc = dcOverlay;
+        DoDraw( &dc, win );
+    }
+
+    return false;
 }
 
 void wxCaret::DoDraw(wxDC *dc, wxWindow* win)

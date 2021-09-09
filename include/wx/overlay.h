@@ -45,6 +45,9 @@ public:
     // use generic implementation even if the native one is available
     void UseGeneric();
 
+    // returns true if we are using a native implementation
+    bool IsNative() const;
+
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
     void Reset();

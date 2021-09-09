@@ -25,6 +25,12 @@ public:
     // derived from this class.
     virtual bool IsNative() const { return true; }
 
+    // Although wxOverlayGenericImpl is always available on all platforms,
+    // it is known that it doesn't work well under some of them (Wayland specifically)
+    // and therefore cannot be used if this function returns false even if a call to
+    // wxOverlay::UseGeneric() has been made, in which case the call should not be honored.
+    virtual bool IsGenericSupported() const { return true; }
+
     void Init(wxDC* dc, int x, int y, int width, int height)
     {
         InitFromDC(dc, x, y, width, height);

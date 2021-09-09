@@ -64,6 +64,10 @@ protected:
     // refresh the caret
     void Refresh();
 
+    // helper function called by Refresh()
+    // returns true if the overlay needs to be reset
+    bool DoRefresh();
+
     // draw the caret on the given DC
     void DoDraw(wxDC *dc, wxWindow* win);
 
