@@ -5774,16 +5774,16 @@ dnl ---------------------------------------------------------------------------
 if test "$wxUSE_SPELLCHECK" = "yes"; then
     dnl The required APIs are always available under MSW and OS X and we don't
     dnl implement support for spell checking in the other ports, but for GTK 3
-    dnl we need to check for gtkspell library.
+    dnl we need to check for the gspell library.
 
     if test "$WXGTK3" = 1; then
-        PKG_CHECK_MODULES(GTKSPELL, [gtkspell3-3.0],
+        PKG_CHECK_MODULES(GSPELL, [gspell-1],
             [
-                CXXFLAGS="$GTKSPELL_CFLAGS $CXXFLAGS"
-                LIBS="$GTKSPELL_LIBS $LIBS"
+                CXXFLAGS="$GSPELL_CFLAGS $CXXFLAGS"
+                LIBS="$GSPELL_LIBS $LIBS"
             ],
             [
-                AC_MSG_WARN([gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available])
+                AC_MSG_WARN([gspell-1 not found, spell checking in wxTextCtrl won't be available])
                 wxUSE_SPELLCHECK=no
             ]
         )

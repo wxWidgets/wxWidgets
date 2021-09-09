@@ -951,8 +951,8 @@ GTKPRINT_CFLAGS
 SDL_CONFIG
 SDL_LIBS
 SDL_CFLAGS
-GTKSPELL_LIBS
-GTKSPELL_CFLAGS
+GSPELL_LIBS
+GSPELL_CFLAGS
 LIBSECRET_LIBS
 LIBSECRET_CFLAGS
 GXX_VERSION
@@ -1434,8 +1434,8 @@ MesaGL_CFLAGS
 MesaGL_LIBS
 LIBSECRET_CFLAGS
 LIBSECRET_LIBS
-GTKSPELL_CFLAGS
-GTKSPELL_LIBS
+GSPELL_CFLAGS
+GSPELL_LIBS
 SDL_CFLAGS
 SDL_LIBS
 GTKPRINT_CFLAGS
@@ -2475,10 +2475,9 @@ Some influential environment variables:
               C compiler flags for LIBSECRET, overriding pkg-config
   LIBSECRET_LIBS
               linker flags for LIBSECRET, overriding pkg-config
-  GTKSPELL_CFLAGS
-              C compiler flags for GTKSPELL, overriding pkg-config
-  GTKSPELL_LIBS
-              linker flags for GTKSPELL, overriding pkg-config
+  GSPELL_CFLAGS
+              C compiler flags for GSPELL, overriding pkg-config
+  GSPELL_LIBS linker flags for GSPELL, overriding pkg-config
   SDL_CFLAGS  C compiler flags for SDL, overriding pkg-config
   SDL_LIBS    linker flags for SDL, overriding pkg-config
   GTKPRINT_CFLAGS
@@ -34014,20 +34013,20 @@ if test "$wxUSE_SPELLCHECK" = "yes"; then
     if test "$WXGTK3" = 1; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTKSPELL" >&5
-$as_echo_n "checking for GTKSPELL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GSPELL" >&5
+$as_echo_n "checking for GSPELL... " >&6; }
 
 if test -n "$PKG_CONFIG"; then
-    if test -n "$GTKSPELL_CFLAGS"; then
-        pkg_cv_GTKSPELL_CFLAGS="$GTKSPELL_CFLAGS"
+    if test -n "$GSPELL_CFLAGS"; then
+        pkg_cv_GSPELL_CFLAGS="$GSPELL_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtkspell3-3.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtkspell3-3.0") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gspell-1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gspell-1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GTKSPELL_CFLAGS=`$PKG_CONFIG --cflags "gtkspell3-3.0" 2>/dev/null`
+  pkg_cv_GSPELL_CFLAGS=`$PKG_CONFIG --cflags "gspell-1" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -34036,16 +34035,16 @@ else
 	pkg_failed=untried
 fi
 if test -n "$PKG_CONFIG"; then
-    if test -n "$GTKSPELL_LIBS"; then
-        pkg_cv_GTKSPELL_LIBS="$GTKSPELL_LIBS"
+    if test -n "$GSPELL_LIBS"; then
+        pkg_cv_GSPELL_LIBS="$GSPELL_LIBS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtkspell3-3.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtkspell3-3.0") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gspell-1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gspell-1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GTKSPELL_LIBS=`$PKG_CONFIG --libs "gtkspell3-3.0" 2>/dev/null`
+  pkg_cv_GSPELL_LIBS=`$PKG_CONFIG --libs "gspell-1" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -34064,34 +34063,34 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTKSPELL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gtkspell3-3.0"`
+	        GSPELL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gspell-1"`
         else
-	        GTKSPELL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtkspell3-3.0"`
+	        GSPELL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gspell-1"`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$GTKSPELL_PKG_ERRORS" >&5
+	echo "$GSPELL_PKG_ERRORS" >&5
 
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&5
-$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&2;}
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gspell-1 not found, spell checking in wxTextCtrl won't be available" >&5
+$as_echo "$as_me: WARNING: gspell-1 not found, spell checking in wxTextCtrl won't be available" >&2;}
                 wxUSE_SPELLCHECK=no
 
 
 elif test $pkg_failed = untried; then
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&5
-$as_echo "$as_me: WARNING: gtkspell3-3.0 not found, spell checking in wxTextCtrl won't be available" >&2;}
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gspell-1 not found, spell checking in wxTextCtrl won't be available" >&5
+$as_echo "$as_me: WARNING: gspell-1 not found, spell checking in wxTextCtrl won't be available" >&2;}
                 wxUSE_SPELLCHECK=no
 
 
 else
-	GTKSPELL_CFLAGS=$pkg_cv_GTKSPELL_CFLAGS
-	GTKSPELL_LIBS=$pkg_cv_GTKSPELL_LIBS
+	GSPELL_CFLAGS=$pkg_cv_GSPELL_CFLAGS
+	GSPELL_LIBS=$pkg_cv_GSPELL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                CXXFLAGS="$GTKSPELL_CFLAGS $CXXFLAGS"
-                LIBS="$GTKSPELL_LIBS $LIBS"
+                CXXFLAGS="$GSPELL_CFLAGS $CXXFLAGS"
+                LIBS="$GSPELL_LIBS $LIBS"
 
 fi
     fi
