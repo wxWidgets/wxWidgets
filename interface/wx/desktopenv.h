@@ -22,7 +22,7 @@ public:
     /**
     Moves the file/folder to the Recycle Bin/Trash.
 
-    @returns true on success
+    @returns true if the file/folder was successfully moved to the Recycle Bin/Trash.
     */
     static bool MoveToRecycleBin(const wxString &path);
 };
