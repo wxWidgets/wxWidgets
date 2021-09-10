@@ -18,10 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #include "wx/filefn.h"
 #include <wx/filename.h>
 #include "wx/log.h"
@@ -37,7 +33,7 @@ bool wxDesktopEnvBase::MoveToRecycleBin(const wxString &path)
     wxString tempPath = name.GetFullPath();
     if( !wxFileExists( tempPath ) && !wxDirExists( tempPath ) )
     {
-        wxLogSysError( _( "Failed to move '%s' to Recycle Bin" ), path) );
+        wxLogSysError( _( "Failed to move '%s' to Recycle Bin" ), path );
         result = false;
     }
     return result;
