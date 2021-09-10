@@ -18,7 +18,6 @@ class WXDLLIMPEXP_CORE wxDesktopEnv : public wxDesktopEnvBase
 {
 public:
     static bool MoveToRecycleBin(const wxString &path);
-protected:
 };
 
 #endif
