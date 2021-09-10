@@ -9,10 +9,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #include <fstream>
 #include "wx/app.h"
 #include "wx/filefn.h"
