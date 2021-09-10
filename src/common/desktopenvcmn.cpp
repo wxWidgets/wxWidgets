@@ -32,11 +32,12 @@ bool wxDesktopEnvBase::MoveToRecycleBin(const wxString &path)
 {
     bool result = true;
     wxFileName name = wxFileName( path );
+
     name.MakeAbsolute();
     wxString tempPath = name.GetFullPath();
     if( !wxFileExists( tempPath ) && !wxDirExists( tempPath ) )
     {
-        wxLogSysError( _( "Failed to move '%s' to Recycle Bin" ), path.c_str() );
+        wxLogSysError( _( "Failed to move '%s' to Recycle Bin" ), path) );
         result = false;
     }
     return result;
