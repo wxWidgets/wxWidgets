@@ -1045,7 +1045,7 @@ bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
     {
         GtkEntry *entry = GTK_ENTRY(m_text);
         wxCHECK_MSG( entry, false, wxS("wxTextCtrl is not a GtkEntry") );
-        
+
         GspellEntry *spell = gspell_entry_get_from_gtk_entry(entry);
         if (!spell)
             return false;
@@ -1073,7 +1073,7 @@ wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
     else
     {
         GtkEntry *entry = GTK_ENTRY(m_text);
-        
+
         if ( entry && gspell_entry_get_from_gtk_entry(entry) )
             opts.SpellCheck();
     }
