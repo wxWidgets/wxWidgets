@@ -19,6 +19,8 @@
 #include "wx/wxprec.h"
 
 #include <gio/gio.h>
+#include "wx/translation.h"
+#include "wx/log.h"
 #include "wx/desktopenv.h"
 
 // ============================================================================

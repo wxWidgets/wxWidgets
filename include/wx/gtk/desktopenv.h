@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_CORE wxDesktopEnv : public wxDesktopEnvBase
 {
 public:
-    virtual static bool MoveFileToRecycleBin(const wxString &fileName) wxOVERRIDE;
+    static bool MoveToRecycleBin(const wxString &fileName);
 };
 
 #endif
