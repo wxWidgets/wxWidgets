@@ -24,6 +24,7 @@
 
 #include "wx/log.h"
 #include "wx/desktopenv.h"
+#include "wx/msw/private.h"
 
 // ============================================================================
 // implementation
