@@ -27,7 +27,7 @@ public:
 
 TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
 {
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || ( defined(__WXOSX__) && !defined( wxOSX_USE_IPHONE ) ) )
     std::ofstream out( "ffileinstream.test", std::ofstream::out );
     wxString currentDir = wxGetCwd() + "/";
     out << "test file to be moved to trash" << std::endl;
@@ -45,4 +45,3 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     CHECK( !wxDesktopEnv::MoveToRecycleBin( currentDir + "abc" ) );
 #endif
 }
-
