@@ -32,7 +32,7 @@ bool wxDesktopEnv::MoveToRecycleBin(const wxString &path)
         if( result == NO )
         {
             wxLogSysError( _( "Failed to move '%s' to Recycle Bin" ), path );
-            ret = true;
+            result = true;
         }
     }
     return result;
