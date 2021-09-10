@@ -4,7 +4,7 @@
 // Author:      Igor Korot
 // Created:     2021-09-05
 // Copyright:   (c) 2021 wxWidgets development team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_OSX_DESKTOPENV_H_
