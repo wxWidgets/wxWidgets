@@ -86,7 +86,7 @@ public:
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
         static wxCFRef<CFArrayRef>
-            all((CFArrayRef)[NSLocale availableLocaleIdentifiers]);
+            all((CFArrayRef)[[NSLocale availableLocaleIdentifiers] retain]);
 
         wxCFStringRef cfName(locId.GetName());
         if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
