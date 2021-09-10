@@ -4,7 +4,7 @@
 // Author:      Igor Korot
 // Created:     2021-09-05
 // Copyright:   (c) 2019 wxWidgets development team
-// License:     wxWidgets license
+// License:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
