@@ -431,8 +431,13 @@ TEST_CASE_METHOD(WindowTestCase, "Window::SizerErrors", "[window][sizer][error]"
     wxScopedPtr<wxSizer> const sizer2(new wxBoxSizer(wxHORIZONTAL));
 
     REQUIRE_NOTHROW( sizer1->Add(child) );
+#ifdef __WXDEBUG__
     CHECK_THROWS_AS( sizer1->Add(child), TestAssertFailure );
     CHECK_THROWS_AS( sizer2->Add(child), TestAssertFailure );
+#else
+    CHECK_NOTHROW( sizer1->Add(child) );
+    CHECK_NOTHROW( sizer2->Add(child) );
+#endif
 
     CHECK_NOTHROW( sizer1->Detach(child) );
     CHECK_NOTHROW( sizer2->Add(child) );
