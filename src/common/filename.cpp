@@ -290,7 +290,7 @@ inline bool IsDOSPathSep(wxUniChar ch)
 // like a UNC path
 static bool IsUNCPath(const wxString& path, wxPathFormat format)
 {
-    return format == wxPATH_DOS &&
+    return wxFileName::GetFormat(format) == wxPATH_DOS &&
                 path.length() >= 4 && // "\\a" can't be a UNC path
                     IsDOSPathSep(path[0u]) &&
                         IsDOSPathSep(path[1u]) &&

@@ -550,6 +550,14 @@ TEST_CASE("wxFileName::UNC", "[filename]")
     fn.Assign("\\\\share2\\path2\\name.ext", wxPATH_DOS);
     CHECK( fn.GetVolume() == "share2" );
     CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path2" );
+
+#ifdef __WINDOWS__
+    // Check that doubled backslashes in the beginning of the path are not
+    // misinterpreted as UNC volume when we have a drive letter in the
+    // beginning.
+    fn.Assign("d:\\\\root\\directory\\file");
+    CHECK( fn.GetFullPath() == "d:\\root\\directory\\file" );
+#endif // __WINDOWS__
 }
 
 TEST_CASE("wxFileName::VolumeUniqueName", "[filename]")
