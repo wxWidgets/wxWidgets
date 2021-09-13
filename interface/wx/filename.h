@@ -1225,9 +1225,12 @@ public:
         Deletes the specified directory from the file system.
 
         @param flags
-            Can contain one of wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE. By
-            default contains neither so the directory will not be removed
-            unless it is empty.
+            With default value, the directory is removed only if it is empty.
+            If wxPATH_RMDIR_FULL is specified, it is removed even if it
+            contains subdirectories, provided that there are no files in
+            neither this directory nor its subdirectories. If flags contains
+            wxPATH_RMDIR_RECURSIVE, then the directory is removed with all the
+            files and directories under it.
 
         @return Returns @true if the directory was successfully deleted, @false
                 otherwise.
@@ -1240,9 +1243,12 @@ public:
         @param dir
             The directory to delete
         @param flags
-            Can contain one of wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE. By
-            default contains neither so the directory will not be removed
-            unless it is empty.
+            With default value, the directory is removed only if it is empty.
+            If wxPATH_RMDIR_FULL is specified, it is removed even if it
+            contains subdirectories, provided that there are no files in
+            neither this directory nor its subdirectories. If flags contains
+            wxPATH_RMDIR_RECURSIVE, then the directory is removed with all the
+            files and directories under it.
 
         @return Returns @true if the directory was successfully deleted, @false
                 otherwise.
