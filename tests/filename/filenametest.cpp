@@ -716,6 +716,18 @@ TEST_CASE("wxFileName::Exists", "[filename]")
 #endif // __UNIX__
 }
 
+TEST_CASE("wxFileName::Mkdir", "[filename]")
+{
+    wxFileName fn;
+    fn.AssignDir("/foo/bar");
+    if ( fn.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+    {
+        CHECK( fn.DirExists() );
+        CHECK( fn.Rmdir() );
+    }
+    //else: creating the directory may fail because of permissions
+}
+
 TEST_CASE("wxFileName::SameAs", "[filename]")
 {
     wxFileName fn1( wxFileName::CreateTempFileName( "filenametest1" ) );

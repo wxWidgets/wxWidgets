@@ -1283,7 +1283,10 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
         size_t count = dirs.GetCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            if ( i > 0 || filename.IsAbsolute() )
+            // Do not use IsAbsolute() here because we want the path to start
+            // with the separator even if it doesn't have any volume, but
+            // IsAbsolute() would return false in this case.
+            if ( i > 0 || !filename.m_relative )
                 currPath += wxFILE_SEP_PATH;
             currPath += dirs[i];
 
