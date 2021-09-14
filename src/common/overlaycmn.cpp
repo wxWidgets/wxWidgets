@@ -23,7 +23,13 @@
 #include "wx/overlay.h"
 #include "wx/private/overlay.h"
 #include "wx/dcclient.h"
+#ifdef wxOVERLAY_NO_EXTERNAL_DC
+#include "wx/dcgraph.h"
+#else // !wxOVERLAY_NO_EXTERNAL_DC
 #include "wx/dcmemory.h"
+#endif // wxOVERLAY_NO_EXTERNAL_DC
+#include "wx/dcscreen.h"
+#include "wx/scrolwin.h"
 
 // ============================================================================
 // implementation
@@ -52,6 +58,16 @@ bool wxOverlay::IsOk()
 void wxOverlay::Init( wxDC* dc, int x , int y , int width , int height )
 {
     m_impl->Init(dc, x, y, width, height);
+}
+
+void wxOverlay::Init( wxWindow* win, bool fullscreen )
+{
+#ifdef wxOVERLAY_NO_EXTERNAL_DC
+    m_impl->Init(win, fullscreen);
+#else // !wxOVERLAY_NO_EXTERNAL_DC
+    wxUnusedVar(win);
+    wxUnusedVar(fullscreen);
+#endif // wxOVERLAY_NO_EXTERNAL_DC
 }
 
 void wxOverlay::BeginDrawing( wxDC* dc)
@@ -83,13 +99,97 @@ void wxOverlay::Reset()
 // ----------------------------------------------------------------------------
 
 wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxDC *dc, int x , int y , int width , int height) :
-    m_overlay(overlay)
+    m_overlay(overlay), m_ownsDC(false)
 {
     Init(dc, x, y, width, height);
 }
 
 wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxDC *dc) :
-    m_overlay(overlay)
+    m_overlay(overlay), m_ownsDC(false)
+{
+    Init(dc);
+}
+
+wxDCOverlay::wxDCOverlay(wxOverlay& overlay, wxWindow* win,
+                         int x, int y, int width, int height) :
+    m_overlay(overlay), m_ownsDC(true)
+{
+    Init(win, false /*fullscreen*/, wxRect(x, y, width, height));
+}
+
+wxDCOverlay::wxDCOverlay(wxOverlay& overlay, wxWindow* win, bool fullscreen) :
+    m_overlay(overlay), m_ownsDC(true)
+{
+    Init(win, fullscreen, wxRect());
+}
+
+wxDCOverlay::~wxDCOverlay()
+{
+    m_overlay.EndDrawing(m_dc);
+
+    if ( m_ownsDC && m_dc )
+        delete m_dc;
+}
+
+void wxDCOverlay::Init(wxDC *dc, int x , int y , int width , int height )
+{
+    m_dc = dc ;
+    if ( !m_overlay.IsOk() )
+    {
+        m_overlay.Init(dc,x,y,width,height);
+    }
+    m_overlay.BeginDrawing(dc);
+}
+
+void wxDCOverlay::Init(wxWindow* win, bool fullscreen, const wxRect& rect)
+{
+    wxCHECK_RET( win, wxS("Invalid window pointer") );
+
+#ifdef wxOVERLAY_NO_EXTERNAL_DC
+    if ( !m_overlay.IsOk() )
+    {
+        m_overlay.Init(win, fullscreen);
+    }
+
+    if ( m_overlay.IsOk() )
+    {
+        wxBitmap& bitmap = m_overlay.GetImpl()->GetBitmap();
+        m_memDC.SelectObject(bitmap);
+
+#if wxUSE_GRAPHICS_CONTEXT
+        m_dc = new wxGCDC;
+        m_dc->SetGraphicsContext(wxGraphicsContext::Create(m_memDC));
+#else // !wxUSE_GRAPHICS_CONTEXT
+        m_dc = &m_memDC;
+        m_ownsDC = false;
+#endif // wxUSE_GRAPHICS_CONTEXT
+        m_overlay.BeginDrawing(m_dc);
+
+        if ( !rect.IsEmpty() )
+            SetUpdateRectangle(rect);
+    }
+    else
+ #endif // !wxOVERLAY_NO_EXTERNAL_DC
+    {
+        wxDC* dc;
+
+        if ( fullscreen )
+            dc = new wxScreenDC;
+        else
+            dc = new wxClientDC(win);
+
+        wxScrolledWindow* const sw = wxDynamicCast(win, wxScrolledWindow);
+        if ( sw )
+            sw->PrepareDC(*dc);
+
+        if ( rect.IsEmpty() )
+            Init(dc);
+        else
+            Init(dc, rect.x, rect.y, rect.width, rect.height);
+    }
+}
+
+void wxDCOverlay::Init(wxDC* dc)
 {
     const wxSize size(dc->GetSize());
 
@@ -105,24 +205,18 @@ wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxDC *dc) :
          logicalBottom - logicalTop);
 }
 
-wxDCOverlay::~wxDCOverlay()
-{
-    m_overlay.EndDrawing(m_dc);
-}
-
-void wxDCOverlay::Init(wxDC *dc, int x , int y , int width , int height )
-{
-    m_dc = dc ;
-    if ( !m_overlay.IsOk() )
-    {
-        m_overlay.Init(dc,x,y,width,height);
-    }
-    m_overlay.BeginDrawing(dc);
-}
-
 void wxDCOverlay::Clear()
 {
     m_overlay.Clear(m_dc);
+}
+
+void wxDCOverlay::SetUpdateRectangle(const wxRect& rect)
+{
+#ifdef wxOVERLAY_NO_EXTERNAL_DC
+    m_overlay.GetImpl()->SetUpdateRectangle(rect);
+#else // !wxOVERLAY_NO_EXTERNAL_DC
+    wxUnusedVar(rect);
+#endif // wxOVERLAY_NO_EXTERNAL_DC
 }
 
 // ----------------------------------------------------------------------------

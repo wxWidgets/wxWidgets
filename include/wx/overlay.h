@@ -21,6 +21,10 @@
     // don't define wxHAS_NATIVE_OVERLAY
 #endif
 
+#ifdef wxOVERLAY_NO_EXTERNAL_DC
+    #include "wx/dcmemory.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // creates an overlay over an existing window, allowing for manipulations like
 // rubberbanding etc. This API is not stable yet, not to be used outside wx
@@ -29,6 +33,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxOverlayImpl;
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxRect;
 
 class WXDLLIMPEXP_CORE wxOverlay
 {
@@ -50,6 +56,8 @@ private:
     bool IsOk();
 
     void Init(wxDC* dc, int x , int y , int width , int height);
+
+    void Init(wxWindow* win, bool fullscreen);
 
     void BeginDrawing(wxDC* dc);
 
@@ -76,19 +84,40 @@ public:
     // convenience wrapper that behaves the same using the entire area of the dc
     wxDCOverlay(wxOverlay &overlay, wxDC *dc);
 
+    // alternatively, if these ctors are used instead, the drawing should be done
+    // via this class directly (just cast the object to wxDC, i.e.:  wxDC& dc = overlaydc)
+    wxDCOverlay(wxOverlay &overlay, wxWindow *win, int x, int y, int width, int height);
+    wxDCOverlay(wxOverlay &overlay, wxWindow *win, bool fullscreen = false);
+
     // removes the connection between the overlay and the dc
     virtual ~wxDCOverlay();
+
+    // implicit conversion to wxDC
+    operator wxDC& () const
+    {
+        wxASSERT_MSG( m_dc, "Invalid device context" );
+        return *m_dc;
+    }
 
     // clears the layer, restoring the state at the last init
     void Clear();
 
+    // sets the rectangle to be refreshed/updated within the overlay.
+    void SetUpdateRectangle(const wxRect& rect);
+
 private:
+    void Init(wxDC *dc);
     void Init(wxDC *dc, int x , int y , int width , int height);
+    void Init(wxWindow *win, bool fullscreen, const wxRect& rect);
 
     wxOverlay& m_overlay;
 
-    wxDC* m_dc;
+    wxDC*      m_dc;
+    bool       m_ownsDC;
 
+#ifdef wxOVERLAY_NO_EXTERNAL_DC
+    wxMemoryDC m_memDC;
+#endif // wxOVERLAY_NO_EXTERNAL_DC
 
     wxDECLARE_NO_COPY_CLASS(wxDCOverlay);
 };
