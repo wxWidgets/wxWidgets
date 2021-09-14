@@ -392,22 +392,7 @@ void wxFileName::Assign(const wxString& volume,
     // have the volume here and the UNC notation (\\server\path) is only valid
     // for paths which don't start with a volume, so prevent SetPath() from
     // recognizing "\\foo\bar" in "c:\\foo\bar" as an UNC path
-    //
-    // note also that this is a rather ugly way to do what we want (passing
-    // some kind of flag telling to ignore UNC paths to SetPath() would be
-    // better) but this is the safest thing to do to avoid breaking backwards
-    // compatibility in 2.8
-    if ( IsUNCPath(path, format) )
-    {
-        // remove one of the 2 leading backslashes to ensure that it's not
-        // recognized as an UNC path by SetPath()
-        wxString pathNonUNC(path, 1, wxString::npos);
-        SetPath(pathNonUNC, format);
-    }
-    else // no UNC complications
-    {
-        SetPath(path, format);
-    }
+    DoSetPath(path, format, SetPath_PathOnly);
 
     m_volume = volume;
     m_ext = ext;
@@ -416,7 +401,13 @@ void wxFileName::Assign(const wxString& volume,
     m_hasExt = hasExt;
 }
 
-void wxFileName::SetPath( const wxString& pathOrig, wxPathFormat format )
+void wxFileName::SetPath( const wxString& path, wxPathFormat format )
+{
+    DoSetPath(path, format, SetPath_MayHaveVolume);
+}
+
+void
+wxFileName::DoSetPath(const wxString& pathOrig, wxPathFormat format, int flags)
 {
     m_dirs.Clear();
 
@@ -431,23 +422,30 @@ void wxFileName::SetPath( const wxString& pathOrig, wxPathFormat format )
     format = GetFormat( format );
 
     // 0) deal with possible volume part first
-    wxString volume,
-             path;
-    SplitVolume(pathOrig, &volume, &path, format);
-    if ( !volume.empty() )
+    wxString path;
+    if ( flags & SetPath_MayHaveVolume )
     {
-        m_relative = false;
+        wxString volume;
+        SplitVolume(pathOrig, &volume, &path, format);
+        if ( !volume.empty() )
+        {
+            m_relative = false;
 
-        SetVolume(volume);
+            SetVolume(volume);
+        }
+
+        if ( path.empty() )
+        {
+            // we had only the volume
+            return;
+        }
+    }
+    else
+    {
+        path = pathOrig;
     }
 
     // 1) Determine if the path is relative or absolute.
-
-    if ( path.empty() )
-    {
-        // we had only the volume
-        return;
-    }
 
     wxChar leadingChar = path[0u];
 
