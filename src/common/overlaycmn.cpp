@@ -41,7 +41,7 @@
 
 wxOverlay::wxOverlay()
 {
-    m_impl = new wxOverlayImpl();
+    m_impl = wxOverlayImpl::Create();
     m_inDrawing = false;
 }
 
@@ -151,7 +151,9 @@ void wxDCOverlay::Init(wxWindow* win, bool fullscreen, const wxRect& rect)
         m_overlay.Init(win, fullscreen);
     }
 
-    if ( m_overlay.IsOk() )
+    const bool isNative = m_overlay.GetImpl()->IsNative();
+
+    if ( m_overlay.IsOk() && isNative )
     {
         wxBitmap& bitmap = m_overlay.GetImpl()->GetBitmap();
         m_memDC.SelectObject(bitmap);
@@ -169,7 +171,7 @@ void wxDCOverlay::Init(wxWindow* win, bool fullscreen, const wxRect& rect)
             SetUpdateRectangle(rect);
     }
     else
- #endif // !wxOVERLAY_NO_EXTERNAL_DC
+#endif // !wxOVERLAY_NO_EXTERNAL_DC
     {
         wxDC* dc;
 
@@ -212,70 +214,74 @@ void wxDCOverlay::Clear()
 
 void wxDCOverlay::SetUpdateRectangle(const wxRect& rect)
 {
-#ifdef wxOVERLAY_NO_EXTERNAL_DC
     m_overlay.GetImpl()->SetUpdateRectangle(rect);
-#else // !wxOVERLAY_NO_EXTERNAL_DC
-    wxUnusedVar(rect);
-#endif // wxOVERLAY_NO_EXTERNAL_DC
 }
 
 // ----------------------------------------------------------------------------
 // generic implementation of wxOverlayImpl
 // ----------------------------------------------------------------------------
 
+class wxOverlayGenericImpl : public wxOverlayImpl
+{
+public:
+    wxOverlayGenericImpl() : wxOverlayImpl()
+    {
+        m_window = NULL;
+    }
+
+    virtual bool IsNative() const wxOVERRIDE { return false; }
+
+    virtual bool IsOk() wxOVERRIDE
+    {
+        return GetBitmap().IsOk();
+    }
+
+    virtual void InitFromDC(wxDC* dc, int x, int y, int width, int height) wxOVERRIDE
+    {
+        m_window = dc->GetWindow();
+        m_rect   = wxRect(x, y, width, height);
+
+        wxMemoryDC dcMem ;
+        wxBitmap& bmpSaved = GetBitmap();
+        bmpSaved.Create( width, height );
+        dcMem.SelectObject( bmpSaved );
+        dcMem.Blit(0, 0, width, height, dc, x, y);
+        dcMem.SelectObject( wxNullBitmap );
+    }
+
+    virtual void InitFromWindow(wxWindow* WXUNUSED(win), bool WXUNUSED(fullscreen)) wxOVERRIDE
+    {
+        // Not constructible from wxWindow.
+    }
+
+    virtual void Clear(wxDC* dc) wxOVERRIDE
+    {
+        wxMemoryDC dcMem ;
+        wxBitmap& bmpSaved = GetBitmap();
+        dcMem.SelectObject( bmpSaved );
+        dc->Blit( m_rect.x, m_rect.y, m_rect.width, m_rect.height, &dcMem, 0, 0 );
+        dcMem.SelectObject( wxNullBitmap );
+    }
+
+    virtual void Reset() wxOVERRIDE
+    {
+        GetBitmap() = wxBitmap();
+    }
+
+private:
+    wxRect    m_rect;
+    wxWindow* m_window;
+};
+
+void wxOverlay::UseGeneric()
+{
+#ifdef wxHAS_NATIVE_OVERLAY
+    wxASSERT_MSG( !IsOk(), "should only be called for uninitialized overlay" );
+    delete m_impl;
+    m_impl = new wxOverlayGenericImpl();
+#endif // wxHAS_NATIVE_OVERLAY
+}
+
 #ifndef wxHAS_NATIVE_OVERLAY
-
-wxOverlayImpl::wxOverlayImpl()
-{
-     m_window = NULL ;
-     m_x = m_y = m_width = m_height = 0 ;
-}
-
-wxOverlayImpl::~wxOverlayImpl()
-{
-}
-
-bool wxOverlayImpl::IsOk()
-{
-    return m_bmpSaved.IsOk() ;
-}
-
-void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
-{
-    m_window = dc->GetWindow();
-    wxMemoryDC dcMem ;
-    m_bmpSaved.Create( width, height );
-    dcMem.SelectObject( m_bmpSaved );
-    m_x = x ;
-    m_y = y ;
-    m_width = width ;
-    m_height = height ;
-    dcMem.Blit(0, 0, m_width, m_height,
-        dc, x, y);
-    dcMem.SelectObject( wxNullBitmap );
-}
-
-void wxOverlayImpl::Clear(wxDC* dc)
-{
-    wxMemoryDC dcMem ;
-    dcMem.SelectObject( m_bmpSaved );
-    dc->Blit( m_x, m_y, m_width, m_height , &dcMem , 0 , 0 );
-    dcMem.SelectObject( wxNullBitmap );
-}
-
-void wxOverlayImpl::Reset()
-{
-    m_bmpSaved = wxBitmap();
-}
-
-void wxOverlayImpl::BeginDrawing(wxDC*  WXUNUSED(dc))
-{
-}
-
-void wxOverlayImpl::EndDrawing(wxDC* WXUNUSED(dc))
-{
-}
-
-#endif // !wxHAS_NATIVE_OVERLAY
-
-
+wxOverlayImpl* wxOverlayImpl::Create() { return new wxOverlayGenericImpl(); }
+#endif

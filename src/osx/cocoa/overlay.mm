@@ -28,9 +28,8 @@
 
 #include "wx/dcgraph.h"
 
-#include "wx/private/overlay.h"
+#include "wx/osx/cocoa/private/overlay.h"
 
-#ifdef wxHAS_NATIVE_OVERLAY
 
 // ============================================================================
 // implementation
@@ -125,24 +124,24 @@
 }
 @end
 
-wxOverlayImpl::wxOverlayImpl()
+wxOverlayCocoaImpl::wxOverlayCocoaImpl()
 {
     m_window = NULL ;
     m_overlayContext = NULL ;
     m_overlayWindow = NULL ;
 }
 
-wxOverlayImpl::~wxOverlayImpl()
+wxOverlayCocoaImpl::~wxOverlayCocoaImpl()
 {
     Reset();
 }
 
-bool wxOverlayImpl::IsOk()
+bool wxOverlayCocoaImpl::IsOk()
 {
     return m_overlayWindow != NULL ;
 }
 
-void wxOverlayImpl::CreateOverlayWindow( wxDC* dc )
+void wxOverlayCocoaImpl::CreateOverlayWindow( wxDC* dc )
 {
     if (m_window)
     {
@@ -181,7 +180,7 @@ void wxOverlayImpl::CreateOverlayWindow( wxDC* dc )
     [m_overlayWindow orderFront:nil];
 }
 
-void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
+void wxOverlayCocoaImpl::InitFromDC( wxDC* dc, int x , int y , int width , int height )
 {
     wxASSERT_MSG( !IsOk() , "You cannot Init an overlay twice" );
 
@@ -195,7 +194,12 @@ void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
     wxASSERT_MSG(m_overlayWindow != NULL, "Couldn't create the overlay window");
 }
 
-void wxOverlayImpl::BeginDrawing( wxDC* dc)
+void wxOverlayCocoaImpl::InitFromWindow(wxWindow* WXUNUSED(win), bool WXUNUSED(fullscreen))
+{
+    // don't forget to define wxOVERLAY_NO_EXTERNAL_DC in wx/overlay.h when implement this
+}
+
+void wxOverlayCocoaImpl::BeginDrawing( wxDC* dc)
 {
     wxDCImpl *impl = dc->GetImpl();
     wxGCDCImpl *win_impl = wxDynamicCast(impl,wxGCDCImpl);
@@ -221,16 +225,16 @@ void wxOverlayImpl::BeginDrawing( wxDC* dc)
         wxGraphicsContext* ctx = wxGraphicsContext::CreateFromNative( m_overlayContext );
         ctx->Translate(0, ySize);
         ctx->Scale(1,-1);
-        
+
         win_impl->SetGraphicsContext( ctx );
-        
+
         if (m_window)
             dc->SetDeviceOrigin(dc->LogicalToDeviceX(-m_x), dc->LogicalToDeviceY(-m_y));
         dc->SetClippingRegion(m_x, m_y, m_width, m_height);
     }
 }
 
-void wxOverlayImpl::EndDrawing( wxDC* dc)
+void wxOverlayCocoaImpl::EndDrawing( wxDC* dc)
 {
     wxDCImpl *impl = dc->GetImpl();
     wxGCDCImpl *win_impl = wxDynamicCast(impl,wxGCDCImpl);
@@ -243,14 +247,14 @@ void wxOverlayImpl::EndDrawing( wxDC* dc)
     [wxoverlay.overlayView setNeedsDisplay:YES];
 }
 
-void wxOverlayImpl::Clear(wxDC* dc)
+void wxOverlayCocoaImpl::Clear(wxDC* dc)
 {
     wxASSERT_MSG( IsOk() , "You cannot Clear an overlay that is not inited" );
 
     dc->GetGraphicsContext()->ClearRectangle(m_x - 1, m_y - 1, m_width + 2, m_height + 2);
 }
 
-void wxOverlayImpl::Reset()
+void wxOverlayCocoaImpl::Reset()
 {
     if ( m_overlayContext )
     {
@@ -267,4 +271,4 @@ void wxOverlayImpl::Reset()
     }
 }
 
-#endif // wxHAS_NATIVE_OVERLAY
+wxOverlayImpl* wxOverlayImpl::Create() { return new wxOverlayCocoaImpl(); }

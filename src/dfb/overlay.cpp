@@ -24,9 +24,9 @@
     #include "wx/dcclient.h"
 #endif
 
-#include "wx/private/overlay.h"
 #include "wx/dfb/dcclient.h"
 #include "wx/dfb/private.h"
+#include "wx/dfb/private/overlay.h"
 
 // ============================================================================
 // implementation
@@ -36,23 +36,23 @@
 // wxOverlay
 // ----------------------------------------------------------------------------
 
-wxOverlayImpl::wxOverlayImpl()
+wxOverlayDFBImpl::wxOverlayDFBImpl()
 {
     m_window = NULL;
     m_isEmpty = true;
 }
 
-wxOverlayImpl::~wxOverlayImpl()
+wxOverlayDFBImpl::~wxOverlayDFBImpl()
 {
     Reset();
 }
 
-bool wxOverlayImpl::IsOk()
+bool wxOverlayDFBImpl::IsOk()
 {
     return m_window != NULL;
 }
 
-void wxOverlayImpl::Init(wxDC *dc, int x, int y, int width, int height)
+void wxOverlayDFBImpl::InitFromDC(wxDC *dc, int x, int y, int width, int height)
 {
     wxCHECK_RET( dc, "NULL dc pointer" );
     wxASSERT_MSG( !IsOk() , "You cannot Init an overlay twice" );
@@ -76,7 +76,12 @@ void wxOverlayImpl::Init(wxDC *dc, int x, int y, int width, int height)
     m_window->AddOverlay(this);
 }
 
-void wxOverlayImpl::BeginDrawing(wxDC *dc)
+void wxOverlayDFBImpl::InitFromWindow(wxWindow* WXUNUSED(win), bool WXUNUSED(fullscreen))
+{
+    // don't forget to define wxOVERLAY_NO_EXTERNAL_DC in wx/overlay.h when implement this
+}
+
+void wxOverlayDFBImpl::BeginDrawing(wxDC *dc)
 {
     wxCHECK_RET( dc, "NULL dc pointer" );
 
@@ -98,12 +103,12 @@ void wxOverlayImpl::BeginDrawing(wxDC *dc)
     m_isEmpty = false;
 }
 
-void wxOverlayImpl::EndDrawing(wxDC *WXUNUSED(dc))
+void wxOverlayDFBImpl::EndDrawing(wxDC *WXUNUSED(dc))
 {
     m_window->RefreshWindowRect(m_rect);
 }
 
-void wxOverlayImpl::Clear(wxDC *WXUNUSED(dc))
+void wxOverlayDFBImpl::Clear(wxDC *WXUNUSED(dc))
 {
     wxASSERT_MSG( IsOk(),
                   "You cannot Clear an overlay that is not initialized" );
@@ -111,7 +116,7 @@ void wxOverlayImpl::Clear(wxDC *WXUNUSED(dc))
     m_isEmpty = true;
 }
 
-void wxOverlayImpl::Reset()
+void wxOverlayDFBImpl::Reset()
 {
     if ( m_window )
     {
@@ -120,3 +125,5 @@ void wxOverlayImpl::Reset()
         m_surface.Reset();
     }
 }
+
+wxOverlayImpl* wxOverlayImpl::Create() { return new wxOverlayDFBImpl(); }
