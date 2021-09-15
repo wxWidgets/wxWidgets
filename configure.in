@@ -5780,7 +5780,7 @@ if test "$wxUSE_SPELLCHECK" = "yes"; then
         PKG_CHECK_MODULES(GSPELL, [gspell-1],
             [
                 CXXFLAGS="$GSPELL_CFLAGS $CXXFLAGS"
-                LIBS="$GSPELL_LIBS $LIBS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GSPELL_LIBS"
             ],
             [
                 AC_MSG_WARN([gspell-1 not found, spell checking in wxTextCtrl won't be available])

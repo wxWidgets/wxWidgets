@@ -34090,7 +34090,7 @@ else
 $as_echo "yes" >&6; }
 
                 CXXFLAGS="$GSPELL_CFLAGS $CXXFLAGS"
-                LIBS="$GSPELL_LIBS $LIBS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GSPELL_LIBS"
 
 fi
     fi
