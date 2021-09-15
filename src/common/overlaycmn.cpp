@@ -50,6 +50,11 @@ wxOverlay::~wxOverlay()
     delete m_impl;
 }
 
+bool wxOverlay::IsNative() const
+{
+    return m_impl->IsNative();
+}
+
 bool wxOverlay::IsOk()
 {
     return m_impl->IsOk();
@@ -277,6 +282,13 @@ void wxOverlay::UseGeneric()
 {
 #ifdef wxHAS_NATIVE_OVERLAY
     wxASSERT_MSG( !IsOk(), "should only be called for uninitialized overlay" );
+
+    if ( !m_impl->IsGenericSupported() )
+    {
+        // Only native overlay can be used (Wayland for ex.)
+        return;
+    }
+
     delete m_impl;
     m_impl = new wxOverlayGenericImpl();
 #endif // wxHAS_NATIVE_OVERLAY
