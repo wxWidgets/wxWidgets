@@ -169,7 +169,9 @@ TEST_CASE("wxFileName::Construction", "[filename]")
         // if the test is run from root directory or its direct subdirectory
         CHECK( fn.Normalize(wxPATH_NORM_ALL, "/foo/bar/baz", fni.format) );
 
-        if ( *fni.volume && *fni.path )
+        // restrict this check to drive letter volumes as UNC and GUID volumes
+        // can't be combined with the path using the volume separator
+        if ( strlen(fni.volume) == 1 && *fni.path )
         {
             // check that specifying the volume separately or as part of the
             // path doesn't make any difference

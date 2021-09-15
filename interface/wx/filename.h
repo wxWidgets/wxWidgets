@@ -877,6 +877,14 @@ public:
 
     /**
         Returns the string separating the volume from the path for this format.
+
+        Note that for @c wxPATH_DOS paths this string can only be used for
+        single-character volumes representing the drive letters, but not with
+        the UNC or GUID volumes (see their description in GetVolume()
+        documentation). For this reason, its use should be avoided, prefer
+        using wxFileName constructor and Assign() overload taking the volume
+        and the path as separate arguments to combining the volume and the path
+        into a single string using the volume separator between them.
     */
     static wxString GetVolumeSeparator(wxPathFormat format = wxPATH_NATIVE);
 
