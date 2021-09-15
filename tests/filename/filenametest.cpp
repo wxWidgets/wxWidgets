@@ -287,6 +287,7 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
         { "a/.././b/c/../../", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
         { "", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
         { "./foo", wxPATH_NORM_DOTS, "foo", wxPATH_UNIX },
+        { "foo/./bar", wxPATH_NORM_DOTS, "foo/bar", wxPATH_UNIX },
         { "b/../bar", wxPATH_NORM_DOTS, "bar", wxPATH_UNIX },
         { "c/../../quux", wxPATH_NORM_DOTS, "../quux", wxPATH_UNIX },
         { "/c/../../quux", wxPATH_NORM_DOTS, "/quux", wxPATH_UNIX },
