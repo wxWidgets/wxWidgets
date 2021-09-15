@@ -158,6 +158,8 @@ protected:
 
     void DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime);
 
+    void DrawRubberBand(const wxPoint& pos);
+
 private:
     MyFrame *m_owner;
 
@@ -2002,6 +2004,29 @@ void MyCanvas::Draw(wxDC& pdc)
     }
 }
 
+void MyCanvas::DrawRubberBand(const wxPoint& pos)
+{
+    int xx, yy;
+    CalcUnscrolledPosition( pos.x, pos.y, &xx, &yy );
+    m_currentpoint = wxPoint( xx , yy ) ;
+    wxRect newrect ( m_anchorpoint , m_currentpoint );
+
+    wxDCOverlay overlaydc( m_overlay, this,
+        newrect.x, newrect.y, newrect.width, newrect.height );
+    overlaydc.Clear();
+
+    wxDC& dc = overlaydc;
+
+#ifdef wxHAS_NATIVE_OVERLAY
+    dc.SetPen( *wxGREY_PEN );
+    dc.SetBrush( wxColour( 192,192,192,64 ) );
+#else
+    dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+#endif // wxHAS_NATIVE_OVERLAY
+    dc.DrawRectangle( newrect );
+}
+
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
 {
 #if wxUSE_STATUSBAR
@@ -2018,25 +2043,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
     if ( m_rubberBand )
     {
-        int x,y, xx, yy ;
-        event.GetPosition(&x,&y);
-        CalcUnscrolledPosition( x, y, &xx, &yy );
-        m_currentpoint = wxPoint( xx , yy ) ;
-        wxRect newrect ( m_anchorpoint , m_currentpoint ) ;
-
-        wxClientDC dc( this ) ;
-        PrepareDC( dc ) ;
-
-        wxDCOverlay overlaydc( m_overlay, &dc );
-        overlaydc.Clear();
-#ifdef __WXMAC__
-        dc.SetPen( *wxGREY_PEN );
-        dc.SetBrush( wxColour( 192,192,192,64 ) );
-#else
-        dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-#endif
-        dc.DrawRectangle( newrect );
+        DrawRubberBand(event.GetPosition());
     }
 #else
     wxUnusedVar(event);
@@ -2060,9 +2067,7 @@ void MyCanvas::OnMouseUp(wxMouseEvent &event)
     {
         ReleaseMouse();
         {
-            wxClientDC dc( this );
-            PrepareDC( dc );
-            wxDCOverlay overlaydc( m_overlay, &dc );
+            wxDCOverlay overlaydc( m_overlay, this );
             overlaydc.Clear();
         }
         m_overlay.Reset();
