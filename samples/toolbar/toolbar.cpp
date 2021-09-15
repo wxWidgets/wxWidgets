@@ -377,17 +377,14 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     wxBitmap toolBarBitmaps[Tool_Max];
 
-    #define INIT_TOOL_BMP(bmp) \
-        toolBarBitmaps[Tool_##bmp] = wxBITMAP_PNG(bmp)
-
-    INIT_TOOL_BMP(new);
-    INIT_TOOL_BMP(open);
-    INIT_TOOL_BMP(save);
-    INIT_TOOL_BMP(copy);
-    INIT_TOOL_BMP(cut);
-    INIT_TOOL_BMP(paste);
-    INIT_TOOL_BMP(print);
-    INIT_TOOL_BMP(help);
+    toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  );
+    toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open );
+    toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save );
+    toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy );
+    toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut  );
+    toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste);
+    toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print);
+    toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help );
 
     int w = toolBarBitmaps[Tool_new].GetWidth(),
         h = toolBarBitmaps[Tool_new].GetHeight();
