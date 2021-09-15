@@ -31,14 +31,6 @@
 #include "wx/colordlg.h"
 #include "wx/srchctrl.h"
 
-// define this to use XPMs everywhere (by default, BMPs are used under Win)
-// BMPs use less space, but aren't compiled into the executable on other platforms
-#if defined(__WINDOWS__) && wxUSE_WXDIB
-    #define USE_XPM_BITMAPS 0
-#else
-    #define USE_XPM_BITMAPS 1
-#endif
-
 // If this is 1, the sample will test an extra toolbar identical to the
 // main one, but not managed by the frame. This can test subtle differences
 // in the way toolbars are handled, especially on Mac where there is one
@@ -52,20 +44,21 @@
 // resources
 // ----------------------------------------------------------------------------
 
+// Under Windows, PNG files are embedded as resources, see toolbar.rc, but
+// elsewhere we embed them in the program itself. We could also load them
+// during run-time.
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
-#endif
 
-#if USE_XPM_BITMAPS
-    #include "bitmaps/new.xpm"
-    #include "bitmaps/open.xpm"
-    #include "bitmaps/save.xpm"
-    #include "bitmaps/copy.xpm"
-    #include "bitmaps/cut.xpm"
-    #include "bitmaps/preview.xpm"  // paste XPM
-    #include "bitmaps/print.xpm"
-    #include "bitmaps/help.xpm"
-#endif // USE_XPM_BITMAPS
+    #include "bitmaps/new_png.c"
+    #include "bitmaps/open_png.c"
+    #include "bitmaps/save_png.c"
+    #include "bitmaps/copy_png.c"
+    #include "bitmaps/cut_png.c"
+    #include "bitmaps/paste_png.c"
+    #include "bitmaps/print_png.c"
+    #include "bitmaps/help_png.c"
+#endif // !wxHAS_IMAGES_IN_RESOURCES
 
 enum Positions
 {
@@ -301,6 +294,10 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    // Because we use PNG icons in the frame ctor, we need to register this
+    // image handler before creating the frame.
+    wxImage::AddHandler(new wxPNGHandler);
+
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  "wxToolBar Sample",
@@ -311,8 +308,6 @@ bool MyApp::OnInit()
 #if wxUSE_STATUSBAR
     frame->SetStatusText("Hello, wxWidgets");
 #endif
-
-    wxInitAllImageHandlers();
 
     return true;
 }
@@ -382,13 +377,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     wxBitmap toolBarBitmaps[Tool_Max];
 
-#if USE_XPM_BITMAPS
     #define INIT_TOOL_BMP(bmp) \
-        toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-#else // !USE_XPM_BITMAPS
-    #define INIT_TOOL_BMP(bmp) \
-        toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+        toolBarBitmaps[Tool_##bmp] = wxBITMAP_PNG(bmp)
 
     INIT_TOOL_BMP(new);
     INIT_TOOL_BMP(open);
@@ -739,12 +729,12 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
 
         m_tbar->SetMargins(4, 4);
 
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP(new));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP(open));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP(save));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP_PNG(new));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP_PNG(open));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP_PNG(save));
         m_tbar->AddSeparator();
-        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP(help));
-        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP(cut), wxBITMAP(paste));
+        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP_PNG(help));
+        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP_PNG(cut), wxBITMAP_PNG(paste));
         m_tbar->EnableTool(IDM_TOOLBAR_OTHER_4, false);
 
         m_tbar->Realize();
@@ -992,7 +982,7 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
     wxToolBarBase *tb = GetToolBar();
     tb->InsertTool(0, wxID_PRINT, "New print",
-                   wxBITMAP(print), wxNullBitmap,
+                   wxBITMAP_PNG(print), wxNullBitmap,
                    wxITEM_NORMAL,
                    "Delete this tool",
                    "This button was inserted into the toolbar");
