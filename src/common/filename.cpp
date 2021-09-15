@@ -134,6 +134,13 @@ namespace
 {
 
 // ----------------------------------------------------------------------------
+// private constants
+// ----------------------------------------------------------------------------
+
+// length of \\?\Volume{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\ string
+static const size_t wxMSWUniqueVolumePrefixLength = 49;
+
+// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -250,30 +257,31 @@ static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
     {
         format = wxFileName::GetFormat(format);
 
-        // Special Windows UNC paths hack, part 2: undo what we did in
-        // SplitPath() and make an UNC path if we have a drive which is not a
-        // single letter (hopefully the network shares can't be one letter only
-        // although I didn't find any authoritative docs on this)
-        if ( format == wxPATH_DOS && volume.length() > 1 )
+        switch ( format )
         {
-            // We also have to check for Windows unique volume names here and
-            // return it with '\\?\' prepended to it
-            if ( wxFileName::IsMSWUniqueVolumeNamePath("\\\\?\\" + volume + "\\",
-                                                       format) )
-            {
-                path << "\\\\?\\" << volume;
-            }
-            else
-            {
-                // it must be a UNC path
-                path << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << volume;
-            }
+            case wxPATH_DOS:
+                path = volume;
+
+                // We shouldn't use a colon after the volume in UNC and volume
+                // GUID paths, so append it only if it's just a drive letter.
+                if ( volume.length() == 1 )
+                    path += wxFileName::GetVolumeSeparator(format);
+                break;
+
+            case wxPATH_VMS:
+                path << volume << wxFileName::GetVolumeSeparator(format);
+                break;
+
+            case wxPATH_MAC:
+            case wxPATH_UNIX:
+                // Volumes are not used in paths in this format.
+                break;
+
+            case wxPATH_NATIVE:
+            case wxPATH_MAX:
+                wxFAIL_MSG( wxS("unreachable") );
+                break;
         }
-        else if  ( format == wxPATH_DOS || format == wxPATH_VMS )
-        {
-            path << volume << wxFileName::GetVolumeSeparator(format);
-        }
-        // else ignore
     }
 
     return path;
@@ -286,15 +294,21 @@ inline bool IsDOSPathSep(wxUniChar ch)
     return ch == wxFILE_SEP_PATH_DOS || ch == wxFILE_SEP_PATH_UNIX;
 }
 
-// return true if the format used is the DOS/Windows one and the string looks
-// like a UNC path
-static bool IsUNCPath(const wxString& path, wxPathFormat format)
+// return true if the string looks like a UNC path
+static bool IsUNCPath(const wxString& path)
 {
-    return wxFileName::GetFormat(format) == wxPATH_DOS &&
-                path.length() >= 4 && // "\\a" can't be a UNC path
+    return path.length() >= 3 && // "\\a" is the shortest UNC path
                     IsDOSPathSep(path[0u]) &&
                         IsDOSPathSep(path[1u]) &&
                             !IsDOSPathSep(path[2u]);
+}
+
+// return true if the string looks like a GUID volume path ("\\?\Volume{guid}\")
+static bool IsVolumeGUIDPath(const wxString& path)
+{
+    return path.length() >= wxMSWUniqueVolumePrefixLength &&
+             path.StartsWith(wxS("\\\\?\\Volume{")) &&
+              path[wxMSWUniqueVolumePrefixLength - 1] == wxFILE_SEP_PATH_DOS;
 }
 
 // Under Unix-ish systems (basically everything except Windows but we can't
@@ -352,13 +366,6 @@ bool StatAny(wxStructStat& st, const wxFileName& fn)
 }
 
 #endif // wxHAVE_LSTAT
-
-// ----------------------------------------------------------------------------
-// private constants
-// ----------------------------------------------------------------------------
-
-// length of \\?\Volume{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\ string
-static const size_t wxMSWUniqueVolumePrefixLength = 49;
 
 } // anonymous namespace
 
@@ -1986,10 +1993,7 @@ wxFileName::IsMSWUniqueVolumeNamePath(const wxString& path, wxPathFormat format)
 {
     // return true if the format used is the DOS/Windows one and the string begins
     // with a Windows unique volume name ("\\?\Volume{guid}\")
-    return format == wxPATH_DOS &&
-            path.length() >= wxMSWUniqueVolumePrefixLength &&
-             path.StartsWith(wxS("\\\\?\\Volume{")) &&
-              path[wxMSWUniqueVolumePrefixLength - 1] == wxFILE_SEP_PATH_DOS;
+    return GetFormat(format) == wxPATH_DOS && IsVolumeGUIDPath(path);
 }
 
 // ----------------------------------------------------------------------------
@@ -2332,71 +2336,100 @@ wxString wxFileName::GetVolumeString(char drive, int flags)
 
 /* static */
 void
-wxFileName::SplitVolume(const wxString& fullpathWithVolume,
+wxFileName::SplitVolume(const wxString& fullpath,
                         wxString *pstrVolume,
                         wxString *pstrPath,
                         wxPathFormat format)
 {
     format = GetFormat(format);
 
-    wxString fullpath = fullpathWithVolume;
+    wxString pathOnly;
 
-    if ( IsMSWUniqueVolumeNamePath(fullpath, format) )
+    switch ( format )
     {
-        // special Windows unique volume names hack: transform
-        // \\?\Volume{guid}\path into Volume{guid}:path
-        // note: this check must be done before the check for UNC path
-
-        // we know the last backslash from the unique volume name is located
-        // there from IsMSWUniqueVolumeNamePath
-        fullpath[wxMSWUniqueVolumePrefixLength - 1] = wxFILE_SEP_DSK;
-
-        // paths starting with a unique volume name should always be absolute
-        fullpath.insert(wxMSWUniqueVolumePrefixLength, 1, wxFILE_SEP_PATH_DOS);
-
-        // remove the leading "\\?\" part
-        fullpath.erase(0, 4);
-    }
-    else if ( IsUNCPath(fullpath, format) )
-    {
-        // special Windows UNC paths hack: transform \\share\path into share:path
-
-        fullpath.erase(0, 2);
-
-        size_t posFirstSlash =
-            fullpath.find_first_of(GetPathTerminators(format));
-        if ( posFirstSlash != wxString::npos )
-        {
-            fullpath[posFirstSlash] = wxFILE_SEP_DSK;
-
-            // UNC paths are always absolute, right? (FIXME)
-            fullpath.insert(posFirstSlash + 1, 1, wxFILE_SEP_PATH_DOS);
-        }
-    }
-
-    // We separate the volume here
-    if ( format == wxPATH_DOS || format == wxPATH_VMS )
-    {
-        wxString sepVol = GetVolumeSeparator(format);
-
-        // we have to exclude the case of a colon in the very beginning of the
-        // string as it can't be a volume separator (nor can this be a valid
-        // DOS file name at all but we'll leave dealing with this to our caller)
-        size_t posFirstColon = fullpath.find_first_of(sepVol);
-        if ( posFirstColon && posFirstColon != wxString::npos )
-        {
-            if ( pstrVolume )
+        case wxPATH_DOS:
+            // Deal with MSW UNC and volume GUID paths complications first.
+            if ( IsVolumeGUIDPath(fullpath) )
             {
-                *pstrVolume = fullpath.Left(posFirstColon);
+                if ( pstrVolume )
+                    *pstrVolume = fullpath.Left(wxMSWUniqueVolumePrefixLength - 1);
+
+                // Note: take the first slash here.
+                pathOnly = fullpath.Mid(wxMSWUniqueVolumePrefixLength - 1);
+
+                break;
             }
 
-            // remove the volume name and the separator from the full path
-            fullpath.erase(0, posFirstColon + sepVol.length());
-        }
+            if ( IsUNCPath(fullpath) )
+            {
+                // Note that IsUNCPath() checks that 3rd character is not a
+                // (back)slash.
+                size_t posFirstSlash =
+                    fullpath.find_first_of(GetPathTerminators(format), 3);
+                if ( posFirstSlash != wxString::npos )
+                {
+                    if ( pstrVolume )
+                        *pstrVolume = fullpath.Left(posFirstSlash);
+                    pathOnly = fullpath.Mid(posFirstSlash);
+                }
+                else // UNC path to the root of the share (just "\\share")
+                {
+                    if ( pstrVolume )
+                        *pstrVolume = fullpath;
+                }
+
+                // In any case, normalize slashes to backslashes, which are canonical
+                // separators for the UNC paths.
+                if ( pstrVolume )
+                {
+                    (*pstrVolume)[0] =
+                    (*pstrVolume)[1] = '\\';
+                }
+
+                break;
+            }
+
+            wxFALLTHROUGH;
+
+        case wxPATH_VMS:
+            {
+                wxString sepVol = GetVolumeSeparator(format);
+
+                // we have to exclude the case of a colon in the very beginning of the
+                // string as it can't be a volume separator (nor can this be a valid
+                // DOS file name at all but we'll leave dealing with this to our caller)
+                size_t posFirstColon = fullpath.find_first_of(sepVol);
+                if ( posFirstColon && posFirstColon != wxString::npos )
+                {
+                    if ( pstrVolume )
+                    {
+                        *pstrVolume = fullpath.Left(posFirstColon);
+                    }
+
+                    // remove the volume name and the separator from the full path
+                    pathOnly = fullpath.Mid(posFirstColon + 1);
+                }
+                else
+                {
+                    pathOnly = fullpath;
+                }
+            }
+            break;
+
+        case wxPATH_MAC:
+        case wxPATH_UNIX:
+            // Volumes are not used in paths in this format.
+            pathOnly = fullpath;
+            break;
+
+        case wxPATH_NATIVE:
+        case wxPATH_MAX:
+            wxFAIL_MSG( wxS("unreachable") );
+            break;
     }
 
     if ( pstrPath )
-        *pstrPath = fullpath;
+        *pstrPath = pathOnly;
 }
 
 /* static */

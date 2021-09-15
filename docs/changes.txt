@@ -133,6 +133,12 @@ Changes in behaviour not resulting in compilation errors
   bitmaps in wxMSW if the corresponding Set had been called before, as in the
   other ports, instead of returning the normal bitmap as fallback in this case.
 
+- wxFileName::GetVolume() now returns "\\share" and not just "share" for the
+  UNC paths (i.e. \\share\path\on\remote\server) and "\\?\Volume{GUID}" for the
+  volume GUID paths rather than just "Volume{GUID}" as before. This allows
+  distinguishing them from the drive letters, even for single letter network
+  share name.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

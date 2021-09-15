@@ -859,9 +859,19 @@ public:
                   wxDateTime* dtCreate) const;
 
     /**
-        Returns the string containing the volume for this file name, empty if it
-        doesn't have one or if the file system doesn't support volumes at all
-        (for example, Unix).
+        Returns the string containing the volume for this file name.
+
+        The returned string is empty if this object doesn't have a volume name,
+        as is always the case for the paths in Unix format which don't support
+        volumes at all.
+
+        Note that for @c wxPATH_DOS format paths, the returned string may have
+        one of the following forms:
+
+        - Just a single letter, for the usual drive letter volumes, e.g. @c C.
+        - A share name preceded by a double backslash, e.g. @c \\\\share.
+        - A GUID volume preceded by a double backslash and a question mark,
+          e.g. @c \\\\?\\Volume{12345678-9abc-def0-1234-56789abcdef0}.
     */
     wxString GetVolume() const;
 

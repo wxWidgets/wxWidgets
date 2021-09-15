@@ -638,6 +638,9 @@ private:
                    int flags = SetPath_MayHaveVolume);
 
     // the drive/volume/device specification (always empty for Unix)
+    //
+    // for the drive letters, contains just the letter itself, but for MSW UNC
+    // and volume GUID paths, it starts with double backslash, e.g. "\\share"
     wxString        m_volume;
 
     // the path components of the file
