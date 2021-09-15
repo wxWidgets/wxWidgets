@@ -233,12 +233,11 @@ protected:
     bool            m_isDirty;
     bool            m_isShown;
     wxWindow*       m_window;
-    wxDC*           m_windowDC;
 
 #ifdef wxHAS_NATIVE_OVERLAY
     wxOverlay       m_overlay;
-    wxDCOverlay*     m_dcOverlay;
 #else
+    wxDC*           m_windowDC;
     // Stores the window contents while we're dragging the image around
     wxBitmap        m_backingBitmap;
     wxBitmap*       m_pBackingBitmap; // Pointer to existing backing bitmap

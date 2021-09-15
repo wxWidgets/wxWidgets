@@ -55,19 +55,19 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxGenericDragImage, wxObject);
 
 wxGenericDragImage::~wxGenericDragImage()
 {
+#ifndef wxHAS_NATIVE_OVERLAY
     delete m_windowDC;
+#endif
 }
 
 void wxGenericDragImage::Init()
 {
     m_isDirty = false;
     m_isShown = false;
-    m_windowDC = NULL;
     m_window = NULL;
     m_fullScreen = false;
-#ifdef wxHAS_NATIVE_OVERLAY
-    m_dcOverlay = NULL;
-#else
+#ifndef wxHAS_NATIVE_OVERLAY
+    m_windowDC = NULL;
     m_pBackingBitmap = NULL;
 #endif
 }
@@ -187,9 +187,6 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
     m_window = window;
     m_fullScreen = fullScreen;
 
-    if (rect)
-        m_boundingRect = * rect;
-
     m_isDirty = false;
     m_isShown = false;
 
@@ -204,35 +201,35 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
     // Make a copy of the window so we can repair damage done as the image is
     // dragged.
 
-    wxSize clientSize;
     if (!m_fullScreen)
     {
-        clientSize = window->GetClientSize();
-        m_boundingRect.x = 0; m_boundingRect.y = 0;
-        m_boundingRect.width = clientSize.x; m_boundingRect.height = clientSize.y;
+        m_boundingRect.SetPosition(wxPoint(0, 0));
+        m_boundingRect.SetSize(window->GetClientSize());
     }
     else
     {
-        int w, h;
-        wxDisplaySize(& w, & h);
-        clientSize.x = w; clientSize.y = h;
         if (rect)
         {
-            clientSize.x = m_boundingRect.width; clientSize.y = m_boundingRect.height;
+            m_boundingRect = *rect;
         }
         else
         {
-            m_boundingRect.x = 0; m_boundingRect.y = 0;
-            m_boundingRect.width = w; m_boundingRect.height = h;
+            int w, h;
+            wxDisplaySize(&w, &h);
+            m_boundingRect.SetPosition(wxPoint(0, 0));
+            m_boundingRect.SetSize(wxSize(w, h));
         }
     }
 
 #ifndef wxHAS_NATIVE_OVERLAY
     wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
 
-    if (!backing->IsOk() || (backing->GetWidth() < clientSize.x || backing->GetHeight() < clientSize.y))
-        (*backing) = wxBitmap(clientSize.x, clientSize.y);
-#endif // !wxHAS_NATIVE_OVERLAY
+    if (!backing->IsOk() ||
+        (backing->GetWidth() < m_boundingRect.width ||
+         backing->GetHeight() < m_boundingRect.height))
+    {
+        *backing = wxBitmap(m_boundingRect.width, m_boundingRect.height);
+    }
 
     if (!m_fullScreen)
     {
@@ -242,14 +239,9 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
     {
         m_windowDC = new wxScreenDC;
 
-#if 0
-        // Use m_boundingRect to limit the area considered.
-        ((wxScreenDC*) m_windowDC)->StartDrawingOnTop(rect);
-#endif
-
-        m_windowDC->SetClippingRegion(m_boundingRect.x, m_boundingRect.y,
-            m_boundingRect.width, m_boundingRect.height);
+        m_windowDC->SetClippingRegion(m_boundingRect);
     }
+#endif // !wxHAS_NATIVE_OVERLAY
 
     return true;
 }
@@ -293,18 +285,17 @@ bool wxGenericDragImage::EndDrag()
         }
     }
 
+#ifdef wxHAS_NATIVE_OVERLAY
+    m_overlay.Reset();
+#else
     if (m_windowDC)
     {
-#ifdef wxHAS_NATIVE_OVERLAY
-        m_overlay.Reset();
-#else
         m_windowDC->DestroyClippingRegion();
-#endif
-        wxDELETE(m_windowDC);
-    }
 
-#ifndef wxHAS_NATIVE_OVERLAY
-    m_repairBitmap = wxNullBitmap;
+        wxDELETE(m_windowDC);
+
+        m_repairBitmap = wxNullBitmap;
+    }
 #endif
 
     return true;
@@ -314,8 +305,6 @@ bool wxGenericDragImage::EndDrag()
 // is non-NULL, or in screen coordinates if NULL.
 bool wxGenericDragImage::Move(const wxPoint& pt)
 {
-    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Move()") );
-
     wxPoint pt2(pt);
     if (m_fullScreen)
         pt2 = m_window->ClientToScreen(pt);
@@ -338,8 +327,6 @@ bool wxGenericDragImage::Move(const wxPoint& pt)
 
 bool wxGenericDragImage::Show()
 {
-    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Show()") );
-
     // Show at the current position
 
     if (!m_isShown)
@@ -348,6 +335,8 @@ bool wxGenericDragImage::Show()
         // something has changed on the window.
 
 #ifndef wxHAS_NATIVE_OVERLAY
+        wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Show()") );
+
         wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
         wxMemoryDC memDC;
         memDC.SelectObject(* backing);
@@ -376,8 +365,6 @@ bool wxGenericDragImage::UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& des
 
 bool wxGenericDragImage::Hide()
 {
-    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Hide()") );
-
     // Repair the old position
 
     if (m_isShown && m_isDirty)
@@ -396,18 +383,21 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos,
                                      const wxPoint& newPos,
                                      bool eraseOld, bool drawNew)
 {
-    if (!m_windowDC)
-        return false;
-
 #ifdef wxHAS_NATIVE_OVERLAY
-    wxUnusedVar(oldPos);
+    wxDCOverlay dcoverlay( m_overlay, m_window, m_fullScreen );
+    dcoverlay.SetUpdateRectangle(GetImageRect(oldPos));
+    wxDC& dc = dcoverlay;
 
-    wxDCOverlay dcoverlay( m_overlay, (wxWindowDC*) m_windowDC ) ;
     if ( eraseOld )
         dcoverlay.Clear() ;
     if (drawNew)
-        DoDrawImage(*m_windowDC, newPos);
+        DoDrawImage(dc, newPos);
 #else // !wxHAS_NATIVE_OVERLAY
+    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::RedrawImage()") );
+
+    if (!m_windowDC)
+        return false;
+
     wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
     if (!backing->IsOk())
         return false;
