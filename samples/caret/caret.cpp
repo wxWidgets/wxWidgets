@@ -325,10 +325,11 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::CreateCaret()
 {
+    SetCaret(NULL);
     wxCaret *caret = new wxCaret(this, m_widthChar, m_heightChar);
     SetCaret(caret);
 
-    caret->Move(m_xMargin, m_yMargin);
+    DoMoveCaret();
     caret->Show();
 }
 
