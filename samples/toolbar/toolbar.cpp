@@ -58,6 +58,15 @@
     #include "bitmaps/paste_png.c"
     #include "bitmaps/print_png.c"
     #include "bitmaps/help_png.c"
+
+    #include "bitmaps/new_2x_png.c"
+    #include "bitmaps/open_2x_png.c"
+    #include "bitmaps/save_2x_png.c"
+    #include "bitmaps/copy_2x_png.c"
+    #include "bitmaps/cut_2x_png.c"
+    #include "bitmaps/paste_2x_png.c"
+    #include "bitmaps/print_2x_png.c"
+    #include "bitmaps/help_2x_png.c"
 #endif // !wxHAS_IMAGES_IN_RESOURCES
 
 enum Positions
@@ -98,6 +107,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     void OnSize(wxSizeEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     void OnToggleToolbar(wxCommandEvent& event);
     void OnToggleAnotherToolbar(wxCommandEvent& event);
@@ -228,6 +238,7 @@ enum
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
@@ -377,14 +388,28 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     wxBitmap toolBarBitmaps[Tool_Max];
 
-    toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  );
-    toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open );
-    toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save );
-    toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy );
-    toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut  );
-    toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste);
-    toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print);
-    toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help );
+    if ( GetDPIScaleFactor() >= 1.5 )
+    {
+        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new_2x  );
+        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open_2x );
+        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save_2x );
+        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy_2x );
+        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut_2x  );
+        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste_2x);
+        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print_2x);
+        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help_2x );
+    }
+    else
+    {
+        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  );
+        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open );
+        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save );
+        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy );
+        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut  );
+        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste);
+        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print);
+        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help );
+    }
 
     int w = toolBarBitmaps[Tool_new].GetWidth(),
         h = toolBarBitmaps[Tool_new].GetHeight();
@@ -676,6 +701,16 @@ void MyFrame::OnSize(wxSizeEvent& event)
     {
         event.Skip();
     }
+}
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    event.Skip();
+
+    // We check the DPI scaling factor when the toolbar is created, so just
+    // recreate it whenever DPI changes. We could also just update the tools
+    // bitmaps, but this is simpler and doesn't have any significant drawbacks.
+    RecreateToolbar();
 }
 
 void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))

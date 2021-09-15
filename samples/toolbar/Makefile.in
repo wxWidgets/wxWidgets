@@ -155,7 +155,7 @@ toolbar$(EXEEXT): $(TOOLBAR_OBJECTS) $(__toolbar___win32rc)
 	$(CXX) -o $@ $(TOOLBAR_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	$(__toolbar___os2_emxbindcmd)
 
-@COND_PLATFORM_MACOSX_1@toolbar.app/Contents/PkgInfo: toolbar$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns $(srcdir)/bitmaps/new.png $(srcdir)/bitmaps/open.png $(srcdir)/bitmaps/save.png $(srcdir)/bitmaps/copy.png $(srcdir)/bitmaps/cut.png $(srcdir)/bitmaps/paste.png $(srcdir)/bitmaps/print.png $(srcdir)/bitmaps/help.png
+@COND_PLATFORM_MACOSX_1@toolbar.app/Contents/PkgInfo: toolbar$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns $(srcdir)/bitmaps/new.png $(srcdir)/bitmaps/open.png $(srcdir)/bitmaps/save.png $(srcdir)/bitmaps/copy.png $(srcdir)/bitmaps/cut.png $(srcdir)/bitmaps/paste.png $(srcdir)/bitmaps/print.png $(srcdir)/bitmaps/help.png $(srcdir)/bitmaps/new_2x.png $(srcdir)/bitmaps/open_2x.png $(srcdir)/bitmaps/save_2x.png $(srcdir)/bitmaps/copy_2x.png $(srcdir)/bitmaps/cut_2x.png $(srcdir)/bitmaps/paste_2x.png $(srcdir)/bitmaps/print_2x.png $(srcdir)/bitmaps/help_2x.png
 @COND_PLATFORM_MACOSX_1@	mkdir -p toolbar.app/Contents
 @COND_PLATFORM_MACOSX_1@	mkdir -p toolbar.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1@	mkdir -p toolbar.app/Contents/Resources
@@ -179,7 +179,7 @@ toolbar$(EXEEXT): $(TOOLBAR_OBJECTS) $(__toolbar___win32rc)
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns toolbar.app/Contents/Resources/wxmac.icns
-@COND_PLATFORM_MACOSX_1@	cp -f $(srcdir)/bitmaps/new.png $(srcdir)/bitmaps/open.png $(srcdir)/bitmaps/save.png $(srcdir)/bitmaps/copy.png $(srcdir)/bitmaps/cut.png $(srcdir)/bitmaps/paste.png $(srcdir)/bitmaps/print.png $(srcdir)/bitmaps/help.png toolbar.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	cp -f $(srcdir)/bitmaps/new.png $(srcdir)/bitmaps/open.png $(srcdir)/bitmaps/save.png $(srcdir)/bitmaps/copy.png $(srcdir)/bitmaps/cut.png $(srcdir)/bitmaps/paste.png $(srcdir)/bitmaps/print.png $(srcdir)/bitmaps/help.png $(srcdir)/bitmaps/new_2x.png $(srcdir)/bitmaps/open_2x.png $(srcdir)/bitmaps/save_2x.png $(srcdir)/bitmaps/copy_2x.png $(srcdir)/bitmaps/cut_2x.png $(srcdir)/bitmaps/paste_2x.png $(srcdir)/bitmaps/print_2x.png $(srcdir)/bitmaps/help_2x.png toolbar.app/Contents/Resources
 
 @COND_PLATFORM_MACOSX_1@toolbar_bundle: $(____toolbar_BUNDLE_TGT_REF_DEP)
 
