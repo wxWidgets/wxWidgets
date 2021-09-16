@@ -1955,6 +1955,13 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
 
         wxCFStringRef resname(filename);
         wxCFRef<CFURLRef> imageURL(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
+        if ( !imageURL.get() && dpiFactor != 1 )
+        {
+            // try alternate naming scheme
+            filename = wxString::Format("%s_%dx", name, dpiFactor);
+            resname = wxCFStringRef(filename);
+            imageURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL);
+        }
         if ( imageURL.get() )
         {
             // Create the data provider object
