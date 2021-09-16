@@ -40,6 +40,36 @@
 // Define this as 0 for the platforms not supporting controls in toolbars
 #define USE_CONTROLS_IN_TOOLBAR 1
 
+//
+// Configuration switches for testing multires API,
+//
+
+#ifdef __WXOSX__
+
+#define USE_MULTIRES_BITMAP 1
+#define USE_IMAGES_IN_RESOURCES 1
+
+#else
+
+// 'standard'
+
+#define USE_MULTIRES_BITMAP 0
+#ifdef wxHAS_IMAGES_IN_RESOURCES
+#define USE_IMAGES_IN_RESOURCES 1
+#else
+#define USE_IMAGES_IN_RESOURCES 0
+#endif
+
+#endif
+
+#undef wxBITMAP_PNG
+
+#if USE_IMAGES_IN_RESOURCES
+    #define wxBITMAP_PNG(name) wxBitmap(wxS(#name), wxBITMAP_TYPE_PNG_RESOURCE)
+#else
+    #define wxBITMAP_PNG(name) wxBITMAP_PNG_FROM_DATA(name)
+#endif
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -49,6 +79,9 @@
 // during run-time.
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
+#endif
+
+#if USE_IMAGES_IN_RESOURCES == 0
 
     #include "bitmaps/new_png.c"
     #include "bitmaps/open_png.c"
@@ -67,7 +100,7 @@
     #include "bitmaps/paste_2x_png.c"
     #include "bitmaps/print_2x_png.c"
     #include "bitmaps/help_2x_png.c"
-#endif // !wxHAS_IMAGES_IN_RESOURCES
+#endif // !USE_IMAGES_IN_RESOURCES
 
 enum Positions
 {
@@ -388,7 +421,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     wxBitmap toolBarBitmaps[Tool_Max];
 
-#ifndef __WXOSX__
+#if USE_MULTIRES_BITMAP == 0
     if ( GetDPIScaleFactor() >= 1.5 )
     {
         toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new_2x  );
