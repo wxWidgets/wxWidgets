@@ -17,7 +17,7 @@
     #define wxHAS_NATIVE_OVERLAY 1
 #elif defined(__WXOSX__) && wxOSX_USE_COCOA
     #define wxHAS_NATIVE_OVERLAY 1
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) || defined(__WXGTK3__)
     #define wxHAS_NATIVE_OVERLAY 1
     #define wxOVERLAY_NO_EXTERNAL_DC 1
 #else
