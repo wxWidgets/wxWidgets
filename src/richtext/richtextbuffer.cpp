@@ -5697,6 +5697,7 @@ void wxRichTextParagraph::Copy(const wxRichTextParagraph& obj)
 void wxRichTextParagraph::ClearLines()
 {
     WX_CLEAR_LIST(wxRichTextLineList, m_cachedLines);
+    m_cachedLinesVect.clear();
 }
 
 /// Get/set the object size for the given range. Returns false if the range
@@ -6529,7 +6530,17 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
 {
     if (pos < (int) m_cachedLines.GetCount())
     {
-        wxRichTextLine* line = m_cachedLines.Item(pos)->GetData();
+        if (m_cachedLinesVect.empty())
+        {
+            m_cachedLinesVect.reserve(m_cachedLines.GetCount());
+            wxRichTextLineList::compatibility_iterator node = m_cachedLines.GetFirst();
+            while (node)
+            {
+                m_cachedLinesVect.push_back(node->GetData());
+                node = node->GetNext();
+            }
+        }
+        wxRichTextLine* line = m_cachedLinesVect[pos];
         line->Init(this);
         return line;
     }
@@ -6537,6 +6548,8 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
     {
         wxRichTextLine* line = new wxRichTextLine(this);
         m_cachedLines.Append(line);
+        if (!m_cachedLinesVect.empty())
+            m_cachedLinesVect.push_back(line);
         return line;
     }
 }
@@ -6544,6 +6557,7 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
 /// Clear remaining unused line objects, if any
 bool wxRichTextParagraph::ClearUnusedLines(int lineCount)
 {
+    bool erased = false;
     int cachedLineCount = m_cachedLines.GetCount();
     if ((int) cachedLineCount > lineCount)
     {
@@ -6553,8 +6567,11 @@ bool wxRichTextParagraph::ClearUnusedLines(int lineCount)
             wxRichTextLine* line = node->GetData();
             m_cachedLines.Erase(node);
             delete line;
+            erased = true;
         }
     }
+    if (erased)
+        m_cachedLinesVect.clear();
     return true;
 }
 

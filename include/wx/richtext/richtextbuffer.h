@@ -4654,6 +4654,7 @@ protected:
 
     // The lines that make up the wrapped paragraph
     wxRichTextLineList  m_cachedLines;
+    wxVector<wxRichTextLine*> m_cachedLinesVect;
 
     // Whether the paragraph is impacted by floating objects from above
     int                 m_impactedByFloatingObjects;
