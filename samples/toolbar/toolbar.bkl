@@ -1,6 +1,14 @@
 <?xml version="1.0" ?>
 <makefile>
 
+    <!--
+        These files are used with wxBITMAP_PNG() and so must be
+        copied to the resources directory under Mac.
+     -->
+    <set var="BUNDLE_RESOURCES">
+        $(SRCDIR)/bitmaps/new.png $(SRCDIR)/bitmaps/open.png $(SRCDIR)/bitmaps/save.png $(SRCDIR)/bitmaps/copy.png $(SRCDIR)/bitmaps/cut.png $(SRCDIR)/bitmaps/paste.png $(SRCDIR)/bitmaps/print.png $(SRCDIR)/bitmaps/help.png $(SRCDIR)/bitmaps/new_2x.png $(SRCDIR)/bitmaps/open_2x.png $(SRCDIR)/bitmaps/save_2x.png $(SRCDIR)/bitmaps/copy_2x.png $(SRCDIR)/bitmaps/cut_2x.png $(SRCDIR)/bitmaps/paste_2x.png $(SRCDIR)/bitmaps/print_2x.png $(SRCDIR)/bitmaps/help_2x.png
+    </set>
+
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="toolbar" template="wx_sample" template_append="wx_append">

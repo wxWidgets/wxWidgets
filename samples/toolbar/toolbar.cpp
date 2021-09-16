@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -33,14 +30,6 @@
 #include "wx/filedlg.h"
 #include "wx/colordlg.h"
 #include "wx/srchctrl.h"
-
-// define this to use XPMs everywhere (by default, BMPs are used under Win)
-// BMPs use less space, but aren't compiled into the executable on other platforms
-#if defined(__WINDOWS__) && wxUSE_WXDIB
-    #define USE_XPM_BITMAPS 0
-#else
-    #define USE_XPM_BITMAPS 1
-#endif
 
 // If this is 1, the sample will test an extra toolbar identical to the
 // main one, but not managed by the frame. This can test subtle differences
@@ -55,20 +44,30 @@
 // resources
 // ----------------------------------------------------------------------------
 
+// Under Windows, PNG files are embedded as resources, see toolbar.rc, but
+// elsewhere we embed them in the program itself. We could also load them
+// during run-time.
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
-#endif
 
-#if USE_XPM_BITMAPS
-    #include "bitmaps/new.xpm"
-    #include "bitmaps/open.xpm"
-    #include "bitmaps/save.xpm"
-    #include "bitmaps/copy.xpm"
-    #include "bitmaps/cut.xpm"
-    #include "bitmaps/preview.xpm"  // paste XPM
-    #include "bitmaps/print.xpm"
-    #include "bitmaps/help.xpm"
-#endif // USE_XPM_BITMAPS
+    #include "bitmaps/new_png.c"
+    #include "bitmaps/open_png.c"
+    #include "bitmaps/save_png.c"
+    #include "bitmaps/copy_png.c"
+    #include "bitmaps/cut_png.c"
+    #include "bitmaps/paste_png.c"
+    #include "bitmaps/print_png.c"
+    #include "bitmaps/help_png.c"
+
+    #include "bitmaps/new_2x_png.c"
+    #include "bitmaps/open_2x_png.c"
+    #include "bitmaps/save_2x_png.c"
+    #include "bitmaps/copy_2x_png.c"
+    #include "bitmaps/cut_2x_png.c"
+    #include "bitmaps/paste_2x_png.c"
+    #include "bitmaps/print_2x_png.c"
+    #include "bitmaps/help_2x_png.c"
+#endif // !wxHAS_IMAGES_IN_RESOURCES
 
 enum Positions
 {
@@ -108,6 +107,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     void OnSize(wxSizeEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     void OnToggleToolbar(wxCommandEvent& event);
     void OnToggleAnotherToolbar(wxCommandEvent& event);
@@ -238,6 +238,7 @@ enum
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
@@ -304,6 +305,10 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    // Because we use PNG icons in the frame ctor, we need to register this
+    // image handler before creating the frame.
+    wxImage::AddHandler(new wxPNGHandler);
+
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  "wxToolBar Sample",
@@ -314,8 +319,6 @@ bool MyApp::OnInit()
 #if wxUSE_STATUSBAR
     frame->SetStatusText("Hello, wxWidgets");
 #endif
-
-    wxInitAllImageHandlers();
 
     return true;
 }
@@ -385,22 +388,30 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     wxBitmap toolBarBitmaps[Tool_Max];
 
-#if USE_XPM_BITMAPS
-    #define INIT_TOOL_BMP(bmp) \
-        toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-#else // !USE_XPM_BITMAPS
-    #define INIT_TOOL_BMP(bmp) \
-        toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-    INIT_TOOL_BMP(new);
-    INIT_TOOL_BMP(open);
-    INIT_TOOL_BMP(save);
-    INIT_TOOL_BMP(copy);
-    INIT_TOOL_BMP(cut);
-    INIT_TOOL_BMP(paste);
-    INIT_TOOL_BMP(print);
-    INIT_TOOL_BMP(help);
+#ifndef __WXOSX__
+    if ( GetDPIScaleFactor() >= 1.5 )
+    {
+        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new_2x  );
+        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open_2x );
+        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save_2x );
+        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy_2x );
+        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut_2x  );
+        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste_2x);
+        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print_2x);
+        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help_2x );
+    }
+    else
+#endif
+    {
+        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  );
+        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open );
+        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save );
+        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy );
+        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut  );
+        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste);
+        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print);
+        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help );
+    }
 
     int w = toolBarBitmaps[Tool_new].GetWidth(),
         h = toolBarBitmaps[Tool_new].GetHeight();
@@ -416,10 +427,6 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                 wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
         }
     }
-
-    // this call is actually unnecessary as the toolbar will adjust its tools
-    // size to fit the biggest icon used anyhow but it doesn't hurt neither
-    toolBar->SetToolBitmapSize(wxSize(w, h));
 
     toolBar->AddTool(wxID_NEW, "New",
                      toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
@@ -698,6 +705,16 @@ void MyFrame::OnSize(wxSizeEvent& event)
     }
 }
 
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    event.Skip();
+
+    // We check the DPI scaling factor when the toolbar is created, so just
+    // recreate it whenever DPI changes. We could also just update the tools
+    // bitmaps, but this is simpler and doesn't have any significant drawbacks.
+    RecreateToolbar();
+}
+
 void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
 {
     wxToolBar *tbar = GetToolBar();
@@ -742,12 +759,12 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
 
         m_tbar->SetMargins(4, 4);
 
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP(new));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP(open));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP(save));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP_PNG(new));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP_PNG(open));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP_PNG(save));
         m_tbar->AddSeparator();
-        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP(help));
-        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP(cut), wxBITMAP(paste));
+        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP_PNG(help));
+        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP_PNG(cut), wxBITMAP_PNG(paste));
         m_tbar->EnableTool(IDM_TOOLBAR_OTHER_4, false);
 
         m_tbar->Realize();
@@ -995,7 +1012,7 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
     wxToolBarBase *tb = GetToolBar();
     tb->InsertTool(0, wxID_PRINT, "New print",
-                   wxBITMAP(print), wxNullBitmap,
+                   wxBITMAP_PNG(print), wxNullBitmap,
                    wxITEM_NORMAL,
                    "Delete this tool",
                    "This button was inserted into the toolbar");

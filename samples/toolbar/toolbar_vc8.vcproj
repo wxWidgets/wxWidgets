@@ -83,7 +83,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswud\toolbar.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -177,7 +177,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswu\toolbar.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -276,7 +276,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswuddll\toolbar.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -370,7 +370,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswudll\toolbar.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -412,8 +412,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="vc_mswud_x64"
-			IntermediateDirectory="vc_mswud_x64\toolbar"
+			OutputDirectory="vc_x64_mswud"
+			IntermediateDirectory="vc_x64_mswud\toolbar"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -447,8 +447,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud_x64\toolbar\"
-				ProgramDataBaseFileName="vc_mswud_x64\toolbar.pdb"
+				ObjectFile="vc_x64_mswud\toolbar\"
+				ProgramDataBaseFileName="vc_x64_mswud\toolbar.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -469,14 +469,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswud_x64\toolbar.exe"
+				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				OutputFile="vc_x64_mswud\toolbar.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswud_x64\toolbar.pdb"
+				ProgramDatabaseFile="vc_x64_mswud\toolbar.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -491,7 +491,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswud_x64\toolbar_vc8.bsc"
+				OutputFile="vc_x64_mswud\toolbar_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -509,8 +509,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="vc_mswu_x64"
-			IntermediateDirectory="vc_mswu_x64\toolbar"
+			OutputDirectory="vc_x64_mswu"
+			IntermediateDirectory="vc_x64_mswu\toolbar"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -541,8 +541,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu_x64\toolbar\"
-				ProgramDataBaseFileName="vc_mswu_x64\toolbar.pdb"
+				ObjectFile="vc_x64_mswu\toolbar\"
+				ProgramDataBaseFileName="vc_x64_mswu\toolbar.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -563,14 +563,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswu_x64\toolbar.exe"
+				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				OutputFile="vc_x64_mswu\toolbar.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswu_x64\toolbar.pdb"
+				ProgramDatabaseFile="vc_x64_mswu\toolbar.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -587,7 +587,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswu_x64\toolbar_vc8.bsc"
+				OutputFile="vc_x64_mswu\toolbar_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -605,8 +605,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Debug|x64"
-			OutputDirectory="vc_mswuddll_x64"
-			IntermediateDirectory="vc_mswuddll_x64\toolbar"
+			OutputDirectory="vc_x64_mswuddll"
+			IntermediateDirectory="vc_x64_mswuddll\toolbar"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -640,8 +640,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\toolbar\"
-				ProgramDataBaseFileName="vc_mswuddll_x64\toolbar.pdb"
+				ObjectFile="vc_x64_mswuddll\toolbar\"
+				ProgramDataBaseFileName="vc_x64_mswuddll\toolbar.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -662,14 +662,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswuddll_x64\toolbar.exe"
+				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				OutputFile="vc_x64_mswuddll\toolbar.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll_x64\toolbar.pdb"
+				ProgramDatabaseFile="vc_x64_mswuddll\toolbar.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -684,7 +684,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll_x64\toolbar_vc8.bsc"
+				OutputFile="vc_x64_mswuddll\toolbar_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -702,8 +702,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Release|x64"
-			OutputDirectory="vc_mswudll_x64"
-			IntermediateDirectory="vc_mswudll_x64\toolbar"
+			OutputDirectory="vc_x64_mswudll"
+			IntermediateDirectory="vc_x64_mswudll\toolbar"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -734,8 +734,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\toolbar\"
-				ProgramDataBaseFileName="vc_mswudll_x64\toolbar.pdb"
+				ObjectFile="vc_x64_mswudll\toolbar\"
+				ProgramDataBaseFileName="vc_x64_mswudll\toolbar.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -756,14 +756,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswudll_x64\toolbar.exe"
+				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				OutputFile="vc_x64_mswudll\toolbar.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll_x64\toolbar.pdb"
+				ProgramDatabaseFile="vc_x64_mswudll\toolbar.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -780,7 +780,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll_x64\toolbar_vc8.bsc"
+				OutputFile="vc_x64_mswudll\toolbar_vc8.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
