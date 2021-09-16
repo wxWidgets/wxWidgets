@@ -172,6 +172,14 @@ private :
     wxDC*                   m_selectedInto;
 };
 
+/**
+    Smart pointer wrapping wxBitmapRep.
+
+    wxBitmapRepPtr takes ownership of wxBitmapRep passed to it on
+    construction and calls DecRef() on it automatically when it is destroyed.
+    It also provides transparent access to wxBitmapRep methods by allowing
+    to use objects of this class as if they were wxBitmapRep pointers.
+*/
 typedef wxObjectDataPtr<wxBitmapRep> wxBitmapRepPtr;
 typedef wxVector<wxBitmapRepPtr> wxBitmapRepresentationArray;
 
@@ -260,7 +268,13 @@ public:
 
     virtual ~wxBitmap() {}
 
+    static wxBitmap NewFromPNGDataWithScale(const void* data, size_t size, wxBitmapScale scale);
+
     void AddRepresentation( wxBitmapRep* other);
+
+    void AddRepresentation( const wxBitmapRepPtr& other);
+
+    wxBitmap& AddRepresentations(const wxBitmap& bitmapWithRep);
 
     wxImage ConvertToImage() const wxOVERRIDE;
 

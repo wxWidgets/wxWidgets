@@ -1411,7 +1411,19 @@ const wxBitmapRepresentationArray& wxBitmap::GetRepresentations() const
 
 void wxBitmap::AddRepresentation( wxBitmapRep* other)
 {
-    GetRepresentations().push_back(wxBitmapRepPtr(other));
+    AddRepresentation(wxBitmapRepPtr(other));
+}
+
+void wxBitmap::AddRepresentation( const wxBitmapRepPtr& other)
+{
+    GetRepresentations().push_back(other);
+}
+
+wxBitmap& wxBitmap::AddRepresentations(const wxBitmap& bitmapWithRep)
+{
+    for ( auto const& r : bitmapWithRep.GetRepresentations() )
+        AddRepresentation(r);
+    return *this;
 }
 
 const wxBitmapRep* wxBitmap::GetDefaultRepresentation() const
@@ -1990,7 +2002,8 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
 }
 
 /* static */
-wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
+
+wxBitmap wxBitmap::NewFromPNGDataWithScale(const void* data, size_t size, wxBitmapScale scale)
 {
     wxCFRef<CGDataProviderRef>
         provider(CGDataProviderCreateWithData(NULL, data, size, NULL) );
@@ -1998,7 +2011,12 @@ wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
         image(CGImageCreateWithPNGDataProvider(provider, NULL, true,
                                                 kCGRenderingIntentDefault));
 
-    return wxBitmap(image);
+    return wxBitmap(image, scale);
+}
+
+wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
+{
+    return wxBitmap::NewFromPNGDataWithScale(data, size, wxBitmapScale());
 }
 
 void wxBitmap::InitStandardHandlers()

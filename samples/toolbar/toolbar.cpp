@@ -47,7 +47,7 @@
 #ifdef __WXOSX__
 
 #define USE_MULTIRES_BITMAP 1
-#define USE_IMAGES_IN_RESOURCES 1
+#define USE_IMAGES_IN_RESOURCES 0
 
 #else
 
@@ -67,6 +67,10 @@
 #if USE_IMAGES_IN_RESOURCES
     #define wxBITMAP_PNG(name) wxBitmap(wxS(#name), wxBITMAP_TYPE_PNG_RESOURCE)
 #else
+    #if USE_MULTIRES_BITMAP
+        #define wxBITMAP_PNG_WITH_SCALE(name, scale) \
+        wxBitmap::NewFromPNGDataWithScale(name##_png, WXSIZEOF(name##_png), scale)
+    #endif
     #define wxBITMAP_PNG(name) wxBITMAP_PNG_FROM_DATA(name)
 #endif
 
@@ -436,6 +440,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     else
 #endif
     {
+#if USE_IMAGES_IN_RESOURCES == 1 || USE_MULTIRES_BITMAP == 0
         toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  );
         toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open );
         toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save );
@@ -444,6 +449,17 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste);
         toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print);
         toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help );
+#else
+        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  ).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(new_2x  , wxBitmapScale::FromContentScale(2.0)));
+        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open ).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(open_2x , wxBitmapScale::FromContentScale(2.0)));
+        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save ).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(save_2x , wxBitmapScale::FromContentScale(2.0)));
+        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy ).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(copy_2x , wxBitmapScale::FromContentScale(2.0)));
+        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut  ).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(cut_2x  , wxBitmapScale::FromContentScale(2.0)));
+        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(paste_2x, wxBitmapScale::FromContentScale(2.0)));
+        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(print_2x, wxBitmapScale::FromContentScale(2.0)));
+        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help ).AddRepresentations(wxBITMAP_PNG_WITH_SCALE(help_2x , wxBitmapScale::FromContentScale(2.0)));
+
+#endif
     }
 
     int w = toolBarBitmaps[Tool_new].GetWidth(),
