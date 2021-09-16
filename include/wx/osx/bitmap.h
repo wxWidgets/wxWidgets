@@ -406,11 +406,11 @@ public:
     void SetSelectedInto(wxDC *dc);
     wxDC *GetSelectedInto() const;
 
+protected:
     wxBitmapRepresentationArray& GetRepresentations();
 
     const wxBitmapRepresentationArray& GetRepresentations() const;
 
-protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 };
