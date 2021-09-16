@@ -2057,6 +2057,7 @@ set(MSW_SRC
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/generic/activityindicator.cpp
+    src/msw/overlay.cpp
 )
 
 set(MSW_HDR

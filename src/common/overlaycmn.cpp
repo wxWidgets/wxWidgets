@@ -31,6 +31,16 @@
 #include "wx/dcscreen.h"
 #include "wx/scrolwin.h"
 
+// wxGCDC won't be used under wxMSW for two reasons:
+// 1) Blitting from wxGCDC is not implemented under wxMSW
+// 2) wxGCDC is too slow compared to using wxMemoryDC directly
+
+#ifndef __WXMSW__
+    #if wxUSE_GRAPHICS_CONTEXT
+        #define wxHAS_OVERLAY_USING_GCDC 1
+    #endif // wxUSE_GRAPHICS_CONTEXT
+#endif //__WXMSW__
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -163,13 +173,13 @@ void wxDCOverlay::Init(wxWindow* win, bool fullscreen, const wxRect& rect)
         wxBitmap& bitmap = m_overlay.GetImpl()->GetBitmap();
         m_memDC.SelectObject(bitmap);
 
-#if wxUSE_GRAPHICS_CONTEXT
+#ifdef wxHAS_OVERLAY_USING_GCDC
         m_dc = new wxGCDC;
         m_dc->SetGraphicsContext(wxGraphicsContext::Create(m_memDC));
-#else // !wxUSE_GRAPHICS_CONTEXT
+#else // !wxHAS_OVERLAY_USING_GCDC
         m_dc = &m_memDC;
         m_ownsDC = false;
-#endif // wxUSE_GRAPHICS_CONTEXT
+#endif // wxHAS_OVERLAY_USING_GCDC
         m_overlay.BeginDrawing(m_dc);
 
         if ( !rect.IsEmpty() )
