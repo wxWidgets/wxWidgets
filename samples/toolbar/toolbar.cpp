@@ -48,6 +48,7 @@
 
 #define USE_MULTIRES_BITMAP 1
 #define USE_IMAGES_IN_RESOURCES 0
+#define USE_MANUAL_MULTIRES_SELECTION 1
 
 #else
 
@@ -60,6 +61,10 @@
 #define USE_IMAGES_IN_RESOURCES 0
 #endif
 
+#endif
+
+#ifndef USE_MANUAL_MULTIRES_SELECTION
+    #define USE_MANUAL_MULTIRES_SELECTION 0
 #endif
 
 #undef wxBITMAP_PNG
@@ -139,6 +144,8 @@ public:
 
     void PopulateToolbar(wxToolBarBase* toolBar);
     void RecreateToolbar();
+    void SetupToolbarBitmaps();
+    void UpdateToolbarBitmaps();
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -407,24 +414,25 @@ void MyFrame::RecreateToolbar()
     PopulateToolbar(toolBar);
 }
 
-void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
+// Set up toolbar
+enum
 {
-    // Set up toolbar
-    enum
-    {
-        Tool_new,
-        Tool_open,
-        Tool_save,
-        Tool_copy,
-        Tool_cut,
-        Tool_paste,
-        Tool_print,
-        Tool_help,
-        Tool_Max
-    };
+    Tool_new,
+    Tool_open,
+    Tool_save,
+    Tool_copy,
+    Tool_cut,
+    Tool_paste,
+    Tool_print,
+    Tool_help,
+    Tool_Max
+};
 
-    wxBitmap toolBarBitmaps[Tool_Max];
+wxBitmap toolBarBitmaps[Tool_Max];
+int toolBarIDs[Tool_Max] = { wxID_NEW, wxID_OPEN, wxID_SAVE, wxID_COPY, wxID_CUT, wxID_PASTE, wxID_PRINT, wxID_HELP};
 
+void MyFrame::SetupToolbarBitmaps()
+{
 #if USE_MULTIRES_BITMAP == 0
     if ( GetDPIScaleFactor() >= 1.5 )
     {
@@ -475,6 +483,35 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
             toolBarBitmaps[n] =
                 wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
         }
+    }
+}
+
+void MyFrame::UpdateToolbarBitmaps()
+{
+    double scale = GetDPIScaleFactor();
+    wxToolBarBase *toolBar = GetToolBar();
+    wxSize sz(toolBarBitmaps[Tool_new].GetWidth(),toolBarBitmaps[Tool_new].GetHeight());
+    sz *= scale;
+    for ( int i = 0 ; i < Tool_Max; ++i ) {
+#if USE_MANUAL_MULTIRES_SELECTION
+        const wxBitmapRep* rep = toolBarBitmaps[i].GetBestRepresentation(sz);
+        wxCFRef<CGImageRef> image(rep->CreateCGImage());
+        toolBar->SetToolNormalBitmap(toolBarIDs[i], wxBitmap(image,rep->GetScale()));
+#else
+        toolBar->SetToolNormalBitmap(toolBarIDs[i], toolBarBitmaps[i]);
+#endif
+    }
+}
+
+void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
+{
+    int w = toolBarBitmaps[Tool_new].GetWidth(),
+        h = toolBarBitmaps[Tool_new].GetHeight();
+
+    if ( !m_smallToolbar )
+    {
+        w *= 2;
+        h *= 2;
     }
 
     toolBar->AddTool(wxID_NEW, "New",
@@ -690,6 +727,7 @@ MyFrame::MyFrame(wxFrame* parent,
     m_toolbarPosition = TOOLBAR_TOP;
 
     // Create the toolbar
+    SetupToolbarBitmaps();
     RecreateToolbar();
 
     m_panel = new wxPanel(this, wxID_ANY);
@@ -758,10 +796,14 @@ void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
 {
     event.Skip();
 
+#if 0
     // We check the DPI scaling factor when the toolbar is created, so just
-    // recreate it whenever DPI changes. We could also just update the tools
-    // bitmaps, but this is simpler and doesn't have any significant drawbacks.
+    // recreate it whenever DPI changes.
     RecreateToolbar();
+#else
+    // We could also just update the tools bitmaps
+    UpdateToolbarBitmaps();
+#endif
 }
 
 void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))

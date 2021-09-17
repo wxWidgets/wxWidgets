@@ -248,6 +248,8 @@ public:
     // Constructor for generalised creation from data
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
+    wxBitmap(const wxBitmapRepPtr& rep);
+
     // creates an bitmap from the native image format
     wxBitmap(CGImageRef image, wxBitmapScale scale = wxBitmapScale());
     wxBitmap(WXImage image);
@@ -270,8 +272,6 @@ public:
 
     static wxBitmap NewFromPNGDataWithScale(const void* data, size_t size, wxBitmapScale scale);
 
-    void AddRepresentation( wxBitmapRep* other);
-
     void AddRepresentation( const wxBitmapRepPtr& other);
 
     wxBitmap& AddRepresentations(const wxBitmap& bitmapWithRep);
@@ -282,9 +282,7 @@ public:
     wxBitmap GetSubBitmap( const wxRect& rect ) const wxOVERRIDE;
 
     const wxBitmapRep* GetBestRepresentation( const wxSize& dimensions) const;
-    wxBitmapRep* GetBestRepresentation( const wxSize& dimensions);
     const wxBitmapRep* GetDefaultRepresentation() const;
-    wxBitmapRep* GetDefaultRepresentation();
 
     virtual bool Create(int width, int height, int depth, wxBitmapScale scale);
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
@@ -407,6 +405,8 @@ public:
     wxDC *GetSelectedInto() const;
 
 protected:
+    wxBitmapRepPtr GetDefaultRepresentation();
+
     wxBitmapRepresentationArray& GetRepresentations();
 
     const wxBitmapRepresentationArray& GetRepresentations() const;
