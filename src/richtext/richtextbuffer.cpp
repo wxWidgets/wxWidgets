@@ -5697,6 +5697,7 @@ void wxRichTextParagraph::Copy(const wxRichTextParagraph& obj)
 void wxRichTextParagraph::ClearLines()
 {
     WX_CLEAR_LIST(wxRichTextLineList, m_cachedLines);
+    m_cachedLinesVect.clear();
 }
 
 /// Get/set the object size for the given range. Returns false if the range
@@ -6529,7 +6530,8 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
 {
     if (pos < (int) m_cachedLines.GetCount())
     {
-        wxRichTextLine* line = m_cachedLines.Item(pos)->GetData();
+        assert(m_cachedLinesVect.size() == m_cachedLines.GetCount());
+        wxRichTextLine* line = m_cachedLinesVect[pos];
         line->Init(this);
         return line;
     }
@@ -6537,6 +6539,7 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
     {
         wxRichTextLine* line = new wxRichTextLine(this);
         m_cachedLines.Append(line);
+        m_cachedLinesVect.push_back(line);
         return line;
     }
 }
@@ -6555,6 +6558,7 @@ bool wxRichTextParagraph::ClearUnusedLines(int lineCount)
             delete line;
         }
     }
+    m_cachedLinesVect.resize(lineCount);
     return true;
 }
 
