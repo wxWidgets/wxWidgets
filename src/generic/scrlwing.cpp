@@ -1049,6 +1049,9 @@ void wxScrollHelperBase::HandleOnMouseWheel(wxMouseEvent& event)
             int times = abs(lines);
             for (; times > 0; times--)
                 m_win->GetEventHandler()->ProcessEvent(newEvent);
+#ifdef __WXUNIVERSAL__
+            m_win->Refresh(true, GetScrollRect());
+#endif
         }
     }
 }
