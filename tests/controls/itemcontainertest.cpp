@@ -280,13 +280,27 @@ void ItemContainerTestCase::SelectionAfterDelete()
     container->Append("item 1");
     container->Append("item 2");
     container->Append("item 3");
+    container->Append("item 4");
+    container->Append("item 5");
+
+    // Selected item (not the last one) is after deleted item
+    container->SetSelection(4);
+    container->Delete(3);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
+
+    // Selected item (the last one) is after deleted item
+    container->SetSelection(4);
+    container->Delete(3);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
 
     container->SetSelection(1);
     CHECK( container->GetSelection() == 1 );
 
+    // Selected item is before deleted item
     container->Delete(3);
     CHECK( container->GetSelection() == 1 );
 
+    // Selected item is being deleted
     container->Delete(1);
     CHECK( container->GetSelection() == wxNOT_FOUND );
 
