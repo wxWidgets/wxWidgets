@@ -801,6 +801,9 @@ void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
     // recreate it whenever DPI changes.
     RecreateToolbar();
 #else
+    #if USE_MULTIRES_BITMAP == 0
+    SetupToolbarBitmaps();
+    #endif
     // We could also just update the tools bitmaps
     UpdateToolbarBitmaps();
 #endif
