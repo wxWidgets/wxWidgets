@@ -31,7 +31,7 @@ bool wxDesktopEnv::MoveToRecycleBin(const wxString &path)
         BOOL result = [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:nil];
         if( result == NO )
         {
-            wxLogSysError( _( "Failed to move '%s' to Recycle Bin" ), path );
+            wxLogSysError( _( "Failed to move '%s' to Trash" ), path );
             result = true;
         }
     }
