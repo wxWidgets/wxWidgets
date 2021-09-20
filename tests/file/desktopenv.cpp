@@ -4,14 +4,10 @@
 // Author:      Igor Korot
 // Created:     2021-09-05
 // Copyright:   (c) 2019 wxWidgets development team
-// License:     wxWidgets license
+// License:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #include <fstream>
 #include "wx/app.h"
@@ -27,7 +23,7 @@ public:
 
 TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
 {
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || ( defined(__WXOSX__) && !( wxOSX_USE_IPHONE ) )
     std::ofstream out( "ffileinstream.test", std::ofstream::out );
     wxString currentDir = wxGetCwd() + "/";
     out << "test file to be moved to trash" << std::endl;
@@ -35,14 +31,21 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     int res = wxDesktopEnv::MoveToRecycleBin( currentDir + "ffileinstream.test" );
     CHECK( res );
     if( res )
-        CHECK( !( wxFile::Exists( currentDir + "ffileinstream.test") ) );
+        CHECK( !( wxFile::Exists( currentDir + "ffileinstream.test" ) ) );
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    bool result = wxDesktopEnv::RestoreFromRecycleBin( "ffileinstream.test" );
+    CHECK( wxFile::Exists( currentDir + "ffileinstream.test" ) );
+#endif
     wxMkdir( "TrashTest" );
     std::ofstream out1( "TrashTest/ffileinstream.test", std::ofstream::out );
     out1 << "test file to be moved to trash with the directory" << std::endl;
     out1.close();
     CHECK( wxDesktopEnv::MoveToRecycleBin( currentDir + "TrashTest" ) );
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    result = wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
+    CHECK( wxFile::Exists( currentDir + "TrashTest" ) );
+#endif
     // also trying non-existing file
     CHECK( !wxDesktopEnv::MoveToRecycleBin( currentDir + "abc" ) );
 #endif
 }
-

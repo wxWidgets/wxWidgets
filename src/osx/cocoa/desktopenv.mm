@@ -4,7 +4,7 @@
 // Author:      Igor Korot
 // Created:     2021-09-05
 // Copyright:   (c) 2021 wxWidgets development team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #import <Foundation/NSArray.h>
@@ -31,8 +31,8 @@ bool wxDesktopEnv::MoveToRecycleBin(const wxString &path)
         BOOL result = [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:nil];
         if( result == NO )
         {
-            wxLogSysError( _( "Failed to move '%s' to Recycle Bin" ), path );
-            ret = true;
+            wxLogSysError( _( "Failed to move '%s' to Trash" ), path );
+            result = true;
         }
     }
     return result;
