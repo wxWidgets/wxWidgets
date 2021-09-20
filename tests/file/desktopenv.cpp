@@ -13,6 +13,7 @@
 #include "wx/app.h"
 #include "wx/filefn.h"
 #include "wx/file.h"
+#include "wx/dir.h"
 #include "wx/desktopenv.h"
 
 class DesktopEnvTestCase
@@ -43,7 +44,7 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     CHECK( wxDesktopEnv::MoveToRecycleBin( currentDir + "TrashTest" ) );
 #if defined(__WXMSW__) || defined(__WXGTK__)
     result = wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
-    CHECK( wxFile::Exists( currentDir + "TrashTest" ) );
+    CHECK( wxDir::Exists( currentDir + "TrashTest" ) );
 #endif
     // also trying non-existing file
     CHECK( !wxDesktopEnv::MoveToRecycleBin( currentDir + "abc" ) );
