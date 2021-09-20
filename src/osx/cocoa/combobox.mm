@@ -294,6 +294,14 @@ void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
 void wxNSComboBoxControl::RemoveItem(int pos)
 {
     SendEvents(false);
+
+    // Explicitly deselect item being removed
+    int selIdx = [m_comboBox indexOfSelectedItem];
+    if (selIdx!= -1 && selIdx == pos)
+    {
+        [m_comboBox deselectItemAtIndex:selIdx];
+    }
+
     [m_comboBox removeItemAtIndex:pos];
     SendEvents(true);
 }
