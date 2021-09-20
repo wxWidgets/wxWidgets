@@ -34,7 +34,7 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     if( res )
         CHECK( !( wxFile::Exists( currentDir + "ffileinstream.test" ) ) );
 #if defined(__WXMSW__) || defined(__WXGTK__)
-    bool result = wxDesktopEnv::RestoreFromRecycleBin( "ffileinstream.test" );
+    wxDesktopEnv::RestoreFromRecycleBin( "ffileinstream.test" );
     CHECK( wxFile::Exists( currentDir + "ffileinstream.test" ) );
 #endif
     wxMkdir( "TrashTest" );
@@ -43,7 +43,7 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     out1.close();
     CHECK( wxDesktopEnv::MoveToRecycleBin( currentDir + "TrashTest" ) );
 #if defined(__WXMSW__) || defined(__WXGTK__)
-    result = wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
+    wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
     CHECK( wxDir::Exists( currentDir + "TrashTest" ) );
 #endif
     // also trying non-existing file
