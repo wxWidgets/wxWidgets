@@ -135,7 +135,9 @@ void wxFileButton::SetPath(const wxString &str)
 {
     m_path = str;
 
-    if (m_dialog)
+    if (GTK_IS_FILE_CHOOSER(m_widget))
+        gtk_file_chooser_set_filename((GtkFileChooser*)m_widget, str.utf8_str());
+    else if (m_dialog)
         UpdateDialogPath(m_dialog);
 }
 
