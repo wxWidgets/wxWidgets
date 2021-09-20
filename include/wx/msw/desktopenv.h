@@ -14,10 +14,16 @@
 // Desktop Environment
 // ----------------------------------------------------------------------------
 
+/*typedef
+IShellFolder2	FAR*
+LPSHELLFOLDER2;
+*/
 class WXDLLIMPEXP_CORE wxDesktopEnv : public wxDesktopEnvBase
 {
 public:
     static bool MoveToRecycleBin(const wxString &path);
+    static bool GetFilesInRecycleBin(std::vector<wxString> &files);
+    static bool RestoreFromRecycleBin(const wxString &path);
 };
 
 #endif

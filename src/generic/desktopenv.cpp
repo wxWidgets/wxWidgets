@@ -27,5 +27,5 @@
 bool wxDesktopEnv::MoveToRecycleBin(const wxString &WXUNUSED(path))
 {
     wxFAIL_MSG( _( "Not implemented!" ) );
-    return true;
+    return false;
 }
