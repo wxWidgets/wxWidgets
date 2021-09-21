@@ -94,4 +94,3 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
     g_object_unref( f );
     return res;
 }
-
