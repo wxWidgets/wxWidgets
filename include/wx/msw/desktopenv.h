@@ -14,10 +14,8 @@
 // Desktop Environment
 // ----------------------------------------------------------------------------
 
-/*typedef
-IShellFolder2	FAR*
-LPSHELLFOLDER2;
-*/
+#define INVALID_MENU_ID (UINT)-1
+
 class WXDLLIMPEXP_CORE wxDesktopEnv : public wxDesktopEnvBase
 {
 public:
