@@ -503,6 +503,11 @@ void wxListWidgetCocoaImpl::ListInsert( unsigned int n )
 
 void wxListWidgetCocoaImpl::ListDelete( unsigned int n )
 {
+    if ( [m_tableView isRowSelected:n] )
+    {
+        [m_tableView deselectRow:n];
+    }
+
     [m_tableView reloadData];
 
     if ( m_autoSize )
