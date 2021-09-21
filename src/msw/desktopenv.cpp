@@ -66,7 +66,8 @@ bool wxDesktopEnv::GetFilesInRecycleBin(std::vector<wxString> &paths)
     SHFILEINFO fi;
 
     if( ( SUCCEEDED( SHGetDesktopFolder( &pDesktop ) ) ) &&
-        ( SUCCEEDED( SHGetFolderLocation( NULL, CSIDL_BITBUCKET, NULL, NULL, &pidlRecycleBin ) ) ) )
+//        ( SUCCEEDED( SHGetFolderLocation( NULL, CSIDL_BITBUCKET, NULL, NULL, &pidlRecycleBin ) ) ) )
+        ( SHGetKnownFolderIDList( FOLDERID_RecycleBinFolder, KF_FLAG_DONT_VERIFY, NULL, &pidlRecycleBin ) ) )
     {
         if( SUCCEEDED( pDesktop->BindToObject( pidlRecycleBin, NULL, IID_IShellFolder2, (LPVOID *)&m_pFolder2 ) ) )
         {
@@ -117,6 +118,8 @@ bool wxDesktopEnv::GetFilesInRecycleBin(std::vector<wxString> &paths)
             }
         }
     }
+    if( pidlRecycleBin )
+        CoTaskMemFree( pidlRecycleBin );
     return res;
 }
 
@@ -137,7 +140,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
     LPCONTEXTMENU pCtxMenu = NULL;
 
     if( ( SUCCEEDED( SHGetDesktopFolder( &pDesktop ) ) ) &&
-        ( SUCCEEDED( SHGetFolderLocation( NULL, CSIDL_BITBUCKET, NULL, NULL, &pidlRecycleBin ) ) ) )
+        ( SUCCEEDED( SHGetKnownFolderIDList( FOLDERID_RecycleBinFolder, KF_FLAG_DEFAULT, NULL, &pidlRecycleBin ) ) ) )
     {
         if( SUCCEEDED( pDesktop->BindToObject( pidlRecycleBin, NULL, IID_IShellFolder2, (LPVOID *)&m_pFolder2 ) ) )
         {
@@ -184,7 +187,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                             {
                                 if( SUCCEEDED( m_pFolder2->GetUIObjectOf( NULL, 1, (LPCITEMIDLIST *) &pidl, IID_IContextMenu, NULL, (LPVOID *) &pCtxMenu ) ) )
                                 {
-                                    UINT uiID = UINT (-1);
+                                    UINT uiID = INVALID_MENU_ID;
                                     UINT uiCommand = 0;
                                     UINT uiMenuFirst = 1;
                                     UINT uiMenuLast = 0x00007FFF;
@@ -192,8 +195,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                     int iMenuPos = 0;
                                     int iMenuMax = 0;
                                     TCHAR szMenuItem[128];
-                                    TCHAR szTrace[512];
-                                    char verb[MAX_PATH] ;
+                                    char verb[MAX_PATH];
 
                                     hmenuCtx = CreatePopupMenu();
                                     if( SUCCEEDED( pCtxMenu->QueryContextMenu( hmenuCtx, 0, uiMenuFirst, uiMenuLast, CMF_NORMAL ) ) )
@@ -204,8 +206,9 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                         {
                                             GetMenuString( hmenuCtx, iMenuPos, szMenuItem, sizeof( szMenuItem ), MF_BYPOSITION );
                                             uiID = GetMenuItemID( hmenuCtx, iMenuPos );
-                                            if( ( uiID == -1 ) || ( uiID == 0 ) )
+                                            if( ( uiID == INVALID_MENU_ID ) || ( uiID == 0 ) )
                                             {
+                                                wxLogError( _( "Error getting appropriate menu ID" ) );
                                             }
                                             else
                                             {
@@ -230,26 +233,34 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                                         cmi.lpDirectory		= NULL;
                                                         cmi.lpVerb			= (LPSTR) MAKEINTRESOURCE( uiCommand );
                                                         cmi.nShow			= SW_SHOWNORMAL;
-                                                        cmi.dwHotKey		= NULL;
+                                                        cmi.dwHotKey		= 0;
                                                         cmi.hIcon			= NULL;
                                                         hr = pCtxMenu->InvokeCommand( &cmi );
                                                         if( SUCCEEDED( hr ) )
                                                         {
                                                             res = TRUE;
                                                         }
+                                                        else
+                                                            wxLogSysError( _( "Failed to call undelete" ) );
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                    else
+                                        wxLogSysError( _( "Failed to obtain context menu" ) );
                                 }
                             }
                         }
                     }
                 }
             }
+            else
+                wxLogSysError( _( "Failed to enumerate obects in Recycle Bin" ) );
         }
     }
+    else
+        wxLogSysError( _( "Failed to obtain reference to Recycle Bin" ) );
     if( pidlRecycleBin )
     {
         CoTaskMemFree( pidlRecycleBin );
