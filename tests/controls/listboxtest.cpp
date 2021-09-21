@@ -265,7 +265,17 @@ void ListBoxTestCase::HitTest()
     wxYield();
 #endif
 
-    CPPUNIT_ASSERT_EQUAL( 0, m_list->HitTest(5, 5) );
+    wxPoint p(5, 5);
+#ifdef __WXOSX__
+    // On macOS >= 11 wxListBox has a new layout because underlying
+    // NSTableView has a new style with padding so we need to move
+    // the point to be tested to another position.
+    if ( wxCheckOsVersion(11, 0) )
+    {
+        p = wxPoint(10, 10);
+    }
+#endif
+    CPPUNIT_ASSERT_EQUAL( 0, m_list->HitTest(p) );
 
     CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->HitTest(290, 190) );
 }
