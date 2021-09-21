@@ -140,7 +140,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
     LPCONTEXTMENU pCtxMenu = NULL;
 
     if( ( SUCCEEDED( SHGetDesktopFolder( &pDesktop ) ) ) &&
-        ( SUCCEEDED( SHGetKnownFolderIDList( FOLDERID_RecycleBinFolder, KF_FLAG_DONT_VERIFY, NULL, &pidlRecycleBin ) ) ) )
+        ( SUCCEEDED( SHGetKnownFolderIDList( FOLDERID_RecycleBinFolder, KF_FLAG_DEFAULT, NULL, &pidlRecycleBin ) ) ) )
     {
         if( SUCCEEDED( pDesktop->BindToObject( pidlRecycleBin, NULL, IID_IShellFolder2, (LPVOID *)&m_pFolder2 ) ) )
         {
