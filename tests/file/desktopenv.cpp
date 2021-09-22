@@ -37,6 +37,8 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     wxDesktopEnv::RestoreFromRecycleBin( "ffileinstream.test" );
     CHECK( wxFile::Exists( currentDir + "ffileinstream.test" ) );
 #endif
+    if( remove( "ffileinstream.test" ) != 0 )
+        printf( "Error deleting the test file" );
     wxMkdir( "TrashTest" );
     std::ofstream out1( "TrashTest/ffileinstream.test", std::ofstream::out );
     out1 << "test file to be moved to trash with the directory" << std::endl;
@@ -46,6 +48,8 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
     CHECK( wxDir::Exists( currentDir + "TrashTest" ) );
 #endif
+    if( wxRmDir( currentDir + "TrashTest" ) )
+        printf( "Error deleting the test directory" );
     // also trying non-existing file
     CHECK( !wxDesktopEnv::MoveToRecycleBin( currentDir + "abc" ) );
 #endif
