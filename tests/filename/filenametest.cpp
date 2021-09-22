@@ -82,9 +82,9 @@ static struct TestFileNameInfo
     { "c:\\foo.bar", "c", "\\", "foo", "bar", true, wxPATH_DOS },
     { "c:\\Windows\\command.com", "c", "\\Windows", "command", "com", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
-      "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\", "", "", true, wxPATH_DOS },
+      "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\", "", "", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe",
-      "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\Program Files", "setup", "exe", true, wxPATH_DOS },
+      "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\Program Files", "setup", "exe", true, wxPATH_DOS },
 
 #if 0
     // NB: when using the wxFileName::GetLongPath() function on these two
@@ -169,7 +169,9 @@ TEST_CASE("wxFileName::Construction", "[filename]")
         // if the test is run from root directory or its direct subdirectory
         CHECK( fn.Normalize(wxPATH_NORM_ALL, "/foo/bar/baz", fni.format) );
 
-        if ( *fni.volume && *fni.path )
+        // restrict this check to drive letter volumes as UNC and GUID volumes
+        // can't be combined with the path using the volume separator
+        if ( strlen(fni.volume) == 1 && *fni.path )
         {
             // check that specifying the volume separately or as part of the
             // path doesn't make any difference
@@ -287,6 +289,7 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
         { "a/.././b/c/../../", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
         { "", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
         { "./foo", wxPATH_NORM_DOTS, "foo", wxPATH_UNIX },
+        { "foo/./bar", wxPATH_NORM_DOTS, "foo/bar", wxPATH_UNIX },
         { "b/../bar", wxPATH_NORM_DOTS, "bar", wxPATH_UNIX },
         { "c/../../quux", wxPATH_NORM_DOTS, "../quux", wxPATH_UNIX },
         { "/c/../../quux", wxPATH_NORM_DOTS, "/quux", wxPATH_UNIX },
@@ -544,25 +547,38 @@ TEST_CASE("wxFileName::ShortLongPath", "[filename]")
 TEST_CASE("wxFileName::UNC", "[filename]")
 {
     wxFileName fn("//share/path/name.ext", wxPATH_DOS);
-    CHECK( fn.GetVolume() == "share" );
+    CHECK( fn.GetVolume() == "\\\\share" );
     CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path" );
 
     fn.Assign("\\\\share2\\path2\\name.ext", wxPATH_DOS);
-    CHECK( fn.GetVolume() == "share2" );
+    CHECK( fn.GetVolume() == "\\\\share2" );
     CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path2" );
+
+#ifdef __WINDOWS__
+    // Check that doubled backslashes in the beginning of the path are not
+    // misinterpreted as UNC volume when we have a drive letter in the
+    // beginning.
+    fn.Assign("d:\\\\root\\directory\\file");
+    CHECK( fn.GetFullPath() == "d:\\root\\directory\\file" );
+
+    // Check that single letter UNC paths don't turn into drive letters, as
+    // they used to do.
+    fn.Assign("\\\\x\\dir\\file");
+    CHECK( fn.GetFullPath() == "\\\\x\\dir\\file" );
+#endif // __WINDOWS__
 }
 
 TEST_CASE("wxFileName::VolumeUniqueName", "[filename]")
 {
     wxFileName fn("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
                   wxPATH_DOS);
-    CHECK( fn.GetVolume() == "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
+    CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
     CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\" );
     CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\" );
 
     fn.Assign("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
               "Program Files\\setup.exe", wxPATH_DOS);
-    CHECK( fn.GetVolume() == "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
+    CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
     CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\Program Files" );
     CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe" );
 }
@@ -706,6 +722,18 @@ TEST_CASE("wxFileName::Exists", "[filename]")
     }
 #endif
 #endif // __UNIX__
+}
+
+TEST_CASE("wxFileName::Mkdir", "[filename]")
+{
+    wxFileName fn;
+    fn.AssignDir("/foo/bar");
+    if ( fn.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+    {
+        CHECK( fn.DirExists() );
+        CHECK( fn.Rmdir() );
+    }
+    //else: creating the directory may fail because of permissions
 }
 
 TEST_CASE("wxFileName::SameAs", "[filename]")
