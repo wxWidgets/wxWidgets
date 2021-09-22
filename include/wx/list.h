@@ -188,7 +188,7 @@ private:
         {                                                                     \
           liT* _this = const_cast< liT* >( this );                            \
           return compatibility_iterator( _this,                               \
-                     std::find( _this->begin(), _this->end(), e ) );          \
+                     std::find( _this->begin(), _this->end(), (const elT)e ));\
         }                                                                     \
                                                                               \
         bool IsEmpty() const                                                  \
