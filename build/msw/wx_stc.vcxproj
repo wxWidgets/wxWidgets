@@ -459,6 +459,7 @@
     <ClCompile Include="..\..\src\stc\PlatWX.cpp" />
     <ClCompile Include="..\..\src\stc\ScintillaWX.cpp" />
     <ClCompile Include="..\..\src\stc\stc.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_styledtextctrl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -469,6 +470,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\wx\xrc\xh_styledtextctrl.h" />
     <CustomBuild Include="..\..\include\wx\msw\setup.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>

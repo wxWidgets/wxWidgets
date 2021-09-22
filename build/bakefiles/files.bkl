@@ -3441,10 +3441,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
+    src/xrc/xh_styledtextctrl.cpp
 </set>
 
 <set var="STC_CMN_HDR" hints="files">
     wx/stc/stc.h
+    wx/xrc/xh_styledtextctrl.h
 </set>
 
 <set var="STC_OSX_COCOA_SRC" hints="files">
