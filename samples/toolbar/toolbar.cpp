@@ -44,12 +44,15 @@
 // resources
 // ----------------------------------------------------------------------------
 
-// Under Windows, PNG files are embedded as resources, see toolbar.rc, but
-// elsewhere we embed them in the program itself. We could also load them
-// during run-time.
+// We don't embed this item in the resources under Mac, so we need to still use
+// the XPM there.
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
+#endif // !wxHAS_IMAGES_IN_RESOURCES
 
+// If PNG files are not available in resources, we need to embed them in the
+// program itself. We could also load them during run-time.
+#ifndef wxHAS_IMAGE_RESOURCES
     #include "bitmaps/new_png.c"
     #include "bitmaps/open_png.c"
     #include "bitmaps/save_png.c"
@@ -67,7 +70,7 @@
     #include "bitmaps/paste_2x_png.c"
     #include "bitmaps/print_2x_png.c"
     #include "bitmaps/help_2x_png.c"
-#endif // !wxHAS_IMAGES_IN_RESOURCES
+#endif // !wxHAS_IMAGE_RESOURCES
 
 enum Positions
 {
