@@ -1053,6 +1053,10 @@
 				RelativePath="..\..\include\wx\stc\stc.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_styledtextctrl.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -1069,6 +1073,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\stc.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_styledtextctrl.cpp"
 				>
 			</File>
 		</Filter>
