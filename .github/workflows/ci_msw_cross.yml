@@ -58,9 +58,12 @@ jobs:
       matrix:
         include:
           - name: wxMSW 64 bits
+            configure_flags: --enable-stl --disable-compat30
           - name: wxMSW 32 bits
             triplet: i686-w64-mingw32
     env:
+      wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
+
       # Default to 64-bit build.
       HOST_TRIPLET: ${{ matrix.triplet || 'x86_64-w64-mingw32' }}
 
@@ -144,7 +147,7 @@ jobs:
 
       - name: Configure
         run: |
-          ./configure --host=${HOST_TRIPLET} --disable-sys-libs --disable-optimise --disable-debug_info || rc=$?
+          ./configure --host=${HOST_TRIPLET} --disable-sys-libs --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
 
           if [ -n "$rc" ]; then
             echo '*** Configuring failed, contents of config.log follows: ***'
