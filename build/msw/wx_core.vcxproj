@@ -459,6 +459,7 @@
     <ClCompile Include="..\..\src\common\artstd.cpp" />
     <ClCompile Include="..\..\src\common\arttango.cpp" />
     <ClCompile Include="..\..\src\common\bmpbase.cpp" />
+    <ClCompile Include="..\..\src\common\bmpbndl.cpp" />
     <ClCompile Include="..\..\src\common\bmpbtncmn.cpp" />
     <ClCompile Include="..\..\src\common\bookctrl.cpp" />
     <ClCompile Include="..\..\src\common\btncmn.cpp" />
@@ -1087,6 +1088,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
+    <ClInclude Include="..\..\include\wx\bmpbndl.h" />
     <ClInclude Include="..\..\include\wx\msw\accel.h" />
     <ClInclude Include="..\..\include\wx\msw\appprogress.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\access.h" />

@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/toolbar.h"
+#include "wx/bmpbndl.h"
 #include "wx/log.h"
 #include "wx/image.h"
 #include "wx/filedlg.h"
@@ -50,9 +51,8 @@
     #include "../sample.xpm"
 #endif // !wxHAS_IMAGES_IN_RESOURCES
 
-// If PNG files are not available in resources, we need to embed them in the
-// program itself. We could also load them during run-time.
-#ifndef wxHAS_IMAGE_RESOURCES
+// Temporarily embed bitmaps in the program itself on all platforms.
+#if 1 // ndef wxHAS_IMAGE_RESOURCES
     #include "bitmaps/new_png.c"
     #include "bitmaps/open_png.c"
     #include "bitmaps/save_png.c"
@@ -389,45 +389,35 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         Tool_Max
     };
 
-    wxBitmap toolBarBitmaps[Tool_Max];
+    wxBitmapBundle toolBarBitmaps[Tool_Max];
 
-    if ( GetDPIScaleFactor() >= 1.5 )
-    {
-        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new_2x  );
-        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open_2x );
-        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save_2x );
-        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy_2x );
-        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut_2x  );
-        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste_2x);
-        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print_2x);
-        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help_2x );
-    }
-    else
-    {
-        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  );
-        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open );
-        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save );
-        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy );
-        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut  );
-        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste);
-        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print);
-        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help );
-    }
+    // This macro relies on having name_png and name_2x_png arrays defined,
+    // (this is done in this sample by including the corresponding *_png.c files
+    // above).
+    #define BUNDLE_2(name) \
+        wxBitmapBundle::FromBitmaps(wxBITMAP_PNG_FROM_DATA(name),       \
+                                    wxBITMAP_PNG_FROM_DATA(name##_2x))
 
-    int w = toolBarBitmaps[Tool_new].GetWidth(),
-        h = toolBarBitmaps[Tool_new].GetHeight();
+    toolBarBitmaps[Tool_new  ] = BUNDLE_2(new  );
+    toolBarBitmaps[Tool_open ] = BUNDLE_2(open );
+    toolBarBitmaps[Tool_save ] = BUNDLE_2(save );
+    toolBarBitmaps[Tool_copy ] = BUNDLE_2(copy );
+    toolBarBitmaps[Tool_cut  ] = BUNDLE_2(cut  );
+    toolBarBitmaps[Tool_paste] = BUNDLE_2(paste);
+    toolBarBitmaps[Tool_print] = BUNDLE_2(print);
+    toolBarBitmaps[Tool_help ] = BUNDLE_2(help );
+
+    // Size of the bitmaps we use by default.
+    int w = 32,
+        h = 32;
 
     if ( !m_smallToolbar )
     {
         w *= 2;
         h *= 2;
-
-        for ( size_t n = Tool_new; n < WXSIZEOF(toolBarBitmaps); n++ )
-        {
-            toolBarBitmaps[n] =
-                wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
-        }
     }
+
+    toolBar->SetToolBitmapSize(wxSize(w, h));
 
     toolBar->AddTool(wxID_NEW, "New",
                      toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
@@ -472,7 +462,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         {
             wxMemoryDC dc;
             dc.SelectObject(bmpDisabled);
-            dc.DrawBitmap(toolBarBitmaps[Tool_print], 0, 0);
+            dc.DrawBitmap(toolBarBitmaps[Tool_print].GetBitmap(wxSize(w, h)), 0, 0);
 
             wxPen pen(*wxRED, 5);
             dc.SetPen(pen);

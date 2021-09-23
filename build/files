@@ -741,6 +741,7 @@ GUI_CMN_SRC =
     src/common/artstd.cpp
     src/common/arttango.cpp
     src/common/bmpbase.cpp
+    src/common/bmpbndl.cpp
     src/common/bmpbtncmn.cpp
     src/common/bmpcboxcmn.cpp
     src/common/bookctrl.cpp
@@ -950,6 +951,7 @@ GUI_CMN_HDR =
     wx/artprov.h
     wx/bannerwindow.h
     wx/bitmap.h
+    wx/bmpbndl.h
     wx/bmpbuttn.h
     wx/bmpcbox.h
     wx/bookctrl.h

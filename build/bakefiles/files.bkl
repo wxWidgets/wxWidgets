@@ -1015,6 +1015,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/calctrlg.cpp
     src/generic/creddlgg.cpp
     src/generic/rowheightcache.cpp
+    src/common/bmpbndl.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1306,6 +1307,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/propdlg.h
     wx/generic/creddlgg.h
     wx/creddlg.h
+    wx/bmpbndl.h
 </set>
 
 <!-- ====================================================================== -->

@@ -83,8 +83,8 @@ public:
     wxToolBarToolBase(wxToolBarBase *tbar = NULL,
                       int toolid = wxID_SEPARATOR,
                       const wxString& label = wxEmptyString,
-                      const wxBitmap& bmpNormal = wxNullBitmap,
-                      const wxBitmap& bmpDisabled = wxNullBitmap,
+                      const wxBitmapBundle& bmpNormal = wxNullBitmap,
+                      const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                       wxItemKind kind = wxITEM_NORMAL,
                       wxObject *clientData = NULL,
                       const wxString& shortHelpString = wxEmptyString,
@@ -112,10 +112,10 @@ public:
     bool IsToggled() const;
     bool CanBeToggled() const;
 
-    const wxBitmap& GetNormalBitmap() const;
-    const wxBitmap& GetDisabledBitmap() const;
+    wxBitmap GetNormalBitmap() const;
+    wxBitmap GetDisabledBitmap() const;
 
-    const wxBitmap& GetBitmap() const;
+    wxBitmap GetBitmap() const;
     const wxString& GetLabel() const;
 
     const wxString& GetShortHelp() const;
@@ -129,8 +129,8 @@ public:
     bool SetShortHelp(const wxString& help);
     bool SetLongHelp(const wxString& help);
     void Toggle();
-    void SetNormalBitmap(const wxBitmap& bmp);
-    void SetDisabledBitmap(const wxBitmap& bmp);
+    void SetNormalBitmap(const wxBitmapBundle& bmp);
+    void SetDisabledBitmap(const wxBitmapBundle& bmp);
     void SetLabel(const wxString& label);
     void SetClientData(wxObject *clientData);
 
@@ -318,8 +318,8 @@ public:
         @see AddTool()
     */
     wxToolBarToolBase* AddCheckTool(int toolId, const wxString& label,
-                                    const wxBitmap& bitmap1,
-                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    const wxBitmapBundle& bitmap1,
+                                    const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
                                     wxObject* clientData = NULL);
@@ -354,8 +354,8 @@ public:
         @see AddTool()
     */
     wxToolBarToolBase* AddRadioTool(int toolId, const wxString& label,
-                                    const wxBitmap& bitmap1,
-                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    const wxBitmapBundle& bitmap1,
+                                    const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
                                     wxObject* clientData = NULL);
@@ -436,7 +436,7 @@ public:
              InsertTool(), DeleteTool(), Realize(), SetDropdownMenu()
     */
     wxToolBarToolBase* AddTool(int toolId, const wxString& label,
-                               const wxBitmap& bitmap,
+                               const wxBitmapBundle& bitmap,
                                const wxString& shortHelp = wxEmptyString,
                                wxItemKind kind = wxITEM_NORMAL);
 
@@ -478,8 +478,8 @@ public:
              InsertTool(), DeleteTool(), Realize(), SetDropdownMenu()
     */
     wxToolBarToolBase* AddTool(int toolId, const wxString& label,
-                               const wxBitmap& bitmap,
-                               const wxBitmap& bmpDisabled,
+                               const wxBitmapBundle& bitmap,
+                               const wxBitmapBundle& bmpDisabled,
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString,
@@ -727,8 +727,8 @@ public:
     wxToolBarToolBase* InsertTool(  size_t pos,
                                     int toolId,
                                     const wxString& label,
-                                    const wxBitmap& bitmap,
-                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    const wxBitmapBundle& bitmap,
+                                    const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                     wxItemKind kind = wxITEM_NORMAL,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
@@ -895,7 +895,7 @@ public:
             have no effect on those platforms.
 
     */
-    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap);
 
     /**
         Sets the long help for the given tool.
@@ -921,7 +921,7 @@ public:
         @param bitmap
             Bitmap to use for normals tools.
     */
-    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap);
 
     /**
         Sets the value used for spacing tools. The default value is 1.
@@ -982,8 +982,8 @@ public:
     */
     virtual wxToolBarToolBase *CreateTool(int toolId,
                                           const wxString& label,
-                                          const wxBitmap& bmpNormal,
-                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          const wxBitmapBundle& bmpNormal,
+                                          const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = NULL,
                                           const wxString& shortHelp = wxEmptyString,

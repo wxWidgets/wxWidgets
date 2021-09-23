@@ -918,6 +918,7 @@ set(GUI_CMN_SRC
     src/generic/creddlgg.cpp
     src/generic/rowheightcache.cpp
     src/generic/animateg.cpp
+    src/common/bmpbndl.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1209,6 +1210,7 @@ set(GUI_CMN_HDR
     wx/creddlg.h
     wx/generic/creddlgg.h
     wx/generic/animate.h
+    wx/bmpbndl.h
 )
 
 set(UNIX_SRC

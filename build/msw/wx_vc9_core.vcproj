@@ -782,6 +782,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\bmpbndl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\bmpbtncmn.cpp"
 				>
 			</File>
@@ -3310,6 +3314,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\bitmap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\bmpbndl.h"
 				>
 			</File>
 			<File
