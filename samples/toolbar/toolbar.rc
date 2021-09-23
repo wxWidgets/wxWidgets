@@ -8,4 +8,3 @@ cut BITMAP "bitmaps/cut.bmp"
 paste BITMAP "bitmaps/paste.bmp"
 print BITMAP "bitmaps/print.bmp"
 help BITMAP "bitmaps/help.bmp"
-
