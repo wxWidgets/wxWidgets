@@ -194,8 +194,13 @@ Currently the following symbols exist:
 @itemdef{wxHAS_NATIVE_WINDOW, Defined if wxNativeWindow class is available.}
 @itemdef{wxHAS_NOEXCEPT, Defined if the currently used compiler supports C++11 @c noexcept. @c wxNOEXCEPT is defined as this keyword in this case, and as nothing otherwise.}
 @itemdef{wxHAS_NULLPTR_T, Defined if the currently used compiler supports C++11 @c nullptr.}
+@itemdef{wxHAS_IMAGE_RESOURCES, Defined if images can be embedded into the
+    program as resources, i.e. without being defined in the program text
+    itself. This is currently the case for MSW and Mac platforms. This constant
+    is available since wxWidgets 3.1.6.}
 @itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
-    Windows resource files</a> or OS/2 resource files are available on the current platform.}
+    Windows resource files</a> resource files are available on the current platform.
+    Usually wxHAS_IMAGE_RESOURCES should be used instead.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}

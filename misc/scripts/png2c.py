@@ -89,6 +89,6 @@ for path in sys.argv[1:]:
                 i += 1
 
         # Now conclude the C source
-        text += "};\n\n"
+        text += "};"
 
         print(text)
