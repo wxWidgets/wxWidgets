@@ -49,18 +49,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 16.04 wxGTK 2
-            runner: ubuntu-16.04
+          - name: Ubuntu 18.04 wxGTK 2
+            runner: ubuntu-18.04
             gtk_version: 2
-            use_xvfb: true
-          - name: Ubuntu 16.04 wxGTK 3 static
-            runner: ubuntu-16.04
-            configure_flags: --disable-shared
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 2 UTF-8
             runner: ubuntu-18.04
             gtk_version: 2
             configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
+            use_xvfb: true
+          - name: Ubuntu 18.04 wxGTK3 static
+            runner: ubuntu-18.04
+            configure_flags: --disable-shared
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 STL
             runner: ubuntu-18.04
