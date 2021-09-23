@@ -331,22 +331,26 @@ public:
 
     wxObjectDataPtr& operator=(const wxObjectDataPtr &tocopy)
     {
+        // Take care to increment the reference first to ensure correct
+        // behaviour in case of self-assignment.
+        T* const ptr = tocopy.m_ptr;
+        if (ptr)
+            ptr->IncRef();
         if (m_ptr)
             m_ptr->DecRef();
-        m_ptr = tocopy.m_ptr;
-        if (m_ptr)
-            m_ptr->IncRef();
+        m_ptr = ptr;
         return *this;
     }
 
     template <typename U>
     wxObjectDataPtr& operator=(const wxObjectDataPtr<U> &tocopy)
     {
+        T* const ptr = tocopy.get();
+        if (ptr)
+            ptr->IncRef();
         if (m_ptr)
             m_ptr->DecRef();
-        m_ptr = tocopy.get();
-        if (m_ptr)
-            m_ptr->IncRef();
+        m_ptr = ptr;
         return *this;
     }
 
