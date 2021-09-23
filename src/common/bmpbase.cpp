@@ -71,7 +71,7 @@ void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
 
 #if wxUSE_IMAGE
     wxImage img = bmp.ConvertToImage();
-    img.Rescale(sizeNeeded.x, sizeNeeded.y);
+    img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_HIGH);
     bmp = wxBitmap(img);
 #else // !wxUSE_IMAGE
     // Fallback method of scaling the bitmap

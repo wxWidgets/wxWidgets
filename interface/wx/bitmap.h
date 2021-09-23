@@ -685,8 +685,13 @@ public:
     /**
         Rescale the given bitmap to the requested size.
 
-        This function uses wxImage::Rescale() to resize the given @a bmp to the
-        requested size. Both the bitmap itself and size must be valid.
+        This function is just a convenient wrapper for wxImage::Rescale() used
+        to resize the given @a bmp to the requested size. If you need more
+        control over resizing, e.g. to specify the quality option different
+        from ::wxIMAGE_QUALITY_HIGH used by default, please use wxImage
+        function directly instead.
+
+        Both the bitmap itself and size must be valid.
 
         @since 3.1.6
      */
