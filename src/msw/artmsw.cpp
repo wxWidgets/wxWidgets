@@ -218,7 +218,7 @@ static wxBitmap CreateFromStdIcon(const char *iconName,
         const wxSize size = wxArtProvider::GetNativeSizeHint(client);
         if ( size != wxDefaultSize )
         {
-            wxArtProvider::RescaleBitmap(bmp, size);
+            wxBitmap::Rescale(bmp, size);
         }
     }
 
@@ -254,7 +254,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
             {
                 if ( bitmap.GetSize() != sizeNeeded )
                 {
-                    wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
+                    wxBitmap::Rescale(bitmap, sizeNeeded);
                 }
 
                 return bitmap;

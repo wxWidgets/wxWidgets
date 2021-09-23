@@ -64,6 +64,33 @@ wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
 
 #endif // !__WXOSX__
 
+/* static */
+void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
+{
+    wxCHECK_RET( sizeNeeded.IsFullySpecified(), wxS("New size must be given") );
+
+#if wxUSE_IMAGE
+    wxImage img = bmp.ConvertToImage();
+    img.Rescale(sizeNeeded.x, sizeNeeded.y);
+    bmp = wxBitmap(img);
+#else // !wxUSE_IMAGE
+    // Fallback method of scaling the bitmap
+    wxBitmap newBmp(sizeNeeded, bmp.GetDepth());
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
+    newBmp.UseAlpha(bmp.HasAlpha());
+#endif // __WXMSW__ || __WXOSX__
+    {
+        wxMemoryDC dc(newBmp);
+        double scX = (double)sizeNeeded.GetWidth() / bmp.GetWidth();
+        double scY = (double)sizeNeeded.GetHeight() / bmp.GetHeight();
+        dc.SetUserScale(scX, scY);
+        dc.DrawBitmap(bmp, 0, 0);
+    }
+    bmp = newBmp;
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+}
+
 // ----------------------------------------------------------------------------
 // wxBitmapBase
 // ----------------------------------------------------------------------------

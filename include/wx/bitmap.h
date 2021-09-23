@@ -97,6 +97,9 @@ class WXDLLIMPEXP_CORE wxBitmapHelpers
 public:
     // Create a new wxBitmap from the PNG data in the given buffer.
     static wxBitmap NewFromPNGData(const void* data, size_t size);
+
+    // Rescale the given bitmap to the requested size.
+    static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
 };
 
 

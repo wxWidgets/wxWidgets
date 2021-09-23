@@ -683,6 +683,16 @@ public:
     static bool RemoveHandler(const wxString& name);
 
     /**
+        Rescale the given bitmap to the requested size.
+
+        This function uses wxImage::Rescale() to resize the given @a bmp to the
+        requested size. Both the bitmap itself and size must be valid.
+
+        @since 3.1.6
+     */
+    static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
+
+    /**
         Saves a bitmap in the named file.
 
         @param name
