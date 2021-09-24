@@ -244,6 +244,24 @@ wxBitmapBundle wxBitmapBundle::FromBitmaps(const wxVector<wxBitmap>& bitmaps)
     return wxBitmapBundle(new wxBitmapBundleImplSet(bitmaps));
 }
 
+// MSW has its own, actually working, version, in MSW-specific code.
+#ifndef __WXMSW__
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromResources(const wxString& WXUNUSED(name))
+{
+    wxFAIL_MSG
+    (
+        "Loading bitmaps from resources not available on this platform, "
+        "don't use this function and call wxBitmapBundle::FromBitmaps() "
+        "instead."
+    );
+
+    return wxBitmapBundle();
+}
+
+#endif // __WXMSW__
+
 wxSize wxBitmapBundle::GetDefaultSize() const
 {
     if ( !m_impl )

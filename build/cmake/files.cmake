@@ -1963,6 +1963,7 @@ set(MSW_LOWLEVEL_SRC
     src/msw/richtooltip.cpp
     src/msw/evtloop.cpp
     src/msw/ole/access.cpp
+    src/msw/bmpbndl.cpp
 )
 
 set(MSW_LOWLEVEL_HDR

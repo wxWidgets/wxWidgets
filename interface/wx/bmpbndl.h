@@ -61,6 +61,22 @@
     by including a file generated with @c bin2c (see wxBITMAP_PNG_FROM_DATA()),
     on the other platforms.
 
+    For the platforms with resources support, you can also create the bundle
+    from the bitmaps defined in the resources, which has the advantage of not
+    having to explicitly list all the bitmaps, e.g. the code above becomes
+    @code
+    #ifdef wxHAS_IMAGE_RESOURCES
+        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromResources("open"));
+    #else
+        ... same code as shown above ...
+    #endif
+    @endcode
+    and will load all resources called @c open, @c open_2x, @c open_1_5x etc
+    (at least the first one of them must be available). See also
+    wxBITMAP_BUNDLE_2() macro which can avoid the need to check for
+    wxHAS_IMAGE_RESOURCES explicitly in the code in a common case of having
+    only 2 embedded resources (for standard and high DPI).
+
     Also note that the existing code using wxBitmap is compatible with the
     functions taking wxBitmapBundle in wxWidgets 3.1.6 and later because
     bitmaps are implicitly convertible to the objects of this class, so just
@@ -146,6 +162,21 @@ public:
     static wxBitmapBundle FromImage(const wxImage& image);
 
     /**
+        Create a bundle from the bitmaps in the application resources.
+
+        This function can only be used on the platforms supporting storing
+        bitmaps in resources, and currently only works under MSW and simply
+        returns an empty bundle on the other platforms.
+
+        Under MSW, for this function to create a valid bundle, you must have @c
+        RCDATA resource with the given @a name in your application resource
+        file (with the extension @c .rc) containing PNG file, and any other
+        resources using @a name as prefix and suffix with the scale, e.g. "_2x"
+        or "_1_5x" (for 150% DPI) will be also loaded as part of the bundle.
+     */
+    static wxBitmapBundle FromResources(const wxString& name);
+
+    /**
         Check if bitmap bundle is non-empty.
 
         Return @true if the bundle contains any bitmaps or @false if it is
@@ -177,3 +208,28 @@ public:
      */
     wxBitmap GetBitmap(const wxSize size) const;
 };
+
+/**
+    Creates a wxBitmapBundle from resources on the platforms supporting them or
+    from two embedded bitmaps otherwise.
+
+    This macro use wxBitmapBundle::FromResources() with the provide @a name,
+    which must be an @e identifier and not a string, i.e. used without quotes,
+    on the platforms where it works and wxBitmapBundle::FromBitmaps() with @c
+    name_png and @c name_2x_png arrays containing PNG data elsewhere.
+
+    Using it allows to avoid using preprocessor checks in the common case when
+    just two bitmaps (for standard and high DPI) are embedded in the
+    application code. Note that all bitmaps defined in the resources, even if
+    there are more than 2 of them.
+
+    Example of use:
+    @code
+        toolBar->AddTool(wxID_OPEN, wxBITMAP_BUNDLE_2(open));
+    @endcode
+
+    @header{wx/bmpbndl.h}
+
+    @since 3.1.6
+ */
+#define wxBITMAP_BUNDLE_2(name)

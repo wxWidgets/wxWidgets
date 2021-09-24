@@ -51,8 +51,9 @@
     #include "../sample.xpm"
 #endif // !wxHAS_IMAGES_IN_RESOURCES
 
-// Temporarily embed bitmaps in the program itself on all platforms.
-#if 1 // ndef wxHAS_IMAGE_RESOURCES
+// If PNG files are not available in resources, we need to embed them in the
+// program itself. We could also load them during run-time.
+#ifndef wxHAS_IMAGE_RESOURCES
     #include "bitmaps/new_png.c"
     #include "bitmaps/open_png.c"
     #include "bitmaps/save_png.c"
@@ -391,21 +392,22 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     wxBitmapBundle toolBarBitmaps[Tool_Max];
 
-    // This macro relies on having name_png and name_2x_png arrays defined,
-    // (this is done in this sample by including the corresponding *_png.c files
-    // above).
-    #define BUNDLE_2(name) \
-        wxBitmapBundle::FromBitmaps(wxBITMAP_PNG_FROM_DATA(name),       \
-                                    wxBITMAP_PNG_FROM_DATA(name##_2x))
-
-    toolBarBitmaps[Tool_new  ] = BUNDLE_2(new  );
-    toolBarBitmaps[Tool_open ] = BUNDLE_2(open );
-    toolBarBitmaps[Tool_save ] = BUNDLE_2(save );
-    toolBarBitmaps[Tool_copy ] = BUNDLE_2(copy );
-    toolBarBitmaps[Tool_cut  ] = BUNDLE_2(cut  );
-    toolBarBitmaps[Tool_paste] = BUNDLE_2(paste);
-    toolBarBitmaps[Tool_print] = BUNDLE_2(print);
-    toolBarBitmaps[Tool_help ] = BUNDLE_2(help );
+    // Note that to use wxBITMAP_BUNDLE_2() macro it is necessary to
+    //
+    //  1. Have resources (either RT_RCDATA under MSW or files in the app
+    //     bundle resources subdirectory under Mac) with this name.
+    //
+    //  2. Have name_png and name_2x_png arrays defined under the other
+    //     platforms (as is done in this sample by including the corresponding
+    //     *_png.c files above).
+    toolBarBitmaps[Tool_new  ] = wxBITMAP_BUNDLE_2(new  );
+    toolBarBitmaps[Tool_open ] = wxBITMAP_BUNDLE_2(open );
+    toolBarBitmaps[Tool_save ] = wxBITMAP_BUNDLE_2(save );
+    toolBarBitmaps[Tool_copy ] = wxBITMAP_BUNDLE_2(copy );
+    toolBarBitmaps[Tool_cut  ] = wxBITMAP_BUNDLE_2(cut  );
+    toolBarBitmaps[Tool_paste] = wxBITMAP_BUNDLE_2(paste);
+    toolBarBitmaps[Tool_print] = wxBITMAP_BUNDLE_2(print);
+    toolBarBitmaps[Tool_help ] = wxBITMAP_BUNDLE_2(help );
 
     // Size of the bitmaps we use by default.
     int w = 32,

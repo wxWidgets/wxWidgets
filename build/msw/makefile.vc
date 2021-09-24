@@ -2259,6 +2259,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_access.obj \
+	$(OBJS)\monodll_msw_bmpbndl.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_filepickerg.obj \
@@ -2532,7 +2533,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_calctrlg.obj \
 	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj \
-	$(OBJS)\monodll_bmpbndl.obj
+	$(OBJS)\monodll_common_bmpbndl.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
@@ -2603,6 +2604,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_access.obj \
+	$(OBJS)\monodll_msw_bmpbndl.obj \
 	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
@@ -2861,7 +2863,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_calctrlg.obj \
 	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj \
-	$(OBJS)\monodll_bmpbndl.obj
+	$(OBJS)\monodll_common_bmpbndl.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_OBJECTS =  \
@@ -3103,6 +3105,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_access.obj \
+	$(OBJS)\monolib_msw_bmpbndl.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_filepickerg.obj \
@@ -3376,7 +3379,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_calctrlg.obj \
 	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj \
-	$(OBJS)\monolib_bmpbndl.obj
+	$(OBJS)\monolib_common_bmpbndl.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
@@ -3447,6 +3450,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_access.obj \
+	$(OBJS)\monolib_msw_bmpbndl.obj \
 	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
@@ -3705,7 +3709,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_calctrlg.obj \
 	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj \
-	$(OBJS)\monolib_bmpbndl.obj
+	$(OBJS)\monolib_common_bmpbndl.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS =  \
@@ -3880,6 +3884,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_access.obj \
+	$(OBJS)\coredll_msw_bmpbndl.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_filepickerg.obj \
@@ -4153,7 +4158,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_calctrlg.obj \
 	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj \
-	$(OBJS)\coredll_bmpbndl.obj
+	$(OBJS)\coredll_common_bmpbndl.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
@@ -4224,6 +4229,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_access.obj \
+	$(OBJS)\coredll_msw_bmpbndl.obj \
 	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
@@ -4482,7 +4488,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_calctrlg.obj \
 	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj \
-	$(OBJS)\coredll_bmpbndl.obj
+	$(OBJS)\coredll_common_bmpbndl.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __corelib___depname = \
@@ -4563,6 +4569,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_access.obj \
+	$(OBJS)\corelib_msw_bmpbndl.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_filepickerg.obj \
@@ -4836,7 +4843,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_calctrlg.obj \
 	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj \
-	$(OBJS)\corelib_bmpbndl.obj
+	$(OBJS)\corelib_common_bmpbndl.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
@@ -4907,6 +4914,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_access.obj \
+	$(OBJS)\corelib_msw_bmpbndl.obj \
 	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
@@ -5165,7 +5173,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_calctrlg.obj \
 	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj \
-	$(OBJS)\corelib_bmpbndl.obj
+	$(OBJS)\corelib_common_bmpbndl.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxcore_namedll_DEP = $(__coredll___depname)
@@ -8851,6 +8859,11 @@ $(OBJS)\monodll_access.obj: ..\..\src\msw\ole\access.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\bmpbndl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_clrpickerg.obj: ..\..\src\generic\clrpickerg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\clrpickerg.cpp
 !endif
@@ -9896,7 +9909,7 @@ $(OBJS)\monodll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
+$(OBJS)\monodll_common_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\bmpbndl.cpp
 !endif
 
@@ -11430,6 +11443,11 @@ $(OBJS)\monolib_access.obj: ..\..\src\msw\ole\access.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\bmpbndl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_clrpickerg.obj: ..\..\src\generic\clrpickerg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\clrpickerg.cpp
 !endif
@@ -12475,7 +12493,7 @@ $(OBJS)\monolib_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
+$(OBJS)\monolib_common_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\bmpbndl.cpp
 !endif
 
@@ -13982,6 +14000,11 @@ $(OBJS)\coredll_access.obj: ..\..\src\msw\ole\access.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\bmpbndl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_clrpickerg.obj: ..\..\src\generic\clrpickerg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\clrpickerg.cpp
 !endif
@@ -15027,7 +15050,7 @@ $(OBJS)\coredll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
+$(OBJS)\coredll_common_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\bmpbndl.cpp
 !endif
 
@@ -15724,6 +15747,11 @@ $(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_access.obj: ..\..\src\msw\ole\access.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ole\access.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\bmpbndl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -16772,7 +16800,7 @@ $(OBJS)\corelib_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
+$(OBJS)\corelib_common_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\bmpbndl.cpp
 !endif
 

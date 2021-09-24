@@ -59,6 +59,10 @@ public:
     static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
     static wxBitmapBundle FromImage(const wxImage& image);
 
+    // Create from the resources: all existing versions of the bitmap of the
+    // form name_2x or name@2x (and also using other factors) will be used.
+    static wxBitmapBundle FromResources(const wxString& name);
+
 
     // Check if bitmap bundle is non-empty.
     bool IsOk() const { return m_impl; }
@@ -82,6 +86,16 @@ private:
 
     wxBitmapBundleImplPtr m_impl;
 };
+
+// This macro can be used to create a bundle from resources on the platforms
+// that support it and from name_png and name_2x_png on the other ones.
+#ifdef wxHAS_IMAGE_RESOURCES
+    #define wxBITMAP_BUNDLE_2(name) wxBitmapBundle::FromResources(#name)
+#else
+    #define wxBITMAP_BUNDLE_2(name)                                     \
+        wxBitmapBundle::FromBitmaps(wxBITMAP_PNG_FROM_DATA(name),       \
+                                    wxBITMAP_PNG_FROM_DATA(name##_2x))
+#endif
 
 // Inline functions implementation.
 
