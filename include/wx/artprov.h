@@ -189,8 +189,10 @@ public:
     // the topmost provider if platform_dependent = false
     static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
 
-    // Rescale bitmap (used internally if requested size is other than the available).
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use wxBitmap::Rescale() instead.")
     static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded);
+#endif // WXWIN_COMPATIBILITY_3_0
 
 protected:
     friend class wxArtProviderModule;
