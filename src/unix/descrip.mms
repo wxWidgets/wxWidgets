@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 March 2020                                                        *
+# Date : 23 September 2021                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -61,7 +61,7 @@ OBJECTS = appunix.obj,apptraits.obj,\
 		stdpaths.obj,\
 		taskbarx11.obj,\
 		timerunx.obj,evtloopunix.obj,fdiounix.obj,uiactionx11.obj,\
-		mediactrl.obj,wakeuppipe.obj,mimetype.obj
+		mediactrl.obj,wakeuppipe.obj,unix_uilocale.obj
 
 OBJECTS2=displayx11.obj
 
@@ -85,7 +85,7 @@ SOURCES = appunix.cpp,apptraits.cpp,\
 		stdpaths.cpp,\
 		taskbarx11.cpp,\
 		timerunx.cpp,evtloopunix.cpp,fdiounix.cpp,uiactionx11.cpp,\
-		mediactrl.cpp,wakeuppipe.cpp,mimetype.cpp
+		mediactrl.cpp,wakeuppipe.cpp,uilocale.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -146,4 +146,7 @@ fdiounix.obj : fdiounix.cpp
 uiactionx11.obj : uiactionx11.cpp
 mediactrl.obj : mediactrl.cpp
 wakeuppipe.obj : wakeuppipe.cpp
-mimetype.obj : mimetype.cpp
+unix_uilocale.obj : uilocale.cpp
+	cop uilocale.cpp unix_uilocale.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE) unix_uilocale.cpp
+	delete unix_uilocale.cpp;*

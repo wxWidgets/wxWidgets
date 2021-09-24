@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 18 August 2021                                                      *
+# Date : 23 September 2021                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -227,7 +227,7 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
 		textmeasurecmn.obj,modalhook.obj,threadinfo.obj,\
 		addremovectrl.obj,notifmsgcmn.obj,graphcmn.obj,dcsvg.obj,\
-		dcgraph.obj,secretstore.obj
+		dcgraph.obj,secretstore.obj,uilocale.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -433,7 +433,7 @@ SOURCES = \
 		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
 		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp \
 		modalhook.cpp graphcmn.cpp dcsvg.cpp dcgraph.cpp \
-		secretstore.cpp
+		secretstore.cpp uilocale.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -733,3 +733,4 @@ graphcmn.obj : graphcmn.cpp
 dcsvg.obj : dcsvg.cpp
 dcgraph.obj : dcgraph.cpp
 secretstore.obj : secretstore.cpp
+uilocale.obj : uilocale.cpp
