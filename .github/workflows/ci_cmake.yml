@@ -62,6 +62,16 @@ jobs:
             cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
             cmake_samples: OFF
             cmake_tests: OFF
+          - name: macOS 11 wxOSX
+            runner: macos-11
+            cmake_generator: Xcode
+            cmake_defines: -DCMAKE_CXX_STANDARD=11
+          - name: macOS 11 wxIOS
+            runner: macos-11
+            cmake_generator: Xcode
+            cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
+            cmake_samples: OFF
+            cmake_tests: OFF
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}

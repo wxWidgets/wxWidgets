@@ -78,10 +78,6 @@ jobs:
           arch: arm64
           configure_flags: --with-cxx=11
           use_asan: true
-        - name: wxMac Intel C++17
-          runner: self-hosted
-          arch: x86_64
-          configure_flags: --with-cxx=17 --with-macosx-version-min=10.12 --enable-debug
         - name: wxMac Universal C++14
           runner: self-hosted
           arch: arm64
@@ -92,6 +88,31 @@ jobs:
           configure_flags: --disable-sys-libs
         - name: wxiOS
           runner: macos-10.15
+          arch: x86_64
+          configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
+          xcode_sdk: iphonesimulator
+          skip_samples: true
+          skip_testing: true
+          allow_warnings: true
+        - name: wxMac macOS 11 C++11
+          runner: macos-11
+          arch: x86_64
+          configure_flags: --with-cxx=11
+          use_asan: true
+        - name: wxMac macOS 11 C++14
+          runner: macos-11
+          arch: x86_64
+          configure_flags: --with-cxx=14 --disable-shared --disable-debug --enable-optimise
+        - name: wxMac macOS 11 C++17
+          runner: macos-11
+          arch: x86_64
+          configure_flags: --with-cxx=17 --with-macosx-version-min=10.12 --enable-debug
+        - name: wxMac macOS 11
+          runner: macos-11
+          arch: x86_64
+          configure_flags: --disable-sys-libs
+        - name: wxiOS macOS 11
+          runner: macos-11
           arch: x86_64
           configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
           xcode_sdk: iphonesimulator
