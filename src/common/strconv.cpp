@@ -2343,13 +2343,13 @@ wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
         do
         {
             char* bufPtr = (char*)tbuf;
-            dstLen = 8 * SIZEOF_WCHAR_T;
+            dstLen = sizeof(tbuf);
 
             cres = iconv(m2w,
                          ICONV_CHAR_CAST(&pszPtr), &srcLen,
                          &bufPtr, &dstLen );
 
-            res += 8 - (dstLen / SIZEOF_WCHAR_T);
+            res += (sizeof(tbuf) - dstLen) / SIZEOF_WCHAR_T;
         }
         while ((cres == (size_t)-1) && (errno == E2BIG));
     }
