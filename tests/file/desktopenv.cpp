@@ -37,15 +37,18 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     wxDesktopEnv::RestoreFromRecycleBin( "ffileinstream.test" );
     CHECK( wxFile::Exists( currentDir + "ffileinstream.test" ) );
 #endif
-    wxMkdir( "TrashTest" );
-    std::ofstream out1( "TrashTest/ffileinstream.test", std::ofstream::out );
-    out1 << "test file to be moved to trash with the directory" << std::endl;
-    out1.close();
-    CHECK( wxDesktopEnv::MoveToRecycleBin( currentDir + "TrashTest" ) );
+    bool created = wxMkdir( "TrashTest" );
+    if( created )
+    {
+        std::ofstream out1( "TrashTest/ffileinstream.test", std::ofstream::out );
+        out1 << "test file to be moved to trash with the directory" << std::endl;
+        out1.close();
+        CHECK( wxDesktopEnv::MoveToRecycleBin( currentDir + "TrashTest" ) );
 #if defined(__WXMSW__) || defined(__WXGTK__)
-    wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
-    CHECK( wxDir::Exists( currentDir + "TrashTest" ) );
+        wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
+        CHECK( wxDir::Exists( currentDir + "TrashTest" ) );
 #endif
+    }
     // also trying non-existing file
     CHECK( !wxDesktopEnv::MoveToRecycleBin( currentDir + "abc" ) );
 #endif
