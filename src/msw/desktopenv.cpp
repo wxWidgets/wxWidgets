@@ -138,13 +138,14 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
     SHELLDETAILS sd;
     SHFILEINFO fi;
     LPCONTEXTMENU pCtxMenu = NULL;
+    HRESULT hr;
 
-    if( ( SUCCEEDED( SHGetDesktopFolder( &pDesktop ) ) ) &&
-        ( SUCCEEDED( SHGetKnownFolderIDList( FOLDERID_RecycleBinFolder, KF_FLAG_DEFAULT, NULL, &pidlRecycleBin ) ) ) )
+    if( ( SUCCEEDED( hr = SHGetDesktopFolder( &pDesktop ) ) ) &&
+        ( SUCCEEDED( hr = SHGetKnownFolderIDList( FOLDERID_RecycleBinFolder, KF_FLAG_DEFAULT, NULL, &pidlRecycleBin ) ) ) )
     {
-        if( SUCCEEDED( pDesktop->BindToObject( pidlRecycleBin, NULL, IID_IShellFolder2, (LPVOID *)&m_pFolder2 ) ) )
+        if( SUCCEEDED( hr = pDesktop->BindToObject( pidlRecycleBin, NULL, IID_IShellFolder2, (LPVOID *)&m_pFolder2 ) ) )
         {
-            if( S_OK == pDesktop->GetDisplayNameOf( pidlRecycleBin, SHGDN_NORMAL, &strRet ) )
+            if( SUCCEEDED( hr = pDesktop->GetDisplayNameOf( pidlRecycleBin, SHGDN_NORMAL, &strRet ) ) )
             {
                 ZeroMemory( szPath, sizeof( szPath ) );
                 switch( strRet.uType )
@@ -160,15 +161,17 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                     break;
                 }
             }
-            if( SUCCEEDED( m_pFolder2->EnumObjects( NULL, SHCONTF_FOLDERS | SHCONTF_NONFOLDERS| SHCONTF_INCLUDEHIDDEN, &penumFiles ) ) )
+            else
+                wxLogSysError( _( wxString::Format( "Failed to get display name for Recycle Bin, error %d", hr ) ) );
+            if( SUCCEEDED( hr = m_pFolder2->EnumObjects( NULL, SHCONTF_FOLDERS | SHCONTF_NONFOLDERS| SHCONTF_INCLUDEHIDDEN, &penumFiles ) ) )
             {
                 int iSubItem = 0;
                 while( penumFiles->Next( 1, &pidl, NULL ) != S_FALSE )
                 {
                     ::ZeroMemory( &fi, sizeof( fi ) );
-                    if( SUCCEEDED( SHGetFileInfo( (LPCWSTR) pidl, 0, &fi, sizeof( fi ), SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_PIDL ) ) )
+                    if( SUCCEEDED( hr = SHGetFileInfo( (LPCWSTR) pidl, 0, &fi, sizeof( fi ), SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_PIDL ) ) )
                     {
-                        if( SUCCEEDED( m_pFolder2->GetDetailsOf( pidl, iSubItem, &sd ) ) )
+                        if( SUCCEEDED( hr = m_pFolder2->GetDetailsOf( pidl, iSubItem, &sd ) ) )
                         {
                             switch( sd.str.uType )
                             {
@@ -185,7 +188,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                             wxString tmp( szPath );
                             if( path == tmp )
                             {
-                                if( SUCCEEDED( m_pFolder2->GetUIObjectOf( NULL, 1, (LPCITEMIDLIST *) &pidl, IID_IContextMenu, NULL, (LPVOID *) &pCtxMenu ) ) )
+                                if( SUCCEEDED( hr = m_pFolder2->GetUIObjectOf( NULL, 1, (LPCITEMIDLIST *) &pidl, IID_IContextMenu, NULL, (LPVOID *) &pCtxMenu ) ) )
                                 {
                                     UINT uiID = INVALID_MENU_ID;
                                     UINT uiCommand = 0;
@@ -198,7 +201,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                     char verb[MAX_PATH];
 
                                     hmenuCtx = CreatePopupMenu();
-                                    if( SUCCEEDED( pCtxMenu->QueryContextMenu( hmenuCtx, 0, uiMenuFirst, uiMenuLast, CMF_NORMAL ) ) )
+                                    if( SUCCEEDED( hr = pCtxMenu->QueryContextMenu( hmenuCtx, 0, uiMenuFirst, uiMenuLast, CMF_NORMAL ) ) )
                                     {
                                         iMenuMax = GetMenuItemCount( hmenuCtx );
                                         bool found = false;
@@ -212,9 +215,10 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                             }
                                             else
                                             {
-                                                HRESULT hr = pCtxMenu->GetCommandString( uiID - 1, GCS_VERBA, NULL, verb, sizeof( verb ) );
+                                                hr = pCtxMenu->GetCommandString( uiID - 1, GCS_VERBA, NULL, verb, sizeof( verb ) );
                                                 if( FAILED( hr ) )
                                                 {
+                                                    wxLogSysError( _( wxString::Format( "Failed to get menu command string, error %d", hr ) ) );
                                                     verb[0] = TCHAR( '\0' );
                                                 }
                                                 else
@@ -241,26 +245,34 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                                             res = TRUE;
                                                         }
                                                         else
-                                                            wxLogSysError( _( "Failed to call undelete" ) );
+                                                            wxLogSysError( _( wxString::Format( "Failed to call undelete, error is %d", hr ) ) );
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                     else
-                                        wxLogSysError( _( "Failed to obtain context menu" ) );
+                                        wxLogSysError( _( wxString::Format( "Failed to obtain context menu, error %d", hr ) ) );
                                 }
+                                else
+                                    wxLogSysError( _( wxString::Format( "Failed to obtain obect UI from file, error %d", hr ) ) );
                             }
                         }
+                        else
+                            wxLogSysError( _( wxString::Format( "Failed to get details of the file, error %d", hr ) ) );
                     }
+                    else
+                        wxLogSysError( _( wxString::Format( "Failed to get information about the file, error %d", hr ) ) );
                 }
             }
             else
-                wxLogSysError( _( "Failed to enumerate obects in Recycle Bin" ) );
+                wxLogSysError( _( wxString::Format( "Failed to enumerate obects in Recycle Bin, error %d", hr ) ) );
         }
+        else
+            wxLogSysError( _( wxString::Format( "Failed to bind to the Recycle Bin, error %d", hr ) ) );
     }
     else
-        wxLogSysError( _( "Failed to obtain reference to Recycle Bin" ) );
+        wxLogSysError( _( wxString::Format( "Failed to obtain reference to Recycle Bin, error %d" , hr ) ) );
     if( pidlRecycleBin )
     {
         CoTaskMemFree( pidlRecycleBin );
