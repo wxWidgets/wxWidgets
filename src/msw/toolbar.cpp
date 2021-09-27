@@ -1949,6 +1949,10 @@ void wxToolBar::RealizeHelper()
 
 void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    // Ensure that when Realize() is called, the bitmaps size corresponding to
+    // the new resolution will be used.
+    SetToolBitmapSize(event.Scale(wxSize(m_defaultWidth, m_defaultHeight)));
+
     // Manually scale the size of the controls. Even though the font has been
     // updated, the internal size of the controls does not.
     wxToolBarToolsList::compatibility_iterator node;

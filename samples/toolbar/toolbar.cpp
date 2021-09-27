@@ -111,7 +111,6 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     void OnSize(wxSizeEvent& event);
-    void OnDPIChanged(wxDPIChangedEvent& event);
 
     void OnToggleToolbar(wxCommandEvent& event);
     void OnToggleAnotherToolbar(wxCommandEvent& event);
@@ -242,7 +241,6 @@ enum
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
-    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
@@ -696,16 +694,6 @@ void MyFrame::OnSize(wxSizeEvent& event)
     {
         event.Skip();
     }
-}
-
-void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
-{
-    event.Skip();
-
-    // We check the DPI scaling factor when the toolbar is created, so just
-    // recreate it whenever DPI changes. We could also just update the tools
-    // bitmaps, but this is simpler and doesn't have any significant drawbacks.
-    RecreateToolbar();
 }
 
 void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
