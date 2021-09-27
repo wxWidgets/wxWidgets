@@ -410,6 +410,9 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         h *= 2;
     }
 
+    // Note that there is no need for FromDIP() here, wxMSW will adjust the
+    // size on its own and under the other platforms there is no need for
+    // scaling the coordinates anyhow.
     toolBar->SetToolBitmapSize(wxSize(w, h));
 
     toolBar->AddTool(wxID_NEW, "New",

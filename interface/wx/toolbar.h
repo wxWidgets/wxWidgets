@@ -860,6 +860,11 @@ public:
         Sets the default size of each tool bitmap. The default bitmap size is 16
         by 15 pixels.
 
+        Note that @a size does @e not need to be multiplied by the
+        DPI-dependent factor even under MSW, where it would normally be
+        necessary, as the toolbar adjusts this size to the current DPI
+        automatically.
+
         @param size
             The size of the bitmaps in the toolbar.
 
