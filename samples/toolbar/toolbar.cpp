@@ -96,12 +96,7 @@ public:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *parent,
-            wxWindowID id = wxID_ANY,
-            const wxString& title = "wxToolBar Sample",
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN);
+    MyFrame();
     virtual ~MyFrame();
 
     void PopulateToolbar(wxToolBarBase* toolBar);
@@ -312,9 +307,7 @@ bool MyApp::OnInit()
     wxImage::AddHandler(new wxPNGHandler);
 
     // Create the main frame window
-    MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
-                                 "wxToolBar Sample",
-                                  wxPoint(100, 100), wxDefaultSize);
+    MyFrame* frame = new MyFrame();
 
     frame->Show(true);
 
@@ -512,13 +505,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 // ----------------------------------------------------------------------------
 
 // Define my frame constructor
-MyFrame::MyFrame(wxFrame* parent,
-                 wxWindowID id,
-                 const wxString& title,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 long style)
-       : wxFrame(parent, id, title, pos, size, style)
+MyFrame::MyFrame()
+       : wxFrame(NULL, wxID_ANY, "wxToolBar Sample")
 {
     m_tbar = NULL;
 
