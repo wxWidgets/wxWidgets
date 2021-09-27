@@ -157,6 +157,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_point.o \
 	$(OBJS)\test_gui_region.o \
 	$(OBJS)\test_gui_bitmap.o \
+	$(OBJS)\test_gui_bmpbundle.o \
 	$(OBJS)\test_gui_colour.o \
 	$(OBJS)\test_gui_ellipsization.o \
 	$(OBJS)\test_gui_measuring.o \
@@ -877,6 +878,9 @@ $(OBJS)\test_gui_region.o: ./geometry/region.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_bitmap.o: ./graphics/bitmap.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_bmpbundle.o: ./graphics/bmpbundle.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_colour.o: ./graphics/colour.cpp

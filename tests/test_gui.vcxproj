@@ -545,6 +545,7 @@
     <ClCompile Include="geometry\size.cpp" />
     <ClCompile Include="graphics\affinematrix.cpp" />
     <ClCompile Include="graphics\bitmap.cpp" />
+    <ClCompile Include="graphics\bmpbundle.cpp" />
     <ClCompile Include="graphics\boundingbox.cpp" />
     <ClCompile Include="graphics\clippingbox.cpp" />
     <ClCompile Include="graphics\coords.cpp" />

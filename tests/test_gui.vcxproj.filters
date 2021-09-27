@@ -23,6 +23,9 @@
     <ClCompile Include="graphics\bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\bmpbundle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\bitmapcomboboxtest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
