@@ -1594,6 +1594,12 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
                                   GdkEventButton *gdk_event,
                                   wxWindowGTK *win )
 {
+    /* gtk does not set the button1 mask when the event comes from the left button of a mouse.
+      but from some reason, it sets it when the event comes from a touchscreen
+      So simply remove it for consistency
+    */
+    gdk_event->state &= ~GDK_BUTTON1_MASK;
+
     wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
 
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
@@ -1728,6 +1734,7 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
                                     GdkEventButton *gdk_event,
                                     wxWindowGTK *win )
 {
+
     wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
 
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
@@ -3371,10 +3378,76 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindow* win)
     win->GTKProcessEvent(event);
 }
 
+static void wxEventButtonFromEventTouch(GdkEventButton* gdk_event_button, const GdkEventTouch* gdk_event_touch) {
+    gdk_event_button->type = GDK_BUTTON_PRESS;
+    gdk_event_button->window = gdk_event_touch->window;
+    gdk_event_button->send_event = gdk_event_touch->send_event;
+    gdk_event_button->time = gdk_event_touch->time;
+    gdk_event_button->x = gdk_event_touch->x;
+    gdk_event_button->y = gdk_event_touch->y;
+    gdk_event_button->axes = gdk_event_touch->axes;
+    gdk_event_button->state = gdk_event_touch->state;
+    gdk_event_button->device = gdk_event_touch->device;
+    gdk_event_button->x_root = gdk_event_touch->x_root;
+    gdk_event_button->y_root = gdk_event_touch->y_root;
+
+    gdk_event_button->button = 1; // left button
+}
+
+static void wxEventMotionFromEventTouch(GdkEventMotion* gdk_event_motion, const GdkEventTouch* gdk_event_touch) {
+    gdk_event_motion->type = GDK_MOTION_NOTIFY;
+    gdk_event_motion->window = gdk_event_touch->window;
+    gdk_event_motion->send_event = gdk_event_touch->send_event;
+    gdk_event_motion->time = gdk_event_touch->time;
+    gdk_event_motion->x = gdk_event_touch->x;
+    gdk_event_motion->y = gdk_event_touch->y;
+    gdk_event_motion->axes = gdk_event_touch->axes;
+    gdk_event_motion->state = gdk_event_touch->state;
+    gdk_event_motion->device = gdk_event_touch->device;
+    gdk_event_motion->x_root = gdk_event_touch->x_root;
+    gdk_event_motion->y_root = gdk_event_touch->y_root;
+
+    gdk_event_motion->is_hint = true;
+}
+
+static void
+wxEmulateLeftDownEvent(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win) {
+    GdkEventButton gdk_event_button;
+
+    if (!gdk_event->emulating_pointer) return;
+
+    wxEventButtonFromEventTouch(&gdk_event_button, gdk_event);
+    gtk_window_button_press_callback( widget,
+                                    &gdk_event_button,
+                                    win );
+}
+
+static void
+wxEmulateLeftUpEvent(GtkWidget* widget,GdkEventTouch* gdk_event, wxWindow* win) {
+    GdkEventButton gdk_event_button;
+
+    if (!gdk_event->emulating_pointer) return;
+
+    wxEventButtonFromEventTouch(&gdk_event_button, gdk_event);
+    gtk_window_button_release_callback( widget,
+                                    &gdk_event_button,
+                                    win );
+}
+
+static void
+wxEmulateMotionEvent(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win) {
+    GdkEventMotion gdk_event_motion;
+
+    if (!gdk_event->emulating_pointer) return;
+    wxEventMotionFromEventTouch(&gdk_event_motion, gdk_event);
+    gtk_window_motion_notify_callback(widget, &gdk_event_motion, win);
+}
+
 extern "C" {
 static void
-touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindow* win)
+touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
 {
+
     wxWindowGesturesData* const data = wxWindowGestures::FromObject(win);
     if ( !data )
         return;
@@ -3382,6 +3455,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindow* 
     switch ( gdk_event->type )
     {
         case GDK_TOUCH_BEGIN:
+            wxEmulateLeftDownEvent(widget, gdk_event, win);
             data->m_touchCount++;
 
             data->m_allowedGestures &= ~two_finger_tap;
@@ -3411,6 +3485,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindow* 
             break;
 
         case GDK_TOUCH_UPDATE:
+            wxEmulateMotionEvent(widget, gdk_event, win);
             // If press and tap gesture is active and touch corresponding to that gesture is moving
             if ( (data->m_activeGestures & press_and_tap) && gdk_event->sequence == data->m_touchSequence )
             {
@@ -3421,6 +3496,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindow* 
 
         case GDK_TOUCH_END:
         case GDK_TOUCH_CANCEL:
+            wxEmulateLeftUpEvent(widget, gdk_event, win);
             data->m_touchCount--;
 
             if ( data->m_touchCount == 1 )
