@@ -401,19 +401,17 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     toolBarBitmaps[Tool_help ] = wxBITMAP_BUNDLE_2(help );
 
     // Size of the bitmaps we use by default.
-    int w = 32,
-        h = 32;
-
-    if ( !m_smallToolbar )
-    {
-        w *= 2;
-        h *= 2;
-    }
+    //
+    // Note that scaling it up by 2 is not something we would do in real
+    // application code, it is only done in the sample for testing of bigger
+    // bitmap sizes.
+    const wxSize sizeBitmap = toolBarBitmaps[Tool_new].GetDefaultSize() *
+                                (m_smallToolbar ? 1 : 2);
 
     // Note that there is no need for FromDIP() here, wxMSW will adjust the
     // size on its own and under the other platforms there is no need for
     // scaling the coordinates anyhow.
-    toolBar->SetToolBitmapSize(wxSize(w, h));
+    toolBar->SetToolBitmapSize(sizeBitmap);
 
     toolBar->AddTool(wxID_NEW, "New",
                      toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
@@ -454,15 +452,15 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     if ( m_useCustomDisabled )
     {
-        wxBitmap bmpDisabled(w, h);
+        wxBitmap bmpDisabled(sizeBitmap);
         {
             wxMemoryDC dc;
             dc.SelectObject(bmpDisabled);
-            dc.DrawBitmap(toolBarBitmaps[Tool_print].GetBitmap(wxSize(w, h)), 0, 0);
+            dc.DrawBitmap(toolBarBitmaps[Tool_print].GetBitmap(sizeBitmap), 0, 0);
 
             wxPen pen(*wxRED, 5);
             dc.SetPen(pen);
-            dc.DrawLine(0, 0, w, h);
+            dc.DrawLine(0, 0, sizeBitmap.x, sizeBitmap.y);
         }
 
         toolBar->AddTool(wxID_PRINT, "Print", toolBarBitmaps[Tool_print],
@@ -487,8 +485,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         wxImage img(m_pathBmp);
         if ( img.IsOk() )
         {
-            if ( img.GetWidth() > w && img.GetHeight() > h )
-                img = img.GetSubImage(wxRect(0, 0, w, h));
+            if ( img.GetWidth() > sizeBitmap.x && img.GetHeight() > sizeBitmap.y )
+                img = img.GetSubImage(wxRect(0, 0, sizeBitmap.x, sizeBitmap.y));
 
             toolBar->AddSeparator();
             toolBar->AddTool(wxID_ANY, "Custom", img);
