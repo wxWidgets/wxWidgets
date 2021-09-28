@@ -32,6 +32,7 @@
 #include "wx/weakref.h"
 #include "wx/windowid.h"
 #include "wx/osx/private.h"
+#include "wx/private/bmpbndl.h"
 #include "wx/osx/private/available.h"
 
 #import <AppKit/NSWindow.h>
@@ -39,15 +40,16 @@
 
 wxBitmap wxStockPreferencesPage::GetLargeIcon() const
 {
+    wxBitmapBundle bundle;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
         switch ( m_kind )
         {
             case Kind_General:
-                return wxBitmap([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
+                bundle = wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
             case Kind_Advanced:
-                return wxBitmap([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
+                bundle = wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
         }
     }
 #endif
@@ -55,12 +57,12 @@ wxBitmap wxStockPreferencesPage::GetLargeIcon() const
     switch ( m_kind )
     {
         case Kind_General:
-            return wxBitmap([NSImage imageNamed:NSImageNamePreferencesGeneral]);
+            bundle = wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNamePreferencesGeneral]);
         case Kind_Advanced:
-            return wxBitmap([NSImage imageNamed:NSImageNameAdvanced]);
+            bundle = wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNameAdvanced]);
     }
 
-    return wxBitmap(); // silence compiler warning
+    return bundle.IsOk() ? bundle.GetBitmap(bundle.GetDefaultSize()) : wxNullBitmap;
 }
 
 
@@ -98,7 +100,7 @@ public:
                       "can't add more preferences pages after showing the window" );
 
         const wxString title = page->GetName();
-        wxBitmap bmp(page->GetLargeIcon());
+        wxBitmapBundle bmp(page->GetLargeIcon());
         wxASSERT_MSG( bmp.IsOk(), "OS X requires valid bitmap for preference page" );
 
         int toolId = wxIdManager::ReserveId();
