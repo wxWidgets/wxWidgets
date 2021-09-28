@@ -80,10 +80,21 @@ public:
     virtual wxBitmap GetBitmap(const wxSize size) wxOVERRIDE;
 
 private:
+    wxBitmap DoRasterize(const wxSize size);
+
     NSVGimage* const m_svgImage;
     NSVGrasterizer* const m_svgRasterizer;
 
     const wxSize m_sizeDef;
+
+    // Cache the last used bitmap (may be invalid if not used yet).
+    //
+    // Note that we cache only the last bitmap and not all the bitmaps ever
+    // requested from GetBitmap() for the different sizes because there would
+    // be no way to clear such cache and its growth could be unbounded,
+    // resulting in too many bitmap objects being used in an application using
+    // SVG for all of its icons.
+    wxBitmap m_cachedBitmap;
 
     wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplSVG);
 };
@@ -101,8 +112,16 @@ wxSize wxBitmapBundleImplSVG::GetDefaultSize() const
 
 wxBitmap wxBitmapBundleImplSVG::GetBitmap(const wxSize size)
 {
-    // TODO: Cache.
+    if ( !m_cachedBitmap.IsOk() || m_cachedBitmap.GetSize() != size )
+    {
+        m_cachedBitmap = DoRasterize(size);
+    }
 
+    return m_cachedBitmap;
+}
+
+wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize size)
+{
     wxVector<unsigned char> buffer(size.x*size.y*4);
     nsvgRasterize
     (
