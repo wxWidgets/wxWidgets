@@ -23,6 +23,8 @@
 // shared between Cocoa and Carbon
 //
 
+#include "wx/bmpbndl.h"
+
 // bring in theming types without pulling in the headers
 
 #if wxUSE_GUI

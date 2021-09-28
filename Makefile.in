@@ -13464,7 +13464,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_hid.o \
 	monodll_printmac.o \
 	monodll_core_timer.o \
-	monodll_utilsexc_cf.o
+	monodll_utilsexc_cf.o \
+	monodll_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_0 = monolib_unix_apptraits.o
 @COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_0 = monolib_unix_apptraits.o
@@ -13601,7 +13602,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
 	monolib_hid.o \
 	monolib_printmac.o \
 	monolib_core_timer.o \
-	monolib_utilsexc_cf.o
+	monolib_utilsexc_cf.o \
+	monolib_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_17 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17)
 @COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_unix_apptraits.o
 @COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_unix_apptraits.o
@@ -13738,7 +13740,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
 	coredll_hid.o \
 	coredll_printmac.o \
 	coredll_core_timer.o \
-	coredll_utilsexc_cf.o
+	coredll_utilsexc_cf.o \
+	coredll_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_1_1 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1)
 @COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_unix_apptraits.o
 @COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_unix_apptraits.o
@@ -13875,7 +13878,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	corelib_hid.o \
 	corelib_printmac.o \
 	corelib_core_timer.o \
-	corelib_utilsexc_cf.o
+	corelib_utilsexc_cf.o \
+	corelib_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_1_4 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4)
 @COND_TOOLKIT_MSW@__webview_additional_include_wrl_p = \
 @COND_TOOLKIT_MSW@	-I$(top_srcdir)/include/wx/msw/wrl
@@ -19164,6 +19168,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -24459,6 +24469,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -29860,6 +29876,12 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
@@ -34119,6 +34141,12 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp

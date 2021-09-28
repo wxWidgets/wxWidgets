@@ -32,6 +32,24 @@ public:
     // Note that this function is non-const because it may generate the bitmap
     // on demand and cache it.
     virtual wxBitmap GetBitmap(const wxSize size) = 0;
+
+#ifdef __WXOSX__
+    // returns the native representation of the bitmap bundle
+    virtual WXImage OSXGetImage() const { return NULL; }
+#endif
 };
+
+#ifdef __WXOSX__
+
+// this methods are wx-private, may change in the future
+
+WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromBundle(const  wxBitmapBundle& bundle);
+wxBitmapBundle WXDLLIMPEXP_CORE wxOSXMakeBundleFromImage(WXImage image);
+WXImage WXDLLIMPEXP_CORE wxOSXImageFromBitmap(const wxBitmap& bmp);
+#if wxOSX_USE_COCOA
+void WXDLLIMPEXP_CORE wxOSXAddBitmapToImage(WXImage image, const wxBitmap& bmp);
+#endif
+
+#endif
 
 #endif // _WX_PRIVATE_BMPBNDL_H_

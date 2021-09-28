@@ -24,6 +24,8 @@
 
 #if wxUSE_GUI
 
+#include "wx/bmpbndl.h"
+
 typedef CGRect WXRect;
 
 OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(

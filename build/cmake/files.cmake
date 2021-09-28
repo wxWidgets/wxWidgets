@@ -2301,6 +2301,7 @@ set(OSX_LOWLEVEL_SRC
     src/osx/core/timer.cpp
     src/osx/core/utilsexc_cf.cpp
     #TODO:     </if>
+    src/osx/core/bmpbndl.mm
 )
 
 set(OSX_LOWLEVEL_HDR

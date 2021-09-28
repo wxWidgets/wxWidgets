@@ -27,6 +27,10 @@
 
 #include <algorithm>
 
+#ifdef __WXOSX__
+#include "wx/osx/private.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // private helpers
 // ----------------------------------------------------------------------------
@@ -50,8 +54,23 @@ public:
         Init(&bitmap, 1);
     }
 
+    ~wxBitmapBundleImplSet()
+    {
+#ifdef __WXOSX__
+        if (m_nsImage)
+            wxMacCocoaRelease(m_nsImage);
+#endif
+    }
+
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize size) wxOVERRIDE;
+
+#ifdef __WXOSX__
+    virtual WXImage OSXGetImage() const wxOVERRIDE;
+
+private:
+    mutable WXImage m_nsImage = NULL;
+#endif
 
 private:
     // Struct containing bitmap itself as well as a flag indicating whether we
@@ -196,6 +215,30 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize size)
     return wxBitmap();
 }
 
+#ifdef __WXOSX__
+WXImage wxBitmapBundleImplSet::OSXGetImage() const
+{
+    if ( m_nsImage == NULL )
+    {
+#if wxOSX_USE_COCOA
+        m_nsImage = wxOSXImageFromBitmap(m_entries[0].bitmap);
+        const size_t n = m_entries.size();
+        for ( size_t i = 1; i < n; ++i )
+        {
+            const Entry& entry = m_entries[i];
+            wxOSXAddBitmapToImage(m_nsImage, entry.bitmap);
+        }
+#else
+        // TODO determine best bitmap for device scale factor, and use that
+        // with wxOSXImageFromBitmap as on iOS there is only one bitmap in a UIImage
+#endif
+        if ( m_nsImage )
+            wxMacCocoaRetain(m_nsImage);
+    }
+    return m_nsImage;
+}
+#endif
+
 // ============================================================================
 // wxBitmapBundle implementation
 // ============================================================================
@@ -252,7 +295,7 @@ wxBitmapBundle wxBitmapBundle::FromImpl(wxBitmapBundleImpl* impl)
 
 
 // MSW has its own, actually working, version, in MSW-specific code.
-#ifndef __WXMSW__
+#if !defined( __WXMSW__ ) && !defined( __WXOSX__ )
 
 /* static */
 wxBitmapBundle wxBitmapBundle::FromResources(const wxString& WXUNUSED(name))
@@ -267,7 +310,7 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& WXUNUSED(name))
     return wxBitmapBundle();
 }
 
-#endif // __WXMSW__
+#endif // !__WXMSW__ && !__WXOSX__
 
 wxSize wxBitmapBundle::GetDefaultSize() const
 {
