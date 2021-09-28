@@ -958,7 +958,7 @@ void wxWindow::SetScrollbar(int orient,
         if ( scrollbar )
         {
             // wxALWAYS_SHOW_SB only applies to the vertical scrollbar
-            if ( range == -1 || (orient & wxVERTICAL) && (GetWindowStyle() & wxALWAYS_SHOW_SB) )
+            if ( range == -1 || ((orient & wxVERTICAL) && (GetWindowStyle() & wxALWAYS_SHOW_SB)) )
             {
                 // just disable the scrollbar
                 scrollbar->SetScrollbar(pos, pageSize, range == -1 ? 0 : range, pageSize, refresh);
