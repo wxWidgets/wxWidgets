@@ -46,3 +46,36 @@ TEST_CASE("BitmapBundle::FromBitmaps", "[bmpbundle]")
     CHECK( b.GetBitmap(wxSize(20, 20)).GetSize() == wxSize(20, 20) );
     CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
 }
+
+#ifdef wxHAS_RAW_BITMAP
+
+TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")
+{
+    static const char svg_data[] =
+"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
+"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
+"<svg width=\"200\" height=\"200\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">"
+"<g>"
+"<circle cx=\"100\" cy=\"100\" r=\"50\" fill=\"blue\"/>"
+"</g>"
+"</svg>"
+    ;
+
+    wxCharBuffer buf(svg_data);
+    wxBitmapBundle b = wxBitmapBundle::FromSVG(buf.data(), wxSize(20, 20));
+    REQUIRE( b.IsOk() );
+    CHECK( b.GetDefaultSize() == wxSize(20, 20) );
+
+    CHECK( b.GetBitmap(wxSize(32, 32)).GetSize() == wxSize(32, 32) );
+
+    // Check that not using XML header works too.
+    const char* svg_tag_start = strstr(svg_data, "<svg");
+    REQUIRE( svg_tag_start );
+
+    buf = wxCharBuffer(svg_data);
+    b = wxBitmapBundle::FromSVG(buf.data(), wxSize(20, 20));
+    REQUIRE( b.IsOk() );
+    CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
+}
+
+#endif // wxHAS_RAW_BITMAP

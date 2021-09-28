@@ -919,6 +919,7 @@ set(GUI_CMN_SRC
     src/generic/rowheightcache.cpp
     src/generic/animateg.cpp
     src/common/bmpbndl.cpp
+    src/generic/bmpsvg.cpp
 )
 
 set(GUI_CMN_HDR

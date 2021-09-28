@@ -177,6 +177,35 @@ public:
     static wxBitmapBundle FromResources(const wxString& name);
 
     /**
+        Create a bundle from the SVG image.
+
+        Please note that the current implementation uses NanoSVG library
+        (https://github.com/memononen/nanosvg) for parsing and rasterizing SVG
+        images which imposes the following limitations:
+
+        - Text elements are not supported at all.
+        - SVG 1.1 filters are not supported.
+
+        These limitations will be relaxed in the future wxWidgets versions.
+
+        Please also note that this method is only available in the ports
+        providing raw bitmap access via wxPixelData and so defining
+        wxHAS_RAW_BITMAP symbol. Currently SVG images are not supported in the
+        ports without it, e.g. wxX11.
+
+        @param data This data may, or not, have the XML document preamble, i.e.
+            it can start either with @c "<?xml" processing instruction or
+            directly with @c svg tag. Notice that the pointer is non-const as
+            the current implementation modifies it while parsing, i.e. do @a
+            not use @c const_cast to pass data that is actually const to this
+            function.
+        @param sizeDef The default size to return from GetDefaultSize() for
+            this bundle. As SVG images usually don't have any natural
+            default size, it should be provided when creating the bundle.
+     */
+    static wxBitmapBundle FromSVG(char* data, const wxSize sizeDef);
+
+    /**
         Check if bitmap bundle is non-empty.
 
         Return @true if the bundle contains any bitmaps or @false if it is

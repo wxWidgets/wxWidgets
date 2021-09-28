@@ -2088,6 +2088,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\bmpsvg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\busyinfo.cpp"
 				>
 			</File>

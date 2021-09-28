@@ -73,6 +73,18 @@
     #include "bitmaps/help_2x_png.c"
 #endif // !wxHAS_IMAGE_RESOURCES
 
+// Real SVGs would typically be loaded from files, but to keep things as simple
+// as possible here, we embed this one directly in the program text.
+static char svg_data[] =
+"<svg version=\"1.1\" viewBox=\"0.0 0.0 360.0 360.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">"
+"<g>"
+"<path stroke=\"#000000\" fill=\"#ff0000\" d=\"m 10 170 c0 -12 10 -24 24 -24 l100 0 c6 0 12 2 17 7 c4 4 7 10 7 17 l0 100 c0 12 -10 24 -24 24 l-100 0c-12 0 -24 -10 -24 -24 z\"/>"
+"<path stroke=\"#000000\" fill=\"#0000ff\" d=\"m100  90 c0 -12 10 -24 24 -24 l100 0 c6 0 12 2 17 7 c4 4 7 10 7 17 l0 100 c0 12 -10 24 -24 24 l-100 0c-12 0 -24 -10 -24 -24 z\"/>"
+"<path stroke=\"#000000\" fill=\"#ffff00\" d=\"m210 140 c0 -12 10 -24 24 -24 l100 0 c6 0 12 2 17 7 c4 4 7 10 7 17 l0 100 c0 12 -10 24 -24 24 l-100 0c-12 0 -24 -10 -24 -24 z\"/>"
+"</g>"
+"</svg>"
+;
+
 enum Positions
 {
     TOOLBAR_LEFT,
@@ -231,14 +243,14 @@ enum
 // event tables
 // ----------------------------------------------------------------------------
 
-// Notice that wxID_HELP will be processed for the 'About' menu and the toolbar
+// Notice that wxID_ABOUT will be processed for the 'About' menu and the toolbar
 // help button.
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
-    EVT_MENU(wxID_HELP, MyFrame::OnAbout)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLE_TOOLBAR, MyFrame::OnToggleToolbar)
     EVT_MENU(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR, MyFrame::OnToggleAnotherToolbar)
@@ -378,6 +390,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         Tool_paste,
         Tool_print,
         Tool_help,
+        Tool_about,
         Tool_Max
     };
 
@@ -407,6 +420,9 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // bitmap sizes.
     const wxSize sizeBitmap = toolBarBitmaps[Tool_new].GetDefaultSize() *
                                 (m_smallToolbar ? 1 : 2);
+
+    // Use vector SVG image for this button for demonstration purposes.
+    toolBarBitmaps[Tool_about] = wxBitmapBundle::FromSVG(svg_data, sizeBitmap);
 
     // Note that there is no need for FromDIP() here, wxMSW will adjust the
     // size on its own and under the other platforms there is no need for
@@ -478,6 +494,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // right-aligned
     toolBar->AddStretchableSpace();
     toolBar->AddTool(wxID_HELP, "Help", toolBarBitmaps[Tool_help], "Help button", wxITEM_CHECK);
+
+    toolBar->AddTool(wxID_ABOUT, "About", toolBarBitmaps[Tool_about], "About");
 
     if ( !m_pathBmp.empty() )
     {
@@ -601,7 +619,7 @@ MyFrame::MyFrame()
     fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit toolbar sample" );
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
+    helpMenu->Append(wxID_ABOUT, "&About", "About toolbar sample");
 
     wxMenuBar* menuBar = new wxMenuBar( wxMB_DOCKABLE );
 

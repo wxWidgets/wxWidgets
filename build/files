@@ -872,6 +872,7 @@ GUI_CMN_SRC =
     src/generic/animateg.cpp
     src/generic/bannerwindow.cpp
     src/generic/bmpcboxg.cpp
+    src/generic/bmpsvg.cpp
     src/generic/busyinfo.cpp
     src/generic/buttonbar.cpp
     src/generic/calctrlg.cpp
