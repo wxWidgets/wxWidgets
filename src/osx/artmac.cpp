@@ -35,11 +35,11 @@ protected:
                                           const wxArtClient& client) wxOVERRIDE;
 #endif
 #if wxOSX_USE_COCOA_OR_IPHONE
-    virtual wxBitmap CreateBitmap(const wxArtID& id,
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
                                   const wxArtClient& client,
                                   const wxSize& size) wxOVERRIDE
     {
-        return wxOSXCreateSystemBitmap(id, client, size);
+        return wxOSXCreateSystemBitmapBundle(id, client, size);
     }
 #endif
 };

@@ -34,7 +34,7 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGImageRef      inImage) ;
 
 WX_UIImage WXDLLIMPEXP_CORE wxOSXGetUIImageFromCGImage( CGImageRef image );
-wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
+wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id, const wxString &client, const wxSize& size);
 
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
