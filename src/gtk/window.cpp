@@ -1595,8 +1595,10 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
                                   wxWindowGTK *win )
 {
     /* gtk does not set the button1 mask when the event comes from the left button of a mouse.
-      but from some reason, it sets it when the event comes from a touchscreen
-      So simply remove it for consistency
+      but from some reason, it sets it when the event comes from a touchscreen.
+      So simply remove it for consistency.
+      Notice that gtk does that when this callback is invoked by a "button_press_event" event,
+      essencially.
     */
     gdk_event->state &= ~GDK_BUTTON1_MASK;
 
@@ -3378,35 +3380,34 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindow* win)
     win->GTKProcessEvent(event);
 }
 
-static void wxEventButtonFromEventTouch(GdkEventButton* gdk_event_button, const GdkEventTouch* gdk_event_touch) {
-    gdk_event_button->type = GDK_BUTTON_PRESS;
-    gdk_event_button->window = gdk_event_touch->window;
-    gdk_event_button->send_event = gdk_event_touch->send_event;
-    gdk_event_button->time = gdk_event_touch->time;
-    gdk_event_button->x = gdk_event_touch->x;
-    gdk_event_button->y = gdk_event_touch->y;
-    gdk_event_button->axes = gdk_event_touch->axes;
-    gdk_event_button->state = gdk_event_touch->state;
-    gdk_event_button->device = gdk_event_touch->device;
-    gdk_event_button->x_root = gdk_event_touch->x_root;
-    gdk_event_button->y_root = gdk_event_touch->y_root;
+template<typename EventType> void wxEventMouseFromEventTouch(EventType* event, const GdkEventTouch* gdk_event_touch) {
+    event->window = gdk_event_touch->window;
+    event->send_event = gdk_event_touch->send_event;
+    event->time = gdk_event_touch->time;
+    event->x = gdk_event_touch->x;
+    event->y = gdk_event_touch->y;
+    event->axes = gdk_event_touch->axes;
+    event->state = gdk_event_touch->state;
+    event->device = gdk_event_touch->device;
+    event->x_root = gdk_event_touch->x_root;
+    event->y_root = gdk_event_touch->y_root;
+}
 
+static void wxEventButtonFromEventTouch(GdkEventButton * gdk_event_button, const GdkEventTouch* gdk_event_touch) {
+
+    wxEventMouseFromEventTouch<GdkEventButton>(gdk_event_button , gdk_event_touch);
+
+    gdk_event_button->type = GDK_BUTTON_PRESS;
     gdk_event_button->button = 1; // left button
+
+
 }
 
 static void wxEventMotionFromEventTouch(GdkEventMotion* gdk_event_motion, const GdkEventTouch* gdk_event_touch) {
-    gdk_event_motion->type = GDK_MOTION_NOTIFY;
-    gdk_event_motion->window = gdk_event_touch->window;
-    gdk_event_motion->send_event = gdk_event_touch->send_event;
-    gdk_event_motion->time = gdk_event_touch->time;
-    gdk_event_motion->x = gdk_event_touch->x;
-    gdk_event_motion->y = gdk_event_touch->y;
-    gdk_event_motion->axes = gdk_event_touch->axes;
-    gdk_event_motion->state = gdk_event_touch->state;
-    gdk_event_motion->device = gdk_event_touch->device;
-    gdk_event_motion->x_root = gdk_event_touch->x_root;
-    gdk_event_motion->y_root = gdk_event_touch->y_root;
 
+    wxEventMouseFromEventTouch<GdkEventMotion>(gdk_event_motion , gdk_event_touch);
+
+    gdk_event_motion->type = GDK_MOTION_NOTIFY;
     gdk_event_motion->is_hint = true;
 }
 
