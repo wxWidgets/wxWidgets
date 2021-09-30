@@ -162,7 +162,10 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                 }
             }
             else
+            {
+                printf( "Testing RecycleBin - 1" );
                 wxLogSysError( _( wxString::Format( "Failed to get display name for Recycle Bin, error %d", hr ) ) );
+            }
             if( SUCCEEDED( hr = m_pFolder2->EnumObjects( NULL, SHCONTF_FOLDERS | SHCONTF_NONFOLDERS| SHCONTF_INCLUDEHIDDEN, &penumFiles ) ) )
             {
                 int iSubItem = 0;
@@ -212,6 +215,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                             if( ( uiID == INVALID_MENU_ID ) || ( uiID == 0 ) )
                                             {
                                                 wxLogError( _( "Error getting appropriate menu ID" ) );
+                                                printf( "Testing RecycleBin - 2" );
                                             }
                                             else
                                             {
@@ -219,6 +223,7 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                                 if( FAILED( hr ) )
                                                 {
                                                     wxLogSysError( _( wxString::Format( "Failed to get menu command string, error %d", hr ) ) );
+                                                    printf( "Testing RecycleBin - 3" );
                                                     verb[0] = TCHAR( '\0' );
                                                 }
                                                 else
@@ -245,34 +250,58 @@ bool wxDesktopEnv::RestoreFromRecycleBin(const wxString &path)
                                                             res = TRUE;
                                                         }
                                                         else
+                                                        {
+                                                            printf( "Testing RecycleBin - 4" );
                                                             wxLogSysError( _( wxString::Format( "Failed to call undelete, error is %d", hr ) ) );
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                     else
+                                    {
+                                        printf( "Testing RecycleBin - 5" );
                                         wxLogSysError( _( wxString::Format( "Failed to obtain context menu, error %d", hr ) ) );
+                                    }
                                 }
                                 else
+                                {
+                                    printf( "Testing RecycleBin - 6" );
                                     wxLogSysError( _( wxString::Format( "Failed to obtain obect UI from file, error %d", hr ) ) );
+                                }
                             }
                         }
                         else
+                        {
+                            printf( "Testing RecycleBin - 7" );
                             wxLogSysError( _( wxString::Format( "Failed to get details of the file, error %d", hr ) ) );
+                        }
                     }
                     else
+                    {
+                        printf( "Testing RecycleBin - 8" );
                         wxLogSysError( _( wxString::Format( "Failed to get information about the file, error %d", hr ) ) );
+                    }
                 }
             }
             else
+            {
+                printf( "Testing RecycleBin - 9" );
                 wxLogSysError( _( wxString::Format( "Failed to enumerate obects in Recycle Bin, error %d", hr ) ) );
+            }
         }
         else
+        {
+            printf( "Testing RecycleBin - 10" );
             wxLogSysError( _( wxString::Format( "Failed to bind to the Recycle Bin, error %d", hr ) ) );
+        }
     }
     else
+    {
+        printf( "Testing RecycleBin - 11" );
         wxLogSysError( _( wxString::Format( "Failed to obtain reference to Recycle Bin, error %d" , hr ) ) );
+    }
     if( pidlRecycleBin )
     {
         CoTaskMemFree( pidlRecycleBin );
