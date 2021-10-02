@@ -162,6 +162,20 @@ public:
     static wxBitmapBundle FromImage(const wxImage& image);
 
     /**
+        Create a bundle from a custom bitmap bundle implementation.
+
+        This function can be used to create bundles implementing custom logic
+        for creating the bitmaps, e.g. creating them on the fly rather than
+        using predefined bitmaps.
+
+        See wxBitmapBundleImpl.
+
+        @param impl A valid, i.e. non-null, pointer. This function takes
+            ownership of it, so the caller must @e not call DecRef() on it.
+     */
+    static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
+
+    /**
         Create a bundle from the bitmaps in the application resources.
 
         This function can only be used on the platforms supporting storing
@@ -241,6 +255,64 @@ public:
         consume resources until the application termination.
      */
     wxBitmap GetBitmap(const wxSize size) const;
+};
+
+/**
+    Base class for custom implementations of wxBitmapBundle.
+
+    This class shouldn't be used directly in the application code, but may be
+    derived from to implement custom bitmap bundles.
+
+    Example of use:
+    @code
+        class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
+        {
+        public:
+            MyCustomBitmapBundleImpl()
+            {
+            }
+
+            wxSize GetDefaultSize() const wxOVERRIDE
+            {
+                ... determine the minimum/default size for bitmap to use ...
+            }
+
+            wxBitmap GetBitmap(const wxSize size) wxOVERRIDE
+            {
+                ... get the bitmap of the requested size from somewhere and
+                    cache it if necessary, i.e. if getting it is expensive ...
+            }
+        };
+
+        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromImpl(new MyCustomBitmapBundleImpl());
+    @endcode
+
+    Full (but still very simple) example of using it can be found in the
+    toolbar sample code.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @since 3.1.6
+*/
+class wxBitmapBundleImpl : public wxRefCounter
+{
+public:
+    /**
+        Return the size of the bitmaps represented by this bundle in the default
+        DPI.
+
+        Must always return a valid size.
+     */
+    virtual wxSize GetDefaultSize() const = 0;
+
+    /**
+        Retrieve the bitmap of exactly the given size.
+
+        Note that this function is non-const because it may generate the bitmap
+        on demand and cache it.
+     */
+    virtual wxBitmap GetBitmap(const wxSize size) = 0;
 };
 
 /**

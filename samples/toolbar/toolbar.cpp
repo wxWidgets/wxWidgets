@@ -499,15 +499,61 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     if ( !m_pathBmp.empty() )
     {
-        // create a tool with a custom bitmap for testing
-        wxImage img(m_pathBmp);
-        if ( img.IsOk() )
+        wxImage image(m_pathBmp);
+        if ( image.IsOk() )
         {
-            if ( img.GetWidth() > sizeBitmap.x && img.GetHeight() > sizeBitmap.y )
-                img = img.GetSubImage(wxRect(0, 0, sizeBitmap.x, sizeBitmap.y));
+            // create a custom bitmap bundle for testing
+            class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
+            {
+            public:
+                MyCustomBitmapBundleImpl(const wxImage& image,
+                                         const wxSize& sizeDef)
+                    : m_image(image),
+                      m_sizeDef(sizeDef)
+                {
+                }
+
+                wxSize GetDefaultSize() const wxOVERRIDE
+                {
+                    return m_sizeDef;
+                }
+
+                wxBitmap GetBitmap(const wxSize size) wxOVERRIDE
+                {
+                    // In this simple implementation we don't bother caching
+                    // anything.
+                    wxImage image = m_image;
+                    if ( image.GetSize() != size )
+                        image.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
+
+                    // This is required under MSW in order to be able to draw
+                    // over the bitmap using wxDC. For full alpha support,
+                    // wxGraphicsContext should be used.
+                    if ( image.HasAlpha() )
+                        image.ClearAlpha();
+
+                    wxBitmap bitmap(image);
+
+                    // This is the custom part: we show the size of the bitmap
+                    // being used in the bitmap itself.
+                    wxMemoryDC dc(bitmap);
+                    dc.SetTextForeground(*wxRED);
+                    dc.SetFont(wxFontInfo(wxSize(size.x/4, size.y/2)).Bold());
+                    dc.DrawText(wxString::Format("%d", size.y), size.x/4, size.y/4);
+
+                    return bitmap;
+                }
+
+            private:
+                const wxImage m_image;
+                const wxSize m_sizeDef;
+            };
+
+            wxBitmapBundleImpl* const
+                impl = new MyCustomBitmapBundleImpl(image, sizeBitmap);
 
             toolBar->AddSeparator();
-            toolBar->AddTool(wxID_ANY, "Custom", img);
+            toolBar->AddTool(wxID_ANY, "Custom", wxBitmapBundle::FromImpl(impl));
         }
     }
 
