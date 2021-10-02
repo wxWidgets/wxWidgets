@@ -1,0 +1,1 @@
+GTK: Fix missing mouse events after enabling touch events (Thierry Bultel).
