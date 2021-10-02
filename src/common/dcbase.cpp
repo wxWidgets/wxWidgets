@@ -365,7 +365,7 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
                   wxS("Clipping box size values cannot be negative") );
 
     // If we set clipping box with this method we can operate on device coordinates
-    // and calculate clipping box properly also when transfromations were applied to DC.
+    // and calculate clipping box properly also when transformations were applied to DC.
     m_useDevClipCoords = true;
     wxRect clipRegion(LogicalToDevice(x, y), LogicalToDeviceRel(w, h));
 
@@ -1252,7 +1252,7 @@ void wxDC::DrawLabel(const wxString& text,
     {
         if ( pc == text.end() || *pc == '\n' )
         {
-            int xRealStart = x; // init it here to avoid compielr warnings
+            int xRealStart = x; // init it here to avoid compiler warnings
 
             if ( !curLine.empty() )
             {

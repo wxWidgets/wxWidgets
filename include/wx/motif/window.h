@@ -131,7 +131,7 @@ public:
     // (for wxWindowDC and Motif callbacks only)
     // -----------------------------------------
 
-    // Adds a recangle to the updates list
+    // Adds a rectangle to the updates list
     void AddUpdateRect(int x, int y, int w, int h);
 
     void ClearUpdateRegion() { m_updateRegion.Clear(); }

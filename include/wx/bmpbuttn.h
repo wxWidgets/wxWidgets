@@ -73,7 +73,7 @@ public:
                            wxWindowID winid,
                            const wxString& name = wxString());
 
-        which is used used by NewCloseButton(), and, as Create(), must be
+        which is used by NewCloseButton(), and, as Create(), must be
         called on default-constructed wxBitmapButton object.
     */
 

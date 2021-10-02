@@ -163,7 +163,7 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 
         if ( FixedSizeTabs() )
         {
-            // it's enough to just reresh this one
+            // it's enough to just refresh this one
             RefreshTab(nPage);
         }
         else // var width tabs
@@ -556,7 +556,7 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
         {
             // unfortunately we can't do this because the selected tab hangs
             // over its neighbours and so we might need to refresh more tabs -
-            // of course, we could still avoid rereshing some of them with more
+            // of course, we could still avoid refreshing some of them with more
             // complicated checks, but it doesn't seem too bad to refresh all
             // of them, I still don't see flicker, so leaving as is for now
 
@@ -1105,7 +1105,7 @@ void wxNotebook::UpdateSpinBtn()
             // efficient
             m_offset -= GetTabWidth(m_firstVisible--);
 
-            // reclaculate after m_firstVisible change
+            // recalculate after m_firstVisible change
             CalcLastVisibleTab();
         }
 
@@ -1247,7 +1247,7 @@ void wxNotebook::ScrollLastTo(size_t page)
     // go to it
     ScrollTo(m_firstVisible);
 
-    // consitency check: the page we were asked to show should be shown
+    // consistency check: the page we were asked to show should be shown
     wxASSERT_MSG( (size_t)page < m_lastVisible, wxT("bug in ScrollLastTo") );
 }
 

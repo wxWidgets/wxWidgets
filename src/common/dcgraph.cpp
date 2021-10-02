@@ -616,7 +616,7 @@ wxAffineMatrix2D wxGCDCImpl::GetTransformMatrix() const
 
 void wxGCDCImpl::ResetTransformMatrix()
 {
-    // Reset affine transfrom matrix (extended) to identity matrix.
+    // Reset affine transform matrix (extended) to identity matrix.
     m_matrixExtTransform.Set(wxMatrix2D(), wxPoint2DDouble());
     ComputeScaleAndOrigin();
 }

@@ -19,7 +19,7 @@
 #endif
 
 // wxRescaleCoord is used to scale the components of the given wxSize by the
-// ratio between 2 scales, with rounding. It doesn't not scale the components
+// ratio between 2 scales, with rounding. It doesn't scale the components
 // if they're set to -1 (wxDefaultCoord), as this value is special in wxSize.
 //
 // The way it's used is special because we want to ensure there is no confusion

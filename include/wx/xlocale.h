@@ -139,7 +139,7 @@ public:
     wxXLocale() { m_isC = false; }
 
     // Construct from a symbolic language constant: unless the language is
-    // wxLANGUAGE_ENGLISH_US (which we suppose to be the same as "C" locale)
+    // wxLANGUAGE_ENGLISH_US (which we assume to be the same as "C" locale)
     // the object will be invalid
     wxXLocale(wxLanguage lang)
     {

@@ -360,7 +360,7 @@ int wxEventLoopManual::DoRun()
             }
             catch ( ... )
             {
-                // OnException() throwed, possibly rethrowing the same
+                // OnException() thrown, possibly rethrowing the same
                 // exception again: very good, but we still need OnExit() to
                 // be called
                 OnExit();

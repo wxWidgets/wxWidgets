@@ -57,7 +57,7 @@ extern GdkAtom g_altTextAtom;
 // wxClipboardSync: used to perform clipboard operations synchronously
 // ----------------------------------------------------------------------------
 
-// constructing this object on stack will wait wait until the latest clipboard
+// constructing this object on stack will wait until the latest clipboard
 // operation is finished on block exit
 //
 // notice that there can be no more than one such object alive at any moment,

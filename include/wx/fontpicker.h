@@ -95,7 +95,7 @@ protected:
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl: platform-independent class which embeds the
-// platform-dependent wxFontPickerWidget andm if wxFNTP_USE_TEXTCTRL style is
+// platform-dependent wxFontPickerWidget and if wxFNTP_USE_TEXTCTRL style is
 // used, a textctrl next to it.
 // ----------------------------------------------------------------------------
 

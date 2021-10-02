@@ -77,7 +77,7 @@ bool wxFileDialogBase::Create(wxWindow *parent,
     assert in wxRegion::DoOffset is triggered later on.
     Another solution was to override GetWindowStyleFlag() to not include
     wxFD_FILE_MUST_EXIST in its return value, but as other wxFileDialog
-    style flags (that are actually used) dont't seem to cause problems
+    style flags (that are actually used) don't seem to cause problems
     this seemed an easier solution.
     */
     style &= ~wxFD_FILE_MUST_EXIST;

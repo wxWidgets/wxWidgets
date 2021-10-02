@@ -1768,7 +1768,7 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
     }
     else if (style == wxTOOL_STYLE_SEPARATOR)
     {
-        // leave a small gap aroudn the line, also account for the toolbar
+        // leave a small gap around the line, also account for the toolbar
         // border itself
         if(rectOrig.height > rectOrig.width)
         {
@@ -3145,7 +3145,7 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
     {
         if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
         {
-            // TODO: don't harcode all this
+            // TODO: don't hardcode all this
             size->x += 3*window->GetCharWidth();
 
             wxCoord heightBtn = (11*(window->GetCharHeight() + 8))/10;

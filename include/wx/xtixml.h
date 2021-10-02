@@ -56,7 +56,7 @@ public:
     virtual void DoBeginWriteObject(const wxObject *object,
         const wxClassInfo *classInfo, int objectID, const wxStringToAnyHashMap &metadata );
 
-    // end of writing an toplevel object name param is used for unique
+    // end of writing a toplevel object name param is used for unique
     // identification within the container
     virtual void DoEndWriteObject(const wxObject *object,
         const wxClassInfo *classInfo, int objectID );

@@ -316,7 +316,7 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.SetPen(tcCol);
         dc.DrawRectangle(tcRect);
 
-        // this is intentionally here to allow drawed rectangle's
+        // this is intentionally here to allow drawn rectangle's
         // right edge to be hidden
         if ( m_text )
             tcRect.width = m_widthCustomPaint;

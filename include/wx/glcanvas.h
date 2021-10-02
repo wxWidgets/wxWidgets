@@ -162,7 +162,7 @@ public:
     wxGLAttributes& FrameBuffersRGB();
     void EndList(); // No more values can be chained
 
-    // This function is undocumented and can not be chained on purpose!
+    // This function is undocumented and cannot be chained on purpose!
     // To keep backwards compatibility with versions before wx3.1 we add here
     // the default values used in those versions for the case of NULL list.
     void AddDefaultsForWXBefore31();

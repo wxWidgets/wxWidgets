@@ -400,7 +400,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 switch ( keyEvent.m_keyCode )
                 {
                     // for modifiers, don't send wxEVT_CHAR event.
-                    // the definition of Modifiers, plese see the doc of
+                    // the definition of Modifiers, please see the doc of
                     // wxKeyModifier. we only take care of wxMOD_ALT, wxMOD_CONTROL
                     // wxMOD_SHIFT under X11 platform. Other modifiers is handled
                     // by window manager.
@@ -441,7 +441,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             wxKeyEvent keyEvent(wxEVT_KEY_UP);
             wxTranslateKeyEvent(keyEvent, win, window, event);
 
-            // if recieve the modifiers key up. set the corresponding
+            // if receive the modifiers key up. set the corresponding
             // keyboardState to false.
             switch ( keyEvent.m_keyCode )
             {
@@ -771,7 +771,7 @@ Window wxGetWindowParent(Window window)
     return (Window) 0;
 
 #ifndef __VMS
-   // VMS chokes on unreacheable code
+   // VMS chokes on unreachable code
    Window parent, root = 0;
 #if wxUSE_NANOX
     int noChildren = 0;

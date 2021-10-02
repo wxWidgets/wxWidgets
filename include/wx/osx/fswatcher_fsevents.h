@@ -57,7 +57,7 @@ public:
     // watches from kqeueue and from FSEvents
     bool RemoveAll() wxOVERRIDE;
 
-    // post an file change event to the owner
+    // post a file change event to the owner
     void PostChange(const wxFileName& oldFileName,
       const wxFileName& newFileName, int event);
 

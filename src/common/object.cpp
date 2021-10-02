@@ -202,7 +202,7 @@ wxClassInfo *wxClassInfo::FindClass(const wxString& className)
 // first time the problem will no longer happen; all the modules it depends on
 // will have been loaded. The assumption is checked using the 'entry' variable
 // as a reentrance guard, it checks that once the hash table is global it is
-// not accessed multiple times simulateously.
+// not accessed multiple times simultaneously.
 
 void wxClassInfo::Register()
 {
@@ -220,7 +220,7 @@ void wxClassInfo::Register()
     }
     else
     {
-        // guard againt reentrance once the global has been created
+        // guard against reentrance once the global has been created
         wxASSERT_MSG(++entry == 1, wxT("wxClassInfo::Register() reentrance"));
         classTable = sm_classTable;
     }
@@ -250,7 +250,7 @@ void wxClassInfo::Register()
         }
         else
         {
-            // the gobal hash has already been created by a reentrant call,
+            // the global hash has already been created by a reentrant call,
             // so delete the local hash and try again
             delete classTable;
             Register();

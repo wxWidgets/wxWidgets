@@ -22,7 +22,7 @@
     // In other words, it isn't guaranteed to map to Meta. This is a real
     // problem: it is common to map NumLock to it (in fact, it's an exception
     // if the X server _doesn't_ use it for NumLock).  So the old code caused
-    // wxKeyEvent::MetaDown() to always return true as long as NumLock was on
+    // wxKeyEvent::MetaDown() to always return true as long as NumLock was
     // on many systems, which broke all applications using
     // wxKeyEvent::GetModifiers() to check modifiers state (see e.g.  here:
     // http://tinyurl.com/56lsk2).

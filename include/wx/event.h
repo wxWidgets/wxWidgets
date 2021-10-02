@@ -1692,7 +1692,7 @@ private:
 };
 
 
-// Scroll event class, derived form wxCommandEvent. wxScrollEvents are
+// Scroll event class, derived from wxCommandEvent. wxScrollEvents are
 // sent by wxSlider and wxScrollBar.
 /*
  wxEVT_SCROLL_TOP
@@ -3086,7 +3086,7 @@ private:
 
 /*
  wxEVT_MOUSE_CAPTURE_LOST
- The window losing the capture receives this message, unless it released it
+ The window losing the capture receives this message, unless it released
  it itself or unless wxWindow::CaptureMouse was called on another window
  (and so capture will be restored when the new capturer releases it).
  */

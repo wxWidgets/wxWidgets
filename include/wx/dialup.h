@@ -66,7 +66,7 @@ public:
     // parameter to Dial() on this machine and returns their number (may be 0)
     virtual size_t GetISPNames(wxArrayString& names) const = 0;
 
-    // dial the given ISP, use username and password to authentificate
+    // dial the given ISP, use username and password to authenticate
     //
     // if no nameOfISP is given, the function will select the default one
     //
@@ -122,7 +122,7 @@ public:
     // wxEVT_DIALUP_CONNECTED/wxEVT_DIALUP_DISCONNECTED events. The interval
     // parameter is only for Unix where we do the check manually: under
     // Windows, the notification about the change of connection status is
-    // instantenous.
+    // instantaneous.
     //
     // Returns false if couldn't set up automatic check for online status.
     virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds = 60) = 0;

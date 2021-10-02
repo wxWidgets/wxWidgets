@@ -73,7 +73,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         }
     }
 
-    //We do not have a protocol string so we just pass the path withouth the
+    //We do not have a protocol string so we just pass the path without the
     if(start == wxString::npos)
     {
         size_t doubleslash = path.find("//");

@@ -353,7 +353,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
 
     if(page.active && (wnd->FindFocus() == wnd) && focus_area.x <= (area.x + area.width))
     {
-        // clipping seems not to work here, so we we have to recalc the focus-area manually
+        // clipping seems not to work here, so we have to recalc the focus-area manually
         if((focus_area.x + focus_area.width) > (area.x + area.width))
             focus_area.width = area.x + area.width - focus_area.x + focus_width - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder;
         gtk_paint_focus (style_notebook, window,

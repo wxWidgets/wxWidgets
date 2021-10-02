@@ -154,7 +154,7 @@ public:
     virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo,
                                     int objectID, const wxStringToAnyHashMap &metadata ) = 0;
 
-    // end of writing an toplevel object name param is used for unique
+    // end of writing a toplevel object name param is used for unique
     // identification within the container
     virtual void DoEndWriteObject(const wxObject *object,
                 const wxClassInfo *classInfo, int objectID ) = 0;
@@ -213,7 +213,7 @@ Streaming callbacks for depersisting XML to code, or running objects
 class WXDLLIMPEXP_BASE wxObjectReaderCallback;
 
 /*
-wxObjectReader handles streaming in a class from a arbitrary format.
+wxObjectReader handles streaming in a class from an arbitrary format.
 While walking through it issues calls out to interfaces to readercallback
 the guts from the underlying storage format.
 */

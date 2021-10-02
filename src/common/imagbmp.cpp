@@ -1380,7 +1380,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         }
         image->SetOption(wxIMAGE_OPTION_BMP_FORMAT, bppFormat);
 
-        // monochome bitmap:
+        // monochrome bitmap:
         mask.SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_1BPP_BW);
         bool IsBmp = false;
         bool IsMask = false;

@@ -948,7 +948,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     wxSize sz = GetClientSize();
     int btnBorder; // border for button only
 
-    // check if button should really be outside the border: we'll do it it if
+    // check if button should really be outside the border: we'll do it if
     // its platform default or bitmap+pushbutton background is used, but not if
     // there is vertical size adjustment or horizontal spacing.
     if ( ( (m_iFlags & wxCC_BUTTON_OUTSIDE_BORDER) ||
@@ -2378,7 +2378,7 @@ wxSize wxComboCtrlBase::GetButtonSize()
 
     wxSize retSize(m_btnWid,m_btnHei);
 
-    // Need to call CalculateAreas now if button size is
+    // Need to call CalculateAreas now if button size
     // is not explicitly specified.
     if ( retSize.x <= 0 || retSize.y <= 0)
     {

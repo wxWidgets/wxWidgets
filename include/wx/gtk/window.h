@@ -182,7 +182,7 @@ public:
     bool GTKShouldIgnoreEvent() const;
 
 
-    // override this if some events should never be consumed by wxWidgets but
+    // override this if some events should never be consumed by wxWidgets
     // but have to be left for the native control
     //
     // base version just calls HandleWindowEvent()

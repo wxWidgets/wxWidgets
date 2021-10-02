@@ -2510,7 +2510,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
             actually is applied not only to the source but also dest]
 
             Be conservative about using the offset and only do it for
-            currently currently known failing cases: when xdest and xsrc are
+            currently known failing cases: when xdest and xsrc are
             equal and only when not actually stretching.
             */
             const wxCoord ofs = (GetLayoutDirection() == wxLayout_RightToLeft

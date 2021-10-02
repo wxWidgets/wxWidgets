@@ -1291,7 +1291,7 @@ wxString wxRichTextXMLHelper::MakeStringFromProperty(const wxVariant& var)
     return var.MakeString();
 }
 
-// Create a proprty from the string read from the XML file.
+// Create a property from the string read from the XML file.
 wxVariant wxRichTextXMLHelper::MakePropertyFromString(const wxString& name, const wxString& value, const wxString& WXUNUSED(type))
 {
     wxVariant var(value, name);
