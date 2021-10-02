@@ -499,7 +499,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
     if ( wxIsMainThread() )
     {
         // Note that this and the other messages here are intentionally not
-        // translated -- they are for developpers only.
+        // translated -- they are for developers only.
         static const wxStringCharType* caption = wxS("wxWidgets Debug Alert");
 
         wxString msgDlg = wxS("A debugging check in this application ")

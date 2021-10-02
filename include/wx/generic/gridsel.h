@@ -71,7 +71,7 @@ public:
 
     // Extend (or shrink) the current selection block (creating it if
     // necessary, i.e. if there is no selection at all currently or if the
-    // current current cell isn't selected, as in this case a new block
+    // current cell isn't selected, as in this case a new block
     // containing it is always added) to the one specified by the start and end
     // coordinates of its opposite corners (which don't have to be in
     // top/bottom left/right order).

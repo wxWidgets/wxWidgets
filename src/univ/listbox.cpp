@@ -353,8 +353,8 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     }
     //else: current item may stay
 
-    // update the selections array: the indices of all seletected items after
-    // the one being deleted must change and the item itselfm ust be removed
+    // update the selections array: the indices of all selected items after
+    // the one being deleted must change and the item itself just be removed
     int index = wxNOT_FOUND;
     unsigned int count = m_selections.GetCount();
     for ( unsigned int item = 0; item < count; item++ )
@@ -1429,7 +1429,7 @@ bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
             winCapture->ReleaseMouse();
             m_btnCapture = 0;
         }
-        //else: the mouse wasn't presed over the listbox, only released here
+        //else: the mouse wasn't pressed over the listbox, only released here
     }
     else if ( event.LeftDClick() )
     {

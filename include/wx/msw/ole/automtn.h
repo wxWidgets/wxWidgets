@@ -96,7 +96,7 @@ public:
 
     // Uses DISPATCH_PROPERTYGET
     // and returns a dispatch pointer. The calling code should call Release
-    // on the pointer, though this could be implicit by constructing an wxAutomationObject
+    // on the pointer, though this could be implicit by constructing a wxAutomationObject
     // with it and letting the destructor call Release.
     WXIDISPATCH* GetDispatchProperty(const wxString& property, int noArgs, wxVariant args[]) const;
     WXIDISPATCH* GetDispatchProperty(const wxString& property, int noArgs, const wxVariant **args) const;

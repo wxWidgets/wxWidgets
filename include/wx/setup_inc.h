@@ -1053,7 +1053,7 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 but can be safely set to 0 except for wxUniv where it
+// Recommended setting: 1 but can be safely set to 0 except for wxUniv where
 //                      it used by wxComboBox
 #define wxUSE_COMBOCTRL 1
 

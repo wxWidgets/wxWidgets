@@ -33,7 +33,7 @@ public:
     // A container of font and colours with inheritance support. It holds two
     // sets of attributes:
     // 1. The currently specified ones from parsed tags that contain
-    //    information on on what should change in the output; some of them
+    //    information on what should change in the output; some of them
     //    may be invalid if only the others are affected by a change.
     // 2. The _effective_ attributes that are always valid and accumulate
     //    all past changes as the markup is being parser; these are used

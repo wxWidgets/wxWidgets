@@ -76,7 +76,7 @@ wxGCC_WARNING_SUPPRESS(ctor-dtor-privacy)
 //                  using wxArgNormalizer<T>, unlike the rest of
 //                  the function's arguments  [2]
 //        fixed     List of types of the leading "fixed" arguments, in
-//                  parenthesis  [(FILE*,const wxString&)]
+//                  parentheses  [(FILE*,const wxString&)]
 //        impl      Name of the variadic function that implements 'name' for
 //                  the native strings representation (wchar_t* if
 //                  wxUSE_UNICODE_WCHAR or wxUSE_UNICODE_UTF8 when running under

@@ -370,7 +370,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     int ab_free;                    // first free position in alphabet
     int ab_max;                     // last possible character in alphabet
     int pass;                       // pass number in interlaced images
-    int pos;                        // index into decompresion stack
+    int pos;                        // index into decompression stack
     unsigned int x, y;              // position in image buffer
 
     int code, lastcode, abcabca;

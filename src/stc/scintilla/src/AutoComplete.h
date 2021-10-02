@@ -19,7 +19,7 @@ class AutoComplete {
 	std::string stopChars;
 	std::string fillUpChars;
 	char separator;
-	char typesep; // Type seperator
+	char typesep; // Type separator
 	enum { maxItemLen=1000 };
 	std::vector<int> sortMatrix;
 

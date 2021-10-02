@@ -175,7 +175,7 @@ public:
     static wxRendererGeneric* DoGetGeneric();
 
 protected:
-    // draw the rectange using the first pen for the left and top sides and
+    // draw the rectangle using the first pen for the left and top sides and
     // the second one for the bottom and right ones
     void DrawShadedRect(wxDC& dc, wxRect *rect,
                         const wxPen& pen1, const wxPen& pen2);

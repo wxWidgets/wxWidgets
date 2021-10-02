@@ -90,7 +90,7 @@ wxEND_FLAGS( wxMenuBarStyle )
 
 #if wxUSE_EXTENDED_RTTI
 // the negative id would lead the window (its superclass !) to
-// vetoe streaming out otherwise
+// veto streaming out otherwise
 bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
                                 wxObjectWriterCallback *, const wxStringToAnyHashMap & )
 {
@@ -509,7 +509,7 @@ int wxMenuBase::FindItem(const wxString& text) const
                 return rc;
         }
 
-        // we execute this code for submenus as well to alllow finding them by
+        // we execute this code for submenus as well to allow finding them by
         // name just like the ordinary items
         if ( !item->IsSeparator() )
         {

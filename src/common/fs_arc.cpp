@@ -182,7 +182,7 @@ wxArchiveFSEntry *wxArchiveFSCacheDataImpl::GetNext(wxArchiveFSEntry *fse)
 //---------------------------------------------------------------------------
 // wxArchiveFSCacheData
 //
-// This is the inteface for wxArchiveFSCacheDataImpl above. Holds the catalog
+// This is the interface for wxArchiveFSCacheDataImpl above. Holds the catalog
 // of an archive file, and if it is being read from a non-seekable stream, a
 // copy of its backing file.
 //---------------------------------------------------------------------------
@@ -501,7 +501,7 @@ wxString wxArchiveFSHandler::DoFind()
                         match = m_ZipFile + dir + wxT("/") + filename;
                 }
                 else
-                    break; // already tranversed
+                    break; // already transversed
             }
         }
 

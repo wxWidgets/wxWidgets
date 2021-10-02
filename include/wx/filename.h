@@ -495,7 +495,7 @@ public:
     // is the char a path separator for this format?
     static bool IsPathSeparator(wxChar ch, wxPathFormat format = wxPATH_NATIVE);
 
-    // is this is a DOS path which beings with a windows unique volume name
+    // is this is a DOS path which begins with a windows unique volume name
     // ('\\?\Volume{guid}\')?
     static bool IsMSWUniqueVolumeNamePath(const wxString& path,
                                           wxPathFormat format = wxPATH_NATIVE);

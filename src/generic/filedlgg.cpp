@@ -306,7 +306,7 @@ int wxGenericFileDialog::ShowModal()
 
 bool wxGenericFileDialog::Show( bool show )
 {
-    // Called by ShowModal, so don't repeate the update
+    // Called by ShowModal, so don't repeat the update
 #ifndef __WIN32__
     if (show)
     {

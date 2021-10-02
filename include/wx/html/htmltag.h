@@ -39,7 +39,7 @@ public:
     wxHtmlTagsCache(const wxString& source);
     virtual ~wxHtmlTagsCache();
 
-    // Finds parameters for tag starting at at and fills the variables
+    // Finds parameters for tag starting at and fills the variables
     void QueryTag(const wxString::const_iterator& at,
                   const wxString::const_iterator& inputEnd,
                   wxString::const_iterator *end1,

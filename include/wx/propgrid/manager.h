@@ -207,7 +207,7 @@ public:
         return InsertPage(-1, label, bmp, pageObj);
     }
 
-    // Deletes all all properties and all pages.
+    // Deletes all properties and all pages.
     virtual void Clear() wxOVERRIDE;
 
     // Deletes all properties on given page.

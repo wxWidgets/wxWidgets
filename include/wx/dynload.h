@@ -36,7 +36,7 @@ typedef wxDLManifest wxDLImports;
 // ---------------------------------------------------------------------------
 
 // NOTE: Do not attempt to use a base class pointer to this class.
-//       wxDL is not virtual and we deliberately hide some of it's
+//       wxDL is not virtual and we deliberately hide some of its
 //       methods here.
 //
 //       Unless you know exactly why you need to, you probably shouldn't

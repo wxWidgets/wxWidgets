@@ -28,7 +28,7 @@
 #if wxUSE_CONSTRAINTS
 
 // ----------------------------------------------------------------------------
-// forward declrations
+// forward declarations
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;

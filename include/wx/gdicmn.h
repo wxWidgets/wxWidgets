@@ -834,7 +834,7 @@ public:
         return r;
     }
 
-    // return true if the point is (not strcitly) inside the rect
+    // return true if the point is (not strictly) inside the rect
     bool Contains(int x, int y) const;
     bool Contains(const wxPoint& pt) const { return Contains(pt.x, pt.y); }
     // return true if the rectangle 'rect' is (not strictly) inside this rect
@@ -846,7 +846,7 @@ public:
     // like Union() but don't ignore empty rectangles
     wxRect& operator+=(const wxRect& rect);
 
-    // intersections of two rectrangles not testing for empty rectangles
+    // intersections of two rectangles not testing for empty rectangles
     wxRect& operator*=(const wxRect& rect);
 
     // centre this rectangle in the given (usually, but not necessarily,
@@ -948,7 +948,7 @@ public:
 
   wxStockGDI creates the stock GDI objects on demand.  Pointers to the
   created objects are stored in the ms_stockObject array, which is indexed
-  by the Item enum values.  Platorm-specific fonts can be created by
+  by the Item enum values.  Platform-specific fonts can be created by
   implementing a derived class with an override for the GetFont function.
   wxStockGDI operates as a singleton, accessed through the ms_instance
   pointer.  By default this pointer is set to an instance of wxStockGDI.

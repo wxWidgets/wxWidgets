@@ -5016,7 +5016,7 @@ bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
     // same as below except we don't respond to our own messages
     if ( hWndPalChange != GetHWND() )
     {
-        // check to see if we our our parents have a custom palette
+        // check to see if we our parents have a custom palette
         wxWindowMSW *win = this;
         while ( win && !win->HasCustomPalette() )
         {

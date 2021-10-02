@@ -213,7 +213,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
 {
     // VZ: old format
 #if 0
-    // filenames are stores as a string with #0 as deliminators
+    // filenames are stores as a string with #0 as delimitors
     const char *filenames = (const char*) buf;
     size_t pos = 0;
     for(;;)

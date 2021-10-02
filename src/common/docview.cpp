@@ -2160,7 +2160,7 @@ bool wxDocPrintout::OnPrintPage(int WXUNUSED(page))
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
     wxUnusedVar(ppiPrinterY);
 
-    // This scales the DC so that the printout roughly represents the
+    // This scales the DC so that the printout roughly represents
     // the screen scaling. The text point size _should_ be the right size
     // but in fact is too small for some reason. This is a detail that will
     // need to be addressed at some point but can be fudged for the

@@ -26,7 +26,7 @@ public:
     virtual ~wxMemoryDCImpl();
 
     // these get reimplemented for mono-bitmaps to behave
-    // more like their Win32 couterparts. They now interpret
+    // more like their Win32 counterparts. They now interpret
     // wxWHITE, wxWHITE_BRUSH and wxWHITE_PEN as drawing 0
     // and everything else as drawing 1.
     virtual void SetPen( const wxPen &pen ) wxOVERRIDE;

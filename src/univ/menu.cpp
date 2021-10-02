@@ -207,7 +207,7 @@ protected:
     // show the submenu for this item
     void OpenSubmenu(wxMenuItem *item, InputMethod how = WithKeyboard);
 
-    // can this tiem be opened?
+    // can this time be opened?
     bool CanOpen(wxMenuItem *item)
     {
         return item && item->IsEnabled() && item->IsSubMenu();
@@ -216,7 +216,7 @@ protected:
     // dismiss the menu and all parent menus too
     void DismissAndNotify();
 
-    // react to dimissing this menu and also dismiss the parent if
+    // react to dismissing this menu and also dismiss the parent if
     // dismissParent
     void HandleDismiss(bool dismissParent);
 
@@ -1235,7 +1235,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 
             if ( pos <= start )
             {
-                // Item is inserted in the begining of the range
+                // Item is inserted in the beginning of the range
                 // we need to update its end item
                 m_startRadioGroup = pos;
                 item->SetAsRadioGroupStart();
@@ -1465,7 +1465,7 @@ bool wxMenu::ClickItem(wxMenuItem *item)
     }
     else
     {
-        // not applicabled
+        // not applicable
         isChecked = -1;
     }
 

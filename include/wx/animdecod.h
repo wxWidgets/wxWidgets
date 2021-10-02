@@ -28,7 +28,7 @@ class WXDLLIMPEXP_FWD_CORE wxImage;
     object converting from the format-specific data representation to the
     wxImage native format (RGB24).
     wxAnimationDecoders always load an input stream using some optimized format
-    to store it which is format-depedent. This allows to store a (possibly big)
+    to store it which is format-dependent. This allows to store a (possibly big)
     animation using a format which is a good compromise between required memory
     and time required to blit it on the screen.
 

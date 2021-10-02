@@ -188,7 +188,7 @@ private:
                  *m_remaining;
 
     // Reference to the parent top level window, automatically becomes NULL if
-    // it it is destroyed and could be always NULL if it's not given at all.
+    // it is destroyed and could be always NULL if it's not given at all.
     wxWindowRef m_parentTop;
 
     // Progress dialog styles: this is not the same as m_windowStyle because

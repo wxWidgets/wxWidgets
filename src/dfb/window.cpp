@@ -1039,7 +1039,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
                 return;
         }
 
-        // Synthetize navigation key event, but do it only if the TAB key
+        // Synthesize navigation key event, but do it only if the TAB key
         // wasn't handled yet:
         if ( isTab && GetParent() && GetParent()->HasFlag(wxTAB_TRAVERSAL) )
         {

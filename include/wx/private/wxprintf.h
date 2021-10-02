@@ -181,7 +181,7 @@ public:
     bool LoadArg(wxPrintfArg *p, va_list &argptr);
 
 private:
-    // An helper function of LoadArg() which is used to handle the '*' flag
+    // A helper function of LoadArg() which is used to handle the '*' flag
     void ReplaceAsteriskWith(int w);
 };
 

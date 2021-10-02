@@ -1507,7 +1507,7 @@ public:
     }
 
     /*
-       Note that we we must define all of the overloads below to avoid
+       Note that we must define all of the overloads below to avoid
        ambiguity when using str[0].
      */
     wxUniChar operator[](int n) const
