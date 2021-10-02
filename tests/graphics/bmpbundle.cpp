@@ -61,8 +61,7 @@ TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")
 "</svg>"
     ;
 
-    wxCharBuffer buf(svg_data);
-    wxBitmapBundle b = wxBitmapBundle::FromSVG(buf.data(), wxSize(20, 20));
+    wxBitmapBundle b = wxBitmapBundle::FromSVG(svg_data, wxSize(20, 20));
     REQUIRE( b.IsOk() );
     CHECK( b.GetDefaultSize() == wxSize(20, 20) );
 
@@ -72,8 +71,7 @@ TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")
     const char* svg_tag_start = strstr(svg_data, "<svg");
     REQUIRE( svg_tag_start );
 
-    buf = wxCharBuffer(svg_data);
-    b = wxBitmapBundle::FromSVG(buf.data(), wxSize(20, 20));
+    b = wxBitmapBundle::FromSVG(svg_data, wxSize(20, 20));
     REQUIRE( b.IsOk() );
     CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
 }

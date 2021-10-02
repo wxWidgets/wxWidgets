@@ -67,6 +67,9 @@ public:
     // Notice that the data here is non-const because it can be temporarily
     // modified while parsing it.
     static wxBitmapBundle FromSVG(char* data, const wxSize sizeDef);
+
+    // This overload currently makes a copy of the data.
+    static wxBitmapBundle FromSVG(const char* data, const wxSize sizeDef);
 #endif // wxHAS_RAW_BITMAP
 
     // Create from the resources: all existing versions of the bitmap of the

@@ -75,7 +75,7 @@
 
 // Real SVGs would typically be loaded from files, but to keep things as simple
 // as possible here, we embed this one directly in the program text.
-static char svg_data[] =
+static const char svg_data[] =
 "<svg version=\"1.1\" viewBox=\"0.0 0.0 360.0 360.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">"
 "<g>"
 "<path stroke=\"#000000\" fill=\"#ff0000\" d=\"m 10 170 c0 -12 10 -24 24 -24 l100 0 c6 0 12 2 17 7 c4 4 7 10 7 17 l0 100 c0 12 -10 24 -24 24 l-100 0c-12 0 -24 -10 -24 -24 z\"/>"

@@ -172,4 +172,12 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize sizeDef)
     return wxBitmapBundle(new wxBitmapBundleImplSVG(svgImage, sizeDef));
 }
 
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize sizeDef)
+{
+    wxCharBuffer copy(data);
+
+    return FromSVG(copy.data(), sizeDef);
+}
+
 #endif // wxHAS_RAW_BITMAP
