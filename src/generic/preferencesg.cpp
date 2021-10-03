@@ -58,6 +58,8 @@ public:
                    wxSizerFlags().Expand().DoubleBorder(wxLEFT|wxRIGHT|wxBOTTOM));
 #endif
         SetSizer(sizer);
+
+        m_notebook->SetFocus();
     }
 
     void AddPage(wxPreferencesPage *page)
