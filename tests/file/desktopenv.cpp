@@ -50,8 +50,8 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
         wxDesktopEnv::RestoreFromRecycleBin( "TrashTest" );
         CHECK( wxDir::Exists( currentDir + "TrashTest" ) );
 #endif
-    if( wxRmDir( currentDir + "TrashTest" ) )
-        printf( "Error deleting the test directory" );
+        if( wxRmDir( currentDir + "TrashTest" ) )
+            printf( "Error deleting the test directory" );
     }
     // also trying non-existing file
     CHECK( !wxDesktopEnv::MoveToRecycleBin( currentDir + "abc" ) );
