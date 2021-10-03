@@ -7,6 +7,9 @@
 #
 #   git config blame.ignoreRevsFile misc/git/ignore_revs
 
+# Fix comment typos in sources, 2021-10-02
+668a2186cd89fd4576bed224df3624811eebeca1
+
 # Remove (most) occurrences of wxT() macro from the samples, 2018-09-23
 f58ea625968953ca93585ea7f93dcc07ad032d8f
 
