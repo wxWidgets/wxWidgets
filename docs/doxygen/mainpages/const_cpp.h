@@ -209,6 +209,7 @@ Currently the following symbols exist:
 @itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in
     wxRegEx. This is always the case in wxWidgets 3.1.6 and later, so this
     symbol doesn't need to be tested any more.}
+@itemdef{wxHAS_SVG, Defined if SVG support (currently only via wxBitmapBundle::FromSVG()) is available.}
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
 @itemdef{wxHAS_WINDOW_LABEL_IN_STATIC_BOX, Defined if wxStaticBox::Create()
     overload taking @c wxWindow* instead of the text label is available on the current platform.}

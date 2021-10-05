@@ -16,6 +16,13 @@
 
 class wxBitmapBundleImpl;
 
+// It should be possible to implement SVG rasterizing without raw bitmap
+// support using wxDC::DrawSpline(), but currently we don't do it and so
+// FromSVG() is only available in the ports providing raw bitmap access.
+#ifdef wxHAS_RAW_BITMAP
+    #define wxHAS_SVG
+#endif
+
 // ----------------------------------------------------------------------------
 // wxBitmapBundle provides 1 or more versions of a bitmap, all bundled together
 // ----------------------------------------------------------------------------
@@ -62,7 +69,7 @@ public:
     // It should be possible to implement SVG rasterizing without raw bitmap
     // support using wxDC::DrawSpline(), but currently we don't do it and so
     // FromSVG() is only available in the ports providing raw bitmap access.
-#ifdef wxHAS_RAW_BITMAP
+#ifdef wxHAS_SVG
     // Create from the SVG data (data is supposed to be in UTF-8 encoding).
     // Notice that the data here is non-const because it can be temporarily
     // modified while parsing it.
@@ -70,7 +77,7 @@ public:
 
     // This overload currently makes a copy of the data.
     static wxBitmapBundle FromSVG(const char* data, const wxSize sizeDef);
-#endif // wxHAS_RAW_BITMAP
+#endif // wxHAS_SVG
 
     // Create from the resources: all existing versions of the bitmap of the
     // form name_2x or name@2x (and also using other factors) will be used.

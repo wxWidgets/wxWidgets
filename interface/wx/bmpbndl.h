@@ -203,9 +203,9 @@ public:
         These limitations will be relaxed in the future wxWidgets versions.
 
         Please also note that this method is only available in the ports
-        providing raw bitmap access via wxPixelData and so defining
-        wxHAS_RAW_BITMAP symbol. Currently SVG images are not supported in the
-        ports without it, e.g. wxX11.
+        providing raw bitmap access via wxPixelData. This is the case for all
+        tier-1 ports, but not all of them, check if @c wxHAS_SVG is defined
+        before using this method if for maximum portability.
 
         @param data This data may, or not, have the XML document preamble, i.e.
             it can start either with @c "<?xml" processing instruction or

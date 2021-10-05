@@ -421,8 +421,10 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     const wxSize sizeBitmap = toolBarBitmaps[Tool_new].GetDefaultSize() *
                                 (m_smallToolbar ? 1 : 2);
 
+#ifdef wxHAS_SVG
     // Use vector SVG image for this button for demonstration purposes.
     toolBarBitmaps[Tool_about] = wxBitmapBundle::FromSVG(svg_data, sizeBitmap);
+#endif // wxHAS_SVG
 
     // Note that there is no need for FromDIP() here, wxMSW will adjust the
     // size on its own and under the other platforms there is no need for
