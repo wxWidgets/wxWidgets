@@ -63,6 +63,8 @@ public:
     // form name_2x or name@2x (and also using other factors) will be used.
     static wxBitmapBundle FromResources(const wxString& name);
 
+    // Create from existing implementation
+    static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
     // Check if bitmap bundle is non-empty.
     bool IsOk() const { return m_impl; }
@@ -76,6 +78,9 @@ public:
     //
     // If size == wxDefaultSize, GetDefaultSize() is used for it instead.
     wxBitmap GetBitmap(const wxSize size) const;
+
+    // Access implementation
+    wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
 
 private:
     typedef wxObjectDataPtr<wxBitmapBundleImpl> wxBitmapBundleImplPtr;

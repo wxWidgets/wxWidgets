@@ -244,6 +244,13 @@ wxBitmapBundle wxBitmapBundle::FromBitmaps(const wxVector<wxBitmap>& bitmaps)
     return wxBitmapBundle(new wxBitmapBundleImplSet(bitmaps));
 }
 
+/* static */
+wxBitmapBundle wxBitmapBundle::FromImpl(wxBitmapBundleImpl* impl)
+{
+    return wxBitmapBundle(impl);
+}
+
+
 // MSW has its own, actually working, version, in MSW-specific code.
 #ifndef __WXMSW__
 
