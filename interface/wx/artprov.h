@@ -110,13 +110,21 @@ const char* wxART_EDIT;
       class MyProvider : public wxArtProvider
       {
       protected:
+        // Override this method to return a bundle containing the required
+        // bitmap in all available sizes.
+        wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                          const wxArtClient& client,
+                                          const wxSize& size) override;
+
+        // If all bitmaps are available in a single size only, it may be
+        // simpler to override just this one.
         wxBitmap CreateBitmap(const wxArtID& id,
                               const wxArtClient& client,
-                              const wxSize& size);
+                              const wxSize& size) override;
 
         // optionally override this one as well
         wxIconBundle CreateIconBundle(const wxArtID& id,
-                                      const wxArtClient& client);
+                                      const wxArtClient& client) override;
         { ... }
       };
       ...
@@ -128,8 +136,8 @@ const char* wxART_EDIT;
     and supplying icon bundles that contain different bitmap sizes.
 
     There's another way of taking advantage of this class: you can use it in your
-    code and use platform native icons as provided by wxArtProvider::GetBitmap or
-    wxArtProvider::GetIcon.
+    code and use platform native icons as provided by wxArtProvider::GetBitmapBundle
+    or wxArtProvider::GetIcon.
 
     @section artprovider_identify Identifying art resources
 
@@ -272,6 +280,9 @@ public:
     /**
         Query registered providers for bitmap with given ID.
 
+        Note that applications using wxWidgets 3.1.6 or later should prefer
+        calling GetBitmapBundle().
+
         @param id
             wxArtID unique identifier of the bitmap.
         @param client
@@ -285,6 +296,28 @@ public:
     static wxBitmap GetBitmap(const wxArtID& id,
                               const wxArtClient& client = wxART_OTHER,
                               const wxSize& size = wxDefaultSize);
+
+    /**
+        Query registered providers for a bundle of bitmaps with given ID.
+
+        @since 3.1.6
+
+        @param id
+            wxArtID unique identifier of the bitmap.
+        @param client
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+        @param size
+            Default size for the returned bundle.
+
+        @return If any of the registered providers recognizes the ID in its
+            CreateBitmapBundle(), this bundle is returned. Otherwise, if any of
+            providers returns a valid bitmap from CreateBitmap(), the bundle
+            containing only this bitmap is returned. Otherwise, an empty bundle
+            is returned.
+     */
+    static wxBitmapBundle GetBitmapBundle(const wxArtID& id,
+                                          const wxArtClient& client = wxART_OTHER,
+                                          const wxSize& size = wxDefaultSize);
 
     /**
         Same as wxArtProvider::GetBitmap, but return a wxIcon object
@@ -404,8 +437,13 @@ public:
 protected:
 
     /**
-        Derived art provider classes must override this method to create requested art
-        resource. Note that returned bitmaps are cached by wxArtProvider and it is
+        Derived art provider classes may override this method to create requested art
+        resource.
+
+        For bitmaps available in more than one size, CreateBitmapBundle()
+        should be overridden instead.
+
+        Note that returned bitmaps are cached by wxArtProvider and it is
         therefore not necessary to optimize CreateBitmap() for speed (e.g. you may
         create wxBitmap objects from XPMs here).
 
@@ -428,6 +466,29 @@ protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id,
                                   const wxArtClient& client,
                                   const wxSize& size);
+
+    /**
+        Override this method to create the requested art resources available in
+        more than one size.
+
+        Unlike CreateBitmap(), this method can be overridden to return the same
+        bitmap in several (or all, if wxBitmapBundle::FromSVG() is used) sizes
+        at once, which will allow selecting the size best suited for the
+        current display resolution automatically.
+
+        @param id
+            wxArtID unique identifier of the bitmap.
+        @param client
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+            This only serves as a hint.
+        @param size
+            Default size of the bitmaps returned by the bundle.
+
+        @since 3.1.6
+     */
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size);
 
     /**
         This method is similar to CreateBitmap() but can be used when a bitmap

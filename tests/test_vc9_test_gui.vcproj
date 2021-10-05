@@ -831,6 +831,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\bmpbundle.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\bookctrlbasetest.cpp"
 				>
 			</File>

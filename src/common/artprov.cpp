@@ -39,6 +39,7 @@ WX_DEFINE_LIST(wxArtProvidersList)
 // ----------------------------------------------------------------------------
 
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmapBundle, wxArtProviderBitmapBundlesHash);
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxIconBundle, wxArtProviderIconBundlesHash);
 
 class WXDLLEXPORT wxArtProviderCache
@@ -47,6 +48,10 @@ public:
     bool GetBitmap(const wxString& full_id, wxBitmap* bmp);
     void PutBitmap(const wxString& full_id, const wxBitmap& bmp)
         { m_bitmapsHash[full_id] = bmp; }
+
+    bool GetBitmapBundle(const wxString& full_id, wxBitmapBundle* bmpbndl);
+    void PutBitmapBundle(const wxString& full_id, const wxBitmapBundle& bmpbndl)
+        { m_bitmapsBundlesHash[full_id] = bmpbndl; }
 
     bool GetIconBundle(const wxString& full_id, wxIconBundle* bmp);
     void PutIconBundle(const wxString& full_id, const wxIconBundle& iconbundle)
@@ -62,8 +67,9 @@ public:
                                     const wxArtClient& client);
 
 private:
-    wxArtProviderBitmapsHash m_bitmapsHash;         // cache of wxBitmaps
-    wxArtProviderIconBundlesHash m_iconBundlesHash; // cache of wxIconBundles
+    wxArtProviderBitmapsHash m_bitmapsHash;                 // cache of wxBitmaps
+    wxArtProviderBitmapBundlesHash m_bitmapsBundlesHash;    // cache of wxBitmaps
+    wxArtProviderIconBundlesHash m_iconBundlesHash;         // cache of wxIconBundles
 };
 
 bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
@@ -79,6 +85,21 @@ bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
         return true;
     }
 }
+
+bool wxArtProviderCache::GetBitmapBundle(const wxString& full_id, wxBitmapBundle* bmpbndl)
+{
+    wxArtProviderBitmapBundlesHash::iterator entry = m_bitmapsBundlesHash.find(full_id);
+    if ( entry == m_bitmapsBundlesHash.end() )
+    {
+        return false;
+    }
+    else
+    {
+        *bmpbndl = entry->second;
+        return true;
+    }
+}
+
 
 bool wxArtProviderCache::GetIconBundle(const wxString& full_id, wxIconBundle* bmp)
 {
@@ -273,6 +294,37 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 
     return bmp;
 }
+
+/*static*/
+wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size)
+{
+    // safety-check against writing client,id,size instead of id,client,size:
+    wxASSERT_MSG( client.Last() == wxT('C'), wxT("invalid 'client' parameter") );
+
+    wxCHECK_MSG( sm_providers, wxNullBitmap, wxT("no wxArtProvider exists") );
+
+    wxString hashId = wxArtProviderCache::ConstructHashID(id, client);
+
+    wxBitmapBundle bitmapbundle; // (DoGetIconBundle(id, client));
+
+    if ( !sm_cache->GetBitmapBundle(hashId, &bitmapbundle) )
+    {
+        for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
+             node; node = node->GetNext())
+        {
+            bitmapbundle = node->GetData()->CreateBitmapBundle(id, client, size);
+            if ( bitmapbundle.IsOk() )
+                break;
+        }
+
+        sm_cache->PutBitmapBundle(hashId, bitmapbundle);
+    }
+
+    return bitmapbundle;
+}
+
 
 /*static*/
 wxIconBundle wxArtProvider::GetIconBundle(const wxArtID& id, const wxArtClient& client)

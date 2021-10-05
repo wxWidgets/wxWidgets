@@ -177,6 +177,7 @@
             geometry/point.cpp
             geometry/region.cpp
             graphics/bitmap.cpp
+            graphics/bmpbundle.cpp
             graphics/colour.cpp
             graphics/ellipsization.cpp
             graphics/measuring.cpp

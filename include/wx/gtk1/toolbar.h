@@ -83,8 +83,8 @@ protected:
 
     virtual wxToolBarToolBase *CreateTool(int id,
                                           const wxString& label,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
+                                          const wxBitmapBundle& bitmap1,
+                                          const wxBitmapBundle& bitmap2,
                                           wxItemKind kind,
                                           wxObject *clientData,
                                           const wxString& shortHelpString,

@@ -786,6 +786,74 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\bmpbndl.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswud\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswu\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswuddll\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswudll\core\common_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\src\common\bmpbtncmn.cpp"
 				>
 			</File>
@@ -1423,6 +1491,74 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\bmpbndl.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswud\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswu\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswuddll\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_x64_mswudll\core\msw_bmpbndl.obj"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\bmpbuttn.cpp"
 				>
 			</File>
@@ -1949,6 +2085,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\bmpcboxg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\bmpsvg.cpp"
 				>
 			</File>
 			<File
@@ -3314,6 +3454,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\bitmap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\bmpbndl.h"
 				>
 			</File>
 			<File

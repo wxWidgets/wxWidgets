@@ -459,6 +459,7 @@
     <ClCompile Include="..\..\src\common\artstd.cpp" />
     <ClCompile Include="..\..\src\common\arttango.cpp" />
     <ClCompile Include="..\..\src\common\bmpbase.cpp" />
+    <ClCompile Include="..\..\src\common\bmpbndl.cpp" />
     <ClCompile Include="..\..\src\common\bmpbtncmn.cpp" />
     <ClCompile Include="..\..\src\common\bookctrl.cpp" />
     <ClCompile Include="..\..\src\common\btncmn.cpp" />
@@ -591,6 +592,7 @@
     <ClCompile Include="..\..\src\common\windowid.cpp" />
     <ClCompile Include="..\..\src\common\wrapsizer.cpp" />
     <ClCompile Include="..\..\src\common\xpmdecod.cpp" />
+    <ClCompile Include="..\..\src\generic\bmpsvg.cpp" />
     <ClCompile Include="..\..\src\generic\preferencesg.cpp" />
     <ClCompile Include="..\..\src\msw\accel.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
@@ -601,6 +603,16 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\bmpbndl.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\graphicsd2d.cpp" />
     <ClCompile Include="..\..\src\msw\ole\access.cpp" />
@@ -1087,6 +1099,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
+    <ClInclude Include="..\..\include\wx\bmpbndl.h" />
     <ClInclude Include="..\..\include\wx\msw\accel.h" />
     <ClInclude Include="..\..\include\wx\msw\appprogress.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\access.h" />

@@ -43,15 +43,15 @@ public:
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
     virtual void SetToolShortHelp(int id, const wxString& helpString) wxOVERRIDE;
-    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
-    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
+    virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
 
     virtual bool Realize() wxOVERRIDE;
 
     virtual wxToolBarToolBase *CreateTool(int toolid,
                                           const wxString& label,
-                                          const wxBitmap& bmpNormal,
-                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          const wxBitmapBundle& bmpNormal,
+                                          const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = NULL,
                                           const wxString& shortHelp = wxEmptyString,

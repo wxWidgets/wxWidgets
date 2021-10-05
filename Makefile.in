@@ -4051,6 +4051,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/propdlg.h \
 	wx/generic/creddlgg.h \
 	wx/creddlg.h \
+	wx/bmpbndl.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	wx/mediactrl.h \
@@ -4712,7 +4713,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_laywin.o \
 	monodll_calctrlg.o \
 	monodll_creddlgg.o \
-	monodll_rowheightcache.o
+	monodll_rowheightcache.o \
+	monodll_common_bmpbndl.o \
+	monodll_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -4974,7 +4977,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_laywin.o \
 	monodll_calctrlg.o \
 	monodll_creddlgg.o \
-	monodll_rowheightcache.o
+	monodll_rowheightcache.o \
+	monodll_common_bmpbndl.o \
+	monodll_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
@@ -5257,7 +5262,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_notifmsgrt.o \
 	monodll_uuid.o \
 	monodll_msw_evtloop.o \
-	monodll_access.o
+	monodll_access.o \
+	monodll_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS)
@@ -6164,7 +6170,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_notifmsgrt.o \
 	monodll_uuid.o \
 	monodll_msw_evtloop.o \
-	monodll_access.o
+	monodll_access.o \
+	monodll_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS)
@@ -6709,7 +6716,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_laywin.o \
 	monolib_calctrlg.o \
 	monolib_creddlgg.o \
-	monolib_rowheightcache.o
+	monolib_rowheightcache.o \
+	monolib_common_bmpbndl.o \
+	monolib_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -6971,7 +6980,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_laywin.o \
 	monolib_calctrlg.o \
 	monolib_creddlgg.o \
-	monolib_rowheightcache.o
+	monolib_rowheightcache.o \
+	monolib_common_bmpbndl.o \
+	monolib_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
@@ -7254,7 +7265,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_notifmsgrt.o \
 	monolib_uuid.o \
 	monolib_msw_evtloop.o \
-	monolib_access.o
+	monolib_access.o \
+	monolib_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_17)
@@ -8161,7 +8173,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_notifmsgrt.o \
 	monolib_uuid.o \
 	monolib_msw_evtloop.o \
-	monolib_access.o
+	monolib_access.o \
+	monolib_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_17)
@@ -8859,7 +8872,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_laywin.o \
 	coredll_calctrlg.o \
 	coredll_creddlgg.o \
-	coredll_rowheightcache.o
+	coredll_rowheightcache.o \
+	coredll_common_bmpbndl.o \
+	coredll_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -9121,7 +9136,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_laywin.o \
 	coredll_calctrlg.o \
 	coredll_creddlgg.o \
-	coredll_rowheightcache.o
+	coredll_rowheightcache.o \
+	coredll_common_bmpbndl.o \
+	coredll_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
@@ -9404,7 +9421,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_notifmsgrt.o \
 	coredll_uuid.o \
 	coredll_msw_evtloop.o \
-	coredll_access.o
+	coredll_access.o \
+	coredll_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
@@ -10311,7 +10329,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_notifmsgrt.o \
 	coredll_uuid.o \
 	coredll_msw_evtloop.o \
-	coredll_access.o
+	coredll_access.o \
+	coredll_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
@@ -10584,7 +10603,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_laywin.o \
 	corelib_calctrlg.o \
 	corelib_creddlgg.o \
-	corelib_rowheightcache.o
+	corelib_rowheightcache.o \
+	corelib_common_bmpbndl.o \
+	corelib_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -10846,7 +10867,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_laywin.o \
 	corelib_calctrlg.o \
 	corelib_creddlgg.o \
-	corelib_rowheightcache.o
+	corelib_rowheightcache.o \
+	corelib_common_bmpbndl.o \
+	corelib_bmpsvg.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
@@ -11129,7 +11152,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_notifmsgrt.o \
 	corelib_uuid.o \
 	corelib_msw_evtloop.o \
-	corelib_access.o
+	corelib_access.o \
+	corelib_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_6 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
@@ -12036,7 +12060,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_notifmsgrt.o \
 	corelib_uuid.o \
 	corelib_msw_evtloop.o \
-	corelib_access.o
+	corelib_access.o \
+	corelib_msw_bmpbndl.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
@@ -13452,7 +13477,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_hid.o \
 	monodll_printmac.o \
 	monodll_core_timer.o \
-	monodll_utilsexc_cf.o
+	monodll_utilsexc_cf.o \
+	monodll_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_0 = monolib_unix_apptraits.o
 @COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_0 = monolib_unix_apptraits.o
@@ -13589,7 +13615,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
 	monolib_hid.o \
 	monolib_printmac.o \
 	monolib_core_timer.o \
-	monolib_utilsexc_cf.o
+	monolib_utilsexc_cf.o \
+	monolib_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_17 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17)
 @COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_unix_apptraits.o
 @COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_8 = coredll_unix_apptraits.o
@@ -13726,7 +13753,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
 	coredll_hid.o \
 	coredll_printmac.o \
 	coredll_core_timer.o \
-	coredll_utilsexc_cf.o
+	coredll_utilsexc_cf.o \
+	coredll_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_1_1 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1)
 @COND_PLATFORM_MACOSX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_unix_apptraits.o
 @COND_PLATFORM_UNIX_1@__PLATFORM_SRC_OBJECTS_9 = corelib_unix_apptraits.o
@@ -13863,7 +13891,8 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	corelib_hid.o \
 	corelib_printmac.o \
 	corelib_core_timer.o \
-	corelib_utilsexc_cf.o
+	corelib_utilsexc_cf.o \
+	corelib_core_bmpbndl.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_1_4 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4)
 @COND_TOOLKIT_MSW@__webview_additional_include_wrl_p = \
 @COND_TOOLKIT_MSW@	-I$(top_srcdir)/include/wx/msw/wrl
@@ -19033,6 +19062,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_bmpbndl.o: $(srcdir)/src/msw/bmpbndl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/bmpbndl.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
 
@@ -19152,6 +19184,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -21021,6 +21059,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
+@COND_USE_GUI_1@monodll_common_bmpbndl.o: $(srcdir)/src/common/bmpbndl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/bmpbndl.cpp
+
+@COND_USE_GUI_1@monodll_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
@@ -24325,6 +24369,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_bmpbndl.o: $(srcdir)/src/msw/bmpbndl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/bmpbndl.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
 
@@ -24444,6 +24491,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -26313,6 +26366,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
+@COND_USE_GUI_1@monolib_common_bmpbndl.o: $(srcdir)/src/common/bmpbndl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/bmpbndl.cpp
+
+@COND_USE_GUI_1@monolib_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
@@ -29719,6 +29778,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_access.o: $(srcdir)/src/msw/ole/access.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_bmpbndl.o: $(srcdir)/src/msw/bmpbndl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/bmpbndl.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
 
@@ -29838,6 +29900,12 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -31707,6 +31775,12 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
+@COND_USE_GUI_1@coredll_common_bmpbndl.o: $(srcdir)/src/common/bmpbndl.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/bmpbndl.cpp
+
+@COND_USE_GUI_1@coredll_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
 
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -33973,6 +34047,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_access.o: $(srcdir)/src/msw/ole/access.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_bmpbndl.o: $(srcdir)/src/msw/bmpbndl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/bmpbndl.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
 
@@ -34092,6 +34169,12 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_utilsexc_cf.o: $(srcdir)/src/osx/core/utilsexc_cf.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_cf.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_core_bmpbndl.o: $(srcdir)/src/osx/core/bmpbndl.mm $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/bmpbndl.mm
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -35961,6 +36044,12 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
+@COND_USE_GUI_1@corelib_common_bmpbndl.o: $(srcdir)/src/common/bmpbndl.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/bmpbndl.cpp
+
+@COND_USE_GUI_1@corelib_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
 
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_66) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_ADV

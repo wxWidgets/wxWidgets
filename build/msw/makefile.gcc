@@ -1931,6 +1931,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_access.o \
+	$(OBJS)\monodll_msw_bmpbndl.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_filepickerg.o \
@@ -2203,7 +2204,9 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_creddlgg.o \
-	$(OBJS)\monodll_rowheightcache.o
+	$(OBJS)\monodll_rowheightcache.o \
+	$(OBJS)\monodll_common_bmpbndl.o \
+	$(OBJS)\monodll_bmpsvg.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2276,6 +2279,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_access.o \
+	$(OBJS)\monodll_msw_bmpbndl.o \
 	$(OBJS)\monodll_generic_accel.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
@@ -2533,7 +2537,9 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_creddlgg.o \
-	$(OBJS)\monodll_rowheightcache.o
+	$(OBJS)\monodll_rowheightcache.o \
+	$(OBJS)\monodll_common_bmpbndl.o \
+	$(OBJS)\monodll_bmpsvg.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -2774,6 +2780,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_access.o \
+	$(OBJS)\monolib_msw_bmpbndl.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_filepickerg.o \
@@ -3046,7 +3053,9 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_creddlgg.o \
-	$(OBJS)\monolib_rowheightcache.o
+	$(OBJS)\monolib_rowheightcache.o \
+	$(OBJS)\monolib_common_bmpbndl.o \
+	$(OBJS)\monolib_bmpsvg.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -3119,6 +3128,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_access.o \
+	$(OBJS)\monolib_msw_bmpbndl.o \
 	$(OBJS)\monolib_generic_accel.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
@@ -3376,7 +3386,9 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_creddlgg.o \
-	$(OBJS)\monolib_rowheightcache.o
+	$(OBJS)\monolib_rowheightcache.o \
+	$(OBJS)\monolib_common_bmpbndl.o \
+	$(OBJS)\monolib_bmpsvg.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -3500,6 +3512,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_access.o \
+	$(OBJS)\coredll_msw_bmpbndl.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_filepickerg.o \
@@ -3772,7 +3785,9 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_laywin.o \
 	$(OBJS)\coredll_calctrlg.o \
 	$(OBJS)\coredll_creddlgg.o \
-	$(OBJS)\coredll_rowheightcache.o
+	$(OBJS)\coredll_rowheightcache.o \
+	$(OBJS)\coredll_common_bmpbndl.o \
+	$(OBJS)\coredll_bmpsvg.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -3845,6 +3860,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_access.o \
+	$(OBJS)\coredll_msw_bmpbndl.o \
 	$(OBJS)\coredll_generic_accel.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
@@ -4102,7 +4118,9 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_laywin.o \
 	$(OBJS)\coredll_calctrlg.o \
 	$(OBJS)\coredll_creddlgg.o \
-	$(OBJS)\coredll_rowheightcache.o
+	$(OBJS)\coredll_rowheightcache.o \
+	$(OBJS)\coredll_common_bmpbndl.o \
+	$(OBJS)\coredll_bmpsvg.o
 endif
 endif
 ifeq ($(MONOLITHIC),0)
@@ -4183,6 +4201,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_access.o \
+	$(OBJS)\corelib_msw_bmpbndl.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_filepickerg.o \
@@ -4455,7 +4474,9 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_laywin.o \
 	$(OBJS)\corelib_calctrlg.o \
 	$(OBJS)\corelib_creddlgg.o \
-	$(OBJS)\corelib_rowheightcache.o
+	$(OBJS)\corelib_rowheightcache.o \
+	$(OBJS)\corelib_common_bmpbndl.o \
+	$(OBJS)\corelib_bmpsvg.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -4528,6 +4549,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_access.o \
+	$(OBJS)\corelib_msw_bmpbndl.o \
 	$(OBJS)\corelib_generic_accel.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
@@ -4785,7 +4807,9 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_laywin.o \
 	$(OBJS)\corelib_calctrlg.o \
 	$(OBJS)\corelib_creddlgg.o \
-	$(OBJS)\corelib_rowheightcache.o
+	$(OBJS)\corelib_rowheightcache.o \
+	$(OBJS)\corelib_common_bmpbndl.o \
+	$(OBJS)\corelib_bmpsvg.o
 endif
 endif
 ifeq ($(SHARED),1)
@@ -8419,6 +8443,11 @@ $(OBJS)\monodll_access.o: ../../src/msw/ole/access.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9460,6 +9489,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_rowheightcache.o: ../../src/generic/rowheightcache.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_common_bmpbndl.o: ../../src/common/bmpbndl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_bmpsvg.o: ../../src/generic/bmpsvg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10996,6 +11035,11 @@ $(OBJS)\monolib_access.o: ../../src/msw/ole/access.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12037,6 +12081,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_rowheightcache.o: ../../src/generic/rowheightcache.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_common_bmpbndl.o: ../../src/common/bmpbndl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_bmpsvg.o: ../../src/generic/bmpsvg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13543,6 +13597,11 @@ $(OBJS)\coredll_access.o: ../../src/msw/ole/access.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -14587,6 +14646,16 @@ $(OBJS)\coredll_rowheightcache.o: ../../src/generic/rowheightcache.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_common_bmpbndl.o: ../../src/common/bmpbndl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_bmpsvg.o: ../../src/generic/bmpsvg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\corelib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15279,6 +15348,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_access.o: ../../src/msw/ole/access.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -16324,6 +16398,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_rowheightcache.o: ../../src/generic/rowheightcache.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_common_bmpbndl.o: ../../src/common/bmpbndl.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_bmpsvg.o: ../../src/generic/bmpsvg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

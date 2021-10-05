@@ -15,6 +15,7 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/iconbndl.h"
+#include "wx/bmpbndl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxArtProvidersList;
 class WXDLLIMPEXP_FWD_CORE wxArtProviderCache;
@@ -157,6 +158,14 @@ public:
                               const wxArtClient& client = wxASCII_STR(wxART_OTHER),
                               const wxSize& size = wxDefaultSize);
 
+    // Query the providers for bitmapbundle with given ID and return it.
+    // If none is available, then the search for a bitmap with the same properties
+    // is performed. If successful, the bitmap is wrapped into a bitmap bundle.
+    static wxBitmapBundle
+    GetBitmapBundle(const wxArtID& id,
+                    const wxArtClient& client = wxASCII_STR(wxART_OTHER),
+                    const wxSize& size = wxDefaultSize);
+
     // Query the providers for icon with given ID and return it. Return
     // wxNullIcon if no provider provides it.
     static wxIcon GetIcon(const wxArtID& id,
@@ -223,6 +232,15 @@ protected:
                                   const wxSize& WXUNUSED(size))
     {
         return wxNullBitmap;
+    }
+
+    // Derived classes must override CreateBitmapBundle if they provide
+    // a bundle that cannot be represented through an ordinary bitmap.
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size)
+    {
+        return wxBitmapBundle(CreateBitmap(id, client, size));
     }
 
     virtual wxIconBundle CreateIconBundle(const wxArtID& WXUNUSED(id),

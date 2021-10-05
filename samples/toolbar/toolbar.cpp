@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/toolbar.h"
+#include "wx/bmpbndl.h"
 #include "wx/log.h"
 #include "wx/image.h"
 #include "wx/filedlg.h"
@@ -72,6 +73,18 @@
     #include "bitmaps/help_2x_png.c"
 #endif // !wxHAS_IMAGE_RESOURCES
 
+// Real SVGs would typically be loaded from files, but to keep things as simple
+// as possible here, we embed this one directly in the program text.
+static const char svg_data[] =
+"<svg version=\"1.1\" viewBox=\"0.0 0.0 360.0 360.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">"
+"<g>"
+"<path stroke=\"#000000\" fill=\"#ff0000\" d=\"m 10 170 c0 -12 10 -24 24 -24 l100 0 c6 0 12 2 17 7 c4 4 7 10 7 17 l0 100 c0 12 -10 24 -24 24 l-100 0c-12 0 -24 -10 -24 -24 z\"/>"
+"<path stroke=\"#000000\" fill=\"#0000ff\" d=\"m100  90 c0 -12 10 -24 24 -24 l100 0 c6 0 12 2 17 7 c4 4 7 10 7 17 l0 100 c0 12 -10 24 -24 24 l-100 0c-12 0 -24 -10 -24 -24 z\"/>"
+"<path stroke=\"#000000\" fill=\"#ffff00\" d=\"m210 140 c0 -12 10 -24 24 -24 l100 0 c6 0 12 2 17 7 c4 4 7 10 7 17 l0 100 c0 12 -10 24 -24 24 l-100 0c-12 0 -24 -10 -24 -24 z\"/>"
+"</g>"
+"</svg>"
+;
+
 enum Positions
 {
     TOOLBAR_LEFT,
@@ -95,12 +108,7 @@ public:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *parent,
-            wxWindowID id = wxID_ANY,
-            const wxString& title = "wxToolBar Sample",
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN);
+    MyFrame();
     virtual ~MyFrame();
 
     void PopulateToolbar(wxToolBarBase* toolBar);
@@ -110,7 +118,6 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     void OnSize(wxSizeEvent& event);
-    void OnDPIChanged(wxDPIChangedEvent& event);
 
     void OnToggleToolbar(wxCommandEvent& event);
     void OnToggleAnotherToolbar(wxCommandEvent& event);
@@ -236,15 +243,14 @@ enum
 // event tables
 // ----------------------------------------------------------------------------
 
-// Notice that wxID_HELP will be processed for the 'About' menu and the toolbar
+// Notice that wxID_ABOUT will be processed for the 'About' menu and the toolbar
 // help button.
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
-    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
-    EVT_MENU(wxID_HELP, MyFrame::OnAbout)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLE_TOOLBAR, MyFrame::OnToggleToolbar)
     EVT_MENU(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR, MyFrame::OnToggleAnotherToolbar)
@@ -313,9 +319,7 @@ bool MyApp::OnInit()
     wxImage::AddHandler(new wxPNGHandler);
 
     // Create the main frame window
-    MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
-                                 "wxToolBar Sample",
-                                  wxPoint(100, 100), wxDefaultSize);
+    MyFrame* frame = new MyFrame();
 
     frame->Show(true);
 
@@ -386,48 +390,46 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         Tool_paste,
         Tool_print,
         Tool_help,
+        Tool_about,
         Tool_Max
     };
 
-    wxBitmap toolBarBitmaps[Tool_Max];
+    wxBitmapBundle toolBarBitmaps[Tool_Max];
 
-    if ( GetDPIScaleFactor() >= 1.5 )
-    {
-        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new_2x  );
-        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open_2x );
-        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save_2x );
-        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy_2x );
-        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut_2x  );
-        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste_2x);
-        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print_2x);
-        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help_2x );
-    }
-    else
-    {
-        toolBarBitmaps[Tool_new  ] = wxBITMAP_PNG(new  );
-        toolBarBitmaps[Tool_open ] = wxBITMAP_PNG(open );
-        toolBarBitmaps[Tool_save ] = wxBITMAP_PNG(save );
-        toolBarBitmaps[Tool_copy ] = wxBITMAP_PNG(copy );
-        toolBarBitmaps[Tool_cut  ] = wxBITMAP_PNG(cut  );
-        toolBarBitmaps[Tool_paste] = wxBITMAP_PNG(paste);
-        toolBarBitmaps[Tool_print] = wxBITMAP_PNG(print);
-        toolBarBitmaps[Tool_help ] = wxBITMAP_PNG(help );
-    }
+    // Note that to use wxBITMAP_BUNDLE_2() macro it is necessary to
+    //
+    //  1. Have resources (either RT_RCDATA under MSW or files in the app
+    //     bundle resources subdirectory under Mac) with this name.
+    //
+    //  2. Have name_png and name_2x_png arrays defined under the other
+    //     platforms (as is done in this sample by including the corresponding
+    //     *_png.c files above).
+    toolBarBitmaps[Tool_new  ] = wxBITMAP_BUNDLE_2(new  );
+    toolBarBitmaps[Tool_open ] = wxBITMAP_BUNDLE_2(open );
+    toolBarBitmaps[Tool_save ] = wxBITMAP_BUNDLE_2(save );
+    toolBarBitmaps[Tool_copy ] = wxBITMAP_BUNDLE_2(copy );
+    toolBarBitmaps[Tool_cut  ] = wxBITMAP_BUNDLE_2(cut  );
+    toolBarBitmaps[Tool_paste] = wxBITMAP_BUNDLE_2(paste);
+    toolBarBitmaps[Tool_print] = wxBITMAP_BUNDLE_2(print);
+    toolBarBitmaps[Tool_help ] = wxBITMAP_BUNDLE_2(help );
 
-    int w = toolBarBitmaps[Tool_new].GetWidth(),
-        h = toolBarBitmaps[Tool_new].GetHeight();
+    // Size of the bitmaps we use by default.
+    //
+    // Note that scaling it up by 2 is not something we would do in real
+    // application code, it is only done in the sample for testing of bigger
+    // bitmap sizes.
+    const wxSize sizeBitmap = toolBarBitmaps[Tool_new].GetDefaultSize() *
+                                (m_smallToolbar ? 1 : 2);
 
-    if ( !m_smallToolbar )
-    {
-        w *= 2;
-        h *= 2;
+#ifdef wxHAS_SVG
+    // Use vector SVG image for this button for demonstration purposes.
+    toolBarBitmaps[Tool_about] = wxBitmapBundle::FromSVG(svg_data, sizeBitmap);
+#endif // wxHAS_SVG
 
-        for ( size_t n = Tool_new; n < WXSIZEOF(toolBarBitmaps); n++ )
-        {
-            toolBarBitmaps[n] =
-                wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
-        }
-    }
+    // Note that there is no need for FromDIP() here, wxMSW will adjust the
+    // size on its own and under the other platforms there is no need for
+    // scaling the coordinates anyhow.
+    toolBar->SetToolBitmapSize(sizeBitmap);
 
     toolBar->AddTool(wxID_NEW, "New",
                      toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
@@ -468,15 +470,15 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
     if ( m_useCustomDisabled )
     {
-        wxBitmap bmpDisabled(w, h);
+        wxBitmap bmpDisabled(sizeBitmap);
         {
             wxMemoryDC dc;
             dc.SelectObject(bmpDisabled);
-            dc.DrawBitmap(toolBarBitmaps[Tool_print], 0, 0);
+            dc.DrawBitmap(toolBarBitmaps[Tool_print].GetBitmap(sizeBitmap), 0, 0);
 
             wxPen pen(*wxRED, 5);
             dc.SetPen(pen);
-            dc.DrawLine(0, 0, w, h);
+            dc.DrawLine(0, 0, sizeBitmap.x, sizeBitmap.y);
         }
 
         toolBar->AddTool(wxID_PRINT, "Print", toolBarBitmaps[Tool_print],
@@ -495,17 +497,65 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     toolBar->AddStretchableSpace();
     toolBar->AddTool(wxID_HELP, "Help", toolBarBitmaps[Tool_help], "Help button", wxITEM_CHECK);
 
+    toolBar->AddTool(wxID_ABOUT, "About", toolBarBitmaps[Tool_about], "About");
+
     if ( !m_pathBmp.empty() )
     {
-        // create a tool with a custom bitmap for testing
-        wxImage img(m_pathBmp);
-        if ( img.IsOk() )
+        wxImage image(m_pathBmp);
+        if ( image.IsOk() )
         {
-            if ( img.GetWidth() > w && img.GetHeight() > h )
-                img = img.GetSubImage(wxRect(0, 0, w, h));
+            // create a custom bitmap bundle for testing
+            class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
+            {
+            public:
+                MyCustomBitmapBundleImpl(const wxImage& image,
+                                         const wxSize& sizeDef)
+                    : m_image(image),
+                      m_sizeDef(sizeDef)
+                {
+                }
+
+                wxSize GetDefaultSize() const wxOVERRIDE
+                {
+                    return m_sizeDef;
+                }
+
+                wxBitmap GetBitmap(const wxSize size) wxOVERRIDE
+                {
+                    // In this simple implementation we don't bother caching
+                    // anything.
+                    wxImage image = m_image;
+                    if ( image.GetSize() != size )
+                        image.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
+
+                    // This is required under MSW in order to be able to draw
+                    // over the bitmap using wxDC. For full alpha support,
+                    // wxGraphicsContext should be used.
+                    if ( image.HasAlpha() )
+                        image.ClearAlpha();
+
+                    wxBitmap bitmap(image);
+
+                    // This is the custom part: we show the size of the bitmap
+                    // being used in the bitmap itself.
+                    wxMemoryDC dc(bitmap);
+                    dc.SetTextForeground(*wxRED);
+                    dc.SetFont(wxFontInfo(wxSize(size.x/4, size.y/2)).Bold());
+                    dc.DrawText(wxString::Format("%d", size.y), size.x/4, size.y/4);
+
+                    return bitmap;
+                }
+
+            private:
+                const wxImage m_image;
+                const wxSize m_sizeDef;
+            };
+
+            wxBitmapBundleImpl* const
+                impl = new MyCustomBitmapBundleImpl(image, sizeBitmap);
 
             toolBar->AddSeparator();
-            toolBar->AddTool(wxID_ANY, "Custom", img);
+            toolBar->AddTool(wxID_ANY, "Custom", wxBitmapBundle::FromImpl(impl));
         }
     }
 
@@ -522,13 +572,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 // ----------------------------------------------------------------------------
 
 // Define my frame constructor
-MyFrame::MyFrame(wxFrame* parent,
-                 wxWindowID id,
-                 const wxString& title,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 long style)
-       : wxFrame(parent, id, title, pos, size, style)
+MyFrame::MyFrame()
+       : wxFrame(NULL, wxID_ANY, "wxToolBar Sample")
 {
     m_tbar = NULL;
 
@@ -622,7 +667,7 @@ MyFrame::MyFrame(wxFrame* parent,
     fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit toolbar sample" );
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
+    helpMenu->Append(wxID_ABOUT, "&About", "About toolbar sample");
 
     wxMenuBar* menuBar = new wxMenuBar( wxMB_DOCKABLE );
 
@@ -704,16 +749,6 @@ void MyFrame::OnSize(wxSizeEvent& event)
     {
         event.Skip();
     }
-}
-
-void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
-{
-    event.Skip();
-
-    // We check the DPI scaling factor when the toolbar is created, so just
-    // recreate it whenever DPI changes. We could also just update the tools
-    // bitmaps, but this is simpler and doesn't have any significant drawbacks.
-    RecreateToolbar();
 }
 
 void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))

@@ -35,8 +35,8 @@ public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
                   const wxString& label,
-                  const wxBitmap& bitmap1,
-                  const wxBitmap& bitmap2,
+                  const wxBitmapBundle& bitmap1,
+                  const wxBitmapBundle& bitmap2,
                   wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelpString,
@@ -373,8 +373,8 @@ void wxToolBarTool::SetLabel(const wxString& label)
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& text,
-                                         const wxBitmap& bitmap1,
-                                         const wxBitmap& bitmap2,
+                                         const wxBitmapBundle& bitmap1,
+                                         const wxBitmapBundle& bitmap2,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelpString,
@@ -795,7 +795,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
     }
 }
 
-void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
@@ -807,7 +807,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
     }
 }
 
-void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )

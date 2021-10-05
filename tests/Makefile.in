@@ -183,6 +183,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_point.o \
 	test_gui_region.o \
 	test_gui_bitmap.o \
+	test_gui_bmpbundle.o \
 	test_gui_colour.o \
 	test_gui_ellipsization.o \
 	test_gui_measuring.o \
@@ -903,6 +904,9 @@ test_gui_region.o: $(srcdir)/geometry/region.cpp $(TEST_GUI_ODEP)
 
 test_gui_bitmap.o: $(srcdir)/graphics/bitmap.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/bitmap.cpp
+
+test_gui_bmpbundle.o: $(srcdir)/graphics/bmpbundle.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/bmpbundle.cpp
 
 test_gui_colour.o: $(srcdir)/graphics/colour.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/colour.cpp
