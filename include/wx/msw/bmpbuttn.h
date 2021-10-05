@@ -45,7 +45,6 @@ public:
                            wxWindowID winid,
                            const wxString& name = wxString());
 protected:
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton);
 };
 

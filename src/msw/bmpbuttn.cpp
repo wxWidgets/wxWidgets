@@ -16,28 +16,9 @@
 
 #include "wx/bmpbuttn.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/log.h"
-    #include "wx/dcmemory.h"
-    #include "wx/image.h"
-#endif
-
-#include "wx/msw/private.h"
-#include "wx/msw/dc.h"          // for wxDCTemp
-
-#include "wx/msw/uxtheme.h"
-
-#ifndef ODS_NOFOCUSRECT
-    #define ODS_NOFOCUSRECT     0x0200
-#endif
-
 // ----------------------------------------------------------------------------
-// macros
+// wxBitmapButton implementation
 // ----------------------------------------------------------------------------
-
-wxBEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
-    EVT_SYS_COLOUR_CHANGED(wxBitmapButton::OnSysColourChanged)
-wxEND_EVENT_TABLE()
 
 /*
 TODO PROPERTIES :
