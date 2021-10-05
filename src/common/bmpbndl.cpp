@@ -22,6 +22,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/bmpbndl.h"
+#include "wx/icon.h"
 
 #include "wx/private/bmpbndl.h"
 
@@ -254,6 +255,11 @@ wxBitmapBundle::wxBitmapBundle(wxBitmapBundleImpl* impl)
 
 wxBitmapBundle::wxBitmapBundle(const wxBitmap& bitmap)
     : m_impl(bitmap.IsOk() ? new wxBitmapBundleImplSet(bitmap) : NULL)
+{
+}
+
+wxBitmapBundle::wxBitmapBundle(const wxIcon& icon)
+    : m_impl(icon.IsOk() ? new wxBitmapBundleImplSet(wxBitmap(icon)) : NULL)
 {
 }
 
