@@ -182,7 +182,7 @@ void wxAnyButton::GTKUpdateBitmap()
     }
 }
 
-void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
+void wxAnyButton::GTKDoShowBitmap(const wxBitmapBundle& bitmap)
 {
     wxCHECK_RET(bitmap.IsOk(), "invalid bitmap");
 
@@ -197,10 +197,10 @@ void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const
 {
-    return m_bitmaps[which];
+    return m_bitmaps[which].GetBitmap(wxDefaultSize);
 }
 
-void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
 {
     switch ( which )
     {

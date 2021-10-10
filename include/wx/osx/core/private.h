@@ -74,7 +74,7 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/window.h"
 
 class wxTextProofOptions;
@@ -337,7 +337,7 @@ public :
     virtual wxInt32     GetValue() const = 0;
     virtual void        SetValue( wxInt32 v ) = 0;
     virtual wxBitmap    GetBitmap() const = 0;
-    virtual void        SetBitmap( const wxBitmap& bitmap ) = 0;
+    virtual void        SetBitmap( const wxBitmapBundle& bitmap ) = 0;
     virtual void        SetBitmapPosition( wxDirection dir ) = 0;
     virtual void        SetupTabs( const wxNotebook& WXUNUSED(notebook) ) {}
     virtual int         TabHitTest( const wxPoint & WXUNUSED(pt), long *flags ) {*flags=1; return -1;}
@@ -491,7 +491,7 @@ public :
     static wxWidgetImplType*    CreateBitmapToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* parent,
                                     wxWindowID id,
-                                    const wxBitmap& bitmap,
+                                    const wxBitmapBundle& bitmap,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -500,7 +500,7 @@ public :
     static wxWidgetImplType*    CreateBitmapButton( wxWindowMac* wxpeer,
                                     wxWindowMac* parent,
                                     wxWindowID id,
-                                    const wxBitmap& bitmap,
+                                    const wxBitmapBundle& bitmap,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -828,7 +828,7 @@ class wxButtonImpl
     wxButtonImpl(){}
     virtual ~wxButtonImpl(){}
 
-    virtual void SetPressedBitmap( const wxBitmap& bitmap ) = 0;
+    virtual void SetPressedBitmap( const wxBitmapBundle& bitmap ) = 0;
 } ;
 
 //

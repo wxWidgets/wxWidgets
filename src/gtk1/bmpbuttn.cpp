@@ -121,7 +121,7 @@ void wxBitmapButton::Init()
 
 bool wxBitmapButton::Create( wxWindow *parent,
                              wxWindowID id,
-                             const wxBitmap& bitmap,
+                             const wxBitmapBundle& bitmap,
                              const wxPoint& pos,
                              const wxSize& size,
                              long style,
@@ -138,7 +138,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
         return false;
     }
 
-    m_bitmaps[State_Normal] = bitmap;
+    m_bitmaps[State_Normal] = bitmap.GetBitmap(wxDefaultSize);
 
     m_widget = gtk_button_new();
 

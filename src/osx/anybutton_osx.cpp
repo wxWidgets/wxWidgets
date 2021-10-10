@@ -43,20 +43,20 @@ void wxAnyButton::SetLabel(const wxString& label)
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const
 {
-    return m_bitmaps[which];
+    return m_bitmaps[which].GetBitmap(wxDefaultSize);
 }
 
-void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
 {
-    m_bitmaps[which] = bitmap;
+    m_bitmaps[which] = bitmapBundle;
 
     if ( which == State_Normal )
-        GetPeer()->SetBitmap(bitmap);
+        GetPeer()->SetBitmap(bitmapBundle);
     else if ( which == State_Pressed )
     {
         wxButtonImpl* bi = dynamic_cast<wxButtonImpl*> (GetPeer());
         if ( bi )
-            bi->SetPressedBitmap(bitmap);
+            bi->SetPressedBitmap(bitmapBundle);
     }
     InvalidateBestSize();
 }
@@ -84,11 +84,11 @@ bool wxAnyButton::DoSetLabelMarkup(const wxString& markup)
 void wxAnyButton::OnEnterWindow( wxMouseEvent& WXUNUSED(event))
 {
     if ( DoGetBitmap( State_Current ).IsOk() )
-        GetPeer()->SetBitmap( DoGetBitmap( State_Current ) );
+        GetPeer()->SetBitmap( m_bitmaps[State_Current] );
 }
 
 void wxAnyButton::OnLeaveWindow( wxMouseEvent& WXUNUSED(event))
 {
     if ( DoGetBitmap( State_Current ).IsOk() )
-        GetPeer()->SetBitmap( DoGetBitmap( State_Normal ) );
+        GetPeer()->SetBitmap( m_bitmaps[State_Normal] );
 }

@@ -41,7 +41,7 @@
 #define wxBU_NOTEXT          0x0002
 
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/control.h"
 
 // ----------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public:
 
     // show the image in the button in addition to the label: this method is
     // supported on all (major) platforms
-    void SetBitmap(const wxBitmap& bitmap, wxDirection dir = wxLEFT)
+    void SetBitmap(const wxBitmapBundle& bitmap, wxDirection dir = wxLEFT)
     {
         SetBitmapLabel(bitmap);
         SetBitmapPosition(dir);
@@ -71,15 +71,15 @@ public:
     // SetBitmapXXX() methods (except for SetBitmapLabel() which is a synonym
     // for it anyhow) and that all bitmaps passed to these functions should be
     // of the same size.
-    void SetBitmapLabel(const wxBitmap& bitmap)
+    void SetBitmapLabel(const wxBitmapBundle& bitmap)
         { DoSetBitmap(bitmap, State_Normal); }
-    void SetBitmapPressed(const wxBitmap& bitmap)
+    void SetBitmapPressed(const wxBitmapBundle& bitmap)
         { DoSetBitmap(bitmap, State_Pressed); }
-    void SetBitmapDisabled(const wxBitmap& bitmap)
+    void SetBitmapDisabled(const wxBitmapBundle& bitmap)
         { DoSetBitmap(bitmap, State_Disabled); }
-    void SetBitmapCurrent(const wxBitmap& bitmap)
+    void SetBitmapCurrent(const wxBitmapBundle& bitmap)
         { DoSetBitmap(bitmap, State_Current); }
-    void SetBitmapFocus(const wxBitmap& bitmap)
+    void SetBitmapFocus(const wxBitmapBundle& bitmap)
         { DoSetBitmap(bitmap, State_Focused); }
 
     wxBitmap GetBitmapLabel() const { return DoGetBitmap(State_Normal); }
@@ -113,6 +113,7 @@ public:
     // backwards compatible names for pressed/current bitmaps: they're not
     // deprecated as there is nothing really wrong with using them and no real
     // advantage to using the new names but the new names are still preferred
+    // (and need to be used when using wxBitmapBundle and not just wxBitmap)
     wxBitmap GetBitmapSelected() const { return GetBitmapPressed(); }
     wxBitmap GetBitmapHover() const { return GetBitmapCurrent(); }
 
@@ -161,7 +162,7 @@ protected:
 
     virtual wxBitmap DoGetBitmap(State WXUNUSED(which)) const
         { return wxBitmap(); }
-    virtual void DoSetBitmap(const wxBitmap& WXUNUSED(bitmap),
+    virtual void DoSetBitmap(const wxBitmapBundle& WXUNUSED(bitmap),
                              State WXUNUSED(which))
         { }
 

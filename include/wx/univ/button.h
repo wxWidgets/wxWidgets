@@ -11,8 +11,6 @@
 #ifndef _WX_UNIV_BUTTON_H_
 #define _WX_UNIV_BUTTON_H_
 
-#include "wx/bitmap.h"
-
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -32,7 +30,7 @@ public:
     wxButton() { Init(); }
     wxButton(wxWindow *parent,
              wxWindowID id,
-             const wxBitmap& bitmap,
+             const wxBitmapBundle& bitmap,
              const wxString& label = wxEmptyString,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
@@ -74,7 +72,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& label = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -97,7 +95,7 @@ public:
 
 
 protected:
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
+    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which) wxOVERRIDE;
     virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE;
 

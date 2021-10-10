@@ -105,8 +105,11 @@ public:
         states.
 
         @param bitmap
-            The bitmap to display in the button. If the bitmap is invalid, any
-            currently shown bitmaps are removed from the button.
+            The bitmap bundle containing the resolution-dependent bitmaps to
+            display in the button. At default DPI, the size of the bitmap is
+            determined by the default bundle size, i.e. the value returned from
+            wxBitmapBundle::GetDefaultSize(). If the bitmap bundle is invalid,
+            any currently shown bitmaps are removed from the button.
         @param dir
             The position of the bitmap inside the button. By default it is
             positioned to the left of the text, near to the left button border.
@@ -116,7 +119,7 @@ public:
 
         @since 2.9.1
      */
-    void SetBitmap(const wxBitmap& bitmap, wxDirection dir = wxLEFT);
+    void SetBitmap(const wxBitmapBundle& bitmap, wxDirection dir = wxLEFT);
 
     /**
         Sets the bitmap to be shown when the mouse is over the button.
@@ -129,7 +132,7 @@ public:
         @since 2.9.1 (available as wxBitmapButton::SetBitmapHover() in previous
             versions)
     */
-    void SetBitmapCurrent(const wxBitmap& bitmap);
+    void SetBitmapCurrent(const wxBitmapBundle& bitmap);
 
     /**
         Sets the bitmap for the disabled button appearance.
@@ -145,7 +148,7 @@ public:
 
         @since 2.9.1 (available in wxBitmapButton only in previous versions)
     */
-    void SetBitmapDisabled(const wxBitmap& bitmap);
+    void SetBitmapDisabled(const wxBitmapBundle& bitmap);
 
     /**
         Sets the bitmap for the button appearance when it has the keyboard
@@ -159,7 +162,7 @@ public:
 
         @since 2.9.1 (available in wxBitmapButton only in previous versions)
     */
-    void SetBitmapFocus(const wxBitmap& bitmap);
+    void SetBitmapFocus(const wxBitmapBundle& bitmap);
 
     /**
         Sets the bitmap label for the button.
@@ -171,7 +174,7 @@ public:
 
         @since 2.9.1 (available in wxBitmapButton only in previous versions)
     */
-    void SetBitmapLabel(const wxBitmap& bitmap);
+    void SetBitmapLabel(const wxBitmapBundle& bitmap);
 
     /**
         Sets the bitmap for the selected (depressed) button appearance.
@@ -179,7 +182,7 @@ public:
         @since 2.9.1 (available as wxBitmapButton::SetBitmapSelected() in
             previous versions)
     */
-    void SetBitmapPressed(const wxBitmap& bitmap);
+    void SetBitmapPressed(const wxBitmapBundle& bitmap);
 
 
     /**

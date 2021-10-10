@@ -23,6 +23,7 @@
 
 #include "wx/tglbtn.h"
 #include "wx/osx/private.h"
+#include "wx/private/bmpbndl.h"
 
 // from button.mm
 
@@ -30,7 +31,7 @@ extern "C" void SetBezelStyleFromBorderFlags(NSButton *v,
                                              long style,
                                              wxWindowID winid = wxID_ANY,
                                              const wxString& label = wxString(),
-                                             const wxBitmap& bitmap = wxBitmap());
+                                             const wxBitmapBundle& bitmap = wxBitmapBundle());
 
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
@@ -54,7 +55,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
 wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID winid,
-                                    const wxBitmap& label,
+                                    const wxBitmapBundle& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -66,7 +67,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     SetBezelStyleFromBorderFlags(v, style, winid, wxString(), label);
     
     if (label.IsOk())
-        [v setImage:label.GetNSImage() ];
+        [v setImage: wxOSXGetImageFromBundle(label) ];
 
     [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );

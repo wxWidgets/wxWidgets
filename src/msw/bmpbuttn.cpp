@@ -32,7 +32,7 @@ bitmap "disabled" ,
 
 bool wxBitmapButton::Create(wxWindow *parent,
                             wxWindowID id,
-                            const wxBitmap& bitmap,
+                            const wxBitmapBundle& bitmap,
                             const wxPoint& pos,
                             const wxSize& size, long style,
                             const wxValidator& validator,
