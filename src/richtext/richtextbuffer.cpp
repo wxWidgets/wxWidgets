@@ -6530,7 +6530,7 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
 {
     if (pos < (int) m_cachedLines.GetCount())
     {
-        assert(m_cachedLinesVect.size() == m_cachedLines.GetCount());
+        wxASSERT(m_cachedLinesVect.size() == m_cachedLines.GetCount());
         wxRichTextLine* line = m_cachedLinesVect[pos];
         line->Init(this);
         return line;
