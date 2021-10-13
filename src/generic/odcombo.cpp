@@ -704,9 +704,19 @@ int wxVListBoxComboPopup::GetSelection() const
 
 void wxVListBoxComboPopup::SetStringValue( const wxString& value )
 {
-    int index = m_strings.Index(value);
-
     m_stringValue = value;
+
+    // Keep previous selection if it already corresponds to the given value
+    // (this is useful if there are multiple identical items in the combobox,
+    // we don't want to select the first one of them if another one had been
+    // previously selected).
+    if ( m_value >= 0 && m_value < (int)m_strings.size() &&
+            value == m_strings[m_value] )
+    {
+        return;
+    }
+
+    int index = m_strings.Index(value);
 
     if ( index >= 0 && index < (int)wxVListBox::GetItemCount() )
     {
