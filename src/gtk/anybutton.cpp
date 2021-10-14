@@ -192,7 +192,10 @@ void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
 
     wxCHECK_RET(GTK_IS_IMAGE(image), "must have image widget");
 
-    WX_GTK_IMAGE(image)->Set(bitmap);
+    if (WX_GTK_IS_IMAGE(image))
+        WX_GTK_IMAGE(image)->Set(bitmap);
+    else
+        gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
 }
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const

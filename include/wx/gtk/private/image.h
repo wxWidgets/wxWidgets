@@ -31,3 +31,4 @@ public:
 };
 
 #define WX_GTK_IMAGE(obj) G_TYPE_CHECK_INSTANCE_CAST(obj, wxGtkImage::Type(), wxGtkImage)
+#define WX_GTK_IS_IMAGE(obj) G_TYPE_CHECK_INSTANCE_TYPE(obj, wxGtkImage::Type())
