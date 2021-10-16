@@ -176,9 +176,16 @@ namespace
 struct BitmapProvider: wxGtkImage::BitmapProvider
 {
     BitmapProvider(wxToolBarTool* tool) : m_tool(tool) { }
+
+    virtual double GetScale() const wxOVERRIDE;
     virtual wxBitmap Get() const wxOVERRIDE;
     wxToolBarTool* const m_tool;
 };
+
+double BitmapProvider::GetScale() const
+{
+    return m_tool->GetToolBar()->GetDPIScaleFactor();
+}
 
 wxBitmap BitmapProvider::Get() const
 {

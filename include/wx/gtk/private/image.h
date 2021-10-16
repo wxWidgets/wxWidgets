@@ -5,6 +5,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "wx/bmpbndl.h"
+#include "wx/math.h"
+
 // Class that can be used in place of GtkImage, to allow drawing of alternate
 // bitmaps, such as HiDPI or disabled.
 
@@ -14,14 +17,26 @@ public:
     struct BitmapProvider
     {
         virtual ~BitmapProvider() { }
+
+        virtual double GetScale() const = 0;
         virtual wxBitmap Get() const = 0;
-        virtual void Set(const wxBitmap&) { }
+        virtual void Set(const wxBitmapBundle&) { }
+
+        // Simple helpers used in implementation.
+        bool IsScaled() const { return !wxIsSameDouble(GetScale(), 1); }
+        wxBitmap GetAtScale(const wxBitmapBundle& b) const
+        {
+            return b.GetBitmap(b.GetDefaultSize()*GetScale());
+        }
     };
 
     static GType Type();
     static GtkWidget* New(BitmapProvider* provider);
     static GtkWidget* New(wxWindow* win = NULL);
-    void Set(const wxBitmap& bitmap);
+
+    // Use bitmaps from the given bundle, the logical bitmap size is the
+    // default size of the bundle.
+    void Set(const wxBitmapBundle& bitmapBundle);
 
     // This pointer is never null and is owned by this class.
     BitmapProvider* m_provider;
