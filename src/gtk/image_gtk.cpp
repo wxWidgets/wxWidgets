@@ -24,8 +24,17 @@ struct BitmapProviderDefault: wxGtkImage::BitmapProvider
     BitmapProviderDefault(wxWindow* win) : m_win(win) { }
     virtual wxBitmap Get() const wxOVERRIDE;
     virtual void Set(const wxBitmap& bitmap) wxOVERRIDE;
+
+    // This pointer can be null if there is no associated window.
     wxWindow* const m_win;
+
+    // The bitmap stored here is only valid if it uses scale factor > 1,
+    // otherwise we leave it invalid to indicate the drawing the bitmap should
+    // be left to GtkImage itself.
     wxBitmap m_bitmap;
+
+    // This bitmap is only valid if m_bitmap is and if we have the associated
+    // window (as otherwise it would never be used at all).
     wxBitmap m_bitmapDisabled;
 };
 

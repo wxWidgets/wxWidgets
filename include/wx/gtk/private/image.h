@@ -23,9 +23,13 @@ public:
     static GtkWidget* New(wxWindow* win = NULL);
     void Set(const wxBitmap& bitmap);
 
+    // This pointer is never null and is owned by this class.
     BitmapProvider* m_provider;
 
     wxDECLARE_NO_COPY_CLASS(wxGtkImage);
+
+    // This class is constructed by New() and destroyed by its GObject
+    // finalizer, so neither its ctor nor dtor can ever be used.
     wxGtkImage() wxMEMBER_DELETE;
     ~wxGtkImage() wxMEMBER_DELETE;
 };
