@@ -520,7 +520,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                     return m_sizeDef;
                 }
 
-                wxBitmap GetBitmap(const wxSize size) wxOVERRIDE
+                wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
                 {
                     // In this simple implementation we don't bother caching
                     // anything.
