@@ -33,25 +33,33 @@ struct BitmapProviderDefault: wxGtkImage::BitmapProvider
     // be left to GtkImage itself.
     wxBitmap m_bitmap;
 
-    // This bitmap is only valid if m_bitmap is and if we have the associated
-    // window (as otherwise it would never be used at all).
-    wxBitmap m_bitmapDisabled;
+    // This bitmap is created on demand from m_bitmap when necessary (and is
+    // mutable because this is done in const Get()).
+    mutable wxBitmap m_bitmapDisabled;
 };
 
 wxBitmap BitmapProviderDefault::Get() const
 {
-    return (m_win == NULL || m_win->IsEnabled()) ? m_bitmap : m_bitmapDisabled;
+    if ( m_win && !m_win->IsEnabled() )
+    {
+        if ( !m_bitmapDisabled.IsOk() && m_bitmap.IsOk() )
+            m_bitmapDisabled = m_bitmap.CreateDisabled();
+
+        return m_bitmapDisabled;
+    }
+
+    return m_bitmap;
 }
 
 void BitmapProviderDefault::Set(const wxBitmap& bitmap)
 {
     m_bitmap.UnRef();
+
+    // Ensure it's recreated if needed later.
     m_bitmapDisabled.UnRef();
     if (bitmap.IsOk() && bitmap.GetScaleFactor() > 1)
     {
         m_bitmap = bitmap;
-        if (m_win)
-            m_bitmapDisabled = bitmap.CreateDisabled();
     }
 }
 
