@@ -15,23 +15,20 @@
 
 namespace
 {
+
+#ifdef __WXGTK3__
+
 // Default provider for HiDPI common case
 struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 {
-#ifdef __WXGTK3__
     BitmapProviderDefault(wxWindow* win) : m_win(win) { }
     virtual wxBitmap Get() const wxOVERRIDE;
     virtual void Set(const wxBitmap& bitmap) wxOVERRIDE;
     wxWindow* const m_win;
     wxBitmap m_bitmap;
     wxBitmap m_bitmapDisabled;
-#else
-    BitmapProviderDefault(wxWindow*) { }
-    virtual wxBitmap Get() const wxOVERRIDE { return wxBitmap(); }
-#endif
 };
 
-#ifdef __WXGTK3__
 wxBitmap BitmapProviderDefault::Get() const
 {
     return (m_win == NULL || m_win->IsEnabled()) ? m_bitmap : m_bitmapDisabled;
@@ -48,7 +45,18 @@ void BitmapProviderDefault::Set(const wxBitmap& bitmap)
             m_bitmapDisabled = bitmap.CreateDisabled();
     }
 }
-#endif // __WXGTK3__
+
+#else // !__WXGTK3__
+
+// Trivial version for GTK < 3 which doesn't provide any high DPI support.
+struct BitmapProviderDefault: wxGtkImage::BitmapProvider
+{
+    BitmapProviderDefault(wxWindow*) { }
+    virtual wxBitmap Get() const wxOVERRIDE { return wxBitmap(); }
+};
+
+#endif // __WXGTK3__/!__WXGTK3__
+
 } // namespace
 
 extern "C" {
