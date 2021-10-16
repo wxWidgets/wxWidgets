@@ -63,7 +63,7 @@ public:
     }
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxBitmap GetBitmap(const wxSize size) wxOVERRIDE;
+    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
 #ifdef __WXOSX__
     virtual WXImage OSXGetImage() const wxOVERRIDE;
@@ -156,7 +156,7 @@ wxSize wxBitmapBundleImplSet::GetDefaultSize() const
     return m_entries[0].bitmap.GetSize();
 }
 
-wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize size)
+wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
 {
     // We use linear search instead if binary one because it's simpler and the
     // vector size is small enough (< 10) for it not to matter in practice.
@@ -320,7 +320,7 @@ wxSize wxBitmapBundle::GetDefaultSize() const
     return m_impl->GetDefaultSize();
 }
 
-wxBitmap wxBitmapBundle::GetBitmap(const wxSize size) const
+wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
 {
     if ( !m_impl )
         return wxBitmap();

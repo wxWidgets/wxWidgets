@@ -73,10 +73,10 @@ public:
     // Create from the SVG data (data is supposed to be in UTF-8 encoding).
     // Notice that the data here is non-const because it can be temporarily
     // modified while parsing it.
-    static wxBitmapBundle FromSVG(char* data, const wxSize sizeDef);
+    static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 
     // This overload currently makes a copy of the data.
-    static wxBitmapBundle FromSVG(const char* data, const wxSize sizeDef);
+    static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 #endif // wxHAS_SVG
 
     // Create from the resources: all existing versions of the bitmap of the
@@ -97,7 +97,7 @@ public:
     // available size by rescaling it if necessary.
     //
     // If size == wxDefaultSize, GetDefaultSize() is used for it instead.
-    wxBitmap GetBitmap(const wxSize size) const;
+    wxBitmap GetBitmap(const wxSize& size) const;
 
     // Access implementation
     wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
@@ -178,7 +178,7 @@ public:
     //
     // Note that this function is non-const because it may generate the bitmap
     // on demand and cache it.
-    virtual wxBitmap GetBitmap(const wxSize size) = 0;
+    virtual wxBitmap GetBitmap(const wxSize& size) = 0;
 
 #ifdef __WXOSX__
     // returns the native representation of the bitmap bundle

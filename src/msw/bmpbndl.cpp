@@ -138,7 +138,7 @@ public:
                          const wxBitmap& bitmap);
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxBitmap GetBitmap(const wxSize size) wxOVERRIDE;
+    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
 private:
     // Load the bitmap from the given resource and add it m_bitmaps, after
@@ -230,7 +230,7 @@ wxBitmapBundleImplRC::AddBitmap(const ResourceInfo& info,
     return bitmap;
 }
 
-wxBitmap wxBitmapBundleImplRC::GetBitmap(const wxSize size)
+wxBitmap wxBitmapBundleImplRC::GetBitmap(const wxSize& size)
 {
     // First check if we already have the bitmap of this size: we're only
     // interested in the exact match here.

@@ -219,10 +219,10 @@ public:
             this bundle. As SVG images usually don't have any natural
             default size, it should be provided when creating the bundle.
      */
-    static wxBitmapBundle FromSVG(char* data, const wxSize sizeDef);
+    static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 
     /// @overload
-    static wxBitmapBundle FromSVG(const char* data, const wxSize sizeDef);
+    static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 
     /**
         Check if bitmap bundle is non-empty.
@@ -254,7 +254,7 @@ public:
         this will create many bitmaps that will never be deleted and will
         consume resources until the application termination.
      */
-    wxBitmap GetBitmap(const wxSize size) const;
+    wxBitmap GetBitmap(const wxSize& size) const;
 };
 
 /**
@@ -277,7 +277,7 @@ public:
                 ... determine the minimum/default size for bitmap to use ...
             }
 
-            wxBitmap GetBitmap(const wxSize size) wxOVERRIDE
+            wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
             {
                 ... get the bitmap of the requested size from somewhere and
                     cache it if necessary, i.e. if getting it is expensive ...
@@ -312,7 +312,7 @@ public:
         Note that this function is non-const because it may generate the bitmap
         on demand and cache it.
      */
-    virtual wxBitmap GetBitmap(const wxSize size) = 0;
+    virtual wxBitmap GetBitmap(const wxSize& size) = 0;
 };
 
 /**

@@ -46,7 +46,7 @@ public:
     ~wxOSXImageBundleImpl();
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxBitmap GetBitmap(const wxSize size) wxOVERRIDE;
+    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
     virtual WXImage OSXGetImage() const wxOVERRIDE;
 
@@ -76,7 +76,7 @@ wxSize wxOSXImageBundleImpl::GetDefaultSize() const
     return wxSize(sz.width, sz.height);
 }
 
-wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize size)
+wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& size)
 {
     return wxBitmap();
 }
