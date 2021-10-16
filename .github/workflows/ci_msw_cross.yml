@@ -93,18 +93,18 @@ jobs:
 
       - name: Install prerequisites
         run: |
-          packages="git make wine x11-xserver-utils xvfb"
+          packages="git make wine x11-xserver-utils"
 
           case "${HOST_TRIPLET}" in
             x86_64-w64-mingw32)
-              packages="$packages g++-mingw-w64-x86-64 wine64"
+              packages="$packages g++-mingw-w64-x86-64 wine64 xvfb"
               winerun=wine64
               ;;
 
             i686-w64-mingw32)
               sudo dpkg --add-architecture i386
               sudo apt-get -q -o=Dpkg::Use-Pty=0 update
-              packages="$packages g++-mingw-w64-i686 wine32 libgl1:i386"
+              packages="$packages g++-mingw-w64-i686 wine32 libgl1:i386 xvfb:i386"
               winerun=wine
               ;;
 
