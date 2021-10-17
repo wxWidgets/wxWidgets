@@ -32,7 +32,7 @@ endif()
 if(WIN32_MSVC_NAMING)
     wx_install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib${wxPLATFORM_LIB_DIR}")
+        DESTINATION "lib/${wxPLATFORM_LIB_DIR}")
 else()
     wx_install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
