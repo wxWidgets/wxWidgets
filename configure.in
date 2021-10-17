@@ -766,7 +766,7 @@ WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which
 WX_ARG_FEATURE(secretstore,   [  --enable-secretstore    use wxSecretStore class], wxUSE_SECRETSTORE)
 WX_ARG_FEATURE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 WX_ARG_FEATURE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
-WX_ARG_FEATURE(spellcheck,    [  --enable-spellcheck     enable spellchecking in wxTextCtrl class (MSW and GTK3 only)], wxUSE_SPELLCHECK)
+WX_ARG_FEATURE(spellcheck,    [  --enable-spellcheck     enable spell checking in wxTextCtrl], wxUSE_SPELLCHECK)
 WX_ARG_FEATURE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
 WX_ARG_FEATURE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_FEATURE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)

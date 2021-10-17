@@ -2176,7 +2176,7 @@ Optional Features:
   --enable-secretstore    use wxSecretStore class
   --enable-snglinst       use wxSingleInstanceChecker class
   --enable-sound          use wxSound class
-  --enable-spellcheck     enable spellchecking in wxTextCtrl class (MSW and GTK3 only)
+  --enable-spellcheck     enable spell checking in wxTextCtrl
   --enable-stdpaths       use wxStandardPaths class
   --enable-stopwatch      use wxStopWatch class
   --enable-streams        use wxStream etc classes
