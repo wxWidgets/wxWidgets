@@ -112,6 +112,26 @@ public:
     bool IsToggled() const;
     bool CanBeToggled() const;
 
+    /**
+        Return the bundle containing normal tool bitmaps.
+
+        This bundle may be invalid if the tool doesn't show a bitmap.
+
+        @since 3.1.6
+     */
+    wxBitmapBundle GetNormalBitmapBundle() const;
+
+    /**
+        Return the bundle containing disabled tool bitmaps.
+
+        This bundle may be invalid if the tool doesn't show a bitmap or doesn't
+        have a specific disabled bitmap creates one automatically from the
+        normal bitmap.
+
+        @since 3.1.6
+     */
+    wxBitmapBundle GetDisabledBitmapBundle() const;
+
     wxBitmap GetNormalBitmap() const;
     wxBitmap GetDisabledBitmap() const;
 

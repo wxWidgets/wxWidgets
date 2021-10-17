@@ -146,6 +146,9 @@ public:
         { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
 
     // attributes
+    wxBitmapBundle GetNormalBitmapBundle() const { return m_bmpNormal; }
+    wxBitmapBundle GetDisabledBitmapBundle() const { return m_bmpDisabled; }
+
     wxBitmap GetNormalBitmap(const wxSize& size = wxDefaultSize) const
         { return m_bmpNormal.GetBitmap(size); }
     wxBitmap GetDisabledBitmap(const wxSize& size = wxDefaultSize) const
