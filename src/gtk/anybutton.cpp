@@ -186,16 +186,10 @@ void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
 {
     wxCHECK_RET(bitmap.IsOk(), "invalid bitmap");
 
-    GtkWidget* image = gtk_button_get_image(GTK_BUTTON(m_widget));
-    if (image == NULL)
-        image = gtk_bin_get_child(GTK_BIN(m_widget));
+    GtkWidget* const image = gtk_button_get_image(GTK_BUTTON(m_widget));
+    wxCHECK_RET(WX_GTK_IS_IMAGE(image), "must have image widget");
 
-    wxCHECK_RET(GTK_IS_IMAGE(image), "must have image widget");
-
-    if (WX_GTK_IS_IMAGE(image))
-        WX_GTK_IMAGE(image)->Set(bitmap);
-    else
-        gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+    WX_GTK_IMAGE(image)->Set(bitmap);
 }
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const
@@ -220,6 +214,14 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
             else
             {
                 GtkWidget *image = gtk_button_get_image(GTK_BUTTON(m_widget));
+                if ( image && !WX_GTK_IS_IMAGE(image) )
+                {
+                    // This must be the GtkImage created for stock buttons, we
+                    // want to replace it with our own wxGtkImage as only it
+                    // handles showing appropriately-sized bitmaps in high DPI.
+                    image = NULL;
+                }
+
                 if ( image && !bitmap.IsOk() )
                 {
                     gtk_container_remove(GTK_CONTAINER(m_widget), image);
