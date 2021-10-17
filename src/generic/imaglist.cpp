@@ -29,14 +29,26 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxGenericImageList, wxObject);
 wxIMPLEMENT_DYNAMIC_CLASS(wxImageList, wxGenericImageList);
 
+wxGenericImageList::wxGenericImageList()
+{
+    Create(0, 0, false);
+}
+
 wxGenericImageList::wxGenericImageList( int width, int height, bool mask, int initialCount )
 {
     (void)Create(width, height, mask, initialCount);
 }
 
-wxGenericImageList::~wxGenericImageList()
+void wxGenericImageList::Destroy()
 {
     (void)RemoveAll();
+
+    // Make it invalid.
+    m_size = wxSize(0, 0);
+}
+
+wxGenericImageList::~wxGenericImageList()
+{
 }
 
 int wxGenericImageList::GetImageCount() const

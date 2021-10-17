@@ -22,10 +22,11 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_CORE wxGenericImageList: public wxObject
 {
 public:
-    wxGenericImageList() { }
+    wxGenericImageList();
     wxGenericImageList( int width, int height, bool mask = true, int initialCount = 1 );
     virtual ~wxGenericImageList();
     bool Create( int width, int height, bool mask = true, int initialCount = 1 );
+    void Destroy();
 
     virtual int GetImageCount() const;
     virtual bool GetSize( int index, int &width, int &height ) const;
