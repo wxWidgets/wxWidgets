@@ -186,10 +186,7 @@ void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
 {
     wxCHECK_RET(bitmap.IsOk(), "invalid bitmap");
 
-    GtkWidget* image = gtk_button_get_image(GTK_BUTTON(m_widget));
-    if (image == NULL)
-        image = gtk_bin_get_child(GTK_BIN(m_widget));
-
+    GtkWidget* const image = gtk_button_get_image(GTK_BUTTON(m_widget));
     wxCHECK_RET(WX_GTK_IS_IMAGE(image), "must have image widget");
 
     WX_GTK_IMAGE(image)->Set(bitmap);
