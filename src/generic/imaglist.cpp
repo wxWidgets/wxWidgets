@@ -29,6 +29,11 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxGenericImageList, wxObject);
 wxIMPLEMENT_DYNAMIC_CLASS(wxImageList, wxGenericImageList);
 
+wxGenericImageList::wxGenericImageList()
+{
+    Create(0, 0, false);
+}
+
 wxGenericImageList::wxGenericImageList( int width, int height, bool mask, int initialCount )
 {
     (void)Create(width, height, mask, initialCount);
