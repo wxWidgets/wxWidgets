@@ -73,6 +73,8 @@ wxImageList::wxImageList()
 // Creates an image list
 bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
+    wxASSERT_MSG( m_hImageList == NULL, "Recreating existing wxImageList?" );
+
     // Prevent from storing negative dimensions
     m_size = wxSize(wxMax(width, 0), wxMax(height, 0));
     UINT flags = 0;
