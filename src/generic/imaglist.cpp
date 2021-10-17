@@ -39,9 +39,16 @@ wxGenericImageList::wxGenericImageList( int width, int height, bool mask, int in
     (void)Create(width, height, mask, initialCount);
 }
 
-wxGenericImageList::~wxGenericImageList()
+void wxGenericImageList::Destroy()
 {
     (void)RemoveAll();
+
+    // Make it invalid.
+    m_size = wxSize(0, 0);
+}
+
+wxGenericImageList::~wxGenericImageList()
+{
 }
 
 int wxGenericImageList::GetImageCount() const

@@ -100,13 +100,18 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
     return m_hImageList != 0;
 }
 
-wxImageList::~wxImageList()
+void wxImageList::Destroy()
 {
     if ( m_hImageList )
     {
         ImageList_Destroy(GetHImageList());
         m_hImageList = 0;
     }
+}
+
+wxImageList::~wxImageList()
+{
+    Destroy();
 }
 
 // ----------------------------------------------------------------------------

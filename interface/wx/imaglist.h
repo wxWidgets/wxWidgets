@@ -124,10 +124,28 @@ public:
     int Add(const wxIcon& icon);
 
     /**
-        Initializes the list. See wxImageList() for details.
+        Initializes the list.
+
+        See wxImageList() for details.
+
+        This function can be called only once after creating the object using
+        its default ctor or after calling Destroy().
     */
     bool Create(int width, int height, bool mask = true,
                 int initialCount = 1);
+
+    /**
+        Destroys the current list.
+
+        This function resets the object to its initial state and does more than
+        just RemoveAll() in the native wxMSW version.
+
+        After calling it, Create() may be called again to recreate the image
+        list, e.g. using a different size.
+
+        @since 3.1.6
+     */
+    void Destroy();
 
     /**
         Draws a specified image onto a device context.

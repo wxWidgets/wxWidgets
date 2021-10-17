@@ -58,6 +58,9 @@ public:
   // initialNumber is the initial number of images to reserve.
   bool Create(int width, int height, bool mask = true, int initialNumber = 1);
 
+  // Destroys the image list, Create() may then be called again later.
+  void Destroy();
+
   // Adds a bitmap, and optionally a mask bitmap.
   // Note that wxImageList creates *new* bitmaps, so you may delete
   // 'bitmap' and 'mask' after calling Add.

@@ -26,6 +26,7 @@ public:
     wxGenericImageList( int width, int height, bool mask = true, int initialCount = 1 );
     virtual ~wxGenericImageList();
     bool Create( int width, int height, bool mask = true, int initialCount = 1 );
+    void Destroy();
 
     virtual int GetImageCount() const;
     virtual bool GetSize( int index, int &width, int &height ) const;
