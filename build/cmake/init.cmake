@@ -563,6 +563,17 @@ if(wxUSE_GUI)
     else()
         set(wxUSE_LIBGNOMEVFS OFF)
     endif()
+
+    if(WXGTK3 AND wxUSE_SPELLCHECK)
+        find_package(GSPELL)
+        if(GSPELL_FOUND)
+            list(APPEND wxTOOLKIT_INCLUDE_DIRS ${GSPELL_INCLUDE_DIRS})
+            list(APPEND wxTOOLKIT_LIBRARIES ${GSPELL_LIBRARIES})
+        else()
+            message(STATUS "gspell-1 not found, spell checking in wxTextCtrl won't be available")
+            wx_option_force_value(wxUSE_SPELLCHECK OFF)
+        endif()
+    endif()
 endif()
 
 # test if precompiled headers are supported using the cotire test project
