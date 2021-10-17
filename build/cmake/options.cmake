@@ -190,6 +190,7 @@ wx_option(wxUSE_PRINTF_POS_PARAMS "use wxVsnprintf() which supports positional p
 wx_option(wxUSE_SECRETSTORE "use wxSecretStore class")
 wx_option(wxUSE_SNGLINST_CHECKER "use wxSingleInstanceChecker class")
 wx_option(wxUSE_SOUND "use wxSound class")
+wx_option(wxUSE_SPELLCHECK "enable spellchecking in wxTextCtrl class (MSW and GTK3 only)")
 wx_option(wxUSE_STDPATHS "use wxStandardPaths class")
 wx_option(wxUSE_STOPWATCH "use wxStopWatch class")
 wx_option(wxUSE_STREAMS "use wxStream etc classes")

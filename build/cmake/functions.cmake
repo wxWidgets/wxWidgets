@@ -26,6 +26,11 @@ else()
     set(WIN32_MSVC_NAMING 0)
 endif()
 
+if(MSVC)
+    # Generator expression to not create different Debug and Release directories
+    set(MSVC_DIR_FIX "$<1:/>")
+endif()
+
 # This function adds a list of headers to a variable while prepending
 # include/ to the path
 macro(wx_add_headers src_var)
@@ -97,9 +102,9 @@ function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
 
     set_target_properties(${target_name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
-        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
-        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
+        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${MSVC_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${MSVC_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${MSVC_DIR_FIX}${wxPLATFORM_LIB_DIR}"
         )
 
     if(wxBUILD_PIC)
@@ -417,9 +422,9 @@ macro(wx_add_library name)
             set(runtime_dir "bin")
         endif()
         wx_install(TARGETS ${name}
-            LIBRARY DESTINATION "lib${wxPLATFORM_LIB_DIR}"
-            ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}"
-            RUNTIME DESTINATION "${runtime_dir}${wxPLATFORM_LIB_DIR}"
+            LIBRARY DESTINATION "lib${MSVC_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+            ARCHIVE DESTINATION "lib${MSVC_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+            RUNTIME DESTINATION "${runtime_dir}${MSVC_DIR_FIX}${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
     endif()
@@ -574,7 +579,7 @@ function(wx_set_builtin_target_properties target_name)
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
-        wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}")
+        wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib${MSVC_DIR_FIX}${wxPLATFORM_LIB_DIR}")
     endif()
 endfunction()
 
@@ -628,14 +633,6 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
         if(NOT ${${lib_name_upper}_FOUND})
             wx_option_force_value(${var_name} builtin)
         endif()
-    endif()
-
-    if(${var_name} STREQUAL "builtin" AND NOT wxBUILD_SHARED)
-        # Only install if we build as static libraries
-        wx_install(TARGETS ${target_name}
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
-            )
     endif()
 
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} ${var_name} "${help_str}" PARENT_SCOPE)
