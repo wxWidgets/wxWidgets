@@ -630,14 +630,6 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
         endif()
     endif()
 
-    if(${var_name} STREQUAL "builtin" AND NOT wxBUILD_SHARED)
-        # Only install if we build as static libraries
-        wx_install(TARGETS ${target_name}
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
-            )
-    endif()
-
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} ${var_name} "${help_str}" PARENT_SCOPE)
 endfunction()
 
