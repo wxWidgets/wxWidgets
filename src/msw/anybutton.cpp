@@ -105,9 +105,10 @@ extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
 class wxButtonImageData: public wxObject
 {
 public:
-    explicit wxButtonImageData(const wxSize& bitmapSize)
-        : m_bitmapSize(bitmapSize)
+    explicit wxButtonImageData(const wxBitmapBundle& normalBundle)
+        : m_bitmapSize(normalBundle.GetDefaultSize())
     {
+        m_bitmapBundles[wxAnyButton::State_Normal] = normalBundle;
     }
 
     virtual ~wxButtonImageData() { }
@@ -158,7 +159,7 @@ public:
     virtual wxDirection GetBitmapPosition() const = 0;
     virtual void SetBitmapPosition(wxDirection dir) = 0;
 
-private:
+protected:
     wxSize m_bitmapSize;
 
     wxBitmapBundle m_bitmapBundles[wxAnyButton::State_Max];
@@ -177,9 +178,10 @@ class wxODButtonImageData : public wxButtonImageData
 {
 public:
     wxODButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
-        : wxButtonImageData(bitmapBundle.GetDefaultSize())
+        : wxButtonImageData(bitmapBundle)
     {
-        SetBitmapBundle(bitmapBundle, wxAnyButton::State_Normal);
+        SetBitmap(GetBitmapFromBundle(bitmapBundle),
+                  wxAnyButton::State_Normal);
 #if wxUSE_IMAGE
         SetBitmap(GetBitmapFromBundle(bitmapBundle).ConvertToDisabled(),
                   wxAnyButton::State_Disabled);
@@ -250,44 +252,10 @@ public:
     // we must be constructed with the size of our images as we need to create
     // the image list
     wxXPButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
-        : wxButtonImageData(bitmapBundle.GetDefaultSize()),
+        : wxButtonImageData(bitmapBundle),
           m_hwndBtn(GetHwndOf(btn))
     {
-        // initialize all bitmaps except for the disabled one to normal state
-        const wxBitmap bitmap = bitmapBundle.GetBitmap(wxDefaultSize);
-        m_iml.Create
-              (
-                bitmap.GetWidth(),
-                bitmap.GetHeight(),
-                !bitmap.HasAlpha() /* use mask only if no alpha */,
-                wxAnyButton::State_Max + 1 /* see "pulse" comment below */
-              );
-
-        for ( int n = 0; n < wxAnyButton::State_Max; n++ )
-        {
-#if wxUSE_IMAGE
-            m_iml.Add(n == wxAnyButton::State_Disabled ? bitmap.ConvertToDisabled()
-                                                    : bitmap);
-#else
-            m_iml.Add(bitmap);
-#endif
-        }
-
-        // In addition to the states supported by wxWidgets such as normal,
-        // hot, pressed, disabled and focused, we need to add bitmap for
-        // another state when running under Windows 7 -- the so called "stylus
-        // hot" state corresponding to PBS_STYLUSHOT constant. While it's
-        // documented in MSDN as being only used with tablets, it is a lie as
-        // a focused button actually alternates between the image list elements
-        // with PBS_DEFAULTED and PBS_STYLUSHOT indices and, in particular,
-        // just disappears during half of the time if the latter is not set so
-        // we absolutely must set it.
-        //
-        // This also explains why we need to allocate an extra slot when creating
-        // the image list above, the slot State_Max is used for this one.
-        m_iml.Add(bitmap);
-
-        m_data.himl = GetHimagelistOf(&m_iml);
+        InitImageList();
 
         // no margins by default
         ::SetRectEmpty(&m_data.margin);
@@ -296,6 +264,9 @@ public:
         m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
 
         UpdateImageInfo();
+
+        // React to DPI changes in the future.
+        btn->Bind(wxEVT_DPI_CHANGED, &wxXPButtonImageData::OnDPIChanged, this);
     }
 
     virtual wxBitmap GetBitmap(wxAnyButton::State which) const wxOVERRIDE
@@ -383,12 +354,72 @@ public:
     }
 
 private:
+    void InitImageList()
+    {
+        const wxBitmap
+            bitmap = m_bitmapBundles[wxAnyButton::State_Normal].GetBitmap(m_bitmapSize);
+
+        m_iml.Create
+              (
+                bitmap.GetWidth(),
+                bitmap.GetHeight(),
+                !bitmap.HasAlpha() /* use mask only if no alpha */,
+                wxAnyButton::State_Max + 1 /* see "pulse" comment below */
+              );
+
+        m_data.himl = GetHimagelistOf(&m_iml);
+
+        for ( int n = 0; n < wxAnyButton::State_Max; n++ )
+        {
+            wxBitmap stateBitmap = m_bitmapBundles[n].GetBitmap(m_bitmapSize);
+            if ( !stateBitmap.IsOk() )
+            {
+#if wxUSE_IMAGE
+                if ( n == wxAnyButton::State_Disabled )
+                    stateBitmap = bitmap.ConvertToDisabled();
+                else
+#endif // wxUSE_IMAGE
+                    stateBitmap = bitmap;
+            }
+
+            m_iml.Add(bitmap);
+        }
+
+        // In addition to the states supported by wxWidgets such as normal,
+        // hot, pressed, disabled and focused, we need to add bitmap for
+        // another state when running under Windows 7 -- the so called "stylus
+        // hot" state corresponding to PBS_STYLUSHOT constant. While it's
+        // documented in MSDN as being only used with tablets, it is a lie as
+        // a focused button actually alternates between the image list elements
+        // with PBS_DEFAULTED and PBS_STYLUSHOT indices and, in particular,
+        // just disappears during half of the time if the latter is not set so
+        // we absolutely must set it.
+        //
+        // This also explains why we need to allocate an extra slot when creating
+        // the image list above, the slot State_Max is used for this one.
+        m_iml.Add(bitmap);
+    }
+
     void UpdateImageInfo()
     {
         if ( !::SendMessage(m_hwndBtn, BCM_SETIMAGELIST, 0, (LPARAM)&m_data) )
         {
             wxLogDebug("SendMessage(BCM_SETIMAGELIST) failed");
         }
+    }
+
+    void OnDPIChanged(wxDPIChangedEvent& event)
+    {
+        event.Skip();
+
+        // We need to recreate the image list using the new size and re-add all
+        // bitmaps to it.
+        m_bitmapSize = event.Scale(m_bitmapSize);
+
+        m_iml.Destroy();
+        InitImageList();
+
+        UpdateImageInfo();
     }
 
     // we store image list separately to be able to use convenient wxImageList
