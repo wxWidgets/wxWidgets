@@ -105,9 +105,10 @@ extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
 class wxButtonImageData: public wxObject
 {
 public:
-    explicit wxButtonImageData(const wxBitmapBundle& normalBundle)
-        : m_bitmapSize(normalBundle.GetDefaultSize())
+    wxButtonImageData(wxWindow* btn, const wxBitmapBundle& normalBundle)
     {
+        m_bitmapSize = normalBundle.GetDefaultSize() * btn->GetDPIScaleFactor();
+
         m_bitmapBundles[wxAnyButton::State_Normal] = normalBundle;
     }
 
@@ -178,7 +179,7 @@ class wxODButtonImageData : public wxButtonImageData
 {
 public:
     wxODButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
-        : wxButtonImageData(bitmapBundle)
+        : wxButtonImageData(btn, bitmapBundle)
     {
         SetBitmap(GetBitmapFromBundle(bitmapBundle),
                   wxAnyButton::State_Normal);
@@ -252,7 +253,7 @@ public:
     // we must be constructed with the size of our images as we need to create
     // the image list
     wxXPButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
-        : wxButtonImageData(bitmapBundle),
+        : wxButtonImageData(btn, bitmapBundle),
           m_hwndBtn(GetHwndOf(btn))
     {
         InitImageList();
