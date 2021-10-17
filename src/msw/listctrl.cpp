@@ -351,6 +351,10 @@ void wxListCtrl::MSWSetExListStyles()
     if ( !GetToolTip() )
         exStyle |= LVS_EX_LABELTIP;
 
+    // include the checkbox style
+    if ( HasCheckBoxes() )
+        exStyle |= LVS_EX_CHECKBOXES;
+
     if ( wxApp::GetComCtl32Version() >= 600 )
     {
         // We must enable double buffering when using the system theme to avoid
