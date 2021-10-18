@@ -168,7 +168,7 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 //
 // It doesn't need to be used directly, but may be inherited from in order to
 // implement custom bitmap bundles.
-class wxBitmapBundleImpl : public wxRefCounter
+class WXDLLIMPEXP_CORE wxBitmapBundleImpl : public wxRefCounter
 {
 public:
     ~wxBitmapBundleImpl();
