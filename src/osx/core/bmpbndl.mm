@@ -171,6 +171,9 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
 
 WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
 {
+    if (!bundle.IsOk())
+        return NULL;
+
     WXImage image = bundle.GetImpl()->OSXGetImage();
 
     if (image == 0)
