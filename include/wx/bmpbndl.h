@@ -171,6 +171,8 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 class wxBitmapBundleImpl : public wxRefCounter
 {
 public:
+    ~wxBitmapBundleImpl();
+
     // Return the size of the bitmaps represented by this bundle in the default
     // DPI (a.k.a. 100% resolution).
     //
@@ -185,7 +187,10 @@ public:
 
 #ifdef __WXOSX__
     // returns the native representation of the bitmap bundle
-    virtual WXImage OSXGetImage() const { return NULL; }
+    virtual WXImage OSXGetImage() const;
+protected:
+    // native NSImage/UIImage representation useful for caching
+    mutable WXImage m_nsImage = NULL;
 #endif
 };
 

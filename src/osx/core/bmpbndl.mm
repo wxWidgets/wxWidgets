@@ -97,27 +97,33 @@ wxBitmapBundle wxOSXMakeBundleFromImage( WXImage img)
 
 WXImage wxOSXImageFromBitmap( const wxBitmap& bmp)
 {
-    WXImage image;
+    WXImage image = NULL;
+    if ( bmp.Ok() )
+    {
 #if wxOSX_USE_COCOA
-    double scale = bmp.GetScaleFactor();
-    NSSize sz = NSMakeSize( bmp.GetWidth()*scale, bmp.GetHeight()*scale);
-    image = [[NSImage alloc] initWithSize:sz];
-    wxOSXAddBitmapToImage(image, bmp);
+        double scale = bmp.GetScaleFactor();
+        NSSize sz = NSMakeSize( bmp.GetWidth()*scale, bmp.GetHeight()*scale);
+        image = [[NSImage alloc] initWithSize:sz];
+        wxOSXAddBitmapToImage(image, bmp);
 #else
-    wxCFRef<CGImageRef> cgimage = bmp.CreateCGImage();
-    image = [[UIImage alloc] initWithCGImage:cgimage scale:bmp.GetScaleFactor() orientation:UIImageOrientationUp];
+        wxCFRef<CGImageRef> cgimage = bmp.CreateCGImage();
+        image = [[UIImage alloc] initWithCGImage:cgimage scale:bmp.GetScaleFactor() orientation:UIImageOrientationUp];
 #endif
-    [image autorelease];
+        [image autorelease];
+    }
     return image;
 }
 
 #if wxOSX_USE_COCOA
 void wxOSXAddBitmapToImage( WXImage image, const wxBitmap& bmp)
 {
-    wxCFRef<CGImageRef> cgimage = bmp.CreateCGImage();
-    NSImageRep* nsrep = [[NSBitmapImageRep alloc] initWithCGImage:cgimage];
-    [image addRepresentation:nsrep];
-    [nsrep release];
+    if ( bmp.Ok() && image != NULL )
+    {
+        wxCFRef<CGImageRef> cgimage = bmp.CreateCGImage();
+        NSImageRep* nsrep = [[NSBitmapImageRep alloc] initWithCGImage:cgimage];
+        [image addRepresentation:nsrep];
+        [nsrep release];
+    }
 }
 #endif
 
@@ -175,9 +181,6 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
         return NULL;
 
     WXImage image = bundle.GetImpl()->OSXGetImage();
-
-    if (image == 0)
-        image = bundle.GetBitmap(bundle.GetDefaultSize()).OSXGetImage();
 
     return image;
 }

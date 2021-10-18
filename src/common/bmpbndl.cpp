@@ -57,10 +57,6 @@ public:
 
     ~wxBitmapBundleImplSet()
     {
-#ifdef __WXOSX__
-        if (m_nsImage)
-            wxMacCocoaRelease(m_nsImage);
-#endif
     }
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
@@ -68,9 +64,6 @@ public:
 
 #ifdef __WXOSX__
     virtual WXImage OSXGetImage() const wxOVERRIDE;
-
-private:
-    mutable WXImage m_nsImage = NULL;
 #endif
 
 private:
@@ -333,3 +326,39 @@ wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
 
     return m_impl->GetBitmap(size == wxDefaultSize ? GetDefaultSize() : size);
 }
+
+wxBitmapBundleImpl::~wxBitmapBundleImpl()
+{
+#ifdef __WXOSX__
+    if (m_nsImage)
+        wxMacCocoaRelease(m_nsImage);
+#endif
+}
+
+#ifdef __WXOSX__
+WXImage wxBitmapBundleImpl::OSXGetImage() const
+{
+    if ( m_nsImage == NULL )
+    {
+        wxSize sz = GetDefaultSize();
+#if wxOSX_USE_COCOA
+        wxBitmap bmp = const_cast<wxBitmapBundleImpl*>(this)->GetBitmap(sz);
+        m_nsImage = wxOSXImageFromBitmap(bmp);
+        double scale = wxOSXGetMainScreenContentScaleFactor();
+        if ( scale >= 1.9 )
+        {
+            sz *= scale;
+            bmp = const_cast<wxBitmapBundleImpl*>(this)->GetBitmap(sz);
+            wxOSXAddBitmapToImage(m_nsImage, bmp);
+        }
+#else
+        // TODO determine best bitmap for device scale factor, and use that
+        // as on iOS there is only one bitmap in a UIImage
+#endif
+        if ( m_nsImage )
+            wxMacCocoaRetain(m_nsImage);
+    }
+    return m_nsImage;
+}
+#endif
+
