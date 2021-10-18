@@ -361,4 +361,3 @@ WXImage wxBitmapBundleImpl::OSXGetImage() const
     return m_nsImage;
 }
 #endif
-
