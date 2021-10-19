@@ -107,7 +107,7 @@ class wxButtonImageData: public wxObject
 public:
     wxButtonImageData(wxWindow* btn, const wxBitmapBundle& normalBundle)
     {
-        m_bitmapSize = normalBundle.GetDefaultSize() * btn->GetDPIScaleFactor();
+        m_bitmapSize = normalBundle.GetPreferredSizeFor(btn);
 
         m_bitmapBundles[wxAnyButton::State_Normal] = normalBundle;
     }
@@ -254,7 +254,7 @@ public:
     // the image list
     wxXPButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
         : wxButtonImageData(btn, bitmapBundle),
-          m_hwndBtn(GetHwndOf(btn))
+          m_btn(btn)
     {
         InitImageList();
 
@@ -403,7 +403,7 @@ private:
 
     void UpdateImageInfo()
     {
-        if ( !::SendMessage(m_hwndBtn, BCM_SETIMAGELIST, 0, (LPARAM)&m_data) )
+        if ( !::SendMessage(GetHwndOf(m_btn), BCM_SETIMAGELIST, 0, (LPARAM)&m_data) )
         {
             wxLogDebug("SendMessage(BCM_SETIMAGELIST) failed");
         }
@@ -415,7 +415,7 @@ private:
 
         // We need to recreate the image list using the new size and re-add all
         // bitmaps to it.
-        m_bitmapSize = event.Scale(m_bitmapSize);
+        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredSizeFor(m_btn);
 
         m_iml.Destroy();
         InitImageList();
@@ -431,7 +431,7 @@ private:
     BUTTON_IMAGELIST m_data;
 
     // the button we're associated with
-    const HWND m_hwndBtn;
+    wxWindow* const m_btn;
 
 
     wxDECLARE_NO_COPY_CLASS(wxXPButtonImageData);
