@@ -23,6 +23,21 @@
 
 #ifdef wxHAS_SVG
 
+// Try to help people updating their sources from Git and forgetting to
+// initialize new submodules, if possible: if you get this error, it means that
+// your source tree doesn't contain 3rdparty/nanosvg and you should initialize
+// and update the corresponding submodule.
+#ifdef __has_include
+    #if ! __has_include("../../3rdparty/nanosvg/src/nanosvg.h")
+        #error You need to run "git submodule update --init 3rdparty/nanosvg".
+        #undef wxHAS_SVG
+    #endif
+#endif // __has_include
+
+#endif // wxHAS_SVG
+
+#ifdef wxHAS_SVG
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"                   // Only for wxMin()
 #endif // WX_PRECOMP
