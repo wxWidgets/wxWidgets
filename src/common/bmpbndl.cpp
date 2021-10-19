@@ -23,6 +23,7 @@
 
 #include "wx/bmpbndl.h"
 #include "wx/icon.h"
+#include "wx/window.h"
 
 #include "wx/private/bmpbndl.h"
 
@@ -64,6 +65,7 @@ public:
     }
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
+    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
 #ifdef __WXOSX__
@@ -155,6 +157,47 @@ wxSize wxBitmapBundleImplSet::GetDefaultSize() const
 {
     // Default size is the size of the smallest bitmap in the bundle.
     return m_entries[0].bitmap.GetSize();
+}
+
+wxSize wxBitmapBundleImplSet::GetPreferredSizeAtScale(double scale) const
+{
+    // Target size is the ideal size we'd like the bitmap to have at this scale.
+    const wxSize sizeTarget = GetDefaultSize()*scale;
+
+    const size_t n = m_entries.size();
+    for ( size_t i = 0; i < n; ++i )
+    {
+        const wxSize sizeThis = m_entries[i].bitmap.GetSize();
+
+        // Keep looking for the exact match which we still can hope to find
+        // while the current bitmap is smaller.
+        if ( sizeThis.y < sizeTarget.y )
+            continue;
+
+        // If we've found the exact match, just return it.
+        if ( sizeThis.y == sizeTarget.y )
+            return sizeThis;
+
+        // We've found the closest bigger bitmap.
+
+        // If there is no smaller bitmap, we have no choice but to use this one.
+        if ( i == 0 )
+            return sizeThis;
+
+        // Decide whether we should use this one or the previous smaller one
+        // depending on which of them is closer to the target size, breaking
+        // the tie in favour of the bigger size.
+        const wxSize sizeLast = m_entries[i - 1].bitmap.GetSize();
+
+        return sizeThis.y - sizeTarget.y <= sizeTarget.y - sizeLast.y
+                ? sizeThis
+                : sizeLast;
+
+    }
+
+    // We only get here if the target size is bigger than all the available
+    // sizes, in which case we have no choice but to use the biggest bitmap.
+    return m_entries.back().bitmap.GetSize();
 }
 
 wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
@@ -324,6 +367,21 @@ wxSize wxBitmapBundle::GetDefaultSize() const
         return wxDefaultSize;
 
     return m_impl->GetDefaultSize();
+}
+
+wxSize wxBitmapBundle::GetPreferredSizeFor(wxWindow* window) const
+{
+    wxCHECK_MSG( window, wxDefaultSize, "window must be valid" );
+
+    return GetPreferredSizeAtScale(window->GetDPIScaleFactor());
+}
+
+wxSize wxBitmapBundle::GetPreferredSizeAtScale(double scale) const
+{
+    if ( !m_impl )
+        return wxDefaultSize;
+
+    return m_impl->GetPreferredSizeAtScale(scale);
 }
 
 wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const

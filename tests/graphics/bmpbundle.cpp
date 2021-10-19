@@ -47,6 +47,27 @@ TEST_CASE("BitmapBundle::FromBitmaps", "[bmpbundle]")
     CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
 }
 
+TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
+{
+    CHECK( wxBitmapBundle().GetPreferredSizeAtScale(1) == wxDefaultSize );
+
+    const wxSize normal(32, 32);
+    const wxSize bigger(64, 64);
+
+    const wxBitmapBundle
+        b = wxBitmapBundle::FromBitmaps(wxBitmap(normal), wxBitmap(bigger));
+
+    CHECK( b.GetPreferredSizeAtScale(0   ) == normal );
+    CHECK( b.GetPreferredSizeAtScale(1   ) == normal );
+    CHECK( b.GetPreferredSizeAtScale(1.25) == normal );
+    CHECK( b.GetPreferredSizeAtScale(1.4 ) == normal );
+    CHECK( b.GetPreferredSizeAtScale(1.5 ) == bigger );
+    CHECK( b.GetPreferredSizeAtScale(1.75) == bigger );
+    CHECK( b.GetPreferredSizeAtScale(2   ) == bigger );
+    CHECK( b.GetPreferredSizeAtScale(2.5 ) == bigger );
+    CHECK( b.GetPreferredSizeAtScale(3   ) == bigger );
+}
+
 #ifdef wxHAS_SVG
 
 TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")

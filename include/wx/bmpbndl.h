@@ -15,6 +15,7 @@
 #include "wx/vector.h"
 
 class wxBitmapBundleImpl;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // It should be possible to implement SVG rasterizing without raw bitmap
 // support using wxDC::DrawSpline(), but currently we don't do it and so
@@ -96,6 +97,12 @@ public:
     // default DPI, i.e. 100% scaling. Returns invalid size for empty bundle.
     wxSize GetDefaultSize() const;
 
+    // Get preferred size, i.e. usually the closest size in which a bitmap is
+    // available to the ideal size determined from the default size and the DPI
+    // scaling, for the given window.
+    wxSize GetPreferredSizeFor(wxWindow* window) const;
+    wxSize GetPreferredSizeAtScale(double scale) const;
+
     // Get bitmap of the specified size, creating a new bitmap from the closest
     // available size by rescaling it if necessary.
     //
@@ -176,6 +183,11 @@ public:
     //
     // Must always return a valid size.
     virtual wxSize GetDefaultSize() const = 0;
+
+    // Return the preferred size that should be used at the given scale.
+    //
+    // Must always return a valid size.
+    virtual wxSize GetPreferredSizeAtScale(double scale) const = 0;
 
     // Retrieve the bitmap of exactly the given size.
     //
