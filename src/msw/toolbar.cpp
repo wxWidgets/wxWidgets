@@ -1991,7 +1991,10 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
     // work. E.g. when switching from 125% to 150%. All the sizes are set
     // correctly, but after all dpi events are handled, 5px of the toolbar are
     // gone and a dark-gray bar appears. After resizing the window, the gray
-    // bar disapears as well.
+    // bar disappears as well, but unfortunately calling PostSizeEventToParent()
+    // either from here or even from RealizeHelper() itself doesn't work and
+    // there are still minor but visible cosmetic problems when moving the
+    // toolbar from 125% to 175% display.
     CallAfter(&wxToolBar::RealizeHelper);
 }
 

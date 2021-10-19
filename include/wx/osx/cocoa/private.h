@@ -140,7 +140,7 @@ public :
     wxInt32             GetValue() const wxOVERRIDE;
     void                SetValue( wxInt32 v ) wxOVERRIDE;
     wxBitmap            GetBitmap() const wxOVERRIDE;
-    void                SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE;
+    void                SetBitmap( const wxBitmapBundle& bitmap ) wxOVERRIDE;
     void                SetBitmapPosition( wxDirection dir ) wxOVERRIDE;
     void                SetupTabs( const wxNotebook &notebook ) wxOVERRIDE;
     void                GetBestRect( wxRect *r ) const wxOVERRIDE;
@@ -356,12 +356,12 @@ class wxButtonCocoaImpl : public wxWidgetCocoaImpl, public wxButtonImpl
 {
 public:
     wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v);
-    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
 #if wxUSE_MARKUP
     virtual void SetLabelMarkup(const wxString& markup) wxOVERRIDE;
 #endif // wxUSE_MARKUP
 
-    void SetPressedBitmap( const wxBitmap& bitmap ) wxOVERRIDE;
+    void SetPressedBitmap( const wxBitmapBundle& bitmap ) wxOVERRIDE;
     void GetLayoutInset(int &left, int &top, int &right, int &bottom) const wxOVERRIDE;
     void SetAcceleratorFromLabel(const wxString& label);
 

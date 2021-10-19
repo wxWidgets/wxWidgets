@@ -475,7 +475,7 @@ void wxWidgetIPhoneImpl::SetValue( wxInt32 v )
 {
 }
 
-void wxWidgetIPhoneImpl::SetBitmap( const wxBitmap& bitmap )
+void wxWidgetIPhoneImpl::SetBitmap( const wxBitmapBundle& bitmap )
 {
 }
 

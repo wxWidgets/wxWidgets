@@ -90,7 +90,7 @@ public :
     void                SetValue( wxInt32 v );
 
     virtual wxBitmap    GetBitmap() const;
-    virtual void        SetBitmap( const wxBitmap& bitmap );
+    virtual void        SetBitmap( const wxBitmapBundle& bitmap );
     virtual void        SetBitmapPosition( wxDirection dir );
 
     void                SetupTabs( const wxNotebook &notebook );

@@ -109,6 +109,14 @@ public:
     wxBitmapBundle(const wxBitmap& bitmap);
 
     /**
+        Conversion constructor from a single icon.
+
+        This constructor does the same thing as FromBitmap() and only exists
+        for interoperability with the existing code using wxIcon.
+     */
+    wxBitmapBundle(const wxIcon& icon);
+
+    /**
         Conversion constructor from a single image.
 
         Similarly to the constructor from wxBitmap, this constructor only

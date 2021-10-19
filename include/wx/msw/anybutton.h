@@ -45,7 +45,7 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
     virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
+    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which) wxOVERRIDE;
     virtual wxSize DoGetBitmapMargins() const wxOVERRIDE;
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE;
     virtual void DoSetBitmapPosition(wxDirection dir) wxOVERRIDE;

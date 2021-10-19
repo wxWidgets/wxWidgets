@@ -41,6 +41,9 @@ public:
     // using wxBitmap.
     wxBitmapBundle(const wxBitmap& bitmap);
 
+    // This is similar to above and also exists only for compatibility.
+    wxBitmapBundle(const wxIcon& icon);
+
     // Another conversion ctor from a single image: this one is needed to allow
     // passing wxImage to the functions that used to take wxBitmap but now take
     // wxBitmapBundle.

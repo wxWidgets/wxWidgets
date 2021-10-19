@@ -19,6 +19,7 @@
 #include "wx/tglbtn.h"
 
 #include "wx/osx/private.h"
+#include "wx/private/bmpbndl.h"
 
 #if wxUSE_MARKUP
     #include "wx/osx/cocoa/private/markuptoattr.h"
@@ -88,7 +89,7 @@ wxButtonCocoaImpl::wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
     SetNeedsFrame(false);
 }
 
-void wxButtonCocoaImpl::SetBitmap(const wxBitmap& bitmap)
+void wxButtonCocoaImpl::SetBitmap(const wxBitmapBundle& bitmap)
 {
     // switch bezel style for plain pushbuttons
     if ( bitmap.IsOk() )
@@ -123,10 +124,10 @@ void wxButtonCocoaImpl::SetLabelMarkup(const wxString& markup)
 }
 #endif // wxUSE_MARKUP
 
-void wxButtonCocoaImpl::SetPressedBitmap( const wxBitmap& bitmap )
+void wxButtonCocoaImpl::SetPressedBitmap( const wxBitmapBundle& bitmap )
 {
     NSButton* button = GetNSButton();
-    [button setAlternateImage: bitmap.GetNSImage()];
+    [button setAlternateImage: wxOSXGetImageFromBundle(bitmap)];
 #if wxUSE_TOGGLEBTN
     if ( GetWXPeer()->IsKindOf(wxCLASSINFO(wxToggleButton)) )
     {
@@ -227,7 +228,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
                              long style,
                              wxWindowID winid,
                              const wxString& label = wxString(),
-                             const wxBitmap& bitmap = wxBitmap())
+                             const wxBitmapBundle& bitmap = wxBitmapBundle())
 {
     // We can't display a custom label inside a button with help bezel style so
     // we only use it if we are using the default label. wxButton itself checks
@@ -245,7 +246,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
         // single or multi line.
         const bool
             isSimpleText = (label.find_first_of("\n\r") == wxString::npos)
-                                && (!bitmap.IsOk() || bitmap.GetHeight() < 20);
+                                && (!bitmap.IsOk() || bitmap.GetDefaultSize().y < 20);
 
         NSBezelStyle bezel;
         switch ( style & wxBORDER_MASK )
@@ -353,7 +354,7 @@ void wxWidgetCocoaImpl::PerformClick()
 wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
                                                    wxWindowMac* WXUNUSED(parent),
                                                    wxWindowID winid,
-                                                   const wxBitmap& bitmap,
+                                                   const wxBitmapBundle& bitmap,
                                                    const wxPoint& pos,
                                                    const wxSize& size,
                                                    long style,
@@ -365,7 +366,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     SetBezelStyleFromBorderFlags(v, style, winid, wxString(), bitmap);
 
     if (bitmap.IsOk())
-        [v setImage:bitmap.GetNSImage() ];
+        [v setImage: wxOSXGetImageFromBundle(bitmap) ];
 
     [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
