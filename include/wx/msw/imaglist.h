@@ -32,7 +32,7 @@ public:
   // from icons), and the initial size of the list.
   wxImageList(int width, int height, bool mask = true, int initialCount = 1)
   {
-    m_hImageList = 0;
+    m_hImageList = NULL;
     Create(width, height, mask, initialCount);
   }
   virtual ~wxImageList();
