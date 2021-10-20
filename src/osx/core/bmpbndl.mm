@@ -232,22 +232,33 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
     {
         wxSize sz = impl->GetDefaultSize();
 
-    #if wxOSX_USE_COCOA
+#if wxOSX_USE_COCOA
         wxBitmap bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
         image = wxOSXImageFromBitmap(bmp);
-        double scale = wxOSXGetMainScreenContentScaleFactor();
-        if ( scale >= 1.9 )
-        {
-            sz *= scale;
-            bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
-            wxOSXAddBitmapToImage(image, bmp);
-        }
-#else
-        // TODO determine best bitmap for device scale factor, and use that
-        // as on iOS there is only one bitmap in a UIImage
-#endif
 
-        wxOSXSetImageForBundleImpl(impl, image);
+        // unconditionally try to add a 2x version
+        double scale = 2.0;
+        wxSize doublesz = sz * scale;
+        bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(doublesz);
+        if ( bmp.IsOk() && bmp.GetSize() != sz )
+            wxOSXAddBitmapToImage(image, bmp);
+#else
+        double scale = wxOSXGetMainScreenContentScaleFactor();
+        wxSize scaledSize = sz * scale;
+        wxBitmap bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(scaledSize);
+        if ( bmp.IsOk() )
+            image = wxOSXImageFromBitmap(bmp);
+        else if ( scale > 1.9 )
+        {
+            // if we are on a high dpi device and no matching bitmap is available
+            // use scale 1x
+            bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
+            if ( bmp.IsOk() )
+                image = wxOSXImageFromBitmap(bmp);
+        }
+#endif
+        if ( image )
+            wxOSXSetImageForBundleImpl(impl, image);
     }
 
     return image;
