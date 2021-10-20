@@ -2672,9 +2672,7 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
     }
     else if ( constr )
     {
-        wxLogDebug(wxT("Constraints not satisfied for %s named '%s'."),
-                   GetClassInfo()->GetClassName(),
-                   GetName().c_str());
+        wxLogDebug(wxT("Constraints not satisfied for %s."), wxDumpWindow(this));
     }
 
     if ( recurse )
@@ -3340,8 +3338,7 @@ void wxWindowBase::ReleaseMouse()
         (
           wxString::Format
           (
-            "Releasing mouse in %p(%s) but it is not captured",
-            this, GetClassInfo()->GetClassName()
+            "Releasing mouse in %s but it is not captured", wxDumpWindow(this)
           )
         );
     }
@@ -3351,9 +3348,8 @@ void wxWindowBase::ReleaseMouse()
         (
           wxString::Format
           (
-            "Releasing mouse in %p(%s) but it is captured by %p(%s)",
-            this, GetClassInfo()->GetClassName(),
-            winCapture, winCapture->GetClassInfo()->GetClassName()
+            "Releasing mouse in %s but it is captured by %s",
+            wxDumpWindow(this), wxDumpWindow(winCapture)
           )
         );
     }
