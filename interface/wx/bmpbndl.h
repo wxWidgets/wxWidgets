@@ -275,7 +275,7 @@ public:
 
         @param window Non-null and fully created window.
      */
-    wxSize GetPreferredSizeFor(wxWindow* window) const;
+    wxSize GetPreferredSizeFor(const wxWindow* window) const;
 
     /**
         Get bitmap of the specified size, creating a new bitmap from the closest

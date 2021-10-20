@@ -375,7 +375,7 @@ wxSize wxBitmapBundle::GetDefaultSize() const
     return m_impl->GetDefaultSize();
 }
 
-wxSize wxBitmapBundle::GetPreferredSizeFor(wxWindow* window) const
+wxSize wxBitmapBundle::GetPreferredSizeFor(const wxWindow* window) const
 {
     wxCHECK_MSG( window, wxDefaultSize, "window must be valid" );
 
