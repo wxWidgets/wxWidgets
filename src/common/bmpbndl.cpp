@@ -216,8 +216,9 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
 #ifdef __WXOSX__
 void wxBitmapBundleImplSet::OSXCreateNSImage()
 {
+    WXImage image = NULL;
 #if wxOSX_USE_COCOA
-    WXImage image = wxOSXImageFromBitmap(m_entries[0].bitmap);
+    image = wxOSXImageFromBitmap(m_entries[0].bitmap);
     const size_t n = m_entries.size();
     for ( size_t i = 1; i < n; ++i )
     {
@@ -225,6 +226,7 @@ void wxBitmapBundleImplSet::OSXCreateNSImage()
         wxOSXAddBitmapToImage(image, entry.bitmap);
     }
 #else
+    image = wxOSXImageFromBitmap(m_entries[0].bitmap);
     // TODO determine best bitmap for device scale factor, and use that
     // with wxOSXImageFromBitmap as on iOS there is only one bitmap in a UIImage
 #endif
