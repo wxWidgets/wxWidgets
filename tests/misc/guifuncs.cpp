@@ -25,6 +25,7 @@
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 #include "wx/panel.h"
+#include "wx/scopedptr.h"
 
 #include "asserthelper.h"
 
@@ -143,12 +144,12 @@ void MiscGUIFuncsTestCase::ClientToScreen()
     wxWindow* const tlw = wxTheApp->GetTopWindow();
     CPPUNIT_ASSERT( tlw );
 
-    wxPanel* const
-        p1 = new wxPanel(tlw, wxID_ANY, wxPoint(0, 0), wxSize(100, 50));
-    wxPanel* const
-        p2 = new wxPanel(tlw, wxID_ANY, wxPoint(0, 50), wxSize(100, 50));
+    wxScopedPtr<wxPanel> const
+        p1(new wxPanel(tlw, wxID_ANY, wxPoint(0, 0), wxSize(100, 50)));
+    wxScopedPtr<wxPanel> const
+        p2(new wxPanel(tlw, wxID_ANY, wxPoint(0, 50), wxSize(100, 50)));
     wxWindow* const
-        b = new wxWindow(p2, wxID_ANY, wxPoint(10, 10), wxSize(30, 10));
+        b = new wxWindow(p2.get(), wxID_ANY, wxPoint(10, 10), wxSize(30, 10));
 
     // We need this to realize the windows created above under wxGTK.
     wxYield();
@@ -166,9 +167,6 @@ void MiscGUIFuncsTestCase::ClientToScreen()
         tlwOrig + wxPoint(10, 60),
         b->ClientToScreen(wxPoint(0, 0))
     );
-
-    p1->Destroy();
-    p2->Destroy();
 }
 
 namespace
@@ -206,9 +204,11 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
     // assertion messages.
     parent->SetLabel("parent");
 
-    wxWindow* btn1 = new TestButton(parent, "1", wxPoint(10, 10));
-    wxWindow* btn2 = new TestButton(parent, "2", wxPoint(10, 90));
-    wxWindow* btn3 = new TestButton(btn2, "3", wxPoint(20, 20));
+    wxScopedPtr<wxWindow> btn1(new TestButton(parent, "1", wxPoint(10, 10)));
+    wxScopedPtr<wxWindow> btn2(new TestButton(parent, "2", wxPoint(10, 90)));
+
+    // No need to use wxScopedPtr<> for this one, it will be deleted by btn2.
+    wxWindow* btn3 = new TestButton(btn2.get(), "3", wxPoint(20, 20));
 
     // We need this to realize the windows created above under wxGTK.
     wxYield();
@@ -265,8 +265,4 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
         btn3->GetLabel(),
         GetLabelOfWindowAtPoint(parent, 31, 111)
     );
-
-    btn1->Destroy();
-    btn2->Destroy();
-    // btn3 was already deleted when its parent was
 }
