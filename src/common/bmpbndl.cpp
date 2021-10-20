@@ -335,4 +335,3 @@ wxBitmapBundleImpl::~wxBitmapBundleImpl()
     wxOSXBundleImplDestroyed(this);
 #endif
 }
-
