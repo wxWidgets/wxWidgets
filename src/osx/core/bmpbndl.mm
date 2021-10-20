@@ -28,10 +28,75 @@
 #include "wx/osx/private.h"
 
 #include <algorithm>
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // private helpers
 // ----------------------------------------------------------------------------
+
+namespace {
+
+class wxOSXImageHolder
+{
+public:
+    wxOSXImageHolder() : m_nsImage(NULL)
+    {
+    }
+
+    explicit wxOSXImageHolder( WXImage image) : m_nsImage(image)
+    {
+        [m_nsImage retain];
+    }
+
+    wxOSXImageHolder( const wxOSXImageHolder& other ) : m_nsImage(other.m_nsImage)
+    {
+        [m_nsImage retain];;
+    }
+
+    ~wxOSXImageHolder()
+    {
+        [m_nsImage release];
+    }
+
+    wxOSXImageHolder& operator=(const wxOSXImageHolder& other)
+    {
+        if ( other.m_nsImage != m_nsImage )
+        {
+            [m_nsImage release];
+            m_nsImage = other.m_nsImage;
+            [m_nsImage retain];
+        }
+        return *this;
+    }
+
+    WXImage GetImage() const { return m_nsImage; }
+private:
+    WXImage    m_nsImage;
+};
+
+} // anonymouse namespace
+
+std::unordered_map< const wxBitmapBundleImpl*, wxOSXImageHolder> gs_nativeImages;
+
+WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromBundleImpl(const wxBitmapBundleImpl* impl)
+{
+    auto image = gs_nativeImages.find(impl);
+    if (image != gs_nativeImages.end())
+        return image->second.GetImage();
+    else
+        return NULL;
+}
+
+void WXDLLIMPEXP_CORE wxOSXSetImageForBundleImpl(const wxBitmapBundleImpl* impl, WXImage image)
+{
+    gs_nativeImages[impl] = wxOSXImageHolder(image);
+}
+
+void WXDLLIMPEXP_CORE wxOSXBundleImplDestroyed(const wxBitmapBundleImpl* impl)
+{
+    gs_nativeImages.erase(impl);
+}
+
 
 namespace
 {
@@ -48,11 +113,6 @@ public:
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
     virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
-
-    virtual WXImage OSXGetImage() const wxOVERRIDE;
-
-private:
-    WXImage    m_nsImage;
 };
 
 } // anonymouse namespace
@@ -63,17 +123,16 @@ private:
 
 wxOSXImageBundleImpl::wxOSXImageBundleImpl(WXImage image)
 {
-    m_nsImage = (WXImage) wxMacCocoaRetain(image);
+    wxOSXSetImageForBundleImpl(this, image);
 }
 
 wxOSXImageBundleImpl::~wxOSXImageBundleImpl()
 {
-    wxMacCocoaRelease(m_nsImage);
 }
 
 wxSize wxOSXImageBundleImpl::GetDefaultSize() const
 {
-    CGSize sz = wxOSXGetImageSize(m_nsImage);
+    CGSize sz = wxOSXGetImageSize(wxOSXGetImageFromBundleImpl(this));
     return wxSize(sz.width, sz.height);
 }
 
@@ -88,11 +147,6 @@ wxSize wxOSXImageBundleImpl::GetPreferredSizeAtScale(double scale) const
 wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& size)
 {
     return wxBitmap();
-}
-
-WXImage wxOSXImageBundleImpl::OSXGetImage() const
-{
-    return m_nsImage;
 }
 
 wxBitmapBundle wxOSXMakeBundleFromImage( WXImage img)
@@ -183,10 +237,42 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
     if (!bundle.IsOk())
         return NULL;
 
-    WXImage image = bundle.GetImpl()->OSXGetImage();
+    wxBitmapBundleImpl* impl = bundle.GetImpl();
+
+    WXImage image = wxOSXGetImageFromBundleImpl(impl);
 
     if (image == 0)
-        image = bundle.GetBitmap(bundle.GetDefaultSize()).OSXGetImage();
+    {
+        wxSize sz = impl->GetDefaultSize();
+
+#if wxOSX_USE_COCOA
+        wxBitmap bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
+        image = wxOSXImageFromBitmap(bmp);
+
+        // unconditionally try to add a 2x version
+        double scale = 2.0;
+        wxSize doublesz = sz * scale;
+        bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(doublesz);
+        if ( bmp.IsOk() && bmp.GetSize() != sz )
+            wxOSXAddBitmapToImage(image, bmp);
+#else
+        double scale = wxOSXGetMainScreenContentScaleFactor();
+        wxSize scaledSize = sz * scale;
+        wxBitmap bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(scaledSize);
+        if ( bmp.IsOk() )
+            image = wxOSXImageFromBitmap(bmp);
+        else if ( scale > 1.9 )
+        {
+            // if we are on a high dpi device and no matching bitmap is available
+            // use scale 1x
+            bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
+            if ( bmp.IsOk() )
+                image = wxOSXImageFromBitmap(bmp);
+        }
+#endif
+        if ( image )
+            wxOSXSetImageForBundleImpl(impl, image);
+    }
 
     return image;
 }

@@ -175,8 +175,11 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 //
 // It doesn't need to be used directly, but may be inherited from in order to
 // implement custom bitmap bundles.
-class wxBitmapBundleImpl : public wxRefCounter
+class WXDLLIMPEXP_CORE wxBitmapBundleImpl : public wxRefCounter
 {
+protected:
+    virtual ~wxBitmapBundleImpl();
+
 public:
     // Return the size of the bitmaps represented by this bundle in the default
     // DPI (a.k.a. 100% resolution).
@@ -194,11 +197,6 @@ public:
     // Note that this function is non-const because it may generate the bitmap
     // on demand and cache it.
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
-
-#ifdef __WXOSX__
-    // returns the native representation of the bitmap bundle
-    virtual WXImage OSXGetImage() const { return NULL; }
-#endif
 };
 
 #endif // _WX_BMPBNDL_H_
