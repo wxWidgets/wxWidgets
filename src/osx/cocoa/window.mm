@@ -51,9 +51,6 @@
 // debugging helpers
 // ----------------------------------------------------------------------------
 
-// This one is defined in window_osx.cpp.
-extern wxString wxDumpWindow(wxWindowMac* win);
-
 // These functions are called from the code but are also useful in the debugger
 // (especially wxDumpNSView(), as selectors can be printed out directly anyhow),
 // so make them just static instead of putting them in an anonymous namespace

@@ -182,28 +182,6 @@ wxBEGIN_EVENT_TABLE(wxBlindPlateWindow, wxWindow)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
-// debug helpers
-// ----------------------------------------------------------------------------
-
-// Function used to dump a brief description of a window.
-extern
-wxString wxDumpWindow(wxWindowMac* win)
-{
-    if ( !win )
-        return "(no window)";
-
-    wxString s = wxString::Format("%s(%p",
-                                  win->GetClassInfo()->GetClassName(), win);
-
-    wxString label = win->GetLabel();
-    if ( !label.empty() )
-        s += wxString::Format(", \"%s\"", label);
-    s += ")";
-
-    return s;
-}
-
-// ----------------------------------------------------------------------------
  // constructors and such
 // ----------------------------------------------------------------------------
 
