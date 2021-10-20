@@ -1,6 +1,3 @@
-// To get DPI change events, we need to opt in into per monitor DPI support.
-#define wxUSE_DPI_AWARE_MANIFEST 2
-
 #include "../sample.rc"
 
 new        RCDATA "bitmaps/new.png"
