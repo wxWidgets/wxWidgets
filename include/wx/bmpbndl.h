@@ -170,9 +170,10 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 // implement custom bitmap bundles.
 class WXDLLIMPEXP_CORE wxBitmapBundleImpl : public wxRefCounter
 {
-public:
-    ~wxBitmapBundleImpl();
+protected:
+    virtual ~wxBitmapBundleImpl();
 
+public:
     // Return the size of the bitmaps represented by this bundle in the default
     // DPI (a.k.a. 100% resolution).
     //

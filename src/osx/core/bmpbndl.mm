@@ -34,6 +34,8 @@
 // private helpers
 // ----------------------------------------------------------------------------
 
+namespace {
+
 class wxOSXImageHolder
 {
 public:
@@ -41,28 +43,28 @@ public:
     {
     }
 
-    wxOSXImageHolder( WXImage image) : m_nsImage(image)
+    explicit wxOSXImageHolder( WXImage image) : m_nsImage(image)
     {
-        wxMacCocoaRetain(m_nsImage);
+        [m_nsImage retain];
     }
 
     wxOSXImageHolder( const wxOSXImageHolder& other ) : m_nsImage(other.m_nsImage)
     {
-        wxMacCocoaRetain(m_nsImage);
+        [m_nsImage retain];;
     }
 
     ~wxOSXImageHolder()
     {
-        wxMacCocoaRelease(m_nsImage);
+        [m_nsImage release];
     }
 
     wxOSXImageHolder& operator=(const wxOSXImageHolder& other)
     {
         if ( other.m_nsImage != m_nsImage )
         {
-            wxMacCocoaRelease(m_nsImage);
+            [m_nsImage release];
             m_nsImage = other.m_nsImage;
-            wxMacCocoaRetain(m_nsImage);
+            [m_nsImage retain];
         }
         return *this;
     }
@@ -72,12 +74,14 @@ private:
     WXImage    m_nsImage;
 };
 
-std::unordered_map< const wxBitmapBundleImpl*, wxOSXImageHolder> s_nativeImages;
+} // anonymouse namespace
+
+std::unordered_map< const wxBitmapBundleImpl*, wxOSXImageHolder> gs_nativeImages;
 
 WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromBundleImpl(const wxBitmapBundleImpl* impl)
 {
-    auto image = s_nativeImages.find(impl);
-    if (image != s_nativeImages.end())
+    auto image = gs_nativeImages.find(impl);
+    if (image != gs_nativeImages.end())
         return image->second.GetImage();
     else
         return NULL;
@@ -85,12 +89,12 @@ WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromBundleImpl(const wxBitmapBundleImpl* i
 
 void WXDLLIMPEXP_CORE wxOSXSetImageForBundleImpl(const wxBitmapBundleImpl* impl, WXImage image)
 {
-    s_nativeImages[impl] = image;
+    gs_nativeImages[impl] = wxOSXImageHolder(image);
 }
 
 void WXDLLIMPEXP_CORE wxOSXBundleImplDestroyed(const wxBitmapBundleImpl* impl)
 {
-    s_nativeImages.erase(impl);
+    gs_nativeImages.erase(impl);
 }
 
 
