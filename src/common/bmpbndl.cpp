@@ -57,21 +57,10 @@ public:
 
     ~wxBitmapBundleImplSet()
     {
-#ifdef __WXOSX__
-        if (m_nsImage)
-            wxMacCocoaRelease(m_nsImage);
-#endif
     }
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
-
-#ifdef __WXOSX__
-    virtual WXImage OSXGetImage() const wxOVERRIDE;
-
-private:
-    mutable WXImage m_nsImage = NULL;
-#endif
 
 private:
     // Struct containing bitmap itself as well as a flag indicating whether we
@@ -123,6 +112,10 @@ private:
     // Common implementation of all ctors.
     void Init(const wxBitmap* bitmaps, size_t n);
 
+#ifdef __WXOSX__
+    void OSXCreateNSImage();
+#endif
+
     wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplSet);
 };
 
@@ -149,6 +142,10 @@ void wxBitmapBundleImplSet::Init(const wxBitmap* bitmaps, size_t n)
     // Should we check that all bitmaps really have unique sizes here? For now,
     // don't bother with this, but we might want to do it later if it really
     // turns out to be a problem in practice.
+
+#ifdef __WXOSX__
+    OSXCreateNSImage();
+#endif
 }
 
 wxSize wxBitmapBundleImplSet::GetDefaultSize() const
@@ -217,26 +214,22 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
 }
 
 #ifdef __WXOSX__
-WXImage wxBitmapBundleImplSet::OSXGetImage() const
+void wxBitmapBundleImplSet::OSXCreateNSImage()
 {
-    if ( m_nsImage == NULL )
-    {
 #if wxOSX_USE_COCOA
-        m_nsImage = wxOSXImageFromBitmap(m_entries[0].bitmap);
-        const size_t n = m_entries.size();
-        for ( size_t i = 1; i < n; ++i )
-        {
-            const Entry& entry = m_entries[i];
-            wxOSXAddBitmapToImage(m_nsImage, entry.bitmap);
-        }
-#else
-        // TODO determine best bitmap for device scale factor, and use that
-        // with wxOSXImageFromBitmap as on iOS there is only one bitmap in a UIImage
-#endif
-        if ( m_nsImage )
-            wxMacCocoaRetain(m_nsImage);
+    WXImage image = wxOSXImageFromBitmap(m_entries[0].bitmap);
+    const size_t n = m_entries.size();
+    for ( size_t i = 1; i < n; ++i )
+    {
+        const Entry& entry = m_entries[i];
+        wxOSXAddBitmapToImage(image, entry.bitmap);
     }
-    return m_nsImage;
+#else
+    // TODO determine best bitmap for device scale factor, and use that
+    // with wxOSXImageFromBitmap as on iOS there is only one bitmap in a UIImage
+#endif
+    if ( image )
+        wxOSXSetImageForBundleImpl(this, image);
 }
 #endif
 
@@ -333,3 +326,13 @@ wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
 
     return m_impl->GetBitmap(size == wxDefaultSize ? GetDefaultSize() : size);
 }
+
+//
+
+wxBitmapBundleImpl::~wxBitmapBundleImpl()
+{
+#ifdef __WXOSX__
+    wxOSXBundleImplDestroyed(this);
+#endif
+}
+

@@ -28,10 +28,71 @@
 #include "wx/osx/private.h"
 
 #include <algorithm>
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // private helpers
 // ----------------------------------------------------------------------------
+
+class wxOSXImageHolder
+{
+public:
+    wxOSXImageHolder() : m_nsImage(NULL)
+    {
+    }
+
+    wxOSXImageHolder( WXImage image) : m_nsImage(image)
+    {
+        wxMacCocoaRetain(m_nsImage);
+    }
+
+    wxOSXImageHolder( const wxOSXImageHolder& other ) : m_nsImage(other.m_nsImage)
+    {
+        wxMacCocoaRetain(m_nsImage);
+    }
+
+    ~wxOSXImageHolder()
+    {
+        wxMacCocoaRelease(m_nsImage);
+    }
+
+    wxOSXImageHolder& operator=(const wxOSXImageHolder& other)
+    {
+        if ( other.m_nsImage != m_nsImage )
+        {
+            wxMacCocoaRelease(m_nsImage);
+            m_nsImage = other.m_nsImage;
+            wxMacCocoaRetain(m_nsImage);
+        }
+        return *this;
+    }
+
+    WXImage GetImage() const { return m_nsImage; }
+private:
+    WXImage    m_nsImage;
+};
+
+std::unordered_map< const wxBitmapBundleImpl*, wxOSXImageHolder> s_nativeImages;
+
+WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromBundleImpl(const wxBitmapBundleImpl* impl)
+{
+    auto image = s_nativeImages.find(impl);
+    if (image != s_nativeImages.end())
+        return image->second.GetImage();
+    else
+        return NULL;
+}
+
+void WXDLLIMPEXP_CORE wxOSXSetImageForBundleImpl(const wxBitmapBundleImpl* impl, WXImage image)
+{
+    s_nativeImages[impl] = image;
+}
+
+void WXDLLIMPEXP_CORE wxOSXBundleImplDestroyed(const wxBitmapBundleImpl* impl)
+{
+    s_nativeImages.erase(impl);
+}
+
 
 namespace
 {
@@ -47,11 +108,6 @@ public:
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
-
-    virtual WXImage OSXGetImage() const wxOVERRIDE;
-
-private:
-    WXImage    m_nsImage;
 };
 
 } // anonymouse namespace
@@ -62,28 +118,22 @@ private:
 
 wxOSXImageBundleImpl::wxOSXImageBundleImpl(WXImage image)
 {
-    m_nsImage = (WXImage) wxMacCocoaRetain(image);
+    wxOSXSetImageForBundleImpl(this, image);
 }
 
 wxOSXImageBundleImpl::~wxOSXImageBundleImpl()
 {
-    wxMacCocoaRelease(m_nsImage);
 }
 
 wxSize wxOSXImageBundleImpl::GetDefaultSize() const
 {
-    CGSize sz = wxOSXGetImageSize(m_nsImage);
+    CGSize sz = wxOSXGetImageSize(wxOSXGetImageFromBundleImpl(this));
     return wxSize(sz.width, sz.height);
 }
 
 wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& size)
 {
     return wxBitmap();
-}
-
-WXImage wxOSXImageBundleImpl::OSXGetImage() const
-{
-    return m_nsImage;
 }
 
 wxBitmapBundle wxOSXMakeBundleFromImage( WXImage img)
@@ -174,10 +224,31 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
     if (!bundle.IsOk())
         return NULL;
 
-    WXImage image = bundle.GetImpl()->OSXGetImage();
+    wxBitmapBundleImpl* impl = bundle.GetImpl();
+
+    WXImage image = wxOSXGetImageFromBundleImpl(impl);
 
     if (image == 0)
-        image = bundle.GetBitmap(bundle.GetDefaultSize()).OSXGetImage();
+    {
+        wxSize sz = impl->GetDefaultSize();
+
+    #if wxOSX_USE_COCOA
+        wxBitmap bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
+        image = wxOSXImageFromBitmap(bmp);
+        double scale = wxOSXGetMainScreenContentScaleFactor();
+        if ( scale >= 1.9 )
+        {
+            sz *= scale;
+            bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
+            wxOSXAddBitmapToImage(image, bmp);
+        }
+#else
+        // TODO determine best bitmap for device scale factor, and use that
+        // as on iOS there is only one bitmap in a UIImage
+#endif
+
+        wxOSXSetImageForBundleImpl(impl, image);
+    }
 
     return image;
 }
