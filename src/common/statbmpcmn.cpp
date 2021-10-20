@@ -80,4 +80,20 @@ wxCONSTRUCTOR_5( wxStaticBitmap, wxWindow*, Parent, wxWindowID, Id, \
         bitmap
 */
 
+// ----------------------------------------------------------------------------
+// wxStaticBitmap
+// ----------------------------------------------------------------------------
+
+wxStaticBitmapBase::~wxStaticBitmapBase()
+{
+    // this destructor is required for Darwin
+}
+
+wxSize wxStaticBitmapBase::DoGetBestSize() const
+{
+    // the fall back size is completely arbitrary
+    const wxBitmap bmp = GetBitmap();
+    return bmp.IsOk() ? bmp.GetScaledSize() : wxSize(16, 16);
+}
+
 #endif // wxUSE_STATBMP

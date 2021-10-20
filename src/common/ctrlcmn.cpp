@@ -620,24 +620,4 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
     return ret;
 }
 
-// ----------------------------------------------------------------------------
-// wxStaticBitmap
-// ----------------------------------------------------------------------------
-
-#if wxUSE_STATBMP
-
-wxStaticBitmapBase::~wxStaticBitmapBase()
-{
-    // this destructor is required for Darwin
-}
-
-wxSize wxStaticBitmapBase::DoGetBestSize() const
-{
-    // the fall back size is completely arbitrary
-    const wxBitmap bmp = GetBitmap();
-    return bmp.IsOk() ? bmp.GetScaledSize() : wxSize(16, 16);
-}
-
-#endif // wxUSE_STATBMP
-
 #endif // wxUSE_CONTROLS
