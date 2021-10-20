@@ -138,6 +138,7 @@ public:
                          const wxBitmap& bitmap);
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
+    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
 private:
@@ -183,6 +184,52 @@ wxBitmapBundleImplRC::wxBitmapBundleImplRC(const ResourceInfos& resourceInfos,
 wxSize wxBitmapBundleImplRC::GetDefaultSize() const
 {
     return m_bitmaps[0].GetSize();
+}
+
+wxSize wxBitmapBundleImplRC::GetPreferredSizeAtScale(double scale) const
+{
+    // Optimistically assume we're going to use this exact scale by default.
+    double scalePreferred = scale;
+
+    for ( size_t i = 0; ; ++i )
+    {
+        if ( i == m_resourceInfos.size() )
+        {
+            // The requested scale is bigger than anything we have, so use the
+            // biggest available one.
+            scalePreferred = m_resourceInfos[i - 1].scale;
+            break;
+        }
+
+        const double scaleThis = m_resourceInfos[i].scale;
+
+        // Keep looking for the exact match which we still can hope to find
+        // while the current scale is smaller.
+        if ( scaleThis < scale )
+            continue;
+
+        // If we've found the exact match, just use it.
+        if ( scaleThis == scale )
+            break;
+
+        // We've found the closest bigger scale.
+
+        // If there is no smaller one, we have no choice but to use this one.
+        if ( i == 0 )
+            break;
+
+        // Decide whether we should use this one or the previous smaller one
+        // depending on which of them is closer to the target scale, breaking
+        // the tie in favour of the bigger one.
+        const double scaleLast = m_resourceInfos[i - 1].scale;
+
+        scalePreferred = scaleThis - scale <= scale - scaleLast
+                            ? scaleThis
+                            : scaleLast;
+        break;
+    }
+
+    return GetDefaultSize()*scalePreferred;
 }
 
 wxBitmap

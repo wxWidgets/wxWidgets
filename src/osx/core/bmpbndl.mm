@@ -46,6 +46,7 @@ public:
     ~wxOSXImageBundleImpl();
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
+    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
     virtual WXImage OSXGetImage() const wxOVERRIDE;
@@ -74,6 +75,14 @@ wxSize wxOSXImageBundleImpl::GetDefaultSize() const
 {
     CGSize sz = wxOSXGetImageSize(m_nsImage);
     return wxSize(sz.width, sz.height);
+}
+
+wxSize wxOSXImageBundleImpl::GetPreferredSizeAtScale(double scale) const
+{
+    // The system always performs scaling, as the scaling factor is integer and
+    // so it doesn't make sense to round it up or down, hence we should use the
+    // theoretical best size for given scale.
+    return GetDefaultSize()*scale;
 }
 
 wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& size)

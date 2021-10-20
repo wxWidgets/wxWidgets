@@ -32,6 +32,7 @@
         #include "wx/image.h"
     #endif // WXWIN_COMPATIBILITY_2_8
     #include "wx/menu.h"
+    #include "wx/vector.h"
 #endif
 
 extern WXDLLEXPORT_DATA(const char) wxToolBarNameStr[] = "toolbar";
@@ -432,6 +433,39 @@ void wxToolBarBase::ClearTools()
     }
 }
 
+namespace
+{
+
+// Struct containing the number of tools preferring to use the given size.
+struct SizePrefWithCount
+{
+    SizePrefWithCount() : count(0) { }
+
+    wxSize size;
+    int count;
+};
+
+typedef wxVector<SizePrefWithCount> SizePrefs;
+
+void RecordSizePref(SizePrefs& prefs, const wxSize& size)
+{
+    for ( size_t n = 0; n < prefs.size(); ++n )
+    {
+        if ( prefs[n].size == size )
+        {
+            prefs[n].count++;
+            return;
+        }
+    }
+
+    SizePrefWithCount pref;
+    pref.size = size;
+    pref.count++;
+    prefs.push_back(pref);
+}
+
+} // anonymous namespace
+
 void wxToolBarBase::AdjustToolBitmapSize()
 {
     if ( HasFlag(wxTB_NOICONS) )
@@ -442,8 +476,10 @@ void wxToolBarBase::AdjustToolBitmapSize()
 
     const wxSize sizeOrig(m_defaultWidth, m_defaultHeight);
 
-    wxSize sizeActual(sizeOrig);
-
+    // We want to use preferred bitmap size, but the preferred sizes can be
+    // different for different bitmap bundles, so record all their preferences
+    // first.
+    SizePrefs prefs;
     const double scale = GetDPIScaleFactor();
     for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
           i != m_tools.end();
@@ -451,11 +487,48 @@ void wxToolBarBase::AdjustToolBitmapSize()
     {
         const wxBitmapBundle& bmp = (*i)->GetNormalBitmapBundle();
         if ( bmp.IsOk() )
-            sizeActual.IncTo(bmp.GetDefaultSize()*scale);
+            RecordSizePref(prefs, bmp.GetPreferredSizeAtScale(scale));
     }
 
-    if ( sizeActual != sizeOrig )
-        SetToolBitmapSize(sizeActual);
+    // Now find the size preferred by most tools.
+    int countMax = 0;
+    wxSize sizePreferred;
+    for ( size_t n = 0; n < prefs.size(); ++n )
+    {
+        const int countThis = prefs[n].count;
+        const wxSize sizeThis = prefs[n].size;
+
+        if ( countThis > countMax )
+        {
+            countMax = countThis;
+            sizePreferred = sizeThis;
+        }
+        else if ( countThis == countMax )
+        {
+            // We have a tie between different sizes, choose the one
+            // corresponding to the current scale factor, if possible, as this
+            // is the ideal bitmap size that should be consistent with all the
+            // other bitmaps.
+            if ( sizePreferred != sizeOrig*scale )
+            {
+                if ( sizeThis == sizeOrig*scale )
+                {
+                    sizePreferred = sizeThis;
+                }
+                else // Neither of the sizes is the ideal one.
+                {
+                    // Choose the larger one as like this some bitmaps will be
+                    // downscaled, which should look better than upscaling some
+                    // (other) ones.
+                    if ( sizeThis.y > sizePreferred.y )
+                        sizePreferred = sizeThis;
+                }
+            }
+        }
+    }
+
+    if ( sizePreferred != sizeOrig )
+        SetToolBitmapSize(sizePreferred);
 }
 
 bool wxToolBarBase::Realize()

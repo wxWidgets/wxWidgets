@@ -520,6 +520,13 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                     return m_sizeDef;
                 }
 
+                wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE
+                {
+                    // We just scale the bitmap to fit the requested size, so
+                    // we don't really have any preferences.
+                    return m_sizeDef*scale;
+                }
+
                 wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
                 {
                     // In this simple implementation we don't bother caching

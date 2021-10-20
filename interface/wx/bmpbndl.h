@@ -253,6 +253,31 @@ public:
     wxSize GetDefaultSize() const;
 
     /**
+        Get the size that would be best to use for this bundle at the given DPI
+        scaling factor.
+
+        For bundles containing some number of the fixed-size bitmaps, this
+        function returns the size of an existing bitmap closest to the ideal
+        size at the given scale, i.e. GetDefaultSize() multiplied by @a scale.
+
+        Passing a size returned by this function to GetBitmap() ensures that
+        bitmap doesn't need to be rescaled, which typically significantly
+        lowers its quality.
+     */
+    wxSize GetPreferredSizeAtScale(double scale) const;
+
+    /**
+        Get the size that would be best to use for this bundle at the DPI
+        scaling factor used by the given window.
+
+        This is just a convenient wrapper for GetPreferredSizeAtScale() calling
+        that function with the result of wxWindow::GetDPIScaleFactor().
+
+        @param window Non-null and fully created window.
+     */
+    wxSize GetPreferredSizeFor(wxWindow* window) const;
+
+    /**
         Get bitmap of the specified size, creating a new bitmap from the closest
         available size by rescaling it if necessary.
 
@@ -285,6 +310,16 @@ public:
                 ... determine the minimum/default size for bitmap to use ...
             }
 
+            wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE
+            {
+                // If it's ok to scale the bitmap, just use the standard size
+                // at the given scale:
+                return GetDefaultSize()*scale;
+
+                ... otherwise, an existing bitmap of the size closest to the
+                    one above would need to be found and its size returned ...
+            }
+
             wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
             {
                 ... get the bitmap of the requested size from somewhere and
@@ -313,6 +348,13 @@ public:
         Must always return a valid size.
      */
     virtual wxSize GetDefaultSize() const = 0;
+
+    /**
+        Return the preferred size that should be used at the given scale.
+
+        Must always return a valid size.
+     */
+    virtual wxSize GetPreferredSizeAtScale(double scale) const = 0;
 
     /**
         Retrieve the bitmap of exactly the given size.
