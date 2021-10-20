@@ -201,3 +201,16 @@ TEST_CASE("GUI::FindWindowAtPoint", "[guifuncs]")
     INFO("Point over disabled child controls still corresponds to this child");
     CHECK( GetLabelOfWindowAtPoint(parent, 31, 111) == btn3->GetLabel() );
 }
+
+TEST_CASE("wxWindow::Dump", "[window]")
+{
+    CHECK_NOTHROW( wxDumpWindow(NULL) );
+
+    wxScopedPtr<wxButton>
+        button(new wxButton(wxTheApp->GetTopWindow(), wxID_ANY, "bloordyblop"));
+
+    const std::string s = wxDumpWindow(button.get()).utf8_string();
+
+    CHECK_THAT( s, Catch::Contains("wxButton") );
+    CHECK_THAT( s, Catch::Contains("bloordyblop") );
+}

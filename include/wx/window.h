@@ -2100,6 +2100,9 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 // get the (first) top level parent window
 WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindowBase *win);
 
+// Return a string with platform-dependent description of the window.
+extern WXDLLIMPEXP_CORE wxString wxDumpWindow(wxWindowBase* win);
+
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------
 // accessible object for windows

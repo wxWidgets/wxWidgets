@@ -4251,5 +4251,22 @@ wxWindow* wxGetActiveWindow();
 */
 wxWindow* wxGetTopLevelParent(wxWindow* window);
 
+/**
+    Return a string with human-readable platform-specific description of
+    the window useful for diagnostic purposes.
+
+    The string returned from this function doesn't have any fixed form and can
+    vary between different wxWidgets ports and versions, but contains some
+    useful description of the window and uniquely identifies it. This can be
+    useful to include in debug or tracing messages.
+
+    @param window Window pointer which is allowed to be @NULL.
+
+    @header{wx/window.h}
+
+    @since 3.1.6
+ */
+wxString wxDumpWindow(wxWindow* window);
+
 //@}
 
