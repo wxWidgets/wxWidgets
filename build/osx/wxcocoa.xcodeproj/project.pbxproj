@@ -847,6 +847,15 @@
 		4040AE89BF9F34668091064A /* dragimgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A67053D16D63C588E555C84 /* dragimgg.cpp */; };
 		4040AE89BF9F34668091064B /* dragimgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A67053D16D63C588E555C84 /* dragimgg.cpp */; };
 		4040AE89BF9F34668091064C /* dragimgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A67053D16D63C588E555C84 /* dragimgg.cpp */; };
+		DB244DC0A09C379AAA63C0A4 /* bmpbndl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26CC5C56BD493346B16854F9 /* bmpbndl.cpp */; };
+		DB244DC0A09C379AAA63C0A5 /* bmpbndl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26CC5C56BD493346B16854F9 /* bmpbndl.cpp */; };
+		DB244DC0A09C379AAA63C0A6 /* bmpbndl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26CC5C56BD493346B16854F9 /* bmpbndl.cpp */; };
+		32988828498D32B2B3F8A982 /* bmpsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 741E9B48274638CD9DD73698 /* bmpsvg.cpp */; };
+		32988828498D32B2B3F8A983 /* bmpsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 741E9B48274638CD9DD73698 /* bmpsvg.cpp */; };
+		32988828498D32B2B3F8A984 /* bmpsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 741E9B48274638CD9DD73698 /* bmpsvg.cpp */; };
+		1A70DDEDF9E13FF4BDA390E9 /* bmpbndl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B1A8E72B8E531B28C6DFD7A /* bmpbndl.mm */; };
+		1A70DDEDF9E13FF4BDA390EA /* bmpbndl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B1A8E72B8E531B28C6DFD7A /* bmpbndl.mm */; };
+		1A70DDEDF9E13FF4BDA390EB /* bmpbndl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B1A8E72B8E531B28C6DFD7A /* bmpbndl.mm */; };
 		4156FDB73D0A397A870E4302 /* overlay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD8031E28A3C9CB7C45784 /* overlay.mm */; };
 		4156FDB73D0A397A870E4303 /* overlay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD8031E28A3C9CB7C45784 /* overlay.mm */; };
 		4156FDB73D0A397A870E4304 /* overlay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD8031E28A3C9CB7C45784 /* overlay.mm */; };
@@ -1823,9 +1832,6 @@
 		9A63148F193E33B5964DD029 /* uilocale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E4466371B7E3265AE7B1E0C /* uilocale.cpp */; };
 		9A63148F193E33B5964DD02A /* uilocale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E4466371B7E3265AE7B1E0C /* uilocale.cpp */; };
 		9A63148F193E33B5964DD02B /* uilocale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E4466371B7E3265AE7B1E0C /* uilocale.cpp */; };
-		AE660214E0CB375FBA508A36 /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1B794996B953D00AC7BC2AE /* uilocale.mm */; };
-		AE660214E0CB375FBA508A37 /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1B794996B953D00AC7BC2AE /* uilocale.mm */; };
-		AE660214E0CB375FBA508A38 /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1B794996B953D00AC7BC2AE /* uilocale.mm */; };
 		9A83D365AD1F37FA9C7030C2 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF330EAACFA53877BE289896 /* matrix.cpp */; };
 		9A83D365AD1F37FA9C7030C3 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF330EAACFA53877BE289896 /* matrix.cpp */; };
 		9A83D365AD1F37FA9C7030C4 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF330EAACFA53877BE289896 /* matrix.cpp */; };
@@ -2031,6 +2037,9 @@
 		AE5286C71D1130EAA368A1C4 /* radiobtncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 724927B0045F3CC0884878BB /* radiobtncmn.cpp */; };
 		AE5286C71D1130EAA368A1C5 /* radiobtncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 724927B0045F3CC0884878BB /* radiobtncmn.cpp */; };
 		AE5286C71D1130EAA368A1C6 /* radiobtncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 724927B0045F3CC0884878BB /* radiobtncmn.cpp */; };
+		AE660214E0CB375FBA508A36 /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1B794996B953D00AC7BC2AE /* uilocale.mm */; };
+		AE660214E0CB375FBA508A37 /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1B794996B953D00AC7BC2AE /* uilocale.mm */; };
+		AE660214E0CB375FBA508A38 /* uilocale.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1B794996B953D00AC7BC2AE /* uilocale.mm */; };
 		AE84BC9A1CCA3ADA9C483950 /* xmlrole.c in Sources */ = {isa = PBXBuildFile; fileRef = 59C6B9849FF6325E890942EF /* xmlrole.c */; };
 		AE84BC9A1CCA3ADA9C483951 /* xmlrole.c in Sources */ = {isa = PBXBuildFile; fileRef = 59C6B9849FF6325E890942EF /* xmlrole.c */; };
 		AE84BC9A1CCA3ADA9C483952 /* xmlrole.c in Sources */ = {isa = PBXBuildFile; fileRef = 59C6B9849FF6325E890942EF /* xmlrole.c */; };
@@ -4215,6 +4224,9 @@
 		3FEBA7AC7F743EE88352AEBC /* htmlwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = htmlwin.cpp; path = ../../src/html/htmlwin.cpp; sourceTree = "<group>"; };
 		400275BE019D3E5BA47988BE /* inffast.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = inffast.c; path = ../../src/zlib/inffast.c; sourceTree = "<group>"; };
 		4048A3523EC03409BD899BEF /* xtixml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xtixml.cpp; path = ../../src/common/xtixml.cpp; sourceTree = "<group>"; };
+		26CC5C56BD493346B16854F9 /* bmpbndl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bmpbndl.cpp; path = ../../src/common/bmpbndl.cpp; sourceTree = "<group>"; };
+		741E9B48274638CD9DD73698 /* bmpsvg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bmpsvg.cpp; path = ../../src/generic/bmpsvg.cpp; sourceTree = "<group>"; };
+		4B1A8E72B8E531B28C6DFD7A /* bmpbndl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = bmpbndl.mm; path = ../../src/osx/core/bmpbndl.mm; sourceTree = "<group>"; };
 		40586C8986443431A64EB066 /* LexLisp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLisp.cxx; path = ../../src/stc/scintilla/lexers/LexLisp.cxx; sourceTree = "<group>"; };
 		4071FF90F1D4336C836B2AE4 /* tif_pixarlog.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_pixarlog.c; path = ../../src/tiff/libtiff/tif_pixarlog.c; sourceTree = "<group>"; };
 		40CE02524DD4385AB2C3DF95 /* socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = socket.cpp; path = ../../src/common/socket.cpp; sourceTree = "<group>"; };
@@ -4257,7 +4269,6 @@
 		4C4649974D8B3A109D1BF145 /* art_internal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_internal.cpp; path = ../../src/ribbon/art_internal.cpp; sourceTree = "<group>"; };
 		4CB467F9898C3952A68D988B /* zutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = zutil.c; path = ../../src/zlib/zutil.c; sourceTree = "<group>"; };
 		4E4466371B7E3265AE7B1E0C /* uilocale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uilocale.cpp; path = ../../src/common/uilocale.cpp; sourceTree = "<group>"; };
-		E1B794996B953D00AC7BC2AE /* uilocale.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = uilocale.mm; path = ../../src/osx/core/uilocale.mm; sourceTree = "<group>"; };
 		4E74E9E53454331F8E10ECC5 /* pcre2_match_data.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_match_data.c; path = ../../3rdparty/pcre/src/pcre2_match_data.c; sourceTree = "<group>"; };
 		4EB3B255D20F3AE5A95230F6 /* LexCSS.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCSS.cxx; path = ../../src/stc/scintilla/lexers/LexCSS.cxx; sourceTree = "<group>"; };
 		4F58B88D42A93BD0B74ADF75 /* CallTip.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CallTip.cxx; path = ../../src/stc/scintilla/src/CallTip.cxx; sourceTree = "<group>"; };
@@ -4844,6 +4855,7 @@
 		E110907DDC13305E88B90086 /* dirctrlcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dirctrlcmn.cpp; path = ../../src/common/dirctrlcmn.cpp; sourceTree = "<group>"; };
 		E145FC31ED523B4AA5080A61 /* RESearch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RESearch.cxx; path = ../../src/stc/scintilla/src/RESearch.cxx; sourceTree = "<group>"; };
 		E1B1FBB2BCC43BA7A45E9438 /* listctrlcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = listctrlcmn.cpp; path = ../../src/common/listctrlcmn.cpp; sourceTree = "<group>"; };
+		E1B794996B953D00AC7BC2AE /* uilocale.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = uilocale.mm; path = ../../src/osx/core/uilocale.mm; sourceTree = "<group>"; };
 		E1F2E9C9052D3E53BBD17DE3 /* statbrma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statbrma.cpp; path = ../../src/osx/carbon/statbrma.cpp; sourceTree = "<group>"; };
 		E4E16323A43E36DC8024EDF1 /* textctrl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = textctrl.mm; path = ../../src/osx/cocoa/textctrl.mm; sourceTree = "<group>"; };
 		E5357E76650035639844D15B /* stringimpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringimpl.cpp; path = ../../src/common/stringimpl.cpp; sourceTree = "<group>"; };
@@ -5462,6 +5474,9 @@
 			children = (
 				B0665A40F3FC3F218074C63C /* artmac.cpp */,
 				302A13BC64C238A297F4399F /* brush.cpp */,
+				26CC5C56BD493346B16854F9 /* bmpbndl.cpp */,
+				4B1A8E72B8E531B28C6DFD7A /* bmpbndl.mm */,
+				741E9B48274638CD9DD73698 /* bmpsvg.cpp */,
 				BDE76674C0F5391BAD2AFA2F /* dialog_osx.cpp */,
 				5FF661188B563D27A11F5716 /* fontutil.cpp */,
 				693F731B7D1730A79485F9EC /* minifram.cpp */,
@@ -7165,6 +7180,8 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 6976B5F5F3A63A21A92029E3 /* Build configuration list for PBXProject "wxcocoa" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -7753,6 +7770,7 @@
 				5417332FE2DB3CD3A647B15F /* cursor.cpp in Sources */,
 				D66F5D4D204B3B789C7F76BB /* fontdlg.cpp in Sources */,
 				692FCCABFB963696AFC1E124 /* gdiobj.cpp in Sources */,
+				1A70DDEDF9E13FF4BDA390EB /* bmpbndl.mm in Sources */,
 				B0E94A59C83637C09FAAE71E /* app.cpp in Sources */,
 				EB52C6A91594381393294500 /* control.cpp in Sources */,
 				45AB45C6B24A3983B22E56A7 /* dataobj.cpp in Sources */,
@@ -7783,6 +7801,7 @@
 				C005C2D547E735E9B0816590 /* prntdlgg.cpp in Sources */,
 				A1AF8FF873D6383996995ED1 /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D5596B /* textmeasure.cpp in Sources */,
+				DB244DC0A09C379AAA63C0A6 /* bmpbndl.cpp in Sources */,
 				01D4C5F2147F3942A7CE91AC /* icon.cpp in Sources */,
 				750C716389AD3ADBABC9D68B /* statbmp_osx.cpp in Sources */,
 				1EDED99760B23A1999E75C14 /* imaglist.cpp in Sources */,
@@ -7849,6 +7868,7 @@
 				A283187810EB32DAA173BD35 /* artstd.cpp in Sources */,
 				75DCE6FF00E93C5D93970844 /* arttango.cpp in Sources */,
 				1749412E53B9311DABA71DDE /* bmpbase.cpp in Sources */,
+				32988828498D32B2B3F8A984 /* bmpsvg.cpp in Sources */,
 				3ACCC2EB8E973C11835EB599 /* bmpbtncmn.cpp in Sources */,
 				A5775D87FD713CBB930A7840 /* bookctrl.cpp in Sources */,
 				C3A63D7091913CD39094AE0D /* btncmn.cpp in Sources */,
@@ -8323,6 +8343,7 @@
 				88E1AE56FD393C8BA5CF8546 /* stringops.cpp in Sources */,
 				056E30EA43753A7CB1AF8C9F /* strvararg.cpp in Sources */,
 				4DD98A9436C83CF3B9425A79 /* sysopt.cpp in Sources */,
+				32988828498D32B2B3F8A983 /* bmpsvg.cpp in Sources */,
 				9FB1E1763EFA334CA0C07C4A /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5423 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2E /* textfile.cpp in Sources */,
@@ -8777,6 +8798,7 @@
 				FBE4DB30865D3177B3A9993C /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87115 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884756 /* xh_bmp.cpp in Sources */,
+				1A70DDEDF9E13FF4BDA390EA /* bmpbndl.mm in Sources */,
 				8966F77CC97B3ED780C8F138 /* xh_bmpcbox.cpp in Sources */,
 				84B3625464F732C3A79E1315 /* xh_bmpbt.cpp in Sources */,
 				D5C304182151365FA9FF8A3E /* xh_bttn.cpp in Sources */,
@@ -8817,6 +8839,7 @@
 				47F4FC8717AF3A848812DFCD /* xh_radbt.cpp in Sources */,
 				7181709A030D3749AB355B75 /* xh_radbx.cpp in Sources */,
 				FDE14459359334DE9FB03ED6 /* xh_scrol.cpp in Sources */,
+				DB244DC0A09C379AAA63C0A5 /* bmpbndl.cpp in Sources */,
 				87092C0C817D343DAB77E23F /* xh_scwin.cpp in Sources */,
 				00E2F82590B33BDCA1F6D0C5 /* xh_htmllbox.cpp in Sources */,
 				A39B0D7EB43137F7BA50A35D /* xh_simplebook.cpp in Sources */,
@@ -9616,6 +9639,7 @@
 				88E1AE56FD393C8BA5CF8545 /* stringops.cpp in Sources */,
 				056E30EA43753A7CB1AF8C9E /* strvararg.cpp in Sources */,
 				4DD98A9436C83CF3B9425A78 /* sysopt.cpp in Sources */,
+				32988828498D32B2B3F8A982 /* bmpsvg.cpp in Sources */,
 				9FB1E1763EFA334CA0C07C49 /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2D /* textfile.cpp in Sources */,
@@ -10070,6 +10094,7 @@
 				FBE4DB30865D3177B3A9993B /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87114 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884755 /* xh_bmp.cpp in Sources */,
+				1A70DDEDF9E13FF4BDA390E9 /* bmpbndl.mm in Sources */,
 				8966F77CC97B3ED780C8F137 /* xh_bmpcbox.cpp in Sources */,
 				84B3625464F732C3A79E1314 /* xh_bmpbt.cpp in Sources */,
 				D5C304182151365FA9FF8A3D /* xh_bttn.cpp in Sources */,
@@ -10110,6 +10135,7 @@
 				47F4FC8717AF3A848812DFCC /* xh_radbt.cpp in Sources */,
 				7181709A030D3749AB355B74 /* xh_radbx.cpp in Sources */,
 				FDE14459359334DE9FB03ED5 /* xh_scrol.cpp in Sources */,
+				DB244DC0A09C379AAA63C0A4 /* bmpbndl.cpp in Sources */,
 				87092C0C817D343DAB77E23E /* xh_scwin.cpp in Sources */,
 				00E2F82590B33BDCA1F6D0C4 /* xh_htmllbox.cpp in Sources */,
 				A39B0D7EB43137F7BA50A35C /* xh_simplebook.cpp in Sources */,
