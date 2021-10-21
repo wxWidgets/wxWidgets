@@ -30,18 +30,6 @@ public:
 
     virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
 
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
-    {
-        wxBitmap bmp;
-        bmp.CopyFromIcon(icon);
-        SetBitmap(bmp);
-    }
-
-#if defined(__WXGTK20__) || defined(__WXMAC__)
-    // icons and bitmaps are really the same thing in wxGTK and wxMac
-    wxIcon GetIcon() const wxOVERRIDE  { return (const wxIcon &)m_bitmap; }
-#endif
-
     virtual void SetScaleMode(ScaleMode scaleMode) wxOVERRIDE;
 
     virtual ScaleMode GetScaleMode() const wxOVERRIDE { return m_scaleMode; }

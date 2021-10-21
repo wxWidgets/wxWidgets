@@ -96,4 +96,38 @@ wxSize wxStaticBitmapBase::DoGetBestSize() const
     return bmp.IsOk() ? bmp.GetScaledSize() : wxSize(16, 16);
 }
 
+// Only wxMSW handles icons and bitmaps differently, in all the other ports
+// they are exactly the same thing.
+#ifdef wxICON_IS_BITMAP
+
+void wxStaticBitmapBase::SetIcon(const wxIcon& icon)
+{
+    SetBitmap(icon);
+}
+
+wxIcon wxStaticBitmapBase::GetIcon() const
+{
+    wxIcon icon;
+    icon.CopyFromBitmap(GetBitmap());
+    return icon;
+}
+
+#else // !wxICON_IS_BITMAP
+
+// Just provide the stabs for them, they're never used anyhow as they're
+// overridden in wxMSW implementation of this class.
+void wxStaticBitmapBase::SetIcon(const wxIcon& WXUNUSED(icon))
+{
+    wxFAIL_MSG(wxS("unreachable"));
+}
+
+wxIcon wxStaticBitmapBase::GetIcon() const
+{
+    wxFAIL_MSG(wxS("unreachable"));
+
+    return wxIcon();
+}
+
+#endif // wxICON_IS_BITMAP/!wxICON_IS_BITMAP
+
 #endif // wxUSE_STATBMP

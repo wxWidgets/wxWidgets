@@ -69,26 +69,6 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
     m_bitmap = bitmap;
 }
 
-void wxStaticBitmap::SetIcon(const wxIcon& icon)
-{
-#ifdef __WXMSW__
-    m_bitmap.CopyFromIcon(icon);
-#else
-    m_bitmap = (const wxBitmap&)icon;
-#endif
-}
-
-wxIcon wxStaticBitmap::GetIcon() const
-{
-    wxIcon icon;
-#ifdef __WXMSW__
-    icon.CopyFromBitmap(m_bitmap);
-#else
-    icon = (const wxIcon&)m_bitmap;
-#endif
-    return icon;
-}
-
 // ----------------------------------------------------------------------------
 // drawing
 // ----------------------------------------------------------------------------

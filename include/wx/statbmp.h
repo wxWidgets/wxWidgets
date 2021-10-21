@@ -37,15 +37,12 @@ public:
     virtual ~wxStaticBitmapBase();
 
     // our interface
-    virtual void SetIcon(const wxIcon& icon) = 0;
     virtual void SetBitmap(const wxBitmap& bitmap) = 0;
     virtual wxBitmap GetBitmap() const = 0;
-    virtual wxIcon GetIcon() const /* = 0 -- should be pure virtual */
-    {
-        // stub it out here for now as not all ports implement it (but they
-        // should)
-        return wxIcon();
-    }
+
+    virtual void SetIcon(const wxIcon& icon);
+    virtual wxIcon GetIcon() const;
+
     virtual void SetScaleMode(ScaleMode WXUNUSED(scaleMode)) { }
     virtual ScaleMode GetScaleMode() const { return Scale_None; }
 

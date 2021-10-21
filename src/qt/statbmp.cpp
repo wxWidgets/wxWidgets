@@ -57,11 +57,6 @@ static void SetPixmap( QLabel *label, const QPixmap *pixMap )
         label->setPixmap( *pixMap );
 }
 
-void wxStaticBitmap::SetIcon(const wxIcon& icon)
-{
-    SetPixmap( m_qtLabel, icon.GetHandle() );
-}
-
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     SetPixmap( m_qtLabel, bitmap.GetHandle() );
@@ -74,13 +69,6 @@ wxBitmap wxStaticBitmap::GetBitmap() const
         return wxBitmap( *pix );
     else
         return wxBitmap();
-}
-
-wxIcon wxStaticBitmap::GetIcon() const
-{
-    wxIcon icon;
-    icon.CopyFromBitmap( GetBitmap() );
-    return icon;
 }
 
 QWidget *wxStaticBitmap::GetHandle() const

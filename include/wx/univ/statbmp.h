@@ -53,10 +53,7 @@ public:
                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
     virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE;
     virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
-
-    wxIcon GetIcon() const wxOVERRIDE;
 
     virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
 

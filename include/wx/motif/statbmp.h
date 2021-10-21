@@ -48,19 +48,6 @@ public:
 
     wxBitmap GetBitmap() const { return m_messageBitmap; }
 
-    // for compatibility with wxMSW
-    wxIcon GetIcon() const
-    {
-        // don't use wxDynamicCast, icons and bitmaps are really the same thing
-        return *(const wxIcon*)&m_messageBitmap;
-    }
-
-    // for compatibility with wxMSW
-    void  SetIcon(const wxIcon& icon)
-    {
-        SetBitmap( icon );
-    }
-
     // Implementation
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
