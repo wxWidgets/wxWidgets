@@ -34,7 +34,13 @@ bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                             wxDefaultValidator, name))
         return false;
     m_scaleMode = Scale_None;
-    SetBitmap(bitmap);
+
+    // Don't call SetBitmap() here, as it changes the size and refreshes the
+    // window unnecessarily, when we don't need either of these side effects
+    // here.
+    m_bitmap = bitmap;
+    SetInitialSize(size);
+
     Bind(wxEVT_PAINT, &wxGenericStaticBitmap::OnPaint, this);
     return true;
 }

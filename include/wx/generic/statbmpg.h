@@ -38,7 +38,8 @@ public:
     virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE
     {
         m_bitmap = bitmap;
-        SetInitialSize(GetBitmapSize());
+        InvalidateBestSize();
+        SetSize(GetBestSize());
         Refresh();
     }
 
@@ -53,12 +54,6 @@ public:
     virtual ScaleMode GetScaleMode() const wxOVERRIDE { return m_scaleMode; }
 
 private:
-    wxSize GetBitmapSize()
-    {
-        return m_bitmap.IsOk() ? m_bitmap.GetScaledSize()
-                               : wxSize(16, 16); // this is completely arbitrary
-    }
-
     void OnPaint(wxPaintEvent& event);
 
     wxBitmap m_bitmap;
