@@ -401,6 +401,9 @@ more details.
         defined when compiling code which uses wxWidgets as a DLL/shared library}
 @itemdef{WXBUILDING,
         defined when building wxWidgets itself, whether as a static or shared library}
+@itemdef{wxICON_IS_BITMAP,
+         defined in the ports where wxIcon inherits from wxBitmap (all but
+         wxMSW currently)}
 @endDefList
 
 */
