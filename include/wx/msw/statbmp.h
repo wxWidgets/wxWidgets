@@ -25,7 +25,7 @@ public:
 
     wxStaticBitmap(wxWindow *parent,
                    wxWindowID id,
-                   const wxBitmap& label,
+                   const wxBitmapBundle& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -51,13 +51,13 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr))
     {
-        m_bitmap = label;
+        m_bitmapBundle = label;
 
         return DoCreate(parent, id, pos, size, style, name);
     }
@@ -78,7 +78,7 @@ public:
     virtual ~wxStaticBitmap() { Free(); }
 
     virtual void SetIcon(const wxIcon& icon) wxOVERRIDE;
-    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
     virtual wxBitmap GetBitmap() const wxOVERRIDE;
     virtual wxIcon GetIcon() const wxOVERRIDE;
 
@@ -103,9 +103,9 @@ private:
                   long style,
                   const wxString& name);
 
-    // update the image to correspond to the current m_icon or m_bitmap value,
-    // resize the control if the new size is different from the old one and
-    // update its style if the new "is icon" value differs from the old one
+    // update the image to correspond to the current m_icon or m_bitmapBundle
+    // value, resize the control if the new size is different from the old one
+    // and update its style if the new "is icon" value differs from the old one
     void DoUpdateImage(const wxSize& sizeOld, bool wasIcon);
 
     // draw the bitmap ourselves here if the OS can't do it correctly (if it
@@ -114,15 +114,14 @@ private:
 
     void WXHandleSize(wxSizeEvent& event);
 
-    // return the either m_icon or m_bitmap (may still be invalid of both of
-    // them are)
-    const wxGDIImage& GetImage() const;
+    // return the size of m_icon or the appropriate size of m_bitmapBundle at
+    // the current DPI scaling (may still be invalid of both of them are)
+    wxSize GetImageSize() const;
 
 
     // we can have either an icon or a bitmap: if m_icon is valid, it is used,
-    // otherwise m_bitmap is used if it is valid
+    // otherwise m_bitmapBundle defined in the base class is used if it is valid
     wxIcon m_icon;
-    wxBitmap m_bitmap;
 
     // handle used in last call to STM_SETIMAGE
     WXHANDLE m_currentHandle;

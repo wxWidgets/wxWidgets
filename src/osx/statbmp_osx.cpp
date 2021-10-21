@@ -29,7 +29,7 @@
 
 bool wxStaticBitmap::Create(wxWindow *parent,
                             wxWindowID id,
-                            const wxBitmap& bitmap,
+                            const wxBitmapBundle& bitmap,
                             const wxPoint& pos,
                             const wxSize& size,
                             long style,
@@ -49,7 +49,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 
     // Don't call SetBitmap() here, as we don't need to change the size nor
     // refresh the window here.
-    m_bitmap = bitmap;
+    m_bitmapBundle = bitmap;
     GetPeer()->SetBitmap(bitmap);
 
     SetInitialSize(size);
@@ -58,9 +58,9 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 }
 
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    m_bitmap = bitmap;
+    m_bitmapBundle = bitmap;
     GetPeer()->SetBitmap(bitmap);
 
     InvalidateBestSize();

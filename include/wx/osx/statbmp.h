@@ -9,7 +9,7 @@ public:
     wxStaticBitmap() {}
     wxStaticBitmap(wxWindow *parent,
                           wxWindowID id,
-                          const wxBitmap& bitmap,
+                          const wxBitmapBundle& bitmap,
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
                           long style = 0,
@@ -20,15 +20,13 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
-
-    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
 
     virtual void SetScaleMode(ScaleMode scaleMode) wxOVERRIDE;
 
@@ -37,7 +35,6 @@ public:
 private:
     void OnPaint(wxPaintEvent& event);
 
-    wxBitmap m_bitmap;
     ScaleMode m_scaleMode;
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);

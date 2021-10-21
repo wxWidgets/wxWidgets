@@ -28,7 +28,7 @@ wxStaticBitmap::wxStaticBitmap() :
 
 wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos,
                 const wxSize& size,
                 long style,
@@ -39,7 +39,7 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
 
 bool wxStaticBitmap::Create( wxWindow *parent,
              wxWindowID id,
-             const wxBitmap& label,
+             const wxBitmapBundle& label,
              const wxPoint& pos,
              const wxSize& size,
              long style,
@@ -57,9 +57,9 @@ static void SetPixmap( QLabel *label, const QPixmap *pixMap )
         label->setPixmap( *pixMap );
 }
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    SetPixmap( m_qtLabel, bitmap.GetHandle() );
+    SetPixmap( m_qtLabel, bitmap.GetBitmapFor(this).GetHandle() );
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const

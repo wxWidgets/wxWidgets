@@ -586,7 +586,7 @@ public :
     static wxWidgetImplType*    CreateStaticBitmap( wxWindowMac* wxpeer,
                                                    wxWindowMac* parent,
                                                    wxWindowID id,
-                                                   const wxBitmap& bitmap,
+                                                   const wxBitmapBundle& bitmap,
                                                    const wxPoint& pos,
                                                    const wxSize& size,
                                                    long style,

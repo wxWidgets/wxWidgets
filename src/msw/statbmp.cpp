@@ -105,34 +105,30 @@ WXDWORD wxStaticBitmap::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-const wxGDIImage& wxStaticBitmap::GetImage() const
+wxSize wxStaticBitmap::GetImageSize() const
 {
-    // Note: do not use ternary operator here to avoid unwanted conversions
-    // from wxIcon to wxBitmap.
-    if ( m_icon.IsOk() )
-        return m_icon;
-
-    return m_bitmap;
+    return m_icon.IsOk() ? m_icon.GetSize()
+                         : m_bitmapBundle.GetPreferredSizeFor(this);
 }
 
 void wxStaticBitmap::SetIcon(const wxIcon& icon)
 {
-    const wxSize sizeOld = GetImage().GetSize();
+    const wxSize sizeOld = GetImageSize();
     const bool wasIcon = m_icon.IsOk();
 
     m_icon = icon;
-    m_bitmap = wxBitmap();
+    m_bitmapBundle = wxBitmapBundle();
 
     DoUpdateImage(sizeOld, wasIcon);
 }
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    const wxSize sizeOld = GetImage().GetSize();
+    const wxSize sizeOld = GetImageSize();
     const bool wasIcon = m_icon.IsOk();
 
     m_icon = wxIcon();
-    m_bitmap = bitmap;
+    m_bitmapBundle = bitmap;
 
     DoUpdateImage(sizeOld, wasIcon);
 }
@@ -140,15 +136,15 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 wxIcon wxStaticBitmap::GetIcon() const
 {
     wxIcon icon = m_icon;
-    if ( !icon.IsOk() && m_bitmap.IsOk() )
-        icon.CopyFromBitmap(m_bitmap);
+    if ( !icon.IsOk() && m_bitmapBundle.IsOk() )
+        icon.CopyFromBitmap(m_bitmapBundle.GetBitmapFor(this));
 
     return icon;
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const
 {
-    wxBitmap bitmap = m_bitmap;
+    wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
     if ( !bitmap.IsOk() && m_icon.IsOk() )
         bitmap.CopyFromIcon(m_icon);
 
@@ -174,13 +170,8 @@ void wxStaticBitmap::Free()
 
 wxSize wxStaticBitmap::DoGetBestClientSize() const
 {
-    wxSize size;
-    const wxGDIImage& image = GetImage();
-    if ( image.IsOk() )
-    {
-        size = image.GetSize();
-    }
-    else // No image yet
+    wxSize size = GetImageSize();
+    if ( size == wxDefaultSize )
     {
         // this is completely arbitrary
         size.x =
@@ -236,33 +227,42 @@ void wxStaticBitmap::MSWReplaceImageHandle(WXHANDLE handle)
 
 void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
 {
-    const wxSize sizeNew = GetImage().GetSize();
+    const wxSize sizeNew = GetImageSize();
     const bool isIcon = m_icon.IsOk();
 
     Free();
 
-    // Normally we just use the handle of provided image but in some cases we
-    // create our own temporary bitmap, so the actual handle may end up being
-    // different from the original one.
-    const HANDLE handleOrig = (HANDLE)GetImage().GetHandle();
-    HANDLE handle = handleOrig;
-
-#if wxUSE_WXDIB
+    // For the icons we just use its HICON directly, but for bitmaps we create
+    // our own temporary bitmap and need to delete its handle manually later.
     if ( !isIcon )
     {
+        wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
+
+#if wxUSE_WXDIB
         // wxBitmap normally stores alpha in pre-multiplied format but
         // apparently STM_SETIMAGE message handler does pre-multiplication
         // internally so we need to undo the pre-multiplication here for a
         // while (this is similar to what we do in ImageList::Add()).
-        if ( m_bitmap.HasAlpha() )
+        if ( bitmap.HasAlpha() )
         {
             // For bitmap with alpha channel create temporary DIB with
             // not-premultiplied alpha values.
-            handle = wxDIB(m_bitmap.ConvertToImage(),
-                           wxDIB::PixelFormat_NotPreMultiplied).Detach();
+            m_currentHandle = wxDIB(bitmap.ConvertToImage(),
+                                    wxDIB::PixelFormat_NotPreMultiplied)
+                .Detach();
+            m_ownsCurrentHandle = true;
+        }
+        else
+#endif // wxUSE_WXDIB
+        {
+            // Just use the HBITMAP as is.
+            m_currentHandle = bitmap.GetHandle();
         }
     }
-#endif // wxUSE_WXDIB
+    else // it's an icon
+    {
+        m_currentHandle = m_icon.GetHandle();
+    }
 
     if ( isIcon != wasIcon )
     {
@@ -271,10 +271,7 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
             .TurnOn(isIcon ? SS_ICON : SS_BITMAP);
     }
 
-    MSWReplaceImageHandle(handle);
-
-    m_currentHandle = (WXHANDLE)handle;
-    m_ownsCurrentHandle = handle != handleOrig;
+    MSWReplaceImageHandle(m_currentHandle);
 
     if ( sizeNew != sizeOld )
     {

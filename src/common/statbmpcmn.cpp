@@ -24,6 +24,8 @@
 
 #include "wx/statbmp.h"
 
+#include <math.h>
+
 extern WXDLLEXPORT_DATA(const char) wxStaticBitmapNameStr[] = "staticBitmap";
 
 // ---------------------------------------------------------------------------
@@ -91,9 +93,29 @@ wxStaticBitmapBase::~wxStaticBitmapBase()
 
 wxSize wxStaticBitmapBase::DoGetBestSize() const
 {
+    if ( m_bitmapBundle.IsOk() )
+    {
+        // We return the scaled (i.e. in logical pixels) size of the bitmap
+        // that would be returned by GetBitmap(), but without bothering to
+        // actually create the bitmap here.
+        //
+        // Note that we can use content scale factor rather than DPI scale
+        // because the scaled size is the same as normal size on platforms
+        // without wxHAVE_DPI_INDEPENDENT_PIXELS (e.g. wxMSW) anyhow.
+        const wxSize size = m_bitmapBundle.GetPreferredSizeFor(this);
+        const double scale = GetContentScaleFactor();
+
+        // We have to round up the size to avoid truncating the bitmap.
+        return wxSize(ceil(size.x/scale), ceil(size.y/scale));
+    }
+
     // the fall back size is completely arbitrary
-    const wxBitmap bmp = GetBitmap();
-    return bmp.IsOk() ? bmp.GetScaledSize() : wxSize(16, 16);
+    return wxSize(16, 16);
+}
+
+wxBitmap wxStaticBitmapBase::GetBitmap() const
+{
+    return m_bitmapBundle.GetBitmapFor(this);
 }
 
 // Only wxMSW handles icons and bitmaps differently, in all the other ports

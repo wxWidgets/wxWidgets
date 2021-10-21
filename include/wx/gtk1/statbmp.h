@@ -21,21 +21,20 @@ public:
     wxStaticBitmap();
     wxStaticBitmap( wxWindow *parent,
                     wxWindowID id,
-                    const wxBitmap& label,
+                    const wxBitmapBundle& label,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
                     const wxString& name = wxASCII_STR(wxStaticBitmapNameStr) );
     bool Create( wxWindow *parent,
                  wxWindowID id,
-                 const wxBitmap& label,
+                 const wxBitmapBundle& label,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap( const wxBitmap& bitmap );
-    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+    virtual void SetBitmapBundle( const wxBitmapBundle& bitmap );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

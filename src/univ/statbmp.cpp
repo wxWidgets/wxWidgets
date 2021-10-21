@@ -42,7 +42,7 @@
 
 bool wxStaticBitmap::Create(wxWindow *parent,
                             wxWindowID id,
-                            const wxBitmap &label,
+                            const wxBitmapBundle &label,
                             const wxPoint &pos,
                             const wxSize &size,
                             long style,
@@ -64,9 +64,9 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 // bitmap/icon setting/getting and converting between
 // ----------------------------------------------------------------------------
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    m_bitmap = bitmap;
+    m_bitmapBundle = bitmap;
 
     InvalidateBestSize();
     SetSize(GetBestSize());
