@@ -47,7 +47,12 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 
     MacPostControlCreate( pos, size );
 
-    SetBitmap(bitmap);
+    // Don't call SetBitmap() here, as we don't need to change the size nor
+    // refresh the window here.
+    m_bitmap = bitmap;
+    GetPeer()->SetBitmap(bitmap);
+
+    SetInitialSize(size);
 
     return true;
 }
@@ -56,10 +61,10 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     m_bitmap = bitmap;
-    SetInitialSize(GetBitmapSize());
-
     GetPeer()->SetBitmap(bitmap);
 
+    InvalidateBestSize();
+    SetSize(GetBestSize());
     Refresh();
 }
 
