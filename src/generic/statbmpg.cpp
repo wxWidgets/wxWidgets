@@ -55,7 +55,7 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
     if ( !drawSize.x || !drawSize.y )
         return;
 
-    const wxBitmap bitmap = GetBitmap();
+    wxBitmap bitmap = GetBitmap();
     const wxSize bmpSize = bitmap.GetSize();
     wxDouble w = 0;
     wxDouble h = 0;
@@ -96,9 +96,8 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
         gc(wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc));
     gc->DrawBitmap(bitmap, x, y, w, h);
 #else
-    wxImage img = bitmap.ConvertToImage();
-    img.Rescale(wxRound(w), wxRound(h), wxIMAGE_QUALITY_HIGH);
-    dc.DrawBitmap(wxBitmap(img), wxRound(x), wxRound(y), true);
+    wxBitmap::Rescale(bitmap, wxSize(wxRound(w), wxRound(h)));
+    dc.DrawBitmap(bitmap, wxRound(x), wxRound(y), true);
 #endif
 }
 
