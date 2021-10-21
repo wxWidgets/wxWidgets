@@ -249,12 +249,14 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
         wxBitmap bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(sz);
         image = wxOSXImageFromBitmap(bmp);
 
-        // unconditionally try to add a 2x version
-        double scale = 2.0;
-        wxSize doublesz = sz * scale;
-        bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(doublesz);
-        if ( bmp.IsOk() && bmp.GetSize() != sz )
-            wxOSXAddBitmapToImage(image, bmp);
+        // unconditionally try to add a 2x version, if there really is a different one
+        wxSize doublesz = impl->GetPreferredSizeAtScale(2.0);
+        if ( doublesz != sz )
+        {
+            bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(doublesz);
+            if ( bmp.IsOk() )
+                wxOSXAddBitmapToImage(image, bmp);
+        }
 #else
         double scale = wxOSXGetMainScreenContentScaleFactor();
         wxSize scaledSize = sz * scale;
