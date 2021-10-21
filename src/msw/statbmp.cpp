@@ -191,20 +191,15 @@ void wxStaticBitmap::Init()
     m_ownsCurrentHandle = false;
 }
 
-void wxStaticBitmap::DeleteCurrentHandleIfNeeded()
+void wxStaticBitmap::Free()
 {
+    MSWReplaceImageHandle(0);
+
     if ( m_ownsCurrentHandle )
     {
         ::DeleteObject(m_currentHandle);
         m_ownsCurrentHandle = false;
     }
-}
-
-void wxStaticBitmap::Free()
-{
-    MSWReplaceImageHandle(0);
-
-    DeleteCurrentHandleIfNeeded();
 
     wxDELETE(m_image);
 }

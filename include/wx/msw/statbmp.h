@@ -90,9 +90,6 @@ private:
     // HICON (which can be 0) and destroy the previous image if necessary.
     void MSWReplaceImageHandle(WXLPARAM handle);
 
-    // Delete the current handle only if we own it.
-    void DeleteCurrentHandleIfNeeded();
-
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);
     wxDECLARE_EVENT_TABLE();
