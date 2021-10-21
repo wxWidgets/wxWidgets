@@ -64,7 +64,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxBookCtrlEvent);
 // wxAuiTabContainer is a class which contains information about each
 // tab.  It also can render an entire tab control to a specified DC.
 // It's not a window class itself, because this code will be used by
-// the wxFrameMananger, where it is disadvantageous to have separate
+// the wxAuiManager, where it is disadvantageous to have separate
 // windows for each tab control in the case of "docked tabs"
 
 // A derived class, wxAuiTabCtrl, is an actual wxWindow-derived window
