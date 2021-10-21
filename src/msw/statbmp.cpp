@@ -221,7 +221,7 @@ void wxStaticBitmap::DoPaintManually(wxPaintEvent& WXUNUSED(event))
                   true /* use mask */);
 }
 
-void wxStaticBitmap::MSWReplaceImageHandle(WXLPARAM handle)
+void wxStaticBitmap::MSWReplaceImageHandle(WXHANDLE handle)
 {
     HGDIOBJ oldHandle = (HGDIOBJ)::SendMessage(GetHwnd(), STM_SETIMAGE,
                   m_icon.IsOk() ? IMAGE_ICON : IMAGE_BITMAP, (LPARAM)handle);
@@ -271,7 +271,7 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
             .TurnOn(isIcon ? SS_ICON : SS_BITMAP);
     }
 
-    MSWReplaceImageHandle((WXLPARAM)handle);
+    MSWReplaceImageHandle(handle);
 
     m_currentHandle = (WXHANDLE)handle;
     m_ownsCurrentHandle = handle != handleOrig;

@@ -132,7 +132,7 @@ private:
 
     // Replace the image at the native control level with the given HBITMAP or
     // HICON (which can be 0) and destroy the previous image if necessary.
-    void MSWReplaceImageHandle(WXLPARAM handle);
+    void MSWReplaceImageHandle(WXHANDLE handle);
 
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);
