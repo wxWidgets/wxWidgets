@@ -25,7 +25,20 @@ public:
 
     wxStaticBitmap(wxWindow *parent,
                    wxWindowID id,
-                   const wxGDIImage& label,
+                   const wxBitmap& label,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxString& name = wxASCII_STR(wxStaticBitmapNameStr))
+    {
+        Init();
+
+        Create(parent, id, label, pos, size, style, name);
+    }
+
+    wxStaticBitmap(wxWindow *parent,
+                   wxWindowID id,
+                   const wxIcon& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -38,16 +51,34 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxGDIImage& label,
+                const wxBitmap& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
+                const wxString& name = wxASCII_STR(wxStaticBitmapNameStr))
+    {
+        m_bitmap = label;
+
+        return DoCreate(parent, id, pos, size, style, name);
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxIcon& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxASCII_STR(wxStaticBitmapNameStr))
+    {
+        m_icon = label;
+
+        return DoCreate(parent, id, pos, size, style, name);
+    }
 
     virtual ~wxStaticBitmap() { Free(); }
 
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE { SetImage(&icon); }
-    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE { SetImage(&bitmap); }
+    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE;
+    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
     virtual wxBitmap GetBitmap() const wxOVERRIDE;
     virtual wxIcon GetIcon() const wxOVERRIDE;
 
@@ -59,15 +90,23 @@ public:
 protected:
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
+private:
     // ctor/dtor helpers
     void Init();
     void Free();
 
-    // true if icon/bitmap is valid
-    bool ImageIsOk() const;
+    // common part of both Create() overloads
+    bool DoCreate(wxWindow *parent,
+                  wxWindowID id,
+                  const wxPoint& pos,
+                  const wxSize& size,
+                  long style,
+                  const wxString& name);
 
-    void SetImage(const wxGDIImage* image);
-    void SetImageNoCopy( wxGDIImage* image );
+    // update the image to correspond to the current m_icon or m_bitmap value,
+    // resize the control if the new size is different from the old one and
+    // update its style if the new "is icon" value differs from the old one
+    void DoUpdateImage(const wxSize& sizeOld, bool wasIcon);
 
     // draw the bitmap ourselves here if the OS can't do it correctly (if it
     // can we leave it to it)
@@ -75,14 +114,19 @@ protected:
 
     void WXHandleSize(wxSizeEvent& event);
 
-    // we can have either an icon or a bitmap
-    bool m_isIcon;
-    wxGDIImage *m_image;
+    // return the either m_icon or m_bitmap (may still be invalid of both of
+    // them are)
+    const wxGDIImage& GetImage() const;
+
+
+    // we can have either an icon or a bitmap: if m_icon is valid, it is used,
+    // otherwise m_bitmap is used if it is valid
+    wxIcon m_icon;
+    wxBitmap m_bitmap;
 
     // handle used in last call to STM_SETIMAGE
     WXHANDLE m_currentHandle;
 
-private:
     // Flag indicating whether we own m_currentHandle, i.e. should delete it.
     bool m_ownsCurrentHandle;
 
