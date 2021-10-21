@@ -112,7 +112,9 @@ private:
     // can we leave it to it)
     void DoPaintManually(wxPaintEvent& event);
 
+    // event handlers
     void WXHandleSize(wxSizeEvent& event);
+    void WXHandleDPIChanged(wxDPIChangedEvent& event);
 
     // return the size of m_icon or the appropriate size of m_bitmapBundle at
     // the current DPI scaling (may still be invalid of both of them are)

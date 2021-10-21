@@ -45,6 +45,7 @@
 
 wxBEGIN_EVENT_TABLE(wxStaticBitmap, wxStaticBitmapBase)
     EVT_SIZE(wxStaticBitmap::WXHandleSize)
+    EVT_DPI_CHANGED(wxStaticBitmap::WXHandleDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ===========================================================================
@@ -186,6 +187,16 @@ void wxStaticBitmap::WXHandleSize(wxSizeEvent& event)
     // Invalidate everything when our size changes as the image position (it's
     // drawn centred in the window client area) changes.
     Refresh();
+
+    event.Skip();
+}
+
+void wxStaticBitmap::WXHandleDPIChanged(wxDPIChangedEvent& event)
+{
+    // Icons only exist in a single resolution, so don't bother updating in
+    // this case.
+    if ( !m_icon.IsOk() && m_bitmapBundle.IsOk() )
+        DoUpdateImage(wxSize(), false /* not using an icon */);
 
     event.Skip();
 }
