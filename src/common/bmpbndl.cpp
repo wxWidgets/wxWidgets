@@ -407,6 +407,11 @@ wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
     return bmp;
 }
 
+wxBitmap wxBitmapBundle::GetBitmapFor(const wxWindow* window) const
+{
+    return GetBitmap(GetPreferredSizeFor(window));
+}
+
 // ============================================================================
 // wxBitmapBundleImpl implementation
 // ============================================================================

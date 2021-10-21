@@ -109,6 +109,11 @@ public:
     // If size == wxDefaultSize, GetDefaultSize() is used for it instead.
     wxBitmap GetBitmap(const wxSize& size) const;
 
+    // Helper combining GetBitmap() and GetPreferredSizeFor(): returns the
+    // bitmap of the size appropriate for the current DPI scaling of the given
+    // window.
+    wxBitmap GetBitmapFor(const wxWindow* window) const;
+
     // Access implementation
     wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
 

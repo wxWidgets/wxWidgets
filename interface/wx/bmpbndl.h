@@ -288,6 +288,19 @@ public:
         consume resources until the application termination.
      */
     wxBitmap GetBitmap(const wxSize& size) const;
+
+    /**
+        Get bitmap of the size appropriate for the DPI scaling used by the
+        given window.
+
+        This helper function simply combines GetBitmap() and
+        GetPreferredSizeFor(), i.e. it returns a (normally unscaled) bitmap
+        from the bundle of the closest size to the size that should be used at
+        the DPI scaling of the provided window.
+
+        @param window Non-null and fully created window.
+     */
+    wxBitmap GetBitmapFor(const wxWindow* window) const;
 };
 
 /**
