@@ -67,6 +67,10 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     m_bitmap = bitmap;
+
+    InvalidateBestSize();
+    SetSize(GetBestSize());
+    Refresh();
 }
 
 // ----------------------------------------------------------------------------
