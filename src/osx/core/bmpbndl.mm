@@ -22,6 +22,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/bmpbndl.h"
+#include "wx/filename.h"
+#include "wx/stdpaths.h"
 
 #include "wx/private/bmpbndl.h"
 
@@ -184,32 +186,30 @@ void wxOSXAddBitmapToImage( WXImage image, const wxBitmap& bmp)
 }
 #endif
 
-wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
+wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& filename)
 {
     wxVector<wxBitmap> resources;
+    wxFileName fn(filename);
 
-    wxString ext = "png"; // TODO adapt as soon as we get res param
-    wxCFStringRef restype(ext);
+    wxString ext = fn.GetExt().Lower();
+    wxString name = fn.GetName();
 
     for ( int dpiFactor = 1 ; dpiFactor <= 2 ; ++dpiFactor)
     {
-        wxString filename;
         if ( dpiFactor == 1 )
-            filename = name;
+            fn.SetName(name);
         else
-            filename = wxString::Format("%s@%dx", name, dpiFactor);
+            fn.SetName(wxString::Format("%s@%dx", name, dpiFactor));
 
-        wxCFStringRef resname(filename);
-        wxCFRef<CFURLRef> imageURL(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
-        if ( !imageURL.get() && dpiFactor != 1 )
+        if ( !fn.FileExists() && dpiFactor != 1 )
         {
             // try alternate naming scheme
-            filename = wxString::Format("%s_%dx", name, dpiFactor);
-            resname = wxCFStringRef(filename);
-            imageURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL);
+            fn.SetName(wxString::Format("%s_%dx", name, dpiFactor));
         }
-        if ( imageURL.get() )
+        
+        if ( fn.FileExists() )
         {
+            wxCFRef<CFURLRef> imageURL(wxOSXCreateURLFromFileSystemPath(fn.GetFullPath()));
             // Create the data provider object
             wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL (imageURL) );
             CGImageRef image = NULL;
@@ -230,6 +230,13 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
     }
 
     return wxBitmapBundle::FromBitmaps(resources);
+}
+
+wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
+{
+    wxString resourcePath = wxStandardPaths::Get().GetResourcesDir();
+
+    return wxBitmapBundle::FromFiles(resourcePath+"/"+name+".png");
 }
 
 WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)

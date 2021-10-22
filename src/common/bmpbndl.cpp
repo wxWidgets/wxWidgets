@@ -356,6 +356,23 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& WXUNUSED(name))
 
 #endif // !__WXMSW__ && !__WXOSX__
 
+#if !defined( __WXOSX__ )
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& WXUNUSED(filename))
+{
+    wxFAIL_MSG
+    (
+        "Loading bitmap bundles from files not available on this platform, "
+        "don't use this function and call wxBitmapBundle::FromBitmaps() "
+        "instead."
+    );
+
+    return wxBitmapBundle();
+}
+
+#endif
+
 wxSize wxBitmapBundle::GetDefaultSize() const
 {
     if ( !m_impl )
