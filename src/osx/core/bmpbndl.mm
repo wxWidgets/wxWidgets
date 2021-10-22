@@ -206,7 +206,7 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& filename)
             // try alternate naming scheme
             fn.SetName(wxString::Format("%s_%dx", name, dpiFactor));
         }
-        
+
         if ( fn.FileExists() )
         {
             wxCFRef<CFURLRef> imageURL(wxOSXCreateURLFromFileSystemPath(fn.GetFullPath()));
