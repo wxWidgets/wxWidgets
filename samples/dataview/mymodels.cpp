@@ -478,6 +478,22 @@ void MyListModel::GetValueByRow( wxVariant &variant,
             }
             break;
 
+        case Col_IconText:
+            {
+                wxString text;
+                if ( row >= m_iconColValues.GetCount() )
+                {
+                    text = "virtual icon";
+                }
+                else
+                {
+                    text = m_iconColValues[row];
+                }
+
+                variant << wxDataViewIconText(text, m_icon[row % 2]);
+            }
+            break;
+
         case Col_Date:
             variant = wxDateTime(1, wxDateTime::Jan, 2000).Add(wxTimeSpan(row));
             break;
@@ -534,6 +550,13 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
             return false;
 
         case Col_ToggleIconText:
+            if ( !(row % 2) )
+                return false;
+            attr.SetColour(*wxYELLOW);
+            attr.SetBackgroundColour(*wxLIGHT_GREY);
+            break;
+
+        case Col_IconText:
             if ( !(row % 2) )
                 return false;
             attr.SetColour(*wxYELLOW);

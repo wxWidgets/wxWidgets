@@ -209,6 +209,7 @@ public:
     enum
     {
         Col_ToggleIconText,
+        Col_IconText,
         Col_EditableText,
         Col_Date,
         Col_TextWithAttr,
@@ -237,6 +238,8 @@ public:
     {
         if (col == Col_ToggleIconText)
             return wxDataViewCheckIconTextRenderer::GetDefaultType();
+        if (col == Col_IconText)
+            return wxDataViewIconTextRenderer::GetDefaultType();
 
         return "string";
     }

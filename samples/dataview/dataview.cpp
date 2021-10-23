@@ -904,6 +904,16 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
             const int alignment = modelFlags & wxALIGN_MASK;
             colCheckIconText->GetRenderer()->SetAlignment(alignment);
 
+            wxDataViewColumn* const colIconText = new wxDataViewColumn
+                (
+                     L"icon + text",
+                     new wxDataViewIconTextRenderer(),
+                     MyListModel::Col_IconText,
+                     wxCOL_WIDTH_AUTOSIZE
+                );
+            m_ctrl[Page_List]->AppendColumn(colIconText);
+            colIconText->GetRenderer()->SetAlignment(alignment);
+
             wxDataViewColumn* const colEditable =
                 m_ctrl[Page_List]->AppendTextColumn("editable string",
                                         MyListModel::Col_EditableText,
