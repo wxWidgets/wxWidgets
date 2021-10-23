@@ -5,6 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxMC_NO_AUTORESIZE         0x0001
+
 /**
     Describes the current state of the media.
 
@@ -224,6 +226,16 @@ public:
     There is a rather simple example of how to create a backend in the
     wxActiveXContainer documentation.
 
+
+    @beginStyleTable
+    @style{wxMC_NO_AUTORESIZE}
+           By default, the control will automatically adjust its size to
+           exactly fit the size of a loaded video as soon as a video is loaded.
+           If this flag is given, the control will not change its size
+           automatically and must be done manually (if desired) using Layout().
+           It is strongly recommended to use this flag and handle control
+           resizing manually.
+    @endStyleTable
 
     @library{wxmedia}
     @category{media}
