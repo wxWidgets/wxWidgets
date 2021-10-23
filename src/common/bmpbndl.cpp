@@ -384,7 +384,16 @@ wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
     if ( !m_impl )
         return wxBitmap();
 
-    return m_impl->GetBitmap(size == wxDefaultSize ? GetDefaultSize() : size);
+    const wxSize sizeDef = GetDefaultSize();
+
+    wxBitmap bmp = m_impl->GetBitmap(size == wxDefaultSize ? sizeDef : size);
+
+    // Ensure that the returned bitmap uses the scale factor such that it takes
+    // the same space, in logical pixels, as the bitmap in the default size.
+    if ( size != wxDefaultSize )
+        bmp.SetScaleFactor(static_cast<double>(size.y)/sizeDef.y);
+
+    return bmp;
 }
 
 // ============================================================================
