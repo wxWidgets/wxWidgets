@@ -186,6 +186,7 @@ public:
     void ResetAlpha() { UseAlpha(false); }
 
     // support for scaled bitmaps
+    virtual void SetScaleFactor(double WXUNUSED(scale)) { }
     virtual double GetScaleFactor() const { return 1.0; }
     virtual double GetScaledWidth() const { return GetWidth(); }
     virtual double GetScaledHeight() const { return GetHeight(); }

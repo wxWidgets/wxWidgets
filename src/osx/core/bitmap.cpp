@@ -75,6 +75,8 @@ public:
     int GetBytesPerRow() const;
     bool HasAlpha() const;
     WXImage GetImage() const;
+
+    void SetScaleFactor(double scale) { m_scaleFactor = scale; }
     double GetScaleFactor() const { return m_scaleFactor; }
 
     const void *GetRawAccess() const;
@@ -1387,6 +1389,13 @@ int wxBitmap::GetWidth() const
    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
    return GetBitmapData()->GetWidth() ;
+}
+
+void wxBitmap::SetScaleFactor(double scale)
+{
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
+
+    return GetBitmapData()->SetScaleFactor(scale) ;
 }
 
 double wxBitmap::GetScaleFactor() const

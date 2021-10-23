@@ -469,7 +469,7 @@ public:
         @param depth
             The number of bits used to represent each bitmap pixel.
         @param logicalScale
-            Scale factor used by the bitmap
+            Scale factor used by the bitmap, see SetScaleFactor().
 
         @return @true if the creation was successful.
 
@@ -586,9 +586,10 @@ public:
         1 must be used in high DPI to appear sharp on the screen.
 
         Note that the scale factor is only used in the ports where logical
-        pixels are not the same as physical ones, such as wxOSX or wxGTK3.
+        pixels are not the same as physical ones, such as wxOSX or wxGTK3, and
+        this function always returns 1 under the other platforms.
 
-        @see GetScaledWidth(), GetScaledHeight(), GetScaledSize()
+        @see SetScaleFactor(), GetScaledWidth(), GetScaledHeight(), GetScaledSize()
 
         @since 2.9.5
      */
@@ -795,6 +796,38 @@ public:
             Bitmap height in pixels.
     */
     virtual void SetHeight(int height);
+
+    /**
+        Sets the bitmap scale factor.
+
+        This doesn't change the bitmap actual size or its contents, but changes
+        its scale factor, so that it appears in a smaller size when it is drawn
+        on screen: e.g. setting @a scale to 2 means that the bitmap will be
+        twice smaller (in each direction) when drawn on screen in the ports in
+        which logical and physical pixels differ (i.e. wxOSX and wxGTK3, but
+        not wxMSW).
+
+        When creating a new bitmap, CreateScaled() can be used to specify the
+        correct scale factor from the beginning.
+
+        Note that this method exists in all ports, but simply does nothing in
+        those of them that don't use logical pixel scaling. The preprocessor
+        symbol @c wxHAS_BITMAP_SCALE_FACTOR can be tested to determine whether
+        the scale factor is really supported, e.g.
+
+        @code
+            bitmap.SetScaleFactor(2);
+
+            // In the other ports scale factor is always 1, so the assert would
+            // fail there.
+            #ifdef wxHAS_BITMAP_SCALE_FACTOR
+                wxASSERT( bitmap.GetScaleFactor() == 2 );
+            #endif
+        @endcode
+
+        @since 3.1.6
+     */
+    virtual void SetScaleFactor(double scale);
 
     /**
         Sets the mask for this bitmap.
