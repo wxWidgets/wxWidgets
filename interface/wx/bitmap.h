@@ -403,6 +403,15 @@ public:
     static void CleanUpHandlers();
 
     /**
+        Returns disabled (dimmed) version of the bitmap.
+
+        This method is not available when <code>wxUSE_IMAGE == 0</code>.
+
+        @since 2.9.0
+    */
+    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
+
+    /**
         Creates an image from a platform-dependent bitmap. This preserves
         mask information so that bitmaps and images can be converted back
         and forth without loss in that respect.
@@ -576,15 +585,6 @@ public:
         @see GetHeight(), GetWidth()
     */
     wxSize GetSize() const;
-
-    /**
-        Returns disabled (dimmed) version of the bitmap.
-
-        This method is not available when <code>wxUSE_IMAGE == 0</code>.
-
-        @since 2.9.0
-    */
-    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
 
     /**
         Gets the width of the bitmap in pixels.
