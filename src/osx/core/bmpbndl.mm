@@ -186,32 +186,31 @@ void wxOSXAddBitmapToImage( WXImage image, const wxBitmap& bmp)
 }
 #endif
 
-wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& filename)
+wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& filename, const wxString& extension)
 {
     wxVector<wxBitmap> resources;
-    wxFileName fn(filename);
 
-    wxString ext = fn.GetExt().Lower();
-    wxString name = fn.GetName();
+    wxFileName fn(path, filename, extension);
+    wxString ext = extension.Lower();
 
     for ( int dpiFactor = 1 ; dpiFactor <= 2 ; ++dpiFactor)
     {
         if ( dpiFactor == 1 )
-            fn.SetName(name);
+            fn.SetName(filename);
         else
-            fn.SetName(wxString::Format("%s@%dx", name, dpiFactor));
+            fn.SetName(wxString::Format("%s@%dx", filename, dpiFactor));
 
         if ( !fn.FileExists() && dpiFactor != 1 )
         {
             // try alternate naming scheme
-            fn.SetName(wxString::Format("%s_%dx", name, dpiFactor));
+            fn.SetName(wxString::Format("%s_%dx", filename, dpiFactor));
         }
 
         if ( fn.FileExists() )
         {
             wxCFRef<CFURLRef> imageURL(wxOSXCreateURLFromFileSystemPath(fn.GetFullPath()));
             // Create the data provider object
-            wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL (imageURL) );
+            wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL(imageURL));
             CGImageRef image = NULL;
 
             if ( ext == "jpeg" )
@@ -234,9 +233,7 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& filename)
 
 wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
 {
-    wxString resourcePath = wxStandardPaths::Get().GetResourcesDir();
-
-    return wxBitmapBundle::FromFiles(resourcePath+"/"+name+".png");
+    return wxBitmapBundle::FromFiles(wxStandardPaths::Get().GetResourcesDir(), name, "png");
 }
 
 WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)

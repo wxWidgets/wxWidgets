@@ -24,6 +24,7 @@
 #include "wx/bmpbndl.h"
 #include "wx/icon.h"
 #include "wx/window.h"
+#include "wx/filename.h"
 
 #include "wx/private/bmpbndl.h"
 
@@ -356,19 +357,53 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& WXUNUSED(name))
 
 #endif // !__WXMSW__ && !__WXOSX__
 
+wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& filename)
+{
+    wxFileName fn(filename);
+    return FromFiles(fn.GetPath(wxPATH_GET_VOLUME), fn.GetName(), fn.GetExt());
+}
+
 #if !defined( __WXOSX__ )
 
 /* static */
-wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& WXUNUSED(filename))
+wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& filename, const wxString& extension)
 {
-    wxFAIL_MSG
-    (
-        "Loading bitmap bundles from files not available on this platform, "
-        "don't use this function and call wxBitmapBundle::FromBitmaps() "
-        "instead."
-    );
+    wxVector<wxBitmap> resources;
 
-    return wxBitmapBundle();
+    wxFileName fn(path, filename, extension);
+    wxString ext = extension.Lower();
+
+    for ( int dpiFactor = 1 ; dpiFactor <= 2 ; ++dpiFactor)
+    {
+        if ( dpiFactor == 1 )
+            fn.SetName(filename);
+        else
+            fn.SetName(wxString::Format("%s@%dx", filename, dpiFactor));
+
+        if ( !fn.FileExists() && dpiFactor != 1 )
+        {
+            // try alternate naming scheme
+            fn.SetName(wxString::Format("%s_%dx", filename, dpiFactor));
+        }
+
+        if ( fn.FileExists() )
+        {
+            wxBitmapType type = wxBITMAP_TYPE_INVALID;
+            if ( ext == "jpeg" )
+                type = wxBITMAP_TYPE_JPEG;
+            else if ( ext == "png" )
+                type = wxBITMAP_TYPE_PNG;
+
+            wxBitmap bmp(fn.GetFullPath(), type, dpiFactor);
+
+            if ( bmp.IsOk() )
+            {
+                resources.push_back(bmp);
+            }
+        }
+    }
+
+    return wxBitmapBundle::FromBitmaps(resources);
 }
 
 #endif

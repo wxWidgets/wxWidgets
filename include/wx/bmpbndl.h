@@ -89,7 +89,8 @@ public:
 
     // Create from files: all existing versions of the bitmap of the
     // form filename_2x or name@2x (and also using other factors) will be used.
-    static wxBitmapBundle FromFiles(const wxString& filename);
+    static wxBitmapBundle FromFiles(const wxString& fullpathname);
+    static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension);
 
     // Create from existing implementation
     static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
