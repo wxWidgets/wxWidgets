@@ -30,6 +30,7 @@
 #include "wx/statusbr.h"
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
+#include "wx/popupwin.h"
 
 #include "wx/aui/aui.h"
 #include "../sample.xpm"
@@ -85,6 +86,7 @@ class MyFrame : public wxFrame
         ID_Settings,
         ID_CustomizeToolbar,
         ID_DropDownToolbarItem,
+        ID_DropDownPanelItem,
         ID_NotebookNoCloseButton,
         ID_NotebookCloseButton,
         ID_NotebookCloseButtonAll,
@@ -99,6 +101,7 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
+        ID_SpinControl,
 
         ID_SampleItem,
 
@@ -127,6 +130,7 @@ private:
 
     wxString GetIntroText();
 
+    wxPopupTransientWindow* pulse_quant;
 private:
 
     void OnEraseBackground(wxEraseEvent& evt);
@@ -161,6 +165,9 @@ private:
 
     void OnPaneClose(wxAuiManagerEvent& evt);
 
+    void OnToolClicked(wxCommandEvent& evt);
+    void OnToolFromPanelClicked(wxCommandEvent& evt);
+    void OnDropDownPanelItem(wxAuiToolBarEvent& evt);
 private:
 
     wxAuiManager m_mgr;
@@ -646,11 +653,21 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(MyFrame::ID_FirstPerspective, MyFrame::ID_FirstPerspective+1000,
                    MyFrame::OnRestorePerspective)
     EVT_AUITOOLBAR_TOOL_DROPDOWN(ID_DropDownToolbarItem, MyFrame::OnDropDownToolbarItem)
+    EVT_AUITOOLBAR_TOOL_DROPDOWN(ID_DropDownPanelItem, MyFrame::OnDropDownPanelItem)
     EVT_AUI_PANE_CLOSE(MyFrame::OnPaneClose)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
     EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
     EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnNotebookPageChanging)
+
+    EVT_MENU(ID_DropDownToolbarItem, MyFrame::OnToolClicked)
+    EVT_MENU(ID_SampleItem+27, MyFrame::OnToolClicked)
+    EVT_MENU(ID_SampleItem+28, MyFrame::OnToolClicked)
+    EVT_MENU(ID_DropDownPanelItem, MyFrame::OnToolFromPanelClicked)
+    EVT_MENU(ID_SampleItem+29, MyFrame::OnToolClicked)
+    EVT_MENU(ID_SampleItem+30, MyFrame::OnToolClicked)
+    EVT_MENU(ID_SampleItem+31, MyFrame::OnToolClicked)
+    EVT_MENU(ID_SampleItem+32, MyFrame::OnToolClicked)
 wxEND_EVENT_TABLE()
 
 
@@ -835,20 +852,22 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_DEFAULT_STYLE |
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
+                                         wxAUI_TB_HORZ_TEXT |
+                                         wxAUI_TB_ALLOW_CLICK_WITH_DROPDOWN);
     wxBitmapBundle tb4_bmp1 = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+27, "Item 2", tb4_bmp1);
     tb4->SetToolSticky(ID_SampleItem+23, true);
-    tb4->AddTool(ID_SampleItem+24, "Disabled", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+28, "Disabled", tb4_bmp1);
     tb4->EnableTool(ID_SampleItem+24, false); // Just to show disabled items look
-    tb4->AddTool(ID_SampleItem+25, "Item 4", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+29, "Item 4", tb4_bmp1);
     tb4->AddSeparator();
-    tb4->AddTool(ID_SampleItem+26, "Item 5", tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+27, "Item 6", tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+28, "Item 7", tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+29, "Item 8", tb4_bmp1);
+    tb4->AddTool(ID_DropDownPanelItem, "Item 5", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+30, "Item 6", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+31, "Item 7", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+32, "Item 8", tb4_bmp1);
     tb4->SetToolDropDown(ID_DropDownToolbarItem, true);
+    tb4->SetToolDropDown(ID_DropDownPanelItem, true);
     tb4->SetCustomOverflowItems(prepend_items, append_items);
     wxChoice* choice = new wxChoice(tb4, ID_SampleItem+35);
     choice->AppendString("One choice");
@@ -859,12 +878,12 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-    tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
+    tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb5->AddSeparator();
-    tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
-    tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
-    tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
-    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
+    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
+    tb5->AddTool(ID_SampleItem+35, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
+    tb5->AddTool(ID_SampleItem+36, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
+    tb5->AddTool(ID_SampleItem+37, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
     tb5->SetCustomOverflowItems(prepend_items, append_items);
     tb5->Realize();
 
@@ -1004,6 +1023,8 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // "commit" all changes made to wxAuiManager
     m_mgr.Update();
+
+    pulse_quant = NULL;
 }
 
 wxAuiDockArt* MyFrame::GetDockArt()
@@ -1517,6 +1538,31 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
     }
 }
 
+void MyFrame::OnDropDownPanelItem(wxAuiToolBarEvent& evt)
+{
+    if (evt.IsDropDownClicked())
+    {
+        if (pulse_quant == nullptr)
+        {
+            pulse_quant = new wxPopupTransientWindow(nullptr);
+            wxPanel * panel = new wxPanel(pulse_quant);
+            wxSpinCtrl * count = new wxSpinCtrl(panel, ID_SpinControl);
+            count->SetValue(1);
+            wxBoxSizer * sz = new wxBoxSizer(wxVERTICAL);
+            sz->Add(count, 0, wxALL, 8);
+            panel->SetSizer(sz);
+            sz->Fit(panel);
+            pulse_quant->SetSizer(sz);
+            pulse_quant->SetClientSize(panel->GetSize());
+        }
+        wxRect rect = evt.GetItemRect();
+        wxPoint pos = wxPoint(rect.GetLeft(), rect.GetBottom() + 12);
+        wxAuiToolBar * tb = static_cast<wxAuiToolBar *>(evt.GetEventObject());
+        pulse_quant->SetPosition(tb->ClientToScreen(pos));
+        pulse_quant->Popup();
+    }
+    else evt.Skip();
+}
 
 void MyFrame::OnTabAlignment(wxCommandEvent &evt)
 {
@@ -1550,6 +1596,26 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_("wxAUI Demo\nAn advanced window management library for wxWidgets\n(c) Copyright 2005-2006, Kirix Corporation"), _("About wxAUI Demo"), wxOK, this);
+}
+
+void MyFrame::OnToolClicked(wxCommandEvent& evt)
+{
+    wxMessageBox(_("Tool clicked"), _("Click test"), wxOK, this);
+}
+
+void MyFrame::OnToolFromPanelClicked(wxCommandEvent& evt)
+{
+    if (evt.GetExtraLong() == 1)
+    {
+        wxSpinCtrl * spin = static_cast<wxSpinCtrl *>(pulse_quant->FindWindow(ID_SpinControl));
+        if (spin)
+        {
+            int value = spin->GetValue();
+            wxMessageBox(wxString::Format(_("Tool clicked from panel:\nvalue %d"), value), _("Click test"), wxOK, this);
+            return;
+        }
+    }
+    wxMessageBox(_("Tool clicked"), _("Click test"), wxOK, this);
 }
 
 wxTextCtrl* MyFrame::CreateTextCtrl(const wxString& ctrl_text)
