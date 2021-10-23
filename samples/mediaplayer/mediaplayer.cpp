@@ -500,7 +500,7 @@ void wxMediaPlayerApp::MacOpenFiles(const wxArrayString & fileNames )
 // ----------------------------------------------------------------------------
 
 wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600,600))
+       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(1366,768))
 {
     SetIcon(wxICON(sample));
 
@@ -1492,7 +1492,8 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
 
     //  Make sure creation was successful
     bool bOK = m_mediactrl->Create(this, wxID_MEDIACTRL, wxEmptyString,
-                                    wxDefaultPosition, wxDefaultSize, 0,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxMC_NO_AUTORESIZE,
 // you could specify a macro backend here like
 //  wxMEDIABACKEND_WMP10);
 //        "wxPDFMediaBackend");
@@ -1608,14 +1609,14 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_volSlider = new wxSlider(this, wxID_VOLSLIDER, 100, // init
                             0, // start
                             100, // end
-                            wxDefaultPosition, wxSize(250,20),
+                            wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
     horsizer3->Add(m_volSlider, 1, wxALL, 5);
 
     m_pbSlider = new wxSlider(this, wxID_PBSLIDER, 4, // init
                             1, // start
                             16, // end
-                            wxDefaultPosition, wxSize(250,20),
+                            wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
     horsizer3->Add(m_pbSlider, 1, wxALL, 5);
     sizer->Add(horsizer3, 1, wxCENTRE | wxALL, 5);
