@@ -188,7 +188,7 @@ void wxOSXAddBitmapToImage( WXImage image, const wxBitmap& bmp)
 
 wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& filename, const wxString& extension)
 {
-    wxVector<wxBitmap> resources;
+    wxVector<wxBitmap> bitmaps;
 
     wxFileName fn(path, filename, extension);
     wxString ext = extension.Lower();
@@ -223,12 +223,12 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& f
             {
                 wxBitmap bmp(image, dpiFactor);
                 CGImageRelease(image);
-                resources.push_back(bmp);
+                bitmaps.push_back(bmp);
             }
         }
     }
 
-    return wxBitmapBundle::FromBitmaps(resources);
+    return wxBitmapBundle::FromBitmaps(bitmaps);
 }
 
 wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)

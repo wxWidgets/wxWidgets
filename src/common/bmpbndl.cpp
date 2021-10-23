@@ -368,7 +368,7 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& filename)
 /* static */
 wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& filename, const wxString& extension)
 {
-    wxVector<wxBitmap> resources;
+    wxVector<wxBitmap> bitmaps;
 
     wxFileName fn(path, filename, extension);
     wxString ext = extension.Lower();
@@ -388,22 +388,16 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& f
 
         if ( fn.FileExists() )
         {
-            wxBitmapType type = wxBITMAP_TYPE_INVALID;
-            if ( ext == "jpeg" )
-                type = wxBITMAP_TYPE_JPEG;
-            else if ( ext == "png" )
-                type = wxBITMAP_TYPE_PNG;
-
-            wxBitmap bmp(fn.GetFullPath(), type, dpiFactor);
+            wxBitmap bmp(fn.GetFullPath(), wxBITMAP_TYPE_ANY, dpiFactor);
 
             if ( bmp.IsOk() )
             {
-                resources.push_back(bmp);
+                bitmaps.push_back(bmp);
             }
         }
     }
 
-    return wxBitmapBundle::FromBitmaps(resources);
+    return wxBitmapBundle::FromBitmaps(bitmaps);
 }
 
 #endif
