@@ -187,10 +187,9 @@ public:
 
     // support for scaled bitmaps
     virtual double GetScaleFactor() const { return 1.0; }
-    virtual double GetScaledWidth() const { return GetWidth() / GetScaleFactor(); }
-    virtual double GetScaledHeight() const { return GetHeight() / GetScaleFactor(); }
-    virtual wxSize GetScaledSize() const
-        { return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight())); }
+    virtual double GetScaledWidth() const { return GetWidth(); }
+    virtual double GetScaledHeight() const { return GetHeight(); }
+    virtual wxSize GetScaledSize() const { return GetSize(); }
 
     // implementation only from now on
     // -------------------------------
