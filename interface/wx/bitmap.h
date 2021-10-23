@@ -551,7 +551,7 @@ public:
     /**
         Gets the height of the bitmap in pixels.
 
-        @see GetWidth(), GetSize()
+        @see GetWidth(), GetSize(), GetScaledHeight()
     */
     virtual int GetHeight() const;
 
@@ -578,18 +578,73 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
     /**
+        Returns the scale factor of this bitmap.
+
+        Scale factor is 1 by default, but can be greater to indicate that the
+        size of bitmap in logical, DPI-independent pixels is smaller than its
+        actual size in physical pixels. Bitmaps with scale factor greater than
+        1 must be used in high DPI to appear sharp on the screen.
+
+        Note that the scale factor is only used in the ports where logical
+        pixels are not the same as physical ones, such as wxOSX or wxGTK3.
+
+        @see GetScaledWidth(), GetScaledHeight(), GetScaledSize()
+
+        @since 2.9.5
+     */
+    virtual double GetScaleFactor() const;
+
+    /**
+        Returns the scaled height of the bitmap.
+
+        See GetScaledSize() for more information.
+
+        @see GetScaledWidth(), GetHeight()
+
+        @since 2.9.5
+     */
+    virtual double GetScaledHeight() const;
+
+    /**
+        Returns the scaled size of the bitmap.
+
+        The scaled size of the bitmap is its size in pixels, as returned by
+        GetSize(), divided by its scale factor, as returned by
+        GetScaleFactor(), and so is the same as the normal size for bitmaps
+        with the default scale factor of 1 and always less than the physical
+        size for the higher resolution bitmaps supposed to be used on high DPI
+        screens.
+
+        @see GetScaledWidth(), GetScaledHeight(), GetSize()
+
+        @since 2.9.5
+     */
+    virtual wxSize GetScaledSize() const;
+
+    /**
+        Returns the scaled width of the bitmap.
+
+        See GetScaledSize() for more information.
+
+        @see GetScaledHeight(), GetWidth()
+
+        @since 2.9.5
+     */
+    virtual double GetScaledWidth() const;
+
+    /**
         Returns the size of the bitmap in pixels.
 
         @since 2.9.0
 
-        @see GetHeight(), GetWidth()
+        @see GetHeight(), GetWidth(), GetScaledSize()
     */
     wxSize GetSize() const;
 
     /**
         Gets the width of the bitmap in pixels.
 
-        @see GetHeight(), GetSize()
+        @see GetHeight(), GetSize(), GetScaledWidth()
     */
     virtual int GetWidth() const;
 
