@@ -388,7 +388,8 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& f
 
         if ( fn.FileExists() )
         {
-            wxBitmap bmp(fn.GetFullPath(), wxBITMAP_TYPE_ANY, dpiFactor);
+            wxBitmap bmp(fn.GetFullPath(), wxBITMAP_TYPE_ANY);
+            // TODO Decide: SetScaleFactor to dpiFactor ? only on GTK3 ?
 
             if ( bmp.IsOk() )
             {
