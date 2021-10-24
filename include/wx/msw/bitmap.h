@@ -158,8 +158,7 @@ public:
 
     virtual bool Create(int width, int height, const wxDC& dc);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    virtual bool CreateScaled(int w, int h, int d, double logicalScale)
-        { return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d); }
+    virtual bool CreateScaled(int w, int h, int d, double logicalScale);
 
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
@@ -185,12 +184,12 @@ public:
     void UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
 
-    // support for scaled bitmaps
-    virtual void SetScaleFactor(double WXUNUSED(scale)) { }
-    virtual double GetScaleFactor() const { return 1.0; }
-    virtual double GetScaledWidth() const { return GetWidth(); }
-    virtual double GetScaledHeight() const { return GetHeight(); }
-    virtual wxSize GetScaledSize() const { return GetSize(); }
+    // provide stabs of scaled bitmaps functions, they are trivial here
+    virtual void SetScaleFactor(double scale);
+    virtual double GetScaleFactor() const;
+    virtual double GetScaledWidth() const;
+    virtual double GetScaledHeight() const;
+    virtual wxSize GetScaledSize() const;
 
     // implementation only from now on
     // -------------------------------
