@@ -149,12 +149,7 @@ wxBitmapBundle wxBitmapBundle::FromBitmaps(const wxBitmap& bitmap1,
 /* static */ inline
 wxBitmapBundle wxBitmapBundle::FromBitmap(const wxBitmap& bitmap)
 {
-    if ( !bitmap.IsOk() )
-        return wxBitmapBundle();
-
-    wxVector<wxBitmap> bitmaps;
-    bitmaps.push_back(bitmap);
-    return FromBitmaps(bitmaps);
+    return wxBitmapBundle(bitmap);
 }
 
 /* static */ inline
