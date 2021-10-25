@@ -403,6 +403,15 @@ public:
     static void CleanUpHandlers();
 
     /**
+        Returns disabled (dimmed) version of the bitmap.
+
+        This method is not available when <code>wxUSE_IMAGE == 0</code>.
+
+        @since 2.9.0
+    */
+    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
+
+    /**
         Creates an image from a platform-dependent bitmap. This preserves
         mask information so that bitmaps and images can be converted back
         and forth without loss in that respect.
@@ -460,7 +469,7 @@ public:
         @param depth
             The number of bits used to represent each bitmap pixel.
         @param logicalScale
-            Scale factor used by the bitmap
+            Scale factor used by the bitmap, see SetScaleFactor().
 
         @return @true if the creation was successful.
 
@@ -542,7 +551,7 @@ public:
     /**
         Gets the height of the bitmap in pixels.
 
-        @see GetWidth(), GetSize()
+        @see GetWidth(), GetSize(), GetScaledHeight()
     */
     virtual int GetHeight() const;
 
@@ -569,27 +578,74 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
     /**
+        Returns the scale factor of this bitmap.
+
+        Scale factor is 1 by default, but can be greater to indicate that the
+        size of bitmap in logical, DPI-independent pixels is smaller than its
+        actual size in physical pixels. Bitmaps with scale factor greater than
+        1 must be used in high DPI to appear sharp on the screen.
+
+        Note that the scale factor is only used in the ports where logical
+        pixels are not the same as physical ones, such as wxOSX or wxGTK3, and
+        this function always returns 1 under the other platforms.
+
+        @see SetScaleFactor(), GetScaledWidth(), GetScaledHeight(), GetScaledSize()
+
+        @since 2.9.5
+     */
+    virtual double GetScaleFactor() const;
+
+    /**
+        Returns the scaled height of the bitmap.
+
+        See GetScaledSize() for more information.
+
+        @see GetScaledWidth(), GetHeight()
+
+        @since 2.9.5
+     */
+    virtual double GetScaledHeight() const;
+
+    /**
+        Returns the scaled size of the bitmap.
+
+        The scaled size of the bitmap is its size in pixels, as returned by
+        GetSize(), divided by its scale factor, as returned by
+        GetScaleFactor(), and so is the same as the normal size for bitmaps
+        with the default scale factor of 1 and always less than the physical
+        size for the higher resolution bitmaps supposed to be used on high DPI
+        screens.
+
+        @see GetScaledWidth(), GetScaledHeight(), GetSize()
+
+        @since 2.9.5
+     */
+    virtual wxSize GetScaledSize() const;
+
+    /**
+        Returns the scaled width of the bitmap.
+
+        See GetScaledSize() for more information.
+
+        @see GetScaledHeight(), GetWidth()
+
+        @since 2.9.5
+     */
+    virtual double GetScaledWidth() const;
+
+    /**
         Returns the size of the bitmap in pixels.
 
         @since 2.9.0
 
-        @see GetHeight(), GetWidth()
+        @see GetHeight(), GetWidth(), GetScaledSize()
     */
     wxSize GetSize() const;
 
     /**
-        Returns disabled (dimmed) version of the bitmap.
-
-        This method is not available when <code>wxUSE_IMAGE == 0</code>.
-
-        @since 2.9.0
-    */
-    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
-
-    /**
         Gets the width of the bitmap in pixels.
 
-        @see GetHeight(), GetSize()
+        @see GetHeight(), GetSize(), GetScaledWidth()
     */
     virtual int GetWidth() const;
 
@@ -740,6 +796,38 @@ public:
             Bitmap height in pixels.
     */
     virtual void SetHeight(int height);
+
+    /**
+        Sets the bitmap scale factor.
+
+        This doesn't change the bitmap actual size or its contents, but changes
+        its scale factor, so that it appears in a smaller size when it is drawn
+        on screen: e.g. setting @a scale to 2 means that the bitmap will be
+        twice smaller (in each direction) when drawn on screen in the ports in
+        which logical and physical pixels differ (i.e. wxOSX and wxGTK3, but
+        not wxMSW).
+
+        When creating a new bitmap, CreateScaled() can be used to specify the
+        correct scale factor from the beginning.
+
+        Note that this method exists in all ports, but simply does nothing in
+        those of them that don't use logical pixel scaling. The preprocessor
+        symbol @c wxHAS_BITMAP_SCALE_FACTOR can be tested to determine whether
+        the scale factor is really supported, e.g.
+
+        @code
+            bitmap.SetScaleFactor(2);
+
+            // In the other ports scale factor is always 1, so the assert would
+            // fail there.
+            #ifdef wxHAS_BITMAP_SCALE_FACTOR
+                wxASSERT( bitmap.GetScaleFactor() == 2 );
+            #endif
+        @endcode
+
+        @since 3.1.6
+     */
+    virtual void SetScaleFactor(double scale);
 
     /**
         Sets the mask for this bitmap.

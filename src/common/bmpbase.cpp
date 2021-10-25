@@ -196,6 +196,39 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule);
 
+// ----------------------------------------------------------------------------
+// Trivial implementations of scale-factor related functions
+// ----------------------------------------------------------------------------
+
+bool wxBitmapBase::CreateScaled(int w, int h, int d, double logicalScale)
+{
+    return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d);
+}
+
+void wxBitmapBase::SetScaleFactor(double WXUNUSED(scale))
+{
+}
+
+double wxBitmapBase::GetScaleFactor() const
+{
+    return 1.0;
+}
+
+double wxBitmapBase::GetScaledWidth() const
+{
+    return GetWidth() / GetScaleFactor();
+}
+
+double wxBitmapBase::GetScaledHeight() const
+{
+    return GetHeight() / GetScaleFactor();
+}
+
+wxSize wxBitmapBase::GetScaledSize() const
+{
+    return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight()));
+}
+
 #endif // wxUSE_BITMAP_BASE
 
 // ----------------------------------------------------------------------------

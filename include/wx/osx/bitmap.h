@@ -13,6 +13,8 @@
 
 #include "wx/palette.h"
 
+#define wxHAS_BITMAP_SCALE_FACTOR
+
 // Bitmap
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class wxBitmapRefData ;
@@ -239,6 +241,7 @@ public:
     void EndRawAccess();
 #endif
 
+    void SetScaleFactor(double scale) wxOVERRIDE;
     double GetScaleFactor() const wxOVERRIDE;
 
     void SetSelectedInto(wxDC *dc);

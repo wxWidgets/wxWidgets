@@ -68,6 +68,40 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK( b.GetPreferredSizeAtScale(3   ) == bigger );
 }
 
+#ifdef wxHAS_BITMAP_SCALE_FACTOR
+
+TEST_CASE("BitmapBundle::Scaled", "[bmpbundle]")
+{
+    // Adding a bitmap with scale factor > 1 should create the bundle using the
+    // scaled size as default size.
+    wxBitmap scaled2x(64, 64);
+    scaled2x.SetScaleFactor(2);
+    CHECK( scaled2x.GetScaledSize() == wxSize(32, 32) );
+
+    wxBitmapBundle b(scaled2x);
+    CHECK( b.GetDefaultSize() == wxSize(32, 32) );
+
+    // Retrieving this bitmap back from the bundle should preserve its scale.
+    scaled2x = b.GetBitmap(wxSize(64, 64));
+    CHECK( scaled2x.GetSize() == wxSize(64, 64) );
+    CHECK( scaled2x.GetScaleFactor() == 2 );
+
+    // And retrieving the bitmap from the bundle should set scale factor for it
+    // even if it hadn't originally been added with it.
+    b = wxBitmapBundle::FromBitmaps(wxBitmap(32, 32), wxBitmap(64, 64));
+    scaled2x = b.GetBitmap(wxSize(64, 64));
+    CHECK( scaled2x.GetSize() == wxSize(64, 64) );
+    CHECK( scaled2x.GetScaleFactor() == 2 );
+
+    // Using scaled bitmaps when there is more than one of them is a bad idea
+    // in general, as only physical size matters, but the default size should
+    // still be the scaled size of the smallest one.
+    b = wxBitmapBundle::FromBitmaps(scaled2x, wxBitmap(64, 64));
+    CHECK( b.GetDefaultSize() == wxSize(32, 32) );
+}
+
+#endif // wxHAS_BITMAP_SCALE_FACTOR
+
 #ifdef wxHAS_SVG
 
 TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")

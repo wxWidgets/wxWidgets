@@ -155,24 +155,13 @@ static gboolean wxGtkImageDraw(GtkWidget* widget, GdkEventExpose* event)
 #endif
     }
 
-    const double scaleFactor = image->m_provider->GetScale();
-
     GtkAllocation alloc;
     gtk_widget_get_allocation(widget, &alloc);
-    int x = (alloc.width  - int(bitmap.GetWidth() /scaleFactor)) / 2;
-    int y = (alloc.height - int(bitmap.GetHeight()/scaleFactor)) / 2;
+    int x = (alloc.width  - int(bitmap.GetScaledWidth() )) / 2;
+    int y = (alloc.height - int(bitmap.GetScaledHeight())) / 2;
 #ifdef __WXGTK3__
     gtk_render_background(gtk_widget_get_style_context(widget),
         cr, 0, 0, alloc.width, alloc.height);
-
-    if (!wxIsSameDouble(scaleFactor, 1))
-    {
-        cairo_translate(cr, x, y);
-        const double scale = 1 / scaleFactor;
-        cairo_scale(cr, scale, scale);
-        x = 0;
-        y = 0;
-    }
     bitmap.Draw(cr, x, y);
 #else
     x += alloc.x;

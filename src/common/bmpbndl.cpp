@@ -110,6 +110,11 @@ private:
     // Note that this vector is never empty.
     Entries m_entries;
 
+    // The size of the bitmap at the default size.
+    //
+    // Note that it may be different from the size of the first entry if we
+    // only have high resolution bitmap and no bitmap for 100% DPI.
+    wxSize m_sizeDefault;
 
     // Common implementation of all ctors.
     void Init(const wxBitmap* bitmaps, size_t n);
@@ -141,6 +146,13 @@ void wxBitmapBundleImplSet::Init(const wxBitmap* bitmaps, size_t n)
 
     std::sort(m_entries.begin(), m_entries.end(), BitmapSizeComparator());
 
+    // This is not normally the case, but it could happen that even the
+    // smallest bitmap has scale factor > 1, so use its scaled size (this can
+    // notably be the case when there is only a single high resolution bitmap
+    // provided, e.g. in the code predating wxBitmapBundle introduction but now
+    // using it due to implicit conversion to it from wxBitmap).
+    m_sizeDefault = m_entries[0].bitmap.GetScaledSize();
+
     // Should we check that all bitmaps really have unique sizes here? For now,
     // don't bother with this, but we might want to do it later if it really
     // turns out to be a problem in practice.
@@ -152,8 +164,7 @@ void wxBitmapBundleImplSet::Init(const wxBitmap* bitmaps, size_t n)
 
 wxSize wxBitmapBundleImplSet::GetDefaultSize() const
 {
-    // Default size is the size of the smallest bitmap in the bundle.
-    return m_entries[0].bitmap.GetSize();
+    return m_sizeDefault;
 }
 
 wxSize wxBitmapBundleImplSet::GetPreferredSizeAtScale(double scale) const
@@ -384,7 +395,16 @@ wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
     if ( !m_impl )
         return wxBitmap();
 
-    return m_impl->GetBitmap(size == wxDefaultSize ? GetDefaultSize() : size);
+    const wxSize sizeDef = GetDefaultSize();
+
+    wxBitmap bmp = m_impl->GetBitmap(size == wxDefaultSize ? sizeDef : size);
+
+    // Ensure that the returned bitmap uses the scale factor such that it takes
+    // the same space, in logical pixels, as the bitmap in the default size.
+    if ( size != wxDefaultSize )
+        bmp.SetScaleFactor(static_cast<double>(size.y)/sizeDef.y);
+
+    return bmp;
 }
 
 // ============================================================================

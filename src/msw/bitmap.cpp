@@ -745,6 +745,11 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
         return false;
 }
 
+bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
+{
+    return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d);
+}
+
 bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 {
     UnRef();
@@ -1355,6 +1360,39 @@ bool wxBitmap::InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth)
     GetBitmapData()->m_hasAlpha = (depth == 32) && CheckAlpha(bmp);
 
     return IsOk();
+}
+
+// ----------------------------------------------------------------------------
+// scale factor-related functions
+// ----------------------------------------------------------------------------
+
+// Note: currently we don't use scale factor at all and don't even store it
+// because this seems useless, but we define these functions out of line here
+// and not inline in the header to make it possible to change this later
+// without breaking ABI if necessary.
+
+void  wxBitmap::SetScaleFactor(double WXUNUSED(scale))
+{
+}
+
+double wxBitmap::GetScaleFactor() const
+{
+    return 1.0;
+}
+
+double wxBitmap::GetScaledWidth() const
+{
+    return GetWidth();
+}
+
+double wxBitmap::GetScaledHeight() const
+{
+    return GetHeight();
+}
+
+wxSize wxBitmap::GetScaledSize() const
+{
+    return GetSize();
 }
 
 // ----------------------------------------------------------------------------
