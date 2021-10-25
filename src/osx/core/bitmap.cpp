@@ -782,12 +782,6 @@ wxBitmapRefData::~wxBitmapRefData()
 // wxBitmap
 // ----------------------------------------------------------------------------
 
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
-{
-    *this = icon;
-    return IsOk();
-}
-
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
     m_refData = new wxBitmapRefData( the_width , the_height , no_bits ) ;

@@ -61,9 +61,6 @@ public:
     virtual void SetPalette(const wxPalette& palette) wxOVERRIDE;
 #endif // wxUSE_PALETTE
 
-    // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon) wxOVERRIDE;
-
     // implementation:
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED(virtual void SetHeight(int height) wxOVERRIDE);

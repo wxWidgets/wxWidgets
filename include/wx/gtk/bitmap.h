@@ -103,9 +103,6 @@ public:
     wxImage ConvertToImage() const wxOVERRIDE;
 #endif // wxUSE_IMAGE
 
-    // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon) wxOVERRIDE;
-
     wxMask *GetMask() const wxOVERRIDE;
     void SetMask( wxMask *mask ) wxOVERRIDE;
 

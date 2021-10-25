@@ -988,12 +988,6 @@ void wxBitmap::SetMask( wxMask *mask )
     }
 }
 
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
-{
-    *this = icon;
-    return IsOk();
-}
-
 #ifdef __WXGTK3__
 bool wxBitmap::CreateScaled(int w, int h, int depth, double scale)
 {

@@ -63,9 +63,6 @@ public:
     virtual void SetPalette(const wxPalette& palette);
 #endif
 
-    // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon);
-
     static void InitStandardHandlers();
 
     // raw bitmap access support functions

@@ -165,9 +165,6 @@ public:
     wxBitmapRefData *GetBitmapData()
         { return (wxBitmapRefData *)m_refData; }
 
-    // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon) wxOVERRIDE;
-
     int GetWidth() const wxOVERRIDE;
     int GetHeight() const wxOVERRIDE;
     int GetDepth() const wxOVERRIDE;
