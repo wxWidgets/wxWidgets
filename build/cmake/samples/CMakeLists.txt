@@ -12,7 +12,7 @@ wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif hourglass.ani DEPE
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
 wx_add_sample(aui auidemo.cpp LIBRARIES wxaui wxhtml NAME auidemo DEPENDS wxUSE_AUI)
-wx_add_sample(calendar RES calendar.rc DEPENDS wxUSE_CALENDARCTRL)
+wx_add_sample(calendar DEPENDS wxUSE_CALENDARCTRL)
 wx_add_sample(caret DEPENDS wxUSE_CARET)
 wx_add_sample(clipboard DEPENDS wxUSE_CLIPBOARD)
 wx_add_sample(collpane DEPENDS wxUSE_COLLPANE)
