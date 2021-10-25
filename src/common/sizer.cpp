@@ -187,6 +187,32 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
            );
 }
 
+bool CheckExpectedParentIs(wxWindow* w, wxWindow* expectedParent)
+{
+    // We specifically exclude the case of a window with a null parent as it
+    // typically doesn't happen accidentally, but does happen intentionally in
+    // our own wxTabFrame which is a hack used by AUI for whatever reason, and
+    // could presumably be also done on purpose in application code.
+    wxWindow* const parent = w->GetParent();
+
+    return !parent || parent == expectedParent;
+}
+
+wxString MakeExpectedParentMessage(wxWindow* w, wxWindow* expectedParent)
+{
+    return wxString::Format
+           (
+            "Windows managed by the sizer associated with the given "
+            "window must have this window as parent, otherwise they "
+            "will not be repositioned correctly.\n"
+            "\n"
+            "Please use the window %s with which this sizer is associated, "
+            "as the parent when creating the window %s managed by it.",
+            wxDumpWindow(expectedParent),
+            wxDumpWindow(w)
+           );
+}
+
 } // anonymous namespace
 
 #endif // wxDEBUG_LEVEL
@@ -225,6 +251,18 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
     ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_HORIZONTAL, wxALIGN_RIGHT); \
     ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_VERTICAL, wxALIGN_BOTTOM)
 
+// Verify that the given window has the expected parent.
+//
+// Both pointers must be non-null.
+//
+// Note that this is a serious error and that, unlike for benign sizer flag
+// checks, it can't be disabled by setting some environment variable.
+#define ASSERT_WINDOW_PARENT_IS(w, expectedParent)   \
+    wxASSERT_MSG                                     \
+    (                                                \
+        CheckExpectedParentIs(w, expectedParent),    \
+        MakeExpectedParentMessage(w, expectedParent) \
+    )
 
 /* static */
 void wxSizerFlags::DisableConsistencyChecks()
@@ -779,8 +817,18 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
 
     ContainingSizerGuard guard( item );
 
-    if ( item->GetWindow() )
-        item->GetWindow()->SetContainingSizer( this );
+    if ( wxWindow* const w = item->GetWindow() )
+    {
+        w->SetContainingSizer( this );
+
+        // If possible, detect adding windows with a wrong parent to the sizer
+        // as early as possible, as this allows to see where exactly it happens
+        // (otherwise this will be checked when the containing window is set
+        // later, but by this time the stack trace at the moment of assertion
+        // won't point out the culprit any longer).
+        if ( m_containingWindow )
+            ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+    }
 
     if ( item->GetSizer() )
         item->GetSizer()->SetContainingWindow( m_containingWindow );
@@ -810,6 +858,9 @@ void wxSizer::SetContainingWindow(wxWindow *win)
         {
             sizer->SetContainingWindow(win);
         }
+
+        if ( wxWindow* const w = item->GetWindow() )
+            ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
     }
 }
 
