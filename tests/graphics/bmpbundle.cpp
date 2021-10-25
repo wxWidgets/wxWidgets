@@ -57,6 +57,8 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     const wxBitmapBundle
         b = wxBitmapBundle::FromBitmaps(wxBitmap(normal), wxBitmap(bigger));
 
+    // Check that the existing bitmaps are used without scaling for most of the
+    // typical scaling values.
     CHECK( b.GetPreferredSizeAtScale(0   ) == normal );
     CHECK( b.GetPreferredSizeAtScale(1   ) == normal );
     CHECK( b.GetPreferredSizeAtScale(1.25) == normal );
@@ -65,7 +67,10 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK( b.GetPreferredSizeAtScale(1.75) == bigger );
     CHECK( b.GetPreferredSizeAtScale(2   ) == bigger );
     CHECK( b.GetPreferredSizeAtScale(2.5 ) == bigger );
-    CHECK( b.GetPreferredSizeAtScale(3   ) == bigger );
+
+    // This scale is too big to use any of the existing bitmaps, so they will
+    // be scaled.
+    CHECK( b.GetPreferredSizeAtScale(3   ) == 3*normal );
 }
 
 #ifdef wxHAS_BITMAP_SCALE_FACTOR

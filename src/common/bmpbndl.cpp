@@ -205,7 +205,14 @@ wxSize wxBitmapBundleImplSet::GetPreferredSizeAtScale(double scale) const
 
     // We only get here if the target size is bigger than all the available
     // sizes, in which case we have no choice but to use the biggest bitmap.
-    return m_entries.back().bitmap.GetSize();
+    const wxSize sizeMax = m_entries.back().bitmap.GetSize();
+
+    // But check how far is it from the requested scale: if it's more than 1.5
+    // times smaller, we should still scale it, notably to ensure that bitmaps
+    // of standard size are scaled when 2x DPI scaling is used.
+    return static_cast<double>(sizeTarget.y) / sizeMax.y >= 1.5
+            ? sizeTarget
+            : sizeMax;
 }
 
 wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
