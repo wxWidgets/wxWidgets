@@ -206,7 +206,7 @@ public:
 
         @param path     Path of the directory containing the files
         @param filename Bitmap's filename without any scale suffix
-        @param extension Fileextension
+        @param extension File extension, without leading dot (`png` by default)
     */
     static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = wxASCII_STR("png"));
 
