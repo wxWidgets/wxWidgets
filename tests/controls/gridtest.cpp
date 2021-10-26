@@ -1163,6 +1163,16 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
     CHECK( m_grid->IsInSelection(5, 1) );
     CHECK( !m_grid->IsInSelection(3, 1) );
 
+    // Check that top left/bottom right selection functions still work in row
+    // selection mode.
+    wxGridCellCoordsArray arr = m_grid->GetSelectionBlockTopLeft();
+    REQUIRE( arr.size() == 1 );
+    CHECK( arr[0] == wxGridCellCoords(5, 0) );
+
+    arr = m_grid->GetSelectionBlockBottomRight();
+    REQUIRE( arr.size() == 1 );
+    CHECK( arr[0] == wxGridCellCoords(5, 1) );
+
     //Test row selection be selecting a single cell and checking the whole
     //row is selected
     m_grid->ClearSelection();

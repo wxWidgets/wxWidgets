@@ -746,10 +746,6 @@ wxGridCellCoordsArray wxGridSelection::GetCellSelection() const
 
 wxGridCellCoordsArray wxGridSelection::GetBlockSelectionTopLeft() const
 {
-    // return blocks only in wxGridSelectCells selection mode
-    if ( m_selectionMode != wxGrid::wxGridSelectCells )
-        return wxGridCellCoordsArray();
-
     wxGridCellCoordsArray coords;
     const size_t count = m_selection.size();
     coords.reserve(count);
@@ -762,9 +758,6 @@ wxGridCellCoordsArray wxGridSelection::GetBlockSelectionTopLeft() const
 
 wxGridCellCoordsArray wxGridSelection::GetBlockSelectionBottomRight() const
 {
-    if ( m_selectionMode != wxGrid::wxGridSelectCells )
-        return wxGridCellCoordsArray();
-
     wxGridCellCoordsArray coords;
     const size_t count = m_selection.size();
     coords.reserve(count);
