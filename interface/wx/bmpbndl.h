@@ -210,7 +210,7 @@ public:
     */
     static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = wxASCII_STR("png"));
 
-    // Overload taking the full path name
+    /// @overload
     static wxBitmapBundle FromFiles(const wxString& fullpathname);
 
     /**
