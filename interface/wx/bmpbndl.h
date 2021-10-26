@@ -198,6 +198,21 @@ public:
      */
     static wxBitmapBundle FromResources(const wxString& name);
 
+     /**
+        Create a bundle from bitmaps stored as files.
+
+        Looking in @a path for files using @a filename as prefix and potentionally a
+        suffix with scale, e.g. "_2x" or "@2x"
+
+        @param path     Path of the directory containing the files
+        @param filename Bitmap's filename without any scale suffix
+        @param extension File extension, without leading dot (`png` by default)
+    */
+    static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = "png");
+
+    /// @overload
+    static wxBitmapBundle FromFiles(const wxString& fullpathname);
+
     /**
         Create a bundle from the SVG image.
 

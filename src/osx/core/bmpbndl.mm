@@ -22,6 +22,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/bmpbndl.h"
+#include "wx/filename.h"
+#include "wx/stdpaths.h"
 
 #include "wx/private/bmpbndl.h"
 
@@ -184,34 +186,31 @@ void wxOSXAddBitmapToImage( WXImage image, const wxBitmap& bmp)
 }
 #endif
 
-wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
+wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& filename, const wxString& extension)
 {
-    wxVector<wxBitmap> resources;
+    wxVector<wxBitmap> bitmaps;
 
-    wxString ext = "png"; // TODO adapt as soon as we get res param
-    wxCFStringRef restype(ext);
+    wxFileName fn(path, filename, extension);
+    wxString ext = extension.Lower();
 
     for ( int dpiFactor = 1 ; dpiFactor <= 2 ; ++dpiFactor)
     {
-        wxString filename;
         if ( dpiFactor == 1 )
-            filename = name;
+            fn.SetName(filename);
         else
-            filename = wxString::Format("%s@%dx", name, dpiFactor);
+            fn.SetName(wxString::Format("%s@%dx", filename, dpiFactor));
 
-        wxCFStringRef resname(filename);
-        wxCFRef<CFURLRef> imageURL(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
-        if ( !imageURL.get() && dpiFactor != 1 )
+        if ( !fn.FileExists() && dpiFactor != 1 )
         {
             // try alternate naming scheme
-            filename = wxString::Format("%s_%dx", name, dpiFactor);
-            resname = wxCFStringRef(filename);
-            imageURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL);
+            fn.SetName(wxString::Format("%s_%dx", filename, dpiFactor));
         }
-        if ( imageURL.get() )
+
+        if ( fn.FileExists() )
         {
+            wxCFRef<CFURLRef> imageURL(wxOSXCreateURLFromFileSystemPath(fn.GetFullPath()));
             // Create the data provider object
-            wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL (imageURL) );
+            wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL(imageURL));
             CGImageRef image = NULL;
 
             if ( ext == "jpeg" )
@@ -224,12 +223,17 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
             {
                 wxBitmap bmp(image, dpiFactor);
                 CGImageRelease(image);
-                resources.push_back(bmp);
+                bitmaps.push_back(bmp);
             }
         }
     }
 
-    return wxBitmapBundle::FromBitmaps(resources);
+    return wxBitmapBundle::FromBitmaps(bitmaps);
+}
+
+wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
+{
+    return wxBitmapBundle::FromFiles(wxStandardPaths::Get().GetResourcesDir(), name, "png");
 }
 
 WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
