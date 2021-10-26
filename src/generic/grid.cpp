@@ -2301,17 +2301,12 @@ void wxGrid::Render( wxDC& dc,
 
     // remove grid selection, don't paint selection colour
     // unless we have wxGRID_DRAW_SELECTION
-    // block selections are the only ones catered for here
-    wxGridCellCoordsArray selectedCells;
-    bool hasSelection = IsSelection();
-    if ( hasSelection && !( style & wxGRID_DRAW_SELECTION ) )
+    wxGridSelection* selectionOrig = NULL;
+    if ( m_selection && !( style & wxGRID_DRAW_SELECTION ) )
     {
-        selectedCells = GetSelectionBlockTopLeft();
-        // non block selections may not have a bottom right
-        if ( GetSelectionBlockBottomRight().size() )
-            selectedCells.Add( GetSelectionBlockBottomRight()[ 0 ] );
-
-        ClearSelection();
+        // remove the selection temporarily, it will be restored below
+        selectionOrig = m_selection;
+        m_selection = NULL;
     }
 
     // store user device origin
@@ -2437,12 +2432,9 @@ void wxGrid::Render( wxDC& dc,
     dc.SetDeviceOrigin( userOriginX, userOriginY );
     dc.SetUserScale( scaleUserX, scaleUserY );
 
-    if ( selectedCells.size() && !( style & wxGRID_DRAW_SELECTION ) )
+    if ( selectionOrig )
     {
-        SelectBlock( selectedCells[ 0 ].GetRow(),
-                     selectedCells[ 0 ].GetCol(),
-                     selectedCells[ selectedCells.size() -1 ].GetRow(),
-                     selectedCells[ selectedCells.size() -1 ].GetCol() );
+        m_selection = selectionOrig;
     }
 }
 
