@@ -208,7 +208,7 @@ public:
         @param filename Bitmap's filename without any scale suffix
         @param extension File extension, without leading dot (`png` by default)
     */
-    static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = wxASCII_STR("png"));
+    static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = "png");
 
     /// @overload
     static wxBitmapBundle FromFiles(const wxString& fullpathname);
