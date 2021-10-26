@@ -372,13 +372,6 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 
 #endif // wxUSE_PALETTE
 
-// copies the contents and mask of the given (colour) icon to the bitmap
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
-{
-    *this = icon;
-    return IsOk();
-}
-
 #if WXWIN_COMPATIBILITY_3_0
 void wxBitmap::SetHeight(int height)
 {

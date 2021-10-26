@@ -196,6 +196,12 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule);
 
+bool wxBitmapBase::CopyFromIcon(const wxIcon& icon)
+{
+    *this = icon;
+    return IsOk();
+}
+
 // ----------------------------------------------------------------------------
 // Trivial implementations of scale-factor related functions
 // ----------------------------------------------------------------------------

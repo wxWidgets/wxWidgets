@@ -98,9 +98,6 @@ public:
     bool CreateFromImage(const wxImage& image, int depth = -1);
 #endif // wxUSE_IMAGE
 
-    // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon);
-
     wxMask *GetMask() const;
     void SetMask( wxMask *mask );
 

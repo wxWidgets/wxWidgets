@@ -223,7 +223,7 @@ public:
 #endif // wxUSE_PALETTE
 
     // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon) = 0;
+    bool CopyFromIcon(const wxIcon& icon);
 
     // implementation:
 #if WXWIN_COMPATIBILITY_3_0

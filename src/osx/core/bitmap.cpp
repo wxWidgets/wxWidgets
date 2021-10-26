@@ -782,11 +782,6 @@ wxBitmapRefData::~wxBitmapRefData()
 // wxBitmap
 // ----------------------------------------------------------------------------
 
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
-{
-    return Create( icon.OSXGetImage() );
-}
-
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
     m_refData = new wxBitmapRefData( the_width , the_height , no_bits ) ;
