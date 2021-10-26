@@ -5697,6 +5697,7 @@ void wxRichTextParagraph::Copy(const wxRichTextParagraph& obj)
 void wxRichTextParagraph::ClearLines()
 {
     WX_CLEAR_LIST(wxRichTextLineList, m_cachedLines);
+    m_cachedLinesVect.clear();
 }
 
 /// Get/set the object size for the given range. Returns false if the range
@@ -6529,7 +6530,8 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
 {
     if (pos < (int) m_cachedLines.GetCount())
     {
-        wxRichTextLine* line = m_cachedLines.Item(pos)->GetData();
+        wxASSERT(m_cachedLinesVect.size() == m_cachedLines.GetCount());
+        wxRichTextLine* line = m_cachedLinesVect[pos];
         line->Init(this);
         return line;
     }
@@ -6537,6 +6539,7 @@ wxRichTextLine* wxRichTextParagraph::AllocateLine(int pos)
     {
         wxRichTextLine* line = new wxRichTextLine(this);
         m_cachedLines.Append(line);
+        m_cachedLinesVect.push_back(line);
         return line;
     }
 }
@@ -6555,6 +6558,7 @@ bool wxRichTextParagraph::ClearUnusedLines(int lineCount)
             delete line;
         }
     }
+    m_cachedLinesVect.resize(lineCount);
     return true;
 }
 
@@ -6815,21 +6819,57 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
 
     int offset = GetRange().GetStart();
 
-    wxString str = m_text;
-    if (context.HasVirtualText(this))
+    const bool allSelected = selectionRange.GetStart() <= range.GetStart() && selectionRange.GetEnd() >= range.GetEnd();
+    const bool noneSelected = selectionRange.GetEnd() < range.GetStart() || selectionRange.GetStart() > range.GetEnd();
+
+    wxString stringChunk;
+    wxString stringWhole;
+
+    // If nothing or everything is selected, our algorithm does not need stringWhole. It
+    // is enough to preprocess stringChunk only.
+    // In case of partial selection we need to preprocess stringWhole too.
+    if (allSelected || noneSelected)
     {
-        if (!context.GetVirtualText(this, str) || str.Length() != m_text.Length())
-            str = m_text;
+        const wxString* pWholeString = &m_text;
+        if (context.HasVirtualText(this))
+        {
+            if (context.GetVirtualText(this, stringWhole) && stringWhole.Length() == m_text.Length())
+                pWholeString = &stringWhole;
+        }
+
+        long len = range.GetLength();
+        stringChunk = pWholeString->Mid(range.GetStart() - offset, (size_t) len);
+
+        // Replace line break characters with spaces
+        wxString toRemove = wxRichTextLineBreakChar;
+        stringChunk.Replace(toRemove, wxT(" "));
+        if (textAttr.HasTextEffects() &&
+            (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
+        {
+            stringChunk.MakeUpper();
+        }
     }
+    else
+    {
+        stringWhole = m_text;
+        if (context.HasVirtualText(this))
+        {
+            if (!context.GetVirtualText(this, stringWhole) || stringWhole.Length() != m_text.Length())
+                stringWhole = m_text;
+        }
 
-    // Replace line break characters with spaces
-    wxString toRemove = wxRichTextLineBreakChar;
-    str.Replace(toRemove, wxT(" "));
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
-        str.MakeUpper();
+        // Replace line break characters with spaces
+        wxString toRemove = wxRichTextLineBreakChar;
+        stringWhole.Replace(toRemove, wxT(" "));
+        if (textAttr.HasTextEffects() &&
+            (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
+        {
+            stringWhole.MakeUpper();
+        }
 
-    long len = range.GetLength();
-    wxString stringChunk = str.Mid(range.GetStart() - offset, (size_t) len);
+        long len = range.GetLength();
+        stringChunk = stringWhole.Mid(range.GetStart() - offset, (size_t) len);
+    }
 
     // Test for the optimized situations where all is selected, or none
     // is selected.
@@ -6899,12 +6939,12 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
     // TODO: new selection code
 
     // (a) All selected.
-    if (selectionRange.GetStart() <= range.GetStart() && selectionRange.GetEnd() >= range.GetEnd())
+    if (allSelected)
     {
         DrawTabbedString(dc, textAttr, rect, stringChunk, x, y, true);
     }
     // (b) None selected.
-    else if (selectionRange.GetEnd() < range.GetStart() || selectionRange.GetStart() > range.GetEnd())
+    else if (noneSelected)
     {
         // Draw all unselected
         DrawTabbedString(dc, textAttr, rect, stringChunk, x, y, false);
@@ -6913,6 +6953,8 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
     {
         // (c) Part selected, part not
         // Let's draw unselected chunk, selected chunk, then unselected chunk.
+
+        const wxString& str = stringWhole;
 
         dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
@@ -7215,22 +7257,31 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     bool haveDescent = false;
     int startPos = range.GetStart() - GetRange().GetStart();
-    long len = range.GetLength();
 
-    wxString str(m_text);
-    if (context.HasVirtualText(this))
+    wxString stringChunk;
+
     {
-        if (!context.GetVirtualText(this, str) || str.Length() != m_text.Length())
-            str = m_text;
+        // We don't need stringWhole. Only prepare stringChunk.
+        wxString stringWhole;
+        const wxString* pWholeString = &m_text;
+        if (context.HasVirtualText(this))
+        {
+            if (context.GetVirtualText(this, stringWhole) && stringWhole.Length() == m_text.Length())
+                pWholeString = &stringWhole;
+        }
+
+        long len = range.GetLength();
+        stringChunk = pWholeString->Mid(startPos, (size_t) len);
+
+        // Replace line break characters with spaces
+        wxString toRemove = wxRichTextLineBreakChar;
+        stringChunk.Replace(toRemove, wxT(" "));
+        if (textAttr.HasTextEffects() &&
+            (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
+        {
+            stringChunk.MakeUpper();
+        }
     }
-
-    wxString toReplace = wxRichTextLineBreakChar;
-    str.Replace(toReplace, wxT(" "));
-
-    wxString stringChunk = str.Mid(startPos, (size_t) len);
-
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
-        stringChunk.MakeUpper();
 
     wxCoord w, h;
     int width = 0;
