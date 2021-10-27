@@ -116,7 +116,7 @@ jobs:
         with:
           key: ${{ matrix.name }}
 
-      - name: Set up build system
+      - name: Set up build environment
         run: |
           echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
 
@@ -161,6 +161,20 @@ jobs:
           sudo locale-gen de_DE.utf8 de_CH.utf8 en_US.utf8 fr_FR.utf8 sv_SE.utf8
 
           ./build/tools/before_install.sh
+
+      - name: Show build environment
+        run: |
+          echo "Environment:"
+          env | sort
+          echo
+
+          echo "Compiler version:"
+          ${CXX-g++} --version
+          echo
+
+          echo "Ccache version:"
+          ccache --version
+          echo
 
       - name: Configuring
         run: |
