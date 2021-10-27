@@ -71,9 +71,14 @@ function(wx_write_config_inplace)
         "${CMAKE_CURRENT_SOURCE_DIR}/wx-config-inplace.in"
         "inplace-${TOOLCHAIN_FULLNAME}"
         )
+    if(WIN32_MSVC_NAMING)
+        set(COPY_CMD copy)
+    else()
+        set(COPY_CMD create_symlink)
+    endif()
     execute_process(
         COMMAND
-        ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_COMMAND} -E ${COPY_CMD}
         "lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
         "${CMAKE_CURRENT_BINARY_DIR}/wx-config"
         )
