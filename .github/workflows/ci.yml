@@ -111,12 +111,19 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Install CCache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.name }}
+
       - name: Set up build system
         run: |
           echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
 
           wxPROC_COUNT=`./build/tools/proc_count.sh`
           echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
+
+          echo "PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
 
           # Setting this variable suppresses "Error retrieving accessibility bus address"
           # messages from WebKit tests that we're not interested in.
