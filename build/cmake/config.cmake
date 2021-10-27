@@ -12,11 +12,8 @@ file(MAKE_DIRECTORY ${wxCONFIG_DIR})
 set(TOOLCHAIN_FULLNAME ${wxBUILD_FILE_ID})
 
 macro(wx_configure_script input output)
-    set(abs_top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
-    set(abs_top_builddir ${CMAKE_CURRENT_BINARY_DIR})
-
     configure_file(
-        ${input}
+        ${CMAKE_CURRENT_SOURCE_DIR}/${input}
         ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
         ESCAPE_QUOTES @ONLY NEWLINE_STYLE UNIX)
     file(COPY
@@ -68,7 +65,7 @@ endmacro()
 
 function(wx_write_config_inplace)
     wx_configure_script(
-        "${CMAKE_CURRENT_SOURCE_DIR}/wx-config-inplace.in"
+        "wx-config-inplace.in"
         "inplace-${TOOLCHAIN_FULLNAME}"
         )
     if(WIN32_MSVC_NAMING)
@@ -191,7 +188,7 @@ function(wx_write_config)
     set(RESCOMP)
 
     wx_configure_script(
-        "${CMAKE_CURRENT_SOURCE_DIR}/wx-config.in"
+        "wx-config.in"
         "${TOOLCHAIN_FULLNAME}"
         )
 endfunction()
