@@ -485,6 +485,10 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         AddScriptMessageHandler().
+    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
+        only available in wxWidgets 3.1.6 or later. For usage details see
+        RunScriptAsync().
     @endEventTable
 
     @since 2.9.3
@@ -764,8 +768,26 @@ public:
             @NULL if it is not needed. This parameter is new since wxWidgets
             version 3.1.1.
         @return @true if there is a result, @false if there is an error.
+
+        @see RunScriptAsync()
     */
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
+
+    /**
+        Runs the given JavaScript code asynchronously and returns the result
+        via a @c wxEVT_WEBVIEW_SCRIPT_RESULT.
+
+        @param javascript JavaScript code to execute.
+        @param clientData Arbirary pointer to data that can be retrieved from
+            the result event.
+
+        @note The IE backend does not support async script execution.
+
+        @since 3.1.6
+        @see RunScript()
+    */
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const;
+
 
     /**
         Add a script message handler with the given name.
