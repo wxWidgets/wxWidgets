@@ -189,13 +189,33 @@ wxString MakeFlagsCheckMessage(const char* start, const char* whatToRemove)
 
 bool CheckExpectedParentIs(wxWindow* w, wxWindow* expectedParent)
 {
+    wxWindow* parent = w->GetParent();
+
     // We specifically exclude the case of a window with a null parent as it
     // typically doesn't happen accidentally, but does happen intentionally in
     // our own wxTabFrame which is a hack used by AUI for whatever reason, and
     // could presumably be also done on purpose in application code.
-    wxWindow* const parent = w->GetParent();
+    if ( !parent )
+        return true;
 
-    return !parent || parent == expectedParent;
+    // We also allow the window to be a (grand)grandchild of this window, as
+    // this happens with children of wxStaticBox in (possibly nested)
+    // wxStaticBoxSizer.
+    while ( parent != expectedParent )
+    {
+#if wxUSE_STATBOX
+        if ( wxDynamicCast(parent, wxStaticBox) )
+        {
+            parent = parent->GetParent();
+            if ( parent )
+                continue;
+        }
+#endif // wxUSE_STATBOX
+
+        return false;
+    }
+
+    return true;
 }
 
 wxString MakeExpectedParentMessage(wxWindow* w, wxWindow* expectedParent)
