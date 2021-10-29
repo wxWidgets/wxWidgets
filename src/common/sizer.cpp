@@ -879,8 +879,13 @@ void wxSizer::SetContainingWindow(wxWindow *win)
             sizer->SetContainingWindow(win);
         }
 
-        if ( wxWindow* const w = item->GetWindow() )
-            ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+        // If we have a valid containing window, check that all windows managed
+        // by this sizer were correctly created using it as parent.
+        if ( m_containingWindow )
+        {
+            if ( wxWindow* const w = item->GetWindow() )
+                ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+        }
     }
 }
 
