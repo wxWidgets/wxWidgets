@@ -351,48 +351,23 @@ bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxStri
 {
     if(!m_statusItem)
     {
-        m_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+        m_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
         [m_statusItem retain];
 
         m_target = [[wxOSXStatusItemTarget alloc] init];
         [m_target setImplementation:this];
-        [m_statusItem setHighlightMode:YES];
-        [m_statusItem setTarget:m_target];
-        [m_statusItem setAction:@selector(clickedAction:)];
-        [m_statusItem sendActionOn:NSLeftMouseDownMask];
+        [[m_statusItem button] setTarget:m_target];
+        [[m_statusItem button] setAction:@selector(clickedAction:)];
+        [[m_statusItem button] sendActionOn: NSEventMaskLeftMouseDown | NSEventMaskRightMouseDown];
     }
 
     m_icon.CopyFromIcon(icon);
-    
-    // status item doesn't scale automatically
-    // first scale to optimal pixel resolution
-    
-    int dimension = wxMax( m_icon.GetHeight(), m_icon.GetWidth() );
-    int target_dimension = 16 * wxOSXGetMainScreenContentScaleFactor();
-    if ( dimension > target_dimension )
-    {
-        wxImage img = m_icon.ConvertToImage();
-        int factor = (dimension+(target_dimension-1))/target_dimension;
-        m_icon = img.ShrinkBy(factor, factor);
-    }
-    
     NSImage* nsimage = m_icon.GetNSImage();
-    NSSize size = [nsimage size];
-    
-    // then scale to optimal point resolution
-    
-    dimension = wxMax(size.width,size.height);
-    if ( dimension > 16 )
-    {
-        int factor = (dimension+15)/16;
-        size.width /= factor;
-        size.height /= factor;
-        [nsimage setSize:size];
-    }
-    [m_statusItem setImage:nsimage];
+    [[m_statusItem button] setImageScaling: NSImageScaleProportionallyUpOrDown];
+    [[m_statusItem button] setImage: nsimage];
     
     wxCFStringRef cfTooltip(tooltip);
-    [m_statusItem setToolTip:cfTooltip.AsNSString()];
+    [[m_statusItem button] setToolTip:cfTooltip.AsNSString()];
     return true;
 }
 
