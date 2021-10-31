@@ -15,6 +15,7 @@
 #include "wx/vector.h"
 
 class wxBitmapBundleImpl;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // It should be possible to implement SVG rasterizing without raw bitmap
@@ -131,6 +132,11 @@ public:
     GetConsensusSizeFor(wxWindow* win,
                         const wxVector<wxBitmapBundle>& bundles,
                         const wxSize& sizeDefault);
+
+    // Create wxImageList and fill it with the images from the given bundles in
+    // the sizes appropriate for the DPI scaling used for the specified window.
+    static wxImageList*
+    CreateImageList(wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
 
 private:
     typedef wxObjectDataPtr<wxBitmapBundleImpl> wxBitmapBundleImplPtr;

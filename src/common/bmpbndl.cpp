@@ -22,9 +22,10 @@
 #endif // WX_PRECOMP
 
 #include "wx/bmpbndl.h"
-#include "wx/icon.h"
-#include "wx/window.h"
 #include "wx/filename.h"
+#include "wx/icon.h"
+#include "wx/imaglist.h"
+#include "wx/window.h"
 
 #include "wx/private/bmpbndl.h"
 
@@ -554,6 +555,32 @@ wxBitmapBundle::GetConsensusSizeFor(wxWindow* win,
     }
 
     return sizePreferred;
+}
+
+/* static */
+wxImageList*
+wxBitmapBundle::CreateImageList(wxWindow* win,
+                                const wxVector<wxBitmapBundle>& bundles)
+{
+    wxCHECK_MSG( win, NULL, "must have a valid window" );
+    wxCHECK_MSG( !bundles.empty(), NULL, "should have some images" );
+
+    // We arbitrarily choose the default size of the first bundle as the
+    // default size for the image list too, as it's not clear what else could
+    // we do here. Note that this size is only used to break the tie in case
+    // the same number of bundles prefer two different sizes, so it's not going
+    // to matter at all in most cases.
+    const wxSize
+        size = GetConsensusSizeFor(win, bundles, bundles[0].GetDefaultSize());
+
+    wxImageList* const iml = new wxImageList(size.x, size.y);
+
+    for ( size_t n = 0; n < bundles.size(); ++n )
+    {
+        iml->Add(bundles[n].GetBitmap(size));
+    }
+
+    return iml;
 }
 
 // ============================================================================
