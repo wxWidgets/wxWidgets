@@ -19,6 +19,27 @@ public:
     virtual ~wxWithImages();
 
     /**
+        Return the number of images in this control.
+
+        The returned value may be 0 if there are no images associated with the
+        control.
+
+        @see HasImages()
+
+        @since 3.1.6
+     */
+    int GetImageCount() const;
+
+    /**
+        Return true if the control has any images associated with it.
+
+        @see GetImageCount()
+
+        @since 3.1.6
+     */
+    bool HasImages() const;
+
+    /**
         Sets the image list for the page control and takes ownership of the list.
 
         @see wxImageList, SetImageList()

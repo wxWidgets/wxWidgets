@@ -15,7 +15,7 @@
 #include "wx/imaglist.h"
 
 // ----------------------------------------------------------------------------
-// wxWithImages: mix-in class providing access to wxImageList.
+// wxWithImages: mix-in for classes using indices for image access
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxWithImages
@@ -35,6 +35,18 @@ public:
     virtual ~wxWithImages()
     {
         FreeIfNeeded();
+    }
+
+    // Return the number of images, possibly 0.
+    int GetImageCount() const
+    {
+        return m_imageList ? m_imageList->GetImageCount() : 0;
+    }
+
+    // Return true if we have any images at all.
+    bool HasImages() const
+    {
+        return GetImageCount() != 0;
     }
 
     // Sets the image list to use, it is *not* deleted by the control.

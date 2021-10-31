@@ -157,9 +157,9 @@ wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 
 int GetIconIndex(wxBookCtrlBase* bookCtrl)
 {
-    if (bookCtrl && bookCtrl->GetImageList())
+    if (bookCtrl)
     {
-       int nImages = bookCtrl->GetImageList()->GetImageCount();
+       const int nImages = bookCtrl->GetImageCount();
        if (nImages > 0)
        {
            return bookCtrl->GetPageCount() % nImages;
