@@ -122,6 +122,16 @@ public:
     // Access implementation
     wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
 
+
+    // Implementation only from now on.
+
+    // Get the bitmap size preferred by the majority of the elements of the
+    // bundles at the scale appropriate for the given scale.
+    static wxSize
+    GetConsensusSizeFor(wxWindow* win,
+                        const wxVector<wxBitmapBundle>& bundles,
+                        const wxSize& sizeDefault);
+
 private:
     typedef wxObjectDataPtr<wxBitmapBundleImpl> wxBitmapBundleImplPtr;
 
