@@ -1080,7 +1080,25 @@ enum wxKeyCode
     WXK_MEDIA_PLAY_PAUSE,
     WXK_LAUNCH_MAIL,
     WXK_LAUNCH_APP1,
-    WXK_LAUNCH_APP2
+    WXK_LAUNCH_APP2,
+    WXK_LAUNCH_0,
+    WXK_LAUNCH_1,
+    WXK_LAUNCH_2,
+    WXK_LAUNCH_3,
+    WXK_LAUNCH_4,
+    WXK_LAUNCH_5,
+    WXK_LAUNCH_6,
+    WXK_LAUNCH_7,
+    WXK_LAUNCH_8,
+    WXK_LAUNCH_9,
+    /* Alias for backwards compatibility with old gtk bindings,
+     * then continue from LAUNCH_9 */
+    WXK_LAUNCH_A = WXK_LAUNCH_APP1,
+    WXK_LAUNCH_B = WXK_LAUNCH_APP2,
+    WXK_LAUNCH_C = WXK_LAUNCH_9 + 1,
+    WXK_LAUNCH_D,
+    WXK_LAUNCH_E,
+    WXK_LAUNCH_F
 };
 
 /**
