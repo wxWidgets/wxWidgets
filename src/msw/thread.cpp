@@ -1194,6 +1194,12 @@ bool wxThread::SetName(const wxString &name)
     wxCHECK_MSG(this == This(), false,
         "SetName() must be called in the context of the thread to be named");
 
+    return SetNameForCurrent(name);
+}
+
+/* static */
+bool wxThread::SetNameForCurrent(const wxString &name)
+{
     bool retval = wxSetThreadNameOnWindows10(name.wc_str());
 
     // Even if the method above succeeded, we can set

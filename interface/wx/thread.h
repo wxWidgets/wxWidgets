@@ -1407,6 +1407,18 @@ protected:
         @since 3.1.6
     */
     bool SetName(const wxString &name);
+
+    /**
+        Sets an internal name for the current thread, which may be a wxThread
+        or any other kind of thread; e.g. an std::thread.
+
+        @return Either:
+            - @false: Failure or missing implementation for this OS.
+            - @true: Success or undetectable failure.
+
+        @since 3.1.6
+    */
+    static bool SetNameForCurrent(const wxString &name);
 };
 
 

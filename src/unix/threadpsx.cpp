@@ -1685,7 +1685,12 @@ bool wxThread::SetName(const wxString &name)
     wxCHECK_MSG(this == This(), false,
         "SetName() must be called from inside the thread to be named");
 
+    return SetNameForCurrent(name);
+}
 
+/* static */
+bool wxThread::SetNameForCurrent(const wxString &name)
+{
     // the API is nearly the same on different *nix, but not quite:
 
 #if defined(__DARWIN__)
