@@ -80,13 +80,13 @@ void wxRichTextPrintout::OnPreparePrinting()
             wxASSERT (child != NULL);
             if (child)
             {
-                wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
-                while (node2)
+                wxRichTextLineVector::const_iterator it = child->GetLines().begin();
+                while (it != child->GetLines().end())
                 {
-                    wxRichTextLine* line = node2->GetData();
+                    wxRichTextLine* line = *it;
 
                     int lineY = child->GetPosition().y + line->GetPosition().y - yOffset;
-                    bool hasHardPageBreak = ((node2 == child->GetLines().GetFirst()) && child->GetAttributes().HasPageBreak());
+                    bool hasHardPageBreak = ((it == child->GetLines().begin()) && child->GetAttributes().HasPageBreak());
 
                     // Break the page if either we're going off the bottom, or this paragraph specifies
                     // an explicit page break
@@ -134,7 +134,7 @@ void wxRichTextPrintout::OnPreparePrinting()
 
                     lastLine = line;
 
-                    node2 = node2->GetNext();
+                    ++it;
                 }
             }
 
