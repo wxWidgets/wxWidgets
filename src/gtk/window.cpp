@@ -961,7 +961,7 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
 }
 
 
-static bool
+static void
 wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                            wxWindowGTK *win,
                            GdkEventKey *gdk_event)
@@ -1090,8 +1090,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     // now fill all the other fields
     wxFillOtherKeyEventFields(event, win, gdk_event);
-
-    return true;
 }
 
 
@@ -1181,55 +1179,46 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
-    bool return_after_IM = false;
 
-    if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
+    wxTranslateGTKKeyEventToWx(event, win, gdk_event);
+    // Send the CHAR_HOOK event first
+    if ( SendCharHookEvent(event, win) )
     {
-        // Send the CHAR_HOOK event first
-        if ( SendCharHookEvent(event, win) )
-        {
-            // Don't do anything at all with this event any more.
-            return TRUE;
-        }
+        // Don't do anything at all with this event any more.
+        return TRUE;
+    }
 
-        // Next check for accelerators.
+    // Next check for accelerators.
 #if wxUSE_ACCEL
-        wxWindowGTK *ancestor = win;
-        while (ancestor)
+    wxWindowGTK *ancestor = win;
+    while (ancestor)
+    {
+        int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+        if (command != -1)
         {
-            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-            if (command != -1)
+            wxCommandEvent menu_event( wxEVT_MENU, command );
+            ret = ancestor->HandleWindowEvent( menu_event );
+
+            if ( !ret )
             {
-                wxCommandEvent menu_event( wxEVT_MENU, command );
-                ret = ancestor->HandleWindowEvent( menu_event );
-
-                if ( !ret )
-                {
-                    // if the accelerator wasn't handled as menu event, try
-                    // it as button click (for compatibility with other
-                    // platforms):
-                    wxCommandEvent button_event( wxEVT_BUTTON, command );
-                    ret = ancestor->HandleWindowEvent( button_event );
-                }
-
-                break;
+                // if the accelerator wasn't handled as menu event, try
+                // it as button click (for compatibility with other
+                // platforms):
+                wxCommandEvent button_event( wxEVT_BUTTON, command );
+                ret = ancestor->HandleWindowEvent( button_event );
             }
-            if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
-                break;
-            ancestor = ancestor->GetParent();
+
+            break;
         }
+        if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
+            break;
+        ancestor = ancestor->GetParent();
+    }
 #endif // wxUSE_ACCEL
 
-        // If not an accelerator, then emit KEY_DOWN event
-        if ( !ret )
-            ret = win->HandleWindowEvent( event );
-    }
-    else
-    {
-        // Return after IM processing as we cannot do
-        // anything with it anyhow.
-        return_after_IM = true;
-    }
+    // If not an accelerator, then emit KEY_DOWN event
+    if ( !ret )
+        ret = win->HandleWindowEvent( event );
 
     if ( !ret )
     {
@@ -1251,9 +1240,6 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             return TRUE;
         }
     }
-
-    if (return_after_IM)
-        return FALSE;
 
     // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
     // will only be sent if it is not in an accelerator table.
@@ -1382,11 +1368,7 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
     wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
 
     wxKeyEvent event( wxEVT_KEY_UP );
-    if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
-    {
-        // unknown key pressed, ignore (the event would be useless anyhow)
-        return FALSE;
-    }
+    wxTranslateGTKKeyEventToWx(event, win, gdk_event);
 
     return win->GTKProcessEvent(event);
 }
