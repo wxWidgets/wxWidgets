@@ -1080,12 +1080,12 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         event.m_uniChar = event.m_keyCode;
     }
 
-    // sending unknown key events doesn't really make sense
+    // sending a WXK_NONE key and let app deal with it the RawKeyCode if required
     if ( !key_code && !event.m_uniChar )
-        return false;
+        event.m_keyCode = WXK_NONE;
 #else
     if (!key_code)
-        return false;
+        event.m_keyCode = WXK_NONE;
 #endif // wxUSE_UNICODE
 
     // now fill all the other fields
