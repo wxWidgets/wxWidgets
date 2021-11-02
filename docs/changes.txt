@@ -139,6 +139,9 @@ Changes in behaviour not resulting in compilation errors
   distinguishing them from the drive letters, even for single letter network
   share name.
 
+- wxRichTextParagraph::GetLines() now returns const wxVector<wxRichTextLine*>&
+  instead of wxList<wxRichTextLine*>&.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
