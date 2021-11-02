@@ -39,6 +39,10 @@ public:
     GtkWidget *GetMenuItem() const { return m_menuItem; }
     void SetGtkLabel();
 
+#if wxUSE_ACCEL
+    void GTKSetExtraAccels();
+#endif // wxUSE_ACCEL
+
 #if WXWIN_COMPATIBILITY_2_8
     // compatibility only, don't use in new code
     wxDEPRECATED_CONSTRUCTOR(

@@ -38,6 +38,7 @@ enum
     MenuTestCase_Foo = 10000,
     MenuTestCase_SelectAll,
     MenuTestCase_Bar,
+    MenuTestCase_ExtraAccels,
     MenuTestCase_First
 };
 
@@ -172,7 +173,15 @@ void MenuTestCase::CreateFrame()
     fileMenu->Append(MenuTestCase_SelectAll, "Select &all\tCtrl-A",
                      "Accelerator conflicting with wxTextCtrl");
     m_itemCount++;
-
+    wxMenuItem* extraAccels = fileMenu->Append(MenuTestCase_ExtraAccels, "Check extra accels");
+    wxAcceleratorEntry entry;
+    if (entry.FromString("Ctrl-T"))
+        extraAccels->AddExtraAccel(entry);
+    if (entry.FromString("Shift-Ctrl-W"))
+        extraAccels->AddExtraAccel(entry);
+    if (entry.FromString("Ctrl-W"))
+        extraAccels->SetAccel(&entry);
+    m_itemCount++;
 
     PopulateMenu(helpMenu, "Helpmenu item ", m_itemCount);
     helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
@@ -617,6 +626,22 @@ void MenuTestCase::Events()
     wxYield();
 
     CHECK( !handler.GotEvent() );
+
+    // Invoke accelerator and extra accelerators, all of them should work.
+    sim.Char('W', wxMOD_CONTROL);
+    wxYield();
+    CHECK( handler.GotEvent() );
+    CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccels) );
+
+    sim.Char('T', wxMOD_CONTROL);
+    wxYield();
+    CHECK( handler.GotEvent() );
+    CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccels) );
+
+    sim.Char('W', wxMOD_CONTROL | wxMOD_SHIFT);
+    wxYield();
+    CHECK( handler.GotEvent() );
+    CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccels) );
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 

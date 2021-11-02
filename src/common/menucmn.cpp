@@ -296,6 +296,11 @@ void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
     SetItemLabel(text);
 }
 
+void wxMenuItemBase::AddExtraAccel(const wxAcceleratorEntry& accel)
+{
+    m_extraAccels.push_back(accel);
+}
+
 #endif // wxUSE_ACCEL
 
 void wxMenuItemBase::SetItemLabel(const wxString& str)

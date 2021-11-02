@@ -36,6 +36,7 @@ extern int wxOpenModalDialogsCount;
 static const int wxGTK_TITLE_ID = -3;
 
 #if wxUSE_ACCEL
+static wxString GetGtkHotKeyFromAccel(wxAcceleratorEntry*);
 static bool wxGetGtkAccel(const wxMenuItem*, guint*, GdkModifierType*);
 #endif
 
@@ -678,6 +679,37 @@ void wxMenuItem::SetGtkLabel()
 #endif // wxUSE_ACCEL
 }
 
+#if wxUSE_ACCEL
+void wxMenuItem::GTKSetExtraAccels()
+{
+    const int extraAccelsSize = m_extraAccels.size();
+    for (int i = 0; i < extraAccelsSize; ++i)
+    {
+        const wxString extraHotKey = GetGtkHotKeyFromAccel(&(m_extraAccels[i]));
+        if ( !extraHotKey.empty() )
+        {
+            guint extraAccelKey;
+            GdkModifierType extraAccelMods;
+            gtk_accelerator_parse(
+                wxGTK_CONV_SYS(extraHotKey),
+                &extraAccelKey, &extraAccelMods
+            );
+            if ( gtk_accelerator_valid(extraAccelKey, extraAccelMods) )
+            {
+                gtk_widget_add_accelerator(
+                    m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
+                    extraAccelKey, extraAccelMods, GTK_ACCEL_MASK);
+            }
+            else
+            {
+                wxLogDebug("'%s' is not a valid keyboard accelerator for this GTK version",
+                   extraHotKey);
+            }
+        }
+    }
+}
+#endif // wxUSE_ACCEL
+
 void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
 {
     if (m_kind == wxITEM_NORMAL)
@@ -961,6 +993,10 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
         if ( mitem->IsSubMenu() )
             UpdateSubMenuItemLabels(mitem);
 
+#if wxUSE_ACCEL
+        mitem->GTKSetExtraAccels();
+#endif
+
         g_signal_connect (menuItem, "select",
                           G_CALLBACK(menuitem_select), mitem);
         g_signal_connect (menuItem, "deselect",
@@ -1038,11 +1074,10 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
 #if wxUSE_ACCEL
 
-static wxString GetGtkHotKey( const wxMenuItem& item )
+static wxString GetGtkHotKeyFromAccel( wxAcceleratorEntry *accel )
 {
     wxString hotkey;
 
-    wxAcceleratorEntry *accel = item.GetAccel();
     if ( accel )
     {
         int flags = accel->GetFlags();
@@ -1313,8 +1348,6 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 }
                 break;
         }
-
-        delete accel;
     }
 
     return hotkey;
@@ -1323,7 +1356,8 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
 static bool
 wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_mods)
 {
-    const wxString string = GetGtkHotKey(*item);
+    wxScopedPtr<wxAcceleratorEntry> accel(item->GetAccel());
+    const wxString string = GetGtkHotKeyFromAccel(accel.get());
     if (!string.empty())
     {
         gtk_accelerator_parse(wxGTK_CONV_SYS(string), accel_key, accel_mods);
