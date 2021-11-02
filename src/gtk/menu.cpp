@@ -704,6 +704,54 @@ void wxMenuItem::SetGtkLabel()
 #endif // wxUSE_ACCEL
 }
 
+#if wxUSE_ACCEL
+void wxMenuItem::GTKSetExtraAccels()
+{
+    GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
+
+    const size_t extraAccelsSize = m_extraAccels.size();
+    for (size_t i = 0; i < extraAccelsSize; ++i)
+    {
+        GtkAccel(m_extraAccels[i]).Add(m_menuItem, accelGroup, GTK_ACCEL_MASK);
+    }
+}
+
+void wxMenuItem::AddExtraAccel(const wxAcceleratorEntry& accel)
+{
+    wxMenuItemBase::AddExtraAccel(accel);
+
+    // If the item is not yet part of the menu, all its extra accelerators will
+    // be registered with GTK in GTKSetExtraAccels() once it is added to the
+    // menu, but if it had already been added to it, we need to let GTK know
+    // about the new extra accelerator.
+    if (m_menuItem)
+    {
+        GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
+
+        GtkAccel(accel).Add(m_menuItem, accelGroup, GTK_ACCEL_MASK);
+    }
+}
+
+void wxMenuItem::ClearExtraAccels()
+{
+    // Tell GTK not to use the existing accelerators any longer if they're
+    // already in use.
+    if (m_menuItem)
+    {
+        GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
+
+        const size_t extraAccelsSize = m_extraAccels.size();
+        for (size_t i = 0; i < extraAccelsSize; ++i)
+        {
+            GtkAccel(m_extraAccels[i]).Remove(m_menuItem, accelGroup);
+        }
+    }
+
+    wxMenuItemBase::ClearExtraAccels();
+}
+
+#endif // wxUSE_ACCEL
+
 void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
 {
     if (m_kind == wxITEM_NORMAL)
@@ -986,6 +1034,10 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
         mitem->SetGtkLabel();
         if ( mitem->IsSubMenu() )
             UpdateSubMenuItemLabels(mitem);
+
+#if wxUSE_ACCEL
+        mitem->GTKSetExtraAccels();
+#endif
 
         g_signal_connect (menuItem, "select",
                           G_CALLBACK(menuitem_select), mitem);

@@ -38,6 +38,8 @@ enum
     MenuTestCase_Foo = 10000,
     MenuTestCase_SelectAll,
     MenuTestCase_Bar,
+    MenuTestCase_ExtraAccel,
+    MenuTestCase_ExtraAccels,
     MenuTestCase_First
 };
 
@@ -173,6 +175,34 @@ void MenuTestCase::CreateFrame()
                      "Accelerator conflicting with wxTextCtrl");
     m_itemCount++;
 
+    // Test adding an extra accelerator to the item before adding it to the menu.
+    wxAcceleratorEntry entry;
+
+    wxMenuItem* const
+        extraAccel = new wxMenuItem(fileMenu, MenuTestCase_ExtraAccel, "Extra accels");
+
+    CHECK( entry.FromString("Ctrl-U") );
+    extraAccel->SetAccel(&entry);
+
+    CHECK( entry.FromString("Ctrl-V") );
+    extraAccel->AddExtraAccel(entry);
+
+    fileMenu->Append(extraAccel);
+    m_itemCount++;
+
+    // And now also test adding 2 of them after creating the initial menu item.
+    wxMenuItem* const
+        extraAccels = fileMenu->Append(MenuTestCase_ExtraAccels, "Extra accels 2");
+    m_itemCount++;
+
+    CHECK( entry.FromString("Ctrl-T") );
+    extraAccels->AddExtraAccel(entry);
+
+    CHECK(entry.FromString("Shift-Ctrl-W"));
+    extraAccels->AddExtraAccel(entry);
+
+    CHECK(entry.FromString("Ctrl-W"));
+    extraAccels->SetAccel(&entry);
 
     PopulateMenu(helpMenu, "Helpmenu item ", m_itemCount);
     helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
@@ -606,6 +636,42 @@ void MenuTestCase::Events()
 
     const wxCommandEvent& ev2 = handler.GetEvent();
     CHECK( ev2.GetId() == static_cast<int>(MenuTestCase_SelectAll) );
+
+    // Invoke accelerator and extra accelerators, all of them should work.
+    sim.Char('U', wxMOD_CONTROL);
+    wxYield();
+    if ( handler.GotEvent() )
+        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccel );
+    else
+        FAIL("No expected event for Ctrl-U");
+
+    sim.Char('V', wxMOD_CONTROL);
+    wxYield();
+    if ( handler.GotEvent() )
+        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccel );
+    else
+        FAIL("No expected event for Ctrl-V");
+
+    sim.Char('W', wxMOD_CONTROL);
+    wxYield();
+    if ( handler.GotEvent() )
+        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccels );
+    else
+        FAIL("No expected event for Ctrl-W");
+
+    sim.Char('T', wxMOD_CONTROL);
+    wxYield();
+    if ( handler.GotEvent() )
+        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccels );
+    else
+        FAIL("No expected event for Ctrl-T");
+
+    sim.Char('W', wxMOD_CONTROL | wxMOD_SHIFT);
+    wxYield();
+    if ( handler.GotEvent() )
+        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccels );
+    else
+        FAIL("No expected event for Ctrl-Shift-W");
 
     // Now create a text control which uses the same accelerator for itself and
     // check that when the text control has focus, the accelerator does _not_

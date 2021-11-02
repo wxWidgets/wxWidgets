@@ -225,29 +225,30 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
             return;
         }
 
-        // find the (new) accel for this item
+        // remove old accels
+        int n = wxNOT_FOUND;
+        while ( (n = FindAccel(item->GetId())) != wxNOT_FOUND )
+        {
+            delete m_accels[n];
+            m_accels.RemoveAt(n);
+        }
+
+        // find the (new) accel for this item and add it if any
         wxAcceleratorEntry *accel = wxAcceleratorEntry::Create(item->GetItemLabel());
         if ( accel )
+        {
             accel->m_command = item->GetId();
-
-        // find the old one
-        int n = FindAccel(item->GetId());
-        if ( n == wxNOT_FOUND )
-        {
-            // no old, add new if any
-            if ( accel )
-                m_accels.Add(accel);
-            else
-                return;     // skipping RebuildAccelTable() below
+            m_accels.Add(accel);
         }
-        else
+
+        // add extra accels
+        const wxVector<wxAcceleratorEntry>& extraAccelsVector = item->GetExtraAccels();
+        const int extraAccelsSize = extraAccelsVector.size();
+        for (int i = 0; i < extraAccelsSize; ++i)
         {
-            // replace old with new or just remove the old one if no new
-            delete m_accels[n];
-            if ( accel )
-                m_accels[n] = accel;
-            else
-                m_accels.RemoveAt(n);
+            wxAcceleratorEntry *extraAccel = new wxAcceleratorEntry(extraAccelsVector[i]);
+            extraAccel->m_command = item->GetId();
+            m_accels.Add(extraAccel);
         }
 
         if ( IsAttached() )
@@ -274,19 +275,22 @@ void wxMenu::RemoveAccel(wxMenuItem *item)
         return;
     }
 
-    // remove the corresponding accel from the accel table
-    int n = FindAccel(item->GetId());
-    if ( n != wxNOT_FOUND )
+    // remove the corresponding accels from the accel table
+    int n = wxNOT_FOUND;
+    bool accels_found = false;
+    while ( (n = FindAccel(item->GetId())) != wxNOT_FOUND )
     {
         delete m_accels[n];
-
         m_accels.RemoveAt(n);
+        accels_found = true;
+    }
 
 #if wxUSE_OWNER_DRAWN
+    if ( accels_found )
+    {
         ResetMaxAccelWidth();
-#endif
     }
-    //else: this item doesn't have an accel, nothing to do
+#endif
 }
 
 #endif // wxUSE_ACCEL

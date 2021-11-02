@@ -45,6 +45,15 @@
             <bitmap>uncenter.xpm</bitmap>
             <help>Disable autocentering of a dialog on its parent</help>
         </object>
+        <object class="wxMenuItem" name="multiple_accels">
+            <label>_Multiple accelerators</label>
+            <help>You can open the dialog with multiple accelerators</help>
+            <accel>Ctrl-W</accel>
+            <extra-accels>
+                <accel>Ctrl-T</accel>
+                <accel>Shift-Ctrl-W</accel>
+            </extra-accels>
+        </object>
     </object>
     <object class="wxMenu" name="advanced_demos_menu">
         <label>_Advanced</label>

@@ -211,6 +211,10 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     wxOSXMenuRemoveItem(m_hMenu , pos );
     */
+#if wxUSE_ACCEL
+    // we need to remove all hidden menu items related to this one
+    item->RemoveHiddenItems();
+#endif
     GetPeer()->Remove( item );
     // and from internal data structures
     return wxMenuBase::DoRemove(item);
