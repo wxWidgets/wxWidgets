@@ -141,16 +141,16 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
     {
         ULONG numLangs;
         ULONG bufferSize = 0;
-        if ( (*s_pfnGetUserPreferredUILanguages)(MUI_LANGUAGE_NAME,
-                                                 &numLangs,
-                                                 NULL,
-                                                 &bufferSize) )
+        if ( s_pfnGetUserPreferredUILanguages(MUI_LANGUAGE_NAME,
+                                              &numLangs,
+                                              NULL,
+                                              &bufferSize) )
         {
             wxScopedArray<WCHAR> langs(bufferSize);
-            if ( (*s_pfnGetUserPreferredUILanguages)(MUI_LANGUAGE_NAME,
-                                                     &numLangs,
-                                                     langs.get(),
-                                                     &bufferSize) )
+            if ( s_pfnGetUserPreferredUILanguages(MUI_LANGUAGE_NAME,
+                                                  &numLangs,
+                                                  langs.get(),
+                                                  &bufferSize) )
             {
                 wxArrayString preferred;
 
