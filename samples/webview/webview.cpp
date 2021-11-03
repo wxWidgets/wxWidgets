@@ -932,7 +932,10 @@ void WebFrame::OnScriptMessage(wxWebViewEvent& evt)
 
 void WebFrame::OnScriptResult(wxWebViewEvent& evt)
 {
-    wxLogMessage("Async script result received; value = %s", evt.GetString());
+    if (evt.IsError())
+        wxLogError("Async script execution failed: %s", evt.GetString());
+    else
+        wxLogMessage("Async script result received; value = %s", evt.GetString());
 }
 
 void WebFrame::OnSetPage(wxCommandEvent& WXUNUSED(evt))

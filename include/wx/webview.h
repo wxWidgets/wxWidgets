@@ -300,6 +300,7 @@ public:
           m_actionFlags(flags), m_messageHandler(messageHandler)
     {}
 
+    bool IsError() const { return GetInt() == 0; }
 
     const wxString& GetURL() const { return m_url; }
     const wxString& GetTarget() const { return m_target; }

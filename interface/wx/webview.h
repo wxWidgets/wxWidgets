@@ -1345,6 +1345,14 @@ public:
         @since 3.1.5
     */
     const wxString& GetMessageHandler() const;
+
+    /**
+        Returns true the script execution failed. Only valid for events of type
+        @c wxEVT_WEBVIEW_SCRIPT_RESULT
+
+        @since 3.1.6
+    */
+    bool IsError() const;
 };
 
 
