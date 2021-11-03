@@ -777,6 +777,11 @@ public:
         Runs the given JavaScript code asynchronously and returns the result
         via a @c wxEVT_WEBVIEW_SCRIPT_RESULT.
 
+        The script result value can be retrieved via wxWebViewEvent::GetString().
+        If the execution fails wxWebViewEvent::IsError() will return @true. In this
+        case additional script execution error information maybe available
+        via wxWebViewEvent::GetString().
+
         @param javascript JavaScript code to execute.
         @param clientData Arbirary pointer to data that can be retrieved from
             the result event.
@@ -1301,6 +1306,10 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         wxWebView::AddScriptMessageHandler().
+    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
+        only available in wxWidgets 3.1.6 or later. For usage details see
+        wxWebView::RunScriptAsync().
     @endEventTable
 
     @since 2.9.3
