@@ -69,10 +69,28 @@ protected:
         }
     }
 
+    void OnScriptResult(const wxWebViewEvent& evt)
+    {
+        m_asyncScriptResult = (evt.IsError()) ? 0 : 1;
+        m_asyncScriptString = evt.GetString();
+    }
+
+    void RunAsyncScript(const wxString& javascript)
+    {
+        m_browser->Bind(wxEVT_WEBVIEW_SCRIPT_RESULT, &WebViewTestCase::OnScriptResult, this);
+        m_asyncScriptResult = -1;
+        m_browser->RunScriptAsync(javascript);
+        while (m_asyncScriptResult == -1)
+            wxYield();
+        m_browser->Unbind(wxEVT_WEBVIEW_SCRIPT_RESULT, &WebViewTestCase::OnScriptResult, this);
+    }
+
     wxWebView* const m_browser;
     EventCounter* const m_loaded;
     wxString m_blankTitle;
     wxString m_alternateHistoryURL;
+    int m_asyncScriptResult;
+    wxString m_asyncScriptString;
 };
 
 TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
@@ -392,6 +410,21 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(!m_browser->RunScript("syntax(error"));
         CHECK(!m_browser->RunScript("syntax(error", &result));
         CHECK(!m_browser->RunScript("x.y.z"));
+    }
+
+    SECTION("RunScriptAsync")
+    {
+#ifdef __WXMSW__
+        // IE doesn't support async script execution
+        if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+            return;
+#endif
+        RunAsyncScript("function f(a){return a;}f('Hello World!');");
+        CHECK(m_asyncScriptResult == 1);
+        CHECK(m_asyncScriptString == "Hello World!");
+
+        RunAsyncScript("int main() { return 0; }");
+        CHECK(m_asyncScriptResult == 0);
     }
 
     SECTION("SetPage")
