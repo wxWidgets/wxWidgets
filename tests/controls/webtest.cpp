@@ -35,6 +35,17 @@ public:
         : m_browser(wxWebView::New()),
           m_loaded(new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED))
     {
+#ifdef __WXMSW__
+        if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+        {
+            // The blank page does not have an empty title with edge
+            m_blankTitle = "about:blank";
+            // Edge does not support about: url use a different URL instead
+            m_alternateHistoryURL = "about:blank";
+        }
+        else
+#endif
+            m_alternateHistoryURL = "about:";
     }
 
     ~WebViewTestCase()
@@ -53,13 +64,15 @@ protected:
             if(i % 2 == 1)
                 m_browser->LoadURL("about:blank");
             else
-                m_browser->LoadURL("about:");
+                m_browser->LoadURL(m_alternateHistoryURL);
             ENSURE_LOADED;
         }
     }
 
     wxWebView* const m_browser;
     EventCounter* const m_loaded;
+    wxString m_blankTitle;
+    wxString m_alternateHistoryURL;
 };
 
 TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
@@ -88,7 +101,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
         //Test title after loading a url, we yield to let events process
         LoadUrl();
-        CHECK(m_browser->GetCurrentTitle() == "");
+        CHECK(m_browser->GetCurrentTitle() == m_blankTitle);
     }
 
     SECTION("URL")
@@ -97,7 +110,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
         //After first loading about:blank the next in the sequence is about:
         LoadUrl();
-        CHECK(m_browser->GetCurrentURL() == "about:");
+        CHECK(m_browser->GetCurrentURL() == m_alternateHistoryURL);
     }
 
     SECTION("History")
@@ -336,9 +349,9 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->RunScript("function f(a){return a;}f(false);", &result));
         CHECK(result == "false");
 
-        CHECK(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; \
-            person.lastName = 'Bar';return person;}f();", &result));
-        CHECK(result == "{\"name\":\"Foo\",\"lastName\":\"Bar\"}");
+        CHECK(m_browser->RunScript("function f(){var person = new Object();person.lastName = 'Bar'; \
+            person.name = 'Foo';return person;}f();", &result));
+        CHECK(result == "{\"lastName\":\"Bar\",\"name\":\"Foo\"}");
 
         CHECK(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
         CHECK(result == "[\"foo\",\"bar\"]");
