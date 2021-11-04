@@ -870,53 +870,24 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
         case GDK_KEY_Mail:
             key_code = WXK_LAUNCH_MAIL;
             break;
+
         case GDK_KEY_Launch0:
-            key_code = WXK_LAUNCH_0;
-            break;
         case GDK_KEY_Launch1:
-            key_code = WXK_LAUNCH_1;
-            break;
         case GDK_KEY_Launch2:
-            key_code = WXK_LAUNCH_2;
-            break;
         case GDK_KEY_Launch3:
-            key_code = WXK_LAUNCH_3;
-            break;
         case GDK_KEY_Launch4:
-            key_code = WXK_LAUNCH_4;
-            break;
         case GDK_KEY_Launch5:
-            key_code = WXK_LAUNCH_5;
-            break;
         case GDK_KEY_Launch6:
-            key_code = WXK_LAUNCH_6;
-            break;
         case GDK_KEY_Launch7:
-            key_code = WXK_LAUNCH_7;
-            break;
         case GDK_KEY_Launch8:
-            key_code = WXK_LAUNCH_8;
-            break;
         case GDK_KEY_Launch9:
-            key_code = WXK_LAUNCH_9;
-            break;
         case GDK_KEY_LaunchA:
-            key_code = WXK_LAUNCH_A;
-            break;
         case GDK_KEY_LaunchB:
-            key_code = WXK_LAUNCH_B;
-            break;
         case GDK_KEY_LaunchC:
-            key_code = WXK_LAUNCH_C;
-            break;
         case GDK_KEY_LaunchD:
-            key_code = WXK_LAUNCH_D;
-            break;
         case GDK_KEY_LaunchE:
-            key_code = WXK_LAUNCH_E;
-            break;
         case GDK_KEY_LaunchF:
-            key_code = WXK_LAUNCH_F;
+            key_code = WXK_LAUNCH_0 + (keysym - GDK_KEY_Launch0);
             break;
 #endif // GTK_CHECK_VERSION(2,18,0)
 
