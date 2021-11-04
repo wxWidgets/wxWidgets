@@ -28,7 +28,7 @@ public:
     virtual void Reset() wxOVERRIDE;
     virtual bool IsOk() wxOVERRIDE;
     virtual void InitFromDC(wxDC* dc, int x , int y , int width , int height) wxOVERRIDE;
-    virtual void InitFromWindow(wxWindow* win, bool fullscreen) wxOVERRIDE;
+    virtual void InitFromWindow(wxWindow* win, wxOverlay::Target target) wxOVERRIDE;
     virtual void BeginDrawing(wxDC* dc) wxOVERRIDE;
     virtual void EndDrawing(wxDC* dc) wxOVERRIDE;
     virtual void Clear(wxDC* dc) wxOVERRIDE;
@@ -60,8 +60,6 @@ private:
     GtkWidget* m_surface;
 
     cairo_surface_t* m_cairoSurface;
-
-    bool m_fullscreen;
 
     wxDECLARE_NO_COPY_CLASS(wxOverlayGTKImpl);
 };

@@ -37,6 +37,7 @@
 
 #define wxUSE_IMAGE_IN_DRAGIMAGE 1
 
+#include "wx/display.h"
 #include "wx/generic/dragimgg.h"
 
 // ----------------------------------------------------------------------------
@@ -214,10 +215,7 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
         }
         else
         {
-            int w, h;
-            wxDisplaySize(&w, &h);
-            m_boundingRect.SetPosition(wxPoint(0, 0));
-            m_boundingRect.SetSize(wxSize(w, h));
+            m_boundingRect = wxDisplay(window).GetGeometry();
         }
     }
 
@@ -384,7 +382,8 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos,
                                      bool eraseOld, bool drawNew)
 {
 #ifdef wxHAS_NATIVE_OVERLAY
-    wxDCOverlay dcoverlay( m_overlay, m_window, m_fullScreen );
+    wxDCOverlay dcoverlay( m_overlay, m_window,
+        m_fullScreen ? wxOverlay::Overlay_Screen : wxOverlay::Overlay_Window );
     dcoverlay.SetUpdateRectangle(GetImageRect(oldPos));
     wxDC& dc = dcoverlay;
 

@@ -76,9 +76,9 @@ void wxOverlayDFBImpl::InitFromDC(wxDC *dc, int x, int y, int width, int height)
     m_window->AddOverlay(this);
 }
 
-void wxOverlayDFBImpl::InitFromWindow(wxWindow* WXUNUSED(win), bool WXUNUSED(fullscreen))
+void wxOverlayDFBImpl::InitFromWindow(wxWindow* WXUNUSED(win), wxOverlay::Target WXUNUSED(target))
 {
-    // don't forget to define wxOVERLAY_NO_EXTERNAL_DC in wx/overlay.h when implement this
+    // don't forget to define wxOVERLAY_USE_INTERNAL_BUFFER in wx/overlay.h when implement this
 }
 
 void wxOverlayDFBImpl::BeginDrawing(wxDC *dc)

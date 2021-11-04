@@ -166,14 +166,13 @@ void wxOverlayGTKImpl::CreateSurface()
     gtk_window_present(GTK_WINDOW(m_surface));
 }
 
-void wxOverlayGTKImpl::InitFromWindow(wxWindow* win, bool fullscreen)
+void wxOverlayGTKImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
 {
     wxASSERT_MSG( !IsOk(), "You cannot Init an overlay twice" );
 
     m_window = win;
-    m_fullscreen = fullscreen;
 
-    if ( fullscreen )
+    if ( target == wxOverlay::Overlay_Screen )
     {
         m_rect = wxDisplay(win).GetGeometry();
     }

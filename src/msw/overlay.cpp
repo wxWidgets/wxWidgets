@@ -166,14 +166,13 @@ bool wxOverlayMSWImpl::IsOk()
     return GetBitmap().IsOk();
 }
 
-void wxOverlayMSWImpl::InitFromWindow(wxWindow* win, bool fullscreen)
+void wxOverlayMSWImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
 {
     wxASSERT_MSG( !IsOk() , "You cannot Init an overlay twice" );
 
     m_window = win;
-    m_fullscreen = fullscreen;
 
-    if ( fullscreen )
+    if ( target == wxOverlay::Overlay_Screen )
     {
         m_rect = wxDisplay(win).GetGeometry();
     }

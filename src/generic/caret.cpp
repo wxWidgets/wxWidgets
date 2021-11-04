@@ -218,17 +218,11 @@ void wxCaret::Blink()
 
 void wxCaret::Refresh()
 {
-    if ( DoRefresh() )
-        m_overlay.Reset();
-}
-
-bool wxCaret::DoRefresh()
-{
     wxWindow* const win = GetWindow();
 
     if ( !win->IsShownOnScreen() )
     {
-        return false;
+        return;
     }
 
     wxDCOverlay dcOverlay( m_overlay, win, m_x, m_y, m_width , m_height );
@@ -236,15 +230,15 @@ bool wxCaret::DoRefresh()
     if ( m_blinkedOut )
     {
         dcOverlay.Clear();
-        return !m_overlay.IsNative();
+
+        if ( !m_overlay.IsNative() )
+            m_overlay.Reset();
     }
     else
     {
         wxDC& dc = dcOverlay;
         DoDraw( &dc, win );
     }
-
-    return false;
 }
 
 void wxCaret::DoDraw(wxDC *dc, wxWindow* win)

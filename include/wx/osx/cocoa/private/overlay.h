@@ -33,7 +33,7 @@ public:
 
     virtual void InitFromDC( wxDC* dc, int x , int y , int width , int height ) wxOVERRIDE;
 
-    virtual void InitFromWindow(wxWindow* win, bool fullscreen) wxOVERRIDE;
+    virtual void InitFromWindow(wxWindow* win, wxOverlay::Target target) wxOVERRIDE;
 
     virtual void BeginDrawing( wxDC* dc) wxOVERRIDE;
 

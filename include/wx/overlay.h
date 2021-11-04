@@ -19,12 +19,18 @@
     #define wxHAS_NATIVE_OVERLAY 1
 #elif defined(__WXMSW__) || defined(__WXGTK3__)
     #define wxHAS_NATIVE_OVERLAY 1
-    #define wxOVERLAY_NO_EXTERNAL_DC 1
+    #define wxOVERLAY_USE_INTERNAL_BUFFER 1
 #else
     // don't define wxHAS_NATIVE_OVERLAY
 #endif
 
-#ifdef wxOVERLAY_NO_EXTERNAL_DC
+// Under MSW and GTK3 we can create and use a wxDCOverlay (like a regular wxDC)
+// independently of any external wxDC. i.e. a wxMemoryDC/wxGCDC are used for the
+// actual drawings and the result is blitted to the destination (overlay) window
+// eventually.
+// For the other platforms, they can define this symbol after overriding the base
+// class wxOverlayImpl::InitFromWindow() function.
+#ifdef wxOVERLAY_USE_INTERNAL_BUFFER
     #include "wx/dcmemory.h"
 #endif
 
@@ -58,15 +64,21 @@ public:
     // returns (port-specific) implementation of the overlay
     wxOverlayImpl *GetImpl() { return m_impl; }
 
+    enum Target
+    {
+        Overlay_Window,
+        Overlay_Screen
+    };
+
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxDCOverlay;
 
     // returns true if it has been setup
     bool IsOk();
 
-    void Init(wxDC* dc, int x , int y , int width , int height);
+    void InitFromDC(wxDC* dc, int x , int y , int width , int height);
 
-    void Init(wxWindow* win, bool fullscreen);
+    void InitFromWindow(wxWindow* win, Target target);
 
     void BeginDrawing(wxDC* dc);
 
@@ -96,17 +108,14 @@ public:
     // alternatively, if these ctors are used instead, the drawing should be done
     // via this class directly (just cast the object to wxDC, i.e.:  wxDC& dc = overlaydc)
     wxDCOverlay(wxOverlay &overlay, wxWindow *win, int x, int y, int width, int height);
-    wxDCOverlay(wxOverlay &overlay, wxWindow *win, bool fullscreen = false);
+    wxDCOverlay(wxOverlay &overlay, wxWindow *win,
+                wxOverlay::Target target = wxOverlay::Overlay_Window);
 
     // removes the connection between the overlay and the dc
     virtual ~wxDCOverlay();
 
     // implicit conversion to wxDC
-    operator wxDC& () const
-    {
-        wxASSERT_MSG( m_dc, "Invalid device context" );
-        return *m_dc;
-    }
+    operator wxDC& () const { return *m_dc; }
 
     // clears the layer, restoring the state at the last init
     void Clear();
@@ -115,18 +124,18 @@ public:
     void SetUpdateRectangle(const wxRect& rect);
 
 private:
-    void Init(wxDC *dc);
-    void Init(wxDC *dc, int x , int y , int width , int height);
-    void Init(wxWindow *win, bool fullscreen, const wxRect& rect);
+    void InitFromDC(wxDC *dc);
+    void InitFromDC(wxDC *dc, int x , int y , int width , int height);
+    void InitFromWindow(wxWindow *win, wxOverlay::Target target, const wxRect& rect);
 
     wxOverlay& m_overlay;
 
     wxDC*      m_dc;
     bool       m_ownsDC;
 
-#ifdef wxOVERLAY_NO_EXTERNAL_DC
+#ifdef wxOVERLAY_USE_INTERNAL_BUFFER
     wxMemoryDC m_memDC;
-#endif // wxOVERLAY_NO_EXTERNAL_DC
+#endif // wxOVERLAY_USE_INTERNAL_BUFFER
 
     wxDECLARE_NO_COPY_CLASS(wxDCOverlay);
 };

@@ -194,9 +194,9 @@ void wxOverlayCocoaImpl::InitFromDC( wxDC* dc, int x , int y , int width , int h
     wxASSERT_MSG(m_overlayWindow != NULL, "Couldn't create the overlay window");
 }
 
-void wxOverlayCocoaImpl::InitFromWindow(wxWindow* WXUNUSED(win), bool WXUNUSED(fullscreen))
+void wxOverlayCocoaImpl::InitFromWindow(wxWindow* WXUNUSED(win), wxOverlay::Target WXUNUSED(target))
 {
-    // don't forget to define wxOVERLAY_NO_EXTERNAL_DC in wx/overlay.h when implement this
+    // don't forget to define wxOVERLAY_USE_INTERNAL_BUFFER in wx/overlay.h when implement this
 }
 
 void wxOverlayCocoaImpl::BeginDrawing( wxDC* dc)

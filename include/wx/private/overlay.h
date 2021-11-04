@@ -12,6 +12,7 @@
 #define _WX_PRIVATE_OVERLAY_H_
 
 #include "wx/bitmap.h"
+#include "wx/overlay.h"
 
 class wxOverlayImpl
 {
@@ -36,9 +37,9 @@ public:
         InitFromDC(dc, x, y, width, height);
     }
 
-    void Init(wxWindow* win, bool fullscreen)
+    void Init(wxWindow* win, wxOverlay::Target target)
     {
-        InitFromWindow(win, fullscreen);
+        InitFromWindow(win, target);
     }
 
     // returns true if it has been setup
@@ -62,7 +63,7 @@ public:
 
 protected:
     virtual void InitFromDC(wxDC* dc, int x, int y, int width, int height) = 0;
-    virtual void InitFromWindow(wxWindow* win, bool fullscreen) = 0;
+    virtual void InitFromWindow(wxWindow* win, wxOverlay::Target target) = 0;
 
 private:
     wxBitmap m_bitmap;
