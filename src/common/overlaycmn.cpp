@@ -106,9 +106,9 @@ void wxOverlay::Reset()
 {
     // Notice that this function can be safely called anytime when using generic overlay
     // because BeginDrawing()/EndDrawing() are trivial there.
-    const bool canReset = !m_impl->IsNative() || !m_inDrawing;
 
-    wxASSERT_MSG(canReset,wxT("cannot reset overlay during drawing"));
+    wxASSERT_MSG(!m_impl->IsNative() || !m_inDrawing,
+                 "cannot reset overlay during drawing");
 
     m_impl->Reset();
 }
@@ -121,24 +121,36 @@ void wxOverlay::Reset()
 wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxDC *dc, int x , int y , int width , int height) :
     m_overlay(overlay), m_ownsDC(false)
 {
+    // Initializing the wxOverlay from wxDC is not currently supported under wxMSW and wxGTK3
+    // and to preserve compatibility with the old wx versions we fallback to the generic impl.
+#if !defined(__WXOSX__) && !defined(__WXDFB__)
+    m_overlay.UseGeneric();
+#endif
+
     InitFromDC(dc, x, y, width, height);
 }
 
 wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxDC *dc) :
     m_overlay(overlay), m_ownsDC(false)
 {
+    // Initializing the wxOverlay from wxDC is not currently supported under wxMSW and wxGTK3
+    // and to preserve compatibility with the old wx versions we fallback to the generic impl.
+#if !defined(__WXOSX__) && !defined(__WXDFB__)
+    m_overlay.UseGeneric();
+#endif
+
     InitFromDC(dc);
 }
 
 wxDCOverlay::wxDCOverlay(wxOverlay& overlay, wxWindow* win,
                          int x, int y, int width, int height) :
-    m_overlay(overlay), m_ownsDC(true)
+    m_overlay(overlay), m_dc(NULL), m_ownsDC(true)
 {
     InitFromWindow(win, wxOverlay::Overlay_Window, wxRect(x, y, width, height));
 }
 
 wxDCOverlay::wxDCOverlay(wxOverlay& overlay, wxWindow* win, wxOverlay::Target target) :
-    m_overlay(overlay), m_ownsDC(true)
+    m_overlay(overlay), m_dc(NULL), m_ownsDC(true)
 {
     InitFromWindow(win, target, wxRect());
 }
@@ -168,12 +180,14 @@ void wxDCOverlay::InitFromWindow(wxWindow* win, wxOverlay::Target target, const 
 #ifdef wxOVERLAY_USE_INTERNAL_BUFFER
     if ( !m_overlay.IsOk() )
     {
+        SetUpdateRectangle(rect);
         m_overlay.InitFromWindow(win, target);
     }
 
-    const bool isNative = m_overlay.GetImpl()->IsNative();
+    if ( !m_overlay.IsOk() )
+        return;
 
-    if ( m_overlay.IsOk() && isNative )
+    if ( m_overlay.GetImpl()->IsNative() )
     {
         wxBitmap& bitmap = m_overlay.GetImpl()->GetBitmap();
         m_memDC.SelectObject(bitmap);
@@ -298,7 +312,7 @@ void wxOverlay::UseGeneric()
 #ifdef wxHAS_NATIVE_OVERLAY
     wxASSERT_MSG( !IsOk(), "should only be called for uninitialized overlay" );
 
-    if ( !m_impl->IsGenericSupported() )
+    if ( !m_impl->IsNative() || !m_impl->IsGenericSupported() )
     {
         // Only native overlay can be used (Wayland for ex.)
         return;

@@ -42,7 +42,7 @@ public:
 
 private:
     // create and initialize m_surface
-    void CreateSurface();
+    void CreateSurface(wxOverlay::Target target);
 
     // The input shape applies only to event handling.
     // i.e. mouse clicks should be passed on to m_window.

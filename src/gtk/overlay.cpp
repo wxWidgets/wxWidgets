@@ -71,15 +71,6 @@ wxgtk_overlay_draw(GtkWidget* widget, cairo_t* cr, wxOverlayGTKImpl* overlay)
 
     return false;
 }
-
-static void
-wxgtk_overlay_realized(GtkWidget* widget, gpointer WXUNUSED(data))
-{
-    // Quoting the GTK docs:
-    // The window manager can’t see the override redirect window at all.
-    // This means it won’t have a titlebar, won’t be minimizable, etc.
-    gdk_window_set_override_redirect(gtk_widget_get_window(widget), TRUE);
-}
 }
 
 // ----------------------------------------------------------------------------
@@ -110,7 +101,7 @@ bool wxOverlayGTKImpl::IsOk()
     return m_surface != NULL && GetBitmap().IsOk();
 }
 
-void wxOverlayGTKImpl::CreateSurface()
+void wxOverlayGTKImpl::CreateSurface(wxOverlay::Target target)
 {
     if ( wxPrivate::IsWayland() )
     {
@@ -124,15 +115,17 @@ void wxOverlayGTKImpl::CreateSurface()
         // If W is the window being overlayed by m_surface is covered by another window
         // W2, m_surface will be shown above W2 too even if it has the "above state" set.
         m_surface = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-        gtk_window_set_keep_below(GTK_WINDOW(m_surface), TRUE);
 
-        // These calls seem redundant because this window will set the override_redirect
-        // flag anyway, which means the WM cannot see it at all.
         gtk_window_set_decorated(GTK_WINDOW(m_surface), FALSE);
         gtk_window_set_resizable(GTK_WINDOW(m_surface), FALSE);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_surface), TRUE);
         gtk_window_set_skip_pager_hint(GTK_WINDOW(m_surface), TRUE);
         gtk_window_set_type_hint(GTK_WINDOW(m_surface), GDK_WINDOW_TYPE_HINT_DOCK);
+
+        if ( target == wxOverlay::Overlay_Screen )
+            gtk_window_set_keep_above(GTK_WINDOW(m_surface), TRUE);
+        else
+            gtk_window_set_keep_below(GTK_WINDOW(m_surface), TRUE);
     }
 
     gtk_window_set_focus_on_map(GTK_WINDOW(m_surface), FALSE);
@@ -154,38 +147,44 @@ void wxOverlayGTKImpl::CreateSurface()
     gtk_window_move(GTK_WINDOW(m_surface), m_rect.x, m_rect.y);
     gtk_widget_set_size_request(m_surface, m_rect.GetWidth(), m_rect.GetHeight());
 
+    gtk_window_present(GTK_WINDOW(m_surface));
+
     if ( wxPrivate::IsWayland() )
     {
         g_signal_connect(m_surface, "draw", G_CALLBACK(wxgtk_overlay_draw), this);
     }
-    else
-    {
-        g_signal_connect(m_surface, "realize", G_CALLBACK(wxgtk_overlay_realized), NULL);
-    }
-
-    gtk_window_present(GTK_WINDOW(m_surface));
 }
 
 void wxOverlayGTKImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
 {
     wxASSERT_MSG( !IsOk(), "You cannot Init an overlay twice" );
+    wxASSERT_MSG( !m_window || m_window == win,
+        "wxOverlay re-initialized with a different window");
 
     m_window = win;
 
+    wxRect rect;
+
     if ( target == wxOverlay::Overlay_Screen )
     {
-        m_rect = wxDisplay(win).GetGeometry();
+        rect = wxDisplay(win).GetGeometry();
     }
     else
     {
-        m_rect.SetSize(win->GetClientSize());
-        m_rect.SetPosition(win->GetScreenPosition());
+        rect.SetSize(win->GetClientSize());
+        rect.SetPosition(win->GetScreenPosition());
+    }
+
+    if ( m_rect.GetWidth() < rect.GetWidth() ||
+         m_rect.GetHeight() < rect.GetHeight() )
+    {
+        m_rect = rect;
     }
 
     wxBitmap& bitmap = GetBitmap();
     bitmap.Create(m_rect.GetWidth(), m_rect.GetHeight(), 32);
 
-    CreateSurface();
+    CreateSurface(target);
 }
 
 void wxOverlayGTKImpl::InitFromDC(wxDC* , int, int, int, int)
@@ -285,12 +284,10 @@ void wxOverlayGTKImpl::Reset()
     if ( !IsOk() )
         return;
 
-    g_signal_handlers_disconnect_by_func(m_surface, (gpointer)wxgtk_overlay_realized, NULL);
     g_signal_handlers_disconnect_by_func(m_surface, (gpointer)wxgtk_overlay_draw, this);
     gtk_widget_hide(m_surface);
     gtk_widget_destroy(m_surface);
 
-    m_window = NULL;
     m_surface = NULL;
     m_cairoSurface = NULL;
 

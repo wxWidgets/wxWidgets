@@ -39,7 +39,7 @@ static const wxChar* gs_overlayClassName = NULL;
 class wxOverlayWindow : public wxNativeContainerWindow
 {
 public:
-    static wxWindow*  Create()
+    static wxWindow*  Create(wxOverlay::Target target)
     {
         static const wxChar* OVERLAY_WINDOW_CLASS = wxS("wxOverlayWindow");
 
@@ -61,9 +61,14 @@ public:
             gs_overlayClassName = OVERLAY_WINDOW_CLASS;
         }
 
+        DWORD exStyle = WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE;
+
+        if ( target == wxOverlay::Overlay_Screen )
+            exStyle |= WS_EX_TOPMOST;
+
         HWND hwnd = ::CreateWindowEx
                       (
-                        WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE | WS_EX_TOPMOST,
+                        exStyle,
                         OVERLAY_WINDOW_CLASS,
                         NULL,
                         WS_POPUP, 0, 0, 0,
@@ -157,29 +162,37 @@ wxOverlayMSWImpl::wxOverlayMSWImpl()
 wxOverlayMSWImpl::~wxOverlayMSWImpl()
 {
     Reset();
-
-    m_overlayWindow->Destroy();
 }
 
 bool wxOverlayMSWImpl::IsOk()
 {
-    return GetBitmap().IsOk();
+    return m_overlayWindow != NULL && GetBitmap().IsOk();
 }
 
 void wxOverlayMSWImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
 {
     wxASSERT_MSG( !IsOk() , "You cannot Init an overlay twice" );
+    wxASSERT_MSG( !m_window || m_window == win,
+        "wxOverlay re-initialized with a different window");
 
     m_window = win;
 
+    wxRect rect;
+
     if ( target == wxOverlay::Overlay_Screen )
     {
-        m_rect = wxDisplay(win).GetGeometry();
+        rect = wxDisplay(win).GetGeometry();
     }
     else
     {
-        m_rect.SetSize(win->GetClientSize());
-        m_rect.SetPosition(win->GetScreenPosition());
+        rect.SetSize(win->GetClientSize());
+        rect.SetPosition(win->GetScreenPosition());
+    }
+
+    if ( m_rect.GetWidth() < rect.GetWidth() ||
+         m_rect.GetHeight() < rect.GetHeight() )
+    {
+        m_rect = rect;
     }
 
     wxBitmap& bitmap = GetBitmap();
@@ -187,8 +200,7 @@ void wxOverlayMSWImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
 
     if ( !m_overlayWindow )
     {
-        m_overlayWindow = wxPrivate::wxOverlayWindow::Create();
-        m_overlayWindow->SetBackgroundColour(*wxBLUE);
+        m_overlayWindow = wxPrivate::wxOverlayWindow::Create(target);
     }
 
     m_overlayWindow->Move(m_rect.GetPosition());
@@ -244,10 +256,15 @@ void wxOverlayMSWImpl::Clear(wxDC* dc)
 
 void wxOverlayMSWImpl::Reset()
 {
+    m_oldRect = wxRect();
+
     GetBitmap() = wxBitmap();
 
     if ( m_overlayWindow )
-        m_overlayWindow->Hide();
+    {
+        m_overlayWindow->Destroy();
+        m_overlayWindow = NULL;
+    }
 }
 
 wxOverlayImpl* wxOverlayImpl::Create() { return new wxOverlayMSWImpl(); }
