@@ -583,7 +583,22 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     m_updatesCount = -2;
 
     if ( !MSWCreateControl(windowClass.t_str(), msStyle, pos, size, valueWin) )
+    {
+        // There is one case in which window creation may realistically fail
+        // and this is when we create a plain EDIT control with too long text,
+        // so try to detect this and transparently switch to using RICHEDIT in
+        // this case (note that the exact length cut off is unknown and might
+        // be system-dependent, but even though plain EDIT works for texts
+        // longer than 64KiB, we don't lose much by trying to use RICHEDIT if
+        // creating it failed).
+        if ( !HasFlag(wxTE_RICH | wxTE_RICH2) && value.length() >= 0x10000 )
+        {
+            m_windowStyle |= wxTE_RICH2;
+            return MSWCreateText(value, pos, size);
+        }
+
         return false;
+    }
 
     m_updatesCount = -1;
 

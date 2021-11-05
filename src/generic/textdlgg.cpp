@@ -97,7 +97,11 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     topsizer->Add(CreateTextSizer(message), flagsBorder2);
 #endif
 
-    // 2) text ctrl
+    // 2) text ctrl: create it with wxTE_RICH2 style to allow putting more than
+    // 64KiB of text into it
+    if ( style & wxTE_MULTILINE )
+        style |= wxTE_RICH2;
+
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
                                 wxDefaultPosition, wxSize(300, wxDefaultCoord),
                                 style & ~wxTextEntryDialogStyle);

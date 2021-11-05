@@ -4049,8 +4049,8 @@ WXHWND wxWindowMSW::MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* 
     {
         wxLogLastError(wxString::Format
         (
-            wxT("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx)"),
-            clName, style, exStyle
+            wxT("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx, title-len=%zu)"),
+            clName, style, exStyle, title ? wxStrlen(title) : 0
         ));
     }
     else if ( !IsTopLevel() && !MSWIsPositionDirectlySupported(x, y) )
