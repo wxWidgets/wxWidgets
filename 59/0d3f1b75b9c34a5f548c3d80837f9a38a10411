@@ -1,0 +1,1 @@
+All: Recognize Windows 11 and macOS 12 in wxGetOsDescription() (Tobias Taschner).
