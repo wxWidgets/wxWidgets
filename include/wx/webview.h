@@ -139,6 +139,7 @@ public:
     {
         m_showMenu = true;
         m_runScriptCount = 0;
+        m_syncScriptResult = 0;
     }
 
     virtual ~wxWebView() {}

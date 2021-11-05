@@ -229,7 +229,7 @@ bool wxWebView::RunScript(const wxString& javascript, wxString* output) const
 {
     m_syncScriptResult = -1;
     m_syncScriptOutput.clear();
-    RunScriptAsync(javascript, (void*)this);
+    RunScriptAsync(javascript);
 
     // Wait for script exection
     while (m_syncScriptResult == -1)
