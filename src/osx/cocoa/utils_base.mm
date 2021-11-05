@@ -115,6 +115,9 @@ wxString wxGetOsDescription()
             case 11:
                 osName = "Big Sur";
                 break;
+            case 12:
+                osName = "Monterey";
+                break;
         }
     }
 #else

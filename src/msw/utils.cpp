@@ -1134,9 +1134,14 @@ wxString wxGetOsDescription()
                     break;
 
                 case 10:
-                    str = wxIsWindowsServer() == 1
-                            ? "Windows Server 2016"
-                            : "Windows 10";
+                    if (info.dwBuildNumber >= 22000)
+                        str = wxIsWindowsServer() == 1
+                            ? "Windows Server 2022"
+                            : "Windows 11";
+                    else
+                        str = wxIsWindowsServer() == 1
+                                ? "Windows Server 2016"
+                                : "Windows 10";
                     break;
             }
 
