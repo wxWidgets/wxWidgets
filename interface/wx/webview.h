@@ -714,6 +714,11 @@ public:
     /**
         Runs the given JavaScript code.
 
+        @note Because of various potential issues it's recommended to use
+            RunScriptAsync() instead of this method. This is especially true
+            if you plan to run code from a webview event and will also prevent
+            unintended side effects on the UI outside of the webview.
+
         JavaScript code is executed inside the browser control and has full
         access to DOM and other browser-provided functionality. For example,
         this code
