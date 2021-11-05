@@ -493,6 +493,21 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(LAUNCH_MAIL)
         WXK_(LAUNCH_APP1)
         WXK_(LAUNCH_APP2)
+        WXK_(LAUNCH_0)
+        WXK_(LAUNCH_1)
+        WXK_(LAUNCH_2)
+        WXK_(LAUNCH_3)
+        WXK_(LAUNCH_4)
+        WXK_(LAUNCH_5)
+        WXK_(LAUNCH_6)
+        WXK_(LAUNCH_7)
+        WXK_(LAUNCH_8)
+        WXK_(LAUNCH_9)
+        // skip A/B which are duplicate cases of APP1/2
+        WXK_(LAUNCH_C)
+        WXK_(LAUNCH_D)
+        WXK_(LAUNCH_E)
+        WXK_(LAUNCH_F)
 #undef WXK_
 
     default:

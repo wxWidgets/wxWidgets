@@ -870,11 +870,24 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
         case GDK_KEY_Mail:
             key_code = WXK_LAUNCH_MAIL;
             break;
+
+        case GDK_KEY_Launch0:
+        case GDK_KEY_Launch1:
+        case GDK_KEY_Launch2:
+        case GDK_KEY_Launch3:
+        case GDK_KEY_Launch4:
+        case GDK_KEY_Launch5:
+        case GDK_KEY_Launch6:
+        case GDK_KEY_Launch7:
+        case GDK_KEY_Launch8:
+        case GDK_KEY_Launch9:
         case GDK_KEY_LaunchA:
-            key_code = WXK_LAUNCH_APP1;
-            break;
         case GDK_KEY_LaunchB:
-            key_code = WXK_LAUNCH_APP2;
+        case GDK_KEY_LaunchC:
+        case GDK_KEY_LaunchD:
+        case GDK_KEY_LaunchE:
+        case GDK_KEY_LaunchF:
+            key_code = WXK_LAUNCH_0 + (keysym - GDK_KEY_Launch0);
             break;
 #endif // GTK_CHECK_VERSION(2,18,0)
 
