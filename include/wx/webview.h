@@ -138,7 +138,6 @@ public:
     wxWebView()
     {
         m_showMenu = true;
-        m_runScriptCount = 0;
         m_syncScriptResult = 0;
     }
 
@@ -271,10 +270,6 @@ protected:
 
     void SendScriptResult(void* clientData, bool success,
         const wxString& output) const;
-
-    // Count the number of calls to RunScript() in order to prevent
-    // the_same variable from being used twice in more than one call.
-    mutable int m_runScriptCount;
 
 private:
     static void InitFactoryMap();
