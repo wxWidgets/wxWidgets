@@ -113,6 +113,8 @@
     #define _LANGUAGE_C_PLUS_PLUS 1
 #endif // SGI hack
 
+#define __STDC_WANT_LIB_EXT1__ 1 // for memset_s() in <string.h>
+
 #include <stdarg.h>
 #include <dirent.h>
 #include <string.h>
@@ -200,6 +202,33 @@ void wxMicroSleep(unsigned long microseconds)
 void wxMilliSleep(unsigned long milliseconds)
 {
     wxMicroSleep(milliseconds*1000);
+}
+
+// ----------------------------------------------------------------------------
+// security
+// ----------------------------------------------------------------------------
+
+void wxSecureZeroMemory(void* v, size_t n)
+{
+#if (defined(__GLIBC__) && \
+        (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 25))) || \
+    (defined(__FreeBSD__) && __FreeBSD__ >= 11)
+    // This non-standard function is somewhat widely available elsewhere too,
+    // but may be found in a non-standard header file, or in a library that is
+    // not linked by default.
+    explicit_bzero(v, n);
+#elif defined(__DARWIN__) || defined(__STDC_LIB_EXT1__)
+    // memset_s() is available since OS X 10.9, and may be available on
+    // other platforms.
+    memset_s(v, n, 0, n);
+#else
+    // A generic implementation based on the example at:
+    // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1381.pdf
+    int c = 0;
+    volatile unsigned char *p = reinterpret_cast<unsigned char *>(v);
+    while ( n-- )
+        *p++ = c;
+#endif
 }
 
 // ----------------------------------------------------------------------------

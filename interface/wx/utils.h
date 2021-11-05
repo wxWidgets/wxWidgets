@@ -336,6 +336,23 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map);
 //@{
 
 /**
+    Fills the memory block with zeros in a way that is guaranteed
+    not to be optimized away by the compiler.
+
+    @param p Pointer to the memory block to be zeroed, must be non-@NULL.
+    @param n The number of bytes to zero.
+
+    NOTE: If security is vitally important in your use case, please
+    have a look at the implementations and decide whether you trust
+    them to behave as promised.
+
+    @header{wx/utils.h}
+
+    @since 3.1.6
+*/
+void wxSecureZeroMemory(void *p, size_t n);
+
+/**
     Returns battery state as one of @c wxBATTERY_NORMAL_STATE,
     @c wxBATTERY_LOW_STATE, @c wxBATTERY_CRITICAL_STATE,
     @c wxBATTERY_SHUTDOWN_STATE or @c wxBATTERY_UNKNOWN_STATE.
