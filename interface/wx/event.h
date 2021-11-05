@@ -1321,20 +1321,26 @@ enum wxKeyCategoryFlags
     This event class contains information about key press and release events.
 
     The main information carried by this event is the key being pressed or
-    released. It can be accessed using either GetKeyCode() function or
-    GetUnicodeKey(). For the printable characters, the latter should be used as
-    it works for any keys, including non-Latin-1 characters that can be entered
-    when using national keyboard layouts. GetKeyCode() should be used to handle
+    released. It can be accessed using one of GetUnicodeKey(), GetKeyCode()
+    or GetRawKeyCode() functions.
+    For the printable characters, GetUnicodeKey() should be used as it works
+    for any keys, including non-Latin-1 characters that can be entered when
+    using national keyboard layouts. GetKeyCode() should be used to handle
     special characters (such as cursor arrows keys or @c HOME or @c INS and so
     on) which correspond to ::wxKeyCode enum elements above the @c WXK_START
     constant. While GetKeyCode() also returns the character code for Latin-1
     keys for compatibility, it doesn't work for Unicode characters in general
-    and will return @c WXK_NONE for any non-Latin-1 ones. For this reason, it's
-    recommended to always use GetUnicodeKey() and only fall back to GetKeyCode()
-    if GetUnicodeKey() returned @c WXK_NONE meaning that the event corresponds
-    to a non-printable special keys.
+    and will return @c WXK_NONE for any non-Latin-1 ones.
+    If both GetUnicodeKey() and GetKeyCode() return @c WXK_NONE then the key
+    has no @c WXK_xxx mapping and GetRawKeyCode() can be used to distinguish
+    between keys, but raw key codes are platform specific.
+    For these reasons, it is recommended to always use GetUnicodeKey() and
+    only fall back to GetKeyCode() if GetUnicodeKey() returned @c WXK_NONE,
+    meaning that the event corresponds to a non-printable special keys, then
+    optionally check GetRawKeyCode() if GetKeyCode() also returned @c WXK_NONE
+    or simply ignore that key.
 
-    While both of these functions can be used with the events of @c
+    While these three functions can be used with the events of @c
     wxEVT_KEY_DOWN, @c wxEVT_KEY_UP and @c wxEVT_CHAR types, the values
     returned by them are different for the first two events and the last one.
     For the latter, the key returned corresponds to the character that would
@@ -1367,6 +1373,10 @@ enum wxKeyCategoryFlags
     usual Latin-1 ones. However for non-Latin-1 letters only GetUnicodeKey()
     can be used to retrieve the key code as GetKeyCode() just returns @c
     WXK_NONE in this case.
+
+    Also, note that @c wxEVT_CHAR events are not generated for keys which do
+    not have a wxWidgets mapping, so GetRawKeyCode() should never be required
+    for this event.
 
     To summarize: you should handle @c wxEVT_CHAR if you need the translated
     key and @c wxEVT_KEY_DOWN if you only need the value of the key itself,
