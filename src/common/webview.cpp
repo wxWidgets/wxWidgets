@@ -228,7 +228,7 @@ wxString wxWebView::GetUserAgent() const
 bool wxWebView::RunScript(const wxString& javascript, wxString* output) const
 {
     m_syncScriptResult = -1;
-    m_syncScriptOutput.Clear();
+    m_syncScriptOutput.clear();
     RunScriptAsync(javascript, (void*)this);
 
     // Wait for script exection
@@ -249,7 +249,7 @@ void wxWebView::RunScriptAsync(const wxString& WXUNUSED(javascript),
 void wxWebView::SendScriptResult(void* clientData, bool success,
     const wxString& output) const
 {
-    // If currently running sync RunScript() don't send an event, but use
+    // If currently running sync RunScript(), don't send an event, but use
     // the scripts result directly
     if (m_syncScriptResult == -1)
     {

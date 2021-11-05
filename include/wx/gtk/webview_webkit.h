@@ -156,7 +156,7 @@ public:
     bool m_creating;
 
 #if wxUSE_WEBVIEW_WEBKIT2
-    // This methods needs to be public to make it callable from a callback
+    // This method needs to be public to make it callable from a callback
     void ProcessJavaScriptResult(GAsyncResult *res, wxWebKitRunScriptParams* params) const;
 #endif
 

@@ -24,7 +24,8 @@
 class wxJSScriptWrapper
 {
 public:
-    enum OutputType {
+    enum OutputType
+    {
         JS_OUTPUT_STRING, // All return types are converted to a string
         JS_OUTPUT_WEBKIT, // Some return types will be processed
         JS_OUTPUT_IE, // Most return types will be processed
