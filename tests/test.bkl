@@ -349,6 +349,9 @@
         <srcdir>$(SRCDIR)/image</srcdir>
         <dstdir>image</dstdir>
         <files>
+            8bpp-colorsused-large.bmp
+            8bpp-colorsused-negative.bmp
+
             horse_grey.bmp horse_grey_flipped.bmp
             horse_rle4.bmp horse_rle4_flipped.bmp
             horse_rle8.bmp horse_rle8_flipped.bmp
