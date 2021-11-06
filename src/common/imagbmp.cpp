@@ -518,8 +518,24 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     // allocate space for palette if needed:
     BMPPalette *cmap;
 
-    if ( bpp < 16 )
+    if ( bpp <= 8 )
     {
+        // The bit depth is 8bpp, 4bpp, or 1bpp, which means that ncolors is
+        // the size of a palette.  The largest useful palette is 256 since
+        // anything larger couldn't be referenced by a pixel.  Since ncolors
+        // comes from the file, which could be corrupt or malicious, reject
+        // any bitmaps that have a dubious palette size.
+        if ( ncolors < 0 || 256 < ncolors )
+        {
+            if ( verbose )
+            {
+                wxLogError(
+                    _("BMP: header has biClrUsed=%d when biBitCount=%d."),
+                    ncolors, bpp);
+            }
+            return false;
+        }
+
         cmap = new BMPPalette[ncolors];
         if ( !cmap )
         {

@@ -98,6 +98,7 @@ private:
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
         CPPUNIT_TEST( ScaleCompare );
         CPPUNIT_TEST( CreateBitmapFromCursor );
+        CPPUNIT_TEST( MalformedBMP );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -119,6 +120,7 @@ private:
     void BMPFlippingAndRLECompression();
     void ScaleCompare();
     void CreateBitmapFromCursor();
+    void MalformedBMP();
 
     wxDECLARE_NO_COPY_CLASS(ImageTestCase);
 };
@@ -1518,6 +1520,25 @@ void ImageTestCase::CreateBitmapFromCursor()
         }
     }
 #endif
+}
+
+// This function assumes that the file is malformed in a way that it cannot
+// be loaded.  If the file is malformed such that wxImage can salvage part
+// of it, then CompareBMPImage should be called instead.
+static void LoadMalformedBMP(const wxString& file)
+{
+    wxImage image(file);
+    WX_ASSERT_MESSAGE
+    (
+        ("wxImage::isOk() returned true after loading \"%s\"", file),
+        !image.IsOk()
+    );
+}
+
+void ImageTestCase::MalformedBMP()
+{
+    LoadMalformedBMP("image/8bpp-colorsused-negative.bmp");
+    LoadMalformedBMP("image/8bpp-colorsused-large.bmp");
 }
 
 #endif //wxUSE_IMAGE
