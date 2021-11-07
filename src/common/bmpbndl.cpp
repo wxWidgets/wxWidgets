@@ -570,8 +570,11 @@ wxBitmapBundle::CreateImageList(wxWindow* win,
     // we do here. Note that this size is only used to break the tie in case
     // the same number of bundles prefer two different sizes, so it's not going
     // to matter at all in most cases.
-    const wxSize
-        size = GetConsensusSizeFor(win, bundles, bundles[0].GetDefaultSize());
+    wxSize size = GetConsensusSizeFor(win, bundles, bundles[0].GetDefaultSize());
+
+    // wxImageList wants the logical size for the platforms where logical and
+    // physical pixels are different.
+    size /= win->GetContentScaleFactor();
 
     wxImageList* const iml = new wxImageList(size.x, size.y);
 
