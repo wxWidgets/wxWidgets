@@ -1659,7 +1659,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
                  wxNullProperty,
                  wxS("when adding properties to fixed parents, use BeginAddChildren and EndAddChildren.") );
 
-    bool res = PrepareToAddItem( property, (wxPropertyCategory*)parent );
+    bool res = PrepareToAddItem( property, parent );
 
     // PrepareToAddItem() may just decide to use current category
     // instead of adding new one.
