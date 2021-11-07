@@ -283,9 +283,10 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     wxCHECK_MSG(page < GetPageCount(), false, "invalid notebook index");
 
     wxGtkNotebookPage* pageData = GetNotebookPage(page);
-    if (image >= 0)
+
+    const wxBitmapBundle bundle = GetBitmapBundle(image);
+    if ( bundle.IsOk() )
     {
-        wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
         if (pageData->m_image == NULL)
         {
             pageData->m_image = wxGtkImage::New();
@@ -293,7 +294,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
         }
-        WX_GTK_IMAGE(pageData->m_image)->Set(GetImageList()->GetBitmap(image));
+        WX_GTK_IMAGE(pageData->m_image)->Set(bundle);
     }
     else if (pageData->m_image)
     {
@@ -481,21 +482,13 @@ bool wxNotebook::InsertPage( size_t position,
     gtk_container_set_border_width(GTK_CONTAINER(pageData->m_box), 2);
 #endif
 
-    pageData->m_image = NULL;
-    if (imageId != -1)
+    const wxBitmapBundle bundle = GetBitmapBundle(imageId);
+    if ( bundle.IsOk() )
     {
-        if (HasImageList())
-        {
-            const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
-            pageData->m_image = wxGtkImage::New();
-            WX_GTK_IMAGE(pageData->m_image)->Set(bitmap);
-            gtk_box_pack_start(GTK_BOX(pageData->m_box),
-                pageData->m_image, false, false, m_padding);
-        }
-        else
-        {
-            wxFAIL_MSG("invalid notebook imagelist");
-        }
+        pageData->m_image = wxGtkImage::New();
+        WX_GTK_IMAGE(pageData->m_image)->Set(bundle);
+        gtk_box_pack_start(GTK_BOX(pageData->m_box),
+            pageData->m_image, false, false, m_padding);
     }
 
     /* set the label text */
