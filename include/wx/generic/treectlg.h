@@ -287,6 +287,9 @@ protected:
     // overridden wxWindow methods
     virtual void DoThaw() wxOVERRIDE;
 
+    virtual void OnImagesChanged() wxOVERRIDE;
+    void UpdateAfterImageListChange();
+
     // misc helpers
     void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);
 

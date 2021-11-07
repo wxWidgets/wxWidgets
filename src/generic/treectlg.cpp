@@ -2424,9 +2424,18 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         m_lineHeight += m_lineHeight/10;   // otherwise 10% extra spacing
 }
 
-void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
+void wxGenericTreeCtrl::OnImagesChanged()
 {
-    wxWithImages::SetImageList(imageList);
+    if ( HasImages() )
+    {
+        UpdateImageListIfNecessary(this);
+
+        UpdateAfterImageListChange();
+    }
+}
+
+void wxGenericTreeCtrl::UpdateAfterImageListChange()
+{
     m_dirty = true;
 
     if (m_anchor)
@@ -2434,33 +2443,26 @@ void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
 
     // Don't do any drawing if we're setting the list to NULL,
     // since we may be in the process of deleting the tree control.
-    if (imageList)
+    if (GetImageList())
         CalculateLineHeight();
+}
+
+void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
+{
+    wxWithImages::SetImageList(imageList);
+    UpdateAfterImageListChange();
 }
 
 void wxGenericTreeCtrl::SetStateImageList(wxImageList *imageList)
 {
     m_imagesState.SetImageList(imageList);
-    m_dirty = true;
-
-    if (m_anchor)
-        m_anchor->RecursiveResetSize();
-
-    // Don't do any drawing if we're setting the list to NULL,
-    // since we may be in the process of deleting the tree control.
-    if (imageList)
-        CalculateLineHeight();
+    UpdateAfterImageListChange();
 }
 
 void wxGenericTreeCtrl::SetButtonsImageList(wxImageList *imageList)
 {
     m_imagesButtons.SetImageList(imageList);
-    m_dirty = true;
-
-    if (m_anchor)
-        m_anchor->RecursiveResetSize();
-
-    CalculateLineHeight();
+    UpdateAfterImageListChange();
 }
 
 void wxGenericTreeCtrl::AssignButtonsImageList(wxImageList *imageList)

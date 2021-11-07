@@ -107,7 +107,12 @@ public:
     void GetItemsRecursively(const wxTreeItemId& idParent,
                              wxTreeItemIdValue cookie = 0);
 
-    void CreateImageList(int size = 16);
+    // This function behaves differently depending on the value of size:
+    //  - If it's -1, it turns off the use of images entirely.
+    //  - If it's 0, it reuses the last used size.
+    //  - If it's strictly positive, it creates icons in this size.
+    void CreateImages(int size);
+
     void CreateButtonsImageList(int size = 11);
     void CreateStateImageList(bool del = false);
 

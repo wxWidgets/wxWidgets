@@ -613,10 +613,25 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
     wxWithImages::SetImageList(imageList);
 
+    DoUpdateIconsSize(imageList);
+}
+
+void wxTreeCtrl::DoUpdateIconsSize(wxImageList *imageList)
+{
     int width, height;
     imageList->GetSize(0, width, height);
     m_qtTreeWidget->ResizeIcons(QSize(width, height));
     m_qtTreeWidget->update();
+}
+
+void wxTreeCtrl::OnImagesChanged()
+{
+    if ( HasImages() )
+    {
+        UpdateImageListIfNecessary(this);
+
+        DoUpdateIconsSize(GetImageList());
+    }
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)

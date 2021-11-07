@@ -172,6 +172,7 @@ wxTreeCtrlBase::wxTreeCtrlBase()
     m_quickBestSize = true;
 
     Bind(wxEVT_CHAR_HOOK, &wxTreeCtrlBase::OnCharHook, this);
+    Bind(wxEVT_DPI_CHANGED, &wxTreeCtrlBase::WXHandleDPIChanged, this);
 }
 
 wxTreeCtrlBase::~wxTreeCtrlBase()

@@ -931,6 +931,24 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
     SetAnyImageList(imageList, TVSIL_STATE);
 }
 
+void wxTreeCtrl::OnImagesChanged()
+{
+    wxImageList* imageList;
+
+    if ( HasImages() )
+    {
+        UpdateImageListIfNecessary(this);
+
+        imageList = GetImageList();
+    }
+    else
+    {
+        imageList = NULL;
+    }
+
+    SetAnyImageList(imageList, TVSIL_NORMAL);
+}
+
 size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
                                     bool recursively) const
 {
