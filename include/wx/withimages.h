@@ -154,6 +154,42 @@ protected:
                     : wxNullIcon;
     }
 
+    // Return the bitmap bundle for the image with the given index.
+    //
+    // If index == NO_IMAGE or there are no images at all, returns an empty
+    // bundle (but, unlike GetImage() above, asserts if the index is valid but
+    // there is no image, as this probably indicates a programming mistake).
+    //
+    // If there is no bundle, but there is an image list, returns a bundle
+    // containing just the bitmap from the image list.
+    wxBitmapBundle GetBitmapBundle(int iconIndex) const
+    {
+        wxBitmapBundle bundle;
+
+        if ( iconIndex != NO_IMAGE )
+        {
+            if ( !m_images.empty() )
+            {
+                bundle = m_images.at(iconIndex);
+            }
+            else if ( m_imageList )
+            {
+                bundle = m_imageList->GetIcon(iconIndex);
+            }
+            else
+            {
+                wxFAIL_MSG
+                (
+                    "Image index specified, but there are no images.\n"
+                    "\n"
+                    "Did you forget to call SetImages()?"
+                );
+            }
+        }
+
+        return bundle;
+    }
+
 private:
     // Free the image list if necessary, i.e. if we own it.
     void FreeIfNeeded()
