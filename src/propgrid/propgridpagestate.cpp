@@ -1705,9 +1705,11 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
         else if ( parentIsRoot )
             // Parent is root.
             m_regularArray.DoAddChild( property, -1, false );
+        else
+            parent->DoAddChild(property, index, true);
 
         // Add to current mode
-        if ( !property->IsCategory() )
+        if ( !property->IsCategory() && (parentIsCategory || parentIsRoot) )
             m_abcArray->DoAddChild( property, index, true );
     }
 
