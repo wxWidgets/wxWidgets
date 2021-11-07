@@ -360,10 +360,6 @@ private:
     // common part of all ctors
     void Init();
 
-    // update the images if we use them on DPI change
-    void WXHandleDPIChanged(wxDPIChangedEvent& event);
-
-
     // internal border
     unsigned int m_internalBorder;
 
