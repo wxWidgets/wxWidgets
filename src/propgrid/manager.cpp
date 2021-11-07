@@ -995,6 +995,10 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
     {
         state->m_pPropGrid = m_pPropGrid;
         state->InitNonCatMode();
+        if ( !isPageInserted )
+        {
+            state->EnableCategories(m_pPropGrid->HasFlag(wxPG_HIDE_CATEGORIES) ? false : true);
+        }
     }
 
     if ( !label.empty() )
