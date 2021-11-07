@@ -6,6 +6,38 @@
 
 /**
    A mixin class to be used with other classes that use a wxImageList.
+
+   This class is used by classes such as wxNotebook and wxTreeCtrl, that use
+   image indices to specify the icons used for their items (page icons for the
+   former or the items inside the control for the latter).
+
+   The icon index can either be a special value NO_IMAGE to indicate that an
+   item doesn't use an image at all or a small positive integer to specify the
+   index of the icon in the list of images maintained by this class. Note that
+   for many controls, either none of the items should have an icon or all of
+   them should have one, i.e. mixing the items with and without an icon doesn't
+   always work well and may result in less than ideal appearance.
+
+   To initialize the list of icons used, call SetImages() method passing it a
+   vector of wxBitmapBundle objects which can, in the simplest case, be just
+   wxBitmap or wxIcon objects -- however, as always with wxBitmapBundle, either
+   more than one bitmap or icon needs to be specified or the bitmap bundle
+   needs to be created from SVG to obtain better appearance in high DPI.
+
+   Alternative, traditional API which was the only one available until
+   wxWidgets 3.1.6, is based on the use of wxImageList class. To use it, you
+   need to create an object of this class and then call either
+   AssignImageList() to set this image list and give the control its ownership
+   or SetImageList() to retain the ownership of the image list, which can be
+   useful if the same image list is shared by multiple controls, but requires
+   deleting the image list later.
+
+   @note wxImageList-based API is not formally deprecated, but its use is
+         discouraged because it is more complicated than simply providing a
+         vector of bitmaps and it doesn't allow specifying multiple images or
+         using SVG, which is required for good high DPI support. Please don't
+         use AssignImageList() and SetImageList() in the new code and use
+         SetImages() instead.
 */
 class wxWithImages
 {
