@@ -41,6 +41,8 @@ wxBEGIN_EVENT_TABLE(wxBookCtrlBase, wxControl)
 #if wxUSE_HELP
     EVT_HELP(wxID_ANY, wxBookCtrlBase::OnHelp)
 #endif // wxUSE_HELP
+
+    EVT_DPI_CHANGED(wxBookCtrlBase::WXHandleDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -290,6 +292,16 @@ wxSize wxBookCtrlBase::GetControllerSize() const
 // ----------------------------------------------------------------------------
 // miscellaneous stuff
 // ----------------------------------------------------------------------------
+
+void wxBookCtrlBase::WXHandleDPIChanged(wxDPIChangedEvent& event)
+{
+    if ( HasImages() )
+    {
+        OnImagesChanged();
+    }
+
+    event.Skip();
+}
 
 #if wxUSE_HELP
 
