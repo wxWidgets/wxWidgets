@@ -978,7 +978,6 @@ void MyTreeCtrl::CreateImageList(int size)
     wxImageList *images = new wxImageList(size, size, true);
 
     // should correspond to TreeCtrlIcon_xxx enum
-    wxBusyCursor wait;
     wxIcon icons[5];
 
     if (m_alternateImages)
