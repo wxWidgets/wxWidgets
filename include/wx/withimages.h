@@ -92,6 +92,13 @@ public:
         m_ownsImageList = true;
     }
 
+    // This function can be used for implementing AssignImageList()-like
+    // methods in the classes using this one and tells us to simply take
+    // ownership of the image list that we already have.
+    //
+    // Avoid using it if possible.
+    void TakeOwnership() { m_ownsImageList = true; }
+
     // Get pointer (may be NULL) to the associated image list.
     wxImageList* GetImageList() const { return m_imageList; }
 
