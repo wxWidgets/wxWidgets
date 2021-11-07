@@ -748,7 +748,7 @@ void MyFrame::OnToggleAlternateStates(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToggleButtons(wxCommandEvent& WXUNUSED(event))
 {
-#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
+#ifdef HAS_GENERIC_TREECTRL
     if ( wxGetApp().ShowButtons() )
     {
         m_treeCtrl->CreateButtonsImageList(-1);
@@ -1064,9 +1064,9 @@ void MyTreeCtrl::CreateStateImageList(bool del)
     AssignStateImageList(states);
 }
 
-#if USE_GENERIC_TREECTRL || (!defined(__WXMSW__) && !defined(__WXQT__))
 void MyTreeCtrl::CreateButtonsImageList(int size)
 {
+#ifdef HAS_GENERIC_TREECTRL
     if ( size == -1 )
     {
         SetButtonsImageList(NULL);
@@ -1112,8 +1112,7 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
 
     AssignButtonsImageList(images);
 #else
-void MyTreeCtrl::CreateButtonsImageList(int WXUNUSED(size))
-{
+    wxUnusedVar(size);
 #endif
 }
 

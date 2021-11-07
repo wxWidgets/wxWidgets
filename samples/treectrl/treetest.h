@@ -8,6 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// This can be defined to 1 to force using wxGenericTreeCtrl even on the
+// platforms where the native controls would normally be used (wxMSW and wxQt).
 #define USE_GENERIC_TREECTRL 0
 
 #if USE_GENERIC_TREECTRL
@@ -16,6 +18,13 @@
 #define wxTreeCtrl wxGenericTreeCtrl
 #define sm_classwxTreeCtrl sm_classwxGenericTreeCtrl
 #endif
+#endif
+
+// This one is defined if we're actually using the generic control, either
+// because it was explicitly requested above or because there is no other one
+// on this platform anyhow.
+#if USE_GENERIC_TREECTRL || (!defined(__WXMSW__) && !defined(__WXQT__))
+    #define HAS_GENERIC_TREECTRL
 #endif
 
 // Define a new application type
