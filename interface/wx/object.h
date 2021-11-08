@@ -686,6 +686,8 @@ public:
     made known to the class hierarchy, but objects of this class cannot be created
     dynamically.
 
+    Note that this macro requires a final semicolon.
+
     @header{wx/object.h}
 
     Example:
@@ -711,6 +713,8 @@ public:
     implies that the class should have a default constructor, if this is not
     the case consider using wxDECLARE_ABSTRACT_CLASS().
 
+    Note that this macro requires a final semicolon.
+
     @header{wx/object.h}
 
     Example:
@@ -734,6 +738,8 @@ public:
     known to the class hierarchy, but objects of this class cannot be created
     dynamically.
 
+    Note that this macro requires a final semicolon.
+
     The same as wxDECLARE_ABSTRACT_CLASS().
 
     @header{wx/object.h}
@@ -743,6 +749,8 @@ public:
 /**
     Used in a C++ implementation file to complete the declaration of a class
     that has run-time type information.
+
+    Note that this macro requires a final semicolon.
 
     @header{wx/object.h}
 
@@ -763,6 +771,8 @@ public:
     Used in a C++ implementation file to complete the declaration of a class
     that has run-time type information and two base classes.
 
+    Note that this macro requires a final semicolon.
+
     @header{wx/object.h}
 */
 #define wxIMPLEMENT_ABSTRACT_CLASS2( className, baseClassName1, baseClassName2 )
@@ -771,6 +781,8 @@ public:
     Used in a C++ implementation file to complete the declaration of a class
     that has run-time type information, and whose instances can be created
     dynamically.
+
+    Note that this macro requires a final semicolon.
 
     @header{wx/object.h}
 
@@ -792,6 +804,8 @@ public:
     that has run-time type information, and whose instances can be created
     dynamically. Use this for classes derived from two base classes.
 
+    Note that this macro requires a final semicolon.
+
     @header{wx/object.h}
 */
 #define wxIMPLEMENT_DYNAMIC_CLASS2( className, baseClassName1, baseClassName2 )
@@ -802,6 +816,8 @@ public:
     Please prefer to use the more clear, if longer,
     ::wxIMPLEMENT_ABSTRACT_CLASS in the new code.
 
+    Note that this macro requires a final semicolon.
+
     @header{wx/object.h}
 */
 #define wxIMPLEMENT_CLASS( className, baseClassName )
@@ -811,6 +827,8 @@ public:
 
     Please prefer to use the more clear, if longer,
     ::wxIMPLEMENT_ABSTRACT_CLASS2 in the new code.
+
+    Note that this macro requires a final semicolon.
 
     @header{wx/object.h}
 */

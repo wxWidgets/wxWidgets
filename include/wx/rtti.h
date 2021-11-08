@@ -169,7 +169,8 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
             func);                                                            \
                                                                               \
     wxClassInfo *name::GetClassInfo() const                                   \
-        { return &name::ms_classInfo; }
+        { return &name::ms_classInfo; }                                       \
+    typedef int wx_impl_class_common ## name
 
 #define wxIMPLEMENT_CLASS_COMMON1(name, basename, func)                       \
     wxIMPLEMENT_CLASS_COMMON(name, basename, NULL, func)
@@ -183,16 +184,18 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
     // Single inheritance with one base class
 #define wxIMPLEMENT_DYNAMIC_CLASS(name, basename)                             \
-    wxIMPLEMENT_CLASS_COMMON1(name, basename, name::wxCreateObject)           \
+    wxIMPLEMENT_CLASS_COMMON1(name, basename, name::wxCreateObject);          \
     wxObject* name::wxCreateObject()                                          \
-        { return new name; }
+        { return new name; }                                                  \
+    typedef int wx_impl_dyn_class ## name
 
     // Multiple inheritance with two base classes
 #define wxIMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)                \
     wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2,                     \
-                              name::wxCreateObject)                           \
+                              name::wxCreateObject);                          \
     wxObject* name::wxCreateObject()                                          \
-        { return new name; }
+        { return new name; }                                                  \
+    typedef int wx_impl_dyn_class2 ## name
 
 // -----------------------------------
 // for abstract classes
