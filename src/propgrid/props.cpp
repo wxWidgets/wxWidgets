@@ -191,7 +191,7 @@ bool wxNumericPropertyValidator::Validate(wxWindow* parent)
 // wxNumericProperty
 // -----------------------------------------------------------------------
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxNumericProperty, wxPGProperty)
+wxIMPLEMENT_ABSTRACT_CLASS(wxNumericProperty, wxPGProperty);
 
 wxNumericProperty::wxNumericProperty(const wxString& label, const wxString& name)
     : wxPGProperty(label, name)
@@ -1958,7 +1958,7 @@ public:
 // wxDialogProperty
 // -----------------------------------------------------------------------
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxEditorDialogProperty, wxPGProperty)
+wxIMPLEMENT_ABSTRACT_CLASS(wxEditorDialogProperty, wxPGProperty);
 
 wxEditorDialogProperty::wxEditorDialogProperty(const wxString& label, const wxString& name)
     : wxPGProperty(label, name)

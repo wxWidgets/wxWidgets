@@ -22,7 +22,7 @@
 
 #define TRACE_MODULE wxT("module")
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxModule, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxModule, wxObject);
 
 wxModuleList wxModule::ms_modules;
 bool wxModule::ms_areInitialized = false;
