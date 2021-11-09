@@ -172,7 +172,7 @@ jobs:
           ${CXX-g++} --version
           echo
 
-          echo "Ccache version:"
+          echo "ccache version:"
           ccache --version
           echo
 
