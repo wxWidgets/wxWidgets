@@ -333,7 +333,8 @@ private:
 class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 {
 public:
-    wxListCtrlBase() { }
+    wxListCtrlBase();
+    virtual ~wxListCtrlBase();
 
     // Image list methods.
     // -------------------
@@ -344,14 +345,14 @@ public:
     // is destroyed.
     //
     // The value of "which" must be one of wxIMAGE_LIST_{NORMAL,SMALL,STATE}.
-    virtual void AssignImageList(wxImageList* imageList, int which) = 0;
+    virtual void AssignImageList(wxImageList* imageList, int which);
 
     // Same as AssignImageList() but the control does not delete the image list
     // so it can be shared among several controls.
-    virtual void SetImageList(wxImageList* imageList, int which) = 0;
+    virtual void SetImageList(wxImageList* imageList, int which);
 
     // Return the currently used image list, may be NULL.
-    virtual wxImageList* GetImageList(int which) const = 0;
+    virtual wxImageList* GetImageList(int which) const;
 
 
     // Column-related methods.
@@ -440,6 +441,7 @@ public:
 protected:
     // Real implementations methods to which our public forwards.
     virtual long DoInsertColumn(long col, const wxListItem& info) = 0;
+    virtual void DoSetImageList(wxImageList *imageList, int which) = 0;
 
     // Overridden methods of the base class.
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
@@ -468,6 +470,13 @@ protected:
     virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
 private:
+    wxImageList *     m_imageListNormal; // The image list for normal icons
+    wxImageList *     m_imageListSmall;  // The image list for small icons
+    wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
+    bool              m_ownsImageListNormal,
+                      m_ownsImageListSmall,
+                      m_ownsImageListState;
+
     // user defined color to draw row lines, may be invalid
     wxItemAttr m_alternateRowColour;
 };

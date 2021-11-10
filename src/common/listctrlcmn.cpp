@@ -135,6 +135,26 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent);
 // wxListCtrlBase implementation
 // ----------------------------------------------------------------------------
 
+wxListCtrlBase::wxListCtrlBase()
+{
+    m_imageListNormal =
+    m_imageListSmall =
+    m_imageListState = NULL;
+    m_ownsImageListNormal =
+    m_ownsImageListSmall =
+    m_ownsImageListState = false;
+}
+
+wxListCtrlBase::~wxListCtrlBase()
+{
+    if (m_ownsImageListNormal)
+        delete m_imageListNormal;
+    if (m_ownsImageListSmall)
+        delete m_imageListSmall;
+    if (m_ownsImageListState)
+        delete m_imageListState;
+}
+
 long
 wxListCtrlBase::AppendColumn(const wxString& heading,
                              wxListColumnFormat format,
@@ -286,6 +306,68 @@ int wxListCtrlBase::OnGetItemColumnImage(long item, long column) const
 wxItemAttr* wxListCtrlBase::OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
 {
     return OnGetItemAttr(item);
+}
+
+// ----------------------------------------------------------------------------
+// Images support
+// ----------------------------------------------------------------------------
+
+wxImageList *wxListCtrlBase::GetImageList(int which) const
+{
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        return m_imageListNormal;
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        return m_imageListSmall;
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        return m_imageListState;
+    }
+    return NULL;
+}
+
+void wxListCtrlBase::SetImageList(wxImageList *imageList, int which)
+{
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        if (m_ownsImageListNormal) delete m_imageListNormal;
+        m_imageListNormal = imageList;
+        m_ownsImageListNormal = false;
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        if (m_ownsImageListSmall) delete m_imageListSmall;
+        m_imageListSmall = imageList;
+        m_ownsImageListSmall = false;
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        if (m_ownsImageListState) delete m_imageListState;
+        m_imageListState = imageList;
+        m_ownsImageListState = false;
+    }
+    else
+    {
+        wxFAIL_MSG("unknown image list");
+        return;
+    }
+
+    // Actually update the images shown in the control.
+    DoSetImageList(imageList, which);
+}
+
+void wxListCtrlBase::AssignImageList(wxImageList *imageList, int which)
+{
+    SetImageList(imageList, which);
+    if ( which == wxIMAGE_LIST_NORMAL )
+        m_ownsImageListNormal = true;
+    else if ( which == wxIMAGE_LIST_SMALL )
+        m_ownsImageListSmall = true;
+    else if ( which == wxIMAGE_LIST_STATE )
+        m_ownsImageListState = true;
 }
 
 #endif // wxUSE_LISTCTRL
