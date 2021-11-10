@@ -18,8 +18,7 @@
 #include "wx/control.h"
 #include "wx/itemattr.h"
 #include "wx/systhemectrl.h"
-
-class WXDLLIMPEXP_FWD_CORE wxImageList;
+#include "wx/withimages.h"
 
 // ----------------------------------------------------------------------------
 // types
@@ -333,8 +332,7 @@ private:
 class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 {
 public:
-    wxListCtrlBase();
-    virtual ~wxListCtrlBase();
+    wxListCtrlBase() { }
 
     // Image list methods.
     // -------------------
@@ -470,12 +468,9 @@ protected:
     virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
 private:
-    wxImageList *     m_imageListNormal; // The image list for normal icons
-    wxImageList *     m_imageListSmall;  // The image list for small icons
-    wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
-    bool              m_ownsImageListNormal,
-                      m_ownsImageListSmall,
-                      m_ownsImageListState;
+    wxWithImages m_imagesNormal,
+                 m_imagesSmall,
+                 m_imagesState;
 
     // user defined color to draw row lines, may be invalid
     wxItemAttr m_alternateRowColour;
