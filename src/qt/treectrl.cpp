@@ -628,9 +628,7 @@ void wxTreeCtrl::OnImagesChanged()
 {
     if ( HasImages() )
     {
-        UpdateImageListIfNecessary(this);
-
-        DoUpdateIconsSize(GetImageList());
+        DoUpdateIconsSize(GetUpdatedImageListFor(this));
     }
 }
 

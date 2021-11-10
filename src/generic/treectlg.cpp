@@ -2428,7 +2428,8 @@ void wxGenericTreeCtrl::OnImagesChanged()
 {
     if ( HasImages() )
     {
-        UpdateImageListIfNecessary(this);
+        // We call it solely for the side effect of updating the image list.
+        GetUpdatedImageListFor(this);
 
         UpdateAfterImageListChange();
     }

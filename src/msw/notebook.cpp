@@ -449,20 +449,9 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 
 void wxNotebook::OnImagesChanged()
 {
-    HIMAGELIST himl;
+    wxImageList* const iml = GetUpdatedImageListFor(this);
 
-    if ( HasImages() )
-    {
-        UpdateImageListIfNecessary(this);
-
-        himl = GetHimagelistOf(GetImageList());
-    }
-    else
-    {
-        himl = 0;
-    }
-
-    (void) TabCtrl_SetImageList(GetHwnd(), himl);
+    (void) TabCtrl_SetImageList(GetHwnd(), iml ? GetHimagelistOf(iml) : NULL);
 }
 
 // ----------------------------------------------------------------------------

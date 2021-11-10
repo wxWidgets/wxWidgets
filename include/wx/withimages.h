@@ -124,11 +124,11 @@ protected:
     // This helper function can be used from OnImagesChanged() if the derived
     // class actually needs to use wxImageList: it ensures that m_imageList is
     // updated from m_images, if the latter is not empty, using the images of
-    // the appropriate size for the given window.
-    void UpdateImageListIfNecessary(wxWindow* win)
+    // the appropriate size for the given window, and returns it.
+    wxImageList* GetUpdatedImageListFor(wxWindow* win)
     {
         if ( m_images.empty() )
-            return;
+            return NULL;
 
         // Note that we can't just call AssignImageList() here to avoid
         // infinite recursion.
@@ -137,6 +137,8 @@ protected:
 
         // We always own it as we created it ourselves.
         m_ownsImageList = true;
+
+        return m_imageList;
     }
 
 
