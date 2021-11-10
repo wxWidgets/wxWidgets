@@ -102,25 +102,6 @@ public:
     // Get pointer (may be NULL) to the associated image list.
     wxImageList* GetImageList() const { return m_imageList; }
 
-protected:
-    // This function is called when the images associated with the control
-    // change, due to either SetImages() or SetImageList() being called.
-    //
-    // It ought to be pure virtual, but isn't because there could be existing
-    // application code inheriting from this class and not overriding it
-    // (because this function hadn't existed when this code was written).
-    virtual void OnImagesChanged() { }
-
-    // This function can be used as event handle for wxEVT_DPI_CHANGED event
-    // and simply calls OnImagesChanged() to refresh the images when it happens.
-    void WXHandleDPIChanged(wxDPIChangedEvent& event)
-    {
-        if ( HasImages() )
-            OnImagesChanged();
-
-        event.Skip();
-    }
-
     // This helper function can be used from OnImagesChanged() if the derived
     // class actually needs to use wxImageList: it ensures that m_imageList is
     // updated from m_images, if the latter is not empty, using the images of
@@ -139,6 +120,25 @@ protected:
         m_ownsImageList = true;
 
         return m_imageList;
+    }
+
+protected:
+    // This function is called when the images associated with the control
+    // change, due to either SetImages() or SetImageList() being called.
+    //
+    // It ought to be pure virtual, but isn't because there could be existing
+    // application code inheriting from this class and not overriding it
+    // (because this function hadn't existed when this code was written).
+    virtual void OnImagesChanged() { }
+
+    // This function can be used as event handle for wxEVT_DPI_CHANGED event
+    // and simply calls OnImagesChanged() to refresh the images when it happens.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event)
+    {
+        if ( HasImages() )
+            OnImagesChanged();
+
+        event.Skip();
     }
 
 
