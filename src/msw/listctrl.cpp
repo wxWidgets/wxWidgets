@@ -315,11 +315,11 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     // If SetImageList() had been called before the control was created, take
     // it into account now.
-    if ( wxImageList* const iml = GetImageList(wxIMAGE_LIST_NORMAL) )
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_NORMAL) )
         ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_NORMAL);
-    if ( wxImageList* const iml = GetImageList(wxIMAGE_LIST_SMALL) )
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_SMALL) )
         ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_SMALL);
-    if ( wxImageList* const iml = GetImageList(wxIMAGE_LIST_STATE) )
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_STATE) )
         ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_STATE);
 
     return true;
@@ -1509,7 +1509,7 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
 }
 
 
-void wxListCtrl::DoSetImageList(wxImageList *imageList, int which)
+void wxListCtrl::DoUpdateImages(int which)
 {
     // It's possible that this function is called before the control is
     // created, don't do anything else in this case -- the image list will be
@@ -1536,6 +1536,8 @@ void wxListCtrl::DoSetImageList(wxImageList *imageList, int which)
             wxFAIL_MSG("invalid image list");
             return;
     }
+
+    wxImageList* const imageList = GetUpdatedImageList(which);
 
     (void) ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 

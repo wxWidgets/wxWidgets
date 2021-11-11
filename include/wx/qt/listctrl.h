@@ -269,7 +269,7 @@ protected:
 
     // Implement base class pure virtual methods.
     virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
-    void DoSetImageList(wxImageList *imageList, int which) wxOVERRIDE;
+    void DoUpdateImages(int which) wxOVERRIDE;
 
     bool              m_hasCheckBoxes;
 

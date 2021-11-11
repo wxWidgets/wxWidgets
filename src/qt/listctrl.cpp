@@ -1534,7 +1534,7 @@ long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
     return -1;
 }
 
-void wxListCtrl::DoSetImageList(wxImageList* WXUNUSED(imageList), int WXUNUSED(which))
+void wxListCtrl::DoUpdateImages(int WXUNUSED(which))
 {
     // TODO: Ensure the icons are actually updated.
 }

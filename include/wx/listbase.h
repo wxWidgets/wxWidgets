@@ -334,8 +334,18 @@ class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 public:
     wxListCtrlBase() { }
 
-    // Image list methods.
-    // -------------------
+    // Image-related methods.
+    // ----------------------
+
+    // Preferred way of specifying the images is by using the SetXXXImages(),
+    // methods using wxImageList below still work, but don't allow specifying
+    // images in different resolutions, which is necessary for good appearance
+    // on high DPI displays.
+
+    // "Normal" images are used only in icon view, the "report" view uses
+    // "small" images.
+    void SetNormalImages(const wxVector<wxBitmapBundle>& images);
+    void SetSmallImages(const wxVector<wxBitmapBundle>& images);
 
     // Associate the given (possibly NULL to indicate that no images will be
     // used) image list with the control. The ownership of the image list
@@ -437,9 +447,17 @@ public:
     virtual void CheckItem(long WXUNUSED(item), bool WXUNUSED(check)) { }
 
 protected:
+    // Return pointer to the corresponding m_imagesXXX.
+    const wxWithImages* GetImages(int which) const;
+    wxWithImages* GetImages(int which);
+
+    // Helper updating or creating the image list, if necessary, unlike
+    // GetImageList() which just returns the previously set image list.
+    wxImageList* GetUpdatedImageList(int which);
+
     // Real implementations methods to which our public forwards.
     virtual long DoInsertColumn(long col, const wxListItem& info) = 0;
-    virtual void DoSetImageList(wxImageList *imageList, int which) = 0;
+    virtual void DoUpdateImages(int which) = 0;
 
     // Overridden methods of the base class.
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;

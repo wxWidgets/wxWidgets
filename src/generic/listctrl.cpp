@@ -5402,9 +5402,9 @@ long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const
     return m_mainWin->GetNextItem( item, geom, state );
 }
 
-void wxGenericListCtrl::DoSetImageList( wxImageList *imageList, int which )
+void wxGenericListCtrl::DoUpdateImages(int which )
 {
-    m_mainWin->SetImageList( imageList, which );
+    m_mainWin->SetImageList( GetUpdatedImageList(which), which );
 }
 
 bool wxGenericListCtrl::Arrange( int WXUNUSED(flag) )

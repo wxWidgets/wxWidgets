@@ -292,21 +292,52 @@ wxItemAttr* wxListCtrlBase::OnGetItemColumnAttr(long item, long WXUNUSED(column)
 // Images support
 // ----------------------------------------------------------------------------
 
-wxImageList *wxListCtrlBase::GetImageList(int which) const
+void wxListCtrlBase::SetNormalImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesNormal.SetImages(images);
+
+    DoUpdateImages(wxIMAGE_LIST_NORMAL);
+}
+
+void wxListCtrlBase::SetSmallImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesSmall.SetImages(images);
+
+    DoUpdateImages(wxIMAGE_LIST_SMALL);
+}
+
+wxWithImages* wxListCtrlBase::GetImages(int which)
 {
     if ( which == wxIMAGE_LIST_NORMAL )
     {
-        return m_imagesNormal.GetImageList();
+        return &m_imagesNormal;
     }
     else if ( which == wxIMAGE_LIST_SMALL )
     {
-        return m_imagesSmall.GetImageList();
+        return &m_imagesSmall;
     }
     else if ( which == wxIMAGE_LIST_STATE )
     {
-        return m_imagesState.GetImageList();
+        return &m_imagesState;
     }
     return NULL;
+}
+
+const wxWithImages* wxListCtrlBase::GetImages(int which) const
+{
+    return const_cast<wxListCtrlBase*>(this)->GetImages(which);
+}
+
+wxImageList* wxListCtrlBase::GetUpdatedImageList(int which)
+{
+    wxWithImages* const images = GetImages(which);
+    return images ? images->GetUpdatedImageListFor(this) : NULL;
+}
+
+wxImageList *wxListCtrlBase::GetImageList(int which) const
+{
+    const wxWithImages* const images = GetImages(which);
+    return images ? images->GetImageList() : NULL;
 }
 
 void wxListCtrlBase::SetImageList(wxImageList *imageList, int which)
@@ -330,7 +361,7 @@ void wxListCtrlBase::SetImageList(wxImageList *imageList, int which)
     }
 
     // Actually update the images shown in the control.
-    DoSetImageList(imageList, which);
+    DoUpdateImages(which);
 }
 
 void wxListCtrlBase::AssignImageList(wxImageList *imageList, int which)
