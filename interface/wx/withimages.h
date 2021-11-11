@@ -111,9 +111,30 @@ public:
     /**
         Returns the associated image list, may be NULL.
 
+        Note that the new code should use GetUpdatedImageListFor() instead.
+
         @see wxImageList, SetImageList()
     */
     wxImageList* GetImageList() const;
+
+    /**
+        Returns the image list updated to reflect the DPI scaling used for the
+        given window if possible.
+
+        If SetImages() has been called, this function creates the image list
+        containing the images using the DPI scaling in effect for the provided
+        @a win, which must be valid.
+
+        Otherwise it behaves as GetImageList(), i.e. returns the image list
+        previously set using SetImageList() or AssignImageList(), and just
+        returns @NULL if none of them had been called.
+
+        @return Possibly null pointer owned by this object, i.e. which must @e
+            not be deleted by the caller.
+
+        @since 3.1.6
+     */
+    wxImageList* GetUpdatedImageListFor(wxWindow* win);
 
 protected:
     /**
