@@ -108,16 +108,16 @@ public:
     // the appropriate size for the given window, and returns it.
     wxImageList* GetUpdatedImageListFor(wxWindow* win)
     {
-        if ( m_images.empty() )
-            return NULL;
+        if ( !m_images.empty() )
+        {
+            // Note that we can't just call AssignImageList() here to avoid
+            // infinite recursion.
+            FreeIfNeeded();
+            m_imageList = wxBitmapBundle::CreateImageList(win, m_images);
 
-        // Note that we can't just call AssignImageList() here to avoid
-        // infinite recursion.
-        FreeIfNeeded();
-        m_imageList = wxBitmapBundle::CreateImageList(win, m_images);
-
-        // We always own it as we created it ourselves.
-        m_ownsImageList = true;
+            // We always own it as we created it ourselves.
+            m_ownsImageList = true;
+        }
 
         return m_imageList;
     }
