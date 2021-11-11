@@ -3180,8 +3180,6 @@ void  wxDataViewTreeCtrl::DeleteAllItems()
 
 void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 {
-    if (!HasImageList()) return;
-
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
 
@@ -3192,8 +3190,6 @@ void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 
 void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 {
-    if (!HasImageList()) return;
-
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
 
