@@ -315,14 +315,19 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     // If SetImageList() had been called before the control was created, take
     // it into account now.
+    UpdateAllImageLists();
+
+    return true;
+}
+
+void wxListCtrl::UpdateAllImageLists()
+{
     if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_NORMAL) )
         ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_NORMAL);
     if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_SMALL) )
         ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_SMALL);
     if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_STATE) )
         ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_STATE);
-
-    return true;
 }
 
 void wxListCtrl::MSWSetExListStyles()
@@ -448,6 +453,8 @@ void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 
 void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 {
+    UpdateAllImageLists();
+
     const int numCols = GetColumnCount();
     for ( int i = 0; i < numCols; ++i )
     {

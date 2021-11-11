@@ -438,6 +438,9 @@ private:
     // destroy m_textCtrl if it's currently valid and reset it to NULL
     void DeleteEditControl();
 
+    // Update all image lists that we have.
+    void UpdateAllImageLists();
+
     // Intercept Escape and Enter keys to avoid them being stolen from our
     // in-place editor control.
     void OnCharHook(wxKeyEvent& event);
