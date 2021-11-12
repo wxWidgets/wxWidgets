@@ -168,7 +168,6 @@ bool wxToolbook::SetPageImage(size_t n, int imageId)
     int toolId = PageToToolId(n);
     wxBitmap bmp = GetImageList()->GetBitmap(imageId);
     GetToolBar()->SetToolNormalBitmap(toolId, bmp);
-    GetToolBar()->SetToolDisabledBitmap(toolId, bmp.ConvertToDisabled());
 
     return true;
 }
@@ -295,7 +294,7 @@ bool wxToolbook::InsertPage(size_t n,
 
     int toolId = page->GetId();
     GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
-    GetToolBar()->InsertTool(n, toolId, text, bitmap, bitmap.ConvertToDisabled(), wxITEM_RADIO);
+    GetToolBar()->InsertTool(n, toolId, text, bitmap, wxNullBitmap, wxITEM_RADIO);
 
     // fix current selection
     if (m_selection == wxNOT_FOUND)
