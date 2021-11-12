@@ -144,6 +144,8 @@ set(TEST_GUI_DATA
     horse.tga
     horse.tif
     horse.xpm
+    image/8bpp-colorsused-large.bmp
+    image/8bpp-colorsused-negative.bmp
     image/horse_grey.bmp
     image/horse_grey_flipped.bmp
     image/horse_rle4.bmp
