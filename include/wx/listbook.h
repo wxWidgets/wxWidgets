@@ -73,7 +73,6 @@ public:
     virtual int SetSelection(size_t n) wxOVERRIDE { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
     virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
-    virtual void SetImageList(wxImageList *imageList) wxOVERRIDE;
 
     virtual bool DeleteAllPages() wxOVERRIDE;
 
@@ -82,13 +81,12 @@ public:
 protected:
     virtual wxWindow *DoRemovePage(size_t page) wxOVERRIDE;
 
+    virtual void OnImagesChanged() wxOVERRIDE;
+
     void UpdateSelectedPage(size_t newsel) wxOVERRIDE;
 
     wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE;
     void MakeChangedEvent(wxBookCtrlEvent &event) wxOVERRIDE;
-
-    // Get the correct wxListCtrl flags to use depending on our own flags.
-    long GetListCtrlFlags() const;
 
     // event handlers
     void OnListSelected(wxListEvent& event);
@@ -97,6 +95,12 @@ protected:
 private:
     // this should be called when we need to be relaid out
     void UpdateSize();
+
+    // Get the correct wxListCtrl flags to use depending on our own flags.
+    long GetListCtrlFlags(bool hasImages) const;
+
+    // Update list control wxLC_ICON flag depending on whether we have images.
+    void SyncListCtrlIconFlag(bool hasImages);
 
 
     wxDECLARE_EVENT_TABLE();
