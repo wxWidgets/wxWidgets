@@ -161,12 +161,11 @@ int wxToolbook::GetPageImage(size_t WXUNUSED(n)) const
 
 bool wxToolbook::SetPageImage(size_t n, int imageId)
 {
-    wxASSERT( GetImageList() != NULL );
-    if (!GetImageList())
+    wxBitmapBundle bmp = GetBitmapBundle(imageId);
+    if ( !bmp.IsOk() )
         return false;
 
     int toolId = PageToToolId(n);
-    wxBitmap bmp = GetImageList()->GetBitmap(imageId);
     GetToolBar()->SetToolNormalBitmap(toolId, bmp);
 
     return true;
@@ -271,24 +270,10 @@ bool wxToolbook::InsertPage(size_t n,
 
     m_needsRealizing = true;
 
-    wxASSERT(GetImageList() != NULL);
-
-    if (!GetImageList())
-        return false;
-
-    // TODO: make sure all platforms can convert between icon and bitmap,
-    // and/or test whether the image is a bitmap or an icon.
-#ifdef __WXMAC__
-    wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
-#else
-    // On Windows, we can lose information by using GetBitmap, so extract icon instead
-    wxIcon icon = GetImageList()->GetIcon(imageId);
-    wxBitmap bitmap;
-    bitmap.CopyFromIcon(icon);
-#endif
+    wxBitmapBundle bitmap = GetBitmapBundle(imageId);
 
     int toolId = page->GetId();
-    GetToolBar()->InsertTool(n, toolId, text, bitmap, wxNullBitmap, wxITEM_RADIO);
+    GetToolBar()->InsertTool(n, toolId, text, bitmap, wxBitmapBundle(), wxITEM_RADIO);
 
     // fix current selection
     if (m_selection == wxNOT_FOUND)
