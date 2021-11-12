@@ -192,6 +192,10 @@ protected:
         return bundle;
     }
 
+    // Accessor to the images for the derived classes: this is only useful when
+    // delegating SetImages() to another object.
+    const Images& GetImages() const { return m_images; }
+
 private:
     // Free the image list if necessary, i.e. if we own it.
     void FreeIfNeeded()
