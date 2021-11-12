@@ -115,9 +115,6 @@ protected:
     // whether the toolbar needs to be realized
     bool m_needsRealizing;
 
-    // maximum bitmap size
-    wxSize m_maxBitmapSize;
-
 private:
     // common part of all constructors
     void Init();

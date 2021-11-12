@@ -200,8 +200,6 @@ void wxToolbook::Realize()
     {
         m_needsRealizing = false;
 
-        GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
-
         GetToolBar()->Realize();
     }
 
@@ -289,11 +287,7 @@ bool wxToolbook::InsertPage(size_t n,
     bitmap.CopyFromIcon(icon);
 #endif
 
-    m_maxBitmapSize.x = wxMax(bitmap.GetWidth(), m_maxBitmapSize.x);
-    m_maxBitmapSize.y = wxMax(bitmap.GetHeight(), m_maxBitmapSize.y);
-
     int toolId = page->GetId();
-    GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
     GetToolBar()->InsertTool(n, toolId, text, bitmap, wxNullBitmap, wxITEM_RADIO);
 
     // fix current selection
