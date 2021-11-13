@@ -39,13 +39,6 @@ wxAuiTabArt* wxAuiMSWTabArt::Clone()
     return new wxAuiMSWTabArt(*this);
 }
 
-void wxAuiMSWTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
-    size_t tab_count)
-{
-    wxAuiGenericTabArt::SetSizingInfo(tab_ctrl_size, tab_count);
-}
-
-
 void wxAuiMSWTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 {
     if ( !IsThemed() )
