@@ -168,13 +168,13 @@ void wxAuiTabContainer::SetActiveColour(const wxColour& colour)
     m_art->SetActiveColour(colour);
 }
 
-void wxAuiTabContainer::SetRect(const wxRect& rect)
+void wxAuiTabContainer::SetRect(const wxRect& rect, wxWindow* wnd)
 {
     m_rect = rect;
 
     if (m_art)
     {
-        m_art->SetSizingInfo(rect.GetSize(), m_pages.GetCount());
+        m_art->SetSizingInfo(rect.GetSize(), m_pages.GetCount(), wnd);
     }
 }
 
@@ -191,7 +191,7 @@ bool wxAuiTabContainer::AddPage(wxWindow* page,
     // let the art provider know how many pages we have
     if (m_art)
     {
-        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount());
+        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), page);
     }
 
     return true;
@@ -214,7 +214,7 @@ bool wxAuiTabContainer::InsertPage(wxWindow* page,
     // let the art provider know how many pages we have
     if (m_art)
     {
-        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount());
+        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), page);
     }
 
     return true;
@@ -252,7 +252,7 @@ bool wxAuiTabContainer::RemovePage(wxWindow* wnd)
             // let the art provider know how many pages we have
             if (m_art)
             {
-                m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount());
+                m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), wnd);
             }
 
             return true;

@@ -534,7 +534,7 @@ public:
     void SetColour(const wxColour& colour);
     void SetActiveColour(const wxColour& colour);
     void DoShowHide();
-    void SetRect(const wxRect& rect);
+    void SetRect(const wxRect& rect, wxWindow* wnd = NULL);
 
     void RemoveButton(int id);
     void AddButton(int id,
@@ -672,8 +672,13 @@ public:
 
     /**
         Sets sizing information.
+
+        The @a wnd argument is only present in wxWidgets 3.1.6 and newer and is
+        required, it only has @NULL default value for compatibility reasons.
     */
-    virtual void SetSizingInfo(const wxSize& tab_ctrl_size, size_t tab_count) = 0;
+    virtual void SetSizingInfo(const wxSize& tab_ctrl_size,
+                               size_t tab_count,
+                               wxWindow* wnd = NULL) = 0;
 };
 
 /**
@@ -767,7 +772,8 @@ public:
     wxAuiTabArt* Clone();
     void SetFlags(unsigned int flags);
     void SetSizingInfo(const wxSize& tabCtrlSize,
-                       size_t tabCount);
+                       size_t tabCount,
+                       wxWindow* wnd = NULL);
 
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
@@ -872,7 +878,8 @@ public:
     void SetFlags(unsigned int flags);
 
     void SetSizingInfo(const wxSize& tabCtrlSize,
-                       size_t tabCount);
+                       size_t tabCount,
+                       wxWindow* wnd = NULL);
 
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);

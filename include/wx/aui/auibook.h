@@ -151,7 +151,7 @@ public:
     void SetColour(const wxColour& colour);
     void SetActiveColour(const wxColour& colour);
     void DoShowHide();
-    void SetRect(const wxRect& rect);
+    void SetRect(const wxRect& rect, wxWindow* wnd = NULL);
 
     void RemoveButton(int id);
     void AddButton(int id,
@@ -199,6 +199,8 @@ public:
     ~wxAuiTabCtrl();
 
     bool IsDragging() const { return m_isDragging; }
+
+    void SetRect(const wxRect& rect) { wxAuiTabContainer::SetRect(rect, this); }
 
 protected:
     // choose the default border for this window

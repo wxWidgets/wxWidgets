@@ -18,6 +18,7 @@
 #if wxUSE_AUI
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
@@ -232,9 +233,18 @@ void wxAuiGenericTabArt::SetFlags(unsigned int flags)
 }
 
 void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
-                                       size_t tab_count)
+                                       size_t tab_count,
+                                       wxWindow* wnd)
 {
-    m_fixedTabWidth = wxWindow::FromDIP(100, NULL);
+    if ( !wnd )
+    {
+        // This is only allowed for backwards compatibility, we should be
+        // really passed a valid window.
+        wnd = wxTheApp->GetTopWindow();
+        wxCHECK_RET( wnd, "must have some window" );
+    }
+
+    m_fixedTabWidth = wnd->FromDIP(100);
 
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
 
@@ -948,9 +958,16 @@ void wxAuiSimpleTabArt::SetFlags(unsigned int flags)
 }
 
 void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
-                                      size_t tab_count)
+                                      size_t tab_count,
+                                      wxWindow* wnd)
 {
-    m_fixedTabWidth = wxWindow::FromDIP(100, NULL);
+    if ( !wnd )
+    {
+        wnd = wxTheApp->GetTopWindow();
+        wxCHECK_RET( wnd, "must have some window" );
+    }
+
+    m_fixedTabWidth = wnd->FromDIP(100);
 
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
 
