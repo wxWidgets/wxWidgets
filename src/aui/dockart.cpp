@@ -128,26 +128,6 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
     return wxBitmap(img);
 }
 
-// A utility function to scales a bitmap in place for use at the given scale
-// factor.
-void wxAuiScaleBitmap(wxBitmap& bmp, double scale)
-{
-#if wxUSE_IMAGE && !defined(__WXGTK3__) && !defined(__WXMAC__)
-    // scale to a close round number to improve quality
-    scale = floor(scale + 0.25);
-    if (scale > 1.0 && !(bmp.GetScaleFactor() > 1.0))
-    {
-        wxImage img = bmp.ConvertToImage();
-        img.Rescale(bmp.GetWidth()*scale, bmp.GetHeight()*scale,
-            wxIMAGE_QUALITY_BOX_AVERAGE);
-        bmp = wxBitmap(img);
-    }
-#else
-    wxUnusedVar(bmp);
-    wxUnusedVar(scale);
-#endif // wxUSE_IMAGE
-}
-
 static void DrawGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
                                   const wxColour& start_color,
@@ -804,8 +784,6 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             }
             break;
     }
-
-    wxAuiScaleBitmap(bmp, window->GetDPIScaleFactor());
 
     wxRect rect = _rect;
 

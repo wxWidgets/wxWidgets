@@ -361,8 +361,8 @@ size_t wxAuiTabContainer::GetPageCount() const
 
 void wxAuiTabContainer::AddButton(int id,
                                   int location,
-                                  const wxBitmap& normalBitmap,
-                                  const wxBitmap& disabledBitmap)
+                                  const wxBitmapBundle& normalBitmap,
+                                  const wxBitmapBundle& disabledBitmap)
 {
     wxAuiTabContainerButton button;
     button.id = id;
@@ -1963,7 +1963,7 @@ void wxAuiNotebook::SetWindowStyleFlag(long style)
 bool wxAuiNotebook::AddPage(wxWindow* page,
                             const wxString& caption,
                             bool select,
-                            const wxBitmap& bitmap)
+                            const wxBitmapBundle& bitmap)
 {
     return InsertPage(GetPageCount(), page, caption, select, bitmap);
 }
@@ -1972,7 +1972,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
                                wxWindow* page,
                                const wxString& caption,
                                bool select,
-                               const wxBitmap& bitmap)
+                               const wxBitmapBundle& bitmap)
 {
     wxASSERT_MSG(page, wxT("page pointer must be non-NULL"));
     if (!page)
@@ -2230,7 +2230,7 @@ wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
     return page_info.tooltip;
 }
 
-bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)
+bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
 {
     if (page_idx >= m_tabs.GetPageCount())
         return false;
@@ -2264,7 +2264,7 @@ wxBitmap wxAuiNotebook::GetPageBitmap(size_t page_idx) const
 
     // update our own tab catalog
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
-    return page_info.bitmap;
+    return page_info.bitmap.GetBitmap(page_info.bitmap.GetDefaultSize());
 }
 
 // GetSelection() returns the index of the currently active page
@@ -3397,7 +3397,7 @@ int wxAuiNotebook::GetPageImage(size_t WXUNUSED(n)) const
 
 bool wxAuiNotebook::SetPageImage(size_t n, int imageId)
 {
-    return SetPageBitmap(n, GetImageList()->GetBitmap(imageId));
+    return SetPageBitmap(n, GetBitmapBundle(imageId));
 }
 
 int wxAuiNotebook::ChangeSelection(size_t n)
@@ -3408,14 +3408,7 @@ int wxAuiNotebook::ChangeSelection(size_t n)
 bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select,
                             int imageId)
 {
-    if(HasImageList())
-    {
-        return AddPage(page, text, select, GetImageList()->GetBitmap(imageId));
-    }
-    else
-    {
-        return AddPage(page, text, select, wxNullBitmap);
-    }
+    return AddPage(page, text, select, GetBitmapBundle(imageId));
 }
 
 bool wxAuiNotebook::DeleteAllPages()
@@ -3432,15 +3425,7 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
                                const wxString &text, bool select,
                                int imageId)
 {
-    if(HasImageList())
-    {
-        return InsertPage(index, page, text, select,
-                          GetImageList()->GetBitmap(imageId));
-    }
-    else
-    {
-        return InsertPage(index, page, text, select, wxNullBitmap);
-    }
+    return InsertPage(index, page, text, select, GetBitmapBundle(imageId));
 }
 
 namespace

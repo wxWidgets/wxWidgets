@@ -139,7 +139,7 @@ public:
     */
     bool AddPage(wxWindow* page, const wxString& caption,
                  bool select = false,
-                 const wxBitmap& bitmap = wxNullBitmap);
+                 const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
         Adds a new page.
@@ -272,7 +272,7 @@ public:
     bool InsertPage(size_t page_idx, wxWindow* page,
                     const wxString& caption,
                     bool select = false,
-                    const wxBitmap& bitmap = wxNullBitmap);
+                    const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
         Inserts a new page at the specified position.
@@ -326,9 +326,9 @@ public:
 
     /**
         Sets the bitmap for the page.  To remove a bitmap from the tab caption, pass
-        wxNullBitmap.
+        an empty wxBitmapBundle.
     */
-    bool SetPageBitmap(size_t page, const wxBitmap& bitmap);
+    bool SetPageBitmap(size_t page, const wxBitmapBundle& bitmap);
 
     /**
         Sets the image index for the given page. @a image is an index into
@@ -445,7 +445,7 @@ public:
     wxWindow* window;     // page's associated window
     wxString caption;     // caption displayed on the tab
     wxString tooltip;     // tooltip displayed when hovering over tab title
-    wxBitmap bitmap;      // tab's bitmap
+    wxBitmapBundle bitmap;// tab's bitmap
     wxRect rect;          // tab's hit rectangle
     bool active;          // true if the page is currently active
 };
@@ -469,9 +469,9 @@ public:
     /// buttons location (wxLEFT, wxRIGHT, or wxCENTER)
     int location;
     /// button's hover bitmap
-    wxBitmap bitmap;
+    wxBitmapBundle bitmap;
     /// button's disabled bitmap
-    wxBitmap disBitmap;
+    wxBitmapBundle disBitmap;
     /// button's hit rectangle
     wxRect rect;
 };
@@ -539,8 +539,8 @@ public:
     void RemoveButton(int id);
     void AddButton(int id,
                    int location,
-                   const wxBitmap& normalBitmap = wxNullBitmap,
-                   const wxBitmap& disabledBitmap = wxNullBitmap);
+                   const wxBitmapBundle& normalBitmap = wxBitmapBundle(),
+                   const wxBitmapBundle& disabledBitmap = wxBitmapBundle());
 
     size_t GetTabOffset() const;
     void SetTabOffset(size_t offset);
