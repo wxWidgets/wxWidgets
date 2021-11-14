@@ -27,6 +27,7 @@
 #include "wx/aui/tabart.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/image.h"
@@ -646,7 +647,8 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
     {
         DrawIcon(dc, window, rect, pane);
 
-        caption_offset += pane.icon.GetScaledWidth() + window->FromDIP(3);
+        const wxBitmap& icon = pane.icon.GetBitmapFor(window);
+        caption_offset += icon.GetScaledWidth() + window->FromDIP(3);
     }
 
     if (pane.state & wxAuiPaneInfo::optionActive)
@@ -685,10 +687,17 @@ void wxAuiDefaultDockArt::DrawIcon(wxDC& dc, const wxRect& rect, wxAuiPaneInfo& 
 void
 wxAuiDefaultDockArt::DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wxAuiPaneInfo& pane)
 {
+    if (!window)
+    {
+        window = wxTheApp->GetTopWindow();
+        wxCHECK_RET( window, "must have some window" );
+    }
+
     // Draw the icon centered vertically
-    int xOffset = window ? window->FromDIP(2) : 2;
-    dc.DrawBitmap(pane.icon,
-                  rect.x+xOffset, rect.y+(rect.height-pane.icon.GetScaledHeight())/2,
+    int xOffset = window->FromDIP(2);
+    const wxBitmap& icon = pane.icon.GetBitmapFor(window);
+    dc.DrawBitmap(icon,
+                  rect.x+xOffset, rect.y+(rect.height-icon.GetScaledHeight())/2,
                   true);
 }
 
@@ -751,39 +760,41 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
                                       const wxRect& _rect,
                                       wxAuiPaneInfo& pane)
 {
-    wxBitmap bmp;
+    wxBitmapBundle bb;
     switch (button)
     {
         default:
         case wxAUI_BUTTON_CLOSE:
             if (pane.state & wxAuiPaneInfo::optionActive)
-                bmp = m_activeCloseBitmap;
+                bb = m_activeCloseBitmap;
             else
-                bmp = m_inactiveCloseBitmap;
+                bb = m_inactiveCloseBitmap;
             break;
         case wxAUI_BUTTON_PIN:
             if (pane.state & wxAuiPaneInfo::optionActive)
-                bmp = m_activePinBitmap;
+                bb = m_activePinBitmap;
             else
-                bmp = m_inactivePinBitmap;
+                bb = m_inactivePinBitmap;
             break;
         case wxAUI_BUTTON_MAXIMIZE_RESTORE:
             if (pane.IsMaximized())
             {
                 if (pane.state & wxAuiPaneInfo::optionActive)
-                    bmp = m_activeRestoreBitmap;
+                    bb = m_activeRestoreBitmap;
                 else
-                    bmp = m_inactiveRestoreBitmap;
+                    bb = m_inactiveRestoreBitmap;
             }
             else
             {
                 if (pane.state & wxAuiPaneInfo::optionActive)
-                    bmp = m_activeMaximizeBitmap;
+                    bb = m_activeMaximizeBitmap;
                 else
-                    bmp = m_inactiveMaximizeBitmap;
+                    bb = m_inactiveMaximizeBitmap;
             }
             break;
     }
+
+    const wxBitmap& bmp = bb.GetBitmapFor(window);
 
     wxRect rect = _rect;
 

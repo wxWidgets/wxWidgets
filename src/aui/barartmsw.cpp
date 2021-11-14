@@ -153,15 +153,16 @@ void wxAuiMSWToolBarArt::DrawButton(
         int bmpX = 0, bmpY = 0;
         int textX = 0, textY = 0;
 
+        const wxBitmap& bmp = item.GetCurrentBitmapFor(wnd);
         if ( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
         {
             bmpX = rect.x +
                 (rect.width / 2) -
-                (item.GetBitmap().GetWidth() / 2);
+                (bmp.GetWidth() / 2);
 
             bmpY = rect.y +
                 ((rect.height - textHeight) / 2) -
-                (item.GetBitmap().GetHeight() / 2);
+                (bmp.GetHeight() / 2);
 
             textX = rect.x + (rect.width / 2) - (textWidth / 2) + 1;
             textY = rect.y + rect.height - textHeight - 1;
@@ -172,19 +173,13 @@ void wxAuiMSWToolBarArt::DrawButton(
 
             bmpY = rect.y +
                 (rect.height / 2) -
-                (item.GetBitmap().GetHeight() / 2);
+                (bmp.GetHeight() / 2);
 
-            textX = bmpX + wnd->FromDIP(3) + item.GetBitmap().GetWidth();
+            textX = bmpX + wnd->FromDIP(3) + bmp.GetWidth();
             textY = rect.y +
                 (rect.height / 2) -
                 (textHeight / 2);
         }
-
-        wxBitmap bmp;
-        if ( item.GetState() & wxAUI_BUTTON_STATE_DISABLED )
-            bmp = item.GetDisabledBitmap();
-        else
-            bmp = item.GetBitmap();
 
         if ( bmp.IsOk() )
             dc.DrawBitmap(bmp, bmpX, bmpY, true);
@@ -271,14 +266,18 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
             &dropDownR,
             NULL);
 
+        const wxBitmap& bmp = item.GetCurrentBitmapFor(wnd);
+        if ( !bmp.IsOk() )
+            return;
+
         if ( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
         {
             bmpX = buttonRect.x +
                 (buttonRect.width / 2) -
-                (item.GetBitmap().GetWidth() / 2);
+                (bmp.GetWidth() / 2);
             bmpY = buttonRect.y +
                 ((buttonRect.height - textHeight) / 2) -
-                (item.GetBitmap().GetHeight() / 2);
+                (bmp.GetHeight() / 2);
 
             textX = rect.x + (rect.width / 2) - (textWidth / 2) + 1;
             textY = rect.y + rect.height - textHeight - 1;
@@ -289,26 +288,13 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
 
             bmpY = rect.y +
                 (rect.height / 2) -
-                (item.GetBitmap().GetHeight() / 2);
+                (bmp.GetHeight() / 2);
 
-            textX = bmpX + wnd->FromDIP(3) + item.GetBitmap().GetWidth();
+            textX = bmpX + wnd->FromDIP(3) + bmp.GetWidth();
             textY = rect.y +
                 (rect.height / 2) -
                 (textHeight / 2);
         }
-
-        wxBitmap bmp;
-        if ( item.GetState() & wxAUI_BUTTON_STATE_DISABLED )
-        {
-            bmp = item.GetDisabledBitmap();
-        }
-        else
-        {
-            bmp = item.GetBitmap();
-        }
-
-        if ( !bmp.IsOk() )
-            return;
 
         dc.DrawBitmap(bmp, bmpX, bmpY, true);
 
@@ -433,7 +419,7 @@ wxSize wxAuiMSWToolBarArt::GetToolSize(
 {
     if ( m_themed )
     {
-        if ( !item.GetBitmap().IsOk() && !(m_flags & wxAUI_TB_TEXT) )
+        if ( !item.GetBitmapBundle().IsOk() && !(m_flags & wxAUI_TB_TEXT) )
             return m_buttonSize;
 
         wxSize size = wxAuiGenericToolBarArt::GetToolSize(dc, wnd, item);
