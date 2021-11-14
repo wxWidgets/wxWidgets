@@ -85,6 +85,47 @@ static const char* const gs_xpm_catmode[] = {
 "................"
 };
 
+static const char* const gs_xpm_catmode_2x[] = {
+"32 32 5 1",
+". c none",
+"B c black",
+"D c #868686",
+"L c #CACACA",
+"W c #FFFFFF",
+"................................",
+"...DDDD.........................",
+"..DDDDDD........................",
+"..DDLLDD..BBBBBBBBBBBB..........",
+"..DDLLDD..BBBBBBBBBBBB..........",
+"..DDDDDD........................",
+"...DDDD.........................",
+"..........DDDDDDDDDD..DDDDDD....",
+"..........DDDDDDDDDD..DDDDDD....",
+"................................",
+"................................",
+"..........DDDDDDDDDD..DDDDDD....",
+"..........DDDDDDDDDD..DDDDDD....",
+"................................",
+"................................",
+"..........DDDDDDDDDD..DDDDDD....",
+"..........DDDDDDDDDD..DDDDDD....",
+"................................",
+"................................",
+"..........DDDDDDDDDD..DDDDDD....",
+"..........DDDDDDDDDD..DDDDDD....",
+"................................",
+"................................",
+"...DDDD.........................",
+"..DDDDDD........................",
+"..DDLLDD..BBBBBBBBBBBB..........",
+"..DDLLDD..BBBBBBBBBBBB..........",
+"..DDDDDD........................",
+"...DDDD.........................",
+"..........DDDDDDDDDD..DDDDDD....",
+"..........DDDDDDDDDD..DDDDDD....",
+"................................"
+};
+
 // Alphabetic Mode Icon
 static const char* const gs_xpm_noncatmode[] = {
 "16 16 5 1",
@@ -111,6 +152,47 @@ static const char* const gs_xpm_noncatmode[] = {
 "................"
 };
 
+static const char* const gs_xpm_noncatmode_2x[] = {
+"32 32 5 1",
+". c none",
+"B c black",
+"D c #868686",
+"L c #000080",
+"W c #FFFFFF",
+"................................",
+"....DDBBDD......DDDDDD..DDDDDD..",
+"....DDBBDD......DDDDDD..DDDDDD..",
+"..DDBB..BBDD....................",
+"..DDBB..BBDD....................",
+"..BBBBBBBBBB....DDDDDD..DDDDDD..",
+"..BBBBBBBBBB....DDDDDD..DDDDDD..",
+"..BB......BB....................",
+"..BB......BB....................",
+"................DDDDDD..DDDDDD..",
+"......LL........DDDDDD..DDDDDD..",
+"......LL........................",
+"......LL........................",
+"......LL........DDDDDD..DDDDDD..",
+"..LL..LL..LL....DDDDDD..DDDDDD..",
+"...LL.LL.LL.....................",
+"....LLLLLL......................",
+".....LLLL.......DDDDDD..DDDDDD..",
+"......LL........DDDDDD..DDDDDD..",
+"......LL........................",
+"................................",
+"..BBBBBBBBBB....DDDDDD..DDDDDD..",
+"..BBBBBBBBBB....DDDDDD..DDDDDD..",
+"........BBDD....................",
+".......BBDD.....................",
+"......BBDD......DDDDDD..DDDDDD..",
+".....BBDD.......DDDDDD..DDDDDD..",
+"....BBDD........................",
+"...BBDD.........................",
+"..BBBBBBBBBB....DDDDDD..DDDDDD..",
+"..BBBBBBBBBB....DDDDDD..DDDDDD..",
+"................................"
+};
+
 // Default Page Icon.
 static const char* const gs_xpm_defpage[] = {
 "16 16 5 1",
@@ -135,6 +217,47 @@ static const char* const gs_xpm_defpage[] = {
 "................",
 "................",
 "................"
+};
+
+static const char* const gs_xpm_defpage_2x[] = {
+"32 32 5 1",
+". c none",
+"B c black",
+"D c #868686",
+"L c #000080",
+"W c #FFFFFF",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................",
+"....BBBBBBBBBBBBBBBBBBBBBBBB....",
+"....BBBBBBBBBBBBBBBBBBBBBBBB....",
+"....BB....................BB....",
+"....BB....................BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB....................BB....",
+"....BB....................BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB....................BB....",
+"....BB....................BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB....................BB....",
+"....BB....................BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB..BBBB..LLLLLLLLLL..BB....",
+"....BB....................BB....",
+"....BB....................BB....",
+"....BBBBBBBBBBBBBBBBBBBBBBBB....",
+"....BBBBBBBBBBBBBBBBBBBBBBBB....",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................"
 };
 
 // -----------------------------------------------------------------------
@@ -939,7 +1062,7 @@ size_t wxPropertyGridManager::GetPageCount() const
 
 wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
                                                        const wxString& label,
-                                                       const wxBitmap& bmp,
+                                                       const wxBitmapBundle& bmp,
                                                        wxPropertyGridPage* pageObj )
 {
     if ( index < 0 )
@@ -1038,7 +1161,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
                                            label, wxITEM_RADIO);
             else
                 tool = m_pToolbar->AddTool(wxID_ANY, label,
-                                           wxBitmap(gs_xpm_defpage),
+                                           wxBitmapBundle::FromBitmaps(wxBitmap(gs_xpm_defpage), wxBitmap(gs_xpm_defpage_2x)),
                                            label, wxITEM_RADIO);
 
             pageObj->m_toolId = tool->GetId();
@@ -1532,8 +1655,8 @@ void wxPropertyGridManager::RecreateControls()
                 wxToolBarToolBase* tool = m_pToolbar->InsertTool(0,
                                             wxID_ANY,
                                             desc,
-                                            wxBitmap(gs_xpm_catmode),
-                                            wxNullBitmap,
+                                            wxBitmapBundle::FromBitmaps(wxBitmap(gs_xpm_catmode), wxBitmap(gs_xpm_catmode_2x)),
+                                            wxBitmapBundle(),
                                             wxITEM_RADIO,
                                             desc);
                 m_categorizedModeToolId = tool->GetId();
@@ -1549,8 +1672,8 @@ void wxPropertyGridManager::RecreateControls()
                 wxToolBarToolBase* tool = m_pToolbar->InsertTool(1,
                                             wxID_ANY,
                                             desc,
-                                            wxBitmap(gs_xpm_noncatmode),
-                                            wxNullBitmap,
+                                            wxBitmapBundle::FromBitmaps(wxBitmap(gs_xpm_noncatmode), wxBitmap(gs_xpm_noncatmode_2x)),
+                                            wxBitmapBundle(),
                                             wxITEM_RADIO,
                                             desc);
                 m_alphabeticModeToolId = tool->GetId();
