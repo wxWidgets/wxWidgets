@@ -682,8 +682,10 @@ void wxMenuItem::SetGtkLabel()
 #if wxUSE_ACCEL
 void wxMenuItem::GTKSetExtraAccels()
 {
-    const int extraAccelsSize = m_extraAccels.size();
-    for (int i = 0; i < extraAccelsSize; ++i)
+    GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
+
+    const size_t extraAccelsSize = m_extraAccels.size();
+    for (size_t i = 0; i < extraAccelsSize; ++i)
     {
         const wxString extraHotKey = GetGtkHotKeyFromAccel(&(m_extraAccels[i]));
         if ( !extraHotKey.empty() )
@@ -697,7 +699,7 @@ void wxMenuItem::GTKSetExtraAccels()
             if ( gtk_accelerator_valid(extraAccelKey, extraAccelMods) )
             {
                 gtk_widget_add_accelerator(
-                    m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
+                    m_menuItem, "activate", accelGroup,
                     extraAccelKey, extraAccelMods, GTK_ACCEL_MASK);
             }
             else
