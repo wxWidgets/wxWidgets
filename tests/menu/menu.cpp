@@ -641,35 +641,35 @@ void MenuTestCase::Events()
     sim.Char('U', wxMOD_CONTROL);
     wxYield();
     if ( handler.GotEvent() )
-        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccel );
+        CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccel) );
     else
         FAIL("No expected event for Ctrl-U");
 
     sim.Char('V', wxMOD_CONTROL);
     wxYield();
     if ( handler.GotEvent() )
-        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccel );
+        CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccel) );
     else
         FAIL("No expected event for Ctrl-V");
 
     sim.Char('W', wxMOD_CONTROL);
     wxYield();
     if ( handler.GotEvent() )
-        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccels );
+        CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccels) );
     else
         FAIL("No expected event for Ctrl-W");
 
     sim.Char('T', wxMOD_CONTROL);
     wxYield();
     if ( handler.GotEvent() )
-        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccels );
+        CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccels) );
     else
         FAIL("No expected event for Ctrl-T");
 
     sim.Char('W', wxMOD_CONTROL | wxMOD_SHIFT);
     wxYield();
     if ( handler.GotEvent() )
-        CHECK( handler.GetEvent().GetId() == MenuTestCase_ExtraAccels );
+        CHECK( handler.GetEvent().GetId() == static_cast<int>(MenuTestCase_ExtraAccels) );
     else
         FAIL("No expected event for Ctrl-Shift-W");
 
