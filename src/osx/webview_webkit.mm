@@ -371,76 +371,28 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
     }
 }
 
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output) const
+void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, void* clientData) const
 {
-    __block bool scriptExecuted = false;
-    __block wxString outputStr;
-    __block bool scriptSuccess = false;
+    wxJSScriptWrapper wrapJS(javascript, wxJSScriptWrapper::JS_OUTPUT_STRING);
 
     // Start script execution
-    [m_webView evaluateJavaScript:wxCFStringRef(javascript).AsNSString()
+    [m_webView evaluateJavaScript:wxCFStringRef(wrapJS.GetWrappedCode()).AsNSString()
                 completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
         if (error)
         {
-            outputStr.assign(wxCFStringRef(error.localizedFailureReason).AsString());
+            SendScriptResult(clientData, false, wxCFStringRef(error.localizedDescription).AsString());
         }
         else
         {
-            if ([obj isKindOfClass:[NSNumber class]])
-            {
-                NSNumber* num = (NSNumber*) obj;
-                CFTypeID numID = CFGetTypeID((__bridge CFTypeRef)(num));
-                if (numID == CFBooleanGetTypeID())
-                    outputStr = num.boolValue ? "true" : "false";
-                else
-                    outputStr = wxCFStringRef::AsString(num.stringValue);
-            }
-            else if (obj)
-                outputStr.assign(wxCFStringRef::AsString([NSString stringWithFormat:@"%@", obj]));
+            wxString scriptResult;
+            if (obj)
+                scriptResult = wxCFStringRef::AsString([NSString stringWithFormat:@"%@", obj]);
+            wxString scriptOutput;
+            bool success = wxJSScriptWrapper::ExtractOutput(scriptResult, &scriptOutput);
 
-            scriptSuccess = true;
+            SendScriptResult(clientData, success, scriptOutput);
         }
-
-        scriptExecuted = true;
     }];
-
-    // Wait for script exection
-    while (!scriptExecuted)
-        wxYield();
-
-    if (output)
-        output->assign(outputStr);
-
-    return scriptSuccess;
-}
-
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
-{
-    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
-
-    // This string is also used as an error indicator: it's cleared if there is
-    // no error or used in the warning message below if there is one.
-    wxString result;
-    if (RunScriptSync(wrapJS.GetWrappedCode(), &result)
-        && result == wxS("true"))
-    {
-        if (RunScriptSync(wrapJS.GetOutputCode() + ";", &result))
-        {
-            if (output)
-                *output = result;
-            result.clear();
-        }
-
-        RunScriptSync(wrapJS.GetCleanUpCode());
-    }
-
-    if (!result.empty())
-    {
-        wxLogWarning(_("Error running JavaScript: %s"), result);
-        return false;
-    }
-
-    return true;
 }
 
 bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)

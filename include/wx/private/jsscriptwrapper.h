@@ -24,18 +24,17 @@
 class wxJSScriptWrapper
 {
 public:
-    wxJSScriptWrapper(const wxString& js, int* runScriptCount)
-        : m_escapedCode(js)
+    enum OutputType
     {
-        // We assign the return value of JavaScript snippet we execute to the
-        // variable with this name in order to be able to access it later if
-        // needed.
-        //
-        // Note that we use a different name for it for each call to
-        // RunScript() (which creates a new wxJSScriptWrapper every time) to
-        // avoid any possible conflict between different calls.
-        m_outputVarName = wxString::Format(wxASCII_STR("__wxOut%i"), (*runScriptCount)++);
+        JS_OUTPUT_STRING, // All return types are converted to a string
+        JS_OUTPUT_WEBKIT, // Some return types will be processed
+        JS_OUTPUT_IE, // Most return types will be processed
+        JS_OUTPUT_RAW // The return types is returned as is
+    };
 
+    wxJSScriptWrapper(const wxString& js, OutputType outputType)
+        : m_escapedCode(js), m_outputType(outputType)
+    {
         // Adds one escape level.
         const char *charsNeededToBeEscaped = "\\\"\n\r\v\t\b\f";
         for (
@@ -69,126 +68,139 @@ public:
         }
     }
 
-    // Get the code to execute, its returned value will be either boolean true,
-    // if it executed successfully, or the exception message if an error
-    // occurred.
+    // Get the code to execute, its returned value will be either the value,
+    // if it executed successfully, or the exception message prefixed with
+    // "__wxexc:" if an error occurred.
     //
-    // Execute GetOutputCode() later to get the real output after successful
-    // execution of this code.
+    // Either use SetOutput() to specify the script result or access it directly
+    // Using GetOutputRef()
+    //
+    // Execute ExtractOutput() later to get the real output after successful
+    // execution of this code or the proper error message.
     wxString GetWrappedCode() const
     {
-        return wxString::Format
-               (
-                wxASCII_STR("try { var %s = eval(\"%s\"); true; } "
-                "catch (e) { e.name + \": \" + e.message; }"),
-                m_outputVarName,
-                m_escapedCode
-               );
-    }
+        wxString code = wxString::Format(
+            wxASCII_STR("(function () { try { var res = eval(\"%s\"); "),
+            m_escapedCode);
 
-    // Get code returning the result of the last successful execution of the
-    // code returned by GetWrappedCode().
-    wxString GetOutputCode() const
-    {
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
-        return wxString::Format
-               (
-                wxASCII_STR("if (typeof %s == 'object') JSON.stringify(%s);"
-                "else if (typeof %s == 'undefined') 'undefined';"
-                "else %s;"),
-                m_outputVarName,
-                m_outputVarName,
-                m_outputVarName,
-                m_outputVarName
-               );
-#elif wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
-        return wxString::Format
-               (
-                wxASCII_STR("try {"
-                    "(%s == null || typeof %s != 'object') ? String(%s)"
-                                                          ": JSON.stringify(%s);"
-                "}"
-                "catch (e) {"
+        switch (m_outputType)
+        {
+            case JS_OUTPUT_STRING:
+                code += wxASCII_STR(
+                            "if (typeof res == 'object') return JSON.stringify(res);"
+                            "else if (typeof res == 'undefined') return 'undefined';"
+                            "else return String(res);"
+                        );
+                break;
+            case JS_OUTPUT_WEBKIT:
+                code += wxASCII_STR(
+                            "if (typeof res == 'object') return JSON.stringify(res);"
+                            "else if (typeof res == 'undefined') return 'undefined';"
+                            "else return res;"
+                        );
+                break;
+            case JS_OUTPUT_IE:
+                code += wxASCII_STR(
                     "try {"
-                        "function __wx$stringifyJSON(obj) {"
-                            "if (!(obj instanceof Object))"
-                                "return typeof obj === \"string\""
-                                    "? \'\"\' + obj + \'\"\'"
-                                    ": \'\' + obj;"
-                            "else if (obj instanceof Array) {"
-                                "if (obj[0] === undefined)"
-                                    "return \'[]\';"
-                                "else {"
-                                    "var arr = [];"
-                                    "for (var i = 0; i < obj.length; i++)"
-                                        "arr.push(__wx$stringifyJSON(obj[i]));"
-                                    "return \'[\' + arr + \']\';"
-                                "}"
-                            "}"
-                            "else if (typeof obj === \"object\") {"
-                                "if (obj instanceof Date) {"
-                                    "if (!Date.prototype.toISOString) {"
-                                        "(function() {"
-                                            "function pad(number) {"
-                                                "return number < 10"
-                                                    "? '0' + number"
-                                                    ": number;"
-                                            "}"
-                                            "Date.prototype.toISOString = function() {"
-                                                "return this.getUTCFullYear() +"
-                                                    "'-' + pad(this.getUTCMonth() + 1) +"
-                                                    "'-' + pad(this.getUTCDate()) +"
-                                                    "'T' + pad(this.getUTCHours()) +"
-                                                    "':' + pad(this.getUTCMinutes()) +"
-                                                    "':' + pad(this.getUTCSeconds()) +"
-                                                    "'.' + (this.getUTCMilliseconds() / 1000)"
-                                                            ".toFixed(3).slice(2, 5) + 'Z\"';"
-                                            "};"
-                                        "}());"
-                                    "}"
-                                    "return '\"' + obj.toISOString(); + '\"'"
-                                "}"
-                                "var objElements = [];"
-                                "for (var key in obj)"
-                                "{"
-                                    "if (typeof obj[key] === \"function\")"
-                                        "return \'{}\';"
-                                    "else {"
-                                        "objElements.push(\'\"\'"
-                                            "+ key + \'\":\' +"
-                                            "__wx$stringifyJSON(obj[key]));"
-                                    "}"
-                                "}"
-                                "return \'{\' + objElements + \'}\';"
-                            "}"
-                        "}"
-                        "__wx$stringifyJSON(%s);"
+                    "return (res == null || typeof res != 'object') ? String(res)"
+                               ": JSON.stringify(res);"
                     "}"
-                    "catch (e) { e.name + \": \" + e.message; }"
-                "}"),
-                m_outputVarName,
-                m_outputVarName,
-                m_outputVarName,
-                m_outputVarName,
-                m_outputVarName
-               );
-#else
-        return m_outputVarName;
-#endif
+                    "catch (e) {"
+                     "try {"
+                         "function __wx$stringifyJSON(obj) {"
+                             "if (!(obj instanceof Object))"
+                                 "return typeof obj === \"string\""
+                                     "? \'\"\' + obj + \'\"\'"
+                                     ": \'\' + obj;"
+                             "else if (obj instanceof Array) {"
+                                 "if (obj[0] === undefined)"
+                                     "return \'[]\';"
+                                 "else {"
+                                     "var arr = [];"
+                                     "for (var i = 0; i < obj.length; i++)"
+                                         "arr.push(__wx$stringifyJSON(obj[i]));"
+                                     "return \'[\' + arr + \']\';"
+                                 "}"
+                             "}"
+                             "else if (typeof obj === \"object\") {"
+                                 "if (obj instanceof Date) {"
+                                     "if (!Date.prototype.toISOString) {"
+                                         "(function() {"
+                                             "function pad(number) {"
+                                                 "return number < 10"
+                                                     "? '0' + number"
+                                                     ": number;"
+                                             "}"
+                                             "Date.prototype.toISOString = function() {"
+                                                 "return this.getUTCFullYear() +"
+                                                     "'-' + pad(this.getUTCMonth() + 1) +"
+                                                     "'-' + pad(this.getUTCDate()) +"
+                                                     "'T' + pad(this.getUTCHours()) +"
+                                                     "':' + pad(this.getUTCMinutes()) +"
+                                                     "':' + pad(this.getUTCSeconds()) +"
+                                                     "'.' + (this.getUTCMilliseconds() / 1000)"
+                                                             ".toFixed(3).slice(2, 5) + 'Z\"';"
+                                             "};"
+                                         "}());"
+                                     "}"
+                                     "return '\"' + obj.toISOString(); + '\"'"
+                                 "}"
+                                 "var objElements = [];"
+                                 "for (var key in obj)"
+                                 "{"
+                                     "if (typeof obj[key] === \"function\")"
+                                         "return \'{}\';"
+                                     "else {"
+                                         "objElements.push(\'\"\'"
+                                             "+ key + \'\":\' +"
+                                             "__wx$stringifyJSON(obj[key]));"
+                                     "}"
+                                 "}"
+                                 "return \'{\' + objElements + \'}\';"
+                             "}"
+                         "}"
+                         "return __wx$stringifyJSON(res);"
+                     "}"
+                     "catch (e) { return \"__wxexc:\" + e.name + \": \" + e.message; }"
+                    "}");
+                break;
+            case JS_OUTPUT_RAW:
+                code += wxASCII_STR("return res;");
+                break;
+        }
+
+        code +=
+            wxASCII_STR("} catch (e) { return \"__wxexc:\" + e.name + \": \" + e.message; }"
+                        "})()");
+        return code;
     }
 
-    const wxString& GetUnwrappedOutputCode() { return m_outputVarName; }
-
-    // Execute the code returned by this function to let the output of the code
-    // we executed be garbage-collected.
-    wxString GetCleanUpCode() const
+    // Extract the output value
+    //
+    // Returns true if executed successfully
+    //    string of the result will be put into output
+    // Returns false when an exception occurred
+    //    string will be the exception message
+    static bool ExtractOutput(const wxString& result, wxString* output)
     {
-        return wxString::Format(wxASCII_STR("%s = undefined;"), m_outputVarName);
+        if (output)
+            *output = result;
+
+        if (result.starts_with(wxASCII_STR("__wxexc:")))
+        {
+            if (output)
+                output->Remove(0, 8);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
 private:
     wxString m_escapedCode;
-    wxString m_outputVarName;
+    OutputType m_outputType;
 
     wxDECLARE_NO_COPY_CLASS(wxJSScriptWrapper);
 };
