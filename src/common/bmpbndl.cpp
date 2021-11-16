@@ -22,9 +22,10 @@
 #endif // WX_PRECOMP
 
 #include "wx/bmpbndl.h"
-#include "wx/icon.h"
-#include "wx/window.h"
 #include "wx/filename.h"
+#include "wx/icon.h"
+#include "wx/imaglist.h"
+#include "wx/window.h"
 
 #include "wx/private/bmpbndl.h"
 
@@ -463,6 +464,126 @@ wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
 wxBitmap wxBitmapBundle::GetBitmapFor(const wxWindow* window) const
 {
     return GetBitmap(GetPreferredSizeFor(window));
+}
+
+namespace
+{
+
+// Struct containing the number of tools preferring to use the given size.
+struct SizePrefWithCount
+{
+    SizePrefWithCount() : count(0) { }
+
+    wxSize size;
+    int count;
+};
+
+typedef wxVector<SizePrefWithCount> SizePrefs;
+
+void RecordSizePref(SizePrefs& prefs, const wxSize& size)
+{
+    for ( size_t n = 0; n < prefs.size(); ++n )
+    {
+        if ( prefs[n].size == size )
+        {
+            prefs[n].count++;
+            return;
+        }
+    }
+
+    SizePrefWithCount pref;
+    pref.size = size;
+    pref.count++;
+    prefs.push_back(pref);
+}
+
+} // anonymous namespace
+
+/* static */
+wxSize
+wxBitmapBundle::GetConsensusSizeFor(wxWindow* win,
+                                    const wxVector<wxBitmapBundle>& bundles,
+                                    const wxSize& sizeDefault)
+{
+    const double scale = win->GetDPIScaleFactor();
+    const wxSize sizeIdeal = sizeDefault*scale;
+
+    // We want to use preferred bitmap size, but the preferred sizes can be
+    // different for different bitmap bundles, so record all their preferences
+    // first.
+    SizePrefs prefs;
+    for ( size_t n = 0; n < bundles.size(); ++n )
+    {
+        RecordSizePref(prefs, bundles[n].GetPreferredSizeAtScale(scale));
+    }
+
+    // Now find the size preferred by most tools.
+    int countMax = 0;
+    wxSize sizePreferred;
+    for ( size_t n = 0; n < prefs.size(); ++n )
+    {
+        const int countThis = prefs[n].count;
+        const wxSize sizeThis = prefs[n].size;
+
+        if ( countThis > countMax )
+        {
+            countMax = countThis;
+            sizePreferred = sizeThis;
+        }
+        else if ( countThis == countMax )
+        {
+            // We have a tie between different sizes, choose the one
+            // corresponding to the current scale factor, if possible, as this
+            // is the ideal bitmap size that should be consistent with all the
+            // other bitmaps.
+            if ( sizePreferred != sizeIdeal )
+            {
+                if ( sizeThis == sizeIdeal )
+                {
+                    sizePreferred = sizeThis;
+                }
+                else // Neither of the sizes is the ideal one.
+                {
+                    // Choose the larger one as like this some bitmaps will be
+                    // downscaled, which should look better than upscaling some
+                    // (other) ones.
+                    if ( sizeThis.y > sizePreferred.y )
+                        sizePreferred = sizeThis;
+                }
+            }
+        }
+    }
+
+    return sizePreferred;
+}
+
+/* static */
+wxImageList*
+wxBitmapBundle::CreateImageList(wxWindow* win,
+                                const wxVector<wxBitmapBundle>& bundles)
+{
+    wxCHECK_MSG( win, NULL, "must have a valid window" );
+    wxCHECK_MSG( !bundles.empty(), NULL, "should have some images" );
+
+    // We arbitrarily choose the default size of the first bundle as the
+    // default size for the image list too, as it's not clear what else could
+    // we do here. Note that this size is only used to break the tie in case
+    // the same number of bundles prefer two different sizes, so it's not going
+    // to matter at all in most cases.
+    wxSize size = GetConsensusSizeFor(win, bundles, bundles[0].GetDefaultSize());
+
+    // wxImageList wants the logical size for the platforms where logical and
+    // physical pixels are different.
+    size /= win->GetContentScaleFactor();
+
+    wxImageList* const iml = new wxImageList(size.x, size.y);
+
+    for ( size_t n = 0; n < bundles.size(); ++n )
+    {
+        iml->Add(bundles[n].GetBitmap(size));
+    }
+
+    return iml;
 }
 
 // ============================================================================

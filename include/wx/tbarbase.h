@@ -64,8 +64,8 @@ public:
     wxToolBarToolBase(wxToolBarBase *tbar = NULL,
                       int toolid = wxID_SEPARATOR,
                       const wxString& label = wxEmptyString,
-                      const wxBitmapBundle& bmpNormal = wxNullBitmap,
-                      const wxBitmapBundle& bmpDisabled = wxNullBitmap,
+                      const wxBitmapBundle& bmpNormal = wxBitmapBundle(),
+                      const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                       wxItemKind kind = wxITEM_NORMAL,
                       wxObject *clientData = NULL,
                       const wxString& shortHelpString = wxEmptyString,
@@ -292,7 +292,7 @@ public:
 
     // the full AddTool() function
     //
-    // If bmpDisabled is wxNullBitmap, a shadowed version of the normal bitmap
+    // If bmpDisabled is an empty bundle, a shadowed version of the normal bitmap
     // is created and used as the disabled image.
     wxToolBarToolBase *AddTool(int toolid,
                                const wxString& label,
@@ -314,14 +314,14 @@ public:
                                const wxString& shortHelp = wxEmptyString,
                                wxItemKind kind = wxITEM_NORMAL)
     {
-        return AddTool(toolid, label, bitmap, wxNullBitmap, kind, shortHelp);
+        return AddTool(toolid, label, bitmap, wxBitmapBundle(), kind, shortHelp);
     }
 
     // add a check tool, i.e. a tool which can be toggled
     wxToolBarToolBase *AddCheckTool(int toolid,
                                     const wxString& label,
                                     const wxBitmapBundle& bitmap,
-                                    const wxBitmapBundle& bmpDisabled = wxNullBitmap,
+                                    const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
                                     wxObject *clientData = NULL)
@@ -335,7 +335,7 @@ public:
     wxToolBarToolBase *AddRadioTool(int toolid,
                                     const wxString& label,
                                     const wxBitmapBundle& bitmap,
-                                    const wxBitmapBundle& bmpDisabled = wxNullBitmap,
+                                    const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
                                     wxObject *clientData = NULL)
@@ -353,7 +353,7 @@ public:
                                     int toolid,
                                     const wxString& label,
                                     const wxBitmapBundle& bitmap,
-                                    const wxBitmapBundle& bmpDisabled = wxNullBitmap,
+                                    const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                     wxItemKind kind = wxITEM_NORMAL,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
@@ -522,7 +522,7 @@ public:
                                const wxString& longHelpString = wxEmptyString)
     ,
         return AddTool(toolid, wxEmptyString,
-                       bitmap, wxNullBitmap, wxITEM_NORMAL,
+                       bitmap, wxBitmapBundle(), wxITEM_NORMAL,
                        shortHelpString, longHelpString, NULL);
     )
     wxDEPRECATED_INLINE(
@@ -544,7 +544,7 @@ public:
     wxToolBarToolBase *InsertTool(size_t pos,
                                   int toolid,
                                   const wxBitmap& bitmap,
-                                  const wxBitmap& bmpDisabled = wxNullBitmap,
+                                  const wxBitmap& bmpDisabled = wxBitmapBundle(),
                                   bool toggle = false,
                                   wxObject *clientData = NULL,
                                   const wxString& shortHelp = wxEmptyString,
@@ -583,7 +583,7 @@ public:
     virtual wxToolBarToolBase *CreateTool(int toolid,
                                           const wxString& label,
                                           const wxBitmapBundle& bmpNormal,
-                                          const wxBitmapBundle& bmpDisabled = wxNullBitmap,
+                                          const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = NULL,
                                           const wxString& shortHelp = wxEmptyString,
@@ -598,7 +598,7 @@ public:
     {
         return CreateTool(wxID_SEPARATOR,
                           wxEmptyString,
-                          wxNullBitmap, wxNullBitmap,
+                          wxBitmapBundle(), wxBitmapBundle(),
                           wxITEM_SEPARATOR, NULL,
                           wxEmptyString, wxEmptyString);
     }

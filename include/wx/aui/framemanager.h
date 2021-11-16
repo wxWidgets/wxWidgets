@@ -24,7 +24,7 @@
 #include "wx/window.h"
 #include "wx/timer.h"
 #include "wx/sizer.h"
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 enum wxAuiManagerDock
 {
@@ -223,7 +223,7 @@ public:
     }
     wxAuiPaneInfo& Name(const wxString& n) { name = n; return *this; }
     wxAuiPaneInfo& Caption(const wxString& c) { caption = c; return *this; }
-    wxAuiPaneInfo& Icon(const wxBitmap& b) { icon = b; return *this; }
+    wxAuiPaneInfo& Icon(const wxBitmapBundle& b) { icon = b; return *this; }
     wxAuiPaneInfo& Left() { dock_direction = wxAUI_DOCK_LEFT; return *this; }
     wxAuiPaneInfo& Right() { dock_direction = wxAUI_DOCK_RIGHT; return *this; }
     wxAuiPaneInfo& Top() { dock_direction = wxAUI_DOCK_TOP; return *this; }
@@ -371,7 +371,7 @@ public:
 public:
     wxString name;        // name of the pane
     wxString caption;     // caption displayed on the window
-    wxBitmap icon;        // icon of the pane, may be invalid
+    wxBitmapBundle icon;  // icon of the pane, may be invalid
 
     wxWindow* window;     // window that is in this pane
     wxFrame* frame;       // floating frame window that holds the pane

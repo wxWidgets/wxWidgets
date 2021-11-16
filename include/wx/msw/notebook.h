@@ -62,14 +62,6 @@ public:
   bool SetPageText(size_t nPage, const wxString& strText) wxOVERRIDE;
   wxString GetPageText(size_t nPage) const wxOVERRIDE;
 
-  // image list stuff: each page may have an image associated with it. All
-  // the images belong to an image list, so you have to
-  // 1) create an image list
-  // 2) associate it with the notebook
-  // 3) set for each page it's image
-    // associate image list with a control
-  void SetImageList(wxImageList* imageList) wxOVERRIDE;
-
     // sets/returns item's image index in the current image list
   int  GetPageImage(size_t nPage) const wxOVERRIDE;
   bool SetPageImage(size_t nPage, int nImage) wxOVERRIDE;
@@ -160,6 +152,9 @@ protected:
 
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(size_t nPage) wxOVERRIDE;
+
+  // update the image list used by the native control
+  virtual void OnImagesChanged() wxOVERRIDE;
 
   // get the page rectangle for the current notebook size
   //

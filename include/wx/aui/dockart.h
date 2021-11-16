@@ -21,7 +21,7 @@
 
 #include "wx/pen.h"
 #include "wx/brush.h"
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/colour.h"
 
 // dock art provider code - a dock provider provides all drawing
@@ -159,14 +159,14 @@ protected:
     wxBrush m_backgroundBrush;
     wxBrush m_gripperBrush;
     wxFont m_captionFont;
-    wxBitmap m_inactiveCloseBitmap;
-    wxBitmap m_inactivePinBitmap;
-    wxBitmap m_inactiveMaximizeBitmap;
-    wxBitmap m_inactiveRestoreBitmap;
-    wxBitmap m_activeCloseBitmap;
-    wxBitmap m_activePinBitmap;
-    wxBitmap m_activeMaximizeBitmap;
-    wxBitmap m_activeRestoreBitmap;
+    wxBitmapBundle m_inactiveCloseBitmap;
+    wxBitmapBundle m_inactivePinBitmap;
+    wxBitmapBundle m_inactiveMaximizeBitmap;
+    wxBitmapBundle m_inactiveRestoreBitmap;
+    wxBitmapBundle m_activeCloseBitmap;
+    wxBitmapBundle m_activePinBitmap;
+    wxBitmapBundle m_activeMaximizeBitmap;
+    wxBitmapBundle m_activeRestoreBitmap;
     wxPen m_gripperPen1;
     wxPen m_gripperPen2;
     wxPen m_gripperPen3;

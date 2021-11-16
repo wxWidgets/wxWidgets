@@ -447,14 +447,11 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
     return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
 }
 
-void wxNotebook::SetImageList(wxImageList* imageList)
+void wxNotebook::OnImagesChanged()
 {
-    wxNotebookBase::SetImageList(imageList);
+    wxImageList* const iml = GetUpdatedImageListFor(this);
 
-    if ( imageList )
-    {
-        (void) TabCtrl_SetImageList(GetHwnd(), GetHimagelistOf(imageList));
-    }
+    (void) TabCtrl_SetImageList(GetHwnd(), iml ? GetHimagelistOf(iml) : NULL);
 }
 
 // ----------------------------------------------------------------------------

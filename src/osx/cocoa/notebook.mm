@@ -22,7 +22,7 @@
 #endif
 
 #include "wx/string.h"
-#include "wx/imaglist.h"
+#include "wx/private/bmpbndl.h"
 #include "wx/osx/private.h"
 
 //
@@ -266,13 +266,11 @@ public:
             [item setView:page->GetHandle() ];
             wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
             [item setLabel:cf.AsNSString()];
-            if ( notebook.GetImageList() && notebook.GetPageImage(i) >= 0 )
+
+            const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
+            if ( bitmap.IsOk() )
             {
-                const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( i ) ) ;
-                if ( bmap.IsOk() )
-                {
-                    [(WXCTabViewImageItem*) item setImage: bmap.GetNSImage()];
-                }
+                [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
             }
         }
     }

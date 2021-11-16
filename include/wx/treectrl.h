@@ -23,8 +23,7 @@
 #include "wx/treebase.h"
 #include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through wxCLASSINFO macro
 #include "wx/systhemectrl.h"
-
-class WXDLLIMPEXP_FWD_CORE wxImageList;
+#include "wx/withimages.h"
 
 #if !defined(__WXMSW__) && !defined(__WXQT__) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_TREECTRL
@@ -34,7 +33,8 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 // wxTreeCtrlBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxSystemThemedControl<wxControl>
+class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxSystemThemedControl<wxControl>,
+                                        public wxWithImages
 {
 public:
     wxTreeCtrlBase();
@@ -57,30 +57,19 @@ public:
     unsigned int GetSpacing() const { return m_spacing; }
     void SetSpacing(unsigned int spacing) { m_spacing = spacing; }
 
-        // image list: these functions allow to associate an image list with
-        // the control and retrieve it. Note that the control does _not_ delete
-        // the associated image list when it's deleted in order to allow image
-        // lists to be shared between different controls.
-        //
-        // The normal image list is for the icons which correspond to the
-        // normal tree item state (whether it is selected or not).
-        // Additionally, the application might choose to show a state icon
-        // which corresponds to an app-defined item state (for example,
-        // checked/unchecked) which are taken from the state image list.
-    wxImageList *GetImageList() const { return m_imageListNormal; }
-    wxImageList *GetStateImageList() const { return m_imageListState; }
-
-    virtual void SetImageList(wxImageList *imageList) = 0;
-    virtual void SetStateImageList(wxImageList *imageList) = 0;
-    void AssignImageList(wxImageList *imageList)
+        // In addition to {Set,Get,Assign}ImageList() methods inherited from
+        // wxWithImages, this control has similar functions for the state image
+        // list that can be used to show a state icon corresponding to an
+        // app-defined item state (for example, checked/unchecked).
+    wxImageList *GetStateImageList() const
     {
-        SetImageList(imageList);
-        m_ownsImageListNormal = true;
+        return m_imagesState.GetImageList();
     }
+    virtual void SetStateImageList(wxImageList *imageList) = 0;
     void AssignStateImageList(wxImageList *imageList)
     {
         SetStateImageList(imageList);
-        m_ownsImageListState = true;
+        m_imagesState.TakeOwnership();
     }
 
 
@@ -435,10 +424,9 @@ protected:
                                         int& flags) const = 0;
 
 
-    wxImageList *m_imageListNormal, // images for tree elements
-                *m_imageListState;  // special images for app defined states
-    bool         m_ownsImageListNormal,
-                 m_ownsImageListState;
+    // Usually we inherit from this class, rather than aggregating it, but we
+    // need two different sets of images here, so we do both.
+    wxWithImages m_imagesState;
 
     // spacing between left border and the text
     unsigned int m_spacing;

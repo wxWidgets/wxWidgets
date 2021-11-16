@@ -921,18 +921,19 @@ void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
-    if (m_ownsImageListNormal)
-        delete m_imageListNormal;
-
-    SetAnyImageList(m_imageListNormal = imageList, TVSIL_NORMAL);
-    m_ownsImageListNormal = false;
+    wxWithImages::SetImageList(imageList);
+    SetAnyImageList(imageList, TVSIL_NORMAL);
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
 {
-    if (m_ownsImageListState) delete m_imageListState;
-    SetAnyImageList(m_imageListState = imageList, TVSIL_STATE);
-    m_ownsImageListState = false;
+    m_imagesState.SetImageList(imageList);
+    SetAnyImageList(imageList, TVSIL_STATE);
+}
+
+void wxTreeCtrl::OnImagesChanged()
+{
+    SetAnyImageList(GetUpdatedImageListFor(this), TVSIL_NORMAL);
 }
 
 size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
@@ -3558,14 +3559,16 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         // so we have to add temp image (of zero index) to state image list
                         // before we draw any item, then after items are drawn we have to
                         // delete it (in POSTPAINT notify)
-                        if (m_imageListState && m_imageListState->GetImageCount() > 0)
+                        if ( m_imagesState.HasImages() )
                         {
+                            wxImageList* const
+                                imageListState = m_imagesState.GetImageList();
                             const HIMAGELIST
-                                hImageList = GetHimagelistOf(m_imageListState);
+                                hImageList = GetHimagelistOf(imageListState);
 
                             // add temporary image
                             int width, height;
-                            m_imageListState->GetSize(0, width, height);
+                            imageListState->GetSize(0, width, height);
 
                             HBITMAP hbmpTemp = ::CreateBitmap(width, height, 1, 1, NULL);
                             int index = ::ImageList_Add(hImageList, hbmpTemp, hbmpTemp);
@@ -3590,8 +3593,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     case CDDS_POSTPAINT:
                         // we are deleting temp image of 0 index, which was
                         // added before items were drawn (in PREPAINT notify)
-                        if (m_imageListState && m_imageListState->GetImageCount() > 0)
-                            m_imageListState->Remove(0);
+                        if ( m_imagesState.HasImages() )
+                            m_imagesState.GetImageList()->Remove(0);
                         break;
 
                     case CDDS_ITEMPREPAINT:

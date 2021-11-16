@@ -4887,26 +4887,12 @@ wxEND_EVENT_TABLE()
 
 void wxGenericListCtrl::Init()
 {
-    m_imageListNormal = NULL;
-    m_imageListSmall = NULL;
-    m_imageListState = NULL;
-
-    m_ownsImageListNormal =
-    m_ownsImageListSmall =
-    m_ownsImageListState = false;
-
     m_mainWin = NULL;
     m_headerWin = NULL;
 }
 
 wxGenericListCtrl::~wxGenericListCtrl()
 {
-    if (m_ownsImageListNormal)
-        delete m_imageListNormal;
-    if (m_ownsImageListSmall)
-        delete m_imageListSmall;
-    if (m_ownsImageListState)
-        delete m_imageListState;
 }
 
 void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
@@ -5416,54 +5402,9 @@ long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const
     return m_mainWin->GetNextItem( item, geom, state );
 }
 
-wxImageList *wxGenericListCtrl::GetImageList(int which) const
+void wxGenericListCtrl::DoUpdateImages(int which )
 {
-    if (which == wxIMAGE_LIST_NORMAL)
-        return m_imageListNormal;
-    else if (which == wxIMAGE_LIST_SMALL)
-        return m_imageListSmall;
-    else if (which == wxIMAGE_LIST_STATE)
-        return m_imageListState;
-
-    return NULL;
-}
-
-void wxGenericListCtrl::SetImageList( wxImageList *imageList, int which )
-{
-    if ( which == wxIMAGE_LIST_NORMAL )
-    {
-        if (m_ownsImageListNormal)
-            delete m_imageListNormal;
-        m_imageListNormal = imageList;
-        m_ownsImageListNormal = false;
-    }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        if (m_ownsImageListSmall)
-            delete m_imageListSmall;
-        m_imageListSmall = imageList;
-        m_ownsImageListSmall = false;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        if (m_ownsImageListState)
-            delete m_imageListState;
-        m_imageListState = imageList;
-        m_ownsImageListState = false;
-    }
-
-    m_mainWin->SetImageList( imageList, which );
-}
-
-void wxGenericListCtrl::AssignImageList(wxImageList *imageList, int which)
-{
-    SetImageList(imageList, which);
-    if ( which == wxIMAGE_LIST_NORMAL )
-        m_ownsImageListNormal = true;
-    else if ( which == wxIMAGE_LIST_SMALL )
-        m_ownsImageListSmall = true;
-    else if ( which == wxIMAGE_LIST_STATE )
-        m_ownsImageListState = true;
+    m_mainWin->SetImageList( GetUpdatedImageList(which), which );
 }
 
 bool wxGenericListCtrl::Arrange( int WXUNUSED(flag) )

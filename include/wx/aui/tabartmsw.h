@@ -19,8 +19,6 @@ public:
     virtual ~wxAuiMSWTabArt();
 
     wxAuiTabArt* Clone() wxOVERRIDE;
-    void SetSizingInfo(const wxSize& tabCtrlSize,
-        size_t tabCount) wxOVERRIDE;
 
     void DrawBorder(
         wxDC& dc,
@@ -62,7 +60,7 @@ public:
         wxDC& dc,
         wxWindow* wnd,
         const wxString& caption,
-        const wxBitmap& bitmap,
+        const wxBitmapBundle& bitmap,
         bool active,
         int closeButtonState,
         int* xExtent) wxOVERRIDE;

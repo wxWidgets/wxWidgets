@@ -165,11 +165,6 @@ wxTreeEvent::wxTreeEvent(const wxTreeEvent & event)
 
 wxTreeCtrlBase::wxTreeCtrlBase()
 {
-    m_imageListNormal =
-    m_imageListState = NULL;
-    m_ownsImageListNormal =
-    m_ownsImageListState = false;
-
     // arbitrary default
     m_spacing = 18;
 
@@ -177,14 +172,11 @@ wxTreeCtrlBase::wxTreeCtrlBase()
     m_quickBestSize = true;
 
     Bind(wxEVT_CHAR_HOOK, &wxTreeCtrlBase::OnCharHook, this);
+    Bind(wxEVT_DPI_CHANGED, &wxTreeCtrlBase::WXHandleDPIChanged, this);
 }
 
 wxTreeCtrlBase::~wxTreeCtrlBase()
 {
-    if (m_ownsImageListNormal)
-        delete m_imageListNormal;
-    if (m_ownsImageListState)
-        delete m_imageListState;
 }
 
 void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
@@ -195,7 +187,7 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
         if ( current == wxTREE_ITEMSTATE_NONE )
             return;
         state = current + 1;
-        if ( m_imageListState && state >= m_imageListState->GetImageCount() )
+        if ( m_imagesState.HasImages() && state >= m_imagesState.GetImageCount() )
             state = 0;
     }
     else if ( state == wxTREE_ITEMSTATE_PREV )
@@ -205,7 +197,7 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
             return;
         state = current - 1;
         if ( state == -1 )
-            state = m_imageListState ? m_imageListState->GetImageCount() - 1 : 0;
+            state = m_imagesState.GetImageCount();
     }
     // else: wxTREE_ITEMSTATE_NONE depending on platform
 
