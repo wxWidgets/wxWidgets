@@ -36,7 +36,7 @@ extern int wxOpenModalDialogsCount;
 static const int wxGTK_TITLE_ID = -3;
 
 #if wxUSE_ACCEL
-static wxString GetGtkHotKeyFromAccel(wxAcceleratorEntry*);
+static wxString GetGtkHotKeyFromAccel(const wxAcceleratorEntry*);
 static bool wxGetGtkAccel(const wxMenuItem*, guint*, GdkModifierType*);
 #endif
 
@@ -1076,7 +1076,7 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
 #if wxUSE_ACCEL
 
-static wxString GetGtkHotKeyFromAccel( wxAcceleratorEntry *accel )
+static wxString GetGtkHotKeyFromAccel( const wxAcceleratorEntry *accel )
 {
     wxString hotkey;
 
