@@ -680,6 +680,64 @@ void wxMenuItem::SetGtkLabel()
 }
 
 #if wxUSE_ACCEL
+
+namespace
+{
+
+// Simple struct encapsulating a GTK accelerator with wrappers for just the
+// operations that we need.
+class GtkAccel
+{
+public:
+    explicit GtkAccel(const wxAcceleratorEntry& entry)
+    {
+        const wxString& hotkey = GetGtkHotKeyFromAccel(&entry);
+
+        if ( hotkey.empty() )
+        {
+            // Key with this code can never be a valid accelerator, so we use
+            // it to indicate that it's invalid.
+            m_key = 0;
+        }
+        else
+        {
+            gtk_accelerator_parse(wxGTK_CONV_SYS(hotkey), &m_key, &m_mods);
+            if ( !gtk_accelerator_valid(m_key, m_mods) )
+            {
+                wxLogDebug("\"%s\" is not a valid keyboard accelerator "
+                           "for this GTK version",
+                           hotkey);
+                m_key = 0;
+            }
+        }
+    }
+
+    // Default copy ctor, assignment operator and dtor are all OK.
+
+    void
+    Add(GtkWidget* widget, GtkAccelGroup* accelGroup, GtkAccelFlags accelFlags)
+    {
+        if ( m_key )
+        {
+            gtk_widget_add_accelerator(
+                widget, "activate", accelGroup,
+                m_key, m_mods, accelFlags);
+        }
+    }
+
+    void Remove(GtkWidget* widget, GtkAccelGroup* accelGroup)
+    {
+        if ( m_key )
+            gtk_widget_remove_accelerator(widget, accelGroup, m_key, m_mods);
+    }
+
+private:
+    guint m_key;
+    GdkModifierType m_mods;
+};
+
+} // anonymous namespace
+
 void wxMenuItem::GTKSetExtraAccels()
 {
     GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
