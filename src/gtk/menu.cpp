@@ -45,8 +45,9 @@ class GtkAccel
 {
 public:
     // Can be constructed from any menu item (must be valid, but doesn't have
-    // to be an accelerator).
+    // to be an accelerator) or an already existing accelerator entry.
     explicit GtkAccel(const wxMenuItem* item);
+    explicit GtkAccel(const wxAcceleratorEntry& entry) { Init(&entry); }
 
     // Default copy ctor, assignment operator and dtor are all OK.
 
@@ -56,7 +57,9 @@ public:
     void Remove(GtkWidget* widget, GtkAccelGroup* accelGroup);
 
 private:
-    static wxString GetGtkHotKey(const wxMenuItem& item);
+    static wxString GetGtkHotKey(const wxAcceleratorEntry*);
+
+    void Init(const wxAcceleratorEntry* entry);
 
     guint m_key;
     GdkModifierType m_mods;
@@ -1062,11 +1065,10 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 #if wxUSE_ACCEL
 
 /* static */
-wxString GtkAccel::GetGtkHotKey( const wxMenuItem& item )
+wxString GtkAccel::GetGtkHotKey(const wxAcceleratorEntry *accel)
 {
     wxString hotkey;
 
-    wxAcceleratorEntry *accel = item.GetAccel();
     if ( accel )
     {
         int flags = accel->GetFlags();
@@ -1337,16 +1339,14 @@ wxString GtkAccel::GetGtkHotKey( const wxMenuItem& item )
                 }
                 break;
         }
-
-        delete accel;
     }
 
     return hotkey;
 }
 
-GtkAccel::GtkAccel(const wxMenuItem* item)
+void GtkAccel::Init(const wxAcceleratorEntry* entry)
 {
-    const wxString string = GetGtkHotKey(*item);
+    const wxString string = GetGtkHotKey(entry);
     if (!string.empty())
     {
         gtk_accelerator_parse(wxGTK_CONV_SYS(string), &m_key, &m_mods);
@@ -1356,9 +1356,9 @@ GtkAccel::GtkAccel(const wxMenuItem* item)
         // keys in the future versions, recheck once again using its function.
         if ( !gtk_accelerator_valid(m_key, m_mods) )
         {
-        wxLogDebug("\"%s\" is not a valid keyboard accelerator "
-                   "for this GTK version",
-                   string);
+            wxLogDebug("\"%s\" is not a valid keyboard accelerator "
+                       "for this GTK version",
+                       string);
             m_key = 0;
         }
     }
@@ -1368,6 +1368,12 @@ GtkAccel::GtkAccel(const wxMenuItem* item)
         // it to indicate that it's invalid.
         m_key = 0;
     }
+}
+
+GtkAccel::GtkAccel(const wxMenuItem* item)
+{
+    wxScopedPtr<wxAcceleratorEntry> accel(item->GetAccel());
+    Init(accel.get());
 
 #ifndef __WXGTK4__
     if ( !IsOk() )
