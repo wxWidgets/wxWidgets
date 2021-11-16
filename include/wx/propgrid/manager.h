@@ -192,8 +192,8 @@ public:
     // Creates new property page. Note that the first page is not created
     // automatically.
     // label - A label for the page. This may be shown as a toolbar tooltip etc.
-    // bmp - Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-    //   default image is used.
+    // bmp - Bitmap bundle image for toolbar. If it's null then a built-in
+    //   default bitmap bundle is used.
     // pageObj - wxPropertyGridPage instance. Manager will take ownership of this object.
     // NULL indicates that a default page instance should be created.
     // Returns pointer to created page.
@@ -201,7 +201,7 @@ public:
     // added when the toolbar is not turned off using window style flag
     // switching.
     wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
-                                 const wxBitmap& bmp = wxNullBitmap,
+                                 const wxBitmapBundle& bmp = wxBitmapBundle(),
                                  wxPropertyGridPage* pageObj = NULL )
     {
         return InsertPage(-1, label, bmp, pageObj);
@@ -378,14 +378,14 @@ public:
     // automatically.
     // index - Add to this position. -1 will add as the last item.
     // label - A label for the page. This may be shown as a toolbar tooltip etc.
-    // bmp - Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-    //   default image is used.
+    // bmp - Bitmap bundle for toolbar. If it's null, then a built-in
+    //   default bitmap bundle is used.
     // pageObj - wxPropertyGridPage instance. Manager will take ownership of this object.
     //   If NULL, default page object is constructed.
     // Returns pointer to created page.
     virtual wxPropertyGridPage* InsertPage( int index,
                                             const wxString& label,
-                                            const wxBitmap& bmp = wxNullBitmap,
+                                            const wxBitmapBundle& bmp = wxBitmapBundle(),
                                             wxPropertyGridPage* pageObj = NULL );
 
     // Returns true if any property on any page has been modified by the user.

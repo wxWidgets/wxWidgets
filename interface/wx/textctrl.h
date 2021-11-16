@@ -1084,10 +1084,15 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
            The text will not be user-editable.
     @style{wxTE_RICH}
            Use rich text control under MSW, this allows having more than 64KB
-           of text in the control. This style is ignored under other platforms.
+           of text in the control. This style is ignored under other platforms
+           and it is recommended to use wxTE_RICH2 instead of it under MSW.
     @style{wxTE_RICH2}
            Use rich text control version 2.0 or higher under MSW, this style is
-           ignored under other platforms
+           ignored under other platforms. Note that this style may be turned on
+           automatically even if it is not used explicitly when creating a text
+           control with a long (i.e. much more than 64KiB) initial text, as
+           creating the control would simply fail in this case under MSW if
+           neither this style nor wxTE_RICH is used.
     @style{wxTE_AUTO_URL}
            Highlight the URLs and generate the wxTextUrlEvents when mouse
            events occur over them.

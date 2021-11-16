@@ -325,6 +325,12 @@ WXDLLIMPEXP_BASE void wxDecToHex(unsigned char dec, char* ch1, char* ch2);
 WXDLLIMPEXP_BASE wxString wxDecToHex(unsigned char dec);
 
 // ----------------------------------------------------------------------------
+// Security
+// ----------------------------------------------------------------------------
+
+WXDLLIMPEXP_BASE void wxSecureZeroMemory(void *p, size_t n);
+
+// ----------------------------------------------------------------------------
 // Process management
 // ----------------------------------------------------------------------------
 

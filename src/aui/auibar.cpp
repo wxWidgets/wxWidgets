@@ -637,8 +637,8 @@ void wxAuiGenericToolBarArt::DrawSeparator(
         rect.width = new_width;
     }
 
-    wxColour startColour = m_baseColour.ChangeLightness(80);
-    wxColour endColour = m_baseColour.ChangeLightness(80);
+    wxColour startColour = m_baseColour.ChangeLightness(IsThemeDark() ? 120 : 80);
+    wxColour endColour = m_baseColour.ChangeLightness(IsThemeDark() ? 120 : 80);
     dc.GradientFillLinear(rect, startColour, endColour, horizontal ? wxSOUTH : wxEAST);
 }
 

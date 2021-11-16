@@ -100,7 +100,7 @@ bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWrite
 
 #if wxUSE_MENUBAR
 wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
-                                       wxMenuBarStreamingCallback)
+                                       wxMenuBarStreamingCallback);
 #endif
 
 #if wxUSE_EXTENDED_RTTI
@@ -187,7 +187,7 @@ wxENUM_MEMBER( wxITEM_RADIO )
 wxEND_ENUM( wxItemKind )
 
 wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject, "wx/menuitem.h", \
-                                       wxMenuItemStreamingCallback)
+                                       wxMenuItemStreamingCallback);
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
 wxPROPERTY( Parent, wxMenu*, SetMenu, GetMenu, wxEMPTY_PARAMETER_VALUE, \

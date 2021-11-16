@@ -16,6 +16,9 @@ f58ea625968953ca93585ea7f93dcc07ad032d8f
 # Remove trailing whitespace from several files, 2018-04-11
 496da2e550ce1f562f727230babc363da190530e
 
+# Remove all lines containing cvs/svn "$Id$" keyword.
+3f66f6a5b3583b02c34854556eb83e3a808524ce
+
 # Globally replace _T() with wxT()., 2009-07-23
 9a83f860948059b0273b5cc6d9e43fadad3ebfca
 

@@ -1659,7 +1659,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
                  wxNullProperty,
                  wxS("when adding properties to fixed parents, use BeginAddChildren and EndAddChildren.") );
 
-    bool res = PrepareToAddItem( property, (wxPropertyCategory*)parent );
+    bool res = PrepareToAddItem( property, parent );
 
     // PrepareToAddItem() may just decide to use current category
     // instead of adding new one.
@@ -1705,9 +1705,11 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
         else if ( parentIsRoot )
             // Parent is root.
             m_regularArray.DoAddChild( property, -1, false );
+        else
+            parent->DoAddChild(property, index, true);
 
         // Add to current mode
-        if ( !property->IsCategory() )
+        if ( !property->IsCategory() && (parentIsCategory || parentIsRoot) )
             m_abcArray->DoAddChild( property, index, true );
     }
 
@@ -1834,6 +1836,36 @@ bool wxPropertyGridPageState::IsChildCategory(wxPGProperty* p,
     return false;
 }
 
+namespace
+{
+static wxPGProperty* FindCategoryForProperty(wxPGProperty* cat, wxPGProperty* prop, int& foundAtIndex)
+{
+    wxASSERT(cat->IsCategory() || cat->IsRoot());
+
+    int idx = cat->Index(prop);
+    if ( idx != wxNOT_FOUND )
+    {
+        foundAtIndex = idx;
+        return cat;
+    }
+
+    for ( unsigned int i = 0; i < cat->GetChildCount(); i++ )
+    {
+        wxPGProperty* p = cat->Item(i);
+        if ( p->IsCategory() )
+        {
+            wxPGProperty* foundCat = FindCategoryForProperty(p, prop, foundAtIndex);
+            if ( foundCat )
+            {
+                return foundCat;
+            }
+        }
+    }
+
+    return NULL;
+}
+};
+
 void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 {
     wxCHECK_RET(item != &m_regularArray && item != m_abcArray,
@@ -1943,38 +1975,25 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 
         // categorized mode - categorized array
         parent->RemoveChild(indinparent);
-        item->m_parent->FixIndicesOfChildren();
+        parent->FixIndicesOfChildren();
     }
     else
     {
         // non-categorized mode - categorized array
 
         // We need to find location of item.
-        wxPGProperty* cat_parent = &m_regularArray;
-        int cat_index = m_regularArray.GetChildCount();
-        for ( unsigned int i = 0; i < m_regularArray.GetChildCount(); i++ )
+        int cat_index;
+        wxPGProperty* cat_parent = FindCategoryForProperty(&m_regularArray, item, cat_index);
+        if ( cat_parent )
         {
-            wxPGProperty* p = m_regularArray.Item(i);
-            if ( p == item ) { cat_index = i; break; }
-            if ( p->IsCategory() )
-            {
-                int subind = p->Index(item);
-                if ( subind != wxNOT_FOUND )
-                {
-                    cat_parent = p;
-                    cat_index = subind;
-                    break;
-                }
-            }
+            cat_parent->RemoveChild(cat_index);
         }
-        cat_parent->RemoveChild(cat_index);
 
         // non-categorized mode - non-categorized array
         if ( !item->IsCategory() )
         {
-            wxASSERT( item->m_parent == m_abcArray );
-            item->m_parent->RemoveChild(indinparent);
-            item->m_parent->FixIndicesOfChildren(indinparent);
+            parent->RemoveChild(indinparent);
+            parent->FixIndicesOfChildren(indinparent);
         }
     }
 

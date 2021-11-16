@@ -224,7 +224,7 @@ const char* wxART_EDIT;
     #endif
     @endcode
     For a list of the GTK+ stock items please refer to the
-    <a href="http://library.gnome.org/devel/gtk/stable/gtk-Stock-Items.html">GTK+ documentation
+    <a href="https://developer-old.gnome.org/gtk3/stable/gtk3-Stock-Items.html">GTK+ documentation
     page</a>.
     It is also possible to load icons from the current icon theme by specifying their name
     (without extension and directory components).
