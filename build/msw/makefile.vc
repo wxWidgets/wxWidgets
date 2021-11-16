@@ -215,7 +215,6 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_packbits.obj \
 	$(OBJS)\wxtiff_tif_pixarlog.obj \
 	$(OBJS)\wxtiff_tif_predict.obj \
-	$(OBJS)\wxtiff_tif_print.obj \
 	$(OBJS)\wxtiff_tif_read.obj \
 	$(OBJS)\wxtiff_tif_strip.obj \
 	$(OBJS)\wxtiff_tif_swab.obj \
@@ -6872,9 +6871,6 @@ $(OBJS)\wxtiff_tif_pixarlog.obj: ..\..\src\tiff\libtiff\tif_pixarlog.c
 
 $(OBJS)\wxtiff_tif_predict.obj: ..\..\src\tiff\libtiff\tif_predict.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_predict.c
-
-$(OBJS)\wxtiff_tif_print.obj: ..\..\src\tiff\libtiff\tif_print.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_print.c
 
 $(OBJS)\wxtiff_tif_read.obj: ..\..\src\tiff\libtiff\tif_read.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_read.c

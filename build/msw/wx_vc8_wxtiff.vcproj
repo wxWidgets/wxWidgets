@@ -783,10 +783,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\tiff\libtiff\tif_print.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\tiff\libtiff\tif_read.c"
 				>
 			</File>
