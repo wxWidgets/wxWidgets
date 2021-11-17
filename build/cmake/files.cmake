@@ -154,6 +154,7 @@ set(BASE_OSX_SHARED_HDR
 set(BASE_AND_GUI_OSX_COCOA_SRC
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
+    src/osx/volume.mm
 )
 
 set(BASE_OSX_NOTWXMAC_SRC

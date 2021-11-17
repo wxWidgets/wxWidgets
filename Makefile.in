@@ -957,6 +957,7 @@ ALL_BASE_SOURCES =  \
 	src/common/utilscmn.cpp \
 	src/osx/cocoa/power.mm \
 	src/osx/cocoa/utils.mm \
+	src/osx/volume.mm \
 	src/msw/main.cpp \
 	src/msw/volume.cpp \
 	src/common/fs_inet.cpp \
@@ -4345,9 +4346,10 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
-@COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_volume.o
+@COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
-@COND_TOOLKIT_OSX_COCOA@	= monodll_cocoa_power.o monodll_cocoa_utils.o
+@COND_TOOLKIT_OSX_COCOA@	= monodll_cocoa_power.o monodll_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	monodll_osx_volume.o
 COND_PLATFORM_MACOSX_1___NET_PLATFORM_SRC_OBJECTS =  \
 	monodll_socketiohandler.o \
 	monodll_sockunix.o \
@@ -6348,9 +6350,10 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_volume.o
+@COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
-@COND_TOOLKIT_OSX_COCOA@	= monolib_cocoa_power.o monolib_cocoa_utils.o
+@COND_TOOLKIT_OSX_COCOA@	= monolib_cocoa_power.o monolib_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	monolib_osx_volume.o
 COND_PLATFORM_MACOSX_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_socketiohandler.o \
 	monolib_sockunix.o \
@@ -8403,9 +8406,10 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_volume.o
+@COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
-@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_power.o basedll_cocoa_utils.o
+@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_power.o basedll_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	basedll_osx_volume.o
 COND_MONOLITHIC_0_SHARED_0___baselib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0@__baselib___depname = $(COND_MONOLITHIC_0_SHARED_0___baselib___depname)
@@ -8489,9 +8493,10 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_msw_uilocale.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_volume.o
+@COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
-@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_power.o baselib_cocoa_utils.o
+@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_power.o baselib_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	baselib_osx_volume.o
 @COND_SHARED_1@____wxbase_namedll_DEP = $(__basedll___depname)
 @COND_SHARED_0@____wxbase_namelib_DEP = $(__baselib___depname)
 COND_MONOLITHIC_0_SHARED_1___netdll___depname = \
@@ -8662,9 +8667,10 @@ COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 @COND_USE_SOVERSOLARIS_1@__coredll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__coredll___win32rc = coredll_version_rc.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
-@COND_PLATFORM_WIN32_1@	= coredll_msw_main.o coredll_volume.o
+@COND_PLATFORM_WIN32_1@	= coredll_msw_main.o coredll_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
-@COND_TOOLKIT_OSX_COCOA@	= coredll_power.o coredll_cocoa_utils.o
+@COND_TOOLKIT_OSX_COCOA@	= coredll_power.o coredll_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	coredll_osx_volume.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_4) \
 	$(__PLATFORM_SRC_OBJECTS_8) \
@@ -10393,9 +10399,10 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_USE_PCH_1@_____pch_wxprec_corelib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_corelib/wx/wxprec.h.gch
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
-@COND_PLATFORM_WIN32_1@	= corelib_msw_main.o corelib_volume.o
+@COND_PLATFORM_WIN32_1@	= corelib_msw_main.o corelib_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
-@COND_TOOLKIT_OSX_COCOA@	= corelib_power.o corelib_cocoa_utils.o
+@COND_TOOLKIT_OSX_COCOA@	= corelib_power.o corelib_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	corelib_osx_volume.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_6) \
 	$(__PLATFORM_SRC_OBJECTS_9) \
@@ -16178,7 +16185,7 @@ monodll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(MONODLL_ODEP)
 monodll_msw_main.o: $(srcdir)/src/msw/main.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
-monodll_volume.o: $(srcdir)/src/msw/volume.cpp $(MONODLL_ODEP)
+monodll_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
 monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
@@ -16186,6 +16193,9 @@ monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
 
 monodll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
+
+monodll_osx_volume.o: $(srcdir)/src/osx/volume.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/volume.mm
 
 monodll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -21485,7 +21495,7 @@ monolib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(MONOLIB_ODEP)
 monolib_msw_main.o: $(srcdir)/src/msw/main.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
-monolib_volume.o: $(srcdir)/src/msw/volume.cpp $(MONOLIB_ODEP)
+monolib_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
 monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
@@ -21493,6 +21503,9 @@ monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
 
 monolib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
+
+monolib_osx_volume.o: $(srcdir)/src/osx/volume.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/volume.mm
 
 monolib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -26792,7 +26805,7 @@ basedll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASEDLL_ODEP)
 basedll_main.o: $(srcdir)/src/msw/main.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
-basedll_volume.o: $(srcdir)/src/msw/volume.cpp $(BASEDLL_ODEP)
+basedll_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
 basedll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASEDLL_ODEP)
@@ -26800,6 +26813,9 @@ basedll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASEDLL_ODEP)
 
 basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
+
+basedll_osx_volume.o: $(srcdir)/src/osx/volume.mm $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/volume.mm
 
 @COND_PLATFORM_UNIX_1@basedll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -27278,7 +27294,7 @@ baselib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASELIB_ODEP)
 baselib_main.o: $(srcdir)/src/msw/main.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
-baselib_volume.o: $(srcdir)/src/msw/volume.cpp $(BASELIB_ODEP)
+baselib_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
 baselib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASELIB_ODEP)
@@ -27286,6 +27302,9 @@ baselib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASELIB_ODEP)
 
 baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
+
+baselib_osx_volume.o: $(srcdir)/src/osx/volume.mm $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/volume.mm
 
 @COND_PLATFORM_UNIX_1@baselib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -27524,7 +27543,7 @@ coredll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(COREDLL_ODEP)
 coredll_msw_main.o: $(srcdir)/src/msw/main.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
-coredll_volume.o: $(srcdir)/src/msw/volume.cpp $(COREDLL_ODEP)
+coredll_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
 coredll_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
@@ -27532,6 +27551,9 @@ coredll_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
 
 coredll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
+
+coredll_osx_volume.o: $(srcdir)/src/osx/volume.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/volume.mm
 
 coredll_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(COREDLL_ODEP)
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
@@ -31793,7 +31815,7 @@ corelib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(CORELIB_ODEP)
 corelib_msw_main.o: $(srcdir)/src/msw/main.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
-corelib_volume.o: $(srcdir)/src/msw/volume.cpp $(CORELIB_ODEP)
+corelib_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
 corelib_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
@@ -31801,6 +31823,9 @@ corelib_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
 
 corelib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
+
+corelib_osx_volume.o: $(srcdir)/src/osx/volume.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/volume.mm
 
 corelib_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(CORELIB_ODEP)
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c

@@ -173,35 +173,4 @@ void wxDirDialog::SetTitle(const wxString &title)
     wxDialog::SetTitle(title);
 }
 
-size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
-{
-    NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-    NSArray *volumes = [workspace mountedLocalVolumePaths];
-    NSFileManager *filemanager = [NSFileManager defaultManager];
-
-    for (NSString *path in volumes)
-    {
-        NSString *description, *type, *name;
-        BOOL removable, writable, unmountable;
-
-        if ( [workspace getFileSystemInfoForPath:path isRemovable:&removable isWritable:&writable
-                                   isUnmountable:&unmountable description:&description type:&type] )
-        {
-            if ( writable )
-                icon_ids.Add(wxFileIconsTable::drive);
-            else
-                icon_ids.Add(wxFileIconsTable::cdrom);
-
-            name = [filemanager displayNameAtPath:path];
-
-            paths.Add(wxCFStringRefFromGet(path).AsString());
-            names.Add(wxCFStringRefFromGet(name).AsString());
-        }
-    }
-
-    wxASSERT_MSG( (paths.GetCount() == names.GetCount()), wxT("The number of paths and their human readable names should be equal in number."));
-    wxASSERT_MSG( (paths.GetCount() == icon_ids.GetCount()), wxT("Wrong number of icons for available drives."));
-    return paths.GetCount();
-}
-
 #endif // wxUSE_DIRDLG
