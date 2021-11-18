@@ -1083,28 +1083,11 @@ void wxListCtrl::Init()
 {
     m_hasCheckBoxes = false;
     m_model = NULL;
-    m_imageListNormal = NULL;
-    m_ownsImageListNormal = false;
-    m_imageListSmall = NULL;
-    m_ownsImageListSmall = false;
-    m_imageListState = NULL;
-    m_ownsImageListState = false;
     m_qtTreeWidget = NULL;
 }
 
 wxListCtrl::~wxListCtrl()
 {
-    if ( m_ownsImageListNormal )
-        delete m_imageListNormal;
-    if ( m_ownsImageListSmall )
-        delete m_imageListSmall;
-    if ( m_ownsImageListState )
-        delete m_imageListState;
-
-    m_imageListNormal = NULL;
-    m_imageListSmall = NULL;
-    m_imageListState = NULL;
-
     m_qtTreeWidget->setModel(NULL);
     m_model->deleteLater();
 }
@@ -1551,58 +1534,9 @@ long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
     return -1;
 }
 
-wxImageList *wxListCtrl::GetImageList(int which) const
+void wxListCtrl::DoUpdateImages(int WXUNUSED(which))
 {
-    if ( which == wxIMAGE_LIST_NORMAL )
-    {
-        return m_imageListNormal;
-    }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        return m_imageListSmall;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        return m_imageListState;
-    }
-    return NULL;
-}
-
-
-void wxListCtrl::SetImageList(wxImageList *imageList, int which)
-{
-    if ( which == wxIMAGE_LIST_NORMAL )
-    {
-        if ( m_ownsImageListNormal )
-            delete m_imageListNormal;
-        m_imageListNormal = imageList;
-        m_ownsImageListNormal = false;
-    }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        if ( m_ownsImageListSmall )
-            delete m_imageListSmall;
-        m_imageListSmall = imageList;
-        m_ownsImageListSmall = false;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        if ( m_ownsImageListState )
-            delete m_imageListState;
-        m_imageListState = imageList;
-        m_ownsImageListState = false;
-    }
-}
-
-void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
-{
-    SetImageList(imageList, which);
-    if ( which == wxIMAGE_LIST_NORMAL )
-        m_ownsImageListNormal = true;
-    else if ( which == wxIMAGE_LIST_SMALL )
-        m_ownsImageListSmall = true;
-    else if ( which == wxIMAGE_LIST_STATE )
-        m_ownsImageListState = true;
+    // TODO: Ensure the icons are actually updated.
 }
 
 void wxListCtrl::RefreshItem(long item)

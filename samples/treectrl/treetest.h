@@ -8,6 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// This can be defined to 1 to force using wxGenericTreeCtrl even on the
+// platforms where the native controls would normally be used (wxMSW and wxQt).
 #define USE_GENERIC_TREECTRL 0
 
 #if USE_GENERIC_TREECTRL
@@ -16,6 +18,13 @@
 #define wxTreeCtrl wxGenericTreeCtrl
 #define sm_classwxTreeCtrl sm_classwxGenericTreeCtrl
 #endif
+#endif
+
+// This one is defined if we're actually using the generic control, either
+// because it was explicitly requested above or because there is no other one
+// on this platform anyhow.
+#if USE_GENERIC_TREECTRL || (!defined(__WXMSW__) && !defined(__WXQT__))
+    #define HAS_GENERIC_TREECTRL
 #endif
 
 // Define a new application type
@@ -98,7 +107,12 @@ public:
     void GetItemsRecursively(const wxTreeItemId& idParent,
                              wxTreeItemIdValue cookie = 0);
 
-    void CreateImageList(int size = 16);
+    // This function behaves differently depending on the value of size:
+    //  - If it's -1, it turns off the use of images entirely.
+    //  - If it's 0, it reuses the last used size.
+    //  - If it's strictly positive, it creates icons in this size.
+    void CreateImages(int size);
+
     void CreateButtonsImageList(int size = 11);
     void CreateStateImageList(bool del = false);
 

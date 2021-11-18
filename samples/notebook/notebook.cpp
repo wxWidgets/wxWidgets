@@ -157,9 +157,9 @@ wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 
 int GetIconIndex(wxBookCtrlBase* bookCtrl)
 {
-    if (bookCtrl && bookCtrl->GetImageList())
+    if (bookCtrl)
     {
-       int nImages = bookCtrl->GetImageList()->GetImageCount();
+       const int nImages = bookCtrl->GetImageCount();
        if (nImages > 0)
        {
            return bookCtrl->GetPageCount() % nImages;
@@ -397,18 +397,13 @@ MyFrame::MyFrame()
     m_panel    = NULL;
     m_bookCtrl = NULL;
 
-    // create a dummy image list with a few icons
+    // use some random images for the book control pages
     const wxSize imageSize(32, 32);
 
-    m_imageList = new wxImageList(imageSize.GetWidth(), imageSize.GetHeight());
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, imageSize));
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, imageSize));
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_WARNING, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_ERROR, wxART_OTHER, imageSize));
 
     m_panel = new wxPanel(this);
 
@@ -442,8 +437,6 @@ MyFrame::~MyFrame()
 #if USE_LOG
     delete wxLog::SetActiveTarget(m_logTargetOld);
 #endif // USE_LOG
-
-    delete m_imageList;
 }
 
 // DISPATCH_ON_TYPE() macro is an ugly way to write the "same" code for
@@ -565,7 +558,7 @@ void MyFrame::RecreateBook()
     // wxToolbook doesn't work without icons so always use them for it.
     if ( m_chkShowImages || m_type == Type_Toolbook )
     {
-        m_bookCtrl->SetImageList(m_imageList);
+        m_bookCtrl->SetImages(m_images);
     }
 
     if ( oldBook )

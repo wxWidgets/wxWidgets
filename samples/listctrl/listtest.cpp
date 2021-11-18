@@ -178,35 +178,32 @@ MyFrame::MyFrame(const wxString& title)
     // Give it an icon
     SetIcon(wxICON(sample));
 
-    // Make an image list containing large icons
-    m_imageListNormal = new wxImageList(32, 32, true);
-    m_imageListSmall = new wxImageList(16, 16, true);
-
+    // Fill vectors containing normal and small icons.
 #ifdef wxHAS_IMAGES_IN_RESOURCES
-    m_imageListNormal->Add( wxIcon("icon1", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon2", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon3", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon4", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon5", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon6", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon7", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon8", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon9", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon1", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon2", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon3", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon4", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon5", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon6", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon7", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon8", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesNormal.push_back( wxIcon("icon9", wxBITMAP_TYPE_ICO_RESOURCE) );
 
-    m_imageListSmall->Add( wxIcon("iconsmall", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imagesSmall.push_back( wxIcon("iconsmall", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16) );
 
 #else
-    m_imageListNormal->Add( wxIcon( toolbrai_xpm ) );
-    m_imageListNormal->Add( wxIcon( toolchar_xpm ) );
-    m_imageListNormal->Add( wxIcon( tooldata_xpm ) );
-    m_imageListNormal->Add( wxIcon( toolnote_xpm ) );
-    m_imageListNormal->Add( wxIcon( tooltodo_xpm ) );
-    m_imageListNormal->Add( wxIcon( toolchec_xpm ) );
-    m_imageListNormal->Add( wxIcon( toolgame_xpm ) );
-    m_imageListNormal->Add( wxIcon( tooltime_xpm ) );
-    m_imageListNormal->Add( wxIcon( toolword_xpm ) );
+    m_imagesNormal.push_back( wxIcon( toolbrai_xpm ) );
+    m_imagesNormal.push_back( wxIcon( toolchar_xpm ) );
+    m_imagesNormal.push_back( wxIcon( tooldata_xpm ) );
+    m_imagesNormal.push_back( wxIcon( toolnote_xpm ) );
+    m_imagesNormal.push_back( wxIcon( tooltodo_xpm ) );
+    m_imagesNormal.push_back( wxIcon( toolchec_xpm ) );
+    m_imagesNormal.push_back( wxIcon( toolgame_xpm ) );
+    m_imagesNormal.push_back( wxIcon( tooltime_xpm ) );
+    m_imagesNormal.push_back( wxIcon( toolword_xpm ) );
 
-    m_imageListSmall->Add( wxIcon( small1_xpm) );
+    m_imagesSmall.push_back( wxIcon( small1_xpm) );
 #endif
 
     // Make a menubar
@@ -312,9 +309,6 @@ MyFrame::MyFrame(const wxString& title)
 MyFrame::~MyFrame()
 {
     delete wxLog::SetActiveTarget(m_logOld);
-
-    delete m_imageListNormal;
-    delete m_imageListSmall;
 }
 
 bool MyFrame::CheckNonVirtual() const
@@ -532,7 +526,7 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::InitWithReportItems()
 {
-    m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
+    m_listCtrl->SetSmallImages(m_imagesSmall);
 
     // note that under MSW for SetColumnWidth() to work we need to create the
     // items with images initially even if we specify dummy image id
@@ -621,8 +615,8 @@ void MyFrame::InitWithReportItems()
 
 void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
 {
-    m_listCtrl->SetImageList(m_imageListNormal, wxIMAGE_LIST_NORMAL);
-    m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
+    m_listCtrl->SetNormalImages(m_imagesNormal);
+    m_listCtrl->SetSmallImages(m_imagesSmall);
 
     for ( int i = 0; i < NUM_ICONS; i++ )
     {
@@ -705,7 +699,7 @@ void MyFrame::OnSetItemsCount(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::InitWithVirtualItems()
 {
-    m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
+    m_listCtrl->SetSmallImages(m_imagesSmall);
 
     if ( m_smallVirtual )
     {

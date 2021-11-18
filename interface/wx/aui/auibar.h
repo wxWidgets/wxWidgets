@@ -299,29 +299,29 @@ public:
     /**
 
     */
-    void SetBitmap(const wxBitmap& bmp);
+    void SetBitmap(const wxBitmapBundle& bmp);
     /**
 
     */
-    const wxBitmap& GetBitmap() const;
-
-    /**
-
-    */
-    void SetDisabledBitmap(const wxBitmap& bmp);
-    /**
-
-    */
-    const wxBitmap& GetDisabledBitmap() const;
+    wxBitmap GetBitmap() const;
 
     /**
 
     */
-    void SetHoverBitmap(const wxBitmap& bmp);
+    void SetDisabledBitmap(const wxBitmapBundle& bmp);
     /**
 
     */
-    const wxBitmap& GetHoverBitmap() const;
+    wxBitmap GetDisabledBitmap() const;
+
+    /**
+
+    */
+    void SetHoverBitmap(const wxBitmapBundle& bmp);
+    /**
+
+    */
+    wxBitmap GetHoverBitmap() const;
 
     /**
 
@@ -705,22 +705,22 @@ public:
 
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
-                 const wxBitmap& bitmap,
+                 const wxBitmapBundle& bitmap,
                  const wxString& short_help_string = wxEmptyString,
                  wxItemKind kind = wxITEM_NORMAL);
 
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
-                 const wxBitmap& bitmap,
-                 const wxBitmap& disabled_bitmap,
+                 const wxBitmapBundle& bitmap,
+                 const wxBitmapBundle& disabled_bitmap,
                  wxItemKind kind,
                  const wxString& short_help_string,
                  const wxString& long_help_string,
                  wxObject* client_data);
 
     wxAuiToolBarItem* AddTool(int toolId,
-                 const wxBitmap& bitmap,
-                 const wxBitmap& disabled_bitmap,
+                 const wxBitmapBundle& bitmap,
+                 const wxBitmapBundle& disabled_bitmap,
                  bool toggle = false,
                  wxObject* client_data = NULL,
                  const wxString& short_help_string = wxEmptyString,
@@ -861,7 +861,7 @@ public:
     void SetToolLabel(int toolId, const wxString& label);
 
     wxBitmap GetToolBitmap(int toolId) const;
-    void SetToolBitmap(int toolId, const wxBitmap& bitmap);
+    void SetToolBitmap(int toolId, const wxBitmapBundle& bitmap);
 
     wxString GetToolShortHelp(int toolId) const;
     void SetToolShortHelp(int toolId, const wxString& help_string);

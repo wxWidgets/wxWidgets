@@ -244,7 +244,6 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_packbits.o \
 	wxtiff_tif_pixarlog.o \
 	wxtiff_tif_predict.o \
-	wxtiff_tif_print.o \
 	wxtiff_tif_read.o \
 	wxtiff_tif_strip.o \
 	wxtiff_tif_swab.o \
@@ -15317,9 +15316,6 @@ wxtiff_tif_pixarlog.o: $(srcdir)/src/tiff/libtiff/tif_pixarlog.c
 
 wxtiff_tif_predict.o: $(srcdir)/src/tiff/libtiff/tif_predict.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_predict.c
-
-wxtiff_tif_print.o: $(srcdir)/src/tiff/libtiff/tif_print.c
-	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_print.c
 
 wxtiff_tif_read.o: $(srcdir)/src/tiff/libtiff/tif_read.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_read.c

@@ -57,6 +57,8 @@ void wxBookCtrlBase::Init()
 
     m_controlMargin = 0;
     m_controlSizer = NULL;
+
+    Bind(wxEVT_DPI_CHANGED, &wxBookCtrlBase::WXHandleDPIChanged, this);
 }
 
 bool

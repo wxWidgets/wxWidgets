@@ -14,8 +14,6 @@ class wxQtListTreeWidget;
 class wxQtListModel;
 class wxQtVirtualListModel;
 
-class WXDLLIMPEXP_FWD_CORE wxImageList;
-
 class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
 {
 public:
@@ -177,13 +175,6 @@ public:
     // Returns the item or -1 if unsuccessful.
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const;
 
-    // Gets one of the three image lists
-    wxImageList *GetImageList(int which) const wxOVERRIDE;
-
-    // Sets the image list
-    void SetImageList(wxImageList *imageList, int which) wxOVERRIDE;
-    void AssignImageList(wxImageList *imageList, int which) wxOVERRIDE;
-
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);
@@ -278,13 +269,8 @@ protected:
 
     // Implement base class pure virtual methods.
     virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
+    void DoUpdateImages(int which) wxOVERRIDE;
 
-    wxImageList *     m_imageListNormal; // The image list for normal icons
-    wxImageList *     m_imageListSmall;  // The image list for small icons
-    wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
-    bool              m_ownsImageListNormal,
-                      m_ownsImageListSmall,
-                      m_ownsImageListState;
     bool              m_hasCheckBoxes;
 
 private:

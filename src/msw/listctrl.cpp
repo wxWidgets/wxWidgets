@@ -275,13 +275,6 @@ wxEND_EVENT_TABLE()
 
 void wxListCtrl::Init()
 {
-    m_imageListNormal =
-    m_imageListSmall =
-    m_imageListState = NULL;
-    m_ownsImageListNormal =
-    m_ownsImageListSmall =
-    m_ownsImageListState = false;
-
     m_colCount = 0;
     m_textCtrl = NULL;
 
@@ -322,14 +315,19 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     // If SetImageList() had been called before the control was created, take
     // it into account now.
-    if ( m_imageListNormal )
-        ListView_SetImageList(GetHwnd(), GetHimagelistOf(m_imageListNormal), LVSIL_NORMAL);
-    if ( m_imageListSmall )
-        ListView_SetImageList(GetHwnd(), GetHimagelistOf(m_imageListSmall), LVSIL_SMALL);
-    if ( m_imageListState )
-        ListView_SetImageList(GetHwnd(), GetHimagelistOf(m_imageListState), LVSIL_STATE);
+    UpdateAllImageLists();
 
     return true;
+}
+
+void wxListCtrl::UpdateAllImageLists()
+{
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_NORMAL) )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_NORMAL);
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_SMALL) )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_SMALL);
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_STATE) )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_STATE);
 }
 
 void wxListCtrl::MSWSetExListStyles()
@@ -455,6 +453,8 @@ void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 
 void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 {
+    UpdateAllImageLists();
+
     const int numCols = GetColumnCount();
     for ( int i = 0; i < numCols; ++i )
     {
@@ -535,13 +535,6 @@ wxListCtrl::~wxListCtrl()
     FreeAllInternalData();
 
     DeleteEditControl();
-
-    if (m_ownsImageListNormal)
-        delete m_imageListNormal;
-    if (m_ownsImageListSmall)
-        delete m_imageListSmall;
-    if (m_ownsImageListState)
-        delete m_imageListState;
 
     delete m_headerCustomDraw;
 }
@@ -1523,53 +1516,35 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
 }
 
 
-wxImageList *wxListCtrl::GetImageList(int which) const
+void wxListCtrl::DoUpdateImages(int which)
 {
-    if ( which == wxIMAGE_LIST_NORMAL )
-    {
-        return m_imageListNormal;
-    }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        return m_imageListSmall;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        return m_imageListState;
-    }
-    return NULL;
-}
-
-void wxListCtrl::SetImageList(wxImageList *imageList, int which)
-{
-    int flags = 0;
-    if ( which == wxIMAGE_LIST_NORMAL )
-    {
-        flags = LVSIL_NORMAL;
-        if (m_ownsImageListNormal) delete m_imageListNormal;
-        m_imageListNormal = imageList;
-        m_ownsImageListNormal = false;
-    }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        flags = LVSIL_SMALL;
-        if (m_ownsImageListSmall) delete m_imageListSmall;
-        m_imageListSmall = imageList;
-        m_ownsImageListSmall = false;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        flags = LVSIL_STATE;
-        if (m_ownsImageListState) delete m_imageListState;
-        m_imageListState = imageList;
-        m_ownsImageListState = false;
-    }
-
     // It's possible that this function is called before the control is
     // created, don't do anything else in this case -- the image list will be
     // really set after creating it.
     if ( !GetHwnd() )
         return;
+
+    int flags;
+    switch ( which )
+    {
+        case wxIMAGE_LIST_NORMAL:
+            flags = LVSIL_NORMAL;
+            break;
+
+        case wxIMAGE_LIST_SMALL:
+            flags = LVSIL_SMALL;
+            break;
+
+        case wxIMAGE_LIST_STATE:
+            flags = LVSIL_STATE;
+            break;
+
+        default:
+            wxFAIL_MSG("invalid image list");
+            return;
+    }
+
+    wxImageList* const imageList = GetUpdatedImageList(which);
 
     (void) ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 
@@ -1584,17 +1559,6 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
             SetItemText(i, text);
         }
     }
-}
-
-void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
-{
-    SetImageList(imageList, which);
-    if ( which == wxIMAGE_LIST_NORMAL )
-        m_ownsImageListNormal = true;
-    else if ( which == wxIMAGE_LIST_SMALL )
-        m_ownsImageListSmall = true;
-    else if ( which == wxIMAGE_LIST_STATE )
-        m_ownsImageListState = true;
 }
 
 // ----------------------------------------------------------------------------

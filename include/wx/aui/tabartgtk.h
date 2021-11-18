@@ -49,7 +49,7 @@ public:
     int GetBorderWidth(wxWindow* wnd) wxOVERRIDE;
     int GetAdditionalBorderSpace(wxWindow* wnd) wxOVERRIDE;
     virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
-                              const wxBitmap& bitmap, bool active,
+                              const wxBitmapBundle& bitmap, bool active,
                               int close_button_state, int* x_extent) wxOVERRIDE;
 };
 

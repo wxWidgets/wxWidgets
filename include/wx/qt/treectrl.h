@@ -135,9 +135,13 @@ protected:
 
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const wxOVERRIDE;
 
+    virtual void OnImagesChanged() wxOVERRIDE;
+
 private:
     void SendDeleteEvent(const wxTreeItemId &item);
     wxTreeItemId GetNext(const wxTreeItemId &item) const;
+
+    void DoUpdateIconsSize(wxImageList *imageList);
 
     wxQTreeWidget *m_qtTreeWidget;
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);

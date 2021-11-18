@@ -376,10 +376,15 @@ public:
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
 
     /**
-        Sets the image list associated with the control and takes ownership of it
-        (i.e. the control will, unlike when using SetImageList(), delete the list
-        when destroyed). @a which is one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,
-        @c wxIMAGE_LIST_STATE (the last is unimplemented).
+        Sets the image list associated with the control and takes ownership of it.
+
+        Not that it is recommended to use SetNormalImages() or SetSmallImages()
+        instead of this function in the new code.
+
+        After calling this function the control will, unlike when using
+        SetImageList(), delete the list when destroyed. @a which must be one of
+        @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL, @c wxIMAGE_LIST_STATE
+        (support for the last one is unimplemented).
 
         @see SetImageList()
     */
@@ -1108,8 +1113,11 @@ public:
     /**
         Sets the image list associated with the control.
 
-        @a which is one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,
-        @c wxIMAGE_LIST_STATE (the last is unimplemented).
+        Not that it is recommended to use SetNormalImages() or SetSmallImages()
+        instead of this function in the new code.
+
+        @a which must be one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,
+        @c wxIMAGE_LIST_STATE (support for the last one is unimplemented).
 
         This method does not take ownership of the image list, you have to
         delete it yourself.
@@ -1122,6 +1130,40 @@ public:
         @see AssignImageList()
     */
     void SetImageList(wxImageList* imageList, int which);
+
+    /**
+        Sets the images to use when showing large, normal icons in this control.
+
+        These images are used by the items when the list control is in
+        wxLC_ICON mode, in all the other modes the images set by
+        SetSmallImages() are used.
+
+        This function should be preferred to calling SetImageList() or
+        AssignImageList() with @c wxIMAGE_LIST_NORMAL argument in the new code,
+        as using wxBitmapBundle makes it possible to specify multiple versions
+        of the icons, allowing the control to choose the right one for the
+        current DPI scaling.
+
+        @since 3.1.6
+     */
+    void SetNormalImages(const wxVector<wxBitmapBundle>& images);
+
+    /**
+        Sets the images to use when showing small icons in this control.
+
+        These images are used by the items when the list control is in
+        wxLC_SMALL_ICON or wxLC_REPORT mode, use SetNormalImages() for the
+        icons used in wxLC_ICON mode.
+
+        This function should be preferred to calling SetImageList() or
+        AssignImageList() with @c wxIMAGE_LIST_SMALL argument in the new code,
+        as using wxBitmapBundle makes it possible to specify multiple versions
+        of the icons, allowing the control to choose the right one for the
+        current DPI scaling.
+
+        @since 3.1.6
+     */
+    void SetSmallImages(const wxVector<wxBitmapBundle>& images);
 
     /**
         Check if the item is visible.
@@ -1427,8 +1469,12 @@ protected:
 
     /**
         This function must be overridden in the derived class for a control with
-        @c wxLC_VIRTUAL style having an "image list" (see SetImageList(); if the
-        control doesn't have an image list, it is not necessary to override it).
+        @c wxLC_VIRTUAL style using images.
+
+        If the control doesn't use images, i.e. SetNormalImages() or
+        SetSmallImages() hadn't been called, it is not necessary to override
+        it.
+
         It should return the index of the items image in the controls image list
         or -1 for no image.
 

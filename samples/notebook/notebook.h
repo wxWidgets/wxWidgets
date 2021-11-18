@@ -131,7 +131,7 @@ private:
 
     wxBoxSizer *m_sizerFrame;
 
-    wxImageList *m_imageList;
+    wxBookCtrlBase::Images m_images;
 
     wxDECLARE_EVENT_TABLE();
 };

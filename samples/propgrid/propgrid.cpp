@@ -1837,7 +1837,7 @@ void FormMain::PopulateGrid()
 
     // Use wxMyPropertyGridPage (see above) to test the
     // custom wxPropertyGridPage feature.
-    pgman->AddPage("Examples",wxNullBitmap,myPage);
+    pgman->AddPage("Examples", wxBitmapBundle(), myPage);
 
     PopulateWithExamples();
 }
