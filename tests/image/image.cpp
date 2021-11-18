@@ -1355,6 +1355,11 @@ void ImageTestCase::BMPFlippingAndRLECompression()
     CompareBMPImage("image/horse_rle8.bmp", "image/horse_rle8_flipped.bmp");
 
     CompareBMPImage("image/horse_rle4.bmp", "image/horse_rle4_flipped.bmp");
+
+    CompareBMPImage("image/rle8-delta-320x240.bmp",
+                    "image/rle8-delta-320x240-expected.bmp");
+    CompareBMPImage("image/rle4-delta-320x240.bmp",
+                    "image/rle8-delta-320x240-expected.bmp");
 }
 
 
