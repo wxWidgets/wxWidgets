@@ -85,7 +85,14 @@
             src/tiff/libtiff/tif_packbits.c
             src/tiff/libtiff/tif_pixarlog.c
             src/tiff/libtiff/tif_predict.c
+            <!--
+                Exclude this file because it contains only TIFFPrintDirectory()
+                function that we never use, but compiling which generates tons
+                of warnings when using MinGW (e.g. when cross-compiling) and it
+                seems simpler to just not compile it at all than to fix them.
+
             src/tiff/libtiff/tif_print.c
+            -->
             src/tiff/libtiff/tif_read.c
             src/tiff/libtiff/tif_strip.c
             src/tiff/libtiff/tif_swab.c

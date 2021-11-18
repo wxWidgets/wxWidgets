@@ -119,9 +119,6 @@ public:
     void SetWindowStyleFlag( long style ) wxOVERRIDE;
     void RecreateWindow() {}
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
-    wxImageList *GetImageList( int which ) const wxOVERRIDE;
-    void SetImageList( wxImageList *imageList, int which ) wxOVERRIDE;
-    void AssignImageList( wxImageList *imageList, int which ) wxOVERRIDE;
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
 
     void ClearAll();
@@ -209,19 +206,13 @@ public:
     // implementation
     // --------------
 
-    wxImageList         *m_imageListNormal;
-    wxImageList         *m_imageListSmall;
-    wxImageList         *m_imageListState;  // what's that ?
-    bool                 m_ownsImageListNormal,
-                         m_ownsImageListSmall,
-                         m_ownsImageListState;
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
 
 protected:
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
-
+    void DoUpdateImages(int which) wxOVERRIDE;
 
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 

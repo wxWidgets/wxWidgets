@@ -244,8 +244,8 @@ public:
             A label for the page. This may be shown as a toolbar tooltip etc.
 
         @param bmp
-            Bitmap bundle for toolbar. If it is null then a built-in default
-            bitmap bundle is used.
+            Bitmap bundle for toolbar image. If the bundle is empty, then
+            a built-in default bitmap bundle is used.
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
@@ -402,8 +402,8 @@ public:
             A label for the page. This may be shown as a toolbar tooltip etc.
 
         @param bmp
-            Bitmap bundle for toolbar. If it is null then a built-in default
-            bitmap bundle is used.
+            Bitmap bundle for toolbar image. If the bundle is empty, then
+            a built-in default bitmap bundle is used.
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this

@@ -412,9 +412,9 @@ int BookWidgetsPage::GetTextValue(wxTextCtrl *text) const
 
 int BookWidgetsPage::GetIconIndex() const
 {
-    if ( m_imageList )
+    if ( m_book )
     {
-       int nImages = m_imageList->GetImageCount();
+       const int nImages = m_book->GetImageCount();
        if ( nImages > 0 )
        {
            return m_book->GetPageCount() % nImages;

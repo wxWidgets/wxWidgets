@@ -15,6 +15,7 @@
 
 #if wxUSE_AUI
 
+#include "wx/bmpbndl.h"
 #include "wx/control.h"
 #include "wx/sizer.h"
 #include "wx/pen.h"
@@ -165,14 +166,22 @@ public:
     void SetLabel(const wxString& s) { m_label = s; }
     const wxString& GetLabel() const { return m_label; }
 
-    void SetBitmap(const wxBitmap& bmp) { m_bitmap = bmp; }
-    const wxBitmap& GetBitmap() const { return m_bitmap; }
+    void SetBitmap(const wxBitmapBundle& bmp) { m_bitmap = bmp; }
+    const wxBitmapBundle& GetBitmapBundle() const { return m_bitmap; }
+    wxBitmap GetBitmapFor(wxWindow* wnd) const { return m_bitmap.GetBitmapFor(wnd); }
+    wxBitmap GetBitmap() const { return GetBitmapFor(m_window); }
 
-    void SetDisabledBitmap(const wxBitmap& bmp) { m_disabledBitmap = bmp; }
-    const wxBitmap& GetDisabledBitmap() const { return m_disabledBitmap; }
+    void SetDisabledBitmap(const wxBitmapBundle& bmp) { m_disabledBitmap = bmp; }
+    const wxBitmapBundle& GetDisabledBitmapBundle() const { return m_disabledBitmap; }
+    wxBitmap GetDisabledBitmapFor(wxWindow* wnd) const { return m_disabledBitmap.GetBitmapFor(wnd); }
+    wxBitmap GetDisabledBitmap() const { return GetBitmapFor(m_window); }
 
-    void SetHoverBitmap(const wxBitmap& bmp) { m_hoverBitmap = bmp; }
-    const wxBitmap& GetHoverBitmap() const { return m_hoverBitmap; }
+    // Return the bitmap for the current state, normal or disabled.
+    wxBitmap GetCurrentBitmapFor(wxWindow* wnd) const;
+
+    void SetHoverBitmap(const wxBitmapBundle& bmp) { m_hoverBitmap = bmp; }
+    const wxBitmapBundle& GetHoverBitmapBundle() const { return m_hoverBitmap; }
+    wxBitmap GetHoverBitmap() const { return m_hoverBitmap.GetBitmapFor(m_window); }
 
     void SetShortHelp(const wxString& s) { m_shortHelp = s; }
     const wxString& GetShortHelp() const { return m_shortHelp; }
@@ -220,9 +229,9 @@ private:
 
     wxWindow* m_window;          // item's associated window
     wxString m_label;            // label displayed on the item
-    wxBitmap m_bitmap;           // item's bitmap
-    wxBitmap m_disabledBitmap;  // item's disabled bitmap
-    wxBitmap m_hoverBitmap;     // item's hover bitmap
+    wxBitmapBundle m_bitmap;     // item's bitmap
+    wxBitmapBundle m_disabledBitmap;  // item's disabled bitmap
+    wxBitmapBundle m_hoverBitmap;     // item's hover bitmap
     wxString m_shortHelp;       // short help (for tooltip)
     wxString m_longHelp;        // long help (for status bar)
     wxSizerItem* m_sizerItem;   // sizer item
@@ -424,10 +433,10 @@ public:
 
 protected:
 
-    wxBitmap m_buttonDropDownBmp;
-    wxBitmap m_disabledButtonDropDownBmp;
-    wxBitmap m_overflowBmp;
-    wxBitmap m_disabledOverflowBmp;
+    wxBitmapBundle m_buttonDropDownBmp;
+    wxBitmapBundle m_disabledButtonDropDownBmp;
+    wxBitmapBundle m_overflowBmp;
+    wxBitmapBundle m_disabledOverflowBmp;
     wxColour m_baseColour;
     wxColour m_highlightColour;
     wxFont m_font;
@@ -481,22 +490,22 @@ public:
 
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
-                 const wxBitmap& bitmap,
+                 const wxBitmapBundle& bitmap,
                  const wxString& shortHelpString = wxEmptyString,
                  wxItemKind kind = wxITEM_NORMAL);
 
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
-                 const wxBitmap& bitmap,
-                 const wxBitmap& disabledBitmap,
+                 const wxBitmapBundle& bitmap,
+                 const wxBitmapBundle& disabledBitmap,
                  wxItemKind kind,
                  const wxString& shortHelpString,
                  const wxString& longHelpString,
                  wxObject* clientData);
 
     wxAuiToolBarItem* AddTool(int toolId,
-                 const wxBitmap& bitmap,
-                 const wxBitmap& disabledBitmap,
+                 const wxBitmapBundle& bitmap,
+                 const wxBitmapBundle& disabledBitmap,
                  bool toggle = false,
                  wxObject* clientData = NULL,
                  const wxString& shortHelpString = wxEmptyString,
@@ -591,7 +600,7 @@ public:
     void SetToolLabel(int toolId, const wxString& label);
 
     wxBitmap GetToolBitmap(int toolId) const;
-    void SetToolBitmap(int toolId, const wxBitmap& bitmap);
+    void SetToolBitmap(int toolId, const wxBitmapBundle& bitmap);
 
     wxString GetToolShortHelp(int toolId) const;
     void SetToolShortHelp(int toolId, const wxString& helpString);

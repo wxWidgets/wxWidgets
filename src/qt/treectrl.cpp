@@ -611,17 +611,30 @@ void wxTreeCtrl::SetIndent(unsigned int indent)
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
-    m_imageListNormal = imageList;
+    wxWithImages::SetImageList(imageList);
 
+    DoUpdateIconsSize(imageList);
+}
+
+void wxTreeCtrl::DoUpdateIconsSize(wxImageList *imageList)
+{
     int width, height;
-    m_imageListNormal->GetSize(0, width, height);
+    imageList->GetSize(0, width, height);
     m_qtTreeWidget->ResizeIcons(QSize(width, height));
     m_qtTreeWidget->update();
 }
 
+void wxTreeCtrl::OnImagesChanged()
+{
+    if ( HasImages() )
+    {
+        DoUpdateIconsSize(GetUpdatedImageListFor(this));
+    }
+}
+
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
 {
-    m_imageListState = imageList;
+    m_imagesState.SetImageList(imageList);
     m_qtTreeWidget->update();
 }
 

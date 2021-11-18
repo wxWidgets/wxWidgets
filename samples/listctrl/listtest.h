@@ -159,8 +159,8 @@ protected:
     void OnUpdateToggleHeader(wxUpdateUIEvent& event);
     void OnUpdateRowLines(wxUpdateUIEvent& event);
 
-    wxImageList *m_imageListNormal;
-    wxImageList *m_imageListSmall;
+    wxVector<wxBitmapBundle> m_imagesNormal;
+    wxVector<wxBitmapBundle> m_imagesSmall;
 
     wxPanel *m_panel;
     MyListCtrl *m_listCtrl;

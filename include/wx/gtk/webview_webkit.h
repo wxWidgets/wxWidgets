@@ -27,6 +27,8 @@ typedef struct _WebKitWebView WebKitWebView;
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
 
+class wxWebKitRunScriptParams;
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
@@ -119,13 +121,15 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
 #if wxUSE_WEBVIEW_WEBKIT2
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const wxOVERRIDE;
     virtual bool AddScriptMessageHandler(const wxString& name) wxOVERRIDE;
     virtual bool RemoveScriptMessageHandler(const wxString& name) wxOVERRIDE;
     virtual bool AddUserScript(const wxString& javascript,
         wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START) wxOVERRIDE;
     virtual void RemoveAllUserScripts() wxOVERRIDE;
+#else
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
 #endif
 
     //Virtual Filesystem Support
@@ -151,6 +155,11 @@ public:
     //create-web-view signal and so we need to send a new window event
     bool m_creating;
 
+#if wxUSE_WEBVIEW_WEBKIT2
+    // This method needs to be public to make it callable from a callback
+    void ProcessJavaScriptResult(GAsyncResult *res, wxWebKitRunScriptParams* params) const;
+#endif
+
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 
@@ -173,7 +182,6 @@ private:
     bool CanExecuteEditingCommand(const gchar* command) const;
     void SetupWebExtensionServer();
     GDBusProxy *GetExtensionProxy() const;
-    bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
 #endif
 
     WebKitWebView *m_web_view;

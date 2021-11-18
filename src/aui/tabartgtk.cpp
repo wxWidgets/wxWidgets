@@ -310,8 +310,10 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         int bitmap_offset;
         bitmap_offset = textX;
 
+        const wxBitmap bitmap = page.bitmap.GetBitmapFor(wnd);
+
         // draw bitmap
-        int bitmapY = tab_rect.y +(tab_rect.height - page.bitmap.GetScaledHeight()) / 2;
+        int bitmapY = tab_rect.y +(tab_rect.height - bitmap.GetScaledHeight()) / 2;
         if(!page.active)
         {
             if (tab_pos == wxAUI_NB_TOP)
@@ -319,12 +321,12 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             else
                 bitmapY -= style_notebook->ythickness / 2;
         }
-        dc.DrawBitmap(page.bitmap,
+        dc.DrawBitmap(bitmap,
                       bitmap_offset,
                       bitmapY,
                       true);
 
-        textX += page.bitmap.GetScaledWidth() + padding;
+        textX += bitmap.GetScaledWidth() + padding;
     }
 
     wxCoord textW, textH, textY;
@@ -490,7 +492,7 @@ int wxAuiGtkTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
 wxSize wxAuiGtkTabArt::GetTabSize(wxDC& dc,
                               wxWindow* wnd,
                               const wxString& caption,
-                              const wxBitmap& bitmap,
+                              const wxBitmapBundle& bitmap,
                               bool active,
                               int close_button_state,
                               int* x_extent)
