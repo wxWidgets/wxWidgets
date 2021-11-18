@@ -18,7 +18,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_FSVOLUME
+#if wxUSE_FSVOLUME && !defined(__WXOSX_IPHONE__)
 
 #include "wx/volume.h"
 
