@@ -42,6 +42,77 @@
 #include <mach-o/dyld.h>
 
 // ============================================================================
+// delegate for filtering by wildcard
+// ============================================================================
+
+@interface OpenSavePanelDelegate : NSObject<NSOpenSavePanelDelegate>
+
+- (void)setWildcard:(wxString) wildcard;
+
+@end
+
+
+@implementation OpenSavePanelDelegate
+
+wxArrayString m_extensions;
+
+- (BOOL)panel:(id)sender shouldEnableURL:(NSURL *)url
+{
+    NSString *unsafePath = [url path];
+    wxString path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
+
+    for( const wxString& extension : m_extensions )
+    {
+        if( path.Matches( extension ) )
+            return YES;
+    }
+
+    return NO;
+}
+
+- (void)panel:(id)sender didChangeToDirectoryURL:(NSURL *)url
+{
+}
+
+- (BOOL)panel:(id)sender validateURL:(NSURL *)url error:(NSError **)outError
+{
+    return YES;
+}
+
+- (void)setWildcard:(wxString)wildcard
+{
+    m_extensions.clear();
+
+    if( !wildcard.empty() )
+    {
+        wxStringTokenizer tokenizer( wildcard, wxT("|") );
+        int               numtokens = (int) tokenizer.CountTokens();
+
+        if( numtokens == 1 )
+        {
+            // For compatibility we allow a single filter expression (like *.*) without
+            // explanatory text.  In this case the token is the name and the extension.
+            wxString extension = tokenizer.GetNextToken();
+            m_extensions.Add( extension );
+        }
+        else
+        {
+            int numextensions = numtokens / 2;
+
+            for( int i = 0; i < numextensions; i++ )
+            {
+                wxString name = tokenizer.GetNextToken();
+                wxString extension = tokenizer.GetNextToken();
+                m_extensions.Add( extension );
+            }
+        }
+    }
+}
+
+@end
+
+
+// ============================================================================
 // implementation
 // ============================================================================
 
@@ -530,7 +601,11 @@ int wxFileDialog::ShowModal()
         }
         else
         {
-            [oPanel setAllowedFileTypes: types];
+            OpenSavePanelDelegate* delegate = [[OpenSavePanelDelegate alloc] init];
+            [delegate setWiladcard: m_wildCard];
+
+            [oPanel setDelegate: delegate];
+            [delegate autorelease];
         }
         if ( !m_dir.IsEmpty() )
             [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
