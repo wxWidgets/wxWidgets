@@ -772,11 +772,15 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
 
                         if ( first == 0 )
                         {
+                            // This is an escape sequence with special meaning.
                             if ( aByte == 0 )
                             {
                                 // end of scanline marker
-                                column = width;
-                                row--;
+                                // This is ignored if the end-of-line was
+                                // implicitly assumed when column==width,
+                                // in which case column is now 0.
+                                if (column != 0)
+                                    column = width;
                             }
                             else if ( aByte == 1 )
                             {
@@ -787,18 +791,23 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                             else if ( aByte == 2 )
                             {
                                 // delta marker, move in image
+
+                                // process column offset
                                 aByte = stream.GetC();
                                 if ( !stream.IsOk() )
                                     return false;
                                 column += aByte;
-                                linepos = column * bpp / 4;
+
+                                // process row offset
                                 aByte = stream.GetC();
                                 if ( !stream.IsOk() )
                                     return false;
-                                row += aByte; // upside down
+                                row += aByte;
+                                line = isUpsideDown ? height - 1 - row : row;
                             }
                             else
                             {
+                                // absolute mode (pixels not runs)
                                 int absolute = aByte;
                                 wxUint8 nibble[2] ;
                                 int readBytes = 0 ;
@@ -817,8 +826,6 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                                     ptr[poffset + 1] = cmap[nibble[k%2]].g;
                                     ptr[poffset + 2] = cmap[nibble[k%2]].b;
                                     column++;
-                                    if ( k % 2 )
-                                        linepos++;
                                 }
                                 if ( readBytes & 0x01 )
                                 {
@@ -840,8 +847,6 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                                 ptr[poffset + 1] = cmap[nibble[l%2]].g;
                                 ptr[poffset + 2] = cmap[nibble[l%2]].b;
                                 column++;
-                                if ( l % 2 )
-                                    linepos++;
                             }
                         }
                     }
@@ -874,8 +879,11 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                             if ( aByte == 0 )
                             {
                                 // end of scanline marker
-                                column = width;
-                                row--;
+                                // This is ignored if the end-of-line was
+                                // implicitly assumed when column==width,
+                                // in which case column is now 0.
+                                if (column != 0)
+                                    column = width;
                             }
                             else if ( aByte == 1 )
                             {
@@ -886,22 +894,26 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                             else if ( aByte == 2 )
                             {
                                 // delta marker, move in image
+
+                                // process column offset
                                 aByte = stream.GetC();
                                 if ( !stream.IsOk() )
                                     return false;
                                 column += aByte;
-                                linepos = column * bpp / 8;
+
+                                // process row offset
                                 aByte = stream.GetC();
                                 if ( !stream.IsOk() )
                                     return false;
-                                row -= aByte;
+                                row += aByte;
+                                line = isUpsideDown ? height - 1 - row : row;
                             }
                             else
                             {
+                                // absolute mode (pixels not runs)
                                 int absolute = aByte;
                                 for (int k = 0; k < absolute; k++)
                                 {
-                                    linepos++;
                                     aByte = stream.GetC();
                                     if ( !stream.IsOk() )
                                         return false;
@@ -920,13 +932,13 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                         }
                         else
                         {
+                            // encoded mode (repeat aByte first times)
                             for ( int l = 0; l < first && column < width; l++ )
                             {
                                 ptr[poffset    ] = cmap[aByte].r;
                                 ptr[poffset + 1] = cmap[aByte].g;
                                 ptr[poffset + 2] = cmap[aByte].b;
                                 column++;
-                                linepos++;
                             }
                         }
                     }
@@ -994,7 +1006,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 column++;
             }
         }
-        while ( (linepos < linesize) && (comp != 1) && (comp != 2) )
+        while ( (linepos < linesize) && (comp != BI_RLE8) && (comp != BI_RLE4) )
         {
             ++linepos;
             if ( !stream.ReadAll(&aByte, 1) )
