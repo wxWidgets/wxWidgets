@@ -165,6 +165,7 @@ public :
     virtual void Check( bool check ) = 0;
     virtual void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) = 0;
     virtual void Hide( bool hide = true ) = 0;
+    virtual void SetAllowsKeyEquivalentWhenHidden( bool ) {}
 
     virtual void * GetHMenuItem() = 0;
 

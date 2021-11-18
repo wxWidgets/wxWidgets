@@ -34,10 +34,19 @@ public:
     virtual void SetBitmap(const wxBitmap& bitmap);
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
+#if wxUSE_ACCEL
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel) wxOVERRIDE;
+    virtual void ClearExtraAccels() wxOVERRIDE;
+#endif // wxUSE_ACCEL
+
     // implementation
     void SetMenuItem(GtkWidget *menuItem);
     GtkWidget *GetMenuItem() const { return m_menuItem; }
     void SetGtkLabel();
+
+#if wxUSE_ACCEL
+    void GTKSetExtraAccels();
+#endif // wxUSE_ACCEL
 
 #if WXWIN_COMPATIBILITY_2_8
     // compatibility only, don't use in new code

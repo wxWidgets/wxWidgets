@@ -36,8 +36,38 @@ extern int wxOpenModalDialogsCount;
 static const int wxGTK_TITLE_ID = -3;
 
 #if wxUSE_ACCEL
-static bool wxGetGtkAccel(const wxMenuItem*, guint*, GdkModifierType*);
-#endif
+namespace
+{
+
+// Simple struct encapsulating a GTK accelerator with wrappers for just the
+// operations that we need.
+class GtkAccel
+{
+public:
+    // Can be constructed from any menu item (must be valid, but doesn't have
+    // to be an accelerator) or an already existing accelerator entry.
+    explicit GtkAccel(const wxMenuItem* item);
+    explicit GtkAccel(const wxAcceleratorEntry& entry) { Init(&entry); }
+
+    // Default copy ctor, assignment operator and dtor are all OK.
+
+    bool IsOk() const { return m_key != 0; }
+
+    void Add(GtkWidget* widget, GtkAccelGroup* accelGroup, GtkAccelFlags accelFlags);
+    void Remove(GtkWidget* widget, GtkAccelGroup* accelGroup);
+
+private:
+    static wxString GetGtkHotKey(const wxAcceleratorEntry*);
+
+    void Init(const wxAcceleratorEntry* entry);
+
+    guint m_key;
+    GdkModifierType m_mods;
+};
+
+} // anonymous namespace
+
+#endif // wxUSE_ACCEL
 
 // Unity hack: under Ubuntu Unity the global menu bar is not affected by a
 // modal dialog being shown, so the user can select a menu item before hiding
@@ -642,12 +672,10 @@ void wxMenuItem::SetItemLabel( const wxString& str )
     if (m_menuItem)
     {
         // remove old accelerator
-        guint accel_key;
-        GdkModifierType accel_mods;
-        if ( wxGetGtkAccel(this, &accel_key, &accel_mods) )
+        GtkAccel gtkAccel(this);
+        if ( gtkAccel.IsOk() )
         {
-            gtk_widget_remove_accelerator(
-                m_menuItem, GetRootParentMenu(m_parentMenu)->m_accel, accel_key, accel_mods);
+            gtkAccel.Remove(m_menuItem, GetRootParentMenu(m_parentMenu)->m_accel);
         }
     }
 #endif // wxUSE_ACCEL
@@ -662,13 +690,11 @@ void wxMenuItem::SetGtkLabel()
     GtkLabel* label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(m_menuItem)));
     gtk_label_set_text_with_mnemonic(label, wxGTK_CONV_SYS(text));
 #if wxUSE_ACCEL
-    guint accel_key;
-    GdkModifierType accel_mods;
-    if ( wxGetGtkAccel(this, &accel_key, &accel_mods) )
+    GtkAccel gtkAccel(this);
+    if ( gtkAccel.IsOk() )
     {
-        gtk_widget_add_accelerator(
-            m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
-            accel_key, accel_mods, GTK_ACCEL_VISIBLE);
+        gtkAccel.Add(m_menuItem, GetRootParentMenu(m_parentMenu)->m_accel,
+                     GTK_ACCEL_VISIBLE);
     }
     else
     {
@@ -677,6 +703,54 @@ void wxMenuItem::SetGtkLabel()
     }
 #endif // wxUSE_ACCEL
 }
+
+#if wxUSE_ACCEL
+void wxMenuItem::GTKSetExtraAccels()
+{
+    GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
+
+    const size_t extraAccelsSize = m_extraAccels.size();
+    for (size_t i = 0; i < extraAccelsSize; ++i)
+    {
+        GtkAccel(m_extraAccels[i]).Add(m_menuItem, accelGroup, GTK_ACCEL_MASK);
+    }
+}
+
+void wxMenuItem::AddExtraAccel(const wxAcceleratorEntry& accel)
+{
+    wxMenuItemBase::AddExtraAccel(accel);
+
+    // If the item is not yet part of the menu, all its extra accelerators will
+    // be registered with GTK in GTKSetExtraAccels() once it is added to the
+    // menu, but if it had already been added to it, we need to let GTK know
+    // about the new extra accelerator.
+    if (m_menuItem)
+    {
+        GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
+
+        GtkAccel(accel).Add(m_menuItem, accelGroup, GTK_ACCEL_MASK);
+    }
+}
+
+void wxMenuItem::ClearExtraAccels()
+{
+    // Tell GTK not to use the existing accelerators any longer if they're
+    // already in use.
+    if (m_menuItem)
+    {
+        GtkAccelGroup* const accelGroup = GetRootParentMenu(m_parentMenu)->m_accel;
+
+        const size_t extraAccelsSize = m_extraAccels.size();
+        for (size_t i = 0; i < extraAccelsSize; ++i)
+        {
+            GtkAccel(m_extraAccels[i]).Remove(m_menuItem, accelGroup);
+        }
+    }
+
+    wxMenuItemBase::ClearExtraAccels();
+}
+
+#endif // wxUSE_ACCEL
 
 void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
 {
@@ -961,6 +1035,10 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
         if ( mitem->IsSubMenu() )
             UpdateSubMenuItemLabels(mitem);
 
+#if wxUSE_ACCEL
+        mitem->GTKSetExtraAccels();
+#endif
+
         g_signal_connect (menuItem, "select",
                           G_CALLBACK(menuitem_select), mitem);
         g_signal_connect (menuItem, "deselect",
@@ -1038,11 +1116,11 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
 #if wxUSE_ACCEL
 
-static wxString GetGtkHotKey( const wxMenuItem& item )
+/* static */
+wxString GtkAccel::GetGtkHotKey(const wxAcceleratorEntry *accel)
 {
     wxString hotkey;
 
-    wxAcceleratorEntry *accel = item.GetAccel();
     if ( accel )
     {
         int flags = accel->GetFlags();
@@ -1313,33 +1391,44 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 }
                 break;
         }
-
-        delete accel;
     }
 
     return hotkey;
 }
 
-static bool
-wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_mods)
+void GtkAccel::Init(const wxAcceleratorEntry* entry)
 {
-    const wxString string = GetGtkHotKey(*item);
+    const wxString string = GetGtkHotKey(entry);
     if (!string.empty())
     {
-        gtk_accelerator_parse(wxGTK_CONV_SYS(string), accel_key, accel_mods);
+        gtk_accelerator_parse(wxGTK_CONV_SYS(string), &m_key, &m_mods);
 
         // Normally, we detect all the keys considered invalid by GTK in
         // GetGtkHotKey(), but just in case GTK decides to add more invalid
         // keys in the future versions, recheck once again using its function.
-        if ( gtk_accelerator_valid(*accel_key, *accel_mods) )
-            return true;
-
-        wxLogDebug("\"%s\" is not a valid keyboard accelerator "
-                   "for this GTK version",
-                   string);
+        if ( !gtk_accelerator_valid(m_key, m_mods) )
+        {
+            wxLogDebug("\"%s\" is not a valid keyboard accelerator "
+                       "for this GTK version",
+                       string);
+            m_key = 0;
+        }
     }
-#ifndef __WXGTK4__
     else
+    {
+        // Key with this code can never be a valid accelerator, so we use
+        // it to indicate that it's invalid.
+        m_key = 0;
+    }
+}
+
+GtkAccel::GtkAccel(const wxMenuItem* item)
+{
+    wxScopedPtr<wxAcceleratorEntry> accel(item->GetAccel());
+    Init(accel.get());
+
+#ifndef __WXGTK4__
+    if ( !IsOk() )
     {
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
@@ -1351,17 +1440,33 @@ wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_m
                 gtk_stock_lookup(stockid, &stock_item) &&
                     stock_item.keyval )
         {
-            *accel_key = stock_item.keyval;
-            *accel_mods = stock_item.modifier;
-
-            return true;
+            m_key = stock_item.keyval;
+            m_mods = stock_item.modifier;
         }
         wxGCC_WARNING_RESTORE()
     }
-#endif
-
-    return false;
+#endif // !__WXGTK4__
 }
+
+void
+GtkAccel::Add(GtkWidget* widget, GtkAccelGroup* accelGroup, GtkAccelFlags accelFlags)
+{
+    if ( IsOk() )
+    {
+        gtk_widget_add_accelerator(
+            widget, "activate", accelGroup,
+            m_key, m_mods, accelFlags);
+    }
+}
+
+void GtkAccel::Remove(GtkWidget* widget, GtkAccelGroup* accelGroup)
+{
+    if ( IsOk() )
+    {
+        gtk_widget_remove_accelerator(widget, accelGroup, m_key, m_mods);
+    }
+}
+
 #endif // wxUSE_ACCEL
 
 #ifndef __WXGTK4__
