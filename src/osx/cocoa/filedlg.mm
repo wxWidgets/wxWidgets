@@ -602,7 +602,7 @@ int wxFileDialog::ShowModal()
         else
         {
             OpenSavePanelDelegate* delegate = [[OpenSavePanelDelegate alloc] init];
-            [delegate setWiladcard: m_wildCard];
+            [delegate setWildcard: m_wildCard];
 
             [oPanel setDelegate: delegate];
             [delegate autorelease];
