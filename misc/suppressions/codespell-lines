@@ -27,3 +27,5 @@ expressions</em> (BRE). EREs are roughly those of the traditional @e egrep,
     static wxString ConvertFromBasic(const wxString& bre);
         This function can be used to convert @a bre using deprecated wxRE_BASIC
     static wxString ConvertFromBasic(const wxString& bre);
+    @c makefile.unx in the sample directory to build it using the version of
+    makefile.unx</code> in the sample directory to build it.
