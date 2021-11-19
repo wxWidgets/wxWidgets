@@ -1216,16 +1216,23 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
             wxToolBarToolBase* tool;
 
             if ( bmp.IsOk() )
-                tool = m_pToolbar->AddTool(wxID_ANY, label, bmp,
-                                           label, wxITEM_RADIO);
+            {
+                tool = m_pToolbar->AddTool(wxID_ANY, label, bmp, label, wxITEM_RADIO);
+            }
             else
-                tool = m_pToolbar->AddTool(wxID_ANY, label,
+            {
 #ifdef wxHAS_SVG
-                                           wxBitmapBundle::FromSVG(gs_svg_defpage, m_pToolbar->GetToolBitmapSize()),
+                wxBitmapBundle toolImages =
+                    wxBitmapBundle::FromSVG(gs_svg_defpage, m_pToolbar->GetToolBitmapSize());
 #else
-                                           wxBitmapBundle::FromBitmaps(wxBitmap(gs_xpm_defpage), wxBitmap(gs_xpm_defpage_2x)),
+                wxBitmap icon1x(gs_xpm_defpage);
+                wxBitmap icon2x(gs_xpm_defpage_2x);
+                icon2x.SetScaleFactor(2);
+                wxBitmapBundle toolImages = wxBitmapBundle::FromBitmaps(icon1x, icon2x);
 #endif // wxHAS_SVG/!wxHAS_SVG
-                                           label, wxITEM_RADIO);
+
+                tool = m_pToolbar->AddTool(wxID_ANY, label, toolImages, label, wxITEM_RADIO);
+            }
 
             pageObj->m_toolId = tool->GetId();
 
@@ -1715,15 +1722,20 @@ void wxPropertyGridManager::RecreateControls()
             if (m_categorizedModeToolId == -1)
             {
                 wxString desc(_("Categorized Mode"));
+#ifdef wxHAS_SVG
+                wxBitmapBundle toolImages =
+                    wxBitmapBundle::FromSVG(gs_svg_catmode, m_pToolbar->GetToolBitmapSize());
+#else
+                wxBitmap icon1x(gs_xpm_catmode);
+                wxBitmap icon2x(gs_xpm_catmode_2x);
+                icon2x.SetScaleFactor(2);
+                wxBitmapBundle toolImages = wxBitmapBundle::FromBitmaps(icon1x, icon2x);
+#endif // wxHAS_SVG/!wxHAS_SVG
+
                 wxToolBarToolBase* tool = m_pToolbar->InsertTool(0,
                                             wxID_ANY,
                                             desc,
-#ifdef wxHAS_SVG
-                                            wxBitmapBundle::FromSVG(gs_svg_catmode, m_pToolbar->GetToolBitmapSize()),
-#else
-                                            wxBitmapBundle::FromBitmaps(wxBitmap(gs_xpm_catmode), wxBitmap(gs_xpm_catmode_2x)),
-#endif // wxHAS_SVG/!wxHAS_SVG
-                                            wxBitmapBundle(),
+                                            toolImages, wxBitmapBundle(),
                                             wxITEM_RADIO,
                                             desc);
                 m_categorizedModeToolId = tool->GetId();
@@ -1736,15 +1748,20 @@ void wxPropertyGridManager::RecreateControls()
             if (m_alphabeticModeToolId == -1)
             {
                 wxString desc(_("Alphabetic Mode"));
+#ifdef wxHAS_SVG
+                wxBitmapBundle toolImages =
+                    wxBitmapBundle::FromSVG(gs_svg_noncatmode, m_pToolbar->GetToolBitmapSize());
+#else
+                wxBitmap icon1x(gs_xpm_noncatmode);
+                wxBitmap icon2x(gs_xpm_noncatmode_2x);
+                icon2x.SetScaleFactor(2);
+                wxBitmapBundle toolImages = wxBitmapBundle::FromBitmaps(icon1x, icon2x);
+#endif // wxHAS_SVG/!wxHAS_SVG
+
                 wxToolBarToolBase* tool = m_pToolbar->InsertTool(1,
                                             wxID_ANY,
                                             desc,
-#ifdef wxHAS_SVG
-                                            wxBitmapBundle::FromSVG(gs_svg_noncatmode, m_pToolbar->GetToolBitmapSize()),
-#else
-                                            wxBitmapBundle::FromBitmaps(wxBitmap(gs_xpm_noncatmode), wxBitmap(gs_xpm_noncatmode_2x)),
-#endif // wxHAS_SVG/!wxHAS_SVG
-                                            wxBitmapBundle(),
+                                            toolImages, wxBitmapBundle(),
                                             wxITEM_RADIO,
                                             desc);
                 m_alphabeticModeToolId = tool->GetId();
