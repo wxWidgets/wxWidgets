@@ -553,7 +553,7 @@ public:
     /**
         Adds new bitmap button.
     */
-    void Add( const wxBitmap& bitmap, int id = -2 );
+    void Add( const wxBitmapBundle& bitmap, int id = -2 );
 
     /**
         Call this in CreateControls() of your custom editor class

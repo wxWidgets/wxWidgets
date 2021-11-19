@@ -17,6 +17,7 @@
 
 #include "wx/propgrid/propgriddefs.h"
 #include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/font.h"
 #include "wx/validate.h"
 
@@ -135,6 +136,7 @@ public:
     // can be passed to DrawText.
     int PreDrawCell( wxDC& dc,
                      const wxRect& rect,
+                     const wxPropertyGrid* propGrid,
                      const wxPGCell& cell,
                      int flags ) const;
 
@@ -180,7 +182,7 @@ public:
         m_text = text;
         m_hasValidText = true;
     }
-    void SetBitmap( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
+    void SetBitmap( const wxBitmapBundle& bitmap ) { m_bitmapBundle = bitmap; }
     void SetFgCol( const wxColour& col ) { m_fgCol = col; }
     void SetBgCol( const wxColour& col ) { m_bgCol = col; }
     void SetFont( const wxFont& font ) { m_font = font; }
@@ -189,7 +191,7 @@ protected:
     virtual ~wxPGCellData() { }
 
     wxString    m_text;
-    wxBitmap    m_bitmap;
+    wxBitmapBundle m_bitmapBundle;
     wxColour    m_fgCol;
     wxColour    m_bgCol;
     wxFont      m_font;
@@ -210,7 +212,7 @@ public:
     }
 
     wxPGCell( const wxString& text,
-              const wxBitmap& bitmap = wxNullBitmap,
+              const wxBitmapBundle& bitmap = wxBitmapBundle(),
               const wxColour& fgCol = wxNullColour,
               const wxColour& bgCol = wxNullColour );
 
@@ -238,7 +240,7 @@ public:
     void MergeFrom( const wxPGCell& srcCell );
 
     void SetText( const wxString& text );
-    void SetBitmap( const wxBitmap& bitmap );
+    void SetBitmap( const wxBitmapBundle& bitmap );
     void SetFgCol( const wxColour& col );
 
     // Sets font of the cell.
@@ -254,7 +256,7 @@ public:
     void SetBgCol( const wxColour& col );
 
     const wxString& GetText() const { return GetData()->m_text; }
-    const wxBitmap& GetBitmap() const { return GetData()->m_bitmap; }
+    const wxBitmapBundle& GetBitmap() const { return GetData()->m_bitmapBundle; }
     const wxColour& GetFgCol() const { return GetData()->m_fgCol; }
 
     // Returns font of the cell. If no specific font is set for this
@@ -818,7 +820,7 @@ public:
 
     // Adds a single item, with bitmap.
     wxPGChoiceEntry& Add( const wxString& label,
-                          const wxBitmap& bitmap,
+                          const wxBitmapBundle& bitmap,
                           int value = wxPG_INVALID_VALUE );
 
     // Adds a single item with full entry information.
@@ -1539,10 +1541,7 @@ public:
 
     // Returns bitmap that appears next to value text. Only returns non-@NULL
     // bitmap if one was set with SetValueImage().
-    wxBitmap* GetValueImage() const
-    {
-        return m_valueBitmap;
-    }
+    wxBitmap* GetValueImage() const;
 
     // Returns property attribute value, null variant if not found.
     wxVariant GetAttribute( const wxString& name ) const;
@@ -1696,7 +1695,7 @@ public:
 
     // Set wxBitmap in front of the value. This bitmap may be ignored
     // by custom cell renderers.
-    void SetValueImage( wxBitmap& bmp );
+    void SetValueImage( const wxBitmapBundle& bmp );
 
     // Sets selected choice and changes property value.
     // Tries to retain value type, although currently if it is not string,
@@ -2047,7 +2046,8 @@ protected:
     // Show this in front of the value
     //
     // TODO: Can bitmap be implemented with wxPGCell?
-    wxBitmap*                   m_valueBitmap;
+    wxBitmapBundle              m_valueBitmapBundle;
+    wxBitmap                    m_valueBitmap;
 
     wxVariant                   m_value;
     wxPGAttributeStorage        m_attributes;

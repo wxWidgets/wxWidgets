@@ -5093,7 +5093,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         int space = m_pState->GetColumnWidth(m_colHover);
 
                         int imageWidth = 0;
-                        const wxBitmap& bmp = cell.GetBitmap();
+                        const wxBitmap& bmp = cell.GetBitmap().GetBitmapFor(this);
                         if ( bmp.IsOk() )
                         {
                             imageWidth = bmp.GetWidth();
