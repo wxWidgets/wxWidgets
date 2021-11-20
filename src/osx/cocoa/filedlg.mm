@@ -58,6 +58,9 @@ wxArrayString m_extensions;
 
 - (BOOL)panel:(id)sender shouldEnableURL:(NSURL *)url
 {
+    if( url.hasDirectoryPath )
+        return YES;
+
     NSString *unsafePath = [url path];
     wxString path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
 
