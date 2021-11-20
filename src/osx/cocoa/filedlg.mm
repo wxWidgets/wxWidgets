@@ -442,11 +442,6 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     {
         [panel setAccessoryView:nil];
     }
-
-    wxOpenSavePanelDelegate* del = [[wxOpenSavePanelDelegate alloc]init];
-    [panel setDelegate:del];
-    m_delegate = del;
-
 }
 
 int wxFileDialog::GetMatchingFilterExtension(const wxString& filename)
@@ -585,7 +580,11 @@ int wxFileDialog::ShowModal()
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
         
         SetupExtraControls(oPanel);
-                
+
+        wxOpenSavePanelDelegate* del = [[wxOpenSavePanelDelegate alloc]init];
+        [oPanel setDelegate:del];
+        m_delegate = del;
+
         [oPanel setTreatsFilePackagesAsDirectories:NO];
         [oPanel setCanChooseDirectories:NO];
         [oPanel setResolvesAliases:HasFlag(wxFD_NO_FOLLOW) ? NO : YES];
@@ -604,8 +603,10 @@ int wxFileDialog::ShowModal()
         }
         else
         {
-            [oPanel setAllowedFileTypes: types];
-            [m_delegate setAllowedExtensions: m_currentExtensions];
+            if ( m_delegate )
+                [m_delegate setAllowedExtensions: m_currentExtensions];
+            else
+                [oPanel setAllowedFileTypes: types];
         }
         if ( !m_dir.IsEmpty() )
             [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
