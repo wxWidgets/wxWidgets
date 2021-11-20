@@ -10,7 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include <wx/xml/xml.h>
+#include "wx/xml/xml.h"
 
 #if wxUSE_XRC && wxUSE_MENUS
 
