@@ -435,6 +435,11 @@ inline wxSize operator*(unsigned long i, const wxSize& s)
     return wxSize(int(s.x * i), int(s.y * i));
 }
 
+inline wxSize operator/(const wxSize& s, double i)
+{
+    return wxSize(wxRound(s.x / i), wxRound(s.y / i));
+}
+
 inline wxSize operator*(const wxSize& s, double i)
 {
     return wxSize(wxRound(s.x * i), wxRound(s.y * i));

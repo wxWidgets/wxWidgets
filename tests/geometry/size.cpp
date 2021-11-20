@@ -48,4 +48,6 @@ TEST_CASE("wxSize::Operators", "[size]")
     CHECK( s3 == wxSize(2, 4) );
     s3 /= 2;
     CHECK( s3 == s1 );
+
+    CHECK( wxSize(6, 9) / 1.5 == wxSize(4, 6) );
 }
