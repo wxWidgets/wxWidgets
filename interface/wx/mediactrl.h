@@ -232,9 +232,11 @@ public:
            By default, the control will automatically adjust its size to
            exactly fit the size of a loaded video as soon as a video is loaded.
            If this flag is given, the control will not change its size
-           automatically and must be done manually (if desired) using Layout().
+           automatically and it must be done manually (if desired) using Layout().
            It is strongly recommended to use this flag and handle control
-           resizing manually.
+           resizing manually (note that this style is only available in
+           wxWidgets 3.1.6, so it is only possible to do it when using this or
+           later version).
     @endStyleTable
 
     @library{wxmedia}
@@ -267,7 +269,8 @@ public:
         @param size
             Size to put the control at and to stretch movie to.
         @param style
-            Optional styles.
+            Optional styles. It is recommended to use ::wxMC_NO_AUTORESIZE,
+            although it is not used by default for compatibility reasons.
         @param szBackend
             Name of backend you want to use, leave blank to make wxMediaCtrl figure it out.
         @param validator
@@ -301,7 +304,8 @@ public:
         @param size
             Size to put the control at and to stretch movie to.
         @param style
-            Optional styles.
+            Optional styles. It is recommended to use ::wxMC_NO_AUTORESIZE,
+            although it is not used by default for compatibility reasons.
         @param szBackend
             Name of backend you want to use, leave blank to make wxMediaCtrl figure it out.
         @param validator
