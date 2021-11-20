@@ -458,12 +458,22 @@ void wxToolBarBase::AdjustToolBitmapSize()
 
     if ( !bundles.empty() )
     {
-        const wxSize sizePreferred = wxBitmapBundle::GetConsensusSizeFor
-                                     (
-                                        this,
-                                        bundles,
-                                        sizeOrig
-                                     );
+        wxSize sizePreferred = wxBitmapBundle::GetConsensusSizeFor
+                               (
+                                this,
+                                bundles,
+                                sizeOrig
+                               );
+
+        // This size is supposed to be in logical units for the platforms where
+        // they differ from physical ones, so convert it.
+        //
+        // Note that this could introduce rounding problems but, in fact,
+        // neither wxGTK nor wxOSX (that are the only ports where contents
+        // scale factor may be different from 1) use this size at all
+        // currently, so it shouldn't matter. But if/when they are modified to
+        // use the size computed here, this would need to be revisited.
+        sizePreferred /= GetContentScaleFactor();
 
         if ( sizePreferred != sizeOrig )
             SetToolBitmapSize(sizePreferred);
