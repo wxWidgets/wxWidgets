@@ -87,6 +87,7 @@ private:
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
+    void OnToggleLayoutDirection(wxCommandEvent& evt);
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -408,6 +409,7 @@ enum
     ID_STYLE_MENU,
     ID_INC_INDENT,
     ID_DEC_INDENT,
+    ID_LAYOUT_DIR,
 
     // file menu
     //ID_SINGLE,        wxDV_SINGLE==0 so it's always present
@@ -487,6 +489,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
     EVT_MENU( ID_INC_INDENT, MyFrame::OnIncIndent )
     EVT_MENU( ID_DEC_INDENT, MyFrame::OnDecIndent )
+    EVT_MENU( ID_LAYOUT_DIR, MyFrame::OnToggleLayoutDirection)
 
     EVT_NOTEBOOK_PAGE_CHANGED( wxID_ANY, MyFrame::OnPageChanged )
 
@@ -607,6 +610,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->Append(wxID_ANY, "Si&ze", size_menu);
     file_menu->Append(ID_INC_INDENT, "&Increase indent\tCtrl-I");
     file_menu->Append(ID_DEC_INDENT, "&Decrease indent\tShift-Ctrl-I");
+    file_menu->AppendSeparator();
+    file_menu->AppendCheckItem(ID_LAYOUT_DIR, "Toggle &layout direction\tCtrl-L");
+    file_menu->Check(ID_LAYOUT_DIR, GetLayoutDirection() == wxLayout_RightToLeft);
     file_menu->AppendSeparator();
     file_menu->Append(ID_EXIT, "E&xit");
 
@@ -1209,6 +1215,19 @@ void MyFrame::OnDecIndent(wxCommandEvent& WXUNUSED(event))
     wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
     dvc->SetIndent(wxMax(dvc->GetIndent() - 5, 0));
     wxLogMessage("Indent is now %d", dvc->GetIndent());
+}
+
+void MyFrame::OnToggleLayoutDirection(wxCommandEvent& WXUNUSED(evt))
+{
+    wxLayoutDirection dir = GetLayoutDirection() == wxLayout_LeftToRight
+                                  ? wxLayout_RightToLeft : wxLayout_LeftToRight;
+    SetLayoutDirection(dir);
+    GetStatusBar()->SetLayoutDirection(dir);
+    for ( int i = 0; i < Page_Max; i++ )
+    {
+        m_ctrl[i]->SetLayoutDirection(dir);
+    }
+    m_log->SetLayoutDirection(dir);
 }
 
 void MyFrame::OnPageChanged( wxBookCtrlEvent& WXUNUSED(event) )
