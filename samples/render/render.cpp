@@ -142,6 +142,8 @@ private:
     void OnLoad(wxCommandEvent& event);
     void OnUnload(wxCommandEvent& event);
 #endif // wxUSE_DYNLIB_CLASS
+    void OnToggleLayoutDirection(wxCommandEvent &evt);
+
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -449,6 +451,7 @@ enum
     Render_Load,
     Render_Unload,
 #endif // wxUSE_DYNLIB_CLASS
+    Render_LayoutDir,
 
 #if wxUSE_GRAPHICS_CONTEXT
     DC_DC,
@@ -502,6 +505,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_Load,  MyFrame::OnLoad)
     EVT_MENU(Render_Unload,MyFrame::OnUnload)
 #endif // wxUSE_DYNLIB_CLASS
+    EVT_MENU(Render_LayoutDir, MyFrame::OnToggleLayoutDirection)
     EVT_MENU(Render_Quit,  MyFrame::OnQuit)
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -602,8 +606,11 @@ MyFrame::MyFrame()
 #if wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Load, "&Load renderer...\tCtrl-L");
     menuFile->Append(Render_Unload, "&Unload renderer\tCtrl-U");
-    menuFile->AppendSeparator();
 #endif // wxUSE_DYNLIB_CLASS
+    menuFile->AppendSeparator();
+    menuFile->AppendCheckItem(Render_LayoutDir, "Toggle &layout direction\tShift-Ctrl-L");
+    menuFile->Check(Render_LayoutDir, GetLayoutDirection() == wxLayout_RightToLeft);
+    menuFile->AppendSeparator();
     menuFile->Append(Render_Quit);
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -753,6 +760,15 @@ void MyFrame::OnUnload(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_DYNLIB_CLASS
+
+void MyFrame::OnToggleLayoutDirection(wxCommandEvent& WXUNUSED(evt))
+{
+    wxLayoutDirection dir = GetLayoutDirection() == wxLayout_LeftToRight
+                                  ? wxLayout_RightToLeft : wxLayout_LeftToRight;
+    SetLayoutDirection(dir);
+    GetStatusBar()->SetLayoutDirection(dir);
+    m_panel->SetLayoutDirection(dir);
+}
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
