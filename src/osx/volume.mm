@@ -18,7 +18,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_FSVOLUME && !defined(__WXOSX_IPHONE__)
+#if wxUSE_FSVOLUME
 
 #include "wx/volume.h"
 
@@ -46,15 +46,25 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
                           mountedVolumeURLsIncludingResourceValuesForKeys:nil
                           options:NSVolumeEnumerationSkipHiddenVolumes];
 
+
     wxArrayString volumePaths;
-    for (NSURL* url in nativeVolumes)
+    if ( nativeVolumes == nil )
     {
-        wxFSVolumeBase volume(url.fileSystemRepresentation);
+        wxFSVolumeBase volume("/");
         int flags = volume.GetFlags();
         if ((flags & flagsSet) == flagsSet && !(flags & flagsUnset))
-            volumePaths.push_back(volume.GetName());
+                volumePaths.push_back(volume.GetName());
     }
-
+    else
+    {
+        for (NSURL* url in nativeVolumes)
+        {
+            wxFSVolumeBase volume(url.fileSystemRepresentation);
+            int flags = volume.GetFlags();
+            if ((flags & flagsSet) == flagsSet && !(flags & flagsUnset))
+                volumePaths.push_back(volume.GetName());
+        }
+    }
     return volumePaths;
 }
 
@@ -96,11 +106,16 @@ bool wxFSVolumeBase::IsOk() const
 wxFSVolumeKind wxFSVolumeBase::GetKind() const
 {
     NSURL* url = [NSURL fileURLWithPath:wxCFStringRef(GetName()).AsNSString()];
-    auto values = [url resourceValuesForKeys:@[NSURLVolumeIsLocalKey] error:nil];
+    auto values = [url resourceValuesForKeys:@[NSURLVolumeIsLocalKey, NSURLVolumeIsReadOnlyKey] error:nil];
 
     // Assume disk for local volumes
     if ([(NSNumber*)[values objectForKey:NSURLVolumeIsLocalKey] boolValue])
-        return wxFS_VOL_DISK;
+    {
+        if ([(NSNumber*)[values objectForKey:NSURLVolumeIsReadOnlyKey] boolValue])
+            return wxFS_VOL_CDROM;
+        else
+            return wxFS_VOL_DISK;
+    }
     else
         return wxFS_VOL_NETWORK;
 }
