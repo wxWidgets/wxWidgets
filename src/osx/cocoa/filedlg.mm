@@ -60,22 +60,26 @@
 {
     if ( [url isFileURL] )
     {
-        if( url.hasDirectoryPath )
+        NSString* filename = [url path];
+        NSString* resolvedLink = [[NSFileManager defaultManager] destinationOfSymbolicLinkAtPath:filename error:nil];
+
+        if ( resolvedLink != nil )
+            filename = resolvedLink;
+
+        BOOL isDir = NO;
+        if( [[NSFileManager defaultManager]
+            fileExistsAtPath:filename isDirectory:&isDir] && isDir )
         {
             // allow ordinary folders to be enabled, but for packages apply our extensions check
-            NSNumber *isPackage;
-            NSError* error = nil;
-            if ( [url getResourceValue:&isPackage forKey:NSURLIsPackageKey error:&error] )
-            {
-                if ( [isPackage boolValue] == NO )
-                    return YES;
-            }
+
+            if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:filename] == NO)
+                return YES;    // it's a folder, OK to show
         }
 
         if ( m_extensions.GetCount() == 0 )
             return YES;
 
-        NSString *ext = [[url path] pathExtension];
+        NSString *ext = [filename pathExtension];
         wxString wxext = wxCFStringRef([ext retain]).AsString().Lower();
 
         for( const wxString& extension : m_extensions )
@@ -380,7 +384,7 @@ void wxFileDialog::DoOnFilterSelected(int index)
     NSSavePanel* panel = (NSSavePanel*) GetWXWindow();
     if ( m_delegate )
     {
-        [m_delegate setAllowedExtensions:m_currentExtensions];
+        [(wxOpenSavePanelDelegate*)m_delegate setAllowedExtensions:m_currentExtensions];
         [panel validateVisibleColumns];
     }
     else
@@ -604,7 +608,7 @@ int wxFileDialog::ShowModal()
         else
         {
             if ( m_delegate )
-                [m_delegate setAllowedExtensions: m_currentExtensions];
+                [(wxOpenSavePanelDelegate*) m_delegate setAllowedExtensions: m_currentExtensions];
             else
                 [oPanel setAllowedFileTypes: types];
         }
