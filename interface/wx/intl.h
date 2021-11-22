@@ -33,8 +33,25 @@ struct wxLanguageInfo
     /// language info structure.
     int Language;
 
+    /**
+        Tag for locale in BCP 47-like notation.
+
+        @since 3.1.6
+     */
+    wxString LocaleTag;
+
     /// Canonical name of the language, e.g. @c fr_FR.
     wxString CanonicalName;
+
+    /**
+        Canonical reference including region.
+
+        Set, if the name specifies the language only, e.g. fr_FR for fr.
+        Empty, if region is unknown or already part of the name.
+
+        @since 3.1.6
+    */
+    wxString CanonicalRef;
 
     //@{
     /**
@@ -45,8 +62,15 @@ struct wxLanguageInfo
     wxUint32 WinLang, WinSublang;
     //@}
 
-    /// Human-readable name of the language.
+    /// Human-readable name of the language in English.
     wxString Description;
+
+    /**
+        Human-readable name of the language in this language itself.
+
+        @since 3.1.6
+     */
+    wxString DescriptionNative;
 
     /// The layout direction used for this language.
     wxLayoutDirection LayoutDirection;

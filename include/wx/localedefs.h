@@ -82,12 +82,17 @@ enum wxLocaleInfo
 struct WXDLLIMPEXP_BASE wxLanguageInfo
 {
     int Language;                   // wxLanguage id
+    wxString LocaleTag;             // Tag of locale in BCP 47-like notation
     wxString CanonicalName;         // Canonical name, e.g. fr_FR
+    wxString CanonicalRef;          // Canonical reference including region,
+                                    //   if the name specifies the language only, e.g. fr_FR for fr;
+                                    //   empty, if region is unknown or already part of the name.
 #ifdef __WINDOWS__
     wxUint32 WinLang,               // Win32 language identifiers
              WinSublang;
 #endif // __WINDOWS__
-    wxString Description;           // human-readable name of the language
+    wxString Description;           // human-readable name of the language in English
+    wxString DescriptionNative;     // human-readable name of the language in native language
     wxLayoutDirection LayoutDirection;
 
 #ifdef __WINDOWS__

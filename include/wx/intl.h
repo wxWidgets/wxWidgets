@@ -238,8 +238,8 @@ public:
     wxString GetHeaderValue(const wxString& header,
                             const wxString& domain = wxEmptyString) const;
 
-    // These two methods are for internal use only. First one creates
-    // ms_languagesDB if it doesn't already exist, second one destroys
+    // These two methods are for internal use only. First one creates the
+    // global language database if it doesn't already exist, second one destroys
     // it.
     static void CreateLanguagesDB();
     static void DestroyLanguagesDB();
@@ -250,10 +250,6 @@ private:
     void DoInit(const wxString& name,
                 const wxString& shortName,
                 int language);
-
-    // copy default table of languages from global static array to
-    // m_langugagesInfo, called by InitLanguagesDB
-    static void InitLanguagesDB();
 
     // This method is trivial and just initializes the member fields to default
     // values.

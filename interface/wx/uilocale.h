@@ -189,6 +189,69 @@ public:
         conventions.
      */
     bool IsSupported() const;
+
+    /**
+        Adds custom, user-defined language to the database of known languages.
+        This database is used in conjunction with the first form of Init().
+    */
+    static void AddLanguage(const wxLanguageInfo& info);
+
+    /**
+        This function may be used to find the language description structure for the
+        given locale, specified either as a two letter ISO language code (for example,
+        "pt"), a language code followed by the country code ("pt_BR") or a full, human
+        readable, language description ("Portuguese-Brazil").
+
+        Returns the information for the given language or @NULL if this language
+        is unknown. Note that even if the returned pointer is valid, the caller
+        should @e not delete it.
+
+        @see GetLanguageInfo()
+    */
+    static const wxLanguageInfo* FindLanguageInfo(const wxString& locale);
+
+    /**
+        Returns a pointer to wxLanguageInfo structure containing information about
+        the given language or @NULL if this language is unknown. Note that even if
+        the returned pointer is valid, the caller should @e not delete it.
+
+        See AddLanguage() for the wxLanguageInfo description.
+        As with Init(), @c wxLANGUAGE_DEFAULT has the special meaning if passed
+        as an argument to this function and in this case the result of
+        GetSystemLanguage() is used.
+    */
+    static const wxLanguageInfo* GetLanguageInfo(int lang);
+
+    /**
+        Returns English name of the given language or empty string if this
+        language is unknown.
+
+        See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
+    */
+    static wxString GetLanguageName(int lang);
+
+    /**
+        Returns canonical name (see GetCanonicalName()) of the given language
+        or empty string if this language is unknown.
+
+        See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
+    */
+    static wxString GetLanguageCanonicalName(int lang);
+
+    /**
+        Tries to detect the user's default locale setting.
+
+        Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
+        algorithm failed.
+
+        @note This function works with @em locales and returns the user's default
+              locale. This may be, and usually is, the same as their preferred UI
+              language, but it's not the same thing. Use wxTranslation to obtain
+              @em language information.
+
+        @see wxTranslations::GetBestTranslation().
+    */
+    static int GetSystemLanguage();
 };
 
 /**

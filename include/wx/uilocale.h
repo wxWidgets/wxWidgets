@@ -138,11 +138,59 @@ public:
     // its dtor is not virtual.
     ~wxUILocale();
 
+    // Try to get user's (or OS's) preferred language setting.
+    // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
+    static int GetSystemLanguage();
+
+    // Retrieve the language info struct for the given language
+    //
+    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    static const wxLanguageInfo* GetLanguageInfo(int lang);
+
+    // Returns language name in English or empty string if the language
+    // is not in database
+    static wxString GetLanguageName(int lang);
+
+    // Returns ISO code ("canonical name") of language or empty string if the
+    // language is not in database
+    static wxString GetLanguageCanonicalName(int lang);
+
+    // Find the language for the given locale string which may be either a
+    // canonical ISO 2 letter language code ("xx"), a language code followed by
+    // the country code ("xx_XX") or a Windows full language name ("Xxxxx...")
+    //
+    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    static const wxLanguageInfo* FindLanguageInfo(const wxString& locale);
+
+    // Add custom language to the list of known languages.
+    // Notes: 1) wxLanguageInfo contains platform-specific data
+    //        2) must be called before Init to have effect
+    static void AddLanguage(const wxLanguageInfo& info);
+
+    // These two methods are for internal use only. First one creates the
+    // global language database if it doesn't already exist, second one destroys
+    // it.
+    static void CreateLanguagesDB();
+    static void DestroyLanguagesDB();
+
+    // These two methods are for internal use only.
+    // wxLocaleIdent expects script identifiers as listed in ISO 15924.
+    // However, directory names for translation catalogs follow the
+    // Unix convention, using script aliases as listed  in ISO 15924.
+    // First one converts a script name to its alias, second converts
+    // a script alias to its corresponding script name.
+    // Both methods return empty strings, if the script name or alias
+    // couldn't be found.
+    static wxString GetScriptAliasFromName(const wxString& scriptName);
+    static wxString GetScriptNameFromAlias(const wxString& scriptAlias);
+
 private:
     // This ctor is private and exists only for implementation reasons.
     // It takes ownership of the provided pointer.
     explicit wxUILocale(wxUILocaleImpl* impl = NULL) : m_impl(impl) { }
 
+    // Creates the global tables of languages and scripts called by CreateLanguagesDB
+    static void InitLanguagesDB();
 
     static wxUILocale ms_current;
 

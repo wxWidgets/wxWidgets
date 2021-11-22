@@ -1,5 +1,28 @@
-Run the genlang.py script from the top level wxWidgets directory to update
-include/wx/language.h (wxLanguage enum), interface/wx/language.h (its
-documentation) and src/common/languageinfo.cpp (conversion tables) with the data
-from langtabl.txt.
+Run the genlang.py script from the top level wxWidgets directory to
+update include/wx/language.h (wxLanguage enum), interface/wx/language.h
+(its documentation) and src/common/languageinfo.cpp (conversion tables)
+with the data from langtabl.txt and scripttabl.txt.
 
+langtabl.txt contains a tabular list of language entries. Each entry
+contains
+
+- a symbolic language identifier used in enum wxLanguage,
+- a BCP 47-like locale identifier,
+- a Unix locale identifier,
+- a Unix locale identifier including a region id (if the default Unix
+  locale identifier does not include a region identifier) (mainly for
+  compatibility with wxWidgets version below 3.1.6),
+- numeric Windows language identifier (1),
+- numeric Windows sublanguage identifier (1),
+- language and region description in English
+- language and region description in native language.
+
+scripttabl.txt contains a list of 4-letter script codes and their
+aliases (English) based on the ISO 15924 standard (2), restricted to
+entries for which aliases are defined. This list is used in wxWidgets
+to convert between script code used in BCP 47-like identifiers and
+script modifiers used in Unix locale names. The data in (2) can be used
+to update scripttabl.txt if necessary.
+
+(1) used on Windows only, deprecated by Microsoft
+(2) http://www.unicode.org/iso15924/iso15924-codes.html
