@@ -611,7 +611,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->Append(ID_INC_INDENT, "&Increase indent\tCtrl-I");
     file_menu->Append(ID_DEC_INDENT, "&Decrease indent\tShift-Ctrl-I");
     file_menu->AppendSeparator();
-    file_menu->AppendCheckItem(ID_LAYOUT_DIR, "Toggle &layout direction\tCtrl-L");
+    file_menu->AppendCheckItem(ID_LAYOUT_DIR, "Toggle &layout direction\tShift-Ctrl-L");
     file_menu->Check(ID_LAYOUT_DIR, GetLayoutDirection() == wxLayout_RightToLeft);
     file_menu->AppendSeparator();
     file_menu->Append(ID_EXIT, "E&xit");
