@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D2AAC07D0554694100DB518D"
+               BlueprintIdentifier = "BAB02EC06578349A9171CCAC"
                BuildableName = "libwx_osx_iphone.a"
                BlueprintName = "static"
-               ReferencedContainer = "container:wxiphone_in.xcodeproj">
+               ReferencedContainer = "container:wxiPhone.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,7 +26,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -37,7 +36,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -47,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D2AAC07D0554694100DB518D"
+            BlueprintIdentifier = "BAB02EC06578349A9171CCAC"
             BuildableName = "libwx_osx_iphone.a"
             BlueprintName = "static"
-            ReferencedContainer = "container:wxiphone_in.xcodeproj">
+            ReferencedContainer = "container:wxiPhone.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -65,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D2AAC07D0554694100DB518D"
+            BlueprintIdentifier = "BAB02EC06578349A9171CCAC"
             BuildableName = "libwx_osx_iphone.a"
             BlueprintName = "static"
-            ReferencedContainer = "container:wxiphone_in.xcodeproj">
+            ReferencedContainer = "container:wxiPhone.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
