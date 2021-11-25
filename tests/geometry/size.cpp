@@ -17,65 +17,37 @@
     #include "wx/gdicmn.h"
 #endif // WX_PRECOMP
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
+#include "asserthelper.h"
 
-class SizeTestCase : public CppUnit::TestCase
-{
-public:
-    SizeTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( SizeTestCase );
-        CPPUNIT_TEST( Operators );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Operators();
-
-    wxDECLARE_NO_COPY_CLASS(SizeTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( SizeTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SizeTestCase, "SizeTestCase" );
-
-void SizeTestCase::Operators()
+TEST_CASE("wxSize::Operators", "[size]")
 {
     wxSize s1(1,2);
     wxSize s2(3,4);
     wxSize s3;
 
     s3 = s1 + s2;
-    CPPUNIT_ASSERT( s3.GetWidth()==4 );
-    CPPUNIT_ASSERT( s3.GetHeight()==6 );
+    CHECK( s3 == wxSize(4, 6) );
     s3 = s2 - s1;
-    CPPUNIT_ASSERT( s3.GetWidth()==2 );
-    CPPUNIT_ASSERT( s3.GetHeight()==2 );
+    CHECK( s3 == wxSize(2, 2) );
     s3 = s1 * 2;
-    CPPUNIT_ASSERT( s3.GetWidth()==2 );
-    CPPUNIT_ASSERT( s3.GetHeight()==4 );
+    CHECK( s3 == wxSize(2, 4) );
     s3 = 2 * s1;
-    CPPUNIT_ASSERT( s3.GetWidth()==2 );
-    CPPUNIT_ASSERT( s3.GetHeight()==4 );
+    CHECK( s3 == wxSize(2, 4) );
     s3 = s3 / 2;
-    CPPUNIT_ASSERT( s3.GetWidth()==1 );
-    CPPUNIT_ASSERT( s3.GetHeight()==2 );
+    CHECK( s3 == wxSize(1, 2) );
 
     s3 = s2;
-    CPPUNIT_ASSERT( s3 != s1 );
+    CHECK( s3 != s1 );
     s3 = s1;
-    CPPUNIT_ASSERT( s3 == s1 );
+    CHECK( s3 == s1 );
     s3 += s2;
-    CPPUNIT_ASSERT( s3.GetWidth()==4 );
-    CPPUNIT_ASSERT( s3.GetHeight()==6 );
+    CHECK( s3 == wxSize(4, 6) );
     s3 -= s2;
-    CPPUNIT_ASSERT( s3 == s1 );
+    CHECK( s3 == s1 );
     s3 *= 2;
-    CPPUNIT_ASSERT( s3.GetWidth()==2 );
-    CPPUNIT_ASSERT( s3.GetHeight()==4 );
+    CHECK( s3 == wxSize(2, 4) );
     s3 /= 2;
-    CPPUNIT_ASSERT( s3 == s1 );
+    CHECK( s3 == s1 );
+
+    CHECK( wxSize(6, 9) / 1.5 == wxSize(4, 6) );
 }
