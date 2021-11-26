@@ -61,12 +61,14 @@ public:
 
     // is this spin button vertically oriented?
     bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }
+    virtual bool SetIncrement(int value) { m_increment = value; return true; }
+    virtual int GetIncrement() const { return m_increment; }
 
 protected:
     // the range value
     int   m_min;
     int   m_max;
-
+    int   m_increment;
     wxDECLARE_NO_COPY_CLASS(wxSpinButtonBase);
 };
 

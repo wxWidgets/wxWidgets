@@ -55,11 +55,13 @@ enum
     SpinBtnPage_SetValue,
     SpinBtnPage_SetMinAndMax,
     SpinBtnPage_SetBase,
+    SpinBtnPage_SetIncrement,
     SpinBtnPage_CurValueText,
     SpinBtnPage_ValueText,
     SpinBtnPage_MinText,
     SpinBtnPage_MaxText,
     SpinBtnPage_BaseText,
+    SpinBtnPage_SetIncrementText,
     SpinBtnPage_SpinBtn,
     SpinBtnPage_SpinCtrl,
     SpinBtnPage_SpinCtrlDouble
@@ -103,7 +105,7 @@ protected:
     void OnButtonSetValue(wxCommandEvent& event);
     void OnButtonSetMinAndMax(wxCommandEvent& event);
     void OnButtonSetBase(wxCommandEvent& event);
-
+    void OnButtonSetIncrement(wxCommandEvent &event);
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
     void OnSpinBtn(wxSpinEvent& event);
@@ -138,6 +140,9 @@ protected:
     // and numeric base
     int m_base;
 
+    // the increment
+    int m_increment;
+
     // the controls
     // ------------
 
@@ -159,7 +164,8 @@ protected:
     wxTextCtrl *m_textValue,
                *m_textMin,
                *m_textMax,
-               *m_textBase;
+               *m_textBase,
+               *m_textIncrement;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -175,7 +181,7 @@ wxBEGIN_EVENT_TABLE(SpinBtnWidgetsPage, WidgetsPage)
     EVT_BUTTON(SpinBtnPage_SetValue, SpinBtnWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(SpinBtnPage_SetMinAndMax, SpinBtnWidgetsPage::OnButtonSetMinAndMax)
     EVT_BUTTON(SpinBtnPage_SetBase, SpinBtnWidgetsPage::OnButtonSetBase)
-
+    EVT_BUTTON(SpinBtnPage_SetIncrement, SpinBtnWidgetsPage::OnButtonSetIncrement)
     EVT_UPDATE_UI(SpinBtnPage_SetValue, SpinBtnWidgetsPage::OnUpdateUIValueButton)
     EVT_UPDATE_UI(SpinBtnPage_SetMinAndMax, SpinBtnWidgetsPage::OnUpdateUIMinMaxButton)
     EVT_UPDATE_UI(SpinBtnPage_SetBase, SpinBtnWidgetsPage::OnUpdateUIBaseButton)
@@ -227,12 +233,14 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
     m_textValue =
     m_textMin =
     m_textMax =
-    m_textBase = NULL;
+    m_textBase =
+    m_textIncrement = NULL;
 
     m_min = 0;
     m_max = 10;
 
     m_base = 10;
+    m_increment = 1;
 
     m_sizerSpin = NULL;
 }
@@ -310,6 +318,13 @@ void SpinBtnWidgetsPage::CreateContent()
                                             &m_textBase);
     m_textBase->SetValue("10");
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    sizerRow = CreateSizerWithTextAndButton( SpinBtnPage_SetIncrement,
+                                             "Set Increment",
+                                             SpinBtnPage_SetIncrementText,
+                                             &m_textIncrement );
+    m_textIncrement->SetValue( "1" );
+    sizerMiddle->Add( sizerRow, 0, wxALL | wxGROW, 5 );
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
@@ -479,6 +494,23 @@ void SpinBtnWidgetsPage::OnButtonSetBase(wxCommandEvent& WXUNUSED(event))
     }
 
     m_sizerSpin->Layout();
+}
+
+void SpinBtnWidgetsPage::OnButtonSetIncrement(wxCommandEvent& WXUNUSED (event))
+{
+    unsigned long increment;
+    if( !m_textIncrement->GetValue().ToULong(&increment) || !increment )
+    {
+        wxLogWarning("Invalid base value.");
+        return;
+    }
+
+    m_increment = increment;
+    if( !m_spinctrl->SetIncrement (m_increment) )
+    {
+        wxLogWarning( "Setting increment to %d failed", m_increment );
+    }
+    wxLogWarning("Setting increment to %d.", m_increment);
 }
 
 void SpinBtnWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
