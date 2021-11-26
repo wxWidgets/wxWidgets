@@ -149,6 +149,7 @@ set(TEST_GUI_DATA
     image/rle4-delta-320x240.bmp
     image/rle8-delta-320x240-expected.bmp
     image/rle8-delta-320x240.bmp
+    image/width-times-height-overflow.bmp
     image/horse_grey.bmp
     image/horse_grey_flipped.bmp
     image/horse_rle4.bmp
@@ -191,6 +192,7 @@ set(TEST_GUI_DATA
     image/toucan_dis_240.png
     image/toucan_grey.png
     image/toucan_mono_255_255_255.png
+    image/width_height_32_bit_overflow.pgm
     intl/ja/internat.mo
     intl/ja/internat.po
     )

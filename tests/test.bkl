@@ -354,6 +354,7 @@
             rle4-delta-320x240.bmp
             rle8-delta-320x240.bmp
             rle8-delta-320x240-expected.bmp
+            width-times-height-overflow.bmp
 
             horse_grey.bmp horse_grey_flipped.bmp
             horse_rle4.bmp horse_rle4_flipped.bmp
@@ -401,6 +402,8 @@
             toucan_dis_240.png
             toucan_grey.png
             toucan_mono_255_255_255.png
+
+            width_height_32_bit_overflow.pgm
         </files>
     </wx-data>
 

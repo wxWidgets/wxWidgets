@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/image.cpp
 // Purpose:     wxImage
 // Author:      Robert Roebling
@@ -30,6 +30,9 @@
 
 // For memcpy
 #include <string.h>
+
+// For INT_MIN, INT_MAX
+#include <limits.h>  
 
 // make the code compile with either wxFile*Stream or wxFFile*Stream:
 #define HAS_FILE_STREAMS (wxUSE_STREAMS && (wxUSE_FILE || wxUSE_FFILE))
@@ -152,13 +155,74 @@ bool wxImage::Create(const char* const* xpmData)
 #endif
 }
 
+// Check if multiplying two int values would overflow.
+// Return true if a*b overflows, false otherwise.
+//
+// This is based on code in INT32-C from the SEI CERT C Coding Standard.
+// The signature matches the GCC built-in __builtin_smul_overflow,
+// but this function is portable to all conforming compilers.
+static bool smul_overflow(int a, int b, int * product)
+{
+    if (a > 0) // a is positive
+    { 
+        if (b > 0) // a and b are positive
+        {
+            if (a > (INT_MAX / b))
+                return true;
+        }
+        else // a positive, b nonpositive
+        { 
+            if (b < (INT_MIN / a))
+                return true;
+        }
+    }
+    else // a is nonpositive
+    {
+        if (b > 0) // a is nonpositive, b is positive
+        {
+            if (a < (INT_MIN / b))
+                return true;
+        }
+        else // a and b are nonpositive
+        {
+            if ( (a != 0) && (b < (INT_MAX / a)))
+                return true;
+        }
+    }
+
+    // no overflow
+    *product = a * b; 
+    return false;
+}
+
 bool wxImage::Create( int width, int height, bool clear )
 {
     UnRef();
 
+    // The width and height may come from an image file, which may be corrupt
+    // or malicious.  If carefully crafted, integer overflow could cause this
+    // function to allocate a very small buffer while the caller thinks it's
+    // very large, which could cause the caller to overwrite the memory bounds.
+    // To avoid this, width and height are checked.
+    if (width < 0 || height < 0)
+    {
+        return false;
+    }
+    int total_pixels; // total_pixels = width*height
+    if (smul_overflow( width, height, &total_pixels ))
+    {
+        return false;
+    }
+    
+    int data_size; // data_size = width*height*3
+    if (smul_overflow( total_pixels, 3, &data_size ))
+    {
+        return false;
+    }
+
     m_refData = new wxImageRefData();
 
-    M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
+    M_IMGDATA->m_data = (unsigned char *) malloc( data_size );
     if (!M_IMGDATA->m_data)
     {
         UnRef();
