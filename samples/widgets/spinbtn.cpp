@@ -506,10 +506,7 @@ void SpinBtnWidgetsPage::OnButtonSetIncrement(wxCommandEvent& WXUNUSED (event))
     }
 
     m_increment = increment;
-    if( !m_spinctrl->SetIncrement (m_increment) )
-    {
-        wxLogWarning( "Setting increment to %d failed", m_increment );
-    }
+    m_spinctrl->SetIncrement (m_increment);
     wxLogWarning("Setting increment to %d.", m_increment);
 }
 
