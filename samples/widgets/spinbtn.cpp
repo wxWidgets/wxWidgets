@@ -498,8 +498,8 @@ void SpinBtnWidgetsPage::OnButtonSetBase(wxCommandEvent& WXUNUSED(event))
 
 void SpinBtnWidgetsPage::OnButtonSetIncrement(wxCommandEvent& WXUNUSED (event))
 {
-    unsigned long increment;
-    if( !m_textIncrement->GetValue().ToULong(&increment) || !increment )
+    int increment = wxAtoi( m_textIncrement->GetValue() );
+    if( !increment )
     {
         wxLogWarning("Invalid base value.");
         return;
