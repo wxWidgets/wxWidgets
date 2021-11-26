@@ -126,15 +126,7 @@ const char* wxLanguageInfo::TrySetLocale() const
     // CRT (check by calling setlocale()).
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
-        if ( ::GetLocaleInfo(lcid, LOCALE_SNAME, buffer, WXSIZEOF(buffer)) )
-        {
-            locale = buffer;
-        }
-        else
-        {
-            wxLogLastError(wxT("GetLocaleInfo(LOCALE_SNAME)"));
-        }
-
+        locale = LocaleTag;
         const char* const retloc = wxSetlocale(LC_ALL, locale);
         if ( retloc )
             return retloc;
@@ -167,7 +159,7 @@ const char* wxLanguageInfo::TrySetLocale() const
 
 const char* wxLanguageInfo::TrySetLocale() const
 {
-    return wxSetlocale(LC_ALL, CanonicalName);
+    return wxSetlocale(LC_ALL, (CanonicalRef.empty()) ? CanonicalName : CanonicalRef);
 }
 
 #endif // __WINDOWS__/!__WINDOWS__
@@ -450,160 +442,6 @@ int wxUILocale::GetSystemLanguage()
 
     // no info about this language in the database
     return wxLANGUAGE_UNKNOWN;
-}
-
-// ----------------------------------------------------------------------------
-// encoding stuff
-// ----------------------------------------------------------------------------
-
-// this is a bit strange as under Windows we get the encoding name using its
-// numeric value and under Unix we do it the other way round, but this just
-// reflects the way different systems provide the encoding info
-
-/* static */
-wxString wxUILocale::GetSystemEncodingName()
-{
-    wxString encname;
-
-#if defined(__WIN32__)
-    // FIXME: what is the error return value for GetACP()?
-    const UINT codepage = ::GetACP();
-    switch (codepage)
-    {
-    case 65001:
-        encname = "UTF-8";
-        break;
-
-    default:
-        encname.Printf(wxS("windows-%u"), codepage);
-    }
-#elif defined(__WXMAC__)
-    encname = wxCFStringRef::AsString(
-        CFStringGetNameOfEncoding(CFStringGetSystemEncoding())
-    );
-#elif defined(__UNIX_LIKE__)
-
-#if defined(HAVE_LANGINFO_H) && defined(CODESET)
-    // GNU libc provides current character set this way (this conforms
-    // to Unix98)
-    char* oldLocale = strdup(setlocale(LC_CTYPE, NULL));
-    setlocale(LC_CTYPE, "");
-    encname = wxString::FromAscii(nl_langinfo(CODESET));
-    setlocale(LC_CTYPE, oldLocale);
-    free(oldLocale);
-
-    if (encname.empty())
-#endif // HAVE_LANGINFO_H
-    {
-        // if we can't get at the character set directly, try to see if it's in
-        // the environment variables (in most cases this won't work, but I was
-        // out of ideas)
-        char* lang = getenv("LC_ALL");
-        char* dot = lang ? strchr(lang, '.') : NULL;
-        if (!dot)
-        {
-            lang = getenv("LC_CTYPE");
-            if (lang)
-                dot = strchr(lang, '.');
-        }
-        if (!dot)
-        {
-            lang = getenv("LANG");
-            if (lang)
-                dot = strchr(lang, '.');
-        }
-
-        if (dot)
-        {
-            encname = wxString::FromAscii(dot + 1);
-        }
-    }
-#endif // Win32/Unix
-
-    return encname;
-}
-
-/* static */
-wxFontEncoding wxUILocale::GetSystemEncoding()
-{
-#if defined(__WIN32__)
-    const UINT codepage = ::GetACP();
-
-    switch (codepage)
-    {
-    case 1250:
-    case 1251:
-    case 1252:
-    case 1253:
-    case 1254:
-    case 1255:
-    case 1256:
-    case 1257:
-    case 1258:
-        return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
-
-    case 1361:
-        return wxFONTENCODING_CP1361;
-
-    case 874:
-        return wxFONTENCODING_CP874;
-
-    case 932:
-        return wxFONTENCODING_CP932;
-
-    case 936:
-        return wxFONTENCODING_CP936;
-
-    case 949:
-        return wxFONTENCODING_CP949;
-
-    case 950:
-        return wxFONTENCODING_CP950;
-
-    case 65001:
-        return wxFONTENCODING_UTF8;
-    }
-#elif defined(__WXMAC__)
-    CFStringEncoding encoding = 0;
-    encoding = CFStringGetSystemEncoding();
-    return wxMacGetFontEncFromSystemEnc(encoding);
-#elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
-    const wxString encname = GetSystemEncodingName();
-    if (!encname.empty())
-    {
-        wxFontEncoding enc = wxFontMapperBase::GetEncodingFromName(encname);
-
-        // on some modern Linux systems (RedHat 8) the default system locale
-        // is UTF8 -- but it isn't supported by wxGTK1 in ANSI build at all so
-        // don't even try to use it in this case
-#if !wxUSE_UNICODE && \
-        ((defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__WXMOTIF__))
-        if (enc == wxFONTENCODING_UTF8)
-        {
-            // the most similar supported encoding...
-            enc = wxFONTENCODING_ISO8859_1;
-        }
-#endif // !wxUSE_UNICODE
-
-        // GetEncodingFromName() returns wxFONTENCODING_DEFAULT for C locale
-        // (a.k.a. US-ASCII) which is arguably a bug but keep it like this for
-        // backwards compatibility and just take care to not return
-        // wxFONTENCODING_DEFAULT from here as this surely doesn't make sense
-        if (enc == wxFONTENCODING_DEFAULT)
-        {
-            // we don't have wxFONTENCODING_ASCII, so use the closest one
-            return wxFONTENCODING_ISO8859_1;
-        }
-
-        if (enc != wxFONTENCODING_MAX)
-        {
-            return enc;
-        }
-        //else: return wxFONTENCODING_SYSTEM below
-    }
-#endif // Win32/Unix
-
-    return wxFONTENCODING_SYSTEM;
 }
 
 /* static */
@@ -977,13 +815,147 @@ int wxLocale::GetSystemLanguage()
 /* static */
 wxString wxLocale::GetSystemEncodingName()
 {
-    return wxUILocale::GetSystemEncodingName();
+    wxString encname;
+
+#if defined(__WIN32__)
+    // FIXME: what is the error return value for GetACP()?
+    const UINT codepage = ::GetACP();
+    switch (codepage)
+    {
+    case 65001:
+        encname = "UTF-8";
+        break;
+
+    default:
+        encname.Printf(wxS("windows-%u"), codepage);
+    }
+#elif defined(__WXMAC__)
+    encname = wxCFStringRef::AsString(
+        CFStringGetNameOfEncoding(CFStringGetSystemEncoding())
+    );
+#elif defined(__UNIX_LIKE__)
+
+#if defined(HAVE_LANGINFO_H) && defined(CODESET)
+    // GNU libc provides current character set this way (this conforms
+    // to Unix98)
+    char* oldLocale = strdup(setlocale(LC_CTYPE, NULL));
+    setlocale(LC_CTYPE, "");
+    encname = wxString::FromAscii(nl_langinfo(CODESET));
+    setlocale(LC_CTYPE, oldLocale);
+    free(oldLocale);
+
+    if (encname.empty())
+#endif // HAVE_LANGINFO_H
+    {
+        // if we can't get at the character set directly, try to see if it's in
+        // the environment variables (in most cases this won't work, but I was
+        // out of ideas)
+        char* lang = getenv("LC_ALL");
+        char* dot = lang ? strchr(lang, '.') : NULL;
+        if (!dot)
+        {
+            lang = getenv("LC_CTYPE");
+            if (lang)
+                dot = strchr(lang, '.');
+        }
+        if (!dot)
+        {
+            lang = getenv("LANG");
+            if (lang)
+                dot = strchr(lang, '.');
+        }
+
+        if (dot)
+        {
+            encname = wxString::FromAscii(dot + 1);
+        }
+    }
+#endif // Win32/Unix
+
+    return encname;
 }
 
 /* static */
 wxFontEncoding wxLocale::GetSystemEncoding()
 {
-    return wxUILocale::GetSystemEncoding();
+#if defined(__WIN32__)
+    const UINT codepage = ::GetACP();
+
+    switch (codepage)
+    {
+    case 1250:
+    case 1251:
+    case 1252:
+    case 1253:
+    case 1254:
+    case 1255:
+    case 1256:
+    case 1257:
+    case 1258:
+        return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
+
+    case 1361:
+        return wxFONTENCODING_CP1361;
+
+    case 874:
+        return wxFONTENCODING_CP874;
+
+    case 932:
+        return wxFONTENCODING_CP932;
+
+    case 936:
+        return wxFONTENCODING_CP936;
+
+    case 949:
+        return wxFONTENCODING_CP949;
+
+    case 950:
+        return wxFONTENCODING_CP950;
+
+    case 65001:
+        return wxFONTENCODING_UTF8;
+    }
+#elif defined(__WXMAC__)
+    CFStringEncoding encoding = 0;
+    encoding = CFStringGetSystemEncoding();
+    return wxMacGetFontEncFromSystemEnc(encoding);
+#elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
+    const wxString encname = GetSystemEncodingName();
+    if (!encname.empty())
+    {
+        wxFontEncoding enc = wxFontMapperBase::GetEncodingFromName(encname);
+
+        // on some modern Linux systems (RedHat 8) the default system locale
+        // is UTF8 -- but it isn't supported by wxGTK1 in ANSI build at all so
+        // don't even try to use it in this case
+#if !wxUSE_UNICODE && \
+        ((defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__WXMOTIF__))
+        if (enc == wxFONTENCODING_UTF8)
+        {
+            // the most similar supported encoding...
+            enc = wxFONTENCODING_ISO8859_1;
+        }
+#endif // !wxUSE_UNICODE
+
+        // GetEncodingFromName() returns wxFONTENCODING_DEFAULT for C locale
+        // (a.k.a. US-ASCII) which is arguably a bug but keep it like this for
+        // backwards compatibility and just take care to not return
+        // wxFONTENCODING_DEFAULT from here as this surely doesn't make sense
+        if (enc == wxFONTENCODING_DEFAULT)
+        {
+            // we don't have wxFONTENCODING_ASCII, so use the closest one
+            return wxFONTENCODING_ISO8859_1;
+        }
+
+        if (enc != wxFONTENCODING_MAX)
+        {
+            return enc;
+        }
+        //else: return wxFONTENCODING_SYSTEM below
+    }
+#endif // Win32/Unix
+
+    return wxFONTENCODING_SYSTEM;
 }
 
 /* static */

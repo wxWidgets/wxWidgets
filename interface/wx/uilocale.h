@@ -241,23 +241,6 @@ public:
     static wxString GetLanguageCanonicalName(int lang);
 
     /**
-        Tries to detect the user's default font encoding.
-        Returns wxFontEncoding() value or @c wxFONTENCODING_SYSTEM if it
-        couldn't be determined.
-    */
-    static wxFontEncoding GetSystemEncoding();
-
-    /**
-        Tries to detect the name of the user's default font encoding.
-        This string isn't particularly useful for the application as its form is
-        platform-dependent and so you should probably use GetSystemEncoding() instead.
-
-        Returns a user-readable string value or an empty string if it couldn't be
-        determined.
-    */
-    static wxString GetSystemEncodingName();
-
-    /**
         Tries to detect the user's default locale setting.
 
         Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing

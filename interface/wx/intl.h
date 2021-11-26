@@ -33,15 +33,23 @@ struct wxLanguageInfo
     /// language info structure.
     int Language;
 
-    /// Tag for locale in BCP 47-like notation.
+    /**
+        Tag for locale in BCP 47-like notation.
+
+        @since 3.1.6
+     */
     wxString LocaleTag;
 
     /// Canonical name of the language, e.g. @c fr_FR.
     wxString CanonicalName;
 
-    /// Canonical name reference, e.g. @c fr_FR for @c fr.
-    /// This allows the translation loader to look for message catalogs in
-    /// subdirectories for the default region, too, for generic canonical language names.
+    /**
+        Canonical reference including region, if the name specifies
+        the language only, e.g. fr_FR for fr;
+        empty, if region is unknown or already part of the name.
+
+        @since 3.1.6
+    */
     wxString CanonicalRef;
 
     //@{
@@ -56,7 +64,11 @@ struct wxLanguageInfo
     /// Human-readable name of the language in English.
     wxString Description;
 
-    /// Human-readable name of the language in native language.
+    /**
+        Human-readable name of the language in native language.
+
+        @since 3.1.6
+     */
     wxString DescriptionNative;
 
     /// The layout direction used for this language.

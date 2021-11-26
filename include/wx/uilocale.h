@@ -142,14 +142,6 @@ public:
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
     static int GetSystemLanguage();
 
-    // get the encoding used by default for text on this system, returns
-    // wxFONTENCODING_SYSTEM if it couldn't be determined
-    static wxFontEncoding GetSystemEncoding();
-
-    // get the string describing the system encoding, return empty string if
-    // couldn't be determined
-    static wxString GetSystemEncodingName();
-
     // Retrieve the language info struct for the given language
     //
     // Returns NULL if no info found, pointer must *not* be deleted by caller
@@ -175,8 +167,8 @@ public:
     //        2) must be called before Init to have effect
     static void AddLanguage(const wxLanguageInfo& info);
 
-    // These two methods are for internal use only. First one creates
-    // ms_languagesDB if it doesn't already exist, second one destroys
+    // These two methods are for internal use only. First one creates the
+    // global language database if it doesn't already exist, second one destroys
     // it.
     static void CreateLanguagesDB();
     static void DestroyLanguagesDB();
@@ -197,8 +189,7 @@ private:
     // It takes ownership of the provided pointer.
     explicit wxUILocale(wxUILocaleImpl* impl = NULL) : m_impl(impl) { }
 
-    // copy default table of languages from global static array to
-    // m_languagesInfo, called by InitLanguagesDB
+    // Creates the global tables of languages and scripts called by CreateLanguagesDB
     static void InitLanguagesDB();
 
     static wxUILocale ms_current;
