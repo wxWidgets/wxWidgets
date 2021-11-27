@@ -235,8 +235,6 @@ public:
         or empty string if this language is unknown.
 
         See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
-
-        @since 2.9.1
     */
     static wxString GetLanguageCanonicalName(int lang);
 

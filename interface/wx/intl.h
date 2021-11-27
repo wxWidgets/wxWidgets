@@ -44,9 +44,10 @@ struct wxLanguageInfo
     wxString CanonicalName;
 
     /**
-        Canonical reference including region, if the name specifies
-        the language only, e.g. fr_FR for fr;
-        empty, if region is unknown or already part of the name.
+        Canonical reference including region.
+        
+        Set, if the name specifies the language only, e.g. fr_FR for fr.
+        Empty, if region is unknown or already part of the name.
 
         @since 3.1.6
     */
@@ -65,7 +66,7 @@ struct wxLanguageInfo
     wxString Description;
 
     /**
-        Human-readable name of the language in native language.
+        Human-readable name of the language in this language itself.
 
         @since 3.1.6
      */

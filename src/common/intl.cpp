@@ -159,7 +159,7 @@ const char* wxLanguageInfo::TrySetLocale() const
 
 const char* wxLanguageInfo::TrySetLocale() const
 {
-    return wxSetlocale(LC_ALL, (CanonicalRef.empty()) ? CanonicalName : CanonicalRef);
+    return wxSetlocale(LC_ALL, CanonicalRef.empty() ? CanonicalName : CanonicalRef);
 }
 
 #endif // __WINDOWS__/!__WINDOWS__
