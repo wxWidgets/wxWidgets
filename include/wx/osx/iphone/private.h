@@ -100,8 +100,10 @@ public :
     bool                ButtonClickDidStateChange() { return true ;}
     void                SetMinimum( wxInt32 v );
     void                SetMaximum( wxInt32 v );
+    void                SetIncrement(int WXUNUSED(value)) { }
     wxInt32             GetMinimum() const;
     wxInt32             GetMaximum() const;
+    int                 GetIncrement() const { return 1; }
     void                PulseGauge();
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
