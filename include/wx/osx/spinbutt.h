@@ -62,7 +62,8 @@ public:
     // osx specific event handling common for all osx-ports
 
     virtual bool OSXHandleClicked( double timestampsec ) wxOVERRIDE;
-
+    virtual void SetIncrement(int value) wxOVERRIDE;
+    virtual int GetIncrement() const wxOVERRIDE;
 protected:
     void         SendThumbTrackEvent() ;
 
