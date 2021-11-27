@@ -377,6 +377,8 @@ TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Increment", "[spinctrl]")
 
     wxUIActionSimulator sim;
 
+    CHECK( m_spin->GetIncrement() == 1 );
+
     m_spin->SetFocus();
     wxYield();
     m_spin->SetIncrement( 5 );

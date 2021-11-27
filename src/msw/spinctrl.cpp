@@ -888,10 +888,8 @@ void wxSpinCtrl::SetIncrement(int value)
 
 int  wxSpinCtrl::GetIncrement() const
 {
-    int increment;
     UDACCEL accel;
     ::SendMessage( GetHwnd(), UDM_GETACCEL, 1, (LPARAM) &accel );
-    increment = accel.nInc;
-    return increment;
+    return accel.nInc;
 }
 #endif // wxUSE_SPINCTRL

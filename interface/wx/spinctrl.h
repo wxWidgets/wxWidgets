@@ -146,8 +146,10 @@ public:
     int GetValue() const;
 
     /**
-        Get the value f increment fr a spin control.
+        Get the value for increment for a spin control.
+        The default value is 1
 
+        @see SetIncrement()
         @since 3.1.6
     */
     int GetIncrement() const;
@@ -223,7 +225,7 @@ public:
     void SetValue(int value);
 
     /**
-        Sets the increment for the control, just like with wxSpinCtrlDouble
+        Sets the increment for the control.
 
         @since 3.1.6
     */
