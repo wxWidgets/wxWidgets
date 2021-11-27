@@ -45,7 +45,7 @@ struct wxLanguageInfo
 
     /**
         Canonical reference including region.
-        
+
         Set, if the name specifies the language only, e.g. fr_FR for fr.
         Empty, if region is unknown or already part of the name.
 
