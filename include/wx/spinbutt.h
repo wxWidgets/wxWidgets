@@ -61,7 +61,7 @@ public:
 
     // is this spin button vertically oriented?
     bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }
-    virtual void SetIncrement(int WXUNUSED(value)) { };
+    virtual void SetIncrement(int WXUNUSED(value)) { }
     virtual int GetIncrement() const { return 1; }
 
 protected:
