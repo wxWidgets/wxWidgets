@@ -281,7 +281,7 @@ protected:
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
 
     // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
-    void SetClippingHrgn(WXHRGN hrgn);
+    void SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset = false);
 
     // implementation of DoGetSize() for wxScreen/PrinterDC: this simply
     // returns the size of the entire device this DC is associated with
