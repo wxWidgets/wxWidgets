@@ -78,6 +78,9 @@ public:
     void OnAbout( wxCommandEvent &event );
     void OnNewFrame( wxCommandEvent &event );
     void OnNewFrameHiDPI(wxCommandEvent&);
+#ifdef wxHAS_SVG
+    void OnNewSVGFrame(wxCommandEvent&);
+#endif // wxHAS_SVG
     void OnImageInfo( wxCommandEvent &event );
     void OnThumbnail( wxCommandEvent &event );
     void OnFilters(wxCommandEvent& event);
@@ -967,6 +970,7 @@ enum
     ID_ABOUT = wxID_ABOUT,
     ID_NEW = 100,
     ID_NEW_HIDPI,
+    ID_NEW_SVG,
     ID_INFO,
     ID_SHOWRAW,
     ID_GRAPHICS,
@@ -982,6 +986,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
     EVT_MENU    (ID_NEW,   MyFrame::OnNewFrame)
     EVT_MENU    (ID_NEW_HIDPI,   MyFrame::OnNewFrameHiDPI)
+#ifdef wxHAS_SVG
+    EVT_MENU    (ID_NEW_SVG, MyFrame::OnNewSVGFrame)
+#endif // wxHAS_SVG
     EVT_MENU    (ID_INFO,  MyFrame::OnImageInfo)
     EVT_MENU    (ID_SHOWTHUMBNAIL, MyFrame::OnThumbnail)
     EVT_MENU    (ID_FILTERS, MyFrame::OnFilters)
@@ -1011,6 +1018,9 @@ MyFrame::MyFrame()
     wxMenu *menuImage = new wxMenu;
     menuImage->Append( ID_NEW, "&Show any image...\tCtrl-O");
     menuImage->Append(ID_NEW_HIDPI, "Show any image as &HiDPI...\tCtrl-H");
+#ifdef wxHAS_SVG
+    menuImage->Append( ID_NEW_SVG, "Show &SVG image...\tCtrl-S");
+#endif // wxHAS_SVG
     menuImage->Append( ID_INFO, "Show image &information...\tCtrl-I");
 #ifdef wxHAVE_RAW_BITMAP
     menuImage->AppendSeparator();
@@ -1130,6 +1140,76 @@ void MyFrame::OnNewFrameHiDPI(wxCommandEvent&)
     if (!filename.empty())
         new MyImageFrame(this, filename, image, GetContentScaleFactor());
 }
+
+#ifdef wxHAS_SVG
+
+class MySVGFrame : public wxFrame
+{
+public:
+    explicit MySVGFrame(wxFrame* parent,
+                        const wxString& filename,
+                        const wxBitmapBundle& bundle)
+        : wxFrame(parent, wxID_ANY, wxString::Format("SVG image %s", filename),
+                  wxDefaultPosition, wxDefaultSize,
+                  wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE),
+          m_bundle(bundle)
+    {
+        Bind(wxEVT_PAINT, &MySVGFrame::OnPaint, this);
+
+        SetClientSize(bundle.GetDefaultSize());
+
+        Show();
+    }
+
+private:
+    void OnPaint(wxPaintEvent&)
+    {
+        wxPaintDC dc(this);
+
+        // Check if the bitmap needs to be re-rendered at the new size. Note
+        // that the bitmap size is in physical pixels, which can be different
+        // from the logical pixels in which the window size is expressed.
+        const wxSize sizeWin = GetClientSize();
+        const wxSize sizeBmp = sizeWin*GetContentScaleFactor();
+        if ( !m_bitmap.IsOk() || m_bitmap.GetSize() != sizeBmp )
+        {
+            m_bitmap = m_bundle.GetBitmap(sizeBmp);
+        }
+
+        // Use wxGraphicsContext if available for alpha support.
+#if wxUSE_GRAPHICS_CONTEXT
+        wxScopedPtr<wxGraphicsContext> const
+            gc(wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc));
+
+        gc->DrawBitmap(m_bitmap, 0, 0, sizeWin.x, sizeWin.y);
+#else
+        dc.DrawBitmap(m_bitmap, wxPoint(0, 0), true);
+#endif
+    }
+
+    const wxBitmapBundle m_bundle;
+    wxBitmap m_bitmap;
+
+    wxDECLARE_NO_COPY_CLASS(MySVGFrame);
+};
+
+void MyFrame::OnNewSVGFrame(wxCommandEvent&)
+{
+    const wxString
+        filename = wxLoadFileSelector("SVG document", ".svg", "image", this);
+    if ( filename.empty() )
+        return;
+
+    // The default size here is completely arbitrary, as we don't know anything
+    // about the SVG being loaded.
+    wxBitmapBundle bb = wxBitmapBundle::FromSVGFile(filename, wxSize(200, 200));
+    if ( !bb.IsOk() )
+        return;
+
+    new MySVGFrame(this, filename, bb);
+}
+
+#endif // wxHAS_SVG
 
 void MyFrame::OnUpdateNewFrameHiDPI(wxUpdateUIEvent& event)
 {
