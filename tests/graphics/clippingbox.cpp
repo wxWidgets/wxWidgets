@@ -839,6 +839,35 @@ static void OneRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool che
     }
 }
 
+static void OneRegionRTL(wxDC& dc, const wxBitmap& bmp)
+{
+    dc.SetLayoutDirection(wxLayout_RightToLeft);
+    if ( dc.GetLayoutDirection() != wxLayout_RightToLeft )
+    {
+        WARN("Skipping test because RTL layout direction is not supported on this platform");
+        return;
+    }
+
+#ifdef __WXGTK__
+    wxUnusedVar(bmp);
+    WARN("Skipping test known to fail in wxGTK");
+#else
+    // Setting one clipping region inside DC area.
+    const int x = 10;
+    const int y = 20;
+    const int w = 60;
+    const int h = 75;
+
+    dc.SetClippingRegion(x, y, w, h);
+    dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    dc.Clear();
+    int x2 = x + w - 1; // right physical edge becomes left logical edge
+    CheckClipBox(dc, bmp,
+        x, y, w, h,
+        (s_dcSize.x-1)-x2, y, w, h);
+#endif
+}
+
 static void TwoRegionsOverlapping(wxDC& dc, const wxBitmap& bmp)
 {
     // Setting one clipping region and next another region (partially overlapping).
@@ -984,6 +1013,59 @@ static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, boo
                      dc.DeviceToLogicalYRel(h),
                      x, y, w, h);
     }
+}
+
+static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
+{
+#if wxUSE_DC_TRANSFORM_MATRIX
+    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+        return;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
+    dc.SetLayoutDirection(wxLayout_RightToLeft);
+    if ( dc.GetLayoutDirection() != wxLayout_RightToLeft )
+    {
+        WARN("Skipping test because RTL layout direction is not supported on this platform");
+        return;
+    }
+
+#ifdef __WXGTK__
+    wxUnusedVar(bmp);
+    WARN("Skipping test known to fail in wxGTK");
+#else
+    // Setting one clipping region in device coordinates
+    // inside transformed DC area.
+    const int x = 10;
+    const int y = 21;
+    const int w = 79;
+    const int h = 75;
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+    if ( useTransformMatrix )
+    {
+        wxAffineMatrix2D m;
+        m.Translate(40, 75);
+        m.Scale(2.0, 3.0);
+        dc.SetTransformMatrix(m);
+    }
+    else
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+    {
+        dc.SetDeviceOrigin(10, 15);
+        dc.SetUserScale(0.5, 1.5);
+        dc.SetLogicalScale(4.0, 2.0);
+        dc.SetLogicalOrigin(-15, -20);
+    }
+    wxRegion reg(x, y, w, h);
+    dc.SetDeviceClippingRegion(reg);
+    dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    dc.Clear();
+    wxPoint pos = dc.DeviceToLogical(x+w-1, y); // right physical edge becomes left logical edge
+    wxSize dim = dc.DeviceToLogicalRel(-w, h);
+    CheckClipBox(dc, bmp,
+                 pos.x, pos.y, dim.x, dim.y,
+                 x, y, w, h);
+#endif
 }
 
 static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
@@ -1888,6 +1970,11 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
         OneRegionAndDCTransformation(dc, bmp, true, true);
     }
 
+    SECTION("OneRegionRTL")
+    {
+        OneRegionRTL(dc, bmp);
+    }
+
     SECTION("TwoRegionsOverlapping")
     {
         TwoRegionsOverlapping(dc, bmp);
@@ -1921,6 +2008,16 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
     SECTION("OneDevRegion Transform Matrix")
     {
         OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionRTL")
+    {
+        OneDevRegionRTL(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionRTL TransformMatrix")
+    {
+        OneDevRegionRTL(dc, bmp, true);
     }
 
     SECTION("OneLargeDevRegion 1")
@@ -2193,6 +2290,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
         OneRegionAndDCTransformation(dc, bmp, true, true);
     }
 
+    SECTION("OneRegionRTL")
+    {
+        OneRegionRTL(dc, bmp);
+    }
+
     SECTION("TwoRegionsOverlapping")
     {
         TwoRegionsOverlapping(dc, bmp);
@@ -2226,6 +2328,16 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
     SECTION("OneDevRegion Transform Matrix")
     {
         OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionRTL")
+    {
+        OneDevRegionRTL(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionRTL TransformMatrix")
+    {
+        OneDevRegionRTL(dc, bmp, true);
     }
 
     SECTION("OneLargeDevRegion 1")
@@ -2506,6 +2618,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
         OneRegionAndDCTransformation(dc, bmp, true, true);
     }
 
+    SECTION("OneRegionRTL")
+    {
+        OneRegionRTL(dc, bmp);
+    }
+
     SECTION("TwoRegionsOverlapping")
     {
         TwoRegionsOverlapping(dc, bmp);
@@ -2539,6 +2656,16 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
     SECTION("OneDevRegion Transform Matrix")
     {
         OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionRTL")
+    {
+        OneDevRegionRTL(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionRTL TransformMatrix")
+    {
+        OneDevRegionRTL(dc, bmp, true);
     }
 
     SECTION("OneLargeDevRegion 1")
@@ -2820,6 +2947,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
         OneRegionAndDCTransformation(dc, bmp, true, true);
     }
 
+    SECTION("OneRegionRTL")
+    {
+        OneRegionRTL(dc, bmp);
+    }
+
     SECTION("TwoRegionsOverlapping")
     {
         TwoRegionsOverlapping(dc, bmp);
@@ -2853,6 +2985,16 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
     SECTION("OneDevRegion Transform Matrix")
     {
         OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionRTL")
+    {
+        OneDevRegionRTL(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionRTL TransformMatrix")
+    {
+        OneDevRegionRTL(dc, bmp, true);
     }
 
     SECTION("OneLargeDevRegion 1")
@@ -3134,6 +3276,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
         OneRegionAndDCTransformation(dc, bmp, true, true);
     }
 
+    SECTION("OneRegionRTL")
+    {
+        OneRegionRTL(dc, bmp);
+    }
+
     SECTION("TwoRegionsOverlapping")
     {
         TwoRegionsOverlapping(dc, bmp);
@@ -3167,6 +3314,16 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
     SECTION("OneDevRegion Transform Matrix")
     {
         OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionRTL")
+    {
+        OneDevRegionRTL(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionRTL TransformMatrix")
+    {
+        OneDevRegionRTL(dc, bmp, true);
     }
 
     SECTION("OneLargeDevRegion 1")
@@ -3446,6 +3603,11 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
         OneRegionAndDCTransformation(dc, bmp, true, true);
     }
 
+    SECTION("OneRegionRTL")
+    {
+        OneRegionRTL(dc, bmp);
+    }
+
     SECTION("TwoRegionsOverlapping")
     {
         TwoRegionsOverlapping(dc, bmp);
@@ -3479,6 +3641,16 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
     SECTION("OneDevRegion Transform Matrix")
     {
         OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionRTL")
+    {
+        OneDevRegionRTL(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionRTL TransformMatrix")
+    {
+        OneDevRegionRTL(dc, bmp, true);
     }
 
     SECTION("OneLargeDevRegion 1")
@@ -3768,6 +3940,11 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
         OneRegionAndDCTransformation(dc, bmp, true, true);
     }
 
+    SECTION("OneRegionRTL")
+    {
+        OneRegionRTL(dc, bmp);
+    }
+
     SECTION("TwoRegionsOverlapping")
     {
         TwoRegionsOverlapping(dc, bmp);
@@ -3801,6 +3978,16 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
     SECTION("OneDevRegion Transform Matrix")
     {
         OneDevRegion(dc, bmp, true, true);
+    }
+
+    SECTION("OneDevRegionRTL")
+    {
+        OneDevRegionRTL(dc, bmp, false);
+    }
+
+    SECTION("OneDevRegionRTL TransformMatrix")
+    {
+        OneDevRegionRTL(dc, bmp, true);
     }
 
     SECTION("OneLargeDevRegion 1")
