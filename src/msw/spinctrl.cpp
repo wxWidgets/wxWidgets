@@ -889,7 +889,10 @@ void wxSpinCtrl::SetIncrement(int value)
 int  wxSpinCtrl::GetIncrement() const
 {
     UDACCEL accel;
-    ::SendMessage( GetHwnd(), UDM_GETACCEL, 1, (LPARAM) &accel );
-    return accel.nInc;
+    int num = ::SendMessage( GetHwnd(), UDM_GETACCEL, 1, (LPARAM) &accel );
+    if( num == 1 )
+        return accel.nInc;
+    else
+        return 1;
 }
 #endif // wxUSE_SPINCTRL
