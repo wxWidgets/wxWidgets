@@ -928,7 +928,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-images fr ja
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images fr ja
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -984,6 +984,10 @@ $(OBJS)\test_allheaders.exe: $(OBJS)\test_allheaders_dummy.obj  $(TEST_ALLHEADER
 !endif
 
 data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
+data-image-sample: 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
