@@ -544,7 +544,7 @@ public:
     wxToolBarToolBase *InsertTool(size_t pos,
                                   int toolid,
                                   const wxBitmap& bitmap,
-                                  const wxBitmap& bmpDisabled = wxBitmapBundle(),
+                                  const wxBitmap& bmpDisabled = wxNullBitmap,
                                   bool toggle = false,
                                   wxObject *clientData = NULL,
                                   const wxString& shortHelp = wxEmptyString,
