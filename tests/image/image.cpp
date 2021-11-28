@@ -98,7 +98,6 @@ private:
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
         CPPUNIT_TEST( ScaleCompare );
         CPPUNIT_TEST( CreateBitmapFromCursor );
-        CPPUNIT_TEST( MalformedBMP );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -120,7 +119,6 @@ private:
     void BMPFlippingAndRLECompression();
     void ScaleCompare();
     void CreateBitmapFromCursor();
-    void MalformedBMP();
 
     wxDECLARE_NO_COPY_CLASS(ImageTestCase);
 };
@@ -1528,25 +1526,52 @@ void ImageTestCase::CreateBitmapFromCursor()
 }
 
 // This function assumes that the file is malformed in a way that it cannot
-// be loaded.  If the file is malformed such that wxImage can salvage part
-// of it, then CompareBMPImage should be called instead.
-static void LoadMalformedBMP(const wxString& file)
+// be loaded but that doesn't fail a wxCHECK.
+static void LoadMalformedImage(const wxString& file, wxBitmapType type)
 {
-    wxImage image(file);
-    WX_ASSERT_MESSAGE
-    (
-        ("wxImage::isOk() returned true after loading \"%s\"", file),
-        !image.IsOk()
-    );
+    // If the file doesn't exist, it's a test bug.
+    // (The product code would fail but for the wrong reason.)
+    INFO("Checking that image exists: " << file);
+    REQUIRE(wxFileExists(file));
+
+    // Load the image, expecting a failure.
+    wxImage image;
+    INFO("Loading malformed image: " << file);
+    REQUIRE(!image.LoadFile(file, type));
 }
 
-void ImageTestCase::MalformedBMP()
+// This function assumes that the file is malformed in a way that wxImage
+// fails a wxCHECK when trying to load it.
+static void LoadMalformedImageWithException(const wxString& file,
+                                            wxBitmapType type)
 {
-    LoadMalformedBMP("image/8bpp-colorsused-negative.bmp");
-    LoadMalformedBMP("image/8bpp-colorsused-large.bmp");
+    // If the file doesn't exist, it's a test bug.
+    // (The product code would fail but for the wrong reason.)
+    INFO("Checking that image exists: " << file);
+    REQUIRE(wxFileExists(file));
+
+    wxImage image;
+    INFO("Loading malformed image: " << file);
+#ifdef __WXDEBUG__
+    REQUIRE_THROWS(image.LoadFile(file, type));
+#else
+    REQUIRE(!image.LoadFile(file, type));
+#endif
 }
 
-#endif //wxUSE_IMAGE
+TEST_CASE("wxImage::BMP", "[image][bmp]")
+{
+    SECTION("Load malformed bitmaps")
+    {
+        LoadMalformedImage("image/8bpp-colorsused-negative.bmp",
+                           wxBITMAP_TYPE_BMP);
+        LoadMalformedImage("image/8bpp-colorsused-large.bmp",
+                           wxBITMAP_TYPE_BMP);
+
+        LoadMalformedImageWithException("image/width-times-height-overflow.bmp",
+                                        wxBITMAP_TYPE_BMP);
+    }
+}
 
 TEST_CASE("wxImage::Paste", "[image][paste]")
 {
@@ -2234,6 +2259,20 @@ TEST_CASE("wxImage::XPM", "[image][xpm]")
    CHECK( wxIcon(dummy_xpm).IsOk() );
 }
 
+TEST_CASE("wxImage::PNM", "[image][pnm]")
+{
+#if wxUSE_PNM
+    wxImage::AddHandler(new wxPNMHandler);
+
+    SECTION("width*height*3 overflow")
+    {
+        // wxImage should reject the file as malformed (wxTrac#19326)
+        LoadMalformedImageWithException("image/width_height_32_bit_overflow.pgm",
+                                        wxBITMAP_TYPE_PNM);
+    }
+#endif
+}
+
 TEST_CASE("wxImage::ChangeColours", "[image]")
 {
     wxImage original;
@@ -2298,3 +2337,5 @@ TEST_CASE("wxImage::SizeLimits", "[image]")
 /*
     TODO: add lots of more tests to wxImage functions
 */
+
+#endif //wxUSE_IMAGE

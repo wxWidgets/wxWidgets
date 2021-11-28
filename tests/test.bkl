@@ -401,6 +401,9 @@
             toucan_dis_240.png
             toucan_grey.png
             toucan_mono_255_255_255.png
+
+            width-times-height-overflow.bmp
+            width_height_32_bit_overflow.pgm
         </files>
     </wx-data>
 

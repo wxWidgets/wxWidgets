@@ -191,6 +191,8 @@ set(TEST_GUI_DATA
     image/toucan_dis_240.png
     image/toucan_grey.png
     image/toucan_mono_255_255_255.png
+    image/width-times-height-overflow.bmp
+    image/width_height_32_bit_overflow.pgm
     intl/ja/internat.mo
     intl/ja/internat.po
     )

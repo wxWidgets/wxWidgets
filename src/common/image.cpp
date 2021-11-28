@@ -156,15 +156,22 @@ bool wxImage::Create( int width, int height, bool clear )
 {
     UnRef();
 
-    m_refData = new wxImageRefData();
-
-    M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
-    if (!M_IMGDATA->m_data)
-    {
-        UnRef();
+    if (width <= 0 || height <= 0)
         return false;
-    }
 
+    const unsigned long long size = (unsigned long long)width * height * 3;
+
+    // In theory, 64-bit architectures could handle larger sizes,
+    // but wxImage code is riddled with int-based arithmetic which will overflow
+    if (size > INT_MAX)
+        return false;
+
+    unsigned char* p = (unsigned char*)malloc(size_t(size));
+    if (p == NULL)
+        return false;
+
+    m_refData = new wxImageRefData;
+    M_IMGDATA->m_data = p;
     M_IMGDATA->m_width = width;
     M_IMGDATA->m_height = height;
     M_IMGDATA->m_ok = true;
