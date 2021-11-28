@@ -63,7 +63,7 @@ public:
     }
 
 private:
-    static wxBitmap GetNamedBitmap(const wxString& name)
+    static wxBitmapBundle GetNamedBitmap(const wxString& name)
     {
         // GTK UI guidelines recommend using "symbolic" versions of the icons
         // for these buttons, so try them first but fall back to the normal
