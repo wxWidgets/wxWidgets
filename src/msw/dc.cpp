@@ -650,7 +650,7 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
     // note that we combine the new clipping region with the existing one: this
     // is compatible with what the other ports do and is the documented
     // behaviour now (starting with 2.3.3)
-    if ( ::ExtSelectClipRgn(GetHdc(), rgnRTL ? rgnRTL : (HRGN)hrgn, RGN_AND) == ERROR )
+    if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)rgnRTL ? (HRGN)rgnRTL : (HRGN)hrgn, RGN_AND) == ERROR )
     {
         wxLogLastError(wxT("ExtSelectClipRgn"));
 
