@@ -981,6 +981,10 @@ wxListHeaderWindow::wxListHeaderWindow()
 
     m_owner = NULL;
     m_resizeCursor = NULL;
+
+    m_enableSortCol = false;
+    m_sortAsc = true;
+    m_sortCol = -1;
 }
 
 bool wxListHeaderWindow::Create( wxWindow *win,
@@ -1099,6 +1103,15 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             flags |= wxCONTROL_SELECTED;
 #endif
 
+        wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE;
+        if ( !m_owner->IsVirtual() && m_enableSortCol && i == m_sortCol )
+        {
+            if ( m_sortAsc )
+                sortArrow = wxHDR_SORT_ICON_UP;
+            else
+                sortArrow = wxHDR_SORT_ICON_DOWN;
+        }
+
         if (i == 0)
            flags |= wxCONTROL_SPECIAL; // mark as first column
 
@@ -1107,7 +1120,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                     this,
                                     dc,
                                     wxRect(x, HEADER_OFFSET_Y, cw, ch),
-                                    flags
+                                    flags,
+                                    sortArrow
                                 );
 
         // see if we have enough space for the column label
@@ -1320,6 +1334,12 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                             colItem.SetState(state & ~wxLIST_STATE_SELECTED);
                         m_owner->SetColumn(i, colItem);
                     }
+
+                    if ( m_sortCol != m_column )
+                        m_sortAsc = true;
+                    else
+                        m_sortAsc = !m_sortAsc;
+                    m_sortCol = m_column;
                 }
 
                 SendListEvent( event.LeftDown()
@@ -5062,6 +5082,60 @@ bool wxGenericListCtrl::IsItemChecked(long item) const
         return false;
 
     return m_mainWin->IsItemChecked(item);
+}
+
+void wxGenericListCtrl::EnableSortIndicator(const bool enable)
+{
+    if ( m_headerWin )
+    {
+        m_headerWin->m_enableSortCol = enable;
+        Refresh();
+    }
+}
+
+bool wxGenericListCtrl::IsSortIndicatorEnabled() const
+{
+    return m_headerWin && m_headerWin->m_enableSortCol;
+}
+
+void wxGenericListCtrl::ShowSortIndicator(const int idx, const bool ascending)
+{
+    if ( idx == -1 )
+    {
+        RemoveSortIndicator();
+    }
+    else if ( m_headerWin )
+    {
+        m_headerWin->m_sortCol = idx;
+        m_headerWin->m_sortAsc = ascending;
+        Refresh();
+    }
+}
+
+void wxGenericListCtrl::RemoveSortIndicator()
+{
+    if ( m_headerWin )
+    {
+        m_headerWin->m_sortCol = -1;
+        m_headerWin->m_sortAsc = true;
+        Refresh();
+    }
+}
+
+int wxGenericListCtrl::GetSortIndicator() const
+{
+    if ( m_headerWin )
+        return m_headerWin->m_sortCol;
+
+    return -1;
+}
+
+bool wxGenericListCtrl::IsAscendingSortIndicator() const
+{
+    if ( m_headerWin )
+        return m_headerWin->m_sortAsc;
+
+    return true;
 }
 
 void wxGenericListCtrl::SetSingleStyle( long style, bool add )

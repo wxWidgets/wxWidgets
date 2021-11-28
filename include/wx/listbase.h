@@ -446,6 +446,14 @@ public:
     virtual bool IsItemChecked(long WXUNUSED(item)) const { return false; }
     virtual void CheckItem(long WXUNUSED(item), bool WXUNUSED(check)) { }
 
+    // Sort indicator in header.
+    virtual void EnableSortIndicator(const bool WXUNUSED(enable) = true) { }
+    virtual bool IsSortIndicatorEnabled() const { return false; }
+    virtual void ShowSortIndicator(const int WXUNUSED(idx), const bool WXUNUSED(ascending) = true) { }
+    virtual void RemoveSortIndicator() { }
+    virtual int GetSortIndicator() const { return -1; }
+    virtual bool IsAscendingSortIndicator() const { return true; }
+
 protected:
     // Return pointer to the corresponding m_imagesXXX.
     const wxWithImages* GetImages(int which) const;

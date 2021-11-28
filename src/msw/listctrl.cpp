@@ -278,6 +278,10 @@ void wxListCtrl::Init()
     m_colCount = 0;
     m_textCtrl = NULL;
 
+    m_enableSortCol = false;
+    m_sortAsc = true;
+    m_sortCol = -1;
+
     m_hasAnyAttr = false;
 
     m_headerCustomDraw = NULL;
@@ -1452,6 +1456,48 @@ bool wxListCtrl::IsItemChecked(long item) const
     return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
+void wxListCtrl::EnableSortIndicator(const bool enable)
+{
+    m_enableSortCol = enable;
+    DrawSortArrow();
+}
+
+bool wxListCtrl::IsSortIndicatorEnabled() const
+{
+    return m_enableSortCol;
+}
+
+void wxListCtrl::ShowSortIndicator(const int idx, const bool ascending)
+{
+    if ( idx == -1 )
+    {
+        RemoveSortIndicator();
+    }
+    else
+    {
+        m_sortCol = idx;
+        m_sortAsc = ascending;
+        DrawSortArrow();
+    }
+}
+
+void wxListCtrl::RemoveSortIndicator()
+{
+    m_sortCol = -1;
+    m_sortAsc = true;
+    DrawSortArrow();
+}
+
+int wxListCtrl::GetSortIndicator() const
+{
+    return m_sortCol;
+}
+
+bool wxListCtrl::IsAscendingSortIndicator() const
+{
+    return m_sortAsc;
+}
+
 // Gets the number of selected items in the list control
 int wxListCtrl::GetSelectedItemCount() const
 {
@@ -2045,6 +2091,8 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
         SetColumnWidth(n, wxLIST_AUTOSIZE_USEHEADER);
     }
 
+    DrawSortArrow();
+
     return n;
 }
 
@@ -2419,6 +2467,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_COLUMNCLICK:
+                if ( m_sortCol != nmLV->iSubItem )
+                    m_sortAsc = true;
+                else
+                    m_sortAsc = !m_sortAsc;
+                m_sortCol = nmLV->iSubItem;
+                DrawSortArrow();
+
                 eventType = wxEVT_LIST_COL_CLICK;
                 event.m_itemIndex = -1;
                 event.m_col = nmLV->iSubItem;
@@ -3359,6 +3414,39 @@ void wxListCtrl::OnCharHook(wxKeyEvent& event)
     }
 
     event.Skip();
+}
+
+void wxListCtrl::DrawSortArrow()
+{
+    if ( HasFlag(wxLC_SORT_ASCENDING) || HasFlag(wxLC_SORT_DESCENDING) )
+    {
+        m_sortCol = 0;
+        m_sortAsc = HasFlag(wxLC_SORT_ASCENDING);
+    }
+
+    LV_COLUMN lvCol;
+    wxZeroMemory(lvCol);
+    lvCol.mask = LVCF_FMT;
+
+    for ( int col = 0; col < m_colCount; ++col )
+    {
+        if ( ListView_GetColumn(GetHwnd(), col, &lvCol) )
+        {
+            if ( !IsVirtual() && m_enableSortCol && col == m_sortCol )
+            {
+                if ( m_sortAsc )
+                    lvCol.fmt = (lvCol.fmt & ~HDF_SORTDOWN) | HDF_SORTUP;
+                else
+                    lvCol.fmt = (lvCol.fmt & ~HDF_SORTUP) | HDF_SORTDOWN;
+            }
+            else
+            {
+                lvCol.fmt = lvCol.fmt & ~(HDF_SORTDOWN | HDF_SORTUP);
+            }
+
+            ListView_SetColumn(GetHwnd(), col, &lvCol);
+        }
+    }
 }
 
 WXLRESULT

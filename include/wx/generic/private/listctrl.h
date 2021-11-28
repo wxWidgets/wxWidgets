@@ -381,6 +381,10 @@ public:
     int m_colToSend;
     int m_widthToSend;
 
+    bool m_enableSortCol;
+    bool m_sortAsc;
+    int m_sortCol;
+
     virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
 
     virtual void OnInternalIdle() wxOVERRIDE;
