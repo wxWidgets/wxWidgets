@@ -139,7 +139,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_8
     // use PushBack(), it's the same thing
-    static wxDEPRECATED( void Insert(wxArtProvider *provider) );
+    wxDEPRECATED( static void Insert(wxArtProvider *provider) );
 #endif
 
     // Remove latest added provider and delete it.

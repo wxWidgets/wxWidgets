@@ -645,14 +645,14 @@ public:
         }
     )
 
-    static wxDEPRECATED(
+    wxDEPRECATED(static
         wxImageHandler *FindHandler(const wxString& ext, long type)
         {
             return FindHandler(ext, (wxBitmapType)type);
         }
     )
 
-    static wxDEPRECATED(
+    wxDEPRECATED(static
         wxImageHandler *FindHandler(long imageType)
         {
             return FindHandler((wxBitmapType)imageType);

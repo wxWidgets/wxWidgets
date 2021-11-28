@@ -81,7 +81,7 @@ public:
     // unnaturally: it disabled the bell when it was true, not false as could
     // be expected; use SuppressBellOnError() instead
 #if WXWIN_COMPATIBILITY_2_8
-    static wxDEPRECATED_INLINE(
+    wxDEPRECATED_INLINE(static
         void SetBellOnError(bool doIt = true),
         ms_isSilent = doIt;
     )
