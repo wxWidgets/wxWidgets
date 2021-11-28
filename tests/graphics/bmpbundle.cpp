@@ -136,4 +136,11 @@ TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")
     CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
 }
 
+TEST_CASE("BitmapBundle::FromSVGFile", "[bmpbundle][svg][file]")
+{
+    wxBitmapBundle b = wxBitmapBundle::FromSVGFile("horse.svg", wxSize(20, 20));
+    REQUIRE( b.IsOk() );
+    CHECK( b.GetDefaultSize() == wxSize(20, 20) );
+}
+
 #endif // wxHAS_SVG

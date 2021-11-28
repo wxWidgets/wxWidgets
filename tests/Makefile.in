@@ -553,7 +553,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 
 data: 
 	@mkdir -p .
-	@for f in testdata.fc; do \
+	@for f in testdata.fc horse.svg; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

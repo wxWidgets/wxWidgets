@@ -985,7 +985,7 @@ $(OBJS)\test_allheaders.exe: $(OBJS)\test_allheaders_dummy.obj  $(TEST_ALLHEADER
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (testdata.fc horse.svg) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 data-image-sample: 
 	if not exist $(OBJS) mkdir $(OBJS)
