@@ -2606,9 +2606,6 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                          item->GetY() + offset,
                          item->GetWidth() - state_w - image_w + 2,
                          total_h - offset );
-#if !defined(__WXGTK20__) && !defined(__WXMAC__)
-            dc.DrawRectangle( rect );
-#else
             rect.x -= 1;
             rect.width += 2;
 
@@ -2619,7 +2616,6 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                 flags |= wxCONTROL_CURRENT;
             wxRendererNative::Get().
                 DrawItemSelectionRect(this, dc, rect, flags);
-#endif
         }
         // On GTK+ 2, drawing a 'normal' background is wrong for themes that
         // don't allow backgrounds to be customized. Not drawing the background,
@@ -2994,10 +2990,8 @@ void wxGenericTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
 
 void wxGenericTreeCtrl::OnSize( wxSizeEvent &event )
 {
-#ifdef __WXGTK__
     if (HasFlag( wxTR_FULL_ROW_HIGHLIGHT) && m_current)
         RefreshLine( m_current );
-#endif
 
     event.Skip(true);
 }
