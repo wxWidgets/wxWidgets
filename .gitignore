@@ -284,6 +284,8 @@
 /samples/**/*c*_mswunivuddll
 /samples/**/*c*_mswunivuddll_x64
 /samples/**/*c*_mswunivuddll_arm64
+/samples/**/*.vcxproj.user
+/samples/**/.vs/
 
 # /samples/image/
 /samples/image/saved.xpm
