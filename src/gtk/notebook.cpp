@@ -490,6 +490,10 @@ bool wxNotebook::InsertPage( size_t position,
         gtk_box_pack_start(GTK_BOX(pageData->m_box),
             pageData->m_image, false, false, m_padding);
     }
+    else
+    {
+        pageData->m_image = NULL;
+    }
 
     /* set the label text */
     pageData->m_label = gtk_label_new(wxGTK_CONV(wxStripMenuCodes(text)));
