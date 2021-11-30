@@ -439,7 +439,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
         [panel setAccessoryView:accView];
         if ([panel respondsToSelector:@selector(setAccessoryViewDisclosed)])
         {
-            [panel setAccessoryViewDisclosed:YES];
+            [(id)panel setAccessoryViewDisclosed:YES];
         }
     }
     else
