@@ -41,6 +41,8 @@ MyMusicTreeModel::MyMusicTreeModel()
     m_pop->Append(
         new MyMusicTreeModelNode( m_pop, "You are not alone", "Michael Jackson", 1995 ) );
     m_pop->Append(
+        new MyMusicTreeModelNode( m_pop, "Yesterday", "The Beatles", -1 /* not specified */ ) );
+    m_pop->Append(
         new MyMusicTreeModelNode( m_pop, "Take a bow", "Madonna", 1994 ) );
     m_root->Append( m_pop );
 
@@ -193,7 +195,8 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         variant = node->m_artist;
         break;
     case 2:
-        variant = (long) node->m_year;
+        if (node->m_year != -1)
+            variant = (long) node->m_year;
         break;
     case 3:
         variant = node->m_quality;
@@ -202,7 +205,9 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         variant = 80L;  // all music is very 80% popular
         break;
     case 5:
-        if (GetYear(item) < 1900)
+        if (node->m_year == -1)
+            variant = "n/a";
+        else if (node->m_year < 1900)
             variant = "old";
         else
             variant = "new";
@@ -248,7 +253,16 @@ bool MyMusicTreeModel::IsEnabled( const wxDataViewItem &item,
     MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
 
     // disable Beethoven's ratings, his pieces can only be good
-    return !(col == 3 && node->m_artist.EndsWith("Beethoven"));
+    if (col == 3 && node->m_artist.EndsWith("Beethoven"))
+        return false;
+
+    // also disable editing the year when it's not specified, this doesn't work
+    // because the editor needs some initial value
+    if (col == 2 && node->m_year == -1)
+        return false;
+
+    // otherwise allow editing
+    return true;
 }
 
 wxDataViewItem MyMusicTreeModel::GetParent( const wxDataViewItem &item ) const
