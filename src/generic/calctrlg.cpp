@@ -690,11 +690,12 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         const wxSize bestSizeCombo = m_comboMonth->GetBestSize();
+        const wxSize bestSizeSpin = m_spinYear->GetBestSize();
 
-        height += wxMax(bestSizeCombo.y, m_spinYear->GetBestSize().y)
+        height += wxMax(bestSizeCombo.y, bestSizeSpin.y)
                     + VERT_MARGIN;
 
-        wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + GetCharWidth()*8;
+        wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + bestSizeSpin.x;
         if ( width < w2 )
             width = w2;
     }
