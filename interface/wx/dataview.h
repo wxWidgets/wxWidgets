@@ -268,7 +268,17 @@ public:
 
     /**
         Override this to indicate the value of @a item.
-        A wxVariant is used to store the data.
+
+        This function should fill the provided @a variant with the value to be
+        shown for the specified item in the given column. The value returned in
+        this wxVariant must have the appropriate type, e.g. string for the text
+        columns, boolean for the columns using wxDataViewToggleRenderer etc,
+        and if there is a type mismatch, nothing will be shown and a debug
+        error message will be logged.
+
+        It is also possible to not return any value, in which case nothing will
+        be shown in the corresponding cell, in the same way as if HasValue()
+        returned @false.
     */
     virtual void GetValue(wxVariant& variant, const wxDataViewItem& item,
                           unsigned int col) const = 0;
