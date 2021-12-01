@@ -248,6 +248,20 @@ public:
     static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 
     /**
+        Create a bundle from the SVG image loaded from the given file.
+
+        This function loads the SVG data from the given @a path and calls
+        FromSVG() with it. As it is just a wrapper for FromSVG(), please see
+        that function documentation for more information about SVG support.
+
+        @param path Path to the SVG file. Notice that it should a local file,
+            not an URL.
+        @param sizeDef The default size to return from GetDefaultSize() for
+            this bundle.
+     */
+    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+
+    /**
         Check if bitmap bundle is non-empty.
 
         Return @true if the bundle contains any bitmaps or @false if it is

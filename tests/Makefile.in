@@ -448,7 +448,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-images fr ja
+all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-image-sample data-images fr ja
 
 install: 
 
@@ -552,6 +552,18 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test_allheaders/testprec.h.gch testprec.h $(CXX) $(TEST_ALLHEADERS_CXXFLAGS)
 
 data: 
+	@mkdir -p .
+	@for f in testdata.fc horse.svg; do \
+	if test ! -f ./$$f -a ! -d ./$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
+	done
+
+data-image-sample: 
 	@mkdir -p .
 	@for f in horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
@@ -1248,4 +1260,4 @@ failtest_allheaders:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
 .PHONY: all install uninstall clean distclean test_gui_bundle \
-	test_allheaders_bundle data data-images fr ja
+	test_allheaders_bundle data data-image-sample data-images fr ja

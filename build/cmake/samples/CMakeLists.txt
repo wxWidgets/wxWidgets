@@ -70,7 +70,7 @@ endif()
 wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
-    horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg cursor.png
+    horse.ico horse3.ani horse.svg smile.xbm toucan.png cmyk.jpg cursor.png
     NAME imagesample DEPENDS wxUSE_IMAGE)
 foreach(lang ar bg cs de fr it ka pl ru sv ja ja_JP.EUC-JP)
     list(APPEND INTERNAT_DATA_FILES ${lang}/internat.po ${lang}/internat.mo)

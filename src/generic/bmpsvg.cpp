@@ -42,6 +42,13 @@
     #include "wx/utils.h"                   // Only for wxMin()
 #endif // WX_PRECOMP
 
+#ifdef wxUSE_FFILE
+    #include "wx/ffile.h"
+#elif wxUSE_FILE
+    #include "wx/file.h"
+#else
+    #define wxNO_SVG_FILE
+#endif
 #include "wx/rawbmp.h"
 
 #include "wx/private/bmpbndl.h"
@@ -201,6 +208,36 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef)
     wxCharBuffer copy(data);
 
     return FromSVG(copy.data(), sizeDef);
+}
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
+{
+    // There is nsvgParseFromFile(), but it doesn't work with Unicode filenames
+    // under MSW and does exactly the same thing that we do here in any case,
+    // so it seems better to use our code.
+#ifndef wxNO_SVG_FILE
+#if wxUSE_FFILE
+    wxFFile file(path, "rb");
+#elif wxUSE_FILE
+    wxFile file(path);
+#endif
+    if ( file.IsOpened() )
+    {
+        const wxFileOffset lenAsOfs = file.Length();
+        if ( lenAsOfs != wxInvalidOffset )
+        {
+            const size_t len = static_cast<size_t>(lenAsOfs);
+
+            wxCharBuffer buf(len);
+            char* const ptr = buf.data();
+            if ( file.Read(ptr, len) == len )
+                return wxBitmapBundle::FromSVG(ptr, sizeDef);
+        }
+    }
+#endif // !wxNO_SVG_FILE
+
+    return wxBitmapBundle();
 }
 
 #endif // wxHAS_SVG
