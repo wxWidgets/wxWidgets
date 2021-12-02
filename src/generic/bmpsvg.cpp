@@ -36,21 +36,13 @@
 
 #ifdef wxHAS_SVG
 
-#ifndef WX_PRECOMP
-    #include "wx/utils.h"                   // Only for wxMin()
-#endif // WX_PRECOMP
+// Note that we have to include NanoSVG headers before including any of wx
+// headers, notably wx/unichar.h which defines global operator==() overloads
+// for wxUniChar that confuse OpenVMS C++ compiler and break compilation of
+// these headers with errors about ambiguous operator==(char,enum).
 
-#include "wx/bmpbndl.h"
-#ifdef wxUSE_FFILE
-    #include "wx/ffile.h"
-#elif wxUSE_FILE
-    #include "wx/file.h"
-#else
-    #define wxNO_SVG_FILE
-#endif
-#include "wx/rawbmp.h"
-
-#include "wx/private/bmpbndl.h"
+// This is required by NanoSVG headers, but not included by them.
+#include <stdio.h>
 
 // Disable some warnings inside NanoSVG code that we're not interested in.
 #ifdef __VISUALC__
@@ -73,6 +65,22 @@
 #ifdef __VISUALC__
     #pragma warning(pop)
 #endif
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"                   // Only for wxMin()
+#endif // WX_PRECOMP
+
+#include "wx/bmpbndl.h"
+#ifdef wxUSE_FFILE
+    #include "wx/ffile.h"
+#elif wxUSE_FILE
+    #include "wx/file.h"
+#else
+    #define wxNO_SVG_FILE
+#endif
+#include "wx/rawbmp.h"
+
+#include "wx/private/bmpbndl.h"
 
 // ----------------------------------------------------------------------------
 // private helpers
