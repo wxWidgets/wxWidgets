@@ -5441,7 +5441,7 @@ void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt) {
     // adjust the margins to the new DPI
     for ( int i = 0; i < SC_MAX_MARGIN; ++i )
     {
-        SetMarginWidth(i, evt.ScaleY(GetMarginWidth(i)));
+        SetMarginWidth(i, evt.ScaleX(GetMarginWidth(i)));
     }
 
     // Hide auto-complete popup, there is no (easy) way to set it to the correct size
