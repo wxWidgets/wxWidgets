@@ -19,8 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/bmpbndl.h"
-
 #ifdef wxHAS_SVG
 
 // Try to help people updating their sources from Git and forgetting to
@@ -42,6 +40,7 @@
     #include "wx/utils.h"                   // Only for wxMin()
 #endif // WX_PRECOMP
 
+#include "wx/bmpbndl.h"
 #ifdef wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE

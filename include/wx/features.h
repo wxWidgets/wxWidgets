@@ -95,6 +95,15 @@
     #define wxHAVE_RAW_BITMAP
 #endif
 
+/*
+    While it should be possible to implement SVG rasterizing without raw bitmap
+    support using wxDC::DrawSpline(), currently we don't do it and so FromSVG()
+    is only available in the ports providing raw bitmap access.
+ */
+#ifdef wxHAS_RAW_BITMAP
+    #define wxHAS_SVG
+#endif
+
 
 // Previously this symbol wasn't defined for all compilers as Bind() couldn't
 // be implemented for some of them (notably MSVC 6), but this is not the case

@@ -18,13 +18,6 @@ class wxBitmapBundleImpl;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-// It should be possible to implement SVG rasterizing without raw bitmap
-// support using wxDC::DrawSpline(), but currently we don't do it and so
-// FromSVG() is only available in the ports providing raw bitmap access.
-#ifdef wxHAS_RAW_BITMAP
-    #define wxHAS_SVG
-#endif
-
 // ----------------------------------------------------------------------------
 // wxBitmapBundle provides 1 or more versions of a bitmap, all bundled together
 // ----------------------------------------------------------------------------
