@@ -34,6 +34,7 @@
     #include "wx/dcclient.h"
     #include "wx/stattext.h"
     #include "wx/intl.h"
+    #include "wx/textctrl.h"
     #include "wx/textdlg.h"
     #include "wx/sizer.h"
     #include "wx/module.h"
