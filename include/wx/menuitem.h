@@ -131,7 +131,7 @@ public:
     // return vector of extra accels. Implementation only.
     const wxVector<wxAcceleratorEntry>& GetExtraAccels() const { return m_extraAccels; }
 
-    virtual void ClearExtraAccels() { m_extraAccels.clear(); }
+    virtual void ClearExtraAccels();
 #endif // wxUSE_ACCEL
 
 #if WXWIN_COMPATIBILITY_2_8

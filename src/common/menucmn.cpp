@@ -301,6 +301,11 @@ void wxMenuItemBase::AddExtraAccel(const wxAcceleratorEntry& accel)
     m_extraAccels.push_back(accel);
 }
 
+void wxMenuItemBase::ClearExtraAccels()
+{
+    m_extraAccels.clear();
+}
+
 #endif // wxUSE_ACCEL
 
 void wxMenuItemBase::SetItemLabel(const wxString& str)
