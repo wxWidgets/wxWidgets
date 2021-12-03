@@ -913,6 +913,7 @@ set(GUI_CMN_SRC
     src/generic/laywin.cpp
     src/generic/calctrlg.cpp
     src/generic/wizard.cpp
+    src/generic/maskededit.cpp
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
     src/generic/creddlgg.cpp
@@ -1180,6 +1181,8 @@ set(GUI_CMN_HDR
     wx/generic/grid.h
     wx/generic/grideditors.h
     wx/wizard.h
+    wx/maskededit.h
+    wx/generic/maskededit.h
     wx/generic/dataview.h
     wx/generic/wizard.h
     wx/generic/dvrenderers.h

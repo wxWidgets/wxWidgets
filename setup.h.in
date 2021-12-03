@@ -442,6 +442,7 @@
 
 #define wxUSE_ADDREMOVECTRL 0
 
+#define wxUSE_MASKED_EDIT 0
 
 #define wxUSE_ACCEL 0
 

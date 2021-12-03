@@ -2201,6 +2201,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_editlbox.o \
 	$(OBJS)\monodll_laywin.o \
+	$(OBJS)\monodll_maskededit.o \
 	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_creddlgg.o \
 	$(OBJS)\monodll_rowheightcache.o \
@@ -2534,6 +2535,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_editlbox.o \
 	$(OBJS)\monodll_laywin.o \
+	$(OBJS)\monodll_maskededit.o \
 	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_creddlgg.o \
 	$(OBJS)\monodll_rowheightcache.o \
@@ -3050,6 +3052,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_editlbox.o \
 	$(OBJS)\monolib_laywin.o \
+	$(OBJS)\monolib_maskededit.o \
 	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_creddlgg.o \
 	$(OBJS)\monolib_rowheightcache.o \
@@ -3383,6 +3386,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_editlbox.o \
 	$(OBJS)\monolib_laywin.o \
+	$(OBJS)\monolib_maskededit.o \
 	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_creddlgg.o \
 	$(OBJS)\monolib_rowheightcache.o \
@@ -3782,6 +3786,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.o \
 	$(OBJS)\coredll_editlbox.o \
 	$(OBJS)\coredll_laywin.o \
+	$(OBJS)\coredll_maskededit.o \
 	$(OBJS)\coredll_calctrlg.o \
 	$(OBJS)\coredll_creddlgg.o \
 	$(OBJS)\coredll_rowheightcache.o \
@@ -4115,6 +4120,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.o \
 	$(OBJS)\coredll_editlbox.o \
 	$(OBJS)\coredll_laywin.o \
+	$(OBJS)\coredll_maskededit.o \
 	$(OBJS)\coredll_calctrlg.o \
 	$(OBJS)\coredll_creddlgg.o \
 	$(OBJS)\coredll_rowheightcache.o \
@@ -4471,6 +4477,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.o \
 	$(OBJS)\corelib_editlbox.o \
 	$(OBJS)\corelib_laywin.o \
+	$(OBJS)\corelib_maskededit.o \
 	$(OBJS)\corelib_calctrlg.o \
 	$(OBJS)\corelib_creddlgg.o \
 	$(OBJS)\corelib_rowheightcache.o \
@@ -4804,6 +4811,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.o \
 	$(OBJS)\corelib_editlbox.o \
 	$(OBJS)\corelib_laywin.o \
+	$(OBJS)\corelib_maskededit.o \
 	$(OBJS)\corelib_calctrlg.o \
 	$(OBJS)\corelib_creddlgg.o \
 	$(OBJS)\corelib_rowheightcache.o \
@@ -9473,6 +9481,12 @@ $(OBJS)\monodll_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_maskededit.o: ../../src/generic/maskededit.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
@@ -12065,6 +12079,12 @@ $(OBJS)\monolib_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_maskededit.o: ../../src/generic/maskededit.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
@@ -14627,6 +14647,12 @@ $(OBJS)\coredll_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_maskededit.o: ../../src/generic/maskededit.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
@@ -16379,6 +16405,12 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_laywin.o: ../../src/generic/laywin.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_maskededit.o: ../../src/generic/maskededit.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
