@@ -5803,6 +5803,11 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
                 if ( reopenLabelEditorCol >= 0 )
                     DoBeginLabelEdit(reopenLabelEditorCol);
             }
+            else if ( action == wxPG_ACTION_EDIT )
+            {
+                // For first and last item just validate the value
+                CommitChangesFromEditor();
+            }
             wasHandled = true;
         }
     }
