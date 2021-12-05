@@ -1099,6 +1099,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\maskededittest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\graphics\measuring.cpp"
 				>
 			</File>

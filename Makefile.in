@@ -36048,6 +36048,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_editlbox.o: $(srcdir)/src/generic/editlbox.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/editlbox.cpp
 
+@COND_USE_GUI_1@corelib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
+
 @COND_USE_GUI_1@corelib_maskededit.o: $(srcdir)/src/generic/maskededit.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/maskededit.cpp
 

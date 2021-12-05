@@ -9481,7 +9481,6 @@ $(OBJS)\monodll_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
-
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_maskededit.o: ../../src/generic/maskededit.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
@@ -12079,7 +12078,6 @@ $(OBJS)\monolib_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
-
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_maskededit.o: ../../src/generic/maskededit.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
@@ -14647,7 +14645,6 @@ $(OBJS)\coredll_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
-
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_maskededit.o: ../../src/generic/maskededit.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
@@ -16407,7 +16404,6 @@ ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
-
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_maskededit.o: ../../src/generic/maskededit.cpp
