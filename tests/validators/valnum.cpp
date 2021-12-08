@@ -133,11 +133,11 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferUnsignedRange", "[valnum
     m_text->ChangeValue("0");
     CHECK( !valUnsigned.TransferFromWindow() );
 
-    m_text->ChangeValue("1")
+    m_text->ChangeValue("1");
     CHECK( valUnsigned.TransferFromWindow() );
     CHECK( value == 1);
 
-    m_text->ChangeValue("20")
+    m_text->ChangeValue("20");
     CHECK( valUnsigned.TransferFromWindow() );
     CHECK( value == 20);
 
