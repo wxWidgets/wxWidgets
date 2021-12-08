@@ -1002,6 +1002,37 @@ public:
     */
     void SetUseBestVisual(bool flag, bool forceTrueColour = false);
 
+    /**
+        @name GTK-specific functions
+    */
+    //@{
+
+    /**
+        Disables the printing of various GTK messages.
+
+        This function can be called to suppress GTK diagnostic messages that
+        are output on the standard error stream by default.
+
+        The default value of the argument disables all messages, but you
+        can pass in a mask flag to specifically disable only particular
+        categories of messages.
+
+        Note that this function only works when using glib 2.50 (released in
+        September 2016) or later and does nothing with the older versions of
+        the library.
+
+        @param flags
+           The mask for the types of messages to suppress. Refer to the
+           glib documentation for the @c GLogLevelFlags enum, which defines
+           the various message types.
+
+        @onlyfor{wxgtk}
+
+        @since 3.1.6
+    */
+    static void GTKSuppressDiagnostics(int flags = -1);
+
+    //@}
 
     /**
         @name Mac-specific functions
