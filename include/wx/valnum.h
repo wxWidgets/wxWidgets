@@ -347,6 +347,19 @@ public:
         this->SetMax(std::numeric_limits<ValueType>::max());
     }
 
+  // Ctor for an integer validator.
+  //
+  // Sets the range to the specified interval [min, max].
+  wxIntegerValidator(ValueType *value,
+                     ValueType min,
+                     ValueType max,
+                     int style = wxNUM_VAL_DEFAULT)
+      : Base(value, style)
+  {
+    this->SetMin(min);
+    this->SetMax(max);
+  }
+
     virtual wxObject *Clone() const wxOVERRIDE { return new wxIntegerValidator(*this); }
 
     virtual bool IsInRange(LongestValueType value) const wxOVERRIDE

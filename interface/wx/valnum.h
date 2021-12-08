@@ -288,6 +288,25 @@ public:
             of wxNUM_VAL_NO_TRAILING_ZEROES which can't be used here.
     */
     wxIntegerValidator(ValueType *value = NULL, int style = wxNUM_VAL_DEFAULT);
+
+    /**
+        Validator constructor with specified range.
+
+        @param value
+            A pointer to the variable associated with the validator. This variable
+            should have a lifetime equal to or longer than the validator lifetime
+            (which is usually determined by the lifetime of the window).
+        @param min
+            The minimum value accepted by the validator.
+        @param max
+            The maximum value accepted by the validator.
+        @param style
+            A combination of wxNumValidatorStyle enum values with the exception
+            of wxNUM_VAL_NO_TRAILING_ZEROES which can't be used here.
+
+        @since 3.1.6
+    */
+    wxIntegerValidator(ValueType *value, ValueType min, ValueType max, int style = wxNUM_VAL_DEFAULT);
 };
 
 /**
