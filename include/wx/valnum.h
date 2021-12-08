@@ -338,15 +338,13 @@ public:
 
     // Ctor for an integer validator.
     //
-    // Sets the range as specified or to the maximum range appropriately for the type, including setting 0 as the
+    // Sets the range as appropriate for the type, including setting 0 as the
     // minimal value for the unsigned types.
-    wxIntegerValidator(ValueType *value = NULL, int style = wxNUM_VAL_DEFAULT,
-                       ValueType min=std::numeric_limits<ValueType>::min(),
-                       ValueType max=std::numeric_limits<ValueType>::max())
+    wxIntegerValidator(ValueType *value = NULL, int style = wxNUM_VAL_DEFAULT)
                        : Base(value, style)
     {
-        this->SetMin(min);
-        this->SetMax(max);
+        this->SetMin(std::numeric_limits<ValueType>::min());
+        this->SetMax(std::numeric_limits<ValueType>::max());
     }
 
   // Ctor for an integer validator.
