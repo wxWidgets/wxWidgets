@@ -72,6 +72,11 @@ jobs:
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
 
+    # Use bash as the shell, even under MSW where the default is PowerShell.
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -79,7 +84,6 @@ jobs:
           submodules: 'recursive'
 
       - name: Set environment variables
-        shell: bash
         run: |
           wxPROC_COUNT=`./build/tools/proc_count.sh`
           if [ "${{ matrix.cmake_generator }}" == "Xcode" ]; then
