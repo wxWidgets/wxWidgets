@@ -220,10 +220,10 @@ public:
     wxFont GetItemFont( long item ) const;
 
     // Checkbox state of an item
-    virtual bool HasCheckBoxes() const wxOVERRIDE;
-    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
-    virtual bool IsItemChecked(long item) const wxOVERRIDE;
-    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+    bool HasCheckBoxes() const wxOVERRIDE;
+    bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
+    bool IsItemChecked(long item) const wxOVERRIDE;
+    void CheckItem(long item, bool check) wxOVERRIDE;
 
     // Sort indicator in header
     void EnableSortIndicator(const bool enable = true) wxOVERRIDE;
