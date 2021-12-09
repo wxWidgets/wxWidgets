@@ -73,8 +73,19 @@ public:
   virtual bool Cleared() wxOVERRIDE;
   virtual void Resort() wxOVERRIDE;
 
- // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
-  void AdjustAutosizedColumns(bool force = false);
+  // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data, does nothing if the
+  // control is frozen
+  void AdjustAutosizedColumns()
+  {
+    if (!m_DataViewCtrlPtr->IsFrozen())
+      DoAdjustAutosizedColumns();
+  }
+
+  // called by the control when it is thawed to adjust the columns if necessary
+  void OnThaw()
+  {
+    DoAdjustAutosizedColumns();
+  }
 
 protected:
  // if the dataview control can have a variable row height this method sets the dataview's control row height of
@@ -84,6 +95,9 @@ protected:
   void AdjustRowHeights(wxDataViewItemArray const& items);
 
 private:
+  // adjust the columns unconditionally
+  void DoAdjustAutosizedColumns();
+
   wxDataViewCtrl* m_DataViewCtrlPtr;
 };
 
@@ -297,11 +311,8 @@ void wxOSXDataViewModelNotifier::AdjustRowHeights(wxDataViewItemArray const& ite
   }
 }
 
-void wxOSXDataViewModelNotifier::AdjustAutosizedColumns(bool forced)
+void wxOSXDataViewModelNotifier::DoAdjustAutosizedColumns()
 {
-  if (m_DataViewCtrlPtr->IsFrozen() && !forced)
-    return;
-
   unsigned count = m_DataViewCtrlPtr->GetColumnCount();
   for ( unsigned col = 0; col < count; col++ )
   {
@@ -709,10 +720,8 @@ void wxDataViewCtrl::AdjustAutosizedColumns() const
 void wxDataViewCtrl::DoThaw()
 {
     if ( m_ModelNotifier )
-    {
-        // On thaw, we want to force the updating of the colum sizes
-        m_ModelNotifier->AdjustAutosizedColumns(true);
-    }
+        m_ModelNotifier->OnThaw();
+
     wxDataViewCtrlBase::DoThaw();
 }
 
