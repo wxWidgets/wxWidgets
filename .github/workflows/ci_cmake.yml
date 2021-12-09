@@ -128,6 +128,7 @@ jobs:
           cmake --build . -- $wxBUILD_ARGS
 
       - name: Installing
+        if: runner.os != 'Windows'
         working-directory: build_cmake
         run: |
           sudo cmake --build . --target install
