@@ -239,7 +239,7 @@ private:
     // arrows but let the other navigation characters through
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     virtual WXLRESULT
-    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
 #endif // __WXMSW__
 
     WX_FORWARD_TO_SCROLL_HELPER()
