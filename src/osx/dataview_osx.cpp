@@ -74,17 +74,24 @@ public:
   virtual void Resort() wxOVERRIDE;
 
   // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data, does nothing if the
-  // control is frozen
+  // control is frozen but remember it for later
   void AdjustAutosizedColumns()
   {
     if (!m_DataViewCtrlPtr->IsFrozen())
       DoAdjustAutosizedColumns();
+    else
+      m_needsAdjustmentOnThaw = true;
   }
 
   // called by the control when it is thawed to adjust the columns if necessary
   void OnThaw()
   {
-    DoAdjustAutosizedColumns();
+    if (m_needsAdjustmentOnThaw)
+    {
+      DoAdjustAutosizedColumns();
+
+      m_needsAdjustmentOnThaw = false;
+    }
   }
 
 protected:
@@ -99,6 +106,11 @@ private:
   void DoAdjustAutosizedColumns();
 
   wxDataViewCtrl* m_DataViewCtrlPtr;
+
+  // This is set to true only if AdjustAutosizedColumns() is called while the
+  // control is frozen and in this case OnThaw() readjusts the columns when it
+  // is thawed.
+  bool m_needsAdjustmentOnThaw;
 };
 
 //
@@ -109,6 +121,8 @@ wxOSXDataViewModelNotifier::wxOSXDataViewModelNotifier(wxDataViewCtrl* initDataV
 {
   if (initDataViewCtrlPtr == NULL)
     wxFAIL_MSG("Pointer to dataview control must not be NULL");
+
+  m_needsAdjustmentOnThaw = false;
 }
 
 bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataViewItem const& item)
