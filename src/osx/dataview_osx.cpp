@@ -702,7 +702,7 @@ void wxDataViewCtrl::FinishCustomItemEditing()
 
 void wxDataViewCtrl::AdjustAutosizedColumns() const
 {
-  if ( m_ModelNotifier && !IsFrozen() )
+  if ( m_ModelNotifier )
     m_ModelNotifier->AdjustAutosizedColumns();
 }
 
