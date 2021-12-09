@@ -913,16 +913,15 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     // empty cells.
     SetEnabled(model->IsEnabled(item, column));
 
+    return !value.IsNull();
     }
     wxCATCH_ALL
     (
         // There is not much we can do about it here, just log it and don't
         // show anything in this cell.
         wxLogDebug("Retrieving the value from the model threw an exception");
-        SetValue(wxVariant());
+        return false;
     )
-
-    return true;
 }
 
 

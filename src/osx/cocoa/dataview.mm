@@ -626,7 +626,8 @@ outlineView:(NSOutlineView*)outlineView
     {
         wxVariant value;
         model->GetValue(value,dataViewItem, colIdx);
-        col->GetRenderer()->SetValue(value);
+        if ( !value.IsNull() )
+            col->GetRenderer()->SetValue(value);
     }
 
     return nil;

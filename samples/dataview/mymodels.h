@@ -26,7 +26,7 @@ class MyMusicTreeModelNode
 public:
     MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
                           const wxString &title, const wxString &artist,
-                          unsigned int year )
+                          int year )
     {
         m_parent = parent;
 
