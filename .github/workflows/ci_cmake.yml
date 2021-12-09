@@ -65,6 +65,7 @@ jobs:
             cmake_tests: OFF
           - name: Windows MSVC
             runner: windows-latest
+            cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
             cmake_generator: Ninja
             cmake_samples: SOME
             cmake_tests: CONSOLE_ONLY
