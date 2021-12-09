@@ -1420,6 +1420,72 @@ public:
     */
     void ExtendRulesAndAlternateColour(bool extend = true);
 
+    /**
+        Enable or disable showing a sort indicator in the header bar.
+        Sort indicators are only shown in report view.
+
+        When clicking on the header of a column, this column will get the sort-
+        indicator in ascending order, or toggle it in the opposite order. To
+        sort the list, call SortItems() in EVT_LIST_COL_CLICK.
+
+        @note In wxMSW, this will disable the header icon of the column.
+
+        @param enable
+            If @true, enable showing a sort indicator, otherwise disable.
+
+        @since 3.1.6
+    */
+    void EnableSortIndicator(const bool enable);
+
+    /**
+        Returns true if a sort indicator is enabled.
+
+        @see EnableSortIndicator()
+
+        @since 3.1.6
+    */
+    bool IsSortIndicatorEnabled() const;
+
+    /**
+        Show the sort indicator of a specific column in a specific direction.
+        Sort indicators have to be enabled using EnableSortIndicator().
+
+        @note This does not actually sort the list, use SortItems() for this.
+
+        @param idx
+            The column to set the sort indicator for.
+            If @c -1 is given, then the currently shown sort indicator
+            will be removed.
+        @param ascending
+            If @true or @false show the sort indicator corresponding to
+            ascending or descending sort order respectively.
+
+        @since 3.1.6
+    */
+    void ShowSortIndicator(const int idx, const bool ascending = true);
+
+    /**
+        Remove the sort indicator from the column being used as sort key.
+
+        @since 3.1.6
+    */
+    int RemoveSortIndicator() const;
+
+    /**
+        Returns the column that shows the sort indicator.
+
+        @since 3.1.6
+    */
+    int GetSortIndicator() const;
+
+    /**
+        Returns @true if the sort indicator direction is ascending,
+        @false when the direction is descending.
+
+        @since 3.1.6
+    */
+    bool IsAscendingSortIndicator() const;
+
 protected:
 
     /**

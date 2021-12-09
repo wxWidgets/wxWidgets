@@ -220,10 +220,18 @@ public:
     wxFont GetItemFont( long item ) const;
 
     // Checkbox state of an item
-    virtual bool HasCheckBoxes() const wxOVERRIDE;
-    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
-    virtual bool IsItemChecked(long item) const wxOVERRIDE;
-    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+    bool HasCheckBoxes() const wxOVERRIDE;
+    bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
+    bool IsItemChecked(long item) const wxOVERRIDE;
+    void CheckItem(long item, bool check) wxOVERRIDE;
+
+    // Sort indicator in header
+    void EnableSortIndicator(const bool enable = true) wxOVERRIDE;
+    bool IsSortIndicatorEnabled() const wxOVERRIDE;
+    void ShowSortIndicator(const int idx, const bool ascending = true) wxOVERRIDE;
+    void RemoveSortIndicator() wxOVERRIDE;
+    int GetSortIndicator() const wxOVERRIDE;
+    bool IsAscendingSortIndicator() const wxOVERRIDE;
 
     // Gets the number of selected items in the list control
     int GetSelectedItemCount() const;
@@ -418,6 +426,10 @@ protected:
     int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                     // keep track of inserted/deleted columns
 
+    bool m_enableSortCol;
+    bool m_sortAsc;
+    int m_sortCol;
+
     // all wxMSWListItemData objects we use
     wxVector<wxMSWListItemData *> m_internalData;
 
@@ -445,6 +457,8 @@ private:
     // in-place editor control.
     void OnCharHook(wxKeyEvent& event);
 
+    // Draw the sort arrow arror in the header.
+    void DrawSortArrow();
 
     // Object using for header custom drawing if necessary, may be NULL.
     wxMSWListHeaderCustomDraw* m_headerCustomDraw;
