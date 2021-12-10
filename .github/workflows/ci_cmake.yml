@@ -65,6 +65,7 @@ jobs:
             cmake_tests: OFF
           - name: Windows MSVC
             runner: windows-latest
+            no_sudo: 1
             cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
             cmake_generator: Ninja
             cmake_samples: SOME
@@ -129,10 +130,13 @@ jobs:
           cmake --build . -- $wxBUILD_ARGS
 
       - name: Installing
-        if: runner.os != 'Windows'
         working-directory: build_cmake
         run: |
-          sudo cmake --build . --target install
+            if [ -z "${{ matrix.no_sudo }}" ]; then
+                sudo cmake --build . --target install
+            else
+                cmake --build . --target install
+            fi
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
