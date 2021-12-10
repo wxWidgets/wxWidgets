@@ -124,7 +124,7 @@ void TextStreamTestCase::Endline()
 
 void TextStreamTestCase::MiscTests()
 {
-    wxString filename = wxT("testdata.fc");
+    wxString filename = wxT("testdata.conf");
     wxFileInputStream fsIn(filename);
     if ( !fsIn.IsOk() )
     {

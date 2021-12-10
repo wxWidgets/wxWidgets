@@ -114,7 +114,7 @@ set(TEST_DATA
     horse.bmp
     horse.png
     horse.xpm
-    testdata.fc
+    testdata.conf
     )
 
 wx_add_test(test_base CONSOLE ${TEST_SRC}

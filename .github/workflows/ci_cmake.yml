@@ -63,9 +63,21 @@ jobs:
             cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
             cmake_samples: OFF
             cmake_tests: OFF
+          - name: Windows MSVC
+            runner: windows-latest
+            no_sudo: 1
+            cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
+            cmake_generator: Ninja
+            cmake_samples: SOME
+            cmake_tests: CONSOLE_ONLY
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
+
+    # Use bash as the shell, even under MSW where the default is PowerShell.
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout
@@ -100,6 +112,11 @@ jobs:
         run: |
           ./build/tools/before_install.sh
 
+      # required for CMake to find Ninja
+      - name: "[Windows] Set up MSVC Developer Command Prompt"
+        if: runner.os == 'Windows'
+        uses: seanmiddleditch/gha-setup-vsdevenv@v3
+
       - name: Configuring
         run: |
           cmake --version
@@ -115,7 +132,11 @@ jobs:
       - name: Installing
         working-directory: build_cmake
         run: |
-          sudo cmake --build . --target install
+            if [ -z "${{ matrix.no_sudo }}" ]; then
+                sudo cmake --build . --target install
+            else
+                cmake --build . --target install
+            fi
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
