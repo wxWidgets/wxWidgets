@@ -1691,7 +1691,8 @@ void wxDataViewCtrlBase::StartEditor(const wxDataViewItem& item, unsigned int co
 #if wxUSE_DRAG_AND_DROP
 
 /* static */
-wxDataObject* wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
+wxDataObjectComposite*
+wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
 {
     if (formats.empty())
     {

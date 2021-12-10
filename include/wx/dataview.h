@@ -809,7 +809,8 @@ protected:
     // Helper function which can be used by DoEnableDropTarget() implementations
     // in the derived classes: return a composite data object supporting the
     // given formats or null if the vector is empty.
-    static wxDataObject* CreateDataObject(const wxVector<wxDataFormat>& formats);
+    static wxDataObjectComposite*
+    CreateDataObject(const wxVector<wxDataFormat>& formats);
 
     virtual bool DoEnableDropTarget(const wxVector<wxDataFormat>& WXUNUSED(formats))
         { return false; }

@@ -1701,11 +1701,14 @@ public:
 class wxDataViewDropTarget: public wxDropTarget
 {
 public:
-    wxDataViewDropTarget( wxDataObject *obj, wxDataViewMainWindow *win ) :
-        wxDropTarget( obj )
+    wxDataViewDropTarget( wxDataObjectComposite *obj, wxDataViewMainWindow *win ) :
+        wxDropTarget( obj ),
+        m_obj(obj)
     {
         m_win = win;
     }
+
+    wxDataObjectComposite* GetCompositeDataObject() const { return m_obj; }
 
     virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) wxOVERRIDE
     {
@@ -1735,6 +1738,9 @@ public:
 
     virtual void OnLeave() wxOVERRIDE
         { m_win->OnLeave(); }
+
+private:
+    wxDataObjectComposite* const m_obj;
 
     wxDataViewMainWindow   *m_win;
 };
@@ -2379,7 +2385,9 @@ wxDragResult wxDataViewMainWindow::OnData(wxDataFormat format, wxCoord x, wxCoor
 {
     DropItemInfo dropItemInfo = GetDropItemInfo(x, y);
 
-    wxDataObjectComposite *obj = static_cast<wxDataObjectComposite*>(GetDropTarget()->GetDataObject());
+    wxDataViewDropTarget* const
+        target = static_cast<wxDataViewDropTarget*>(GetDropTarget());
+    wxDataObjectComposite* const obj = target->GetCompositeDataObject();
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, dropItemInfo.m_item);
     event.SetProposedDropIndex(dropItemInfo.m_proposedDropIndex);
@@ -5804,7 +5812,7 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
 bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat> &formats )
 {
     wxDataViewDropTarget* dt = NULL;
-    if (wxDataObject* dataObject = CreateDataObject(formats))
+    if (wxDataObjectComposite* dataObject = CreateDataObject(formats))
     {
         dt = new wxDataViewDropTarget(dataObject, m_clientArea);
     }
