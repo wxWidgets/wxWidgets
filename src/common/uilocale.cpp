@@ -114,13 +114,11 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     // 1. Handle platform-dependent cases
 
     // 1a. Check for modifier in POSIX tag
-    bool posixFound = false;
     wxString tagRest;
     wxString tagMain = tag.BeforeFirst('@', &tagRest);
     if (!tagRest.empty())
     {
         // POSIX modifier found
-        posixFound = true;
         wxString script = wxUILocale::GetScriptNameFromAlias(tagRest);
         if (!script.empty())
             locId.Script(script);
@@ -137,7 +135,6 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     if (!tagRest.empty())
     {
         // POSIX charset found
-        posixFound = true;
         locId.Charset(tagRest);
     }
     else
