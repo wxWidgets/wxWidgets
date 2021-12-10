@@ -1502,6 +1502,7 @@ outlineView:(NSOutlineView*)outlineView
         currentlyEditedColumn =
             currentlyEditedRow = -1;
 
+        [self setAutoresizesOutlineColumn:NO];
         [self setDelegate:self];
         [self setDoubleAction:@selector(actionDoubleClick:)];
         [self setDraggingSourceOperationMask:NSDragOperationEvery forLocal:NO];
@@ -2347,20 +2348,9 @@ bool wxCocoaDataViewControl::Update(const wxDataViewColumn *columnPtr)
     return false;
 }
 
-bool wxCocoaDataViewControl::Update(const wxDataViewItem& parent, const wxDataViewItem& item)
+bool wxCocoaDataViewControl::Update(const wxDataViewItem& WXUNUSED(parent), const wxDataViewItem& item)
 {
-    if (GetSortingColumn())
-    {
-        if (parent.IsOk())
-            [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-        else
-            [m_OutlineView reloadData];
-    }
-    else
-    {
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:item]];
-    }
-
+    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:item]];
     return true;
 }
 
