@@ -1430,20 +1430,26 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
         return;
     }
 
-    const wxTextDataObject* const obj = static_cast<wxTextDataObject*>(event.GetDataObject());
+    // Note that instead of recreating a new data object here we could also
+    // retrieve the data object from the event, using its GetDataObject()
+    // method. This would be more efficient as it would avoid copying the text
+    // one more time, but would require a cast in the code and we don't really
+    // care about efficiency here.
+    wxTextDataObject obj;
+    obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
 
     if ( item.IsOk() )
     {
         if (m_music_model->IsContainer(item))
         {
             wxLogMessage("Text '%s' dropped in container '%s' (proposed index = %i)",
-                         obj->GetText(), m_music_model->GetTitle(item), event.GetProposedDropIndex());
+                         obj.GetText(), m_music_model->GetTitle(item), event.GetProposedDropIndex());
         }
         else
-            wxLogMessage("Text '%s' dropped on item '%s'", obj->GetText(), m_music_model->GetTitle(item));
+            wxLogMessage("Text '%s' dropped on item '%s'", obj.GetText(), m_music_model->GetTitle(item));
     }
     else
-        wxLogMessage("Text '%s' dropped on background (proposed index = %i)", obj->GetText(), event.GetProposedDropIndex());
+        wxLogMessage("Text '%s' dropped on background (proposed index = %i)", obj.GetText(), event.GetProposedDropIndex());
 }
 
 #endif // wxUSE_DRAG_AND_DROP
