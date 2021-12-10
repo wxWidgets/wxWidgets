@@ -338,7 +338,7 @@
 
 
     <wx-data id="data">
-        <files>testdata.fc horse.svg</files>
+        <files>testdata.conf horse.svg</files>
     </wx-data>
 
     <wx-data id="data-image-sample">

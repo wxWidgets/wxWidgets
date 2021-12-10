@@ -551,7 +551,7 @@ endif
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (testdata.fc horse.svg) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (testdata.conf horse.svg) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 data-image-sample: 
 	if not exist $(OBJS) mkdir $(OBJS)
