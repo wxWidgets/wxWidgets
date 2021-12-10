@@ -729,20 +729,22 @@ outlineView:(NSOutlineView*)outlineView
     // Create event
     wxDataViewEvent event(eventType, dvc, wxDataViewItemFromItem(item));
 
-    // Retrieve data info if user released mouse buttton (drop occured)
+    // Retrieve the data itself if user released mouse button (drop occurred)
     if (eventType == wxEVT_DATAVIEW_ITEM_DROP)
     {
         if (!dt->GetData())
             return NSDragOperationNone;
 
         wxDataObjectComposite *obj = static_cast<wxDataObjectComposite*>(dt->GetDataObject());
-        event.SetDataSize(obj->GetDataSize(format));
-        event.SetDataObject(obj->GetObject(format));
+        event.InitData(obj, format);
+    }
+    else // Otherwise set just the data format
+    {
+        event.SetDataFormat(format);
     }
 
     // Setup other event properties
     event.SetProposedDropIndex(index);
-    event.SetDataFormat(format);
     if (index == -1)
     {
         event.SetDropEffect(wxDragCopy);

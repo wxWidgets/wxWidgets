@@ -1805,6 +1805,18 @@ void wxDataViewEvent::Init(wxDataViewCtrlBase* dvc,
     SetEventObject(dvc);
 }
 
+#if wxUSE_DRAG_AND_DROP
+
+void wxDataViewEvent::InitData(wxDataObjectComposite* obj, wxDataFormat format)
+{
+    SetDataFormat(format);
+
+    SetDataObject(obj->GetObject(format));
+    SetDataSize(obj->GetDataSize(format));
+}
+
+#endif // wxUSE_DRAG_AND_DROP
+
 #if wxUSE_SPINCTRL
 
 // -------------------------------------

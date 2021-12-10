@@ -936,6 +936,9 @@ public:
     // insertion of items, this is the proposed child index for the insertion.
     void SetProposedDropIndex(int index) { m_proposedDropIndex = index; }
     int GetProposedDropIndex() const { return m_proposedDropIndex;}
+
+    // Internal, only used by wxWidgets itself.
+    void InitData(wxDataObjectComposite* obj, wxDataFormat format);
 #endif // wxUSE_DRAG_AND_DROP
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDataViewEvent(*this); }
