@@ -972,6 +972,7 @@ protected:
 #if wxUSE_DRAG_AND_DROP
     wxDataObject       *m_dataObject;
 
+    wxMemoryBuffer      m_dataBuf;
     wxDataFormat        m_dataFormat;
     void*               m_dataBuffer;
     size_t              m_dataSize;

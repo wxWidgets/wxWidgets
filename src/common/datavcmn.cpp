@@ -1812,7 +1812,17 @@ void wxDataViewEvent::InitData(wxDataObjectComposite* obj, wxDataFormat format)
     SetDataFormat(format);
 
     SetDataObject(obj->GetObject(format));
-    SetDataSize(obj->GetDataSize(format));
+
+    const size_t size = obj->GetDataSize(format);
+    SetDataSize(size);
+
+    if ( size )
+    {
+        obj->GetDataHere(format, m_dataBuf.GetWriteBuf(size));
+        m_dataBuf.UngetWriteBuf(size);
+
+        SetDataBuffer(m_dataBuf.GetData());
+    }
 }
 
 #endif // wxUSE_DRAG_AND_DROP
