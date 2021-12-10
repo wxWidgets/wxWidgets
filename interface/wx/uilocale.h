@@ -163,6 +163,11 @@ public:
     wxString GetName() const;
 
     /**
+        Get the locale id from which the current locale was instantiated.
+     */
+    wxLocaleIdent GetLocaleId() const;
+
+    /**
         Query the locale for the specified information.
 
         This function returns the value of the locale-specific option specified
@@ -178,6 +183,26 @@ public:
      */
     wxString GetInfo(wxLocaleInfo index,
                      wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT) const;
+
+    /**
+        Query the locale for the specified localized name.
+
+        @param name
+            One of the elements of wxLocaleName enum.
+        @param form
+            The representation form requested.
+        @return
+            The localized name value or empty string if the function failed.
+     */
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const;
+
+    /**
+        Query the layout direction of the current locale.
+
+        @return
+            The layout direction or wxLayout_Default if the function failed.
+     */
+    wxLayoutDirection GetLayoutDirection() const;
 
     /**
         Return true if locale is supported on the current system.
@@ -274,7 +299,7 @@ wxString wxGetUIDateFormat();
 
     There are two possible ways to construct wxLocaleIdent:
 
-        - You can either use fromTag() to create it from a string in the form
+        - You can either use FromTag() to create it from a string in the form
           @code language ["-" script] ["-" region] @endcode, corresponding to
           the subset of BCP 47 (https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
           syntax.
@@ -308,7 +333,39 @@ class wxLocaleIdent
 {
 public:
     /**
-        Return the locale identifier corresponding to the given BCP 47-like tag.
+        Return the locale identifier corresponding to the given locale tag.
+
+        This method accepts locale tags in various formats:
+
+            - BCP-47,
+            - Windows,
+            - POSIX, and
+            - macOS.
+
+        See section 2.01 of https://www.rfc-editor.org/rfc/bcp/bcp47.txt for the
+        full BCP-47 syntax. Here we fully support just the subset we're interested in:
+
+            - Normal language tags (not private use or grandfathered ones),
+            - Script, and
+            - Region.
+
+        Additionally platform-specific tags are supported:
+
+            - Extensions (without validity checks) (Windows only),
+            - Sortorder (Windows only)
+            - Charset (POSIX only), and
+            - Modifier (POSIX only).
+
+        Only language, script, and region are supported across all platforms.
+        The script tag is mapped to the modifier tag for POSIX platforms.
+        The script tag takes precedence, if a modifier is also specified.
+
+        The following tag syntax is accepted:
+
+            BCP-47:  <language>[-<script>][-<region>][-<extension>]
+            Windows: <language>[-<script>][-<region>][-<extension>][_<sortorder>]
+            POSIX:   <language>[_<region>][.<charset>][@<modifier>]
+            macOS:   <language>[-<script>][_<region>]
 
         The string must contain at least the language part (2 or 3 ASCII
         letters) and may contain script and region separated by dashes, i.e.
@@ -363,7 +420,9 @@ public:
     /**
         Set script.
 
-        Note that script value is currently ignored under Unix systems.
+        Note that under Unix systems the script value is currently mapped
+        to the modifier attribute using the script alias name, if the latter
+        is known. Otherwise it is ignored.
 
         Return reference to @this for method chaining.
 
@@ -391,14 +450,47 @@ public:
 
         Note that this value is only used under Unix systems and simply ignored
         under the other ones.
+        Note that under Unix systems the modifier value may represent a script
+        value. If the value corresponds to a valid script alias it is mapped
+        to the associated script tag.
 
         Return reference to @this for method chaining.
 
         @param modifier
-            Modifier is defined by ISO/IEC 15897.
-            It is a semi-colon separated list of identifiers, or name=value pairs.
+            Modifier is a free-form text string.
     */
     wxLocaleIdent& Modifier(const wxString& modifier);
+
+    // Set extension (only supported under Windows)
+    /**
+        Set extension.
+
+        Note that this value is only used under Windows systems and simply ignored
+        under the other ones.
+
+        Return reference to @this for method chaining.
+
+        @param extension
+            Extension identifiers allow to support custom Windows locales.
+            They are usually not portable, not even from one Windows system
+            to the other.
+    */
+    wxLocaleIdent& Extension(const wxString& extension);
+
+    // Set sortorder (only supported under Windows)
+    /**
+        Set sortorder.
+
+        Note that this value is only used under Windows systems and simply ignored
+        under the other ones.
+
+        Return reference to @this for method chaining.
+
+        @param sortorder
+            Sortorder identifiers are defined in the Windows Development documentation:
+            https://docs.microsoft.com/en-us/windows/win32/intl/sort-order-identifiers.
+    */
+    wxLocaleIdent& Sortorder(const wxString& sortorder);
 
     /// Return the language part of the locale identifier.
     const wxString& GetLanguage() const;
@@ -415,14 +507,35 @@ public:
     /// Return the modifier part of the locale identifier.
     const wxString& GetModifier() const;
 
+    /// Return the extension part of the locale identifier.
+    const wxString& GetExtension() const;
+
+    /// Return the sortorder part of the locale identifier.
+    const wxString& GetSortorder() const;
+
     /**
         Construct platform dependent name.
         Format:
-        Windows: <language>-<script>-<REGION>
-        Unix:    <language>_<REGION>.<charset>@<modifier>
+        Windows: <language>-<script>-<REGION>-<extension>_<sortorder>
+        Unix:    <language>_<REGION>.<charset>@{<modifier>|<scriptalias>}
         MacOS:   <language>-<script>_<REGION>
     */
     wxString GetName() const;
+
+    /**
+        Construct name in specified format.
+        Format:
+        Default: name as used in wxLocaleIdent::FromTag() or system format
+        System:  name in platform-dependent format
+        Windows: <language>-<script>-<REGION>-<extension>_<sortorder>
+        Unix:    <language>_<REGION>.<charset>@<modifier>
+        MacOS:   <language>-<script>_<REGION>
+        BCP 47:  <language>-<script>-<REGION>-<extension>
+
+        @param tagType
+            Value from wxLocaleTagType enum.
+    */
+    wxString GetTag(wxLocaleTagType tagType = wxLOCALE_TAGTYPE_DEFAULT) const;
 
     /**
         Check if the locale is empty.

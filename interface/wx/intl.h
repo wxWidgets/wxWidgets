@@ -91,6 +91,33 @@ struct wxLanguageInfo
 
 
 /**
+    The type of a locale tag.
+
+    @see wxLocaleIdent::GetTag()
+*/
+enum wxLocaleTagType
+{
+    /// Default (tag as given or else same as wxLOCALE_TAGFORM_SYSTEM)
+    wxLOCALE_TAGTYPE_DEFAULT,
+
+    /// Default type of the system (platform-dependent).
+    wxLOCALE_TAGTYPE_SYSTEM,
+
+    /// BCP47-like type: <language>[-<script>][-<region>][-<modifier>].
+    wxLOCALE_TAGTYPE_BCP47,
+
+    /// macOS type: <language>[-<script>][_<region>].
+    wxLOCALE_TAGTYPE_MACOS,
+
+    /// POSIX type: <language>_<region>[.<charset>][@{<scriptalias>|<modifier>}].
+    wxLOCALE_TAGTYPE_POSIX,
+
+    /// Windows type:  <language>[-<script>][-<region>][-<modifier>][_<sortorder>].
+    wxLOCALE_TAGTYPE_WINDOWS
+};
+
+
+/**
     The category of locale settings.
 
     @see wxLocale::GetInfo(), wxUILocale::GetInfo()
@@ -189,6 +216,50 @@ enum wxLocaleInfo
         @since 2.9.0
      */
     wxLOCALE_TIME_FMT
+};
+
+
+/**
+    The values understood by wxUILocale::GetLocalizedName().
+
+    The corresponding strings can be used to display the information in the UI.
+
+    @since 3.1.6
+
+    @see wxUILocale::GetLocalizedName()
+*/
+enum wxLocaleName
+{
+    /// Display name of a locale.
+    wxLOCALE_NAME_LOCALE,
+
+    /// Display name of the language of a locale.
+    wxLOCALE_NAME_LANGUAGE,
+
+    /// Display name of the country/region of a locale.
+    wxLOCALE_NAME_COUNTRY
+};
+
+// ----------------------------------------------------------------------------
+// wxLocaleForm: the forms of names understood by wxLocale::GetLocalizedName()
+// ----------------------------------------------------------------------------
+
+/**
+    The values understood by wxUILocale::GetLocalizedName().
+
+    The values specify the form of a localized name.
+
+    @since 3.1.6
+
+    @see wxUILocale::GetLocalizedName()
+*/
+enum wxLocaleForm
+{
+    /// Name should be returned in the language of the locale itself.
+    wxLOCALE_FORM_NATIVE,
+
+    /// Name should be returned in English.
+    wxLOCALE_FORM_ENGLISH
 };
 
 

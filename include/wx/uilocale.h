@@ -56,12 +56,20 @@ public:
     // Set modifier (only supported under Unix)
     wxLocaleIdent& Modifier(const wxString& modifier);
 
+    // Set sortorder (only supported under Windows)
+    wxLocaleIdent& Extension(const wxString& extension);
+
+    // Set sortorder (only supported under Windows)
+    wxLocaleIdent& Sortorder(const wxString& sortorder);
+
     // Accessors for the individual fields.
     const wxString& GetLanguage() const { return m_language; }
     const wxString& GetRegion() const { return m_region; }
     const wxString& GetScript() const { return m_script; }
     const wxString& GetCharset() const { return m_charset; }
     const wxString& GetModifier() const { return m_modifier; }
+    const wxString& GetExtension() const { return m_extension; }
+    const wxString& GetSortorder() const { return m_sortorder; }
 
     // Construct platform dependent name
     wxString GetName() const;
@@ -69,7 +77,7 @@ public:
     // Get the language tag: for the objects created with FromTag() returns the
     // string passed to it directly, otherwise reconstructs this string from
     // the components.
-    wxString GetTag() const;
+    wxString GetTag(wxLocaleTagType tagType = wxLOCALE_TAGTYPE_DEFAULT) const;
 
     // Empty locale identifier is invalid. at least Language() must be called.
     bool IsEmpty() const
@@ -85,6 +93,8 @@ private:
     wxString m_script;
     wxString m_charset;
     wxString m_modifier;
+    wxString m_extension;
+    wxString m_sortorder;
 };
 
 // ----------------------------------------------------------------------------
@@ -126,9 +136,18 @@ public:
     // Get the platform-dependent name of the current locale.
     wxString GetName() const;
 
+    // Get the locale id from which the current locale was instantiated.
+    wxLocaleIdent GetLocaleId() const;
+
     // Query the locale for the specified information.
     wxString GetInfo(wxLocaleInfo index,
                      wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT) const;
+
+    // Query the locale for the specified localized name.
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const;
+
+    // Query the layout direction of the current locale.
+    wxLayoutDirection GetLayoutDirection() const;
 
     // Compares two strings in the order defined by this locale.
     int CompareStrings(const wxString& lhs, const wxString& rhs,

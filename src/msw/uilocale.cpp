@@ -35,6 +35,14 @@
     #define MUI_LANGUAGE_NAME 8
 #endif
 
+#ifndef LOCALE_ICONSTRUCTEDLOCALE
+#define LOCALE_ICONSTRUCTEDLOCALE 0x0000007d
+#endif
+
+#ifndef LOCALE_RETURN_NUMBER
+#define LOCALE_RETURN_NUMBER 0x20000000
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -96,6 +104,16 @@ wxString wxLocaleIdent::GetName() const
         {
             name << "-" << m_region;
         }
+
+        if (!m_extension.empty())
+        {
+            name << "-" << m_extension;
+        }
+
+        if (!m_sortorder.empty())
+        {
+            name << "_" << m_sortorder;
+        }
     }
 
     return name;
@@ -140,9 +158,84 @@ public:
         return buf;
     }
 
+    wxLocaleIdent GetLocaleId() const wxOVERRIDE
+    {
+        return wxLocaleIdent::FromTag(GetName());
+    }
+
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE
     {
         return wxGetInfoFromLCID(m_lcid, index, cat);
+    }
+
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const wxOVERRIDE
+    {
+        wxChar buf[256];
+        buf[0] = wxT('\0');
+        wxString str;
+        switch (name)
+        {
+            case wxLOCALE_NAME_LOCALE:
+                switch (form)
+                {
+                    case wxLOCALE_FORM_NATIVE:
+                        {
+                            ::GetLocaleInfo(m_lcid, LOCALE_SNATIVELANGNAME, buf, WXSIZEOF(buf));
+                            wxString strLang = buf;
+                            ::GetLocaleInfo(m_lcid, LOCALE_SNATIVECTRYNAME, buf, WXSIZEOF(buf));
+                            wxString strCtry = buf;
+                            str << strLang << " (" << strCtry << ")";
+                        }
+                        break;
+                    case wxLOCALE_FORM_ENGLISH:
+                        {
+                            ::GetLocaleInfo(m_lcid, LOCALE_SENGLANGUAGE, buf, WXSIZEOF(buf));
+                            wxString strLang = buf;
+                            ::GetLocaleInfo(m_lcid, LOCALE_SENGCOUNTRY, buf, WXSIZEOF(buf));
+                            wxString strCtry = buf;
+                            str << strLang << " (" << strCtry << ")";
+                        }
+                        break;
+                    default:
+                        wxFAIL_MSG("unknown wxLocaleForm");
+                }
+                break;
+            case wxLOCALE_NAME_LANGUAGE:
+                switch (form)
+                {
+                    case wxLOCALE_FORM_NATIVE:
+                        ::GetLocaleInfo(m_lcid, LOCALE_SNATIVELANGNAME, buf, WXSIZEOF(buf));
+                        break;
+                    case wxLOCALE_FORM_ENGLISH:
+                        ::GetLocaleInfo(m_lcid, LOCALE_SENGLANGUAGE, buf, WXSIZEOF(buf));
+                        break;
+                    default:
+                        wxFAIL_MSG("unknown wxLocaleForm");
+                }
+                str = buf;
+                break;
+            case wxLOCALE_NAME_COUNTRY:
+                switch (form)
+                {
+                    case wxLOCALE_FORM_NATIVE:
+                        ::GetLocaleInfo(m_lcid, LOCALE_SNATIVECTRYNAME, buf, WXSIZEOF(buf));
+                        break;
+                    case wxLOCALE_FORM_ENGLISH:
+                        ::GetLocaleInfo(m_lcid, LOCALE_SENGCOUNTRY, buf, WXSIZEOF(buf));
+                        break;
+                    default:
+                        wxFAIL_MSG("unknown wxLocaleForm");
+                }
+                str = buf;
+                break;
+        }
+
+        return str;
+    }
+
+    wxLayoutDirection GetLayoutDirection() const
+    {
+        return wxLayout_Default;
     }
 
     int CompareStrings(const wxString& lhs, const wxString& rhs,
@@ -209,7 +302,28 @@ public:
     {
         // Getting the locale name seems to be the simplest way to see if it's
         // really supported: unknown locale result in an error here.
+        //
+        // The latter may have been a valid assumption for Windows 7 and below,
+        // but at least for Windows 10 the function only fails if the given
+        // locale name is not a valid BCP 47 identifier. For example,
+        // valid language codes can have 2 or 3 letters:
+        // - using name "w" fails
+        // - using name "wx" succeeds
+        // - using name "wxy" succeeds
+        // - using name "wxyz" fails
         if ( !ms_GetLocaleInfoEx(name, LOCALE_SNAME, NULL, 0) )
+            return NULL;
+
+        // It can be checked whether the locale is "constructed" or not.
+        // "not constructed" means the locale is a predefined locale,
+        // "constructed" means the locale is not predefined, but has to be constructed.
+        // For example, "de-US" would be a constructed locale.
+        // Using LOCALE_ICONSTRUCTEDLOCALE to query the locale status is discouraged
+        // by Microsoft (the constant is not even defined in a Windows header file).
+        // However, for now constructed locales will be rejected here.
+        int isConstructed = 0;
+        if (!ms_GetLocaleInfoEx(name, LOCALE_ICONSTRUCTEDLOCALE | LOCALE_RETURN_NUMBER,
+                                (LPWSTR)&isConstructed, sizeof(int)) || isConstructed != 0)
             return NULL;
 
         return new wxUILocaleImplName(name);
@@ -240,6 +354,11 @@ public:
     wxString GetName() const wxOVERRIDE
     {
         return DoGetInfo(LOCALE_SNAME);
+    }
+
+    wxLocaleIdent GetLocaleId() const wxOVERRIDE
+    {
+        return wxLocaleIdent::FromTag(GetName());
     }
 
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE
@@ -284,6 +403,93 @@ public:
         }
 
         return str;
+    }
+
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const wxOVERRIDE
+    {
+        // TODO-XP: This duplicates code from in wxGetInfoFromLCID(), but
+        // it's only temporary because we will drop all code using LCID soon.
+                // LOCALE_SINTLSYMBOL (Currency 3-letter ISO 4217)
+        static wxWinVersion ver = wxGetWinVersion();
+        wxString str;
+        switch (name)
+        {
+            case wxLOCALE_NAME_LOCALE:
+                switch (form)
+                {
+                    case wxLOCALE_FORM_NATIVE:
+                        if (ver >= wxWinVersion_7)
+                        {
+                            str = DoGetInfo(LOCALE_SNATIVEDISPLAYNAME);
+                        }
+                        else
+                        {
+                            wxString strLang = DoGetInfo(LOCALE_SNATIVELANGNAME);
+                            wxString strCtry = DoGetInfo(LOCALE_SNATIVECTRYNAME);
+                            str << strLang << " (" << strCtry << ")";
+                        }
+                        break;
+                    case wxLOCALE_FORM_ENGLISH:
+                        if (ver >= wxWinVersion_7)
+                        {
+                            str = DoGetInfo(LOCALE_SENGLISHDISPLAYNAME);
+                        }
+                        else
+                        {
+                            wxString strLang = DoGetInfo(LOCALE_SENGLANGUAGE);
+                            wxString strCtry = DoGetInfo(LOCALE_SENGCOUNTRY);
+                            str << strLang << " (" << strCtry << ")";
+                        }
+                        break;
+                    default:
+                        wxFAIL_MSG("unknown wxLocaleForm");
+                }
+                break;
+            case wxLOCALE_NAME_LANGUAGE:
+                switch (form)
+                {
+                    case wxLOCALE_FORM_NATIVE:
+                        str = DoGetInfo((ver >= wxWinVersion_7) ? LOCALE_SNATIVELANGUAGENAME : LOCALE_SNATIVELANGNAME);
+                        break;
+                    case wxLOCALE_FORM_ENGLISH:
+                        str = DoGetInfo((ver >= wxWinVersion_7) ? LOCALE_SENGLISHLANGUAGENAME : LOCALE_SENGLANGUAGE);
+                        break;
+                    default:
+                        wxFAIL_MSG("unknown wxLocaleForm");
+                }
+                break;
+            case wxLOCALE_NAME_COUNTRY:
+                switch (form)
+                {
+                    case wxLOCALE_FORM_NATIVE:
+                        str = DoGetInfo((ver >= wxWinVersion_7) ? LOCALE_SNATIVECOUNTRYNAME : LOCALE_SNATIVECTRYNAME);
+                        break;
+                    case wxLOCALE_FORM_ENGLISH:
+                        str = DoGetInfo((ver >= wxWinVersion_7) ? LOCALE_SENGLISHCOUNTRYNAME : LOCALE_SENGCOUNTRY);
+                        break;
+                    default:
+                        wxFAIL_MSG("unknown wxLocaleForm");
+                }
+                break;
+        }
+
+        return str;
+    }
+
+    wxLayoutDirection GetLayoutDirection() const
+    {
+        if (wxGetWinVersion() >= wxWinVersion_7)
+        {
+            wxString str = DoGetInfo(LOCALE_IREADINGLAYOUT);
+            // str contains a number between 0 and 3:
+            // 0 = LTR, 1 = RTL, 2 = TTB+RTL, 3 = TTB + LTR
+            // If str equals 1 return RTL, otherwise LTR
+            return (str.IsSameAs("1") ? wxLayout_RightToLeft : wxLayout_LeftToRight);
+        }
+        else
+        {
+            return wxLayout_Default;
+        }
     }
 
     int CompareStrings(const wxString& lhs, const wxString& rhs,
@@ -398,14 +604,19 @@ wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateForLanguage(const wxLanguageInfo& info)
 {
-    if ( info.WinLang == 0 )
+    if (!wxUILocaleImplName::CanUse())
     {
-        wxLogWarning(wxS("Locale '%s' not supported by OS."), info.Description);
-
-        return NULL;
+        if (info.WinLang == 0)
+        {
+            wxLogWarning(wxS("Locale '%s' not supported by OS."), info.Description);
+            return NULL;
+        }
+        return new wxUILocaleImplLCID(info.GetLCID());
     }
-
-    return new wxUILocaleImplLCID(info.GetLCID());
+    else
+    {
+        return wxUILocaleImplName::Create(info.LocaleTag.wc_str());
+    }
 }
 
 /* static */
@@ -420,7 +631,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
         return NULL;
     }
 
-    return wxUILocaleImplName::Create(locId.GetTag().wc_str());
+    return wxUILocaleImplName::Create(locId.GetTag(wxLOCALE_TAGTYPE_WINDOWS).wc_str());
 }
 
 #endif // wxUSE_INTL

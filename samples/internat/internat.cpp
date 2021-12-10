@@ -364,6 +364,30 @@ MyFrame::MyFrame()
                       ),
                   wxSizerFlags().Center().Border());
 
+    topSizer->Add(new wxStaticText
+                      (
+                        panel,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                          _("UI locale name in English: %s"),
+                          wxUILocale::GetCurrent().GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_ENGLISH)
+                        )
+                      ),
+                  wxSizerFlags().Center().Border());
+
+    topSizer->Add(new wxStaticText
+                      (
+                        panel,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                          _("... and in the locale language: %s"),
+                          wxUILocale::GetCurrent().GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE)
+                        )
+                      ),
+                  wxSizerFlags().Center().Border());
+
     // create some controls affected by the locale
 
     // this demonstrates RTL layout mirroring for Arabic locales and using
@@ -528,16 +552,17 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
         return;
 
     s_locale = locale;
-    const wxLanguageInfo * const info = wxLocale::FindLanguageInfo(s_locale);
-    if ( !info )
-    {
-        wxLogError(_("Locale \"%s\" is unknown."), s_locale);
-        return;
-    }
 
-    if ( wxLocale::IsAvailable(info->Language) )
+    wxUILocale uiLocale = wxUILocale::FromTag(s_locale);
+    if (uiLocale.IsSupported())
     {
-        wxLogMessage(_("Locale \"%s\" is available."), s_locale);
+        wxLayoutDirection layout = uiLocale.GetLayoutDirection();
+        wxString strLayout = (layout == wxLayout_RightToLeft) ? "RTL" : "LTR";
+        wxString strLocale = uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE);
+        wxLogMessage(_("Locale \"%s\" is available.\nIdentifier: %s; Layout: %s\nEnglish name: %s\nLocalized name: %s"),
+                     s_locale, uiLocale.GetName(), strLayout,
+                     uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_ENGLISH),
+                     uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE));
     }
     else
     {
