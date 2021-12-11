@@ -1552,7 +1552,6 @@ void MyFrame::OnDropDownPanelItem(wxAuiToolBarEvent& evt)
             sz->Add(count, 0, wxALL, 8);
             panel->SetSizer(sz);
             sz->Fit(panel);
-            pulse_quant->SetSizer(sz);
             pulse_quant->SetClientSize(panel->GetSize());
         }
         wxRect rect = evt.GetItemRect();
