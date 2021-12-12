@@ -462,6 +462,9 @@ public:
     static wxAppConsole *GetInstance() { return ms_appInstance; }
     static void SetInstance(wxAppConsole *app) { ms_appInstance = app; }
 
+    // returns true for GUI wxApp subclasses
+    virtual bool IsGUI() const { return false; }
+
 
     // command line arguments (public for backwards compatibility)
     int argc;
@@ -684,6 +687,19 @@ public:
     // deactivated
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 
+    virtual bool IsGUI() const wxOVERRIDE { return true; }
+
+    // returns non-null pointer only if we have a GUI application object: this
+    // is only useful in the rare cases when the same code can be used in both
+    // console and GUI applications, but needs to use GUI-specific functions if
+    // the GUI is available
+    static wxAppBase *GetGUIInstance()
+    {
+        return ms_appInstance && ms_appInstance->IsGUI()
+                ? static_cast<wxAppBase*>(ms_appInstance)
+                : NULL;
+    }
+
 protected:
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits() wxOVERRIDE;
@@ -761,7 +777,7 @@ protected:
 // return the object of the correct type (i.e. MyApp and not wxApp)
 //
 // the cast is safe as in GUI build we only use wxApp, not wxAppConsole, and in
-// console mode it does nothing at all
+// console mode it does nothing at all (but see also wxApp::GetGUIInstance())
 #define wxTheApp static_cast<wxApp*>(wxApp::GetInstance())
 
 // ----------------------------------------------------------------------------
