@@ -251,7 +251,7 @@ public:
         Returns the one and only global application object.
         Usually ::wxTheApp is used instead.
 
-        @see SetInstance()
+        @see SetInstance(), wxApp::GetGUIInstance()
     */
     static wxAppConsole* GetInstance();
 
@@ -839,6 +839,35 @@ public:
     virtual wxVideoMode GetDisplayMode() const;
 
     /**
+        Returns the current GUI wxApp object if any or @NULL otherwise.
+
+        This function should only be used in the rare cases when the same code
+        needs to work in both console and GUI applications, but needs to use
+        GUI-specific functionality if it is available, and so just calling
+        wxAppConsole::GetInstance() is insufficient while using ::wxTheApp is
+        incorrect, as the application object is not always a GUI wxApp.
+
+        For example:
+        @code
+            WXWidget handle = 0;
+            if ( wxApp* const app = wxApp::GetGUIInstance() ) {
+                if ( wxWindow* const w = app->GetTopWindow() ) {
+                    handle = w->GetHandle();
+                }
+            }
+            //else: no window to use
+
+            some_native_function_taking_a_window_handle(handle);
+        @endcode
+
+        Note that in this particular example, you could  use GetMainTopWindow()
+        which already does the same thing instead of doing it yourself.
+
+        @since 3.1.6
+    */
+    static wxAppConsole* GetGUIInstance();
+
+    /**
         Returns @true if the application will exit when the top-level frame is deleted.
 
         @see SetExitOnFrameDelete()
@@ -1213,7 +1242,9 @@ public:
 /**
     The global pointer to the singleton wxApp object.
 
-    @see wxApp::GetInstance()
+    This pointer can only be used in the GUI applications.
+
+    @see wxAppConsole::GetInstance(), wxApp::GetGUIInstance()
 */
 wxApp *wxTheApp;
 
