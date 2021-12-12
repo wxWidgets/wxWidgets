@@ -825,6 +825,7 @@ static wxOrientation GetOrientation(long style)
 wxBEGIN_EVENT_TABLE(wxAuiToolBar, wxControl)
     EVT_SIZE(wxAuiToolBar::OnSize)
     EVT_IDLE(wxAuiToolBar::OnIdle)
+    EVT_DPI_CHANGED(wxAuiToolBar::OnDPIChanged)
     EVT_ERASE_BACKGROUND(wxAuiToolBar::OnEraseBackground)
     EVT_PAINT(wxAuiToolBar::OnPaint)
     EVT_LEFT_DOWN(wxAuiToolBar::OnLeftDown)
@@ -2381,6 +2382,11 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
         }
     }
     evt.Skip();
+}
+
+void wxAuiToolBar::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    Realize();
 }
 
 void wxAuiToolBar::UpdateWindowUI(long flags)
