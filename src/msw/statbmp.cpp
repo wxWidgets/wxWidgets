@@ -160,6 +160,8 @@ void wxStaticBitmap::Init()
 
 void wxStaticBitmap::Free()
 {
+    m_bitmap.UnRef();
+
     MSWReplaceImageHandle(0);
 
     if ( m_ownsCurrentHandle )
@@ -266,7 +268,9 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
         else
 #endif // wxUSE_WXDIB
         {
-            // Just use the HBITMAP as is.
+            // Just use the HBITMAP as is, but also make a copy of the bitmap
+            // to ensure that HBITMAP remains valid for as long as we need it
+            m_bitmap = bitmap;
             m_currentHandle = bitmap.GetHandle();
         }
     }
