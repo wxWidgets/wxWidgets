@@ -1104,7 +1104,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 #endif
 
         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE;
-        if ( !m_owner->IsVirtual() && m_enableSortCol && i == m_sortCol )
+        if ( m_enableSortCol && i == m_sortCol )
         {
             if ( m_sortAsc )
                 sortArrow = wxHDR_SORT_ICON_UP;

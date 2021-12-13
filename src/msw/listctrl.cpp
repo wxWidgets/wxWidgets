@@ -3432,7 +3432,7 @@ void wxListCtrl::DrawSortArrow()
     {
         if ( ListView_GetColumn(GetHwnd(), col, &lvCol) )
         {
-            if ( !IsVirtual() && m_enableSortCol && col == m_sortCol )
+            if ( m_enableSortCol && col == m_sortCol )
             {
                 if ( m_sortAsc )
                     lvCol.fmt = (lvCol.fmt & ~HDF_SORTDOWN) | HDF_SORTUP;
