@@ -1459,6 +1459,13 @@ bool wxListCtrl::IsItemChecked(long item) const
 void wxListCtrl::EnableSortIndicator(bool enable)
 {
     m_enableSortCol = enable;
+
+    // This is the only place where we call this function even with disabled
+    // sort indicators because we may need to reset the currently shown
+    // indicator after disabling it.
+    //
+    // Also note that we should *not* skip calling it m_enableSortCol didn't
+    // change, as ShowSortIndicator() relies on it being called here.
     DrawSortArrow();
 }
 
@@ -1477,7 +1484,11 @@ void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
     {
         m_sortCol = idx;
         m_sortAsc = ascending;
-        DrawSortArrow();
+
+        // We need to enable the sort indicators if they're not enabled yet and
+        // if they're already enabled, this will update the actually shown sort
+        // indicator.
+        EnableSortIndicator();
     }
 }
 
@@ -1485,7 +1496,9 @@ void wxListCtrl::RemoveSortIndicator()
 {
     m_sortCol = -1;
     m_sortAsc = true;
-    DrawSortArrow();
+
+    if ( IsSortIndicatorEnabled() )
+        DrawSortArrow();
 }
 
 int wxListCtrl::GetSortIndicator() const
@@ -2091,7 +2104,8 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
         SetColumnWidth(n, wxLIST_AUTOSIZE_USEHEADER);
     }
 
-    DrawSortArrow();
+    if ( IsSortIndicatorEnabled() )
+        DrawSortArrow();
 
     return n;
 }
@@ -2472,7 +2486,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 else
                     m_sortAsc = !m_sortAsc;
                 m_sortCol = nmLV->iSubItem;
-                DrawSortArrow();
+                if ( IsSortIndicatorEnabled() )
+                    DrawSortArrow();
 
                 eventType = wxEVT_LIST_COL_CLICK;
                 event.m_itemIndex = -1;
@@ -3432,7 +3447,7 @@ void wxListCtrl::DrawSortArrow()
     {
         if ( ListView_GetColumn(GetHwnd(), col, &lvCol) )
         {
-            if ( m_enableSortCol && col == m_sortCol )
+            if ( col == m_sortCol )
             {
                 if ( m_sortAsc )
                     lvCol.fmt = (lvCol.fmt & ~HDF_SORTDOWN) | HDF_SORTUP;

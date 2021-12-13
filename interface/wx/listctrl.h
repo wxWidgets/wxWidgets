@@ -1428,6 +1428,9 @@ public:
         indicator in ascending order, or toggle it in the opposite order. To
         sort the list, call SortItems() in EVT_LIST_COL_CLICK.
 
+        Note that calling ShowSortIndicator() implicitly enables sort
+        indicators.
+
         @note In wxMSW, this will disable the header icon of the column.
 
         @param enable
@@ -1448,7 +1451,9 @@ public:
 
     /**
         Show the sort indicator of a specific column in a specific direction.
-        Sort indicators have to be enabled using EnableSortIndicator().
+
+        This function also enables showing sort indicators if
+        EnableSortIndicator() hadn't been called.
 
         @note This does not actually sort the list, use SortItems() for this.
 

@@ -5108,6 +5108,7 @@ void wxGenericListCtrl::ShowSortIndicator(int idx, bool ascending)
                 (idx != m_headerWin->m_sortCol ||
                  ascending != m_headerWin->m_sortAsc) )
     {
+        m_headerWin->m_enableSortCol = true;
         m_headerWin->m_sortCol = idx;
         m_headerWin->m_sortAsc = ascending;
         m_headerWin->Refresh();
