@@ -1435,7 +1435,7 @@ public:
 
         @since 3.1.6
     */
-    void EnableSortIndicator(const bool enable);
+    void EnableSortIndicator(bool enable);
 
     /**
         Returns true if a sort indicator is enabled.
@@ -1462,7 +1462,7 @@ public:
 
         @since 3.1.6
     */
-    void ShowSortIndicator(const int idx, const bool ascending = true);
+    void ShowSortIndicator(int idx, bool ascending = true);
 
     /**
         Remove the sort indicator from the column being used as sort key.

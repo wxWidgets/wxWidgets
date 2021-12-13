@@ -226,9 +226,9 @@ public:
     void CheckItem(long item, bool check) wxOVERRIDE;
 
     // Sort indicator in header
-    void EnableSortIndicator(const bool enable = true) wxOVERRIDE;
+    void EnableSortIndicator(bool enable = true) wxOVERRIDE;
     bool IsSortIndicatorEnabled() const wxOVERRIDE;
-    void ShowSortIndicator(const int idx, const bool ascending = true) wxOVERRIDE;
+    void ShowSortIndicator(int idx, bool ascending = true) wxOVERRIDE;
     void RemoveSortIndicator() wxOVERRIDE;
     int GetSortIndicator() const wxOVERRIDE;
     bool IsAscendingSortIndicator() const wxOVERRIDE;

@@ -5084,7 +5084,7 @@ bool wxGenericListCtrl::IsItemChecked(long item) const
     return m_mainWin->IsItemChecked(item);
 }
 
-void wxGenericListCtrl::EnableSortIndicator(const bool enable)
+void wxGenericListCtrl::EnableSortIndicator(bool enable)
 {
     if ( m_headerWin )
     {
@@ -5098,7 +5098,7 @@ bool wxGenericListCtrl::IsSortIndicatorEnabled() const
     return m_headerWin && m_headerWin->m_enableSortCol;
 }
 
-void wxGenericListCtrl::ShowSortIndicator(const int idx, const bool ascending)
+void wxGenericListCtrl::ShowSortIndicator(int idx, bool ascending)
 {
     if ( idx == -1 )
     {

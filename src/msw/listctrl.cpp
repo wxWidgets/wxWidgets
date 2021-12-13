@@ -1456,7 +1456,7 @@ bool wxListCtrl::IsItemChecked(long item) const
     return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
-void wxListCtrl::EnableSortIndicator(const bool enable)
+void wxListCtrl::EnableSortIndicator(bool enable)
 {
     m_enableSortCol = enable;
     DrawSortArrow();
@@ -1467,7 +1467,7 @@ bool wxListCtrl::IsSortIndicatorEnabled() const
     return m_enableSortCol;
 }
 
-void wxListCtrl::ShowSortIndicator(const int idx, const bool ascending)
+void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
 {
     if ( idx == -1 )
     {
