@@ -5086,10 +5086,10 @@ bool wxGenericListCtrl::IsItemChecked(long item) const
 
 void wxGenericListCtrl::EnableSortIndicator(bool enable)
 {
-    if ( m_headerWin )
+    if ( m_headerWin && enable != m_headerWin->m_enableSortCol )
     {
         m_headerWin->m_enableSortCol = enable;
-        Refresh();
+        m_headerWin->Refresh();
     }
 }
 
@@ -5104,21 +5104,23 @@ void wxGenericListCtrl::ShowSortIndicator(int idx, bool ascending)
     {
         RemoveSortIndicator();
     }
-    else if ( m_headerWin )
+    else if ( m_headerWin &&
+                (idx != m_headerWin->m_sortCol ||
+                 ascending != m_headerWin->m_sortAsc) )
     {
         m_headerWin->m_sortCol = idx;
         m_headerWin->m_sortAsc = ascending;
-        Refresh();
+        m_headerWin->Refresh();
     }
 }
 
 void wxGenericListCtrl::RemoveSortIndicator()
 {
-    if ( m_headerWin )
+    if ( m_headerWin && m_headerWin->m_sortCol != -1 )
     {
         m_headerWin->m_sortCol = -1;
         m_headerWin->m_sortAsc = true;
-        Refresh();
+        m_headerWin->Refresh();
     }
 }
 
