@@ -447,12 +447,16 @@ public:
     virtual void CheckItem(long WXUNUSED(item), bool WXUNUSED(check)) { }
 
     // Sort indicator in header.
-    virtual void EnableSortIndicator(const bool WXUNUSED(enable) = true) { }
-    virtual bool IsSortIndicatorEnabled() const { return false; }
-    virtual void ShowSortIndicator(const int WXUNUSED(idx), const bool WXUNUSED(ascending) = true) { }
-    virtual void RemoveSortIndicator() { }
+    virtual void ShowSortIndicator(int WXUNUSED(col), bool WXUNUSED(ascending) = true) { }
+    void RemoveSortIndicator() { ShowSortIndicator(-1); }
     virtual int GetSortIndicator() const { return -1; }
     virtual bool IsAscendingSortIndicator() const { return true; }
+    bool GetUpdatedAscendingSortIndicator(int col) const
+    {
+        // If clicking on the same column by which we already sort, toggle the sort
+        // direction, otherwise use ascending sort by default.
+        return col == GetSortIndicator() ? !IsAscendingSortIndicator() : true;
+    }
 
 protected:
     // Return pointer to the corresponding m_imagesXXX.

@@ -1421,38 +1421,18 @@ public:
     void ExtendRulesAndAlternateColour(bool extend = true);
 
     /**
-        Enable or disable showing a sort indicator in the header bar.
-        Sort indicators are only shown in report view.
-
-        When clicking on the header of a column, this column will get the sort-
-        indicator in ascending order, or toggle it in the opposite order. To
-        sort the list, call SortItems() in EVT_LIST_COL_CLICK.
-
-        @note In wxMSW, this will disable the header icon of the column.
-
-        @param enable
-            If @true, enable showing a sort indicator, otherwise disable.
-
-        @since 3.1.6
-    */
-    void EnableSortIndicator(const bool enable);
-
-    /**
-        Returns true if a sort indicator is enabled.
-
-        @see EnableSortIndicator()
-
-        @since 3.1.6
-    */
-    bool IsSortIndicatorEnabled() const;
-
-    /**
         Show the sort indicator of a specific column in a specific direction.
-        Sort indicators have to be enabled using EnableSortIndicator().
+
+        Sort indicators are only shown in report view and in the native wxMSW
+        version override any column icon, i.e. if the sort indicator is shown
+        for a column, no (other) icon is shown.
+
+        This function should typically be called from EVT_LIST_COL_CLICK
+        handler.
 
         @note This does not actually sort the list, use SortItems() for this.
 
-        @param idx
+        @param col
             The column to set the sort indicator for.
             If @c -1 is given, then the currently shown sort indicator
             will be removed.
@@ -1462,7 +1442,7 @@ public:
 
         @since 3.1.6
     */
-    void ShowSortIndicator(const int idx, const bool ascending = true);
+    void ShowSortIndicator(int col, bool ascending = true);
 
     /**
         Remove the sort indicator from the column being used as sort key.
@@ -1474,9 +1454,36 @@ public:
     /**
         Returns the column that shows the sort indicator.
 
+        Can return @c -1 if there is no sort indicator currently shown.
+
         @since 3.1.6
     */
     int GetSortIndicator() const;
+
+    /**
+        Returns the new value to use for sort indicator after clicking a
+        column.
+
+        This helper function can be useful in the EVT_LIST_COL_CLICK handler
+        when it updates the sort indicator after the user clicked on a column.
+
+        For example:
+        @code
+            void MyListCtrl::OnColClick(wxListEvent& event)
+            {
+                int col = event.GetColumn();
+                if ( col == -1 )
+                    return; // clicked outside any column.
+
+                const bool ascending = GetUpdatedAscendingSortIndicator(col);
+                SortItems(MyCompareFunction, ascending);
+                ShowSortIndicator(col, ascending);
+            }
+        @endcode
+
+        @since 3.1.6
+    */
+    bool GetUpdatedAscendingSortIndicator(int col) const;
 
     /**
         Returns @true if the sort indicator direction is ascending,

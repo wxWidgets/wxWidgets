@@ -461,8 +461,6 @@ void MyFrame::RecreateList(long flags, bool withText)
                                     flags |
                                     wxBORDER_THEME | wxLC_EDIT_LABELS);
 
-        m_listCtrl->EnableSortIndicator();
-
         if ( old )
         {
             wxSizer* const sizer = m_panel->GetSizer();
@@ -1091,10 +1089,11 @@ void MyListCtrl::OnColClick(wxListEvent& event)
         return; // clicked outside any column.
     }
 
-    if ( IsSortIndicatorEnabled() )
+    // sort on item data (SetItemData)
+    const bool ascending = GetUpdatedAscendingSortIndicator(col);
+    if ( SortItems(MyCompareFunction, ascending) )
     {
-        // sort on  item data (SetItemData), disable when sorting fails
-        EnableSortIndicator( SortItems(MyCompareFunction, IsAscendingSortIndicator()) );
+        ShowSortIndicator(col, ascending);
     }
 
     // set or unset image

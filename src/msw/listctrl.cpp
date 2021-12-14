@@ -278,7 +278,6 @@ void wxListCtrl::Init()
     m_colCount = 0;
     m_textCtrl = NULL;
 
-    m_enableSortCol = false;
     m_sortAsc = true;
     m_sortCol = -1;
 
@@ -1456,36 +1455,15 @@ bool wxListCtrl::IsItemChecked(long item) const
     return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
-void wxListCtrl::EnableSortIndicator(const bool enable)
+void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
 {
-    m_enableSortCol = enable;
-    DrawSortArrow();
-}
-
-bool wxListCtrl::IsSortIndicatorEnabled() const
-{
-    return m_enableSortCol;
-}
-
-void wxListCtrl::ShowSortIndicator(const int idx, const bool ascending)
-{
-    if ( idx == -1 )
-    {
-        RemoveSortIndicator();
-    }
-    else
+    if ( idx != m_sortCol || (idx != -1 && ascending != m_sortAsc) )
     {
         m_sortCol = idx;
         m_sortAsc = ascending;
+
         DrawSortArrow();
     }
-}
-
-void wxListCtrl::RemoveSortIndicator()
-{
-    m_sortCol = -1;
-    m_sortAsc = true;
-    DrawSortArrow();
 }
 
 int wxListCtrl::GetSortIndicator() const
@@ -2091,7 +2069,10 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
         SetColumnWidth(n, wxLIST_AUTOSIZE_USEHEADER);
     }
 
-    DrawSortArrow();
+    // Update the sort indicator if the index of the column for which it was
+    // set changed. Note that this condition works even if m_sortCol == -1.
+    if ( col <= m_sortCol )
+        DrawSortArrow();
 
     return n;
 }
@@ -2467,13 +2448,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_COLUMNCLICK:
-                if ( m_sortCol != nmLV->iSubItem )
-                    m_sortAsc = true;
-                else
-                    m_sortAsc = !m_sortAsc;
-                m_sortCol = nmLV->iSubItem;
-                DrawSortArrow();
-
                 eventType = wxEVT_LIST_COL_CLICK;
                 event.m_itemIndex = -1;
                 event.m_col = nmLV->iSubItem;
@@ -3432,7 +3406,7 @@ void wxListCtrl::DrawSortArrow()
     {
         if ( ListView_GetColumn(GetHwnd(), col, &lvCol) )
         {
-            if ( !IsVirtual() && m_enableSortCol && col == m_sortCol )
+            if ( col == m_sortCol )
             {
                 if ( m_sortAsc )
                     lvCol.fmt = (lvCol.fmt & ~HDF_SORTDOWN) | HDF_SORTUP;
