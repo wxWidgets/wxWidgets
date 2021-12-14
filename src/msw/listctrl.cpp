@@ -278,7 +278,6 @@ void wxListCtrl::Init()
     m_colCount = 0;
     m_textCtrl = NULL;
 
-    m_enableSortCol = false;
     m_sortAsc = true;
     m_sortCol = -1;
 
@@ -1456,49 +1455,15 @@ bool wxListCtrl::IsItemChecked(long item) const
     return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
-void wxListCtrl::EnableSortIndicator(bool enable)
-{
-    m_enableSortCol = enable;
-
-    // This is the only place where we call this function even with disabled
-    // sort indicators because we may need to reset the currently shown
-    // indicator after disabling it.
-    //
-    // Also note that we should *not* skip calling it m_enableSortCol didn't
-    // change, as ShowSortIndicator() relies on it being called here.
-    DrawSortArrow();
-}
-
-bool wxListCtrl::IsSortIndicatorEnabled() const
-{
-    return m_enableSortCol;
-}
-
 void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
 {
-    if ( idx == -1 )
-    {
-        RemoveSortIndicator();
-    }
-    else
+    if ( idx != m_sortCol || (idx != -1 && ascending != m_sortAsc) )
     {
         m_sortCol = idx;
         m_sortAsc = ascending;
 
-        // We need to enable the sort indicators if they're not enabled yet and
-        // if they're already enabled, this will update the actually shown sort
-        // indicator.
-        EnableSortIndicator();
-    }
-}
-
-void wxListCtrl::RemoveSortIndicator()
-{
-    m_sortCol = -1;
-    m_sortAsc = true;
-
-    if ( IsSortIndicatorEnabled() )
         DrawSortArrow();
+    }
 }
 
 int wxListCtrl::GetSortIndicator() const
@@ -2104,7 +2069,9 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
         SetColumnWidth(n, wxLIST_AUTOSIZE_USEHEADER);
     }
 
-    if ( IsSortIndicatorEnabled() )
+    // Update the sort indicator if the index of the column for which it was
+    // set changed. Note that this condition works even if m_sortCol == -1.
+    if ( col <= m_sortCol )
         DrawSortArrow();
 
     return n;
@@ -2481,14 +2448,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_COLUMNCLICK:
-                if ( m_sortCol != nmLV->iSubItem )
-                    m_sortAsc = true;
-                else
-                    m_sortAsc = !m_sortAsc;
-                m_sortCol = nmLV->iSubItem;
-                if ( IsSortIndicatorEnabled() )
-                    DrawSortArrow();
-
                 eventType = wxEVT_LIST_COL_CLICK;
                 event.m_itemIndex = -1;
                 event.m_col = nmLV->iSubItem;

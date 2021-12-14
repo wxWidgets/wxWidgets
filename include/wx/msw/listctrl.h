@@ -226,10 +226,7 @@ public:
     void CheckItem(long item, bool check) wxOVERRIDE;
 
     // Sort indicator in header
-    void EnableSortIndicator(bool enable = true) wxOVERRIDE;
-    bool IsSortIndicatorEnabled() const wxOVERRIDE;
     void ShowSortIndicator(int idx, bool ascending = true) wxOVERRIDE;
-    void RemoveSortIndicator() wxOVERRIDE;
     int GetSortIndicator() const wxOVERRIDE;
     bool IsAscendingSortIndicator() const wxOVERRIDE;
 
@@ -426,20 +423,15 @@ protected:
     int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                     // keep track of inserted/deleted columns
 
-    // m_sortCol and m_sortAsc are used only if m_enableSortCol is true.
-    //
-    // Note that m_sortCol may be set to -1, but this is not the same as
-    // setting m_enableSortCol to false, as the control updates the sort
-    // indicator on column click in the former case, but not in the latter.
-    bool m_enableSortCol;
-    bool m_sortAsc;
-    int m_sortCol;
-
     // all wxMSWListItemData objects we use
     wxVector<wxMSWListItemData *> m_internalData;
 
     // true if we have any items with custom attributes
     bool m_hasAnyAttr;
+
+    // m_sortAsc is only used if m_sortCol != -1
+    bool m_sortAsc;
+    int m_sortCol;
 
 private:
     // process NM_CUSTOMDRAW notification message
@@ -462,8 +454,7 @@ private:
     // in-place editor control.
     void OnCharHook(wxKeyEvent& event);
 
-    // Draw the sort arrow in the header. Should only be called when sort
-    // indicators are enabled.
+    // Draw the sort arrow in the header.
     void DrawSortArrow();
 
     // Object using for header custom drawing if necessary, may be NULL.

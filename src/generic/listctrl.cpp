@@ -982,7 +982,6 @@ wxListHeaderWindow::wxListHeaderWindow()
     m_owner = NULL;
     m_resizeCursor = NULL;
 
-    m_enableSortCol = false;
     m_sortAsc = true;
     m_sortCol = -1;
 }
@@ -1104,7 +1103,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 #endif
 
         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE;
-        if ( m_enableSortCol && i == m_sortCol )
+        if ( i == m_sortCol )
         {
             if ( m_sortAsc )
                 sortArrow = wxHDR_SORT_ICON_UP;
@@ -1334,12 +1333,6 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                             colItem.SetState(state & ~wxLIST_STATE_SELECTED);
                         m_owner->SetColumn(i, colItem);
                     }
-
-                    if ( m_sortCol != m_column )
-                        m_sortAsc = true;
-                    else
-                        m_sortAsc = !m_sortAsc;
-                    m_sortCol = m_column;
                 }
 
                 SendListEvent( event.LeftDown()
@@ -5084,43 +5077,14 @@ bool wxGenericListCtrl::IsItemChecked(long item) const
     return m_mainWin->IsItemChecked(item);
 }
 
-void wxGenericListCtrl::EnableSortIndicator(bool enable)
-{
-    if ( m_headerWin && enable != m_headerWin->m_enableSortCol )
-    {
-        m_headerWin->m_enableSortCol = enable;
-        m_headerWin->Refresh();
-    }
-}
-
-bool wxGenericListCtrl::IsSortIndicatorEnabled() const
-{
-    return m_headerWin && m_headerWin->m_enableSortCol;
-}
-
 void wxGenericListCtrl::ShowSortIndicator(int idx, bool ascending)
 {
-    if ( idx == -1 )
-    {
-        RemoveSortIndicator();
-    }
-    else if ( m_headerWin &&
+    if ( m_headerWin &&
                 (idx != m_headerWin->m_sortCol ||
-                 ascending != m_headerWin->m_sortAsc) )
+                 (idx != -1 && ascending != m_headerWin->m_sortAsc)) )
     {
-        m_headerWin->m_enableSortCol = true;
         m_headerWin->m_sortCol = idx;
         m_headerWin->m_sortAsc = ascending;
-        m_headerWin->Refresh();
-    }
-}
-
-void wxGenericListCtrl::RemoveSortIndicator()
-{
-    if ( m_headerWin && m_headerWin->m_sortCol != -1 )
-    {
-        m_headerWin->m_sortCol = -1;
-        m_headerWin->m_sortAsc = true;
         m_headerWin->Refresh();
     }
 }

@@ -115,10 +115,7 @@ public:
     bool IsItemChecked(long item) const wxOVERRIDE;
     void CheckItem(long item, bool check) wxOVERRIDE;
 
-    void EnableSortIndicator(bool enable = true) wxOVERRIDE;
-    bool IsSortIndicatorEnabled() const wxOVERRIDE;
     void ShowSortIndicator(int idx, bool ascending = true) wxOVERRIDE;
-    void RemoveSortIndicator() wxOVERRIDE;
     int GetSortIndicator() const wxOVERRIDE;
     bool IsAscendingSortIndicator() const wxOVERRIDE;
 
