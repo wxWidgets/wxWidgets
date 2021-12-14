@@ -451,6 +451,12 @@ public:
     void RemoveSortIndicator() { ShowSortIndicator(-1); }
     virtual int GetSortIndicator() const { return -1; }
     virtual bool IsAscendingSortIndicator() const { return true; }
+    bool GetUpdatedAscendingSortIndicator(int col) const
+    {
+        // If clicking on the same column by which we already sort, toggle the sort
+        // direction, otherwise use ascending sort by default.
+        return col == GetSortIndicator() ? !IsAscendingSortIndicator() : true;
+    }
 
 protected:
     // Return pointer to the corresponding m_imagesXXX.

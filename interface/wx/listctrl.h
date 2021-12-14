@@ -1461,6 +1461,31 @@ public:
     int GetSortIndicator() const;
 
     /**
+        Returns the new value to use for sort indicator after clicking a
+        column.
+
+        This helper function can be useful in the EVT_LIST_COL_CLICK handler
+        when it updates the sort indicator after the user clicked on a column.
+
+        For example:
+        @code
+            void MyListCtrl::OnColClick(wxListEvent& event)
+            {
+                int col = event.GetColumn();
+                if ( col == -1 )
+                    return; // clicked outside any column.
+
+                const bool ascending = GetUpdatedAscendingSortIndicator(col);
+                SortItems(MyCompareFunction, ascending);
+                ShowSortIndicator(col, ascending);
+            }
+        @endcode
+
+        @since 3.1.6
+    */
+    bool GetUpdatedAscendingSortIndicator(int col) const;
+
+    /**
         Returns @true if the sort indicator direction is ascending,
         @false when the direction is descending.
 

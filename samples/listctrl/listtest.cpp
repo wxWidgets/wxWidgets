@@ -1089,15 +1089,8 @@ void MyListCtrl::OnColClick(wxListEvent& event)
         return; // clicked outside any column.
     }
 
-    // If clicking on the same column by which we already sort, toggle the sort
-    // direction, otherwise use ascending sort by default.
-    bool ascending;
-    if ( col == GetSortIndicator() )
-        ascending = !IsAscendingSortIndicator();
-    else
-        ascending = true;
-
     // sort on item data (SetItemData)
+    const bool ascending = GetUpdatedAscendingSortIndicator(col);
     if ( SortItems(MyCompareFunction, ascending) )
     {
         ShowSortIndicator(col, ascending);
