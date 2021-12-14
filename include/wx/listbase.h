@@ -447,7 +447,7 @@ public:
     virtual void CheckItem(long WXUNUSED(item), bool WXUNUSED(check)) { }
 
     // Sort indicator in header.
-    virtual void ShowSortIndicator(int WXUNUSED(idx), bool WXUNUSED(ascending) = true) { }
+    virtual void ShowSortIndicator(int WXUNUSED(col), bool WXUNUSED(ascending) = true) { }
     void RemoveSortIndicator() { ShowSortIndicator(-1); }
     virtual int GetSortIndicator() const { return -1; }
     virtual bool IsAscendingSortIndicator() const { return true; }

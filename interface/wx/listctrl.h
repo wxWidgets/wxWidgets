@@ -1432,7 +1432,7 @@ public:
 
         @note This does not actually sort the list, use SortItems() for this.
 
-        @param idx
+        @param col
             The column to set the sort indicator for.
             If @c -1 is given, then the currently shown sort indicator
             will be removed.
@@ -1442,7 +1442,7 @@ public:
 
         @since 3.1.6
     */
-    void ShowSortIndicator(int idx, bool ascending = true);
+    void ShowSortIndicator(int col, bool ascending = true);
 
     /**
         Remove the sort indicator from the column being used as sort key.
