@@ -149,6 +149,16 @@ jobs:
         ./build/tools/before_install.sh
         mkdir -p $PWD/localbin_${{ matrix.arch }}
 
+    - name: Show build environment
+      run: |
+        echo "Environment:"
+        env | sort
+        echo
+
+        echo "Compiler version:"
+        ${CXX-g++} --version
+        echo
+
     - name: Configuring
       run: |
         wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
