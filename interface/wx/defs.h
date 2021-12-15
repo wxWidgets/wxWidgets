@@ -1525,9 +1525,28 @@ typedef double wxDouble;
     In such case, this macro can be used to disable the automatic assignment
     operator generation.
 
-    @see wxDECLARE_NO_COPY_CLASS()
+    @see wxDECLARE_NO_COPY_CLASS(), wxDECLARE_NO_ASSIGN_DEF_COPY()
  */
 #define wxDECLARE_NO_ASSIGN_CLASS(classname)
+
+/**
+    Macro disabling the generation of default assignment operator but
+    generating a default copy constructor.
+
+    This macro can be useful for the classes that can't be copied after
+    creation, but may be copy-constructed using the default compiler-generated
+    copy constructor.
+
+    Note that using wxDECLARE_NO_ASSIGN_CLASS() for such macros results in @c
+    -Wdeprecated-copy warning from clang 13, while this macro avoids such
+    warnings.
+
+    Default copy constructor is only generated when using C++11 or later,
+    otherwise this macro is identical to wxDECLARE_NO_ASSIGN_CLASS().
+
+    @since 3.1.6
+ */
+#define wxDECLARE_NO_ASSIGN_DEF_COPY(classname)
 
 /**
     This macro can be used in a class declaration to disable the generation of

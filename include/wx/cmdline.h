@@ -176,7 +176,7 @@ public:
 
 private:
     const wxCmdLineParser& m_parser;
-    wxDECLARE_NO_ASSIGN_CLASS(wxCmdLineArgs);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxCmdLineArgs);
 };
 
 // ----------------------------------------------------------------------------

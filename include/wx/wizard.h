@@ -285,7 +285,7 @@ private:
     bool m_direction;
     wxWizardPage*    m_page;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWizardEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWizardEvent);
 };
 
 // ----------------------------------------------------------------------------

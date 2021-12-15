@@ -110,7 +110,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxTaskBarIconEvent(*this); }
 
 private:
-    wxDECLARE_NO_ASSIGN_CLASS(wxTaskBarIconEvent);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxTaskBarIconEvent);
 };
 
 typedef void (wxEvtHandler::*wxTaskBarIconEventFunction)(wxTaskBarIconEvent&);

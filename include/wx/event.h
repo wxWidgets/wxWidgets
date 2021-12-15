@@ -1276,7 +1276,7 @@ protected:
     int               m_commandInt;
     long              m_extraLong;     // Additional information (e.g. select/deselect)
 
-    wxDECLARE_NO_ASSIGN_CLASS(wxEventBasicPayloadMixin);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxEventBasicPayloadMixin);
 };
 
 class WXDLLIMPEXP_BASE wxEventAnyPayloadMixin : public wxEventBasicPayloadMixin
@@ -1720,7 +1720,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxScrollEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxScrollEvent);
 };
 
 // ScrollWin event class, derived fom wxEvent. wxScrollWinEvents
@@ -2428,7 +2428,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxPaintEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPaintEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxPaintEvent);
 };
 
 class WXDLLIMPEXP_CORE wxNcPaintEvent : public wxEvent
@@ -2444,7 +2444,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxNcPaintEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxNcPaintEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxNcPaintEvent);
 };
 
 // Erase background event class
@@ -2520,7 +2520,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxChildFocusEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxChildFocusEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxChildFocusEvent);
 };
 
 // Activate event class
@@ -2583,7 +2583,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxInitDialogEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxInitDialogEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxInitDialogEvent);
 };
 
 // Miscellaneous menu event class
@@ -2751,7 +2751,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxMaximizeEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMaximizeEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxMaximizeEvent);
 };
 
 /*
@@ -3052,7 +3052,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxSysColourChangedEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSysColourChangedEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxSysColourChangedEvent);
 };
 
 /*
@@ -3112,15 +3112,15 @@ public:
  */
 class WXDLLIMPEXP_CORE wxDisplayChangedEvent : public wxEvent
 {
-private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDisplayChangedEvent);
-
 public:
     wxDisplayChangedEvent()
         : wxEvent(0, wxEVT_DISPLAY_CHANGED)
         { }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDisplayChangedEvent(*this); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxDisplayChangedEvent);
 };
 
 /*
@@ -3153,7 +3153,7 @@ private:
     wxSize m_oldDPI;
     wxSize m_newDPI;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDPIChangedEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxDPIChangedEvent);
 };
 
 /*
@@ -3302,7 +3302,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxWindowCreateEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWindowCreateEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWindowCreateEvent);
 };
 
 class WXDLLIMPEXP_CORE wxWindowDestroyEvent : public wxCommandEvent
@@ -3315,7 +3315,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxWindowDestroyEvent(*this); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWindowDestroyEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWindowDestroyEvent);
 };
 
 // A help event is sent when the user clicks on a window in context-help mode.

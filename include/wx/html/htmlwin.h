@@ -604,7 +604,7 @@ private:
 
     bool m_bLinkWasClicked;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlCellEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxHtmlCellEvent);
 };
 
 
@@ -631,7 +631,7 @@ public:
 private:
     wxHtmlLinkInfo m_linkInfo;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlLinkEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxHtmlLinkEvent);
 };
 
 

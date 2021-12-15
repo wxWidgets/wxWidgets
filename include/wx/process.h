@@ -179,7 +179,7 @@ public:
     int m_pid,
         m_exitcode;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxProcessEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxProcessEvent);
 };
 
 typedef void (wxEvtHandler::*wxProcessEventFunction)(wxProcessEvent&);
