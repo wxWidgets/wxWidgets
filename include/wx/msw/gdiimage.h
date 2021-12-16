@@ -36,6 +36,8 @@ public:
     {
         m_width = m_height = m_depth = 0;
 
+        m_scaleFactor = 1.0;
+
         m_handle = NULL;
     }
 
@@ -44,6 +46,8 @@ public:
         m_width = data.m_width;
         m_height = data.m_height;
         m_depth = data.m_depth;
+
+        m_scaleFactor = data.m_scaleFactor;
 
         // can't copy handles like this, derived class copy ctor must do it!
         m_handle = NULL;
@@ -64,6 +68,9 @@ public:
 
     // the depth of the image
     int m_depth;
+
+    // scale factor of the image
+    double m_scaleFactor;
 
     // the handle to it
     union
@@ -111,6 +118,10 @@ public:
     int GetWidth() const { return IsNull() ? 0 : GetGDIImageData()->m_width; }
     int GetHeight() const { return IsNull() ? 0 : GetGDIImageData()->m_height; }
     int GetDepth() const { return IsNull() ? 0 : GetGDIImageData()->m_depth; }
+    double GetScaleFactor() const
+    {
+        return IsNull() ? 1.0 : GetGDIImageData()->m_scaleFactor;
+    }
 
     wxSize GetSize() const
     {
