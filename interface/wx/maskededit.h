@@ -364,7 +364,7 @@ public:
      is a fields separator.}
     @endTable
      Notice the above specifications (except 'C' and 'c') are tested using
-     wxIsxxx functions. So, they are locale dependant.
+     wxIsxxx functions. So, they are locale dependent.
 
      Any other char is a literal. It is shown in the control, but it can
      not be edited.

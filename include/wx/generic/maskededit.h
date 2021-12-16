@@ -186,7 +186,7 @@ public:
       ^    Switch off upper/lower case conversion.
       \    Escape the next character and use it as a literal.
      Notice the above specifications (except 'C' and 'c') are tested using
-     wxIsxxx functions. So, they are locale dependant.
+     wxIsxxx functions. So, they are locale dependent.
      Any other char is a literal. It is shown in the control, but it can
      not be edited.
      Literals are also used as fields separators.
