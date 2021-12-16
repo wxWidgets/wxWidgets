@@ -180,7 +180,12 @@ void wxMemoryFSHandlerBase::AddFileWithMimeType(const wxString& filename,
                                                 const wxString& textdata,
                                                 const wxString& mimetype)
 {
-    const wxCharBuffer buf(textdata.To8BitData());
+    // We try to use the provided data "as is" if possible, but if not, we fall
+    // back to UTF-8 because it's better to do this than just lose the data
+    // completely.
+    wxCharBuffer buf(textdata.To8BitData());
+    if ( !buf.length() )
+        buf = textdata.utf8_str();
 
     AddFileWithMimeType(filename, buf.data(), buf.length(), mimetype);
 }
