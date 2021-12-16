@@ -586,7 +586,26 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         }
     }
 
-    return icon->CreateFromHICON((WXHICON)hicon);
+    if ( !hicon )
+        return false;
+
+    wxSize size;
+    double scale = 1.0;
+    if ( hasSize )
+    {
+        size.x = desiredWidth;
+        size.y = desiredHeight;
+    }
+    else // We loaded an icon of default size.
+    {
+        // LoadIcon() returns icons of scaled size, so we must use the correct
+        // scaling factor of them.
+        size = wxGetHiconSize(hicon);
+        if ( const wxWindow* win = wxApp::GetMainTopWindow() )
+            scale = win->GetDPIScaleFactor();
+    }
+
+    return icon->InitFromHICON((WXHICON)hicon, size.x, size.y, scale);
 }
 
 #if wxUSE_PNG_RESOURCE_HANDLER
