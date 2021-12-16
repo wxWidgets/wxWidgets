@@ -9294,7 +9294,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_LISTBOX=no
     DEFAULT_wxUSE_LISTCTRL=no
     DEFAULT_wxUSE_MARKUP=no
-    DEFAULT_wxUSE_MASKEDEDIT=no
+    DEFAULT_wxUSE_MASKED_EDIT=no
     DEFAULT_wxUSE_NOTEBOOK=no
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
@@ -10530,14 +10530,14 @@ fi
 if test "${enable_maskededit+set}" = set; then :
   enableval=$enable_maskededit;
                           if test "$enableval" = yes; then
-                            wx_cv_use_maskededit='wxUSE_MASKEDEDIT=yes'
+                            wx_cv_use_maskededit='wxUSE_MASKED_EDIT=yes'
                           else
-                            wx_cv_use_maskededit='wxUSE_MASKEDEDIT=no'
+                            wx_cv_use_maskededit='wxUSE_MASKED_EDIT=no'
                           fi
 
 else
 
-                          wx_cv_use_maskededit='wxUSE_MASKEDEDIT=${'DEFAULT_wxUSE_MASKEDEDIT":-$defaultval}"
+                          wx_cv_use_maskededit='wxUSE_MASKED_EDIT=${'DEFAULT_wxUSE_MASKED_EDIT":-$defaultval}"
 
 fi
 
@@ -37074,8 +37074,8 @@ if test "$wxUSE_EDITABLELISTBOX" = "yes"; then
     USES_CONTROLS=1
 fi
 
-if test "$wxUSE_MASKEDEDIT" = "yes"; then
-    $as_echo "#define wxUSE_MASKEDEDIT 1" >>confdefs.h
+if test "$wxUSE_MASKED_EDIT" = "yes"; then
+    $as_echo "#define wxUSE_MASKED_EDIT 1" >>confdefs.h
 
     USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS maskededit"
