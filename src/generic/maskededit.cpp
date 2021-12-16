@@ -959,7 +959,7 @@ void wxMaskedEdit::OnChar(wxKeyEvent& event)
 
         //May jump to next field
         size_t inField = (size_t) FindField(caretPos);
-        if ( caretPos == m_arrPosF[inField] && !HasFieldRoom(inField) )
+        if ( inField != wxNOT_FOUND && caretPos == m_arrPosF[inField] && !HasFieldRoom(inField) )
         {
             long defPos = PosForFieldNext(caretPos);
             //If we have inserted at last position, keep the caret at its end.
