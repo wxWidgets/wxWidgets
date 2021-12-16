@@ -83,6 +83,10 @@ public:
         Stored data (bitmap, text or raw data) will be copied into private memory
         stream and available under name @c "memory:" + @e filename.
 
+        When using the overload taking @c wxString data, the string must
+        contain only Latin-1 characters (which includes strings created using
+        wxString::From8BitData()).
+
         @note you must use a @a type value (aka image format) that wxWidgets
               can save (e.g. JPG, PNG, see wxImage documentation)!
 
