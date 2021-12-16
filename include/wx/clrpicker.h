@@ -183,7 +183,7 @@ public:
 private:
     wxColour m_colour;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxColourPickerEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxColourPickerEvent);
 };
 
 // ----------------------------------------------------------------------------

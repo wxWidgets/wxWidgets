@@ -3160,8 +3160,14 @@ typedef const void* WXWidget;
 
 #if defined(__cplusplus) && (__cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14))
     #define wxMEMBER_DELETE = delete
+    #define wxDECLARE_DEFAULT_COPY_CTOR(classname) \
+        public:                                    \
+            classname(const classname&) = default;
 #else
     #define wxMEMBER_DELETE
+
+    // We can't do this without C++11 "= default".
+    #define wxDECLARE_DEFAULT_COPY_CTOR(classname)
 #endif
 
 #define wxDECLARE_NO_COPY_CLASS(classname)      \
@@ -3181,6 +3187,11 @@ typedef const void* WXWidget;
 
 #define wxDECLARE_NO_ASSIGN_CLASS(classname)    \
     private:                                    \
+        classname& operator=(const classname&) wxMEMBER_DELETE
+
+#define wxDECLARE_NO_ASSIGN_DEF_COPY(classname)                 \
+        wxDECLARE_DEFAULT_COPY_CTOR(classname)                  \
+    private:                                                    \
         classname& operator=(const classname&) wxMEMBER_DELETE
 
 /* deprecated variants _not_ requiring a semicolon after them */

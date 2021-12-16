@@ -311,7 +311,7 @@ private:
     wxWebViewNavigationActionFlags m_actionFlags;
     wxString m_messageHandler;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWebViewEvent);
 };
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NAVIGATING, wxWebViewEvent );

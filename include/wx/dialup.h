@@ -179,7 +179,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDialUpEvent(*this); }
 
 private:
-    wxDECLARE_NO_ASSIGN_CLASS(wxDialUpEvent);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxDialUpEvent);
 };
 
 // the type of dialup event handler function
