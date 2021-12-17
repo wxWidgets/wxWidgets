@@ -87,6 +87,9 @@ void MaskedEditTestCase::TestUI()
 {
     wxUIActionSimulator sim;
 
+    m_editTx->SetMask("=a>A^-###++xx.#{4}");
+    m_editTx->SetValue( "=fG-56 ++  . 987" );
+
     m_editTx->SetFocus();
     sim.Char(WXK_END);
     sim.Char(WXK_BACK);
@@ -111,6 +114,9 @@ void MaskedEditTestCase::TestUI()
 void MaskedEditTestCase::TestFunc()
 {
     // Should fail because not all fields have all required chars
+    m_editTx->SetMask("=a>A^-###++xx.#{4}");
+    m_editTx->SetValue( "=fG-56 ++2d.  98" );
+
     CPPUNIT_ASSERT( !m_editTx->IsValid() );
 
     m_editTx->ChangeValue("=aB-123++  .5670");
