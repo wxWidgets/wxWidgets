@@ -307,7 +307,9 @@ public:
         @param client
             wxArtClient identifier of the client (i.e. who is asking for the bitmap).
         @param size
-            Default size for the returned bundle.
+            Default size for the returned bundle, i.e. the size of the bitmap
+            in normal DPI (this implies that wxWindow::FromDIP() must @e not be
+            used with it).
 
         @return If any of the registered providers recognizes the ID in its
             CreateBitmapBundle(), this bundle is returned. Otherwise, if any of
