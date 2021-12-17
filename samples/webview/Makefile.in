@@ -53,8 +53,8 @@ WEBVIEW_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
 	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEW_OBJECTS =  \
-	webview_webview.o \
-	$(__webview___win32rc)
+	$(__webview___win32rc) \
+	webview_webview.o
 
 ### Conditionally set variables: ###
 
@@ -91,6 +91,7 @@ COND_PLATFORM_OS2_1___webview___os2_emxbindcmd = $(NM) webview$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__webview___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___webview___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+@COND_PLATFORM_WIN32_1@__webview___win32rc = webview_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__webview_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= webview.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__webview_bundle___depname = webview_bundle
@@ -116,7 +117,6 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__webview___win32rc = webview_sample_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -190,11 +190,11 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 
 @COND_PLATFORM_MACOSX_1@webview_bundle: $(____webview_BUNDLE_TGT_REF_DEP)
 
+webview_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+
 webview_webview.o: $(srcdir)/webview.cpp
 	$(CXXC) -c -o $@ $(WEBVIEW_CXXFLAGS) $(srcdir)/webview.cpp
-
-webview_sample_rc.o: $(srcdir)/../sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

@@ -3378,8 +3378,8 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/ole/automtn.h \
 	wx/msw/ole/uuid.h \
 	wx/msw/wx.manifest \
-	wx/msw/amd64.manifest \
-	wx/msw/ia64.manifest \
+	wx/msw/wx_dpi_aware.manifest \
+	wx/msw/wx_dpi_aware_pmv2.manifest \
 	wx/msw/wx.rc \
 	wx/msw/colours.bmp \
 	wx/msw/csquery.bmp \
