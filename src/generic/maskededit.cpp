@@ -407,17 +407,17 @@ void wxMaskedEdit::SetMaskedColours(const wxMaskedEditColours& colours)
     m_params.colours = colours;
     //Use defaults for colours that have not been set yet
     if ( m_params.colours.colOKBackgn == wxNullColour )
-        m_params.colours.colOKBackgn == defBg;
+        m_params.colours.colOKBackgn = defBg;
     if ( m_params.colours.colOKForegn == wxNullColour )
-        m_params.colours.colOKForegn == defFg;
+        m_params.colours.colOKForegn = defFg;
     if ( m_params.colours.colWrBackgn == wxNullColour )
-        m_params.colours.colWrBackgn == defBg;
+        m_params.colours.colWrBackgn = defBg;
     if ( m_params.colours.colWrForegn == wxNullColour )
-        m_params.colours.colWrForegn == defFg;
+        m_params.colours.colWrForegn = defFg;
     if ( m_params.colours.colEmBackgn == wxNullColour )
-        m_params.colours.colEmBackgn == defBg;
+        m_params.colours.colEmBackgn = defBg;
     if ( m_params.colours.colEmForegn == wxNullColour )
-        m_params.colours.colEmForegn == defFg;
+        m_params.colours.colEmForegn = defFg;
 }
 
 //Default colours. We need them if not all of the six colours have been set.
