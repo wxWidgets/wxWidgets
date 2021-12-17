@@ -17,7 +17,7 @@
 class wxOverlayImpl
 {
 public:
-    wxOverlayImpl() { }
+    wxOverlayImpl() { m_isManualReset = false; }
     virtual ~wxOverlayImpl() { }
 
     static wxOverlayImpl* Create();
@@ -61,12 +61,17 @@ public:
 
     wxBitmap& GetBitmap() { return m_bitmap; }
 
+    void SetIsManualReset() { m_isManualReset = true; }
+    bool IsManualReset() const { return m_isManualReset; }
+
 protected:
     virtual void InitFromDC(wxDC* dc, int x, int y, int width, int height) = 0;
     virtual void InitFromWindow(wxWindow* win, wxOverlay::Target target) = 0;
 
 private:
     wxBitmap m_bitmap;
+
+    bool m_isManualReset;
 
     wxDECLARE_NO_COPY_CLASS(wxOverlayImpl);
 };

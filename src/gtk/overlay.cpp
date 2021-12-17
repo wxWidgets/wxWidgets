@@ -20,7 +20,9 @@
 
 
 #ifndef WX_PRECOMP
+    #include "wx/toplevel.h"
     #include "wx/window.h"
+    #include "wx/caret.h"
     #include "wx/dcclient.h"
 #endif
 
@@ -69,7 +71,15 @@ wxgtk_overlay_draw(GtkWidget* widget, cairo_t* cr, wxOverlayGTKImpl* overlay)
         }
     }
 
-    return false;
+    if ( wxPrivate::IsWayland() )
+    {
+        return FALSE;
+    }
+
+    overlay->SetShownOnScreen();
+
+    // no need to call this handler again.
+    return TRUE;
 }
 }
 
@@ -82,10 +92,14 @@ wxOverlayGTKImpl::wxOverlayGTKImpl()
     m_window = NULL;
     m_surface = NULL;
     m_cairoSurface = NULL;
+
+    m_x11Helper = NULL;
 }
 
 wxOverlayGTKImpl::~wxOverlayGTKImpl()
 {
+    delete m_x11Helper;
+
     Reset();
 }
 
@@ -120,12 +134,9 @@ void wxOverlayGTKImpl::CreateSurface(wxOverlay::Target target)
         gtk_window_set_resizable(GTK_WINDOW(m_surface), FALSE);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_surface), TRUE);
         gtk_window_set_skip_pager_hint(GTK_WINDOW(m_surface), TRUE);
-        gtk_window_set_type_hint(GTK_WINDOW(m_surface), GDK_WINDOW_TYPE_HINT_DOCK);
 
         if ( target == wxOverlay::Overlay_Screen )
             gtk_window_set_keep_above(GTK_WINDOW(m_surface), TRUE);
-        else
-            gtk_window_set_keep_below(GTK_WINDOW(m_surface), TRUE);
     }
 
     gtk_window_set_focus_on_map(GTK_WINDOW(m_surface), FALSE);
@@ -149,9 +160,15 @@ void wxOverlayGTKImpl::CreateSurface(wxOverlay::Target target)
 
     gtk_window_present(GTK_WINDOW(m_surface));
 
-    if ( wxPrivate::IsWayland() )
+    if ( wxPrivate::IsWayland() || m_x11Helper )
     {
         g_signal_connect(m_surface, "draw", G_CALLBACK(wxgtk_overlay_draw), this);
+
+        if ( m_x11Helper )
+        {
+            // this has the effect of showing the wxGrid selection overlay faster.
+            gdk_display_sync(gtk_widget_get_display(tlw));
+        }
     }
 }
 
@@ -162,6 +179,20 @@ void wxOverlayGTKImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
         "wxOverlay re-initialized with a different window");
 
     m_window = win;
+
+    if ( !m_x11Helper && !wxPrivate::IsWayland() && IsManualReset() &&
+         target != wxOverlay::Overlay_Screen )
+    {
+        m_x11Helper = new wxOverlayX11Helper(this);
+    }
+
+    if ( m_x11Helper )
+    {
+        if ( m_x11Helper->IsFrozen() )
+            return;
+
+        m_x11Helper->ResetIsShownOnScreen();
+    }
 
     wxRect rect;
 
@@ -236,7 +267,7 @@ void wxOverlayGTKImpl::EndDrawing(wxDC* dc)
         gtk_widget_queue_draw_area(m_surface,
             dcOrig.x+m_rect.x, dcOrig.y+m_rect.y, m_rect.width, m_rect.height);
     }
-    else // not Wayland
+    else if ( IsShownOnScreen() ) // not Wayland
     {
         // Under X we blit m_cairoSurface directly on m_surface
 
@@ -245,6 +276,7 @@ void wxOverlayGTKImpl::EndDrawing(wxDC* dc)
 
         cairo_rectangle_int_t rect = {m_rect.x, m_rect.y, m_rect.width, m_rect.height};
         cairo_region_t* region = cairo_region_create_rectangle(&rect);
+
         if ( !m_oldRect.IsEmpty() )
         {
             rect = {m_oldRect.x, m_oldRect.y, m_oldRect.width, m_oldRect.height};
@@ -311,6 +343,251 @@ void wxOverlayGTKImpl::SetInputShape()
     gtk_widget_input_shape_combine_region(m_surface, region);
     cairo_region_destroy(region);
 }
+
+void wxOverlayGTKImpl::SetShownOnScreen()
+{
+    if ( m_x11Helper )
+        m_x11Helper->SetShownOnScreen();
+}
+
+bool wxOverlayGTKImpl::IsShownOnScreen() const
+{
+    return !m_x11Helper || m_x11Helper->IsShownOnScreen();
+}
+
+//------------------------------------------------------------------------------
+// wxOverlayX11Helper implementation
+//------------------------------------------------------------------------------
+
+#ifdef GDK_WINDOWING_X11
+
+extern "C"
+{
+static GdkFilterReturn
+wxOverlayWindowFilter(GdkXEvent* gdkxevent, GdkEvent* event, gpointer data)
+{
+    wxOverlayX11Helper * const overlay = static_cast<wxOverlayX11Helper *>(data);
+
+    XEvent * const xevent = static_cast<XEvent *>(gdkxevent);
+
+    Window appwin = overlay->XGetAppWindow();
+
+    if ( xevent->type == ConfigureNotify )
+    {
+        if ( ((XConfigureEvent*)xevent)->window == appwin )
+        {
+            overlay->Freeze();
+        }
+    }
+    else if ( xevent->type == DestroyNotify )
+    {
+        if ( ((XDestroyWindowEvent*)xevent)->window == appwin )
+        {
+            // we won't need it any more
+            gdk_window_remove_filter(event->any.window,
+                                     wxOverlayWindowFilter, data);
+        }
+    }
+
+    return GDK_FILTER_CONTINUE;
+}
+}
+
+wxOverlayX11Helper::wxOverlayX11Helper(wxOverlayGTKImpl* owner)
+    : m_owner(owner), m_timer(this),
+      m_isFrozen(false), m_isPointerInsideWindow(false)
+{
+    wxTopLevelWindow * const appWin =
+        wxDynamicCast(wxGetTopLevelParent(owner->GetWindow()), wxTopLevelWindow);
+
+    appWin->Bind(wxEVT_MOVE, &wxOverlayX11Helper::OnMove, this);
+    appWin->Bind(wxEVT_SIZE, &wxOverlayX11Helper::OnSize, this);
+
+    appWin->Bind(wxEVT_ENTER_WINDOW, &wxOverlayX11Helper::OnEnter, this);
+    appWin->Bind(wxEVT_LEAVE_WINDOW, &wxOverlayX11Helper::OnLeave, this);
+}
+
+wxOverlayX11Helper::~wxOverlayX11Helper()
+{
+    wxTopLevelWindow * const appWin =
+        wxDynamicCast(wxGetTopLevelParent(m_owner->GetWindow()), wxTopLevelWindow);
+
+    if ( appWin )
+    {
+        appWin->Unbind(wxEVT_MOVE, &wxOverlayX11Helper::OnMove, this);
+        appWin->Unbind(wxEVT_SIZE, &wxOverlayX11Helper::OnSize, this);
+
+        appWin->Unbind(wxEVT_ENTER_WINDOW, &wxOverlayX11Helper::OnEnter, this);
+        appWin->Unbind(wxEVT_LEAVE_WINDOW, &wxOverlayX11Helper::OnLeave, this);
+
+        GdkWindow* root = gtk_widget_get_root_window(appWin->GetHandle());
+        gdk_window_remove_filter(root, wxOverlayWindowFilter, this);
+    }
+}
+
+Window wxOverlayX11Helper::XGetAppWindow() const
+{
+    if ( !m_owner->GetSurface() || !IsShownOnScreen() )
+        return None;
+
+    // It's safe to cache the _appwin_ value here as it is unique for each process.
+    static Window appwin = None;
+
+    if ( appwin != None )
+    {
+        return appwin;
+    }
+
+    GdkDisplay* display = gtk_widget_get_display(m_owner->GetSurface());
+
+    gdk_x11_display_error_trap_push(display);
+    gdk_x11_display_grab(display);
+
+    GtkWidget* const tlw = gtk_widget_get_toplevel(m_owner->GetWindow()->GetHandle());
+
+    Window parent = GDK_WINDOW_XID(gtk_widget_get_window(tlw));
+
+    Window root, *wins;
+
+    do
+    {
+        unsigned int nwins = 0;
+
+        appwin = parent;
+
+        if ( XQueryTree(GDK_DISPLAY_XDISPLAY(display), appwin, &root, &parent, &wins, &nwins) )
+        {
+            if ( nwins )
+                XFree(wins);
+        }
+
+    } while ( parent != root );
+
+    gdk_x11_display_ungrab(display);
+    gdk_x11_display_error_trap_pop_ignored(display);
+
+    return appwin;
+}
+
+void wxOverlayX11Helper::SetShownOnScreen()
+{
+    m_isShownOnScreen = true;
+
+    GdkWindow* root = gtk_widget_get_root_window(m_owner->GetWindow()->GetHandle());
+    GdkEventMask mask = gdk_window_get_events(root);
+    gdk_window_set_events(root, GdkEventMask(mask | GDK_SUBSTRUCTURE_MASK));
+    gdk_window_add_filter(root, wxOverlayWindowFilter, this);
+
+    if ( !m_isPointerInsideWindow )
+    {
+        gtk_window_set_transient_for(GTK_WINDOW(m_owner->GetSurface()), NULL);
+    }
+}
+
+void wxOverlayX11Helper::Freeze()
+{
+    if ( m_isFrozen )
+        return;
+
+    m_isFrozen = true;
+
+    wxCaret* caret = m_owner->GetWindow()->GetCaret();
+    if ( caret )
+        caret->Hide();
+
+    m_owner->Reset();
+}
+
+void wxOverlayX11Helper::Thaw()
+{
+    if ( !m_isFrozen )
+        return;
+
+    GdkWindow* const gdkwin =
+        gtk_widget_get_window(
+            gtk_widget_get_toplevel(m_owner->GetWindow()->GetHandle()));
+
+    const GdkEventMask mask = GdkEventMask(
+            GDK_BUTTON_PRESS_MASK |
+            GDK_BUTTON_RELEASE_MASK |
+            GDK_POINTER_MOTION_HINT_MASK |
+            GDK_POINTER_MOTION_MASK);
+
+    GdkDisplay* display = gdk_window_get_display(gdkwin);
+    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    GdkGrabStatus status = gdk_device_grab(device, gdkwin, GDK_OWNERSHIP_NONE, true,
+                                           mask, NULL, unsigned(GDK_CURRENT_TIME));
+
+    if ( status == GDK_GRAB_SUCCESS )
+    {
+        m_isFrozen = false;
+
+        wxCaret* caret = m_owner->GetWindow()->GetCaret();
+        if ( caret )
+        {
+            caret->Show();
+        }
+        else
+        {
+            // TODO: call UpdateOverlay() directly instead
+            m_owner->GetWindow()->GetMainWindowOfCompositeControl()->Refresh(false);
+        }
+
+        gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+    }
+    // else do nothing if there is an active grab on the pointer
+    // meaning that we are still moving or resizing the window.
+}
+
+void wxOverlayX11Helper::OnMove(wxMoveEvent& event)
+{
+    event.Skip();
+    Freeze(); // some systems need this (e.g. Unity)
+    Thaw();
+}
+
+void wxOverlayX11Helper::OnSize(wxSizeEvent& event)
+{
+    event.Skip();
+    Freeze(); // some systems need this (e.g. Unity)
+
+    // We need to postpone the call to "Thaw()" slightly because KDE generates
+    // a ConfigureNotify after running this handler and we will end up with a
+    // frozen overlay.
+    m_timer.StartOnce(100);
+}
+
+void wxOverlayX11Helper::OnEnter(wxMouseEvent& event)
+{
+    m_isPointerInsideWindow = true;
+
+    if ( m_isFrozen )
+    {
+        Thaw();
+    }
+    else if ( m_owner->IsOk() )
+    {
+        GtkWidget* const tlw = gtk_widget_get_toplevel(m_owner->GetWindow()->GetHandle());
+        gtk_window_set_transient_for(GTK_WINDOW(m_owner->GetSurface()), GTK_WINDOW(tlw));
+    }
+
+    event.Skip();
+}
+
+void wxOverlayX11Helper::OnLeave(wxMouseEvent& event)
+{
+    m_isPointerInsideWindow = false;
+
+    if ( m_owner->IsOk() )
+    {
+        gtk_window_set_transient_for(GTK_WINDOW(m_owner->GetSurface()), NULL);
+    }
+
+    event.Skip();
+}
+
+#endif // GDK_WINDOWING_X11
 
 wxOverlayImpl* wxOverlayImpl::Create() { return new wxOverlayGTKImpl(); }
 

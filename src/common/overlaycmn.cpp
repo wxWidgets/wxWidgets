@@ -113,6 +113,10 @@ void wxOverlay::Reset()
     m_impl->Reset();
 }
 
+void wxOverlay::SetIsManualReset()
+{
+    m_impl->SetIsManualReset();
+}
 
 // ----------------------------------------------------------------------------
 // wxDCOverlay
@@ -184,10 +188,7 @@ void wxDCOverlay::InitFromWindow(wxWindow* win, wxOverlay::Target target, const 
         m_overlay.InitFromWindow(win, target);
     }
 
-    if ( !m_overlay.IsOk() )
-        return;
-
-    if ( m_overlay.GetImpl()->IsNative() )
+    if ( m_overlay.IsOk() && m_overlay.GetImpl()->IsNative() )
     {
         wxBitmap& bitmap = m_overlay.GetImpl()->GetBitmap();
         m_memDC.SelectObject(bitmap);
