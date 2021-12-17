@@ -115,9 +115,14 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 
 #define wxRC_STR(text) wxRC_STR2(text)
 #define wxRC_STR2(text) #text
+#define wxRC_CONCAT(a, b) wxRC_CONCAT2(a, b)
+#define wxRC_CONCAT2(a, b) a ## b
 
-#define wxMANIFEST_FILE "wx/msw/wx" wxRC_STR(wxMANIFEST_DPI)
-
+#ifdef __GNUC__
+    #define wxMANIFEST_FILE "wx/msw/wx" wxRC_STR(wxMANIFEST_DPI)
+#else
+    #define wxMANIFEST_FILE wxRC_CONCAT(wx/msw/wx, wxMANIFEST_DPI)
+#endif
 wxMANIFEST_ID RT_MANIFEST wxMANIFEST_FILE
 
 #endif // wxUSE_RC_MANIFEST
