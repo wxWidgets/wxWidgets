@@ -227,6 +227,19 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
     return wxUILocaleImplCF::Create(locId);
 }
 
+/* static */
+wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
+{
+    wxArrayString preferred;
+    NSArray* preferredLangs = [NSLocale preferredLanguages];
+    NSUInteger count = preferredLangs.count;
+
+    for (NSUInteger j = 0; j < count; ++j)
+        preferred.push_back(wxCFStringRef::AsString(preferredLangs[j]));
+
+    return preferred;
+}
+
 int
 wxUILocaleImplCF::CompareStrings(const wxString& lhs, const wxString& rhs,
                                  int flags) const

@@ -236,6 +236,18 @@ public:
     static const wxLanguageInfo* FindLanguageInfo(const wxString& locale);
 
     /**
+        This function may be used to find the language description structure for the
+        given locale, specified as a locale identifier.
+
+        Returns the information for the given language or @NULL if this language
+        is unknown. Note that even if the returned pointer is valid, the caller
+        should @e not delete it.
+
+        @see GetLanguageInfo()
+    */
+    static const wxLanguageInfo* FindLanguageInfo(const wxLocaleIdent& localeId);
+
+    /**
         Returns a pointer to wxLanguageInfo structure containing information about
         the given language or @NULL if this language is unknown. Note that even if
         the returned pointer is valid, the caller should @e not delete it.

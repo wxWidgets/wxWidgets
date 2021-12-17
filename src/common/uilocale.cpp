@@ -81,7 +81,7 @@ wxUILocale wxUILocale::ms_current;
 wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 {
     // This method accepts tags in various formats: BCP47, Windows, POSIX, and macOS.
-    //
+    // 
     // See section 2.01 of https://www.rfc-editor.org/rfc/bcp/bcp47.txt for the
     // full syntax. Here we fully support just the subset we're interested in:
     //
@@ -467,10 +467,31 @@ bool wxUILocale::UseDefault()
 }
 
 /* static */
-bool wxUILocale::UseLanguage(const wxLanguageInfo& info)
+bool wxUILocale::UseLocaleName(const wxString& localeName)
 {
-    wxUILocaleImpl* const impl = wxUILocaleImpl::CreateForLanguage(info);
-    if ( !impl )
+    wxUILocaleImpl* impl = NULL;
+    if (localeName.IsSameAs("C", false))
+    {
+        impl = wxUILocaleImpl::CreateStdC();
+    }
+    else
+    {
+        wxLocaleIdent localeId = wxLocaleIdent::FromTag(localeName);
+        impl = wxUILocaleImpl::CreateForLocale(localeId);
+        if (!impl)
+        {
+            // Creating the locale may have failed due to lacking support for wxUILocaleImplName
+            // Try to locate the locale in our language database
+            const wxLanguageInfo* const info = wxUILocale::FindLanguageInfo(localeId);
+            if (info)
+            {
+                // Language found in language database
+                // Try to create a locale based on the language
+                impl = wxUILocaleImpl::CreateForLanguage(*info);
+            }
+        }
+    }
+    if (!impl)
         return false;
 
     impl->Use();
@@ -570,12 +591,7 @@ wxLayoutDirection wxUILocale::GetLayoutDirection() const
         wxLocaleIdent localeId = m_impl->GetLocaleId();
         if (!localeId.IsEmpty())
         {
-            wxString lang = localeId.GetLanguage();
-            if (localeId.GetRegion().empty())
-            {
-                lang << '-' << localeId.GetRegion();
-            }
-            const wxLanguageInfo* const info = wxUILocale::FindLanguageInfo(lang);
+            const wxLanguageInfo* const info = wxUILocale::FindLanguageInfo(localeId);
             if (info)
             {
                 dir = info->LayoutDirection;
@@ -608,6 +624,182 @@ wxUILocale::~wxUILocale()
 {
     if ( m_impl )
         m_impl->DecRef();
+}
+
+
+/*static*/
+int wxUILocale::GetSystemLanguage()
+{
+    const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
+    size_t count = languagesDB.size();
+    wxArrayString preferred = wxUILocaleImpl::GetPreferredUILanguages();
+
+    for (wxArrayString::const_iterator j = preferred.begin();
+        j != preferred.end();
+        ++j)
+    {
+        wxLocaleIdent localeId = wxLocaleIdent::FromTag(*j);
+        wxString lang = localeId.GetTag(wxLOCALE_TAGTYPE_BCP47);
+        size_t pos = lang.find('-');
+        wxString langShort = (pos != wxString::npos) ? lang.substr(0, pos) : wxString();
+        size_t ixShort = count;
+
+        for (size_t ixLanguage = 0; ixLanguage < count; ++ixLanguage)
+        {
+            if (languagesDB[ixLanguage].LocaleTag == lang)
+            {
+                return languagesDB[ixLanguage].Language;
+            }
+            if (pos != wxString::npos)
+            {
+                if (languagesDB[ixLanguage].LocaleTag == lang)
+                {
+                    ixShort = ixLanguage;
+                }
+            }
+        }
+        if (ixShort < count)
+        {
+            return languagesDB[ixShort].Language;
+        }
+    }
+
+    // no info about this language in the database
+    return wxLANGUAGE_UNKNOWN;
+}
+
+/* static */
+wxArrayString wxUILocale::GetPreferredUILanguages()
+{
+    return wxUILocaleImpl::GetPreferredUILanguages();
+}
+
+/* static */
+const wxLanguageInfo* wxUILocale::GetLanguageInfo(int lang)
+{
+    CreateLanguagesDB();
+
+    // calling GetLanguageInfo(wxLANGUAGE_DEFAULT) is a natural thing to do, so
+    // make it work
+    if (lang == wxLANGUAGE_DEFAULT)
+        lang = GetSystemLanguage();
+
+    if (lang == wxLANGUAGE_UNKNOWN)
+        return NULL;
+
+    const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
+    const size_t count = languagesDB.size();
+    for (size_t i = 0; i < count; i++)
+    {
+        if (languagesDB[i].Language == lang)
+            return &languagesDB[i];
+    }
+
+    return NULL;
+}
+
+/* static */
+wxString wxUILocale::GetLanguageName(int lang)
+{
+    wxString string;
+
+    if (lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN)
+        return string;
+
+    const wxLanguageInfo* info = GetLanguageInfo(lang);
+    if (info)
+        string = info->Description;
+
+    return string;
+}
+
+/* static */
+wxString wxUILocale::GetLanguageCanonicalName(int lang)
+{
+    wxString string;
+
+    if (lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN)
+        return string;
+
+    const wxLanguageInfo* info = GetLanguageInfo(lang);
+    if (info)
+        string = info->CanonicalName;
+
+    return string;
+}
+
+/* static */
+const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
+{
+    CreateLanguagesDB();
+
+    const wxLanguageInfo* infoRet = NULL;
+
+    const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
+    const size_t count = languagesDB.size();
+    for (size_t i = 0; i < count; i++)
+    {
+        const wxLanguageInfo* info = &languagesDB[i];
+
+        if (wxStricmp(locale, info->CanonicalName) == 0 ||
+            wxStricmp(locale, info->Description) == 0)
+        {
+            // exact match, stop searching
+            infoRet = info;
+            break;
+        }
+
+        if (wxStricmp(locale, info->CanonicalName.BeforeFirst(wxS('_'))) == 0)
+        {
+            // a match -- but maybe we'll find an exact one later, so continue
+            // looking
+            //
+            // OTOH, maybe we had already found a language match and in this
+            // case don't overwrite it because the entry for the default
+            // country always appears first in gs_languagesDB
+            if (!infoRet)
+                infoRet = info;
+        }
+    }
+
+    return infoRet;
+}
+
+/* static */
+const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
+{
+    CreateLanguagesDB();
+
+    const wxLanguageInfo* infoRet = NULL;
+    wxString localeTag = locId.GetTag(wxLOCALE_TAGTYPE_BCP47);
+
+    const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
+    const size_t count = languagesDB.size();
+    for (size_t i = 0; i < count; i++)
+    {
+        const wxLanguageInfo* info = &languagesDB[i];
+
+        if (wxStricmp(localeTag, info->LocaleTag) == 0)
+        {
+            // exact match, stop searching
+            infoRet = info;
+            break;
+        }
+
+        if (wxStricmp(localeTag, info->LocaleTag.BeforeFirst(wxS('-'))) == 0)
+        {
+            // a match -- but maybe we'll find an exact one later, so continue
+            // looking
+            //
+            // OTOH, maybe we had already found a language match and in this
+            // case don't overwrite it because the entry for the default
+            // country always appears first in gs_languagesDB
+            if (!infoRet)
+                infoRet = info;
+        }
+    }
+
+    return infoRet;
 }
 
 #endif // wxUSE_INTL

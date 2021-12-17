@@ -25,6 +25,7 @@
 
 #include "wx/msw/private/uilocale.h"
 
+#include "wx/scopedarray.h"
 #include "wx/dynlib.h"
 
 #ifndef LOCALE_NAME_USER_DEFAULT
@@ -118,6 +119,91 @@ wxString wxLocaleIdent::GetName() const
 
     return name;
 }
+
+// ----------------------------------------------------------------------------
+// Standard C wxUILocale implementation for MSW
+// ----------------------------------------------------------------------------
+
+class wxUILocaleImplStdC : public wxUILocaleImpl
+{
+public:
+
+    // Create object corresponding to the given locale, return NULL if not
+    // supported.
+    static wxUILocaleImplStdC* Create()
+    {
+        return new wxUILocaleImplStdC();
+    }
+
+
+    ~wxUILocaleImplStdC() wxOVERRIDE
+    {
+    }
+
+    void Use() wxOVERRIDE
+    {
+        // TODO: Should method Use() set a UI locale somehow?
+    }
+
+    wxString GetName() const wxOVERRIDE
+    {
+        return wxString("C");
+    }
+
+    wxLocaleIdent GetLocaleId() const wxOVERRIDE
+    {
+        return wxLocaleIdent().Language("C");
+    }
+
+    wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE
+    {
+        return wxGetStdCLocaleInfo(index, cat);
+    }
+
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm WXUNUSED(form)) const wxOVERRIDE
+    {
+        wxString str;
+        switch (name)
+        {
+            case wxLOCALE_NAME_LOCALE:
+            case wxLOCALE_NAME_LANGUAGE:
+                str = wxString("English");
+                break;
+            case wxLOCALE_NAME_COUNTRY:
+                str = wxString();
+                break;
+            default:
+                wxFAIL_MSG("unknown wxLocaleInfo");
+        }
+
+        return str;
+    }
+
+    wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
+    {
+        return wxLayout_Default;
+    }
+
+    int CompareStrings(const wxString& lhs, const wxString& rhs,
+        int flags) const wxOVERRIDE
+    {
+        const int rc = flags & wxCompare_CaseInsensitive ? lhs.CmpNoCase(rhs)
+            : lhs.Cmp(rhs);
+        if (rc < 0)
+            return -1;
+        if (rc > 0)
+            return 1;
+        return 0;
+    }
+
+private:
+    // Ctor is private, use Create() instead.
+    explicit wxUILocaleImplStdC()
+    {
+    }
+
+    wxDECLARE_NO_COPY_CLASS(wxUILocaleImplStdC);
+};
 
 // ----------------------------------------------------------------------------
 // LCID-based wxUILocale implementation for MSW
@@ -233,7 +319,7 @@ public:
         return str;
     }
 
-    wxLayoutDirection GetLayoutDirection() const
+    wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
         return wxLayout_Default;
     }
@@ -279,6 +365,9 @@ public:
             wxDL_INIT_FUNC(ms_, SetThreadPreferredUILanguages, dllKernel32);
             if ( !ms_SetThreadPreferredUILanguages )
                 return false;
+            wxDL_INIT_FUNC(ms_, GetUserPreferredUILanguages, dllKernel32);
+            if (!ms_GetUserPreferredUILanguages)
+                return false;
 
             wxDL_INIT_FUNC(ms_, CompareStringEx, dllKernel32);
             if ( !ms_CompareStringEx )
@@ -288,6 +377,62 @@ public:
         }
 
         return s_canUse == 1;
+    }
+
+    static wxArrayString GetPreferredUILanguages()
+    {
+        wxArrayString preferred;
+
+        if (CanUse())
+        {
+            ULONG numberOfLanguages = 0;
+            ULONG bufferSize = 0;
+            if (ms_GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numberOfLanguages, NULL, &bufferSize))
+            {
+                wxScopedArray<WCHAR> languages(bufferSize);
+                if (ms_GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numberOfLanguages, languages.get(), &bufferSize))
+                {
+                    WCHAR* buf = languages.get();
+                    for (unsigned k = 0; k < numberOfLanguages; ++k)
+                    {
+                        const wxString language(buf);
+                        preferred.push_back(language);
+                        buf += language.length() + 1;
+                    }
+                }
+            }
+            else
+            {
+                wxLogLastError(wxT("GetThreadPreferredUILanguages"));
+            }
+        }
+        else
+        {
+            const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
+            size_t count = languagesDB.size();
+            const LANGID langid = ::GetUserDefaultUILanguage();
+            if (langid != LOCALE_CUSTOM_UI_DEFAULT)
+            {
+                size_t ixLanguage = 0;
+                wxUint32 lang = PRIMARYLANGID(langid);
+                wxUint32 sublang = SUBLANGID(langid);
+
+                for (ixLanguage = 0; ixLanguage < count; ++ixLanguage)
+                {
+                    if (languagesDB[ixLanguage].WinLang == lang &&
+                        languagesDB[ixLanguage].WinSublang == sublang)
+                    {
+                        break;
+                    }
+                }
+                if (ixLanguage < count)
+                {
+                    preferred.push_back(languagesDB[ixLanguage].CanonicalName);
+                }
+            }
+        }
+
+        return preferred;
     }
 
     // Create object corresponding to the default user locale.
@@ -476,7 +621,7 @@ public:
         return str;
     }
 
-    wxLayoutDirection GetLayoutDirection() const
+    wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
         if (wxGetWinVersion() >= wxWinVersion_7)
         {
@@ -532,6 +677,9 @@ private:
     typedef BOOL (WINAPI *SetThreadPreferredUILanguages_t)(DWORD, CONST WCHAR*, ULONG*);
     static SetThreadPreferredUILanguages_t ms_SetThreadPreferredUILanguages;
 
+    typedef BOOL (WINAPI *GetUserPreferredUILanguages_t)(DWORD, PULONG, PZZWSTR, PULONG);
+    static GetUserPreferredUILanguages_t ms_GetUserPreferredUILanguages;
+
     // Note: we currently don't use NLSVERSIONINFO output parameter and so we
     // don't bother dealing with the different sizes of this struct under
     // different OS versions and define the function type as using "void*" to
@@ -573,6 +721,7 @@ private:
 
 wxUILocaleImplName::GetLocaleInfoEx_t wxUILocaleImplName::ms_GetLocaleInfoEx;
 wxUILocaleImplName::SetThreadPreferredUILanguages_t wxUILocaleImplName::ms_SetThreadPreferredUILanguages;
+wxUILocaleImplName::GetUserPreferredUILanguages_t wxUILocaleImplName::ms_GetUserPreferredUILanguages;
 wxUILocaleImplName::CompareStringEx_t wxUILocaleImplName::ms_CompareStringEx;
 
 // ----------------------------------------------------------------------------
@@ -582,14 +731,7 @@ wxUILocaleImplName::CompareStringEx_t wxUILocaleImplName::ms_CompareStringEx;
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 {
-    if ( !wxUILocaleImplName::CanUse() )
-    {
-        // There is no LCID for "C" locale, but US English is basically the same.
-        LCID lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
-        return new wxUILocaleImplLCID(lcid);
-    }
-
-    return wxUILocaleImplName::Create(L"en-US");
+    return wxUILocaleImplStdC::Create();
 }
 
 /* static */
@@ -632,6 +774,12 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
     }
 
     return wxUILocaleImplName::Create(locId.GetTag(wxLOCALE_TAGTYPE_WINDOWS).wc_str());
+}
+
+/* static */
+wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
+{
+    return wxUILocaleImplName::GetPreferredUILanguages();
 }
 
 #endif // wxUSE_INTL

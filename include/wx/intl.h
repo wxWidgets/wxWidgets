@@ -14,6 +14,7 @@
 
 #include "wx/defs.h"
 #include "wx/localedefs.h"
+#include "wx/uilocale.h"
 #include "wx/string.h"
 #include "wx/translation.h"
 
@@ -265,10 +266,14 @@ private:
                           const wxString& shortName,
                           bool bLoadDefault);
 
+    // This method is called on destructing a wxLocale instance
+    // to enable the wxUILocale associated with the previous wxLocale instance.
+    bool EnableUILocale();
 
     wxString       m_strLocale,       // this locale name
                    m_strShort;        // short name for the locale
     int            m_language;        // this locale wxLanguage value
+    wxString       m_uiLocaleTag;     // wxUILocale identifier
 
     const char  *m_pszOldLocale;      // previous locale from setlocale()
     wxLocale      *m_pOldLocale;      // previous wxLocale

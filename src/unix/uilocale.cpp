@@ -26,6 +26,7 @@
 #include "wx/unix/private/uilocale.h"
 
 #include "wx/intl.h"
+#include "wx/utils.h"
 
 #include <locale.h>
 #ifdef HAVE_LANGINFO_H
@@ -34,6 +35,13 @@
 
 namespace
 {
+
+// Small helper function: get the value of the given environment variable and
+// return true only if the variable was found and has non-empty value.
+inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
+{
+    return wxGetEnv(name, value) && !value->empty();
+}
 
 // ----------------------------------------------------------------------------
 // wxUILocale implementation using standard Unix/C functions
@@ -56,7 +64,7 @@ public:
     wxLocaleIdent GetLocaleId() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const wxOVERRIDE;
-    wxLayoutDirection GetLayoutDirection() const;
+    wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
 
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const wxOVERRIDE;
@@ -513,6 +521,129 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locIdOrig)
     // just assume it's valid.
     return new wxUILocaleImplUnix(locIdOrig);
 #endif // HAVE_LOCALE_T/!HAVE_LOCALE_T
+}
+
+/* static */
+wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
+{
+    wxArrayString preferred;
+
+    // first get the string identifying the language from the environment
+    wxString langFull;
+    if (!wxGetNonEmptyEnvVar(wxS("LC_ALL"), &langFull) &&
+        !wxGetNonEmptyEnvVar(wxS("LC_MESSAGES"), &langFull) &&
+        !wxGetNonEmptyEnvVar(wxS("LANG"), &langFull))
+    {
+        // no language specified, treat it as English
+        preferred.push_back("en-US");
+        return preferred;
+    }
+
+    // the language string has the following form
+    //
+    //      lang[_LANG][.encoding][@modifier]
+    //
+    // (see environ(5) in the Open Unix specification)
+    //
+    // where lang is the primary language, LANG is a sublang/territory,
+    // encoding is the charset to use and modifier "allows the user to select
+    // a specific instance of localization data within a single category"
+    //
+    // for example, the following strings are valid:
+    //      fr
+    //      fr_FR
+    //      de_DE.iso88591
+    //      de_DE@euro
+    //      de_DE.iso88591@euro
+
+    // for now we don't use the encoding, although we probably should (doing
+    // translations of the msg catalogs on the fly as required) (TODO)
+    //
+    // we need the modifier for languages like Valencian: ca_ES@valencia
+    // though, remember it
+    wxString modifier;
+    size_t posModifier = langFull.find_first_of(wxS("@"));
+    if (posModifier != wxString::npos)
+        modifier = langFull.Mid(posModifier);
+
+    size_t posEndLang = langFull.find_first_of(wxS("@."));
+    if (posEndLang != wxString::npos)
+    {
+        langFull.Truncate(posEndLang);
+    }
+
+    if (langFull == wxS("C") || langFull == wxS("POSIX"))
+    {
+        // default C locale is English too
+        preferred.push_back("en_US");
+        return preferred;
+    }
+
+    // do we have just the language (or sublang too)?
+    const bool justLang = langFull.find('_') == wxString::npos;
+
+    if (justLang && langFull.length() > 2)
+    {
+        const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
+        size_t count = languagesDB.size();
+
+        // In addition to the format above, we also can have full language
+        // names in LANG env var - for example, SuSE is known to use
+        // LANG="german" - so check for use of non-standard format and try to
+        // find the name in verbose description.
+        for (size_t i = 0; i < count; i++)
+        {
+            if (languagesDB[i].Description.CmpNoCase(langFull) == 0)
+            {
+                break;
+            }
+            if (i < count)
+                langFull = languagesDB[i].CanonicalName;
+        }
+    }
+
+    // 0. Make sure the lang is according to latest ISO 639
+    //    (this is necessary because glibc uses iw and in instead
+    //    of he and id respectively).
+
+    // the language itself (second part is the region)
+    wxString langOrig = ExtractLang(langFull);
+    wxString region = ExtractNotLang(langFull);
+
+    wxString lang;
+    if (langOrig == wxS("iw"))
+        lang = wxS("he");
+    else if (langOrig == wxS("in"))
+        lang = wxS("id");
+    else if (langOrig == wxS("ji"))
+        lang = wxS("yi");
+    else if (langOrig == wxS("no") && region == wxS("_NO"))
+        lang = wxS("nb");
+    else if (langOrig == wxS("no") && region == wxS("_NY"))
+    {
+        lang = wxS("nn");
+        region = wxS("_NO");
+    }
+    else if (langOrig == wxS("no"))
+        lang = wxS("nb");
+    else
+        lang = langOrig;
+
+    // did we change it?
+    if (lang != langOrig)
+    {
+        langFull = lang + region;
+    }
+
+    if (!modifier.empty())
+    {
+        // Locale name with modifier
+        preferred.push_back(langFull + modifier);
+    }
+    // Locale name without modifier
+    preferred.push_back(langFull);
+
+    return preferred;
 }
 
 #endif // wxUSE_INTL

@@ -16,6 +16,7 @@
 
 #include "wx/localedefs.h"
 #include "wx/string.h"
+#include "wx/arrstr.h"
 
 class wxUILocaleImpl;
 
@@ -107,11 +108,11 @@ public:
     // Configure the UI to use the default user locale.
     static bool UseDefault();
 
-    // Use the locale corresponding to the given language.
+    // Use the locale corresponding to the given locale name.
     //
     // This is a compatibility function used by wxWidgets itself, don't use it
     // in the new code.
-    static bool UseLanguage(const wxLanguageInfo& info);
+    static bool UseLocaleName(const wxString& localeName);
 
     // Get the object corresponding to the currently used locale.
     static const wxUILocale& GetCurrent();
@@ -161,6 +162,10 @@ public:
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
     static int GetSystemLanguage();
 
+    // Try to retrieve a list of user's (or OS's) preferred UI languages.
+    // Return empty list if language-guessing algorithm failed
+    static wxArrayString GetPreferredUILanguages();
+
     // Retrieve the language info struct for the given language
     //
     // Returns NULL if no info found, pointer must *not* be deleted by caller
@@ -180,6 +185,13 @@ public:
     //
     // Returns NULL if no info found, pointer must *not* be deleted by caller
     static const wxLanguageInfo* FindLanguageInfo(const wxString& locale);
+
+    // Find the language for the given locale string which may be either a
+    // canonical ISO 2 letter language code ("xx"), a language code followed by
+    // the country code ("xx_XX") or a Windows full language name ("Xxxxx...")
+    //
+    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    static const wxLanguageInfo* FindLanguageInfo(const wxLocaleIdent& locId);
 
     // Add custom language to the list of known languages.
     // Notes: 1) wxLanguageInfo contains platform-specific data
