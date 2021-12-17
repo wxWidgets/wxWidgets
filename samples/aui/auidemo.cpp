@@ -781,7 +781,6 @@ MyFrame::MyFrame(wxWindow* parent,
     // create some toolbars
     wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb1->SetToolBitmapSize(FromDIP(wxSize(48,48)));
     tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
     tb1->AddSeparator();
     tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
@@ -794,7 +793,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_HORIZONTAL);
-    tb2->SetToolBitmapSize(FromDIP(wxSize(16,16)));
 
     wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, FromDIP(wxSize(16,16)));
     tb2->AddTool(ID_SampleItem+6, "Disabled", tb2_bmp1);
@@ -816,7 +814,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb3->SetToolBitmapSize(FromDIP(wxSize(16,16)));
     wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, FromDIP(wxSize(16,16)));
     tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxITEM_CHECK);
     tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxITEM_CHECK);
@@ -839,7 +836,6 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
-    tb4->SetToolBitmapSize(FromDIP(wxSize(16,16)));
     wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
@@ -863,7 +859,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-    tb5->SetToolBitmapSize(FromDIP(wxSize(48,48)));
     tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
     tb5->AddSeparator();
     tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
