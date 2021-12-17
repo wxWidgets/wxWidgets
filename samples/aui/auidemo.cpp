@@ -1584,11 +1584,11 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl()
                                       FromDIP(wxSize(160,250)),
                                       wxTR_DEFAULT_STYLE | wxNO_BORDER);
 
-    wxSize size = FromDIP(wxSize(16, 16));
-    wxImageList* imglist = new wxImageList(size.x, size.y, true, 2);
-    imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, size));
-    imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, size));
-    tree->AssignImageList(imglist);
+    wxSize size(16, 16);
+    wxVector<wxBitmapBundle> images;
+    images.push_back(wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, size));
+    images.push_back(wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, size));
+    tree->SetImages(images);
 
     wxTreeItemId root = tree->AddRoot("wxAUI Project", 0);
     wxArrayTreeItemIds items;
