@@ -51,7 +51,7 @@ jobs:
     # versions of MinGW and Wine and is simpler to test with locally than the
     # bespoke container used by GitHub Actions by default.
     runs-on: ubuntu-latest
-    container: debian:sid-slim
+    container: debian:testing-slim
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
