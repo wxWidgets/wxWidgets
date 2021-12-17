@@ -29,8 +29,8 @@ class MaskedEditTestCase : public CppUnit::TestCase
 public:
     MaskedEditTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( MaskedEditTestCase );
