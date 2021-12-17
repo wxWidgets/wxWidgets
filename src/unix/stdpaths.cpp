@@ -260,6 +260,8 @@ wxString wxStandardPaths::GetDocumentsDir() const
                         value.Replace(wxT("$HOME"), homeDir);
                         value.Trim(true);
                         value.Trim(false);
+                        // Remove quotes
+                        value.Replace("\"", "", true /* replace all */);
                         if (!value.IsEmpty() && wxDirExists(value))
                             return value;
                         else
