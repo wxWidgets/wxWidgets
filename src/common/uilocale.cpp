@@ -81,7 +81,7 @@ wxUILocale wxUILocale::ms_current;
 wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 {
     // This method accepts tags in various formats: BCP47, Windows, POSIX, and macOS.
-    // 
+    //
     // See section 2.01 of https://www.rfc-editor.org/rfc/bcp/bcp47.txt for the
     // full syntax. Here we fully support just the subset we're interested in:
     //

@@ -44,6 +44,34 @@
 #define LOCALE_RETURN_NUMBER 0x20000000
 #endif
 
+#ifndef LOCALE_SENGLISHDISPLAYNAME
+#define LOCALE_SENGLISHDISPLAYNAME    0x00000072
+#endif
+
+#ifndef LOCALE_SNATIVEDISPLAYNAME
+#define LOCALE_SNATIVEDISPLAYNAME     0x00000073
+#endif
+
+#ifndef LOCALE_SENGLISHLANGUAGENAME
+#define LOCALE_SENGLISHLANGUAGENAME   0x00001001
+#endif
+
+#ifndef LOCALE_SNATIVELANGUAGENAME
+#define LOCALE_SNATIVELANGUAGENAME    0x00000004
+#endif
+
+#ifndef LOCALE_SENGLISHCOUNTRYNAME
+#define LOCALE_SENGLISHCOUNTRYNAME    0x00001002
+#endif
+
+#ifndef LOCALE_SNATIVECOUNTRYNAME
+#define LOCALE_SNATIVECOUNTRYNAME     0x00000008
+#endif
+
+#ifndef LOCALE_IREADINGLAYOUT
+#define LOCALE_IREADINGLAYOUT         0x00000070
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -677,7 +705,7 @@ private:
     typedef BOOL (WINAPI *SetThreadPreferredUILanguages_t)(DWORD, CONST WCHAR*, ULONG*);
     static SetThreadPreferredUILanguages_t ms_SetThreadPreferredUILanguages;
 
-    typedef BOOL (WINAPI *GetUserPreferredUILanguages_t)(DWORD, PULONG, PZZWSTR, PULONG);
+    typedef BOOL (WINAPI *GetUserPreferredUILanguages_t)(DWORD, ULONG*, WCHAR*, ULONG*);
     static GetUserPreferredUILanguages_t ms_GetUserPreferredUILanguages;
 
     // Note: we currently don't use NLSVERSIONINFO output parameter and so we

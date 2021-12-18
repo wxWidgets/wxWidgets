@@ -1225,38 +1225,6 @@ LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
     return 0;
 }
 
-namespace
-{
-
-// This private function additionally checks consistency of the decimal
-// separator settings between MSW and CRT.
-wxString
-GetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
-{
-    const wxString str = wxGetInfoFromLCID(lcid, index, cat);
-
-    if ( !str.empty() && index == wxLOCALE_DECIMAL_POINT )
-    {
-        // As we get our decimal point separator from Win32 and not the
-        // CRT there is a possibility of mismatch between them and this
-        // can easily happen if the user code called setlocale()
-        // instead of using wxLocale to change the locale. And this can
-        // result in very strange bugs elsewhere in the code as the
-        // assumptions that formatted strings do use the decimal
-        // separator actually fail, so check for it here.
-        wxASSERT_MSG
-        (
-            wxString::Format("%.3f", 1.23).find(str) != wxString::npos,
-            "Decimal separator mismatch -- did you use setlocale()?"
-            "If so, use wxLocale to change the locale instead."
-        );
-    }
-
-    return str;
-}
-
-} // anonymous namespace
-
 // This function is also used by wxUILocaleImpl, so don't make it private.
 wxString
 wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
