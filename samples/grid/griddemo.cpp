@@ -343,6 +343,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELECT_ROW, GridFrame::SelectRow)
     EVT_MENU( ID_SELECT_ALL, GridFrame::SelectAll)
     EVT_MENU( ID_SELECT_UNSELECT, GridFrame::OnAddToSelectToggle)
+    EVT_MENU( ID_SELECT_USEOVERLAY, GridFrame::OnUseOverlay)
 
     EVT_MENU( ID_SIZE_ROW, GridFrame::AutoSizeRow )
     EVT_MENU( ID_SIZE_COL, GridFrame::AutoSizeCol )
@@ -521,6 +522,7 @@ GridFrame::GridFrame()
     editMenu->AppendCheckItem( ID_FREEZE_OR_THAW, "Freeze up to cursor\tCtrl-F" );
 
     wxMenu *selectMenu = new wxMenu;
+    selectMenu->Append( ID_SELECT_USEOVERLAY, "Use wxOverlay to draw selection");
     selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
                         "When off, old selection is deselected before "
                         "selecting the new cells", wxITEM_CHECK );
@@ -1625,6 +1627,11 @@ void GridFrame::SelectAll(wxCommandEvent& WXUNUSED(event))
 void GridFrame::OnAddToSelectToggle(wxCommandEvent& event)
 {
     m_addToSel = event.IsChecked();
+}
+
+void GridFrame::OnUseOverlay(wxCommandEvent& WXUNUSED(event))
+{
+    grid->UseOverlay();
 }
 
 void GridFrame::OnLabelLeftClick( wxGridEvent& ev )

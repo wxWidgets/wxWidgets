@@ -19,7 +19,6 @@
 
 #include "wx/vector.h"
 
-typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
 
 // Note: for all eventType arguments of the methods of this class wxEVT_NULL
 //       may be passed to forbid events generation completely.
@@ -109,16 +108,62 @@ public:
     wxArrayInt GetRowSelection() const;
     wxArrayInt GetColSelection() const;
 
-    wxVectorGridBlockCoords& GetBlocks() { return m_selection; }
+    wxGridBlockCoordsVector& GetBlocks() { return m_selection; }
 
     void EndSelecting();
+
+    // A simple interface needed to help drawing grid selections
+    // correctly and efficiently.
+    class PolyPolygon
+    {
+    public:
+        PolyPolygon();
+
+        // Default dtor is ok
+
+        size_t GetSize() const { return m_counts.size(); }
+
+        // wxVector<> doesn't have data() member function when wxUSE_STL is not
+        // defined, so we just return the reference to the 1rst element of each
+        // vector which are guaranteed to be valid when accessed via these member
+        // functions.
+
+        const int* GetCounts() const { return &m_counts[0]; }
+
+        const wxPoint* GetPoints() const { return &m_points[0]; }
+
+        // implementation only
+        void Append(const wxVector<wxPoint>& points);
+
+        wxRect GetBoundingBox() const;
+
+    private:
+        void CalcBoundingBox(const wxVector<wxPoint>& points);
+
+        wxVector<int>     m_counts;
+        wxVector<wxPoint> m_points;
+
+        int m_minX, m_maxX,
+            m_minY, m_maxY;
+
+        wxDECLARE_NO_COPY_CLASS(PolyPolygon);
+    };
+
+    // This function returns the selected blocks as:
+    //
+    // 1) a simple rectangle (polyPolygon would be omitted in this case)
+    // 2) a simple polygon that can be drawn using wxDC::DrawPolygon()
+    // 3) a poly-polygon which can be drawn using wxDC::DrawPolyPolygon()
+    //
+    // for 2 & 3 the returned rectangle is the bounding box of the polyPolygon.
+    wxRect GetAsPolyPolygon(PolyPolygon& polyPolygon) const;
 
 private:
     void SelectBlockNoEvent(const wxGridBlockCoords& block)
     {
         SelectBlock(block.GetTopRow(), block.GetLeftCol(),
                     block.GetBottomRow(), block.GetRightCol(),
-                    wxKeyboardState(), false);
+                    wxKeyboardState(), wxEVT_NULL);
     }
 
     // Really select the block and don't check for the current selection mode.
@@ -135,7 +180,7 @@ private:
     // We don't currently check if the new block is contained by several
     // existing blocks, as this would be more difficult and doesn't seem to be
     // really needed in practice.
-    void MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
+    void MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
                          const wxGridBlockCoords& block);
 
     // All currently selected blocks. We expect there to be a relatively small
@@ -145,7 +190,7 @@ private:
     // Selection may be empty, but if it isn't, the last block is special, as
     // it is the current block, which is affected by operations such as
     // extending the current selection from keyboard.
-    wxVectorGridBlockCoords             m_selection;
+    wxGridBlockCoordsVector             m_selection;
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;

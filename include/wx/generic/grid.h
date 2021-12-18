@@ -113,6 +113,7 @@ class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 #if wxUSE_DATEPICKCTRL
 class WXDLLIMPEXP_FWD_CORE wxDatePickerCtrl;
 #endif
+class WXDLLIMPEXP_FWD_CORE wxOverlay;
 
 class wxGridFixedIndicesSet;
 
@@ -2249,6 +2250,8 @@ public:
     wxArrayInt GetSelectedRows() const;
     wxArrayInt GetSelectedCols() const;
 
+    void GetSelectedBlocksAsRects(wxVector<wxRect>& rectangles) const;
+
     // This function returns the rectangle that encloses the block of cells
     // limited by TopLeft and BottomRight cell in device coords and clipped
     //  to the client size of the grid window.
@@ -2256,6 +2259,12 @@ public:
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight,
                               const wxGridWindow *gridWindow = NULL) const;
+
+    // Similar to BlockToDeviceRect() above but mostly to deal with selection,
+    // i.e. GetSelectedBlocksAsRects() uses this function as a helper.
+    void BlockToDeviceRects(const wxGridCellCoords& topLeft,
+                            const wxGridCellCoords& bottomRight,
+                            wxVector<wxRect>& rectangles, wxGridWindow* gridWin) const;
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
@@ -2348,6 +2357,10 @@ public:
 
     // unset any existing sorting column
     void UnsetSortingColumn() { SetSortingColumn(wxNOT_FOUND); }
+
+    // use wxOverlay to draw the grid selection
+    void UseOverlay();
+    bool IsUsingOverlay() const { return m_overlay != NULL; }
 
 #if WXWIN_COMPATIBILITY_2_8
     // ------ For compatibility with previous wxGrid only...
@@ -2522,6 +2535,8 @@ public:
     // implementation only
     void CancelMouseCapture();
 
+    void UpdateOverlay();
+
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual void DoEnable(bool enable) wxOVERRIDE;
@@ -2579,6 +2594,9 @@ protected:
 
     wxColour    m_selectionBackground;
     wxColour    m_selectionForeground;
+
+    // if not null, will be used to draw the grid selection
+    wxOverlay*  m_overlay;
 
     // NB: *never* access m_row/col arrays directly because they are created
     //     on demand, *always* use accessor functions instead!

@@ -45,6 +45,7 @@
 #include "wx/renderer.h"
 #include "wx/headerctrl.h"
 #include "wx/hashset.h"
+#include "wx/overlay.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"
@@ -2585,6 +2586,7 @@ void wxGrid::DoRenderBox( wxDC& dc, const int& style,
 void wxGridWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
     m_owner->ScrollWindow(dx, dy, rect);
+    m_owner->UpdateOverlay();
 }
 
 void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
@@ -2705,6 +2707,8 @@ wxGrid::~wxGrid()
 {
     if ( m_winCapture )
         m_winCapture->ReleaseMouse();
+
+    delete m_overlay;
 
     // Ensure that the editor control is destroyed before the grid is,
     // otherwise we crash later when the editor tries to do something with the
@@ -2976,6 +2980,8 @@ void wxGrid::Init()
 
     m_table = NULL;
     m_ownTable = false;
+
+    m_overlay = NULL;
 
     m_selection = NULL;
     m_defaultCellAttr = NULL;
@@ -5663,6 +5669,8 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
             if ( m_frozenCornerGridWin )
                 m_frozenCornerGridWin->Refresh(eraseb, NULL);
         }
+
+        UpdateOverlay();
     }
 }
 
@@ -5751,6 +5759,87 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
                                               m_gridWin);
         if ( !rect.IsEmpty() )
             m_gridWin->Refresh(false, &rect);
+    }
+}
+
+void wxGrid::UseOverlay()
+{
+    if ( !m_overlay )
+    {
+        m_overlay = new wxOverlay;
+
+        if ( !m_overlay->IsNative() )
+        {
+            delete m_overlay;
+            m_overlay = NULL;
+        }
+        else
+        {
+            m_overlay->SetIsManualReset();
+        }
+    }
+}
+
+void wxGrid::UpdateOverlay()
+{
+    if ( !IsUsingOverlay() || GetBatchCount() )
+        return;
+
+    if ( !IsSelection() )
+    {
+        m_overlay->Reset();
+
+        return;
+    }
+
+    wxGridSelection::PolyPolygon polygons;
+    const wxRect rect = m_selection->GetAsPolyPolygon(polygons);
+
+    // Notice that polygons & rect are in scrolled coordinates and ready to be drawn
+    // (i.e. no preparation is needed here). also, the window passed to overlaydc is
+    // m_gridWin and not this (i.e. wxGrid which is wxScrolledCanvas) because we don't
+    // want wxOverlay to prepare the dc over again.
+
+    wxRect overlayRect = GetScreenRect();
+    overlayRect.Offset(GetRowLabelSize(), GetColLabelSize());
+
+    wxDCOverlay overlaydc(*m_overlay, m_gridWin,
+                          overlayRect.x, overlayRect.y,
+                          overlayRect.width, overlayRect.height);
+
+    overlaydc.SetUpdateRectangle(rect);
+
+    wxDC& dc = overlaydc;
+
+    overlaydc.Clear();
+
+    if ( rect.IsEmpty() )
+        return;
+
+    const wxColour colBg = GetSelectionBackground();
+
+#ifdef __WXMSW__
+    dc.SetPen(wxPen(colBg.ChangeLightness(20)));
+#else
+    dc.SetPen(wxPen(colBg));
+#endif
+    dc.SetBrush(wxColour(colBg.Red(), colBg.Green(), colBg.Blue(), 64));
+
+    const int n = polygons.GetSize();
+
+    if ( n == 0 )
+    {
+        dc.DrawRectangle(rect);
+    }
+    else
+    {
+        const int* counts = polygons.GetCounts();
+        const wxPoint* points = polygons.GetPoints();
+
+        if ( n == 1 )
+            dc.DrawPolygon(counts[0], points);
+        else
+            dc.DrawPolyPolygon(n, counts, points);
     }
 }
 
@@ -8221,6 +8310,7 @@ void wxGrid::MakeCellVisible( int row, int col )
         ypos /= m_yScrollPixelsPerLine;
     Scroll(xpos, ypos);
     AdjustScrollbars();
+    UpdateOverlay();
 }
 
 int wxGrid::GetFirstFullyVisibleRow() const
@@ -9951,6 +10041,8 @@ void wxGrid::DoSetRowSize( int row, int height )
             if ( m_frozenColGridWin )
                 refreshLowerPart(m_frozenColGridWin);
         }
+
+        UpdateOverlay();
     }
 }
 
@@ -10135,6 +10227,8 @@ void wxGrid::DoSetColSize( int col, int width )
             if ( m_frozenRowGridWin )
                 refreshFurtherPart(m_frozenRowGridWin);
         }
+
+        UpdateOverlay();
     }
 }
 
@@ -10752,7 +10846,7 @@ wxGridBlocks wxGrid::GetSelectedBlocks() const
     if ( !m_selection )
         return wxGridBlocks();
 
-    const wxVectorGridBlockCoords& blocks = m_selection->GetBlocks();
+    const wxGridBlockCoordsVector& blocks = m_selection->GetBlocks();
     return wxGridBlocks(blocks.begin(), blocks.end());
 }
 
@@ -10950,6 +11044,209 @@ void wxGrid::ClearSelection()
 {
     if ( m_selection )
         m_selection->ClearSelection();
+}
+
+void wxGrid::GetSelectedBlocksAsRects(wxVector<wxRect>& rectangles) const
+{
+    wxGridBlocks range = GetSelectedBlocks();
+    for ( wxGridBlocks::iterator itr = range.begin(), end = range.end();
+          itr != end;
+          ++itr )
+    {
+        wxGridBlockCoords coords = *itr;
+
+        const int topRow     = coords.GetTopRow();
+        const int bottomRow  = coords.GetBottomRow();
+        const int leftCol    = coords.GetLeftCol();
+        const int rightCol   = coords.GetRightCol();
+
+        int row = topRow;
+        int col = leftCol;
+
+        // corner grid
+        if ( topRow < m_numFrozenRows && GetColPos(leftCol) < m_numFrozenCols && m_frozenCornerGridWin )
+        {
+            row = wxMin(bottomRow, m_numFrozenRows - 1);
+            col = wxMin(rightCol, m_numFrozenCols - 1);
+
+            BlockToDeviceRects(wxGridCellCoords(topRow, leftCol),
+                               wxGridCellCoords(row, col),
+                               rectangles, m_frozenCornerGridWin);
+            row++; col++;
+        }
+
+        // frozen cols grid
+        if ( GetColPos(leftCol) < m_numFrozenCols && bottomRow >= m_numFrozenRows && m_frozenColGridWin )
+        {
+            col = wxMin(rightCol, m_numFrozenCols - 1);
+
+            BlockToDeviceRects(wxGridCellCoords(row, leftCol),
+                               wxGridCellCoords(bottomRow, col),
+                               rectangles, m_frozenColGridWin);
+            col++;
+        }
+
+        // frozen rows grid
+        if ( topRow < m_numFrozenRows && GetColPos(rightCol) >= m_numFrozenCols && m_frozenRowGridWin )
+        {
+            row = wxMin(bottomRow, m_numFrozenRows - 1);
+
+            BlockToDeviceRects(wxGridCellCoords(topRow, col),
+                               wxGridCellCoords(row, rightCol),
+                               rectangles, m_frozenRowGridWin);
+            row++;
+        }
+
+        // main grid
+        if ( bottomRow >= m_numFrozenRows && GetColPos(rightCol) >= m_numFrozenCols )
+        {
+            BlockToDeviceRects(wxGridCellCoords(row, col),
+                               wxGridCellCoords(bottomRow, rightCol),
+                               rectangles, m_gridWin);
+        }
+    }
+}
+
+void wxGrid::BlockToDeviceRects(const wxGridCellCoords& topLeft,
+                                const wxGridCellCoords& bottomRight,
+                                wxVector<wxRect>& rectangles, wxGridWindow* gridWin) const
+{
+    int cw, ch;
+    gridWin->GetClientSize(&cw, &ch);
+    const wxPoint offset = GetGridWindowOffset(gridWin);
+
+    // Get the origin coordinates: notice that they will be negative if the
+    // grid is scrolled downwards/to the right.
+    int gridOriginX = 0;
+    int gridOriginY = 0;
+    CalcGridWindowScrolledPosition(gridOriginX, gridOriginY,
+                                   &gridOriginX, &gridOriginY, gridWin);
+
+    const int onScreenLeftmostCol  = internalXToCol(-gridOriginX + offset.x, gridWin);
+    const int onScreenUppermostRow = internalYToRow(-gridOriginY + offset.y, gridWin);
+
+    const int onScreenRightmostCol  = internalXToCol(-gridOriginX + offset.x + cw, gridWin);
+    const int onScreenBottommostRow = internalYToRow(-gridOriginY + offset.y + ch, gridWin);
+
+    // Bound our loop so that we only examine the portion of the selected block
+    // that is shown on screen. Therefore, we compare the Top-Left block values
+    // to the Top-Left screen values, and the Bottom-Right block values to the
+    // Bottom-Right screen values, choosing appropriately.
+    int visibleTopRow     = wxMax(topLeft.GetRow(),       onScreenUppermostRow);
+    int visibleBottomRow  = wxMin(bottomRight.GetRow(),   onScreenBottommostRow);
+    int visibleLeftCol    = wxMax(topLeft.GetCol(),       onScreenLeftmostCol);
+    int visibleRightCol   = wxMin(bottomRight.GetCol(),   onScreenRightmostCol);
+
+    // help drawing selected multicells if/when their main cells are scrolled out of view.
+    bool isBlockVisible = true;
+
+    if ( visibleTopRow > visibleBottomRow )
+    {
+        isBlockVisible = false;
+        wxSwap(visibleTopRow, visibleBottomRow);
+    }
+
+    if ( visibleLeftCol > visibleRightCol )
+    {
+        isBlockVisible = false;
+        wxSwap(visibleLeftCol, visibleRightCol);
+    }
+
+    const bool useRowAsBlockId = (visibleBottomRow - visibleTopRow) >
+                                    (visibleRightCol - visibleLeftCol) ? true : false;
+
+    wxVector<std::pair<wxGridCellCoords, int> > vect;
+
+    for ( int j = visibleTopRow; j <= visibleBottomRow; j++ )
+    {
+        for ( int i = visibleLeftCol; i <= visibleRightCol; i++ )
+        {
+            int row = j, col = i;
+            int blockId = useRowAsBlockId ? row : col;
+
+            int cell_rows = 0, cell_cols = 0;
+            const wxGrid::CellSpan cellSpan = GetCellSize(j, i, &cell_rows, &cell_cols);
+
+            if ( cellSpan != CellSpan_None )
+            {
+                if ( cellSpan == CellSpan_Inside )
+                {
+                    row += cell_rows;
+                    col += cell_cols;
+                }
+
+                blockId = IsInSelection(row, col) ? row + col + GetNumberRows() : -1;
+            }
+            else if ( !isBlockVisible )
+            {
+                continue;
+            }
+
+            vect.push_back(std::make_pair(wxGridCellCoords(row, col), blockId));
+        }
+    }
+
+    wxVector<std::pair<wxGridCellCoords, int> >::iterator itr = vect.begin(),
+                                                          end = vect.end();
+    while ( itr != end )
+    {
+        const std::pair<wxGridCellCoords, int>& bound1 = *itr++;
+        const std::pair<wxGridCellCoords, int>* bound2 = NULL;
+
+        const int blockId = bound1.second;
+
+        while ( itr != end )
+        {
+            const std::pair<wxGridCellCoords, int>& bound = *itr++;
+            if ( bound.second != blockId )
+            {
+                --itr;
+                break;
+            }
+
+            bound2 = &bound;
+        }
+
+        if ( blockId < 0 )
+            continue;
+
+        wxRect rect = CellToRect(bound1.first);
+
+        if ( bound2 && bound2->first != bound1.first )
+        {
+            rect += CellToRect(bound2->first);
+        }
+
+        // For one hand, we need to compensate for the 1 subtracted in CellToRect(),
+        // for the other hand, this makes the algorithm responsible for generating
+        // the polygons from these rectangles works correctly. see PolyPolygonHelper.
+        rect.Inflate(1);
+
+        int left, top, right, bottom;
+
+        // Convert to scrolled coords
+        CalcGridWindowScrolledPosition( rect.GetLeft() - offset.x, rect.GetTop() - offset.y,
+                                        &left, &top, gridWin );
+        CalcGridWindowScrolledPosition( rect.GetRight() - offset.x, rect.GetBottom() - offset.y,
+                                        &right, &bottom, gridWin );
+
+        if ( right < 0 || bottom < 0 || left > cw || top > ch )
+        {
+            continue;
+        }
+
+        rect.SetLeft( wxMax(0, left) );
+        rect.SetTop( wxMax(0, top) );
+        rect.SetRight( wxMin(cw, right) );
+        rect.SetBottom( wxMin(ch, bottom) );
+
+        rect.Offset(offset);
+
+        if ( std::find(rectangles.begin(), rectangles.end(), rect) != rectangles.end() )
+            continue;
+
+        rectangles.push_back(rect);
+    }
 }
 
 // This function returns the rectangle that encloses the given block

@@ -91,6 +91,7 @@ class GridFrame : public wxFrame
     void SelectRow(wxCommandEvent& event);
     void SelectAll(wxCommandEvent& event);
     void OnAddToSelectToggle(wxCommandEvent& event);
+    void OnUseOverlay(wxCommandEvent& event);
 
     void AutoSizeRow(wxCommandEvent& event);
     void AutoSizeCol(wxCommandEvent& event);
@@ -203,6 +204,7 @@ public:
         ID_VTABLE,
         ID_BUGS_TABLE,
         ID_TABULAR_TABLE,
+        ID_SELECT_USEOVERLAY,
         ID_SELECT_UNSELECT,
         ID_SELECT_ALL,
         ID_SELECT_ROW,
