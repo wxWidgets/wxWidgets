@@ -20,7 +20,7 @@
 
 
 #ifndef WX_PRECOMP
-    #include "wx/log.h"
+    #include "wx/toplevel.h"
     #include "wx/window.h"
     #include "wx/dcclient.h"
 #endif
@@ -153,7 +153,7 @@ private:
 // wxOverlay
 // ----------------------------------------------------------------------------
 
-wxOverlayMSWImpl::wxOverlayMSWImpl()
+wxOverlayMSWImpl::wxOverlayMSWImpl() : m_timer(this)
 {
     m_window = NULL;
     m_overlayWindow = NULL;
@@ -174,6 +174,17 @@ void wxOverlayMSWImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
     wxASSERT_MSG( !IsOk() , "You cannot Init an overlay twice" );
     wxASSERT_MSG( !m_window || m_window == win,
         "wxOverlay re-initialized with a different window");
+
+    if ( target != wxOverlay::Overlay_Screen && IsManualReset() )
+    {
+        wxTopLevelWindow * const
+            appWin = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
+
+        appWin->Bind(wxEVT_MOVE_START, &wxOverlayMSWImpl::OnMoveStart, this);
+        appWin->Bind(wxEVT_MOVE_END,   &wxOverlayMSWImpl::OnMoveEnd,   this);
+        appWin->Bind(wxEVT_SIZE,       &wxOverlayMSWImpl::OnResize,    this);
+        appWin->Bind(wxEVT_ICONIZE,    &wxOverlayMSWImpl::OnIconize,   this);
+    }
 
     m_window = win;
 
@@ -256,6 +267,32 @@ void wxOverlayMSWImpl::Clear(wxDC* dc)
 
 void wxOverlayMSWImpl::Reset()
 {
+    if ( IsOk() && IsManualReset() )
+    {
+        DWORD dwExStyle = ::GetWindowLong(m_overlayWindow->GetHandle(), GWL_EXSTYLE);
+        if ( (dwExStyle & WS_EX_TOPMOST) == 0 )
+        {
+            wxTopLevelWindow * const
+                appWin = wxDynamicCast(wxGetTopLevelParent(m_window), wxTopLevelWindow);
+
+            if ( appWin )
+            {
+                appWin->Unbind(wxEVT_MOVE_START, &wxOverlayMSWImpl::OnMoveStart, this);
+                appWin->Unbind(wxEVT_MOVE_END,   &wxOverlayMSWImpl::OnMoveEnd,   this);
+                appWin->Unbind(wxEVT_SIZE,       &wxOverlayMSWImpl::OnResize,    this);
+                appWin->Unbind(wxEVT_ICONIZE,    &wxOverlayMSWImpl::OnIconize,   this);
+            }
+        }
+    }
+
+    DoReset();
+}
+
+void wxOverlayMSWImpl::DoReset()
+{
+    if ( !IsOk() )
+        return;
+
     m_oldRect = wxRect();
 
     GetBitmap() = wxBitmap();
@@ -265,6 +302,42 @@ void wxOverlayMSWImpl::Reset()
         m_overlayWindow->Destroy();
         m_overlayWindow = NULL;
     }
+}
+
+void wxOverlayMSWImpl::OnMoveStart(wxMoveEvent& event)
+{
+    DoReset();
+    event.Skip();
+}
+
+void wxOverlayMSWImpl::OnMoveEnd(wxMoveEvent& event)
+{
+    m_window->GetMainWindowOfCompositeControl()->Refresh(false);
+    event.Skip();
+}
+
+void wxOverlayMSWImpl::OnResize(wxSizeEvent& event)
+{
+    DoReset();
+    m_timer.StartOnce(100);
+    event.Skip();
+}
+
+void wxOverlayMSWImpl::OnIconize(wxIconizeEvent& event)
+{
+    if ( event.IsIconized() )
+    {
+        DoReset();
+    }
+    else
+    {
+        m_window->GetMainWindowOfCompositeControl()->Refresh(false);
+    }
+}
+
+void wxOverlayMSWImpl::OverlayTimer::Notify()
+{
+    m_owner->GetWindow()->GetMainWindowOfCompositeControl()->Refresh(false);
 }
 
 wxOverlayImpl* wxOverlayImpl::Create() { return new wxOverlayMSWImpl(); }

@@ -11,6 +11,7 @@
 #define _WX_MSW_PRIVATE_OVERLAY_H_
 
 #include "wx/private/overlay.h"
+#include "wx/timer.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxDC;
@@ -31,7 +32,28 @@ public:
 
     virtual void SetUpdateRectangle(const wxRect& rect) wxOVERRIDE;
 
+    wxWindow* GetWindow() const { return m_window; }
+
 public:
+    void DoReset();
+
+    void OnMoveStart(wxMoveEvent& event);
+    void OnMoveEnd(wxMoveEvent& event);
+    void OnResize(wxSizeEvent& event);
+    void OnIconize(wxIconizeEvent& event);
+
+    class OverlayTimer : public wxTimer
+    {
+    public:
+        OverlayTimer(wxOverlayMSWImpl* owner) : m_owner(owner) { }
+
+        virtual void Notify() wxOVERRIDE;
+
+    private:
+        wxOverlayMSWImpl* const m_owner;
+
+    } m_timer;
+
     // window the overlay is associated with
     wxWindow* m_window;
     // the overlay window itself
