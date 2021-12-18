@@ -347,10 +347,12 @@
             <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
             <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
             <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='17.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
             <!-- per-monitor dpi -->
             <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
             <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
             <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='17.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
         </set>
     </if>
 

@@ -144,6 +144,10 @@ WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware.manifest
 !endif
+!if "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "17.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware.manifest
+!endif
 !if "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest
@@ -153,6 +157,10 @@ WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest
 !endif
 !if "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest
+!endif
+!if "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "17.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest
 !endif
