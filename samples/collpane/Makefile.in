@@ -51,8 +51,8 @@ COLLPANE_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
 	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 COLLPANE_OBJECTS =  \
-	collpane_collpane.o \
-	$(__collpane___win32rc)
+	$(__collpane___win32rc) \
+	collpane_collpane.o
 
 ### Conditionally set variables: ###
 
@@ -89,6 +89,7 @@ COND_PLATFORM_OS2_1___collpane___os2_emxbindcmd = $(NM) collpane$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__collpane___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___collpane___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+@COND_PLATFORM_WIN32_1@__collpane___win32rc = collpane_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__collpane_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= collpane.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__collpane_bundle___depname = collpane_bundle
@@ -108,7 +109,6 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__collpane___win32rc = collpane_sample_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -182,11 +182,11 @@ collpane$(EXEEXT): $(COLLPANE_OBJECTS) $(__collpane___win32rc)
 
 @COND_PLATFORM_MACOSX_1@collpane_bundle: $(____collpane_BUNDLE_TGT_REF_DEP)
 
+collpane_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+
 collpane_collpane.o: $(srcdir)/collpane.cpp
 	$(CXXC) -c -o $@ $(COLLPANE_CXXFLAGS) $(srcdir)/collpane.cpp
-
-collpane_sample_rc.o: $(srcdir)/../sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

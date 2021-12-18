@@ -2285,8 +2285,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
     wx/msw/wx.manifest
-    wx/msw/amd64.manifest
-    wx/msw/ia64.manifest
+    wx/msw/wx_dpi_aware.manifest
+    wx/msw/wx_dpi_aware_pmv2.manifest
     wx/msw/wx.rc
     <!-- bitmaps -->
     wx/msw/colours.bmp
