@@ -877,22 +877,4 @@ void wxSpinCtrl::DoClientToScreen(int *x, int *y) const
 {
     wxWindow::MSWDoClientToScreen(GetBuddyHwnd(), x, y);
 }
-
-void wxSpinCtrl::SetIncrement(int value)
-{
-    UDACCEL accel;
-    accel.nSec = 0;
-    accel.nInc = value;
-    ::SendMessage( GetHwnd (), UDM_SETACCEL, 1, (LPARAM) &accel);
-}
-
-int  wxSpinCtrl::GetIncrement() const
-{
-    UDACCEL accel;
-    int num = ::SendMessage( GetHwnd(), UDM_GETACCEL, 1, (LPARAM) &accel );
-    if( num == 1 )
-        return accel.nInc;
-    else
-        return 1;
-}
 #endif // wxUSE_SPINCTRL
