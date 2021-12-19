@@ -29,8 +29,15 @@ class MaskedEditTestCase : public CppUnit::TestCase
 public:
     MaskedEditTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    virtual void MaskedEditTestCase::setUp() wxOVERRIDE
+    {
+        CreateControl();
+    }
+
+    virtual void MaskedEditTestCase::tearDown() wxOVERRIDE
+    {
+        wxTheApp->GetTopWindow()->DestroyChildren();
+    }
 
 private:
     CPPUNIT_TEST_SUITE( MaskedEditTestCase );
@@ -44,7 +51,7 @@ private:
     void TestUI();
 #endif
     void TestFunc();
-
+    void CreateControl();
     wxMaskedEditText* m_editTx;
 
     DECLARE_NO_COPY_CLASS(MaskedEditTestCase)
@@ -56,14 +63,23 @@ CPPUNIT_TEST_SUITE_REGISTRATION( MaskedEditTestCase );
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MaskedEditTestCase, "MaskedEditTestCase" );
 
-void MaskedEditTestCase::setUp()
+void MaskedEditTestCase::CreateControl()
 {
     m_editTx = new wxMaskedEditText(wxTheApp->GetTopWindow(), wxID_ANY);
-}
+    m_editTx->SetMask("=a>A^-###++xx.#{4}");
+    // test empty value
+    CPPUNIT_ASSERT_EQUAL( "=  -   ++  .    ", m_editTx->GetValue() );
 
-void MaskedEditTestCase::tearDown()
-{
-    wxTheApp->GetTopWindow()->DestroyChildren();
+    m_editTx->SetValue("=bc- 12++  .9876");
+    // 'c' should be changed to 'C' and '12' should be left re-aligned
+    CPPUNIT_ASSERT_EQUAL( "=bC-12 ++  .9876", m_editTx->GetValue() );
+
+    m_editTx->SetFieldFlags(3, wxEditFieldFlags(wxALIGN_RIGHT));
+    m_editTx->SetPlainValue("fg56");
+    m_editTx->SetFieldValue(3, "987");
+    CPPUNIT_ASSERT_EQUAL( "=fG-56 ++  . 987", m_editTx->GetValue() );
+    wxString temp = m_editTx->GetValue();
+    wxString temp1 = m_editTx->GetMask();
 }
 
 void MaskedEditTestCase::TestSet()
@@ -80,22 +96,25 @@ void MaskedEditTestCase::TestSet()
     m_editTx->SetPlainValue("fg56");
     m_editTx->SetFieldValue(3, "987");
     CPPUNIT_ASSERT_EQUAL( "=fG-56 ++  . 987", m_editTx->GetValue() );
+    wxString temp = m_editTx->GetValue();
+    wxString temp1 = m_editTx->GetMask();
 }
 
 #if wxUSE_UIACTIONSIMULATOR
 void MaskedEditTestCase::TestUI()
 {
     wxUIActionSimulator sim;
-
+/**
     m_editTx->SetMask("=a>A^-###++xx.#{4}");
     m_editTx->SetValue( "=fG-56 ++  . 987" );
-
+*/
     m_editTx->SetFocus();
     sim.Char(WXK_END);
     sim.Char(WXK_BACK);
     wxYield();
     CPPUNIT_ASSERT_EQUAL( "=fG-56 ++  .  98", m_editTx->GetValue() );
 
+    sim.Char(WXK_LEFT);
     sim.Char(WXK_LEFT);
     sim.Char(WXK_LEFT);
     sim.Char('d');
@@ -114,9 +133,6 @@ void MaskedEditTestCase::TestUI()
 void MaskedEditTestCase::TestFunc()
 {
     // Should fail because not all fields have all required chars
-    m_editTx->SetMask("=a>A^-###++xx.#{4}");
-    m_editTx->SetValue( "=fG-56 ++2d.  98" );
-
     CPPUNIT_ASSERT( !m_editTx->IsValid() );
 
     m_editTx->ChangeValue("=aB-123++  .5670");
