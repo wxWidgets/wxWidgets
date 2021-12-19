@@ -679,4 +679,3 @@ WXDLLIMPEXP_ADV long wxMaskedDateShort(const wxMaskedEdit* caller, void* params)
 #endif // wxUSE_MASKED_EDIT
 
 #endif // _WX_MASKED_EDIT_H_
-

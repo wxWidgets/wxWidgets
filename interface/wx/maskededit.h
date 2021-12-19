@@ -17,12 +17,12 @@
     If you don't set a member of this struct, the standard system default
     colour for the control is used for it.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEditText, wxMaskedEditCombo
 
-    @since 2.9.5
+    @since 3.1.6
 
 */
 struct wxMaskedEditColours
@@ -60,19 +60,19 @@ struct wxMaskedEditColours
     @endcode
 
     By specification, all methods of wxEditFieldFlags return the
-    wxEditFieldFlags object itself to allowing chaining multiple methods calls,
+    wxEditFieldFlags object itself to allow chaining multiple method calls,
     like in this example:
 
     @code
     maskedCtrl->SetFieldFlags(n, wxEditFieldFlags().SetFillChar('_'));
     @endcode
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEdit
 
-    @since 2.9.5
+    @since 3.1.6
 */
 class wxEditFieldFlags
 {
@@ -160,12 +160,12 @@ public:
 
     An example of a currently defined function is wxMaskedRangeCheck().
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEdit::SetFieldFunction()
 
-    @since 2.9.5
+    @since 3.1.6
 
 */
 typedef long wxMaskedFieldFunc(const wxMaskedEdit*, size_t, void*);
@@ -179,12 +179,12 @@ typedef long wxMaskedFieldFunc(const wxMaskedEdit*, size_t, void*);
 
     An example of a currently defined function is wxMaskedDateShort().
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEdit::SetControlFunction()
 
-    @since 2.9.5
+    @since 3.1.6
 
     @header{wx/maskededit.h}
 */
@@ -199,12 +199,12 @@ typedef long wxMaskedFunc(const wxMaskedEdit*, void*);
     It is also useful if you have several masked edit controls and you want
     to set all parameters at once repeatedly.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEditText, wxMaskedEditCombo, wxMaskedEdit
 
-    @since 2.9.5
+    @since 3.1.6
 */
 class wxMaskedEditParams
 {
@@ -312,12 +312,12 @@ public:
     functions just do test (i.e. they don't change anything) and inform the
     main code if that field/control has an acceptable value.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEditText, wxMaskedEditCombo
 
-    @since 2.9.5
+    @since 3.1.6
 */
 class wxMaskedEdit
 {
@@ -620,12 +620,12 @@ public:
  
      The events this class emits are those of wxTextCtrl.
  
-     @library{wxadv}
+     @library{wxcore}
      @category{ctrl}
  
      @see wxMaskedEdit, wxMaskedEditCombo, wxTextCtrl
  
-     @since 2.9.5
+     @since 3.1.6
  */
  class wxMaskedEditText : public wxMaskedEdit, public wxTextCtrl
  {
@@ -712,12 +712,12 @@ public:
 
     The events this class emits are those of wxComboBox.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEdit, wxMaskedEditText, wxComboBox
 
-    @since 2.9.5
+    @since 3.1.6
 */
 class wxMaskedEditCombo : public wxMaskedEdit,  public wxComboBox
 {
@@ -838,12 +838,12 @@ public:
 
     Used to pass parameters to wxMaskedRangeCheck()
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEditText, wxMaskedEditCombo, wxMaskedEdit
 
-    @since 2.9.5
+    @since 3.1.6
 
 */
 class wxRangeParams
@@ -882,22 +882,22 @@ public:
     the range (excluded range as opposed to included range). For example, 33
     or 90 are valid values for a [70-50] range.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
-    @since 2.9.5
+    @since 3.1.6
 */
 long wxMaskedRangeCheck(const wxMaskedEdit* caller, size_t index, void* params);
 
 /**
     Used to pass parameters to wxMaskedDateShort()
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEditText, wxMaskedEditCombo, wxMaskedEdit
 
-    @since 2.9.5
+    @since 3.1.6
 +*/
 struct wxDateParams
 {
@@ -922,12 +922,12 @@ struct wxDateParams
     Once the fields are known, their values are extracted and tested to form a
     valid date.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxMaskedEditText, wxMaskedEditCombo, wxMaskedEdit
 
-    @since 2.9.5
+    @since 3.1.6
 */
 long wxMaskedDateShort(const wxMaskedEdit* caller, void* params);
 
