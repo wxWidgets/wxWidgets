@@ -205,7 +205,7 @@ private:
 // avoid overdrawing the caret
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAS_CARET_USING_OVERLAYS
+#ifdef wxHAS_NATIVE_OVERLAY
 
 // we don't need to hide the caret if it's rendered using overlays
 class WXDLLIMPEXP_CORE wxCaretSuspend
@@ -216,7 +216,7 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
 
-#else // !wxHAS_CARET_USING_OVERLAYS
+#else // !wxHAS_NATIVE_OVERLAY
 
 class WXDLLIMPEXP_CORE wxCaretSuspend
 {
@@ -245,7 +245,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
 
-#endif // wxHAS_CARET_USING_OVERLAYS/!wxHAS_CARET_USING_OVERLAYS
+#endif // wxHAS_NATIVE_OVERLAY/!wxHAS_NATIVE_OVERLAY
 
 #endif // wxUSE_CARET
 

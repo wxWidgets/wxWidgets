@@ -56,7 +56,7 @@ public:
     void Reset();
 
     // We need to informe/hint wxOverlay to set up a mechanism to detect the
-    // geometry change of the overlayed window, because under wxMSW and wxGTK3
+    // geometry change of the overlaid window, because under wxMSW and wxGTK3
     // (X11) there is no direct/implicit connection between the overlay and the
     // wxWindow it overlays when the latter get moved or resized. so this function
     // is only needed for a specific kind of overlays (a manual reset overlays)

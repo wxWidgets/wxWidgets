@@ -473,14 +473,29 @@ void wxOverlayX11Helper::SetShownOnScreen()
 {
     m_isShownOnScreen = true;
 
-    GdkWindow* root = gtk_widget_get_root_window(m_owner->GetWindow()->GetHandle());
+    wxWindow* window = m_owner->GetWindow();
+    GtkWidget* surface = m_owner->GetSurface();
+
+    if ( window->GetCaret() )
+    {
+        // We need to reposition the caret as it is not positioned
+        // correctly when it is first shown under Gnome. and in fact,
+        // there is no harm in doing it unconditionally for any WM
+        // knowing that this adjustment is performed only once.
+        // i.e. when the overlay window becomes visible on screen.
+        const wxPoint pos = window->GetScreenPosition();
+
+        gtk_window_move(GTK_WINDOW(surface), pos.x, pos.y);
+    }
+
+    GdkWindow* root = gtk_widget_get_root_window(window->GetHandle());
     GdkEventMask mask = gdk_window_get_events(root);
     gdk_window_set_events(root, GdkEventMask(mask | GDK_SUBSTRUCTURE_MASK));
     gdk_window_add_filter(root, wxOverlayWindowFilter, this);
 
     if ( !m_isPointerInsideWindow )
     {
-        gtk_window_set_transient_for(GTK_WINDOW(m_owner->GetSurface()), NULL);
+        gtk_window_set_transient_for(GTK_WINDOW(surface), NULL);
     }
 }
 

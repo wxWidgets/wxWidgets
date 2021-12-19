@@ -98,7 +98,11 @@ void wxCaret::InitGeneric()
     m_hasFocus = true;
     m_blinkedOut = true;
 
+#ifdef wxHAS_NATIVE_OVERLAY
+    m_overlay.SetIsManualReset();
+#else
     m_overlay.UseGeneric();
+#endif
 }
 
 wxCaret::~wxCaret()
@@ -138,7 +142,11 @@ void wxCaret::DoHide()
 void wxCaret::DoMove()
 {
     if ( m_overlay.IsNative() )
+    {
+#ifndef __WXGTK3__
         m_overlay.Reset();
+#endif
+    }
 
     if ( IsVisible() )
     {
