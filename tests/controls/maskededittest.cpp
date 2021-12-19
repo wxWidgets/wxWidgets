@@ -29,12 +29,12 @@ class MaskedEditTestCase : public CppUnit::TestCase
 public:
     MaskedEditTestCase() { }
 
-    virtual void MaskedEditTestCase::setUp() wxOVERRIDE
+    virtual void setUp() wxOVERRIDE
     {
         CreateControl();
     }
 
-    virtual void MaskedEditTestCase::tearDown() wxOVERRIDE
+    virtual void tearDown() wxOVERRIDE
     {
         wxTheApp->GetTopWindow()->DestroyChildren();
     }
