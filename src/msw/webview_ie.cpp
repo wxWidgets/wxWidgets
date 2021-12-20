@@ -1173,22 +1173,15 @@ bool wxWebViewIEImpl::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
                 {
                     is_visible = false;
                 }
-                style->Release();
             }
-            elm2->Release();
         }
 
         //Lets check the object's parent element.
         IHTMLElement* parent;
         if(is_visible && SUCCEEDED(elm1->get_parentElement(&parent)))
-        {
             elm1 = parent;
-        }
         else
-        {
-            elm1->Release();
             break;
-        }
     }
     return is_visible;
 }
