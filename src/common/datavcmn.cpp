@@ -2383,10 +2383,6 @@ bool wxDataViewListStore::SetValueByRow( const wxVariant &value, unsigned int ro
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewListCtrl,wxDataViewCtrl);
 
-wxBEGIN_EVENT_TABLE(wxDataViewListCtrl,wxDataViewCtrl)
-   EVT_SIZE( wxDataViewListCtrl::OnSize )
-wxEND_EVENT_TABLE()
-
 wxDataViewListCtrl::wxDataViewListCtrl()
 {
 }
@@ -2504,11 +2500,6 @@ wxDataViewColumn *wxDataViewListCtrl::AppendIconTextColumn( const wxString &labe
         GetStore()->GetColumnCount()-1, width, align, flags );
 
     return wxDataViewCtrl::AppendColumn( ret ) ? ret : NULL;
-}
-
-void wxDataViewListCtrl::OnSize( wxSizeEvent &event )
-{
-    event.Skip( true );
 }
 
 //-----------------------------------------------------------------------------
