@@ -273,6 +273,8 @@ private:
     wxString       m_strLocale,       // this locale name
                    m_strShort;        // short name for the locale
     int            m_language;        // this locale wxLanguage value
+
+    bool           m_uiLocaleRestore; // flag whether to restore the wxUILocale instance
     wxString       m_uiLocaleTag;     // wxUILocale identifier
 
     const char  *m_pszOldLocale;      // previous locale from setlocale()

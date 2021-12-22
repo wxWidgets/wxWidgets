@@ -302,15 +302,23 @@ bool wxLocale::Init(const wxString& name,
 
 #if defined(__UNIX__) || defined(__WIN32__)
     bool ok = wxUILocale::UseLocaleName(szLocale);
+    m_uiLocaleRestore = ok;
     if (ok)
     {
         m_uiLocaleTag = wxUILocale::GetCurrent().GetName();
     }
+
+    // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
+    // the other platforms we still have to do it here.
+#if defined(__WIN32__) || defined(__WXOSX__)
+    ok = wxSetlocale(LC_ALL, szLocale) != NULL;
+#endif // __WIN32__
+
+#else
+    bool ok = false;
 #endif
 
-    const bool ret = wxSetlocale(LC_ALL, szLocale) != NULL;
-
-    return DoCommonPostInit(ret, szLocale, shortName, bLoadDefault);
+    return DoCommonPostInit(ok, szLocale, shortName, bLoadDefault);
 }
 
 void wxLocale::DoInit(const wxString& name,
@@ -326,6 +334,7 @@ void wxLocale::DoInit(const wxString& name,
     m_language = language;
 
     // Store the current locale in order to be able to restore it in the dtor.
+    m_uiLocaleRestore = false;
     m_pszOldLocale = wxSetlocale(LC_ALL, NULL);
     if ( m_pszOldLocale )
         m_pszOldLocale = wxStrdup(m_pszOldLocale);
@@ -430,6 +439,7 @@ bool wxLocale::Init(int lang, int flags)
 
     bool ok = lang == wxLANGUAGE_DEFAULT ? wxUILocale::UseDefault()
                                          : wxUILocale::UseLocaleName(shortName);
+    m_uiLocaleRestore = ok;
     if (ok)
     {
         m_uiLocaleTag = wxUILocale::GetCurrent().GetName();
@@ -678,7 +688,9 @@ wxString wxLocale::GetSysName() const
 
 bool wxLocale::EnableUILocale()
 {
-    return wxUILocale::UseLocaleName(m_uiLocaleTag);
+    if (m_uiLocaleRestore)
+        return wxUILocale::UseLocaleName(m_uiLocaleTag);
+    return false;
 }
 
 // clean up
@@ -932,50 +944,50 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
                     break;
                 case 'c':
                     switch ( lastCount )
-                {
-                    case 1: // c
-                        // TODO: unsupported: first day of week as numeric value
-                        fmtWX += "1";
-                        break;
-                    case 3: // ccc
-                        fmtWX += "%a";
-                        break;
-                    case 4: // cccc
-                        fmtWX += "%A";
-                        break;
-                    case 5: // ccccc
-                        // no "narrow form" in strftime(), use abbrev.
-                        fmtWX += "%a";
-                        break;
+                    {
+                        case 1: // c
+                            // TODO: unsupported: first day of week as numeric value
+                            fmtWX += "1";
+                            break;
+                        case 3: // ccc
+                            fmtWX += "%a";
+                            break;
+                        case 4: // cccc
+                            fmtWX += "%A";
+                            break;
+                        case 5: // ccccc
+                            // no "narrow form" in strftime(), use abbrev.
+                            fmtWX += "%a";
+                            break;
 
-                    default:
-                        wxFAIL_MSG( "wrong number of 'c's" );
-                }
+                        default:
+                            wxFAIL_MSG( "wrong number of 'c's" );
+                    }
                     break;
                 case 'L':
                     switch ( lastCount )
-                {
-                    case 1: // L
-                    case 2: // LL
-                        fmtWX += "%m";
-                        break;
+                    {
+                        case 1: // L
+                        case 2: // LL
+                            fmtWX += "%m";
+                            break;
 
-                    case 3: // LLL
-                        fmtWX += "%b";
-                        break;
+                        case 3: // LLL
+                            fmtWX += "%b";
+                            break;
 
-                    case 4: // LLLL
-                        fmtWX += "%B";
-                        break;
+                        case 4: // LLLL
+                            fmtWX += "%B";
+                            break;
 
-                    case 5: // LLLLL
-                        // no "narrow form" in strftime(), use abbrev.
-                        fmtWX += "%b";
-                        break;
+                        case 5: // LLLLL
+                            // no "narrow form" in strftime(), use abbrev.
+                            fmtWX += "%b";
+                            break;
 
-                    default:
-                        wxFAIL_MSG( "too many 'L's" );
-                }
+                        default:
+                            wxFAIL_MSG( "too many 'L's" );
+                    }
                     break;
 #endif
                 case 'M':

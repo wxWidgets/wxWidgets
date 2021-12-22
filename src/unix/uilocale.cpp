@@ -98,14 +98,38 @@ inline locale_t TryCreateLocale(const wxLocaleIdent& locId)
 // modifying its wxLocaleIdent argument if it succeeds).
 locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
 {
-    locale_t loc = TryCreateLocale(locId);
-    if ( !loc && locId.GetCharset().empty() )
+    locale_t loc = NULL;
+
+#if wxUSE_UNICODE
+    if ( locId.GetCharset().empty() )
     {
-        wxLocaleIdent locIdUTF8 = wxLocaleIdent(locId).Charset("UTF-8");
+        wxLocaleIdent locIdUTF8(locId);
+        locIdUTF8.Charset(wxS("UTF-8"));
+
         loc = TryCreateLocale(locIdUTF8);
+        if ( !loc )
+        {
+            locIdUTF8.Charset(wxS("utf-8"));
+            loc = TryCreateLocale(locIdUTF8);
+        }
+        if ( !loc )
+        {
+            locIdUTF8.Charset(wxS("UTF8"));
+            loc = TryCreateLocale(locIdUTF8);
+        }
+        if ( !loc )
+        {
+            locIdUTF8.Charset(wxS("utf8"));
+            loc = TryCreateLocale(locIdUTF8);
+        }
         if ( loc )
             locId = locIdUTF8;
     }
+
+    // if we can't set UTF-8 locale, try non-UTF-8 one:
+    if ( !loc )
+#endif // wxUSE_UNICODE
+        loc = TryCreateLocale(locId);
 
     return loc;
 }
@@ -598,7 +622,7 @@ wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
                 break;
             }
             if (i < count)
-                langFull = languagesDB[i].CanonicalName;
+            	langFull = languagesDB[i].CanonicalName;
         }
     }
 
@@ -640,7 +664,7 @@ wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
         // Locale name with modifier
         preferred.push_back(langFull + modifier);
     }
-    // Locale name without modifier
+	// Locale name without modifier
     preferred.push_back(langFull);
 
     return preferred;
