@@ -363,26 +363,18 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
         return;
     }
 
-    wxBrush brush;
     if ( flags & wxCONTROL_SELECTED )
     {
-        if ( flags & wxCONTROL_FOCUSED )
+        wxColour color(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        if ((flags & wxCONTROL_FOCUSED) == 0)
         {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            color = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
         }
-        else // !focused
-        {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-        }
-    }
-    else // !selected
-    {
-        brush = *wxTRANSPARENT_BRUSH;
-    }
 
-    wxDCBrushChanger setBrush(dc, brush);
-    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
-    dc.DrawRectangle( rect );
+        wxDCBrushChanger setBrush(dc, wxBrush(color));
+        wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+        dc.DrawRectangle(rect);
+    }
 
     if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
         DrawFocusRect( win, dc, rect, flags );
