@@ -622,7 +622,7 @@ wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
                 break;
             }
             if (i < count)
-            	langFull = languagesDB[i].CanonicalName;
+                langFull = languagesDB[i].CanonicalName;
         }
     }
 
@@ -664,7 +664,7 @@ wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
         // Locale name with modifier
         preferred.push_back(langFull + modifier);
     }
-	// Locale name without modifier
+    // Locale name without modifier
     preferred.push_back(langFull);
 
     return preferred;
