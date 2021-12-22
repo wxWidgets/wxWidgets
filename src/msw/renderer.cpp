@@ -368,7 +368,13 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
         wxColour color(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
         if ((flags & wxCONTROL_FOCUSED) == 0)
         {
-            color = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+            // Use wxSYS_COLOUR_BTNFACE for unfocused selection, but only if it
+            // has enough contrast with wxSYS_COLOUR_HIGHLIGHTTEXT, as otherwise
+            // the text will be unreadable
+            const wxColour btnface(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+            const wxColour highlightText(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+            if (fabs(btnface.GetLuminance() - highlightText.GetLuminance()) > 0.5)
+                color = btnface;
         }
 
         wxDCBrushChanger setBrush(dc, wxBrush(color));
