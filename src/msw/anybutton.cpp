@@ -420,7 +420,7 @@ private:
                     stateBitmap = bitmap;
             }
 
-            m_iml.Add(bitmap);
+            m_iml.Add(stateBitmap);
         }
 
         // In addition to the states supported by wxWidgets such as normal,
