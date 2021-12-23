@@ -4693,6 +4693,8 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         if (gdk_event->window != gtk_tree_view_get_bin_window(treeview))
             return FALSE;
 
+        int x = int(gdk_event->x);
+        int y = int(gdk_event->y);
         wxGtkTreePath path;
         GtkTreeViewColumn *column = NULL;
         gint cell_x = 0;
@@ -4700,7 +4702,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         gtk_tree_view_get_path_at_pos
         (
             treeview,
-            (int) gdk_event->x, (int) gdk_event->y,
+            x, y,
             path.ByRef(),
             &column,
             &cell_x,
@@ -4722,6 +4724,13 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
 
         wxDataViewEvent
             event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKPathToItem(path));
+#if GTK_CHECK_VERSION(2,12,0)
+        if (wx_is_at_least_gtk2(12))
+        {
+            gtk_tree_view_convert_bin_window_to_widget_coords(treeview, x, y, &x, &y);
+            event.SetPosition(x, y);
+        }
+#endif
         return dv->HandleWindowEvent( event );
     }
 
