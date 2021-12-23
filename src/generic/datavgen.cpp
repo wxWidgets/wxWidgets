@@ -4988,6 +4988,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     if (event.RightUp())
     {
         wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, m_owner, col, item);
+        int xx = event.GetX();
+        int yy = event.GetY();
+        ClientToScreen(&xx, &yy);
+        m_owner->ScreenToClient(&xx, &yy);
+        le.SetPosition(xx, yy);
         m_owner->ProcessWindowEvent(le);
         return;
     }
