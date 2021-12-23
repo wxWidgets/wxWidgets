@@ -846,7 +846,8 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
 
     // Check if we already had bitmaps of different size.
     if ( m_imageData &&
-          bitmapBundle.GetDefaultSize() != m_imageData->GetBitmapSize() )
+          bitmapBundle.GetDefaultSize() !=
+            m_imageData->GetBitmapBundle(State_Normal).GetDefaultSize() )
     {
         wxASSERT_MSG( which == State_Normal,
                       "Must set normal bitmap with the new size first" );
