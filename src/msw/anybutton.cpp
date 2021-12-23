@@ -106,13 +106,24 @@ class wxButtonImageData: public wxObject
 {
 public:
     wxButtonImageData(wxWindow* btn, const wxBitmapBundle& normalBundle)
+        : m_btn(btn)
     {
         m_bitmapSize = normalBundle.GetPreferredSizeFor(btn);
 
         m_bitmapBundles[wxAnyButton::State_Normal] = normalBundle;
+
+        // React to DPI changes in the future.
+        m_btn->Bind(wxEVT_DPI_CHANGED, &wxButtonImageData::OnDPIChanged, this);
     }
 
     virtual ~wxButtonImageData() { }
+
+    virtual void OnDPIChanged(wxDPIChangedEvent& event)
+    {
+        event.Skip();
+
+        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredSizeFor(m_btn);
+    }
 
     // Bitmap can be set either explicitly, when the bitmap for the given state
     // is specified by the application, or implicitly, when the bitmap for some
@@ -164,6 +175,9 @@ protected:
     wxSize m_bitmapSize;
 
     wxBitmapBundle m_bitmapBundles[wxAnyButton::State_Max];
+
+    // the button we're associated with
+    wxWindow* const m_btn;
 
     wxDECLARE_NO_COPY_CLASS(wxButtonImageData);
 };
@@ -246,6 +260,13 @@ private:
         }
     }
 
+    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
+    {
+        wxButtonImageData::OnDPIChanged(event);
+
+        InitImageList();
+    }
+
     // just store the values passed to us to be able to retrieve them later
     // from the drawing code
     wxBitmap m_bitmaps[wxAnyButton::State_Max];
@@ -270,8 +291,7 @@ public:
     // we must be constructed with the size of our images as we need to create
     // the image list
     wxXPButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
-        : wxButtonImageData(btn, bitmapBundle),
-          m_btn(btn)
+        : wxButtonImageData(btn, bitmapBundle)
     {
         InitImageList();
 
@@ -282,9 +302,6 @@ public:
         m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
 
         UpdateImageInfo();
-
-        // React to DPI changes in the future.
-        btn->Bind(wxEVT_DPI_CHANGED, &wxXPButtonImageData::OnDPIChanged, this);
     }
 
     virtual wxBitmap GetBitmap(wxAnyButton::State which) const wxOVERRIDE
@@ -426,13 +443,9 @@ private:
         }
     }
 
-    void OnDPIChanged(wxDPIChangedEvent& event)
+    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
     {
-        event.Skip();
-
-        // We need to recreate the image list using the new size and re-add all
-        // bitmaps to it.
-        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredSizeFor(m_btn);
+        wxButtonImageData::OnDPIChanged(event);
 
         m_iml.Destroy();
         InitImageList();
@@ -446,10 +459,6 @@ private:
 
     // store the rest of the data in BCM_SETIMAGELIST-friendly form
     BUTTON_IMAGELIST m_data;
-
-    // the button we're associated with
-    wxWindow* const m_btn;
-
 
     wxDECLARE_NO_COPY_CLASS(wxXPButtonImageData);
     wxDECLARE_ABSTRACT_CLASS(wxXPButtonImageData);
