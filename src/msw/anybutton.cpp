@@ -181,12 +181,8 @@ public:
     wxODButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
         : wxButtonImageData(btn, bitmapBundle)
     {
-        SetBitmap(GetBitmapFromBundle(bitmapBundle),
-                  wxAnyButton::State_Normal);
-#if wxUSE_IMAGE
-        SetBitmap(GetBitmapFromBundle(bitmapBundle).ConvertToDisabled(),
-                  wxAnyButton::State_Disabled);
-#endif
+        InitImageList();
+
         m_dir = wxLEFT;
 
         // we use margins when we have both bitmap and text, but when we have
@@ -229,6 +225,27 @@ public:
     }
 
 private:
+    void InitImageList()
+    {
+        const wxBitmap bitmap = m_bitmapBundles[wxAnyButton::State_Normal].GetBitmap(m_bitmapSize);
+
+        for ( int n = 0; n < wxAnyButton::State_Max; n++ )
+        {
+            wxBitmap stateBitmap = m_bitmapBundles[n].GetBitmap(m_bitmapSize);
+            if ( !stateBitmap.IsOk() )
+            {
+#if wxUSE_IMAGE
+                if ( n == wxAnyButton::State_Disabled )
+                    stateBitmap = bitmap.ConvertToDisabled();
+                else
+#endif // wxUSE_IMAGE
+                    stateBitmap = bitmap;
+            }
+
+            SetBitmap(stateBitmap, (wxAnyButton::State)n);
+        }
+    }
+
     // just store the values passed to us to be able to retrieve them later
     // from the drawing code
     wxBitmap m_bitmaps[wxAnyButton::State_Max];
