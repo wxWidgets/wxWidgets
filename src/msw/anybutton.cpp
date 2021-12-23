@@ -116,7 +116,10 @@ public:
         m_btn->Bind(wxEVT_DPI_CHANGED, &wxButtonImageData::OnDPIChanged, this);
     }
 
-    virtual ~wxButtonImageData() { }
+    virtual ~wxButtonImageData()
+    {
+        m_btn->Unbind(wxEVT_DPI_CHANGED, &wxButtonImageData::OnDPIChanged, this);
+    }
 
     virtual void OnDPIChanged(wxDPIChangedEvent& event)
     {
