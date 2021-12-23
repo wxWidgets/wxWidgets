@@ -306,6 +306,7 @@ WebFrame::WebFrame(const wxString& url) :
     // set the frame icon
     SetIcon(wxICON(sample));
     SetTitle("wxWebView Sample");
+    EnableFullScreenView(); // Enable native fullscreen API on macOS
 
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
 
