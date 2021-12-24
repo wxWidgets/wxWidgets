@@ -54,7 +54,7 @@ public:
 
     A wxSpinButton has two small up and down (or left and right) arrow buttons.
 
-    It is often used next to a text control for increment and decrementing a value.
+    It is often used next to a text control for incrementing and decrementing a value.
     Portable programs should try to use wxSpinCtrl instead as wxSpinButton is not
     implemented for all platforms but wxSpinCtrl is as it degenerates to a simple
     wxTextCtrl on such platforms.
