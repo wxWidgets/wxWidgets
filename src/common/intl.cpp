@@ -166,7 +166,10 @@ const char* wxLanguageInfo::TrySetLocale() const
 
 wxString wxLanguageInfo::GetLocaleName() const
 {
-    return wxUILocale::GetCurrent().GetName();
+    wxString localeId = CanonicalRef.empty() ? CanonicalName : CanonicalRef;
+    wxUILocale uiLocale = wxUILocale::FromTag(localeId);
+    wxString localeName = uiLocale.IsSupported() ? uiLocale.GetName() : wxString();
+    return localeName;
 }
 
 // ----------------------------------------------------------------------------
