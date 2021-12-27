@@ -5800,8 +5800,14 @@ void wxGrid::UpdateOverlay()
     // m_gridWin and not this (i.e. wxGrid which is wxScrolledCanvas) because we don't
     // want wxOverlay to prepare the dc over again.
 
-    wxRect overlayRect = GetScreenRect();
-    overlayRect.Offset(GetRowLabelSize(), GetColLabelSize());
+    wxRect overlayRect  = GetScreenRect();
+    overlayRect.width  -= GetRowLabelSize();
+    overlayRect.height -= GetColLabelSize();
+
+    const int xOffset = GetLayoutDirection() == wxLayout_LeftToRight
+                      ? GetRowLabelSize() : -GetRowLabelSize();
+
+    overlayRect.Offset(xOffset, GetColLabelSize());
 
     wxDCOverlay overlaydc(*m_overlay, m_gridWin,
                           overlayRect.x, overlayRect.y,

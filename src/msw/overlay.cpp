@@ -214,6 +214,12 @@ void wxOverlayMSWImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
         m_overlayWindow = wxPrivate::wxOverlayWindow::Create(target);
     }
 
+    if ( m_window->GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        m_rect.x -= m_rect.GetWidth();
+        m_overlayWindow->SetLayoutDirection(wxLayout_RightToLeft);
+    }
+
     m_overlayWindow->Move(m_rect.GetPosition());
     m_overlayWindow->SetSize(m_rect.GetSize());
     m_overlayWindow->Show();
@@ -246,7 +252,12 @@ void wxOverlayMSWImpl::EndDrawing(wxDC* dc)
     const wxPoint pt = dc->GetDeviceOrigin();
     winDC.SetDeviceOrigin(pt.x, pt.y);
 
-    winDC.Blit(m_rect.x, m_rect.y, m_rect.width, m_rect.height, dc, m_rect.x, m_rect.y);
+    // It looks like Blit() is still having a problem with RTL!
+    int rect_x = m_rect.x;
+    if ( m_overlayWindow->GetLayoutDirection() == wxLayout_RightToLeft )
+        rect_x += 1;
+
+    winDC.Blit(rect_x, m_rect.y, m_rect.width, m_rect.height, dc, m_rect.x, m_rect.y);
 
     dc->DestroyClippingRegion();
 }

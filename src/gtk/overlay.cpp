@@ -66,6 +66,14 @@ wxgtk_overlay_draw(GtkWidget* widget, cairo_t* cr, wxOverlayGTKImpl* overlay)
 
         if ( surface && cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS )
         {
+            if ( overlay->GetWindow()->GetLayoutDirection() == wxLayout_RightToLeft )
+            {
+                // DC is mirrored for RTL
+                const int w = gdk_window_get_width(gtk_widget_get_window(widget));
+                cairo_translate(cr, w, 0);
+                cairo_scale(cr, -1, 1);
+            }
+
             cairo_set_source_surface(cr, surface, 0, 0);
             cairo_paint(cr);
         }
@@ -155,7 +163,11 @@ void wxOverlayGTKImpl::CreateSurface(wxOverlay::Target target)
     GtkWidget* const tlw = gtk_widget_get_toplevel(m_window->GetHandle());
     gtk_window_set_transient_for(GTK_WINDOW(m_surface), GTK_WINDOW(tlw));
 
-    gtk_window_move(GTK_WINDOW(m_surface), m_rect.x, m_rect.y);
+    if ( m_window->GetLayoutDirection() == wxLayout_LeftToRight )
+        gtk_window_move(GTK_WINDOW(m_surface), m_rect.x, m_rect.y);
+    else
+        gtk_window_move(GTK_WINDOW(m_surface), m_rect.x - m_rect.GetWidth(), m_rect.y);
+
     gtk_widget_set_size_request(m_surface, m_rect.GetWidth(), m_rect.GetHeight());
 
     gtk_window_present(GTK_WINDOW(m_surface));
@@ -252,27 +264,52 @@ void wxOverlayGTKImpl::EndDrawing(wxDC* dc)
 
     SetInputShape();
 
+    const int surfaceWidth = gdk_window_get_width(gtk_widget_get_window(m_surface));
+
     const wxPoint dcOrig = dc->GetDeviceOrigin(); // for wxScrolledWindows
 
     if ( wxPrivate::IsWayland() )
     {
+        int rect_x, oldRect_x;
+
+        if ( m_window->GetLayoutDirection() == wxLayout_LeftToRight )
+        {
+            rect_x = m_rect.x + dcOrig.x;
+            oldRect_x = m_oldRect.x + dcOrig.x;
+        }
+        else // RTL
+        {
+            rect_x = surfaceWidth - m_rect.x - m_rect.width - dcOrig.x;
+            oldRect_x = surfaceWidth - m_oldRect.x - m_oldRect.width - dcOrig.x;
+        }
+
         // clear the old rectangle if necessary
         if ( !m_oldRect.IsEmpty() && !m_rect.Contains(m_oldRect) )
         {
             // We just rely on GTK to automatically clears the rectangle for us.
             gtk_widget_queue_draw_area(m_surface,
-                dcOrig.x+m_oldRect.x, dcOrig.y+m_oldRect.y, m_oldRect.width, m_oldRect.height);
+                oldRect_x, m_oldRect.y + dcOrig.y, m_oldRect.width, m_oldRect.height);
         }
 
         gtk_widget_queue_draw_area(m_surface,
-            dcOrig.x+m_rect.x, dcOrig.y+m_rect.y, m_rect.width, m_rect.height);
+            rect_x, m_rect.y + dcOrig.y, m_rect.width, m_rect.height);
     }
     else if ( IsShownOnScreen() ) // not Wayland
     {
         // Under X we blit m_cairoSurface directly on m_surface
 
         cairo_t* cr = gdk_cairo_create(gtk_widget_get_window(m_surface));
-        cairo_translate(cr, dcOrig.x, dcOrig.y);
+
+        if ( m_window->GetLayoutDirection() == wxLayout_LeftToRight )
+        {
+            cairo_translate(cr, dcOrig.x, dcOrig.y);
+        }
+        else
+        {
+            // DC is mirrored for RTL
+            cairo_translate(cr, surfaceWidth - dcOrig.x, dcOrig.y);
+            cairo_scale(cr, -1, 1);
+        }
 
         cairo_rectangle_int_t rect = {m_rect.x, m_rect.y, m_rect.width, m_rect.height};
         cairo_region_t* region = cairo_region_create_rectangle(&rect);
