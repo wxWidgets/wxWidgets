@@ -22,10 +22,10 @@
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
     #include "wx/window.h"
-    #include "wx/caret.h"
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/caret.h"
 #include "wx/display.h"
 #include "wx/scrolwin.h"
 #include "wx/gtk/dc.h"
@@ -513,6 +513,7 @@ void wxOverlayX11Helper::SetShownOnScreen()
     wxWindow* window = m_owner->GetWindow();
     GtkWidget* surface = m_owner->GetSurface();
 
+#if wxUSE_CARET
     if ( window->GetCaret() )
     {
         // We need to reposition the caret as it is not positioned
@@ -524,6 +525,7 @@ void wxOverlayX11Helper::SetShownOnScreen()
 
         gtk_window_move(GTK_WINDOW(surface), pos.x, pos.y);
     }
+#endif // wxUSE_CARET
 
     GdkWindow* root = gtk_widget_get_root_window(window->GetHandle());
     GdkEventMask mask = gdk_window_get_events(root);
@@ -543,9 +545,11 @@ void wxOverlayX11Helper::Freeze()
 
     m_isFrozen = true;
 
+#if wxUSE_CARET
     wxCaret* caret = m_owner->GetWindow()->GetCaret();
     if ( caret )
         caret->Hide();
+#endif // wxUSE_CARET
 
     m_owner->Reset();
 }
@@ -575,12 +579,14 @@ void wxOverlayX11Helper::Thaw()
     {
         m_isFrozen = false;
 
+#if wxUSE_CARET
         wxCaret* caret = m_owner->GetWindow()->GetCaret();
         if ( caret )
         {
             caret->Show();
         }
         else
+#endif // wxUSE_CARET
         {
             // TODO: call UpdateOverlay() directly instead
             m_owner->GetWindow()->GetMainWindowOfCompositeControl()->Refresh(false);
