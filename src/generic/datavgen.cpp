@@ -2832,7 +2832,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             bool selected = m_selection.IsSelected(item);
 
             int state = 0;
-            if (m_hasFocus && selected)
+            if (selected)
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             cell->SetState(state);
