@@ -91,7 +91,6 @@ bool wxNotificationMessageBase::AddAction(wxWindowID actionid, const wxString &l
 
 void wxNotificationMessage::Init()
 {
-    m_impl = new wxGenericNotificationMessageImpl(this);
 }
 
 #endif
