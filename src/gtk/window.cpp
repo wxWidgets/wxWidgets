@@ -5251,6 +5251,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             break;
 
         case wxBG_STYLE_ERASE:
+        case wxBG_STYLE_COLOUR:
             {
 #ifdef __WXGTK3__
                 wxGTKCairoDC dc(cr, static_cast<wxWindow*>(this), GetLayoutDirection());
