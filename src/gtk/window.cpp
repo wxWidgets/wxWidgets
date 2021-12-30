@@ -2353,7 +2353,7 @@ void wxWindowGTK::GTKHandleRealized()
         if (IsTransparentBackgroundSupported())
         {
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            if (window)
+            if (window && !IsTopLevel())
                 gdk_window_set_composited(window, true);
             wxGCC_WARNING_RESTORE()
         }
@@ -5339,7 +5339,8 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
         for ( node = m_children.GetFirst(); node ; node = node->GetNext() )
         {
             wxWindow *compositeChild = node->GetData();
-            if (compositeChild->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT)
+            if (compositeChild->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT &&
+                !compositeChild->IsTopLevel())
             {
 #ifndef __WXGTK3__
                 if (cr == NULL)
