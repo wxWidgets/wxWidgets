@@ -578,7 +578,6 @@ EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
     }
     else
     {
-        wxFAIL_MSG("eglChooseConfig failed");
         delete config;
         return NULL;
     }
