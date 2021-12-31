@@ -3277,7 +3277,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     }
 
     // Change the current row to the last row if the current exceed the max row number
-    if ( m_currentRow >= GetRowCount() )
+    if ( HasCurrentRow() && m_currentRow >= GetRowCount() )
         ChangeCurrentRow(m_count - 1);
 
     GetOwner()->InvalidateColBestWidths();
@@ -3974,7 +3974,7 @@ wxDataViewMainWindow::DoExpand(wxDataViewTreeNode* node,
         // Shift all stored indices after this row by the number of newly added
         // rows.
         m_selection.OnItemsInserted(row + 1, countNewRows);
-        if ( m_currentRow > row )
+        if ( HasCurrentRow() && m_currentRow > row )
             ChangeCurrentRow(m_currentRow + countNewRows);
 
         if ( m_count != -1 )
@@ -4049,7 +4049,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
         node->ToggleOpen(this);
 
         // Adjust the current row if necessary.
-        if ( m_currentRow > row )
+        if ( HasCurrentRow() && m_currentRow > row )
         {
             // If the current row was among the collapsed items, make the
             // parent itself current.
