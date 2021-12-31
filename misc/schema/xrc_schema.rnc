@@ -469,6 +469,14 @@ t_bitmap     = t_url?,
                    attribute stock_client { t_identifier}?
                )?
 
+t_bitmaps    = (
+                    element bitmap {_, t_bitmap }+ |
+                    (
+                        element svg  {_, t_url } &
+                        element size {_, t_size }
+                    )
+                )
+
 t_font       = (
                    [xrc:p="o"] element size         {_, t_float }* &
                    [xrc:p="o"] element style        {_, ("normal" | "italic" | "slant") }* &

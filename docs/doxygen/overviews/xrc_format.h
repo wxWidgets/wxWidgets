@@ -384,6 +384,42 @@ If both specifications are provided, then @c stock_id is used if it is
 recognized by wxArtProvider and the provided bitmap file is used as a fallback.
 
 
+@subsection overview_xrcformat_type_bitmaps Multi-resolution bitmap
+
+BitmapBundle properties contain specification of a set of bitmaps or SVG file,
+which are mutually exclusive.
+Example with a set of bitmaps:
+@code
+<bitmaps>
+    <bitmap>new.png</bitmap>
+    <bitmap>new_2x.png</bitmap>
+</bitmaps>
+@endcode
+While using SVG file you also should specify @c size,
+because usually SVG file doesn't have it:
+@code
+<bitmaps>
+    <svg>new.svg</svg>
+    <size>16,16</size>
+</bitmaps>
+@endcode
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Adds a new bitmap to BitmapBundle. Unlike normal object properties,
+    @c bitmap may be used more than once to add multiple bitmaps.
+    Mutually exclusive with @c svg.}
+@row3col{svg, @ref overview_xrcformat_type_url,
+    SVG file to create BitmapBundle. Require @c size.
+    Mutually exclusive with @c bitmap.}
+@row3col{size, @ref overview_xrcformat_type_size,
+    The default size to return from GetDefaultSize() for this bundle.
+    As SVG images usually don't have any natural default size,
+    it should be provided when creating the bundle with @c svg.}
+@endTable
+
+
 @subsection overview_xrcformat_type_style Style
 
 Style properties (such as window's style or sizer flags) use syntax similar to
