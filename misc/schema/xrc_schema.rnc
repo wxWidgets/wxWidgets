@@ -1556,7 +1556,10 @@ wxStaticBitmap =
         attribute class { "wxStaticBitmap" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
-        element bitmap {_, t_bitmap }
+        (
+            element bitmap {_, t_bitmap } |
+            element bitmaps  {_, t_bitmaps }
+        )
     }
 
 

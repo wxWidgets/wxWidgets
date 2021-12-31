@@ -2145,10 +2145,14 @@ child and the second one for right/bottom child window.
 
 @subsubsection xrc_wxstaticbitmap wxStaticBitmap
 
+wxStaticBitmap requires @c bitmap or @c bitmaps tag.
+
 @beginTable
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-     Bitmap to display (required).}
+     Bitmap to display. Mutually exclusive with @c bitmaps.}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+     BitmapBundle to display. Mutually exclusive with @c bitmap.}
 @endTable
 
 @subsubsection xrc_wxstaticbox wxStaticBox
