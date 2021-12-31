@@ -912,7 +912,9 @@ Example:
 @row3col{label, @ref overview_xrcformat_type_text,
     Label to display on the button (may be omitted if only the bitmap or stock ID is used).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to display in the button (optional).}
+    Bitmap to display in the button (optional). Mutually exclusive with @c bitmaps.}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+    BitmapBundle to display in the button (optional). Mutually exclusive with @c bitmap.}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
     Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT).}
 @row3col{default, @ref overview_xrcformat_type_bool,
