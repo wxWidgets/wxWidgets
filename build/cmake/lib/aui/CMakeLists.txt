@@ -13,10 +13,12 @@ wx_append_sources(AUI_FILES AUI_CMN)
 
 if(WXMSW)
     wx_append_sources(AUI_FILES AUI_MSW)
+elseif(WXUWP)
+    wx_append_sources(AUI_FILES AUI_UWP)
 elseif(WXGTK2)
     wx_append_sources(AUI_FILES AUI_GTK)
 endif()
-
+OR
 wx_add_library(wxaui ${AUI_FILES})
 
 wx_finalize_lib(wxaui)

@@ -13,6 +13,8 @@ wx_append_sources(GL_FILES OPENGL_CMN)
 
 if(WXMSW)
     wx_append_sources(GL_FILES OPENGL_MSW)
+elseif(WXUWP)
+    wx_append_sources(GL_FILES OPENGL_UWP)
 elseif(WXGTK)
     wx_append_sources(GL_FILES OPENGL_GTK)
 elseif(WXOSX_COCOA)

@@ -358,6 +358,11 @@ if(wxUSE_GUI)
         set(wxUSE_ENH_METAFILE ON)
     endif()
 
+    if(WXUWP AND wxUSE_METAFILE)
+        # this one should probably be made separately configurable
+        set(wxUSE_ENH_METAFILE ON)
+    endif()
+
     # Direct2D check
     if(WIN32 AND wxUSE_GRAPHICS_DIRECT2D)
         check_include_file(d2d1.h HAVE_D2D1_H)

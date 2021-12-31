@@ -3110,6 +3110,16 @@ set(AUI_MSW_SRC
     src/aui/barartmsw.cpp
 )
 
+set(AUI_UWP_HDR
+    wx/aui/tabartuwp.h
+    wx/aui/barartuwp.h
+)
+
+set(AUI_UWP_SRC
+    src/aui/tabartuwp.cpp
+    src/aui/barartuwp.cpp
+)
+
 set(AUI_GTK_SRC
     src/aui/tabartgtk.cpp
 )

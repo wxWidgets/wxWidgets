@@ -805,6 +805,17 @@ function(wx_add name group)
             endif()
         endif()
 
+        if (WXUWP AND DEFINED wxUSE_DPI_AWARE_MANIFEST)
+            set(wxUSE_DPI_AWARE_MANIFEST_VALUE 0)
+            if (${wxUSE_DPI_AWARE_MANIFEST} MATCHES "system")
+                set(wxUSE_DPI_AWARE_MANIFEST_VALUE 1)
+                list(APPEND src_files "${wxSOURCE_DIR}/include/wx/uwp/wx_dpi_aware.manifest")
+            elseif(${wxUSE_DPI_AWARE_MANIFEST} MATCHES "per-monitor")
+                set(wxUSE_DPI_AWARE_MANIFEST_VALUE 2)
+                list(APPEND src_files "${wxSOURCE_DIR}/include/wx/uwp/wx_dpi_aware_pmv2.manifest")
+            endif()
+        endif()
+
         add_executable(${target_name} ${exe_type} ${src_files})
 
         if (DEFINED wxUSE_DPI_AWARE_MANIFEST_VALUE)
