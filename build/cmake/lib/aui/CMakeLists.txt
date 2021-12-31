@@ -18,7 +18,6 @@ elseif(WXUWP)
 elseif(WXGTK2)
     wx_append_sources(AUI_FILES AUI_GTK)
 endif()
-OR
 wx_add_library(wxaui ${AUI_FILES})
 
 wx_finalize_lib(wxaui)
