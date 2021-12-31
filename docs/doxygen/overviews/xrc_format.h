@@ -1041,7 +1041,9 @@ just as @ref xrc_wxbutton wxButton.
 @row3col{note, @ref overview_xrcformat_type_text,
     Second line of text describing the action performed when the button is pressed (default: none).  }
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to display in the button (optional).}
+    Bitmap to display in the button (optional). Mutually exclusive with @c bitmaps.}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+    BitmapBundle to display in the button (optional). Mutually exclusive with @c bitmap.}
 @row3col{default, @ref overview_xrcformat_type_bool,
     Should this button be the default button in dialog (default: 0)?}
 @endTable

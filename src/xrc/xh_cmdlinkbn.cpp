@@ -46,10 +46,10 @@ wxObject *wxCommandLinkButtonXmlHandler::DoCreateResource()
     if (GetBool(wxT("default"), 0))
         button->SetDefault();
 
-    if ( GetParamNode("bitmap") )
+    wxBitmapBundle bb = GetBitmapOrBitmaps("bitmap", "bitmaps", wxART_BUTTON);
+    if ( bb.IsOk() )
     {
-        button->SetBitmap(GetBitmap("bitmap", wxART_BUTTON),
-                          GetDirection("bitmapposition"));
+        button->SetBitmap(bb);
     }
 
     SetupWindow(button);
