@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Configuration">
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+   <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '10.0'">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0'">v110</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0'">v120</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0'">v140</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '17.0'">v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' >= '15.0' and '$(WindowsTargetPlatformVersion)'==''">
+    <!-- Latest Target Version property -->
+    <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+    <TargetPlatformVersion>$(WindowsTargetPlatformVersion)</TargetPlatformVersion>
+  </PropertyGroup>
+</Project>
