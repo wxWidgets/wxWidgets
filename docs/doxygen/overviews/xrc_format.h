@@ -2272,9 +2272,13 @@ properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Tool's bitmap (default: empty).}
+    Tool's bitmap (default: empty). Mutually exclusive with @c bitmaps.}
 @row3col{bitmap2, @ref overview_xrcformat_type_bitmap,
     Bitmap for disabled tool (default: derived from @c bitmap).}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+    Tool's BitmapBundle. Mutually exclusive with @c bitmap.}
+@row3col{bitmaps2, @ref overview_xrcformat_type_bitmaps,
+    BitmapBundle for disabled tool (default: derived from @c bitmaps).}
 @row3col{label, @ref overview_xrcformat_type_text,
     Label to display on the tool (default: no label).}
 @row3col{radio, @ref overview_xrcformat_type_bool,

@@ -1650,8 +1650,16 @@ wxToolBar_tool =
     element object {
         attribute class { "tool" } &
         stdObjectNodeAttributes &
-        [xrc:p="important"] element bitmap {_, t_bitmap }* &
-        [xrc:p="o"] element bitmap2  {_, t_bitmap }* &
+        (
+            (
+                [xrc:p="important"] element bitmap {_, t_bitmap }* &
+                [xrc:p="o"] element bitmap2  {_, t_bitmap }*
+            ) |
+            (
+                [xrc:p="important"] element bitmaps {_, t_bitmaps }* &
+                [xrc:p="o"] element bitmaps2  {_, t_bitmaps }*
+            )
+        ) &
         [xrc:p="o"] element label    {_, t_text }* &
         [xrc:p="o"] element tooltip  {_, t_text }* &
         [xrc:p="o"] element longhelp {_, t_text }* &
