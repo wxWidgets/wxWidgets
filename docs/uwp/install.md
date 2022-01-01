@@ -3,6 +3,7 @@ Installing wxWidgets for Windows UWP      {#plat_uwp_install}
 
 This is wxWidgets for the Universal Windows Platform.
 Supported Windows are Windows 10+ including both 32 bit and 64 bit versions.
+**This platform is currently in development**
 
 [TOC]
 
@@ -43,6 +44,7 @@ The following steps explain how to compile wxWidgets using Visual Studio.
 1) Install the development workloads required to use C++/WinRT:
 https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/intro-to-using-cpp-with-winrt#visual-studio-support-for-cwinrt-xaml-the-vsix-extension-and-the-nuget-package
 
-2) Generate the solution from Cmake.
+2) Generate the VS 2022 solution from Cmake(testing):
+ From Powershell: cmake -B<ouptut_folder> -G "Visual Studio 17 2022" -A x64 -DCMAKE_SYSTEM_NAME="WindowsStore" -DCMAKE_SYSTEM_VERSION="10.0"
 
-3) Build.
+3) Build from Visual Studio
