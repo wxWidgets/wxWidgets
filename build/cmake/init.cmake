@@ -465,6 +465,10 @@ if(wxUSE_GUI)
                 wx_option_force_value(wxUSE_WEBVIEW OFF)
             endif()
         endif()
+
+        if (wxUWP)
+            add_definitions("/ZW")
+        endif()
     endif()
 
     if(wxUSE_PRIVATE_FONTS AND WXGTK)

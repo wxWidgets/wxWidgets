@@ -370,11 +370,6 @@ function(wx_set_target_properties target_name is_base)
         VERSION ${wxSOVERSION}
     )
 
-    if (wxUWP)
-        set_target_properties(${target_name} PROPERTIES VS_WINRT_EXTENSIONS TRUE)
-        add_definitions(-ZW)
-    endif()
-
     wx_set_common_target_properties(${target_name})
 endfunction()
 
@@ -392,6 +387,10 @@ macro(wx_add_library name)
 
     list(APPEND wxLIB_TARGETS ${name})
     set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
+
+    if (wxUWP)
+        set_target_properties(${name} PROPERTIES VS_WINRT_COMPONENT TRUE)
+    endif()
 
     if(wxBUILD_MONOLITHIC AND NOT ${name} STREQUAL "wxmono")
         # collect all source files for mono library
