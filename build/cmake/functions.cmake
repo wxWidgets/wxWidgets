@@ -370,10 +370,6 @@ function(wx_set_target_properties target_name is_base)
         VERSION ${wxSOVERSION}
     )
 
-    if (wxUWP)
-        set_target_properties(${target_name} PROPERTIES VS_WINRT_COMPONENT TRUE)
-    endif()
-
     wx_set_common_target_properties(${target_name})
 endfunction()
 
@@ -912,6 +908,10 @@ function(wx_add name group)
     set_target_properties(${target_name} PROPERTIES
         VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}"
         )
+
+    if (WXUWP)
+        set_target_properties(${target_name} PROPERTIES VS_WINRT_COMPONENT TRUE)
+    endif()
 
     if(group STREQUAL Tests)
         add_test(NAME ${target_name}

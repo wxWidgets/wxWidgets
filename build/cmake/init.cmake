@@ -12,6 +12,7 @@ if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_D
     set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
 endif()
 
+
 if(MSVC)
     # Determine MSVC runtime library flag
     set(MSVC_LIB_USE "/MD")
@@ -408,9 +409,9 @@ if(wxUSE_GUI)
     endif()
 
     # wxUWP checks
-    if (wxUWP)
-        add_definitions(-ZW)
-     endif()
+    # if (WXUWP)
+    #    add_definitions(-ZW)
+    # endif()
 
     # extra dependencies
     if(wxUSE_OPENGL)
