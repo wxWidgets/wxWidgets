@@ -50,3 +50,8 @@ Powershell example for Visual Studio 2022 under Windows 10:
   
 
 3) Build the generated solution.
+
+
+TO VERIFY:
+- Do specify DCMAKE_SYSTEM_NAME et DCMAKE_SYSTEM_VERSION is really necessary?
+- Didnt found how to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
