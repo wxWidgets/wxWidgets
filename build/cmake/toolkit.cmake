@@ -52,7 +52,7 @@ elseif(wxBUILD_TOOLKIT MATCHES "^osx*")
     set(WXOSX ON)
 elseif(wxBUILD_TOOLKIT MATCHES "qt")
     set(WXQT ON)
-elseif(wxBUILD_TOOLKIT MATCHES "uwp")
+elseif(wxBUILD_TOOLKIT MATCHES "uwp" OR CMAKE_SYSTEM_NAME MATCHES "WindowsStore")
     set(WXUWP ON)
 endif()
 
