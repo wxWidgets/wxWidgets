@@ -56,3 +56,4 @@ Powershell example for Visual Studio 2022 under Windows 10:
 TO VERIFY:
 - Do specify DCMAKE_SYSTEM_NAME et DCMAKE_SYSTEM_VERSION is really necessary?
 - Didnt found how to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
+- How to generate the Nuget stuff import from Cmake? See a VS generated WinRT vcxproj for reference.
