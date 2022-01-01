@@ -43,9 +43,10 @@ The following steps explain how to compile wxWidgets using Visual Studio.
 https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/intro-to-using-cpp-with-winrt#visual-studio-support-for-cwinrt-xaml-the-vsix-extension-and-the-nuget-package  
 
 2) Generate the Visual Studio solution using Cmake: 
-
 **cmake -B<ouptut_folder> -G <cmake_generator> -A x64 -DCMAKE_SYSTEM_NAME=<system_name> -DCMAKE_SYSTEM_VERSION="<system_version>" -DwxBUILD_TOOLKIT="uwp"**  
-Powershell example for Visual Studio 2022 under Windows 10: 
+
+Powershell example for Visual Studio 2022 under Windows 10:  
+
 **cmake -BMyOutputFolder -G "Visual Studio 17 2022" -A x64 -DCMAKE_SYSTEM_NAME="WindowsStore" -DCMAKE_SYSTEM_VERSION="10.0" -DwxBUILD_TOOLKIT="uwp"**  
   
 
