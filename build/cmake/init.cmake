@@ -407,6 +407,11 @@ if(wxUSE_GUI)
         endif()
     endif()
 
+    # wxUWP checks
+    if (wxUWP)
+        add_definitions(-ZW)
+     endif()
+
     # extra dependencies
     if(wxUSE_OPENGL)
         if(WXOSX_IPHONE)
