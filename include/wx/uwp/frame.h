@@ -1,19 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/frame.h
-// Purpose:     wxFrame class
-// Author:      Julian Smart
+// Name:        wx/uwp/app.h
+// Purpose:     wxApp class
+// Author:      Cloyz2021
 // Modified by:
-// Created:     01/02/97
+// Created:     02/01/2020
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
-
-#if wxUSE_TASKBARBUTTON
-class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
-#endif
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {

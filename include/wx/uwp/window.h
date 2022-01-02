@@ -1,10 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/window.h
-// Purpose:     wxWindowMSW class
-// Author:      Julian Smart
-// Modified by: Vadim Zeitlin on 13.05.99: complete refont of message handling,
-//              elimination of Default(), ...
-// Created:     01/02/97
+// Name:        wx/uwp/window.h
+// Purpose:     wxWindowUWP class
+// Author:      Cloyz2021
+// Modified by: 
+// Created:     02/01/2020
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,15 +25,15 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 // wxWindow declaration for MSW
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWindowMSW : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowUWP : public wxWindowBase
 {
     friend class wxSpinCtrl;
     friend class wxSlider;
     friend class wxRadioBox;
 public:
-    wxWindowMSW() { Init(); }
+    wxWindowUWP() { Init(); }
 
-    wxWindowMSW(wxWindow *parent,
+    wxWindowUWP(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -45,7 +44,7 @@ public:
         Create(parent, id, pos, size, style, name);
     }
 
-    virtual ~wxWindowMSW();
+    virtual ~wxWindowUWP();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/window.cpp
-// Purpose:     wxWindowMSW
-// Author:      Julian Smart
-// Modified by: VZ on 13.05.99: no more Default(), MSWOnXXX() reorganisation
-// Created:     04/01/98
+// Name:        src/uwp/window.cpp
+// Purpose:     wxWindowUWP
+// Author:      cloyz2021
+// Modified by: 
+// Created:     02/01/2020
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,9 +23,9 @@
 #include "wx/window.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/wrapwin.h"
-    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
-    #include "wx/msw/missing.h"
+    #include "wx/uwp/wrapwin.h"
+    #include "wx/uwp/wrapcctl.h" // include <commctrl.h> "properly"
+    #include "wx/uwp/missing.h"
     #include "wx/accel.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
@@ -75,12 +75,12 @@
     #endif
 #endif
 
-#include "wx/msw/private.h"
-#include "wx/msw/private/keyboard.h"
-#include "wx/msw/private/paint.h"
-#include "wx/msw/private/winstyle.h"
-#include "wx/msw/dcclient.h"
-#include "wx/msw/seh.h"
+#include "wx/uwp/private.h"
+#include "wx/uwp/private/keyboard.h"
+#include "wx/uwp/private/paint.h"
+#include "wx/uwp/private/winstyle.h"
+#include "wx/uwp/dcclient.h"
+#include "wx/uwp/seh.h"
 #include "wx/private/textmeasure.h"
 #include "wx/private/rescale.h"
 
@@ -113,7 +113,7 @@
 #include <windowsx.h>
 
 #if wxUSE_UXTHEME
-    #include "wx/msw/uxtheme.h"
+    #include "wx/uwp/uxtheme.h"
 #endif
 
 #if wxUSE_DYNLIB_CLASS
