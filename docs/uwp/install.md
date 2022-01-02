@@ -54,8 +54,12 @@ Powershell example for Visual Studio 2022 under Windows 10:
   
 
 PORT STATUS:
-1) Copied most of wxMSW Cmake parametrization as well has its sources files.
-2) Able to generate UWP projects from Cmake.
+
+Here the list of UWP controls to be ported:
+https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?view=winui-3.0
+
+1) Copied most of wxMSW Cmake parametrization as well has its sources files - [x]
+2) Able to generate UWP projects from Cmake - [x]
 3) Working on making the minimal sample run. To include WinRT headers, the winrt folder prefix needs to be removed or they not found. Why?
    See: https://github.com/webview/webview/issues/390
    for eg use #include <Windows.Foundation.h> instead of #include <winrt/Windows.Foundation.h>
