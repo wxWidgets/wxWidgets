@@ -755,6 +755,8 @@ protected:
     #include "wx/osx/app.h"
 #elif defined(__WXQT__)
     #include "wx/qt/app.h"
+#elif defined(__WXUWP__)
+    #include "wx/uwp/app.h"
 #endif
 
 #else // !GUI
