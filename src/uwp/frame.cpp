@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/frame.cpp
 // Name:        wx/uwp/frame.cpp
 // Purpose:     wxApp class
 // Author:      Yann Clotioloman Yéo
