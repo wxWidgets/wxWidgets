@@ -58,9 +58,9 @@ PORT STATUS:
 Here the list of UWP controls to be ported:
 https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?view=winui-3.0
 
-1) Copied most of wxMSW Cmake parametrization as well has its sources files - [X] 
-2) Able to generate UWP projects from Cmake - [X] 
-3) Working on making the minimal sample run. To include WinRT headers, the winrt folder prefix needs to be removed or they not found. Why?
+- [x] Copied most of wxMSW Cmake parametrization as well has its sources files
+- [x] Able to generate UWP projects from Cmake 
+- [ ] Working on making the minimal sample run. To include WinRT headers, the winrt folder prefix needs to be removed or they not found. Why?
    See: https://github.com/webview/webview/issues/390
    for eg use #include <Windows.Foundation.h> instead of #include <winrt/Windows.Foundation.h>
 
