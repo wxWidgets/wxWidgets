@@ -52,8 +52,16 @@ Powershell example for Visual Studio 2022 under Windows 10:
 3) Build the generated solution.
 
   
-  
+
+PORT STATUS:
+1) Copied most of wxMSW Cmake parametrization as well has its sources files.
+2) Able to generate UWP projects from Cmake.
+3) Working on making the minimal sample run. To include WinRT headers, the winrt folder prefix needs to be removed or they not found. Why?
+   See: https://github.com/webview/webview/issues/390
+   for eg use #include <Windows.Foundation.h> instead of #include <winrt/Windows.Foundation.h>
+
 TO VERIFY:
 - Do specify DCMAKE_SYSTEM_NAME et DCMAKE_SYSTEM_VERSION is really necessary?
 - Didnt found how to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
-- How to generate the Nuget stuff import from Cmake? See a VS generated WinRT vcxproj for reference.
+- How to generate the Nuget stuff import from Cmake? See a VS generated WinRT vcxproj for reference. Ask user to give version for each SDK?
+  Also see: https://github.com/Microsoft/cppwinrt/issues/124
