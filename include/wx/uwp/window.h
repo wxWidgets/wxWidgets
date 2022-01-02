@@ -24,7 +24,8 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 // ---------------------------------------------------------------------------
 // wxWindow declaration for MSW
 // ---------------------------------------------------------------------------
-
+ 
+// Make empty class????
 class WXDLLIMPEXP_CORE wxWindowUWP : public wxWindowBase
 {
     friend class wxSpinCtrl;
