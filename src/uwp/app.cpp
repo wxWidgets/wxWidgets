@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/uwp/app.cpp
 // Purpose:     wxApp
-// Author:      Cloyz2021
+// Author:      Yann Clotioloman Yéo
 // Modified by:
 // Created:     02/01/2022
 // Copyright:   (c) Julian Smart

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/menu.cpp
+// Name:        src/uwp/menu.cpp
 // Purpose:     wxMenu, wxMenuBar, wxMenuItem
 // Author:      Yann Clotioloman Yéo
 // Modified by:

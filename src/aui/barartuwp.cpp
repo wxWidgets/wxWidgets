@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/aui/barartmsw.cpp
+// Name:        src/aui/barartuwp.cpp
 // Purpose:     Implementation of wxAuiUWPToolBarArt
 // Author:      Yann Clotioloman Yéo
 // Created:     02/01/2022

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/uwp/frame.cpp
-// Purpose:     wxApp class
+// Purpose:     wxFrame class
 // Author:      Yann Clotioloman Yéo
 // Modified by:
 // Created:     02/01/2022

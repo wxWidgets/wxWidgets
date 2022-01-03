@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/aui/tabartmsw.cpp
+// Name:        src/aui/tabartuwp.cpp
 // Purpose:     wxAuiUWPTabArt implementation
 // Author:      Yann Clotioloman Yéo
 // Created:     02/01/2022
