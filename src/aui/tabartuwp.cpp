@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/aui/tabartmsw.cpp
-// Purpose:     wxAuiMSWTabArt implementation
-// Author:      Tobias Taschner
-// Created:     2015-09-26
+// Purpose:     wxAuiUWPTabArt implementation
+// Author:      Yann Clotioloman Yéo
+// Created:     02/01/2020
 // Copyright:   (c) 2015 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/aui/barartmsw.h
-// Purpose:     Interface of wxAuiMSWToolBarArt
-// Author:      Tobias Taschner
+// Name:        wx/aui/barartuwp.h
+// Purpose:     Interface of wxAuiUWPToolBarArt
+// Author:      Yann Clotioloman Yéo
 // Created:     2015-09-22
 // Copyright:   (c) 2015 wxWidgets development team
 // Licence:     wxWindows licence

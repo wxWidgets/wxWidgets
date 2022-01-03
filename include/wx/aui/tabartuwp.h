@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/aui/tabartmsw.h
-// Purpose:     wxAuiMSWTabArt declaration
-// Author:      Tobias Taschner
-// Created:     2015-09-26
+// Name:        wx/aui/tabartuwp.h
+// Purpose:     wxAuiUWPTabArt declaration
+// Author:      Yann Clotioloman Yéo
+// Created:     02/01/2020
 // Copyright:   (c) 2015 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

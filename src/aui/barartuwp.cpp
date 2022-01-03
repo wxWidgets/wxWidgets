@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/aui/barartmsw.cpp
-// Purpose:     Implementation of wxAuiMSWToolBarArt
-// Author:      Tobias Taschner
-// Created:     2015-09-22
+// Purpose:     Implementation of wxAuiUWPToolBarArt
+// Author:      Yann Clotioloman Yéo
+// Created:     02/01/2020
 // Copyright:   (c) 2015 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
