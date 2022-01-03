@@ -58,7 +58,7 @@ Here the list of the UWP framework controls. To be ported when possible:
 https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?view=winui-3.0
 
 **Issues**:
-- wxUSE_GUI is somewhat defined to 0 when generating wxUWP projects
+- wxUSE_GUI is somewhat defined to 0 when generating wxUWP projects. Should endup being one like the wxMSW default.
 - How to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
 
 **Samples status**:
