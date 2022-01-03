@@ -37,4 +37,3 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxApp);
 };
 #endif // _WX_APP_H_
-
