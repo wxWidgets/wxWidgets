@@ -51,7 +51,7 @@ Powershell example for Visual Studio 2022 under Windows 10:
 - Build the generated solution.
 
   
-Port Status                           {#uwp_bstatus}
+Port Status                           {#uwp_status}
 ===========
 
 Here the list of the UWP framework controls. To be ported when possible:  
