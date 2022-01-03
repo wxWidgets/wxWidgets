@@ -36,7 +36,7 @@ this environment variable is used in the examples below.
 Building wxWidgets                     {#uwp_build}
 ==================
 
-The following steps explain how to compile wxWidgets using Visual Studio.
+A) The following steps explain how to compile wxWidgets using Visual Studio.
 
 
 1) Make sure you have installed the development workloads required to use C++/WinRT. 
@@ -53,9 +53,9 @@ Powershell example for Visual Studio 2022 under Windows 10:
 
   
 
-PORT STATUS:
+B) PORT STATUS:
 
-Here the full list of UWP controls. To be ported when possible:
+Here the full list of UWP controls. To be ported when possible:  
 https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?view=winui-3.0
 
 - [x] Able to generate UWP projects from Cmake 
@@ -63,5 +63,5 @@ https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?vi
    See: https://github.com/webview/webview/issues/390
    for eg use #include <Windows.Foundation.h> instead of #include <winrt/Windows.Foundation.h>
 
-TO VERIFY:
+C) TO VERIFY:
 - Didnt found how to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
