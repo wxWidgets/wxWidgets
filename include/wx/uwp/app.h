@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/uwp/app.h
 // Purpose:     wxApp class
-// Author:      Cloyz2021
+// Author:      Yann Clotioloman Yéo
 // Modified by:
 // Created:     02/01/2020
 // Copyright:   (c) Julian Smart
