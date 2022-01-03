@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F9F03EBB-B034-3691-B9BD-6407E3AA10DF}</ProjectGuid>
+    <ApplicationType>Windows Store</ApplicationType>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.19041.0</WindowsTargetPlatformMinVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>propgrid</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">wxpropgrid.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">wxuwp316ud_propgrid_vc_custom</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">wxpropgrid.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">wxuwp316u_propgrid_vc_custom</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\uwpud;D:\WxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;UNICODE;_UNICODE;WXDLLNAME=wxuwp316ud_propgrid_vc_custom;WXBUILDING;_LIB;wxUSE_GUI=1;wxUSE_BASE=0;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;_WINSOCK_DEPRECATED_NO_WARNINGS=1;__WXUWP__;DLL_EXPORTS;WXMAKINGDLL_PROPGRID;WXUSINGDLL;WX_PRECOMP;CMAKE_INTDIR="Debug";wxpropgrid_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;UNICODE;_UNICODE;WXDLLNAME=wxuwp316ud_propgrid_vc_custom;WXBUILDING;_LIB;wxUSE_GUI=1;wxUSE_BASE=0;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;_WINSOCK_DEPRECATED_NO_WARNINGS=1;__WXUWP__;DLL_EXPORTS;WXMAKINGDLL_PROPGRID;WXUSINGDLL;WX_PRECOMP;CMAKE_INTDIR=\"Debug\";wxpropgrid_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\uwpud;D:\WxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\uwpud;D:\WxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;..\..\lib\vc_x64_dll\wxuwp31ud_core.lib;..\..\lib\vc_x64_dll\wxbase31ud.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;WindowsApp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/WxWidgets/MyOutputFolder/lib/vc_x64_dll/wxuwp31ud_propgrid.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/WxWidgets/MyOutputFolder/lib/vc_x64_dll/wxuwp316ud_propgrid_vc_custom.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\uwpu;D:\WxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;UNICODE;_UNICODE;NDEBUG;WXDLLNAME=wxuwp316u_propgrid_vc_custom;WXBUILDING;_LIB;wxUSE_GUI=1;wxUSE_BASE=0;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;_WINSOCK_DEPRECATED_NO_WARNINGS=1;__WXUWP__;DLL_EXPORTS;WXMAKINGDLL_PROPGRID;WXUSINGDLL;WX_PRECOMP;CMAKE_INTDIR="Release";wxpropgrid_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;UNICODE;_UNICODE;NDEBUG;WXDLLNAME=wxuwp316u_propgrid_vc_custom;WXBUILDING;_LIB;wxUSE_GUI=1;wxUSE_BASE=0;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;_WINSOCK_DEPRECATED_NO_WARNINGS=1;__WXUWP__;DLL_EXPORTS;WXMAKINGDLL_PROPGRID;WXUSINGDLL;WX_PRECOMP;CMAKE_INTDIR=\"Release\";wxpropgrid_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\uwpu;D:\WxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\uwpu;D:\WxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;..\..\lib\vc_x64_dll\wxuwp31u_core.lib;..\..\lib\vc_x64_dll\wxbase31u.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;ws2_32.lib;wininet.lib;oleacc.lib;uxtheme.lib;WindowsApp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/WxWidgets/MyOutputFolder/lib/vc_x64_dll/wxuwp31u_propgrid.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/WxWidgets/MyOutputFolder/lib/vc_x64_dll/wxuwp316u_propgrid_vc_custom.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\8266bdac180e5d7b872ae116ff99c4a9\wxpropgrid_CXX_prefix.hxx.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating CXX prefix header D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+cd D:\WxWidgets\MyOutputFolder
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCOTIRE_BUILD_TYPE:STRING=Debug -P D:/WxWidgets/build/cmake/modules/cotire.cmake combine D:/WxWidgets/MyOutputFolder/libs/propgrid/wxpropgrid_CXX_Debug_cotire.cmake D:/WxWidgets/MyOutputFolder/libs/propgrid/$(Configuration)/cotire/wxpropgrid_CXX_prefix.hxx D:/WxWidgets/include/wx/wxprec.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\include\wx\wxprec.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating CXX prefix header D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd D:\WxWidgets\MyOutputFolder
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCOTIRE_BUILD_TYPE:STRING=Release -P D:/WxWidgets/build/cmake/modules/cotire.cmake combine D:/WxWidgets/MyOutputFolder/libs/propgrid/wxpropgrid_CXX_Release_cotire.cmake D:/WxWidgets/MyOutputFolder/libs/propgrid/$(Configuration)/cotire/wxpropgrid_CXX_prefix.hxx D:/WxWidgets/include/wx/wxprec.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\include\wx\wxprec.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\WxWidgets\build\cmake\lib\propgrid\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/WxWidgets/build/cmake/lib/propgrid/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/WxWidgets -BD:/WxWidgets/MyOutputFolder --check-stamp-file D:/WxWidgets/MyOutputFolder/libs/propgrid/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\wxpropgrid_CXX_cotire.cmake;D:\WxWidgets\MyOutputFolder\libs\propgrid\wxpropgrid_RC_cotire.cmake;D:\WxWidgets\build\cmake\source_groups.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/WxWidgets/build/cmake/lib/propgrid/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/WxWidgets -BD:/WxWidgets/MyOutputFolder --check-stamp-file D:/WxWidgets/MyOutputFolder/libs/propgrid/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\wxpropgrid_CXX_cotire.cmake;D:\WxWidgets\MyOutputFolder\libs\propgrid\wxpropgrid_RC_cotire.cmake;D:\WxWidgets\build\cmake\source_groups.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\advprops.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\editors.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\manager.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\property.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\propgrid.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\propgridiface.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\propgridpagestate.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\src\propgrid\props.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalOptions) /Zm170</AdditionalOptions>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\libs\propgrid\$(Configuration)\cotire\wxpropgrid_CXX_prefix.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\advprops.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\editors.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\manager.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\property.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\propgrid.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\propgriddefs.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\propgridiface.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\propgridpagestate.h" />
+    <ClInclude Include="D:\WxWidgets\include\wx\propgrid\props.h" />
+    <ClInclude Include="D:\WxWidgets\MyOutputFolder\lib\vc_x64_dll\uwpu\wx\setup.h" />
+    <ResourceCompile Include="D:\WxWidgets\src\msw\version.rc" />
+    <ClInclude Include="D:\WxWidgets\include\wx\msw\genrcdefs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:\WxWidgets\MyOutputFolder\ZERO_CHECK.vcxproj">
+      <Project>{659836F0-DC23-35C9-A482-B26FC1646CC3}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="D:\WxWidgets\MyOutputFolder\libs\base\wxbase.vcxproj">
+      <Project>{58B5EC56-7053-3490-A42F-4E707C04CB3A}</Project>
+      <Name>wxbase</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\WxWidgets\MyOutputFolder\libs\core\wxcore.vcxproj">
+      <Project>{FB35DF66-7CA6-3A2C-B7C6-75E3963781A2}</Project>
+      <Name>wxcore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

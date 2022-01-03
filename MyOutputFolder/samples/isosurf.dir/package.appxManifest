@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="1F95DF8D-E733-3FCC-AF65-76D6D0ACF818" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="1F95DF8D-E733-3FCC-AF65-76D6D0ACF818" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>isosurf</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>isosurf.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="isosurf.exe" EntryPoint="isosurf.App">
+			<uap:VisualElements
+				DisplayName="isosurf"
+				Description="isosurf"
+				BackgroundColor="#336699"
+				Square150x150Logo="isosurf.dir\Logo.png"
+				Square44x44Logo="isosurf.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="isosurf.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

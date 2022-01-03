@@ -1,0 +1,936 @@
+The target system is: WindowsStore - 10.0 - 
+The host system is: Windows - 10.0.19042 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler:  
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 2022-01-03 2:42:28 PM.
+Project "D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(498,5): warning MSB8021: The value 'MultiByte' of the variable 'CharacterSet' is incompatible with the value 'true' of the variable 'WindowsAppContainer'. [D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdC\CompilerIdC.vcxproj]
+  Creating directory "Debug\CompilerIdC.tlog\".
+  Creating directory "Generated Files\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdC.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\bin\HostX64\x64\CL.exe /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdC\ /I"Generated Files\\" /IDebug\ /nologo /W0 /WX- /diagnostics:column /sdl /MP1 /Od /Oi /Oy- /D _UNICODE /D UNICODE /D __WRL_NO_DEFAULT_LIB__ /Gm- /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc143.pdb" /external:W0 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /FC /errorReport:queue CMakeCCompilerId.c
+  CMakeCCompilerId.c
+Link:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib /MANIFEST /MANIFESTUAC:NO /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /APPCONTAINER /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X64 Debug\CMakeCCompilerId.obj
+  CompilerIdC.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdC\CompilerIdC.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_C_COMPILER=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x64\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdC.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate".
+Done Building Project "D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdC\CompilerIdC.vcxproj" (default targets).
+
+Build succeeded.
+
+"D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdC\CompilerIdC.vcxproj" (default target) (1) ->
+(PrepareForBuild target) -> 
+  C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(498,5): warning MSB8021: The value 'MultiByte' of the variable 'CharacterSet' is incompatible with the value 'true' of the variable 'WindowsAppContainer'. [D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdC\CompilerIdC.vcxproj]
+
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.57
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+
+The C compiler identification is MSVC, found in "D:/WxWidgets/MyOutputFolder/CMakeFiles/3.22.1/CompilerIdC/CompilerIdC.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler:  
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 2022-01-03 2:42:30 PM.
+Project "D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(498,5): warning MSB8021: The value 'MultiByte' of the variable 'CharacterSet' is incompatible with the value 'true' of the variable 'WindowsAppContainer'. [D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdCXX\CompilerIdCXX.vcxproj]
+  Creating directory "Debug\CompilerIdCXX.tlog\".
+  Creating directory "Generated Files\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdCXX.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\bin\HostX64\x64\CL.exe /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdCXX\ /I"Generated Files\\" /IDebug\ /nologo /W0 /WX- /diagnostics:column /sdl /MP1 /Od /Oi /Oy- /D _UNICODE /D UNICODE /D __WRL_NO_DEFAULT_LIB__ /Gm- /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc143.pdb" /external:W0 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /FC /errorReport:queue CMakeCXXCompilerId.cpp
+  CMakeCXXCompilerId.cpp
+Link:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib /MANIFEST /MANIFESTUAC:NO /manifest:embed /PDB:".\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /APPCONTAINER /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdCXX.lib" /MACHINE:X64 Debug\CMakeCXXCompilerId.obj
+  CompilerIdCXX.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdCXX\CompilerIdCXX.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_CXX_COMPILER=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x64\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdCXX.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdCXX.tlog\CompilerIdCXX.lastbuildstate".
+Done Building Project "D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdCXX\CompilerIdCXX.vcxproj" (default targets).
+
+Build succeeded.
+
+"D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdCXX\CompilerIdCXX.vcxproj" (default target) (1) ->
+(PrepareForBuild target) -> 
+  C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(498,5): warning MSB8021: The value 'MultiByte' of the variable 'CharacterSet' is incompatible with the value 'true' of the variable 'WindowsAppContainer'. [D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CompilerIdCXX\CompilerIdCXX.vcxproj]
+
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.86
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+
+The CXX compiler identification is MSVC, found in "D:/WxWidgets/MyOutputFolder/CMakeFiles/3.22.1/CompilerIdCXX/CompilerIdCXX.exe"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_056dd.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CMakeCCompilerABI.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_056dd.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_056dd.dir\Debug\\" /Fd"cmTC_056dd.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCCompilerABI.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_056dd.vcxproj]
+  cmTC_056dd.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_056dd.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_056dd.vcxproj]
+  cmTC_056dd -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_056dd\cmTC_056dd_1.0.0.0_x64_Debug_Test\cmTC_056dd_1.0.0.0_x64_Debug.msix
+  cmTC_056dd -> cmTC_056dd.dir\Debug\Symbols\cmTC_056dd_1.0.0.0_x64_Debug.appxsym
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_b95ff.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CMakeCXXCompilerABI.cpp
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_b95ff.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_b95ff.dir\Debug\\" /Fd"cmTC_b95ff.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCXXCompilerABI.cpp"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b95ff.vcxproj]
+  cmTC_b95ff.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_b95ff.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b95ff.vcxproj]
+  cmTC_b95ff -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_b95ff\cmTC_b95ff_1.0.0.0_x64_Debug_Test\cmTC_b95ff_1.0.0.0_x64_Debug.msix
+  cmTC_b95ff -> cmTC_b95ff.dir\Debug\Symbols\cmTC_b95ff_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_6f9ce.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_6f9ce.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_6f9ce.dir\Debug\\" /Fd"cmTC_6f9ce.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_6f9ce.vcxproj]
+  cmTC_6f9ce.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_6f9ce.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_6f9ce.vcxproj]
+  cmTC_6f9ce -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_6f9ce\cmTC_6f9ce_1.0.0.0_x64_Debug_Test\cmTC_6f9ce_1.0.0.0_x64_Debug.msix
+  cmTC_6f9ce -> cmTC_6f9ce.dir\Debug\Symbols\cmTC_6f9ce_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_3401e.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_3401e.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3401e.dir\Debug\\" /Fd"cmTC_3401e.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3401e.vcxproj]
+  cmTC_3401e.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_3401e.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3401e.vcxproj]
+  cmTC_3401e -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_3401e\cmTC_3401e_1.0.0.0_x64_Debug_Test\cmTC_3401e_1.0.0.0_x64_Debug.msix
+  cmTC_3401e -> cmTC_3401e.dir\Debug\Symbols\cmTC_3401e_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_90173.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_90173.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_90173.dir\Debug\\" /Fd"cmTC_90173.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_90173.vcxproj]
+  cmTC_90173.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_90173.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_90173.vcxproj]
+  cmTC_90173 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_90173\cmTC_90173_1.0.0.0_x64_Debug_Test\cmTC_90173_1.0.0.0_x64_Debug.msix
+  cmTC_90173 -> cmTC_90173.dir\Debug\Symbols\cmTC_90173_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining size of wchar_t passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_a486f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  SIZEOF_WCHAR_T.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_a486f.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a486f.dir\Debug\\" /Fd"cmTC_a486f.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SIZEOF_WCHAR_T.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a486f.vcxproj]
+  cmTC_a486f.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_a486f.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a486f.vcxproj]
+  cmTC_a486f -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_a486f\cmTC_a486f_1.0.0.0_x64_Debug_Test\cmTC_a486f_1.0.0.0_x64_Debug.msix
+  cmTC_a486f -> cmTC_a486f.dir\Debug\Symbols\cmTC_a486f_1.0.0.0_x64_Debug.appxsym
+
+
+
+Performing C SOURCE FILE Test HAVE_WINHTTP_H succeeded with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_a108d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_a108d.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_WINHTTP_H /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a108d.dir\Debug\\" /Fd"cmTC_a108d.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a108d.vcxproj]
+  cmTC_a108d.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_a108d.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a108d.vcxproj]
+  cmTC_a108d -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_a108d\cmTC_a108d_1.0.0.0_x64_Debug_Test\cmTC_a108d_1.0.0.0_x64_Debug.msix
+  cmTC_a108d -> cmTC_a108d.dir\Debug\Symbols\cmTC_a108d_1.0.0.0_x64_Debug.appxsym
+
+
+Source file was:
+#include <windows.h>
+                                 #include <winhttp.h>
+                                 int main(){return 0;}
+Determining if the include file d2d1.h exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_c4f3d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_c4f3d.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c4f3d.dir\Debug\\" /Fd"cmTC_c4f3d.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c4f3d.vcxproj]
+  cmTC_c4f3d.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_c4f3d.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c4f3d.vcxproj]
+  cmTC_c4f3d -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_c4f3d\cmTC_c4f3d_1.0.0.0_x64_Debug_Test\cmTC_c4f3d_1.0.0.0_x64_Debug.msix
+  cmTC_c4f3d -> cmTC_c4f3d.dir\Debug\Symbols\cmTC_c4f3d_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if files stdlib.h;stdarg.h;string.h;float.h exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_c7456.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  STDC_HEADERS.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_c7456.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c7456.dir\Debug\\" /Fd"cmTC_c7456.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckIncludeFiles\STDC_HEADERS.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c7456.vcxproj]
+  cmTC_c7456.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_c7456.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c7456.vcxproj]
+  cmTC_c7456 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_c7456\cmTC_c7456_1.0.0.0_x64_Debug_Test\cmTC_c7456_1.0.0.0_x64_Debug.msix
+  cmTC_c7456 -> cmTC_c7456.dir\Debug\Symbols\cmTC_c7456_1.0.0.0_x64_Debug.appxsym
+
+
+
+Performing C++ SOURCE FILE Test HAVE_STD_STRING_COMPARE succeeded with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_b7e4d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_b7e4d.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_STD_STRING_COMPARE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_b7e4d.dir\Debug\\" /Fd"cmTC_b7e4d.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(7,16): warning C4834: discarding return value of function with 'nodiscard' attribute [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(8,16): warning C4834: discarding return value of function with 'nodiscard' attribute [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(9,16): warning C4834: discarding return value of function with 'nodiscard' attribute [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(10,16): warning C4834: discarding return value of function with 'nodiscard' attribute [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(11,16): warning C4834: discarding return value of function with 'nodiscard' attribute [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(12,16): warning C4834: discarding return value of function with 'nodiscard' attribute [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+  cmTC_b7e4d.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_b7e4d.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7e4d.vcxproj]
+  cmTC_b7e4d -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_b7e4d\cmTC_b7e4d_1.0.0.0_x64_Debug_Test\cmTC_b7e4d_1.0.0.0_x64_Debug.msix
+  cmTC_b7e4d -> cmTC_b7e4d.dir\Debug\Symbols\cmTC_b7e4d_1.0.0.0_x64_Debug.appxsym
+
+
+Source file was:
+#include <string>
+
+
+int main(int argc, char* argv[]) {
+ 
+    std::string foo, bar;
+    foo.compare(bar);
+    foo.compare(1, 1, bar);
+    foo.compare(1, 1, bar, 1, 1);
+    foo.compare("");
+    foo.compare(1, 1, "");
+    foo.compare(1, 1, "", 2);
+return 0; }
+Performing C++ SOURCE FILE Test HAVE_STD_WSTRING succeeded with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_03afa.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_03afa.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_STD_WSTRING /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_03afa.dir\Debug\\" /Fd"cmTC_03afa.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_03afa.vcxproj]
+  cmTC_03afa.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_03afa.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_03afa.vcxproj]
+  cmTC_03afa -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_03afa\cmTC_03afa_1.0.0.0_x64_Debug_Test\cmTC_03afa_1.0.0.0_x64_Debug.msix
+  cmTC_03afa -> cmTC_03afa.dir\Debug\Symbols\cmTC_03afa_1.0.0.0_x64_Debug.appxsym
+
+
+Source file was:
+#include <string>
+
+
+int main(int argc, char* argv[]) {
+ std::wstring s;
+return 0; }
+Performing C++ SOURCE FILE Test HAVE_STD_UNORDERED_MAP succeeded with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_37b16.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_37b16.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_STD_UNORDERED_MAP /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_37b16.dir\Debug\\" /Fd"cmTC_37b16.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_37b16.vcxproj]
+  cmTC_37b16.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_37b16.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_37b16.vcxproj]
+  cmTC_37b16 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_37b16\cmTC_37b16_1.0.0.0_x64_Debug_Test\cmTC_37b16_1.0.0.0_x64_Debug.msix
+  cmTC_37b16 -> cmTC_37b16.dir\Debug\Symbols\cmTC_37b16_1.0.0.0_x64_Debug.appxsym
+
+
+Source file was:
+#include <unordered_map>
+#include <unordered_set>
+
+
+int main(int argc, char* argv[]) {
+ 
+    std::unordered_map<double*, char*> test1;
+    std::unordered_set<char*> test2;
+return 0; }
+Performing C++ SOURCE FILE Test wxSIZE_T_IS_NOT_UINT succeeded with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_6af3b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_6af3b.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D wxSIZE_T_IS_NOT_UINT /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_6af3b.dir\Debug\\" /Fd"cmTC_6af3b.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_6af3b.vcxproj]
+  cmTC_6af3b.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_6af3b.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_6af3b.vcxproj]
+  cmTC_6af3b -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_6af3b\cmTC_6af3b_1.0.0.0_x64_Debug_Test\cmTC_6af3b_1.0.0.0_x64_Debug.msix
+  cmTC_6af3b -> cmTC_6af3b.dir\Debug\Symbols\cmTC_6af3b_1.0.0.0_x64_Debug.appxsym
+
+
+Source file was:
+#include <stddef.h>
+
+
+int main(int argc, char* argv[]) {
+ return 0; }
+
+            struct Foo { void foo(size_t); void foo(unsigned int); };
+
+            int bar() {
+return 0; }
+Performing C++ SOURCE FILE Test wxSIZE_T_IS_NOT_ULONG succeeded with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_882b3.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_882b3.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D wxSIZE_T_IS_NOT_ULONG /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_882b3.dir\Debug\\" /Fd"cmTC_882b3.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_882b3.vcxproj]
+  cmTC_882b3.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_882b3.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_882b3.vcxproj]
+  cmTC_882b3 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_882b3\cmTC_882b3_1.0.0.0_x64_Debug_Test\cmTC_882b3_1.0.0.0_x64_Debug.msix
+  cmTC_882b3 -> cmTC_882b3.dir\Debug\Symbols\cmTC_882b3_1.0.0.0_x64_Debug.appxsym
+
+
+Source file was:
+#include <stddef.h>
+
+
+int main(int argc, char* argv[]) {
+ return 0; }
+
+            struct Foo { void foo(size_t); void foo(unsigned long); };
+
+            int bar() {
+return 0; }
+Performing C++ SOURCE FILE Test wxWCHAR_T_IS_REAL_TYPE succeeded with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_41678.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_41678.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D wxWCHAR_T_IS_REAL_TYPE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_41678.dir\Debug\\" /Fd"cmTC_41678.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_41678.vcxproj]
+  cmTC_41678.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_41678.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_41678.vcxproj]
+  cmTC_41678 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_41678\cmTC_41678_1.0.0.0_x64_Debug_Test\cmTC_41678_1.0.0.0_x64_Debug.msix
+  cmTC_41678 -> cmTC_41678.dir\Debug\Symbols\cmTC_41678_1.0.0.0_x64_Debug.appxsym
+
+
+Source file was:
+#include <wchar.h>
+
+
+int main(int argc, char* argv[]) {
+ return 0; }
+
+            struct Foo { void foo(wchar_t);
+                         void foo(unsigned short);
+                         void foo(unsigned int);
+                         void foo(unsigned long); };
+
+            int bar() {
+return 0; }
+Determining if the wcsftime exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_0373a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_0373a.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_0373a.dir\Debug\\" /Fd"cmTC_0373a.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_0373a.vcxproj]
+  cmTC_0373a.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_0373a.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_0373a.vcxproj]
+  cmTC_0373a -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_0373a\cmTC_0373a_1.0.0.0_x64_Debug_Test\cmTC_0373a_1.0.0.0_x64_Debug.msix
+  cmTC_0373a -> cmTC_0373a.dir\Debug\Symbols\cmTC_0373a_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsftime
+  return ((int*)(&wcsftime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wprintf exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_da60b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_da60b.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_da60b.dir\Debug\\" /Fd"cmTC_da60b.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_da60b.vcxproj]
+  cmTC_da60b.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_da60b.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_da60b.vcxproj]
+  cmTC_da60b -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_da60b\cmTC_da60b_1.0.0.0_x64_Debug_Test\cmTC_da60b_1.0.0.0_x64_Debug.msix
+  cmTC_da60b -> cmTC_da60b.dir\Debug\Symbols\cmTC_da60b_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wprintf
+  return ((int*)(&wprintf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the fputws exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_facab.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_facab.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_facab.dir\Debug\\" /Fd"cmTC_facab.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_facab.vcxproj]
+  cmTC_facab.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_facab.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_facab.vcxproj]
+  cmTC_facab -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_facab\cmTC_facab_1.0.0.0_x64_Debug_Test\cmTC_facab_1.0.0.0_x64_Debug.msix
+  cmTC_facab -> cmTC_facab.dir\Debug\Symbols\cmTC_facab_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef fputws
+  return ((int*)(&fputws))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the vswprintf exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_54d92.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_54d92.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_54d92.dir\Debug\\" /Fd"cmTC_54d92.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_54d92.vcxproj]
+  cmTC_54d92.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_54d92.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_54d92.vcxproj]
+  cmTC_54d92 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_54d92\cmTC_54d92_1.0.0.0_x64_Debug_Test\cmTC_54d92_1.0.0.0_x64_Debug.msix
+  cmTC_54d92 -> cmTC_54d92.dir\Debug\Symbols\cmTC_54d92_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef vswprintf
+  return ((int*)(&vswprintf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the vswscanf exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_5b4c5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_5b4c5.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_5b4c5.dir\Debug\\" /Fd"cmTC_5b4c5.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_5b4c5.vcxproj]
+  cmTC_5b4c5.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_5b4c5.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_5b4c5.vcxproj]
+  cmTC_5b4c5 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_5b4c5\cmTC_5b4c5_1.0.0.0_x64_Debug_Test\cmTC_5b4c5_1.0.0.0_x64_Debug.msix
+  cmTC_5b4c5 -> cmTC_5b4c5.dir\Debug\Symbols\cmTC_5b4c5_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef vswscanf
+  return ((int*)(&vswscanf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsnlen exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_78488.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_78488.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_78488.dir\Debug\\" /Fd"cmTC_78488.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_78488.vcxproj]
+  cmTC_78488.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_78488.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_78488.vcxproj]
+  cmTC_78488 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_78488\cmTC_78488_1.0.0.0_x64_Debug_Test\cmTC_78488_1.0.0.0_x64_Debug.msix
+  cmTC_78488 -> cmTC_78488.dir\Debug\Symbols\cmTC_78488_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsnlen
+  return ((int*)(&wcsnlen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcstoull exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_c0a1f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_c0a1f.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c0a1f.dir\Debug\\" /Fd"cmTC_c0a1f.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c0a1f.vcxproj]
+  cmTC_c0a1f.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_c0a1f.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c0a1f.vcxproj]
+  cmTC_c0a1f -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_c0a1f\cmTC_c0a1f_1.0.0.0_x64_Debug_Test\cmTC_c0a1f_1.0.0.0_x64_Debug.msix
+  cmTC_c0a1f -> cmTC_c0a1f.dir\Debug\Symbols\cmTC_c0a1f_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcstoull
+  return ((int*)(&wcstoull))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcslen exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_3c138.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_3c138.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3c138.dir\Debug\\" /Fd"cmTC_3c138.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3c138.vcxproj]
+  cmTC_3c138.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_3c138.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3c138.vcxproj]
+  cmTC_3c138 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_3c138\cmTC_3c138_1.0.0.0_x64_Debug_Test\cmTC_3c138_1.0.0.0_x64_Debug.msix
+  cmTC_3c138 -> cmTC_3c138.dir\Debug\Symbols\cmTC_3c138_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcslen
+  return ((int*)(&wcslen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the function strnlen exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_379b7.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckFunctionExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_379b7.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D CHECK_FUNCTION_EXISTS=strnlen /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_379b7.dir\Debug\\" /Fd"cmTC_379b7.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_379b7.vcxproj]
+  cmTC_379b7.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_379b7.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_379b7.vcxproj]
+  cmTC_379b7 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_379b7\cmTC_379b7_1.0.0.0_x64_Debug_Test\cmTC_379b7_1.0.0.0_x64_Debug.msix
+  cmTC_379b7 -> cmTC_379b7.dir\Debug\Symbols\cmTC_379b7_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if the function strtoull exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_9f161.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckFunctionExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_9f161.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D CHECK_FUNCTION_EXISTS=strtoull /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_9f161.dir\Debug\\" /Fd"cmTC_9f161.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_9f161.vcxproj]
+  cmTC_9f161.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_9f161.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_9f161.vcxproj]
+  cmTC_9f161 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_9f161\cmTC_9f161_1.0.0.0_x64_Debug_Test\cmTC_9f161_1.0.0.0_x64_Debug.msix
+  cmTC_9f161 -> cmTC_9f161.dir\Debug\Symbols\cmTC_9f161_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if the vsscanf exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_67106.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_67106.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_67106.dir\Debug\\" /Fd"cmTC_67106.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_67106.vcxproj]
+  cmTC_67106.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_67106.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_67106.vcxproj]
+  cmTC_67106 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_67106\cmTC_67106_1.0.0.0_x64_Debug_Test\cmTC_67106_1.0.0.0_x64_Debug.msix
+  cmTC_67106 -> cmTC_67106.dir\Debug\Symbols\cmTC_67106_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <stdio.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef vsscanf
+  return ((int*)(&vsscanf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the round exist passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_268b5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_268b5.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_268b5.dir\Debug\\" /Fd"cmTC_268b5.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.cxx
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_268b5.vcxproj]
+  cmTC_268b5.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_268b5.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_268b5.vcxproj]
+  cmTC_268b5 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_268b5\cmTC_268b5_1.0.0.0_x64_Debug_Test\cmTC_268b5_1.0.0.0_x64_Debug.msix
+  cmTC_268b5 -> cmTC_268b5.dir\Debug\Symbols\cmTC_268b5_1.0.0.0_x64_Debug.appxsym
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <math.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef round
+  return ((int*)(&round))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the include file type_traits exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_ace3a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_ace3a.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_ace3a.dir\Debug\\" /Fd"cmTC_ace3a.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.cxx
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ace3a.vcxproj]
+  cmTC_ace3a.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_ace3a.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ace3a.vcxproj]
+  cmTC_ace3a -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_ace3a\cmTC_ace3a_1.0.0.0_x64_Debug_Test\cmTC_ace3a_1.0.0.0_x64_Debug.msix
+  cmTC_ace3a -> cmTC_ace3a.dir\Debug\Symbols\cmTC_ace3a_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if the include file fcntl.h exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_2a4b2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  CheckIncludeFile.c
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_2a4b2.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_2a4b2.dir\Debug\\" /Fd"cmTC_2a4b2.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_2a4b2.vcxproj]
+  cmTC_2a4b2.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_2a4b2.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_2a4b2.vcxproj]
+  cmTC_2a4b2 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_2a4b2\cmTC_2a4b2_1.0.0.0_x64_Debug_Test\cmTC_2a4b2_1.0.0.0_x64_Debug.msix
+  cmTC_2a4b2 -> cmTC_2a4b2.dir\Debug\Symbols\cmTC_2a4b2_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining if the include file wchar.h exists passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_42e93.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_42e93.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_42e93.dir\Debug\\" /Fd"cmTC_42e93.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_42e93.vcxproj]
+  cmTC_42e93.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_42e93.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_42e93.vcxproj]
+  cmTC_42e93 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_42e93\cmTC_42e93_1.0.0.0_x64_Debug_Test\cmTC_42e93_1.0.0.0_x64_Debug.msix
+  cmTC_42e93 -> cmTC_42e93.dir\Debug\Symbols\cmTC_42e93_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining size of size_t passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_81fc2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  SIZEOF_SIZE_T.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_81fc2.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_81fc2.dir\Debug\\" /Fd"cmTC_81fc2.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SIZEOF_SIZE_T.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_81fc2.vcxproj]
+  cmTC_81fc2.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_81fc2.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_81fc2.vcxproj]
+  cmTC_81fc2 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_81fc2\cmTC_81fc2_1.0.0.0_x64_Debug_Test\cmTC_81fc2_1.0.0.0_x64_Debug.msix
+  cmTC_81fc2 -> cmTC_81fc2.dir\Debug\Symbols\cmTC_81fc2_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining size of int passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_c2814.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  SIZEOF_INT.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_c2814.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c2814.dir\Debug\\" /Fd"cmTC_c2814.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SIZEOF_INT.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c2814.vcxproj]
+  cmTC_c2814.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_c2814.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_c2814.vcxproj]
+  cmTC_c2814 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_c2814\cmTC_c2814_1.0.0.0_x64_Debug_Test\cmTC_c2814_1.0.0.0_x64_Debug.msix
+  cmTC_c2814 -> cmTC_c2814.dir\Debug\Symbols\cmTC_c2814_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining size of long passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_31647.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  SIZEOF_LONG.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_31647.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_31647.dir\Debug\\" /Fd"cmTC_31647.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SIZEOF_LONG.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_31647.vcxproj]
+  cmTC_31647.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_31647.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_31647.vcxproj]
+  cmTC_31647 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_31647\cmTC_31647_1.0.0.0_x64_Debug_Test\cmTC_31647_1.0.0.0_x64_Debug.msix
+  cmTC_31647 -> cmTC_31647.dir\Debug\Symbols\cmTC_31647_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining size of short passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_d9756.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  SIZEOF_SHORT.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_d9756.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d9756.dir\Debug\\" /Fd"cmTC_d9756.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SIZEOF_SHORT.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_d9756.vcxproj]
+  cmTC_d9756.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_d9756.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_d9756.vcxproj]
+  cmTC_d9756 -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_d9756\cmTC_d9756_1.0.0.0_x64_Debug_Test\cmTC_d9756_1.0.0.0_x64_Debug.msix
+  cmTC_d9756 -> cmTC_d9756.dir\Debug\Symbols\cmTC_d9756_1.0.0.0_x64_Debug.appxsym
+
+
+
+Determining size of long long passed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_d170a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  SIZEOF_LONG_LONG.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_d170a.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d170a.dir\Debug\\" /Fd"cmTC_d170a.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SIZEOF_LONG_LONG.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_d170a.vcxproj]
+  cmTC_d170a.vcxproj -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_d170a.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage\Microsoft.AppXPackage.Targets(2720,5): warning : Publisher name (CN=CMake) does not match signing certificate subject: CN=CMake Test Cert. Updating Publisher name. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_d170a.vcxproj]
+  cmTC_d170a -> D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\AppPackages\cmTC_d170a\cmTC_d170a_1.0.0.0_x64_Debug_Test\cmTC_d170a_1.0.0.0_x64_Debug.msix
+  cmTC_d170a -> cmTC_d170a.dir\Debug\Symbols\cmTC_d170a_1.0.0.0_x64_Debug.appxsym
+
+
+

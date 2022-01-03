@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\$(Configuration)\cotire\example_CXX_unity_0_0.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\$(Configuration)\cotire\example_CXX_unity_1_1.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\$(Configuration)\cotire\example_CXX_unity_2_2.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\WxWidgets\build\cmake\modules\cotire_test\src\log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\WxWidgets\build\cmake\modules\cotire_test\src\example.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\CMakeFiles\a4ec9c2edff2a087d29a8c92b23e607d\example_CXX_unity_0_0.cxx.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\CMakeFiles\a4ec9c2edff2a087d29a8c92b23e607d\example_CXX_unity_1_1.cxx.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\CMakeFiles\a4ec9c2edff2a087d29a8c92b23e607d\example_CXX_unity_2_2.cxx.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\WxWidgets\build\cmake\modules\cotire_test\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example_unity.dir\Windows_TemporaryKey.pfx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <AppxManifest Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example_unity.dir\package.appxManifest">
+      <Filter>Resource Files</Filter>
+    </AppxManifest>
+    <Image Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example_unity.dir\SmallLogo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example_unity.dir\SmallLogo44x44.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example_unity.dir\Logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example_unity.dir\StoreLogo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example_unity.dir\SplashScreen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{2C2ABE90-4DDB-39A8-AA18-EDBBBEB71A40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{FDFC3EA6-B7BB-3770-BF7E-4ED1BCF48B4F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BA33721F-E2E9-3E33-9658-5F19F054EB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{751CDBE9-A2CF-3AC8-A022-D809FADB4128}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+</Project>

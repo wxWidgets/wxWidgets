@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="B6BA7579-6596-383D-BEB9-077C40EA7983" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="B6BA7579-6596-383D-BEB9-077C40EA7983" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>except</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>except.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="except.exe" EntryPoint="except.App">
+			<uap:VisualElements
+				DisplayName="except"
+				Description="except"
+				BackgroundColor="#336699"
+				Square150x150Logo="except.dir\Logo.png"
+				Square44x44Logo="except.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="except.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

@@ -1,0 +1,1 @@
+D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\AppPackages\example\example_1.0.0.0_x64_Debug_Test\example_1.0.0.0_x64_Debug.msix

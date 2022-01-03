@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{659836F0-DC23-35C9-A482-B26FC1646CC3}</ProjectGuid>
+    <ApplicationType>Windows Store</ApplicationType>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.19041.0</WindowsTargetPlatformMinVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>ZERO_CHECK</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\8e2b6530f2b953667a5b84d9bed83371\generate.stamp.rule">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/WxWidgets -BD:/WxWidgets/MyOutputFolder --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/WxWidgets/MyOutputFolder/wxWidgets.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePrintHelpers.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckPrototypeDefinition.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsStore-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsStore-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsStore.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ProcessorCount.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\TestBigEndian.cmake;D:\WxWidgets\CMakeLists.txt;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeCCompiler.cmake;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeSystem.cmake;D:\WxWidgets\build\cmake\build.cfg.in;D:\WxWidgets\build\cmake\build_cfg.cmake;D:\WxWidgets\build\cmake\files.cmake;D:\WxWidgets\build\cmake\functions.cmake;D:\WxWidgets\build\cmake\init.cmake;D:\WxWidgets\build\cmake\install.cmake;D:\WxWidgets\build\cmake\lib\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\adv\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\aui\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\base\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\core\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\expat.cmake;D:\WxWidgets\build\cmake\lib\gl\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\html\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\jpeg.cmake;D:\WxWidgets\build\cmake\lib\media\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\net\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\png.cmake;D:\WxWidgets\build\cmake\lib\propgrid\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\qa\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\regex.cmake;D:\WxWidgets\build\cmake\lib\ribbon\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\richtext\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\stc\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\tiff.cmake;D:\WxWidgets\build\cmake\lib\webview\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\xml\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\xrc\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\zlib.cmake;D:\WxWidgets\build\cmake\main.cmake;D:\WxWidgets\build\cmake\modules\cotire.cmake;D:\WxWidgets\build\cmake\options.cmake;D:\WxWidgets\build\cmake\policies.cmake;D:\WxWidgets\build\cmake\samples\CMakeLists.txt;D:\WxWidgets\build\cmake\samples\html.cmake;D:\WxWidgets\build\cmake\setup.cmake;D:\WxWidgets\build\cmake\setup.h.in;D:\WxWidgets\build\cmake\source_groups.cmake;D:\WxWidgets\build\cmake\toolkit.cmake;D:\WxWidgets\build\cmake\uninstall.cmake.in;D:\WxWidgets\build\cmake\utils\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\WxWidgets\MyOutputFolder\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\base\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\net\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\core\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\adv\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\aui\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\html\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\propgrid\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\ribbon\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\richtext\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\webview\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\stc\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\xrc\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\media\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\gl\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\qa\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\xml\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\utils\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\samples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/WxWidgets -BD:/WxWidgets/MyOutputFolder --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/WxWidgets/MyOutputFolder/wxWidgets.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePrintHelpers.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckPrototypeDefinition.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsStore-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsStore-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsStore.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ProcessorCount.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\TestBigEndian.cmake;D:\WxWidgets\CMakeLists.txt;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeCCompiler.cmake;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeCXXCompiler.cmake;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeRCCompiler.cmake;D:\WxWidgets\MyOutputFolder\CMakeFiles\3.22.1\CMakeSystem.cmake;D:\WxWidgets\build\cmake\build.cfg.in;D:\WxWidgets\build\cmake\build_cfg.cmake;D:\WxWidgets\build\cmake\files.cmake;D:\WxWidgets\build\cmake\functions.cmake;D:\WxWidgets\build\cmake\init.cmake;D:\WxWidgets\build\cmake\install.cmake;D:\WxWidgets\build\cmake\lib\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\adv\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\aui\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\base\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\core\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\expat.cmake;D:\WxWidgets\build\cmake\lib\gl\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\html\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\jpeg.cmake;D:\WxWidgets\build\cmake\lib\media\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\net\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\png.cmake;D:\WxWidgets\build\cmake\lib\propgrid\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\qa\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\regex.cmake;D:\WxWidgets\build\cmake\lib\ribbon\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\richtext\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\stc\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\tiff.cmake;D:\WxWidgets\build\cmake\lib\webview\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\xml\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\xrc\CMakeLists.txt;D:\WxWidgets\build\cmake\lib\zlib.cmake;D:\WxWidgets\build\cmake\main.cmake;D:\WxWidgets\build\cmake\modules\cotire.cmake;D:\WxWidgets\build\cmake\options.cmake;D:\WxWidgets\build\cmake\policies.cmake;D:\WxWidgets\build\cmake\samples\CMakeLists.txt;D:\WxWidgets\build\cmake\samples\html.cmake;D:\WxWidgets\build\cmake\setup.cmake;D:\WxWidgets\build\cmake\setup.h.in;D:\WxWidgets\build\cmake\source_groups.cmake;D:\WxWidgets\build\cmake\toolkit.cmake;D:\WxWidgets\build\cmake\uninstall.cmake.in;D:\WxWidgets\build\cmake\utils\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\WxWidgets\MyOutputFolder\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\base\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\net\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\core\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\adv\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\aui\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\html\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\propgrid\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\ribbon\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\richtext\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\webview\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\stc\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\xrc\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\media\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\gl\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\qa\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\libs\xml\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\utils\CMakeFiles\generate.stamp;D:\WxWidgets\MyOutputFolder\samples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

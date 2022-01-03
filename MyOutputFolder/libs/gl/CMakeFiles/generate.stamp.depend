@@ -1,0 +1,5 @@
+# CMake generation dependency list for this directory.
+D:/WxWidgets/MyOutputFolder/libs/gl/wxgl_CXX_cotire.cmake
+D:/WxWidgets/MyOutputFolder/libs/gl/wxgl_RC_cotire.cmake
+D:/WxWidgets/build/cmake/lib/gl/CMakeLists.txt
+D:/WxWidgets/build/cmake/source_groups.cmake

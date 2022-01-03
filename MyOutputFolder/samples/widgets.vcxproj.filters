@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\activityindicator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\bmpcombobox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\checkbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\choice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\clrpicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\combobox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\datepick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\dirctrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\dirpicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\editlbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\filectrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\filepicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\fontpicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\gauge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\headerctrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\hyperlnk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\itemcontainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\listbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\native.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\notebook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\odcombobox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\radiobox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\searchctrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\slider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\spinbtn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\static.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\statbmp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\textctrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\timepick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\toggle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\WxWidgets\samples\widgets\widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\WxWidgets\samples\widgets\widgets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\WxWidgets\samples\widgets\itemcontainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\c06b2a09b753ee92b0b0c0a0dc0186bb\widgets_CXX_prefix.hxx.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\WxWidgets\build\cmake\samples\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D:\WxWidgets\samples\sample.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\WxWidgets\MyOutputFolder\samples\widgets.dir\Windows_TemporaryKey.pfx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <AppxManifest Include="D:\WxWidgets\MyOutputFolder\samples\widgets.dir\package.appxManifest">
+      <Filter>Resource Files</Filter>
+    </AppxManifest>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\widgets.dir\SmallLogo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\widgets.dir\SmallLogo44x44.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\widgets.dir\Logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\widgets.dir\StoreLogo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\widgets.dir\SplashScreen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5110FAF9-9F5B-3331-8458-FF6F913A6304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ECD2D1D7-23E1-31EA-B959-2E05F12C9873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{FE48B28E-CC86-3B4D-B4C5-31D50D006374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{934D6F2A-27AF-3B58-8C61-5B5A69802E5B}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+</Project>

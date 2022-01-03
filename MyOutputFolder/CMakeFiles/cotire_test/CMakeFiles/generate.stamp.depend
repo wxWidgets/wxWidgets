@@ -1,0 +1,29 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeParseArguments.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Compiler/MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/WindowsStore-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/WindowsStore-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/WindowsStore.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/ProcessorCount.cmake
+D:/WxWidgets/MyOutputFolder/CMakeFiles/3.22.1/CMakeCCompiler.cmake
+D:/WxWidgets/MyOutputFolder/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake
+D:/WxWidgets/MyOutputFolder/CMakeFiles/3.22.1/CMakeRCCompiler.cmake
+D:/WxWidgets/MyOutputFolder/CMakeFiles/3.22.1/CMakeSystem.cmake
+D:/WxWidgets/build/cmake/modules/cotire.cmake
+D:/WxWidgets/build/cmake/modules/cotire_test/CMakeLists.txt

@@ -1,0 +1,10 @@
+^D:\WXWIDGETS\MYOUTPUTFOLDER\CMAKEFILES\COTIRE_TEST\CMAKEFILES\BD6415421B9A648CFD0CAE44D779DA48\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/WxWidgets/build/cmake/modules/cotire_test -BD:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test/CotireExample.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

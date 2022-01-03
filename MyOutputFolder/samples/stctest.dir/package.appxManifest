@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="03C33904-34D5-39D0-8985-1A1F242B1ABD" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="03C33904-34D5-39D0-8985-1A1F242B1ABD" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>stctest</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>stctest.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="stctest.exe" EntryPoint="stctest.App">
+			<uap:VisualElements
+				DisplayName="stctest"
+				Description="stctest"
+				BackgroundColor="#336699"
+				Square150x150Logo="stctest.dir\Logo.png"
+				Square44x44Logo="stctest.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="stctest.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

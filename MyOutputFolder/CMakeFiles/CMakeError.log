@@ -1,0 +1,863 @@
+Determining if the include file pthread.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_ca9f9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_ca9f9.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_ca9f9.dir\Debug\\" /Fd"cmTC_ca9f9.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'pthread.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ca9f9.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ca9f9.vcxproj]
+
+
+
+Performing C++ SOURCE FILE Test HAVE_HASH_MAP failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_df106.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_df106.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_HASH_MAP /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_df106.dir\Debug\\" /Fd"cmTC_df106.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\include\hash_map(22,1): fatal error C1189: #error:  <hash_map> is deprecated and will be REMOVED. Please use <unordered_map>. You can define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS to acknowledge that you have received this warning. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_df106.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_df106.vcxproj]
+
+
+Source file was:
+#include <hash_map>
+#include <hash_set>
+
+
+int main(int argc, char* argv[]) {
+ 
+    std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
+    std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;
+return 0; }
+Performing C++ SOURCE FILE Test HAVE_EXT_HASH_MAP failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_4eb7e.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_4eb7e.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_EXT_HASH_MAP /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_4eb7e.dir\Debug\\" /Fd"cmTC_4eb7e.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(1,10): fatal error C1083: Cannot open include file: 'ext/hash_map': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_4eb7e.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_4eb7e.vcxproj]
+
+
+Source file was:
+#include <ext/hash_map>
+#include <ext/hash_set>
+
+
+int main(int argc, char* argv[]) {
+ 
+    __gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
+    __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;
+return 0; }
+Performing C++ SOURCE FILE Test HAVE_TR1_UNORDERED_MAP failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_097d8.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_097d8.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_TR1_UNORDERED_MAP /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_097d8.dir\Debug\\" /Fd"cmTC_097d8.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(1,10): fatal error C1083: Cannot open include file: 'tr1/unordered_map': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_097d8.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_097d8.vcxproj]
+
+
+Source file was:
+#include <tr1/unordered_map>
+#include <tr1/unordered_set>
+
+
+int main(int argc, char* argv[]) {
+ 
+    std::tr1::unordered_map<double*, char*> test1;
+    std::tr1::unordered_set<char*> test2;
+return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_ATOMIC_BUILTINS failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_a22d0.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c(7,25): warning C4013: '__sync_fetch_and_add' undefined; assuming extern returning int [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a22d0.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c(8,25): warning C4013: '__sync_sub_and_fetch' undefined; assuming extern returning int [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a22d0.vcxproj]
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_a22d0.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_GCC_ATOMIC_BUILTINS /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a22d0.dir\Debug\\" /Fd"cmTC_a22d0.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a22d0.vcxproj]
+src.obj : error LNK2019: unresolved external symbol __sync_fetch_and_add referenced in function main [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a22d0.vcxproj]
+src.obj : error LNK2019: unresolved external symbol __sync_sub_and_fetch referenced in function main [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a22d0.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_a22d0.exe : fatal error LNK1120: 2 unresolved externals [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a22d0.vcxproj]
+
+
+Source file was:
+
+
+int main(int argc, char* argv[]) {
+ 
+    unsigned int value=0;
+    /* wxAtomicInc doesn't use return value here */
+    __sync_fetch_and_add(&value, 2);
+    __sync_sub_and_fetch(&value, 1);
+    /* but wxAtomicDec does, so mimic that: */
+    volatile unsigned int r2 = __sync_sub_and_fetch(&value, 1);
+return 0; }
+Determining if the localtime_r exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_60fd7.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_60fd7.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_60fd7.dir\Debug\\" /Fd"cmTC_60fd7.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,30): error C2065: 'localtime_r': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_60fd7.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_60fd7.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef localtime_r
+  return ((int*)(&localtime_r))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the gmtime_r exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_ec8e1.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_ec8e1.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_ec8e1.dir\Debug\\" /Fd"cmTC_ec8e1.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,27): error C2065: 'gmtime_r': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ec8e1.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ec8e1.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef gmtime_r
+  return ((int*)(&gmtime_r))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Performing C SOURCE FILE Test HAVE_PW_GECOS failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_44535.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_44535.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D HAVE_PW_GECOS /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_44535.dir\Debug\\" /Fd"cmTC_44535.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c(2,10): fatal error C1083: Cannot open include file: 'pwd.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_44535.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_44535.vcxproj]
+
+
+Source file was:
+
+#include <pwd.h>
+
+int main()
+{
+  (void)sizeof(((struct passwd *)0)->pw_gecos);
+  return 0;
+}
+
+Determining if the ftime exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_15a31.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_15a31.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_15a31.dir\Debug\\" /Fd"cmTC_15a31.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,24): error C2065: 'ftime': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_15a31.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_15a31.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef ftime
+  return ((int*)(&ftime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the putws exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_40d75.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_40d75.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_40d75.dir\Debug\\" /Fd"cmTC_40d75.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,24): error C2065: 'putws': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_40d75.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_40d75.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef putws
+  return ((int*)(&putws))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsdup exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_ddde4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_ddde4.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_ddde4.dir\Debug\\" /Fd"cmTC_ddde4.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,19): error C4996: 'wcsdup': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _wcsdup. See online help for details. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ddde4.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_ddde4.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsdup
+  return ((int*)(&wcsdup))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcscasecmp exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_b7d74.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_b7d74.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_b7d74.dir\Debug\\" /Fd"cmTC_b7d74.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,29): error C2065: 'wcscasecmp': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7d74.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b7d74.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcscasecmp
+  return ((int*)(&wcscasecmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsncasecmp exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_cbe28.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_cbe28.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_cbe28.dir\Debug\\" /Fd"cmTC_cbe28.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,30): error C2065: 'wcsncasecmp': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_cbe28.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_cbe28.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsncasecmp
+  return ((int*)(&wcsncasecmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsrctombs exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_9281a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_9281a.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_9281a.dir\Debug\\" /Fd"cmTC_9281a.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(8,29): error C2065: 'wcsrctombs': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_9281a.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_9281a.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsrctombs
+  return ((int*)(&wcsrctombs))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the function fsync exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_fd168.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckFunctionExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_fd168.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D CHECK_FUNCTION_EXISTS=fsync /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_fd168.dir\Debug\\" /Fd"cmTC_fd168.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_fd168.vcxproj]
+CheckFunctionExists.obj : error LNK2019: unresolved external symbol fsync referenced in function main [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_fd168.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_fd168.exe : fatal error LNK1120: 1 unresolved externals [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_fd168.vcxproj]
+
+
+
+Determining if the function snprintf exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_d18d8.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckFunctionExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_d18d8.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D CHECK_FUNCTION_EXISTS=snprintf /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d18d8.dir\Debug\\" /Fd"cmTC_d18d8.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_d18d8.vcxproj]
+CheckFunctionExists.obj : error LNK2019: unresolved external symbol snprintf referenced in function main [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_d18d8.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_d18d8.exe : fatal error LNK1120: 1 unresolved externals [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_d18d8.vcxproj]
+
+
+
+Determining if the function vsnprintf exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_da2e6.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckFunctionExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_da2e6.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D CHECK_FUNCTION_EXISTS=vsnprintf /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_da2e6.dir\Debug\\" /Fd"cmTC_da2e6.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_da2e6.vcxproj]
+CheckFunctionExists.obj : error LNK2019: unresolved external symbol vsnprintf referenced in function main [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_da2e6.vcxproj]
+MSVCRTD.lib(vsnprintf.obj) : error LNK2001: unresolved external symbol vsnprintf [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_da2e6.vcxproj]
+MSVCRTD.lib(vsnprintf.obj) : error LNK2001: unresolved external symbol _vsnprintf [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_da2e6.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_da2e6.exe : fatal error LNK1120: 2 unresolved externals [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_da2e6.vcxproj]
+
+
+
+Determining if the function setpriority exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_cd026.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckFunctionExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_cd026.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D CHECK_FUNCTION_EXISTS=setpriority /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_cd026.dir\Debug\\" /Fd"cmTC_cd026.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_cd026.vcxproj]
+CheckFunctionExists.obj : error LNK2019: unresolved external symbol setpriority referenced in function main [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_cd026.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_cd026.exe : fatal error LNK1120: 1 unresolved externals [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_cd026.vcxproj]
+
+
+
+Determining if the function gettimeofday exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_a9046.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckFunctionExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_a9046.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D CHECK_FUNCTION_EXISTS=gettimeofday /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a9046.dir\Debug\\" /Fd"cmTC_a9046.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.c"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a9046.vcxproj]
+CheckFunctionExists.obj : error LNK2019: unresolved external symbol gettimeofday referenced in function main [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a9046.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\Debug\cmTC_a9046.exe : fatal error LNK1120: 1 unresolved externals [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_a9046.vcxproj]
+
+
+
+Determining if the include file tr1/type_traits exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_6d072.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_6d072.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_6d072.dir\Debug\\" /Fd"cmTC_6d072.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.cxx
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.cxx(1,10): fatal error C1083: Cannot open include file: 'tr1/type_traits': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_6d072.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_6d072.vcxproj]
+
+
+
+Determining if the include file langinfo.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_fd188.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_fd188.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_fd188.dir\Debug\\" /Fd"cmTC_fd188.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'langinfo.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_fd188.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_fd188.vcxproj]
+
+
+
+Determining if the include file sched.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_18e0d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_18e0d.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_18e0d.dir\Debug\\" /Fd"cmTC_18e0d.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'sched.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_18e0d.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_18e0d.vcxproj]
+
+
+
+Determining if the include file unistd.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_f8529.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_f8529.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_f8529.dir\Debug\\" /Fd"cmTC_f8529.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_f8529.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_f8529.vcxproj]
+
+
+
+Determining if the include file wcstr.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_3c28b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_3c28b.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3c28b.dir\Debug\\" /Fd"cmTC_3c28b.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'wcstr.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3c28b.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3c28b.vcxproj]
+
+
+
+Performing C++ SOURCE FILE Test wxTEST_TZ_timezone failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_b3081.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_b3081.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D wxTEST_TZ_timezone /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_b3081.dir\Debug\\" /Fd"cmTC_b3081.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(7,18): error C2065: 'timezone': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b3081.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_b3081.vcxproj]
+
+
+Source file was:
+#include <time.h>
+
+
+int main(int argc, char* argv[]) {
+ 
+            int tz;
+            tz = timezone;
+return 0; }
+Performing C++ SOURCE FILE Test wxTEST_TZ__timezone failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_5912b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_5912b.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D wxTEST_TZ__timezone /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_5912b.dir\Debug\\" /Fd"cmTC_5912b.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(7,18): error C4996: '__timezone': This function or variable may be unsafe. Consider using _get_timezone instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_5912b.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_5912b.vcxproj]
+
+
+Source file was:
+#include <time.h>
+
+
+int main(int argc, char* argv[]) {
+ 
+            int tz;
+            tz = _timezone;
+return 0; }
+Performing C++ SOURCE FILE Test wxTEST_TZ___timezone failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_dae7c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.cxx
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_dae7c.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D wxTEST_TZ___timezone /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_dae7c.dir\Debug\\" /Fd"cmTC_dae7c.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(7,28): error C2440: '=': cannot convert from 'long *(__cdecl *)(void)' to 'int' [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_dae7c.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.cxx(7,18): message : There is no context in which this conversion is possible [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_dae7c.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_dae7c.vcxproj]
+
+
+Source file was:
+#include <time.h>
+
+
+int main(int argc, char* argv[]) {
+ 
+            int tz;
+            tz = __timezone;
+return 0; }
+Performing C SOURCE FILE Test WX_GMTOFF_IN_TM failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_38cc0.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  src.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_38cc0.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D WX_GMTOFF_IN_TM /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_38cc0.dir\Debug\\" /Fd"cmTC_38cc0.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\src.c(6,34): error C2039: 'tm_gmtoff': is not a member of 'tm' [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_38cc0.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\corecrt_wtime.h(26): message : see declaration of 'tm' [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_38cc0.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_38cc0.vcxproj]
+
+
+Source file was:
+
+#include <time.h>
+
+int main()
+{
+  (void)sizeof(((struct tm *)0)->tm_gmtoff);
+  return 0;
+}
+
+Determining if the dlopen exist failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_f9fcb.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckSymbolExists.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_f9fcb.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_f9fcb.dir\Debug\\" /Fd"cmTC_f9fcb.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckSymbolExists.c(2,10): fatal error C1083: Cannot open include file: 'dlfcn.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_f9fcb.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_f9fcb.vcxproj]
+
+
+File D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <dlfcn.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef dlopen
+  return ((int*)(&dlopen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the include file sys/epoll.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_2010c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'sys/epoll.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_2010c.vcxproj]
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_2010c.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_2010c.dir\Debug\\" /Fd"cmTC_2010c.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_2010c.vcxproj]
+
+
+
+Determining if the include file sys/select.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_755b5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'sys/select.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_755b5.vcxproj]
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_755b5.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_755b5.dir\Debug\\" /Fd"cmTC_755b5.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_755b5.vcxproj]
+
+
+
+Determining if the include file sys/inotify.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_3f0bc.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'sys/inotify.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3f0bc.vcxproj]
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_3f0bc.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3f0bc.dir\Debug\\" /Fd"cmTC_3f0bc.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_3f0bc.vcxproj]
+
+
+
+Determining if the include file sys/event.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_5aed4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'sys/event.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_5aed4.vcxproj]
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_5aed4.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_5aed4.dir\Debug\\" /Fd"cmTC_5aed4.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_5aed4.vcxproj]
+
+
+
+Determining if the include file xlocale.h exists failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_93e91.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  CheckIncludeFile.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_93e91.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_93e91.dir\Debug\\" /Fd"cmTC_93e91.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1,10): fatal error C1083: Cannot open include file: 'xlocale.h': No such file or directory [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_93e91.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_93e91.vcxproj]
+
+
+
+Determining size of locale_t failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_1244c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  LOCALE_T.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_1244c.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_1244c.dir\Debug\\" /Fd"cmTC_1244c.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\LOCALE_T.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\LOCALE_T.c(30,12): error C2065: 'locale_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_1244c.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\LOCALE_T.c(31,12): error C2065: 'locale_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_1244c.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\LOCALE_T.c(32,12): error C2065: 'locale_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_1244c.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\LOCALE_T.c(33,12): error C2065: 'locale_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_1244c.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\LOCALE_T.c(34,12): error C2065: 'locale_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_1244c.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_1244c.vcxproj]
+
+
+D:/WxWidgets/MyOutputFolder/CMakeFiles/CheckTypeSize/LOCALE_T.c:
+#include <sys/types.h>
+#include <stdint.h>
+#include <stddef.h>
+#include "locale.h"
+
+
+#undef KEY
+#if defined(__i386)
+# define KEY '_','_','i','3','8','6'
+#elif defined(__x86_64)
+# define KEY '_','_','x','8','6','_','6','4'
+#elif defined(__PPC64__)
+# define KEY '_','_','P','P','C','6','4','_','_'
+#elif defined(__ppc64__)
+# define KEY '_','_','p','p','c','6','4','_','_'
+#elif defined(__PPC__)
+# define KEY '_','_','P','P','C','_','_'
+#elif defined(__ppc__)
+# define KEY '_','_','p','p','c','_','_'
+#elif defined(__aarch64__)
+# define KEY '_','_','a','a','r','c','h','6','4','_','_'
+#elif defined(__ARM_ARCH_7A__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','A','_','_'
+#elif defined(__ARM_ARCH_7S__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','S','_','_'
+#endif
+
+#define SIZE (sizeof(locale_t))
+static char info_size[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)),
+  ']',
+#ifdef KEY
+  ' ','k','e','y','[', KEY, ']',
+#endif
+  '\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_size[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining size of ssize_t failed with the following output:
+Change Dir: D:/WxWidgets/MyOutputFolder/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_debe6.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET Framework
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+  SSIZE_T.c
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  cl /c /ID:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\ /I"Generated Files\\" /IcmTC_debe6.dir\Debug\ /Zi /W3 /WX- /diagnostics:column /sdl /MP1 /Od /Ob0 /Oi /Oy- /D _UNICODE /D UNICODE /D WINAPI_FAMILY=WINAPI_FAMILY_APP /D __WRL_NO_DEFAULT_LIB__ /D WIN32 /D _WINDOWS /D UNICODE /D _UNICODE /D __WINDOWSSTORE__ /D __WIN32__ /D "CMAKE_INTDIR=\"Debug\"" /Gm- /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_debe6.dir\Debug\\" /Fd"cmTC_debe6.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /FU"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.30.30705\lib\x86\store\references\platform.winmd" /analyze- /errorReport:queue D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SSIZE_T.c
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SSIZE_T.c(29,12): error C2065: 'ssize_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_debe6.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SSIZE_T.c(30,12): error C2065: 'ssize_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_debe6.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SSIZE_T.c(31,12): error C2065: 'ssize_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_debe6.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SSIZE_T.c(32,12): error C2065: 'ssize_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_debe6.vcxproj]
+D:\WxWidgets\MyOutputFolder\CMakeFiles\CheckTypeSize\SSIZE_T.c(33,12): error C2065: 'ssize_t': undeclared identifier [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_debe6.vcxproj]
+C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\XamlCompiler\Microsoft.Windows.UI.Xaml.Common.targets(486,5): error MSB4181: The "CompileXaml" task returned false but did not log an error. [D:\WxWidgets\MyOutputFolder\CMakeFiles\CMakeTmp\cmTC_debe6.vcxproj]
+
+
+D:/WxWidgets/MyOutputFolder/CMakeFiles/CheckTypeSize/SSIZE_T.c:
+#include <sys/types.h>
+#include <stdint.h>
+#include <stddef.h>
+
+
+#undef KEY
+#if defined(__i386)
+# define KEY '_','_','i','3','8','6'
+#elif defined(__x86_64)
+# define KEY '_','_','x','8','6','_','6','4'
+#elif defined(__PPC64__)
+# define KEY '_','_','P','P','C','6','4','_','_'
+#elif defined(__ppc64__)
+# define KEY '_','_','p','p','c','6','4','_','_'
+#elif defined(__PPC__)
+# define KEY '_','_','P','P','C','_','_'
+#elif defined(__ppc__)
+# define KEY '_','_','p','p','c','_','_'
+#elif defined(__aarch64__)
+# define KEY '_','_','a','a','r','c','h','6','4','_','_'
+#elif defined(__ARM_ARCH_7A__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','A','_','_'
+#elif defined(__ARM_ARCH_7S__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','S','_','_'
+#endif
+
+#define SIZE (sizeof(ssize_t))
+static char info_size[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)),
+  ']',
+#ifdef KEY
+  ' ','k','e','y','[', KEY, ']',
+#endif
+  '\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_size[argc];
+  (void)argv;
+  return require;
+}
+
+

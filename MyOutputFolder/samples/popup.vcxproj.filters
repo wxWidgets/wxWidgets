@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\WxWidgets\samples\popup\popup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\c06b2a09b753ee92b0b0c0a0dc0186bb\popup_CXX_prefix.hxx.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\WxWidgets\build\cmake\samples\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D:\WxWidgets\samples\sample.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\WxWidgets\MyOutputFolder\samples\popup.dir\Windows_TemporaryKey.pfx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <AppxManifest Include="D:\WxWidgets\MyOutputFolder\samples\popup.dir\package.appxManifest">
+      <Filter>Resource Files</Filter>
+    </AppxManifest>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\popup.dir\SmallLogo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\popup.dir\SmallLogo44x44.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\popup.dir\Logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\popup.dir\StoreLogo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="D:\WxWidgets\MyOutputFolder\samples\popup.dir\SplashScreen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5110FAF9-9F5B-3331-8458-FF6F913A6304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{FE48B28E-CC86-3B4D-B4C5-31D50D006374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{934D6F2A-27AF-3B58-8C61-5B5A69802E5B}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+</Project>
