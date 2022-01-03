@@ -64,5 +64,5 @@ https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?vi
 **Samples status**:
 Name                      | Runs     |
 ------------------------- | -----    |
-Minimal Sample            |          |
+Minimal Sample            |    NO    |
 
