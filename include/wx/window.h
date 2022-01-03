@@ -2021,6 +2021,8 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowMSW wxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/msw/window.h"
+#elif defined(__WXUWP__)
+    #include "wx/uwp/window.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/window.h"
 #elif defined(__WXGTK20__)

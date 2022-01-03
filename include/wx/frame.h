@@ -261,6 +261,8 @@ protected:
 #else // !__WXUNIVERSAL__
     #if defined(__WXMSW__)
         #include "wx/msw/frame.h"
+    #elif defined(__WXUWP__)
+        #include "wx/uwp/frame.h"
     #elif defined(__WXGTK20__)
         #include "wx/gtk/frame.h"
     #elif defined(__WXGTK__)
