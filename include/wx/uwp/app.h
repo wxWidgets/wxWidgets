@@ -23,11 +23,11 @@ public:
     // override base class (pure) virtuals
     // -----------------------------------
 
-    virtual void Exit();
+    virtual void Exit() wxOVERRIDE;
 
     virtual void CleanUp() wxOVERRIDE;
 
-    virtual void WakeUpIdle();
+    virtual void WakeUpIdle() wxOVERRIDE;
 
 public:
     // Implementation
