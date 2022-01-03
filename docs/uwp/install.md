@@ -64,8 +64,5 @@ Issues:
 Samples status:
 Name                      | Runs     |
 ------------------------- | -----    |
-Minimal Sample            | -  []    |
-                          |          |
-
-
+Minimal Sample            |          |
 
