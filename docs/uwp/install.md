@@ -35,7 +35,7 @@ this environment variable is used in the examples below.
 Building wxWidgets                     {#uwp_build}
 ==================
 
-A) The following steps explain how to compile wxWidgets using Visual Studio.
+**A)** The following steps explain how to compile wxWidgets using Visual Studio.
 
 
 1) Make sure you have installed the development workloads required to use C++/WinRT. 
@@ -52,7 +52,7 @@ Powershell example for Visual Studio 2022 under Windows 10:
 
   
 
-B) PORT STATUS.
+**B)** PORT STATUS.
 
 Here the full list of UWP controls. To be ported when possible:  
 https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?view=winui-3.0
@@ -62,16 +62,10 @@ Issues:
 - How to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
 
 Samples status:
-Name                      | Runs   |
-------------------------- | -----  |
-wxBUILD_SHARED            | BOOL   |
-wxBUILD_TESTS             | STRING |
-wxBUILD_SAMPLES           | STRING |
-wxBUILD_DEMOS             | BOOL   |
-wxUSE_GUI                 | BOOL   |
-wxBUILD_COMPATIBILITY     | STRING |
-wxBUILD_PRECOMP           | BOOL   |
-wxBUILD_MONOLITHIC        | BOOL   |
+Name                      | Runs     |
+------------------------- | -----    |
+Minimal Sample            | -  []    |
+                          |          |
 
 
 
