@@ -5,7 +5,6 @@ This is wxWidgets for the Universal Windows Platform.
 Supported OS are Windows 10+ including both 32 bit and 64 bit versions.
 **This platform is currently in development**
 
-[TOC]
 
 Installation                           {#uwp_install}
 ============
@@ -53,15 +52,26 @@ Powershell example for Visual Studio 2022 under Windows 10:
 
   
 
-B) PORT STATUS:
+B) PORT STATUS.
 
 Here the full list of UWP controls. To be ported when possible:  
 https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls?view=winui-3.0
 
-- [x] Able to generate UWP projects from Cmake 
-- [ ] Working on making the minimal sample run. To include WinRT headers, the winrt folder prefix needs to be removed or they not found. Why?
-   See: https://github.com/webview/webview/issues/390
-   for eg use #include <Windows.Foundation.h> instead of #include <winrt/Windows.Foundation.h>
+Issues:
+- wxUSE_GUI is somewhat defined to 0 when generating wxUWP projects
+- How to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
 
-C) TO VERIFY:
-- Didnt found how to disable /ZW (Windows Runtime Compilation) from Cmake. Is it ok to have it ON?
+Samples status:
+Name                      | Runs   |
+------------------------- | -----  |
+wxBUILD_SHARED            | BOOL   |
+wxBUILD_TESTS             | STRING |
+wxBUILD_SAMPLES           | STRING |
+wxBUILD_DEMOS             | BOOL   |
+wxUSE_GUI                 | BOOL   |
+wxBUILD_COMPATIBILITY     | STRING |
+wxBUILD_PRECOMP           | BOOL   |
+wxBUILD_MONOLITHIC        | BOOL   |
+
+
+
