@@ -1,1 +1,0 @@
-D:\WxWidgets\MyOutputFolder\CMakeFiles\cotire_test\src\example.vcxproj;x64

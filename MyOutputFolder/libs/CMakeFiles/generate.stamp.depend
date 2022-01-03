@@ -1,9 +1,0 @@
-# CMake generation dependency list for this directory.
-D:/WxWidgets/build/cmake/lib/CMakeLists.txt
-D:/WxWidgets/build/cmake/lib/expat.cmake
-D:/WxWidgets/build/cmake/lib/jpeg.cmake
-D:/WxWidgets/build/cmake/lib/png.cmake
-D:/WxWidgets/build/cmake/lib/regex.cmake
-D:/WxWidgets/build/cmake/lib/tiff.cmake
-D:/WxWidgets/build/cmake/lib/zlib.cmake
-D:/WxWidgets/build/cmake/source_groups.cmake

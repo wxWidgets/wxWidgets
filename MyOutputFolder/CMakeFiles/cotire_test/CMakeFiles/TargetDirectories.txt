@@ -1,6 +1,0 @@
-D:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test/CMakeFiles/ALL_BUILD.dir
-D:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test/CMakeFiles/ZERO_CHECK.dir
-D:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test/src/CMakeFiles/example.dir
-D:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test/src/CMakeFiles/example_unity.dir
-D:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test/src/CMakeFiles/all_unity.dir
-D:/WxWidgets/MyOutputFolder/CMakeFiles/cotire_test/src/CMakeFiles/clean_cotire.dir
