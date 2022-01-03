@@ -2,7 +2,7 @@ Installing wxWidgets for Windows UWP      {#plat_uwp_install}
 ------------------------------------
 
 This is wxWidgets for the Universal Windows Platform.
-Supported OS are Windows 10+ including both 32 bit and 64 bit versions.
+Supported OS are Windows 10+ including both 32 bit and 64 bit versions.  
 **This platform is currently in development**
 
 
