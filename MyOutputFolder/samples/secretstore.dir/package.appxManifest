@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="10CB7949-6EA4-3B65-888D-2A32E5726D77" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="10CB7949-6EA4-3B65-888D-2A32E5726D77" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>secretstore</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>secretstore.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="secretstore.exe" EntryPoint="secretstore.App">
+			<uap:VisualElements
+				DisplayName="secretstore"
+				Description="secretstore"
+				BackgroundColor="#336699"
+				Square150x150Logo="secretstore.dir\Logo.png"
+				Square44x44Logo="secretstore.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="secretstore.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

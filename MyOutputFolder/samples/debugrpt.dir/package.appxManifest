@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="3378F268-EE0C-33EB-BCEB-3BDB8EE547B7" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="3378F268-EE0C-33EB-BCEB-3BDB8EE547B7" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>debugrpt</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>debugrpt.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="debugrpt.exe" EntryPoint="debugrpt.App">
+			<uap:VisualElements
+				DisplayName="debugrpt"
+				Description="debugrpt"
+				BackgroundColor="#336699"
+				Square150x150Logo="debugrpt.dir\Logo.png"
+				Square44x44Logo="debugrpt.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="debugrpt.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

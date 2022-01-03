@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="35882D59-B8A4-36D8-B905-78E655727F6A" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="35882D59-B8A4-36D8-B905-78E655727F6A" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>internat</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>internat.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="internat.exe" EntryPoint="internat.App">
+			<uap:VisualElements
+				DisplayName="internat"
+				Description="internat"
+				BackgroundColor="#336699"
+				Square150x150Logo="internat.dir\Logo.png"
+				Square44x44Logo="internat.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="internat.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

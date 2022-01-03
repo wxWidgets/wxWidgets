@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="41AF8E0C-96EB-32BA-B7F9-E93D33DF4D82" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="41AF8E0C-96EB-32BA-B7F9-E93D33DF4D82" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>svg</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>svg.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="svg.exe" EntryPoint="svg.App">
+			<uap:VisualElements
+				DisplayName="svg"
+				Description="svg"
+				BackgroundColor="#336699"
+				Square150x150Logo="svg.dir\Logo.png"
+				Square44x44Logo="svg.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="svg.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

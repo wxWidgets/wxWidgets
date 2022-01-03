@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\WxWidgets\MyOutputFolder\CMakeFiles\549f73d6fdfd1bb9e925bec607866c3c\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5110FAF9-9F5B-3331-8458-FF6F913A6304}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

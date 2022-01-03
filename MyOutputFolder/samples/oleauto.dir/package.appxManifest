@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="6E8FFEEE-25EE-326E-9529-2492C20600A6" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="6E8FFEEE-25EE-326E-9529-2492C20600A6" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>oleauto</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>oleauto.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="oleauto.exe" EntryPoint="oleauto.App">
+			<uap:VisualElements
+				DisplayName="oleauto"
+				Description="oleauto"
+				BackgroundColor="#336699"
+				Square150x150Logo="oleauto.dir\Logo.png"
+				Square44x44Logo="oleauto.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="oleauto.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

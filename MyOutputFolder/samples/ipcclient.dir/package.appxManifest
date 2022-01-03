@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="1DCF58E3-AACE-3393-A8EA-09B8314E5B5C" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="1DCF58E3-AACE-3393-A8EA-09B8314E5B5C" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>ipcclient</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>ipcclient.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="ipcclient.exe" EntryPoint="ipcclient.App">
+			<uap:VisualElements
+				DisplayName="ipcclient"
+				Description="ipcclient"
+				BackgroundColor="#336699"
+				Square150x150Logo="ipcclient.dir\Logo.png"
+				Square44x44Logo="ipcclient.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="ipcclient.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

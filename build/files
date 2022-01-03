@@ -2211,19 +2211,6 @@ UWP_LOWLEVEL_SRC =
     src/uwp/app.cpp
     src/uwp/window.cpp
 
-UWP_LOWLEVEL_HDR =
-    wx/uwp/evtloop.h
-    wx/uwp/helpchm.h
-    wx/uwp/helpwin.h
-    wx/uwp/htmlhelp.h
-    wx/uwp/joystick.h
-    wx/uwp/nonownedwnd.h
-    wx/uwp/ole/activex.h
-    wx/uwp/popupwin.h
-    wx/uwp/sound.h
-    wx/uwp/taskbar.h
-    wx/uwp/uxtheme.h
-
 UWP_SRC =
     src/uwp/control.cpp
     src/uwp/frame.cpp
@@ -2236,40 +2223,6 @@ UWP_HDR =
     wx/uwp/menuitem.h
     wx/uwp/control.h
     wx/uwp/frame.h
-
-UWP_RSC =
-    # Resources must be installed together with headers:
-    wx/uwp/wx.manifest
-    wx/uwp/wx_dpi_aware.manifest
-    wx/uwp/wx_dpi_aware_pmv2.manifest
-    wx/uwp/wx.rc
-    # bitmaps
-    wx/uwp/colours.bmp
-    wx/uwp/csquery.bmp
-    # cursors
-    wx/uwp/blank.cur
-    wx/uwp/bullseye.cur
-    wx/uwp/cross.cur
-    wx/uwp/hand.cur
-    wx/uwp/magnif1.cur
-    wx/uwp/pbrush.cur
-    wx/uwp/pencil.cur
-    wx/uwp/pntleft.cur
-    wx/uwp/pntright.cur
-    wx/uwp/roller.cur
-    # icons
-    wx/uwp/cdrom.ico
-    wx/uwp/child.ico
-    wx/uwp/computer.ico
-    wx/uwp/drive.ico
-    wx/uwp/file1.ico
-    wx/uwp/floppy.ico
-    wx/uwp/folder1.ico
-    wx/uwp/folder2.ico
-    wx/uwp/mdi.ico
-    wx/uwp/question.ico
-    wx/uwp/removble.ico
-    wx/uwp/std.ico
 
 # wxDFB
 

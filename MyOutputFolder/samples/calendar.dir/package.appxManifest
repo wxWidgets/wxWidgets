@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="80488D79-D206-3B7F-B3EB-6582BF6A430B" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="80488D79-D206-3B7F-B3EB-6582BF6A430B" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>calendar</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>calendar.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="calendar.exe" EntryPoint="calendar.App">
+			<uap:VisualElements
+				DisplayName="calendar"
+				Description="calendar"
+				BackgroundColor="#336699"
+				Square150x150Logo="calendar.dir\Logo.png"
+				Square44x44Logo="calendar.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="calendar.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"	xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	IgnorableNamespaces="uap mp">
+
+	<Identity Name="BA75FE50-CB86-31C5-A8F6-FA09C7729C33" Publisher="CN=CMake" Version="1.0.0.0" />
+	<mp:PhoneIdentity PhoneProductId="BA75FE50-CB86-31C5-A8F6-FA09C7729C33" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<Properties>
+		<DisplayName>webviewsample</DisplayName>
+		<PublisherDisplayName>CMake</PublisherDisplayName>
+		<Logo>webviewsample.dir\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="webviewsample.exe" EntryPoint="webviewsample.App">
+			<uap:VisualElements
+				DisplayName="webviewsample"
+				Description="webviewsample"
+				BackgroundColor="#336699"
+				Square150x150Logo="webviewsample.dir\Logo.png"
+				Square44x44Logo="webviewsample.dir\SmallLogo44x44.png">
+				<uap:SplashScreen Image="webviewsample.dir\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+</Package>
