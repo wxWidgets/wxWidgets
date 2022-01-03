@@ -2,7 +2,7 @@
 // Name:        wx/aui/tabartuwp.h
 // Purpose:     wxAuiUWPTabArt declaration
 // Author:      Yann Clotioloman Yéo
-// Created:     02/01/2020
+// Created:     02/01/2022
 // Copyright:   (c) 2015 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

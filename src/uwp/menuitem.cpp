@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/menuitem.cpp
+// Name:        src/uwp/menuitem.cpp
 // Purpose:     wxMenuItem implementation
-// Author:      Vadim Zeitlin
+// Author:      Yann Clotioloman Yéo
 // Modified by:
-// Created:     11.11.97
+// Created:     02/01/2022
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

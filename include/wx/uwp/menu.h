@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/menu.h
+// Name:        wx/uwp/menu.h
 // Purpose:     wxMenu, wxMenuBar classes
-// Author:      Julian Smart
-// Modified by: Vadim Zeitlin (wxMenuItem is now in separate file)
-// Created:     01/02/97
+// Author:      Yann Clotioloman Yéo
+// Modified by:
+// Created:     02/01/2022
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

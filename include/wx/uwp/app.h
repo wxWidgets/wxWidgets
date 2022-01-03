@@ -3,7 +3,7 @@
 // Purpose:     wxApp class
 // Author:      Yann Clotioloman Yéo
 // Modified by:
-// Created:     02/01/2020
+// Created:     02/01/2022
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

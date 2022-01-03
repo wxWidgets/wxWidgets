@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/control.cpp
+// Name:        src/uwp/control.cpp
 // Purpose:     wxControl class
-// Author:      Julian Smart
+// Author:      Yann Clotioloman Yéo
 // Modified by:
-// Created:     01/02/97
+// Created:     02/01/2022
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

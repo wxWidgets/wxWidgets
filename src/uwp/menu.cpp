@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/menu.cpp
 // Purpose:     wxMenu, wxMenuBar, wxMenuItem
-// Author:      Julian Smart
-// Modified by: Vadim Zeitlin
-// Created:     04/01/98
+// Author:      Yann Clotioloman Yéo
+// Modified by:
+// Created:     02/01/2022
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
