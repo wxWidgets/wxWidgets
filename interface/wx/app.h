@@ -1213,9 +1213,34 @@ public:
     wxIMPLEMENT_APP(MyApp);
     @endcode
 
-    @see wxDECLARE_APP()
+    @see wxDECLARE_APP(), wxIMPLEMENT_APP_CONSOLE()
 */
 #define wxIMPLEMENT_APP( className )
+
+/**
+    This macro defines the application entry point for non-GUI applications and
+    tells wxWidgets which application class should be used.
+
+    This macro is provided for symmetry with wxIMPLEMENT_APP() for the console
+    (non-GUI) applications and is equivalent to using wxIMPLEMENT_APP_NO_MAIN()
+    and wxIMPLEMENT_WXWIN_MAIN_CONSOLE().
+
+    The @a className passed to this macro must be a name of the class deriving
+    from wxApp.
+
+    Note that this macro requires a final semicolon.
+
+    @header{wx/app.h}
+
+    Example:
+
+    @code
+    wxIMPLEMENT_APP_CONSOLE(MyApp);
+    @endcode
+
+    @see wxIMPLEMENT_APP()
+*/
+#define wxIMPLEMENT_APP_CONSOLE( className )
 
 /**
     This macro defines the application entry point appropriate for the current
@@ -1234,6 +1259,23 @@ public:
     @header{wx/app.h}
  */
 #define wxIMPLEMENT_WXWIN_MAIN
+
+/**
+    This macro defines the application entry point for console applications.
+
+    This macro is provided mostly for symmetry with wxIMPLEMENT_WXWIN_MAIN()
+    but is less useful, as it is also simple enough to define @c main()
+    function directly.
+
+    Please note, however, that this macro, as well as wxIMPLEMENT_APP_CONSOLE()
+    which uses it, contains the call to wxDISABLE_DEBUG_SUPPORT() which
+    disables debugging code in release builds and that if you don't use this
+    macro, but define @c main() yourself, you probably want to call
+    wxDISABLE_DEBUG_SUPPORT() from it explicitly.
+
+    @header{wx/app.h}
+ */
+#define wxIMPLEMENT_WXWIN_MAIN_CONSOLE
 
 //@}
 
