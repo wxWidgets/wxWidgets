@@ -2129,6 +2129,16 @@ void wxCocoaDataViewControl::InitOutlineView(long style)
 
     if ( style & wxDV_NO_HEADER )
         [m_OutlineView setHeaderView:nil];
+
+    if (@available(macOS 11.0, *))
+    {
+        // TODO:
+        // The default value for this property is NSTableViewStyleAutomatic in macOS 11 and later.
+        // Apps that link to previous macOS versions default to NSTableViewStylePlain.
+
+        // Prior to Big Sur, the default intercellSpacing was (width = 3, height = 2), but on Big Sur it's (width = 17, height = 0). Big Sur really loves its whitespace!
+        [m_OutlineView setIntercellSpacing:NSMakeSize(3, 2)];
+    }
 }
 
 wxCocoaDataViewControl::~wxCocoaDataViewControl()
