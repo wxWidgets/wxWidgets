@@ -149,6 +149,8 @@ void wxGenericColourButton::UpdateColour()
     }
 
     dc.SelectObject( wxNullBitmap );
+
+    SetBitmapLabel( wxNullBitmap );
     SetBitmapLabel( m_bitmap );
 }
 
