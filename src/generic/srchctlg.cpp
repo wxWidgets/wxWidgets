@@ -1200,9 +1200,11 @@ void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )
     LayoutControls();
 }
 
-void wxSearchCtrl::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+void wxSearchCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 {
     RecalcBitmaps();
+
+    event.Skip();
 }
 
 #if wxUSE_MENUS

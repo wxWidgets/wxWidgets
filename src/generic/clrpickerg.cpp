@@ -120,10 +120,12 @@ void wxGenericColourButton::OnColourChanged(wxColourDialogEvent& ev)
     parent->ProcessWindowEvent(event);
 }
 
-void wxGenericColourButton::OnDPIChanged(wxDPIChangedEvent&WXUNUSED(event))
+void wxGenericColourButton::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_bitmap = wxBitmap(FromDIP(defaultBitmapSize));
     UpdateColour();
+
+    event.Skip();
 }
 
 void wxGenericColourButton::UpdateColour()

@@ -467,6 +467,8 @@ void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 
         SetColumnWidth(i, event.ScaleX(width));
     }
+
+    event.Skip();
 }
 
 bool wxListCtrl::IsDoubleBuffered() const

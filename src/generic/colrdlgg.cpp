@@ -278,13 +278,15 @@ void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
     PaintHighlight(dc, true);
 }
 
-void wxGenericColourDialog::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+void wxGenericColourDialog::OnDPIChanged(wxDPIChangedEvent& event)
 {
     CalculateMeasurements();
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     CreateCustomBitmaps();
 #endif
+
+    event.Skip();
 }
 
 void wxGenericColourDialog::CalculateMeasurements()

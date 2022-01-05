@@ -654,6 +654,8 @@ void wxSlider::OnDPIChanged(wxDPIChangedEvent& event)
     int thumbLen = GetThumbLength();
 
     SetThumbLength(event.ScaleX(thumbLen));
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

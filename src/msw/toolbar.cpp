@@ -1992,6 +1992,8 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
     // there are still minor but visible cosmetic problems when moving the
     // toolbar from 125% to 175% display.
     CallAfter(&wxToolBar::RealizeHelper);
+
+    event.Skip();
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
