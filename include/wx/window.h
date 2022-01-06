@@ -49,13 +49,6 @@
     #define wxUSE_MENUS_NATIVE wxUSE_MENUS
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 
-#if defined(__WXGTK3__) || defined(__WXMAC__)
-    #define wxHAS_DPI_INDEPENDENT_PIXELS
-
-    // This is an older synonym kept only for compatibility
-    #define wxHAVE_DPI_INDEPENDENT_PIXELS
-#endif
-
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
