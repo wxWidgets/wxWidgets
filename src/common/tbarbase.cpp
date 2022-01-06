@@ -475,7 +475,13 @@ void wxToolBarBase::AdjustToolBitmapSize()
         // use the size computed here, this would need to be revisited.
         sizePreferred /= GetContentScaleFactor();
 
-        if ( sizePreferred != sizeOrig )
+        // Increase the bitmap size to the preferred one, as the default bitmap
+        // size is small and using larger bitmaps shouldn't shrink them to it.
+        // However intentionally setting a size larger than the actual bitmap
+        // size should scale them up, as people sometimes want to use bigger
+        // buttons and this is how it used to behave before wxBitmapBundle
+        // introduction.
+        if ( sizePreferred.x > sizeOrig.x || sizePreferred.y > sizeOrig.y )
             SetToolBitmapSize(sizePreferred);
     }
 }
