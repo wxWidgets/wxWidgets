@@ -184,10 +184,12 @@ public:
     void UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
 
-    // provide stabs of scaled bitmaps functions, they are trivial here
+    // allow setting and storing the scale factor
     virtual void SetScaleFactor(double scale);
     virtual double GetScaleFactor() const;
 
+    // but scaled metrics accessors return the same thing as non-scaled ones,
+    // just as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
     double GetScaledWidth() const;
     double GetScaledHeight() const;
     wxSize GetScaledSize() const;

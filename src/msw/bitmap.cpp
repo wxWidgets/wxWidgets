@@ -1387,17 +1387,17 @@ double wxBitmap::GetScaleFactor() const
 
 double wxBitmap::GetScaledWidth() const
 {
-    return GetWidth() / GetScaleFactor();
+    return GetWidth();
 }
 
 double wxBitmap::GetScaledHeight() const
 {
-    return GetHeight() / GetScaleFactor();
+    return GetHeight();
 }
 
 wxSize wxBitmap::GetScaledSize() const
 {
-    return GetSize() / GetScaleFactor();
+    return GetSize();
 }
 
 // ----------------------------------------------------------------------------

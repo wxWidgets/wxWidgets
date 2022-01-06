@@ -190,6 +190,9 @@ public:
     virtual void SetScaleFactor(double scale);
     virtual double GetScaleFactor() const;
 
+    // These functions return the corresponding metrics divided by the scale
+    // factor on platforms with DPI-independent pixels (e.g. GTK, Mac) and just
+    // the same thing as the non-scaled accessors elsewhere (e.g. MSW).
     double GetScaledWidth() const;
     double GetScaledHeight() const;
     wxSize GetScaledSize() const;

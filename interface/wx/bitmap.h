@@ -609,12 +609,18 @@ public:
     /**
         Returns the scaled size of the bitmap.
 
-        The scaled size of the bitmap is its size in pixels, as returned by
+        For the platforms using DPI-independent pixels, i.e. those where @c
+        wxHAS_DPI_INDEPENDENT_PIXELS is defined, such as wxOSX or wxGTK 3,
+        this function returns the physical size of the bitmap, as returned by
         GetSize(), divided by its scale factor, as returned by
-        GetScaleFactor(), and so is the same as the normal size for bitmaps
-        with the default scale factor of 1 and always less than the physical
-        size for the higher resolution bitmaps supposed to be used on high DPI
-        screens.
+        GetScaleFactor(), while for the other platforms, it simply returns the
+        same thing as GetSize().
+
+        This ensures that the result of this function is always expressed in
+        the pixel coordinates appropriate for the current platform, i.e. its
+        return value is always in logical pixels, used for window and wxDC
+        coordinates, whether these pixels are the same as physical pixels,
+        which are returned by GetSize(), or not.
 
         @see GetScaledWidth(), GetScaledHeight(), GetSize()
 
