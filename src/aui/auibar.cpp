@@ -2384,9 +2384,11 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
     evt.Skip();
 }
 
-void wxAuiToolBar::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+void wxAuiToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
     Realize();
+
+    event.Skip();
 }
 
 void wxAuiToolBar::UpdateWindowUI(long flags)

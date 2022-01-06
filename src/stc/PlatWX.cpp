@@ -2940,7 +2940,7 @@ void wxSTCListBox::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     GetParent()->Refresh();
 }
 
-void wxSTCListBox::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+void wxSTCListBox::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_imagePadding = FromDIP(1);
     m_textBoxToTextGap = FromDIP(3);
@@ -2950,6 +2950,8 @@ void wxSTCListBox::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
     GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
 
     RecalculateItemHeight();
+
+    event.Skip();
 }
 
 void wxSTCListBox::OnMouseLeaveWindow(wxMouseEvent& event)

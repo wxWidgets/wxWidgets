@@ -1360,11 +1360,13 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
     }
 }
 
-void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
 {
     m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
     CalculateFontAndBitmapStuff(m_vspacing);
     Refresh();
+
+    event.Skip();
 }
 
 // -----------------------------------------------------------------------
