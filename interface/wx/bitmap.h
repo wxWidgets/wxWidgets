@@ -816,21 +816,6 @@ public:
         When creating a new bitmap, CreateScaled() can be used to specify the
         correct scale factor from the beginning.
 
-        Note that this method exists in all ports, but simply does nothing in
-        those of them that don't use logical pixel scaling. The preprocessor
-        symbol @c wxHAS_BITMAP_SCALE_FACTOR can be tested to determine whether
-        the scale factor is really supported, e.g.
-
-        @code
-            bitmap.SetScaleFactor(2);
-
-            // In the other ports scale factor is always 1, so the assert would
-            // fail there.
-            #ifdef wxHAS_BITMAP_SCALE_FACTOR
-                wxASSERT( bitmap.GetScaleFactor() == 2 );
-            #endif
-        @endcode
-
         @since 3.1.6
      */
     virtual void SetScaleFactor(double scale);

@@ -13,8 +13,6 @@
 
 #include "wx/palette.h"
 
-#define wxHAS_BITMAP_SCALE_FACTOR
-
 // Bitmap
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class wxBitmapRefData ;

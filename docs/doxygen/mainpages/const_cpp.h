@@ -167,9 +167,6 @@ Currently the following symbols exist:
     have an efficient (CPU-specific) implementation. Notice that the functions
     themselves are always available but can be prohibitively slow to use when
     implemented in a generic way, using a critical section.}
-@itemdef{wxHAS_BITMAP_SCALE_FACTOR, Defined in @c wx/bitmap.h if bitmaps
-    actually use scale factor under the current platform, see
-    wxBitmap::SetScaleFactor().}
 @itemdef{wxHAS_BITMAPTOGGLEBUTTON, Defined in @c wx/tglbtn.h if
     wxBitmapToggleButton class is available in addition to wxToggleButton.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
