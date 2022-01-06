@@ -2867,7 +2867,7 @@ wxSize wxWindowBase::GetDPI() const
     return wxDisplay(static_cast<const wxWindow*>(this)).GetPPI();
 }
 
-#ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
 
 namespace
 {
@@ -2910,7 +2910,7 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
     return wxRescaleCoord(sz).From(dpi).To(baseline);
 }
 
-#endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
 // Windows' computes dialog units using average character width over upper-
 // and lower-case ASCII alphabet and not using the average character width

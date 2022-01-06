@@ -489,7 +489,7 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     SetBackgroundImage(wxNullBitmap);
 
     double pixelScale = 1.0;
-#ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
     pixelScale = GetDPIScaleFactor();
 #endif
 
