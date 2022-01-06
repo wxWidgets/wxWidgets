@@ -220,6 +220,11 @@ double wxBitmapBase::GetScaleFactor() const
     return 1.0;
 }
 
+wxSize wxBitmapBase::GetDIPSize() const
+{
+    return GetSize() / GetScaleFactor();
+}
+
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
 
 double wxBitmapBase::GetScaledWidth() const

@@ -542,6 +542,22 @@ public:
     virtual int GetDepth() const;
 
     /**
+        Returns the size of bitmap in DPI-independent units.
+
+        This assumes that the bitmap was created using the value of scale
+        factor corresponding to the current DPI (see CreateScaled() and
+        SetScaleFactor()) and returns its physical size divided by this scale
+        factor.
+
+        Unlike GetScaledSize(), this function returns the same value under all
+        platforms and so its result should @e not be used as window or device
+        context coordinates.
+
+        @since 3.1.6
+     */
+    wxSize GetDIPSize() const;
+
+    /**
         Returns the static list of bitmap format handlers.
 
         @see wxBitmapHandler

@@ -193,7 +193,7 @@ private:
         // necessary, so use GetScaledSize() and not GetSize().
         const wxBitmap bitmap = wxArtProvider::GetBitmap(id, client);
         if ( bitmap.IsOk() )
-            return bitmap.GetScaledSize();
+            return bitmap.GetDIPSize();
 
         // We really need some default size, so just return this hardcoded
         // value if all else fails -- what else can we do.

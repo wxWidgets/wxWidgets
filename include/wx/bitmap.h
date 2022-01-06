@@ -186,9 +186,15 @@ public:
     wxSize GetSize() const
         { return wxSize(GetWidth(), GetHeight()); }
 
-    // support for scaled bitmaps
+    // Store or return the scale factor, which determines the ratio between the
+    // bitmap physical size and its DIP size (on all platforms). By default
+    // it's just 1.
     virtual void SetScaleFactor(double scale);
     virtual double GetScaleFactor() const;
+
+    // This function returns the size divided by the scale factor, so that a
+    // 64x64 bitmap with a scale factor of 2 has DIP size of 32x32 everywhere.
+    wxSize GetDIPSize() const;
 
     // These functions return the corresponding metrics divided by the scale
     // factor on platforms with DPI-independent pixels (e.g. GTK, Mac) and just
