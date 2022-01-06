@@ -187,9 +187,10 @@ public:
     // provide stabs of scaled bitmaps functions, they are trivial here
     virtual void SetScaleFactor(double scale);
     virtual double GetScaleFactor() const;
-    virtual double GetScaledWidth() const;
-    virtual double GetScaledHeight() const;
-    virtual wxSize GetScaledSize() const;
+
+    double GetScaledWidth() const;
+    double GetScaledHeight() const;
+    wxSize GetScaledSize() const;
 
     // implementation only from now on
     // -------------------------------

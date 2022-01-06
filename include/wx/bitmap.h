@@ -189,9 +189,10 @@ public:
     // support for scaled bitmaps
     virtual void SetScaleFactor(double scale);
     virtual double GetScaleFactor() const;
-    virtual double GetScaledWidth() const;
-    virtual double GetScaledHeight() const;
-    virtual wxSize GetScaledSize() const;
+
+    double GetScaledWidth() const;
+    double GetScaledHeight() const;
+    wxSize GetScaledSize() const;
 
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
