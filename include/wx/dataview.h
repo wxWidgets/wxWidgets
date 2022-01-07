@@ -1399,6 +1399,8 @@ public:
         { return GetStore()->GetNthChild(parent, pos); }
     int GetChildCount( const wxDataViewItem& parent ) const
         { return GetStore()->GetChildCount(parent); }
+    wxDataViewItem GetItemParent(wxDataViewItem item) const
+        { return GetStore()->GetParent(item); }
 
     void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const
