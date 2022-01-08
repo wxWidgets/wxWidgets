@@ -3287,6 +3287,8 @@ public:
 
     /**
         Returns the item's parent.
+
+        @since 3.1.6
     */
     wxDataViewItem GetItemParent(wxDataViewItem item) const;
 
