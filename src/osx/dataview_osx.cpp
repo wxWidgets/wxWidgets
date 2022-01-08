@@ -73,8 +73,26 @@ public:
   virtual bool Cleared() wxOVERRIDE;
   virtual void Resort() wxOVERRIDE;
 
- // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
-  void AdjustAutosizedColumns();
+  // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data, does nothing if the
+  // control is frozen but remember it for later
+  void AdjustAutosizedColumns()
+  {
+    if (!m_DataViewCtrlPtr->IsFrozen())
+      DoAdjustAutosizedColumns();
+    else
+      m_needsAdjustmentOnThaw = true;
+  }
+
+  // called by the control when it is thawed to adjust the columns if necessary
+  void OnThaw()
+  {
+    if (m_needsAdjustmentOnThaw)
+    {
+      DoAdjustAutosizedColumns();
+
+      m_needsAdjustmentOnThaw = false;
+    }
+  }
 
 protected:
  // if the dataview control can have a variable row height this method sets the dataview's control row height of
@@ -84,7 +102,15 @@ protected:
   void AdjustRowHeights(wxDataViewItemArray const& items);
 
 private:
+  // adjust the columns unconditionally
+  void DoAdjustAutosizedColumns();
+
   wxDataViewCtrl* m_DataViewCtrlPtr;
+
+  // This is set to true only if AdjustAutosizedColumns() is called while the
+  // control is frozen and in this case OnThaw() readjusts the columns when it
+  // is thawed.
+  bool m_needsAdjustmentOnThaw;
 };
 
 //
@@ -95,6 +121,8 @@ wxOSXDataViewModelNotifier::wxOSXDataViewModelNotifier(wxDataViewCtrl* initDataV
 {
   if (initDataViewCtrlPtr == NULL)
     wxFAIL_MSG("Pointer to dataview control must not be NULL");
+
+  m_needsAdjustmentOnThaw = false;
 }
 
 bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataViewItem const& item)
@@ -297,7 +325,7 @@ void wxOSXDataViewModelNotifier::AdjustRowHeights(wxDataViewItemArray const& ite
   }
 }
 
-void wxOSXDataViewModelNotifier::AdjustAutosizedColumns()
+void wxOSXDataViewModelNotifier::DoAdjustAutosizedColumns()
 {
   unsigned count = m_DataViewCtrlPtr->GetColumnCount();
   for ( unsigned col = 0; col < count; col++ )
@@ -701,6 +729,14 @@ void wxDataViewCtrl::AdjustAutosizedColumns() const
 {
   if ( m_ModelNotifier )
     m_ModelNotifier->AdjustAutosizedColumns();
+}
+
+void wxDataViewCtrl::DoThaw()
+{
+    if ( m_ModelNotifier )
+        m_ModelNotifier->OnThaw();
+
+    wxDataViewCtrlBase::DoThaw();
 }
 
 /*static*/
