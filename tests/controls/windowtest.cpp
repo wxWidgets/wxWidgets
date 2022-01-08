@@ -26,6 +26,7 @@
 #include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 #include "wx/tooltip.h"
+#include "wx/wupdlock.h"
 
 class WindowTestCase
 {
@@ -53,24 +54,42 @@ protected:
     wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
 
-TEST_CASE_METHOD(WindowTestCase, "Window::ShowHideEvent", "[window]")
-{
 #if defined(__WXMSW__)
-    EventCounter show(m_window, wxEVT_SHOW);
 
-    CHECK(m_window->IsShown());
+static void DoTestShowHideEvent(wxWindow* window)
+{
+    EventCounter show(window, wxEVT_SHOW);
 
-    m_window->Show(false);
+    CHECK(window->IsShown());
 
-    CHECK(!m_window->IsShown());
+    window->Show(false);
 
-    m_window->Show();
+    CHECK(!window->IsShown());
 
-    CHECK(m_window->IsShown());
+    window->Show();
+
+    CHECK(window->IsShown());
 
     CHECK( show.GetCount() == 2 );
-#endif // __WXMSW__
 }
+
+TEST_CASE_METHOD(WindowTestCase, "Window::ShowHideEvent", "[window]")
+{
+    SECTION("Normal window")
+    {
+        DoTestShowHideEvent(m_window);
+    }
+
+    SECTION("Frozen window")
+    {
+        wxWindowUpdateLocker freeze(m_window->GetParent() );
+        REQUIRE( m_window->IsFrozen() );
+
+        DoTestShowHideEvent(m_window);
+    }
+}
+
+#endif // __WXMSW__
 
 TEST_CASE_METHOD(WindowTestCase, "Window::KeyEvent", "[window]")
 {

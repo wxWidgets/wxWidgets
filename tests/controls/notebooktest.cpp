@@ -18,6 +18,7 @@
 
 #include "wx/notebook.h"
 #include "wx/scopedptr.h"
+#include "wx/wupdlock.h"
 
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
@@ -118,6 +119,130 @@ void NotebookTestCase::NoEventsOnDestruction()
     CHECK( m_numPageChanges == 1 );
 }
 
+// Unfortunately currently wxMSW is the only port in which wxEVT_SHOW events
+// are generated for the notebook pages as expected.
+#ifdef __WXMSW__
+    #define wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+#endif
+
+#ifdef wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+
+enum EvtShowState
+{
+    // According to the last wxEVT_SHOW notification, ...
+    EvtShowState_Hidden,  // ... the window has been hidden
+    EvtShowState_Shown    // ... the window has been shown
+};
+
+class NotebookPage : public wxPanel
+{
+public:
+    NotebookPage(wxWindow *parent, wxWindowID id = wxID_ANY);
+
+    // Returns the current display state (shown or hidden) according to
+    // the last wxEVT_SHOW notification received.
+    EvtShowState GetEvtShowState() const { return m_evtShowState; }
+
+protected:
+    void OnShow(wxShowEvent& event);
+
+    EvtShowState m_evtShowState;
+};
+
+NotebookPage::NotebookPage(wxWindow *parent, wxWindowID id)
+    : wxPanel(parent, id)
+{
+    // Windows that are not derived from wxTopLevelWindow are
+    // by default created in the shown state.
+    m_evtShowState = EvtShowState_Shown;
+
+    Bind(wxEVT_SHOW, &NotebookPage::OnShow, this);
+}
+
+void NotebookPage::OnShow(wxShowEvent& event)
+{
+    m_evtShowState = event.IsShown() ? EvtShowState_Shown
+                                     : EvtShowState_Hidden;
+
+    event.Skip();
+}
+
+#else // !wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+
+typedef wxPanel NotebookPage;
+
+#endif // wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+
+static void DoTestAddPageEvents(wxNotebook* notebook)
+{
+    EventCounter countPageChanging(notebook, wxEVT_NOTEBOOK_PAGE_CHANGING);
+    EventCounter countPageChanged(notebook, wxEVT_NOTEBOOK_PAGE_CHANGED);
+
+    // Add the first page, it is special.
+    NotebookPage* page1 = new NotebookPage(notebook);
+    notebook->AddPage(page1, "Initial page");
+
+    // The selection should have been changed.
+    CHECK( notebook->GetSelection() == 0 );
+
+    // But no events should have been generated.
+    CHECK( countPageChanging.GetCount() == 0 );
+    CHECK( countPageChanged.GetCount() == 0 );
+
+#ifdef wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+    CHECK( page1->GetEvtShowState() == EvtShowState_Shown );
+#endif // wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+
+
+    // Add another page without selecting it.
+    NotebookPage* page2 = new NotebookPage(notebook);
+    notebook->AddPage(page2, "Unselected page");
+
+    // Selection shouldn't have changed.
+    CHECK( notebook->GetSelection() == 0 );
+
+    // And no events should have been generated, of course.
+    CHECK( countPageChanging.GetCount() == 0 );
+    CHECK( countPageChanged.GetCount() == 0 );
+
+#ifdef wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+    CHECK( page1->GetEvtShowState() == EvtShowState_Shown );
+    CHECK( page2->GetEvtShowState() == EvtShowState_Hidden );
+#endif // wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+
+
+    // Finally add another page and do select it.
+    NotebookPage* page3 = new NotebookPage(notebook);
+    notebook->AddPage(page3, "Selected page", true);
+
+    // It should have become selected.
+    CHECK( notebook->GetSelection() == 2 );
+
+    // And events for the selection change should have been generated.
+    CHECK( countPageChanging.GetCount() == 1 );
+    CHECK( countPageChanged.GetCount() == 1 );
+
+#ifdef wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+    CHECK( page1->GetEvtShowState() == EvtShowState_Hidden );
+    CHECK( page2->GetEvtShowState() == EvtShowState_Hidden );
+    CHECK( page3->GetEvtShowState() == EvtShowState_Shown );
+#endif // wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+
+
+    // Change the selection to the first page.
+    notebook->SetSelection(0);
+
+    // And events for the selection change should have been generated.
+    CHECK( countPageChanging.GetCount() == 2 );
+    CHECK( countPageChanged.GetCount() == 2 );
+
+#ifdef wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+    CHECK( page1->GetEvtShowState() == EvtShowState_Shown );
+    CHECK( page2->GetEvtShowState() == EvtShowState_Hidden );
+    CHECK( page3->GetEvtShowState() == EvtShowState_Hidden );
+#endif // wxHAS_WORKING_SHOW_EVENTS_FOR_NOTEBOOK_PAGES
+}
+
 TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
 {
     wxNotebook* const
@@ -127,40 +252,18 @@ TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
 
     CHECK( notebook->GetSelection() == wxNOT_FOUND );
 
-    EventCounter countPageChanging(notebook, wxEVT_NOTEBOOK_PAGE_CHANGING);
-    EventCounter countPageChanged(notebook, wxEVT_NOTEBOOK_PAGE_CHANGED);
+    SECTION("Normal notebook")
+    {
+        DoTestAddPageEvents(notebook);
+    }
 
-    // Add the first page, it is special.
-    notebook->AddPage(new wxPanel(notebook), "Initial page");
+    SECTION("Frozen notebook")
+    {
+        wxWindowUpdateLocker noUpdates(notebook);
+        REQUIRE( notebook->IsFrozen() );
 
-    // The selection should have been changed.
-    CHECK( notebook->GetSelection() == 0 );
-
-    // But no events should have been generated.
-    CHECK( countPageChanging.GetCount() == 0 );
-    CHECK( countPageChanged.GetCount() == 0 );
-
-
-    // Add another page without selecting it.
-    notebook->AddPage(new wxPanel(notebook), "Unselected page");
-
-    // Selection shouldn't have changed.
-    CHECK( notebook->GetSelection() == 0 );
-
-    // And no events should have been generated, of course.
-    CHECK( countPageChanging.GetCount() == 0 );
-    CHECK( countPageChanged.GetCount() == 0 );
-
-
-    // Finally add another page and do select it.
-    notebook->AddPage(new wxPanel(notebook), "Selected page", true);
-
-    // It should have become selected.
-    CHECK( notebook->GetSelection() == 2 );
-
-    // And events for the selection change should have been generated.
-    CHECK( countPageChanging.GetCount() == 1 );
-    CHECK( countPageChanged.GetCount() == 1 );
+        DoTestAddPageEvents(notebook);
+    }
 }
 
 #endif //wxUSE_NOTEBOOK
