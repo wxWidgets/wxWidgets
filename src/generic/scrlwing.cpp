@@ -561,6 +561,12 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
     {
         m_targetWindow->ScrollWindow(dx, dy, GetScrollRect());
     }
+#ifdef __WXUNIVERSAL__
+    if (m_win != m_targetWindow)
+    {
+        m_win->Refresh(true, GetScrollRect());
+    }
+#endif // __WXUNIVERSAL__
 }
 
 int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
