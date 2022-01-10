@@ -42,6 +42,10 @@
 #include "wx/fs_mem.h"
 #include "wx/stdpaths.h"
 
+#ifndef wxHAS_IMAGES_IN_RESOURCES
+    #include "../sample.xpm"
+#endif
+
 #if wxUSE_STC
 #include "wx/stc/stc.h"
 #else
