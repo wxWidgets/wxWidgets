@@ -52,11 +52,6 @@
 #include "wx/textctrl.h"
 #endif
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
-#include "stop.xpm"
-#include "refresh.xpm"
-#endif
-
 #include "wxlogo.xpm"
 
 
@@ -310,22 +305,31 @@ WebFrame::WebFrame(const wxString& url) :
 
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
 
-    // Create the toolbar
-    m_toolbar = CreateToolBar(wxTB_TEXT);
-    m_toolbar->SetToolBitmapSize(wxSize(32, 32));
+    long toolbarStyle = wxTB_TEXT;
 
-    wxBitmap back = wxArtProvider::GetBitmap(wxART_GO_BACK , wxART_TOOLBAR);
-    wxBitmap forward = wxArtProvider::GetBitmap(wxART_GO_FORWARD , wxART_TOOLBAR);
-    #ifdef __WXGTK__
-        wxBitmap stop = wxArtProvider::GetBitmap("gtk-stop", wxART_TOOLBAR);
-    #else
-        wxBitmap stop = wxBitmap(stop_xpm);
-    #endif
-    #ifdef __WXGTK__
-        wxBitmap refresh = wxArtProvider::GetBitmap("gtk-refresh", wxART_TOOLBAR);
-    #else
-        wxBitmap refresh = wxBitmap(refresh_xpm);
-    #endif
+    wxBitmapBundle back;
+    wxBitmapBundle forward;
+    wxBitmapBundle stop;
+    wxBitmapBundle refresh;
+    wxBitmapBundle wxlogo;
+
+    // Create the toolbar
+#ifdef wxHAS_SVG
+    wxSize sizeBitmap = wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR);
+
+    if ( !sizeBitmap.IsFullySpecified() )
+        sizeBitmap.Set(32, 32);
+
+    back    = wxBitmapBundle::FromSVGFile("webview_back.svg", sizeBitmap);
+    forward = wxBitmapBundle::FromSVGFile("webview_forward.svg", sizeBitmap);
+    stop    = wxBitmapBundle::FromSVGFile("webview_stop.svg", sizeBitmap);
+    refresh = wxBitmapBundle::FromSVGFile("webview_refresh.svg", sizeBitmap);
+    wxlogo  = wxBitmapBundle::FromSVGFile("wxlogo.svg", sizeBitmap);
+#else
+     toolbarStyle |= wxTB_NOICONS;
+#endif
+
+    m_toolbar = CreateToolBar(toolbarStyle);
 
     m_toolbar_back = m_toolbar->AddTool(wxID_ANY, _("Back"), back);
     m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
@@ -333,7 +337,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
     m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, FromDIP(wxSize(400, -1)), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(m_url, _("URL"));
-    m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
+    m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxlogo);
 
     m_toolbar->Realize();
 

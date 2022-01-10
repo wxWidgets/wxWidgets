@@ -17,4 +17,14 @@
         </if>
     </exe>
 
+    <wx-data id="data">
+        <files>
+            webview_back.svg
+            webview_forward.svg
+            webview_refresh.svg
+            webview_stop.svg
+            wxlogo.svg
+        </files>
+    </wx-data>
+
 </makefile>
