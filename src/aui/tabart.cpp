@@ -248,9 +248,9 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wnd->FromDIP(4);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
-        tot_width -= m_activeCloseBmp.GetPreferredSizeFor(wnd).x;
+        tot_width -= m_activeCloseBmp.GetPreferredSizeFor(wnd).x / wnd->GetContentScaleFactor();
     if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
-        tot_width -= m_activeWindowListBmp.GetPreferredSizeFor(wnd).x;
+        tot_width -= m_activeWindowListBmp.GetPreferredSizeFor(wnd).x / wnd->GetContentScaleFactor();
 
     if (tab_count > 0)
     {
