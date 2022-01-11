@@ -335,10 +335,15 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
 {
     wxString dataFile;
 
+    // wxObjectDataPtr ctor takes ownership of raw pointer, so compensate
+    // DecRef() that will be done in its dtor.
+    IncRef();
+    const wxWebRequestImplPtr request(this);
+
     const wxWebResponseImplPtr& response = GetResponse();
 
     wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
-                          wxWebResponse(response), failMsg);
+                          wxWebRequest(request), wxWebResponse(response), failMsg);
 
     bool release = false;
     switch ( state )
