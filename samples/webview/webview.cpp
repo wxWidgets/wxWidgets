@@ -304,24 +304,32 @@ WebFrame::WebFrame(const wxString& url) :
     EnableFullScreenView(); // Enable native fullscreen API on macOS
 
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
+
     long toolbarStyle = wxTB_TEXT;
 
-    // Create the toolbar
-#ifndef wxHAS_SVG
-    toolbarStyle |= wxTB_NOICONS;
-#endif
-    m_toolbar = CreateToolBar(toolbarStyle);
+    wxBitmapBundle back;
+    wxBitmapBundle forward;
+    wxBitmapBundle stop;
+    wxBitmapBundle refresh;
+    wxBitmapBundle wxlogo;
 
+    // Create the toolbar
+#ifdef wxHAS_SVG
     wxSize sizeBitmap = wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR);
 
     if ( !sizeBitmap.IsFullySpecified() )
         sizeBitmap.Set(32, 32);
 
-    wxBitmapBundle back    = wxBitmapBundle::FromSVGFile("webview_back.svg", sizeBitmap);
-    wxBitmapBundle forward = wxBitmapBundle::FromSVGFile("webview_forward.svg", sizeBitmap);
-    wxBitmapBundle stop    = wxBitmapBundle::FromSVGFile("webview_stop.svg", sizeBitmap);
-    wxBitmapBundle refresh = wxBitmapBundle::FromSVGFile("webview_refresh.svg", sizeBitmap);
-    wxBitmapBundle wxlogo  = wxBitmapBundle::FromSVGFile("wxlogo.svg", sizeBitmap);
+    back    = wxBitmapBundle::FromSVGFile("webview_back.svg", sizeBitmap);
+    forward = wxBitmapBundle::FromSVGFile("webview_forward.svg", sizeBitmap);
+    stop    = wxBitmapBundle::FromSVGFile("webview_stop.svg", sizeBitmap);
+    refresh = wxBitmapBundle::FromSVGFile("webview_refresh.svg", sizeBitmap);
+    wxlogo  = wxBitmapBundle::FromSVGFile("wxlogo.svg", sizeBitmap);
+#else
+     toolbarStyle |= wxTB_NOICONS;
+#endif
+
+    m_toolbar = CreateToolBar(toolbarStyle);
 
     m_toolbar_back = m_toolbar->AddTool(wxID_ANY, _("Back"), back);
     m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
