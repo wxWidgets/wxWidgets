@@ -384,6 +384,42 @@ If both specifications are provided, then @c stock_id is used if it is
 recognized by wxArtProvider and the provided bitmap file is used as a fallback.
 
 
+@subsection overview_xrcformat_type_bitmaps Multi-resolution bitmap
+
+BitmapBundle properties contain specification of a set of bitmaps or SVG file,
+which are mutually exclusive.
+Example with a set of bitmaps:
+@code
+<bitmaps>
+    <bitmap>new.png</bitmap>
+    <bitmap>new_2x.png</bitmap>
+</bitmaps>
+@endcode
+While using SVG file you also should specify @c size,
+because usually SVG file doesn't have it:
+@code
+<bitmaps>
+    <svg>new.svg</svg>
+    <size>16,16</size>
+</bitmaps>
+@endcode
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Adds a new bitmap to BitmapBundle. Unlike normal object properties,
+    @c bitmap may be used more than once to add multiple bitmaps.
+    Mutually exclusive with @c svg.}
+@row3col{svg, @ref overview_xrcformat_type_url,
+    SVG file to create BitmapBundle. Require @c size.
+    Mutually exclusive with @c bitmap.}
+@row3col{size, @ref overview_xrcformat_type_size,
+    The default size to return from GetDefaultSize() for this bundle.
+    As SVG images usually don't have any natural default size,
+    it should be provided when creating the bundle with @c svg.}
+@endTable
+
+
 @subsection overview_xrcformat_type_style Style
 
 Style properties (such as window's style or sizer flags) use syntax similar to
@@ -876,7 +912,9 @@ Example:
 @row3col{label, @ref overview_xrcformat_type_text,
     Label to display on the button (may be omitted if only the bitmap or stock ID is used).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to display in the button (optional).}
+    Bitmap to display in the button (optional). Mutually exclusive with @c bitmaps.}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+    BitmapBundle to display in the button (optional). Mutually exclusive with @c bitmap.}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
     Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT).}
 @row3col{default, @ref overview_xrcformat_type_bool,
@@ -1003,7 +1041,9 @@ just as @ref xrc_wxbutton wxButton.
 @row3col{note, @ref overview_xrcformat_type_text,
     Second line of text describing the action performed when the button is pressed (default: none).  }
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to display in the button (optional).}
+    Bitmap to display in the button (optional). Mutually exclusive with @c bitmaps.}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+    BitmapBundle to display in the button (optional). Mutually exclusive with @c bitmap.}
 @row3col{default, @ref overview_xrcformat_type_bool,
     Should this button be the default button in dialog (default: 0)?}
 @endTable
@@ -2109,10 +2149,14 @@ child and the second one for right/bottom child window.
 
 @subsubsection xrc_wxstaticbitmap wxStaticBitmap
 
+wxStaticBitmap requires @c bitmap or @c bitmaps tag.
+
 @beginTable
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-     Bitmap to display (required).}
+     Bitmap to display. Mutually exclusive with @c bitmaps.}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+     BitmapBundle to display. Mutually exclusive with @c bitmap.}
 @endTable
 
 @subsubsection xrc_wxstaticbox wxStaticBox
@@ -2228,9 +2272,13 @@ properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Tool's bitmap (default: empty).}
+    Tool's bitmap (default: empty). Mutually exclusive with @c bitmaps.}
 @row3col{bitmap2, @ref overview_xrcformat_type_bitmap,
     Bitmap for disabled tool (default: derived from @c bitmap).}
+@row3col{bitmaps, @ref overview_xrcformat_type_bitmaps,
+    Tool's BitmapBundle. Mutually exclusive with @c bitmap.}
+@row3col{bitmaps2, @ref overview_xrcformat_type_bitmaps,
+    BitmapBundle for disabled tool (default: derived from @c bitmaps).}
 @row3col{label, @ref overview_xrcformat_type_text,
     Label to display on the tool (default: no label).}
 @row3col{radio, @ref overview_xrcformat_type_bool,

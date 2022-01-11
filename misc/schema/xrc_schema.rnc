@@ -469,6 +469,14 @@ t_bitmap     = t_url?,
                    attribute stock_client { t_identifier}?
                )?
 
+t_bitmaps    = (
+                    element bitmap {_, t_bitmap }+ |
+                    (
+                        element svg  {_, t_url } &
+                        element size {_, t_size }
+                    )
+                )
+
 t_font       = (
                    [xrc:p="o"] element size         {_, t_float }* &
                    [xrc:p="o"] element style        {_, ("normal" | "italic" | "slant") }* &
@@ -734,7 +742,10 @@ wxButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="o"] element label          {_, t_text }* &
-        [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"](
+           element bitmap {_, t_bitmap } |
+           element bitmaps {_, t_bitmaps }
+        )* &
         [xrc:p="o"] element bitmapposition {_, t_direction }* &
         [xrc:p="o"] element default        {_, t_bool }*
     }
@@ -816,7 +827,10 @@ wxCommandLinkButton =
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="o"] element note {_, t_text }* &
-        [xrc:p="o"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"](
+           element bitmap {_, t_bitmap } |
+           element bitmaps {_, t_bitmaps }
+        )* &
         [xrc:p="o"] element default {_, t_bool }*
     }
 
@@ -1548,7 +1562,10 @@ wxStaticBitmap =
         attribute class { "wxStaticBitmap" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
-        element bitmap {_, t_bitmap }
+        (
+            element bitmap {_, t_bitmap } |
+            element bitmaps  {_, t_bitmaps }
+        )
     }
 
 
@@ -1633,8 +1650,16 @@ wxToolBar_tool =
     element object {
         attribute class { "tool" } &
         stdObjectNodeAttributes &
-        [xrc:p="important"] element bitmap {_, t_bitmap }* &
-        [xrc:p="o"] element bitmap2  {_, t_bitmap }* &
+        (
+            (
+                [xrc:p="important"] element bitmap {_, t_bitmap }* &
+                [xrc:p="o"] element bitmap2  {_, t_bitmap }*
+            ) |
+            (
+                [xrc:p="important"] element bitmaps {_, t_bitmaps }* &
+                [xrc:p="o"] element bitmaps2  {_, t_bitmaps }*
+            )
+        ) &
         [xrc:p="o"] element label    {_, t_text }* &
         [xrc:p="o"] element tooltip  {_, t_text }* &
         [xrc:p="o"] element longhelp {_, t_text }* &
