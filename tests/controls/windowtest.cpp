@@ -54,8 +54,6 @@ protected:
     wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
 
-#if defined(__WXMSW__)
-
 static void DoTestShowHideEvent(wxWindow* window)
 {
     EventCounter show(window, wxEVT_SHOW);
@@ -88,8 +86,6 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ShowHideEvent", "[window]")
         DoTestShowHideEvent(m_window);
     }
 }
-
-#endif // __WXMSW__
 
 TEST_CASE_METHOD(WindowTestCase, "Window::KeyEvent", "[window]")
 {
