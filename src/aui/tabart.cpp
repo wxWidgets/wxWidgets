@@ -703,7 +703,9 @@ wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
     // if there's a bitmap, add space for it
     if (bitmap.IsOk())
     {
-        const wxSize bitmapSize = bitmap.GetPreferredSizeFor(wnd);
+        // we need the correct size of the bitmap to be used on this window in
+        // logical dimensions for drawing
+        const wxSize bitmapSize = bitmap.GetPreferredSizeFor(wnd) / wnd->GetContentScaleFactor();
 
         // increase by bitmap plus right side bitmap padding
         tab_width += bitmapSize.x + wnd->FromDIP(3);
