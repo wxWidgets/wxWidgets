@@ -907,8 +907,6 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         }
     }
 
-    // then the calendar itself
-    dc.SetTextForeground(*wxBLACK);
     //dc.SetFont(*wxNORMAL_FONT);
 
     y += m_heightRow;
@@ -916,6 +914,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     // draw column with calendar week nr
     if ( HasFlag( wxCAL_SHOW_WEEK_NUMBERS ) && IsExposed( 0, y, m_calendarWeekWidth, m_heightRow * 6 ))
     {
+        dc.SetTextForeground(*wxBLACK);
         dc.SetBackgroundMode(wxTRANSPARENT);
         dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
@@ -929,6 +928,9 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             date += wxDateSpan::Week();
         }
     }
+
+    // then the calendar itself
+    dc.SetTextForeground(GetForegroundColour());
 
     wxDateTime date = GetStartDate();
 
