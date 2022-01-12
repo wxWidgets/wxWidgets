@@ -77,13 +77,13 @@ change is to just replace the pixel values with the values in DIP: for this,
 just use wxWindow::FromDIP() to convert from one to the other.
 
 For example, if you have the existing code:
-```cpp
+~~~{cpp}
 myFrame->SetClientSize(wxSize(400, 300));
-```
+~~~
 you can just replace it with
-```cpp
+~~~{cpp}
 myFrame->SetClientSize(myFrame->FromDIP(wxSize(400, 300)));
-```
+~~~
 
 Physical Pixels
 ---------------
