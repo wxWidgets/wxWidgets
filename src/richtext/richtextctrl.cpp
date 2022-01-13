@@ -987,7 +987,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         && (distance > 4)
 #endif
         // Don't select to the end of the container when going outside the window
-        // For analysis, see http://trac.wxwidgets.org/ticket/15714
+        // For analysis, see https://github.com/wxWidgets/wxWidgets/issues/15714
         && (! (hitObj == (& m_buffer) && ((hit & wxRICHTEXT_HITTEST_OUTSIDE) != 0)))
         )
     {

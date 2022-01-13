@@ -6,7 +6,7 @@ See [README](https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.6/docs/r
 
 ## Reporting Problems
 
-Please report bugs to the [issue tracker](http://trac.wxwidgets.org/newticket) or the [wx-users mailing list](http://groups.google.com/group/wx-users).
+Please report bugs to the [issue tracker](https://github.com/wxWidgets/wxWidgets/issues/new) or the [wx-users mailing list](http://groups.google.com/group/wx-users).
 
 ## Download Verification
 

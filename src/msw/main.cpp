@@ -303,7 +303,7 @@ void wxSetProcessDPIAware()
 // SetProcessDPIAware() call.
 //
 // Further discussion:
-//     http://trac.wxwidgets.org/ticket/16116
+//     https://github.com/wxWidgets/wxWidgets/issues/16116
 //     https://groups.google.com/d/topic/wx-dev/Z0VpgzCY34U/discussion
 bool gs_allowChangingDPIAwareness = true;
 

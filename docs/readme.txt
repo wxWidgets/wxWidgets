@@ -175,15 +175,11 @@ details.
 Bug reporting
 -------------
 
-The wxWidgets bug tracker can be browsed at:
+The wxWidgets bug tracker is at:
 
-    http://trac.wxwidgets.org/report
+    https://github.com/wxWidgets/wxWidgets/issues/
 
-and new bugs can be opened from
-
-    http://trac.wxwidgets.org/newticket
-
-Please use the search function of our Trac installation to find
+Please use the search function to find
 any possibly relevant bugs before reporting new ones. Also please
 notice that often trying to correct the bug yourself is the
 quickest way to fix it. Even if you fail to do it, you may
