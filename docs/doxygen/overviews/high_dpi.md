@@ -2,7 +2,7 @@ High DPI Support in wxWidgets       {#overview_high_dpi}
 =============================
 [TOC]
 
-Introduction
+Introduction                        {#high_dpi_intro}
 ============
 
 Many modern displays have way more pixels on the same surface than used to be
@@ -50,10 +50,10 @@ on high DPI displays is needed: one which allows to scale some pixel values
 drawing, which should remain unscaled to use the full available resolution).
 
 
-Pixel Values in wxWidgets
+Pixel Values in wxWidgets           {#high_dpi_pixel_types}
 =========================
 
-Logical and Device-Independent Pixels
+Logical and Device-Independent Pixels {#high_dpi_lp_and_dip}
 -------------------------------------
 
 Some systems like eg Apple's OSes automatically scale all the coordinates by
@@ -97,7 +97,7 @@ must be in logical pixels that can depend on the current DPI scaling, and so
 should never be fixed at compilation time.
 
 
-Physical Pixels
+Physical Pixels                     {#high_dpi_pp}
 ---------------
 
 In addition to (logical) pixels and DIPs discussed above, you may also need to
@@ -121,7 +121,7 @@ pixels first, but you can also do it directly, by using
 wxWindow::GetDPIScaleFactor(). This function can return a value different from
 1 even under MSW, i.e. it returns DPI scaling for physical display pixels.
 
-Summary of Different Pixel Kinds
+Summary of Different Pixel Kinds    {#high_dpi_pixel_conversions}
 --------------------------------
 
 Under MSW, logical pixels are always the same as physical pixels, but are
@@ -154,7 +154,7 @@ digraph Pixels
 @enddot
 
 
-High-Resolution Images and Artwork
+High-Resolution Images and Artwork  {#high_dpi_artwork}
 ==================================
 
 In order to benefit from the increased detail on High DPI devices you might want
@@ -168,7 +168,7 @@ sizes / resolutions.
 
 [comment]: # (TODO: API and Use Cases)
 
-Platform-Specific Build Issues
+Platform-Specific Build Issues      {#high_dpi_platform_specific}
 ==============================
 
 Generally speaking, all systems handle applications not specifically marked as
@@ -177,7 +177,7 @@ up, resulting in blurry graphics and fonts, but globally preserving the
 application appearance. For the best results, the application needs to be
 explicitly marked as DPI-aware in a platform-dependent way.
 
-MSW
+MSW                                 {#high_dpi_platform_msw}
 ---
 
 The behaviour of the application when running on a high-DPI display depends on
@@ -192,7 +192,7 @@ full, per-monitor DPI awareness supported by Windows 10 version 1703 or later.
 [1]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
 [2]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
 
-macOS
+macOS                               {#high_dpi_platform_mac}
 -----
 
 DPI-aware applications must set their `NSPrincipalClass` to `wxNSApplication`
