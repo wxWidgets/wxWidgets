@@ -138,6 +138,77 @@ wxArtProviderCache::ConstructHashID(const wxArtID& id,
             wxString::Format(wxT("%d-%d"), size.x, size.y);
 }
 
+// ----------------------------------------------------------------------------
+// wxBitmapBundleImplArt: uses art provider to get the bitmaps
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+class wxBitmapBundleImplArt : public wxBitmapBundleImpl
+{
+public:
+    wxBitmapBundleImplArt(const wxArtID& id,
+                          const wxArtClient& client,
+                          const wxSize& size)
+        : m_artId(id),
+          m_artClient(client),
+          m_sizeDefault(GetValidSize(id, client, size))
+    {
+    }
+
+    virtual wxSize GetDefaultSize() const wxOVERRIDE
+    {
+        return m_sizeDefault;
+    }
+
+    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE
+    {
+        // We have no preferred sizes.
+        return m_sizeDefault*scale;
+    }
+
+    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+    {
+        return wxArtProvider::GetBitmap(m_artId, m_artClient, size);
+    }
+
+private:
+    static wxSize GetValidSize(const wxArtID& id,
+                               const wxArtClient& client,
+                               const wxSize& size)
+    {
+        // If valid size is provided, just use it.
+        if ( size != wxDefaultSize )
+            return size;
+
+        // Otherwise, try to get the size we'd use without creating a bitmap
+        // immediately.
+        const wxSize sizeHint = wxArtProvider::GetSizeHint(client);
+        if ( sizeHint != wxDefaultSize )
+            return sizeHint;
+
+        // If we really have to, do create a bitmap just to get its size. Note
+        // we need the size in logical pixels here, it will be scaled later if
+        // necessary, so use GetScaledSize() and not GetSize().
+        const wxBitmap bitmap = wxArtProvider::GetBitmap(id, client);
+        if ( bitmap.IsOk() )
+            return bitmap.GetDIPSize();
+
+        // We really need some default size, so just return this hardcoded
+        // value if all else fails -- what else can we do.
+        return wxSize(16, 16);
+    }
+
+    const wxArtID m_artId;
+    const wxArtClient m_artClient;
+    const wxSize m_sizeDefault;
+
+    wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplArt);
+};
+
+} // anonymous namespace
+
 // ============================================================================
 // wxArtProvider class
 // ============================================================================
@@ -305,7 +376,7 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
 
     wxCHECK_MSG( sm_providers, wxNullBitmap, wxT("no wxArtProvider exists") );
 
-    wxString hashId = wxArtProviderCache::ConstructHashID(id, client);
+    wxString hashId = wxArtProviderCache::ConstructHashID(id, client, size);
 
     wxBitmapBundle bitmapbundle; // (DoGetIconBundle(id, client));
 
@@ -325,6 +396,12 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
     return bitmapbundle;
 }
 
+wxBitmapBundle wxArtProvider::CreateBitmapBundle(const wxArtID& id,
+                                                 const wxArtClient& client,
+                                                 const wxSize& size)
+{
+    return wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
+}
 
 /*static*/
 wxIconBundle wxArtProvider::GetIconBundle(const wxArtID& id, const wxArtClient& client)

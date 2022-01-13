@@ -71,7 +71,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_0
 
     WXHICON GetHICON() const { return (WXHICON)GetHandle(); }
-    bool InitFromHICON(WXHICON icon, int width, int height);
+    bool InitFromHICON(WXHICON icon, int width, int height, double scale = 1.0);
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no

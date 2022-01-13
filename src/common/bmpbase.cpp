@@ -220,6 +220,13 @@ double wxBitmapBase::GetScaleFactor() const
     return 1.0;
 }
 
+wxSize wxBitmapBase::GetDIPSize() const
+{
+    return GetSize() / GetScaleFactor();
+}
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+
 double wxBitmapBase::GetScaledWidth() const
 {
     return GetWidth() / GetScaleFactor();
@@ -234,6 +241,25 @@ wxSize wxBitmapBase::GetScaledSize() const
 {
     return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight()));
 }
+
+#else // !wxHAS_DPI_INDEPENDENT_PIXELS
+
+double wxBitmapBase::GetScaledWidth() const
+{
+    return GetWidth();
+}
+
+double wxBitmapBase::GetScaledHeight() const
+{
+    return GetHeight();
+}
+
+wxSize wxBitmapBase::GetScaledSize() const
+{
+    return GetSize();
+}
+
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS/!wxHAS_DPI_INDEPENDENT_PIXELS
 
 #endif // wxUSE_BITMAP_BASE
 

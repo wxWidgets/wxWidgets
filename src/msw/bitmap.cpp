@@ -499,6 +499,8 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
     int w = icon.GetWidth(),
         h = icon.GetHeight();
 
+    refData->m_scaleFactor = icon.GetScaleFactor();
+
     if ( iconInfo.hbmColor )
     {
         refData->m_width = w;
@@ -1366,18 +1368,26 @@ bool wxBitmap::InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth)
 // scale factor-related functions
 // ----------------------------------------------------------------------------
 
-// Note: currently we don't use scale factor at all and don't even store it
-// because this seems useless, but we define these functions out of line here
-// and not inline in the header to make it possible to change this later
-// without breaking ABI if necessary.
+// wxMSW doesn't really use scale factor, but we must still store it to use the
+// correct sizes in the code which uses it to decide on the bitmap size to use.
 
-void  wxBitmap::SetScaleFactor(double WXUNUSED(scale))
+void  wxBitmap::SetScaleFactor(double scale)
 {
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
+
+    GetBitmapData()->m_scaleFactor = scale;
 }
 
 double wxBitmap::GetScaleFactor() const
 {
-    return 1.0;
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
+
+    return GetBitmapData()->m_scaleFactor;
+}
+
+wxSize wxBitmap::GetDIPSize() const
+{
+    return GetSize() / GetScaleFactor();
 }
 
 double wxBitmap::GetScaledWidth() const

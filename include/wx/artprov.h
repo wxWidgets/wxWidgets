@@ -234,14 +234,11 @@ protected:
         return wxNullBitmap;
     }
 
-    // Derived classes must override CreateBitmapBundle if they provide
-    // a bundle that cannot be represented through an ordinary bitmap.
+    // Default implementation creates a wxBitmapBundle which returns the
+    // specified art resource in whichever size it is being asked for.
     virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
                                               const wxArtClient& client,
-                                              const wxSize& size)
-    {
-        return wxBitmapBundle(CreateBitmap(id, client, size));
-    }
+                                              const wxSize& size);
 
     virtual wxIconBundle CreateIconBundle(const wxArtID& WXUNUSED(id),
                                           const wxArtClient& WXUNUSED(client))

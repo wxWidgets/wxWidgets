@@ -1416,7 +1416,7 @@ public:
        For the platforms not doing any pixel mapping, i.e. where logical and
        physical pixels are one and the same, this function always returns 1.0
        and so using it is, in principle, unnecessary and could be avoided by
-       using preprocessor check for @c wxHAVE_DPI_INDEPENDENT_PIXELS @e not
+       using preprocessor check for @c wxHAS_DPI_INDEPENDENT_PIXELS @e not
        being defined, however using this function unconditionally under all
        platforms is usually simpler and so preferable.
 
@@ -1424,7 +1424,7 @@ public:
            3.0, but different from its behaviour in versions 3.1.0 to 3.1.3,
            where it returned the same value as GetDPIScaleFactor(). Please use
            the other function if you need to use a scaling factor greater than
-           1.0 even for the platforms without @c wxHAVE_DPI_INDEPENDENT_PIXELS,
+           1.0 even for the platforms without @c wxHAS_DPI_INDEPENDENT_PIXELS,
            such as wxMSW.
 
        @since 2.9.5

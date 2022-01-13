@@ -245,12 +245,12 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     m_fixedTabWidth = wnd->FromDIP(100);
 
-    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
+    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wnd->FromDIP(4);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
-        tot_width -= m_activeCloseBmp.GetPreferredSizeFor(wnd).x;
+        tot_width -= m_activeCloseBmp.GetPreferredSizeFor(wnd).x / wnd->GetContentScaleFactor();
     if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
-        tot_width -= m_activeWindowListBmp.GetPreferredSizeFor(wnd).x;
+        tot_width -= m_activeWindowListBmp.GetPreferredSizeFor(wnd).x / wnd->GetContentScaleFactor();
 
     if (tab_count > 0)
     {
@@ -258,12 +258,12 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     }
 
 
-    m_fixedTabWidth = wxMax(m_fixedTabWidth, wxWindow::FromDIP(100, NULL));
+    m_fixedTabWidth = wxMax(m_fixedTabWidth, wnd->FromDIP(100));
 
     if (m_fixedTabWidth > tot_width/2)
         m_fixedTabWidth = tot_width/2;
 
-    m_fixedTabWidth = wxMin(m_fixedTabWidth, wxWindow::FromDIP(220, NULL));
+    m_fixedTabWidth = wxMin(m_fixedTabWidth, wnd->FromDIP(220));
 
     m_tabCtrlHeight = tab_ctrl_size.y;
 }
@@ -703,7 +703,9 @@ wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
     // if there's a bitmap, add space for it
     if (bitmap.IsOk())
     {
-        const wxSize bitmapSize = bitmap.GetPreferredSizeFor(wnd);
+        // we need the correct size of the bitmap to be used on this window in
+        // logical dimensions for drawing
+        const wxSize bitmapSize = bitmap.GetPreferredSizeFor(wnd) / wnd->GetContentScaleFactor();
 
         // increase by bitmap plus right side bitmap padding
         tab_width += bitmapSize.x + wnd->FromDIP(3);
@@ -976,7 +978,7 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     m_fixedTabWidth = wnd->FromDIP(100);
 
-    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
+    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wnd->FromDIP(4);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
         tot_width -= m_activeCloseBmp.GetBitmapFor(wnd).GetScaledWidth();
@@ -989,12 +991,12 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     }
 
 
-    m_fixedTabWidth = wxMax(m_fixedTabWidth, wxWindow::FromDIP(100, NULL));
+    m_fixedTabWidth = wxMax(m_fixedTabWidth, wnd->FromDIP(100));
 
     if (m_fixedTabWidth > tot_width/2)
         m_fixedTabWidth = tot_width/2;
 
-    m_fixedTabWidth = wxMin(m_fixedTabWidth, wxWindow::FromDIP(220, NULL));
+    m_fixedTabWidth = wxMin(m_fixedTabWidth, wnd->FromDIP(220));
 }
 
 void wxAuiSimpleTabArt::SetColour(const wxColour& colour)

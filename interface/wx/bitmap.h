@@ -542,6 +542,22 @@ public:
     virtual int GetDepth() const;
 
     /**
+        Returns the size of bitmap in DPI-independent units.
+
+        This assumes that the bitmap was created using the value of scale
+        factor corresponding to the current DPI (see CreateScaled() and
+        SetScaleFactor()) and returns its physical size divided by this scale
+        factor.
+
+        Unlike GetScaledSize(), this function returns the same value under all
+        platforms and so its result should @e not be used as window or device
+        context coordinates.
+
+        @since 3.1.6
+     */
+    wxSize GetDIPSize() const;
+
+    /**
         Returns the static list of bitmap format handlers.
 
         @see wxBitmapHandler
@@ -604,23 +620,29 @@ public:
 
         @since 2.9.5
      */
-    virtual double GetScaledHeight() const;
+    double GetScaledHeight() const;
 
     /**
         Returns the scaled size of the bitmap.
 
-        The scaled size of the bitmap is its size in pixels, as returned by
+        For the platforms using DPI-independent pixels, i.e. those where @c
+        wxHAS_DPI_INDEPENDENT_PIXELS is defined, such as wxOSX or wxGTK 3,
+        this function returns the physical size of the bitmap, as returned by
         GetSize(), divided by its scale factor, as returned by
-        GetScaleFactor(), and so is the same as the normal size for bitmaps
-        with the default scale factor of 1 and always less than the physical
-        size for the higher resolution bitmaps supposed to be used on high DPI
-        screens.
+        GetScaleFactor(), while for the other platforms, it simply returns the
+        same thing as GetSize().
+
+        This ensures that the result of this function is always expressed in
+        the pixel coordinates appropriate for the current platform, i.e. its
+        return value is always in logical pixels, used for window and wxDC
+        coordinates, whether these pixels are the same as physical pixels,
+        which are returned by GetSize(), or not.
 
         @see GetScaledWidth(), GetScaledHeight(), GetSize()
 
         @since 2.9.5
      */
-    virtual wxSize GetScaledSize() const;
+    wxSize GetScaledSize() const;
 
     /**
         Returns the scaled width of the bitmap.
@@ -631,7 +653,7 @@ public:
 
         @since 2.9.5
      */
-    virtual double GetScaledWidth() const;
+    double GetScaledWidth() const;
 
     /**
         Returns the size of the bitmap in pixels.
@@ -809,21 +831,6 @@ public:
 
         When creating a new bitmap, CreateScaled() can be used to specify the
         correct scale factor from the beginning.
-
-        Note that this method exists in all ports, but simply does nothing in
-        those of them that don't use logical pixel scaling. The preprocessor
-        symbol @c wxHAS_BITMAP_SCALE_FACTOR can be tested to determine whether
-        the scale factor is really supported, e.g.
-
-        @code
-            bitmap.SetScaleFactor(2);
-
-            // In the other ports scale factor is always 1, so the assert would
-            // fail there.
-            #ifdef wxHAS_BITMAP_SCALE_FACTOR
-                wxASSERT( bitmap.GetScaleFactor() == 2 );
-            #endif
-        @endcode
 
         @since 3.1.6
      */

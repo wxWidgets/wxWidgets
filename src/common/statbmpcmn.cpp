@@ -101,7 +101,7 @@ wxSize wxStaticBitmapBase::DoGetBestSize() const
         //
         // Note that we can use content scale factor rather than DPI scale
         // because the scaled size is the same as normal size on platforms
-        // without wxHAVE_DPI_INDEPENDENT_PIXELS (e.g. wxMSW) anyhow.
+        // without wxHAS_DPI_INDEPENDENT_PIXELS (e.g. wxMSW) anyhow.
         const wxSize size = m_bitmapBundle.GetPreferredSizeFor(this);
         const double scale = GetContentScaleFactor();
 

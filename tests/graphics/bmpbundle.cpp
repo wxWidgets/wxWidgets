@@ -73,7 +73,7 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK( b.GetPreferredSizeAtScale(3   ) == 3*normal );
 }
 
-#ifdef wxHAS_BITMAP_SCALE_FACTOR
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
 
 TEST_CASE("BitmapBundle::Scaled", "[bmpbundle]")
 {
@@ -105,7 +105,7 @@ TEST_CASE("BitmapBundle::Scaled", "[bmpbundle]")
     CHECK( b.GetDefaultSize() == wxSize(32, 32) );
 }
 
-#endif // wxHAS_BITMAP_SCALE_FACTOR
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
 
 #ifdef wxHAS_SVG
 

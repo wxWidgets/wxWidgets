@@ -49,10 +49,6 @@
     #define wxUSE_MENUS_NATIVE wxUSE_MENUS
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 
-#if defined(__WXGTK3__) || defined(__WXMAC__)
-    #define wxHAVE_DPI_INDEPENDENT_PIXELS
-#endif
-
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -542,7 +538,7 @@ public:
 
     // Return the magnification of the content of this window for the platforms
     // using logical pixels different from physical ones, i.e. those for which
-    // wxHAVE_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
+    // wxHAS_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
     // returns 1, regardless of DPI scale factor returned by the function below.
     virtual double GetContentScaleFactor() const;
 
@@ -997,14 +993,14 @@ public:
         // horizontal and vertical directions, but this could, in principle,
         // change too, so prefer using the overloads taking wxPoint or wxSize.
 
-#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     static wxSize FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
     {
         return sz;
     }
 #else
     static wxSize FromDIP(const wxSize& sz, const wxWindowBase* w);
-#endif // wxHAVE_DPI_INDEPENDENT_PIXELS
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
     static wxPoint FromDIP(const wxPoint& pt, const wxWindowBase* w)
     {
         const wxSize sz = FromDIP(wxSize(pt.x, pt.y), w);
@@ -1019,14 +1015,14 @@ public:
     wxPoint FromDIP(const wxPoint& pt) const { return FromDIP(pt, this); }
     int FromDIP(int d) const { return FromDIP(d, this); }
 
-#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     static wxSize ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
     {
         return sz;
     }
 #else
     static wxSize ToDIP(const wxSize& sz, const wxWindowBase* w);
-#endif // wxHAVE_DPI_INDEPENDENT_PIXELS
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
     static wxPoint ToDIP(const wxPoint& pt, const wxWindowBase* w)
     {
         const wxSize sz = ToDIP(wxSize(pt.x, pt.y), w);
