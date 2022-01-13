@@ -157,16 +157,104 @@ digraph Pixels
 High-Resolution Images and Artwork  {#high_dpi_artwork}
 ==================================
 
-In order to benefit from the increased detail on High DPI devices you might want
+In order to really benefit from the increased detail on High DPI devices you need
 to provide the images or artwork your application uses in higher resolutions as
 well. Note that it is not recommended to just provide a high-resolution version
 and let the system scale that down on 1x displays. Apart from performance
-consideration also the quality might suffer, contours become more blurry.
+consideration also the quality might suffer, contours become more blurry, so
+for best results it is recommended to use the images that can be used without
+scaling at the common DPI values, i.e. at least 100% and 200% scaling. If you
+don't want providing several copies of all bitmaps, you can use a single
+vector image in [SVG format][1] instead.
 
-You can use vector based graphics like SVG or you can add the same image at different
-sizes / resolutions.
+[1]: https://en.wikipedia.org/wiki/Scalable_Vector_Graphics
 
-[comment]: # (TODO: API and Use Cases)
+In either case, you must use wxBitmapBundle class representing several
+different versions of the same bitmap (or even potentially just a single one,
+which makes it upwards-compatible with wxBitmap). Most functions accepting
+wxBitmap or wxImage in wxWidgets API have been updated to work with
+wxBitmapBundle instead, which allows the library to select the appropriate
+size depending on the current DPI and, for the platforms supporting it
+(currently only MSW and macOS), even update the bitmap automatically if the
+DPI changes, as can happen, for example, when the window showing the bitmap is
+moved to another monitor with a different resolution.
+
+Note that other than creating wxBitmapBundle instead of wxBitmap, no other
+changes are needed. Moreover, when upgrading the existing code it is possible
+to replace some wxBitmap objects by wxBitmapBundle while keeping the others.
+
+Using Multiple Bitmaps              {#high_dpi_bundle_bitmaps}
+----------------------
+
+When using multiple bitmaps, the simplest way to create a wxBitmapBundle is to
+do it from a vector of bitmaps of different sizes. In the most common case of
+just two bitmaps, a special constructor taking these bitmaps directly can be
+used rather than having to construct a vector from them:
+
+~~~{cpp}
+wxBitmap normal(32, 32);
+wxBitmap highDPI(64, 64);
+... initialize the bitmaps somehow ...
+wxBitmapBundle bundle(normal, bitmap);
+
+// Now the bundle can be passed to any wxWidgets control using bitmaps.
+~~~
+
+For the platforms where it is common to embed bitmaps in the resources, it is
+possible to use wxBitmapBundle::FromResources() to create a bundle containing
+all bitmaps using the given base name, i.e. `foo` for the normal bitmap and
+`foo_2x` for the bitmap for 200% scaling (for fractional values decimal
+separator must be replaced with underscore, e.g. use `foo_1_5x` for the bitmap
+to use 150% scaling).
+
+It is also possible to create wxBitmapBundle from the files using the same
+naming convention with wxBitmapBundle::FromFiles(). And, to abstract the
+differences between the platforms using resources and the other ones, a helper
+wxBITMAP_BUNDLE_2() macro which uses resources if possible or files otherwise
+is provided, similar to wxBITMAP_PNG() macro for plain bitmaps.
+
+Independently of the way in which the bundle was created, it will provide the
+bitmap closest in size to the expected size at the current DPI, while trying
+to avoid having scale it. This means that at 175% DPI scaling, for example,
+the high DPI (i.e. double-sized) bitmap will be used _without_ scaling rather
+than scaling it by 0.875, which almost certainly wouldn't look good. However
+if the current DPI scaling is 300%, the 2x bitmap will be scaled, if it's the
+closest one available, as using it without scaling would appear in bitmaps too
+small to use. The cut-off for the decision whether to scale bitmap or use an
+existing one without scaling is the factor of 1.5: if the mismatch between the
+required and closest available size is equal or greater than 1.5, the bitmap
+will be scaled. Otherwise it will be used in its natural size.
+
+If this behaviour is inappropriate for your application, it is also possible
+to define a custom wxBitmapBundle implementation, see wxBitmapBundleImpl for
+more details.
+
+Using Vector Graphics               {#high_dpi_bundle_vector}
+---------------------
+
+As an alternative to providing multiple versions of the bitmaps, it is
+possible to use a single SVG image and create the bitmap bundle using either
+wxBitmapBundle::FromSVG() or wxBitmapBundle::FromSVGFile(). Such bitmap
+bundles will always produce bitmaps of exactly the required size, at any
+resolution. At normal DPI, i.e. without any scaling, the size of the resulting
+bitmap will be the default bundle size, which must be provided when creating
+this kind of bitmap bundle, as SVG image itself doesn't necessarily contain
+this information.
+
+Note that wxWidgets currently uses [NanoSVG][1] library for SVG support and so
+doesn't support all SVG standard features and you may need to simplify or
+tweak the SVG files to make them appear correctly.
+
+[1]: https://github.com/memononen/nanosvg
+
+wxBitmapBundle and XRC              {#high_dpi_bundle_xrc}
+----------------------
+
+XRC format has been updated to allow specifying wxBitmapBundle with
+`<bitmaps>` tag in all the places where wxBitmap could be specified using
+`<bitmap>` before (of course, using the latter tag is still supported). Either
+multiple bitmaps or a single SVG image can be used.
+
 
 Platform-Specific Build Issues      {#high_dpi_platform_specific}
 ==============================
