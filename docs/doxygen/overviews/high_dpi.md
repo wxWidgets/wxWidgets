@@ -123,6 +123,16 @@ pixels first, but you can also do it directly, by using
 wxWindow::GetDPIScaleFactor(). This function can return a value different from
 1 even under MSW, i.e. it returns DPI scaling for physical display pixels.
 
+**Warning:** It is possible that conversion between different pixel
+coordinates is not lossless due to rounding. E.g. to create a window big
+enough to show a bitmap 15 pixels wide, you need to use `FromPhys(15)`,
+however the exact result of this function is not representable as an `int`
+when using 200% DPI scaling. In this case, the value is always rounded
+upwards, i.e. the function returns `8`, to ensure that a window of this size
+in logical pixels is always big enough to show the bitmap, but this can only
+be done at the price of having one "extra" pixel in the window.
+
+
 Summary of Different Pixel Kinds    {#high_dpi_pixel_conversions}
 --------------------------------
 
