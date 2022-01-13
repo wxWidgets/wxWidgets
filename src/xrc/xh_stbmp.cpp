@@ -33,7 +33,7 @@ wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 
     bmp->Create(m_parentAsWindow,
                 GetID(),
-                GetBitmapOrBitmaps(wxT("bitmap"), wxT("bitmaps"), wxART_OTHER, GetSize()),
+                GetBitmap(wxT("bitmap"), wxART_OTHER, GetSize()),
                 GetPosition(), GetSize(),
                 GetStyle(),
                 GetName());
