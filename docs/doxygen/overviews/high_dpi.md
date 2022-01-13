@@ -69,12 +69,13 @@ pixels**, abbreviated as "DIP", that are always of the same size on all
 displays and all platforms.
 
 Thus, the first thing do when preparing your application for high DPI support
-is to stop using raw pixel values. Actually, using any pixel values is not
-recommended and replacing them with the values based on the text metrics, i.e.
-obtained using wxWindow::GetTextExtent(), or expressing them in dialog units
-(see wxWindow::ConvertDialogToPixels()) is preferable. However the simplest
-change is to just replace the pixel values with the values in DIP: for this,
-just use wxWindow::FromDIP() to convert from one to the other.
+is to stop using raw pixel values, as they mean different things under
+different platforms when DPI scaling is used. Actually, using any pixel values
+is not recommended and replacing them with the values based on the text
+metrics, i.e. obtained using wxWindow::GetTextExtent(), or expressing them in
+dialog units (see wxWindow::ConvertDialogToPixels()) is preferable. However
+the simplest change is to just replace the pixel values with the values in
+DIP: for this, just use wxWindow::FromDIP() to convert from one to the other.
 
 For example, if you have the existing code:
 ~~~{cpp}
@@ -84,23 +85,73 @@ you can just replace it with
 ~~~{cpp}
 myFrame->SetClientSize(myFrame->FromDIP(wxSize(400, 300)));
 ~~~
+although replacing it with something like
+~~~{cpp}
+const wxSize sizeM = myFrame->GetTextExtent("M");
+myFrame->SetClientSize(100*sizeM.x, 40*sizeM.y));
+~~~
+might be even better.
+
+In any case, remember that window and wxDC or wxGraphicsContext coordinates
+must be in logical pixels that can depend on the current DPI scaling, and so
+should never be fixed at compilation time.
+
 
 Physical Pixels
 ---------------
 
 In addition to (logical) pixels and DIPs discussed above, you may also need to
 work in physical pixel coordinates, corresponding to the actual display pixels.
-Physical pixels are never scaled, on any platform, and must be used when
-drawing graphics elements to ensure that the best possible resolution is used.
-For example, all operations on wxGLCanvas use physical pixels.
+Physical pixels are never scaled, on any platform, and are used for the real
+bitmap sizes. They are also used for drawing operations on wxGLCanvas, which
+is _different_ from wxDC and wxGraphicsContext that use logical pixels.
 
-To convert between logical and physical pixels, you can use
-wxWindow::GetContentScaleFactor(): this is a value greater than or equal to 1,
-so a value in logical pixels needs to be multiplied by it in order to obtain
-the value in physical pixels.
+Under MSW physical pixels are same as logical ones, but when writing portable
+code you need to convert between logical and physical pixels using
+wxWindow::GetContentScaleFactor(): this function returns a value greater than
+or equal to 1 (and always just 1 under MSW), so a value in logical pixels
+needs to be multiplied by it in order to obtain the value in physical pixels.
 
 For example, in a wxGLCanvas created with the size of 100 (logical) pixels, the
-rightmost physical pixel coordinate will be `100*GetContentScaleFactor()`.
+rightmost physical pixel coordinate will be `100*GetContentScaleFactor()`
+under all platforms.
+
+You can convert from DIPs to physical pixels by converting DIPs to the logical
+pixels first, but you can also do it directly, by using
+wxWindow::GetDPIScaleFactor(). This function can return a value different from
+1 even under MSW, i.e. it returns DPI scaling for physical display pixels.
+
+Summary of Different Pixel Kinds
+--------------------------------
+
+Under MSW, logical pixels are always the same as physical pixels, but are
+different from DIPs, while under all the other platforms with DPI scaling
+support (currently only GTK 3 and macOS), logical pixels are the same as DIP,
+but different from physical pixels.
+
+However under all platforms the following functions can be used to convert
+between different kinds of pixels:
+
+* From DIP to logical pixels: use wxWindow::FromDIP() or wxWindow::ToDIP().
+* Logical pixels and physical pixels: multiply or divide by wxWindow::GetContentScaleFactor().
+* From DIP to physical pixels: multiply or divide by wxWindow::GetDPIScaleFactor().
+
+Or, in the diagram form:
+
+@dot
+digraph Pixels
+{
+    node [shape = hexagon, style = filled, fontname = Helvetica];
+
+    LP  [fillcolor = lightblue, label = "Logical\nPixels"];
+    DIP [fillcolor = yellow, label = "DI\nPixels"];
+    PP  [fillcolor = green, label = "Physical\nPixels"];
+
+    LP  -> PP [fontname = Helvetica, labeldistance = 5, labelangle = 30, dir = both, weight = 2, minlen = 3, label = "GetContentScaleFactor()", headlabel = "multiply by", taillabel = "divide by"];
+    LP -> DIP [fontname = Helvetica, labeldistance = 6, dir = both, weight = 2, minlen = 3, headlabel = "ToDIP()", taillabel = "FromDIP()"];
+    DIP -> PP [fontname = Helvetica, dir = both, minlen = 10, label = "GetDPIScaleFactor()" headlabel = "multiply by", taillabel = "divide by", constraint = false] ;
+}
+@enddot
 
 
 High-Resolution Images and Artwork
