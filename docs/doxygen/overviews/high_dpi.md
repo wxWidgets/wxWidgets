@@ -107,7 +107,9 @@ bitmap sizes. They are also used for drawing operations on wxGLCanvas, which
 is _different_ from wxDC and wxGraphicsContext that use logical pixels.
 
 Under MSW physical pixels are same as logical ones, but when writing portable
-code you need to convert between logical and physical pixels using
+code you need to convert between logical and physical pixels. This can be done
+using convenience wxWindow::FromPhys() and wxWindow::ToPhys() functions
+similar to the DIP functions above or by directly multiplying or dividing by
 wxWindow::GetContentScaleFactor(): this function returns a value greater than
 or equal to 1 (and always just 1 under MSW), so a value in logical pixels
 needs to be multiplied by it in order to obtain the value in physical pixels.
@@ -133,7 +135,7 @@ However under all platforms the following functions can be used to convert
 between different kinds of pixels:
 
 * From DIP to logical pixels: use wxWindow::FromDIP() or wxWindow::ToDIP().
-* Logical pixels and physical pixels: multiply or divide by wxWindow::GetContentScaleFactor().
+* From physical to logical pixels: use wxWindow::FromPhys() or wxWindow::ToPhys().
 * From DIP to physical pixels: multiply or divide by wxWindow::GetDPIScaleFactor().
 
 Or, in the diagram form:
@@ -147,7 +149,7 @@ digraph Pixels
     DIP [fillcolor = yellow, label = "DI\nPixels"];
     PP  [fillcolor = green, label = "Physical\nPixels"];
 
-    LP  -> PP [fontname = Helvetica, labeldistance = 5, labelangle = 30, dir = both, weight = 2, minlen = 3, label = "GetContentScaleFactor()", headlabel = "multiply by", taillabel = "divide by"];
+    LP  -> PP [fontname = Helvetica, labeldistance = 5, labelangle = 30, dir = both, weight = 2, minlen = 3, headlabel = "ToPhys()", taillabel = "FromPhys()"];
     LP -> DIP [fontname = Helvetica, labeldistance = 6, dir = both, weight = 2, minlen = 3, headlabel = "ToDIP()", taillabel = "FromDIP()"];
     DIP -> PP [fontname = Helvetica, dir = both, minlen = 10, label = "GetDPIScaleFactor()" headlabel = "multiply by", taillabel = "divide by", constraint = false] ;
 }
