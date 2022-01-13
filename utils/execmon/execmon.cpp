@@ -61,7 +61,7 @@ public:
         //    [Debug] date somefilename.pp(nnnn): assert "xxxxx" failed in yyyy
         // but then the assert dialog pop-ups and thus the app doesn't exit
         // FIXME: make assertion detection work also under other platforms
-        //        see https://trac.wxwidgets.org/ticket/10697
+        //        see https://github.com/wxWidgets/wxWidgets/issues/10697
         m_crashed = out.GetString().Contains("assert") ||
                     err.GetString().Contains("assert");
         m_exitCode = status;

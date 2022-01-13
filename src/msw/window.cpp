@@ -5075,7 +5075,7 @@ bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
     wxON_BLOCK_EXIT_SET(gs_insideCaptureChanged, false);
 
     // notify windows on the capture stack about lost capture
-    // (see http://sourceforge.net/tracker/index.php?func=detail&aid=1153662&group_id=9863&atid=109863):
+    // (see https://github.com/wxWidgets/wxWidgets/issues/21642)
     wxWindowBase::NotifyCaptureLost();
 
     wxWindow *win = wxFindWinFromHandle(hWndGainedCapture);

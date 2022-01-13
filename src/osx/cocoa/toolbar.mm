@@ -605,7 +605,7 @@ void wxToolBarTool::UpdateImages()
 
         dc.SelectObject(m_alternateBitmap);
         // This color corresponds to OS X Yosemite's rendering of selected toolbar items
-        // See also https://trac.wxwidgets.org/ticket/16645
+        // See also https://github.com/wxWidgets/wxWidgets/issues/16645
         wxColour grey(0xB9, 0xB9, 0xB9);
         dc.SetBackground(*wxTRANSPARENT_BRUSH);
         dc.Clear();

@@ -1310,7 +1310,7 @@ wxString GtkAccel::GetGtkHotKey(const wxAcceleratorEntry *accel)
 
             /*
              The following keycodes have been shown not to work as accelerator
-             keys on GTK (see https://trac.wxwidgets.org/ticket/10049)
+             keys on GTK (see https://github.com/wxWidgets/wxWidgets/issues/10049)
              and are not valid
              (see gtkaccelgroup.c inside gtk_accelerator_valid())
              */

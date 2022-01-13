@@ -109,4 +109,4 @@ To verify your download please use the following SHA-1 checksums:
 
 ## Reporting Problems
 
-Please report bugs to the [issue tracker](https://trac.wxwidgets.org/newticket) or the [wx-users mailing list](http://groups.google.com/group/wx-users).
+Please report bugs to the [issue tracker](https://github.com/wxWidgets/wxWidgets/issues/new) or the [wx-users mailing list](http://groups.google.com/group/wx-users).
