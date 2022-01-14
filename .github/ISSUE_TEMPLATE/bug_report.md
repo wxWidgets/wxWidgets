@@ -30,3 +30,4 @@ Steps to reproduce the behaviour, please make them as detailed as possible, e.g.
  - wxWidgets version you use: [e.g. 3.1.6]
  - wxWidgets port you use: [e.g. wxMSW, wxGTK, wxOSX]
  - OS and its version: [e.g. Windows 10.0.19042.867, Ubuntu 22.10, macOS 15]
+ - For wxGTK only, please specify GTK version: [e.g. 3.24.5] and, if relevant, i.e. for appearance-related problems, the theme being used.
