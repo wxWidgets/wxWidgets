@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_APP_H_
-#define _WX_APP_H_
+#ifndef _WX_UWP_APP_H_
+#define _WX_UWP_APP_H_
 
 // ----------------------------------------------------------------------------
 // the wxApp class for UWP - see wxAppBase for more details
@@ -36,4 +36,4 @@ public:
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxApp);
 };
-#endif // _WX_APP_H_
+#endif // _WX_UWP_APP_H_
