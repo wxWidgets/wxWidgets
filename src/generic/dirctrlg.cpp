@@ -571,8 +571,13 @@ void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
     wxTreeEvent changedEvent(wxEVT_DIRCTRL_SELECTIONCHANGED, GetId());
 
     changedEvent.SetEventObject(this);
-    changedEvent.SetItem(event.GetItem());
-    changedEvent.SetClientObject(m_treeCtrl->GetItemData(event.GetItem()));
+
+    const wxTreeItemId item = event.GetItem();
+    if ( item.IsOk() )
+    {
+        changedEvent.SetItem(item);
+        changedEvent.SetClientObject(m_treeCtrl->GetItemData(item));
+    }
 
     if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
         event.Veto();
