@@ -361,6 +361,7 @@ if(wxUSE_GUI)
     if(WXUWP AND wxUSE_METAFILE)
         # this one should probably be made separately configurable
         set(wxUSE_ENH_METAFILE ON)
+        wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
     endif()
 
     # Direct2D check
