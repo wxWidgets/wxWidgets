@@ -2108,6 +2108,16 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
     InitOutlineView(style);
 }
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 110000
+        typedef NS_ENUM(NSInteger, NSTableViewStyle) {
+            NSTableViewStyleAutomatic,
+            NSTableViewStyleFullWidth,
+            NSTableViewStyleInset,
+            NSTableViewStyleSourceList,
+            NSTableViewStylePlain
+        };
+#endif
+
 void wxCocoaDataViewControl::InitOutlineView(long style)
 {
     // we cannot call InstallHandler(m_OutlineView) here, because we are handling
