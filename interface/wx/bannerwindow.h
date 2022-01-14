@@ -134,7 +134,7 @@ public:
         @param bmp Bitmap to use as background. May be invalid to indicate
             that no background bitmap should be used.
      */
-    void SetBitmap(const wxBitmap& bmp);
+    void SetBitmap(const wxBitmapBundle& bmp);
 
     /**
         Set the text to display.
