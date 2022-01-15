@@ -75,12 +75,17 @@ wxString wxSystemAppearance::GetName() const
     return wxString();
 }
 
+#endif // !__WXOSX__
+
+// These ports implement this function using platform-specific API.
+#if !defined(__WXOSX__) && !defined(__WXMSW__)
+
 bool wxSystemAppearance::IsDark() const
 {
     return IsUsingDarkBackground();
 }
 
-#endif // !__WXOSX__
+#endif // !__WXOSX__ && !__WXMSW__
 
 bool wxSystemAppearance::IsUsingDarkBackground() const
 {
