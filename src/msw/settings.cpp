@@ -359,3 +359,23 @@ extern wxFont wxGetCCDefaultFont()
 }
 
 #endif // wxUSE_LISTCTRL || wxUSE_TREECTRL
+
+// Improved dark mode detection
+// Without this code, IsUsingDarkBacckground() in fact never work, as background color is always reported to be white when querying system settings.
+// Registry key HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize has a value AppsUseLightTheme = 0 for dark mode, 1 for normal mode
+// If the key is absent, fallback to the generic algorithm in IsUsingDarkBackground()
+// Adapted from https://stackoverflow.com/questions/51334674/how-to-detect-windows-10-light-dark-mode-in-win32-application/51336913
+
+#include "../../include/wx/msw/registry.h"
+
+bool wxSystemAppearance::IsDark() const
+{
+    wxRegKey rk(wxRegKey::HKCU, "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
+    if (rk.Exists() && rk.HasValue("AppsUseLightTheme")) {
+        long value = -1;
+        rk.QueryValue("AppsUseLightTheme", &value);
+        return value<=0;
+    }
+    return IsUsingDarkBackground();
+}
+
