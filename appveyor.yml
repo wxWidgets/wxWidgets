@@ -27,6 +27,7 @@ skip_commits:
     - include/wx/x11/
     - src/x11/
     - '**/*.md'
+    - .github/ISSUE_TEMPLATE/
     - .github/workflows/
     - build/tools/before_install.sh
     - build/tools/httpbin.sh
