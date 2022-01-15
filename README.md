@@ -72,7 +72,7 @@ If you are looking for community support, you can get it from
 - [#wxwidgets IRC channel](https://www.wxwidgets.org/support/irc/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/wxwidgets)
   (tag your questions with `wxwidgets`)
-- And you can report bugs at [GitHub](https://github.com/wxWidgets/wxWidgets/issues/new/)
+- And you can report bugs at [GitHub](https://github.com/wxWidgets/wxWidgets/issues/new/choose)
 
 [Commercial support](https://www.wxwidgets.org/support/commercial/) is also
 available.
