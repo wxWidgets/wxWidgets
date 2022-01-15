@@ -288,6 +288,10 @@ TEST_CASE("wxArrayString", "[dynarray]")
     CHECK( a1.Index( wxT("thermit"), /*bCase=*/true, /*fromEnd=*/true ) == 3 );
     CHECK( a1.Index( wxT("alligator"), /*bCase=*/true, /*fromEnd=*/true ) == 4 );
 
+    a1.push_back(wxT("alligator"));
+    CHECK(a1.Index(wxT("alligator")) == 4);
+    CHECK(a1.Index(wxT("alligator"), /*bCase=*/true, /*fromEnd=*/true) == 5);
+
     wxArrayString a5;
 
     CHECK( a5.Add( wxT("x"), 1 ) == 0 );
@@ -759,13 +763,14 @@ TEST_CASE("wxDynArray::IndexFromEnd", "[dynarray]")
     a.push_back(10);
     a.push_back(1);
     a.push_back(42);
+    a.push_back(42);
 
     CHECK( a.Index(10) == 0 );
     CHECK( a.Index(1) == 1 );
     CHECK( a.Index(42) == 2 );
     CHECK( a.Index(10, /*bFromEnd=*/true) == 0 );
     CHECK( a.Index( 1, /*bFromEnd=*/true) == 1 );
-    CHECK( a.Index(42, /*bFromEnd=*/true) == 2 );
+    CHECK( a.Index(42, /*bFromEnd=*/true) == 3 );
 }
 
 
