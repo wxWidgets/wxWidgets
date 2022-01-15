@@ -1688,6 +1688,67 @@ void wxDataViewCtrlBase::StartEditor(const wxDataViewItem& item, unsigned int co
     EditItem(item, GetColumn(column));
 }
 
+#if wxUSE_DRAG_AND_DROP
+
+/* static */
+wxDataObjectComposite*
+wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
+{
+    if (formats.empty())
+    {
+         return NULL;
+    }
+
+    wxDataObjectComposite *dataObject(new wxDataObjectComposite);
+    for (size_t i = 0; i < formats.size(); ++i)
+    {
+        switch (formats[i].GetType())
+        {
+            case wxDF_TEXT:
+            case wxDF_OEMTEXT:
+            case wxDF_UNICODETEXT:
+                dataObject->Add(new wxTextDataObject);
+                break;
+
+            case wxDF_BITMAP:
+            case wxDF_PNG:
+                dataObject->Add(new wxBitmapDataObject);
+                break;
+
+            case wxDF_FILENAME:
+                dataObject->Add(new wxFileDataObject);
+                break;
+
+            case wxDF_HTML:
+                dataObject->Add(new wxHTMLDataObject);
+                break;
+
+            case wxDF_METAFILE:
+            case wxDF_SYLK:
+            case wxDF_DIF:
+            case wxDF_TIFF:
+            case wxDF_DIB:
+            case wxDF_PALETTE:
+            case wxDF_PENDATA:
+            case wxDF_RIFF:
+            case wxDF_WAVE:
+            case wxDF_ENHMETAFILE:
+            case wxDF_LOCALE:
+            case wxDF_PRIVATE:
+                dataObject->Add(new wxCustomDataObject(formats[i]));
+                break;
+
+            case wxDF_INVALID:
+            case wxDF_MAX:
+                break;
+        }
+    }
+
+    return dataObject;
+}
+
+#endif // wxUSE_DRAG_AND_DROP
+
 // ---------------------------------------------------------
 // wxDataViewEvent
 // ---------------------------------------------------------
@@ -1743,6 +1804,28 @@ void wxDataViewEvent::Init(wxDataViewCtrlBase* dvc,
 
     SetEventObject(dvc);
 }
+
+#if wxUSE_DRAG_AND_DROP
+
+void wxDataViewEvent::InitData(wxDataObjectComposite* obj, wxDataFormat format)
+{
+    SetDataFormat(format);
+
+    SetDataObject(obj->GetObject(format));
+
+    const size_t size = obj->GetDataSize(format);
+    SetDataSize(size);
+
+    if ( size )
+    {
+        obj->GetDataHere(format, m_dataBuf.GetWriteBuf(size));
+        m_dataBuf.UngetWriteBuf(size);
+
+        SetDataBuffer(m_dataBuf.GetData());
+    }
+}
+
+#endif // wxUSE_DRAG_AND_DROP
 
 #if wxUSE_SPINCTRL
 

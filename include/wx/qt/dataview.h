@@ -119,7 +119,7 @@ public:
     virtual bool IsExpanded( const wxDataViewItem & item ) const;
 
     virtual bool EnableDragSource( const wxDataFormat &format );
-    virtual bool EnableDropTarget( const wxDataFormat &format );
+    virtual bool DoEnableDropTarget( const wxVector<wxDataFormat>& formats );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

@@ -166,7 +166,7 @@ public:
     virtual bool IsExpanded( const wxDataViewItem & item ) const wxOVERRIDE;
 
     virtual bool EnableDragSource( const wxDataFormat &format ) wxOVERRIDE;
-    virtual bool EnableDropTarget( const wxDataFormat &format ) wxOVERRIDE;
+    virtual bool DoEnableDropTarget( const wxVector<wxDataFormat>& formats ) wxOVERRIDE;
 
     virtual wxDataViewColumn *GetCurrentColumn() const wxOVERRIDE;
 

@@ -1390,9 +1390,25 @@ public:
     virtual bool EnableDragSource( const wxDataFormat &format );
 
     /**
-       Enable drop operations using the given @a format.
+        Enable drop operations using any of the specified  @a formats.
+
+        Currently this is fully implemented in the generic and native macOS
+        versions. In wxGTK only the first element of the array is used.
+
+        @note Passing empty array disables drag and drop operations completely.
+
+        @since 3.1.6
     */
-    virtual bool EnableDropTarget( const wxDataFormat &format );
+    bool EnableDropTargets(const wxVector<wxDataFormat>& formats);
+
+    /**
+        Enable drop operations using the given @a format.
+
+        See EnableDropTargets() for providing more than one supported format.
+
+        @note Since 3.1.6 wxDF_INVALID can be passed to disable drag and drop support.
+    */
+    bool EnableDropTarget( const wxDataFormat &format );
 
     /**
         Call this to ensure that the given item is visible.

@@ -1430,6 +1430,11 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
         return;
     }
 
+    // Note that instead of recreating a new data object here we could also
+    // retrieve the data object from the event, using its GetDataObject()
+    // method. This would be more efficient as it would avoid copying the text
+    // one more time, but would require a cast in the code and we don't really
+    // care about efficiency here.
     wxTextDataObject obj;
     obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
 

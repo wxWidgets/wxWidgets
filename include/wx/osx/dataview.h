@@ -208,6 +208,10 @@ public:
 
   virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) wxOVERRIDE;
 
+#if wxUSE_DRAG_AND_DROP
+  virtual bool DoEnableDropTarget( const wxVector<wxDataFormat>& formats ) wxOVERRIDE;
+#endif // wxUSE_DRAG_AND_DROP
+
  // returns the n-th pointer to a column;
  // this method is different from GetColumn(unsigned int pos) because here 'n' is not a position in the control but the n-th
  // position in the internal list/array of column pointers
