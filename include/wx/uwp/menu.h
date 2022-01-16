@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MENU_H_
-#define _WX_MENU_H_
+#ifndef _WX_UWP_MENU_H_
+#define _WX_UWP_MENU_H_
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"
@@ -93,4 +93,4 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar);
 };
 
-#endif // _WX_MENU_H_
+#endif // _WX_UWP_MENU_H_

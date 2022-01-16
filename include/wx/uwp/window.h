@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WINDOW_H_
-#define _WX_WINDOW_H_
+#ifndef _WX_UWP_WINDOW_H_
+#define _WX_UWP_WINDOW_H_
 
 #include "wx/settings.h"        // solely for wxSystemColour
 
@@ -22,7 +22,7 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_CORE wxWindowUWP : public wxWindowBase
 {
 public:
-    wxWindowUWP() { Init(); }
+    wxWindowUWP() {}
 
     wxWindowUWP(wxWindow* parent,
         wxWindowID id,
@@ -31,8 +31,6 @@ public:
         long style = 0,
         const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
-        Init();
-        Create(parent, id, pos, size, style, name);
     }
 
     virtual ~wxWindowUWP();
@@ -42,3 +40,5 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWindowUWP);
     wxDECLARE_EVENT_TABLE();
 };
+
+#endif // _WX_UWP_WINDOW_H_

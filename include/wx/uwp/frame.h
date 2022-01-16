@@ -8,14 +8,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FRAME_H_
-#define _WX_FRAME_H_
+#ifndef _WX_UWP_FRAME_H_
+#define _WX_UWP_FRAME_H_
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { Init(); }
+    wxFrame() {}
     wxFrame(wxWindow *parent,
             wxWindowID id,
             const wxString& title,
@@ -24,8 +24,6 @@ public:
             long style = wxDEFAULT_FRAME_STYLE,
             const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
-        Init();
-
         Create(parent, id, title, pos, size, style, name);
     }
 
@@ -38,13 +36,9 @@ public:
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
     virtual ~wxFrame();
 
-    // implement base class pure virtuals
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
-
 private:
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame);
 };
 
-#endif
-    // _WX_FRAME_H_
+#endif// _WX_UWP_FRAME_H_
