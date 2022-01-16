@@ -390,6 +390,27 @@ set(OPENGL_QT_SRC
     src/qt/glcanvas.cpp
 )
 
+
+set(UWP_HDR
+    wx/uwp/app.h
+    wx/uwp/control.h
+    wx/uwp/frame.h
+    wx/uwp/menu.h
+    wx/uwp/menuitem.h
+    wx/uwp/window.h
+)
+
+set(UWP_SRC
+    src/uwp/app.cpp
+    src/uwp/control.cpp
+    src/uwp/frame.cpp
+    src/uwp/menu.cpp
+    src/uwp/menuitem.cpp
+    src/uwp/window.cpp
+)
+
+
+
 set(BASE_CMN_SRC
     src/common/any.cpp
     src/common/appbase.cpp

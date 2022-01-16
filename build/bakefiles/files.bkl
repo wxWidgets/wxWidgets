@@ -3605,6 +3605,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_SHARED_HDR) $(OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='QT'">$(QT_HDR)</if>
+        <if cond="TOOLKIT=='UWP'">$(UWP_HDR)</if>
     </set>
 
     <set var="CORE_SRC" hints="files">
