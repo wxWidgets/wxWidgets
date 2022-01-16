@@ -12,6 +12,8 @@
 
 #include "wx/defs.h"
 
+#if !defined(__WXUWP__)
+
 #if wxUSE_DBGHELP
 
 #include "wx/dynlib.h"
@@ -412,6 +414,5 @@ private:
 };
 
 #endif // wxUSE_DBGHELP
-
 #endif // _WX_MSW_DEBUGHLPH_H_
-
+#endif //__WXUWP__
