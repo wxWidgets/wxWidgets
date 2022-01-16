@@ -71,15 +71,17 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-// this defines a CASTWNDPROC macro which casts a pointer to the type of a
-// window proc
-#if defined(STRICT) || defined(__GNUC__)
-    typedef WNDPROC WndProcCast;
-#else
-    typedef FARPROC WndProcCast;
-#endif
+#if !defined(__WXUWP__)
+    // this defines a CASTWNDPROC macro which casts a pointer to the type of a
+    // window proc
+    #if defined(STRICT) || defined(__GNUC__)
+        typedef WNDPROC WndProcCast;
+    #else
+        typedef FARPROC WndProcCast;
+    #endif
 
-#define CASTWNDPROC (WndProcCast)
+    #define CASTWNDPROC (WndProcCast)
+#endif
 
 
 // ---------------------------------------------------------------------------
