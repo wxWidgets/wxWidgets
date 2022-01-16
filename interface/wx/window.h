@@ -1198,6 +1198,103 @@ public:
     /// @overload
     static int ToDIP(int d, const wxWindow* w);
 
+
+    /**
+        Convert from physical pixels to logical pixels.
+
+        All window coordinates in wxWidgets API are always expressed in logical
+        pixels, but the meaning of logical pixels depends on the platform.
+        Physical pixels always mean the same thing and refer to the actual
+        display pixels or, also, sizes of the bitmaps. Under some platforms
+        logical pixels are actually the same as physical ones (this is the case
+        for MSW), but under other platforms (e.g. GTK or macOS) this is not the
+        case and GetContentScaleFactor() defines the ratio between one logical
+        and one physical pixel.
+
+        This function can be used to convert a value in physical pixels to
+        logical pixels independently of the platform used. It simply does
+        nothing under MSW, but divides the input value by the content scale
+        factor under the other platforms.
+
+        Note that dividing an integer value by scale factor doesn't always
+        yield an integer value. This function always round the resulting value
+        up, e.g. 15 physical pixels are translated to 8, not 7, logical pixels
+        in 200% DPI scaling. This ensures that a physical bitmap of size 15 is
+        not truncated if the result of this function is used to create a window
+        to show it, but it does mean that there will be one extra pixel left.
+
+        @see FromDIP(), ToPhys()
+
+        @since 3.1.6
+     */
+    wxSize FromPhys(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint FromPhys(const wxPoint& pt) const;
+
+    /// @overload
+    int FromPhys(int d) const;
+
+    /**
+        Convert from physical pixels to logical pixels for any window.
+
+        This function can be used without any window pointer, i.e. @a w can be
+        @NULL. In this case, it uses the content scale factor of the main
+        screen if supported or just does nothing (i.e. uses scale factor of 1)
+        otherwise.
+
+        Using member overloads is always preferable, if possible, as they
+        always use the actually appropriate content scale factor.
+
+        @since 3.1.6
+     */
+    static wxSize FromPhys(const wxSize& sz, const wxWindow* w);
+
+    /// @overload
+    static wxPoint FromPhys(const wxPoint& pt, const wxWindow* w);
+
+    /// @overload
+    static int FromPhys(int d, const wxWindow* w);
+
+
+    /**
+        Convert from logical pixels to physical pixels.
+
+        This function performs the transformation in the converse direction
+        compared to FromPhys().
+
+        @since 3.1.6
+     */
+    wxSize ToPhys(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint ToPhys(const wxPoint& pt) const;
+
+    /// @overload
+    int ToPhys(int d) const;
+
+    /**
+        Convert from logical pixels to physical pixels for any window.
+
+        This function can be used without any window pointer, i.e. @a w can be
+        @NULL. In this case, it uses the content scale factor of the main
+        screen if supported or just does nothing (i.e. uses scale factor of 1)
+        otherwise.
+
+        Using member overloads is always preferable, if possible, as they
+        always use the actually appropriate content scale factor.
+
+        @since 3.1.6
+     */
+    static wxSize ToPhys(const wxSize& sz, const wxWindow* w);
+
+    /// @overload
+    static wxPoint ToPhys(const wxPoint& pt, const wxWindow* w);
+
+    /// @overload
+    static int ToPhys(int d, const wxWindow* w);
+
+
     /**
         This functions returns the best acceptable minimal size for the window.
 
