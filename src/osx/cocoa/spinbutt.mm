@@ -51,6 +51,8 @@ public :
     virtual void SetValue(wxInt32 v) wxOVERRIDE;
     virtual void SetMinimum(wxInt32 v) wxOVERRIDE;
     virtual void SetMaximum(wxInt32 v) wxOVERRIDE;
+    virtual void SetIncrement(int value) wxOVERRIDE;
+    virtual int GetIncrement() const wxOVERRIDE;
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
     virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd) wxOVERRIDE;
 private:
@@ -121,6 +123,16 @@ void wxSpinButtonCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSE
         m_formerValue = [(NSStepper*)m_osxView intValue];
         m_trackValue = false;
     }
+}
+
+void wxSpinButtonCocoaImpl::SetIncrement(int value)
+{
+    [(NSStepper*)m_osxView setIncrement:value];
+}
+
+int wxSpinButtonCocoaImpl::GetIncrement() const
+{
+    return [(NSStepper *) m_osxView increment];
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,

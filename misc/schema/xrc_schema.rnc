@@ -1482,7 +1482,8 @@ wxSpinButton =
         stdWindowProperties &
         [xrc:p="o"] element value {_, t_integer }* &
         [xrc:p="o"] element min   {_, t_integer }* &
-        [xrc:p="o"] element max   {_, t_integer }*
+        [xrc:p="o"] element max   {_, t_integer }* &
+        [xrc:p="o"] element inc   {_, t_integer }*
     }
 
 
@@ -1494,7 +1495,8 @@ wxSpinCtrl =
         [xrc:p="o"] element value {_, t_integer }* &
         [xrc:p="o"] element min   {_, t_integer }* &
         [xrc:p="o"] element max   {_, t_integer }* &
-        [xrc:p="o"] element base  {_, ("10" | "16") }*
+        [xrc:p="o"] element base  {_, ("10" | "16") }* &
+        [xrc:p="o"] element inc   {_, t_integer }*
     }
 
 

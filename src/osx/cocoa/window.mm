@@ -181,8 +181,10 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (double)minValue;
 - (double)maxValue;
+- (int)increment;
 - (void)setMinValue:(double)aDouble;
 - (void)setMaxValue:(double)aDouble;
+- (void)setIncrement:(int)value;
 
 - (void)sizeToFit;
 
@@ -3416,6 +3418,23 @@ wxInt32 wxWidgetCocoaImpl::GetMinimum() const
     if (  [m_osxView respondsToSelector:@selector(minValue)] )
     {
         return (int)[m_osxView minValue];
+    }
+    return 0;
+}
+
+void wxWidgetCocoaImpl::SetIncrement(int value)
+{
+    if (  [m_osxView respondsToSelector:@selector(setIncrement:)] )
+    {
+        [m_osxView setIncrement:value];
+    }
+}
+
+int wxWidgetCocoaImpl::GetIncrement() const
+{
+    if(  [m_osxView respondsToSelector:@selector(increment)] )
+    {
+        return (int) [m_osxView increment];
     }
     return 0;
 }

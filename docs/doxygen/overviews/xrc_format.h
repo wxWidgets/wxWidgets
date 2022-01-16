@@ -2057,6 +2057,8 @@ exactly one non-toplevel window as its child.
     Minimum allowed value (default: 0).}
 @row3col{max, integer,
     Maximum allowed value (default: 100).}
+@row3col{inc, integer,
+    Increment (default: 1). Available since wxWidgets 3.1.6.}
 @endTable
 
 

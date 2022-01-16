@@ -368,4 +368,30 @@ TEST_CASE_METHOD(SpinCtrlTestCase3, "SpinCtrl::SetValueInsideEventHandler", "[sp
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
+TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Increment", "[spinctrl]")
+{
+#if wxUSE_UIACTIONSIMULATOR
+    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
+        wxDefaultPosition, wxDefaultSize,
+        wxSP_ARROW_KEYS | wxSP_WRAP);
+
+    wxUIActionSimulator sim;
+
+    CHECK( m_spin->GetIncrement() == 1 );
+
+    m_spin->SetFocus();
+    wxYield();
+    m_spin->SetIncrement( 5 );
+    sim.Char(WXK_UP);
+
+    wxYield();
+
+    CHECK(m_spin->GetValue() == 5);
+
+    int increment = m_spin->GetIncrement();
+
+    CHECK( increment == 5 );
+#endif
+}
+
 #endif

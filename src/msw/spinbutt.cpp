@@ -288,4 +288,24 @@ bool wxSpinButton::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD WXUNUSED(id))
     return false;
 }
 
+void wxSpinButton::SetIncrement(int value)
+{
+    UDACCEL accel;
+    accel.nSec = 0;
+    accel.nInc = value;
+    ::SendMessage(GetHwnd(), UDM_SETACCEL, 1, (LPARAM) &accel);
+}
+
+int  wxSpinButton::GetIncrement() const
+{
+    UDACCEL accel;
+
+    // If the message is unsupported, this default value won't be modified and
+    // will be returned below.
+    accel.nInc = 1;
+
+    ::SendMessage(GetHwnd(), UDM_GETACCEL, 1, (LPARAM) &accel);
+
+    return accel.nInc;
+}
 #endif // wxUSE_SPINBTN
