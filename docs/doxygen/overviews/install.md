@@ -199,7 +199,8 @@ project, there are several things you must do.
   `defaults write com.apple.dt.Xcode UseSanitizedBuildSystemEnvironment -bool NO`
 - Set the variables for use with the launch agent (application to OSX 10.10
 and up)
-```
+
+~~~{xml}
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -218,7 +219,7 @@ launchctl setenv WXWIN /Users/dconnet/devtools/wx/wxWidgets-3.1.5
   <true/>
 </dict>
 </plist>
-```
+~~~
 
 ### Other IDEs
 
