@@ -9091,21 +9091,14 @@ void wxGrid::RedrawGridLines()
     if ( !ShouldRefresh() )
         return;
 
-    if ( GridLinesEnabled() )
-    {
-        DrawAllGridLines();
-    }
-    else // remove the grid lines
-    {
-        m_gridWin->Refresh();
+    m_gridWin->Refresh();
 
-        if ( m_frozenColGridWin )
-            m_frozenColGridWin->Refresh();
-        if ( m_frozenRowGridWin )
-            m_frozenRowGridWin->Refresh();
-        if ( m_frozenCornerGridWin )
-            m_frozenCornerGridWin->Refresh();
-    }
+    if ( m_frozenColGridWin )
+        m_frozenColGridWin->Refresh();
+    if ( m_frozenRowGridWin )
+        m_frozenRowGridWin->Refresh();
+    if ( m_frozenCornerGridWin )
+        m_frozenCornerGridWin->Refresh();
 }
 
 void wxGrid::EnableGridLines( bool enable )
