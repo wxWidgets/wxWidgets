@@ -9010,13 +9010,7 @@ void wxGrid::SetCellHighlightColour( const wxColour& colour )
     {
         m_cellHighlightColour = colour;
 
-        wxGridWindow *gridWindow = CellToGridWindow(m_currentCellCoords);
-
-        wxClientDC dc( gridWindow );
-        PrepareDCFor( dc, gridWindow );
-
-        wxGridCellAttrPtr attr = GetCellAttrPtr(m_currentCellCoords);
-        DrawCellHighlight(dc, attr.get());
+        RefreshBlock(m_currentCellCoords, m_currentCellCoords);
     }
 }
 
