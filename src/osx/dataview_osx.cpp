@@ -251,7 +251,14 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
 
 bool wxOSXDataViewModelNotifier::Cleared()
 {
-  return m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
+  bool noFailureFlag;
+
+  // NOTE: See comments in ItemDeleted method above
+  m_DataViewCtrlPtr->SetDeleting(true);
+  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
+  m_DataViewCtrlPtr->SetDeleting(false);
+
+  return noFailureFlag;
 }
 
 void wxOSXDataViewModelNotifier::Resort()
