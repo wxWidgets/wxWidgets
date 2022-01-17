@@ -6248,16 +6248,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             break;
     }
 
-    wxGridWindow *currentGridWindow = CellToGridWindow(coords);
-
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
-        wxGridWindow *prevGridWindow = CellToGridWindow(m_currentCellCoords);
-
         DisableCellEditControl();
 
         if ( IsVisible( m_currentCellCoords, false ) )
         {
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+            RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+#else
+            wxGridWindow* prevGridWindow = CellToGridWindow(m_currentCellCoords);
             wxRect r;
             r = BlockToDeviceRect( m_currentCellCoords, m_currentCellCoords, prevGridWindow );
             if ( !m_gridLinesEnabled )
@@ -6273,12 +6273,6 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
 
-#if defined(__WXMAC__)
-            currentGridWindow->Refresh(true /*, & r */);
-
-            if ( prevGridWindow != currentGridWindow )
-                prevGridWindow->Refresh(true);
-#else
             wxClientDC prevDc( prevGridWindow );
             PrepareDCFor(prevDc, prevGridWindow);
 
@@ -6293,10 +6287,13 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-#if !defined(__WXMAC__)
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+    RefreshBlock(coords, coords);
+#else
     if ( ShouldRefresh() )
     {
         wxGridCellAttrPtr attr = GetCellAttrPtr( coords );
+        wxGridWindow* currentGridWindow = CellToGridWindow(coords);
         wxClientDC dc( currentGridWindow );
         PrepareDCFor(dc, currentGridWindow);
         DrawCellHighlight( dc, attr.get() );
