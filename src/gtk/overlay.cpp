@@ -329,6 +329,7 @@ void wxOverlayGTKImpl::EndDrawing(wxDC* dc)
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
         cairo_paint(cr);
 
+        cairo_surface_flush(cairo_get_target(cr));
         cairo_destroy(cr);
     }
 
