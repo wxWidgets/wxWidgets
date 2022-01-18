@@ -413,10 +413,9 @@ void wxGridSelection::ClearSelection()
     wxRect r;
     wxGridCellCoords coords1, coords2;
 
-    m_selection.clear();
-
     if ( m_grid->IsUsingOverlay() )
     {
+        m_selection.clear();
         m_grid->UpdateOverlay();
     }
     else
