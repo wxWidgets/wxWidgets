@@ -43,7 +43,7 @@
 
 #include "wx/control.h"
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
-#include "wx/bitmap.h" // wxBitmap used by-value
+#include "wx/bmpbndl.h"
 #include "wx/textentry.h"
 #include "wx/time.h" // needed for wxMilliClock_t
 
@@ -351,11 +351,11 @@ public:
     //  bmpHover: drawn when cursor hovers on button. This is ignored on platforms
     //            that do not generally display hover differently.
     //  bmpDisabled: drawn when combobox is disabled.
-    void SetButtonBitmaps( const wxBitmap& bmpNormal,
+    void SetButtonBitmaps( const wxBitmapBundle& bmpNormal,
                            bool pushButtonBg = false,
-                           const wxBitmap& bmpPressed = wxNullBitmap,
-                           const wxBitmap& bmpHover = wxNullBitmap,
-                           const wxBitmap& bmpDisabled = wxNullBitmap );
+                           const wxBitmapBundle& bmpPressed = wxBitmapBundle(),
+                           const wxBitmapBundle& bmpHover = wxBitmapBundle(),
+                           const wxBitmapBundle& bmpDisabled = wxBitmapBundle() );
 
 #if WXWIN_COMPATIBILITY_2_8
     //
@@ -433,11 +433,11 @@ public:
                  (m_windowStyle & wxCB_READONLY) );
     }
 
-    // These methods return references to appropriate dropbutton bitmaps
-    const wxBitmap& GetBitmapNormal() const { return m_bmpNormal; }
-    const wxBitmap& GetBitmapPressed() const { return m_bmpPressed; }
-    const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
-    const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
+    // These methods return appropriate dropbutton bitmaps
+    wxBitmap GetBitmapNormal() const { return m_bmpNormal.GetBitmapFor(this); }
+    wxBitmap GetBitmapPressed() const { return m_bmpPressed.GetBitmapFor(this); }
+    wxBitmap GetBitmapHover() const { return m_bmpHover.GetBitmapFor(this); }
+    wxBitmap GetBitmapDisabled() const { return m_bmpDisabled.GetBitmapFor(this); }
 
     // Set custom style flags for embedded wxTextCtrl. Usually must be used
     // with two-step creation, before Create() call.
@@ -585,6 +585,10 @@ protected:
 
     void OnPopupMouseEvent(wxMouseEvent& event);
 
+    // This function can be used as event handle for wxEVT_DPI_CHANGED event
+    // and simply recalculates button size when it happens.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event);
+
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
@@ -699,10 +703,10 @@ protected:
     int                     m_btnWidDefault;
 
     // custom dropbutton bitmaps
-    wxBitmap                m_bmpNormal;
-    wxBitmap                m_bmpPressed;
-    wxBitmap                m_bmpHover;
-    wxBitmap                m_bmpDisabled;
+    wxBitmapBundle          m_bmpNormal;
+    wxBitmapBundle          m_bmpPressed;
+    wxBitmapBundle          m_bmpHover;
+    wxBitmapBundle          m_bmpDisabled;
 
     // area used by the button
     wxSize                  m_btnSize;
