@@ -207,7 +207,7 @@ used rather than having to construct a vector from them:
 wxBitmap normal(32, 32);
 wxBitmap highDPI(64, 64);
 ... initialize the bitmaps somehow ...
-wxBitmapBundle bundle = wxBitmapBundle::FromBitmaps(normal, bitmap);
+wxBitmapBundle bundle = wxBitmapBundle::FromBitmaps(normal, highDPI);
 
 // Now the bundle can be passed to any wxWidgets control using bitmaps.
 ~~~
