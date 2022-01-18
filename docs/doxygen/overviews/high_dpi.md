@@ -207,7 +207,7 @@ used rather than having to construct a vector from them:
 wxBitmap normal(32, 32);
 wxBitmap highDPI(64, 64);
 ... initialize the bitmaps somehow ...
-wxBitmapBundle bundle(normal, bitmap);
+wxBitmapBundle bundle = wxBitmapBundle::FromBitmaps(normal, bitmap);
 
 // Now the bundle can be passed to any wxWidgets control using bitmaps.
 ~~~
@@ -231,7 +231,7 @@ to avoid having scale it. This means that at 175% DPI scaling, for example,
 the high DPI (i.e. double-sized) bitmap will be used _without_ scaling rather
 than scaling it by 0.875, which almost certainly wouldn't look good. However
 if the current DPI scaling is 300%, the 2x bitmap will be scaled, if it's the
-closest one available, as using it without scaling would appear in bitmaps too
+closest one available, as using it without scaling would result in bitmaps too
 small to use. The cut-off for the decision whether to scale bitmap or use an
 existing one without scaling is the factor of 1.5: if the mismatch between the
 required and closest available size is equal or greater than 1.5, the bitmap
