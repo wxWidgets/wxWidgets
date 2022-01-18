@@ -192,7 +192,7 @@ public:
         Note that the inactive bitmap, if smaller than the control's size, will be
         centered in the control; if bigger, it will be stretched to fit it.
     */
-    virtual void SetInactiveBitmap(const wxBitmap& bmp);
+    virtual void SetInactiveBitmap(const wxBitmapBundle& bmp);
 
     /**
         Stops playing the animation.
