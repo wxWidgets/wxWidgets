@@ -59,15 +59,24 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
 
-int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
     int n = 0;
-    for ( const auto& s: *this )
+    if (!bFromEnd)
     {
-        if ( s.IsSameAs(str, bCase) )
-            return n;
+        for ( const auto& s: *this )
+        {
+            if ( s.IsSameAs(str, bCase) )
+                return n;
 
-        ++n;
+            ++n;
+        }
+    }
+    else
+    {
+        for( n = size()-1; n >= 0; --n )
+            if ((*this)[n].IsSameAs(str, bCase))
+                return n;
     }
 
     return wxNOT_FOUND;
@@ -107,26 +116,50 @@ struct wxStringCmpNoCase
     }
 };
 
-int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
-    wxArrayString::const_iterator it;
-
-    if (bCase)
+    if (!bFromEnd)
     {
-        it = std::find_if(begin(), end(),
-                          std::not1(
-                              std::bind2nd(
-                                  wxStringCmp(), str)));
-    }
-    else // !bCase
-    {
-        it = std::find_if(begin(), end(),
-                          std::not1(
-                              std::bind2nd(
-                                  wxStringCmpNoCase(), str)));
-    }
+        wxArrayString::const_iterator it;
 
-    return it == end() ? wxNOT_FOUND : it - begin();
+        if (bCase)
+        {
+            it = std::find_if(begin(), end(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmp(), str)));
+        }
+        else // !bCase
+        {
+            it = std::find_if(begin(), end(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmpNoCase(), str)));
+        }
+
+        return it == end() ? wxNOT_FOUND : it - begin();
+    }
+    else // bFromEnd
+    {
+        wxArrayString::const_reverse_iterator it;
+
+        if (bCase)
+        {
+            it = std::find_if(rbegin(), rend(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmp(), str)));
+        }
+        else // !bCase
+        {
+            it = std::find_if(rbegin(), rend(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmpNoCase(), str)));
+        }
+
+        return it == rend() ? wxNOT_FOUND : it.base()-1 - begin();
+    }
 }
 
 template<class F>
