@@ -175,7 +175,7 @@ void wxOverlayMSWImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
     wxASSERT_MSG( !m_window || m_window == win,
         "wxOverlay re-initialized with a different window");
 
-    if ( target != wxOverlay::Overlay_Screen && IsManualReset() )
+    if ( target != wxOverlay::Overlay_Screen )
     {
         wxTopLevelWindow * const
             appWin = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
@@ -278,7 +278,7 @@ void wxOverlayMSWImpl::Clear(wxDC* dc)
 
 void wxOverlayMSWImpl::Reset()
 {
-    if ( IsOk() && IsManualReset() )
+    if ( IsOk() )
     {
         DWORD dwExStyle = ::GetWindowLong(m_overlayWindow->GetHandle(), GWL_EXSTYLE);
         if ( (dwExStyle & WS_EX_TOPMOST) == 0 )

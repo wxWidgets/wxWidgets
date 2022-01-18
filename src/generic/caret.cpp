@@ -98,9 +98,7 @@ void wxCaret::InitGeneric()
     m_hasFocus = true;
     m_blinkedOut = true;
 
-#ifdef wxHAS_NATIVE_OVERLAY
-    m_overlay.SetIsManualReset();
-#else
+#ifndef wxHAS_NATIVE_OVERLAY
     m_overlay.UseGeneric();
 #endif
 }

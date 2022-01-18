@@ -192,7 +192,7 @@ void wxOverlayGTKImpl::InitFromWindow(wxWindow* win, wxOverlay::Target target)
 
     m_window = win;
 
-    if ( !m_x11Helper && !wxPrivate::IsWayland() && IsManualReset() &&
+    if ( !m_x11Helper && !wxPrivate::IsWayland() &&
          target != wxOverlay::Overlay_Screen )
     {
         m_x11Helper = new wxOverlayX11Helper(this);

@@ -5773,10 +5773,6 @@ void wxGrid::UseOverlay()
             delete m_overlay;
             m_overlay = NULL;
         }
-        else
-        {
-            m_overlay->SetIsManualReset();
-        }
     }
 }
 

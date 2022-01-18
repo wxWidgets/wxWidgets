@@ -55,15 +55,6 @@ public:
     // to be done eg when the window content has been changed and repainted
     void Reset();
 
-    // We need to informe/hint wxOverlay to set up a mechanism to detect the
-    // geometry change of the overlaid window, because under wxMSW and wxGTK3
-    // (X11) there is no direct/implicit connection between the overlay and the
-    // wxWindow it overlays when the latter get moved or resized. so this function
-    // is only needed for a specific kind of overlays (a manual reset overlays)
-    // which by convention are overlays that need a different action to be reset
-    // other than the mouse-up event (e.g. wxCaret overlay, wxGrid selection overlay).
-    void SetIsManualReset();
-
     // implementation only
     // -------------------
 

@@ -113,11 +113,6 @@ void wxOverlay::Reset()
     m_impl->Reset();
 }
 
-void wxOverlay::SetIsManualReset()
-{
-    m_impl->SetIsManualReset();
-}
-
 // ----------------------------------------------------------------------------
 // wxDCOverlay
 // ----------------------------------------------------------------------------
