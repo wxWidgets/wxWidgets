@@ -1116,7 +1116,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_text = new MyTextCtrl( this, wxID_ANY, "Single line.",
                              wxDefaultPosition, wxDefaultSize,
-                             wxTE_PROCESS_ENTER);
+                             wxTE_PROCESS_ENTER | wxTE_RICH2);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
     (*m_text) << " Appended.";
