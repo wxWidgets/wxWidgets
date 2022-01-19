@@ -91,14 +91,14 @@
             #include <d2d1_3.h>
 
             #ifdef _D2D1_SVG_ // defined by a Direct2D header with SVG APIs
-                #define wxHAS_BMPBUNDLE_SVG_D2D
+                #define wxHAS_BMPBUNDLE_IMPL_SVG_D2D
             #endif // #ifdef _D2D1_SVG_
 
         #endif // #if __has_include(<d2d1_3.h>)
     #endif // #ifdef __has_include
 #endif // #if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
 
-#ifdef wxHAS_BMPBUNDLE_SVG_D2D
+#ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
     #include "wx/platinfo.h"
     #include "wx/msw/private.h"
     #include "wx/msw/private/comptr.h"
@@ -106,7 +106,7 @@
     #include "wx/msw/private/graphicsd2d.h"
 
     #include <combaseapi.h>
-#endif // #ifdef wxHAS_BMPBUNDLE_SVG_D2D
+#endif // #ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
 
 // ----------------------------------------------------------------------------
 // private helpers
@@ -190,6 +190,7 @@ public:
 protected:
     virtual wxBitmap DoRasterize(const wxSize& size) wxOVERRIDE;
 
+private:
     NSVGimage* const m_svgImage;
     NSVGrasterizer* const m_svgRasterizer;
 
@@ -238,6 +239,8 @@ wxBitmap wxBitmapBundleImplSVGNano::DoRasterize(const wxSize& size)
 
     return bitmap;
 }
+
+#ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
 
 // ============================================================================
 // wxBitmapBundleImplSVGD2D declaration
@@ -667,12 +670,12 @@ private:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapBundleImplSVGD2DModule, wxModule);
 
-
+#endif // #ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
 
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
 {
-#ifdef wxHAS_BMPBUNDLE_SVG_D2D
+#ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
 
     if ( wxBitmapBundleImplSVGD2D::IsAvailable() )
     {
@@ -682,7 +685,7 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
             return bundle;
     }
 
-#endif // #ifdef wxHAS_BMPBUNDLE_SVG_D2D
+#endif // #ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
 
     NSVGimage* const svgImage = nsvgParse(data, "px", 96);
     if ( !svgImage )
