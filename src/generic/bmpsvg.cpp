@@ -100,7 +100,6 @@
 
 #ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
     #include "wx/platinfo.h"
-    //#include "wx/msw/private.h"
     #include "wx/msw/private/comptr.h"
     #include "wx/msw/private/graphicsd2d.h"
 
@@ -277,6 +276,7 @@ private:
 
     // whether there was an attempt to initialize, regardless of its success
     static bool ms_initialized;
+
     // large bitmap shared by all instances of wxBitmapBundleImplSVGD2D
     // on which the SVGs are rendered onto
     static wxCOMPtr<IWICBitmap>          ms_bitmap;
@@ -324,7 +324,7 @@ wxBitmapBundleImplSVGD2D::wxBitmapBundleImplSVGD2D(const char* data, const wxSiz
     : wxBitmapBundleImplSVG(sizeDef)
 {
     wxCHECK_RET(data, "null data");
-    wxCHECK_RET(IsAvailable(), "Don't create instances of wxBitmapBundleImplSVGD2D when wxBitmapBundleImplSVGD2D::IsAvailable() returns false");
+    wxCHECK_RET(IsAvailable(), "wxBitmapBundleImplSVGD2D rasterization unavailable");
 
     wxCOMPtr<IStream> SVGStream;
 
@@ -439,7 +439,7 @@ bool wxBitmapBundleImplSVGD2D::GetSVGBitmapFromSharedBitmap(const wxSize& size, 
     }
 
     const unsigned char* src = &buffer[0];
-    // we may not want the whole row
+    // if size.x < ms_maxBitmapSize.x, we need to skip the rest of the ms_bitmap row
     const size_t         rowBytesToSkip = (ms_maxBitmapSize.x - size.x) * 4;
 
     wxAlphaPixelData           bmpdata(bmpOut);
@@ -474,36 +474,36 @@ wxBitmap wxBitmapBundleImplSVGD2D::DoRasterize(const wxSize& size)
 {
     if ( !IsOk() )
     {
-        wxLogDebug("m_SVGDocument is invalid");
+        wxLogDebug("invalid m_SVGDocument");
+        return wxBitmap();
     }
-    else
+
     if ( !CanRasterizeAtSize(size) )
     {
-        wxLogDebug("Couldn't rasterize to bitmap with dimensions %dx%d", size.x, size.y);
+        wxLogDebug("invalid rasterization size %dx%d", size.x, size.y);
+        return wxBitmap();
     }
-    else
-    {
-        const float         scaleValue = wxMin((float)size.x / m_SVGDocumentDimensions.x, (float)size.y / m_SVGDocumentDimensions.y);
-        const D2D1_POINT_2F scaleCenter = D2D1::Point2F(size.x / 2.0f, size.y / 2.0f);
-        const D2D1_SIZE_F   transl = D2D1::SizeF((size.x - m_SVGDocumentDimensions.x) / 2.0f, (size.y - m_SVGDocumentDimensions.y) / 2.0f);
 
-        D2D1_MATRIX_3X2_F transform = D2D1::Matrix3x2F::Identity();
-        wxBitmap          bmp;
+    const float         scaleValue = wxMin((float)size.x / m_SVGDocumentDimensions.x, (float)size.y / m_SVGDocumentDimensions.y);
+    const D2D1_POINT_2F scaleCenter = D2D1::Point2F(size.x / 2.0f, size.y / 2.0f);
+    const D2D1_SIZE_F   transl = D2D1::SizeF((size.x - m_SVGDocumentDimensions.x) / 2.0f, (size.y - m_SVGDocumentDimensions.y) / 2.0f);
 
-        // center
-        transform = transform * D2D1::Matrix3x2F::Translation(transl);
-        // scale
-        transform = transform * D2D1::Matrix3x2F::Scale(scaleValue, scaleValue, scaleCenter);
+    D2D1_MATRIX_3X2_F transform = D2D1::Matrix3x2F::Identity();
+    wxBitmap          bmp;
 
-        ms_context->BeginDraw();
-        ms_context->Clear();
-        ms_context->SetTransform(transform);
-        ms_context->DrawSvgDocument(m_SVGDocument);
-        ms_context->EndDraw();
+    // center
+    transform = transform * D2D1::Matrix3x2F::Translation(transl);
+    // scale
+    transform = transform * D2D1::Matrix3x2F::Scale(scaleValue, scaleValue, scaleCenter);
 
-        if ( GetSVGBitmapFromSharedBitmap(size, bmp) )
-            return bmp;
-    }
+    ms_context->BeginDraw();
+    ms_context->Clear();
+    ms_context->SetTransform(transform);
+    ms_context->DrawSvgDocument(m_SVGDocument);
+    ms_context->EndDraw();
+
+    if ( GetSVGBitmapFromSharedBitmap(size, bmp) )
+        return bmp;
 
     return wxBitmap();
 }
@@ -514,6 +514,7 @@ void wxBitmapBundleImplSVGD2D::Initialize()
 {
     if ( IsInitialized() )
         return;
+
     ms_initialized = true;
 
     const wxPlatformInfo& platformInfo = wxPlatformInfo::Get();
@@ -522,17 +523,17 @@ void wxBitmapBundleImplSVGD2D::Initialize()
     if ( !platformInfo.CheckOSVersion(10, 0, 16299) )
         return;
 
+    if ( wxWICImagingFactory() == NULL || wxD2D1Factory() == NULL )
+    {
+        wxLogDebug("wxDirect2D surprisingly unavailable");
+        return;
+    }
+
     HRESULT hr;
     UINT    width, height;
 
     width  = static_cast<UINT>(ms_maxBitmapSize.x);
     height = static_cast<UINT>(ms_maxBitmapSize.y);
-
-    if ( wxWICImagingFactory() == NULL || wxD2D1Factory() == NULL )
-    {
-        wxLogDebug("wxDirect2D is not available even when it should be.");
-        return;
-    }
 
     hr = wxWICImagingFactory()->CreateBitmap(width, height, GUID_WICPixelFormat32bppPRGBA, WICBitmapCacheOnDemand, &ms_bitmap);
     if ( FAILED(hr) )
@@ -608,6 +609,9 @@ bool wxBitmapBundleImplSVGD2D::wxBitmapBundleImplSVGD2D::CanRasterizeAtSize(cons
  {
      const size_t dataLen = strlen(data);
 
+    // It could be better to use SHCreateMemStream, but more complicated
+    // to implement: https://docs.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-shcreatememstream#remarks
+
     HGLOBAL hMem = ::GlobalAlloc(GMEM_MOVEABLE, dataLen);
 
     if ( !hMem )
@@ -615,9 +619,6 @@ bool wxBitmapBundleImplSVGD2D::wxBitmapBundleImplSVGD2D::CanRasterizeAtSize(cons
         wxLogDebug("Failed to allocate memory for SVG stream");
         return false;
     }
-
-    // It could be better to use SHCreateMemStream, but more complicated
-    // to implement: https://docs.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-shcreatememstream#remarks
 
     LPVOID buff = ::GlobalLock(hMem);
 
