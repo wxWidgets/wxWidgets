@@ -341,6 +341,16 @@ public:
         the returned bitmap to wxIcon.
      */
     wxIcon GetIcon(const wxSize& size) const;
+
+    /**
+        Check if the two bundles refer to the same object.
+
+        Bundles are considered to be same only if they actually use the same
+        underlying object, i.e. are copies of each other. If the two bundles
+        were independently constructed, they're @e not considered to be the
+        same, even if they were created from the same bitmap.
+     */
+    bool IsSameAs(const wxBitmapBundle& other) const;
 };
 
 /**

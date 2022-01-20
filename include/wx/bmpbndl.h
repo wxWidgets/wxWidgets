@@ -123,6 +123,11 @@ public:
     // Access implementation
     wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
 
+    // Check if two objects refer to the same bundle.
+    bool IsSameAs(const wxBitmapBundle& other) const
+    {
+        return GetImpl() == other.GetImpl();
+    }
 
     // Implementation only from now on.
 
