@@ -323,9 +323,13 @@ public:
     {
         SetEventObject(splitter);
         if (splitter) m_id = splitter->GetId();
+
+        m_data.resize.oldSize = 0;
+        m_data.resize.newSize = 0;
     }
     wxSplitterEvent(const wxSplitterEvent& event)
-        : wxNotifyEvent(event), m_data(event.m_data) { }
+        : wxNotifyEvent(event), m_data(event.m_data)
+    { }
 
     // SASH_POS_CHANGED methods
 
@@ -334,17 +338,41 @@ public:
     void SetSashPosition(int pos)
     {
         wxASSERT( GetEventType() == wxEVT_SPLITTER_SASH_POS_CHANGED
-                || GetEventType() == wxEVT_SPLITTER_SASH_POS_CHANGING);
+            || GetEventType() == wxEVT_SPLITTER_SASH_POS_CHANGING
+            || GetEventType() == wxEVT_SPLITTER_SASH_POS_RESIZE);
 
-        m_data.pos = pos;
+        m_data.resize.pos = pos;
     }
 
     int GetSashPosition() const
     {
         wxASSERT( GetEventType() == wxEVT_SPLITTER_SASH_POS_CHANGED
-                || GetEventType() == wxEVT_SPLITTER_SASH_POS_CHANGING);
+            || GetEventType() == wxEVT_SPLITTER_SASH_POS_CHANGING
+            || GetEventType() == wxEVT_SPLITTER_SASH_POS_RESIZE);
 
-        return m_data.pos;
+        return m_data.resize.pos;
+    }
+
+    void SetSize(int oldSize, int newSize)
+    {
+        wxASSERT(GetEventType() == wxEVT_SPLITTER_SASH_POS_RESIZE);
+
+        m_data.resize.oldSize = oldSize;
+        m_data.resize.newSize = newSize;
+    }
+
+    int GetOldSize() const
+    {
+        wxASSERT(GetEventType() == wxEVT_SPLITTER_SASH_POS_RESIZE);
+
+        return m_data.resize.oldSize;
+    }
+
+    int GetNewSize() const
+    {
+        wxASSERT(GetEventType() == wxEVT_SPLITTER_SASH_POS_RESIZE);
+
+        return m_data.resize.newSize;
     }
 
     // UNSPLIT event methods
@@ -378,7 +406,12 @@ private:
     // data for the different types of event
     union
     {
-        int pos;            // position for SASH_POS_CHANGED event
+        struct
+        {
+            int pos;            // position for SASH_POS_* events
+            int oldSize;        // window size for SASH_POS_UPDATE event
+            int newSize;        // window size for SASH_POS_UPDATE event
+        } resize;
         wxWindow *win;      // window being removed for UNSPLIT event
         struct
         {
@@ -402,6 +435,9 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
 
 #define EVT_SPLITTER_SASH_POS_CHANGING(id, fn) \
     wx__DECLARE_SPLITTEREVT(SASH_POS_CHANGING, id, fn)
+
+#define EVT_SPLITTER_SASH_POS_RESIZE(id, fn) \
+    wx__DECLARE_SPLITTEREVT(SASH_POS_UPDATE, id, fn)
 
 #define EVT_SPLITTER_DCLICK(id, fn) \
     wx__DECLARE_SPLITTEREVT(DOUBLECLICKED, id, fn)
