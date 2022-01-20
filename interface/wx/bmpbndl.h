@@ -333,6 +333,14 @@ public:
         @param window Non-null and fully created window.
      */
     wxBitmap GetBitmapFor(const wxWindow* window) const;
+
+    /**
+        Get icon of the specified size.
+
+        This is just a convenient wrapper for GetBitmap() and simply converts
+        the returned bitmap to wxIcon.
+     */
+    wxIcon GetIcon(const wxSize& size) const;
 };
 
 /**
