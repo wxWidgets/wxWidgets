@@ -410,11 +410,20 @@ public:
     /**
         Returns the CPU architecture name, if available.
 
-        @see wxGetCpuArchitectureName()
+        @see wxGetCpuArchitectureName(), GetNativeCpuArchitectureName()
 
         @since 3.1.5
      */
     wxString GetCpuArchitectureName() const;
+
+    /**
+        Returns the native CPU architecture name, if available.
+
+        @since 3.1.6
+
+        @see ::wxGetNativeCpuArchitectureName(), GetCpuArchitectureName()
+     */
+    wxString GetNativeCpuArchitectureName() const;
 
     /**
         Returns the run-time major version of the OS associated with this
