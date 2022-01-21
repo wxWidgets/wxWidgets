@@ -90,6 +90,14 @@
 #define PROCESSOR_ARCHITECTURE_ARM64 12
 #endif
 
+#ifndef IMAGE_FILE_MACHINE_ARM64
+#define IMAGE_FILE_MACHINE_ARM64 0xAA64
+#endif
+
+#ifndef IMAGE_FILE_MACHINE_ARMNT
+#define IMAGE_FILE_MACHINE_ARMNT 0x01c4
+#endif
+
 #include <errno.h>
 
 // For wxKillAllChildren
@@ -1312,8 +1320,52 @@ wxWinVersion wxGetWinVersion()
     return wxWinVersion_Unknown;
 }
 
+wxString wxGetCpuArchitecureNameFromImageType(USHORT imageType)
+{
+    switch (imageType)
+    {
+    case IMAGE_FILE_MACHINE_I386:
+        return "x86";
+    case IMAGE_FILE_MACHINE_AMD64:
+        return "x64";
+    case IMAGE_FILE_MACHINE_IA64:
+        return "Itanium";
+    case IMAGE_FILE_MACHINE_ARMNT:
+        return "arm";
+    case IMAGE_FILE_MACHINE_ARM64:
+        return "arm64";
+    default:
+        return wxString();
+    }
+}
+
+// Wrap IsWow64Process2 API (Available since Win10 1511)
+BOOL wxIsWow64Process2(HANDLE hProcess, USHORT* pProcessMachine, USHORT* pNativeMachine)
+{
+#if wxUSE_DYNLIB_CLASS // Win32
+
+    typedef BOOL(WINAPI *IsWow64Process2_t)(HANDLE, USHORT *, USHORT *);
+
+    wxDynamicLibrary dllKernel32("kernel32.dll");
+    IsWow64Process2_t pfnIsWow64Process2 =
+        (IsWow64Process2_t)dllKernel32.RawGetSymbol("IsWow64Process2");
+
+    if (pfnIsWow64Process2)
+        return pfnIsWow64Process2(hProcess, pProcessMachine, pNativeMachine);
+    else
+#endif
+    return FALSE;
+}
+
 wxString wxGetCpuArchitectureName()
 {
+    // Try to get the current active CPU architecture via IsWow64Process2()
+    // first, fallback to GetNativeSystemInfo() otherwise
+    USHORT machine;
+    if (wxIsWow64Process2(::GetCurrentProcess(), &machine, NULL) &&
+        machine != IMAGE_FILE_MACHINE_UNKNOWN)
+        return wxGetCpuArchitecureNameFromImageType(machine);
+
     SYSTEM_INFO si;
     GetNativeSystemInfo(&si);
 
@@ -1339,6 +1391,18 @@ wxString wxGetCpuArchitectureName()
         return wxString();
     }
 }
+
+wxString wxGetNativeCpuArchitectureName()
+{
+    USHORT machine;
+    USHORT nativeMachine;
+    if (wxIsWow64Process2(::GetCurrentProcess(), &machine, &nativeMachine))
+        return wxGetCpuArchitecureNameFromImageType(nativeMachine);
+    else
+        return wxGetCpuArchitectureName();
+}
+
+
 
 // ----------------------------------------------------------------------------
 // sleep functions

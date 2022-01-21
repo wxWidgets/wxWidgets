@@ -145,6 +145,10 @@
     #include <sys/resource.h>   // for setpriority()
 #endif
 
+#if defined(__DARWIN__)
+    #include <sys/sysctl.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
@@ -1122,6 +1126,19 @@ bool wxIsPlatform64Bit()
 wxString wxGetCpuArchitectureName()
 {
     return wxGetCommandOutput(wxT("uname -m"));
+}
+
+wxString wxGetNativeCpuArchitectureName()
+{
+#if defined(__DARWIN__)
+    // macOS on ARM will report an x86_64 process as translated, assume the native CPU is arm64
+    int translated;
+    size_t translated_size = sizeof(translated);
+    if (sysctlbyname("sysctl.proc_translated", &translated, &translated_size, NULL, 0) == 0)
+        return "arm64";
+    else
+#endif
+        return wxGetCpuArchitectureName();
 }
 
 #ifdef __LINUX__
