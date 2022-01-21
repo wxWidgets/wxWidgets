@@ -311,14 +311,14 @@ private:
 
 // This is a maximum size wxBitmapBundleImplSVGD2D can rasterize to.
 // The larger the size, the larger memory needed and the memory is
-// allocated (ms_bitmap and ms_context)  upon the first use of
+// allocated (ms_bitmap and ms_context) upon the first use of
 // wxBitmapBundleImplSVGD2D and freed only when wxWidgets shuts down.
 // The size should be large enough for wxBitmapBundle purpose.
 const wxSize wxBitmapBundleImplSVGD2D::ms_maxBitmapSize(512, 512);
 
 bool wxBitmapBundleImplSVGD2D::ms_initialized = false;
-wxCOMPtr<IWICBitmap>wxBitmapBundleImplSVGD2D::ms_bitmap;
-wxCOMPtr<ID2D1DeviceContext5>wxBitmapBundleImplSVGD2D::ms_context;
+wxCOMPtr<IWICBitmap> wxBitmapBundleImplSVGD2D::ms_bitmap;
+wxCOMPtr<ID2D1DeviceContext5> wxBitmapBundleImplSVGD2D::ms_context;
 
 wxBitmapBundleImplSVGD2D::wxBitmapBundleImplSVGD2D(const char* data, const wxSize& sizeDef)
     : wxBitmapBundleImplSVG(sizeDef)
@@ -339,11 +339,12 @@ bool wxBitmapBundleImplSVGD2D::IsOk() const
 
 bool wxBitmapBundleImplSVGD2D::CreateSVGDocument(const wxCOMPtr<IStream>& SVGStream)
 {
-    HRESULT     hr;
-    D2D1_SIZE_F viewportSize = D2D1::SizeF(32, 32); // viewportSize is ignored when creating SVGDocument
+    const D2D1_SIZE_F viewportSize = D2D1::SizeF(32, 32); // viewportSize is ignored when creating SVGDocument
 
+    HRESULT hr;
+    
     hr = ms_context->CreateSvgDocument(SVGStream, viewportSize, &m_SVGDocument);
-    if ( FAILED (hr) )
+    if ( FAILED(hr) )
     {
         wxLogApiError("ID2D1DeviceContext5::CreateSvgDocument", hr);
         return false;
@@ -685,10 +686,13 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
 
     if ( wxBitmapBundleImplSVGD2D::IsAvailable() )
     {
-        wxBitmapBundle bundle(new wxBitmapBundleImplSVGD2D(data, sizeDef));
+        const wxBitmapBundleImplSVGD2D* D2DImpl = new wxBitmapBundleImplSVGD2D(data, sizeDef));
 
-        if ( bundle.IsOk() )
-            return bundle;
+        if ( D2DImpl->IsOk() ) // SVG loaded successfully
+            return wxBitmapBundle(D2DImpl);
+        else
+            delete D2DImpl;
+        // fall back to NanoSVG
     }
 
 #endif // #ifdef wxHAS_BMPBUNDLE_IMPL_SVG_D2D
