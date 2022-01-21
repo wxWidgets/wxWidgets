@@ -262,7 +262,9 @@ wxBitmap wxBitmapBundleImplSVGNano::DoRasterize(const wxSize& size)
 class wxBitmapBundleImplSVGD2D : public wxBitmapBundleImplSVG
 {
 public:
-    // data must be 0 terminated
+    // data must be 0 terminated, wxBitmapBundleImplSVGD2D doesn't
+    // take its ownership and it can be deleted after the ctor
+    // was called.
     wxBitmapBundleImplSVGD2D(const char* data, const wxSize& sizeDef);
 
     bool IsOk() const;
@@ -342,7 +344,7 @@ bool wxBitmapBundleImplSVGD2D::CreateSVGDocument(const wxCOMPtr<IStream>& SVGStr
     const D2D1_SIZE_F viewportSize = D2D1::SizeF(32, 32); // viewportSize is ignored when creating SVGDocument
 
     HRESULT hr;
-    
+
     hr = ms_context->CreateSvgDocument(SVGStream, viewportSize, &m_SVGDocument);
     if ( FAILED(hr) )
     {
@@ -686,10 +688,10 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
 
     if ( wxBitmapBundleImplSVGD2D::IsAvailable() )
     {
-        const wxBitmapBundleImplSVGD2D* D2DImpl = new wxBitmapBundleImplSVGD2D(data, sizeDef));
+        wxBitmapBundleImplSVGD2D* D2DImpl = new wxBitmapBundleImplSVGD2D(data, sizeDef);
 
         if ( D2DImpl->IsOk() ) // SVG loaded successfully
-            return wxBitmapBundle(D2DImpl);
+            return wxBitmapBundle::FromImpl(D2DImpl);
         else
             delete D2DImpl;
         // fall back to NanoSVG
@@ -715,9 +717,6 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef)
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
 {
-    // There is nsvgParseFromFile(), but it doesn't work with Unicode filenames
-    // under MSW and does exactly the same thing that we do here in any case,
-    // so it seems better to use our code.
 #ifndef wxNO_SVG_FILE
 #if wxUSE_FFILE
     wxFFile file(path, "rb");
