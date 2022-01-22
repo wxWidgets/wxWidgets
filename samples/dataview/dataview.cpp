@@ -1106,7 +1106,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
     }
 
     if ( HasModelFlag(MODEL_USE_TALL_ROWS) )
-        m_ctrl[nPanel]->SetRowHeight(32);
+        m_ctrl[nPanel]->SetRowHeight(FromDIP(32));
 }
 
 
