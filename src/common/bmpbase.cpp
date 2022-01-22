@@ -206,9 +206,9 @@ bool wxBitmapBase::CopyFromIcon(const wxIcon& icon)
 // Trivial implementations of scale-factor related functions
 // ----------------------------------------------------------------------------
 
-bool wxBitmapBase::CreateScaled(int w, int h, int d, double logicalScale)
+bool wxBitmapBase::DoCreate(const wxSize& sz, double scale, int depth)
 {
-    return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d);
+    return Create(sz*scale, depth);
 }
 
 void wxBitmapBase::SetScaleFactor(double WXUNUSED(scale))

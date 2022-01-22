@@ -599,7 +599,7 @@ void wxToolBarTool::UpdateImages()
         // TODO CS this should use the best current representation, or optionally iterate through all
         wxSize sz = m_bmpNormal.GetDefaultSize();
         m_alternateBitmap = wxBitmap();
-        m_alternateBitmap.Create(sz.x, sz.y, -1); // TODO CS m_alternateBitmap.CreateScaled(sz.x, sz.y, -1, m_bmpNormal.GetScaleFactor());
+        m_alternateBitmap.Create(sz.x, sz.y, -1); // TODO CS m_alternateBitmap.CreateWithLogicalSize(sz, m_bmpNormal.GetScaleFactor());
         m_alternateBitmap.UseAlpha();
         wxMemoryDC dc;
 

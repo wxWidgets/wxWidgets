@@ -747,9 +747,9 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
         return false;
 }
 
-bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
+bool wxBitmap::CreateWithLogicalSize(const wxSize& size, double scale, int depth)
 {
-    return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d);
+    return Create(size*scale, depth);
 }
 
 bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)

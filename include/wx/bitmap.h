@@ -177,7 +177,15 @@ public:
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
-    virtual bool CreateScaled(int w, int h, int d, double logicalScale);
+
+    bool CreateWithLogicalSize(const wxSize& sz,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(sz, scale, depth); }
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(wxSize(width, height), scale, depth); }
 
     virtual int GetHeight() const = 0;
     virtual int GetWidth() const = 0;
@@ -203,8 +211,10 @@ public:
     double GetLogicalHeight() const;
     wxSize GetLogicalSize() const;
 
-    // Old synonyms for GetLogicalXXX() functions, prefer the new names in the
-    // new code.
+    // Old synonyms for CreateWithLogicalSize() and GetLogicalXXX() functions,
+    // prefer the new names in the new code.
+    bool CreateScaled(int w, int h, int d, double logicalScale)
+        { return CreateWithLogicalSize(w, h, logicalScale, d); }
     double GetScaledWidth() const { return GetLogicalWidth(); }
     double GetScaledHeight() const { return GetLogicalHeight(); }
     wxSize GetScaledSize() const { return GetLogicalSize(); }
@@ -273,6 +283,8 @@ public:
     }
 
 protected:
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth);
+
     static wxList sm_handlers;
 
     wxDECLARE_ABSTRACT_CLASS(wxBitmapBase);

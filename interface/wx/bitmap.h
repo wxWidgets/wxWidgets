@@ -460,7 +460,39 @@ public:
     bool Create(int width, int height, const wxDC& dc);
 
     /**
-        Create a bitmap with a scale factor, width and height are multiplied with that factor
+        Create a bitmap specifying its size in logical pixels and the scale
+        factor to use.
+
+        The physical size of the bitmap is obtained by multiplying the given
+        size in logical pixels by @a scale and rounding it to the closest
+        integer.
+
+        @param size
+            The size of the bitmap in logical pixels. Both width and height
+            must be strictly positive.
+        @param scale
+            Scale factor used by the bitmap, see SetScaleFactor().
+        @param depth
+            The number of bits used to represent each bitmap pixel.
+
+        @return @true if the creation was successful.
+
+        @since 3.1.6
+     */
+    bool CreateWithLogicalSize(const wxSize& size,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /// @overload
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /**
+        Create a bitmap with a scale factor.
+
+        This is an older synonym for CreateWithLogicalSize(), use the new
+        function in the new code.
 
         @param width
             The width of the bitmap in pixels, must be strictly positive.
@@ -545,9 +577,9 @@ public:
         Returns the size of bitmap in DPI-independent units.
 
         This assumes that the bitmap was created using the value of scale
-        factor corresponding to the current DPI (see CreateScaled() and
-        SetScaleFactor()) and returns its physical size divided by this scale
-        factor.
+        factor corresponding to the current DPI (see CreateWithLogicalSize()
+        and SetScaleFactor()) and returns its physical size divided by this
+        scale factor.
 
         Unlike GetLogicalSize(), this function returns the same value under all
         platforms and so its result should @e not be used as window or device
@@ -863,8 +895,8 @@ public:
         which logical and physical pixels differ (i.e. wxOSX and wxGTK3, but
         not wxMSW).
 
-        When creating a new bitmap, CreateScaled() can be used to specify the
-        correct scale factor from the beginning.
+        When creating a new bitmap, CreateWithLogicalSize() can be used to
+        specify the correct scale factor from the beginning.
 
         @since 3.1.6
      */
