@@ -400,6 +400,12 @@ wxBitmapBundle wxArtProvider::CreateBitmapBundle(const wxArtID& id,
                                                  const wxArtClient& client,
                                                  const wxSize& size)
 {
+    // Check that we have a valid art ID to ensure that wxBitmapBundleImplArt
+    // will be able to create valid bitmaps when it is used, because it is
+    // expected that a non-empty bundle always has at least one valid bitmap.
+    if ( !GetBitmap(id, client, size).IsOk() )
+        return wxBitmapBundle();
+
     return wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
 }
 
