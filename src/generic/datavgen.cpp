@@ -3387,7 +3387,7 @@ void wxDataViewMainWindow::RecalculateDisplay()
     int height = GetLineStart( GetRowCount() );
 
     SetVirtualSize( width, height );
-    GetOwner()->SetScrollRate( 10, m_lineHeight );
+    GetOwner()->SetScrollRate( FromDIP(10), m_lineHeight );
     UpdateColumnSizes();
 
     Refresh();
