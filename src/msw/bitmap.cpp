@@ -1390,17 +1390,17 @@ wxSize wxBitmap::GetDIPSize() const
     return GetSize() / GetScaleFactor();
 }
 
-double wxBitmap::GetScaledWidth() const
+double wxBitmap::GetLogicalWidth() const
 {
     return GetWidth();
 }
 
-double wxBitmap::GetScaledHeight() const
+double wxBitmap::GetLogicalHeight() const
 {
     return GetHeight();
 }
 
-wxSize wxBitmap::GetScaledSize() const
+wxSize wxBitmap::GetLogicalSize() const
 {
     return GetSize();
 }

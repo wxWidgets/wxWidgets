@@ -191,11 +191,16 @@ public:
     // return the size divided by scale factor
     wxSize GetDIPSize() const;
 
-    // but scaled metrics accessors return the same thing as non-scaled ones,
-    // just as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
-    double GetScaledWidth() const;
-    double GetScaledHeight() const;
-    wxSize GetScaledSize() const;
+    // logical metrics accessors return the same thing as physical ones, just
+    // as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
+    double GetLogicalWidth() const;
+    double GetLogicalHeight() const;
+    wxSize GetLogicalSize() const;
+
+    // old synonyms for GetLogicalXXX() functions
+    double GetScaledWidth() const { return GetLogicalWidth(); }
+    double GetScaledHeight() const { return GetLogicalHeight(); }
+    wxSize GetScaledSize() const { return GetLogicalSize(); }
 
     // implementation only from now on
     // -------------------------------

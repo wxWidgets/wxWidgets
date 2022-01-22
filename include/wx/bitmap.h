@@ -198,10 +198,16 @@ public:
 
     // These functions return the corresponding metrics divided by the scale
     // factor on platforms with DPI-independent pixels (e.g. GTK, Mac) and just
-    // the same thing as the non-scaled accessors elsewhere (e.g. MSW).
-    double GetScaledWidth() const;
-    double GetScaledHeight() const;
-    wxSize GetScaledSize() const;
+    // return the same thing as normal accessors elsewhere (e.g. MSW).
+    double GetLogicalWidth() const;
+    double GetLogicalHeight() const;
+    wxSize GetLogicalSize() const;
+
+    // Old synonyms for GetLogicalXXX() functions, prefer the new names in the
+    // new code.
+    double GetScaledWidth() const { return GetLogicalWidth(); }
+    double GetScaledHeight() const { return GetLogicalHeight(); }
+    wxSize GetScaledSize() const { return GetLogicalSize(); }
 
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
