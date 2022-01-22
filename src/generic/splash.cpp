@@ -72,7 +72,7 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
 
     m_window = new wxSplashScreenWindow(bitmap, this, wxID_ANY, pos, size, wxNO_BORDER);
 
-    SetClientSize(bitmap.GetScaledWidth(), bitmap.GetScaledHeight());
+    SetClientSize(bitmap.GetLogicalWidth(), bitmap.GetLogicalHeight());
 
     if (m_splashStyle & wxSPLASH_CENTRE_ON_PARENT)
         CentreOnParent();
@@ -173,7 +173,7 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
 #endif // USE_PALETTE_IN_SPLASH
 
     dcMem.SelectObjectAsSource(bitmap);
-    dc.Blit(0, 0, bitmap.GetScaledWidth(), bitmap.GetScaledHeight(), &dcMem, 0, 0, wxCOPY,
+    dc.Blit(0, 0, bitmap.GetLogicalWidth(), bitmap.GetLogicalHeight(), &dcMem, 0, 0, wxCOPY,
             true /* use mask */);
     dcMem.SelectObject(wxNullBitmap);
 

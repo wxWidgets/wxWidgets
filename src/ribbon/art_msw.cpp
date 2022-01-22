@@ -1444,9 +1444,9 @@ void wxRibbonMSWArtProvider::DrawTab(
         {
         int x = tab.rect.x + 4;
         if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) == 0)
-            x = tab.rect.x + (tab.rect.width - icon.GetScaledWidth()) / 2;
+            x = tab.rect.x + (tab.rect.width - icon.GetLogicalWidth()) / 2;
         dc.DrawBitmap(icon, x, tab.rect.y + 1 + (tab.rect.height - 1 -
-            icon.GetScaledHeight()) / 2, true);
+            icon.GetLogicalHeight()) / 2, true);
         }
     }
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
@@ -1478,8 +1478,8 @@ void wxRibbonMSWArtProvider::DrawTab(
             int x = tab.rect.x + 3;
             if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
             {
-                x += 3 + tab.page->GetIcon().GetScaledWidth();
-                width -= 3 + tab.page->GetIcon().GetScaledWidth();
+                x += 3 + tab.page->GetIcon().GetLogicalWidth();
+                width -= 3 + tab.page->GetIcon().GetLogicalWidth();
             }
             int y = tab.rect.y + (tab.rect.height - text_height) / 2;
 
@@ -1514,7 +1514,7 @@ void wxRibbonMSWArtProvider::DrawTabSeparator(
     // The tab separator is relatively expensive to draw (for its size), and is
     // usually drawn multiple times sequentially (in different positions), so it
     // makes sense to draw it once and cache it.
-    if(!m_cached_tab_separator.IsOk() || m_cached_tab_separator.GetScaledSize() != rect.GetSize() || visibility != m_cached_tab_separator_visibility)
+    if(!m_cached_tab_separator.IsOk() || m_cached_tab_separator.GetLogicalSize() != rect.GetSize() || visibility != m_cached_tab_separator_visibility)
     {
         wxRect size(rect.GetSize());
         ReallyDrawTabSeparator(wnd, size, visibility);
@@ -1524,7 +1524,7 @@ void wxRibbonMSWArtProvider::DrawTabSeparator(
 
 void wxRibbonMSWArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility)
 {
-    if(!m_cached_tab_separator.IsOk() || m_cached_tab_separator.GetScaledSize() != rect.GetSize())
+    if(!m_cached_tab_separator.IsOk() || m_cached_tab_separator.GetLogicalSize() != rect.GetSize())
     {
         m_cached_tab_separator = wxBitmap(rect.GetSize());
     }
@@ -2326,8 +2326,8 @@ void wxRibbonMSWArtProvider::DrawMinimisedPanel(
 
     if(bitmap.IsOk())
     {
-        dc.DrawBitmap(bitmap, preview.x + (preview.width - bitmap.GetScaledWidth()) / 2,
-            preview.y + (preview.height - 7 - bitmap.GetScaledHeight()) / 2, true);
+        dc.DrawBitmap(bitmap, preview.x + (preview.width - bitmap.GetLogicalWidth()) / 2,
+            preview.y + (preview.height - 7 - bitmap.GetLogicalHeight()) / 2, true);
     }
 
     if (!wnd->IsHovered())
@@ -2506,7 +2506,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
             {
             case wxRIBBON_BUTTONBAR_BUTTON_LARGE:
                 {
-                    int iYBorder = rect.y + bitmap_large.GetScaledHeight() + 4;
+                    int iYBorder = rect.y + bitmap_large.GetLogicalHeight() + 4;
                     wxRect partial_bg(rect);
                     if(state & wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED)
                     {
@@ -2612,9 +2612,9 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
         {
             const int padding = 2;
             dc.DrawBitmap(bitmap_large,
-                rect.x + (rect.width - bitmap_large.GetScaledWidth()) / 2,
+                rect.x + (rect.width - bitmap_large.GetLogicalWidth()) / 2,
                 rect.y + padding, true);
-            int ypos = rect.y + padding + bitmap_large.GetScaledHeight() + padding;
+            int ypos = rect.y + padding + bitmap_large.GetLogicalHeight() + padding;
             int arrow_width = kind == wxRIBBON_BUTTON_NORMAL ? 0 : 8;
             wxCoord label_w, label_h;
             dc.GetTextExtent(label, &label_w, &label_h);
@@ -2666,8 +2666,8 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
         {
             int x_cursor = rect.x + 2;
             dc.DrawBitmap(bitmap_small, x_cursor,
-                    rect.y + (rect.height - bitmap_small.GetScaledHeight())/2, true);
-            x_cursor += bitmap_small.GetScaledWidth() + 2;
+                    rect.y + (rect.height - bitmap_small.GetLogicalHeight())/2, true);
+            x_cursor += bitmap_small.GetLogicalWidth() + 2;
             wxCoord label_w, label_h;
             dc.GetTextExtent(label, &label_w, &label_h);
             dc.DrawText(label, x_cursor,
@@ -2808,8 +2808,8 @@ void wxRibbonMSWArtProvider::DrawTool(
         dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,
             bg_rect.y + (bg_rect.height / 2) - 2, true);
     }
-    dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetScaledWidth()) / 2,
-        bg_rect.y + (bg_rect.height - bitmap.GetScaledHeight()) / 2, true);
+    dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetLogicalWidth()) / 2,
+        bg_rect.y + (bg_rect.height - bitmap.GetLogicalHeight()) / 2, true);
 }
 
 void
@@ -2894,8 +2894,8 @@ void wxRibbonMSWArtProvider::GetBarTabWidth(
     }
     if((m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS) && bitmap.IsOk())
     {
-        width += bitmap.GetScaledWidth();
-        min += bitmap.GetScaledWidth();
+        width += bitmap.GetLogicalWidth();
+        min += bitmap.GetLogicalWidth();
     }
 
     if(ideal != NULL)
@@ -2944,7 +2944,7 @@ int wxRibbonMSWArtProvider::GetTabCtrlHeight(
             const wxRibbonPageTabInfo& info = pages.Item(i);
             if(info.page->GetIcon().IsOk())
             {
-                icon_height = wxMax(icon_height, info.page->GetIcon().GetScaledHeight() + 4);
+                icon_height = wxMax(icon_height, info.page->GetIcon().GetLogicalHeight() + 4);
             }
         }
     }

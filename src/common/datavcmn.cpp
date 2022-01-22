@@ -2185,7 +2185,7 @@ wxSize wxDataViewCheckIconTextRenderer::GetSize() const
     if ( m_value.GetIcon().IsOk() )
     {
 #ifdef __WXGTK3__
-        const wxSize sizeIcon = m_value.GetIcon().GetScaledSize();
+        const wxSize sizeIcon = m_value.GetIcon().GetLogicalSize();
 #else
         const wxSize sizeIcon = m_value.GetIcon().GetSize();
 #endif
@@ -2226,7 +2226,7 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
     if ( drawIcon )
     {
 #ifdef __WXGTK3__
-        const wxSize sizeIcon = icon.GetScaledSize();
+        const wxSize sizeIcon = icon.GetLogicalSize();
 #else
         const wxSize sizeIcon = icon.GetSize();
 #endif

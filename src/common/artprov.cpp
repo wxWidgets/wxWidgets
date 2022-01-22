@@ -190,7 +190,7 @@ private:
 
         // If we really have to, do create a bitmap just to get its size. Note
         // we need the size in logical pixels here, it will be scaled later if
-        // necessary, so use GetScaledSize() and not GetSize().
+        // necessary, so use GetDIPSize() and not GetSize().
         const wxBitmap bitmap = wxArtProvider::GetBitmap(id, client);
         if ( bitmap.IsOk() )
             return bitmap.GetDIPSize();

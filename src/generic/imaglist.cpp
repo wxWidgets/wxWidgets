@@ -134,7 +134,7 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 
     // Ensure image size is the same as the size of the images on the image list.
     wxBitmap bmpResized;
-    const wxSize sz = bmp.GetScaledSize();
+    const wxSize sz = bmp.GetLogicalSize();
     if ( sz.x == imgSize.x && sz.y == imgSize.y )
     {
         bmpResized = bmp;
@@ -178,9 +178,9 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         return -1;
     }
 
-    // We use the scaled, i.e. logical, size here as image list images size is
-    // specified in logical pixels, just as window coordinates and sizes are.
-    const wxSize bitmapSize = bitmap.GetScaledSize();
+    // We use the logical size here as image list images size is specified in
+    // logical pixels, just as window coordinates and sizes are.
+    const wxSize bitmapSize = bitmap.GetLogicalSize();
 
     // There is a special case: a bitmap may contain more than one image,
     // in which case we're supposed to chop it in parts, just as Windows

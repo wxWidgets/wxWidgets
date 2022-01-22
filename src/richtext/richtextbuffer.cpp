@@ -12534,7 +12534,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
     // Don't repeat unless absolutely necessary
     if (m_imageCache.IsOk() && !resetCache && !context.GetLayingOut())
     {
-        retImageSize = wxSize(m_imageCache.GetScaledWidth(), m_imageCache.GetScaledHeight());
+        retImageSize = wxSize(m_imageCache.GetLogicalWidth(), m_imageCache.GetLogicalHeight());
         return true;
     }
 
@@ -12549,7 +12549,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
             m_imageCache = bitmap;
             m_imageState = ImageState_Loaded;
         }
-        retImageSize = wxSize(m_imageCache.GetScaledWidth(), m_imageCache.GetScaledHeight());
+        retImageSize = wxSize(m_imageCache.GetLogicalWidth(), m_imageCache.GetLogicalHeight());
         return true;
     }
 
@@ -12567,7 +12567,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
         {
             wxBitmap bitmap(image_placeholder24x24_xpm);
             m_imageCache = bitmap;
-            m_originalImageSize = wxSize(bitmap.GetScaledWidth(), bitmap.GetScaledHeight());
+            m_originalImageSize = wxSize(bitmap.GetLogicalWidth(), bitmap.GetLogicalHeight());
             m_imageState = ImageState_Bad;
             retImageSize = m_originalImageSize;
             return false;
@@ -12699,7 +12699,7 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, w
     int width = sz.x;
     int height = sz.y;
 
-    if (m_imageCache.IsOk() && m_imageCache.GetScaledWidth() == width && m_imageCache.GetScaledHeight() == height)
+    if (m_imageCache.IsOk() && m_imageCache.GetLogicalWidth() == width && m_imageCache.GetLogicalHeight() == height)
     {
         // Do nothing, we didn't need to change the image cache
         changed = false;

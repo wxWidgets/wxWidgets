@@ -104,7 +104,7 @@ public:
         {
             bitmap_large = MakeResizedBitmap(bitmap_small, bitmap_size_large);
         }
-        else if(bitmap_large.GetScaledSize() != bitmap_size_large)
+        else if(bitmap_large.GetLogicalSize() != bitmap_size_large)
         {
             bitmap_large = MakeResizedBitmap(bitmap_large, bitmap_size_large);
         }
@@ -113,7 +113,7 @@ public:
         {
             bitmap_small = MakeResizedBitmap(bitmap_large, bitmap_size_small);
         }
-        else if(bitmap_small.GetScaledSize() != bitmap_size_small)
+        else if(bitmap_small.GetLogicalSize() != bitmap_size_small)
         {
             bitmap_small = MakeResizedBitmap(bitmap_small, bitmap_size_small);
         }
@@ -418,7 +418,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     {
         if(bitmap.IsOk())
         {
-            m_bitmap_size_large = bitmap.GetScaledSize();
+            m_bitmap_size_large = bitmap.GetLogicalSize();
             if(!bitmap_small.IsOk())
             {
                 m_bitmap_size_small = m_bitmap_size_large;
@@ -427,7 +427,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         }
         if(bitmap_small.IsOk())
         {
-            m_bitmap_size_small = bitmap_small.GetScaledSize();
+            m_bitmap_size_small = bitmap_small.GetLogicalSize();
             if(!bitmap.IsOk())
             {
                 m_bitmap_size_large = m_bitmap_size_small;

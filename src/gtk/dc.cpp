@@ -567,7 +567,7 @@ void wxMemoryDCImpl::Setup()
     m_ok = m_bitmap.IsOk();
     if (m_ok)
     {
-        m_size = m_bitmap.GetScaledSize();
+        m_size = m_bitmap.GetLogicalSize();
         m_contentScaleFactor = m_bitmap.GetScaleFactor();
         cairo_t* cr = m_bitmap.CairoCreate();
         AdjustForRTL(cr);
