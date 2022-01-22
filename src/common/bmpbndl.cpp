@@ -477,6 +477,11 @@ wxBitmap wxBitmapBundle::GetBitmapFor(const wxWindow* window) const
     return GetBitmap(GetPreferredSizeFor(window));
 }
 
+wxIcon wxBitmapBundle::GetIconFor(const wxWindow* window) const
+{
+    return GetIcon(GetPreferredSizeFor(window));
+}
+
 namespace
 {
 

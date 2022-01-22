@@ -343,6 +343,17 @@ public:
     wxIcon GetIcon(const wxSize& size) const;
 
     /**
+        Get icon of the size appropriate for the DPI scaling used by the
+        given window.
+
+        This is similar to GetBitmapFor(), but returns a wxIcon, as GetIcon()
+        does.
+
+        @param window Non-null and fully created window.
+     */
+    wxIcon GetIconFor(const wxWindow* window) const;
+
+    /**
         Check if the two bundles refer to the same object.
 
         Bundles are considered to be same only if they actually use the same

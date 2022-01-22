@@ -115,10 +115,11 @@ public:
     // GetBitmap() converting the returned bitmap to the icon.
     wxIcon GetIcon(const wxSize& size) const;
 
-    // Helper combining GetBitmap() and GetPreferredSizeFor(): returns the
-    // bitmap of the size appropriate for the current DPI scaling of the given
-    // window.
+    // Helpers combining GetBitmap() or GetIcon() and GetPreferredSizeFor():
+    // return the bitmap or icon of the size appropriate for the current DPI
+    // scaling of the given window.
     wxBitmap GetBitmapFor(const wxWindow* window) const;
+    wxIcon GetIconFor(const wxWindow* window) const;
 
     // Access implementation
     wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
