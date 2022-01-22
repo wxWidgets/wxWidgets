@@ -1106,9 +1106,9 @@ bool wxIsPlatformLittleEndian();
 wxString wxGetCpuArchitectureName();
 
 /**
-    In some situations the current processes and native CPU architecture maybe
+    In some situations the current process and native CPU architecture may be
     different. This returns the native CPU architecture regardless of the
-    current processes CPU architecture.
+    current process CPU architecture.
 
     Common examples for CPU architecture differences are the following:
         - Win32 process in x64 Windows (WoW)

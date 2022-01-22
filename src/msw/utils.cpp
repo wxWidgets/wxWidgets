@@ -1339,27 +1339,27 @@ wxString wxGetCpuArchitecureNameFromImageType(USHORT imageType)
     }
 }
 
-// Wrap IsWo64Process2 API (Available since Win10 1511)
+// Wrap IsWow64Process2 API (Available since Win10 1511)
 BOOL wxIsWow64Process2(HANDLE hProcess, USHORT* pProcessMachine, USHORT* pNativeMachine)
 {
 #if wxUSE_DYNLIB_CLASS // Win32
 
     typedef BOOL(WINAPI *IsWow64Process2_t)(HANDLE, USHORT *, USHORT *);
 
-    wxDynamicLibrary dllKernel32(wxT("kernel32.dll"));
+    wxDynamicLibrary dllKernel32("kernel32.dll");
     IsWow64Process2_t pfnIsWow64Process2 =
-        (IsWow64Process2_t)dllKernel32.RawGetSymbol(wxT("IsWow64Process2"));
+        (IsWow64Process2_t)dllKernel32.RawGetSymbol("IsWow64Process2");
 
     if (pfnIsWow64Process2)
         return pfnIsWow64Process2(hProcess, pProcessMachine, pNativeMachine);
     else
 #endif
-        return ERROR_BAD_ENVIRONMENT;
+    return FALSE;
 }
 
 wxString wxGetCpuArchitectureName()
 {
-    // Try to get the current active CPU architecture via IsWo64Process2()
+    // Try to get the current active CPU architecture via IsWow64Process2()
     // first, fallback to GetNativeSystemInfo() otherwise
     USHORT machine;
     if (wxIsWow64Process2(::GetCurrentProcess(), &machine, NULL) &&
