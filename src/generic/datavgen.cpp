@@ -1514,7 +1514,7 @@ wxSize wxDataViewProgressRenderer::GetSize() const
     // renderers, it doesn't have a "good" width for the content. This makes it
     // grow to the whole column, which is pretty much always the desired
     // behaviour. Keep the height fixed so that the progress bar isn't too fat.
-    return wxSize(-1, 12);
+    return GetView()->FromDIP(wxSize(-1, 12));
 }
 
 // ---------------------------------------------------------
@@ -1557,7 +1557,7 @@ bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
     if ( icon.IsOk() )
     {
         dc->DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetHeight())/2);
-        xoffset = icon.GetWidth()+4;
+        xoffset = icon.GetWidth() + GetView()->FromDIP(4);
     }
 
     RenderText(m_value.GetText(), xoffset, rect, dc, state);
@@ -1567,15 +1567,17 @@ bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 
 wxSize wxDataViewIconTextRenderer::GetSize() const
 {
+    wxWindow* const dvc = GetView();
+
     if (!m_value.GetText().empty())
     {
         wxSize size = GetTextExtent(m_value.GetText());
 
         if (m_value.GetIcon().IsOk())
-            size.x += m_value.GetIcon().GetWidth() + 4;
+            size.x += m_value.GetIcon().GetWidth() + dvc->FromDIP(4);
         return size;
     }
-    return wxSize(80,20);
+    return dvc->FromDIP(wxSize(80,20));
 }
 
 wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
@@ -1588,7 +1590,9 @@ wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect 
     // adjust the label rect to take the width of the icon into account
     if (iconText.GetIcon().IsOk())
     {
-        int w = iconText.GetIcon().GetWidth() + 4;
+        wxWindow* const dvc = GetView();
+
+        int w = iconText.GetIcon().GetWidth() + dvc->FromDIP(4);
         labelRect.x += w;
         labelRect.width -= w;
     }
