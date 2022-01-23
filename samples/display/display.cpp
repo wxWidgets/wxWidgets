@@ -28,6 +28,7 @@
 #include "wx/artprov.h"
 #include "wx/bookctrl.h"
 #include "wx/sysopt.h"
+#include "wx/wupdlock.h"
 
 #include "wx/display.h"
 
@@ -307,15 +308,28 @@ void MyFrame::PopuplateWithDisplayInfo()
 
 #if wxUSE_DISPLAY
         wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
-        const wxArrayVideoModes modes = display.GetModes();
-        const size_t countModes = modes.GetCount();
-        for ( size_t nMode = 0; nMode < countModes; nMode++ )
-        {
-            const wxVideoMode& mode = modes[nMode];
 
-            choiceModes->Append(VideoModeToText(mode),
-                                new MyVideoModeClientData(mode));
-        }
+        {
+            // Speed up the Append() loop below by foregoing the repeated resizing
+            // of the choice dropdown via repeated calls to GetBestSize() which
+            // happens deep inside the Append() call chain and executes another
+            // inner loop calling SendMessage() to get the control contents.
+            //
+            // As there can be a couple of hundreds of video modes, this saves
+            // many thousands of such calls and so has a very noticeable effect.
+            wxWindowUpdateLocker lockUpdates(choiceModes);
+
+            const wxArrayVideoModes modes = display.GetModes();
+            const size_t countModes = modes.GetCount();
+            for ( size_t nMode = 0; nMode < countModes; nMode++ )
+            {
+                const wxVideoMode& mode = modes[nMode];
+
+                choiceModes->Append(VideoModeToText(mode),
+                    new MyVideoModeClientData(mode));
+            }
+        } // Destroy wxWindowUpdateLocker to finally resize the window now.
+
         const wxString currentMode = VideoModeToText(display.GetCurrentMode());
         choiceModes->SetStringSelection(currentMode);
 
