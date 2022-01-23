@@ -315,6 +315,9 @@ public:
         cached, avoid calling it for many different sizes if you do use it, as
         this will create many bitmaps that will never be deleted and will
         consume resources until the application termination.
+
+        @param size The size of the bitmap to return, in physical pixels. If
+            this parameter is wxDefaultSize, default bundle size is used.
      */
     wxBitmap GetBitmap(const wxSize& size) const;
 
@@ -330,6 +333,35 @@ public:
         @param window Non-null and fully created window.
      */
     wxBitmap GetBitmapFor(const wxWindow* window) const;
+
+    /**
+        Get icon of the specified size.
+
+        This is just a convenient wrapper for GetBitmap() and simply converts
+        the returned bitmap to wxIcon.
+     */
+    wxIcon GetIcon(const wxSize& size) const;
+
+    /**
+        Get icon of the size appropriate for the DPI scaling used by the
+        given window.
+
+        This is similar to GetBitmapFor(), but returns a wxIcon, as GetIcon()
+        does.
+
+        @param window Non-null and fully created window.
+     */
+    wxIcon GetIconFor(const wxWindow* window) const;
+
+    /**
+        Check if the two bundles refer to the same object.
+
+        Bundles are considered to be same only if they actually use the same
+        underlying object, i.e. are copies of each other. If the two bundles
+        were independently constructed, they're @e not considered to be the
+        same, even if they were created from the same bitmap.
+     */
+    bool IsSameAs(const wxBitmapBundle& other) const;
 };
 
 /**
