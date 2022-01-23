@@ -32,6 +32,7 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
+#include "wx/arrstr.h"
 #include "wx/apptrait.h"
 #include "wx/datetime.h"
 #include "wx/file.h"
@@ -702,9 +703,48 @@ void wxLog::ClearTraceMasks()
     TraceMasks().Clear();
 }
 
+#if wxDEBUG_COLLECT_TRACE_MASKS
+static wxArrayString collected_masks;
+
+void wxLog::DumpCollectedTraceMasks()
+{
+	wxMessageOutputDebug().Output(wxT("[wxCollectedTraceMasks]\n"));
+	for (wxArrayString::const_iterator it = collected_masks.begin(),
+		en = collected_masks.end();
+		it != en;
+	++it)
+	{
+		wxString mask = *it;
+		wxMessageOutputDebug().Output(mask + wxS('\n'));
+	}
+	wxMessageOutputDebug().Output(wxT("[/wxCollectedTraceMasks]\n"));
+}
+#endif
+
 /*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
 {
     wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
+
+#if wxDEBUG_COLLECT_TRACE_MASKS
+	{
+		bool foundIt = false;
+		for (wxArrayString::const_iterator it = collected_masks.begin(),
+			en = collected_masks.end();
+			it != en;
+			++it)
+		{
+			if (*it == mask)
+			{
+				foundIt = true;
+				break;
+			}
+		}
+		if (!foundIt)
+		{
+			collected_masks.Add(mask);
+		}
+	}
+#endif
 
     const wxArrayString& masks = GetTraceMasks();
     for ( wxArrayString::const_iterator it = masks.begin(),

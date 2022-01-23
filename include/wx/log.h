@@ -14,6 +14,14 @@
 #include "wx/defs.h"
 #include "wx/cpp.h"
 
+#if !defined(wxDEBUG_COLLECT_TRACE_MASKS)
+	#if wxDEBUG_LEVEL >= 11
+		#define wxDEBUG_COLLECT_TRACE_MASKS	1
+	#else
+		#define wxDEBUG_COLLECT_TRACE_MASKS	0
+	#endif
+#endif
+
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
@@ -495,6 +503,10 @@ public:
     // is this trace mask in the list?
     static bool IsAllowedTraceMask(const wxString& mask);
 
+#if wxDEBUG_COLLECT_TRACE_MASKS
+	// Dump the set of masks collect through observing calls to IsAllowedTraceMask()
+	static void DumpCollectedTraceMasks();
+#endif
 
     // log formatting
     // -----------------
@@ -1360,6 +1372,9 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 
 
 #else // !wxUSE_LOG
+
+//#if wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
+#pragma message("WARNING: you won't get any wxTrace nor any wxDebug messages as you have wxUSE_LOG turned OFF!")
 
 #undef wxUSE_LOG_DEBUG
 #define wxUSE_LOG_DEBUG 0
