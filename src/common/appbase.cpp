@@ -189,7 +189,12 @@ wxAppConsoleBase::~wxAppConsoleBase()
 {
     wxEvtHandler::RemoveFilter(this);
 
-    // we're being destroyed and using this object from now on may not work or
+#if wxDEBUG_COLLECT_TRACE_MASKS
+	// Now dump the log/trace masks the wxWidgets library has been using during this run.
+	wxLog::DumpCollectedTraceMasks();
+#endif
+
+	// we're being destroyed and using this object from now on may not work or
     // even crash so don't leave dangling pointers to it
     ms_appInstance = NULL;
 
