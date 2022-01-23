@@ -115,7 +115,8 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
     }
     else
     {
-        InitFromHICON((WXHICON)hicon, bmp.GetWidth(), bmp.GetHeight());
+        InitFromHICON((WXHICON)hicon, bmp.GetWidth(), bmp.GetHeight(),
+                      bmp.GetScaleFactor());
     }
 }
 
