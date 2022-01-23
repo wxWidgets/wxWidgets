@@ -118,10 +118,19 @@ public:
     int GetWidth() const { return IsNull() ? 0 : GetGDIImageData()->m_width; }
     int GetHeight() const { return IsNull() ? 0 : GetGDIImageData()->m_height; }
     int GetDepth() const { return IsNull() ? 0 : GetGDIImageData()->m_depth; }
-    double GetScaleFactor() const
-    {
-        return IsNull() ? 1.0 : GetGDIImageData()->m_scaleFactor;
-    }
+
+    // allow setting and storing the scale factor
+    void SetScaleFactor(double scale);
+    double GetScaleFactor() const;
+
+    // return the size divided by scale factor
+    wxSize GetDIPSize() const;
+
+    // logical metrics accessors return the same thing as physical ones, just
+    // as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
+    double GetLogicalWidth() const;
+    double GetLogicalHeight() const;
+    wxSize GetLogicalSize() const;
 
     wxSize GetSize() const
     {

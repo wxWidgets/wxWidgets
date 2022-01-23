@@ -191,19 +191,6 @@ public:
     void UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
 
-    // allow setting and storing the scale factor
-    virtual void SetScaleFactor(double scale);
-    virtual double GetScaleFactor() const;
-
-    // return the size divided by scale factor
-    wxSize GetDIPSize() const;
-
-    // logical metrics accessors return the same thing as physical ones, just
-    // as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
-    double GetLogicalWidth() const;
-    double GetLogicalHeight() const;
-    wxSize GetLogicalSize() const;
-
     // old synonyms for CreateWithLogicalSize() and GetLogicalXXX() functions
     bool CreateScaled(int w, int h, int d, double logicalScale)
         { return CreateWithLogicalSize(wxSize(w, h), logicalScale, d); }

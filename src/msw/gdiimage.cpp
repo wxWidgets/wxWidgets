@@ -336,6 +336,49 @@ void wxGDIImage::InitStandardHandlers()
 }
 
 // ----------------------------------------------------------------------------
+// scale factor-related functions
+// ----------------------------------------------------------------------------
+
+// wxMSW doesn't really use scale factor, but we must still store it to use the
+// correct sizes in the code which uses it to decide on the bitmap size to use.
+
+void wxGDIImage::SetScaleFactor(double scale)
+{
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
+
+    AllocExclusive();
+
+    GetGDIImageData()->m_scaleFactor = scale;
+}
+
+double wxGDIImage::GetScaleFactor() const
+{
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
+
+    return GetGDIImageData()->m_scaleFactor;
+}
+
+wxSize wxGDIImage::GetDIPSize() const
+{
+    return GetSize() / GetScaleFactor();
+}
+
+double wxGDIImage::GetLogicalWidth() const
+{
+    return GetWidth();
+}
+
+double wxGDIImage::GetLogicalHeight() const
+{
+    return GetHeight();
+}
+
+wxSize wxGDIImage::GetLogicalSize() const
+{
+    return GetSize();
+}
+
+// ----------------------------------------------------------------------------
 // wxBitmap handlers
 // ----------------------------------------------------------------------------
 
