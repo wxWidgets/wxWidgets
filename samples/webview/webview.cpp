@@ -324,7 +324,7 @@ WebFrame::WebFrame(const wxString& url) :
     forward = wxBitmapBundle::FromSVGFile("webview_forward.svg", sizeBitmap);
     stop    = wxBitmapBundle::FromSVGFile("webview_stop.svg", sizeBitmap);
     refresh = wxBitmapBundle::FromSVGFile("webview_refresh.svg", sizeBitmap);
-    wxlogo  = wxBitmapBundle::FromSVGFile("wxlogo.svg", sizeBitmap);
+    wxlogo  = wxArtProvider::GetBitmapBundle(wxART_WX_LOGO);
 #else
      toolbarStyle |= wxTB_NOICONS;
 #endif

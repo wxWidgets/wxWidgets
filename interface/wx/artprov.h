@@ -91,6 +91,8 @@ const char* wxART_FIND_AND_REPLACE;
 const char* wxART_FULL_SCREEN;
 const char* wxART_EDIT;
 
+const char* wxART_WX_LOGO;
+
 
 /**
     @class wxArtProvider
@@ -205,6 +207,7 @@ const char* wxART_EDIT;
      @li @c wxART_FLOPPY
      @li @c wxART_CDROM
      @li @c wxART_REMOVABLE
+     @li @c wxART_WX_LOGO (since 3.1.6)
     </td></tr>
     </table>
 

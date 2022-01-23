@@ -23,7 +23,6 @@
             webview_forward.svg
             webview_refresh.svg
             webview_stop.svg
-            wxlogo.svg
         </files>
     </wx-data>
 

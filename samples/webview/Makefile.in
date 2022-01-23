@@ -192,7 +192,7 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 
 data: 
 	@mkdir -p .
-	@for f in webview_back.svg webview_forward.svg webview_refresh.svg webview_stop.svg wxlogo.svg; do \
+	@for f in webview_back.svg webview_forward.svg webview_refresh.svg webview_stop.svg; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
