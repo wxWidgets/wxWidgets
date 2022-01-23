@@ -307,15 +307,40 @@ void MyFrame::PopuplateWithDisplayInfo()
 
 #if wxUSE_DISPLAY
         wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
-        const wxArrayVideoModes modes = display.GetModes();
+
+		// Performance tweak:
+		// 
+		// Speed up the Append() loop below by foregoing the repeated resizing of the choice dropdown via repeated calls to GetBestSize()
+		// which happens deep inside the Append() call chain and executes another inner loop calling SendMessage() to get the control contents.
+		// 
+		// With the 'display' sample, that's about 500+ rounds and about 500*500/2 SendMessage() calls less now.
+		choiceModes->Freeze();
+
+		const wxArrayVideoModes modes = display.GetModes();
         const size_t countModes = modes.GetCount();
         for ( size_t nMode = 0; nMode < countModes; nMode++ )
         {
             const wxVideoMode& mode = modes[nMode];
 
+			// unfreeze the choice control for the last item: so the control can get properly resized for when we're done adding these items here.
+			if (nMode == countModes - 1)
+			{
+				if (choiceModes->IsFrozen())
+				{
+					choiceModes->Thaw();
+				}
+			}
+
             choiceModes->Append(VideoModeToText(mode),
                                 new MyVideoModeClientData(mode));
         }
+
+		// Always make sure to unfreeze the choice dropdown, even when there were ZERO items to add above.
+		if (choiceModes->IsFrozen())
+		{
+			choiceModes->Thaw();
+		}
+
         const wxString currentMode = VideoModeToText(display.GetCurrentMode());
         choiceModes->SetStringSelection(currentMode);
 
