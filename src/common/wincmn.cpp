@@ -2905,15 +2905,10 @@ wxSize wxWindowBase::FromPhys(wxSize sz, const wxWindowBase* w)
 
     if ( scale != 1.0 )
     {
-        // We prefer to round up the size so that conversion from physical
-        // pixels to logical and back doesn't result in smaller value, as this
-        // would e.g. truncate the bitmap of odd size when drawing it at 200%
-        // scaling. Leaving an extra pixel in this case seems like a lesser
-        // evil, even if not ideal.
         if ( sz.x != wxDefaultCoord )
-            sz.x = ceil(sz.x) / scale;
+            sz.x = wxRound(sz.x / scale);
         if ( sz.y != wxDefaultCoord )
-            sz.y = ceil(sz.y) / scale;
+            sz.y = wxRound(sz.y / scale);
     }
 
     return sz;
@@ -2927,9 +2922,9 @@ wxSize wxWindowBase::ToPhys(wxSize sz, const wxWindowBase* w)
     if ( scale != 1.0 )
     {
         if ( sz.x != wxDefaultCoord )
-            sz.x *= scale;
+            sz.x = wxRound(sz.x * scale);
         if ( sz.y != wxDefaultCoord )
-            sz.y *= scale;
+            sz.y = wxRound(sz.y * scale);
     }
 
     return sz;

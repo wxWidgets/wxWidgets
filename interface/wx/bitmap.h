@@ -460,7 +460,39 @@ public:
     bool Create(int width, int height, const wxDC& dc);
 
     /**
-        Create a bitmap with a scale factor, width and height are multiplied with that factor
+        Create a bitmap specifying its size in logical pixels and the scale
+        factor to use.
+
+        The physical size of the bitmap is obtained by multiplying the given
+        size in logical pixels by @a scale and rounding it to the closest
+        integer.
+
+        @param size
+            The size of the bitmap in logical pixels. Both width and height
+            must be strictly positive.
+        @param scale
+            Scale factor used by the bitmap, see SetScaleFactor().
+        @param depth
+            The number of bits used to represent each bitmap pixel.
+
+        @return @true if the creation was successful.
+
+        @since 3.1.6
+     */
+    bool CreateWithLogicalSize(const wxSize& size,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /// @overload
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /**
+        Create a bitmap with a scale factor.
+
+        This is an older synonym for CreateWithLogicalSize(), use the new
+        function in the new code.
 
         @param width
             The width of the bitmap in pixels, must be strictly positive.
@@ -545,11 +577,11 @@ public:
         Returns the size of bitmap in DPI-independent units.
 
         This assumes that the bitmap was created using the value of scale
-        factor corresponding to the current DPI (see CreateScaled() and
-        SetScaleFactor()) and returns its physical size divided by this scale
-        factor.
+        factor corresponding to the current DPI (see CreateWithLogicalSize()
+        and SetScaleFactor()) and returns its physical size divided by this
+        scale factor.
 
-        Unlike GetScaledSize(), this function returns the same value under all
+        Unlike GetLogicalSize(), this function returns the same value under all
         platforms and so its result should @e not be used as window or device
         context coordinates.
 
@@ -565,11 +597,55 @@ public:
     static wxList& GetHandlers();
 
     /**
-        Gets the height of the bitmap in pixels.
+        Returns the height of the bitmap in physical pixels.
 
-        @see GetWidth(), GetSize(), GetScaledHeight()
+        @see GetWidth(), GetSize(), GetLogicalHeight()
     */
     virtual int GetHeight() const;
+
+    /**
+        Returns the height of the bitmap in logical pixels.
+
+        See GetLogicalSize() for more information.
+
+        @see GetLogicalWidth(), GetWidth()
+
+        @since 3.1.6
+     */
+    double GetLogicalHeight() const;
+
+    /**
+        Returns the size of the bitmap in logical pixels.
+
+        For the platforms using DPI-independent pixels, i.e. those where @c
+        wxHAS_DPI_INDEPENDENT_PIXELS is defined, such as wxOSX or wxGTK 3,
+        this function returns the physical size of the bitmap, as returned by
+        GetSize(), divided by its scale factor, as returned by
+        GetScaleFactor(), while for the other platforms, it simply returns the
+        same thing as GetSize().
+
+        This ensures that the result of this function is always expressed in
+        the pixel coordinates appropriate for the current platform, i.e. its
+        return value is always in logical pixels, used for window and wxDC
+        coordinates, whether these pixels are the same as physical pixels,
+        which are returned by GetSize(), or not.
+
+        @see GetLogicalWidth(), GetLogicalHeight(), GetSize()
+
+        @since 2.9.5
+     */
+    wxSize GetLogicalSize() const;
+
+    /**
+        Returns the width of the bitmap in logical pixels.
+
+        See GetLogicalSize() for more information.
+
+        @see GetLogicalHeight(), GetWidth()
+
+        @since 3.1.6
+     */
+    double GetLogicalWidth() const;
 
     /**
         Gets the associated mask (if any) which may have been loaded from a file
@@ -605,69 +681,59 @@ public:
         pixels are not the same as physical ones, such as wxOSX or wxGTK3, and
         this function always returns 1 under the other platforms.
 
-        @see SetScaleFactor(), GetScaledWidth(), GetScaledHeight(), GetScaledSize()
+        @see SetScaleFactor(), GetLogicalWidth(), GetLogicalHeight(), GetLogicalSize()
 
         @since 2.9.5
      */
     virtual double GetScaleFactor() const;
 
     /**
-        Returns the scaled height of the bitmap.
+        Returns the height of the bitmap in logical pixels.
 
-        See GetScaledSize() for more information.
-
-        @see GetScaledWidth(), GetHeight()
+        This is an older synonym for GetLogicalHeight(), use the new function
+        in the new code.
 
         @since 2.9.5
      */
     double GetScaledHeight() const;
 
     /**
-        Returns the scaled size of the bitmap.
+        Returns the size of the bitmap in logical pixels.
 
-        For the platforms using DPI-independent pixels, i.e. those where @c
-        wxHAS_DPI_INDEPENDENT_PIXELS is defined, such as wxOSX or wxGTK 3,
-        this function returns the physical size of the bitmap, as returned by
-        GetSize(), divided by its scale factor, as returned by
-        GetScaleFactor(), while for the other platforms, it simply returns the
-        same thing as GetSize().
-
-        This ensures that the result of this function is always expressed in
-        the pixel coordinates appropriate for the current platform, i.e. its
-        return value is always in logical pixels, used for window and wxDC
-        coordinates, whether these pixels are the same as physical pixels,
-        which are returned by GetSize(), or not.
-
-        @see GetScaledWidth(), GetScaledHeight(), GetSize()
+        This is an older synonym for GetLogicalSize(), use the new function in
+        the new code.
 
         @since 2.9.5
      */
     wxSize GetScaledSize() const;
 
     /**
-        Returns the scaled width of the bitmap.
+        Returns the width of the bitmap in logical pixels.
 
-        See GetScaledSize() for more information.
-
-        @see GetScaledHeight(), GetWidth()
+        This is an older synonym for GetLogicalWidth(), use the new function in
+        the new code.
 
         @since 2.9.5
      */
     double GetScaledWidth() const;
 
     /**
-        Returns the size of the bitmap in pixels.
+        Returns the size of the bitmap in physical pixels.
+
+        The return value of this function doesn't depend on the scale factor,
+        it is always the physical size of the bitmap, i.e. corresponding to the
+        actual number of pixels in it.
 
         @since 2.9.0
 
-        @see GetHeight(), GetWidth(), GetScaledSize()
+        @see GetHeight(), GetWidth(), GetLogicalSize()
     */
     wxSize GetSize() const;
 
     /**
-        Gets the width of the bitmap in pixels.
+        Returns the width of the bitmap in physical pixels.
 
-        @see GetHeight(), GetSize(), GetScaledWidth()
+        @see GetHeight(), GetSize(), GetLogicalWidth()
     */
     virtual int GetWidth() const;
 
@@ -829,8 +895,8 @@ public:
         which logical and physical pixels differ (i.e. wxOSX and wxGTK3, but
         not wxMSW).
 
-        When creating a new bitmap, CreateScaled() can be used to specify the
-        correct scale factor from the beginning.
+        When creating a new bitmap, CreateWithLogicalSize() can be used to
+        specify the correct scale factor from the beginning.
 
         @since 3.1.6
      */

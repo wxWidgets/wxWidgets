@@ -206,9 +206,9 @@ bool wxBitmapBase::CopyFromIcon(const wxIcon& icon)
 // Trivial implementations of scale-factor related functions
 // ----------------------------------------------------------------------------
 
-bool wxBitmapBase::CreateScaled(int w, int h, int d, double logicalScale)
+bool wxBitmapBase::DoCreate(const wxSize& sz, double scale, int depth)
 {
-    return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d);
+    return Create(sz*scale, depth);
 }
 
 void wxBitmapBase::SetScaleFactor(double WXUNUSED(scale))
@@ -227,34 +227,34 @@ wxSize wxBitmapBase::GetDIPSize() const
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
 
-double wxBitmapBase::GetScaledWidth() const
+double wxBitmapBase::GetLogicalWidth() const
 {
     return GetWidth() / GetScaleFactor();
 }
 
-double wxBitmapBase::GetScaledHeight() const
+double wxBitmapBase::GetLogicalHeight() const
 {
     return GetHeight() / GetScaleFactor();
 }
 
-wxSize wxBitmapBase::GetScaledSize() const
+wxSize wxBitmapBase::GetLogicalSize() const
 {
-    return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight()));
+    return wxSize(wxRound(GetLogicalWidth()), wxRound(GetLogicalHeight()));
 }
 
 #else // !wxHAS_DPI_INDEPENDENT_PIXELS
 
-double wxBitmapBase::GetScaledWidth() const
+double wxBitmapBase::GetLogicalWidth() const
 {
     return GetWidth();
 }
 
-double wxBitmapBase::GetScaledHeight() const
+double wxBitmapBase::GetLogicalHeight() const
 {
     return GetHeight();
 }
 
-wxSize wxBitmapBase::GetScaledSize() const
+wxSize wxBitmapBase::GetLogicalSize() const
 {
     return GetSize();
 }

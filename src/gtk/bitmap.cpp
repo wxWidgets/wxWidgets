@@ -18,6 +18,7 @@
     #include "wx/cursor.h"
 #endif
 
+#include "wx/math.h"
 #include "wx/rawbmp.h"
 
 #include "wx/gtk/private/object.h"
@@ -989,9 +990,9 @@ void wxBitmap::SetMask( wxMask *mask )
 }
 
 #ifdef __WXGTK3__
-bool wxBitmap::CreateScaled(int w, int h, int depth, double scale)
+bool wxBitmap::DoCreate(const wxSize& size, double scale, int depth)
 {
-    Create(int(w * scale), int(h * scale), depth);
+    Create(size*scale, depth);
     M_BMPDATA->m_scaleFactor = scale;
     return true;
 }

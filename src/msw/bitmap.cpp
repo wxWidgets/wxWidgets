@@ -747,9 +747,9 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
         return false;
 }
 
-bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
+bool wxBitmap::CreateWithLogicalSize(const wxSize& size, double scale, int depth)
 {
-    return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d);
+    return Create(size*scale, depth);
 }
 
 bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
@@ -1390,17 +1390,17 @@ wxSize wxBitmap::GetDIPSize() const
     return GetSize() / GetScaleFactor();
 }
 
-double wxBitmap::GetScaledWidth() const
+double wxBitmap::GetLogicalWidth() const
 {
     return GetWidth();
 }
 
-double wxBitmap::GetScaledHeight() const
+double wxBitmap::GetLogicalHeight() const
 {
     return GetHeight();
 }
 
-wxSize wxBitmap::GetScaledSize() const
+wxSize wxBitmap::GetLogicalSize() const
 {
     return GetSize();
 }

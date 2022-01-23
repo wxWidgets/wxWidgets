@@ -693,7 +693,7 @@ bool wxRibbonPanel::Realize()
         wxSize panel_min_size = GetMinNotMinimisedSize();
         m_minimised_size = m_art->GetMinimisedPanelMinimumSize(temp_dc, this,
             &bitmap_size, &m_preferred_expand_direction);
-        if(m_minimised_icon.IsOk() && m_minimised_icon.GetScaledSize() != bitmap_size)
+        if(m_minimised_icon.IsOk() && m_minimised_icon.GetLogicalSize() != bitmap_size)
         {
             double scale = m_minimised_icon.GetScaleFactor();
             if (scale > 1.0)

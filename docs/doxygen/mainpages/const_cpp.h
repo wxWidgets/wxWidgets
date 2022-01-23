@@ -178,7 +178,7 @@ Currently the following symbols exist:
     same apparent size on the display independently of the DPI (this symbol
     only exists in wxWidgets 3.1.6 or later). Note that it should rarely, if
     ever, be necessary to use this symbol directly, functions such as
-    wxWindow::FromDIP() and wxBitmap::GetScaledSize() exist to hide the
+    wxWindow::FromDIP() and wxBitmap::GetLogicalSize() exist to hide the
     differences between the platforms with and without DPI-independent pixels.}
 @itemdef{wxHAS_MEMBER_DEFAULT, Defined if the currently used compiler supports
     C++11 @c =default.}

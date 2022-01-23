@@ -86,7 +86,6 @@ public:
     bool Create(int width, int height, const wxDC& WXUNUSED(dc))
         { return Create(width,height); }
 #ifdef __WXGTK3__
-    virtual bool CreateScaled(int w, int h, int depth, double scale) wxOVERRIDE;
     virtual void SetScaleFactor(double scale) wxOVERRIDE;
     virtual double GetScaleFactor() const wxOVERRIDE;
 #endif
@@ -154,6 +153,10 @@ protected:
 
     virtual wxGDIRefData* CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const wxOVERRIDE;
+
+#ifdef __WXGTK3__
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth) wxOVERRIDE;
+#endif
 
 private:
 #ifndef __WXGTK3__

@@ -1217,11 +1217,12 @@ public:
         factor under the other platforms.
 
         Note that dividing an integer value by scale factor doesn't always
-        yield an integer value. This function always round the resulting value
-        up, e.g. 15 physical pixels are translated to 8, not 7, logical pixels
-        in 200% DPI scaling. This ensures that a physical bitmap of size 15 is
-        not truncated if the result of this function is used to create a window
-        to show it, but it does mean that there will be one extra pixel left.
+        yield an integer value. This function rounds the resulting value to
+        the closest integer, e.g. 15 physical pixels are translated to 8, not
+        7, logical pixels in 200% DPI scaling. This ensures that a physical
+        bitmap of size 15 is not truncated if the result of this function is
+        used to create a window to show it, but it does mean that there will be
+        one extra pixel, not covered by this bitmap, left.
 
         @see FromDIP(), ToPhys()
 

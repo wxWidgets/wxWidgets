@@ -961,7 +961,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 
     wxBitmap ret;
     double scale = GetScaleFactor();
-    ret.CreateScaled( rect.width, rect.height, GetDepth(), scale );
+    ret.CreateWithLogicalSize( rect.GetSize(), scale, GetDepth() );
     wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
     if ( HasAlpha() )
         ret.UseAlpha() ;
@@ -1039,17 +1039,18 @@ bool wxBitmap::Create(int w, int h, int d)
 bool wxBitmap::Create(int w, int h, const wxDC& dc)
 {
     double factor = dc.GetContentScaleFactor();
-    return CreateScaled(w,h,wxBITMAP_SCREEN_DEPTH, factor);
+    return CreateWithLogicalSize(w, h, factor);
 }
 
-bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
+bool wxBitmap::DoCreate(const wxSize& size, double scale, int d)
 {
     UnRef();
 
     if ( d < 0 )
         d = wxDisplayDepth() ;
 
-    m_refData = new wxBitmapRefData( w*logicalScale , h*logicalScale , d, logicalScale );
+    const wxSize sizePhys = size*scale;
+    m_refData = new wxBitmapRefData( sizePhys.x, sizePhys.y, d );
 
     return GetBitmapData()->IsOk() ;
 }

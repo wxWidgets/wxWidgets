@@ -2501,7 +2501,7 @@ void wxCellRendererPixbuf::Set(const wxBitmap& bitmap)
         {
             pixbufNew =
             pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
-                int(bitmap.GetScaledWidth()), int(bitmap.GetScaledHeight()));
+                int(bitmap.GetLogicalWidth()), int(bitmap.GetLogicalHeight()));
         }
     }
     g_object_set(G_OBJECT(this), "pixbuf", pixbuf, NULL);
@@ -2520,8 +2520,8 @@ wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget
         wxCellRendererPixbufParentClass->render(cell, cr, widget, background_area, cell_area, flags);
     else
     {
-        const int x = (cell_area->width  - int(bitmap.GetScaledWidth() )) / 2;
-        const int y = (cell_area->height - int(bitmap.GetScaledHeight())) / 2;
+        const int x = (cell_area->width  - int(bitmap.GetLogicalWidth() )) / 2;
+        const int y = (cell_area->height - int(bitmap.GetLogicalHeight())) / 2;
         bitmap.Draw(cr, cell_area->x + x, cell_area->y + y);
     }
 }

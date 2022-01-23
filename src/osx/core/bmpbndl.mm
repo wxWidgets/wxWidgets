@@ -164,7 +164,7 @@ WXImage wxOSXImageFromBitmap( const wxBitmap& bmp)
 {
     WXImage image;
 #if wxOSX_USE_COCOA
-    NSSize sz = NSMakeSize(bmp.GetScaledWidth(), bmp.GetScaledHeight());
+    NSSize sz = NSMakeSize(bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
     image = [[NSImage alloc] initWithSize:sz];
     wxOSXAddBitmapToImage(image, bmp);
 #else

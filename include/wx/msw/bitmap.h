@@ -158,7 +158,14 @@ public:
 
     virtual bool Create(int width, int height, const wxDC& dc);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    virtual bool CreateScaled(int w, int h, int d, double logicalScale);
+
+    bool CreateWithLogicalSize(const wxSize& sz,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return CreateWithLogicalSize(wxSize(width, height), scale, depth); }
 
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
@@ -191,11 +198,18 @@ public:
     // return the size divided by scale factor
     wxSize GetDIPSize() const;
 
-    // but scaled metrics accessors return the same thing as non-scaled ones,
-    // just as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
-    double GetScaledWidth() const;
-    double GetScaledHeight() const;
-    wxSize GetScaledSize() const;
+    // logical metrics accessors return the same thing as physical ones, just
+    // as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
+    double GetLogicalWidth() const;
+    double GetLogicalHeight() const;
+    wxSize GetLogicalSize() const;
+
+    // old synonyms for CreateWithLogicalSize() and GetLogicalXXX() functions
+    bool CreateScaled(int w, int h, int d, double logicalScale)
+        { return CreateWithLogicalSize(wxSize(w, h), logicalScale, d); }
+    double GetScaledWidth() const { return GetLogicalWidth(); }
+    double GetScaledHeight() const { return GetLogicalHeight(); }
+    wxSize GetScaledSize() const { return GetLogicalSize(); }
 
     // implementation only from now on
     // -------------------------------

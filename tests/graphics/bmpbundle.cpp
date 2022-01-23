@@ -81,7 +81,7 @@ TEST_CASE("BitmapBundle::Scaled", "[bmpbundle]")
     // scaled size as default size.
     wxBitmap scaled2x(64, 64);
     scaled2x.SetScaleFactor(2);
-    CHECK( scaled2x.GetScaledSize() == wxSize(32, 32) );
+    CHECK( scaled2x.GetLogicalSize() == wxSize(32, 32) );
 
     wxBitmapBundle b(scaled2x);
     CHECK( b.GetDefaultSize() == wxSize(32, 32) );

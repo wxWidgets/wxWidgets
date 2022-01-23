@@ -128,7 +128,7 @@ wxRect DrawCloseButton(wxDC& dc,
 
     wxBitmap bmp(gtk_widget_render_icon(widget, GTK_STOCK_CLOSE, GTK_ICON_SIZE_SMALL_TOOLBAR, "tab"));
 
-    if(bmp.GetScaledWidth() != s_CloseIconSize || bmp.GetScaledHeight() != s_CloseIconSize)
+    if(bmp.GetLogicalWidth() != s_CloseIconSize || bmp.GetLogicalHeight() != s_CloseIconSize)
     {
         wxImage img = bmp.ConvertToImage();
         img.Rescale(s_CloseIconSize, s_CloseIconSize);
@@ -313,7 +313,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         const wxBitmap bitmap = page.bitmap.GetBitmapFor(wnd);
 
         // draw bitmap
-        int bitmapY = tab_rect.y +(tab_rect.height - bitmap.GetScaledHeight()) / 2;
+        int bitmapY = tab_rect.y +(tab_rect.height - bitmap.GetLogicalHeight()) / 2;
         if(!page.active)
         {
             if (tab_pos == wxAUI_NB_TOP)
@@ -326,7 +326,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
                       bitmapY,
                       true);
 
-        textX += bitmap.GetScaledWidth() + padding;
+        textX += bitmap.GetLogicalWidth() + padding;
     }
 
     wxCoord textW, textH, textY;
