@@ -1235,17 +1235,21 @@ class WXDLLIMPEXP_CORE wxDataViewTreeStoreNode
 {
 public:
     wxDataViewTreeStoreNode( wxDataViewTreeStoreNode *parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = NULL );
     virtual ~wxDataViewTreeStoreNode();
 
     void SetText( const wxString &text )
         { m_text = text; }
     wxString GetText() const
         { return m_text; }
-    void SetIcon( const wxIcon &icon )
+    void SetIcon( const wxBitmapBundle &icon )
         { m_icon = icon; }
-    const wxIcon &GetIcon() const
+    const wxBitmapBundle& GetBitmapBundle() const
         { return m_icon; }
+    wxIcon GetIcon() const
+        { return m_icon.GetIcon(wxDefaultSize); }
     void SetData( wxClientData *data )
         { delete m_data; m_data = data; }
     wxClientData *GetData() const
@@ -1263,7 +1267,7 @@ public:
 private:
     wxDataViewTreeStoreNode  *m_parent;
     wxString                  m_text;
-    wxIcon                    m_icon;
+    wxBitmapBundle            m_icon;
     wxClientData             *m_data;
 };
 
@@ -1273,7 +1277,9 @@ class WXDLLIMPEXP_CORE wxDataViewTreeStoreContainerNode: public wxDataViewTreeSt
 {
 public:
     wxDataViewTreeStoreContainerNode( wxDataViewTreeStoreNode *parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
         wxClientData *data = NULL );
     virtual ~wxDataViewTreeStoreContainerNode();
 
@@ -1284,10 +1290,12 @@ public:
 
     wxDataViewTreeStoreNodes::iterator FindChild(wxDataViewTreeStoreNode* node);
 
-    void SetExpandedIcon( const wxIcon &icon )
+    void SetExpandedIcon( const wxBitmapBundle &icon )
         { m_iconExpanded = icon; }
-    const wxIcon &GetExpandedIcon() const
+    const wxBitmapBundle& GetExpandedBitmapBundle() const
         { return m_iconExpanded; }
+    wxIcon GetExpandedIcon() const
+        { return m_iconExpanded.GetIcon(wxDefaultSize); }
 
     void SetExpanded( bool expanded = true )
         { m_isExpanded = expanded; }
@@ -1301,7 +1309,7 @@ public:
 
 private:
     wxDataViewTreeStoreNodes     m_children;
-    wxIcon                       m_iconExpanded;
+    wxBitmapBundle               m_iconExpanded;
     bool                         m_isExpanded;
 };
 
@@ -1314,20 +1322,32 @@ public:
     ~wxDataViewTreeStore();
 
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = NULL );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = NULL );
     wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = NULL );
 
     wxDataViewItem PrependContainer( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
         wxClientData *data = NULL );
     wxDataViewItem AppendContainer( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
         wxClientData *data = NULL );
     wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
         wxClientData *data = NULL );
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const;
@@ -1335,10 +1355,12 @@ public:
 
     void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const;
-    void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemIcon( const wxDataViewItem& item ) const;
-    void SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemExpandedIcon( const wxDataViewItem& item ) const;
+    void SetItemIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxBitmapBundle GetItemBitmapBundle( const wxDataViewItem& item ) const;
+    wxIcon GetItemIcon( const wxDataViewItem& item ) const;
+    void SetItemExpandedIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxBitmapBundle GetItemExpandedBitmapBundle( const wxDataViewItem& item ) const;
+    wxIcon GetItemExpandedIcon( const wxDataViewItem& item ) const;
     void SetItemData( const wxDataViewItem& item, wxClientData *data );
     wxClientData *GetItemData( const wxDataViewItem& item ) const;
 
@@ -1433,11 +1455,11 @@ public:
     void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const
         { return GetStore()->GetItemText(item); }
-    void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemIcon( const wxDataViewItem& item ) const
+    void SetItemIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxIcon GetItemIcon( const wxDataViewItem& item ) const
         { return GetStore()->GetItemIcon(item); }
-    void SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemExpandedIcon( const wxDataViewItem& item ) const
+    void SetItemExpandedIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxIcon GetItemExpandedIcon( const wxDataViewItem& item ) const
         { return GetStore()->GetItemExpandedIcon(item); }
     void SetItemData( const wxDataViewItem& item, wxClientData *data )
         { GetStore()->SetItemData(item,data); }
@@ -1451,6 +1473,9 @@ public:
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
     void OnSize( wxSizeEvent &event );
+
+protected:
+    virtual void OnImagesChanged() wxOVERRIDE;
 
 private:
     wxDECLARE_EVENT_TABLE();

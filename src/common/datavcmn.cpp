@@ -2217,11 +2217,11 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
     int xoffset = sizeCheck.x + MARGIN_CHECK_ICON;
 
     wxRect rectIcon;
-    const wxIcon& icon = m_value.GetIcon();
-    const bool drawIcon = icon.IsOk();
+    const wxBitmapBundle& bb = m_value.GetBitmapBundle();
+    const bool drawIcon = bb.IsOk();
     if ( drawIcon )
     {
-        const wxSize sizeIcon = icon.GetLogicalSize();
+        const wxSize sizeIcon = bb.GetPreferredSizeFor(GetView());
         rectIcon = wxRect(cell.GetPosition(), sizeIcon);
         rectIcon.x += xoffset;
         rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);
@@ -2260,7 +2260,7 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
 
     // Finally draw the icon, if any.
     if ( drawIcon )
-        dc->DrawIcon(icon, rectIcon.GetPosition());
+        dc->DrawIcon(bb.GetIconFor(GetView()), rectIcon.GetPosition());
 
     return true;
 }
@@ -2583,7 +2583,7 @@ wxDataViewColumn *wxDataViewListCtrl::AppendIconTextColumn( const wxString &labe
 
 wxDataViewTreeStoreNode::wxDataViewTreeStoreNode(
         wxDataViewTreeStoreNode *parent,
-        const wxString &text, const wxIcon &icon, wxClientData *data )
+        const wxString &text, const wxBitmapBundle &icon, wxClientData *data )
     : m_text(text)
     , m_icon(icon)
 {
@@ -2598,7 +2598,7 @@ wxDataViewTreeStoreNode::~wxDataViewTreeStoreNode()
 
 wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(
         wxDataViewTreeStoreNode *parent, const wxString &text,
-        const wxIcon &icon, const wxIcon &expanded, wxClientData *data )
+        const wxBitmapBundle &icon, const wxBitmapBundle &expanded, wxClientData *data )
     : wxDataViewTreeStoreNode( parent, text, icon, data )
     , m_iconExpanded(expanded)
 {
@@ -2647,7 +2647,7 @@ wxDataViewTreeStore::~wxDataViewTreeStore()
 }
 
 wxDataViewItem wxDataViewTreeStore::AppendItem( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon, wxClientData *data )
+        const wxString &text, const wxBitmapBundle &icon, wxClientData *data )
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
     if (!parent_node) return wxDataViewItem(0);
@@ -2660,7 +2660,7 @@ wxDataViewItem wxDataViewTreeStore::AppendItem( const wxDataViewItem& parent,
 }
 
 wxDataViewItem wxDataViewTreeStore::PrependItem( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon, wxClientData *data )
+        const wxString &text, const wxBitmapBundle &icon, wxClientData *data )
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
     if (!parent_node) return wxDataViewItem(0);
@@ -2677,7 +2677,7 @@ wxDataViewItem
 wxDataViewTreeStore::InsertItem(const wxDataViewItem& parent,
                                 const wxDataViewItem& previous,
                                 const wxString& text,
-                                const wxIcon& icon,
+                                const wxBitmapBundle& icon,
                                 wxClientData *data)
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
@@ -2696,7 +2696,7 @@ wxDataViewTreeStore::InsertItem(const wxDataViewItem& parent,
 }
 
 wxDataViewItem wxDataViewTreeStore::PrependContainer( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon, const wxIcon &expanded,
+        const wxString &text, const wxBitmapBundle &icon, const wxBitmapBundle &expanded,
         wxClientData *data )
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
@@ -2713,8 +2713,8 @@ wxDataViewItem wxDataViewTreeStore::PrependContainer( const wxDataViewItem& pare
 wxDataViewItem
 wxDataViewTreeStore::AppendContainer(const wxDataViewItem& parent,
                                      const wxString &text,
-                                     const wxIcon& icon,
-                                     const wxIcon& expanded,
+                                     const wxBitmapBundle& icon,
+                                     const wxBitmapBundle& expanded,
                                      wxClientData * data)
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
@@ -2731,8 +2731,8 @@ wxDataViewItem
 wxDataViewTreeStore::InsertContainer(const wxDataViewItem& parent,
                                      const wxDataViewItem& previous,
                                      const wxString& text,
-                                     const wxIcon& icon,
-                                     const wxIcon& expanded,
+                                     const wxBitmapBundle& icon,
+                                     const wxBitmapBundle& expanded,
                                      wxClientData * data)
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
@@ -2798,7 +2798,7 @@ wxString wxDataViewTreeStore::GetItemText( const wxDataViewItem& item ) const
     return node->GetText();
 }
 
-void wxDataViewTreeStore::SetItemIcon( const wxDataViewItem& item, const wxIcon &icon )
+void wxDataViewTreeStore::SetItemIcon( const wxDataViewItem& item, const wxBitmapBundle &icon )
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return;
@@ -2806,7 +2806,7 @@ void wxDataViewTreeStore::SetItemIcon( const wxDataViewItem& item, const wxIcon 
     node->SetIcon( icon );
 }
 
-const wxIcon &wxDataViewTreeStore::GetItemIcon( const wxDataViewItem& item ) const
+wxIcon wxDataViewTreeStore::GetItemIcon( const wxDataViewItem& item ) const
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return wxNullIcon;
@@ -2814,7 +2814,7 @@ const wxIcon &wxDataViewTreeStore::GetItemIcon( const wxDataViewItem& item ) con
     return node->GetIcon();
 }
 
-void wxDataViewTreeStore::SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon )
+void wxDataViewTreeStore::SetItemExpandedIcon( const wxDataViewItem& item, const wxBitmapBundle &icon )
 {
     wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
     if (!node) return;
@@ -2822,7 +2822,7 @@ void wxDataViewTreeStore::SetItemExpandedIcon( const wxDataViewItem& item, const
     node->SetExpandedIcon( icon );
 }
 
-const wxIcon &wxDataViewTreeStore::GetItemExpandedIcon( const wxDataViewItem& item ) const
+wxIcon wxDataViewTreeStore::GetItemExpandedIcon( const wxDataViewItem& item ) const
 {
     wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
     if (!node) return wxNullIcon;
@@ -2887,15 +2887,18 @@ wxDataViewTreeStore::GetValue(wxVariant &variant,
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return;
 
-    wxIcon icon( node->GetIcon());
+    wxBitmapBundle bb;
     if (node->IsContainer())
     {
         wxDataViewTreeStoreContainerNode *container = (wxDataViewTreeStoreContainerNode*) node;
-        if (container->IsExpanded() && container->GetExpandedIcon().IsOk())
-           icon = container->GetExpandedIcon();
+        if (container->IsExpanded())
+           bb = container->GetExpandedBitmapBundle();
     }
 
-    wxDataViewIconText data( node->GetText(), icon );
+    if (!bb.IsOk())
+        bb = node->GetBitmapBundle();
+
+    wxDataViewIconText data( node->GetText(), bb );
 
     variant << data;
 }
@@ -3045,7 +3048,7 @@ wxDataViewItem wxDataViewTreeCtrl::AppendItem( const wxDataViewItem& parent,
         const wxString &text, int iconIndex, wxClientData *data )
 {
     wxDataViewItem res = GetStore()->
-        AppendItem( parent, text, GetImage(iconIndex), data );
+        AppendItem( parent, text, GetBitmapBundle(iconIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -3056,7 +3059,7 @@ wxDataViewItem wxDataViewTreeCtrl::PrependItem( const wxDataViewItem& parent,
         const wxString &text, int iconIndex, wxClientData *data )
 {
     wxDataViewItem res = GetStore()->
-        PrependItem( parent, text, GetImage(iconIndex), data );
+        PrependItem( parent, text, GetBitmapBundle(iconIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -3067,7 +3070,7 @@ wxDataViewItem wxDataViewTreeCtrl::InsertItem( const wxDataViewItem& parent, con
         const wxString &text, int iconIndex, wxClientData *data )
 {
     wxDataViewItem res = GetStore()->
-        InsertItem( parent, previous, text, GetImage(iconIndex), data );
+        InsertItem( parent, previous, text, GetBitmapBundle(iconIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -3079,7 +3082,7 @@ wxDataViewItem wxDataViewTreeCtrl::PrependContainer( const wxDataViewItem& paren
 {
     wxDataViewItem res = GetStore()->
         PrependContainer( parent, text,
-                          GetImage(iconIndex), GetImage(expandedIndex), data );
+                          GetBitmapBundle(iconIndex), GetBitmapBundle(expandedIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -3091,7 +3094,7 @@ wxDataViewItem wxDataViewTreeCtrl::AppendContainer( const wxDataViewItem& parent
 {
     wxDataViewItem res = GetStore()->
         AppendContainer( parent, text,
-                         GetImage(iconIndex), GetImage(expandedIndex), data );
+                         GetBitmapBundle(iconIndex), GetBitmapBundle(expandedIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -3103,7 +3106,7 @@ wxDataViewItem wxDataViewTreeCtrl::InsertContainer( const wxDataViewItem& parent
 {
     wxDataViewItem res = GetStore()->
         InsertContainer( parent, previous, text,
-                         GetImage(iconIndex), GetImage(expandedIndex), data );
+                         GetBitmapBundle(iconIndex), GetBitmapBundle(expandedIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -3118,7 +3121,7 @@ void wxDataViewTreeCtrl::SetItemText( const wxDataViewItem& item, const wxString
     GetStore()->ValueChanged( item, 0 );
 }
 
-void wxDataViewTreeCtrl::SetItemIcon( const wxDataViewItem& item, const wxIcon &icon )
+void wxDataViewTreeCtrl::SetItemIcon( const wxDataViewItem& item, const wxBitmapBundle &icon )
 {
     GetStore()->SetItemIcon(item,icon);
 
@@ -3126,7 +3129,7 @@ void wxDataViewTreeCtrl::SetItemIcon( const wxDataViewItem& item, const wxIcon &
     GetStore()->ValueChanged( item, 0 );
 }
 
-void wxDataViewTreeCtrl::SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon )
+void wxDataViewTreeCtrl::SetItemExpandedIcon( const wxDataViewItem& item, const wxBitmapBundle &icon )
 {
     GetStore()->SetItemExpandedIcon(item,icon);
 
@@ -3201,6 +3204,11 @@ void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
     }
 #endif
     event.Skip( true );
+}
+
+void wxDataViewTreeCtrl::OnImagesChanged()
+{
+    Refresh();
 }
 
 #endif // wxUSE_DATAVIEWCTRL
