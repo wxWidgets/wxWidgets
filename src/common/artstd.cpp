@@ -33,6 +33,9 @@ class wxDefaultArtProvider : public wxArtProvider
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
                                   const wxSize& size) wxOVERRIDE;
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size) wxOVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
@@ -125,6 +128,10 @@ protected:
 #include "../../art/findrepl.xpm"
 #include "../../art/fullscreen.xpm"
 #include "../../art/edit.xpm"
+
+#ifdef wxHAS_SVG
+    #include "../../art/wxlogo_svg.cpp"
+#endif // wxHAS_SVG
 
 wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
 {
@@ -252,6 +259,35 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
 #endif // wxUSE_IMAGE
 
     return bmp;
+}
+
+wxBitmapBundle
+wxDefaultArtProvider::CreateBitmapBundle(const wxArtID& id,
+                                         const wxArtClient& client,
+                                         const wxSize& size)
+{
+    wxBitmapBundle bb;
+
+#ifdef wxHAS_SVG
+    // We currently handle just a single SVG here.
+    if ( id == wxART_WX_LOGO )
+    {
+        wxSize sizeDef = size != wxDefaultSize ? size : GetSizeHint(client);
+        if ( sizeDef == wxDefaultSize )
+        {
+            // We really need some default size here.
+            sizeDef = wxSize(16, 16);
+        }
+
+        bb = wxBitmapBundle::FromSVG((const char*)wxlogo_svg_data, sizeDef);
+    }
+#else // !wxHAS_SVG
+    wxUnusedVar(id);
+    wxUnusedVar(client);
+    wxUnusedVar(size);
+#endif // wxHAS_SVG/!wxHAS_SVG
+
+    return bb;
 }
 
 #endif // wxUSE_ARTPROVIDER_STD
