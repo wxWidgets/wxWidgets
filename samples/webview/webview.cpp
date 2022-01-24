@@ -320,10 +320,19 @@ WebFrame::WebFrame(const wxString& url) :
     if ( !sizeBitmap.IsFullySpecified() )
         sizeBitmap.Set(32, 32);
 
-    back    = wxBitmapBundle::FromSVGFile("webview_back.svg", sizeBitmap);
-    forward = wxBitmapBundle::FromSVGFile("webview_forward.svg", sizeBitmap);
-    stop    = wxBitmapBundle::FromSVGFile("webview_stop.svg", sizeBitmap);
-    refresh = wxBitmapBundle::FromSVGFile("webview_refresh.svg", sizeBitmap);
+    wxPathList pathlist;
+    pathlist.Add(".");
+    pathlist.Add("..");
+    pathlist.Add("../webview");
+    pathlist.Add("../../../samples/webview");
+    wxFileName svgPath = wxFileName(pathlist.FindValidPath("webview_back.svg"));
+    back    = wxBitmapBundle::FromSVGFile(svgPath.GetFullPath(), sizeBitmap);
+    svgPath.SetName("webview_forward");
+    forward = wxBitmapBundle::FromSVGFile(svgPath.GetFullPath(), sizeBitmap);
+    svgPath.SetName("webview_stop");
+    stop    = wxBitmapBundle::FromSVGFile(svgPath.GetFullPath(), sizeBitmap);
+    svgPath.SetName("webview_refresh");
+    refresh = wxBitmapBundle::FromSVGFile(svgPath.GetFullPath(), sizeBitmap);
     wxlogo  = wxArtProvider::GetBitmapBundle(wxART_WX_LOGO);
 #else
      toolbarStyle |= wxTB_NOICONS;
