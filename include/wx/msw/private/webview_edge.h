@@ -55,6 +55,7 @@ public:
     bool m_initialized;
     bool m_isBusy;
     wxString m_pendingURL;
+    wxString m_pendingPage;
     int m_pendingContextMenuEnabled;
     int m_pendingAccessToDevToolsEnabled;
     wxVector<wxString> m_pendingUserScripts;

@@ -460,6 +460,12 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         m_pendingURL.clear();
     }
 
+    if (!m_pendingPage.empty())
+    {
+        m_ctrl->SetPage(m_pendingPage, "");
+        m_pendingPage.clear();
+    }
+
     return S_OK;
 }
 
@@ -576,6 +582,7 @@ void wxWebViewEdge::LoadURL(const wxString& url)
 {
     if (!m_impl->m_webView)
     {
+        m_impl->m_pendingPage.clear();
         m_impl->m_pendingURL = url;
         return;
     }
@@ -940,8 +947,15 @@ void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> WXUNUSED(handl
 
 void wxWebViewEdge::DoSetPage(const wxString& html, const wxString& WXUNUSED(baseUrl))
 {
-    if (m_impl->m_webView)
-        m_impl->m_webView->NavigateToString(html.wc_str());
+    if (!m_impl->m_webView)
+    {
+        m_impl->m_pendingPage = html;
+        m_impl->m_pendingURL.clear();
+        return;
+    }
+    HRESULT hr = m_impl->m_webView->NavigateToString(html.wc_str());
+    if (FAILED(hr))
+        wxLogApiError("WebView2::NavigateToString", hr);
 }
 
 // wxWebViewFactoryEdge
