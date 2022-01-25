@@ -429,11 +429,18 @@ wxSize wxBitmapBundle::GetDefaultSize() const
     return m_impl->GetDefaultSize();
 }
 
-wxSize wxBitmapBundle::GetPreferredSizeFor(const wxWindow* window) const
+wxSize wxBitmapBundle::GetPreferredBitmapSizeFor(const wxWindow* window) const
 {
     wxCHECK_MSG( window, wxDefaultSize, "window must be valid" );
 
     return GetPreferredSizeAtScale(window->GetDPIScaleFactor());
+}
+
+wxSize wxBitmapBundle::GetPreferredLogicalSizeFor(const wxWindow* window) const
+{
+    wxCHECK_MSG( window, wxDefaultSize, "window must be valid" );
+
+    return window->FromPhys(GetPreferredSizeAtScale(window->GetDPIScaleFactor()));
 }
 
 wxSize wxBitmapBundle::GetPreferredSizeAtScale(double scale) const
@@ -474,12 +481,12 @@ wxIcon wxBitmapBundle::GetIcon(const wxSize& size) const
 
 wxBitmap wxBitmapBundle::GetBitmapFor(const wxWindow* window) const
 {
-    return GetBitmap(GetPreferredSizeFor(window));
+    return GetBitmap(GetPreferredBitmapSizeFor(window));
 }
 
 wxIcon wxBitmapBundle::GetIconFor(const wxWindow* window) const
 {
-    return GetIcon(GetPreferredSizeFor(window));
+    return GetIcon(GetPreferredBitmapSizeFor(window));
 }
 
 namespace

@@ -92,7 +92,7 @@ wxStaticBitmapBase::~wxStaticBitmapBase()
 wxSize wxStaticBitmapBase::DoGetBestSize() const
 {
     if ( m_bitmapBundle.IsOk() )
-        return FromPhys(m_bitmapBundle.GetPreferredSizeFor(this));
+        return m_bitmapBundle.GetPreferredLogicalSizeFor(this);
 
     // the fall back size is completely arbitrary
     return wxSize(16, 16);

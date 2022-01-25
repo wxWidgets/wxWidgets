@@ -306,7 +306,7 @@ wxSize wxAuiMSWTabArt::GetTabSize(wxDC& dc,
     // if there's a bitmap, add space for it
     if ( bitmap.IsOk() )
     {
-        const wxSize bitmapSize = wnd->FromPhys(bitmap.GetPreferredSizeFor(wnd));
+        const wxSize bitmapSize = bitmap.GetPreferredLogicalSizeFor(wnd);
 
         tabWidth += bitmapSize.x + wnd->FromDIP(3); // bitmap padding
         tabHeight = wxMax(tabHeight, bitmapSize.y + wnd->FromDIP(2));
