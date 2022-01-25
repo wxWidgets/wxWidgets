@@ -147,10 +147,10 @@ public:
     }
 
     wxUint32 GetRGB() const
-        { return Red() | (Green() << 8) | (Blue() << 16); }
+        { return wxUint32(Red()) | wxUint32(Green() << 8) | wxUint32(Blue() << 16); }
 
     wxUint32 GetRGBA() const
-        { return Red() | (Green() << 8) | (Blue() << 16) | (Alpha() << 24); }
+        { return wxUint32(Red()) | wxUint32(Green() << 8) | wxUint32(Blue() << 16) | wxUint32(Alpha() << 24); }
 
 #if !wxCOLOUR_IS_GDIOBJECT
     virtual bool IsOk() const= 0;
