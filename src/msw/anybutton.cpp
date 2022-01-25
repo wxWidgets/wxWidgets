@@ -108,7 +108,7 @@ public:
     wxButtonImageData(wxWindow* btn, const wxBitmapBundle& normalBundle)
         : m_btn(btn)
     {
-        m_bitmapSize = normalBundle.GetPreferredSizeFor(btn);
+        m_bitmapSize = normalBundle.GetPreferredBitmapSizeFor(btn);
 
         m_bitmapBundles[wxAnyButton::State_Normal] = normalBundle;
 
@@ -125,7 +125,7 @@ public:
     {
         event.Skip();
 
-        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredSizeFor(m_btn);
+        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredBitmapSizeFor(m_btn);
     }
 
     // Bitmap can be set either explicitly, when the bitmap for the given state

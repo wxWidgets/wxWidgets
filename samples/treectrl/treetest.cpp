@@ -1015,7 +1015,7 @@ void MyTreeCtrl::CreateImages(int size)
             return m_sizeDef;
         }
 
-        wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE
+        wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
         {
             return m_sizeDef*scale;
         }

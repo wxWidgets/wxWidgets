@@ -410,7 +410,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
 
 
 
-    const wxSize sizeDropDown = m_buttonDropDownBmp.GetPreferredSizeFor(wnd);
+    const wxSize sizeDropDown = m_buttonDropDownBmp.GetPreferredLogicalSizeFor(wnd);
     dropBmpX = dropDownRect.x +
                 (dropDownRect.width/2) -
                 (sizeDropDown.x/2);

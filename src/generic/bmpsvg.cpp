@@ -108,7 +108,7 @@ public:
     }
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
 private:
@@ -142,7 +142,7 @@ wxSize wxBitmapBundleImplSVG::GetDefaultSize() const
     return m_sizeDef;
 }
 
-wxSize wxBitmapBundleImplSVG::GetPreferredSizeAtScale(double scale) const
+wxSize wxBitmapBundleImplSVG::GetPreferredBitmapSizeAtScale(double scale) const
 {
     // We consider that we can render at any scale.
     return m_sizeDef*scale;

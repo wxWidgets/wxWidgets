@@ -162,7 +162,7 @@ public:
         return m_sizeDefault;
     }
 
-    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
     {
         // We have no preferred sizes.
         return m_sizeDefault*scale;

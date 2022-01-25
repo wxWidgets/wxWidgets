@@ -685,7 +685,7 @@ wxAuiDefaultDockArt::DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wx
     }
 
     // Ensure the icon fits into the title bar.
-    wxSize iconSize = pane.icon.GetPreferredSizeFor(window);
+    wxSize iconSize = pane.icon.GetPreferredLogicalSizeFor(window);
     if (iconSize.y > rect.height)
     {
         iconSize *= static_cast<double>(rect.height) / iconSize.y;
@@ -693,7 +693,7 @@ wxAuiDefaultDockArt::DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wx
 
     // Draw the icon centered vertically
     int xOffset = window->FromDIP(2);
-    const wxBitmap& icon = pane.icon.GetBitmap(iconSize);
+    const wxBitmap& icon = pane.icon.GetBitmap(window->ToPhys(iconSize));
     dc.DrawBitmap(icon,
                   rect.x+xOffset, rect.y+(rect.height-icon.GetLogicalHeight())/2,
                   true);

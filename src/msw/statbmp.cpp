@@ -109,7 +109,7 @@ WXDWORD wxStaticBitmap::MSWGetStyle(long style, WXDWORD *exstyle) const
 wxSize wxStaticBitmap::GetImageSize() const
 {
     return m_icon.IsOk() ? m_icon.GetSize()
-                         : m_bitmapBundle.GetPreferredSizeFor(this);
+                         : m_bitmapBundle.GetPreferredBitmapSizeFor(this);
 }
 
 void wxStaticBitmap::SetIcon(const wxIcon& icon)

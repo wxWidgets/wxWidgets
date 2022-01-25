@@ -99,11 +99,14 @@ public:
     // default DPI, i.e. 100% scaling. Returns invalid size for empty bundle.
     wxSize GetDefaultSize() const;
 
+    // Get the physical size of the preferred bitmap at the given scale.
+    wxSize GetPreferredBitmapSizeAtScale(double scale) const;
+
     // Get preferred size, i.e. usually the closest size in which a bitmap is
     // available to the ideal size determined from the default size and the DPI
-    // scaling, for the given window.
-    wxSize GetPreferredSizeFor(const wxWindow* window) const;
-    wxSize GetPreferredSizeAtScale(double scale) const;
+    // scaling, for the given window, in physical/logical pixels respectively.
+    wxSize GetPreferredBitmapSizeFor(const wxWindow* window) const;
+    wxSize GetPreferredLogicalSizeFor(const wxWindow* window) const;
 
     // Get bitmap of the specified size, creating a new bitmap from the closest
     // available size by rescaling it if necessary.
@@ -115,9 +118,9 @@ public:
     // GetBitmap() converting the returned bitmap to the icon.
     wxIcon GetIcon(const wxSize& size) const;
 
-    // Helpers combining GetBitmap() or GetIcon() and GetPreferredSizeFor():
-    // return the bitmap or icon of the size appropriate for the current DPI
-    // scaling of the given window.
+    // Helpers combining GetPreferredBitmapSizeFor() and GetBitmap() or
+    // GetIcon(): return the bitmap or icon of the size appropriate for the
+    // current DPI scaling of the given window.
     wxBitmap GetBitmapFor(const wxWindow* window) const;
     wxIcon GetIconFor(const wxWindow* window) const;
 
@@ -217,7 +220,7 @@ public:
     // Return the preferred size that should be used at the given scale.
     //
     // Must always return a valid size.
-    virtual wxSize GetPreferredSizeAtScale(double scale) const = 0;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const = 0;
 
     // Retrieve the bitmap of exactly the given size.
     //

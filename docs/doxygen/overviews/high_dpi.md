@@ -176,6 +176,9 @@ use "Logical", "Physical" or "DIP" in their names, the only exceptions are:
   wxBitmap::GetLogicalHeight() and wxBitmap::GetLogicalSize() to use or get the
   size in logical pixels which must be used in any computations involving the
   sizes expressed in logical units.
+- Similarly, the size returned by wxBitmapBundle::GetPreferredBitmapSizeFor()
+  is in physical pixels, but wxBitmapBundle::GetPreferredLogicalSizeFor() can
+  be used to retrieve the same value in logical units.
 - The default size of wxBitmapBundle, taken by wxBitmapBundle::FromSVG() and
   returned by wxBitmapBundle::GetDefaultSize() is in DIPs.
 

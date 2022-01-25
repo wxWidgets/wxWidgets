@@ -2221,7 +2221,7 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
     const bool drawIcon = bb.IsOk();
     if ( drawIcon )
     {
-        const wxSize sizeIcon = bb.GetPreferredSizeFor(GetView());
+        const wxSize sizeIcon = bb.GetPreferredLogicalSizeFor(GetView());
         rectIcon = wxRect(cell.GetPosition(), sizeIcon);
         rectIcon.x += xoffset;
         rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);

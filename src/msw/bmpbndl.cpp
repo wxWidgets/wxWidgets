@@ -138,7 +138,7 @@ public:
                          const wxBitmap& bitmap);
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
 private:
@@ -186,7 +186,7 @@ wxSize wxBitmapBundleImplRC::GetDefaultSize() const
     return m_bitmaps[0].GetSize();
 }
 
-wxSize wxBitmapBundleImplRC::GetPreferredSizeAtScale(double scale) const
+wxSize wxBitmapBundleImplRC::GetPreferredBitmapSizeAtScale(double scale) const
 {
     // Optimistically assume we're going to use this exact scale by default.
     double scalePreferred = scale;

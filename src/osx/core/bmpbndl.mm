@@ -113,7 +113,7 @@ public:
     ~wxOSXImageBundleImpl();
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 };
 
@@ -138,7 +138,7 @@ wxSize wxOSXImageBundleImpl::GetDefaultSize() const
     return wxSize(sz.width, sz.height);
 }
 
-wxSize wxOSXImageBundleImpl::GetPreferredSizeAtScale(double scale) const
+wxSize wxOSXImageBundleImpl::GetPreferredBitmapSizeAtScale(double scale) const
 {
     // The system always performs scaling, as the scaling factor is integer and
     // so it doesn't make sense to round it up or down, hence we should use the
@@ -253,7 +253,7 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
         image = wxOSXImageFromBitmap(bmp);
 
         // unconditionally try to add a 2x version, if there really is a different one
-        wxSize doublesz = impl->GetPreferredSizeAtScale(2.0);
+        wxSize doublesz = impl->GetPreferredBitmapSizeAtScale(2.0);
         if ( doublesz != sz )
         {
             bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(doublesz);
