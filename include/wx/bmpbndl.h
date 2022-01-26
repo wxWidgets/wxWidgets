@@ -78,6 +78,13 @@ public:
 
     // Load SVG image from the given file (must be a local file, not an URL).
     static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+
+    // Create from SVG image stored as an application resource.
+    // On Windows, name must be a resource with RT_RCDATA type.
+    // On MacOS, name must be a file with an extension "svg" placed in the "Resources"
+    // subdirectory of the application bundle.
+    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
+
 #endif // wxHAS_SVG
 
     // Create from the resources: all existing versions of the bitmap of the

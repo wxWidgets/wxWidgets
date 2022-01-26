@@ -352,3 +352,29 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
 
     return wxBitmapBundle(new wxBitmapBundleImplRC(resourceInfos, bitmap));
 }
+
+#ifdef wxHAS_SVG
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSize& sizeDef)
+{
+    // Currently we hardcode RCDATA resource type as this is what is usually
+    // used for the embedded images. We could allow specifying the type as part
+    // of the name in the future (e.g. "type:name" or something like this) if
+    // really needed.
+    wxCharBuffer svgData = wxCharBuffer::CreateOwned(wxLoadUserResource(name, RT_RCDATA, NULL, wxGetInstance()));
+    
+    if ( !svgData.data() )
+    {        
+        wxLogError(wxS("SVG image \"%s\" not found, check ")
+                   wxS("that the resource file contains \"RCDATA\" ")
+                   wxS("resource with this name."),
+                   name);
+
+        return wxBitmapBundle();
+    }
+
+    return wxBitmapBundle::FromSVG(svgData.data(), sizeDef);
+} 
+
+#endif
