@@ -363,9 +363,9 @@ wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSiz
     // of the name in the future (e.g. "type:name" or something like this) if
     // really needed.
     wxCharBuffer svgData = wxCharBuffer::CreateOwned(wxLoadUserResource(name, RT_RCDATA, NULL, wxGetInstance()));
-    
+
     if ( !svgData.data() )
-    {        
+    {
         wxLogError(wxS("SVG image \"%s\" not found, check ")
                    wxS("that the resource file contains \"RCDATA\" ")
                    wxS("resource with this name."),
@@ -375,6 +375,6 @@ wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSiz
     }
 
     return wxBitmapBundle::FromSVG(svgData.data(), sizeDef);
-} 
+}
 
 #endif
