@@ -63,7 +63,7 @@ public:
     }
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
 private:
@@ -169,7 +169,7 @@ wxSize wxBitmapBundleImplSet::GetDefaultSize() const
     return m_sizeDefault;
 }
 
-wxSize wxBitmapBundleImplSet::GetPreferredSizeAtScale(double scale) const
+wxSize wxBitmapBundleImplSet::GetPreferredBitmapSizeAtScale(double scale) const
 {
     // Target size is the ideal size we'd like the bitmap to have at this scale.
     const wxSize sizeTarget = GetDefaultSize()*scale;
@@ -433,22 +433,22 @@ wxSize wxBitmapBundle::GetPreferredBitmapSizeFor(const wxWindow* window) const
 {
     wxCHECK_MSG( window, wxDefaultSize, "window must be valid" );
 
-    return GetPreferredSizeAtScale(window->GetDPIScaleFactor());
+    return GetPreferredBitmapSizeAtScale(window->GetDPIScaleFactor());
 }
 
 wxSize wxBitmapBundle::GetPreferredLogicalSizeFor(const wxWindow* window) const
 {
     wxCHECK_MSG( window, wxDefaultSize, "window must be valid" );
 
-    return window->FromPhys(GetPreferredSizeAtScale(window->GetDPIScaleFactor()));
+    return window->FromPhys(GetPreferredBitmapSizeAtScale(window->GetDPIScaleFactor()));
 }
 
-wxSize wxBitmapBundle::GetPreferredSizeAtScale(double scale) const
+wxSize wxBitmapBundle::GetPreferredBitmapSizeAtScale(double scale) const
 {
     if ( !m_impl )
         return wxDefaultSize;
 
-    return m_impl->GetPreferredSizeAtScale(scale);
+    return m_impl->GetPreferredBitmapSizeAtScale(scale);
 }
 
 wxBitmap wxBitmapBundle::GetBitmap(const wxSize& size) const
@@ -537,7 +537,7 @@ wxBitmapBundle::GetConsensusSizeFor(wxWindow* win,
     SizePrefs prefs;
     for ( size_t n = 0; n < bundles.size(); ++n )
     {
-        RecordSizePref(prefs, bundles[n].GetPreferredSizeAtScale(scale));
+        RecordSizePref(prefs, bundles[n].GetPreferredBitmapSizeAtScale(scale));
     }
 
     // Now find the size preferred by most tools.

@@ -105,7 +105,7 @@ public:
     wxSize GetPreferredBitmapSizeFor(const wxWindow* window) const;
     // Same as above, but returning value is in logical size.
     wxSize GetPreferredLogicalSizeFor(const wxWindow* window) const;
-    wxSize GetPreferredSizeAtScale(double scale) const;
+    wxSize GetPreferredBitmapSizeAtScale(double scale) const;
 
     // Get bitmap of the specified size, creating a new bitmap from the closest
     // available size by rescaling it if necessary.
@@ -219,7 +219,7 @@ public:
     // Return the preferred size that should be used at the given scale.
     //
     // Must always return a valid size.
-    virtual wxSize GetPreferredSizeAtScale(double scale) const = 0;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const = 0;
 
     // Retrieve the bitmap of exactly the given size.
     //

@@ -293,18 +293,30 @@ public:
         bitmap doesn't need to be rescaled, which typically significantly
         lowers its quality.
      */
-    wxSize GetPreferredSizeAtScale(double scale) const;
+    wxSize GetPreferredBitmapSizeAtScale(double scale) const;
 
     /**
         Get the size that would be best to use for this bundle at the DPI
         scaling factor used by the given window.
 
-        This is just a convenient wrapper for GetPreferredSizeAtScale() calling
+        This is just a convenient wrapper for GetPreferredBitmapSizeAtScale() calling
         that function with the result of wxWindow::GetDPIScaleFactor().
 
         @param window Non-null and fully created window.
      */
-    wxSize GetPreferredSizeFor(const wxWindow* window) const;
+    wxSize GetPreferredBitmapSizeFor(const wxWindow* window) const;
+
+    /**
+        Get the size that would be best to use for this bundle at the DPI
+        scaling factor used by the given window in logical size.
+
+        This is just call GetPreferredBitmapSizeAtScale() with the result of
+        wxWindow::GetDPIScaleFactor() and convert returned value with
+        wxWindow::FromPhys().
+
+        @param window Non-null and fully created window.
+     */
+    wxSize GetPreferredLogicalSizeFor(const wxWindow* window) const;
 
     /**
         Get bitmap of the specified size, creating a new bitmap from the closest
@@ -384,7 +396,7 @@ public:
                 ... determine the minimum/default size for bitmap to use ...
             }
 
-            wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE
+            wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
             {
                 // If it's ok to scale the bitmap, just use the standard size
                 // at the given scale:
@@ -428,7 +440,7 @@ public:
 
         Must always return a valid size.
      */
-    virtual wxSize GetPreferredSizeAtScale(double scale) const = 0;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const = 0;
 
     /**
         Retrieve the bitmap of exactly the given size.
