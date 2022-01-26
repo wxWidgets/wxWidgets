@@ -76,6 +76,7 @@
     wxBITMAP_BUNDLE_2() macro which can avoid the need to check for
     wxHAS_IMAGE_RESOURCES explicitly in the code in a common case of having
     only 2 embedded resources (for standard and high DPI).
+    See also FromSVGResource().
 
     Also note that the existing code using wxBitmap is compatible with the
     functions taking wxBitmapBundle in wxWidgets 3.1.6 and later because
@@ -187,14 +188,16 @@ public:
         Create a bundle from the bitmaps in the application resources.
 
         This function can only be used on the platforms supporting storing
-        bitmaps in resources, and currently only works under MSW and simply
-        returns an empty bundle on the other platforms.
+        bitmaps in resources, and currently only works under MSW and MacOS
+        and returns an empty bundle on the other platforms.
 
         Under MSW, for this function to create a valid bundle, you must have @c
         RCDATA resource with the given @a name in your application resource
         file (with the extension @c .rc) containing PNG file, and any other
         resources using @a name as prefix and suffix with the scale, e.g. "_2x"
         or "_1_5x" (for 150% DPI) will be also loaded as part of the bundle.
+
+         @see FromSVGResource()
      */
     static wxBitmapBundle FromResources(const wxString& name);
 
@@ -260,6 +263,21 @@ public:
             this bundle.
      */
     static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+
+    /**
+        Create a bundle from the SVG image loaded from an application resource.
+        Available only on the platforms supporting images in resources, i.e.,
+        MSW and MacOS.
+
+        @param name On MSW, it must be a resource with @c RT_RCDATA type.
+            On MacOS, it must be a file with an extension "svg" placed in
+            the "Resources" subdirectory of the application bundle.
+        @param sizeDef The default size to return from GetDefaultSize() for
+            this bundle.
+
+        @see FromResources(), FromSVGFile()
+     */
+    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
 
     /**
         Check if bitmap bundle is non-empty.

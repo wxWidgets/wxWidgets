@@ -358,7 +358,7 @@ wxBitmapBundle wxBitmapBundle::FromImpl(wxBitmapBundleImpl* impl)
 }
 
 
-// MSW has its own, actually working, version, in MSW-specific code.
+// MSW and MacOS have their own, actually working, version, in their platform-specific code.
 #if !defined( __WXMSW__ ) && !defined( __WXOSX__ )
 
 /* static */
@@ -373,6 +373,23 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& WXUNUSED(name))
 
     return wxBitmapBundle();
 }
+
+#ifdef wxHAS_SVG
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& WXUNUSED(name), const wxSize& WXUNUSED(sizeDef))
+{
+    wxFAIL_MSG
+    (
+        "Loading an SVG from a resource not available on this platform, "
+        "don't use this function and call wxBitmapBundle::FromSVG(File)() "
+        "instead."
+    );
+
+    return wxBitmapBundle();
+}
+
+#endif // wxHAS_SVG
 
 #endif // !__WXMSW__ && !__WXOSX__
 
