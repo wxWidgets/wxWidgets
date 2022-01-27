@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# This is a slightly generalized version of bin2c.py and is based on it.
+# This is a slightly generalized version of png2c.py and is based on it.
 
 import sys
 import os
