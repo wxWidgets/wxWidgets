@@ -1093,6 +1093,20 @@ void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title, wxFontEncoding 
     [m_macWindow setTitle:wxCFStringRef( title , encoding ).AsNSString()];
 }
 
+wxContentProtection wxNonOwnedWindowCocoaImpl::GetContentProtection() const
+{
+    return (m_macWindow.sharingType == NSWindowSharingNone) ?
+        wxCONTENT_PROTECTION_ENABLED : wxCONTENT_PROTECTION_NONE;
+}
+
+bool wxNonOwnedWindowCocoaImpl::SetContentProtection(wxContentProtection contentProtection)
+{
+    m_macWindow.sharingType = (contentProtection == wxCONTENT_PROTECTION_ENABLED) ?
+        NSWindowSharingNone : NSWindowSharingReadOnly;
+
+    return true;
+}
+
 bool wxNonOwnedWindowCocoaImpl::EnableCloseButton(bool enable)
 {
     [[m_macWindow standardWindowButton:NSWindowCloseButton] setEnabled:enable];

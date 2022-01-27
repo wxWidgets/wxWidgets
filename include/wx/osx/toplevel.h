@@ -68,6 +68,9 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
     virtual bool IsFullScreen() const wxOVERRIDE;
 
+    virtual wxContentProtection GetContentProtection() const wxOVERRIDE;
+    virtual bool SetContentProtection(wxContentProtection contentProtection) wxOVERRIDE;
+
     // implementation from now on
     // --------------------------
 

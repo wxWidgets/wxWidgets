@@ -76,6 +76,7 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 
 #include "wx/bmpbndl.h"
 #include "wx/window.h"
+#include "wx/toplevel.h"
 
 class wxTextProofOptions;
 
@@ -962,6 +963,9 @@ public :
     virtual bool EnableFullScreenView(bool enable) = 0;
 
     virtual bool ShowFullScreen(bool show, long style)= 0;
+
+    virtual wxContentProtection GetContentProtection() const = 0;
+    virtual bool SetContentProtection(wxContentProtection contentProtection) = 0;
 
     virtual void RequestUserAttention(int flags) = 0;
 
