@@ -305,39 +305,16 @@ WebFrame::WebFrame(const wxString& url) :
 
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
 
-    long toolbarStyle = wxTB_TEXT;
-
-    wxBitmapBundle back;
-    wxBitmapBundle forward;
-    wxBitmapBundle stop;
-    wxBitmapBundle refresh;
-    wxBitmapBundle wxlogo;
-
     // Create the toolbar
-#ifdef wxHAS_SVG
-    wxSize sizeBitmap = wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR);
+    m_toolbar = CreateToolBar(wxTB_TEXT);
 
-    if ( !sizeBitmap.IsFullySpecified() )
-        sizeBitmap.Set(32, 32);
-
-    back    = wxBitmapBundle::FromSVGFile("webview_back.svg", sizeBitmap);
-    forward = wxBitmapBundle::FromSVGFile("webview_forward.svg", sizeBitmap);
-    stop    = wxBitmapBundle::FromSVGFile("webview_stop.svg", sizeBitmap);
-    refresh = wxBitmapBundle::FromSVGFile("webview_refresh.svg", sizeBitmap);
-    wxlogo  = wxArtProvider::GetBitmapBundle(wxART_WX_LOGO);
-#else
-     toolbarStyle |= wxTB_NOICONS;
-#endif
-
-    m_toolbar = CreateToolBar(toolbarStyle);
-
-    m_toolbar_back = m_toolbar->AddTool(wxID_ANY, _("Back"), back);
-    m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
-    m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), stop);
-    m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
+    m_toolbar_back = m_toolbar->AddTool(wxID_ANY, _("Back"), wxArtProvider::GetBitmapBundle(wxART_GO_BACK, wxART_TOOLBAR));
+    m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), wxArtProvider::GetBitmapBundle(wxART_GO_FORWARD, wxART_TOOLBAR));
+    m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), wxArtProvider::GetBitmapBundle(wxART_STOP, wxART_TOOLBAR));
+    m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"), wxArtProvider::GetBitmapBundle(wxART_REFRESH, wxART_TOOLBAR));
     m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, FromDIP(wxSize(400, -1)), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(m_url, _("URL"));
-    m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxlogo);
+    m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_TOOLBAR));
 
     m_toolbar->Realize();
 

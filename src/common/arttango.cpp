@@ -67,9 +67,11 @@
 #include "../../art/tango/go_previous.h"
 #include "../../art/tango/go_up.h"
 #include "../../art/tango/image_missing.h"
-#include "../../art/tango/text_x_generic.h"
 #include "../../art/tango/list_add.h"
 #include "../../art/tango/list_remove.h"
+#include "../../art/tango/process_stop.h"
+#include "../../art/tango/text_x_generic.h"
+#include "../../art/tango/view_refresh.h"
 
 // ----------------------------------------------------------------------------
 // art provider class
@@ -190,6 +192,9 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
         { wxART_FIND,               BITMAP_DATA(edit_find)                  },
         { wxART_FIND_AND_REPLACE,   BITMAP_DATA(edit_find_replace)          },
         { wxART_FULL_SCREEN,        BITMAP_DATA(fullscreen)                 },
+        { wxART_REFRESH,            BITMAP_DATA(view_refresh)               },
+        { wxART_STOP,               BITMAP_DATA(process_stop)               },
+
     };
 
     #undef BITMAP_DATA

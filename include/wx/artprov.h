@@ -118,6 +118,9 @@ typedef wxString wxArtID;
 
 #define wxART_WX_LOGO              wxART_MAKE_ART_ID(wxART_WX_LOGO)
 
+#define wxART_REFRESH              wxART_MAKE_ART_ID(wxART_REFRESH)
+#define wxART_STOP                 wxART_MAKE_ART_ID(wxART_STOP)
+
 // ----------------------------------------------------------------------------
 // wxArtProvider class
 // ----------------------------------------------------------------------------
