@@ -17,16 +17,9 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/dataview.h"
 #include "mymodels.h"
-
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
-
-#include "null.xpm"
-#include "wx_small.xpm"
-
 
 // ----------------------------------------------------------------------------
 // MyMusicTreeModel
@@ -378,20 +371,10 @@ MyListModel::MyListModel(int modelFlags) :
     m_iconColValues.assign(NUMBER_REAL_ITEMS,
         useMultiLine ? multiLineText : wxString("test"));
 
-    m_icon[0] = wxIcon( null_xpm );
+    const wxSize size = GetIconSizeFromModelFlags(modelFlags);
 
-    const int newSize = m_icon[0].GetWidth() * 2;
-    const bool useTallRows = (modelFlags & MODEL_USE_TALL_ROWS) != 0;
-
-    if ( useTallRows )
-        m_icon[0].CopyFromBitmap(
-            wxImage(null_xpm).Rescale(newSize, newSize));
-
-    if ( !useTallRows || (modelFlags & MODEL_KEEP_LOGO_SMALL) )
-        m_icon[1] = wxIcon( wx_small_xpm );
-    else
-        m_icon[1].CopyFromBitmap(
-            wxImage(wx_small_xpm).Rescale(newSize, newSize));
+    m_icon[0] = wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_LIST, size);
+    m_icon[1] = wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_LIST, size);
 }
 
 void MyListModel::Prepend( const wxString &text )

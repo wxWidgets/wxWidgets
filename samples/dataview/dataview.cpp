@@ -47,8 +47,6 @@
     #include "../sample.xpm"
 #endif
 
-#include "wx_small.xpm"
-
 // ----------------------------------------------------------------------------
 // MyApp
 // ----------------------------------------------------------------------------
@@ -992,13 +990,13 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
                                         wxDefaultSize, style | wxDV_NO_HEADER );
             m_ctrl[Page_TreeStore] = tc;
 
-            const bool useDefaultSize = !HasModelFlag(MODEL_USE_TALL_ROWS)
-                  || HasModelFlag(MODEL_KEEP_LOGO_SMALL);
-            const int imageSize = useDefaultSize ? 16 : 32;
-            wxImageList *ilist = new wxImageList( imageSize, imageSize );
+            const wxSize size = GetIconSizeFromModelFlags(m_modelFlags[nPanel]);
 
-            ilist->Add( wxIcon(wx_small_xpm) );
-            tc->AssignImageList( ilist );
+            wxDataViewTreeCtrl::Images images;
+            images.push_back(
+                wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_LIST, size)
+            );
+            tc->SetImages(images);
 
             const wxDataViewItem root =
                 tc->AppendContainer( wxDataViewItem(0), "The Root", 0 );
@@ -1106,7 +1104,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
     }
 
     if ( HasModelFlag(MODEL_USE_TALL_ROWS) )
-        m_ctrl[nPanel]->SetRowHeight(32);
+        m_ctrl[nPanel]->SetRowHeight(FromDIP(32));
 }
 
 

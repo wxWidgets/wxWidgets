@@ -253,7 +253,7 @@ private:
     wxArrayString    m_textColValues;
     wxArrayString    m_iconColValues;
     IntToStringMap   m_customColValues;
-    wxIcon           m_icon[2];
+    wxBitmapBundle   m_icon[2];
 };
 
 // ----------------------------------------------------------------------------
@@ -317,3 +317,12 @@ enum ModelFlags
     MODEL_KEEP_LOGO_SMALL = 1 << 1,
     MODEL_USE_MULTI_LINE_TEXT = 1 << 2
 };
+
+inline wxSize GetIconSizeFromModelFlags(int modelFlags)
+{
+    wxSize size(16, 16);
+    if ( (modelFlags & MODEL_USE_TALL_ROWS) && !(modelFlags & MODEL_KEEP_LOGO_SMALL) )
+        size *= 2;
+
+    return size;
+}

@@ -1514,7 +1514,7 @@ wxSize wxDataViewProgressRenderer::GetSize() const
     // renderers, it doesn't have a "good" width for the content. This makes it
     // grow to the whole column, which is pretty much always the desired
     // behaviour. Keep the height fixed so that the progress bar isn't too fat.
-    return wxSize(-1, 12);
+    return GetView()->FromDIP(wxSize(-1, 12));
 }
 
 // ---------------------------------------------------------
@@ -1553,11 +1553,13 @@ bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 {
     int xoffset = 0;
 
-    const wxIcon& icon = m_value.GetIcon();
-    if ( icon.IsOk() )
+    const wxBitmapBundle& bb = m_value.GetBitmapBundle();
+    if ( bb.IsOk() )
     {
-        dc->DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetHeight())/2);
-        xoffset = icon.GetWidth()+4;
+        wxWindow* const dvc = GetView();
+        const wxIcon& icon = bb.GetIconFor(dvc);
+        dc->DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetLogicalHeight())/2);
+        xoffset = icon.GetLogicalWidth() + dvc->FromDIP(4);
     }
 
     RenderText(m_value.GetText(), xoffset, rect, dc, state);
@@ -1567,15 +1569,18 @@ bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 
 wxSize wxDataViewIconTextRenderer::GetSize() const
 {
+    wxWindow* const dvc = GetView();
+
     if (!m_value.GetText().empty())
     {
         wxSize size = GetTextExtent(m_value.GetText());
 
-        if (m_value.GetIcon().IsOk())
-            size.x += m_value.GetIcon().GetWidth() + 4;
+        const wxBitmapBundle& bb = m_value.GetBitmapBundle();
+        if (bb.IsOk())
+            size.x += bb.GetPreferredSizeFor(dvc).x + dvc->FromDIP(4);
         return size;
     }
-    return wxSize(80,20);
+    return dvc->FromDIP(wxSize(80,20));
 }
 
 wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
@@ -1586,9 +1591,12 @@ wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect 
     wxString text = iconText.GetText();
 
     // adjust the label rect to take the width of the icon into account
-    if (iconText.GetIcon().IsOk())
+    const wxBitmapBundle& bb = iconText.GetBitmapBundle();
+    if (bb.IsOk())
     {
-        int w = iconText.GetIcon().GetWidth() + 4;
+        wxWindow* const dvc = GetView();
+
+        int w = bb.GetPreferredSizeFor(dvc).x + dvc->FromDIP(4);
         labelRect.x += w;
         labelRect.width -= w;
     }
@@ -2113,14 +2121,16 @@ wxDataViewMainWindow::~wxDataViewMainWindow()
 
 int wxDataViewMainWindow::GetDefaultRowHeight() const
 {
+    const int SMALL_ICON_HEIGHT = FromDIP(16);
+
 #ifdef __WXMSW__
     // We would like to use the same line height that Explorer uses. This is
     // different from standard ListView control since Vista.
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
-        return wxMax(16, GetCharHeight()) + 6; // 16 = mini icon height
+        return wxMax(SMALL_ICON_HEIGHT, GetCharHeight()) + FromDIP(6);
     else
 #endif // __WXMSW__
-        return wxMax(16, GetCharHeight()) + 1; // 16 = mini icon height
+        return wxMax(SMALL_ICON_HEIGHT, GetCharHeight()) + FromDIP(1);
 }
 
 
@@ -3381,7 +3391,7 @@ void wxDataViewMainWindow::RecalculateDisplay()
     int height = GetLineStart( GetRowCount() );
 
     SetVirtualSize( width, height );
-    GetOwner()->SetScrollRate( 10, m_lineHeight );
+    GetOwner()->SetScrollRate( FromDIP(10), m_lineHeight );
     UpdateColumnSizes();
 
     Refresh();
