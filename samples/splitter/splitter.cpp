@@ -129,7 +129,7 @@ private:
     wxSplitterWindow* m_splitter;
     wxWindow *m_replacewindow;
     int m_sashPos;
-    bool m_lockSash:1;
+    bool m_lockSash;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyFrame);
@@ -277,7 +277,7 @@ MyFrame::MyFrame()
     splitMenu->Append(SPLIT_SETGRAVITY,
                       "Set &gravity\tCtrl-G",
                       "Set gravity of sash");
-    splitMenu->Append(SPLIT_LOCKSASH,
+    splitMenu->AppendCheckItem(SPLIT_LOCKSASH,
                       "Toggle sash &lock on resize\tCtrl-R",
                       "Keep the sash in a fixed position while resizing");
     splitMenu->AppendSeparator();
@@ -550,8 +550,6 @@ void MySplitterWindow::OnPositionChanged(wxSplitterEvent& event)
     // new position. If the sash is not locked, this has no effect but
     // doesn't hurt either.
     m_frame->SetSashPos(event.GetSashPosition());
-
-    event.Skip();
 }
 
 void MySplitterWindow::OnPositionResize(wxSplitterEvent &event)
@@ -560,17 +558,19 @@ void MySplitterWindow::OnPositionResize(wxSplitterEvent &event)
     // if it is not locked. Otherwise we hold it at the position
     // the user specified by manually dragging.
     if (m_frame->IsSashLocked())
+    {
+        // We set the last known position to keep the sash in place.
+        // For this particular example we could also simply use
+        // event.Veto()
+        // as well and it would have the same effect.
         event.SetSashPosition(m_frame->GetSashPos());
-
-    event.Skip();
+    }
 }
 
 void MySplitterWindow::OnPositionChanging(wxSplitterEvent& event)
 {
     wxLogStatus(m_frame, "Position is changing, now = %d (or %d)",
                 event.GetSashPosition(), GetSashPosition());
-
-    event.Skip();
 }
 
 void MySplitterWindow::OnDClick(wxSplitterEvent& event)
@@ -579,6 +579,7 @@ void MySplitterWindow::OnDClick(wxSplitterEvent& event)
     m_frame->SetStatusText("Splitter double clicked", 1);
 #endif // wxUSE_STATUSBAR
 
+    // Let the splitter window handle the event as well.
     event.Skip();
 }
 
@@ -588,6 +589,7 @@ void MySplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
     m_frame->SetStatusText("Splitter unsplit", 1);
 #endif // wxUSE_STATUSBAR
 
+    // Let the splitter window handle the event as well.
     event.Skip();
 }
 

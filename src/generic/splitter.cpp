@@ -488,19 +488,22 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
             update.m_data.resize.oldSize = old_size;
             update.m_data.resize.newSize = size;
 
-            if (!DoSendEvent(update))
+            if (DoSendEvent(update))
             {
-                // the event handler vetoed the change
-                newPosition = -1;
-            }
-            else
-            {
-                // If the user set the sashposition to -1
-                // we keep the already calculated value,
-                // otherwise the user provided the new position.
-                int userPos = update.GetSashPosition();
-                if (userPos != -1)
-                    newPosition = userPos;
+                if (update.IsAllowed())
+                {
+                    // If the user set the sashposition to -1
+                    // we keep the already calculated value, otherwise
+                    // the user provided the new position.
+                    int userPos = update.GetSashPosition();
+                    if (userPos != -1)
+                        newPosition = userPos;
+                }
+                else
+                {
+                    // the event handler vetoed the change
+                    newPosition = -1;
+                }
             }
 
             // Also check if the second window became too small.
@@ -925,7 +928,7 @@ void wxSplitterWindow::UpdateSize()
 
 bool wxSplitterWindow::DoSendEvent(wxSplitterEvent& event)
 {
-    return !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 wxSize wxSplitterWindow::DoGetBestSize() const
@@ -1032,15 +1035,18 @@ int wxSplitterWindow::OnSashPositionChanging(int newSashPosition)
     wxSplitterEvent event(wxEVT_SPLITTER_SASH_POS_CHANGING, this);
     event.m_data.resize.pos = newSashPosition;
 
-    if ( !DoSendEvent(event) )
+    if (DoSendEvent(event))
     {
-        // the event handler vetoed the change
-        newSashPosition = -1;
-    }
-    else
-    {
-        // it could have been changed by it
-        newSashPosition = event.GetSashPosition();
+        if (event.IsAllowed())
+        {
+            // it could have been changed by it
+            newSashPosition = event.GetSashPosition();
+        }
+        else
+        {
+            // the event handler vetoed the change
+            newSashPosition = -1;
+        }
     }
 
     return newSashPosition;
