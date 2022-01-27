@@ -5599,6 +5599,23 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
                     case PANGO_VARIANT_SMALL_CAPS:
                         g_string_append(css, "small-caps ");
                         break;
+#if PANGO_VERSION_CHECK(1,50,0)
+                    case PANGO_VARIANT_ALL_SMALL_CAPS:
+                        g_string_append(css, "all-small-caps ");
+                        break;
+                    case PANGO_VARIANT_PETITE_CAPS:
+                        g_string_append(css, "petite-caps ");
+                        break;
+                    case PANGO_VARIANT_ALL_PETITE_CAPS:
+                        g_string_append(css, "all-petite-caps ");
+                        break;
+                    case PANGO_VARIANT_UNICASE:
+                        g_string_append(css, "unicase ");
+                        break;
+                    case PANGO_VARIANT_TITLE_CAPS:
+                        g_string_append(css, "titling-caps ");
+                        break;
+#endif // Pango 1.50+
                     }
                 }
                 if (pfm & PANGO_FONT_MASK_WEIGHT)
