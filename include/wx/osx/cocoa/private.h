@@ -297,6 +297,9 @@ public :
 
     virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) wxOVERRIDE;
 
+    virtual wxContentProtection GetContentProtection() const wxOVERRIDE;
+    virtual bool SetContentProtection(wxContentProtection contentProtection) wxOVERRIDE;
+
     virtual bool EnableCloseButton(bool enable) wxOVERRIDE;
     virtual bool EnableMaximizeButton(bool enable) wxOVERRIDE;
     virtual bool EnableMinimizeButton(bool enable) wxOVERRIDE;
