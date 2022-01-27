@@ -994,17 +994,38 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     <label>wxStaticBitmap</label>
                     <object class="wxPanel" name="staticbitmap">
                         <object class="wxFlexGridSizer">
-                            <cols>1</cols>
+                            <cols>2</cols>
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
-                            <growablecols>0</growablecols>
-                            <growablerows>0</growablerows>
+                            <growablecols>0,1</growablecols>
+                            <growablerows>0,1</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>wxStaticBitmap with one bitmap:</label>
+                                </object>
+                            </object>
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticBitmap" name="controls_staticbitmap">
                                     <bitmap>stop.xpm</bitmap>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>wxStaticBitmap with a multi-resolution bitmap:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticBitmap">
+                                    <bitmap>stop.xpm;stop_2x.xpm</bitmap>
                                 </object>
                             </object>
                         </object>

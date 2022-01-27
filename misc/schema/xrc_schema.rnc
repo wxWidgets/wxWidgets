@@ -467,7 +467,8 @@ t_bitmap     = t_url?,
                (
                    attribute stock_id { t_identifier},
                    attribute stock_client { t_identifier}?
-               )?
+               )?,
+               attribute default_size { t_size}?
 
 t_font       = (
                    [xrc:p="o"] element size         {_, t_float }* &
