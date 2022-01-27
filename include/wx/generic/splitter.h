@@ -409,8 +409,8 @@ private:
         struct
         {
             int pos;            // position for SASH_POS_* events
-            int oldSize;        // window size for SASH_POS_UPDATE event
-            int newSize;        // window size for SASH_POS_UPDATE event
+            int oldSize;        // window size for SASH_POS_RESIZE event
+            int newSize;        // window size for SASH_POS_RESIZE event
         } resize;
         wxWindow *win;      // window being removed for UNSPLIT event
         struct
@@ -437,7 +437,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
     wx__DECLARE_SPLITTEREVT(SASH_POS_CHANGING, id, fn)
 
 #define EVT_SPLITTER_SASH_POS_RESIZE(id, fn) \
-    wx__DECLARE_SPLITTEREVT(SASH_POS_UPDATE, id, fn)
+    wx__DECLARE_SPLITTEREVT(SASH_POS_RESIZE, id, fn)
 
 #define EVT_SPLITTER_DCLICK(id, fn) \
     wx__DECLARE_SPLITTEREVT(DOUBLECLICKED, id, fn)

@@ -58,6 +58,7 @@ enum
     SPLIT_SETPOSITION,
     SPLIT_SETMINSIZE,
     SPLIT_SETGRAVITY,
+    SPLIT_LOCKSASH,
     SPLIT_REPLACE,
     SPLIT_INVISIBLE
 };
@@ -105,6 +106,7 @@ public:
     void OnSetPosition(wxCommandEvent& event);
     void OnSetMinSize(wxCommandEvent& event);
     void OnSetGravity(wxCommandEvent& event);
+    void OnLockSash(wxCommandEvent& event);
     void OnReplace(wxCommandEvent &event);
     void OnToggleInvisible(wxCommandEvent &event);
 
@@ -116,11 +118,18 @@ public:
     void OnUpdateUIUnsplit(wxUpdateUIEvent& event);
     void OnUpdateUIInvisible(wxUpdateUIEvent& event);
 
+    bool IsSashLocked() const { return m_lockSash; }
+
+    void SetSashPos(int pos) { m_sashPos = pos; }
+    int GetSashPos() const { return m_sashPos; }
+
 private:
     wxWindow *m_left, *m_right;
 
     wxSplitterWindow* m_splitter;
     wxWindow *m_replacewindow;
+    int m_sashPos;
+    bool m_lockSash:1;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyFrame);
@@ -129,16 +138,17 @@ private:
 class MySplitterWindow : public wxSplitterWindow
 {
 public:
-    MySplitterWindow(wxFrame *parent);
+    MySplitterWindow(MyFrame *parent);
 
     // event handlers
     void OnPositionChanged(wxSplitterEvent& event);
     void OnPositionChanging(wxSplitterEvent& event);
+    void OnPositionResize(wxSplitterEvent& event);
     void OnDClick(wxSplitterEvent& event);
     void OnUnsplitEvent(wxSplitterEvent& event);
 
 private:
-    wxFrame *m_frame;
+    MyFrame *m_frame;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MySplitterWindow);
@@ -197,6 +207,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_SETPOSITION, MyFrame::OnSetPosition)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::OnSetMinSize)
     EVT_MENU(SPLIT_SETGRAVITY, MyFrame::OnSetGravity)
+    EVT_MENU(SPLIT_LOCKSASH, MyFrame::OnLockSash)
     EVT_MENU(SPLIT_REPLACE, MyFrame::OnReplace)
     EVT_MENU(SPLIT_INVISIBLE, MyFrame::OnToggleInvisible)
 
@@ -213,6 +224,9 @@ MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxSplitterWindow sample",
                  wxDefaultPosition, wxSize(420, 300))
 {
+    m_lockSash = false;
+    m_sashPos = 0;
+
     SetIcon(wxICON(sample));
 
 #if wxUSE_STATUSBAR
@@ -263,6 +277,9 @@ MyFrame::MyFrame()
     splitMenu->Append(SPLIT_SETGRAVITY,
                       "Set &gravity\tCtrl-G",
                       "Set gravity of sash");
+    splitMenu->Append(SPLIT_LOCKSASH,
+                      "Toggle sash &lock on resize\tCtrl-R",
+                      "Keep the sash in a fixed position while resizing");
     splitMenu->AppendSeparator();
 
     splitMenu->Append(SPLIT_REPLACE,
@@ -426,6 +443,12 @@ void MyFrame::OnSetMinSize(wxCommandEvent& WXUNUSED(event) )
 #endif // wxUSE_STATUSBAR
 }
 
+void MyFrame::OnLockSash(wxCommandEvent &WXUNUSED(event))
+{
+    m_lockSash = !m_lockSash;
+    m_sashPos = m_splitter->GetSashPosition();
+}
+
 void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
@@ -501,13 +524,14 @@ void MyFrame::OnUpdateUIInvisible(wxUpdateUIEvent& event)
 wxBEGIN_EVENT_TABLE(MySplitterWindow, wxSplitterWindow)
     EVT_SPLITTER_SASH_POS_CHANGED(wxID_ANY, MySplitterWindow::OnPositionChanged)
     EVT_SPLITTER_SASH_POS_CHANGING(wxID_ANY, MySplitterWindow::OnPositionChanging)
+    EVT_SPLITTER_SASH_POS_RESIZE(wxID_ANY, MySplitterWindow::OnPositionResize)
 
     EVT_SPLITTER_DCLICK(wxID_ANY, MySplitterWindow::OnDClick)
 
     EVT_SPLITTER_UNSPLIT(wxID_ANY, MySplitterWindow::OnUnsplitEvent)
 wxEND_EVENT_TABLE()
 
-MySplitterWindow::MySplitterWindow(wxFrame *parent)
+MySplitterWindow::MySplitterWindow(MyFrame *parent)
                 : wxSplitterWindow(parent, wxID_ANY,
                                    wxDefaultPosition, wxDefaultSize,
                                    wxSP_3D | wxSP_LIVE_UPDATE |
@@ -520,6 +544,23 @@ void MySplitterWindow::OnPositionChanged(wxSplitterEvent& event)
 {
     wxLogStatus(m_frame, "Position has changed, now = %d (or %d)",
                 event.GetSashPosition(), GetSashPosition());
+
+    // This event is only sent when the user manually dragged the sash.
+    // In this case we accept the user input so the sash is locked at the
+    // new position. If the sash is not locked, this has no effect but
+    // doesn't hurt either.
+    m_frame->SetSashPos(event.GetSashPosition());
+
+    event.Skip();
+}
+
+void MySplitterWindow::OnPositionResize(wxSplitterEvent &event)
+{
+    // When the splitter is resizing we only allow the sash to be moved
+    // if it is not locked. Otherwise we hold it at the position
+    // the user specified by manually dragging.
+    if (m_frame->IsSashLocked())
+        event.SetSashPosition(m_frame->GetSashPos());
 
     event.Skip();
 }
