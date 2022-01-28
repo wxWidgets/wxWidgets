@@ -304,8 +304,6 @@ protected:
     // Returns translation of values into string indices.
     wxArrayInt GetValueAsIndices() const;
 
-    wxArrayString       m_valueAsStrings;  // Value as array of strings
-
     // Cache displayed text since generating it is relatively complicated.
     wxString            m_display;
     // How to handle user strings
