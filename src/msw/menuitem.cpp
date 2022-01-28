@@ -688,25 +688,50 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     }
 }
 
-void wxMenuItem::DoSetBitmap(const wxBitmap& bmpNew, bool bChecked)
+wxBitmap wxMenuItem::GetBitmapFromBundle(const wxBitmapBundle& bundle) const
 {
-    wxBitmap& bmp = bChecked ? m_bmpChecked : m_bmpUnchecked;
-    if ( bmp.IsSameAs(bmpNew) )
-        return;
+    if (bundle.IsOk())
+    {
+        if (m_parentMenu && m_parentMenu->GetWindow())
+        {
+            return bundle.GetBitmapFor(m_parentMenu->GetWindow());
+        }
+        else
+        {
+            return bundle.GetBitmap(wxDefaultSize);
+        }
+    }
+    return wxNullBitmap;
+}
 
+wxBitmap wxMenuItem::GetBitmap(bool bChecked) const
+{
+    wxBitmap bmp = GetBitmapFromBundle(bChecked ? m_bmpChecked : m_bmpUnchecked);
 #if wxUSE_IMAGE
-    if ( !bmpNew.HasAlpha() && wxGetWinVersion() >= wxWinVersion_Vista)
+    if ( bmp.IsOk() && !bmp.HasAlpha() && wxGetWinVersion() >= wxWinVersion_Vista)
     {
         // we must use PARGB DIB for the menu bitmaps so ensure that we do
-        wxImage img(bmpNew.ConvertToImage());
+        wxImage img(bmp.ConvertToImage());
         img.InitAlpha();
         bmp = wxBitmap(img);
     }
-    else
 #endif // wxUSE_IMAGE
-    {
-        bmp = bmpNew;
-    }
+    return bmp;
+}
+
+#if wxUSE_OWNER_DRAWN
+wxBitmap wxMenuItem::GetDisabledBitmap() const
+{
+    return GetBitmapFromBundle(m_bmpDisabled);
+}
+#endif
+
+void wxMenuItem::DoSetBitmap(const wxBitmapBundle& bmpNew, bool bChecked)
+{
+    wxBitmapBundle& bmp = bChecked ? m_bmpChecked : m_bmpUnchecked;
+    if ( bmp.IsSameAs(bmpNew) )
+        return;
+    bmp = bmpNew;
 
 #if wxUSE_OWNER_DRAWN
     // already marked as owner-drawn, cannot be reverted
@@ -738,7 +763,10 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmpNew, bool bChecked)
         return;
     }
 #endif // wxUSE_OWNER_DRAWN
+}
 
+void wxMenuItem::SetupBitmaps()
+{
     const int itemPos = MSGetMenuItemPos();
     if ( itemPos == -1 )
     {
@@ -855,8 +883,10 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
     {
         // get size of bitmap always return valid value (0 for invalid bitmap),
         // so we don't needed check if bitmap is valid ;)
-        size_t heightBmp = wxMax(m_bmpChecked.GetHeight(), m_bmpUnchecked.GetHeight());
-        size_t widthBmp = wxMax(m_bmpChecked.GetWidth(),  m_bmpUnchecked.GetWidth());
+        wxBitmap bmpChecked = GetBitmap(true);
+        wxBitmap bmpUnchecked = GetBitmap(false);
+        size_t heightBmp = wxMax(bmpChecked.GetLogicalHeight(), bmpUnchecked.GetLogicalHeight());
+        size_t widthBmp = wxMax(bmpChecked.GetLogicalWidth(),  bmpUnchecked.GetLogicalWidth());
 
         if ( IsOwnerDrawn() )
         {
@@ -1113,8 +1143,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             dcMem.SelectObjectAsSource(bmp);
 
             // center bitmap
-            int nBmpWidth  = bmp.GetWidth(),
-                nBmpHeight = bmp.GetHeight();
+            int nBmpWidth  = bmp.GetLogicalWidth(),
+                nBmpHeight = bmp.GetLogicalHeight();
 
             int x = rcImg.left + (imgWidth - nBmpWidth) / 2;
             int y = rcImg.top  + (rcImg.bottom - rcImg.top - nBmpHeight) / 2;

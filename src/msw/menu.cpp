@@ -305,6 +305,38 @@ bool wxMenu::MSWGetRadioGroupRange(int pos, int *start, int *end) const
     return m_radioData && m_radioData->GetGroupRange(pos, start, end);
 }
 
+#if wxUSE_MENUBAR
+void wxMenu::Attach(wxMenuBarBase* menubar)
+{
+    wxMenuBase::Attach(menubar);
+
+    if (menubar->IsAttached())
+    {
+        // menubar is already attached, we need to call SetupBitmaps
+        SetupBitmaps();
+    }
+}
+#endif
+
+void wxMenu::SetupBitmaps()
+{
+    for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxMenuItem *item = node->GetData();
+        if ( item->IsSubMenu() )
+        {
+            item->GetSubMenu()->SetupBitmaps();
+        }
+
+        if ( !item->IsSeparator() )
+        {
+            item->SetupBitmaps();
+        }
+    }
+}
+
 // append a new item or submenu to the menu
 bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 {
@@ -412,20 +444,6 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             {
                 WinStruct<MENUITEMINFO> mii;
                 mii.fMask = MIIM_STRING | MIIM_DATA;
-
-                // don't set hbmpItem for the checkable items as it would
-                // be used for both checked and unchecked state
-                if ( pItem->IsCheckable() )
-                {
-                    mii.fMask |= MIIM_CHECKMARKS;
-                    mii.hbmpChecked = pItem->GetHBitmapForMenu(wxMenuItem::Checked);
-                    mii.hbmpUnchecked = pItem->GetHBitmapForMenu(wxMenuItem::Unchecked);
-                }
-                else if ( pItem->GetBitmap().IsOk() )
-                {
-                    mii.fMask |= MIIM_BITMAP;
-                    mii.hbmpItem = pItem->GetHBitmapForMenu(wxMenuItem::Normal);
-                }
 
                 mii.cch = itemText.length();
                 mii.dwTypeData = wxMSW_CONV_LPTSTR(itemText);
@@ -593,6 +611,14 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // if we're already attached to the menubar, we must update it
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
+        if ( pItem->IsSubMenu() )
+        {
+            pItem->GetSubMenu()->SetupBitmaps();
+        }
+        if ( !pItem->IsSeparator() )
+        {
+            pItem->SetupBitmaps();
+        }
         GetMenuBar()->Refresh();
     }
 
@@ -1233,6 +1259,14 @@ void wxMenuBar::RebuildAccelTable()
 
 #endif // wxUSE_ACCEL
 
+void wxMenuBar::SetupBitmaps()
+{
+    for ( wxMenuList::const_iterator it = m_menus.begin(); it != m_menus.end(); ++it )
+    {
+        (*it)->SetupBitmaps();
+    }
+}
+
 void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
@@ -1240,6 +1274,10 @@ void wxMenuBar::Attach(wxFrame *frame)
 #if wxUSE_ACCEL
     RebuildAccelTable();
 #endif // wxUSE_ACCEL
+
+    SetupBitmaps();
+
+    frame->Bind(wxEVT_DPI_CHANGED, &wxMenuBar::OnDPIChanged, this);
 }
 
 void wxMenuBar::Detach()

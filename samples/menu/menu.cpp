@@ -559,7 +559,7 @@ MyFrame::MyFrame()
 #if USE_LOG_WINDOW
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
                                       "Clear &log\tCtrl-L");
-    item->SetBitmap(copy_xpm);
+    item->SetBitmap(wxBitmap(copy_xpm));
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
 #endif // USE_LOG_WINDOW
