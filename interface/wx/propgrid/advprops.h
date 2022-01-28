@@ -299,7 +299,7 @@ public:
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
 
-    void GenerateValueAsString( wxVariant& value, wxString* target ) const;
+    wxString GenerateValueAsString(const wxVariant& value) const;
 
     // Returns translation of values into string indices.
     wxArrayInt GetValueAsIndices() const;
