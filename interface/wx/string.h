@@ -1267,6 +1267,24 @@ public:
     bool ToCDouble(double* val) const;
 
     /**
+        Works like ToLong() but for signed integers.
+
+        @see ToLong(), ToUInt(), ToDouble()
+
+        @since 3.1.6
+    */
+    bool ToInt(int *val, int base = 10) const;
+
+    /**
+        Works like ToULong() but for unsigned integers.
+
+        @see ToInt(), ToULong(), ToDouble()
+
+        @since 3.1.6
+    */
+    bool ToUInt(unsigned int *val, int base = 10) const;
+
+    /**
         Attempts to convert the string to a signed integer in base @a base.
 
         Returns @true on success in which case the number is stored in the location
@@ -1294,7 +1312,7 @@ public:
         Please refer to the documentation of the standard function @c strtol()
         for more details about the supported syntax.
 
-        @see ToCDouble(), ToDouble(), ToULong()
+        @see ToCDouble(), ToDouble(), ToULong(), ToInt()
     */
     bool ToLong(long* val, int base = 10) const;
 
