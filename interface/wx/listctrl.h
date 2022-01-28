@@ -1396,7 +1396,7 @@ public:
     /**
         Extend rules and alternate rows background to the entire client area.
 
-        Bu default, the rules (when enabled with wxLC_HRULES and wxLC_VRULES)
+        By default, the rules (when enabled with wxLC_HRULES and wxLC_VRULES)
         and alternate row background (when EnableAlternateRowColours() was
         called) are only shown in the part of the control occupied by the
         items, which can be smaller than the entire window if there are few
