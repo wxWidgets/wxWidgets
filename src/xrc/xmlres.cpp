@@ -1967,7 +1967,7 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
     }
 
     wxBitmapBundle bitmapBundle;
-    wxString paramValue = GetParamValue(node);
+    wxString paramValue = GetFilePath(node);
     if ( paramValue.EndsWith(".svg") )
     {
         if ( paramValue.Contains(";") )
