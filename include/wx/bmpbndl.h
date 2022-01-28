@@ -76,6 +76,9 @@ public:
     // This overload currently makes a copy of the data.
     static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 
+    // This overload works for data not terminated with 0
+    static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+
     // Load SVG image from the given file (must be a local file, not an URL).
     static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
 

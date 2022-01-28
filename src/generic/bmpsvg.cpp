@@ -219,6 +219,15 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef)
 }
 
 /* static */
+wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef)
+{
+    wxCharBuffer copy(len);
+    memcpy(copy.data(), data, len);
+
+    return FromSVG(copy.data(), sizeDef);
+}
+
+/* static */
 wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
 {
     // There is nsvgParseFromFile(), but it doesn't work with Unicode filenames
