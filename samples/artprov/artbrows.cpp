@@ -192,6 +192,14 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     SetArtClient(wxART_MESSAGE_BOX);
 }
 
+wxArtBrowserDialog::~wxArtBrowserDialog()
+{
+    const int itemCount = m_list->GetItemCount();
+
+    // item data are set by the ART_ICON macro
+    for ( int i = 0; i < itemCount; ++i )
+        delete reinterpret_cast<wxString*>(m_list->GetItemData(i));
+}
 
 wxSize wxArtBrowserDialog::GetSelectedBitmapSize() const
 {
