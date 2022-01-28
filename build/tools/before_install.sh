@@ -50,7 +50,7 @@ case $(uname -s) in
                 *)
                     case "$wxGTK_VERSION" in
                         3)  libtoolkit_dev=libgtk-3-dev
-                            extra_deps='libwebkit2gtk-4.0-dev libwebkitgtk-3.0-dev libgspell-1-dev'
+                            extra_deps='libwebkit2gtk-4.0-dev libgspell-1-dev'
                             ;;
                         2)  libtoolkit_dev=libgtk2.0-dev
                             extra_deps='libwebkitgtk-dev'
@@ -61,9 +61,7 @@ case $(uname -s) in
                     esac
 
                     extra_deps="$extra_deps \
-                            libgstreamermm-1.0-dev libgstreamermm-0.10-dev \
                             libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-                            libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev \
                             libglu1-mesa-dev"
             esac
 
