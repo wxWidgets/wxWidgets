@@ -973,7 +973,6 @@ wxString wxFloatProperty::ValueToString( wxVariant& value,
 
 bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
-    wxString s;
     double value;
 
     if ( text.empty() )
