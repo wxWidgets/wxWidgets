@@ -76,6 +76,7 @@ as simple as executing the following commands:
     > .\bootstrap-vcpkg.bat
     > .\vcpkg integrate install
     > .\vcpkg install liblzma
+    > .\vcpkg install liblzma:x64-windows
 @endcode
 
 Afterwards, liblzma headers and libraries (in DLL form) will be available to
