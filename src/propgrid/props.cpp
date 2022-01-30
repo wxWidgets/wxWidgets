@@ -1512,7 +1512,7 @@ void wxFlagsProperty::Init()
     // Generate children
     //
 
-    unsigned int prevChildCount = m_children.size();
+    size_t prevChildCount = m_children.size();
 
     int oldSel = -1;
     if ( prevChildCount )
@@ -1536,10 +1536,8 @@ void wxFlagsProperty::Init()
         state->DoClearSelection();
     }
 
-    unsigned int i;
-
     // Delete old children
-    for ( i=0; i<prevChildCount; i++ )
+    for ( size_t i=0; i<prevChildCount; i++ )
         delete m_children[i];
 
     m_children.clear();
@@ -1553,7 +1551,7 @@ void wxFlagsProperty::Init()
     {
         const wxPGChoices& choices = m_choices;
 
-        for ( i=0; i<GetItemCount(); i++ )
+        for ( unsigned int i=0; i<GetItemCount(); i++ )
         {
             bool child_val;
             child_val = ( value & choices.GetValue(i) )?true:false;
@@ -2413,7 +2411,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
 
     // Populate the list box
     wxArrayString arr;
-    for ( unsigned int i=0; i<ArrayGetCount(); i++ )
+    for ( size_t i=0; i<ArrayGetCount(); i++ )
         arr.push_back(ArrayGet(i));
     m_elb->SetStrings(arr);
 
@@ -2725,7 +2723,7 @@ wxString wxArrayStringProperty::ArrayStringToString(const wxArrayString& src,
     wxString pdr;
     wxString preas;
 
-    unsigned int itemCount = src.size();
+    size_t itemCount = src.size();
 
     if ( flags & Escape )
     {
@@ -2741,7 +2739,7 @@ wxString wxArrayStringProperty::ArrayStringToString(const wxArrayString& src,
 
     wxString delimStr(delimiter);
 
-    for ( unsigned int i = 0; i < itemCount; i++ )
+    for ( size_t i = 0; i < itemCount; i++ )
     {
         wxString str( src.Item(i) );
 
