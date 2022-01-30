@@ -903,7 +903,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
          !(argFlags & wxPG_FULL_VALUE) )
         iMax = PWC_CHILD_SUMMARY_LIMIT;
 
-    int iMaxMinusOne = iMax-1;
+    size_t iMaxMinusOne = iMax-1;
 
     if ( !IsTextEditable() )
         argFlags |= wxPG_UNEDITABLE_COMPOSITE_FRAGMENT;
