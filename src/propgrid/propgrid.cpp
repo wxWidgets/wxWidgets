@@ -5618,7 +5618,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
     // Handles key event when editor control is not focused.
     //
 
-    wxCHECK2(!IsFrozen(), return);
+    wxCHECK_RET(!IsFrozen(), "wxPropertyGrid shouldn't be frozen");
 
     // Traversal between items, collapsing/expanding, etc.
     wxPGProperty* selected = GetSelection();
