@@ -210,8 +210,6 @@ bool wxStdAnyButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
             m_winHasMouse = true;
 
             consumer->PerformAction(wxACTION_BUTTON_PRESS);
-
-            return true;
         }
         else if ( event.LeftUp() )
         {
