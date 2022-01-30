@@ -2940,7 +2940,6 @@ public:
 */
 class wxPropertyCategory : public wxPGProperty
 {
-    friend class wxPropertyGrid;
     friend class wxPropertyGridPageState;
 public:
 
