@@ -108,6 +108,7 @@ dependency manager:
     > bootstrap-vcpkg.bat
     > vcpkg integrate install
     > vcpkg install wxwidgets
+    > vcpkg install wxwidgets:x64-windows
 
 The wxWidgets port in vcpkg is kept up to date by Microsoft team members and community
 contributors. If the version is out of date, please [create an issue or pull request]
