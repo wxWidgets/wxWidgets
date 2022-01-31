@@ -14,6 +14,8 @@
 
 #include "wx/bmpbndl.h"
 
+#include "wx/artprov.h"
+
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
@@ -144,3 +146,16 @@ TEST_CASE("BitmapBundle::FromSVGFile", "[bmpbundle][svg][file]")
 }
 
 #endif // wxHAS_SVG
+
+TEST_CASE("BitmapBundle::ArtProvider", "[bmpbundle][art]")
+{
+    // Check that creating a bogus bundle fails as expected.
+    wxBitmapBundle b = wxArtProvider::GetBitmapBundle("bloordyblop");
+    CHECK( !b.IsOk() );
+
+    // And that creating a bundle using a standard icon works.
+    const wxSize size(16, 16);
+    b = wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_MENU, size);
+    CHECK( b.IsOk() );
+    CHECK( b.GetDefaultSize() == size );
+}

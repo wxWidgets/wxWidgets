@@ -325,9 +325,17 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
         for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
              node; node = node->GetNext())
         {
-            bmp = node->GetData()->CreateBitmap(id, client, size);
+            wxArtProvider* const provider = node->GetData();
+            bmp = provider->CreateBitmap(id, client, size);
             if ( bmp.IsOk() )
                 break;
+
+            const wxBitmapBundle& bb = provider->CreateBitmapBundle(id, client, size);
+            if ( bb.IsOk() )
+            {
+                bmp = bb.GetBitmap(size);
+                break;
+            }
         }
 
         wxSize sizeNeeded = size;
@@ -385,28 +393,31 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
         for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
              node; node = node->GetNext())
         {
-            bitmapbundle = node->GetData()->CreateBitmapBundle(id, client, size);
+            wxArtProvider* const provider = node->GetData();
+            bitmapbundle = provider->CreateBitmapBundle(id, client, size);
             if ( bitmapbundle.IsOk() )
                 break;
+
+            // Try creating the bundle from individual bitmaps returned by the
+            // provider because they can be available in more than one size,
+            // i.e. it's better to return a custom bundle returning them in the
+            // size closest to the requested one rather than a simple bundle
+            // just containing the single bitmap in the specified size.
+            //
+            // Note that we do this here rather than outside of this loop
+            // because we consider that a simple bitmap defined in a higher
+            // priority provider should override a bitmap bundle defined in a
+            // lower priority one: even if this means that the bitmap will be
+            // scaled, at least we'll be using the expected bitmap rather than
+            // potentially using a bitmap of a different style.
+            if ( GetBitmap(id, client, size).IsOk() )
+                bitmapbundle = wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
         }
 
         sm_cache->PutBitmapBundle(hashId, bitmapbundle);
     }
 
     return bitmapbundle;
-}
-
-wxBitmapBundle wxArtProvider::CreateBitmapBundle(const wxArtID& id,
-                                                 const wxArtClient& client,
-                                                 const wxSize& size)
-{
-    // Check that we have a valid art ID to ensure that wxBitmapBundleImplArt
-    // will be able to create valid bitmaps when it is used, because it is
-    // expected that a non-empty bundle always has at least one valid bitmap.
-    if ( !GetBitmap(id, client, size).IsOk() )
-        return wxBitmapBundle();
-
-    return wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
 }
 
 /*static*/

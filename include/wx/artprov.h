@@ -226,9 +226,14 @@ protected:
         return GetSizeHint(client, true);
     }
 
-    // Derived classes must override CreateBitmap or CreateIconBundle
-    // (or both) to create requested art resource. This method is called
-    // only once per instance's lifetime for each requested wxArtID.
+    // Derived classes must override at least one of the CreateXXX() functions
+    // below to create requested art resource. Overriding more than one of them
+    // is also possible but is usually not needed, as both GetBitmap() and
+    // GetBitmapBundle() will try using both CreateBitmap() and
+    // CreateBitmapBundle().
+    //
+    // Note that these methods are called only once per instance's lifetime for
+    // each requested wxArtID as the return value is cached.
     virtual wxBitmap CreateBitmap(const wxArtID& WXUNUSED(id),
                                   const wxArtClient& WXUNUSED(client),
                                   const wxSize& WXUNUSED(size))
@@ -236,11 +241,12 @@ protected:
         return wxNullBitmap;
     }
 
-    // Default implementation creates a wxBitmapBundle which returns the
-    // specified art resource in whichever size it is being asked for.
-    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
-                                              const wxArtClient& client,
-                                              const wxSize& size);
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& WXUNUSED(id),
+                                              const wxArtClient& WXUNUSED(client),
+                                              const wxSize& WXUNUSED(size))
+    {
+        return wxBitmapBundle();
+    }
 
     virtual wxIconBundle CreateIconBundle(const wxArtID& WXUNUSED(id),
                                           const wxArtClient& WXUNUSED(client))
