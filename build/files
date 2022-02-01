@@ -1299,6 +1299,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/assertdlg_gtk.cpp
     src/gtk/bitmap.cpp
     src/gtk/brush.cpp
+    src/gtk/caret.cpp
     src/gtk/clipbrd.cpp
     src/gtk/colour.cpp
     src/gtk/cursor.cpp
@@ -1342,6 +1343,7 @@ GTK_LOWLEVEL_HDR =
     wx/gtk/assertdlg_gtk.h
     wx/gtk/bitmap.h
     wx/gtk/brush.h
+    wx/gtk/caret.h
     wx/gtk/clipbrd.h
     wx/gtk/colour.h
     wx/gtk/cursor.h

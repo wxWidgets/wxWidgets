@@ -20,7 +20,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_CARET
+#if wxUSE_CARET && !defined(__WXGTK3__)
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
@@ -284,4 +284,4 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
     dc->DrawRectangle(m_x, m_y, m_width, m_height);
 }
 
-#endif // wxUSE_CARET
+#endif // wxUSE_CARET && !defined(__WXGTK3__)

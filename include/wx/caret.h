@@ -195,6 +195,8 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/caret.h"
+#elif defined(__WXGTK3__)
+    #include "wx/gtk/caret.h"
 #else
     #include "wx/generic/caret.h"
 #endif // platform

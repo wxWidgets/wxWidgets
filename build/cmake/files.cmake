@@ -1315,6 +1315,7 @@ set(GTK_LOWLEVEL_SRC
     src/gtk/utilsgtk.cpp
     src/gtk/win_gtk.cpp
     src/gtk/window.cpp
+    src/gtk/caret.cpp
 )
 
 set(GTK2_LOWLEVEL_SRC
@@ -1352,6 +1353,7 @@ set(GTK_LOWLEVEL_HDR
     wx/gtk/tooltip.h
     wx/gtk/toplevel.h
     wx/gtk/window.h
+    wx/gtk/caret.h
 )
 
 set(GTK_SRC
