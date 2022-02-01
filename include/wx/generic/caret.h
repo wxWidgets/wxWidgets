@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CARET_H_
-#define _WX_CARET_H_
+#ifndef _WX_GENERIC_CARET_H_
+#define _WX_GENERIC_CARET_H_
 
 #include "wx/timer.h"
 #include "wx/dc.h"
@@ -83,4 +83,4 @@ private:
                   m_hasFocus;       // true => our window has focus
 };
 
-#endif // _WX_CARET_H_
+#endif // _WX_GENERIC_CARET_H_
