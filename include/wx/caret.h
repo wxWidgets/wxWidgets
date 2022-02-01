@@ -111,7 +111,7 @@ public:
 
         // move the caret to given position (in logical coords)
     void Move(int x, int y) { m_x = x; m_y = y; DoMove(); }
-    void Move(const wxPoint& pt) { m_x = pt.x; m_y = pt.y; DoMove(); }
+    void Move(const wxPoint& pt) { Move(pt.x, pt.y); }
 
         // show/hide the caret (should be called by wxWindow when needed):
         // Show() must be called as many times as Hide() + 1 to make the caret
