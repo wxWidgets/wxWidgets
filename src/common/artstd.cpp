@@ -279,7 +279,7 @@ wxDefaultArtProvider::CreateBitmapBundle(const wxArtID& id,
             sizeDef = wxSize(16, 16);
         }
 
-        bb = wxBitmapBundle::FromSVG((const char*)wxlogo_svg_data, sizeDef);
+        bb = wxBitmapBundle::FromSVG(wxlogo_svg_data, sizeof(wxlogo_svg_data), sizeDef);
     }
 #else // !wxHAS_SVG
     wxUnusedVar(id);

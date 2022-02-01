@@ -114,6 +114,8 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_FLOPPY)
     ART_ICON(wxART_CDROM)
     ART_ICON(wxART_REMOVABLE)
+    ART_ICON(wxART_REFRESH)
+    ART_ICON(wxART_STOP)
 }
 
 
