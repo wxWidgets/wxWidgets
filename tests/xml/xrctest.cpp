@@ -257,6 +257,49 @@ TEST_CASE("XRC::PathWithFragment", "[xrc][uri]")
     CHECK( !wxXmlResource::Get()->LoadBitmap("bad").IsOk() );
 }
 
+TEST_CASE("XRC::EnvVarInPath", "[xrc]")
+{
+    wxStringInputStream sis(
+#ifdef __WINDOWS__
+        "<root><bitmap>%WX_TEST_ENV_IN_PATH%.bmp</bitmap></root>"
+#else
+        "<root><bitmap>$(WX_TEST_ENV_IN_PATH).bmp</bitmap></root>"
+#endif
+    );
+    wxXmlDocument xmlDoc(sis, "UTF-8");
+    REQUIRE( xmlDoc.IsOk() );
+
+    class wxTestEnvXmlHandler : public wxXmlResourceHandler
+    {
+    public:
+        wxTestEnvXmlHandler(wxXmlNode* testNode)
+        {
+            varIsSet = wxSetEnv("WX_TEST_ENV_IN_PATH", "horse");
+
+            wxXmlResource::Get()->SetFlags(wxXRC_USE_LOCALE | wxXRC_USE_ENVVARS);
+            SetParentResource(wxXmlResource::Get());
+
+            m_node = testNode;
+        }
+        ~wxTestEnvXmlHandler()
+        {
+            wxUnsetEnv("WX_TEST_ENV_IN_PATH");
+            wxXmlResource::Get()->SetFlags(wxXRC_USE_LOCALE);
+        }
+        virtual wxObject* DoCreateResource() wxOVERRIDE { return NULL; }
+        virtual bool CanHandle(wxXmlNode*) wxOVERRIDE { return false; }
+        bool varIsSet;
+    } handler(xmlDoc.GetRoot());
+
+    REQUIRE( handler.varIsSet );
+
+    wxXmlResourceHandlerImpl *impl = new wxXmlResourceHandlerImpl(&handler);
+    handler.SetImpl(impl);
+
+    CHECK( impl->GetBitmap().IsOk() );
+    CHECK( impl->GetBitmapBundle().IsOk() );
+}
+
 // This test is disabled by default as it requires the environment variable
 // below to be defined to point to a HTTP URL with the file to load.
 //
