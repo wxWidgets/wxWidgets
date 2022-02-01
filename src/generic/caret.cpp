@@ -97,9 +97,11 @@ void wxCaret::InitGeneric()
 {
     m_hasFocus = true;
     m_blinkedOut = true;
-
-#ifndef wxHAS_NATIVE_OVERLAY
-    m_overlay.UseGeneric();
+#ifndef wxHAS_CARET_USING_OVERLAYS
+    m_xOld =
+    m_yOld = -1;
+    if (m_width && m_height)
+        m_bmpUnderCaret.Create(m_width, m_height);
 #endif
 }
 
@@ -139,13 +141,9 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
-    if ( m_overlay.IsNative() )
-    {
-#ifndef __WXGTK3__
-        m_overlay.Reset();
+#ifdef wxHAS_CARET_USING_OVERLAYS
+    m_overlay.Reset();
 #endif
-    }
-
     if ( IsVisible() )
     {
         if ( !m_blinkedOut )
@@ -170,9 +168,15 @@ void wxCaret::DoSize()
         m_countVisible = 0;
         DoHide();
     }
-
+#ifdef wxHAS_CARET_USING_OVERLAYS
     m_overlay.Reset();
-
+#else
+    // Change bitmap size
+    if (m_width && m_height)
+        m_bmpUnderCaret = wxBitmap(m_width, m_height);
+    else
+        m_bmpUnderCaret = wxBitmap();
+#endif
     if (countVisible > 0)
     {
         m_countVisible = countVisible;
@@ -224,27 +228,47 @@ void wxCaret::Blink()
 
 void wxCaret::Refresh()
 {
-    wxWindow* const win = GetWindow();
-
-    if ( !win->IsShownOnScreen() )
-    {
-        return;
-    }
-
-    wxDCOverlay dcOverlay( m_overlay, win, m_x, m_y, m_width , m_height );
-
+    wxClientDC dcWin(GetWindow());
+// this is the new code, switch to 0 if this gives problems
+#ifdef wxHAS_CARET_USING_OVERLAYS
+    wxDCOverlay dcOverlay( m_overlay, &dcWin, m_x, m_y, m_width , m_height );
     if ( m_blinkedOut )
     {
         dcOverlay.Clear();
-
-        if ( !m_overlay.IsNative() )
-            m_overlay.Reset();
     }
     else
     {
-        wxDC& dc = dcOverlay;
-        DoDraw( &dc, win );
+        DoDraw( &dcWin, GetWindow() );
     }
+#else
+    wxMemoryDC dcMem;
+    dcMem.SelectObject(m_bmpUnderCaret);
+    if ( m_blinkedOut )
+    {
+        // restore the old image
+        dcWin.Blit(m_xOld, m_yOld, m_width, m_height,
+                   &dcMem, 0, 0);
+        m_xOld =
+        m_yOld = -1;
+    }
+    else
+    {
+        if ( m_xOld == -1 && m_yOld == -1 )
+        {
+            // save the part we're going to overdraw
+            dcMem.Blit(0, 0, m_width, m_height,
+                       &dcWin, m_x, m_y);
+
+            m_xOld = m_x;
+            m_yOld = m_y;
+        }
+        //else: we already saved the image below the caret, don't do it any
+        //      more
+
+        // and draw the caret there
+        DoDraw(&dcWin, GetWindow());
+    }
+#endif
 }
 
 void wxCaret::DoDraw(wxDC *dc, wxWindow* win)

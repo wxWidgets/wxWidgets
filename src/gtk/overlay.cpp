@@ -25,7 +25,6 @@
     #include "wx/dcclient.h"
 #endif
 
-#include "wx/caret.h"
 #include "wx/display.h"
 #include "wx/scrolwin.h"
 #include "wx/gtk/dc.h"
@@ -416,23 +415,6 @@ wxOverlayX11Helper::~wxOverlayX11Helper()
 void wxOverlayX11Helper::SetShownOnScreen()
 {
     m_isShownOnScreen = true;
-
-    wxWindow* window = m_owner->GetWindow();
-    GtkWidget* surface = m_owner->GetSurface();
-
-#if wxUSE_CARET
-    if ( window->GetCaret() )
-    {
-        // We need to reposition the caret as it is not positioned
-        // correctly when it is first shown under Gnome. and in fact,
-        // there is no harm in doing it unconditionally for any WM
-        // knowing that this adjustment is performed only once.
-        // i.e. when the overlay window becomes visible on screen.
-        const wxPoint pos = window->GetScreenPosition();
-
-        gtk_window_move(GTK_WINDOW(surface), pos.x, pos.y);
-    }
-#endif // wxUSE_CARET
 }
 
 void wxOverlayX11Helper::OnMove(wxMoveEvent& event)
