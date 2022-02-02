@@ -312,7 +312,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
-                (void)DoSendEvent(eventUnsplit);
+                (void)ProcessWindowEvent(eventUnsplit);
                 SetSashPositionAndNotify(0);
             }
             else if ( posSashNew == GetWindowSize() )
@@ -323,7 +323,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
-                (void)DoSendEvent(eventUnsplit);
+                (void)ProcessWindowEvent(eventUnsplit);
                 SetSashPositionAndNotify(0);
             }
             else
@@ -488,19 +488,22 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
             update.m_data.resize.oldSize = old_size;
             update.m_data.resize.newSize = size;
 
-            if (!DoSendEvent(update))
+            if ( ProcessWindowEvent(update) )
             {
-                // the event handler vetoed the change
-                newPosition = -1;
-            }
-            else
-            {
-                // If the user set the sashposition to -1
-                // we keep the already calculated value,
-                // otherwise the user provided the new position.
-                int userPos = update.GetSashPosition();
-                if (userPos != -1)
-                    newPosition = userPos;
+                if (update.IsAllowed())
+                {
+                    // If the user set the sashposition to -1
+                    // we keep the already calculated value,
+                    // otherwise the user provided the new position.
+                    int userPos = update.GetSashPosition();
+                    if (userPos != -1)
+                        newPosition = userPos;
+                }
+                else
+                {
+                    // the event handler vetoed the change
+                    newPosition = -1;
+                }
             }
 
             // Also check if the second window became too small.
@@ -696,7 +699,7 @@ void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
     wxSplitterEvent event(wxEVT_SPLITTER_SASH_POS_CHANGED, this);
     event.m_data.resize.pos = m_sashPosition;
 
-    (void)DoSendEvent(event);
+    (void)ProcessWindowEvent(event);
 }
 
 // Position and size subwindows.
@@ -923,11 +926,6 @@ void wxSplitterWindow::UpdateSize()
     SizeWindows();
 }
 
-bool wxSplitterWindow::DoSendEvent(wxSplitterEvent& event)
-{
-    return !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();
-}
-
 wxSize wxSplitterWindow::DoGetBestSize() const
 {
     // get best sizes of subwindows
@@ -1032,15 +1030,18 @@ int wxSplitterWindow::OnSashPositionChanging(int newSashPosition)
     wxSplitterEvent event(wxEVT_SPLITTER_SASH_POS_CHANGING, this);
     event.m_data.resize.pos = newSashPosition;
 
-    if ( !DoSendEvent(event) )
+    if ( ProcessWindowEvent(event) )
     {
-        // the event handler vetoed the change
-        newSashPosition = -1;
-    }
-    else
-    {
-        // it could have been changed by it
-        newSashPosition = event.GetSashPosition();
+        if (event.IsAllowed())
+        {
+            // it could have been changed by it
+            newSashPosition = event.GetSashPosition();
+        }
+        else
+        {
+            // the event handler vetoed the change
+            newSashPosition = -1;
+        }
     }
 
     return newSashPosition;
@@ -1056,7 +1057,7 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
     wxSplitterEvent event(wxEVT_SPLITTER_DOUBLECLICKED, this);
     event.m_data.pt.x = x;
     event.m_data.pt.y = y;
-    if ( DoSendEvent(event) )
+    if ( !ProcessWindowEvent(event) || event.IsAllowed() )
     {
         if ( GetMinimumPaneSize() == 0 || m_permitUnsplitAlways )
         {
@@ -1065,7 +1066,7 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
             {
                 wxSplitterEvent unsplitEvent(wxEVT_SPLITTER_UNSPLIT, this);
                 unsplitEvent.m_data.win = win;
-                (void)DoSendEvent(unsplitEvent);
+                (void)ProcessWindowEvent(unsplitEvent);
             }
         }
     }
