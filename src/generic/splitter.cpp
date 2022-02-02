@@ -312,7 +312,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
-                (void)DoSendEvent(eventUnsplit);
+                (void)ProcessWindowEvent(eventUnsplit);
                 SetSashPositionAndNotify(0);
             }
             else if ( posSashNew == GetWindowSize() )
@@ -323,7 +323,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
-                (void)DoSendEvent(eventUnsplit);
+                (void)ProcessWindowEvent(eventUnsplit);
                 SetSashPositionAndNotify(0);
             }
             else
@@ -488,7 +488,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
             update.m_data.resize.oldSize = old_size;
             update.m_data.resize.newSize = size;
 
-            if (DoSendEvent(update))
+            if ( ProcessWindowEvent(update) )
             {
                 if (update.IsAllowed())
                 {
@@ -699,7 +699,7 @@ void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
     wxSplitterEvent event(wxEVT_SPLITTER_SASH_POS_CHANGED, this);
     event.m_data.resize.pos = m_sashPosition;
 
-    (void)DoSendEvent(event);
+    (void)ProcessWindowEvent(event);
 }
 
 // Position and size subwindows.
@@ -926,11 +926,6 @@ void wxSplitterWindow::UpdateSize()
     SizeWindows();
 }
 
-bool wxSplitterWindow::DoSendEvent(wxSplitterEvent& event)
-{
-    return GetEventHandler()->ProcessEvent(event);
-}
-
 wxSize wxSplitterWindow::DoGetBestSize() const
 {
     // get best sizes of subwindows
@@ -1035,7 +1030,7 @@ int wxSplitterWindow::OnSashPositionChanging(int newSashPosition)
     wxSplitterEvent event(wxEVT_SPLITTER_SASH_POS_CHANGING, this);
     event.m_data.resize.pos = newSashPosition;
 
-    if (DoSendEvent(event))
+    if ( ProcessWindowEvent(event) )
     {
         if (event.IsAllowed())
         {
@@ -1062,7 +1057,7 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
     wxSplitterEvent event(wxEVT_SPLITTER_DOUBLECLICKED, this);
     event.m_data.pt.x = x;
     event.m_data.pt.y = y;
-    if ( DoSendEvent(event) )
+    if ( !ProcessWindowEvent(event) || event.IsAllowed() )
     {
         if ( GetMinimumPaneSize() == 0 || m_permitUnsplitAlways )
         {
@@ -1071,7 +1066,7 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
             {
                 wxSplitterEvent unsplitEvent(wxEVT_SPLITTER_UNSPLIT, this);
                 unsplitEvent.m_data.win = win;
-                (void)DoSendEvent(unsplitEvent);
+                (void)ProcessWindowEvent(unsplitEvent);
             }
         }
     }
