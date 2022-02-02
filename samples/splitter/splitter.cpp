@@ -571,6 +571,9 @@ void MySplitterWindow::OnPositionChanging(wxSplitterEvent& event)
 {
     wxLogStatus(m_frame, "Position is changing, now = %d (or %d)",
                 event.GetSashPosition(), GetSashPosition());
+
+    // Let the splitter window handle the event as well.
+    event.Skip();
 }
 
 void MySplitterWindow::OnDClick(wxSplitterEvent& event)
