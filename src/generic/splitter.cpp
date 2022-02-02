@@ -493,8 +493,8 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
                 if (update.IsAllowed())
                 {
                     // If the user set the sashposition to -1
-                    // we keep the already calculated value, otherwise
-                    // the user provided the new position.
+                    // we keep the already calculated value,
+                    // otherwise the user provided the new position.
                     int userPos = update.GetSashPosition();
                     if (userPos != -1)
                         newPosition = userPos;
