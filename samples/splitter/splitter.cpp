@@ -59,6 +59,7 @@ enum
     SPLIT_SETMINSIZE,
     SPLIT_SETGRAVITY,
     SPLIT_LOCKSASH,
+    SPLIT_DCLICK,
     SPLIT_REPLACE,
     SPLIT_INVISIBLE
 };
@@ -109,6 +110,7 @@ public:
     void OnLockSash(wxCommandEvent& event);
     void OnReplace(wxCommandEvent &event);
     void OnToggleInvisible(wxCommandEvent &event);
+    void OnToggleDClick(wxCommandEvent &event);
 
     void OnQuit(wxCommandEvent& event);
 
@@ -118,8 +120,9 @@ public:
     void OnUpdateUIUnsplit(wxUpdateUIEvent& event);
     void OnUpdateUIInvisible(wxUpdateUIEvent& event);
 
-    bool IsSashLocked() const { return m_lockSash; }
+    bool AllowDClick() const { return m_allowDClick; }
 
+    bool IsSashLocked() const { return m_lockSash; }
     void SetSashPos(int pos) { m_sashPos = pos; }
     int GetSashPos() const { return m_sashPos; }
 
@@ -130,6 +133,7 @@ private:
     wxWindow *m_replacewindow;
     int m_sashPos;
     bool m_lockSash;
+    bool m_allowDClick;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyFrame);
@@ -208,6 +212,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::OnSetMinSize)
     EVT_MENU(SPLIT_SETGRAVITY, MyFrame::OnSetGravity)
     EVT_MENU(SPLIT_LOCKSASH, MyFrame::OnLockSash)
+    EVT_MENU(SPLIT_DCLICK, MyFrame::OnToggleDClick)
     EVT_MENU(SPLIT_REPLACE, MyFrame::OnReplace)
     EVT_MENU(SPLIT_INVISIBLE, MyFrame::OnToggleInvisible)
 
@@ -226,6 +231,7 @@ MyFrame::MyFrame()
 {
     m_lockSash = false;
     m_sashPos = 0;
+    m_allowDClick = true;
 
     SetIcon(wxICON(sample));
 
@@ -280,6 +286,10 @@ MyFrame::MyFrame()
     splitMenu->AppendCheckItem(SPLIT_LOCKSASH,
                       "Toggle sash &lock on resize\tCtrl-R",
                       "Keep the sash in a fixed position while resizing");
+    splitMenu->AppendCheckItem(SPLIT_DCLICK,
+                      "Toggle double click\tCtrl-D",
+                      "Toggle allow/prevent double click on sash");
+    splitMenu->Check(SPLIT_DCLICK, true);
     splitMenu->AppendSeparator();
 
     splitMenu->Append(SPLIT_REPLACE,
@@ -449,6 +459,11 @@ void MyFrame::OnLockSash(wxCommandEvent &WXUNUSED(event))
     m_sashPos = m_splitter->GetSashPosition();
 }
 
+void MyFrame::OnToggleDClick(wxCommandEvent &WXUNUSED(event))
+{
+    m_allowDClick = !m_allowDClick;
+}
+
 void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
@@ -571,9 +586,6 @@ void MySplitterWindow::OnPositionChanging(wxSplitterEvent& event)
 {
     wxLogStatus(m_frame, "Position is changing, now = %d (or %d)",
                 event.GetSashPosition(), GetSashPosition());
-
-    // Let the splitter window handle the event as well.
-    event.Skip();
 }
 
 void MySplitterWindow::OnDClick(wxSplitterEvent& event)
@@ -582,8 +594,9 @@ void MySplitterWindow::OnDClick(wxSplitterEvent& event)
     m_frame->SetStatusText("Splitter double clicked", 1);
 #endif // wxUSE_STATUSBAR
 
-    // Let the splitter window handle the event as well.
-    event.Skip();
+    // Let the splitter window handle the event if it is not blocked.
+    if (!m_frame->AllowDClick())
+        event.Veto();
 }
 
 void MySplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
