@@ -10,7 +10,9 @@
 #ifndef wxWebViewEdge_PRIVATE_H
 #define wxWebViewEdge_PRIVATE_H
 
+#if !wxUSE_WEBVIEW_EDGE_STATIC
 #include "wx/dynlib.h"
+#endif
 #include "wx/msw/private/comptr.h"
 
 #include <WebView2.h>
@@ -98,7 +100,9 @@ public:
 
     void UpdateWebMessageHandler();
 
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     static wxDynamicLibrary ms_loaderDll;
+#endif
     static wxString ms_browserExecutableDir;
 
     static bool Initialize();

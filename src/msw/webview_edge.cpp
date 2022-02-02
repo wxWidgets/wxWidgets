@@ -42,6 +42,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
             event.SetInt(wxerror); \
             break;
 
+#if wxUSE_WEBVIEW_EDGE_STATIC
+    #define wxCreateCoreWebView2EnvironmentWithOptions ::CreateCoreWebView2EnvironmentWithOptions
+    #define wxGetAvailableCoreWebView2BrowserVersionString ::GetAvailableCoreWebView2BrowserVersionString
+
+    // Automatically link the static loader lib with MSVC
+    #pragma comment(lib, "WebView2LoaderStatic")
+#else
 // WebView2Loader typedefs
 typedef HRESULT (__stdcall *CreateCoreWebView2EnvironmentWithOptions_t)(
     PCWSTR browserExecutableFolder,
@@ -54,8 +61,9 @@ typedef HRESULT(__stdcall *GetAvailableCoreWebView2BrowserVersionString_t)(
 
 CreateCoreWebView2EnvironmentWithOptions_t wxCreateCoreWebView2EnvironmentWithOptions = NULL;
 GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2BrowserVersionString = NULL;
-
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
+#endif // wxUSE_WEBVIEW_EDGE_STATIC
+
 wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
@@ -132,6 +140,7 @@ HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
 
 bool wxWebViewEdgeImpl::Initialize()
 {
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     if (ms_loaderDll.IsLoaded())
         return true;
 
@@ -144,7 +153,7 @@ bool wxWebViewEdgeImpl::Initialize()
     wxDL_INIT_FUNC(wx, GetAvailableCoreWebView2BrowserVersionString, loaderDll);
     if (!wxGetAvailableCoreWebView2BrowserVersionString || !wxCreateCoreWebView2EnvironmentWithOptions)
         return false;
-
+#endif
     // Check if a Edge browser can be found by the loader DLL
     wxCoTaskMemPtr<wchar_t> versionStr;
     HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
@@ -155,14 +164,18 @@ bool wxWebViewEdgeImpl::Initialize()
         return false;
     }
 
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     ms_loaderDll.Attach(loaderDll.Detach());
+#endif
 
     return true;
 }
 
 void wxWebViewEdgeImpl::Uninitialize()
 {
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     ms_loaderDll.Unload();
+#endif
 }
 
 void wxWebViewEdgeImpl::UpdateBounds()

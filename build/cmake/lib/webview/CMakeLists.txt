@@ -87,7 +87,12 @@ elseif(WXMSW)
             endif()
         endif()
 
-        wx_webview_copy_webview2_loader(wxwebview)
+        if (wxUSE_WEBVIEW_EDGE_STATIC)
+            target_link_directories(wxwebview PUBLIC "${WEBVIEW2_PACKAGE_DIR}/build/native/$(LibrariesArchitecture)/")
+        else()
+            wx_webview_copy_webview2_loader(wxwebview)
+        endif()
+
     endif()
 elseif(WXGTK)
     if(LIBSOUP_FOUND)
