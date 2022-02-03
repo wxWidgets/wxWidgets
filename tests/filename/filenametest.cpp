@@ -21,6 +21,7 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/scopeguard.h"
+#include "wx/sckipc.h"
 
 #include "wx/private/localeset.h"
 
@@ -710,8 +711,14 @@ TEST_CASE("wxFileName::Exists", "[filename]")
     // These files are only guaranteed to exist under Linux.
     // No need for wxFILE_EXISTS_NO_FOLLOW here; wxFILE_EXISTS_SYMLINK implies it
     CHECK( wxFileName::Exists("/proc/self", wxFILE_EXISTS_SYMLINK) );
-    CHECK( wxFileName::Exists("/dev/log", wxFILE_EXISTS_SOCKET) );
 #endif // __LINUX__
+    wxString name = dirTemp.GetPath() + "/socktmpdirXXXXXX";
+    wxString socktempdir = wxString::From8BitData(mkdtemp(name.char_str()));
+    wxON_BLOCK_EXIT2(wxRmdir, socktempdir, 0);
+    wxString sockfile = socktempdir + "/socket";
+    wxTCPServer server;
+    server.Create(sockfile);
+    CHECK( wxFileName::Exists(sockfile, wxFILE_EXISTS_SOCKET) );
 #ifndef __VMS
     wxString fifo = dirTemp.GetPath() + "/fifo";
    if (mkfifo(fifo.c_str(), 0600) == 0)
