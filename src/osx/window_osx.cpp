@@ -871,6 +871,8 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 {
 #ifndef __WXUNIVERSAL__
+    menu->SetupBitmaps();
+
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
         wxPoint mouse = wxGetMousePosition();

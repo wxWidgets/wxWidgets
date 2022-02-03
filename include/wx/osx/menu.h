@@ -66,6 +66,12 @@ public:
     // containing this position.
     bool OSXGetRadioGroupRange(int pos, int *start, int *end) const;
 
+#if wxUSE_MENUBAR
+    virtual void Attach(wxMenuBarBase *menubar) wxOVERRIDE;
+#endif
+
+    void SetupBitmaps();
+
 protected:
     // hide special menu items like exit, preferences etc
     // that are expected in the app menu
@@ -162,6 +168,9 @@ public:
     static wxMenuBar* MacGetInstalledMenuBar() { return s_macInstalledMenuBar ; }
     static void MacSetCommonMenuBar(wxMenuBar* menubar) { s_macCommonMenuBar=menubar; }
     static wxMenuBar* MacGetCommonMenuBar() { return s_macCommonMenuBar; }
+
+    virtual void Attach(wxFrame *frame) wxOVERRIDE;
+    void SetupBitmaps();
 
 
     static WXHMENU MacGetWindowMenuHMenu() { return s_macWindowMenuHandle ; }
