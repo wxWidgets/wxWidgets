@@ -631,7 +631,7 @@ static const struct ToIntData
     bool IsOk() const { return !(flags & Number_Invalid); }
 } intData[] =
 {
-/*    {wxT("1"), 1, Number_Ok},
+    {wxT("1"), 1, Number_Ok},
     { wxT("0"), 0, Number_Ok },
     { wxT("a"), 0, Number_Invalid },
     { wxT("12345"), 12345, Number_Ok },
@@ -645,7 +645,7 @@ static const struct ToIntData
 
     { wxT("-2147483648"), (TestValue_t)INT_MIN, Number_Int | Number_Signed },
     { wxT("-2147483649"), (TestValue_t)INT_MIN, Number_Int | Number_Signed | Number_Invalid },
-*/
+
     { wxT("4294967295"), (TestValue_t)UINT_MAX, Number_Int | Number_Unsigned },
     { wxT("4294967296"), (TestValue_t)UINT_MAX, Number_Int | Number_Unsigned | Number_Invalid},
 };

@@ -1696,10 +1696,7 @@ bool wxString::ToUInt(unsigned int *pVal, int base) const
     wxASSERT_MSG(!base || (base > 1 && base <= 36), wxT("invalid base"));
 
     WX_STRING_TO_X_TYPE_START
-    wxULongLong_t lval = wxStrtoull(start, &end, base);
-    if (lval > UINT_MAX)
-        return false;
-    unsigned int val = (unsigned int)lval;
+    unsigned int val = (unsigned int)wxStrtoul(start, &end, base);
     WX_STRING_TO_X_TYPE_END
 }
 
