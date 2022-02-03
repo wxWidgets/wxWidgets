@@ -638,7 +638,7 @@ static const struct ToIntData
     { wxT("--1"), 0, Number_Invalid },
 
     { wxT("-1"), -1, Number_Signed | Number_Int },
-    { wxT("-1"), (TestValue_t)UINT_MAX, Number_Unsigned | Number_Int },
+    { wxT("-1"), (TestValue_t)UINT_MAX, Number_Unsigned | Number_Int | Number_Invalid },
 
     { wxT("2147483647"), (TestValue_t)INT_MAX, Number_Int | Number_Signed },
     { wxT("2147483648"), (TestValue_t)INT_MAX, Number_Int | Number_Signed | Number_Invalid },
