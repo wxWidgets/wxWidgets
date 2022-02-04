@@ -50,6 +50,33 @@ wxString ConcatenateDataViewItemValues(wxDataViewCtrl const* dataViewCtrlPtr, wx
 }
 
 // ============================================================================
+// wxOSXDVCScopedDeleter
+// ============================================================================
+
+// Helper class which exists only to reset m_Deleting on scope exit.
+class wxOSXDVCScopedDeleter
+{
+public:
+    explicit wxOSXDVCScopedDeleter(wxDataViewCtrl* dvc) :
+        m_dvc(dvc),
+        m_valueOrig(m_dvc->m_Deleting)
+    {
+        m_dvc->m_Deleting = true;
+    }
+
+    ~wxOSXDVCScopedDeleter()
+    {
+        m_dvc->m_Deleting = m_valueOrig;
+    }
+
+private:
+    wxDataViewCtrl* const m_dvc;
+    const bool m_valueOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxOSXDVCScopedDeleter);
+};
+
+// ============================================================================
 // wxOSXDataViewModelNotifier
 // ============================================================================
 class wxOSXDataViewModelNotifier : public wxDataViewModelNotifier
@@ -192,42 +219,33 @@ bool wxOSXDataViewModelNotifier::ItemsChanged(wxDataViewItemArray const& items)
 
 bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDataViewItem const& item)
 {
-  bool noFailureFlag;
-
-
   wxCHECK_MSG(item.IsOk(),false,"To be deleted item is invalid.");
  // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
-  m_DataViewCtrlPtr->SetDeleting(true);
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
- // enable automatic updating again:
-  m_DataViewCtrlPtr->SetDeleting(false);
+  wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr);
+
+  bool ok = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
 
   AdjustAutosizedColumns();
- // done:
-  return noFailureFlag;
+
+  return ok;
 }
 
 bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& WXUNUSED(items))
 {
-  bool noFailureFlag;
-
-
  // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
-  m_DataViewCtrlPtr->SetDeleting(true);
+    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr);
  // delete all specified items:
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
- // enable automatic updating again:
-  m_DataViewCtrlPtr->SetDeleting(false);
+    bool ok = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
 
   AdjustAutosizedColumns();
- // done:
-  return noFailureFlag;
+
+  return ok;
 }
 
 bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsigned int col)
@@ -251,14 +269,9 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
 
 bool wxOSXDataViewModelNotifier::Cleared()
 {
-  bool noFailureFlag;
-
-  // NOTE: See comments in ItemDeleted method above
-  m_DataViewCtrlPtr->SetDeleting(true);
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
-  m_DataViewCtrlPtr->SetDeleting(false);
-
-  return noFailureFlag;
+    // NOTE: See comments in ItemDeleted method above
+    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr);
+    return m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
 }
 
 void wxOSXDataViewModelNotifier::Resort()

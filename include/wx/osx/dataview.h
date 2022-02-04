@@ -259,11 +259,6 @@ public:
   {
     m_CustomRendererPtr = NewCustomRendererPtr;
   }
- // sets the flag indicating a deletion process:
-  void SetDeleting(bool deleting)
-  {
-    m_Deleting = deleting;
-  }
 
   void AdjustAutosizedColumns() const;
 
@@ -304,6 +299,9 @@ private:
   bool m_Deleting; // flag indicating if a delete process is running; this flag is necessary because the notifier indicating an item deletion in the model may be called
                    // after the actual deletion of the item; then, native callback functions/delegates may try to update data of variables that are already deleted;
                    // if this flag is set all native variable update requests will be ignored
+
+  // This class can set (and reset) m_Deleting.
+  friend class wxOSXDVCScopedDeleter;
 
   void* m_cgContext; // pointer to core graphics context
 
