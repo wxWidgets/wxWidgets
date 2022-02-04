@@ -82,6 +82,7 @@ private:
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
     void OnGetPageInfo(wxCommandEvent& event);
     void OnDisable(wxCommandEvent& event);
+    void OnClearMyMusicTreeModel(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -398,6 +399,7 @@ enum
     ID_CLEARLOG = wxID_HIGHEST+1,
     ID_GET_PAGE_INFO,
     ID_DISABLE,
+    ID_CLEAR_MODEL,
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
     ID_CUSTOM_HEADER_ATTR,
@@ -479,6 +481,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU( ID_GET_PAGE_INFO, MyFrame::OnGetPageInfo )
     EVT_MENU( ID_DISABLE, MyFrame::OnDisable )
+    EVT_MENU( ID_CLEAR_MODEL, MyFrame::OnClearMyMusicTreeModel )
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
     EVT_MENU( ID_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr )
@@ -597,6 +600,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_GET_PAGE_INFO, "Show current &page info");
     file_menu->AppendCheckItem(ID_DISABLE, "&Disable\tCtrl-D");
+    file_menu->Append(ID_CLEAR_MODEL, "&Clear MyMusicTreeModel\tCtrl-W");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->AppendCheckItem(ID_CUSTOM_HEADER_ATTR, "C&ustom header attributes");
@@ -1142,6 +1146,11 @@ void MyFrame::OnGetPageInfo(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnDisable(wxCommandEvent& event)
 {
     m_ctrl[m_notebook->GetSelection()]->Enable(!event.IsChecked());
+}
+
+void MyFrame::OnClearMyMusicTreeModel(wxCommandEvent& WXUNUSED(event))
+{
+    m_music_model->Clear();
 }
 
 void MyFrame::OnSetForegroundColour(wxCommandEvent& WXUNUSED(event))

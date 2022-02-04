@@ -551,6 +551,11 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    // See the comment in outlineView:objectValueForTableColumn:byItem: below:
+    // this function can also be called in the same circumstances.
+    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+        return nil;
+
     if ((item == currentParentItem) &&
             (index < ((NSInteger) [self getChildCount])))
         return [self getChild:index];

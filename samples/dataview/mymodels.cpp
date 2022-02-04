@@ -145,6 +145,21 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
     // notify control
     ItemDeleted( parent, item );
 }
+void MyMusicTreeModel::Clear()
+{
+    m_pop       = NULL;
+    m_classical = NULL;
+    m_ninth     = NULL;
+
+    while (!m_root->GetChildren().IsEmpty())
+    {
+        MyMusicTreeModelNode* node = m_root->GetNthChild(0);
+        m_root->GetChildren().Remove(node);
+        delete node;
+    }
+
+    Cleared();
+}
 
 int MyMusicTreeModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
                                unsigned int column, bool ascending ) const

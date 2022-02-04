@@ -136,6 +136,7 @@ public:
     void AddToClassical( const wxString &title, const wxString &artist,
                          unsigned int year );
     void Delete( const wxDataViewItem &item );
+    void Clear();
 
     wxDataViewItem GetNinthItem() const
     {
