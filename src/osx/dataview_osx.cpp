@@ -50,28 +50,40 @@ wxString ConcatenateDataViewItemValues(wxDataViewCtrl const* dataViewCtrlPtr, wx
 }
 
 // ============================================================================
-// wxOSXDVCScopedDeleter
+// wxOSXDVCDeleting and wxOSXDVCScopedDeleter
 // ============================================================================
+
+struct wxOSXDVCDeleting
+{
+    explicit wxOSXDVCDeleting(const wxDataViewItem& parent) : m_parent(parent)
+    {
+    }
+
+    const wxDataViewItem m_parent;
+
+    wxDECLARE_NO_COPY_CLASS(wxOSXDVCDeleting);
+};
 
 // Helper class which exists only to reset m_Deleting on scope exit.
 class wxOSXDVCScopedDeleter
 {
 public:
-    explicit wxOSXDVCScopedDeleter(wxDataViewCtrl* dvc) :
+    wxOSXDVCScopedDeleter(wxDataViewCtrl* dvc, const wxDataViewItem& parent) :
         m_dvc(dvc),
         m_valueOrig(m_dvc->m_Deleting)
     {
-        m_dvc->m_Deleting = true;
+        m_dvc->m_Deleting = new wxOSXDVCDeleting(parent);
     }
 
     ~wxOSXDVCScopedDeleter()
     {
+        delete m_dvc->m_Deleting;
         m_dvc->m_Deleting = m_valueOrig;
     }
 
 private:
     wxDataViewCtrl* const m_dvc;
-    const bool m_valueOrig;
+    wxOSXDVCDeleting* const m_valueOrig;
 
     wxDECLARE_NO_COPY_CLASS(wxOSXDVCScopedDeleter);
 };
@@ -224,7 +236,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
-  wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr);
+  wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, parent);
 
   bool ok = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
 
@@ -239,7 +251,7 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
-    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr);
+    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, parent);
  // delete all specified items:
     bool ok = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
 
@@ -270,7 +282,7 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
 bool wxOSXDataViewModelNotifier::Cleared()
 {
     // NOTE: See comments in ItemDeleted method above
-    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr);
+    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, wxDataViewItem());
     return m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
 }
 
@@ -403,9 +415,21 @@ wxDataViewCtrl::~wxDataViewCtrl()
 void wxDataViewCtrl::Init()
 {
   m_CustomRendererPtr = NULL;
-  m_Deleting          = false;
+  m_Deleting          = NULL;
   m_cgContext         = NULL;
   m_ModelNotifier     = NULL;
+}
+
+bool wxDataViewCtrl::IsDeleting() const
+{
+    return m_Deleting != NULL;
+}
+
+bool wxDataViewCtrl::IsClearing() const
+{
+    // We only set the item being deleted to an invalid item when we're
+    // clearing the entire model.
+    return m_Deleting != NULL && !m_Deleting->m_parent.IsOk();
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,

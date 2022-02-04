@@ -551,9 +551,12 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
-    // See the comment in outlineView:objectValueForTableColumn:byItem: below:
-    // this function can also be called in the same circumstances.
-    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+    // This function can be called when we're just deleting some item, but in
+    // this case it's being called for a different item (the one to which the
+    // selection changes if the previously selected item was deleted), so we
+    // can still use it, however we still can't use the item if everything is
+    // being deleted.
+    if ( implementation->GetDataViewCtrl()->IsClearing() )
         return nil;
 
     if ((item == currentParentItem) &&

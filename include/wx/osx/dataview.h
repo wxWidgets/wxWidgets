@@ -230,11 +230,9 @@ public:
     return m_CustomRendererPtr;
   }
 
- // checks if currently a delete process is running
-  bool IsDeleting() const
-  {
-    return m_Deleting;
-  }
+ // checks if a single item or all items are being deleted
+  bool IsDeleting() const;
+  bool IsClearing() const;
 
  // with CG, we need to get the context from an kEventControlDraw event
  // unfortunately, the DataBrowser callbacks don't provide the context
@@ -296,9 +294,11 @@ private:
  //
  // variables
  //
-  bool m_Deleting; // flag indicating if a delete process is running; this flag is necessary because the notifier indicating an item deletion in the model may be called
-                   // after the actual deletion of the item; then, native callback functions/delegates may try to update data of variables that are already deleted;
-                   // if this flag is set all native variable update requests will be ignored
+
+  // If non-null, describes the item(s) being deleted. This is necessary to
+  // allow avoiding referencing already deleted items from the native
+  // callbacks/delegates.
+  struct wxOSXDVCDeleting* m_Deleting;
 
   // This class can set (and reset) m_Deleting.
   friend class wxOSXDVCScopedDeleter;
