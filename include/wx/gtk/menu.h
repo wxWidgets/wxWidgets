@@ -75,6 +75,8 @@ public:
 
     void Attach(wxMenuBarBase *menubar) wxOVERRIDE;
 
+    void SetupBitmaps(wxWindow *win);
+
     void SetLayoutDirection(wxLayoutDirection dir);
     wxLayoutDirection GetLayoutDirection() const;
 
