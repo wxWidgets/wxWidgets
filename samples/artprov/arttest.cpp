@@ -155,13 +155,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
-    menuFile->AppendCheckItem(ID_PlugProvider, "&Plug-in art provider", "Enable custom art provider");
+    menuFile->AppendCheckItem(ID_PlugProvider, "&Plug-in art provider\tCtrl-P", "Enable custom art provider");
     menuFile->AppendSeparator();
 
 #if wxUSE_LOG
-    menuFile->Append(ID_Logs, "&Logging test", "Show some logging output");
+    menuFile->Append(ID_Logs, "&Logging test\tCtrl-L", "Show some logging output");
 #endif // wxUSE_LOG
-    menuFile->Append(ID_Browser, "&Resources browser", "Browse all available icons");
+    menuFile->Append(ID_Browser, "&Resources browser\tCtrl-R", "Browse all available icons");
     menuFile->AppendSeparator();
 
     menuFile->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
