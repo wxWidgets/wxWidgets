@@ -1369,8 +1369,12 @@ HBITMAP wxMenuItem::GetHBitmapForMenu(BitmapKind kind) const
 #if wxUSE_IMAGE
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
+        // We need to store the returned bitmap, so that its HBITMAP remains
+        // valid for as long as it's used.
         bool checked = (kind != Unchecked);
-        wxBitmap bmp = GetBitmap(checked);
+        wxBitmap& bmp = const_cast<wxBitmap&>(checked ? m_bmpCheckedCurrent
+                                                      : m_bmpUncheckedCurrent);
+        bmp = GetBitmap(checked);
         if ( bmp.IsOk() )
         {
             return GetHbitmapOf(bmp);

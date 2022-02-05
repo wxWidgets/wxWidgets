@@ -149,6 +149,12 @@ private:
     wxBitmapBundle m_bmpDisabled;
 #endif // wxUSE_OWNER_DRAWN
 
+    // Bitmaps being currently used: we must store them separately from the
+    // bundle itself because their HBITMAPs must remain valid as long as
+    // they're used by Windows.
+    wxBitmap m_bmpCheckedCurrent,
+             m_bmpUncheckedCurrent;
+
     // Give wxMenu access to our MSWMustUseOwnerDrawn() and GetHBitmapForMenu().
     friend class wxMenu;
 
