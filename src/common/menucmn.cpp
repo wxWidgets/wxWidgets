@@ -344,6 +344,23 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 }
 #endif
 
+wxBitmap wxMenuItemBase::GetBitmapFromBundle(const wxBitmapBundle& bundle) const
+{
+    wxBitmap bmp;
+    if ( bundle.IsOk() )
+    {
+        if ( m_parentMenu && m_parentMenu->GetWindow() )
+        {
+            bmp = bundle.GetBitmapFor(m_parentMenu->GetWindow());
+        }
+        else
+        {
+            bmp = bundle.GetBitmap(wxDefaultSize);
+        }
+    }
+    return bmp;
+}
+
 bool wxMenuBase::ms_locked = true;
 
 // ----------------------------------------------------------------------------

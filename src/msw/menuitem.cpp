@@ -688,22 +688,6 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     }
 }
 
-wxBitmap wxMenuItem::GetBitmapFromBundle(const wxBitmapBundle& bundle) const
-{
-    if (bundle.IsOk())
-    {
-        if (m_parentMenu && m_parentMenu->GetWindow())
-        {
-            return bundle.GetBitmapFor(m_parentMenu->GetWindow());
-        }
-        else
-        {
-            return bundle.GetBitmap(wxDefaultSize);
-        }
-    }
-    return wxNullBitmap;
-}
-
 wxBitmap wxMenuItem::GetBitmap(bool bChecked) const
 {
     wxBitmap bmp = GetBitmapFromBundle(bChecked ? m_bmpChecked : m_bmpUnchecked);

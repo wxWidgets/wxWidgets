@@ -21,6 +21,8 @@
 
 #include "wx/object.h"  // base class
 
+#include "wx/bmpbndl.h"
+
 #include "wx/windowid.h"
 
 #include "wx/vector.h"
@@ -164,6 +166,10 @@ public:
     }
 
 protected:
+    // Helper function returning the appropriate bitmap from the given bundle
+    // (which may be invalid, in which case invalid bitmap is returned).
+    wxBitmap GetBitmapFromBundle(const wxBitmapBundle& bundle) const;
+
     wxWindowIDRef m_id;             // numeric id of the item >= 0 or wxID_ANY or wxID_SEPARATOR
     wxMenu       *m_parentMenu,     // the menu we belong to
                  *m_subMenu;        // our sub menu or NULL

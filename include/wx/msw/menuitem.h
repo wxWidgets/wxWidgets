@@ -15,8 +15,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/bmpbndl.h"
-
 #if wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
 
@@ -133,8 +131,6 @@ private:
 private:
     // common part of all ctors
     void Init();
-
-    wxBitmap GetBitmapFromBundle(const wxBitmapBundle& bundle) const;
 
     // Return the item position in the menu containing it.
     //

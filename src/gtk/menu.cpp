@@ -768,19 +768,7 @@ void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
 
 wxBitmap wxMenuItem::GetBitmap() const
 {
-    wxBitmap bmp;
-    if ( m_bitmap.IsOk() )
-    {
-        if ( m_parentMenu && m_parentMenu->GetWindow() )
-        {
-            bmp = m_bitmap.GetBitmapFor(m_parentMenu->GetWindow());
-        }
-        else
-        {
-            bmp = m_bitmap.GetBitmap(wxDefaultSize);
-        }
-    }
-    return bmp;
+    return GetBitmapFromBundle(m_bitmap);
 }
 
 void wxMenuItem::SetupBitmaps(wxWindow *win)
