@@ -1147,7 +1147,7 @@ void wxMenu::SetupBitmaps(wxWindow *win)
         wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
             menuitem->GetSubMenu()->SetupBitmaps(win);
-        if (menuitem->GetKind() == wxITEM_NORMAL)
+        if (!menuitem->IsSeparator())
             menuitem->SetupBitmaps(win);
         node = node->GetNext();
     }
