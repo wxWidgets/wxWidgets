@@ -365,6 +365,17 @@ public:
     wxBitmap GetBitmapFor(const wxWindow* window) const;
 
     /**
+        Get bitmap of the size appropriate for the DPI scaling used by the
+        given window.
+
+        This function is static overload of GetBitmapFor().
+
+        @param bundle wxBitmapBundle that will be used to get the bitmap.
+        @param window Non-null and fully created window.
+     */
+    static wxBitmap GetBitmapFor(const wxBitmapBundle& bundle, const wxWindow* window);
+
+    /**
         Get icon of the specified size.
 
         This is just a convenient wrapper for GetBitmap() and simply converts

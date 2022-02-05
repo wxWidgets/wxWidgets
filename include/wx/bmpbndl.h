@@ -133,6 +133,9 @@ public:
     wxBitmap GetBitmapFor(const wxWindow* window) const;
     wxIcon GetIconFor(const wxWindow* window) const;
 
+    // Static overload for function above
+    static wxBitmap GetBitmapFor(const wxBitmapBundle& bundle, const wxWindow* window);
+
     // Access implementation
     wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
 
