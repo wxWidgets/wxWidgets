@@ -311,7 +311,6 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 void
 wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
 {
-#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
     if ( sizeNeeded == wxDefaultSize )
         return;
 
@@ -326,6 +325,7 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
         // Do nothing in this special but quite common case, because scaling
         // with only a pixel difference will look horrible.
     }
+#if wxUSE_IMAGE
     else if ((bmp_h < sizeNeeded.x) && (bmp_w < sizeNeeded.y))
     {
         // the caller wants default size, which is larger than
@@ -336,19 +336,11 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
         img.Resize(sizeNeeded, offset);
         bmp = wxBitmap(img);
     }
+#endif // wxUSE_IMAGE
     else // scale (down or mixed, but not up)
     {
-        wxImage img = bmp.ConvertToImage();
-        bmp = wxBitmap
-              (
-                  img.Scale(sizeNeeded.x, sizeNeeded.y,
-                            wxIMAGE_QUALITY_HIGH)
-              );
+        wxBitmap::Rescale(bmp, sizeNeeded);
     }
-#else
-    wxUnusedVar(bmp);
-    wxUnusedVar(sizeNeeded);
-#endif // wxUSE_IMAGE
 }
 
 /*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
