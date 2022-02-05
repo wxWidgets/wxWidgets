@@ -1034,7 +1034,7 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
             menuItem = gtk_menu_item_new_with_label("");
 #else
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            if (mitem->GetBitmapBundle().IsOk())
+            if (mitem->GetBitmap().IsOk())
             {
                 menuItem = gtk_image_menu_item_new_with_label("");
             }

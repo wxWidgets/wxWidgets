@@ -33,7 +33,6 @@ public:
     virtual bool IsChecked() const wxOVERRIDE;
     virtual void SetBitmap(const wxBitmapBundle& bitmap);
     virtual wxBitmap GetBitmap() const;
-    const wxBitmapBundle& GetBitmapBundle() const { return m_bitmap; }
     void SetupBitmaps(wxWindow *win);
 
 #if wxUSE_ACCEL
