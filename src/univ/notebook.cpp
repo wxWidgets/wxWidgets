@@ -1144,6 +1144,8 @@ void wxNotebook::UpdateSpinBtn()
         {
             m_spinbtn->Hide();
         }
+        // reset offset to zero if all tabs are visible
+        m_offset = 0;
     }
 }
 
