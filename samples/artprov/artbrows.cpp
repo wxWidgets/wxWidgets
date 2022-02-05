@@ -229,7 +229,9 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
     m_list->SetItemState(sel, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 
     m_client = client;
-    SetArtBitmap((const char*)m_list->GetItemData(sel), m_client);
+
+    const wxString *data = (const wxString*)m_list->GetItemData(sel);
+    SetArtBitmap(*data, m_client);
 }
 
 void wxArtBrowserDialog::OnSelectItem(wxListEvent &event)
