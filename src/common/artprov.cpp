@@ -402,13 +402,10 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
             }
         }
 
-        // if we didn't get the correct size, resize the bitmap
-        if ( bmp.IsOk() && sizeNeeded != wxDefaultSize )
+        // resize the bitmap if necessary
+        if ( bmp.IsOk() )
         {
-            if ( bmp.GetSize() != sizeNeeded )
-            {
-                wxBitmap::Rescale(bmp, sizeNeeded);
-            }
+            RescaleOrResizeIfNeeded(bmp, sizeNeeded);
         }
 
         sm_cache->PutBitmap(hashId, bmp);
