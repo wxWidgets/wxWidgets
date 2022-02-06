@@ -16,7 +16,6 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
-#include "wx/bitmap.h"
 #include "wx/vector.h"
 
 // ----------------------------------------------------------------------------
@@ -49,8 +48,8 @@ public:
     void RemoveHiddenItems();
 #endif // wxUSE_ACCEL
 
-    virtual void SetBitmap(const wxBitmap& bitmap) ;
-    virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) ;
+    virtual wxBitmap GetBitmap() const;
 
 
     // Implementation only from now on.
@@ -64,7 +63,7 @@ public:
 private:
     void UncheckRadio() ;
 
-    wxBitmap  m_bitmap; // Bitmap for menuitem, if any
+    wxBitmapBundle m_bitmap; // Bitmap for menuitem, if any
 
     wxMenuItemImpl* m_peer;
 

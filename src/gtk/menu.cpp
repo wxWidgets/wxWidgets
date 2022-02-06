@@ -251,6 +251,8 @@ AttachToFrame(wxMenu* menu, wxFrame* frame)
             AttachToFrame(menuitem->GetSubMenu(), frame);
         node = node->GetNext();
     }
+
+    menu->SetupBitmaps(frame);
 }
 
 } // anonymous namespace
@@ -664,6 +666,8 @@ void wxMenuItem::SetMenuItem(GtkWidget* menuItem)
     m_menuItem = menuItem;
     if (menuItem)
         g_object_ref(menuItem);
+    if (m_menuItem && m_parentMenu && m_parentMenu->GetWindow())
+        SetupBitmaps(m_parentMenu->GetWindow());
 }
 
 void wxMenuItem::SetItemLabel( const wxString& str )
@@ -752,7 +756,7 @@ void wxMenuItem::ClearExtraAccels()
 
 #endif // wxUSE_ACCEL
 
-void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
+void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
 {
     if (m_kind == wxITEM_NORMAL)
         m_bitmap = bitmap;
@@ -760,6 +764,24 @@ void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
     {
         wxFAIL_MSG("only normal menu items can have bitmaps");
     }
+}
+
+wxBitmap wxMenuItem::GetBitmap() const
+{
+    return GetBitmapFromBundle(m_bitmap);
+}
+
+void wxMenuItem::SetupBitmaps(wxWindow *win)
+{
+#ifndef __WXGTK4__
+    if ( m_menuItem && m_bitmap.IsOk() )
+    {
+        GtkWidget* image = wxGtkImage::New(win);
+        WX_GTK_IMAGE(image)->Set(m_bitmap);
+        gtk_widget_show(image);
+        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(m_menuItem), image);
+    }
+#endif
 }
 
 void wxMenuItem::Check( bool check )
@@ -1000,14 +1022,9 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
             menuItem = gtk_menu_item_new_with_label("");
 #else
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            const wxBitmap& bitmap = mitem->GetBitmap();
-            if (bitmap.IsOk())
+            if (mitem->GetBitmap().IsOk())
             {
-                GtkWidget* image = wxGtkImage::New();
-                WX_GTK_IMAGE(image)->Set(bitmap);
                 menuItem = gtk_image_menu_item_new_with_label("");
-                gtk_widget_show(image);
-                gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuItem), image);
             }
             else
             {
@@ -1108,6 +1125,20 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
     // inherit layout direction from menubar.
     SetLayoutDirection(menubar->GetLayoutDirection());
+}
+
+void wxMenu::SetupBitmaps(wxWindow *win)
+{
+    wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *menuitem = node->GetData();
+        if (menuitem->IsSubMenu())
+            menuitem->GetSubMenu()->SetupBitmaps(win);
+        if (!menuitem->IsSeparator())
+            menuitem->SetupBitmaps(win);
+        node = node->GetNext();
+    }
 }
 
 // ----------------------------------------------------------------------------
