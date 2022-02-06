@@ -82,7 +82,10 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
 
     // For comctl32.dll < 6 always use masks as it doesn't support alpha.
     if ( mask || wxApp::GetComCtl32Version() < 600 )
+    {
+        m_useMask = true;
         flags |= ILC_MASK;
+    }
 
     // Grow by 1, I guess this is reasonable behaviour most of the time
     m_hImageList = (WXHIMAGELIST) ImageList_Create(width, height, flags,
@@ -92,7 +95,6 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
         wxLogLastError(wxT("ImageList_Create()"));
     }
 
-    m_useMask = (flags & ILC_MASK) != 0;
     return m_hImageList != 0;
 }
 
