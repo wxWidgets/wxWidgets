@@ -142,72 +142,46 @@ void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useM
                          AutoHBITMAP& hbmpRelease, AutoHBITMAP& hbmpMask, HBITMAP& hbmp)
 {
 #if wxUSE_WXDIB && wxUSE_IMAGE
-    // wxBitmap normally stores alpha in pre-multiplied format but
-    // ImageList_Draw() does pre-multiplication internally so we need to undo
-    // the pre-multiplication here. Converting back and forth like this is, of
-    // course, very inefficient but it's better than wrong appearance so we do
-    // this for now until a better way can be found.
-    if ( useMask )
+    // We can only use directly bitmaps without alpha and without mask unless
+    // the image list uses masks and need to modify bitmap in all the other
+    // cases, so check if this is necessary.
+    if ( bitmap.HasAlpha() || (!useMask && (mask.IsOk() || bitmap.GetMask())) )
     {
-        if ( bitmap.HasAlpha() )
+        wxBitmap bmp(bitmap);
+
+        if ( mask.IsOk() || bmp.GetMask() )
         {
-            // Remove alpha channel from image to prevent
-            // possible interferences with the mask.
-            // The bitmap isn't drawn correctly if we use both.
-            wxImage img = bitmap.ConvertToImage();
-            img.ClearAlpha();
-            hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-            hbmpRelease.Init(hbmp);
-        }
-        else
-        {
-            hbmp = GetHbitmapOf(bitmap);
+            // Explicitly specified mask overrides the mask associated with the
+            // bitmap, if any.
+            if ( mask.IsOk() )
+                bmp.SetMask(new wxMask(mask));
+
+            // Get rid of the mask by converting it to alpha.
+            if ( bmp.HasAlpha() )
+                bmp.MSWBlendMaskWithAlpha();
         }
 
-        hbmpMask.Init(GetMaskForImage(bitmap, mask));
+        // wxBitmap normally stores alpha in pre-multiplied format but
+        // ImageList_Draw() does pre-multiplication internally so we need to undo
+        // the pre-multiplication here. Converting back and forth like this is, of
+        // course, very inefficient but it's better than wrong appearance so we do
+        // this for now until a better way can be found.
+        wxImage img = bmp.ConvertToImage();
+        if ( !img.HasAlpha() )
+            img.InitAlpha();
+        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+
+        // In any case we'll never use mask at the native image list level as
+        // it's incompatible with alpha and we need to use alpha.
     }
     else
-    {
-        if ( bitmap.HasAlpha() )
-        {
-            wxBitmap bmp(bitmap);
-            if ( mask.IsOk() || bmp.GetMask() )
-            {
-                // Blend mask with alpha channel.
-                if ( mask.IsOk() )
-                {
-                    bmp.SetMask(new wxMask(mask));
-                }
-                bmp.MSWBlendMaskWithAlpha();
-            }
-            wxImage img = bmp.ConvertToImage();
-            hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-            hbmpRelease.Init(hbmp);
-        }
-        else
-        {
-            if ( mask.IsOk() || bitmap.GetMask() )
-            {
-                // Convert mask to alpha channel.
-                wxBitmap bmp(bitmap);
-                if ( mask.IsOk() )
-                {
-                    bmp.SetMask(new wxMask(mask));
-                }
-                wxImage img = bmp.ConvertToImage();
-                img.InitAlpha();
-                hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-                hbmpRelease.Init(hbmp);
-            }
-            else
-            {
-                hbmp = GetHbitmapOf(bitmap);
-            }
-        }
-    }
-#else
-    hbmp = GetHbitmapOf(bitmap);
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
+    {
+        hbmp = GetHbitmapOf(bitmap);
+        if ( useMask )
+            hbmpMask.Init(GetMaskForImage(bitmap, mask));
+    }
 }
 } // anonymous namespace
 
