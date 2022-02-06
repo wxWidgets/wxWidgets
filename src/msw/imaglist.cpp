@@ -209,7 +209,7 @@ void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useM
     hbmp = GetHbitmapOf(bitmap);
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
 }
-};
+} // anonymous namespace
 
 // Adds a bitmap, and optionally a mask bitmap.
 // Note that wxImageList creates new bitmaps, so you may delete
