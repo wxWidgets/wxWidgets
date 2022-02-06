@@ -257,6 +257,11 @@ protected:
         return wxNullIconBundle;
     }
 
+    // Helper for resizing the bitmaps to the requested size without scaling
+    // them up nor resizing (16, 15) bitmaps to (16, 16) -- or doing anything
+    // at all if the bitmap is already of the required size.
+    static void RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded);
+
 private:
     static void CommonAddingProvider();
     static wxIconBundle DoGetIconBundle(const wxArtID& id,

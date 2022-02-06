@@ -308,6 +308,36 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 }
 #endif // WXWIN_COMPATIBILITY_3_0
 
+void
+wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
+{
+    if ( sizeNeeded == wxDefaultSize )
+        return;
+
+    int bmp_w = bmp.GetWidth();
+    int bmp_h = bmp.GetHeight();
+
+    if ( bmp_w == sizeNeeded.x && bmp_h == sizeNeeded.y )
+        return;
+
+#if wxUSE_IMAGE
+    if ((bmp_h <= sizeNeeded.x) && (bmp_w <= sizeNeeded.y))
+    {
+        // the caller wants default size, which is larger than
+        // the image we have; to avoid degrading it visually by
+        // scaling it up, paste it into transparent image instead:
+        wxPoint offset((sizeNeeded.x - bmp_w)/2, (sizeNeeded.y - bmp_h)/2);
+        wxImage img = bmp.ConvertToImage();
+        img.Resize(sizeNeeded, offset);
+        bmp = wxBitmap(img);
+    }
+    else // scale (down or mixed, but not up)
+#endif // wxUSE_IMAGE
+    {
+        wxBitmap::Rescale(bmp, sizeNeeded);
+    }
+}
+
 /*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
                                              const wxArtClient& client,
                                              const wxSize& size)
@@ -359,13 +389,10 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
             }
         }
 
-        // if we didn't get the correct size, resize the bitmap
-        if ( bmp.IsOk() && sizeNeeded != wxDefaultSize )
+        // resize the bitmap if necessary
+        if ( bmp.IsOk() )
         {
-            if ( bmp.GetSize() != sizeNeeded )
-            {
-                wxBitmap::Rescale(bmp, sizeNeeded);
-            }
+            RescaleOrResizeIfNeeded(bmp, sizeNeeded);
         }
 
         sm_cache->PutBitmap(hashId, bmp);

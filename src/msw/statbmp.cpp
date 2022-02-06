@@ -241,13 +241,12 @@ void wxStaticBitmap::MSWReplaceImageHandle(WXHANDLE handle)
 void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
 {
     const wxSize sizeNew = GetImageSize();
-    const bool isIcon = m_icon.IsOk();
 
     Free();
 
     // For the icons we just use its HICON directly, but for bitmaps we create
     // our own temporary bitmap and need to delete its handle manually later.
-    if ( !isIcon )
+    if ( !m_icon.IsOk() )
     {
         wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
 
@@ -265,6 +264,17 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
                 .Detach();
             m_ownsCurrentHandle = true;
         }
+        else if ( bitmap.GetMask() )
+        {
+            // The native control doesn't know anything about the bitmap mask,
+            // so we need to use an icon in this case.
+            //
+            // Alternatively, we could convert mask to alpha and it's not
+            // really clear what is better, but we used to use icons for
+            // bitmaps with masks before, so let's keep doing it until we find
+            // a good reason not to.
+            m_icon.CopyFromBitmap(bitmap);
+        }
         else
 #endif // wxUSE_WXDIB
         {
@@ -274,7 +284,9 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
             m_currentHandle = bitmap.GetHandle();
         }
     }
-    else // it's an icon
+
+    const bool isIcon = m_icon.IsOk();
+    if ( isIcon )
     {
         m_currentHandle = m_icon.GetHandle();
     }

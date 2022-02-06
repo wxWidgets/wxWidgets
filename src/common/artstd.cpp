@@ -213,50 +213,15 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
 {
     wxBitmap bmp = wxDefaultArtProvider_CreateBitmap(id);
 
-#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
     if (bmp.IsOk())
     {
         // fit into transparent image with desired size hint from the client
         if (reqSize == wxDefaultSize)
         {
             // find out if there is a desired size for this client
-            wxSize bestSize = GetSizeHint(client);
-            if (bestSize != wxDefaultSize)
-            {
-                int bmp_w = bmp.GetWidth();
-                int bmp_h = bmp.GetHeight();
-
-                if (bmp_w == 16 && bmp_h == 15 && bestSize == wxSize(16, 16))
-                {
-                    // Do nothing in this special but quite common case, because scaling
-                    // with only a pixel difference will look horrible.
-                }
-                else if ((bmp_h < bestSize.x) && (bmp_w < bestSize.y))
-                {
-                    // the caller wants default size, which is larger than
-                    // the image we have; to avoid degrading it visually by
-                    // scaling it up, paste it into transparent image instead:
-                    wxPoint offset((bestSize.x - bmp_w)/2, (bestSize.y - bmp_h)/2);
-                    wxImage img = bmp.ConvertToImage();
-                    img.Resize(bestSize, offset);
-                    bmp = wxBitmap(img);
-                }
-                else // scale (down or mixed, but not up)
-                {
-                    wxImage img = bmp.ConvertToImage();
-                    bmp = wxBitmap
-                          (
-                              img.Scale(bestSize.x, bestSize.y,
-                                        wxIMAGE_QUALITY_HIGH)
-                          );
-                }
-            }
+            RescaleOrResizeIfNeeded(bmp, GetSizeHint(client));
         }
     }
-#else
-    wxUnusedVar(client);
-    wxUnusedVar(reqSize);
-#endif // wxUSE_IMAGE
 
     return bmp;
 }
