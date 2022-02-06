@@ -36,6 +36,7 @@
 
 #include "wx/imaglist.h"
 #include "wx/dc.h"
+#include "wx/scopedptr.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/dib.h"
 #include "wx/msw/private.h"
@@ -459,17 +460,15 @@ wxIcon wxImageList::GetIcon(int index) const
 static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
 {
     HBITMAP hbmpMask;
-    wxMask *pMask;
-    bool deleteMask = false;
+    wxScopedPtr<wxMask> maskDeleter;
 
     if ( mask.IsOk() )
     {
         hbmpMask = GetHbitmapOf(mask);
-        pMask = NULL;
     }
     else
     {
-        pMask = bitmap.GetMask();
+        wxMask* pMask = bitmap.GetMask();
         if ( !pMask )
         {
             // use the light grey count as transparent: the trouble here is
@@ -481,19 +480,12 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
 
             pMask = new wxMask(bitmap, col);
 
-            deleteMask = true;
+            maskDeleter.reset(pMask);
         }
 
         hbmpMask = (HBITMAP)pMask->GetMaskBitmap();
     }
 
     // windows mask convention is opposite to the wxWidgets one
-    HBITMAP hbmpMaskInv = wxInvertMask(hbmpMask);
-
-    if ( deleteMask )
-    {
-        delete pMask;
-    }
-
-    return hbmpMaskInv;
+    return wxInvertMask(hbmpMask);
 }
