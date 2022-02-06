@@ -64,12 +64,6 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
 // wxImageList creation/destruction
 // ----------------------------------------------------------------------------
 
-wxImageList::wxImageList()
-    : m_hImageList(NULL)
-    , m_useMask(false)
-{
-}
-
 // Creates an image list
 bool wxImageList::Create(int width, int height, bool mask, int initial)
 {

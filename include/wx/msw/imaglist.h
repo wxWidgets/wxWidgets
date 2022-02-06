@@ -24,7 +24,7 @@ public:
    * Public interface
    */
 
-  wxImageList();
+  wxImageList() { Init(); }
 
   // Creates an image list.
   // Specify the width and height of the images in the list,
@@ -32,7 +32,7 @@ public:
   // from icons), and the initial size of the list.
   wxImageList(int width, int height, bool mask = true, int initialCount = 1)
   {
-    m_hImageList = NULL;
+    Init();
     Create(width, height, mask, initialCount);
   }
   virtual ~wxImageList();
@@ -198,7 +198,15 @@ public:
 protected:
   WXHIMAGELIST m_hImageList;
   wxSize m_size;
+
+private:
   bool m_useMask;
+
+  void Init()
+  {
+    m_hImageList = NULL;
+    m_useMask = false;
+  }
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxImageList);
 };
