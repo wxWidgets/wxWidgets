@@ -538,32 +538,7 @@ public:
                style | wxCC_STD_BUTTON,
                validator,name);
 
-        //
-        // Prepare custom button bitmap (just '...' text)
-        wxMemoryDC dc;
-        wxBitmap bmp(12,16);
-        dc.SelectObject(bmp);
-
-        // Draw transparent background
-        wxColour magic(255,0,255);
-        wxBrush magicBrush(magic);
-        dc.SetBrush( magicBrush );
-        dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle(0,0,bmp.GetWidth(),bmp.GetHeight());
-
-        // Draw text
-        wxString str = "...";
-        int w,h;
-        dc.GetTextExtent(str, &w, &h, 0, 0);
-        dc.DrawText(str, (bmp.GetWidth()-w)/2, (bmp.GetHeight()-h)/2);
-
-        dc.SelectObject( wxNullBitmap );
-
-        // Finalize transparency with a mask
-        wxMask *mask = new wxMask( bmp, magic );
-        bmp.SetMask( mask );
-
-        SetButtonBitmaps(bmp,true);
+        SetButtonBitmaps(wxBitmapBundle::FromSVGFile("three-dots.svg", wxSize(16, 16)), true);
     }
 
     virtual void OnButtonClick() wxOVERRIDE
@@ -852,17 +827,14 @@ MyFrame::MyFrame(const wxString& title)
                                    );
 
     // Load images from disk
-    wxImage imgNormal("dropbutn.png");
-    wxImage imgPressed("dropbutp.png");
-    wxImage imgHover("dropbuth.png");
+    wxBitmapBundle bmpNormal = wxBitmapBundle::FromSVGFile("dropbutn.svg", wxSize(16, 16));
+    wxBitmapBundle bmpPressed = wxBitmapBundle::FromSVGFile("dropbutp.svg", wxSize(16, 16));
+    wxBitmapBundle bmpHover = wxBitmapBundle::FromSVGFile("dropbuth.svg", wxSize(16, 16));
 
-    if ( imgNormal.IsOk() && imgPressed.IsOk() && imgHover.IsOk() )
+    if ( bmpNormal.IsOk() && bmpPressed.IsOk() && bmpHover.IsOk() )
     {
-        wxBitmap bmpNormal(imgNormal);
-        wxBitmap bmpPressed(imgPressed);
-        wxBitmap bmpHover(imgHover);
-        odc->SetButtonBitmaps(bmpNormal,false,bmpPressed,bmpHover);
-        odc2->SetButtonBitmaps(bmpNormal,true,bmpPressed,bmpHover);
+        odc->SetButtonBitmaps(bmpNormal, false, bmpPressed, bmpHover);
+        odc2->SetButtonBitmaps(bmpNormal, true, bmpPressed, bmpHover);
     }
     else
         wxLogError("Dropbutton images not found");
