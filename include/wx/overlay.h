@@ -27,12 +27,13 @@
 // internal code
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_CORE wxOverlayImpl;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
 class WXDLLIMPEXP_CORE wxOverlay
 {
 public:
+    class Impl;
+
     wxOverlay();
     ~wxOverlay();
 
@@ -40,8 +41,7 @@ public:
     // to be done eg when the window content has been changed and repainted
     void Reset();
 
-    // returns (port-specific) implementation of the overlay
-    wxOverlayImpl *GetImpl() { return m_impl; }
+    static Impl* Create();
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxDCOverlay;
@@ -57,7 +57,7 @@ private:
 
     void Clear(wxDC* dc);
 
-    wxOverlayImpl* m_impl;
+    Impl* m_impl;
 
     bool m_inDrawing;
 
