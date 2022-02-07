@@ -633,7 +633,7 @@ public:
         Returns the tab size for the given caption, bitmap and state.
     */
     virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
-                              const wxBitmap& bitmap, bool active,
+                              const wxBitmapBundle& bitmap, bool active,
                               int close_button_state, int* x_extent) = 0;
 
     /**
@@ -810,7 +810,7 @@ public:
                  wxDC& dc,
                  wxWindow* wnd,
                  const wxString& caption,
-                 const wxBitmap& bitmap,
+                 const wxBitmapBundle& bitmap,
                  bool active,
                  int closeButtonState,
                  int* xExtent);
@@ -836,14 +836,14 @@ protected:
     wxPen m_borderPen;
     wxBrush m_baseColourBrush;
     wxColour m_activeColour;
-    wxBitmap m_activeCloseBmp;
-    wxBitmap m_disabledCloseBmp;
-    wxBitmap m_activeLeftBmp;
-    wxBitmap m_disabledLeftBmp;
-    wxBitmap m_activeRightBmp;
-    wxBitmap m_disabledRightBmp;
-    wxBitmap m_activeWindowListBmp;
-    wxBitmap m_disabledWindowListBmp;
+    wxBitmapBundle m_activeCloseBmp;
+    wxBitmapBundle m_disabledCloseBmp;
+    wxBitmapBundle m_activeLeftBmp;
+    wxBitmapBundle m_disabledLeftBmp;
+    wxBitmapBundle m_activeRightBmp;
+    wxBitmapBundle m_disabledRightBmp;
+    wxBitmapBundle m_activeWindowListBmp;
+    wxBitmapBundle m_disabledWindowListBmp;
 
     int m_fixedTabWidth;
     int m_tabCtrlHeight;
@@ -940,14 +940,14 @@ protected:
     wxBrush m_normalBkBrush;
     wxBrush m_selectedBkBrush;
     wxBrush m_bkBrush;
-    wxBitmap m_activeCloseBmp;
-    wxBitmap m_disabledCloseBmp;
-    wxBitmap m_activeLeftBmp;
-    wxBitmap m_disabledLeftBmp;
-    wxBitmap m_activeRightBmp;
-    wxBitmap m_disabledRightBmp;
-    wxBitmap m_activeWindowListBmp;
-    wxBitmap m_disabledWindowListBmp;
+    wxBitmapBundle m_activeCloseBmp;
+    wxBitmapBundle m_disabledCloseBmp;
+    wxBitmapBundle m_activeLeftBmp;
+    wxBitmapBundle m_disabledLeftBmp;
+    wxBitmapBundle m_activeRightBmp;
+    wxBitmapBundle m_disabledRightBmp;
+    wxBitmapBundle m_activeWindowListBmp;
+    wxBitmapBundle m_disabledWindowListBmp;
 
     int m_fixedTabWidth;
     unsigned int m_flags;
