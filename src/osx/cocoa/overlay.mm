@@ -31,6 +31,7 @@
 #include "wx/dcgraph.h"
 
 #include "wx/private/overlay.h"
+#include "wx/osx/private.h"
 
 // ============================================================================
 // implementation
