@@ -97,8 +97,8 @@ protected:
 
     void UpdateInternals();
 
-    wxArrayPtrVoid      m_bitmapbundles;// Images associated with items
-    wxSize              m_usedImgSize;  // Size of bitmaps
+    wxVector<wxBitmapBundle> m_bitmapbundles;// Images associated with items
+    wxSize                   m_usedImgSize;  // Size of bitmaps
 
     int                 m_imgAreaWidth;  // Width and height of area next to text field
     int                 m_fontHeight;

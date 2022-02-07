@@ -47,10 +47,6 @@ const char wxBitmapComboBoxNameStr[] = "bitmapComboBox";
 #define wxBCB_DEFAULT_ITEM_HEIGHT  13
 
 
-// This macros allows wxArrayPtrVoid to be used in more convenient manner
-#define GetBitmapBundlePtr(n)     ((wxBitmapBundle*)m_bitmapbundles[n])
-
-
 // ----------------------------------------------------------------------------
 // Initialization
 // ----------------------------------------------------------------------------
@@ -68,8 +64,8 @@ void wxBitmapComboBoxBase::UpdateInternals()
     m_fontHeight = GetControl()->GetCharHeight()
         + GetControl()->FromDIP(EXTRA_FONT_HEIGHT);
 
-    while ( m_bitmapbundles.GetCount() < GetItemContainer()->GetCount() )
-        m_bitmapbundles.Add( new wxBitmapBundle() );
+    while ( m_bitmapbundles.size() < GetItemContainer()->GetCount() )
+        m_bitmapbundles.push_back( wxBitmapBundle() );
 }
 
 // ----------------------------------------------------------------------------
@@ -79,13 +75,13 @@ void wxBitmapComboBoxBase::UpdateInternals()
 void wxBitmapComboBoxBase::DoSetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap)
 {
     wxCHECK_RET( n < m_bitmapbundles.size(), "invalid item index" );
-    *GetBitmapBundlePtr(n) = bitmap;
+    m_bitmapbundles.at(n) = bitmap;
 }
 
 wxBitmap wxBitmapComboBoxBase::GetItemBitmap(unsigned int n) const
 {
     wxCHECK_MSG( n < m_bitmapbundles.size(), wxNullBitmap, "invalid item index" );
-    return (*GetBitmapBundlePtr(n)).GetBitmapFor(
+    return m_bitmapbundles.at(n).GetBitmapFor(
         const_cast<wxBitmapComboBoxBase*>(this)->GetControl()
     );
 }
@@ -96,10 +92,7 @@ wxBitmap wxBitmapComboBoxBase::GetItemBitmap(unsigned int n) const
 
 void wxBitmapComboBoxBase::BCBDoClear()
 {
-    for ( unsigned i = 0; i < m_bitmapbundles.size(); i++ )
-        delete GetBitmapBundlePtr(i);
-
-    m_bitmapbundles.Empty();
+    m_bitmapbundles.clear();
 
     m_usedImgSize.x = -1;
     m_usedImgSize.y = -1;
@@ -109,8 +102,10 @@ void wxBitmapComboBoxBase::BCBDoClear()
 
 void wxBitmapComboBoxBase::BCBDoDeleteOneItem(unsigned int n)
 {
-    delete GetBitmapBundlePtr(n);
-    m_bitmapbundles.RemoveAt(n);
+    if ( n < m_bitmapbundles.size() )
+    {
+        m_bitmapbundles.erase(m_bitmapbundles.begin() + n);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -211,7 +206,7 @@ void wxBitmapComboBoxBase::DrawItem(wxDC& dc,
                                     const wxString& text,
                                     int WXUNUSED(flags)) const
 {
-    const wxBitmapBundle& bb = *GetBitmapBundlePtr(item);
+    const wxBitmapBundle& bb = m_bitmapbundles.at(item);
     if ( bb.IsOk() )
     {
         const wxWindow* win = const_cast<wxBitmapComboBoxBase*>(this)->GetControl();
