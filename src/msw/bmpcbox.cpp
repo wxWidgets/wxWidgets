@@ -332,16 +332,16 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
             }
 
             // Update the bitmap array.
-            if ( GetCount() > m_bitmapbundles.Count() )
+            if ( GetCount() > m_bitmapbundles.size() )
             {
-                wxASSERT_MSG( GetCount() == m_bitmapbundles.Count() + 1,
+                wxASSERT_MSG( GetCount() == m_bitmapbundles.size() + 1,
                               wxS("Invalid wxBitmapComboBox state") );
                 // Control is in the normal state.
                 // New item has been just added.
                 // Insert bitmap at the given index into the array.
-                wxASSERT_MSG( (size_t)index <= m_bitmapbundles.Count(),
+                wxASSERT_MSG( (size_t)index <= m_bitmapbundles.size(),
                               wxS("wxBitmapComboBox item index out of bound") );
-                m_bitmapbundles.Insert(new wxBitmapBundle(wxNullBitmap), index);
+                m_bitmapbundles.insert(m_bitmapbundles.begin() + index, wxBitmapBundle());
             }
             else
             {
@@ -350,7 +350,7 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
                 // In this case existing bitmaps are reused.
                 // Required and actual indices should be the same to assure
                 // consistency between list of items and bitmap array.
-                wxASSERT_MSG( (size_t)index < m_bitmapbundles.Count(),
+                wxASSERT_MSG( (size_t)index < m_bitmapbundles.size(),
                               wxS("wxBitmapComboBox item index out of bound") );
                 wxASSERT_MSG( (unsigned int)index == pos+i,
                               wxS("Invalid index for wxBitmapComboBox item") );
@@ -359,28 +359,27 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
     }
     else
     {
-        if ( GetCount() == m_bitmapbundles.Count() )
+        if ( GetCount() == m_bitmapbundles.size() )
         {
             // Control is in the normal state.
             // Just insert new bitmaps into the array.
             const unsigned int countNew = GetCount() + numItems;
-            m_bitmapbundles.Alloc(countNew);
 
             for ( unsigned int i = 0; i < numItems; i++ )
             {
-                m_bitmapbundles.Insert(new wxBitmapBundle(wxNullBitmap), pos + i);
+                m_bitmapbundles.insert(m_bitmapbundles.begin() + pos + i, wxBitmapBundle());
             }
         }
         else
         {
-            wxASSERT_MSG( GetCount() < m_bitmapbundles.Count(),
+            wxASSERT_MSG( GetCount() < m_bitmapbundles.size(),
                           wxS("Invalid wxBitmapComboBox state") );
             // There are less items then bitmaps.
             // (This can happen if control is e.g. recreated with RecreateControl).
             // In this case existing bitmaps are reused.
             // The whole block of inserted items should be within the range
             // of indices of the existing bitmap array.
-            wxASSERT_MSG( pos + numItems <= m_bitmapbundles.Count(),
+            wxASSERT_MSG( pos + numItems <= m_bitmapbundles.size(),
                       wxS("wxBitmapComboBox item index out of bound") );
         }
 
