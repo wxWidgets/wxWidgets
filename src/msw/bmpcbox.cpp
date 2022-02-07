@@ -363,8 +363,6 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
         {
             // Control is in the normal state.
             // Just insert new bitmaps into the array.
-            const unsigned int countNew = GetCount() + numItems;
-
             for ( unsigned int i = 0; i < numItems; i++ )
             {
                 m_bitmapbundles.insert(m_bitmapbundles.begin() + pos + i, wxBitmapBundle());
