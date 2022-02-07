@@ -130,10 +130,23 @@ public:
             m_placement.showCmd = SW_HIDE;
         }
 
+        wxSize oldDPI = tlw->GetDPI();
         if ( !::SetWindowPlacement(GetHwndOf(tlw), &m_placement) )
         {
             wxLogLastError(wxS("SetWindowPlacement"));
             return false;
+        }
+        wxSize newDPI = tlw->GetDPI();
+        // If a window was placed on a monitor with a different DPI than the
+        // main display call SetWindowPlacement() a second time to apply
+        // the window size correctly.
+        if (oldDPI != newDPI)
+        {
+            if (!::SetWindowPlacement(GetHwndOf(tlw), &m_placement))
+            {
+                wxLogLastError(wxS("SetWindowPlacement"));
+                return false;
+            }
         }
 
         return true;
