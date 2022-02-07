@@ -5328,6 +5328,33 @@ __RUNTIME_LIBS_333 = D
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_333 = $(__THREADSFLAG)
 !endif
+!if "$(TARGET_CPU)" == "amd64"
+__webview_additional_libdirs_arch_FILENAMES = x64
+!endif
+!if "$(TARGET_CPU)" == "AMD64"
+__webview_additional_libdirs_arch_FILENAMES = x64
+!endif
+!if "$(TARGET_CPU)" == "arm64"
+__webview_additional_libdirs_arch_FILENAMES = arm64
+!endif
+!if "$(TARGET_CPU)" == "ARM64"
+__webview_additional_libdirs_arch_FILENAMES = arm64
+!endif
+!if "$(TARGET_CPU)" == "x64"
+__webview_additional_libdirs_arch_FILENAMES = x64
+!endif
+!if "$(TARGET_CPU)" == "X64"
+__webview_additional_libdirs_arch_FILENAMES = x64
+!endif
+!if "$(TARGET_CPU)" == "x86"
+__webview_additional_libdirs_arch_FILENAMES = x86
+!endif
+!if "$(TARGET_CPU)" == "X86"
+__webview_additional_libdirs_arch_FILENAMES = x86
+!endif
+!if "$(TARGET_CPU)" == ""
+__webview_additional_libdirs_arch_FILENAMES = x86
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_WEBVIEW)" == "1"
 __webviewlib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
@@ -6208,7 +6235,7 @@ wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_WEBVIEW)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\webviewdll_dummy.obj  $(WEBVIEWDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(__coredll___depname) $(__basedll___depname) $(OBJS)\webviewdll_version.res
-	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_325)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
+	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_325)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) /LIBPATH:..\..\3rdparty\webview2\build\native\$(__webview_additional_libdirs_arch_FILENAMES) $(LDFLAGS) @<<
 	$(WEBVIEWDLL_OBJECTS) $(WEBVIEWDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
 <<
 !endif
