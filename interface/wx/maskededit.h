@@ -28,19 +28,19 @@
 struct wxMaskedEditColours
 {
     /// Foreground colour used when everything is OK.
-    wxColour colOKForegn;
+    wxColour colOKForeground;
     /// Background colour used when everything is OK.
-    wxColour colOKBackgn;
+    wxColour colOKBackground;
 
     /// Foreground colour used when something is wrong.
-    wxColour colWrForegn;
+    wxColour colInvaldForeground;
     /// Background colour used when something is wrong.
-    wxColour colWrBackgn;
+    wxColour colInvaldBackground;
 
     /// Foreground colour used for an empty control's value.
-    wxColour colEmForegn;
+    wxColour colBlankForeground;
     /// Background colour used for an empty control's value.
-    wxColour colEmBackgn;
+    wxColour colBlankBackground;
 };
 
 /**
@@ -74,7 +74,7 @@ struct wxMaskedEditColours
 
     @since 3.1.6
 */
-class wxEditFieldFlags
+class wxMaskedEditFieldFlags
 {
 public:
     /**
@@ -88,7 +88,7 @@ public:
             @c wxALIGN_LEFT (default) or @c wxALIGN_RIGHT.
 
     */
-    wxEditFieldFlags(wxAlignment alignment = wxALIGN_LEFT);
+    wxMaskedEditFieldFlags(wxAlignment alignment = wxALIGN_LEFT);
 
     /**
         Sets the alignment of this wxEditFieldFlags to @a alignment.
@@ -97,7 +97,7 @@ public:
             @c wxALIGN_LEFT (default) or @c wxALIGN_RIGHT.
 
     */
-    wxEditFieldFlags& SetAlignment(wxAlignment alignment);
+    wxMaskedEditFieldFlags& SetAlignment(wxAlignment alignment);
 
     /**
         Sets the fill char of this wxEditFieldFlags to @a fillchar.
@@ -109,7 +109,7 @@ public:
             Any printable character.
 
     */
-    wxEditFieldFlags& SetFillChar(wxChar fillchar);
+    wxMaskedEditFieldFlags& SetFillChar(wxChar fillchar);
 
     /**
         Sets the padding char of this wxEditFieldFlags to @a paddingchar.
@@ -124,28 +124,28 @@ public:
             Any printable character or '\0'.
 
     */
-    wxEditFieldFlags& SetPaddingChar(wxChar paddingchar);
+    wxMaskedEditFieldFlags& SetPaddingChar(wxChar paddingchar);
 
     /**
         Returns the alignment used in this object.
 
         @see SetAlignment()
     */
-    wxAlignment GetAlignment();
+    wxAlignment GetAlignment() const;
 
     /**
         Returns the fill char used in this object.
 
         @see SetFillChar()
     */
-    wxChar GetFillChar();
+    wxChar GetFillChar() const;
 
     /**
         Returns the padding char used in this object.
 
         @see SetPaddingChar()
     */
-    wxChar GetPaddingChar();
+    wxChar GetPaddingChar() const;
 };
 
 /** @addtogroup group_maskededit_predef

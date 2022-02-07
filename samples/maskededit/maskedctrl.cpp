@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     2012-07-30
 // RCS-ID:      $Id$
-// Copyright:   (c)
+// Copyright:   (c) 2012 Manuel Martin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,10 +19,6 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -77,7 +73,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE()
 };
 
 // Define a new panel type: this will fit inside our main frame

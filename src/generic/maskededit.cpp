@@ -22,7 +22,7 @@
 #endif // wxUSE_COMBOBOX
 
 #include "wx/clipbrd.h"
-#include "wx/maskededit.h"
+#include "wx/generic/maskededit.h"
 
 
 //////////////////////////  wxMaskedEdit  ////////////////////////////////
@@ -363,7 +363,7 @@ bool wxMaskedEdit::SetMask(const wxString& mask)
     //Previous value in the control is lost. Let's show the new empty one
     m_filled.clear();
     m_filled.reserve( m_ExpMask.Len() );
-    for (size_t i = 0; i < m_ExpMask.Len(); i++)
+    for (size_t j = 0; j < m_ExpMask.Len(); j++)
         m_filled.push_back(false);
 
     SetPlainValue("");
@@ -406,18 +406,18 @@ void wxMaskedEdit::SetMaskedColours(const wxMaskedEditColours& colours)
 
     m_params.colours = colours;
     //Use defaults for colours that have not been set yet
-    if ( m_params.colours.colOKBackgn == wxNullColour )
-        m_params.colours.colOKBackgn = defBg;
-    if ( m_params.colours.colOKForegn == wxNullColour )
-        m_params.colours.colOKForegn = defFg;
-    if ( m_params.colours.colWrBackgn == wxNullColour )
-        m_params.colours.colWrBackgn = defBg;
-    if ( m_params.colours.colWrForegn == wxNullColour )
-        m_params.colours.colWrForegn = defFg;
-    if ( m_params.colours.colEmBackgn == wxNullColour )
-        m_params.colours.colEmBackgn = defBg;
-    if ( m_params.colours.colEmForegn == wxNullColour )
-        m_params.colours.colEmForegn = defFg;
+    if ( m_params.colours.colOKBackground == wxNullColour )
+        m_params.colours.colOKBackground = defBg;
+    if ( m_params.colours.colOKForeground == wxNullColour )
+        m_params.colours.colOKForeground = defFg;
+    if ( m_params.colours.colInvaldBackground == wxNullColour )
+        m_params.colours.colInvaldBackground = defBg;
+    if ( m_params.colours.colInvaldForeground == wxNullColour )
+        m_params.colours.colInvaldForeground = defFg;
+    if ( m_params.colours.colBlankBackground == wxNullColour )
+        m_params.colours.colBlankBackground = defBg;
+    if ( m_params.colours.colBlankForeground == wxNullColour )
+        m_params.colours.colBlankForeground = defFg;
 }
 
 //Default colours. We need them if not all of the six colours have been set.
@@ -445,7 +445,7 @@ void wxMaskedEdit::GetDefaultColours(wxColour* defFgCol, wxColour* defBgCol)
 }
 
 //Set all fields with the same flags.
-void wxMaskedEdit::SetAllFieldsFlags(const wxEditFieldFlags& flags)
+void wxMaskedEdit::SetAllFieldsFlags(const wxMaskedEditFieldFlags& flags)
 {
     for (size_t i = 0; i < GetFieldsCount(); i++)
         SetFieldFlags(i, flags);
@@ -1717,20 +1717,20 @@ void wxMaskedEdit::UseColours(int whatColours)
 {
     if (whatColours == mEmColour)
     {
-        msk_control->SetBackgroundColour(m_params.colours.colEmBackgn);
-        msk_control->SetForegroundColour(m_params.colours.colEmForegn);
+        msk_control->SetBackgroundColour(m_params.colours.colBlankBackground);
+        msk_control->SetForegroundColour(m_params.colours.colBlankForeground);
     }
 
     else if (whatColours == mOKColour)
     {
-        msk_control->SetBackgroundColour(m_params.colours.colOKBackgn);
-        msk_control->SetForegroundColour(m_params.colours.colOKForegn);
+        msk_control->SetBackgroundColour(m_params.colours.colOKBackground);
+        msk_control->SetForegroundColour(m_params.colours.colOKForeground);
     }
 
     else
     {
-        msk_control->SetBackgroundColour(m_params.colours.colWrBackgn);
-        msk_control->SetForegroundColour(m_params.colours.colWrForegn);
+        msk_control->SetBackgroundColour(m_params.colours.colInvaldBackground);
+        msk_control->SetForegroundColour(m_params.colours.colInvaldForeground);
     }
 
     msk_control->Refresh();
