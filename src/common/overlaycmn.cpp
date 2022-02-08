@@ -44,6 +44,11 @@ wxOverlay::~wxOverlay()
     delete m_impl;
 }
 
+bool wxOverlay::IsNative() const
+{
+    return m_impl->IsNative();
+}
+
 bool wxOverlay::IsOk()
 {
     return m_impl->IsOk();
@@ -76,9 +81,15 @@ void wxOverlay::Reset()
     wxASSERT_MSG(m_inDrawing==false,wxT("cannot reset overlay during drawing"));
     m_impl->Reset();
 }
+// ----------------------------------------------------------------------------
 
 wxOverlay::Impl::~Impl()
 {
+}
+
+bool wxOverlay::Impl::IsNative() const
+{
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -139,6 +150,7 @@ class wxOverlayImpl: public wxOverlay::Impl
 public:
     wxOverlayImpl();
     ~wxOverlayImpl();
+    virtual bool IsNative() const wxOVERRIDE;
     virtual bool IsOk() wxOVERRIDE;
     virtual void Init(wxDC* dc, int x, int y, int width, int height) wxOVERRIDE;
     virtual void BeginDrawing(wxDC* dc) wxOVERRIDE;
@@ -162,6 +174,11 @@ wxOverlayImpl::wxOverlayImpl()
 
 wxOverlayImpl::~wxOverlayImpl()
 {
+}
+
+bool wxOverlayImpl::IsNative() const
+{
+    return false;
 }
 
 bool wxOverlayImpl::IsOk()

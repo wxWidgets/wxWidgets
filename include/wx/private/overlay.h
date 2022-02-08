@@ -17,6 +17,7 @@ class wxOverlay::Impl
 {
 public:
     virtual ~Impl();
+    virtual bool IsNative() const;
     virtual bool IsOk() = 0;
     virtual void Init(wxDC* dc, int x, int y, int width, int height) = 0;
     virtual void BeginDrawing(wxDC* dc) = 0;

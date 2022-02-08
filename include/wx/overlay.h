@@ -41,10 +41,12 @@ public:
     // to be done eg when the window content has been changed and repainted
     void Reset();
 
-    static Impl* Create();
+    bool IsNative() const;
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxDCOverlay;
+
+    static Impl* Create();
 
     // returns true if it has been setup
     bool IsOk();
