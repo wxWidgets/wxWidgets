@@ -36,22 +36,7 @@ public:
     virtual void OnKillFocus() wxOVERRIDE;
 
 protected:
-    void Init()
-    {
-        wxCaretBase::Init();
-
-        if ( GetBlinkTime() == 1200 )
-        {
-            // for MSW compatibility, map gtk-cursor-blink-time
-            // default value '1200' to '500'.
-            SetBlinkTime(500);
-        }
-
-        m_hasFocus = true;
-        m_blinkedOut = true;
-
-        m_xx = m_yy = -1;
-    }
+    void Init();
 
     // common part of On{Set,Kill}Focus()
     void OnFocus(bool hasFocus);

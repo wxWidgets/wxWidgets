@@ -85,6 +85,27 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
     g_object_set_property(G_OBJECT(settings), "gtk-cursor-blink", &blink);
 }
 
+// ---------------------------------------------------------------------------
+// wxCaret implementation
+// ---------------------------------------------------------------------------
+
+void wxCaret::Init()
+{
+    wxCaretBase::Init();
+
+    if ( GetBlinkTime() == 1200 )
+    {
+        // for MSW compatibility, map gtk-cursor-blink-time
+        // default value '1200' to '500'.
+        SetBlinkTime(500);
+    }
+
+    m_hasFocus = true;
+    m_blinkedOut = true;
+
+    m_xx = m_yy = -1;
+}
+
 void wxCaret::OnTimer()
 {
     // don't blink the caret when we don't have the focus
