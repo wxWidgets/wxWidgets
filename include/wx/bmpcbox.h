@@ -16,7 +16,7 @@
 
 #if wxUSE_BITMAPCOMBOBOX
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/dynarray.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -43,7 +43,7 @@ public:
     virtual ~wxBitmapComboBoxBase() { }
 
     // Sets the image for the given item.
-    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap) = 0;
+    virtual void SetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap) = 0;
 
 #if !defined(wxBITMAPCOMBOBOX_OWNERDRAWN_BASED)
 
@@ -79,7 +79,7 @@ protected:
     void BCBDoClear();
     void BCBDoDeleteOneItem(unsigned int n);
 
-    void DoSetItemBitmap(unsigned int n, const wxBitmap& bitmap);
+    void DoSetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap);
 
     void DrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const;
     void DrawItem(wxDC& dc, const wxRect& rect, int item, const wxString& text,
@@ -87,7 +87,7 @@ protected:
     wxCoord MeasureItem(size_t item) const;
 
     // Returns true if image size was affected
-    virtual bool OnAddBitmap(const wxBitmap& bitmap);
+    virtual bool OnAddBitmap(const wxBitmapBundle& bitmap);
 
     // Recalculates amount of empty space needed in front of text
     // in control itself. Returns number that can be passed to
@@ -97,8 +97,8 @@ protected:
 
     void UpdateInternals();
 
-    wxArrayPtrVoid      m_bitmaps;  // Images associated with items
-    wxSize              m_usedImgSize;  // Size of bitmaps
+    wxVector<wxBitmapBundle> m_bitmapbundles;// Images associated with items
+    wxSize                   m_usedImgSize;  // Size of bitmaps
 
     int                 m_imgAreaWidth;  // Width and height of area next to text field
     int                 m_fontHeight;
