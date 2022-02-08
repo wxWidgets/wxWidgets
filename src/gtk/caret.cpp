@@ -106,7 +106,15 @@ void wxCaret::Init()
     m_xx = m_yy = -1;
 }
 
-void wxCaret::OnTimer()
+void wxCaret::SetupTimer()
+{
+    wxWindow* const win = GetWindow();
+    m_timer.SetOwner(win);
+
+    win->Bind(wxEVT_TIMER, &wxCaret::OnTimer, this);
+}
+
+void wxCaret::OnTimer(wxTimerEvent& WXUNUSED(event))
 {
     // don't blink the caret when we don't have the focus
     if ( m_hasFocus )

@@ -14,21 +14,25 @@
 class WXDLLIMPEXP_CORE wxCaret : public wxCaretBase
 {
 public:
-    wxCaret() : m_timer(this) { Init(); }
+    wxCaret() { Init(); }
         // create the caret of given (in pixels) width and height and associate
         // with the given window
-    wxCaret(wxWindow *window, int width, int height) : m_timer(this)
+    wxCaret(wxWindow *window, int width, int height)
     {
         Init();
 
         (void)Create(window, width, height);
+
+        SetupTimer();
     }
         // same as above
-    wxCaret(wxWindowBase *window, const wxSize& size) : m_timer(this)
+    wxCaret(wxWindowBase *window, const wxSize& size)
     {
         Init();
 
         (void)Create(window, size);
+
+        SetupTimer();
     }
 
     // process wxWindow notifications
@@ -63,29 +67,17 @@ protected:
     // draw the caret at position (x,y)
     void Draw(int x, int y);
 
-    // called by CaretTimer
-    void OnTimer();
+    void SetupTimer();
 
-    class CaretTimer : public wxTimer
-    {
-    public:
-        CaretTimer(wxCaret* caret) : m_caret(caret) { }
-
-        virtual void Notify() wxOVERRIDE
-        {
-            m_caret->OnTimer();
-        }
-
-    private:
-        wxCaret* m_caret;
-
-    } m_timer;
+    void OnTimer(wxTimerEvent& event);
 
 private:
     bool m_hasFocus;
     bool m_blinkedOut;
 
     int m_xx, m_yy; // old caret's position
+
+    wxTimer m_timer;
 
     wxDECLARE_NO_COPY_CLASS(wxCaret);
 };
