@@ -50,22 +50,13 @@ protected:
     virtual void DoShow() wxOVERRIDE;
     virtual void DoHide() wxOVERRIDE;
 
-    void Blink() { DoBlink(m_x, m_y); }
-    void BlinkOld()
-    {
-        if ( m_xx != -1 || m_yy != -1 )
-        {
-            // blink out the caret at the old position.
-            if ( !m_blinkedOut )
-                DoBlink(m_xx, m_yy);
-        }
-    }
+    virtual void SetPosition(int x, int y) wxOVERRIDE;
 
-    // blink the caret at position (x,y)
-    void DoBlink(int x, int y);
+    // blink the caret
+    void Blink();
 
-    // draw the caret at position (x,y)
-    void Draw(int x, int y);
+    // draw the caret
+    void Draw();
 
     void SetupTimer();
 
@@ -74,8 +65,6 @@ protected:
 private:
     bool m_hasFocus;
     bool m_blinkedOut;
-
-    int m_xx, m_yy; // old caret's position
 
     wxTimer m_timer;
 

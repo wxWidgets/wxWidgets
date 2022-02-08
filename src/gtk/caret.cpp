@@ -102,8 +102,6 @@ void wxCaret::Init()
 
     m_hasFocus = true;
     m_blinkedOut = true;
-
-    m_xx = m_yy = -1;
 }
 
 void wxCaret::SetupTimer()
@@ -177,27 +175,30 @@ void wxCaret::DoHide()
 void wxCaret::DoMove()
 {
     if ( IsVisible() )
-    {
-        BlinkOld();
         Blink();
-    }
+}
 
-    m_xx = m_x;
-    m_yy = m_y;
+void wxCaret::SetPosition(int x, int y)
+{
+    // blink out the caret at the old position.
+    if ( IsVisible() && !m_blinkedOut )
+        Blink();
+
+    wxCaretBase::SetPosition(x, y);
 }
 
 // ---------------------------------------------------------------------------
 // blink/draw the caret
 // ---------------------------------------------------------------------------
 
-void wxCaret::DoBlink(int x, int y)
+void wxCaret::Blink()
 {
     m_blinkedOut = !m_blinkedOut;
 
-    Draw(x, y);
+    Draw();
 }
 
-void wxCaret::Draw(int x, int y)
+void wxCaret::Draw()
 {
     wxWindow* const win = GetWindow();
 
@@ -214,7 +215,7 @@ void wxCaret::Draw(int x, int y)
 
     cairo_set_source_rgb(cr, 1, 1, 1);
     cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-    cairo_rectangle(cr, x, y, m_width , m_height);
+    cairo_rectangle(cr, m_x, m_y, m_width , m_height);
     cairo_clip_preserve(cr);
 
     if ( m_hasFocus )
@@ -227,7 +228,7 @@ void wxCaret::Draw(int x, int y)
     static bool s_isWayland = wxPrivate::IsWayland();
     if ( s_isWayland )
     {
-        win->RefreshRect(wxRect(x, y, m_width , m_height));
+        win->RefreshRect(wxRect(m_x, m_y, m_width , m_height));
     }
 }
 

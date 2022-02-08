@@ -110,7 +110,11 @@ public:
     // ----------
 
         // move the caret to given position (in logical coords)
-    void Move(int x, int y) { m_x = x; m_y = y; DoMove(); }
+    void Move(int x, int y)
+    {
+        SetPosition(x, y);
+        DoMove();
+    }
     void Move(const wxPoint& pt) { Move(pt.x, pt.y); }
 
         // show/hide the caret (should be called by wxWindow when needed):
@@ -163,6 +167,12 @@ protected:
     virtual void DoHide() = 0;
     virtual void DoMove() = 0;
     virtual void DoSize() { }
+
+    virtual void SetPosition(int x, int y)
+    {
+        m_x = x;
+        m_y = y;
+    }
 
     // the common initialization
     void Init()
