@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CARET_H_
-#define _WX_CARET_H_
+#ifndef _WX_GTK_CARET_H_
+#define _WX_GTK_CARET_H_
 
 #include "wx/timer.h"
 
@@ -71,4 +71,4 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxCaret);
 };
 
-#endif // _WX_CARET_H_
+#endif // _WX_GTK_CARET_H_
