@@ -57,7 +57,14 @@ int wxCaretBase::GetBlinkTime()
     g_value_init(&blinkTime, G_TYPE_LONG);
     g_object_get_property(G_OBJECT(settings), "gtk-cursor-blink-time", &blinkTime);
 
-    return g_value_get_long(&blinkTime);
+    // Quoting gtk-cursor-blink-time documentation:
+    //
+    //   "Length of the cursor blink cycle, in milliseconds.
+    //    Default value: 1200"
+    //
+    // blinkTime (blink cycle) = time interval between 2 consecutive blinks.
+    //
+    return g_value_get_long(&blinkTime) / 2;
 }
 
 //static
@@ -78,7 +85,7 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 
         GValue blinkTime = G_VALUE_INIT;
         g_value_init(&blinkTime, G_TYPE_LONG);
-        g_value_set_long(&blinkTime, milliseconds);
+        g_value_set_long(&blinkTime, 2 * milliseconds);
         g_object_set_property(G_OBJECT(settings), "gtk-cursor-blink-time", &blinkTime);
     }
 
@@ -92,13 +99,6 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 void wxCaret::Init()
 {
     wxCaretBase::Init();
-
-    if ( GetBlinkTime() == 1200 )
-    {
-        // for MSW compatibility, map gtk-cursor-blink-time
-        // default value '1200' to '500'.
-        SetBlinkTime(500);
-    }
 
     m_hasFocus = true;
     m_blinkedOut = true;
