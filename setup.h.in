@@ -332,6 +332,8 @@
 
 #define wxUSE_WEBVIEW_EDGE 0
 
+#define wxUSE_WEBVIEW_EDGE_STATIC 0
+
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #define wxUSE_WEBVIEW_WEBKIT 0
 #else
