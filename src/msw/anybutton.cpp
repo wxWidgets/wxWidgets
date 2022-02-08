@@ -812,29 +812,29 @@ wxBitmap wxAnyButton::DoGetBitmap(State which) const
 
 void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
 {
+    // Normal image sets images for all states of the button, or deletes the
+    // images if the bundle is invalid.
+    // Delete the wxButtonImageData so when the new one is created, all states
+    // are initialized.
+    if ( which == State_Normal )
+    {
+        delete m_imageData;
+        m_imageData = NULL;
+    }
+
     if ( !bitmapBundle.IsOk() )
     {
-        if ( m_imageData  )
+        if ( m_imageData )
         {
-            // Normal image is special: setting it enables images for the
-            // button and resetting it to nothing disables all of them.
-            if ( which == State_Normal )
-            {
-                delete m_imageData;
-                m_imageData = NULL;
-            }
-            else
-            {
-                // Invalidate the current bundle, if any.
-                m_imageData->SetBitmapBundle(bitmapBundle, which);
+            // Invalidate the current bundle, if any.
+            m_imageData->SetBitmapBundle(bitmapBundle, which);
 
-                // Replace the removed bitmap with the normal one.
-                wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
-                m_imageData->SetBitmap(which == State_Disabled
-                                            ? bmpNormal.ConvertToDisabled()
-                                            : bmpNormal,
-                                       which);
-            }
+            // Replace the removed bitmap with the normal one.
+            wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
+            m_imageData->SetBitmap(which == State_Disabled
+                                        ? bmpNormal.ConvertToDisabled()
+                                        : bmpNormal,
+                                    which);
         }
 
         return;
