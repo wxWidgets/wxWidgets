@@ -31,7 +31,7 @@
 #include "wx/dynarray.h"
 
 #include "wx/dfb/private.h"
-#include "wx/private/overlay.h"
+#include "wx/dfb/private/overlay.h"
 
 #define TRACE_EVENTS "events"
 #define TRACE_PAINT  "paint"
