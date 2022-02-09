@@ -47,7 +47,7 @@ wxObject *wxBitmapComboBoxXmlHandler::DoCreateResource()
         }
 
         m_combobox->Append(GetText(wxT("text")),
-                           GetBitmap(wxT("bitmap")));
+                           GetBitmapBundle(wxT("bitmap")));
 
         return m_combobox;
     }

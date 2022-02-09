@@ -426,19 +426,19 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <selection>2</selection>
                                     <object class="ownerdrawnitem">
                                         <text>This is a</text>
-                                        <bitmap>basicdlg.xpm</bitmap>
+                                        <bitmap>basicdlg.xpm;basicdlg2.xpm</bitmap>
                                      </object>
                                     <object class="ownerdrawnitem">
                                         <text>read-only</text>
-                                        <bitmap>derivdlg.xpm</bitmap>
+                                        <bitmap>derivdlg.xpm;derivdlg2.xpm</bitmap>
                                      </object>
                                     <object class="ownerdrawnitem">
                                         <text>wxBitmapComboBox</text>
-                                        <bitmap>uncenter.xpm</bitmap>
+                                        <bitmap>uncenter.xpm;uncenter2.xpm</bitmap>
                                      </object>
                                     <object class="ownerdrawnitem">
                                         <text>control</text>
-                                        <bitmap>custclas.xpm</bitmap>
+                                        <bitmap>custclas.xpm;custclas2.xpm</bitmap>
                                     </object>
                                 </object>
                             </object>
