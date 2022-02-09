@@ -433,6 +433,17 @@ void wxToolBarBase::ClearTools()
     }
 }
 
+void wxToolBarBase::SetToolBitmapSize(const wxSize& size)
+{
+    m_defaultWidth = size.x;
+    m_defaultHeight = size.y;
+}
+
+wxSize wxToolBarBase::GetToolBitmapSize() const
+{
+    return wxSize(m_defaultWidth, m_defaultHeight);
+}
+
 void wxToolBarBase::AdjustToolBitmapSize()
 {
     if ( HasFlag(wxTB_NOICONS) )
