@@ -213,14 +213,6 @@ static bool IsPerMonitorDPIAware(HWND hwnd)
 
 }
 
-void wxNonOwnedWindow::InheritAttributes()
-{
-    m_activeDPI = GetDPI();
-    m_perMonitorDPIaware = IsPerMonitorDPIAware(GetHwnd());
-
-    wxNonOwnedWindowBase::InheritAttributes();
-}
-
 bool wxNonOwnedWindow::IsThisEnabled() const
 {
     // Under MSW we use the actual window state rather than the value of
@@ -243,6 +235,12 @@ WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPA
 
     switch ( message )
     {
+        case WM_NCCREATE:
+            m_perMonitorDPIaware = IsPerMonitorDPIAware(GetHwnd());
+            if ( m_perMonitorDPIaware )
+                m_activeDPI = GetDPI();
+            break;
+
         case WM_DPICHANGED:
             {
                 const RECT* const prcNewWindow =
