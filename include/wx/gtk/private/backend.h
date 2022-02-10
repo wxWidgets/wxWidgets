@@ -8,7 +8,7 @@
 #ifdef __WXGTK3__
 namespace wxGTKImpl
 {
-    bool IsWayland(void* instance);
-    bool IsX11(void* instance);
+    WXDLLIMPEXP_CORE bool IsWayland(void* instance);
+    WXDLLIMPEXP_CORE bool IsX11(void* instance);
 }
 #endif

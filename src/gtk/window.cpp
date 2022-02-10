@@ -405,6 +405,7 @@ static bool IsBackend(void* instance, const char* string)
     return strncmp(string, name, strlen(string)) == 0;
 }
 
+WXDLLIMPEXP_CORE
 bool wxGTKImpl::IsWayland(void* instance)
 {
     static wxByte is = 2;
@@ -413,6 +414,7 @@ bool wxGTKImpl::IsWayland(void* instance)
     return bool(is);
 }
 
+WXDLLIMPEXP_CORE
 bool wxGTKImpl::IsX11(void* instance)
 {
     static wxByte is = 2;
