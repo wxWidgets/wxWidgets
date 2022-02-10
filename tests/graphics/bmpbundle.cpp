@@ -180,6 +180,11 @@ TEST_CASE("BitmapBundle::Scale", "[bmpbundle][scale]")
     bmp.SetScaleFactor(3);
     CHECK( bmp2.GetScaleFactor() == 2 );
     CHECK( bmp.GetScaleFactor() == 3 );
+
+    // Check that creating bitmap bundle from a bitmap with a scale factor
+    // works as expected.
+    wxBitmapBundle b = bmp2;
+    CHECK( b.GetDefaultSize() == wxSize(8, 8) );
 }
 
 #endif // ports with scaled bitmaps support
