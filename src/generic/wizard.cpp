@@ -121,17 +121,17 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent);
 
 void wxWizardPage::Init()
 {
-    m_bitmap = wxNullBitmap;
+    m_bitmap = wxBitmapBundle();
 }
 
 wxWizardPage::wxWizardPage(wxWizard *parent,
-                           const wxBitmap& bitmap)
+                           const wxBitmapBundle& bitmap)
 {
     Create(parent, bitmap);
 }
 
 bool wxWizardPage::Create(wxWizard *parent,
-                          const wxBitmap& bitmap)
+                          const wxBitmapBundle& bitmap)
 {
     if ( !wxPanel::Create(parent, wxID_ANY) )
         return false;
@@ -280,12 +280,14 @@ void wxWizard::Init()
     m_bitmapBackgroundColour = *wxWHITE;
     m_bitmapPlacement = 0;
     m_bitmapMinimumWidth = 115;
+
+    Bind(wxEVT_DPI_CHANGED, &wxWizard::WXHandleDPIChanged, this);
 }
 
 bool wxWizard::Create(wxWindow *parent,
                       int id,
                       const wxString& title,
-                      const wxBitmap& bitmap,
+                      const wxBitmapBundle& bitmap,
                       const wxPoint& pos,
                       long style)
 {
@@ -606,10 +608,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     {
         bmp = m_page->GetBitmap();
         if ( !bmp.IsOk() )
-            bmp = m_bitmap;
+            bmp = m_bitmap.GetBitmapFor(this);
 
         if ( !bmpPrev.IsOk() )
-            bmpPrev = m_bitmap;
+            bmpPrev = m_bitmap.GetBitmapFor(this);
 
         if (!GetBitmapPlacement())
         {
@@ -729,7 +731,7 @@ wxSize wxWizard::GetPageSize() const
     if ( m_statbmp )
     {
         // make the page at least as tall as the bitmap
-        pageSize.IncTo(wxSize(0, m_bitmap.GetLogicalHeight()));
+        pageSize.IncTo(wxSize(0, m_bitmap.GetPreferredLogicalSizeFor(this).GetHeight()));
     }
 
     if ( m_usingSizer )
@@ -862,11 +864,27 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
     }
 }
 
-void wxWizard::SetBitmap(const wxBitmap& bitmap)
+void wxWizard::SetBitmap(const wxBitmapBundle& bitmap)
 {
     m_bitmap = bitmap;
     if (m_statbmp)
         m_statbmp->SetBitmap(m_bitmap);
+}
+
+void wxWizard::WXHandleDPIChanged(wxDPIChangedEvent& event)
+{
+    wxBitmap bmp;
+    if ( m_statbmp )
+    {
+        bmp = m_page->GetBitmap();
+        if ( !bmp.IsOk() )
+            bmp = m_bitmap.GetBitmapFor(this);
+
+        ResizeBitmap(bmp);
+        m_statbmp->SetBitmap(bmp);
+    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -948,7 +966,8 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
 
         if (!m_statbmp->GetBitmap().IsOk() || m_statbmp->GetBitmap().GetLogicalHeight() != bitmapHeight)
         {
-            wxBitmap bitmap(bitmapWidth, bitmapHeight);
+            wxBitmap bitmap;
+            bitmap.CreateWithLogicalSize(bitmapWidth, bitmapHeight, bmp.GetScaleFactor(), bmp.GetDepth());
             {
                 wxMemoryDC dc;
                 dc.SelectObject(bitmap);
