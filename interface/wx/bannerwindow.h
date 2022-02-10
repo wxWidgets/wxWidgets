@@ -29,7 +29,7 @@
                         "the online server.\n"
                         "  Please enter your credentials in the controls below.");
 
-        // And position it along the left edge of the window.
+        // And position it along the top edge of the window.
         wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
         sizer->Add(banner, wxSizerFlags().Expand());
 
