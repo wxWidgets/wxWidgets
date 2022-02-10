@@ -23,6 +23,7 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/fswatcher.h"
+#include "wx/log.h"
 #include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
 #include "wx/vector.h"
@@ -32,6 +33,27 @@
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
+
+#if wxUSE_LOG
+// Logging is disabled by default when running the tests, but sometimes it can
+// be helpful to see the errors in case of unexpected failure, so this class
+// re-enables logs in its scope.
+//
+// It's a counterpart to wxLogNull.
+class LogEnabler
+{
+public:
+    LogEnabler() : m_wasEnabled(wxLog::EnableLogging(true)) { }
+    ~LogEnabler() { wxLog::EnableLogging(m_wasEnabled); }
+
+private:
+    const bool m_wasEnabled;
+
+    wxDECLARE_NO_COPY_CLASS(LogEnabler);
+};
+#else // !wxUSE_LOG
+class LogEnabler { };
+#endif // wxUSE_LOG/!wxUSE_LOG
 
 // class generating file system events
 class EventGenerator
@@ -138,7 +160,10 @@ public:
         // unique filename, the file always get created...
         ms_watchDir.AppendDir("fswatcher_test");
         REQUIRE(!ms_watchDir.DirExists());
+
+        LogEnabler enableLogs;
         REQUIRE(ms_watchDir.Mkdir());
+
         REQUIRE(ms_watchDir.DirExists());
 
         return ms_watchDir;
@@ -151,6 +176,7 @@ public:
         // just to be really sure we know what we remove
         REQUIRE( ms_watchDir.GetDirs().Last() == "fswatcher_test" );
 
+        LogEnabler enableLogs;
         CHECK( ms_watchDir.Rmdir(wxPATH_RMDIR_RECURSIVE) );
 
         ms_watchDir = wxFileName();
