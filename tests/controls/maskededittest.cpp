@@ -19,131 +19,103 @@
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
-#include "wx/maskededit.h"
+#include "wx/generic/maskededit.h"
 
 #include "testableframe.h"
 #include "wx/uiaction.h"
 
-class MaskedEditTestCase : public CppUnit::TestCase
+class MaskedEditTestCase
 {
 public:
-    MaskedEditTestCase() { }
-
-    virtual void setUp() wxOVERRIDE
+    MaskedEditTestCase()
     {
-        CreateControl();
+        m_maskedEdit = new wxMaskedEditText(wxTheApp->GetTopWindow(), wxID_ANY);
+        m_maskedEdit->SetMask( "=a>A^-###++xx.#{4}" );
+    }
+    ~MaskedEditTestCase ()
+    {
+        delete m_maskedEdit;
     }
 
-    virtual void tearDown() wxOVERRIDE
-    {
-        wxTheApp->GetTopWindow()->DestroyChildren();
-    }
-
-private:
-    CPPUNIT_TEST_SUITE( MaskedEditTestCase );
-    CPPUNIT_TEST( TestSet );
-    WXUISIM_TEST( TestUI );
-    CPPUNIT_TEST( TestFunc );
-    CPPUNIT_TEST_SUITE_END();
-
-    void TestSet();
-#if wxUSE_UIACTIONSIMULATOR
-    void TestUI();
-#endif
-    void TestFunc();
-    void CreateControl();
-    wxMaskedEditText* m_editTx;
+protected:
+    wxMaskedEditText* m_maskedEdit;
 
     DECLARE_NO_COPY_CLASS(MaskedEditTestCase)
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( MaskedEditTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MaskedEditTestCase, "MaskedEditTestCase" );
-
-void MaskedEditTestCase::CreateControl()
+TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::CreateControl", "[maskedtextctrl]" )
 {
-    m_editTx = new wxMaskedEditText(wxTheApp->GetTopWindow(), wxID_ANY);
-    m_editTx->SetMask("=a>A^-###++xx.#{4}");
     // test empty value
-    CPPUNIT_ASSERT_EQUAL( "=  -   ++  .    ", m_editTx->GetValue() );
+    CHECK( m_maskedEdit->GetValue() == "=  -   ++  .    " );
 
-    m_editTx->SetValue("=bc- 12++  .9876");
+    m_maskedEdit->SetValue( "=bc- 12++  .9876" );
     // 'c' should be changed to 'C' and '12' should be left re-aligned
-    CPPUNIT_ASSERT_EQUAL( "=bC-12 ++  .9876", m_editTx->GetValue() );
+    CHECK( m_maskedEdit->GetValue() == "=bC-12 ++  .9876" );
 
-    m_editTx->SetFieldFlags(3, wxEditFieldFlags(wxALIGN_RIGHT));
-    m_editTx->SetPlainValue("fg56");
-    m_editTx->SetFieldValue(3, "987");
-    CPPUNIT_ASSERT_EQUAL( "=fG-56 ++  . 987", m_editTx->GetValue() );
-    wxString temp = m_editTx->GetValue();
-    wxString temp1 = m_editTx->GetMask();
+    m_maskedEdit->SetFieldFlags( 3, wxMaskedEditFieldFlags( wxALIGN_RIGHT ) );
+    m_maskedEdit->SetPlainValue( "fg56" );
+    m_maskedEdit->SetFieldValue( 3, "987" );
+    CHECK( m_maskedEdit->GetValue() == "=fG-56 ++  . 987" );
 }
 
-void MaskedEditTestCase::TestSet()
+TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::TestSet", "[maskedtextctrl]" )
 {
-    m_editTx->SetMask("=a>A^-###++xx.#{4}");
+    m_maskedEdit->SetMask( "=a>A^-###++xx.#{4}" );
     // test empty value
-    CPPUNIT_ASSERT_EQUAL( "=  -   ++  .    ", m_editTx->GetValue() );
+    CHECK( m_maskedEdit->GetValue() == "=  -   ++  .    " );
 
-    m_editTx->SetValue("=bc- 12++  .9876");
+    m_maskedEdit->SetValue( "=bc- 12++  .9876" );
     // 'c' should be changed to 'C' and '12' should be left re-aligned
-    CPPUNIT_ASSERT_EQUAL( "=bC-12 ++  .9876", m_editTx->GetValue() );
+    CHECK( m_maskedEdit->GetValue() == "=bC-12 ++  .9876" );
 
-    m_editTx->SetFieldFlags(3, wxEditFieldFlags(wxALIGN_RIGHT));
-    m_editTx->SetPlainValue("fg56");
-    m_editTx->SetFieldValue(3, "987");
-    CPPUNIT_ASSERT_EQUAL( "=fG-56 ++  . 987", m_editTx->GetValue() );
-    wxString temp = m_editTx->GetValue();
-    wxString temp1 = m_editTx->GetMask();
+    m_maskedEdit->SetFieldFlags( 3, wxMaskedEditFieldFlags( wxALIGN_RIGHT ) );
+    m_maskedEdit->SetPlainValue( "fg56" );
+    m_maskedEdit->SetFieldValue( 3, "987" );
+    CHECK( m_maskedEdit->GetValue() == "=fG-56 ++  . 987" );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
-void MaskedEditTestCase::TestUI()
+TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::TestUI", "[maskedtextctrl]" )
 {
     wxUIActionSimulator sim;
-/**
-    m_editTx->SetMask("=a>A^-###++xx.#{4}");
-    m_editTx->SetValue( "=fG-56 ++  . 987" );
-*/
-    m_editTx->SetFocus();
-    sim.Char(WXK_END);
-    sim.Char(WXK_BACK);
-    wxYield();
-    CPPUNIT_ASSERT_EQUAL( "=fG-56 ++  .  98", m_editTx->GetValue() );
+    m_maskedEdit->SetFieldFlags( 3, wxMaskedEditFieldFlags( wxALIGN_RIGHT ) );
+    m_maskedEdit->SetValue( "=fG-56 ++  . 987" );
+    m_maskedEdit->SetFocus();
 
-    sim.Char(WXK_LEFT);
-    sim.Char(WXK_LEFT);
-    sim.Char(WXK_LEFT);
-    sim.Char('d');
+    sim.Char( WXK_END );
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "=fG-56 ++d .  98", m_editTx->GetValue() );
+    sim.Char( WXK_BACK );
+    wxYield();
+    CHECK( m_maskedEdit->GetValue() == "=fG-56 ++  .  98" );
+    sim.Char( WXK_LEFT );
+    sim.Char( WXK_LEFT );
+    sim.Char( WXK_LEFT );
+    sim.Char( 'd' );
+    wxYield();
+    CHECK( m_maskedEdit->GetValue() == "=fG-56 ++d .  98" );
 
-    m_editTx->SetInsertionPoint(6);
-    sim.Char(WXK_RIGHT);
-    sim.Char('2');
+    m_maskedEdit->SetInsertionPoint( 6 );
+    sim.Char( WXK_RIGHT );
+    sim.Char( '2' );
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "=fG-56 ++2d.  98", m_editTx->GetValue() );
+    CHECK( m_maskedEdit->GetValue() == "=fG-56 ++2d.  98" );
 }
 #endif
 
-
-void MaskedEditTestCase::TestFunc()
+TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::TestFunc", "[maskedtextctrl]" )
 {
     // Should fail because not all fields have all required chars
-    CPPUNIT_ASSERT( !m_editTx->IsValid() );
+    CHECK( !m_maskedEdit->IsValid() );
 
-    m_editTx->ChangeValue("=aB-123++  .5670");
-    CPPUNIT_ASSERT( m_editTx->IsValid() );
+    m_maskedEdit->ChangeValue( "=aB-123++  .5670" );
+    CHECK( m_maskedEdit->IsValid() );
 
     wxRangeParams parms;
     parms.rmin = 70;
     parms.rmax = 100;
-    m_editTx->SetFieldFunction(1, &wxMaskedRangeCheck, &parms);
+    m_maskedEdit->SetFieldFunction( 1, &wxMaskedRangeCheck, &parms );
     // Should fail because 123 > 100
-    CPPUNIT_ASSERT( !m_editTx->IsValid() );
+    CHECK( !m_maskedEdit->IsValid() );
 }
 
 #endif // wxUSE_MASKED_EDIT
