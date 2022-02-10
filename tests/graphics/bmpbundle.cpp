@@ -159,3 +159,27 @@ TEST_CASE("BitmapBundle::ArtProvider", "[bmpbundle][art]")
     CHECK( b.IsOk() );
     CHECK( b.GetDefaultSize() == size );
 }
+
+// This test only makes sense for the ports that actually support scaled
+// bitmaps, which is the case for the ports using real logical pixels (they
+// have to support bitmap scale for things to work) and MSW, which doesn't, but
+// still implements support for at least storing and retrieving bitmap scale in
+// its wxBitmap.
+#if defined(wxHAS_DPI_INDEPENDENT_PIXELS) || defined(__WXMSW__)
+
+TEST_CASE("BitmapBundle::Scale", "[bmpbundle][scale]")
+{
+    // This is not a wxBitmapBundle test, strictly speaking, but check that
+    // setting scale factor works correctly for bitmaps, as wxBitmapBundle does
+    // this internally.
+    wxBitmap bmp(16, 16);
+    bmp.SetScaleFactor(2);
+    CHECK( bmp.GetScaleFactor() == 2 );
+
+    wxBitmap bmp2(bmp);
+    bmp.SetScaleFactor(3);
+    CHECK( bmp2.GetScaleFactor() == 2 );
+    CHECK( bmp.GetScaleFactor() == 3 );
+}
+
+#endif // ports with scaled bitmaps support

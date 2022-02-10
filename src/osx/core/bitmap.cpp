@@ -1391,7 +1391,12 @@ void wxBitmap::SetScaleFactor(double scale)
 {
     wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
 
-    return GetBitmapData()->SetScaleFactor(scale) ;
+    if ( GetBitmapData()->GetScaleFactor() != scale )
+    {
+        AllocExclusive();
+
+        GetBitmapData()->SetScaleFactor(scale) ;
+    }
 }
 
 double wxBitmap::GetScaleFactor() const
