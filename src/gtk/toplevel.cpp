@@ -37,6 +37,7 @@
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
+#include "wx/gtk/private/backend.h"
 
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
@@ -79,7 +80,7 @@ static bool HasClientDecor(GtkWidget* widget)
         GdkDisplay* display = gtk_widget_get_display(widget);
         const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
         has =
-            strcmp(name, "GdkWaylandDisplay") == 0 ||
+            wxGTKImpl::IsWayland(display) ||
             strcmp(name, "GdkMirDisplay") == 0 ||
             strcmp(name, "GdkBroadwayDisplay") == 0;
     }
@@ -504,7 +505,7 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     GdkDisplay* display = gdk_window_get_display(window);
 
 #ifdef __WXGTK3__
-    if (strcmp("GdkX11Display", g_type_name(G_TYPE_FROM_INSTANCE(display))) != 0)
+    if (!wxGTKImpl::IsX11(display))
         return false;
 #endif
 
@@ -771,12 +772,11 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                       G_CALLBACK (wxgtk_tlw_key_press_event), NULL);
 
 #ifdef __WXGTK3__
-    const char* displayTypeName =
-        g_type_name(G_TYPE_FROM_INSTANCE(gtk_widget_get_display(m_widget)));
+    GdkDisplay* display = gtk_widget_get_display(m_widget);
 #endif
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
-    if (strcmp("GdkX11Display", displayTypeName) == 0)
+    if (wxGTKImpl::IsX11(display))
 #endif
     {
         gtk_widget_add_events(m_widget, GDK_PROPERTY_CHANGE_MASK);
@@ -814,7 +814,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
             m_gdkDecor |= GDK_DECOR_TITLE;
 #if GTK_CHECK_VERSION(3,10,0)
         else if (
-            strcmp("GdkWaylandDisplay", displayTypeName) == 0 &&
+            wxGTKImpl::IsWayland(display) &&
             gtk_check_version(3,10,0) == NULL)
         {
             gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
@@ -933,7 +933,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
 
 #ifdef __WXGTK3__
-    if (strcmp("GdkX11Display", g_type_name(G_TYPE_FROM_INSTANCE(display))) == 0)
+    if (wxGTKImpl::IsX11(display))
 #endif
     {
         xdpy = GDK_DISPLAY_XDISPLAY(display);
@@ -1068,7 +1068,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
             gs_requestFrameExtentsStatus != RFE_STATUS_BROKEN &&
             !gtk_widget_get_realized(m_widget) &&
 #ifdef __WXGTK3__
-            strcmp("GdkX11Screen", g_type_name(G_TYPE_FROM_INSTANCE(screen))) == 0 &&
+            wxGTKImpl::IsX11(screen) &&
 #endif
             g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),

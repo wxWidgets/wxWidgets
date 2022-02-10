@@ -42,6 +42,7 @@
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/win_gtk.h"
+#include "wx/gtk/private/backend.h"
 #include "wx/private/textmeasure.h"
 using namespace wxGTKImpl;
 
@@ -394,6 +395,32 @@ PangoContext* wxGetPangoContext()
 
     return context;
 }
+
+#ifdef __WXGTK3__
+static bool IsBackend(void* instance, const char* string)
+{
+    if (instance == NULL)
+        instance = wxGetTopLevelGDK();
+    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(instance));
+    return strncmp(string, name, strlen(string)) == 0;
+}
+
+bool wxGTKImpl::IsWayland(void* instance)
+{
+    static wxByte is = 2;
+    if (is > 1)
+        is = IsBackend(instance, "GdkWayland");
+    return bool(is);
+}
+
+bool wxGTKImpl::IsX11(void* instance)
+{
+    static wxByte is = 2;
+    if (is > 1)
+        is = IsBackend(instance, "GdkX11");
+    return bool(is);
+}
+#endif // __WXGTK3__
 
 //-----------------------------------------------------------------------------
 // "expose_event"/"draw" from m_wxwindow
@@ -1014,7 +1041,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
-            if (strcmp("GdkX11Window", g_type_name(G_TYPE_FROM_INSTANCE(gdk_event->window))) == 0)
+            if (wxGTKImpl::IsX11(gdk_event->window))
 #else
             if (true)
 #endif

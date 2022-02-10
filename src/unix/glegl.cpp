@@ -29,6 +29,7 @@
 #include "wx/scopedptr.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/backend.h"
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/gdkwayland.h>
 #include <wayland-egl.h>
@@ -459,9 +460,8 @@ bool wxGLCanvasEGL::CreateSurface()
     }
 
     GdkWindow *window = GTKGetDrawingWindow();
-    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(window));
 #ifdef GDK_WINDOWING_X11
-    if (strcmp("GdkX11Window", name) == 0)
+    if (wxGTKImpl::IsX11(window))
     {
         m_xwindow = GDK_WINDOW_XID(window);
         m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
@@ -470,7 +470,7 @@ bool wxGLCanvasEGL::CreateSurface()
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-    if (strcmp("GdkWaylandWindow", name) == 0)
+    if (wxGTKImpl::IsWayland(window))
     {
         int x, y;
         gdk_window_get_origin(window, &x, &y);
