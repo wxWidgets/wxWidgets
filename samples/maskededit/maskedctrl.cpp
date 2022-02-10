@@ -26,7 +26,7 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/maskededit.h"
+#include "wx/generic/maskededit.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -73,7 +73,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    wxDECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new panel type: this will fit inside our main frame
@@ -348,9 +348,9 @@ MyPanel::MyPanel(MyFrame* parent)
 
     //Colours
     wxMaskedEditColours mskColours;
-    mskColours.colOKBackgn.Set(160, 255, 100);
-    mskColours.colOKForegn.Set(0, 0, 255);
-    mskColours.colWrBackgn.Set(255, 125, 100);
+    mskColours.colOKBackground.Set(160, 255, 100);
+    mskColours.colOKForeground.Set(0, 0, 255);
+    mskColours.colInvaldBackground.Set(255, 125, 100);
 
     //Headers
     stDesText = new wxStaticText(this, wxID_ANY, "Description");
@@ -383,7 +383,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl = new wxMaskedEditText(this, idCtrl);
     parent->ctrIDs.push_back(idCtrl);
     edTexCtrl->SetMask(edMask);
-    edTexCtrl->SetFieldFlags(0, wxEditFieldFlags(wxALIGN_RIGHT));
+    edTexCtrl->SetFieldFlags(0, wxMaskedEditFieldFlags(wxALIGN_RIGHT));
     mainSizer->Add(edTexCtrl, sizerFlags);
 
     edPlain = edTexCtrl->GetPlainValue();
@@ -410,7 +410,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl = new wxMaskedEditText(this, idCtrl);
     parent->ctrIDs.push_back(idCtrl);
     edTexCtrl->SetMask(edMask);
-    edTexCtrl->SetFieldFlags(0, wxEditFieldFlags().SetFillChar('_'));
+    edTexCtrl->SetFieldFlags(0, wxMaskedEditFieldFlags().SetFillChar('_'));
     edTexCtrl->SetValue("GRRR ***@&#%!!!");
     mainSizer->Add(edTexCtrl, sizerFlags);
 
@@ -438,7 +438,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl = new wxMaskedEditText(this, idCtrl);
     parent->ctrIDs.push_back(idCtrl);
     edTexCtrl->SetMask(edMask);
-    wxEditFieldFlags fieldFlags;
+    wxMaskedEditFieldFlags fieldFlags;
     fieldFlags.SetAlignment(wxALIGN_RIGHT);
     fieldFlags.SetPaddingChar('0');
     edTexCtrl->SetAllFieldsFlags(fieldFlags);
@@ -684,7 +684,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edComboCtrl->SetMask(edMask);
 
     edComboCtrl->SetAllFieldsFlags(fieldFlags); //same flags as sample 3
-    mskColours.colWrForegn.Set(0, 0, 0);
+    mskColours.colInvaldForeground.Set(0, 0, 0);
     edComboCtrl->SetMaskedColours(mskColours);
     mainSizer->Add(edComboCtrl, sizerFlags);
     //use the predefined range and date functions
