@@ -1050,7 +1050,7 @@ bool wxBitmap::DoCreate(const wxSize& size, double scale, int d)
         d = wxDisplayDepth() ;
 
     const wxSize sizePhys = size*scale;
-    m_refData = new wxBitmapRefData( sizePhys.x, sizePhys.y, d );
+    m_refData = new wxBitmapRefData( sizePhys.x, sizePhys.y, d, scale );
 
     return GetBitmapData()->IsOk() ;
 }
