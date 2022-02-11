@@ -145,7 +145,7 @@ private:
     virtual wxWindow* GetHTMLWindow() wxOVERRIDE;
     virtual wxColour GetHTMLBackgroundColour() const wxOVERRIDE;
     virtual void SetHTMLBackgroundColour(const wxColour& clr) wxOVERRIDE;
-    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) wxOVERRIDE;
+    virtual void SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg) wxOVERRIDE;
     virtual void SetHTMLStatusText(const wxString& text) wxOVERRIDE;
     virtual wxCursor GetHTMLCursor(HTMLCursor type) const wxOVERRIDE;
 

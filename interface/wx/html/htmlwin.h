@@ -83,7 +83,7 @@ public:
     virtual void SetHTMLBackgroundColour(const wxColour& clr) = 0;
 
     /// Sets window's background to given bitmap.
-    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) = 0;
+    virtual void SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg) = 0;
 
     /// Sets status bar text.
     virtual void SetHTMLStatusText(const wxString& text) = 0;

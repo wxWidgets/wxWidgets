@@ -1045,25 +1045,27 @@ void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
 
 void wxHtmlWindow::DoEraseBackground(wxDC& dc)
 {
+    wxBitmap bmp = m_bmpBg.GetBitmapFor(this);
+
     // if we don't have any background bitmap we just fill it with background
     // colour and we also must do it if the background bitmap is not fully
     // opaque as otherwise junk could be left there
-    if ( !m_bmpBg.IsOk() || m_bmpBg.GetMask() )
+    if ( !bmp.IsOk() || bmp.GetMask() )
     {
         dc.SetBackground(GetBackgroundColour());
         dc.Clear();
     }
 
-    if ( m_bmpBg.IsOk() )
+    if ( bmp.IsOk() )
     {
         // draw the background bitmap tiling it over the entire window area
         const wxSize sz = GetVirtualSize();
-        const wxSize sizeBmp(m_bmpBg.GetWidth(), m_bmpBg.GetHeight());
+        const wxSize sizeBmp(bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
         for ( wxCoord x = 0; x < sz.x; x += sizeBmp.x )
         {
             for ( wxCoord y = 0; y < sz.y; y += sizeBmp.y )
             {
-                dc.DrawBitmap(m_bmpBg, x, y, true /* use mask */);
+                dc.DrawBitmap(bmp, x, y, true /* use mask */);
             }
         }
     }
@@ -1321,7 +1323,9 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
 
 void wxHtmlWindow::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
 {
+    wxBitmapBundle bmpBg = m_bmpBg;
     DoSetPage(*(m_Parser->GetSource()));
+    SetBackgroundImage(bmpBg);
 }
 
 void wxHtmlWindow::OnMouseMove(wxMouseEvent& WXUNUSED(event))
@@ -1827,7 +1831,7 @@ void wxHtmlWindow::SetHTMLBackgroundColour(const wxColour& clr)
     SetBackgroundColour(clr);
 }
 
-void wxHtmlWindow::SetHTMLBackgroundImage(const wxBitmap& bmpBg)
+void wxHtmlWindow::SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg)
 {
     SetBackgroundImage(bmpBg);
 }
