@@ -433,11 +433,29 @@ void wxToolBarBase::ClearTools()
     }
 }
 
+void wxToolBarBase::DoSetToolBitmapSize(const wxSize& size)
+{
+    m_defaultWidth = size.x;
+    m_defaultHeight = size.y;
+}
+
+void wxToolBarBase::SetToolBitmapSize(const wxSize& size)
+{
+    m_requestedBitmapSize = size;
+
+    DoSetToolBitmapSize(size);
+}
+
+wxSize wxToolBarBase::GetToolBitmapSize() const
+{
+    return wxSize(m_defaultWidth, m_defaultHeight);
+}
+
 void wxToolBarBase::AdjustToolBitmapSize()
 {
     if ( HasFlag(wxTB_NOICONS) )
     {
-        SetToolBitmapSize(wxSize(0, 0));
+        DoSetToolBitmapSize(wxSize(0, 0));
         return;
     }
 
@@ -465,6 +483,11 @@ void wxToolBarBase::AdjustToolBitmapSize()
                                 sizeOrig
                                );
 
+        // Don't do anything if it doesn't change, our current size is supposed
+        // to satisfy any constraints we might have anyhow.
+        if ( sizePreferred == sizeOrig )
+            return;
+
         // This size is supposed to be in logical units for the platforms where
         // they differ from physical ones, so convert it.
         //
@@ -475,14 +498,16 @@ void wxToolBarBase::AdjustToolBitmapSize()
         // use the size computed here, this would need to be revisited.
         sizePreferred /= GetContentScaleFactor();
 
-        // Increase the bitmap size to the preferred one, as the default bitmap
-        // size is small and using larger bitmaps shouldn't shrink them to it.
-        // However intentionally setting a size larger than the actual bitmap
-        // size should scale them up, as people sometimes want to use bigger
-        // buttons and this is how it used to behave before wxBitmapBundle
-        // introduction.
-        if ( sizePreferred.x > sizeOrig.x || sizePreferred.y > sizeOrig.y )
-            SetToolBitmapSize(sizePreferred);
+        // Don't decrease the bitmap below the size requested by the application
+        // as using larger bitmaps shouldn't shrink them to the small default
+        // size.
+        sizePreferred.IncTo(m_requestedBitmapSize);
+
+        // Call DoSetToolBitmapSize() and not SetToolBitmapSize() to avoid
+        // changing the requested bitmap size: if we set our own adjusted size
+        // as the preferred one, we wouldn't decrease it later even if we ought
+        // to, as when moving from a monitor with higher DPI to a lower-DPI one.
+        DoSetToolBitmapSize(sizePreferred);
     }
 }
 

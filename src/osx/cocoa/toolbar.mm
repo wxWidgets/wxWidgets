@@ -1332,7 +1332,7 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     DoLayout();
 }    
 
-void wxToolBar::SetToolBitmapSize(const wxSize& size)
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
 {
     m_defaultWidth = size.x + kwxMacToolBorder;
     m_defaultHeight = size.y + kwxMacToolBorder;

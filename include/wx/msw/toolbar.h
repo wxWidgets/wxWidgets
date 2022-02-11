@@ -48,7 +48,6 @@ public:
 
     virtual bool Realize() wxOVERRIDE;
 
-    virtual void SetToolBitmapSize(const wxSize& size) wxOVERRIDE;
     virtual wxSize GetToolSize() const wxOVERRIDE;
 
     virtual void SetRows(int nRows) wxOVERRIDE;
@@ -115,6 +114,8 @@ protected:
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) wxOVERRIDE;
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
+
+    virtual void DoSetToolBitmapSize(const wxSize& size) wxOVERRIDE;
 
     // return the appropriate size and flags for the toolbar control
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
