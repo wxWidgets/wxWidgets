@@ -152,6 +152,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     html = new wxHtmlWindow(&dlg, wxID_ANY, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
     html -> SetBorders(0);
     html -> LoadPage("data/about.htm");
+    html -> SetHTMLBackgroundImage(wxBitmapBundle::FromSVGFile("data/bg.svg", wxSize(65, 45)));
     html -> SetInitialSize(wxSize(html -> GetInternalRepresentation() -> GetWidth(),
                                   html -> GetInternalRepresentation() -> GetHeight()));
 
