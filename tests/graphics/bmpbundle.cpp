@@ -172,8 +172,13 @@ TEST_CASE("BitmapBundle::Scale", "[bmpbundle][scale]")
     // This is not a wxBitmapBundle test, strictly speaking, but check that
     // setting scale factor works correctly for bitmaps, as wxBitmapBundle does
     // this internally.
-    wxBitmap bmp(16, 16);
-    bmp.SetScaleFactor(2);
+    wxBitmap bmp;
+    bmp.CreateWithLogicalSize(8, 8, 2);
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( bmp.GetLogicalSize() == wxSize(8, 8) );
+#endif
+    CHECK( bmp.GetDIPSize() == wxSize(8, 8) );
+    CHECK( bmp.GetSize() == wxSize(16, 16) );
     CHECK( bmp.GetScaleFactor() == 2 );
 
     wxBitmap bmp2(bmp);
