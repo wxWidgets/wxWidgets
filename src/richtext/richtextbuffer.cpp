@@ -5695,6 +5695,9 @@ void wxRichTextParagraph::Copy(const wxRichTextParagraph& obj)
 /// Clear the cached lines
 void wxRichTextParagraph::ClearLines()
 {
+    size_t cachedLineCount = m_cachedLines.size();
+    for (size_t i = 0; i < cachedLineCount; i++)
+        delete m_cachedLines[i];
     m_cachedLines.clear();
 }
 
