@@ -172,10 +172,10 @@ use "Logical", "Physical" or "DIP" in their names, the only exceptions are:
 
 - Size passed to wxBitmap constructors taking one, as well as the size returned
   by wxBitmap::GetWidth() and wxBitmap::GetHeight() is in physical pixels. You
-  can use wxBitmap::CreateWithLogicalSize() and wxBitmap::GetLogicalWidth(),
-  wxBitmap::GetLogicalHeight() and wxBitmap::GetLogicalSize() to use or get the
-  size in logical pixels which must be used in any computations involving the
-  sizes expressed in logical units.
+  can use wxBitmap::CreateWithDIPSize() and wxBitmap::GetDIPSize() or
+  wxBitmap::GetLogicalSize() to use or get the size in DPI-independent or
+  logical pixels (notably, the latter must be used in any computations
+  involving the sizes expressed in logical units).
 - Similarly, the size returned by wxBitmapBundle::GetPreferredBitmapSizeFor()
   is in physical pixels, but wxBitmapBundle::GetPreferredLogicalSizeFor() can
   be used to retrieve the same value in logical units.

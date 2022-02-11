@@ -299,7 +299,7 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
     if (width < 1) width = 1;
     if (height < 1) height = 1;
     bitmap = new wxBitmap();
-    bitmap->CreateWithLogicalSize(width, height,(GETWIN(winid))->GetContentScaleFactor());
+    bitmap->CreateWithDIPSize(width, height,(GETWIN(winid))->GetContentScaleFactor());
     mdc->SelectObject(*bitmap);
 }
 

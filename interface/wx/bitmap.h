@@ -460,16 +460,21 @@ public:
     bool Create(int width, int height, const wxDC& dc);
 
     /**
-        Create a bitmap specifying its size in logical pixels and the scale
-        factor to use.
+        Create a bitmap specifying its size in DPI-independent pixels and the
+        scale factor to use.
 
         The physical size of the bitmap is obtained by multiplying the given
-        size in logical pixels by @a scale and rounding it to the closest
-        integer.
+        @a size by @a scale and rounding it to the closest integer.
+
+        After using this function the following postconditions are true:
+
+        - GetSize() returns @a size multiplied by @a scale
+        - GetDIPSize() returns @a size
+        - GetScaleFactor() returns @a scale
 
         @param size
-            The size of the bitmap in logical pixels. Both width and height
-            must be strictly positive.
+            The size of the bitmap in DPI-independent pixels. Both width and
+            height must be strictly positive.
         @param scale
             Scale factor used by the bitmap, see SetScaleFactor().
         @param depth
@@ -479,19 +484,19 @@ public:
 
         @since 3.1.6
      */
-    bool CreateWithLogicalSize(const wxSize& size,
-                               double scale,
-                               int depth = wxBITMAP_SCREEN_DEPTH);
+    bool CreateWithDIPSize(const wxSize& size,
+                           double scale,
+                           int depth = wxBITMAP_SCREEN_DEPTH);
 
     /// @overload
-    bool CreateWithLogicalSize(int width, int height,
-                               double scale,
-                               int depth = wxBITMAP_SCREEN_DEPTH);
+    bool CreateWithDIPSize(int width, int height,
+                           double scale,
+                           int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Create a bitmap with a scale factor.
 
-        This is an older synonym for CreateWithLogicalSize(), use the new
+        This is an older synonym for CreateWithDIPSize(), use the new
         function in the new code.
 
         @param width
@@ -577,7 +582,7 @@ public:
         Returns the size of bitmap in DPI-independent units.
 
         This assumes that the bitmap was created using the value of scale
-        factor corresponding to the current DPI (see CreateWithLogicalSize()
+        factor corresponding to the current DPI (see CreateWithDIPSize()
         and SetScaleFactor()) and returns its physical size divided by this
         scale factor.
 
@@ -895,7 +900,7 @@ public:
         which logical and physical pixels differ (i.e. wxOSX and wxGTK3, but
         not wxMSW).
 
-        When creating a new bitmap, CreateWithLogicalSize() can be used to
+        When creating a new bitmap, CreateWithDIPSize() can be used to
         specify the correct scale factor from the beginning.
 
         @since 3.1.6

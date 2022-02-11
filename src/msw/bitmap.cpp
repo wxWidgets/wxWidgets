@@ -763,7 +763,7 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
         return false;
 }
 
-bool wxBitmap::CreateWithLogicalSize(const wxSize& size, double scale, int depth)
+bool wxBitmap::CreateWithDIPSize(const wxSize& size, double scale, int depth)
 {
     if ( !Create(size*scale, depth) )
         return false;
