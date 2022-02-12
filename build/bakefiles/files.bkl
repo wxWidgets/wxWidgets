@@ -1417,6 +1417,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/sockgtk.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
+    src/gtk/overlay.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
