@@ -43,7 +43,7 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
         wiz->Create(m_parentAsWindow,
                     GetID(),
                     GetText(wxT("title")),
-                    GetBitmap(),
+                    GetBitmapBundle(),
                     GetPosition());
         SetupWindow(wiz);
 
@@ -61,7 +61,7 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
         if (m_class == wxT("wxWizardPageSimple"))
         {
             XRC_MAKE_INSTANCE(p, wxWizardPageSimple)
-            p->Create(m_wizard, NULL, NULL, GetBitmap());
+            p->Create(m_wizard, NULL, NULL, GetBitmapBundle());
             if (m_lastSimplePage)
                 wxWizardPageSimple::Chain(m_lastSimplePage, p);
             page = p;
@@ -76,7 +76,7 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
             }
 
             page = wxStaticCast(m_instance, wxWizardPage);
-            page->Create(m_wizard, GetBitmap());
+            page->Create(m_wizard, GetBitmapBundle());
         }
 
         page->SetName(GetName());
