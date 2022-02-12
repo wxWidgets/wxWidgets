@@ -967,7 +967,7 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
         if (!m_statbmp->GetBitmap().IsOk() || m_statbmp->GetBitmap().GetLogicalHeight() != bitmapHeight)
         {
             wxBitmap bitmap;
-            bitmap.CreateWithLogicalSize(bitmapWidth, bitmapHeight, bmp.GetScaleFactor(), bmp.GetDepth());
+            bitmap.CreateWithDIPSize(bitmapWidth, bitmapHeight, bmp.GetScaleFactor(), bmp.GetDepth());
             {
                 wxMemoryDC dc;
                 dc.SelectObject(bitmap);
