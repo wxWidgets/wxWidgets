@@ -100,14 +100,14 @@ private:
     wxChar m_paddingChar;
 };
 
-class WXDLLIMPEXP_ADV wxMaskedEdit;
+class wxMaskedEdit;
 //For field test
 typedef long wxMaskedFieldFunc(const wxMaskedEdit*, size_t, void*);
 //For whole value test
 typedef long wxMaskedFunc(const wxMaskedEdit*, void*);
 
 // All configurable parameters are stored here.
-class WXDLLIMPEXP_ADV wxMaskedEditParams
+class WXDLLIMPEXP_CORE wxMaskedEditParams
 {
 public:
     wxMaskedEditParams()
@@ -155,7 +155,7 @@ public:
 // Base class for all masked edit controls
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxMaskedEdit
+class WXDLLIMPEXP_CORE wxMaskedEdit
 {
 public:
     //ctor.
@@ -411,19 +411,19 @@ protected:
     //The mask identifiers
     enum
     {
-        mDigitReq = 1, //'#'
-        mDigitOpt,     //'9'
-        mAlphaReq,     //'A'
-        mAlphaOpt,     //'a'
-        mAlpNumReq,    //'N'
-        mAlpNumOpt,    //'n'
-        mAnyCharReq,   //'C'
-        mAnyCharOpt,   //'c'
-        mHexReq,       //'H'
-        mHexOpt,       //'H'
-        mLiteral,
-        mUppChar = 100, //'>'
-        mLowChar = 200  //'<'
+        DigitReq = 1, //'#'
+        DigitOpt,     //'9'
+        AlphaReq,     //'A'
+        AlphaOpt,     //'a'
+        AlpNumReq,    //'N'
+        AlpNumOpt,    //'n'
+        AnyCharReq,   //'C'
+        AnyCharOpt,   //'c'
+        HexReq,       //'H'
+        HexOpt,       //'H'
+        Literal,
+        UppChar = 100, //'>'
+        LowChar = 200  //'<'
     };
 
 };
@@ -434,7 +434,7 @@ protected:
 
 #if wxUSE_TEXTCTRL
 //wxMaskedEditText is only for wxTextCtrl
-class wxMaskedEditText : public wxMaskedEdit,
+class WXDLLIMPEXP_CORE wxMaskedEditText : public wxMaskedEdit,
                                          public wxTextCtrl
 {
 public:
@@ -509,7 +509,7 @@ private:
 
 #if wxUSE_COMBOBOX
 //wxMaskedEditCombo is only for wxComboBox
-class wxMaskedEditCombo : public wxMaskedEdit,
+class WXDLLIMPEXP_CORE wxMaskedEditCombo : public wxMaskedEdit,
                                           public wxComboBox
 {
 public:
@@ -630,7 +630,7 @@ private:
 // ----------------------------------------------------------------------------
 
 //Range check
-class WXDLLIMPEXP_ADV wxRangeParams
+class WXDLLIMPEXP_CORE wxRangeParams
 {
 public:
     wxRangeParams()
@@ -643,19 +643,19 @@ public:
     int base;
 };
 
-WXDLLIMPEXP_ADV long wxMaskedRangeCheck(const wxMaskedEdit* caller,
+WXDLLIMPEXP_CORE long wxMaskedRangeCheck(const wxMaskedEdit* caller,
                                         size_t index,
                                         void* params);
 
 //Date check
-struct WXDLLIMPEXP_ADV wxDateParams
+struct WXDLLIMPEXP_CORE wxDateParams
 {
     size_t dayField;
     size_t monthField;
     size_t yearField;
 };
 
-WXDLLIMPEXP_ADV long wxMaskedDateShort(const wxMaskedEdit* caller, void* params);
+WXDLLIMPEXP_CORE long wxMaskedDateShort(const wxMaskedEdit* caller, void* params);
 
 #endif // wxUSE_MASKED_EDIT
 

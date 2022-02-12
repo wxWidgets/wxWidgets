@@ -142,62 +142,62 @@ bool wxMaskedEdit::SetMask(const wxString& mask)
 
             if ( ch == '#' )
             {
-                maskIDTmp.push_back( mDigitReq );
-                if ( !IsHomogField(&firstFieldCmm, mDigitReq, mDigitOpt) )
+                maskIDTmp.push_back( DigitReq );
+                if ( !IsHomogField(&firstFieldCmm, DigitReq, DigitOpt) )
                     return false;
             }
             else if ( ch == '9' )
             {
-                maskIDTmp.push_back( mDigitOpt );
-                if ( !IsHomogField(&firstFieldCmm, mDigitReq, mDigitOpt) )
+                maskIDTmp.push_back( DigitOpt );
+                if ( !IsHomogField(&firstFieldCmm, DigitReq, DigitOpt) )
                     return false;
             }
             else if( ch == 'A' )
             {
-                maskIDTmp.push_back( mAlphaReq + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mAlphaReq, mAlphaOpt) )
+                maskIDTmp.push_back( AlphaReq + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, AlphaReq, AlphaOpt) )
                     return false;
             }
             else if( ch == 'a' )
             {
-                maskIDTmp.push_back( mAlphaOpt + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mAlphaReq, mAlphaOpt) )
+                maskIDTmp.push_back( AlphaOpt + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, AlphaReq, AlphaOpt) )
                     return false;
             }
             else if( ch == 'N' )
             {
-                maskIDTmp.push_back( mAlpNumReq + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mAlpNumReq, mAlpNumOpt) )
+                maskIDTmp.push_back( AlpNumReq + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, AlpNumReq, AlpNumOpt) )
                     return false;
             }
             else if( ch == 'n' )
             {
-                maskIDTmp.push_back( mAlpNumOpt + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mAlpNumReq, mAlpNumOpt) )
+                maskIDTmp.push_back( AlpNumOpt + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, AlpNumReq, AlpNumOpt) )
                     return false;
             }
             else if( ch == 'C' )
             {
-                maskIDTmp.push_back( mAnyCharReq + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mAnyCharReq, mAnyCharOpt) )
+                maskIDTmp.push_back( AnyCharReq + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, AnyCharReq, AnyCharOpt) )
                     return false;
             }
             else if( ch == 'c' )
             {
-                maskIDTmp.push_back( mAnyCharOpt + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mAnyCharReq, mAnyCharOpt) )
+                maskIDTmp.push_back( AnyCharOpt + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, AnyCharReq, AnyCharOpt) )
                     return false;
             }
             else if( ch == 'X' )
             {
-                maskIDTmp.push_back( mHexReq + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mHexReq, mHexOpt) )
+                maskIDTmp.push_back( HexReq + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, HexReq, HexOpt) )
                     return false;
             }
             else if( ch == 'x' )
             {
-                maskIDTmp.push_back( mHexOpt + caseULforced );
-                if ( !IsHomogField(&firstFieldCmm, mHexReq, mHexOpt) )
+                maskIDTmp.push_back( HexOpt + caseULforced );
+                if ( !IsHomogField(&firstFieldCmm, HexReq, HexOpt) )
                     return false;
             }
 
@@ -215,14 +215,14 @@ bool wxMaskedEdit::SetMask(const wxString& mask)
 
         if ( ch == '>' )
         {
-            caseULforced = mUppChar;
+            caseULforced = UppChar;
             //Don't 'close' the field. This char is not a literal
             i++;
             continue;
         }
         if ( ch == '<' )
         {
-            caseULforced = mLowChar;
+            caseULforced = LowChar;
             //Don't 'close' the field. This char is not a literal
             i++;
             continue;
@@ -325,7 +325,7 @@ bool wxMaskedEdit::SetMask(const wxString& mask)
                     wxFAIL_MSG("Warning: Unprintable character in mask");
                 }
                 maskTmp << ch;
-                maskIDTmp.push_back(mLiteral);
+                maskIDTmp.push_back(Literal);
                 sForSize << ch; //This literal has its own size. Don't use 9/M
                 pos++;
             }
@@ -527,7 +527,7 @@ bool wxMaskedEdit::SetPlainValue(const wxString& plainValue)
     posMask = 0;
     while ( iMask != m_ExpMask.end() )
     {
-        if ( m_maskIDs[posMask] == mLiteral )
+        if ( m_maskIDs[posMask] == Literal )
         {
             ch = *iMask;
             m_filled[posMask] = false;
@@ -688,7 +688,7 @@ wxString wxMaskedEdit::GetPlainValue() const
     wxChar padCh = '\0';
     while ( iT != ctrlValue.end() )
     {
-        if ( m_maskIDs[pos] != mLiteral )
+        if ( m_maskIDs[pos] != Literal )
         {
             if ( m_filled[pos] )
                 pValue += *iT;
@@ -734,7 +734,7 @@ wxString wxMaskedEdit::HandleSelection(long *pos, bool *changed)
     wxString::iterator it = newString.begin() + selFrom;
     while ( i < (size_t)selTo )
     {
-        if ( m_maskIDs[i] != mLiteral && m_filled[i] )
+        if ( m_maskIDs[i] != Literal && m_filled[i] )
         {
             *it = GetFieldFlags((size_t) FindField(i) ).GetFillChar();
             m_filled[i] = false;
@@ -1529,7 +1529,7 @@ bool wxMaskedEdit::ProcessChar(wxChar aChar, long* pos, wxString* inText, bool* 
             // that the user wants to move to next field
             size_t nextLitPos = (size_t) m_arrPosF[index] + 1;
             if ( nextLitPos < m_ExpMask.Len()
-                && m_maskIDs[nextLitPos] == mLiteral
+                && m_maskIDs[nextLitPos] == Literal
                 && aChar == m_ExpMask[nextLitPos] )
             {
                 nPos = nextLitPos;
@@ -1672,7 +1672,7 @@ wxString wxMaskedEdit::SetMaskedValue(const wxString& value)
 
     while (pos < maxLen)
     {
-        if ( m_maskIDs[pos] == mLiteral )
+        if ( m_maskIDs[pos] == Literal )
         {
             *iMV = *iM;
             m_filled[pos] = false;
@@ -1748,37 +1748,37 @@ bool wxMaskedEdit::CharAgreesWithMask(wxChar testChar, long pos) const
 {
     switch ( GetMaskedType( (size_t)pos ) )
     {
-        case mDigitReq :
-        case mDigitOpt :
+        case DigitReq :
+        case DigitOpt :
             return wxIsdigit( testChar );
-        case mAlphaReq :
-        case mAlphaReq + mUppChar :
-        case mAlphaReq + mLowChar :
-        case mAlphaOpt :
-        case mAlphaOpt + mUppChar :
-        case mAlphaOpt + mLowChar :
+        case AlphaReq :
+        case AlphaReq + UppChar :
+        case AlphaReq + LowChar :
+        case AlphaOpt :
+        case AlphaOpt + UppChar :
+        case AlphaOpt + LowChar :
             return wxIsalpha( testChar );
-        case mAlpNumReq :
-        case mAlpNumReq + mUppChar :
-        case mAlpNumReq + mLowChar :
-        case mAlpNumOpt :
-        case mAlpNumOpt + mUppChar :
-        case mAlpNumOpt + mLowChar :
+        case AlpNumReq :
+        case AlpNumReq + UppChar :
+        case AlpNumReq + LowChar :
+        case AlpNumOpt :
+        case AlpNumOpt + UppChar :
+        case AlpNumOpt + LowChar :
             return wxIsalnum( testChar );
-        case mAnyCharReq :
-        case mAnyCharReq + mUppChar :
-        case mAnyCharReq + mLowChar :
-        case mAnyCharOpt :
-        case mAnyCharOpt + mUppChar :
-        case mAnyCharOpt + mLowChar :
+        case AnyCharReq :
+        case AnyCharReq + UppChar :
+        case AnyCharReq + LowChar :
+        case AnyCharOpt :
+        case AnyCharOpt + UppChar :
+        case AnyCharOpt + LowChar :
             // iswprint() gets wrong with Unicode, at least in MSW
             return true;
-        case mHexReq :
-        case mHexReq + mUppChar :
-        case mHexReq + mLowChar :
-        case mHexOpt :
-        case mHexOpt + mUppChar :
-        case mHexOpt + mLowChar :
+        case HexReq :
+        case HexReq + UppChar :
+        case HexReq + LowChar :
+        case HexOpt :
+        case HexOpt + UppChar :
+        case HexOpt + LowChar :
             return wxIsxdigit( testChar );
 
         default :
@@ -1792,11 +1792,11 @@ wxChar wxMaskedEdit::ToUppLowCase(wxChar ch, size_t pos)
     int mktype = GetMaskedType( pos );
     //Forced uppercase types are normal + mUppChar
     //Forced lowercase types are normal + mLowChar
-    if ( mktype > mUppChar && mktype < mLowChar )
+    if ( mktype > UppChar && mktype < LowChar )
     {
         return wxToupper( ch );
     }
-    else if ( mktype > mLowChar )
+    else if ( mktype > LowChar )
     {
         return wxTolower( ch );
     }
@@ -1852,14 +1852,14 @@ long wxMaskedEdit::IsFieldValid(size_t index) const
     {
         int masktype = m_maskIDs[(size_t)i];
         //remove upper/lower forced
-        if (masktype > mUppChar)
-            masktype -= mUppChar;
-        if (masktype > mLowChar)
-            masktype -= mLowChar;
+        if (masktype > UppChar)
+            masktype -= UppChar;
+        if (masktype > LowChar)
+            masktype -= LowChar;
         //check
-        if ( ( masktype == mDigitReq || masktype == mAlphaReq
-            || masktype == mAlpNumReq || masktype == mAnyCharReq
-            || masktype == mHexReq ) && !m_filled[(size_t)i] )
+        if ( ( masktype == DigitReq || masktype == AlphaReq
+            || masktype == AlpNumReq || masktype == AnyCharReq
+            || masktype == HexReq ) && !m_filled[(size_t)i] )
         {
             return i - m_arrPosS[index]; //error position
         }
