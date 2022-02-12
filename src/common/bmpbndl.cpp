@@ -149,11 +149,11 @@ void wxBitmapBundleImplSet::Init(const wxBitmap* bitmaps, size_t n)
     std::sort(m_entries.begin(), m_entries.end(), BitmapSizeComparator());
 
     // This is not normally the case, but it could happen that even the
-    // smallest bitmap has scale factor > 1, so use its scaled size (this can
+    // smallest bitmap has scale factor > 1, so use its size in DIPs (this can
     // notably be the case when there is only a single high resolution bitmap
     // provided, e.g. in the code predating wxBitmapBundle introduction but now
     // using it due to implicit conversion to it from wxBitmap).
-    m_sizeDefault = m_entries[0].bitmap.GetLogicalSize();
+    m_sizeDefault = m_entries[0].bitmap.GetDIPSize();
 
     // Should we check that all bitmaps really have unique sizes here? For now,
     // don't bother with this, but we might want to do it later if it really

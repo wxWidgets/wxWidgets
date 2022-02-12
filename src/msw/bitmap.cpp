@@ -763,9 +763,14 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
         return false;
 }
 
-bool wxBitmap::CreateWithLogicalSize(const wxSize& size, double scale, int depth)
+bool wxBitmap::CreateWithDIPSize(const wxSize& size, double scale, int depth)
 {
-    return Create(size*scale, depth);
+    if ( !Create(size*scale, depth) )
+        return false;
+
+    GetBitmapData()->m_scaleFactor = scale;
+
+    return true;
 }
 
 bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
