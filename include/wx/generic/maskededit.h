@@ -106,57 +106,57 @@ typedef long wxMaskedFieldFunc(const wxMaskedEdit*, size_t, void*);
 //For whole value test
 typedef long wxMaskedFunc(const wxMaskedEdit*, void*);
 
-// All configurable parameters are stored here.
-class WXDLLIMPEXP_CORE wxMaskedEditParams
-{
-public:
-    wxMaskedEditParams()
-    {
-        ResetFields(0);
-        controlFunc = NULL;
-        controlFuncParams = NULL;
-    };
-   ~wxMaskedEditParams() {};
-
-    //Reset the per field parameters.
-    void ResetFields(size_t numFields)
-    {
-        fieldsFlags.clear();
-        fieldsFlags.resize(numFields);
-        fieldsFuncs.clear();
-        fieldsFuncs.resize(numFields, NULL);
-        fieldFuncsParams.clear();
-        fieldFuncsParams.resize(numFields, NULL);
-    }
-
-    //The mask.
-    wxString mask;
-
-    //Colours used for different cases. The whole control is coloured.
-    wxMaskedEditColours colours;
-
-    //Fields settings containers.
-    //Flags
-    wxVector<wxMaskedEditFieldFlags> fieldsFlags;
-
-    //Functions to test a field
-    wxVector<wxMaskedFieldFunc*> fieldsFuncs;
-    //And their parameters
-    wxVector<void*> fieldFuncsParams;
-
-    //Function for the whole control
-    wxMaskedFunc* controlFunc;
-    //And its parameters
-    void* controlFuncParams;
-};
-
-
 // ----------------------------------------------------------------------------
 // Base class for all masked edit controls
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxMaskedEdit
 {
+private:
+    // All configurable parameters are stored here.
+    class WXDLLIMPEXP_CORE wxMaskedEditParams
+    {
+    public:
+        wxMaskedEditParams()
+        {
+            ResetFields(0);
+            controlFunc = NULL;
+            controlFuncParams = NULL;
+        };
+        ~wxMaskedEditParams() {};
+
+        //Reset the per field parameters.
+        void ResetFields(size_t numFields)
+        {
+            fieldsFlags.clear();
+            fieldsFlags.resize(numFields);
+            fieldsFuncs.clear();
+            fieldsFuncs.resize(numFields, NULL);
+            fieldFuncsParams.clear();
+            fieldFuncsParams.resize(numFields, NULL);
+        }
+
+        //The mask.
+        wxString mask;
+
+        //Colours used for different cases. The whole control is coloured.
+        wxMaskedEditColours colours;
+
+        //Fields settings containers.
+        //Flags
+        wxVector<wxMaskedEditFieldFlags> fieldsFlags;
+
+        //Functions to test a field
+        wxVector<wxMaskedFieldFunc*> fieldsFuncs;
+        //And their parameters
+        wxVector<void*> fieldFuncsParams;
+
+        //Function for the whole control
+        wxMaskedFunc* controlFunc;
+        //And its parameters
+        void* controlFuncParams;
+    };
+
 public:
     //ctor.
     wxMaskedEdit()

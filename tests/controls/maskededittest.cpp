@@ -105,17 +105,17 @@ TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::TestUI", "[maskedtext
 TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::TestFunc", "[maskedtextctrl]" )
 {
     // Should fail because not all fields have all required chars
-    CHECK( !m_maskedEdit->IsValid() );
+    CHECK( !m_maskedEdit->GetInvalidFieldIndex() );
 
     m_maskedEdit->ChangeValue( "=aB-123++  .5670" );
-    CHECK( m_maskedEdit->IsValid() );
+    CHECK( m_maskedEdit->GetInvalidFieldIndex() );
 
     wxRangeParams parms;
     parms.rmin = 70;
     parms.rmax = 100;
     m_maskedEdit->SetFieldFunction( 1, &wxMaskedRangeCheck, &parms );
     // Should fail because 123 > 100
-    CHECK( !m_maskedEdit->IsValid() );
+    CHECK( !m_maskedEdit->GetInvalidFieldIndex() );
 }
 
 #endif // wxUSE_MASKED_EDIT
