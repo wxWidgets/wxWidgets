@@ -550,7 +550,7 @@ public:
 
         Returns the position of the error found, or '-1' if everything is well.
     */
-    long IsValid();
+    long GetInvalidFieldIndex() const;
 
     /**
         Sets bell on/off when a character is not accepted.

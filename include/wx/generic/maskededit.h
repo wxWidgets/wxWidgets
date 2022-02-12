@@ -229,7 +229,7 @@ public:
     bool SetFieldValue(size_t index, const wxString& plainValue);
 
     //Check characters, fields and the whole control's value.
-    long IsValid();
+    long GetInvalidFieldIndex() const;
 
     //Bell on error.
     void SetBellOnError(bool bell)
@@ -360,9 +360,9 @@ protected:
 
     enum
     {
-        mEmColour = 1,
-        mOKColour,
-        mWRColour
+        BlankColour = 1,
+        OKColour,
+        InvalidColour
     };
 
     //Bell
@@ -434,7 +434,7 @@ protected:
 
 #if wxUSE_TEXTCTRL
 //wxMaskedEditText is only for wxTextCtrl
-class WXDLLIMPEXP_ADV wxMaskedEditText : public wxMaskedEdit,
+class wxMaskedEditText : public wxMaskedEdit,
                                          public wxTextCtrl
 {
 public:
@@ -503,31 +503,13 @@ private:
             wxFAIL_MSG("Multiline wxMaskedEditText not allowed yet");
         }
     }
-
-    void MaskPostInit()
-    {
-        msk_control = this;
-
-        //Set default fixed pitch font
-        //Don't use directly m_font because wxWindowBase::SetFont decides
-        // it is the same font.
-        wxFont font = GetFont();
-        font.SetFamily(wxFONTFAMILY_TELETYPE);
-        SetFont(font);
-
-        //Event handlers
-        Bind(wxEVT_KEY_DOWN, &wxMaskedEdit::OnKeyDown, this);
-        Bind(wxEVT_CHAR, &wxMaskedEdit::OnChar, this);
-        Bind(wxEVT_COMMAND_TEXT_CUT, &wxMaskedEdit::OnCut, this);
-        Bind(wxEVT_COMMAND_TEXT_PASTE, &wxMaskedEdit::OnPaste, this);
-    }
-
+    void MaskPostInit();
 };
 #endif // wxUSE_TEXTCTRL
 
 #if wxUSE_COMBOBOX
 //wxMaskedEditCombo is only for wxComboBox
-class WXDLLIMPEXP_ADV wxMaskedEditCombo : public wxMaskedEdit,
+class wxMaskedEditCombo : public wxMaskedEdit,
                                           public wxComboBox
 {
 public:

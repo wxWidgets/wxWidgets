@@ -1009,7 +1009,7 @@ void wxMaskedEdit::OnComboSelect(wxCommandEvent& event)
 void wxMaskedEdit::OnComboDrop(wxCommandEvent& event)
 {
     //Neither OK nor Wr[ong] colours are good here. Use colours for an empty value
-    UseColours(mEmColour);
+    UseColours(BlankColour);
 
     event.Skip(true);
 }
@@ -1051,11 +1051,11 @@ void wxMaskedEdit::UpdateMaskedColours()
     }
 
     if ( isEmpty )
-        UseColours(mEmColour);
-    else if ( IsValid() == -1 )
-        UseColours(mOKColour);
+        UseColours(BlankColour);
+    else if ( GetInvalidFieldIndex() == -1 )
+        UseColours(OKColour);
     else
-        UseColours(mWRColour);
+        UseColours(InvalidColour);
 
 }
 
@@ -1715,13 +1715,13 @@ wxString wxMaskedEdit::SetMaskedValue(const wxString& value)
 //Show the colours
 void wxMaskedEdit::UseColours(int whatColours)
 {
-    if (whatColours == mEmColour)
+    if (whatColours == BlankColour)
     {
         msk_control->SetBackgroundColour(m_params.colours.colBlankBackground);
         msk_control->SetForegroundColour(m_params.colours.colBlankForeground);
     }
 
-    else if (whatColours == mOKColour)
+    else if (whatColours == OKColour)
     {
         msk_control->SetBackgroundColour(m_params.colours.colOKBackground);
         msk_control->SetForegroundColour(m_params.colours.colOKForeground);
@@ -1874,7 +1874,7 @@ long wxMaskedEdit::IsFieldValid(size_t index) const
 }
 
 //Check fields and the whole control's value
-long wxMaskedEdit::IsValid()
+long wxMaskedEdit::GetInvalidFieldIndex() const
 {
     //Don't do validation if we have no fields at all
     size_t nuFields = GetFieldsCount();
@@ -1965,6 +1965,24 @@ long wxMaskedDateShort(const wxMaskedEdit* caller, void* params)
 
     //OK
     return -1;
+}
+
+void wxMaskedEditText::MaskPostInit()
+{
+    msk_control = this;
+
+    //Set default fixed pitch font
+    //Don't use directly m_font because wxWindowBase::SetFont decides
+    // it is the same font.
+    wxFont font = GetFont();
+    font.SetFamily(wxFONTFAMILY_TELETYPE);
+    SetFont(font);
+
+    //Event handlers
+    Bind(wxEVT_KEY_DOWN, &wxMaskedEdit::OnKeyDown, this);
+    Bind(wxEVT_CHAR, &wxMaskedEdit::OnChar, this);
+    Bind(wxEVT_COMMAND_TEXT_CUT, &wxMaskedEdit::OnCut, this);
+    Bind(wxEVT_COMMAND_TEXT_PASTE, &wxMaskedEdit::OnPaste, this);
 }
 
 #endif // wxUSE_MASKED_EDIT

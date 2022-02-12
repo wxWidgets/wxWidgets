@@ -154,9 +154,6 @@ bool MyApp::OnInit()
     // created initially)
     frame->Show(true);
 
-    //Set the focus to our first control
-    (frame->FindWindow(MaskCtrl_First))->SetFocus();
-
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned false here, the
     // application would exit immediately.
@@ -213,6 +210,9 @@ MyFrame::MyFrame(const wxString& title)
     //of the frame, it will fill all frame's client area.
     //We also want to set the minimum size of this frame.
     myPanel->GetSizer()->SetSizeHints(this);
+
+    //Set the focus to our first control
+    FindWindow(MaskCtrl_First)->SetFocus();
 }
 
 
