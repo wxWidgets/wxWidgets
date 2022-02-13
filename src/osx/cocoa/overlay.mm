@@ -19,8 +19,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-
-#include "wx/overlay.h"
+#include "wx/private/overlay.h"
 
 #ifdef wxHAS_NATIVE_OVERLAY
 
@@ -30,7 +29,6 @@
 
 #include "wx/dcgraph.h"
 
-#include "wx/private/overlay.h"
 #include "wx/osx/private.h"
 
 // ============================================================================
