@@ -21,13 +21,14 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/dcbuffer.h" // just for wxALWAYS_NATIVE_DOUBLE_BUFFER
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/frame.h"
 #endif
 
 #include "wx/aui/tabmdi.h"
+
+#include "wx/dcbuffer.h" // just for wxALWAYS_NATIVE_DOUBLE_BUFFER
 
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
