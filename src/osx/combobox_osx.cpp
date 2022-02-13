@@ -212,7 +212,7 @@ void wxComboBox::SetString(unsigned int n, const wxString& s)
     GetComboPeer()->InsertItem(n, s);
     // When selected item is removed its selection is invalidated
     // so we need to re-select it manually.
-    if ( sel == n )
+    if ( sel == int(n) )
     {
         SetSelection(n);
     }
