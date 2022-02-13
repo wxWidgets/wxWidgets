@@ -114,7 +114,7 @@ class WXDLLIMPEXP_CORE wxMaskedEdit
 {
 private:
     // All configurable parameters are stored here.
-    class WXDLLIMPEXP_CORE wxMaskedEditParams
+    class wxMaskedEditParams
     {
     public:
         wxMaskedEditParams()
