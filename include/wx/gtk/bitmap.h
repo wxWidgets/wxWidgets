@@ -83,11 +83,13 @@ public:
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
     bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
-    bool Create(int width, int height, const wxDC& WXUNUSED(dc))
-        { return Create(width,height); }
 #ifdef __WXGTK3__
+    bool Create(int width, int height, const wxDC& dc);
     virtual void SetScaleFactor(double scale) wxOVERRIDE;
     virtual double GetScaleFactor() const wxOVERRIDE;
+#else
+    bool Create(int width, int height, const wxDC& WXUNUSED(dc))
+        { return Create(width,height); }
 #endif
 
     virtual int GetHeight() const wxOVERRIDE;
