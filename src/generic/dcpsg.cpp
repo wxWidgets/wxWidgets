@@ -1335,14 +1335,14 @@ void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDesc
                        "  dup stringwidth rlineto\n"
                        "  stroke\n"
                        "  grestore\n",
-                        -YLOG2DEVREL(textDescent - m_underlinePosition),
+                        -YLOG2DEVREL(textDescent - int(m_underlinePosition)),
                         m_underlineThickness );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
     }
     PsPrint(           "  show\n" ); // x y
     // Advance to the beginning of th next line.
-    buffer.Printf(     "  %f add moveto\n", -YLOG2DEVREL(lineHeight) );
+    buffer.Printf(     "  %f add moveto\n", -YLOG2DEVREL(int(lineHeight)) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
     // Execute above statements for all elements of the array

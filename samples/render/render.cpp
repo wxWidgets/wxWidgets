@@ -383,7 +383,7 @@ private:
             dc.DrawText(notImplementedText, x2, y);
         else
             renderer.DrawChoice(this, dc,
-                                wxRect(x2, y, width, 1.5*GetCharHeight()), m_flags);
+                                wxRect(x2, y, width, GetCharHeight() * 3 / 2), m_flags);
     }
 
     int m_flags;

@@ -4647,8 +4647,8 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
                                      GdkEventMotion *gdk_event,
                                      wxDataViewCtrl *dv )
 {
-    int x = gdk_event->x;
-    int y = gdk_event->y;
+    int x = int(gdk_event->x);
+    int y = int(gdk_event->y);
     if (gdk_event->is_hint)
     {
 #ifdef __WXGTK3__

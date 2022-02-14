@@ -240,8 +240,8 @@ private:
         dc.DrawBitmap
            (
                 m_bitmap,
-                dc.DeviceToLogicalX((size.x - m_zoom*m_bitmap.GetWidth())/2),
-                dc.DeviceToLogicalY((size.y - m_zoom*m_bitmap.GetHeight())/2),
+                dc.DeviceToLogicalX((size.x - int(m_zoom * m_bitmap.GetWidth())) / 2),
+                dc.DeviceToLogicalY((size.y - int(m_zoom * m_bitmap.GetHeight())) / 2),
                 true /* use mask */
            );
     }

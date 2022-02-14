@@ -309,7 +309,7 @@ int wxBitmapRefData::GetWidth() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetWidth(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).width * m_scaleFactor;
+        return int(wxOSXGetImageSize(m_nsImage).width * m_scaleFactor);
 }
 
 int wxBitmapRefData::GetHeight() const
@@ -319,7 +319,7 @@ int wxBitmapRefData::GetHeight() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetHeight(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).height * m_scaleFactor;
+        return int(wxOSXGetImageSize(m_nsImage).height * m_scaleFactor);
 }
 
 int wxBitmapRefData::GetDepth() const
@@ -966,8 +966,8 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     if ( HasAlpha() )
         ret.UseAlpha() ;
 
-    int destwidth = rect.width*scale ;
-    int destheight = rect.height*scale ;
+    int destwidth = int(rect.width * scale);
+    int destheight = int(rect.height * scale);
 
     {
         const unsigned char* sourcedata = static_cast<const unsigned char*>(GetBitmapData()->GetRawAccess());

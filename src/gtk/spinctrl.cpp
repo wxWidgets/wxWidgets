@@ -374,7 +374,7 @@ void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
     // Negative values in the range are allowed only if base == 10
-    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(minVal, maxVal, GetBase()) )
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(int(minVal), int(maxVal), GetBase()) )
     {
         return;
     }

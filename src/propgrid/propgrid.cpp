@@ -5101,7 +5101,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             imageWidth = bmp.GetWidth();
                             int hMax = m_lineHeight - wxPG_CUSTOM_IMAGE_SPACINGY - 1;
                             if ( bmp.GetHeight() > hMax )
-                                imageWidth *= (double)hMax / bmp.GetHeight();
+                                imageWidth = int(double(imageWidth) * hMax / bmp.GetHeight());
                         }
 
                         if ( m_colHover == 0 )

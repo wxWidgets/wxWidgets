@@ -704,7 +704,7 @@ wxImage wxImage::ResampleBox(int width, int height) const
             // Calculate the average from the sum and number of averaged pixels
             if (src_alpha)
             {
-                if (sum_a)
+                if (sum_a != 0)
                 {
                     dst_data[0] = (unsigned char)(sum_r / sum_a);
                     dst_data[1] = (unsigned char)(sum_g / sum_a);
@@ -1054,7 +1054,7 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
             // of double data type and are rounded here for accuracy
             if ( src_alpha )
             {
-                if ( sum_a )
+                if (sum_a != 0)
                 {
                      dst_data[0] = (unsigned char)(sum_r / sum_a + 0.5);
                      dst_data[1] = (unsigned char)(sum_g / sum_a + 0.5);
