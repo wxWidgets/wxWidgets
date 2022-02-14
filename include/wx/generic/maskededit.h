@@ -246,7 +246,7 @@ public:
     }
 
     //Get control's value, without decorations.
-    wxString GetPlainValue() const;
+    wxString GetAllFieldsValue() const;
 
     //Get the current text in a field. Empty cells are filled with the padding
     //char set for this field.

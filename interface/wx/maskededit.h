@@ -115,7 +115,7 @@ public:
         Sets the padding char of this wxEditFieldFlags to @a paddingchar.
 
         The padding char is used to fill the empty (i.e. not typed yet)
-        positions in the field for the return of wxMaskedEdit::GetPlainValue()
+        positions in the field for the return of wxMaskedEdit::GetAllFieldsValue()
         and wxMaskedEdit::GetFieldValue().
 
         Default is '\0' (null) which is interpreted as "don't fill"
@@ -454,7 +454,7 @@ public:
 
         If the plain value is bigger than the mask, it returns @false.
 
-        @see GetPlainValue(), SetFieldValue(), wxMaskedEditText::SetValue()
+        @see GetAllFieldsValue(), SetFieldValue(), wxMaskedEditText::SetValue()
     */
     bool SetPlainValue(const wxString& plainValue);
 
@@ -500,7 +500,7 @@ public:
 
         @see SetPlainValue(), GetFieldValue(), wxEditFieldFlags
     */
-    wxString GetPlainValue() const;
+    wxString GetAllFieldsValue() const;
 
     /**
         Gets the current text in the field @a index.

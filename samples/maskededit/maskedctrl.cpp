@@ -281,9 +281,9 @@ void MyFrame::OnUpdatePlain(wxCommandEvent& event)
 
     win = FindWindow(plainTextID - 100);
     if ( wxMaskedEditText *etext = wxDynamicCast(win, wxMaskedEditText) )
-        ptc->SetValue( etext->GetPlainValue() );
+        ptc->SetValue( etext->GetAllFieldsValue() );
     else if ( wxMaskedEditCombo *ecombo = wxDynamicCast(win, wxMaskedEditCombo) )
-        ptc->SetValue( ecombo->GetPlainValue() );
+        ptc->SetValue( ecombo->GetAllFieldsValue() );
 }
 
 // ----------------------------------------------------------------------------
@@ -294,7 +294,7 @@ void MyFrame::OnUpdatePlain(wxCommandEvent& event)
 long MyFunction(const wxMaskedEdit* caller, void* WXUNUSED(params))
 {
     //Get the whole control's value, without decorations
-    wxString str = caller->GetPlainValue();
+    wxString str = caller->GetAllFieldsValue();
 
     //Sum of distances to '0'
     long sum = 0;
@@ -386,7 +386,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl->SetFieldFlags(0, wxMaskedEditFieldFlags(wxALIGN_RIGHT));
     mainSizer->Add(edTexCtrl, sizerFlags);
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -414,7 +414,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl->SetValue("GRRR ***@&#%!!!");
     mainSizer->Add(edTexCtrl, sizerFlags);
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -445,7 +445,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl->SetMaskedColours(mskColours);
     mainSizer->Add(edTexCtrl, sizerFlags);
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -473,7 +473,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl->SetAllFieldsFlags(fieldFlags); //same as sample 3
     mainSizer->Add(edTexCtrl, sizerFlags);
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -507,7 +507,7 @@ MyPanel::MyPanel(MyFrame* parent)
     fparamsIP.rmax = 255;
     edTexCtrl->SetAllFieldsFunction(&wxMaskedRangeCheck, &fparamsIP);
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -546,7 +546,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl->SetFieldFunction(1, &wxMaskedRangeCheck, &fparams59);
     edTexCtrl->SetFieldFunction(2, &wxMaskedRangeCheck, &fparams59);
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -583,7 +583,7 @@ MyPanel::MyPanel(MyFrame* parent)
     dparams1.yearField = 2;
     edTexCtrl->SetControlFunction( &wxMaskedDateShort, &dparams1 );
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -619,7 +619,7 @@ MyPanel::MyPanel(MyFrame* parent)
     dparams2.yearField = 0;
     edTexCtrl->SetControlFunction( &wxMaskedDateShort, &dparams2 );
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -651,7 +651,7 @@ MyPanel::MyPanel(MyFrame* parent)
     //use our user function. It does not need parameters, so pass NULL
     edTexCtrl->SetControlFunction( &MyFunction, NULL );
 
-    edPlain = edTexCtrl->GetPlainValue();
+    edPlain = edTexCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edTexCtrl->GetMinSize() );
@@ -695,7 +695,7 @@ MyPanel::MyPanel(MyFrame* parent)
     dparams1.yearField = 2;
     edComboCtrl->SetControlFunction( &wxMaskedDateShort, &dparams1 );
 
-    edPlain = edComboCtrl->GetPlainValue();
+    edPlain = edComboCtrl->GetAllFieldsValue();
     tcPlainText = new wxTextCtrl(this, idCtrl + 100, edPlain);
     tcPlainText->SetEditable(false);
     tcPlainText->SetMinSize( edComboCtrl->GetMinSize() );

@@ -678,7 +678,7 @@ wxString wxMaskedEdit::GetFieldValue(size_t index) const
 }
 
 //Get control's value, without decorations.
-wxString wxMaskedEdit::GetPlainValue() const
+wxString wxMaskedEdit::GetAllFieldsValue() const
 {
     wxString pValue;
     wxString ctrlValue = GetTextEntry()->GetValue();
