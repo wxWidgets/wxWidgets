@@ -16,6 +16,7 @@
 #include "wx/mediactrl.h"
 
 #include <gst/gst.h>                // main gstreamer header
+#include <stdint.h>
 
 #if GST_CHECK_VERSION(1,0,0)
 #include <gst/video/video.h>
@@ -307,7 +308,7 @@ extern "C" {
 static gint gtk_window_realize_callback(GtkWidget* widget,
                                         wxGStreamerMediaBackend* be)
 {
-    window_id_type window_id = (window_id_type)wxGtkGetIdFromWidget(widget);
+    window_id_type window_id = (window_id_type)(uintptr_t)wxGtkGetIdFromWidget(widget);
 
 #if GST_CHECK_VERSION(1,0,0)
     gst_video_overlay_set_window_handle(be->m_xoverlay, window_id);
@@ -674,7 +675,7 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     }
     else
     {
-        window_id = (window_id_type)wxGtkGetIdFromWidget(m_ctrl->m_wxwindow);
+        window_id = (window_id_type)(uintptr_t)wxGtkGetIdFromWidget(m_ctrl->m_wxwindow);
 #else
         window_id = ctrl->GetHandle();
 #endif
