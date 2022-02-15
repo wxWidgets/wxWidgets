@@ -1246,7 +1246,7 @@ public:
         number to be formatted always with the rules dictated by the "C" locale
         (in particular, the decimal point must be a dot), independently from the
         current application-wide locale (see wxLocale).
-        
+
         @code
         double val(0);
 
