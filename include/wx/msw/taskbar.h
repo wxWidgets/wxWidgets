@@ -12,7 +12,7 @@
 #ifndef _WX_TASKBAR_H_
 #define _WX_TASKBAR_H_
 
-#include "wx/icon.h"
+#include "wx/bmpbndl.h"
 
 // private helper class:
 class WXDLLIMPEXP_FWD_CORE wxTaskBarIconWindow;
@@ -28,7 +28,7 @@ public:
     bool IsIconInstalled() const { return m_iconAdded; }
 
     // Operations
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
+    bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
     bool RemoveIcon() wxOVERRIDE;
     bool PopupMenu(wxMenu *menu) wxOVERRIDE;
 
@@ -50,7 +50,7 @@ public:
                      const wxString& text,
                      unsigned msec = 0,
                      int flags = 0,
-                     const wxIcon& icon = wxNullIcon);
+                     const wxBitmapBundle& icon = wxBitmapBundle());
 #endif // wxUSE_TASKBARICON_BALLOONS
 
 protected:
@@ -62,7 +62,11 @@ protected:
 
     wxTaskBarIconWindow *m_win;
     bool                 m_iconAdded;
-    wxIcon               m_icon;
+    wxBitmapBundle       m_icon;
+    wxIcon               m_realIcon;
+#ifdef NIIF_LARGE_ICON
+    wxIcon               m_balloonIcon;
+#endif
     wxString             m_strTooltip;
 
 private:
@@ -75,7 +79,7 @@ private:
 
     // Implementation of the public SetIcon() which may also be used when we
     // don't know if we should add a new icon or modify the existing one.
-    bool DoSetIcon(const wxIcon& icon,
+    bool DoSetIcon(const wxBitmapBundle& icon,
                    const wxString& tooltip,
                    Operation operation);
 

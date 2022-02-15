@@ -33,7 +33,7 @@ wxTaskBarIcon::~wxTaskBarIcon()
     delete m_qtSystemTrayIcon;
 }
 
-bool wxTaskBarIcon::SetIcon(const wxIcon& WXUNUSED(icon),
+bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& WXUNUSED(icon),
              const wxString& WXUNUSED(tooltip))
 {
     return false;

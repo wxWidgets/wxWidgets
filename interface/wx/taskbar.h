@@ -139,7 +139,7 @@ public:
     /**
         Sets the icon, and optional tooltip text.
     */
-    virtual bool SetIcon(const wxIcon& icon,
+    virtual bool SetIcon(const wxBitmapBundle& icon,
                          const wxString& tooltip = wxEmptyString);
 
     /**

@@ -18,6 +18,7 @@
 #include "wx/event.h"
 
 class WXDLLIMPEXP_FWD_CORE wxTaskBarIconEvent;
+class wxBitmapBundle;
 
 // ----------------------------------------------------------------------------
 
@@ -50,7 +51,7 @@ public:
 #endif
 
     // Operations:
-    virtual bool SetIcon(const wxIcon& icon,
+    virtual bool SetIcon(const wxBitmapBundle& icon,
                          const wxString& tooltip = wxEmptyString) = 0;
     virtual bool RemoveIcon() = 0;
     virtual bool PopupMenu(wxMenu *menu) = 0;

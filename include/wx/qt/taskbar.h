@@ -21,7 +21,7 @@ public:
     bool IsIconInstalled() const { return false; }
 
     // Operations
-    virtual bool SetIcon(const wxIcon& icon,
+    virtual bool SetIcon(const wxBitmapBundle& icon,
                          const wxString& tooltip = wxEmptyString) wxOVERRIDE;
     virtual bool RemoveIcon() wxOVERRIDE;
     virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;

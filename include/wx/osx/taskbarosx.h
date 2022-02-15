@@ -30,7 +30,7 @@ public:
     bool IsOk() const { return true; }
 
     bool IsIconInstalled() const;
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
+    bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString);
     bool RemoveIcon();
     bool PopupMenu(wxMenu *menu);
 
