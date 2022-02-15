@@ -207,6 +207,15 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
     if ( !svgImage )
         return wxBitmapBundle();
 
+    // Somewhat unexpectedly, a non-null but empty image is returned even if
+    // the data is not SVG at all, e.g. without this check creating a bundle
+    // from any random file with FromSVGFile() would "work".
+    if ( svgImage->width == 0 && svgImage->height == 0 && !svgImage->shapes )
+    {
+        nsvgDelete(svgImage);
+        return wxBitmapBundle();
+    }
+
     return wxBitmapBundle(new wxBitmapBundleImplSVG(svgImage, sizeDef));
 }
 
