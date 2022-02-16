@@ -235,10 +235,14 @@ WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPA
 
     switch ( message )
     {
-        case WM_NCCREATE:
-            m_perMonitorDPIaware = IsPerMonitorDPIAware(GetHwnd());
-            if ( m_perMonitorDPIaware )
+        case WM_NCCALCSIZE:
+            // Use this message ID to determine the DPI information on
+            // window creation, since WM_NCCREATE is not generated for dialogs.
+            if ( m_activeDPI == wxDefaultSize )
+            {
+                m_perMonitorDPIaware = IsPerMonitorDPIAware(GetHwnd());
                 m_activeDPI = GetDPI();
+            }
             break;
 
         case WM_DPICHANGED:
