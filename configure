@@ -21166,8 +21166,14 @@ fi
         ;;
 
     *-*-solaris2* )
-                if test "$ac_cv_sizeof_void_p" = 8 -a -d "/usr/lib/64"; then
+                                if test "$ac_cv_sizeof_void_p" = 8 -a -d "/usr/lib/64"; then
             wx_cv_std_libpath="lib/64"
+            if test -n "$PKG_CONFIG_PATH"; then
+                PKG_CONFIG_PATH="/usr/$wx_cv_std_libpath/pkgconfig:$PKG_CONFIG_PATH"
+            else
+                PKG_CONFIG_PATH="/usr/$wx_cv_std_libpath/pkgconfig"
+            fi
+            export PKG_CONFIG_PATH
         fi
         ;;
 
