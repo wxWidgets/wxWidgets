@@ -2142,7 +2142,7 @@ Optional Features:
   --enable-webrequest     use wxWebRequest
   --enable-ipc            use interprocess communication (wxSocket etc.)
   --enable-baseevtloop    use event loop in console programs too
-  --enable-epollloop      use wxEpollDispatcher class (Linux only)
+  --enable-epollloop      use wxEpollDispatcher class (mostly Linux only)
   --enable-selectloop     use wxSelectDispatcher class
   --enable-any            use wxAny class
   --enable-apple_ieee     use the Apple IEEE codec
@@ -35638,6 +35638,11 @@ done
             if test "$ac_cv_header_sys_epoll_h" = "yes"; then
                 $as_echo "#define wxUSE_EPOLL_DISPATCHER 1" >>confdefs.h
 
+                case "${host}" in
+                *-*-freebsd*)
+                                                            EPOLL_LINK="-lepoll-shim"
+                ;;
+                esac
             else
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: sys/epoll.h not available, wxEpollDispatcher disabled" >&5
 $as_echo "$as_me: WARNING: sys/epoll.h not available, wxEpollDispatcher disabled" >&2;}
@@ -38852,7 +38857,7 @@ if test "$SHARED" = 1; then
 fi
 
 LIBS=`echo $LIBS`
-EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $PCRE_LINK $DMALLOC_LIBS"
+EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $PCRE_LINK $DMALLOC_LIBS $EPOLL_LINK"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
