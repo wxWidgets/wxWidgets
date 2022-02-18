@@ -882,7 +882,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
             wxDataViewColumn *column5 =
                 new wxDataViewColumn( "custom", cr, 5, wxCOL_WIDTH_DEFAULT, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_RESIZABLE );
-            column5->SetBitmap(wxArtProvider::GetBitmap(wxART_INFORMATION, wxART_MENU));
+            column5->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_MENU));
             m_ctrl[Page_Music]->AppendColumn( column5 );
 
 
