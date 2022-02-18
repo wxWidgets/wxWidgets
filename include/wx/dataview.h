@@ -490,7 +490,7 @@ public:
     }
 
     // ctor for the bitmap columns
-    wxDataViewColumnBase(const wxBitmap& bitmap,
+    wxDataViewColumnBase(const wxBitmapBundle& bitmap,
                          wxDataViewRenderer *renderer,
                          unsigned int model_column)
         : m_bitmap(bitmap)
@@ -511,8 +511,9 @@ public:
 
     // implement some of base class pure virtuals (the rest is port-dependent
     // and done differently in generic and native versions)
-    virtual void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE { m_bitmap = bitmap; }
-    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
+    virtual void SetBitmap( const wxBitmapBundle& bitmap ) wxOVERRIDE { m_bitmap = bitmap; }
+    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap.GetBitmap(wxDefaultSize); }
+    virtual wxBitmapBundle GetBitmapBundle() const wxOVERRIDE { return m_bitmap; }
 
     // Special accessor for use by wxWidgets only returning the width that was
     // explicitly set, either by the application, using SetWidth(), or by the
@@ -523,7 +524,7 @@ public:
 protected:
     wxDataViewRenderer      *m_renderer;
     int                      m_model_column;
-    wxBitmap                 m_bitmap;
+    wxBitmapBundle           m_bitmap;
     wxDataViewCtrl          *m_owner;
 
 private:

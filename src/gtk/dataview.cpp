@@ -3241,7 +3241,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     SetTitle( title );
 }
 
-wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell,
+wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
                                     wxAlignment align, int flags )
     : wxDataViewColumnBase( bitmap, cell, model_column )
@@ -3332,7 +3332,7 @@ wxString wxDataViewColumn::GetTitle() const
            );
 }
 
-void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
+void wxDataViewColumn::SetBitmap( const wxBitmapBundle &bitmap )
 {
     wxDataViewColumnBase::SetBitmap( bitmap );
 
