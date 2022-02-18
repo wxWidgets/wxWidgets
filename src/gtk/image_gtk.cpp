@@ -12,6 +12,8 @@
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/image.h"
 
+GdkWindow* wxGetTopLevelGDK();
+
 namespace
 {
 
@@ -40,7 +42,15 @@ struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 
 double BitmapProviderDefault::GetScale() const
 {
-    return m_win ? m_win->GetDPIScaleFactor() : 1.0;
+    if ( m_win )
+    {
+        return m_win->GetDPIScaleFactor();
+    }
+#if GTK_CHECK_VERSION(3,10,0)
+    return gdk_window_get_scale_factor(wxGetTopLevelGDK());
+#else
+    return 1.0;
+#endif
 }
 
 wxBitmap BitmapProviderDefault::Get() const
