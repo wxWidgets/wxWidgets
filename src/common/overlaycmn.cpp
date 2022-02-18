@@ -139,6 +139,8 @@ void wxDCOverlay::Clear()
 
 #ifdef wxHAS_GENERIC_OVERLAY
 
+#include "wx/window.h"
+
 namespace {
 class wxOverlayImpl: public wxOverlay::Impl
 {
@@ -179,39 +181,67 @@ bool wxOverlayImpl::IsNative() const
 
 bool wxOverlayImpl::IsOk()
 {
-    return m_bmpSaved.IsOk() ;
+    return false;
 }
 
 void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
 {
+    if (m_bmpSaved.IsOk())
+    {
+        if (x != m_x || y != m_y || width != m_width || height != m_height)
+        {
+            if (m_window)
+                m_window->Update();
+
+            // Area that needs to be copied from window
+            wxRect rect(x, y, width, height);
+            wxRegion region(rect);
+            rect.Intersect(wxRect(m_x, m_y, m_width, m_height));
+            region.Subtract(rect);
+            rect = region.GetBox();
+
+            const wxBitmap bmpOld(m_bmpSaved);
+            m_bmpSaved.Create(width, height, *dc);
+            wxMemoryDC dcMem(m_bmpSaved);
+
+            // Get new area from window
+            dcMem.Blit(rect.x - x, rect.y - y, rect.width, rect.height, dc, rect.x, rect.y);
+
+            // Copy old area to new position
+            dcMem.DrawBitmap(bmpOld, m_x - x, m_y - y);
+
+            m_x = x;
+            m_y = y;
+            m_width = width;
+            m_height = height;
+        }
+        return;
+    }
     m_window = dc->GetWindow();
-    wxMemoryDC dcMem ;
-    m_bmpSaved.Create( width, height );
-    dcMem.SelectObject( m_bmpSaved );
+    m_bmpSaved.Create(width, height, *dc);
+    wxMemoryDC dcMem(m_bmpSaved);
     m_x = x ;
     m_y = y ;
     m_width = width ;
     m_height = height ;
     dcMem.Blit(0, 0, m_width, m_height,
         dc, x, y);
-    dcMem.SelectObject( wxNullBitmap );
 }
 
 void wxOverlayImpl::Clear(wxDC* dc)
 {
-    wxMemoryDC dcMem ;
-    dcMem.SelectObject( m_bmpSaved );
-    dc->Blit( m_x, m_y, m_width, m_height , &dcMem , 0 , 0 );
-    dcMem.SelectObject( wxNullBitmap );
+    dc->DrawBitmap(m_bmpSaved, m_x, m_y);
 }
 
 void wxOverlayImpl::Reset()
 {
-    m_bmpSaved = wxBitmap();
+    m_bmpSaved.UnRef();
 }
 
-void wxOverlayImpl::BeginDrawing(wxDC*  WXUNUSED(dc))
+void wxOverlayImpl::BeginDrawing(wxDC* dc)
 {
+    // Make sure no drawing is done outside of overlay area
+    dc->SetClippingRegion(m_x, m_y, m_width, m_height);
 }
 
 void wxOverlayImpl::EndDrawing(wxDC* WXUNUSED(dc))
