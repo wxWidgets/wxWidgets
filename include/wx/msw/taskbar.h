@@ -13,6 +13,7 @@
 #define _WX_TASKBAR_H_
 
 #include "wx/bmpbndl.h"
+#include "wx/icon.h"
 
 // private helper class:
 class WXDLLIMPEXP_FWD_CORE wxTaskBarIconWindow;

@@ -136,7 +136,7 @@ private:
     wxTaskBarIconCustomStatusItemImpl();
 };
 
-namespace 
+namespace
 {
 
 // Helper function.
