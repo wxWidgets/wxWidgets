@@ -513,7 +513,6 @@ void wxGenericFontDialog::CreateWidgets()
 
     GetSizer()->SetItemMinSize(m_previewer, is_pda ? 100 : 430, is_pda ? 40 : 100);
     GetSizer()->SetSizeHints(this);
-    GetSizer()->Fit(this);
 
     Centre(wxBOTH);
 

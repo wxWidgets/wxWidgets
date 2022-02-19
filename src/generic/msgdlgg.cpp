@@ -220,7 +220,6 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
     wxSize size( GetSize() );
     if (size.x < size.y*3/2)
     {

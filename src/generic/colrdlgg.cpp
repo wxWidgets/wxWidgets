@@ -395,7 +395,6 @@ void wxGenericColourDialog::CreateWidgets()
     SetSizer( topSizer );
 
     topSizer->SetSizeHints( this );
-    topSizer->Fit( this );
 
     Centre( wxBOTH );
 }

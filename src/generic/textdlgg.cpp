@@ -114,7 +114,6 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
 
     if ( style & wxCENTRE )
         Centre( wxBOTH );
