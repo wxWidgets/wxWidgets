@@ -25,7 +25,6 @@
 #ifndef WX_PRECOMP
     #include <stdio.h>
 
-    #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/button.h"
     #include "wx/stattext.h"
@@ -86,8 +85,6 @@ bool wxNumberEntryDialog::Create(wxWindow *parent,
     m_max = max;
     m_min = min;
 
-    wxBeginBusyCursor();
-
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 #if wxUSE_STATTEXT
     // 1) text message
@@ -132,8 +129,6 @@ bool wxNumberEntryDialog::Create(wxWindow *parent,
 
     m_spinctrl->SetSelection(-1, -1);
     m_spinctrl->SetFocus();
-
-    wxEndBusyCursor();
 
     return true;
 }
