@@ -35,6 +35,10 @@
     #define NIN_BALLOONUSERCLICK    0x0405
 #endif
 
+#ifndef NIIF_LARGE_ICON
+    #define NIIF_LARGE_ICON 0x0020
+#endif
+
 // initialized on demand
 static UINT gs_msgTaskbar = 0;
 static UINT gs_msgRestartTaskbar = 0;
@@ -249,7 +253,6 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
 
     wxUnusedVar(icon); // It's only unused if not supported actually.
 
-#ifdef NIIF_LARGE_ICON
     // User specified icon is only supported since Vista
     if ( icon.IsOk() && wxPlatformInfo::Get().CheckOSVersion(6, 0) )
     {
@@ -257,9 +260,7 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
         notifyData.hBalloonIcon = GetHiconOf(m_balloonIcon);
         notifyData.dwInfoFlags |= NIIF_USER | NIIF_LARGE_ICON;
     }
-    else
-#endif
-    if ( flags & wxICON_INFORMATION )
+    else if ( flags & wxICON_INFORMATION )
         notifyData.dwInfoFlags |= NIIF_INFO;
     else if ( flags & wxICON_WARNING )
         notifyData.dwInfoFlags |= NIIF_WARNING;
