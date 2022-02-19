@@ -157,7 +157,6 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
 
     m_input->SetFocus();
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );

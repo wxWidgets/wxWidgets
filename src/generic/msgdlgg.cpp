@@ -217,7 +217,6 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     if ( sizerBtn )
         topsizer->Add(sizerBtn, 0, wxEXPAND | wxALL, 10 );
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );

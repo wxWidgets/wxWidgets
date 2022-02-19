@@ -115,7 +115,6 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
         topsizer->Add(buttonSizer, wxSizerFlags(flagsBorder2).Expand());
     }
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );

@@ -392,7 +392,6 @@ void wxGenericColourDialog::CreateWidgets()
         topSizer->Add(buttonsizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
-    SetAutoLayout( true );
     SetSizer( topSizer );
 
     topSizer->SetSizeHints( this );

@@ -120,7 +120,6 @@ bool wxNumberEntryDialog::Create(wxWindow *parent,
     }
 
     SetSizer( topsizer );
-    SetAutoLayout( true );
 
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
