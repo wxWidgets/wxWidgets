@@ -85,13 +85,9 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     m_value = value;
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-
-    wxSizerFlags flagsBorder2;
-    flagsBorder2.DoubleBorder();
-
 #if wxUSE_STATTEXT
     // 1) text message
-    topsizer->Add(CreateTextSizer(message), flagsBorder2);
+    topsizer->Add(CreateTextSizer(message), wxSizerFlags().DoubleBorder());
 #endif
 
     // 2) text ctrl: create it with wxTE_RICH2 style to allow putting more than
@@ -112,7 +108,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     wxSizer *buttonSizer = CreateSeparatedButtonSizer(style & (wxOK | wxCANCEL));
     if ( buttonSizer )
     {
-        topsizer->Add(buttonSizer, wxSizerFlags(flagsBorder2).Expand());
+        topsizer->Add(buttonSizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
     SetSizer( topsizer );
