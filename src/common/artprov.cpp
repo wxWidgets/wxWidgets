@@ -437,8 +437,11 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
             // lower priority one: even if this means that the bitmap will be
             // scaled, at least we'll be using the expected bitmap rather than
             // potentially using a bitmap of a different style.
-            if ( GetBitmap(id, client, size).IsOk() )
+            if ( provider->CreateBitmap(id, client, size).IsOk() )
+            {
                 bitmapbundle = wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
+                break;
+            }
         }
 
         sm_cache->PutBitmapBundle(hashId, bitmapbundle);
