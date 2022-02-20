@@ -1953,7 +1953,7 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
     if ( !node )
     {
         // this is not an error as bitmap parameter could be optional
-        return wxNullBitmap;
+        return wxBitmapBundle();
     }
 
     /* If the bitmap is specified as stock item, query wxArtProvider for it: */
