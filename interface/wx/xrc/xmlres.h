@@ -614,6 +614,23 @@ protected:
                        wxSize size = wxDefaultSize);
 
     /**
+        Gets a bitmap bundle.
+
+        @since 3.1.6
+    */
+    wxBitmapBundle GetBitmapBundle(const wxString& param = "bitmap",
+                                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                                   wxSize size = wxDefaultSize);
+    /**
+        Gets a bitmap bundle from the provided node.
+
+        @since 3.1.6
+    */
+    wxBitmapBundle GetBitmapBundle(const wxXmlNode* node,
+                                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                                   wxSize size = wxDefaultSize);
+
+    /**
         Gets a bool flag (1, t, yes, on, true are @true, everything else is @false).
     */
     bool GetBool(const wxString& param, bool defaultv = false);
