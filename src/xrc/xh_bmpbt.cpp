@@ -38,7 +38,7 @@ wxBitmapButtonXmlHandler::SetBitmapIfSpecified(wxBitmapButton* button,
 {
     wxXmlNode* const node = GetParamNode(paramName);
     if ( node )
-        (button->*setter)(GetBitmap(node));
+        (button->*setter)(GetBitmapBundle(node));
 }
 
 wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
@@ -55,7 +55,7 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
     {
         button->Create(m_parentAsWindow,
                        GetID(),
-                       GetBitmap(wxT("bitmap"), wxART_BUTTON),
+                       GetBitmapBundle(wxT("bitmap"), wxART_BUTTON),
                        GetPosition(), GetSize(),
                        GetStyle(wxT("style")),
                        wxDefaultValidator,
