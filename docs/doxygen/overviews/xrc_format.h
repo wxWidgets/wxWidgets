@@ -832,14 +832,18 @@ Refer to the section @ref xrc_wxtoolbar for more details.
      3.1.5.}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap to show on the button (default: none).}
-@row3col{selected, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when the button is selected (default: none, same as @c bitmap).}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap).
+     This property exists since wxWidgets 3.1.6, but the equivalent (and still
+     supported) "selected" property can be used in the older versions.}
 @row3col{focus, @ref overview_xrcformat_type_bitmap,
      Bitmap to show when the button has focus (default: none, same as @c bitmap).}
 @row3col{disabled, @ref overview_xrcformat_type_bitmap,
      Bitmap to show when the button is disabled (default: none, same as @c bitmap).}
-@row3col{hover, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when mouse cursor hovers above the bitmap (default: none, same as @c bitmap).}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when mouse cursor hovers above the bitmap (default: none, same as @c bitmap).
+     This property exists since wxWidgets 3.1.6, but the equivalent (and still
+     supported) "hover" property can be used in the older versions.}
 @endTable
 
 

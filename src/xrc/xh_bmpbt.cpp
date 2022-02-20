@@ -31,14 +31,23 @@ wxBitmapButtonXmlHandler::wxBitmapButtonXmlHandler()
 
 // Function calls the given setter with the contents of the node with the given
 // name, if present.
+//
+// If alternative parameter name is specified, it is used too.
 void
 wxBitmapButtonXmlHandler::SetBitmapIfSpecified(wxBitmapButton* button,
                                                BitmapSetter setter,
-                                               const char* paramName)
+                                               const char* paramName,
+                                               const char* paramNameAlt)
 {
-    wxXmlNode* const node = GetParamNode(paramName);
-    if ( node )
+    if ( wxXmlNode* const node = GetParamNode(paramName) )
+    {
         (button->*setter)(GetBitmapBundle(node));
+    }
+    else if ( paramNameAlt )
+    {
+        if ( wxXmlNode* const nodeAlt = GetParamNode(paramNameAlt) )
+            (button->*setter)(GetBitmap(nodeAlt));
+    }
 }
 
 wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
@@ -66,10 +75,12 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
         button->SetDefault();
     SetupWindow(button);
 
-    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapPressed, "selected");
+    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapPressed,
+                         "pressed", "selected");
     SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapFocus, "focus");
     SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapDisabled, "disabled");
-    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapCurrent, "hover");
+    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapCurrent,
+                         "current", "hover");
 
     return button;
 }
