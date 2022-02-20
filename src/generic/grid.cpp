@@ -5746,12 +5746,13 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
     }
 }
 
-void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxGrid::OnSize(wxSizeEvent& event)
 {
     if (m_targetWindow != this) // check whether initialisation has been done
     {
         // reposition our children windows
         CalcWindowSizes();
+        event.Skip();
     }
 }
 
