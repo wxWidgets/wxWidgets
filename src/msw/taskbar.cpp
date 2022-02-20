@@ -35,6 +35,10 @@
     #define NIN_BALLOONUSERCLICK    0x0405
 #endif
 
+#ifndef NIIF_USER
+    #define NIIF_USER       0x0004
+#endif
+
 #ifndef NIIF_LARGE_ICON
     #define NIIF_LARGE_ICON 0x0020
 #endif
