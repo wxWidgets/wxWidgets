@@ -89,9 +89,15 @@ public:
     // title is the string shown for this column
     virtual wxString GetTitle() const = 0;
 
-    // bitmap shown (instead of text) in the column header
+    // This function exists only for backwards compatibility, it's recommended to override
+    // GetBitmapBundle() in the new code and override this one to do nothing, as it will
+    // never be called if GetBitmapBundle() is overridden.
     virtual wxBitmap GetBitmap() const = 0;
-    virtual wxBitmapBundle GetBitmapBundle() const = 0;
+
+    // Override this function to return the bundle containing the bitmap to show in the
+    // column header. By default delegates to GetBitmap() but should be overridden if
+    // the bitmaps are used.
+    virtual wxBitmapBundle GetBitmapBundle() const { return GetBitmap(); }
 
     // width of the column in pixels, can be set to wxCOL_WIDTH_DEFAULT meaning
     // unspecified/default
@@ -222,7 +228,7 @@ public:
         Init();
     }
 
-    wxHeaderColumnSimple(const wxBitmap& bitmap,
+    wxHeaderColumnSimple(const wxBitmapBundle& bitmap,
                          int width = wxCOL_WIDTH_DEFAULT,
                          wxAlignment align = wxALIGN_CENTER,
                          int flags = wxCOL_DEFAULT_FLAGS)
@@ -239,7 +245,7 @@ public:
     virtual wxString GetTitle() const wxOVERRIDE { return m_title; }
 
     virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE { m_bitmap = bitmap; }
-    wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap.GetBitmap(wxDefaultSize); }
+    wxBitmap GetBitmap() const wxOVERRIDE { wxFAIL_MSG("unreachable"); return wxNullBitmap; }
     wxBitmapBundle GetBitmapBundle() const wxOVERRIDE { return m_bitmap; }
 
     virtual void SetWidth(int width) wxOVERRIDE { m_width = width; }
