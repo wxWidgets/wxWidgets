@@ -219,6 +219,7 @@
                                 <border>5</border>
                                 <object class="wxBitmapButton" name="controls_bitmapbutton">
                                     <bitmap>controls.xpm</bitmap>
+                                    <current>custclas.xpm</current>
                                 </object>
                             </object>
                             <object class="sizeritem">

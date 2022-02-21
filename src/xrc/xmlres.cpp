@@ -1946,15 +1946,26 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
                                                      const wxArtClient& defaultArtClient,
                                                      wxSize size)
 {
-    wxASSERT_MSG( !param.empty(), "bitmap parameter name can't be empty" );
+    wxASSERT_MSG( !param.empty(), "bitmap bundle parameter name can't be empty" );
 
     const wxXmlNode* const node = GetParamNode(param);
 
     if ( !node )
     {
         // this is not an error as bitmap parameter could be optional
-        return wxNullBitmap;
+        return wxBitmapBundle();
     }
+
+    return GetBitmapBundle(node, defaultArtClient, size);
+}
+
+wxBitmapBundle
+wxXmlResourceHandlerImpl::GetBitmapBundle(const wxXmlNode* node,
+                                          const wxArtClient& defaultArtClient,
+                                          wxSize size)
+{
+    if  ( !node )
+        return wxBitmapBundle();
 
     /* If the bitmap is specified as stock item, query wxArtProvider for it: */
     wxString art_id, art_client;
@@ -1974,7 +1985,7 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
         {
             ReportParamError
             (
-                param,
+                node->GetName(),
                 "may contain either one SVG file or a list of files separated by ';'"
             );
             return bitmapBundle;
@@ -1986,21 +1997,23 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
         {
             ReportParamError
             (
-                param,
+             node->GetName(),
                 "'default_size' attribute required with svg file"
             );
         }
         else
         {
 #ifdef wxHAS_SVG
-            wxSize svgDefaultSize = ParseStringInPixels(this, param, svgDefaultSizeAttr, wxDefaultSize);
+            wxSize svgDefaultSize = ParseStringInPixels(this, node->GetName(),
+                                                        svgDefaultSizeAttr,
+                                                        wxDefaultSize);
 #if wxUSE_FILESYSTEM
             wxFSFile* fsfile = GetCurFileSystem().OpenFile(paramValue, wxFS_READ | wxFS_SEEKABLE);
             if (fsfile == NULL)
             {
                 ReportParamError
                 (
-                    param,
+                    node->GetName(),
                     wxString::Format("cannot open SVG resource \"%s\"", paramValue)
                 );
             }
@@ -2023,7 +2036,7 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
 #else // !wxHAS_SVG
             ReportParamError
             (
-                param,
+                node->GetName(),
                 "SVG bitmaps are not supported in this build of the library"
             );
 #endif // wxHAS_SVG/!wxHAS_SVG
@@ -2035,7 +2048,7 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
         {
             ReportParamError
             (
-                param,
+                node->GetName(),
                 "may contain either one SVG file or a list of files separated by ';'"
             );
             return bitmapBundle;
@@ -2046,7 +2059,7 @@ wxBitmapBundle wxXmlResourceHandlerImpl::GetBitmapBundle(const wxString& param,
         wxArrayString paths = wxSplit(paramValue, ';', '\0');
         for ( wxArrayString::const_iterator i = paths.begin(); i != paths.end(); ++i )
         {
-            wxBitmap bmpNext = LoadBitmapFromFS(this, *i, size, param);
+            wxBitmap bmpNext = LoadBitmapFromFS(this, *i, size, node->GetName());
             if ( !bmpNext.IsOk() )
             {
                 // error in loading wxBitmap, return invalid wxBitmapBundle

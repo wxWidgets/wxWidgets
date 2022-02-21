@@ -61,9 +61,10 @@ wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
     if ( animation )
         ctrl->SetAnimation(*animation);
 
-    // if no inactive-bitmap has been provided, GetBitmap() will return wxNullBitmap
-    // which just tells wxAnimationCtrl to use the default for inactive status
-    ctrl->SetInactiveBitmap(GetBitmap(wxT("inactive-bitmap")));
+    // if no inactive-bitmap has been provided, GetBitmapBundle() will return
+    // an empty bundle, which just tells wxAnimationCtrl to use the default
+    // bitmap for inactive status
+    ctrl->SetInactiveBitmap(GetBitmapBundle(wxT("inactive-bitmap")));
 
     SetupWindow(ctrl);
 
