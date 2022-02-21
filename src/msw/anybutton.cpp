@@ -515,7 +515,7 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     {
         // We still need some margin or the text would be overwritten, just
         // make it as small as possible.
-        sizeBtn.x += 2*win->GetCharWidth();
+        sizeBtn.x += win->GetCharWidth();
     }
     else
     {
