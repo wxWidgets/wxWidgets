@@ -127,6 +127,7 @@ enum
     ID_ROTATE_LEFT = wxID_HIGHEST+1,
     ID_ROTATE_RIGHT,
     ID_RESIZE,
+    ID_ZOOM_x2,
     ID_PAINT_BG
 };
 
@@ -197,9 +198,11 @@ private:
                               "Uncheck this for transparent images");
         menu->AppendSeparator();
         menu->Append(ID_RESIZE, "&Fit to window\tCtrl-F");
+        menu->AppendSeparator();
         menu->Append(wxID_ZOOM_IN, "Zoom &in\tCtrl-+");
         menu->Append(wxID_ZOOM_OUT, "Zoom &out\tCtrl--");
         menu->Append(wxID_ZOOM_100, "Reset zoom to &100%\tCtrl-1");
+        menu->Append(ID_ZOOM_x2, "Double zoom level\tCtrl-2");
         menu->AppendSeparator();
         menu->Append(ID_ROTATE_LEFT, "Rotate &left\tCtrl-L");
         menu->Append(ID_ROTATE_RIGHT, "Rotate &right\tCtrl-R");
@@ -442,12 +445,28 @@ private:
 
     void OnZoom(wxCommandEvent& event)
     {
-        if ( event.GetId() == wxID_ZOOM_IN )
-            m_zoom *= 1.2;
-        else if ( event.GetId() == wxID_ZOOM_OUT )
-            m_zoom /= 1.2;
-        else // wxID_ZOOM_100
-            m_zoom = 1.;
+        switch ( event.GetId() )
+        {
+            case wxID_ZOOM_IN:
+                m_zoom *= 1.2;
+                break;
+
+            case wxID_ZOOM_OUT:
+                m_zoom /= 1.2;
+                break;
+
+            case wxID_ZOOM_100:
+                m_zoom = 1.;
+                break;
+
+            case ID_ZOOM_x2:
+                m_zoom *= 2.;
+                break;
+
+            default:
+                wxFAIL_MSG("unknown zoom command");
+                return;
+        }
 
         UpdateStatusBar();
     }
@@ -946,6 +965,7 @@ wxBEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_MENU(wxID_ZOOM_IN, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_OUT, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_100, MyImageFrame::OnZoom)
+    EVT_MENU(ID_ZOOM_x2, MyImageFrame::OnZoom)
 wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
