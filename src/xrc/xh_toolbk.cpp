@@ -63,24 +63,18 @@ wxObject *wxToolbookXmlHandler::DoCreateResource()
 
             if (wnd)
             {
-                int imgId = -1;
+                newPage currentPage;
 
                 if ( HasParam(wxT("bitmap")) )
                 {
-                    wxBitmap bmp = GetBitmap(wxT("bitmap"), wxART_OTHER);
-                    wxImageList *imgList = m_toolbook->GetImageList();
-                    if ( imgList == NULL )
-                    {
-                        imgList = new wxImageList( bmp.GetWidth(), bmp.GetHeight() );
-                        m_toolbook->AssignImageList( imgList );
-                    }
-                    imgId = imgList->Add(bmp);
+                    m_bookImages.push_back( GetBitmapBundle(wxT("bitmap"), wxART_OTHER) );
+                    currentPage.bmpId = m_bookImages.size() - 1;
                 }
                 else if ( HasParam(wxT("image")) )
                 {
                     if ( m_toolbook->GetImageList() )
                     {
-                        imgId = (int)GetLong(wxT("image"));
+                        currentPage.imgId = (int)GetLong(wxT("image"));
                     }
                     else // image without image list?
                     {
@@ -89,8 +83,10 @@ wxObject *wxToolbookXmlHandler::DoCreateResource()
                     }
                 }
 
-                m_toolbook->AddPage(wnd, GetText(wxT("label")),
-                        GetBool(wxT("selected")), imgId );
+                currentPage.wnd = wnd;
+                currentPage.label = GetText(wxT("label"));
+                currentPage.selected = GetBool(wxT("selected"));
+                m_bookPages.push_back(currentPage);
             }
             else
             {
@@ -123,9 +119,32 @@ wxObject *wxToolbookXmlHandler::DoCreateResource()
         m_toolbook = nb;
         bool old_ins = m_isInside;
         m_isInside = true;
+        wxVector<newPage> old_pages = m_bookPages;
+        m_bookPages.clear();
+        wxVector<wxBitmapBundle> old_images = m_bookImages;
+        m_bookImages.clear();
         CreateChildren(m_toolbook, true/*only this handler*/);
+
+        if ( !m_bookImages.empty() )
+        {
+            m_toolbook->SetImages(m_bookImages);
+        }
+        for ( size_t i = 0; i < m_bookPages.size(); ++i )
+        {
+            const newPage& currentPage = m_bookPages.at(i);
+            int imgId = currentPage.bmpId;
+            if ( imgId == -1 )
+            {
+                imgId = currentPage.imgId;
+            }
+            m_toolbook->AddPage(currentPage.wnd, currentPage.label,
+                        currentPage.selected, imgId );
+        }
+
         m_isInside = old_ins;
         m_toolbook = old_par;
+        m_bookPages = old_pages;
+        m_bookImages = old_images;
 
         return nb;
     }
