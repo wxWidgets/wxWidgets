@@ -72,7 +72,37 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         wxArrayTbkPageIndexes old_treeContext = m_treeContext;
         m_treeContext.Clear();
 
+        wxVector<newPage> old_pages = m_bookPages;
+        m_bookPages.clear();
+
+        wxVector<wxBitmapBundle> old_images = m_bookImages;
+        m_bookImages.clear();
+
         CreateChildren(m_tbk, true/*only this handler*/);
+
+        if ( !m_bookImages.empty() )
+        {
+            m_tbk->SetImages(m_bookImages);
+        }
+        for ( size_t i = 0; i < m_bookPages.size(); ++i )
+        {
+            const newPage& currentPage = m_bookPages.at(i);
+            int imgId = currentPage.bmpId;
+            if ( imgId == -1 )
+            {
+                imgId = currentPage.imgId;
+            }
+            if( currentPage.depth == 0 )
+            {
+                m_tbk->AddPage(currentPage.wnd,
+                    currentPage.label, currentPage.selected, imgId);
+            }
+            else
+            {
+                m_tbk->InsertSubPage(currentPage.pos, currentPage.wnd,
+                    currentPage.label, currentPage.selected, imgId);
+            }
+        }
 
         wxXmlNode *node = GetParamNode("object");
         int pageIndex = 0;
@@ -95,6 +125,8 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         m_treeContext = old_treeContext;
         m_isInside = old_ins;
         m_tbk = old_par;
+        m_bookPages = old_pages;
+        m_bookImages = old_images;
 
         return tbk;
     }
@@ -125,23 +157,20 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
     if( depth <= m_treeContext.GetCount() )
     {
         // first prepare the icon
-        int imgIndex = wxNOT_FOUND;
+        newPage currentPage;
+        currentPage.pos = 0;
+        currentPage.imgId = -1;
+        currentPage.bmpId = -1;
         if ( HasParam(wxT("bitmap")) )
         {
-            wxBitmap bmp = GetBitmap(wxT("bitmap"), wxART_OTHER);
-            wxImageList *imgList = m_tbk->GetImageList();
-            if ( imgList == NULL )
-            {
-                imgList = new wxImageList( bmp.GetWidth(), bmp.GetHeight() );
-                m_tbk->AssignImageList( imgList );
-            }
-            imgIndex = imgList->Add(bmp);
+            m_bookImages.push_back( GetBitmapBundle(wxT("bitmap"), wxART_OTHER) );
+            currentPage.bmpId = m_bookImages.size() - 1;
         }
         else if ( HasParam(wxT("image")) )
         {
             if ( m_tbk->GetImageList() )
             {
-                imgIndex = GetLong(wxT("image"));
+                currentPage.imgId = (int)GetLong(wxT("image"));
             }
             else // image without image list?
             {
@@ -150,21 +179,21 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
             }
         }
 
-        // then add the page to the corresponding parent
+        // then keep the page with the corresponding parent
         if( depth < m_treeContext.GetCount() )
             m_treeContext.RemoveAt(depth, m_treeContext.GetCount() - depth );
-        if( depth == 0)
+        if( depth != 0)
         {
-            m_tbk->AddPage(wnd,
-                GetText(wxT("label")), GetBool(wxT("selected")), imgIndex);
-        }
-        else
-        {
-            m_tbk->InsertSubPage(m_treeContext.Item(depth - 1), wnd,
-                GetText(wxT("label")), GetBool(wxT("selected")), imgIndex);
+            currentPage.pos = m_treeContext.Item(depth - 1);
         }
 
-        m_treeContext.Add( m_tbk->GetPageCount() - 1);
+        currentPage.wnd = wnd;
+        currentPage.depth = depth;
+        currentPage.label = GetText(wxT("label"));
+        currentPage.selected = GetBool(wxT("selected"));
+        m_bookPages.push_back(currentPage);
+
+        m_treeContext.Add( m_bookPages.size() - 1);
 
     }
     else
