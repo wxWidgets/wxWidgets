@@ -87,14 +87,16 @@ wxIMPLEMENT_APP_CONSOLE(BenchApp);
 
 Bench::Function *Bench::Function::ms_head = NULL;
 
-long Bench::GetNumericParameter()
+long Bench::GetNumericParameter(long defVal)
 {
-    return wxGetApp().GetNumericParameter();
+    const long val = wxGetApp().GetNumericParameter();
+    return val ? val : defVal;
 }
 
-wxString Bench::GetStringParameter()
+wxString Bench::GetStringParameter(const wxString& defVal)
 {
-    return wxGetApp().GetStringParameter();
+    const wxString& val = wxGetApp().GetStringParameter();
+    return !val.empty() ? val : defVal;
 }
 
 // ============================================================================
