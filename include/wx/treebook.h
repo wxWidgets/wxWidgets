@@ -132,9 +132,6 @@ public:
     virtual int SetSelection(size_t n) wxOVERRIDE { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
     virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
-    virtual void SetImages(const Images& images) wxOVERRIDE;
-    virtual void SetImageList(wxImageList *imageList) wxOVERRIDE;
-    virtual void AssignImageList(wxImageList *imageList);
     virtual bool DeleteAllPages() wxOVERRIDE;
 
 protected:
@@ -148,6 +145,7 @@ protected:
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);
     void OnTreeNodeExpandedCollapsed(wxTreeEvent& event);
+    virtual void OnImagesChanged() wxOVERRIDE;
 
     // array of tree item ids corresponding to the page indices
     wxVector<wxTreeItemId> m_treeIds;
