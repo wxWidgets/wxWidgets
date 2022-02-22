@@ -64,6 +64,8 @@ wxObject *wxToolbookXmlHandler::DoCreateResource()
             if (wnd)
             {
                 newPage currentPage;
+                currentPage.imgId = -1;
+                currentPage.bmpId = -1;
 
                 if ( HasParam(wxT("bitmap")) )
                 {

@@ -27,11 +27,11 @@ public:
 private:
     struct newPage
     {
-        wxWindow* wnd = NULL;
+        wxWindow* wnd;
         wxString label;
-        bool selected = false;
-        int imgId = -1; // index in image list
-        int bmpId = -1; // index in wxVector<wxBitmapBundle>
+        bool selected;
+        int imgId; // index in image list
+        int bmpId; // index in wxVector<wxBitmapBundle>
     };
 
     bool m_isInside;
