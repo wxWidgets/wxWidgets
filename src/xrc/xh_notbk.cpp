@@ -73,15 +73,8 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
                                          GetBool(wxT("selected")));
                 if ( HasParam(wxT("bitmap")) )
                 {
-                    wxBitmap bmp = GetBitmap(wxT("bitmap"), wxART_OTHER);
-                    wxImageList *imgList = m_notebook->GetImageList();
-                    if ( imgList == NULL )
-                    {
-                        imgList = new wxImageList( bmp.GetWidth(), bmp.GetHeight() );
-                        m_notebook->AssignImageList( imgList );
-                    }
-                    int imgIndex = imgList->Add(bmp);
-                    m_notebook->SetPageImage(m_notebook->GetPageCount()-1, imgIndex );
+                    m_bookImages.push_back( GetBitmapBundle(wxT("bitmap"), wxART_OTHER) );
+                    m_bookImagesIdx.push_back( m_notebook->GetPageCount()-1 );
                 }
                 else if ( HasParam(wxT("image")) )
                 {
@@ -130,9 +123,25 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         m_notebook = nb;
         bool old_ins = m_isInside;
         m_isInside = true;
+        wxVector<wxBitmapBundle> old_images = m_bookImages;
+        m_bookImages.clear();
+        wxVector<size_t> old_imageIdx = m_bookImagesIdx;
+        m_bookImagesIdx.clear();
         CreateChildren(m_notebook, true/*only this handler*/);
+
+        if ( !m_bookImages.empty() )
+        {
+            m_notebook->SetImages(m_bookImages);
+            for ( size_t i = 0; i < m_bookImagesIdx.size(); ++i )
+            {
+                m_notebook->SetPageImage( m_bookImagesIdx[i], i );
+            }
+        }
+
         m_isInside = old_ins;
         m_notebook = old_par;
+        m_bookImages = old_images;
+        m_bookImagesIdx = old_imageIdx;
 
         return nb;
     }
