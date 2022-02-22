@@ -132,6 +132,7 @@ public:
     virtual int SetSelection(size_t n) wxOVERRIDE { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
     virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
+    virtual void SetImages(const Images& images) wxOVERRIDE;
     virtual void SetImageList(wxImageList *imageList) wxOVERRIDE;
     virtual void AssignImageList(wxImageList *imageList);
     virtual bool DeleteAllPages() wxOVERRIDE;

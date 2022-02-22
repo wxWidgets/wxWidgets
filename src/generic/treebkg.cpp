@@ -564,6 +564,12 @@ wxWindow *wxTreebook::TryGetNonNullPage(size_t n)
     return page;
 }
 
+void wxTreebook::SetImages(const Images& images)
+{
+    wxBookCtrlBase::SetImages(images);
+    GetTreeCtrl()->SetImages(images);
+}
+
 void wxTreebook::SetImageList(wxImageList *imageList)
 {
     wxBookCtrlBase::SetImageList(imageList);

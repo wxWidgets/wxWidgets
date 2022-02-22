@@ -65,7 +65,7 @@ public:
     //
     // Override OnImagesChanged() in the derived class to update the actually
     // shown images.
-    void SetImages(const Images& images)
+    virtual void SetImages(const Images& images)
     {
         m_images = images;
 
