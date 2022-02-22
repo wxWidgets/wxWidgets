@@ -48,8 +48,9 @@ double BitmapProviderDefault::GetScale() const
     }
 #if GTK_CHECK_VERSION(3,10,0)
     return gdk_window_get_scale_factor(wxGetTopLevelGDK());
-#endif
+#else
     return 1.0;
+#endif
 }
 
 wxBitmap BitmapProviderDefault::Get() const

@@ -91,6 +91,8 @@ public:
         Override this function to return the bundle containing the bitmap to show in the
         column header. By default delegates to GetBitmap() but should be overridden if
         the bitmaps are used.
+
+        @since 3.1.6
     */
     virtual wxBitmapBundle GetBitmapBundle() const;
 
