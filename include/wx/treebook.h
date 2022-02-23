@@ -138,6 +138,8 @@ protected:
     // Implementation of a page removal. See DeletPage for comments.
     wxTreebookPage *DoRemovePage(size_t pos) wxOVERRIDE;
 
+    virtual void OnImagesChanged() wxOVERRIDE;
+
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const wxOVERRIDE { return true; }
     virtual wxWindow *TryGetNonNullPage(size_t page) wxOVERRIDE;
@@ -145,7 +147,6 @@ protected:
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);
     void OnTreeNodeExpandedCollapsed(wxTreeEvent& event);
-    virtual void OnImagesChanged() wxOVERRIDE;
 
     // array of tree item ids corresponding to the page indices
     wxVector<wxTreeItemId> m_treeIds;

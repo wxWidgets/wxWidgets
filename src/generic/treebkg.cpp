@@ -566,14 +566,13 @@ wxWindow *wxTreebook::TryGetNonNullPage(size_t n)
 
 void wxTreebook::OnImagesChanged()
 {
-    if ( !GetImages().empty() )
-    {
-        GetTreeCtrl()->SetImages(GetImages());
-    }
+    // Propagate the images to the tree control which will actually use them.
+    wxTreeCtrl* const tree = GetTreeCtrl();
+    const Images& images = GetImages();
+    if ( !images.empty() )
+        tree->SetImages(images);
     else
-    {
-        GetTreeCtrl()->SetImageList(GetImageList());
-    }
+        tree->SetImageList(GetImageList());
 }
 
 // ----------------------------------------------------------------------------
