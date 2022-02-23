@@ -79,6 +79,14 @@ BENCHMARK_FUNC(EnlargeNormal)
                        wxIMAGE_QUALITY_NORMAL).IsOk();
 }
 
+BENCHMARK_FUNC(EnlargeBoxAverage)
+{
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(150) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_BOX_AVERAGE).IsOk();
+}
+
 BENCHMARK_FUNC(EnlargeHighQuality)
 {
     const wxImage& image = GetTestImage();
@@ -93,6 +101,14 @@ BENCHMARK_FUNC(ShrinkNormal)
     const double factor = Bench::GetNumericParameter(50) / 100.;
     return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
                        wxIMAGE_QUALITY_NORMAL).IsOk();
+}
+
+BENCHMARK_FUNC(ShrinkBoxAverage)
+{
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(50) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_BOX_AVERAGE).IsOk();
 }
 
 BENCHMARK_FUNC(ShrinkHighQuality)
