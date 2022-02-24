@@ -1405,8 +1405,8 @@ wxVersionInfo wxGetLibraryVersionInfo()
 #endif
                wxDEBUG_LEVEL,
 #if !wxUSE_REPRODUCIBLE_BUILD
-               __TDATE__,
-               __TTIME__,
+               __DATE__,
+               __TIME__,
 #endif
                wxPlatformInfo::Get().GetToolkitMajorVersion(),
                wxPlatformInfo::Get().GetToolkitMinorVersion()

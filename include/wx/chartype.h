@@ -241,17 +241,9 @@
 /* a helper macro allowing to make another macro Unicode-friendly, see below */
 #define wxAPPLY_T(x) wxT(x)
 
-/* Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs */
+/* Unicode-friendly __FILE__ analog */
 #ifndef __TFILE__
     #define __TFILE__ wxAPPLY_T(__FILE__)
-#endif
-
-#ifndef __TDATE__
-    #define __TDATE__ wxAPPLY_T(__DATE__)
-#endif
-
-#ifndef __TTIME__
-    #define __TTIME__ wxAPPLY_T(__TIME__)
 #endif
 
 #endif /* _WX_WXCHARTYPE_H_ */
