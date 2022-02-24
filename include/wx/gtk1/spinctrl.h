@@ -68,7 +68,7 @@ public:
     void DoSetIncrement(double inc);
     void SetIncrement(int inc) { DoSetIncrement(inc); }
     double DoGetIncrement() const;
-   
+
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
 
