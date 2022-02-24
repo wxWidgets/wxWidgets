@@ -17,11 +17,14 @@ case $(uname -s) in
             echo '--- End of APT files dump ---'
 
             run_apt() {
-                echo "Running apt-get $@"
+                echo "-> Running apt-get $@"
 
                 # Disable some (but not all) output.
                 $SUDO apt-get -q -o=Dpkg::Use-Pty=0 "$@"
 
+                echo "-> Done with $?"
+
+                return $?
             }
 
             if [ "$wxUSE_ASAN" = 1 ]; then
