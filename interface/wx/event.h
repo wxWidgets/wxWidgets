@@ -4498,6 +4498,9 @@ public:
         }
     @endcode
 
+    See also @c samples/dialogs for a full example of interrupting closing an
+    application when there are e.g. unsaved files.
+
     The EVT_END_SESSION event is slightly different as it is sent by the system
     when the user session is ending (e.g. because of log out or shutdown) and
     so all windows are being forcefully closed. At least under MSW, after the
