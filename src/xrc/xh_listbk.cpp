@@ -26,9 +26,7 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxListbookXmlHandler, wxXmlResourceHandler);
 
 wxListbookXmlHandler::wxListbookXmlHandler()
-                     :wxXmlResourceHandler(),
-                      m_isInside(false),
-                      m_listbook(NULL)
+                    : m_listbook(NULL)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_LEFT);
@@ -49,53 +47,7 @@ wxObject *wxListbookXmlHandler::DoCreateResource()
 {
     if (m_class == wxT("listbookpage"))
     {
-        wxXmlNode *n = GetParamNode(wxT("object"));
-
-        if ( !n )
-            n = GetParamNode(wxT("object_ref"));
-
-        if (n)
-        {
-            bool old_ins = m_isInside;
-            m_isInside = false;
-            wxObject *item = CreateResFromNode(n, m_listbook, NULL);
-            m_isInside = old_ins;
-            wxWindow *wnd = wxDynamicCast(item, wxWindow);
-
-            if (wnd)
-            {
-                m_listbook->AddPage(wnd, GetText(wxT("label")),
-                                         GetBool(wxT("selected")));
-                if ( HasParam(wxT("bitmap")) )
-                {
-                    m_bookImages.push_back( GetBitmapBundle(wxT("bitmap"), wxART_OTHER) );
-                    m_bookImagesIdx.push_back( m_listbook->GetPageCount()-1 );
-                }
-                else if ( HasParam(wxT("image")) )
-                {
-                    if ( m_listbook->GetImageList() )
-                    {
-                        m_listbook->SetPageImage(m_listbook->GetPageCount()-1,
-                                                 GetLong(wxT("image")) );
-                    }
-                    else // image without image list?
-                    {
-                        ReportError(n, "image can only be used in conjunction "
-                                       "with imagelist");
-                    }
-                }
-            }
-            else
-            {
-                ReportError(n, "listbookpage child must be a window");
-            }
-            return wnd;
-        }
-        else
-        {
-            ReportError("listbookpage must have a window child");
-            return NULL;
-        }
+        return DoCreatePage(m_listbook);
     }
 
     else
@@ -108,33 +60,12 @@ wxObject *wxListbookXmlHandler::DoCreateResource()
                    GetStyle(wxT("style")),
                    GetName());
 
-        wxImageList *imagelist = GetImageList();
-        if ( imagelist )
-            nb->AssignImageList(imagelist);
-
         wxListbook *old_par = m_listbook;
         m_listbook = nb;
-        bool old_ins = m_isInside;
-        m_isInside = true;
-        wxVector<wxBitmapBundle> old_images = m_bookImages;
-        m_bookImages.clear();
-        wxVector<size_t> old_imageIdx = m_bookImagesIdx;
-        m_bookImagesIdx.clear();
-        CreateChildren(m_listbook, true/*only this handler*/);
 
-        if ( !m_bookImages.empty() )
-        {
-            m_listbook->SetImages(m_bookImages);
-            for ( size_t i = 0; i < m_bookImagesIdx.size(); ++i )
-            {
-                m_listbook->SetPageImage( m_bookImagesIdx[i], i );
-            }
-        }
+        DoCreatePages(m_listbook);
 
-        m_isInside = old_ins;
         m_listbook = old_par;
-        m_bookImages = old_images;
-        m_bookImagesIdx = old_imageIdx;
 
         return nb;
     }
@@ -142,8 +73,8 @@ wxObject *wxListbookXmlHandler::DoCreateResource()
 
 bool wxListbookXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_isInside && IsOfClass(node, wxT("wxListbook"))) ||
-            (m_isInside && IsOfClass(node, wxT("listbookpage"))));
+    return ((!IsInside() && IsOfClass(node, wxT("wxListbook"))) ||
+            (IsInside() && IsOfClass(node, wxT("listbookpage"))));
 }
 
 #endif // wxUSE_XRC && wxUSE_LISTBOOK

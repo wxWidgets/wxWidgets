@@ -1078,6 +1078,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_bookctrlbase.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_bttn.h"
 				>
 			</File>
@@ -1349,6 +1353,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_bmpcbox.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_bookctrlbase.cpp"
 				>
 			</File>
 			<File
