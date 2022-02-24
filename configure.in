@@ -6254,7 +6254,16 @@ if test "$wxUSE_CONSOLE_EVENTLOOP" = "yes"; then
         if test "$wxUSE_EPOLL_DISPATCHER" = "yes"; then
             AC_CHECK_HEADERS(sys/epoll.h,,, [AC_INCLUDES_DEFAULT()])
             if test "$ac_cv_header_sys_epoll_h" = "yes"; then
-                AC_DEFINE(wxUSE_EPOLL_DISPATCHER)
+                dnl On FreeBSD or other *BSD sys/epoll.h may exist, but require
+                dnl linking with extra libraries, so we use epoll on Linux only.
+                case "${host}" in
+                *-*-linux*)
+                    AC_DEFINE(wxUSE_EPOLL_DISPATCHER)
+                ;;
+                *)
+                    AC_MSG_WARN([wxEpollDispatcher disabled, because OS is not Linux])
+                ;;
+                esac
             else
                 AC_MSG_WARN([sys/epoll.h not available, wxEpollDispatcher disabled])
             fi

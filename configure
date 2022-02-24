@@ -35642,8 +35642,16 @@ fi
 done
 
             if test "$ac_cv_header_sys_epoll_h" = "yes"; then
-                $as_echo "#define wxUSE_EPOLL_DISPATCHER 1" >>confdefs.h
+                                                case "${host}" in
+                *-*-linux*)
+                    $as_echo "#define wxUSE_EPOLL_DISPATCHER 1" >>confdefs.h
 
+                ;;
+                *)
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxEpollDispatcher disabled, because OS is not Linux" >&5
+$as_echo "$as_me: WARNING: wxEpollDispatcher disabled, because OS is not Linux" >&2;}
+                ;;
+                esac
             else
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: sys/epoll.h not available, wxEpollDispatcher disabled" >&5
 $as_echo "$as_me: WARNING: sys/epoll.h not available, wxEpollDispatcher disabled" >&2;}
