@@ -26,9 +26,7 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxChoicebookXmlHandler, wxXmlResourceHandler);
 
 wxChoicebookXmlHandler::wxChoicebookXmlHandler()
-                       :wxXmlResourceHandler(),
-                        m_isInside(false),
-                        m_choicebook(NULL)
+                      : m_choicebook(NULL)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_LEFT);
@@ -49,53 +47,7 @@ wxObject *wxChoicebookXmlHandler::DoCreateResource()
 {
     if (m_class == wxT("choicebookpage"))
     {
-        wxXmlNode *n = GetParamNode(wxT("object"));
-
-        if ( !n )
-            n = GetParamNode(wxT("object_ref"));
-
-        if (n)
-        {
-            bool old_ins = m_isInside;
-            m_isInside = false;
-            wxObject *item = CreateResFromNode(n, m_choicebook, NULL);
-            m_isInside = old_ins;
-            wxWindow *wnd = wxDynamicCast(item, wxWindow);
-
-            if (wnd)
-            {
-                m_choicebook->AddPage(wnd, GetText(wxT("label")),
-                                           GetBool(wxT("selected")));
-                if ( HasParam(wxT("bitmap")) )
-                {
-                    m_bookImages.push_back( GetBitmapBundle(wxT("bitmap"), wxART_OTHER) );
-                    m_bookImagesIdx.push_back( m_choicebook->GetPageCount()-1 );
-                }
-                else if ( HasParam(wxT("image")) )
-                {
-                    if ( m_choicebook->GetImageList() )
-                    {
-                        m_choicebook->SetPageImage(m_choicebook->GetPageCount()-1,
-                                                   GetLong(wxT("image")) );
-                    }
-                    else // image without image list?
-                    {
-                        ReportError(n, "image can only be used in conjunction "
-                                       "with imagelist");
-                    }
-                }
-            }
-            else
-            {
-                ReportError(n, "choicebookpage child must be a window");
-            }
-            return wnd;
-        }
-        else
-        {
-            ReportError("choicebookpage must have a window child");
-            return NULL;
-        }
+        return DoCreatePage(m_choicebook);
     }
 
     else
@@ -108,33 +60,12 @@ wxObject *wxChoicebookXmlHandler::DoCreateResource()
                    GetStyle(wxT("style")),
                    GetName());
 
-        wxImageList *imagelist = GetImageList();
-        if ( imagelist )
-            nb->AssignImageList(imagelist);
-
         wxChoicebook *old_par = m_choicebook;
         m_choicebook = nb;
-        bool old_ins = m_isInside;
-        m_isInside = true;
-        wxVector<wxBitmapBundle> old_images = m_bookImages;
-        m_bookImages.clear();
-        wxVector<size_t> old_imageIdx = m_bookImagesIdx;
-        m_bookImagesIdx.clear();
-        CreateChildren(m_choicebook, true/*only this handler*/);
 
-        if ( !m_bookImages.empty() )
-        {
-            m_choicebook->SetImages(m_bookImages);
-            for ( size_t i = 0; i < m_bookImagesIdx.size(); ++i )
-            {
-                m_choicebook->SetPageImage( m_bookImagesIdx[i], i );
-            }
-        }
+        DoCreatePages(m_choicebook);
 
-        m_isInside = old_ins;
         m_choicebook = old_par;
-        m_bookImages = old_images;
-        m_bookImagesIdx = old_imageIdx;
 
         return nb;
     }
@@ -142,8 +73,8 @@ wxObject *wxChoicebookXmlHandler::DoCreateResource()
 
 bool wxChoicebookXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_isInside && IsOfClass(node, wxT("wxChoicebook"))) ||
-            (m_isInside && IsOfClass(node, wxT("choicebookpage"))));
+    return ((!IsInside() && IsOfClass(node, wxT("wxChoicebook"))) ||
+            (IsInside() && IsOfClass(node, wxT("choicebookpage"))));
 }
 
 #endif // wxUSE_XRC && wxUSE_CHOICEBOOK

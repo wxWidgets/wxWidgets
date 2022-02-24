@@ -28,9 +28,7 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialogXmlHandler, wxXmlResourceHandler);
 
 wxPropertySheetDialogXmlHandler::wxPropertySheetDialogXmlHandler()
-                     :wxXmlResourceHandler(),
-                      m_isInside(false),
-                      m_dialog(NULL)
+                               : m_dialog(NULL)
 {
     XRC_ADD_STYLE(wxSTAY_ON_TOP);
     XRC_ADD_STYLE(wxCAPTION);
@@ -55,39 +53,7 @@ wxObject *wxPropertySheetDialogXmlHandler::DoCreateResource()
 {
     if (m_class == wxT("propertysheetpage"))
     {
-        wxXmlNode *n = GetParamNode(wxT("object"));
-
-        if (!n) n = GetParamNode(wxT("object_ref"));
-
-        if (n)
-        {
-            wxBookCtrlBase *bookctrl = m_dialog->GetBookCtrl();
-            bool old_ins = m_isInside;
-            m_isInside = false;
-            wxObject *item = CreateResFromNode(n, bookctrl, NULL);
-            m_isInside = old_ins;
-            wxWindow *wnd = wxDynamicCast(item, wxWindow);
-
-            if (wnd)
-            {
-                bookctrl->AddPage(wnd, GetText(wxT("label")), GetBool(wxT("selected")));
-                if (HasParam(wxT("bitmap")))
-                {
-                    m_bookImages.push_back( GetBitmapBundle(wxT("bitmap"), wxART_OTHER) );
-                    m_bookImagesIdx.push_back( bookctrl->GetPageCount()-1 );
-                }
-            }
-            else
-            {
-                ReportError(n, "propertysheetpage child must be a window");
-            }
-            return wnd;
-        }
-        else
-        {
-            ReportError("propertysheetpage must have a window child");
-            return NULL;
-        }
+        return DoCreatePage(m_dialog->GetBookCtrl());
     }
 
     else
@@ -109,28 +75,10 @@ wxObject *wxPropertySheetDialogXmlHandler::DoCreateResource()
 
         wxPropertySheetDialog *old_par = m_dialog;
         m_dialog = dlg;
-        bool old_ins = m_isInside;
-        m_isInside = true;
-        wxVector<wxBitmapBundle> old_images = m_bookImages;
-        m_bookImages.clear();
-        wxVector<size_t> old_imageIdx = m_bookImagesIdx;
-        m_bookImagesIdx.clear();
-        CreateChildren(m_dialog, true/*only this handler*/);
 
-        wxBookCtrlBase *bookctrl = m_dialog->GetBookCtrl();
-        if ( !m_bookImages.empty() )
-        {
-            bookctrl->SetImages(m_bookImages);
-            for ( size_t i = 0; i < m_bookImagesIdx.size(); ++i )
-            {
-                bookctrl->SetPageImage( m_bookImagesIdx[i], i );
-            }
-        }
+        DoCreatePages(m_dialog->GetBookCtrl());
 
-        m_isInside = old_ins;
         m_dialog = old_par;
-        m_bookImages = old_images;
-        m_bookImagesIdx = old_imageIdx;
 
         if (GetBool(wxT("centered"), false)) dlg->Centre();
         wxString buttons = GetText(wxT("buttons"));
@@ -152,8 +100,8 @@ wxObject *wxPropertySheetDialogXmlHandler::DoCreateResource()
 
 bool wxPropertySheetDialogXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_isInside && IsOfClass(node, wxT("wxPropertySheetDialog"))) ||
-            (m_isInside && IsOfClass(node, wxT("propertysheetpage"))));
+    return ((!IsInside() && IsOfClass(node, wxT("wxPropertySheetDialog"))) ||
+            (IsInside() && IsOfClass(node, wxT("propertysheetpage"))));
 }
 
 #endif // wxUSE_XRC && wxUSE_BOOKCTRL

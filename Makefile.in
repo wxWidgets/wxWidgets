@@ -1878,7 +1878,8 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_unkwn.o \
 	xrcdll_xh_wizrd.o \
 	xrcdll_xmlres.o \
-	xrcdll_xmlrsall.o
+	xrcdll_xmlrsall.o \
+	xrcdll_xh_bookctrlbase.o
 XRCDLL_ODEP =  $(_____pch_wxprec_xrcdll_wx_wxprec_h_gch___depname)
 XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
@@ -1953,7 +1954,8 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_unkwn.o \
 	xrclib_xh_wizrd.o \
 	xrclib_xmlres.o \
-	xrclib_xmlrsall.o
+	xrclib_xmlrsall.o \
+	xrclib_xh_bookctrlbase.o
 XRCLIB_ODEP =  $(_____pch_wxprec_xrclib_wx_wxprec_h_gch___depname)
 AUIDLL_CXXFLAGS = $(__auidll_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
@@ -4147,6 +4149,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_unkwn.h \
 	wx/xrc/xh_wizrd.h \
 	wx/xrc/xmlres.h \
+	wx/xrc/xh_bookctrlbase.h \
 	wx/aui/framemanager.h \
 	wx/aui/dockart.h \
 	wx/aui/floatpane.h \
@@ -4465,6 +4468,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_wizrd.o \
 	monodll_xmlres.o \
 	monodll_xmlrsall.o \
+	monodll_xh_bookctrlbase.o \
 	monodll_framemanager.o \
 	monodll_dockart.o \
 	monodll_floatpane.o \
@@ -6475,6 +6479,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_wizrd.o \
 	monolib_xmlres.o \
 	monolib_xmlrsall.o \
+	monolib_xh_bookctrlbase.o \
 	monolib_framemanager.o \
 	monolib_dockart.o \
 	monolib_floatpane.o \
@@ -17643,6 +17648,9 @@ monodll_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(MONODLL_ODEP)
 monodll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
 
+monodll_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
+
 monodll_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
 
@@ -22961,6 +22969,9 @@ monolib_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(MONOLIB_ODEP)
 
 monolib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
+
+monolib_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
 
 monolib_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
@@ -36693,6 +36704,9 @@ xrcdll_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCDLL_ODEP)
 xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
 
+xrcdll_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
+
 xrclib_xh_activityindicator.o: $(srcdir)/src/xrc/xh_activityindicator.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_activityindicator.cpp
 
@@ -36896,6 +36910,9 @@ xrclib_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCLIB_ODEP)
 
 xrclib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
+
+xrclib_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
 
 auidll_version_rc.o: $(srcdir)/src/msw/version.rc $(AUIDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_66) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_AUI

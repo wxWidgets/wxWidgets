@@ -229,6 +229,9 @@
     <ClCompile Include="..\..\src\xrc\xmlrsall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xrc\xh_bookctrlbase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -438,6 +441,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xmlres.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\xrc\xh_bookctrlbase.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
   </ItemGroup>

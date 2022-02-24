@@ -2951,6 +2951,7 @@ set(XRC_SRC
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
     src/xrc/xh_dataview.cpp
+    src/xrc/xh_bookctrlbase.cpp
 )
 
 set(XRC_HDR
@@ -3022,6 +3023,7 @@ set(XRC_HDR
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
     wx/xrc/xh_dataview.h
+    wx/xrc/xh_bookctrlbase.h
 )
 
 set(XML_SRC
