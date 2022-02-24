@@ -870,6 +870,11 @@ wxAcceleratorEntry *wxMenuItem::GetAccel() const
 
 #endif // wxUSE_ACCEL
 
+wxBitmap wxMenuItem::GetBitmap() const
+{
+   return GetBitmapFromBundle(m_bitmap);
+}
+
 void wxMenuItem::Check( bool check )
 {
     wxCHECK_RET( m_menuItem, wxT("invalid menu item") );
@@ -978,7 +983,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     else if (mitem->GetBitmap().IsOk())
     {
         text = mitem->wxMenuItemBase::GetItemLabel();
-        const wxBitmap *bitmap = &mitem->GetBitmap();
+        const wxBitmap bitmap = mitem->GetBitmap();
 
         // TODO
         wxUnusedVar(bitmap);
