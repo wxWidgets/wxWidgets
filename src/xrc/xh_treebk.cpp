@@ -27,9 +27,7 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxTreebookXmlHandler, wxXmlResourceHandler);
 
 wxTreebookXmlHandler::wxTreebookXmlHandler()
-                    : wxXmlResourceHandler(),
-                      m_tbk(NULL),
-                      m_isInside(false)
+                    : m_tbk(NULL)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_TOP);
@@ -42,10 +40,33 @@ wxTreebookXmlHandler::wxTreebookXmlHandler()
 
 bool wxTreebookXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_isInside && IsOfClass(node, wxT("wxTreebook"))) ||
-            (m_isInside && IsOfClass(node, wxT("treebookpage"))));
+    return ((!IsInside() && IsOfClass(node, wxT("wxTreebook"))) ||
+            (IsInside() && IsOfClass(node, wxT("treebookpage"))));
 }
 
+
+void
+wxTreebookXmlHandler::DoAddPage(wxBookCtrlBase* book,
+                                size_t n,
+                                const PageWithAttrs& page)
+{
+    const int parent = m_pageParents.at(n);
+
+    const int imgId = page.GetImageId();
+
+    // This is a bit ugly, but as we know that we only call DoCreatePages()
+    // with a wxTreebook, this cast here is always safe.
+    wxTreebook* const tbk = static_cast<wxTreebook*>(book);
+
+    if ( parent == -1 )
+    {
+        tbk->AddPage(page.wnd, page.label, page.selected, imgId);
+    }
+    else
+    {
+        tbk->InsertSubPage(parent, page.wnd, page.label, page.selected, imgId);
+    }
+}
 
 wxObject *wxTreebookXmlHandler::DoCreateResource()
 {
@@ -59,50 +80,16 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
                     GetStyle(wxT("style")),
                     GetName());
 
-        wxImageList *imagelist = GetImageList();
-        if ( imagelist )
-            tbk->AssignImageList(imagelist);
-
         wxTreebook * old_par = m_tbk;
         m_tbk = tbk;
-
-        bool old_ins = m_isInside;
-        m_isInside = true;
 
         wxArrayTbkPageIndexes old_treeContext = m_treeContext;
         m_treeContext.Clear();
 
-        wxVector<newPage> old_pages = m_bookPages;
-        m_bookPages.clear();
+        wxVector<int> parentsSave;
+        m_pageParents.swap(parentsSave);
 
-        wxVector<wxBitmapBundle> old_images = m_bookImages;
-        m_bookImages.clear();
-
-        CreateChildren(m_tbk, true/*only this handler*/);
-
-        if ( !m_bookImages.empty() )
-        {
-            m_tbk->SetImages(m_bookImages);
-        }
-        for ( size_t i = 0; i < m_bookPages.size(); ++i )
-        {
-            const newPage& currentPage = m_bookPages.at(i);
-            int imgId = currentPage.bmpId;
-            if ( imgId == -1 )
-            {
-                imgId = currentPage.imgId;
-            }
-            if( currentPage.depth == 0 )
-            {
-                m_tbk->AddPage(currentPage.wnd,
-                    currentPage.label, currentPage.selected, imgId);
-            }
-            else
-            {
-                m_tbk->InsertSubPage(currentPage.pos, currentPage.wnd,
-                    currentPage.label, currentPage.selected, imgId);
-            }
-        }
+        DoCreatePages(m_tbk);
 
         wxXmlNode *node = GetParamNode("object");
         int pageIndex = 0;
@@ -123,85 +110,46 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         }
 
         m_treeContext = old_treeContext;
-        m_isInside = old_ins;
         m_tbk = old_par;
-        m_bookPages = old_pages;
-        m_bookImages = old_images;
+
+        m_pageParents.swap(parentsSave);
 
         return tbk;
     }
 
 //    else ( m_class == wxT("treebookpage") )
-    wxXmlNode *n = GetParamNode(wxT("object"));
-    wxWindow *wnd = NULL;
 
-    if ( !n )
-        n = GetParamNode(wxT("object_ref"));
-
-    if (n)
-    {
-        bool old_ins = m_isInside;
-        m_isInside = false;
-        wxObject *item = CreateResFromNode(n, m_tbk, NULL);
-        m_isInside = old_ins;
-        wnd = wxDynamicCast(item, wxWindow);
-
-        if (wnd == NULL && item != NULL)
-        {
-            ReportError(n, "treebookpage child must be a window");
-        }
-    }
 
     size_t depth = GetLong( wxT("depth") );
 
-    if( depth <= m_treeContext.GetCount() )
+    if ( depth > m_treeContext.GetCount() )
     {
-        // first prepare the icon
-        newPage currentPage;
-        currentPage.pos = 0;
-        currentPage.imgId = -1;
-        currentPage.bmpId = -1;
-        if ( HasParam(wxT("bitmap")) )
-        {
-            m_bookImages.push_back( GetBitmapBundle(wxT("bitmap"), wxART_OTHER) );
-            currentPage.bmpId = m_bookImages.size() - 1;
-        }
-        else if ( HasParam(wxT("image")) )
-        {
-            if ( m_tbk->GetImageList() )
-            {
-                currentPage.imgId = (int)GetLong(wxT("image"));
-            }
-            else // image without image list?
-            {
-                ReportError(n, "image can only be used in conjunction "
-                               "with imagelist");
-            }
-        }
+        ReportParamError("depth", "invalid depth");
+        return NULL;
+    }
 
-        // then keep the page with the corresponding parent
-        if( depth < m_treeContext.GetCount() )
-            m_treeContext.RemoveAt(depth, m_treeContext.GetCount() - depth );
-        if( depth != 0)
-        {
-            currentPage.pos = m_treeContext.Item(depth - 1);
-        }
+    wxObject* const page = DoCreatePage(m_tbk);
+    if ( !page )
+    {
+        // Error was already reported by DoCreatePage().
+        return NULL;
+    }
 
-        currentPage.wnd = wnd;
-        currentPage.depth = depth;
-        currentPage.label = GetText(wxT("label"));
-        currentPage.selected = GetBool(wxT("selected"));
-        m_bookPages.push_back(currentPage);
-
-        m_treeContext.Add( m_bookPages.size() - 1);
-
+    // Determine the index of the parent page to use.
+    if( depth < m_treeContext.GetCount() )
+        m_treeContext.RemoveAt(depth, m_treeContext.GetCount() - depth );
+    if( depth != 0)
+    {
+        m_pageParents.push_back(m_treeContext.Item(depth - 1));
     }
     else
     {
-        ReportParamError("depth", "invalid depth");
+        m_pageParents.push_back(-1);
     }
 
-    return wnd;
+    m_treeContext.Add(m_pageParents.size() - 1);
+
+    return page;
 }
 
 #endif // wxUSE_XRC && wxUSE_TREEBOOK
