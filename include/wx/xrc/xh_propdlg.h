@@ -12,7 +12,7 @@
 
 #include "wx/xrc/xh_bookctrlbase.h"
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_BOOKCTRL
 
 class WXDLLIMPEXP_FWD_CORE wxPropertySheetDialog;
 
@@ -29,6 +29,6 @@ private:
     wxPropertySheetDialog *m_dialog;
 };
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_BOOKCTRL
 
 #endif // _WX_XH_PROPDLG_H_
