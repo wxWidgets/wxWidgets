@@ -24,30 +24,22 @@
 
 #include "wx/bookctrl.h"
 
-// ----------------------------------------------------------------------------
-// private types
-// ----------------------------------------------------------------------------
-
-struct wxBookCtrlXmlHandlerBase::PageWithAttrs
-{
-    PageWithAttrs()
-    {
-        wnd = NULL;
-        selected = false;
-        imgId =
-        bmpId = wxWithImages::NO_IMAGE;
-    }
-
-    wxWindow* wnd;
-    wxString label;
-    bool selected;
-    int imgId; // index in the image list
-    int bmpId; // index in m_bookImages vector
-};
-
 // ============================================================================
 // wxBookCtrlXmlHandlerBase implementation
 // ============================================================================
+
+wxBookCtrlXmlHandlerBase::PageWithAttrs::PageWithAttrs()
+{
+    wnd = NULL;
+    selected = false;
+    imgId =
+    bmpId = wxWithImages::NO_IMAGE;
+}
+
+int wxBookCtrlXmlHandlerBase::PageWithAttrs::GetImageId() const
+{
+    return bmpId != wxWithImages::NO_IMAGE ? bmpId : imgId;
+}
 
 wxBookCtrlXmlHandlerBase::wxBookCtrlXmlHandlerBase()
                         : m_isInside(false)
@@ -83,16 +75,11 @@ void wxBookCtrlXmlHandlerBase::DoCreatePages(wxBookCtrlBase* book)
     for ( size_t i = 0; i < m_bookPages.size(); ++i )
     {
         const PageWithAttrs& currentPage = m_bookPages.at(i);
-        int imgId = currentPage.bmpId;
-        if ( imgId == -1 )
-        {
-            imgId = currentPage.imgId;
-        }
 
         book->AddPage(currentPage.wnd,
                       currentPage.label,
                       currentPage.selected,
-                      imgId);
+                      currentPage.GetImageId());
     }
 
     m_bookImages.swap(imagesSave);

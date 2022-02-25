@@ -43,7 +43,20 @@ protected:
 private:
     // This struct contains the actual page, created by DoCreatePage(), and all
     // its attributes read from wxXmlNode.
-    struct PageWithAttrs;
+    struct PageWithAttrs
+    {
+        PageWithAttrs();
+
+        // Returns bmpId if it's valid or imgId (which can still be invalid)
+        // otherwise.
+        int GetImageId() const;
+
+        wxWindow* wnd;
+        wxString label;
+        bool selected;
+        int imgId; // index in the image list
+        int bmpId; // index in m_bookImages vector
+    };
 
     // And this vector contains all the pages created so far.
     wxVector<PageWithAttrs> m_bookPages;
