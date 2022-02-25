@@ -40,7 +40,6 @@ protected:
     // Return true if we're parsing the book control node itself.
     bool IsInside() const { return m_isInside; }
 
-private:
     // This struct contains the actual page, created by DoCreatePage(), and all
     // its attributes read from wxXmlNode.
     struct PageWithAttrs
@@ -57,6 +56,14 @@ private:
         int imgId; // index in the image list
         int bmpId; // index in m_bookImages vector
     };
+
+private:
+    // This function is implemented by just calling AddPage() in the base
+    // class, but can be overridden if something else is needed, as is e.g. the
+    // case for wxTreebookXmlHandler.
+    virtual void
+    DoAddPage(wxBookCtrlBase* book, size_t n, const PageWithAttrs& page);
+
 
     // And this vector contains all the pages created so far.
     wxVector<PageWithAttrs> m_bookPages;
