@@ -52,6 +52,14 @@ wxBookCtrlXmlHandlerBase::~wxBookCtrlXmlHandlerBase()
     // PageWithAttrs which is not fully declared in the header.
 }
 
+void
+wxBookCtrlXmlHandlerBase::DoAddPage(wxBookCtrlBase* book,
+                                    size_t WXUNUSED(n),
+                                    const PageWithAttrs& page)
+{
+    book->AddPage(page.wnd, page.label, page.selected, page.GetImageId());
+}
+
 void wxBookCtrlXmlHandlerBase::DoCreatePages(wxBookCtrlBase* book)
 {
     bool old_ins = m_isInside;
@@ -74,12 +82,7 @@ void wxBookCtrlXmlHandlerBase::DoCreatePages(wxBookCtrlBase* book)
 
     for ( size_t i = 0; i < m_bookPages.size(); ++i )
     {
-        const PageWithAttrs& currentPage = m_bookPages.at(i);
-
-        book->AddPage(currentPage.wnd,
-                      currentPage.label,
-                      currentPage.selected,
-                      currentPage.GetImageId());
+        DoAddPage(book, i, m_bookPages[i]);
     }
 
     m_bookImages.swap(imagesSave);
