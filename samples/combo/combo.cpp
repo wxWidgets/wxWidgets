@@ -538,7 +538,9 @@ public:
                style | wxCC_STD_BUTTON,
                validator,name);
 
+#ifdef wxHAS_SVG
         SetButtonBitmaps(wxBitmapBundle::FromSVGFile("three-dots.svg", wxSize(16, 16)), true);
+#endif
     }
 
     virtual void OnButtonClick() wxOVERRIDE
@@ -827,6 +829,7 @@ MyFrame::MyFrame(const wxString& title)
                                    );
 
     // Load images from disk
+#ifdef wxHAS_SVG
     wxBitmapBundle bmpNormal = wxBitmapBundle::FromSVGFile("dropbutn.svg", wxSize(16, 16));
     wxBitmapBundle bmpPressed = wxBitmapBundle::FromSVGFile("dropbutp.svg", wxSize(16, 16));
     wxBitmapBundle bmpHover = wxBitmapBundle::FromSVGFile("dropbuth.svg", wxSize(16, 16));
@@ -838,6 +841,7 @@ MyFrame::MyFrame(const wxString& title)
     }
     else
         wxLogError("Dropbutton images not found");
+#endif
 
     //odc2->SetButtonPosition(0, // width adjustment
     //                        0, // height adjustment
