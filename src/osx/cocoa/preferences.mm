@@ -74,7 +74,7 @@ public:
                   wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX | wxMINIMIZE_BOX)),
           m_toolbarRealized(false),
-          m_visiblePage(NULL)
+          m_visibleTool(NULL)
     {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
         if ( WX_IS_MACOS_AVAILABLE(11,0) )
@@ -124,6 +124,10 @@ public:
             OnSelectPageForTool(first);
             m_toolbar->OSXSelectTool(first->GetId());
         }
+        else if ( show && m_visibleTool )
+        {
+            OnSelectPageForTool(m_visibleTool);
+        }
 
         return wxFrame::Show(show);
     }
@@ -158,8 +162,6 @@ private:
         {
             info.win = info.page->CreateWindow(this);
             info.win->Hide();
-            // fill the page with data using wxEVT_INIT_DIALOG/TransferDataToWindow:
-            info.win->InitDialog();
         }
 
         return info.win;
@@ -201,16 +203,28 @@ private:
         wxCHECK_RET( info, "toolbar item lacks client data" );
 
         wxWindow *win = GetPageWindow(*info);
+        // Fill the page with data using wxEVT_INIT_DIALOG/TransferDataToWindow:
+        // This could result in the page resizing as controls are updated
+        win->InitDialog();
+
         FitPageWindow(win);
 
         // When the page changes in a native preferences dialog, the sequence
         // of events is thus:
 
         // 1. the old page is hidden, only gray background remains
-        if ( m_visiblePage )
-            m_visiblePage->Hide();
-        m_visiblePage = win;
+        if ( m_visibleTool)
+        {
+            PageInfo *visibleInfo = static_cast<PageInfo*>(m_visibleTool->GetClientData());
+            wxCHECK_RET( visibleInfo, "toolbar item lacks client data" );
+            if ( visibleInfo->win )
+                visibleInfo->win->Hide();
 
+        }
+        m_visibleTool = tool;
+
+
+        
         //   2. window is resized to fix the new page, with animation
         //      (in our case, using overriden DoMoveWindow())
         SetClientSize(win->GetSize());
@@ -251,7 +265,7 @@ private:
 
     wxToolBar *m_toolbar;
     bool       m_toolbarRealized;
-    wxWindow  *m_visiblePage;
+    const wxToolBarToolBase *m_visibleTool;
 };
 
 
