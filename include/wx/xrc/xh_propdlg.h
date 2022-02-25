@@ -12,7 +12,7 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_BOOKCTRL
 
 class WXDLLIMPEXP_FWD_CORE wxPropertySheetDialog;
 
@@ -32,6 +32,6 @@ private:
     wxVector<size_t> m_bookImagesIdx;
 };
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_BOOKCTRL
 
 #endif // _WX_XH_PROPDLG_H_
