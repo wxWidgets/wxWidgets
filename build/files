@@ -2832,6 +2832,7 @@ XRC_SRC =
     src/xrc/xh_bmp.cpp
     src/xrc/xh_bmpcbox.cpp
     src/xrc/xh_bmpbt.cpp
+    src/xrc/xh_bookctrlbase.cpp
     src/xrc/xh_bttn.cpp
     src/xrc/xh_cald.cpp
     src/xrc/xh_chckb.cpp
@@ -2902,6 +2903,7 @@ XRC_HDR =
     wx/xrc/xh_bmpbt.h
     wx/xrc/xh_bmp.h
     wx/xrc/xh_bmpcbox.h
+    wx/xrc/xh_bookctrlbase.h
     wx/xrc/xh_bttn.h
     wx/xrc/xh_cald.h
     wx/xrc/xh_chckb.h

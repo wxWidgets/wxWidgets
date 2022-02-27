@@ -9,13 +9,13 @@
 #ifndef _WX_XH_NOTBK_H_
 #define _WX_XH_NOTBK_H_
 
-#include "wx/xrc/xmlres.h"
+#include "wx/xrc/xh_bookctrlbase.h"
 
 #if wxUSE_XRC && wxUSE_NOTEBOOK
 
 class WXDLLIMPEXP_FWD_CORE wxNotebook;
 
-class WXDLLIMPEXP_XRC wxNotebookXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxNotebookXmlHandler : public wxBookCtrlXmlHandlerBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler);
 
@@ -25,7 +25,6 @@ public:
     virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
 private:
-    bool m_isInside;
     wxNotebook *m_notebook;
 };
 
