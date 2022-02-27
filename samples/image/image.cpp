@@ -127,6 +127,12 @@ enum
     ID_ROTATE_LEFT = wxID_HIGHEST+1,
     ID_ROTATE_RIGHT,
     ID_RESIZE,
+    ID_ZOOM_x2,
+    ID_ZOOM_DC,
+    ID_ZOOM_NEAREST,
+    ID_ZOOM_BILINEAR,
+    ID_ZOOM_BICUBIC,
+    ID_ZOOM_BOX_AVERAGE,
     ID_PAINT_BG
 };
 
@@ -189,6 +195,7 @@ private:
 
         m_bitmap = bitmap;
         m_zoom = 1.;
+        m_useImageForZoom = false;
 
         wxMenu *menu = new wxMenu;
         menu->Append(wxID_SAVEAS);
@@ -197,9 +204,17 @@ private:
                               "Uncheck this for transparent images");
         menu->AppendSeparator();
         menu->Append(ID_RESIZE, "&Fit to window\tCtrl-F");
+        menu->AppendSeparator();
         menu->Append(wxID_ZOOM_IN, "Zoom &in\tCtrl-+");
         menu->Append(wxID_ZOOM_OUT, "Zoom &out\tCtrl--");
         menu->Append(wxID_ZOOM_100, "Reset zoom to &100%\tCtrl-1");
+        menu->Append(ID_ZOOM_x2, "Double zoom level\tCtrl-2");
+        menu->AppendSeparator();
+        menu->AppendRadioItem(ID_ZOOM_DC, "Use wx&DC for zoomin\tShift-Ctrl-D");
+        menu->AppendRadioItem(ID_ZOOM_NEAREST, "Use rescale nearest\tShift-Ctrl-N");
+        menu->AppendRadioItem(ID_ZOOM_BILINEAR, "Use rescale bilinear\tShift-Ctrl-L");
+        menu->AppendRadioItem(ID_ZOOM_BICUBIC, "Use rescale bicubic\tShift-Ctrl-C");
+        menu->AppendRadioItem(ID_ZOOM_BOX_AVERAGE, "Use rescale box average\tShift-Ctrl-B");
         menu->AppendSeparator();
         menu->Append(ID_ROTATE_LEFT, "Rotate &left\tCtrl-L");
         menu->Append(ID_ROTATE_RIGHT, "Rotate &right\tCtrl-R");
@@ -234,14 +249,27 @@ private:
         if ( GetMenuBar()->IsChecked(ID_PAINT_BG) )
             dc.Clear();
 
-        dc.SetUserScale(m_zoom, m_zoom);
+        const int width = int(m_zoom * m_bitmap.GetWidth());
+        const int height = int(m_zoom * m_bitmap.GetHeight());
+
+        wxBitmap bitmap;
+        if ( m_useImageForZoom )
+        {
+            bitmap = m_bitmap.ConvertToImage().Scale(width, height,
+                                                     m_resizeQuality);
+        }
+        else
+        {
+            dc.SetUserScale(m_zoom, m_zoom);
+            bitmap = m_bitmap;
+        }
 
         const wxSize size = GetClientSize();
         dc.DrawBitmap
            (
-                m_bitmap,
-                dc.DeviceToLogicalX((size.x - int(m_zoom * m_bitmap.GetWidth())) / 2),
-                dc.DeviceToLogicalY((size.y - int(m_zoom * m_bitmap.GetHeight())) / 2),
+                bitmap,
+                dc.DeviceToLogicalX((size.x - width) / 2),
+                dc.DeviceToLogicalY((size.y - height) / 2),
                 true /* use mask */
            );
     }
@@ -442,14 +470,66 @@ private:
 
     void OnZoom(wxCommandEvent& event)
     {
-        if ( event.GetId() == wxID_ZOOM_IN )
-            m_zoom *= 1.2;
-        else if ( event.GetId() == wxID_ZOOM_OUT )
-            m_zoom /= 1.2;
-        else // wxID_ZOOM_100
-            m_zoom = 1.;
+        switch ( event.GetId() )
+        {
+            case wxID_ZOOM_IN:
+                m_zoom *= 1.2;
+                break;
+
+            case wxID_ZOOM_OUT:
+                m_zoom /= 1.2;
+                break;
+
+            case wxID_ZOOM_100:
+                m_zoom = 1.;
+                break;
+
+            case ID_ZOOM_x2:
+                m_zoom *= 2.;
+                break;
+
+            default:
+                wxFAIL_MSG("unknown zoom command");
+                return;
+        }
 
         UpdateStatusBar();
+    }
+
+    void OnUseZoom(wxCommandEvent& event)
+    {
+        bool useImageForZoom = true;
+
+        switch ( event.GetId() )
+        {
+            case ID_ZOOM_DC:
+                useImageForZoom = false;
+                break;
+
+            case ID_ZOOM_NEAREST:
+                m_resizeQuality = wxIMAGE_QUALITY_NEAREST;
+                break;
+
+            case ID_ZOOM_BILINEAR:
+                m_resizeQuality = wxIMAGE_QUALITY_BILINEAR;
+                break;
+
+            case ID_ZOOM_BICUBIC:
+                m_resizeQuality = wxIMAGE_QUALITY_BICUBIC;
+                break;
+
+            case ID_ZOOM_BOX_AVERAGE:
+                m_resizeQuality = wxIMAGE_QUALITY_BOX_AVERAGE;
+                break;
+
+            default:
+                wxFAIL_MSG("unknown use for zoom command");
+                return;
+        }
+
+        m_useImageForZoom = useImageForZoom;
+
+        Refresh();
     }
 
     void OnRotate(wxCommandEvent& event)
@@ -517,6 +597,11 @@ private:
 
     wxBitmap m_bitmap;
     double m_zoom;
+
+    // If false, then wxDC is used for zooming. If true, then m_resizeQuality
+    // is used with wxImage::Scale() for zooming.
+    bool m_useImageForZoom;
+    wxImageResizeQuality m_resizeQuality;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -946,6 +1031,13 @@ wxBEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_MENU(wxID_ZOOM_IN, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_OUT, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_100, MyImageFrame::OnZoom)
+    EVT_MENU(ID_ZOOM_x2, MyImageFrame::OnZoom)
+
+    EVT_MENU(ID_ZOOM_DC, MyImageFrame::OnUseZoom)
+    EVT_MENU(ID_ZOOM_NEAREST, MyImageFrame::OnUseZoom)
+    EVT_MENU(ID_ZOOM_BILINEAR, MyImageFrame::OnUseZoom)
+    EVT_MENU(ID_ZOOM_BICUBIC, MyImageFrame::OnUseZoom)
+    EVT_MENU(ID_ZOOM_BOX_AVERAGE, MyImageFrame::OnUseZoom)
 wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------

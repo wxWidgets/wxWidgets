@@ -837,8 +837,8 @@ public:
         This function is just a convenient wrapper for wxImage::Rescale() used
         to resize the given @a bmp to the requested size. If you need more
         control over resizing, e.g. to specify the quality option different
-        from ::wxIMAGE_QUALITY_HIGH used by default, please use wxImage
-        function directly instead.
+        from ::wxIMAGE_QUALITY_NEAREST used by this function, please use the
+        wxImage function directly instead.
 
         Both the bitmap itself and size must be valid.
 
