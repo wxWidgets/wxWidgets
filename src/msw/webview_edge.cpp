@@ -989,8 +989,7 @@ wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo()
             wxWebViewEdgeImpl::ms_browserExecutableDir.wc_str(), &nativeVersionStr);
         if (SUCCEEDED(hr) && nativeVersionStr)
         {
-            wxString versionStr = nativeVersionStr;
-            wxStringTokenizer tk(versionStr, ". ");
+            wxStringTokenizer tk(wxString(nativeVersionStr), ". ");
             // Ignore the return value because if the version component is missing
             // or invalid (i.e. non-numeric), the only thing we can do is to ignore
             // it anyhow.
