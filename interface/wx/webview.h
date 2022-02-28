@@ -362,6 +362,9 @@ public:
       loaded and Edge (Chromium) is installed)
     - Make sure to add a note about using the WebView2 SDK to your application
       documentation, as required by its licence
+    - With Visual Studio 2019 or newer @c wxUSE_WEBVIEW_EDGE_STATIC can be used
+      to static link the loader and remove the dependency on @c WebView2Loader.dll
+      at runtime.
 
     If enabled and available at runtime Edge will be selected as the default
     backend. If you require the IE backend use @c wxWebViewBackendIE when

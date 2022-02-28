@@ -17,10 +17,6 @@ typedef struct _GdkPixbuf GdkPixbuf;
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 class WXDLLIMPEXP_FWD_CORE wxCursor;
 
-#ifdef __WXGTK3__
-    #define wxHAS_BITMAP_SCALE_FACTOR
-#endif
-
 //-----------------------------------------------------------------------------
 // wxMask
 //-----------------------------------------------------------------------------
@@ -87,12 +83,13 @@ public:
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
     bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
-    bool Create(int width, int height, const wxDC& WXUNUSED(dc))
-        { return Create(width,height); }
-#ifdef wxHAS_BITMAP_SCALE_FACTOR
-    virtual bool CreateScaled(int w, int h, int depth, double scale) wxOVERRIDE;
+#ifdef __WXGTK3__
+    bool Create(int width, int height, const wxDC& dc);
     virtual void SetScaleFactor(double scale) wxOVERRIDE;
     virtual double GetScaleFactor() const wxOVERRIDE;
+#else
+    bool Create(int width, int height, const wxDC& WXUNUSED(dc))
+        { return Create(width,height); }
 #endif
 
     virtual int GetHeight() const wxOVERRIDE;
@@ -158,6 +155,10 @@ protected:
 
     virtual wxGDIRefData* CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const wxOVERRIDE;
+
+#ifdef __WXGTK3__
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth) wxOVERRIDE;
+#endif
 
 private:
 #ifndef __WXGTK3__

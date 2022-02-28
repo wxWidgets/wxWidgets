@@ -16,7 +16,7 @@ wx_add_sample(calendar DEPENDS wxUSE_CALENDARCTRL)
 wx_add_sample(caret DEPENDS wxUSE_CARET)
 wx_add_sample(clipboard DEPENDS wxUSE_CLIPBOARD)
 wx_add_sample(collpane DEPENDS wxUSE_COLLPANE)
-wx_add_sample(combo DATA dropbuth.png dropbutn.png dropbutp.png DEPENDS wxUSE_COMBOCTRL)
+wx_add_sample(combo DATA dropbuth.svg dropbutn.svg dropbutp.svg three-dots.svg DEPENDS wxUSE_COMBOCTRL)
 wx_add_sample(config conftest.cpp DEPENDS wxUSE_CONFIG)
 wx_add_sample(console CONSOLE IMPORTANT)
 wx_add_sample(dataview IMPORTANT dataview.cpp mymodels.cpp mymodels.h DEPENDS wxUSE_DATAVIEWCTRL)
@@ -70,7 +70,7 @@ endif()
 wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
-    horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg cursor.png
+    horse.ico horse3.ani horse.svg smile.xbm toucan.png cmyk.jpg cursor.png
     NAME imagesample DEPENDS wxUSE_IMAGE)
 foreach(lang ar bg cs de fr it ka pl ru sv ja ja_JP.EUC-JP)
     list(APPEND INTERNAT_DATA_FILES ${lang}/internat.po ${lang}/internat.mo)
@@ -152,7 +152,8 @@ wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
-wx_add_sample(webview LIBRARIES wxwebview DATA ../help/doc.zip:doc.zip
+wx_add_sample(webview LIBRARIES wxwebview
+    DATA ../help/doc.zip:doc.zip
     NAME webviewsample DEPENDS wxUSE_WEBVIEW)
 if(TARGET webviewsample AND wxUSE_STC)
     wx_exe_link_libraries(webviewsample wxstc)

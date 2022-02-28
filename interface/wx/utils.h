@@ -1099,9 +1099,30 @@ bool wxIsPlatformLittleEndian();
     The returned string may be empty if the CPU architecture couldn't be
     recognized.
 
+    @see wxGetNativeCpuArchitectureName()
+
     @since 3.1.5
 */
 wxString wxGetCpuArchitectureName();
+
+/**
+    In some situations the current process and native CPU architecture may be
+    different. This returns the native CPU architecture regardless of the
+    current process CPU architecture.
+
+    Common examples for CPU architecture differences are the following:
+        - Win32 process in x64 Windows (WoW)
+        - Win32 or x64 process on ARM64 Windows (WoW64)
+        - x86_64 process on ARM64 macOS (Rosetta 2)
+
+    The returned string may be empty if the CPU architecture couldn't be
+    recognized.
+
+    @see wxGetCpuArchitectureName()
+
+    @since 3.1.6
+*/
+wxString wxGetNativeCpuArchitectureName();
 
 /**
     Returns a structure containing information about the currently running

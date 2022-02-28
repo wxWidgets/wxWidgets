@@ -157,8 +157,8 @@ static gboolean wxGtkImageDraw(GtkWidget* widget, GdkEventExpose* event)
 
     GtkAllocation alloc;
     gtk_widget_get_allocation(widget, &alloc);
-    int x = (alloc.width  - int(bitmap.GetScaledWidth() )) / 2;
-    int y = (alloc.height - int(bitmap.GetScaledHeight())) / 2;
+    int x = (alloc.width  - int(bitmap.GetLogicalWidth() )) / 2;
+    int y = (alloc.height - int(bitmap.GetLogicalHeight())) / 2;
 #ifdef __WXGTK3__
     gtk_render_background(gtk_widget_get_style_context(widget),
         cr, 0, 0, alloc.width, alloc.height);

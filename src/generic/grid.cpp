@@ -5746,12 +5746,13 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
     }
 }
 
-void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxGrid::OnSize(wxSizeEvent& event)
 {
     if (m_targetWindow != this) // check whether initialisation has been done
     {
         // reposition our children windows
         CalcWindowSizes();
+        event.Skip();
     }
 }
 
@@ -6248,16 +6249,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             break;
     }
 
-    wxGridWindow *currentGridWindow = CellToGridWindow(coords);
-
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
-        wxGridWindow *prevGridWindow = CellToGridWindow(m_currentCellCoords);
-
         DisableCellEditControl();
 
         if ( IsVisible( m_currentCellCoords, false ) )
         {
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+            RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+#else
+            wxGridWindow* prevGridWindow = CellToGridWindow(m_currentCellCoords);
             wxRect r;
             r = BlockToDeviceRect( m_currentCellCoords, m_currentCellCoords, prevGridWindow );
             if ( !m_gridLinesEnabled )
@@ -6273,12 +6274,6 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
 
-#if defined(__WXMAC__)
-            currentGridWindow->Refresh(true /*, & r */);
-
-            if ( prevGridWindow != currentGridWindow )
-                prevGridWindow->Refresh(true);
-#else
             wxClientDC prevDc( prevGridWindow );
             PrepareDCFor(prevDc, prevGridWindow);
 
@@ -6293,10 +6288,13 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-#if !defined(__WXMAC__)
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+    RefreshBlock(coords, coords);
+#else
     if ( ShouldRefresh() )
     {
         wxGridCellAttrPtr attr = GetCellAttrPtr( coords );
+        wxGridWindow* currentGridWindow = CellToGridWindow(coords);
         wxClientDC dc( currentGridWindow );
         PrepareDCFor(dc, currentGridWindow);
         DrawCellHighlight( dc, attr.get() );
@@ -9013,13 +9011,7 @@ void wxGrid::SetCellHighlightColour( const wxColour& colour )
     {
         m_cellHighlightColour = colour;
 
-        wxGridWindow *gridWindow = CellToGridWindow(m_currentCellCoords);
-
-        wxClientDC dc( gridWindow );
-        PrepareDCFor( dc, gridWindow );
-
-        wxGridCellAttrPtr attr = GetCellAttrPtr(m_currentCellCoords);
-        DrawCellHighlight(dc, attr.get());
+        RefreshBlock(m_currentCellCoords, m_currentCellCoords);
     }
 }
 
@@ -9100,21 +9092,14 @@ void wxGrid::RedrawGridLines()
     if ( !ShouldRefresh() )
         return;
 
-    if ( GridLinesEnabled() )
-    {
-        DrawAllGridLines();
-    }
-    else // remove the grid lines
-    {
-        m_gridWin->Refresh();
+    m_gridWin->Refresh();
 
-        if ( m_frozenColGridWin )
-            m_frozenColGridWin->Refresh();
-        if ( m_frozenRowGridWin )
-            m_frozenRowGridWin->Refresh();
-        if ( m_frozenCornerGridWin )
-            m_frozenCornerGridWin->Refresh();
-    }
+    if ( m_frozenColGridWin )
+        m_frozenColGridWin->Refresh();
+    if ( m_frozenRowGridWin )
+        m_frozenRowGridWin->Refresh();
+    if ( m_frozenCornerGridWin )
+        m_frozenCornerGridWin->Refresh();
 }
 
 void wxGrid::EnableGridLines( bool enable )

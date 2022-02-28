@@ -578,7 +578,7 @@ public:
 
     // don't use integer masks any more, use string trace masks instead
 #if WXWIN_COMPATIBILITY_2_8
-    static wxDEPRECATED_INLINE( void SetTraceMask(wxTraceMask ulMask),
+    wxDEPRECATED_INLINE( static void SetTraceMask(wxTraceMask ulMask),
         ms_ulTraceMask = ulMask; )
 
     // this one can't be marked deprecated as it's used in our own wxLogger

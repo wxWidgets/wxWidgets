@@ -218,7 +218,7 @@ public:
 private:
     wxFont m_font;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFontPickerEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxFontPickerEvent);
 };
 
 // ----------------------------------------------------------------------------

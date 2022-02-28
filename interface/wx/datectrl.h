@@ -122,7 +122,7 @@ public:
             The window style, see the description of the styles in the class
             documentation.
         @param validator
-            Validator which can be used for additional date checks.
+            Validator which can be used for additional data checks.
         @param name
             Control name.
 

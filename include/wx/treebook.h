@@ -132,13 +132,13 @@ public:
     virtual int SetSelection(size_t n) wxOVERRIDE { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
     virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
-    virtual void SetImageList(wxImageList *imageList) wxOVERRIDE;
-    virtual void AssignImageList(wxImageList *imageList);
     virtual bool DeleteAllPages() wxOVERRIDE;
 
 protected:
     // Implementation of a page removal. See DeletPage for comments.
     wxTreebookPage *DoRemovePage(size_t pos) wxOVERRIDE;
+
+    virtual void OnImagesChanged() wxOVERRIDE;
 
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const wxOVERRIDE { return true; }

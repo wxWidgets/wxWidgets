@@ -202,6 +202,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
     m_bitness = wxIsPlatform64Bit() ? wxBITNESS_64 : wxBITNESS_32;
     m_cpuArch = wxGetCpuArchitectureName();
+    m_nativeCpuArch = wxGetNativeCpuArchitectureName();
 
 #ifdef __LINUX__
     m_ldi = wxGetLinuxDistributionInfo();

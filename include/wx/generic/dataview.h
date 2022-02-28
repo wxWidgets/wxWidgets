@@ -284,7 +284,7 @@ public:
 
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource( const wxDataFormat &format ) wxOVERRIDE;
-    virtual bool EnableDropTarget( const wxDataFormat &format ) wxOVERRIDE;
+    virtual bool DoEnableDropTarget(const wxVector<wxDataFormat>& formats) wxOVERRIDE;
 #endif // wxUSE_DRAG_AND_DROP
 
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE;

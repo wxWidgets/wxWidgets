@@ -140,7 +140,7 @@ public:
         @param style
             The window style, see wxCP_* flags.
         @param validator
-            Validator which can be used for additional date checks.
+            Validator which can be used for additional data checks.
         @param name
             Control name.
 

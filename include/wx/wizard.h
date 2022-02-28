@@ -27,7 +27,7 @@
 #include "wx/dialog.h"      // the base class
 #include "wx/panel.h"       // ditto
 #include "wx/event.h"       // wxEVT_XXX constants
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 // Extended style to specify a help button
 #define wxWIZARD_EX_HELPBUTTON   0x00000010
@@ -62,10 +62,10 @@ public:
     // that no other parameters are needed because the wizard will resize and
     // reposition the page anyhow
     wxWizardPage(wxWizard *parent,
-                 const wxBitmap& bitmap = wxNullBitmap);
+                 const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     bool Create(wxWizard *parent,
-                const wxBitmap& bitmap = wxNullBitmap);
+                const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     // these functions are used by the wizard to show another page when the
     // user chooses "Back" or "Next" button
@@ -76,7 +76,7 @@ public:
     // cases - override this method if you want to create the bitmap to be used
     // dynamically or to do something even more fancy. It's ok to return
     // wxNullBitmap from here - the default one will be used then.
-    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+    virtual wxBitmap GetBitmap() const { return m_bitmap.GetBitmapFor(this); }
 
 #if wxUSE_VALIDATORS
     // Override the base functions to allow a validator to be assigned to this page.
@@ -103,7 +103,7 @@ protected:
     // common part of ctors:
     void Init();
 
-    wxBitmap m_bitmap;
+    wxBitmapBundle m_bitmap;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWizardPage);
@@ -127,7 +127,7 @@ public:
     wxWizardPageSimple(wxWizard *parent,
                        wxWizardPage *prev = NULL,
                        wxWizardPage *next = NULL,
-                       const wxBitmap& bitmap = wxNullBitmap)
+                       const wxBitmapBundle& bitmap = wxBitmapBundle())
     {
         Create(parent, prev, next, bitmap);
     }
@@ -135,7 +135,7 @@ public:
     bool Create(wxWizard *parent = NULL, // let it be default ctor too
                 wxWizardPage *prev = NULL,
                 wxWizardPage *next = NULL,
-                const wxBitmap& bitmap = wxNullBitmap)
+                const wxBitmapBundle& bitmap = wxBitmapBundle())
     {
         m_prev = prev;
         m_next = next;
@@ -197,7 +197,7 @@ public:
         wxWizard(wxWindow *parent,
                  int id = wxID_ANY,
                  const wxString& title = wxEmptyString,
-                 const wxBitmap& bitmap = wxNullBitmap,
+                 const wxBitmapBundle& bitmap = wxBitmapBundle(),
                  const wxPoint& pos = wxDefaultPosition,
                  long style = wxDEFAULT_DIALOG_STYLE);
     */
@@ -285,7 +285,7 @@ private:
     bool m_direction;
     wxWizardPage*    m_page;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWizardEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWizardEvent);
 };
 
 // ----------------------------------------------------------------------------

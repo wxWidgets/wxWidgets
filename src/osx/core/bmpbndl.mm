@@ -113,7 +113,7 @@ public:
     ~wxOSXImageBundleImpl();
 
     virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 };
 
@@ -138,7 +138,7 @@ wxSize wxOSXImageBundleImpl::GetDefaultSize() const
     return wxSize(sz.width, sz.height);
 }
 
-wxSize wxOSXImageBundleImpl::GetPreferredSizeAtScale(double scale) const
+wxSize wxOSXImageBundleImpl::GetPreferredBitmapSizeAtScale(double scale) const
 {
     // The system always performs scaling, as the scaling factor is integer and
     // so it doesn't make sense to round it up or down, hence we should use the
@@ -146,7 +146,7 @@ wxSize wxOSXImageBundleImpl::GetPreferredSizeAtScale(double scale) const
     return GetDefaultSize()*scale;
 }
 
-wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& size)
+wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& WXUNUSED(size))
 {
     return wxBitmap();
 }
@@ -164,8 +164,7 @@ WXImage wxOSXImageFromBitmap( const wxBitmap& bmp)
 {
     WXImage image;
 #if wxOSX_USE_COCOA
-    double scale = bmp.GetScaleFactor();
-    NSSize sz = NSMakeSize( bmp.GetWidth()*scale, bmp.GetHeight()*scale);
+    NSSize sz = NSMakeSize(bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
     image = [[NSImage alloc] initWithSize:sz];
     wxOSXAddBitmapToImage(image, bmp);
 #else
@@ -254,7 +253,7 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
         image = wxOSXImageFromBitmap(bmp);
 
         // unconditionally try to add a 2x version, if there really is a different one
-        wxSize doublesz = impl->GetPreferredSizeAtScale(2.0);
+        wxSize doublesz = impl->GetPreferredBitmapSizeAtScale(2.0);
         if ( doublesz != sz )
         {
             bmp = const_cast<wxBitmapBundleImpl*>(impl)->GetBitmap(doublesz);
@@ -282,3 +281,10 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
 
     return image;
 }
+
+#ifdef wxHAS_SVG
+wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSize &sizeDef)
+{
+    return wxBitmapBundle::FromSVGFile(wxFileName(wxStandardPaths::Get().GetResourcesDir(), name, "svg").GetFullPath(), sizeDef);
+}
+#endif // #ifdef wxHAS_SVG

@@ -301,6 +301,11 @@ void wxMenuItemBase::AddExtraAccel(const wxAcceleratorEntry& accel)
     m_extraAccels.push_back(accel);
 }
 
+void wxMenuItemBase::ClearExtraAccels()
+{
+    m_extraAccels.clear();
+}
+
 #endif // wxUSE_ACCEL
 
 void wxMenuItemBase::SetItemLabel(const wxString& str)
@@ -338,6 +343,23 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     return GetLabelText(text);
 }
 #endif
+
+wxBitmap wxMenuItemBase::GetBitmapFromBundle(const wxBitmapBundle& bundle) const
+{
+    wxBitmap bmp;
+    if ( bundle.IsOk() )
+    {
+        if ( m_parentMenu && m_parentMenu->GetWindow() )
+        {
+            bmp = bundle.GetBitmapFor(m_parentMenu->GetWindow());
+        }
+        else
+        {
+            bmp = bundle.GetBitmap(wxDefaultSize);
+        }
+    }
+    return bmp;
+}
 
 bool wxMenuBase::ms_locked = true;
 

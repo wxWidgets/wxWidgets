@@ -484,10 +484,10 @@ void MyPage::OnDraw(wxDC& dc)
             double padding = (double)txtPad / sqrt(2.0);
             txtX = 150;
             txtY = 200;
-            dc.DrawLine(txtX - padding, txtY, txtX + lenW, txtY - lenW); // top
-            dc.DrawLine(txtX + lenW, txtY - lenW, txtX - padding + lenH + lenW, txtY + (lenH - lenW));
-            dc.DrawLine(txtX - padding, txtY, txtX - padding + lenH, txtY + lenH);
-            dc.DrawLine(txtX - padding + lenH, txtY + lenH, txtX - padding + lenH + lenW, txtY + (lenH - lenW)); // bottom
+            dc.DrawLine(txtX - int(padding), txtY, txtX + int(lenW), txtY - int(lenW)); // top
+            dc.DrawLine(txtX + int(lenW), txtY - int(lenW), txtX - int(padding + lenH + lenW), txtY + int(lenH - lenW));
+            dc.DrawLine(txtX - int(padding), txtY, txtX - int(padding + lenH), txtY + int(lenH));
+            dc.DrawLine(txtX - int(padding + lenH), txtY + int(lenH), txtX - int(padding + lenH + lenW), txtY + int(lenH - lenW)); // bottom
             dc.DrawRotatedText(txtStr, txtX, txtY, 45);
             break;
     }

@@ -10,7 +10,7 @@
 #ifndef _WX_XH_TREEBK_H_
 #define _WX_XH_TREEBK_H_
 
-#include "wx/xrc/xmlres.h"
+#include "wx/xrc/xh_bookctrlbase.h"
 
 #if wxUSE_XRC && wxUSE_TREEBOOK
 
@@ -28,7 +28,7 @@ WX_DEFINE_USER_EXPORTED_ARRAY_SIZE_T(size_t, wxArrayTbkPageIndexes,
 // which indicates the depth of the page in the tree.
 // There is only one logical constraint on this parameter :
 // it cannot be greater than the previous page depth plus one
-class WXDLLIMPEXP_XRC wxTreebookXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxTreebookXmlHandler : public wxBookCtrlXmlHandlerBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxTreebookXmlHandler);
 
@@ -38,9 +38,16 @@ public:
     virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
 private:
+    virtual void
+    DoAddPage(wxBookCtrlBase* book, size_t n, const PageWithAttrs& page) wxOVERRIDE;
+
     wxTreebook *m_tbk;
+
+    // N-th element contains the index of the parent page at depth N.
     wxArrayTbkPageIndexes m_treeContext;
-    bool m_isInside;
+
+    // The index of the parent page or -1 if the page is a top level one.
+    wxVector<int> m_pageParents;
 };
 
 

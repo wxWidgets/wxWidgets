@@ -148,6 +148,10 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
     wxDECLARE_NO_ASSIGN_CLASS(name);                                          \
     wxDECLARE_DYNAMIC_CLASS(name)
 
+#define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(name)                      \
+    wxDECLARE_NO_ASSIGN_DEF_COPY(name);                                       \
+    wxDECLARE_DYNAMIC_CLASS(name)
+
 #define wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)                                 \
     wxDECLARE_NO_COPY_CLASS(name);                                            \
     wxDECLARE_DYNAMIC_CLASS(name)

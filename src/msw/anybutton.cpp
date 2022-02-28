@@ -75,11 +75,6 @@ using namespace wxMSWImpl;
     #endif
 #endif // wxUSE_UXTHEME
 
-// BCM_GETIDEALSIZE is defined since XP
-#ifndef BCM_GETIDEALSIZE
-    #define BCM_GETIDEALSIZE    0x1601
-#endif // BCM_GETIDEALSIZE
-
 #ifndef ODS_NOACCEL
     #define ODS_NOACCEL         0x0100
 #endif
@@ -106,13 +101,27 @@ class wxButtonImageData: public wxObject
 {
 public:
     wxButtonImageData(wxWindow* btn, const wxBitmapBundle& normalBundle)
+        : m_btn(btn)
     {
-        m_bitmapSize = normalBundle.GetPreferredSizeFor(btn);
+        m_bitmapSize = normalBundle.GetPreferredBitmapSizeFor(btn);
 
         m_bitmapBundles[wxAnyButton::State_Normal] = normalBundle;
+
+        // React to DPI changes in the future.
+        m_btn->Bind(wxEVT_DPI_CHANGED, &wxButtonImageData::OnDPIChanged, this);
     }
 
-    virtual ~wxButtonImageData() { }
+    virtual ~wxButtonImageData()
+    {
+        m_btn->Unbind(wxEVT_DPI_CHANGED, &wxButtonImageData::OnDPIChanged, this);
+    }
+
+    virtual void OnDPIChanged(wxDPIChangedEvent& event)
+    {
+        event.Skip();
+
+        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredBitmapSizeFor(m_btn);
+    }
 
     // Bitmap can be set either explicitly, when the bitmap for the given state
     // is specified by the application, or implicitly, when the bitmap for some
@@ -165,6 +174,9 @@ protected:
 
     wxBitmapBundle m_bitmapBundles[wxAnyButton::State_Max];
 
+    // the button we're associated with
+    wxWindow* const m_btn;
+
     wxDECLARE_NO_COPY_CLASS(wxButtonImageData);
 };
 
@@ -181,12 +193,8 @@ public:
     wxODButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
         : wxButtonImageData(btn, bitmapBundle)
     {
-        SetBitmap(GetBitmapFromBundle(bitmapBundle),
-                  wxAnyButton::State_Normal);
-#if wxUSE_IMAGE
-        SetBitmap(GetBitmapFromBundle(bitmapBundle).ConvertToDisabled(),
-                  wxAnyButton::State_Disabled);
-#endif
+        InitImageList();
+
         m_dir = wxLEFT;
 
         // we use margins when we have both bitmap and text, but when we have
@@ -229,6 +237,34 @@ public:
     }
 
 private:
+    void InitImageList()
+    {
+        const wxBitmap bitmap = m_bitmapBundles[wxAnyButton::State_Normal].GetBitmap(m_bitmapSize);
+
+        for ( int n = 0; n < wxAnyButton::State_Max; n++ )
+        {
+            wxBitmap stateBitmap = m_bitmapBundles[n].GetBitmap(m_bitmapSize);
+            if ( !stateBitmap.IsOk() )
+            {
+#if wxUSE_IMAGE
+                if ( n == wxAnyButton::State_Disabled )
+                    stateBitmap = bitmap.ConvertToDisabled();
+                else
+#endif // wxUSE_IMAGE
+                    stateBitmap = bitmap;
+            }
+
+            SetBitmap(stateBitmap, (wxAnyButton::State)n);
+        }
+    }
+
+    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
+    {
+        wxButtonImageData::OnDPIChanged(event);
+
+        InitImageList();
+    }
+
     // just store the values passed to us to be able to retrieve them later
     // from the drawing code
     wxBitmap m_bitmaps[wxAnyButton::State_Max];
@@ -253,8 +289,7 @@ public:
     // we must be constructed with the size of our images as we need to create
     // the image list
     wxXPButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
-        : wxButtonImageData(btn, bitmapBundle),
-          m_btn(btn)
+        : wxButtonImageData(btn, bitmapBundle)
     {
         InitImageList();
 
@@ -265,9 +300,6 @@ public:
         m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
 
         UpdateImageInfo();
-
-        // React to DPI changes in the future.
-        btn->Bind(wxEVT_DPI_CHANGED, &wxXPButtonImageData::OnDPIChanged, this);
     }
 
     virtual wxBitmap GetBitmap(wxAnyButton::State which) const wxOVERRIDE
@@ -383,7 +415,7 @@ private:
                     stateBitmap = bitmap;
             }
 
-            m_iml.Add(bitmap);
+            m_iml.Add(stateBitmap);
         }
 
         // In addition to the states supported by wxWidgets such as normal,
@@ -409,13 +441,9 @@ private:
         }
     }
 
-    void OnDPIChanged(wxDPIChangedEvent& event)
+    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
     {
-        event.Skip();
-
-        // We need to recreate the image list using the new size and re-add all
-        // bitmaps to it.
-        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredSizeFor(m_btn);
+        wxButtonImageData::OnDPIChanged(event);
 
         m_iml.Destroy();
         InitImageList();
@@ -429,10 +457,6 @@ private:
 
     // store the rest of the data in BCM_SETIMAGELIST-friendly form
     BUTTON_IMAGELIST m_data;
-
-    // the button we're associated with
-    wxWindow* const m_btn;
-
 
     wxDECLARE_NO_COPY_CLASS(wxXPButtonImageData);
     wxDECLARE_ABSTRACT_CLASS(wxXPButtonImageData);
@@ -491,7 +515,7 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     {
         // We still need some margin or the text would be overwritten, just
         // make it as small as possible.
-        sizeBtn.x += 2*win->GetCharWidth();
+        sizeBtn.x += win->GetCharWidth();
     }
     else
     {
@@ -614,16 +638,6 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
     // and also for the margins we always add internally (unless we have no
     // border at all in which case the button has exactly the same size as
     // bitmap and so no margins should be used)
-    AdjustForBitmapMargins(size);
-}
-
-void wxAnyButton::AdjustForBitmapMargins(wxSize& size) const
-{
-    wxCHECK_RET(m_imageData, wxT("shouldn't be called if no image"));
-
-    // and also for the margins we always add internally (unless we have no
-    // border at all in which case the button has exactly the same size as
-    // bitmap and so no margins should be used)
     if ( !HasFlag(wxBORDER_NONE) )
     {
         int marginH = 0,
@@ -670,51 +684,32 @@ wxSize wxAnyButton::DoGetBestSize() const
 
     wxSize size;
 
-    // The preferred way is to use BCM_GETIDEALSIZE, but it only works properly
-    // if there is a text label in the button and can't be used under old
-    // systems or without a manifest.
-    if ( !IsOwnerDrawn() && ShowsLabel() &&
-            wxGetWinVersion() >= wxWinVersion_Vista )
+    // Account for the text part if we have it.
+    if ( ShowsLabel() )
     {
-        SIZE idealSize = { 0, 0 };
-        if ( ::SendMessage(GetHwnd(), BCM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
-            size.Set(idealSize.cx, idealSize.cy);
-
-        if ( m_imageData )
-            AdjustForBitmapMargins(size);
-    }
-
-    // If we failed to set the size using BCM_GETIDEALSIZE above, determine it
-    // ourselves.
-    if ( size == wxSize() )
-    {
-        // Account for the text part if we have it.
-        if ( ShowsLabel() )
-        {
-            int flags = 0;
-            if ( HasFlag(wxBU_EXACTFIT) )
-                flags |= wxMSWButton::Size_ExactFit;
-            if ( DoGetAuthNeeded() )
-                flags |= wxMSWButton::Size_AuthNeeded;
+        int flags = 0;
+        if ( HasFlag(wxBU_EXACTFIT) )
+            flags |= wxMSWButton::Size_ExactFit;
+        if ( DoGetAuthNeeded() )
+            flags |= wxMSWButton::Size_AuthNeeded;
 
 #if wxUSE_MARKUP
-            if ( m_markupText )
-            {
-                wxClientDC dc(self);
-                size = wxMSWButton::GetFittingSize(self,
-                                                   m_markupText->Measure(dc),
-                                                   flags);
-            }
-            else // Normal plain text (but possibly multiline) label.
-#endif // wxUSE_MARKUP
-            {
-                size = wxMSWButton::ComputeBestFittingSize(self, flags);
-            }
+        if ( m_markupText )
+        {
+            wxClientDC dc(self);
+            size = wxMSWButton::GetFittingSize(self,
+                                               m_markupText->Measure(dc),
+                                               flags);
         }
-
-        if ( m_imageData )
-            AdjustForBitmapSize(size);
+        else // Normal plain text (but possibly multiline) label.
+#endif // wxUSE_MARKUP
+        {
+            size = wxMSWButton::ComputeBestFittingSize(self, flags);
+        }
     }
+
+    if ( m_imageData )
+        AdjustForBitmapSize(size);
 
     return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
@@ -783,29 +778,29 @@ wxBitmap wxAnyButton::DoGetBitmap(State which) const
 
 void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
 {
+    // Normal image sets images for all states of the button, or deletes the
+    // images if the bundle is invalid.
+    // Delete the wxButtonImageData so when the new one is created, all states
+    // are initialized.
+    if ( which == State_Normal )
+    {
+        delete m_imageData;
+        m_imageData = NULL;
+    }
+
     if ( !bitmapBundle.IsOk() )
     {
-        if ( m_imageData  )
+        if ( m_imageData )
         {
-            // Normal image is special: setting it enables images for the
-            // button and resetting it to nothing disables all of them.
-            if ( which == State_Normal )
-            {
-                delete m_imageData;
-                m_imageData = NULL;
-            }
-            else
-            {
-                // Invalidate the current bundle, if any.
-                m_imageData->SetBitmapBundle(bitmapBundle, which);
+            // Invalidate the current bundle, if any.
+            m_imageData->SetBitmapBundle(bitmapBundle, which);
 
-                // Replace the removed bitmap with the normal one.
-                wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
-                m_imageData->SetBitmap(which == State_Disabled
-                                            ? bmpNormal.ConvertToDisabled()
-                                            : bmpNormal,
-                                       which);
-            }
+            // Replace the removed bitmap with the normal one.
+            wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
+            m_imageData->SetBitmap(which == State_Disabled
+                                        ? bmpNormal.ConvertToDisabled()
+                                        : bmpNormal,
+                                    which);
         }
 
         return;
@@ -817,7 +812,8 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
 
     // Check if we already had bitmaps of different size.
     if ( m_imageData &&
-          bitmapBundle.GetDefaultSize() != m_imageData->GetBitmapSize() )
+          bitmapBundle.GetDefaultSize() !=
+            m_imageData->GetBitmapBundle(State_Normal).GetDefaultSize() )
     {
         wxASSERT_MSG( which == State_Normal,
                       "Must set normal bitmap with the new size first" );

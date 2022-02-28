@@ -341,7 +341,7 @@ wxArrayVideoModes wxDisplayImplMacOSX::GetModes(const wxVideoMode& mode) const
                             CGDisplayModeGetWidth(theValue),
                             CGDisplayModeGetHeight(theValue),
                             wxOSXCGDisplayModeGetBitsPerPixel(theValue),
-                            CGDisplayModeGetRefreshRate(theValue));
+                            int(CGDisplayModeGetRefreshRate(theValue)));
         
         if (theMode.Matches( mode ))
             resultModes.Add( theMode );
@@ -358,7 +358,7 @@ wxVideoMode wxDisplayImplMacOSX::GetCurrentMode() const
                        CGDisplayModeGetWidth(theValue),
                        CGDisplayModeGetHeight(theValue),
                        wxOSXCGDisplayModeGetBitsPerPixel(theValue),
-                       CGDisplayModeGetRefreshRate(theValue));
+                       int(CGDisplayModeGetRefreshRate(theValue)));
 }
 
 bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
@@ -385,7 +385,7 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
                             CGDisplayModeGetWidth(theValue),
                             CGDisplayModeGetHeight(theValue),
                             wxOSXCGDisplayModeGetBitsPerPixel(theValue),
-                            CGDisplayModeGetRefreshRate(theValue));
+                            int(CGDisplayModeGetRefreshRate(theValue)));
         
         if ( theMode.GetWidth() == mode.GetWidth() && theMode.GetHeight() == mode.GetHeight() &&
             ( mode.GetDepth() == 0 || theMode.GetDepth() == mode.GetDepth() ) &&

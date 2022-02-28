@@ -14,6 +14,13 @@ enum
     wxUSER_ATTENTION_ERROR = 2  ///< Results in a more drastic action.
 };
 
+// Values for wxTopLevelWindow::GetContentProtection() and wxTopLevelWindow::SetContentProtection()
+enum wxContentProtection
+{
+    wxCONTENT_PROTECTION_NONE,   ///< Window contents are visible in screen captures
+    wxCONTENT_PROTECTION_ENABLED ///< Window contents are not visible in screen captures
+};
+
 /**
     Styles used with wxTopLevelWindow::ShowFullScreen().
 */
@@ -681,6 +688,39 @@ public:
         @see EnableFullScreenView(), IsFullScreen()
     */
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+
+    /**
+        Get the current content protection of the window.
+
+        @see SetContentProtection()
+
+        @since 3.1.6
+    */
+    virtual wxContentProtection GetContentProtection() const;
+
+    /**
+        Set content protection for the window.
+
+        When content protection is enabled contents of this window will not
+        be included in screen captures.
+
+        Obviously this can't provide absolute security as there might be
+        workarounds and tools that bypass this protection. Additionally a
+        screen could always be photographed.
+
+        @return @true if the content protection was changed, @false if running
+        under an unsupported OS.
+
+        @note Windows 7 or newer is required but any macOS version is supported.
+
+        @onlyfor{wxmsw,wxosx}
+
+        @see GetContentProtection()
+
+        @since 3.1.6
+    */
+    virtual bool SetContentProtection(wxContentProtection contentProtection);
+
 
     /**
         This method is specific to wxUniversal port.

@@ -922,7 +922,6 @@ public:
     };
 
     bool EnableDragSource( const wxDataFormat &format );
-    bool EnableDropTarget( const wxDataFormat &format );
 
     void RefreshDropHint();
     void RemoveDropHint();
@@ -1032,8 +1031,6 @@ private:
     bool                        m_dragEnabled;
     wxDataFormat                m_dragFormat;
 
-    bool                        m_dropEnabled;
-    wxDataFormat                m_dropFormat;
     DropItemInfo                m_dropItemInfo;
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -1517,7 +1514,7 @@ wxSize wxDataViewProgressRenderer::GetSize() const
     // renderers, it doesn't have a "good" width for the content. This makes it
     // grow to the whole column, which is pretty much always the desired
     // behaviour. Keep the height fixed so that the progress bar isn't too fat.
-    return wxSize(-1, 12);
+    return GetView()->FromDIP(wxSize(-1, 12));
 }
 
 // ---------------------------------------------------------
@@ -1556,11 +1553,13 @@ bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 {
     int xoffset = 0;
 
-    const wxIcon& icon = m_value.GetIcon();
-    if ( icon.IsOk() )
+    const wxBitmapBundle& bb = m_value.GetBitmapBundle();
+    if ( bb.IsOk() )
     {
-        dc->DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetHeight())/2);
-        xoffset = icon.GetWidth()+4;
+        wxWindow* const dvc = GetView();
+        const wxIcon& icon = bb.GetIconFor(dvc);
+        dc->DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetLogicalHeight())/2);
+        xoffset = icon.GetLogicalWidth() + dvc->FromDIP(4);
     }
 
     RenderText(m_value.GetText(), xoffset, rect, dc, state);
@@ -1570,15 +1569,18 @@ bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 
 wxSize wxDataViewIconTextRenderer::GetSize() const
 {
+    wxWindow* const dvc = GetView();
+
     if (!m_value.GetText().empty())
     {
         wxSize size = GetTextExtent(m_value.GetText());
 
-        if (m_value.GetIcon().IsOk())
-            size.x += m_value.GetIcon().GetWidth() + 4;
+        const wxBitmapBundle& bb = m_value.GetBitmapBundle();
+        if (bb.IsOk())
+            size.x += bb.GetPreferredLogicalSizeFor(dvc).x + dvc->FromDIP(4);
         return size;
     }
-    return wxSize(80,20);
+    return dvc->FromDIP(wxSize(80,20));
 }
 
 wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
@@ -1589,9 +1591,12 @@ wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect 
     wxString text = iconText.GetText();
 
     // adjust the label rect to take the width of the icon into account
-    if (iconText.GetIcon().IsOk())
+    const wxBitmapBundle& bb = iconText.GetBitmapBundle();
+    if (bb.IsOk())
     {
-        int w = iconText.GetIcon().GetWidth() + 4;
+        wxWindow* const dvc = GetView();
+
+        int w = bb.GetPreferredLogicalSizeFor(dvc).x + dvc->FromDIP(4);
         labelRect.x += w;
         labelRect.width -= w;
     }
@@ -1704,11 +1709,14 @@ public:
 class wxDataViewDropTarget: public wxDropTarget
 {
 public:
-    wxDataViewDropTarget( wxDataObject *obj, wxDataViewMainWindow *win ) :
-        wxDropTarget( obj )
+    wxDataViewDropTarget( wxDataObjectComposite *obj, wxDataViewMainWindow *win ) :
+        wxDropTarget( obj ),
+        m_obj(obj)
     {
         m_win = win;
     }
+
+    wxDataObjectComposite* GetCompositeDataObject() const { return m_obj; }
 
     virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) wxOVERRIDE
     {
@@ -1738,6 +1746,9 @@ public:
 
     virtual void OnLeave() wxOVERRIDE
         { m_win->OnLeave(); }
+
+private:
+    wxDataObjectComposite* const m_obj;
 
     wxDataViewMainWindow   *m_win;
 };
@@ -2076,7 +2087,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_dragStart = wxPoint(0,0);
 
     m_dragEnabled = false;
-    m_dropEnabled = false;
     m_dropItemInfo = DropItemInfo();
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -2111,14 +2121,16 @@ wxDataViewMainWindow::~wxDataViewMainWindow()
 
 int wxDataViewMainWindow::GetDefaultRowHeight() const
 {
+    const int SMALL_ICON_HEIGHT = FromDIP(16);
+
 #ifdef __WXMSW__
     // We would like to use the same line height that Explorer uses. This is
     // different from standard ListView control since Vista.
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
-        return wxMax(16, GetCharHeight()) + 6; // 16 = mini icon height
+        return wxMax(SMALL_ICON_HEIGHT, GetCharHeight()) + FromDIP(6);
     else
 #endif // __WXMSW__
-        return wxMax(16, GetCharHeight()) + 1; // 16 = mini icon height
+        return wxMax(SMALL_ICON_HEIGHT, GetCharHeight()) + FromDIP(1);
 }
 
 
@@ -2128,17 +2140,6 @@ bool wxDataViewMainWindow::EnableDragSource( const wxDataFormat &format )
 {
     m_dragFormat = format;
     m_dragEnabled = format != wxDF_INVALID;
-
-    return true;
-}
-
-bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
-{
-    m_dropFormat = format;
-    m_dropEnabled = format != wxDF_INVALID;
-
-    if (m_dropEnabled)
-        SetDropTarget( new wxDataViewDropTarget( new wxCustomDataObject( format ), this ) );
 
     return true;
 }
@@ -2389,18 +2390,18 @@ bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
     return true;
 }
 
-wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoord y,
-                                           wxDragResult def )
+wxDragResult wxDataViewMainWindow::OnData(wxDataFormat format, wxCoord x, wxCoord y,
+                                          wxDragResult def)
 {
     DropItemInfo dropItemInfo = GetDropItemInfo(x, y);
 
-    wxCustomDataObject *obj = (wxCustomDataObject *) GetDropTarget()->GetDataObject();
+    wxDataViewDropTarget* const
+        target = static_cast<wxDataViewDropTarget*>(GetDropTarget());
+    wxDataObjectComposite* const obj = target->GetCompositeDataObject();
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, dropItemInfo.m_item);
     event.SetProposedDropIndex(dropItemInfo.m_proposedDropIndex);
-    event.SetDataFormat( format );
-    event.SetDataSize( obj->GetSize() );
-    event.SetDataBuffer( obj->GetData() );
+    event.InitData(obj, format);
     event.SetDropEffect( def );
     if ( !m_owner->HandleWindowEvent( event ) || !event.IsAllowed() )
         return wxDragNone;
@@ -2463,14 +2464,15 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
             width -= indent;
 
         wxDataViewItem item = GetItemByRow( row );
-        cell->PrepareForItem(model, item, column->GetModelColumn());
+        if ( cell->PrepareForItem(model, item, column->GetModelColumn()) )
+        {
+            wxRect item_rect(x, 0, width, height);
+            item_rect.Deflate(PADDING_RIGHTLEFT, 0);
 
-        wxRect item_rect(x, 0, width, height);
-        item_rect.Deflate(PADDING_RIGHTLEFT, 0);
-
-        // dc.SetClippingRegion( item_rect );
-        cell->WXCallRender(item_rect, &dc, 0);
-        // dc.DestroyClippingRegion();
+            // dc.SetClippingRegion( item_rect );
+            cell->WXCallRender(item_rect, &dc, 0);
+            // dc.DestroyClippingRegion();
+        }
 
         x += width;
     }
@@ -2831,12 +2833,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             bool selected = m_selection.IsSelected(item);
 
             int state = 0;
-            if (m_hasFocus && selected)
+            if (selected)
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             cell->SetState(state);
             if (hasValue)
-                cell->PrepareForItem(model, dataitem, col->GetModelColumn());
+                hasValue = cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
             if ( !selected )
@@ -3276,7 +3278,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     }
 
     // Change the current row to the last row if the current exceed the max row number
-    if ( m_currentRow >= GetRowCount() )
+    if ( HasCurrentRow() && m_currentRow >= GetRowCount() )
         ChangeCurrentRow(m_count - 1);
 
     GetOwner()->InvalidateColBestWidths();
@@ -3389,7 +3391,7 @@ void wxDataViewMainWindow::RecalculateDisplay()
     int height = GetLineStart( GetRowCount() );
 
     SetVirtualSize( width, height );
-    GetOwner()->SetScrollRate( 10, m_lineHeight );
+    GetOwner()->SetScrollRate( FromDIP(10), m_lineHeight );
     UpdateColumnSizes();
 
     Refresh();
@@ -3789,9 +3791,8 @@ int wxDataViewMainWindow::QueryAndCacheLineHeight(unsigned int row, wxDataViewIt
 
         wxDataViewRenderer *renderer =
             const_cast<wxDataViewRenderer*>(column->GetRenderer());
-        renderer->PrepareForItem(model, item, column->GetModelColumn());
-
-        height = wxMax(height, renderer->GetSize().y);
+        if ( renderer->PrepareForItem(model, item, column->GetModelColumn()) )
+            height = wxMax(height, renderer->GetSize().y);
     }
 
     // ... and store the height in the cache
@@ -3974,7 +3975,7 @@ wxDataViewMainWindow::DoExpand(wxDataViewTreeNode* node,
         // Shift all stored indices after this row by the number of newly added
         // rows.
         m_selection.OnItemsInserted(row + 1, countNewRows);
-        if ( m_currentRow > row )
+        if ( HasCurrentRow() && m_currentRow > row )
             ChangeCurrentRow(m_currentRow + countNewRows);
 
         if ( m_count != -1 )
@@ -4049,7 +4050,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
         node->ToggleOpen(this);
 
         // Adjust the current row if necessary.
-        if ( m_currentRow > row )
+        if ( HasCurrentRow() && m_currentRow > row )
         {
             // If the current row was among the collapsed items, make the
             // parent itself current.
@@ -4988,6 +4989,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     if (event.RightUp())
     {
         wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, m_owner, col, item);
+        int xx = event.GetX();
+        int yy = event.GetY();
+        ClientToScreen(&xx, &yy);
+        m_owner->ScreenToClient(&xx, &yy);
+        le.SetPosition(xx, yy);
         m_owner->ProcessWindowEvent(le);
         return;
     }
@@ -5628,7 +5634,7 @@ wxSize wxDataViewCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
     return newsize;
 }
 
-void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
+void wxDataViewCtrl::OnSize(wxSizeEvent &event)
 {
     // We need to override OnSize so that our scrolled
     // window a) does call Layout() to use sizers for
@@ -5655,6 +5661,7 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
     {
         m_headerArea->Refresh();
     }
+    event.Skip();
 }
 
 void wxDataViewCtrl::OnDPIChanged(wxDPIChangedEvent& event)
@@ -5677,6 +5684,8 @@ void wxDataViewCtrl::OnDPIChanged(wxDPIChangedEvent& event)
             width = event.ScaleX(width);
         m_cols[i]->SetWidth(width);
     }
+
+    event.Skip();
 }
 
 void wxDataViewCtrl::SetFocus()
@@ -5816,9 +5825,17 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return m_clientArea->EnableDragSource( format );
 }
 
-bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat> &formats )
 {
-    return m_clientArea->EnableDropTarget( format );
+    wxDataViewDropTarget* dt = NULL;
+    if (wxDataObjectComposite* dataObject = CreateDataObject(formats))
+    {
+        dt = new wxDataViewDropTarget(dataObject, m_clientArea);
+    }
+
+    m_clientArea->SetDropTarget(dt);
+
+    return true;
 }
 
 #endif // wxUSE_DRAG_AND_DROP
@@ -5998,8 +6015,8 @@ public:
 
         if ( m_model->HasValue(item, GetColumn()) )
         {
-            m_renderer->PrepareForItem(m_model, item, GetColumn());
-            width += m_renderer->GetSize().x;
+            if ( m_renderer->PrepareForItem(m_model, item, GetColumn()) )
+                width += m_renderer->GetSize().x;
         }
 
         UpdateWithWidth(width);
@@ -6747,7 +6764,9 @@ wxAccStatus wxDataViewCtrlAccessible::GetName(int childId, wxString* name)
                 continue; // Skip non-textual items
 
             wxDataViewRenderer* r = dvCol->GetRenderer();
-            r->PrepareForItem(model, item, dvCol->GetModelColumn());
+            if ( !r->PrepareForItem(model, item, dvCol->GetModelColumn()) )
+                continue;
+
             wxString vs = r->GetAccessibleDescription();
             if ( !vs.empty() )
             {
@@ -6905,7 +6924,9 @@ wxAccStatus wxDataViewCtrlAccessible::GetDescription(int childId, wxString* desc
             model->GetValue(value, item, dvCol->GetModelColumn());
 
             wxDataViewRenderer* r = dvCol->GetRenderer();
-            r->PrepareForItem(model, item, dvCol->GetModelColumn());
+            if ( !r->PrepareForItem(model, item, dvCol->GetModelColumn()) )
+                continue;
+
             wxString valStr = r->GetAccessibleDescription();
             // Skip first textual item
             if ( !firstTextSkipped && !value.IsNull() && !value.IsType(wxS("bool")) && !valStr.empty() )

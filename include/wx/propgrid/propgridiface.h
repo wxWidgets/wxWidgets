@@ -1160,9 +1160,6 @@ private:
 
         return m_pState->GetGrid();
     }
-
-    friend class wxPropertyGrid;
-    friend class wxPropertyGridManager;
 };
 
 #endif // wxUSE_PROPGRID

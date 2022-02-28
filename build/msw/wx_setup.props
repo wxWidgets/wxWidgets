@@ -28,16 +28,22 @@
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Debug' or '$(Configuration)'=='DLL Debug') and '$(CharacterSet)'=='Unicode'">
     <wxSuffix>ud</wxSuffix>
+    <wxSuffixDebug>d</wxSuffixDebug>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Debug' or '$(Configuration)'=='DLL Debug') and '$(CharacterSet)'!='Unicode'">
     <wxSuffix>d</wxSuffix>
+    <wxSuffixDebug>d</wxSuffixDebug>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Release' or '$(Configuration)'=='DLL Release') and '$(CharacterSet)'=='Unicode'">
     <wxSuffix>u</wxSuffix>
+    <wxSuffixDebug>
+    </wxSuffixDebug>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Release' or '$(Configuration)'=='DLL Release') and '$(CharacterSet)'!='Unicode'">
     <wxSuffix>
     </wxSuffix>
+    <wxSuffixDebug>
+    </wxSuffixDebug>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='DLL Debug'">
     <wxSuffixDebug>d</wxSuffixDebug>

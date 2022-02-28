@@ -65,6 +65,9 @@ public:
     void GtkDisableEvents();
     void GtkEnableEvents();
 
+    void SetIncrement(int inc) { DoSetIncrement(inc); }
+    int GetIncrement() const { return int(DoGetIncrement()); }
+   
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
 
@@ -73,6 +76,8 @@ public:
 
  protected:
     virtual wxSize DoGetBestSize() const;
+    void DoSetIncrement(double inc);
+    double DoGetIncrement() const;
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.

@@ -346,12 +346,17 @@ public:
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 
-    void GenerateValueAsString( wxVariant& value, wxString* target ) const;
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use function GenerateValueAsString(val) returning wxString")
+    void GenerateValueAsString( wxVariant& value, wxString* target ) const
+    {
+        *target = GenerateValueAsString(value);
+    }
+#endif // WXWIN_COMPATIBILITY_3_0
+    wxString GenerateValueAsString(const wxVariant& value) const;
 
     // Returns translation of values into string indices.
     wxArrayInt GetValueAsIndices() const;
-
-    wxArrayString       m_valueAsStrings;  // Value as array of strings
 
     // Cache displayed text since generating it is relatively complicated.
     wxString            m_display;

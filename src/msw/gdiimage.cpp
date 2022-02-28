@@ -336,6 +336,54 @@ void wxGDIImage::InitStandardHandlers()
 }
 
 // ----------------------------------------------------------------------------
+// scale factor-related functions
+// ----------------------------------------------------------------------------
+
+// wxMSW doesn't really use scale factor, but we must still store it to use the
+// correct sizes in the code which uses it to decide on the bitmap size to use.
+
+void wxGDIImage::SetScaleFactor(double scale)
+{
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
+
+    if ( GetGDIImageData()->m_scaleFactor != scale )
+    {
+        AllocExclusive();
+
+        // Note that GetGDIImageData() result may have changed after calling
+        // AllocExclusive(), so don't be tempted to optimize it.
+        GetGDIImageData()->m_scaleFactor = scale;
+    }
+}
+
+double wxGDIImage::GetScaleFactor() const
+{
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
+
+    return GetGDIImageData()->m_scaleFactor;
+}
+
+wxSize wxGDIImage::GetDIPSize() const
+{
+    return GetSize() / GetScaleFactor();
+}
+
+double wxGDIImage::GetLogicalWidth() const
+{
+    return GetWidth();
+}
+
+double wxGDIImage::GetLogicalHeight() const
+{
+    return GetHeight();
+}
+
+wxSize wxGDIImage::GetLogicalSize() const
+{
+    return GetSize();
+}
+
+// ----------------------------------------------------------------------------
 // wxBitmap handlers
 // ----------------------------------------------------------------------------
 
@@ -586,7 +634,26 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         }
     }
 
-    return icon->CreateFromHICON((WXHICON)hicon);
+    if ( !hicon )
+        return false;
+
+    wxSize size;
+    double scale = 1.0;
+    if ( hasSize )
+    {
+        size.x = desiredWidth;
+        size.y = desiredHeight;
+    }
+    else // We loaded an icon of default size.
+    {
+        // LoadIcon() returns icons of scaled size, so we must use the correct
+        // scaling factor of them.
+        size = wxGetHiconSize(hicon);
+        if ( const wxWindow* win = wxApp::GetMainTopWindow() )
+            scale = win->GetDPIScaleFactor();
+    }
+
+    return icon->InitFromHICON((WXHICON)hicon, size.x, size.y, scale);
 }
 
 #if wxUSE_PNG_RESOURCE_HANDLER

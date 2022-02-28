@@ -196,6 +196,16 @@ bool wxTopLevelWindowMac::IsFullScreen() const
     return m_nowpeer->IsFullScreen();
 }
 
+wxContentProtection wxTopLevelWindowMac::GetContentProtection() const
+{
+    return m_nowpeer->GetContentProtection();
+}
+
+bool wxTopLevelWindowMac::SetContentProtection(wxContentProtection contentProtection)
+{
+    return m_nowpeer->SetContentProtection(contentProtection);
+}
+
 bool wxTopLevelWindowMac::EnableCloseButton(bool enable)
 {
     // Unlike in wxMSW, wxSYSTEM_MENU is not sufficient to show

@@ -85,9 +85,9 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
 
             break;
         }
+        default:
+            wxFAIL_MSG("Unknown scale mode");
     }
-
-    wxASSERT_MSG(w, wxS("Unknown scale mode"));
 
     wxDouble x = (drawSize.x - w) / 2;
     wxDouble y = (drawSize.y - h) / 2;

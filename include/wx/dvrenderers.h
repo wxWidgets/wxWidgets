@@ -37,19 +37,24 @@ class WXDLLIMPEXP_CORE wxDataViewIconText : public wxObject
 {
 public:
     wxDataViewIconText( const wxString &text = wxEmptyString,
-                        const wxIcon& icon = wxNullIcon )
+                        const wxBitmapBundle& bitmap = wxBitmapBundle() )
         : m_text(text),
-          m_icon(icon)
+          m_bitmap(bitmap)
     { }
 
     void SetText( const wxString &text ) { m_text = text; }
     wxString GetText() const             { return m_text; }
-    void SetIcon( const wxIcon &icon )   { m_icon = icon; }
-    const wxIcon &GetIcon() const        { return m_icon; }
+
+    void SetBitmapBundle(const wxBitmapBundle& bitmap) { m_bitmap = bitmap; }
+    const wxBitmapBundle& GetBitmapBundle() const { return m_bitmap; }
+
+    // These methods exist for compatibility, prefer using the methods above.
+    void SetIcon( const wxIcon &icon ) { m_bitmap = wxBitmapBundle(icon); }
+    wxIcon GetIcon() const { return m_bitmap.GetIcon(wxDefaultSize); }
 
     bool IsSameAs(const wxDataViewIconText& other) const
     {
-        return m_text == other.m_text && m_icon.IsSameAs(other.m_icon);
+        return m_text == other.m_text && m_bitmap.IsSameAs(other.m_bitmap);
     }
 
     bool operator==(const wxDataViewIconText& other) const
@@ -64,7 +69,7 @@ public:
 
 private:
     wxString    m_text;
-    wxIcon      m_icon;
+    wxBitmapBundle m_bitmap;
 
     wxDECLARE_DYNAMIC_CLASS(wxDataViewIconText);
 };
@@ -79,7 +84,7 @@ class WXDLLIMPEXP_CORE wxDataViewCheckIconText : public wxDataViewIconText
 {
 public:
     wxDataViewCheckIconText(const wxString& text = wxString(),
-                            const wxIcon& icon = wxNullIcon,
+                            const wxBitmapBundle& icon = wxBitmapBundle(),
                             wxCheckBoxState checkedState = wxCHK_UNDETERMINED)
         : wxDataViewIconText(text, icon),
           m_checkedState(checkedState)

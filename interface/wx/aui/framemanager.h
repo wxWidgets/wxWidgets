@@ -991,7 +991,7 @@ public:
     wxString caption;
 
     /// icon of the pane, may be invalid
-    wxBitmap icon;
+    wxBitmapBundle icon;
 
     /// window that is in this pane
     wxWindow* window;

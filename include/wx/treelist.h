@@ -515,7 +515,7 @@ private:
 
     friend class wxTreeListCtrl;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTreeListEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxTreeListEvent);
 };
 
 // Event types and event table macros.

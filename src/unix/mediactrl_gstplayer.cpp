@@ -147,7 +147,7 @@ expose_event_callback(GtkWidget* widget, GdkEventExpose* event, wxGStreamerMedia
         );
 #ifdef __WXGTK3__
         GdkWindow* window = gtk_widget_get_window(widget);
-        if (strcmp("GdkWaylandWindow", g_type_name(G_TYPE_FROM_INSTANCE(window))) == 0)
+        if (wxGTKImpl::IsWayland(window))
         {
             // on wayland we need to place the video
             int x, y;
@@ -198,7 +198,7 @@ static void realize_callback(GtkWidget* widget, wxGStreamerMediaBackend* be)
     );
 #ifdef __WXGTK3__
     GdkWindow* window = gtk_widget_get_window(widget);
-    if (strcmp("GdkWaylandWindow", g_type_name(G_TYPE_FROM_INSTANCE(window))) == 0)
+    if (wxGTKImpl::IsWayland(window))
     {
         // on wayland we need to place the video
         int x, y;

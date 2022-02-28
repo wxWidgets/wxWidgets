@@ -1123,7 +1123,7 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
 {
     if ( !AddFontResourceEx(filename.t_str(), FR_PRIVATE, 0) )
     {
-        wxLogSysError(_("Font file \"%s\" couldn't be loaded"), filename);
+        wxLogError(_("Font file \"%s\" couldn't be loaded"), filename);
         return false;
     }
 

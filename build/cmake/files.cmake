@@ -154,6 +154,7 @@ set(BASE_OSX_SHARED_HDR
 set(BASE_AND_GUI_OSX_COCOA_SRC
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
+    src/osx/volume.mm
 )
 
 set(BASE_OSX_NOTWXMAC_SRC
@@ -1303,6 +1304,7 @@ set(GTK_LOWLEVEL_SRC
     src/gtk/mimetype.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
+    src/gtk/overlay.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
@@ -2176,8 +2178,8 @@ set(MSW_HDR
 set(MSW_RSC
     # Resources must be installed together with headers:
     wx/msw/wx.manifest
-    wx/msw/amd64.manifest
-    wx/msw/ia64.manifest
+    wx/msw/wx_dpi_aware.manifest
+    wx/msw/wx_dpi_aware_pmv2.manifest
     wx/msw/wx.rc
     # bitmaps
     wx/msw/colours.bmp
@@ -2952,6 +2954,7 @@ set(XRC_SRC
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
     src/xrc/xh_dataview.cpp
+    src/xrc/xh_bookctrlbase.cpp
 )
 
 set(XRC_HDR
@@ -3023,6 +3026,7 @@ set(XRC_HDR
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
     wx/xrc/xh_dataview.h
+    wx/xrc/xh_bookctrlbase.h
 )
 
 set(XML_SRC

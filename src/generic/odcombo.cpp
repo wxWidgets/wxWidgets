@@ -108,9 +108,11 @@ void wxVListBoxComboPopup::SetFocus()
 #endif
 }
 
-void wxVListBoxComboPopup::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+void wxVListBoxComboPopup::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_itemHeight = m_combo->GetCharHeight();
+
+    event.Skip();
 }
 
 bool wxVListBoxComboPopup::LazyCreate()

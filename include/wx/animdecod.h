@@ -96,24 +96,8 @@ public:
 
     bool CanRead( wxInputStream& stream ) const
     {
-        // NOTE: this code is the same of wxImageHandler::CallDoCanRead
-
-        if ( !stream.IsSeekable() )
-            return false;        // can't test unseekable stream
-
-        wxFileOffset posOld = stream.TellI();
-        bool ok = DoCanRead(stream);
-
-        // restore the old position to be able to test other formats and so on
-        if ( stream.SeekI(posOld) == wxInvalidOffset )
-        {
-            wxLogDebug(wxT("Failed to rewind the stream in wxAnimationDecoder!"));
-
-            // reading would fail anyhow as we're not at the right position
-            return false;
-        }
-
-        return ok;
+        return wxInputStreamPeeker(stream).
+                    CallIfCanSeek(&wxAnimationDecoder::DoCanRead, this);
     }
 
     virtual wxAnimationDecoder *Clone() const = 0;

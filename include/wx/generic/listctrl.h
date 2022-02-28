@@ -110,10 +110,14 @@ public:
     void SetTextColour(const wxColour& col);
     long GetTopItem() const;
 
-    virtual bool HasCheckBoxes() const wxOVERRIDE;
-    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
-    virtual bool IsItemChecked(long item) const wxOVERRIDE;
-    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+    bool HasCheckBoxes() const wxOVERRIDE;
+    bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
+    bool IsItemChecked(long item) const wxOVERRIDE;
+    void CheckItem(long item, bool check) wxOVERRIDE;
+
+    void ShowSortIndicator(int idx, bool ascending = true) wxOVERRIDE;
+    int GetSortIndicator() const wxOVERRIDE;
+    bool IsAscendingSortIndicator() const wxOVERRIDE;
 
     void SetSingleStyle( long style, bool add = true ) ;
     void SetWindowStyleFlag( long style ) wxOVERRIDE;
@@ -232,7 +236,7 @@ private:
     // arrows but let the other navigation characters through
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     virtual WXLRESULT
-    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
 #endif // __WXMSW__
 
     WX_FORWARD_TO_SCROLL_HELPER()

@@ -1335,14 +1335,14 @@ void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDesc
                        "  dup stringwidth rlineto\n"
                        "  stroke\n"
                        "  grestore\n",
-                        -YLOG2DEVREL(textDescent - m_underlinePosition),
+                        -YLOG2DEVREL(textDescent - int(m_underlinePosition)),
                         m_underlineThickness );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
     }
     PsPrint(           "  show\n" ); // x y
     // Advance to the beginning of th next line.
-    buffer.Printf(     "  %f add moveto\n", -YLOG2DEVREL(lineHeight) );
+    buffer.Printf(     "  %f add moveto\n", -YLOG2DEVREL(int(lineHeight)) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
     // Execute above statements for all elements of the array
@@ -2233,7 +2233,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
     {
         // String couldn't be converted which used to SEGV as reported here:
         // http://bugs.debian.org/702378
-        // https://trac.wxwidgets.org/ticket/15300
+        // https://github.com/wxWidgets/wxWidgets/issues/15300
         // Upstream suggests "just return if the conversion failed".
         if (x) (*x) = 0;
         if (y) (*y) = 0;

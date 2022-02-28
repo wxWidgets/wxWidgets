@@ -1550,8 +1550,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
     m_radioGroup.start = -1;
     m_isRadioGroupStart = false;
 
-    m_bmpDisabled = wxNullBitmap;
-
     UpdateAccelInfo();
 }
 
@@ -1615,8 +1613,8 @@ void wxMenuItem::SetCheckable(bool checkable)
     }
 }
 
-void wxMenuItem::SetBitmaps(const wxBitmap& bmpChecked,
-                            const wxBitmap& bmpUnchecked)
+void wxMenuItem::SetBitmaps(const wxBitmapBundle& bmpChecked,
+                            const wxBitmapBundle& bmpUnchecked)
 {
     m_bmpChecked = bmpChecked;
     m_bmpUnchecked = bmpUnchecked;

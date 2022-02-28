@@ -421,7 +421,7 @@ void InteractiveOutputTestCase::TestStandardPaths()
 // wxVolume tests
 // ----------------------------------------------------------------------------
 
-#if !defined(__WIN32__) || !wxUSE_FSVOLUME
+#if (!defined(__WIN32__) && !defined(__APPLE__)) || defined(__WXOSX_IPHONE__) || !wxUSE_FSVOLUME
     #undef TEST_VOLUME
 #endif
 

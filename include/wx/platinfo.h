@@ -296,6 +296,8 @@ public:
         { return GetEndiannessName(m_endian); }
     wxString GetCpuArchitectureName() const
         { return m_cpuArch; }
+    wxString GetNativeCpuArchitectureName() const
+        { return m_nativeCpuArch; }
     wxString GetOperatingSystemDescription() const
         { return m_osDesc; }
     wxString GetDesktopEnvironment() const
@@ -339,6 +341,8 @@ public:
         { m_endian = n; }
     void SetCpuArchitectureName(const wxString& cpuArch)
         { m_cpuArch = cpuArch; }
+    void SetNativeCpuArchitectureName(const wxString& cpuArch)
+        { m_nativeCpuArch = cpuArch; }
 
     void SetDesktopEnvironment(const wxString& de)
         { m_desktopEnv = de; }
@@ -427,6 +431,9 @@ protected:
 
     // CPU architecture family name, possibly empty if unknown
     wxString m_cpuArch;
+
+    // native CPU architecture family name, possibly empty if unknown
+    wxString m_nativeCpuArch;
 };
 
 // Returns true only for MSW programs running under Wine.

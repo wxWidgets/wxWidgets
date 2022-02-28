@@ -400,6 +400,18 @@
 #define MUI_LANGUAGE_NAME 0x8
 #endif
 
+#ifndef WDA_NONE
+#define WDA_NONE 0x0
+#endif
+
+#ifndef WDA_MONITOR
+#define WDA_MONITOR 0x1
+#endif
+
+#ifndef WDA_EXCLUDEFROMCAPTURE
+#define WDA_EXCLUDEFROMCAPTURE 0x11
+#endif
+
  /*
   * The following are specifically required for Wine
   */

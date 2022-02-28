@@ -288,6 +288,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,  MyFrame::OnStandardButtonsSizerDialog)
     EVT_MENU(DIALOGS_TEST_DEFAULT_ACTION,           MyFrame::OnTestDefaultActionDialog)
     EVT_MENU(DIALOGS_MODAL_HOOK,                    MyFrame::OnModalHook)
+    EVT_MENU(DIALOGS_SIMULATE_UNSAVED,              MyFrame::OnSimulatedUnsaved)
 
     EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
 #if wxUSE_NOTIFICATION_MESSAGE
@@ -303,6 +304,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_RICHTOOLTIP
 
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
+    EVT_CLOSE(                                      MyFrame::OnClose)
 wxEND_EVENT_TABLE()
 
 #if USE_MODAL_PRESENTATION
@@ -635,6 +637,7 @@ bool MyApp::OnInit()
     menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, "&Standard Buttons Sizer Dialog");
     menuDlg->Append(DIALOGS_TEST_DEFAULT_ACTION, "&Test dialog default action");
     menuDlg->AppendCheckItem(DIALOGS_MODAL_HOOK, "Enable modal dialog hook");
+    menuDlg->AppendCheckItem(DIALOGS_SIMULATE_UNSAVED, "Simulate an unsaved document at exit");
 
     menuDlg->AppendSeparator();
     menuDlg->Append(wxID_EXIT, "E&xit\tAlt-X");
@@ -678,7 +681,7 @@ bool MyApp::OnInit()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(NULL, wxID_ANY, title), m_confirmExit(false)
 {
     SetIcon(wxICON(sample));
 
@@ -2984,9 +2987,57 @@ void MyFrame::OnModalHook(wxCommandEvent& event)
         s_hook.Unregister();
 }
 
+void MyFrame::OnSimulatedUnsaved(wxCommandEvent& event)
+{
+    m_confirmExit = event.IsChecked();
+}
+
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 {
     Close(true);
+}
+
+void MyFrame::OnClose(wxCloseEvent& event)
+{
+    if ( m_confirmExit && event.CanVeto() )
+    {
+        wxMessageDialog dialog(this,
+            "You have an unsaved file; save before closing?",
+            "OnClose",
+            wxCENTER |
+            wxYES_NO | wxCANCEL |
+            wxICON_QUESTION);
+
+        dialog.SetYesNoLabels(
+            "&Save",
+            "&Discard changes"
+        );
+        switch ( dialog.ShowModal() )
+        {
+        case wxID_CANCEL:
+            event.Veto();
+            wxLogStatus("You cancelled closing the application.");
+            // Return without calling event.Skip() to prevent closing the frame.
+            // The application should resume operation as if closing it had not
+            // been attempted.
+            return;
+        case wxID_YES:
+            wxMessageBox("You chose to save your file.", "OnClose", wxOK);
+            // In a real application, do something to save the
+            // file(s), possibly asking for a file name and location
+            // using wxFileDialog.
+            break;
+        default:
+            wxLogError("Unexpected wxMessageDialog return code!");
+            wxFALLTHROUGH;
+        case wxID_NO:
+            // Don't save anything, and simply continue with closing the frame.
+            break;
+        }
+    }
+
+    // Continue with closing the frame.
+    event.Skip();
 }
 
 #if wxUSE_PROGRESSDLG

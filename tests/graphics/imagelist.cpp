@@ -765,8 +765,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
     REQUIRE(bmp1x.IsOk());
     CHECK(bmp1x.GetWidth() == 16);
     CHECK(bmp1x.GetHeight() == 8);
-    CHECK(bmp1x.GetScaledWidth() == 16);
-    CHECK(bmp1x.GetScaledHeight() == 8);
+    CHECK(bmp1x.GetLogicalWidth() == 16);
+    CHECK(bmp1x.GetLogicalHeight() == 8);
     CHECK_FALSE(bmp1x.HasAlpha());
     CHECK(bmp1x.GetMask() == NULL);
 
@@ -774,8 +774,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
     REQUIRE(bmp2x.IsOk());
     CHECK(bmp2x.GetWidth() == 16);
     CHECK(bmp2x.GetHeight() == 8);
-    CHECK(bmp2x.GetScaledWidth() == 8);
-    CHECK(bmp2x.GetScaledHeight() == 4);
+    CHECK(bmp2x.GetLogicalWidth() == 8);
+    CHECK(bmp2x.GetLogicalHeight() == 4);
     CHECK_FALSE(bmp2x.HasAlpha());
     CHECK(bmp2x.GetMask() == NULL);
 
@@ -803,8 +803,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
         wxBitmap bmp = il.GetBitmap(1);
         CHECK(bmp.IsOk() == true);
         CHECK(bmp.GetScaleFactor() == 2.0);
-        CHECK(bmp.GetScaledWidth() == 8);
-        CHECK(bmp.GetScaledHeight() == 4);
+        CHECK(bmp.GetLogicalWidth() == 8);
+        CHECK(bmp.GetLogicalHeight() == 4);
         CHECK(bmp.GetWidth() == 16);
         CHECK(bmp.GetHeight() == 8);
         CHECK_FALSE(bmp.HasAlpha());
@@ -835,8 +835,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
         wxBitmap bmp = il.GetBitmap(1);
         CHECK(bmp.IsOk() == true);
         CHECK(bmp.GetScaleFactor() == 1.0);
-        CHECK(bmp.GetScaledWidth() == 16);
-        CHECK(bmp.GetScaledHeight() == 8);
+        CHECK(bmp.GetLogicalWidth() == 16);
+        CHECK(bmp.GetLogicalHeight() == 8);
         CHECK(bmp.GetWidth() == 16);
         CHECK(bmp.GetHeight() == 8);
         CHECK_FALSE(bmp.HasAlpha());
@@ -867,8 +867,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
         wxBitmap bmp = il.GetBitmap(0);
         CHECK(bmp.IsOk() == true);
         CHECK(bmp.GetScaleFactor() == 2.0);
-        CHECK(bmp.GetScaledWidth() == 8);
-        CHECK(bmp.GetScaledHeight() == 4);
+        CHECK(bmp.GetLogicalWidth() == 8);
+        CHECK(bmp.GetLogicalHeight() == 4);
         CHECK(bmp.GetWidth() == 16);
         CHECK(bmp.GetHeight() == 8);
         CHECK_FALSE(bmp.HasAlpha());
@@ -898,8 +898,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
 
         wxBitmap bmp = il.GetBitmap(0);
         CHECK(bmp.GetScaleFactor() == 1.0);
-        CHECK(bmp.GetScaledWidth() == 16);
-        CHECK(bmp.GetScaledHeight() == 8);
+        CHECK(bmp.GetLogicalWidth() == 16);
+        CHECK(bmp.GetLogicalHeight() == 8);
         CHECK(bmp.GetWidth() == 16);
         CHECK(bmp.GetHeight() == 8);
         CHECK_FALSE(bmp.HasAlpha());
@@ -916,8 +916,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
         REQUIRE(bmp2x2.IsOk());
         CHECK(bmp2x2.GetWidth() == 32);
         CHECK(bmp2x2.GetHeight() == 16);
-        CHECK(bmp2x2.GetScaledWidth() == 16);
-        CHECK(bmp2x2.GetScaledHeight() == 8);
+        CHECK(bmp2x2.GetLogicalWidth() == 16);
+        CHECK(bmp2x2.GetLogicalHeight() == 8);
         CHECK(bmp2x2.HasAlpha() == false);
         CHECK(bmp2x2.GetMask() == NULL);
 
@@ -939,8 +939,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
 
         wxBitmap bmp = il.GetBitmap(0);
         CHECK(bmp.GetScaleFactor() == 1.0);
-        CHECK(bmp.GetScaledWidth() == 16);
-        CHECK(bmp.GetScaledHeight() == 8);
+        CHECK(bmp.GetLogicalWidth() == 16);
+        CHECK(bmp.GetLogicalHeight() == 8);
         CHECK(bmp.GetWidth() == 16);
         CHECK(bmp.GetHeight() == 8);
         CHECK_FALSE(bmp.HasAlpha());
@@ -963,8 +963,8 @@ TEST_CASE("ImageList:HiDPI", "[imagelist][hidpi]")
 
         bmp = il.GetBitmap(0);
         CHECK(bmp.GetScaleFactor() == 2.0);
-        CHECK(bmp.GetScaledWidth() == 16);
-        CHECK(bmp.GetScaledHeight() == 8);
+        CHECK(bmp.GetLogicalWidth() == 16);
+        CHECK(bmp.GetLogicalHeight() == 8);
         CHECK(bmp.GetWidth() == 32);
         CHECK(bmp.GetHeight() == 16);
         CHECK_FALSE(bmp.HasAlpha());

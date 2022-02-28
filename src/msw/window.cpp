@@ -664,7 +664,20 @@ bool wxWindowMSW::Show(bool show)
     // should work without errors
     if ( hWnd )
     {
-        ::ShowWindow(hWnd, show ? SW_SHOW : SW_HIDE);
+        BOOL ret = ::ShowWindow(hWnd, show ? SW_SHOW : SW_HIDE);
+
+        // Windows does not generate its WM_SHOWWINDOW notification when hiding
+        // a frozen window. Instead, ::ShowWindow() returns that the window was
+        // previously hidden, although it was shown but frozen.
+        // In such a case we have to generate the wxEVT_SHOW event ourselves
+        // for a consistent behaviour under all platforms.
+        bool changed = (ret != 0) != show;
+        if ( !changed && IsFrozen() )
+        {
+            wxShowEvent eventShow(GetId(), show);
+            eventShow.SetEventObject(this);
+            HandleWindowEvent(eventShow);
+        }
     }
 
     if ( IsFrozen() )
@@ -2354,6 +2367,8 @@ static void wxYieldForCommandsOnly()
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+    menu->SetupBitmaps();
+
     wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
@@ -5062,7 +5077,7 @@ bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
     wxON_BLOCK_EXIT_SET(gs_insideCaptureChanged, false);
 
     // notify windows on the capture stack about lost capture
-    // (see http://sourceforge.net/tracker/index.php?func=detail&aid=1153662&group_id=9863&atid=109863):
+    // (see https://github.com/wxWidgets/wxWidgets/issues/21642)
     wxWindowBase::NotifyCaptureLost();
 
     wxWindow *win = wxFindWinFromHandle(hWndGainedCapture);

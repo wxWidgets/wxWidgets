@@ -427,7 +427,7 @@ public:
     wxSocketNotify  m_event;
     void           *m_clientData;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSocketEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxSocketEvent);
 };
 
 

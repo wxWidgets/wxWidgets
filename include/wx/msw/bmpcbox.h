@@ -82,21 +82,21 @@ public:
     virtual ~wxBitmapComboBox();
 
     // Sets the image for the given item.
-    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void SetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap) wxOVERRIDE;
 
     virtual bool SetFont(const wxFont& font) wxOVERRIDE;
 
     // Adds item with image to the end of the combo box.
-    int Append(const wxString& item, const wxBitmap& bitmap = wxNullBitmap);
-    int Append(const wxString& item, const wxBitmap& bitmap, void *clientData);
-    int Append(const wxString& item, const wxBitmap& bitmap, wxClientData *clientData);
+    int Append(const wxString& item, const wxBitmapBundle& bitmap = wxBitmapBundle());
+    int Append(const wxString& item, const wxBitmapBundle& bitmap, void *clientData);
+    int Append(const wxString& item, const wxBitmapBundle& bitmap, wxClientData *clientData);
 
     // Inserts item with image into the list before pos. Not valid for wxCB_SORT
     // styles, use Append instead.
-    int Insert(const wxString& item, const wxBitmap& bitmap, unsigned int pos);
-    int Insert(const wxString& item, const wxBitmap& bitmap,
+    int Insert(const wxString& item, const wxBitmapBundle& bitmap, unsigned int pos);
+    int Insert(const wxString& item, const wxBitmapBundle& bitmap,
                unsigned int pos, void *clientData);
-    int Insert(const wxString& item, const wxBitmap& bitmap,
+    int Insert(const wxString& item, const wxBitmapBundle& bitmap,
                unsigned int pos, wxClientData *clientData);
 
 protected:
@@ -119,7 +119,7 @@ protected:
     virtual void DoClear() wxOVERRIDE;
     virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
 
-    virtual bool OnAddBitmap(const wxBitmap& bitmap) wxOVERRIDE;
+    virtual bool OnAddBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
     void RecreateControl();
 

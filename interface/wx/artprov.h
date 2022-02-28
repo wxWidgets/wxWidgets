@@ -91,6 +91,8 @@ const char* wxART_FIND_AND_REPLACE;
 const char* wxART_FULL_SCREEN;
 const char* wxART_EDIT;
 
+const char* wxART_WX_LOGO;
+
 
 /**
     @class wxArtProvider
@@ -205,6 +207,7 @@ const char* wxART_EDIT;
      @li @c wxART_FLOPPY
      @li @c wxART_CDROM
      @li @c wxART_REMOVABLE
+     @li @c wxART_WX_LOGO (since 3.1.6)
     </td></tr>
     </table>
 
@@ -307,7 +310,9 @@ public:
         @param client
             wxArtClient identifier of the client (i.e. who is asking for the bitmap).
         @param size
-            Default size for the returned bundle.
+            Default size for the returned bundle, i.e. the size of the bitmap
+            in normal DPI (this implies that wxWindow::FromDIP() must @e not be
+            used with it).
 
         @return If any of the registered providers recognizes the ID in its
             CreateBitmapBundle(), this bundle is returned. Otherwise, if any of

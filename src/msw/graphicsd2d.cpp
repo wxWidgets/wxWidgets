@@ -566,7 +566,7 @@ ID2D1Factory* wxD2D1Factory()
         // the Direct2D Debug Layer is only available starting with Windows 8
         // and Visual Studio 2012.
 #if defined(__WXDEBUG__) && defined(__VISUALC__) && wxCHECK_VISUALC_VERSION(11)
-        if ( wxGetWinVersion() >= wxWinVersion_8 )
+        if ( wxTheAssertHandler && wxGetWinVersion() >= wxWinVersion_8 )
         {
             factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_WARNING;
         }

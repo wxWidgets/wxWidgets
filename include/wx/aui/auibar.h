@@ -642,6 +642,7 @@ protected: // handlers
 
     void OnSize(wxSizeEvent& evt);
     void OnIdle(wxIdleEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnLeftDown(wxMouseEvent& evt);

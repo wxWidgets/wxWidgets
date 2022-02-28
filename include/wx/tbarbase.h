@@ -467,10 +467,8 @@ public:
 
     // get/set the size of the bitmaps used by the toolbar: should be called
     // before adding any tools to the toolbar
-    virtual void SetToolBitmapSize(const wxSize& size)
-        { m_defaultWidth = size.x; m_defaultHeight = size.y; }
-    virtual wxSize GetToolBitmapSize() const
-        { return wxSize(m_defaultWidth, m_defaultHeight); }
+    virtual void SetToolBitmapSize(const wxSize& size);
+    virtual wxSize GetToolBitmapSize() const;
 
     // the button size in some implementations is bigger than the bitmap size:
     // get the total button size (by default the same as bitmap size)
@@ -687,6 +685,10 @@ protected:
         return tool;
     }
 
+    // set the tool bitmap size without changing m_requestedBitmapSize
+    virtual void DoSetToolBitmapSize(const wxSize& size);
+
+
     // the list of all our tools
     wxToolBarToolsList m_tools;
 
@@ -702,10 +704,15 @@ protected:
     int m_toolPacking,
         m_toolSeparation;
 
-    // the size of the toolbar bitmaps
+    // the currently used size of the toolbar bitmaps: the name is unfortunate
+    // but keep it for compatibility
     wxCoord m_defaultWidth, m_defaultHeight;
 
 private:
+    // the size of the bitmaps requested by the application by calling
+    // SetToolBitmapSize()
+    wxSize m_requestedBitmapSize;
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxToolBarBase);
 };

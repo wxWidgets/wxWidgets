@@ -1669,9 +1669,9 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 // toolbar geometry
 // ----------------------------------------------------------------------------
 
-void wxToolBar::SetToolBitmapSize(const wxSize& size)
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
 {
-    wxToolBarBase::SetToolBitmapSize(size);
+    wxToolBarBase::DoSetToolBitmapSize(size);
 
     ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));
 }
@@ -1992,6 +1992,8 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
     // there are still minor but visible cosmetic problems when moving the
     // toolbar from 125% to 175% display.
     CallAfter(&wxToolBar::RealizeHelper);
+
+    event.Skip();
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))

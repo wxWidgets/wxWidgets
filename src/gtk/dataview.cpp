@@ -211,7 +211,7 @@ public:
     // dnd iface
 
     bool EnableDragSource( const wxDataFormat &format );
-    bool EnableDropTarget( const wxDataFormat &format );
+    bool EnableDropTarget( const wxVector<wxDataFormat> &formats );
 
     gboolean row_draggable( GtkTreeDragSource *drag_source, GtkTreePath *path );
     gboolean drag_data_delete( GtkTreeDragSource *drag_source, GtkTreePath* path );
@@ -1832,11 +1832,10 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
     GtkTreeIter parentIter;
     parentIter.stamp = wxgtk_model->stamp;
     parentIter.user_data = (gpointer) parent.GetID();
-    wxGtkTreePath parentPath(wxgtk_tree_model_get_path(
+    wxGtkTreePath path(wxgtk_tree_model_get_path(
         GTK_TREE_MODEL(wxgtk_model), &parentIter ));
 
     // and add the final index ourselves
-    wxGtkTreePath path(gtk_tree_path_copy(parentPath));
     int index = m_internal->GetIndexOf( parent, item );
     gtk_tree_path_append_index( path, index );
 #endif
@@ -1849,10 +1848,11 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
     // Did we remove the last child, causing 'parent' to become a leaf?
     if ( !m_wx_model->IsContainer(parent) )
     {
+        gtk_tree_path_up(path);
         gtk_tree_model_row_has_child_toggled
         (
             GTK_TREE_MODEL(wxgtk_model),
-            parentPath,
+            path,
             &parentIter
         );
     }
@@ -2501,7 +2501,7 @@ void wxCellRendererPixbuf::Set(const wxBitmap& bitmap)
         {
             pixbufNew =
             pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
-                int(bitmap.GetScaledWidth()), int(bitmap.GetScaledHeight()));
+                int(bitmap.GetLogicalWidth()), int(bitmap.GetLogicalHeight()));
         }
     }
     g_object_set(G_OBJECT(this), "pixbuf", pixbuf, NULL);
@@ -2520,8 +2520,8 @@ wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget
         wxCellRendererPixbufParentClass->render(cell, cr, widget, background_area, cell_area, flags);
     else
     {
-        const int x = (cell_area->width  - int(bitmap.GetScaledWidth() )) / 2;
-        const int y = (cell_area->height - int(bitmap.GetScaledHeight())) / 2;
+        const int x = (cell_area->width  - int(bitmap.GetLogicalWidth() )) / 2;
+        const int y = (cell_area->height - int(bitmap.GetLogicalHeight())) / 2;
         bitmap.Draw(cr, cell_area->x + x, cell_area->y + y);
     }
 }
@@ -3171,6 +3171,14 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     return FALSE;
 }
 
+// Helper for wxGtkTreeCellDataFunc() below.
+static void wxGtkTreeSetVisibleProp(GtkCellRenderer *renderer, gboolean visible)
+{
+    wxGtkValue gvalue( G_TYPE_BOOLEAN );
+    g_value_set_boolean( gvalue, visible );
+    g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
+}
+
 extern "C"
 {
 
@@ -3200,16 +3208,22 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     if (!wx_model->IsVirtualListModel())
     {
         gboolean visible = wx_model->HasValue(item, column);
-        wxGtkValue gvalue( G_TYPE_BOOLEAN );
-        g_value_set_boolean( gvalue, visible );
-        g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
+        wxGtkTreeSetVisibleProp(renderer, visible);
 
         if ( !visible )
             return;
     }
 
     cell->GtkSetCurrentItem(item);
-    cell->PrepareForItem(wx_model, item, column);
+
+    if (!cell->PrepareForItem(wx_model, item, column))
+    {
+        // We don't have any value in this cell, after all, so hide it.
+        if (!wx_model->IsVirtualListModel())
+        {
+            wxGtkTreeSetVisibleProp(renderer, FALSE);
+        }
+    }
 }
 
 } // extern "C"
@@ -3780,9 +3794,17 @@ bool wxDataViewCtrlInternal::EnableDragSource( const wxDataFormat &format )
     return true;
 }
 
-bool wxDataViewCtrlInternal::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrlInternal::EnableDropTarget( const wxVector<wxDataFormat>& formats )
 {
-    wxGtkString atom_str( gdk_atom_name( format  ) );
+    if (formats.empty())
+    {
+        gtk_tree_view_unset_rows_drag_dest(GTK_TREE_VIEW(m_owner->GtkGetTreeView()));
+
+        return true;
+    }
+
+    // TODO: Use all formats, not just the first one.
+    wxGtkString atom_str( gdk_atom_name( formats[0] ) );
     m_dropTargetTargetEntryTarget = wxCharBuffer( atom_str );
 
     m_dropTargetTargetEntry.target =  m_dropTargetTargetEntryTarget.data();
@@ -4625,8 +4647,8 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
                                      GdkEventMotion *gdk_event,
                                      wxDataViewCtrl *dv )
 {
-    int x = gdk_event->x;
-    int y = gdk_event->y;
+    int x = int(gdk_event->x);
+    int y = int(gdk_event->y);
     if (gdk_event->is_hint)
     {
 #ifdef __WXGTK3__
@@ -4679,6 +4701,8 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         if (gdk_event->window != gtk_tree_view_get_bin_window(treeview))
             return FALSE;
 
+        int x = int(gdk_event->x);
+        int y = int(gdk_event->y);
         wxGtkTreePath path;
         GtkTreeViewColumn *column = NULL;
         gint cell_x = 0;
@@ -4686,7 +4710,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         gtk_tree_view_get_path_at_pos
         (
             treeview,
-            (int) gdk_event->x, (int) gdk_event->y,
+            x, y,
             path.ByRef(),
             &column,
             &cell_x,
@@ -4708,6 +4732,13 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
 
         wxDataViewEvent
             event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKPathToItem(path));
+#if GTK_CHECK_VERSION(2,12,0)
+        if (wx_is_at_least_gtk2(12))
+        {
+            gtk_tree_view_convert_bin_window_to_widget_coords(treeview, x, y, &x, &y);
+            event.SetPosition(x, y);
+        }
+#endif
         return dv->HandleWindowEvent( event );
     }
 
@@ -4908,10 +4939,10 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return m_internal->EnableDragSource( format );
 }
 
-bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat>& formats )
 {
     wxCHECK_MSG( m_internal, false, "model must be associated before calling EnableDragTarget" );
-    return m_internal->EnableDropTarget( format );
+    return m_internal->EnableDropTarget( formats );
 }
 
 bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )

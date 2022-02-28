@@ -70,10 +70,14 @@ wxMenuItem::~wxMenuItem()
 // change item state
 // -----------------
 
-void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
+void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
 {
       m_bitmap = bitmap;
-      UpdateItemBitmap();
+}
+
+wxBitmap wxMenuItem::GetBitmap() const
+{
+    return GetBitmapFromBundle(m_bitmap);
 }
 
 void wxMenuItem::Enable(bool bDoEnable)
@@ -167,7 +171,7 @@ void wxMenuItem::UpdateItemBitmap()
 
     if ( m_bitmap.IsOk() )
     {
-        GetPeer()->SetBitmap( m_bitmap );
+        GetPeer()->SetBitmap(GetBitmap());
     }
 }
 

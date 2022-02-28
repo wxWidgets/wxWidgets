@@ -22,6 +22,7 @@ class wxArtBrowserDialog : public wxDialog
 {
 public:
     wxArtBrowserDialog(wxWindow *parent);
+    ~wxArtBrowserDialog();
 
     void SetArtClient(const wxArtClient& client);
     void SetArtBitmap(const wxArtID& id, const wxArtClient& client, const wxSize& size = wxDefaultSize);

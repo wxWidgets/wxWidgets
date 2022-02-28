@@ -116,6 +116,11 @@ typedef wxString wxArtID;
 
 #define wxART_EDIT                 wxART_MAKE_ART_ID(wxART_EDIT)
 
+#define wxART_WX_LOGO              wxART_MAKE_ART_ID(wxART_WX_LOGO)
+
+#define wxART_REFRESH              wxART_MAKE_ART_ID(wxART_REFRESH)
+#define wxART_STOP                 wxART_MAKE_ART_ID(wxART_STOP)
+
 // ----------------------------------------------------------------------------
 // wxArtProvider class
 // ----------------------------------------------------------------------------
@@ -139,7 +144,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_8
     // use PushBack(), it's the same thing
-    static wxDEPRECATED( void Insert(wxArtProvider *provider) );
+    wxDEPRECATED( static void Insert(wxArtProvider *provider) );
 #endif
 
     // Remove latest added provider and delete it.
@@ -224,9 +229,14 @@ protected:
         return GetSizeHint(client, true);
     }
 
-    // Derived classes must override CreateBitmap or CreateIconBundle
-    // (or both) to create requested art resource. This method is called
-    // only once per instance's lifetime for each requested wxArtID.
+    // Derived classes must override at least one of the CreateXXX() functions
+    // below to create requested art resource. Overriding more than one of them
+    // is also possible but is usually not needed, as both GetBitmap() and
+    // GetBitmapBundle() will try using both CreateBitmap() and
+    // CreateBitmapBundle().
+    //
+    // Note that these methods are called only once per instance's lifetime for
+    // each requested wxArtID as the return value is cached.
     virtual wxBitmap CreateBitmap(const wxArtID& WXUNUSED(id),
                                   const wxArtClient& WXUNUSED(client),
                                   const wxSize& WXUNUSED(size))
@@ -234,13 +244,11 @@ protected:
         return wxNullBitmap;
     }
 
-    // Derived classes must override CreateBitmapBundle if they provide
-    // a bundle that cannot be represented through an ordinary bitmap.
-    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
-                                              const wxArtClient& client,
-                                              const wxSize& size)
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& WXUNUSED(id),
+                                              const wxArtClient& WXUNUSED(client),
+                                              const wxSize& WXUNUSED(size))
     {
-        return wxBitmapBundle(CreateBitmap(id, client, size));
+        return wxBitmapBundle();
     }
 
     virtual wxIconBundle CreateIconBundle(const wxArtID& WXUNUSED(id),
@@ -248,6 +256,11 @@ protected:
     {
         return wxNullIconBundle;
     }
+
+    // Helper for resizing the bitmaps to the requested size without scaling
+    // them up nor resizing (16, 15) bitmaps to (16, 16) -- or doing anything
+    // at all if the bitmap is already of the required size.
+    static void RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded);
 
 private:
     static void CommonAddingProvider();

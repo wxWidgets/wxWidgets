@@ -21,7 +21,7 @@
 #include "wx/filesys.h"
 #include "wx/html/htmlfilt.h"
 #include "wx/filename.h"
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 class wxHtmlProcessor;
 class wxHtmlWinModule;
@@ -106,7 +106,7 @@ public:
     virtual void SetHTMLBackgroundColour(const wxColour& clr) = 0;
 
     /// Sets window's background to given bitmap.
-    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) = 0;
+    virtual void SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg) = 0;
 
     /// Sets status bar text.
     virtual void SetHTMLStatusText(const wxString& text) = 0;
@@ -315,7 +315,7 @@ public:
 
     // Sets the bitmap to use for background (currnetly it will be tiled,
     // when/if we have CSS support we could add other possibilities...)
-    void SetBackgroundImage(const wxBitmap& bmpBg) { m_bmpBg = bmpBg; }
+    void SetBackgroundImage(const wxBitmapBundle& bmpBg) { m_bmpBg = bmpBg; }
 
 #if wxUSE_CONFIG
     // Saves custom settings into cfg config. it will use the path 'path'
@@ -460,7 +460,7 @@ public:
     virtual wxWindow* GetHTMLWindow() wxOVERRIDE;
     virtual wxColour GetHTMLBackgroundColour() const wxOVERRIDE;
     virtual void SetHTMLBackgroundColour(const wxColour& clr) wxOVERRIDE;
-    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) wxOVERRIDE;
+    virtual void SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg) wxOVERRIDE;
     virtual void SetHTMLStatusText(const wxString& text) wxOVERRIDE;
     virtual wxCursor GetHTMLCursor(HTMLCursor type) const wxOVERRIDE;
 
@@ -523,7 +523,7 @@ private:
     wxBitmap m_backBuffer;
 
     // background image, may be invalid
-    wxBitmap m_bmpBg;
+    wxBitmapBundle m_bmpBg;
 
     // variables used when user is selecting text
     wxPoint     m_tmpSelFromPos;
@@ -604,7 +604,7 @@ private:
 
     bool m_bLinkWasClicked;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlCellEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxHtmlCellEvent);
 };
 
 
@@ -631,7 +631,7 @@ public:
 private:
     wxHtmlLinkInfo m_linkInfo;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlLinkEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxHtmlLinkEvent);
 };
 
 

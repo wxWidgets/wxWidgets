@@ -76,6 +76,7 @@
     wxBITMAP_BUNDLE_2() macro which can avoid the need to check for
     wxHAS_IMAGE_RESOURCES explicitly in the code in a common case of having
     only 2 embedded resources (for standard and high DPI).
+    See also FromSVGResource().
 
     Also note that the existing code using wxBitmap is compatible with the
     functions taking wxBitmapBundle in wxWidgets 3.1.6 and later because
@@ -187,14 +188,16 @@ public:
         Create a bundle from the bitmaps in the application resources.
 
         This function can only be used on the platforms supporting storing
-        bitmaps in resources, and currently only works under MSW and simply
-        returns an empty bundle on the other platforms.
+        bitmaps in resources, and currently only works under MSW and MacOS
+        and returns an empty bundle on the other platforms.
 
         Under MSW, for this function to create a valid bundle, you must have @c
         RCDATA resource with the given @a name in your application resource
         file (with the extension @c .rc) containing PNG file, and any other
         resources using @a name as prefix and suffix with the scale, e.g. "_2x"
         or "_1_5x" (for 150% DPI) will be also loaded as part of the bundle.
+
+         @see FromSVGResource()
      */
     static wxBitmapBundle FromResources(const wxString& name);
 
@@ -248,6 +251,35 @@ public:
     static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 
     /**
+        Create a bundle from the SVG image loaded from the given file.
+
+        This function loads the SVG data from the given @a path and calls
+        FromSVG() with it. As it is just a wrapper for FromSVG(), please see
+        that function documentation for more information about SVG support.
+
+        @param path Path to the SVG file. Notice that it should a local file,
+            not an URL.
+        @param sizeDef The default size to return from GetDefaultSize() for
+            this bundle.
+     */
+    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+
+    /**
+        Create a bundle from the SVG image loaded from an application resource.
+        Available only on the platforms supporting images in resources, i.e.,
+        MSW and MacOS.
+
+        @param name On MSW, it must be a resource with @c RT_RCDATA type.
+            On MacOS, it must be a file with an extension "svg" placed in
+            the "Resources" subdirectory of the application bundle.
+        @param sizeDef The default size to return from GetDefaultSize() for
+            this bundle.
+
+        @see FromResources(), FromSVGFile()
+     */
+    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
+
+    /**
         Check if bitmap bundle is non-empty.
 
         Return @true if the bundle contains any bitmaps or @false if it is
@@ -279,18 +311,30 @@ public:
         bitmap doesn't need to be rescaled, which typically significantly
         lowers its quality.
      */
-    wxSize GetPreferredSizeAtScale(double scale) const;
+    wxSize GetPreferredBitmapSizeAtScale(double scale) const;
 
     /**
         Get the size that would be best to use for this bundle at the DPI
         scaling factor used by the given window.
 
-        This is just a convenient wrapper for GetPreferredSizeAtScale() calling
+        This is just a convenient wrapper for GetPreferredBitmapSizeAtScale() calling
         that function with the result of wxWindow::GetDPIScaleFactor().
 
         @param window Non-null and fully created window.
      */
-    wxSize GetPreferredSizeFor(const wxWindow* window) const;
+    wxSize GetPreferredBitmapSizeFor(const wxWindow* window) const;
+
+    /**
+        Get the size that would be best to use for this bundle at the DPI
+        scaling factor used by the given window in logical size.
+
+        This is just call GetPreferredBitmapSizeAtScale() with the result of
+        wxWindow::GetDPIScaleFactor() and convert returned value with
+        wxWindow::FromPhys().
+
+        @param window Non-null and fully created window.
+     */
+    wxSize GetPreferredLogicalSizeFor(const wxWindow* window) const;
 
     /**
         Get bitmap of the specified size, creating a new bitmap from the closest
@@ -301,6 +345,9 @@ public:
         cached, avoid calling it for many different sizes if you do use it, as
         this will create many bitmaps that will never be deleted and will
         consume resources until the application termination.
+
+        @param size The size of the bitmap to return, in physical pixels. If
+            this parameter is wxDefaultSize, default bundle size is used.
      */
     wxBitmap GetBitmap(const wxSize& size) const;
 
@@ -308,14 +355,43 @@ public:
         Get bitmap of the size appropriate for the DPI scaling used by the
         given window.
 
-        This helper function simply combines GetBitmap() and
-        GetPreferredSizeFor(), i.e. it returns a (normally unscaled) bitmap
+        This helper function simply combines GetPreferredBitmapSizeFor() and
+        GetBitmap(), i.e. it returns a (normally unscaled) bitmap
         from the bundle of the closest size to the size that should be used at
         the DPI scaling of the provided window.
 
         @param window Non-null and fully created window.
      */
     wxBitmap GetBitmapFor(const wxWindow* window) const;
+
+    /**
+        Get icon of the specified size.
+
+        This is just a convenient wrapper for GetBitmap() and simply converts
+        the returned bitmap to wxIcon.
+     */
+    wxIcon GetIcon(const wxSize& size) const;
+
+    /**
+        Get icon of the size appropriate for the DPI scaling used by the
+        given window.
+
+        This is similar to GetBitmapFor(), but returns a wxIcon, as GetIcon()
+        does.
+
+        @param window Non-null and fully created window.
+     */
+    wxIcon GetIconFor(const wxWindow* window) const;
+
+    /**
+        Check if the two bundles refer to the same object.
+
+        Bundles are considered to be same only if they actually use the same
+        underlying object, i.e. are copies of each other. If the two bundles
+        were independently constructed, they're @e not considered to be the
+        same, even if they were created from the same bitmap.
+     */
+    bool IsSameAs(const wxBitmapBundle& other) const;
 };
 
 /**
@@ -338,7 +414,7 @@ public:
                 ... determine the minimum/default size for bitmap to use ...
             }
 
-            wxSize GetPreferredSizeAtScale(double scale) const wxOVERRIDE
+            wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
             {
                 // If it's ok to scale the bitmap, just use the standard size
                 // at the given scale:
@@ -382,7 +458,7 @@ public:
 
         Must always return a valid size.
      */
-    virtual wxSize GetPreferredSizeAtScale(double scale) const = 0;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const = 0;
 
     /**
         Retrieve the bitmap of exactly the given size.

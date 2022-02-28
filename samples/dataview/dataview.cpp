@@ -47,8 +47,6 @@
     #include "../sample.xpm"
 #endif
 
-#include "wx_small.xpm"
-
 // ----------------------------------------------------------------------------
 // MyApp
 // ----------------------------------------------------------------------------
@@ -84,6 +82,7 @@ private:
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
     void OnGetPageInfo(wxCommandEvent& event);
     void OnDisable(wxCommandEvent& event);
+    void OnClearMyMusicTreeModel(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -400,6 +399,7 @@ enum
     ID_CLEARLOG = wxID_HIGHEST+1,
     ID_GET_PAGE_INFO,
     ID_DISABLE,
+    ID_CLEAR_MODEL,
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
     ID_CUSTOM_HEADER_ATTR,
@@ -481,6 +481,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU( ID_GET_PAGE_INFO, MyFrame::OnGetPageInfo )
     EVT_MENU( ID_DISABLE, MyFrame::OnDisable )
+    EVT_MENU( ID_CLEAR_MODEL, MyFrame::OnClearMyMusicTreeModel )
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
     EVT_MENU( ID_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr )
@@ -599,6 +600,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_GET_PAGE_INFO, "Show current &page info");
     file_menu->AppendCheckItem(ID_DISABLE, "&Disable\tCtrl-D");
+    file_menu->Append(ID_CLEAR_MODEL, "&Clear MyMusicTreeModel\tCtrl-W");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->AppendCheckItem(ID_CUSTOM_HEADER_ATTR, "C&ustom header attributes");
@@ -992,13 +994,13 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
                                         wxDefaultSize, style | wxDV_NO_HEADER );
             m_ctrl[Page_TreeStore] = tc;
 
-            const bool useDefaultSize = !HasModelFlag(MODEL_USE_TALL_ROWS)
-                  || HasModelFlag(MODEL_KEEP_LOGO_SMALL);
-            const int imageSize = useDefaultSize ? 16 : 32;
-            wxImageList *ilist = new wxImageList( imageSize, imageSize );
+            const wxSize size = GetIconSizeFromModelFlags(m_modelFlags[nPanel]);
 
-            ilist->Add( wxIcon(wx_small_xpm) );
-            tc->AssignImageList( ilist );
+            wxDataViewTreeCtrl::Images images;
+            images.push_back(
+                wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_LIST, size)
+            );
+            tc->SetImages(images);
 
             const wxDataViewItem root =
                 tc->AppendContainer( wxDataViewItem(0), "The Root", 0 );
@@ -1106,7 +1108,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
     }
 
     if ( HasModelFlag(MODEL_USE_TALL_ROWS) )
-        m_ctrl[nPanel]->SetRowHeight(32);
+        m_ctrl[nPanel]->SetRowHeight(FromDIP(32));
 }
 
 
@@ -1144,6 +1146,11 @@ void MyFrame::OnGetPageInfo(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnDisable(wxCommandEvent& event)
 {
     m_ctrl[m_notebook->GetSelection()]->Enable(!event.IsChecked());
+}
+
+void MyFrame::OnClearMyMusicTreeModel(wxCommandEvent& WXUNUSED(event))
+{
+    m_music_model->Clear();
 }
 
 void MyFrame::OnSetForegroundColour(wxCommandEvent& WXUNUSED(event))
@@ -1430,6 +1437,11 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
         return;
     }
 
+    // Note that instead of recreating a new data object here we could also
+    // retrieve the data object from the event, using its GetDataObject()
+    // method. This would be more efficient as it would avoid copying the text
+    // one more time, but would require a cast in the code and we don't really
+    // care about efficiency here.
     wxTextDataObject obj;
     obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
 

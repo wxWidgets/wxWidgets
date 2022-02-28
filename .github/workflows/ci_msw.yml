@@ -6,6 +6,7 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'
       - '.github/workflows/ci_cmake.yml'
       - '.github/workflows/ci_mac.yml'
@@ -25,6 +26,7 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'
       - '.github/workflows/ci_cmake.yml'
       - '.github/workflows/ci_mac.yml'
@@ -58,12 +60,22 @@ jobs:
           - configuration: 'DLL Release'
             platform: 'x64'
             vsversion: 2019
+            use_stl: true
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+
+      - name: Configure to use STL
+        if: matrix.use_stl
+        working-directory: include/wx/msw
+        run: |
+            $txt = Get-Content setup.h
+            Write-Output $txt |
+            %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL 1"} |
+            Set-Content setup.h
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.0.3

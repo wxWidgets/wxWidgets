@@ -5,6 +5,7 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
+    - '.github/ISSUE_TEMPLATE/**'
     - '.github/workflows/ci.yml'
     - '.github/workflows/ci_cmake.yml'
     - '.github/workflows/ci_msw.yml'
@@ -33,6 +34,7 @@ on:
   pull_request:
     branches: [ master ]
     paths-ignore:
+    - '.github/ISSUE_TEMPLATE/**'
     - '.github/workflows/ci.yml'
     - '.github/workflows/ci_cmake.yml'
     - '.github/workflows/ci_msw.yml'
@@ -73,10 +75,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: wxMac ARM C++11
+        - name: wxMac ARM C++11 STL
           runner: self-hosted
           arch: arm64
-          configure_flags: --with-cxx=11
+          configure_flags: --with-cxx=11 --enable-stl
           use_asan: true
         - name: wxMac Intel C++17
           runner: self-hosted
@@ -149,6 +151,16 @@ jobs:
         ./build/tools/before_install.sh
         mkdir -p $PWD/localbin_${{ matrix.arch }}
 
+    - name: Show build environment
+      run: |
+        echo "Environment:"
+        env | sort
+        echo
+
+        echo "Compiler version:"
+        ${CXX-g++} --version
+        echo
+
     - name: Configuring
       run: |
         wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
@@ -203,7 +215,11 @@ jobs:
       if: matrix.skip_testing != true
       working-directory: tests
       run: |
-        export ASAN_OPTIONS=fast_unwind_on_malloc=0
+        # We currently need to disable container overflow detection as we get
+        # what seems to be a false positive in BitmapComboBoxTestCase triggered
+        # by creating a new string from std::allocator<wxString>::construct()
+        # used by std::vector<>::insert().
+        export ASAN_OPTIONS='fast_unwind_on_malloc=0 detect_container_overflow=0'
         # Exclude tests that are currently known to fail
         wx_tests_selection='~[valnum] ~wxPersistTLW ~wxPersistDVC ~wxTopLevel::Show ~wxFont::Weight ~wxFont::NativeFontInfo ~WebView ~RadioButton::Single ~RadioButton::Focus ~wxHtmlPrintout::Pagination ~wxTextCtrl::GetBestSize ~TextCtrlTestCase ~ClippingBoxTestCase::wxClientDC ~wxExecute::RedirectUTF8 ~Ellipsization::NormalCase ~SpinCtrl::* ~SpinCtrlDouble::* ~NotebookTestCase ~SettingsTestCase ~XRC::LoadURL ~Window::Show ~ModalDialogsTestCase ~Button::Click ~Button::Disabled ~wxDVC::GetItemRect ~wxDVC::AppendTextColumn ~Grid::KeyboardSelection ~Grid::CellClick ~Grid::ReorderedColumnsCellClick ~Grid::CellSelect ~wxStyledTextCtrl::AutoComp ~EvtLoopTestCase ~EventPropagationTestCase'
         ./test_gui $wx_tests_selection

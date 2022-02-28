@@ -266,8 +266,7 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
     // because without it GetBestSize (which is used to set the initial size
     // of controls if an explicit size is not given) will often report
     // incorrect sizes since the widget's style context is not fully known.
-    // See bug #901694 for details
-    // (http://sourceforge.net/tracker/?func=detail&aid=901694&group_id=9863&atid=109863)
+    // See https://github.com/wxWidgets/wxWidgets/issues/20825
     gtk_widget_set_parent(child->m_widget, parent->m_widget);
 
     // NOTE: This should be considered a temporary workaround until we can

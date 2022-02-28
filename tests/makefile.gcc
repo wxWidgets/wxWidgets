@@ -502,7 +502,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-images fr ja
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images fr ja
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -551,6 +551,10 @@ $(OBJS)\test_allheaders.exe: $(TEST_ALLHEADERS_OBJECTS) $(OBJS)\test_allheaders_
 endif
 
 data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %%f in (testdata.conf horse.svg) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+
+data-image-sample: 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %%f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
@@ -1187,7 +1191,7 @@ $(OBJS)\test_allheaders_allheaders.o: ./allheaders.cpp
 $(OBJS)\test_allheaders_testableframe.o: ./testableframe.cpp
 	$(CXX) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean data data-images fr ja
+.PHONY: all clean data data-image-sample data-images fr ja
 
 
 SHELL := $(COMSPEC)

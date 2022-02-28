@@ -877,5 +877,4 @@ void wxSpinCtrl::DoClientToScreen(int *x, int *y) const
 {
     wxWindow::MSWDoClientToScreen(GetBuddyHwnd(), x, y);
 }
-
 #endif // wxUSE_SPINCTRL

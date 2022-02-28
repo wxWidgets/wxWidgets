@@ -83,7 +83,7 @@ elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}
         wx_string_append(CMAKE_C_FLAGS_RELEASE "${COMPILER_DBGSYM_FLAG}")
     endif()
 
-    if(wxBUILD_USE_STATIC_RUNTIME)
+    if(wxBUILD_USE_STATIC_RUNTIME AND NOT APPLE)
         if(MINGW)
             set(STATIC_LINKER_FLAGS " -static")
         else()

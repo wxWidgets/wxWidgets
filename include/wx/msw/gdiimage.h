@@ -36,6 +36,8 @@ public:
     {
         m_width = m_height = m_depth = 0;
 
+        m_scaleFactor = 1.0;
+
         m_handle = NULL;
     }
 
@@ -44,6 +46,8 @@ public:
         m_width = data.m_width;
         m_height = data.m_height;
         m_depth = data.m_depth;
+
+        m_scaleFactor = data.m_scaleFactor;
 
         // can't copy handles like this, derived class copy ctor must do it!
         m_handle = NULL;
@@ -64,6 +68,9 @@ public:
 
     // the depth of the image
     int m_depth;
+
+    // scale factor of the image
+    double m_scaleFactor;
 
     // the handle to it
     union
@@ -111,6 +118,19 @@ public:
     int GetWidth() const { return IsNull() ? 0 : GetGDIImageData()->m_width; }
     int GetHeight() const { return IsNull() ? 0 : GetGDIImageData()->m_height; }
     int GetDepth() const { return IsNull() ? 0 : GetGDIImageData()->m_depth; }
+
+    // allow setting and storing the scale factor
+    void SetScaleFactor(double scale);
+    double GetScaleFactor() const;
+
+    // return the size divided by scale factor
+    wxSize GetDIPSize() const;
+
+    // logical metrics accessors return the same thing as physical ones, just
+    // as in all the other ports without wxHAS_DPI_INDEPENDENT_PIXELS.
+    double GetLogicalWidth() const;
+    double GetLogicalHeight() const;
+    wxSize GetLogicalSize() const;
 
     wxSize GetSize() const
     {

@@ -42,6 +42,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
             event.SetInt(wxerror); \
             break;
 
+#if wxUSE_WEBVIEW_EDGE_STATIC
+    #define wxCreateCoreWebView2EnvironmentWithOptions ::CreateCoreWebView2EnvironmentWithOptions
+    #define wxGetAvailableCoreWebView2BrowserVersionString ::GetAvailableCoreWebView2BrowserVersionString
+
+    // Automatically link the static loader lib with MSVC
+    #pragma comment(lib, "WebView2LoaderStatic")
+#else
 // WebView2Loader typedefs
 typedef HRESULT (__stdcall *CreateCoreWebView2EnvironmentWithOptions_t)(
     PCWSTR browserExecutableFolder,
@@ -54,10 +61,10 @@ typedef HRESULT(__stdcall *GetAvailableCoreWebView2BrowserVersionString_t)(
 
 CreateCoreWebView2EnvironmentWithOptions_t wxCreateCoreWebView2EnvironmentWithOptions = NULL;
 GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2BrowserVersionString = NULL;
-
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
+#endif // wxUSE_WEBVIEW_EDGE_STATIC
+
 wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
-wxString wxWebViewEdgeImpl::ms_version;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
     m_ctrl(webview)
@@ -133,6 +140,7 @@ HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
 
 bool wxWebViewEdgeImpl::Initialize()
 {
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     if (ms_loaderDll.IsLoaded())
         return true;
 
@@ -145,7 +153,7 @@ bool wxWebViewEdgeImpl::Initialize()
     wxDL_INIT_FUNC(wx, GetAvailableCoreWebView2BrowserVersionString, loaderDll);
     if (!wxGetAvailableCoreWebView2BrowserVersionString || !wxCreateCoreWebView2EnvironmentWithOptions)
         return false;
-
+#endif
     // Check if a Edge browser can be found by the loader DLL
     wxCoTaskMemPtr<wchar_t> versionStr;
     HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
@@ -155,16 +163,19 @@ bool wxWebViewEdgeImpl::Initialize()
         wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
         return false;
     }
-    ms_version = versionStr;
 
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     ms_loaderDll.Attach(loaderDll.Detach());
+#endif
 
     return true;
 }
 
 void wxWebViewEdgeImpl::Uninitialize()
 {
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     ms_loaderDll.Unload();
+#endif
 }
 
 void wxWebViewEdgeImpl::UpdateBounds()
@@ -460,6 +471,12 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         m_pendingURL.clear();
     }
 
+    if (!m_pendingPage.empty())
+    {
+        m_ctrl->SetPage(m_pendingPage, "");
+        m_pendingPage.clear();
+    }
+
     return S_OK;
 }
 
@@ -576,6 +593,7 @@ void wxWebViewEdge::LoadURL(const wxString& url)
 {
     if (!m_impl->m_webView)
     {
+        m_impl->m_pendingPage.clear();
         m_impl->m_pendingURL = url;
         return;
     }
@@ -940,8 +958,15 @@ void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> WXUNUSED(handl
 
 void wxWebViewEdge::DoSetPage(const wxString& html, const wxString& WXUNUSED(baseUrl))
 {
-    if (m_impl->m_webView)
-        m_impl->m_webView->NavigateToString(html.wc_str());
+    if (!m_impl->m_webView)
+    {
+        m_impl->m_pendingPage = html;
+        m_impl->m_pendingURL.clear();
+        return;
+    }
+    HRESULT hr = m_impl->m_webView->NavigateToString(html.wc_str());
+    if (FAILED(hr))
+        wxLogApiError("WebView2::NavigateToString", hr);
 }
 
 // wxWebViewFactoryEdge
@@ -953,17 +978,26 @@ bool wxWebViewFactoryEdge::IsAvailable()
 
 wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo()
 {
-    IsAvailable(); // Make sure ms_version string is initialized (if available)
     long major = 0,
          minor = 0,
          micro = 0;
-    wxStringTokenizer tk(wxWebViewEdgeImpl::ms_version, ". ");
-    // Ignore the return value because if the version component is missing
-    // or invalid (i.e. non-numeric), the only thing we can do is to ignore
-    // it anyhow.
-    tk.GetNextToken().ToLong(&major);
-    tk.GetNextToken().ToLong(&minor);
-    tk.GetNextToken().ToLong(&micro);
+
+    if (wxWebViewEdgeImpl::Initialize())
+    {
+        wxCoTaskMemPtr<wchar_t> nativeVersionStr;
+        HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
+            wxWebViewEdgeImpl::ms_browserExecutableDir.wc_str(), &nativeVersionStr);
+        if (SUCCEEDED(hr) && nativeVersionStr)
+        {
+            wxStringTokenizer tk(wxString(nativeVersionStr), ". ");
+            // Ignore the return value because if the version component is missing
+            // or invalid (i.e. non-numeric), the only thing we can do is to ignore
+            // it anyhow.
+            tk.GetNextToken().ToLong(&major);
+            tk.GetNextToken().ToLong(&minor);
+            tk.GetNextToken().ToLong(&micro);
+        }
+    }
 
     return wxVersionInfo("Microsoft Edge WebView2", major, minor, micro);
 }

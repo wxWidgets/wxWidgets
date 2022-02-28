@@ -736,9 +736,8 @@ public:
     /**
         Implement in derived class for custom array-to-string conversion.
     */
-    virtual void ConvertArrayToString(const wxArrayString& arr,
-                                      wxString* pString,
-                                      const wxUniChar& delimiter) const;
+    virtual wxString ConvertArrayToString(const wxArrayString& arr,
+                                          const wxUniChar& delimiter) const;
 
     /**
         Shows string editor dialog to edit the individual item. Value to be edited
@@ -758,11 +757,10 @@ public:
     };
 
     /**
-        Generates contents for string @a dst based on the contents of
-        wxArrayString @a src.
+        Generates string based on the contents of wxArrayString @a src.
     */
-    static void ArrayStringToString( wxString& dst, const wxArrayString& src,
-                                     wxUniChar delimiter, int flags );
+    static wxString ArrayStringToString(const wxArrayString& src,
+                                        wxUniChar delimiter, int flags);
 
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);

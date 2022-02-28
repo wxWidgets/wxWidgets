@@ -639,7 +639,7 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
         DrawIcon(dc, window, rect, pane);
 
         const wxBitmap& icon = pane.icon.GetBitmapFor(window);
-        caption_offset += icon.GetScaledWidth() + window->FromDIP(3);
+        caption_offset += icon.GetLogicalWidth() + window->FromDIP(3);
     }
 
     if (pane.state & wxAuiPaneInfo::optionActive)
@@ -684,11 +684,18 @@ wxAuiDefaultDockArt::DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wx
         wxCHECK_RET( window, "must have some window" );
     }
 
+    // Ensure the icon fits into the title bar.
+    wxSize iconSize = pane.icon.GetPreferredLogicalSizeFor(window);
+    if (iconSize.y > rect.height)
+    {
+        iconSize *= static_cast<double>(rect.height) / iconSize.y;
+    }
+
     // Draw the icon centered vertically
     int xOffset = window->FromDIP(2);
-    const wxBitmap& icon = pane.icon.GetBitmapFor(window);
+    const wxBitmap& icon = pane.icon.GetBitmap(window->ToPhys(iconSize));
     dc.DrawBitmap(icon,
-                  rect.x+xOffset, rect.y+(rect.height-icon.GetScaledHeight())/2,
+                  rect.x+xOffset, rect.y+(rect.height-icon.GetLogicalHeight())/2,
                   true);
 }
 
@@ -789,7 +796,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
 
     wxRect rect = _rect;
 
-    rect.y = rect.y + (rect.height/2) - (bmp.GetScaledHeight()/2);
+    rect.y = rect.y + (rect.height/2) - (bmp.GetLogicalHeight()/2);
 
     if (button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
@@ -813,8 +820,8 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
 
         // draw the background behind the button
         dc.DrawRectangle(rect.x, rect.y,
-            bmp.GetScaledWidth() - window->FromDIP(1),
-            bmp.GetScaledHeight() - window->FromDIP(1));
+            bmp.GetLogicalWidth() - window->FromDIP(1),
+            bmp.GetLogicalHeight() - window->FromDIP(1));
     }
 
     // draw the button itself

@@ -56,7 +56,7 @@ wxObject *wxBannerWindowXmlHandler::DoCreateResource()
         }
     }
 
-    wxBitmap bitmap = GetBitmap();
+    wxBitmapBundle bitmap = GetBitmapBundle();
     if ( bitmap.IsOk() )
     {
         if ( colStart.IsOk() || colEnd.IsOk() )

@@ -2777,8 +2777,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     if ( styleRender & wxGRID_DRAW_COLS_HEADER )
         sizeRender.y += grid->GetColLabelSize();
 
-    sizeRender.x *= zoom;
-    sizeRender.y *= zoom;
+    sizeRender *= zoom;
 
     // delete any existing render frame and create new one
     wxWindow* win = FindWindowByName( "frameRender" );

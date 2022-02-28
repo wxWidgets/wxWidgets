@@ -68,13 +68,14 @@ const wxChar *SMALL_VIRTUAL_VIEW_ITEMS[][2] =
 static const int NUM_ICONS = 9;
 
 int wxCALLBACK
-MyCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr WXUNUSED(sortData))
+MyCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData)
 {
+    bool ascending = (sortData == 1);
     // inverse the order
     if (item1 < item2)
-        return 1;
+        return ascending ? -1 : 1;
     if (item1 > item2)
-        return -1;
+        return ascending ? 1 : -1;
 
     return 0;
 }
@@ -721,11 +722,15 @@ void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
 {
     wxStopWatch sw;
 
-    m_listCtrl->SortItems(MyCompareFunction, 0);
+    static bool sortAsc = false;
+    sortAsc = !sortAsc;
+    m_listCtrl->SortItems(MyCompareFunction, sortAsc);
 
     m_logWindow->WriteText(wxString::Format("Sorting %d items took %ld ms\n",
                                             m_listCtrl->GetItemCount(),
                                             sw.Time()));
+
+    m_listCtrl->ShowSortIndicator(0, sortAsc);
 }
 
 void MyFrame::OnFind(wxCommandEvent& WXUNUSED(event))
@@ -1082,6 +1087,13 @@ void MyListCtrl::OnColClick(wxListEvent& event)
     if ( col == -1 )
     {
         return; // clicked outside any column.
+    }
+
+    // sort on item data (SetItemData)
+    const bool ascending = GetUpdatedAscendingSortIndicator(col);
+    if ( SortItems(MyCompareFunction, ascending) )
+    {
+        ShowSortIndicator(col, ascending);
     }
 
     // set or unset image

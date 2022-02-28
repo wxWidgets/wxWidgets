@@ -220,10 +220,15 @@ public:
     wxFont GetItemFont( long item ) const;
 
     // Checkbox state of an item
-    virtual bool HasCheckBoxes() const wxOVERRIDE;
-    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
-    virtual bool IsItemChecked(long item) const wxOVERRIDE;
-    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+    bool HasCheckBoxes() const wxOVERRIDE;
+    bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
+    bool IsItemChecked(long item) const wxOVERRIDE;
+    void CheckItem(long item, bool check) wxOVERRIDE;
+
+    // Sort indicator in header
+    void ShowSortIndicator(int idx, bool ascending = true) wxOVERRIDE;
+    int GetSortIndicator() const wxOVERRIDE;
+    bool IsAscendingSortIndicator() const wxOVERRIDE;
 
     // Gets the number of selected items in the list control
     int GetSelectedItemCount() const;
@@ -424,6 +429,10 @@ protected:
     // true if we have any items with custom attributes
     bool m_hasAnyAttr;
 
+    // m_sortAsc is only used if m_sortCol != -1
+    bool m_sortAsc;
+    int m_sortCol;
+
 private:
     // process NM_CUSTOMDRAW notification message
     WXLPARAM OnCustomDraw(WXLPARAM lParam);
@@ -445,6 +454,8 @@ private:
     // in-place editor control.
     void OnCharHook(wxKeyEvent& event);
 
+    // Draw the sort arrow in the header.
+    void DrawSortArrow();
 
     // Object using for header custom drawing if necessary, may be NULL.
     wxMSWListHeaderCustomDraw* m_headerCustomDraw;

@@ -157,6 +157,7 @@ clean:
 	$(MAKE) -C text -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C thread -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C toolbar -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C treelist -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C treectrl -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C typetest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C uiaction -f makefile.gcc $(MAKEARGS) clean
@@ -409,6 +410,9 @@ thread:
 
 toolbar: 
 	$(MAKE) -C toolbar -f makefile.gcc $(MAKEARGS) all
+
+treelist: 
+	$(MAKE) -C treelist -f makefile.gcc $(MAKEARGS) all
 
 treectrl: 
 	$(MAKE) -C treectrl -f makefile.gcc $(MAKEARGS) all

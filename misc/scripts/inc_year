@@ -27,5 +27,5 @@ run_sed src/common/utilscmn.cpp "s/1995-$old_year/1995-$new_year/"
 
 # And Mac files are much newer than that.
 run_sed CMakeLists.txt "s/2002-$old_year/2002-$new_year/"
-run_set build/bakefiles/mac_bundles.bkl "s/2002-$old_year/2002-$new_year/"
+run_sed build/bakefiles/mac_bundles.bkl "s/2002-$old_year/2002-$new_year/"
 run_sed samples/minimal/Info_cocoa.plist "s/2005-$old_year/2005-$new_year/"

@@ -122,8 +122,10 @@ private:
 
 
     // we can have either an icon or a bitmap: if m_icon is valid, it is used,
-    // otherwise m_bitmapBundle defined in the base class is used if it is valid
+    // otherwise we use m_bitmap which is itself obtained from m_bitmapBundle
+    // defined in the base class
     wxIcon m_icon;
+    wxBitmap m_bitmap;
 
     // handle used in last call to STM_SETIMAGE
     WXHANDLE m_currentHandle;

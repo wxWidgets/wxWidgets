@@ -11,7 +11,7 @@
 #ifndef _WX_GENERIC_ANIMATEH__
 #define _WX_GENERIC_ANIMATEH__
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 
 // ----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ public:
 
     void SetAnimation(const wxAnimation &animation) wxOVERRIDE;
 
-    virtual void SetInactiveBitmap(const wxBitmap &bmp) wxOVERRIDE;
+    virtual void SetInactiveBitmap(const wxBitmapBundle &bmp) wxOVERRIDE;
 
     // override base class method
     virtual bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
@@ -109,6 +109,15 @@ protected:      // internal utilities
 
     virtual void DisplayStaticImage() wxOVERRIDE;
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+
+    // This function can be used as event handler for wxEVT_DPI_CHANGED event
+    // and simply calls UpdateStaticImage() to refresh the m_bmpStaticReal when it happens.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event)
+    {
+        UpdateStaticImage();
+
+        event.Skip();
+    }
 
     // Helpers to safely access methods in the wxAnimationGenericImpl that are
     // specific to the generic implementation

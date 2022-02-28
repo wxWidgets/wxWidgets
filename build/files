@@ -177,6 +177,7 @@ BASE_OSX_SHARED_HDR =
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
+    src/osx/volume.mm
 
 # files used by non-wxMac OS X builds
 BASE_OSX_NOTWXMAC_SRC =
@@ -1316,6 +1317,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/mimetype.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
+    src/gtk/overlay.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
@@ -2162,8 +2164,8 @@ MSW_HDR =
 MSW_RSC =
     # Resources must be installed together with headers:
     wx/msw/wx.manifest
-    wx/msw/amd64.manifest
-    wx/msw/ia64.manifest
+    wx/msw/wx_dpi_aware.manifest
+    wx/msw/wx_dpi_aware_pmv2.manifest
     wx/msw/wx.rc
     # bitmaps
     wx/msw/colours.bmp
@@ -2832,6 +2834,7 @@ XRC_SRC =
     src/xrc/xh_bmp.cpp
     src/xrc/xh_bmpcbox.cpp
     src/xrc/xh_bmpbt.cpp
+    src/xrc/xh_bookctrlbase.cpp
     src/xrc/xh_bttn.cpp
     src/xrc/xh_cald.cpp
     src/xrc/xh_chckb.cpp
@@ -2902,6 +2905,7 @@ XRC_HDR =
     wx/xrc/xh_bmpbt.h
     wx/xrc/xh_bmp.h
     wx/xrc/xh_bmpcbox.h
+    wx/xrc/xh_bookctrlbase.h
     wx/xrc/xh_bttn.h
     wx/xrc/xh_cald.h
     wx/xrc/xh_chckb.h

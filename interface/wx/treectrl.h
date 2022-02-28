@@ -1105,7 +1105,12 @@ public:
                 const wxTreeItemId& item = wxTreeItemId());
 
     /**
-        Returns the item (valid for all events).
+        Returns the item.
+
+        Note that the item may be invalid for wxEVT_TREE_SEL_CHANGED events
+        when the previously selected item has been deselected and there is no
+        new selection any longer, as it notably happens when deleting all tree
+        control items.
     */
     wxTreeItemId GetItem() const;
 
