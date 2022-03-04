@@ -3228,6 +3228,42 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
 } // extern "C"
 
+namespace
+{
+
+// Define a custom bitmap provider here as we don't have a valid window to use
+// with the standard provider when we need to initialize the image yet, so we
+// have to use the column -- which will have the associated window by the time
+// we actually need to use it.
+struct BitmapProvider : wxGtkImage::BitmapProvider
+{
+    explicit BitmapProvider(wxDataViewColumn* column) : m_column(column) { }
+
+    virtual double GetScale() const wxOVERRIDE;
+    virtual wxBitmap Get() const wxOVERRIDE;
+
+    wxDataViewColumn* const m_column;
+};
+
+double BitmapProvider::GetScale() const
+{
+    wxDataViewCtrl* const ctrl = m_column->GetOwner();
+    wxCHECK_MSG( ctrl, 1.0, "no valid window, using default scale factor" );
+
+    return ctrl->GetDPIScaleFactor();
+}
+
+wxBitmap BitmapProvider::Get() const
+{
+#ifdef __WXGTK3__
+    if (IsScaled())
+        return GetAtScale(m_column->GetBitmapBundle());
+#endif
+    return wxBitmap();
+}
+
+} // namespace
+
 #include <wx/listimpl.cpp>
 WX_DEFINE_LIST(wxDataViewColumnList)
 
@@ -3241,7 +3277,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     SetTitle( title );
 }
 
-wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell,
+wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
                                     wxAlignment align, int flags )
     : wxDataViewColumnBase( bitmap, cell, model_column )
@@ -3267,7 +3303,7 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
     GtkWidget* box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
     gtk_widget_show( box );
     // gtk_container_set_border_width((GtkContainer*)box, 2);
-    m_image = wxGtkImage::New();
+    m_image = wxGtkImage::New(new BitmapProvider(this));
     gtk_box_pack_start(GTK_BOX(box), m_image, FALSE, FALSE, 1);
     m_label = gtk_label_new("");
     gtk_box_pack_end( GTK_BOX(box), GTK_WIDGET(m_label), FALSE, FALSE, 1 );
@@ -3332,7 +3368,7 @@ wxString wxDataViewColumn::GetTitle() const
            );
 }
 
-void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
+void wxDataViewColumn::SetBitmap( const wxBitmapBundle &bitmap )
 {
     wxDataViewColumnBase::SetBitmap( bitmap );
 

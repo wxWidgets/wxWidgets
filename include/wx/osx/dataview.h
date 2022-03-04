@@ -33,7 +33,7 @@ public:
                      int width = wxDVC_DEFAULT_WIDTH,
                      wxAlignment align = wxALIGN_CENTER,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
-    wxDataViewColumn(const wxBitmap& bitmap,
+    wxDataViewColumn(const wxBitmapBundle& bitmap,
                      wxDataViewRenderer* renderer,
                      unsigned int model_column,
                      int width = wxDVC_DEFAULT_WIDTH,
@@ -53,7 +53,7 @@ public:
     virtual bool IsHidden() const wxOVERRIDE;
 
     virtual void SetAlignment  (wxAlignment align) wxOVERRIDE;
-    virtual void SetBitmap     (wxBitmap const& bitmap) wxOVERRIDE;
+    virtual void SetBitmap     (wxBitmapBundle const& bitmap) wxOVERRIDE;
     virtual void SetFlags      (int flags) wxOVERRIDE { m_flags = flags; /*SetIndividualFlags(flags); */ }
     virtual void SetHidden     (bool hidden) wxOVERRIDE;
     virtual void SetMaxWidth   (int maxWidth);

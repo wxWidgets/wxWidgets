@@ -405,8 +405,8 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
     // draw the bitmap if there is one
     if ( params && params->m_labelBitmap.IsOk() )
     {
-        int w = params->m_labelBitmap.GetWidth();
-        int h = params->m_labelBitmap.GetHeight();
+        int w = params->m_labelBitmap.GetLogicalWidth();
+        int h = params->m_labelBitmap.GetLogicalHeight();
 
         const int margin = 1; // an extra pixel on either side of the bitmap
 

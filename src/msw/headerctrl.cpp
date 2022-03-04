@@ -123,6 +123,9 @@ protected:
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
+    // This function can be used as event handle for wxEVT_DPI_CHANGED event.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event);
+
 private:
     // override MSW-specific methods needed for new control
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
@@ -222,6 +225,8 @@ void wxMSWHeaderCtrl::Init()
     m_colBeingDragged = -1;
     m_isColBeingResized = false;
     m_customDraw = NULL;
+
+    Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
 }
 
 bool wxMSWHeaderCtrl::Create(wxWindow *parent,
@@ -330,6 +335,18 @@ void wxMSWHeaderCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
     {
         customDraw->m_attr.SetFont(m_font);
     }
+}
+
+void wxMSWHeaderCtrl::WXHandleDPIChanged(wxDPIChangedEvent& event)
+{
+    delete m_imageList;
+    m_imageList = NULL;
+    for (unsigned int i = 0; i < m_numColumns; ++i)
+    {
+        UpdateHeader(i);
+    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -443,7 +460,7 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     hdi.pszText = buf.data();
     hdi.cchTextMax = wxStrlen(buf);
 
-    const wxBitmap bmp = col.GetBitmap();
+    wxBitmap bmp = col.GetBitmapBundle().GetBitmapFor(this);
     if ( bmp.IsOk() )
     {
         hdi.mask |= HDI_IMAGE;
@@ -451,8 +468,8 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
         if ( HasFlag(wxHD_BITMAP_ON_RIGHT) )
             hdi.fmt |= HDF_BITMAP_ON_RIGHT;
 
-        const int bmpWidth = bmp.GetWidth(),
-                  bmpHeight = bmp.GetHeight();
+        const int bmpWidth = bmp.GetLogicalWidth(),
+                  bmpHeight = bmp.GetLogicalHeight();
 
         if ( !m_imageList )
         {

@@ -553,7 +553,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         wxHeaderButtonParams params;
         params.m_labelText = col.GetTitle();
-        params.m_labelBitmap = col.GetBitmap();
+        params.m_labelBitmap = col.GetBitmapBundle().GetBitmapFor(this);
         params.m_labelAlignment = col.GetAlignment();
 
 #ifdef __WXGTK__
