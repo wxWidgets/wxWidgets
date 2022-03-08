@@ -35,6 +35,11 @@
     #include "wx/osx/private/available.h"
 #endif
 
+#ifdef __WINDOWS__
+    // We only need it to get ::MulDiv() declaration, used by wxMulDivInt32().
+    #include "wx/msw/wrapwin.h"
+#endif
+
 #include "wx/renderer.h"
 
 #include <stdlib.h>
@@ -61,6 +66,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxNotifyEvent);
 wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_PAINT(wxSplitterWindow::OnPaint)
     EVT_SIZE(wxSplitterWindow::OnSize)
+    EVT_DPI_CHANGED(wxSplitterWindow::OnDPIChanged)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
     EVT_MOUSE_CAPTURE_LOST(wxSplitterWindow::OnMouseCaptureLost)
 
@@ -140,6 +146,7 @@ void wxSplitterWindow::Init()
 
     m_needUpdating = false;
     m_isHot = false;
+    m_sizeAfterDPIChange = false;
 }
 
 wxSplitterWindow::~wxSplitterWindow()
@@ -473,6 +480,13 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
             // Apply gravity if we use it.
             int delta = (int) ( (size - old_size)*m_sashGravity );
 
+            if ( m_sizeAfterDPIChange )
+            {
+                // Keep the same relative position.
+                delta = wxMulDivInt32(size, m_sashPosition, old_size) - m_sashPosition;
+                m_sizeAfterDPIChange = false;
+            }
+
             // If delta == 0 then sash will be set according to the windows min size.
             if ( delta != 0 )
             {
@@ -518,6 +532,14 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
     m_lastSize = curSize;
 
     SizeWindows();
+}
+
+void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
+    m_sizeAfterDPIChange = true;
+
+    event.Skip();
 }
 
 void wxSplitterWindow::SetSashGravity(double gravity)

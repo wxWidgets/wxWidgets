@@ -201,6 +201,8 @@ public:
     // Adjusts the panes
     void OnSize(wxSizeEvent& event);
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // In live mode, resize child windows in idle time
     void OnInternalIdle() wxOVERRIDE;
 
@@ -295,6 +297,7 @@ protected:
     bool        m_needUpdating:1;
     bool        m_permitUnsplitAlways:1;
     bool        m_isHot:1;
+    bool        m_sizeAfterDPIChange:1;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxSplitterWindow);
