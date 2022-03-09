@@ -819,6 +819,27 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
         year *= 10;
         year += *p++ - '0';
     }
+    else // a 2-digit year
+    {
+        // RFC 822 allows 2-digit years, stating that year is
+        // "any numeric year 1900 or later".
+        // So how do we interpret e.g. the year '95'? Does it mean:
+        // a) 1995
+        // b) 2095
+        // c) literally 95 AD, two millennia ago?
+        // NOTE! wx traditionally implemented option c!
+        // However, the most sensible interpretation for 95 is
+        // probably 1995, so we shall now use that.
+        // Years 00..29 are considered to mean 20xx.
+        if ( year >= 30 )
+        {
+            year += 1900;
+        }
+        else
+        {
+            year += 2000;
+        }
+    }
 
     if ( *p++ != ' ' )
         return false;

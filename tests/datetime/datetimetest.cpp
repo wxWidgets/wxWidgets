@@ -1100,6 +1100,20 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        // 2-digit year is accepted by the RFC822
+        {
+            "Sat, 18 Dec 99 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
+        // years 00..29 are considered to mean 20xx
+        {
+            "Tue, 18 Dec 29 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 2029, 15, 48, 30 },
+            true
+        },
+
         // try some bogus ones too
         {
             "Sun, 01 Jun 2008 16:30: +0200",

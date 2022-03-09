@@ -142,6 +142,9 @@ Changes in behaviour not resulting in compilation errors
 - wxRichTextParagraph::GetLines() now returns const wxVector<wxRichTextLine*>&
   instead of wxList<wxRichTextLine*>&.
 
+- wxDateTime::ParseRfc822Date() now interprets a 2-digit year as 19xx, or
+  20xx for 00..29, whereas earlier e.g. 95 was interpreted literally as 95 AD.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
