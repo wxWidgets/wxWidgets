@@ -791,8 +791,13 @@ wxDateTime::ParseRFC822TimeZone(wxString::const_iterator *iterator,
         }
         else
         {
+            // TZ is max 3 characters long; we do not want to consume
+            // characters beyond that.
+            wxString::const_iterator pPlusMax3 = pEnd;
+            if ( p != pEnd && p + 1 != pEnd && p + 2 != pEnd && p + 3 != pEnd )
+                pPlusMax3 = p + 3;
             // abbreviation
-            const wxString tz(p, pEnd);
+            const wxString tz(p, pPlusMax3);
             if ( tz == wxT("UT") || tz == wxT("UTC") || tz == wxT("GMT") )
                 offset = 0;
             else if ( tz == wxT("AST") )
@@ -1774,6 +1779,19 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
     Set(dtDate.GetDay(), dtDate.GetMonth(), dtDate.GetYear(),
         dtTime.GetHour(), dtTime.GetMinute(), dtTime.GetSecond(),
         dtTime.GetMillisecond());
+
+    // let's see if there is a time zone specified
+    // after date and/or time
+    if ( endBoth != date.end() && *endBoth == ' ' )
+    {
+        wxString::const_iterator tz = endBoth + 1;
+        if ( tz != date.end() &&
+             ParseRFC822TimeZone(&tz, date.end())
+           )
+        {
+            endBoth = tz;
+        }
+    }
 
     *end = endBoth;
 
