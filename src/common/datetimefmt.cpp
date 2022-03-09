@@ -801,8 +801,14 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 // this function is "strict" by design - it must reject anything except true
 // RFC822 time specs.
 bool
-wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
+wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterator *end)
 {
+    // This implementation implicitly relies on the assumption that the
+    // input never ends prematurely (all dereferencing of *p assumes that).
+    // To avoid iterating beyond the end of buffer, let us append 32 zero bytes
+    // to the date string (32 being the length of a typical RFC822 timestamp).
+    const wxString date(originalDate + wxString(32, '\0'));
+
     const wxString::const_iterator pEnd = date.end();
     wxString::const_iterator p = date.begin();
 
@@ -1011,7 +1017,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     MakeFromUTC();
 
     if ( end )
-        *end = p;
+        *end = originalDate.begin() + (p - date.begin());
 
     return true;
 }
