@@ -754,17 +754,22 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
     const wxString::const_iterator pEnd = date.end();
     wxString::const_iterator p = date.begin();
 
-    // 1. week day
-    const wxDateTime::WeekDay
-        wd = GetWeekDayFromName(p, pEnd, Name_Abbr, DateLang_English);
-    if ( wd == Inv_WeekDay )
-        return false;
-    //else: ignore week day for now, we could also check that it really
-    //      corresponds to the specified date
+    // 1. week day (optional)
+    // if there is a week day present, it must be separated
+    // by a comma at position [3].
+    if ( date.Length() > 3 && date[3] == ',' )
+    {
+        const wxDateTime::WeekDay
+            wd = GetWeekDayFromName(p, pEnd, Name_Abbr, DateLang_English);
+        if ( wd == Inv_WeekDay )
+            return false;
+        //else: ignore week day for now, we could also check that it really
+        //      corresponds to the specified date
 
-    // 2. separating comma
-    if ( *p++ != ',' || *p++ != ' ' )
-        return false;
+        // 2. separating comma
+        if ( *p++ != ',' || *p++ != ' ' )
+            return false;
+    }
 
     // 3. day number
     if ( !wxIsdigit(*p) )
