@@ -990,6 +990,13 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        // day of week is optional according to the RFC
+        {
+            "18 Dec 1999 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
         // try some bogus ones too
         {
             "Sun, 01 Jun 2008 16:30: +0200",
