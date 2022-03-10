@@ -24,6 +24,7 @@ public:
 
     virtual bool Reparent(wxWindowBase* newParent) wxOVERRIDE;
     virtual bool IsThisEnabled() const wxOVERRIDE;
+    virtual bool IsDPIChanging() const wxOVERRIDE;
 
 protected:
     virtual bool DoClearShape() wxOVERRIDE;
@@ -49,6 +50,9 @@ private:
     // This window supports handling per-monitor DPI awareness when the
     // application manifest contains <dpiAwareness>PerMonitorV2</dpiAwareness>.
     bool m_perMonitorDPIaware;
+
+    // Set to true while a window is being updated after a DPI change.
+    bool m_dpiChanging;
 
     wxDECLARE_NO_COPY_CLASS(wxNonOwnedWindow);
 };
