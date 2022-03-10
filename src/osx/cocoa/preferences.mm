@@ -38,18 +38,17 @@
 #import <AppKit/NSWindow.h>
 
 
-wxBitmap wxStockPreferencesPage::GetLargeIcon() const
+wxBitmapBundle wxStockPreferencesPage::GetIcon() const
 {
-    wxBitmapBundle bundle;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
         switch ( m_kind )
         {
             case Kind_General:
-                bundle = wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
+                return wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
             case Kind_Advanced:
-                bundle = wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
+                return wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
         }
     }
 #endif
@@ -57,12 +56,12 @@ wxBitmap wxStockPreferencesPage::GetLargeIcon() const
     switch ( m_kind )
     {
         case Kind_General:
-            bundle = wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNamePreferencesGeneral]);
+            return wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNamePreferencesGeneral]);
         case Kind_Advanced:
-            bundle = wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNameAdvanced]);
+            return wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNameAdvanced]);
     }
 
-    return bundle.IsOk() ? bundle.GetBitmap(bundle.GetDefaultSize()) : wxNullBitmap;
+    return wxBitmapBundle();
 }
 
 
@@ -100,7 +99,7 @@ public:
                       "can't add more preferences pages after showing the window" );
 
         const wxString title = page->GetName();
-        wxBitmapBundle bmp(page->GetLargeIcon());
+        wxBitmapBundle bmp(page->GetIcon());
         wxASSERT_MSG( bmp.IsOk(), "OS X requires valid bitmap for preference page" );
 
         int toolId = wxIdManager::ReserveId();
