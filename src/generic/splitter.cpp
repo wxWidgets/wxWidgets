@@ -35,11 +35,6 @@
     #include "wx/osx/private/available.h"
 #endif
 
-#ifdef __WINDOWS__
-    // We only need it to get ::MulDiv() declaration, used by wxMulDivInt32().
-    #include "wx/msw/wrapwin.h"
-#endif
-
 #include "wx/renderer.h"
 
 #include <stdlib.h>
@@ -146,7 +141,6 @@ void wxSplitterWindow::Init()
 
     m_needUpdating = false;
     m_isHot = false;
-    m_sizeAfterDPIChange = false;
 }
 
 wxSplitterWindow::~wxSplitterWindow()
@@ -480,11 +474,10 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
             // Apply gravity if we use it.
             int delta = (int) ( (size - old_size)*m_sashGravity );
 
-            if ( m_sizeAfterDPIChange )
+            if ( winTop && winTop->IsDPIChanging() )
             {
                 // Keep the same relative position.
                 delta = wxMulDivInt32(size, m_sashPosition, old_size) - m_sashPosition;
-                m_sizeAfterDPIChange = false;
             }
 
             // If delta == 0 then sash will be set according to the windows min size.
@@ -537,7 +530,6 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
 void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
-    m_sizeAfterDPIChange = true;
 
     event.Skip();
 }
