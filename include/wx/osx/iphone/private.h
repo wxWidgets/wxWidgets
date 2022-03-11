@@ -180,7 +180,7 @@ public :
 
     virtual bool IsFullScreen() const;
 
-    virtual bool EnableFullScreenView(bool enable);
+    virtual bool EnableFullScreenView(bool enable, long style);
 
     virtual bool ShowFullScreen(bool show, long style);
 
