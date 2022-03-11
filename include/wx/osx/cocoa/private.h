@@ -314,7 +314,7 @@ public :
 
     virtual bool IsFullScreen() const wxOVERRIDE;
 
-    bool EnableFullScreenView(bool enable) wxOVERRIDE;
+    bool EnableFullScreenView(bool enable, long style) wxOVERRIDE;
 
     virtual bool ShowFullScreen(bool show, long style) wxOVERRIDE;
 
@@ -341,6 +341,7 @@ public :
     void            RestoreWindowLevel() wxOVERRIDE;
 
     bool m_macIgnoreNextFullscreenChange = false;
+    long m_macFullscreenStyle = wxFULLSCREEN_ALL;
 
     static WX_NSResponder GetNextFirstResponder() ;
     static WX_NSResponder GetFormerFirstResponder() ;

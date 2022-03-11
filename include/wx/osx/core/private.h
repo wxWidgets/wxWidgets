@@ -962,7 +962,7 @@ public :
 
     virtual void ShowWithoutActivating() { Show(true); }
 
-    virtual bool EnableFullScreenView(bool enable) = 0;
+    virtual bool EnableFullScreenView(bool enable, long style) = 0;
 
     virtual bool ShowFullScreen(bool show, long style)= 0;
 
