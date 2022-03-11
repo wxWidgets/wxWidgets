@@ -147,8 +147,7 @@ public:
         NZST = GMT12,       //!< Standard Time
         NZDT = GMT13,       //!< Daylight Saving Time
 
-        /// Universal Coordinated Time = the new and politically correct name
-        /// for GMT.
+        /// Universal Coordinated Time
         UTC = GMT0
     };
 

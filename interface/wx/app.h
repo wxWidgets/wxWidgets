@@ -789,7 +789,7 @@ public:
 
     In addition to the features provided by wxAppConsole it keeps track of
     the <em>top window</em> (see SetTopWindow()) and adds support for
-    video modes (see SetVideoMode()).
+    video modes (see SetDisplayMode()).
 
     In general, application-wide settings for GUI-only apps are accessible
     from wxApp (or from wxSystemSettings or wxSystemOptions classes).
