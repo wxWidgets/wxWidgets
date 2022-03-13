@@ -145,6 +145,7 @@ public:
     wxString m_beforeGridAnnotated;
 };
 
+
 // Compares two grids, checking for differences with attribute presence and
 // cell sizes.
 class GridAttrMatcher : public Catch::MatcherBase<TestableGrid>
@@ -1729,6 +1730,18 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
         CHECK_ATTR_COUNT( 0 );
     }
 
+    SECTION("Cloning")
+    {
+        CHECK_ATTR_COUNT( 0 );
+
+        m_grid->GetOrCreateCellAttrPtr(0, 0)->SetClientObject(new wxStringClientData("test"));
+        CHECK_ATTR_COUNT( 1 );
+
+        m_grid->SetAttr(0, 1, m_grid->GetOrCreateCellAttrPtr(0, 0)->Clone());
+        CHECK_ATTR_COUNT( 2 );
+
+        CHECK( static_cast<wxStringClientData *>(m_grid->GetOrCreateCellAttrPtr(0, 1)->GetClientObject())->GetData() == "test" );
+    }
 
     // Fill the grid with attributes for next sections.
 
