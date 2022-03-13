@@ -445,6 +445,8 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
         m_editor->IncRef();
     }
 
+    attr->SetClientDataContainer( GetClientDataContainer() );
+ 
     if ( IsReadOnly() )
         attr->SetReadOnly();
 
@@ -484,6 +486,10 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
     {
         m_editor =  mergefrom->m_editor;
         m_editor->IncRef();
+    }
+    if ( !HasClientDataContainer() && mergefrom->HasClientDataContainer() )
+    {
+        SetClientDataContainer( mergefrom->GetClientDataContainer() );
     }
     if ( !HasReadWriteMode() && mergefrom->HasReadWriteMode() )
         SetReadOnly(mergefrom->IsReadOnly());

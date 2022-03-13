@@ -157,6 +157,13 @@ using namespace wxGridPrivate;
 
 // Enables a grid cell to display a formatted date
 
+wxGridCellDateRenderer::wxGridCellDateRenderer(const wxGridCellDateRenderer& other)
+    : m_oformat(other.m_oformat)
+    , m_tz(other.m_tz)
+{
+    SetClientDataContainer( other.GetClientDataContainer() );
+}
+
 wxGridCellDateRenderer::wxGridCellDateRenderer(const wxString& outformat)
 {
     if ( outformat.empty() )
@@ -256,6 +263,13 @@ wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat
 {
 }
 
+wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxGridCellDateTimeRenderer& other)
+    : wxGridCellDateRenderer(other)
+    , m_iformat(other.m_iformat)
+{
+    //SetClientDataContainer( other.GetClientDataContainer() ); //Not needed here, as it is also done in wxGridCellDateRenderer ctor
+}
+
 wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
 {
     return new wxGridCellDateTimeRenderer(*this);
@@ -272,6 +286,12 @@ wxGridCellDateTimeRenderer::GetDateParseParams(DateParseParams& params) const
 // ----------------------------------------------------------------------------
 // wxGridCellChoiceRenderer
 // ----------------------------------------------------------------------------
+
+wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other)
+    : m_choices(other.m_choices)
+{
+    SetClientDataContainer( other.GetClientDataContainer() );
+}
 
 wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
                                                 wxGridCellAttr& attr,
@@ -318,6 +338,9 @@ wxGridCellRenderer *wxGridCellEnumRenderer::Clone() const
 {
     wxGridCellEnumRenderer *renderer = new wxGridCellEnumRenderer;
     renderer->m_choices = m_choices;
+
+    renderer->SetClientDataContainer( GetClientDataContainer() );
+
     return renderer;
 }
 
@@ -607,6 +630,13 @@ wxGridCellAutoWrapStringRenderer::GetBestWidth(wxGrid& grid,
     return width;
 }
 
+wxGridCellRenderer *wxGridCellAutoWrapStringRenderer::Clone() const
+{
+    wxGridCellAutoWrapStringRenderer *renderer = new wxGridCellAutoWrapStringRenderer;
+    renderer->SetClientDataContainer( GetClientDataContainer() );
+    return renderer;
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellStringRenderer
 // ----------------------------------------------------------------------------
@@ -727,6 +757,13 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                            rect, attr);
 }
 
+wxGridCellRenderer *wxGridCellStringRenderer::Clone() const
+{
+    wxGridCellStringRenderer *renderer = new wxGridCellStringRenderer;
+    renderer->SetClientDataContainer( GetClientDataContainer() );
+    return renderer;
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellNumberRenderer
 // ----------------------------------------------------------------------------
@@ -802,6 +839,13 @@ void wxGridCellNumberRenderer::SetParameters(const wxString& params)
     }
 }
 
+wxGridCellRenderer *wxGridCellNumberRenderer::Clone() const
+{
+    wxGridCellNumberRenderer *renderer = new wxGridCellNumberRenderer(m_minValue, m_maxValue);
+    renderer->SetClientDataContainer( GetClientDataContainer() );
+    return renderer;
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellFloatRenderer
 // ----------------------------------------------------------------------------
@@ -822,6 +866,8 @@ wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
     renderer->m_precision = m_precision;
     renderer->m_style = m_style;
     renderer->m_format = m_format;
+
+    renderer->SetClientDataContainer( GetClientDataContainer() );
 
     return renderer;
 }
@@ -1057,6 +1103,13 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
         flags |= wxCONTROL_CHECKED;
 
     wxRendererNative::Get().DrawCheckBox( &grid, dc, checkBoxRect, flags );
+}
+
+wxGridCellRenderer *wxGridCellBoolRenderer::Clone() const
+{
+    wxGridCellBoolRenderer *renderer = new wxGridCellBoolRenderer;
+    renderer->SetClientDataContainer( GetClientDataContainer() );
+    return renderer;
 }
 
 #endif // wxUSE_GRID

@@ -128,8 +128,7 @@ public:
     // parameters string format is "min,max"
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
-    virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellNumberEditor(m_min, m_max); }
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
 
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const wxOVERRIDE;
@@ -208,8 +207,7 @@ public:
     virtual void Reset() wxOVERRIDE;
     virtual void StartingKey(wxKeyEvent& event) wxOVERRIDE;
 
-    virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellFloatEditor(m_width, m_precision); }
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
 
     // parameters string format is "width[,precision[,format]]"
     // format to choose between f|e|g|E|G (f is used by default)
@@ -262,8 +260,7 @@ public:
     virtual void StartingClick() wxOVERRIDE;
     virtual void StartingKey(wxKeyEvent& event) wxOVERRIDE;
 
-    virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellBoolEditor; }
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
 
     // added GetValue so we can get the value which is in the control, see
     // also UseStringValues()
@@ -379,8 +376,7 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler) wxOVERRIDE;
 
-    virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellAutoWrapStringEditor; }
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor);
 };

@@ -672,6 +672,9 @@ void wxGridCellTextEditor::SetValidator(const wxValidator& validator)
 wxGridCellEditor *wxGridCellTextEditor::Clone() const
 {
     wxGridCellTextEditor* editor = new wxGridCellTextEditor(m_maxChars);
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
+
 #if wxUSE_VALIDATORS
     if ( m_validator )
     {
@@ -960,6 +963,13 @@ wxString wxGridCellNumberEditor::GetValue() const
     return s;
 }
 
+wxGridCellEditor *wxGridCellNumberEditor::Clone() const
+{
+    wxGridCellNumberEditor* editor = new wxGridCellNumberEditor;
+    editor->SetClientDataContainer( GetClientDataContainer() );
+    return editor;
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellFloatEditor
 // ----------------------------------------------------------------------------
@@ -1211,6 +1221,13 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
     }
 
     return false;
+}
+
+wxGridCellEditor *wxGridCellFloatEditor::Clone() const
+{
+    wxGridCellFloatEditor* editor = new wxGridCellFloatEditor;
+    editor->SetClientDataContainer( GetClientDataContainer() );
+    return editor;
 }
 
 #endif // wxUSE_TEXTCTRL
@@ -1478,6 +1495,13 @@ void wxGridCellBoolEditor::SetGridFromValue(int row, int col, wxGrid* grid) cons
         table->SetValue(row, col, GetStringValue());
 }
 
+wxGridCellEditor *wxGridCellBoolEditor::Clone() const
+{
+    wxGridCellBoolEditor* editor = new wxGridCellBoolEditor;
+    editor->SetClientDataContainer( GetClientDataContainer() );
+    return editor;
+}
+
 #endif // wxUSE_CHECKBOX
 
 #if wxUSE_COMBOBOX
@@ -1511,6 +1535,7 @@ wxGridCellEditor *wxGridCellChoiceEditor::Clone() const
     wxGridCellChoiceEditor *editor = new wxGridCellChoiceEditor;
     editor->m_allowOthers = m_allowOthers;
     editor->m_choices = m_choices;
+    editor->SetClientDataContainer( GetClientDataContainer() );
 
     return editor;
 }
@@ -1696,6 +1721,7 @@ wxGridCellEditor *wxGridCellEnumEditor::Clone() const
 {
     wxGridCellEnumEditor *editor = new wxGridCellEnumEditor();
     editor->m_index = m_index;
+    editor->SetClientDataContainer( GetClientDataContainer() );
     return editor;
 }
 
@@ -1792,6 +1818,13 @@ wxGridCellAutoWrapStringEditor::Create(wxWindow* parent,
 {
     wxGridCellTextEditor::DoCreate(parent, id, evtHandler,
                                     wxTE_MULTILINE | wxTE_RICH);
+}
+
+wxGridCellEditor *wxGridCellAutoWrapStringEditor::Clone() const
+{
+    wxGridCellAutoWrapStringEditor* editor = new wxGridCellAutoWrapStringEditor;
+    editor->SetClientDataContainer( GetClientDataContainer() );
+    return editor;
 }
 
 #if wxUSE_DATEPICKCTRL
@@ -1959,7 +1992,9 @@ void wxGridCellDateEditor::Reset()
 
 wxGridCellEditor *wxGridCellDateEditor::Clone() const
 {
-    return new wxGridCellDateEditor(m_format);
+    wxGridCellDateEditor* editor = new wxGridCellDateEditor(m_format);
+    editor->SetClientDataContainer( GetClientDataContainer() );
+    return editor;
 }
 
 wxString wxGridCellDateEditor::GetValue() const

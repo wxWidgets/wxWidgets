@@ -14,6 +14,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/hashmap.h"
+#include "wx/sharedptr.h"
 
 typedef int (*wxShadowObjectMethod)(void*, void*);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
@@ -156,6 +157,39 @@ protected:
     // what kind of data do we have?
     wxClientDataType m_clientDataType;
 
+};
+
+// This class is a replacement for wxClientDataContainer, and unlike
+// wxClientDataContainer the wxSharedClientDataContainer client data is
+// possible to copy (as a shared ptr) when instances of it are cloned.
+// Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
+// that provides storage and management of "client data.". The client data
+// is reference counted and managed by the container.
+//
+// NOTE:  If your class has a clone function and needs to store client data,
+//        use wxSharedClientDataContainer and not wxClientDataContainer!
+
+class WXDLLIMPEXP_BASE wxSharedClientDataContainer
+{
+public:
+    void SetClientObject(wxClientData *data);
+    wxClientData *GetClientObject() const;
+    void SetClientData(void *data);
+    void *GetClientData() const;
+
+protected:
+    bool HasClientDataContainer() const {return NULL != m_data.get();}
+    wxSharedPtr<wxClientDataContainer> GetClientDataContainer() const {return m_data;}
+    void SetClientDataContainer(wxSharedPtr<wxClientDataContainer> data) {m_data = data;}
+
+private:
+    //Helper function that will create m_data if it is currently NULL
+    wxClientDataContainer *GetValidClientData();
+
+    //m_data is shared, not deep copied, when cloned. If you make changes to
+    //the data in one instance of your class, you change it for all cloned
+    //instances!
+    wxSharedPtr<wxClientDataContainer> m_data;
 };
 
 #endif // _WX_CLNTDATAH__

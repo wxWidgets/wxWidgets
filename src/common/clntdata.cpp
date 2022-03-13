@@ -72,6 +72,35 @@ void *wxClientDataContainer::DoGetClientData() const
 }
 
 
+void wxSharedClientDataContainer::SetClientObject(wxClientData *data)
+{
+    GetValidClientData()->SetClientObject(data);
+}
+
+wxClientData *wxSharedClientDataContainer::GetClientObject() const
+{
+    return HasClientDataContainer() ? GetClientDataContainer()->GetClientObject() : NULL;
+}
+
+void wxSharedClientDataContainer::SetClientData(void *data)
+{
+    GetValidClientData()->SetClientData(data);
+}
+
+void *wxSharedClientDataContainer::GetClientData() const
+{
+    return HasClientDataContainer() ? GetClientDataContainer()->GetClientData() : NULL;
+}
+
+wxClientDataContainer *wxSharedClientDataContainer::GetValidClientData()
+{
+    if ( !HasClientDataContainer() )
+    {
+        m_data = new wxClientDataContainer;
+    }
+    return m_data.get();
+}
+
 // ----------------------------------------------------------------------------
 
 
