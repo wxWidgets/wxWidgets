@@ -145,7 +145,6 @@ public:
     wxString m_beforeGridAnnotated;
 };
 
-
 // Compares two grids, checking for differences with attribute presence and
 // cell sizes.
 class GridAttrMatcher : public Catch::MatcherBase<TestableGrid>

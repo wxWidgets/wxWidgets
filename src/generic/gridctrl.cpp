@@ -161,7 +161,7 @@ wxGridCellDateRenderer::wxGridCellDateRenderer(const wxGridCellDateRenderer& oth
     : m_oformat(other.m_oformat)
     , m_tz(other.m_tz)
 {
-    SetClientDataContainer( other.GetClientDataContainer() );
+    SetClientDataContainer(other.GetClientDataContainer());
 }
 
 wxGridCellDateRenderer::wxGridCellDateRenderer(const wxString& outformat)
@@ -267,7 +267,7 @@ wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxGridCellDateTimeR
     : wxGridCellDateRenderer(other)
     , m_iformat(other.m_iformat)
 {
-    //SetClientDataContainer( other.GetClientDataContainer() ); //Not needed here, as it is also done in wxGridCellDateRenderer ctor
+    //SetClientDataContainer(other.GetClientDataContainer()); //Not needed here, as it is also done in wxGridCellDateRenderer ctor
 }
 
 wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
@@ -290,7 +290,7 @@ wxGridCellDateTimeRenderer::GetDateParseParams(DateParseParams& params) const
 wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other)
     : m_choices(other.m_choices)
 {
-    SetClientDataContainer( other.GetClientDataContainer() );
+    SetClientDataContainer(other.GetClientDataContainer());
 }
 
 wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
@@ -339,7 +339,7 @@ wxGridCellRenderer *wxGridCellEnumRenderer::Clone() const
     wxGridCellEnumRenderer *renderer = new wxGridCellEnumRenderer;
     renderer->m_choices = m_choices;
 
-    renderer->SetClientDataContainer( GetClientDataContainer() );
+    renderer->SetClientDataContainer(GetClientDataContainer());
 
     return renderer;
 }
@@ -633,7 +633,7 @@ wxGridCellAutoWrapStringRenderer::GetBestWidth(wxGrid& grid,
 wxGridCellRenderer *wxGridCellAutoWrapStringRenderer::Clone() const
 {
     wxGridCellAutoWrapStringRenderer *renderer = new wxGridCellAutoWrapStringRenderer;
-    renderer->SetClientDataContainer( GetClientDataContainer() );
+    renderer->SetClientDataContainer(GetClientDataContainer());
     return renderer;
 }
 
@@ -760,7 +760,7 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
 wxGridCellRenderer *wxGridCellStringRenderer::Clone() const
 {
     wxGridCellStringRenderer *renderer = new wxGridCellStringRenderer;
-    renderer->SetClientDataContainer( GetClientDataContainer() );
+    renderer->SetClientDataContainer(GetClientDataContainer());
     return renderer;
 }
 
@@ -842,7 +842,7 @@ void wxGridCellNumberRenderer::SetParameters(const wxString& params)
 wxGridCellRenderer *wxGridCellNumberRenderer::Clone() const
 {
     wxGridCellNumberRenderer *renderer = new wxGridCellNumberRenderer(m_minValue, m_maxValue);
-    renderer->SetClientDataContainer( GetClientDataContainer() );
+    renderer->SetClientDataContainer(GetClientDataContainer());
     return renderer;
 }
 
@@ -867,7 +867,7 @@ wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
     renderer->m_style = m_style;
     renderer->m_format = m_format;
 
-    renderer->SetClientDataContainer( GetClientDataContainer() );
+    renderer->SetClientDataContainer(GetClientDataContainer());
 
     return renderer;
 }
@@ -1108,7 +1108,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 wxGridCellRenderer *wxGridCellBoolRenderer::Clone() const
 {
     wxGridCellBoolRenderer *renderer = new wxGridCellBoolRenderer;
-    renderer->SetClientDataContainer( GetClientDataContainer() );
+    renderer->SetClientDataContainer(GetClientDataContainer());
     return renderer;
 }
 
