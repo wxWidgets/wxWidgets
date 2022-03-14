@@ -21,7 +21,7 @@
     @library{wxbase}
     @category{containers}
 
-    @see wxEvtHandler, wxClientData
+    @see wxSharedClientDataContainer, wxEvtHandler, wxClientData
 */
 class wxClientDataContainer
 {
@@ -36,6 +36,50 @@ public:
     */
     virtual ~wxClientDataContainer();
 
+    /**
+        Get the untyped client data.
+    */
+    void* GetClientData() const;
+
+    /**
+        Get a pointer to the client data object.
+    */
+    wxClientData* GetClientObject() const;
+
+    /**
+        Set the untyped client data.
+    */
+    void SetClientData(void* data);
+
+    /**
+        Set the client data object. Any previous object will be deleted.
+    */
+    void SetClientObject(wxClientData* data);
+};
+
+
+
+/**
+    @class wxSharedClientDataContainer
+
+    This class is a replacement for @ref wxClientDataContainer, and unlike
+    wxClientDataContainer the wxSharedClientDataContainer client data is
+    possible to copy (as a shared ptr) when instances of it are cloned.
+    Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
+    that provides storage and management of "client data.". The client data
+    is reference counted and managed by the container.
+
+    @note If your class has a Clone function and needs to store client data,
+          use wxSharedClientDataContainer and not wxClientDataContainer!
+
+    @library{wxbase}
+    @category{containers}
+
+    @see wxClientDataContainer, wxClientData
+*/
+class wxSharedClientDataContainer
+{
+public:
     /**
         Get the untyped client data.
     */
