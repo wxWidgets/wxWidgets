@@ -1221,11 +1221,8 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
 void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
 {
     wxSize size(m_width, m_height);
-    if (!HasClientDecor(m_widget))
-    {
-        size.x -= m_decorSize.left + m_decorSize.right;
-        size.y -= m_decorSize.top + m_decorSize.bottom;
-    }
+    size.x -= m_decorSize.left + m_decorSize.right;
+    size.y -= m_decorSize.top + m_decorSize.bottom;
     if (size.x < 0) size.x = 0;
     if (size.y < 0) size.y = 0;
     if (width)  *width  = size.x;
