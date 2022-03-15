@@ -27,6 +27,7 @@
 #include "smile.xpm"
 #include "smile2.xpm"
 
+#include "wx/artprov.h"
 #include "wx/taskbar.h"
 
 #include "tbtest.h"
@@ -119,7 +120,7 @@ MyDialog::MyDialog(const wxString& title)
     m_taskBarIcon = new MyTaskBarIcon();
 
     // we should be able to show up to 128 characters on Windows
-    if (!m_taskBarIcon->SetIcon(wxBitmapBundle::FromSVGFile("icon.svg", wxSize(32, 32)),
+    if (!m_taskBarIcon->SetIcon(wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_OTHER, wxSize(32, 32)),
                                  "wxTaskBarIcon Sample\n"
                                  "With a very, very, very, very\n"
                                  "long tooltip whose length is\n"
@@ -130,7 +131,7 @@ MyDialog::MyDialog(const wxString& title)
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
     m_dockIcon = new MyTaskBarIcon(wxTBI_DOCK);
-    if ( !m_dockIcon->SetIcon(wxBitmapBundle::FromSVGFile("icon.svg", wxSize(32, 32))) )
+    if ( !m_dockIcon->SetIcon(wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_OTHER, wxSize(32, 32))) )
     {
         wxLogError("Could not set icon.");
     }
