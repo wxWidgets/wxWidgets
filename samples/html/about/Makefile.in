@@ -189,7 +189,7 @@ about$(EXEEXT): $(ABOUT_OBJECTS) $(__about___win32rc)
 
 data_files: 
 	@mkdir -p ./data
-	@for f in about.htm logo.png; do \
+	@for f in about.htm bg.svg logo.png; do \
 	if test ! -f ./data/$$f -a ! -d ./data/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/data/$$f -newer ./data/$$f -print` ; \

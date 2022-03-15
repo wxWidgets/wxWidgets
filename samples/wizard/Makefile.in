@@ -134,7 +134,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: wizard$(EXEEXT) $(__wizard_bundle___depname)
+all: wizard$(EXEEXT) $(__wizard_bundle___depname) data
 
 install: 
 
@@ -182,6 +182,18 @@ wizard$(EXEEXT): $(WIZARD_OBJECTS) $(__wizard___win32rc)
 
 @COND_PLATFORM_MACOSX_1@wizard_bundle: $(____wizard_BUNDLE_TGT_REF_DEP)
 
+data: 
+	@mkdir -p .
+	@for f in wiztest.svg wiztest2.svg; do \
+	if test ! -f ./$$f -a ! -d ./$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
+	done
+
 wizard_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
@@ -192,4 +204,4 @@ wizard_wizard.o: $(srcdir)/wizard.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean wizard_bundle
+.PHONY: all install uninstall clean distclean wizard_bundle data
