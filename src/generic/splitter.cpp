@@ -474,12 +474,6 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
             // Apply gravity if we use it.
             int delta = (int) ( (size - old_size)*m_sashGravity );
 
-            if ( winTop && winTop->IsDPIChanging() )
-            {
-                // Keep the same relative position.
-                delta = wxMulDivInt32(size, m_sashPosition, old_size) - m_sashPosition;
-            }
-
             // If delta == 0 then sash will be set according to the windows min size.
             if ( delta != 0 )
             {
@@ -530,6 +524,8 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
 void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
+    m_sashPosition = event.ScaleX(m_sashPosition);
+    m_lastSize = event.Scale(m_lastSize);
 
     event.Skip();
 }

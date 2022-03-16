@@ -1297,16 +1297,6 @@ public:
 
 
     /**
-        Returns @true while a window is being updated after a DPI change.
-
-        @remarks This function is currently only used under MSW.
-
-        @since 3.1.6
-    */
-    bool IsDPIChanging() const;
-
-
-    /**
         This functions returns the best acceptable minimal size for the window.
 
         For example, for a static control, it will be the minimal size such that the

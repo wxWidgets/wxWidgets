@@ -143,7 +143,6 @@ wxNonOwnedWindow::wxNonOwnedWindow()
     m_shapeImpl = NULL;
 #endif // wxUSE_GRAPHICS_CONTEXT
 
-    m_dpiChanging = false;
     m_activeDPI = wxDefaultSize;
     m_perMonitorDPIaware = false;
 }
@@ -229,11 +228,6 @@ bool wxNonOwnedWindow::IsThisEnabled() const
                   : m_isEnabled;
 }
 
-bool wxNonOwnedWindow::IsDPIChanging() const
-{
-    return m_dpiChanging;
-}
-
 WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
@@ -256,11 +250,9 @@ WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPA
                 const RECT* const prcNewWindow =
                                          reinterpret_cast<const RECT*>(lParam);
 
-                m_dpiChanging = true;
                 processed = HandleDPIChange(wxSize(LOWORD(wParam),
                                                    HIWORD(wParam)),
                                             wxRectFromRECT(*prcNewWindow));
-                m_dpiChanging = false;
             }
             break;
     }

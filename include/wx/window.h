@@ -664,9 +664,6 @@ public:
         // window state)
     virtual bool IsThisEnabled() const { return m_isEnabled; }
 
-    // returns true while a window is being updated after a DPI change
-    virtual bool IsDPIChanging() const { return false; }
-
     // returns true if the window is visible, i.e. IsShown() returns true
     // if called on it and all its parents up to the first TLW
     virtual bool IsShownOnScreen() const;
