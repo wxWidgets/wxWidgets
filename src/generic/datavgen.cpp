@@ -3094,6 +3094,12 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         if ( !parentNode )
             return false;
 
+        // If the parent has children but child nodes was not initialized then
+        // the node is collapsed so just return as nodes will be initialized in
+        // Expand().
+        if ( parentNode->GetChildNodes().empty() )
+            return true;
+
         parentNode->SetHasChildren(true);
 
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
