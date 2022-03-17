@@ -2050,6 +2050,11 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     if ( !haveDay && !haveWDay )
         return false;
 
+    // even if haveDay == true, we cannot construct a date from a day number
+    // alone, without at least a weekday or month
+    if ( !haveWDay && !haveMon )
+        return false;
+
     if ( haveWDay && (haveMon || haveYear || haveDay) &&
          !(haveDay && haveMon && haveYear) )
     {
