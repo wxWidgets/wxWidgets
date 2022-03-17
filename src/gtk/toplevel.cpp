@@ -75,9 +75,13 @@ static bool gs_decorCacheValid;
 #ifdef __WXGTK3__
 static bool HasClientDecor(GtkWidget* widget)
 {
+    if (!gtk_window_get_decorated(GTK_WINDOW(widget)))
+        return false;
+
     GdkDisplay* display = gtk_widget_get_display(widget);
     if (wxGTKImpl::IsX11(display))
         return false;
+
 #if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,22,0)
     if (wxGTKImpl::IsWayland(display) && wx_is_at_least_gtk3(22))
         return !gdk_wayland_display_prefers_ssd(display);
@@ -237,6 +241,20 @@ static void
 size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
 {
     win->m_useCachedClientSize = true;
+    GtkAllocation a;
+    gtk_widget_get_allocation(win->m_widget, &a);
+    const bool hasClientDecor = HasClientDecor(win->m_widget);
+    if (hasClientDecor)
+    {
+        GtkAllocation a2;
+        gtk_widget_get_allocation(win->m_mainWidget, &a2);
+        wxTopLevelWindowGTK::DecorSize decorSize;
+        decorSize.left = a2.x;
+        decorSize.right = a.width - a2.width - a2.x;
+        decorSize.top = a2.y;
+        decorSize.bottom = a.height - a2.height - a2.y;
+        win->GTKUpdateDecorSize(decorSize);
+    }
     if (win->m_clientWidth  != alloc->width ||
         win->m_clientHeight != alloc->height)
     {
@@ -246,21 +264,8 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
         win->m_clientWidth  = alloc->width;
         win->m_clientHeight = alloc->height;
 
-        GtkAllocation a;
-        gtk_widget_get_allocation(win->m_widget, &a);
         wxSize size(a.width, a.height);
-        if (HasClientDecor(win->m_widget))
-        {
-            GtkAllocation a2;
-            gtk_widget_get_allocation(win->m_mainWidget, &a2);
-            wxTopLevelWindowGTK::DecorSize decorSize;
-            decorSize.left = a2.x;
-            decorSize.right = a.width - a2.width - a2.x;
-            decorSize.top = a2.y;
-            decorSize.bottom = a.height - a2.height - a2.y;
-            win->GTKUpdateDecorSize(decorSize);
-        }
-        else
+        if (!hasClientDecor)
         {
             size.x += win->m_decorSize.left + win->m_decorSize.right;
             size.y += win->m_decorSize.top + win->m_decorSize.bottom;
