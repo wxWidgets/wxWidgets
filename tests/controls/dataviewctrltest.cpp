@@ -90,6 +90,224 @@ protected:
     wxDECLARE_NO_COPY_CLASS(MultiColumnsDataViewCtrlTestCase);
 };
 
+class DataViewCtrlTestModel: public wxDataViewModel
+{
+public:
+    // Items of the model.
+    //
+    // wxTEST_ITEM_NULL
+    // |
+    // |-- wxTEST_ITEM_ROOT
+    //     |
+    //     |-- wxTEST_ITEM_CHILD
+    //         |
+    //         |-- wxTEST_ITEM_GRANDCHILD
+    //         |
+    //         |-- wxTEST_ITEM_GRANDCHILD_HIDDEN
+    //
+    enum wxTestItem
+    {
+        wxTEST_ITEM_NULL,
+        wxTEST_ITEM_ROOT,
+        wxTEST_ITEM_CHILD,
+        wxTEST_ITEM_GRANDCHILD,
+        wxTEST_ITEM_GRANDCHILD_HIDDEN,
+    };
+
+    DataViewCtrlTestModel()
+        : m_root(wxTEST_ITEM_ROOT),
+          m_child(wxTEST_ITEM_CHILD),
+          m_grandChild(wxTEST_ITEM_GRANDCHILD),
+          m_grandChildHidden(wxTEST_ITEM_GRANDCHILD_HIDDEN),
+          m_secondGrandchildVisible(false)
+    {
+    }
+
+    wxDataViewItem GetDataViewItem(wxTestItem item) const
+    {
+        switch( item )
+        {
+            case wxTEST_ITEM_NULL:
+                return wxDataViewItem();
+
+            case wxTEST_ITEM_ROOT:
+                return wxDataViewItem(const_cast<wxTestItem*>(&m_root));
+
+            case wxTEST_ITEM_CHILD:
+                return wxDataViewItem(const_cast<wxTestItem*>(&m_child));
+
+            case wxTEST_ITEM_GRANDCHILD:
+                return wxDataViewItem(const_cast<wxTestItem*>(&m_grandChild));
+
+            case wxTEST_ITEM_GRANDCHILD_HIDDEN:
+                return wxDataViewItem(const_cast<wxTestItem*>(&m_grandChildHidden));
+        }
+        return wxDataViewItem();
+    }
+
+    // Overridden wxDataViewModel methods.
+
+    unsigned int GetColumnCount() const wxOVERRIDE
+    {
+        return 1;
+    }
+
+    wxString GetColumnType(unsigned int WXUNUSED(col)) const wxOVERRIDE
+    {
+        return "string";
+    }
+
+    void GetValue(wxVariant &variant, const wxDataViewItem &item,
+                  unsigned int WXUNUSED(col)) const wxOVERRIDE
+    {
+        switch( GetItemID(item) )
+        {
+            case wxTEST_ITEM_NULL:
+                break;
+
+            case wxTEST_ITEM_ROOT:
+                variant = "root";
+                break;
+
+            case wxTEST_ITEM_CHILD:
+                variant = "child";
+                break;
+
+            case wxTEST_ITEM_GRANDCHILD:
+                variant = "grand child";
+                break;
+
+            case wxTEST_ITEM_GRANDCHILD_HIDDEN:
+                variant = "initially hidden";
+                break;
+        }
+    }
+
+    bool SetValue(const wxVariant &WXUNUSED(variant),
+                  const wxDataViewItem &WXUNUSED(item),
+                  unsigned int WXUNUSED(col)) wxOVERRIDE
+    {
+        return false;
+    }
+
+    bool HasContainerColumns(const wxDataViewItem &WXUNUSED(item)) const wxOVERRIDE
+    {
+        // Always display all the columns, even for the containers.
+        return true;
+    }
+
+    wxDataViewItem GetParent(const wxDataViewItem &item) const wxOVERRIDE
+    {
+        switch( GetItemID(item) )
+        {
+            case wxTEST_ITEM_NULL:
+                FAIL( "The item is the top most container" );
+                return wxDataViewItem();
+
+            case wxTEST_ITEM_ROOT:
+                return wxDataViewItem();
+
+            case wxTEST_ITEM_CHILD:
+                return GetDataViewItem(m_root);
+
+            case wxTEST_ITEM_GRANDCHILD:
+            case wxTEST_ITEM_GRANDCHILD_HIDDEN:
+                return GetDataViewItem(m_child);
+        }
+        return wxDataViewItem();
+    }
+
+    bool IsContainer(const wxDataViewItem &item) const wxOVERRIDE
+    {
+        switch( GetItemID(item) )
+        {
+            case wxTEST_ITEM_NULL:
+            case wxTEST_ITEM_ROOT:
+            case wxTEST_ITEM_CHILD:
+                return true;
+
+            case wxTEST_ITEM_GRANDCHILD:
+            case wxTEST_ITEM_GRANDCHILD_HIDDEN:
+                return false;
+        }
+        return false;
+    }
+
+    unsigned int GetChildren(const wxDataViewItem &item,
+                           wxDataViewItemArray &children) const wxOVERRIDE
+    {
+        switch( GetItemID(item) )
+        {
+            case wxTEST_ITEM_NULL:
+                children.push_back(GetDataViewItem(m_root));
+                return 1;
+
+            case wxTEST_ITEM_ROOT:
+                children.push_back(GetDataViewItem(m_child));
+                return 1;
+
+            case wxTEST_ITEM_CHILD:
+                children.push_back(GetDataViewItem(m_grandChild));
+
+                if ( m_secondGrandchildVisible )
+                {
+                    children.push_back(GetDataViewItem(m_grandChildHidden));
+                    return 2;
+                }
+
+                return 1;
+
+            case wxTEST_ITEM_GRANDCHILD:
+            case wxTEST_ITEM_GRANDCHILD_HIDDEN:
+                FAIL( "The item is not a container" );
+                return 0;
+        }
+        return 0;
+    }
+
+    void ShowSecondGrandChild()
+    {
+        m_secondGrandchildVisible = true;
+        ItemAdded(GetDataViewItem(m_child), GetDataViewItem(m_grandChildHidden));
+    }
+
+private:
+    wxTestItem GetItemID(const wxDataViewItem &dataViewItem) const
+    {
+        if ( dataViewItem.GetID() == NULL )
+            return wxTEST_ITEM_NULL;
+        return *static_cast<wxTestItem*>(dataViewItem.GetID());
+    }
+
+    wxTestItem m_root;
+    wxTestItem m_child;
+    wxTestItem m_grandChild;
+    wxTestItem m_grandChildHidden;
+
+    // Whether wxTEST_ITEM_GRANDCHILD_HIDDEN item should be visible or not.
+    bool m_secondGrandchildVisible;
+};
+
+
+class DataViewCtrlWithCustomModelTestCase
+{
+public:
+    DataViewCtrlWithCustomModelTestCase();
+    ~DataViewCtrlWithCustomModelTestCase();
+
+protected:
+    // The dataview control.
+    wxDataViewCtrl *m_dvc;
+
+    // The dataview model.
+    DataViewCtrlTestModel *m_model;
+
+    // Its items.
+    wxDataViewItem m_root, m_child, m_grandchild, m_grandchildHidden;
+
+    wxDECLARE_NO_COPY_CLASS(DataViewCtrlWithCustomModelTestCase);
+};
+
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
@@ -137,6 +355,45 @@ MultiColumnsDataViewCtrlTestCase::MultiColumnsDataViewCtrlTestCase()
 }
 
 MultiColumnsDataViewCtrlTestCase::~MultiColumnsDataViewCtrlTestCase()
+{
+    delete m_dvc;
+}
+
+DataViewCtrlWithCustomModelTestCase::DataViewCtrlWithCustomModelTestCase()
+{
+    m_dvc = new wxDataViewCtrl(wxTheApp->GetTopWindow(),
+                               wxID_ANY,
+                               wxDefaultPosition,
+                               wxSize(400, 200),
+                               wxDV_SINGLE);
+
+    m_model = new DataViewCtrlTestModel();
+    m_dvc->AssociateModel(m_model);
+    m_model->DecRef();
+
+    m_dvc->AppendColumn(
+        new wxDataViewColumn(
+            "Value",
+            new wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT),
+            0,
+            m_dvc->FromDIP(200),
+            wxALIGN_LEFT,
+            wxDATAVIEW_COL_RESIZABLE));
+
+    m_root = m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_ROOT);
+    m_child = m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_CHILD);
+    m_grandchild =
+        m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_GRANDCHILD);
+    m_grandchildHidden =
+        m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_GRANDCHILD_HIDDEN);
+
+    m_dvc->Layout();
+    m_dvc->Expand(m_root);
+    m_dvc->Refresh();
+    m_dvc->Update();
+}
+
+DataViewCtrlWithCustomModelTestCase::~DataViewCtrlWithCustomModelTestCase()
 {
     delete m_dvc;
 }
@@ -295,6 +552,67 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_child1) );
     m_dvc->ExpandChildren(m_root);
     CHECK( m_dvc->IsExpanded(m_child1) );
+}
+
+TEST_CASE_METHOD(DataViewCtrlWithCustomModelTestCase,
+                 "wxDVC::Expand",
+                 "[wxDataViewCtrl][expand]")
+{
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( !m_dvc->IsExpanded(m_child) );
+
+#ifdef __WXGTK__
+    // We need to let the native control have some events to lay itself out.
+    wxYield();
+#endif // __WXGTK__
+
+    SECTION( "Was Expanded" )
+    {
+        CHECK( m_dvc->GetItemRect(m_grandchild).IsEmpty() );
+        CHECK( m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
+
+        m_dvc->Expand(m_child);
+
+#ifdef __WXGTK__
+        wxYield();
+#endif // __WXGTK__
+
+        CHECK( !m_dvc->GetItemRect(m_grandchild).IsEmpty() );
+        CHECK( m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
+
+        m_dvc->Collapse(m_child);
+    }
+
+    SECTION( "Was Not Expanded" )
+    {
+        // Do nothing.
+    }
+
+    // Check wxDataViewModel::ItemAdded().
+    m_model->ShowSecondGrandChild();
+
+    m_dvc->Expand(m_child);
+    m_dvc->Refresh();
+    m_dvc->Update();
+    CHECK( m_dvc->IsExpanded(m_child) );
+
+#ifdef __WXGTK__
+    // Unfortunately it's not enough to call wxYield() once, so wait up to
+    // 0.5 sec.
+    wxStopWatch sw;
+    while ( m_dvc->GetItemRect(m_grandchild).IsEmpty() )
+    {
+        if ( sw.Time() > 500 )
+        {
+            WARN("Timed out waiting for wxDataViewCtrl");
+            break;
+        }
+        wxYield();
+    }
+#endif // __WXGTK__
+
+    CHECK( !m_dvc->GetItemRect(m_grandchild).IsEmpty() );
+    CHECK( !m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
 }
 
 TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
