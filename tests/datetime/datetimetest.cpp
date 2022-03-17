@@ -1220,6 +1220,7 @@ void DateTimeTestCase::TestDateParse()
         { "31/04/06" },
         { "bloordyblop" },
         { "2 .  .    " },
+        { "14:30:15" },
     };
 
     wxGCC_WARNING_RESTORE(missing-field-initializers)
@@ -1234,7 +1235,7 @@ void DateTimeTestCase::TestDateParse()
         const wxString datestr = TranslateDate(parseTestDates[n].str);
 
         const char * const end = dt.ParseDate(datestr);
-        if ( end && !*end )
+        if ( end )
         {
             WX_ASSERT_MESSAGE(
                 ("Erroneously parsed \"%s\"", datestr),
@@ -1359,6 +1360,13 @@ void DateTimeTestCase::TestDateTimeParse()
         },
 
         {
+            // date after time
+            "14:30:00 2020-01-04",
+            {  4, wxDateTime::Jan, 2020, 14, 30,  0 },
+            true,
+        },
+
+        {
             "bloordyblop",
             {  1, wxDateTime::Jan, 9999,  0,  0,  0},
             false
@@ -1367,7 +1375,8 @@ void DateTimeTestCase::TestDateTimeParse()
         {
             "2012-01-01 10:12:05 +0100",
             {  1, wxDateTime::Jan, 2012,  10,  12,  5, -1 },
-            false // ParseDateTime does know yet +0100
+            true // ParseDateTime does know yet +0100, but
+                 // ignoring that, parsing still succeeds
         },
     };
 
@@ -1383,7 +1392,7 @@ void DateTimeTestCase::TestDateTimeParse()
         const wxString datestr = TranslateDate(parseTestDates[n].str);
 
         const char * const end = dt.ParseDateTime(datestr);
-        if ( end && !*end )
+        if ( end )
         {
             WX_ASSERT_MESSAGE(
                 ("Erroneously parsed \"%s\"", datestr),
