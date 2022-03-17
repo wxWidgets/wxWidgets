@@ -61,6 +61,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxNotifyEvent);
 wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_PAINT(wxSplitterWindow::OnPaint)
     EVT_SIZE(wxSplitterWindow::OnSize)
+    EVT_DPI_CHANGED(wxSplitterWindow::OnDPIChanged)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
     EVT_MOUSE_CAPTURE_LOST(wxSplitterWindow::OnMouseCaptureLost)
 
@@ -518,6 +519,15 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
     m_lastSize = curSize;
 
     SizeWindows();
+}
+
+void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
+    m_sashPosition = event.ScaleX(m_sashPosition);
+    m_lastSize = event.Scale(m_lastSize);
+
+    event.Skip();
 }
 
 void wxSplitterWindow::SetSashGravity(double gravity)

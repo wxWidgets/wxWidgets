@@ -201,6 +201,8 @@ public:
     // Adjusts the panes
     void OnSize(wxSizeEvent& event);
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // In live mode, resize child windows in idle time
     void OnInternalIdle() wxOVERRIDE;
 
