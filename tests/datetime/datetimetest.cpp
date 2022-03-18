@@ -1253,7 +1253,7 @@ void DateTimeTestCase::TestDateParse()
 
         // valid, but followed by something
         { "Dec 31 1979 was the end of 70s",
-             { 31, wxDateTime::Dec, 1979 }, true, "was the end of 70s" },
+             { 31, wxDateTime::Dec, 1979 }, true, " was the end of 70s" },
 
         // some invalid ones too
         { "29 Feb 2006" },

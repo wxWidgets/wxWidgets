@@ -1866,16 +1866,18 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     // tokenize the string
     while ( p != pEnd )
     {
-        // skip white space and date delimiters
-        if ( wxStrchr(".,/-\t\r\n ", *p) )
-        {
-            ++p;
-            continue;
-        }
-
         // modify copy of the iterator as we're not sure if the next token is
         // still part of the date at all
         wxString::const_iterator pCopy = p;
+
+        // skip white space and date delimiters
+        while ( pCopy != pEnd && wxStrchr(".,/-\t\r\n ", *pCopy) )
+        {
+            ++pCopy;
+        }
+
+        if ( pCopy == pEnd )
+            break;
 
         // we can have either alphabetic or numeric token, start by testing if
         // it's the latter
