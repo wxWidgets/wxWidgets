@@ -1247,6 +1247,8 @@ void DateTimeTestCase::TestDateParse()
         { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true, "" },
         { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true, "" },
         { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true, "" },
+        { "Thu 20 Jun 2019", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "20 Jun 2019 Thu", { 20, wxDateTime::Jun, 2019 }, true, "" },
 
         // valid, but followed by something
         { "Dec 31 1979 was the end of 70s",
@@ -1255,6 +1257,8 @@ void DateTimeTestCase::TestDateParse()
         // some invalid ones too
         { "29 Feb 2006" },
         { "31/04/06" },
+        { "Sat 20 Jun 2019" }, // it was not a Saturday
+        { "20 Jun 2019 Sat" }, // it was not a Saturday
         { "bloordyblop" },
         { "2 .  .    " },
         { "14:30:15" },
