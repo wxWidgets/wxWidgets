@@ -3102,10 +3102,10 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
             return true;
         }
 
-        // If the parent has children but child nodes was not initialized then
-        // the node is collapsed so just return as nodes will be initialized in
+        // If the parent has children but child nodes was not initialized and
+        // the node is collapsed then just return as nodes will be initialized in
         // Expand().
-        if ( parentNode->GetChildNodes().empty() )
+        if ( !parentNode->IsOpen() && parentNode->GetChildNodes().empty() )
             return true;
 
         parentNode->SetHasChildren(true);
