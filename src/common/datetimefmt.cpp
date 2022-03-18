@@ -2033,9 +2033,9 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                     {
                         const wxString ord = wxGetTranslation(ordinals[n]);
                         const size_t len = ord.length();
-                        if ( date.compare(p - pBegin, len, ord) == 0 )
+                        if ( date.compare(pCopy - pBegin, len, ord) == 0 )
                         {
-                            p += len;
+                            pCopy += len;
                             break;
                         }
                     }
