@@ -1249,6 +1249,7 @@ void DateTimeTestCase::TestDateParse()
         { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true, "" },
         { "Thu 20 Jun 2019", { 20, wxDateTime::Jun, 2019 }, true, "" },
         { "20 Jun 2019 Thu", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "Dec sixth 2017",  {  6, wxDateTime::Dec, 2017 }, true, "" },
 
         // valid, but followed by something
         { "Dec 31 1979 was the end of 70s",
