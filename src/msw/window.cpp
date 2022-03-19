@@ -4891,7 +4891,13 @@ double wxWindowMSW::GetDPIScaleFactor() const
 
 void wxWindowMSW::WXAdjustFontToOwnPPI(wxFont& font) const
 {
-    font.WXAdjustToPPI(GetDPI());
+    // We don't need to adjust the font if the window hasn't been created yet,
+    // as our MSWUpdateFontOnDPIChange() will be called when it is created if a
+    // non-default DPI is used and it will be done then, so skip doing it now,
+    // especially because we can't get the correct DPI in GetDPI() anyhow
+    // without a valid HWND.
+    if ( GetHwnd() )
+        font.WXAdjustToPPI(GetDPI());
 }
 
 void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
