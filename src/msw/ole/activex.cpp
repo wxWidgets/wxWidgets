@@ -154,7 +154,7 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
 
 static void PixelsToHimetric(SIZEL &sz)
 {
-    static const wxSize logSz = wxGetDPIofHDC(ScreenHDC());
+    const wxSize logSz = wxGetDPIofHDC(ScreenHDC());
 
 #define HIMETRIC_INCH   2540
 #define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
