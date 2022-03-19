@@ -44,7 +44,8 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
                     GetID(),
                     GetText(wxT("title")),
                     GetBitmapBundle(),
-                    GetPosition());
+                    GetPosition(),
+                    GetStyle(wxT("style"), wxDEFAULT_DIALOG_STYLE));
         SetupWindow(wiz);
 
         wxWizard *old = m_wizard;
