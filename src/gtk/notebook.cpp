@@ -288,7 +288,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     {
         if (pageData->m_image == NULL)
         {
-            pageData->m_image = wxGtkImage::New();
+            pageData->m_image = wxGtkImage::New(this);
             gtk_widget_show(pageData->m_image);
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
@@ -484,7 +484,7 @@ bool wxNotebook::InsertPage( size_t position,
     const wxBitmapBundle bundle = GetBitmapBundle(imageId);
     if ( bundle.IsOk() )
     {
-        pageData->m_image = wxGtkImage::New();
+        pageData->m_image = wxGtkImage::New(this);
         WX_GTK_IMAGE(pageData->m_image)->Set(bundle);
         gtk_box_pack_start(GTK_BOX(pageData->m_box),
             pageData->m_image, false, false, m_padding);

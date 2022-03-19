@@ -7,13 +7,12 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/bmpbndl.h"
 #include "wx/log.h"
 #include "wx/window.h"
 
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/image.h"
-
-GdkWindow* wxGetTopLevelGDK();
 
 namespace
 {
@@ -29,8 +28,6 @@ struct BitmapProviderDefault: wxGtkImage::BitmapProvider
     virtual wxBitmap Get() const wxOVERRIDE;
     virtual void Set(const wxBitmapBundle& bitmap) wxOVERRIDE;
 
-
-    // This pointer can be null if there is no associated window.
     wxWindow* const m_win;
 
     // All the bitmaps we use.
@@ -43,26 +40,12 @@ struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 
 double BitmapProviderDefault::GetScale() const
 {
-    if ( m_win )
-    {
-        return m_win->GetDPIScaleFactor();
-    }
-
-    // We expect to always have a window by the time this function is called,
-    // so while we try to do something reasonable even if we don't have it,
-    // at least log it because this is not expected to happen.
-    wxLogDebug("No window in wxGtkImage, using main window scale.");
-
-#if GTK_CHECK_VERSION(3,10,0)
-    return gdk_window_get_scale_factor(wxGetTopLevelGDK());
-#else
-    return 1.0;
-#endif
+    return m_win->GetDPIScaleFactor();
 }
 
 wxBitmap BitmapProviderDefault::Get() const
 {
-    if ( m_win && !m_win->IsEnabled() )
+    if (!m_win->IsEnabled())
     {
         if ( !m_bitmapDisabled.IsOk() && m_bitmapBundle.IsOk() )
             m_bitmapDisabled = GetAtScale(m_bitmapBundle).CreateDisabled();

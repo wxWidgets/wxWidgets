@@ -5,9 +5,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/bmpbndl.h"
-#include "wx/math.h"
-
 // Class that can be used in place of GtkImage, to allow drawing of alternate
 // bitmaps, such as HiDPI or disabled.
 
@@ -32,7 +29,7 @@ public:
 
     static GType Type();
     static GtkWidget* New(BitmapProvider* provider);
-    static GtkWidget* New(wxWindow* win = NULL);
+    static GtkWidget* New(wxWindow* win);
 
     // Use bitmaps from the given bundle, the logical bitmap size is the
     // default size of the bundle.
