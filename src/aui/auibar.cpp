@@ -854,8 +854,6 @@ void wxAuiToolBar::Init()
     m_actionItem = NULL;
     m_tipItem = NULL;
     m_art = new wxAuiDefaultToolBarArt;
-    m_toolPacking = FromDIP(2);
-    m_toolBorderPadding = FromDIP(3);
     m_toolTextOrientation = wxAUI_TBTOOL_TEXT_BOTTOM;
     m_gripperSizerItem = NULL;
     m_overflowSizerItem = NULL;
@@ -878,6 +876,9 @@ bool wxAuiToolBar::Create(wxWindow* parent,
         return false;
 
     m_windowStyle = style;
+
+    m_toolPacking = FromDIP(2);
+    m_toolBorderPadding = FromDIP(3);
 
     m_gripperVisible  = (style & wxAUI_TB_GRIPPER) ? true : false;
     m_overflowVisible = (style & wxAUI_TB_OVERFLOW) ? true : false;
