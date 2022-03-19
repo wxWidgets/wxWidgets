@@ -4872,6 +4872,17 @@ wxSize wxWindowMSW::GetDPI() const
         {
             hwnd = GetHwndOf(topWin);
         }
+
+        if ( hwnd == NULL )
+        {
+            // We shouldn't be using this function without a valid HWND because
+            // we can't really find the correct DPI to use in this case for a
+            // system with multiple monitors using different DPIs, so warn
+            // about doing it but still return the screen DPI which will often,
+            // if not always, be the correct value to use anyhow.
+            wxLogDebug("Using possibly wrong DPI for %s", wxDumpWindow(this));
+            return wxGetDPIofHDC(ScreenHDC());
+        }
     }
 
     wxSize dpi = GetWindowDPI(hwnd);
