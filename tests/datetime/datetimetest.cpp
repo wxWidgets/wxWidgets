@@ -1140,6 +1140,18 @@ void DateTimeTestCase::TestParseRFC822()
         },
 
         {
+            "Sun 01 Jun 2008 16:39:10 +02", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun 01 Jun 2008 16:39:10 G", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
             "Sat, 18 Dec 1999 10:48:30", // TZ missing
             { 0 },
             false
