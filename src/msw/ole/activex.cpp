@@ -152,9 +152,6 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-#define HIMETRIC_PER_INCH   2540
-#define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
-
 static void PixelsToHimetric(SIZEL &sz)
 {
     static const wxSize logSz = wxGetDPIofHDC(ScreenHDC());
