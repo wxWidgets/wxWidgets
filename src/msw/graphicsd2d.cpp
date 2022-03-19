@@ -5316,13 +5316,11 @@ wxGraphicsFont wxD2DRenderer::CreateFont(
 {
     // Use the same DPI as wxFont will use in SetPixelSize, so these cancel
     // each other out and we are left with the actual pixel size.
-    ScreenHDC hdc;
-    wxRealPoint dpi(::GetDeviceCaps(hdc, LOGPIXELSX),
-                    ::GetDeviceCaps(hdc, LOGPIXELSY));
+    const wxSize dpi = wxGetDPIofHDC(ScreenHDC());
 
     return CreateFontAtDPI(
         wxFontInfo(wxSize(sizeInPixels, sizeInPixels)).AllFlags(flags).FaceName(facename),
-        dpi, col);
+        wxRealPoint(dpi.x, dpi.y), col);
 }
 
 wxGraphicsFont wxD2DRenderer::CreateFontAtDPI(const wxFont& font,

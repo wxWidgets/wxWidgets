@@ -2648,8 +2648,7 @@ wxSize wxMSWDCImpl::GetPPI() const
 
     if ( !ppi.x || !ppi.y )
     {
-        ppi.x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
-        ppi.y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+        ppi = wxGetDPIofHDC(GetHdc());
     }
 
     return ppi;

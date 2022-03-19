@@ -471,6 +471,13 @@ private:
     wxDECLARE_NO_COPY_CLASS(MemoryHDC);
 };
 
+// Helper function returning the resolution of the given HDC.
+inline wxSize wxGetDPIofHDC(HDC hdc)
+{
+    return wxSize(::GetDeviceCaps(hdc, LOGPIXELSX),
+                  ::GetDeviceCaps(hdc, LOGPIXELSY));
+}
+
 // a class which selects a GDI object into a DC in its ctor and deselects in
 // dtor
 class SelectInHDC
