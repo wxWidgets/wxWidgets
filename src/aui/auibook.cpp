@@ -1520,8 +1520,9 @@ public:
     wxTabFrame()
     {
         m_tabs = NULL;
-        m_rect = wxRect(wxPoint(0,0), FromDIP(wxSize(200,200)));
-        m_tabCtrlHeight = FromDIP(20);
+
+        // Both m_rect and m_tabCtrlHeight will be really initialized later.
+        m_tabCtrlHeight = 0;
     }
 
     ~wxTabFrame()
