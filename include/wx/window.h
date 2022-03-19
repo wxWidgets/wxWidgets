@@ -2148,7 +2148,7 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindowBase *win);
 
 // Return a string with platform-dependent description of the window.
-extern WXDLLIMPEXP_CORE wxString wxDumpWindow(wxWindowBase* win);
+extern WXDLLIMPEXP_CORE wxString wxDumpWindow(const wxWindowBase* win);
 
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------
