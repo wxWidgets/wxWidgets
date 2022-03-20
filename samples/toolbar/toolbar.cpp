@@ -151,6 +151,8 @@ public:
 
     void OnUpdateCopyAndCut(wxUpdateUIEvent& event);
     void OnUpdateToggleHorzText(wxUpdateUIEvent& event);
+    void OnUpdateNeedsToolbar(wxUpdateUIEvent& event)
+        { event.Enable( GetToolBar() != NULL ); }
     void OnUpdateToggleRadioBtn(wxUpdateUIEvent& event)
         { event.Enable( m_tbar != NULL ); }
 
@@ -206,13 +208,8 @@ enum
     IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
     IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
     IDM_TOOLBAR_TOGGLETOOLBARSIZE,
-    IDM_TOOLBAR_TOGGLETOOLBARROWS,
     IDM_TOOLBAR_TOGGLETOOLTIPS,
     IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
-    IDM_TOOLBAR_SHOW_TEXT,
-    IDM_TOOLBAR_SHOW_ICONS,
-    IDM_TOOLBAR_SHOW_BOTH,
-    IDM_TOOLBAR_BG_COL,
     IDM_TOOLBAR_CUSTOM_PATH,
     IDM_TOOLBAR_TOP_ORIENTATION,
     IDM_TOOLBAR_LEFT_ORIENTATION,
@@ -223,18 +220,30 @@ enum
     IDM_TOOLBAR_OTHER_3,
     IDM_TOOLBAR_OTHER_4,
 
+    // items starting from this one must be disabled when there is no toolbar
+    IDM_FIRST_NEEDS_TOOLBAR,
+
+    IDM_TOOLBAR_TOGGLETOOLBARROWS,
+    IDM_TOOLBAR_SHOW_TEXT,
+    IDM_TOOLBAR_SHOW_ICONS,
+    IDM_TOOLBAR_SHOW_BOTH,
+    IDM_TOOLBAR_BG_COL,
+
     // tools menu items
     IDM_TOOLBAR_ENABLEPRINT,
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
     IDM_TOOLBAR_TOGGLESEARCH,
-    IDM_TOOLBAR_TOGGLERADIOBTN1,
-    IDM_TOOLBAR_TOGGLERADIOBTN2,
-    IDM_TOOLBAR_TOGGLERADIOBTN3,
     IDM_TOOLBAR_CHANGE_TOOLTIP,
     IDM_TOOLBAR_INC_TOOL_SPACING,
     IDM_TOOLBAR_DEC_TOOL_SPACING,
+
+    IDM_LAST_NEEDS_TOOLBAR,
+
+    IDM_TOOLBAR_TOGGLERADIOBTN1,
+    IDM_TOOLBAR_TOGGLERADIOBTN2,
+    IDM_TOOLBAR_TOGGLERADIOBTN3,
 
     ID_COMBO = 1000
 };
@@ -290,6 +299,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(wxID_COPY, MyFrame::OnUpdateCopyAndCut)
     EVT_UPDATE_UI(wxID_CUT, MyFrame::OnUpdateCopyAndCut)
 
+    EVT_UPDATE_UI_RANGE(IDM_FIRST_NEEDS_TOOLBAR,
+                        IDM_LAST_NEEDS_TOOLBAR,
+                        MyFrame::OnUpdateNeedsToolbar)
     EVT_UPDATE_UI_RANGE(IDM_TOOLBAR_TOGGLERADIOBTN1,
                         IDM_TOOLBAR_TOGGLERADIOBTN3,
                         MyFrame::OnUpdateToggleRadioBtn)

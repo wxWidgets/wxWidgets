@@ -538,6 +538,11 @@ void wxToolBar::Recreate()
     // TB_DELETEBUTTON.
     m_nButtons = 0;
 
+    // We need to ensure that the tool bitmap size will be adjusted if it's
+    // different from the default and not from the value used for the toolbar
+    // we just destroyed.
+    wxToolBarBase::DoSetToolBitmapSize(wxSize(16, 15));
+
     Realize();
 }
 
