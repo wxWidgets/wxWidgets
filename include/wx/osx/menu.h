@@ -36,6 +36,8 @@ public:
 
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
+    virtual void SetInvokingWindow(wxWindow* win) wxOVERRIDE;
+
     bool ProcessCommand(wxCommandEvent& event);
 
     // get the menu handle

@@ -421,6 +421,14 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 }
 #endif
 
+void wxMenu::SetInvokingWindow(wxWindow* win)
+{
+    wxMenuBase::SetInvokingWindow(win);
+
+    if ( win )
+        SetupBitmaps();
+}
+
 void wxMenu::SetupBitmaps()
 {
     for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
