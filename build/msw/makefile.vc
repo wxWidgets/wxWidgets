@@ -2534,6 +2534,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
+	$(OBJS)\monodll_maskededit.obj \
 	$(OBJS)\monodll_calctrlg.obj \
 	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj \
@@ -2865,6 +2866,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
+	$(OBJS)\monodll_maskededit.obj \
 	$(OBJS)\monodll_calctrlg.obj \
 	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj \
@@ -3384,6 +3386,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
+	$(OBJS)\monolib_maskededit.obj \
 	$(OBJS)\monolib_calctrlg.obj \
 	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj \
@@ -3715,6 +3718,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
+	$(OBJS)\monolib_maskededit.obj \
 	$(OBJS)\monolib_calctrlg.obj \
 	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj \
@@ -4166,6 +4170,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.obj \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
+	$(OBJS)\coredll_maskededit.obj \
 	$(OBJS)\coredll_calctrlg.obj \
 	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj \
@@ -4497,6 +4502,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.obj \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
+	$(OBJS)\coredll_maskededit.obj \
 	$(OBJS)\coredll_calctrlg.obj \
 	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj \
@@ -4853,6 +4859,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.obj \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
+	$(OBJS)\corelib_maskededit.obj \
 	$(OBJS)\corelib_calctrlg.obj \
 	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj \
@@ -5184,6 +5191,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.obj \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
+	$(OBJS)\corelib_maskededit.obj \
 	$(OBJS)\corelib_calctrlg.obj \
 	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj \
@@ -9939,6 +9947,11 @@ $(OBJS)\monodll_laywin.obj: ..\..\src\generic\laywin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_maskededit.obj: ..\..\src\generic\maskededit.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\maskededit.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
@@ -12534,6 +12547,11 @@ $(OBJS)\monolib_laywin.obj: ..\..\src\generic\laywin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_maskededit.obj: ..\..\src\generic\maskededit.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\maskededit.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
@@ -15096,6 +15114,11 @@ $(OBJS)\coredll_laywin.obj: ..\..\src\generic\laywin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_maskededit.obj: ..\..\src\generic\maskededit.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\maskededit.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
@@ -16848,6 +16871,11 @@ $(OBJS)\corelib_editlbox.obj: ..\..\src\generic\editlbox.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_laywin.obj: ..\..\src\generic\laywin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\laywin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_maskededit.obj: ..\..\src\generic\maskededit.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\maskededit.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

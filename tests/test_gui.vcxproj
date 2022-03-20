@@ -499,6 +499,7 @@
     <ClCompile Include="controls\listctrltest.cpp" />
     <ClCompile Include="controls\listviewtest.cpp" />
     <ClCompile Include="controls\markuptest.cpp" />
+    <ClCompile Include="controls\maskededittest.cpp" />
     <ClCompile Include="controls\notebooktest.cpp" />
     <ClCompile Include="controls\ownerdrawncomboboxtest.cpp" />
     <ClCompile Include="controls\pickerbasetest.cpp" />
