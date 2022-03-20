@@ -3215,7 +3215,8 @@ bool wxDataViewIconTextRenderer::MacRender()
 
     cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
     iconText << GetValue();
-    [cell setImage:iconText.GetIcon().GetNSImage()];
+    const wxDataViewCtrl* const dvc = GetOwner()->GetOwner();
+    [cell setImage:iconText.GetBitmapBundle().GetBitmapFor(dvc).GetNSImage()];
     [cell setStringValue:wxCFStringRef(iconText.GetText()).AsNSString()];
     return true;
 }
@@ -3324,11 +3325,12 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
 
     const wxCFStringRef textString(checkIconText.GetText());
 
-    const wxIcon& icon = checkIconText.GetIcon();
+    const wxBitmapBundle& icon = checkIconText.GetBitmapBundle();
     if ( icon.IsOk() )
     {
         wxNSTextAttachmentCellWithBaseline* const attachmentCell =
-            [[wxNSTextAttachmentCellWithBaseline alloc] initImageCell: icon.GetNSImage()];
+            [[wxNSTextAttachmentCellWithBaseline alloc]
+             initImageCell: icon.GetBitmapFor(GetOwner()->GetOwner()).GetNSImage()];
         NSTextAttachment* const attachment = [NSTextAttachment new];
         [attachment setAttachmentCell: attachmentCell];
 
