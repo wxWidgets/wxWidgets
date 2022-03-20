@@ -162,6 +162,30 @@ TEST_CASE("BitmapBundle::ArtProvider", "[bmpbundle][art]")
     b = wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_MENU, size);
     CHECK( b.IsOk() );
     CHECK( b.GetDefaultSize() == size );
+
+#if wxUSE_ARTPROVIDER_TANGO
+    // Tango art provider is supposed to use 16px for the default size of the
+    // menu and button images and 24px for all the other ones, but we need to
+    // choose the client kind for which the current platform doesn't define its
+    // own default/fallback size to be able to test for it, i.e. this is the
+    // client for which GetNativeSizeHint() of the native art provider returns
+    // wxDefaultSize.
+    const wxArtClient artClient =
+#ifdef __WXMSW__
+        wxART_TOOLBAR
+#else
+        wxART_LIST
+#endif
+        ;
+
+    // We also need to use an image provided by Tango but not by the native art
+    // provider, but here we can at least avoid the platform checks by using an
+    // image not provided by any native providers.
+    b = wxArtProvider::GetBitmapBundle(wxART_REFRESH, artClient);
+
+    CHECK( b.IsOk() );
+    CHECK( b.GetDefaultSize() == wxSize(24, 24) );
+#endif // wxUSE_ARTPROVIDER_TANGO
 }
 
 // This test only makes sense for the ports that actually support scaled

@@ -209,8 +209,12 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
         wxSize sizeDef = size != wxDefaultSize ? size : GetSizeHint(client);
         if (sizeDef == wxDefaultSize)
         {
-            // We really need some default size here.
-            sizeDef = wxSize(16, 16);
+            // We really need some default size here, so keep using the same
+            // sizes we used for PNG-based implementation we had before.
+            if ( client == wxART_MENU || client == wxART_BUTTON )
+                sizeDef = wxSize(16, 16);
+            else
+                sizeDef = wxSize(24, 24);
         }
         return wxBitmapBundle::FromSVG(entry.data, entry.len, sizeDef);
     }
