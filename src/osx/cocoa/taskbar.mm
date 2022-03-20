@@ -404,12 +404,11 @@ bool wxTaskBarIconCustomStatusItemImpl::PopupMenu(wxMenu *menu)
 {
     wxASSERT(menu);
 
-    menu->SetInvokingWindow(m_eventWindow);
+    wxMenuInvokingWindowSetter setInvokingWindow(*menu, m_eventWindow);
     menu->UpdateUI();
 
     [m_statusItem popUpStatusItemMenu:(NSMenu*)menu->GetHMenu()];
 
-    menu->SetInvokingWindow(NULL);
     return true;
 }
 
