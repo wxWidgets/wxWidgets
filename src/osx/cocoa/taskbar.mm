@@ -40,6 +40,8 @@ class wxTaskBarIconWindow : public wxTopLevelWindow
 public:
     wxTaskBarIconWindow(wxTaskBarIconImpl *impl);
 
+    double GetContentScaleFactor() const wxOVERRIDE;
+
     void OnMenuEvent(wxCommandEvent& event);
     void OnUpdateUIEvent(wxUpdateUIEvent& event);
     
@@ -424,6 +426,13 @@ wxEND_EVENT_TABLE()
 wxTaskBarIconWindow::wxTaskBarIconWindow(wxTaskBarIconImpl *impl) 
 : m_impl(impl)
 {
+}
+
+double wxTaskBarIconWindow::GetContentScaleFactor() const
+{
+    // We don't have any real window here, so use the main screen scale, which
+    // should be appropriate for dock/status icons.
+    return wxOSXGetMainScreenContentScaleFactor();
 }
 
 void wxTaskBarIconWindow::OnMenuEvent(wxCommandEvent& event)
