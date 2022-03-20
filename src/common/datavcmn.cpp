@@ -1735,6 +1735,7 @@ wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
             case wxDF_ENHMETAFILE:
             case wxDF_LOCALE:
             case wxDF_PRIVATE:
+            default: // any other custom format
                 dataObject->Add(new wxCustomDataObject(formats[i]));
                 break;
 
