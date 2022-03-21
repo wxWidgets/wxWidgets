@@ -6368,19 +6368,10 @@ void wxWindowGTK::GTKScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
     //as well...
     if (!(wxstyle & wxNO_BORDER) && !(wxstyle & wxBORDER_STATIC))
     {
-        GtkShadowType gtkstyle;
+        GtkShadowType gtkstyle = GTK_SHADOW_IN;
 
         if(wxstyle & wxBORDER_RAISED)
             gtkstyle = GTK_SHADOW_OUT;
-        else if ((wxstyle & wxBORDER_SUNKEN) || (wxstyle & wxBORDER_THEME))
-            gtkstyle = GTK_SHADOW_IN;
-#if 0
-        // Now obsolete
-        else if (wxstyle & wxBORDER_DOUBLE)
-            gtkstyle = GTK_SHADOW_ETCHED_IN;
-#endif
-        else //default
-            gtkstyle = GTK_SHADOW_IN;
 
         gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(w),
                                              gtkstyle );
