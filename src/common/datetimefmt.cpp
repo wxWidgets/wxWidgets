@@ -751,7 +751,7 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
     // to the date string (32 being the length of a typical RFC822 timestamp).
     const wxString date(originalDate + wxString(32, '\0'));
 
-    const wxString::const_iterator pEnd = date.end();
+    const wxString::const_iterator pEnd = date.begin() + originalDate.length();
     wxString::const_iterator p = date.begin();
 
     // 1. week day (optional)
@@ -896,7 +896,8 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
         // the explicit offset given: it has the form of hhmm
         bool plus = *p++ == '+';
 
-        if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
+        if ( p == pEnd || !wxIsdigit(*p) ||
+             p + 1 == pEnd || !wxIsdigit(*(p + 1)) )
             return false;
 
 
@@ -905,7 +906,8 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
 
         p += 2;
 
-        if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
+        if ( p == pEnd || !wxIsdigit(*p) ||
+             p + 1 == pEnd || !wxIsdigit(*(p + 1)) )
             return false;
 
         // minutes
@@ -920,7 +922,7 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
     {
         // the symbolic timezone given: may be either military timezone or one
         // of standard abbreviations
-        if ( !*(p + 1) )
+        if ( p + 1 == pEnd )
         {
             // military: Z = UTC, J unused, A = -1, ..., Y = +12
             static const int offsets[26] =
@@ -939,7 +941,7 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
         else
         {
             // abbreviation
-            const wxString tz(p, date.end());
+            const wxString tz(p, pEnd);
             if ( tz == wxT("UT") || tz == wxT("UTC") || tz == wxT("GMT") )
                 offset = 0;
             else if ( tz == wxT("AST") )

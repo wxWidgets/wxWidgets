@@ -1106,6 +1106,18 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        {
+            "Sat, 18 Dec 1999 10:48:30 G", // military time zone
+            { 18, wxDateTime::Dec, 1999, 17, 48, 30 },
+            true
+        },
+
+        {
+            "Sat, 18 Dec 1999 10:48:30 Q", // military time zone
+            { 18, wxDateTime::Dec, 1999,  6, 48, 30 },
+            true
+        },
+
         // seconds are optional according to the RFC
         {
             "Sun, 01 Jun 2008 16:30 +0200",
@@ -1160,7 +1172,25 @@ void DateTimeTestCase::TestParseRFC822()
         },
 
         {
+            "Sun, 01 Jun 2008 16:39:10 +020", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
             "Sun, 01 Jun 2008 16:39:10 +02", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +0", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +", // truncated time zone
             { 0 },
             false
         },
