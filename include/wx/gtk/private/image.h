@@ -15,21 +15,19 @@ public:
     {
         virtual ~BitmapProvider() { }
 
-        virtual double GetScale() const = 0;
-        virtual wxBitmap Get() const = 0;
+        virtual wxBitmap Get(int scale) const = 0;
         virtual void Set(const wxBitmapBundle&) { }
 
         // Simple helpers used in implementation.
-        bool IsScaled() const { return !wxIsSameDouble(GetScale(), 1); }
-        wxBitmap GetAtScale(const wxBitmapBundle& b) const
+        static wxBitmap GetAtScale(const wxBitmapBundle& b, int scale)
         {
-            return b.GetBitmap(b.GetDefaultSize()*GetScale());
+            return b.GetBitmap(b.GetDefaultSize() * scale);
         }
     };
 
     static GType Type();
     static GtkWidget* New(BitmapProvider* provider);
-    static GtkWidget* New(wxWindow* win);
+    static GtkWidget* New(wxWindow* win = NULL);
 
     // Use bitmaps from the given bundle, the logical bitmap size is the
     // default size of the bundle.
