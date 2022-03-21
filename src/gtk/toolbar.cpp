@@ -195,6 +195,7 @@ wxBitmap BitmapProvider::Get(int scale) const
     }
     return bitmap;
 #else
+    wxUnusedVar(scale);
     if (!m_tool->IsEnabled())
         return m_tool->GetDisabledBitmap();
     return wxBitmap();
