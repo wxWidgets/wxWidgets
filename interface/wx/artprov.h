@@ -440,6 +440,13 @@ public:
 
 
 protected:
+    /**
+        Derived art provider classes may override this method to return the
+        size of the images used by this provider.
+
+        The default implementation returns the result of GetNativeSizeHint().
+     */
+    virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
     /**
         Derived art provider classes may override this method to create requested art
