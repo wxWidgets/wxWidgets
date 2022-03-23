@@ -439,6 +439,32 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
 #endif
     m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"), wxDefaultPosition, wxDefaultSize, buttonStyle);
 
+    // compute the maximum width of the buttons and use it for all of them
+    wxSize buttonSize;
+    buttonSize.IncTo(m_btnPrev->GetBestSize());
+    buttonSize.IncTo(m_btnNext->GetBestSize());
+    buttonSize.IncTo(btnCancel->GetBestSize());
+
+    // use the other possible label for the "Next" button temporarily, so that
+    // we could make it big enough to fit it too if it's longer
+    m_btnNext->SetLabel(m_finishLabel);
+    buttonSize.IncTo(m_btnNext->GetBestSize());
+
+    if (btnHelp)
+        buttonSize.IncTo(btnHelp->GetBestSize());
+
+    // now do make all buttons of the same (and big enough) size
+    m_btnPrev->SetMinSize(buttonSize);
+    m_btnNext->SetMinSize(buttonSize);
+    btnCancel->SetMinSize(buttonSize);
+
+    if (btnHelp)
+        btnHelp->SetMinSize(buttonSize);
+
+    // restore the initial label of the 'next' button after temporarily
+    // changing it above
+    m_btnNext->SetLabel(m_nextLabel);
+
     if (btnHelp)
     {
         buttonRow->Add(
