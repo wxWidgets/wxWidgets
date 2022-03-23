@@ -199,11 +199,14 @@ public:
     // have native equivalent
     static wxSize GetNativeSizeHint(const wxArtClient& client);
 
-    // Get the size hint of an icon from a specific wxArtClient, queries
-    // the topmost provider if platform_dependent = false
-    static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
+    // Get the size hint of an icon from a specific wxArtClient from the
+    // topmost (i.e. first used) provider.
+    static wxSize GetSizeHint(const wxArtClient& client);
 
 #if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use GetSizeHint() without bool argument or GetNativeSizeHint()")
+    static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent);
+
     wxDEPRECATED_MSG("use wxBitmap::Rescale() instead.")
     static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded);
 #endif // WXWIN_COMPATIBILITY_3_0

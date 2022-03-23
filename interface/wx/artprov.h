@@ -350,15 +350,13 @@ public:
     /**
         Returns a suitable size hint for the given @e wxArtClient.
 
-        If @a platform_default is @true, return a size based on the current
-        platform using GetNativeSizeHint(), otherwise return the size from the
-        topmost wxArtProvider. @e wxDefaultSize may be returned if the client
-        doesn't have a specified size, like wxART_OTHER for example.
+        Return the size used by the topmost wxArtProvider for the given @a
+        client. @e wxDefaultSize may be returned if the client doesn't have a
+        specified size, like wxART_OTHER for example.
 
         @see GetNativeSizeHint()
     */
-    static wxSize GetSizeHint(const wxArtClient& client,
-                              bool platform_default = false);
+    static wxSize GetSizeHint(const wxArtClient& client);
 
     /**
         Query registered providers for icon bundle with given ID.

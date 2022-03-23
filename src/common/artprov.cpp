@@ -530,15 +530,19 @@ wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
     }
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 /*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client,
                                          bool platform_dependent)
 {
-    if (!platform_dependent)
-    {
-        wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
-        if (node)
-            return node->GetData()->DoGetSizeHint(client);
-    }
+    return platform_dependent ? GetNativeSizeHint(client) : GetSizeHint(client);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+/*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client)
+{
+    wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
+    if (node)
+        return node->GetData()->DoGetSizeHint(client);
 
     return GetNativeSizeHint(client);
 }
