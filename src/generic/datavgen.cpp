@@ -959,7 +959,13 @@ private:
     // Return false only if the event was vetoed by its handler.
     bool SendExpanderEvent(wxEventType type, const wxDataViewItem& item);
 
-    wxDataViewTreeNode * FindNode( const wxDataViewItem & item );
+    struct FindNodeResult
+    {
+        wxDataViewTreeNode * m_node;
+        bool                 m_subtreeRealized;
+    };
+
+    FindNodeResult FindNode( const wxDataViewItem & item );
 
     wxDataViewColumn *FindColumnForEditing(const wxDataViewItem& item, wxDataViewCellMode mode) const;
 
@@ -3089,8 +3095,15 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         // specific position (row) is unclear, so clear whole height cache
         ClearRowHeightCache();
 
-        wxDataViewTreeNode *parentNode = FindNode(parent);
+        const FindNodeResult findResult = FindNode(parent);
+        wxDataViewTreeNode *parentNode = findResult.m_node;
 
+        // If one of parents is not realized yet (has children but was never
+        // expanded). Return as nodes will be initialized in Expand().
+        if ( !findResult.m_subtreeRealized )
+            return true;
+
+        // The parent node was not found.
         if ( !parentNode )
             return false;
 
@@ -3197,7 +3210,13 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     }
     else // general case
     {
-        wxDataViewTreeNode *parentNode = FindNode(parent);
+        const FindNodeResult findResult = FindNode(parent);
+        wxDataViewTreeNode *parentNode = findResult.m_node;
+
+        // One of parents of the parent node has children but was never
+        // expanded, so the tree was not built and we have nothing to delete.
+        if ( !findResult.m_subtreeRealized )
+            return true;
 
         // Notice that it is possible that the item being deleted is not in the
         // tree at all, for example we could be deleting a never shown (because
@@ -3316,7 +3335,10 @@ bool wxDataViewMainWindow::DoItemChanged(const wxDataViewItem & item, int view_c
         // column but also falls back to other values for comparison. To ensure
         // consistency it is better to treat a value change as if it was an item
         // change.
-        wxDataViewTreeNode* const node = FindNode(item);
+        const FindNodeResult findResult = FindNode(item);
+        wxDataViewTreeNode* const node = findResult.m_node;
+        if ( !findResult.m_subtreeRealized )
+            return true;
         wxCHECK_MSG( node, false, "invalid item" );
         node->PutInSortOrder(this);
     }
@@ -4084,14 +4106,22 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
     }
 }
 
-wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
+wxDataViewMainWindow::FindNodeResult
+wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
 {
+    FindNodeResult result;
+    result.m_node = NULL;
+    result.m_subtreeRealized = true;
+
     const wxDataViewModel * model = GetModel();
     if( model == NULL )
-        return NULL;
+        return result;
 
     if (!item.IsOk())
-        return m_root;
+    {
+        result.m_node = m_root;
+        return result;
+    }
 
     // Compose the parent-chain for the item we are looking for
     wxVector<wxDataViewItem> parentChain;
@@ -4112,9 +4142,9 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             if( node->GetChildNodes().empty() )
             {
                 // Even though the item is a container, it doesn't have any
-                // child nodes in the control's representation yet. We have
-                // to realize its subtree now.
-                ::BuildTreeHelper(this, model, node->GetItem(), node);
+                // child nodes in the control's representation yet.
+                result.m_subtreeRealized = false;
+                return result;
             }
 
             const wxDataViewTreeNodes& nodes = node->GetChildNodes();
@@ -4126,7 +4156,10 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
                 if (currentNode->GetItem() == parentChain[iter])
                 {
                     if (currentNode->GetItem() == item)
-                        return currentNode;
+                    {
+                        result.m_node = currentNode;
+                        return result;
+                    }
 
                     node = currentNode;
                     found = true;
@@ -4134,15 +4167,15 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
                 }
             }
             if (!found)
-                return NULL;
+                return result;
         }
         else
-            return NULL;
+            return result;
 
         if ( !iter )
             break;
     }
-    return NULL;
+    return result;
 }
 
 void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item,
