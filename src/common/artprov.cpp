@@ -543,6 +543,11 @@ wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
     return GetNativeSizeHint(client);
 }
 
+wxSize wxArtProvider::DoGetSizeHint(const wxArtClient& client)
+{
+    return GetNativeSizeHint(client);
+}
+
 #ifndef wxHAS_NATIVE_ART_PROVIDER_IMPL
 /*static*/
 wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& WXUNUSED(client))

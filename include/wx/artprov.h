@@ -224,10 +224,7 @@ protected:
     static void CleanUpProviders();
 
     // Get the default size of an icon for a specific client
-    virtual wxSize DoGetSizeHint(const wxArtClient& client)
-    {
-        return GetSizeHint(client, true);
-    }
+    virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
     // Derived classes must override at least one of the CreateXXX() functions
     // below to create requested art resource. Overriding more than one of them
