@@ -70,6 +70,13 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs]")
     CHECK( wxTheClipboard->SetData(dobj) );
     wxTheClipboard->Flush();
 }
+
+TEST_CASE("GUI::DataFormatCompare", "[guifuncs][dataformat]")
+{
+    const wxDataFormat df(wxDF_TEXT);
+    CHECK( df == wxDF_TEXT );
+    CHECK( df != wxDF_INVALID );
+}
 #endif // wxUSE_DATAOBJ
 
 TEST_CASE("GUI::ParseFileDialogFilter", "[guifuncs]")
