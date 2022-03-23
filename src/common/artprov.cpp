@@ -538,18 +538,30 @@ wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
 }
 #endif // WXWIN_COMPATIBILITY_3_0
 
-/*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client)
+/*static*/ wxSize wxArtProvider::GetDIPSizeHint(const wxArtClient& client)
 {
     wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
     if (node)
         return node->GetData()->DoGetSizeHint(client);
 
-    return GetNativeSizeHint(client);
+    return GetNativeDIPSizeHint(client);
+}
+
+/*static*/
+wxSize wxArtProvider::GetSizeHint(const wxArtClient& client, wxWindow* win)
+{
+    return wxWindow::FromDIP(GetDIPSizeHint(client), win);
 }
 
 wxSize wxArtProvider::DoGetSizeHint(const wxArtClient& client)
 {
-    return GetNativeSizeHint(client);
+    return GetNativeDIPSizeHint(client);
+}
+
+/*static*/
+wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client, wxWindow* win)
+{
+    return wxWindow::FromDIP(GetNativeDIPSizeHint(client), win);
 }
 
 #ifndef wxHAS_NATIVE_ART_PROVIDER_IMPL

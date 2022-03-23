@@ -333,7 +333,7 @@ public:
                           const wxSize& size = wxDefaultSize);
 
     /**
-        Returns native icon size for use specified by @a client hint.
+        Returns native icon size for use specified by @a client hint in DIPs.
 
         If the platform has no commonly used default for this use or if
         @a client is not recognized, returns wxDefaultSize.
@@ -343,20 +343,42 @@ public:
               In that case, this method returns only one of them, picked
               reasonably.
 
-        @since 2.9.0
+        @since 3.1.6
      */
-    static wxSize GetNativeSizeHint(const wxArtClient& client);
+    static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
 
     /**
-        Returns a suitable size hint for the given @e wxArtClient.
+        Returns native icon size for use specified by @a client hint.
+
+        This function does the same thing as GetNativeDIPSizeHint(), but uses
+        @a win to convert the returned value to logical pixels. If @a win is
+        @NULL, default DPI scaling (i.e. that of the primary display) is used.
+
+        @since 2.9.0 (@a win parameter is available only since 3.1.6)
+     */
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+
+    /**
+        Returns a suitable size hint for the given @e wxArtClient in DIPs.
 
         Return the size used by the topmost wxArtProvider for the given @a
         client. @e wxDefaultSize may be returned if the client doesn't have a
         specified size, like wxART_OTHER for example.
 
-        @see GetNativeSizeHint()
+        @see GetNativeDIPSizeHint()
     */
-    static wxSize GetSizeHint(const wxArtClient& client);
+    static wxSize GetDIPSizeHint(const wxArtClient& client);
+
+    /**
+        Returns a suitable size hint for the given @e wxArtClient.
+
+        This function does the same thing as GetDIPSizeHint(), but uses @a win
+        to convert the returned value to logical pixels. If @a win is @NULL,
+        default DPI scaling (i.e. that of the primary display) is used.
+
+        Note that @a win parameter is only available since wxWidgets 3.1.6.
+     */
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = NULL);
 
     /**
         Query registered providers for icon bundle with given ID.
@@ -442,7 +464,9 @@ protected:
         Derived art provider classes may override this method to return the
         size of the images used by this provider.
 
-        The default implementation returns the result of GetNativeSizeHint().
+        Note that the returned size should be in DPI-independent pixels, i.e.
+        DIPs. The default implementation returns the result of
+        GetNativeDIPSizeHint().
      */
     virtual wxSize DoGetSizeHint(const wxArtClient& client);
 

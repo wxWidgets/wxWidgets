@@ -19,6 +19,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxArtProvidersList;
 class WXDLLIMPEXP_FWD_CORE wxArtProviderCache;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 class wxArtProviderModule;
 
 // ----------------------------------------------------------------------------
@@ -196,12 +198,15 @@ public:
                                       const wxArtClient& client = wxASCII_STR(wxART_OTHER));
 
     // Gets native size for given 'client' or wxDefaultSize if it doesn't
-    // have native equivalent
-    static wxSize GetNativeSizeHint(const wxArtClient& client);
+    // have native equivalent. The first version returns the size in logical
+    // pixels while the second one returns it in DIPs.
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
 
     // Get the size hint of an icon from a specific wxArtClient from the
     // topmost (i.e. first used) provider.
-    static wxSize GetSizeHint(const wxArtClient& client);
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetDIPSizeHint(const wxArtClient& client);
 
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("use GetSizeHint() without bool argument or GetNativeSizeHint()")
@@ -226,7 +231,10 @@ protected:
     // Destroy caches & all providers
     static void CleanUpProviders();
 
-    // Get the default size of an icon for a specific client
+    // Get the default size of an icon for a specific client.
+    //
+    // Although this function doesn't have "DIP" in its name, it should return
+    // the size in DIPs.
     virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
     // Derived classes must override at least one of the CreateXXX() functions
