@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------------
 
 // All files in art/tango in alphabetical order:
+#include "../../art/tango/application_exit.h"
 #include "../../art/tango/application_x_executable.h"
 #include "../../art/tango/dialog_error.h"
 #include "../../art/tango/dialog_information.h"
@@ -185,9 +186,9 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
         { wxART_PLUS,               BITMAP_DATA(list_add)                   },
         { wxART_MINUS,              BITMAP_DATA(list_remove)                },
 
-        // Surprisingly Tango doesn't seem to have neither wxART_CLOSE nor
-        // wxART_QUIT. We could use system-log-out for the latter but it
-        // doesn't seem quite right.
+        // Surprisingly Tango doesn't seem to have wxART_CLOSE.
+
+        { wxART_QUIT,               BITMAP_DATA(application_exit)           },
 
         { wxART_FIND,               BITMAP_DATA(edit_find)                  },
         { wxART_FIND_AND_REPLACE,   BITMAP_DATA(edit_find_replace)          },
@@ -208,8 +209,12 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
         wxSize sizeDef = size != wxDefaultSize ? size : GetSizeHint(client);
         if (sizeDef == wxDefaultSize)
         {
-            // We really need some default size here.
-            sizeDef = wxSize(16, 16);
+            // We really need some default size here, so keep using the same
+            // sizes we used for PNG-based implementation we had before.
+            if ( client == wxART_MENU || client == wxART_BUTTON )
+                sizeDef = wxSize(16, 16);
+            else
+                sizeDef = wxSize(24, 24);
         }
         return wxBitmapBundle::FromSVG(entry.data, entry.len, sizeDef);
     }
