@@ -1150,6 +1150,10 @@ private:
     // assign the preferred first day of a week to flags, if necessary
     void UseEffectiveWeekDayFlags(WeekFlags &flags) const;
 
+    // parse time zone (e.g. "+0100") between [iterator,dateEnd)
+    bool ParseRFC822TimeZone(wxString::const_iterator* iterator,
+                             const wxString::const_iterator& dateEnd);
+
     // the internal representation of the time is the amount of milliseconds
     // elapsed since the origin which is set by convention to the UNIX/C epoch
     // value: the midnight of January 1, 1970 (UTC)

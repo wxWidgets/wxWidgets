@@ -736,6 +736,111 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     return res;
 }
 
+bool
+wxDateTime::ParseRFC822TimeZone(wxString::const_iterator *iterator,
+                                const wxString::const_iterator &pEnd)
+{
+    wxString::const_iterator& p = *iterator;
+    int offset = 0; // just to suppress warnings
+    if ( *p == '-' || *p == '+' )
+    {
+        // the explicit offset given: it has the form of hhmm
+        bool plus = *p++ == '+';
+
+        if ( p == pEnd || !wxIsdigit(*p) ||
+             p + 1 == pEnd || !wxIsdigit(*(p + 1)) )
+            return false;
+
+
+        // hours
+        offset = MIN_PER_HOUR*(10*(*p - '0') + (*(p + 1) - '0'));
+
+        p += 2;
+
+        if ( p == pEnd || !wxIsdigit(*p) ||
+             p + 1 == pEnd || !wxIsdigit(*(p + 1)) )
+            return false;
+
+        // minutes
+        offset += 10*(*p - '0') + (*(p + 1) - '0');
+
+        if ( !plus )
+            offset = -offset;
+
+        p += 2;
+    }
+    else // not numeric
+    {
+        // the symbolic timezone given: may be either military timezone or one
+        // of standard abbreviations
+        if ( p + 1 == pEnd )
+        {
+            // military: Z = UTC, J unused, A = -1, ..., Y = +12
+            static const int offsets[26] =
+            {
+                //A  B   C   D   E   F   G   H   I    J    K    L    M
+                -1, -2, -3, -4, -5, -6, -7, -8, -9,   0, -10, -11, -12,
+                //N  O   P   R   Q   S   T   U   V    W    Z    Y    Z
+                +1, +2, +3, +4, +5, +6, +7, +8, +9, +10, +11, +12, 0
+            };
+
+            if ( *p < wxT('A') || *p > wxT('Z') || *p == wxT('J') )
+                return false;
+
+            offset = offsets[*p++ - 'A'];
+        }
+        else
+        {
+            // TZ is max 3 characters long; we do not want to consume
+            // characters beyond that.
+            wxString::const_iterator pPlusMax3 = pEnd;
+            if ( p != pEnd && p + 1 != pEnd && p + 2 != pEnd && p + 3 != pEnd )
+                pPlusMax3 = p + 3;
+            // abbreviation
+            const wxString tz(p, pPlusMax3);
+            if ( tz == wxT("UT") || tz == wxT("UTC") || tz == wxT("GMT") )
+                offset = 0;
+            else if ( tz == wxT("AST") )
+                offset = AST - GMT0;
+            else if ( tz == wxT("ADT") )
+                offset = ADT - GMT0;
+            else if ( tz == wxT("EST") )
+                offset = EST - GMT0;
+            else if ( tz == wxT("EDT") )
+                offset = EDT - GMT0;
+            else if ( tz == wxT("CST") )
+                offset = CST - GMT0;
+            else if ( tz == wxT("CDT") )
+                offset = CDT - GMT0;
+            else if ( tz == wxT("MST") )
+                offset = MST - GMT0;
+            else if ( tz == wxT("MDT") )
+                offset = MDT - GMT0;
+            else if ( tz == wxT("PST") )
+                offset = PST - GMT0;
+            else if ( tz == wxT("PDT") )
+                offset = PDT - GMT0;
+            else
+                return false;
+
+            p += tz.length();
+        }
+
+        // make it minutes
+        offset *= MIN_PER_HOUR;
+    }
+
+    // As always, dealing with the time zone is the most interesting part: we
+    // can't just use MakeFromTimeZone() here because it wouldn't handle the
+    // DST correctly because the TZ specified in the string is DST-invariant
+    // and so we have to manually shift to the UTC first and then convert to
+    // the local TZ.
+    *this -= wxTimeSpan::Minutes(offset);
+    MakeFromUTC();
+
+    return true;
+}
+
 // this function parses a string in (strict) RFC 822 format: see the section 5
 // of the RFC for the detailed description, but briefly it's something of the
 // form "Sat, 18 Dec 1999 00:48:30 +0100"
@@ -751,7 +856,7 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
     // to the date string (32 being the length of a typical RFC822 timestamp).
     const wxString date(originalDate + wxString(32, '\0'));
 
-    const wxString::const_iterator pEnd = date.end();
+    const wxString::const_iterator pEnd = date.begin() + originalDate.length();
     wxString::const_iterator p = date.begin();
 
     // 1. week day (optional)
@@ -889,100 +994,13 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
     if ( *p++ != ' ' )
         return false;
 
-    // 7. now the interesting part: the timezone
-    int offset = 0; // just to suppress warnings
-    if ( *p == '-' || *p == '+' )
-    {
-        // the explicit offset given: it has the form of hhmm
-        bool plus = *p++ == '+';
-
-        if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
-            return false;
-
-
-        // hours
-        offset = MIN_PER_HOUR*(10*(*p - '0') + (*(p + 1) - '0'));
-
-        p += 2;
-
-        if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
-            return false;
-
-        // minutes
-        offset += 10*(*p - '0') + (*(p + 1) - '0');
-
-        if ( !plus )
-            offset = -offset;
-
-        p += 2;
-    }
-    else // not numeric
-    {
-        // the symbolic timezone given: may be either military timezone or one
-        // of standard abbreviations
-        if ( !*(p + 1) )
-        {
-            // military: Z = UTC, J unused, A = -1, ..., Y = +12
-            static const int offsets[26] =
-            {
-                //A  B   C   D   E   F   G   H   I    J    K    L    M
-                -1, -2, -3, -4, -5, -6, -7, -8, -9,   0, -10, -11, -12,
-                //N  O   P   R   Q   S   T   U   V    W    Z    Y    Z
-                +1, +2, +3, +4, +5, +6, +7, +8, +9, +10, +11, +12, 0
-            };
-
-            if ( *p < wxT('A') || *p > wxT('Z') || *p == wxT('J') )
-                return false;
-
-            offset = offsets[*p++ - 'A'];
-        }
-        else
-        {
-            // abbreviation
-            const wxString tz(p, date.end());
-            if ( tz == wxT("UT") || tz == wxT("UTC") || tz == wxT("GMT") )
-                offset = 0;
-            else if ( tz == wxT("AST") )
-                offset = AST - GMT0;
-            else if ( tz == wxT("ADT") )
-                offset = ADT - GMT0;
-            else if ( tz == wxT("EST") )
-                offset = EST - GMT0;
-            else if ( tz == wxT("EDT") )
-                offset = EDT - GMT0;
-            else if ( tz == wxT("CST") )
-                offset = CST - GMT0;
-            else if ( tz == wxT("CDT") )
-                offset = CDT - GMT0;
-            else if ( tz == wxT("MST") )
-                offset = MST - GMT0;
-            else if ( tz == wxT("MDT") )
-                offset = MDT - GMT0;
-            else if ( tz == wxT("PST") )
-                offset = PST - GMT0;
-            else if ( tz == wxT("PDT") )
-                offset = PDT - GMT0;
-            else
-                return false;
-
-            p += tz.length();
-        }
-
-        // make it minutes
-        offset *= MIN_PER_HOUR;
-    }
-
-
     // the spec was correct, construct the date from the values we found
     Set(day, mon, year, hour, min, sec);
 
-    // As always, dealing with the time zone is the most interesting part: we
-    // can't just use MakeFromTimeZone() here because it wouldn't handle the
-    // DST correctly because the TZ specified in the string is DST-invariant
-    // and so we have to manually shift to the UTC first and then convert to
-    // the local TZ.
-    *this -= wxTimeSpan::Minutes(offset);
-    MakeFromUTC();
+    // 7. now the interesting part: the timezone
+
+    if ( !ParseRFC822TimeZone(&p, pEnd) )
+        return false;
 
     if ( end )
         *end = originalDate.begin() + (p - date.begin());
@@ -1761,6 +1779,19 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
     Set(dtDate.GetDay(), dtDate.GetMonth(), dtDate.GetYear(),
         dtTime.GetHour(), dtTime.GetMinute(), dtTime.GetSecond(),
         dtTime.GetMillisecond());
+
+    // let's see if there is a time zone specified
+    // after date and/or time
+    if ( endBoth != date.end() && *endBoth == ' ' )
+    {
+        wxString::const_iterator tz = endBoth + 1;
+        if ( tz != date.end() &&
+             ParseRFC822TimeZone(&tz, date.end())
+           )
+        {
+            endBoth = tz;
+        }
+    }
 
     *end = endBoth;
 

@@ -1106,6 +1106,18 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        {
+            "Sat, 18 Dec 1999 10:48:30 G", // military time zone
+            { 18, wxDateTime::Dec, 1999, 17, 48, 30 },
+            true
+        },
+
+        {
+            "Sat, 18 Dec 1999 10:48:30 Q", // military time zone
+            { 18, wxDateTime::Dec, 1999,  6, 48, 30 },
+            true
+        },
+
         // seconds are optional according to the RFC
         {
             "Sun, 01 Jun 2008 16:30 +0200",
@@ -1160,13 +1172,31 @@ void DateTimeTestCase::TestParseRFC822()
         },
 
         {
-            "Sun 01 Jun 2008 16:39:10 +02", // truncated time zone
+            "Sun, 01 Jun 2008 16:39:10 +020", // truncated time zone
             { 0 },
             false
         },
 
         {
-            "Sun 01 Jun 2008 16:39:10 G", // truncated time zone
+            "Sun, 01 Jun 2008 16:39:10 +02", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +0", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 GM", // truncated time zone
             { 0 },
             false
         },
@@ -1386,23 +1416,26 @@ void DateTimeTestCase::TestDateTimeParse()
     static const struct ParseTestData
     {
         const char *str;
-        Date date;              // NB: this should be in UTC
+        Date date;      // either local time or UTC
         bool good;
         const char *beyondEnd;  // what remains unprocessed of the input
+        bool dateIsUTC; // true when timezone is specified
     } parseTestDates[] =
     {
         {
             "Thu 22 Nov 2007 07:40:00 PM",
             { 22, wxDateTime::Nov, 2007, 19, 40,  0 },
             true,
-            ""
+            "",
+            false
         },
 
         {
             "2010-01-04 14:30",
             {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
             true,
-            ""
+            "",
+            false
         },
 
         {
@@ -1410,36 +1443,116 @@ void DateTimeTestCase::TestDateTimeParse()
             "14:30:00 2020-01-04",
             {  4, wxDateTime::Jan, 2020, 14, 30,  0 },
             true,
+            "",
+            false
         },
 
         {
             "bloordyblop",
             {  1, wxDateTime::Jan, 9999,  0,  0,  0},
             false,
-            "bloordyblop"
+            "bloordyblop",
+            false
         },
 
         {
             "2022-03-09 19:12:05 and some text after space",
             {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
             true,
-            " and some text after space"
+            " and some text after space",
+            false
         },
 
         {
-            // something other than a space right after time
+            "2022-03-09 19:12:05 ", // just a trailing space
+            {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
+            true,
+            " ",
+            false
+        },
+
+        // something other than a space right after time
+        {
             "2022-03-09 19:12:05AAaaaa",
             {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
             true,
-            "AAaaaa"
+            "AAaaaa",
+            false
+        },
+
+        // the rest have a time zone specified, and when the
+        // time zone is valid, the date to compare to is in UTC
+        {
+            "2012-01-01 10:12:05 +0100",
+            {  1, wxDateTime::Jan, 2012,   9,  12,  5, -1 },
+            true,
+            "",
+            true
         },
 
         {
-            "2012-01-01 10:12:05 +0100",
-            {  1, wxDateTime::Jan, 2012,  10,  12,  5, -1 },
-            true, // ParseDateTime does know yet +0100, but
-                  // ignoring that, parsing still succeeds
-            " +0100"
+            "2022-03-09 19:12:05 -0700",
+            { 10, wxDateTime::Mar, 2022,   2,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 +0615",
+            {  9, wxDateTime::Mar, 2022,  12,  57,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 +0615 and some text",
+            {  9, wxDateTime::Mar, 2022,  12,  57,  5, -1 },
+            true,
+            " and some text",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 UTC",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 UTC and some text",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " and some text",
+            true
+        },
+
+        {
+            // date after time
+            "15:12:05 2022-03-09 UTC",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 +010", // truncated time zone
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " +010",
+            false
+        },
+
+        {
+            "2022-03-09 15:12:05 GM", // truncated time zone
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " GM",
+            false
         },
 
     };
@@ -1463,7 +1576,10 @@ void DateTimeTestCase::TestDateTimeParse()
                 parseTestDates[n].good
             );
 
-            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+            wxDateTime dtReal = parseTestDates[n].dateIsUTC ?
+                parseTestDates[n].date.DT().FromUTC() :
+                parseTestDates[n].date.DT();
+            CPPUNIT_ASSERT_EQUAL( dtReal, dt );
             CPPUNIT_ASSERT_EQUAL( wxString(parseTestDates[n].beyondEnd), wxString(end) );
         }
         else // failed to parse
