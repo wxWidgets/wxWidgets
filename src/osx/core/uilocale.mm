@@ -224,9 +224,9 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
 }
 
 /* static */
-wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
+wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
 {
-    wxArrayString preferred;
+    wxVector<wxString> preferred;
     NSArray* preferredLangs = [NSLocale preferredLanguages];
     NSUInteger count = preferredLangs.count;
 

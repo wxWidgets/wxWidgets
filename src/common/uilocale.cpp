@@ -149,7 +149,7 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     if (tagRest.length() > 4 && locId.m_modifier.empty() && locId.m_charset.empty())
     {
         // Windows sortorder found
-        locId.Sortorder(tagRest);
+        locId.SortOrder(tagRest);
         tagMain = tagTemp;
     }
 
@@ -343,7 +343,7 @@ wxLocaleIdent& wxLocaleIdent::Extension(const wxString& extension)
     return *this;
 }
 
-wxLocaleIdent& wxLocaleIdent::Sortorder(const wxString& sortorder)
+wxLocaleIdent& wxLocaleIdent::SortOrder(const wxString& sortorder)
 {
     // Windows sortorder identifiers all seem to have a length of 6 characters.
     // To distinguish sortorder from script and region identifiers require length > 4.
@@ -632,9 +632,9 @@ int wxUILocale::GetSystemLanguage()
 {
     const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
     size_t count = languagesDB.size();
-    wxArrayString preferred = wxUILocaleImpl::GetPreferredUILanguages();
+    wxVector<wxString> preferred = wxUILocaleImpl::GetPreferredUILanguages();
 
-    for (wxArrayString::const_iterator j = preferred.begin();
+    for (wxVector<wxString>::const_iterator j = preferred.begin();
         j != preferred.end();
         ++j)
     {
@@ -669,7 +669,7 @@ int wxUILocale::GetSystemLanguage()
 }
 
 /* static */
-wxArrayString wxUILocale::GetPreferredUILanguages()
+wxVector<wxString> wxUILocale::GetPreferredUILanguages()
 {
     return wxUILocaleImpl::GetPreferredUILanguages();
 }

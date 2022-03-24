@@ -407,9 +407,9 @@ public:
         return s_canUse == 1;
     }
 
-    static wxArrayString GetPreferredUILanguages()
+    static wxVector<wxString> GetPreferredUILanguages()
     {
-        wxArrayString preferred;
+        wxVector<wxString> preferred;
 
         if (CanUse())
         {
@@ -805,7 +805,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
 }
 
 /* static */
-wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
+wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
 {
     return wxUILocaleImplName::GetPreferredUILanguages();
 }

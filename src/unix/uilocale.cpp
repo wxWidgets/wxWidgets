@@ -545,9 +545,9 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locIdOrig)
 }
 
 /* static */
-wxArrayString wxUILocaleImpl::GetPreferredUILanguages()
+wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
 {
-    wxArrayString preferred;
+    wxVector<wxString> preferred;
 
     // first get the string identifying the language from the environment
     wxString langFull;
