@@ -1662,7 +1662,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
         // cell.
         // Also shouldn't continuously try to fit the multi-line content into
         // a single line, which is not possible. See
-        // https://trac.wxwidgets.org/ticket/15943 .
+        // https://github.com/wxWidgets/wxWidgets/issues/15943 .
 
         m_grid->SetCellValue(0, 0, multilineStr);
         m_grid->SetCellRenderer(0 , 0, new wxGridCellAutoWrapStringRenderer);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg228" width="17.777" height="13.096" version="1.1" viewBox="0 0 17.777 13.096" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs id="defs23">
+  <clipPath id="clipPath18872">
+   <use id="use2" width="100%" height="100%" xlink:href="#g18868"/>
+  </clipPath>
+ </defs>
+ <rect id="rect165" width="17.777" height="13.096" fill="#800080" opacity=".3" stroke-width="1.3979"/>
+ <g id="g52" transform="translate(-3.7881 -.52737)" opacity=".3">
+  <g id="g31" transform="translate(-4.6599,-12.159)">
+   <rect id="rect25" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect27" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect29" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect33" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g50" transform="translate(-4.6599,-12.159)">
+   <rect id="rect35" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect37" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect39" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect41" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g46" clip-path="url(#clipPath18872)">
+    <g id="g18868">
+     <rect id="rect43" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect48" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+</svg>

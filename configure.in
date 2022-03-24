@@ -2212,8 +2212,16 @@ case "${host}" in
 
     *-*-solaris2* )
         dnl use ../lib or ../lib/64 depending on the size of void*
+        dnl The pkg-config path should be adjusted for 64-bit.
+        dnl see https://docs.oracle.com/cd/E37838_01/html/E66175/gplhi.html
         if test "$ac_cv_sizeof_void_p" = 8 -a -d "/usr/lib/64"; then
             wx_cv_std_libpath="lib/64"
+            if test -n "$PKG_CONFIG_PATH"; then
+                PKG_CONFIG_PATH="/usr/$wx_cv_std_libpath/pkgconfig:$PKG_CONFIG_PATH"
+            else
+                PKG_CONFIG_PATH="/usr/$wx_cv_std_libpath/pkgconfig"
+            fi
+            export PKG_CONFIG_PATH
         fi
         ;;
 
@@ -6246,7 +6254,16 @@ if test "$wxUSE_CONSOLE_EVENTLOOP" = "yes"; then
         if test "$wxUSE_EPOLL_DISPATCHER" = "yes"; then
             AC_CHECK_HEADERS(sys/epoll.h,,, [AC_INCLUDES_DEFAULT()])
             if test "$ac_cv_header_sys_epoll_h" = "yes"; then
-                AC_DEFINE(wxUSE_EPOLL_DISPATCHER)
+                dnl On FreeBSD or other *BSD sys/epoll.h may exist, but require
+                dnl linking with extra libraries, so we use epoll on Linux only.
+                case "${host}" in
+                *-*-linux*)
+                    AC_DEFINE(wxUSE_EPOLL_DISPATCHER)
+                ;;
+                *)
+                    AC_MSG_WARN([wxEpollDispatcher disabled, because OS is not Linux])
+                ;;
+                esac
             else
                 AC_MSG_WARN([sys/epoll.h not available, wxEpollDispatcher disabled])
             fi

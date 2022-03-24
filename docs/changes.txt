@@ -139,9 +139,18 @@ Changes in behaviour not resulting in compilation errors
   distinguishing them from the drive letters, even for single letter network
   share name.
 
+- wxRichTextParagraph::GetLines() now returns const wxVector<wxRichTextLine*>&
+  instead of wxList<wxRichTextLine*>&.
+
+- wxDateTime::ParseRfc822Date() now interprets a 2-digit year as 19xx, or
+  20xx for 00..29, whereas earlier e.g. 95 was interpreted literally as 95 AD.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
+
+- wxBitmapComboBoxBase::SetItemBitmap() changed argument's type from wxBitmap
+  to wxBitmapBundle.
 
 - "webview" library is not included in `wx-config --libs` output any more, you
   need to request it explicitly, e.g. `wx-config --libs std,webview`.

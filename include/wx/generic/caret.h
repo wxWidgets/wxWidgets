@@ -15,10 +15,6 @@
 #include "wx/dc.h"
 #include "wx/overlay.h"
 
-#ifdef wxHAS_NATIVE_OVERLAY
-    #define wxHAS_CARET_USING_OVERLAYS
-#endif
-
 class WXDLLIMPEXP_FWD_CORE wxCaret;
 
 class WXDLLIMPEXP_CORE wxCaretTimer : public wxTimer
@@ -75,17 +71,13 @@ private:
     // GTK specific initialization
     void InitGeneric();
 
-#ifdef wxHAS_CARET_USING_OVERLAYS
     // the overlay for displaying the caret
     wxOverlay   m_overlay;
-#else
     // the bitmap holding the part of window hidden by the caret when it was
     // at (m_xOld, m_yOld)
     wxBitmap      m_bmpUnderCaret;
     int           m_xOld,
                   m_yOld;
-#endif
-
     wxCaretTimer  m_timer;
     bool          m_blinkedOut,     // true => caret hidden right now
                   m_hasFocus;       // true => our window has focus

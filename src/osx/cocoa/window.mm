@@ -181,8 +181,10 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (double)minValue;
 - (double)maxValue;
+- (int)increment;
 - (void)setMinValue:(double)aDouble;
 - (void)setMaxValue:(double)aDouble;
+- (void)setIncrement:(int)value;
 
 - (void)sizeToFit;
 
@@ -2484,10 +2486,13 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlDoubleAction:), (IMP) wxOSX_controlDoubleAction, "v@:@" )
 
 #if wxUSE_DRAG_AND_DROP
-    wxOSX_CLASS_ADD_METHOD(c, @selector(draggingEntered:), (IMP) wxOSX_draggingEntered, "I@:@" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(draggingUpdated:), (IMP) wxOSX_draggingUpdated, "I@:@" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(draggingExited:), (IMP) wxOSX_draggingExited, "v@:@" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(performDragOperation:), (IMP) wxOSX_performDragOperation, "c@:@" )
+    if ( !(skipFlags & wxOSXSKIP_DND) )
+    {
+        wxOSX_CLASS_ADD_METHOD(c, @selector(draggingEntered:), (IMP) wxOSX_draggingEntered, "I@:@" )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(draggingUpdated:), (IMP) wxOSX_draggingUpdated, "I@:@" )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(draggingExited:), (IMP) wxOSX_draggingExited, "v@:@" )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(performDragOperation:), (IMP) wxOSX_performDragOperation, "c@:@" )
+    }
 #endif
 
 #if OBJC_API_VERSION < 2
@@ -3413,6 +3418,23 @@ wxInt32 wxWidgetCocoaImpl::GetMinimum() const
     if (  [m_osxView respondsToSelector:@selector(minValue)] )
     {
         return (int)[m_osxView minValue];
+    }
+    return 0;
+}
+
+void wxWidgetCocoaImpl::SetIncrement(int value)
+{
+    if (  [m_osxView respondsToSelector:@selector(setIncrement:)] )
+    {
+        [m_osxView setIncrement:value];
+    }
+}
+
+int wxWidgetCocoaImpl::GetIncrement() const
+{
+    if(  [m_osxView respondsToSelector:@selector(increment)] )
+    {
+        return (int) [m_osxView increment];
     }
     return 0;
 }

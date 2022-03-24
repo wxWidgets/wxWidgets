@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 17:46+0200\n"
-"PO-Revision-Date: 2020-10-15 15:50+0200\n"
+"PO-Revision-Date: 2022-02-28 20:39+0100\n"
 "Last-Translator: gvmelle <translations@gvmelle.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/"
 "wxwidgets_unofficial/language/nl/)\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../include/wx/defs.h:2622
 msgid "All files (*.*)|*.*"
@@ -421,9 +421,8 @@ msgstr "Decimaal"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
-#, fuzzy
 msgid "Multiply"
-msgstr "KP_Multiply"
+msgstr "Vermenigvuldigen"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
@@ -708,7 +707,7 @@ msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgid "num "
-msgstr ""
+msgstr "num "
 
 #: ../src/common/accelcmn.cpp:259 ../src/common/accelcmn.cpp:358
 msgid "F"
@@ -716,7 +715,7 @@ msgstr "F"
 
 #: ../src/common/accelcmn.cpp:276 ../src/common/accelcmn.cpp:361
 msgid "KP_F"
-msgstr ""
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:279 ../src/common/accelcmn.cpp:364
 msgid "KP_"
@@ -905,12 +904,12 @@ msgstr "'%s' heeft extra '..', genegeerd."
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2062 ../src/generic/datavgen.cpp:1397
 msgid "checked"
-msgstr ""
+msgstr "aangevinkt"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2066 ../src/generic/datavgen.cpp:1399
 msgid "unchecked"
-msgstr ""
+msgstr "niet aangevinkt"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2070
@@ -1897,12 +1896,11 @@ msgstr " doorhalen"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr " dun"
 
 #: ../src/common/fontcmn.cpp:957
-#, fuzzy
 msgid " extra light"
-msgstr " licht"
+msgstr " extra licht"
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
@@ -1910,29 +1908,27 @@ msgstr " licht"
 
 #: ../src/common/fontcmn.cpp:965
 msgid " medium"
-msgstr ""
+msgstr " Gemiddeld"
 
 #: ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid " semi bold"
-msgstr " vet"
+msgstr " halfvet"
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
 msgstr " vet"
 
 #: ../src/common/fontcmn.cpp:977
-#, fuzzy
 msgid " extra bold"
-msgstr " vet"
+msgstr " extravet"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
-msgstr ""
+msgstr " zwaar"
 
 #: ../src/common/fontcmn.cpp:985
 msgid " extra heavy"
-msgstr ""
+msgstr " extra zwaar"
 
 #: ../src/common/fontcmn.cpp:1001
 msgid " italic"
@@ -1944,12 +1940,11 @@ msgstr "doorhalen"
 
 #: ../src/common/fontcmn.cpp:1154
 msgid "thin"
-msgstr ""
+msgstr "dun"
 
 #: ../src/common/fontcmn.cpp:1167
-#, fuzzy
 msgid "extralight"
-msgstr "licht"
+msgstr "extralicht"
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
@@ -1961,29 +1956,27 @@ msgstr "normaal"
 
 #: ../src/common/fontcmn.cpp:1185
 msgid "medium"
-msgstr ""
+msgstr "medium"
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
-#, fuzzy
 msgid "semibold"
-msgstr "vet"
+msgstr "halfvet"
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
 msgstr "vet"
 
 #: ../src/common/fontcmn.cpp:1205
-#, fuzzy
 msgid "extrabold"
-msgstr "vet"
+msgstr "extravet"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
-msgstr ""
+msgstr "zwaar"
 
 #: ../src/common/fontcmn.cpp:1223
 msgid "extraheavy"
-msgstr ""
+msgstr "extra zwaar"
 
 #: ../src/common/fontcmn.cpp:1228
 msgid "italic"
@@ -2107,9 +2100,9 @@ msgid "&Customize..."
 msgstr "&Aanpassen..."
 
 #: ../src/common/hyperlnkcmn.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open URL \"%s\" in the default browser"
-msgstr "Openen van URL \"%s\" in standaard browser mislukt."
+msgstr "Openen van URL \"%s\" in standaard browser mislukt"
 
 #: ../src/common/iconbndl.cpp:198
 #, c-format
@@ -2456,46 +2449,43 @@ msgid " (error %ld: %s)"
 msgstr " (fout %ld: %s)"
 
 #: ../src/common/lzmastream.cpp:121
-#, fuzzy
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "Kon geen kleur allokeren voor OpenGL"
+msgstr "Kan geen geheugen toewijzen voor LZMA-decompressie."
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr ""
+msgstr "Initiëring LZMA decompressie mislukt: onverwachte fout %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
-msgstr ""
+msgstr "input is niet in XZ formaat"
 
 #: ../src/common/lzmastream.cpp:183
 msgid "input compressed using unknown XZ option"
-msgstr ""
+msgstr "input gecomprimeerd met gebruik van onbekende XZ optie"
 
 #: ../src/common/lzmastream.cpp:188
 msgid "input is corrupted"
-msgstr ""
+msgstr "input is gecorrumpeerd"
 
 #: ../src/common/lzmastream.cpp:192
-#, fuzzy
 msgid "unknown decompression error"
-msgstr "decompressie fout"
+msgstr "onbekende decompressiefout"
 
 #: ../src/common/lzmastream.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA decompression error: %s"
-msgstr "decompressie fout"
+msgstr "LZMA decompressie fout: %s"
 
 #: ../src/common/lzmastream.cpp:231
-#, fuzzy
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "Kon geen kleur allokeren voor OpenGL"
+msgstr "Kan geen geheugen toewijzen voor LZMA-compressie."
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr ""
+msgstr "Initiëring LZMA compressie mislukt: onverwachte fout %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2503,19 +2493,18 @@ msgid "out of memory"
 msgstr "geheugen uitgeput"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
-#, fuzzy
 msgid "unknown compression error"
-msgstr "compressie fout"
+msgstr "onbekende compressiefout"
 
 #: ../src/common/lzmastream.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA compression error: %s"
-msgstr "compressie fout"
+msgstr "LZMA-compressiefout: %s"
 
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
-msgstr ""
+msgstr "LZMA compressiefout tijdens wurging van de output: %s"
 
 #: ../src/common/mimecmn.cpp:221
 #, c-format
@@ -3151,22 +3140,22 @@ msgstr ""
 
 #: ../src/common/secretstore.cpp:168
 msgid "Not available for this platform"
-msgstr ""
+msgstr "Niet beschikbaar op dit platform"
 
 #: ../src/common/secretstore.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Saving password for \"%s\" failed: %s."
-msgstr "Het opslaan van wachtwoord voor \"%s/%s\" is mislukt: %s."
+msgstr "Het opslaan van wachtwoord voor “%s” is mislukt: %s."
 
 #: ../src/common/secretstore.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Reading password for \"%s\" failed: %s."
-msgstr "Het lezen van wachtwoord voor \"%s/%s\" is mislukt: %s."
+msgstr "Het lezen van wachtwoord voor \"%s\" is mislukt: %s."
 
 #: ../src/common/secretstore.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting password for \"%s\" failed: %s."
-msgstr "Het verwijderen van het wachtwoord voor \"%s/%s\" is mislukt: %s."
+msgstr "Het verwijderen van het wachtwoord voor \"%s\" is mislukt: %s."
 
 #: ../src/common/selectdispatcher.cpp:255
 msgid "Failed to monitor I/O channels"
@@ -3185,7 +3174,6 @@ msgid "Cannot initialize sockets"
 msgstr "Kan sockets niet initiëren"
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "&Help"
@@ -3234,12 +3222,10 @@ msgid "&Cancel"
 msgstr "&Annuleren"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
 msgstr "&CD-rom"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
 msgstr "CD-Rom"
 
@@ -3320,14 +3306,12 @@ msgid "File"
 msgstr "Bestand"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "&Find..."
-msgstr "&Zoeken"
+msgstr "&Zoeken…"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "Find..."
-msgstr "Zoeken"
+msgstr "Zoeken…"
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
@@ -3521,14 +3505,12 @@ msgid "Remove"
 msgstr "Weghalen"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Rep&lace..."
-msgstr "&Vervangen"
+msgstr "&Vervangen…"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Replace..."
-msgstr "Vervangen"
+msgstr "Vervangen…"
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
@@ -3543,9 +3525,8 @@ msgid "Save &As..."
 msgstr "Opslaan &Als..."
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Save As..."
-msgstr "Opslaan &Als..."
+msgstr "Opslaan Als..."
 
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
 #: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
@@ -3695,13 +3676,12 @@ msgid "Delete selection"
 msgstr "Selectie verwijderen"
 
 #: ../src/common/stockitem.cpp:267
-#, fuzzy
 msgid "Find in document"
-msgstr "HTML-document openen"
+msgstr "Zoeken in document"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Find and replace in document"
-msgstr ""
+msgstr "Zoek en vervang in document"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Paste selection"
@@ -3720,14 +3700,12 @@ msgid "Undo last action"
 msgstr "Laatste actie ongedaan maken"
 
 #: ../src/common/stockitem.cpp:273
-#, fuzzy
 msgid "Create new document"
-msgstr "Maak nieuwe map"
+msgstr "Maak nieuwe document"
 
 #: ../src/common/stockitem.cpp:274
-#, fuzzy
 msgid "Open an existing document"
-msgstr "HTML-document openen"
+msgstr "Open een bestaand document"
 
 #: ../src/common/stockitem.cpp:275
 msgid "Close current document"
@@ -3791,9 +3769,9 @@ msgid "File couldn't be loaded."
 msgstr "Bestand kon niet worden geladen."
 
 #: ../src/common/textfile.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "Lezen van document van het bestand \"%s\" mislukt."
+msgstr "Lezen van tekstbestand \"%s\" mislukt."
 
 #: ../src/common/textfile.cpp:161
 #, c-format
@@ -3864,23 +3842,22 @@ msgid "'%s' is not one of the valid strings"
 msgstr "'%s' is niet een van de geldige strings"
 
 #: ../src/common/valtext.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains invalid character(s)"
-msgstr "'%s' bevat ongeldige tekens"
+msgstr "'%s' bevat ongeldig(e) teken(s)"
 
 #: ../src/common/webrequest.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s (%d)"
-msgstr "Fout: "
+msgstr "Fout: %s (%d)"
 
 #: ../src/common/webrequest.cpp:642
 msgid "Not enough free disk space for download."
-msgstr ""
+msgstr "Niet genoeg vrije schijfruimte voor downloaden."
 
 #: ../src/common/webrequest_curl.cpp:884
-#, fuzzy
 msgid "libcurl could not be initialized"
-msgstr "Kolombeschrijving kon niet worden geïnitialiseerd."
+msgstr "libcurl kan niet worden geïnitialiseerd"
 
 #: ../src/common/wincmn.cpp:1673
 msgid "This platform does not support background transparency."
@@ -4012,7 +3989,7 @@ msgstr "kan zlib inflate stream niet opnieuw starten"
 
 #: ../src/common/zipstrm.cpp:1043
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
-msgstr ""
+msgstr "Negeren van misvormde extra dataregel, ZIP-bestand kan corrupt zijn"
 
 #: ../src/common/zipstrm.cpp:1522
 msgid "assuming this is a multi-part zip concatenated"
@@ -4057,9 +4034,10 @@ msgid "reading zip stream (entry %s): bad crc"
 msgstr "inlezen van zip stream (regel %s): foute crc"
 
 #: ../src/common/zipstrm.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
-msgstr "fout schrijven zip invoer '%s': foute crc of lengte"
+msgstr ""
+"fout bij het wegschrijven van zip-invoer ‘%s’: bestand te groot zonder ZIP64"
 
 #: ../src/common/zipstrm.cpp:2615
 #, c-format
@@ -4198,7 +4176,7 @@ msgstr "Kies Kleur"
 
 #: ../src/generic/colrdlgg.cpp:359
 msgid "Red:"
-msgstr ""
+msgstr "Red:"
 
 #: ../src/generic/colrdlgg.cpp:362
 msgid "Green:"
@@ -4218,16 +4196,16 @@ msgstr "Voeg toe aan aangepaste kleuren"
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
-msgstr ""
+msgstr "Gebruikersnaam:"
 
 #: ../src/generic/creddlgg.cpp:63
 msgid "Password:"
-msgstr ""
+msgstr "Wachtwoord:"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/generic/datavgen.cpp:1161
 msgid "true"
-msgstr ""
+msgstr "true"
 
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/generic/datavgen.cpp:1163
@@ -4237,17 +4215,17 @@ msgstr "onwaar"
 #: ../src/generic/datavgen.cpp:6763
 #, c-format
 msgid "Row %i"
-msgstr ""
+msgstr "Rij %i"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6853
 msgid "Collapse"
-msgstr ""
+msgstr "Inklappen"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6856
 msgid "Expand"
-msgstr ""
+msgstr "Uitvouwen"
 
 #: ../src/generic/datavgen.cpp:6875
 #, c-format
@@ -4284,7 +4262,7 @@ msgstr "Een foutopsporingsrapport is aangemaakt in de map\n"
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
-msgstr ""
+msgstr "Het volgende debug-rapport zal worden aangemaakt\n"
 
 #: ../src/generic/dbgrptg.cpp:322
 msgid ""
@@ -4677,6 +4655,8 @@ msgstr "Kies lettertype"
 #: ../src/generic/grid.cpp:6091
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
+"Het kopiëren van meer dan één geselecteerd blok naar het klembord wordt niet "
+"ondersteund."
 
 #: ../src/generic/helpext.cpp:265
 #, c-format
@@ -4997,6 +4977,9 @@ msgid ""
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
+"WAARSCHUWING: het gebruik van de XIM-invoermethode wordt niet ondersteund en "
+"kan leiden tot problemen met invoerverwerking en flikkering. Overweeg om "
+"GTK_IM_MODULE uit te schakelen of in te stellen op “ibus”."
 
 #: ../src/gtk/app.cpp:431
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
@@ -5012,26 +4995,25 @@ msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
+"Het gebruik van privélettertypen wordt niet ondersteund op dit systeem: "
+"Pango-bibliotheek is te oud, 1.38 of later vereist."
 
 #: ../src/gtk/font.cpp:562
-#, fuzzy
 msgid "Failed to create font configuration object."
-msgstr "Updaten van gebruikersconfiguratie bestand is mislukt."
+msgstr "Kan lettertype configuratieobject niet maken."
 
 #: ../src/gtk/font.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "Lezen van document van het bestand \"%s\" mislukt."
+msgstr "Kan aangepast lettertype “%s” niet toevoegen."
 
 #: ../src/gtk/font.cpp:580
-#, fuzzy
 msgid "Failed to register font configuration using private fonts."
-msgstr "Updaten van gebruikersconfiguratie bestand is mislukt."
+msgstr "Kan lettertypeconfiguratie niet registreren met privélettertypen."
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
-#, fuzzy
 msgid "Fatal Error"
-msgstr "Bestandsfout"
+msgstr "Fatale fout"
 
 #: ../src/gtk/glcanvas.cpp:181
 msgid ""
@@ -5040,6 +5022,11 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"Dit programma is ook niet gecompileerd met EGL-ondersteuning die vereist is "
+"onder Wayland, óf\n"
+"installeer EGL-bibliotheken en herbouw óf voer het uit onder X11-backend "
+"door instelling\n"
+"omgevingsvariabele GDK_BACKEND=x11 voordat u uw programma start."
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5048,6 +5035,10 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
+"wxGLCanvas wordt momenteel alleen ondersteund op Wayland en X11. Mogelijk "
+"kunt u\n"
+"dit omzeilen door omgevingsvariabele GDK_BACKEND=x11 in te stellen voor\n"
+"het starten van uw programma."
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
@@ -5072,12 +5063,13 @@ msgstr "Kan geen tekst aanbrengen in de control."
 #: ../src/gtk/webview_webkit.cpp:930
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
+"Het ophalen van JavaScript scriptuitvoer wordt niet ondersteund met WebKit v1"
 
 #: ../src/gtk/webview_webkit2.cpp:1310 ../src/msw/webview_edge.cpp:881
 #: ../src/msw/webview_ie.cpp:1077 ../src/osx/webview_webkit.mm:439
 #, c-format
 msgid "Error running JavaScript: %s"
-msgstr ""
+msgstr "Fout bij het uitvoeren van JavaScript: %s"
 
 #: ../src/gtk/window.cpp:5664
 msgid ""
@@ -5810,9 +5802,9 @@ msgid "Couldn't obtain folder name"
 msgstr "Kon de mapnaam niet verkrijgen"
 
 #: ../src/msw/dlmsw.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "(error %d: %s)"
-msgstr " (fout %ld: %s)"
+msgstr "(Fout %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
 #: ../src/msw/imaglist.cpp:224 ../src/msw/imaglist.cpp:246
@@ -5836,9 +5828,9 @@ msgid "File dialog failed with error code %0lx."
 msgstr "Bestandsdialoog mislukt met foutcode %0lx."
 
 #: ../src/msw/font.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "Bestand kon niet worden geladen."
+msgstr "Lettertypebestand “%s” kan niet worden geladen"
 
 #: ../src/msw/fontdlg.cpp:170
 #, c-format
@@ -5888,7 +5880,7 @@ msgstr "Initialiseren van OpenGL mislukt"
 
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
-msgstr ""
+msgstr "Kan aangepaste DirectWrite-lettertypelader niet registreren."
 
 #: ../src/msw/helpchm.cpp:53
 msgid ""
@@ -6137,17 +6129,17 @@ msgstr "Kan waarde van '%s' niet instellen"
 #: ../src/msw/registry.cpp:905 ../src/msw/registry.cpp:954
 #, c-format
 msgid "Registry value \"%s\" is not numeric (but of type %s)"
-msgstr ""
+msgstr "Registerwaarde “%s” is niet numeriek (maar van het type %s)"
 
 #: ../src/msw/registry.cpp:990
 #, c-format
 msgid "Registry value \"%s\" is not binary (but of type %s)"
-msgstr ""
+msgstr "Registerwaarde “%s” is niet binair (maar van het type %s)"
 
 #: ../src/msw/registry.cpp:1039
 #, c-format
 msgid "Registry value \"%s\" is not text (but of type %s)"
-msgstr ""
+msgstr "Registerwaarde “%s” is geen tekst (maar van het type %s)"
 
 #: ../src/msw/registry.cpp:1100
 #, c-format
@@ -6301,34 +6293,31 @@ msgstr "Kan pictogram niet laden van '%s'."
 
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
-msgstr ""
+msgstr "Kan emulatieniveau voor webweergave niet vinden in het register"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
-msgstr ""
+msgstr "Kan webweergave niet instellen op modern emulatieniveau"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
-msgstr ""
+msgstr "Kan webweergave niet resetten naar standaard emulatieniveau"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
-msgstr ""
+msgstr "Kan geen JavaScript-script uitvoeren zonder een geldig HTML-document"
 
 #: ../src/msw/webview_ie.cpp:1044
-#, fuzzy
 msgid "Can't get the JavaScript object"
-msgstr "Kan thread-prioriteit niet instellen"
+msgstr "Kan het JavaScript-object niet ophalen"
 
 #: ../src/msw/webview_ie.cpp:1056
-#, fuzzy
 msgid "failed to evaluate"
-msgstr "Uitvoeren van '%s' mislukt\n"
+msgstr "evalueren mislukt"
 
 #: ../src/msw/webview_ie.cpp:1065
-#, fuzzy
 msgid "failed to retrieve execution result"
-msgstr "Verkrijgen van tekst van inbel-foutmelding mislukt"
+msgstr "kan uitvoeringsresultaat niet ophalen"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
@@ -6423,23 +6412,20 @@ msgid "<Any Teletype>"
 msgstr "<Elke Teletype>"
 
 #: ../src/osx/cocoa/filedlg.mm:274
-#, fuzzy
 msgid "File type:"
-msgstr "Niet proportioneel (Teletype)"
+msgstr "Bestandstype:"
 
 #: ../src/osx/cocoa/menu.mm:281
-#, fuzzy
 msgid "Minimize"
 msgstr "Minimaliseren"
 
 #: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
 msgid "Zoom"
 msgstr "Inzoomen"
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Breng alles naar voren"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6447,9 +6433,9 @@ msgid "Failed to load sound from \"%s\" (error %d)."
 msgstr "Laden van geluid \"%s\" mislukt (fout %d)."
 
 #: ../src/osx/fontutil.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr ": bestand bestaat niet!"
+msgstr "Lettertypebestand “%s” bestaat niet."
 
 #: ../src/osx/fontutil.cpp:89
 #, c-format
@@ -6457,6 +6443,8 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
 "\"."
 msgstr ""
+"Lettertypebestand “%s” kan niet worden gebruikt omdat het zich niet in de "
+"lettertypemap “%s” bevindt."
 
 #: ../src/osx/menu_osx.cpp:441
 msgid "About..."
@@ -6489,14 +6477,12 @@ msgid "Quit %s"
 msgstr "Stop %s"
 
 #: ../src/osx/webview_webkit.mm:278
-#, fuzzy
 msgid "Printing is not supported by the system web control"
-msgstr "Gzip niet ondersteund door deze versie van zlib"
+msgstr "Afdrukken wordt niet ondersteund door de webbesturing van het systeem"
 
 #: ../src/osx/webview_webkit.mm:287
-#, fuzzy
 msgid "Print operation could not be initialized"
-msgstr "Kolombeschrijving kon niet worden geïnitialiseerd."
+msgstr "Afdrukbewerking kon niet worden geïnitialiseerd"
 
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:572
@@ -6914,7 +6900,7 @@ msgstr ""
 #: ../src/propgrid/props.cpp:155
 #, c-format
 msgid "Unknown base %d. Base 10 will be used."
-msgstr ""
+msgstr "Onbekende basis %d. Basis 10 zal worden gebruikt."
 
 #: ../src/propgrid/props.cpp:309
 #, c-format
@@ -8838,9 +8824,8 @@ msgid "Already dialling ISP."
 msgstr "Al bezig internetaanbieder te bellen."
 
 #: ../src/unix/dlunix.cpp:90
-#, fuzzy
 msgid "Failed to unload shared library"
-msgstr "Laden van gedeelde bibliotheek '%s' mislukt"
+msgstr "Kan gedeelde bibliotheek niet verwijderen"
 
 #: ../src/unix/dlunix.cpp:118
 msgid "Unknown dynamic library error"
@@ -9167,588 +9152,3 @@ msgstr "Kan bronnen niet laden uit bestand '%s'."
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Aanmaken van '%s' in '%s' mislukte."
-
-#~ msgid "&Save as"
-#~ msgstr "&Opslaan Als"
-
-#~ msgid "'%s' doesn't consist only of valid characters"
-#~ msgstr "'%s' bestaat niet alleen uit geldige tekens"
-
-#~ msgid "'%s' should be numeric."
-#~ msgstr "'%s' moet numeriek zijn."
-
-#~ msgid "'%s' should only contain ASCII characters."
-#~ msgstr "'%s' mag alleen ASCII-tekens bevatten."
-
-#~ msgid "'%s' should only contain alphabetic characters."
-#~ msgstr "'%s' mag alleen letters bevatten."
-
-#~ msgid "'%s' should only contain alphabetic or numeric characters."
-#~ msgstr "'%s' mag alleen alfa-numerieke tekens bevatten."
-
-#~ msgid "'%s' should only contain digits."
-#~ msgstr "'%s' mag alleen cijfers bevatten."
-
-#~ msgid "Can't create window of class %s"
-#~ msgstr "Kan venster van klasse '%s' niet maken"
-
-#~ msgid "Could not initalize libnotify."
-#~ msgstr "Kon niet initalize libnotify."
-
-#~ msgid "Couldn't create the overlay window"
-#~ msgstr "Kon geen overlay venster aanmaken"
-
-#~ msgid "Couldn't init the context on the overlay window"
-#~ msgstr "Kon de context in het overlay venster niet initiëren"
-
-#~ msgid "Failed to convert file \"%s\" to Unicode."
-#~ msgstr "Conversie bestand \"%s\" naar Unicode mislukt."
-
-#~ msgid "Failed to set text in the text control."
-#~ msgstr "Kan geen tekst aanbrengen in tekst-control."
-
-#~ msgid "Invalid GTK+ command line option, use \"%s --help\""
-#~ msgstr "Ongeldig GTK+ commandoregel  optie, gebruik \"%s --help\""
-
-#~ msgid "No unused colour in image."
-#~ msgstr "Geen ongebruikte kleuren in afbeelding."
-
-#~ msgid "Not available"
-#~ msgstr "Niet beschikbaar"
-
-#~ msgid "Replace selection"
-#~ msgstr "Selectie vervangen"
-
-#~ msgid "Save as"
-#~ msgstr "Opslaan Als"
-
-#~ msgid "Style Organiser"
-#~ msgstr "Stijl Organiseren"
-
-#~ msgid "The following standard GTK+ options are also supported:\n"
-#~ msgstr "De volgende standaard GTK+ opties worden ook ondersteund:\n"
-
-#~ msgid "You cannot Clear an overlay that is not inited"
-#~ msgstr "U kunt geen overlay wissen die niet is geïnitieerd"
-
-#~ msgid "You cannot Init an overlay twice"
-#~ msgstr "U kunt niet een overlay twee keer initiëren"
-
-#~ msgid "locale '%s' cannot be set."
-#~ msgstr "landinstelling '%s' kan niet worden ingesteld."
-
-#~ msgid "Adding flavor TEXT failed"
-#~ msgstr "Toevoegen flavor TEXT mislukt"
-
-#~ msgid "Adding flavor utxt failed"
-#~ msgstr "Toevoegen flavor utxt mislukt"
-
-#~ msgid "Bitmap renderer cannot render value; value type: "
-#~ msgstr "Bitmap renderer kan geen waarde renderen; waarde type: "
-
-#~ msgid ""
-#~ "Cannot create new column's ID. Probably max. number of columns reached."
-#~ msgstr ""
-#~ "Kan geen nieuwe kolom ID aanmaken. Waarschijnlijk is het maximale aantal "
-#~ "bereikt."
-
-#~ msgid "Column could not be added."
-#~ msgstr "Kolom kon niet toegevoegd worden."
-
-#~ msgid "Column index not found."
-#~ msgstr "Kolomindex niet gevonden."
-
-#~ msgid "Column width could not be determined"
-#~ msgstr "Kolom breedte kon niet worden vastgesteld"
-
-#~ msgid "Column width could not be set."
-#~ msgstr "Kolombreedte kon niet worden ingesteld."
-
-#~ msgid "Confirm registry update"
-#~ msgstr "Bevestig register bijwerking"
-
-#~ msgid "Could not determine column index."
-#~ msgstr "Kon kolomindex niet bepalen."
-
-#~ msgid "Could not determine column's position"
-#~ msgstr "Kon de kolompositie niet bepalen"
-
-#~ msgid "Could not determine number of columns."
-#~ msgstr "Kon aantal kolommen niet vaststellen."
-
-#~ msgid "Could not determine number of items"
-#~ msgstr "Kon aantal elementen niet vaststellen."
-
-#~ msgid "Could not get header description."
-#~ msgstr "Kon headeromschrijving niet ophalen."
-
-#~ msgid "Could not get items."
-#~ msgstr "Kon elementen niet ophalen."
-
-#~ msgid "Could not get property flags."
-#~ msgstr "Kan geen eigenschapsvlaggen verkrijgen."
-
-#~ msgid "Could not get selected items."
-#~ msgstr "Kon geselecteerde elementen niet ophalen."
-
-#~ msgid "Could not remove column."
-#~ msgstr "Kon kolom niet volledig verwijderen"
-
-#~ msgid "Could not retrieve number of items"
-#~ msgstr "Kon aantal elementen niet ophalen"
-
-#~ msgid "Could not set column width."
-#~ msgstr "Kon kolombreedte niet instellen."
-
-#~ msgid "Could not set header description."
-#~ msgstr "Kon de header beschrijving niet instellen."
-
-#~ msgid "Could not set icon."
-#~ msgstr "Kon pictogram niet instellen."
-
-#~ msgid "Could not set maximum width."
-#~ msgstr "Kon maximum breedte niet instellen."
-
-#~ msgid "Could not set minimum width."
-#~ msgstr "Kon minimum breedte niet instellen."
-
-#~ msgid "Could not set property flags."
-#~ msgstr "Kon eigenschapsvlaggen niet instellen."
-
-#~ msgid "Data object has invalid data format"
-#~ msgstr "Data-object heeft een ongeldig formaat"
-
-#~ msgid "Date renderer cannot render value; value type: "
-#~ msgstr "Datum renderer kan geen waarde renderen; waarde type: "
-
-#~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension \"%s"
-#~ "\" ?\n"
-#~ "Current value is \n"
-#~ "%s, \n"
-#~ "New value is \n"
-#~ "%s %1"
-#~ msgstr ""
-#~ "Wilt u het '%s' commando dat gebruikt wordt voor bestanden met extensie "
-#~ "\"%s\" overschrijven?\n"
-#~ "Huidige waarde is \n"
-#~ "%s, \n"
-#~ "Nieuwe waarde is \n"
-#~ "%s %1"
-
-#~ msgid "Failed to retrieve data from the clipboard."
-#~ msgstr "Ophalen van gegevens van klembord mislukt"
-
-#~ msgid "GIF: Invalid gif index."
-#~ msgstr "GIF: Ongeldige gif index."
-
-#~ msgid "GIF: unknown error!!!"
-#~ msgstr "GIF: onbekende fout!"
-
-#~ msgid "Icon & text renderer cannot render value; value type: "
-#~ msgstr "Pictogram & tekst renderer kan geen waarde renderen; waarde type:"
-
-#~ msgid "Invalid data view item"
-#~ msgstr "Ongeldig gegevens view element"
-
-#~ msgid "New directory"
-#~ msgstr "Nieuwe map"
-
-#~ msgid "Next"
-#~ msgstr "Volgende"
-
-#~ msgid "No column existing."
-#~ msgstr "Er bestaat geen kolom."
-
-#~ msgid "No column for the specified column existing."
-#~ msgstr "Er bestaat geen kolom voor de gespecificeerde kolom."
-
-#~ msgid "No column for the specified column position existing."
-#~ msgstr "Er bestaat geen kolom voor de gespecificeerde kolompositie."
-
-#~ msgid ""
-#~ "No renderer or invalid renderer type specified for custom data column."
-#~ msgstr ""
-#~ "Geen renderer of ongeldig renderingstype gespecificeerd voor aangepaste "
-#~ "gegevens kolom."
-
-#~ msgid "No renderer specified for column."
-#~ msgstr "Geen renderer gespecificeerd voor kolom."
-
-#~ msgid "Number of columns could not be determined."
-#~ msgstr "Het aantal kolommen kon niet worden vastgesteld."
-
-#~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
-#~ msgstr "OpenGL functie \"%s\" faalde: %s (fout %d)"
-
-#~ msgid ""
-#~ "Please install a newer version of comctl32.dll\n"
-#~ "(at least version 4.70 is required but you have %d.%02d)\n"
-#~ "or this program won't operate correctly."
-#~ msgstr ""
-#~ "Installeer alstublieft een nieuwere versie van comctl32.dll\n"
-#~ "(Tenminste versie 4.70 is vereist maar u heeft %d.%02d)\n"
-#~ "anders kan dit programma niet correct functioneren."
-
-#~ msgid "Pointer to data view control not set correctly."
-#~ msgstr "Pointer naar DataView Control niet juist ingesteld."
-
-#~ msgid "Pointer to model not set correctly."
-#~ msgstr "Pointer naar model is niet goed ingesteld."
-
-#~ msgid "Progress renderer cannot render value type; value type: "
-#~ msgstr "Voortgang renderer kan geen woord type renderen; waarde type:"
-
-#~ msgid "Rendering failed."
-#~ msgstr "Renderen mislukt."
-
-#~ msgid ""
-#~ "Setting directory access times is not supported under this OS version"
-#~ msgstr ""
-#~ "Instellen van toegangstijden voor mappen wordt niet ondersteund op deze "
-#~ "OS versie"
-
-#~ msgid "Show hidden directories"
-#~ msgstr "Toon verborgen mappen"
-
-#~ msgid "Text renderer cannot render value; value type: "
-#~ msgstr "Gerenderde tekst kan geen waarde renderen; waarde type: "
-
-#~ msgid "There is no column or renderer for the specified column index."
-#~ msgstr "Er is geen kolom of renderer voor de gespecificeerde kolomindex."
-
-#~ msgid ""
-#~ "This system doesn't support date controls, please upgrade your version of "
-#~ "comctl32.dll"
-#~ msgstr ""
-#~ "Dit systeem ondersteunt geen datum controls. Werk uw versie van comctl32."
-#~ "dll bij"
-
-#~ msgid "Toggle renderer cannot render value; value type: "
-#~ msgstr "Schakelaar renderer kan geen waarde renderen; waarde type:"
-
-#~ msgid "Too many colours in PNG, the image may be slightly blurred."
-#~ msgstr ""
-#~ "Te veel kleuren in PNG. De afbeelding kan enigszins troebel overkomen."
-
-#~ msgid "Unable to handle native drag&drop data"
-#~ msgstr "Kan eigen sleur&pleur gegevens niet afhandelen"
-
-#~ msgid "Unable to initialize Hildon program"
-#~ msgstr "Hildon programma kan niet worden geïnitializeerd"
-
-#~ msgid "Unknown data format"
-#~ msgstr "Onbekend gegevensformaat"
-
-#~ msgid "Valid pointer to native data view control does not exist"
-#~ msgstr "Geldige Pointer naar systeemeigen DataView Control bestaat niet."
-
-#~ msgid "Win32s on Windows 3.1"
-#~ msgstr "Windows 3.1 met Win32s"
-
-#~ msgid "Windows 10"
-#~ msgstr "Windows 10"
-
-#~ msgid "Windows 2000"
-#~ msgstr "Windows 2000"
-
-#~ msgid "Windows 7"
-#~ msgstr "Windows 7"
-
-#~ msgid "Windows 8"
-#~ msgstr "Windows 8"
-
-#~ msgid "Windows 8.1"
-#~ msgstr "Windows 8.1"
-
-#~ msgid "Windows 95"
-#~ msgstr "Windows 95"
-
-#~ msgid "Windows 95 OSR2"
-#~ msgstr "Windows 95 OSR2"
-
-#~ msgid "Windows 98"
-#~ msgstr "Windows 98"
-
-#~ msgid "Windows 98 SE"
-#~ msgstr "Windows 98 SE"
-
-#~ msgid "Windows 9x (%d.%d)"
-#~ msgstr "Windows 9x (%d.%d)"
-
-#~ msgid "Windows CE (%d.%d)"
-#~ msgstr "Windows CE (%d.%d)"
-
-#~ msgid "Windows ME"
-#~ msgstr "Windows ME"
-
-#~ msgid "Windows NT %lu.%lu"
-#~ msgstr "Windows NT %lu.%lu"
-
-#~ msgid "Windows Server 10"
-#~ msgstr "Windows Server 10"
-
-#~ msgid "Windows Server 2003"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2008"
-#~ msgstr "Windows Server 2008"
-
-#~ msgid "Windows Server 2008 R2"
-#~ msgstr "Windows Server 2008 R2"
-
-#~ msgid "Windows Server 2012"
-#~ msgstr "Windows Server 2012"
-
-#~ msgid "Windows Server 2012 R2"
-#~ msgstr "Windows Server 2012 R2"
-
-#~ msgid "Windows Vista"
-#~ msgstr "Windows Vista"
-
-#~ msgid "Windows XP"
-#~ msgstr "Windows XP"
-
-#~ msgid "can't execute '%s'"
-#~ msgstr "kan '%s' niet uitvoeren"
-
-#~ msgid "error opening '%s'"
-#~ msgstr "fout bij openen '%s'"
-
-#~ msgid "unknown seek origin"
-#~ msgstr "onbekend zoek-startpunt"
-
-#~ msgid "wxWidget control pointer is not a data view pointer"
-#~ msgstr "wxWidget Control Pointer is geen DataView Pointer"
-
-#~ msgid "wxWidget's control not initialized."
-#~ msgstr "wxWidget's besturingselement niet geïnitialiseerd."
-
-#~ msgid "ADD"
-#~ msgstr "TOEVOEGEN"
-
-#~ msgid "BACK"
-#~ msgstr "TERUG"
-
-#~ msgid "CANCEL"
-#~ msgstr "ANNULEREN"
-
-#~ msgid "CAPITAL"
-#~ msgstr "HOOFDLETTER"
-
-#~ msgid "CLEAR"
-#~ msgstr "WISSEN"
-
-#~ msgid "COMMAND"
-#~ msgstr "OPDRACHT"
-
-#~ msgid "Cannot create mutex."
-#~ msgstr "De mutex kan niet worden aangemaakt."
-
-#~ msgid "Cannot resume thread %lu"
-#~ msgstr "Kan thread %lu niet hervatten"
-
-#~ msgid "Cannot suspend thread %lu"
-#~ msgstr "Kan thread %lu niet tijdelijk buiten dienst stellen"
-
-#~ msgid "Couldn't acquire a mutex lock"
-#~ msgstr "Kon geen mutex vergrendeling verkrijgen"
-
-#~ msgid "Couldn't get hatch style from wxBrush."
-#~ msgstr "Kon geen hatch stijl verkrijgen van wxBrush."
-
-#~ msgid "Couldn't release a mutex"
-#~ msgstr "Kon een mutex niet vrijgeven"
-
-#~ msgid "DECIMAL"
-#~ msgstr "DECIMAAL"
-
-#~ msgid "DEL"
-#~ msgstr "DEL"
-
-#~ msgid "DELETE"
-#~ msgstr "VERWIJDEREN"
-
-#~ msgid "DIVIDE"
-#~ msgstr "Opsplitsen"
-
-#~ msgid "DOWN"
-#~ msgstr "DOWN"
-
-#~ msgid "END"
-#~ msgstr "EIND"
-
-#~ msgid "ENTER"
-#~ msgstr "ENTER"
-
-#~ msgid "ESC"
-#~ msgstr "ESC"
-
-#~ msgid "ESCAPE"
-#~ msgstr "ESCAPE"
-
-#~ msgid "EXECUTE"
-#~ msgstr "UITVOEREN"
-
-#~ msgid "Execution of command '%s' failed with error: %ul"
-#~ msgstr "Uitvoering van opdracht '%s' mislukt met fout: %ul"
-
-#~ msgid ""
-#~ "File '%s' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "Bestand '%s' bestaat al.\n"
-#~ "Wilt u het vervangen?"
-
-#~ msgid "HELP"
-#~ msgstr "HELP"
-
-#~ msgid "HOME"
-#~ msgstr "HOME"
-
-#~ msgid "INS"
-#~ msgstr "INS"
-
-#~ msgid "INSERT"
-#~ msgstr "INVOEGEN"
-
-#~ msgid "KP_BEGIN"
-#~ msgstr "KP_BEGIN"
-
-#~ msgid "KP_DECIMAL"
-#~ msgstr "KP_DECIMAL"
-
-#~ msgid "KP_DELETE"
-#~ msgstr "KP_DELETE"
-
-#~ msgid "KP_DIVIDE"
-#~ msgstr "KP_DIVIDE"
-
-#~ msgid "KP_DOWN"
-#~ msgstr "KP_DOWN"
-
-#~ msgid "KP_ENTER"
-#~ msgstr "KP_ENTER"
-
-#~ msgid "KP_EQUAL"
-#~ msgstr "KP_EQUAL"
-
-#~ msgid "KP_HOME"
-#~ msgstr "KP_HOME"
-
-#~ msgid "KP_INSERT"
-#~ msgstr "KP_INSERT"
-
-#~ msgid "KP_LEFT"
-#~ msgstr "KP_LEFT"
-
-#~ msgid "KP_MULTIPLY"
-#~ msgstr "KP_MULTIPLY"
-
-#~ msgid "KP_NEXT"
-#~ msgstr "KP_NEXT"
-
-#~ msgid "KP_PAGEDOWN"
-#~ msgstr "KP_PAGEDOWN"
-
-#~ msgid "KP_PAGEUP"
-#~ msgstr "KP_PAGEUP"
-
-#~ msgid "KP_PRIOR"
-#~ msgstr "KP_PRIOR"
-
-#~ msgid "KP_RIGHT"
-#~ msgstr "KP_RIGHT"
-
-#~ msgid "KP_SEPARATOR"
-#~ msgstr "KP_SEPARATOR"
-
-#~ msgid "KP_SPACE"
-#~ msgstr "KP_SPACE"
-
-#~ msgid "KP_SUBTRACT"
-#~ msgstr "KP_SUBTRACT"
-
-#~ msgid "LEFT"
-#~ msgstr "LINKS"
-
-#~ msgid "MENU"
-#~ msgstr "MENU"
-
-#~ msgid "NUM_LOCK"
-#~ msgstr "NUM_LOCK"
-
-#~ msgid "PAGEDOWN"
-#~ msgstr "PAGEDOWN"
-
-#~ msgid "PAGEUP"
-#~ msgstr "PAGEUP"
-
-#~ msgid "PAUSE"
-#~ msgstr "PAUZE"
-
-#~ msgid "PGDN"
-#~ msgstr "PGDN"
-
-#~ msgid "PGUP"
-#~ msgstr "PGUP"
-
-#~ msgid "PRINT"
-#~ msgstr "PRINT"
-
-#~ msgid "RETURN"
-#~ msgstr "TERUG"
-
-#~ msgid "RIGHT"
-#~ msgstr "RECHTS"
-
-#~ msgid "SCROLL_LOCK"
-#~ msgstr "SCROLL_LOCK"
-
-#~ msgid "SELECT"
-#~ msgstr "SELECTEER"
-
-#~ msgid "SEPARATOR"
-#~ msgstr "SCHEIDINGSTEKEN"
-
-#~ msgid "SNAPSHOT"
-#~ msgstr "SNAPSHOT"
-
-#~ msgid "SPACE"
-#~ msgstr "SPACE"
-
-#~ msgid "SUBTRACT"
-#~ msgstr "Aftrekken"
-
-#~ msgid "TAB"
-#~ msgstr "TAB"
-
-#~ msgid "The print dialog returned an error."
-#~ msgstr "De afdrukdialoog gaf een fout."
-
-#~ msgid "The wxGtkPrinterDC cannot be used."
-#~ msgstr "De wxGtkPrinterDC kan niet worden gebruikt."
-
-#~ msgid "Timer creation failed."
-#~ msgstr "Aanmaken timer mislukt"
-
-#~ msgid "UP"
-#~ msgstr "OMHOOG"
-
-#~ msgid "WINDOWS_LEFT"
-#~ msgstr "WINDOWS_LEFT"
-
-#~ msgid "WINDOWS_MENU"
-#~ msgstr "WINDOWS_MENU"
-
-#~ msgid "WINDOWS_RIGHT"
-#~ msgstr "WINDOWS_RIGHT"
-
-#~ msgid "buffer is too small for Windows directory."
-#~ msgstr "buffer is te klein voor Windows map."
-
-#~ msgid "not implemented"
-#~ msgstr "Niet geïmplementeerd"
-
-#~ msgid "wxPrintout::GetPageInfo gives a null maxPage."
-#~ msgstr "wxPrintout::GetPageInfo geeft een null maxPage."

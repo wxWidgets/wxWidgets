@@ -83,6 +83,7 @@
     <subproject id="text" template="sub"/>
     <subproject id="thread" template="sub"/>
     <subproject id="toolbar" template="sub"/>
+    <subproject id="treelist" template="sub"/>
     <subproject id="treectrl" template="sub"/>
     <subproject id="typetest" template="sub"/>
     <subproject id="uiaction" template="sub"/>

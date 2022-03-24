@@ -14,11 +14,10 @@
 
 #if wxUSE_BANNERWINDOW
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/event.h"
 #include "wx/window.h"
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
@@ -75,7 +74,7 @@ public:
     // truncated from the top, for wxTOP and wxBOTTOM -- from the right and for
     // wxRIGHT -- from the bottom, so put the most important part of the bitmap
     // information in the opposite direction.
-    void SetBitmap(const wxBitmap& bmp);
+    void SetBitmap(const wxBitmapBundle& bmp);
 
     // Set the text to display. This is mutually exclusive with SetBitmap().
     // Title is rendered in bold and should be single line, message can have
@@ -120,7 +119,7 @@ private:
     wxDirection m_direction;
 
     // If valid, this bitmap is drawn as is.
-    wxBitmap m_bitmap;
+    wxBitmapBundle m_bitmapBundle;
 
     // If bitmap is valid, this is the colour we use to extend it if the bitmap
     // is smaller than this window. It is computed on demand by GetBitmapBg().

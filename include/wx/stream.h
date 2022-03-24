@@ -682,6 +682,53 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxWrapperInputStream);
 };
 
+// ----------------------------------------------------------------------------
+// wxPeekInputStream(): read some data from a stream and then rewind it back
+// ----------------------------------------------------------------------------
+
+// This semi-private class is used in wx code to read some data, using the
+// provided method of the class T, from a stream if it's seekable and then
+// rewind it back.
+class wxInputStreamPeeker
+{
+public:
+    explicit wxInputStreamPeeker(wxInputStream& stream)
+        : m_stream(stream),
+          m_ofsOrig(stream.IsSeekable() ? stream.TellI() : wxInvalidOffset)
+    {
+    }
+
+    // Call the given function if the stream is seekable, otherwise return 0.
+    template <typename R, typename T>
+    R CallIfCanSeek(R (T::*func)(wxInputStream&), T* obj)
+    {
+        return RewindAndReturn(CanSeek() ? (obj->*func)(m_stream) : R(0));
+    }
+
+    // Overload for const methods.
+    template <typename R, typename T>
+    R CallIfCanSeek(R (T::*func)(wxInputStream&) const, const T* obj)
+    {
+        return RewindAndReturn(CanSeek() ? (obj->*func)(m_stream) : R(0));
+    }
+
+private:
+    bool CanSeek() const { return m_ofsOrig != wxInvalidOffset; }
+
+    template <typename R>
+    R RewindAndReturn(R retval)
+    {
+        if ( CanSeek() && m_stream.SeekI(m_ofsOrig) == wxInvalidOffset )
+            return R(0);
+
+        return retval;
+    }
+
+    wxInputStream& m_stream;
+    const wxFileOffset m_ofsOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxInputStreamPeeker);
+};
 
 #endif // wxUSE_STREAMS
 

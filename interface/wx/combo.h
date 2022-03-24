@@ -483,33 +483,33 @@ public:
         Returns disabled button bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the disabled state bitmap.
+        @return The disabled state bitmap.
     */
-    const wxBitmap& GetBitmapDisabled() const;
+    wxBitmap GetBitmapDisabled() const;
 
     /**
         Returns button mouse hover bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the mouse hover state bitmap.
+        @return The mouse hover state bitmap.
     */
-    const wxBitmap& GetBitmapHover() const;
+    wxBitmap GetBitmapHover() const;
 
     /**
         Returns default button bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the normal state bitmap.
+        @return The normal state bitmap.
     */
-    const wxBitmap& GetBitmapNormal() const;
+    wxBitmap GetBitmapNormal() const;
 
     /**
         Returns depressed button bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the depressed state bitmap.
+        @return The depressed state bitmap.
     */
-    const wxBitmap& GetBitmapPressed() const;
+    wxBitmap GetBitmapPressed() const;
 
     /**
         Returns current size of the dropdown button.
@@ -697,11 +697,11 @@ public:
         @param bmpDisabled
             Disabled button image.
     */
-    void SetButtonBitmaps(const wxBitmap& bmpNormal,
+    void SetButtonBitmaps(const wxBitmapBundle& bmpNormal,
                           bool pushButtonBg = false,
-                          const wxBitmap& bmpPressed = wxNullBitmap,
-                          const wxBitmap& bmpHover = wxNullBitmap,
-                          const wxBitmap& bmpDisabled = wxNullBitmap);
+                          const wxBitmapBundle& bmpPressed = wxBitmapBundle(),
+                          const wxBitmapBundle& bmpHover = wxBitmapBundle(),
+                          const wxBitmapBundle& bmpDisabled = wxBitmapBundle());
 
     /**
         Sets size and position of dropdown button.

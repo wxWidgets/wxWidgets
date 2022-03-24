@@ -159,14 +159,14 @@ Reporting Bugs
 
 The wxWidgets bug tracker can be found here:
 
-* https://trac.wxwidgets.org/newticket
+* https://github.com/wxWidgets/wxWidgets/issues/
 
-Please use the search function of our Trac installation to find any possibly
-relevant bugs before reporting new ones. Also please notice that often trying to
-correct the bug yourself is the quickest way to fix it. Even if you fail to do
-it, you may discover valuable information allowing us to fix it while doing it.
-We also give much higher priority to bug reports with patches fixing the
-problems so this ensures that your report will be addressed sooner.
+Please use the search function find any possibly relevant bugs before reporting
+new ones. Also please notice that often trying to correct the bug yourself is
+the quickest way to fix it. Even if you fail to do it, you may discover
+valuable information allowing us to fix it while doing it. We also give much
+higher priority to bug reports with patches fixing the problems so this ensures
+that your report will be addressed sooner.
 
 
 Further Information

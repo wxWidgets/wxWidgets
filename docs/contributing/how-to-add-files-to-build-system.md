@@ -120,24 +120,11 @@ wxUniversal, e.g. GDI classes. Files shared by all X Window System ports
 should be put into `XWIN_LOWLEVEL_SRC`.
 
 
-Adding sample
--------------
+Adding a new sample
+-------------------
 
-Copy the bakefile from another sample, change the ID and files accordingly.
-If the sample uses some data files, make sure to have `<wx-data>` node
-in the sample's bakefile (see e.g. `samples/image/image.bkl` for an example).
-Make sure to add `<wx-lib>` statements for all libraries from multilib build
-that are required by the sample.
-
-The Windows resource specification should use the central .rc file:
-
-        <win32-res>../sample.rc</win32-res>
-
-Run `bakefile_gen` in `$(wx)/build/bakefiles` to regenerate the bakefiles.
-
-Finally commit `$(wx)/build/bakefiles/make_dist.mk` and all the other modified files.
-
-Currently we commit all the generated makefiles.
+This is explained in details in `how-to-add-new-sample.md` file, please see
+there.
 
 
 Adding new core library

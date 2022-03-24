@@ -247,7 +247,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
     tool->bitmap = bitmap;
     if(bitmap_disabled.IsOk())
     {
-        wxASSERT(bitmap.GetScaledSize() == bitmap_disabled.GetScaledSize());
+        wxASSERT(bitmap.GetLogicalSize() == bitmap_disabled.GetLogicalSize());
         tool->bitmap_disabled = bitmap_disabled;
     }
     else
@@ -779,7 +779,7 @@ bool wxRibbonToolBar::Realize()
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             tool->size = m_art->GetToolSize(temp_dc, this,
-                tool->bitmap.GetScaledSize(), tool->kind, t == 0,
+                tool->bitmap.GetLogicalSize(), tool->kind, t == 0,
                 t == (tool_count - 1), &tool->dropdown);
             if(t == 0)
                 tool->state |= wxRIBBON_TOOLBAR_TOOL_FIRST;

@@ -275,7 +275,7 @@ void DirCtrlWidgetsPage::CreateDirCtrl(bool defaultPath)
     wxGenericDirCtrl *dirCtrl = new wxGenericDirCtrl(
         this,
         DirCtrlPage_Ctrl,
-        defaultPath ? wxDirDialogDefaultFolderStr : m_dirCtrl->GetPath(),
+        defaultPath ? wxString(wxDirDialogDefaultFolderStr) : m_dirCtrl->GetPath(),
         wxDefaultPosition,
         wxDefaultSize,
         style

@@ -157,7 +157,7 @@ public:
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
 
-        Bu default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
+        By default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
         to be in English and written only using 7-bit ASCII characters.
         If you have to deal with non-English strings or 8-bit characters in the
         source code, see the instructions in @ref overview_nonenglish.

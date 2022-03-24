@@ -599,13 +599,13 @@ void wxToolBarTool::UpdateImages()
         // TODO CS this should use the best current representation, or optionally iterate through all
         wxSize sz = m_bmpNormal.GetDefaultSize();
         m_alternateBitmap = wxBitmap();
-        m_alternateBitmap.Create(sz.x, sz.y, -1); // TODO CS m_alternateBitmap.CreateScaled(sz.x, sz.y, -1, m_bmpNormal.GetScaleFactor());
+        m_alternateBitmap.Create(sz.x, sz.y, -1); // TODO CS m_alternateBitmap.CreateWithDIPSize(sz, m_bmpNormal.GetScaleFactor());
         m_alternateBitmap.UseAlpha();
         wxMemoryDC dc;
 
         dc.SelectObject(m_alternateBitmap);
         // This color corresponds to OS X Yosemite's rendering of selected toolbar items
-        // See also https://trac.wxwidgets.org/ticket/16645
+        // See also https://github.com/wxWidgets/wxWidgets/issues/16645
         wxColour grey(0xB9, 0xB9, 0xB9);
         dc.SetBackground(*wxTRANSPARENT_BRUSH);
         dc.Clear();
@@ -1332,7 +1332,7 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     DoLayout();
 }    
 
-void wxToolBar::SetToolBitmapSize(const wxSize& size)
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
 {
     m_defaultWidth = size.x + kwxMacToolBorder;
     m_defaultHeight = size.y + kwxMacToolBorder;

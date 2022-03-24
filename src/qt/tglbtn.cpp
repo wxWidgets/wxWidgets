@@ -30,7 +30,7 @@ wxBitmapToggleButton::wxBitmapToggleButton()
 
 wxBitmapToggleButton::wxBitmapToggleButton(wxWindow *parent,
                wxWindowID id,
-               const wxBitmap& label,
+               const wxBitmapBundle& label,
                const wxPoint& pos,
                const wxSize& size,
                long style,
@@ -42,7 +42,7 @@ wxBitmapToggleButton::wxBitmapToggleButton(wxWindow *parent,
 
 bool wxBitmapToggleButton::Create(wxWindow *parent,
             wxWindowID id,
-            const wxBitmap& label,
+            const wxBitmapBundle& label,
             const wxPoint& pos,
             const wxSize& size, long style,
             const wxValidator& validator,

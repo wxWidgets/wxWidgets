@@ -177,40 +177,29 @@ struct BitmapProvider: wxGtkImage::BitmapProvider
 {
     BitmapProvider(wxToolBarTool* tool) : m_tool(tool) { }
 
-    virtual double GetScale() const wxOVERRIDE;
-    virtual wxBitmap Get() const wxOVERRIDE;
+    virtual wxBitmap Get(int scale) const wxOVERRIDE;
     wxToolBarTool* const m_tool;
 };
 
-double BitmapProvider::GetScale() const
-{
-    return m_tool->GetToolBar()->GetDPIScaleFactor();
-}
-
-wxBitmap BitmapProvider::Get() const
+wxBitmap BitmapProvider::Get(int scale) const
 {
 #ifdef __WXGTK3__
-    if (!m_tool->IsEnabled())
+    const bool isEnabled = m_tool->IsEnabled();
+    const wxBitmapBundle bundle(
+        isEnabled ? m_tool->GetNormalBitmapBundle() : m_tool->GetDisabledBitmapBundle());
+    wxBitmap bitmap(GetAtScale(bundle, scale));
+    if (!isEnabled && !bitmap.IsOk())
     {
-        wxBitmap disabled(GetAtScale(m_tool->GetDisabledBitmapBundle()));
-        // if no disabled bitmap and normal bitmap is scaled
-        if (!disabled.IsOk() && IsScaled())
-        {
-            // make scaled disabled bitmap from normal one
-            wxBitmap bitmap(GetAtScale(m_tool->GetNormalBitmapBundle()));
-            if (bitmap.IsOk())
-                disabled = bitmap.CreateDisabled();
-        }
-        return disabled;
+        // Create disabled bitmap from normal one
+        bitmap = GetAtScale(m_tool->GetNormalBitmapBundle(), scale).CreateDisabled();
     }
-
-    if (IsScaled())
-        return GetAtScale(m_tool->GetNormalBitmapBundle());
+    return bitmap;
 #else
+    wxUnusedVar(scale);
     if (!m_tool->IsEnabled())
         return m_tool->GetDisabledBitmap();
-#endif
     return wxBitmap();
+#endif
 }
 } // namespace
 

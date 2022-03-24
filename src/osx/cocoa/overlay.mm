@@ -19,8 +19,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/private/overlay.h"
 
-#include "wx/overlay.h"
+#ifdef wxHAS_NATIVE_OVERLAY
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -28,9 +29,7 @@
 
 #include "wx/dcgraph.h"
 
-#include "wx/private/overlay.h"
-
-#ifdef wxHAS_NATIVE_OVERLAY
+#include "wx/osx/private.h"
 
 // ============================================================================
 // implementation
@@ -124,6 +123,38 @@
     return self;
 }
 @end
+
+class wxOverlayImpl: public wxOverlay::Impl
+{
+public:
+    wxOverlayImpl();
+    ~wxOverlayImpl();
+
+    virtual void Reset() override;
+    virtual bool IsOk() override;
+    virtual void Init(wxDC* dc, int x, int y, int width, int height) override;
+    virtual void BeginDrawing(wxDC* dc) override;
+    virtual void EndDrawing(wxDC* dc) override;
+    virtual void Clear(wxDC* dc) override;
+
+    void CreateOverlayWindow(wxDC* dc);
+
+    WXWindow m_overlayWindow;
+    WXWindow m_overlayParentWindow;
+    CGContextRef m_overlayContext;
+    // we store the window in case we would have to issue a Refresh()
+    wxWindow* m_window;
+
+    int m_x;
+    int m_y;
+    int m_width;
+    int m_height;
+} ;
+
+wxOverlay::Impl* wxOverlay::Create()
+{
+    return new wxOverlayImpl;
+}
 
 wxOverlayImpl::wxOverlayImpl()
 {

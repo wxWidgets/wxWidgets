@@ -178,6 +178,49 @@ bool wxApp::DoIdle()
     return keepSource;
 }
 
+// Custom Glib log writer: setting it is only possible with glib 2.50 or later.
+#if GLIB_CHECK_VERSION(2, 50, 0)
+extern "C" {
+static GLogWriterOutput
+wx_log_writer(GLogLevelFlags   log_level,
+              const GLogField *fields,
+              gsize            n_fields,
+              gpointer         user_data)
+{
+    const wxUIntPtr log_mask = reinterpret_cast<wxUIntPtr>(user_data);
+
+    GLogWriterOutput result;
+    if (log_level & log_mask)
+    {
+        result = G_LOG_WRITER_HANDLED;
+    }
+    else
+    {
+        result = g_log_writer_default(log_level, fields, n_fields, NULL);
+    }
+    return result;
+}
+}
+
+/* static */
+void wxApp::GTKSuppressDiagnostics(int flags)
+{
+    if (glib_check_version(2, 50, 0) == 0)
+    {
+        g_log_set_writer_func(
+            wx_log_writer,
+            (wxUIntToPtr)(flags == -1 ? G_LOG_LEVEL_MASK : flags),
+            NULL);
+    }
+}
+#else // glib < 2.50
+/* static */
+void wxApp::GTKSuppressDiagnostics(int WXUNUSED(flags))
+{
+    // We can't do anything here.
+}
+#endif // glib >=/< 2.50
+
 //-----------------------------------------------------------------------------
 // wxApp
 //-----------------------------------------------------------------------------

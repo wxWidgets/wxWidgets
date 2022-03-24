@@ -6,6 +6,7 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_cmake.yml'
       - '.github/workflows/ci_msw.yml'
@@ -25,6 +26,7 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_cmake.yml'
       - '.github/workflows/ci_msw.yml'

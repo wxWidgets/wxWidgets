@@ -952,7 +952,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     }
     else
     {
-        int width = GetClientSize().GetWidth() * 0.8;
+        int width = GetClientSize().GetWidth() * 4 / 5;
         splitter->SplitVertically(m_richTextCtrl, styleListCtrl, width);
         splitter->SetSashGravity(0.8);
     }

@@ -591,7 +591,8 @@ public:
         you should use @c wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR) but
         in any case, as the bitmap size is deduced automatically from the size
         of the bitmaps associated with the tools added to the toolbar, it is
-        usually unnecessary to call SetToolBitmapSize() explicitly.
+        usually unnecessary to call neither this function nor
+        SetToolBitmapSize() at all.
 
         @remarks Note that this is the size of the bitmap you pass to AddTool(),
             and not the eventual size of the tool button.
@@ -880,16 +881,16 @@ public:
         Sets the default size of each tool bitmap. The default bitmap size is 16
         by 15 pixels.
 
-        Note that @a size does @e not need to be multiplied by the
-        DPI-dependent factor even under MSW, where it would normally be
+        It is usually unnecessary to call this function, as the tools will
+        always be made big enough to fit the size of the bitmaps used in them.
+
+        If you do call it, note that @a size does @e not need to be multiplied
+        by the DPI-dependent factor even under MSW, where it would normally be
         necessary, as the toolbar adjusts this size to the current DPI
         automatically.
 
         @param size
             The size of the bitmaps in the toolbar.
-
-        @remarks This should be called to tell the toolbar what the tool bitmap
-            size is. Call it before you add tools.
 
         @see GetToolBitmapSize(), GetToolSize()
     */

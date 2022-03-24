@@ -10,7 +10,9 @@
 #ifndef wxWebViewEdge_PRIVATE_H
 #define wxWebViewEdge_PRIVATE_H
 
+#if !wxUSE_WEBVIEW_EDGE_STATIC
 #include "wx/dynlib.h"
+#endif
 #include "wx/msw/private/comptr.h"
 
 #include <WebView2.h>
@@ -55,6 +57,7 @@ public:
     bool m_initialized;
     bool m_isBusy;
     wxString m_pendingURL;
+    wxString m_pendingPage;
     int m_pendingContextMenuEnabled;
     int m_pendingAccessToDevToolsEnabled;
     wxVector<wxString> m_pendingUserScripts;
@@ -97,9 +100,10 @@ public:
 
     void UpdateWebMessageHandler();
 
+#if !wxUSE_WEBVIEW_EDGE_STATIC
     static wxDynamicLibrary ms_loaderDll;
+#endif
     static wxString ms_browserExecutableDir;
-    static wxString ms_version;
 
     static bool Initialize();
 

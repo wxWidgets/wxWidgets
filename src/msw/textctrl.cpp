@@ -2959,7 +2959,7 @@ void wxTextCtrl::MSWSetRichZoom()
 
     // apply the new zoom ratio, Windows uses a default denominator of 100, so
     // do it here as well
-    num = 100 * ratio;
+    num = UINT(100 * ratio);
     denom = 100;
     ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
 }
@@ -3238,7 +3238,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         wxFont font(style.GetFont());
 
         LOGFONT lf = font.GetNativeFontInfo()->lf;
-        cf.yHeight = 20 * font.GetFractionalPointSize(); // 1 pt = 20 twips
+        cf.yHeight = LONG(20 * font.GetFractionalPointSize()); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
         wxStrlcpy(cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName));

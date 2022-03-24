@@ -1061,7 +1061,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
     // use native scrolling when available and do it in generic way
     // otherwise:
-#if defined(__WXX11__) || defined(__WINDOWS__)
+#ifdef __WXX11__
 
     wxWindowNative::ScrollWindow(dx, dy, rect);
 

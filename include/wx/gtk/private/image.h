@@ -5,9 +5,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/bmpbndl.h"
-#include "wx/math.h"
-
 // Class that can be used in place of GtkImage, to allow drawing of alternate
 // bitmaps, such as HiDPI or disabled.
 
@@ -18,15 +15,13 @@ public:
     {
         virtual ~BitmapProvider() { }
 
-        virtual double GetScale() const = 0;
-        virtual wxBitmap Get() const = 0;
+        virtual wxBitmap Get(int scale) const = 0;
         virtual void Set(const wxBitmapBundle&) { }
 
         // Simple helpers used in implementation.
-        bool IsScaled() const { return !wxIsSameDouble(GetScale(), 1); }
-        wxBitmap GetAtScale(const wxBitmapBundle& b) const
+        static wxBitmap GetAtScale(const wxBitmapBundle& b, int scale)
         {
-            return b.GetBitmap(b.GetDefaultSize()*GetScale());
+            return b.GetBitmap(b.GetDefaultSize() * scale);
         }
     };
 

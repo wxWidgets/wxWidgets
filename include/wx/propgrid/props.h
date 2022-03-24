@@ -710,9 +710,16 @@ public:
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     // Implement in derived class for custom array-to-string conversion.
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use function ConvertArrayToString(arr, delim) returning wxString")
     virtual void ConvertArrayToString(const wxArrayString& arr,
                                       wxString* pString,
-                                      const wxUniChar& delimiter) const;
+                                      const wxUniChar& delimiter) const
+    {
+        *pString = ConvertArrayToString(arr, delimiter);
+    }
+#endif // WXWIN_COMPATIBILITY_3_0
+    virtual wxString ConvertArrayToString(const wxArrayString& arr, const wxUniChar& delimiter) const;
 
     // Shows string editor dialog. Value to be edited should be read from
     // value, and if dialog is not cancelled, it should be stored back and true
@@ -736,10 +743,17 @@ public:
         QuoteStrings    = 0x02
     };
 
-    // Generates contents for string dst based on the contents of
-    // wxArrayString src.
+    // Generates string based on the contents of wxArrayString src.
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use function ArrayStringToString(src, delim, flag) returning wxString")
     static void ArrayStringToString( wxString& dst, const wxArrayString& src,
-                                     wxUniChar delimiter, int flags );
+                                     wxUniChar delimiter, int flags )
+    {
+        dst = ArrayStringToString(src, delimiter, flags);
+    }
+#endif // WXWIN_COMPATIBILITY_3_0
+    static wxString ArrayStringToString(const wxArrayString& src,
+                                        wxUniChar delimiter, int flags);
 
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;

@@ -24,13 +24,10 @@
     #include "wx/wx.h"
 #endif
 
-// the application icon (under Windows it is in resources)
-#ifndef wxHAS_IMAGES_IN_RESOURCES
-    #include "../sample.xpm"
-#endif
-
 #include "smile.xpm"
+#include "smile2.xpm"
 
+#include "wx/artprov.h"
 #include "wx/taskbar.h"
 
 #include "tbtest.h"
@@ -123,7 +120,7 @@ MyDialog::MyDialog(const wxString& title)
     m_taskBarIcon = new MyTaskBarIcon();
 
     // we should be able to show up to 128 characters on Windows
-    if ( !m_taskBarIcon->SetIcon(wxICON(sample),
+    if (!m_taskBarIcon->SetIcon(wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_OTHER, wxSize(32, 32)),
                                  "wxTaskBarIcon Sample\n"
                                  "With a very, very, very, very\n"
                                  "long tooltip whose length is\n"
@@ -134,7 +131,7 @@ MyDialog::MyDialog(const wxString& title)
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
     m_dockIcon = new MyTaskBarIcon(wxTBI_DOCK);
-    if ( !m_dockIcon->SetIcon(wxICON(sample)) )
+    if ( !m_dockIcon->SetIcon(wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_OTHER, wxSize(32, 32))) )
     {
         wxLogError("Could not set icon.");
     }
@@ -156,7 +153,10 @@ void MyDialog::OnAbout(wxCommandEvent& WXUNUSED(event))
           "(C) 2007 Vadim Zeitlin";
 
 #if defined(__WXMSW__) && wxUSE_TASKBARICON_BALLOONS
-    m_taskBarIcon->ShowBalloon(title, message, 15000, wxICON_INFORMATION);
+    m_taskBarIcon->ShowBalloon(title, message, 15000,
+                               wxICON_INFORMATION,
+                               wxBitmapBundle::FromSVGFile("info.svg", wxSize(64, 64))
+    );
 #else // !__WXMSW__
     wxMessageBox(message, title, wxICON_INFORMATION|wxOK, this);
 #endif // __WXMSW__/!__WXMSW__
@@ -231,7 +231,11 @@ void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
 {
     wxIcon icon(smile_xpm);
 
-    if (!SetIcon(icon, "wxTaskBarIcon Sample - a different icon"))
+    if (!SetIcon(wxBitmapBundle::FromBitmaps(
+                     wxBitmap(smile_xpm),
+                     wxBitmap(smile2_xpm)
+                 ),
+                 "wxTaskBarIcon Sample - a different icon"))
         wxMessageBox("Could not set new icon.");
 }
 

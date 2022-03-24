@@ -1931,8 +1931,7 @@ wxMsgCatalog *wxFileTranslationsLoader::LoadCatalog(const wxString& domain,
         wxSplit(searchPath, wxPATH_SEP[0])
     );
 
-    wxFileName fn(domain);
-    fn.SetExt(wxS("mo"));
+    wxFileName fn(wxString(), domain, wxS("mo"));
 
     wxString strFullName;
     if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )

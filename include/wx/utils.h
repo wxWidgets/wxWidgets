@@ -156,6 +156,9 @@ WXDLLIMPEXP_BASE bool wxIsPlatform64Bit();
 // Get machine CPU architecture
 WXDLLIMPEXP_BASE wxString wxGetCpuArchitectureName();
 
+// Get native machine CPU architecture
+WXDLLIMPEXP_BASE wxString wxGetNativeCpuArchitectureName();
+
 #ifdef __LINUX__
 // Get linux-distro information
 WXDLLIMPEXP_BASE wxLinuxDistributionInfo wxGetLinuxDistributionInfo();

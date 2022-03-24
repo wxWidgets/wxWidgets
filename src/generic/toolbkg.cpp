@@ -371,7 +371,10 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
     int page = ToolIdToPage(event.GetId());
     if (page == wxNOT_FOUND)
     {
-        // this happens only of page id has changed afterwards
+        // we may have gotten an event from something other than our tool, e.g.
+        // a menu item from a context menu shown from the application code, so
+        // take care to avoid consuming it in this case
+        event.Skip();
         return;
     }
 

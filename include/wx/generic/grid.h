@@ -3244,7 +3244,7 @@ private:
         m_selecting = sel;
     }
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridEvent);
 };
 
 class WXDLLIMPEXP_CORE wxGridSizeEvent : public wxNotifyEvent,
@@ -3300,7 +3300,7 @@ private:
         m_y = y;
     }
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridSizeEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridSizeEvent);
 };
 
 
@@ -3365,7 +3365,7 @@ protected:
     wxGridCellCoords  m_bottomRight;
     bool              m_selecting;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridRangeSelectEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridRangeSelectEvent);
 };
 
 
@@ -3402,7 +3402,7 @@ private:
     int m_col;
     wxWindow* m_window;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEditorCreatedEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridEditorCreatedEvent);
 };
 
 

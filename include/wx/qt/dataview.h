@@ -15,7 +15,7 @@ public:
                       unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH,
                       wxAlignment align = wxALIGN_CENTER,
                       int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *renderer,
+    wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRenderer *renderer,
                       unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH,
                       wxAlignment align = wxALIGN_CENTER,
                       int flags = wxDATAVIEW_COL_RESIZABLE );
@@ -24,7 +24,7 @@ public:
     // setters:
 
     virtual void SetTitle( const wxString &title );
-    virtual void SetBitmap( const wxBitmap &bitmap );
+    virtual void SetBitmap( const wxBitmapBundle &bitmap );
 
     virtual void SetOwner( wxDataViewCtrl *owner );
 
@@ -119,7 +119,7 @@ public:
     virtual bool IsExpanded( const wxDataViewItem & item ) const;
 
     virtual bool EnableDragSource( const wxDataFormat &format );
-    virtual bool EnableDropTarget( const wxDataFormat &format );
+    virtual bool DoEnableDropTarget( const wxVector<wxDataFormat>& formats );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

@@ -322,6 +322,8 @@ static void *EffectiveAppearanceContext = &EffectiveAppearanceContext;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
 - (void)windowWillEnterFullScreen:(NSNotification *)notification;
 - (void)windowDidChangeBackingProperties:(NSNotification *)notification;
+- (NSApplicationPresentationOptions)window:(NSWindow *)window
+      willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions;
 
 @end
 
@@ -333,6 +335,27 @@ extern int wxOSXGetIdFromSelector(SEL action );
 {
     self = [super init];
     return self;
+}
+
+- (NSApplicationPresentationOptions)window:(NSWindow *)window
+      willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions
+{
+    NSApplicationPresentationOptions options =
+        NSApplicationPresentationFullScreen | NSApplicationPresentationHideDock;
+
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if (windowimpl->m_macFullscreenStyle & wxFULLSCREEN_NOMENUBAR)
+            options |= NSApplicationPresentationAutoHideMenuBar;
+
+        // Auto hide toolbar requires auto hide menu
+        if (windowimpl->m_macFullscreenStyle & wxFULLSCREEN_NOTOOLBAR)
+            options |= NSApplicationPresentationAutoHideToolbar |
+                NSApplicationPresentationAutoHideMenuBar;
+    }
+
+    return options;
 }
 
 - (BOOL) triggerMenu:(SEL) action sender:(id)sender
@@ -1093,6 +1116,20 @@ void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title, wxFontEncoding 
     [m_macWindow setTitle:wxCFStringRef( title , encoding ).AsNSString()];
 }
 
+wxContentProtection wxNonOwnedWindowCocoaImpl::GetContentProtection() const
+{
+    return (m_macWindow.sharingType == NSWindowSharingNone) ?
+        wxCONTENT_PROTECTION_ENABLED : wxCONTENT_PROTECTION_NONE;
+}
+
+bool wxNonOwnedWindowCocoaImpl::SetContentProtection(wxContentProtection contentProtection)
+{
+    m_macWindow.sharingType = (contentProtection == wxCONTENT_PROTECTION_ENABLED) ?
+        NSWindowSharingNone : NSWindowSharingReadOnly;
+
+    return true;
+}
+
 bool wxNonOwnedWindowCocoaImpl::EnableCloseButton(bool enable)
 {
     [[m_macWindow standardWindowButton:NSWindowCloseButton] setEnabled:enable];
@@ -1174,8 +1211,9 @@ bool wxNonOwnedWindowCocoaImpl::IsFullScreen() const
     return m_macFullScreenData != NULL ;
 }
 
-bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable)
+bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable, long style)
 {
+    m_macFullscreenStyle = style;
     NSUInteger collectionBehavior = [m_macWindow collectionBehavior];
     if (enable)
     {
@@ -1198,12 +1236,13 @@ bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable)
     return true;
 }
 
-bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
+bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long style)
 {
     if ( IsUsingFullScreenApi(m_macWindow) )
     {
         if ( show != IsFullScreen() )
         {
+            m_macFullscreenStyle = style;
             m_macIgnoreNextFullscreenChange = true;
             [m_macWindow toggleFullScreen: nil];
         }

@@ -141,7 +141,7 @@ CheckReplace(const char* pattern,
     wxRegEx re(pattern);
 
     wxString text(original);
-    CHECK( re.Replace(&text, replacement) == numMatches );
+    CHECK( re.Replace(&text, replacement) == static_cast<int>(numMatches) );
     CHECK( text == expected );
 }
 

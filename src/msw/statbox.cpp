@@ -374,8 +374,8 @@ RECT AdjustRectForRtl(wxLayoutDirection dir, RECT const& childRect, RECT const& 
         // The clipping region too is mirrored in RTL layout.
         // We need to mirror screen coordinates relative to static box window priot to
         // intersecting with region.
-        ret.right = boxRect.right - childRect.left - boxRect.left;
-        ret.left = boxRect.right - childRect.right - boxRect.left;
+        ret.right = boxRect.right - (childRect.left - boxRect.left);
+        ret.left = boxRect.left + (boxRect.right - childRect.right);
     }
 
     return ret;

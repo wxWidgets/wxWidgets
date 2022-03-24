@@ -17,11 +17,14 @@ case $(uname -s) in
             echo '--- End of APT files dump ---'
 
             run_apt() {
-                echo "Running apt-get $@"
+                echo "-> Running apt-get $@"
 
                 # Disable some (but not all) output.
                 $SUDO apt-get -q -o=Dpkg::Use-Pty=0 "$@"
 
+                echo "-> Done with $?"
+
+                return $?
             }
 
             if [ "$wxUSE_ASAN" = 1 ]; then
@@ -50,7 +53,7 @@ case $(uname -s) in
                 *)
                     case "$wxGTK_VERSION" in
                         3)  libtoolkit_dev=libgtk-3-dev
-                            extra_deps='libwebkit2gtk-4.0-dev libwebkitgtk-3.0-dev libgspell-1-dev'
+                            extra_deps='libwebkit2gtk-4.0-dev libgspell-1-dev'
                             ;;
                         2)  libtoolkit_dev=libgtk2.0-dev
                             extra_deps='libwebkitgtk-dev'
@@ -61,9 +64,7 @@ case $(uname -s) in
                     esac
 
                     extra_deps="$extra_deps \
-                            libgstreamermm-1.0-dev libgstreamermm-0.10-dev \
                             libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-                            libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev \
                             libglu1-mesa-dev"
             esac
 

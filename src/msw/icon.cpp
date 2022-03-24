@@ -115,7 +115,8 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
     }
     else
     {
-        InitFromHICON((WXHICON)hicon, bmp.GetWidth(), bmp.GetHeight());
+        InitFromHICON((WXHICON)hicon, bmp.GetWidth(), bmp.GetHeight(),
+                      bmp.GetScaleFactor());
     }
 }
 
@@ -154,7 +155,7 @@ bool wxIcon::CreateFromHICON(WXHICON icon)
     return InitFromHICON(icon, size.GetWidth(), size.GetHeight());
 }
 
-bool wxIcon::InitFromHICON(WXHICON icon, int width, int height)
+bool wxIcon::InitFromHICON(WXHICON icon, int width, int height, double scale)
 {
 #if wxDEBUG_LEVEL >= 2
     if ( icon != NULL )
@@ -170,6 +171,7 @@ bool wxIcon::InitFromHICON(WXHICON icon, int width, int height)
     GetGDIImageData()->m_handle = (WXHANDLE)icon;
     GetGDIImageData()->m_width = width;
     GetGDIImageData()->m_height = height;
+    GetGDIImageData()->m_scaleFactor = scale;
 
     return IsOk();
 }

@@ -12,7 +12,7 @@
 #ifndef _WX_TOGGLEBUTTON_H_
 #define _WX_TOGGLEBUTTON_H_
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 // Checkbox item (single checkbox)
 class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
@@ -77,7 +77,7 @@ public:
     wxBitmapToggleButton() {}
     wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
-                   const wxBitmap& label,
+                   const wxBitmapBundle& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -90,7 +90,7 @@ public:
     // Create the control
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,

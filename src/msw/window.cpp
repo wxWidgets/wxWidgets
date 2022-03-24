@@ -664,7 +664,20 @@ bool wxWindowMSW::Show(bool show)
     // should work without errors
     if ( hWnd )
     {
-        ::ShowWindow(hWnd, show ? SW_SHOW : SW_HIDE);
+        BOOL ret = ::ShowWindow(hWnd, show ? SW_SHOW : SW_HIDE);
+
+        // Windows does not generate its WM_SHOWWINDOW notification when hiding
+        // a frozen window. Instead, ::ShowWindow() returns that the window was
+        // previously hidden, although it was shown but frozen.
+        // In such a case we have to generate the wxEVT_SHOW event ourselves
+        // for a consistent behaviour under all platforms.
+        bool changed = (ret != 0) != show;
+        if ( !changed && IsFrozen() )
+        {
+            wxShowEvent eventShow(GetId(), show);
+            eventShow.SetEventObject(this);
+            HandleWindowEvent(eventShow);
+        }
     }
 
     if ( IsFrozen() )
@@ -2354,6 +2367,8 @@ static void wxYieldForCommandsOnly()
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+    menu->SetupBitmaps();
+
     wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
@@ -4857,15 +4872,24 @@ wxSize wxWindowMSW::GetDPI() const
         {
             hwnd = GetHwndOf(topWin);
         }
+
+        if ( hwnd == NULL )
+        {
+            // We shouldn't be using this function without a valid HWND because
+            // we can't really find the correct DPI to use in this case for a
+            // system with multiple monitors using different DPIs, so warn
+            // about doing it but still return the screen DPI which will often,
+            // if not always, be the correct value to use anyhow.
+            wxLogDebug("Using possibly wrong DPI for %s", wxDumpWindow(this));
+            return wxGetDPIofHDC(ScreenHDC());
+        }
     }
 
     wxSize dpi = GetWindowDPI(hwnd);
 
     if ( !dpi.x || !dpi.y )
     {
-        WindowHDC hdc(hwnd);
-        dpi.x = ::GetDeviceCaps(hdc, LOGPIXELSX);
-        dpi.y = ::GetDeviceCaps(hdc, LOGPIXELSY);
+        dpi = wxGetDPIofHDC(WindowHDC(hwnd));
     }
 
     return dpi;
@@ -4878,7 +4902,13 @@ double wxWindowMSW::GetDPIScaleFactor() const
 
 void wxWindowMSW::WXAdjustFontToOwnPPI(wxFont& font) const
 {
-    font.WXAdjustToPPI(GetDPI());
+    // We don't need to adjust the font if the window hasn't been created yet,
+    // as our MSWUpdateFontOnDPIChange() will be called when it is created if a
+    // non-default DPI is used and it will be done then, so skip doing it now,
+    // especially because we can't get the correct DPI in GetDPI() anyhow
+    // without a valid HWND.
+    if ( GetHwnd() )
+        font.WXAdjustToPPI(GetDPI());
 }
 
 void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
@@ -5062,7 +5092,7 @@ bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
     wxON_BLOCK_EXIT_SET(gs_insideCaptureChanged, false);
 
     // notify windows on the capture stack about lost capture
-    // (see http://sourceforge.net/tracker/index.php?func=detail&aid=1153662&group_id=9863&atid=109863):
+    // (see https://github.com/wxWidgets/wxWidgets/issues/21642)
     wxWindowBase::NotifyCaptureLost();
 
     wxWindow *win = wxFindWinFromHandle(hWndGainedCapture);

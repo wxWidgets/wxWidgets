@@ -10,6 +10,9 @@
 # Fix comment typos in sources, 2021-10-02
 668a2186cd89fd4576bed224df3624811eebeca1
 
+# Remove all trailing spaces, 2019-01-30
+8fbca5cb70c8b647d5bd2cacb1e0a2a00358f351
+
 # Remove (most) occurrences of wxT() macro from the samples, 2018-09-23
 f58ea625968953ca93585ea7f93dcc07ad032d8f
 

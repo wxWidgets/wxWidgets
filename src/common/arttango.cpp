@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/arttango.cpp
-// Purpose:     art provider using embedded PNG versions of Tango icons
+// Purpose:     art provider using embedded SVG versions of Tango icons
 // Author:      Vadim Zeitlin
 // Created:     2010-12-27
 // Copyright:   (c) 2010 Vadim Zeitlin <vadim@wxwidgets.org>
@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------------
 
 // All files in art/tango in alphabetical order:
+#include "../../art/tango/application_exit.h"
 #include "../../art/tango/application_x_executable.h"
 #include "../../art/tango/dialog_error.h"
 #include "../../art/tango/dialog_information.h"
@@ -67,9 +68,11 @@
 #include "../../art/tango/go_previous.h"
 #include "../../art/tango/go_up.h"
 #include "../../art/tango/image_missing.h"
-#include "../../art/tango/text_x_generic.h"
 #include "../../art/tango/list_add.h"
 #include "../../art/tango/list_remove.h"
+#include "../../art/tango/process_stop.h"
+#include "../../art/tango/text_x_generic.h"
+#include "../../art/tango/view_refresh.h"
 
 // ----------------------------------------------------------------------------
 // art provider class
@@ -83,16 +86,14 @@ class wxTangoArtProvider : public wxArtProvider
 public:
     wxTangoArtProvider()
     {
-        m_imageHandledAdded = false;
     }
 
 protected:
-    virtual wxBitmap CreateBitmap(const wxArtID& id,
-                                  const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+        const wxArtClient& client,
+        const wxSize& size) wxOVERRIDE;
 
 private:
-    bool m_imageHandledAdded;
 
     wxDECLARE_NO_COPY_CLASS(wxTangoArtProvider);
 };
@@ -103,13 +104,14 @@ private:
 // implementation
 // ============================================================================
 
-wxBitmap
-wxTangoArtProvider::CreateBitmap(const wxArtID& id,
+wxBitmapBundle
+wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
                                  const wxArtClient& client,
-                                 const wxSize& sizeHint)
+                                 const wxSize& size)
 {
-    // Array indexed by the id names with pointers to image data in 16 and 32
-    // pixel sizes as values. The order of the elements in this array is the
+#ifdef wxHAS_SVG
+    // Array indexed by the id names with pointers to svg data.
+    // The order of the elements in this array is the
     // same as the definition order in wx/artprov.h. While it's not very
     // logical, this should make it simpler to add new icons later. Notice that
     // most elements without Tango equivalents are simply omitted.
@@ -117,20 +119,14 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
     // To avoid repetition use BITMAP_DATA to only specify the image name once
     // (this is especially important if we decide to add more image sizes
     // later).
-    #define BITMAP_ARRAY_NAME(name, size) \
-        name ## _ ## size ## x ## size ## _png
-    #define BITMAP_DATA_FOR_SIZE(name, size) \
-        BITMAP_ARRAY_NAME(name, size), sizeof(BITMAP_ARRAY_NAME(name, size))
     #define BITMAP_DATA(name) \
-        BITMAP_DATA_FOR_SIZE(name, 16), BITMAP_DATA_FOR_SIZE(name, 24)
+        name ## _svg_data, sizeof(name ## _svg_data)
 
     static const struct BitmapEntry
     {
         wxString id;
-        const unsigned char *data16;
-        size_t len16;
-        const unsigned char *data24;
-        size_t len24;
+        const unsigned char *data;
+        size_t len;
     } s_allBitmaps[] =
     {
         // Tango does have bookmark-new but no matching bookmark-delete and
@@ -190,17 +186,18 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
         { wxART_PLUS,               BITMAP_DATA(list_add)                   },
         { wxART_MINUS,              BITMAP_DATA(list_remove)                },
 
-        // Surprisingly Tango doesn't seem to have neither wxART_CLOSE nor
-        // wxART_QUIT. We could use system-log-out for the latter but it
-        // doesn't seem quite right.
+        // Surprisingly Tango doesn't seem to have wxART_CLOSE.
+
+        { wxART_QUIT,               BITMAP_DATA(application_exit)           },
 
         { wxART_FIND,               BITMAP_DATA(edit_find)                  },
         { wxART_FIND_AND_REPLACE,   BITMAP_DATA(edit_find_replace)          },
-        { wxART_FULL_SCREEN,        BITMAP_DATA(full_screen)                },
+        { wxART_FULL_SCREEN,        BITMAP_DATA(fullscreen)                 },
+        { wxART_REFRESH,            BITMAP_DATA(view_refresh)               },
+        { wxART_STOP,               BITMAP_DATA(process_stop)               },
+
     };
 
-    #undef BITMAP_ARRAY_NAME
-    #undef BITMAP_DATA_FOR_SIZE
     #undef BITMAP_DATA
 
     for ( unsigned n = 0; n < WXSIZEOF(s_allBitmaps); n++ )
@@ -209,112 +206,27 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
         if ( entry.id != id )
             continue;
 
-        // This is one of the bitmaps that we have, determine in which size we
-        // should return it.
-
-        wxSize size;
-        bool sizeIsAHint;
-        if ( sizeHint == wxDefaultSize )
+        wxSize sizeDef = size != wxDefaultSize ? size : GetSizeHint(client);
+        if (sizeDef == wxDefaultSize)
         {
-            // Use the normal platform-specific icon size.
-            size = GetNativeSizeHint(client);
-
-            if ( size == wxDefaultSize )
-            {
-                // If we failed to get it, determine the best size more or less
-                // arbitrarily. This definitely won't look good but then it
-                // shouldn't normally happen, all platforms should implement
-                // GetNativeSizeHint() properly.
-                if ( client == wxART_MENU || client == wxART_BUTTON )
-                    size = wxSize(16, 16);
-                else
-                    size = wxSize(24, 24);
-            }
-
-            // We should return the icon of exactly this size so it's more than
-            // just a hint.
-            sizeIsAHint = false;
+            // We really need some default size here, so keep using the same
+            // sizes we used for PNG-based implementation we had before.
+            if ( client == wxART_MENU || client == wxART_BUTTON )
+                sizeDef = wxSize(16, 16);
+            else
+                sizeDef = wxSize(24, 24);
         }
-        else // We have a size hint
-        {
-            // Use it for determining the version of the icon to return.
-            size = sizeHint;
-
-            // But we don't need to return the image of exactly the same size
-            // as the hint, after all it's just that, a hint.
-            sizeIsAHint = true;
-        }
-
-        enum
-        {
-            TangoSize_16,
-            TangoSize_24
-        } tangoSize;
-
-        // We prefer to downscale the image rather than upscale it if possible
-        // so use the smaller one if we can, otherwise the large one.
-        if ( size.x <= 16 && size.y <= 16 )
-            tangoSize = TangoSize_16;
-        else
-            tangoSize = TangoSize_24;
-
-        const unsigned char *data;
-        size_t len;
-        switch ( tangoSize )
-        {
-            default:
-                wxFAIL_MSG( "Unsupported Tango bitmap size" );
-                wxFALLTHROUGH;
-
-            case TangoSize_16:
-                data = entry.data16;
-                len = entry.len16;
-                break;
-
-            case TangoSize_24:
-                data = entry.data24;
-                len = entry.len24;
-                break;
-        }
-
-        wxMemoryInputStream is(data, len);
-
-        // Before reading the image data from the stream for the first time,
-        // add the handler for PNG images: we do it here and not in, say,
-        // InitTangoProvider() to do it as lately as possible and so to avoid
-        // the asserts about adding an already added handler if the user code
-        // adds the handler itself.
-        if ( !m_imageHandledAdded )
-        {
-            // Of course, if the user code did add it already, we have nothing
-            // to do.
-            if ( !wxImage::FindHandler(wxBITMAP_TYPE_PNG) )
-                wxImage::AddHandler(new wxPNGHandler);
-
-            // In any case, no need to do it again.
-            m_imageHandledAdded = true;
-        }
-
-        wxImage image(is, wxBITMAP_TYPE_PNG);
-        if ( !image.IsOk() )
-        {
-            // This should normally never happen as all the embedded images are
-            // well-formed.
-            wxLogDebug("Failed to load embedded PNG image for \"%s\"", id);
-            return wxNullBitmap;
-        }
-
-        if ( !sizeIsAHint )
-        {
-            // Notice that this won't do anything if the size is already right.
-            image.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
-        }
-
-        return image;
+        return wxBitmapBundle::FromSVG(entry.data, entry.len, sizeDef);
     }
 
+#else // !wxHAS_SVG
+    wxUnusedVar(id);
+    wxUnusedVar(client);
+    wxUnusedVar(size);
+#endif // wxHAS_SVG/!wxHAS_SVG
+
     // Not one of the bitmaps that we support.
-    return wxNullBitmap;
+    return wxBitmapBundle();
 }
 
 /* static */

@@ -10,7 +10,7 @@
 set(wxSAMPLE_FOLDER html)
 set(wxSAMPLE_SUBDIR html/)
 
-wx_add_sample(about DATA data/about.htm data/logo.png LIBRARIES wxhtml)
+wx_add_sample(about DATA data/about.htm data/logo.png data/bg.svg LIBRARIES wxhtml)
 wx_list_add_prefix(HELP_DATA_FILES helpfiles/
     Index.hhk
     another.hhc

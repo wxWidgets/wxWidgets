@@ -152,28 +152,15 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-#define HIMETRIC_PER_INCH   2540
-#define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
-
 static void PixelsToHimetric(SIZEL &sz)
 {
-    static int logX = 0;
-    static int logY = 0;
-
-    if (logY == 0)
-    {
-        // initaliase
-        HDC dc = GetDC(NULL);
-        logX = GetDeviceCaps(dc, LOGPIXELSX);
-        logY = GetDeviceCaps(dc, LOGPIXELSY);
-        ReleaseDC(NULL, dc);
-    }
+    const wxSize logSz = wxGetDPIofHDC(ScreenHDC());
 
 #define HIMETRIC_INCH   2540
 #define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
 
-    sz.cx = CONVERT(sz.cx, logX);
-    sz.cy = CONVERT(sz.cy, logY);
+    sz.cx = CONVERT(sz.cx, logSz.x);
+    sz.cy = CONVERT(sz.cy, logSz.y);
 
 #undef CONVERT
 #undef HIMETRIC_INCH

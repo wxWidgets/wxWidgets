@@ -126,8 +126,8 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                        (
                           GetID(),
                           GetText(wxT("label")),
-                          GetBitmap(wxT("bitmap"), wxART_TOOLBAR, m_toolSize),
-                          GetBitmap(wxT("bitmap2"), wxART_TOOLBAR, m_toolSize),
+                          GetBitmapBundle(wxT("bitmap"), wxART_TOOLBAR, m_toolSize),
+                          GetBitmapBundle(wxT("bitmap2"), wxART_TOOLBAR, m_toolSize),
                           kind,
                           GetText(wxT("tooltip")),
                           GetText(wxT("longhelp"))

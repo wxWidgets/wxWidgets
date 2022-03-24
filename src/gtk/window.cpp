@@ -42,6 +42,7 @@
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/win_gtk.h"
+#include "wx/gtk/private/backend.h"
 #include "wx/private/textmeasure.h"
 using namespace wxGTKImpl;
 
@@ -394,6 +395,34 @@ PangoContext* wxGetPangoContext()
 
     return context;
 }
+
+#ifdef __WXGTK3__
+static bool IsBackend(void* instance, const char* string)
+{
+    if (instance == NULL)
+        instance = wxGetTopLevelGDK();
+    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(instance));
+    return strncmp(string, name, strlen(string)) == 0;
+}
+
+WXDLLIMPEXP_CORE
+bool wxGTKImpl::IsWayland(void* instance)
+{
+    static wxByte is = 2;
+    if (is > 1)
+        is = IsBackend(instance, "GdkWayland");
+    return bool(is);
+}
+
+WXDLLIMPEXP_CORE
+bool wxGTKImpl::IsX11(void* instance)
+{
+    static wxByte is = 2;
+    if (is > 1)
+        is = IsBackend(instance, "GdkX11");
+    return bool(is);
+}
+#endif // __WXGTK3__
 
 //-----------------------------------------------------------------------------
 // "expose_event"/"draw" from m_wxwindow
@@ -1014,7 +1043,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
-            if (strcmp("GdkX11Window", g_type_name(G_TYPE_FROM_INSTANCE(gdk_event->window))) == 0)
+            if (wxGTKImpl::IsX11(gdk_event->window))
 #else
             if (true)
 #endif
@@ -1951,7 +1980,7 @@ scroll_event(GtkWidget* widget, GdkEventScroll* gdk_event, wxWindow* win)
                 }
             }
             bool handled = false;
-            if (delta_x)
+            if (delta_x != 0)
             {
                 event.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
                 event.m_wheelRotation = int(event.m_wheelDelta * delta_x);
@@ -1962,7 +1991,7 @@ scroll_event(GtkWidget* widget, GdkEventScroll* gdk_event, wxWindow* win)
                     handled = true;
                 }
             }
-            if (delta_y)
+            if (delta_y != 0)
             {
                 event.m_wheelAxis = wxMOUSE_WHEEL_VERTICAL;
                 event.m_wheelRotation = int(event.m_wheelDelta * -delta_y);
@@ -2353,7 +2382,7 @@ void wxWindowGTK::GTKHandleRealized()
         if (IsTransparentBackgroundSupported())
         {
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            if (window)
+            if (window && !IsTopLevel())
                 gdk_window_set_composited(window, true);
             wxGCC_WARNING_RESTORE()
         }
@@ -3338,8 +3367,8 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindow* win)
             // Update touch point as the touch corresponding to "press" is moving
             if ( data->m_touchSequence == gdk_event->sequence )
             {
-                data->m_lastTouchPoint.x = gdk_event->x;
-                data->m_lastTouchPoint.y = gdk_event->y;
+                data->m_lastTouchPoint.x = int(gdk_event->x);
+                data->m_lastTouchPoint.y = int(gdk_event->y);
             }
             break;
 
@@ -3454,8 +3483,8 @@ touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
             if ( data->m_touchCount == 1 )
             {
                 data->m_lastTouchTime = gdk_event->time;
-                data->m_lastTouchPoint.x = gdk_event->x;
-                data->m_lastTouchPoint.y = gdk_event->y;
+                data->m_lastTouchPoint.x = int(gdk_event->x);
+                data->m_lastTouchPoint.y = int(gdk_event->y);
 
                 // Save the sequence which identifies touch corresponding to "press"
                 data->m_touchSequence = gdk_event->sequence;
@@ -5251,6 +5280,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             break;
 
         case wxBG_STYLE_ERASE:
+        case wxBG_STYLE_COLOUR:
             {
 #ifdef __WXGTK3__
                 wxGTKCairoDC dc(cr, static_cast<wxWindow*>(this), GetLayoutDirection());
@@ -5338,7 +5368,8 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
         for ( node = m_children.GetFirst(); node ; node = node->GetNext() )
         {
             wxWindow *compositeChild = node->GetData();
-            if (compositeChild->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT)
+            if (compositeChild->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT &&
+                !compositeChild->IsTopLevel())
             {
 #ifndef __WXGTK3__
                 if (cr == NULL)
@@ -5597,6 +5628,23 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
                     case PANGO_VARIANT_SMALL_CAPS:
                         g_string_append(css, "small-caps ");
                         break;
+#if PANGO_VERSION_CHECK(1,50,0)
+                    case PANGO_VARIANT_ALL_SMALL_CAPS:
+                        g_string_append(css, "all-small-caps ");
+                        break;
+                    case PANGO_VARIANT_PETITE_CAPS:
+                        g_string_append(css, "petite-caps ");
+                        break;
+                    case PANGO_VARIANT_ALL_PETITE_CAPS:
+                        g_string_append(css, "all-petite-caps ");
+                        break;
+                    case PANGO_VARIANT_UNICASE:
+                        g_string_append(css, "unicase ");
+                        break;
+                    case PANGO_VARIANT_TITLE_CAPS:
+                        g_string_append(css, "titling-caps ");
+                        break;
+#endif // Pango 1.50+
                     }
                 }
                 if (pfm & PANGO_FONT_MASK_WEIGHT)
@@ -5849,6 +5897,8 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
+
+    menu->SetupBitmaps(this);
 
     wxPopupMenuPositionCallbackData data;
     gpointer userdata;
@@ -6318,19 +6368,10 @@ void wxWindowGTK::GTKScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
     //as well...
     if (!(wxstyle & wxNO_BORDER) && !(wxstyle & wxBORDER_STATIC))
     {
-        GtkShadowType gtkstyle;
+        GtkShadowType gtkstyle = GTK_SHADOW_IN;
 
         if(wxstyle & wxBORDER_RAISED)
             gtkstyle = GTK_SHADOW_OUT;
-        else if ((wxstyle & wxBORDER_SUNKEN) || (wxstyle & wxBORDER_THEME))
-            gtkstyle = GTK_SHADOW_IN;
-#if 0
-        // Now obsolete
-        else if (wxstyle & wxBORDER_DOUBLE)
-            gtkstyle = GTK_SHADOW_ETCHED_IN;
-#endif
-        else //default
-            gtkstyle = GTK_SHADOW_IN;
 
         gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(w),
                                              gtkstyle );

@@ -2146,7 +2146,6 @@ protected:
 // Category (caption) property.
 class WXDLLIMPEXP_PROPGRID wxPropertyCategory : public wxPGProperty
 {
-    friend class wxPropertyGrid;
     friend class wxPropertyGridPageState;
     WX_PG_DECLARE_PROPERTY_CLASS(wxPropertyCategory)
 public:

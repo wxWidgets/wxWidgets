@@ -299,6 +299,9 @@ wxUILocaleImplUnix::~wxUILocaleImplUnix()
 void
 wxUILocaleImplUnix::Use()
 {
+    // Note that we don't need to test if m_locId is not empty here, as we
+    // still want to call setlocale() with the empty string to use the default
+    // locale settings in this case.
     if ( !wxSetlocaleTryAll(LC_ALL, m_locId) )
     {
         // Some C libraries (namely glibc) still use old ISO 639,

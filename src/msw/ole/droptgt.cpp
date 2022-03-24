@@ -422,6 +422,13 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 
                 dropCleanup.UpdateEffect(*pdwEffect);
             }
+            else {
+                *pdwEffect = DROPEFFECT_NONE;
+            }
+        }
+        else {
+            // OnDrop() returned false, no need to copy data
+            *pdwEffect = DROPEFFECT_NONE;
         }
 
         return S_OK;

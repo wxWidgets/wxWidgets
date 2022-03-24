@@ -168,7 +168,6 @@ class WXDLLIMPEXP_PROPGRID
     wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
     wxDECLARE_CLASS(wxPropertyGridManager);
-    friend class wxPropertyGridPage;
 public:
 
 #ifndef SWIG

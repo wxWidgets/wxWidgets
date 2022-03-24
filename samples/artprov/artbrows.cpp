@@ -114,6 +114,8 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_FLOPPY)
     ART_ICON(wxART_CDROM)
     ART_ICON(wxART_REMOVABLE)
+    ART_ICON(wxART_REFRESH)
+    ART_ICON(wxART_STOP)
 }
 
 
@@ -192,6 +194,14 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     SetArtClient(wxART_MESSAGE_BOX);
 }
 
+wxArtBrowserDialog::~wxArtBrowserDialog()
+{
+    const int itemCount = m_list->GetItemCount();
+
+    // item data are set by the ART_ICON macro
+    for ( int i = 0; i < itemCount; ++i )
+        delete reinterpret_cast<wxString*>(m_list->GetItemData(i));
+}
 
 wxSize wxArtBrowserDialog::GetSelectedBitmapSize() const
 {
@@ -219,7 +229,9 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
     m_list->SetItemState(sel, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 
     m_client = client;
-    SetArtBitmap((const char*)m_list->GetItemData(sel), m_client);
+
+    const wxString *data = (const wxString*)m_list->GetItemData(sel);
+    SetArtBitmap(*data, m_client);
 }
 
 void wxArtBrowserDialog::OnSelectItem(wxListEvent &event)

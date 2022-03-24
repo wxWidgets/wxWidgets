@@ -519,7 +519,7 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     if test "x$SUNCXX" = "xyes"; then
         dnl Sun C++ compiler requires special way of creating static libs;
         dnl see here for more details:
-        dnl https://sourceforge.net/tracker/?func=detail&atid=109863&aid=1229751&group_id=9863
+        dnl https://github.com/wxWidgets/wxWidgets/issues/2639
         AR=$CXX
         AROPTIONS="-xar -o"
         AC_SUBST(AR)
@@ -537,7 +537,7 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     AC_CHECK_TOOL(STRIP, strip, :)
     AC_CHECK_TOOL(NM, nm, :)
 
-    dnl Don't use `install -d`, see https://trac.wxwidgets.org/ticket/13452
+    dnl Don't use `install -d`, see https://github.com/wxWidgets/wxWidgets/issues/13452
     INSTALL_DIR="mkdir -p"
     AC_SUBST(INSTALL_DIR)
 

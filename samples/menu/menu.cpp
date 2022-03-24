@@ -32,6 +32,7 @@
     #include "wx/textdlg.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/filehistory.h"
 #include "wx/filename.h"
 
@@ -55,8 +56,6 @@
 #else
     #define USE_LOG_WINDOW 0
 #endif
-
-#include "copy.xpm"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -559,7 +558,7 @@ MyFrame::MyFrame()
 #if USE_LOG_WINDOW
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
                                       "Clear &log\tCtrl-L");
-    item->SetBitmap(copy_xpm);
+    item->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_MENU));
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
 #endif // USE_LOG_WINDOW
@@ -1248,7 +1247,8 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
         menu.Append(Menu_Popup_ToBeGreyed, "To be &greyed",
                     "This menu item should be initially greyed out");
         menu.AppendSeparator();
-        menu.Append(Menu_File_Quit, "E&xit");
+        menu.Append(Menu_File_Quit, "E&xit")
+            ->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_QUIT, wxART_MENU));
 
         menu.Delete(Menu_Popup_ToBeDeleted);
         menu.Check(Menu_Popup_ToBeChecked, true);

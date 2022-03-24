@@ -121,17 +121,17 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent);
 
 void wxWizardPage::Init()
 {
-    m_bitmap = wxNullBitmap;
+    m_bitmap = wxBitmapBundle();
 }
 
 wxWizardPage::wxWizardPage(wxWizard *parent,
-                           const wxBitmap& bitmap)
+                           const wxBitmapBundle& bitmap)
 {
     Create(parent, bitmap);
 }
 
 bool wxWizardPage::Create(wxWizard *parent,
-                          const wxBitmap& bitmap)
+                          const wxBitmapBundle& bitmap)
 {
     if ( !wxPanel::Create(parent, wxID_ANY) )
         return false;
@@ -280,12 +280,14 @@ void wxWizard::Init()
     m_bitmapBackgroundColour = *wxWHITE;
     m_bitmapPlacement = 0;
     m_bitmapMinimumWidth = 115;
+
+    Bind(wxEVT_DPI_CHANGED, &wxWizard::WXHandleDPIChanged, this);
 }
 
 bool wxWizard::Create(wxWindow *parent,
                       int id,
                       const wxString& title,
-                      const wxBitmap& bitmap,
+                      const wxBitmapBundle& bitmap,
                       const wxPoint& pos,
                       long style)
 {
@@ -436,6 +438,37 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
         btnHelp=new wxButton(this, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, buttonStyle);
 #endif
     m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"), wxDefaultPosition, wxDefaultSize, buttonStyle);
+
+    // compute the maximum width of the buttons and use it for all of them
+    // (except for the "Help" button under Mac which is special there)
+    wxSize buttonSize;
+    buttonSize.IncTo(m_btnPrev->GetBestSize());
+    buttonSize.IncTo(m_btnNext->GetBestSize());
+    buttonSize.IncTo(btnCancel->GetBestSize());
+
+    // use the other possible label for the "Next" button temporarily, so that
+    // we could make it big enough to fit it too if it's longer
+    m_btnNext->SetLabel(m_finishLabel);
+    buttonSize.IncTo(m_btnNext->GetBestSize());
+
+#ifndef __WXMAC__
+    if (btnHelp)
+        buttonSize.IncTo(btnHelp->GetBestSize());
+#endif
+
+    // now do make all buttons of the same (and big enough) size
+    m_btnPrev->SetMinSize(buttonSize);
+    m_btnNext->SetMinSize(buttonSize);
+    btnCancel->SetMinSize(buttonSize);
+
+#ifndef __WXMAC__
+    if (btnHelp)
+        btnHelp->SetMinSize(buttonSize);
+#endif
+
+    // restore the initial label of the 'next' button after temporarily
+    // changing it above
+    m_btnNext->SetLabel(m_nextLabel);
 
     if (btnHelp)
     {
@@ -606,10 +639,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     {
         bmp = m_page->GetBitmap();
         if ( !bmp.IsOk() )
-            bmp = m_bitmap;
+            bmp = m_bitmap.GetBitmapFor(this);
 
         if ( !bmpPrev.IsOk() )
-            bmpPrev = m_bitmap;
+            bmpPrev = m_bitmap.GetBitmapFor(this);
 
         if (!GetBitmapPlacement())
         {
@@ -729,7 +762,7 @@ wxSize wxWizard::GetPageSize() const
     if ( m_statbmp )
     {
         // make the page at least as tall as the bitmap
-        pageSize.IncTo(wxSize(0, m_bitmap.GetScaledHeight()));
+        pageSize.IncTo(wxSize(0, m_bitmap.GetPreferredLogicalSizeFor(this).GetHeight()));
     }
 
     if ( m_usingSizer )
@@ -862,11 +895,27 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
     }
 }
 
-void wxWizard::SetBitmap(const wxBitmap& bitmap)
+void wxWizard::SetBitmap(const wxBitmapBundle& bitmap)
 {
     m_bitmap = bitmap;
     if (m_statbmp)
         m_statbmp->SetBitmap(m_bitmap);
+}
+
+void wxWizard::WXHandleDPIChanged(wxDPIChangedEvent& event)
+{
+    wxBitmap bmp;
+    if ( m_statbmp )
+    {
+        bmp = m_page->GetBitmap();
+        if ( !bmp.IsOk() )
+            bmp = m_bitmap.GetBitmapFor(this);
+
+        ResizeBitmap(bmp);
+        m_statbmp->SetBitmap(bmp);
+    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -943,12 +992,13 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
         wxSize pageSize = m_sizerPage->GetSize();
         if (pageSize == wxSize(0,0))
             pageSize = GetPageSize();
-        int bitmapWidth = wxMax(bmp.GetScaledWidth(), GetMinimumBitmapWidth());
+        int bitmapWidth = wxMax(bmp.GetLogicalWidth(), GetMinimumBitmapWidth());
         int bitmapHeight = pageSize.y;
 
-        if (!m_statbmp->GetBitmap().IsOk() || m_statbmp->GetBitmap().GetScaledHeight() != bitmapHeight)
+        if (!m_statbmp->GetBitmap().IsOk() || m_statbmp->GetBitmap().GetLogicalHeight() != bitmapHeight)
         {
-            wxBitmap bitmap(bitmapWidth, bitmapHeight);
+            wxBitmap bitmap;
+            bitmap.CreateWithDIPSize(bitmapWidth, bitmapHeight, bmp.GetScaleFactor(), bmp.GetDepth());
             {
                 wxMemoryDC dc;
                 dc.SelectObject(bitmap);
@@ -966,16 +1016,16 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
                     if (GetBitmapPlacement() & wxWIZARD_HALIGN_LEFT)
                         x = 0;
                     else if (GetBitmapPlacement() & wxWIZARD_HALIGN_RIGHT)
-                        x = bitmapWidth - bmp.GetScaledWidth();
+                        x = bitmapWidth - bmp.GetLogicalWidth();
                     else
-                        x = (bitmapWidth - bmp.GetScaledWidth())/2;
+                        x = (bitmapWidth - bmp.GetLogicalWidth())/2;
 
                     if (GetBitmapPlacement() & wxWIZARD_VALIGN_TOP)
                         y = 0;
                     else if (GetBitmapPlacement() & wxWIZARD_VALIGN_BOTTOM)
-                        y = bitmapHeight - bmp.GetScaledHeight();
+                        y = bitmapHeight - bmp.GetLogicalHeight();
                     else
-                        y = (bitmapHeight - bmp.GetScaledHeight())/2;
+                        y = (bitmapHeight - bmp.GetLogicalHeight())/2;
 
                     dc.DrawBitmap(bmp, x, y, true);
                     dc.SelectObject(wxNullBitmap);
@@ -991,8 +1041,8 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
 
 bool wxWizard::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
 {
-    int w = bitmap.GetScaledWidth();
-    int h = bitmap.GetScaledHeight();
+    int w = bitmap.GetLogicalWidth();
+    int h = bitmap.GetLogicalHeight();
 
     wxMemoryDC dcMem;
 
@@ -1002,7 +1052,7 @@ bool wxWizard::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
     for (i = rect.x; i < rect.x + rect.width; i += w)
     {
         for (j = rect.y; j < rect.y + rect.height; j+= h)
-            dc.Blit(i, j, bitmap.GetScaledWidth(), bitmap.GetScaledHeight(), & dcMem, 0, 0);
+            dc.Blit(i, j, bitmap.GetLogicalWidth(), bitmap.GetLogicalHeight(), & dcMem, 0, 0);
     }
     dcMem.SelectObject(wxNullBitmap);
 

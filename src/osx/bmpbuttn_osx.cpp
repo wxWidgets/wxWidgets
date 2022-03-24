@@ -58,7 +58,7 @@ wxSize wxBitmapButton::DoGetBestSize() const
 
     if ( GetBitmapLabel().IsOk() )
     {
-        const wxSize bitmapSize = GetBitmapLabel().GetScaledSize();
+        const wxSize bitmapSize = GetBitmapLabel().GetLogicalSize();
         best += bitmapSize;
 
         // The NSRoundedBezelStyle and NSTexturedRoundedBezelStyle used when

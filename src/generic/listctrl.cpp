@@ -981,6 +981,9 @@ wxListHeaderWindow::wxListHeaderWindow()
 
     m_owner = NULL;
     m_resizeCursor = NULL;
+
+    m_sortAsc = true;
+    m_sortCol = -1;
 }
 
 bool wxListHeaderWindow::Create( wxWindow *win,
@@ -1099,6 +1102,15 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             flags |= wxCONTROL_SELECTED;
 #endif
 
+        wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE;
+        if ( i == m_sortCol )
+        {
+            if ( m_sortAsc )
+                sortArrow = wxHDR_SORT_ICON_UP;
+            else
+                sortArrow = wxHDR_SORT_ICON_DOWN;
+        }
+
         if (i == 0)
            flags |= wxCONTROL_SPECIAL; // mark as first column
 
@@ -1107,7 +1119,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                     this,
                                     dc,
                                     wxRect(x, HEADER_OFFSET_Y, cw, ch),
-                                    flags
+                                    flags,
+                                    sortArrow
                                 );
 
         // see if we have enough space for the column label
@@ -5062,6 +5075,34 @@ bool wxGenericListCtrl::IsItemChecked(long item) const
         return false;
 
     return m_mainWin->IsItemChecked(item);
+}
+
+void wxGenericListCtrl::ShowSortIndicator(int idx, bool ascending)
+{
+    if ( m_headerWin &&
+                (idx != m_headerWin->m_sortCol ||
+                 (idx != -1 && ascending != m_headerWin->m_sortAsc)) )
+    {
+        m_headerWin->m_sortCol = idx;
+        m_headerWin->m_sortAsc = ascending;
+        m_headerWin->Refresh();
+    }
+}
+
+int wxGenericListCtrl::GetSortIndicator() const
+{
+    if ( m_headerWin )
+        return m_headerWin->m_sortCol;
+
+    return -1;
+}
+
+bool wxGenericListCtrl::IsAscendingSortIndicator() const
+{
+    if ( m_headerWin )
+        return m_headerWin->m_sortAsc;
+
+    return true;
 }
 
 void wxGenericListCtrl::SetSingleStyle( long style, bool add )

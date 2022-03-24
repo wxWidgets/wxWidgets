@@ -893,7 +893,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
                                             const wxVariantList* valueOverrides,
                                             wxPGHashMapS2S* childResults ) const
 {
-    int iMax = m_children.size();
+    size_t iMax = m_children.size();
 
     text.clear();
     if ( iMax == 0 )
@@ -903,7 +903,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
          !(argFlags & wxPG_FULL_VALUE) )
         iMax = PWC_CHILD_SUMMARY_LIMIT;
 
-    int iMaxMinusOne = iMax-1;
+    size_t iMaxMinusOne = iMax-1;
 
     if ( !IsTextEditable() )
         argFlags |= wxPG_UNEDITABLE_COMPOSITE_FRAGMENT;
@@ -924,7 +924,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
         }
     }
 
-    int i;
+    size_t i;
     for ( i = 0; i < iMax; i++ )
     {
         wxVariant childValue;
@@ -998,7 +998,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
         }
     }
 
-    if ( (unsigned int)i < m_children.size() )
+    if ( i < m_children.size() )
     {
         if ( !text.EndsWith(wxS("; ")) )
             text += wxS("; ...");

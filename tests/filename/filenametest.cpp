@@ -21,6 +21,7 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/scopeguard.h"
+#include "wx/sckipc.h"
 
 #include "wx/private/localeset.h"
 
@@ -380,11 +381,11 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
             wxRegKey::HKLM,
             "SYSTEM\\CurrentControlSet\\Control\\FileSystem"
          ).QueryValue("NtfsDisable8dot3NameCreation", &shortNamesDisabled) &&
-            !shortNamesDisabled )
+            shortNamesDisabled != 1 )
     {
-        wxFileName fn("..\\MKINST~1");
+        wxFileName fn("TESTDA~1.CON");
         CHECK( fn.Normalize(wxPATH_NORM_LONG, cwd) );
-        CHECK( fn.GetFullPath() == "..\\mkinstalldirs" );
+        CHECK( fn.GetFullPath() == "testdata.conf" );
     }
     //else: when in doubt, don't run the test
 #endif // __WINDOWS__
@@ -710,9 +711,16 @@ TEST_CASE("wxFileName::Exists", "[filename]")
     // These files are only guaranteed to exist under Linux.
     // No need for wxFILE_EXISTS_NO_FOLLOW here; wxFILE_EXISTS_SYMLINK implies it
     CHECK( wxFileName::Exists("/proc/self", wxFILE_EXISTS_SYMLINK) );
-    CHECK( wxFileName::Exists("/dev/log", wxFILE_EXISTS_SOCKET) );
 #endif // __LINUX__
 #ifndef __VMS
+   // OpenVMS does not have mkdtemp
+    wxString name = dirTemp.GetPath() + "/socktmpdirXXXXXX";
+    wxString socktempdir = wxString::From8BitData(mkdtemp(name.char_str()));
+    wxON_BLOCK_EXIT2(wxRmdir, socktempdir, 0);
+    wxString sockfile = socktempdir + "/socket";
+    wxTCPServer server;
+    server.Create(sockfile);
+    CHECK( wxFileName::Exists(sockfile, wxFILE_EXISTS_SOCKET) );
     wxString fifo = dirTemp.GetPath() + "/fifo";
    if (mkfifo(fifo.c_str(), 0600) == 0)
     {

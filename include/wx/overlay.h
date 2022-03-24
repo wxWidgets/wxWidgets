@@ -13,26 +13,19 @@
 
 #include "wx/defs.h"
 
-#if defined(__WXDFB__)
-    #define wxHAS_NATIVE_OVERLAY 1
-#elif defined(__WXOSX__) && wxOSX_USE_COCOA
-    #define wxHAS_NATIVE_OVERLAY 1
-#else
-    // don't define wxHAS_NATIVE_OVERLAY
-#endif
-
 // ----------------------------------------------------------------------------
 // creates an overlay over an existing window, allowing for manipulations like
 // rubberbanding etc. This API is not stable yet, not to be used outside wx
 // internal code
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_CORE wxOverlayImpl;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
 class WXDLLIMPEXP_CORE wxOverlay
 {
 public:
+    class Impl;
+
     wxOverlay();
     ~wxOverlay();
 
@@ -40,11 +33,12 @@ public:
     // to be done eg when the window content has been changed and repainted
     void Reset();
 
-    // returns (port-specific) implementation of the overlay
-    wxOverlayImpl *GetImpl() { return m_impl; }
+    bool IsNative() const;
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxDCOverlay;
+
+    static Impl* Create();
 
     // returns true if it has been setup
     bool IsOk();
@@ -57,7 +51,7 @@ private:
 
     void Clear(wxDC* dc);
 
-    wxOverlayImpl* m_impl;
+    Impl* m_impl;
 
     bool m_inDrawing;
 

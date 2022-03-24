@@ -28,6 +28,8 @@
 
 #include "wx/aui/tabmdi.h"
 
+#include "wx/dcbuffer.h" // just for wxALWAYS_NATIVE_DOUBLE_BUFFER
+
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #endif
@@ -414,6 +416,13 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     if (m_rect.IsEmpty())
         return;
 
+    size_t i;
+    size_t page_count = m_pages.GetCount();
+    size_t button_count = m_buttons.GetCount();
+
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+    wxDC& dc = *raw_dc;
+#else
     wxMemoryDC dc;
 
     // use the same layout direction as the window DC uses to ensure that the
@@ -421,16 +430,13 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     dc.SetLayoutDirection(raw_dc->GetLayoutDirection());
 
     wxBitmap bmp;
-    size_t i;
-    size_t page_count = m_pages.GetCount();
-    size_t button_count = m_buttons.GetCount();
-
     // create off-screen bitmap
     bmp.Create(m_rect.GetWidth(), m_rect.GetHeight(),*raw_dc);
     dc.SelectObject(bmp);
 
     if (!dc.IsOk())
         return;
+#endif
 
     // ensure we show as many tabs as possible
     while (m_tabOffset > 0 && IsTabVisible(page_count-1, m_tabOffset-1, &dc, wnd))
@@ -707,9 +713,11 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     }
 
 
+#if !wxALWAYS_NATIVE_DOUBLE_BUFFER
     raw_dc->Blit(m_rect.x, m_rect.y,
                  m_rect.GetWidth(), m_rect.GetHeight(),
                  &dc, 0, 0);
+#endif
 }
 
 // Is the tab visible?
@@ -1512,8 +1520,9 @@ public:
     wxTabFrame()
     {
         m_tabs = NULL;
-        m_rect = wxRect(wxPoint(0,0), FromDIP(wxSize(200,200)));
-        m_tabCtrlHeight = FromDIP(20);
+
+        // Both m_rect and m_tabCtrlHeight will be really initialized later.
+        m_tabCtrlHeight = 0;
     }
 
     ~wxTabFrame()
@@ -1705,7 +1714,6 @@ void wxAuiNotebook::Init()
     m_curPage = -1;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
     m_dummyWnd = NULL;
-    m_tabCtrlHeight = FromDIP(20);
     m_requestedBmpSize = wxDefaultSize;
     m_requestedTabCtrlHeight = -1;
 }

@@ -227,6 +227,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_AND_GUI_OSX_COCOA_SRC" hints="files">
     src/osx/cocoa/power.mm
     src/osx/cocoa/utils.mm
+    src/osx/volume.mm
 </set>
 
 <!-- Base files used by non-wxMac OS X builds -->
@@ -1416,6 +1417,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/sockgtk.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
+    src/gtk/overlay.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
@@ -2284,8 +2286,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
     wx/msw/wx.manifest
-    wx/msw/amd64.manifest
-    wx/msw/ia64.manifest
+    wx/msw/wx_dpi_aware.manifest
+    wx/msw/wx_dpi_aware_pmv2.manifest
     wx/msw/wx.rc
     <!-- bitmaps -->
     wx/msw/colours.bmp
@@ -3109,6 +3111,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
+    src/xrc/xh_bookctrlbase.cpp
 </set>
 <set var="XRC_HDR" hints="files">
     wx/xrc/xh_activityindicator.h
@@ -3179,6 +3182,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_unkwn.h
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
+    wx/xrc/xh_bookctrlbase.h
 </set>
 
 

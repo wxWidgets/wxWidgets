@@ -55,6 +55,7 @@ httpbin_launch() {
     # it may not support Python version that we actually have (this one
     # still works with 3.4, 20.0.1 is the last one to support 3.5).
     python3 -m pip install --user --upgrade pip==19.1.1
+    python3 -m pip install --user wheel
 
     echo "Installing using `python3 -m pip --version`"
 

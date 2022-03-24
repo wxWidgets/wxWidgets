@@ -222,16 +222,59 @@ public:
     int GetDepth() const;
 
     /**
-        Gets the height of the icon in pixels.
+        Gets the height of the icon in physical pixels.
 
-        @see GetWidth()
+        @see GetWidth(), GetLogicalHeight()
     */
     int GetHeight() const;
 
     /**
-        Gets the width of the icon in pixels.
+        Gets the height of the icon in logical pixels.
 
-        @see GetHeight()
+        See wxBitmap::GetLogicalHeight().
+
+        @since 3.1.6
+     */
+    double GetLogicalHeight() const;
+
+    /**
+        Gets the size of the icon in logical pixels.
+
+        See wxBitmap::GetLogicalSize().
+
+        @since 3.1.6
+     */
+    double GetLogicalSize() const;
+
+    /**
+        Gets the width of the icon in logical pixels.
+
+        See wxBitmap::GetLogicalWidth().
+
+        @since 3.1.6
+     */
+    double GetLogicalWidth() const;
+
+    /**
+        Gets the scale factor of this icon.
+
+        See wxBitmap::GetScaleFactor().
+
+        @since 3.1.6
+     */
+    double GetScaleFactor() const;
+
+    /**
+        Gets the size of the icon in physical pixels.
+
+        @see GetLogicalSize()
+     */
+    wxSize GetSize() const;
+
+    /**
+        Gets the width of the icon in physical pixels.
+
+        @see GetHeight(), GetLogicalWidth()
     */
     int GetWidth() const;
 

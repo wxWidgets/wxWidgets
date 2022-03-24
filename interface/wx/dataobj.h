@@ -30,6 +30,8 @@
              A bitmap (wxBitmap).}
     @itemdef{wxDF_METAFILE,
              A metafile (wxMetafile, Windows only).}
+    @itemdef{wxDF_UNICODETEXT,
+             Unicode text format (wxString).}
     @itemdef{wxDF_FILENAME,
              A list of filenames.}
     @itemdef{wxDF_HTML,

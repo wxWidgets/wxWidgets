@@ -18,13 +18,6 @@ class wxBitmapBundleImpl;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-// It should be possible to implement SVG rasterizing without raw bitmap
-// support using wxDC::DrawSpline(), but currently we don't do it and so
-// FromSVG() is only available in the ports providing raw bitmap access.
-#ifdef wxHAS_RAW_BITMAP
-    #define wxHAS_SVG
-#endif
-
 // ----------------------------------------------------------------------------
 // wxBitmapBundle provides 1 or more versions of a bitmap, all bundled together
 // ----------------------------------------------------------------------------
@@ -82,6 +75,18 @@ public:
 
     // This overload currently makes a copy of the data.
     static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
+
+    // This overload works for data not terminated with 0
+    static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+
+    // Load SVG image from the given file (must be a local file, not an URL).
+    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+
+    // Create from SVG image stored as an application resource.
+    // On Windows, name must be a resource with RT_RCDATA type.
+    // On MacOS, name must be a file with an extension "svg" placed in the
+    // "Resources" subdirectory of the application bundle.
+    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
 #endif // wxHAS_SVG
 
     // Create from the resources: all existing versions of the bitmap of the
@@ -97,17 +102,20 @@ public:
     static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
     // Check if bitmap bundle is non-empty.
-    bool IsOk() const { return m_impl; }
+    bool IsOk() const { return m_impl.get() != NULL; }
 
     // Get the size of the bitmap represented by this bundle when using the
     // default DPI, i.e. 100% scaling. Returns invalid size for empty bundle.
     wxSize GetDefaultSize() const;
 
+    // Get the physical size of the preferred bitmap at the given scale.
+    wxSize GetPreferredBitmapSizeAtScale(double scale) const;
+
     // Get preferred size, i.e. usually the closest size in which a bitmap is
     // available to the ideal size determined from the default size and the DPI
-    // scaling, for the given window.
-    wxSize GetPreferredSizeFor(const wxWindow* window) const;
-    wxSize GetPreferredSizeAtScale(double scale) const;
+    // scaling, for the given window, in physical/logical pixels respectively.
+    wxSize GetPreferredBitmapSizeFor(const wxWindow* window) const;
+    wxSize GetPreferredLogicalSizeFor(const wxWindow* window) const;
 
     // Get bitmap of the specified size, creating a new bitmap from the closest
     // available size by rescaling it if necessary.
@@ -115,14 +123,24 @@ public:
     // If size == wxDefaultSize, GetDefaultSize() is used for it instead.
     wxBitmap GetBitmap(const wxSize& size) const;
 
-    // Helper combining GetBitmap() and GetPreferredSizeFor(): returns the
-    // bitmap of the size appropriate for the current DPI scaling of the given
-    // window.
+    // Get icon of the specified size, this is just a convenient wrapper for
+    // GetBitmap() converting the returned bitmap to the icon.
+    wxIcon GetIcon(const wxSize& size) const;
+
+    // Helpers combining GetPreferredBitmapSizeFor() and GetBitmap() or
+    // GetIcon(): return the bitmap or icon of the size appropriate for the
+    // current DPI scaling of the given window.
     wxBitmap GetBitmapFor(const wxWindow* window) const;
+    wxIcon GetIconFor(const wxWindow* window) const;
 
     // Access implementation
     wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
 
+    // Check if two objects refer to the same bundle.
+    bool IsSameAs(const wxBitmapBundle& other) const
+    {
+        return GetImpl() == other.GetImpl();
+    }
 
     // Implementation only from now on.
 
@@ -211,7 +229,7 @@ public:
     // Return the preferred size that should be used at the given scale.
     //
     // Must always return a valid size.
-    virtual wxSize GetPreferredSizeAtScale(double scale) const = 0;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const = 0;
 
     // Retrieve the bitmap of exactly the given size.
     //

@@ -26,6 +26,7 @@
 
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/backend.h"
 
 //-----------------------------------------------------------------------------
 // data
@@ -161,8 +162,7 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 
 #ifdef __WXGTK3__
 #ifndef __WXGTK4__
-    GdkDisplay* display = gdk_window_get_display(gdk_event->window);
-    if (strcmp("GdkWaylandDisplay", g_type_name(G_TYPE_FROM_INSTANCE(display))) == 0)
+    if (wxGTKImpl::IsWayland(gdk_event->window))
 #endif
     {
         gtk_window_begin_move_drag(GTK_WINDOW(win->m_widget),

@@ -211,7 +211,7 @@ public:
     // dnd iface
 
     bool EnableDragSource( const wxDataFormat &format );
-    bool EnableDropTarget( const wxDataFormat &format );
+    bool EnableDropTarget( const wxVector<wxDataFormat> &formats );
 
     gboolean row_draggable( GtkTreeDragSource *drag_source, GtkTreePath *path );
     gboolean drag_data_delete( GtkTreeDragSource *drag_source, GtkTreePath* path );
@@ -275,11 +275,22 @@ public:
 
     void OnInternalIdle();
 
+    enum wxFindNodeMode
+    {
+        // return NULL from FindNode() of a subtree was not realized
+        wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED,
+
+        // call BuildBranch() from FindNode() to realize a subtree
+        wxFIND_NODE_BUILD_SUBTREE,
+    };
+
 protected:
     void InitTree();
     void ScheduleRefresh();
 
-    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
+    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item,
+                                  wxFindNodeMode mode =
+                                    wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED );
     wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
     wxGtkTreeModelNode *FindParentNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindParentNode( GtkTreeIter *iter );
@@ -1832,11 +1843,10 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
     GtkTreeIter parentIter;
     parentIter.stamp = wxgtk_model->stamp;
     parentIter.user_data = (gpointer) parent.GetID();
-    wxGtkTreePath parentPath(wxgtk_tree_model_get_path(
+    wxGtkTreePath path(wxgtk_tree_model_get_path(
         GTK_TREE_MODEL(wxgtk_model), &parentIter ));
 
     // and add the final index ourselves
-    wxGtkTreePath path(gtk_tree_path_copy(parentPath));
     int index = m_internal->GetIndexOf( parent, item );
     gtk_tree_path_append_index( path, index );
 #endif
@@ -1849,10 +1859,11 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
     // Did we remove the last child, causing 'parent' to become a leaf?
     if ( !m_wx_model->IsContainer(parent) )
     {
+        gtk_tree_path_up(path);
         gtk_tree_model_row_has_child_toggled
         (
             GTK_TREE_MODEL(wxgtk_model),
-            parentPath,
+            path,
             &parentIter
         );
     }
@@ -2501,7 +2512,7 @@ void wxCellRendererPixbuf::Set(const wxBitmap& bitmap)
         {
             pixbufNew =
             pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
-                int(bitmap.GetScaledWidth()), int(bitmap.GetScaledHeight()));
+                int(bitmap.GetLogicalWidth()), int(bitmap.GetLogicalHeight()));
         }
     }
     g_object_set(G_OBJECT(this), "pixbuf", pixbuf, NULL);
@@ -2520,8 +2531,8 @@ wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget
         wxCellRendererPixbufParentClass->render(cell, cr, widget, background_area, cell_area, flags);
     else
     {
-        const int x = (cell_area->width  - int(bitmap.GetScaledWidth() )) / 2;
-        const int y = (cell_area->height - int(bitmap.GetScaledHeight())) / 2;
+        const int x = (cell_area->width  - int(bitmap.GetLogicalWidth() )) / 2;
+        const int y = (cell_area->height - int(bitmap.GetLogicalHeight())) / 2;
         bitmap.Draw(cr, cell_area->x + x, cell_area->y + y);
     }
 }
@@ -3171,6 +3182,14 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     return FALSE;
 }
 
+// Helper for wxGtkTreeCellDataFunc() below.
+static void wxGtkTreeSetVisibleProp(GtkCellRenderer *renderer, gboolean visible)
+{
+    wxGtkValue gvalue( G_TYPE_BOOLEAN );
+    g_value_set_boolean( gvalue, visible );
+    g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
+}
+
 extern "C"
 {
 
@@ -3200,16 +3219,22 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     if (!wx_model->IsVirtualListModel())
     {
         gboolean visible = wx_model->HasValue(item, column);
-        wxGtkValue gvalue( G_TYPE_BOOLEAN );
-        g_value_set_boolean( gvalue, visible );
-        g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
+        wxGtkTreeSetVisibleProp(renderer, visible);
 
         if ( !visible )
             return;
     }
 
     cell->GtkSetCurrentItem(item);
-    cell->PrepareForItem(wx_model, item, column);
+
+    if (!cell->PrepareForItem(wx_model, item, column))
+    {
+        // We don't have any value in this cell, after all, so hide it.
+        if (!wx_model->IsVirtualListModel())
+        {
+            wxGtkTreeSetVisibleProp(renderer, FALSE);
+        }
+    }
 }
 
 } // extern "C"
@@ -3227,7 +3252,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     SetTitle( title );
 }
 
-wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell,
+wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
                                     wxAlignment align, int flags )
     : wxDataViewColumnBase( bitmap, cell, model_column )
@@ -3318,7 +3343,7 @@ wxString wxDataViewColumn::GetTitle() const
            );
 }
 
-void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
+void wxDataViewColumn::SetBitmap( const wxBitmapBundle &bitmap )
 {
     wxDataViewColumnBase::SetBitmap( bitmap );
 
@@ -3780,9 +3805,17 @@ bool wxDataViewCtrlInternal::EnableDragSource( const wxDataFormat &format )
     return true;
 }
 
-bool wxDataViewCtrlInternal::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrlInternal::EnableDropTarget( const wxVector<wxDataFormat>& formats )
 {
-    wxGtkString atom_str( gdk_atom_name( format  ) );
+    if (formats.empty())
+    {
+        gtk_tree_view_unset_rows_drag_dest(GTK_TREE_VIEW(m_owner->GtkGetTreeView()));
+
+        return true;
+    }
+
+    // TODO: Use all formats, not just the first one.
+    wxGtkString atom_str( gdk_atom_name( formats[0] ) );
     m_dropTargetTargetEntryTarget = wxCharBuffer( atom_str );
 
     m_dropTargetTargetEntry.target =  m_dropTargetTargetEntryTarget.data();
@@ -3937,7 +3970,7 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
 {
     if (!m_wx_model->IsVirtualListModel())
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent );
+        wxGtkTreeModelNode *parent_node = FindNode( parent, wxFIND_NODE_BUILD_SUBTREE );
         wxCHECK_MSG(parent_node, false,
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
@@ -3950,6 +3983,17 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
 
         const wxGtkTreeModelChildren& nodeSiblings = parent_node->GetChildren();
         const int nodeSiblingsSize = nodeSiblings.size();
+
+        if ( nodeSiblingsSize == 0 )
+        {
+            BuildBranch( parent_node );
+            return true;
+        }
+        else
+        {
+            if ( parent_node->FindChildByItem(item) != wxNOT_FOUND )
+                return true;
+        }
 
         int nodePos = 0;
 
@@ -4376,10 +4420,13 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
 }
 
 
-static wxGtkTreeModelNode*
-wxDataViewCtrlInternal_FindNode( wxDataViewModel * model, wxGtkTreeModelNode *treeNode, const wxDataViewItem &item )
+wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item,
+                                                      wxFindNodeMode mode )
 {
-    if( model == NULL )
+    if ( !item.IsOk() )
+        return m_root;
+
+    if( m_wx_model == NULL )
         return NULL;
 
     ItemList list;
@@ -4390,14 +4437,25 @@ wxDataViewCtrlInternal_FindNode( wxDataViewModel * model, wxGtkTreeModelNode *tr
     {
         wxDataViewItem * pItem = new wxDataViewItem( it );
         list.Insert( pItem );
-        it = model->GetParent( it );
+        it = m_wx_model->GetParent( it );
     }
 
-    wxGtkTreeModelNode * node = treeNode;
+    wxGtkTreeModelNode * node = m_root;
     for( ItemList::compatibility_iterator n = list.GetFirst(); n; n = n->GetNext() )
     {
         if( node && node->GetNodes().GetCount() != 0 )
         {
+            switch ( mode )
+            {
+                case wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED:
+                    // Do nothing and a subtree will not built.
+                    break;
+
+                case wxFIND_NODE_BUILD_SUBTREE:
+                    BuildBranch( node );
+                    break;
+            }
+
             int len = node->GetNodes().GetCount();
             wxGtkTreeModelNodes &nodes = node->GetNodes();
             int j = 0;
@@ -4428,35 +4486,14 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
         return m_root;
 
     wxDataViewItem item( (void*) iter->user_data );
-    if (!item.IsOk())
-        return m_root;
 
-    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_wx_model, m_root, item );
+    const wxFindNodeMode mode = wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED;
+    wxGtkTreeModelNode *result = FindNode( item, mode );
 
 /*
     if (!result)
     {
         wxLogDebug( "Not found %p", iter->user_data );
-        char *crash = NULL;
-        *crash = 0;
-    }
-    // TODO: remove this code
-*/
-
-    return result;
-}
-
-wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item )
-{
-    if (!item.IsOk())
-        return m_root;
-
-    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_wx_model, m_root, item );
-
-/*
-    if (!result)
-    {
-        wxLogDebug( "Not found %p", item.GetID() );
         char *crash = NULL;
         *crash = 0;
     }
@@ -4625,8 +4662,8 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
                                      GdkEventMotion *gdk_event,
                                      wxDataViewCtrl *dv )
 {
-    int x = gdk_event->x;
-    int y = gdk_event->y;
+    int x = int(gdk_event->x);
+    int y = int(gdk_event->y);
     if (gdk_event->is_hint)
     {
 #ifdef __WXGTK3__
@@ -4679,6 +4716,8 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         if (gdk_event->window != gtk_tree_view_get_bin_window(treeview))
             return FALSE;
 
+        int x = int(gdk_event->x);
+        int y = int(gdk_event->y);
         wxGtkTreePath path;
         GtkTreeViewColumn *column = NULL;
         gint cell_x = 0;
@@ -4686,7 +4725,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         gtk_tree_view_get_path_at_pos
         (
             treeview,
-            (int) gdk_event->x, (int) gdk_event->y,
+            x, y,
             path.ByRef(),
             &column,
             &cell_x,
@@ -4708,6 +4747,13 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
 
         wxDataViewEvent
             event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKPathToItem(path));
+#if GTK_CHECK_VERSION(2,12,0)
+        if (wx_is_at_least_gtk2(12))
+        {
+            gtk_tree_view_convert_bin_window_to_widget_coords(treeview, x, y, &x, &y);
+            event.SetPosition(x, y);
+        }
+#endif
         return dv->HandleWindowEvent( event );
     }
 
@@ -4908,10 +4954,10 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return m_internal->EnableDragSource( format );
 }
 
-bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat>& formats )
 {
     wxCHECK_MSG( m_internal, false, "model must be associated before calling EnableDragTarget" );
-    return m_internal->EnableDropTarget( format );
+    return m_internal->EnableDropTarget( formats );
 }
 
 bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )

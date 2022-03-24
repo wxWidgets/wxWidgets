@@ -54,6 +54,8 @@ public:
     virtual void SetRange(int minVal, int maxVal) wxOVERRIDE;
     virtual int GetValue() const wxOVERRIDE;
     virtual void SetValue(int val) wxOVERRIDE;
+    virtual void SetIncrement(int value) wxOVERRIDE;
+    virtual int GetIncrement() const wxOVERRIDE;
 
     // implementation
 

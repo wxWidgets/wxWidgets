@@ -278,6 +278,9 @@ void wxListCtrl::Init()
     m_colCount = 0;
     m_textCtrl = NULL;
 
+    m_sortAsc = true;
+    m_sortCol = -1;
+
     m_hasAnyAttr = false;
 
     m_headerCustomDraw = NULL;
@@ -464,6 +467,8 @@ void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 
         SetColumnWidth(i, event.ScaleX(width));
     }
+
+    event.Skip();
 }
 
 bool wxListCtrl::IsDoubleBuffered() const
@@ -1452,6 +1457,27 @@ bool wxListCtrl::IsItemChecked(long item) const
     return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
+void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
+{
+    if ( idx != m_sortCol || (idx != -1 && ascending != m_sortAsc) )
+    {
+        m_sortCol = idx;
+        m_sortAsc = ascending;
+
+        DrawSortArrow();
+    }
+}
+
+int wxListCtrl::GetSortIndicator() const
+{
+    return m_sortCol;
+}
+
+bool wxListCtrl::IsAscendingSortIndicator() const
+{
+    return m_sortAsc;
+}
+
 // Gets the number of selected items in the list control
 int wxListCtrl::GetSelectedItemCount() const
 {
@@ -2044,6 +2070,11 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
     {
         SetColumnWidth(n, wxLIST_AUTOSIZE_USEHEADER);
     }
+
+    // Update the sort indicator if the index of the column for which it was
+    // set changed. Note that this condition works even if m_sortCol == -1.
+    if ( col <= m_sortCol )
+        DrawSortArrow();
 
     return n;
 }
@@ -3359,6 +3390,39 @@ void wxListCtrl::OnCharHook(wxKeyEvent& event)
     }
 
     event.Skip();
+}
+
+void wxListCtrl::DrawSortArrow()
+{
+    if ( HasFlag(wxLC_SORT_ASCENDING) || HasFlag(wxLC_SORT_DESCENDING) )
+    {
+        m_sortCol = 0;
+        m_sortAsc = HasFlag(wxLC_SORT_ASCENDING);
+    }
+
+    LV_COLUMN lvCol;
+    wxZeroMemory(lvCol);
+    lvCol.mask = LVCF_FMT;
+
+    for ( int col = 0; col < m_colCount; ++col )
+    {
+        if ( ListView_GetColumn(GetHwnd(), col, &lvCol) )
+        {
+            if ( col == m_sortCol )
+            {
+                if ( m_sortAsc )
+                    lvCol.fmt = (lvCol.fmt & ~HDF_SORTDOWN) | HDF_SORTUP;
+                else
+                    lvCol.fmt = (lvCol.fmt & ~HDF_SORTUP) | HDF_SORTDOWN;
+            }
+            else
+            {
+                lvCol.fmt = lvCol.fmt & ~(HDF_SORTDOWN | HDF_SORTUP);
+            }
+
+            ListView_SetColumn(GetHwnd(), col, &lvCol);
+        }
+    }
 }
 
 WXLRESULT

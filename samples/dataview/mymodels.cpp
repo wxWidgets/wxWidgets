@@ -17,16 +17,9 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/dataview.h"
 #include "mymodels.h"
-
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
-
-#include "null.xpm"
-#include "wx_small.xpm"
-
 
 // ----------------------------------------------------------------------------
 // MyMusicTreeModel
@@ -40,6 +33,8 @@ MyMusicTreeModel::MyMusicTreeModel()
     m_pop = new MyMusicTreeModelNode( m_root, "Pop music" );
     m_pop->Append(
         new MyMusicTreeModelNode( m_pop, "You are not alone", "Michael Jackson", 1995 ) );
+    m_pop->Append(
+        new MyMusicTreeModelNode( m_pop, "Yesterday", "The Beatles", -1 /* not specified */ ) );
     m_pop->Append(
         new MyMusicTreeModelNode( m_pop, "Take a bow", "Madonna", 1994 ) );
     m_root->Append( m_pop );
@@ -150,6 +145,21 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
     // notify control
     ItemDeleted( parent, item );
 }
+void MyMusicTreeModel::Clear()
+{
+    m_pop       = NULL;
+    m_classical = NULL;
+    m_ninth     = NULL;
+
+    while (!m_root->GetChildren().IsEmpty())
+    {
+        MyMusicTreeModelNode* node = m_root->GetNthChild(0);
+        m_root->GetChildren().Remove(node);
+        delete node;
+    }
+
+    Cleared();
+}
 
 int MyMusicTreeModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
                                unsigned int column, bool ascending ) const
@@ -193,7 +203,8 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         variant = node->m_artist;
         break;
     case 2:
-        variant = (long) node->m_year;
+        if (node->m_year != -1)
+            variant = (long) node->m_year;
         break;
     case 3:
         variant = node->m_quality;
@@ -202,7 +213,9 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         variant = 80L;  // all music is very 80% popular
         break;
     case 5:
-        if (GetYear(item) < 1900)
+        if (node->m_year == -1)
+            variant = "n/a";
+        else if (node->m_year < 1900)
             variant = "old";
         else
             variant = "new";
@@ -248,7 +261,16 @@ bool MyMusicTreeModel::IsEnabled( const wxDataViewItem &item,
     MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
 
     // disable Beethoven's ratings, his pieces can only be good
-    return !(col == 3 && node->m_artist.EndsWith("Beethoven"));
+    if (col == 3 && node->m_artist.EndsWith("Beethoven"))
+        return false;
+
+    // also disable editing the year when it's not specified, this doesn't work
+    // because the editor needs some initial value
+    if (col == 2 && node->m_year == -1)
+        return false;
+
+    // otherwise allow editing
+    return true;
 }
 
 wxDataViewItem MyMusicTreeModel::GetParent( const wxDataViewItem &item ) const
@@ -364,20 +386,10 @@ MyListModel::MyListModel(int modelFlags) :
     m_iconColValues.assign(NUMBER_REAL_ITEMS,
         useMultiLine ? multiLineText : wxString("test"));
 
-    m_icon[0] = wxIcon( null_xpm );
+    const wxSize size = GetIconSizeFromModelFlags(modelFlags);
 
-    const int newSize = m_icon[0].GetWidth() * 2;
-    const bool useTallRows = (modelFlags & MODEL_USE_TALL_ROWS) != 0;
-
-    if ( useTallRows )
-        m_icon[0].CopyFromBitmap(
-            wxImage(null_xpm).Rescale(newSize, newSize));
-
-    if ( !useTallRows || (modelFlags & MODEL_KEEP_LOGO_SMALL) )
-        m_icon[1] = wxIcon( wx_small_xpm );
-    else
-        m_icon[1].CopyFromBitmap(
-            wxImage(wx_small_xpm).Rescale(newSize, newSize));
+    m_icon[0] = wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_LIST, size);
+    m_icon[1] = wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_LIST, size);
 }
 
 void MyListModel::Prepend( const wxString &text )

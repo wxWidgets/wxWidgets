@@ -13,8 +13,6 @@
 
 #include "wx/palette.h"
 
-#define wxHAS_BITMAP_SCALE_FACTOR
-
 // Bitmap
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class wxBitmapRefData ;
@@ -152,9 +150,6 @@ public:
     // Create a bitmap compatible with the given DC, inheriting its magnification factor
     bool Create(int width, int height, const wxDC& dc);
 
-    // Create a bitmap with a scale factor, width and height are multiplied with that factor
-    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale) wxOVERRIDE;
-
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const wxOVERRIDE;
@@ -247,6 +242,8 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth) wxOVERRIDE;
 };
 
 #endif // _WX_BITMAP_H_

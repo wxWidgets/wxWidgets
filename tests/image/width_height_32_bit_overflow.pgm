@@ -4,7 +4,7 @@ P2
 # width * height * 3 overflows a 32-bit integer.
 #
 # It is a regression test for
-#   https://trac.wxwidgets.org/ticket/19326
+#   https://github.com/wxWidgets/wxWidgets/issues/19326
 #
 # Each line encodes 32 pixels.  The idea is to
 # have enough of an image present to overwrite a buffer

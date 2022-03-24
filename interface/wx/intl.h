@@ -270,12 +270,14 @@ enum wxLocaleForm
     wxLocale class encapsulates all language-dependent settings and is a
     generalization of the C locale concept.
 
-    @note While this class can still be used in wxMSW and wxGTK ports, it
-        doesn't work in wxOSX where it is impossible to change the application
-        UI locale after launching it. Worse, since macOS 11 (Big Sur), using
-        wxLocale can break application display due to bugs in C locale support
-        in macOS itself. Because of this, it is recommended to use wxUILocale
-        instead of this class for the applications targeting macOS.
+    @note This class is known to have several problems under macOS: first of all,
+        it is impossible to change the application UI locale after launching it
+        under this platform and so using this class doesn't affect the native
+        controls and dialogs there. Additionally, versions of macOS between
+        11.0 and 12.2 inclusive are affected by a bug when changing C locale can
+        break display of the application menus. Because of this, it is
+        recommended to use wxUILocale instead of this class for the
+        applications targeting macOS.
 
     In wxWidgets this class manages current locale. It also initializes and
     activates wxTranslations object that manages message catalogs.

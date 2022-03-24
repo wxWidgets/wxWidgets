@@ -1213,7 +1213,7 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
     text->AppendText("Red text\n");
     text->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
     text->AppendText("Red on grey text\n");
-    text->SetDefaultStyle(wxTextAttr(*wxBLUE);
+    text->SetDefaultStyle(wxTextAttr(*wxBLUE));
     text->AppendText("Blue on grey text\n");
     @endcode
 

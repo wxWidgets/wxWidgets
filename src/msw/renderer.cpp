@@ -363,26 +363,24 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
         return;
     }
 
-    wxBrush brush;
     if ( flags & wxCONTROL_SELECTED )
     {
-        if ( flags & wxCONTROL_FOCUSED )
+        wxColour color(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        if ((flags & wxCONTROL_FOCUSED) == 0)
         {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            // Use wxSYS_COLOUR_BTNFACE for unfocused selection, but only if it
+            // has enough contrast with wxSYS_COLOUR_HIGHLIGHTTEXT, as otherwise
+            // the text will be unreadable
+            const wxColour btnface(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+            const wxColour highlightText(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+            if (fabs(btnface.GetLuminance() - highlightText.GetLuminance()) > 0.5)
+                color = btnface;
         }
-        else // !focused
-        {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-        }
-    }
-    else // !selected
-    {
-        brush = *wxTRANSPARENT_BRUSH;
-    }
 
-    wxDCBrushChanger setBrush(dc, brush);
-    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
-    dc.DrawRectangle( rect );
+        wxDCBrushChanger setBrush(dc, wxBrush(color));
+        wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+        dc.DrawRectangle(rect);
+    }
 
     if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
         DrawFocusRect( win, dc, rect, flags );

@@ -91,7 +91,10 @@ bool wxNotificationMessageBase::AddAction(wxWindowID actionid, const wxString &l
 
 void wxNotificationMessage::Init()
 {
-    m_impl = new wxGenericNotificationMessageImpl(this);
+    // This is only used when we derive from wxGenericNotificationMessage,
+    // which already initializes its m_impl correctly, so there is nothing to
+    // do here (but we still need to have this method for consistency with the
+    // native implementations).
 }
 
 #endif

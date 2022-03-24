@@ -119,6 +119,13 @@ enum
     wxUSER_ATTENTION_ERROR = 2
 };
 
+// Values for Get/SetContentProtection
+enum wxContentProtection
+{
+    wxCONTENT_PROTECTION_NONE,
+    wxCONTENT_PROTECTION_ENABLED
+};
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow: a top level (as opposed to child) window
 // ----------------------------------------------------------------------------
@@ -164,7 +171,8 @@ public:
     // set the frame icons
     virtual void SetIcons(const wxIconBundle& icons) { m_icons = icons; }
 
-    virtual bool EnableFullScreenView(bool WXUNUSED(enable) = true)
+    virtual bool EnableFullScreenView(bool WXUNUSED(enable) = true,
+                                      long WXUNUSED(style) = wxFULLSCREEN_ALL)
     {
         return false;
     }
@@ -180,6 +188,11 @@ public:
 
     // return true if the frame is in fullscreen mode
     virtual bool IsFullScreen() const = 0;
+
+    virtual wxContentProtection GetContentProtection() const
+        { return wxCONTENT_PROTECTION_NONE; }
+    virtual bool SetContentProtection(wxContentProtection WXUNUSED(contentProtection))
+        { return false; }
 
     // the title of the top level window: the text which the
     // window shows usually at the top of the frame/dialog in dedicated bar

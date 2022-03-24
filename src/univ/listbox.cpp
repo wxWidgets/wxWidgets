@@ -1439,8 +1439,6 @@ bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
     if ( !action.IsEmpty() )
     {
         lbox->PerformAction(action, item);
-
-        return true;
     }
 
     return wxStdInputHandler::HandleMouse(consumer, event);

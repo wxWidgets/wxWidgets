@@ -130,10 +130,27 @@ public:
             m_placement.showCmd = SW_HIDE;
         }
 
+        const wxSize oldDPI = tlw->GetDPI();
         if ( !::SetWindowPlacement(GetHwndOf(tlw), &m_placement) )
         {
             wxLogLastError(wxS("SetWindowPlacement"));
             return false;
+        }
+
+        // Check if a window DPI hasn't changed, as the result of being placed
+        // on a monitor with a different DPI from the main one because in this
+        // case its size is not restored properly.
+        const wxSize newDPI = tlw->GetDPI();
+        if ( oldDPI != newDPI )
+        {
+            // So try setting the placement again as now it will use the
+            // correct scaling factor, because the window is already on the
+            // correct monitor.
+            if ( !::SetWindowPlacement(GetHwndOf(tlw), &m_placement) )
+            {
+                wxLogLastError(wxS("SetWindowPlacement (2nd time)"));
+                return false;
+            }
         }
 
         return true;

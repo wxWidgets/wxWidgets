@@ -1156,7 +1156,7 @@ wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
                                  const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
 #ifdef __WXGTK__
-    , m_wxfont(wxFontInfo(wxSize(sizeInPixels, sizeInPixels))
+    , m_wxfont(wxFontInfo(wxSize(int(sizeInPixels), int(sizeInPixels)))
                 .AllFlags(flags).FaceName(facename))
 #endif
 {
@@ -2506,7 +2506,7 @@ void wxCairoContext::Init(cairo_t *context)
     // Factor" in Gnome Tweaks, "Force font DPI" in KDE System Settings or
     // GDK_DPI_SCALE environment variable).
     GdkScreen* screen = gdk_screen_get_default();
-    m_fontScalingFactor = screen ? gdk_screen_get_resolution(screen) / 96.0 : 1.0;
+    m_fontScalingFactor = screen ? float(gdk_screen_get_resolution(screen) / 96.0) : 1.0f;
 #endif
 
     m_context = context;
@@ -3067,7 +3067,7 @@ bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
 
 void wxCairoContext::BeginLayer(wxDouble opacity)
 {
-    m_layerOpacities.push_back(opacity);
+    m_layerOpacities.push_back(float(opacity));
     cairo_push_group(m_context);
 }
 

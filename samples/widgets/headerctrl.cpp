@@ -209,7 +209,7 @@ void HeaderCtrlWidgetsPage::RecreateWidget()
         if ( m_colSettings[i].chkWithBitmap->IsChecked() )
         {
             const wxArtID icons[] = { wxART_ERROR, wxART_QUESTION, wxART_WARNING, wxART_INFORMATION };
-            col.SetBitmap(wxArtProvider::GetIcon(icons[i % WXSIZEOF(icons)], wxART_BUTTON));
+            col.SetBitmap(wxArtProvider::GetBitmapBundle(icons[i % WXSIZEOF(icons)], wxART_BUTTON));
         }
         m_header->AppendColumn(col);
     }

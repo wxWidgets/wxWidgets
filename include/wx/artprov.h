@@ -19,6 +19,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxArtProvidersList;
 class WXDLLIMPEXP_FWD_CORE wxArtProviderCache;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 class wxArtProviderModule;
 
 // ----------------------------------------------------------------------------
@@ -116,6 +118,11 @@ typedef wxString wxArtID;
 
 #define wxART_EDIT                 wxART_MAKE_ART_ID(wxART_EDIT)
 
+#define wxART_WX_LOGO              wxART_MAKE_ART_ID(wxART_WX_LOGO)
+
+#define wxART_REFRESH              wxART_MAKE_ART_ID(wxART_REFRESH)
+#define wxART_STOP                 wxART_MAKE_ART_ID(wxART_STOP)
+
 // ----------------------------------------------------------------------------
 // wxArtProvider class
 // ----------------------------------------------------------------------------
@@ -139,7 +146,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_8
     // use PushBack(), it's the same thing
-    static wxDEPRECATED( void Insert(wxArtProvider *provider) );
+    wxDEPRECATED( static void Insert(wxArtProvider *provider) );
 #endif
 
     // Remove latest added provider and delete it.
@@ -191,14 +198,20 @@ public:
                                       const wxArtClient& client = wxASCII_STR(wxART_OTHER));
 
     // Gets native size for given 'client' or wxDefaultSize if it doesn't
-    // have native equivalent
-    static wxSize GetNativeSizeHint(const wxArtClient& client);
+    // have native equivalent. The first version returns the size in logical
+    // pixels while the second one returns it in DIPs.
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
 
-    // Get the size hint of an icon from a specific wxArtClient, queries
-    // the topmost provider if platform_dependent = false
-    static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
+    // Get the size hint of an icon from a specific wxArtClient from the
+    // topmost (i.e. first used) provider.
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetDIPSizeHint(const wxArtClient& client);
 
 #if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use GetSizeHint() without bool argument or GetNativeSizeHint()")
+    static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent);
+
     wxDEPRECATED_MSG("use wxBitmap::Rescale() instead.")
     static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded);
 #endif // WXWIN_COMPATIBILITY_3_0
@@ -218,15 +231,20 @@ protected:
     // Destroy caches & all providers
     static void CleanUpProviders();
 
-    // Get the default size of an icon for a specific client
-    virtual wxSize DoGetSizeHint(const wxArtClient& client)
-    {
-        return GetSizeHint(client, true);
-    }
+    // Get the default size of an icon for a specific client.
+    //
+    // Although this function doesn't have "DIP" in its name, it should return
+    // the size in DIPs.
+    virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
-    // Derived classes must override CreateBitmap or CreateIconBundle
-    // (or both) to create requested art resource. This method is called
-    // only once per instance's lifetime for each requested wxArtID.
+    // Derived classes must override at least one of the CreateXXX() functions
+    // below to create requested art resource. Overriding more than one of them
+    // is also possible but is usually not needed, as both GetBitmap() and
+    // GetBitmapBundle() will try using both CreateBitmap() and
+    // CreateBitmapBundle().
+    //
+    // Note that these methods are called only once per instance's lifetime for
+    // each requested wxArtID as the return value is cached.
     virtual wxBitmap CreateBitmap(const wxArtID& WXUNUSED(id),
                                   const wxArtClient& WXUNUSED(client),
                                   const wxSize& WXUNUSED(size))
@@ -234,13 +252,11 @@ protected:
         return wxNullBitmap;
     }
 
-    // Derived classes must override CreateBitmapBundle if they provide
-    // a bundle that cannot be represented through an ordinary bitmap.
-    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
-                                              const wxArtClient& client,
-                                              const wxSize& size)
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& WXUNUSED(id),
+                                              const wxArtClient& WXUNUSED(client),
+                                              const wxSize& WXUNUSED(size))
     {
-        return wxBitmapBundle(CreateBitmap(id, client, size));
+        return wxBitmapBundle();
     }
 
     virtual wxIconBundle CreateIconBundle(const wxArtID& WXUNUSED(id),
@@ -248,6 +264,11 @@ protected:
     {
         return wxNullIconBundle;
     }
+
+    // Helper for resizing the bitmaps to the requested size without scaling
+    // them up nor resizing (16, 15) bitmaps to (16, 16) -- or doing anything
+    // at all if the bitmap is already of the required size.
+    static void RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded);
 
 private:
     static void CommonAddingProvider();

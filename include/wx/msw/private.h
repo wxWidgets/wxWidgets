@@ -437,13 +437,14 @@ private:
     wxDECLARE_NO_COPY_CLASS(ScreenHDC);
 };
 
-// the same as ScreenHDC but for window DCs
+// the same as ScreenHDC but for window DCs (and if HWND is NULL, then exactly
+// the same as it)
 class WindowHDC
 {
 public:
     WindowHDC() : m_hwnd(NULL), m_hdc(NULL) { }
     WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
-   ~WindowHDC() { if ( m_hwnd && m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
+   ~WindowHDC() { if ( m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
 
     operator HDC() const { return m_hdc; }
 
@@ -469,6 +470,13 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(MemoryHDC);
 };
+
+// Helper function returning the resolution of the given HDC.
+inline wxSize wxGetDPIofHDC(HDC hdc)
+{
+    return wxSize(::GetDeviceCaps(hdc, LOGPIXELSX),
+                  ::GetDeviceCaps(hdc, LOGPIXELSY));
+}
 
 // a class which selects a GDI object into a DC in its ctor and deselects in
 // dtor

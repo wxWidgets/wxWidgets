@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/backend.h"
 #ifdef GDK_WINDOWING_X11
     #ifndef __WXGTK4__
         #include "wx/unix/private/displayx11.h"
@@ -179,7 +180,7 @@ bool wxDisplayImplGTK::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 
 static inline bool wxIsX11GDKScreen(GdkScreen* screen)
 {
-    return strcmp("GdkX11Screen", g_type_name(G_TYPE_FROM_INSTANCE(screen))) == 0;
+    return wxGTKImpl::IsX11(screen);
 }
 
 #else // !__WXGTK3__

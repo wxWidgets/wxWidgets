@@ -78,11 +78,23 @@ public:
     virtual wxString GetTitle() const = 0;
 
     /**
-        Returns the bitmap in the header of the column, if any.
-
-        If the column has no associated bitmap, wxNullBitmap should be returned.
+        This function exists only for backwards compatibility, it's recommended to override
+        GetBitmapBundle() in the new code and override this one to do nothing, as it will
+        never be called if GetBitmapBundle() is overridden.
     */
     virtual wxBitmap GetBitmap() const = 0;
+
+    /**
+        Returns the bitmap in the header of the column, if any.
+        If the column has no associated bitmap, empty wxBitmapBundle should be returned.
+
+        Override this function to return the bundle containing the bitmap to show in the
+        column header. By default delegates to GetBitmap() but should be overridden if
+        the bitmaps are used.
+
+        @since 3.1.6
+    */
+    virtual wxBitmapBundle GetBitmapBundle() const;
 
     /**
         Returns the current width of the column.
@@ -205,7 +217,7 @@ public:
         Notice that the bitmaps displayed in different columns of the same
         control must all be of the same size.
      */
-    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) = 0;
 
     /**
         Set the column width.
@@ -409,7 +421,7 @@ public:
                          wxAlignment align = wxALIGN_NOT,
                          int flags = wxCOL_DEFAULT_FLAGS);
 
-    wxHeaderColumnSimple(const wxBitmap &bitmap,
+    wxHeaderColumnSimple(const wxBitmapBundle &bitmap,
                          int width = wxCOL_WIDTH_DEFAULT,
                          wxAlignment align = wxALIGN_CENTER,
                          int flags = wxCOL_DEFAULT_FLAGS);
@@ -421,8 +433,9 @@ public:
 
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
-    virtual void SetBitmap(const wxBitmap& bitmap);
+    virtual void SetBitmap(const wxBitmapBundle& bitmap);
     virtual wxBitmap GetBitmap() const;
+    virtual wxBitmapBundle GetBitmapBundle() const;
     virtual void SetWidth(int width);
     virtual int GetWidth() const;
     virtual void SetMinWidth(int minWidth);

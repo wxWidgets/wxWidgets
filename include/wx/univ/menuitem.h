@@ -37,16 +37,16 @@ public:
     // we add some extra functions which are also available under MSW from
     // wxOwnerDrawn class - they will be moved to wxMenuItemBase later
     // hopefully
-    void SetBitmaps(const wxBitmap& bmpChecked,
-                    const wxBitmap& bmpUnchecked = wxNullBitmap);
-    void SetBitmap(const wxBitmap& bmp) { SetBitmaps(bmp); }
-    const wxBitmap& GetBitmap(bool checked = true) const
-      { return checked ? m_bmpChecked : m_bmpUnchecked; }
+    void SetBitmaps(const wxBitmapBundle& bmpChecked,
+                    const wxBitmapBundle& bmpUnchecked = wxBitmapBundle());
+    void SetBitmap(const wxBitmapBundle& bmp) { SetBitmaps(bmp); }
+    wxBitmap GetBitmap(bool checked = true) const
+      { return GetBitmapFromBundle(checked ? m_bmpChecked : m_bmpUnchecked); }
 
-    void SetDisabledBitmap( const wxBitmap& bmpDisabled )
+    void SetDisabledBitmap( const wxBitmapBundle& bmpDisabled )
       { m_bmpDisabled = bmpDisabled; }
-    const wxBitmap& GetDisabledBitmap() const
-      { return m_bmpDisabled; }
+    wxBitmap GetDisabledBitmap() const
+      { return GetBitmapFromBundle(m_bmpDisabled); }
 
     // mark item as belonging to the given radio group
     void SetAsRadioGroupStart();
@@ -93,9 +93,9 @@ protected:
     void UpdateAccelInfo();
 
     // the bitmaps (may be invalid, then they're not used)
-    wxBitmap m_bmpChecked,
-             m_bmpUnchecked,
-             m_bmpDisabled;
+    wxBitmapBundle m_bmpChecked,
+                   m_bmpUnchecked,
+                   m_bmpDisabled;
 
     // the positions of the first and last items of the radio group this item
     // belongs to or -1: start is the radio group start and is valid for all

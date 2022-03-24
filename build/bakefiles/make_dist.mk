@@ -319,7 +319,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	$(CP_P) $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
 	$(CP_P) $(SAMPDIR)/console/console.cpp $(DISTDIR)/samples/console
 	$(CP_P) $(SAMPDIR)/console/console.dsp $(DISTDIR)/samples/console
-	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 	mv $(DISTDIR) $(BASEDISTDIR)
 

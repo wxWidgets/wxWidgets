@@ -12,7 +12,7 @@
     String class for passing textual data to or receiving it from wxWidgets.
 
     @note
-    While the use of wxString is unavoidable in wxWidgets program, you are
+    While the use of wxString is unavoidable in wxWidgets programs, you are
     encouraged to use the standard string classes @c std::string or @c
     std::wstring in your applications and convert them to and from wxString
     only when interacting with wxWidgets.
@@ -1240,12 +1240,27 @@ public:
     bool ToDouble(double* val) const;
 
     /**
-        Variant of ToDouble() always working in "C" locale.
+        Variant of ToDouble(), always working in "C" locale.
 
-        Works like ToDouble() but unlike it this function expects the floating point
+        Works like ToDouble(), but this function expects the floating point
         number to be formatted always with the rules dictated by the "C" locale
         (in particular, the decimal point must be a dot), independently from the
         current application-wide locale (see wxLocale).
+
+        @code
+        double val(0);
+
+        // Will extract 2.2 from the string, but returns
+        // false because the "lbs" section of the string
+        // was not part of the conversion.
+        wxString str("2.2lbs");
+        bool fullStringConverted = str.ToCDouble(&val);
+
+        // Will also extract 2.2, but returns true because
+        // the entirety of the string was converted to a double.
+        str.assign("2.2");
+        fullStringConverted = str.ToCDouble(&val);
+        @endcode
 
         @see ToDouble(), ToLong(), ToULong()
     */

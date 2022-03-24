@@ -116,11 +116,11 @@ wxIconBundle wxMacArtProvider::CreateIconBundle(const wxArtID& id, const wxArtCl
 #endif
 
 // ----------------------------------------------------------------------------
-// wxArtProvider::GetNativeSizeHint()
+// wxArtProvider::GetNativeDIPSizeHint()
 // ----------------------------------------------------------------------------
 
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& client)
 {
     if ( client == wxART_TOOLBAR )
     {

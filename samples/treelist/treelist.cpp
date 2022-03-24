@@ -363,9 +363,9 @@ MyFrame::~MyFrame()
 
 void MyFrame::InitImageList()
 {
-    wxSize iconSize = wxArtProvider::GetSizeHint(wxART_LIST);
+    wxSize iconSize = wxArtProvider::GetSizeHint(wxART_LIST, this);
     if ( iconSize == wxDefaultSize )
-        iconSize = wxSize(16, 16);
+        iconSize = FromDIP(wxSize(16, 16));
 
     m_imageList = new wxImageList(iconSize.x, iconSize.y);
 

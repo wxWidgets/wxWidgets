@@ -282,7 +282,7 @@ void XmlTestCase::PI()
 void XmlTestCase::Escaping()
 {
     // Verify that attribute values are escaped correctly, see
-    // https://trac.wxwidgets.org/ticket/12275
+    // https://github.com/wxWidgets/wxWidgets/issues/12275
 
     const char *xmlText =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -436,7 +436,7 @@ void XmlTestCase::SetRoot()
     CPPUNIT_ASSERT( !doc.IsOk() );
     wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "root");
 
-    // Test for the problem of https://trac.wxwidgets.org/ticket/13135
+    // Test for the problem of https://github.com/wxWidgets/wxWidgets/issues/13135
     doc.SetRoot( root );
     wxXmlNode *docNode = doc.GetDocumentNode();
     CPPUNIT_ASSERT( docNode );

@@ -244,7 +244,7 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
                     m_notebook->AddPage(wnd,
                                         GetText(wxS("label")),
                                         GetBool(wxS("selected")),
-                                        GetBitmap(wxS("bitmap"), wxART_OTHER));
+                                        GetBitmapBundle(wxS("bitmap"), wxART_OTHER));
                 }
                 else
                 {

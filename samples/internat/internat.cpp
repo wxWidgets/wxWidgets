@@ -210,7 +210,7 @@ bool MyApp::OnInit()
         langInfo = wxLocale::GetLanguageInfo(wxLANGUAGE_DEFAULT);
     const wxString
         langDesc = langInfo ? langInfo->Description
-                            : "the default system locale";
+                            : wxString("the default system locale");
 
     if ( m_setLocale == Locale_Ask )
     {

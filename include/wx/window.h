@@ -49,10 +49,6 @@
     #define wxUSE_MENUS_NATIVE wxUSE_MENUS
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 
-#if defined(__WXGTK3__) || defined(__WXMAC__)
-    #define wxHAVE_DPI_INDEPENDENT_PIXELS
-#endif
-
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -542,7 +538,7 @@ public:
 
     // Return the magnification of the content of this window for the platforms
     // using logical pixels different from physical ones, i.e. those for which
-    // wxHAVE_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
+    // wxHAS_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
     // returns 1, regardless of DPI scale factor returned by the function below.
     virtual double GetContentScaleFactor() const;
 
@@ -985,6 +981,57 @@ public:
     // wxWidgets public API.
     virtual void WXAdjustFontToOwnPPI(wxFont& WXUNUSED(font)) const { }
 
+        // All pixel coordinates used in wx API are in logical pixels, which
+        // are the same as physical screen pixels under MSW, but same as DIPs
+        // (see below) under the other ports. The functions defined here can be
+        // used under all platforms to convert between them without using any
+        // preprocessor checks.
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxSize FromPhys(wxSize sz, const wxWindowBase* w);
+#else
+    static wxSize FromPhys(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+    {
+        return sz;
+    }
+#endif
+    static wxPoint FromPhys(const wxPoint& pt, const wxWindowBase* w)
+    {
+        const wxSize sz = FromPhys(wxSize(pt.x, pt.y), w);
+        return wxPoint(sz.x, sz.y);
+    }
+    static int FromPhys(int d, const wxWindowBase* w)
+    {
+        return FromPhys(wxSize(d, 0), w).x;
+    }
+
+    wxSize FromPhys(const wxSize& sz) const { return FromPhys(sz, this); }
+    wxPoint FromPhys(const wxPoint& pt) const { return FromPhys(pt, this); }
+    int FromPhys(int d) const { return FromPhys(d, this); }
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxSize ToPhys(wxSize sz, const wxWindowBase* w);
+#else
+    static wxSize ToPhys(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+    {
+        return sz;
+    }
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxPoint ToPhys(const wxPoint& pt, const wxWindowBase* w)
+    {
+        const wxSize sz = ToPhys(wxSize(pt.x, pt.y), w);
+        return wxPoint(sz.x, sz.y);
+    }
+    static int ToPhys(int d, const wxWindowBase* w)
+    {
+        return ToPhys(wxSize(d, 0), w).x;
+    }
+
+    wxSize ToPhys(const wxSize& sz) const { return ToPhys(sz, this); }
+    wxPoint ToPhys(const wxPoint& pt) const { return ToPhys(pt, this); }
+    int ToPhys(int d) const { return ToPhys(d, this); }
+
+
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
         // account (i.e. multiplied by the same factor as returned by
@@ -997,14 +1044,14 @@ public:
         // horizontal and vertical directions, but this could, in principle,
         // change too, so prefer using the overloads taking wxPoint or wxSize.
 
-#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     static wxSize FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
     {
         return sz;
     }
 #else
     static wxSize FromDIP(const wxSize& sz, const wxWindowBase* w);
-#endif // wxHAVE_DPI_INDEPENDENT_PIXELS
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
     static wxPoint FromDIP(const wxPoint& pt, const wxWindowBase* w)
     {
         const wxSize sz = FromDIP(wxSize(pt.x, pt.y), w);
@@ -1019,14 +1066,14 @@ public:
     wxPoint FromDIP(const wxPoint& pt) const { return FromDIP(pt, this); }
     int FromDIP(int d) const { return FromDIP(d, this); }
 
-#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     static wxSize ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
     {
         return sz;
     }
 #else
     static wxSize ToDIP(const wxSize& sz, const wxWindowBase* w);
-#endif // wxHAVE_DPI_INDEPENDENT_PIXELS
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
     static wxPoint ToDIP(const wxPoint& pt, const wxWindowBase* w)
     {
         const wxSize sz = ToDIP(wxSize(pt.x, pt.y), w);
@@ -2101,7 +2148,7 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindowBase *win);
 
 // Return a string with platform-dependent description of the window.
-extern WXDLLIMPEXP_CORE wxString wxDumpWindow(wxWindowBase* win);
+extern WXDLLIMPEXP_CORE wxString wxDumpWindow(const wxWindowBase* win);
 
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------
