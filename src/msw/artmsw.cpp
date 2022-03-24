@@ -324,35 +324,34 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
 // ----------------------------------------------------------------------------
 
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& client)
 {
-    const wxWindow* win = wxApp::GetMainTopWindow();
     if ( client == wxART_TOOLBAR )
     {
-        return wxWindow::FromDIP(wxSize(24, 24), win);
+        return wxSize(24, 24);
     }
     else if ( client == wxART_MENU )
     {
-        return wxWindow::FromDIP(wxSize(16, 16), win);
+        return wxSize(16, 16);
     }
     else if ( client == wxART_FRAME_ICON )
     {
-        return wxSize(wxGetSystemMetrics(SM_CXSMICON, win),
-                      wxGetSystemMetrics(SM_CYSMICON, win));
+        return wxSize(::GetSystemMetrics(SM_CXSMICON),
+                      ::GetSystemMetrics(SM_CYSMICON));
     }
     else if ( client == wxART_CMN_DIALOG ||
               client == wxART_MESSAGE_BOX )
     {
-        return wxSize(wxGetSystemMetrics(SM_CXICON, win),
-                      wxGetSystemMetrics(SM_CYICON, win));
+        return wxSize(::GetSystemMetrics(SM_CXICON),
+                      ::GetSystemMetrics(SM_CYICON));
     }
     else if (client == wxART_BUTTON)
     {
-        return wxWindow::FromDIP(wxSize(16, 16), win);
+        return wxSize(16, 16);
     }
     else if (client == wxART_LIST)
     {
-        return wxWindow::FromDIP(wxSize(16, 16), win);
+        return wxSize(16, 16);
     }
 
     return wxDefaultSize;

@@ -388,7 +388,7 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
 // ----------------------------------------------------------------------------
 
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& client)
 {
     // Gtk has specific sizes for each client, see artgtk.cpp
     GtkIconSize gtk_size = ArtClientToIconSize(client);
