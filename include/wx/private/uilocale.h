@@ -66,7 +66,7 @@ public:
     // This function retrieves a list of preferred UI languages.
     // The list is in the order of preference, if it has more than one entry.
     // The entries contain platform-dependent identifiers.
-    static wxArrayString GetPreferredUILanguages();
+    static wxVector<wxString> GetPreferredUILanguages();
 
     // Use this locale in the UI.
     //

@@ -94,10 +94,11 @@ struct wxLanguageInfo
     The type of a locale tag.
 
     @see wxLocaleIdent::GetTag()
+    @since 3.1.6
 */
 enum wxLocaleTagType
 {
-    /// Default (tag as given or else same as wxLOCALE_TAGFORM_SYSTEM)
+    /// Default (tag as given or else same as wxLOCALE_TAGTYPE_SYSTEM)
     wxLOCALE_TAGTYPE_DEFAULT,
 
     /// Default type of the system (platform-dependent).
@@ -112,7 +113,7 @@ enum wxLocaleTagType
     /// POSIX type: <language>_<region>[.<charset>][@{<scriptalias>|<modifier>}].
     wxLOCALE_TAGTYPE_POSIX,
 
-    /// Windows type:  <language>[-<script>][-<region>][-<modifier>][_<sortorder>].
+    /// Windows type:  <language>[-<script>][-<region>][-<extension>][_<sortorder>].
     wxLOCALE_TAGTYPE_WINDOWS
 };
 

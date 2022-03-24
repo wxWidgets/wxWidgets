@@ -473,7 +473,6 @@ public:
     */
     wxLocaleIdent& Modifier(const wxString& modifier);
 
-    // Set extension (only supported under Windows)
     /**
         Set extension.
 
@@ -489,7 +488,6 @@ public:
     */
     wxLocaleIdent& Extension(const wxString& extension);
 
-    // Set sortorder (only supported under Windows)
     /**
         Set sortorder.
 

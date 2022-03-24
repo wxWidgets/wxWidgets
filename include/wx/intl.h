@@ -14,7 +14,6 @@
 
 #include "wx/defs.h"
 #include "wx/localedefs.h"
-#include "wx/uilocale.h"
 #include "wx/string.h"
 #include "wx/translation.h"
 

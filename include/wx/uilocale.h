@@ -16,7 +16,7 @@
 
 #include "wx/localedefs.h"
 #include "wx/string.h"
-#include "wx/arrstr.h"
+#include "wx/vector.h"
 
 class wxUILocaleImpl;
 
@@ -57,11 +57,11 @@ public:
     // Set modifier (only supported under Unix)
     wxLocaleIdent& Modifier(const wxString& modifier);
 
-    // Set sortorder (only supported under Windows)
+    // Set extension (only supported under Windows)
     wxLocaleIdent& Extension(const wxString& extension);
 
-    // Set sortorder (only supported under Windows)
-    wxLocaleIdent& Sortorder(const wxString& sortorder);
+    // Set sort order (only supported under Windows)
+    wxLocaleIdent& SortOrder(const wxString& sortorder);
 
     // Accessors for the individual fields.
     const wxString& GetLanguage() const { return m_language; }
@@ -108,7 +108,7 @@ public:
     // Configure the UI to use the default user locale.
     static bool UseDefault();
 
-    // Use the locale corresponding to the given locale name.
+    // Use the locale corresponding to the given POSIX locale, e.g. "de_DE.UTF-8".
     //
     // This is a compatibility function used by wxWidgets itself, don't use it
     // in the new code.
@@ -164,7 +164,7 @@ public:
 
     // Try to retrieve a list of user's (or OS's) preferred UI languages.
     // Return empty list if language-guessing algorithm failed
-    static wxArrayString GetPreferredUILanguages();
+    static wxVector<wxString> GetPreferredUILanguages();
 
     // Retrieve the language info struct for the given language
     //

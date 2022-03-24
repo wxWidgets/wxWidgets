@@ -148,7 +148,6 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 wxString
 wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 {
-    //        NSString* countryCode = [m_nsloc countryCode]
     NSString* str = NULL;
     switch (name)
     {
@@ -192,10 +191,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
             }
             break;
     }
-    if (str)
-        return wxCFStringRef::AsString(str);
-    else
-        return wxString();
+    return wxCFStringRef::AsString(str);
 }
 
 wxLayoutDirection
