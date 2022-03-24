@@ -3838,6 +3838,9 @@ int wxDataViewMainWindow::QueryAndCacheLineHeight(unsigned int row, wxDataViewIt
 }
 
 
+namespace
+{
+
 class RowToTreeNodeJob: public DoJob
 {
 public:
@@ -3890,6 +3893,8 @@ private:
     wxDataViewTreeNode* m_ret;
 };
 
+} // anonymous namespace
+  //
 wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) const
 {
     wxASSERT( !IsVirtualList() );
@@ -4293,6 +4298,9 @@ int wxDataViewMainWindow::RecalculateCount() const
     }
 }
 
+namespace
+{
+
 class ItemToRowJob : public DoJob
 {
 public:
@@ -4341,6 +4349,8 @@ private:
     int m_current;
 
 };
+
+} // anonymous namespace
 
 int
 wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item,

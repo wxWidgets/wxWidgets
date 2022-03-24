@@ -33,10 +33,11 @@ public:
     wxDataFormat& operator=(NativeFormat format)
         { SetId(format); return *this; }
 
-    // comparison (note that we rely on implicit conversions for comparison
-    // with wxDataFormatId, but have to provide them explicitly for comparison
-    // with NativeFormat to avoid ambiguity between comparing from it to
-    // wxDataFormat or vice versa)
+    // comparison
+    bool operator==(wxDataFormatId type) const
+        { return m_type == type; }
+    bool operator!=(wxDataFormatId type) const
+        { return m_type != type; }
     bool operator==(NativeFormat format) const
         { return m_format == (NativeFormat)format; }
     bool operator!=(NativeFormat format) const
