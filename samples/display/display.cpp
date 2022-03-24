@@ -77,6 +77,8 @@ public:
     void OnDisplayChanged(wxDisplayChangedEvent& event);
 #endif // wxUSE_DISPLAY
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     void OnLeftClick(wxMouseEvent& event);
 
 private:
@@ -153,6 +155,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_DISPLAY_CHANGED(MyFrame::OnDisplayChanged)
 #endif // wxUSE_DISPLAY
+
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_LEFT_UP(MyFrame::OnLeftClick)
 wxEND_EVENT_TABLE()
@@ -469,6 +473,15 @@ void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_DISPLAY
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    wxLogStatus(this, "DPI changed: was %d*%d, now %d*%d",
+                event.GetOldDPI().x, event.GetOldDPI().y,
+                event.GetNewDPI().x, event.GetNewDPI().y);
+
+    event.Skip();
+}
 
 void MyFrame::OnLeftClick(wxMouseEvent& event)
 {
