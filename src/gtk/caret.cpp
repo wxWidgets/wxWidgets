@@ -180,11 +180,25 @@ void wxCaret::DoMove()
 
 void wxCaret::SetPosition(int x, int y)
 {
-    // blink out the caret at the old position.
-    if ( IsVisible() && !m_blinkedOut )
-        Blink();
+    static bool s_isWayland = wxPrivate::IsWayland();
+
+    // blink out the caret at the old position first.
+    if ( IsVisible() )
+    {
+        if ( s_isWayland )
+        {
+            GetWindow()->RefreshRect(wxRect(m_x, m_y, m_width , m_height), false);
+        }
+        else if ( !m_blinkedOut )
+        {
+            Blink();
+        }
+    }
 
     wxCaretBase::SetPosition(x, y);
+
+    if ( s_isWayland )
+        GetWindow()->RefreshRect(wxRect(m_x, m_y, m_width , m_height), false);
 }
 
 // ---------------------------------------------------------------------------
@@ -224,12 +238,6 @@ void wxCaret::Draw()
         cairo_stroke(cr);
 
     cairo_destroy(cr);
-
-    static bool s_isWayland = wxPrivate::IsWayland();
-    if ( s_isWayland )
-    {
-        win->RefreshRect(wxRect(m_x, m_y, m_width , m_height));
-    }
 }
 
 #endif // wxUSE_CARET && defined(__WXGTK3__)
