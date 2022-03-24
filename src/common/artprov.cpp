@@ -567,7 +567,7 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client, wxWindow* win
 
 #ifndef wxHAS_NATIVE_ART_PROVIDER_IMPL
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& WXUNUSED(client))
+wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& WXUNUSED(client))
 {
     // rather than returning some arbitrary value that doesn't make much
     // sense (as 2.8 used to do), tell the caller that we don't have a clue:
