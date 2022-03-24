@@ -17,25 +17,11 @@
 
 #include "wx/caret.h"
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/backend.h"
 
 // ===========================================================================
 // implementation
 // ===========================================================================
-
-namespace wxPrivate
-{
-static bool IsWayland()
-{
-#ifdef GDK_WINDOWING_WAYLAND
-    GdkDisplay* display = gdk_display_get_default();
-    const char* displayTypeName = g_type_name(G_TYPE_FROM_INSTANCE(display));
-
-    return strcmp("GdkWaylandDisplay", displayTypeName) == 0;
-#else
-    return false;
-#endif // GDK_WINDOWING_WAYLAND
-}
-} // namespace wxPrivate
 
 // ---------------------------------------------------------------------------
 // blink time
@@ -180,12 +166,10 @@ void wxCaret::DoMove()
 
 void wxCaret::SetPosition(int x, int y)
 {
-    static bool s_isWayland = wxPrivate::IsWayland();
-
     // blink out the caret at the old position first.
     if ( IsVisible() )
     {
-        if ( s_isWayland )
+        if ( wxGTKImpl::IsWayland(NULL) )
         {
             GetWindow()->RefreshRect(wxRect(m_x, m_y, m_width , m_height), false);
         }
@@ -197,7 +181,7 @@ void wxCaret::SetPosition(int x, int y)
 
     wxCaretBase::SetPosition(x, y);
 
-    if ( s_isWayland )
+    if ( wxGTKImpl::IsWayland(NULL) )
         GetWindow()->RefreshRect(wxRect(m_x, m_y, m_width , m_height), false);
 }
 
