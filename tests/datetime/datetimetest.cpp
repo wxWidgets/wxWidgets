@@ -780,16 +780,19 @@ void DateTimeTestCase::TestTimeFormat()
                 if ( s != dt.ToTimezone(tz).Format(fmt) )
                     continue;
 
+                INFO("Test #" << n << " using format \"" << fmt << "\""
+                     << ", format result=\"" << s << "\"");
+
                 // convert back
                 wxDateTime dt2;
                 const char *result = dt2.ParseFormat(s, fmt);
                 if ( !result )
                 {
                     // conversion failed - should it have?
-                    WX_ASSERT_MESSAGE(
-                        ("Test #%u failed: failed to parse \"%s\"", n, s),
-                        kind == CompareNone
-                    );
+                    if ( kind != CompareNone )
+                    {
+                        FAIL_CHECK("Parsing formatted string failed");
+                    }
                 }
                 else // conversion succeeded
                 {
@@ -800,11 +803,12 @@ void DateTimeTestCase::TestTimeFormat()
                     while ( *result && (*result >= 'A' && *result <= 'Z') )
                         result++;
 
-                    WX_ASSERT_MESSAGE(
-                        ("Test #%u failed: \"%s\" was left unparsed in \"%s\"",
-                         n, result, s),
-                        !*result
-                    );
+                    if ( *result )
+                    {
+                        INFO("Left unparsed: \"" << result << "\"");
+                        FAIL_CHECK("Parsing didn't consume the entire string");
+                        continue;
+                    }
 
                     // Without "%z" we can't recover the time zone used in the
                     // call to Format() so we need to call MakeFromTimezone()
