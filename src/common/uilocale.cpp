@@ -269,7 +269,7 @@ wxLocaleIdent& wxLocaleIdent::Language(const wxString& language)
     }
     else
     {
-        m_language = wxEmptyString;
+        m_language.clear();
     }
     return *this;
 }
@@ -283,7 +283,7 @@ wxLocaleIdent& wxLocaleIdent::Region(const wxString& region)
     }
     else
     {
-        m_region = wxEmptyString;
+        m_region.clear();
     }
     return *this;
 }
@@ -302,7 +302,7 @@ wxLocaleIdent& wxLocaleIdent::Script(const wxString& script)
     }
     else
     {
-        m_script = wxEmptyString;
+        m_script.clear();
     }
     return *this;
 }
@@ -315,7 +315,7 @@ wxLocaleIdent& wxLocaleIdent::Charset(const wxString& charset)
     }
     else
     {
-        m_charset = wxEmptyString;
+        m_charset.clear();
     }
     return *this;
 }
@@ -328,7 +328,7 @@ wxLocaleIdent& wxLocaleIdent::Modifier(const wxString& modifier)
     }
     else
     {
-        m_modifier = wxEmptyString;
+        m_modifier.clear();
     }
     return *this;
 }
