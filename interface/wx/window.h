@@ -2395,7 +2395,9 @@ public:
         Under wxGTK and wxOSX, you can use ::wxBG_STYLE_TRANSPARENT to obtain
         full transparency of the window background. Note that wxGTK supports
         this only since GTK 2.12 with a compositing manager enabled, call
-        IsTransparentBackgroundSupported() to check whether this is the case.
+        IsTransparentBackgroundSupported() to check whether this is the case,
+        see the example of doing it in @ref page_samples_shaped "the shaped
+        sample".
 
         Also, in order for @c SetBackgroundStyle(wxBG_STYLE_TRANSPARENT) to
         work, it must be called before Create(). If you're using your own

@@ -690,10 +690,14 @@ utility under macOS).
 
 @section page_samples_shaped Shaped Window Sample
 
-@sampleabout{how to implement a shaped or transparent window\, and a window showing/hiding with effect}
+@sampleabout{Showing unusual, e.g. shaped or semi-transparent windows}
+
+This sample shows windows with non-rectangular shapes and non-opaque windows as
+well as how the windows can be shown with a special effect.
 
 @see wxTopLevelWindow::SetShape(), wxTopLevelWindow::SetTransparent(),
-wxWindow::ShowWithEffect(), wxWindow::HideWithEffect()
+wxWindow::ShowWithEffect(), wxWindow::HideWithEffect(),
+wxWindow::SetBackgroundStyle()
 
 @sampledir{shaped}
 
