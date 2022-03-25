@@ -262,7 +262,8 @@ TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 {
     CheckSupported(wxUILocale::FromTag("en"), "English");
     CheckSupported(wxUILocale(wxLocaleIdent().Language("fr").Region("FR")), "French");
-    CHECK( !wxUILocale::FromTag("bloordyblop").IsSupported() );
+    CHECK_FALSE( wxUILocale::FromTag("bloordyblop").IsSupported() );
+    CHECK_FALSE( wxUILocale::FromTag("xyz").IsSupported() );
 }
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")

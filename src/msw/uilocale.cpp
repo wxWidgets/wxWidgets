@@ -475,29 +475,39 @@ public:
     {
         // Getting the locale name seems to be the simplest way to see if it's
         // really supported: unknown locale result in an error here.
-        //
-        // The latter may have been a valid assumption for Windows 7 and below,
-        // but at least for Windows 10 the function only fails if the given
+        if ( !ms_GetLocaleInfoEx(name, LOCALE_SNAME, NULL, 0) )
+            return NULL;
+
+        // Unfortunately under Windows 10 the call above only fails if the given
         // locale name is not a valid BCP 47 identifier. For example,
         // valid language codes can have 2 or 3 letters:
         // - using name "w" fails
         // - using name "wx" succeeds
         // - using name "wxy" succeeds
         // - using name "wxyz" fails
-        if ( !ms_GetLocaleInfoEx(name, LOCALE_SNAME, NULL, 0) )
-            return NULL;
-
-        // It can be checked whether the locale is "constructed" or not.
-        // "not constructed" means the locale is a predefined locale,
-        // "constructed" means the locale is not predefined, but has to be constructed.
-        // For example, "de-US" would be a constructed locale.
-        // Using LOCALE_ICONSTRUCTEDLOCALE to query the locale status is discouraged
-        // by Microsoft (the constant is not even defined in a Windows header file).
-        // However, for now constructed locales will be rejected here.
-        int isConstructed = 0;
-        if (!ms_GetLocaleInfoEx(name, LOCALE_ICONSTRUCTEDLOCALE | LOCALE_RETURN_NUMBER,
-                                (LPWSTR)&isConstructed, sizeof(int)) || isConstructed != 0)
-            return NULL;
+        // and so we need another check on these systems (but note that this
+        // check must not be done under Windows 7 because there plenty of
+        // actually supported locales are "constructed") by checking
+        // checked whether the locale is "constructed" or not: "not
+        // constructed" means the locale is a predefined locale, "constructed"
+        // means the locale is not predefined, but has to be constructed. For
+        // example, "de-US" would be a constructed locale.
+        if ( wxGetWinVersion() >= wxWinVersion_10 )
+        {
+            // Using LOCALE_ICONSTRUCTEDLOCALE to query the locale status is
+            // discouraged by Microsoft (the constant is not even defined in a
+            // Windows header file). However, for now constructed locales will
+            // be rejected here.
+            int isConstructed = 0;
+            if (!ms_GetLocaleInfoEx
+                 (
+                    name,
+                    LOCALE_ICONSTRUCTEDLOCALE | LOCALE_RETURN_NUMBER,
+                    (LPWSTR)&isConstructed,
+                    sizeof(int)
+                 ) || isConstructed != 0)
+                return NULL;
+        }
 
         return new wxUILocaleImplName(name);
     }
