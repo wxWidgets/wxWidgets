@@ -488,10 +488,10 @@ public:
         // and so we need another check on these systems (but note that this
         // check must not be done under Windows 7 because there plenty of
         // actually supported locales are "constructed") by checking
-        // checked whether the locale is "constructed" or not: "not
-        // constructed" means the locale is a predefined locale, "constructed"
-        // means the locale is not predefined, but has to be constructed. For
-        // example, "de-US" would be a constructed locale.
+        // whether the locale is "constructed" or not: "not constructed"
+        // means the locale is a predefined locale, "constructed"
+        // means the locale is not predefined, but has to be constructed.
+        // For example, "de-US" would be a constructed locale.
         if ( wxGetWinVersion() >= wxWinVersion_10 )
         {
             // Using LOCALE_ICONSTRUCTEDLOCALE to query the locale status is
