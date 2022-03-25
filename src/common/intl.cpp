@@ -304,11 +304,11 @@ bool wxLocale::Init(const wxString& name,
     DoInit(name, strShort, wxLANGUAGE_UNKNOWN);
 
 #if defined(__UNIX__) || defined(__WIN32__)
+    const wxString oldUILocale = wxUILocale::GetCurrent().GetName();
     bool ok = wxUILocale::UseLocaleName(szLocale);
-    m_uiLocaleRestore = ok;
     if (ok)
     {
-        m_uiLocaleTag = wxUILocale::GetCurrent().GetName();
+        m_oldUILocale = oldUILocale;
     }
 
     // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
@@ -337,7 +337,6 @@ void wxLocale::DoInit(const wxString& name,
     m_language = language;
 
     // Store the current locale in order to be able to restore it in the dtor.
-    m_uiLocaleRestore = false;
     m_pszOldLocale = wxSetlocale(LC_ALL, NULL);
     if ( m_pszOldLocale )
         m_pszOldLocale = wxStrdup(m_pszOldLocale);
@@ -439,13 +438,13 @@ bool wxLocale::Init(int lang, int flags)
     // Set the locale:
 
 #if defined(__UNIX__) || defined(__WIN32__)
+    const wxString oldUILocale = wxUILocale::GetCurrent().GetName();
 
     bool ok = lang == wxLANGUAGE_DEFAULT ? wxUILocale::UseDefault()
                                          : wxUILocale::UseLocaleName(shortName);
-    m_uiLocaleRestore = ok;
     if (ok)
     {
-        m_uiLocaleTag = wxUILocale::GetCurrent().GetName();
+        m_oldUILocale = oldUILocale;
     }
 
     // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
@@ -689,13 +688,6 @@ wxString wxLocale::GetSysName() const
     return wxSetlocale(LC_ALL, NULL);
 }
 
-bool wxLocale::EnableUILocale()
-{
-    if (m_uiLocaleRestore)
-        return wxUILocale::UseLocaleName(m_uiLocaleTag);
-    return false;
-}
-
 // clean up
 wxLocale::~wxLocale()
 {
@@ -717,9 +709,11 @@ wxLocale::~wxLocale()
 
     // restore old locale pointer
     wxSetLocale(m_pOldLocale);
-    if (m_pOldLocale)
+
+    // and old current wxUILocale
+    if (!m_oldUILocale.empty())
     {
-        m_pOldLocale->EnableUILocale();
+        wxUILocale::UseLocaleName(m_oldUILocale);
     }
 
     if ( m_pszOldLocale )
