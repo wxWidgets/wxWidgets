@@ -211,15 +211,43 @@ void wxCaret::Draw()
         cairo_scale(cr, -1, 1);
     }
 
-    cairo_set_source_rgb(cr, 1, 1, 1);
+    // We want to use the foreground colour as the caret colour.
+
+    const wxColour fgCol = win->GetForegroundColour();
+    const wxColour bgCol = win->GetBackgroundColour();
+
+    double red     = (bgCol.Red()   + fgCol.Red())   / 255.;
+    double green   = (bgCol.Green() + fgCol.Green()) / 255.;
+    double blue    = (bgCol.Blue()  + fgCol.Blue())  / 255.;
+
+    cairo_set_source_rgb(cr, red, green, blue);
     cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
     cairo_rectangle(cr, m_x, m_y, m_width , m_height);
     cairo_clip_preserve(cr);
 
-    if ( m_hasFocus )
-        cairo_fill(cr);
-    else
-        cairo_stroke(cr);
+    m_hasFocus ? cairo_fill(cr) : cairo_stroke(cr);
+
+    // The CAIRO_OPERATOR_DIFFERENCE takes the difference of the
+    // destination (xB) and source (xA) colors by performing abs(xB−xA):
+    //
+    // If xB+xA <= 1, the operator is lossless and will alternate between
+    // xB and xA on each execution.
+    //
+    // If xB+xA > 1, the following calculations are needed to compensate
+    // for the loss of the original colour.
+
+    red   = wxMax(red - 1.0,   0.0);
+    green = wxMax(green - 1.0, 0.0);
+    blue  = wxMax(blue - 1.0,  0.0);
+
+    if ( red != 0.0 || green != 0.0 || blue != 0.0 )
+    {
+        cairo_set_source_rgb(cr, red, green, blue);
+        cairo_set_operator(cr, CAIRO_OPERATOR_ADD);
+        cairo_rectangle(cr, m_x, m_y, m_width , m_height);
+
+        m_hasFocus ? cairo_fill(cr) : cairo_stroke(cr);
+    }
 
     cairo_destroy(cr);
 }
