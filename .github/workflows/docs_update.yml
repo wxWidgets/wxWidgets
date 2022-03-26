@@ -1,0 +1,40 @@
+name: Update Documentation
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+
+jobs:
+  update:
+    runs-on: ubuntu-20.04
+    name: Update Online Documentation
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install doxygen
+        run: |
+          sudo apt-get -q -o=Dpkg::Use-Pty=0 -y install doxygen graphviz
+
+      - name: Generate documentation
+        working-directory: docs/doxygen
+        run: |
+          ./regen.sh php
+
+      - name: Upload
+        if: github.repository_owner == 'wxWidgets'
+        working-directory: docs/doxygen
+        env:
+          DOCS_WEBSITE_KEY: ${{secrets.DOCS_WEBSITE_KEY}}
+          DOCS_WEBSITE_SSH_CONFIG: ${{secrets.DOCS_WEBSITE_SSH_CONFIG}}
+        run: |
+          mkdir "$HOME/.ssh"
+          echo "$DOCS_WEBSITE_KEY" > "$HOME/.ssh/docs_website_key"
+          chmod 600 "$HOME/.ssh/docs_website_key"
+          echo "$DOCS_WEBSITE_SSH_CONFIG" > "$HOME/.ssh/config"
+          rsync --checksum --compress --delete --recursive --verbose
+            out/html/ wxdocs:public_html/latest/
