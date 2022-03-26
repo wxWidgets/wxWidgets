@@ -132,6 +132,11 @@ void wxTextCtrl::MacCheckSpelling(bool check)
 }
 #endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 
+void wxTextCtrl::OSXEnableNewLineReplacement(bool enable)
+{
+    GetTextPeer()->EnableNewLineReplacement(enable);
+}
+
 void wxTextCtrl::OSXEnableAutomaticQuoteSubstitution(bool enable)
 {
     GetTextPeer()->EnableAutomaticQuoteSubstitution(enable);
@@ -458,7 +463,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     return;
             }
 
-            if ( !(m_windowStyle & wxTE_MULTILINE) )
+            if ( GetTextPeer()->GetNewLineReplacement() )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )

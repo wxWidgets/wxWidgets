@@ -750,6 +750,8 @@ public :
     virtual void EnableAutomaticQuoteSubstitution(bool WXUNUSED(enable)) {}
     virtual void EnableAutomaticDashSubstitution(bool WXUNUSED(enable)) {}
 
+    virtual void EnableNewLineReplacement(bool WXUNUSED(enable)) {}
+    virtual bool GetNewLineReplacement() { return true; }
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
 
     virtual bool SetHint(const wxString& WXUNUSED(hint)) { return false; }

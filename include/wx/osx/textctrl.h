@@ -143,6 +143,7 @@ public:
     wxDEPRECATED( virtual void MacCheckSpelling(bool check) );
 #endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 
+    void OSXEnableNewLineReplacement(bool enable);
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
     void OSXEnableAutomaticDashSubstitution(bool enable);
     void OSXDisableAllSmartSubstitutions();

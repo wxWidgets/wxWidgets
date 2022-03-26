@@ -1761,6 +1761,35 @@ public:
     */
     virtual long XYToPosition(long x, long y) const;
 
+    /**
+        @name Mac-specific functions
+    */
+    //@{
+
+    /**
+        Enable the automatic replacement of new lines characters in a
+        single-line text field with spaces under macOS.
+
+        This feature is enabled by default and will replace any new line (`\n`)
+        character entered into a single-line text field with the space
+        character. Usually single-line text fields are not expected to hold
+        multiple lines of text (that is what wxTE_MULTILINE is for, after all)
+        and it is impossible to have multiple lines of text in them under
+        non-Mac platforms. However, under macOS/Cocoa, a single-line text
+        control can still show multiple lines and this function allows to lift
+        the restriction preventing multiple lines from being entered unless
+        wxTE_MULTILINE is specified.
+
+        @note This function is only available for macOS/Cocoa. It also has no
+        effect if the wxTE_MULTILINE flag is set on a text control.
+
+        @onlyfor{wxosx}
+        @since 3.1.6
+    */
+    virtual void OSXEnableNewLineReplacement(bool enable);
+
+    //@}
+
     //@{
     /**
         Operator definitions for appending to a text control.

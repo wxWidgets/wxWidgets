@@ -81,6 +81,8 @@ public :
     virtual bool becomeFirstResponder(WXWidget slf, void *_cmd) wxOVERRIDE;
     virtual bool resignFirstResponder(WXWidget slf, void *_cmd) wxOVERRIDE;
 
+    virtual void EnableNewLineReplacement(bool enable) wxOVERRIDE;
+    virtual bool GetNewLineReplacement() wxOVERRIDE;
     virtual void SetInternalSelection( long from , long to );
     virtual void UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* editor);
 protected :
@@ -133,6 +135,8 @@ public:
 #endif // wxUSE_SPELLCHECK
     virtual void EnableAutomaticQuoteSubstitution(bool enable) wxOVERRIDE;
     virtual void EnableAutomaticDashSubstitution(bool enable) wxOVERRIDE;
+    virtual void EnableNewLineReplacement(bool enable) wxOVERRIDE;
+    virtual bool GetNewLineReplacement() wxOVERRIDE;
 
     virtual wxSize GetBestSize() const wxOVERRIDE;
     virtual void SetJustification() wxOVERRIDE;
