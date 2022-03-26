@@ -2648,7 +2648,7 @@ wxSize wxMSWDCImpl::GetPPI() const
 
     if ( !ppi.x || !ppi.y )
     {
-        ppi = wxGetDPIofHDC(GetHdc());
+        ppi = wxGetDPIofHDC(GetHdc())*GetContentScaleFactor();
     }
 
     return ppi;
