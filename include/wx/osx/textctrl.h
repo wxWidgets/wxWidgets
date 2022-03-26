@@ -143,6 +143,7 @@ public:
     wxDEPRECATED( virtual void MacCheckSpelling(bool check) );
 #endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 
+    virtual void OSXEnableNewLineReplacement(bool enable);
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
     void OSXEnableAutomaticDashSubstitution(bool enable);
     void OSXDisableAllSmartSubstitutions();
@@ -166,6 +167,8 @@ protected:
 private :
     wxMenu  *m_privateContextMenu;
 
+    // stores if the text control replaces new lines with spaces or not
+    bool m_replaceNewLine;
     wxDECLARE_EVENT_TABLE();
 };
 

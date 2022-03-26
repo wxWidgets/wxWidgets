@@ -118,6 +118,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     int maxLength;
     wxTextEntry* field;
     bool forceUpper;
+    bool replaceNewLine;
 }
 
 @end
@@ -130,6 +131,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     {
         maxLength = 0;
         forceUpper = false;
+        replaceNewLine = true;
     }
     return self;
 }
@@ -139,6 +141,10 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     maxLength = maxlen;
 }
 
+- (void) replaceNewLine:(bool) enable
+{
+    replaceNewLine = enable;
+}
 - (void) forceUpper
 {
     forceUpper = true;
@@ -177,7 +183,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
     // wxTextEntryFormatter is always associated with single-line text entry (through wxNSTextFieldControl)
     // so all new line characters should be replaced with spaces (like it is done in single-line NSCell).
-    NSString* lineStr = [*partialStringPtr stringByReplacingOccurrencesOfString: @"\n" withString: @" "];
+    NSString* lineStr = replaceNewLine ? [*partialStringPtr stringByReplacingOccurrencesOfString: @"\n" withString: @" "] : *partialStringPtr;
 
     NSString* newStr = forceUpper ? [lineStr uppercaseString] : lineStr;
 
@@ -1313,6 +1319,9 @@ void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
         [m_textView setAutomaticDashSubstitutionEnabled:enable];
 }
 
+void wxNSTextViewControl::EnableNewLineReplacement(bool enable)
+{
+}
 wxSize wxNSTextViewControl::GetBestSize() const
 {
     wxSize size;
@@ -1429,6 +1438,10 @@ void wxNSTextFieldControl::SetMaxLength(unsigned long len)
     [GetFormatter() setMaxLength:len];
 }
 
+void wxNSTextFieldControl::EnableNewLineReplacement(bool enable)
+{
+    [GetFormatter() replaceNewLine:enable];
+}
 void wxNSTextFieldControl::ForceUpper()
 {
     [GetFormatter() forceUpper];

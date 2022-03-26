@@ -72,6 +72,7 @@ void wxTextCtrl::Init()
     m_dirty = false;
 
     m_privateContextMenu = NULL;
+    m_replaceNewLine = true;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -131,6 +132,11 @@ void wxTextCtrl::MacCheckSpelling(bool check)
                                        : wxTextProofOptions::Disable());
 }
 #endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
+void wxTextCtrl::OSXEnableNewLineReplacement(bool enable)
+{
+    m_replaceNewLine = enable;
+    GetTextPeer()->EnableNewLineReplacement(enable);
+}
 
 void wxTextCtrl::OSXEnableAutomaticQuoteSubstitution(bool enable)
 {
@@ -458,7 +464,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     return;
             }
 
-            if ( !(m_windowStyle & wxTE_MULTILINE) )
+            if ( !(m_windowStyle & wxTE_MULTILINE) && m_replaceNewLine )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )
