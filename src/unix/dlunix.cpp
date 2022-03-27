@@ -82,12 +82,19 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 }
 
 /* static */
-void wxDynamicLibrary::Unload(wxDllType handle, wxString* errorDest)
+bool wxDynamicLibrary::Unload(wxDllType handle, wxString* errorDest)
 {
     int rc = dlclose(handle);
 
     if ( rc != 0 )
+    {
         ReportError(errorDest, _("Failed to unload shared library"));
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 /* static */

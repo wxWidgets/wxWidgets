@@ -90,12 +90,19 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
     return IsLoaded();
 }
 
-void wxDynamicLibrary::Unload()
+bool wxDynamicLibrary::Unload()
 {
     if ( IsLoaded() )
     {
-        Unload(m_handle, &m_lastError);
+        wxDllType h = m_handle;
         m_handle = NULL;
+        return Unload(h, &m_lastError);
+    }
+    else
+    {
+        // we didn't do anything, but there was no
+        // error either, so return true.
+        return true;
     }
 }
 

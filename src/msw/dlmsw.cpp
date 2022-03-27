@@ -191,12 +191,17 @@ wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 }
 
 /* static */
-void wxDynamicLibrary::Unload(wxDllType handle, wxString *errorDest)
+bool wxDynamicLibrary::Unload(wxDllType handle, wxString *errorDest)
 {
     if ( !::FreeLibrary(handle) )
     {
         wxLogLastError(wxT("FreeLibrary"));
         ReportError(errorDest, _("Failed to unload shared library"));
+        return false;
+    }
+    else
+    {
+        return true;
     }
 }
 

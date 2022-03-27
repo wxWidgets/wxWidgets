@@ -251,10 +251,10 @@ public:
     wxDllType Detach() { wxDllType h = m_handle; m_handle = NULL; return h; }
 
     // unload the given library handle (presumably returned by Detach() before)
-    static void Unload(wxDllType handle, wxString* errorDest = NULL);
+    static bool Unload(wxDllType handle, wxString* errorDest = NULL);
 
     // unload the library, also done automatically in dtor
-    void Unload();
+    bool Unload();
 
     // return error message related to the latest failure
     wxString GetErrorStr() const { return m_lastError; }

@@ -246,8 +246,11 @@ public:
         Unloads the library from memory. wxDynamicLibrary object automatically
         calls this method from its destructor if it had been successfully
         loaded.
+
+        Returns @true on success or if there was no library loaded; @false
+        otherwise.
     */
-    void Unload();
+    bool Unload();
     /**
         Unloads the library from memory. wxDynamicLibrary object automatically
         calls this method from its destructor if it had been successfully
@@ -258,10 +261,13 @@ public:
         wxDynamicLibrary object. In this case you may call Detach() and store
         the handle somewhere and call this static method later to unload it.
 
+        Returns @true on success, or if there was no library loaded; @false
+        otherwise.
+
         @param errorDest In case of an error, the error message is optionally
                written to @c errorDest.
     */
-    static void Unload(wxDllType handle, wxString *errorDest = NULL);
+    static bool Unload(wxDllType handle, wxString *errorDest = NULL);
     /**
         Returns an error string describing the latest error that occurred.
 
