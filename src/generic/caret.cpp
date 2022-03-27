@@ -287,8 +287,16 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
             brush = *wxWHITE_BRUSH;
         }
     }
-    dc->SetPen( pen );
-    dc->SetBrush(m_hasFocus ? brush : *wxTRANSPARENT_BRUSH);
+    if (m_hasFocus)
+    {
+        dc->SetPen(*wxTRANSPARENT_PEN);
+        dc->SetBrush(brush);
+    }
+    else
+    {
+        dc->SetPen(pen);
+        dc->SetBrush(*wxTRANSPARENT_BRUSH);
+    }
 
     // VZ: unfortunately, the rectangle comes out a pixel smaller when this is
     //     done under wxGTK - no idea why
