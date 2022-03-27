@@ -297,7 +297,6 @@ bool wxFontDialog::Create(wxWindow* parent, const wxFontData& fontData)
     wxDialog::Create( parent, wxID_ANY, caption, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
     CreateControls();
-    GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
     Centre();
 
