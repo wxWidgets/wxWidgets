@@ -254,7 +254,7 @@ public:
     static void Unload(wxDllType handle);
 
     // unload the library, also done automatically in dtor
-    void Unload() { if ( IsLoaded() ) { Unload(m_handle); m_handle = NULL; } }
+    void Unload();
 
     // Return the raw handle from dlopen and friends.
     wxDllType GetLibHandle() const { return m_handle; }

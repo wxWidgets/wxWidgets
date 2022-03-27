@@ -89,6 +89,15 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
     return IsLoaded();
 }
 
+void wxDynamicLibrary::Unload()
+{
+    if ( IsLoaded() )
+    {
+        Unload(m_handle);
+        m_handle = NULL;
+    }
+}
+
 void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
 {
     wxCHECK_MSG( IsLoaded(), NULL,
