@@ -222,7 +222,5 @@ fi
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
 # more readable
-currpath=`pwd`/
-interfacepath=`cd ../../interface && pwd`/
-cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" > temp
-mv temp doxygen.log
+topsrcdir=`cd ../.. && pwd`
+sed -i'' -e "s|$topsrcdir/||g" doxygen.log
