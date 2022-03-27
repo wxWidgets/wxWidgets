@@ -338,7 +338,7 @@ wxUILocaleImplUnix::GetName() const
     {
         char* rv = setlocale(LC_ALL, NULL);
         if (rv)
-            name = rv;
+            name = wxString::FromUTF8(rv);
     }
     return name;
 }

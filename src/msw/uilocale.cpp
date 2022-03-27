@@ -170,7 +170,6 @@ public:
 
     void Use() wxOVERRIDE
     {
-        // TODO: Should method Use() set a UI locale somehow?
     }
 
     wxString GetName() const wxOVERRIDE
@@ -253,23 +252,22 @@ public:
 
     wxString GetName() const wxOVERRIDE
     {
-        wxChar buf[256];
-        buf[0] = wxT('\0');
+        wxString str;
 
         // Try using newer constant available since Vista which produces names
         // more similar to the other platforms.
         if ( wxGetWinVersion() >= wxWinVersion_Vista )
         {
-            ::GetLocaleInfo(m_lcid, LOCALE_SNAME, buf, WXSIZEOF(buf));
+            str = DoGetInfo(LOCALE_SNAME);
         }
         else // TODO-XP: Drop this branch.
         {
             // This name constant is available under all systems, including
             // pre-Vista ones.
-            ::GetLocaleInfo(m_lcid, LOCALE_SENGLANGUAGE, buf, WXSIZEOF(buf));
+            str = DoGetInfo(LOCALE_SENGLANGUAGE);
         }
 
-        return buf;
+        return str;
     }
 
     wxLocaleIdent GetLocaleId() const wxOVERRIDE
@@ -284,8 +282,6 @@ public:
 
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const wxOVERRIDE
     {
-        wxChar buf[256];
-        buf[0] = wxT('\0');
         wxString str;
         switch (name)
         {
@@ -294,19 +290,15 @@ public:
                 {
                     case wxLOCALE_FORM_NATIVE:
                         {
-                            ::GetLocaleInfo(m_lcid, LOCALE_SNATIVELANGNAME, buf, WXSIZEOF(buf));
-                            wxString strLang = buf;
-                            ::GetLocaleInfo(m_lcid, LOCALE_SNATIVECTRYNAME, buf, WXSIZEOF(buf));
-                            wxString strCtry = buf;
+                            wxString strLang = DoGetInfo(LOCALE_SNATIVELANGNAME);
+                            wxString strCtry = DoGetInfo(LOCALE_SNATIVECTRYNAME);
                             str << strLang << " (" << strCtry << ")";
                         }
                         break;
                     case wxLOCALE_FORM_ENGLISH:
                         {
-                            ::GetLocaleInfo(m_lcid, LOCALE_SENGLANGUAGE, buf, WXSIZEOF(buf));
-                            wxString strLang = buf;
-                            ::GetLocaleInfo(m_lcid, LOCALE_SENGCOUNTRY, buf, WXSIZEOF(buf));
-                            wxString strCtry = buf;
+                            wxString strLang = DoGetInfo(LOCALE_SENGLANGUAGE);
+                            wxString strCtry = DoGetInfo(LOCALE_SENGCOUNTRY);
                             str << strLang << " (" << strCtry << ")";
                         }
                         break;
@@ -318,29 +310,27 @@ public:
                 switch (form)
                 {
                     case wxLOCALE_FORM_NATIVE:
-                        ::GetLocaleInfo(m_lcid, LOCALE_SNATIVELANGNAME, buf, WXSIZEOF(buf));
+                        str = DoGetInfo(LOCALE_SNATIVELANGNAME);
                         break;
                     case wxLOCALE_FORM_ENGLISH:
-                        ::GetLocaleInfo(m_lcid, LOCALE_SENGLANGUAGE, buf, WXSIZEOF(buf));
+                        str = DoGetInfo(LOCALE_SENGLANGUAGE);
                         break;
                     default:
                         wxFAIL_MSG("unknown wxLocaleForm");
                 }
-                str = buf;
                 break;
             case wxLOCALE_NAME_COUNTRY:
                 switch (form)
                 {
                     case wxLOCALE_FORM_NATIVE:
-                        ::GetLocaleInfo(m_lcid, LOCALE_SNATIVECTRYNAME, buf, WXSIZEOF(buf));
+                        str = DoGetInfo(LOCALE_SNATIVECTRYNAME);
                         break;
                     case wxLOCALE_FORM_ENGLISH:
-                        ::GetLocaleInfo(m_lcid, LOCALE_SENGCOUNTRY, buf, WXSIZEOF(buf));
+                        str = DoGetInfo(LOCALE_SENGCOUNTRY);
                         break;
                     default:
                         wxFAIL_MSG("unknown wxLocaleForm");
                 }
-                str = buf;
                 break;
         }
 
@@ -364,6 +354,18 @@ public:
 
 private:
     const LCID m_lcid;
+
+    wxString DoGetInfo(LCTYPE lctype) const
+    {
+        wchar_t buf[256];
+        if (!::GetLocaleInfo(m_lcid, lctype, buf, WXSIZEOF(buf)))
+        {
+            wxLogLastError(wxT("GetLocaleInfo"));
+            return wxString();
+        }
+
+        return buf;
+    }
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplLCID);
 };
@@ -428,10 +430,14 @@ public:
                         buf += language.length() + 1;
                     }
                 }
+                else
+                {
+                    wxLogLastError(wxT("GetUserPreferredUILanguages"));
+                }
             }
             else
             {
-                wxLogLastError(wxT("GetThreadPreferredUILanguages"));
+                wxLogLastError(wxT("GetUserPreferredUILanguages"));
             }
         }
         else

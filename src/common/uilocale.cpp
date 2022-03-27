@@ -470,7 +470,7 @@ bool wxUILocale::UseDefault()
 bool wxUILocale::UseLocaleName(const wxString& localeName)
 {
     wxUILocaleImpl* impl = NULL;
-    if (localeName.IsSameAs("C", false))
+    if (localeName.IsSameAs("C", false) || localeName.IsSameAs("POSIX", false))
     {
         impl = wxUILocaleImpl::CreateStdC();
     }
