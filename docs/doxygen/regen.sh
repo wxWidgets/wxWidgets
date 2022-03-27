@@ -41,7 +41,7 @@ fi
 # Still allow using incompatible version if explicitly requested.
 if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     doxygen_version=`$DOXYGEN --version`
-    doxygen_version_required=1.8.8
+    doxygen_version_required=1.8.17
     if [[ $doxygen_version != $doxygen_version_required ]]; then
         echo "Doxygen version $doxygen_version is not supported."
         echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
