@@ -104,16 +104,16 @@ enum wxLocaleTagType
     /// Default type of the system (platform-dependent).
     wxLOCALE_TAGTYPE_SYSTEM,
 
-    /// BCP47-like type: <language>[-<script>][-<region>][-<modifier>].
+    /// BCP47-like type: \<language\>[-\<script\>][-\<region\>][-\<modifier\>].
     wxLOCALE_TAGTYPE_BCP47,
 
-    /// macOS type: <language>[-<script>][_<region>].
+    /// macOS type: \<language\>[-\<script\>][_\<region\>].
     wxLOCALE_TAGTYPE_MACOS,
 
-    /// POSIX type: <language>_<region>[.<charset>][@{<scriptalias>|<modifier>}].
+    /// POSIX type: \<language\>_\<region\>[.\<charset\>][@@{\<scriptalias\>|\<modifier\>}].
     wxLOCALE_TAGTYPE_POSIX,
 
-    /// Windows type:  <language>[-<script>][-<region>][-<extension>][_<sortorder>].
+    /// Windows type:  \<language\>[-\<script\>][-\<region\>][-\<extension\>][_\<sortorder\>].
     wxLOCALE_TAGTYPE_WINDOWS
 };
 
