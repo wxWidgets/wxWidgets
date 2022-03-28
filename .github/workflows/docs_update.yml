@@ -30,6 +30,13 @@ jobs:
         working-directory: docs/doxygen
         run: |
           ./regen.sh php
+          if [[ -s doxygen.log ]]; then
+            echo '*** There were warnings during docs generation: ***'
+            echo '-----------------------------------------------------------'
+            cat doxygen.log
+            echo '-----------------------------------------------------------'
+            exit 1
+          fi
 
       - name: Upload
         if: github.ref == 'refs/heads/master'
