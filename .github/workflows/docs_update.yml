@@ -4,6 +4,17 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '.github/workflows/docs_update.yml'
+      - 'docs/**'
+      - 'interface/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/docs_update.yml'
+      - 'docs/**'
+      - 'interface/**'
   workflow_dispatch:
 
 
