@@ -51,14 +51,18 @@ if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     fi
 fi
 
+if [[ -z $WX_HTML_OUTPUT_DIR ]]; then
+    WX_HTML_OUTPUT_DIR=out/html
+fi
+
 # prepare folders for the cp commands below
-mkdir -p out/html       # we need to copy files in this folder below
-mkdir -p out/html/generic
+mkdir -p $WX_HTML_OUTPUT_DIR       # we need to copy files in this folder below
+mkdir -p $WX_HTML_OUTPUT_DIR/generic
 
 # These are not automatically copied by Doxygen because they're not
 # used in doxygen documentation, only in our html footer and by our
 # custom aliases
-cp images/generic/*png out/html/generic
+cp images/generic/*png $WX_HTML_OUTPUT_DIR/generic
 
 # Defaults for settings controlled by this script
 export GENERATE_DOCSET="NO"
@@ -118,12 +122,12 @@ $DOXYGEN Doxyfile
 
 if [[ "$1" = "php" ]]; then
     # Work around a bug in Doxygen < 1.8.19 PHP search function.
-    cp custom_search_functions.php out/html/search_functions.php
+    cp custom_search_functions.php $WX_HTML_OUTPUT_DIR/search_functions.php
 fi
 
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
-    cd out/html
+    cd $WX_HTML_OUTPUT_DIR
     qhelpfile="index.qhp"
 
     # remove all <file> and <files> tags
@@ -146,7 +150,7 @@ if [[ "$1" = "qch" ]]; then
     # remove useless files to make the qch slim
     rm temp *map *md5
 
-    # add a <file> tag for _any_ file in out/html folder except the .qhp itself
+    # add a <file> tag for _any_ file in this directory except the .qhp itself
     for f in * */*png; do
         if [[ $f != $qhelpfile ]]; then
             echo "      <file>$f</file>" >>$qhelpfile
@@ -166,7 +170,7 @@ if [[ "$1" = "qch" ]]; then
 
     # last, run qhelpgenerator:
     cd ../..
-    qhelpgenerator out/html/index.qhp -o out/wx.qch
+    qhelpgenerator $WX_HTML_OUTPUT_DIR/index.qhp -o out/wx.qch
 fi
 
 if [[ "$1" = "docset" ]]; then
@@ -182,7 +186,7 @@ if [[ "$1" = "docset" ]]; then
         XCODE_INSTALL=`xcode-select -print-path`
     fi
 
-    cd out/html
+    cd $WX_HTML_OUTPUT_DIR
     DESTINATIONDIR=`pwd`/../docset
 
     mkdir -p $DESTINATIONDIR
