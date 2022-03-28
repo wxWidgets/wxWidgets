@@ -32,7 +32,7 @@ jobs:
           ./regen.sh php
 
       - name: Upload
-        if: github.repository_owner == 'wxWidgets'
+        if: github.ref == 'refs/heads/master'
         working-directory: docs/doxygen
         env:
           DOCS_WEBSITE_KEY: ${{secrets.DOCS_WEBSITE_KEY}}
