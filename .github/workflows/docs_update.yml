@@ -60,5 +60,5 @@ jobs:
           echo "$DOCS_WEBSITE_KEY" > "$HOME/.ssh/docs_website_key"
           chmod 600 "$HOME/.ssh/docs_website_key"
           echo "$DOCS_WEBSITE_SSH_CONFIG" > "$HOME/.ssh/config"
-          rsync --checksum --compress --delete --recursive --verbose out/html/ wxdocs:public_html/latest/ \
+          rsync --checksum --compress --delete --out-format='%n' --recursive out/html/ wxdocs:public_html/latest/ \
             2> >(grep -v "Warning: Permanently added" 1>&2)
