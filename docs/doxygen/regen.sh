@@ -41,6 +41,8 @@ fi
 # Still allow using incompatible version if explicitly requested.
 if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     doxygen_version=`$DOXYGEN --version`
+    # Note: remove the hack for Doxygen 1.8.19 below when changing this to a
+    # later version.
     doxygen_version_required=1.8.17
     if [[ $doxygen_version != $doxygen_version_required ]]; then
         echo "Doxygen version $doxygen_version is not supported."
@@ -113,6 +115,11 @@ esac
 #     not included!
 #
 $DOXYGEN Doxyfile
+
+if [[ "$1" = "php" ]]; then
+    # Work around a bug in Doxygen < 1.8.19 PHP search function.
+    cp custom_search_functions.php out/html/search_functions.php
+fi
 
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
