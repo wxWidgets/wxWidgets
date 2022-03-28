@@ -473,6 +473,7 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                 default:
                     wxFAIL_MSG("unknown wxLocaleForm");
             }
+            break;
         default:
             wxFAIL_MSG("unknown wxLocaleName");
     }
