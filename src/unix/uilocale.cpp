@@ -73,8 +73,10 @@ private:
 #ifdef HAVE_LANGINFO_H
     // Call nl_langinfo_l() if available, or nl_langinfo() otherwise.
     const char* GetLangInfo(nl_item item) const;
-    wxString DoGetLangInfo(nl_item item);
-    wxString DoGetLangInfo2(nl_item item1, nl_item item2);
+    wxString DoGetLangInfo(wxLocaleForm form, nl_item nlNative, nl_item nlEnglish) const;
+    wxString DoGetLangInfo2(wxLocaleForm form,
+                            nl_item nlNative1, nl_item nlEnglish1,
+                            nl_item nlNative2, nl_item nlEnglish2) const;
 #endif // HAVE_LANGINFO_H
 
     wxLocaleIdent m_locId;
@@ -366,16 +368,23 @@ wxUILocaleImplUnix::GetLangInfo(nl_item item) const
 }
 
 wxString
-wxUILocaleImplUnix::DoGetLangInfo(nl_item item)
+wxUILocaleImplUnix::DoGetLangInfo(wxLocaleForm form, nl_item nlNative, nl_item nlEnglish) const
 {
+    if (form != wxLOCALE_FORM_NATIVE && form != wxLOCALE_FORM_ENGLISH)
+    {
+        wxFAIL_MSG("unknown wxLocaleForm");
+    }
+    nl_item item = (form == wxLOCALE_FORM_NATIVE) ? nlNative : nlEnglish;
     return wxString(GetLangInfo(item), wxCSConv(m_codeset));
 }
 
 wxString
-wxUILocaleImplUnix::DoGetLangInfo2(nl_item item1, nl_item item2)
+wxUILocaleImplUnix::DoGetLangInfo2(wxLocaleForm form,
+                                   nl_item nlNative1, nl_item nlEnglish1,
+                                   nl_item nlNative2, nl_item nlEnglish2) const
 {
-    wxString str1 = DoGetLangInfo(item1);
-    wxString str2 = DoGetLangInfo(item2);
+    wxString str1 = DoGetLangInfo(form, nlNative1, nl_item nlEnglish1);
+    wxString str2 = DoGetLangInfo(form, nlNative2, nl_item nlEnglish2);
     if (!str2.empty())
     {
         str1 << " (" << str2 << ")";
@@ -442,43 +451,15 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = DoGetLangInfo2(_NL_ADDRESS_LANG_NAME, _NL_ADDRESS_COUNTRY_NAME);
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = DoGetLangInfo2(_NL_IDENTIFICATION_LANGUAGE, _NL_IDENTIFICATION_TERRITORY);
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = DoGetLangInfo2(form,
+                                 _NL_ADDRESS_LANG_NAME, _NL_IDENTIFICATION_LANGUAGE,
+                                 _NL_ADDRESS_COUNTRY_NAME, _NL_IDENTIFICATION_TERRITORY);
             break;
         case wxLOCALE_NAME_LANGUAGE:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = DoGetLangInfo(_NL_ADDRESS_LANG_NAME);
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = DoGetLangInfo(_NL_IDENTIFICATION_LANGUAGE);
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = DoGetLangInfo(form, _NL_ADDRESS_LANG_NAME, _NL_IDENTIFICATION_LANGUAGE);
             break;
         case wxLOCALE_NAME_COUNTRY:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = DoGetLangInfo(_NL_ADDRESS_COUNTRY_NAME);
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = DoGetLangInfo(_NL_IDENTIFICATION_TERRITORY);
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = DoGetLangInfo(form, _NL_ADDRESS_COUNTRY_NAME, _NL_IDENTIFICATION_TERRITORY);
             break;
         default:
             wxFAIL_MSG("unknown wxLocaleName");
