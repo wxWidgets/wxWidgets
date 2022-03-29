@@ -148,7 +148,8 @@ void wxMemoryDCImpl::SetFont(const wxFont& font)
     // We need to adjust the font size by the ratio between the scale factor we
     // use and the default/global scale factor used when creating fonts.
     wxFont scaledFont = font;
-    scaledFont.WXAdjustToPPI(wxDisplay::GetStdPPI()*m_contentScaleFactor);
+    if ( scaledFont.IsOk() )
+        scaledFont.WXAdjustToPPI(wxDisplay::GetStdPPI()*m_contentScaleFactor);
     wxMSWDCImpl::SetFont(scaledFont);
 }
 
