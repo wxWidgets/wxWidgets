@@ -1,0 +1,1 @@
+wxOSX: Fix right click event generation for wxComboBox (Daniel Kulp).
