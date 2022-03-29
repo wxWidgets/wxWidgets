@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/caret.h"
+#include "wx/colordlg.h"
 #include "wx/numdlg.h"
 
 // ----------------------------------------------------------------------------
@@ -120,6 +121,8 @@ public:
     void OnSetBlinkTime(wxCommandEvent& event);
     void OnSetFontSize(wxCommandEvent& event);
     void OnCaretMove(wxCommandEvent& event);
+    void OnSetForegroundColour(wxCommandEvent& event);
+    void OnSetBackgroundColour(wxCommandEvent& event);
 
 private:
     MyCanvas *m_canvas;
@@ -142,6 +145,9 @@ enum
     Caret_SetFontSize,
     Caret_Move,
 
+    Caret_SetFgCol,
+    Caret_SetBgCol,
+
     // controls start here (the numbers are, of course, arbitrary)
     Caret_Text = 1000
 };
@@ -159,6 +165,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Caret_SetBlinkTime, MyFrame::OnSetBlinkTime)
     EVT_MENU(Caret_SetFontSize, MyFrame::OnSetFontSize)
     EVT_MENU(Caret_Move, MyFrame::OnCaretMove)
+    EVT_MENU(Caret_SetFgCol, MyFrame::OnSetForegroundColour)
+    EVT_MENU(Caret_SetBgCol, MyFrame::OnSetBackgroundColour)
 wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -211,6 +219,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Caret_SetBlinkTime, "&Blink time...\tCtrl-B");
     menuFile->Append(Caret_SetFontSize, "&Font size...\tCtrl-S");
     menuFile->Append(Caret_Move, "&Move caret\tCtrl-C");
+    menuFile->AppendSeparator();
+    menuFile->Append(Caret_SetFgCol, "Foreground colour...");
+    menuFile->Append(Caret_SetBgCol, "Background colour...");
     menuFile->AppendSeparator();
     menuFile->Append(Caret_About, "&About\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
@@ -284,6 +295,32 @@ void MyFrame::OnSetFontSize(wxCommandEvent& WXUNUSED(event))
     if ( fontSize != -1 )
     {
         m_canvas->SetFontSize((int)fontSize);
+    }
+}
+
+void MyFrame::OnSetForegroundColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour clr = wxGetColourFromUser(this, m_canvas->GetForegroundColour(),
+                                       "Choose the foreground colour");
+
+    if (clr.IsOk())
+    {
+        m_canvas->SetForegroundColour(clr);
+        m_canvas->Refresh();
+        m_canvas->CreateCaret(); // recreate the caret
+    }
+}
+
+void MyFrame::OnSetBackgroundColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour clr = wxGetColourFromUser(this, m_canvas->GetBackgroundColour(),
+                                       "Choose the background colour");
+
+    if (clr.IsOk())
+    {
+        m_canvas->SetBackgroundColour(clr);
+        m_canvas->Refresh();
+        m_canvas->CreateCaret(); // recreate the caret
     }
 }
 
@@ -490,4 +527,3 @@ void MyCanvas::OnChar( wxKeyEvent &event )
 
     DoMoveCaret();
 }
-
