@@ -227,6 +227,7 @@ protected:
 
 private:
     void OnWidgetFocus(wxFocusEvent& event);
+    void OnWidgetContextMenu(wxContextMenuEvent& event);
 
     void ConnectToWidgetEvents();
 
@@ -716,6 +717,8 @@ void WidgetsFrame::ConnectToWidgetEvents()
 
         w->Bind(wxEVT_SET_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
         w->Bind(wxEVT_KILL_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
+
+        w->Bind(wxEVT_CONTEXT_MENU, &WidgetsFrame::OnWidgetContextMenu, this);
     }
 }
 
@@ -1242,6 +1245,17 @@ void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
         wxLogMessage("Widget '%s' %s focus", win->GetClassInfo()->GetClassName(),
                      event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
     }
+
+    event.Skip();
+}
+
+void WidgetsFrame::OnWidgetContextMenu(wxContextMenuEvent& event)
+{
+    wxWindow* win = (wxWindow*)event.GetEventObject();
+    wxLogMessage("Context menu event for %s at %dx%d",
+                 win->GetClassInfo()->GetClassName(),
+                 event.GetPosition().x,
+                 event.GetPosition().y);
 
     event.Skip();
 }
