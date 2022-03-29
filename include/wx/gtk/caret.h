@@ -17,7 +17,7 @@ public:
     wxCaret() { Init(); }
         // create the caret of given (in pixels) width and height and associate
         // with the given window
-    wxCaret(wxWindow *window, int width, int height)
+    wxCaret(wxWindowBase *window, int width, int height)
     {
         Init();
 
@@ -36,6 +36,8 @@ public:
 
         SetupTimer();
     }
+
+    ~wxCaret();
 
     // process wxWindow notifications
     virtual void OnSetFocus() wxOVERRIDE;

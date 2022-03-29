@@ -81,6 +81,13 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 // wxCaret implementation
 // ---------------------------------------------------------------------------
 
+wxCaret::~wxCaret()
+{
+    wxWindow* const win = GetWindow();
+    if (win)
+        win->Unbind(wxEVT_TIMER, &wxCaret::OnTimer, this);
+}
+
 void wxCaret::Init()
 {
     m_hasFocus = true;
