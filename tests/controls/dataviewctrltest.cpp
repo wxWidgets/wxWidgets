@@ -102,6 +102,10 @@ public:
     //     |-- wxTEST_ITEM_CHILD
     //         |
     //         |-- wxTEST_ITEM_GRANDCHILD
+    //         |   |
+    //         |   |-- wxTEST_ITEM_LEAF
+    //         |   |
+    //         |   |-- wxTEST_ITEM_LEAF_HIDDEN
     //         |
     //         |-- wxTEST_ITEM_GRANDCHILD_HIDDEN
     //
@@ -111,15 +115,19 @@ public:
         wxTEST_ITEM_ROOT,
         wxTEST_ITEM_CHILD,
         wxTEST_ITEM_GRANDCHILD,
-        wxTEST_ITEM_GRANDCHILD_HIDDEN,
+        wxTEST_ITEM_LEAF,
+        wxTEST_ITEM_LEAF_HIDDEN,
+        wxTEST_ITEM_GRANDCHILD_HIDDEN
     };
 
     DataViewCtrlTestModel()
         : m_root(wxTEST_ITEM_ROOT),
           m_child(wxTEST_ITEM_CHILD),
           m_grandChild(wxTEST_ITEM_GRANDCHILD),
-          m_grandChildHidden(wxTEST_ITEM_GRANDCHILD_HIDDEN),
-          m_secondGrandchildVisible(false)
+          m_leaf(wxTEST_ITEM_LEAF),
+          m_leafHidden(wxTEST_ITEM_LEAF_HIDDEN),
+          m_grandchildHidden(wxTEST_ITEM_GRANDCHILD_HIDDEN),
+          m_allItemsVisible(false)
     {
     }
 
@@ -139,8 +147,14 @@ public:
             case wxTEST_ITEM_GRANDCHILD:
                 return wxDataViewItem(const_cast<wxTestItem*>(&m_grandChild));
 
+            case wxTEST_ITEM_LEAF:
+                return wxDataViewItem(const_cast<wxTestItem*>(&m_leaf));
+
+            case wxTEST_ITEM_LEAF_HIDDEN:
+                return wxDataViewItem(const_cast<wxTestItem*>(&m_leafHidden));
+
             case wxTEST_ITEM_GRANDCHILD_HIDDEN:
-                return wxDataViewItem(const_cast<wxTestItem*>(&m_grandChildHidden));
+                return wxDataViewItem(const_cast<wxTestItem*>(&m_grandchildHidden));
         }
         return wxDataViewItem();
     }
@@ -175,6 +189,14 @@ public:
 
             case wxTEST_ITEM_GRANDCHILD:
                 variant = "grand child";
+                break;
+
+            case wxTEST_ITEM_LEAF:
+                variant = "leaf";
+                break;
+
+            case wxTEST_ITEM_LEAF_HIDDEN:
+                variant = "initially hidden leaf";
                 break;
 
             case wxTEST_ITEM_GRANDCHILD_HIDDEN:
@@ -213,6 +235,10 @@ public:
             case wxTEST_ITEM_GRANDCHILD:
             case wxTEST_ITEM_GRANDCHILD_HIDDEN:
                 return GetDataViewItem(m_child);
+
+            case wxTEST_ITEM_LEAF:
+            case wxTEST_ITEM_LEAF_HIDDEN:
+                return GetDataViewItem(m_grandChild);
         }
         return wxDataViewItem();
     }
@@ -224,9 +250,11 @@ public:
             case wxTEST_ITEM_NULL:
             case wxTEST_ITEM_ROOT:
             case wxTEST_ITEM_CHILD:
+            case wxTEST_ITEM_GRANDCHILD:
                 return true;
 
-            case wxTEST_ITEM_GRANDCHILD:
+            case wxTEST_ITEM_LEAF:
+            case wxTEST_ITEM_LEAF_HIDDEN:
             case wxTEST_ITEM_GRANDCHILD_HIDDEN:
                 return false;
         }
@@ -249,15 +277,27 @@ public:
             case wxTEST_ITEM_CHILD:
                 children.push_back(GetDataViewItem(m_grandChild));
 
-                if ( m_secondGrandchildVisible )
+                if ( m_allItemsVisible )
                 {
-                    children.push_back(GetDataViewItem(m_grandChildHidden));
+                    children.push_back(GetDataViewItem(m_grandchildHidden));
                     return 2;
                 }
 
                 return 1;
 
             case wxTEST_ITEM_GRANDCHILD:
+                children.push_back(GetDataViewItem(m_leaf));
+
+                if ( m_allItemsVisible )
+                {
+                    children.push_back(GetDataViewItem(m_leafHidden));
+                    return 2;
+                }
+
+                return 1;
+
+            case wxTEST_ITEM_LEAF:
+            case wxTEST_ITEM_LEAF_HIDDEN:
             case wxTEST_ITEM_GRANDCHILD_HIDDEN:
                 FAIL( "The item is not a container" );
                 return 0;
@@ -265,10 +305,34 @@ public:
         return 0;
     }
 
-    void ShowSecondGrandChild()
+    enum wxItemsOrder
     {
-        m_secondGrandchildVisible = true;
-        ItemAdded(GetDataViewItem(m_child), GetDataViewItem(m_grandChildHidden));
+        wxORDER_LEAF_THEN_GRANCHILD,
+        wxORDER_GRANCHILD_THEN_LEAF
+    };
+
+    void ShowChildren(wxItemsOrder order)
+    {
+        m_allItemsVisible = true;
+        switch ( order )
+        {
+            case wxORDER_LEAF_THEN_GRANCHILD:
+                ItemAdded(GetDataViewItem(m_grandChild), GetDataViewItem(m_leafHidden));
+                ItemAdded(GetDataViewItem(m_child), GetDataViewItem(m_grandchildHidden));
+                break;
+
+            case wxORDER_GRANCHILD_THEN_LEAF:
+                ItemAdded(GetDataViewItem(m_child), GetDataViewItem(m_grandchildHidden));
+                ItemAdded(GetDataViewItem(m_grandChild), GetDataViewItem(m_leafHidden));
+                break;
+        }
+    }
+
+    void HideChildren()
+    {
+        m_allItemsVisible = false;
+        ItemDeleted(GetDataViewItem(m_grandChild), GetDataViewItem(m_leafHidden));
+        ItemDeleted(GetDataViewItem(m_child), GetDataViewItem(m_grandchildHidden));
     }
 
 private:
@@ -282,10 +346,12 @@ private:
     wxTestItem m_root;
     wxTestItem m_child;
     wxTestItem m_grandChild;
-    wxTestItem m_grandChildHidden;
+    wxTestItem m_leaf;
+    wxTestItem m_leafHidden;
+    wxTestItem m_grandchildHidden;
 
     // Whether wxTEST_ITEM_GRANDCHILD_HIDDEN item should be visible or not.
-    bool m_secondGrandchildVisible;
+    bool m_allItemsVisible;
 };
 
 
@@ -296,6 +362,51 @@ public:
     ~DataViewCtrlWithCustomModelTestCase();
 
 protected:
+    enum wxItemExistence
+    {
+        wxITEM_APPEAR,
+        wxITEM_DISAPPEAR
+    };
+
+    void UpdateAndWaitForItem(const wxDataViewItem& item, wxItemExistence existence)
+    {
+        m_dvc->Refresh();
+        m_dvc->Update();
+
+#ifdef __WXGTK__
+        // Unfortunately it's not enough to call wxYield() once, so wait up to
+        // 0.5 sec.
+        wxStopWatch sw;
+        while ( true )
+        {
+            wxYield();
+
+            const bool isItemRectEmpty = m_dvc->GetItemRect(item).IsEmpty();
+            switch ( existence )
+            {
+                case wxITEM_APPEAR:
+                    if ( !isItemRectEmpty )
+                        return;
+                    break;
+
+                case wxITEM_DISAPPEAR:
+                    if ( isItemRectEmpty )
+                        return;
+                    break;
+            }
+
+            if ( sw.Time() > 500 )
+            {
+                WARN("Timed out waiting for wxDataViewCtrl");
+                break;
+            }
+        }
+#else // !__WXGTK__
+        wxUnusedVar(item);
+        wxUnusedVar(existence);
+#endif // __WXGTK__
+    }
+
     // The dataview control.
     wxDataViewCtrl *m_dvc;
 
@@ -303,7 +414,12 @@ protected:
     DataViewCtrlTestModel *m_model;
 
     // Its items.
-    wxDataViewItem m_root, m_child, m_grandchild, m_grandchildHidden;
+    wxDataViewItem m_root,
+                   m_child,
+                   m_grandchild,
+                   m_leaf,
+                   m_leafHidden,
+                   m_grandchildHidden;
 
     wxDECLARE_NO_COPY_CLASS(DataViewCtrlWithCustomModelTestCase);
 };
@@ -384,6 +500,10 @@ DataViewCtrlWithCustomModelTestCase::DataViewCtrlWithCustomModelTestCase()
     m_child = m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_CHILD);
     m_grandchild =
         m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_GRANDCHILD);
+    m_leaf =
+        m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_LEAF);
+    m_leafHidden =
+        m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_LEAF_HIDDEN);
     m_grandchildHidden =
         m_model->GetDataViewItem(DataViewCtrlTestModel::wxTEST_ITEM_GRANDCHILD_HIDDEN);
 
@@ -566,53 +686,94 @@ TEST_CASE_METHOD(DataViewCtrlWithCustomModelTestCase,
     wxYield();
 #endif // __WXGTK__
 
-    SECTION( "Was Expanded" )
+    // Unfortunately we can't combine test options with SECTION() so use
+    // the additional enum variable.
+    enum
     {
-        CHECK( m_dvc->GetItemRect(m_grandchild).IsEmpty() );
-        CHECK( m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
+        wxOPTIONS_EXPAND_ADD_LEAF_THEN_GRANCHILD,
+        wxOPTIONS_DONT_EXPAND_ADD_LEAF_THEN_GRANCHILD,
+        wxOPTIONS_EXPAND_ADD_GRANCHILD_THEN_LEAF,
+        wxOPTIONS_DONT_EXPAND_ADD_GRANCHILD_THEN_LEAF
+    } options;
 
-        m_dvc->Expand(m_child);
-
-#ifdef __WXGTK__
-        wxYield();
-#endif // __WXGTK__
-
-        CHECK( !m_dvc->GetItemRect(m_grandchild).IsEmpty() );
-        CHECK( m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
-
-        m_dvc->Collapse(m_child);
+    SECTION( "Was Expanded, Add The Leaf Then The Grandchild" )
+    {
+        options = wxOPTIONS_EXPAND_ADD_LEAF_THEN_GRANCHILD;
     }
 
-    SECTION( "Was Not Expanded" )
+    SECTION( "Was Not Expanded, Add The Leaf Then The Grandchild" )
     {
-        // Do nothing.
+        options = wxOPTIONS_DONT_EXPAND_ADD_LEAF_THEN_GRANCHILD;
+    }
+
+    SECTION( "Was Expanded, Add The Grandchild Then The Leaf" )
+    {
+        options = wxOPTIONS_EXPAND_ADD_GRANCHILD_THEN_LEAF;
+    }
+
+    SECTION( "Was Not Expanded, Add The Grandchild Then The Leaf" )
+    {
+        options = wxOPTIONS_DONT_EXPAND_ADD_GRANCHILD_THEN_LEAF;
+    }
+
+    switch ( options )
+    {
+        case wxOPTIONS_EXPAND_ADD_LEAF_THEN_GRANCHILD:
+        case wxOPTIONS_EXPAND_ADD_GRANCHILD_THEN_LEAF:
+            CHECK( m_dvc->GetItemRect(m_grandchild).IsEmpty() );
+            CHECK( m_dvc->GetItemRect(m_leafHidden).IsEmpty() );
+            CHECK( m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
+
+            m_dvc->Expand(m_child);
+            m_dvc->Expand(m_grandchild);
+            UpdateAndWaitForItem(m_grandchild, wxITEM_APPEAR);
+
+            CHECK( !m_dvc->GetItemRect(m_grandchild).IsEmpty() );
+            CHECK( !m_dvc->GetItemRect(m_leaf).IsEmpty() );
+            CHECK( m_dvc->GetItemRect(m_leafHidden).IsEmpty() );
+            CHECK( m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
+
+            m_dvc->Collapse(m_grandchild);
+            m_dvc->Collapse(m_child);
+            break;
+
+        case wxOPTIONS_DONT_EXPAND_ADD_LEAF_THEN_GRANCHILD:
+        case wxOPTIONS_DONT_EXPAND_ADD_GRANCHILD_THEN_LEAF:
+            // Do nothing.
+            break;
     }
 
     // Check wxDataViewModel::ItemAdded().
-    m_model->ShowSecondGrandChild();
+    switch ( options )
+    {
+        case wxOPTIONS_EXPAND_ADD_LEAF_THEN_GRANCHILD:
+        case wxOPTIONS_DONT_EXPAND_ADD_LEAF_THEN_GRANCHILD:
+            m_model->ShowChildren(DataViewCtrlTestModel::wxORDER_LEAF_THEN_GRANCHILD);
+            break;
+
+        case wxOPTIONS_EXPAND_ADD_GRANCHILD_THEN_LEAF:
+        case wxOPTIONS_DONT_EXPAND_ADD_GRANCHILD_THEN_LEAF:
+            m_model->ShowChildren(DataViewCtrlTestModel::wxORDER_GRANCHILD_THEN_LEAF);
+            break;
+    }
 
     m_dvc->Expand(m_child);
-    m_dvc->Refresh();
-    m_dvc->Update();
+    m_dvc->Expand(m_grandchild);
+    UpdateAndWaitForItem(m_leaf, wxITEM_APPEAR);
+
     CHECK( m_dvc->IsExpanded(m_child) );
-
-#ifdef __WXGTK__
-    // Unfortunately it's not enough to call wxYield() once, so wait up to
-    // 0.5 sec.
-    wxStopWatch sw;
-    while ( m_dvc->GetItemRect(m_grandchild).IsEmpty() )
-    {
-        if ( sw.Time() > 500 )
-        {
-            WARN("Timed out waiting for wxDataViewCtrl");
-            break;
-        }
-        wxYield();
-    }
-#endif // __WXGTK__
-
+    CHECK( m_dvc->IsExpanded(m_grandchild) );
     CHECK( !m_dvc->GetItemRect(m_grandchild).IsEmpty() );
+    CHECK( !m_dvc->GetItemRect(m_leaf).IsEmpty() );
+    CHECK( !m_dvc->GetItemRect(m_leafHidden).IsEmpty() );
     CHECK( !m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
+
+    m_model->HideChildren();
+    UpdateAndWaitForItem(m_leafHidden, wxITEM_DISAPPEAR);
+
+    CHECK( m_dvc->GetItemRect(m_leafHidden).IsEmpty() );
+    // Check that the problem with nodes duplication in ItemAdded() fixed.
+    CHECK( m_dvc->GetItemRect(m_grandchildHidden).IsEmpty() );
 }
 
 TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,

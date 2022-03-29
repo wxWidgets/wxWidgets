@@ -985,7 +985,6 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
 
     SetWildcard( wildCard );
 
-    SetAutoLayout( true );
     SetSizer( mainsizer );
 
     if ( !is_pda )

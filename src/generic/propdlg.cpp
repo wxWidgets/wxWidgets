@@ -88,7 +88,6 @@ void wxPropertySheetDialog::Init()
 // Layout the dialog, to be called after pages have been created
 void wxPropertySheetDialog::LayoutDialog(int centreFlags)
 {
-    GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
     if (centreFlags)
         Centre(centreFlags);

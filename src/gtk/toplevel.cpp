@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/recguard.h"
 #include "wx/sysopt.h"
 
 #include "wx/gtk/private.h"
@@ -61,7 +62,7 @@ static wxTopLevelWindowGTK *g_activeFrame = NULL;
 
 extern wxCursor g_globalCursor;
 extern wxCursor g_busyCursor;
-extern bool g_inSizeAllocate;
+extern wxRecursionGuardFlag g_inSizeAllocate;
 
 #ifdef GDK_WINDOWING_X11
 // Whether _NET_REQUEST_FRAME_EXTENTS support is working
@@ -258,8 +259,7 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
     if (win->m_clientWidth  != alloc->width ||
         win->m_clientHeight != alloc->height)
     {
-        const bool save_inSizeAllocate = g_inSizeAllocate;
-        g_inSizeAllocate = true;
+        wxRecursionGuard setInSizeAllocate(g_inSizeAllocate);
 
         win->m_clientWidth  = alloc->width;
         win->m_clientHeight = alloc->height;
@@ -280,8 +280,6 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
             win->HandleWindowEvent(event);
         }
         // else the window is currently unmapped, don't generate size events
-
-        g_inSizeAllocate = save_inSizeAllocate;
     }
 }
 }
@@ -1822,10 +1820,22 @@ void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
 
 bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 {
-    if (m_widget == NULL)
-        return false;
+    wxCHECK_MSG(m_widget, false, "invalid window");
 
 #ifdef __WXGTK3__
+    // RGBA visual is required
+    GdkScreen* screen = gtk_widget_get_screen(m_widget);
+    GdkVisual* visual = gdk_screen_get_rgba_visual(screen);
+    if (visual == NULL)
+        return false;
+    if (gtk_widget_get_visual(m_widget) != visual)
+    {
+        if (gtk_widget_get_realized(m_widget))
+        {
+            wxLogDebug("SetTransparent() must be called before Show()");
+        }
+        gtk_widget_set_visual(m_widget, visual);
+    }
 #if GTK_CHECK_VERSION(3,8,0)
     if (wx_is_at_least_gtk3(8))
     {

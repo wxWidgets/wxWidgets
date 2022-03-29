@@ -63,6 +63,11 @@ public:
     // work, so it just falls back on CreateStdC() if it fails to create it.
     static wxUILocaleImpl* CreateForLanguage(const wxLanguageInfo& info);
 
+    // This function retrieves a list of preferred UI languages.
+    // The list is in the order of preference, if it has more than one entry.
+    // The entries contain platform-dependent identifiers.
+    static wxVector<wxString> GetPreferredUILanguages();
+
     // Use this locale in the UI.
     //
     // This is not implemented for all platforms, notably not for Mac where the
@@ -72,7 +77,10 @@ public:
 
     // Functions corresponding to wxUILocale ones.
     virtual wxString GetName() const = 0;
+    virtual wxLocaleIdent GetLocaleId() const = 0;
     virtual wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const = 0;
+    virtual wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const = 0;
+    virtual wxLayoutDirection GetLayoutDirection() const = 0;
     virtual int CompareStrings(const wxString& lhs, const wxString& rhs,
                                int flags) const = 0;
 

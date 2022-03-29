@@ -24,6 +24,7 @@
     #include "wx/hashmap.h"
     #include "wx/image.h"
     #include "wx/module.h"
+    #include "wx/window.h"
 #endif
 
 // ===========================================================================
@@ -530,22 +531,43 @@ wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
     }
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 /*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client,
                                          bool platform_dependent)
 {
-    if (!platform_dependent)
-    {
-        wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
-        if (node)
-            return node->GetData()->DoGetSizeHint(client);
-    }
+    return platform_dependent ? GetNativeSizeHint(client) : GetSizeHint(client);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
 
-    return GetNativeSizeHint(client);
+/*static*/ wxSize wxArtProvider::GetDIPSizeHint(const wxArtClient& client)
+{
+    wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
+    if (node)
+        return node->GetData()->DoGetSizeHint(client);
+
+    return GetNativeDIPSizeHint(client);
+}
+
+/*static*/
+wxSize wxArtProvider::GetSizeHint(const wxArtClient& client, wxWindow* win)
+{
+    return wxWindow::FromDIP(GetDIPSizeHint(client), win);
+}
+
+wxSize wxArtProvider::DoGetSizeHint(const wxArtClient& client)
+{
+    return GetNativeDIPSizeHint(client);
+}
+
+/*static*/
+wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client, wxWindow* win)
+{
+    return wxWindow::FromDIP(GetNativeDIPSizeHint(client), win);
 }
 
 #ifndef wxHAS_NATIVE_ART_PROVIDER_IMPL
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& WXUNUSED(client))
+wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& WXUNUSED(client))
 {
     // rather than returning some arbitrary value that doesn't make much
     // sense (as 2.8 used to do), tell the caller that we don't have a clue:

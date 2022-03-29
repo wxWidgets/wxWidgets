@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 17:46+0200\n"
-"PO-Revision-Date: 2020-02-17 00:54+0100\n"
-"Last-Translator: Eduard Ereza Martínez <eduard@ereza.cat>\n"
+"PO-Revision-Date: 2022-03-26 16:47+0100\n"
+"Last-Translator: Andriy Byelikov\n"
 "Language-Team: <wx-translators@wxwidgets.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../include/wx/defs.h:2622
 msgid "All files (*.*)|*.*"
@@ -414,9 +414,8 @@ msgstr "Decimal"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
-#, fuzzy
 msgid "Multiply"
-msgstr "Multiplicació (teclat numèric)"
+msgstr "Multiplicació"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
@@ -701,7 +700,7 @@ msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgid "num "
-msgstr ""
+msgstr "núm "
 
 #: ../src/common/accelcmn.cpp:259 ../src/common/accelcmn.cpp:358
 msgid "F"
@@ -832,7 +831,7 @@ msgstr "str"
 
 #: ../src/common/cmdline.cpp:1487
 msgid "num"
-msgstr "núm."
+msgstr "núm"
 
 #: ../src/common/cmdline.cpp:1491
 msgid "double"
@@ -2105,9 +2104,9 @@ msgid "&Customize..."
 msgstr "&Personalitza..."
 
 #: ../src/common/hyperlnkcmn.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open URL \"%s\" in the default browser"
-msgstr "No s'ha pogut obrir l'URL \"%s\" al navegador per defecte."
+msgstr "No s'ha pogut obrir l'URL \"%s\" al navegador predeterminat"
 
 #: ../src/common/iconbndl.cpp:198
 #, c-format
@@ -2457,46 +2456,43 @@ msgid " (error %ld: %s)"
 msgstr " (error %ld: %s)"
 
 #: ../src/common/lzmastream.cpp:121
-#, fuzzy
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "No s'ha pogut assignar el color per a l'OpenGL"
+msgstr "No s'ha pogut assignar memòria per a la descompressió LZMA."
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr ""
+msgstr "No s'ha pogut inicialitzar la descompressió LZMA: error inesperat %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
-msgstr ""
+msgstr "l'entrada no està en format XZ"
 
 #: ../src/common/lzmastream.cpp:183
 msgid "input compressed using unknown XZ option"
-msgstr ""
+msgstr "l'entrada està comprimida amb una opció XZ desconeguda"
 
 #: ../src/common/lzmastream.cpp:188
 msgid "input is corrupted"
-msgstr ""
+msgstr "l'entrada està corrompuda"
 
 #: ../src/common/lzmastream.cpp:192
-#, fuzzy
 msgid "unknown decompression error"
-msgstr "s'ha produït un error de descompressió"
+msgstr "error de descompressió desconegut"
 
 #: ../src/common/lzmastream.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA decompression error: %s"
-msgstr "s'ha produït un error de descompressió"
+msgstr "Error de descompressió LZMA: %s"
 
 #: ../src/common/lzmastream.cpp:231
-#, fuzzy
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "No s'ha pogut assignar el color per a l'OpenGL"
+msgstr "No s'ha pogut assignar memòria per a la compressió LZMA."
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr ""
+msgstr "No s'ha pogut inicialitzar la compressió LZMA: error inesperat %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2504,19 +2500,18 @@ msgid "out of memory"
 msgstr "s'ha esgotat la memòria"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
-#, fuzzy
 msgid "unknown compression error"
-msgstr "s'ha produït un error de compressió"
+msgstr "error de compressió desconegut"
 
 #: ../src/common/lzmastream.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA compression error: %s"
-msgstr "s'ha produït un error de compressió"
+msgstr "Error de compressió LZMA: %s"
 
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
-msgstr ""
+msgstr "Error de compressió LZMA a l'hora de buidar la sortida: %s"
 
 #: ../src/common/mimecmn.cpp:221
 #, c-format
@@ -3152,22 +3147,22 @@ msgstr ""
 
 #: ../src/common/secretstore.cpp:168
 msgid "Not available for this platform"
-msgstr ""
+msgstr "No disponible per aquesta plataforma"
 
 #: ../src/common/secretstore.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Saving password for \"%s\" failed: %s."
-msgstr "No s'ha pogut desar la contrasenya de \"%s/%s\": %s."
+msgstr "No s'ha pogut desar la clau d'accés per \"%s\": %s."
 
 #: ../src/common/secretstore.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Reading password for \"%s\" failed: %s."
-msgstr "No s'ha pogut llegir la contrasenya de \"%s/%s\": %s."
+msgstr "No s'ha pogut llegir la clau d'accés per \"%s\": %s."
 
 #: ../src/common/secretstore.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting password for \"%s\" failed: %s."
-msgstr "No s'ha pogut suprimir la contrasenya de \"%s/%s\": %s."
+msgstr "No s'ha pogut suprimir la clau d'accés per \"%s\": %s."
 
 #: ../src/common/selectdispatcher.cpp:255
 msgid "Failed to monitor I/O channels"
@@ -3186,7 +3181,6 @@ msgid "Cannot initialize sockets"
 msgstr "No es poden inicialitzar els sòcols"
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "&Ajuda"
@@ -3235,12 +3229,10 @@ msgid "&Cancel"
 msgstr "&Cancel·la"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
 msgstr "&CD-ROM"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
 msgstr "CD-ROM"
 
@@ -3321,14 +3313,12 @@ msgid "File"
 msgstr "Fitxer"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "&Find..."
-msgstr "&Cerca"
+msgstr "&Cerca..."
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "Find..."
-msgstr "Cerca"
+msgstr "Cerca..."
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
@@ -3522,14 +3512,12 @@ msgid "Remove"
 msgstr "Suprimeix"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Rep&lace..."
-msgstr "&Substitueix"
+msgstr "Su&bstitueix..."
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Replace..."
-msgstr "Substitueix"
+msgstr "Substitueix..."
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
@@ -3544,9 +3532,8 @@ msgid "Save &As..."
 msgstr "&Anomena i desa..."
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Save As..."
-msgstr "&Anomena i desa..."
+msgstr "Anomena i desa..."
 
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
 #: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
@@ -3696,13 +3683,12 @@ msgid "Delete selection"
 msgstr "Suprimeix la selecció"
 
 #: ../src/common/stockitem.cpp:267
-#, fuzzy
 msgid "Find in document"
-msgstr "Obre un document HTML"
+msgstr "Cerca dins el document"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Find and replace in document"
-msgstr ""
+msgstr "Troba i substitueix dins el document"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Paste selection"
@@ -3721,14 +3707,12 @@ msgid "Undo last action"
 msgstr "Desfés la darrera acció"
 
 #: ../src/common/stockitem.cpp:273
-#, fuzzy
 msgid "Create new document"
-msgstr "Crea un directori nou"
+msgstr "Crea un document nou"
 
 #: ../src/common/stockitem.cpp:274
-#, fuzzy
 msgid "Open an existing document"
-msgstr "Obre un document HTML"
+msgstr "Obre un document existent"
 
 #: ../src/common/stockitem.cpp:275
 msgid "Close current document"
@@ -3793,9 +3777,9 @@ msgid "File couldn't be loaded."
 msgstr "No s'ha pogut carregar el fitxer."
 
 #: ../src/common/textfile.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "No s'ha pogut llegir el document del fitxer \"%s\"."
+msgstr "No s'ha pogut llegir el fitxer de text \"%s\"."
 
 #: ../src/common/textfile.cpp:161
 #, c-format
@@ -3866,23 +3850,22 @@ msgid "'%s' is not one of the valid strings"
 msgstr "'%s' no és una de les cadenes vàlides"
 
 #: ../src/common/valtext.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains invalid character(s)"
 msgstr "'%s' conté caràcters no permesos"
 
 #: ../src/common/webrequest.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s (%d)"
-msgstr "Error: "
+msgstr "Error: %s (%d)"
 
 #: ../src/common/webrequest.cpp:642
 msgid "Not enough free disk space for download."
-msgstr ""
+msgstr "No hi ha espai suficient al disc per a la descàrrega."
 
 #: ../src/common/webrequest_curl.cpp:884
-#, fuzzy
 msgid "libcurl could not be initialized"
-msgstr "No s'ha pogut carregar el fitxer."
+msgstr "no s'ha pogut inicialitzar libcurl"
 
 #: ../src/common/wincmn.cpp:1673
 msgid "This platform does not support background transparency."
@@ -4019,6 +4002,8 @@ msgstr "no es pot reinicialitzar el flux d'inflació de zlib"
 #: ../src/common/zipstrm.cpp:1043
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
 msgstr ""
+"Ignorant el registre de dades addicionals mal format, el fitxer ZIP pot "
+"estar corromput"
 
 #: ../src/common/zipstrm.cpp:1522
 msgid "assuming this is a multi-part zip concatenated"
@@ -4063,16 +4048,15 @@ msgid "reading zip stream (entry %s): bad crc"
 msgstr "en llegir el flux zip (entrada %s): crc erroni"
 
 #: ../src/common/zipstrm.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
 msgstr ""
-"s'ha produït un error en escriure l'entrada zip '%s': crc o longitud invàlids"
+"error a l'hora d'escriure l'entrada zip '%s': fitxer massa gran sense ZIP64"
 
 #: ../src/common/zipstrm.cpp:2615
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr ""
-"s'ha produït un error en escriure l'entrada zip '%s': crc o longitud invàlids"
+msgstr "error a l'hora d'escriure l'entrada zip '%s': crc o longitud erronis"
 
 #: ../src/common/zstream.cpp:155 ../src/common/zstream.cpp:315
 msgid "Gzip not supported by this version of zlib"
@@ -4227,11 +4211,11 @@ msgstr "Afegeix als colors personalitzats"
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
-msgstr ""
+msgstr "Nom d'usuari:"
 
 #: ../src/generic/creddlgg.cpp:63
 msgid "Password:"
-msgstr ""
+msgstr "Clau d'accés:"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/generic/datavgen.cpp:1161
@@ -4293,7 +4277,7 @@ msgstr "S'ha generat un informe de depuració al driectori\n"
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
-msgstr ""
+msgstr "El següent informe de depuració serà generat\n"
 
 #: ../src/generic/dbgrptg.cpp:322
 msgid ""
@@ -4685,7 +4669,7 @@ msgstr "Trieu el tipus de lletra"
 
 #: ../src/generic/grid.cpp:6091
 msgid "Copying more than one selected block to clipboard is not supported."
-msgstr ""
+msgstr "No es suporta copiar més d'un bloc seleccionat al porta-retalls."
 
 #: ../src/generic/helpext.cpp:265
 #, c-format
@@ -4998,7 +4982,9 @@ msgstr "< &Endarrere"
 
 #: ../src/gtk/aboutdlg.cpp:216
 msgid "translator-credits"
-msgstr "Eduard Ereza Martínez <eduard@ereza.cat>"
+msgstr ""
+"Eduard Ereza Martínez <eduard@ereza.cat>\n"
+"Andriy Byelikov https://github.com/andriybyelikov"
 
 #: ../src/gtk/app.cpp:348
 msgid ""
@@ -5006,6 +4992,9 @@ msgid ""
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
+"ADVERTÈNCIA: l'ús del mètode d'entrada XIM no és compatible i pot provocar "
+"problemes amb la gestió de l'entrada i parpelleig. Consideri desestablir "
+"GTK_IM_MODULE o establir-lo a \"ibus\"."
 
 #: ../src/gtk/app.cpp:431
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
@@ -5022,24 +5011,25 @@ msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
+"Utilitzar tipus de lletra privats no està suportat a aquest sistema: la "
+"biblioteca Pango és massa antiga, es requereix 1.38 o posterior."
 
 #: ../src/gtk/font.cpp:562
-#, fuzzy
 msgid "Failed to create font configuration object."
-msgstr "No s'ha pogut actualitzar el fitxer de configuració de l'usuari."
+msgstr "No s'ha pogut crear l'objecte de configuració de tipus de lletra."
 
 #: ../src/gtk/font.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "No s'ha pogut llegir el document del fitxer \"%s\"."
+msgstr "No s'ha pogut afegir el tipus de lletra personalitzat \"%s\"."
 
 #: ../src/gtk/font.cpp:580
-#, fuzzy
 msgid "Failed to register font configuration using private fonts."
-msgstr "No s'ha pogut actualitzar el fitxer de configuració de l'usuari."
+msgstr ""
+"No s'ha pogut registrar la configuració de tipus de lletra utilitzant tipus "
+"de lletra privats."
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
-#, fuzzy
 msgid "Fatal Error"
 msgstr "Error fatal"
 
@@ -5050,6 +5040,12 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"Aquest programa no ha estat compilat amb el suport EGL requerit baix "
+"Wayland,\n"
+"o bé instal·li les biblioteques EGL i recompili, o bé executi'l baix un "
+"backend\n"
+"X11 establint la variable d'entorn GDK_BACKEND=x11 abans d'iniciar el seu\n"
+"programa."
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5058,6 +5054,11 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
+"wxGLCanvas actualment només està suportat a Wayland i X11. Una possible "
+"solució\n"
+"alternativa és establir la variable d'entorn GDK_BACKEND=x11 abans d'iniciar "
+"el\n"
+"seu programa."
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
@@ -5082,12 +5083,14 @@ msgstr "No s'ha pogut inserir el text al control."
 #: ../src/gtk/webview_webkit.cpp:930
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
+"L'obtenció de la sortida d'un script de JavaScript no està suportada amb "
+"WebKit v1"
 
 #: ../src/gtk/webview_webkit2.cpp:1310 ../src/msw/webview_edge.cpp:881
 #: ../src/msw/webview_ie.cpp:1077 ../src/osx/webview_webkit.mm:439
 #, c-format
 msgid "Error running JavaScript: %s"
-msgstr ""
+msgstr "Error executant JavaScript: %s"
 
 #: ../src/gtk/window.cpp:5664
 msgid ""
@@ -5824,9 +5827,9 @@ msgid "Couldn't obtain folder name"
 msgstr "No s'ha pogut obtenir el nom de la carpeta"
 
 #: ../src/msw/dlmsw.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "(error %d: %s)"
-msgstr " (error %ld: %s)"
+msgstr "(error %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
 #: ../src/msw/imaglist.cpp:224 ../src/msw/imaglist.cpp:246
@@ -5852,9 +5855,9 @@ msgid "File dialog failed with error code %0lx."
 msgstr "El diàleg de fitxer ha fallat amb el codi d'error %0lx."
 
 #: ../src/msw/font.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "No s'ha pogut carregar el fitxer."
+msgstr "No s'ha pogut carregar el fitxer de tipus de lletra \"%s\""
 
 #: ../src/msw/fontdlg.cpp:170
 #, c-format
@@ -5904,6 +5907,8 @@ msgstr "No s'ha pogut inicialitzar l'OpenGL"
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
 msgstr ""
+"No s'ha pogut enregistrar el carregador personalitzat de tipus de lletra de "
+"DirectWrite."
 
 #: ../src/msw/helpchm.cpp:53
 msgid ""
@@ -6321,34 +6326,32 @@ msgstr "No es pot carregar la icona de '%s'."
 
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
-msgstr ""
+msgstr "No s'ha pogut trobar el nivell d'emulació de web view al registre"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
-msgstr ""
+msgstr "No s'ha pogut establir web view a un nivell d'emulació modern"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
-msgstr ""
+msgstr "No s'ha pogut restablir web view a un nivell d'emulació estàndard"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
 msgstr ""
+"No es pot executar un script de JavaScript sense un document HTML vàlid"
 
 #: ../src/msw/webview_ie.cpp:1044
-#, fuzzy
 msgid "Can't get the JavaScript object"
-msgstr "No es pot definir la prioritat del fil d'execució"
+msgstr "No es pot obtenir l'objecte de JavaScript"
 
 #: ../src/msw/webview_ie.cpp:1056
-#, fuzzy
 msgid "failed to evaluate"
-msgstr "No s'ha pogut executar '%s'\n"
+msgstr "no s'ha pogut evaluar"
 
 #: ../src/msw/webview_ie.cpp:1065
-#, fuzzy
 msgid "failed to retrieve execution result"
-msgstr "No s'ha pogut recuperar el text del missatge d'error del RAS"
+msgstr "no s'ha pogut recuperar el resultat de l'execució"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
@@ -6443,23 +6446,20 @@ msgid "<Any Teletype>"
 msgstr "<Qualsevol Teletip>"
 
 #: ../src/osx/cocoa/filedlg.mm:274
-#, fuzzy
 msgid "File type:"
-msgstr "Teletip"
+msgstr "Tipus de fitxer:"
 
 #: ../src/osx/cocoa/menu.mm:281
-#, fuzzy
 msgid "Minimize"
-msgstr "Mi&nimitza"
+msgstr "Minimitza"
 
 #: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
 msgid "Zoom"
 msgstr "Amplia"
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Porta tot al davant"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6467,9 +6467,9 @@ msgid "Failed to load sound from \"%s\" (error %d)."
 msgstr "No s'ha pogut carregar el so de \"%s\" (error %d)."
 
 #: ../src/osx/fontutil.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr "El fitxer %s no existeix"
+msgstr "El fitxer de tipus de lletra \"%s\" no existeix."
 
 #: ../src/osx/fontutil.cpp:89
 #, c-format
@@ -6477,6 +6477,8 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
 "\"."
 msgstr ""
+"El fitxer de tipus de lletra \"%s\" no es pot utilitzar ja que no es troba "
+"dins el directori de tipus de lletra \"%s\"."
 
 #: ../src/osx/menu_osx.cpp:441
 msgid "About..."
@@ -6509,14 +6511,12 @@ msgid "Quit %s"
 msgstr "Surt de %s"
 
 #: ../src/osx/webview_webkit.mm:278
-#, fuzzy
 msgid "Printing is not supported by the system web control"
-msgstr "Aquesta versió de zlib no suporta Gzip"
+msgstr "El control web del sistema no suporta impressió"
 
 #: ../src/osx/webview_webkit.mm:287
-#, fuzzy
 msgid "Print operation could not be initialized"
-msgstr "No es pot començar a mostrar."
+msgstr "No s'ha pogut inicialitzar l'operació d'impressió"
 
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:572
@@ -6932,7 +6932,7 @@ msgstr ""
 #: ../src/propgrid/props.cpp:155
 #, c-format
 msgid "Unknown base %d. Base 10 will be used."
-msgstr ""
+msgstr "Base %d desconeguda. S'utilitzarà la base 10."
 
 #: ../src/propgrid/props.cpp:309
 #, c-format
@@ -8856,9 +8856,8 @@ msgid "Already dialling ISP."
 msgstr "Ja s'està trucant al proveïdor d'Internet."
 
 #: ../src/unix/dlunix.cpp:90
-#, fuzzy
 msgid "Failed to unload shared library"
-msgstr "No s'ha pogut carregar la biblioteca compartida '%s'"
+msgstr "No s'ha pogut descarregar la biblioteca compartida"
 
 #: ../src/unix/dlunix.cpp:118
 msgid "Unknown dynamic library error"

@@ -124,7 +124,7 @@ static gboolean wxGtkImageDraw(GtkWidget* widget, GdkEventExpose* event)
     wxGtkImage* image = WX_GTK_IMAGE(widget);
 
     int scale = 1;
-#ifdef __WXGTK3__
+#if GTK_CHECK_VERSION(3,10,0)
     if (wx_is_at_least_gtk3(10))
         scale = gtk_widget_get_scale_factor(widget);
 #endif

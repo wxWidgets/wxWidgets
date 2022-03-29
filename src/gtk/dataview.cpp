@@ -35,6 +35,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/gdkconv.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/image.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/treeview.h"
@@ -275,11 +276,22 @@ public:
 
     void OnInternalIdle();
 
+    enum wxFindNodeMode
+    {
+        // return NULL from FindNode() of a subtree was not realized
+        wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED,
+
+        // call BuildBranch() from FindNode() to realize a subtree
+        wxFIND_NODE_BUILD_SUBTREE,
+    };
+
 protected:
     void InitTree();
     void ScheduleRefresh();
 
-    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
+    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item,
+                                  wxFindNodeMode mode =
+                                    wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED );
     wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
     wxGtkTreeModelNode *FindParentNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindParentNode( GtkTreeIter *iter );
@@ -2450,9 +2462,9 @@ class wxCellRendererPixbuf: GtkCellRendererPixbuf
 public:
     static GType Type();
     static GtkCellRenderer* New();
-    void Set(const wxBitmap& bitmap);
+    void Set(const wxBitmapBundle& bundle);
 
-    wxBitmap* m_bitmap;
+    wxBitmapBundle* m_bundle;
 
     wxDECLARE_NO_COPY_CLASS(wxCellRendererPixbuf);
     wxCellRendererPixbuf() wxMEMBER_DELETE;
@@ -2480,48 +2492,44 @@ GType wxCellRendererPixbuf::Type()
 GtkCellRenderer* wxCellRendererPixbuf::New()
 {
     wxCellRendererPixbuf* crp = WX_CELL_RENDERER_PIXBUF(g_object_new(Type(), NULL));
-    crp->m_bitmap = new wxBitmap;
+    crp->m_bundle = new wxBitmapBundle;
     return GTK_CELL_RENDERER(crp);
 }
 
-void wxCellRendererPixbuf::Set(const wxBitmap& bitmap)
+void wxCellRendererPixbuf::Set(const wxBitmapBundle& bundle)
 {
-    *m_bitmap = bitmap;
+    *m_bundle = bundle;
 
     GdkPixbuf* pixbuf = NULL;
-    GdkPixbuf* pixbufNew = NULL;
-    if (bitmap.IsOk())
+    if (bundle.IsOk())
     {
-        if (bitmap.GetScaleFactor() <= 1)
-        {
-            pixbuf = bitmap.GetPixbuf();
-            m_bitmap->UnRef();
-        }
-        else
-        {
-            pixbufNew =
-            pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
-                int(bitmap.GetLogicalWidth()), int(bitmap.GetLogicalHeight()));
-        }
+        const wxSize size(bundle.GetDefaultSize());
+        pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8, size.x, size.y);
     }
     g_object_set(G_OBJECT(this), "pixbuf", pixbuf, NULL);
-    if (pixbufNew)
-        g_object_unref(pixbufNew);
+    if (pixbuf)
+        g_object_unref(pixbuf);
 }
 } // anonymous namespace
 
 extern "C" {
 static void
 wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget,
-    const GdkRectangle* background_area, const GdkRectangle* cell_area, GtkCellRendererState flags)
+    const GdkRectangle* /*background_area*/, const GdkRectangle* cell_area,
+    GtkCellRendererState /*flags*/)
 {
-    const wxBitmap& bitmap = *WX_CELL_RENDERER_PIXBUF(cell)->m_bitmap;
-    if (!bitmap.IsOk())
-        wxCellRendererPixbufParentClass->render(cell, cr, widget, background_area, cell_area, flags);
-    else
+    const wxBitmapBundle& bundle = *WX_CELL_RENDERER_PIXBUF(cell)->m_bundle;
+    if (bundle.IsOk())
     {
-        const int x = (cell_area->width  - int(bitmap.GetLogicalWidth() )) / 2;
-        const int y = (cell_area->height - int(bitmap.GetLogicalHeight())) / 2;
+        int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+        if (wx_is_at_least_gtk3(10))
+            scale = gtk_widget_get_scale_factor(widget);
+#endif
+        const wxSize size(bundle.GetDefaultSize());
+        const wxBitmap bitmap(bundle.GetBitmap(size * scale));
+        const int x = (cell_area->width  - size.x) / 2;
+        const int y = (cell_area->height - size.y) / 2;
         bitmap.Draw(cr, cell_area->x + x, cell_area->y + y);
     }
 }
@@ -2529,8 +2537,8 @@ wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget
 static void wxCellRendererPixbufFinalize(GObject* object)
 {
     wxCellRendererPixbuf* crp = WX_CELL_RENDERER_PIXBUF(object);
-    delete crp->m_bitmap;
-    crp->m_bitmap = NULL;
+    delete crp->m_bundle;
+    crp->m_bundle = NULL;
     G_OBJECT_CLASS(wxCellRendererPixbufParentClass)->finalize(object);
 }
 
@@ -3103,10 +3111,10 @@ bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
 
     SetTextValue(m_value.GetText());
 
-    const wxIcon& icon = m_value.GetIcon();
 #ifdef __WXGTK3__
-    WX_CELL_RENDERER_PIXBUF(m_rendererIcon)->Set(icon);
+    WX_CELL_RENDERER_PIXBUF(m_rendererIcon)->Set(m_value.GetBitmapBundle());
 #else
+    const wxIcon& icon = m_value.GetIcon();
     g_object_set(G_OBJECT(m_rendererIcon), "pixbuf", icon.IsOk() ? icon.GetPixbuf() : NULL, NULL);
 #endif
 
@@ -3123,6 +3131,26 @@ bool wxDataViewIconTextRenderer::GetValue(wxVariant& value) const
     value << wxDataViewIconText(str, m_value.GetIcon());
 
     return true;
+}
+
+void wxDataViewIconTextRenderer::SetAttr(const wxDataViewItemAttr& attr)
+{
+    BaseType::SetAttr(attr);
+
+    if (attr.HasBackgroundColour())
+    {
+#ifdef __WXGTK3__
+        const GdkRGBA* rbga = attr.GetBackgroundColour();
+        g_object_set(G_OBJECT(m_rendererIcon), "cell-background-rgba", rbga, NULL);
+#else
+        const GdkColor* color = attr.GetBackgroundColour().GetColor();
+        g_object_set(G_OBJECT(m_rendererIcon), "cell-background-gdk", color, NULL);
+#endif
+    }
+    else
+    {
+        g_object_set(G_OBJECT(m_rendererIcon), "cell-background-set", false, NULL);
+    }
 }
 
 wxVariant
@@ -3959,7 +3987,7 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
 {
     if (!m_wx_model->IsVirtualListModel())
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent );
+        wxGtkTreeModelNode *parent_node = FindNode( parent, wxFIND_NODE_BUILD_SUBTREE );
         wxCHECK_MSG(parent_node, false,
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
@@ -3972,6 +4000,17 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
 
         const wxGtkTreeModelChildren& nodeSiblings = parent_node->GetChildren();
         const int nodeSiblingsSize = nodeSiblings.size();
+
+        if ( nodeSiblingsSize == 0 )
+        {
+            BuildBranch( parent_node );
+            return true;
+        }
+        else
+        {
+            if ( parent_node->FindChildByItem(item) != wxNOT_FOUND )
+                return true;
+        }
 
         int nodePos = 0;
 
@@ -4398,10 +4437,13 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
 }
 
 
-static wxGtkTreeModelNode*
-wxDataViewCtrlInternal_FindNode( wxDataViewModel * model, wxGtkTreeModelNode *treeNode, const wxDataViewItem &item )
+wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item,
+                                                      wxFindNodeMode mode )
 {
-    if( model == NULL )
+    if ( !item.IsOk() )
+        return m_root;
+
+    if( m_wx_model == NULL )
         return NULL;
 
     ItemList list;
@@ -4412,14 +4454,25 @@ wxDataViewCtrlInternal_FindNode( wxDataViewModel * model, wxGtkTreeModelNode *tr
     {
         wxDataViewItem * pItem = new wxDataViewItem( it );
         list.Insert( pItem );
-        it = model->GetParent( it );
+        it = m_wx_model->GetParent( it );
     }
 
-    wxGtkTreeModelNode * node = treeNode;
+    wxGtkTreeModelNode * node = m_root;
     for( ItemList::compatibility_iterator n = list.GetFirst(); n; n = n->GetNext() )
     {
         if( node && node->GetNodes().GetCount() != 0 )
         {
+            switch ( mode )
+            {
+                case wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED:
+                    // Do nothing and a subtree will not built.
+                    break;
+
+                case wxFIND_NODE_BUILD_SUBTREE:
+                    BuildBranch( node );
+                    break;
+            }
+
             int len = node->GetNodes().GetCount();
             wxGtkTreeModelNodes &nodes = node->GetNodes();
             int j = 0;
@@ -4450,35 +4503,14 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
         return m_root;
 
     wxDataViewItem item( (void*) iter->user_data );
-    if (!item.IsOk())
-        return m_root;
 
-    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_wx_model, m_root, item );
+    const wxFindNodeMode mode = wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED;
+    wxGtkTreeModelNode *result = FindNode( item, mode );
 
 /*
     if (!result)
     {
         wxLogDebug( "Not found %p", iter->user_data );
-        char *crash = NULL;
-        *crash = 0;
-    }
-    // TODO: remove this code
-*/
-
-    return result;
-}
-
-wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item )
-{
-    if (!item.IsOk())
-        return m_root;
-
-    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_wx_model, m_root, item );
-
-/*
-    if (!result)
-    {
-        wxLogDebug( "Not found %p", item.GetID() );
         char *crash = NULL;
         *crash = 0;
     }
