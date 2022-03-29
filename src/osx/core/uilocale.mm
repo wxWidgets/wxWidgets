@@ -101,7 +101,10 @@ public:
 
     void Use() wxOVERRIDE;
     wxString GetName() const wxOVERRIDE;
+    wxLocaleIdent GetLocaleId() const wxOVERRIDE;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const wxOVERRIDE;
+    wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const wxOVERRIDE;
 
@@ -130,10 +133,76 @@ wxUILocaleImplCF::GetName() const
     return wxCFStringRef::AsString([m_nsloc localeIdentifier]);
 }
 
+wxLocaleIdent
+wxUILocaleImplCF::GetLocaleId() const
+{
+    return wxLocaleIdent::FromTag(GetName());
+}
+
 wxString
 wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 {
     return wxGetInfoFromCFLocale((CFLocaleRef)m_nsloc, index, cat);
+}
+
+wxString
+wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
+{
+    NSString* str = NULL;
+    switch (name)
+    {
+        case wxLOCALE_NAME_LOCALE:
+            switch (form)
+            {
+                case wxLOCALE_FORM_NATIVE:
+                    str = [m_nsloc localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
+                    break;
+                case wxLOCALE_FORM_ENGLISH:
+                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    break;
+                default:
+                    wxFAIL_MSG("unknown wxLocaleForm");
+            }
+            break;
+        case wxLOCALE_NAME_LANGUAGE:
+            switch (form)
+            {
+                case wxLOCALE_FORM_NATIVE:
+                    str = [m_nsloc localizedStringForLanguageCode:[m_nsloc languageCode]];
+                    break;
+                case wxLOCALE_FORM_ENGLISH:
+                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    break;
+                default:
+                     wxFAIL_MSG("unknown wxLocaleForm");
+            }
+            break;
+        case wxLOCALE_NAME_COUNTRY:
+            switch (form)
+            {
+                case wxLOCALE_FORM_NATIVE:
+                    str = [m_nsloc localizedStringForCountryCode:[m_nsloc countryCode]];
+                    break;
+                case wxLOCALE_FORM_ENGLISH:
+                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    break;
+                default:
+                    wxFAIL_MSG("unknown wxLocaleForm");
+            }
+            break;
+    }
+    return wxCFStringRef::AsString(str);
+}
+
+wxLayoutDirection
+wxUILocaleImplCF::GetLayoutDirection() const
+{
+    NSLocaleLanguageDirection layoutDirection = [NSLocale characterDirectionForLanguage:[m_nsloc languageCode]];
+    if (layoutDirection == NSLocaleLanguageDirectionLeftToRight)
+        return wxLayout_LeftToRight;
+    else if (layoutDirection == NSLocaleLanguageDirectionRightToLeft)
+        return wxLayout_RightToLeft;
+    return wxLayout_Default;
 }
 
 /* static */
@@ -152,6 +221,19 @@ wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
 {
     return wxUILocaleImplCF::Create(locId);
+}
+
+/* static */
+wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
+{
+    wxVector<wxString> preferred;
+    NSArray* preferredLangs = [NSLocale preferredLanguages];
+    NSUInteger count = preferredLangs.count;
+
+    for (NSUInteger j = 0; j < count; ++j)
+        preferred.push_back(wxCFStringRef::AsString(preferredLangs[j]));
+
+    return preferred;
 }
 
 int

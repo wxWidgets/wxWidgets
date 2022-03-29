@@ -757,6 +757,8 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)
        : wxFrame(NULL, id, title, pos, size, style)
 {
+    m_richTextCtrl = NULL;
+
 #ifdef __WXMAC__
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
@@ -1339,6 +1341,8 @@ bool MyFrame::ProcessEvent(wxEvent& event)
             s_id = event.GetId();
 
             wxWindow* focusWin = wxFindFocusDescendant(this);
+            if (!focusWin)
+                focusWin = m_richTextCtrl;
             if (focusWin && focusWin->GetEventHandler()->ProcessEvent(event))
             {
                 //s_command = NULL;

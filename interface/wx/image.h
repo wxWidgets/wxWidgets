@@ -823,6 +823,12 @@ public:
 
         Takes care of the mask colour and out of bounds problems.
 
+        @param image
+            The image containing the data to copy, must be valid.
+        @param x
+            The horizontal position of the position to copy the data to.
+        @param y
+            The vertical position of the position to copy the data to.
         @param alphaBlend
             This parameter (new in wx 3.1.5) determines whether the alpha values
             of the original image replace (default) or are composed with the

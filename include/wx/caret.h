@@ -164,15 +164,6 @@ protected:
     virtual void DoMove() = 0;
     virtual void DoSize() { }
 
-    // the common initialization
-    void Init()
-    {
-        m_window = NULL;
-        m_x = m_y = 0;
-        m_width = m_height = 0;
-        m_countVisible = 0;
-    }
-
     // the size of the caret
     int m_width, m_height;
 
@@ -186,6 +177,14 @@ protected:
     int m_countVisible;
 
 private:
+    void Init()
+    {
+        m_window = NULL;
+        m_x = m_y = 0;
+        m_width = m_height = 0;
+        m_countVisible = 0;
+    }
+
     wxDECLARE_NO_COPY_CLASS(wxCaretBase);
 };
 

@@ -2535,7 +2535,8 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         else
 #endif // wxUSE_POSTSCRIPT
         {
-            wxBitmap bmp(width, height);
+            wxBitmap bmp;
+            bmp.CreateWithDIPSize(wxSize(width, height), GetDPIScaleFactor());
             wxMemoryDC mdc(bmp);
             mdc.SetBackground(*wxWHITE_BRUSH);
             mdc.Clear();

@@ -354,7 +354,6 @@ void wxGenericFontDialog::CreateWidgets()
 
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(itemBoxSizer2);
-    this->SetAutoLayout(true);
 
     wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer2->Add(itemBoxSizer3, 1, wxGROW|wxALL, 5);
@@ -514,7 +513,6 @@ void wxGenericFontDialog::CreateWidgets()
 
     GetSizer()->SetItemMinSize(m_previewer, is_pda ? 100 : 430, is_pda ? 40 : 100);
     GetSizer()->SetSizeHints(this);
-    GetSizer()->Fit(this);
 
     Centre(wxBOTH);
 

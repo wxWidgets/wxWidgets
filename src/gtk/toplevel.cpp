@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/recguard.h"
 #include "wx/sysopt.h"
 
 #include "wx/gtk/private.h"
@@ -61,7 +62,7 @@ static wxTopLevelWindowGTK *g_activeFrame = NULL;
 
 extern wxCursor g_globalCursor;
 extern wxCursor g_busyCursor;
-extern bool g_inSizeAllocate;
+extern wxRecursionGuardFlag g_inSizeAllocate;
 
 #ifdef GDK_WINDOWING_X11
 // Whether _NET_REQUEST_FRAME_EXTENTS support is working
@@ -258,8 +259,7 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
     if (win->m_clientWidth  != alloc->width ||
         win->m_clientHeight != alloc->height)
     {
-        const bool save_inSizeAllocate = g_inSizeAllocate;
-        g_inSizeAllocate = true;
+        wxRecursionGuard setInSizeAllocate(g_inSizeAllocate);
 
         win->m_clientWidth  = alloc->width;
         win->m_clientHeight = alloc->height;
@@ -280,8 +280,6 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
             win->HandleWindowEvent(event);
         }
         // else the window is currently unmapped, don't generate size events
-
-        g_inSizeAllocate = save_inSizeAllocate;
     }
 }
 }

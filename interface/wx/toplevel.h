@@ -585,6 +585,13 @@ public:
     /**
         If the platform supports it will set the window to be translucent.
 
+        Note that in wxGTK this function must be called before the window is
+        shown the first time it's called (but it can be called again after
+        showing the window too).
+
+        See @ref page_samples_shaped "the shaped sample" for an example of
+        using this function.
+
         @param alpha
             Determines how opaque or transparent the window will be, if the
             platform supports the operation. A value of 0 sets the window to be

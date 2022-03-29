@@ -42,7 +42,7 @@ The following sections explain how to compile wxWidgets with each supported
 compiler, see the "Building Applications" section about the instructions for
 building your application using wxWidgets.
 
-All makefiles and project are located in build\msw directory.
+All makefiles and project are located in `build\msw` directory.
 
 Microsoft Visual C++ Compilation       {#msw_build_msvs}
 ----------------------------------------------------------------
@@ -119,7 +119,7 @@ contributors. If the version is out of date, please [create an issue or pull req
 ### Special notes for Visual Studio 2010+
 
 For Visual Studio 2010+ solutions it is possible to customize the build by
-creating a `wx_local.props` file in the build\msw directory which is used, if it
+creating a `wx_local.props` file in the `build\msw` directory which is used, if it
 exists, by the projects. The settings in that file override the default values
 for the properties such as wxCfg (corresponding to the CFG makefile variable
 described below) or wxVendor (corresponding to VENDOR). The typical way to
@@ -239,7 +239,7 @@ executed from a DOS command line window (cmd.exe, *not* Bash sh.exe).
          make command without `setup_h` at the end to work around a bug
          in the current makefiles.
 
-2. To verify your build, change the directory to samples\minimal and
+2. To verify your build, change the directory to `samples\minimal` and
    run the same mingw32-make command (with the same parameters there),
    this should create a working minimal wxWidgets sample.
 

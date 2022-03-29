@@ -32,6 +32,31 @@ enum wxLayoutDirection
 // wxLocaleCategory: the category of locale settings
 // ----------------------------------------------------------------------------
 
+enum wxLocaleTagType
+{
+    // Default (tag as given or else same as wxLOCALE_TAGTYPE_SYSTEM)
+    wxLOCALE_TAGTYPE_DEFAULT,
+
+    // Default type of the system (platform-dependent)
+    wxLOCALE_TAGTYPE_SYSTEM,
+
+    // BCP47-like type: <language>[-<script>][-<region>][-<modifier>]
+    wxLOCALE_TAGTYPE_BCP47,
+
+    // macOS type: <language>[-<script>][_<region>]
+    wxLOCALE_TAGTYPE_MACOS,
+
+    // POSIX type: <language>_<region>[.<charset>][@{<scriptalias>|<modifier>}]
+    wxLOCALE_TAGTYPE_POSIX,
+
+    // Windows type:  <language>[-<script>][-<region>][-<extension>][_<sortorder>]
+    wxLOCALE_TAGTYPE_WINDOWS
+};
+
+// ----------------------------------------------------------------------------
+// wxLocaleCategory: the category of locale settings
+// ----------------------------------------------------------------------------
+
 enum wxLocaleCategory
 {
     // (any) numbers
@@ -72,6 +97,27 @@ enum wxLocaleInfo
     wxLOCALE_DATE_TIME_FMT,
     wxLOCALE_TIME_FMT
 
+};
+
+// ----------------------------------------------------------------------------
+// wxLocaleName: the items understood by wxLocale::GetLocalizedName()
+// ----------------------------------------------------------------------------
+
+enum wxLocaleName
+{
+    wxLOCALE_NAME_LOCALE,
+    wxLOCALE_NAME_LANGUAGE,
+    wxLOCALE_NAME_COUNTRY
+};
+
+// ----------------------------------------------------------------------------
+// wxLocaleForm: the forms of names understood by wxLocale::GetLocalizedName()
+// ----------------------------------------------------------------------------
+
+enum wxLocaleForm
+{
+    wxLOCALE_FORM_NATIVE,
+    wxLOCALE_FORM_ENGLISH
 };
 
 // ----------------------------------------------------------------------------
