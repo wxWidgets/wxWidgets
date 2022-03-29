@@ -130,6 +130,11 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Install CCache
+        uses: hendrikmuhs/ccache-action@v1.2.1
+        with:
+          key: ${{ matrix.name }}
+
       - name: System and environment setup
         run: |
           normal_uid=`id --user`
@@ -148,6 +153,8 @@ jobs:
           echo "wxMAKE_ARGS=-k -j$cpu_count" >> $GITHUB_ENV
 
           echo "wxMAKEFILE_ERROR_CXXFLAGS=-Werror -Wno-error=cpp" >> $GITHUB_ENV
+
+          echo "PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
 
       - name: Configure
         run: |
