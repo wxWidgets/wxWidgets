@@ -114,7 +114,28 @@ void wxDynamicLibrary::ReportError(wxString* errorDest,
     wxASSERT(msg.Find("%s") != wxNOT_FOUND);
 
     const char* de = dlerror();
-    wxString err(de ? de : "");
+    wxString err(de ? de : ""), rest;
+
+    // Perform some normalization to the error string
+    // to avoid repeating the filename in the log message,
+    // if possible, and to maintain consistency with MSW:
+    // the error message should preferably contain just the error
+
+    // drop "<filename>: " from the beginning of the error
+    if ( err.StartsWith(name + ": ", &rest) )
+        err = rest;
+
+#ifdef __WXOSX__
+    if ( err.Contains(name) )
+    {
+        // drop everything before the first ": "
+        // the error is something like:
+        // "dlopen(mylib.dylib, 2): image not found"
+        // the actual error message begins after the first ": "
+        err = err.AfterFirst(':');
+        err.Trim();
+    }
+#endif
 
     if ( err.empty() )
         err = _("Unknown dynamic library error");
