@@ -17,7 +17,6 @@
 
 #include "wx/caret.h"
 #include "wx/gtk/private/wrapgtk.h"
-#include "wx/gtk/private/backend.h"
 
 // ===========================================================================
 // implementation
@@ -84,10 +83,10 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 
 void wxCaret::Init()
 {
-    wxCaretBase::Init();
-
     m_hasFocus = true;
     m_blinkedOut = true;
+
+    m_blinkTime = GetBlinkTime();
 }
 
 void wxCaret::SetupTimer()
@@ -138,20 +137,19 @@ void wxCaret::OnKillFocus()
 
 void wxCaret::DoShow()
 {
-    if ( m_blinkedOut )
-        Blink();
+    if ( !m_blinkedOut )
+        Draw();
 
-    int blinkTime = GetBlinkTime();
-    if ( blinkTime )
-        m_timer.Start(blinkTime);
+    if ( m_blinkTime )
+        m_timer.Start(m_blinkTime);
 }
 
 void wxCaret::DoHide()
 {
     m_timer.Stop();
 
-    if ( !m_blinkedOut )
-        Blink();
+    if ( m_blinkedOut )
+        Draw();
 }
 
 // ---------------------------------------------------------------------------
@@ -167,22 +165,10 @@ void wxCaret::DoMove()
 void wxCaret::SetPosition(int x, int y)
 {
     // blink out the caret at the old position first.
-    if ( IsVisible() )
-    {
-        if ( wxGTKImpl::IsWayland(NULL) )
-        {
-            GetWindow()->RefreshRect(wxRect(m_x, m_y, m_width , m_height), false);
-        }
-        else if ( !m_blinkedOut )
-        {
-            Blink();
-        }
-    }
+    if ( !m_blinkedOut )
+        Blink();
 
     wxCaretBase::SetPosition(x, y);
-
-    if ( wxGTKImpl::IsWayland(NULL) )
-        GetWindow()->RefreshRect(wxRect(m_x, m_y, m_width , m_height), false);
 }
 
 // ---------------------------------------------------------------------------
@@ -193,7 +179,7 @@ void wxCaret::Blink()
 {
     m_blinkedOut = !m_blinkedOut;
 
-    Draw();
+    GetWindow()->RefreshRect(wxRect(m_x, m_y, m_width , m_height), false);
 }
 
 void wxCaret::Draw()

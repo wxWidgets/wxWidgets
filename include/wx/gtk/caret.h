@@ -21,7 +21,9 @@ public:
     {
         Init();
 
-        (void)Create(window, width, height);
+        // Some characters under the caret (e.g. the 'g' char) appear to be trimmed
+        // at the bottom, so we add 1 to the height.
+        (void)Create(window, width, height + 1);
 
         SetupTimer();
     }
@@ -30,7 +32,7 @@ public:
     {
         Init();
 
-        (void)Create(window, size);
+        (void)Create(window, size + wxSize(0, 1));
 
         SetupTimer();
     }
@@ -65,6 +67,7 @@ protected:
 private:
     bool m_hasFocus;
     bool m_blinkedOut;
+    int  m_blinkTime;
 
     wxTimer m_timer;
 
