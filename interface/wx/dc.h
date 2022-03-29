@@ -1155,9 +1155,10 @@ public:
     /**
         Sets the current font for the DC.
 
-        If the argument is ::wxNullFont (or another invalid font; see wxFont::IsOk),
-        the current font is selected out of the device context (leaving wxDC without
-        any valid font), allowing the current font to be destroyed safely.
+        The @a font parameter should be valid, although in wxMSW port (only)
+        the argument ::wxNullFont is also accepted and resets the device
+        context font to the default value used by the system (which is not
+        generally useful).
 
         @see wxFont
     */
