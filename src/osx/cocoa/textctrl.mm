@@ -374,6 +374,20 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         [super flagsChanged:event];
 }
 
+- (void) rightMouseDown:(NSEvent*) event
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
+    if ( impl == NULL || !impl->DoHandleMouseEvent( event ) )
+        [super rightMouseDown:event];
+}
+
+- (void) rightMouseUp:(NSEvent*) event
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
+    if ( impl == NULL || !impl->DoHandleMouseEvent( event ) )
+        [super rightMouseUp:event];
+}
+
 - (void) insertText:(id) str
 {
     // We should never generate char events for the text being inserted
