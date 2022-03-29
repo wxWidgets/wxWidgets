@@ -1764,7 +1764,6 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     sizer->Add( m_controlBar, wxSizerFlags().Expand().Border() );
     sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
 
-    SetAutoLayout( true );
     SetSizer( sizer );
 
     m_modalityKind = kind;

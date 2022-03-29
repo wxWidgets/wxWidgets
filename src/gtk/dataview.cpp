@@ -3136,6 +3136,26 @@ bool wxDataViewIconTextRenderer::GetValue(wxVariant& value) const
     return true;
 }
 
+void wxDataViewIconTextRenderer::SetAttr(const wxDataViewItemAttr& attr)
+{
+    BaseType::SetAttr(attr);
+
+    if (attr.HasBackgroundColour())
+    {
+#ifdef __WXGTK3__
+        const GdkRGBA* rbga = attr.GetBackgroundColour();
+        g_object_set(G_OBJECT(m_rendererIcon), "cell-background-rgba", rbga, NULL);
+#else
+        const GdkColor* color = attr.GetBackgroundColour().GetColor();
+        g_object_set(G_OBJECT(m_rendererIcon), "cell-background-gdk", color, NULL);
+#endif
+    }
+    else
+    {
+        g_object_set(G_OBJECT(m_rendererIcon), "cell-background-set", false, NULL);
+    }
+}
+
 wxVariant
 wxDataViewIconTextRenderer::GtkGetValueFromString(const wxString& str) const
 {

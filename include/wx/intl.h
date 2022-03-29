@@ -270,6 +270,7 @@ private:
                    m_strShort;        // short name for the locale
     int            m_language;        // this locale wxLanguage value
 
+    wxString       m_oldUILocale;     // previous wxUILocale name
     const char  *m_pszOldLocale;      // previous locale from setlocale()
     wxLocale      *m_pOldLocale;      // previous wxLocale
 #ifdef __WIN32__

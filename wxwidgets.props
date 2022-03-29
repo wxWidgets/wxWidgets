@@ -116,7 +116,7 @@
   <Target Name="CheckWXLibs">
     <Error
       Condition="'$(wxUsingDll)$(wxUsingLib)' == ''"
-      Text="wxWidgets libraries not found under &quot;$(MSBuildThisFileDirectory)lib&quot;." />
+      Text="wxWidgets libraries not found under &quot;$(MSBuildThisFileDirectory)lib\vc{,$(wxToolsetVersion),$(wxToolsetVerABICompat)}$(wxArchSuffix)_{lib,dll}$(wxCfg)&quot;." />
   </Target>
 
   <ItemDefinitionGroup>

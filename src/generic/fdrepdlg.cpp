@@ -204,11 +204,9 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     if ( style & wxFR_NOUPDOWN)
         m_radioDir->Enable(false);
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
 
     Centre( wxBOTH );
 

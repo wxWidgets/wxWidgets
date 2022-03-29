@@ -216,6 +216,7 @@ protected:
 
 class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewTextRenderer
 {
+    typedef wxDataViewTextRenderer BaseType;
 public:
     static wxString GetDefaultType() { return wxS("wxDataViewIconText"); }
 
@@ -230,6 +231,7 @@ public:
     virtual void GtkPackIntoColumn(GtkTreeViewColumn *column) wxOVERRIDE;
 
 protected:
+    virtual void SetAttr(const wxDataViewItemAttr& attr) wxOVERRIDE;
     virtual wxVariant GtkGetValueFromString(const wxString& str) const wxOVERRIDE;
 
 private:

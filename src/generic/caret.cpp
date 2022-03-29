@@ -243,13 +243,10 @@ void wxCaret::Refresh()
         return;
     }
 
-    wxMemoryDC dcMem;
-    dcMem.SelectObject(m_bmpUnderCaret);
     if ( m_blinkedOut )
     {
         // restore the old image
-        dcWin.Blit(m_xOld, m_yOld, m_width, m_height,
-                   &dcMem, 0, 0);
+        dcWin.DrawBitmap(m_bmpUnderCaret, m_xOld, m_yOld);
         m_xOld =
         m_yOld = -1;
     }
@@ -257,6 +254,7 @@ void wxCaret::Refresh()
     {
         if ( m_xOld == -1 && m_yOld == -1 )
         {
+            wxMemoryDC dcMem(m_bmpUnderCaret);
             // save the part we're going to overdraw
             dcMem.Blit(0, 0, m_width, m_height,
                        &dcWin, m_x, m_y);
@@ -287,8 +285,16 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
             brush = *wxWHITE_BRUSH;
         }
     }
-    dc->SetPen( pen );
-    dc->SetBrush(m_hasFocus ? brush : *wxTRANSPARENT_BRUSH);
+    if (m_hasFocus)
+    {
+        dc->SetPen(*wxTRANSPARENT_PEN);
+        dc->SetBrush(brush);
+    }
+    else
+    {
+        dc->SetPen(pen);
+        dc->SetBrush(*wxTRANSPARENT_BRUSH);
+    }
 
     // VZ: unfortunately, the rectangle comes out a pixel smaller when this is
     //     done under wxGTK - no idea why
