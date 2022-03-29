@@ -35,6 +35,12 @@ httpbin_launch() {
             blinker==1.4 brotlipy==0.7.0 cffi==1.14.5 click==7.0 decorator==4.4.2
             itsdangerous==1.1.0 pycparser==2.20 raven==6.10.0 werkzeug==0.16.1'
             ;;
+
+        *)
+            # Installing Flask 2.1.0 and its dependency Werkzeug 2.1.0 results
+            # in failures when trying to run httpbin, so stick to an older but
+            # working version.
+            pip_explicit_deps='Flask==2.0.3 Werkzeug==2.0.3'
     esac
 
     # Ensure that we have at least some version of pip and setuptools required
