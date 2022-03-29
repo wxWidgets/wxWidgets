@@ -37,26 +37,28 @@
 // helper for XXXTextExtent() methods
 // ----------------------------------------------------------------------------
 
-template <typename T>
-struct GetTextExtentTester
+namespace
 {
-    // Constructor runs a couple of simple tests for GetTextExtent().
-    GetTextExtentTester(const T& obj)
-    {
-        // Test that getting the height only doesn't crash.
-        int y;
-        obj.GetTextExtent("H", NULL, &y);
 
-        CHECK( y > 1 );
+// Run a couple of simple tests for GetTextExtent().
+template <typename T>
+void GetTextExtentTester(const T& obj)
+{
+    // Test that getting the height only doesn't crash.
+    int y;
+    obj.GetTextExtent("H", NULL, &y);
 
-        wxSize size = obj.GetTextExtent("Hello");
-        CHECK( size.x > 1 );
-        CHECK( size.y == y );
+    CHECK( y > 1 );
 
-        // Test that getting text extent of an empty string returns (0, 0).
-        CHECK( obj.GetTextExtent(wxString()) == wxSize() );
-    }
-};
+    wxSize size = obj.GetTextExtent("Hello");
+    CHECK( size.x > 1 );
+    CHECK( size.y == y );
+
+    // Test that getting text extent of an empty string returns (0, 0).
+    CHECK( obj.GetTextExtent(wxString()) == wxSize() );
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // tests themselves
@@ -66,7 +68,7 @@ TEST_CASE("wxDC::GetTextExtent", "[dc][text-extent]")
 {
     wxClientDC dc(wxTheApp->GetTopWindow());
 
-    GetTextExtentTester<wxClientDC> testDC(dc);
+    GetTextExtentTester(dc);
 
     int w;
     dc.GetMultiLineTextExtent("Good\nbye", &w, NULL);
@@ -86,14 +88,14 @@ TEST_CASE("wxMemoryDC::GetTextExtent", "[memdc][text-extent]")
 {
     wxBitmap bmp(100, 100);
     wxMemoryDC memdc(bmp);
-    GetTextExtentTester<wxMemoryDC> testMem(memdc);
+    GetTextExtentTester(memdc);
 
     // Under MSW, this wxDC should work even without any valid font -- but
     // this is not the case under wxGTK and probably neither elsewhere, so
     // restrict this test to that platform only.
 #ifdef __WXMSW__
     memdc.SetFont(wxNullFont);
-    GetTextExtentTester<wxMemoryDC> testMemNoFont(memdc);
+    GetTextExtentTester(memdc);
 #endif // __WXMSW__
 }
 
@@ -106,7 +108,7 @@ TEST_CASE("wxPostScriptDC::GetTextExtent", "[psdc][text-extent]")
     // should set the default font in it implicitly but for now just work
     // around it.
     psdc.SetFont(*wxNORMAL_FONT);
-    GetTextExtentTester<wxPostScriptDC> testPS(psdc);
+    GetTextExtentTester(psdc);
 }
 #endif // wxUSE_POSTSCRIPT
 
@@ -114,7 +116,7 @@ TEST_CASE("wxPostScriptDC::GetTextExtent", "[psdc][text-extent]")
 TEST_CASE("wxEnhMetaFileDC::GetTextExtent", "[emfdc][text-extent]")
 {
     wxEnhMetaFileDC metadc;
-    GetTextExtentTester<wxEnhMetaFileDC> testMF(metadc);
+    GetTextExtentTester(metadc);
 }
 #endif // wxUSE_ENH_METAFILE
 
@@ -146,7 +148,7 @@ TEST_CASE("wxWindow::GetTextExtent", "[window][text-extent]")
 {
     wxWindow* const win = wxTheApp->GetTopWindow();
 
-    GetTextExtentTester<wxWindow> testWin(*win);
+    GetTextExtentTester(*win);
 }
 
 TEST_CASE("wxDC::GetPartialTextExtent", "[dc][text-extent][partial]")
