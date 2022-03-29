@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/dcclient.h"
+#include "wx/dcmemory.h"
 #include "wx/dcps.h"
 #include "wx/metafile.h"
 
@@ -79,6 +80,13 @@ TEST_CASE("wxDC::GetTextExtent", "[dc][text-extent]")
 
     // And even empty strings count like one line.
     CHECK( dc.GetMultiLineTextExtent(wxString()) == wxSize(0, sz.y) );
+}
+
+TEST_CASE("wxMemoryDC::GetTextExtent", "[memdc][text-extent]")
+{
+    wxBitmap bmp(100, 100);
+    wxMemoryDC memdc(bmp);
+    GetTextExtentTester<wxMemoryDC> testMem(memdc);
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
