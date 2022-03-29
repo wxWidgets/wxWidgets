@@ -87,6 +87,14 @@ TEST_CASE("wxMemoryDC::GetTextExtent", "[memdc][text-extent]")
     wxBitmap bmp(100, 100);
     wxMemoryDC memdc(bmp);
     GetTextExtentTester<wxMemoryDC> testMem(memdc);
+
+    // Under MSW, this wxDC should work even without any valid font -- but
+    // this is not the case under wxGTK and probably neither elsewhere, so
+    // restrict this test to that platform only.
+#ifdef __WXMSW__
+    memdc.SetFont(wxNullFont);
+    GetTextExtentTester<wxMemoryDC> testMemNoFont(memdc);
+#endif // __WXMSW__
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
