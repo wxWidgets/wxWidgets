@@ -383,8 +383,8 @@ wxUILocaleImplUnix::DoGetLangInfo2(wxLocaleForm form,
                                    nl_item nlNative1, nl_item nlEnglish1,
                                    nl_item nlNative2, nl_item nlEnglish2) const
 {
-    wxString str1 = DoGetLangInfo(form, nlNative1, nl_item nlEnglish1);
-    wxString str2 = DoGetLangInfo(form, nlNative2, nl_item nlEnglish2);
+    wxString str1 = DoGetLangInfo(form, nlNative1, nlEnglish1);
+    wxString str2 = DoGetLangInfo(form, nlNative2, nlEnglish2);
     if (!str2.empty())
     {
         str1 << " (" << str2 << ")";
