@@ -1772,7 +1772,7 @@ public:
 
       This feature is enabled by default and will replace any new line (\n) character entered
       into a single-line text field with the space character.
-      Usually single-line text fields are not expected to hold multiple lines of text (that is 
+      Usually single-line text fields are not expected to hold multiple lines of text (that is
       what wxTE_MULTILINE is for, after all). However, under MacOS/Cocoa, a multi-line text control
       created with the wxTE_MULTILINE flag will not respond correctly to keypressed when run from
       inside a plugin.
