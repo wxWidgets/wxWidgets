@@ -79,9 +79,11 @@ TEST_CASE("wxDC::GetTextExtent", "[dc][text-extent]")
 
     // And even empty strings count like one line.
     CHECK( dc.GetMultiLineTextExtent(wxString()) == wxSize(0, sz.y) );
+}
 
-    // Test the functions with some other DC kinds also.
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
+TEST_CASE("wxPostScriptDC::GetTextExtent", "[psdc][text-extent]")
+{
     wxPostScriptDC psdc;
     // wxPostScriptDC doesn't have any font set by default but its
     // GetTextExtent() requires one to be set. This is probably a bug and we
@@ -89,13 +91,16 @@ TEST_CASE("wxDC::GetTextExtent", "[dc][text-extent]")
     // around it.
     psdc.SetFont(*wxNORMAL_FONT);
     GetTextExtentTester<wxPostScriptDC> testPS(psdc);
-#endif
+}
+#endif // wxUSE_POSTSCRIPT
 
 #if wxUSE_ENH_METAFILE
+TEST_CASE("wxEnhMetaFileDC::GetTextExtent", "[emfdc][text-extent]")
+{
     wxEnhMetaFileDC metadc;
     GetTextExtentTester<wxEnhMetaFileDC> testMF(metadc);
-#endif
 }
+#endif // wxUSE_ENH_METAFILE
 
 TEST_CASE("wxDC::LeadingAndDescent", "[dc][text-extent]")
 {
