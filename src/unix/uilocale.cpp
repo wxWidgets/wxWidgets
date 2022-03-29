@@ -73,6 +73,12 @@ private:
 #ifdef HAVE_LANGINFO_H
     // Call nl_langinfo_l() if available, or nl_langinfo() otherwise.
     const char* GetLangInfo(nl_item item) const;
+
+    // Call GetLangInfo() using either the native or English item depending on
+    // the form needed.
+    wxString GetFormOfLangInfo(wxLocaleForm form,
+                               nl_item nlNative,
+                               nl_item nlEnglish) const;
 #endif // HAVE_LANGINFO_H
 
     wxLocaleIdent m_locId;
@@ -363,6 +369,31 @@ wxUILocaleImplUnix::GetLangInfo(nl_item item) const
     return nl_langinfo(item);
 }
 
+wxString
+wxUILocaleImplUnix::GetFormOfLangInfo(wxLocaleForm form,
+                                      nl_item nlNative,
+                                      nl_item nlEnglish) const
+{
+    // Choose a random value that we're sure is never going to be used with
+    // this function (it doesn't make sense for this one to exist in native in
+    // English versions, so it seems to fit the bill well).
+    nl_item item = RADIXCHAR;
+    switch ( form )
+    {
+        case wxLOCALE_FORM_NATIVE:
+            item = nlNative;
+            break;
+
+        case wxLOCALE_FORM_ENGLISH:
+            item = nlEnglish;
+            break;
+    }
+
+    wxCHECK_MSG( item != RADIXCHAR, wxString(), "unknown wxLocaleForm" );
+
+    return wxString(GetLangInfo(item), wxCSConv(m_codeset));
+}
+
 #endif // HAVE_LANGINFO_H
 
 wxString
@@ -422,58 +453,33 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
-            switch (form)
             {
-                case wxLOCALE_FORM_NATIVE:
-                    {
-                        str = wxString(GetLangInfo(_NL_ADDRESS_LANG_NAME), wxCSConv(m_codeset));
-                        wxString strCtry = wxString(GetLangInfo(_NL_ADDRESS_COUNTRY_NAME), wxCSConv(m_codeset));
-                        if (!strCtry.empty())
-                        {
-                            str << " (" << strCtry << ")";
-                        }
-                    }
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    {
-                        str = wxString(GetLangInfo(_NL_IDENTIFICATION_LANGUAGE), wxCSConv(m_codeset));
-                        wxString strCtry = wxString(GetLangInfo(_NL_IDENTIFICATION_TERRITORY), wxCSConv(m_codeset));
-                        if (!strCtry.empty())
-                        {
-                            str << " (" << strCtry << ")";
-                        }
-                    }
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
+                str = GetFormOfLangInfo(form,
+                                        _NL_ADDRESS_LANG_NAME,
+                                        _NL_IDENTIFICATION_LANGUAGE);
+                const wxString
+                    strCtry = GetFormOfLangInfo(form,
+                                                _NL_ADDRESS_COUNTRY_NAME,
+                                                _NL_IDENTIFICATION_TERRITORY);
+                if (!strCtry.empty())
+                {
+                    str << " (" << strCtry << ")";
+                }
             }
             break;
+
         case wxLOCALE_NAME_LANGUAGE:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = wxString(GetLangInfo(_NL_ADDRESS_LANG_NAME), wxCSConv(m_codeset));
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = wxString(GetLangInfo(_NL_IDENTIFICATION_LANGUAGE), wxCSConv(m_codeset));
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = GetFormOfLangInfo(form,
+                                    _NL_ADDRESS_LANG_NAME,
+                                    _NL_IDENTIFICATION_LANGUAGE);
             break;
+
         case wxLOCALE_NAME_COUNTRY:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = wxString(GetLangInfo(_NL_ADDRESS_COUNTRY_NAME), wxCSConv(m_codeset));
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = wxString(GetLangInfo(_NL_IDENTIFICATION_TERRITORY), wxCSConv(m_codeset));
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = GetFormOfLangInfo(form,
+                                    _NL_ADDRESS_COUNTRY_NAME,
+                                    _NL_IDENTIFICATION_TERRITORY);
             break;
+
         default:
             wxFAIL_MSG("unknown wxLocaleName");
     }
