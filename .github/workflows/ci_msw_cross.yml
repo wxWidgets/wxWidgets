@@ -249,7 +249,7 @@ jobs:
           excluded_gui_tests+=('~ClippingBoxTestCase*')
           excluded_gui_tests+=('~ComboBoxTestCase') # TextChangeEvents
           excluded_gui_tests+=('~DatePickerCtrlTestCase') # Range
-          excluded_gui_tests+=('~wxDC::GetTextExtent')
+          excluded_gui_tests+=('~wxEnhMetaFileDC::GetTextExtent')
           excluded_gui_tests+=('~ExecTestCase')
           excluded_gui_tests+=('~wxFont::GetSet')
           excluded_gui_tests+=('~GraphicsPathTestCaseGDIPlus')
