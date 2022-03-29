@@ -112,7 +112,8 @@ void wxDynamicLibrary::ReportError(const wxString& message,
     // msg needs a %s for the name
     wxASSERT(msg.Find("%s") != wxNOT_FOUND);
 
-    wxString err(dlerror());
+    const char* de = dlerror();
+    wxString err(de ? de : "");
 
     if ( err.empty() )
         err = _("Unknown dynamic library error");
