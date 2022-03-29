@@ -35,6 +35,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/gdkconv.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/image.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/treeview.h"
@@ -2461,9 +2462,9 @@ class wxCellRendererPixbuf: GtkCellRendererPixbuf
 public:
     static GType Type();
     static GtkCellRenderer* New();
-    void Set(const wxBitmap& bitmap);
+    void Set(const wxBitmapBundle& bundle);
 
-    wxBitmap* m_bitmap;
+    wxBitmapBundle* m_bundle;
 
     wxDECLARE_NO_COPY_CLASS(wxCellRendererPixbuf);
     wxCellRendererPixbuf() wxMEMBER_DELETE;
@@ -2491,48 +2492,44 @@ GType wxCellRendererPixbuf::Type()
 GtkCellRenderer* wxCellRendererPixbuf::New()
 {
     wxCellRendererPixbuf* crp = WX_CELL_RENDERER_PIXBUF(g_object_new(Type(), NULL));
-    crp->m_bitmap = new wxBitmap;
+    crp->m_bundle = new wxBitmapBundle;
     return GTK_CELL_RENDERER(crp);
 }
 
-void wxCellRendererPixbuf::Set(const wxBitmap& bitmap)
+void wxCellRendererPixbuf::Set(const wxBitmapBundle& bundle)
 {
-    *m_bitmap = bitmap;
+    *m_bundle = bundle;
 
     GdkPixbuf* pixbuf = NULL;
-    GdkPixbuf* pixbufNew = NULL;
-    if (bitmap.IsOk())
+    if (bundle.IsOk())
     {
-        if (bitmap.GetScaleFactor() <= 1)
-        {
-            pixbuf = bitmap.GetPixbuf();
-            m_bitmap->UnRef();
-        }
-        else
-        {
-            pixbufNew =
-            pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
-                int(bitmap.GetLogicalWidth()), int(bitmap.GetLogicalHeight()));
-        }
+        const wxSize size(bundle.GetDefaultSize());
+        pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8, size.x, size.y);
     }
     g_object_set(G_OBJECT(this), "pixbuf", pixbuf, NULL);
-    if (pixbufNew)
-        g_object_unref(pixbufNew);
+    if (pixbuf)
+        g_object_unref(pixbuf);
 }
 } // anonymous namespace
 
 extern "C" {
 static void
 wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget,
-    const GdkRectangle* background_area, const GdkRectangle* cell_area, GtkCellRendererState flags)
+    const GdkRectangle* /*background_area*/, const GdkRectangle* cell_area,
+    GtkCellRendererState /*flags*/)
 {
-    const wxBitmap& bitmap = *WX_CELL_RENDERER_PIXBUF(cell)->m_bitmap;
-    if (!bitmap.IsOk())
-        wxCellRendererPixbufParentClass->render(cell, cr, widget, background_area, cell_area, flags);
-    else
+    const wxBitmapBundle& bundle = *WX_CELL_RENDERER_PIXBUF(cell)->m_bundle;
+    if (bundle.IsOk())
     {
-        const int x = (cell_area->width  - int(bitmap.GetLogicalWidth() )) / 2;
-        const int y = (cell_area->height - int(bitmap.GetLogicalHeight())) / 2;
+        int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+        if (wx_is_at_least_gtk3(10))
+            scale = gtk_widget_get_scale_factor(widget);
+#endif
+        const wxSize size(bundle.GetDefaultSize());
+        const wxBitmap bitmap(bundle.GetBitmap(size * scale));
+        const int x = (cell_area->width  - size.x) / 2;
+        const int y = (cell_area->height - size.y) / 2;
         bitmap.Draw(cr, cell_area->x + x, cell_area->y + y);
     }
 }
@@ -2540,8 +2537,8 @@ wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget
 static void wxCellRendererPixbufFinalize(GObject* object)
 {
     wxCellRendererPixbuf* crp = WX_CELL_RENDERER_PIXBUF(object);
-    delete crp->m_bitmap;
-    crp->m_bitmap = NULL;
+    delete crp->m_bundle;
+    crp->m_bundle = NULL;
     G_OBJECT_CLASS(wxCellRendererPixbufParentClass)->finalize(object);
 }
 
@@ -3114,10 +3111,10 @@ bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
 
     SetTextValue(m_value.GetText());
 
-    const wxIcon& icon = m_value.GetIcon();
 #ifdef __WXGTK3__
-    WX_CELL_RENDERER_PIXBUF(m_rendererIcon)->Set(icon);
+    WX_CELL_RENDERER_PIXBUF(m_rendererIcon)->Set(m_value.GetBitmapBundle());
 #else
+    const wxIcon& icon = m_value.GetIcon();
     g_object_set(G_OBJECT(m_rendererIcon), "pixbuf", icon.IsOk() ? icon.GetPixbuf() : NULL, NULL);
 #endif
 
