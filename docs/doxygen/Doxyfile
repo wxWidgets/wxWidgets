@@ -351,7 +351,7 @@ IGNORE_PREFIX          = wx
 #---------------------------------------------------------------------------
 
 GENERATE_HTML          = $(GENERATE_HTML)
-HTML_OUTPUT            = html
+HTML_OUTPUT            = $(WX_HTML_OUTPUT_DIR)
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = custom_header.html
 HTML_FOOTER            = custom_footer.html
