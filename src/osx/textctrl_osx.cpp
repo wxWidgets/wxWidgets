@@ -70,9 +70,7 @@ wxEND_EVENT_TABLE()
 void wxTextCtrl::Init()
 {
     m_dirty = false;
-
     m_privateContextMenu = NULL;
-    m_replaceNewLine = true;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -134,7 +132,6 @@ void wxTextCtrl::MacCheckSpelling(bool check)
 #endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 void wxTextCtrl::OSXEnableNewLineReplacement(bool enable)
 {
-    m_replaceNewLine = enable;
     GetTextPeer()->EnableNewLineReplacement(enable);
 }
 
@@ -464,7 +461,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     return;
             }
 
-            if ( !(m_windowStyle & wxTE_MULTILINE) && m_replaceNewLine )
+            if ( !(m_windowStyle & wxTE_MULTILINE) && GetTextPeer()->GetNewLineReplacement() )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )

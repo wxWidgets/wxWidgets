@@ -145,6 +145,12 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 {
     replaceNewLine = enable;
 }
+
+- (bool) getReplaceNewLine
+{
+    return replaceNewLine;
+}
+
 - (void) forceUpper
 {
     forceUpper = true;
@@ -1322,6 +1328,12 @@ void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
 void wxNSTextViewControl::EnableNewLineReplacement(bool enable)
 {
 }
+
+bool wxNSTextViewControl::GetNewLineReplacement()
+{
+	return false;
+}
+
 wxSize wxNSTextViewControl::GetBestSize() const
 {
     wxSize size;
@@ -1396,7 +1408,6 @@ void wxNSTextFieldControl::Init(WXWidget w)
     [m_textField setDelegate: tf];
     m_selStart = m_selEnd = 0;
     m_hasEditor = [w isKindOfClass:[NSTextField class]];
-
     GetFormatter(); // we always need to at least replace new line characters with spaces
 }
 
@@ -1442,6 +1453,12 @@ void wxNSTextFieldControl::EnableNewLineReplacement(bool enable)
 {
     [GetFormatter() replaceNewLine:enable];
 }
+
+bool wxNSTextFieldControl::GetNewLineReplacement()
+{
+    return [GetFormatter() getReplaceNewLine];
+}
+
 void wxNSTextFieldControl::ForceUpper()
 {
     [GetFormatter() forceUpper];

@@ -167,8 +167,6 @@ protected:
 private :
     wxMenu  *m_privateContextMenu;
 
-    // stores if the text control replaces new lines with spaces or not
-    bool m_replaceNewLine;
     wxDECLARE_EVENT_TABLE();
 };
 
