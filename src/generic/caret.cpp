@@ -99,8 +99,6 @@ void wxCaret::InitGeneric()
     m_blinkedOut = true;
     m_xOld =
     m_yOld = -1;
-    if (!m_overlay.IsNative() && m_width && m_height)
-        m_bmpUnderCaret.Create(m_width, m_height);
 }
 
 wxCaret::~wxCaret()
@@ -176,8 +174,6 @@ void wxCaret::DoSize()
     {
         // Change bitmap size
         m_bmpUnderCaret.UnRef();
-        if (m_width && m_height)
-            m_bmpUnderCaret.Create(m_width, m_height);
     }
 
     if (countVisible > 0)
@@ -254,6 +250,8 @@ void wxCaret::Refresh()
     {
         if ( m_xOld == -1 && m_yOld == -1 )
         {
+            if (!m_bmpUnderCaret.IsOk())
+                m_bmpUnderCaret.Create(m_width, m_height, dcWin);
             wxMemoryDC dcMem(m_bmpUnderCaret);
             // save the part we're going to overdraw
             dcMem.Blit(0, 0, m_width, m_height,
