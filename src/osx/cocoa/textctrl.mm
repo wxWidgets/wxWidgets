@@ -1331,7 +1331,7 @@ void wxNSTextViewControl::EnableNewLineReplacement(bool enable)
 
 bool wxNSTextViewControl::GetNewLineReplacement()
 {
-	return false;
+    return false;
 }
 
 wxSize wxNSTextViewControl::GetBestSize() const
