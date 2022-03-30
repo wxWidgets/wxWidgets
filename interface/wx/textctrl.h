@@ -1773,18 +1773,17 @@ public:
       This feature is enabled by default and will replace any new line (\n) character entered
       into a single-line text field with the space character.
       Usually single-line text fields are not expected to hold multiple lines of text (that is
-      what wxTE_MULTILINE is for, after all). However, under MacOS/Cocoa, a multi-line text control
-      created with the wxTE_MULTILINE flag will not respond correctly to keypressed when run from
-      inside a plugin.
-      In that case, this function can be called on a single-line text control (created without the
-      wxTE_MULTILINE flag) to disable the new line replacement and turn it into a multi-line text
-      control that also works correctly from inside a plugin.
+      what wxTE_MULTILINE is for, after all) and it is impossible to have multiple
+      lines of text in them under non-Mac platforms. However, under MacOS/Cocoa, a
+      single-line text control can still show multiple lines and this function allows
+      to lift the restriction preventing multiple lines from being entered unless
+      wxTE_MULTILINE is specified.
 
       Note: This function is only available for MacOS/Cocoa. It also has no effect if the
       wxTE_MULTILINE flag is set on a text control.
 
       @onlyfor{wxosx}
-
+    @since 3.1.6
     */
     virtual void OSXEnableNewLineReplacement(bool enable);
 
