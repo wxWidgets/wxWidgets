@@ -1784,7 +1784,7 @@ public:
       wxTE_MULTILINE flag is set on a text control.
 
       @onlyfor{wxosx}
-
+    @since 3.1.6
     */
     virtual void OSXEnableNewLineReplacement(bool enable);
 
