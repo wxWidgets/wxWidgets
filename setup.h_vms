@@ -1316,7 +1316,7 @@ typedef pid_t GPid;
 #undef ICONV_CONST
 
 /* Define if you have the <langinfo.h> header file.  */
-#define HAVE_LANGINFO_H 1
+#undef HAVE_LANGINFO_H
 
 /* Define if you have the <esd.h> header file.  */
 /* #undef HAVE_ESD_H */
