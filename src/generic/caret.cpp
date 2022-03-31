@@ -284,6 +284,9 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
             brush = *wxWHITE_BRUSH;
         }
     }
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsContext* gc = dc->GetGraphicsContext();
+#endif
     if (m_hasFocus)
     {
         dc->SetPen(*wxTRANSPARENT_PEN);
@@ -295,7 +298,6 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
         dc->SetPen(pen);
         dc->SetBrush(*wxTRANSPARENT_BRUSH);
 #if wxUSE_GRAPHICS_CONTEXT
-        wxGraphicsContext* gc = dc->GetGraphicsContext();
         if (gc)
         {
             // Draw outline rect so that its outside edges correspond with
@@ -308,9 +310,12 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
 #endif
     }
 
-    // VZ: unfortunately, the rectangle comes out a pixel smaller when this is
-    //     done under wxGTK - no idea why
-    //dc->SetLogicalFunction(wxINVERT);
+#if wxUSE_GRAPHICS_CONTEXT
+    if (gc == NULL)
+#endif
+    {
+        dc->SetLogicalFunction(wxINVERT);
+    }
 
     dc->DrawRectangle(m_x, m_y, m_width, m_height);
 }
