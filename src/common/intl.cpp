@@ -159,17 +159,22 @@ const char* wxLanguageInfo::TrySetLocale() const
 
 const char* wxLanguageInfo::TrySetLocale() const
 {
-    return wxSetlocale(LC_ALL, CanonicalRef.empty() ? CanonicalName : CanonicalRef);
+    return wxSetlocale(LC_ALL, GetCanonicalWithRegion());
 }
 
 #endif // __WINDOWS__/!__WINDOWS__
 
 wxString wxLanguageInfo::GetLocaleName() const
 {
-    wxString localeId = CanonicalRef.empty() ? CanonicalName : CanonicalRef;
+    wxString localeId = GetCanonicalWithRegion();
     wxUILocale uiLocale = wxUILocale::FromTag(localeId);
     wxString localeName = uiLocale.IsSupported() ? uiLocale.GetName() : wxString();
     return localeName;
+}
+
+wxString wxLanguageInfo::GetCanonicalWithRegion() const
+{
+    return CanonicalRef.empty() ? CanonicalName : CanonicalRef;
 }
 
 // ----------------------------------------------------------------------------
@@ -295,7 +300,7 @@ bool wxLocale::Init(const wxString& name,
         else
         {
             strName = langInfo->Description;
-            strShort = langInfo->CanonicalRef.empty() ? langInfo->CanonicalName : langInfo->CanonicalRef;
+            strShort = langInfo->GetCanonicalWithRegion();
             languageId = langInfo->Language;
         }
     }
@@ -442,7 +447,7 @@ bool wxLocale::Init(int lang, int flags)
     else
     {
         name = info->Description;
-        shortName = info->CanonicalRef.empty() ? info->CanonicalName : info->CanonicalRef;
+        shortName = info->GetCanonicalWithRegion();
     }
 
     DoInit(name, shortName, lang);
@@ -750,7 +755,7 @@ bool wxLocale::IsAvailable(int lang)
         return false;
     }
 
-    wxString localeTag = info->CanonicalRef.empty() ? info->LocaleTag : info->CanonicalRef;
+    wxString localeTag = info->GetCanonicalWithRegion();
     wxUILocale uiLocale(wxLocaleIdent::FromTag(localeTag));
 
     return uiLocale.IsSupported();

@@ -96,11 +96,11 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     // The script tag takes precedence, if a modifier is also specified.
     //
     // The following tag syntax is accepted:
-    //   BCP47:   language[-script][-region][-extension]
-    //   Windows: language[-script][-region][-extension][_sortorder]
-    //   Windows CRT: language[_region][.codepage]
-    //   POSIX:   language[_region][.charset][@modifier]
-    //   macOS:   language[-script][_region]
+    //   BCP47:    language[-script][-region][-extension]
+    //   Windows:  language[-script][-region][-extension][_sortorder]
+    //   POSIX:    language[_region][.charset][@modifier]
+    //   macOS:    language[-script][_region]
+    //   MSVC CRT: language[_region][.codepage]
 
     wxLocaleIdent locId;
 
@@ -731,6 +731,9 @@ wxString wxUILocale::GetLanguageCanonicalName(int lang)
 /* static */
 const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
 {
+    if (locale.empty())
+        return NULL;
+
     CreateLanguagesDB();
 
     // Determine full language and region names, which will be compared
@@ -782,6 +785,9 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
 /* static */
 const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
 {
+    if (locId.IsEmpty())
+        return NULL;
+
     CreateLanguagesDB();
 
     const wxLanguageInfo* infoRet = NULL;
