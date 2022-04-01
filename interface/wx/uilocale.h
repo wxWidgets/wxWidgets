@@ -225,7 +225,9 @@ public:
         This function may be used to find the language description structure for the
         given locale, specified either as a two letter ISO language code (for example,
         "pt"), a language code followed by the country code ("pt_BR") or a full, human
-        readable, language description ("Portuguese-Brazil").
+        readable, language description ("Portuguese_Brazil"). Please note that only
+        the underscore character is supported as the separator between language and
+        region codes.
 
         Returns the information for the given language or @NULL if this language
         is unknown. Note that even if the returned pointer is valid, the caller
@@ -351,8 +353,9 @@ public:
 
         - BCP-47,
         - Windows,
-        - POSIX, and
-        - macOS.
+        - POSIX,
+        - macOS. and
+        - MSVC CRT.
 
         See section 2.01 of https://www.rfc-editor.org/rfc/bcp/bcp47.txt for the
         full BCP-47 syntax. Here we fully support just the subset we're interested in:
@@ -374,10 +377,11 @@ public:
 
         The following tag syntax is accepted:
 
-        - BCP-47:  \<language\>[-\<script\>][-\<region\>][-\<extension\>]
-        - Windows: \<language\>[-\<script\>][-\<region\>][-\<extension\>][_\<sortorder\>]
-        - POSIX:   \<language\>[_\<region\>][.\<charset\>][@@\<modifier\>]
-        - macOS:   \<language\>[-\<script\>][_\<region\>]
+        - BCP-47:   \<language\>[-\<script\>][-\<region\>][-\<extension\>]
+        - Windows:  \<language\>[-\<script\>][-\<region\>][-\<extension\>][_\<sortorder\>]
+        - POSIX:    \<language\>[_\<region\>][.\<charset\>][@@\<modifier\>]
+        - macOS:    \<language\>[-\<script\>][_\<region\>]
+        - MSVC CRT: \<language\>[_\<region\>][.\<charset\>]
 
         The string must contain at least the language part (2 or 3 ASCII
         letters) and may contain script and region separated by dashes, i.e.
@@ -396,6 +400,11 @@ public:
         empty wxLocaleIdent is returned. Of course, even if this function
         returns a non-empty object, the resulting locale may still be invalid
         or unsupported, use wxUILocale::IsSupported() to check for this.
+
+        Note that the format "MSVC CRT" (Microsoft Visual C++ C RunTime) is
+        only supported as an input format, so that locale names as returned
+        by the CRT function setlocale can be handled, mainly for compatibility
+        with wxLocale.
      */
     static wxLocaleIdent FromTag(const wxString& tag);
 

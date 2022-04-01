@@ -41,7 +41,6 @@ namespace
 const char* validCharsAlpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const char* validCharsAlnum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 const char* validCharsModExt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
-const char* validCharsTag = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.@";
 
 // Handle special case "ca-ES-valencia"
 // Sync attributes modifier and extension
@@ -97,17 +96,11 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     // The script tag takes precedence, if a modifier is also specified.
     //
     // The following tag syntax is accepted:
-    //   BCP47:   language[-script][-region][-extension]
-    //   Windows: language[-script][-region][-extension][_sortorder]
-    //   POSIX:   language[_region][.charset][@modifier]
-    //   macOS:   language[-script][_region]
-
-    // Locale tags must always use alphanumeric characters and certain special characters "-_.@"
-    if (tag.find_first_not_of(validCharsTag) != wxString::npos)
-    {
-        wxFAIL_MSG("tag contains invalid characters (not alphanumeric) or invalid delimiters");
-        return wxLocaleIdent();
-    }
+    //   BCP47:    language[-script][-region][-extension]
+    //   Windows:  language[-script][-region][-extension][_sortorder]
+    //   POSIX:    language[_region][.charset][@modifier]
+    //   macOS:    language[-script][_region]
+    //   MSVC CRT: language[_region][.codepage]
 
     wxLocaleIdent locId;
 
@@ -125,10 +118,6 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
         else
             locId.Modifier(tagRest);
     }
-    else
-    {
-        wxASSERT_MSG(tag.find('@') == wxString::npos, "modifier delimiter found, but modifier is empty");
-    }
 
     // 1b. Check for charset in POSIX tag
     tagMain = tagMain.BeforeFirst('.', &tagRest);
@@ -137,27 +126,40 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
         // POSIX charset found
         locId.Charset(tagRest);
     }
-    else
+
+    // 1c. Check for Windows CRT language and region names
     {
-        wxASSERT_MSG(tagMain.find('.') == wxString::npos, "charset delimiter found, but charset is empty");
+        // The tag is potentially a Windows CRT language/region name,
+        // if language and region part both have a length greater 3
+        // (that is, they are not given as ISO codes)
+        wxString tagTemp = tagMain.BeforeFirst('_', &tagRest);
+        if (tagTemp.length() > 3 && (tagRest.empty() || tagRest.length() > 3))
+        {
+            const wxLanguageInfo* const info = wxUILocale::FindLanguageInfo(tagMain);
+            if (info)
+            {
+                tagMain = info->LocaleTag;
+            }
+        }
     }
 
-    // 1c. Check for sort order in Windows tag
+    // 1d. Check for sort order in Windows tag
     //
     // Make sure we don't extract the region identifier erroneously as a sortorder identifier
-    wxString tagTemp = tagMain.BeforeFirst('_', &tagRest);
-    if (tagRest.length() > 4 && locId.m_modifier.empty() && locId.m_charset.empty())
     {
-        // Windows sortorder found
-        locId.SortOrder(tagRest);
-        tagMain = tagTemp;
+        wxString tagTemp = tagMain.BeforeFirst('_', &tagRest);
+        if (tagRest.length() > 4 && locId.m_modifier.empty() && locId.m_charset.empty())
+        {
+            // Windows sortorder found
+            locId.SortOrder(tagRest);
+            tagMain = tagTemp;
+        }
     }
 
     // 2. Handle remaining tag identifier as being BCP47-like
 
     // Now that special POSIX attributes have been handled
     // POSIX specific delimiters must no longer be present
-    wxASSERT_MSG(tagMain.find_first_of(".@") == wxString::npos, "tag contains invalid delimiters");
 
     // Replace '_' separators by '-' to simplify further processing
     tagMain.Replace("_", "-");
@@ -208,13 +210,11 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
         case 4:
             // Must be an ISO 15924 script.
-            wxASSERT_MSG(locId.m_script.empty(), "script already set");
             locId.m_script = (*it).Left(1).Upper() + (*it).Mid(2).Lower();
             break;
 
         default:
             // This looks to be completely invalid.
-            wxFAIL_MSG("invalid code length, script or region code expected");
             return wxLocaleIdent();
     }
 
@@ -731,7 +731,23 @@ wxString wxUILocale::GetLanguageCanonicalName(int lang)
 /* static */
 const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
 {
+    if (locale.empty())
+        return NULL;
+
     CreateLanguagesDB();
+
+    // Determine full language and region names, which will be compared
+    // to the entry description in the language database.
+    // The locale string may have the form "language[_region][.codeset]".
+    // We ignore the "codeset" part here.
+    wxString region;
+    wxString languageOnly = locale.BeforeFirst('.').BeforeFirst('_', &region);
+    wxString language= languageOnly;
+    if (!region.empty())
+    {
+        // Construct description consisting of language and region
+        language << " (" << region << ")";
+    }
 
     const wxLanguageInfo* infoRet = NULL;
 
@@ -742,14 +758,15 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
         const wxLanguageInfo* info = &languagesDB[i];
 
         if (wxStricmp(locale, info->CanonicalName) == 0 ||
-            wxStricmp(locale, info->Description) == 0)
+            wxStricmp(language, info->Description) == 0)
         {
             // exact match, stop searching
             infoRet = info;
             break;
         }
 
-        if (wxStricmp(locale, info->CanonicalName.BeforeFirst(wxS('_'))) == 0)
+        if (wxStricmp(locale, info->CanonicalName.BeforeFirst(wxS('_'))) == 0 ||
+            wxStricmp(languageOnly, info->Description) == 0)
         {
             // a match -- but maybe we'll find an exact one later, so continue
             // looking
@@ -768,6 +785,9 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
 /* static */
 const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
 {
+    if (locId.IsEmpty())
+        return NULL;
+
     CreateLanguagesDB();
 
     const wxLanguageInfo* infoRet = NULL;
