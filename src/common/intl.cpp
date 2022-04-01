@@ -259,6 +259,9 @@ bool wxLocale::Init(const wxString& name,
                   wxS("wxLocale::Init with bConvertEncoding=false is no longer supported, add charset to your catalogs") );
 #endif
 
+    wxString strName(name);
+    wxString strShort(shortName);
+
     // change current locale (default: same as long name)
     wxString szLocale(locale);
     if ( szLocale.empty() )
@@ -270,26 +273,35 @@ bool wxLocale::Init(const wxString& name,
                     wxS("no locale to set in wxLocale::Init()") );
     }
 
-    if ( const wxLanguageInfo* langInfo = FindLanguageInfo(szLocale) )
+    int languageId = wxLANGUAGE_UNKNOWN;
+    wxLocaleIdent localeId = wxLocaleIdent::FromTag(szLocale);
+    if ( const wxLanguageInfo* langInfo = wxUILocale::FindLanguageInfo(localeId) )
     {
         // Prefer to use Init(wxLanguage) overload if possible as it will
         // correctly set our m_language and also set the locale correctly under
         // MSW, where just calling wxSetLocale() as we do below is not enough.
         //
-        // However don't do it if the parameters are incompatible with this
-        // language, e.g. if we are called with something like ("French", "de")
-        // to use French locale but German translations: this seems unlikely to
-        // happen but, in principle, it could.
-        if ( langInfo->CanonicalName.StartsWith(shortName) )
+        // However don't do it if
+        //   1. the locale is not empty, or
+        //   2. the parameters are incompatible with this language,
+        //      e.g. if we are called with something like ("French", "de")
+        //      to use French locale but German translations:
+        //      this seems unlikely to happen but, in principle, it could.
+        if ( locale.empty() && langInfo->CanonicalName.StartsWith(shortName) )
         {
             return Init(langInfo->Language,
                         bLoadDefault ? wxLOCALE_LOAD_DEFAULT : 0);
+        }
+        else
+        {
+            strName = langInfo->Description;
+            strShort = langInfo->CanonicalRef.empty() ? langInfo->CanonicalName : langInfo->CanonicalRef;
+            languageId = langInfo->Language;
         }
     }
 
     // the short name will be used to look for catalog files as well,
     // so we need something here
-    wxString strShort(shortName);
     if ( strShort.empty() ) {
         // FIXME I don't know how these 2 letter abbreviations are formed,
         //       this wild guess is surely wrong
@@ -301,7 +313,7 @@ bool wxLocale::Init(const wxString& name,
         }
     }
 
-    DoInit(name, strShort, wxLANGUAGE_UNKNOWN);
+    DoInit(strName, strShort, languageId);
 
 #if defined(__UNIX__) || defined(__WIN32__)
     const wxString oldUILocale = wxUILocale::GetCurrent().GetName();
@@ -311,7 +323,7 @@ bool wxLocale::Init(const wxString& name,
         m_oldUILocale = oldUILocale;
     }
 
-    // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
+    // Under (non-Darwin) Unix wxUILocale already set the C locale, but under
     // the other platforms we still have to do it here.
 #if defined(__WIN32__) || defined(__WXOSX__)
     ok = wxSetlocale(LC_ALL, szLocale) != NULL;
@@ -321,7 +333,7 @@ bool wxLocale::Init(const wxString& name,
     bool ok = false;
 #endif
 
-    return DoCommonPostInit(ok, szLocale, shortName, bLoadDefault);
+    return DoCommonPostInit(ok, szLocale, strShort, bLoadDefault);
 }
 
 void wxLocale::DoInit(const wxString& name,

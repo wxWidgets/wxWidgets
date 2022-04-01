@@ -225,7 +225,7 @@ public:
         This function may be used to find the language description structure for the
         given locale, specified either as a two letter ISO language code (for example,
         "pt"), a language code followed by the country code ("pt_BR") or a full, human
-        readable, language description ("Portuguese-Brazil").
+        readable, language description ("Portuguese_Brazil").
 
         Returns the information for the given language or @NULL if this language
         is unknown. Note that even if the returned pointer is valid, the caller
@@ -374,10 +374,11 @@ public:
 
         The following tag syntax is accepted:
 
-        - BCP-47:  \<language\>[-\<script\>][-\<region\>][-\<extension\>]
-        - Windows: \<language\>[-\<script\>][-\<region\>][-\<extension\>][_\<sortorder\>]
-        - POSIX:   \<language\>[_\<region\>][.\<charset\>][@@\<modifier\>]
-        - macOS:   \<language\>[-\<script\>][_\<region\>]
+        - BCP-47:      \<language\>[-\<script\>][-\<region\>][-\<extension\>]
+        - Windows:     \<language\>[-\<script\>][-\<region\>][-\<extension\>][_\<sortorder\>]
+        - Windows CRT: \<language\>[_\<region\>][.\<charset\>]
+        - POSIX:       \<language\>[_\<region\>][.\<charset\>][@@\<modifier\>]
+        - macOS:       \<language\>[-\<script\>][_\<region\>]
 
         The string must contain at least the language part (2 or 3 ASCII
         letters) and may contain script and region separated by dashes, i.e.

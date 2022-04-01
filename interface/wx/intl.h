@@ -400,7 +400,7 @@ public:
         This function may be used to find the language description structure for the
         given locale, specified either as a two letter ISO language code (for example,
         "pt"), a language code followed by the country code ("pt_BR") or a full, human
-        readable, language description ("Portuguese-Brazil").
+        readable, language description ("Portuguese_Brazil").
 
         Returns the information for the given language or @NULL if this language
         is unknown. Note that even if the returned pointer is valid, the caller
