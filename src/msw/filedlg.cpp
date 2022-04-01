@@ -430,6 +430,8 @@ int wxFileDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
+    wxWindowDisabler disableOthers(this);
+
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
     WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
 

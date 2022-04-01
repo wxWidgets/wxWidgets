@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/msw/private.h"
+    #include "wx/utils.h"                   // for wxWindowDisabler
 #endif
 
 // This will define wxHAS_MSW_TASKDIALOG if we have support for it in the
@@ -36,6 +37,8 @@ int wxRichMessageDialog::ShowModal()
 
     if ( HasNativeTaskDialog() )
     {
+        wxWindowDisabler disableOthers(this);
+
         // create a task dialog
         WinStruct<TASKDIALOGCONFIG> tdc;
         wxMSWTaskDialogConfig wxTdc(*this);
