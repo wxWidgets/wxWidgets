@@ -151,6 +151,9 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
     // supported
     wxString GetLocaleName() const;
 
+    // returns CanonicalRef if set, otherwise CanonicalName
+    wxString GetCanonicalWithRegion() const;
+
     // Call setlocale() and return non-null value if it works for this language.
     //
     // This function is mostly for internal use, as changing locale involves

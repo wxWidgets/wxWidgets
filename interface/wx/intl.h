@@ -87,6 +87,16 @@ struct wxLanguageInfo
         string is empty.
      */
     wxString GetLocaleName() const;
+
+    /**
+        Return the canonical locale name including the region, if known.
+
+        The value is identical to @c CanonicalRef, if not empty,
+        otherwise it is identical to @c CanonicalName.
+
+        @since 3.1.6
+    */
+    wxString GetCanonicalWithRegion() const;
 };
 
 

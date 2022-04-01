@@ -157,7 +157,7 @@ locale_t TryCreateMatchingLocale(wxLocaleIdent& locId)
               it != infos.end();
               ++it )
         {
-            const wxString& fullname = it->CanonicalRef.empty() ? it->CanonicalName : it->CanonicalRef;
+            const wxString& fullname = it->GetCanonicalWithRegion();
             if ( fullname.BeforeFirst('_') == lang )
             {
                 // We never have encoding in our canonical names, but we
