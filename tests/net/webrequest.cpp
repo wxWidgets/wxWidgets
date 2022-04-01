@@ -323,16 +323,30 @@ TEST_CASE_METHOD(RequestFixture,
 TEST_CASE_METHOD(RequestFixture,
     "WebRequest::SSL::Error", "[net][webrequest][error]")
 {
+    wxString selfsignedURL;
+    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    {
+        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
+        return;
+    }
+
     if (!InitBaseURL())
         return;
 
-    CreateAbs("https://self-signed.badssl.com/");
+    CreateAbs(selfsignedURL);
     Run(wxWebRequest::State_Failed, 0);
 }
 
 TEST_CASE_METHOD(RequestFixture,
     "WebRequest::SSL::Ignore", "[net][webrequest]")
 {
+    wxString selfsignedURL;
+    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    {
+        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
+        return;
+    }
+
     if (!InitBaseURL())
         return;
 
@@ -346,7 +360,7 @@ TEST_CASE_METHOD(RequestFixture,
     }
 #endif // __WINDOWS__
 
-    CreateAbs("https://self-signed.badssl.com/");
+    CreateAbs(selfsignedURL);
     request.DisablePeerVerify();
     Run(wxWebRequest::State_Completed, 200);
 }
