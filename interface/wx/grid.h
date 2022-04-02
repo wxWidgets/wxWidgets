@@ -1905,7 +1905,7 @@ public:
     The number of rows and columns in the table can be specified initially but
     may also be changed later dynamically.
  */
-class wxGridStringTable
+class wxGridStringTable : public wxGridTableBase
 {
 public:
     /**
