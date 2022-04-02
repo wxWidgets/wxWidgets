@@ -35,6 +35,7 @@ class GridFrame : public wxFrame
     void ToggleEditing( wxCommandEvent& );
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
+    void ToggleRowMoving( wxCommandEvent& );
     void ToggleColMoving( wxCommandEvent& );
     void ToggleColHiding( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
@@ -148,6 +149,7 @@ public:
         ID_TOGGLEEDIT,
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
+        ID_TOGGLEROWMOVING,
         ID_TOGGLECOLMOVING,
         ID_TOGGLECOLHIDING,
         ID_TOGGLEGRIDSIZING,
