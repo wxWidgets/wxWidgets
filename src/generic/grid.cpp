@@ -4022,7 +4022,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                     {
                         bool selectNewRow = false,
                              makeRowCurrent = false;
-    
+
                         if ( event.ShiftDown() && !event.CmdDown() )
                         {
                             // Continue editing the current selection and don't
@@ -4054,13 +4054,13 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                             makeRowCurrent =
                             selectNewRow = true;
                         }
-    
+
                         if ( selectNewRow )
                             m_selection->SelectRow(row, event);
-    
+
                         if ( makeRowCurrent )
                             SetCurrentCell(row, GetFirstFullyVisibleColumn());
-    
+
                         ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, rowLabelWin);
                     }
                 }
