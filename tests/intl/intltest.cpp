@@ -357,8 +357,60 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 #endif // wxUSE_UNICODE
 }
 
+// Small helper for making the test below more concise.
+static void CheckTag(const wxString& tag)
+{
+    CHECK( wxLocaleIdent::FromTag(tag).GetTag() == tag );
+}
+
+TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
+{
+    CheckTag("");
+    CheckTag("en");
+    CheckTag("en_US");
+    CheckTag("en_US.utf8");
+    CheckTag("English");
+    CheckTag("English_United States");
+    CheckTag("English_United States.utf8");
+}
+
+// Yet another helper for the test below.
+static void CheckFindLanguage(const wxString& tag, const char* expected)
+{
+    const wxLanguageInfo* const
+        info = wxUILocale::FindLanguageInfo(wxLocaleIdent::FromTag(tag));
+    if ( !expected )
+    {
+        if ( info )
+            FAIL_CHECK("Found " << info->CanonicalName << " for " << tag);
+
+        return;
+    }
+    else
+    {
+        if ( !info )
+        {
+            FAIL_CHECK("Not found for " << tag);
+            return;
+        }
+    }
+
+    CHECK( info->CanonicalName == expected );
+}
+
+TEST_CASE("wxUILocale::FindLanguageInfo", "[uilocale]")
+{
+    CheckFindLanguage("", NULL);
+    CheckFindLanguage("en", "en");
+    CheckFindLanguage("en_US", "en_US");
+    CheckFindLanguage("en_US.utf8", "en_US");
+    CheckFindLanguage("English", "en");
+    CheckFindLanguage("English_United States", "en_US");
+    CheckFindLanguage("English_United States.utf8", "en_US");
+}
+
 // Test which can be used to check if the given locale tag is supported.
-TEST_CASE("wxUILocale::FromTag", "[uilocale][.]")
+TEST_CASE("wxUILocale::FromTag", "[.]")
 {
     wxString tag;
     if ( !wxGetEnv("WX_TEST_LOCALE_TAG", &tag) )
