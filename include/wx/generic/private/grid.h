@@ -572,14 +572,9 @@ public:
 
 
     // Return the index of the line at the given position
-    //
-    // NB: currently this is always identity for the rows as reordering is only
-    //     implemented for the lines
     virtual int GetLineAt(const wxGrid *grid, int pos) const = 0;
 
     // Return the display position of the line with the given index.
-    //
-    // NB: As GetLineAt(), currently this is always identity for rows.
     virtual int GetLinePos(const wxGrid *grid, int line) const = 0;
 
     // Return the index of the line just before the given one or wxNOT_FOUND.
@@ -663,13 +658,16 @@ public:
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const wxOVERRIDE
         {  grid->SetDefaultRowSize(size, resizeExisting); }
 
-    virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int pos) const wxOVERRIDE
-        { return pos; } // TODO: implement row reordering
-    virtual int GetLinePos(const wxGrid * WXUNUSED(grid), int line) const wxOVERRIDE
-        { return line; } // TODO: implement row reordering
+    virtual int GetLineAt(const wxGrid *grid, int pos) const wxOVERRIDE
+        { return grid->GetRowAt(pos); }
+    virtual int GetLinePos(const wxGrid *grid, int line) const wxOVERRIDE
+        { return grid->GetRowPos(line); }
 
-    virtual int GetLineBefore(const wxGrid* WXUNUSED(grid), int line) const wxOVERRIDE
-        { return line - 1; }
+    virtual int GetLineBefore(const wxGrid *grid, int line) const wxOVERRIDE
+    {
+        int posBefore = grid->GetRowPos(line) - 1;
+        return posBefore >= 0 ? grid->GetRowAt(posBefore) : wxNOT_FOUND;
+    }
 
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const wxOVERRIDE
         { return grid->GetGridRowLabelWindow(); }

@@ -1899,6 +1899,11 @@ public:
     bool CanDragColSize(int col) const
         { return m_canDragColSize && DoCanResizeLine(col, m_setFixedCols); }
 
+    // interactive row reordering (disabled by default)
+    bool     EnableDragRowMove( bool enable = true );
+    void     DisableDragRowMove() { EnableDragRowMove( false ); }
+    bool     CanDragRowMove() const { return m_canDragRowMove; }
+
     // interactive column reordering (disabled by default)
     bool     EnableDragColMove( bool enable = true );
     void     DisableDragColMove() { EnableDragColMove( false ); }
@@ -2053,22 +2058,29 @@ public:
     void SetRowSizes(const wxGridSizesInfo& sizeInfo);
 
 
-    // ------- columns (only, for now) reordering
+    // ------- rows and columns reordering
 
-    // columns index <-> positions mapping: by default, the position of the
-    // column is the same as its index, but the columns can also be reordered
-    // (either by calling SetColPos() explicitly or by the user dragging the
-    // columns around) in which case their indices don't correspond to their
+    // rows and columns index <-> positions mapping: by default, the position
+    // is the same as its index, but they can also be reordered
+    // (either by calling SetRowPos()/SetColPos() explicitly or by the user
+    // dragging around) in which case their indices don't correspond to their
     // positions on display any longer
     //
     // internally we always work with indices except for the functions which
-    // have "Pos" in their names (and which work with columns, not pixels) and
-    // only the display and hit testing code really cares about display
-    // positions at all
+    // have "Pos" in their names (and which work with rows and columns, not
+    // pixels) and only the display and hit testing code really cares about
+    // display positions at all
 
-    // set the positions of all columns at once (this method uses the same
-    // conventions as wxHeaderCtrl::SetColumnsOrder() for the order array)
+    // set the positions of all rows or columns at once (this method uses the
+    // same conventions as wxHeaderCtrl::SetColumnsOrder() for the order array)
+    void SetRowsOrder(const wxArrayInt& order);
     void SetColumnsOrder(const wxArrayInt& order);
+
+    // return the row index corresponding to the given (valid) position
+    int GetRowAt(int pos) const
+    {
+        return m_rowAt.empty() ? pos : m_rowAt[pos];
+    }
 
     // return the column index corresponding to the given (valid) position
     int GetColAt(int pos) const
@@ -2076,9 +2088,29 @@ public:
         return m_colAt.empty() ? pos : m_colAt[pos];
     }
 
+    // reorder the rows so that the row with the given index is now shown
+    // as the position pos
+    void SetRowPos(int idx, int pos);
+
     // reorder the columns so that the column with the given index is now shown
     // as the position pos
     void SetColPos(int idx, int pos);
+
+    // return the position at which the row with the given index is
+    // displayed: notice that this is a slow operation as we don't maintain the
+    // reverse mapping currently
+    int GetRowPos(int idx) const
+    {
+        wxASSERT_MSG( idx >= 0 && idx < m_numRows, "invalid row index" );
+
+        if ( m_rowAt.IsEmpty() )
+            return idx;
+
+        int pos = m_rowAt.Index(idx);
+        wxASSERT_MSG( pos != wxNOT_FOUND, "invalid row index" );
+
+        return pos;
+    }
 
     // return the position at which the column with the given index is
     // displayed: notice that this is a slow operation as we don't maintain the
@@ -2096,7 +2128,8 @@ public:
         return pos;
     }
 
-    // reset the columns positions to the default order
+    // reset the rows or columns positions to the default order
+    void ResetRowPos();
     void ResetColPos();
 
 
@@ -2718,6 +2751,7 @@ protected:
         WXGRID_CURSOR_RESIZE_COL,
         WXGRID_CURSOR_SELECT_ROW,
         WXGRID_CURSOR_SELECT_COL,
+        WXGRID_CURSOR_MOVE_ROW,
         WXGRID_CURSOR_MOVE_COL
     };
 
@@ -2744,18 +2778,23 @@ protected:
     CursorMode m_cursorMode;
 
 
+    //Row positions
+    wxArrayInt m_rowAt;
+
     //Column positions
     wxArrayInt m_colAt;
 
     bool    m_canDragRowSize;
     bool    m_canDragColSize;
+    bool    m_canDragRowMove;
     bool    m_canDragColMove;
     bool    m_canHideColumns;
     bool    m_canDragGridSize;
     bool    m_canDragCell;
 
-    // Index of the column being drag-moved or -1 if there is no move operation
-    // in progress.
+    // Index of the row or column being drag-moved or -1 if there is no move
+    // operation in progress.
+    int     m_dragMoveRow;
     int     m_dragMoveCol;
 
     // Last horizontal mouse position while drag-moving a column.
@@ -2908,8 +2947,9 @@ private:
     // the sorting indicator to effectively show
     void UpdateColumnSortingIndicator(int col);
 
-    // update the grid after changing the columns order (common part of
-    // SetColPos() and ResetColPos())
+    // update the grid after changing the rows or columns order (common part
+    // of Set{Row,Col}Pos() and Reset{Row,Col}Pos())
+    void RefreshAfterRowPosChange();
     void RefreshAfterColPosChange();
 
     // reset the variables used during dragging operations after it ended,
@@ -2927,11 +2967,12 @@ private:
     }
 
 
-    // return the position (not index) of the column at the given logical pixel
-    // position
+    // return the position (not index) of the row or column at the given logical
+    // pixel position
     //
     // this always returns a valid position, even if the coordinate is out of
-    // bounds (in which case first/last column is returned)
+    // bounds (in which case first/last row/column is returned)
+    int YToPos(int y, wxGridWindow *gridWindow) const;
     int XToPos(int x, wxGridWindow *gridWindow) const;
 
     // event handlers and their helpers
@@ -2989,12 +3030,14 @@ private:
     void DoColHeaderClick(int col);
 
     void DoStartResizeRowOrCol(int col);
+    void DoStartMoveRow(int col);
     void DoStartMoveCol(int col);
 
     // These functions should only be called when actually resizing/moving,
     // i.e. m_dragRowOrCol and m_dragMoveCol, respectively, are valid.
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
+    void DoEndMoveRow(int pos);
     void DoEndMoveCol(int pos);
 
     // Helper function returning the position (only the horizontal component
@@ -3426,6 +3469,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_EDITOR_SHOWN, wxGridEvent
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_EDITOR_HIDDEN, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_EDITOR_CREATED, wxGridEditorCreatedEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_CELL_BEGIN_DRAG, wxGridEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_MOVE, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_MOVE, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_SORT, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_TABBING, wxGridEvent );
@@ -3470,6 +3514,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_ROW_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(ROW_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(COL_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_AUTO_SIZE(id, fn)       wx__DECLARE_GRIDSIZEEVT(COL_AUTO_SIZE, id, fn)
+#define EVT_GRID_CMD_ROW_MOVE(id, fn)            wx__DECLARE_GRIDEVT(ROW_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_SORT(id, fn)            wx__DECLARE_GRIDEVT(COL_SORT, id, fn)
 #define EVT_GRID_CMD_RANGE_SELECTING(id, fn)     wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECTING, id, fn)
@@ -3496,6 +3541,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_ROW_SIZE(fn)            EVT_GRID_CMD_ROW_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_SIZE(fn)            EVT_GRID_CMD_COL_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_AUTO_SIZE(fn)       EVT_GRID_CMD_COL_AUTO_SIZE(wxID_ANY, fn)
+#define EVT_GRID_ROW_MOVE(fn)            EVT_GRID_CMD_ROW_MOVE(wxID_ANY, fn)
 #define EVT_GRID_COL_MOVE(fn)            EVT_GRID_CMD_COL_MOVE(wxID_ANY, fn)
 #define EVT_GRID_COL_SORT(fn)            EVT_GRID_CMD_COL_SORT(wxID_ANY, fn)
 #define EVT_GRID_RANGE_SELECTING(fn)     EVT_GRID_CMD_RANGE_SELECTING(wxID_ANY, fn)

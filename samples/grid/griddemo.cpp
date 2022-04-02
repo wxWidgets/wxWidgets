@@ -281,6 +281,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
+    EVT_MENU( ID_TOGGLEROWMOVING, GridFrame::ToggleRowMoving)
     EVT_MENU( ID_TOGGLECOLMOVING, GridFrame::ToggleColMoving )
     EVT_MENU( ID_TOGGLECOLHIDING, GridFrame::ToggleColHiding )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
@@ -437,6 +438,7 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_TOGGLEEDIT,"&Editable");
     viewMenu->AppendCheckItem(ID_TOGGLEROWSIZING, "Ro&w drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLECOLSIZING, "C&ol drag-resize");
+    viewMenu->AppendCheckItem(ID_TOGGLEROWMOVING, "Row drag-move");
     viewMenu->AppendCheckItem(ID_TOGGLECOLMOVING, "Col drag-&move");
     viewMenu->AppendCheckItem(ID_TOGGLECOLHIDING, "Col hiding popup menu");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDSIZING, "&Grid drag-resize");
@@ -863,6 +865,12 @@ void GridFrame::ToggleColSizing( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragColSize(
         GetMenuBar()->IsChecked( ID_TOGGLECOLSIZING ) );
+}
+
+void GridFrame::ToggleRowMoving( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableDragRowMove(
+        GetMenuBar()->IsChecked( ID_TOGGLEROWMOVING ) );
 }
 
 void GridFrame::ToggleColMoving( wxCommandEvent& WXUNUSED(ev) )
@@ -1717,9 +1725,12 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
            << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
            << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
 
+    //Indicate whether this row was moved
+    if ( grid->GetRowPos( ev.GetRow() ) != ev.GetRow() )
+        logBuf << " *** Row moved, current position: " << grid->GetRowPos( ev.GetRow() );
     //Indicate whether this column was moved
-    if ( ((wxGrid *)ev.GetEventObject())->GetColPos( ev.GetCol() ) != ev.GetCol() )
-        logBuf << " *** Column moved, current position: " << ((wxGrid *)ev.GetEventObject())->GetColPos( ev.GetCol() );
+    if ( grid->GetColPos( ev.GetCol() ) != ev.GetCol() )
+        logBuf << " *** Column moved, current position: " << grid->GetColPos( ev.GetCol() );
 
     wxLogMessage( "%s", logBuf );
 
@@ -2432,6 +2443,7 @@ private:
         Id_Check_UseNativeHeader,
         Id_Check_DrawNativeLabels,
         Id_Check_ShowRowLabels,
+        Id_Check_EnableRowMove,
         Id_Check_EnableColMove
     };
 
@@ -2461,6 +2473,11 @@ private:
                                     : 0);
     }
 
+    void OnToggleRowMove(wxCommandEvent&)
+    {
+        m_grid->EnableDragRowMove(m_chkEnableRowMove->IsChecked());
+    }
+
     void OnToggleColMove(wxCommandEvent&)
     {
         m_grid->EnableDragColMove(m_chkEnableColMove->IsChecked());
@@ -2474,7 +2491,7 @@ private:
             m_grid->SetColSize(col,
                                event.GetId() == wxID_ADD ? wxGRID_AUTOSIZE : 0);
 
-            UpdateOrderAndVisibility();
+            UpdateColOrderAndVisibility();
         }
     }
 
@@ -2487,14 +2504,14 @@ private:
 
         m_grid->SetColPos(col, pos);
 
-        UpdateOrderAndVisibility();
+        UpdateColOrderAndVisibility();
     }
 
     void OnResetColumnOrder(wxCommandEvent&)
     {
         m_grid->ResetColPos();
 
-        UpdateOrderAndVisibility();
+        UpdateColOrderAndVisibility();
     }
 
     void OnGridColSort(wxGridEvent& event)
@@ -2504,11 +2521,20 @@ private:
                              m_grid->IsSortOrderAscending()));
     }
 
+    void OnGridRowMove(wxGridEvent& event)
+    {
+        // can't update it yet as the order hasn't been changed, so do it a bit
+        // later
+        m_shouldUpdateRowOrder = true;
+
+        event.Skip();
+    }
+
     void OnGridColMove(wxGridEvent& event)
     {
         // can't update it yet as the order hasn't been changed, so do it a bit
         // later
-        m_shouldUpdateOrder = true;
+        m_shouldUpdateColOrder = true;
 
         event.Skip();
     }
@@ -2518,23 +2544,29 @@ private:
         // we only catch this event to react to the user showing or hiding this
         // column using the header control menu and not because we're
         // interested in column resizing
-        UpdateOrderAndVisibility();
+        UpdateColOrderAndVisibility();
 
         event.Skip();
     }
 
     void OnIdle(wxIdleEvent& event)
     {
-        if ( m_shouldUpdateOrder )
+        if ( m_shouldUpdateColOrder )
         {
-            m_shouldUpdateOrder = false;
-            UpdateOrderAndVisibility();
+            m_shouldUpdateColOrder = false;
+            UpdateColOrderAndVisibility();
+        }
+
+        if ( m_shouldUpdateRowOrder )
+        {
+            m_shouldUpdateRowOrder = false;
+            UpdateRowOrderAndVisibility();
         }
 
         event.Skip();
     }
 
-    void UpdateOrderAndVisibility()
+    void UpdateColOrderAndVisibility()
     {
         wxString s;
         for ( int pos = 0; pos < TabularGridTable::COL_MAX; pos++ )
@@ -2554,12 +2586,33 @@ private:
         m_statOrder->SetLabel(s);
     }
 
+    void UpdateRowOrderAndVisibility()
+    {
+        wxString s;
+        for ( int pos = 0; pos < TabularGridTable::ROW_MAX; pos++ )
+        {
+            const int row = m_grid->GetRowAt(pos);
+            const bool isHidden = m_grid->GetRowSize(row) == 0;
+
+            if ( isHidden )
+                s << '[';
+            s << row;
+            if ( isHidden )
+                s << ']';
+
+            s << ' ';
+        }
+
+        m_statOrder->SetLabel(s);
+    }
+
     // controls
     wxGrid *m_grid;
     TabularGridTable *m_table;
     wxCheckBox *m_chkUseNative,
                *m_chkDrawNative,
                *m_chkShowRowLabels,
+               *m_chkEnableRowMove,
                *m_chkEnableColMove;
 
     ColIndexEntry *m_txtColIndex,
@@ -2569,7 +2622,8 @@ private:
     wxStaticText *m_statOrder;
 
     // fla for EVT_IDLE handler
-    bool m_shouldUpdateOrder;
+    bool m_shouldUpdateRowOrder,
+         m_shouldUpdateColOrder;
 
     wxDECLARE_NO_COPY_CLASS(TabularGridFrame);
     wxDECLARE_EVENT_TABLE();
@@ -2594,6 +2648,7 @@ wxBEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
     EVT_BUTTON(wxID_DELETE, TabularGridFrame::OnShowHideColumn)
 
     EVT_GRID_COL_SORT(TabularGridFrame::OnGridColSort)
+    EVT_GRID_ROW_MOVE(TabularGridFrame::OnGridRowMove)
     EVT_GRID_COL_MOVE(TabularGridFrame::OnGridColMove)
     EVT_GRID_COL_SIZE(TabularGridFrame::OnGridColSize)
 
@@ -2603,7 +2658,7 @@ wxEND_EVENT_TABLE()
 TabularGridFrame::TabularGridFrame()
                 : wxFrame(NULL, wxID_ANY, "Tabular table")
 {
-    m_shouldUpdateOrder = false;
+    m_shouldUpdateColOrder = false;
 
     wxPanel * const panel = new wxPanel(this);
 
@@ -2614,6 +2669,7 @@ TabularGridFrame::TabularGridFrame()
                         wxBORDER_STATIC | wxWANTS_CHARS);
     m_grid->AssignTable(m_table, wxGrid::wxGridSelectRows);
 
+    m_grid->EnableDragRowMove();
     m_grid->EnableDragColMove();
     m_grid->UseNativeColHeader();
     m_grid->HideRowLabels();
@@ -2637,6 +2693,12 @@ TabularGridFrame::TabularGridFrame()
     m_chkShowRowLabels = new wxCheckBox(panel, Id_Check_ShowRowLabels,
                                         "Show &row labels");
     sizerStyles->Add(m_chkShowRowLabels, wxSizerFlags().Border());
+
+    m_chkEnableRowMove = new wxCheckBox(panel, Id_Check_EnableRowMove,
+                                        "Allow row reordering");
+    m_chkEnableRowMove->SetValue(true);
+    sizerStyles->Add(m_chkEnableRowMove, wxSizerFlags().Border());
+    sizerControls->Add(sizerStyles);
 
     m_chkEnableColMove = new wxCheckBox(panel, Id_Check_EnableColMove,
                                         "Allow column re&ordering");

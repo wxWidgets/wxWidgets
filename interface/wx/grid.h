@@ -4480,8 +4480,9 @@ public:
         EnableDragGridSize() they can also be resized by dragging the right or
         bottom edge of the grid cells.
 
-        Columns can also be moved to interactively change their order but this
-        needs to be explicitly enabled with EnableDragColMove().
+        Columns and rows can also be moved to interactively change their order
+        but this needs to be explicitly enabled with EnableDragColMove() and
+        EnableDragColMove().
      */
     //@{
 
@@ -4533,6 +4534,15 @@ public:
         is enabled or @false otherwise.
     */
     bool CanDragGridSize() const;
+
+    /**
+        Returns @true if rows can be moved by dragging with the mouse.
+
+        Rows can be moved by dragging on their labels.
+
+        @since 3.1.7
+    */
+    bool CanDragRowMove() const;
 
     /**
         Returns @true if the given row can be resized by dragging with the
@@ -4587,6 +4597,15 @@ public:
     void DisableDragColMove();
 
     /**
+        Disables row moving by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragRowMove().
+
+        @since 3.1.7
+    */
+    void DisableDragRowMove();
+
+    /**
         Disables column sizing by dragging with the mouse.
 
         Equivalent to passing @false to EnableDragColSize().
@@ -4631,6 +4650,19 @@ public:
         indicate that it was successful.
     */
     bool EnableDragColMove(bool enable = true);
+
+    /**
+        Enables or disables row moving by dragging with the mouse.
+
+        Note that reordering rows by dragging them is currently not
+        supported when the grid has any frozen columns (see FreezeTo()) and if
+        this method is called with @a enable equal to @true in this situation,
+        it returns @false without doing anything. Otherwise it returns @true to
+        indicate that it was successful.
+
+        @since 3.1.7
+    */
+    bool EnableDragRowMove(bool enable = true);
 
     /**
         Enables or disables column sizing by dragging with the mouse.
@@ -4702,6 +4734,44 @@ public:
         Resets the position of the columns to the default.
     */
     void ResetColPos();
+
+    /**
+        Returns the row ID of the specified row position.
+
+        @since 3.1.7
+    */
+    int GetRowAt(int rowPos) const;
+
+    /**
+        Returns the position of the specified row.
+
+        @since 3.1.7
+    */
+    int GetRowPos(int rowID) const;
+
+    /**
+        Sets the position of the specified row.
+
+        @since 3.1.7
+    */
+    void SetRowPos(int rowID, int newPos);
+
+    /**
+        Sets the positions of all rows at once.
+
+        This method takes an array containing the indices of the rows in
+        their display order.
+
+        @since 3.1.7
+    */
+    void SetRowsOrder(const wxArrayInt& order);
+
+    /**
+        Resets the position of the rows to the default.
+
+        @since 3.1.7
+    */
+    void ResetRowPos();
 
     //@}
 
@@ -6187,6 +6257,19 @@ public:
         The given cell was made current, either by user or by the program via a
         call to SetGridCursor() or GoToCell(). Processes a
         @c wxEVT_GRID_SELECT_CELL event type.
+    @event{EVT_GRID_ROW_MOVE(func)}
+        The user tries to change the order of the rows in the grid by
+        dragging the row specified by GetRow(). This event can be vetoed to
+        either prevent the user from reordering the row change completely
+        (but notice that if you don't want to allow it at all, you simply
+        shouldn't call wxGrid::EnableDragRowMove() in the first place), vetoed
+        but handled in some way in the handler, e.g. by really moving the
+        row to the new position at the associated table level, or allowed to
+        proceed in which case wxGrid::SetRowPos() is used to reorder the
+        rows display order without affecting the use of the row indices
+        otherwise.
+        This event macro corresponds to @c wxEVT_GRID_ROW_MOVE event type.
+        It is only available since wxWidgets 3.1.7.
     @event{EVT_GRID_COL_MOVE(func)}
         The user tries to change the order of the columns in the grid by
         dragging the column specified by GetCol(). This event can be vetoed to
@@ -6582,6 +6665,7 @@ wxEventType wxEVT_GRID_EDITOR_SHOWN;
 wxEventType wxEVT_GRID_EDITOR_HIDDEN;
 wxEventType wxEVT_GRID_EDITOR_CREATED;
 wxEventType wxEVT_GRID_CELL_BEGIN_DRAG;
+wxEventType wxEVT_GRID_ROW_MOVE;
 wxEventType wxEVT_GRID_COL_MOVE;
 wxEventType wxEVT_GRID_COL_SORT;
 wxEventType wxEVT_GRID_TABBING;
