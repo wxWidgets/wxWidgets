@@ -15,6 +15,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include <float.h>
+
 #include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/stopwatch.h"
