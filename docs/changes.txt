@@ -231,35 +231,107 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.1.6: (released 2021-06-??)
+3.1.6: (released 2022-04-04)
 ----------------------------
 
-NOTE: This file is updated only before the release, please use
+All:
 
-    $ git log --notes=changelog --format='%N' v3.1.5..|grep .
+- Add wxUILocale: CompareStrings(), GetLocalizedName() etc.
+- Add convenient wxFileName::GetAbsolutePath() helper.
+- Add support for std::string_view to wxPrintf() etc.
+- Add wxString::ToInt() and ToUInt() (Gerhard Gruber).
+- Add wxGetNativeCpuArchitectureName() (Tobias Taschner)
+- Add wxSecureZeroMemory() (Lauri Nurmi).
+- Add wxThread::SetName() (Lauri Nurmi).
+- Recognize Windows 11 and macOS 12 in wxGetOsDescription() (Tobias Taschner).
+- Significantly speed up wxMBConv iconv-based implementation (rlbxku1r).
+- Support searching from end in wxArrayString in STL build (Pavel Tyunin).
+- Update and extend list of known locales (Ulrich Telle).
+- Several improvements to parsing dates in wxDateTime (Lauri Nurmi).
+- Fix new compilation warnings with clang 13.
+- Fix warnings when building with gcc 11 and clang 12 -std=c++20.
+- Replace deprecated AC_HELP_STRING in wxwin.m4 (Alexander Bisono).
 
-      to see all the change log entries since the last release.
+All (GUI):
 
-      To update the notes, fetch them first:
+- Add wxBitmapBundle and use it throughout the entire API and in XRC.
+- Add support for using native spell checking in wxTextCtrl (iwbnwif).
+- Add support for style to wxWizard XRC handler (ousnius).
+- Add WXSUPPRESS_SIZER_FLAGS_CHECK and improve assert messages.
+- Add sort indicators support to wxListCtrl (Maarten Bent).
+- Add support for extra menu item accelerators (Alexander Koshelev)
+- Add wxDPIChangedEvent::Scale().
+- Add wxEVT_SPLITTER_SASH_POS_RESIZE (Gerhard Gruber).
+- Add wxImage::Change{Saturation,Brightness,HSV,Lightness}() (Tomay).
+- Add wxIntegerValidator ctor taking range (Simon Stone).
+- Add wxKeyEvent::IsAutoRepeat() (MArk Jessome).
+- Add wxMC_NO_AUTORESIZE wxMediaCtrl style (Scott Talbert).
+- Add wxSpinCtrl::GetTextValue().
+- Add wxSpinCtrl::SetIncrement() (Igor Korot).
+- Add wxStyledTextCtrl XRC handler (Alexander Koshelev)
+- Add wxTopLevelWindow::SetContentProtection() (Tobias Taschner).
+- Add wxWebView::RunScriptAsync() (Tobias Taschner).
+- Add wxXmlResource::LoadDocument().
+- Allow dropping multiple formats on wxDVC (Konstantin S. Matveyev)
+- Allow using any window for the visible part of wxComboCtrl.
+- Fix <big> and <small> tags handling in wxHTML (bakcsizs).
+- Fix DPI change handling in wxGrid with hidden row/column labels.
+- Fix handling of floating and resizable AUI toolbar panes (Kvaz1r).
+- Fix loading BMP files using RLE (David Costanzo).
+- Fix loading BMP files with malformed biClrUsed field (David Costanzo).
+- Implement drawing splines in wxSVGFileDC
+- Improve wxSpinCtrlDouble significant digits handling.
+- Optimize wrapping long lines in wxRichTextCtrl (Mehmet Soyturk).
 
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+wxGTK:
 
-      then use the following command to update them locally
+- Many bug fixes for Wayland-specific problem.
+- Fix missing mouse events after enabling touch events (Thierry Bultel).
+- Allow suppressing GTK diagnostics (Marco DeFreitas).
+- Fix getting key events from wxDataViewCtrl.
+- Fix getting wxPrintData from the print dialog.
+- Fix wxMediaCtrl support when using Wayland (Dominique Martinet).
+- Generate wxKeyEvents for GDK_KEY_LaunchX keys (Dominique Martinet).
 
-    $ git notes --ref=changelog add -m 'wxPort: description.'
+wxMSW:
 
-      and finally push it to the server.
+- Add MSVS 2022 support.
+- Use Winsock 2 by default.
+- Make all native modal dialogs app modal.
+- Fix setting focus to wxWebViewEdge (PB).
+- Fix handling of ampersands in wxCheckListBox items.
+- Fix crash in wxWebViewIE::Find() (PB).
+- Fix size of the buttons when not using a manifest.
+- Fix spurious assertions when using unknown Win32 locales.
+- Fix wxDC::Blit() when using RTL layout (Dimitri Schoolwerth).
+- Fix wxDataViewModel::ItemAdded() for closed nodes (Ilya Sinitsin).
+- Fix wxStaticBox repainting in RTL (AliKet).
+- Implement getting/releasing HDC in Cairo wxGraphicsContext
+- Implement getting/releasing HDC in Direct2D wxGraphicsContext
+- Improve dark mode detection (QuentinC)
+- Use correct default printer settings (Stefan Ziegler).
 
-    $ git push origin refs/notes/changelog:refs/notes/changelog
+wxOSX:
 
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
+- Implement undo/redo for (multiline) wxTextCtrl (Dan Korn).
+- Implement wxCmpNatural() using the same order as Finder does.
+- Implement wxEVT_CHAR generation for wxDataViewCtrl.
+- Implement wxFSVolume for macOS (Tobias Taschner).
+- Allow having multiple lines in single line wxTextCtrl (Tobias Fleischer).
+- Allow setting full screen view options (Tobias Taschner).
+- Fix crash when clearing wxDataViewModel (Konstantin S. Matveyev).
+- Fix handling of drag-and-drop in native controls.
+- Fix right click event generation for wxComboBox (Daniel Kulp).
+- Fix symlinks support in wxFileSystemWatcher (Richard Gibson).
+- Fix task bar icon size in high DPI (Dominic Letz).
+- Significantly speed up creating standard system fonts.
 
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
+wxUniv:
 
-      and then redo "git-notes add" and git-push.
+- Many fixes to event generations, scrolling etc (Kvaz1r).
+- Fix refresh problems when scrolling with mouse wheel (Kvaz1r).
+- Many improvements and bug fixes in wxTextCtrl (Kvaz1r).
+- Fix handling mouse capture in menus (Kvaz1r).
 
 
 3.1.5: (released 2021-04-14)
