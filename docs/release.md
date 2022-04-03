@@ -17,14 +17,14 @@ Finally, Microsoft Windows users may download [Setup.exe file](https://github.co
 
 To verify your download please use the following SHA-1 checksums:
 
-    0000000000000000000000000000000000000000  wxMSW-3.1.6-Setup.exe
-    0000000000000000000000000000000000000000  wxWidgets-3.1.6-docs-chm.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.1.6-docs-html.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.1.6-docs-html.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.1.6-headers.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.1.6.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.1.6.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.1.6.zip
+    08ebc0346449402835fdae531d19745b54d81a5e  wxMSW-3.1.6-Setup.exe
+    0d92865f5f67e967120eabf529bacf8c180cff3f  wxWidgets-3.1.6-docs-chm.zip
+    4b62265330781874712cfe91732b19b2568cc1d0  wxWidgets-3.1.6-docs-html.tar.bz2
+    170a9d2248aa00b61d7f5c3db9d9ee4eaeeedf3d  wxWidgets-3.1.6-docs-html.zip
+    5626a9141c65d8b40f39bfca91cb806547afcf23  wxWidgets-3.1.6-headers.7z
+    ed5203d98f4073ad28d1ee291a4a95b8e68e7e04  wxWidgets-3.1.6.7z
+    28169c3813bd7ac9ea41c280f1653523941b6408  wxWidgets-3.1.6.tar.bz2
+    4fecc726b8ce725eeb0e08888c720e0480269f4e  wxWidgets-3.1.6.zip
 
 ## Binaries
 
