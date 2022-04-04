@@ -180,9 +180,8 @@ For major releases, submit the announcement to https://slashdot.org/submission
 
 ## Post-Release Steps
 
-* Trac: mark the milestone corresponding to the release as completed and
-add a new version for it to allow reporting bugs against it and create the
-next milestone (ask Vadim or Robin to do it or to get admin password).
+* Mark the milestone corresponding to the release as completed at
+  https://github.com/wxWidgets/wxWidgets/milestones
 
 * Update the roadmap at https://wxwidgets.org/develop/roadmap/ to at
 least mention the new release there (the text of this page lives in
