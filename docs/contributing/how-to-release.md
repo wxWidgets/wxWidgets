@@ -47,7 +47,10 @@ and then run it using the new DLLs.
 
 ## Pre-Release Steps
 
-Perform the following steps. You can run `build/tools/pre-release.sh` to do
+Start by copying all the changes since the previous release to the change log
+file as explained in the comment there.
+
+Then update the files below. You can run `build/tools/pre-release.sh` to do
 the straightforward changes like updating the dates and checksums
 automatically, but please also review and update the contents of the README
 and announcement text.
@@ -67,8 +70,7 @@ update the README with the details of the changes first.
 Here is the list of the files, for reference:
 * Update `docs/readme.txt`: version needs to be changed, content updated.
 * Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
-* Update `docs/changes.txt`: put the date on the release line and copy the
-  actual changes from Git notes as instructed in the file.
+* Update `docs/changes.txt`: update the date on the release line.
 * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
 * Update the release announcement post in `docs/publicity/announce.txt`.
 * Update `docs/msw/binaries.md`: at least the version, but possibly also
@@ -144,25 +146,8 @@ any links, such as `3.1` to point to `x.y.z` by doing
 
 and edit `~/public_html/index.html` to add the link to the new release to it.
 
-If the docs must be generated from the tag itself, and not from master, note
-that you need to apply the special commit which is always the tip of master
-branch in `~/wxWidgets` git repository on this machine.
-
-E.g. to create documentation for `v3.0.z` release:
-
-    $ cd ~/wxWidgets
-    $ git fetch --tags
-    $ git checkout -b my-tmp-branch v3.0.z
-    $ git cherry-pick master
-    $ vi docs/doxygen/Doxyfile
-    ... edit HTML_OUTPUT to create files in ~/public_html/3.0.z
-    $ cd docs/doxygen
-    $ PATH="$HOME/doxygen/bin:$PATH" WX_SKIP_DOXYGEN_VERSION_CHECK=1 nice -n 15 ./regen.sh php
-
-    # Cleanup
-    $ git reset --hard master
-    $ git checkout master
-    $ git branch -d my-tmp-branch
+If the docs must be generated from the tag itself, and not from master, check
+out the tag first and return to master branch after doing it.
 
 Note that the docs web site currently uses Cloudflare for caching, which means
 that it won't update for several hours after the change, unless you purge the
