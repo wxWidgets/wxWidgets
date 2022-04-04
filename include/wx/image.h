@@ -210,7 +210,7 @@ public:
                                  unsigned char g,
                                  unsigned char b)
     {
-        return (r << 16) | (g << 8) | b;
+        return ((unsigned)r << 16) | ((unsigned)g << 8) | (unsigned)b;
     }
 
     // find first colour that is not used in the image and has higher
@@ -645,14 +645,14 @@ public:
         }
     )
 
-    static wxDEPRECATED(
+    wxDEPRECATED(static
         wxImageHandler *FindHandler(const wxString& ext, long type)
         {
             return FindHandler(ext, (wxBitmapType)type);
         }
     )
 
-    static wxDEPRECATED(
+    wxDEPRECATED(static
         wxImageHandler *FindHandler(long imageType)
         {
             return FindHandler((wxBitmapType)imageType);

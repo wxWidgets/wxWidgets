@@ -745,18 +745,18 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     if ( item < 0 )
         return;
 
-    const wxBitmap* itemBitmap = NULL;
+    wxBitmap itemBitmap;
 
     if ( comValIndex == -1 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() )
-        itemBitmap = &choices.Item(item).GetBitmap();
+        itemBitmap = choices.Item(item).GetBitmap().GetBitmapFor(this);
 
     //
     // Decide what custom image size to use
     // (Use item-specific bitmap only if not drawn in the control field.)
     wxSize cis;
-    if ( itemBitmap && !(flags & wxODCB_PAINTING_CONTROL) )
+    if ( itemBitmap.IsOk() && !(flags & wxODCB_PAINTING_CONTROL) )
     {
-        cis = itemBitmap->GetSize();
+        cis = itemBitmap.GetSize();
     }
     else
     {
@@ -778,7 +778,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     }
 
     wxPGPaintData paintdata;
-    paintdata.m_parent = NULL;
+    paintdata.m_parent = this;
     paintdata.m_choiceItem = item;
 
     // This is by the current (1.0.0b) spec - if painting control, item is -1
@@ -834,7 +834,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     // If current choice had a bitmap set by the application, then
     // use it instead of any custom paint procedure
     // (only if not drawn in the control field).
-    else if ( itemBitmap && !(flags & wxODCB_PAINTING_CONTROL) )
+    else if ( itemBitmap.IsOk() && !(flags & wxODCB_PAINTING_CONTROL) )
         useCustomPaintProcedure = false;
 
     if ( useCustomPaintProcedure )
@@ -883,7 +883,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
             cell = &choices.Item(item);
             renderer = wxPGGlobalVars->m_defaultRenderer;
-            int imageOffset = renderer->PreDrawCell(dc, r, *cell,
+            int imageOffset = renderer->PreDrawCell(dc, r, this, *cell,
                                                     renderFlags );
             if ( imageOffset )
                 imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 +
@@ -2198,7 +2198,7 @@ typedef wxBitmapButton wxPGEditorBitmapButton;
 
 #endif // __WXGTK__ / !__WXGTK__
 
-void wxPGMultiButton::Add( const wxBitmap& bitmap, int itemid )
+void wxPGMultiButton::Add( const wxBitmapBundle& bitmap, int itemid )
 {
     itemid = GenId(itemid);
     wxSize sz = GetSize();
@@ -2219,16 +2219,17 @@ void wxPGMultiButton::Add( const wxBitmap& bitmap, int itemid )
     // Maximal heigth of the bitmap
     const int hMax = wxMax(4, sz.y - margins);
 
+    wxBitmap bmp = bitmap.GetBitmapFor(this);
     wxBitmap scaledBmp;
     // Scale bitmap down if necessary
-    if ( bitmap.GetHeight() > hMax )
+    if ( bmp.GetHeight() > hMax )
     {
-        double scale = (double)hMax / bitmap.GetHeight();
-        scaledBmp = wxPropertyGrid::RescaleBitmap(bitmap, scale, scale);
+        double scale = (double)hMax / bmp.GetHeight();
+        scaledBmp = wxPropertyGrid::RescaleBitmap(bmp, scale, scale);
     }
     else
     {
-        scaledBmp = bitmap;
+        scaledBmp = bmp;
     }
 
     wxBitmapButton* button = new wxPGEditorBitmapButton(this, itemid, scaledBmp,

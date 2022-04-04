@@ -471,7 +471,7 @@ public:
 
     void Add( const wxString& label, int id = -2 );
 #if wxUSE_BMPBUTTON
-    void Add( const wxBitmap& bitmap, int id = -2 );
+    void Add( const wxBitmapBundle& bitmap, int id = -2 );
 #endif
 
     wxSize GetPrimarySize() const

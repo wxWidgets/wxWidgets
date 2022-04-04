@@ -27,7 +27,7 @@ if(WIN32)
     wx_lib_link_libraries(wxnet PRIVATE ws2_32)
 
     if(wxUSE_WEBREQUEST_WINHTTP)
-        wx_lib_link_libraries(wxnet PRIVATE Winhttp)
+        wx_lib_link_libraries(wxnet PRIVATE winhttp)
     endif()
 endif()
 

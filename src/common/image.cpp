@@ -156,15 +156,22 @@ bool wxImage::Create( int width, int height, bool clear )
 {
     UnRef();
 
-    m_refData = new wxImageRefData();
-
-    M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
-    if (!M_IMGDATA->m_data)
-    {
-        UnRef();
+    if (width <= 0 || height <= 0)
         return false;
-    }
 
+    const unsigned long long size = (unsigned long long)width * height * 3;
+
+    // In theory, 64-bit architectures could handle larger sizes,
+    // but wxImage code is riddled with int-based arithmetic which will overflow
+    if (size > INT_MAX)
+        return false;
+
+    unsigned char* p = (unsigned char*)malloc(size_t(size));
+    if (p == NULL)
+        return false;
+
+    m_refData = new wxImageRefData;
+    M_IMGDATA->m_data = p;
     M_IMGDATA->m_width = width;
     M_IMGDATA->m_height = height;
     M_IMGDATA->m_ok = true;
@@ -503,10 +510,19 @@ wxImage wxImage::ResampleNearest(int width, int height) const
 {
     wxImage image;
 
-    const unsigned long old_width  = M_IMGDATA->m_width;
-    const unsigned long old_height = M_IMGDATA->m_height;
-    wxCHECK_MSG(old_width  <= (ULONG_MAX >> 16) &&
-                old_height <= (ULONG_MAX >> 16), image, "image dimension too large");
+    // We use wxUIntPtr to rescale images of larger size in 64-bit builds:
+    // using long wouldn't allow using images larger than 2^16 in either
+    // direction because of the check below, as sizeof(long) == 4 even in 64
+    // bit builds under MSW, but sizeof(wxUIntPtr) == 8 in this case.
+    const wxUIntPtr old_width  = M_IMGDATA->m_width;
+    const wxUIntPtr old_height = M_IMGDATA->m_height;
+
+    // We use "x << 16" in the code below, so check that this doesn't wrap
+    // around, as the code wouldn't work correctly if it did.
+    static const wxUIntPtr SIZE_LIMIT = static_cast<wxUIntPtr>(-1) >> 16;
+
+    wxCHECK_MSG(old_width  <= SIZE_LIMIT &&
+                old_height <= SIZE_LIMIT, image, "image dimension too large");
 
     image.Create( width, height, false );
 
@@ -529,18 +545,18 @@ wxImage wxImage::ResampleNearest(int width, int height) const
         }
     }
 
-    const unsigned long x_delta = (old_width  << 16) / width;
-    const unsigned long y_delta = (old_height << 16) / height;
+    const wxUIntPtr x_delta = (old_width  << 16) / width;
+    const wxUIntPtr y_delta = (old_height << 16) / height;
 
     unsigned char* dest_pixel = target_data;
 
-    unsigned long y = 0;
+    wxUIntPtr y = 0;
     for (int j = 0; j < height; j++)
     {
         const unsigned char* src_line = &source_data[(y>>16)*old_width*3];
         const unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : 0 ;
 
-        unsigned long x = 0;
+        wxUIntPtr x = 0;
         for (int i = 0; i < width; i++)
         {
             const unsigned char* src_pixel = &src_line[(x>>16)*3];
@@ -688,7 +704,7 @@ wxImage wxImage::ResampleBox(int width, int height) const
             // Calculate the average from the sum and number of averaged pixels
             if (src_alpha)
             {
-                if (sum_a)
+                if (sum_a != 0)
                 {
                     dst_data[0] = (unsigned char)(sum_r / sum_a);
                     dst_data[1] = (unsigned char)(sum_g / sum_a);
@@ -1038,7 +1054,7 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
             // of double data type and are rounded here for accuracy
             if ( src_alpha )
             {
-                if ( sum_a )
+                if (sum_a != 0)
                 {
                      dst_data[0] = (unsigned char)(sum_r / sum_a + 0.5);
                      dst_data[1] = (unsigned char)(sum_g / sum_a + 0.5);
@@ -3429,25 +3445,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxImageHandler, wxObject);
 #if wxUSE_STREAMS
 int wxImageHandler::GetImageCount( wxInputStream& stream )
 {
-    // NOTE: this code is the same of wxAnimationDecoder::CanRead and
-    //       wxImageHandler::CallDoCanRead
-
-    if ( !stream.IsSeekable() )
-        return false;        // can't test unseekable stream
-
-    wxFileOffset posOld = stream.TellI();
-    int n = DoGetImageCount(stream);
-
-    // restore the old position to be able to test other formats and so on
-    if ( stream.SeekI(posOld) == wxInvalidOffset )
-    {
-        wxLogDebug(wxT("Failed to rewind the stream in wxImageHandler!"));
-
-        // reading would fail anyhow as we're not at the right position
-        return false;
-    }
-
-    return n;
+    return wxInputStreamPeeker(stream).
+            CallIfCanSeek(&wxImageHandler::DoGetImageCount, this);
 }
 
 bool wxImageHandler::CanRead( const wxString& name )
@@ -3465,25 +3464,8 @@ bool wxImageHandler::CanRead( const wxString& name )
 
 bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 {
-    // NOTE: this code is the same of wxAnimationDecoder::CanRead and
-    //       wxImageHandler::GetImageCount
-
-    if ( !stream.IsSeekable() )
-        return false;        // can't test unseekable stream
-
-    wxFileOffset posOld = stream.TellI();
-    bool ok = DoCanRead(stream);
-
-    // restore the old position to be able to test other formats and so on
-    if ( stream.SeekI(posOld) == wxInvalidOffset )
-    {
-        wxLogDebug(wxT("Failed to rewind the stream in wxImageHandler!"));
-
-        // reading would fail anyhow as we're not at the right position
-        return false;
-    }
-
-    return ok;
+    return wxInputStreamPeeker(stream)
+            .CallIfCanSeek(&wxImageHandler::DoCanRead, this);
 }
 
 #endif // wxUSE_STREAMS
@@ -3744,8 +3726,8 @@ wxImage wxImage::Rotate(double angle,
 
                     if (0 < src.x && src.x < w - 1)
                     {
-                        x1 = wxRound(floor(src.x));
-                        x2 = wxRound(ceil(src.x));
+                        x1 = (int) floor(src.x);
+                        x2 = (int) ceil(src.x);
                     }
                     else    // else means that x is near one of the borders (0 or width-1)
                     {
@@ -3754,8 +3736,8 @@ wxImage wxImage::Rotate(double angle,
 
                     if (0 < src.y && src.y < h - 1)
                     {
-                        y1 = wxRound(floor(src.y));
-                        y2 = wxRound(ceil(src.y));
+                        y1 = (int) floor(src.y);
+                        y2 = (int) ceil(src.y);
                     }
                     else
                     {

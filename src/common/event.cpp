@@ -51,6 +51,10 @@
     wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
 #endif // wxUSE_BASE
 
+#if wxUSE_GUI
+    #include "wx/private/rescale.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -931,6 +935,15 @@ wxHelpEvent::Origin wxHelpEvent::GuessOrigin(Origin origin)
     }
 
     return origin;
+}
+
+// ----------------------------------------------------------------------------
+// wxDPIChangedEvent
+// ----------------------------------------------------------------------------
+
+wxSize wxDPIChangedEvent::Scale(wxSize sz) const
+{
+    return wxRescaleCoord(sz).From(m_oldDPI).To(m_newDPI);
 }
 
 #endif // wxUSE_GUI

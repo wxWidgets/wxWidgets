@@ -74,6 +74,8 @@ public:
     virtual void MarkDirty() wxOVERRIDE;
     virtual void DiscardEdits() wxOVERRIDE;
 
+    virtual void EmptyUndoBuffer() wxOVERRIDE;
+
     // text control under some platforms supports the text styles: these
     // methods apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
@@ -94,6 +96,13 @@ public:
     virtual void Copy() wxOVERRIDE;
     virtual void Cut() wxOVERRIDE;
     virtual void Paste() wxOVERRIDE;
+
+#if wxUSE_SPELLCHECK
+    // Use native spelling and grammar checking functions (multiline only).
+    virtual bool EnableProofCheck(const wxTextProofOptions& options
+                                    = wxTextProofOptions::Default()) wxOVERRIDE;
+    virtual wxTextProofOptions GetProofCheckOptions() const wxOVERRIDE;
+#endif // wxUSE_SPELLCHECK
 
     // Implementation
     // --------------
@@ -128,8 +137,13 @@ public:
 
     virtual void MacVisibilityChanged() wxOVERRIDE;
     virtual void MacSuperChangedPosition() wxOVERRIDE;
-    virtual void MacCheckSpelling(bool check);
 
+    // Use portable EnableProofCheck() instead now.
+#if WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
+    wxDEPRECATED( virtual void MacCheckSpelling(bool check) );
+#endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
+
+    void OSXEnableNewLineReplacement(bool enable);
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
     void OSXEnableAutomaticDashSubstitution(bool enable);
     void OSXDisableAllSmartSubstitutions();

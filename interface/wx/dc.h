@@ -714,9 +714,16 @@ public:
     /**
         Draws a spline between all given points using the current pen.
 
+        The number of points must be at least 2 for the spline to be drawn.
+
+        @note Drawn curve is not an interpolating curve - it does not go
+        through all points. It may be considered a smoothing curve.
+
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
+
+        @image html drawing-spline.png
     */
     void DrawSpline(int n, const wxPoint points[]);
 
@@ -1148,9 +1155,10 @@ public:
     /**
         Sets the current font for the DC.
 
-        If the argument is ::wxNullFont (or another invalid font; see wxFont::IsOk),
-        the current font is selected out of the device context (leaving wxDC without
-        any valid font), allowing the current font to be destroyed safely.
+        The @a font parameter should be valid, although in wxMSW port (only)
+        the argument ::wxNullFont is also accepted and resets the device
+        context font to the default value used by the system (which is not
+        generally useful).
 
         @see wxFont
     */

@@ -238,6 +238,9 @@ public:
     int GetFlags() const { return m_flags; }
     int GetBorderInPixels() const { return m_borderInPixels; }
 
+    // Disablee sizer flags (in)consistency asserts.
+    static void DisableConsistencyChecks();
+
 private:
 #ifdef wxNEEDS_BORDER_IN_PX
     static float DoGetDefaultBorderInPx();

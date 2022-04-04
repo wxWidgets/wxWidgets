@@ -81,7 +81,6 @@ public:
                             int imageId = NO_IMAGE) wxOVERRIDE;
     virtual int SetSelection(size_t n) wxOVERRIDE { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
-    virtual void SetImageList(wxImageList *imageList) wxOVERRIDE;
 
     virtual bool DeleteAllPages() wxOVERRIDE;
     virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
@@ -115,9 +114,6 @@ protected:
 
     // whether the toolbar needs to be realized
     bool m_needsRealizing;
-
-    // maximum bitmap size
-    wxSize m_maxBitmapSize;
 
 private:
     // common part of all constructors

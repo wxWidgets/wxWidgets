@@ -331,6 +331,8 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
     #define wxFAIL
     #define wxFAIL_MSG(msg)
     #define wxFAIL_COND_MSG(cond, msg)
+    #define wxFAIL_MSG_AT(msg, file, line, func)
+    #define wxFAIL_COND_MSG_AT(cond, msg, file, line, func)
 #endif  // wxDEBUG_LEVEL
 
 #if wxDEBUG_LEVEL >= 2

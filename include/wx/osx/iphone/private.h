@@ -24,6 +24,8 @@
 
 #if wxUSE_GUI
 
+#include "wx/bmpbndl.h"
+
 typedef CGRect WXRect;
 
 OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
@@ -32,7 +34,7 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGImageRef      inImage) ;
 
 WX_UIImage WXDLLIMPEXP_CORE wxOSXGetUIImageFromCGImage( CGImageRef image );
-wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
+wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id, const wxString &client, const wxSize& size);
 
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
@@ -88,7 +90,7 @@ public :
     void                SetValue( wxInt32 v );
 
     virtual wxBitmap    GetBitmap() const;
-    virtual void        SetBitmap( const wxBitmap& bitmap );
+    virtual void        SetBitmap( const wxBitmapBundle& bitmap );
     virtual void        SetBitmapPosition( wxDirection dir );
 
     void                SetupTabs( const wxNotebook &notebook );
@@ -98,8 +100,10 @@ public :
     bool                ButtonClickDidStateChange() { return true ;}
     void                SetMinimum( wxInt32 v );
     void                SetMaximum( wxInt32 v );
+    void                SetIncrement(int WXUNUSED(value)) { }
     wxInt32             GetMinimum() const;
     wxInt32             GetMaximum() const;
+    int                 GetIncrement() const { return 1; }
     void                PulseGauge();
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
@@ -176,9 +180,14 @@ public :
 
     virtual bool IsFullScreen() const;
 
-    virtual bool EnableFullScreenView(bool enable);
+    virtual bool EnableFullScreenView(bool enable, long style);
 
     virtual bool ShowFullScreen(bool show, long style);
+
+    virtual wxContentProtection GetContentProtection() const wxOVERRIDE
+        {  return wxCONTENT_PROTECTION_NONE; }
+    virtual bool SetContentProtection(wxContentProtection contentProtection) wxOVERRIDE
+        { return false; }
 
     virtual void RequestUserAttention(int flags);
 

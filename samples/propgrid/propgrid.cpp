@@ -1159,7 +1159,7 @@ void FormMain::PopulateWithStandardItems ()
             continue;
 
         pg->SetPropertyCell( p, 3, "Cell 3", bmp );
-        pg->SetPropertyCell( p, 4, "Cell 4", wxNullBitmap, *wxWHITE, *wxBLACK );
+        pg->SetPropertyCell( p, 4, "Cell 4", wxBitmapBundle(), *wxWHITE, *wxBLACK );
     }
 }
 
@@ -1384,16 +1384,35 @@ void FormMain::PopulateWithExamples ()
     pg->Append( new wxStringProperty( "StringPropertyWithBitmap",
                 wxPG_LABEL,
                 "Test Text") );
-    wxBitmap myTestBitmap(60, 15, 32);
-    wxMemoryDC mdc;
-    mdc.SelectObject(myTestBitmap);
-    mdc.SetBackground(*wxWHITE_BRUSH);
-    mdc.Clear();
-    mdc.SetPen(*wxBLACK);
-    mdc.DrawLine(0, 0, 60, 15);
-    mdc.SelectObject(wxNullBitmap);
-    pg->SetPropertyImage( "StringPropertyWithBitmap", myTestBitmap );
-
+    wxBitmap myTestBitmap1x(60, 15, 32);
+    {
+        wxMemoryDC mdc(myTestBitmap1x);
+        mdc.SetBackground(*wxWHITE_BRUSH);
+        mdc.Clear();
+        mdc.SetPen(*wxBLACK_PEN);
+        mdc.SetBrush(*wxWHITE_BRUSH);
+        mdc.DrawRectangle(0, 0, 60, 15);
+        mdc.DrawLine(0, 0, 59, 14);
+        mdc.SetTextForeground(*wxBLACK);
+        mdc.DrawText("x1", 0, 0);
+    }
+    wxBitmap myTestBitmap2x(120, 30, 32);
+    {
+        wxMemoryDC mdc(myTestBitmap2x);
+        mdc.SetBackground(*wxWHITE_BRUSH);
+        mdc.Clear();
+        mdc.SetPen(wxPen(*wxBLUE, 2));
+        mdc.SetBrush(*wxWHITE_BRUSH);
+        mdc.DrawRectangle(0, 0, 120, 30);
+        mdc.DrawLine(0, 0, 119, 31);
+        mdc.SetTextForeground(*wxBLUE);
+        wxFont f = mdc.GetFont();
+        f.SetPixelSize(2 * f.GetPixelSize());
+        mdc.SetFont(f);
+        mdc.DrawText("x2", 0, 0);
+    }
+    myTestBitmap2x.SetScaleFactor(2);
+    pg->SetPropertyImage( "StringPropertyWithBitmap", wxBitmapBundle::FromBitmaps(myTestBitmap1x, myTestBitmap2x));
 
     // this value array would be optional if values matched string indexes
     //long flags_prop_values[] = { wxICONIZE, wxCAPTION, wxMINIMIZE_BOX, wxMAXIMIZE_BOX };
@@ -1837,7 +1856,7 @@ void FormMain::PopulateGrid()
 
     // Use wxMyPropertyGridPage (see above) to test the
     // custom wxPropertyGridPage feature.
-    pgman->AddPage("Examples",wxNullBitmap,myPage);
+    pgman->AddPage("Examples", wxBitmapBundle(), myPage);
 
     PopulateWithExamples();
 }
@@ -2773,7 +2792,7 @@ void FormMain::OnColourScheme( wxCommandEvent& event )
 void FormMain::OnCatColoursUpdateUI(wxUpdateUIEvent& WXUNUSED(event))
 {
     // Prevent menu item from being checked
-    // if it is selected from imroper page.
+    // if it is selected from improper page.
     const wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
     m_itemCatColours->SetCheckable(
          pg->GetPropertyByName("Appearance") &&

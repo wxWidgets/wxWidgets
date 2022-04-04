@@ -374,7 +374,7 @@ void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
     // Negative values in the range are allowed only if base == 10
-    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(minVal, maxVal, GetBase()) )
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(int(minVal), int(maxVal), GetBase()) )
     {
         return;
     }
@@ -641,6 +641,18 @@ void wxSpinCtrlDouble::GtkSetEntryWidth()
     const int lenMax = wxString::Format("%.*f", digits, GetMax()).length();
 
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), wxMax(lenMin, lenMax));
+}
+
+void wxSpinCtrlDouble::SetIncrement(double inc)
+{
+    DoSetIncrement(inc);
+
+    const unsigned digits = wxSpinCtrlImpl::DetermineDigits(inc);
+
+    // Increase the number of digits, if necessary, to show all numbers that
+    // can be obtained by using the new increment without loss of precision.
+    if ( digits > GetDigits() )
+        SetDigits(digits);
 }
 
 unsigned wxSpinCtrlDouble::GetDigits() const

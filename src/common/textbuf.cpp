@@ -230,7 +230,7 @@ wxTextFileType wxTextBuffer::GuessType() const
     // interpret the results (FIXME far from being even 50% fool proof)
     if ( nScan > 0 && nDos + nUnix + nMac == 0 ) {
         // no newlines at all
-        wxLogWarning(_("'%s' is probably a binary buffer."), m_strBufferName.c_str());
+        wxLogWarning(_("'%s' is probably a binary buffer."), m_strBufferName);
     }
     else {
         #define   GREATER_OF(t1, t2) n##t1 == n##t2 ? typeDefault               \

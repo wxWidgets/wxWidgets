@@ -267,7 +267,7 @@ private:
 
     wxDebugReport& m_dbgrpt;
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_CHECKLISTBOX
     wxCheckListBox *m_checklst;
 #else
     wxListBox *m_checklst;
@@ -343,7 +343,7 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
                         wxSizerFlags().Border(wxTOP));
     sizerFileBtns->AddStretchSpacer(1);
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_CHECKLISTBOX
     m_checklst = new wxCheckListBox(this, wxID_ANY);
 #else
     m_checklst = new wxListBox(this, wxID_ANY);
@@ -395,7 +395,7 @@ bool wxDebugReportDialog::TransferDataToWindow()
         if ( m_dbgrpt.GetFile(n, &name, &desc) )
         {
             m_checklst->Append(name + wxT(" (") + desc + wxT(')'));
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_CHECKLISTBOX
             m_checklst->Check(n);
 #endif
 
@@ -408,7 +408,7 @@ bool wxDebugReportDialog::TransferDataToWindow()
 
 bool wxDebugReportDialog::TransferDataFromWindow()
 {
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_CHECKLISTBOX
     // any unchecked files should be removed from the report
     const size_t count = m_checklst->GetCount();
     for ( size_t n = 0; n < count; n++ )

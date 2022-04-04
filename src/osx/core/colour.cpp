@@ -200,9 +200,9 @@ void wxColour::GetRGBColor(RGBColor* col) const
 {
     wxCHECK_RET( IsOk(), "invalid colour" );
 
-    col->red = M_COLDATA->Red() * 65535.0;
-    col->blue = M_COLDATA->Blue() * 65535.0;
-    col->green = M_COLDATA->Green() * 65535.0;
+    col->red = static_cast<unsigned short>(M_COLDATA->Red() * 65535);
+    col->blue = static_cast<unsigned short>(M_COLDATA->Blue() * 65535);
+    col->green = static_cast<unsigned short>(M_COLDATA->Green() * 65535);
 }
 #endif
 

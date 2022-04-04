@@ -22,6 +22,8 @@
 
 #include "wx/wxcrt.h"       // for wxStrstr()
 
+#include "wx/private/localeset.h"
+
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
 // the macro below to do it
@@ -778,16 +780,19 @@ void DateTimeTestCase::TestTimeFormat()
                 if ( s != dt.ToTimezone(tz).Format(fmt) )
                     continue;
 
+                INFO("Test #" << n << " using format \"" << fmt << "\""
+                     << ", format result=\"" << s << "\"");
+
                 // convert back
                 wxDateTime dt2;
                 const char *result = dt2.ParseFormat(s, fmt);
                 if ( !result )
                 {
                     // conversion failed - should it have?
-                    WX_ASSERT_MESSAGE(
-                        ("Test #%u failed: failed to parse \"%s\"", n, s),
-                        kind == CompareNone
-                    );
+                    if ( kind != CompareNone )
+                    {
+                        FAIL_CHECK("Parsing formatted string failed");
+                    }
                 }
                 else // conversion succeeded
                 {
@@ -798,11 +803,12 @@ void DateTimeTestCase::TestTimeFormat()
                     while ( *result && (*result >= 'A' && *result <= 'Z') )
                         result++;
 
-                    WX_ASSERT_MESSAGE(
-                        ("Test #%u failed: \"%s\" was left unparsed in \"%s\"",
-                         n, result, s),
-                        !*result
-                    );
+                    if ( *result )
+                    {
+                        INFO("Left unparsed: \"" << result << "\"");
+                        FAIL_CHECK("Parsing didn't consume the entire string");
+                        continue;
+                    }
 
                     // Without "%z" we can't recover the time zone used in the
                     // call to Format() so we need to call MakeFromTimezone()
@@ -911,13 +917,33 @@ void DateTimeTestCase::TestTimeParse()
     wxDateTime dt;
 
     // Parsing standard formats should work.
-    CPPUNIT_ASSERT( dt.ParseTime("12:34:56") );
-    CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
+    const char* end = dt.ParseTime("12:34:56");
+    CPPUNIT_ASSERT( end );
+    if ( end )
+    {
+        CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
+        CPPUNIT_ASSERT_EQUAL( "", wxString(end) );
+    }
+    dt.ResetTime();
+
+    // Valid, but followed by something.
+    end = dt.ParseTime("12:34:56 0123 something");
+    CPPUNIT_ASSERT( end );
+    if ( end )
+    {
+        CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
+        CPPUNIT_ASSERT_EQUAL( " 0123 something", wxString(end) );
+    }
+    dt.ResetTime();
 
     // Parsing just hours should work too.
-    dt.ResetTime();
-    CPPUNIT_ASSERT( dt.ParseTime("17") );
-    CPPUNIT_ASSERT_EQUAL( "17:00:00", dt.FormatISOTime() );
+    end = dt.ParseTime("17");
+    CPPUNIT_ASSERT( end );
+    if ( end )
+    {
+        CPPUNIT_ASSERT_EQUAL( "17:00:00", dt.FormatISOTime() );
+        CPPUNIT_ASSERT_EQUAL( "", wxString(end) );
+    }
 
     // Parsing gibberish shouldn't work.
     CPPUNIT_ASSERT( !dt.ParseTime("bloordyblop") );
@@ -1084,6 +1110,18 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        {
+            "Sat, 18 Dec 1999 10:48:30 G", // military time zone
+            { 18, wxDateTime::Dec, 1999, 17, 48, 30 },
+            true
+        },
+
+        {
+            "Sat, 18 Dec 1999 10:48:30 Q", // military time zone
+            { 18, wxDateTime::Dec, 1999,  6, 48, 30 },
+            true
+        },
+
         // seconds are optional according to the RFC
         {
             "Sun, 01 Jun 2008 16:30 +0200",
@@ -1091,9 +1129,108 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        // day of week is optional according to the RFC
+        {
+            "18 Dec 1999 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
+        // 2-digit year is accepted by the RFC822
+        {
+            "Sat, 18 Dec 99 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
+        // years 00..29 are considered to mean 20xx
+        {
+            "Tue, 18 Dec 29 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 2029, 15, 48, 30 },
+            true
+        },
+
         // try some bogus ones too
         {
             "Sun, 01 Jun 2008 16:30: +0200",
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Und 2008 16:30:10 +0200", // month: Undecimber
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:3:10 +0200", // missing digit
+            { 0 },
+            false
+        },
+
+        {
+            "Sun 01 Jun 2008 16:39:10 +0200", // missing comma
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +020", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +02", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +0", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 GM", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sat, 18 Dec 1999 10:48:30", // TZ missing
+            { 0 },
+            false
+        },
+
+        {
+            "Sat, 18 Dec 1999", // time missing
+            { 0 },
+            false
+        },
+
+        {
+            "Sat, 18 Dec 2", // most of year missing
+            { 0 },
+            false
+        },
+
+        {
+            "Sun,", // missing date and time
+            { 0 },
+            false
+        },
+
+        {
+            "", // empty input
             { 0 },
             false
         },
@@ -1136,19 +1273,30 @@ void DateTimeTestCase::TestDateParse()
         const char *str;
         Date date;              // NB: this should be in UTC
         bool good;
+        const char* beyondEnd;  // what remains unprocessed of the input
     } parseTestDates[] =
     {
-        { "21 Mar 2006", { 21, wxDateTime::Mar, 2006 }, true },
-        { "29 Feb 1976", { 29, wxDateTime::Feb, 1976 }, true },
-        { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true },
-        { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true },
-        { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true },
+        { "21 Mar 2006", { 21, wxDateTime::Mar, 2006 }, true, ""},
+        { "29 Feb 1976", { 29, wxDateTime::Feb, 1976 }, true, "" },
+        { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true, "" },
+        { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true, "" },
+        { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true, "" },
+        { "Thu 20 Jun 2019", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "20 Jun 2019 Thu", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "Dec sixth 2017",  {  6, wxDateTime::Dec, 2017 }, true, "" },
+
+        // valid, but followed by something
+        { "Dec 31 1979 was the end of 70s",
+             { 31, wxDateTime::Dec, 1979 }, true, " was the end of 70s" },
 
         // some invalid ones too
         { "29 Feb 2006" },
         { "31/04/06" },
+        { "Sat 20 Jun 2019" }, // it was not a Saturday
+        { "20 Jun 2019 Sat" }, // it was not a Saturday
         { "bloordyblop" },
         { "2 .  .    " },
+        { "14:30:15" },
     };
 
     wxGCC_WARNING_RESTORE(missing-field-initializers)
@@ -1163,7 +1311,7 @@ void DateTimeTestCase::TestDateParse()
         const wxString datestr = TranslateDate(parseTestDates[n].str);
 
         const char * const end = dt.ParseDate(datestr);
-        if ( end && !*end )
+        if ( end )
         {
             WX_ASSERT_MESSAGE(
                 ("Erroneously parsed \"%s\"", datestr),
@@ -1171,6 +1319,7 @@ void DateTimeTestCase::TestDateParse()
             );
 
             CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+            CPPUNIT_ASSERT_EQUAL( wxString(parseTestDates[n].beyondEnd), wxString(end) );
         }
         else // failed to parse
         {
@@ -1271,40 +1420,152 @@ void DateTimeTestCase::TestDateTimeParse()
     static const struct ParseTestData
     {
         const char *str;
-        Date date;              // NB: this should be in UTC
+        Date date;      // either local time or UTC
         bool good;
+        const char *beyondEnd;  // what remains unprocessed of the input
+        bool dateIsUTC; // true when timezone is specified
     } parseTestDates[] =
     {
         {
             "Thu 22 Nov 2007 07:40:00 PM",
             { 22, wxDateTime::Nov, 2007, 19, 40,  0 },
-            true
+            true,
+            "",
+            false
         },
 
         {
             "2010-01-04 14:30",
             {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
-            true
+            true,
+            "",
+            false
+        },
+
+        {
+            // date after time
+            "14:30:00 2020-01-04",
+            {  4, wxDateTime::Jan, 2020, 14, 30,  0 },
+            true,
+            "",
+            false
         },
 
         {
             "bloordyblop",
             {  1, wxDateTime::Jan, 9999,  0,  0,  0},
+            false,
+            "bloordyblop",
             false
         },
 
         {
-            "2012-01-01 10:12:05 +0100",
-            {  1, wxDateTime::Jan, 2012,  10,  12,  5, -1 },
-            false // ParseDateTime does know yet +0100
+            "2022-03-09 19:12:05 and some text after space",
+            {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
+            true,
+            " and some text after space",
+            false
         },
+
+        {
+            "2022-03-09 19:12:05 ", // just a trailing space
+            {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
+            true,
+            " ",
+            false
+        },
+
+        // something other than a space right after time
+        {
+            "2022-03-09 19:12:05AAaaaa",
+            {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
+            true,
+            "AAaaaa",
+            false
+        },
+
+        // the rest have a time zone specified, and when the
+        // time zone is valid, the date to compare to is in UTC
+        {
+            "2012-01-01 10:12:05 +0100",
+            {  1, wxDateTime::Jan, 2012,   9,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 -0700",
+            { 10, wxDateTime::Mar, 2022,   2,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 +0615",
+            {  9, wxDateTime::Mar, 2022,  12,  57,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 +0615 and some text",
+            {  9, wxDateTime::Mar, 2022,  12,  57,  5, -1 },
+            true,
+            " and some text",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 UTC",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 UTC and some text",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " and some text",
+            true
+        },
+
+        {
+            // date after time
+            "15:12:05 2022-03-09 UTC",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 +010", // truncated time zone
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " +010",
+            false
+        },
+
+        {
+            "2022-03-09 15:12:05 GM", // truncated time zone
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " GM",
+            false
+        },
+
     };
 
     wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     // the test strings here use "PM" which is not available in all locales so
     // we need to use "C" locale for them
-    CLocaleSetter cloc;
+    wxCLocaleSetter cloc;
 
     wxDateTime dt;
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
@@ -1312,14 +1573,18 @@ void DateTimeTestCase::TestDateTimeParse()
         const wxString datestr = TranslateDate(parseTestDates[n].str);
 
         const char * const end = dt.ParseDateTime(datestr);
-        if ( end && !*end )
+        if ( end )
         {
             WX_ASSERT_MESSAGE(
                 ("Erroneously parsed \"%s\"", datestr),
                 parseTestDates[n].good
             );
 
-            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+            wxDateTime dtReal = parseTestDates[n].dateIsUTC ?
+                parseTestDates[n].date.DT().FromUTC() :
+                parseTestDates[n].date.DT();
+            CPPUNIT_ASSERT_EQUAL( dtReal, dt );
+            CPPUNIT_ASSERT_EQUAL( wxString(parseTestDates[n].beyondEnd), wxString(end) );
         }
         else // failed to parse
         {

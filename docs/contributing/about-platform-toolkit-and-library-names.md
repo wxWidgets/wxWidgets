@@ -1,5 +1,4 @@
-wxWidgets naming conventions
-============================
+## wxWidgets naming conventions
 
 Being a cross platform development library, it is naturally desirable
 (at least to me ;) for wxWidgets to be exploited in a fully cross
@@ -9,7 +8,7 @@ when desired.
 
 Since this is now in fact possible for at least the most commonly used
 platforms, wxWidgets has been structured to allow multiple, simultaneous
-installations of the library.  Common files are shared, platform and port
+installations of the library. Common files are shared, platform and port
 specific files and libraries are arranged so as to be unambiguous when
 installed together.
 
@@ -22,61 +21,99 @@ for wxWidgets, but is encompassing enough to maintain a relatively complete
 set of cross platform build tools on a single machine and to provide an
 obvious slot for new ports to slip into.
 
+The libraries use the following naming convention.
+When an item of the name is empty, `'_'` or `'-'` are omitted.
 
-For UNIX libraries, the canonical library name shall be of the form:
+*UNIX libraries* (configure, CMake on Linux/macOS/Cygwin):
 
-	libwx_$(toolkit)$(widgetset)$(debug)-$(version)-$(host).$(lib_extension)
+    libwx_$(toolkit)$(widgetset)$(unicode)_$(flavour)_$(name)-$(version)-$(host).$(lib_extension)
 
-For MSW (native hosted only) libraries the library name should be of
-the form:
+*Windows libraries* (VS solution, makefile.gcc/vc, CMake on Windows/MinGW, shared libraries on Windows):
 
-	wx$(toolkit)$(widgetset)$(version)$(unicode)$(debug).$(lib_extension)
+    wx$(toolkit)$(widgetset)$(version)$(unicode)$(debug)_$(flavour)_$(name)_$(compiler)_$(arch)_$(vendor).$(lib_extension)
 
 
 Where:
 
 --------------------------------------------------------------------
 
-`$toolkit` must currently be one of the following:
+`$toolkit` can currently be one of the following:
 
-	msw
-	gtk
-	base
-	mac
-	motif
+ - `base`
+ - `msw`
+ - `gtk`, `gtk2`, `gtk3`, `gtk4`
+ - `osx_cocoa`, `osx_iphone`
+ - `motif`
+ - `x11`
+ - `dfb`
+ - `qt`
 
 --------------------------------------------------------------------
 
 `$widgetset` may be one of:
 
-	univ
+ - `univ`
 
 or empty if the widget set is the same as the toolkit.
 
 --------------------------------------------------------------------
 
-`$version` is a string encoding the full version (major, minor, release)
-for MSW, or just the major and minor number for UNIX.
+`$version` is a string encoding the major and minor version number,
+separated by a dot on UNIX and without separator on Windows.
+Windows shared libraries of development versions (odd minor releases)
+contain the full version (major, minor, release).
+On UNIX, the `$so_version` contains the release number.
 
-eg. for wxWidgets 2.3.2, `$version` = 232 for MSW or 2.3 for UNIX.
+Eg. for wxWidgets 3.1.5, `$version` is `315` for Windows shared libraries,
+`31` for Windows static libraries, and `3.1` for UNIX libraries. And the
+`$so_version` for UNIX libraries is `.5` and `.5.0.0`.
 
 The rationale for this is that under UNIX-like systems it is desirable
 that differently 'minor numbered' releases can be installed together,
 meaning your old 2.2 apps can continue to work even if you migrate
-development to the next stable or unstable release (eg.  2.3, 2.4),
+development to the next stable or unstable release (eg. 2.3, 2.4),
 but binary compatibility is maintained between point releases (those
-with the same major.minor number)
+with the same major.minor number).
 
 A known break in binary compatibility should be addressed by updating
-the library soname (see the notes in configure.in for details on this)
-
-I do not know why MSW should not also omit the release number from
-`$version`. (maybe that will change by the time this document is ratified)
+the library soname (see the notes in configure.in for details on this).
 
 --------------------------------------------------------------------
 
-`$unicode` and `$debug` are either empty or set to `'u'` and `'d'`
-respectively when enabled.
+`$unicode` is set to `'u'` when Unicode is enabled (default on), and is empty
+when disabled. In the `setup.h` and `wx-config` names, the full `'unicode'`
+name is used.
+
+--------------------------------------------------------------------
+
+`$debug` is set to `'d'` for the libraries using debug version of CRT and is empty
+for release libraries. It is only really useful for the libraries created with MSVC
+projects and makefiles, as MSVC debug and release CRT are not ABI-compatible,
+but is also used by `makefile.gcc` under MSW for consistency with `makefile.vc`.
+When using configure under MSW or UNIX, it is always empty.
+
+--------------------------------------------------------------------
+
+`$flavour` is an optional name to identify the build. It is empty by default.
+
+--------------------------------------------------------------------
+
+`$name` is the name of the library. It is empty for the `'base'` library.
+
+--------------------------------------------------------------------
+
+`$compiler` is the used compiler, for example `'vc'` or `'gcc'`.
+It is only added to shared libraries on Windows.
+
+--------------------------------------------------------------------
+
+`$arch` is used by MSVC solutions. It is empty for 32-bit builds and
+`'x64'` for 64-bit builds. It is only added to shared libraries.
+
+--------------------------------------------------------------------
+
+`$vendor` is an optional name appended to the library name. It is only
+added to shared libraries on Windows. It defaults to `'custom'`.
 
 --------------------------------------------------------------------
 
@@ -87,29 +124,40 @@ that are cross compiled.
 
 --------------------------------------------------------------------
 
-`$lib_extension` is system specific and most usually set to `.a` for
-a static library, `.dll` for a MSW shared library, or `.so.$so_version`
-for a shared UNIX library.
+`$lib_extension` is system specific and most usually set to `'.a'` for
+a static UNIX library, `'.so.$so_version'` for a shared UNIX library,
+`'.lib'` for a static MSVC library or `'.dll'` for a shared MSVC library.
 
-====================================================================
+--------------------------------------------------------------------
 
+`type` is used to indicate a shared or static build. For MSVC, type is
+`'lib'` for shared libraries and `'dll'` for static libraries.
+On UNIX, type is empty for shared libraries and `'static'` for static libraries.
+
+--------------------------------------------------------------------
+
+## setup.h
 
 The installed location of the library specific setup.h is also
-determined by the values of these items.  On UNIX systems they
-will be found in:
+determined by the values of these items. On UNIX they will be found in:
 
-	$(prefix)/lib/wx/include/$(toolkit)$(widgetset)$(debug)-$(version)-$(host)/wx/
+    $(prefix)/lib/wx/include/$(host)-$(toolkit)$(widgetset)-$(unicode)-$(type)-$(version)-$(flavour)/wx/setup.h
 
 which will be in the include search path returned by the relevant
-wx-config for that library.  (or presumably set in the relevant
-make/project files for platforms that do not use wx-config)
+wx-config for that library (or presumably set in the relevant
+make/project files for platforms that do not use wx-config).
 
-====================================================================
+For MSVC and gcc/vc makefile, the file is found in:
 
+    $(prefix)/lib/$(compiler)_$(arch)_$(type)/$(toolkit)$(widgetset)$(unicode)$(debug)/wx/setup.h
+
+--------------------------------------------------------------------
+
+## wx-config
 
 The port specific wx-config file for each library shall be named:
 
-	wx-$(toolkit)$(widgetset)$(debug)-$(version)-$(host)-config
+    $(prefix)/lib/wx/config/$(host)-$(toolkit)$(widgetset)-$(unicode)-$(type)-$(version)-$(flavour)
 
 ${prefix}/bin/wx-config shall exist as a link to (or copy of) one of
 these port specific files (on platforms which support it) and as such

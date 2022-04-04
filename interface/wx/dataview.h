@@ -268,7 +268,17 @@ public:
 
     /**
         Override this to indicate the value of @a item.
-        A wxVariant is used to store the data.
+
+        This function should fill the provided @a variant with the value to be
+        shown for the specified item in the given column. The value returned in
+        this wxVariant must have the appropriate type, e.g. string for the text
+        columns, boolean for the columns using wxDataViewToggleRenderer etc,
+        and if there is a type mismatch, nothing will be shown and a debug
+        error message will be logged.
+
+        It is also possible to not return any value, in which case nothing will
+        be shown in the corresponding cell, in the same way as if HasValue()
+        returned @false.
     */
     virtual void GetValue(wxVariant& variant, const wxDataViewItem& item,
                           unsigned int col) const = 0;
@@ -318,7 +328,7 @@ public:
     virtual bool HasValue(const wxDataViewItem& item, unsigned col) const;
 
     /**
-        Override this to indicate of @a item is a container, i.e.\ if
+        Override this to indicate if @a item is a container, i.e.\ if
         it can have child items.
     */
     virtual bool IsContainer(const wxDataViewItem& item) const = 0;
@@ -1380,9 +1390,25 @@ public:
     virtual bool EnableDragSource( const wxDataFormat &format );
 
     /**
-       Enable drop operations using the given @a format.
+        Enable drop operations using any of the specified  @a formats.
+
+        Currently this is fully implemented in the generic and native macOS
+        versions. In wxGTK only the first element of the array is used.
+
+        @note Passing empty array disables drag and drop operations completely.
+
+        @since 3.1.6
     */
-    virtual bool EnableDropTarget( const wxDataFormat &format );
+    bool EnableDropTargets(const wxVector<wxDataFormat>& formats);
+
+    /**
+        Enable drop operations using the given @a format.
+
+        See EnableDropTargets() for providing more than one supported format.
+
+        @note Since 3.1.6 wxDF_INVALID can be passed to disable drag and drop support.
+    */
+    bool EnableDropTarget( const wxDataFormat &format );
 
     /**
         Call this to ensure that the given item is visible.
@@ -2057,6 +2083,8 @@ public:
     /**
         Set the value of the renderer (and thus its cell) to @a value.
         The internal code will then render this cell with this data.
+
+        @param value A valid, i.e. non-null, value to be shown.
     */
     virtual bool SetValue(const wxVariant& value) = 0;
 
@@ -3266,12 +3294,19 @@ public:
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon& GetItemExpandedIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon& GetItemIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemIcon(const wxDataViewItem& item) const;
+
+    /**
+        Returns the item's parent.
+
+        @since 3.1.6
+    */
+    wxDataViewItem GetItemParent(wxDataViewItem item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
@@ -3351,12 +3386,12 @@ public:
         Calls the identical method from wxDataViewTreeStore.
     */
     void SetItemExpandedIcon(const wxDataViewItem& item,
-                             const wxIcon& icon);
+                             const wxBitmapBundle& icon);
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    void SetItemIcon(const wxDataViewItem& item, const wxIcon& icon);
+    void SetItemIcon(const wxDataViewItem& item, const wxBitmapBundle& icon);
 
     /**
         Calls the identical method from wxDataViewTreeStore.
@@ -3554,8 +3589,8 @@ public:
     */
     wxDataViewItem AppendContainer(const wxDataViewItem& parent,
                                    const wxString& text,
-                                   const wxIcon& icon = wxNullIcon,
-                                   const wxIcon& expanded = wxNullIcon,
+                                   const wxBitmapBundle& icon = wxBitmapBundle(),
+                                   const wxBitmapBundle& expanded = wxBitmapBundle(),
                                    wxClientData* data = NULL);
 
     /**
@@ -3563,7 +3598,7 @@ public:
     */
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
-                              const wxIcon& icon = wxNullIcon,
+                              const wxBitmapBundle& icon = wxBitmapBundle(),
                               wxClientData* data = NULL);
 
     /**
@@ -3594,12 +3629,12 @@ public:
     /**
         Returns the icon to display in expanded containers.
     */
-    const wxIcon& GetItemExpandedIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the icon of the item.
     */
-    const wxIcon& GetItemIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the text of the item.
@@ -3618,8 +3653,8 @@ public:
     wxDataViewItem InsertContainer(const wxDataViewItem& parent,
                                    const wxDataViewItem& previous,
                                    const wxString& text,
-                                   const wxIcon& icon = wxNullIcon,
-                                   const wxIcon& expanded = wxNullIcon,
+                                   const wxBitmapBundle& icon = wxBitmapBundle(),
+                                   const wxBitmapBundle& expanded = wxBitmapBundle(),
                                    wxClientData* data = NULL);
 
     /**
@@ -3628,7 +3663,7 @@ public:
     wxDataViewItem InsertItem(const wxDataViewItem& parent,
                               const wxDataViewItem& previous,
                               const wxString& text,
-                              const wxIcon& icon = wxNullIcon,
+                              const wxBitmapBundle& icon = wxBitmapBundle(),
                               wxClientData* data = NULL);
 
     /**
@@ -3636,8 +3671,8 @@ public:
     */
     wxDataViewItem PrependContainer(const wxDataViewItem& parent,
                                     const wxString& text,
-                                    const wxIcon& icon = wxNullIcon,
-                                    const wxIcon& expanded = wxNullIcon,
+                                    const wxBitmapBundle& icon = wxBitmapBundle(),
+                                    const wxBitmapBundle& expanded = wxBitmapBundle(),
                                     wxClientData* data = NULL);
 
     /**
@@ -3645,7 +3680,7 @@ public:
     */
     wxDataViewItem PrependItem(const wxDataViewItem& parent,
                                const wxString& text,
-                               const wxIcon& icon = wxNullIcon,
+                               const wxBitmapBundle& icon = wxBitmapBundle(),
                                wxClientData* data = NULL);
 
     /**
@@ -3657,12 +3692,12 @@ public:
         Sets the expanded icon for the item.
     */
     void SetItemExpandedIcon(const wxDataViewItem& item,
-                             const wxIcon& icon);
+                             const wxBitmapBundle& icon);
 
     /**
         Sets the icon for the item.
     */
-    void SetItemIcon(const wxDataViewItem& item, const wxIcon& icon);
+    void SetItemIcon(const wxDataViewItem& item, const wxBitmapBundle& icon);
 };
 
 
@@ -3683,14 +3718,25 @@ public:
         Constructor.
     */
     wxDataViewIconText(const wxString& text = wxEmptyString,
-                       const wxIcon& icon = wxNullIcon);
+                       const wxBitmapBundle& bitmap = wxBitmapBundle());
     wxDataViewIconText(const wxDataViewIconText& other);
     //@}
 
     /**
+        Gets the associated image.
+
+        @since 3.1.6
+     */
+    const wxBitmapBundle& GetBitmapBundle() const;
+
+    /**
         Gets the icon.
+
+        This function can only return the icon in the size appropriate for the
+        standard 100% DPI scaling, use GetBitmapBundle() to retrieve image
+        representation suitable for another DPI scaling value.
     */
-    const wxIcon& GetIcon() const;
+    wxIcon GetIcon() const;
 
     /**
         Gets the text.
@@ -3698,7 +3744,21 @@ public:
     wxString GetText() const;
 
     /**
+        Sets the associated image.
+
+        This function allows to provide several representations of the same
+        image, so that the most appropriate one for the current DPI scaling
+        could be used, and so should be preferred to SetIcon().
+
+        @since 3.1.6
+     */
+    void SetBitmapBundle(const wxBitmapBundle& bitmap);
+
+    /**
         Set the icon.
+
+        Use SetBitmapBundle() instead to allow specifying different image
+        representations for different DPI scaling values.
     */
     void SetIcon(const wxIcon& icon);
 
@@ -3812,7 +3872,7 @@ public:
     wxDataViewModel* GetModel() const;
 
     /**
-        Returns the position of a context menu event in screen coordinates.
+        Returns the position of a context menu event in client coordinates.
     */
     wxPoint GetPosition() const;
 
@@ -4026,6 +4086,9 @@ public:
         (selected) row, typically on a dark background.
 
         Default implementation returns @a value unmodified.
+
+        The @a value passed to this method is always non-null and it must
+        return a non-null value too.
     */
     virtual wxVariant MakeHighlighted(const wxVariant& value) const;
 };

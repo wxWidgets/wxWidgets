@@ -219,6 +219,7 @@
                                 <border>5</border>
                                 <object class="wxBitmapButton" name="controls_bitmapbutton">
                                     <bitmap>controls.xpm</bitmap>
+                                    <current>custclas.xpm</current>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -426,19 +427,19 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <selection>2</selection>
                                     <object class="ownerdrawnitem">
                                         <text>This is a</text>
-                                        <bitmap>basicdlg.xpm</bitmap>
+                                        <bitmap>basicdlg.xpm;basicdlg2.xpm</bitmap>
                                      </object>
                                     <object class="ownerdrawnitem">
                                         <text>read-only</text>
-                                        <bitmap>derivdlg.xpm</bitmap>
+                                        <bitmap>derivdlg.xpm;derivdlg2.xpm</bitmap>
                                      </object>
                                     <object class="ownerdrawnitem">
                                         <text>wxBitmapComboBox</text>
-                                        <bitmap>uncenter.xpm</bitmap>
+                                        <bitmap>uncenter.xpm;uncenter2.xpm</bitmap>
                                      </object>
                                     <object class="ownerdrawnitem">
                                         <text>control</text>
-                                        <bitmap>custclas.xpm</bitmap>
+                                        <bitmap>custclas.xpm;custclas2.xpm</bitmap>
                                     </object>
                                 </object>
                             </object>
@@ -962,6 +963,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <style>wxSP_WRAP</style>
                                     <max>100</max>
                                     <value>0</value>
+                                    <inc>2</inc>
                                 </object>
                             </object>
                         </object>
@@ -985,6 +987,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <max>100</max>
                                     <value>17</value>
                                     <base>16</base>
+                                    <inc>2</inc>
                                 </object>
                             </object>
                         </object>
@@ -994,17 +997,38 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     <label>wxStaticBitmap</label>
                     <object class="wxPanel" name="staticbitmap">
                         <object class="wxFlexGridSizer">
-                            <cols>1</cols>
+                            <cols>2</cols>
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
-                            <growablecols>0</growablecols>
-                            <growablerows>0</growablerows>
+                            <growablecols>0,1</growablecols>
+                            <growablerows>0,1</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>wxStaticBitmap with one bitmap:</label>
+                                </object>
+                            </object>
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticBitmap" name="controls_staticbitmap">
                                     <bitmap>stop.xpm</bitmap>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>wxStaticBitmap with a multi-resolution bitmap:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticBitmap">
+                                    <bitmap>stop.xpm;stop_2x.xpm</bitmap>
                                 </object>
                             </object>
                         </object>

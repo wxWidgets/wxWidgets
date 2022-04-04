@@ -146,6 +146,15 @@ public:
     int GetValue() const;
 
     /**
+        Get the value for increment for a spin control.
+
+        The default value is 1 but it can be changed using SetIncrement().
+
+        @since 3.1.6
+    */
+    int GetIncrement() const;
+
+    /**
         Sets the base to use for the numbers in this control.
 
         Currently the only supported values are 10 (which is the default) and
@@ -214,6 +223,22 @@ public:
         Calling this method doesn't generate any @c wxEVT_SPINCTRL events.
     */
     void SetValue(int value);
+
+    /**
+        Sets the increment for the control.
+
+        The increment is the number by which the value changes when the up or
+        down arrow is used.
+
+        The default is 1, but it can be useful to set it to a higher value when
+        using the control for bigger numbers.
+
+        Note that it is still possible to enter any value (in the valid range)
+        into the control manually, whatever is the value of the increment.
+
+        @since 3.1.6
+    */
+    void SetIncrement(int value);
 };
 
 /**
@@ -354,8 +379,15 @@ public:
 
     /**
         Sets the increment value.
-        @note You may also need to change the precision of the value
-        using SetDigits().
+
+        Using this method changes the number of digits used by the control to
+        at least match the value of @a inc, e.g. using the increment of @c 0.01
+        sets the number of digits to 2 if it had been less than 2 before.
+        However it doesn't change the number of digits if it had been already
+        high enough.
+
+        In any case, you may call SetDigits() explicitly to override the
+        automatic determination of the number of digits.
     */
     void SetIncrement(double inc);
 

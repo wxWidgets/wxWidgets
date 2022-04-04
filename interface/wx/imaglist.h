@@ -34,6 +34,10 @@ enum
     wxImageList is used principally in conjunction with wxTreeCtrl and
     wxListCtrl classes.
 
+    Use of this class is not recommended in the new code as it doesn't support
+    showing DPI-dependent bitmaps. Please use wxWithImages::SetImages() instead
+    of wxWithImages::SetImageList().
+
     @library{wxcore}
     @category{gdi}
 
@@ -50,6 +54,8 @@ public:
     /**
         Constructor specifying the image size, whether image masks should be created,
         and the initial size of the list.
+
+        Note that the size is specified in logical pixels.
 
         @param width
             Width of the images in the list.
@@ -68,19 +74,17 @@ public:
     /**
         Adds a new image or images using a bitmap and optional mask bitmap.
 
+        The logical size of the bitmap should be the same as the size specified
+        when constructing wxImageList. If the logical width of the bitmap is
+        greater than the image list width, bitmap is split into smaller images
+        of the required width.
+
         @param bitmap
             Bitmap representing the opaque areas of the image.
         @param mask
             Monochrome mask bitmap, representing the transparent areas of the image.
 
         @return The new zero-based image index.
-
-        @remarks The original bitmap or icon is not affected by the Add()
-                 operation, and can be deleted afterwards.
-                 If the bitmap is wider than the images in the list, then the
-                 bitmap will automatically be split into smaller images, each
-                 matching the dimensions of the image list.
-                 This does not apply when adding icons.
     */
     int Add(const wxBitmap& bitmap,
             const wxBitmap& mask = wxNullBitmap);
@@ -88,46 +92,58 @@ public:
     /**
         Adds a new image or images using a bitmap and mask colour.
 
+        The logical size of the bitmap should be the same as the size specified
+        when constructing wxImageList. If the logical width of the bitmap is
+        greater than the image list width, bitmap is split into smaller images
+        of the required width.
+
         @param bitmap
             Bitmap representing the opaque areas of the image.
         @param maskColour
             Colour indicating which parts of the image are transparent.
 
         @return The new zero-based image index.
-
-        @remarks The original bitmap or icon is not affected by the Add()
-                 operation, and can be deleted afterwards.
-                 If the bitmap is wider than the images in the list, then the
-                 bitmap will automatically be split into smaller images, each
-                 matching the dimensions of the image list.
-                 This does not apply when adding icons.
     */
     int Add(const wxBitmap& bitmap, const wxColour& maskColour);
 
     /**
         Adds a new image using an icon.
 
+        The logical size of the icon should be the same as the size specified
+        when constructing wxImageList.
+
         @param icon
             Icon to use as the image.
 
         @return The new zero-based image index.
-
-        @remarks The original bitmap or icon is not affected by the Add()
-                 operation, and can be deleted afterwards.
-                 If the bitmap is wider than the images in the list, then the
-                 bitmap will automatically be split into smaller images, each
-                 matching the dimensions of the image list.
-                 This does not apply when adding icons.
 
         @onlyfor{wxmsw,wxosx}
     */
     int Add(const wxIcon& icon);
 
     /**
-        Initializes the list. See wxImageList() for details.
+        Initializes the list.
+
+        See wxImageList() for details.
+
+        This function can be called only once after creating the object using
+        its default ctor or after calling Destroy().
     */
     bool Create(int width, int height, bool mask = true,
                 int initialCount = 1);
+
+    /**
+        Destroys the current list.
+
+        This function resets the object to its initial state and does more than
+        just RemoveAll() in the native wxMSW version.
+
+        After calling it, Create() may be called again to recreate the image
+        list, e.g. using a different size.
+
+        @since 3.1.6
+     */
+    void Destroy();
 
     /**
         Draws a specified image onto a device context.

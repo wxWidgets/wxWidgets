@@ -124,11 +124,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     WKWebViewConfiguration* webViewConfig = [[WKWebViewConfiguration alloc] init];
 
-    // WebKit API available since macOS 10.11 and iOS 9.0
-    SEL fullScreenSelector = @selector(_setFullScreenEnabled:);
-    if ([webViewConfig.preferences respondsToSelector:fullScreenSelector])
-        [webViewConfig.preferences performSelector:fullScreenSelector withObject:[NSNumber numberWithBool:YES]];
-
     if (!m_handlers.empty())
     {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
@@ -171,10 +166,22 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     [m_webView setUIDelegate:uiDelegate];
 
-    // WebKit API available since macOS 10.13 and iOS 11.0
-    SEL fullScreenDelegateSelector = @selector(_setFullscreenDelegate:);
-    if ([m_webView respondsToSelector:fullScreenDelegateSelector])
-        [m_webView performSelector:fullScreenDelegateSelector withObject:uiDelegate];
+    // Implement javascript fullscreen interface with user script and message handler
+    AddUserScript("\
+        document.__wxToggleFullscreen = function (elem) { \
+            document.fullscreenElement = elem; \
+            window.webkit.messageHandlers.__wxfullscreen.postMessage((elem) ? 1: 0); \
+            document.dispatchEvent(new Event('fullscreenchange')); \
+        }; \
+        Element.prototype.requestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
+        Element.prototype.webkitRequestFullscreen = Element.prototype.requestFullscreen; \
+        document.exitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
+        document.webkitExitFullscreen = document.exitFullscreen; \
+        document.onfullscreenchange = null; \
+        document.fullscreenEnabled = true; \
+    ");
+    [m_webView.configuration.userContentController addScriptMessageHandler:
+        [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:@"__wxfullscreen"];
 
     m_UIDelegate = uiDelegate;
 
@@ -371,76 +378,28 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
     }
 }
 
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output) const
+void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, void* clientData) const
 {
-    __block bool scriptExecuted = false;
-    __block wxString outputStr;
-    __block bool scriptSuccess = false;
+    wxJSScriptWrapper wrapJS(javascript, wxJSScriptWrapper::JS_OUTPUT_STRING);
 
     // Start script execution
-    [m_webView evaluateJavaScript:wxCFStringRef(javascript).AsNSString()
+    [m_webView evaluateJavaScript:wxCFStringRef(wrapJS.GetWrappedCode()).AsNSString()
                 completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
         if (error)
         {
-            outputStr.assign(wxCFStringRef(error.localizedFailureReason).AsString());
+            SendScriptResult(clientData, false, wxCFStringRef(error.localizedDescription).AsString());
         }
         else
         {
-            if ([obj isKindOfClass:[NSNumber class]])
-            {
-                NSNumber* num = (NSNumber*) obj;
-                CFTypeID numID = CFGetTypeID((__bridge CFTypeRef)(num));
-                if (numID == CFBooleanGetTypeID())
-                    outputStr = num.boolValue ? "true" : "false";
-                else
-                    outputStr = wxCFStringRef::AsString(num.stringValue);
-            }
-            else if (obj)
-                outputStr.assign(wxCFStringRef::AsString([NSString stringWithFormat:@"%@", obj]));
+            wxString scriptResult;
+            if (obj)
+                scriptResult = wxCFStringRef::AsString([NSString stringWithFormat:@"%@", obj]);
+            wxString scriptOutput;
+            bool success = wxJSScriptWrapper::ExtractOutput(scriptResult, &scriptOutput);
 
-            scriptSuccess = true;
+            SendScriptResult(clientData, success, scriptOutput);
         }
-
-        scriptExecuted = true;
     }];
-
-    // Wait for script exection
-    while (!scriptExecuted)
-        wxYield();
-
-    if (output)
-        output->assign(outputStr);
-
-    return scriptSuccess;
-}
-
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
-{
-    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
-
-    // This string is also used as an error indicator: it's cleared if there is
-    // no error or used in the warning message below if there is one.
-    wxString result;
-    if (RunScriptSync(wrapJS.GetWrappedCode(), &result)
-        && result == wxS("true"))
-    {
-        if (RunScriptSync(wrapJS.GetOutputCode() + ";", &result))
-        {
-            if (output)
-                *output = result;
-            result.clear();
-        }
-
-        RunScriptSync(wrapJS.GetCleanUpCode());
-    }
-
-    if (!result.empty())
-    {
-        wxLogWarning(_("Error running JavaScript: %s"), result);
-        return false;
-    }
-
-    return true;
 }
 
 bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
@@ -1026,25 +985,6 @@ WX_API_AVAILABLE_MACOS(10, 12)
     webKitWindow->Print();
 }
 
-- (void)SendFullscreenChangedEvent:(int)status
-{
-    wxWebViewEvent event(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, webKitWindow->GetId(),
-        webKitWindow->GetCurrentURL(), wxString());
-    event.SetEventObject(webKitWindow);
-    event.SetInt(status);
-    webKitWindow->HandleWindowEvent(event);
-}
-
-- (void)_webViewDidEnterFullscreen:(WKWebView *)webView
-{
-    [self SendFullscreenChangedEvent:1];
-}
-
-- (void)_webViewDidExitFullscreen:(WKWebView *)webView
-{
-    [self SendFullscreenChangedEvent:0];
-}
-
 @end
 
 @implementation WebViewScriptMessageHandler
@@ -1061,6 +1001,17 @@ WX_API_AVAILABLE_MACOS(10, 12)
 - (void)userContentController:(nonnull WKUserContentController *)userContentController
       didReceiveScriptMessage:(nonnull WKScriptMessage *)message
 {
+    // Handle internal fullscreen message independent of user message handlers
+    if ([message.name isEqualToString:@"__wxfullscreen"])
+    {
+        wxWebViewEvent event(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, webKitWindow->GetId(),
+            webKitWindow->GetCurrentURL(), wxString());
+        event.SetEventObject(webKitWindow);
+        event.SetInt(((NSNumber*)message.body).intValue);
+        webKitWindow->HandleWindowEvent(event);
+        return;
+    }
+
     wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED,
                          webKitWindow->GetId(),
                          webKitWindow->GetCurrentURL(),

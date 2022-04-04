@@ -18,6 +18,10 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+// Define this as soon as possible and before string.h is included to get
+// memset_s() declaration from it if available.
+#define __STDC_WANT_LIB_EXT1__ 1
+
 #include "wx/utils.h"
 
 #if !defined(HAVE_SETENV) && defined(HAVE_PUTENV)
@@ -141,6 +145,10 @@
     #include <sys/resource.h>   // for setpriority()
 #endif
 
+#if defined(__DARWIN__)
+    #include <sys/sysctl.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
@@ -200,6 +208,33 @@ void wxMicroSleep(unsigned long microseconds)
 void wxMilliSleep(unsigned long milliseconds)
 {
     wxMicroSleep(milliseconds*1000);
+}
+
+// ----------------------------------------------------------------------------
+// security
+// ----------------------------------------------------------------------------
+
+void wxSecureZeroMemory(void* v, size_t n)
+{
+#if (defined(__GLIBC__) && \
+        (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 25))) || \
+    (defined(__FreeBSD__) && __FreeBSD__ >= 11)
+    // This non-standard function is somewhat widely available elsewhere too,
+    // but may be found in a non-standard header file, or in a library that is
+    // not linked by default.
+    explicit_bzero(v, n);
+#elif defined(__DARWIN__) || defined(__STDC_LIB_EXT1__)
+    // memset_s() is available since OS X 10.9, and may be available on
+    // other platforms.
+    memset_s(v, n, 0, n);
+#else
+    // A generic implementation based on the example at:
+    // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1381.pdf
+    int c = 0;
+    volatile unsigned char *p = reinterpret_cast<unsigned char *>(v);
+    while ( n-- )
+        *p++ = c;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1091,6 +1126,19 @@ bool wxIsPlatform64Bit()
 wxString wxGetCpuArchitectureName()
 {
     return wxGetCommandOutput(wxT("uname -m"));
+}
+
+wxString wxGetNativeCpuArchitectureName()
+{
+#if defined(__DARWIN__)
+    // macOS on ARM will report an x86_64 process as translated, assume the native CPU is arm64
+    int translated;
+    size_t translated_size = sizeof(translated);
+    if (sysctlbyname("sysctl.proc_translated", &translated, &translated_size, NULL, 0) == 0)
+        return "arm64";
+    else
+#endif
+        return wxGetCpuArchitectureName();
 }
 
 #ifdef __LINUX__

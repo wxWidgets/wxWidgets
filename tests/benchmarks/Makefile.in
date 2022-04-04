@@ -57,6 +57,7 @@ BENCH_OBJECTS =  \
 	bench_ipcclient.o \
 	bench_log.o \
 	bench_mbconv.o \
+	bench_regex.o \
 	bench_strings.o \
 	bench_tls.o \
 	bench_printfbench.o
@@ -199,7 +200,7 @@ clean:
 	rm -rf bench_graphics.app
 
 distclean: clean
-	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 bench$(EXEEXT): $(BENCH_OBJECTS)
 	$(CXX) -o $@ $(BENCH_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
@@ -225,9 +226,14 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p bench_gui.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/EXECUTABLE/bench_gui/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.bench_gui/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/bench_gui/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/bench_gui/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/bench_gui version $(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >bench_gui.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
@@ -250,9 +256,14 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p bench_graphics.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/EXECUTABLE/bench_graphics/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.bench_graphics/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/bench_graphics/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/bench_graphics/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/bench_graphics version $(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >bench_graphics.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
@@ -298,6 +309,9 @@ bench_log.o: $(srcdir)/log.cpp
 
 bench_mbconv.o: $(srcdir)/mbconv.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/mbconv.cpp
+
+bench_regex.o: $(srcdir)/regex.cpp
+	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/regex.cpp
 
 bench_strings.o: $(srcdir)/strings.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/strings.cpp

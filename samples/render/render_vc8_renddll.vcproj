@@ -205,8 +205,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Debug|x64"
-			OutputDirectory="vc_mswuddll_x64"
-			IntermediateDirectory="vc_mswuddll_x64\renddll"
+			OutputDirectory="vc_x64_mswuddll"
+			IntermediateDirectory="vc_x64_mswuddll\renddll"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -240,8 +240,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\renddll\"
-				ProgramDataBaseFileName="vc_mswuddll_x64\renddll_mswud316_vc.pdb"
+				ObjectFile="vc_x64_mswuddll\renddll\"
+				ProgramDataBaseFileName="vc_x64_mswuddll\renddll_mswud316_vc.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -263,13 +263,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswuddll_x64\renddll_mswud316_vc.dll"
+				OutputFile="vc_x64_mswuddll\renddll_mswud316_vc.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll_x64\renddll_mswud316_vc.pdb"
+				ProgramDatabaseFile="vc_x64_mswuddll\renddll_mswud316_vc.pdb"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -283,7 +283,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll_x64\render_vc8_renddll.bsc"
+				OutputFile="vc_x64_mswuddll\render_vc8_renddll.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -295,8 +295,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Release|x64"
-			OutputDirectory="vc_mswudll_x64"
-			IntermediateDirectory="vc_mswudll_x64\renddll"
+			OutputDirectory="vc_x64_mswudll"
+			IntermediateDirectory="vc_x64_mswudll\renddll"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -327,8 +327,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\renddll\"
-				ProgramDataBaseFileName="vc_mswudll_x64\renddll_mswu316_vc.pdb"
+				ObjectFile="vc_x64_mswudll\renddll\"
+				ProgramDataBaseFileName="vc_x64_mswudll\renddll_mswu316_vc.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -350,13 +350,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswudll_x64\renddll_mswu316_vc.dll"
+				OutputFile="vc_x64_mswudll\renddll_mswu316_vc.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll_x64\renddll_mswu316_vc.pdb"
+				ProgramDatabaseFile="vc_x64_mswudll\renddll_mswu316_vc.pdb"
 				TargetMachine="17"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -372,7 +372,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll_x64\render_vc8_renddll.bsc"
+				OutputFile="vc_x64_mswudll\render_vc8_renddll.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

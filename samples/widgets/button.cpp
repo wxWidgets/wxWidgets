@@ -111,8 +111,8 @@ protected:
     // (re)create the wxButton
     void CreateButton();
 
-    // helper function: create a bitmap for wxBitmapButton
-    wxBitmap CreateBitmap(const wxString& label, const wxArtID& type);
+    // helper function: create a bitmap bundle for wxBitmapButton
+    wxBitmapBundle CreateBitmap(const wxString& label, const wxArtID& type);
 
 
     // the controls
@@ -691,7 +691,8 @@ void ButtonWidgetsPage::OnButton(wxCommandEvent& WXUNUSED(event))
 // bitmap button stuff
 // ----------------------------------------------------------------------------
 
-wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label, const wxArtID& type)
+wxBitmapBundle
+ButtonWidgetsPage::CreateBitmap(const wxString& label, const wxArtID& type)
 {
     wxBitmap bmp(FromDIP(wxSize(180, 70))); // shouldn't hardcode but it's simpler like this
     wxMemoryDC dc;
@@ -708,4 +709,3 @@ wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label, const wxArtID& t
 
     return bmp;
 }
-

@@ -16,6 +16,7 @@
 #ifdef GDK_WINDOWING_WAYLAND
     #include <gdk/gdkwayland.h>
 #endif
+#include "wx/gtk/private/backend.h"
 
 //-----------------------------------------------------------------------------
 // "wxGtkGetIdFromWidget" from widget
@@ -32,19 +33,16 @@ inline gpointer wxGtkGetIdFromWidget(GtkWidget* widget)
     GdkWindow* window = gtk_widget_get_window(widget);
     wxASSERT(window);
 
-#ifdef __WXGTK3__
-    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(window));
-#endif
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
-    if (strcmp("GdkX11Window", name) == 0)
+    if (wxGTKImpl::IsX11(window))
 #endif
     {
         return (gpointer)GDK_WINDOW_XID(window);
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-    if (strcmp("GdkWaylandWindow", name) == 0)
+    if (wxGTKImpl::IsWayland(window))
     {
         return (gpointer)gdk_wayland_window_get_wl_surface(window);
     }

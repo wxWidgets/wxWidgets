@@ -119,7 +119,7 @@ bool wxFTP::Connect(const wxSockAddress& addr, bool WXUNUSED(wait))
     }
 
     wxString command;
-    command.Printf(wxT("USER %s"), m_username.c_str());
+    command.Printf(wxT("USER %s"), m_username);
     char rc = SendCommand(command);
     if ( rc == '2' )
     {
@@ -135,7 +135,7 @@ bool wxFTP::Connect(const wxSockAddress& addr, bool WXUNUSED(wait))
         return false;
     }
 
-    command.Printf(wxT("PASS %s"), m_password.c_str());
+    command.Printf(wxT("PASS %s"), m_password);
     if ( !CheckCommand(command, '2') )
     {
         m_lastError = wxPROTO_CONNERR;
@@ -353,7 +353,7 @@ char wxFTP::GetResult()
     if ( badReply )
     {
         wxLogDebug(wxT("Broken FTP server: '%s' is not a valid reply."),
-                   m_lastResult.c_str());
+                   m_lastResult);
 
         m_lastError = wxPROTO_PROTERR;
 
@@ -419,7 +419,7 @@ bool wxFTP::DoSimpleCommand(const wxChar *command, const wxString& arg)
 
     if ( !CheckCommand(fullcmd, '2') )
     {
-        wxLogDebug(wxT("FTP command '%s' failed."), fullcmd.c_str());
+        wxLogDebug(wxT("FTP command '%s' failed."), fullcmd);
         m_lastError = wxPROTO_NETERR;
 
         return false;
@@ -933,7 +933,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
             // 213 is File Status (STD9)
             // "SIZE" is not described anywhere..? It works on most servers
             int statuscode;
-            if ( wxSscanf(GetLastResult().c_str(), wxT("%i %i"),
+            if ( wxSscanf(GetLastResult(), wxT("%i %i"),
                           &statuscode, &filesize) == 2 )
             {
                 // We've gotten a good reply.
@@ -999,7 +999,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                         if ( fileList[i].Mid(0, 1) == wxT("-") )
                         {
 
-                            if ( wxSscanf(fileList[i].c_str(),
+                            if ( wxSscanf(fileList[i],
                                           wxT("%*s %*s %*s %*s %i %*s %*s %*s %*s"),
                                           &filesize) != 9 )
                             {
@@ -1009,7 +1009,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                         }
                         else // Windows-style response (?)
                         {
-                            if ( wxSscanf(fileList[i].c_str(),
+                            if ( wxSscanf(fileList[i],
                                           wxT("%*s %*s %i %*s"),
                                           &filesize) != 4 )
                             {

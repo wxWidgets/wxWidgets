@@ -17,21 +17,6 @@
 /* the installation location prefix from configure */
 #cmakedefine wxINSTALL_PREFIX "@wxINSTALL_PREFIX@"
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine gid_t int
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine mode_t int
-
-/* Define to `long' if <sys/types.h> doesn't define.  */
-#cmakedefine off_t long
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine pid_t int
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-#cmakedefine size_t unsigned
-
 /* Define if ssize_t type is available.  */
 #cmakedefine HAVE_SSIZE_T
 
@@ -42,9 +27,6 @@
 #ifndef _GNU_SOURCE
 #cmakedefine _GNU_SOURCE 1
 #endif
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#cmakedefine uid_t int
 
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
@@ -234,6 +216,8 @@
 
 #cmakedefine01 wxUSE_SECRETSTORE
 
+#cmakedefine01 wxUSE_SPELLCHECK
+
 #cmakedefine01 wxUSE_STDPATHS
 
 #cmakedefine01 wxUSE_TEXTBUFFER
@@ -328,7 +312,7 @@
 
 #cmakedefine01 wxUSE_XRC
 
-#define wxUSE_XML       wxUSE_XRC
+#cmakedefine01 wxUSE_XML
 
 #cmakedefine01 wxUSE_AUI
 
@@ -347,6 +331,8 @@
 #endif
 
 #cmakedefine01 wxUSE_WEBVIEW_EDGE
+
+#cmakedefine01 wxUSE_WEBVIEW_EDGE_STATIC
 
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT
@@ -833,12 +819,6 @@
  */
 #cmakedefine HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
-/*
- * The built-in regex supports advanced REs in additional to POSIX's basic
- * and extended. Your system regex probably won't support this, and in this
- * case WX_NO_REGEX_ADVANCED should be defined.
- */
-#cmakedefine WX_NO_REGEX_ADVANCED
 /*
  * On GNU systems use re_search instead of regexec, since the latter does a
  * strlen on the search text affecting the performance of some operations.

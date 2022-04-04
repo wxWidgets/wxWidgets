@@ -161,25 +161,14 @@ int wxToolbook::GetPageImage(size_t WXUNUSED(n)) const
 
 bool wxToolbook::SetPageImage(size_t n, int imageId)
 {
-    wxASSERT( GetImageList() != NULL );
-    if (!GetImageList())
+    wxBitmapBundle bmp = GetBitmapBundle(imageId);
+    if ( !bmp.IsOk() )
         return false;
 
     int toolId = PageToToolId(n);
-    wxBitmap bmp = GetImageList()->GetBitmap(imageId);
     GetToolBar()->SetToolNormalBitmap(toolId, bmp);
-    GetToolBar()->SetToolDisabledBitmap(toolId, bmp.ConvertToDisabled());
 
     return true;
-}
-
-// ----------------------------------------------------------------------------
-// image list stuff
-// ----------------------------------------------------------------------------
-
-void wxToolbook::SetImageList(wxImageList *imageList)
-{
-    wxBookCtrlBase::SetImageList(imageList);
 }
 
 // ----------------------------------------------------------------------------
@@ -209,8 +198,6 @@ void wxToolbook::Realize()
     if (m_needsRealizing)
     {
         m_needsRealizing = false;
-
-        GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
 
         GetToolBar()->Realize();
     }
@@ -283,28 +270,10 @@ bool wxToolbook::InsertPage(size_t n,
 
     m_needsRealizing = true;
 
-    wxASSERT(GetImageList() != NULL);
-
-    if (!GetImageList())
-        return false;
-
-    // TODO: make sure all platforms can convert between icon and bitmap,
-    // and/or test whether the image is a bitmap or an icon.
-#ifdef __WXMAC__
-    wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
-#else
-    // On Windows, we can lose information by using GetBitmap, so extract icon instead
-    wxIcon icon = GetImageList()->GetIcon(imageId);
-    wxBitmap bitmap;
-    bitmap.CopyFromIcon(icon);
-#endif
-
-    m_maxBitmapSize.x = wxMax(bitmap.GetWidth(), m_maxBitmapSize.x);
-    m_maxBitmapSize.y = wxMax(bitmap.GetHeight(), m_maxBitmapSize.y);
+    wxBitmapBundle bitmap = GetBitmapBundle(imageId);
 
     int toolId = page->GetId();
-    GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
-    GetToolBar()->InsertTool(n, toolId, text, bitmap, bitmap.ConvertToDisabled(), wxITEM_RADIO);
+    GetToolBar()->InsertTool(n, toolId, text, bitmap, wxBitmapBundle(), wxITEM_RADIO);
 
     // fix current selection
     if (m_selection == wxNOT_FOUND)
@@ -402,7 +371,10 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
     int page = ToolIdToPage(event.GetId());
     if (page == wxNOT_FOUND)
     {
-        // this happens only of page id has changed afterwards
+        // we may have gotten an event from something other than our tool, e.g.
+        // a menu item from a context menu shown from the application code, so
+        // take care to avoid consuming it in this case
+        event.Skip();
         return;
     }
 

@@ -29,6 +29,10 @@
 
 #include "wx/apptrait.h"
 
+#ifdef __WINDOWS__
+    #include "wx/dynlib.h"
+#endif
+
 // global object
 // VERY IMPORTANT: do not use the default constructor since it would
 //                 try to init the wxPlatformInfo instance using
@@ -198,6 +202,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
     m_bitness = wxIsPlatform64Bit() ? wxBITNESS_64 : wxBITNESS_32;
     m_cpuArch = wxGetCpuArchitectureName();
+    m_nativeCpuArch = wxGetNativeCpuArchitectureName();
 
 #ifdef __LINUX__
     m_ldi = wxGetLinuxDistributionInfo();
@@ -373,3 +378,12 @@ wxEndianness wxPlatformInfo::GetEndianness(const wxString& end)
 
     return wxENDIAN_INVALID;
 }
+
+#ifdef __WINDOWS__
+
+bool wxIsRunningUnderWine()
+{
+    return wxLoadedDLL("ntdll.dll").HasSymbol(wxS("wine_get_version"));
+}
+
+#endif // __WINDOWS__

@@ -23,7 +23,7 @@ public:
     virtual ~wxStaticBitmap();
 
     wxStaticBitmap(wxWindow *parent, wxWindowID id,
-        const wxBitmap& label,
+        const wxBitmapBundle& label,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
@@ -33,32 +33,17 @@ public:
     }
 
     bool Create(wxWindow *parent, wxWindowID id,
-        const wxBitmap& label,
+        const wxBitmapBundle& label,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
         const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap(const wxBitmap& bitmap);
+    virtual void SetBitmap(const wxBitmapBundle& bitmap);
 
     virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
     {
         return false;
-    }
-
-    wxBitmap GetBitmap() const { return m_messageBitmap; }
-
-    // for compatibility with wxMSW
-    wxIcon GetIcon() const
-    {
-        // don't use wxDynamicCast, icons and bitmaps are really the same thing
-        return *(const wxIcon*)&m_messageBitmap;
-    }
-
-    // for compatibility with wxMSW
-    void  SetIcon(const wxIcon& icon)
-    {
-        SetBitmap( icon );
     }
 
     // Implementation
@@ -70,7 +55,7 @@ protected:
 
 protected:
     wxBitmap m_messageBitmap;
-    wxBitmap m_messageBitmapOriginal;
+    wxBitmapBundle m_messageBitmapOriginal;
     wxBitmapCache m_bitmapCache;
 };
 

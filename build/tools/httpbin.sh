@@ -16,7 +16,9 @@ httpbin_launch() {
 
     case "$(uname -s)" in
         Linux)
-            dist_codename=$(lsb_release --codename --short)
+            if command -v lsb_release > /dev/null; then
+                dist_codename=$(lsb_release --codename --short)
+            fi
             ;;
 
         Darwin)
@@ -34,15 +36,20 @@ httpbin_launch() {
             itsdangerous==1.1.0 pycparser==2.20 raven==6.10.0 werkzeug==0.16.1'
             ;;
 
-        macOS)
-            # We use Python 2 under macOS 10.11 which doesn't have Python 3,
-            # and decorator >= 5 is incompatible with it too.
-            pip_explicit_deps='decorator==4.4.2'
-            ;;
+        *)
+            # Installing Flask 2.1.0 and its dependency Werkzeug 2.1.0 results
+            # in failures when trying to run httpbin, so stick to an older but
+            # working version.
+            pip_explicit_deps='Flask==2.0.3 Werkzeug==2.0.3'
     esac
 
-    # Ensure that we have at least some version of pip.
-    if ! python3 -m pip; then
+    # Ensure that we have at least some version of pip and setuptools required
+    # for installing cffi.
+    if ! python3 -c 'import setuptools'; then
+        sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-setuptools
+    fi
+
+    if ! python3 -c 'import pip'; then
         sudo apt-get -q -o=Dpkg::Use-Pty=0 install python3-pip
     fi
 
@@ -54,6 +61,7 @@ httpbin_launch() {
     # it may not support Python version that we actually have (this one
     # still works with 3.4, 20.0.1 is the last one to support 3.5).
     python3 -m pip install --user --upgrade pip==19.1.1
+    python3 -m pip install --user wheel
 
     echo "Installing using `python3 -m pip --version`"
 

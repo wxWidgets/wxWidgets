@@ -66,7 +66,7 @@ public:
             The page-specific bitmap if different from the global one
     */
     wxWizardPage(wxWizard* parent,
-                 const wxBitmap& bitmap = wxNullBitmap);
+                 const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
        Creates the wizard page.
@@ -78,7 +78,7 @@ public:
             The page-specific bitmap if different from the global one
     */
     bool Create(wxWizard *parent,
-                const wxBitmap& bitmap = wxNullBitmap);
+                const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
         This method is called by wxWizard to get the bitmap to display alongside the page.
@@ -214,7 +214,7 @@ public:
     wxWizardPageSimple(wxWizard* parent,
                        wxWizardPage* prev = NULL,
                        wxWizardPage* next = NULL,
-                       const wxBitmap& bitmap = wxNullBitmap);
+                       const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
        Creates the wizard page.
@@ -223,7 +223,7 @@ public:
     bool Create(wxWizard *parent = NULL,
                 wxWizardPage *prev = NULL,
                 wxWizardPage *next = NULL,
-                const wxBitmap& bitmap = wxNullBitmap);
+                const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
         A helper chaining this page with the next one.
@@ -380,7 +380,7 @@ public:
     */
     wxWizard(wxWindow* parent, int id = wxID_ANY,
              const wxString& title = wxEmptyString,
-             const wxBitmap& bitmap = wxNullBitmap,
+             const wxBitmapBundle& bitmap = wxBitmapBundle(),
              const wxPoint& pos = wxDefaultPosition,
              long style = wxDEFAULT_DIALOG_STYLE);
 
@@ -408,7 +408,7 @@ public:
     */
     bool Create(wxWindow* parent, int id = wxID_ANY,
                 const wxString& title = wxEmptyString,
-                const wxBitmap& bitmap = wxNullBitmap,
+                const wxBitmapBundle& bitmap = wxBitmapBundle(),
                 const wxPoint& pos = wxDefaultPosition, long style = wxDEFAULT_DIALOG_STYLE);
 
     /**
@@ -523,7 +523,7 @@ public:
     /**
         Sets the bitmap used for the wizard.
     */
-    void SetBitmap(const wxBitmap& bitmap);
+    void SetBitmap(const wxBitmapBundle& bitmap);
 
     /**
         Sets the colour that should be used to fill the area not taken up by the wizard

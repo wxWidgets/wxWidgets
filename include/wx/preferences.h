@@ -15,6 +15,7 @@
 #if wxUSE_PREFERENCES_EDITOR
 
 #include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/vector.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -49,14 +50,15 @@ public:
     // Name of the page, used e.g. for tabs
     virtual wxString GetName() const = 0;
 
-    // Return 32x32 icon used for the page. Currently only used on OS X, where
+    // Return the icon to use for the page. Currently only used on OS X, where
     // implementation is required; unused on other platforms. Because of this,
-    // the method is only pure virtual on platforms that use it.
-#ifdef wxHAS_PREF_EDITOR_ICONS
-    virtual wxBitmap GetLargeIcon() const = 0;
-#else
+    // these methods are not pure virtual but must be implemented if OS X is
+    // supported.
+    //
+    // New code should override GetIcon(), GetLargeIcon() only exists for
+    // backwards compatibility.
+    virtual wxBitmapBundle GetIcon() const { return GetLargeIcon(); }
     virtual wxBitmap GetLargeIcon() const { return wxBitmap(); }
-#endif
 
     // Create a window (usually a wxPanel) for this page. The caller takes
     // ownership of the returned window.
@@ -81,7 +83,7 @@ public:
 
     virtual wxString GetName() const wxOVERRIDE;
 #ifdef __WXOSX_COCOA__
-    virtual wxBitmap GetLargeIcon() const wxOVERRIDE;
+    virtual wxBitmapBundle GetIcon() const wxOVERRIDE;
 #endif
 
 private:

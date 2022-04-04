@@ -90,9 +90,14 @@ void wxAnyButton::QtCreate(wxWindow *parent)
     m_qtPushButton->setAutoDefault(false);
 }
 
-void wxAnyButton::QtSetBitmap( const wxBitmap &bitmap )
+void wxAnyButton::QtSetBitmap( const wxBitmapBundle &bitmapBundle )
 {
     wxCHECK_RET(m_qtPushButton, "Invalid button.");
+
+    if ( !bitmapBundle.IsOk() )
+        return;
+
+    wxBitmap bitmap = bitmapBundle.GetBitmap(bitmapBundle.GetDefaultSize()*GetDPIScaleFactor());
 
     // load the bitmap and resize the button:
     QPixmap *pixmap = bitmap.GetHandle();
@@ -117,10 +122,10 @@ QWidget *wxAnyButton::GetHandle() const
 
 wxBitmap wxAnyButton::DoGetBitmap(State state) const
 {
-    return state < State_Max ? m_bitmaps[state] : wxNullBitmap;
+    return state < State_Max ? m_bitmaps[state].GetBitmap(wxDefaultSize) : wxNullBitmap;
 }
 
-void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
 {
     wxCHECK_RET(which < State_Max, "Invalid state");
 
@@ -166,7 +171,7 @@ void wxAnyButton::QtUpdateState()
     State state = QtGetCurrentState();
 
     // Update the bitmap
-    const wxBitmap& bmp = m_bitmaps[state];
+    const wxBitmapBundle& bmp = m_bitmaps[state];
     QtSetBitmap(bmp.IsOk() ? bmp : m_bitmaps[State_Normal]);
 }
 

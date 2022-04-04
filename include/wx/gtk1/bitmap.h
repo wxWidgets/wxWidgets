@@ -88,9 +88,6 @@ public:
 
     wxImage ConvertToImage() const;
 
-    // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon);
-
     wxMask *GetMask() const;
     void SetMask( wxMask *mask );
 
@@ -123,6 +120,8 @@ public:
 
     // Basically, this corresponds to Win32 StretchBlt()
     wxBitmap Rescale( int clipx, int clipy, int clipwidth, int clipheight, int width, int height );
+    // OpenVMS needs the next statement to detect Rescale in an inherited class
+    using wxBitmapHelpers::Rescale;
 
     // raw bitmap access support functions
     void *GetRawData(wxPixelDataBase& data, int bpp);

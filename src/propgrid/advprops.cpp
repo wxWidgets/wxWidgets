@@ -1966,7 +1966,7 @@ wxMultiChoiceProperty::~wxMultiChoiceProperty()
 
 void wxMultiChoiceProperty::OnSetValue()
 {
-    GenerateValueAsString(m_value, &m_display);
+    m_display = GenerateValueAsString(m_value);
 }
 
 wxString wxMultiChoiceProperty::ValueToString( wxVariant& value,
@@ -1976,35 +1976,30 @@ wxString wxMultiChoiceProperty::ValueToString( wxVariant& value,
     if ( argFlags & wxPG_VALUE_IS_CURRENT )
         return m_display;
 
-    wxString s;
-    GenerateValueAsString(value, &s);
-    return s;
+    return GenerateValueAsString(value);
 }
 
-void wxMultiChoiceProperty::GenerateValueAsString( wxVariant& value,
-                                                   wxString* target ) const
+wxString wxMultiChoiceProperty::GenerateValueAsString(const wxVariant& value) const
 {
     wxArrayString strings;
 
     if ( value.IsType(wxPG_VARIANT_TYPE_ARRSTRING) )
         strings = value.GetArrayString();
 
-    wxString& tempStr = *target;
+    const size_t itemCount = strings.size();
 
-    size_t itemCount = strings.size();
-
-    tempStr.Empty();
-
-    if ( itemCount )
-        tempStr.append( wxS("\"") );
+    wxString valStr;
 
     for ( size_t i = 0; i < itemCount; i++ )
     {
-        tempStr.append( strings[i] );
-        tempStr.append( wxS("\"") );
-        if ( i < (itemCount-1) )
-            tempStr.append ( wxS(" \"") );
+        valStr.append("\"");
+        valStr.append(strings[i]);
+        valStr.append("\"");
+        if ( i < (itemCount - 1) )
+            valStr.append(" ");
     }
+
+    return valStr;
 }
 
 wxArrayInt wxMultiChoiceProperty::GetValueAsIndices() const

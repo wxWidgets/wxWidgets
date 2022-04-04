@@ -75,11 +75,6 @@ using namespace wxMSWImpl;
     #endif
 #endif // wxUSE_UXTHEME
 
-// BCM_GETIDEALSIZE is defined since XP
-#ifndef BCM_GETIDEALSIZE
-    #define BCM_GETIDEALSIZE    0x1601
-#endif // BCM_GETIDEALSIZE
-
 #ifndef ODS_NOACCEL
     #define ODS_NOACCEL         0x0100
 #endif
@@ -97,15 +92,76 @@ extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
 // ----------------------------------------------------------------------------
 
 // we use different data classes for owner drawn buttons and for themed XP ones
+//
+// Each class stores the bitmap bundles possibly containing images of multiple
+// sizes, but only stores bitmaps of the specific size used by the button right
+// now.
 
 class wxButtonImageData: public wxObject
 {
 public:
-    wxButtonImageData() { }
-    virtual ~wxButtonImageData() { }
+    wxButtonImageData(wxWindow* btn, const wxBitmapBundle& normalBundle)
+        : m_btn(btn)
+    {
+        m_bitmapSize = normalBundle.GetPreferredBitmapSizeFor(btn);
 
+        m_bitmapBundles[wxAnyButton::State_Normal] = normalBundle;
+
+        // React to DPI changes in the future.
+        m_btn->Bind(wxEVT_DPI_CHANGED, &wxButtonImageData::OnDPIChanged, this);
+    }
+
+    virtual ~wxButtonImageData()
+    {
+        m_btn->Unbind(wxEVT_DPI_CHANGED, &wxButtonImageData::OnDPIChanged, this);
+    }
+
+    virtual void OnDPIChanged(wxDPIChangedEvent& event)
+    {
+        event.Skip();
+
+        m_bitmapSize = m_bitmapBundles[wxAnyButton::State_Normal].GetPreferredBitmapSizeFor(m_btn);
+    }
+
+    // Bitmap can be set either explicitly, when the bitmap for the given state
+    // is specified by the application, or implicitly, when the bitmap for some
+    // state is set as a side effect of setting another bitmap.
+    //
+    // When setting a bitmap explicitly, we update the entire bundle, while
+    // setting it implicitly only updates the currently used bitmap.
+    wxBitmapBundle GetBitmapBundle(wxAnyButton::State which) const
+    {
+        return m_bitmapBundles[which];
+    }
+
+    void SetBitmapBundle(const wxBitmapBundle& bitmapBundle, wxAnyButton::State which)
+    {
+        m_bitmapBundles[which] = bitmapBundle;
+
+        SetBitmapFromBundle(bitmapBundle, which);
+    }
+
+    // Actually get or update the bitmap being currently used (even if it is
+    // used implicitly, i.e. as consequence of setting a bitmap for another
+    // state).
     virtual wxBitmap GetBitmap(wxAnyButton::State which) const = 0;
     virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) = 0;
+
+    // Helper: get the bitmap of the currently used size from the bundle.
+    wxBitmap GetBitmapFromBundle(const wxBitmapBundle& bitmapBundle) const
+    {
+        return bitmapBundle.GetBitmap(GetBitmapSize());
+    }
+
+    // And another helper to call SetBitmap() with the result.
+    void SetBitmapFromBundle(const wxBitmapBundle& bitmapBundle, wxAnyButton::State which)
+    {
+        SetBitmap(GetBitmapFromBundle(bitmapBundle), which);
+    }
+
+
+    // Return the currently used bitmap size.
+    wxSize GetBitmapSize() const { return m_bitmapSize; }
 
     virtual wxSize GetBitmapMargins() const = 0;
     virtual void SetBitmapMargins(wxCoord x, wxCoord y) = 0;
@@ -113,7 +169,14 @@ public:
     virtual wxDirection GetBitmapPosition() const = 0;
     virtual void SetBitmapPosition(wxDirection dir) = 0;
 
-private:
+protected:
+    wxSize m_bitmapSize;
+
+    wxBitmapBundle m_bitmapBundles[wxAnyButton::State_Max];
+
+    // the button we're associated with
+    wxWindow* const m_btn;
+
     wxDECLARE_NO_COPY_CLASS(wxButtonImageData);
 };
 
@@ -127,12 +190,11 @@ const int OD_BUTTON_MARGIN = 4;
 class wxODButtonImageData : public wxButtonImageData
 {
 public:
-    wxODButtonImageData(wxAnyButton *btn, const wxBitmap& bitmap)
+    wxODButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
+        : wxButtonImageData(btn, bitmapBundle)
     {
-        SetBitmap(bitmap, wxAnyButton::State_Normal);
-#if wxUSE_IMAGE
-        SetBitmap(bitmap.ConvertToDisabled(), wxAnyButton::State_Disabled);
-#endif
+        InitImageList();
+
         m_dir = wxLEFT;
 
         // we use margins when we have both bitmap and text, but when we have
@@ -175,6 +237,34 @@ public:
     }
 
 private:
+    void InitImageList()
+    {
+        const wxBitmap bitmap = m_bitmapBundles[wxAnyButton::State_Normal].GetBitmap(m_bitmapSize);
+
+        for ( int n = 0; n < wxAnyButton::State_Max; n++ )
+        {
+            wxBitmap stateBitmap = m_bitmapBundles[n].GetBitmap(m_bitmapSize);
+            if ( !stateBitmap.IsOk() )
+            {
+#if wxUSE_IMAGE
+                if ( n == wxAnyButton::State_Disabled )
+                    stateBitmap = bitmap.ConvertToDisabled();
+                else
+#endif // wxUSE_IMAGE
+                    stateBitmap = bitmap;
+            }
+
+            SetBitmap(stateBitmap, (wxAnyButton::State)n);
+        }
+    }
+
+    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
+    {
+        wxButtonImageData::OnDPIChanged(event);
+
+        InitImageList();
+    }
+
     // just store the values passed to us to be able to retrieve them later
     // from the drawing code
     wxBitmap m_bitmaps[wxAnyButton::State_Max];
@@ -198,38 +288,10 @@ class wxXPButtonImageData : public wxButtonImageData
 public:
     // we must be constructed with the size of our images as we need to create
     // the image list
-    wxXPButtonImageData(wxAnyButton *btn, const wxBitmap& bitmap)
-        : m_iml(bitmap.GetWidth(), bitmap.GetHeight(),
-                !bitmap.HasAlpha() /* use mask only if no alpha */,
-                wxAnyButton::State_Max + 1 /* see "pulse" comment below */),
-          m_hwndBtn(GetHwndOf(btn))
+    wxXPButtonImageData(wxAnyButton *btn, const wxBitmapBundle& bitmapBundle)
+        : wxButtonImageData(btn, bitmapBundle)
     {
-        // initialize all bitmaps except for the disabled one to normal state
-        for ( int n = 0; n < wxAnyButton::State_Max; n++ )
-        {
-#if wxUSE_IMAGE
-            m_iml.Add(n == wxAnyButton::State_Disabled ? bitmap.ConvertToDisabled()
-                                                    : bitmap);
-#else
-            m_iml.Add(bitmap);
-#endif
-        }
-
-        // In addition to the states supported by wxWidgets such as normal,
-        // hot, pressed, disabled and focused, we need to add bitmap for
-        // another state when running under Windows 7 -- the so called "stylus
-        // hot" state corresponding to PBS_STYLUSHOT constant. While it's
-        // documented in MSDN as being only used with tablets, it is a lie as
-        // a focused button actually alternates between the image list elements
-        // with PBS_DEFAULTED and PBS_STYLUSHOT indices and, in particular,
-        // just disappears during half of the time if the latter is not set so
-        // we absolutely must set it.
-        //
-        // This also explains why we need to allocate an extra slot in the
-        // image list ctor above, the slot State_Max is used for this one.
-        m_iml.Add(bitmap);
-
-        m_data.himl = GetHimagelistOf(&m_iml);
+        InitImageList();
 
         // no margins by default
         ::SetRectEmpty(&m_data.margin);
@@ -325,12 +387,68 @@ public:
     }
 
 private:
+    void InitImageList()
+    {
+        const wxBitmap
+            bitmap = m_bitmapBundles[wxAnyButton::State_Normal].GetBitmap(m_bitmapSize);
+
+        m_iml.Create
+              (
+                bitmap.GetWidth(),
+                bitmap.GetHeight(),
+                !bitmap.HasAlpha() /* use mask only if no alpha */,
+                wxAnyButton::State_Max + 1 /* see "pulse" comment below */
+              );
+
+        m_data.himl = GetHimagelistOf(&m_iml);
+
+        for ( int n = 0; n < wxAnyButton::State_Max; n++ )
+        {
+            wxBitmap stateBitmap = m_bitmapBundles[n].GetBitmap(m_bitmapSize);
+            if ( !stateBitmap.IsOk() )
+            {
+#if wxUSE_IMAGE
+                if ( n == wxAnyButton::State_Disabled )
+                    stateBitmap = bitmap.ConvertToDisabled();
+                else
+#endif // wxUSE_IMAGE
+                    stateBitmap = bitmap;
+            }
+
+            m_iml.Add(stateBitmap);
+        }
+
+        // In addition to the states supported by wxWidgets such as normal,
+        // hot, pressed, disabled and focused, we need to add bitmap for
+        // another state when running under Windows 7 -- the so called "stylus
+        // hot" state corresponding to PBS_STYLUSHOT constant. While it's
+        // documented in MSDN as being only used with tablets, it is a lie as
+        // a focused button actually alternates between the image list elements
+        // with PBS_DEFAULTED and PBS_STYLUSHOT indices and, in particular,
+        // just disappears during half of the time if the latter is not set so
+        // we absolutely must set it.
+        //
+        // This also explains why we need to allocate an extra slot when creating
+        // the image list above, the slot State_Max is used for this one.
+        m_iml.Add(bitmap);
+    }
+
     void UpdateImageInfo()
     {
-        if ( !::SendMessage(m_hwndBtn, BCM_SETIMAGELIST, 0, (LPARAM)&m_data) )
+        if ( !::SendMessage(GetHwndOf(m_btn), BCM_SETIMAGELIST, 0, (LPARAM)&m_data) )
         {
             wxLogDebug("SendMessage(BCM_SETIMAGELIST) failed");
         }
+    }
+
+    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
+    {
+        wxButtonImageData::OnDPIChanged(event);
+
+        m_iml.Destroy();
+        InitImageList();
+
+        UpdateImageInfo();
     }
 
     // we store image list separately to be able to use convenient wxImageList
@@ -339,10 +457,6 @@ private:
 
     // store the rest of the data in BCM_SETIMAGELIST-friendly form
     BUTTON_IMAGELIST m_data;
-
-    // the button we're associated with
-    const HWND m_hwndBtn;
-
 
     wxDECLARE_NO_COPY_CLASS(wxXPButtonImageData);
     wxDECLARE_ABSTRACT_CLASS(wxXPButtonImageData);
@@ -401,7 +515,7 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     {
         // We still need some margin or the text would be overwritten, just
         // make it as small as possible.
-        sizeBtn.x += 2*win->GetCharWidth();
+        sizeBtn.x += win->GetCharWidth();
     }
     else
     {
@@ -505,7 +619,7 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
     wxCHECK_RET( m_imageData, wxT("shouldn't be called if no image") );
 
     // account for the bitmap size, including the user-specified margins
-    const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize()
+    const wxSize sizeBmp = m_imageData->GetBitmapSize()
                                 + 2*m_imageData->GetBitmapMargins();
     const wxDirection dirBmp = m_imageData->GetBitmapPosition();
     if ( dirBmp == wxLEFT || dirBmp == wxRIGHT )
@@ -520,16 +634,6 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
         if ( sizeBmp.x > size.x )
             size.x = sizeBmp.x;
     }
-
-    // and also for the margins we always add internally (unless we have no
-    // border at all in which case the button has exactly the same size as
-    // bitmap and so no margins should be used)
-    AdjustForBitmapMargins(size);
-}
-
-void wxAnyButton::AdjustForBitmapMargins(wxSize& size) const
-{
-    wxCHECK_RET(m_imageData, wxT("shouldn't be called if no image"));
 
     // and also for the margins we always add internally (unless we have no
     // border at all in which case the button has exactly the same size as
@@ -580,45 +684,32 @@ wxSize wxAnyButton::DoGetBestSize() const
 
     wxSize size;
 
-    // BCM_GETIDEALSIZE works properly only it there is a text label in the button.
-    if ( !IsOwnerDrawn() && ShowsLabel() )
+    // Account for the text part if we have it.
+    if ( ShowsLabel() )
     {
-        SIZE idealSize = { 0, 0 };
-        ::SendMessage(GetHwnd(), BCM_GETIDEALSIZE, 0, (LPARAM)&idealSize);
-        size.Set(idealSize.cx, idealSize.cy);
-
-        if ( m_imageData )
-            AdjustForBitmapMargins(size);
-    }
-    else
-    {
-        // Account for the text part if we have it.
-        if ( ShowsLabel() )
-        {
-            int flags = 0;
-            if ( HasFlag(wxBU_EXACTFIT) )
-                flags |= wxMSWButton::Size_ExactFit;
-            if ( DoGetAuthNeeded() )
-                flags |= wxMSWButton::Size_AuthNeeded;
+        int flags = 0;
+        if ( HasFlag(wxBU_EXACTFIT) )
+            flags |= wxMSWButton::Size_ExactFit;
+        if ( DoGetAuthNeeded() )
+            flags |= wxMSWButton::Size_AuthNeeded;
 
 #if wxUSE_MARKUP
-            if ( m_markupText )
-            {
-                wxClientDC dc(self);
-                size = wxMSWButton::GetFittingSize(self,
-                                                   m_markupText->Measure(dc),
-                                                   flags);
-            }
-            else // Normal plain text (but possibly multiline) label.
-#endif // wxUSE_MARKUP
-            {
-                size = wxMSWButton::ComputeBestFittingSize(self, flags);
-            }
+        if ( m_markupText )
+        {
+            wxClientDC dc(self);
+            size = wxMSWButton::GetFittingSize(self,
+                                               m_markupText->Measure(dc),
+                                               flags);
         }
-
-        if ( m_imageData )
-            AdjustForBitmapSize(size);
+        else // Normal plain text (but possibly multiline) label.
+#endif // wxUSE_MARKUP
+        {
+            size = wxMSWButton::ComputeBestFittingSize(self, flags);
+        }
     }
+
+    if ( m_imageData )
+        AdjustForBitmapSize(size);
 
     return wxMSWButton::IncreaseToStdSizeAndCache(self, size);
 }
@@ -672,31 +763,44 @@ WXLRESULT wxAnyButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const
 {
-    return m_imageData ? m_imageData->GetBitmap(which) : wxBitmap();
+    if ( !m_imageData )
+        return wxBitmap();
+
+    const wxBitmapBundle& bitmapBundle = m_imageData->GetBitmapBundle(which);
+    if ( !bitmapBundle.IsOk() )
+        return wxBitmap();
+
+    // Not really sure if it's better to use the default or current size here,
+    // but then this accessor is not that useful anyhow, so it probably doesn't
+    // matter much.
+    return bitmapBundle.GetBitmap(m_imageData->GetBitmapSize());
 }
 
-void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
 {
-    if ( !bitmap.IsOk() )
+    // Normal image sets images for all states of the button, or deletes the
+    // images if the bundle is invalid.
+    // Delete the wxButtonImageData so when the new one is created, all states
+    // are initialized.
+    if ( which == State_Normal )
     {
-        if ( m_imageData  )
+        delete m_imageData;
+        m_imageData = NULL;
+    }
+
+    if ( !bitmapBundle.IsOk() )
+    {
+        if ( m_imageData )
         {
-            // Normal image is special: setting it enables images for the
-            // button and resetting it to nothing disables all of them.
-            if ( which == State_Normal )
-            {
-                delete m_imageData;
-                m_imageData = NULL;
-            }
-            else
-            {
-                // Replace the removed bitmap with the normal one.
-                wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
-                m_imageData->SetBitmap(which == State_Disabled
-                                            ? bmpNormal.ConvertToDisabled()
-                                            : bmpNormal,
-                                       which);
-            }
+            // Invalidate the current bundle, if any.
+            m_imageData->SetBitmapBundle(bitmapBundle, which);
+
+            // Replace the removed bitmap with the normal one.
+            wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
+            m_imageData->SetBitmap(which == State_Disabled
+                                        ? bmpNormal.ConvertToDisabled()
+                                        : bmpNormal,
+                                    which);
         }
 
         return;
@@ -708,9 +812,10 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 
     // Check if we already had bitmaps of different size.
     if ( m_imageData &&
-          bitmap.GetSize() != m_imageData->GetBitmap(State_Normal).GetSize() )
+          bitmapBundle.GetDefaultSize() !=
+            m_imageData->GetBitmapBundle(State_Normal).GetDefaultSize() )
     {
-        wxASSERT_MSG( (which == State_Normal) || bitmap.IsNull(),
+        wxASSERT_MSG( which == State_Normal,
                       "Must set normal bitmap with the new size first" );
 
 #if wxUSE_UXTHEME
@@ -736,7 +841,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         // strategy for bitmap-only buttons
         if ( ShowsLabel() && wxUxThemeIsActive() )
         {
-            m_imageData = new wxXPButtonImageData(this, bitmap);
+            m_imageData = new wxXPButtonImageData(this, bitmapBundle);
 
             if ( oldData )
             {
@@ -755,13 +860,13 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         else
 #endif // wxUSE_UXTHEME
         {
-            m_imageData = new wxODButtonImageData(this, bitmap);
+            m_imageData = new wxODButtonImageData(this, bitmapBundle);
             MakeOwnerDrawn();
         }
     }
     else
     {
-        m_imageData->SetBitmap(bitmap, which);
+        m_imageData->SetBitmapBundle(bitmapBundle, which);
 
         // if the focus bitmap is specified but current one isn't, use
         // the focus bitmap for hovering as well if this is consistent
@@ -771,9 +876,9 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         // and also makes it much easier to do "the right thing" for
         // all platforms (some of them, such as Windows, have "hot"
         // buttons while others don't)
-        if ( which == State_Focused && !m_imageData->GetBitmap(State_Current).IsOk() )
+        if ( which == State_Focused && !m_imageData->GetBitmapBundle(State_Current).IsOk() )
         {
-            m_imageData->SetBitmap(bitmap, State_Current);
+            m_imageData->SetBitmapFromBundle(bitmapBundle, State_Current);
         }
     }
 
@@ -1220,11 +1325,16 @@ void wxAnyButton::MakeOwnerDrawn()
         // if necessary.
         if ( m_imageData && wxDynamicCast(m_imageData, wxODButtonImageData) == NULL )
         {
-            wxODButtonImageData* newData = new wxODButtonImageData(this, m_imageData->GetBitmap(State_Normal));
+            wxODButtonImageData* newData = new wxODButtonImageData(this, m_imageData->GetBitmapBundle(State_Normal));
             for ( int n = 0; n < State_Max; n++ )
             {
                 State st = static_cast<State>(n);
-                newData->SetBitmap(m_imageData->GetBitmap(st), st);
+
+                wxBitmapBundle bmp = m_imageData->GetBitmapBundle(st);
+                if ( bmp.IsOk() )
+                    newData->SetBitmapBundle(bmp, st);
+                else
+                    newData->SetBitmap(m_imageData->GetBitmap(st), st);
             }
             newData->SetBitmapPosition(m_imageData->GetBitmapPosition());
             wxSize margs = m_imageData->GetBitmapMargins();

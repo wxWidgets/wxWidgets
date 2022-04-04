@@ -30,7 +30,7 @@
 // Remaining headers: Needed wx headers, then wx/contrib headers, then application headers
 //-----------------------------------------------------------------------------
 
-#include "wx/xrc/xmlres.h"              // XRC XML resouces
+#include "wx/xrc/xmlres.h"              // XRC XML resources
 
 //-----------------------------------------------------------------------------
 // Event table: connect the events to the handler functions to process them

@@ -424,8 +424,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="vc_mswud_x64"
-			IntermediateDirectory="vc_mswud_x64\test_gui"
+			OutputDirectory="vc_x64_mswud"
+			IntermediateDirectory="vc_x64_mswud\test_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -461,9 +461,9 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="testprec.h"
-				PrecompiledHeaderFile="vc_mswud_x64\testprec_test_gui.pch"
-				ObjectFile="vc_mswud_x64\test_gui\"
-				ProgramDataBaseFileName="vc_mswud_x64\test_gui.pdb"
+				PrecompiledHeaderFile="vc_x64_mswud\testprec_test_gui.pch"
+				ObjectFile="vc_x64_mswud\test_gui\"
+				ProgramDataBaseFileName="vc_x64_mswud\test_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -485,13 +485,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_webview.lib  wxmsw31ud_stc.lib imm32.lib wxmsw31ud_aui.lib  wxmsw31ud_richtext.lib  wxmsw31ud_media.lib  wxmsw31ud_xrc.lib  wxbase31ud_xml.lib  wxmsw31ud_html.lib  wxmsw31ud_core.lib  wxbase31ud_net.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswud_x64\test_gui.exe"
+				OutputFile="vc_x64_mswud\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswud_x64\test_gui.pdb"
+				ProgramDatabaseFile="vc_x64_mswud\test_gui.pdb"
 				SubSystem="1"
 				TargetMachine="17"
 			/>
@@ -506,7 +506,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswud_x64\test_vc8_test_gui.bsc"
+				OutputFile="vc_x64_mswud\test_vc8_test_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -524,8 +524,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="vc_mswu_x64"
-			IntermediateDirectory="vc_mswu_x64\test_gui"
+			OutputDirectory="vc_x64_mswu"
+			IntermediateDirectory="vc_x64_mswu\test_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -558,9 +558,9 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="testprec.h"
-				PrecompiledHeaderFile="vc_mswu_x64\testprec_test_gui.pch"
-				ObjectFile="vc_mswu_x64\test_gui\"
-				ProgramDataBaseFileName="vc_mswu_x64\test_gui.pdb"
+				PrecompiledHeaderFile="vc_x64_mswu\testprec_test_gui.pch"
+				ObjectFile="vc_x64_mswu\test_gui\"
+				ProgramDataBaseFileName="vc_x64_mswu\test_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -582,13 +582,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_webview.lib  wxmsw31u_stc.lib imm32.lib wxmsw31u_aui.lib  wxmsw31u_richtext.lib  wxmsw31u_media.lib  wxmsw31u_xrc.lib  wxbase31u_xml.lib  wxmsw31u_html.lib  wxmsw31u_core.lib  wxbase31u_net.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswu_x64\test_gui.exe"
+				OutputFile="vc_x64_mswu\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswu_x64\test_gui.pdb"
+				ProgramDatabaseFile="vc_x64_mswu\test_gui.pdb"
 				SubSystem="1"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -605,7 +605,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswu_x64\test_vc8_test_gui.bsc"
+				OutputFile="vc_x64_mswu\test_vc8_test_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -623,8 +623,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Debug|x64"
-			OutputDirectory="vc_mswuddll_x64"
-			IntermediateDirectory="vc_mswuddll_x64\test_gui"
+			OutputDirectory="vc_x64_mswuddll"
+			IntermediateDirectory="vc_x64_mswuddll\test_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -660,9 +660,9 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="testprec.h"
-				PrecompiledHeaderFile="vc_mswuddll_x64\testprec_test_gui.pch"
-				ObjectFile="vc_mswuddll_x64\test_gui\"
-				ProgramDataBaseFileName="vc_mswuddll_x64\test_gui.pdb"
+				PrecompiledHeaderFile="vc_x64_mswuddll\testprec_test_gui.pch"
+				ObjectFile="vc_x64_mswuddll\test_gui\"
+				ProgramDataBaseFileName="vc_x64_mswuddll\test_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -684,13 +684,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_webview.lib  wxmsw31ud_stc.lib imm32.lib wxmsw31ud_aui.lib  wxmsw31ud_richtext.lib  wxmsw31ud_media.lib  wxmsw31ud_xrc.lib  wxbase31ud_xml.lib  wxmsw31ud_html.lib  wxmsw31ud_core.lib  wxbase31ud_net.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswuddll_x64\test_gui.exe"
+				OutputFile="vc_x64_mswuddll\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll_x64\test_gui.pdb"
+				ProgramDatabaseFile="vc_x64_mswuddll\test_gui.pdb"
 				SubSystem="1"
 				TargetMachine="17"
 			/>
@@ -705,7 +705,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll_x64\test_vc8_test_gui.bsc"
+				OutputFile="vc_x64_mswuddll\test_vc8_test_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -723,8 +723,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Release|x64"
-			OutputDirectory="vc_mswudll_x64"
-			IntermediateDirectory="vc_mswudll_x64\test_gui"
+			OutputDirectory="vc_x64_mswudll"
+			IntermediateDirectory="vc_x64_mswudll\test_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -757,9 +757,9 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="testprec.h"
-				PrecompiledHeaderFile="vc_mswudll_x64\testprec_test_gui.pch"
-				ObjectFile="vc_mswudll_x64\test_gui\"
-				ProgramDataBaseFileName="vc_mswudll_x64\test_gui.pdb"
+				PrecompiledHeaderFile="vc_x64_mswudll\testprec_test_gui.pch"
+				ObjectFile="vc_x64_mswudll\test_gui\"
+				ProgramDataBaseFileName="vc_x64_mswudll\test_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -781,13 +781,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_webview.lib  wxmsw31u_stc.lib imm32.lib wxmsw31u_aui.lib  wxmsw31u_richtext.lib  wxmsw31u_media.lib  wxmsw31u_xrc.lib  wxbase31u_xml.lib  wxmsw31u_html.lib  wxmsw31u_core.lib  wxbase31u_net.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswudll_x64\test_gui.exe"
+				OutputFile="vc_x64_mswudll\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll_x64\test_gui.pdb"
+				ProgramDatabaseFile="vc_x64_mswudll\test_gui.pdb"
 				SubSystem="1"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -804,7 +804,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll_x64\test_vc8_test_gui.bsc"
+				OutputFile="vc_x64_mswudll\test_vc8_test_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -856,6 +856,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\bitmaptogglebuttontest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\graphics\bmpbundle.cpp"
 				>
 			</File>
 			<File

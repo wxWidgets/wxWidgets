@@ -152,7 +152,7 @@ clean:
 	rm -rf cube.app
 
 distclean: clean
-	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 @COND_USE_OPENGL_1@cube$(EXEEXT): $(CUBE_OBJECTS) $(__cube___win32rc)
 @COND_USE_OPENGL_1@	$(CXX) -o $@ $(CUBE_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_OPENGL) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
@@ -164,9 +164,14 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	mkdir -p cube.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
-@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/EXECUTABLE/cube/" \
-@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.cube/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/cube/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/cube/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/cube version $(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >cube.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	

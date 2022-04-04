@@ -26,7 +26,7 @@
 #endif
 
 bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
-                                   const wxBitmap& bitmap,
+                                   const wxBitmapBundle& bitmap,
                                    const wxPoint& pos, const wxSize& size,
                                    long style, const wxString& name)
 {
@@ -34,14 +34,20 @@ bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                             wxDefaultValidator, name))
         return false;
     m_scaleMode = Scale_None;
-    SetBitmap(bitmap);
+
+    // Don't call SetBitmap() here, as it changes the size and refreshes the
+    // window unnecessarily, when we don't need either of these side effects
+    // here.
+    m_bitmapBundle = bitmap;
+    SetInitialSize(size);
+
     Bind(wxEVT_PAINT, &wxGenericStaticBitmap::OnPaint, this);
     return true;
 }
 
 void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    if ( !m_bitmap.IsOk() )
+    if ( !m_bitmapBundle.IsOk() )
         return;
 
     wxPaintDC dc(this);
@@ -49,13 +55,14 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
     if ( !drawSize.x || !drawSize.y )
         return;
 
-    const wxSize bmpSize = m_bitmap.GetSize();
+    wxBitmap bitmap = GetBitmap();
+    const wxSize bmpSize = bitmap.GetSize();
     wxDouble w = 0;
     wxDouble h = 0;
     switch ( m_scaleMode )
     {
         case Scale_None:
-            dc.DrawBitmap(m_bitmap, 0, 0, true);
+            dc.DrawBitmap(bitmap, 0, 0, true);
             return;
         case Scale_Fill:
             w = drawSize.x;
@@ -78,20 +85,19 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
 
             break;
         }
+        default:
+            wxFAIL_MSG("Unknown scale mode");
     }
-
-    wxASSERT_MSG(w, wxS("Unknown scale mode"));
 
     wxDouble x = (drawSize.x - w) / 2;
     wxDouble y = (drawSize.y - h) / 2;
 #if wxUSE_GRAPHICS_CONTEXT
     wxScopedPtr<wxGraphicsContext> const
         gc(wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc));
-    gc->DrawBitmap(m_bitmap, x, y, w, h);
+    gc->DrawBitmap(bitmap, x, y, w, h);
 #else
-    wxImage img = m_bitmap.ConvertToImage();
-    img.Rescale(wxRound(w), wxRound(h), wxIMAGE_QUALITY_HIGH);
-    dc.DrawBitmap(wxBitmap(img), wxRound(x), wxRound(y), true);
+    wxBitmap::Rescale(bitmap, wxSize(wxRound(w), wxRound(h)));
+    dc.DrawBitmap(bitmap, wxRound(x), wxRound(y), true);
 #endif
 }
 

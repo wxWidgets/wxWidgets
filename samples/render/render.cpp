@@ -37,6 +37,7 @@
 #include "wx/apptrait.h"
 #include "wx/artprov.h"
 #include "wx/renderer.h"
+#include "wx/dcgraph.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -67,6 +68,7 @@ public:
     {
         wxDCBrushChanger setBrush(dc, *wxBLUE_BRUSH);
         wxDCTextColourChanger setFgCol(dc, *wxWHITE);
+        wxDCTextBgModeChanger setBgMode(dc, wxBRUSHSTYLE_TRANSPARENT);
         dc.DrawRoundedRectangle(rect, 5);
 
         wxString label;
@@ -140,11 +142,29 @@ private:
     void OnLoad(wxCommandEvent& event);
     void OnUnload(wxCommandEvent& event);
 #endif // wxUSE_DYNLIB_CLASS
+    void OnToggleLayoutDirection(wxCommandEvent &evt);
+
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
     void OnToggleDrawFlag(wxCommandEvent& event, int flag);
     void OnChangeAlign(int align);
+
+#if wxUSE_GRAPHICS_CONTEXT
+    void OnGraphicContextNone(wxCommandEvent& evt);
+    void OnGraphicContextDefault(wxCommandEvent& evt);
+#if wxUSE_CAIRO
+    void OnGraphicContextCairo(wxCommandEvent& evt);
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    void OnGraphicContextGDIPlus(wxCommandEvent& evt);
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    void OnGraphicContextDirect2D(wxCommandEvent& evt);
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     class MyPanel *m_panel;
 
@@ -163,6 +183,9 @@ public:
         m_useIcon =
         m_useBitmap =
         m_useGeneric = false;
+#if wxUSE_GRAPHICS_CONTEXT
+        m_renderer = NULL;
+#endif
     }
 
     int GetFlags() const { return m_flags; }
@@ -172,18 +195,35 @@ public:
     void SetUseIcon(bool useIcon) { m_useIcon = useIcon; }
     void SetUseBitmap(bool useBitmap) { m_useBitmap = useBitmap; }
     void SetUseGeneric(bool useGeneric) { m_useGeneric = useGeneric; }
+#if wxUSE_GRAPHICS_CONTEXT
+    void UseGraphicRenderer(wxGraphicsRenderer* renderer);
+#endif
 
 private:
     void OnPaint(wxPaintEvent&)
     {
-        wxPaintDC dc(this);
+        wxPaintDC pdc(this);
+
+#if wxUSE_GRAPHICS_CONTEXT
+        wxGCDC gdc;
+        if ( m_renderer )
+        {
+            wxGraphicsContext* ctx = m_renderer->CreateContext(pdc);
+            gdc.SetBackground(GetBackgroundColour());
+            gdc.SetGraphicsContext(ctx);
+        }
+
+        wxDC& dc = m_renderer ? static_cast<wxDC&>(gdc) : pdc;
+#else
+        wxDC& dc = pdc;
+#endif
 
         wxRendererNative& renderer = m_useGeneric ? wxRendererNative::GetGeneric()
                                                   : wxRendererNative::Get();
 
-        int x1 = 10,    // text offset
-            x2 = 300,   // drawing offset
-            y = 10;
+        int x1 = FromDIP(10),    // text offset
+            x2 = FromDIP(300),   // drawing offset
+            y = FromDIP(10);
 
         const int lineHeight = dc.GetCharHeight();
         dc.DrawText("Demonstration of various wxRenderer functions:", x1, y);
@@ -208,8 +248,28 @@ private:
         dc.DrawText("Using flags: " + flagsString, x1, y);
         y += lineHeight*3;
 
+        const wxCoord heightListItem = FromDIP(48);
+        const wxCoord widthListItem = 30*GetCharWidth();
+
+        {
+
+        dc.DrawText("DrawItemText() alignment", x1, y);
+
+        wxRect textRect(x2, y, widthListItem, heightListItem);
+        wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
+        wxDCPenChanger setPen(dc, *wxGREEN_PEN);
+        dc.DrawRectangle(textRect);
+
+        renderer.DrawItemText(this, dc, L"Top Left (\u1ED6)", textRect);
+        renderer.DrawItemText(this, dc, "Bottom right", textRect,
+            wxALIGN_BOTTOM | wxALIGN_RIGHT);
+
+        y += lineHeight + heightListItem;
+
+        }
+
         const wxCoord heightHdr = renderer.GetHeaderButtonHeight(this);
-        const wxCoord widthHdr = 120;
+        const wxCoord width = 15*GetCharWidth();
 
         const wxHeaderSortIconType
             hdrSortIcon = m_useIcon ? wxHDR_SORT_ICON_UP
@@ -228,13 +288,13 @@ private:
         // implementation.
         dc.DrawText("DrawHeaderButton() (default)", x1, y);
         wxRendererNative::GetDefault().DrawHeaderButton(this, dc,
-                                  wxRect(x2, y, widthHdr, heightHdr), m_flags,
+                                  wxRect(x2, y, width, heightHdr), m_flags,
                                   hdrSortIcon, &hdrParams);
         y += lineHeight + heightHdr;
 
         dc.DrawText("DrawHeaderButton() (overridden)", x1, y);
         renderer.DrawHeaderButton(this, dc,
-                                  wxRect(x2, y, widthHdr, heightHdr), m_flags,
+                                  wxRect(x2, y, width, heightHdr), m_flags,
                                   hdrSortIcon, &hdrParams);
         y += lineHeight + heightHdr;
 
@@ -250,9 +310,15 @@ private:
                                wxRect(wxPoint(x2, y), sizeMark), m_flags);
         y += lineHeight + sizeMark.y;
 
+        const wxString notImplementedText = "(generic version unimplemented)";
+
         dc.DrawText("DrawRadioBitmap()", x1, y);
-        renderer.DrawRadioBitmap(this, dc,
-                                 wxRect(wxPoint(x2, y), sizeCheck), m_flags);
+        if ( m_useGeneric )
+            dc.DrawText(notImplementedText, x2, y);
+        else
+            renderer.DrawRadioBitmap(this, dc,
+                                     wxRect(wxPoint(x2, y), sizeCheck), m_flags);
+
         y += lineHeight + sizeCheck.y;
 
         dc.DrawText("DrawCollapseButton()", x1, y);
@@ -269,7 +335,7 @@ private:
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
         dc.DrawText("DrawTitleBarBitmap()", x1, y);
-        wxRect rBtn(x2, y, 21, 21);
+        wxRect rBtn(x2, y, FromDIP(21), FromDIP(21));
         renderer.DrawTitleBarBitmap(this, dc, rBtn,
                                     wxTITLEBAR_BUTTON_HELP, m_flags);
         rBtn.x += 2*rBtn.width;
@@ -289,21 +355,18 @@ private:
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
         // The meanings of those are reversed for the vertical gauge below.
-        const wxCoord heightGauge = 24;
-        const wxCoord widthGauge = 180;
+        const wxCoord heightGauge = FromDIP(24);
+        const wxCoord widthGauge = 30*GetCharWidth();
 
         dc.DrawText("DrawGauge()", x1, y);
         renderer.DrawGauge(this, dc,
             wxRect(x2, y, widthGauge, heightGauge), 25, 100, m_flags);
         renderer.DrawGauge(this, dc,
-            wxRect(x2 + widthGauge + 30, y + heightGauge - widthGauge,
+            wxRect(x2 + widthGauge + FromDIP(30), y + heightGauge - widthGauge,
                    heightGauge, widthGauge),
             25, 100, m_flags | wxCONTROL_SPECIAL);
 
         y += lineHeight + heightGauge;
-
-        const wxCoord heightListItem = 48;
-        const wxCoord widthListItem = 260;
 
         dc.DrawText("DrawItemSelectionRect()", x1, y);
         renderer.DrawItemSelectionRect(this, dc,
@@ -314,10 +377,13 @@ private:
 
         y += heightListItem;
 
-        dc.DrawText("DrawChoice()", x1, y + 20);
-        renderer.DrawChoice(this, dc, wxRect(x2, y, 80, 50), m_flags);
-        y += 50;
-
+        y += lineHeight;
+        dc.DrawText("DrawChoice()", x1, y);
+        if ( m_useGeneric )
+            dc.DrawText(notImplementedText, x2, y);
+        else
+            renderer.DrawChoice(this, dc,
+                                wxRect(x2, y, width, GetCharHeight() * 3 / 2), m_flags);
     }
 
     int m_flags;
@@ -325,9 +391,33 @@ private:
     bool m_useIcon,
          m_useBitmap,
          m_useGeneric;
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsRenderer* m_renderer;
+#endif
 
     wxDECLARE_EVENT_TABLE();
 };
+
+#if wxUSE_GRAPHICS_CONTEXT
+void MyPanel::UseGraphicRenderer(wxGraphicsRenderer* renderer)
+{
+    m_renderer = renderer;
+    if ( renderer )
+    {
+        int major, minor, micro;
+        renderer->GetVersion(&major, &minor, &micro);
+        wxString str = wxString::Format("Graphics renderer: %s %i.%i.%i",
+            renderer->GetName(), major, minor, micro);
+        reinterpret_cast<wxFrame*>(GetParent())->GetStatusBar()->SetStatusText(str, 1);
+    }
+    else
+    {
+        reinterpret_cast<wxFrame*>(GetParent())->GetStatusBar()->SetStatusText(wxEmptyString, 1);
+    }
+
+    Refresh();
+}
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_PAINT(MyPanel::OnPaint)
@@ -361,6 +451,23 @@ enum
     Render_Load,
     Render_Unload,
 #endif // wxUSE_DYNLIB_CLASS
+    Render_LayoutDir,
+
+#if wxUSE_GRAPHICS_CONTEXT
+    DC_DC,
+    DC_GC_Default,
+#if wxUSE_CAIRO
+    DC_GC_Cairo,
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    DC_GC_GDIPlus,
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    DC_GC_Direct2D,
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     // standard menu items
     Render_Quit = wxID_EXIT,
@@ -398,7 +505,24 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_Load,  MyFrame::OnLoad)
     EVT_MENU(Render_Unload,MyFrame::OnUnload)
 #endif // wxUSE_DYNLIB_CLASS
+    EVT_MENU(Render_LayoutDir, MyFrame::OnToggleLayoutDirection)
     EVT_MENU(Render_Quit,  MyFrame::OnQuit)
+
+#if wxUSE_GRAPHICS_CONTEXT
+    EVT_MENU(DC_DC, MyFrame::OnGraphicContextNone)
+    EVT_MENU(DC_GC_Default, MyFrame::OnGraphicContextDefault)
+#if wxUSE_CAIRO
+    EVT_MENU(DC_GC_Cairo, MyFrame::OnGraphicContextCairo)
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    EVT_MENU(DC_GC_GDIPlus, MyFrame::OnGraphicContextGDIPlus)
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    EVT_MENU(DC_GC_Direct2D, MyFrame::OnGraphicContextDirect2D)
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     EVT_MENU(Render_About, MyFrame::OnAbout)
 wxEND_EVENT_TABLE()
@@ -482,9 +606,31 @@ MyFrame::MyFrame()
 #if wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Load, "&Load renderer...\tCtrl-L");
     menuFile->Append(Render_Unload, "&Unload renderer\tCtrl-U");
-    menuFile->AppendSeparator();
 #endif // wxUSE_DYNLIB_CLASS
+    menuFile->AppendSeparator();
+    menuFile->AppendCheckItem(Render_LayoutDir, "Toggle &layout direction\tShift-Ctrl-L");
+    menuFile->Check(Render_LayoutDir, GetLayoutDirection() == wxLayout_RightToLeft);
+    menuFile->AppendSeparator();
     menuFile->Append(Render_Quit);
+
+#if wxUSE_GRAPHICS_CONTEXT
+    wxMenu* menuDC = new wxMenu;
+    // Number the different renderer choices consecutively, starting from 0.
+    int accel = 0;
+    menuDC->AppendRadioItem(DC_DC, wxString::Format("Use wx&DC\t%i", accel++));
+    menuDC->AppendRadioItem(DC_GC_Default, wxString::Format("Use default wx&GraphicContext\t%i", accel++));
+#if wxUSE_CAIRO
+    menuDC->AppendRadioItem(DC_GC_Cairo, wxString::Format("Use &Cairo\t%i", accel++));
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    menuDC->AppendRadioItem(DC_GC_GDIPlus, wxString::Format("Use &GDI+\t%i", accel++));
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+    menuDC->AppendRadioItem(DC_GC_Direct2D,wxString::Format("Use &Direct2D\t%i", accel++));
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
@@ -493,6 +639,9 @@ MyFrame::MyFrame()
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
+#if wxUSE_GRAPHICS_CONTEXT
+    menuBar->Append(menuDC, "&DC");
+#endif // wxUSE_GRAPHICS_CONTEXT
     menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
@@ -612,6 +761,15 @@ void MyFrame::OnUnload(wxCommandEvent& WXUNUSED(event))
 
 #endif // wxUSE_DYNLIB_CLASS
 
+void MyFrame::OnToggleLayoutDirection(wxCommandEvent& WXUNUSED(evt))
+{
+    wxLayoutDirection dir = GetLayoutDirection() == wxLayout_LeftToRight
+                                  ? wxLayout_RightToLeft : wxLayout_LeftToRight;
+    SetLayoutDirection(dir);
+    GetStatusBar()->SetLayoutDirection(dir);
+    m_panel->SetLayoutDirection(dir);
+}
+
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     // true is to force the frame to close
@@ -627,3 +785,35 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION, this);
 }
 
+#if wxUSE_GRAPHICS_CONTEXT
+void MyFrame::OnGraphicContextNone(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(NULL);
+}
+
+void MyFrame::OnGraphicContextDefault(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
+}
+
+#if wxUSE_CAIRO
+void MyFrame::OnGraphicContextCairo(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetCairoRenderer());
+}
+#endif // wxUSE_CAIRO
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+void MyFrame::OnGraphicContextGDIPlus(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetGDIPlusRenderer());
+}
+#endif
+#if wxUSE_GRAPHICS_DIRECT2D
+void MyFrame::OnGraphicContextDirect2D(wxCommandEvent& WXUNUSED(evt))
+{
+    m_panel->UseGraphicRenderer(wxGraphicsRenderer::GetDirect2DRenderer());
+}
+#endif
+#endif // __WXMSW__
+#endif // wxUSE_GRAPHICS_CONTEXT

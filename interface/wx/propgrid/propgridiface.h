@@ -927,7 +927,7 @@ public:
     void SetPropertyCell( wxPGPropArg id,
                           int column,
                           const wxString& text = wxEmptyString,
-                          const wxBitmap& bitmap = wxNullBitmap,
+                          const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );
 
@@ -1047,12 +1047,12 @@ public:
     void SetPropertyHelpString( wxPGPropArg id, const wxString& helpString );
 
     /**
-        Set wxBitmap in front of the value.
+        Set wxBitmap taken from wxBitmapBundle in front of the value.
 
         @remarks Bitmap will be scaled to a size returned by
                 wxPropertyGrid::GetImageSize();
     */
-    void SetPropertyImage( wxPGPropArg id, wxBitmap& bmp );
+    void SetPropertyImage( wxPGPropArg id, wxBitmapBundle& bmp );
 
     /**
         Sets maximum length of text in property text editor.

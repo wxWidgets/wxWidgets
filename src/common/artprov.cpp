@@ -24,6 +24,7 @@
     #include "wx/hashmap.h"
     #include "wx/image.h"
     #include "wx/module.h"
+    #include "wx/window.h"
 #endif
 
 // ===========================================================================
@@ -39,6 +40,7 @@ WX_DEFINE_LIST(wxArtProvidersList)
 // ----------------------------------------------------------------------------
 
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmapBundle, wxArtProviderBitmapBundlesHash);
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxIconBundle, wxArtProviderIconBundlesHash);
 
 class WXDLLEXPORT wxArtProviderCache
@@ -47,6 +49,10 @@ public:
     bool GetBitmap(const wxString& full_id, wxBitmap* bmp);
     void PutBitmap(const wxString& full_id, const wxBitmap& bmp)
         { m_bitmapsHash[full_id] = bmp; }
+
+    bool GetBitmapBundle(const wxString& full_id, wxBitmapBundle* bmpbndl);
+    void PutBitmapBundle(const wxString& full_id, const wxBitmapBundle& bmpbndl)
+        { m_bitmapsBundlesHash[full_id] = bmpbndl; }
 
     bool GetIconBundle(const wxString& full_id, wxIconBundle* bmp);
     void PutIconBundle(const wxString& full_id, const wxIconBundle& iconbundle)
@@ -62,8 +68,9 @@ public:
                                     const wxArtClient& client);
 
 private:
-    wxArtProviderBitmapsHash m_bitmapsHash;         // cache of wxBitmaps
-    wxArtProviderIconBundlesHash m_iconBundlesHash; // cache of wxIconBundles
+    wxArtProviderBitmapsHash m_bitmapsHash;                 // cache of wxBitmaps
+    wxArtProviderBitmapBundlesHash m_bitmapsBundlesHash;    // cache of wxBitmaps
+    wxArtProviderIconBundlesHash m_iconBundlesHash;         // cache of wxIconBundles
 };
 
 bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
@@ -79,6 +86,21 @@ bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
         return true;
     }
 }
+
+bool wxArtProviderCache::GetBitmapBundle(const wxString& full_id, wxBitmapBundle* bmpbndl)
+{
+    wxArtProviderBitmapBundlesHash::iterator entry = m_bitmapsBundlesHash.find(full_id);
+    if ( entry == m_bitmapsBundlesHash.end() )
+    {
+        return false;
+    }
+    else
+    {
+        *bmpbndl = entry->second;
+        return true;
+    }
+}
+
 
 bool wxArtProviderCache::GetIconBundle(const wxString& full_id, wxIconBundle* bmp)
 {
@@ -116,6 +138,77 @@ wxArtProviderCache::ConstructHashID(const wxArtID& id,
     return ConstructHashID(id, client) + wxT('-') +
             wxString::Format(wxT("%d-%d"), size.x, size.y);
 }
+
+// ----------------------------------------------------------------------------
+// wxBitmapBundleImplArt: uses art provider to get the bitmaps
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+class wxBitmapBundleImplArt : public wxBitmapBundleImpl
+{
+public:
+    wxBitmapBundleImplArt(const wxArtID& id,
+                          const wxArtClient& client,
+                          const wxSize& size)
+        : m_artId(id),
+          m_artClient(client),
+          m_sizeDefault(GetValidSize(id, client, size))
+    {
+    }
+
+    virtual wxSize GetDefaultSize() const wxOVERRIDE
+    {
+        return m_sizeDefault;
+    }
+
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+    {
+        // We have no preferred sizes.
+        return m_sizeDefault*scale;
+    }
+
+    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+    {
+        return wxArtProvider::GetBitmap(m_artId, m_artClient, size);
+    }
+
+private:
+    static wxSize GetValidSize(const wxArtID& id,
+                               const wxArtClient& client,
+                               const wxSize& size)
+    {
+        // If valid size is provided, just use it.
+        if ( size != wxDefaultSize )
+            return size;
+
+        // Otherwise, try to get the size we'd use without creating a bitmap
+        // immediately.
+        const wxSize sizeHint = wxArtProvider::GetSizeHint(client);
+        if ( sizeHint != wxDefaultSize )
+            return sizeHint;
+
+        // If we really have to, do create a bitmap just to get its size. Note
+        // we need the size in logical pixels here, it will be scaled later if
+        // necessary, so use GetDIPSize() and not GetSize().
+        const wxBitmap bitmap = wxArtProvider::GetBitmap(id, client);
+        if ( bitmap.IsOk() )
+            return bitmap.GetDIPSize();
+
+        // We really need some default size, so just return this hardcoded
+        // value if all else fails -- what else can we do.
+        return wxSize(16, 16);
+    }
+
+    const wxArtID m_artId;
+    const wxArtClient m_artClient;
+    const wxSize m_sizeDefault;
+
+    wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplArt);
+};
+
+} // anonymous namespace
 
 // ============================================================================
 // wxArtProvider class
@@ -209,30 +302,41 @@ wxArtProvider::~wxArtProvider()
 // wxArtProvider: retrieving bitmaps/icons
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_3_0
 void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 {
-    wxCHECK_RET( sizeNeeded.IsFullySpecified(), wxS("New size must be given") );
+    return wxBitmap::Rescale(bmp, sizeNeeded);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+void
+wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
+{
+    if ( sizeNeeded == wxDefaultSize )
+        return;
+
+    int bmp_w = bmp.GetWidth();
+    int bmp_h = bmp.GetHeight();
+
+    if ( bmp_w == sizeNeeded.x && bmp_h == sizeNeeded.y )
+        return;
 
 #if wxUSE_IMAGE
-    wxImage img = bmp.ConvertToImage();
-    img.Rescale(sizeNeeded.x, sizeNeeded.y);
-    bmp = wxBitmap(img);
-#else // !wxUSE_IMAGE
-    // Fallback method of scaling the bitmap
-    wxBitmap newBmp(sizeNeeded, bmp.GetDepth());
-#if defined(__WXMSW__) || defined(__WXOSX__)
-    // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
-    newBmp.UseAlpha(bmp.HasAlpha());
-#endif // __WXMSW__ || __WXOSX__
+    if ((bmp_h <= sizeNeeded.x) && (bmp_w <= sizeNeeded.y))
     {
-        wxMemoryDC dc(newBmp);
-        double scX = (double)sizeNeeded.GetWidth() / bmp.GetWidth();
-        double scY = (double)sizeNeeded.GetHeight() / bmp.GetHeight();
-        dc.SetUserScale(scX, scY);
-        dc.DrawBitmap(bmp, 0, 0);
+        // the caller wants default size, which is larger than
+        // the image we have; to avoid degrading it visually by
+        // scaling it up, paste it into transparent image instead:
+        wxPoint offset((sizeNeeded.x - bmp_w)/2, (sizeNeeded.y - bmp_h)/2);
+        wxImage img = bmp.ConvertToImage();
+        img.Resize(sizeNeeded, offset);
+        bmp = wxBitmap(img);
     }
-    bmp = newBmp;
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+    else // scale (down or mixed, but not up)
+#endif // wxUSE_IMAGE
+    {
+        wxBitmap::Rescale(bmp, sizeNeeded);
+    }
 }
 
 /*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
@@ -252,9 +356,17 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
         for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
              node; node = node->GetNext())
         {
-            bmp = node->GetData()->CreateBitmap(id, client, size);
+            wxArtProvider* const provider = node->GetData();
+            bmp = provider->CreateBitmap(id, client, size);
             if ( bmp.IsOk() )
                 break;
+
+            const wxBitmapBundle& bb = provider->CreateBitmapBundle(id, client, size);
+            if ( bb.IsOk() )
+            {
+                bmp = bb.GetBitmap(size);
+                break;
+            }
         }
 
         wxSize sizeNeeded = size;
@@ -278,19 +390,65 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
             }
         }
 
-        // if we didn't get the correct size, resize the bitmap
-        if ( bmp.IsOk() && sizeNeeded != wxDefaultSize )
+        // resize the bitmap if necessary
+        if ( bmp.IsOk() )
         {
-            if ( bmp.GetSize() != sizeNeeded )
-            {
-                RescaleBitmap(bmp, sizeNeeded);
-            }
+            RescaleOrResizeIfNeeded(bmp, sizeNeeded);
         }
 
         sm_cache->PutBitmap(hashId, bmp);
     }
 
     return bmp;
+}
+
+/*static*/
+wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size)
+{
+    // safety-check against writing client,id,size instead of id,client,size:
+    wxASSERT_MSG( client.Last() == wxT('C'), wxT("invalid 'client' parameter") );
+
+    wxCHECK_MSG( sm_providers, wxNullBitmap, wxT("no wxArtProvider exists") );
+
+    wxString hashId = wxArtProviderCache::ConstructHashID(id, client, size);
+
+    wxBitmapBundle bitmapbundle; // (DoGetIconBundle(id, client));
+
+    if ( !sm_cache->GetBitmapBundle(hashId, &bitmapbundle) )
+    {
+        for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
+             node; node = node->GetNext())
+        {
+            wxArtProvider* const provider = node->GetData();
+            bitmapbundle = provider->CreateBitmapBundle(id, client, size);
+            if ( bitmapbundle.IsOk() )
+                break;
+
+            // Try creating the bundle from individual bitmaps returned by the
+            // provider because they can be available in more than one size,
+            // i.e. it's better to return a custom bundle returning them in the
+            // size closest to the requested one rather than a simple bundle
+            // just containing the single bitmap in the specified size.
+            //
+            // Note that we do this here rather than outside of this loop
+            // because we consider that a simple bitmap defined in a higher
+            // priority provider should override a bitmap bundle defined in a
+            // lower priority one: even if this means that the bitmap will be
+            // scaled, at least we'll be using the expected bitmap rather than
+            // potentially using a bitmap of a different style.
+            if ( provider->CreateBitmap(id, client, size).IsOk() )
+            {
+                bitmapbundle = wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
+                break;
+            }
+        }
+
+        sm_cache->PutBitmapBundle(hashId, bitmapbundle);
+    }
+
+    return bitmapbundle;
 }
 
 /*static*/
@@ -373,22 +531,43 @@ wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
     }
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 /*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client,
                                          bool platform_dependent)
 {
-    if (!platform_dependent)
-    {
-        wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
-        if (node)
-            return node->GetData()->DoGetSizeHint(client);
-    }
+    return platform_dependent ? GetNativeSizeHint(client) : GetSizeHint(client);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
 
-    return GetNativeSizeHint(client);
+/*static*/ wxSize wxArtProvider::GetDIPSizeHint(const wxArtClient& client)
+{
+    wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
+    if (node)
+        return node->GetData()->DoGetSizeHint(client);
+
+    return GetNativeDIPSizeHint(client);
+}
+
+/*static*/
+wxSize wxArtProvider::GetSizeHint(const wxArtClient& client, wxWindow* win)
+{
+    return wxWindow::FromDIP(GetDIPSizeHint(client), win);
+}
+
+wxSize wxArtProvider::DoGetSizeHint(const wxArtClient& client)
+{
+    return GetNativeDIPSizeHint(client);
+}
+
+/*static*/
+wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client, wxWindow* win)
+{
+    return wxWindow::FromDIP(GetNativeDIPSizeHint(client), win);
 }
 
 #ifndef wxHAS_NATIVE_ART_PROVIDER_IMPL
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& WXUNUSED(client))
+wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& WXUNUSED(client))
 {
     // rather than returning some arbitrary value that doesn't make much
     // sense (as 2.8 used to do), tell the caller that we don't have a clue:

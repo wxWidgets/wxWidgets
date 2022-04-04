@@ -331,7 +331,7 @@ public:
     }
 
     //
-    // Utilies for item manipulation
+    // Utilities for item manipulation
     //
 
     void AddSelection( const wxString& selstr )
@@ -538,32 +538,9 @@ public:
                style | wxCC_STD_BUTTON,
                validator,name);
 
-        //
-        // Prepare custom button bitmap (just '...' text)
-        wxMemoryDC dc;
-        wxBitmap bmp(12,16);
-        dc.SelectObject(bmp);
-
-        // Draw transparent background
-        wxColour magic(255,0,255);
-        wxBrush magicBrush(magic);
-        dc.SetBrush( magicBrush );
-        dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle(0,0,bmp.GetWidth(),bmp.GetHeight());
-
-        // Draw text
-        wxString str = "...";
-        int w,h;
-        dc.GetTextExtent(str, &w, &h, 0, 0);
-        dc.DrawText(str, (bmp.GetWidth()-w)/2, (bmp.GetHeight()-h)/2);
-
-        dc.SelectObject( wxNullBitmap );
-
-        // Finalize transparency with a mask
-        wxMask *mask = new wxMask( bmp, magic );
-        bmp.SetMask( mask );
-
-        SetButtonBitmaps(bmp,true);
+#ifdef wxHAS_SVG
+        SetButtonBitmaps(wxBitmapBundle::FromSVGFile("three-dots.svg", wxSize(16, 16)), true);
+#endif
     }
 
     virtual void OnButtonClick() wxOVERRIDE
@@ -852,20 +829,19 @@ MyFrame::MyFrame(const wxString& title)
                                    );
 
     // Load images from disk
-    wxImage imgNormal("dropbutn.png");
-    wxImage imgPressed("dropbutp.png");
-    wxImage imgHover("dropbuth.png");
+#ifdef wxHAS_SVG
+    wxBitmapBundle bmpNormal = wxBitmapBundle::FromSVGFile("dropbutn.svg", wxSize(16, 16));
+    wxBitmapBundle bmpPressed = wxBitmapBundle::FromSVGFile("dropbutp.svg", wxSize(16, 16));
+    wxBitmapBundle bmpHover = wxBitmapBundle::FromSVGFile("dropbuth.svg", wxSize(16, 16));
 
-    if ( imgNormal.IsOk() && imgPressed.IsOk() && imgHover.IsOk() )
+    if ( bmpNormal.IsOk() && bmpPressed.IsOk() && bmpHover.IsOk() )
     {
-        wxBitmap bmpNormal(imgNormal);
-        wxBitmap bmpPressed(imgPressed);
-        wxBitmap bmpHover(imgHover);
-        odc->SetButtonBitmaps(bmpNormal,false,bmpPressed,bmpHover);
-        odc2->SetButtonBitmaps(bmpNormal,true,bmpPressed,bmpHover);
+        odc->SetButtonBitmaps(bmpNormal, false, bmpPressed, bmpHover);
+        odc2->SetButtonBitmaps(bmpNormal, true, bmpPressed, bmpHover);
     }
     else
         wxLogError("Dropbutton images not found");
+#endif
 
     //odc2->SetButtonPosition(0, // width adjustment
     //                        0, // height adjustment
@@ -884,7 +860,7 @@ MyFrame::MyFrame(const wxString& title)
     //
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
-                        "wxComboCtrl with custom button action:"), 1,
+                        "wxComboCtrl with custom button and custom main control:"), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
 
 
@@ -898,7 +874,31 @@ MyFrame::MyFrame(const wxString& title)
                                   (long)0
                                  );
 
+    // This is a perfectly useless control, as the popup and main control
+    // don't interact with each other, but it shows that we can use something
+    // other than wxTextCtrl for the main part of wxComboCtrl too.
+    //
+    // In a real program, custom popup and main control would work together,
+    // i.e. changing selection in one of them would update the other one.
+    //
+    // Also note the complicated dance we need to go through to create the
+    // controls in the right order: we want to create the custom main control
+    // before actually creating the wxComboCtrl window, as otherwise it would
+    // unnecessarily create a wxTextCtrl by default, forcing us to use its
+    // default ctor and Create() later, but this, in turn, also requires using
+    // default ctor for the main control and creating it later too, as it can't
+    // be created before its parent window is.
+    wxComboCtrl* comboCustom = new wxComboCtrl();
+    wxCheckBox* cbox = new wxCheckBox();
+    comboCustom->SetMainControl(cbox);
+    comboCustom->Create(panel, wxID_ANY, wxEmptyString);
+    cbox->Create(comboCustom, wxID_ANY, "Checkbox as main control");
+    cbox->SetBackgroundColour(*wxWHITE);
+
+    comboCustom->SetPopupControl(new ListViewComboPopup());
+
     rowSizer->Add( fsc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
+    rowSizer->Add( comboCustom, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
     colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
 
 
@@ -934,15 +934,15 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
 
     if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
-        wxLogDebug("EVT_COMBOBOX(id=%i,selection=%i)",event.GetId(),event.GetSelection());
+        wxLogMessage("EVT_COMBOBOX(id=%i,selection=%i)",event.GetId(),event.GetSelection());
     }
     else if ( event.GetEventType() == wxEVT_TEXT )
     {
-        wxLogDebug("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString());
+        wxLogMessage("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString());
     }
     else if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
-        wxLogDebug("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
+        wxLogMessage("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
                    event.GetId(), event.GetString());
     }
 }

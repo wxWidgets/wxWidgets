@@ -324,7 +324,7 @@ public:
     const wxPGAttributeStorage& GetPropertyAttributes( wxPGPropArg id ) const
     {
         // If 'id' refers to invalid property, then we will return dummy
-        // attributes (i.e. root property's attributes, which contents should
+        // attributes (i.e. root property's attributes, which contents
         // should always be empty and of no consequence).
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_pState->DoGetRoot()->GetAttributes())
         return p->GetAttributes();
@@ -812,7 +812,7 @@ public:
     void SetPropertyCell( wxPGPropArg id,
                           int column,
                           const wxString& text = wxEmptyString,
-                          const wxBitmap& bitmap = wxNullBitmap,
+                          const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );
 
@@ -910,7 +910,7 @@ public:
     // Set wxBitmap in front of the value.
     // Bitmap will be scaled to a size returned by
     // wxPropertyGrid::GetImageSize();
-    void SetPropertyImage( wxPGPropArg id, wxBitmap& bmp )
+    void SetPropertyImage( wxPGPropArg id, const wxBitmapBundle& bmp )
     {
         wxPG_PROP_ARG_CALL_PROLOG()
         p->SetValueImage(bmp);
@@ -1160,9 +1160,6 @@ private:
 
         return m_pState->GetGrid();
     }
-
-    friend class wxPropertyGrid;
-    friend class wxPropertyGridManager;
 };
 
 #endif // wxUSE_PROPGRID

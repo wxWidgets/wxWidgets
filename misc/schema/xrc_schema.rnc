@@ -467,7 +467,8 @@ t_bitmap     = t_url?,
                (
                    attribute stock_id { t_identifier},
                    attribute stock_client { t_identifier}?
-               )?
+               )?,
+               attribute default_size { t_size}?
 
 t_font       = (
                    [xrc:p="o"] element size         {_, t_float }* &
@@ -500,6 +501,10 @@ t_imagelist  = (
 t_list_of_numbers = xsd:string { pattern = "\d+(,\d+)*" }
 
 t_list_of_numbers_with_weights = xsd:string { pattern = "\d+(:\d+)?(,\d+(:\d+)?)*" }
+
+t_extra_accels = (
+                     [xrc:p="o"] element accel {_, t_text }+
+                 )
 
 
 #
@@ -1193,15 +1198,16 @@ wxMenuItem =
     element object {
         attribute class { "wxMenuItem" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element label     {_, t_text }* &
-        [xrc:p="o"] element accel     {_, t_text }* &
-        [xrc:p="o"] element radio     {_, t_bool }* &
-        [xrc:p="o"] element checkable {_, t_bool }* &
-        [xrc:p="o"] element bitmap    {_, t_bitmap }* &
-        [xrc:p="o"] element bitmap2   {_, t_bitmap }* &
-        [xrc:p="o"] element help      {_, t_text }* &
-        [xrc:p="o"] element enabled   {_, t_bool }* &
-        [xrc:p="o"] element checked   {_, t_bool }*
+        [xrc:p="o"] element label        {_, t_text }* &
+        [xrc:p="o"] element accel        {_, t_text }* &
+        [xrc:p="o"] element extra-accels {_, t_extra_accels }* &
+        [xrc:p="o"] element radio        {_, t_bool }* &
+        [xrc:p="o"] element checkable    {_, t_bool }* &
+        [xrc:p="o"] element bitmap       {_, t_bitmap }* &
+        [xrc:p="o"] element bitmap2      {_, t_bitmap }* &
+        [xrc:p="o"] element help         {_, t_text }* &
+        [xrc:p="o"] element enabled      {_, t_bool }* &
+        [xrc:p="o"] element checked      {_, t_bool }*
     }
 
 
@@ -1476,7 +1482,8 @@ wxSpinButton =
         stdWindowProperties &
         [xrc:p="o"] element value {_, t_integer }* &
         [xrc:p="o"] element min   {_, t_integer }* &
-        [xrc:p="o"] element max   {_, t_integer }*
+        [xrc:p="o"] element max   {_, t_integer }* &
+        [xrc:p="o"] element inc   {_, t_integer }*
     }
 
 
@@ -1488,7 +1495,8 @@ wxSpinCtrl =
         [xrc:p="o"] element value {_, t_integer }* &
         [xrc:p="o"] element min   {_, t_integer }* &
         [xrc:p="o"] element max   {_, t_integer }* &
-        [xrc:p="o"] element base  {_, ("10" | "16") }*
+        [xrc:p="o"] element base  {_, ("10" | "16") }* &
+        [xrc:p="o"] element inc   {_, t_integer }*
     }
 
 

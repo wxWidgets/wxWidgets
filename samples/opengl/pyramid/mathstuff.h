@@ -11,7 +11,7 @@
   #define MATHSTUFF_H
 
 //NOTE:
-// glm library is great for handling matrices and vectors in a OpenGL style, see
+// glm library is great for handling matrices and vectors in an OpenGL style, see
 // http://glm.g-truc.net/
 // But it's too large for this simple sample. I coded on my own the maths needed.
 

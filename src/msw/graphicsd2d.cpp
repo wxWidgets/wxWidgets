@@ -566,7 +566,7 @@ ID2D1Factory* wxD2D1Factory()
         // the Direct2D Debug Layer is only available starting with Windows 8
         // and Visual Studio 2012.
 #if defined(__WXDEBUG__) && defined(__VISUALC__) && wxCHECK_VISUALC_VERSION(11)
-        if ( wxGetWinVersion() >= wxWinVersion_8 )
+        if ( wxTheAssertHandler && wxGetWinVersion() >= wxWinVersion_8 )
         {
             factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_WARNING;
         }
@@ -3836,6 +3836,8 @@ public:
     void PushState() wxOVERRIDE {}
     void PopState() wxOVERRIDE {}
     void Flush() wxOVERRIDE {}
+    WXHDC GetNativeHDC() wxOVERRIDE { return NULL; };
+    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE {};
 
 protected:
     void DoDrawText(const wxString&, wxDouble, wxDouble) wxOVERRIDE {}
@@ -3992,6 +3994,9 @@ public:
         return GetRenderTarget();
     }
 
+    WXHDC GetNativeHDC() wxOVERRIDE;
+    void ReleaseNativeHDC(WXHDC hdc) wxOVERRIDE;
+
 private:
     void Init();
 
@@ -4041,6 +4046,7 @@ private:
     wxStack<StateData> m_stateStack;
     wxStack<LayerData> m_layers;
     ID2D1RenderTarget* m_cachedRenderTarget;
+    wxCOMPtr<ID2D1GdiInteropRenderTarget> m_gdiRenderTarget;
     D2D1::Matrix3x2F m_initTransform;
     // Clipping box
     bool m_isClipBoxValid;
@@ -4959,11 +4965,29 @@ void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
         GetRenderTarget()->GetDpi(&x, &y);
 
         if ( dpiX )
-            *dpiX = x;
+            *dpiX = x*GetContentScaleFactor();
         if ( dpiY )
-            *dpiY = y;
+            *dpiY = y*GetContentScaleFactor();
     }
 }
+
+WXHDC wxD2DContext::GetNativeHDC()
+{
+    if ( !m_gdiRenderTarget )
+        GetRenderTarget()->QueryInterface(IID_ID2D1GdiInteropRenderTarget, reinterpret_cast<void**>(&m_gdiRenderTarget));
+    wxASSERT(m_gdiRenderTarget);
+    HDC hdc;
+    HRESULT hr = m_gdiRenderTarget->GetDC(D2D1_DC_INITIALIZE_MODE_COPY, &hdc);
+    wxCHECK_MSG(SUCCEEDED(hr), NULL, wxString::Format("Can't get HDC from Direct2D context (hr=%x)", hr));
+    return hdc;
+};
+
+void wxD2DContext::ReleaseNativeHDC(WXHDC WXUNUSED(hdc))
+{
+    wxCHECK_RET(m_gdiRenderTarget, "Can't release HDC for Direct2D context");
+    HRESULT hr = m_gdiRenderTarget->ReleaseDC(NULL);
+    wxCHECK_HRESULT_RET(hr);
+};
 
 //-----------------------------------------------------------------------------
 // wxD2DRenderer declaration
@@ -5107,8 +5131,10 @@ wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
     wxBitmap bmp = dc.GetSelectedBitmap();
     wxASSERT_MSG( bmp.IsOk(), wxS("Should select a bitmap before creating wxGraphicsContext") );
 
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc,
+    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc,
                             bmp.HasAlpha() ? D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE);
+    d2d->SetContentScaleFactor(dc.GetContentScaleFactor());
+    return d2d;
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -5292,13 +5318,11 @@ wxGraphicsFont wxD2DRenderer::CreateFont(
 {
     // Use the same DPI as wxFont will use in SetPixelSize, so these cancel
     // each other out and we are left with the actual pixel size.
-    ScreenHDC hdc;
-    wxRealPoint dpi(::GetDeviceCaps(hdc, LOGPIXELSX),
-                    ::GetDeviceCaps(hdc, LOGPIXELSY));
+    const wxSize dpi = wxGetDPIofHDC(ScreenHDC());
 
     return CreateFontAtDPI(
         wxFontInfo(wxSize(sizeInPixels, sizeInPixels)).AllFlags(flags).FaceName(facename),
-        dpi, col);
+        wxRealPoint(dpi.x, dpi.y), col);
 }
 
 wxGraphicsFont wxD2DRenderer::CreateFontAtDPI(const wxFont& font,

@@ -212,6 +212,8 @@ protected:
 
     virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
 
+    virtual void OnImagesChanged() wxOVERRIDE;
+
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 

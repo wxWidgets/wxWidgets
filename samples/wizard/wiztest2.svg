@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg228" width="37.12" height="83.2" version="1.1" viewBox="0 0 37.12 83.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs id="defs23">
+  <clipPath id="clipPath18872">
+   <use id="use2" xlink:href="#g18868"/>
+  </clipPath>
+  <clipPath id="clipPath18872-8">
+   <use id="use5" width="100%" height="100%" xlink:href="#g18868-0"/>
+  </clipPath>
+  <clipPath id="clipPath18872-7">
+   <use id="use8" width="100%" height="100%" xlink:href="#g18868-1"/>
+  </clipPath>
+  <clipPath id="clipPath18872-3">
+   <use id="use11" width="100%" height="100%" xlink:href="#g18868-6"/>
+  </clipPath>
+  <clipPath id="clipPath18872-9">
+   <use id="use14" width="100%" height="100%" xlink:href="#g18868-2"/>
+  </clipPath>
+  <clipPath id="clipPath18872-77">
+   <use id="use17" width="100%" height="100%" xlink:href="#g18868-7"/>
+  </clipPath>
+  <clipPath id="clipPath18872-5">
+   <use id="use20" width="100%" height="100%" xlink:href="#g18868-01"/>
+  </clipPath>
+  <linearGradient id="linearGradient428" x1="18.79" x2="18.832" y1="81.348" y2=".14159" gradientUnits="userSpaceOnUse">
+   <stop id="stop422" stop-color="#5a5dff" offset="0"/>
+   <stop id="stop424" stop-color="#5a5dff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect id="rect310" x=".14159" y="-.14159" width="37.239" height="83.397" fill="url(#linearGradient428)"/>
+ <g id="g52" transform="translate(-2.6112 1.7181)">
+  <g id="g31" transform="translate(-4.6599 -12.159)">
+   <rect id="rect25" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect27" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect29" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect33" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g50" transform="translate(-4.6599 -12.159)">
+   <rect id="rect35" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect37" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect39" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect41" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g46" clip-path="url(#clipPath18872)">
+    <g id="g18868">
+     <rect id="rect43" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect48" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+ <g id="g81" transform="translate(4.4105 12.142)" opacity=".8">
+  <g id="g60" transform="translate(-4.6599 -12.159)">
+   <rect id="rect54" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect56" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect58" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect62" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g79" transform="translate(-4.6599 -12.159)">
+   <rect id="rect64" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect66" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect68" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect70" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g75" clip-path="url(#clipPath18872-8)">
+    <g id="g18868-0">
+     <rect id="rect72" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect77" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+ <g id="g110" transform="translate(9.7258 23.865)" opacity=".6">
+  <g id="g89" transform="translate(-4.6599 -12.159)">
+   <rect id="rect83" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect85" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect87" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect91" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g108" transform="translate(-4.6599 -12.159)">
+   <rect id="rect93" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect95" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect97" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect99" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g104" clip-path="url(#clipPath18872-7)">
+    <g id="g18868-1">
+     <rect id="rect101" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect106" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+ <g id="g139" transform="translate(11.837 35.514)" opacity=".4">
+  <g id="g118" transform="translate(-4.6599 -12.159)">
+   <rect id="rect112" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect114" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect116" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect120" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g137" transform="translate(-4.6599 -12.159)">
+   <rect id="rect122" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect124" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect126" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect128" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g133" clip-path="url(#clipPath18872-3)">
+    <g id="g18868-6">
+     <rect id="rect130" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect135" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+ <g id="g168" transform="translate(6.3036 47.747)" opacity=".2">
+  <g id="g147" transform="translate(-4.6599 -12.159)">
+   <rect id="rect141" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect143" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect145" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect149" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g166" transform="translate(-4.6599 -12.159)">
+   <rect id="rect151" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect153" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect155" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect157" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g162" clip-path="url(#clipPath18872-9)">
+    <g id="g18868-2">
+     <rect id="rect159" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect164" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+ <g id="g197" transform="translate(2.9543 59.469)" opacity=".1">
+  <g id="g176" transform="translate(-4.6599 -12.159)">
+   <rect id="rect170" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect172" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect174" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect178" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g195" transform="translate(-4.6599 -12.159)">
+   <rect id="rect180" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect182" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect184" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect186" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g191" clip-path="url(#clipPath18872-77)">
+    <g id="g18868-7">
+     <rect id="rect188" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect193" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+ <g id="g226" transform="translate(6.7405 69.59)" opacity=".05">
+  <g id="g205" transform="translate(-4.6599 -12.159)">
+   <rect id="rect199" x="10.709" y="17.917" width="6" height="6"/>
+   <rect id="rect201" x="11.224" y="18.432" width="5" height="5" fill="#f00"/>
+   <rect id="rect203" x="11.481" y="19.745" width=".48911" height="3.1149" fill="#fff"/>
+  </g>
+  <rect id="rect207" x="10.232" y="4.4574" width=".48911" height="3.1149" fill="#fff"/>
+  <g id="g224" transform="translate(-4.6599 -12.159)">
+   <rect id="rect209" x="14.004" y="14.853" width="6" height="6"/>
+   <rect id="rect211" x="14.493" y="15.343" width="5" height="5" fill="#000080"/>
+   <rect id="rect213" x="14.892" y="16.617" width=".48911" height="3.1149" fill="#fff"/>
+   <rect id="rect215" x="17.865" y="17.093" width="6" height="6"/>
+   <g id="g220" clip-path="url(#clipPath18872-5)">
+    <g id="g18868-01">
+     <rect id="rect217" x="18.38" y="17.608" width="5" height="5" fill="#ff0"/>
+    </g>
+   </g>
+   <rect id="rect222" x="18.702" y="19.037" width=".69505" height="3.1149" fill="#fff" stroke-width="1.1921"/>
+  </g>
+ </g>
+</svg>

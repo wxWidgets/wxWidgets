@@ -538,7 +538,7 @@ public:
 
     // Return the magnification of the content of this window for the platforms
     // using logical pixels different from physical ones, i.e. those for which
-    // wxHAVE_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
+    // wxHAS_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
     // returns 1, regardless of DPI scale factor returned by the function below.
     virtual double GetContentScaleFactor() const;
 
@@ -981,6 +981,57 @@ public:
     // wxWidgets public API.
     virtual void WXAdjustFontToOwnPPI(wxFont& WXUNUSED(font)) const { }
 
+        // All pixel coordinates used in wx API are in logical pixels, which
+        // are the same as physical screen pixels under MSW, but same as DIPs
+        // (see below) under the other ports. The functions defined here can be
+        // used under all platforms to convert between them without using any
+        // preprocessor checks.
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxSize FromPhys(wxSize sz, const wxWindowBase* w);
+#else
+    static wxSize FromPhys(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+    {
+        return sz;
+    }
+#endif
+    static wxPoint FromPhys(const wxPoint& pt, const wxWindowBase* w)
+    {
+        const wxSize sz = FromPhys(wxSize(pt.x, pt.y), w);
+        return wxPoint(sz.x, sz.y);
+    }
+    static int FromPhys(int d, const wxWindowBase* w)
+    {
+        return FromPhys(wxSize(d, 0), w).x;
+    }
+
+    wxSize FromPhys(const wxSize& sz) const { return FromPhys(sz, this); }
+    wxPoint FromPhys(const wxPoint& pt) const { return FromPhys(pt, this); }
+    int FromPhys(int d) const { return FromPhys(d, this); }
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxSize ToPhys(wxSize sz, const wxWindowBase* w);
+#else
+    static wxSize ToPhys(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+    {
+        return sz;
+    }
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxPoint ToPhys(const wxPoint& pt, const wxWindowBase* w)
+    {
+        const wxSize sz = ToPhys(wxSize(pt.x, pt.y), w);
+        return wxPoint(sz.x, sz.y);
+    }
+    static int ToPhys(int d, const wxWindowBase* w)
+    {
+        return ToPhys(wxSize(d, 0), w).x;
+    }
+
+    wxSize ToPhys(const wxSize& sz) const { return ToPhys(sz, this); }
+    wxPoint ToPhys(const wxPoint& pt) const { return ToPhys(pt, this); }
+    int ToPhys(int d) const { return ToPhys(d, this); }
+
+
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
         // account (i.e. multiplied by the same factor as returned by
@@ -993,7 +1044,14 @@ public:
         // horizontal and vertical directions, but this could, in principle,
         // change too, so prefer using the overloads taking wxPoint or wxSize.
 
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxSize FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+    {
+        return sz;
+    }
+#else
     static wxSize FromDIP(const wxSize& sz, const wxWindowBase* w);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
     static wxPoint FromDIP(const wxPoint& pt, const wxWindowBase* w)
     {
         const wxSize sz = FromDIP(wxSize(pt.x, pt.y), w);
@@ -1008,7 +1066,14 @@ public:
     wxPoint FromDIP(const wxPoint& pt) const { return FromDIP(pt, this); }
     int FromDIP(int d) const { return FromDIP(d, this); }
 
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    static wxSize ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+    {
+        return sz;
+    }
+#else
     static wxSize ToDIP(const wxSize& sz, const wxWindowBase* w);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
     static wxPoint ToDIP(const wxPoint& pt, const wxWindowBase* w)
     {
         const wxSize sz = ToDIP(wxSize(pt.x, pt.y), w);
@@ -1553,7 +1618,11 @@ public:
     // that we really need to use is not known until the window is actually
     // shown, as is the case for TLWs with recent GTK versions, as it will
     // update the size again when it does become known, if necessary.
-    virtual void WXSetInitialFittingClientSize(int flags);
+    //
+    // The optional sizer argument can be passed to use the given sizer for
+    // laying out the window, which is useful if this function is called before
+    // SetSizer(). By default the window sizer is used.
+    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = NULL);
 
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
@@ -1887,15 +1956,6 @@ protected:
                                  int maxW, int maxH,
                                  int incW, int incH );
 
-    // return the total size of the window borders, i.e. the sum of the widths
-    // of the left and the right border in the x component of the returned size
-    // and the sum of the heights of the top and bottom borders in the y one
-    //
-    // NB: this is currently only implemented properly for wxMSW, wxGTK and
-    //     wxUniv and doesn't behave correctly in the presence of scrollbars in
-    //     the other ports
-    virtual wxSize DoGetBorderSize() const;
-
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just
     // reposition this window except for composite controls which will want to
@@ -2017,9 +2077,6 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowGTK wxWindow
     #endif // wxUniv
     #include "wx/gtk/window.h"
-    #ifdef __WXGTK3__
-        #define wxHAVE_DPI_INDEPENDENT_PIXELS
-    #endif
 #elif defined(__WXGTK__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowGTK
@@ -2044,7 +2101,6 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowMac wxWindow
     #endif // wxUniv
     #include "wx/osx/window.h"
-    #define wxHAVE_DPI_INDEPENDENT_PIXELS
 #elif defined(__WXQT__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowQt
@@ -2074,27 +2130,6 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
     return m_parent ? m_parent->GetParent() : NULL;
 }
 
-#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
-
-// FromDIP() and ToDIP() become trivial in this case, so make them inline to
-// avoid any overhead.
-
-/* static */
-inline wxSize
-wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
-{
-    return sz;
-}
-
-/* static */
-inline wxSize
-wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
-{
-    return sz;
-}
-
-#endif // wxHAVE_DPI_INDEPENDENT_PIXELS
-
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
@@ -2111,6 +2146,9 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 
 // get the (first) top level parent window
 WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindowBase *win);
+
+// Return a string with platform-dependent description of the window.
+extern WXDLLIMPEXP_CORE wxString wxDumpWindow(const wxWindowBase* win);
 
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------

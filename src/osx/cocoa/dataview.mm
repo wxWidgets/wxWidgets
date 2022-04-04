@@ -26,6 +26,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/osx/private/datatransfer.h"
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
@@ -550,6 +551,14 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    // This function can be called when we're just deleting some item, but in
+    // this case it's being called for a different item (the one to which the
+    // selection changes if the previously selected item was deleted), so we
+    // can still use it, however we still can't use the item if everything is
+    // being deleted.
+    if ( implementation->GetDataViewCtrl()->IsClearing() )
+        return nil;
+
     if ((item == currentParentItem) &&
             (index < ((NSInteger) [self getChildCount])))
         return [self getChild:index];
@@ -626,7 +635,8 @@ outlineView:(NSOutlineView*)outlineView
     {
         wxVariant value;
         model->GetValue(value,dataViewItem, colIdx);
-        col->GetRenderer()->SetValue(value);
+        if ( !value.IsNull() )
+            col->GetRenderer()->SetValue(value);
     }
 
     return nil;
@@ -707,71 +717,79 @@ outlineView:(NSOutlineView*)outlineView
     return [self setupAndCallDataViewEvents:wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE dropInfo:info item:item proposedChildIndex:index];
 }
 
--(NSDragOperation) callDataViewEvents:(wxEventType)eventType dataObjects:(wxDataObjectComposite*)dataObjects item:(id)item
-                   proposedChildIndex:(NSInteger)index
+-(NSDragOperation) setupAndCallDataViewEvents:(wxEventType)eventType dropInfo:(id<NSDraggingInfo>)info item:(id)item
+                           proposedChildIndex:(NSInteger)index
 {
-    NSDragOperation dragOperation = NSDragOperationNone;
     wxDataViewCtrl* const dvc(implementation->GetDataViewCtrl());
+
+    wxDropTarget* dt = dvc->GetDropTarget();
+    if (!dt)
+        return NSDragOperationNone;
+
+    NSPasteboard* pasteboard([info draggingPasteboard]);
+    wxOSXPasteboard wxPastboard(pasteboard);
+    dt->SetCurrentDragSource(&wxPastboard);
+
+    wxDataFormat format = dt->GetMatchingPair();
+    if (format == wxDF_INVALID)
+        return NSDragOperationNone;
+
+    // Create event
     wxDataViewEvent event(eventType, dvc, wxDataViewItemFromItem(item));
-    if (dataObjects && (dataObjects->GetFormatCount() > 0))
+
+    // Retrieve the data itself if user released mouse button (drop occurred)
+    if (eventType == wxEVT_DATAVIEW_ITEM_DROP)
     {
-        // copy data into data object:
-        event.SetDataObject(dataObjects);
-        event.SetDataFormat(implementation->GetDnDDataFormat(dataObjects));
-        event.SetProposedDropIndex(index);
-        if (index == -1)
-        {
-            event.SetDropEffect(wxDragCopy);
-        }
-        else
-        {
-            //if index is not -1, we're going to set the default
-            //for the drop effect to None to be compatible with
-            //the other wxPlatforms that don't support it.  In the
-            //user code for for the event, they can set this to
-            //copy/move or similar to support it.
-            event.SetDropEffect(wxDragNone);
-        }
-        wxDataFormatId formatId = event.GetDataFormat().GetType();
-        wxMemoryBuffer buffer;
+        if (!dt->GetData())
+            return NSDragOperationNone;
 
-        // copy data into buffer:
-        if ( formatId != wxDF_INVALID)
-        {
-            size_t size = dataObjects->GetDataSize(formatId);
+        wxDataObjectComposite *obj = static_cast<wxDataObjectComposite*>(dt->GetDataObject());
+        event.InitData(obj, format);
+    }
+    else // Otherwise set just the data format
+    {
+        event.SetDataFormat(format);
+    }
 
-            event.SetDataSize(size);
-            dataObjects->GetDataHere(formatId,buffer.GetWriteBuf(size));
-            buffer.UngetWriteBuf(size);
-            event.SetDataBuffer(buffer.GetData());
-        }
+    // Setup other event properties
+    event.SetProposedDropIndex(index);
+    if (index == -1)
+    {
+        event.SetDropEffect(wxDragCopy);
+    }
+    else
+    {
+        //if index is not -1, we're going to set the default
+        //for the drop effect to None to be compatible with
+        //the other wxPlatforms that don't support it.  In the
+        //user code for for the event, they can set this to
+        //copy/move or similar to support it.
+        event.SetDropEffect(wxDragNone);
+    }
 
-        // finally, send event:
-        if (dvc->HandleWindowEvent(event) && event.IsAllowed())
+    NSDragOperation dragOperation = NSDragOperationNone;
+
+    // finally, send event:
+    if (dvc->HandleWindowEvent(event) && event.IsAllowed())
+    {
+        switch (event.GetDropEffect())
         {
-            switch (event.GetDropEffect())
-            {
-                case wxDragCopy:
-                    dragOperation = NSDragOperationCopy;
-                    break;
-                case wxDragMove:
-                    dragOperation = NSDragOperationMove;
-                    break;
-                case wxDragLink:
-                    dragOperation = NSDragOperationLink;
-                    break;
-                case wxDragNone:
-                case wxDragCancel:
-                case wxDragError:
-                    dragOperation = NSDragOperationNone;
-                    break;
-                default:
-                    dragOperation = NSDragOperationEvery;
-            }
-        }
-        else
-        {
-            dragOperation = NSDragOperationNone;
+            case wxDragCopy:
+                dragOperation = NSDragOperationCopy;
+                break;
+            case wxDragMove:
+                dragOperation = NSDragOperationMove;
+                break;
+            case wxDragLink:
+                dragOperation = NSDragOperationLink;
+                break;
+            case wxDragNone:
+            case wxDragCancel:
+            case wxDragError:
+                dragOperation = NSDragOperationNone;
+                break;
+            default:
+                dragOperation = NSDragOperationEvery;
         }
     }
     else
@@ -782,201 +800,40 @@ outlineView:(NSOutlineView*)outlineView
     return dragOperation;
 }
 
--(NSDragOperation) setupAndCallDataViewEvents:(wxEventType)eventType dropInfo:(id<NSDraggingInfo>)info item:(id)item
-                           proposedChildIndex:(NSInteger)index
-{
-    NSArray* supportedTypes(
-                            [NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]
-                            );
-
-    NSPasteboard* pasteboard([info draggingPasteboard]);
-
-    NSString* bestType([pasteboard availableTypeFromArray:supportedTypes]);
-
-    if ( bestType == nil )
-        return NSDragOperationNone;
-
-    NSDragOperation dragOperation = NSDragOperationNone;
-    wxDataViewCtrl* const dvc(implementation->GetDataViewCtrl());
-
-    wxCHECK_MSG(dvc, false, "Pointer to data view control not set correctly.");
-    wxCHECK_MSG(dvc->GetModel(), false, "Pointer to model not set correctly.");
-
-    // wxDataViewEvent event(eventType, dvc, wxDataViewItemFromItem(item));
-    if ([bestType compare:DataViewPboardType] == NSOrderedSame)
-    {
-        NSArray*               dataArray((NSArray*)[pasteboard propertyListForType:DataViewPboardType]);
-        NSUInteger             indexDraggedItem, noOfDraggedItems([dataArray count]);
-
-        indexDraggedItem = 0;
-        while (indexDraggedItem < noOfDraggedItems)
-        {
-            wxDataObjectComposite* dataObjects(implementation->GetDnDDataObjects((NSData*)[dataArray objectAtIndex:indexDraggedItem]));
-
-            dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
-
-            if ( dragOperation != NSDragOperationNone )
-                ++indexDraggedItem;
-            else
-                indexDraggedItem = noOfDraggedItems;
-
-            // clean-up:
-            delete dataObjects;
-        }
-    }
-    else
-    {
-        // needed to convert internally used UTF-16 representation to a UTF-8
-        // representation
-        CFDataRef              osxData;
-        wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
-        wxTextDataObject*      textDataObject(new wxTextDataObject());
-
-        osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],
-#if defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
-                                                         kCFStringEncodingUTF16,
-#else
-                                                         kCFStringEncodingUTF8,
-#endif
-                                                         32);
-        if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
-            dataObjects->Add(textDataObject);
-        else
-            delete textDataObject;
-        // send event if data could be copied:
-
-        dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
-
-        // clean up:
-        ::CFRelease(osxData);
-        delete dataObjects;
-    }
-
-    return dragOperation;
-}
-
 -(BOOL) outlineView:(NSOutlineView*)outlineView writeItems:(NSArray*)writeItems toPasteboard:(NSPasteboard*)pasteboard
 {
     wxUnusedVar(outlineView);
 
-    // the pasteboard will be filled up with an array containing the data as
-    // returned by the events (including the data type) and a concatenation of
-    // text (string) data; the text data will only be put onto the pasteboard
-    // if for all items a string representation exists
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
-
-    wxDataViewItemArray dataViewItems;
-
 
     wxCHECK_MSG(dvc, false,"Pointer to data view control not set correctly.");
     wxCHECK_MSG(dvc->GetModel(),false,"Pointer to model not set correctly.");
 
+    BOOL result = NO;
     if ([writeItems count] > 0)
     {
-        bool            dataStringAvailable(true); // a flag indicating if for all items a data string is available
-        NSMutableArray* dataArray = [NSMutableArray arrayWithCapacity:[writeItems count]]; // data of all items
-        wxString        dataString; // contains the string data of all items
+        // Send a begin drag event for the first selected item and send wxEVT_DATAVIEW_ITEM_BEGIN_DRAG.
+        // If there are several items selected, user can process each in event handler and
+        // fill up the corresponding wxDataObject the way he wants.
+        const wxDataViewItem item = wxDataViewItemFromItem([writeItems objectAtIndex:0]);
+        wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, dvc, item);
 
-        // send a begin drag event for all selected items and proceed with
-        // dragging unless the event is vetoed:
-        for (size_t itemCounter=0; itemCounter<[writeItems count]; ++itemCounter)
+        // check if event has not been vetoed:
+        if (dvc->HandleWindowEvent(event) && event.IsAllowed() && event.GetDataObject())
         {
-            bool                   itemStringAvailable(false);              // a flag indicating if for the current item a string is available
-            wxDataObjectComposite* itemObject(new wxDataObjectComposite()); // data object for current item
-            wxString               itemString;                              // contains the TAB concatenated data of an item
+            wxDataObject *dataObject = event.GetDataObject();
 
-            const wxDataViewItem item = wxDataViewItemFromItem([writeItems objectAtIndex:itemCounter]);
-            wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, dvc, item);
-            itemString = ::ConcatenateDataViewItemValues(dvc, item);
-            itemObject->Add(new wxTextDataObject(itemString));
-            event.SetDataObject(itemObject);
-            // check if event has not been vetoed:
-            if (dvc->HandleWindowEvent(event) && event.IsAllowed() && (event.GetDataObject()->GetFormatCount() > 0))
-            {
-                size_t const noOfFormats = event.GetDataObject()->GetFormatCount();
-                wxDataFormat* dataFormats(new wxDataFormat[noOfFormats]);
+            wxOSXPasteboard wxPastboard(pasteboard);
 
-                event.GetDataObject()->GetAllFormats(dataFormats,wxDataObject::Get);
-                for (size_t formatCounter=0; formatCounter<noOfFormats; ++formatCounter)
-                {
-                    // constant definitions for abbreviational purposes:
-                    wxDataFormatId const idDataFormat = dataFormats[formatCounter].GetType();
-                    size_t const dataSize       = event.GetDataObject()->GetDataSize(idDataFormat);
-                    size_t const dataBufferSize = sizeof(wxDataFormatId)+dataSize;
-                    // variable definitions (used in all case statements):
-                    // give additional headroom for trailing NULL
-                    wxMemoryBuffer dataBuffer(dataBufferSize+4);
+            wxPastboard.Clear();
+            dataObject->WriteToSink(&wxPastboard);
+            wxPastboard.Flush();
 
-                    dataBuffer.AppendData(&idDataFormat,sizeof(wxDataFormatId));
-                    switch (idDataFormat)
-                    {
-                        case wxDF_TEXT:
-                            // otherwise wxDF_UNICODETEXT already filled up
-                            // the string; and the UNICODE representation has
-                            // priority
-                            if (!itemStringAvailable)
-                            {
-                                event.GetDataObject()->GetDataHere(wxDF_TEXT,dataBuffer.GetAppendBuf(dataSize));
-                                dataBuffer.UngetAppendBuf(dataSize);
-                                [dataArray addObject:[NSData dataWithBytes:dataBuffer.GetData() length:dataBufferSize]];
-                                itemString = wxString(static_cast<char const*>(dataBuffer.GetData())+sizeof(wxDataFormatId),wxConvLocal);
-                                itemStringAvailable = true;
-                            }
-                            break;
-                        case wxDF_UNICODETEXT:
-                            {
-                                event.GetDataObject()->GetDataHere(wxDF_UNICODETEXT,dataBuffer.GetAppendBuf(dataSize));
-                                dataBuffer.UngetAppendBuf(dataSize);
-                                if (itemStringAvailable) // does an object already exist as an ASCII text (see wxDF_TEXT case statement)?
-                                    [dataArray replaceObjectAtIndex:itemCounter withObject:[NSData dataWithBytes:dataBuffer.GetData() length:dataBufferSize]];
-                                else
-                                    [dataArray addObject:[NSData dataWithBytes:dataBuffer.GetData() length:dataBufferSize]];
-                                itemString = wxString::FromUTF8(static_cast<char const*>(dataBuffer.GetData())+sizeof(wxDataFormatId),dataSize);
-                                itemStringAvailable = true;
-                            } /* block */
-                            break;
-                        default:
-                            wxFAIL_MSG("Data object has invalid or unsupported data format");
-                            return NO;
-                    }
-                }
-                delete[] dataFormats;
-                delete itemObject;
-                if (dataStringAvailable)
-                {
-                    if (itemStringAvailable)
-                    {
-                        if (itemCounter > 0)
-                            dataString << wxT('\n');
-                        dataString << itemString;
-                    }
-                    else
-                        dataStringAvailable = false;
-                }
-            }
-            else
-            {
-                delete itemObject;
-                return NO; // dragging was vetoed or no data available
-            }
+            result = YES;
         }
-        if (dataStringAvailable)
-        {
-            wxCFStringRef osxString(dataString);
-
-            [pasteboard declareTypes:[NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil] owner:nil];
-            [pasteboard setPropertyList:dataArray forType:DataViewPboardType];
-            [pasteboard setString:osxString.AsNSString() forType:NSStringPboardType];
-        }
-        else
-        {
-            [pasteboard declareTypes:[NSArray arrayWithObject:DataViewPboardType] owner:nil];
-            [pasteboard setPropertyList:dataArray forType:DataViewPboardType];
-        }
-        return YES;
     }
-    else
-        return NO; // no items to drag (should never occur)
+
+    return result;
 }
 
 //
@@ -1638,7 +1495,7 @@ outlineView:(NSOutlineView*)outlineView
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods(self, wxOSXSKIP_DND);
     }
 }
 
@@ -1654,7 +1511,6 @@ outlineView:(NSOutlineView*)outlineView
             currentlyEditedRow = -1;
 
         [self setAutoresizesOutlineColumn:NO];
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]];
         [self setDelegate:self];
         [self setDoubleAction:@selector(actionDoubleClick:)];
         [self setDraggingSourceOperationMask:NSDragOperationEvery forLocal:NO];
@@ -2092,7 +1948,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
       ),
       m_DataSource(NULL),
       m_OutlineView([[wxCocoaOutlineView alloc] init]),
-      m_expanderWidth(0)
+      m_expanderWidth(-1)
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2157,12 +2013,23 @@ bool wxCocoaDataViewControl::doCommandBySelector(void* sel, WXWidget slf, void* 
 {
     bool handled = wxWidgetCocoaImpl::doCommandBySelector(sel, slf, _cmd);
     // if this special key has not been handled
-    if ( !handled && IsInNativeKeyDown() )
+    if ( !handled )
     {
-        // send the original key event back to the native implementation to get proper default handling like eg for arrow keys
-        wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:@selector(keyDown:)];
-        superimpl(slf, @selector(keyDown:), GetLastNativeKeyDownEvent());
+        if ( IsInNativeKeyDown() )
+        {
+            // send the original key event back to the native implementation to get proper default handling like eg for arrow keys
+            wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:@selector(keyDown:)];
+            superimpl(slf, @selector(keyDown:), GetLastNativeKeyDownEvent());
+        }
+        else
+        {
+            const auto superimpl = (wxOSX_DoCommandBySelectorPtr)
+                [[slf superclass] instanceMethodForSelector:@selector(doCommandBySelector:)];
+            if ( superimpl )
+                superimpl(slf, @selector(doCommandBySelector:), (SEL)sel);
+        }
     }
+
     return handled;
 }
 
@@ -2243,9 +2110,7 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
 void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 {
     const int count = GetCount();
-    wxDataViewColumnNativeData *nativeData = GetColumn(pos)->GetNativeData();
-    NSTableColumn *column = nativeData->GetNativeColumnPtr();
-    UInt32 const noOfColumns = [[m_OutlineView tableColumns] count];
+    NSTableColumn *column = GetColumn(pos)->GetNativeData()->GetNativeColumnPtr();
 
     class MaxWidthCalculator
     {
@@ -2253,11 +2118,10 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
         MaxWidthCalculator(wxCocoaOutlineView *view,
                            NSTableColumn *column, unsigned columnIndex)
             : m_width(0),
-              m_height(0),
               m_view(view),
               m_column(columnIndex),
               m_indent(0),
-              m_expander(0),
+              m_expander(-1),
               m_tableColumn(column)
         {
             // account for indentation in the column with expander
@@ -2274,28 +2138,24 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
         {
             NSCell *cell = [m_view preparedCellAtColumn:m_column row:row];
             unsigned cellWidth = ceil([cell cellSize].width);
-            unsigned cellHeight = ceil([cell cellSize].height);
 
             if ( m_indent )
                 cellWidth += m_indent * [m_view levelForRow:row];
 
-            if ( m_expander == 0 && m_tableColumn == [m_view outlineTableColumn] )
+            if ( m_expander == -1 && m_tableColumn == [m_view outlineTableColumn] )
             {
                 NSRect rc = [m_view frameOfOutlineCellAtRow:row];
                 m_expander = ceil(rc.origin.x + rc.size.width);
             }
 
             m_width = wxMax(m_width, cellWidth);
-            m_height = wxMax(m_height, cellHeight);
         }
 
         int GetMaxWidth() const { return m_width; }
-        int GetMaxHeight() const { return m_height; }
         int GetExpanderWidth() const { return m_expander; }
 
     private:
         int m_width;
-        int m_height;
         wxCocoaOutlineView *m_view;
         unsigned m_column;
         int m_indent;
@@ -2373,42 +2233,10 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 
     // there might not necessarily be an expander in the rows we've examined above so let's
     // globally store the expander width for re-use because it should always be the same
-    if ( m_expanderWidth == 0 )
+    if ( m_expanderWidth == -1 )
         m_expanderWidth = calculator.GetExpanderWidth();
 
-    const bool isLast = pos == noOfColumns - 1;
-
-    if ( isLast )
-    {
-        // Note that FitColumnWidthToContent() is called whenever a column is
-        // added, so we might also just temporarily become the last column;
-        // since we cannot know at this time whether we will just temporarily
-        // be the last column, we store our current column width in order to
-        // restore it later in case we suddenly are no longer the last column
-        // because new columns have been added --> we need to restore our
-        // previous width in that case because it must not get lost.
-        nativeData->SetPrevWidth(GetColumn(pos)->GetWidth());
-
-        [m_OutlineView sizeLastColumnToFit];
-    }
-    else if ( GetColumn(pos)->GetWidthVariable() == wxCOL_WIDTH_AUTOSIZE )
-    {
-        [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
-    }
-    else if ( nativeData->GetIsLast() )
-    {
-        [column setWidth:nativeData->GetPrevWidth()];
-    }
-
-    nativeData->SetIsLast(isLast);
-
-    if ( !(GetDataViewCtrl()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) )
-    {
-        int curHeight = ceil([m_OutlineView rowHeight]);
-        int rowHeight = calculator.GetMaxHeight();
-        if ( rowHeight > curHeight )
-            SetRowHeight(rowHeight);
-    }
+    [column setWidth:calculator.GetMaxWidth() + wxMax(0, m_expanderWidth)];
 }
 
 //
@@ -2754,96 +2582,6 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 void wxCocoaDataViewControl::OnSize()
 {
     [m_OutlineView sizeLastColumnToFit];
-}
-
-//
-// drag & drop helper methods
-//
-wxDataFormat wxCocoaDataViewControl::GetDnDDataFormat(wxDataObjectComposite* dataObjects)
-{
-    wxDataFormat resultFormat;
-    if ( !dataObjects )
-        return resultFormat;
-
-    bool compatible(true);
-
-    size_t const noOfFormats = dataObjects->GetFormatCount();
-    size_t       indexFormat;
-
-    wxDataFormat* formats;
-
-    // get all formats and check afterwards if the formats are compatible; if
-    // they are compatible the preferred format is returned otherwise
-    // wxDF_INVALID is returned;
-    // currently compatible types (ordered by priority are):
-    //  - wxDF_UNICODETEXT - wxDF_TEXT
-    formats = new wxDataFormat[noOfFormats];
-    dataObjects->GetAllFormats(formats);
-    indexFormat = 0;
-    while ((indexFormat < noOfFormats) && compatible)
-    {
-        switch (resultFormat.GetType())
-        {
-            case wxDF_INVALID:
-                resultFormat.SetType(formats[indexFormat].GetType()); // first format (should only be reached if indexFormat == 0)
-                break;
-            case wxDF_TEXT:
-                if (formats[indexFormat].GetType() == wxDF_UNICODETEXT)
-                    resultFormat.SetType(wxDF_UNICODETEXT);
-                else // incompatible
-                {
-                    resultFormat.SetType(wxDF_INVALID);
-                    compatible = false;
-                }
-                break;
-            case wxDF_UNICODETEXT:
-                if (formats[indexFormat].GetType() != wxDF_TEXT)
-                {
-                    resultFormat.SetType(wxDF_INVALID);
-                    compatible = false;
-                }
-                break;
-            default:
-                resultFormat.SetType(wxDF_INVALID); // not (yet) supported format
-                compatible = false;
-        }
-        ++indexFormat;
-    }
-
-    delete[] formats;
-
-    return resultFormat;
-}
-
-wxDataObjectComposite* wxCocoaDataViewControl::GetDnDDataObjects(NSData* dataObject) const
-{
-    wxDataFormatId dataFormatID;
-
-
-    [dataObject getBytes:&dataFormatID length:sizeof(wxDataFormatId)];
-    switch (dataFormatID)
-    {
-        case wxDF_TEXT:
-        case wxDF_UNICODETEXT:
-            {
-                wxTextDataObject* textDataObject(new wxTextDataObject());
-
-                if (textDataObject->SetData(wxDataFormat(dataFormatID),[dataObject length]-sizeof(wxDataFormatId),static_cast<char const*>([dataObject bytes])+sizeof(wxDataFormatId)))
-                {
-                    wxDataObjectComposite* dataObjectComposite(new wxDataObjectComposite());
-
-                    dataObjectComposite->Add(textDataObject);
-                    return dataObjectComposite;
-                }
-                else
-                {
-                    delete textDataObject;
-                    return NULL;
-                }
-            }
-        default:
-            return NULL;
-    }
 }
 
 id wxCocoaDataViewControl::GetItemAtRow(int row) const
@@ -3477,10 +3215,8 @@ bool wxDataViewIconTextRenderer::MacRender()
 
     cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
     iconText << GetValue();
-    if (iconText.GetIcon().IsOk())
-        [cell setImage:wxBitmap(iconText.GetIcon()).GetNSImage()];
-    else
-        [cell setImage:nil];
+    const wxDataViewCtrl* const dvc = GetOwner()->GetOwner();
+    [cell setImage:iconText.GetBitmapBundle().GetBitmapFor(dvc).GetNSImage()];
     [cell setStringValue:wxCFStringRef(iconText.GetText()).AsNSString()];
     return true;
 }
@@ -3589,11 +3325,12 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
 
     const wxCFStringRef textString(checkIconText.GetText());
 
-    const wxIcon& icon = checkIconText.GetIcon();
+    const wxBitmapBundle& icon = checkIconText.GetBitmapBundle();
     if ( icon.IsOk() )
     {
         wxNSTextAttachmentCellWithBaseline* const attachmentCell =
-            [[wxNSTextAttachmentCellWithBaseline alloc] initImageCell: icon.GetNSImage()];
+            [[wxNSTextAttachmentCellWithBaseline alloc]
+             initImageCell: icon.GetBitmapFor(GetOwner()->GetOwner()).GetNSImage()];
         NSTextAttachment* const attachment = [NSTextAttachment new];
         [attachment setAttachmentCell: attachmentCell];
 
@@ -3790,7 +3527,7 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
     SetResizeable((flags & wxDATAVIEW_COL_RESIZABLE) != 0);
 }
 
-wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap,
+wxDataViewColumn::wxDataViewColumn(const wxBitmapBundle& bitmap,
                                    wxDataViewRenderer* renderer,
                                    unsigned int model_column,
                                    int width,
@@ -3830,13 +3567,18 @@ void wxDataViewColumn::SetAlignment(wxAlignment align)
         m_renderer->OSXUpdateAlignment();
 }
 
-void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)
+void wxDataViewColumn::SetBitmap(const wxBitmapBundle& bitmap)
 {
     // bitmaps and titles cannot exist at the same time - if the bitmap is set
     // the title is removed:
     m_title.clear();
     wxDataViewColumnBase::SetBitmap(bitmap);
-    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:bitmap.GetNSImage()];
+    wxBitmap bmp = m_owner ? bitmap.GetBitmapFor(m_owner) : bitmap.GetBitmap(
+        bitmap.GetPreferredBitmapSizeAtScale(
+            wxOSXGetMainScreenContentScaleFactor()
+        )
+    );
+    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:bmp.GetNSImage()];
 }
 
 void wxDataViewColumn::SetMaxWidth(int maxWidth)
@@ -3924,7 +3666,7 @@ void wxDataViewColumn::SetTitle(const wxString& title)
 {
     // bitmaps and titles cannot exist at the same time - if the title is set
     // the bitmap is removed:
-    wxDataViewColumnBase::SetBitmap(wxBitmap());
+    wxDataViewColumnBase::SetBitmap(wxBitmapBundle());
     m_title = title;
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:wxCFStringRef(title).AsNSString()];
 }

@@ -71,6 +71,7 @@ BASE_UNIX_SRC =
     src/unix/fswatcher_inotify.cpp
     src/unix/secretstore.cpp
     src/unix/stdpaths.cpp
+    src/unix/uilocale.cpp
 
 BASE_UNIX_HDR =
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
@@ -98,6 +99,7 @@ BASE_WIN32_SRC =
     src/msw/stdpaths.cpp
     src/msw/thread.cpp
     src/msw/timer.cpp
+    src/msw/uilocale.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
     src/msw/fswatcher.cpp
@@ -139,6 +141,7 @@ BASE_COREFOUNDATION_SRC =
     src/osx/core/evtloop_cf.cpp
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
+    src/osx/core/uilocale.mm
     src/osx/cocoa/utils_base.mm
 
 BASE_COREFOUNDATION_HDR =
@@ -175,6 +178,7 @@ BASE_OSX_SHARED_HDR =
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
+    src/osx/volume.mm
 
 # files used by non-wxMac OS X builds
 BASE_OSX_NOTWXMAC_SRC =
@@ -481,6 +485,7 @@ BASE_CMN_SRC =
     src/common/tokenzr.cpp
     src/common/translation.cpp
     src/common/txtstrm.cpp
+    src/common/uilocale.cpp
     src/common/unichar.cpp
     src/common/uri.cpp
     src/common/ustring.cpp
@@ -574,6 +579,7 @@ BASE_CMN_HDR =
     wx/link.h
     wx/list.h
     wx/listimpl.cpp
+    wx/localedefs.h
     wx/log.h
     wx/longlong.h
     wx/lzmastream.h
@@ -632,6 +638,7 @@ BASE_CMN_HDR =
     wx/txtstrm.h
     wx/typeinfo.h
     wx/types.h
+    wx/uilocale.h
     wx/unichar.h
     wx/uri.h
     wx/ustring.h
@@ -735,6 +742,7 @@ GUI_CMN_SRC =
     src/common/artstd.cpp
     src/common/arttango.cpp
     src/common/bmpbase.cpp
+    src/common/bmpbndl.cpp
     src/common/bmpbtncmn.cpp
     src/common/bmpcboxcmn.cpp
     src/common/bookctrl.cpp
@@ -865,6 +873,7 @@ GUI_CMN_SRC =
     src/generic/animateg.cpp
     src/generic/bannerwindow.cpp
     src/generic/bmpcboxg.cpp
+    src/generic/bmpsvg.cpp
     src/generic/busyinfo.cpp
     src/generic/buttonbar.cpp
     src/generic/calctrlg.cpp
@@ -944,6 +953,7 @@ GUI_CMN_HDR =
     wx/artprov.h
     wx/bannerwindow.h
     wx/bitmap.h
+    wx/bmpbndl.h
     wx/bmpbuttn.h
     wx/bmpcbox.h
     wx/bookctrl.h
@@ -1305,6 +1315,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/mimetype.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
+    src/gtk/overlay.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
@@ -1895,6 +1906,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/aboutdlg.cpp
     src/msw/app.cpp
     src/msw/bitmap.cpp
+    src/msw/bmpbndl.cpp
     src/msw/brush.cpp
     src/msw/caret.cpp
     src/msw/clipbrd.cpp
@@ -2150,8 +2162,8 @@ MSW_HDR =
 MSW_RSC =
     # Resources must be installed together with headers:
     wx/msw/wx.manifest
-    wx/msw/amd64.manifest
-    wx/msw/ia64.manifest
+    wx/msw/wx_dpi_aware.manifest
+    wx/msw/wx_dpi_aware_pmv2.manifest
     wx/msw/wx.rc
     # bitmaps
     wx/msw/colours.bmp
@@ -2270,6 +2282,7 @@ OSX_LOWLEVEL_SRC =
     src/osx/window_osx.cpp
 
     src/osx/core/bitmap.cpp
+    src/osx/core/bmpbndl.mm
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
     src/osx/core/fontenum.cpp
@@ -2819,6 +2832,7 @@ XRC_SRC =
     src/xrc/xh_bmp.cpp
     src/xrc/xh_bmpcbox.cpp
     src/xrc/xh_bmpbt.cpp
+    src/xrc/xh_bookctrlbase.cpp
     src/xrc/xh_bttn.cpp
     src/xrc/xh_cald.cpp
     src/xrc/xh_chckb.cpp
@@ -2889,6 +2903,7 @@ XRC_HDR =
     wx/xrc/xh_bmpbt.h
     wx/xrc/xh_bmp.h
     wx/xrc/xh_bmpcbox.h
+    wx/xrc/xh_bookctrlbase.h
     wx/xrc/xh_bttn.h
     wx/xrc/xh_cald.h
     wx/xrc/xh_chckb.h
@@ -3132,9 +3147,11 @@ STC_CMN_SRC =
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
+    src/xrc/xh_styledtextctrl.cpp
 
 STC_CMN_HDR =
     wx/stc/stc.h
+    wx/xrc/xh_styledtextctrl.h
 
 STC_OSX_COCOA_SRC =
     src/stc/PlatWXcocoa.mm

@@ -86,7 +86,7 @@ wxListbook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    GetListCtrlFlags()
+                    GetListCtrlFlags(HasImages())
                  );
 
     if ( GetListView()->InReportView() )
@@ -103,7 +103,7 @@ wxListbook::Create(wxWindow *parent,
 // wxListCtrl flags
 // ----------------------------------------------------------------------------
 
-long wxListbook::GetListCtrlFlags() const
+long wxListbook::GetListCtrlFlags(bool hasImages) const
 {
     // We'd like to always use wxLC_ICON mode but it doesn't work with the
     // native wxListCtrl under MSW unless we do have icons for all the items,
@@ -115,7 +115,7 @@ long wxListbook::GetListCtrlFlags() const
     // case there.
 
     long flags = IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP;
-    if ( GetImageList() )
+    if ( hasImages )
     {
         flags |= wxLC_ICON;
     }
@@ -252,27 +252,24 @@ bool wxListbook::SetPageImage(size_t n, int imageId)
 }
 
 // ----------------------------------------------------------------------------
-// image list stuff
+// images support
 // ----------------------------------------------------------------------------
 
-void wxListbook::SetImageList(wxImageList *imageList)
+void wxListbook::OnImagesChanged()
 {
-    const long flagsOld = GetListCtrlFlags();
-
-    wxBookCtrlBase::SetImageList(imageList);
-
-    const long flagsNew = GetListCtrlFlags();
-
     wxListView * const list = GetListView();
 
     // We may need to change the list control mode if the image list presence
     // has changed.
-    if ( flagsNew != flagsOld )
+    const bool hasImages = HasImages();
+    if ( list->HasFlag(wxLC_ICON) != hasImages )
     {
         // Preserve the selection which is lost when changing the mode
         const int oldSel = GetSelection();
 
-        list->SetWindowStyleFlag(flagsNew);
+        // Note that we can't just ToggleWindowStyle(wxLC_ICON) here because we
+        // may also need to turn off wxLC_REPORT under MSW.
+        list->SetWindowStyleFlag(GetListCtrlFlags(hasImages));
         if ( list->InReportView() )
             list->InsertColumn(0, wxS("Pages"));
 
@@ -281,7 +278,12 @@ void wxListbook::SetImageList(wxImageList *imageList)
             SetSelection(oldSel);
     }
 
-    list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
+    // We also need to propagate the actual images to use to the list control.
+    const Images& images = GetImages();
+    if ( !images.empty() )
+        list->SetNormalImages(images);
+    else
+        list->SetImageList(GetImageList(), wxIMAGE_LIST_NORMAL);
 }
 
 // ----------------------------------------------------------------------------

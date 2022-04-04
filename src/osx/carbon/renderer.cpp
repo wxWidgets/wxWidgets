@@ -178,7 +178,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
 
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
@@ -267,7 +267,7 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
 
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
@@ -415,8 +415,8 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
                                                                              : kThemeBrushSecondaryHighlightColor ) );
     wxBrush selBrush( col );
 
-    dc.SetPen( *wxTRANSPARENT_PEN );
-    dc.SetBrush( selBrush );
+    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+    wxDCBrushChanger setBrush(dc, selBrush);
     dc.DrawRectangle( rect );
 }
 
@@ -435,7 +435,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
 
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
@@ -681,10 +681,12 @@ void wxRendererMac::DrawTextCtrl(wxWindow* win, wxDC& dc,
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
 
-    dc.SetBrush( *wxWHITE_BRUSH );
-    dc.SetPen( *wxTRANSPARENT_PEN );
+    wxDCBrushChanger setBrush(dc, *wxWHITE_BRUSH);
+    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     dc.DrawRectangle(rect);
 
+    // Note that calling SetBrush() here is fine as we already have
+    // wxDCBrushChanger above, so the original brush will get restored.
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     HIRect hiRect = CGRectMake( x, y, w, h );
@@ -733,19 +735,20 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
     // The following hard coded RGB values are based the close button in
     // XCode 6+ welcome screen
     bool drawCircle;
+    wxColour circleBorderCol, circleInteriorCol;
     if ( flags & wxCONTROL_PRESSED )
     {
         drawCircle = true;
         glyphColor = wxColour(104, 104, 104);
-        dc.SetPen(wxPen(wxColour(70, 70, 71), 1));
-        dc.SetBrush(wxColour(78, 78, 78));
+        circleBorderCol = wxColour(70, 70, 71);
+        circleInteriorCol = wxColour(78, 78, 78);
     }
     else if ( flags & wxCONTROL_CURRENT )
     {
         drawCircle = true;
         glyphColor = *wxWHITE;
-        dc.SetPen(wxPen(wxColour(163, 165, 166), 1));
-        dc.SetBrush(wxColour(182, 184, 187));
+        circleBorderCol = wxColour(163, 165, 166);
+        circleInteriorCol = wxColour(182, 184, 187);
     }
     else
     {
@@ -755,13 +758,16 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
 
     if ( drawCircle )
     {
+        wxDCPenChanger setPen(dc, circleBorderCol);
+        wxDCBrushChanger setBrush(dc, circleInteriorCol);
+
         wxRect circleRect(rect);
         circleRect.Deflate(2);
 
         dc.DrawEllipse(circleRect);
     }
 
-    dc.SetPen(wxPen(glyphColor, 1));
+    wxDCPenChanger setPen(dc, glyphColor);
 
     wxRect centerRect(rect);
     centerRect.Deflate(5);

@@ -24,3 +24,8 @@ expressions</em> (BRE). EREs are roughly those of the traditional @e egrep,
     // 2019), i.e. SEH translator seems to work just fine without /EHa too, so
 // Purpose:     helpers for the structured exception handling (SEH) under Win32
 * MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
+    static wxString ConvertFromBasic(const wxString& bre);
+        This function can be used to convert @a bre using deprecated wxRE_BASIC
+    static wxString ConvertFromBasic(const wxString& bre);
+    @c makefile.unx in the sample directory to build it using the version of
+    makefile.unx</code> in the sample directory to build it.

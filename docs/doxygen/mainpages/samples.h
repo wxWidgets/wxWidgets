@@ -11,15 +11,60 @@
 
 @tableofcontents
 
-Probably the best way to learn wxWidgets is by reading the source of some 80+
-samples provided with it. Many aspects of wxWidgets programming can be learned
+Arguably the best way to learn wxWidgets is by reading the sources of many samples,
+or examples, provided with it. Many aspects of wxWidgets programming can be learned
 from them, but sometimes it is not simple to just choose the right sample to
 look at. This overview aims at describing what each sample does/demonstrates to
 make it easier to find the relevant one if a simple grep through all sources
 didn't help. They also provide some notes about using the samples and what
 features of wxWidgets are they supposed to test.
 
-There are currently more than 80 different samples as part of wxWidgets: the
+Notice that all wxWidgets samples mentioned here can be found in @c samples
+subdirectory of the library distribution. When a @c foobar sample is mentioned
+below, its sources can be found in @c samples/foobar directory of your
+wxWidgets tree. If you installed wxWidgets from a binary package, you might not
+have this directory. In this case, you may view the samples online at
+https://github.com/wxWidgets/wxWidgets/tree/master/samples/ but you need to
+download the source distribution in order to be able to build them (highly
+recommended).
+
+@section page_samples_building Building and running the samples
+
+Although reading the samples code can be very useful, it may not be sufficient
+and often it is even more useful to experiment by making a small change to a
+sample and checking how it works when running the sample.
+
+Before being able to run them, you need to be able build the sample you're
+interested in. The right way to do it depends on the way you built wxWidgets
+itself (see @ref overview_install for more details):
+
+- Under Microsoft Windows (MSW):
+    - If you're using Microsoft Visual C++ compiler (MSVC), you need to
+    use @c makefile.vc from the directory of the sample to build it. Open
+    "Developer Command Prompt", navigate to the sample directory and run
+    <code>nmake -f makefile.vc</code> command with the additional arguments
+    corresponding to your library build, e.g. @c BUILD=debug. See @ref
+    msw_build_msvs "MSVS instructions" for more information.
+    - If you're using MinGW, use @c makefile.gcc in the sample directory in a
+    similar way. Note that if you use MSYS2 or another Unix-like environment
+    for building, you should use the Unix instructions below instead.
+- Under Unix systems (including macOS):
+    - If you installed wxWidgets from your distribution binaries, you can use
+    @c makefile.unx in the sample directory to build it using the version of
+    wxWidgets already installed on your system. Use <code>make -f
+    makefile.unx</code> in the sample directory to build it.
+    - If you built wxWidgets from source using configure, you may use @c
+    Makefile in the directory with the same name as the sample directory, but
+    under the @em build directory, i.e. the one where you ran configure, and
+    @em not under the source directory. Just run @c make to build the sample in
+    the build directory subdirectory, e.g. @c ~/build/wx/samples/minimal. You
+    can also build all the samples at once by doing <code>make samples</code>,
+    but be warned that this might take some time on older and slower machines.
+
+
+@section page_samples_overview Overview of the available samples
+
+There are currently almost 100 different samples as part of wxWidgets: the
 list in this page is not complete! You should start your tour of wxWidgets with
 the @ref page_samples_minimal which is the wxWidgets version of "Hello,
 world!". It shows the basic structure of wxWidgets program and is the most
@@ -41,22 +86,9 @@ may find the following samples showing the corresponding controls:
 @li wxDataViewCtrl: @ref page_samples_dataview
 @li wxWebView: @ref page_samples_webview
 
-Notice that all wxWidgets samples mentioned above can be found in @c samples
-subdirectory of the library distribution. When a @c foobar sample is mentioned
-below, its sources can be found in @c samples/foobar directory of your
-wxWidgets tree. If you installed wxWidgets from a binary package, you might not
-have this directory. In this case, you may view the samples online at
-https://github.com/wxWidgets/wxWidgets/tree/master/samples/ but you need to
-download the source distribution in order to be able to build them (highly
-recommended).
-
 Final advice is to do a search in the entire samples directory if you can't
 find the sample showing the control you are interested in by name. Most classes
 contained in wxWidgets occur in at least one of the samples.
-
-@todo Write descriptions for the samples who description started with
- "This sample demonstrates", they are semi-auto generated.
-
 
 
 @section page_samples_access Accessibility Sample
@@ -658,10 +690,14 @@ utility under macOS).
 
 @section page_samples_shaped Shaped Window Sample
 
-@sampleabout{how to implement a shaped or transparent window\, and a window showing/hiding with effect}
+@sampleabout{Showing unusual, e.g. shaped or semi-transparent windows}
+
+This sample shows windows with non-rectangular shapes and non-opaque windows as
+well as how the windows can be shown with a special effect.
 
 @see wxTopLevelWindow::SetShape(), wxTopLevelWindow::SetTransparent(),
-wxWindow::ShowWithEffect(), wxWindow::HideWithEffect()
+wxWindow::ShowWithEffect(), wxWindow::HideWithEffect(),
+wxWindow::SetBackgroundStyle()
 
 @sampledir{shaped}
 

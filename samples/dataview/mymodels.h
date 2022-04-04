@@ -26,7 +26,7 @@ class MyMusicTreeModelNode
 public:
     MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
                           const wxString &title, const wxString &artist,
-                          unsigned int year )
+                          int year )
     {
         m_parent = parent;
 
@@ -136,6 +136,7 @@ public:
     void AddToClassical( const wxString &title, const wxString &artist,
                          unsigned int year );
     void Delete( const wxDataViewItem &item );
+    void Clear();
 
     wxDataViewItem GetNinthItem() const
     {
@@ -216,7 +217,7 @@ public:
         Col_Max
     };
 
-    MyListModel();
+    MyListModel(int modelFlags);
 
     // helper methods to change the model
 
@@ -253,7 +254,7 @@ private:
     wxArrayString    m_textColValues;
     wxArrayString    m_iconColValues;
     IntToStringMap   m_customColValues;
-    wxIcon           m_icon[2];
+    wxBitmapBundle   m_icon[2];
 };
 
 // ----------------------------------------------------------------------------
@@ -310,3 +311,19 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(MyIndexListModel);
 };
+
+enum ModelFlags
+{
+    MODEL_USE_TALL_ROWS = 1 << 0,
+    MODEL_KEEP_LOGO_SMALL = 1 << 1,
+    MODEL_USE_MULTI_LINE_TEXT = 1 << 2
+};
+
+inline wxSize GetIconSizeFromModelFlags(int modelFlags)
+{
+    wxSize size(16, 16);
+    if ( (modelFlags & MODEL_USE_TALL_ROWS) && !(modelFlags & MODEL_KEEP_LOGO_SMALL) )
+        size *= 2;
+
+    return size;
+}

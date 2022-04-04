@@ -16,7 +16,7 @@
 #if wxUSE_STATBMP
 
 #include "wx/control.h"
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/icon.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticBitmapNameStr[];
@@ -37,15 +37,12 @@ public:
     virtual ~wxStaticBitmapBase();
 
     // our interface
-    virtual void SetIcon(const wxIcon& icon) = 0;
-    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
-    virtual wxBitmap GetBitmap() const = 0;
-    virtual wxIcon GetIcon() const /* = 0 -- should be pure virtual */
-    {
-        // stub it out here for now as not all ports implement it (but they
-        // should)
-        return wxIcon();
-    }
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) = 0;
+    virtual wxBitmap GetBitmap() const;
+
+    virtual void SetIcon(const wxIcon& icon);
+    virtual wxIcon GetIcon() const;
+
     virtual void SetScaleMode(ScaleMode WXUNUSED(scaleMode)) { }
     virtual ScaleMode GetScaleMode() const { return Scale_None; }
 
@@ -58,6 +55,9 @@ protected:
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+
+    // Bitmap bundle passed to ctor or SetBitmap().
+    wxBitmapBundle m_bitmapBundle;
 
     wxDECLARE_NO_COPY_CLASS(wxStaticBitmapBase);
 };

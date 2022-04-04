@@ -25,6 +25,8 @@
     #include "wx/osx/private/datatransfer.h"
 #endif
 
+#include "wx/private/bmpbndl.h"
+
 #include "wx/evtloop.h"
 
 #if wxUSE_CARET
@@ -48,9 +50,6 @@
 // ----------------------------------------------------------------------------
 // debugging helpers
 // ----------------------------------------------------------------------------
-
-// This one is defined in window_osx.cpp.
-extern wxString wxDumpWindow(wxWindowMac* win);
 
 // These functions are called from the code but are also useful in the debugger
 // (especially wxDumpNSView(), as selectors can be printed out directly anyhow),
@@ -182,8 +181,10 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (double)minValue;
 - (double)maxValue;
+- (int)increment;
 - (void)setMinValue:(double)aDouble;
 - (void)setMaxValue:(double)aDouble;
+- (void)setIncrement:(int)value;
 
 - (void)sizeToFit;
 
@@ -452,6 +453,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     wxevent.m_rawFlags = modifiers;
 
     wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
+    wxevent.m_isRepeat = (eventType == NSKeyDown) && [nsEvent isARepeat];
 
     wxString chars;
     if ( eventType != NSFlagsChanged )
@@ -2484,10 +2486,13 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlDoubleAction:), (IMP) wxOSX_controlDoubleAction, "v@:@" )
 
 #if wxUSE_DRAG_AND_DROP
-    wxOSX_CLASS_ADD_METHOD(c, @selector(draggingEntered:), (IMP) wxOSX_draggingEntered, "I@:@" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(draggingUpdated:), (IMP) wxOSX_draggingUpdated, "I@:@" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(draggingExited:), (IMP) wxOSX_draggingExited, "v@:@" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(performDragOperation:), (IMP) wxOSX_performDragOperation, "c@:@" )
+    if ( !(skipFlags & wxOSXSKIP_DND) )
+    {
+        wxOSX_CLASS_ADD_METHOD(c, @selector(draggingEntered:), (IMP) wxOSX_draggingEntered, "I@:@" )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(draggingUpdated:), (IMP) wxOSX_draggingUpdated, "I@:@" )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(draggingExited:), (IMP) wxOSX_draggingExited, "v@:@" )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(performDragOperation:), (IMP) wxOSX_performDragOperation, "c@:@" )
+    }
 #endif
 
 #if OBJC_API_VERSION < 2
@@ -2622,11 +2627,9 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
     [m_osxView setHidden:(visible ? NO:YES)];
     
     // trigger redraw upon shown for layer-backed views
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         if( !m_osxView.isHiddenOrHasHiddenAncestor )
             SetNeedsDisplay(NULL);
-#endif
 }
 
 double wxWidgetCocoaImpl::GetContentScaleFactor() const
@@ -3080,7 +3083,6 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
 namespace
 {
     
@@ -3114,7 +3116,6 @@ void SetSubviewsNeedDisplay( NSView *view, NSRect rect )
 }
 
 }
-#endif
 
 
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
@@ -3129,7 +3130,6 @@ void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
     // Layer-backed views (which are all in Mojave's Dark Mode) may not have
     // their children implicitly redrawn with the parent. For compatibility,
     // do it manually here:
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
     {
         if ( where )
@@ -3137,7 +3137,6 @@ void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
         else
             SetSubviewsNeedDisplay(m_osxView);
     }
-#endif
 }
 
 bool wxWidgetCocoaImpl::GetNeedsDisplay() const
@@ -3423,6 +3422,23 @@ wxInt32 wxWidgetCocoaImpl::GetMinimum() const
     return 0;
 }
 
+void wxWidgetCocoaImpl::SetIncrement(int value)
+{
+    if (  [m_osxView respondsToSelector:@selector(setIncrement:)] )
+    {
+        [m_osxView setIncrement:value];
+    }
+}
+
+int wxWidgetCocoaImpl::GetIncrement() const
+{
+    if(  [m_osxView respondsToSelector:@selector(increment)] )
+    {
+        return (int) [m_osxView increment];
+    }
+    return 0;
+}
+
 wxInt32 wxWidgetCocoaImpl::GetMaximum() const
 {
     if (  [m_osxView respondsToSelector:@selector(maxValue)] )
@@ -3445,15 +3461,11 @@ wxBitmap wxWidgetCocoaImpl::GetBitmap() const
     return bmp;
 }
 
-void wxWidgetCocoaImpl::SetBitmap( const wxBitmap& bitmap )
+void wxWidgetCocoaImpl::SetBitmap( const wxBitmapBundle& bitmap )
 {
     if (  [m_osxView respondsToSelector:@selector(setImage:)] )
     {
-        if (bitmap.IsOk())
-            [m_osxView setImage:bitmap.GetNSImage()];
-        else
-            [m_osxView setImage:nil];
-
+        [m_osxView setImage: wxOSXGetImageFromBundle(bitmap)];
         [m_osxView setNeedsDisplay:YES];
     }
 }
@@ -3624,8 +3636,7 @@ void wxWidgetCocoaImpl::SetForegroundColour(const wxColour& col)
 
     if ([targetView respondsToSelector:@selector(setTextColor:)])
     {
-        wxColor col = GetWXPeer()->GetForegroundColour();
-        [targetView setTextColor: col.OSXGetNSColor()];
+        [targetView setTextColor: col.IsOk() ? col.OSXGetNSColor() : nil];
     }
 }
 

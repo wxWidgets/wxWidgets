@@ -183,7 +183,10 @@ public:
     // this version specific methods
     // -----------------------------
 
-    wxImageList *GetButtonsImageList() const { return m_imageListButtons; }
+    wxImageList *GetButtonsImageList() const
+    {
+        return m_imagesButtons.GetImageList();
+    }
     void SetButtonsImageList(wxImageList *imageList);
     void AssignButtonsImageList(wxImageList *imageList);
 
@@ -248,10 +251,10 @@ protected:
                          m_hilightUnfocusedBrush;
     bool                 m_hasFocus;
     bool                 m_dirty;
-    bool                 m_ownsImageListButtons;
     bool                 m_isDragging; // true between BEGIN/END drag events
     bool                 m_lastOnSame;  // last click on the same item as prev
-    wxImageList         *m_imageListButtons;
+
+    wxWithImages         m_imagesButtons;
 
     int                  m_dragCount;
     wxPoint              m_dragStart;
@@ -283,6 +286,9 @@ protected:
 
     // overridden wxWindow methods
     virtual void DoThaw() wxOVERRIDE;
+
+    virtual void OnImagesChanged() wxOVERRIDE;
+    void UpdateAfterImageListChange();
 
     // misc helpers
     void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);

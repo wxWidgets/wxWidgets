@@ -182,28 +182,6 @@ wxBEGIN_EVENT_TABLE(wxBlindPlateWindow, wxWindow)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
-// debug helpers
-// ----------------------------------------------------------------------------
-
-// Function used to dump a brief description of a window.
-extern
-wxString wxDumpWindow(wxWindowMac* win)
-{
-    if ( !win )
-        return "(no window)";
-
-    wxString s = wxString::Format("%s(%p",
-                                  win->GetClassInfo()->GetClassName(), win);
-
-    wxString label = win->GetLabel();
-    if ( !label.empty() )
-        s += wxString::Format(", \"%s\"", label);
-    s += ")";
-
-    return s;
-}
-
-// ----------------------------------------------------------------------------
  // constructors and such
 // ----------------------------------------------------------------------------
 
@@ -527,7 +505,12 @@ bool wxWindowMac::SetForegroundColour(const wxColour& col )
         return false;
 
     if ( GetPeer() )
-        GetPeer()->SetForegroundColour(col);
+    {
+        // Note that we use GetForegroundColour() and not "col" itself here in
+        // case we're now inheriting our parent foreground rather than passing
+        // the (null) colour argument.
+        GetPeer()->SetForegroundColour(GetForegroundColour());
+    }
 
     return true;
 }
@@ -1264,6 +1247,11 @@ bool wxWindowMac::OSXShowWithEffect(bool show,
 
 void wxWindowMac::DoEnable(bool enable)
 {
+    // We can be called before the window is created in order to create it in
+    // the initially disabled state.
+    if ( !GetPeer() )
+        return;
+
     GetPeer()->Enable( enable ) ;
     MacInvalidateBorders();
 }

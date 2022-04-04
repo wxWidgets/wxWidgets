@@ -20,7 +20,7 @@
 */
 enum wxOperatingSystemId
 {
-    wxOS_UNKNOWN = 0,                 //!< returned on error
+    wxOS_UNKNOWN = 0,                 //!< Returned on error.
 
     wxOS_MAC_OS         = 1 << 0,     //!< Apple Mac OS 8/9/X with Mac paths
     wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple macOS with Unix paths
@@ -28,7 +28,7 @@ enum wxOperatingSystemId
     //! A combination of all @c wxOS_MAC_* values previously listed.
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
-    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (XP/Vista/7/8/10)
+    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (XP/Vista/7/8/10/11)
 
     //! Any Windows system, currently can be only wxOS_WINDOWS_NT.
     wxOS_WINDOWS = wxOS_WINDOWS_NT,
@@ -410,11 +410,20 @@ public:
     /**
         Returns the CPU architecture name, if available.
 
-        @see wxGetCpuArchitectureName()
+        @see wxGetCpuArchitectureName(), GetNativeCpuArchitectureName()
 
         @since 3.1.5
      */
     wxString GetCpuArchitectureName() const;
+
+    /**
+        Returns the native CPU architecture name, if available.
+
+        @since 3.1.6
+
+        @see ::wxGetNativeCpuArchitectureName(), GetCpuArchitectureName()
+     */
+    wxString GetNativeCpuArchitectureName() const;
 
     /**
         Returns the run-time major version of the OS associated with this
@@ -629,3 +638,16 @@ public:
 
     //@}
 };
+
+/**
+    Returns @true only for MSW programs running under Wine.
+
+    This function can be used to check for some functionality not implemented
+    when using Wine.
+
+    @since 3.1.6
+
+    @library{wxbase}
+    @category{cfg}
+*/
+bool wxIsRunningUnderWine();

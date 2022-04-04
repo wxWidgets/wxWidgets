@@ -40,7 +40,7 @@ class WXDLLIMPEXP_HTML wxHtmlHelpDialog : public wxDialog
 
 public:
     wxHtmlHelpDialog(wxHtmlHelpData* data = NULL) { Init(data); }
-    wxHtmlHelpDialog(wxWindow* parent, wxWindowID wxWindowID,
+    wxHtmlHelpDialog(wxWindow* parent, wxWindowID id,
                     const wxString& title = wxEmptyString,
                     int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL);
     virtual ~wxHtmlHelpDialog();

@@ -43,7 +43,7 @@
 
 #include "wx/control.h"
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
-#include "wx/bitmap.h" // wxBitmap used by-value
+#include "wx/bmpbndl.h"
 #include "wx/textentry.h"
 #include "wx/time.h" // needed for wxMilliClock_t
 
@@ -197,6 +197,10 @@ public:
     // get the popup window containing the popup control
     wxWindow *GetPopupWindow() const { return m_winPopup; }
 
+    // Set the control to use instead of the default text control for the main
+    // (always visible) part of the combobox.
+    void SetMainControl(wxWindow* win);
+
     // Get the text control which is part of the combobox.
     wxTextCtrl *GetTextCtrl() const { return m_text; }
 
@@ -347,11 +351,11 @@ public:
     //  bmpHover: drawn when cursor hovers on button. This is ignored on platforms
     //            that do not generally display hover differently.
     //  bmpDisabled: drawn when combobox is disabled.
-    void SetButtonBitmaps( const wxBitmap& bmpNormal,
+    void SetButtonBitmaps( const wxBitmapBundle& bmpNormal,
                            bool pushButtonBg = false,
-                           const wxBitmap& bmpPressed = wxNullBitmap,
-                           const wxBitmap& bmpHover = wxNullBitmap,
-                           const wxBitmap& bmpDisabled = wxNullBitmap );
+                           const wxBitmapBundle& bmpPressed = wxBitmapBundle(),
+                           const wxBitmapBundle& bmpHover = wxBitmapBundle(),
+                           const wxBitmapBundle& bmpDisabled = wxBitmapBundle() );
 
 #if WXWIN_COMPATIBILITY_2_8
     //
@@ -429,11 +433,11 @@ public:
                  (m_windowStyle & wxCB_READONLY) );
     }
 
-    // These methods return references to appropriate dropbutton bitmaps
-    const wxBitmap& GetBitmapNormal() const { return m_bmpNormal; }
-    const wxBitmap& GetBitmapPressed() const { return m_bmpPressed; }
-    const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
-    const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
+    // These methods return appropriate dropbutton bitmaps
+    wxBitmap GetBitmapNormal() const { return m_bmpNormal.GetBitmapFor(this); }
+    wxBitmap GetBitmapPressed() const { return m_bmpPressed.GetBitmapFor(this); }
+    wxBitmap GetBitmapHover() const { return m_bmpHover.GetBitmapFor(this); }
+    wxBitmap GetBitmapDisabled() const { return m_bmpDisabled.GetBitmapFor(this); }
 
     // Set custom style flags for embedded wxTextCtrl. Usually must be used
     // with two-step creation, before Create() call.
@@ -509,9 +513,6 @@ protected:
     // (e.g. from WriteText())
     void OnSetValue(const wxString& value);
 
-    // Installs standard input handler to combo (and optionally to the textctrl)
-    void InstallInputHandlers();
-
     // Flags for DrawButton
     enum
     {
@@ -575,6 +576,19 @@ protected:
     void OnKeyEvent(wxKeyEvent& event);
     void OnCharEvent(wxKeyEvent& event);
 
+    void OnTextFocus(wxFocusEvent& event);
+    void OnTextKey(wxKeyEvent& event);
+
+    void OnPopupActivate(wxActivateEvent& event);
+    void OnPopupKey(wxKeyEvent& event);
+    void OnPopupSize(wxSizeEvent& event);
+
+    void OnPopupMouseEvent(wxMouseEvent& event);
+
+    // This function can be used as event handle for wxEVT_DPI_CHANGED event
+    // and simply recalculates button size when it happens.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event);
+
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
@@ -617,8 +631,12 @@ protected:
     // This is used when control is unfocused and m_valueString is empty
     wxString                m_hintText;
 
-    // the text control and button we show all the time
+    // This pointer is non-null if we use a text control, and not some other
+    // window, as the main control.
     wxTextCtrl*             m_text;
+
+    // the window and button we show all the time
+    wxWindow*               m_mainWindow;
     wxWindow*               m_btn;
 
     // wxPopupWindow or similar containing the window managed by the interface.
@@ -630,17 +648,8 @@ protected:
     // popup interface
     wxComboPopup*           m_popupInterface;
 
-    // this is input etc. handler for the text control
-    wxEvtHandler*           m_textEvtHandler;
-
     // this is for the top level window
     wxEvtHandler*           m_toplevEvtHandler;
-
-    // this is for the control in popup
-    wxEvtHandler*           m_popupEvtHandler;
-
-    // this is for the popup window
-    wxEvtHandler*           m_popupWinEvtHandler;
 
     // main (ie. topmost) window of a composite control (default = this)
     wxWindow*               m_mainCtrlWnd;
@@ -694,10 +703,10 @@ protected:
     int                     m_btnWidDefault;
 
     // custom dropbutton bitmaps
-    wxBitmap                m_bmpNormal;
-    wxBitmap                m_bmpPressed;
-    wxBitmap                m_bmpHover;
-    wxBitmap                m_bmpDisabled;
+    wxBitmapBundle          m_bmpNormal;
+    wxBitmapBundle          m_bmpPressed;
+    wxBitmapBundle          m_bmpHover;
+    wxBitmapBundle          m_bmpDisabled;
 
     // area used by the button
     wxSize                  m_btnSize;
@@ -720,13 +729,14 @@ protected:
     // is the text-area background colour overridden?
     bool                    m_hasTcBgCol;
 
+    // flags used while popup is shown
+    bool                    m_beenInsidePopup;
+    bool                    m_blockEventsToPopup;
+
 private:
     void Init();
 
     wxByte                  m_ignoreEvtText;  // Number of next EVT_TEXTs to ignore
-
-    // Is popup window wxPopupTransientWindow, wxPopupWindow or wxDialog?
-    wxByte                  m_popupWinType;
 
     wxDECLARE_EVENT_TABLE();
 

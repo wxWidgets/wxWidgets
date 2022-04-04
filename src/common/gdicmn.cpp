@@ -418,7 +418,7 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
     self->Initialize();
 
-    // make the comparaison case insensitive and also match both grey and gray
+    // make the comparison case insensitive and also match both grey and gray
     wxString colName = colour;
     colName.MakeUpper();
     wxString colNameAlt = colName;

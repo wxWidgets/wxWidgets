@@ -91,7 +91,14 @@ void wxGTKCairoDCImpl::DoDrawText(const wxString& text, int x, int y)
     if (text.empty())
         return;
 
-    if (m_layoutDir == wxLayout_RightToLeft && text.find('\n') != wxString::npos)
+    cairo_t* cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
+    if (cr == NULL)
+        return;
+
+    double dx = 1, dy = 1;
+    cairo_user_to_device_distance(cr, &dx, &dy);
+    const bool xInverted = dx < 0;
+    if (xInverted && text.find('\n') != wxString::npos)
     {
         // RTL needs each line separately to position text properly.
         // DrawLabel() will split the text and call back for each line.
@@ -105,12 +112,19 @@ void wxGTKCairoDCImpl::DoDrawText(const wxString& text, int x, int y)
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + w, y + h);
 
-    if (m_layoutDir == wxLayout_RightToLeft)
-    {
+    const bool yInverted = dy < 0;
+    if (xInverted || yInverted)
         m_graphicContext->PushState();
+    if (xInverted)
+    {
         // text is not mirrored
         m_graphicContext->Scale(-1, 1);
         x = -x - w;
+    }
+    if (yInverted)
+    {
+        m_graphicContext->Scale(1, -1);
+        y = -y - h;
     }
 
     wxCompositionMode curMode = m_graphicContext->GetCompositionMode();
@@ -123,7 +137,7 @@ void wxGTKCairoDCImpl::DoDrawText(const wxString& text, int x, int y)
 
     m_graphicContext->SetCompositionMode(curMode);
 
-    if (m_layoutDir == wxLayout_RightToLeft)
+    if (xInverted || yInverted)
         m_graphicContext->PopState();
 }
 
@@ -567,7 +581,7 @@ void wxMemoryDCImpl::Setup()
     m_ok = m_bitmap.IsOk();
     if (m_ok)
     {
-        m_size = m_bitmap.GetScaledSize();
+        m_size = m_bitmap.GetLogicalSize();
         m_contentScaleFactor = m_bitmap.GetScaleFactor();
         cairo_t* cr = m_bitmap.CairoCreate();
         AdjustForRTL(cr);

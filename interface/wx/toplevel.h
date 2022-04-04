@@ -14,6 +14,13 @@ enum
     wxUSER_ATTENTION_ERROR = 2  ///< Results in a more drastic action.
 };
 
+// Values for wxTopLevelWindow::GetContentProtection() and wxTopLevelWindow::SetContentProtection()
+enum wxContentProtection
+{
+    wxCONTENT_PROTECTION_NONE,   ///< Window contents are visible in screen captures
+    wxCONTENT_PROTECTION_ENABLED ///< Window contents are not visible in screen captures
+};
+
 /**
     Styles used with wxTopLevelWindow::ShowFullScreen().
 */
@@ -578,6 +585,13 @@ public:
     /**
         If the platform supports it will set the window to be translucent.
 
+        Note that in wxGTK this function must be called before the window is
+        shown the first time it's called (but it can be called again after
+        showing the window too).
+
+        See @ref page_samples_shaped "the shaped sample" for an example of
+        using this function.
+
         @param alpha
             Determines how opaque or transparent the window will be, if the
             platform supports the operation. A value of 0 sets the window to be
@@ -642,6 +656,10 @@ public:
         @param enable
             If @true (default) make the zoom button toggle full screen;
             if @false the button does only toggle zoom.
+        @param style
+            This parameter sets which elements will be hidden when the
+            user presses the full screen button. See ShowFullScreen()
+            for possible values. It is available since wxWidgets 3.1.6.
 
         @return @true if the button behaviour has been changed, @false if running
         under another OS.
@@ -651,6 +669,8 @@ public:
         and entering and exiting the mode is animated.
         If the button is not present the old way of switching to full screen
         is used.
+        Only @c ::wxFULLSCREEN_NOTOOLBAR and @c ::wxFULLSCREEN_NOMENUBAR will be
+        used when using the fullscreen API (other values are ignored).
 
         @onlyfor{wxosx}
 
@@ -658,7 +678,7 @@ public:
 
         @since 3.1.0
     */
-    virtual bool EnableFullScreenView(bool enable = true);
+    virtual bool EnableFullScreenView(bool enable = true, long style = wxFULLSCREEN_ALL);
 
     /**
         Depending on the value of @a show parameter the window is either shown
@@ -681,6 +701,39 @@ public:
         @see EnableFullScreenView(), IsFullScreen()
     */
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+
+    /**
+        Get the current content protection of the window.
+
+        @see SetContentProtection()
+
+        @since 3.1.6
+    */
+    virtual wxContentProtection GetContentProtection() const;
+
+    /**
+        Set content protection for the window.
+
+        When content protection is enabled contents of this window will not
+        be included in screen captures.
+
+        Obviously this can't provide absolute security as there might be
+        workarounds and tools that bypass this protection. Additionally a
+        screen could always be photographed.
+
+        @return @true if the content protection was changed, @false if running
+        under an unsupported OS.
+
+        @note Windows 7 or newer is required but any macOS version is supported.
+
+        @onlyfor{wxmsw,wxosx}
+
+        @see GetContentProtection()
+
+        @since 3.1.6
+    */
+    virtual bool SetContentProtection(wxContentProtection contentProtection);
+
 
     /**
         This method is specific to wxUniversal port.

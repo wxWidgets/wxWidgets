@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/private/bmpbndl.h"
 
 #ifdef __WXMAC__
 
@@ -165,14 +166,14 @@ WXWindow wxOSXGetKeyWindow()
 
 #if wxOSX_USE_IPHONE
 
-wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
+wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxString &client, const wxSize& size)
 {
 #if 1
     // unfortunately this only accesses images in the app bundle, not the system wide globals
     wxCFStringRef cfname(name);
-    return wxBitmap( [[UIImage imageNamed:cfname.AsNSString()] CGImage] );
+    return wxOSXMakeBundleFromImage( [UIImage imageNamed:cfname.AsNSString()] );
 #else
-    return wxBitmap();
+    return wxNullBitmap;
 #endif
 }
 
@@ -197,14 +198,12 @@ WXImage wxOSXGetSystemImage(const wxString& name)
     return nsimage;
 }
 
-wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(sizeHint))
+wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(sizeHint))
 {
     NSImage* nsimage = wxOSXGetSystemImage(name);
     if ( nsimage )
     {
-        // if ( sizeHint != wxDefaultSize )
-        //    [nsimage setSize:NSMakeSize(sizeHint.GetHeight(), sizeHint.GetWidth())];
-        return wxBitmap( nsimage );
+        return wxOSXMakeBundleFromImage( nsimage );
     }
     return wxNullBitmap;
 }

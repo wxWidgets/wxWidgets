@@ -18,7 +18,7 @@
     #define CHECK_GCC_VERSION(major, minor) 0
 #endif
 
-#if CHECK_GCC_VERSION(4, 6)
+#if CHECK_GCC_VERSION(4, 6) || defined(__clang__)
     // As above, we can't reuse wxCONCAT() and wxSTRINGIZE macros from wx/cpp.h
     // here, so define their equivalents here.
     #define CONCAT_HELPER(x, y) x ## y
@@ -27,29 +27,35 @@
     #define STRINGIZE_HELPER(x) #x
     #define STRINGIZE(x)        STRINGIZE_HELPER(x)
 
-    #define GCC_TURN_ON(warn) \
-        _Pragma(STRINGIZE(GCC diagnostic error STRINGIZE(CONCAT(-W,warn))))
-    #define GCC_TURN_OFF(warn) \
-        _Pragma(STRINGIZE(GCC diagnostic ignored STRINGIZE(CONCAT(-W,warn))))
+    #define WARNING_TURN_ON(comp, warn) \
+        _Pragma(STRINGIZE(comp diagnostic error STRINGIZE(CONCAT(-W,warn))))
+    #define WARNING_TURN_OFF(comp, warn) \
+        _Pragma(STRINGIZE(comp diagnostic ignored STRINGIZE(CONCAT(-W,warn))))
+
+    #if CHECK_GCC_VERSION(4, 6)
+        #define GCC_TURN_ON(warn) WARNING_TURN_ON(GCC, warn)
+        #define GCC_TURN_OFF(warn) WARNING_TURN_OFF(GCC, warn)
+    #elif defined(__clang__)
+        #define CLANG_TURN_ON(warn) WARNING_TURN_ON(clang, warn)
+        #define CLANG_TURN_OFF(warn) WARNING_TURN_OFF(clang, warn)
+    #endif
 #endif
 
-// We have to include this one first in order to check for HAVE_XXX below.
+// We have to include this one first in order to check for wxUSE_XXX below.
 #include "wx/setup.h"
+
+// Normally this is done in wx/defs.h, but as we don't include it here, we need
+// to do it manually to avoid warnings inside the standard headers included
+// from catch.hpp.
+#if defined(__CYGWIN__) && defined(__WINDOWS__)
+    #define __USE_W32_SOCKETS
+#endif
 
 #include "catch.hpp"
 
-#if defined(__WXMSW__)
-    #include <windows.h>
-
-    // Avoid warnings about redeclaring standard functions such as chmod() in
-    // various standard headers when using MinGW/Cygwin.
-    #if defined(__MINGW32__) || defined(__CYGWIN__)
-        #include <stdio.h>
-        #include <unistd.h>
-        #include <sys/stat.h>
-        #include <io.h>
-    #endif
-#elif defined(__WXQT__)
+#if defined(__WXQT__)
+    // Include this one before enabling the warnings as doing it later, as it
+    // happens when it's included from wx/fontutil.h, results in -Wsign-promo.
     #include <QtGui/QFont>
 #endif
 
@@ -375,6 +381,24 @@
     // We don't care about padding being added to our structs.
     GCC_TURN_OFF(padded)
 #endif // gcc >= 4.6
+
+// Do the same for clang too except here we don't bother with the individual
+// warnings and just enable the usual ones because clang mostly includes all
+// the useful warnings in them anyhow.
+#ifdef CLANG_TURN_ON
+    CLANG_TURN_ON(all)
+    CLANG_TURN_ON(extra)
+    CLANG_TURN_ON(pedantic)
+
+    // We use long long, variadic macros and empty macro arguments (which are a
+    // C99 extension) even in C++98 builds.
+    #if __cplusplus < 201103L
+        CLANG_TURN_OFF(c++11-long-long)
+        CLANG_TURN_OFF(variadic-macros)
+        CLANG_TURN_OFF(c99-extensions)
+    #endif
+#endif // clang
+
 
 // ANSI build hasn't been updated to work without implicit wxString encoding
 // and never will be, as it will be removed soon anyhow. And in UTF-8-only

@@ -27,7 +27,7 @@ protected:
     void OnLeaveWindow( wxMouseEvent& event);
 
     virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
+    virtual void DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which) wxOVERRIDE;
     virtual void DoSetBitmapPosition(wxDirection dir) wxOVERRIDE;
 
     virtual void DoSetBitmapMargins(int x, int y) wxOVERRIDE
@@ -49,7 +49,7 @@ protected:
     // the bitmaps for the different state of the buttons, all of them may be
     // invalid and the button only shows a bitmap at all if State_Normal bitmap
     // is valid
-    wxBitmap m_bitmaps[State_Max];
+    wxBitmapBundle m_bitmaps[State_Max];
 
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
     wxDECLARE_EVENT_TABLE();

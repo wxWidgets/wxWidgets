@@ -64,6 +64,9 @@ public:
 
     virtual void Redo() wxOVERRIDE;
     virtual bool CanRedo() const wxOVERRIDE;
+#if wxUSE_RICHEDIT
+    virtual void EmptyUndoBuffer() wxOVERRIDE;
+#endif // wxUSE_RICHEDIT
 
     virtual void SetInsertionPointEnd() wxOVERRIDE;
     virtual long GetInsertionPoint() const wxOVERRIDE;
@@ -107,6 +110,14 @@ public:
     // Caret handling (Windows only)
     bool ShowNativeCaret(bool show = true);
     bool HideNativeCaret() { return ShowNativeCaret(false); }
+
+#if wxUSE_RICHEDIT && wxUSE_SPELLCHECK
+    // Use native spelling and grammar checking functions.
+    // This is only available in wxTE_RICH2 controls.
+    virtual bool EnableProofCheck(const wxTextProofOptions& options
+                                    = wxTextProofOptions::Default()) wxOVERRIDE;
+    virtual wxTextProofOptions GetProofCheckOptions() const wxOVERRIDE;
+#endif // wxUSE_RICHEDIT && wxUSE_SPELLCHECK
 
     // Implementation from now on
     // --------------------------

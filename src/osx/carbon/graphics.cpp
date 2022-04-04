@@ -1543,6 +1543,7 @@ private:
     CGAffineTransform m_initTransform;
     CGAffineTransform m_windowTransform;
     bool m_invisible;
+    int m_stateStackLevel;
 
 #if wxOSX_USE_COCOA_OR_CARBON
     wxCFRef<HIShapeRef> m_clipRgn;
@@ -1813,10 +1814,12 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
                 }
             }
 #endif
+            m_initTransform = CGContextGetCTM(m_cgContext);
             CGContextConcatCTM( m_cgContext, m_windowTransform );
             CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
             m_contextSynthesized = true;
             CGContextSaveGState( m_cgContext );
+            m_stateStackLevel = 0;
 
 #if 0 // turn on for debugging of clientdc
             static float color = 0.5 ;
@@ -2139,6 +2142,12 @@ void wxMacCoreGraphicsContext::ResetClip()
         {
             // there is no way for clearing the clip, we can only revert to the stored
             // state, but then we have to make sure everything else is NOT restored
+            // Note: This trick works as expected only if a state with no clipping
+            // path is stored on the top of the stack. It's guaranteed to work only
+            // when no PushState() was called before because in this case a reference
+            // state (initial state without clipping region) is on the top of the stack.
+            wxASSERT_MSG(m_stateStackLevel == 0,
+                         "Resetting the clip may not work when PushState() was called before");
             CGAffineTransform transform = CGContextGetCTM( m_cgContext );
             CGContextRestoreGState( m_cgContext );
             CGContextSaveGState( m_cgContext );
@@ -2375,6 +2384,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextSaveGState( m_cgContext );
         CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
         CGContextSaveGState( m_cgContext );
+        m_stateStackLevel = 0;
         m_contextSynthesized = false;
     }
 }
@@ -2409,7 +2419,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
     if (EnsureIsValid())
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        wxOSXDrawNSImage( m_cgContext, &r, bmp.GetImage());
+        wxOSXDrawNSImage( m_cgContext, &r, bmp.GetNSImage());
     }
 #else
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
@@ -2472,7 +2482,7 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
 #if wxOSX_USE_COCOA
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        wxOSXDrawNSImage( m_cgContext, &r, icon.GetImage());
+        wxOSXDrawNSImage( m_cgContext, &r, icon.GetNSImage());
     }
 #endif
 
@@ -2485,6 +2495,7 @@ void wxMacCoreGraphicsContext::PushState()
         return;
 
     CGContextSaveGState( m_cgContext );
+    m_stateStackLevel++;
 }
 
 void wxMacCoreGraphicsContext::PopState()
@@ -2492,7 +2503,9 @@ void wxMacCoreGraphicsContext::PopState()
     if (!EnsureIsValid())
         return;
 
+    wxCHECK_RET(m_stateStackLevel > 0, "No state to pop");
     CGContextRestoreGState( m_cgContext );
+    m_stateStackLevel--;
 }
 
 void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDouble y )

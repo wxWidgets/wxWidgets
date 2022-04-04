@@ -47,15 +47,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswud"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswud;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -72,9 +72,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswud"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -128,15 +128,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswu"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswu"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswu;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -151,9 +151,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswu"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -207,15 +207,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswud"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswud;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -232,9 +232,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswud"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -288,15 +288,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswu"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswu"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswu;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -311,9 +311,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswu"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -347,7 +347,7 @@
 		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="..\..\lib\vc_x64_lib"
-			IntermediateDirectory="vc_mswud_x64\wxregex"
+			IntermediateDirectory="vc_x64_mswud\wxregex"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -367,21 +367,21 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswud"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswud;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud_x64\wxregex\"
+				ObjectFile="vc_x64_mswud\wxregex\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_lib\wxregexud.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -392,9 +392,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswud"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -428,7 +428,7 @@
 		<Configuration
 			Name="Release|x64"
 			OutputDirectory="..\..\lib\vc_x64_lib"
-			IntermediateDirectory="vc_mswu_x64\wxregex"
+			IntermediateDirectory="vc_x64_mswu\wxregex"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -448,19 +448,19 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswu"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswu"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswu;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu_x64\wxregex\"
+				ObjectFile="vc_x64_mswu\wxregex\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_lib\wxregexu.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -471,9 +471,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswu"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_lib\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -507,7 +507,7 @@
 		<Configuration
 			Name="DLL Debug|x64"
 			OutputDirectory="..\..\lib\vc_x64_dll"
-			IntermediateDirectory="vc_mswuddll_x64\wxregex"
+			IntermediateDirectory="vc_x64_mswuddll\wxregex"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -527,21 +527,21 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswud"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswud;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\wxregex\"
+				ObjectFile="vc_x64_mswuddll\wxregex\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxregexud.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -552,9 +552,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswud"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswud;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -588,7 +588,7 @@
 		<Configuration
 			Name="DLL Release|x64"
 			OutputDirectory="..\..\lib\vc_x64_dll"
-			IntermediateDirectory="vc_mswudll_x64\wxregex"
+			IntermediateDirectory="vc_x64_mswudll\wxregex"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -608,19 +608,19 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswu"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswu"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswu;..\..\3rdparty\pcre\src\wx"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\wxregex\"
+				ObjectFile="vc_x64_mswudll\wxregex\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxregexu.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -631,9 +631,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;HAVE_CONFIG_H;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswu"
+				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_x64_dll\mswu;..\..\3rdparty\pcre\src\wx"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -675,19 +675,111 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\src\regex\regcomp.c"
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_auto_possess.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\regex\regerror.c"
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_chartables.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\regex\regexec.c"
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_compile.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\regex\regfree.c"
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_config.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_context.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_convert.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_dfa_match.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_error.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_extuni.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_find_bracket.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_jit_compile.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_maketables.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_match.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_match_data.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_newline.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_ord2utf.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_pattern_info.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_script_run.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_serialize.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_string_utils.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_study.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_substitute.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_substring.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_tables.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_ucd.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_valid_utf.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\pcre\src\pcre2_xclass.c"
 				>
 			</File>
 		</Filter>

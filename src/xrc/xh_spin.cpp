@@ -22,6 +22,7 @@
 static const long DEFAULT_VALUE = 0;
 static const long DEFAULT_MIN = 0;
 static const long DEFAULT_MAX = 100;
+static const int DEFAULT_INCREMENT = 1;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinButtonXmlHandler, wxXmlResourceHandler);
 
@@ -48,6 +49,7 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
     control->SetValue(GetLong( wxT("value"), DEFAULT_VALUE));
     control->SetRange(GetLong( wxT("min"), DEFAULT_MIN),
                       GetLong(wxT("max"), DEFAULT_MAX));
+    control->SetValue(GetLong(wxT( "inc" ), DEFAULT_INCREMENT));
     SetupWindow(control);
 
     return control;
@@ -98,6 +100,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetLong(wxT("max"), DEFAULT_MAX),
                     GetLong(wxT("value"), DEFAULT_VALUE),
                     GetName());
+    control->SetIncrement(GetLong(wxT("inc"), DEFAULT_INCREMENT));
 
     const long base = GetLong(wxS("base"), 10);
     if ( base != 10 )

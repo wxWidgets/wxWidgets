@@ -100,7 +100,7 @@ public:
     // string <-> wxAcceleratorEntry conversion
     // ----------------------------------------
 
-    // returns a wxString for the this accelerator.
+    // returns a wxString for this accelerator.
     // this function formats it using the <flags>-<keycode> format
     // where <flags> maybe a hyphen-separated list of "shift|alt|ctrl"
     wxString ToString() const { return AsPossiblyLocalizedString(true); }

@@ -607,7 +607,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 {
     wxCHECK_MSG( win, false, wxT("wxSetFocusToChild(): invalid window") );
     //    wxCHECK_MSG( childLastFocused, false,
-    //             wxT("wxSetFocusToChild(): NULL child poonter") );
+    //             wxT("wxSetFocusToChild(): NULL child pointer") );
 
     if ( childLastFocused && *childLastFocused )
     {

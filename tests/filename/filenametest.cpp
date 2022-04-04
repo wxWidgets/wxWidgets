@@ -21,6 +21,9 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/scopeguard.h"
+#include "wx/sckipc.h"
+
+#include "wx/private/localeset.h"
 
 #ifdef __WINDOWS__
     #include "wx/msw/registry.h"
@@ -35,6 +38,10 @@
 
 #include "testfile.h"
 #include "testdate.h"
+
+// Use a hack to keep using wxPATH_NORM_ALL in this test code without getting
+// deprecation warnings for it.
+#define wxPATH_NORM_ALL wxPATH_NORM_DEPR_OLD_DEFAULT
 
 // ----------------------------------------------------------------------------
 // test data
@@ -76,9 +83,9 @@ static struct TestFileNameInfo
     { "c:\\foo.bar", "c", "\\", "foo", "bar", true, wxPATH_DOS },
     { "c:\\Windows\\command.com", "c", "\\Windows", "command", "com", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
-      "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\", "", "", true, wxPATH_DOS },
+      "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\", "", "", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe",
-      "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\Program Files", "setup", "exe", true, wxPATH_DOS },
+      "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\Program Files", "setup", "exe", true, wxPATH_DOS },
 
 #if 0
     // NB: when using the wxFileName::GetLongPath() function on these two
@@ -114,83 +121,16 @@ static struct TestFileNameInfo
 };
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
 
-class FileNameTestCase : public CppUnit::TestCase
-{
-public:
-    FileNameTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( FileNameTestCase );
-        CPPUNIT_TEST( TestConstruction );
-        CPPUNIT_TEST( TestComparison );
-        CPPUNIT_TEST( TestSplit );
-        CPPUNIT_TEST( TestSetPath );
-        CPPUNIT_TEST( TestStrip );
-        CPPUNIT_TEST( TestNormalize );
-        CPPUNIT_TEST( TestRelative );
-        CPPUNIT_TEST( TestReplace );
-        CPPUNIT_TEST( TestGetHumanReadable );
-#ifdef __WINDOWS__
-        CPPUNIT_TEST( TestShortLongPath );
-#endif // __WINDOWS__
-        CPPUNIT_TEST( TestUNC );
-        CPPUNIT_TEST( TestVolumeUniqueName );
-        CPPUNIT_TEST( TestCreateTempFileName );
-        CPPUNIT_TEST( TestGetTimes );
-        CPPUNIT_TEST( TestSetTimes );
-        CPPUNIT_TEST( TestExists );
-        CPPUNIT_TEST( TestIsSame );
-#if defined(__UNIX__)
-        CPPUNIT_TEST( TestSymlinks );
-#endif // __UNIX__
-#ifdef __WINDOWS__
-        CPPUNIT_TEST( TestShortcuts );
-#endif // __WINDOWS__
-    CPPUNIT_TEST_SUITE_END();
-
-    void TestConstruction();
-    void TestComparison();
-    void TestSplit();
-    void TestSetPath();
-    void TestStrip();
-    void TestRelative();
-    void TestNormalize();
-    void TestReplace();
-    void TestGetHumanReadable();
-#ifdef __WINDOWS__
-    void TestShortLongPath();
-#endif // __WINDOWS__
-    void TestUNC();
-    void TestVolumeUniqueName();
-    void TestCreateTempFileName();
-    void TestGetTimes();
-    void TestSetTimes();
-    void TestExists();
-    void TestIsSame();
-#if defined(__UNIX__)
-    void TestSymlinks();
-#endif // __UNIX__
-#ifdef __WINDOWS__
-    void TestShortcuts();
-#endif // __WINDOWS__
-
-    wxDECLARE_NO_COPY_CLASS(FileNameTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( FileNameTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileNameTestCase, "FileNameTestCase" );
-
-void FileNameTestCase::TestConstruction()
+TEST_CASE("wxFileName::Construction", "[filename]")
 {
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
         const TestFileNameInfo& fni = filenames[n];
+
+        INFO("Test #" << n << ": \"" << fni.fullname << "\"");
 
         wxFileName fn(fni.fullname, fni.format);
 
@@ -223,19 +163,16 @@ void FileNameTestCase::TestConstruction()
         fullnameOrig.Replace("//", "/");
 
 
-        wxString fullname = fn.GetFullPath(fni.format);
-        CPPUNIT_ASSERT_EQUAL( fullnameOrig, fullname );
+        CHECK( fn.GetFullPath(fni.format) == fullnameOrig );
 
         // notice that we use a dummy working directory to ensure that paths
         // with "../.." in them could be normalized, otherwise this would fail
         // if the test is run from root directory or its direct subdirectory
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            (const char *)wxString::Format("Normalize(%s) failed", fni.fullname).mb_str(),
-            fn.Normalize(wxPATH_NORM_ALL, "/foo/bar/baz", fni.format)
-        );
+        CHECK( fn.Normalize(wxPATH_NORM_ALL, "/foo/bar/baz", fni.format) );
 
-        if ( *fni.volume && *fni.path )
+        // restrict this check to drive letter volumes as UNC and GUID volumes
+        // can't be combined with the path using the volume separator
+        if ( strlen(fni.volume) == 1 && *fni.path )
         {
             // check that specifying the volume separately or as part of the
             // path doesn't make any difference
@@ -243,10 +180,10 @@ void FileNameTestCase::TestConstruction()
             pathWithVolume += wxFileName::GetVolumeSeparator(fni.format);
             pathWithVolume += fni.path;
 
-            CPPUNIT_ASSERT_EQUAL( wxFileName(pathWithVolume,
-                                             fni.name,
-                                             fni.ext,
-                                             fni.format), fn );
+            CHECK( wxFileName(pathWithVolume,
+                              fni.name,
+                              fni.ext,
+                              fni.format) == fn );
         }
     }
 
@@ -254,31 +191,31 @@ void FileNameTestCase::TestConstruction()
 
     // empty strings
     fn.AssignDir(wxEmptyString);
-    CPPUNIT_ASSERT( !fn.IsOk() );
+    CHECK( !fn.IsOk() );
 
     fn.Assign(wxEmptyString);
-    CPPUNIT_ASSERT( !fn.IsOk() );
+    CHECK( !fn.IsOk() );
 
     fn.Assign(wxEmptyString, wxEmptyString);
-    CPPUNIT_ASSERT( !fn.IsOk() );
+    CHECK( !fn.IsOk() );
 
     fn.Assign(wxEmptyString, wxEmptyString, wxEmptyString);
-    CPPUNIT_ASSERT( !fn.IsOk() );
+    CHECK( !fn.IsOk() );
 
     fn.Assign(wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString);
-    CPPUNIT_ASSERT( !fn.IsOk() );
+    CHECK( !fn.IsOk() );
 }
 
-void FileNameTestCase::TestComparison()
+TEST_CASE("wxFileName::Comparison", "[filename]")
 {
     wxFileName fn1(wxT("/tmp/file1"));
     wxFileName fn2(wxT("/tmp/dir2/../file2"));
-    fn1.Normalize();
-    fn2.Normalize();
-    CPPUNIT_ASSERT_EQUAL(fn1.GetPath(), fn2.GetPath());
+    fn1.MakeAbsolute();
+    fn2.MakeAbsolute();
+    CHECK(fn1.GetPath() == fn2.GetPath());
 }
 
-void FileNameTestCase::TestSplit()
+TEST_CASE("wxFileName::Split", "[filename]")
 {
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
@@ -287,29 +224,29 @@ void FileNameTestCase::TestSplit()
         wxFileName::SplitPath(fni.fullname,
                               &volume, &path, &name, &ext, fni.format);
 
-        CPPUNIT_ASSERT_EQUAL( wxString(fni.volume), volume );
-        CPPUNIT_ASSERT_EQUAL( wxString(fni.path), path );
-        CPPUNIT_ASSERT_EQUAL( wxString(fni.name), name );
-        CPPUNIT_ASSERT_EQUAL( wxString(fni.ext), ext );
+        CHECK( volume == fni.volume );
+        CHECK( path == fni.path );
+        CHECK( name == fni.name );
+        CHECK( ext == fni.ext );
     }
 
     // special case of empty extension
     wxFileName fn("foo.");
-    CPPUNIT_ASSERT_EQUAL( wxString("foo."), fn.GetFullPath() );
+    CHECK( fn.GetFullPath() == "foo." );
 }
 
-void FileNameTestCase::TestSetPath()
+TEST_CASE("wxFileName::SetPath", "[filename]")
 {
     wxFileName fn("d:\\test\\foo.bar", wxPATH_DOS);
     fn.SetPath("c:\\temp", wxPATH_DOS);
-    CPPUNIT_ASSERT( fn.SameAs(wxFileName("c:\\temp\\foo.bar", wxPATH_DOS)) );
+    CHECK( fn.SameAs(wxFileName("c:\\temp\\foo.bar", wxPATH_DOS)) );
 
     fn = wxFileName("/usr/bin/ls", wxPATH_UNIX);
     fn.SetPath("/usr/local/bin", wxPATH_UNIX);
-    CPPUNIT_ASSERT( fn.SameAs(wxFileName("/usr/local/bin/ls", wxPATH_UNIX)) );
+    CHECK( fn.SameAs(wxFileName("/usr/local/bin/ls", wxPATH_UNIX)) );
 }
 
-void FileNameTestCase::TestNormalize()
+TEST_CASE("wxFileName::Normalize", "[filename]")
 {
     // prepare some data to be used later
     wxString sep = wxFileName::GetPathSeparator();
@@ -330,6 +267,14 @@ void FileNameTestCase::TestNormalize()
     if (cwd.Contains(wxT(':')))
         cwd = cwd.AfterFirst(wxT(':'));
 
+    static const char* pathWithEnvVar =
+#ifdef __WINDOWS__
+        "%ABCDEF%/g/h/i"
+#else
+        "$(ABCDEF)/g/h/i"
+#endif
+        ;
+
     static const struct FileNameTest
     {
         const char *original;
@@ -339,16 +284,13 @@ void FileNameTestCase::TestNormalize()
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
-#ifdef __WINDOWS__
-        { "%ABCDEF%/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
-#else
-        { "$(ABCDEF)/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
-#endif
+        { pathWithEnvVar, wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
 
         // test wxPATH_NORM_DOTS
         { "a/.././b/c/../../", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
         { "", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
         { "./foo", wxPATH_NORM_DOTS, "foo", wxPATH_UNIX },
+        { "foo/./bar", wxPATH_NORM_DOTS, "foo/bar", wxPATH_UNIX },
         { "b/../bar", wxPATH_NORM_DOTS, "bar", wxPATH_UNIX },
         { "c/../../quux", wxPATH_NORM_DOTS, "../quux", wxPATH_UNIX },
         { "/c/../../quux", wxPATH_NORM_DOTS, "/quux", wxPATH_UNIX },
@@ -389,6 +331,9 @@ void FileNameTestCase::TestNormalize()
         { ".\\foo", wxPATH_NORM_LONG, ".\\foo", wxPATH_DOS },
         { "..\\Makefile.in", wxPATH_NORM_LONG, "..\\Makefile.in", wxPATH_DOS },
         { "..\\foo", wxPATH_NORM_LONG, "..\\foo", wxPATH_DOS },
+
+        // test default behaviour with deprecated wxPATH_NORM_ALL
+        { pathWithEnvVar, wxPATH_NORM_ALL, "CWD/abcdef/g/h/i", wxPATH_UNIX },
     };
 
     // set the env var ABCDEF
@@ -417,6 +362,11 @@ void FileNameTestCase::TestNormalize()
         );
     }
 
+    // Check that paths are made absolute, but environment variables are not
+    // expanded in them.
+    CHECK( wxFileName(pathWithEnvVar).GetAbsolutePath()
+            == wxFileName(wxGetCwd() + "/" + pathWithEnvVar).GetFullPath() );
+
     // MSW-only test for wxPATH_NORM_LONG: notice that we only run it if short
     // names generation is not disabled for this system as otherwise the file
     // MKINST~1 doesn't exist at all and normalizing it fails (it's possible
@@ -431,35 +381,35 @@ void FileNameTestCase::TestNormalize()
             wxRegKey::HKLM,
             "SYSTEM\\CurrentControlSet\\Control\\FileSystem"
          ).QueryValue("NtfsDisable8dot3NameCreation", &shortNamesDisabled) &&
-            !shortNamesDisabled )
+            shortNamesDisabled != 1 )
     {
-        wxFileName fn("..\\MKINST~1");
-        CPPUNIT_ASSERT( fn.Normalize(wxPATH_NORM_LONG, cwd) );
-        CPPUNIT_ASSERT_EQUAL( "..\\mkinstalldirs", fn.GetFullPath() );
+        wxFileName fn("TESTDA~1.CON");
+        CHECK( fn.Normalize(wxPATH_NORM_LONG, cwd) );
+        CHECK( fn.GetFullPath() == "testdata.conf" );
     }
     //else: when in doubt, don't run the test
 #endif // __WINDOWS__
 }
 
-void FileNameTestCase::TestRelative()
+TEST_CASE("wxFileName::Relative", "[filename]")
 {
     const wxString pathSep = wxFileName::GetPathSeparator();
 
     wxFileName fn("a" + pathSep + "b.cpp");
     fn.MakeRelativeTo("a");
-    CPPUNIT_ASSERT_EQUAL( "b.cpp", fn.GetFullPath() );
+    CHECK( fn.GetFullPath() == "b.cpp" );
 
     fn.AssignDir("a" + pathSep + "b");
     fn.MakeRelativeTo("a");
 
-    CPPUNIT_ASSERT_EQUAL( "b" + pathSep, fn.GetFullPath() );
+    CHECK( fn.GetFullPath() == "b" + pathSep );
 
     fn.AssignDir("a");
     fn.MakeRelativeTo("a");
-    CPPUNIT_ASSERT_EQUAL( "." + pathSep, fn.GetFullPath() );
+    CHECK( fn.GetFullPath() == "." + pathSep );
 }
 
-void FileNameTestCase::TestReplace()
+TEST_CASE("wxFileName::Replace", "[filename]")
 {
     static const struct FileNameTest
     {
@@ -528,11 +478,10 @@ void FileNameTestCase::TestReplace()
         fn.ReplaceHomeDir()
     );
 
-    CPPUNIT_ASSERT_EQUAL( wxString("~/test1/test2/test3/some file"),
-                          fn.GetFullPath(wxPATH_UNIX) );
+    CHECK( fn.GetFullPath(wxPATH_UNIX) == "~/test1/test2/test3/some file" );
 }
 
-void FileNameTestCase::TestGetHumanReadable()
+TEST_CASE("wxFileName::GetHumanReadable", "[filename]")
 {
     static const struct TestData
     {
@@ -550,7 +499,7 @@ void FileNameTestCase::TestGetHumanReadable()
         { "304 KB",    304351, 0, wxSIZE_CONV_SI          },
     };
 
-    CLocaleSetter loc;      // we want to use "C" locale for LC_NUMERIC
+    wxCLocaleSetter loc;    // we want to use "C" locale for LC_NUMERIC
                             // so that regardless of the system's locale
                             // the decimal point used by GetHumanReadableSize()
                             // is always '.'
@@ -560,74 +509,82 @@ void FileNameTestCase::TestGetHumanReadable()
 
         // take care of using the decimal point for the current locale before
         // the actual comparison
-        CPPUNIT_ASSERT_EQUAL
+        CHECK
         (
-            td.result,
             wxFileName::GetHumanReadableSize(td.size, "NA", td.prec, td.conv)
+            ==
+            td.result
         );
     }
 
     // also test the default convention value
-    CPPUNIT_ASSERT_EQUAL( "1.4 MB", wxFileName::GetHumanReadableSize(1512993, "") );
+    CHECK( wxFileName::GetHumanReadableSize(1512993, "") == "1.4 MB" );
 }
 
-void FileNameTestCase::TestStrip()
+TEST_CASE("wxFileName::Strip", "[filename]")
 {
-    CPPUNIT_ASSERT_EQUAL( "", wxFileName::StripExtension("") );
-    CPPUNIT_ASSERT_EQUAL( ".", wxFileName::StripExtension(".") );
-    CPPUNIT_ASSERT_EQUAL( ".vimrc", wxFileName::StripExtension(".vimrc") );
-    CPPUNIT_ASSERT_EQUAL( "bad", wxFileName::StripExtension("bad") );
-    CPPUNIT_ASSERT_EQUAL( "good", wxFileName::StripExtension("good.wav") );
-    CPPUNIT_ASSERT_EQUAL( "good.wav", wxFileName::StripExtension("good.wav.wav") );
+    CHECK( wxFileName::StripExtension("") == "" );
+    CHECK( wxFileName::StripExtension(".") == "." );
+    CHECK( wxFileName::StripExtension(".vimrc") == ".vimrc" );
+    CHECK( wxFileName::StripExtension("bad") == "bad" );
+    CHECK( wxFileName::StripExtension("good.wav") == "good" );
+    CHECK( wxFileName::StripExtension("good.wav.wav") == "good.wav" );
 }
 
 #ifdef __WINDOWS__
 
-void FileNameTestCase::TestShortLongPath()
+TEST_CASE("wxFileName::ShortLongPath", "[filename]")
 {
     wxFileName fn("C:\\Program Files\\Windows NT\\Accessories\\wordpad.exe");
 
     // incredibly enough, GetLongPath() used to return different results during
     // the first and subsequent runs, test for this
-    CPPUNIT_ASSERT_EQUAL( fn.GetLongPath(), fn.GetLongPath() );
-    CPPUNIT_ASSERT_EQUAL( fn.GetShortPath(), fn.GetShortPath() );
+    CHECK( fn.GetLongPath() == fn.GetLongPath() );
+    CHECK( fn.GetShortPath() == fn.GetShortPath() );
 }
 
 #endif // __WINDOWS__
 
-void FileNameTestCase::TestUNC()
+TEST_CASE("wxFileName::UNC", "[filename]")
 {
     wxFileName fn("//share/path/name.ext", wxPATH_DOS);
-    CPPUNIT_ASSERT_EQUAL( "share", fn.GetVolume() );
-    CPPUNIT_ASSERT_EQUAL( "\\path", fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
+    CHECK( fn.GetVolume() == "\\\\share" );
+    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path" );
 
     fn.Assign("\\\\share2\\path2\\name.ext", wxPATH_DOS);
-    CPPUNIT_ASSERT_EQUAL( "share2", fn.GetVolume() );
-    CPPUNIT_ASSERT_EQUAL( "\\path2", fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
+    CHECK( fn.GetVolume() == "\\\\share2" );
+    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path2" );
+
+#ifdef __WINDOWS__
+    // Check that doubled backslashes in the beginning of the path are not
+    // misinterpreted as UNC volume when we have a drive letter in the
+    // beginning.
+    fn.Assign("d:\\\\root\\directory\\file");
+    CHECK( fn.GetFullPath() == "d:\\root\\directory\\file" );
+
+    // Check that single letter UNC paths don't turn into drive letters, as
+    // they used to do.
+    fn.Assign("\\\\x\\dir\\file");
+    CHECK( fn.GetFullPath() == "\\\\x\\dir\\file" );
+#endif // __WINDOWS__
 }
 
-void FileNameTestCase::TestVolumeUniqueName()
+TEST_CASE("wxFileName::VolumeUniqueName", "[filename]")
 {
     wxFileName fn("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
                   wxPATH_DOS);
-    CPPUNIT_ASSERT_EQUAL( "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}",
-                          fn.GetVolume() );
-    CPPUNIT_ASSERT_EQUAL( "\\", fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
-    CPPUNIT_ASSERT_EQUAL( "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
-                          fn.GetFullPath(wxPATH_DOS) );
+    CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
+    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\" );
+    CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\" );
 
     fn.Assign("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
               "Program Files\\setup.exe", wxPATH_DOS);
-    CPPUNIT_ASSERT_EQUAL( "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}",
-                          fn.GetVolume() );
-    CPPUNIT_ASSERT_EQUAL( "\\Program Files",
-                          fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
-    CPPUNIT_ASSERT_EQUAL( "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
-                          "Program Files\\setup.exe",
-                          fn.GetFullPath(wxPATH_DOS) );
+    CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
+    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\Program Files" );
+    CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe" );
 }
 
-void FileNameTestCase::TestCreateTempFileName()
+TEST_CASE("wxFileName::CreateTempFileName", "[filename]")
 {
     static const struct TestData
     {
@@ -655,131 +612,150 @@ void FileNameTestCase::TestCreateTempFileName()
         wxString prefix = testData[n].prefix;
         prefix.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
 
-        std::string errDesc = wxString::Format("failed on prefix '%s'", prefix).ToStdString();
+        INFO("Prefix: " << prefix);
 
         wxString path = wxFileName::CreateTempFileName(prefix);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( errDesc, !testData[n].shouldSucceed, path.empty() );
+        CHECK( path.empty() == !testData[n].shouldSucceed );
 
         if (testData[n].shouldSucceed)
         {
-            errDesc += "; path is " + path.ToStdString();
+            INFO("Path: " << path);
 
             // test the place where the temp file has been created
             wxString expected = testData[n].expectedFolder;
             expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
             expected.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( errDesc, expected, wxFileName(path).GetPath() );
+            CHECK( wxFileName(path).GetPath() == expected );
 
             // the temporary file is created with full permissions for the current process
             // so we should always be able to remove it:
-            CPPUNIT_ASSERT_MESSAGE( errDesc, wxRemoveFile(path) );
+            CHECK( wxRemoveFile(path) );
         }
     }
 }
 
-void FileNameTestCase::TestGetTimes()
+TEST_CASE("wxFileName::GetTimes", "[filename]")
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
-    CPPUNIT_ASSERT( fn.IsOk() );
+    REQUIRE( fn.IsOk() );
     wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
 
     wxDateTime dtAccess, dtMod, dtCreate;
-    CPPUNIT_ASSERT( fn.GetTimes(&dtAccess, &dtMod, &dtCreate) );
+    REQUIRE( fn.GetTimes(&dtAccess, &dtMod, &dtCreate) );
 
     // make sure all retrieved dates are equal to the current date&time
     // with an accuracy up to 1 minute
-    CPPUNIT_ASSERT(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
-    CPPUNIT_ASSERT(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
-    CPPUNIT_ASSERT(dtAccess.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+    CHECK(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+    CHECK(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+    CHECK(dtAccess.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
 }
 
-void FileNameTestCase::TestSetTimes()
+TEST_CASE("wxFileName::SetTimes", "[filename]")
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
-    CPPUNIT_ASSERT( fn.IsOk() );
+    REQUIRE( fn.IsOk() );
     wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
 
     const wxDateTime dtAccess(1, wxDateTime::Jan, 2013);
     const wxDateTime dtModify(1, wxDateTime::Feb, 2013);
     const wxDateTime dtCreate(1, wxDateTime::Mar, 2013);
 
-    CPPUNIT_ASSERT( fn.SetTimes(&dtAccess, &dtModify, &dtCreate) );
+    REQUIRE( fn.SetTimes(&dtAccess, &dtModify, &dtCreate) );
 
     wxDateTime dtAccess2,
                dtModify2,
                dtCreate2;
-    CPPUNIT_ASSERT( fn.GetTimes(&dtAccess2, &dtModify2, &dtCreate2) );
-    CPPUNIT_ASSERT_EQUAL( dtAccess, dtAccess2 );
-    CPPUNIT_ASSERT_EQUAL( dtModify, dtModify2 );
+    REQUIRE( fn.GetTimes(&dtAccess2, &dtModify2, &dtCreate2) );
+    CHECK( dtAccess2 == dtAccess );
+    CHECK( dtModify2 == dtModify );
 
     // Under Unix the creation time can't be set.
 #ifdef __WINDOWS__
-    CPPUNIT_ASSERT_EQUAL( dtCreate, dtCreate2 );
+    CHECK( dtCreate2 == dtCreate );
 #endif // __WINDOWS__
 }
 
-void FileNameTestCase::TestExists()
+TEST_CASE("wxFileName::Exists", "[filename]")
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
-    CPPUNIT_ASSERT( fn.IsOk() );
+    REQUIRE( fn.IsOk() );
     wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
 
-    CPPUNIT_ASSERT( fn.FileExists() );
-    CPPUNIT_ASSERT( !wxFileName::DirExists(fn.GetFullPath()) );
+    CHECK( fn.FileExists() );
+    CHECK( !wxFileName::DirExists(fn.GetFullPath()) );
 
-    CPPUNIT_ASSERT( fn.Exists(wxFILE_EXISTS_REGULAR) );
-    CPPUNIT_ASSERT( !fn.Exists(wxFILE_EXISTS_DIR) );
-    CPPUNIT_ASSERT( fn.Exists() );
+    CHECK( fn.Exists(wxFILE_EXISTS_REGULAR) );
+    CHECK( !fn.Exists(wxFILE_EXISTS_DIR) );
+    CHECK( fn.Exists() );
 
     const wxString& tempdir = wxFileName::GetTempDir();
 
     wxFileName fileInTempDir(tempdir, "bloordyblop");
-    CPPUNIT_ASSERT( !fileInTempDir.Exists() );
-    CPPUNIT_ASSERT( fileInTempDir.DirExists() );
+    CHECK( !fileInTempDir.Exists() );
+    CHECK( fileInTempDir.DirExists() );
 
     wxFileName dirTemp(wxFileName::DirName(tempdir));
-    CPPUNIT_ASSERT( !dirTemp.FileExists() );
-    CPPUNIT_ASSERT( dirTemp.DirExists() );
+    CHECK( !dirTemp.FileExists() );
+    CHECK( dirTemp.DirExists() );
 
-    CPPUNIT_ASSERT( dirTemp.Exists(wxFILE_EXISTS_DIR) );
-    CPPUNIT_ASSERT( !dirTemp.Exists(wxFILE_EXISTS_REGULAR) );
-    CPPUNIT_ASSERT( dirTemp.Exists() );
+    CHECK( dirTemp.Exists(wxFILE_EXISTS_DIR) );
+    CHECK( !dirTemp.Exists(wxFILE_EXISTS_REGULAR) );
+    CHECK( dirTemp.Exists() );
 
 #ifdef __UNIX__
-    CPPUNIT_ASSERT( !wxFileName::FileExists("/dev/null") );
-    CPPUNIT_ASSERT( !wxFileName::DirExists("/dev/null") );
-    CPPUNIT_ASSERT( wxFileName::Exists("/dev/null") );
-    CPPUNIT_ASSERT( wxFileName::Exists("/dev/null", wxFILE_EXISTS_DEVICE) );
+    CHECK( !wxFileName::FileExists("/dev/null") );
+    CHECK( !wxFileName::DirExists("/dev/null") );
+    CHECK( wxFileName::Exists("/dev/null") );
+    CHECK( wxFileName::Exists("/dev/null", wxFILE_EXISTS_DEVICE) );
 #ifdef __LINUX__
     // These files are only guaranteed to exist under Linux.
     // No need for wxFILE_EXISTS_NO_FOLLOW here; wxFILE_EXISTS_SYMLINK implies it
-    CPPUNIT_ASSERT( wxFileName::Exists("/proc/self", wxFILE_EXISTS_SYMLINK) );
-    CPPUNIT_ASSERT( wxFileName::Exists("/dev/log", wxFILE_EXISTS_SOCKET) );
+    CHECK( wxFileName::Exists("/proc/self", wxFILE_EXISTS_SYMLINK) );
 #endif // __LINUX__
 #ifndef __VMS
+   // OpenVMS does not have mkdtemp
+    wxString name = dirTemp.GetPath() + "/socktmpdirXXXXXX";
+    wxString socktempdir = wxString::From8BitData(mkdtemp(name.char_str()));
+    wxON_BLOCK_EXIT2(wxRmdir, socktempdir, 0);
+    wxString sockfile = socktempdir + "/socket";
+    wxTCPServer server;
+    server.Create(sockfile);
+    CHECK( wxFileName::Exists(sockfile, wxFILE_EXISTS_SOCKET) );
     wxString fifo = dirTemp.GetPath() + "/fifo";
    if (mkfifo(fifo.c_str(), 0600) == 0)
     {
         wxON_BLOCK_EXIT1(wxRemoveFile, fifo);
 
-        CPPUNIT_ASSERT( wxFileName::Exists(fifo, wxFILE_EXISTS_FIFO) );
+        CHECK( wxFileName::Exists(fifo, wxFILE_EXISTS_FIFO) );
     }
 #endif
 #endif // __UNIX__
 }
 
-void FileNameTestCase::TestIsSame()
+TEST_CASE("wxFileName::Mkdir", "[filename]")
+{
+    wxFileName fn;
+    fn.AssignDir("/foo/bar");
+    if ( fn.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+    {
+        CHECK( fn.DirExists() );
+        CHECK( fn.Rmdir() );
+    }
+    //else: creating the directory may fail because of permissions
+}
+
+TEST_CASE("wxFileName::SameAs", "[filename]")
 {
     wxFileName fn1( wxFileName::CreateTempFileName( "filenametest1" ) );
-    CPPUNIT_ASSERT( fn1.IsOk() );
+    REQUIRE( fn1.IsOk() );
     wxON_BLOCK_EXIT1( wxRemoveFile, fn1.GetFullPath() );
 
     wxFileName fn2( wxFileName::CreateTempFileName( "filenametest2" ) );
-    CPPUNIT_ASSERT( fn2.IsOk() );
+    REQUIRE( fn2.IsOk() );
     wxON_BLOCK_EXIT1( wxRemoveFile, fn2.GetFullPath() );
 
-    CPPUNIT_ASSERT( fn1.SameAs( fn1 ) );
-    CPPUNIT_ASSERT( !fn1.SameAs( fn2 ) );
+    CHECK( fn1.SameAs( fn1 ) );
+    CHECK( !fn1.SameAs( fn2 ) );
 
 #if defined(__UNIX__)
     // We need to create a temporary directory and a temporary link.
@@ -789,7 +765,7 @@ void FileNameTestCase::TestIsSame()
     const wxString tempdir1 = wxString::From8BitData(tn);
     free(tn);
 
-    CPPUNIT_ASSERT( wxFileName::Mkdir(tempdir1) );
+    REQUIRE( wxFileName::Mkdir(tempdir1) );
     // Unfortunately the casts are needed to select the overload we need here.
     wxON_BLOCK_EXIT2( static_cast<bool (*)(const wxString&, int)>(wxFileName::Rmdir),
                       tempdir1, static_cast<int>(wxPATH_RMDIR_RECURSIVE) );
@@ -797,7 +773,7 @@ void FileNameTestCase::TestIsSame()
     tn = tempnam(NULL, "wxfn2");
     const wxString tempdir2 = wxString::From8BitData(tn);
     free(tn);
-    CPPUNIT_ASSERT_EQUAL( 0, symlink(tempdir1.c_str(), tempdir2.c_str()) );
+    CHECK( symlink(tempdir1.c_str(), tempdir2.c_str()) == 0 );
     wxON_BLOCK_EXIT1( wxRemoveFile, tempdir2 );
 
 
@@ -805,21 +781,21 @@ void FileNameTestCase::TestIsSame()
     wxFileName fn4(tempdir2, "foo");
 
     // These files have different paths, hence are different.
-    CPPUNIT_ASSERT( !fn3.SameAs(fn4) );
+    CHECK( !fn3.SameAs(fn4) );
 
     // Create and close a file to trigger creating it.
     wxFile(fn3.GetFullPath(), wxFile::write);
 
     // Now that both files do exist we should be able to detect that they are
     // actually the same file.
-    CPPUNIT_ASSERT( fn3.SameAs(fn4) );
+    CHECK( fn3.SameAs(fn4) );
 #endif // __UNIX__
 }
 
 #if defined(__UNIX__)
 
 // Tests for functions that are changed by ShouldFollowLink()
-void FileNameTestCase::TestSymlinks()
+TEST_CASE("wxFileName::Symlinks", "[filename]")
 {
     const wxString tmpdir(wxStandardPaths::Get().GetTempDir());
 
@@ -836,76 +812,49 @@ void FileNameTestCase::TestSymlinks()
     tempdir << wxFileName::GetPathSeparator();
 #endif
     wxFileName tempdirfn(wxFileName::DirName(tempdir));
-    CPPUNIT_ASSERT(tempdirfn.DirExists());
+    CHECK(tempdirfn.DirExists());
 
     // Create a regular file in that dir, to act as a symlink target
     wxFileName targetfn(wxFileName::CreateTempFileName(tempdir));
-    CPPUNIT_ASSERT(targetfn.FileExists());
+    CHECK(targetfn.FileExists());
 
     // Resolving a non-symlink will just return the same thing
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Non-symlink didn't resolve to the same file",
-        targetfn, targetfn.ResolveLink()
-    );
+    INFO("Non-symlink didn't resolve to the same file");
+    CHECK( targetfn.ResolveLink() == targetfn );
 
     // Create a symlink to that file
     wxFileName linktofile(tempdir, "linktofile");
-    CPPUNIT_ASSERT_EQUAL(0, symlink(targetfn.GetFullPath().c_str(),
-                                    linktofile.GetFullPath().c_str()));
+    CHECK( symlink(targetfn.GetFullPath().c_str(), linktofile.GetFullPath().c_str()) == 0 );
 
     // Test resolving the filename to the symlink
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Failed to resolve symlink to file",
-        targetfn, linktofile.ResolveLink()
-    );
+    INFO("Failed to resolve symlink to file");
+    CHECK( linktofile.ResolveLink() == targetfn );
 
     // Create a relative symlink to that file
     wxFileName relativelinktofile(tempdir, "relativelinktofile");
     wxString relativeFileName = "./" + targetfn.GetFullName();
-    CPPUNIT_ASSERT_EQUAL(0, symlink(relativeFileName.c_str(),
-                                    relativelinktofile.GetFullPath().c_str()));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Failed to resolve relative symlink to absolute file path",
-        targetfn, relativelinktofile.ResolveLink()
-    );
+    CHECK( symlink(relativeFileName.c_str(), relativelinktofile.GetFullPath().c_str()) == 0 );
+    INFO("Failed to resolve relative symlink to absolute file path");
+    CHECK( relativelinktofile.ResolveLink() == targetfn );
 
     // ... and another to the temporary directory
     const wxString linktodirName(tempdir + "/linktodir");
     wxFileName linktodirfn(linktodirName);
     wxFileName linktodir(wxFileName::DirName(linktodirName));
-    CPPUNIT_ASSERT_EQUAL(0, symlink(tmpfn.GetFullPath().c_str(),
-                                    linktodirName.c_str()));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Failed to resolve symlink to directory",
-        tmpfn, linktodirfn.ResolveLink()
-    );
+    CHECK( symlink(tmpfn.GetFullPath().c_str(), linktodirName.c_str()) == 0 );
+    INFO("Failed to resolve symlink to directory");
+    CHECK( linktodirfn.ResolveLink() == tmpfn );
 
     // And symlinks to both of those symlinks
     wxFileName linktofilelnk(tempdir, "linktofilelnk");
-    CPPUNIT_ASSERT_EQUAL(0, symlink(linktofile.GetFullPath().c_str(),
-                                    linktofilelnk.GetFullPath().c_str()));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Failed to resolve symlink to file symlink",
-        targetfn, linktofilelnk.ResolveLink()
-    );
+    CHECK( symlink(linktofile.GetFullPath().c_str(), linktofilelnk.GetFullPath().c_str()) == 0 );
+    INFO("Failed to resolve symlink to file symlink");
+    CHECK( linktofilelnk.ResolveLink() == targetfn );
 
     wxFileName linktodirlnk(tempdir, "linktodirlnk");
-    CPPUNIT_ASSERT_EQUAL(0, symlink(linktodir.GetFullPath().c_str(),
-                                    linktodirlnk.GetFullPath().c_str()));
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Failed to resolve symlink to directory symlink",
-        tmpfn, linktodirlnk.ResolveLink()
-    );
+    CHECK( symlink(linktodir.GetFullPath().c_str(), linktodirlnk.GetFullPath().c_str()) == 0 );
+    INFO("Failed to resolve symlink to directory symlink");
+    CHECK( linktodirlnk.ResolveLink() == tmpfn );
 
     // Run the tests twice: once in the default symlink following mode and the
     // second time without following symlinks.
@@ -924,130 +873,77 @@ void FileNameTestCase::TestSymlinks()
         }
 
         // Test SameAs()
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Comparison with file" + msg,
-            deref, linktofile.SameAs(targetfn)
-        );
+        INFO("Comparison with file" + msg);
+        CHECK( linktofile.SameAs(targetfn) == deref );
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Comparison with directory" + msg,
-            deref, linktodir.SameAs(tmpfn)
-        );
+        INFO("Comparison with directory" + msg);
+        CHECK( linktodir.SameAs(tmpfn) == deref );
 
         // A link-to-a-link should dereference through to the final target
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Comparison with link to a file" + msg,
-            deref,
-            linktofilelnk.SameAs(targetfn)
-        );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Comparison with link to a directory" + msg,
-            deref,
-            linktodirlnk.SameAs(tmpfn)
-        );
+        INFO("Comparison with link to a file" + msg);
+        CHECK( linktofilelnk.SameAs(targetfn) == deref );
+        INFO("Comparison with link to a directory" + msg);
+        CHECK( linktodirlnk.SameAs(tmpfn) == deref );
 
         // Test GetTimes()
+        INFO("Getting times of a directory" + msg);
         wxDateTime dtAccess, dtMod, dtCreate;
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "Getting times of a directory" + msg,
-            linktodir.GetTimes(&dtAccess, &dtMod, &dtCreate)
-        );
+        CHECK( linktodir.GetTimes(&dtAccess, &dtMod, &dtCreate) );
 
         // Test (File|Dir)Exists()
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing file existence" + msg,
-            deref,
-            linktofile.FileExists()
-        );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing directory existence" + msg,
-            deref,
-            linktodir.DirExists()
-        );
+        INFO("Testing file existence" + msg);
+        CHECK( linktofile.FileExists() == deref );
+        INFO("Testing directory existence" + msg);
+        CHECK( linktodir.DirExists() == deref );
 
         // Test wxFileName::Exists
         // The wxFILE_EXISTS_NO_FOLLOW flag should override DontFollowLink()
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing file existence" + msg,
-            false,
-            linktofile.Exists(wxFILE_EXISTS_REGULAR | wxFILE_EXISTS_NO_FOLLOW)
-        );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing directory existence" + msg,
-            false,
-            linktodir.Exists(wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW)
-        );
+        INFO("Testing file existence" + msg);
+        CHECK_FALSE( linktofile.Exists(wxFILE_EXISTS_REGULAR | wxFILE_EXISTS_NO_FOLLOW) );
+
+        INFO("Testing directory existence" + msg);
+        CHECK_FALSE( linktodir.Exists(wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW) );
+
         // and the static versions
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing file existence" + msg,
-            false,
-            wxFileName::Exists(linktofile.GetFullPath(), wxFILE_EXISTS_REGULAR | wxFILE_EXISTS_NO_FOLLOW)
-        );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing file existence" + msg,
-            true,
-            wxFileName::Exists(linktofile.GetFullPath(), wxFILE_EXISTS_REGULAR)
-        );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing directory existence" + msg,
-            false,
-            wxFileName::Exists(linktodir.GetFullPath(), wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW)
-        );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Testing directory existence" + msg,
-            true,
-            wxFileName::Exists(linktodir.GetFullPath(), wxFILE_EXISTS_DIR)
-        );
+        INFO("Testing file existence" + msg);
+        CHECK_FALSE( wxFileName::Exists(linktofile.GetFullPath(), wxFILE_EXISTS_REGULAR | wxFILE_EXISTS_NO_FOLLOW) );
+        CHECK( wxFileName::Exists(linktofile.GetFullPath(), wxFILE_EXISTS_REGULAR) );
+
+        INFO("Testing directory existence" + msg);
+        CHECK_FALSE( wxFileName::Exists(linktodir.GetFullPath(), wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW) );
+        CHECK( wxFileName::Exists(linktodir.GetFullPath(), wxFILE_EXISTS_DIR) );
     }
 
     // Finally test Exists() after removing the file.
-    CPPUNIT_ASSERT(wxRemoveFile(targetfn.GetFullPath()));
+    CHECK(wxRemoveFile(targetfn.GetFullPath()));
 
     // Resolving a file that doesn't exist returns empty
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Non-existent file didn't resolve correctly",
-        wxFileName(), targetfn.ResolveLink()
-    );
+    INFO("Non-existent file didn't resolve correctly");
+    CHECK( targetfn.ResolveLink() == wxFileName() );
 
     // This should succeed, as the symlink still exists and
     // the default wxFILE_EXISTS_ANY implies wxFILE_EXISTS_NO_FOLLOW
-    CPPUNIT_ASSERT(wxFileName(tempdir, "linktofile").Exists());
+    CHECK(wxFileName(tempdir, "linktofile").Exists());
     // So should this one, as wxFILE_EXISTS_SYMLINK does too
-    CPPUNIT_ASSERT(wxFileName(tempdir, "linktofile").
-                                            Exists(wxFILE_EXISTS_SYMLINK));
+    CHECK(wxFileName(tempdir, "linktofile").Exists(wxFILE_EXISTS_SYMLINK));
     // but not this one, as the now broken symlink is followed
-    CPPUNIT_ASSERT(!wxFileName(tempdir, "linktofile").
-                                            Exists(wxFILE_EXISTS_REGULAR));
-    CPPUNIT_ASSERT(linktofile.Exists());
+    CHECK(!wxFileName(tempdir, "linktofile").Exists(wxFILE_EXISTS_REGULAR));
+    CHECK(linktofile.Exists());
 
     // This is also a convenient place to test Rmdir() as we have things to
     // remove.
 
     // First, check that removing a symlink to a directory fails.
-    CPPUNIT_ASSERT( !wxFileName::Rmdir(linktodirName) );
+    CHECK( !wxFileName::Rmdir(linktodirName) );
 
     // And recursively removing it only removes the symlink itself, not the
     // directory.
-    CPPUNIT_ASSERT( wxFileName::Rmdir(linktodirName, wxPATH_RMDIR_RECURSIVE) );
-    CPPUNIT_ASSERT( tmpfn.Exists() );
+    CHECK( wxFileName::Rmdir(linktodirName, wxPATH_RMDIR_RECURSIVE) );
+    CHECK( tmpfn.Exists() );
 
     // Finally removing the directory itself does remove everything.
-    CPPUNIT_ASSERT(tempdirfn.Rmdir(wxPATH_RMDIR_RECURSIVE));
-    CPPUNIT_ASSERT( !tempdirfn.Exists() );
+    CHECK(tempdirfn.Rmdir(wxPATH_RMDIR_RECURSIVE));
+    CHECK( !tempdirfn.Exists() );
 }
 
 #endif // __UNIX__
@@ -1066,29 +962,29 @@ void CreateShortcut(const wxString& pathFile, const wxString& pathLink)
    wxCOMPtr<IShellLink> sl;
    hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
                          IID_IShellLink, (void **)&sl);
-   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+   REQUIRE( SUCCEEDED(hr) );
 
    wxCOMPtr<IPersistFile> pf;
    hr = sl->QueryInterface(IID_IPersistFile, (void **)&pf);
-   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+   REQUIRE( SUCCEEDED(hr) );
 
    hr = sl->SetPath(pathFile.t_str());
-   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+   CHECK( SUCCEEDED(hr) );
 
    hr = pf->Save(pathLink.wc_str(), TRUE);
-   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+   CHECK( SUCCEEDED(hr) );
 }
 
 } // anonymous namespace
 
-void FileNameTestCase::TestShortcuts()
+TEST_CASE("wxFileName::Shortcuts", "[filename]")
 {
    wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
-   CPPUNIT_ASSERT( fn.IsOk() );
+   REQUIRE( fn.IsOk() );
    wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
 
    wxFileName fnLink(fn.GetPath(), "sc_" + fn.GetName(), "lnk");
-   CPPUNIT_ASSERT( fnLink.IsOk() );
+   REQUIRE( fnLink.IsOk() );
    wxON_BLOCK_EXIT1( wxRemoveFile, fnLink.GetFullPath() );
 
    CreateShortcut(fn.GetFullPath(), fnLink.GetFullPath());
@@ -1097,7 +993,7 @@ void FileNameTestCase::TestShortcuts()
    // name.
    wxFileName fnLinkRel(fnLink);
    fnLink.MakeRelativeTo(".");
-   CPPUNIT_ASSERT_EQUAL(fnLink.GetFullName(), fnLinkRel.GetFullName());
+   CHECK( fnLinkRel.GetFullName() == fnLink.GetFullName() );
 }
 
 #endif // __WINDOWS__
@@ -1107,9 +1003,6 @@ void FileNameTestCase::TestShortcuts()
 // Check that GetSize() works correctly for special files.
 TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
 {
-    if ( IsRunningInLXC() )
-        return;
-
     wxULongLong size = wxFileName::GetSize("/proc/kcore");
     INFO( "size of /proc/kcore=" << size );
     CHECK( size > 0 );

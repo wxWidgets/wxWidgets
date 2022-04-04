@@ -145,6 +145,9 @@ protected:
     // check if the value is in range
     bool InRange(double n) const { return (n >= m_min) && (n <= m_max); }
 
+    // adjust the value to fit the range and snap it to ticks if necessary
+    double AdjustAndSnap(double value) const;
+
     // ensure that the value is in range wrapping it round if necessary
     double AdjustToFitInRange(double value) const;
 
@@ -382,13 +385,7 @@ public:
                 long style = wxSP_ARROW_KEYS,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
-                const wxString& name = wxT("wxSpinCtrlDouble"))
-    {
-        DetermineDigits(inc);
-        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
-                                             style, min, max, initial,
-                                             inc, name);
-    }
+                const wxString& name = wxT("wxSpinCtrlDouble"));
 
     // accessors
     double GetValue(wxSPINCTRL_GETVALUE_FIX) const { return DoGetValue(); }
@@ -402,7 +399,7 @@ public:
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue(double value)                 { DoSetValue(value, SendEvent_None); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
-    void SetIncrement(double inc)               { DoSetIncrement(inc); }
+    void SetIncrement(double inc);
     void SetDigits(unsigned digits);
 
     // We don't implement bases support for floating point numbers, this is not
@@ -416,7 +413,6 @@ protected:
     virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
     virtual wxString DoValueToText(double val) wxOVERRIDE;
     virtual void ResetTextValidator() wxOVERRIDE;
-    void DetermineDigits(double inc);
 
     unsigned m_digits;
 
@@ -424,11 +420,15 @@ private:
     // Common part of all ctors.
     void Init()
     {
-        m_digits = 0;
-        m_format = wxASCII_STR("%0.0f");
+        DoSetDigits(0);
     }
 
-    wxString m_format;
+    // Just set the number of digits and the format unconditionally.
+    void DoSetDigits(unsigned digits);
+
+    // Call DoSetDigits() and update the appearance.
+    void DoSetDigitsAndUpdate(unsigned digits);
+
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };

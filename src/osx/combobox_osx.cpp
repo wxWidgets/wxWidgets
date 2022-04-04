@@ -207,8 +207,15 @@ void wxComboBox::SetString(unsigned int n, const wxString& s)
     // Notice that we shouldn't delete and insert the item in this control
     // itself as this would also affect the client data which we need to
     // preserve here.
+    const int sel = GetSelection();
     GetComboPeer()->RemoveItem(n);
     GetComboPeer()->InsertItem(n, s);
+    // When selected item is removed its selection is invalidated
+    // so we need to re-select it manually.
+    if ( sel == int(n) )
+    {
+        SetSelection(n);
+    }
     SetValue(s); // changing the item in the list won't update the display item
 }
 

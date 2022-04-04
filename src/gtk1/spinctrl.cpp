@@ -165,6 +165,22 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
+void wxSpinCtrl::DoSetIncrement(double inc)
+{
+    wxCHECK_RET( m_widget, "invalid spin button" );
+
+    GtkAdjustment* adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(m_widget));
+    adj->step_increment = inc;
+}
+
+double wxSpinCtrl::DoGetIncrement() const
+{
+    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+
+    GtkAdjustment* adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(m_widget));
+    return adj->step_increment;
+}
+
 void wxSpinCtrl::GtkDisableEvents()
 {
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_adjust),

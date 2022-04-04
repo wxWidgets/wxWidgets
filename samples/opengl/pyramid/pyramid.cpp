@@ -273,7 +273,7 @@ void fOGLErrHandler(int err, int glerr, const GLchar* glMsg)
 
 // Creates a 4-bytes-per-pixel, RGBA array from a wxImage.
 // If the image has alpha channel, it's used. If not, pixels with 'cTrans' color
-// get 'cAlpha' alpha; an the rest of pixels get alpha=255 (opaque).
+// get 'cAlpha' alpha; and the rest of pixels get alpha=255 (opaque).
 //
 // NOTE: The returned pointer must be deleted somewhere in the app.
 unsigned char* MyImgToArray(const wxImage& img, const wxColour& cTrans, unsigned char cAlpha)

@@ -2951,6 +2951,8 @@ private:
                          wxGridWindow* gridWindow);
 
     // Update the width/height of the column/row being drag-resized.
+    // Should be only called when m_dragRowOrCol != -1, i.e. dragging is
+    // actually in progress.
     void DoGridDragResize(const wxPoint& position,
                           const wxGridOperations& oper,
                           wxGridWindow* gridWindow);
@@ -2989,6 +2991,8 @@ private:
     void DoStartResizeRowOrCol(int col);
     void DoStartMoveCol(int col);
 
+    // These functions should only be called when actually resizing/moving,
+    // i.e. m_dragRowOrCol and m_dragMoveCol, respectively, are valid.
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndMoveCol(int pos);
@@ -3240,7 +3244,7 @@ private:
         m_selecting = sel;
     }
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridEvent);
 };
 
 class WXDLLIMPEXP_CORE wxGridSizeEvent : public wxNotifyEvent,
@@ -3296,7 +3300,7 @@ private:
         m_y = y;
     }
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridSizeEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridSizeEvent);
 };
 
 
@@ -3361,7 +3365,7 @@ protected:
     wxGridCellCoords  m_bottomRight;
     bool              m_selecting;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridRangeSelectEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridRangeSelectEvent);
 };
 
 
@@ -3398,7 +3402,7 @@ private:
     int m_col;
     wxWindow* m_window;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEditorCreatedEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridEditorCreatedEvent);
 };
 
 
@@ -3509,20 +3513,17 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 // wxEVT_GRID_CELL_CHANGING and CHANGED ones in wx 2.9.0, however the CHANGED
 // is basically the same as the old CHANGE event so we keep the name for
 // compatibility
-#if WXWIN_COMPATIBILITY_2_8
-    #define wxEVT_GRID_CELL_CHANGE wxEVT_GRID_CELL_CHANGED
+#define wxEVT_GRID_CELL_CHANGE wxEVT_GRID_CELL_CHANGED
 
-    #define EVT_GRID_CMD_CELL_CHANGE EVT_GRID_CMD_CELL_CHANGED
-    #define EVT_GRID_CELL_CHANGE EVT_GRID_CELL_CHANGED
-#endif // WXWIN_COMPATIBILITY_2_8
+#define EVT_GRID_CMD_CELL_CHANGE EVT_GRID_CMD_CELL_CHANGED
+#define EVT_GRID_CELL_CHANGE EVT_GRID_CELL_CHANGED
 
 // same as above: RANGE_SELECT was split in RANGE_SELECTING and SELECTED in 3.2,
 // but we keep the old name for compatibility
-#if WXWIN_COMPATIBILITY_3_0
-    #define wxEVT_GRID_RANGE_SELECT wxEVT_GRID_RANGE_SELECTED
+#define wxEVT_GRID_RANGE_SELECT wxEVT_GRID_RANGE_SELECTED
 
-    #define EVT_GRID_RANGE_SELECT EVT_GRID_RANGE_SELECTED
-#endif // WXWIN_COMPATIBILITY_3_0
+#define EVT_GRID_CMD_RANGE_SELECT EVT_GRID_CMD_RANGE_SELECTED
+#define EVT_GRID_RANGE_SELECT EVT_GRID_RANGE_SELECTED
 
 
 #if 0  // TODO: implement these ?  others ?

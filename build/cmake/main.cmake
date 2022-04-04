@@ -41,6 +41,10 @@ if(NOT wxBUILD_CUSTOM_SETUP_HEADER_PATH)
     include(build/cmake/setup.cmake)
 endif()
 
+if(WIN32_MSVC_NAMING)
+    include(build/cmake/build_cfg.cmake)
+endif()
+
 if(NOT MSVC)
     # Write wx-config
     include(build/cmake/config.cmake)

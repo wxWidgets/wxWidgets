@@ -1231,6 +1231,13 @@ wxString wxWebViewWebKit::GetPageText() const
     return wxString();
 }
 
+class wxWebKitRunScriptParams
+{
+public:
+    const wxWebViewWebKit* webKitCtrl;
+    void* clientData;
+};
+
 extern "C"
 {
 
@@ -1238,80 +1245,55 @@ static void wxgtk_run_javascript_cb(GObject *,
                                     GAsyncResult *res,
                                     void *user_data)
 {
-    g_object_ref(res);
-
-    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
-    *res_out = res;
+    wxWebKitRunScriptParams* params = static_cast<wxWebKitRunScriptParams*>(user_data);
+    params->webKitCtrl->ProcessJavaScriptResult(res, params);
 }
 
 } // extern "C"
 
-// Run the given script synchronously and return its result in output.
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output) const
+void wxWebViewWebKit::ProcessJavaScriptResult(GAsyncResult *res, wxWebKitRunScriptParams* params) const
 {
-    GAsyncResult *result = NULL;
-    webkit_web_view_run_javascript(m_web_view,
-                                   javascript.utf8_str(),
-                                   NULL,
-                                   wxgtk_run_javascript_cb,
-                                   &result);
-
-    GMainContext *main_context = g_main_context_get_thread_default();
-
-    while ( !result )
-        g_main_context_iteration(main_context, TRUE);
-
     wxGtkError error;
     wxWebKitJavascriptResult js_result
                              (
                                 webkit_web_view_run_javascript_finish
                                 (
                                     m_web_view,
-                                    result,
+                                    res,
                                     error.Out()
                                 )
                              );
 
-    // Match g_object_ref() in wxgtk_run_javascript_cb()
-    g_object_unref(result);
-
-    if ( !js_result )
+    if ( js_result )
     {
-        if ( output )
-            *output = error.GetMessage();
-        return false;
+        wxString scriptResult;
+        if ( wxGetStringFromJSResult(js_result, &scriptResult) )
+        {
+            wxString scriptOutput;
+            bool success = wxJSScriptWrapper::ExtractOutput(scriptResult, &scriptOutput);
+            SendScriptResult(params->clientData, success, scriptOutput);
+        }
     }
+    else
+        SendScriptResult(params->clientData, false, error.GetMessage());
 
-    return wxGetStringFromJSResult(js_result, output);
+    delete params;
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
+void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, void* clientData) const
 {
-    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+    wxJSScriptWrapper wrapJS(javascript, wxJSScriptWrapper::JS_OUTPUT_STRING);
 
-    // This string is also used as an error indicator: it's cleared if there is
-    // no error or used in the warning message below if there is one.
-    wxString result;
-    if ( RunScriptSync(wrapJS.GetWrappedCode(), &result)
-            && result == wxS("true") )
-    {
-        if ( RunScriptSync(wrapJS.GetOutputCode(), &result) )
-        {
-            if ( output )
-                *output = result;
-            result.clear();
-        }
+    // Collect parameters for access from the callback
+    wxWebKitRunScriptParams* params = new wxWebKitRunScriptParams;
+    params->webKitCtrl = this;
+    params->clientData = clientData;
 
-        RunScriptSync(wrapJS.GetCleanUpCode());
-    }
-
-    if ( !result.empty() )
-    {
-        wxLogWarning(_("Error running JavaScript: %s"), result);
-        return false;
-    }
-
-    return true;
+    webkit_web_view_run_javascript(m_web_view,
+                                   wrapJS.GetWrappedCode().utf8_str(),
+                                   NULL,
+                                   wxgtk_run_javascript_cb,
+                                   params);
 }
 
 bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)

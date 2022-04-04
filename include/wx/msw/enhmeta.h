@@ -155,7 +155,7 @@ protected:
 // ----------------------------------------------------------------------------
 // wxEnhMetaFileSimpleDataObject does derive from wxDataObjectSimple which
 // makes it more convenient to use (it can be used with wxDataObjectComposite)
-// at the price of not supoprting any more CF_METAFILEPICT but only
+// at the price of not supporting any more CF_METAFILEPICT but only
 // CF_ENHMETAFILE
 // ----------------------------------------------------------------------------
 

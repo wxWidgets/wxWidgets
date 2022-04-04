@@ -124,9 +124,17 @@ void wxTextCtrl::MacVisibilityChanged()
 {
 }
 
+#if WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
 void wxTextCtrl::MacCheckSpelling(bool check)
 {
-    GetTextPeer()->CheckSpelling(check);
+    GetTextPeer()->CheckSpelling(check ? wxTextProofOptions::Default()
+                                       : wxTextProofOptions::Disable());
+}
+#endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
+
+void wxTextCtrl::OSXEnableNewLineReplacement(bool enable)
+{
+    GetTextPeer()->EnableNewLineReplacement(enable);
 }
 
 void wxTextCtrl::OSXEnableAutomaticQuoteSubstitution(bool enable)
@@ -259,6 +267,13 @@ void wxTextCtrl::DiscardEdits()
     m_dirty = false;
 }
 
+void wxTextCtrl::EmptyUndoBuffer()
+{
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
+    GetTextPeer()->EmptyUndoBuffer() ;
+}
+
 int wxTextCtrl::GetNumberOfLines() const
 {
     return GetTextPeer()->GetNumberOfLines() ;
@@ -333,6 +348,22 @@ void wxTextCtrl::Paste()
     }
 }
 
+#if wxUSE_SPELLCHECK
+
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
+{
+    GetTextPeer()->CheckSpelling(options);
+
+    return true;
+}
+
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
+{
+    return GetTextPeer()->GetCheckingOptions();
+}
+
+#endif // wxUSE_SPELLCHECK
+
 void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 {
     // By default, load the first file into the text window.
@@ -342,7 +373,7 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
-    if ( event.GetModifiers() == wxMOD_CONTROL )
+    if ( event.ControlDown() )
     {
         switch( event.GetKeyCode() )
         {
@@ -360,6 +391,18 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
             case 'X':
                 if ( CanCut() )
                     Cut() ;
+                return;
+            case 'Z':
+                if ( !event.ShiftDown() )
+                {
+                    if ( CanUndo() )
+                        Undo() ;
+                    return;
+                }
+                // else fall through to Redo
+            case 'Y':
+                if ( CanRedo() )
+                    Redo() ;
                 return;
             default:
                 break;
@@ -420,7 +463,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     return;
             }
 
-            if ( !(m_windowStyle & wxTE_MULTILINE) )
+            if ( GetTextPeer()->GetNewLineReplacement() )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )
@@ -688,6 +731,10 @@ void wxTextWidgetImpl::Redo()
 {
 }
 
+void wxTextWidgetImpl::EmptyUndoBuffer()
+{
+}
+
 long wxTextWidgetImpl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
 {
     return 0 ;
@@ -784,6 +831,15 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
 
     return -1 ;
 }
+
+#if wxUSE_SPELLCHECK
+
+wxTextProofOptions wxTextWidgetImpl::GetCheckingOptions() const
+{
+    return wxTextProofOptions::Disable();
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextWidgetImpl::SetJustification()
 {

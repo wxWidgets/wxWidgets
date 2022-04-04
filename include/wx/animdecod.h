@@ -28,7 +28,7 @@ class WXDLLIMPEXP_FWD_CORE wxImage;
     object converting from the format-specific data representation to the
     wxImage native format (RGB24).
     wxAnimationDecoders always load an input stream using some optimized format
-    to store it which is format-depedent. This allows to store a (possibly big)
+    to store it which is format-dependent. This allows to store a (possibly big)
     animation using a format which is a good compromise between required memory
     and time required to blit it on the screen.
 
@@ -96,24 +96,8 @@ public:
 
     bool CanRead( wxInputStream& stream ) const
     {
-        // NOTE: this code is the same of wxImageHandler::CallDoCanRead
-
-        if ( !stream.IsSeekable() )
-            return false;        // can't test unseekable stream
-
-        wxFileOffset posOld = stream.TellI();
-        bool ok = DoCanRead(stream);
-
-        // restore the old position to be able to test other formats and so on
-        if ( stream.SeekI(posOld) == wxInvalidOffset )
-        {
-            wxLogDebug(wxT("Failed to rewind the stream in wxAnimationDecoder!"));
-
-            // reading would fail anyhow as we're not at the right position
-            return false;
-        }
-
-        return ok;
+        return wxInputStreamPeeker(stream).
+                    CallIfCanSeek(&wxAnimationDecoder::DoCanRead, this);
     }
 
     virtual wxAnimationDecoder *Clone() const = 0;

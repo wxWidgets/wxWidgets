@@ -20,6 +20,7 @@
 #include "wx/app.h"
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/private/bmpbndl.h"
 #include "wx/geometry.h"
 #include "wx/sysopt.h"
 
@@ -77,8 +78,8 @@ public:
         wxToolBar *tbar,
         int id,
         const wxString& label,
-        const wxBitmap& bmpNormal,
-        const wxBitmap& bmpDisabled,
+        const wxBitmapBundle& bmpNormal,
+        const wxBitmapBundle& bmpDisabled,
         wxItemKind kind,
         wxObject *clientData,
         const wxString& shortHelp,
@@ -175,21 +176,16 @@ public:
 
     void UpdateLabel()
     {
-        // Use an empty string if we're not displaying text
-        wxString labelStr;
         wxToolBar *tbar = (wxToolBar*) GetToolBar();
         int style = (tbar ? tbar->GetWindowStyleFlag() : 0);
-        if ( (style & (wxTB_NOICONS | wxTB_TEXT)) != 0 )
-            labelStr = wxStripMenuCodes(m_label);
 
-        wxCFStringRef l(labelStr, GetToolBarFontEncoding());
+        // strip mnemonics from the label for compatibility with the usual
+        // labels in wxStaticText sense
+        wxCFStringRef l(wxStripMenuCodes(m_label), GetToolBarFontEncoding());
         wxCFStringRef sh( GetShortHelp(), GetToolBarFontEncoding() );
 #if wxOSX_USE_NATIVE_TOOLBAR
        if ( m_toolbarItem )
         {
-            // strip mnemonics from the label for compatibility with the usual
-            // labels in wxStaticText sense
-
             [m_toolbarItem setLabel:l.AsNSString()];
 
             [m_toolbarItem setToolTip:sh.AsNSString()];
@@ -596,27 +592,27 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
 
 void wxToolBarTool::UpdateImages()
 {
-    [(NSButton*) m_controlHandle setImage:m_bmpNormal.GetNSImage()];
+    [(NSButton*) m_controlHandle setImage:wxOSXGetImageFromBundle(m_bmpNormal)];
 
     if ( CanBeToggled() )
     {
-        int w = m_bmpNormal.GetScaledWidth();
-        int h = m_bmpNormal.GetScaledHeight();
+        // TODO CS this should use the best current representation, or optionally iterate through all
+        wxSize sz = m_bmpNormal.GetDefaultSize();
         m_alternateBitmap = wxBitmap();
-        m_alternateBitmap.CreateScaled(w, h, -1, m_bmpNormal.GetScaleFactor());
+        m_alternateBitmap.Create(sz.x, sz.y, -1); // TODO CS m_alternateBitmap.CreateWithDIPSize(sz, m_bmpNormal.GetScaleFactor());
         m_alternateBitmap.UseAlpha();
         wxMemoryDC dc;
 
         dc.SelectObject(m_alternateBitmap);
         // This color corresponds to OS X Yosemite's rendering of selected toolbar items
-        // See also https://trac.wxwidgets.org/ticket/16645
+        // See also https://github.com/wxWidgets/wxWidgets/issues/16645
         wxColour grey(0xB9, 0xB9, 0xB9);
         dc.SetBackground(*wxTRANSPARENT_BRUSH);
         dc.Clear();
         dc.SetPen(grey);
         dc.SetBrush(grey);
-        dc.DrawRoundedRectangle( 0, 0, w, h, 3 );
-        dc.DrawBitmap( m_bmpNormal, 0, 0, true );
+        dc.DrawRoundedRectangle( 0, 0, sz.x, sz.y, 3 );
+        dc.DrawBitmap( m_bmpNormal.GetBitmap(sz), 0, 0, true );
         dc.SelectObject( wxNullBitmap );
 
         [(NSButton*) m_controlHandle setAlternateImage:m_alternateBitmap.GetNSImage()];
@@ -638,7 +634,7 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         if ( CanBeToggled() && toggle )
             [m_toolbarItem setImage:m_alternateBitmap.GetNSImage()];
         else
-            [m_toolbarItem setImage:m_bmpNormal.GetNSImage()];
+            [m_toolbarItem setImage:wxOSXGetImageFromBundle(m_bmpNormal)];
     }
 #endif
 
@@ -650,8 +646,8 @@ wxToolBarTool::wxToolBarTool(
     wxToolBar *tbar,
     int id,
     const wxString& label,
-    const wxBitmap& bmpNormal,
-    const wxBitmap& bmpDisabled,
+    const wxBitmapBundle& bmpNormal,
+    const wxBitmapBundle& bmpDisabled,
     wxItemKind kind,
     wxObject *clientData,
     const wxString& shortHelp,
@@ -670,8 +666,8 @@ wxToolBarTool::wxToolBarTool(
 wxToolBarToolBase *wxToolBar::CreateTool(
     int id,
     const wxString& label,
-    const wxBitmap& bmpNormal,
-    const wxBitmap& bmpDisabled,
+    const wxBitmapBundle& bmpNormal,
+    const wxBitmapBundle& bmpDisabled,
     wxItemKind kind,
     wxObject *clientData,
     const wxString& shortHelp,
@@ -1336,7 +1332,7 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     DoLayout();
 }    
 
-void wxToolBar::SetToolBitmapSize(const wxSize& size)
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
 {
     m_defaultWidth = size.x + kwxMacToolBorder;
     m_defaultHeight = size.y + kwxMacToolBorder;
@@ -1385,7 +1381,7 @@ void wxToolBar::MacSuperChangedPosition()
      */
 }
 
-void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
@@ -1399,7 +1395,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
     }
 }
 
-void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )

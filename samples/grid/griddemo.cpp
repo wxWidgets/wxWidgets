@@ -2037,7 +2037,7 @@ wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
             return wxGRID_VALUE_NUMBER;
 
         case Col_Severity:
-            // fall thorugh (TODO should be a list)
+            wxFALLTHROUGH;
 
         case Col_Summary:
             return wxString::Format("%s:80", wxGRID_VALUE_STRING);
@@ -2777,8 +2777,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     if ( styleRender & wxGRID_DRAW_COLS_HEADER )
         sizeRender.y += grid->GetColLabelSize();
 
-    sizeRender.x *= zoom;
-    sizeRender.y *= zoom;
+    sizeRender *= zoom;
 
     // delete any existing render frame and create new one
     wxWindow* win = FindWindowByName( "frameRender" );

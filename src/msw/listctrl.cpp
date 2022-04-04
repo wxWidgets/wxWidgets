@@ -275,15 +275,11 @@ wxEND_EVENT_TABLE()
 
 void wxListCtrl::Init()
 {
-    m_imageListNormal =
-    m_imageListSmall =
-    m_imageListState = NULL;
-    m_ownsImageListNormal =
-    m_ownsImageListSmall =
-    m_ownsImageListState = false;
-
     m_colCount = 0;
     m_textCtrl = NULL;
+
+    m_sortAsc = true;
+    m_sortCol = -1;
 
     m_hasAnyAttr = false;
 
@@ -320,7 +316,21 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( HasFlag(wxLC_LIST) )
         m_colCount = 1;
 
+    // If SetImageList() had been called before the control was created, take
+    // it into account now.
+    UpdateAllImageLists();
+
     return true;
+}
+
+void wxListCtrl::UpdateAllImageLists()
+{
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_NORMAL) )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_NORMAL);
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_SMALL) )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_SMALL);
+    if ( wxImageList* const iml = GetUpdatedImageList(wxIMAGE_LIST_STATE) )
+        ListView_SetImageList(GetHwnd(), GetHimagelistOf(iml), LVSIL_STATE);
 }
 
 void wxListCtrl::MSWSetExListStyles()
@@ -341,6 +351,10 @@ void wxListCtrl::MSWSetExListStyles()
     // enable this style if there is no risk of this happening.
     if ( !GetToolTip() )
         exStyle |= LVS_EX_LABELTIP;
+
+    // include the checkbox style
+    if ( HasCheckBoxes() )
+        exStyle |= LVS_EX_CHECKBOXES;
 
     if ( wxApp::GetComCtl32Version() >= 600 )
     {
@@ -442,14 +456,19 @@ void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 
 void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 {
+    UpdateAllImageLists();
+
     const int numCols = GetColumnCount();
     for ( int i = 0; i < numCols; ++i )
     {
         int width = GetColumnWidth(i);
-        if ( width > 0 )
-            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
-        SetColumnWidth(i, width);
+        if ( width <= 0 )
+            continue;
+
+        SetColumnWidth(i, event.ScaleX(width));
     }
+
+    event.Skip();
 }
 
 bool wxListCtrl::IsDoubleBuffered() const
@@ -521,13 +540,6 @@ wxListCtrl::~wxListCtrl()
     FreeAllInternalData();
 
     DeleteEditControl();
-
-    if (m_ownsImageListNormal)
-        delete m_imageListNormal;
-    if (m_ownsImageListSmall)
-        delete m_imageListSmall;
-    if (m_ownsImageListState)
-        delete m_imageListState;
 
     delete m_headerCustomDraw;
 }
@@ -1445,6 +1457,27 @@ bool wxListCtrl::IsItemChecked(long item) const
     return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
+void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
+{
+    if ( idx != m_sortCol || (idx != -1 && ascending != m_sortAsc) )
+    {
+        m_sortCol = idx;
+        m_sortAsc = ascending;
+
+        DrawSortArrow();
+    }
+}
+
+int wxListCtrl::GetSortIndicator() const
+{
+    return m_sortCol;
+}
+
+bool wxListCtrl::IsAscendingSortIndicator() const
+{
+    return m_sortAsc;
+}
+
 // Gets the number of selected items in the list control
 int wxListCtrl::GetSelectedItemCount() const
 {
@@ -1509,47 +1542,36 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
 }
 
 
-wxImageList *wxListCtrl::GetImageList(int which) const
+void wxListCtrl::DoUpdateImages(int which)
 {
-    if ( which == wxIMAGE_LIST_NORMAL )
-    {
-        return m_imageListNormal;
-    }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        return m_imageListSmall;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        return m_imageListState;
-    }
-    return NULL;
-}
+    // It's possible that this function is called before the control is
+    // created, don't do anything else in this case -- the image list will be
+    // really set after creating it.
+    if ( !GetHwnd() )
+        return;
 
-void wxListCtrl::SetImageList(wxImageList *imageList, int which)
-{
-    int flags = 0;
-    if ( which == wxIMAGE_LIST_NORMAL )
+    int flags;
+    switch ( which )
     {
-        flags = LVSIL_NORMAL;
-        if (m_ownsImageListNormal) delete m_imageListNormal;
-        m_imageListNormal = imageList;
-        m_ownsImageListNormal = false;
+        case wxIMAGE_LIST_NORMAL:
+            flags = LVSIL_NORMAL;
+            break;
+
+        case wxIMAGE_LIST_SMALL:
+            flags = LVSIL_SMALL;
+            break;
+
+        case wxIMAGE_LIST_STATE:
+            flags = LVSIL_STATE;
+            break;
+
+        default:
+            wxFAIL_MSG("invalid image list");
+            return;
     }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        flags = LVSIL_SMALL;
-        if (m_ownsImageListSmall) delete m_imageListSmall;
-        m_imageListSmall = imageList;
-        m_ownsImageListSmall = false;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        flags = LVSIL_STATE;
-        if (m_ownsImageListState) delete m_imageListState;
-        m_imageListState = imageList;
-        m_ownsImageListState = false;
-    }
+
+    wxImageList* const imageList = GetUpdatedImageList(which);
+
     (void) ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 
     // For ComCtl32 prior 6.0 we need to re-assign all existing
@@ -1563,17 +1585,6 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
             SetItemText(i, text);
         }
     }
-}
-
-void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
-{
-    SetImageList(imageList, which);
-    if ( which == wxIMAGE_LIST_NORMAL )
-        m_ownsImageListNormal = true;
-    else if ( which == wxIMAGE_LIST_SMALL )
-        m_ownsImageListSmall = true;
-    else if ( which == wxIMAGE_LIST_STATE )
-        m_ownsImageListState = true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1603,7 +1614,7 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
     // OTOH we have to subtract the size of our borders because the base class
     // public method already adds them, but ListView_ApproximateViewRect()
     // already takes the borders into account, so this would be superfluous.
-    return size - DoGetBorderSize();
+    return size - GetWindowBorderSize();
 }
 
 // ----------------------------------------------------------------------------
@@ -2040,7 +2051,7 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
         // always give some width to the new column: this one is compatible
         // with the generic version
         lvCol.mask |= LVCF_WIDTH;
-        lvCol.cx = 80;
+        lvCol.cx = wxLIST_DEFAULT_COL_WIDTH;
     }
 
     long n = ListView_InsertColumn(GetHwnd(), col, &lvCol);
@@ -2059,6 +2070,11 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
     {
         SetColumnWidth(n, wxLIST_AUTOSIZE_USEHEADER);
     }
+
+    // Update the sort indicator if the index of the column for which it was
+    // set changed. Note that this condition works even if m_sortCol == -1.
+    if ( col <= m_sortCol )
+        DrawSortArrow();
 
     return n;
 }
@@ -3374,6 +3390,39 @@ void wxListCtrl::OnCharHook(wxKeyEvent& event)
     }
 
     event.Skip();
+}
+
+void wxListCtrl::DrawSortArrow()
+{
+    if ( HasFlag(wxLC_SORT_ASCENDING) || HasFlag(wxLC_SORT_DESCENDING) )
+    {
+        m_sortCol = 0;
+        m_sortAsc = HasFlag(wxLC_SORT_ASCENDING);
+    }
+
+    LV_COLUMN lvCol;
+    wxZeroMemory(lvCol);
+    lvCol.mask = LVCF_FMT;
+
+    for ( int col = 0; col < m_colCount; ++col )
+    {
+        if ( ListView_GetColumn(GetHwnd(), col, &lvCol) )
+        {
+            if ( col == m_sortCol )
+            {
+                if ( m_sortAsc )
+                    lvCol.fmt = (lvCol.fmt & ~HDF_SORTDOWN) | HDF_SORTUP;
+                else
+                    lvCol.fmt = (lvCol.fmt & ~HDF_SORTUP) | HDF_SORTDOWN;
+            }
+            else
+            {
+                lvCol.fmt = lvCol.fmt & ~(HDF_SORTDOWN | HDF_SORTUP);
+            }
+
+            ListView_SetColumn(GetHwnd(), col, &lvCol);
+        }
+    }
 }
 
 WXLRESULT

@@ -295,7 +295,7 @@ public:
     //
     // 'window' is pointer to wxHtmlWindowInterface of the window which
     // generated the event.
-    // HINT: if this handling is not enough for you you should use
+    // HINT: if this handling is not enough for you should use
     //       wxHtmlWidgetCell
     virtual bool ProcessMouseClick(wxHtmlWindowInterface *window,
                                    const wxPoint& pos,

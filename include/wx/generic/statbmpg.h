@@ -18,7 +18,7 @@ public:
     wxGenericStaticBitmap() {}
     wxGenericStaticBitmap(wxWindow *parent,
                           wxWindowID id,
-                          const wxBitmap& bitmap,
+                          const wxBitmapBundle& bitmap,
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
                           long style = 0,
@@ -29,32 +29,19 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE
     {
-        m_bitmap = bitmap;
-        SetInitialSize(GetBitmapSize());
+        m_bitmapBundle = bitmap;
+        InvalidateBestSize();
+        SetSize(GetBestSize());
         Refresh();
     }
-
-    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
-
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
-    {
-        m_bitmap.CopyFromIcon(icon);
-        SetInitialSize(GetBitmapSize());
-        Refresh();
-    }
-
-#if defined(__WXGTK20__) || defined(__WXMAC__)
-    // icons and bitmaps are really the same thing in wxGTK and wxMac
-    wxIcon GetIcon() const wxOVERRIDE  { return (const wxIcon &)m_bitmap; }
-#endif
 
     virtual void SetScaleMode(ScaleMode scaleMode) wxOVERRIDE
     {
@@ -65,15 +52,8 @@ public:
     virtual ScaleMode GetScaleMode() const wxOVERRIDE { return m_scaleMode; }
 
 private:
-    wxSize GetBitmapSize()
-    {
-        return m_bitmap.IsOk() ? m_bitmap.GetScaledSize()
-                               : wxSize(16, 16); // this is completely arbitrary
-    }
-
     void OnPaint(wxPaintEvent& event);
 
-    wxBitmap m_bitmap;
     ScaleMode m_scaleMode;
 
     wxDECLARE_DYNAMIC_CLASS(wxGenericStaticBitmap);

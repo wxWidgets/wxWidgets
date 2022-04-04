@@ -41,7 +41,7 @@ clean:
 	-(cd wxrc && $(MAKE) clean)
 
 distclean: clean
-	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 	-(cd emulator/src && $(MAKE) distclean)
 	-(cd execmon && $(MAKE) distclean)
 	-(cd helpview/src && $(MAKE) distclean)

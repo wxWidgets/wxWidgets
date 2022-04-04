@@ -937,32 +937,6 @@ static int GetMultiplier()
     return 6;
 }
 
-static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
-{
-    wxCHECK_RET( sizeNeeded.IsFullySpecified(), wxS("New size must be given") );
-
-#if wxUSE_IMAGE
-    wxImage img = bmp.ConvertToImage();
-    img.Rescale(sizeNeeded.x, sizeNeeded.y);
-    bmp = wxBitmap(img);
-#else // !wxUSE_IMAGE
-    // Fallback method of scaling the bitmap
-    wxBitmap newBmp(sizeNeeded, bmp.GetDepth());
-#if defined(__WXMSW__) || defined(__WXOSX__)
-    // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
-    newBmp.UseAlpha(bmp.HasAlpha());
-#endif // __WXMSW__ || __WXOSX__
-    {
-        wxMemoryDC dc(newBmp);
-        double scX = (double)sizeNeeded.GetWidth() / bmp.GetWidth();
-        double scY = (double)sizeNeeded.GetHeight() / bmp.GetHeight();
-        dc.SetUserScale(scX, scY);
-        dc.DrawBitmap(bmp, 0, 0);
-    }
-    bmp = newBmp;
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
-}
-
 wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
 {
     wxColour bg = GetBackgroundColour();
@@ -1055,7 +1029,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
 
     if ( multiplier != 1 )
     {
-        RescaleBitmap(bitmap, wxSize(x, y));
+        wxBitmap::Rescale(bitmap, wxSize(x, y));
     }
     if ( !renderDrop )
     {
@@ -1137,7 +1111,7 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
     };
     mem.DrawPolygon(WXSIZEOF(handlePolygon2),handlePolygon2,multiplier*lineStartBase,multiplier*(x-lineStartBase));
 
-    // Stop drawing on the bitmap before possibly calling RescaleBitmap()
+    // Stop drawing on the bitmap before possibly calling wxBitmap::Rescale()
     // below.
     mem.SelectObject(wxNullBitmap);
 
@@ -1147,7 +1121,7 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
 
     if ( multiplier != 1 )
     {
-        RescaleBitmap(bitmap, wxSize(x, y));
+        wxBitmap::Rescale(bitmap, wxSize(x, y));
     }
 
     return bitmap;
@@ -1226,9 +1200,11 @@ void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )
     LayoutControls();
 }
 
-void wxSearchCtrl::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+void wxSearchCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 {
     RecalcBitmaps();
+
+    event.Skip();
 }
 
 #if wxUSE_MENUS

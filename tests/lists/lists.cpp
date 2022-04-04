@@ -18,6 +18,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/list.h"
+#include "wx/scopedptr.h"
 
 // --------------------------------------------------------------------------
 // test class
@@ -205,6 +206,50 @@ void ListsTestCase::wxListCtorTest()
     }
 
     CPPUNIT_ASSERT( Baz::GetNumber() == 0 );
+}
+
+// Check for WX_DECLARE_LIST_3 which is used to define wxWindowList: we can't
+// use this class itself here, as it's in the GUI library, so declare something
+// similar.
+struct ListElementBase
+{
+    virtual ~ListElementBase() { }
+};
+
+struct ListElement : ListElementBase
+{
+    explicit ListElement(int n) : m_n(n) { }
+
+    int m_n;
+};
+
+WX_DECLARE_LIST_3(ListElement, ListElementBase, ElementsList, ElementsListNode, class);
+
+#if wxUSE_STD_CONTAINERS
+
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(ElementsList)
+
+#else // !wxUSE_STD_CONTAINERS
+
+void ElementsListNode::DeleteData()
+{
+    delete static_cast<ListElement *>(GetData());
+}
+
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
+
+TEST_CASE("wxWindowList::Find", "[list]")
+{
+    ListElement* const el = new ListElement(17);
+    wxScopedPtr<ListElementBase> elb(el);
+
+    ElementsList l;
+    l.Append(el);
+
+    // We should be able to call Find() with the base class pointer.
+    ElementsList::compatibility_iterator it = l.Find(elb.get());
+    CHECK( it == l.GetFirst() );
 }
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY

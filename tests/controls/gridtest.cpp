@@ -760,7 +760,11 @@ TEST_CASE_METHOD(GridTestCase, "Grid::KeyboardSelection", "[grid][selection]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
 {
+    EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECTED);
+
     m_grid->SelectAll();
+
+    CHECK(select.GetCount() == 1);
 
     CHECK(m_grid->IsSelection());
     CHECK(m_grid->IsInSelection(0, 0));
@@ -779,13 +783,21 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
     CHECK(bottomright.Item(0).GetCol() == 1);
     CHECK(bottomright.Item(0).GetRow() == 3);
 
+    // Note that calling SelectCol() results in 2 events because there is a
+    // deselection event first.
+    select.Clear();
     m_grid->SelectCol(1);
+    CHECK(select.GetCount() == 2);
 
     CHECK(m_grid->IsInSelection(0, 1));
     CHECK(m_grid->IsInSelection(9, 1));
     CHECK(!m_grid->IsInSelection(3, 0));
 
+    // But if we explicitly avoid deselecting the existing selection, we should
+    // get exactly one event.
+    select.Clear();
     m_grid->SelectRow(4, true /* add to selection */);
+    CHECK(select.GetCount() == 1);
 
     CHECK(m_grid->IsInSelection(4, 0));
     CHECK(m_grid->IsInSelection(4, 1));
@@ -1150,6 +1162,16 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
     CHECK( m_grid->IsInSelection(5, 0) );
     CHECK( m_grid->IsInSelection(5, 1) );
     CHECK( !m_grid->IsInSelection(3, 1) );
+
+    // Check that top left/bottom right selection functions still work in row
+    // selection mode.
+    wxGridCellCoordsArray arr = m_grid->GetSelectionBlockTopLeft();
+    REQUIRE( arr.size() == 1 );
+    CHECK( arr[0] == wxGridCellCoords(5, 0) );
+
+    arr = m_grid->GetSelectionBlockBottomRight();
+    REQUIRE( arr.size() == 1 );
+    CHECK( arr[0] == wxGridCellCoords(5, 1) );
 
     //Test row selection be selecting a single cell and checking the whole
     //row is selected
@@ -1640,7 +1662,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
         // cell.
         // Also shouldn't continuously try to fit the multi-line content into
         // a single line, which is not possible. See
-        // https://trac.wxwidgets.org/ticket/15943 .
+        // https://github.com/wxWidgets/wxWidgets/issues/15943 .
 
         m_grid->SetCellValue(0, 0, multilineStr);
         m_grid->SetCellRenderer(0 , 0, new wxGridCellAutoWrapStringRenderer);

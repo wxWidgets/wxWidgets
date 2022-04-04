@@ -251,7 +251,7 @@ public:
         Returns the one and only global application object.
         Usually ::wxTheApp is used instead.
 
-        @see SetInstance()
+        @see SetInstance(), wxApp::GetGUIInstance()
     */
     static wxAppConsole* GetInstance();
 
@@ -789,7 +789,7 @@ public:
 
     In addition to the features provided by wxAppConsole it keeps track of
     the <em>top window</em> (see SetTopWindow()) and adds support for
-    video modes (see SetVideoMode()).
+    video modes (see SetDisplayMode()).
 
     In general, application-wide settings for GUI-only apps are accessible
     from wxApp (or from wxSystemSettings or wxSystemOptions classes).
@@ -837,6 +837,35 @@ public:
         wxWidgets ports such as wxDFB.
     */
     virtual wxVideoMode GetDisplayMode() const;
+
+    /**
+        Returns the current GUI wxApp object if any or @NULL otherwise.
+
+        This function should only be used in the rare cases when the same code
+        needs to work in both console and GUI applications, but needs to use
+        GUI-specific functionality if it is available, and so just calling
+        wxAppConsole::GetInstance() is insufficient while using ::wxTheApp is
+        incorrect, as the application object is not always a GUI wxApp.
+
+        For example:
+        @code
+            WXWidget handle = 0;
+            if ( wxApp* const app = wxApp::GetGUIInstance() ) {
+                if ( wxWindow* const w = app->GetTopWindow() ) {
+                    handle = w->GetHandle();
+                }
+            }
+            //else: no window to use
+
+            some_native_function_taking_a_window_handle(handle);
+        @endcode
+
+        Note that in this particular example, you could  use GetMainTopWindow()
+        which already does the same thing instead of doing it yourself.
+
+        @since 3.1.6
+    */
+    static wxAppConsole* GetGUIInstance();
 
     /**
         Returns @true if the application will exit when the top-level frame is deleted.
@@ -1002,6 +1031,37 @@ public:
     */
     void SetUseBestVisual(bool flag, bool forceTrueColour = false);
 
+    /**
+        @name GTK-specific functions
+    */
+    //@{
+
+    /**
+        Disables the printing of various GTK messages.
+
+        This function can be called to suppress GTK diagnostic messages that
+        are output on the standard error stream by default.
+
+        The default value of the argument disables all messages, but you
+        can pass in a mask flag to specifically disable only particular
+        categories of messages.
+
+        Note that this function only works when using glib 2.50 (released in
+        September 2016) or later and does nothing with the older versions of
+        the library.
+
+        @param flags
+           The mask for the types of messages to suppress. Refer to the
+           glib documentation for the @c GLogLevelFlags enum, which defines
+           the various message types.
+
+        @onlyfor{wxgtk}
+
+        @since 3.1.6
+    */
+    static void GTKSuppressDiagnostics(int flags = -1);
+
+    //@}
 
     /**
         @name Mac-specific functions
@@ -1132,8 +1192,17 @@ public:
 #define wxDECLARE_APP( className )
 
 /**
-    This is used in the application class implementation file to make the
-    application class known to wxWidgets for dynamic construction.
+    This macro defines the application entry point and tells wxWidgets which
+    application class should be used.
+
+    The two tasks performed by this macro can be done separately by using
+    wxIMPLEMENT_APP_NO_MAIN() and wxIMPLEMENT_WXWIN_MAIN() macros, but in a
+    typical GUI application it's simpler and more convenient to use this macro
+    to do both together.
+
+    The @a className passed to this macro must be a name of the class deriving
+    from wxApp.
+
     Note that this macro requires a final semicolon.
 
     @header{wx/app.h}
@@ -1144,9 +1213,69 @@ public:
     wxIMPLEMENT_APP(MyApp);
     @endcode
 
-    @see wxDECLARE_APP()
+    @see wxDECLARE_APP(), wxIMPLEMENT_APP_CONSOLE()
 */
 #define wxIMPLEMENT_APP( className )
+
+/**
+    This macro defines the application entry point for non-GUI applications and
+    tells wxWidgets which application class should be used.
+
+    This macro is provided for symmetry with wxIMPLEMENT_APP() for the console
+    (non-GUI) applications and is equivalent to using wxIMPLEMENT_APP_NO_MAIN()
+    and wxIMPLEMENT_WXWIN_MAIN_CONSOLE().
+
+    The @a className passed to this macro must be a name of the class deriving
+    from wxApp.
+
+    Note that this macro requires a final semicolon.
+
+    @header{wx/app.h}
+
+    Example:
+
+    @code
+    wxIMPLEMENT_APP_CONSOLE(MyApp);
+    @endcode
+
+    @see wxIMPLEMENT_APP()
+*/
+#define wxIMPLEMENT_APP_CONSOLE( className )
+
+/**
+    This macro defines the application entry point appropriate for the current
+    platform.
+
+    Note that usually wxIMPLEMENT_APP() is used instead of this macro.
+
+    For most platforms, it defines @c main() function, but for GUI Windows
+    applications, it defines @c WinMain() instead.
+
+    In either case, the macro expansion includes the call to
+    wxDISABLE_DEBUG_SUPPORT() which disables debugging code in release builds.
+    If you don't use this macro, but define the entry point yourself, you
+    probably want to call wxDISABLE_DEBUG_SUPPORT() explicitly.
+
+    @header{wx/app.h}
+ */
+#define wxIMPLEMENT_WXWIN_MAIN
+
+/**
+    This macro defines the application entry point for console applications.
+
+    This macro is provided mostly for symmetry with wxIMPLEMENT_WXWIN_MAIN()
+    but is less useful, as it is also simple enough to define @c main()
+    function directly.
+
+    Please note, however, that this macro, as well as wxIMPLEMENT_APP_CONSOLE()
+    which uses it, contains the call to wxDISABLE_DEBUG_SUPPORT() which
+    disables debugging code in release builds and that if you don't use this
+    macro, but define @c main() yourself, you probably want to call
+    wxDISABLE_DEBUG_SUPPORT() from it explicitly.
+
+    @header{wx/app.h}
+ */
+#define wxIMPLEMENT_WXWIN_MAIN_CONSOLE
 
 //@}
 
@@ -1155,7 +1284,9 @@ public:
 /**
     The global pointer to the singleton wxApp object.
 
-    @see wxApp::GetInstance()
+    This pointer can only be used in the GUI applications.
+
+    @see wxAppConsole::GetInstance(), wxApp::GetGUIInstance()
 */
 wxApp *wxTheApp;
 

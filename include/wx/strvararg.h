@@ -76,7 +76,7 @@ wxGCC_WARNING_SUPPRESS(ctor-dtor-privacy)
 //                  using wxArgNormalizer<T>, unlike the rest of
 //                  the function's arguments  [2]
 //        fixed     List of types of the leading "fixed" arguments, in
-//                  parenthesis  [(FILE*,const wxString&)]
+//                  parentheses  [(FILE*,const wxString&)]
 //        impl      Name of the variadic function that implements 'name' for
 //                  the native strings representation (wchar_t* if
 //                  wxUSE_UNICODE_WCHAR or wxUSE_UNICODE_UTF8 when running under
@@ -780,6 +780,13 @@ WX_ARG_NORMALIZER_FORWARD(const wxWCharBuffer&, const wchar_t*);
 
 #include "wx/stringimpl.h"
 
+// And also string_view, if we have it (notice that <string> was included from
+// wx/stringimpl.h above, so __cpp_lib_string_view should be defined if it's
+// supported).
+#ifdef __cpp_lib_string_view
+    #include <string_view>
+#endif // __cpp_lib_string_view
+
 #if !wxUSE_UTF8_LOCALE_ONLY
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 template<>
@@ -790,6 +797,22 @@ struct wxArgNormalizerWchar<const std::string&>
                          const wxFormatString *fmt, unsigned index)
         : wxArgNormalizerWchar<const char*>(s.c_str(), fmt, index) {}
 };
+
+#ifdef __cpp_lib_string_view
+// This is inefficient because we create a temporary string rather than using
+// the string_view directly, but is required because the rest of the code
+// assumes NUL-terminated strings and is still better than nothing (i.e. no
+// support for std::string_view at all).
+template<>
+struct wxArgNormalizerWchar<const std::string_view&>
+    : public wxArgNormalizerWchar<const std::string&>
+{
+    wxArgNormalizerWchar(const std::string_view& v,
+                         const wxFormatString *fmt, unsigned index)
+        : wxArgNormalizerWchar<const std::string&>(std::string{v}, fmt, index) {}
+};
+#endif // __cpp_lib_string_view
+
 #endif // NO_IMPLICIT_WXSTRING_ENCODING
 
 template<>
@@ -812,6 +835,18 @@ struct wxArgNormalizerUtf8<const std::string&>
                         const wxFormatString *fmt, unsigned index)
         : wxArgNormalizerUtf8<const char*>(s.c_str(), fmt, index) {}
 };
+
+#ifdef __cpp_lib_string_view
+template<>
+struct wxArgNormalizerUtf8<const std::string_view&>
+    : public wxArgNormalizerUtf8<const char*>
+{
+    wxArgNormalizerUtf8(const std::string_view& v,
+                        const wxFormatString *fmt, unsigned index)
+        : wxArgNormalizerUtf8<const char*>(v.data(), fmt, index) {}
+};
+#endif // __cpp_lib_string_view
+
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 template<>
@@ -826,6 +861,9 @@ struct wxArgNormalizerUtf8<const wxStdWideString&>
 
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 WX_ARG_NORMALIZER_FORWARD(std::string, const std::string&);
+#ifdef __cpp_lib_string_view
+WX_ARG_NORMALIZER_FORWARD(std::string_view, const std::string_view&);
+#endif // __cpp_lib_string_view
 #endif
 WX_ARG_NORMALIZER_FORWARD(wxStdWideString, const wxStdWideString&);
 

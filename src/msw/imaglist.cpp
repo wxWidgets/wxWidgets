@@ -36,6 +36,7 @@
 
 #include "wx/imaglist.h"
 #include "wx/dc.h"
+#include "wx/scopedptr.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/dib.h"
 #include "wx/msw/private.h"
@@ -64,15 +65,11 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
 // wxImageList creation/destruction
 // ----------------------------------------------------------------------------
 
-wxImageList::wxImageList()
-    : m_hImageList(NULL)
-    , m_useMask(false)
-{
-}
-
 // Creates an image list
 bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
+    wxASSERT_MSG( m_hImageList == NULL, "Recreating existing wxImageList?" );
+
     // Prevent from storing negative dimensions
     m_size = wxSize(wxMax(width, 0), wxMax(height, 0));
     UINT flags = 0;
@@ -86,7 +83,10 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
 
     // For comctl32.dll < 6 always use masks as it doesn't support alpha.
     if ( mask || wxApp::GetComCtl32Version() < 600 )
+    {
+        m_useMask = true;
         flags |= ILC_MASK;
+    }
 
     // Grow by 1, I guess this is reasonable behaviour most of the time
     m_hImageList = (WXHIMAGELIST) ImageList_Create(width, height, flags,
@@ -96,17 +96,21 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
         wxLogLastError(wxT("ImageList_Create()"));
     }
 
-    m_useMask = (flags & ILC_MASK) != 0;
     return m_hImageList != 0;
 }
 
-wxImageList::~wxImageList()
+void wxImageList::Destroy()
 {
     if ( m_hImageList )
     {
         ImageList_Destroy(GetHImageList());
         m_hImageList = 0;
     }
+}
+
+wxImageList::~wxImageList()
+{
+    Destroy();
 }
 
 // ----------------------------------------------------------------------------
@@ -139,74 +143,48 @@ void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useM
                          AutoHBITMAP& hbmpRelease, AutoHBITMAP& hbmpMask, HBITMAP& hbmp)
 {
 #if wxUSE_WXDIB && wxUSE_IMAGE
-    // wxBitmap normally stores alpha in pre-multiplied format but
-    // ImageList_Draw() does pre-multiplication internally so we need to undo
-    // the pre-multiplication here. Converting back and forth like this is, of
-    // course, very inefficient but it's better than wrong appearance so we do
-    // this for now until a better way can be found.
-    if ( useMask )
+    // We can only use directly bitmaps without alpha and without mask unless
+    // the image list uses masks and need to modify bitmap in all the other
+    // cases, so check if this is necessary.
+    if ( bitmap.HasAlpha() || (!useMask && (mask.IsOk() || bitmap.GetMask())) )
     {
-        if ( bitmap.HasAlpha() )
+        wxBitmap bmp(bitmap);
+
+        if ( mask.IsOk() || bmp.GetMask() )
         {
-            // Remove alpha channel from image to prevent
-            // possible interferences with the mask.
-            // The bitmap isn't drawn correctly if we use both.
-            wxImage img = bitmap.ConvertToImage();
-            img.ClearAlpha();
-            hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-            hbmpRelease.Init(hbmp);
-        }
-        else
-        {
-            hbmp = GetHbitmapOf(bitmap);
+            // Explicitly specified mask overrides the mask associated with the
+            // bitmap, if any.
+            if ( mask.IsOk() )
+                bmp.SetMask(new wxMask(mask));
+
+            // Get rid of the mask by converting it to alpha.
+            if ( bmp.HasAlpha() )
+                bmp.MSWBlendMaskWithAlpha();
         }
 
-        hbmpMask.Init(GetMaskForImage(bitmap, mask));
+        // wxBitmap normally stores alpha in pre-multiplied format but
+        // ImageList_Draw() does pre-multiplication internally so we need to undo
+        // the pre-multiplication here. Converting back and forth like this is, of
+        // course, very inefficient but it's better than wrong appearance so we do
+        // this for now until a better way can be found.
+        wxImage img = bmp.ConvertToImage();
+        if ( !img.HasAlpha() )
+            img.InitAlpha();
+        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+
+        // In any case we'll never use mask at the native image list level as
+        // it's incompatible with alpha and we need to use alpha.
     }
     else
-    {
-        if ( bitmap.HasAlpha() )
-        {
-            wxBitmap bmp(bitmap);
-            if ( mask.IsOk() || bmp.GetMask() )
-            {
-                // Blend mask with alpha channel.
-                if ( mask.IsOk() )
-                {
-                    bmp.SetMask(new wxMask(mask));
-                }
-                bmp.MSWBlendMaskWithAlpha();
-            }
-            wxImage img = bmp.ConvertToImage();
-            hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-            hbmpRelease.Init(hbmp);
-        }
-        else
-        {
-            if ( mask.IsOk() || bitmap.GetMask() )
-            {
-                // Convert mask to alpha channel.
-                wxBitmap bmp(bitmap);
-                if ( mask.IsOk() )
-                {
-                    bmp.SetMask(new wxMask(mask));
-                }
-                wxImage img = bmp.ConvertToImage();
-                img.InitAlpha();
-                hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-                hbmpRelease.Init(hbmp);
-            }
-            else
-            {
-                hbmp = GetHbitmapOf(bitmap);
-            }
-        }
-    }
-#else
-    hbmp = GetHbitmapOf(bitmap);
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
+    {
+        hbmp = GetHbitmapOf(bitmap);
+        if ( useMask )
+            hbmpMask.Init(GetMaskForImage(bitmap, mask));
+    }
 }
-};
+} // anonymous namespace
 
 // Adds a bitmap, and optionally a mask bitmap.
 // Note that wxImageList creates new bitmaps, so you may delete
@@ -481,39 +459,16 @@ wxIcon wxImageList::GetIcon(int index) const
 
 static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
 {
-#if wxUSE_IMAGE
-    wxBitmap bitmapWithMask;
-#endif // wxUSE_IMAGE
-
     HBITMAP hbmpMask;
-    wxMask *pMask;
-    bool deleteMask = false;
+    wxScopedPtr<wxMask> maskDeleter;
 
     if ( mask.IsOk() )
     {
         hbmpMask = GetHbitmapOf(mask);
-        pMask = NULL;
     }
     else
     {
-        pMask = bitmap.GetMask();
-
-#if wxUSE_IMAGE
-        // check if we don't have alpha in this bitmap -- we can create a mask
-        // from it (and we need to do it for the older systems which don't
-        // support 32bpp bitmaps natively)
-        if ( !pMask )
-        {
-            wxImage img(bitmap.ConvertToImage());
-            if ( img.HasAlpha() )
-            {
-                img.ConvertAlphaToMask();
-                bitmapWithMask = wxBitmap(img);
-                pMask = bitmapWithMask.GetMask();
-            }
-        }
-#endif // wxUSE_IMAGE
-
+        wxMask* pMask = bitmap.GetMask();
         if ( !pMask )
         {
             // use the light grey count as transparent: the trouble here is
@@ -525,19 +480,12 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
 
             pMask = new wxMask(bitmap, col);
 
-            deleteMask = true;
+            maskDeleter.reset(pMask);
         }
 
         hbmpMask = (HBITMAP)pMask->GetMaskBitmap();
     }
 
     // windows mask convention is opposite to the wxWidgets one
-    HBITMAP hbmpMaskInv = wxInvertMask(hbmpMask);
-
-    if ( deleteMask )
-    {
-        delete pMask;
-    }
-
-    return hbmpMaskInv;
+    return wxInvertMask(hbmpMask);
 }

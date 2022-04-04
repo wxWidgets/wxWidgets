@@ -88,7 +88,7 @@ public:
 
     virtual bool SetUserAgent(const wxString& userAgent) wxOVERRIDE;
 
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const wxOVERRIDE;
     virtual bool AddScriptMessageHandler(const wxString& name) wxOVERRIDE;
     virtual bool RemoveScriptMessageHandler(const wxString& name) wxOVERRIDE;
     virtual bool AddUserScript(const wxString& javascript,
@@ -109,9 +109,9 @@ private:
 
     void OnSize(wxSizeEvent& event);
 
-    void OnTopLevelParentIconized(wxIconizeEvent& event);
+    void OnSetFocus(wxFocusEvent& event);
 
-    bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
+    void OnTopLevelParentIconized(wxIconizeEvent& event);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewEdge);
 };

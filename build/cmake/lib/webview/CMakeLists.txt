@@ -43,14 +43,6 @@ endif()
 
 wx_add_library(wxwebview ${WEBVIEW_FILES})
 
-if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
-    if(wxVERSION_IS_DEV)
-        set(WX_WEB_EXTENSIONS_DIRECTORY "lib/wx/${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER}/web-extensions")
-    else()
-        set(WX_WEB_EXTENSIONS_DIRECTORY "lib/wx/${wxMAJOR_VERSION}.${wxMINOR_VERSION}/web-extensions")
-    endif()
-endif()
-
 if(APPLE)
     wx_lib_link_libraries(wxwebview PUBLIC "-framework WebKit")
 elseif(WXMSW)
@@ -95,7 +87,12 @@ elseif(WXMSW)
             endif()
         endif()
 
-        wx_webview_copy_webview2_loader(wxwebview)
+        if (wxUSE_WEBVIEW_EDGE_STATIC)
+            target_link_directories(wxwebview PUBLIC "${WEBVIEW2_PACKAGE_DIR}/build/native/$(LibrariesArchitecture)/")
+        else()
+            wx_webview_copy_webview2_loader(wxwebview)
+        endif()
+
     endif()
 elseif(WXGTK)
     if(LIBSOUP_FOUND)
@@ -120,16 +117,31 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     wx_append_sources(WEBKIT2_EXT_FILES WEBVIEW_WEBKIT2_EXTENSION)
     add_library(wxwebkit2_ext SHARED ${WEBKIT2_EXT_FILES})
     wx_set_target_properties(wxwebkit2_ext false)
+    set_target_properties(wxwebkit2_ext PROPERTIES NO_SONAME 1)
 
     # Change output name to match expected name in webview_webkit2.cpp: webkit2_ext*
+    set(lib_unicode)
     if(wxUSE_UNICODE)
-        set(lib_unicode u)
+        set(lib_unicode "u")
     endif()
-    set_target_properties(wxwebkit2_ext PROPERTIES PREFIX "")
+
+    set(lib_rls)
+    set(lib_dbg)
+    if(WIN32_MSVC_NAMING)
+        set(lib_dbg "d")
+    endif()
+
+    if(wxVERSION_IS_DEV)
+        set(WX_WEB_EXT_VERSION "${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER}")
+    else()
+        set(WX_WEB_EXT_VERSION "${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+    endif()
+
     set_target_properties(wxwebkit2_ext PROPERTIES
-        OUTPUT_NAME "webkit2_ext${lib_unicode}-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
-        OUTPUT_NAME_DEBUG "webkit2_ext${lib_unicode}d-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
-        )
+        OUTPUT_NAME       "webkit2_ext${lib_unicode}${lib_rls}-${WX_WEB_EXT_VERSION}"
+        OUTPUT_NAME_DEBUG "webkit2_ext${lib_unicode}${lib_dbg}-${WX_WEB_EXT_VERSION}"
+        PREFIX ""
+    )
 
     target_include_directories(wxwebkit2_ext PUBLIC
         ${LIBSOUP_INCLUDE_DIRS}
@@ -140,7 +152,7 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
         ${WEBKIT2_LIBRARIES}
         )
 
-    wx_install(TARGETS wxwebkit2_ext LIBRARY DESTINATION ${WX_WEB_EXTENSIONS_DIRECTORY})
+    wx_install(TARGETS wxwebkit2_ext LIBRARY DESTINATION "lib/wx/${WX_WEB_EXT_VERSION}/web-extensions")
 
     add_dependencies(wxwebview wxwebkit2_ext)
 endif()

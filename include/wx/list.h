@@ -52,18 +52,19 @@ typedef wxObjectListNode wxNode;
 
 #define wxLIST_COMPATIBILITY
 
-#define WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl) \
-    WX_DECLARE_LIST_WITH_DECL(elT, liT, decl)
-#define WX_DECLARE_LIST_PTR_3(elT, dummy1, liT, dummy2, decl) \
-    WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl)
+#define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
+    WX_DECLARE_LIST_3(elT, elT, liT, dummy, decl)
+
+#define WX_DECLARE_LIST_PTR_3(elT, baseT, liT, dummy, decl) \
+    WX_DECLARE_LIST_3(elT, baseT, liT, dummy, decl)
 
 #define WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
     WX_DECLARE_LIST_WITH_DECL(elT, liT, decl)
 #define WX_DECLARE_LIST_PTR_2(elT, liT, dummy, decl) \
-    WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
+    WX_DECLARE_LIST_2(elT, liT, dummy, decl)
 
-#define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
-    WX_DECLARE_LIST_XO(elT*, liT, decl)
+#define WX_DECLARE_LIST_3(elT, baseT, liT, dummy, decl) \
+    WX_DECLARE_LIST_XO(elT*, baseT*, liT, decl)
 
 template<class T>
 class wxList_SortFunction
@@ -106,7 +107,7 @@ private:
  */
 
 // the real wxList-class declaration
-#define WX_DECLARE_LIST_XO(elT, liT, decl)                                    \
+#define WX_DECLARE_LIST_XO(elT, baseT, liT, decl)                             \
     decl _WX_LIST_HELPER_##liT                                                \
     {                                                                         \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
@@ -183,11 +184,11 @@ private:
     public:                                                                   \
         liT() : m_destroy( false ) {}                                         \
                                                                               \
-        compatibility_iterator Find( const elT e ) const                      \
+        compatibility_iterator Find( const baseT e ) const                    \
         {                                                                     \
           liT* _this = const_cast< liT* >( this );                            \
           return compatibility_iterator( _this,                               \
-                     std::find( _this->begin(), _this->end(), e ) );          \
+                     std::find( _this->begin(), _this->end(), (const elT)e ));\
         }                                                                     \
                                                                               \
         bool IsEmpty() const                                                  \
@@ -218,11 +219,11 @@ private:
             iterator i = const_cast< liT* >(this)->end();                     \
             return compatibility_iterator( this, !empty() ? --i : i );        \
         }                                                                     \
-        bool Member( elT e ) const                                            \
+        bool Member( baseT e ) const                                          \
             { return Find( e ); }                                             \
         compatibility_iterator Nth( int n ) const                             \
             { return Item( n ); }                                             \
-        int IndexOf( elT e ) const                                            \
+        int IndexOf( baseT e ) const                                          \
             { return Find( e ).IndexOf(); }                                   \
                                                                               \
         compatibility_iterator Append( elT e )                                \
@@ -264,7 +265,7 @@ private:
             }                                                                 \
             return false;                                                     \
         }                                                                     \
-        bool DeleteObject( elT e )                                            \
+        bool DeleteObject( baseT e )                                          \
         {                                                                     \
             return DeleteNode( Find( e ) );                                   \
         }                                                                     \
@@ -1258,7 +1259,7 @@ private:
 
 #else // if wxUSE_STD_CONTAINERS
 
-WX_DECLARE_LIST_XO(wxString, wxStringListBase, class WXDLLIMPEXP_BASE);
+WX_DECLARE_LIST_XO(wxString, wxString, wxStringListBase, class WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxStringList : public wxStringListBase
 {

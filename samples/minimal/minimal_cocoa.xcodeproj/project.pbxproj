@@ -274,6 +274,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
 			buildSettings = {
+				PRODUCT_BUNDLE_IDENTIFIER = org.wxwidgets.minimal;
 				PRODUCT_NAME = minimal_cocoa;
 				USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include";
 			};
@@ -283,7 +284,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.wxwidgets.minimal;
 				PRODUCT_NAME = minimal_cocoa;
 				USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include";
 			};

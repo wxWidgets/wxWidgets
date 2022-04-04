@@ -42,7 +42,7 @@ bool MyOnGLError(int err, const GLchar* glMsg = NULL)
 
 // We do calculations with 'doubles'. We pass 'GLFloats' to the shaders
 // because OGL added 'doubles' since OGL 4.0, and this sample is for 3.2
-// Due to asynchronous nature of OGL, we can't not trust in the passed matrix
+// Due to asynchronous nature of OGL, we can't trust in the passed matrix
 // to be stored by GPU before the passing-function returns. So we don't use
 // temporary storage, but dedicated matrices
 void SetAsGLFloat4x4(double *matD, GLfloat *matF, int msize)
@@ -352,7 +352,7 @@ bool myOGLShaders::AskUnifLocations()
         GLint glret = glGetUniformLocation(m_proId, it->name.c_str());
         if ( glret == -1 )
         {
-            // Return now, this GPU program can not be used because we will
+            // Return now, this GPU program cannot be used because we will
             // pass data to unknown/unused uniform locations
             return false;
         }

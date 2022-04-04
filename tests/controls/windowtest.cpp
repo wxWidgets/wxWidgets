@@ -26,6 +26,7 @@
 #include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 #include "wx/tooltip.h"
+#include "wx/wupdlock.h"
 
 class WindowTestCase
 {
@@ -53,23 +54,37 @@ protected:
     wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
 
-TEST_CASE_METHOD(WindowTestCase, "Window::ShowHideEvent", "[window]")
+static void DoTestShowHideEvent(wxWindow* window)
 {
-#if defined(__WXMSW__)
-    EventCounter show(m_window, wxEVT_SHOW);
+    EventCounter show(window, wxEVT_SHOW);
 
-    CHECK(m_window->IsShown());
+    CHECK(window->IsShown());
 
-    m_window->Show(false);
+    window->Show(false);
 
-    CHECK(!m_window->IsShown());
+    CHECK(!window->IsShown());
 
-    m_window->Show();
+    window->Show();
 
-    CHECK(m_window->IsShown());
+    CHECK(window->IsShown());
 
     CHECK( show.GetCount() == 2 );
-#endif // __WXMSW__
+}
+
+TEST_CASE_METHOD(WindowTestCase, "Window::ShowHideEvent", "[window]")
+{
+    SECTION("Normal window")
+    {
+        DoTestShowHideEvent(m_window);
+    }
+
+    SECTION("Frozen window")
+    {
+        wxWindowUpdateLocker freeze(m_window->GetParent() );
+        REQUIRE( m_window->IsFrozen() );
+
+        DoTestShowHideEvent(m_window);
+    }
 }
 
 TEST_CASE_METHOD(WindowTestCase, "Window::KeyEvent", "[window]")
@@ -431,8 +446,13 @@ TEST_CASE_METHOD(WindowTestCase, "Window::SizerErrors", "[window][sizer][error]"
     wxScopedPtr<wxSizer> const sizer2(new wxBoxSizer(wxHORIZONTAL));
 
     REQUIRE_NOTHROW( sizer1->Add(child) );
+#ifdef __WXDEBUG__
     CHECK_THROWS_AS( sizer1->Add(child), TestAssertFailure );
     CHECK_THROWS_AS( sizer2->Add(child), TestAssertFailure );
+#else
+    CHECK_NOTHROW( sizer1->Add(child) );
+    CHECK_NOTHROW( sizer2->Add(child) );
+#endif
 
     CHECK_NOTHROW( sizer1->Detach(child) );
     CHECK_NOTHROW( sizer2->Add(child) );

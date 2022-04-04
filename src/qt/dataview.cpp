@@ -22,7 +22,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *r
 {
 }
 
-wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *renderer,
+wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRenderer *renderer,
                   unsigned int model_column, int width,
                   wxAlignment align,
                   int flags )
@@ -34,7 +34,7 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 {
 }
 
-void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
+void wxDataViewColumn::SetBitmap( const wxBitmapBundle &bitmap )
 {
 }
 
@@ -285,7 +285,7 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return false;
 }
 
-bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat> &formats )
 {
     return false;
 }

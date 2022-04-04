@@ -312,7 +312,7 @@ void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                 wxDC& dc,
                                                 wxRect& rect) const
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)));
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
 
@@ -344,7 +344,7 @@ void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                    wxDC& dc,
                                                    wxRect& rect) const
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)));
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
     dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
@@ -373,7 +373,7 @@ void wxGridCornerHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                    wxDC& dc,
                                                    wxRect& rect) const
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)));
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight() - 1, rect.GetBottom() - 1,
                 rect.GetRight() - 1, rect.GetTop());
     dc.DrawLine(rect.GetRight() - 1, rect.GetBottom() - 1,
@@ -2301,17 +2301,12 @@ void wxGrid::Render( wxDC& dc,
 
     // remove grid selection, don't paint selection colour
     // unless we have wxGRID_DRAW_SELECTION
-    // block selections are the only ones catered for here
-    wxGridCellCoordsArray selectedCells;
-    bool hasSelection = IsSelection();
-    if ( hasSelection && !( style & wxGRID_DRAW_SELECTION ) )
+    wxGridSelection* selectionOrig = NULL;
+    if ( m_selection && !( style & wxGRID_DRAW_SELECTION ) )
     {
-        selectedCells = GetSelectionBlockTopLeft();
-        // non block selections may not have a bottom right
-        if ( GetSelectionBlockBottomRight().size() )
-            selectedCells.Add( GetSelectionBlockBottomRight()[ 0 ] );
-
-        ClearSelection();
+        // remove the selection temporarily, it will be restored below
+        selectionOrig = m_selection;
+        m_selection = NULL;
     }
 
     // store user device origin
@@ -2437,12 +2432,9 @@ void wxGrid::Render( wxDC& dc,
     dc.SetDeviceOrigin( userOriginX, userOriginY );
     dc.SetUserScale( scaleUserX, scaleUserY );
 
-    if ( selectedCells.size() && !( style & wxGRID_DRAW_SELECTION ) )
+    if ( selectionOrig )
     {
-        SelectBlock( selectedCells[ 0 ].GetRow(),
-                     selectedCells[ 0 ].GetCol(),
-                     selectedCells[ selectedCells.size() -1 ].GetRow(),
-                     selectedCells[ selectedCells.size() -1 ].GetCol() );
+        m_selection = selectionOrig;
     }
 }
 
@@ -2829,8 +2821,13 @@ void wxGrid::InitPixelFields()
     m_defaultRowHeight += 4;
 #endif
 
-    m_rowLabelWidth  = FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH);
-    m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
+    // Don't change the value when called from OnDPIChanged() later if the
+    // corresponding label window is hidden, these values should remain zeroes
+    // then.
+    if ( m_rowLabelWin->IsShown() )
+        m_rowLabelWidth  = FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH);
+    if ( m_colLabelWin->IsShown() )
+        m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
 
     m_defaultColWidth = FromDIP(WXGRID_DEFAULT_COL_WIDTH);
 
@@ -3012,7 +3009,7 @@ void wxGrid::Init()
     m_gridLinesEnabled = true;
     m_gridLinesClipHorz =
     m_gridLinesClipVert = true;
-    m_cellHighlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    m_cellHighlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     m_cellHighlightPenWidth = 2;
     m_cellHighlightROPenWidth = 1;
     if ( wxSystemSettings::GetAppearance().IsDark() )
@@ -3823,13 +3820,10 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
             switch ( m_cursorMode )
             {
                 case WXGRID_CURSOR_RESIZE_ROW:
-                {
                     DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
-                }
-                break;
+                    break;
 
                 case WXGRID_CURSOR_SELECT_ROW:
-                {
                     if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
                         break;
 
@@ -3846,8 +3840,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                             event,
                             wxEVT_GRID_RANGE_SELECTING);
                     }
-                }
-                break;
+                    break;
 
                 // default label to suppress warnings about "enumeration value
                 // 'xxx' not handled in switch
@@ -4167,10 +4160,9 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
             {
                 case WXGRID_CURSOR_RESIZE_COL:
                     DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
-                break;
+                    break;
 
                 case WXGRID_CURSOR_SELECT_COL:
-                {
                     if ( col != -1 )
                     {
                         if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
@@ -4188,8 +4180,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                             event,
                             wxEVT_GRID_RANGE_SELECTING);
                     }
-                }
-                break;
+                    break;
 
                 case WXGRID_CURSOR_MOVE_COL:
                 {
@@ -4708,11 +4699,13 @@ bool wxGrid::DoGridDragEvent(wxMouseEvent& event,
             return DoGridCellDrag(event, coords, isFirstDrag);
 
         case WXGRID_CURSOR_RESIZE_ROW:
-            DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
+            if ( m_dragRowOrCol != -1 )
+                DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
             break;
 
         case WXGRID_CURSOR_RESIZE_COL:
-            DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
+            if ( m_dragRowOrCol != -1 )
+                DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
             break;
 
         default:
@@ -4865,12 +4858,14 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
     {
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-        DoEndDragResizeRow(event, gridWindow);
+        if ( m_dragRowOrCol != -1 )
+            DoEndDragResizeRow(event, gridWindow);
     }
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
     {
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-        DoEndDragResizeCol(event, gridWindow);
+        if ( m_dragRowOrCol != -1 )
+            DoEndDragResizeCol(event, gridWindow);
     }
 
     m_dragLastPos = -1;
@@ -5048,6 +5043,9 @@ void wxGrid::DoGridDragResize(const wxPoint& position,
                               const wxGridOperations& oper,
                               wxGridWindow* gridWindow)
 {
+    wxCHECK_RET( m_dragRowOrCol != -1,
+                 "shouldn't be called when not drag resizing" );
+
     // Get the logical position from the physical one we're passed.
     const wxPoint
         logicalPos = CalcGridWindowUnscrolledPosition(position, gridWindow);
@@ -5748,12 +5746,13 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
     }
 }
 
-void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxGrid::OnSize(wxSizeEvent& event)
 {
     if (m_targetWindow != this) // check whether initialisation has been done
     {
         // reposition our children windows
         CalcWindowSizes();
+        event.Skip();
     }
 }
 
@@ -5775,7 +5774,7 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
             if ( height <= 0 )
                 continue;
 
-            height = height * event.GetNewDPI().x / event.GetOldDPI().x;
+            height = event.ScaleY(height);
             total += height;
 
             m_rowHeights[i] = height;
@@ -5798,7 +5797,7 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
             if ( width <= 0 )
                 continue;
 
-            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+            width = event.ScaleX(width);
             total += width;
 
             m_colWidths[i] = width;
@@ -6250,16 +6249,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             break;
     }
 
-    wxGridWindow *currentGridWindow = CellToGridWindow(coords);
-
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
-        wxGridWindow *prevGridWindow = CellToGridWindow(m_currentCellCoords);
-
         DisableCellEditControl();
 
         if ( IsVisible( m_currentCellCoords, false ) )
         {
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+            RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+#else
+            wxGridWindow* prevGridWindow = CellToGridWindow(m_currentCellCoords);
             wxRect r;
             r = BlockToDeviceRect( m_currentCellCoords, m_currentCellCoords, prevGridWindow );
             if ( !m_gridLinesEnabled )
@@ -6275,12 +6274,6 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
 
-#if defined(__WXMAC__)
-            currentGridWindow->Refresh(true /*, & r */);
-
-            if ( prevGridWindow != currentGridWindow )
-                prevGridWindow->Refresh(true);
-#else
             wxClientDC prevDc( prevGridWindow );
             PrepareDCFor(prevDc, prevGridWindow);
 
@@ -6295,10 +6288,13 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-#if !defined(__WXMAC__)
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+    RefreshBlock(coords, coords);
+#else
     if ( ShouldRefresh() )
     {
         wxGridCellAttrPtr attr = GetCellAttrPtr( coords );
+        wxGridWindow* currentGridWindow = CellToGridWindow(coords);
         wxClientDC dc( currentGridWindow );
         PrepareDCFor(dc, currentGridWindow);
         DrawCellHighlight( dc, attr.get() );
@@ -9015,13 +9011,7 @@ void wxGrid::SetCellHighlightColour( const wxColour& colour )
     {
         m_cellHighlightColour = colour;
 
-        wxGridWindow *gridWindow = CellToGridWindow(m_currentCellCoords);
-
-        wxClientDC dc( gridWindow );
-        PrepareDCFor( dc, gridWindow );
-
-        wxGridCellAttrPtr attr = GetCellAttrPtr(m_currentCellCoords);
-        DrawCellHighlight(dc, attr.get());
+        RefreshBlock(m_currentCellCoords, m_currentCellCoords);
     }
 }
 
@@ -9102,21 +9092,14 @@ void wxGrid::RedrawGridLines()
     if ( !ShouldRefresh() )
         return;
 
-    if ( GridLinesEnabled() )
-    {
-        DrawAllGridLines();
-    }
-    else // remove the grid lines
-    {
-        m_gridWin->Refresh();
+    m_gridWin->Refresh();
 
-        if ( m_frozenColGridWin )
-            m_frozenColGridWin->Refresh();
-        if ( m_frozenRowGridWin )
-            m_frozenRowGridWin->Refresh();
-        if ( m_frozenCornerGridWin )
-            m_frozenCornerGridWin->Refresh();
-    }
+    if ( m_frozenColGridWin )
+        m_frozenColGridWin->Refresh();
+    if ( m_frozenRowGridWin )
+        m_frozenRowGridWin->Refresh();
+    if ( m_frozenCornerGridWin )
+        m_frozenCornerGridWin->Refresh();
 }
 
 void wxGrid::EnableGridLines( bool enable )

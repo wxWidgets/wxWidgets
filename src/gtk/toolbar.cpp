@@ -35,8 +35,8 @@ public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
                   const wxString& label,
-                  const wxBitmap& bitmap1,
-                  const wxBitmap& bitmap2,
+                  const wxBitmapBundle& bitmap1,
+                  const wxBitmapBundle& bitmap2,
                   wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelpString,
@@ -176,36 +176,30 @@ namespace
 struct BitmapProvider: wxGtkImage::BitmapProvider
 {
     BitmapProvider(wxToolBarTool* tool) : m_tool(tool) { }
-    virtual wxBitmap Get() const wxOVERRIDE;
+
+    virtual wxBitmap Get(int scale) const wxOVERRIDE;
     wxToolBarTool* const m_tool;
 };
 
-wxBitmap BitmapProvider::Get() const
+wxBitmap BitmapProvider::Get(int scale) const
 {
 #ifdef __WXGTK3__
-    wxBitmap bitmap(m_tool->GetNormalBitmap());
-    if (m_tool->IsEnabled())
+    const bool isEnabled = m_tool->IsEnabled();
+    const wxBitmapBundle bundle(
+        isEnabled ? m_tool->GetNormalBitmapBundle() : m_tool->GetDisabledBitmapBundle());
+    wxBitmap bitmap(GetAtScale(bundle, scale));
+    if (!isEnabled && !bitmap.IsOk())
     {
-        if (bitmap.IsOk() && bitmap.GetScaleFactor() <= 1)
-            bitmap.UnRef();
+        // Create disabled bitmap from normal one
+        bitmap = GetAtScale(m_tool->GetNormalBitmapBundle(), scale).CreateDisabled();
     }
-    else
-    {
-        wxBitmap disabled(m_tool->GetDisabledBitmap());
-        // if no disabled bitmap and normal bitmap is scaled
-        if (!disabled.IsOk() && bitmap.IsOk() && bitmap.GetScaleFactor() > 1)
-        {
-            // make scaled disabled bitmap from normal one
-            disabled = bitmap.CreateDisabled();
-        }
-        bitmap = disabled;
-    }
-#else
-    wxBitmap bitmap;
-    if (!m_tool->IsEnabled())
-        bitmap = m_tool->GetDisabledBitmap();
-#endif
     return bitmap;
+#else
+    wxUnusedVar(scale);
+    if (!m_tool->IsEnabled())
+        return m_tool->GetDisabledBitmap();
+    return wxBitmap();
+#endif
 }
 } // namespace
 
@@ -373,8 +367,8 @@ void wxToolBarTool::SetLabel(const wxString& label)
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& text,
-                                         const wxBitmap& bitmap1,
-                                         const wxBitmap& bitmap2,
+                                         const wxBitmapBundle& bitmap1,
+                                         const wxBitmapBundle& bitmap2,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelpString,
@@ -463,7 +457,6 @@ bool wxToolBar::Create( wxWindow *parent,
     else
     {
         m_widget = gtk_event_box_new();
-        ConnectWidget( m_widget );
     }
     gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar));
     wxGCC_WARNING_RESTORE()
@@ -796,7 +789,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
     }
 }
 
-void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
@@ -808,7 +801,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
     }
 }
 
-void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )

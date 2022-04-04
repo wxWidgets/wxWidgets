@@ -146,6 +146,11 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
     if ( HasClientObjectData() )
         delete GetClientObject( n );
 
+    // Deselect item being removed
+    int selIdx = GetSelection();
+    if ( selIdx != -1 && selIdx == int(n) )
+        SetSelection(-1);
+
     dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->RemoveItem(n);
     m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;

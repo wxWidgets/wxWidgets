@@ -199,8 +199,9 @@ For major releases, submit the announcement to https://slashdot.org/submission
 add a new version for it to allow reporting bugs against it and create the
 next milestone (ask Vadim or Robin to do it or to get admin password).
 
-* Update the roadmap at https://trac.wxwidgets.org/wiki/Roadmap to at
-least mention the new release there.
+* Update the roadmap at https://wxwidgets.org/develop/roadmap/ to at
+least mention the new release there (the text of this page lives in
+wxWidgets/website repository).
 
 * Run `misc/scripts/inc_release` to increment micro version,
 i.e. replace x.y.z with x.y.z+1.
@@ -248,7 +249,7 @@ with the vcXXX version number:
     Visual Studio 2014  vc120
     Visual Studio 2015  vc14x
 
-The Visual Studio 2015, 2017 and 2019 are binary compatible, allowing the
+The Visual Studio 2015, 2017, 2019 and 2022 are binary compatible, allowing the
 vc14x binary to be used with any of them.
 
 This will build all of the x86 and x64 binaries for the selected compiler version,

@@ -27,6 +27,7 @@
 #ifdef __WXGTK__
 #ifdef __WXGTK20__
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/backend.h"
 #else // GTK+ 1.x
 #include <gtk/gtk.h>
 #define GDK_WINDOWING_X11
@@ -2640,9 +2641,7 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
 bool wxGetKeyState(wxKeyCode key)
 {
 #ifdef wxHAS_GETKEYSTATE_GTK
-    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
-    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
-    if (strcmp(name, "GdkX11Display") != 0)
+    if (!wxGTKImpl::IsX11(NULL))
     {
         return wxGetKeyStateGTK(key);
     }

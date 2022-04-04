@@ -73,7 +73,7 @@ public:
                            wxWindowID winid,
                            const wxString& name = wxString());
 
-        which is used used by NewCloseButton(), and, as Create(), must be
+        which is used by NewCloseButton(), and, as Create(), must be
         called on default-constructed wxBitmapButton object.
     */
 
@@ -99,8 +99,9 @@ protected:
     // function called when any of the bitmaps changes
     virtual void OnSetBitmap() { InvalidateBestSize(); Refresh(); }
 
-    virtual wxBitmap DoGetBitmap(State which) const { return m_bitmaps[which]; }
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which)
+    virtual wxBitmap DoGetBitmap(State which) const
+        { return m_bitmaps[which].GetBitmap(wxDefaultSize); }
+    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which)
         { m_bitmaps[which] = bitmap; OnSetBitmap(); }
 
     virtual wxSize DoGetBitmapMargins() const
@@ -114,8 +115,8 @@ protected:
         m_marginY = y;
     }
 
-    // the bitmaps for various states
-    wxBitmap m_bitmaps[State_Max];
+    // the bitmap bundles for various states
+    wxBitmapBundle m_bitmaps[State_Max];
 
     // the margins around the bitmap
     int m_marginX,

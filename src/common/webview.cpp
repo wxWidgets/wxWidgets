@@ -50,6 +50,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
+wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 
@@ -222,6 +223,51 @@ wxString wxWebView::GetUserAgent() const
     wxString userAgent;
     RunScript("navigator.userAgent", &userAgent);
     return userAgent;
+}
+
+bool wxWebView::RunScript(const wxString& javascript, wxString* output) const
+{
+    m_syncScriptResult = -1;
+    m_syncScriptOutput.clear();
+    RunScriptAsync(javascript);
+
+    // Wait for script exection
+    while (m_syncScriptResult == -1)
+        wxYield();
+
+    if (m_syncScriptResult && output)
+        *output = m_syncScriptOutput;
+    return m_syncScriptResult == 1;
+}
+
+void wxWebView::RunScriptAsync(const wxString& WXUNUSED(javascript),
+    void* WXUNUSED(clientData)) const
+{
+    wxLogError(_("RunScriptAsync not supported"));
+}
+
+void wxWebView::SendScriptResult(void* clientData, bool success,
+    const wxString& output) const
+{
+    // If currently running sync RunScript(), don't send an event, but use
+    // the scripts result directly
+    if (m_syncScriptResult == -1)
+    {
+        if (!success)
+            wxLogWarning(_("Error running JavaScript: %s"), output);
+        m_syncScriptOutput = output;
+        m_syncScriptResult = success;
+    }
+    else
+    {
+        wxWebViewEvent evt(wxEVT_WEBVIEW_SCRIPT_RESULT, GetId(), "", "",
+            wxWEBVIEW_NAV_ACTION_NONE);
+        evt.SetEventObject(const_cast<wxWebView*>(this));
+        evt.SetClientData(clientData);
+        evt.SetInt(success);
+        evt.SetString(output);
+        HandleWindowEvent(evt);
+    }
 }
 
 // static

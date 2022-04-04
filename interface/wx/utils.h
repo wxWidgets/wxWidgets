@@ -336,6 +336,23 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map);
 //@{
 
 /**
+    Fills the memory block with zeros in a way that is guaranteed
+    not to be optimized away by the compiler.
+
+    @param p Pointer to the memory block to be zeroed, must be non-@NULL.
+    @param n The number of bytes to zero.
+
+    NOTE: If security is vitally important in your use case, please
+    have a look at the implementations and decide whether you trust
+    them to behave as promised.
+
+    @header{wx/utils.h}
+
+    @since 3.1.6
+*/
+void wxSecureZeroMemory(void *p, size_t n);
+
+/**
     Returns battery state as one of @c wxBATTERY_NORMAL_STATE,
     @c wxBATTERY_LOW_STATE, @c wxBATTERY_CRITICAL_STATE,
     @c wxBATTERY_SHUTDOWN_STATE or @c wxBATTERY_UNKNOWN_STATE.
@@ -917,7 +934,7 @@ wxString wxGetOsDescription();
     numbers will have a value of -1.
 
     On systems where only the micro version can't be detected or doesn't make
-    sense such as Windows, it will have a value of 0.
+    sense, it will have a value of 0.
 
     For Unix-like systems (@c wxOS_UNIX) the major, minor, and micro version
     integers will contain the kernel's major, minor, and micro version
@@ -928,24 +945,106 @@ wxString wxGetOsDescription();
     natural version numbers associated with the OS; e.g. "10", "11" and "2" if
     the machine is using macOS El Capitan 10.11.2.
 
-    For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will
-    contain the following values:
-    @beginTable
-    @row3col{<b>Windows OS name</b>, <b>Major version</b>, <b>Minor version</b>}
-    @row3col{Windows 10,               10, 0}
-    @row3col{Windows Server 2016,      10, 0}
-    @row3col{Windows 8.1,               6, 3}
-    @row3col{Windows Server 2012 R2,    6, 3}
-    @row3col{Windows 8,                 6, 2}
-    @row3col{Windows Server 2012,       6, 2}
-    @row3col{Windows 7,                 6, 1}
-    @row3col{Windows Server 2008 R2,    6, 1}
-    @row3col{Windows Server 2008,       6, 0}
-    @row3col{Windows Vista,             6, 0}
-    @row3col{Windows Server 2003 R2,    5, 2}
-    @row3col{Windows Server 2003,       5, 2}
-    @row3col{Windows XP,                5, 1}
-    @endDefList
+    For Windows-like systems (@c wxOS_WINDOWS) the major, minor and micro
+    (equal to the build number) version integers will contain the following values:
+    <table>
+        <tr>
+            <th>Windows OS name</th>
+            <th>Major version</th>
+            <th>Minor version</th>
+            <th>Build number</th>
+        </tr>
+        <tr>
+            <td>Windows 11</td>
+            <td>10</td>
+            <td>0</td>
+            <td>&gt;= 22000</td>
+        </tr>
+        <tr>
+            <td>Windows Server 2022</td>
+            <td>10</td>
+            <td>0</td>
+            <td>&gt;= 22000</td>
+        </tr>
+        <tr>
+            <td>Windows 10</td>
+            <td>10</td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows Server 2016</td>
+            <td>10</td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows 8.1</td>
+            <td>6</td>
+            <td>3</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows Server 2012 R2</td>
+            <td>6</td>
+            <td>3</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows 8</td>
+            <td>6</td>
+            <td>2</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows Server 2012</td>
+            <td>6</td>
+            <td>2</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows 7</td>
+            <td>6</td>
+            <td>1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows 2008 R2</td>
+            <td>6</td>
+            <td>1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows Vista</td>
+            <td>6</td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows Server 2008</td>
+            <td>6</td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows Server 2003 R2</td>
+            <td>5</td>
+            <td>2</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows Server 2003</td>
+            <td>5</td>
+            <td>2</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Windows XP</td>
+            <td>5</td>
+            <td>1</td>
+            <td></td>
+        </tr>
+    </table>
     See the <a href="http://msdn.microsoft.com/en-us/library/ms724832(VS.85).aspx">MSDN</a>
     for more info about the values above.
 
@@ -1000,9 +1099,30 @@ bool wxIsPlatformLittleEndian();
     The returned string may be empty if the CPU architecture couldn't be
     recognized.
 
+    @see wxGetNativeCpuArchitectureName()
+
     @since 3.1.5
 */
 wxString wxGetCpuArchitectureName();
+
+/**
+    In some situations the current process and native CPU architecture may be
+    different. This returns the native CPU architecture regardless of the
+    current process CPU architecture.
+
+    Common examples for CPU architecture differences are the following:
+        - Win32 process in x64 Windows (WoW)
+        - Win32 or x64 process on ARM64 Windows (WoW64)
+        - x86_64 process on ARM64 macOS (Rosetta 2)
+
+    The returned string may be empty if the CPU architecture couldn't be
+    recognized.
+
+    @see wxGetCpuArchitectureName()
+
+    @since 3.1.6
+*/
+wxString wxGetNativeCpuArchitectureName();
 
 /**
     Returns a structure containing information about the currently running

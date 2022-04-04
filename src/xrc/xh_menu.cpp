@@ -10,6 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/xml/xml.h"
 
 #if wxUSE_XRC && wxUSE_MENUS
 
@@ -79,6 +80,18 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             wxString label = GetText(wxT("label"));
 #if wxUSE_ACCEL
             wxString accel = GetText(wxT("accel"), false);
+            wxVector<wxString> extraAccels;
+            if (HasParam(wxT("extra-accels")))
+            {
+                wxXmlNode* const extraAccelsNode = GetParamNode(wxT("extra-accels"));
+                wxXmlNode* node = extraAccelsNode->GetChildren();
+                while (node)
+                {
+                    if (node->GetName() == wxT("accel"))
+                        extraAccels.push_back(node->GetChildren()->GetContent());
+                    node = node->GetNext();
+                }
+            }
 #endif // wxUSE_ACCEL
 
             wxItemKind kind = wxITEM_NORMAL;
@@ -101,11 +114,34 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             wxMenuItem *mitem = new wxMenuItem(p_menu, id, label,
                                                GetText(wxT("help")), kind);
 #if wxUSE_ACCEL
+            if (!extraAccels.empty())
+            {
+                const int entriesSize = extraAccels.size();
+                for (int i = 0; i < entriesSize; ++i)
+                {
+                    wxAcceleratorEntry entry;
+                    if (entry.FromString(extraAccels[i]))
+                        mitem->AddExtraAccel(entry);
+                    else
+                        ReportParamError
+                        (
+                            "extra-accels",
+                            wxString::Format("cannot create accel from '%s\'", extraAccels[i])
+                        );
+                }
+            }
+
             if (!accel.empty())
             {
                 wxAcceleratorEntry entry;
                 if (entry.FromString(accel))
                     mitem->SetAccel(&entry);
+                else
+                    ReportParamError
+                    (
+                        "accel",
+                        wxString::Format("cannot create accel from '%s'", accel)
+                    );
             }
 #endif // wxUSE_ACCEL
 
@@ -116,11 +152,11 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
                 // and unchecked bitmaps for menu items
 #ifdef __WXMSW__
                 if (HasParam(wxT("bitmap2")))
-                    mitem->SetBitmaps(GetBitmap(wxT("bitmap2"), wxART_MENU),
-                                      GetBitmap(wxT("bitmap"), wxART_MENU));
+                    mitem->SetBitmaps(GetBitmapBundle(wxT("bitmap2"), wxART_MENU),
+                                      GetBitmapBundle(wxT("bitmap"), wxART_MENU));
                 else
 #endif // __WXMSW__
-                    mitem->SetBitmap(GetBitmap(wxT("bitmap"), wxART_MENU));
+                    mitem->SetBitmap(GetBitmapBundle(wxT("bitmap"), wxART_MENU));
             }
 #endif
             p_menu->Append(mitem);

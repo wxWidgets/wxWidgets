@@ -9,9 +9,8 @@
 
 /**
     Flags for wxColour -> wxString conversion (see wxColour::GetAsString).
-
-    @{
 */
+//@{
 enum {
     wxC2S_NAME             = 1,   // return colour name, when possible
     wxC2S_CSS_SYNTAX       = 2,   // return colour in rgb(r,g,b) syntax
@@ -34,6 +33,20 @@ const unsigned char wxALPHA_OPAQUE = 0xff;
     Valid RGB values are in the range 0 to 255.
 
     You can retrieve the current system colour settings with wxSystemSettings.
+
+
+    @section colour_accessors Channel Accessor Functions
+
+    Note that this class provides pairs of functions for each of the colour
+    channels, i.e. red, green, blue and alpha values. The one word functions
+    Red(), Green(), Blue() and Alpha() return the values of type @c unsigned @c
+    char, while GetRed(), GetGreen(), GetBlue() and GetAlpha() returns the same
+    value as @c unsigned @c int. According to the C++ integer promotion rules,
+    the result of any arithmetic expression involving the former will be
+    (signed) @c int, while that of the latter will be @c unsigned, which is
+    what would be commonly expected, so the latter family of functions should
+    be typically preferred (but they are only available since wxWidgets 3.1.6).
+
 
     @library{wxcore}
     @category{gdi}
@@ -95,13 +108,46 @@ public:
     /**
         Returns the alpha value, on platforms where alpha is not yet supported, this
         always returns wxALPHA_OPAQUE.
+
+        @see GetAlpha()
     */
     virtual unsigned char Alpha() const;
 
     /**
         Returns the blue intensity.
+
+        @see GetBlue()
     */
     virtual unsigned char Blue() const;
+
+    /**
+        Returns the alpha value, on platforms where alpha is not yet supported, this
+        always returns wxALPHA_OPAQUE.
+
+        @since 3.1.6
+     */
+    unsigned int GetAlpha() const;
+
+    /**
+        Returns the blue intensity as unsigned int.
+
+        @since 3.1.6
+     */
+    unsigned int GetBlue() const;
+
+    /**
+        Returns the green intensity as unsigned int.
+
+        @since 3.1.6
+     */
+    unsigned int GetGreen() const;
+
+    /**
+        Returns the red intensity as unsigned int.
+
+        @since 3.1.6
+     */
+    unsigned int GetRed() const;
 
     /**
         Converts this colour to a wxString using the given flags.
@@ -185,6 +231,8 @@ public:
 
     /**
         Returns the green intensity.
+
+        @see GetGreen()
     */
     virtual unsigned char Green() const;
 
@@ -196,6 +244,8 @@ public:
 
     /**
         Returns the red intensity.
+
+        @see GetRed()
     */
     virtual unsigned char Red() const;
 

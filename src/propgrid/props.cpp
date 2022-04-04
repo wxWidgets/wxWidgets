@@ -191,7 +191,7 @@ bool wxNumericPropertyValidator::Validate(wxWindow* parent)
 // wxNumericProperty
 // -----------------------------------------------------------------------
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxNumericProperty, wxPGProperty)
+wxIMPLEMENT_ABSTRACT_CLASS(wxNumericProperty, wxPGProperty);
 
 wxNumericProperty::wxNumericProperty(const wxString& label, const wxString& name)
     : wxPGProperty(label, name)
@@ -973,7 +973,6 @@ wxString wxFloatProperty::ValueToString( wxVariant& value,
 
 bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
-    wxString s;
     double value;
 
     if ( text.empty() )
@@ -1513,7 +1512,7 @@ void wxFlagsProperty::Init()
     // Generate children
     //
 
-    unsigned int prevChildCount = m_children.size();
+    size_t prevChildCount = m_children.size();
 
     int oldSel = -1;
     if ( prevChildCount )
@@ -1537,10 +1536,8 @@ void wxFlagsProperty::Init()
         state->DoClearSelection();
     }
 
-    unsigned int i;
-
     // Delete old children
-    for ( i=0; i<prevChildCount; i++ )
+    for ( size_t i=0; i<prevChildCount; i++ )
         delete m_children[i];
 
     m_children.clear();
@@ -1554,7 +1551,7 @@ void wxFlagsProperty::Init()
     {
         const wxPGChoices& choices = m_choices;
 
-        for ( i=0; i<GetItemCount(); i++ )
+        for ( unsigned int i=0; i<GetItemCount(); i++ )
         {
             bool child_val;
             child_val = ( value & choices.GetValue(i) )?true:false;
@@ -1958,7 +1955,7 @@ public:
 // wxDialogProperty
 // -----------------------------------------------------------------------
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxEditorDialogProperty, wxPGProperty)
+wxIMPLEMENT_ABSTRACT_CLASS(wxEditorDialogProperty, wxPGProperty);
 
 wxEditorDialogProperty::wxEditorDialogProperty(const wxString& label, const wxString& name)
     : wxPGProperty(label, name)
@@ -2199,7 +2196,7 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
         m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
         m_initialPath.empty() ? path : m_initialPath,
         file,
-        m_wildcard.empty() ? wxALL_FILES : m_wildcard,
+        m_wildcard.empty() ? _(wxALL_FILES) : m_wildcard,
         m_dlgStyle,
         wxDefaultPosition);
 
@@ -2414,7 +2411,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
 
     // Populate the list box
     wxArrayString arr;
-    for ( unsigned int i=0; i<ArrayGetCount(); i++ )
+    for ( size_t i=0; i<ArrayGetCount(); i++ )
         arr.push_back(ArrayGet(i));
     m_elb->SetStrings(arr);
 
@@ -2685,27 +2682,22 @@ void wxArrayStringProperty::OnSetValue()
     GenerateValueAsString();
 }
 
-void
-wxArrayStringProperty::ConvertArrayToString(const wxArrayString& arr,
-                                            wxString* pString,
-                                            const wxUniChar& delimiter) const
+wxString wxArrayStringProperty::ConvertArrayToString(const wxArrayString& arr,
+                                                     const wxUniChar& delimiter) const
 {
+    int flag;
     if ( delimiter == '"' || delimiter == '\'' )
     {
         // Quoted strings
-        ArrayStringToString(*pString,
-                            arr,
-                            delimiter,
-                            Escape | QuoteStrings);
+        flag = Escape | QuoteStrings;
     }
     else
     {
         // Regular delimiter
-        ArrayStringToString(*pString,
-                            arr,
-                            delimiter,
-                            0);
+        flag = 0;
     }
+
+    return ArrayStringToString(arr, delimiter, flag);
 }
 
 wxString wxArrayStringProperty::ValueToString( wxVariant& WXUNUSED(value),
@@ -2719,25 +2711,19 @@ wxString wxArrayStringProperty::ValueToString( wxVariant& WXUNUSED(value),
     }
 
     wxArrayString arr = m_value.GetArrayString();
-    wxString s;
-    ConvertArrayToString(arr, &s, m_delimiter);
-    return s;
+    return ConvertArrayToString(arr, m_delimiter);
 }
 
 // Converts wxArrayString to a string separated by delimiters and spaces.
 // preDelim is useful for "str1" "str2" style. Set flags to 1 to do slash
 // conversion.
-void
-wxArrayStringProperty::ArrayStringToString( wxString& dst,
-                                            const wxArrayString& src,
-                                            wxUniChar delimiter, int flags )
+wxString wxArrayStringProperty::ArrayStringToString(const wxArrayString& src,
+                                                    wxUniChar delimiter, int flags)
 {
     wxString pdr;
     wxString preas;
 
-    unsigned int itemCount = src.size();
-
-    dst.Empty();
+    size_t itemCount = src.size();
 
     if ( flags & Escape )
     {
@@ -2746,12 +2732,14 @@ wxArrayStringProperty::ArrayStringToString( wxString& dst,
         pdr += delimiter;
     }
 
+    wxString dst;
+
     if ( itemCount )
         dst.append( preas );
 
     wxString delimStr(delimiter);
 
-    for ( unsigned int i = 0; i < itemCount; i++ )
+    for ( size_t i = 0; i < itemCount; i++ )
     {
         wxString str( src.Item(i) );
 
@@ -2776,12 +2764,14 @@ wxArrayStringProperty::ArrayStringToString( wxString& dst,
         else if ( flags & QuoteStrings )
             dst.append( delimStr );
     }
+
+    return dst;
 }
 
 void wxArrayStringProperty::GenerateValueAsString()
 {
     wxArrayString arr = m_value.GetArrayString();
-    ConvertArrayToString(arr, &m_display, m_delimiter);
+    m_display = ConvertArrayToString(arr, m_delimiter);
 }
 
 // Default implementation doesn't do anything.
@@ -2845,8 +2835,7 @@ bool wxArrayStringProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
             if ( !curValue.IsNull() )
             {
                 wxArrayString actualValue = curValue.GetArrayString();
-                wxString tempStr;
-                ConvertArrayToString(actualValue, &tempStr, m_delimiter);
+                wxString tempStr = ConvertArrayToString(actualValue, m_delimiter);
             #if wxUSE_VALIDATORS
                 if ( dialogValidator.DoValidate(pg, validator,
                                                 tempStr) )

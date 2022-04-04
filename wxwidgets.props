@@ -25,7 +25,7 @@
       - Version-specific prefix of the form "vcNNN", which is used in some other
         projects.
       - Version-specific but ABI-compatible prefix which differs from the
-        previous value in that it's the same "vc14x" for MSVS 2015/2017/2019
+        previous value in that it's the same "vc14x" for MSVS 2015/2017/2019/2022
         which are ABI-compatible with each other. This is used by official wx
         binaries, so we want to check this one too.
       -->
@@ -35,6 +35,7 @@
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '14.0'">140</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '15.0'">141</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '16.0'">142</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '17.0'">143</wxToolsetVersion>
 
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '10.0'">100</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '11.0'">110</wxToolsetVerABICompat>
@@ -42,6 +43,7 @@
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '14.0'">14x</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '15.0'">14x</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '16.0'">14x</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '17.0'">14x</wxToolsetVerABICompat>
   </PropertyGroup>
 
   <!--
@@ -114,7 +116,7 @@
   <Target Name="CheckWXLibs">
     <Error
       Condition="'$(wxUsingDll)$(wxUsingLib)' == ''"
-      Text="wxWidgets libraries not found under &quot;$(MSBuildThisFileDirectory)lib&quot;." />
+      Text="wxWidgets libraries not found under &quot;$(MSBuildThisFileDirectory)lib\vc{,$(wxToolsetVersion),$(wxToolsetVerABICompat)}$(wxArchSuffix)_{lib,dll}$(wxCfg)&quot;." />
   </Target>
 
   <ItemDefinitionGroup>

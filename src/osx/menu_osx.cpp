@@ -155,7 +155,17 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *item, size_t pos)
 #if wxUSE_MENUBAR
     // if we're already attached to the menubar, we must update it
     if ( IsAttached() && GetMenuBar()->IsAttached() )
+    {
+        if ( item->IsSubMenu() )
+        {
+            item->GetSubMenu()->SetupBitmaps();
+        }
+        if ( !item->IsSeparator() )
+        {
+            item->UpdateItemBitmap();
+        }
         GetMenuBar()->Refresh();
+    }
 #endif // wxUSE_MENUBAR
 
     if ( check )
@@ -211,6 +221,10 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     wxOSXMenuRemoveItem(m_hMenu , pos );
     */
+#if wxUSE_ACCEL
+    // we need to remove all hidden menu items related to this one
+    item->RemoveHiddenItems();
+#endif
     GetPeer()->Remove( item );
     // and from internal data structures
     return wxMenuBase::DoRemove(item);
@@ -393,6 +407,44 @@ void wxMenu::HandleMenuOpened()
 void wxMenu::HandleMenuClosed()
 {
     DoHandleMenuOpenedOrClosed(wxEVT_MENU_CLOSE);
+}
+
+#if wxUSE_MENUBAR
+void wxMenu::Attach(wxMenuBarBase *menubar)
+{
+    wxMenuBase::Attach(menubar);
+
+    if (menubar->IsAttached())
+    {
+        SetupBitmaps();
+    }
+}
+#endif
+
+void wxMenu::SetInvokingWindow(wxWindow* win)
+{
+    wxMenuBase::SetInvokingWindow(win);
+
+    if ( win )
+        SetupBitmaps();
+}
+
+void wxMenu::SetupBitmaps()
+{
+    for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxMenuItem *item = node->GetData();
+        if ( item->IsSubMenu() )
+        {
+            item->GetSubMenu()->SetupBitmaps();
+        }
+        if ( !item->IsSeparator() )
+        {
+            item->UpdateItemBitmap();
+        }
+    }
 }
 
 #if wxUSE_MENUBAR
@@ -619,6 +671,21 @@ wxString wxMenuBar::GetMenuLabel(size_t pos) const
                  wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
 
     return GetMenu(pos)->GetTitle();
+}
+
+void wxMenuBar::SetupBitmaps()
+{
+    for ( wxMenuList::const_iterator it = m_menus.begin(); it != m_menus.end(); ++it )
+    {
+        (*it)->SetupBitmaps();
+    }
+}
+
+void wxMenuBar::Attach(wxFrame *frame)
+{
+    wxMenuBarBase::Attach(frame);
+
+    SetupBitmaps();
 }
 
 // ---------------------------------------------------------------------------

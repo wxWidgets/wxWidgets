@@ -58,6 +58,8 @@ public:
 
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual void SetIncrement(int value) wxOVERRIDE;
+    virtual int  GetIncrement() const wxOVERRIDE;
 
 protected:
    virtual wxSize DoGetBestSize() const wxOVERRIDE;

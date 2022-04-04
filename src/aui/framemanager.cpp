@@ -614,7 +614,6 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_art = new wxAuiDefaultDockArt;
     m_hintWnd = NULL;
     m_flags = flags;
-    m_skipping = false;
     m_hasMaximized = false;
     m_frame = NULL;
     m_dockConstraintX = 0.3;
@@ -3010,28 +3009,16 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (!part->dock->fixed || part->dock->dock_direction == wxAUI_DOCK_CENTER ||
             pt.x >= cli_size.x || pt.x <= 0 || pt.y >= cli_size.y || pt.y <= 0)
         {
-            if (m_lastRect.IsEmpty() || m_lastRect.Contains(pt.x, pt.y ))
+            if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) && drop.IsFloatable())
             {
-                m_skipping = true;
+                drop.Float();
             }
             else
             {
-                if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) && drop.IsFloatable())
-                {
-                    drop.Float();
-                }
-
-                m_skipping = false;
-
-                return ProcessDockResult(target, drop);
+                drop.Position(pt.x - GetDockPixelOffset(drop) - offset.x);
             }
-
-            drop.Position(pt.x - GetDockPixelOffset(drop) - offset.x);
-
             return ProcessDockResult(target, drop);
         }
-
-        m_skipping = false;
 
         m_lastRect = part->dock->rect;
         m_lastRect.Inflate( m_frame->FromDIP(wxSize(15, 15)) );

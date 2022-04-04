@@ -59,7 +59,7 @@ TEST_CASE("wxRegEx::Compile", "[regex][compile]")
     CHECK_FALSE( re.Compile("foo[") );
     CHECK_FALSE( re.Compile("foo[bar") );
     CHECK      ( re.Compile("foo[bar]") );
-    CHECK_FALSE( re.Compile("foo{1") );
+    // Not invalid for PCRE: CHECK_FALSE( re.Compile("foo{1") );
     CHECK      ( re.Compile("foo{1}") );
     CHECK      ( re.Compile("foo{1,2}") );
     CHECK      ( re.Compile("foo*") );
@@ -79,28 +79,33 @@ CheckMatch(const char* pattern,
     INFO( "Pattern: " << pattern << FlagStr(flags) << ", match: " << text );
 
     wxRegEx re(pattern, compileFlags);
-    REQUIRE( re.IsValid() );
-
-    bool ok = re.Matches(text, matchFlags);
-
-    if (expected) {
-        REQUIRE( ok );
-
-        wxStringTokenizer tkz(wxString(expected, *wxConvCurrent),
-                              wxT("\t"), wxTOKEN_RET_EMPTY);
-        size_t i;
-
-        for (i = 0; i < re.GetMatchCount() && tkz.HasMoreTokens(); i++) {
-            INFO( "Match #" << i );
-            CHECK( re.GetMatch(text, i) == tkz.GetNextToken() );
-        }
-
-        if ((flags & wxRE_NOSUB) == 0)
-            CHECK(re.GetMatchCount() == i);
+    if ( !re.IsValid() )
+    {
+        FAIL("Regex compilation failed");
+        return;
     }
-    else {
-        CHECK( !ok );
+
+    if ( !re.Matches(text, matchFlags) )
+    {
+        CHECK( !expected );
+        return;
     }
+
+    CHECK( expected );
+    if ( !expected )
+        return;
+
+    wxStringTokenizer tkz(wxString(expected, *wxConvCurrent),
+                          wxT("\t"), wxTOKEN_RET_EMPTY);
+    size_t i;
+
+    for (i = 0; i < re.GetMatchCount() && tkz.HasMoreTokens(); i++) {
+        INFO( "Match #" << i );
+        CHECK( re.GetMatch(text, i) == tkz.GetNextToken() );
+    }
+
+    if ((flags & wxRE_NOSUB) == 0)
+        CHECK(re.GetMatchCount() == i);
 }
 
 TEST_CASE("wxRegEx::Match", "[regex][match]")
@@ -136,7 +141,7 @@ CheckReplace(const char* pattern,
     wxRegEx re(pattern);
 
     wxString text(original);
-    CHECK( re.Replace(&text, replacement) == numMatches );
+    CHECK( re.Replace(&text, replacement) == static_cast<int>(numMatches) );
     CHECK( text == expected );
 }
 
@@ -163,6 +168,41 @@ TEST_CASE("wxRegEx::QuoteMeta", "[regex][meta]")
     CHECK( wxRegEx::QuoteMeta("\\") == "\\\\" );
     CHECK( wxRegEx::QuoteMeta("\\?!") == "\\\\\\?!" );
     CHECK( wxRegEx::QuoteMeta(":foo.*bar") == ":foo\\.\\*bar" );
+}
+
+TEST_CASE("wxRegEx::ConvertFromBasic", "[regex][basic]")
+{
+    CHECK( wxRegEx::ConvertFromBasic("\\(a\\)b") == "(a)b" );
+    CHECK( wxRegEx::ConvertFromBasic("a\\{0,1\\}b") == "a{0,1}b" );
+    CHECK( wxRegEx::ConvertFromBasic("*") == "\\*" );
+    CHECK( wxRegEx::ConvertFromBasic("**") == "\\**" );
+    CHECK( wxRegEx::ConvertFromBasic("^*") == "^\\*" );
+    CHECK( wxRegEx::ConvertFromBasic("^^") == "^\\^" );
+    CHECK( wxRegEx::ConvertFromBasic("x$y") == "x\\$y" );
+    CHECK( wxRegEx::ConvertFromBasic("$$") == "\\$$" );
+    CHECK( wxRegEx::ConvertFromBasic("\\(x$\\)") == "(x$)" );
+    CHECK( wxRegEx::ConvertFromBasic("[^$\\)]") == "[^$\\)]" );
+}
+
+TEST_CASE("wxRegEx::Unicode", "[regex][unicode]")
+{
+    const wxString cyrillicCapitalA(L"\u0410");
+    const wxString cyrillicSmallA(L"\u0430");
+
+    wxRegEx re(cyrillicCapitalA, wxRE_ICASE);
+    REQUIRE( re.IsValid() );
+
+    REQUIRE( re.Matches(cyrillicSmallA) );
+    CHECK( re.GetMatch(cyrillicSmallA) == cyrillicSmallA );
+}
+
+// This pseudo test can be used just to see the version of PCRE being used.
+TEST_CASE("wxRegEx::GetLibraryVersionInfo", "[.]")
+{
+    const wxVersionInfo ver = wxRegEx::GetLibraryVersionInfo();
+    WARN("Using " << ver.GetName() << " " << ver.GetDescription()
+                  << " (major=" << ver.GetMajor()
+                  << ", minor=" << ver.GetMinor() << ")");
 }
 
 #endif // wxUSE_REGEX

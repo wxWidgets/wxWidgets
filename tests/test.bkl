@@ -177,6 +177,7 @@
             geometry/point.cpp
             geometry/region.cpp
             graphics/bitmap.cpp
+            graphics/bmpbundle.cpp
             graphics/colour.cpp
             graphics/ellipsization.cpp
             graphics/measuring.cpp
@@ -337,8 +338,10 @@
 
 
     <wx-data id="data">
-        <files>testdata.fc</files>
+        <files>testdata.conf horse.svg</files>
+    </wx-data>
 
+    <wx-data id="data-image-sample">
         <!-- test data for image/image.cpp test unit: -->
         <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg
                horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
@@ -348,6 +351,12 @@
         <srcdir>$(SRCDIR)/image</srcdir>
         <dstdir>image</dstdir>
         <files>
+            8bpp-colorsused-large.bmp
+            8bpp-colorsused-negative.bmp
+            rle4-delta-320x240.bmp
+            rle8-delta-320x240.bmp
+            rle8-delta-320x240-expected.bmp
+
             horse_grey.bmp horse_grey_flipped.bmp
             horse_rle4.bmp horse_rle4_flipped.bmp
             horse_rle8.bmp horse_rle8_flipped.bmp
@@ -394,6 +403,9 @@
             toucan_dis_240.png
             toucan_grey.png
             toucan_mono_255_255_255.png
+
+            width-times-height-overflow.bmp
+            width_height_32_bit_overflow.pgm
         </files>
     </wx-data>
 

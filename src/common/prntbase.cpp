@@ -34,6 +34,7 @@
     #include "wx/dcclient.h"
     #include "wx/stattext.h"
     #include "wx/intl.h"
+    #include "wx/textctrl.h"
     #include "wx/textdlg.h"
     #include "wx/sizer.h"
     #include "wx/module.h"
@@ -1058,7 +1059,7 @@ void wxPreviewCanvas::OnMouseWheel(wxMouseEvent& event)
             else
                 delta = 50;
 
-            if ( event.GetWheelRotation() > 0 )
+            if ( event.GetWheelRotation() < 0 )
                 delta = -delta;
 
             int newZoom = currentZoom + delta;
@@ -1763,7 +1764,6 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     sizer->Add( m_controlBar, wxSizerFlags().Expand().Border() );
     sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
 
-    SetAutoLayout( true );
     SetSizer( sizer );
 
     m_modalityKind = kind;

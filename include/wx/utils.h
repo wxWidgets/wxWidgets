@@ -156,6 +156,9 @@ WXDLLIMPEXP_BASE bool wxIsPlatform64Bit();
 // Get machine CPU architecture
 WXDLLIMPEXP_BASE wxString wxGetCpuArchitectureName();
 
+// Get native machine CPU architecture
+WXDLLIMPEXP_BASE wxString wxGetNativeCpuArchitectureName();
+
 #ifdef __LINUX__
 // Get linux-distro information
 WXDLLIMPEXP_BASE wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
@@ -323,6 +326,12 @@ inline int wxHexToDec(const char* buf)
 WXDLLIMPEXP_BASE void wxDecToHex(unsigned char dec, wxChar *buf);
 WXDLLIMPEXP_BASE void wxDecToHex(unsigned char dec, char* ch1, char* ch2);
 WXDLLIMPEXP_BASE wxString wxDecToHex(unsigned char dec);
+
+// ----------------------------------------------------------------------------
+// Security
+// ----------------------------------------------------------------------------
+
+WXDLLIMPEXP_BASE void wxSecureZeroMemory(void *p, size_t n);
 
 // ----------------------------------------------------------------------------
 // Process management

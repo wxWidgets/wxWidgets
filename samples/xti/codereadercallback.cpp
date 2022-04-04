@@ -49,7 +49,7 @@ struct wxObjectCodeReaderCallback::wxObjectCodeReaderCallbackInternal
     {
         if ( m_objectNames.find(objectID) != m_objectNames.end() )
         {
-            wxLogError( _("Passing a already registered object to SetObjectName") );
+            wxLogError( _("Passing an already registered object to SetObjectName") );
             return ;
         }
         m_objectNames[objectID] = (const wxChar *)name;

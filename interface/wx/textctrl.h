@@ -258,7 +258,6 @@ enum wxTextCtrlHitTestResult
     wxTE_HT_BEYOND
 };
 
-
 /**
     @class wxTextAttr
 
@@ -979,6 +978,75 @@ public:
     void operator=(const wxTextAttr& attr);
 };
 
+/**
+    @class wxTextProofOptions
+
+    This class provides a convenient means of passing multiple parameters to
+    wxTextCtrl::EnableProofCheck().
+
+    By default, i.e. when calling EnableProofCheck() without any parameters,
+    Default() proof options are used, which enable spelling (but not grammar)
+    checks for the current language.
+
+    However it is also possible to customize the options:
+
+    @code
+    textctrl->EnableProofCheck(wxTextProofOptions::Default().Language("fr").GrammarCheck());
+    @endcode
+
+    or disable the all checks entirely:
+
+    @code
+    textctrl->EnableProofCheck(wxTextProofOptions::Disable());
+    @endcode
+
+    Note that this class has no public constructor, except for the copy
+    constructor, so its objects can only be created using the static factory
+    methods Default() or Disable().
+
+    @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::GetProofCheckOptions().
+
+    @since 3.1.6
+*/
+class WXDLLIMPEXP_CORE wxTextProofOptions
+{
+    /**
+       Create an object corresponding to the default checks.
+
+       The returned object enables spelling checks and disables grammar checks.
+     */
+    static wxTextProofOptions Default()
+
+    /**
+       Create an object disabling all checks.
+
+       The returned object can be passed to wxTextCtrl::EnableProofCheck() to
+       disable all checks in the text control.
+     */
+    static wxTextProofOptions Disable()
+
+    /**
+       Enable / disable spell checking for this control.
+     */
+    wxTextProofOptions& SpellCheck(bool enable = true)
+
+    /**
+       Enable / disable grammar checking for this control.
+
+       This option is currently only supported under macOS and is ignored under
+       the other platforms.
+     */
+    wxTextProofOptions& GrammarCheck(bool enable = true)
+
+    /// Return true if spell checking is enabled.
+    bool IsSpellCheckEnabled() const;
+
+    /// Return true if grammar checking is enabled.
+    bool IsGrammarCheckEnabled() const;
+
+    /// Returns true if any checks are enabled.
+    bool AnyChecksEnabled() const
+};
 
 /**
     @class wxTextCtrl
@@ -1016,10 +1084,15 @@ public:
            The text will not be user-editable.
     @style{wxTE_RICH}
            Use rich text control under MSW, this allows having more than 64KB
-           of text in the control. This style is ignored under other platforms.
+           of text in the control. This style is ignored under other platforms
+           and it is recommended to use wxTE_RICH2 instead of it under MSW.
     @style{wxTE_RICH2}
            Use rich text control version 2.0 or higher under MSW, this style is
-           ignored under other platforms
+           ignored under other platforms. Note that this style may be turned on
+           automatically even if it is not used explicitly when creating a text
+           control with a long (i.e. much more than 64KiB) initial text, as
+           creating the control would simply fail in this case under MSW if
+           neither this style nor wxTE_RICH is used.
     @style{wxTE_AUTO_URL}
            Highlight the URLs and generate the wxTextUrlEvents when mouse
            events occur over them.
@@ -1140,7 +1213,7 @@ public:
     text->AppendText("Red text\n");
     text->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
     text->AppendText("Red on grey text\n");
-    text->SetDefaultStyle(wxTextAttr(*wxBLUE);
+    text->SetDefaultStyle(wxTextAttr(*wxBLUE));
     text->AppendText("Blue on grey text\n");
     @endcode
 
@@ -1313,6 +1386,17 @@ public:
     virtual void DiscardEdits();
 
     /**
+        Delete the undo history.
+
+        Currently only implemented in wxMSW (for controls using wxTE_RICH2
+        style only) and wxOSX (for multiline text controls only), does nothing
+        in the other ports or for the controls not using the appropriate styles.
+
+        @since 3.1.6
+    */
+    virtual void EmptyUndoBuffer();
+
+    /**
         This function inserts into the control the character which would have
         been inserted if the given key event had occurred in the text control.
 
@@ -1324,6 +1408,36 @@ public:
             @true if the event resulted in a change to the control, @false otherwise.
     */
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
+
+    /**
+        Enable or disable native spell checking on this text control if it is
+        available on the current platform.
+
+        Currently this is supported in wxMSW (when running under Windows 8 or
+        later), wxGTK when using GTK 3 and wxOSX. In addition, wxMSW requires
+        that the text control has the wxTE_RICH2 style set, while wxOSX
+        requires that the control has the wxTE_MULTILINE style.
+
+        When using wxGTK, this method only works if gspell library was
+        available during the library build.
+
+        @param options
+            A wxTextProofOptions object specifying the desired behaviour
+            of the proof checker (e.g. language to use, spell check, grammar
+            check, etc.) and whether the proof checks should be enabled at all.
+            By default, spelling checks for the current language are enabled.
+            Passing wxTextProofOptions::Disable() disables all the checks.
+
+        @return
+            @true if proof checking has been successfully enabled or disabled,
+            @false otherwise (usually because the corresponding functionality
+            is not available under the current platform or for this type of
+            text control).
+
+        @since 3.1.6
+    */
+    virtual bool EnableProofCheck(const wxTextProofOptions& options
+                                    = wxTextProofOptions::Default());
 
     /**
         Returns the style currently used for the new text.
@@ -1465,6 +1579,18 @@ public:
         @see IsSingleLine(), IsMultiLine()
     */
     bool IsSingleLine() const;
+
+    /**
+        Returns the current text proofing options.
+
+        This function is implemented for the same platforms as
+        EnableProofCheck() and returns wxTextProofOptions with all checks
+        disabled, i.e. such that wxTextProofOptions::AnyChecksEnabled() returns
+        @false.
+
+        @since 3.1.6
+    */
+    virtual wxTextProofOptions GetProofCheckOptions();
 
     /**
         Loads and displays the named file, if it exists.
@@ -1634,6 +1760,35 @@ public:
             The position value, or -1 if x or y was invalid.
     */
     virtual long XYToPosition(long x, long y) const;
+
+    /**
+        @name Mac-specific functions
+    */
+    //@{
+
+    /**
+        Enable the automatic replacement of new lines characters in a
+        single-line text field with spaces under macOS.
+
+        This feature is enabled by default and will replace any new line (`\n`)
+        character entered into a single-line text field with the space
+        character. Usually single-line text fields are not expected to hold
+        multiple lines of text (that is what wxTE_MULTILINE is for, after all)
+        and it is impossible to have multiple lines of text in them under
+        non-Mac platforms. However, under macOS/Cocoa, a single-line text
+        control can still show multiple lines and this function allows to lift
+        the restriction preventing multiple lines from being entered unless
+        wxTE_MULTILINE is specified.
+
+        @note This function is only available for macOS/Cocoa. It also has no
+        effect if the wxTE_MULTILINE flag is set on a text control.
+
+        @onlyfor{wxosx}
+        @since 3.1.6
+    */
+    virtual void OSXEnableNewLineReplacement(bool enable);
+
+    //@}
 
     //@{
     /**

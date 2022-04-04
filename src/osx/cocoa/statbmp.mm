@@ -106,7 +106,7 @@ void wxStaticBitmap::SetScaleMode(ScaleMode scaleMode)
 wxWidgetImplType* wxWidgetImpl::CreateStaticBitmap( wxWindowMac* wxpeer,
                                                    wxWindowMac* WXUNUSED(parent),
                                                    wxWindowID WXUNUSED(id),
-                                                   const wxBitmap& WXUNUSED(bitmap),
+                                                   const wxBitmapBundle& WXUNUSED(bitmap),
                                                    const wxPoint& pos,
                                                    const wxSize& size,
                                                    long WXUNUSED(style),

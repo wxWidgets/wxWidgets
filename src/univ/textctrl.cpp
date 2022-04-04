@@ -128,6 +128,7 @@
     #include "wx/dcclient.h"
     #include "wx/validate.h"
     #include "wx/dataobj.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include <ctype.h>
@@ -790,10 +791,7 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 
         Replace(0, GetLastPosition(), value);
 
-        if ( IsSingleLine() )
-        {
-            SetInsertionPoint(0);
-        }
+        SetInsertionPoint(0);
     }
     else // nothing changed
     {
@@ -1724,11 +1722,10 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
     }
     else // multiline
     {
-        if ( (size_t)y >= GetLineCount() )
-        {
-            // this position is below the text
-            return GetLastPosition();
-        }
+        size_t nLineCount = GetLineCount();
+
+        if ((size_t)y >= nLineCount)
+            return -1;
 
         wxTextPos pos = 0;
         for ( size_t nLine = 0; nLine < (size_t)y; nLine++ )
@@ -1736,14 +1733,12 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
             // +1 is because the positions at the end of this line and of the
             // start of the next one are different
             pos += GetLines()[nLine].length() + 1;
+
         }
 
-        // take into account also the position in line
+        // out of the line
         if ( (size_t)x > GetLines()[y].length() )
-        {
-            // don't return position in the next line
-            x = GetLines()[y].length();
-        }
+            return -1;
 
         return pos + x;
     }
@@ -1770,9 +1765,10 @@ bool wxTextCtrl::PositionToXY(wxTextPos pos,
         size_t nLineCount = GetLineCount();
         for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
         {
-            // +1 is because the start the start of the next line is one
+            // +1 is because the start of the next line is one
             // position after the end of this one
             wxTextPos posNew = posCur + GetLines()[nLine].length() + 1;
+
             if ( posNew > pos )
             {
                 // we've found the line, now just calc the column
@@ -2459,7 +2455,7 @@ void wxTextCtrl::UpdateLastVisible()
         return;
 
     // use (efficient) HitTestLine to find the last visible character
-    wxString text = m_value.Mid((size_t)SData().m_colStart /* to the end */);
+    wxString text = m_value;
     wxTextCoord col;
     switch ( HitTestLine(text, m_rectText.width, &col) )
     {
@@ -2884,16 +2880,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     dc.GetTextExtent(line, &width, NULL);
     if ( x >= width )
     {
-        // clicking beyond the end of line is equivalent to clicking at
-        // the end of it, so return the last line column
         col = line.length();
-        if ( col )
-        {
-            // unless the line is empty and so doesn't have any column at all -
-            // in this case return 0, what else can we do?
-            col--;
-        }
-
         res = wxTE_HT_BEYOND;
     }
     else if ( x < 0 )
@@ -3388,7 +3375,7 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
         SData().m_colStart = col;
 
         // after changing m_colStart, recalc the last visible position: we need
-        // to recalc the last visible position beore scrolling in order to make
+        // to recalc the last visible position before scrolling in order to make
         // it appear exactly at the right edge of the text area after scrolling
         UpdateLastVisible();
 
@@ -4671,6 +4658,15 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         if ( CanRedo() )
             Redo();
     }
+    else if ( action == wxACTION_TEXT_RETURN )
+    {
+        // activate default button
+        if ( !HasFlag(wxTE_PROCESS_ENTER) && !HasFlag(wxTE_MULTILINE) )
+        {
+            return ClickDefaultButtonIfPossible();
+        }
+        return false;
+    }
     else
     {
         return wxControl::PerformAction(action, numArg, strArg);
@@ -4763,12 +4759,18 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #endif
         if ( keycode == WXK_RETURN )
         {
-            if ( IsSingleLine() || (GetWindowStyle() & wxTE_PROCESS_ENTER) )
+            if ( (GetWindowStyle() & wxTE_PROCESS_ENTER) )
             {
                 wxCommandEvent event(wxEVT_TEXT_ENTER, GetId());
                 InitCommandEvent(event);
                 event.SetString(GetValue());
-                GetEventHandler()->ProcessEvent(event);
+                if( GetEventHandler()->ProcessEvent(event) )
+                    return;
+            }
+
+            if ( IsSingleLine() )
+            {
+                ClickDefaultButtonIfPossible();
             }
             else // interpret <Enter> normally: insert new line
             {
@@ -4798,6 +4800,23 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #endif // wxDEBUG_LEVEL >= 2
 
     event.Skip();
+}
+
+bool wxTextCtrl::ClickDefaultButtonIfPossible()
+{
+    wxTopLevelWindow* tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( tlw )
+    {
+        wxButton* btn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+        if ( btn )
+        {
+            wxCommandEvent evt(wxEVT_BUTTON, btn->GetId());
+            evt.SetEventObject(btn);
+            btn->Command(evt);
+            return true;
+        }
+    }
+    return false;
 }
 
 /* static */
@@ -4917,6 +4936,9 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
                 action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_LEFT;
             break;
 
+        case WXK_RETURN:
+            action << wxACTION_TEXT_RETURN;
+            break;
         // something else
         default:
             // reset the action as it could be already set to one of the
@@ -4952,7 +4974,11 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
 
     if ( (action != wxACTION_NONE) && (action != wxACTION_TEXT_PREFIX_SEL) )
     {
-        consumer->PerformAction(action, -1, str);
+        bool result = consumer->PerformAction(action, -1, str);
+        if ( !result && action == wxACTION_TEXT_RETURN )
+        {
+            return wxStdInputHandler::HandleKey(consumer, event, pressed);
+        }
 
         // the key down of WXK_UP/DOWN and WXK_PAGEUP/DOWN
         // must generate a wxEVT_TEXT event. For the controls

@@ -447,14 +447,11 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
     return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
 }
 
-void wxNotebook::SetImageList(wxImageList* imageList)
+void wxNotebook::OnImagesChanged()
 {
-    wxNotebookBase::SetImageList(imageList);
+    wxImageList* const iml = GetUpdatedImageListFor(this);
 
-    if ( imageList )
-    {
-        (void) TabCtrl_SetImageList(GetHwnd(), GetHimagelistOf(imageList));
-    }
+    (void) TabCtrl_SetImageList(GetHwnd(), iml ? GetHimagelistOf(iml) : NULL);
 }
 
 // ----------------------------------------------------------------------------
@@ -674,7 +671,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     // finally do insert it
     if ( TabCtrl_InsertItem(GetHwnd(), nPage, &tcItem) == -1 )
     {
-        wxLogError(wxT("Can't create the notebook page '%s'."), strText.c_str());
+        wxLogError(wxT("Can't create the notebook page '%s'."), strText);
 
         return false;
     }
@@ -795,9 +792,6 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxBitmap bmp(rc.right, rc.bottom);
     wxMemoryDC memdc(bmp);
 
-    const wxLayoutDirection dir = dc.GetLayoutDirection();
-    memdc.SetLayoutDirection(dir);
-
     const HDC hdc = GetHdcOf(memdc);
 
     // The drawing logic of the native tab control is absolutely impenetrable
@@ -866,10 +860,7 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
         ::ExtFloodFill(hdc, x, y, ::GetSysColor(COLOR_BTNFACE), FLOODFILLSURFACE);
     }
 
-    // For some reason in RTL mode, source offset has to be -1, otherwise the
-    // right border (physical) remains unpainted.
-    const wxCoord ofs = dir == wxLayout_RightToLeft ? -1 : 0;
-    dc.Blit(ofs, 0, rc.right, rc.bottom, &memdc, ofs, 0);
+    dc.Blit(0, 0, rc.right, rc.bottom, &memdc, 0, 0);
 }
 
 #endif // USE_NOTEBOOK_ANTIFLICKER

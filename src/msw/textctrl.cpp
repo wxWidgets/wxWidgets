@@ -19,7 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-
 #if wxUSE_TEXTCTRL
 
 #ifndef WX_PRECOMP
@@ -77,6 +76,27 @@
     #include "wx/msw/ole/oleutils.h"
 
     #include "wx/msw/private/comptr.h"
+
+    #if wxUSE_SPELLCHECK
+        #include "wx/msw/wrapwin.h"
+
+        // Add defines that are missing in MinGW.
+        #ifndef IMF_SPELLCHECKING
+            #define IMF_SPELLCHECKING 0x0800
+        #endif
+        #ifndef SES_USECTF
+            #define SES_USECTF 0x00010000
+        #endif
+        #ifndef SES_CTFALLOWEMBED
+            #define SES_CTFALLOWEMBED 0x00200000
+        #endif
+        #ifndef SES_CTFALLOWSMARTTAG
+            #define SES_CTFALLOWSMARTTAG 0x00400000
+        #endif
+        #ifndef SES_CTFALLOWPROOFING
+            #define SES_CTFALLOWPROOFING 0x00800000
+        #endif
+    #endif // wxUSE_SPELLCHECK
 #endif // wxUSE_RICHEDIT
 
 #if wxUSE_INKEDIT
@@ -563,7 +583,22 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     m_updatesCount = -2;
 
     if ( !MSWCreateControl(windowClass.t_str(), msStyle, pos, size, valueWin) )
+    {
+        // There is one case in which window creation may realistically fail
+        // and this is when we create a plain EDIT control with too long text,
+        // so try to detect this and transparently switch to using RICHEDIT in
+        // this case (note that the exact length cut off is unknown and might
+        // be system-dependent, but even though plain EDIT works for texts
+        // longer than 64KiB, we don't lose much by trying to use RICHEDIT if
+        // creating it failed).
+        if ( !HasFlag(wxTE_RICH | wxTE_RICH2) && value.length() >= 0x10000 )
+        {
+            m_windowStyle |= wxTE_RICH2;
+            return MSWCreateText(value, pos, size);
+        }
+
         return false;
+    }
 
     m_updatesCount = -1;
 
@@ -690,33 +725,16 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
     }
 
-#if wxUSE_RICHEDIT && wxUSE_OLE && defined(wxHAS_TOM_H)
+#if wxUSE_RICHEDIT
     // For RichEdit >= 4, SetFont(), called above from MSWCreateControl(), uses
     // EM_SETCHARFORMAT which affects the undo buffer, meaning that CanUndo()
-    // for a newly created control returns true, which is unexpected. To avoid
-    // this, we explicitly use Undo(tomFalse) here to clear the undo buffer.
-    // And since Undo(tomFalse) also disables the undo buffer, we need to
-    // enable it again immediately after clearing by calling Undo(tomTrue).
+    // for a newly created control returns true, which is unexpected, so clear
+    // the undo buffer.
     if ( GetRichVersion() >= 4 )
     {
-        wxCOMPtr<IRichEditOle> pRichEditOle;
-        if ( SendMessage(GetHwnd(), EM_GETOLEINTERFACE,
-                         0, (LPARAM)&pRichEditOle) && pRichEditOle )
-        {
-            wxCOMPtr<ITextDocument> pDoc;
-            HRESULT hr = pRichEditOle->QueryInterface
-                                       (
-                                        wxIID_PPV_ARGS(ITextDocument, &pDoc)
-                                       );
-            if ( SUCCEEDED(hr) )
-            {
-                hr = pDoc->Undo(tomFalse, NULL);
-                if ( SUCCEEDED(hr) )
-                    pDoc->Undo(tomTrue, NULL);
-            }
-        }
+        EmptyUndoBuffer();
     }
-#endif // wxUSE_RICHEDIT && wxHAS_TOM_H
+#endif // wxUSE_RICHEDIT
 
     return true;
 }
@@ -742,7 +760,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
         wxChar c;
         if ( wxSscanf(classname, wxT("RichEdit%d0%c"), &m_verRichEdit, &c) != 2 )
         {
-            wxLogDebug(wxT("Unknown edit control '%s'."), classname.c_str());
+            wxLogDebug(wxT("Unknown edit control '%s'."), classname);
 
             m_verRichEdit = 0;
         }
@@ -828,6 +846,44 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     return msStyle;
 }
+
+#if wxUSE_RICHEDIT && wxUSE_SPELLCHECK
+
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
+{
+    wxCHECK_MSG((m_windowStyle & wxTE_RICH2), false,
+            "Unable to enable proof checking on a control "
+            "that does not have wxTE_RICH2 style");
+
+    LPARAM editStyle = SES_USECTF | SES_CTFALLOWEMBED
+                        | SES_CTFALLOWSMARTTAG  | SES_CTFALLOWPROOFING;
+    ::SendMessage(GetHwnd(), EM_SETEDITSTYLE, editStyle, editStyle);
+
+    LRESULT langOptions = ::SendMessage(GetHwnd(), EM_GETLANGOPTIONS, 0, 0);
+
+    if ( options.IsSpellCheckEnabled() )
+        langOptions |= IMF_SPELLCHECKING;
+    else
+        langOptions &= ~IMF_SPELLCHECKING;
+
+    ::SendMessage(GetHwnd(), EM_SETLANGOPTIONS, 0, langOptions);
+
+   return GetProofCheckOptions().IsSpellCheckEnabled();
+}
+
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
+{
+    wxTextProofOptions opts = wxTextProofOptions::Disable();
+
+    LRESULT langOptions = ::SendMessage(GetHwnd(), EM_GETLANGOPTIONS, 0, 0);
+
+    if (langOptions & IMF_SPELLCHECKING)
+        opts.SpellCheck();
+
+    return opts;
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {
@@ -2012,6 +2068,37 @@ bool wxTextCtrl::CanRedo() const
     return wxTextEntry::CanRedo();
 }
 
+#if wxUSE_RICHEDIT
+
+void wxTextCtrl::EmptyUndoBuffer()
+{
+#if wxUSE_OLE && defined(wxHAS_TOM_H)
+    // We need to use Undo(tomFalse) to clear the undo buffer, but calling it
+    // also disables the undo buffer, so we need to enable it again immediately
+    // after clearing by calling Undo(tomTrue).
+    if ( GetRichVersion() >= 4 )
+    {
+        wxCOMPtr<IRichEditOle> pRichEditOle;
+        if ( SendMessage(GetHwnd(), EM_GETOLEINTERFACE,
+                         0, (LPARAM)&pRichEditOle) && pRichEditOle )
+        {
+            wxCOMPtr<ITextDocument> pDoc;
+            HRESULT hr = pRichEditOle->QueryInterface
+                                       (
+                                        wxIID_PPV_ARGS(ITextDocument, &pDoc)
+                                       );
+            if ( SUCCEEDED(hr) )
+            {
+                hr = pDoc->Undo(tomFalse, NULL);
+                if ( SUCCEEDED(hr) )
+                    pDoc->Undo(tomTrue, NULL);
+            }
+        }
+    }
+#endif // wxUSE_OLE && wxHAS_TOM_H
+}
+#endif // wxUSE_RICHEDIT
+
 // ----------------------------------------------------------------------------
 // caret handling (Windows only)
 // ----------------------------------------------------------------------------
@@ -2058,80 +2145,29 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
 {
-    // check for our special keys here: if we don't do it and the parent frame
-    // uses them as accelerators, they wouldn't work at all, so we disable
-    // usual preprocessing for them
-    if ( msg->message == WM_KEYDOWN )
+    // Handle keys specific to (multiline) text controls here.
+    if ( msg->message == WM_KEYDOWN && !(HIWORD(msg->lParam) & KF_ALTDOWN) )
     {
-        const WPARAM vkey = msg->wParam;
-        if ( HIWORD(msg->lParam) & KF_ALTDOWN )
+        switch ( msg->wParam )
         {
-            // Alt-Backspace is accelerator for "Undo"
-            if ( vkey == VK_BACK )
-                return false;
-        }
-        else // no Alt
-        {
-            // we want to process some Ctrl-foo and Shift-bar but no key
-            // combinations without either Ctrl or Shift nor with both of them
-            // pressed
-            const int ctrl = wxIsCtrlDown(),
-                      shift = wxIsShiftDown();
-            switch ( ctrl + shift )
-            {
-                default:
-                    wxFAIL_MSG( wxT("how many modifiers have we got?") );
-                    wxFALLTHROUGH;
+            case VK_RETURN:
+                // This key must be handled only by multiline controls and only
+                // if it's pressed on its own, not with some modifier.
+                if ( !wxIsShiftDown() && !wxIsCtrlDown() && IsMultiLine() )
+                    return false;
+                break;
 
-                case 0:
-                    switch ( vkey )
-                    {
-                        case VK_RETURN:
-                            // This one is only special for multi line controls.
-                            if ( !IsMultiLine() )
-                                break;
-                            wxFALLTHROUGH;
-
-                        case VK_DELETE:
-                        case VK_HOME:
-                        case VK_END:
-                            return false;
-                    }
-                    wxFALLTHROUGH;
-                case 2:
-                    break;
-
-                case 1:
-                    // either Ctrl or Shift pressed
-                    if ( ctrl )
-                    {
-                        switch ( vkey )
-                        {
-                            case 'A':
-                            case 'C':
-                            case 'V':
-                            case 'X':
-                            case VK_INSERT:
-                            case VK_DELETE:
-                            case VK_HOME:
-                            case VK_END:
-                                return false;
-
-                            case VK_BACK:
-                                if ( MSWNeedsToHandleCtrlBackspace() )
-                                    return false;
-                        }
-                    }
-                    else // Shift is pressed
-                    {
-                        if ( vkey == VK_INSERT || vkey == VK_DELETE )
-                            return false;
-                    }
-            }
+            case VK_BACK:
+                if ( wxIsCtrlDown() && !wxIsShiftDown() &&
+                        MSWNeedsToHandleCtrlBackspace() )
+                    return false;
+                break;
         }
     }
 
-    return wxControl::MSWShouldPreProcessMessage(msg);
+    // Delegate all the other checks to the base classes.
+    return wxTextEntry::MSWShouldPreProcessMessage(msg) &&
+                wxControl::MSWShouldPreProcessMessage(msg);
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
@@ -2923,7 +2959,7 @@ void wxTextCtrl::MSWSetRichZoom()
 
     // apply the new zoom ratio, Windows uses a default denominator of 100, so
     // do it here as well
-    num = 100 * ratio;
+    num = UINT(100 * ratio);
     denom = 100;
     ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
 }
@@ -3202,7 +3238,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         wxFont font(style.GetFont());
 
         LOGFONT lf = font.GetNativeFontInfo()->lf;
-        cf.yHeight = 20 * font.GetFractionalPointSize(); // 1 pt = 20 twips
+        cf.yHeight = LONG(20 * font.GetFractionalPointSize()); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
         wxStrlcpy(cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName));

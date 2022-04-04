@@ -82,7 +82,7 @@ MyResizableListCtrl::MyResizableListCtrl( wxWindow *parent, wxWindowID id,
     // This listctrl needs to insert its columns in the constructor, since
     // as soon as the listctrl is built, it is resized and grafted onto an
     // "unknown" XRC placeholder. This induces an OnSize() event, calling the
-    // overrriden OnSize function for this class, which needs to have 3
+    // overridden OnSize function for this class, which needs to have 3
     // columns to resize (else an assert on WXGTK debug build).
     InsertColumn( RECORD_COLUMN, _("Record"), wxLIST_FORMAT_LEFT, 140);
     InsertColumn( ACTION_COLUMN, _("Action"), wxLIST_FORMAT_LEFT, 70);

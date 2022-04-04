@@ -347,7 +347,7 @@ typedef wxUint32 wxDword;
     each time we cast it to a pointer or a handle (which results in hundreds
     of warnings as Win32 API often passes pointers in them)
  */
-#ifdef __VISUALC__
+#if defined(__VISUALC__) && (_MSC_VER < 1800)
     #define wxW64 __w64
 #else
     #define wxW64

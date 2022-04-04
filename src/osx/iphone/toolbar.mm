@@ -19,9 +19,12 @@
 #endif
 
 #include "wx/app.h"
-#include "wx/osx/private.h"
 #include "wx/geometry.h"
 #include "wx/sysopt.h"
+
+#include "wx/private/bmpbndl.h"
+
+#include "wx/osx/private.h"
 
 #pragma mark -
 #pragma mark Tool Implementation
@@ -58,8 +61,8 @@ public:
                   wxToolBar *tbar,
                   int id,
                   const wxString& label,
-                  const wxBitmap& bmpNormal,
-                  const wxBitmap& bmpDisabled,
+                  const wxBitmapBundle& bmpNormal,
+                  const wxBitmapBundle& bmpDisabled,
                   wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelp,
@@ -104,8 +107,8 @@ wxToolBarTool::wxToolBarTool(
                              wxToolBar *tbar,
                              int id,
                              const wxString& label,
-                             const wxBitmap& bmpNormal,
-                             const wxBitmap& bmpDisabled,
+                             const wxBitmapBundle& bmpNormal,
+                             const wxBitmapBundle& bmpDisabled,
                              wxItemKind kind,
                              wxObject *clientData,
                              const wxString& shortHelp,
@@ -127,7 +130,7 @@ wxToolBarToolBase(
     }
     else if ( bmpNormal.IsOk() )
     {
-        bui = [bui initWithImage:bmpNormal.GetUIImage() style:UIBarButtonItemStylePlain target:toolbar
+        bui = [bui initWithImage:wxOSXGetImageFromBundle(bmpNormal) style:UIBarButtonItemStylePlain target:toolbar
                       action:@selector(clickedAction:)];
     }
     else
@@ -180,8 +183,8 @@ wxToolBarTool::~wxToolBarTool()
 wxToolBarToolBase *wxToolBar::CreateTool(
                                          int id,
                                          const wxString& label,
-                                         const wxBitmap& bmpNormal,
-                                         const wxBitmap& bmpDisabled,
+                                         const wxBitmapBundle& bmpNormal,
+                                         const wxBitmapBundle& bmpDisabled,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
@@ -277,7 +280,7 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     DoLayout();
 } 
 
-void wxToolBar::SetToolBitmapSize(const wxSize& size)
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
 {
     m_defaultWidth = size.x;
     m_defaultHeight = size.y;
@@ -296,7 +299,7 @@ void wxToolBar::SetRows(int nRows)
         m_maxRows = nRows;
 }
 
-void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
@@ -307,7 +310,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
     }
 }
 
-void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )

@@ -10,13 +10,14 @@ We provide pre-built binary files for the following compilers:
 * Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2
   (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
 * MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
-* [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 9.2.0.
+* [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 10.3.0.
+* [MSYS2](https://www.msys2.org/) MinGW 11.2.0.
 
 Getting the files
 -----------------
 
 First, you need to get the correct files. You will always need the
-`wxWidgets-3.1.5-headers.7z` one but the rest depends on your compiler version
+`wxWidgets-3.1.6-headers.7z` one but the rest depends on your compiler version
 and architecture: as different versions of MSVC compiler are not binary
 compatible, you should select the files with the correct
 `vc80`, `vc90`, `vc100`, `vc110`, `vc120`, or `vc14x`
@@ -27,14 +28,14 @@ or the ones without this suffix for the still more common 32-bit builds. After
 determining the combination of suffixes you need, you should download the
 "Dev" and the "ReleaseDLL" files in addition to the "Headers" one above,
 e.g. for 32-bit MSVS 2017 development you need
-`wxMSW-3.1.5_vc14x_Dev.7z` and `wxMSW-3.1.5_vc14x_ReleaseDLL.7z`.
+`wxMSW-3.1.6_vc14x_Dev.7z` and `wxMSW-3.1.6_vc14x_ReleaseDLL.7z`.
 
 All binaries are available at:
 
-https://www.wxwidgets.org/downloads#v3.1.5_msw
+https://www.wxwidgets.org/downloads#v3.1.6_msw
 
 Once you have the files you need, unzip all of them into the same directory, for
-example `c:\wx\3.1.5`. You should have only include and lib subdirectories under
+example `c:\wx\3.1.6`. You should have only include and lib subdirectories under
 it, nothing else. To avoid hard-coding this path into your projects, define
 `wxwin` environment variable containing it: although it's a little known fact,
 all versions of MSVC support environment variable expansion in the C++ projects

@@ -381,6 +381,9 @@ public:
     int m_colToSend;
     int m_widthToSend;
 
+    bool m_sortAsc;
+    int m_sortCol;
+
     virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
 
     virtual void OnInternalIdle() wxOVERRIDE;
@@ -695,10 +698,10 @@ public:
         { return m_small_image_list; }
 
     // set the scrollbars and update the positions of the items
-    void RecalculatePositions(bool noRefresh = false);
+    void RecalculatePositions();
 
-    // refresh the window and the header
-    void RefreshAll();
+    // do the same thing and also call Refresh()
+    void RecalculatePositionsAndRefresh();
 
     long GetNextItem( long item, int geometry, int state ) const;
     void DeleteItem( long index );

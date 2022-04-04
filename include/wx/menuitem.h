@@ -21,7 +21,11 @@
 
 #include "wx/object.h"  // base class
 
+#include "wx/bmpbndl.h"
+
 #include "wx/windowid.h"
+
+#include "wx/vector.h"
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -122,6 +126,14 @@ public:
     // set the accel for this item - this may also be done indirectly with
     // SetText()
     virtual void SetAccel(wxAcceleratorEntry *accel);
+
+    // add the accel to extra accels list
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel);
+
+    // return vector of extra accels. Implementation only.
+    const wxVector<wxAcceleratorEntry>& GetExtraAccels() const { return m_extraAccels; }
+
+    virtual void ClearExtraAccels();
 #endif // wxUSE_ACCEL
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -136,7 +148,7 @@ public:
     wxDEPRECATED( const wxString& GetText() const );
 
     // Now use GetLabelText to strip the accelerators
-    static wxDEPRECATED( wxString GetLabelFromText(const wxString& text) );
+    wxDEPRECATED( static wxString GetLabelFromText(const wxString& text) );
 
     // Now use SetItemLabel
     wxDEPRECATED( virtual void SetText(const wxString& str) );
@@ -154,6 +166,10 @@ public:
     }
 
 protected:
+    // Helper function returning the appropriate bitmap from the given bundle
+    // (which may be invalid, in which case invalid bitmap is returned).
+    wxBitmap GetBitmapFromBundle(const wxBitmapBundle& bundle) const;
+
     wxWindowIDRef m_id;             // numeric id of the item >= 0 or wxID_ANY or wxID_SEPARATOR
     wxMenu       *m_parentMenu,     // the menu we belong to
                  *m_subMenu;        // our sub menu or NULL
@@ -162,6 +178,10 @@ protected:
     wxItemKind    m_kind;           // separator/normal/check/radio item?
     bool          m_isChecked;      // is checked?
     bool          m_isEnabled;      // is enabled?
+
+#if wxUSE_ACCEL
+    wxVector<wxAcceleratorEntry> m_extraAccels; // extra accels will work, but won't be shown in wxMenuItem title
+#endif // wxUSE_ACCEL
 
     // this ctor is for the derived classes only, we're never created directly
     wxMenuItemBase(wxMenu *parentMenu = NULL,

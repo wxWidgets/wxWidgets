@@ -50,7 +50,7 @@
 
   I decided to keep apart all of this from wxWidgets. You won't find anything
   related to wxWidgets in the oglstuff[.h][.cpp] files.
-  That's why I use std::vector and std:string instead of those provided by wx.
+  That's why I use std::vector and std::string instead of those provided by wx.
 */
 
 

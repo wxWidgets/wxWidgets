@@ -51,8 +51,8 @@ public:
             return DoCreateBuffer(dc, w, h);
 
         if ( !ms_buffer ||
-                w > ms_buffer->GetScaledWidth() ||
-                    h > ms_buffer->GetScaledHeight() )
+                w > ms_buffer->GetLogicalWidth() ||
+                    h > ms_buffer->GetLogicalHeight() )
         {
             delete ms_buffer;
 
@@ -84,7 +84,7 @@ private:
 
         // we must always return a valid bitmap but creating a bitmap of
         // size 0 would fail, so create a 1*1 bitmap in this case
-        buffer->CreateScaled(wxMax(w, 1), wxMax(h, 1), -1, scale);
+        buffer->CreateWithDIPSize(wxMax(w, 1), wxMax(h, 1), scale);
 
         return buffer;
     }

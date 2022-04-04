@@ -288,4 +288,91 @@ wxItemAttr* wxListCtrlBase::OnGetItemColumnAttr(long item, long WXUNUSED(column)
     return OnGetItemAttr(item);
 }
 
+// ----------------------------------------------------------------------------
+// Images support
+// ----------------------------------------------------------------------------
+
+void wxListCtrlBase::SetNormalImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesNormal.SetImages(images);
+
+    DoUpdateImages(wxIMAGE_LIST_NORMAL);
+}
+
+void wxListCtrlBase::SetSmallImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesSmall.SetImages(images);
+
+    DoUpdateImages(wxIMAGE_LIST_SMALL);
+}
+
+wxWithImages* wxListCtrlBase::GetImages(int which)
+{
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        return &m_imagesNormal;
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        return &m_imagesSmall;
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        return &m_imagesState;
+    }
+    return NULL;
+}
+
+const wxWithImages* wxListCtrlBase::GetImages(int which) const
+{
+    return const_cast<wxListCtrlBase*>(this)->GetImages(which);
+}
+
+wxImageList* wxListCtrlBase::GetUpdatedImageList(int which)
+{
+    wxWithImages* const images = GetImages(which);
+    return images ? images->GetUpdatedImageListFor(this) : NULL;
+}
+
+wxImageList *wxListCtrlBase::GetImageList(int which) const
+{
+    const wxWithImages* const images = GetImages(which);
+    return images ? images->GetImageList() : NULL;
+}
+
+void wxListCtrlBase::SetImageList(wxImageList *imageList, int which)
+{
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        m_imagesNormal.SetImageList(imageList);
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        m_imagesSmall.SetImageList(imageList);
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        m_imagesState.SetImageList(imageList);
+    }
+    else
+    {
+        wxFAIL_MSG("unknown image list");
+        return;
+    }
+
+    // Actually update the images shown in the control.
+    DoUpdateImages(which);
+}
+
+void wxListCtrlBase::AssignImageList(wxImageList *imageList, int which)
+{
+    SetImageList(imageList, which);
+    if ( which == wxIMAGE_LIST_NORMAL )
+        m_imagesNormal.TakeOwnership();
+    else if ( which == wxIMAGE_LIST_SMALL )
+        m_imagesSmall.TakeOwnership();
+    else if ( which == wxIMAGE_LIST_STATE )
+        m_imagesState.TakeOwnership();
+}
+
 #endif // wxUSE_LISTCTRL

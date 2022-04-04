@@ -84,10 +84,8 @@
 /build/msw/.vs/
 
 # /build/osx
-**/*.xcodeproj/*
-!**/*.xcodeproj/project.pbxproj
-!**/*.xcodeproj/xcshareddata/
-!**/*.xcworkspace/contents.xcworkspacedata
+**/xcuserdata/
+**/DerivedData/
 /build/osx/build
 /build/osx/setup/cocoa/include/wx/setup.h
 /build/osx/setup/iphone/include/wx/setup.h
@@ -385,7 +383,6 @@
 /tests/*c*_mswunivuddll_arm64
 /tests/test.opt
 /tests/test*.dsw
-/tests/test*.sln
 /tests/test.suo
 /tests/test_test.vcproj
 

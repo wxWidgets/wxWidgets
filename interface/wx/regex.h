@@ -12,13 +12,31 @@
 */
 enum
 {
-    /** Use extended regex syntax. */
+    /**
+        Use extended regex syntax.
+
+        This is the default and doesn't need to be specified.
+     */
     wxRE_EXTENDED = 0,
 
-    /** Use advanced RE syntax (built-in regex only). */
+    /**
+        Use advanced regex syntax.
+
+        This flag is synonym for wxRE_EXTENDED and doesn't need to be specified
+        as this is the default syntax.
+     */
     wxRE_ADVANCED = 1,
 
-    /** Use basic RE syntax. */
+    /**
+        Use basic regex syntax.
+
+        Use basic regular expression syntax, close to its POSIX definition,
+        but with some extensions still available.
+
+        The word start/end boundary assertions `\<` and `\>` are only
+        available when using basic syntax, use `[[:<:]]` and `[[:>:]]` or
+        just more general word boundary assertion `\b` when not using it.
+     */
     wxRE_BASIC    = 2,
 
     /** Ignore case in match. */
@@ -28,9 +46,11 @@ enum
     wxRE_NOSUB    = 8,
 
     /**
-        If not set, treat '\n' as an ordinary character, otherwise it is
-        special: it is not matched by '.' and '^' and '$' always match
-        after/before it regardless of the setting of wxRE_NOT[BE]OL.
+        If not set, treat `\n` as an ordinary character.
+
+        Otherwise `\n` is special: it is not matched by `.` and `^` and `$`
+        always match after/before it regardless of the setting of
+        ::wxRE_NOTBOL and ::wxRE_NOTEOL.
     */
     wxRE_NEWLINE  = 16,
 
@@ -51,7 +71,19 @@ enum
     wxRE_NOTBOL = 32,
 
     /** '$' doesn't match at the end of line. */
-    wxRE_NOTEOL = 64
+    wxRE_NOTEOL = 64,
+
+    /**
+        Don't accept empty string as a valid match.
+
+        If the regex matches an empty string, try alternatives, if there are
+        any, or fail.
+
+        This flag is not supported if PCRE support is turned off.
+
+        @since 3.1.6
+     */
+    wxRE_NOTEMPTY = 128
 };
 
 /**
@@ -60,26 +92,19 @@ enum
     wxRegEx represents a regular expression.  This class provides support
     for regular expressions matching and also replacement.
 
-    It is built on top of either the system library (if it has support
-    for POSIX regular expressions - which is the case of the most modern
-    Unices) or uses the built in Henry Spencer's library.  Henry Spencer
-    would appreciate being given credit in the documentation of software
-    which uses his library, but that is not a requirement.
+    In wxWidgets 3.1.6 or later, it is built on top of PCRE library
+    (https://www.pcre.org/). In the previous versions of wxWidgets, this class
+    uses Henry Spencer's library and behaved slightly differently, see below
+    for the discussion of the changes if you're upgrading from an older
+    version.
 
-    Regular expressions, as defined by POSIX, come in two flavours: @e extended
-    and @e basic.  The builtin library also adds a third flavour
-    of expression @ref overview_resyntax "advanced", which is not available
-    when using the system library.
+    Note that while C++11 and later provides @c std::regex and related classes,
+    this class is still useful as it provides the following important
+    advantages:
 
-    Unicode is fully supported only when using the builtin library.
-    When using the system library in Unicode mode, the expressions and data
-    are translated to the default 8-bit encoding before being passed to
-    the library.
-
-    On platforms where a system library is available, the default is to use
-    the builtin library for Unicode builds, and the system library otherwise.
-    It is possible to use the other if preferred by selecting it when building
-    the wxWidgets.
+    - Support for richer regular expressions syntax.
+    - Much better performance in many common cases, by a factor of 10-100.
+    - Consistent behaviour, including performance, on all platforms.
 
     @library{wxbase}
     @category{data}
@@ -118,6 +143,64 @@ enum
     std::cout << "text now contains " << count << " hidden addresses" << std::endl;
     std::cout << originalText << std::endl;
     @endcode
+
+
+    @section regex_pcre_changes Changes in the PCRE-based version
+
+    This section describes the difference in regex syntax in the new PCRE-based
+    wxRegEx version compared to the previously used version which implemented
+    POSIX regex support.
+
+    The main change is that both extended (::wxRE_EXTENDED) and advanced
+    (::wxRE_ADVANCED) regex syntax is now the same as PCRE syntax described at
+    https://www.pcre.org/current/doc/html/pcre2syntax.html
+
+    Basic regular expressions (::wxRE_BASIC) are still different, but their
+    use is deprecated and PCRE extensions are still accepted in them, please
+    avoid using them.
+
+    Other changes are:
+
+    - Negated character classes, i.e. @c [^....], now always match newline
+      character, regardless of whether ::wxRE_NEWLINE was used or not. The dot
+      metacharacter still has the same meaning, i.e. it matches newline by
+      default but not when ::wxRE_NEWLINE is specified.
+
+    - Previously POSIX-specified behaviour of handling unmatched right
+      parenthesis @c ')' as a literal character was implemented, but now this
+      is a (regex) compilation error.
+
+    - Empty alternation branches were previously ignored, i.e. matching @c a||b
+      worked the same as matching just @c a|b, but now actually matches an
+      empty string. The new ::wxRE_NOTEMPTY flag can be used to disable empty
+      matches.
+
+    - Using @c \\U to embed Unicode code points into the pattern is not
+      supported any more, use the still supported @c \\u, followed by exactly
+      four hexadecimal digits, or @c \\x, followed by exactly two hexadecimal
+      digits, instead.
+
+    - POSIX collating elements inside square brackets, i.e. @c [.XXX.] and
+      @c [:XXXX:] are not supported by PCRE and result in regex compilation
+      errors.
+
+    - Backslash can be used to escape the character following it even inside
+      square brackets now, while it loses its special meaning in POSIX regexes
+      when it occurs inside square brackets. In particular, @c "\\]" escapes
+      the special meaning of the closing bracket, and so does @e not close the
+      character class. Please use @c "\\\\]" instead.
+
+    - Closing parenthesis without a matching open parenthesis is now a syntax
+      error instead of just being treated as a literal. To fix possible errors
+      due to it, escape parenthesis that are supposed to be taken literally
+      with a backslash, i.e. use @c "\\)" in C strings.
+
+    - For completeness, PCRE syntax which previously resulted in errors, e.g.
+      @c "(?:...)" and similar constructs, are now accepted and behave as
+      expected. Other regexes syntactically invalid according to POSIX are
+      re-interpreted as sequences of literal characters with PCRE, e.g. @c "{1"
+      is just a sequence of two literal characters now, where it previously was
+      a compilation error.
 */
 class wxRegEx
 {
@@ -276,5 +359,27 @@ public:
         @since 3.1.3
     */
     static wxString QuoteMeta(const wxString& str);
+
+    /**
+        Converts a basic regular expression to an extended regex syntax.
+
+        This function can be used to convert @a bre using deprecated wxRE_BASIC
+        syntax to default (extended) syntax.
+
+        @since 3.1.6
+     */
+    static wxString ConvertFromBasic(const wxString& bre);
+
+    /**
+        Return the version of PCRE used.
+
+        The returned wxVersionInfo object currently always has its micro
+        version component set to 0, as PCRE uses only major and minor version
+        components. Its description component contains the version number,
+        release date and, for pre-release PCRE versions, a mention of it.
+
+        @since 3.1.6
+     */
+    static wxVersionInfo GetLibraryVersionInfo();
 };
 

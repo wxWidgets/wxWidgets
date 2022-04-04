@@ -186,6 +186,10 @@ static void FileNameFromEvent(wxFileName& eventFileName, char* path,
     {
         eventFileName.AssignDir(strPath);
     }
+    if ( flags & kFSEventStreamEventFlagItemIsSymlink )
+    {
+        eventFileName.Assign(strPath);
+    }
 }
 
 // This is the function that the FsEvents API

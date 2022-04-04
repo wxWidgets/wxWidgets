@@ -29,8 +29,8 @@ ANITEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	-I.\..\..\samples -DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 ANITEST_OBJECTS =  \
-	$(OBJS)\anitest_anitest.o \
-	$(OBJS)\anitest_sample_rc.o
+	$(OBJS)\anitest_sample_rc.o \
+	$(OBJS)\anitest_anitest.o
 
 ### Conditionally set variables: ###
 
@@ -224,11 +224,11 @@ catalog:
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %%f in (throbber.gif hourglass.ani) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
+$(OBJS)\anitest_sample_rc.o: ./../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
+
 $(OBJS)\anitest_anitest.o: ./anitest.cpp
 	$(CXX) -c -o $@ $(ANITEST_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\anitest_sample_rc.o: ./../sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
 
 .PHONY: all clean catalog
 

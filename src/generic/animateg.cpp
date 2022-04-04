@@ -178,6 +178,8 @@ void wxGenericAnimationCtrl::Init()
     // use the window background colour by default to be consistent
     // with the GTK+ native version
     m_useWinBackgroundColour = true;
+
+    Bind(wxEVT_DPI_CHANGED, &wxGenericAnimationCtrl::WXHandleDPIChanged, this);
 }
 
 bool wxGenericAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -263,14 +265,14 @@ void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
     DisplayStaticImage();
 }
 
-void wxGenericAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
+void wxGenericAnimationCtrl::SetInactiveBitmap(const wxBitmapBundle &bmp)
 {
     // if the bitmap has an associated mask, we need to set our background to
     // the colour of our parent otherwise when calling DrawCurrentFrame()
     // (which uses the bitmap's mask), our background colour would be used for
     // transparent areas - and that's not what we want (at least for
     // consistency with the GTK version)
-    if ( bmp.IsOk() && bmp.GetMask() != NULL && GetParent() != NULL )
+    if ( bmp.IsOk() && bmp.GetBitmapFor(this).GetMask() != NULL && GetParent() != NULL )
         SetBackgroundColour(GetParent()->GetBackgroundColour());
 
     wxAnimationCtrlBase::SetInactiveBitmap(bmp);

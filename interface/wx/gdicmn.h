@@ -1064,12 +1064,19 @@ public:
     /**
         @name Miscellaneous operators
 
+        Sizes can be added to or subtracted from each other or divided or
+        multiplied by a number.
+
         Note that these operators are documented as class members
         (to make them easier to find) but, as their prototype shows,
         they are implemented as global operators; note that this is
         transparent to the user but it helps to understand why the
         following functions are documented to take the wxSize they
         operate on as an explicit argument.
+
+        Also note that using @c double factor may result in rounding errors,
+        as wxSize always stores @c int coordinates and the result is always
+        rounded.
     */
     //@{
     wxSize& operator=(const wxSize& sz);
@@ -1083,10 +1090,15 @@ public:
     wxSize& operator -=(const wxSize& sz);
 
     wxSize operator /(const wxSize& sz, int factor);
+    wxSize operator /(const wxSize& sz, double factor);
     wxSize operator *(const wxSize& sz, int factor);
+    wxSize operator *(const wxSize& sz, double factor);
     wxSize operator *(int factor, const wxSize& sz);
+    wxSize operator *(double factor, const wxSize& sz);
     wxSize& operator /=(int factor);
+    wxSize& operator /=(double factor);
     wxSize& operator *=(int factor);
+    wxSize& operator *=(double factor);
     //@}
 };
 
@@ -1344,4 +1356,3 @@ void wxDisplaySizeMM(int* width, int* height);
 */
 wxSize wxGetDisplaySizeMM();
 //@}
-

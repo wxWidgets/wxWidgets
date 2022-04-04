@@ -38,6 +38,8 @@ enum
     MenuTestCase_Foo = 10000,
     MenuTestCase_SelectAll,
     MenuTestCase_Bar,
+    MenuTestCase_ExtraAccel,
+    MenuTestCase_ExtraAccels,
     MenuTestCase_First
 };
 
@@ -173,6 +175,34 @@ void MenuTestCase::CreateFrame()
                      "Accelerator conflicting with wxTextCtrl");
     m_itemCount++;
 
+    // Test adding an extra accelerator to the item before adding it to the menu.
+    wxAcceleratorEntry entry;
+
+    wxMenuItem* const
+        extraAccel = new wxMenuItem(fileMenu, MenuTestCase_ExtraAccel, "Extra accels");
+
+    CHECK( entry.FromString("Ctrl-U") );
+    extraAccel->SetAccel(&entry);
+
+    CHECK( entry.FromString("Ctrl-V") );
+    extraAccel->AddExtraAccel(entry);
+
+    fileMenu->Append(extraAccel);
+    m_itemCount++;
+
+    // And now also test adding 2 of them after creating the initial menu item.
+    wxMenuItem* const
+        extraAccels = fileMenu->Append(MenuTestCase_ExtraAccels, "Extra accels 2");
+    m_itemCount++;
+
+    CHECK( entry.FromString("Ctrl-T") );
+    extraAccels->AddExtraAccel(entry);
+
+    CHECK(entry.FromString("Shift-Ctrl-W"));
+    extraAccels->AddExtraAccel(entry);
+
+    CHECK(entry.FromString("Ctrl-W"));
+    extraAccels->SetAccel(&entry);
 
     PopulateMenu(helpMenu, "Helpmenu item ", m_itemCount);
     helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
@@ -358,7 +388,7 @@ GetTranslatedString(const wxTranslations& trans, const wxString& s)
 void MenuTestCase::TranslatedMnemonics()
 {
     // Check that appended mnemonics are correctly stripped;
-    // see https://trac.wxwidgets.org/ticket/16736
+    // see https://github.com/wxWidgets/wxWidgets/issues/16736
     wxTranslations trans;
     trans.SetLanguage(wxLANGUAGE_JAPANESE);
     wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
@@ -532,7 +562,6 @@ public:
     {
         m_win->Bind(wxEVT_MENU, &MenuEventHandler::OnMenu, this);
 
-        m_gotEvent = false;
         m_event = NULL;
     }
 
@@ -543,33 +572,41 @@ public:
         delete m_event;
     }
 
-    const wxCommandEvent& GetEvent()
+    // Check that we received an event with the given ID and return the event
+    // object if we did (otherwise fail the test and return NULL).
+    const wxObject* CheckGot(int expectedId)
     {
-        CPPUNIT_ASSERT( m_gotEvent );
+        if ( !m_event )
+        {
+            FAIL("Event not generated");
+            return NULL;
+        }
 
-        m_gotEvent = false;
+        CHECK( m_event->GetId() == expectedId );
 
-        return *m_event;
+        const wxObject* const src = m_event->GetEventObject();
+
+        delete m_event;
+        m_event = NULL;
+
+        return src;
     }
 
     bool GotEvent() const
     {
-        return m_gotEvent;
+        return m_event != NULL;
     }
 
 private:
     void OnMenu(wxCommandEvent& event)
     {
-        CPPUNIT_ASSERT( !m_gotEvent );
+        CHECK( !m_event );
 
-        delete m_event;
         m_event = static_cast<wxCommandEvent*>(event.Clone());
-        m_gotEvent = true;
     }
 
     wxWindow* const m_win;
     wxCommandEvent* m_event;
-    bool m_gotEvent;
 };
 
 #endif // wxUSE_UIACTIONSIMULATOR
@@ -589,23 +626,45 @@ void MenuTestCase::Events()
     sim.KeyUp(WXK_F1);
     wxYield();
 
-    const wxCommandEvent& ev = handler.GetEvent();
-    CPPUNIT_ASSERT_EQUAL( static_cast<int>(MenuTestCase_Bar), ev.GetId() );
-
-    wxObject* const src = ev.GetEventObject();
-    CPPUNIT_ASSERT( src );
-
-    CPPUNIT_ASSERT_EQUAL( "wxMenu",
-                          wxString(src->GetClassInfo()->GetClassName()) );
-    CPPUNIT_ASSERT_EQUAL( static_cast<wxObject*>(m_menuWithBar),
-                          src );
+    INFO("Expecting event for F1");
+    if ( const wxObject* const src = handler.CheckGot(MenuTestCase_Bar) )
+    {
+        CHECK( wxString(src->GetClassInfo()->GetClassName()) == "wxMenu" );
+        CHECK( src == m_menuWithBar );
+    }
 
     // Invoke another accelerator, it should also work.
     sim.Char('A', wxMOD_CONTROL);
     wxYield();
 
-    const wxCommandEvent& ev2 = handler.GetEvent();
-    CHECK( ev2.GetId() == static_cast<int>(MenuTestCase_SelectAll) );
+    INFO("Expecting event for Ctrl-A");
+    handler.CheckGot(MenuTestCase_SelectAll);
+
+    // Invoke accelerator and extra accelerators, all of them should work.
+    sim.Char('U', wxMOD_CONTROL);
+    wxYield();
+    INFO("Expecting event for Ctrl-U");
+    handler.CheckGot(MenuTestCase_ExtraAccel);
+
+    sim.Char('V', wxMOD_CONTROL);
+    wxYield();
+    INFO("Expecting event for Ctrl-V");
+    handler.CheckGot(MenuTestCase_ExtraAccel);
+
+    sim.Char('W', wxMOD_CONTROL);
+    wxYield();
+    INFO("Expecting event for Ctrl-W");
+    handler.CheckGot(MenuTestCase_ExtraAccels);
+
+    sim.Char('T', wxMOD_CONTROL);
+    wxYield();
+    INFO("Expecting event for Ctrl-T");
+    handler.CheckGot(MenuTestCase_ExtraAccels);
+
+    sim.Char('W', wxMOD_CONTROL | wxMOD_SHIFT);
+    wxYield();
+    INFO("Expecting event for Ctrl-Shift-W");
+    handler.CheckGot(MenuTestCase_ExtraAccels);
 
     // Now create a text control which uses the same accelerator for itself and
     // check that when the text control has focus, the accelerator does _not_

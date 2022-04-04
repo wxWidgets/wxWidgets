@@ -19,9 +19,12 @@ and read its documentation online at https://docs.wxwidgets.org/
 Platforms
 ---------
 
-[![AppVeyor](https://img.shields.io/appveyor/build/wxWidgets/wxWidgets?label=AppVeyor&logo=appveyor)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
-[![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets?label=TravisCI&logo=travis)](https://travis-ci.org/wxWidgets/wxWidgets)
-[![Github](https://img.shields.io/github/checks-status/wxWidgets/wxWidgets/master?label=GitHub&logo=github)](https://github.com/wxWidgets/wxWidgets/actions)
+[![AppVeyor](https://img.shields.io/appveyor/build/wxWidgets/wxWidgets/master?label=AppVeyor&logo=appveyor)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
+[![Unix (make)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci.yml)
+[![Unix (CMake)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_cmake.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_cmake.yml)
+[![MSW (MSVC)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw.yml)
+[![MSW (gcc)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw_cross.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_msw_cross.yml)
+[![Mac](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_mac.yml/badge.svg)](https://github.com/wxWidgets/wxWidgets/actions/workflows/ci_mac.yml)
 [![OSS-Fuzz](https://oss-fuzz-build-logs.storage.googleapis.com/badges/wxwidgets.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:wxwidgets)
 
 This version of wxWidgets supports the following primary platforms:
@@ -32,7 +35,7 @@ This version of wxWidgets supports the following primary platforms:
 
 Most popular C++ compilers are supported including but not limited to:
 
-- Microsoft Visual C++ 2005 or later (up to 2019).
+- Microsoft Visual C++ 2005 or later (up to 2022).
 - g++ 4 or later, including MinGW/MinGW-64/TDM under Windows.
 - Clang under macOS and Linux.
 - Intel icc compiler.
@@ -69,7 +72,7 @@ If you are looking for community support, you can get it from
 - [#wxwidgets IRC channel](https://www.wxwidgets.org/support/irc/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/wxwidgets)
   (tag your questions with `wxwidgets`)
-- And you can report bugs at https://trac.wxwidgets.org/newticket
+- And you can report bugs at [GitHub](https://github.com/wxWidgets/wxWidgets/issues/new/choose)
 
 [Commercial support](https://www.wxwidgets.org/support/commercial/) is also
 available.

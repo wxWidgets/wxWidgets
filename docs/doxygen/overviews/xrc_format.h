@@ -340,8 +340,9 @@ or translations are done.
 
 @subsection overview_xrcformat_type_bitmap Bitmap
 
-Bitmap properties contain specification of a single bitmap or icon. In the most
-basic form, their text value is simply a relative URL of the bitmap to use.
+Bitmap properties contain specification of a single bitmap, icon, a set of bitmaps
+or SVG file. In the most basic form, their text value is simply a relative URL of
+the bitmap to use.
 For example:
 @code
 <object class="tool" name="wxID_NEW">
@@ -362,6 +363,31 @@ percent-encoded, e.g. here is the correct way to specify a bitmap with the path
 
 Bitmap file paths can include environment variables that are expanded if
 wxXRC_USE_ENVVARS was passed to the wxXmlResource constructor.
+
+It is possible to specify the multi-resolution bitmap by a set of bitmaps or
+an SVG file, which are mutually exclusive. The set of bitmaps should contain
+one or more relative URLs of a bitmap, separated by @c ';'.
+For example, to specify two bitmaps, to be used in standard and 200% DPI
+scaling respectively, you could write:
+@code
+<bitmap>new.png;new_2x.png</bitmap>
+@endcode
+
+Here the first bitmap is special, as its size determines the logical size of
+the bitmap. In other words, this bitmap is the one used when DPI scaling
+is not in effect. Any subsequent bitmaps can come in any order and will be used
+when the DPI scaling factor is equal, or at least close, to the ratio of their
+size to the size of the first bitmap. Using @c _2x naming convention here is common,
+but @e not required, the names of the bitmaps can be arbitrary, e.g.
+@code
+<bitmap>new_32x32.png;new_64x64.png</bitmap>
+@endcode
+would work just as well.
+When using SVG file you must also specify @c default_size attribute
+(even if the size is specified in SVG file, it may be different from the size needed here):
+@code
+<bitmap default_size="32,32">new.svg</bitmap>
+@endcode
 
 Alternatively, it is possible to specify the bitmap using wxArtProvider IDs.
 In this case, the property element has no textual value (filename) and instead
@@ -515,6 +541,28 @@ Example:
     <bitmap stock_id="wxART_QUESTION"/>
     <bitmap stock_id="wxART_INFORMATION"/>
 </imagelist>
+@endcode
+
+
+@subsection overview_xrcformat_type_extra_accels Accelerators List
+
+Defines a list of wxMenuItem's extra accelerators.
+
+The extra-accels property element is a "composite" element:
+it contains one or more @c \<accel\> "sub-properties":
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{accel, @ref overview_xrcformat_type_text_notrans,
+     wxMenuItem's accelerator (default: none).}
+@endTable
+
+Example:
+@code
+<extra-accels>
+    <accel>Ctrl-W</accel>
+    <accel>Shift-Ctrl-W</accel>
+</extra-accels>
 @endcode
 
 
@@ -784,14 +832,18 @@ Refer to the section @ref xrc_wxtoolbar for more details.
      3.1.5.}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap to show on the button (default: none).}
-@row3col{selected, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when the button is selected (default: none, same as @c bitmap).}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap).
+     This property exists since wxWidgets 3.1.6, but the equivalent (and still
+     supported) "selected" property can be used in the older versions.}
 @row3col{focus, @ref overview_xrcformat_type_bitmap,
      Bitmap to show when the button has focus (default: none, same as @c bitmap).}
 @row3col{disabled, @ref overview_xrcformat_type_bitmap,
      Bitmap to show when the button is disabled (default: none, same as @c bitmap).}
-@row3col{hover, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when mouse cursor hovers above the bitmap (default: none, same as @c bitmap).}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when mouse cursor hovers above the bitmap (default: none, same as @c bitmap).
+     This property exists since wxWidgets 3.1.6, but the equivalent (and still
+     supported) "hover" property can be used in the older versions.}
 @endTable
 
 
@@ -1379,7 +1431,7 @@ following properties (all of them optional):
 @row3col{text, @ref overview_xrcformat_type_text,
     The title of the column. }
 @row3col{width, integer,
-    The column width. }
+    The column width. @c wxLIST_DEFAULT_COL_WIDTH is used by default. }
 @row3col{image, integer,
     The zero-based index of the image associated with the item in the 'small' image list. }
 @endTable
@@ -1496,6 +1548,10 @@ wxMenuItem objects support the following properties:
      Item's label (may be omitted if stock ID is used).}
 @row3col{accel, @ref overview_xrcformat_type_text_notrans,
      Item's accelerator (default: none).}
+@row3col{extra-accels, @ref overview_xrcformat_type_extra_accels,
+     List of item's extra accelerators. Such accelerators will not be shown
+     in item's label, but still will work. (default: none).
+     This property is only supported since wxWidgets 3.1.6.}
 @row3col{radio, @ref overview_xrcformat_type_bool,
      Item's kind is wxITEM_RADIO (default: 0)?}
 @row3col{checkable, @ref overview_xrcformat_type_bool,
@@ -1520,6 +1576,10 @@ Example:
   <object class="wxMenuItem" name="wxID_FIND">
     <label>_Find...</label>
     <accel>Ctrl-F</accel>
+    <extra-accels>
+      <accel>Ctrl-W</accel>
+      <accel>Shift-Ctrl-W</accel>
+    </extra-accels>
   </object>
   <object class="separator"/>
   <object class="wxMenuItem" name="menu_fuzzy">
@@ -2001,6 +2061,8 @@ exactly one non-toplevel window as its child.
     Minimum allowed value (default: 0).}
 @row3col{max, integer,
     Maximum allowed value (default: 100).}
+@row3col{inc, integer,
+    Increment (default: 1). Available since wxWidgets 3.1.6.}
 @endTable
 
 
@@ -2109,6 +2171,26 @@ No additional properties.
      Wrap the text so that each line is at most the given number of pixels, see
      wxStaticText::Wrap() (default: no wrap).}
 @endTable
+
+@subsubsection xrc_wxstyledtextctrl wxStyledTextCtrl
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{wrapmode, @ref overview_xrcformat_type_style,
+    Set wrapmode to wxSTC_WRAP_WORD to enable wrapping on word or style boundaries,
+    wxSTC_WRAP_CHAR to enable wrapping between any characters, wxSTC_WRAP_WHITESPACE
+    to enable wrapping on whitespace, and wxSTC_WRAP_NONE to disable line wrapping
+    (default: wxSTC_WRAP_NONE).}
+@endTable
+
+Notice that wxStyledTextCtrl support in XRC is available in wxWidgets 3.1.6 and
+later only and you need to explicitly register its handler using
+@code
+    #include <wx/xrc/xh_styledtextctrl.h>
+
+    AddHandler(new wxStyledTextCtrl);
+@endcode
+to use it.
 
 @subsubsection xrc_wxtextctrl wxTextCtrl
 
@@ -2452,7 +2534,7 @@ properties:
 @row3col{minsize, @ref overview_xrcformat_type_size,
     Minimal size of this item (default: no min size).}
 @row3col{ratio, @ref overview_xrcformat_type_pair_ints,
-    Item ratio, see wxSizer::SetRatio() (default: no ratio).}
+    Item ratio, see wxSizerItem::SetRatio() (default: no ratio).}
 @row3col{cellpos, @ref overview_xrcformat_type_pair_ints,
     (wxGridBagSizer only) Position, see wxGBSizerItem::SetPos() (required). }
 @row3col{cellspan, @ref overview_xrcformat_type_pair_ints,

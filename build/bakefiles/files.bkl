@@ -115,6 +115,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/fswatcher_inotify.cpp
     src/unix/stdpaths.cpp
     src/unix/secretstore.cpp
+    src/unix/uilocale.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
@@ -146,6 +147,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/utilsexc.cpp
     src/msw/fswatcher.cpp
     src/msw/secretstore.cpp
+    src/msw/uilocale.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
     src/msw/main.cpp
@@ -187,6 +189,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
     src/osx/core/secretstore.cpp
+    src/osx/core/uilocale.mm
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/osx/core/cfdataref.h
@@ -224,6 +227,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_AND_GUI_OSX_COCOA_SRC" hints="files">
     src/osx/cocoa/power.mm
     src/osx/cocoa/utils.mm
+    src/osx/volume.mm
 </set>
 
 <!-- Base files used by non-wxMac OS X builds -->
@@ -561,6 +565,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fswatcherg.cpp
     src/common/secretstore.cpp
     src/common/lzmastream.cpp
+    src/common/uilocale.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
     src/common/event.cpp
@@ -735,6 +740,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fswatcher.h
     wx/secretstore.h
     wx/lzmastream.h
+    wx/localedefs.h
+    wx/uilocale.h
 </set>
 
 
@@ -1009,6 +1016,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/calctrlg.cpp
     src/generic/creddlgg.cpp
     src/generic/rowheightcache.cpp
+    src/common/bmpbndl.cpp
+    src/generic/bmpsvg.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1300,6 +1309,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/propdlg.h
     wx/generic/creddlgg.h
     wx/creddlg.h
+    wx/bmpbndl.h
 </set>
 
 <!-- ====================================================================== -->
@@ -1407,6 +1417,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/sockgtk.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
+    src/gtk/overlay.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
@@ -2081,6 +2092,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/uuid.cpp
     src/msw/evtloop.cpp
     src/msw/ole/access.cpp
+    src/msw/bmpbndl.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2274,8 +2286,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
     wx/msw/wx.manifest
-    wx/msw/amd64.manifest
-    wx/msw/ia64.manifest
+    wx/msw/wx_dpi_aware.manifest
+    wx/msw/wx_dpi_aware_pmv2.manifest
     wx/msw/wx.rc
     <!-- bitmaps -->
     wx/msw/colours.bmp
@@ -2414,6 +2426,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/printmac.cpp
     src/osx/core/timer.cpp
     src/osx/core/utilsexc_cf.cpp
+    src/osx/core/bmpbndl.mm
     </if>
 </set>
 
@@ -3098,6 +3111,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
+    src/xrc/xh_bookctrlbase.cpp
 </set>
 <set var="XRC_HDR" hints="files">
     wx/xrc/xh_activityindicator.h
@@ -3168,6 +3182,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_unkwn.h
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
+    wx/xrc/xh_bookctrlbase.h
 </set>
 
 
@@ -3435,10 +3450,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
+    src/xrc/xh_styledtextctrl.cpp
 </set>
 
 <set var="STC_CMN_HDR" hints="files">
     wx/stc/stc.h
+    wx/xrc/xh_styledtextctrl.h
 </set>
 
 <set var="STC_OSX_COCOA_SRC" hints="files">

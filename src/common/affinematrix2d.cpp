@@ -71,7 +71,7 @@ bool wxAffineMatrix2D::Invert()
 {
     const wxDouble det = m_11*m_22 - m_12*m_21;
 
-    if ( !det )
+    if ( det == 0 )
         return false;
 
     wxDouble ex = (m_21*m_ty - m_22*m_tx) / det;

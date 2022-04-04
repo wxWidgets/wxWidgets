@@ -504,7 +504,7 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
             state = 2;
         else if (state > 0)
         {
-            const double d=ToDouble(line2);
+            const float d = float(ToDouble(line2));
 
             if (line1 == "10")
                 v[0].x = d;
@@ -670,7 +670,7 @@ void DXFRenderer::Render() const
         {
             DXFLine *line = (DXFLine *)p;
             glBegin(GL_LINES);
-            glColor3f(c.Red()/255.0,c.Green()/255.0,c.Blue()/255.0);
+            glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glVertex3f(line->v0.x, line->v0.y, line->v0.z);
             glVertex3f(line->v1.x, line->v1.y, line->v1.z);
             glEnd();
@@ -679,7 +679,7 @@ void DXFRenderer::Render() const
         {
             DXFFace *face = (DXFFace *)p;
             glBegin(GL_TRIANGLES);
-            glColor3f(c.Red()/255.0,c.Green()/255.0,c.Blue()/255.0);
+            glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glNormal3f(face->n.x, face->n.y, face->n.z);
             glVertex3f(face->v0.x, face->v0.y, face->v0.z);
             glVertex3f(face->v1.x, face->v1.y, face->v1.z);

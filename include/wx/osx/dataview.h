@@ -33,7 +33,7 @@ public:
                      int width = wxDVC_DEFAULT_WIDTH,
                      wxAlignment align = wxALIGN_CENTER,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
-    wxDataViewColumn(const wxBitmap& bitmap,
+    wxDataViewColumn(const wxBitmapBundle& bitmap,
                      wxDataViewRenderer* renderer,
                      unsigned int model_column,
                      int width = wxDVC_DEFAULT_WIDTH,
@@ -53,7 +53,7 @@ public:
     virtual bool IsHidden() const wxOVERRIDE;
 
     virtual void SetAlignment  (wxAlignment align) wxOVERRIDE;
-    virtual void SetBitmap     (wxBitmap const& bitmap) wxOVERRIDE;
+    virtual void SetBitmap     (wxBitmapBundle const& bitmap) wxOVERRIDE;
     virtual void SetFlags      (int flags) wxOVERRIDE { m_flags = flags; /*SetIndividualFlags(flags); */ }
     virtual void SetHidden     (bool hidden) wxOVERRIDE;
     virtual void SetMaxWidth   (int maxWidth);
@@ -208,6 +208,10 @@ public:
 
   virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) wxOVERRIDE;
 
+#if wxUSE_DRAG_AND_DROP
+  virtual bool DoEnableDropTarget( const wxVector<wxDataFormat>& formats ) wxOVERRIDE;
+#endif // wxUSE_DRAG_AND_DROP
+
  // returns the n-th pointer to a column;
  // this method is different from GetColumn(unsigned int pos) because here 'n' is not a position in the control but the n-th
  // position in the internal list/array of column pointers
@@ -226,11 +230,9 @@ public:
     return m_CustomRendererPtr;
   }
 
- // checks if currently a delete process is running
-  bool IsDeleting() const
-  {
-    return m_Deleting;
-  }
+ // checks if a single item or all items are being deleted
+  bool IsDeleting() const;
+  bool IsClearing() const;
 
  // with CG, we need to get the context from an kEventControlDraw event
  // unfortunately, the DataBrowser callbacks don't provide the context
@@ -254,11 +256,6 @@ public:
   void SetCustomRendererPtr(wxDataViewCustomRenderer* NewCustomRendererPtr)
   {
     m_CustomRendererPtr = NewCustomRendererPtr;
-  }
- // sets the flag indicating a deletion process:
-  void SetDeleting(bool deleting)
-  {
-    m_Deleting = deleting;
   }
 
   void AdjustAutosizedColumns() const;
@@ -285,6 +282,8 @@ protected:
  // event handling
   void OnSize(wxSizeEvent &event);
 
+  virtual void DoThaw() wxOVERRIDE;
+
 private:
  // initializing of local variables:
   void Init();
@@ -295,9 +294,14 @@ private:
  //
  // variables
  //
-  bool m_Deleting; // flag indicating if a delete process is running; this flag is necessary because the notifier indicating an item deletion in the model may be called
-                   // after the actual deletion of the item; then, native callback functions/delegates may try to update data of variables that are already deleted;
-                   // if this flag is set all native variable update requests will be ignored
+
+  // If non-null, describes the item(s) being deleted. This is necessary to
+  // allow avoiding referencing already deleted items from the native
+  // callbacks/delegates.
+  struct wxOSXDVCDeleting* m_Deleting;
+
+  // This class can set (and reset) m_Deleting.
+  friend class wxOSXDVCScopedDeleter;
 
   void* m_cgContext; // pointer to core graphics context
 

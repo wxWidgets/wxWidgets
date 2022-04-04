@@ -32,6 +32,7 @@
         #include "wx/image.h"
     #endif // WXWIN_COMPATIBILITY_2_8
     #include "wx/menu.h"
+    #include "wx/vector.h"
 #endif
 
 extern WXDLLEXPORT_DATA(const char) wxToolBarNameStr[] = "toolbar";
@@ -156,8 +157,8 @@ void wxToolBarBase::FixupStyle()
 
 wxToolBarToolBase *wxToolBarBase::DoAddTool(int toolid,
                                             const wxString& label,
-                                            const wxBitmap& bitmap,
-                                            const wxBitmap& bmpDisabled,
+                                            const wxBitmapBundle& bitmap,
+                                            const wxBitmapBundle& bmpDisabled,
                                             wxItemKind kind,
                                             const wxString& shortHelp,
                                             const wxString& longHelp,
@@ -173,8 +174,8 @@ wxToolBarToolBase *wxToolBarBase::DoAddTool(int toolid,
 wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
                                              int toolid,
                                              const wxString& label,
-                                             const wxBitmap& bitmap,
-                                             const wxBitmap& bmpDisabled,
+                                             const wxBitmapBundle& bitmap,
+                                             const wxBitmapBundle& bmpDisabled,
                                              wxItemKind kind,
                                              const wxString& shortHelp,
                                              const wxString& longHelp,
@@ -432,29 +433,82 @@ void wxToolBarBase::ClearTools()
     }
 }
 
+void wxToolBarBase::DoSetToolBitmapSize(const wxSize& size)
+{
+    m_defaultWidth = size.x;
+    m_defaultHeight = size.y;
+}
+
+void wxToolBarBase::SetToolBitmapSize(const wxSize& size)
+{
+    m_requestedBitmapSize = size;
+
+    DoSetToolBitmapSize(size);
+}
+
+wxSize wxToolBarBase::GetToolBitmapSize() const
+{
+    return wxSize(m_defaultWidth, m_defaultHeight);
+}
+
 void wxToolBarBase::AdjustToolBitmapSize()
 {
     if ( HasFlag(wxTB_NOICONS) )
     {
-        SetToolBitmapSize(wxSize(0, 0));
+        DoSetToolBitmapSize(wxSize(0, 0));
         return;
     }
 
     const wxSize sizeOrig(m_defaultWidth, m_defaultHeight);
 
-    wxSize sizeActual(sizeOrig);
+    // Check if we should be using a different size because we have bitmaps
+    // that shouldn't be scaled to the size we use right now.
 
+    wxVector<wxBitmapBundle> bundles;
     for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
           i != m_tools.end();
           ++i )
     {
-        const wxBitmap& bmp = (*i)->GetNormalBitmap();
+        const wxBitmapBundle& bmp = (*i)->GetNormalBitmapBundle();
         if ( bmp.IsOk() )
-            sizeActual.IncTo(bmp.GetScaledSize());
+            bundles.push_back(bmp);
     }
 
-    if ( sizeActual != sizeOrig )
-        SetToolBitmapSize(sizeActual);
+    if ( !bundles.empty() )
+    {
+        wxSize sizePreferred = wxBitmapBundle::GetConsensusSizeFor
+                               (
+                                this,
+                                bundles,
+                                sizeOrig
+                               );
+
+        // Don't do anything if it doesn't change, our current size is supposed
+        // to satisfy any constraints we might have anyhow.
+        if ( sizePreferred == sizeOrig )
+            return;
+
+        // This size is supposed to be in logical units for the platforms where
+        // they differ from physical ones, so convert it.
+        //
+        // Note that this could introduce rounding problems but, in fact,
+        // neither wxGTK nor wxOSX (that are the only ports where contents
+        // scale factor may be different from 1) use this size at all
+        // currently, so it shouldn't matter. But if/when they are modified to
+        // use the size computed here, this would need to be revisited.
+        sizePreferred /= GetContentScaleFactor();
+
+        // Don't decrease the bitmap below the size requested by the application
+        // as using larger bitmaps shouldn't shrink them to the small default
+        // size.
+        sizePreferred.IncTo(m_requestedBitmapSize);
+
+        // Call DoSetToolBitmapSize() and not SetToolBitmapSize() to avoid
+        // changing the requested bitmap size: if we set our own adjusted size
+        // as the preferred one, we wouldn't decrease it later even if we ought
+        // to, as when moving from a monitor with higher DPI to a lower-DPI one.
+        DoSetToolBitmapSize(sizePreferred);
+    }
 }
 
 bool wxToolBarBase::Realize()

@@ -75,6 +75,8 @@ public:
     int GetBytesPerRow() const;
     bool HasAlpha() const;
     WXImage GetImage() const;
+
+    void SetScaleFactor(double scale) { m_scaleFactor = scale; }
     double GetScaleFactor() const { return m_scaleFactor; }
 
     const void *GetRawAccess() const;
@@ -307,7 +309,7 @@ int wxBitmapRefData::GetWidth() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetWidth(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).width * m_scaleFactor;
+        return int(wxOSXGetImageSize(m_nsImage).width * m_scaleFactor);
 }
 
 int wxBitmapRefData::GetHeight() const
@@ -317,7 +319,7 @@ int wxBitmapRefData::GetHeight() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetHeight(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).height * m_scaleFactor;
+        return int(wxOSXGetImageSize(m_nsImage).height * m_scaleFactor);
 }
 
 int wxBitmapRefData::GetDepth() const
@@ -780,11 +782,6 @@ wxBitmapRefData::~wxBitmapRefData()
 // wxBitmap
 // ----------------------------------------------------------------------------
 
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
-{
-    return Create( icon.GetImage() );
-}
-
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
     m_refData = new wxBitmapRefData( the_width , the_height , no_bits ) ;
@@ -949,9 +946,9 @@ bool wxBitmap::Create(CGContextRef bitmapcontext)
     return GetBitmapData()->IsOk() ;
 }
 
-WXImage wxBitmap::GetImage() const
+WXImage wxBitmap::OSXGetImage() const
 {
-    return GetBitmapData()->GetImage();
+    return IsOk() ? GetBitmapData()->GetImage() : NULL;
 }
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
@@ -964,13 +961,13 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 
     wxBitmap ret;
     double scale = GetScaleFactor();
-    ret.CreateScaled( rect.width, rect.height, GetDepth(), scale );
+    ret.CreateWithDIPSize( rect.GetSize(), scale, GetDepth() );
     wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
     if ( HasAlpha() )
         ret.UseAlpha() ;
 
-    int destwidth = rect.width*scale ;
-    int destheight = rect.height*scale ;
+    int destwidth = int(rect.width * scale);
+    int destheight = int(rect.height * scale);
 
     {
         const unsigned char* sourcedata = static_cast<const unsigned char*>(GetBitmapData()->GetRawAccess());
@@ -1042,17 +1039,18 @@ bool wxBitmap::Create(int w, int h, int d)
 bool wxBitmap::Create(int w, int h, const wxDC& dc)
 {
     double factor = dc.GetContentScaleFactor();
-    return CreateScaled(w,h,wxBITMAP_SCREEN_DEPTH, factor);
+    return CreateWithDIPSize(w, h, factor);
 }
 
-bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
+bool wxBitmap::DoCreate(const wxSize& size, double scale, int d)
 {
     UnRef();
 
     if ( d < 0 )
         d = wxDisplayDepth() ;
 
-    m_refData = new wxBitmapRefData( w*logicalScale , h*logicalScale , d, logicalScale );
+    const wxSize sizePhys = size*scale;
+    m_refData = new wxBitmapRefData( sizePhys.x, sizePhys.y, d, scale );
 
     return GetBitmapData()->IsOk() ;
 }
@@ -1387,6 +1385,18 @@ int wxBitmap::GetWidth() const
    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
    return GetBitmapData()->GetWidth() ;
+}
+
+void wxBitmap::SetScaleFactor(double scale)
+{
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
+
+    if ( GetBitmapData()->GetScaleFactor() != scale )
+    {
+        AllocExclusive();
+
+        GetBitmapData()->SetScaleFactor(scale) ;
+    }
 }
 
 double wxBitmap::GetScaleFactor() const

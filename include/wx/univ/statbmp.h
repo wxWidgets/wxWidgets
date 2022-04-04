@@ -25,7 +25,7 @@ public:
     }
 
     wxStaticBitmap(wxWindow *parent,
-                   const wxBitmap& label,
+                   const wxBitmapBundle& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0)
@@ -35,7 +35,7 @@ public:
 
     wxStaticBitmap(wxWindow *parent,
                    wxWindowID id,
-                   const wxBitmap& label,
+                   const wxBitmapBundle& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -46,17 +46,13 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE;
-    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
-
-    wxIcon GetIcon() const wxOVERRIDE;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
 
     virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
 
@@ -64,9 +60,6 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
 private:
-    // the bitmap which we show
-    wxBitmap m_bitmap;
-
     wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);
 };
 

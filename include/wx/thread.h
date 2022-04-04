@@ -102,7 +102,7 @@ enum
 //
 // However recursive mutexes have several important drawbacks: first, in the
 // POSIX implementation, they're less efficient. Second, and more importantly,
-// they CAN NOT BE USED WITH CONDITION VARIABLES under Unix! Using them with
+// they CANNOT BE USED WITH CONDITION VARIABLES under Unix! Using them with
 // wxCondition will work under Windows and some Unices (notably Linux) but will
 // deadlock under other Unix versions (e.g. Solaris). As it might be difficult
 // to ensure that a recursive mutex is not used with wxCondition, it is a good
@@ -596,7 +596,13 @@ public:
     // Delete() instead (or leave the thread terminate by itself)
     virtual ~wxThread();
 
+    // sets name to assist debugging
+    static bool SetNameForCurrent(const wxString &name);
+
 protected:
+    // sets name to assist debugging
+    bool SetName(const wxString &name);
+
     // exits from the current thread - can be called only from this thread
     void Exit(ExitCode exitcode = NULL);
 

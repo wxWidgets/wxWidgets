@@ -41,7 +41,9 @@ fi
 # Still allow using incompatible version if explicitly requested.
 if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     doxygen_version=`$DOXYGEN --version`
-    doxygen_version_required=1.8.8
+    # Note: remove the hack for Doxygen 1.8.19 below when changing this to a
+    # later version.
+    doxygen_version_required=1.8.17
     if [[ $doxygen_version != $doxygen_version_required ]]; then
         echo "Doxygen version $doxygen_version is not supported."
         echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
@@ -49,14 +51,18 @@ if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     fi
 fi
 
+if [[ -z $WX_HTML_OUTPUT_DIR ]]; then
+    WX_HTML_OUTPUT_DIR=out/html
+fi
+
 # prepare folders for the cp commands below
-mkdir -p out/html       # we need to copy files in this folder below
-mkdir -p out/html/generic
+mkdir -p $WX_HTML_OUTPUT_DIR       # we need to copy files in this folder below
+mkdir -p $WX_HTML_OUTPUT_DIR/generic
 
 # These are not automatically copied by Doxygen because they're not
 # used in doxygen documentation, only in our html footer and by our
 # custom aliases
-cp images/generic/*png out/html/generic
+cp images/generic/*png $WX_HTML_OUTPUT_DIR/generic
 
 # Defaults for settings controlled by this script
 export GENERATE_DOCSET="NO"
@@ -114,9 +120,14 @@ esac
 #
 $DOXYGEN Doxyfile
 
+if [[ "$1" = "php" ]]; then
+    # Work around a bug in Doxygen < 1.8.19 PHP search function.
+    cp custom_search_functions.php $WX_HTML_OUTPUT_DIR/search_functions.php
+fi
+
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
-    cd out/html
+    cd $WX_HTML_OUTPUT_DIR
     qhelpfile="index.qhp"
 
     # remove all <file> and <files> tags
@@ -139,7 +150,7 @@ if [[ "$1" = "qch" ]]; then
     # remove useless files to make the qch slim
     rm temp *map *md5
 
-    # add a <file> tag for _any_ file in out/html folder except the .qhp itself
+    # add a <file> tag for _any_ file in this directory except the .qhp itself
     for f in * */*png; do
         if [[ $f != $qhelpfile ]]; then
             echo "      <file>$f</file>" >>$qhelpfile
@@ -159,7 +170,7 @@ if [[ "$1" = "qch" ]]; then
 
     # last, run qhelpgenerator:
     cd ../..
-    qhelpgenerator out/html/index.qhp -o out/wx.qch
+    qhelpgenerator $WX_HTML_OUTPUT_DIR/index.qhp -o out/wx.qch
 fi
 
 if [[ "$1" = "docset" ]]; then
@@ -175,7 +186,7 @@ if [[ "$1" = "docset" ]]; then
         XCODE_INSTALL=`xcode-select -print-path`
     fi
 
-    cd out/html
+    cd $WX_HTML_OUTPUT_DIR
     DESTINATIONDIR=`pwd`/../docset
 
     mkdir -p $DESTINATIONDIR
@@ -198,7 +209,7 @@ if [[ "$1" = "docset" ]]; then
     $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
     $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL https://docs.wxwidgets.org
     $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
-    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2021 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2022 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
     $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
     $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
     $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx
@@ -222,7 +233,5 @@ fi
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
 # more readable
-currpath=`pwd`/
-interfacepath=`cd ../../interface && pwd`/
-cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" > temp
-mv temp doxygen.log
+topsrcdir=`cd ../.. && pwd`
+sed -i'' -e "s|$topsrcdir/||g" doxygen.log

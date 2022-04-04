@@ -365,16 +365,6 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
 
 extern bool IsNetworkAvailable()
 {
-    // Somehow even though network is available on Travis CI build machines,
-    // attempts to open remote URIs sporadically fail, so don't run these tests
-    // under Travis to avoid false positives.
-    static int s_isTravis = -1;
-    if ( s_isTravis == -1 )
-        s_isTravis = wxGetEnv(wxASCII_STR("TRAVIS"), NULL);
-
-    if ( s_isTravis )
-        return false;
-
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
 
@@ -401,23 +391,8 @@ extern bool IsAutomaticTest()
     static int s_isAutomatic = -1;
     if ( s_isAutomatic == -1 )
     {
-        // Allow setting an environment variable to emulate buildslave user for
-        // testing.
-        wxString username;
-        if ( !wxGetEnv(wxASCII_STR("WX_TEST_USER"), &username) )
-            username = wxGetUserId();
-
-        username.MakeLower();
-        s_isAutomatic = username == wxASCII_STR("buildbot") ||
-                            username.Matches(wxASCII_STR("sandbox*"));
-
-        // Also recognize various CI environments.
-        if ( !s_isAutomatic )
-        {
-            s_isAutomatic = wxGetEnv(wxASCII_STR("TRAVIS"), NULL) ||
-                              wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
-                                wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
-        }
+        s_isAutomatic = wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
+                            wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
     }
 
     return s_isAutomatic == 1;
@@ -434,20 +409,6 @@ extern bool IsRunningUnderXVFB()
 
     return s_isRunningUnderXVFB == 1;
 }
-
-#ifdef __LINUX__
-
-extern bool IsRunningInLXC()
-{
-    // We're supposed to be able to detect running in LXC by checking for
-    // /dev/lxd existency, but this doesn't work under Travis for some reason,
-    // so just rely on having the environment variable defined for the
-    // corresponding builds in our .travis.yml.
-    wxString value;
-    return wxGetEnv("wxLXC", &value) && value == "1";
-}
-
-#endif // __LINUX__
 
 #if wxUSE_GUI
 
@@ -580,9 +541,24 @@ bool TestApp::OnInit()
     cout << "Test program for wxWidgets non-GUI features\n"
 #endif
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << "\n"
+         << "compiled using "
+#if defined(__clang__)
+         << "clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__
+#elif defined(__INTEL_COMPILER)
+         << "icc " << __INTEL_COMPILER
+#elif defined(__GNUG__)
+         << "gcc " << __GNUC__ << "." << __GNUC_MINOR__
+#elif defined(_MSC_VER)
+         << "msvc " << _MSC_VER
+    #if defined(_MSC_FULL_VER)
+                                << " (full: " << _MSC_FULL_VER << ")"
+    #endif
+#else
+         << "unidentified compiler"
+#endif
+         << "\n"
          << "running under " << wxGetOsDescription()
          << " as " << wxGetUserId()
-         << ", locale is " << setlocale(LC_ALL, NULL)
          << std::endl;
 
 #if wxUSE_GUI

@@ -466,6 +466,9 @@ void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
 
 void wxMediaBackendCommonBase::NotifyMovieSizeChanged()
 {
+    if ( m_ctrl->HasFlag(wxMC_NO_AUTORESIZE) )
+        return;
+
     // our best size changed after opening a new file
     m_ctrl->InvalidateBestSize();
     m_ctrl->SetSize(m_ctrl->GetSize());

@@ -20,6 +20,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 // a mapping from wx ids to standard osx actions in order to support the native menu item handling
 // if a new mapping is added, make sure the wxNonOwnedWindowController has a handler for this action as well
@@ -268,6 +269,15 @@ public :
             [m_osxMenuItem setHidden:hide ];
         else
             wxLogDebug("wxMenuItemCocoaImpl::Hide not yet supported under OS X < 10.5");
+    }
+
+    void SetAllowsKeyEquivalentWhenHidden( bool allow ) wxOVERRIDE
+    {
+        // setAllowsKeyEquivalentWhenHidden is available since macOS 10.13
+        if (WX_IS_MACOS_AVAILABLE(10, 13))
+            [m_osxMenuItem setAllowsKeyEquivalentWhenHidden:allow ];
+        else
+            wxLogDebug("wxMenuItemCocoaImpl::setAllowsKeyEquivalentWhenHidden not supported under OS X < 10.13");
     }
 
     void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) wxOVERRIDE

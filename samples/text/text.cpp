@@ -1116,12 +1116,22 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_text = new MyTextCtrl( this, wxID_ANY, "Single line.",
                              wxDefaultPosition, wxDefaultSize,
-                             wxTE_PROCESS_ENTER);
+                             wxTE_PROCESS_ENTER | wxTE_RICH2);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
     (*m_text) << " Appended.";
     m_text->SetInsertionPoint(0);
     m_text->WriteText( "Prepended. " );
+
+#if wxUSE_SPELLCHECK
+    if ( m_text->EnableProofCheck(wxTextProofOptions::Default()) )
+    {
+        // Break the string in several parts to avoid misspellings in the sources.
+        (*m_text) << " Mis"
+                      "s"
+                      "spelled.";
+    }
+#endif
 
     m_password = new MyTextCtrl( this, wxID_ANY, "",
       wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
@@ -1205,8 +1215,27 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_tab->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("tab"))));
 
     m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2 );
     m_enter->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("enter"))));
+
+#if wxUSE_SPELLCHECK
+    (*m_enter) << "\n";
+
+    // Enable grammar check just for demonstration purposes (note that it's
+    // only supported under Mac, but spell checking will be enabled under the
+    // other platforms too, if supported). If we didn't want to enable it, we
+    // could omit the EnableProofCheck() argument entirely.
+    if ( !m_enter->EnableProofCheck(wxTextProofOptions::Default().GrammarCheck()) )
+    {
+        (*m_enter) << "Spell checking is not available on this platform, sorry.";
+    }
+    else
+    {
+        (*m_enter) << "Spell checking is enabled, mis"
+                      "s"
+                      "spelled words should be highlighted.";
+    }
+#endif
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, "Allows more than 30Kb of text\n"
                                 "(on all Windows versions)\n"

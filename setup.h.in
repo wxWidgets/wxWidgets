@@ -17,21 +17,6 @@
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef gid_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef mode_t
-
-/* Define to `long' if <sys/types.h> doesn't define.  */
-#undef off_t
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef pid_t
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-#undef size_t
-
 /* Define if ssize_t type is available.  */
 #undef HAVE_SSIZE_T
 
@@ -42,9 +27,6 @@
 #ifndef _GNU_SOURCE
 #undef _GNU_SOURCE
 #endif
-
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef uid_t
 
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
@@ -234,6 +216,8 @@
 
 #define wxUSE_SECRETSTORE   0
 
+#define wxUSE_SPELLCHECK 0
+
 #define wxUSE_STDPATHS      0
 
 #define wxUSE_TEXTBUFFER    0
@@ -328,7 +312,7 @@
 
 #define wxUSE_XRC       0
 
-#define wxUSE_XML       wxUSE_XRC
+#define wxUSE_XML       0
 
 #define wxUSE_AUI       0
 
@@ -347,6 +331,8 @@
 #endif
 
 #define wxUSE_WEBVIEW_EDGE 0
+
+#define wxUSE_WEBVIEW_EDGE_STATIC 0
 
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #define wxUSE_WEBVIEW_WEBKIT 0
@@ -833,12 +819,6 @@
  */
 #undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
-/*
- * The built-in regex supports advanced REs in additional to POSIX's basic
- * and extended. Your system regex probably won't support this, and in this
- * case WX_NO_REGEX_ADVANCED should be defined.
- */
-#undef WX_NO_REGEX_ADVANCED
 /*
  * On GNU systems use re_search instead of regexec, since the latter does a
  * strlen on the search text affecting the performance of some operations.

@@ -46,7 +46,7 @@ set(wxBINARY_DIR ${CMAKE_BINARY_DIR})
 set(wxOUTPUT_DIR ${wxBINARY_DIR}/lib)
 
 # parse the version number from wx/version.h and include in wxMAJOR_VERSION and wxMINOR_VERSION
-file(READ include/wx/version.h WX_VERSION_H_CONTENTS)
+file(READ "${wxSOURCE_DIR}/include/wx/version.h" WX_VERSION_H_CONTENTS)
 string(REGEX MATCH "wxMAJOR_VERSION[ \t]+([0-9]+)"
     wxMAJOR_VERSION ${WX_VERSION_H_CONTENTS})
 string (REGEX MATCH "([0-9]+)"
@@ -59,6 +59,7 @@ string(REGEX MATCH "wxRELEASE_NUMBER[ \t]+([0-9]+)"
     wxRELEASE_NUMBER ${WX_VERSION_H_CONTENTS})
 string (REGEX MATCH "([0-9]+)"
     wxRELEASE_NUMBER ${wxRELEASE_NUMBER})
+
 # Determine if current version is a "Development" release
 math(EXPR rel_dev "${wxMINOR_VERSION} % 2")
 if(rel_dev)
@@ -67,8 +68,25 @@ else()
     set(wxVERSION_IS_DEV FALSE)
 endif()
 
+# parse the .so version from build/bakefiles/version.bkl
+file(READ "${wxSOURCE_DIR}/build/bakefiles/version.bkl" WX_VERSION_BKL_CONTENTS)
+string(REGEX MATCH "WX_CURRENT.>([0-9]+)"
+    WX_CURRENT ${WX_VERSION_BKL_CONTENTS})
+string(REGEX MATCH "([0-9]+)"
+    WX_CURRENT ${WX_CURRENT})
+string(REGEX MATCH "WX_REVISION.>([0-9]+)"
+    WX_REVISION ${WX_VERSION_BKL_CONTENTS})
+string(REGEX MATCH "([0-9]+)"
+    WX_REVISION ${WX_REVISION})
+string(REGEX MATCH "WX_AGE.>([0-9]+)"
+    WX_AGE ${WX_VERSION_BKL_CONTENTS})
+string(REGEX MATCH "([0-9]+)"
+    WX_AGE ${WX_AGE})
+math(EXPR wxSOVERSION_MAJOR "${WX_CURRENT} - ${WX_AGE}")
+set(wxSOVERSION ${wxSOVERSION_MAJOR}.${WX_AGE}.${WX_REVISION})
+
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
-set(wxCOPYRIGHT "1992-2021 wxWidgets")
+set(wxCOPYRIGHT "2002-2022 wxWidgets")
 
 project(wxWidgets VERSION ${wxVERSION})
 

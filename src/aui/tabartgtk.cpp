@@ -128,7 +128,7 @@ wxRect DrawCloseButton(wxDC& dc,
 
     wxBitmap bmp(gtk_widget_render_icon(widget, GTK_STOCK_CLOSE, GTK_ICON_SIZE_SMALL_TOOLBAR, "tab"));
 
-    if(bmp.GetScaledWidth() != s_CloseIconSize || bmp.GetScaledHeight() != s_CloseIconSize)
+    if(bmp.GetLogicalWidth() != s_CloseIconSize || bmp.GetLogicalHeight() != s_CloseIconSize)
     {
         wxImage img = bmp.ConvertToImage();
         img.Rescale(s_CloseIconSize, s_CloseIconSize);
@@ -310,8 +310,10 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         int bitmap_offset;
         bitmap_offset = textX;
 
+        const wxBitmap bitmap = page.bitmap.GetBitmapFor(wnd);
+
         // draw bitmap
-        int bitmapY = tab_rect.y +(tab_rect.height - page.bitmap.GetScaledHeight()) / 2;
+        int bitmapY = tab_rect.y +(tab_rect.height - bitmap.GetLogicalHeight()) / 2;
         if(!page.active)
         {
             if (tab_pos == wxAUI_NB_TOP)
@@ -319,12 +321,12 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             else
                 bitmapY -= style_notebook->ythickness / 2;
         }
-        dc.DrawBitmap(page.bitmap,
+        dc.DrawBitmap(bitmap,
                       bitmap_offset,
                       bitmapY,
                       true);
 
-        textX += page.bitmap.GetScaledWidth() + padding;
+        textX += bitmap.GetLogicalWidth() + padding;
     }
 
     wxCoord textW, textH, textY;
@@ -353,7 +355,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
 
     if(page.active && (wnd->FindFocus() == wnd) && focus_area.x <= (area.x + area.width))
     {
-        // clipping seems not to work here, so we we have to recalc the focus-area manually
+        // clipping seems not to work here, so we have to recalc the focus-area manually
         if((focus_area.x + focus_area.width) > (area.x + area.width))
             focus_area.width = area.x + area.width - focus_area.x + focus_width - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder;
         gtk_paint_focus (style_notebook, window,
@@ -490,7 +492,7 @@ int wxAuiGtkTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
 wxSize wxAuiGtkTabArt::GetTabSize(wxDC& dc,
                               wxWindow* wnd,
                               const wxString& caption,
-                              const wxBitmap& bitmap,
+                              const wxBitmapBundle& bitmap,
                               bool active,
                               int close_button_state,
                               int* x_extent)

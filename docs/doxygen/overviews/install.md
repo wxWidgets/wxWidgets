@@ -187,8 +187,39 @@ e.g. if you use `AC_CONFIG_MACRO_DIRS([m4])`).
 
 For applications using Microsoft Visual Studio IDE, simply add the provided
 `wxwidgets.props` property sheet file to your project as explained in the
-[instructions](@ref #msw_build_apps) and build the project as usual.
+[instructions](@ref msw_build_apps) and build the project as usual.
 
+
+### Mac, with Xcode
+
+If you want to use an environment variable (such as WXWIN) in your xcode
+project, there are several things you must do.
+
+- Enable the usage of environment variables in xcode:<br>
+  `defaults write com.apple.dt.Xcode UseSanitizedBuildSystemEnvironment -bool NO`
+- Set the variables for use with the launch agent (application to OSX 10.10
+and up)
+
+~~~{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>my.startup</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>sh</string>
+    <string>-c</string>
+    <string>
+launchctl setenv WXWIN /Users/dconnet/devtools/wx/wxWidgets-3.1.5
+    </string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+</dict>
+</plist>
+~~~
 
 ### Other IDEs
 
@@ -202,4 +233,4 @@ If you use another IDE, under Unix you should run `wx-config --cxxflags` and
 `wx-config --libs` commands separately and copy-and-paste their output to the
 "Additional preprocessor options" and "Additional linker options" fields in
 your IDE, respectively. Under MSW systems you need to configure the IDE using
-the instructions in the ["manual setup"](@ref #msw_build_apps) section.
+the instructions in the ["manual setup"](@ref msw_build_apps) section.

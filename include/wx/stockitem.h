@@ -65,7 +65,7 @@ enum wxStockHelpStringClient
     wxSTOCK_MENU        // help string to use for menu items
 };
 
-// Returns an help string for the given stock UI element and for the given "context".
+// Returns a help string for the given stock UI element and for the given "context".
 WXDLLIMPEXP_CORE wxString wxGetStockHelpString(wxWindowID id,
                                           wxStockHelpStringClient client = wxSTOCK_MENU);
 

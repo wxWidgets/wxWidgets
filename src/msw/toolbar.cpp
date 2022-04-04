@@ -150,8 +150,8 @@ public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
                   const wxString& label,
-                  const wxBitmap& bmpNormal,
-                  const wxBitmap& bmpDisabled,
+                  const wxBitmapBundle& bmpNormal,
+                  const wxBitmapBundle& bmpDisabled,
                   wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelp,
@@ -344,8 +344,8 @@ static bool MSWShouldBeChecked(const wxToolBarToolBase *tool)
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& label,
-                                         const wxBitmap& bmpNormal,
-                                         const wxBitmap& bmpDisabled,
+                                         const wxBitmapBundle& bmpNormal,
+                                         const wxBitmapBundle& bmpDisabled,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
@@ -537,6 +537,11 @@ void wxToolBar::Recreate()
     // any more, so doing this is unnecessary and just results in errors from
     // TB_DELETEBUTTON.
     m_nButtons = 0;
+
+    // We need to ensure that the tool bitmap size will be adjusted if it's
+    // different from the default and not from the value used for the toolbar
+    // we just destroyed.
+    wxToolBarBase::DoSetToolBitmapSize(wxSize(16, 15));
 
     Realize();
 }
@@ -781,14 +786,14 @@ void wxToolBar::CreateDisabledImageList()
             node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool = node->GetData();
-        wxBitmap bmpDisabled = tool->GetDisabledBitmap();
+        wxBitmap bmpDisabled = tool->GetDisabledBitmap(wxSize(m_defaultWidth,
+                                                              m_defaultHeight));
         if ( bmpDisabled.IsOk() )
         {
-            const wxSize sizeBitmap = bmpDisabled.GetSize();
             m_disabledImgList = new wxImageList
                                     (
-                                        sizeBitmap.x,
-                                        sizeBitmap.y,
+                                        m_defaultWidth,
+                                        m_defaultHeight,
                                         // Don't use mask if we have alpha
                                         // (wxImageList will fall back to
                                         // mask if alpha not supported)
@@ -858,11 +863,15 @@ bool wxToolBar::Realize()
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
 
+        const wxSize sizeBitmap(m_defaultWidth, m_defaultHeight);
+
         for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
         {
             wxToolBarToolBase *tool = node->GetData();
-            if ( tool->IsButton() &&
-                 tool->GetNormalBitmap().IsOk() && tool->GetNormalBitmap().HasAlpha() )
+            wxBitmap toolBitmap;
+            if ( tool->IsButton() )
+                toolBitmap = tool->GetNormalBitmap(sizeBitmap);
+            if ( toolBitmap.IsOk() && toolBitmap.HasAlpha() )
             {
                 // By default bitmaps don't have alpha in wxMSW, but if we
                 // use a bitmap tool with alpha, we should use alpha for
@@ -925,16 +934,10 @@ bool wxToolBar::Realize()
             wxToolBarToolBase *tool = node->GetData();
             if ( tool->IsButton() )
             {
-                wxBitmap bmp = tool->GetNormalBitmap();
-
-                const int w = bmp.GetWidth();
-                const int h = bmp.GetHeight();
+                wxBitmap bmp = tool->GetNormalBitmap(sizeBitmap);
 
                 if ( bmp.IsOk() )
                 {
-                    int xOffset = wxMax(0, (m_defaultWidth - w)/2);
-                    int yOffset = wxMax(0, (m_defaultHeight - h)/2);
-
 #if wxUSE_IMAGE
                     // If a mix of icons with alpha and without is used,
                     // convert them all to use alpha.
@@ -947,7 +950,7 @@ bool wxToolBar::Realize()
 #endif
 
                     // notice the last parameter: do use mask
-                    dcAllButtons.DrawBitmap(bmp, x + xOffset, yOffset, true);
+                    dcAllButtons.DrawBitmap(bmp, x, 0, true);
 
                     // Handle of the bitmap could have changed inside
                     // DrawBitmap() call if it had to convert it from DDB to
@@ -963,7 +966,8 @@ bool wxToolBar::Realize()
                 // also deal with disabled bitmap if we want to use them
                 if ( m_disabledImgList )
                 {
-                    wxBitmap bmpDisabled = tool->GetDisabledBitmap();
+                    wxBitmap bmpDisabled = tool->GetDisabledBitmap(sizeBitmap);
+
 #if wxUSE_IMAGE && wxUSE_WXDIB
                     if ( !bmpDisabled.IsOk() )
                     {
@@ -977,9 +981,9 @@ bool wxToolBar::Realize()
                         {
                             // we need to have light grey background colour for
                             // MapBitmap() to work correctly
-                            for ( int y = 0; y < h; y++ )
+                            for ( int y = 0; y < m_defaultHeight; y++ )
                             {
-                                for ( int xx = 0; xx < w; xx++ )
+                                for ( int xx = 0; xx < m_defaultWidth; xx++ )
                                 {
                                     if ( imgGreyed.IsTransparent(xx, y) )
                                         imgGreyed.SetRGB(xx, y,
@@ -995,7 +999,10 @@ bool wxToolBar::Realize()
 #endif // wxUSE_IMAGE
 
                     if ( remapValue == Remap_Buttons )
-                        MapBitmap(bmpDisabled.GetHBITMAP(), w, h);
+                    {
+                        MapBitmap(bmpDisabled.GetHBITMAP(),
+                                  m_defaultWidth, m_defaultHeight);
+                    }
 
                     m_disabledImgList->Add(bmpDisabled);
                 }
@@ -1667,9 +1674,9 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 // toolbar geometry
 // ----------------------------------------------------------------------------
 
-void wxToolBar::SetToolBitmapSize(const wxSize& size)
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
 {
-    wxToolBarBase::SetToolBitmapSize(size);
+    wxToolBarBase::DoSetToolBitmapSize(size);
 
     ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));
 }
@@ -1842,7 +1849,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
     wxFAIL_MSG( wxT("not implemented") );
 }
 
-void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
@@ -1854,7 +1861,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
     }
 }
 
-void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
@@ -1949,8 +1956,6 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
     // Manually scale the size of the controls. Even though the font has been
     // updated, the internal size of the controls does not.
-    const float scaleFactor = (float)event.GetNewDPI().y / event.GetOldDPI().y;
-
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
@@ -1961,7 +1966,7 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
         if ( wxControl* const control = tool->GetControl() )
         {
             const wxSize oldSize = control->GetSize();
-            wxSize newSize = oldSize * scaleFactor;
+            wxSize newSize = event.Scale(oldSize);
 
             // Use the best height for choice-based controls.
             // Scaling the current size does not work, because the control
@@ -1987,8 +1992,13 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
     // work. E.g. when switching from 125% to 150%. All the sizes are set
     // correctly, but after all dpi events are handled, 5px of the toolbar are
     // gone and a dark-gray bar appears. After resizing the window, the gray
-    // bar disapears as well.
+    // bar disappears as well, but unfortunately calling PostSizeEventToParent()
+    // either from here or even from RealizeHelper() itself doesn't work and
+    // there are still minor but visible cosmetic problems when moving the
+    // toolbar from 125% to 175% display.
     CallAfter(&wxToolBar::RealizeHelper);
+
+    event.Skip();
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))

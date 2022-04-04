@@ -282,6 +282,14 @@
 #   endif
 #endif /* !defined(wxUSE_SECRETSTORE) */
 
+#ifndef wxUSE_SPELLCHECK
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SPELLCHECK must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_SPELLCHECK 1
+#   endif
+#endif /* !defined(wxUSE_SPELLCHECK) */
+
 #ifndef wxUSE_STDPATHS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_STDPATHS must be defined, please read comment near the top of this file."

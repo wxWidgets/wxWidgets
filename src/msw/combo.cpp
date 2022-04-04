@@ -120,9 +120,6 @@ bool wxComboCtrl::Create(wxWindow *parent,
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
 
-    // Add keyboard input handlers for main control and textctrl
-    InstallInputHandlers();
-
     // SetInitialSize should be called last
     SetInitialSize(size);
 

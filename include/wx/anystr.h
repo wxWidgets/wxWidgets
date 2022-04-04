@@ -106,7 +106,7 @@ public:
         // surrogates as we do for now)
         //
         // just remember that this works as long as wxString keeps an internal
-        // buffer with its wide wide char representation, just as with AsChar()
+        // buffer with its wide char representation, just as with AsChar()
         // above
         return m_str->c_str().AsWChar() + (m_iter - m_str->begin());
     }
@@ -114,7 +114,7 @@ public:
     // Because the objects of this class are only used as return type for
     // functions which can return NULL we can skip providing dereferencing
     // operators: the code using this class must test it for NULL first and if
-    // it does anything else with it it has to assign it to either char* or
+    // it does anything else with it has to assign it to either char* or
     // wchar_t* itself, before dereferencing.
     //
     // IOW this
@@ -134,7 +134,7 @@ private:
     const wxString * const m_str;
     const wxString::const_iterator m_iter;
 
-    wxDECLARE_NO_ASSIGN_CLASS(wxAnyStrPtr);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxAnyStrPtr);
 };
 
 #endif // _WX_ANYSTR_H_

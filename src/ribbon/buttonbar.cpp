@@ -71,7 +71,7 @@ wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size)
         scale = 2.0;
 
     wxImage img(original.ConvertToImage());
-    img.Rescale(scale * size.GetWidth(), scale * size.GetHeight(), wxIMAGE_QUALITY_HIGH);
+    img.Rescale(int(scale * size.GetWidth()), int(scale * size.GetHeight()), wxIMAGE_QUALITY_HIGH);
     return wxBitmap(img, -1, scale);
 }
 
@@ -104,7 +104,7 @@ public:
         {
             bitmap_large = MakeResizedBitmap(bitmap_small, bitmap_size_large);
         }
-        else if(bitmap_large.GetScaledSize() != bitmap_size_large)
+        else if(bitmap_large.GetLogicalSize() != bitmap_size_large)
         {
             bitmap_large = MakeResizedBitmap(bitmap_large, bitmap_size_large);
         }
@@ -113,7 +113,7 @@ public:
         {
             bitmap_small = MakeResizedBitmap(bitmap_large, bitmap_size_small);
         }
-        else if(bitmap_small.GetScaledSize() != bitmap_size_small)
+        else if(bitmap_small.GetLogicalSize() != bitmap_size_small)
         {
             bitmap_small = MakeResizedBitmap(bitmap_small, bitmap_size_small);
         }
@@ -418,7 +418,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     {
         if(bitmap.IsOk())
         {
-            m_bitmap_size_large = bitmap.GetScaledSize();
+            m_bitmap_size_large = bitmap.GetLogicalSize();
             if(!bitmap_small.IsOk())
             {
                 m_bitmap_size_small = m_bitmap_size_large;
@@ -427,7 +427,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         }
         if(bitmap_small.IsOk())
         {
-            m_bitmap_size_small = bitmap_small.GetScaledSize();
+            m_bitmap_size_small = bitmap_small.GetLogicalSize();
             if(!bitmap.IsOk())
             {
                 m_bitmap_size_large = m_bitmap_size_small;
@@ -439,7 +439,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     wxRibbonButtonBarButtonBase* base = new wxRibbonButtonBarButtonBase;
     base->id = button_id;
     base->label = label;
-    base->SetBitmaps(GetAncestorRibbonBar(), m_bitmap_size_large, m_bitmap_size_small,
+    base->SetBitmaps(m_ribbonBar, m_bitmap_size_large, m_bitmap_size_small,
                      bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     base->kind = kind;
     base->help_string = help_string;
@@ -679,7 +679,7 @@ void wxRibbonButtonBar::SetButtonIcon(
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     if(base == NULL)
         return;
-    base->SetBitmaps(GetAncestorRibbonBar(), m_bitmap_size_large, m_bitmap_size_small,
+    base->SetBitmaps(m_ribbonBar, m_bitmap_size_large, m_bitmap_size_small,
                      bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     Refresh();
 }
@@ -933,8 +933,6 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
 
-    wxRibbonBar* const ribbon = GetAncestorRibbonBar();
-
     size_t btn_count = layout->buttons.Count();
     size_t btn_i;
     for(btn_i = 0; btn_i < btn_count; ++btn_i)
@@ -944,7 +942,7 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         wxRect rect(button.position + m_layout_offset, base->sizes[button.size].size);
 
         wxBitmap bitmap, bitmap_small;
-        base->GetBitmaps(ribbon,
+        base->GetBitmaps(m_ribbonBar,
                          m_bitmap_size_large, m_bitmap_size_small, bitmap,
                          bitmap_small);
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
@@ -975,6 +973,11 @@ void wxRibbonButtonBar::OnSize(wxSizeEvent& evt)
 
 void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
 {
+    // This can initialize it to NULL when we're called from the default ctor,
+    // but will set it to the correct value when used from non-default ctor or
+    // Create() later.
+    m_ribbonBar = GetAncestorRibbonBar();
+
     m_bitmap_size_large = wxSize(32, 32);
     m_bitmap_size_small = wxSize(16, 16);
 

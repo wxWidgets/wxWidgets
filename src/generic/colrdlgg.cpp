@@ -16,7 +16,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/dialog.h"
     #include "wx/listbox.h"
@@ -278,13 +277,15 @@ void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
     PaintHighlight(dc, true);
 }
 
-void wxGenericColourDialog::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+void wxGenericColourDialog::OnDPIChanged(wxDPIChangedEvent& event)
 {
     CalculateMeasurements();
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     CreateCustomBitmaps();
 #endif
+
+    event.Skip();
 }
 
 void wxGenericColourDialog::CalculateMeasurements()
@@ -314,8 +315,6 @@ void wxGenericColourDialog::CalculateMeasurements()
 
 void wxGenericColourDialog::CreateWidgets()
 {
-    wxBeginBusyCursor();
-
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     CreateCustomBitmaps();
 #endif
@@ -393,15 +392,11 @@ void wxGenericColourDialog::CreateWidgets()
         topSizer->Add(buttonsizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
-    SetAutoLayout( true );
     SetSizer( topSizer );
 
     topSizer->SetSizeHints( this );
-    topSizer->Fit( this );
 
     Centre( wxBOTH );
-
-    wxEndBusyCursor();
 }
 
 void wxGenericColourDialog::InitializeColours(void)

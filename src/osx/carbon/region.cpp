@@ -1315,7 +1315,7 @@ OSStatus wxOSXRegionToRectsSetterCallback(
     if (message == kHIShapeEnumerateRect)
     {
         RegionToRectsCallbackData *cb = (RegionToRectsCallbackData*) data ;
-        cb->m_rects[cb->m_current++] = wxRect( rect->origin.x , rect->origin.y , rect->size.width , rect->size.height ) ;
+        cb->m_rects[cb->m_current++] = wxRect(int(rect->origin.x), int(rect->origin.y), int(rect->size.width), int(rect->size.height)) ;
     }
 
     return noErr;

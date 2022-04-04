@@ -32,6 +32,12 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
+#if wxUSE_SPELLCHECK && defined(__WXGTK3__)
+extern "C" {
+#include <gspell-1/gspell/gspell.h>
+}
+#endif // wxUSE_SPELLCHECK && __WXGTK3__
+
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
@@ -787,7 +793,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         gtk_entry_set_width_chars((GtkEntry*)m_text, 1);
 
         // work around probable bug in GTK+ 2.18 when calling WriteText on a
-        // new, empty control, see https://trac.wxwidgets.org/ticket/11409
+        // new, empty control, see https://github.com/wxWidgets/wxWidgets/issues/11409
         gtk_entry_get_text((GtkEntry*)m_text);
 
 #ifndef __WXGTK3__
@@ -1016,6 +1022,64 @@ void wxTextCtrl::GTKSetJustification()
         gtk_entry_set_alignment(GTK_ENTRY(m_text), align);
     }
 }
+
+#if wxUSE_SPELLCHECK && defined(__WXGTK3__)
+
+bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
+{
+    if ( IsMultiLine() )
+    {
+        GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+        wxCHECK_MSG( textview, false, wxS("wxTextCtrl is not a GtkTextView") );
+
+        GspellTextView *spell = gspell_text_view_get_from_gtk_text_view (textview);
+        if ( !spell )
+            return false;
+
+        gspell_text_view_basic_setup(spell);
+        gspell_text_view_set_inline_spell_checking(spell, options.IsSpellCheckEnabled());
+        gspell_text_view_set_enable_language_menu(spell, options.IsSpellCheckEnabled());
+    }
+    else
+    {
+        GtkEntry *entry = GTK_ENTRY(m_text);
+        wxCHECK_MSG( entry, false, wxS("wxTextCtrl is not a GtkEntry") );
+
+        GspellEntry *spell = gspell_entry_get_from_gtk_entry(entry);
+        if ( !spell )
+            return false;
+
+        gspell_entry_basic_setup(spell);
+        gspell_entry_set_inline_spell_checking(spell, options.IsSpellCheckEnabled());
+    }
+
+    return GetProofCheckOptions().IsSpellCheckEnabled();
+}
+
+wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
+{
+    wxTextProofOptions opts = wxTextProofOptions::Disable();
+
+    if ( IsMultiLine() )
+    {
+        GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+
+        if ( textview && gspell_text_view_get_from_gtk_text_view(textview) )
+            opts.SpellCheck();
+    }
+
+    else
+    {
+        GtkEntry *entry = GTK_ENTRY(m_text);
+
+        if ( entry && gspell_entry_get_from_gtk_entry(entry) )
+            opts.SpellCheck();
+    }
+
+    return opts;
+}
+
+#endif // wxUSE_SPELLCHECK && __WXGTK3__
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {

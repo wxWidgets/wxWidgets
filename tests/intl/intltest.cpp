@@ -18,6 +18,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/intl.h"
+#include "wx/uilocale.h"
 
 #if wxUSE_INTL
 
@@ -197,7 +198,7 @@ void IntlTestCase::DateTimeFmtFrench()
 
 #ifdef __WXOSX__
     // Things are difficult to test under macOS as the format keeps changing,
-    // e.g. at some time between 10.10 and 10.12 a new " � " string appeared in
+    // e.g. at some time between 10.10 and 10.12 a new " à " string appeared in
     // its middle, so test it piece-wise and hope it doesn't change too much.
     CHECK( fmtDT.StartsWith("%A %d %B %Y") );
     CHECK( fmtDT.EndsWith("%H:%M:%S") );
@@ -238,5 +239,190 @@ TEST_CASE("wxLocale::Default", "[locale]")
 }
 
 #endif // wxUSE_UNICODE
+
+// Under MSW and macOS all the locales used below should be supported, but
+// under Linux some locales may be unavailable.
+static inline bool CheckSupported(const wxUILocale& loc, const char* desc)
+{
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+    INFO(desc << " locale");
+    CHECK( loc.IsSupported() );
+#else // Unix (not Darwin)
+    if ( !loc.IsSupported() )
+    {
+        WARN(desc << " locale not supported.");
+        return false;
+    }
+#endif
+
+    return true;
+}
+
+TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
+{
+    CheckSupported(wxUILocale::FromTag("en"), "English");
+    CheckSupported(wxUILocale(wxLocaleIdent().Language("fr").Region("FR")), "French");
+    CHECK_FALSE( wxUILocale::FromTag("bloordyblop").IsSupported() );
+    CHECK_FALSE( wxUILocale::FromTag("xyz").IsSupported() );
+}
+
+TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
+{
+    CHECK( wxUILocale::FromTag("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+
+    const wxUILocale locDE(wxUILocale::FromTag("de"));
+    if ( CheckSupported(locDE, "German") )
+        CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
+
+    // This one shows that "Swiss High German" locale (de_CH) correctly uses
+    // dot, and not comma, as decimal separator, even under macOS, where POSIX
+    // APIs use incorrect (identical to "German") definitions for this locale.
+    const wxUILocale locDE_CH(wxLocaleIdent().Language("de").Region("CH"));
+    if ( CheckSupported(locDE_CH, "Swiss German") )
+        CHECK( locDE_CH.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+}
+
+// Just a small helper to make the test below shorter.
+static inline wxString u8(const char* s) { return wxString::FromUTF8(s); }
+
+TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
+{
+    SECTION("English")
+    {
+        const wxUILocale l(wxUILocale::FromTag("en"));
+
+        // This is not very interesting, but check that comparison works at all.
+        CHECK( l.CompareStrings("x", "x") ==  0 );
+        CHECK( l.CompareStrings("x", "y") == -1 );
+        CHECK( l.CompareStrings("z", "y") == +1 );
+
+        // Also check for some degenerate cases.
+        CHECK( l.CompareStrings("", "")  ==  0 );
+        CHECK( l.CompareStrings("", "a") == -1 );
+
+        // The rest of the tests won't work unless it's really English locale
+        // and not the default "C" one.
+        if ( !CheckSupported(l, "English") )
+            return;
+
+        // And for case handling.
+        CHECK( l.CompareStrings("a", "A") == -1 );
+        CHECK( l.CompareStrings("b", "A") ==  1 );
+        CHECK( l.CompareStrings("B", "a") ==  1 );
+
+        // Case insensitive comparison is not supported with POSIX APIs.
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+        CHECK( l.CompareStrings("a", "A", wxCompare_CaseInsensitive) == 0 );
+#endif
+    }
+
+    // UTF-8 strings are not supported in ASCII build.
+#if wxUSE_UNICODE
+    SECTION("German")
+    {
+        const wxUILocale l(wxLocaleIdent().Language("de").Region("DE"));
+
+        if ( !CheckSupported(l, "German") )
+            return;
+
+        // This is more interesting and shows that CompareStrings() uses German
+        // dictionary rules (DIN 5007-1 variant 1).
+        CHECK( l.CompareStrings("a",  u8("ä")) == -1 );
+        CHECK( l.CompareStrings(u8("ä"), "ae") == -1 );
+
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+        // Unfortunately CompareStringsEx() doesn't seem to work correctly
+        // under Wine.
+        if ( wxIsRunningUnderWine() )
+            return;
+
+        CHECK( l.CompareStrings(u8("ß"), "ss", wxCompare_CaseInsensitive) == 0 );
+#endif
+    }
+
+    SECTION("Swedish")
+    {
+        if ( wxIsRunningUnderWine() )
+            return;
+
+        const wxUILocale l(wxUILocale::FromTag("sv"));
+
+        if ( !CheckSupported(l, "Swedish") )
+            return;
+
+        // And this shows that sort order really depends on the language.
+        CHECK( l.CompareStrings(u8("ä"), "ae") == 1 );
+        CHECK( l.CompareStrings(u8("ö"), "z" ) == 1 );
+    }
+#endif // wxUSE_UNICODE
+}
+
+// Small helper for making the test below more concise.
+static void CheckTag(const wxString& tag)
+{
+    CHECK( wxLocaleIdent::FromTag(tag).GetTag() == tag );
+}
+
+TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
+{
+    CheckTag("");
+    CheckTag("en");
+    CheckTag("en_US");
+    CheckTag("en_US.utf8");
+    CheckTag("English");
+    CheckTag("English_United States");
+    CheckTag("English_United States.utf8");
+}
+
+// Yet another helper for the test below.
+static void CheckFindLanguage(const wxString& tag, const char* expected)
+{
+    const wxLanguageInfo* const
+        info = wxUILocale::FindLanguageInfo(wxLocaleIdent::FromTag(tag));
+    if ( !expected )
+    {
+        if ( info )
+            FAIL_CHECK("Found " << info->CanonicalName << " for " << tag);
+
+        return;
+    }
+    else
+    {
+        if ( !info )
+        {
+            FAIL_CHECK("Not found for " << tag);
+            return;
+        }
+    }
+
+    CHECK( info->CanonicalName == expected );
+}
+
+TEST_CASE("wxUILocale::FindLanguageInfo", "[uilocale]")
+{
+    CheckFindLanguage("", NULL);
+    CheckFindLanguage("en", "en");
+    CheckFindLanguage("en_US", "en_US");
+    CheckFindLanguage("en_US.utf8", "en_US");
+    CheckFindLanguage("English", "en");
+    CheckFindLanguage("English_United States", "en_US");
+    CheckFindLanguage("English_United States.utf8", "en_US");
+}
+
+// Test which can be used to check if the given locale tag is supported.
+TEST_CASE("wxUILocale::FromTag", "[.]")
+{
+    wxString tag;
+    if ( !wxGetEnv("WX_TEST_LOCALE_TAG", &tag) )
+    {
+        FAIL("Specify WX_TEST_LOCALE_TAG");
+    }
+
+    const wxLocaleIdent locId = wxLocaleIdent::FromTag(tag);
+    REQUIRE( !locId.IsEmpty() );
+
+    const wxUILocale loc(locId);
+    WARN("Locale \"" << tag << "\" supported: " << loc.IsSupported() );
+}
 
 #endif // wxUSE_INTL

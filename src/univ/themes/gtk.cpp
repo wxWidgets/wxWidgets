@@ -825,14 +825,10 @@ void wxGTKRenderer::DrawTextBorder(wxDC& dc,
 
     if ( border != wxBORDER_NONE )
     {
+        DrawRect(dc, &rect, m_penBlack);
         if ( flags & wxCONTROL_FOCUSED )
         {
-            DrawRect(dc, &rect, m_penBlack);
             DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-        }
-        else // !focused
-        {
-            DrawInnerShadedRect(dc, &rect);
         }
     }
 
@@ -936,7 +932,7 @@ void wxGTKRenderer::DrawUndeterminedBitmap(wxDC& dc,
                                            bool isPressed)
 {
     // FIXME: For sure it is not GTK look but it is better than nothing.
-    // Show me correct look and I will immediatelly make it better (ABX)
+    // Show me correct look and I will immediately make it better (ABX)
     wxRect rect = rectTotal;
 
     wxColour col1, col2;
@@ -1084,7 +1080,7 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
         dc.SelectObject(m_bitmapsCheckbox[0][1]);
         DrawUncheckBitmap(dc, rect, false);
 
-        // normal undeterminated
+        // normal undetermined
         dc.SelectObject(m_bitmapsCheckbox[0][2]);
         DrawUndeterminedBitmap(dc, rect, false);
 
@@ -1095,7 +1091,7 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
         dc.SelectObject(m_bitmapsCheckbox[1][1]);
         DrawUncheckBitmap(dc, rect, true);
 
-        // pressed undeterminated
+        // pressed undetermined
         dc.SelectObject(m_bitmapsCheckbox[1][2]);
         DrawUndeterminedBitmap(dc, rect, true);
     }
@@ -1813,7 +1809,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
     gi->m_ofsAccel = gi->m_ofsLabel + widthLabelMax;
     if ( widthAccelMax > 0 )
     {
-        // if we actually have any accesl, add a margin
+        // if we actually have any accels, add a margin
         gi->m_ofsAccel += MENU_ACCEL_MARGIN;
     }
 

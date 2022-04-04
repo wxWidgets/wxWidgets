@@ -34,6 +34,7 @@
     #include "wx/module.h"
 #endif //WX_PRECOMP
 
+#include "wx/dynlib.h"
 #include "wx/scopeguard.h"
 #include "wx/tooltip.h"
 
@@ -495,8 +496,6 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     {
         EnableCloseButton(false);
     }
-
-    InheritAttributes();
 
     // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
     // itself but for custom windows we have to do it ourselves in order to
@@ -1046,6 +1045,47 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 
     DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
     DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG);
+}
+
+wxContentProtection wxTopLevelWindowMSW::GetContentProtection() const
+{
+#if wxUSE_DYNLIB_CLASS
+    typedef BOOL(WINAPI *GetWindowDisplayAffinity_t)(HWND, DWORD *);
+
+    wxDynamicLibrary dllUser32("user32.dll");
+    GetWindowDisplayAffinity_t pfnGetWindowDisplayAffinity =
+        (GetWindowDisplayAffinity_t)dllUser32.RawGetSymbol("GetWindowDisplayAffinity");
+    if (pfnGetWindowDisplayAffinity)
+    {
+        DWORD affinity = 0;
+        if (!pfnGetWindowDisplayAffinity(GetHWND(), &affinity))
+            wxLogLastError("GetWindowDisplayAffinity");
+        else if (affinity & WDA_MONITOR)
+            return wxCONTENT_PROTECTION_ENABLED;
+    }
+#endif
+    return wxCONTENT_PROTECTION_NONE;
+}
+
+bool wxTopLevelWindowMSW::SetContentProtection(wxContentProtection contentProtection)
+{
+#if wxUSE_DYNLIB_CLASS
+    typedef BOOL(WINAPI *SetWindowDisplayAffinity_t)(HWND, DWORD);
+
+    wxDynamicLibrary dllUser32("user32.dll");
+    SetWindowDisplayAffinity_t pfnSetWindowDisplayAffinity =
+        (SetWindowDisplayAffinity_t)dllUser32.RawGetSymbol("SetWindowDisplayAffinity");
+    if (pfnSetWindowDisplayAffinity)
+    {
+        if (pfnSetWindowDisplayAffinity(GetHWND(),
+            (contentProtection == wxCONTENT_PROTECTION_ENABLED) ?
+            WDA_MONITOR : WDA_NONE))
+            return true;
+        else
+            wxLogLastError("SetWindowDisplayAffinity");
+    }
+#endif
+    return false;
 }
 
 // static

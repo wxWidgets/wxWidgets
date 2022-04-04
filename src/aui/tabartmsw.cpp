@@ -39,13 +39,6 @@ wxAuiTabArt* wxAuiMSWTabArt::Clone()
     return new wxAuiMSWTabArt(*this);
 }
 
-void wxAuiMSWTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
-    size_t tab_count)
-{
-    wxAuiGenericTabArt::SetSizingInfo(tab_ctrl_size, tab_count);
-}
-
-
 void wxAuiMSWTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 {
     if ( !IsThemed() )
@@ -211,7 +204,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
 
     dc.SetFont(wnd->GetFont());
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
-    dc.DrawLabel(page.caption, page.bitmap, textRect, wxALIGN_CENTRE);
+    dc.DrawLabel(page.caption, page.bitmap.GetBitmapFor(wnd), textRect, wxALIGN_CENTRE);
 
     // draw focus rectangle
     if ( page.active && (wnd->FindFocus() == wnd) )
@@ -283,7 +276,7 @@ int wxAuiMSWTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
 wxSize wxAuiMSWTabArt::GetTabSize(wxDC& dc,
     wxWindow* wnd,
     const wxString& caption,
-    const wxBitmap& bitmap,
+    const wxBitmapBundle& bitmap,
     bool active,
     int close_button_state,
     int* x_extent)
@@ -313,8 +306,10 @@ wxSize wxAuiMSWTabArt::GetTabSize(wxDC& dc,
     // if there's a bitmap, add space for it
     if ( bitmap.IsOk() )
     {
-        tabWidth += bitmap.GetWidth() + wnd->FromDIP(3); // bitmap padding
-        tabHeight = wxMax(tabHeight, bitmap.GetHeight() + wnd->FromDIP(2));
+        const wxSize bitmapSize = bitmap.GetPreferredLogicalSizeFor(wnd);
+
+        tabWidth += bitmapSize.x + wnd->FromDIP(3); // bitmap padding
+        tabHeight = wxMax(tabHeight, bitmapSize.y + wnd->FromDIP(2));
     }
 
     // add padding

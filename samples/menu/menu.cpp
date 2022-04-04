@@ -32,6 +32,7 @@
     #include "wx/textdlg.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/filehistory.h"
 #include "wx/filename.h"
 
@@ -55,8 +56,6 @@
 #else
     #define USE_LOG_WINDOW 0
 #endif
-
-#include "copy.xpm"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -559,7 +558,7 @@ MyFrame::MyFrame()
 #if USE_LOG_WINDOW
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
                                       "Clear &log\tCtrl-L");
-    item->SetBitmap(copy_xpm);
+    item->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_MENU));
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
 #endif // USE_LOG_WINDOW
@@ -574,17 +573,9 @@ MyFrame::MyFrame()
     m_fileHistory = new wxFileHistory();
     m_fileHistory->UseMenu(m_fileHistoryMenu);
 
-    wxFileName fn( "menu.cpp" );
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
-
-    fn = "Makefile.in";
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
-
-    fn.Assign("minimal", "minimal", "cpp");
-    fn.Normalize();
-    m_fileHistory->AddFileToHistory( fn.GetFullPath() );
+    m_fileHistory->AddFileToHistory( wxFileName("menu.cpp").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("Makefile.in").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("minimal", "minimal", "cpp").GetAbsolutePath() );
 
     fileMenu->AppendSubMenu(m_fileHistoryMenu, "Sample file history");
 #endif
@@ -1256,7 +1247,8 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
         menu.Append(Menu_Popup_ToBeGreyed, "To be &greyed",
                     "This menu item should be initially greyed out");
         menu.AppendSeparator();
-        menu.Append(Menu_File_Quit, "E&xit");
+        menu.Append(Menu_File_Quit, "E&xit")
+            ->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_QUIT, wxART_MENU));
 
         menu.Delete(Menu_Popup_ToBeDeleted);
         menu.Check(Menu_Popup_ToBeChecked, true);

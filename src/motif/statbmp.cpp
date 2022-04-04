@@ -30,7 +30,7 @@
  */
 
 bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
-           const wxBitmap& bitmap,
+           const wxBitmapBundle& bitmap,
            const wxPoint& pos,
            const wxSize& size,
            long style,
@@ -41,7 +41,6 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
         return false;
     PreCreation();
 
-    m_messageBitmap = bitmap;
     m_messageBitmapOriginal = bitmap;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
@@ -58,9 +57,9 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     wxSize actualSize(size);
     // work around the cases where the bitmap is a wxNull(Icon/Bitmap)
     if (actualSize.x == -1)
-        actualSize.x = bitmap.IsOk() ? bitmap.GetWidth() : 1;
+        actualSize.x = bitmap.IsOk() ? bitmap.GetDefaultSize().x : 16;
     if (actualSize.y == -1)
-        actualSize.y = bitmap.IsOk() ? bitmap.GetHeight() : 1;
+        actualSize.y = bitmap.IsOk() ? bitmap.GetDefaultSize().y : 16;
 
     PostCreation();
     DoSetBitmap();
@@ -80,16 +79,17 @@ void wxStaticBitmap::DoSetBitmap()
     Widget widget = (Widget) m_mainWidget;
     int w2, h2;
 
-    if (m_messageBitmapOriginal.IsOk())
+    wxBitmap bitmapOriginal = m_messageBitmapOriginal.GetBitmap(wxDefaultSize);
+    if (bitmapOriginal.IsOk())
     {
-        w2 = m_messageBitmapOriginal.GetWidth();
-        h2 = m_messageBitmapOriginal.GetHeight();
+        w2 = bitmapOriginal.GetWidth();
+        h2 = bitmapOriginal.GetHeight();
 
         Pixmap pixmap;
 
         // Must re-make the bitmap to have its transparent areas drawn
         // in the current widget background colour.
-        if (m_messageBitmapOriginal.GetMask())
+        if (bitmapOriginal.GetMask())
         {
             WXPixel backgroundPixel;
             XtVaGetValues( widget, XmNbackground, &backgroundPixel,
@@ -98,13 +98,14 @@ void wxStaticBitmap::DoSetBitmap()
             wxColour col;
             col.SetPixel(backgroundPixel);
 
-            wxBitmap newBitmap = wxCreateMaskedBitmap(m_messageBitmapOriginal, col);
+            wxBitmap newBitmap = wxCreateMaskedBitmap(bitmapOriginal, col);
             m_messageBitmap = newBitmap;
 
             pixmap = (Pixmap) m_messageBitmap.GetDrawable();
         }
         else
         {
+            m_messageBitmap = bitmapOriginal;
             m_bitmapCache.SetBitmap( m_messageBitmap );
             pixmap = (Pixmap)m_bitmapCache.GetLabelPixmap(widget);
         }
@@ -127,9 +128,8 @@ void wxStaticBitmap::DoSetBitmap()
     }
 }
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    m_messageBitmap = bitmap;
     m_messageBitmapOriginal = bitmap;
 
     DoSetBitmap();

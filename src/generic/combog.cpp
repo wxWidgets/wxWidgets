@@ -177,9 +177,6 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
     // Create textctrl, if necessary
     CreateTextCtrl( tcBorder );
 
-    // Add keyboard input handlers for main control and textctrl
-    InstallInputHandlers();
-
     // Set background style for double-buffering, when needed
     // (cannot use when system draws background automatically)
     if ( !HasTransparentBackground() )
@@ -319,7 +316,7 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.SetPen(tcCol);
         dc.DrawRectangle(tcRect);
 
-        // this is intentionally here to allow drawed rectangle's
+        // this is intentionally here to allow drawn rectangle's
         // right edge to be hidden
         if ( m_text )
             tcRect.width = m_widthCustomPaint;
@@ -419,12 +416,7 @@ void wxGenericComboCtrl::SetCustomPaintWidth( int width )
         // Common textctrl re-creation code
         if ( tcCreateStyle != -1 )
         {
-            tc->RemoveEventHandler(m_textEvtHandler);
-            delete m_textEvtHandler;
-
             CreateTextCtrl( tcCreateStyle );
-
-            InstallInputHandlers();
         }
     }
 #endif // UNRELIABLE_TEXTCTRL_BORDER

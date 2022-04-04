@@ -139,7 +139,7 @@ public:
         Internally calls Create().
     */
     wxBitmapToggleButton(wxWindow* parent, wxWindowID id,
-                         const wxBitmap& label,
+                         const wxBitmapBundle& label,
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          long style = 0,
@@ -150,7 +150,7 @@ public:
         Create method for two-step construction.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,

@@ -27,9 +27,8 @@ skip_commits:
     - include/wx/x11/
     - src/x11/
     - '**/*.md'
+    - .github/ISSUE_TEMPLATE/
     - .github/workflows/
-    - .travis.yml
-    - build/tools/travis-ci.sh
     - build/tools/before_install.sh
     - build/tools/httpbin.sh
 
@@ -52,7 +51,6 @@ environment:
   - TOOLSET: mingw
   - TOOLSET: msys2
     MSYSTEM: MINGW32
-  - TOOLSET: cygwin
   - TOOLSET: cmake
     GENERATOR: 'Visual Studio 12'
     SHARED: ON

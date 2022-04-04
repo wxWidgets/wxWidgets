@@ -25,7 +25,7 @@
 
 bool wxBitmapButton::Create( wxWindow *parent,
                              wxWindowID id,
-                             const wxBitmap& bitmap,
+                             const wxBitmapBundle& bitmap,
                              const wxPoint& pos,
                              const wxSize& size,
                              long style,
@@ -58,7 +58,7 @@ wxSize wxBitmapButton::DoGetBestSize() const
 
     if ( GetBitmapLabel().IsOk() )
     {
-        const wxSize bitmapSize = GetBitmapLabel().GetScaledSize();
+        const wxSize bitmapSize = GetBitmapLabel().GetLogicalSize();
         best += bitmapSize;
 
         // The NSRoundedBezelStyle and NSTexturedRoundedBezelStyle used when

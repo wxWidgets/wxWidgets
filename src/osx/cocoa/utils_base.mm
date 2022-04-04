@@ -115,6 +115,9 @@ wxString wxGetOsDescription()
             case 11:
                 osName = "Big Sur";
                 break;
+            case 12:
+                osName = "Monterey";
+                break;
         }
     }
 #else
@@ -167,7 +170,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     // Check the URL validity
     if( url == nil )
     {
-        wxLogDebug(wxT("wxCocoaLaunch Can't open path: %s"), path.c_str());
+        wxLogDebug(wxT("wxCocoaLaunch Can't open path: %s"), path);
         return false ;
     }
 
@@ -266,3 +269,10 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
 }
 
 #endif
+
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+{
+    // The values of NSOrdered{Ascending,Same,Descending} are the same as
+    // expected return values of wxCmpNatural(), so we don't need to convert.
+    return [wxCFStringRef(s1).AsNSString() localizedStandardCompare: wxCFStringRef(s2).AsNSString()];
+}

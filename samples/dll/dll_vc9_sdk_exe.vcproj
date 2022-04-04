@@ -394,8 +394,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="vc_mswud_x64"
-			IntermediateDirectory="vc_mswud_x64\sdk_exe"
+			OutputDirectory="vc_x64_mswud"
+			IntermediateDirectory="vc_x64_mswud\sdk_exe"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -428,8 +428,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud_x64\sdk_exe\"
-				ProgramDataBaseFileName="vc_mswud_x64\sdk_exe.pdb"
+				ObjectFile="vc_x64_mswud\sdk_exe\"
+				ProgramDataBaseFileName="vc_x64_mswud\sdk_exe.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -449,14 +449,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswud_x64\my_dll.lib user32.lib"
-				OutputFile="vc_mswud_x64\sdk_exe.exe"
+				AdditionalDependencies="vc_x64_mswud\my_dll.lib user32.lib"
+				OutputFile="vc_x64_mswud\sdk_exe.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswud_x64\sdk_exe.pdb"
+				ProgramDatabaseFile="vc_x64_mswud\sdk_exe.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -471,7 +471,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswud_x64\dll_vc9_sdk_exe.bsc"
+				OutputFile="vc_x64_mswud\dll_vc9_sdk_exe.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -486,8 +486,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="vc_mswu_x64"
-			IntermediateDirectory="vc_mswu_x64\sdk_exe"
+			OutputDirectory="vc_x64_mswu"
+			IntermediateDirectory="vc_x64_mswu\sdk_exe"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -518,8 +518,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu_x64\sdk_exe\"
-				ProgramDataBaseFileName="vc_mswu_x64\sdk_exe.pdb"
+				ObjectFile="vc_x64_mswu\sdk_exe\"
+				ProgramDataBaseFileName="vc_x64_mswu\sdk_exe.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -539,14 +539,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswu_x64\my_dll.lib user32.lib"
-				OutputFile="vc_mswu_x64\sdk_exe.exe"
+				AdditionalDependencies="vc_x64_mswu\my_dll.lib user32.lib"
+				OutputFile="vc_x64_mswu\sdk_exe.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswu_x64\sdk_exe.pdb"
+				ProgramDatabaseFile="vc_x64_mswu\sdk_exe.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -563,7 +563,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswu_x64\dll_vc9_sdk_exe.bsc"
+				OutputFile="vc_x64_mswu\dll_vc9_sdk_exe.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -578,8 +578,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Debug|x64"
-			OutputDirectory="vc_mswuddll_x64"
-			IntermediateDirectory="vc_mswuddll_x64\sdk_exe"
+			OutputDirectory="vc_x64_mswuddll"
+			IntermediateDirectory="vc_x64_mswuddll\sdk_exe"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -612,8 +612,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\sdk_exe\"
-				ProgramDataBaseFileName="vc_mswuddll_x64\sdk_exe.pdb"
+				ObjectFile="vc_x64_mswuddll\sdk_exe\"
+				ProgramDataBaseFileName="vc_x64_mswuddll\sdk_exe.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -633,14 +633,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswuddll_x64\my_dll.lib user32.lib"
-				OutputFile="vc_mswuddll_x64\sdk_exe.exe"
+				AdditionalDependencies="vc_x64_mswuddll\my_dll.lib user32.lib"
+				OutputFile="vc_x64_mswuddll\sdk_exe.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll_x64\sdk_exe.pdb"
+				ProgramDatabaseFile="vc_x64_mswuddll\sdk_exe.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -655,7 +655,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll_x64\dll_vc9_sdk_exe.bsc"
+				OutputFile="vc_x64_mswuddll\dll_vc9_sdk_exe.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -670,8 +670,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Release|x64"
-			OutputDirectory="vc_mswudll_x64"
-			IntermediateDirectory="vc_mswudll_x64\sdk_exe"
+			OutputDirectory="vc_x64_mswudll"
+			IntermediateDirectory="vc_x64_mswudll\sdk_exe"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -702,8 +702,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\sdk_exe\"
-				ProgramDataBaseFileName="vc_mswudll_x64\sdk_exe.pdb"
+				ObjectFile="vc_x64_mswudll\sdk_exe\"
+				ProgramDataBaseFileName="vc_x64_mswudll\sdk_exe.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -723,14 +723,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswudll_x64\my_dll.lib user32.lib"
-				OutputFile="vc_mswudll_x64\sdk_exe.exe"
+				AdditionalDependencies="vc_x64_mswudll\my_dll.lib user32.lib"
+				OutputFile="vc_x64_mswudll\sdk_exe.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll_x64\sdk_exe.pdb"
+				ProgramDatabaseFile="vc_x64_mswudll\sdk_exe.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -747,7 +747,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll_x64\dll_vc9_sdk_exe.bsc"
+				OutputFile="vc_x64_mswudll\dll_vc9_sdk_exe.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

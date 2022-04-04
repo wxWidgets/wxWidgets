@@ -148,7 +148,7 @@ private:
 /**
     Helper macro for defining user value types.
 
-    Even though C++ RTTI would be fully available to use, we'd have to to
+    Even though C++ RTTI would be fully available to use, we'd have to
     facilitate sub-type system which allows, for instance, wxAny with
     signed short '15' to be treated equal to wxAny with signed long long '15'.
     Having sm_instance is important here.

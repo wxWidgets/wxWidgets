@@ -28,8 +28,28 @@ contents and use the utility classes and functions from it instead of
 duplicating their functionality (which can often be done only in exception
 unsafe way).
 
+2. Utility classes
+---------------------------
 
-2. Windows features checks
+wxWidgets provides a couple of useful (mostly undocumented) classes making
+Windows API easier to work with.
+
+Please whenever possible do not use raw pointers for BSTR, COM interfaces
+or task memory, use the appropriate RAII wrapper instead (see below).
+
+Grep wxWidgets source code for the class name to see how it is to be used.
+
+*wxBasicString*: for `BSTR`, in `"wx/msw/ole/oleutils.h"`
+
+*wxCOMPtr*: simplistic smart pointer for COM interfaces, in `"wx/msw/private/comptr.h"`
+
+*wxCoTaskMemPtr*: smart pointer for memory allocated/freed with `CoTaskMem{Alloc/Free}()`,
+in `"wx/msw/private/cotaskmemptr.h"`
+
+*wxSafeArray*: for `SAFEARRAY`, in `"wx/msw/ole/safearray.h"`
+
+
+3. Windows features checks
 --------------------------
 
 All checks of features not present in all Windows versions must be done both at

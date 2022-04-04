@@ -297,7 +297,7 @@ public:
 
 protected:
     // structure to hold information needed to process one native event
-    // this is just a dummy holder, so it doesn't take ownership of it's data
+    // this is just a dummy holder, so it doesn't take ownership of its data
     struct wxEventProcessingData
     {
         wxEventProcessingData(const FILE_NOTIFY_INFORMATION* ne,

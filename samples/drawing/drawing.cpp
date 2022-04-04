@@ -1072,28 +1072,28 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
 #if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
 void MyCanvas::DrawAlpha(wxDC& dc)
 {
-    wxDouble margin = 20 ;
-    wxDouble width = 180 ;
+    const int margin = 20;
+    const int width = 180;
     wxDouble radius = 30 ;
 
     dc.SetPen( wxPen( wxColour( 128, 0, 0 ), 12 ));
     dc.SetBrush(*wxRED_BRUSH);
 
-    wxRect r(margin,margin+width*0.66,width,width) ;
+    wxRect r(margin, margin + width * 2 / 3, width, width);
 
     dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
 
     dc.SetPen( wxPen( wxColour( 0, 0, 128 ), 12));
     dc.SetBrush( wxColour(0, 0, 255, 192) );
 
-    r.Offset( width * 0.8 , - width * 0.66 ) ;
+    r.Offset(width * 4 / 5, -width * 2 / 3);
 
     dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
 
     dc.SetPen( wxPen( wxColour( 128, 128, 0 ), 12));
     dc.SetBrush( wxBrush( wxColour( 192, 192, 0, 192)));
 
-    r.Offset( width * 0.8 , width *0.5 ) ;
+    r.Offset(width * 4 / 5, width / 2);
 
     dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
 
@@ -2535,7 +2535,8 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         else
 #endif // wxUSE_POSTSCRIPT
         {
-            wxBitmap bmp(width, height);
+            wxBitmap bmp;
+            bmp.CreateWithDIPSize(wxSize(width, height), GetDPIScaleFactor());
             wxMemoryDC mdc(bmp);
             mdc.SetBackground(*wxWHITE_BRUSH);
             mdc.Clear();

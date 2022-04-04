@@ -244,8 +244,8 @@ public:
             A label for the page. This may be shown as a toolbar tooltip etc.
 
         @param bmp
-            Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-            default image is used.
+            Bitmap bundle for toolbar image. If the bundle is empty, then
+            a built-in default bitmap bundle is used.
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
@@ -258,7 +258,7 @@ public:
                 switching. Otherwise toolbar buttons might not be added properly.
     */
     wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
-                                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
+                                 const wxBitmapBundle& bmp = wxBitmapBundle(),
                                  wxPropertyGridPage* pageObj = NULL );
 
     /**
@@ -402,8 +402,8 @@ public:
             A label for the page. This may be shown as a toolbar tooltip etc.
 
         @param bmp
-            Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-            default image is used.
+            Bitmap bundle for toolbar image. If the bundle is empty, then
+            a built-in default bitmap bundle is used.
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
@@ -412,7 +412,7 @@ public:
         @return Returns pointer to created page.
     */
     virtual wxPropertyGridPage* InsertPage( int index, const wxString& label,
-                                            const wxBitmap& bmp = wxNullBitmap,
+                                            const wxBitmapBundle& bmp = wxBitmapBundle(),
                                             wxPropertyGridPage* pageObj = NULL );
 
     /**

@@ -309,7 +309,7 @@ public:
     WebKit on macOS and GTK. This allows the correct viewing of complex pages with
     JavaScript and CSS.
 
-    @section descriptions Backend Descriptions
+    @section backend_descriptions Backend Descriptions
 
     This class supports using multiple backends, corresponding to different
     implementations of the same functionality. Under macOS and Unix platforms
@@ -348,7 +348,7 @@ public:
     - With CMake just enable @c wxUSE_WEBVIEW_EDGE
     - When not using CMake:
         - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
-        nuget package (Version 1.0.622.22 or newer)
+        nuget package (Version 1.0.705.50 or newer)
         - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
         (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
         file after unpacking it)
@@ -362,6 +362,9 @@ public:
       loaded and Edge (Chromium) is installed)
     - Make sure to add a note about using the WebView2 SDK to your application
       documentation, as required by its licence
+    - With Visual Studio 2019 or newer @c wxUSE_WEBVIEW_EDGE_STATIC can be used
+      to static link the loader and remove the dependency on @c WebView2Loader.dll
+      at runtime.
 
     If enabled and available at runtime Edge will be selected as the default
     backend. If you require the IE backend use @c wxWebViewBackendIE when
@@ -485,6 +488,10 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         AddScriptMessageHandler().
+    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
+        only available in wxWidgets 3.1.6 or later. For usage details see
+        RunScriptAsync().
     @endEventTable
 
     @since 2.9.3
@@ -710,6 +717,11 @@ public:
     /**
         Runs the given JavaScript code.
 
+        @note Because of various potential issues it's recommended to use
+            RunScriptAsync() instead of this method. This is especially true
+            if you plan to run code from a webview event and will also prevent
+            unintended side effects on the UI outside of the webview.
+
         JavaScript code is executed inside the browser control and has full
         access to DOM and other browser-provided functionality. For example,
         this code
@@ -764,15 +776,38 @@ public:
             @NULL if it is not needed. This parameter is new since wxWidgets
             version 3.1.1.
         @return @true if there is a result, @false if there is an error.
+
+        @see RunScriptAsync()
     */
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
+
+    /**
+        Runs the given JavaScript code asynchronously and returns the result
+        via a @c wxEVT_WEBVIEW_SCRIPT_RESULT.
+
+        The script result value can be retrieved via wxWebViewEvent::GetString().
+        If the execution fails wxWebViewEvent::IsError() will return @true. In this
+        case additional script execution error information maybe available
+        via wxWebViewEvent::GetString().
+
+        @param javascript JavaScript code to execute.
+        @param clientData Arbirary pointer to data that can be retrieved from
+            the result event.
+
+        @note The IE backend does not support async script execution.
+
+        @since 3.1.6
+        @see RunScript()
+    */
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const;
+
 
     /**
         Add a script message handler with the given name.
 
         To use the script message handler from javascript use
-        @c window.<name>.postMessage(<messageBody>) where <name> corresponds the value
-        of the name parameter. The <messageBody> will be available to the application
+        @c `window.<name>.postMessage(<messageBody>)` where `<name>` corresponds the value
+        of the name parameter. The `<messageBody>` will be available to the application
         via a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event.
 
         Sample C++ code receiving a script message:
@@ -1279,6 +1314,10 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         wxWebView::AddScriptMessageHandler().
+    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
+        only available in wxWidgets 3.1.6 or later. For usage details see
+        wxWebView::RunScriptAsync().
     @endEventTable
 
     @since 2.9.3
@@ -1323,6 +1362,14 @@ public:
         @since 3.1.5
     */
     const wxString& GetMessageHandler() const;
+
+    /**
+        Returns true the script execution failed. Only valid for events of type
+        @c wxEVT_WEBVIEW_SCRIPT_RESULT
+
+        @since 3.1.6
+    */
+    bool IsError() const;
 };
 
 

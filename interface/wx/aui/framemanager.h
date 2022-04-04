@@ -745,7 +745,7 @@ public:
 
         @since 2.9.2
     */
-    wxAuiPaneInfo& Icon(const wxBitmap& b);
+    wxAuiPaneInfo& Icon(const wxBitmapBundle& b);
 
     /**
         IsBottomDockable() returns @true if the pane can be docked at the bottom of the
@@ -991,7 +991,7 @@ public:
     wxString caption;
 
     /// icon of the pane, may be invalid
-    wxBitmap icon;
+    wxBitmapBundle icon;
 
     /// window that is in this pane
     wxWindow* window;

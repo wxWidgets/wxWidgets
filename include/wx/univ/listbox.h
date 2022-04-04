@@ -142,9 +142,8 @@ public:
     // select the item which is diff items below the current one
     void ChangeCurrent(int diff);
 
-    // activate (i.e. send a LISTBOX_DOUBLECLICKED message) the specified or
-    // current (if -1) item
-    void Activate(int item = -1);
+    // activate (i.e. send a LISTBOX_DOUBLECLICKED message) the specified item
+    void Activate(int item);
 
     // select or unselect the specified or current (if -1) item
     void DoSelect(int item = -1, bool sel = true);

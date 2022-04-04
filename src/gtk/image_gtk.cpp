@@ -7,48 +7,58 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
+#include "wx/log.h"
 #include "wx/window.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/image.h"
 
 namespace
 {
+
+#ifdef __WXGTK3__
+
 // Default provider for HiDPI common case
 struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 {
-#ifdef __WXGTK3__
     BitmapProviderDefault(wxWindow* win) : m_win(win) { }
-    virtual wxBitmap Get() const wxOVERRIDE;
-    virtual void Set(const wxBitmap& bitmap) wxOVERRIDE;
+
+    virtual wxBitmap Get(int scale) const wxOVERRIDE;
+    virtual void Set(const wxBitmapBundle& bitmap) wxOVERRIDE;
+
     wxWindow* const m_win;
-    wxBitmap m_bitmap;
-    wxBitmap m_bitmapDisabled;
-#else
-    BitmapProviderDefault(wxWindow*) { }
-    virtual wxBitmap Get() const wxOVERRIDE { return wxBitmap(); }
-#endif
+
+    // All the bitmaps we use.
+    wxBitmapBundle m_bitmapBundle;
 };
 
-#ifdef __WXGTK3__
-wxBitmap BitmapProviderDefault::Get() const
+wxBitmap BitmapProviderDefault::Get(int scale) const
 {
-    return (m_win == NULL || m_win->IsEnabled()) ? m_bitmap : m_bitmapDisabled;
+    wxBitmap bitmap(GetAtScale(m_bitmapBundle, scale));
+    if (m_win && !m_win->IsEnabled())
+        bitmap = bitmap.CreateDisabled();
+
+    return bitmap;
 }
 
-void BitmapProviderDefault::Set(const wxBitmap& bitmap)
+void BitmapProviderDefault::Set(const wxBitmapBundle& bitmapBundle)
 {
-    m_bitmap.UnRef();
-    m_bitmapDisabled.UnRef();
-    if (bitmap.IsOk() && bitmap.GetScaleFactor() > 1)
-    {
-        m_bitmap = bitmap;
-        if (m_win)
-            m_bitmapDisabled = bitmap.CreateDisabled();
-    }
+    m_bitmapBundle = bitmapBundle;
 }
-#endif // __WXGTK3__
+
+#else // !__WXGTK3__
+
+// Trivial version for GTK < 3 which doesn't provide any high DPI support.
+struct BitmapProviderDefault: wxGtkImage::BitmapProvider
+{
+    BitmapProviderDefault(wxWindow*) { }
+    virtual wxBitmap Get(int /*scale*/) const wxOVERRIDE { return wxBitmap(); }
+};
+
+#endif // __WXGTK3__/!__WXGTK3__
+
 } // namespace
 
 extern "C" {
@@ -85,27 +95,20 @@ GtkWidget* wxGtkImage::New(wxWindow* win)
     return New(new BitmapProviderDefault(win));
 }
 
-void wxGtkImage::Set(const wxBitmap& bitmap)
+void wxGtkImage::Set(const wxBitmapBundle& bitmapBundle)
 {
-    m_provider->Set(bitmap);
+    m_provider->Set(bitmapBundle);
+
+    // Always set the default bitmap to use the correct size, even if we draw a
+    // different bitmap below.
+    wxBitmap bitmap = bitmapBundle.GetBitmap(wxDefaultSize);
 
     GdkPixbuf* pixbuf = NULL;
-    GdkPixbuf* pixbufNew = NULL;
     if (bitmap.IsOk())
     {
-        if (bitmap.GetScaleFactor() <= 1)
-            pixbuf = bitmap.GetPixbuf();
-        else
-        {
-            // Placeholder pixbuf for correct size
-            pixbufNew =
-            pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
-                int(bitmap.GetScaledWidth()), int(bitmap.GetScaledHeight()));
-        }
+        pixbuf = bitmap.GetPixbuf();
     }
     gtk_image_set_from_pixbuf(GTK_IMAGE(this), pixbuf);
-    if (pixbufNew)
-        g_object_unref(pixbufNew);
 }
 
 static GtkWidgetClass* wxGtkImageParentClass;
@@ -119,24 +122,29 @@ static gboolean wxGtkImageDraw(GtkWidget* widget, GdkEventExpose* event)
 #endif
 {
     wxGtkImage* image = WX_GTK_IMAGE(widget);
-    const wxBitmap bitmap(image->m_provider->Get());
+
+    int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+    if (wx_is_at_least_gtk3(10))
+        scale = gtk_widget_get_scale_factor(widget);
+#endif
+    const wxBitmap bitmap(image->m_provider->Get(scale));
+
+#ifndef __WXGTK3__
+    // We rely on GTK to draw default disabled images
     if (!bitmap.IsOk())
-    {
-#ifdef __WXGTK3__
-        return wxGtkImageParentClass->draw(widget, cr);
-#else
         return wxGtkImageParentClass->expose_event(widget, event);
 #endif
-    }
 
     GtkAllocation alloc;
     gtk_widget_get_allocation(widget, &alloc);
-    int x = (alloc.width  - int(bitmap.GetScaledWidth() )) / 2;
-    int y = (alloc.height - int(bitmap.GetScaledHeight())) / 2;
+    int x = (alloc.width  - int(bitmap.GetLogicalWidth() )) / 2;
+    int y = (alloc.height - int(bitmap.GetLogicalHeight())) / 2;
 #ifdef __WXGTK3__
     gtk_render_background(gtk_widget_get_style_context(widget),
         cr, 0, 0, alloc.width, alloc.height);
-    bitmap.Draw(cr, x, y);
+    if (bitmap.IsOk())
+        bitmap.Draw(cr, x, y);
 #else
     x += alloc.x;
     y += alloc.y;

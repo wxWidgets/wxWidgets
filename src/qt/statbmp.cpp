@@ -28,7 +28,7 @@ wxStaticBitmap::wxStaticBitmap() :
 
 wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos,
                 const wxSize& size,
                 long style,
@@ -39,7 +39,7 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
 
 bool wxStaticBitmap::Create( wxWindow *parent,
              wxWindowID id,
-             const wxBitmap& label,
+             const wxBitmapBundle& label,
              const wxPoint& pos,
              const wxSize& size,
              long style,
@@ -57,14 +57,9 @@ static void SetPixmap( QLabel *label, const QPixmap *pixMap )
         label->setPixmap( *pixMap );
 }
 
-void wxStaticBitmap::SetIcon(const wxIcon& icon)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    SetPixmap( m_qtLabel, icon.GetHandle() );
-}
-
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
-{
-    SetPixmap( m_qtLabel, bitmap.GetHandle() );
+    SetPixmap( m_qtLabel, bitmap.GetBitmapFor(this).GetHandle() );
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const
@@ -74,13 +69,6 @@ wxBitmap wxStaticBitmap::GetBitmap() const
         return wxBitmap( *pix );
     else
         return wxBitmap();
-}
-
-wxIcon wxStaticBitmap::GetIcon() const
-{
-    wxIcon icon;
-    icon.CopyFromBitmap( GetBitmap() );
-    return icon;
 }
 
 QWidget *wxStaticBitmap::GetHandle() const

@@ -500,10 +500,6 @@ void wxUITextViewControl::SetStyle(long start,
     }
 }
 
-void wxUITextViewControl::CheckSpelling(bool check)
-{
-}
-
 wxSize wxUITextViewControl::GetBestSize() const
 {
     wxRect r;

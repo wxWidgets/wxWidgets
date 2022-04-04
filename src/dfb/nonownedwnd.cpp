@@ -430,7 +430,7 @@ void wxNonOwnedWindow::SetDfbFocus()
     // Note that the events are processed by event loop, i.e. not between
     // execution of lines (1) and (2) above. So by the time the first
     // DWET_GOTFOCUS event is handled, tlw2->SetFocus() was already executed.
-    // If we onconditionally called RequestFocus() from here, handling the
+    // If we unconditionally called RequestFocus() from here, handling the
     // first event would result in this change to the event queue:
     //
     //     DWET_LOSTFOCUS(tlw1)

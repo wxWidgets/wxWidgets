@@ -138,16 +138,19 @@ void wxAnimationCtrlBase::UpdateStaticImage()
 
     // if given bitmap is not of the right size, recreate m_bmpStaticReal accordingly
     const wxSize &sz = GetClientSize();
-    if (sz.GetWidth() != m_bmpStaticReal.GetWidth() ||
-        sz.GetHeight() != m_bmpStaticReal.GetHeight())
+    if (sz.GetWidth() != m_bmpStaticReal.GetLogicalWidth() ||
+        sz.GetHeight() != m_bmpStaticReal.GetLogicalHeight())
     {
+        wxBitmap bmpCurrent = m_bmpStatic.GetBitmapFor(this);
+
         if (!m_bmpStaticReal.IsOk() ||
-            m_bmpStaticReal.GetWidth() != sz.GetWidth() ||
-            m_bmpStaticReal.GetHeight() != sz.GetHeight())
+            m_bmpStaticReal.GetLogicalWidth() != sz.GetWidth() ||
+            m_bmpStaticReal.GetLogicalHeight() != sz.GetHeight())
         {
             // need to (re)create m_bmpStaticReal
-            if (!m_bmpStaticReal.Create(sz.GetWidth(), sz.GetHeight(),
-                                        m_bmpStatic.GetDepth()))
+            if (!m_bmpStaticReal.CreateWithDIPSize(sz,
+                                          bmpCurrent.GetScaleFactor(),
+                                          bmpCurrent.GetDepth()))
             {
                 wxLogDebug(wxT("Cannot create the static bitmap"));
                 m_bmpStatic = wxNullBitmap;
@@ -155,8 +158,8 @@ void wxAnimationCtrlBase::UpdateStaticImage()
             }
         }
 
-        if (m_bmpStatic.GetWidth() <= sz.GetWidth() &&
-            m_bmpStatic.GetHeight() <= sz.GetHeight())
+        if (bmpCurrent.GetLogicalWidth() <= sz.GetWidth() &&
+            bmpCurrent.GetLogicalHeight() <= sz.GetHeight())
         {
             // clear the background of m_bmpStaticReal
             wxBrush brush(GetBackgroundColour());
@@ -166,25 +169,25 @@ void wxAnimationCtrlBase::UpdateStaticImage()
             dc.Clear();
 
             // center the user-provided bitmap in m_bmpStaticReal
-            dc.DrawBitmap(m_bmpStatic,
-                        (sz.GetWidth()-m_bmpStatic.GetWidth())/2,
-                        (sz.GetHeight()-m_bmpStatic.GetHeight())/2,
+            dc.DrawBitmap(bmpCurrent,
+                        (sz.GetWidth()-bmpCurrent.GetLogicalWidth())/2,
+                        (sz.GetHeight()-bmpCurrent.GetLogicalHeight())/2,
                         true /* use mask */ );
         }
         else
         {
             // the user-provided bitmap is bigger than our control, strech it
-            wxImage temp(m_bmpStatic.ConvertToImage());
+            wxImage temp(bmpCurrent.ConvertToImage());
             temp.Rescale(sz.GetWidth(), sz.GetHeight(), wxIMAGE_QUALITY_HIGH);
             m_bmpStaticReal = wxBitmap(temp);
         }
     }
 }
 
-void wxAnimationCtrlBase::SetInactiveBitmap(const wxBitmap &bmp)
+void wxAnimationCtrlBase::SetInactiveBitmap(const wxBitmapBundle &bmp)
 {
     m_bmpStatic = bmp;
-    m_bmpStaticReal = bmp;
+    m_bmpStaticReal = bmp.GetBitmapFor(this);
 
     // if not playing, update the control now
     // NOTE: DisplayStaticImage() will call UpdateStaticImage automatically

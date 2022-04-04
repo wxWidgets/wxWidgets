@@ -22,3 +22,11 @@
 	path = src/jpeg
 	url = https://github.com/wxWidgets/libjpeg-turbo.git
 	branch = wx
+[submodule "3rdparty/pcre"]
+	path = 3rdparty/pcre
+	url = https://github.com/wxWidgets/pcre
+	branch = wx
+[submodule "3rdparty/nanosvg"]
+	path = 3rdparty/nanosvg
+	url = https://github.com/wxWidgets/nanosvg
+	branch = wx

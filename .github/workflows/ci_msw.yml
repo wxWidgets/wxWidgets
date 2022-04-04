@@ -1,0 +1,116 @@
+# CI workflow building wxMSW under Windows.
+name: MSW builds
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/gtk/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/gtk/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+
+jobs:
+  msw-msvs:
+    runs-on: windows-${{ matrix.vsversion }}
+    name: wxMSW vs${{ matrix.vsversion }} ${{ matrix.configuration }} ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - configuration: 'DLL Debug'
+            platform: 'x64'
+            vsversion: 2022
+          - configuration: 'Debug'
+            platform: 'Win32'
+            vsversion: 2019
+          - configuration: 'DLL Release'
+            platform: 'x64'
+            vsversion: 2019
+            use_stl: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Configure to use STL
+        if: matrix.use_stl
+        working-directory: include/wx/msw
+        run: |
+            $txt = Get-Content setup.h
+            Write-Output $txt |
+            %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL 1"} |
+            Set-Content setup.h
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.3
+        with:
+            vs-prerelease: true
+
+      - name: Build
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
+            if ( '${{ matrix.configuration }}'.IndexOf('DLL') -ne -1 ) {
+                $dlldir = Join-Path (Get-Location) 'lib\vc_${{ matrix.platform }}_dll'
+                Write-Output "Adding $dlldir to the PATH"
+                $dlldir | Out-File -Append $env:GITHUB_PATH
+            }
+
+      - name: Build minimal sample
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\minimal\minimal_vc16.sln
+
+      - name: Build tests
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
+
+      - name: Run tests
+        working-directory: tests
+        run: |
+            .\vc*msw*\test.exe
+
+      - name: Build GUI tests
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
+
+      - name: Run GUI tests
+        working-directory: tests
+        run: |
+            .\vc*msw*\test_gui.exe

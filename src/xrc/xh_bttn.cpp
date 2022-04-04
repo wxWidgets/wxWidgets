@@ -49,7 +49,7 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
 
     if ( GetParamNode("bitmap") )
     {
-        button->SetBitmap(GetBitmap("bitmap", wxART_BUTTON),
+        button->SetBitmap(GetBitmapBundle("bitmap", wxART_BUTTON),
                           GetDirection("bitmapposition"));
     }
 

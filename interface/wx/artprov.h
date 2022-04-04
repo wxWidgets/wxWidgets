@@ -91,6 +91,8 @@ const char* wxART_FIND_AND_REPLACE;
 const char* wxART_FULL_SCREEN;
 const char* wxART_EDIT;
 
+const char* wxART_WX_LOGO;
+
 
 /**
     @class wxArtProvider
@@ -110,13 +112,21 @@ const char* wxART_EDIT;
       class MyProvider : public wxArtProvider
       {
       protected:
+        // Override this method to return a bundle containing the required
+        // bitmap in all available sizes.
+        wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                          const wxArtClient& client,
+                                          const wxSize& size) override;
+
+        // If all bitmaps are available in a single size only, it may be
+        // simpler to override just this one.
         wxBitmap CreateBitmap(const wxArtID& id,
                               const wxArtClient& client,
-                              const wxSize& size);
+                              const wxSize& size) override;
 
         // optionally override this one as well
         wxIconBundle CreateIconBundle(const wxArtID& id,
-                                      const wxArtClient& client);
+                                      const wxArtClient& client) override;
         { ... }
       };
       ...
@@ -128,8 +138,8 @@ const char* wxART_EDIT;
     and supplying icon bundles that contain different bitmap sizes.
 
     There's another way of taking advantage of this class: you can use it in your
-    code and use platform native icons as provided by wxArtProvider::GetBitmap or
-    wxArtProvider::GetIcon.
+    code and use platform native icons as provided by wxArtProvider::GetBitmapBundle
+    or wxArtProvider::GetIcon.
 
     @section artprovider_identify Identifying art resources
 
@@ -197,6 +207,7 @@ const char* wxART_EDIT;
      @li @c wxART_FLOPPY
      @li @c wxART_CDROM
      @li @c wxART_REMOVABLE
+     @li @c wxART_WX_LOGO (since 3.1.6)
     </td></tr>
     </table>
 
@@ -216,7 +227,7 @@ const char* wxART_EDIT;
     #endif
     @endcode
     For a list of the GTK+ stock items please refer to the
-    <a href="http://library.gnome.org/devel/gtk/stable/gtk-Stock-Items.html">GTK+ documentation
+    <a href="https://developer-old.gnome.org/gtk3/stable/gtk3-Stock-Items.html">GTK+ documentation
     page</a>.
     It is also possible to load icons from the current icon theme by specifying their name
     (without extension and directory components).
@@ -272,6 +283,9 @@ public:
     /**
         Query registered providers for bitmap with given ID.
 
+        Note that applications using wxWidgets 3.1.6 or later should prefer
+        calling GetBitmapBundle().
+
         @param id
             wxArtID unique identifier of the bitmap.
         @param client
@@ -287,6 +301,30 @@ public:
                               const wxSize& size = wxDefaultSize);
 
     /**
+        Query registered providers for a bundle of bitmaps with given ID.
+
+        @since 3.1.6
+
+        @param id
+            wxArtID unique identifier of the bitmap.
+        @param client
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+        @param size
+            Default size for the returned bundle, i.e. the size of the bitmap
+            in normal DPI (this implies that wxWindow::FromDIP() must @e not be
+            used with it).
+
+        @return If any of the registered providers recognizes the ID in its
+            CreateBitmapBundle(), this bundle is returned. Otherwise, if any of
+            providers returns a valid bitmap from CreateBitmap(), the bundle
+            containing only this bitmap is returned. Otherwise, an empty bundle
+            is returned.
+     */
+    static wxBitmapBundle GetBitmapBundle(const wxArtID& id,
+                                          const wxArtClient& client = wxART_OTHER,
+                                          const wxSize& size = wxDefaultSize);
+
+    /**
         Same as wxArtProvider::GetBitmap, but return a wxIcon object
         (or ::wxNullIcon on failure).
     */
@@ -295,7 +333,7 @@ public:
                           const wxSize& size = wxDefaultSize);
 
     /**
-        Returns native icon size for use specified by @a client hint.
+        Returns native icon size for use specified by @a client hint in DIPs.
 
         If the platform has no commonly used default for this use or if
         @a client is not recognized, returns wxDefaultSize.
@@ -305,22 +343,42 @@ public:
               In that case, this method returns only one of them, picked
               reasonably.
 
-        @since 2.9.0
+        @since 3.1.6
      */
-    static wxSize GetNativeSizeHint(const wxArtClient& client);
+    static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
+
+    /**
+        Returns native icon size for use specified by @a client hint.
+
+        This function does the same thing as GetNativeDIPSizeHint(), but uses
+        @a win to convert the returned value to logical pixels. If @a win is
+        @NULL, default DPI scaling (i.e. that of the primary display) is used.
+
+        @since 2.9.0 (@a win parameter is available only since 3.1.6)
+     */
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+
+    /**
+        Returns a suitable size hint for the given @e wxArtClient in DIPs.
+
+        Return the size used by the topmost wxArtProvider for the given @a
+        client. @e wxDefaultSize may be returned if the client doesn't have a
+        specified size, like wxART_OTHER for example.
+
+        @see GetNativeDIPSizeHint()
+    */
+    static wxSize GetDIPSizeHint(const wxArtClient& client);
 
     /**
         Returns a suitable size hint for the given @e wxArtClient.
 
-        If @a platform_default is @true, return a size based on the current
-        platform using GetNativeSizeHint(), otherwise return the size from the
-        topmost wxArtProvider. @e wxDefaultSize may be returned if the client
-        doesn't have a specified size, like wxART_OTHER for example.
+        This function does the same thing as GetDIPSizeHint(), but uses @a win
+        to convert the returned value to logical pixels. If @a win is @NULL,
+        default DPI scaling (i.e. that of the primary display) is used.
 
-        @see GetNativeSizeHint()
-    */
-    static wxSize GetSizeHint(const wxArtClient& client,
-                              bool platform_default = false);
+        Note that @a win parameter is only available since wxWidgets 3.1.6.
+     */
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = NULL);
 
     /**
         Query registered providers for icon bundle with given ID.
@@ -402,10 +460,24 @@ public:
 
 
 protected:
+    /**
+        Derived art provider classes may override this method to return the
+        size of the images used by this provider.
+
+        Note that the returned size should be in DPI-independent pixels, i.e.
+        DIPs. The default implementation returns the result of
+        GetNativeDIPSizeHint().
+     */
+    virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
     /**
-        Derived art provider classes must override this method to create requested art
-        resource. Note that returned bitmaps are cached by wxArtProvider and it is
+        Derived art provider classes may override this method to create requested art
+        resource.
+
+        For bitmaps available in more than one size, CreateBitmapBundle()
+        should be overridden instead.
+
+        Note that returned bitmaps are cached by wxArtProvider and it is
         therefore not necessary to optimize CreateBitmap() for speed (e.g. you may
         create wxBitmap objects from XPMs here).
 
@@ -428,6 +500,29 @@ protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id,
                                   const wxArtClient& client,
                                   const wxSize& size);
+
+    /**
+        Override this method to create the requested art resources available in
+        more than one size.
+
+        Unlike CreateBitmap(), this method can be overridden to return the same
+        bitmap in several (or all, if wxBitmapBundle::FromSVG() is used) sizes
+        at once, which will allow selecting the size best suited for the
+        current display resolution automatically.
+
+        @param id
+            wxArtID unique identifier of the bitmap.
+        @param client
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+            This only serves as a hint.
+        @param size
+            Default size of the bitmaps returned by the bundle.
+
+        @since 3.1.6
+     */
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size);
 
     /**
         This method is similar to CreateBitmap() but can be used when a bitmap

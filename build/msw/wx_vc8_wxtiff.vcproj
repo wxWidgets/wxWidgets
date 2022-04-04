@@ -345,7 +345,7 @@
 		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="..\..\lib\vc_x64_lib"
-			IntermediateDirectory="vc_mswud_x64\wxtiff"
+			IntermediateDirectory="vc_x64_mswud\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -378,7 +378,7 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud_x64\wxtiff\"
+				ObjectFile="vc_x64_mswud\wxtiff\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_lib\wxtiffd.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -426,7 +426,7 @@
 		<Configuration
 			Name="Release|x64"
 			OutputDirectory="..\..\lib\vc_x64_lib"
-			IntermediateDirectory="vc_mswu_x64\wxtiff"
+			IntermediateDirectory="vc_x64_mswu\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -456,7 +456,7 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu_x64\wxtiff\"
+				ObjectFile="vc_x64_mswu\wxtiff\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_lib\wxtiff.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -504,7 +504,7 @@
 		<Configuration
 			Name="DLL Debug|x64"
 			OutputDirectory="..\..\lib\vc_x64_dll"
-			IntermediateDirectory="vc_mswuddll_x64\wxtiff"
+			IntermediateDirectory="vc_x64_mswuddll\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -537,7 +537,7 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\wxtiff\"
+				ObjectFile="vc_x64_mswuddll\wxtiff\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxtiffd.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -585,7 +585,7 @@
 		<Configuration
 			Name="DLL Release|x64"
 			OutputDirectory="..\..\lib\vc_x64_dll"
-			IntermediateDirectory="vc_mswudll_x64\wxtiff"
+			IntermediateDirectory="vc_x64_mswudll\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -615,7 +615,7 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\wxtiff\"
+				ObjectFile="vc_x64_mswudll\wxtiff\"
 				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxtiff.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -780,10 +780,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\tiff\libtiff\tif_predict.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\tiff\libtiff\tif_print.c"
 				>
 			</File>
 			<File

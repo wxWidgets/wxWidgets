@@ -33,8 +33,25 @@ struct wxLanguageInfo
     /// language info structure.
     int Language;
 
+    /**
+        Tag for locale in BCP 47-like notation.
+
+        @since 3.1.6
+     */
+    wxString LocaleTag;
+
     /// Canonical name of the language, e.g. @c fr_FR.
     wxString CanonicalName;
+
+    /**
+        Canonical reference including region.
+
+        Set, if the name specifies the language only, e.g. fr_FR for fr.
+        Empty, if region is unknown or already part of the name.
+
+        @since 3.1.6
+    */
+    wxString CanonicalRef;
 
     //@{
     /**
@@ -45,8 +62,15 @@ struct wxLanguageInfo
     wxUint32 WinLang, WinSublang;
     //@}
 
-    /// Human-readable name of the language.
+    /// Human-readable name of the language in English.
     wxString Description;
+
+    /**
+        Human-readable name of the language in this language itself.
+
+        @since 3.1.6
+     */
+    wxString DescriptionNative;
 
     /// The layout direction used for this language.
     wxLayoutDirection LayoutDirection;
@@ -63,13 +87,51 @@ struct wxLanguageInfo
         string is empty.
      */
     wxString GetLocaleName() const;
+
+    /**
+        Return the canonical locale name including the region, if known.
+
+        The value is identical to @c CanonicalRef, if not empty,
+        otherwise it is identical to @c CanonicalName.
+
+        @since 3.1.6
+    */
+    wxString GetCanonicalWithRegion() const;
+};
+
+
+/**
+    The type of a locale tag.
+
+    @see wxLocaleIdent::GetTag()
+    @since 3.1.6
+*/
+enum wxLocaleTagType
+{
+    /// Default (tag as given or else same as wxLOCALE_TAGTYPE_SYSTEM)
+    wxLOCALE_TAGTYPE_DEFAULT,
+
+    /// Default type of the system (platform-dependent).
+    wxLOCALE_TAGTYPE_SYSTEM,
+
+    /// BCP47-like type: \<language\>[-\<script\>][-\<region\>][-\<modifier\>].
+    wxLOCALE_TAGTYPE_BCP47,
+
+    /// macOS type: \<language\>[-\<script\>][_\<region\>].
+    wxLOCALE_TAGTYPE_MACOS,
+
+    /// POSIX type: \<language\>_\<region\>[.\<charset\>][@@{\<scriptalias\>|\<modifier\>}].
+    wxLOCALE_TAGTYPE_POSIX,
+
+    /// Windows type:  \<language\>[-\<script\>][-\<region\>][-\<extension\>][_\<sortorder\>].
+    wxLOCALE_TAGTYPE_WINDOWS
 };
 
 
 /**
     The category of locale settings.
 
-    @see wxLocale::GetInfo()
+    @see wxLocale::GetInfo(), wxUILocale::GetInfo()
 */
 enum wxLocaleCategory
 {
@@ -108,6 +170,8 @@ enum wxLocaleCategory
 
     All of these values are used with @c wxLOCALE_CAT_DATE in wxLocale::GetInfo() or,
     more typically, with @c wxLOCALE_CAT_DEFAULT as they only apply to a single category.
+
+    @see wxUILocale::GetInfo()
 */
 enum wxLocaleInfo
 {
@@ -116,6 +180,9 @@ enum wxLocaleInfo
 
         This value can be used with either wxLOCALE_CAT_NUMBER or
         wxLOCALE_CAT_MONEY categories.
+
+        By default, i.e. when wxLOCALE_CAT_DEFAULT is used, the separator for
+        numbers is returned.
      */
     wxLOCALE_THOUSANDS_SEP,
 
@@ -124,6 +191,9 @@ enum wxLocaleInfo
 
         This value can be used with either wxLOCALE_CAT_NUMBER or
         wxLOCALE_CAT_MONEY categories.
+
+        By default, i.e. when wxLOCALE_CAT_DEFAULT is used, the decimal point
+        for numbers is returned.
      */
     wxLOCALE_DECIMAL_POINT,
 
@@ -161,10 +231,63 @@ enum wxLocaleInfo
 
 
 /**
+    The values understood by wxUILocale::GetLocalizedName().
+
+    The corresponding strings can be used to display the information in the UI.
+
+    @since 3.1.6
+
+    @see wxUILocale::GetLocalizedName()
+*/
+enum wxLocaleName
+{
+    /// Display name of a locale.
+    wxLOCALE_NAME_LOCALE,
+
+    /// Display name of the language of a locale.
+    wxLOCALE_NAME_LANGUAGE,
+
+    /// Display name of the country/region of a locale.
+    wxLOCALE_NAME_COUNTRY
+};
+
+// ----------------------------------------------------------------------------
+// wxLocaleForm: the forms of names understood by wxLocale::GetLocalizedName()
+// ----------------------------------------------------------------------------
+
+/**
+    The values understood by wxUILocale::GetLocalizedName().
+
+    The values specify the form of a localized name.
+
+    @since 3.1.6
+
+    @see wxUILocale::GetLocalizedName()
+*/
+enum wxLocaleForm
+{
+    /// Name should be returned in the language of the locale itself.
+    wxLOCALE_FORM_NATIVE,
+
+    /// Name should be returned in English.
+    wxLOCALE_FORM_ENGLISH
+};
+
+
+/**
     @class wxLocale
 
     wxLocale class encapsulates all language-dependent settings and is a
     generalization of the C locale concept.
+
+    @note This class is known to have several problems under macOS: first of all,
+        it is impossible to change the application UI locale after launching it
+        under this platform and so using this class doesn't affect the native
+        controls and dialogs there. Additionally, versions of macOS between
+        11.0 and 12.2 inclusive are affected by a bug when changing C locale can
+        break display of the application menus. Because of this, it is
+        recommended to use wxUILocale instead of this class for the
+        applications targeting macOS.
 
     In wxWidgets this class manages current locale. It also initializes and
     activates wxTranslations object that manages message catalogs.
@@ -287,7 +410,7 @@ public:
         This function may be used to find the language description structure for the
         given locale, specified either as a two letter ISO language code (for example,
         "pt"), a language code followed by the country code ("pt_BR") or a full, human
-        readable, language description ("Portuguese-Brazil").
+        readable, language description ("Portuguese_Brazil").
 
         Returns the information for the given language or @NULL if this language
         is unknown. Note that even if the returned pointer is valid, the caller
@@ -434,6 +557,9 @@ public:
 
     /**
         Get the values of a locale datum in the OS locale.
+
+        This function shouldn't be used in the new code, use
+        wxUILocale::GetInfo() instead.
 
         This function is similar to GetInfo() and, in fact, identical to it
         under non-MSW systems. Under MSW it differs from it when no locale had

@@ -1374,7 +1374,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
         {
            /* we SHOULD use the direct way if all of the bitmap
               in the memory dc is copied in which case XCopyArea
-              wouldn't be able able to boost performace by reducing
+              wouldn't be able able to boost performance by reducing
               the area to be scaled */
             use_bitmap_method = true;
         }

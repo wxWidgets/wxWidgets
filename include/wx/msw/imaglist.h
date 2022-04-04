@@ -24,7 +24,7 @@ public:
    * Public interface
    */
 
-  wxImageList();
+  wxImageList() { Init(); }
 
   // Creates an image list.
   // Specify the width and height of the images in the list,
@@ -32,6 +32,7 @@ public:
   // from icons), and the initial size of the list.
   wxImageList(int width, int height, bool mask = true, int initialCount = 1)
   {
+    Init();
     Create(width, height, mask, initialCount);
   }
   virtual ~wxImageList();
@@ -57,6 +58,9 @@ public:
   // mask specifies whether the images have masks or not.
   // initialNumber is the initial number of images to reserve.
   bool Create(int width, int height, bool mask = true, int initialNumber = 1);
+
+  // Destroys the image list, Create() may then be called again later.
+  void Destroy();
 
   // Adds a bitmap, and optionally a mask bitmap.
   // Note that wxImageList creates *new* bitmaps, so you may delete
@@ -194,7 +198,15 @@ public:
 protected:
   WXHIMAGELIST m_hImageList;
   wxSize m_size;
+
+private:
   bool m_useMask;
+
+  void Init()
+  {
+    m_hImageList = NULL;
+    m_useMask = false;
+  }
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxImageList);
 };

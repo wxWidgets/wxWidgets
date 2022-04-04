@@ -102,23 +102,6 @@ static const char *wxPostScriptHeaderEllipticArc=
 "  { fill }{ stroke } ifelse\n" // -> fill or stroke
 "} def\n";
 
-static const char *wxPostScriptHeaderSpline = "\
-/DrawSplineSection {\n\
-    /y3 exch def\n\
-    /x3 exch def\n\
-    /y2 exch def\n\
-    /x2 exch def\n\
-    /y1 exch def\n\
-    /x1 exch def\n\
-    /xa x1 x2 x1 sub 0.666667 mul add def\n\
-    /ya y1 y2 y1 sub 0.666667 mul add def\n\
-    /xb x3 x2 x3 sub 0.666667 mul add def\n\
-    /yb y3 y2 y3 sub 0.666667 mul add def\n\
-    x1 y1 lineto\n\
-    xa ya xb yb x3 y3 curveto\n\
-    } def\n\
-";
-
 static const char *wxPostScriptHeaderColourImage = "\
 % define 'colorimage' if it isn't defined\n\
 %   ('colortogray' and 'mergeprocs' come from xwd2ps\n\
@@ -1161,14 +1144,14 @@ void wxPostScriptDCImpl::SetPSFont()
     // Generate PS code to register the font only once.
     if ( m_definedPSFonts.Index(name) == wxNOT_FOUND )
     {
-        buffer.Printf( "%s reencodeISO def\n", name.c_str() );
+        buffer.Printf( "%s reencodeISO def\n", name );
         PsPrint( buffer );
         m_definedPSFonts.Add(name);
     }
 
     // Select font
     double size = m_font.GetPointSize() * double(GetFontPointSizeAdjustment(DPI));
-    buffer.Printf( "%s findfont %f scalefont setfont\n", name.c_str(), size * m_scaleX );
+    buffer.Printf( "%s findfont %f scalefont setfont\n", name, size * m_scaleX );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
@@ -1352,14 +1335,14 @@ void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDesc
                        "  dup stringwidth rlineto\n"
                        "  stroke\n"
                        "  grestore\n",
-                        -YLOG2DEVREL(textDescent - m_underlinePosition),
+                        -YLOG2DEVREL(textDescent - int(m_underlinePosition)),
                         m_underlineThickness );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
     }
     PsPrint(           "  show\n" ); // x y
     // Advance to the beginning of th next line.
-    buffer.Printf(     "  %f add moveto\n", -YLOG2DEVREL(lineHeight) );
+    buffer.Printf(     "  %f add moveto\n", -YLOG2DEVREL(int(lineHeight)) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
     // Execute above statements for all elements of the array
@@ -1463,82 +1446,68 @@ void wxPostScriptDCImpl::SetLogicalFunction(wxRasterOperationMode WXUNUSED(funct
 void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     SetPen( m_pen );
 
-    // a and b are not used
-    //double a, b;
-    double c, d, x1, y1, x3, y3;
-    wxPoint *p, *q;
+    wxPointList::const_iterator itPt = points->begin();
 
-    wxPointList::compatibility_iterator node = points->GetFirst();
-    p = node->GetData();
-    x1 = p->x;
-    y1 = p->y;
+    const wxPoint* pt = *itPt; ++itPt;
+    wxPoint2DDouble p1(*pt);
 
-    node = node->GetNext();
-    p = node->GetData();
-    c = p->x;
-    d = p->y;
-    x3 =
-         #if 0
-         a =
-         #endif
-         (double)(x1 + c) / 2;
-    y3 =
-         #if 0
-         b =
-         #endif
-         (double)(y1 + d) / 2;
+    pt = *itPt; ++itPt;
+    wxPoint2DDouble p2(*pt);
+    wxPoint2DDouble p3 = (p1 + p2) / 2.0;
 
     wxString buffer;
     buffer.Printf( "newpath\n"
                    "%f %f moveto\n"
                    "%f %f lineto\n",
-            XLOG2DEV(wxRound(x1)), YLOG2DEV(wxRound(y1)),
-            XLOG2DEV(wxRound(x3)), YLOG2DEV(wxRound(y3)) );
+            XLOG2DEV(wxRound(p1.m_x)), YLOG2DEV(wxRound(p1.m_y)),
+            XLOG2DEV(wxRound(p3.m_x)), YLOG2DEV(wxRound(p3.m_y)) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
-    CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+    CalcBoundingBox( (wxCoord)p1.m_x, (wxCoord)p1.m_y );
+    CalcBoundingBox( (wxCoord)p3.m_x, (wxCoord)p3.m_y );
 
-    node = node->GetNext();
-    while (node)
+    while ( itPt != points->end() )
     {
-        double x2, y2;
-        q = node->GetData();
+        pt = *itPt; ++itPt;
 
-        x1 = x3;
-        y1 = y3;
-        x2 = c;
-        y2 = d;
-        c = q->x;
-        d = q->y;
-        x3 = (double)(x2 + c) / 2;
-        y3 = (double)(y2 + d) / 2;
+        wxPoint2DDouble p0 = p3;
+        p1 = p2;
+        p2 = *pt;
+        p3 = (p1 + p2) / 2.0;
 
-        buffer.Printf( "%f %f %f %f %f %f DrawSplineSection\n",
-            XLOG2DEV(wxRound(x1)), YLOG2DEV(wxRound(y1)),
-            XLOG2DEV(wxRound(x2)), YLOG2DEV(wxRound(y2)),
-            XLOG2DEV(wxRound(x3)), YLOG2DEV(wxRound(y3)) );
+        // Calculate using degree elevation to a cubic bezier
+        wxPoint2DDouble c1 = (p0 + (p1 * 2.0)) / 3.0;
+        wxPoint2DDouble c2 = ((p1 * 2.0) + p3) / 3.0;
+
+        buffer.Printf("%f %f %f %f %f %f curveto\n",
+            XLOG2DEV(wxRound(c1.m_x)), YLOG2DEV(wxRound(c1.m_y)),
+            XLOG2DEV(wxRound(c2.m_x)), YLOG2DEV(wxRound(c2.m_y)),
+            XLOG2DEV(wxRound(p3.m_x)), YLOG2DEV(wxRound(p3.m_y)));
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
-        CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
-
-        node = node->GetNext();
+        CalcBoundingBox( (wxCoord)p0.m_x, (wxCoord)p0.m_y );
+        CalcBoundingBox( (wxCoord)p3.m_x, (wxCoord)p3.m_y );
     }
 
     /*
-       At this point, (x2,y2) and (c,d) are the position of the
+       At this point, p1 and p2 are the position of the
        next-to-last and last point respectively, in the point list
      */
 
-    buffer.Printf( "%f %f lineto\nstroke\n", XLOG2DEV(wxRound(c)), YLOG2DEV(wxRound(d)) );
+    buffer.Printf( "%f %f lineto\n"
+                   "stroke\n",
+                   XLOG2DEV(wxRound(p2.m_x)), YLOG2DEV(wxRound(p2.m_y)) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
+
+    CalcBoundingBox((wxCoord)p2.m_x, (wxCoord)p2.m_y);
 }
 #endif // wxUSE_SPLINES
 
@@ -1716,8 +1685,6 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
     PsPrint( wxPostScriptHeaderColourImage );
     PsPrint( wxPostScriptHeaderReencodeISO1 );
     PsPrint( wxPostScriptHeaderReencodeISO2 );
-    if (wxPostScriptHeaderSpline)
-        PsPrint( wxPostScriptHeaderSpline );
     PsPrint( wxPostScriptHeaderStrSplit );
     PsPrint( "%%EndProlog\n" );
 
@@ -2148,7 +2115,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
            /  character widths in an array, which is processed below (see point 3.). */
         if (afmFile==NULL)
         {
-            wxLogDebug( wxT("GetTextExtent: can't open AFM file '%s'"), afmName.c_str() );
+            wxLogDebug( wxT("GetTextExtent: can't open AFM file '%s'"), afmName );
             wxLogDebug( wxT("               using approximate values"));
             for (int i=0; i<256; i++) lastWidths[i] = 500; /* an approximate value */
             lastDescender = -150; /* dito. */
@@ -2173,7 +2140,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%d",descString,&lastDescender)!=2) ||
                             (strcmp(descString,"Descender")!=0))
                     {
-                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad descender)"), afmName.c_str(),line );
+                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad descender)"), afmName,line );
                     }
                 }
                 /* JC 1.) check for UnderlinePosition */
@@ -2182,7 +2149,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%lf",upString,&UnderlinePosition)!=2) ||
                             (strcmp(upString,"UnderlinePosition")!=0))
                     {
-                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad UnderlinePosition)"), afmName.c_str(), line );
+                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad UnderlinePosition)"), afmName, line );
                     }
                 }
                 /* JC 2.) check for UnderlineThickness */
@@ -2191,7 +2158,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%lf",utString,&UnderlineThickness)!=2) ||
                             (strcmp(utString,"UnderlineThickness")!=0))
                     {
-                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad UnderlineThickness)"), afmName.c_str(), line );
+                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad UnderlineThickness)"), afmName, line );
                     }
                 }
                 /* JC 3.) check for EncodingScheme */
@@ -2200,12 +2167,12 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%s",utString,encString)!=2) ||
                             (strcmp(utString,"EncodingScheme")!=0))
                     {
-                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad EncodingScheme)"), afmName.c_str(), line );
+                        wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad EncodingScheme)"), afmName, line );
                     }
                     else if (strncmp(encString, "AdobeStandardEncoding", 21))
                     {
                         wxLogDebug( wxT("AFM-file '%s': line '%s' has error (unsupported EncodingScheme %s)"),
-                                afmName.c_str(),line, encString);
+                                afmName,line, encString);
                     }
                 }
                 /* B.) check for char-width */
@@ -2213,11 +2180,11 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                 {
                     if (sscanf(line,"%s%d%s%s%d",cString,&ascii,semiString,WXString,&cWidth)!=5)
                     {
-                        wxLogDebug(wxT("AFM-file '%s': line '%s' has an error (bad character width)"),afmName.c_str(),line);
+                        wxLogDebug(wxT("AFM-file '%s': line '%s' has an error (bad character width)"),afmName,line);
                     }
                     if(strcmp(cString,"C")!=0 || strcmp(semiString,";")!=0 || strcmp(WXString,"WX")!=0)
                     {
-                        wxLogDebug(wxT("AFM-file '%s': line '%s' has a format error"),afmName.c_str(),line);
+                        wxLogDebug(wxT("AFM-file '%s': line '%s' has a format error"),afmName,line);
                     }
                     /* printf("            char '%c'=%d has width '%d'\n",ascii,ascii,cWidth); */
                     if (ascii>=0 && ascii<256)
@@ -2227,7 +2194,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                     else
                     {
                         /* MATTHEW: this happens a lot; don't print an error */
-                        /* wxLogDebug("AFM-file '%s': ASCII value %d out of range",afmName.c_str(),ascii); */
+                        /* wxLogDebug("AFM-file '%s': ASCII value %d out of range",afmName,ascii); */
                     }
                 }
                 /* C.) ignore other entries. */
@@ -2266,7 +2233,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
     {
         // String couldn't be converted which used to SEGV as reported here:
         // http://bugs.debian.org/702378
-        // https://trac.wxwidgets.org/ticket/15300
+        // https://github.com/wxWidgets/wxWidgets/issues/15300
         // Upstream suggests "just return if the conversion failed".
         if (x) (*x) = 0;
         if (y) (*y) = 0;

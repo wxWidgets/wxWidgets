@@ -12,11 +12,11 @@ wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif hourglass.ani DEPE
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
 wx_add_sample(aui auidemo.cpp LIBRARIES wxaui wxhtml NAME auidemo DEPENDS wxUSE_AUI)
-wx_add_sample(calendar RES calendar.rc DEPENDS wxUSE_CALENDARCTRL)
+wx_add_sample(calendar DEPENDS wxUSE_CALENDARCTRL)
 wx_add_sample(caret DEPENDS wxUSE_CARET)
 wx_add_sample(clipboard DEPENDS wxUSE_CLIPBOARD)
 wx_add_sample(collpane DEPENDS wxUSE_COLLPANE)
-wx_add_sample(combo DATA dropbuth.png dropbutn.png dropbutp.png DEPENDS wxUSE_COMBOCTRL)
+wx_add_sample(combo DATA dropbuth.svg dropbutn.svg dropbutp.svg three-dots.svg DEPENDS wxUSE_COMBOCTRL)
 wx_add_sample(config conftest.cpp DEPENDS wxUSE_CONFIG)
 wx_add_sample(console CONSOLE IMPORTANT)
 wx_add_sample(dataview IMPORTANT dataview.cpp mymodels.cpp mymodels.h DEPENDS wxUSE_DATAVIEWCTRL)
@@ -38,7 +38,7 @@ wx_add_sample(dialup nettest.cpp LIBRARIES wxnet DEPENDS wxUSE_DIALUP_MANAGER)
 wx_add_sample(display)
 wx_add_sample(dnd dnd.cpp RES dnd.rc DATA wxwin.png DEPENDS wxUSE_DRAG_AND_DROP)
 wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
-    RES docview.rc LIBRARIES wxaui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
+    RES docview.rc PLIST Info.plist.in LIBRARIES wxaui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
 wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DATA backgrnd.png shape01.png shape02.png shape03.png
     DEPENDS wxUSE_DRAGIMAGE)
@@ -70,12 +70,12 @@ endif()
 wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
-    horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg cursor.png
+    horse.ico horse3.ani horse.svg smile.xbm toucan.png cmyk.jpg cursor.png
     NAME imagesample DEPENDS wxUSE_IMAGE)
 foreach(lang ar bg cs de fr it ka pl ru sv ja ja_JP.EUC-JP)
     list(APPEND INTERNAT_DATA_FILES ${lang}/internat.po ${lang}/internat.mo)
 endforeach()
-wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} DEPENDS wxUSE_INTL)
+wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} PLIST Info.plist.in DEPENDS wxUSE_INTL)
 # IPC samples
 set(wxSAMPLE_FOLDER ipc)
 wx_add_sample(ipc client.cpp client.h connection.h ipcsetup.h NAME ipcclient LIBRARIES wxnet DEPENDS wxUSE_IPC)
@@ -142,7 +142,7 @@ wx_add_sample(stc stctest.cpp edit.cpp prefs.cpp edit.h defsext.h prefs.h
     DATA stctest.cpp NAME stctest LIBRARIES wxstc DEPENDS wxUSE_STC)
 wx_add_sample(svg svgtest.cpp RES svgtest.rc DEPENDS wxUSE_SVG)
 wx_add_sample(taborder)
-wx_add_sample(taskbar tbtest.cpp tbtest.h DEPENDS wxUSE_TASKBARICON)
+wx_add_sample(taskbar tbtest.cpp tbtest.h DATA info.svg DEPENDS wxUSE_TASKBARICON)
 wx_add_sample(text DEPENDS wxUSE_TEXTCTRL)
 wx_add_sample(thread DEPENDS wxUSE_THREADS)
 wx_add_sample(toolbar RES toolbar.rc DEPENDS wxUSE_TOOLBAR)
@@ -152,7 +152,8 @@ wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
-wx_add_sample(webview LIBRARIES wxwebview DATA ../help/doc.zip:doc.zip
+wx_add_sample(webview LIBRARIES wxwebview
+    DATA ../help/doc.zip:doc.zip
     NAME webviewsample DEPENDS wxUSE_WEBVIEW)
 if(TARGET webviewsample AND wxUSE_STC)
     wx_exe_link_libraries(webviewsample wxstc)
@@ -217,7 +218,7 @@ wx_list_add_prefix(WIDGETS_RC_FILES icons/
 wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC}
     DATA ${WIDGETS_RC_FILES} textctrl.cpp ../image/toucan.png:toucan.png
     )
-wx_add_sample(wizard DEPENDS wxUSE_WIZARDDLG)
+wx_add_sample(wizard DATA wiztest.svg wiztest2.svg DEPENDS wxUSE_WIZARDDLG)
 wx_add_sample(wrapsizer)
 
 wx_list_add_prefix(XRC_RC_FILES rc/

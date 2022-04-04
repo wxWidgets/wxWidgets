@@ -24,7 +24,7 @@ wxStaticBitmap::wxStaticBitmap(void)
 {
 }
 
-wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
+wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmapBundle &bitmap,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
@@ -38,7 +38,7 @@ static char * bogus_xpm[] = {
 "  ",
 "  "};
 
-bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
+bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmapBundle &bitmap,
                              const wxPoint &pos, const wxSize &size,
                              long style, const wxString &name )
 {
@@ -51,13 +51,14 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         return false;
     }
 
-    m_bitmap = bitmap;
-
-    wxBitmap bmp(bitmap.IsOk() ? bitmap : wxBitmap(bogus_xpm));
-    m_widget = gtk_pixmap_new(bmp.GetPixmap(), NULL);
-
     if (bitmap.IsOk())
-        SetBitmap(bitmap);
+    {
+        m_bitmap = bitmap.GetBitmapFor(this);
+        m_bitmapBundle = bitmap;
+    }
+
+    wxBitmap bmp(m_bitmap.IsOk() ? m_bitmap : wxBitmap(bogus_xpm));
+    m_widget = gtk_pixmap_new(bmp.GetPixmap(), NULL);
 
     PostCreation(size);
     m_parent->DoAddChild( this );
@@ -65,9 +66,10 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     return true;
 }
 
-void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
+void wxStaticBitmap::SetBitmap( const wxBitmapBundle &bitmap )
 {
-    m_bitmap = bitmap;
+    m_bitmapBundle = bitmap;
+    m_bitmap = bitmap.GetBitmapFor(this);
 
     if (m_bitmap.IsOk())
     {

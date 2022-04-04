@@ -252,12 +252,12 @@
 #       endif
 #    endif  /* SGI */
 
-#    if defined(__INNOTEK_LIBC__)
+#    if defined(__INNOTEK_LIBC__) && !defined(_GNU_SOURCE)
         /* Ensure visibility of strnlen declaration */
 #        define _GNU_SOURCE
 #    endif
 
-#    if defined(__CYGWIN__)
+#    if defined(__CYGWIN__) && !defined(_GNU_SOURCE)
         /* Ensure visibility of Dl_info and pthread_setconcurrency declarations */
 #        define _GNU_SOURCE
 #    endif
@@ -415,6 +415,7 @@
 #ifdef __WXOSX__
 /* setup precise defines according to sdk used */
 #   include <TargetConditionals.h>
+#   include <Availability.h>
 #   if defined(__WXOSX_IPHONE__)
 #       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
 #           error "incorrect SDK for an iPhone build"

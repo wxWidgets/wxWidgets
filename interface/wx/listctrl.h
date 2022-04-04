@@ -89,7 +89,7 @@ enum wxListColumnFormat
     wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
 };
 
-/// Autosize values for SetColumnWidth
+/// Values for SetColumnWidth()
 enum
 {
     wxLIST_AUTOSIZE = -1,
@@ -151,7 +151,7 @@ enum
     2.8 was removed in wxWidgets 3.1, meaning for wxWidgets 3.1+ wxOSX uses the generic
     implementation for all modes.
 
-    @subsection column_order Column Ordering
+    @section column_order Column Ordering
 
     By default, the columns of a list control appear on the screen in order
     of their indices, i.e. column 0 appears first, then column 1 next,
@@ -376,10 +376,15 @@ public:
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
 
     /**
-        Sets the image list associated with the control and takes ownership of it
-        (i.e. the control will, unlike when using SetImageList(), delete the list
-        when destroyed). @a which is one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,
-        @c wxIMAGE_LIST_STATE (the last is unimplemented).
+        Sets the image list associated with the control and takes ownership of it.
+
+        Not that it is recommended to use SetNormalImages() or SetSmallImages()
+        instead of this function in the new code.
+
+        After calling this function the control will, unlike when using
+        SetImageList(), delete the list when destroyed. @a which must be one of
+        @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL, @c wxIMAGE_LIST_STATE
+        (support for the last one is unimplemented).
 
         @see SetImageList()
     */
@@ -656,7 +661,7 @@ public:
     /**
         Returns the colour for this item.
         If the item has no specific colour, returns an invalid colour
-        (and not the default background control of the control itself).
+        (and not the default background colour of the control itself).
 
         @see GetItemTextColour()
     */
@@ -729,7 +734,7 @@ public:
         Returns the colour for this item.
 
         If the item has no specific colour, returns an invalid colour (and not the
-        default foreground control of the control itself as this wouldn't allow
+        default foreground colour of the control itself as this wouldn't allow
         distinguishing between items having the same colour as the current control
         foreground and items with default colour which, hence, have always the
         same colour as the control).
@@ -1038,6 +1043,10 @@ public:
 
         Note that the wxWindow::GetBackgroundColour() function of wxWindow base
         class can be used to retrieve the current background colour.
+
+        @note If alternate row colouring is enabled, then call
+        EnableAlternateRowColours() again after changing the background colour. This
+        will update the alternate row color to match the new background colour.
     */
     virtual bool SetBackgroundColour(const wxColour& col);
 
@@ -1104,15 +1113,57 @@ public:
     /**
         Sets the image list associated with the control.
 
-        @a which is one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,
-        @c wxIMAGE_LIST_STATE (the last is unimplemented).
+        Not that it is recommended to use SetNormalImages() or SetSmallImages()
+        instead of this function in the new code.
+
+        @a which must be one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,
+        @c wxIMAGE_LIST_STATE (support for the last one is unimplemented).
 
         This method does not take ownership of the image list, you have to
         delete it yourself.
 
+        Note that, unlike for most of the other methods of this class, it is
+        possible to call this function before the corresponding window is
+        created, i.e. do it in a constructor of a class derived from wxListCtrl
+        before calling Create().
+
         @see AssignImageList()
     */
     void SetImageList(wxImageList* imageList, int which);
+
+    /**
+        Sets the images to use when showing large, normal icons in this control.
+
+        These images are used by the items when the list control is in
+        wxLC_ICON mode, in all the other modes the images set by
+        SetSmallImages() are used.
+
+        This function should be preferred to calling SetImageList() or
+        AssignImageList() with @c wxIMAGE_LIST_NORMAL argument in the new code,
+        as using wxBitmapBundle makes it possible to specify multiple versions
+        of the icons, allowing the control to choose the right one for the
+        current DPI scaling.
+
+        @since 3.1.6
+     */
+    void SetNormalImages(const wxVector<wxBitmapBundle>& images);
+
+    /**
+        Sets the images to use when showing small icons in this control.
+
+        These images are used by the items when the list control is in
+        wxLC_SMALL_ICON or wxLC_REPORT mode, use SetNormalImages() for the
+        icons used in wxLC_ICON mode.
+
+        This function should be preferred to calling SetImageList() or
+        AssignImageList() with @c wxIMAGE_LIST_SMALL argument in the new code,
+        as using wxBitmapBundle makes it possible to specify multiple versions
+        of the icons, allowing the control to choose the right one for the
+        current DPI scaling.
+
+        @since 3.1.6
+     */
+    void SetSmallImages(const wxVector<wxBitmapBundle>& images);
 
     /**
         Check if the item is visible.
@@ -1345,7 +1396,7 @@ public:
     /**
         Extend rules and alternate rows background to the entire client area.
 
-        Bu default, the rules (when enabled with wxLC_HRULES and wxLC_VRULES)
+        By default, the rules (when enabled with wxLC_HRULES and wxLC_VRULES)
         and alternate row background (when EnableAlternateRowColours() was
         called) are only shown in the part of the control occupied by the
         items, which can be smaller than the entire window if there are few
@@ -1368,6 +1419,79 @@ public:
         @since 3.1.5
     */
     void ExtendRulesAndAlternateColour(bool extend = true);
+
+    /**
+        Show the sort indicator of a specific column in a specific direction.
+
+        Sort indicators are only shown in report view and in the native wxMSW
+        version override any column icon, i.e. if the sort indicator is shown
+        for a column, no (other) icon is shown.
+
+        This function should typically be called from EVT_LIST_COL_CLICK
+        handler.
+
+        @note This does not actually sort the list, use SortItems() for this.
+
+        @param col
+            The column to set the sort indicator for.
+            If @c -1 is given, then the currently shown sort indicator
+            will be removed.
+        @param ascending
+            If @true or @false show the sort indicator corresponding to
+            ascending or descending sort order respectively.
+
+        @since 3.1.6
+    */
+    void ShowSortIndicator(int col, bool ascending = true);
+
+    /**
+        Remove the sort indicator from the column being used as sort key.
+
+        @since 3.1.6
+    */
+    int RemoveSortIndicator() const;
+
+    /**
+        Returns the column that shows the sort indicator.
+
+        Can return @c -1 if there is no sort indicator currently shown.
+
+        @since 3.1.6
+    */
+    int GetSortIndicator() const;
+
+    /**
+        Returns the new value to use for sort indicator after clicking a
+        column.
+
+        This helper function can be useful in the EVT_LIST_COL_CLICK handler
+        when it updates the sort indicator after the user clicked on a column.
+
+        For example:
+        @code
+            void MyListCtrl::OnColClick(wxListEvent& event)
+            {
+                int col = event.GetColumn();
+                if ( col == -1 )
+                    return; // clicked outside any column.
+
+                const bool ascending = GetUpdatedAscendingSortIndicator(col);
+                SortItems(MyCompareFunction, ascending);
+                ShowSortIndicator(col, ascending);
+            }
+        @endcode
+
+        @since 3.1.6
+    */
+    bool GetUpdatedAscendingSortIndicator(int col) const;
+
+    /**
+        Returns @true if the sort indicator direction is ascending,
+        @false when the direction is descending.
+
+        @since 3.1.6
+    */
+    bool IsAscendingSortIndicator() const;
 
 protected:
 
@@ -1418,8 +1542,12 @@ protected:
 
     /**
         This function must be overridden in the derived class for a control with
-        @c wxLC_VIRTUAL style having an "image list" (see SetImageList(); if the
-        control doesn't have an image list, it is not necessary to override it).
+        @c wxLC_VIRTUAL style using images.
+
+        If the control doesn't use images, i.e. SetNormalImages() or
+        SetSmallImages() hadn't been called, it is not necessary to override
+        it.
+
         It should return the index of the items image in the controls image list
         or -1 for no image.
 

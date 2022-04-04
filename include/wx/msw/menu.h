@@ -69,6 +69,12 @@ public:
     // containing this position.
     bool MSWGetRadioGroupRange(int pos, int *start, int *end) const;
 
+#if wxUSE_MENUBAR
+    virtual void Attach(wxMenuBarBase *menubar) wxOVERRIDE;
+#endif
+
+    void SetupBitmaps();
+
 #if wxUSE_ACCEL
     // called by wxMenuBar to build its accel table from the accels of all menus
     bool HasAccels() const { return !m_accels.empty(); }
@@ -219,6 +225,16 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    void SetupBitmaps();
+
+    void OnDPIChanged(wxDPIChangedEvent& event)
+    {
+        // need to reset bitmaps
+        SetupBitmaps();
+
+        event.Skip();
+    }
 
     WXHMENU       m_hMenu;
 

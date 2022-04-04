@@ -68,6 +68,9 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
     virtual bool IsFullScreen() const wxOVERRIDE { return m_fsIsShowing; }
 
+    virtual wxContentProtection GetContentProtection() const wxOVERRIDE;
+    virtual bool SetContentProtection(wxContentProtection contentProtection) wxOVERRIDE;
+
     // wxMSW only: EnableCloseButton(false) may be used to remove the "Close"
     // button from the title bar
     virtual bool EnableCloseButton(bool enable = true) wxOVERRIDE;

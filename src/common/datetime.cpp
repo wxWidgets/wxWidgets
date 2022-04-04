@@ -885,6 +885,7 @@ wxDateTime::Country wxDateTime::GetCountry()
         struct tm *tm = wxLocaltime_r(&t, &tmstruct);
 
         wxString tz = wxCallStrftime(wxS("%Z"), tm);
+        ms_country = USA;
         if ( tz == wxT("WET") || tz == wxT("WEST") ||
                 tz == wxT("BST") || tz == wxT("GMT") )
         {
@@ -897,19 +898,6 @@ wxDateTime::Country wxDateTime::GetCountry()
         else if ( tz == wxT("MSK") || tz == wxT("MSD") )
         {
             ms_country = Russia;
-        }
-        else if ( tz == wxT("AST") || tz == wxT("ADT") ||
-                  tz == wxT("EST") || tz == wxT("EDT") ||
-                  tz == wxT("CST") || tz == wxT("CDT") ||
-                  tz == wxT("MST") || tz == wxT("MDT") ||
-                  tz == wxT("PST") || tz == wxT("PDT") )
-        {
-            ms_country = USA;
-        }
-        else
-        {
-            // well, choose a default one
-            ms_country = USA;
         }
     }
 

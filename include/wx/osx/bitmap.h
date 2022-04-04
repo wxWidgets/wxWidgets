@@ -150,9 +150,6 @@ public:
     // Create a bitmap compatible with the given DC, inheriting its magnification factor
     bool Create(int width, int height, const wxDC& dc);
 
-    // Create a bitmap with a scale factor, width and height are multiplied with that factor
-    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale) wxOVERRIDE;
-
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const wxOVERRIDE;
@@ -162,9 +159,6 @@ public:
 
     wxBitmapRefData *GetBitmapData()
         { return (wxBitmapRefData *)m_refData; }
-
-    // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon) wxOVERRIDE;
 
     int GetWidth() const wxOVERRIDE;
     int GetHeight() const wxOVERRIDE;
@@ -204,16 +198,17 @@ public:
     // returns a CGImageRef which must released after usage with CGImageRelease
     CGImageRef CreateCGImage() const ;
 
-    WXImage GetImage() const;
+    // returns nil for invalid bitmap
+    WXImage OSXGetImage() const;
 #if wxOSX_USE_COCOA
     // returns an autoreleased version of the image
     WX_NSImage GetNSImage() const
-        { return GetImage(); }
+        { return OSXGetImage(); }
 #endif
 #if wxOSX_USE_IPHONE
     // returns an autoreleased version of the image
     WX_UIImage GetUIImage() const
-        { return GetImage(); }
+        { return OSXGetImage(); }
 #endif
 
 #if WXWIN_COMPATIBILITY_3_0
@@ -238,6 +233,7 @@ public:
     void EndRawAccess();
 #endif
 
+    void SetScaleFactor(double scale) wxOVERRIDE;
     double GetScaleFactor() const wxOVERRIDE;
 
     void SetSelectedInto(wxDC *dc);
@@ -246,6 +242,8 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth) wxOVERRIDE;
 };
 
 #endif // _WX_BITMAP_H_

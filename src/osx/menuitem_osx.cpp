@@ -21,6 +21,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxMenuItemImpl, wxObject);
 
@@ -69,10 +70,14 @@ wxMenuItem::~wxMenuItem()
 // change item state
 // -----------------
 
-void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
+void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
 {
       m_bitmap = bitmap;
-      UpdateItemBitmap();
+}
+
+wxBitmap wxMenuItem::GetBitmap() const
+{
+    return GetBitmapFromBundle(m_bitmap);
 }
 
 void wxMenuItem::Enable(bool bDoEnable)
@@ -166,7 +171,7 @@ void wxMenuItem::UpdateItemBitmap()
 
     if ( m_bitmap.IsOk() )
     {
-        GetPeer()->SetBitmap( m_bitmap );
+        GetPeer()->SetBitmap(GetBitmap());
     }
 }
 
@@ -206,6 +211,45 @@ void wxMenuItem::UpdateItemText()
     GetPeer()->SetLabel( text, NULL );
 #endif // wxUSE_ACCEL/!wxUSE_ACCEL
 }
+
+#if wxUSE_ACCEL
+
+void wxMenuItem::AddExtraAccel(const wxAcceleratorEntry& accel)
+{
+    if (WX_IS_MACOS_AVAILABLE(10, 13))
+    {
+        wxMenuItemBase::AddExtraAccel(accel);
+
+        // create the same wxMenuItem but hidden and with different accelerator.
+        wxMenuItem* hiddenMenuItem = new wxMenuItem(m_parentMenu, GetId(), m_text, m_help, GetKind(), m_subMenu);
+        hiddenMenuItem->SetAccel(&(m_extraAccels.back()));
+        hiddenMenuItem->GetPeer()->Hide(true);
+        hiddenMenuItem->GetPeer()->SetAllowsKeyEquivalentWhenHidden(true);
+        m_parentMenu->GetPeer()->InsertOrAppend( hiddenMenuItem, -1 );
+        hiddenMenuItem->SetMenu(m_parentMenu);
+        m_hiddenMenuItems.push_back(hiddenMenuItem);
+    }
+    else
+    {
+        wxLogDebug("Extra accelerators not being supported under macOS < 10.13");
+    }
+}
+
+void wxMenuItem::ClearExtraAccels()
+{
+    wxMenuItemBase::ClearExtraAccels();
+    RemoveHiddenItems();
+}
+
+void wxMenuItem::RemoveHiddenItems()
+{
+    for (size_t i = 0; i < m_hiddenMenuItems.size(); ++i)
+    {
+        m_parentMenu->GetPeer()->Remove( m_hiddenMenuItems[i] );
+    }
+}
+
+#endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase

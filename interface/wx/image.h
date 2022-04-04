@@ -823,6 +823,12 @@ public:
 
         Takes care of the mask colour and out of bounds problems.
 
+        @param image
+            The image containing the data to copy, must be valid.
+        @param x
+            The horizontal position of the position to copy the data to.
+        @param y
+            The vertical position of the position to copy the data to.
         @param alphaBlend
             This parameter (new in wx 3.1.5) determines whether the alpha values
             of the original image replace (default) or are composed with the
@@ -971,6 +977,11 @@ public:
             bmp = image;
         }
         @endcode
+
+        @note The algorithm used for the default (normal) quality value doesn't
+        work with images larger than 65536 (2^16) pixels in either dimension
+        for 32-bit programs. For 64-bit programs the limit is 2^48 and so not
+        relevant in practice.
 
         @see Rescale()
     */

@@ -134,7 +134,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: taskbar$(EXEEXT) $(__taskbar_bundle___depname)
+all: taskbar$(EXEEXT) $(__taskbar_bundle___depname) data
 
 install: 
 
@@ -149,7 +149,7 @@ clean:
 	rm -rf taskbar.app
 
 distclean: clean
-	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 taskbar$(EXEEXT): $(TASKBAR_OBJECTS) $(__taskbar___win32rc)
 	$(CXX) -o $@ $(TASKBAR_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
@@ -161,9 +161,14 @@ taskbar$(EXEEXT): $(TASKBAR_OBJECTS) $(__taskbar___win32rc)
 @COND_PLATFORM_MACOSX_1@	mkdir -p taskbar.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/taskbar/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.taskbar/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/taskbar/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/taskbar/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/taskbar version $(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2022 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >taskbar.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
@@ -177,6 +182,18 @@ taskbar$(EXEEXT): $(TASKBAR_OBJECTS) $(__taskbar___win32rc)
 
 @COND_PLATFORM_MACOSX_1@taskbar_bundle: $(____taskbar_BUNDLE_TGT_REF_DEP)
 
+data: 
+	@mkdir -p .
+	@for f in info.svg; do \
+	if test ! -f ./$$f -a ! -d ./$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
+	done
+
 taskbar_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
@@ -187,4 +204,4 @@ taskbar_tbtest.o: $(srcdir)/tbtest.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean taskbar_bundle
+.PHONY: all install uninstall clean distclean taskbar_bundle data

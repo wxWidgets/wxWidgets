@@ -76,6 +76,8 @@ public:
 
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
 
+    virtual wxSize GetWindowBorderSize() const wxOVERRIDE;
+
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
 #ifdef __WXGTK3__
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
@@ -180,7 +182,7 @@ public:
     bool GTKShouldIgnoreEvent() const;
 
 
-    // override this if some events should never be consumed by wxWidgets but
+    // override this if some events should never be consumed by wxWidgets
     // but have to be left for the native control
     //
     // base version just calls HandleWindowEvent()
@@ -384,7 +386,6 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
-    virtual wxSize DoGetBorderSize() const wxOVERRIDE;
     virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
     virtual void DoEnable(bool enable) wxOVERRIDE;
 

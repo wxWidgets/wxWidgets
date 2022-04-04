@@ -22,6 +22,8 @@
 #include "wx/txtstrm.h"
 #include "wx/mstream.h"
 
+#include "wx/private/localeset.h"
+
 #if defined wxHAVE_TCHAR_SUPPORT && !defined HAVE_WCHAR_H
     #define HAVE_WCHAR_H
 #endif
@@ -1106,7 +1108,7 @@ void MBConvTestCase::LibcTests()
     // supposed to use the same CRT -- no idea why and unfortunately gdb is too
     // flaky to debug it)
 #ifdef __VISUALC__
-    LocaleSetter loc("English_United States.1252");
+    wxLocaleSetter loc("English_United States.1252");
 
     wxMBConvLibc convLibc;
     TestCoder(

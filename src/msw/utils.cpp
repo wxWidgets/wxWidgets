@@ -90,10 +90,34 @@
 #define PROCESSOR_ARCHITECTURE_ARM64 12
 #endif
 
+#ifndef IMAGE_FILE_MACHINE_ARM64
+#define IMAGE_FILE_MACHINE_ARM64 0xAA64
+#endif
+
+#ifndef IMAGE_FILE_MACHINE_ARMNT
+#define IMAGE_FILE_MACHINE_ARMNT 0x01c4
+#endif
+
 #include <errno.h>
 
 // For wxKillAllChildren
 #include <tlhelp32.h>
+
+// For wxCmpNatural()
+#include <shlwapi.h>
+
+// In some distributions of MinGW32, this function is exported in the library,
+// but not declared in shlwapi.h. Therefore we declare it here.
+#if defined( __MINGW32_TOOLCHAIN__ )
+    extern "C" __declspec(dllimport) int WINAPI StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
+#endif
+
+// For MSVC we can also link the library containing StrCmpLogicalW()
+// directly from here, for the other compilers this needs to be done at
+// makefiles level.
+#ifdef __VISUALC__
+    #pragma comment(lib, "shlwapi")
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -532,6 +556,24 @@ bool wxSetEnv(const wxString& variable, const wxString& value)
 bool wxUnsetEnv(const wxString& variable)
 {
     return wxDoSetEnv(variable, NULL);
+}
+
+// ----------------------------------------------------------------------------
+// security
+// ----------------------------------------------------------------------------
+
+void wxSecureZeroMemory(void* v, size_t n)
+{
+#if defined(__MINGW32__)
+    // A generic implementation based on the example at:
+    // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1381.pdf
+    int c = 0;
+    volatile unsigned char *p = reinterpret_cast<unsigned char *>(v);
+    while ( n-- )
+        *p++ = c;
+#else
+    RtlSecureZeroMemory(v, n);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1118,9 +1160,14 @@ wxString wxGetOsDescription()
                     break;
 
                 case 10:
-                    str = wxIsWindowsServer() == 1
-                            ? "Windows Server 2016"
-                            : "Windows 10";
+                    if (info.dwBuildNumber >= 22000)
+                        str = wxIsWindowsServer() == 1
+                            ? "Windows Server 2022"
+                            : "Windows 11";
+                    else
+                        str = wxIsWindowsServer() == 1
+                                ? "Windows Server 2016"
+                                : "Windows 10";
                     break;
             }
 
@@ -1273,8 +1320,52 @@ wxWinVersion wxGetWinVersion()
     return wxWinVersion_Unknown;
 }
 
+wxString wxGetCpuArchitecureNameFromImageType(USHORT imageType)
+{
+    switch (imageType)
+    {
+    case IMAGE_FILE_MACHINE_I386:
+        return "x86";
+    case IMAGE_FILE_MACHINE_AMD64:
+        return "x64";
+    case IMAGE_FILE_MACHINE_IA64:
+        return "Itanium";
+    case IMAGE_FILE_MACHINE_ARMNT:
+        return "arm";
+    case IMAGE_FILE_MACHINE_ARM64:
+        return "arm64";
+    default:
+        return wxString();
+    }
+}
+
+// Wrap IsWow64Process2 API (Available since Win10 1511)
+BOOL wxIsWow64Process2(HANDLE hProcess, USHORT* pProcessMachine, USHORT* pNativeMachine)
+{
+#if wxUSE_DYNLIB_CLASS // Win32
+
+    typedef BOOL(WINAPI *IsWow64Process2_t)(HANDLE, USHORT *, USHORT *);
+
+    wxDynamicLibrary dllKernel32("kernel32.dll");
+    IsWow64Process2_t pfnIsWow64Process2 =
+        (IsWow64Process2_t)dllKernel32.RawGetSymbol("IsWow64Process2");
+
+    if (pfnIsWow64Process2)
+        return pfnIsWow64Process2(hProcess, pProcessMachine, pNativeMachine);
+    else
+#endif
+    return FALSE;
+}
+
 wxString wxGetCpuArchitectureName()
 {
+    // Try to get the current active CPU architecture via IsWow64Process2()
+    // first, fallback to GetNativeSystemInfo() otherwise
+    USHORT machine;
+    if (wxIsWow64Process2(::GetCurrentProcess(), &machine, NULL) &&
+        machine != IMAGE_FILE_MACHINE_UNKNOWN)
+        return wxGetCpuArchitecureNameFromImageType(machine);
+
     SYSTEM_INFO si;
     GetNativeSystemInfo(&si);
 
@@ -1300,6 +1391,18 @@ wxString wxGetCpuArchitectureName()
         return wxString();
     }
 }
+
+wxString wxGetNativeCpuArchitectureName()
+{
+    USHORT machine;
+    USHORT nativeMachine;
+    if (wxIsWow64Process2(::GetCurrentProcess(), &machine, &nativeMachine))
+        return wxGetCpuArchitecureNameFromImageType(nativeMachine);
+    else
+        return wxGetCpuArchitectureName();
+}
+
+
 
 // ----------------------------------------------------------------------------
 // sleep functions
@@ -1582,4 +1685,9 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc)
     }
 
     return hwnd;
+}
+
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+{
+    return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
 }

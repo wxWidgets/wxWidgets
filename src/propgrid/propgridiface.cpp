@@ -739,7 +739,7 @@ void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, int fl
 void wxPropertyGridInterface::SetPropertyCell( wxPGPropArg id,
                                                int column,
                                                const wxString& text,
-                                               const wxBitmap& bitmap,
+                                               const wxBitmapBundle& bitmap,
                                                const wxColour& fgCol,
                                                const wxColour& bgCol )
 {

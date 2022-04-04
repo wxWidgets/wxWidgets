@@ -471,7 +471,6 @@ void SliderWidgetsPage::CreateSlider()
 
         default:
             wxFAIL_MSG("unexpected radiobox selection");
-            // fall through
     }
 
     if ( m_chkBothSides->GetValue() )

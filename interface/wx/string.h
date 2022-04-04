@@ -12,7 +12,7 @@
     String class for passing textual data to or receiving it from wxWidgets.
 
     @note
-    While the use of wxString is unavoidable in wxWidgets program, you are
+    While the use of wxString is unavoidable in wxWidgets programs, you are
     encouraged to use the standard string classes @c std::string or @c
     std::wstring in your applications and convert them to and from wxString
     only when interacting with wxWidgets.
@@ -1240,16 +1240,49 @@ public:
     bool ToDouble(double* val) const;
 
     /**
-        Variant of ToDouble() always working in "C" locale.
+        Variant of ToDouble(), always working in "C" locale.
 
-        Works like ToDouble() but unlike it this function expects the floating point
+        Works like ToDouble(), but this function expects the floating point
         number to be formatted always with the rules dictated by the "C" locale
         (in particular, the decimal point must be a dot), independently from the
         current application-wide locale (see wxLocale).
 
+        @code
+        double val(0);
+
+        // Will extract 2.2 from the string, but returns
+        // false because the "lbs" section of the string
+        // was not part of the conversion.
+        wxString str("2.2lbs");
+        bool fullStringConverted = str.ToCDouble(&val);
+
+        // Will also extract 2.2, but returns true because
+        // the entirety of the string was converted to a double.
+        str.assign("2.2");
+        fullStringConverted = str.ToCDouble(&val);
+        @endcode
+
         @see ToDouble(), ToLong(), ToULong()
     */
     bool ToCDouble(double* val) const;
+
+    /**
+        Works like ToLong() but for signed integers.
+
+        @see ToLong(), ToUInt(), ToDouble()
+
+        @since 3.1.6
+    */
+    bool ToInt(int *val, int base = 10) const;
+
+    /**
+        Works like ToULong() but for unsigned integers.
+
+        @see ToInt(), ToULong(), ToDouble()
+
+        @since 3.1.6
+    */
+    bool ToUInt(unsigned int *val, int base = 10) const;
 
     /**
         Attempts to convert the string to a signed integer in base @a base.
@@ -1279,7 +1312,7 @@ public:
         Please refer to the documentation of the standard function @c strtol()
         for more details about the supported syntax.
 
-        @see ToCDouble(), ToDouble(), ToULong()
+        @see ToCDouble(), ToDouble(), ToULong(), ToInt()
     */
     bool ToLong(long* val, int base = 10) const;
 

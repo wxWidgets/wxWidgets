@@ -141,16 +141,16 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
     {
         ULONG numLangs;
         ULONG bufferSize = 0;
-        if ( (*s_pfnGetUserPreferredUILanguages)(MUI_LANGUAGE_NAME,
-                                                 &numLangs,
-                                                 NULL,
-                                                 &bufferSize) )
+        if ( s_pfnGetUserPreferredUILanguages(MUI_LANGUAGE_NAME,
+                                              &numLangs,
+                                              NULL,
+                                              &bufferSize) )
         {
             wxScopedArray<WCHAR> langs(bufferSize);
-            if ( (*s_pfnGetUserPreferredUILanguages)(MUI_LANGUAGE_NAME,
-                                                     &numLangs,
-                                                     langs.get(),
-                                                     &bufferSize) )
+            if ( s_pfnGetUserPreferredUILanguages(MUI_LANGUAGE_NAME,
+                                                  &numLangs,
+                                                  langs.get(),
+                                                  &bufferSize) )
             {
                 wxArrayString preferred;
 
@@ -1140,7 +1140,7 @@ bool wxMsgCatalogFile::LoadFile(const wxString& filename,
               );
     if ( !ok )
     {
-        wxLogWarning(_("'%s' is not a valid message catalog."), filename.c_str());
+        wxLogWarning(_("'%s' is not a valid message catalog."), filename);
         return false;
     }
 
@@ -1931,16 +1931,15 @@ wxMsgCatalog *wxFileTranslationsLoader::LoadCatalog(const wxString& domain,
         wxSplit(searchPath, wxPATH_SEP[0])
     );
 
-    wxFileName fn(domain);
-    fn.SetExt(wxS("mo"));
+    wxFileName fn(wxString(), domain, wxS("mo"));
 
     wxString strFullName;
     if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
         return NULL;
 
     // open file and read its data
-    wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName.c_str());
-    wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
+    wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName);
+    wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName);
 
     return wxMsgCatalog::CreateFromFile(strFullName, domain);
 }

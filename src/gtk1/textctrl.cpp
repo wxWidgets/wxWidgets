@@ -1018,7 +1018,7 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
     }
 }
 
-// the font will change for subsequent text insertiongs
+// the font will change for subsequent text insertions
 bool wxTextCtrl::SetFont( const wxFont &font )
 {
     wxCHECK_MSG( m_text != NULL, false, wxT("invalid text ctrl") );

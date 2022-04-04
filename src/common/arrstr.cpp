@@ -25,23 +25,6 @@
 #include <functional>
 #include "wx/afterstd.h"
 
-#if defined( __WINDOWS__ )
-    #include <shlwapi.h>
-
-    // In some distributions of MinGW32, this function is exported in the library,
-    // but not declared in shlwapi.h. Therefore we declare it here.
-    #if defined( __MINGW32_TOOLCHAIN__ )
-        extern "C" __declspec(dllimport) int WINAPI StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
-    #endif
-
-    // For MSVC we can also link the library containing StrCmpLogicalW()
-    // directly from here, for the other compilers this needs to be done at
-    // makefiles level.
-    #ifdef __VISUALC__
-        #pragma comment(lib, "shlwapi")
-    #endif
-#endif
-
 // ============================================================================
 // ArrayString
 // ============================================================================
@@ -76,15 +59,24 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
 
-int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
     int n = 0;
-    for ( const auto& s: *this )
+    if (!bFromEnd)
     {
-        if ( s.IsSameAs(str, bCase) )
-            return n;
+        for ( const auto& s: *this )
+        {
+            if ( s.IsSameAs(str, bCase) )
+                return n;
 
-        ++n;
+            ++n;
+        }
+    }
+    else
+    {
+        for( n = size()-1; n >= 0; --n )
+            if ((*this)[n].IsSameAs(str, bCase))
+                return n;
     }
 
     return wxNOT_FOUND;
@@ -124,26 +116,50 @@ struct wxStringCmpNoCase
     }
 };
 
-int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
-    wxArrayString::const_iterator it;
-
-    if (bCase)
+    if (!bFromEnd)
     {
-        it = std::find_if(begin(), end(),
-                          std::not1(
-                              std::bind2nd(
-                                  wxStringCmp(), str)));
-    }
-    else // !bCase
-    {
-        it = std::find_if(begin(), end(),
-                          std::not1(
-                              std::bind2nd(
-                                  wxStringCmpNoCase(), str)));
-    }
+        wxArrayString::const_iterator it;
 
-    return it == end() ? wxNOT_FOUND : it - begin();
+        if (bCase)
+        {
+            it = std::find_if(begin(), end(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmp(), str)));
+        }
+        else // !bCase
+        {
+            it = std::find_if(begin(), end(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmpNoCase(), str)));
+        }
+
+        return it == end() ? wxNOT_FOUND : it - begin();
+    }
+    else // bFromEnd
+    {
+        wxArrayString::const_reverse_iterator it;
+
+        if (bCase)
+        {
+            it = std::find_if(rbegin(), rend(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmp(), str)));
+        }
+        else // !bCase
+        {
+            it = std::find_if(rbegin(), rend(),
+                              std::not1(
+                                  std::bind2nd(
+                                      wxStringCmpNoCase(), str)));
+        }
+
+        return it == rend() ? wxNOT_FOUND : it.base()-1 - begin();
+    }
 }
 
 template<class F>
@@ -912,15 +928,13 @@ int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 // ----------------------------------------------------------------------------
 // wxCmpNatural
 // ----------------------------------------------------------------------------
-//
-// If a native version of Natural sort is available, then use that, otherwise
-// use the generic version.
+
+// If native natural sort function isn't available, use the generic version.
+#if !(defined(__WINDOWS__) || defined(__DARWIN__) || defined(__WXOSX_IPHONE__))
+
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
-#if defined( __WINDOWS__ )
-    return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
-#else
     return wxCmpNaturalGeneric(s1, s2);
-#endif // #if defined( __WINDOWS__ )
 }
 
+#endif // not a platform with native implementation

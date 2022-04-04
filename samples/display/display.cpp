@@ -28,6 +28,7 @@
 #include "wx/artprov.h"
 #include "wx/bookctrl.h"
 #include "wx/sysopt.h"
+#include "wx/wupdlock.h"
 
 #include "wx/display.h"
 
@@ -66,6 +67,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnFromPoint(wxCommandEvent& event);
     void OnFullScreen(wxCommandEvent& event);
+    void OnContentProtection(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
 #if wxUSE_DISPLAY
@@ -74,6 +76,8 @@ public:
 
     void OnDisplayChanged(wxDisplayChangedEvent& event);
 #endif // wxUSE_DISPLAY
+
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     void OnLeftClick(wxMouseEvent& event);
 
@@ -114,6 +118,8 @@ enum
     // menu items
     Display_FromPoint = wxID_HIGHEST + 1,
     Display_FullScreen,
+    Display_ContentProtection_None,
+    Display_ContentProtection_Enable,
 
     // controls
     Display_ChangeMode,
@@ -139,6 +145,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Display_Quit,  MyFrame::OnQuit)
     EVT_MENU(Display_FromPoint,  MyFrame::OnFromPoint)
     EVT_MENU(Display_FullScreen, MyFrame::OnFullScreen)
+    EVT_MENU(Display_ContentProtection_None, MyFrame::OnContentProtection)
+    EVT_MENU(Display_ContentProtection_Enable, MyFrame::OnContentProtection)
     EVT_MENU(Display_About, MyFrame::OnAbout)
 
 #if wxUSE_DISPLAY
@@ -147,6 +155,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_DISPLAY_CHANGED(MyFrame::OnDisplayChanged)
 #endif // wxUSE_DISPLAY
+
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_LEFT_UP(MyFrame::OnLeftClick)
 wxEND_EVENT_TABLE()
@@ -209,6 +219,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     itemFullScreen->SetBitmap(
             wxArtProvider::GetBitmap(wxART_FULL_SCREEN, wxART_MENU)
         );
+
+    wxMenu* contentProtectionMenu = new wxMenu();
+    contentProtectionMenu->Append(Display_ContentProtection_None, _("&None"), "", wxITEM_RADIO);
+    contentProtectionMenu->Check(Display_ContentProtection_None, true);
+    contentProtectionMenu->Append(Display_ContentProtection_Enable, _("&Enabled"), "", wxITEM_RADIO);
+    menuDisplay->Append(wxID_ANY, _("Content &Protection"), contentProtectionMenu);
+
     menuDisplay->Append(itemFullScreen);
     menuDisplay->AppendSeparator();
     menuDisplay->Append(Display_Quit, _("E&xit\tAlt-X"), _("Quit this program"));
@@ -307,15 +324,28 @@ void MyFrame::PopuplateWithDisplayInfo()
 
 #if wxUSE_DISPLAY
         wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
-        const wxArrayVideoModes modes = display.GetModes();
-        const size_t countModes = modes.GetCount();
-        for ( size_t nMode = 0; nMode < countModes; nMode++ )
-        {
-            const wxVideoMode& mode = modes[nMode];
 
-            choiceModes->Append(VideoModeToText(mode),
-                                new MyVideoModeClientData(mode));
-        }
+        {
+            // Speed up the Append() loop below by foregoing the repeated resizing
+            // of the choice dropdown via repeated calls to GetBestSize() which
+            // happens deep inside the Append() call chain and executes another
+            // inner loop calling SendMessage() to get the control contents.
+            //
+            // As there can be a couple of hundreds of video modes, this saves
+            // many thousands of such calls and so has a very noticeable effect.
+            wxWindowUpdateLocker lockUpdates(choiceModes);
+
+            const wxArrayVideoModes modes = display.GetModes();
+            const size_t countModes = modes.GetCount();
+            for ( size_t nMode = 0; nMode < countModes; nMode++ )
+            {
+                const wxVideoMode& mode = modes[nMode];
+
+                choiceModes->Append(VideoModeToText(mode),
+                    new MyVideoModeClientData(mode));
+            }
+        } // Destroy wxWindowUpdateLocker to finally resize the window now.
+
         const wxString currentMode = VideoModeToText(display.GetCurrentMode());
         choiceModes->SetStringSelection(currentMode);
 
@@ -392,6 +422,34 @@ void MyFrame::OnFullScreen(wxCommandEvent& WXUNUSED(event))
     ShowFullScreen(!IsFullScreen());
 }
 
+void MyFrame::OnContentProtection(wxCommandEvent& event)
+{
+    wxContentProtection contentProtection;
+    switch (event.GetId())
+    {
+    case Display_ContentProtection_Enable:
+        contentProtection = wxCONTENT_PROTECTION_ENABLED;
+        break;
+    default:
+        contentProtection = wxCONTENT_PROTECTION_NONE;
+    }
+
+    if (SetContentProtection(contentProtection))
+    {
+        switch (GetContentProtection())
+        {
+        case wxCONTENT_PROTECTION_ENABLED:
+            wxLogInfo("The contents of this window should now NOT be visible in screen captures.");
+            break;
+        case wxCONTENT_PROTECTION_NONE:
+            wxLogInfo("The contents of this window should now be visible in screen captures.");
+            break;
+        }
+    }
+    else
+        wxLogError("Content protection could not be changed");
+}
+
 #if wxUSE_DISPLAY
 
 void MyFrame::OnChangeMode(wxCommandEvent& event)
@@ -415,6 +473,15 @@ void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_DISPLAY
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    wxLogStatus(this, "DPI changed: was %d*%d, now %d*%d",
+                event.GetOldDPI().x, event.GetOldDPI().y,
+                event.GetNewDPI().x, event.GetNewDPI().y);
+
+    event.Skip();
+}
 
 void MyFrame::OnLeftClick(wxMouseEvent& event)
 {

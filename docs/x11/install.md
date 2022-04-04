@@ -16,7 +16,7 @@ IMPORTANT NOTE:
   example: wxX11 2.8.0, gcc 2.95.4, Redhat 6.2
 
 First steps                            {#x11_first_steps}
------------
+===========
 
 - Download wxX11-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as

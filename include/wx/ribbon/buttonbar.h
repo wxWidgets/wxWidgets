@@ -18,6 +18,7 @@
 #include "wx/ribbon/control.h"
 #include "wx/dynarray.h"
 
+class wxRibbonButtonBar;
 class wxRibbonButtonBarButtonBase;
 class wxRibbonButtonBarLayout;
 class wxRibbonButtonBarButtonInstance;
@@ -206,6 +207,9 @@ protected:
     bool m_layouts_valid;
     bool m_lock_active_state;
     bool m_show_tooltips_for_disabled;
+
+private:
+    wxRibbonBar* m_ribbonBar;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonButtonBar);

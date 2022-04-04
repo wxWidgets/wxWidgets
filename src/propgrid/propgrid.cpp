@@ -1360,11 +1360,13 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
     }
 }
 
-void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
 {
     m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
     CalculateFontAndBitmapStuff(m_vspacing);
     Refresh();
+
+    event.Skip();
 }
 
 // -----------------------------------------------------------------------
@@ -4619,12 +4621,12 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
             int w = wxMax(width, 250);
             int h = wxMax(height + dblh, 400);
             m_doubleBuffer = new wxBitmap;
-            m_doubleBuffer->CreateScaled( w, h, wxBITMAP_SCREEN_DEPTH, scaleFactor );
+            m_doubleBuffer->CreateWithDIPSize( w, h, scaleFactor );
         }
         else
         {
-            int w = m_doubleBuffer->GetScaledWidth();
-            int h = m_doubleBuffer->GetScaledHeight();
+            int w = m_doubleBuffer->GetLogicalWidth();
+            int h = m_doubleBuffer->GetLogicalHeight();
 
             // Double buffer must be large enough
             if ( w < width || h < (height+dblh) )
@@ -4633,7 +4635,7 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
                 if ( h < (height+dblh) ) h = height + dblh;
                 delete m_doubleBuffer;
                 m_doubleBuffer = new wxBitmap;
-                m_doubleBuffer->CreateScaled( w, h, wxBITMAP_SCREEN_DEPTH, scaleFactor );
+                m_doubleBuffer->CreateWithDIPSize( w, h, scaleFactor );
             }
         }
     }
@@ -5093,13 +5095,13 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         int space = m_pState->GetColumnWidth(m_colHover);
 
                         int imageWidth = 0;
-                        const wxBitmap& bmp = cell.GetBitmap();
+                        const wxBitmap& bmp = cell.GetBitmap().GetBitmapFor(this);
                         if ( bmp.IsOk() )
                         {
                             imageWidth = bmp.GetWidth();
                             int hMax = m_lineHeight - wxPG_CUSTOM_IMAGE_SPACINGY - 1;
                             if ( bmp.GetHeight() > hMax )
-                                imageWidth *= (double)hMax / bmp.GetHeight();
+                                imageWidth = int(double(imageWidth) * hMax / bmp.GetHeight());
                         }
 
                         if ( m_colHover == 0 )
@@ -5616,7 +5618,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
     // Handles key event when editor control is not focused.
     //
 
-    wxCHECK2(!IsFrozen(), return);
+    wxCHECK_RET(!IsFrozen(), "wxPropertyGrid shouldn't be frozen");
 
     // Traversal between items, collapsing/expanding, etc.
     wxPGProperty* selected = GetSelection();
@@ -5802,6 +5804,11 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
                 if ( reopenLabelEditorCol >= 0 )
                     DoBeginLabelEdit(reopenLabelEditorCol);
+            }
+            else if ( action == wxPG_ACTION_EDIT )
+            {
+                // For first and last item just validate the value
+                CommitChangesFromEditor();
             }
             wasHandled = true;
         }

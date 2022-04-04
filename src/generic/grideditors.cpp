@@ -29,12 +29,14 @@
     #include "wx/listbox.h"
 #endif
 
+#include "wx/numformatter.h"
 #include "wx/valnum.h"
 #include "wx/textfile.h"
 #include "wx/spinctrl.h"
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 #include "wx/datectrl.h"
+#include "wx/uilocale.h"
 
 #include "wx/generic/gridsel.h"
 #include "wx/generic/grideditors.h"
@@ -653,7 +655,7 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
         }
         else
         {
-            wxLogDebug( wxT("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params.c_str() );
+            wxLogDebug( wxT("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params );
         }
     }
 }
@@ -934,7 +936,7 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
             }
         }
 
-        wxLogDebug(wxT("Invalid wxGridCellNumberEditor parameter string '%s' ignored"), params.c_str());
+        wxLogDebug(wxT("Invalid wxGridCellNumberEditor parameter string '%s' ignored"), params);
     }
 }
 
@@ -997,7 +999,7 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
         const wxString value = table->GetValue(row, col);
         if ( !value.empty() )
         {
-            if ( !value.ToDouble(&m_value) )
+            if ( !wxNumberFormatter::FromString(value, &m_value) )
             {
                 wxFAIL_MSG( wxT("this cell doesn't have float value") );
                 return;
@@ -1018,7 +1020,7 @@ bool wxGridCellFloatEditor::EndEdit(int WXUNUSED(row),
     double value;
     if ( !text.empty() )
     {
-        if ( !text.ToDouble(&value) )
+        if ( !wxNumberFormatter::FromString(text, &value) )
             return false;
     }
     else // new value is empty string
@@ -1060,20 +1062,9 @@ void wxGridCellFloatEditor::Reset()
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
-    char tmpbuf[2];
-    tmpbuf[0] = (char) keycode;
-    tmpbuf[1] = '\0';
-    wxString strbuf(tmpbuf, *wxConvCurrent);
-
-#if wxUSE_INTL
-    bool is_decimal_point = ( strbuf ==
-       wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER) );
-#else
-    bool is_decimal_point = ( strbuf == wxT(".") );
-#endif
 
     if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
-         || is_decimal_point )
+         || keycode == wxNumberFormatter::GetDecimalSeparator() )
     {
         wxGridCellTextEditor::StartingKey(event);
 
@@ -1107,7 +1098,7 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params);
             }
         }
 
@@ -1121,7 +1112,7 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params);
             }
         }
 
@@ -1197,7 +1188,7 @@ wxString wxGridCellFloatEditor::GetString()
             m_format += wxT('f');
     }
 
-    return wxString::Format(m_format, m_value);
+    return wxNumberFormatter::Format(m_format, m_value);
 }
 
 bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
@@ -1207,17 +1198,10 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
         const int keycode = event.GetKeyCode();
         if ( wxIsascii(keycode) )
         {
-#if wxUSE_INTL
-            const wxString decimalPoint =
-                wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
-#else
-            const wxString decimalPoint(wxT('.'));
-#endif
-
             // accept digits, 'e' as in '1e+6', also '-', '+', and '.'
             if ( wxIsdigit(keycode) ||
                     tolower(keycode) == 'e' ||
-                        keycode == decimalPoint ||
+                        keycode == wxNumberFormatter::GetDecimalSeparator() ||
                             keycode == '+' ||
                                 keycode == '-' )
             {
@@ -1869,7 +1853,7 @@ wxGridCellDateEditor::wxGridCellDateEditor(const wxString& format)
 void wxGridCellDateEditor::SetParameters(const wxString& params)
 {
     if ( params.empty() )
-        m_format = "%x";
+        m_format = wxGetUIDateFormat();
     else
         m_format = params;
 }

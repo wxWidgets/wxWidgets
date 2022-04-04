@@ -171,6 +171,15 @@ Currently the following symbols exist:
     wxBitmapToggleButton class is available in addition to wxToggleButton.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
+@itemdef{wxHAS_DEPRECATED_ATTR, Defined if C++14 @c [[deprecated]] attribute is
+    supported (this symbol only exists in wxWidgets 3.1.6 or later).}
+@itemdef{wxHAS_DPI_INDEPENDENT_PIXELS, Defined if pixel coordinates on the
+    current platform scale with DPI, i.e. if the given length in pixels has the
+    same apparent size on the display independently of the DPI (this symbol
+    only exists in wxWidgets 3.1.6 or later). Note that it should rarely, if
+    ever, be necessary to use this symbol directly, functions such as
+    wxWindow::FromDIP() and wxBitmap::GetLogicalSize() exist to hide the
+    differences between the platforms with and without DPI-independent pixels.}
 @itemdef{wxHAS_MEMBER_DEFAULT, Defined if the currently used compiler supports
     C++11 @c =default.}
 @itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in
@@ -192,14 +201,22 @@ Currently the following symbols exist:
 @itemdef{wxHAS_NATIVE_WINDOW, Defined if wxNativeWindow class is available.}
 @itemdef{wxHAS_NOEXCEPT, Defined if the currently used compiler supports C++11 @c noexcept. @c wxNOEXCEPT is defined as this keyword in this case, and as nothing otherwise.}
 @itemdef{wxHAS_NULLPTR_T, Defined if the currently used compiler supports C++11 @c nullptr.}
+@itemdef{wxHAS_IMAGE_RESOURCES, Defined if images can be embedded into the
+    program as resources, i.e. without being defined in the program text
+    itself. This is currently the case for MSW and Mac platforms. This constant
+    is available since wxWidgets 3.1.6.}
 @itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
-    Windows resource files</a> or OS/2 resource files are available on the current platform.}
+    Windows resource files</a> resource files are available on the current platform.
+    Usually wxHAS_IMAGE_RESOURCES should be used instead.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}
 @itemdef{wxHAS_RAW_BITMAP, Defined if direct access to bitmap data using the classes in @c wx/rawbmp.h is supported.}
 @itemdef{wxHAS_RAW_KEY_CODES, Defined if raw key codes (see wxKeyEvent::GetRawKeyCode are supported.}
-@itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in wxRegEx.}
+@itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in
+    wxRegEx. This is always the case in wxWidgets 3.1.6 and later, so this
+    symbol doesn't need to be tested any more.}
+@itemdef{wxHAS_SVG, Defined if SVG support (currently only via wxBitmapBundle::FromSVG()) is available.}
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
 @itemdef{wxHAS_WINDOW_LABEL_IN_STATIC_BOX, Defined if wxStaticBox::Create()
     overload taking @c wxWindow* instead of the text label is available on the current platform.}
@@ -388,6 +405,9 @@ more details.
         defined when compiling code which uses wxWidgets as a DLL/shared library}
 @itemdef{WXBUILDING,
         defined when building wxWidgets itself, whether as a static or shared library}
+@itemdef{wxICON_IS_BITMAP,
+         defined in the ports where wxIcon inherits from wxBitmap (all but
+         wxMSW currently)}
 @endDefList
 
 */

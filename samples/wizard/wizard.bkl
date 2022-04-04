@@ -9,4 +9,11 @@
         <wx-lib>base</wx-lib>
     </exe>
 
+    <wx-data id="data">
+        <files>
+            wiztest.svg
+            wiztest2.svg
+        </files>
+    </wx-data>
+
 </makefile>

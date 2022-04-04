@@ -781,22 +781,20 @@ MyFrame::MyFrame(wxWindow* parent,
     // create some toolbars
     wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb1->SetToolBitmapSize(FromDIP(wxSize(48,48)));
-    tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
+    tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb1->AddSeparator();
-    tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb1->AddTool(ID_SampleItem+3, "Test", wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb1->AddTool(ID_SampleItem+4, "Test", wxArtProvider::GetBitmap(wxART_WARNING));
-    tb1->AddTool(ID_SampleItem+5, "Test", wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
+    tb1->AddTool(ID_SampleItem+3, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
+    tb1->AddTool(ID_SampleItem+4, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
+    tb1->AddTool(ID_SampleItem+5, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
     tb1->SetCustomOverflowItems(prepend_items, append_items);
     tb1->Realize();
 
 
     wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_HORIZONTAL);
-    tb2->SetToolBitmapSize(FromDIP(wxSize(16,16)));
 
-    wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, FromDIP(wxSize(16,16)));
+    wxBitmapBundle tb2_bmp1 = wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
     tb2->AddTool(ID_SampleItem+6, "Disabled", tb2_bmp1);
     tb2->AddTool(ID_SampleItem+7, "Test", tb2_bmp1);
     tb2->AddTool(ID_SampleItem+8, "Test", tb2_bmp1);
@@ -816,8 +814,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb3->SetToolBitmapSize(FromDIP(wxSize(16,16)));
-    wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, FromDIP(wxSize(16,16)));
+    wxBitmapBundle tb3_bmp1 = wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
     tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxITEM_CHECK);
     tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxITEM_CHECK);
     tb3->AddTool(ID_SampleItem+18, "Check 3", tb3_bmp1, "Check 3", wxITEM_CHECK);
@@ -839,8 +836,7 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
-    tb4->SetToolBitmapSize(FromDIP(wxSize(16,16)));
-    wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
+    wxBitmapBundle tb4_bmp1 = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
     tb4->SetToolSticky(ID_SampleItem+23, true);
@@ -863,13 +859,12 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-    tb5->SetToolBitmapSize(FromDIP(wxSize(48,48)));
-    tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
+    tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb5->AddSeparator();
-    tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmap(wxART_WARNING));
-    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
+    tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
+    tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
+    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
     tb5->SetCustomOverflowItems(prepend_items, append_items);
     tb5->Realize();
 
@@ -928,9 +923,9 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
                   Name("test10").Caption("Text Pane with Hide Prompt").
                   Bottom().Layer(1).Position(1).
-                  Icon(wxArtProvider::GetBitmap(wxART_WARNING,
-                                                wxART_OTHER,
-                                                wxSize(iconSize, iconSize))));
+                  Icon(wxArtProvider::GetBitmapBundle(wxART_WARNING,
+                                                      wxART_OTHER,
+                                                      wxSize(iconSize, iconSize))));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test11").Caption("Fixed Pane").
@@ -1401,7 +1396,7 @@ void MyFrame::OnNotebookPageChanging(wxAuiNotebookEvent& evt)
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
 {
     // for the purpose of this test application, explicitly
-    // allow all noteboko drag and drop events
+    // allow all notebook drag and drop events
     evt.Allow();
 }
 
@@ -1489,6 +1484,7 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
         // create the popup menu
         wxMenu menuPopup;
 
+        // TODO: Use GetBitmapBundle() when wxMenuItem is updated to use it too.
         wxBitmap bmp = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, FromDIP(wxSize(16,16)));
 
         wxMenuItem* m1 =  new wxMenuItem(&menuPopup, 10001, _("Drop Down Item 1"));
@@ -1589,11 +1585,11 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl()
                                       FromDIP(wxSize(160,250)),
                                       wxTR_DEFAULT_STYLE | wxNO_BORDER);
 
-    wxSize size = FromDIP(wxSize(16, 16));
-    wxImageList* imglist = new wxImageList(size.x, size.y, true, 2);
-    imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, size));
-    imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, size));
-    tree->AssignImageList(imglist);
+    wxSize size(16, 16);
+    wxVector<wxBitmapBundle> images;
+    images.push_back(wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, size));
+    images.push_back(wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, size));
+    tree->SetImages(images);
 
     wxTreeItemId root = tree->AddRoot("wxAUI Project", 0);
     wxArrayTreeItemIds items;
@@ -1655,7 +1651,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
                                     m_notebook_style);
    ctrl->Freeze();
 
-   wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
+   wxBitmapBundle page_bmp = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
 
    ctrl->AddPage(CreateHTMLCtrl(ctrl), "Welcome to wxAUI" , false, page_bmp);
    ctrl->SetPageToolTip(0, "Welcome to wxAUI (this is a page tooltip)");

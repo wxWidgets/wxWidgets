@@ -42,7 +42,7 @@ protected:
     virtual void DoEnable(bool enable) wxOVERRIDE;
 
     virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
+    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which) wxOVERRIDE;
     virtual void DoSetBitmapPosition(wxDirection dir) wxOVERRIDE;
 
     // update the bitmap to correspond to the current button state
@@ -60,13 +60,13 @@ private:
     State GTKGetCurrentBitmapState() const;
 
     // show the given bitmap (must be valid)
-    void GTKDoShowBitmap(const wxBitmap& bitmap);
+    void GTKDoShowBitmap(const wxBitmapBundle& bitmap);
 
 
     // the bitmaps for the different state of the buttons, all of them may be
     // invalid and the button only shows a bitmap at all if State_Normal bitmap
     // is valid
-    wxBitmap m_bitmaps[State_Max];
+    wxBitmapBundle m_bitmaps[State_Max];
 
     // true iff mouse is currently over the button
     bool m_isCurrent;

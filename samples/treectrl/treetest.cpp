@@ -213,7 +213,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 {
     // This reduces flicker effects - even better would be to define
     // OnEraseBackground to do nothing. When the tree control's scrollbars are
-    // show or hidden, the frame is sent a background erase event.
+    // shown or hidden, the frame is sent a background erase event.
     SetBackgroundColour(*wxWHITE);
 
     // Give it an icon
@@ -688,7 +688,7 @@ void MyFrame::OnSetImageSize(wxCommandEvent& WXUNUSED(event))
     if ( size == -1 )
         return;
 
-    m_treeCtrl->CreateImageList(size);
+    m_treeCtrl->CreateImages(size);
     wxGetApp().SetShowImages(true);
 }
 
@@ -696,12 +696,12 @@ void MyFrame::OnToggleImages(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxGetApp().ShowImages() )
     {
-        m_treeCtrl->CreateImageList(-1);
+        m_treeCtrl->CreateImages(-1);
         wxGetApp().SetShowImages(false);
     }
     else
     {
-        m_treeCtrl->CreateImageList(0);
+        m_treeCtrl->CreateImages(0);
         wxGetApp().SetShowImages(true);
     }
 }
@@ -730,7 +730,7 @@ void MyFrame::OnToggleAlternateImages(wxCommandEvent& WXUNUSED(event))
     bool alternateImages = m_treeCtrl->AlternateImages();
 
     m_treeCtrl->SetAlternateImages(!alternateImages);
-    m_treeCtrl->CreateImageList(0);
+    m_treeCtrl->CreateImages(0);
 }
 
 void MyFrame::OnToggleAlternateStates(wxCommandEvent& WXUNUSED(event))
@@ -748,7 +748,7 @@ void MyFrame::OnToggleAlternateStates(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToggleButtons(wxCommandEvent& WXUNUSED(event))
 {
-#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
+#ifdef HAS_GENERIC_TREECTRL
     if ( wxGetApp().ShowButtons() )
     {
         m_treeCtrl->CreateButtonsImageList(-1);
@@ -955,14 +955,14 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
 {
     m_reverseSort = false;
 
-    CreateImageList();
+    CreateImages(16);
     CreateStateImageList();
 
     // Add some items to the tree
     AddTestItemsToTree(NUM_CHILDREN_PER_LEVEL, NUM_LEVELS);
 }
 
-void MyTreeCtrl::CreateImageList(int size)
+void MyTreeCtrl::CreateImages(int size)
 {
     if ( size == -1 )
     {
@@ -974,11 +974,9 @@ void MyTreeCtrl::CreateImageList(int size)
     else
         m_imageSize = size;
 
-    // Make an image list containing small icons
-    wxImageList *images = new wxImageList(size, size, true);
+    const wxSize iconSize(size, size);
 
     // should correspond to TreeCtrlIcon_xxx enum
-    wxBusyCursor wait;
     wxIcon icons[5];
 
     if (m_alternateImages)
@@ -991,8 +989,6 @@ void MyTreeCtrl::CreateImageList(int size)
     }
     else
     {
-        wxSize iconSize(size, size);
-
         icons[TreeCtrlIcon_File] =
         icons[TreeCtrlIcon_FileSelected] = wxArtProvider::GetIcon(wxART_NORMAL_FILE, wxART_LIST, iconSize);
         icons[TreeCtrlIcon_Folder] =
@@ -1000,20 +996,50 @@ void MyTreeCtrl::CreateImageList(int size)
         icons[TreeCtrlIcon_FolderOpened] = wxArtProvider::GetIcon(wxART_FOLDER, wxART_LIST, iconSize);
     }
 
+    // Make a vector of bundles corresponding to the icons. We use a custom
+    // bundle implementation here as we always scale the icons, even at 100%
+    // DPI, to ensure they are of the desired size.
+    wxVector<wxBitmapBundle> images;
+
+    class FixedSizeImpl : public wxBitmapBundleImpl
+    {
+    public:
+        FixedSizeImpl(const wxSize& sizeDef, const wxIcon& icon)
+            : m_sizeDef(sizeDef),
+              m_icon(icon)
+        {
+        }
+
+        wxSize GetDefaultSize() const wxOVERRIDE
+        {
+            return m_sizeDef;
+        }
+
+        wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+        {
+            return m_sizeDef*scale;
+        }
+
+        wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+        {
+            wxBitmap bmp(m_icon);
+            if ( size != bmp.GetSize() )
+                wxBitmap::Rescale(bmp, size);
+
+            return bmp;
+        }
+
+    private:
+        const wxSize m_sizeDef;
+        const wxIcon m_icon;
+    };
+
     for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
     {
-        int sizeOrig = icons[0].GetWidth();
-        if ( size == sizeOrig )
-        {
-            images->Add(icons[i]);
-        }
-        else
-        {
-            images->Add(wxBitmap(wxBitmap(icons[i]).ConvertToImage().Rescale(size, size)));
-        }
+        images.push_back(wxBitmapBundle::FromImpl(new FixedSizeImpl(iconSize, icons[i])));
     }
 
-    AssignImageList(images);
+    SetImages(images);
 }
 
 void MyTreeCtrl::CreateStateImageList(bool del)
@@ -1039,7 +1065,7 @@ void MyTreeCtrl::CreateStateImageList(bool del)
         int width  = icons[0].GetWidth(),
             height = icons[0].GetHeight();
 
-        // Make an state image list containing small icons
+        // Make a state image list containing small icons
         states = new wxImageList(width, height, true);
 
         for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
@@ -1064,9 +1090,9 @@ void MyTreeCtrl::CreateStateImageList(bool del)
     AssignStateImageList(states);
 }
 
-#if USE_GENERIC_TREECTRL || (!defined(__WXMSW__) && !defined(__WXQT__))
 void MyTreeCtrl::CreateButtonsImageList(int size)
 {
+#ifdef HAS_GENERIC_TREECTRL
     if ( size == -1 )
     {
         SetButtonsImageList(NULL);
@@ -1112,8 +1138,7 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
 
     AssignButtonsImageList(images);
 #else
-void MyTreeCtrl::CreateButtonsImageList(int WXUNUSED(size))
-{
+    wxUnusedVar(size);
 #endif
 }
 

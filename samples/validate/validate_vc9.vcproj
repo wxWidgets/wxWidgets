@@ -398,8 +398,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="vc_mswud_x64"
-			IntermediateDirectory="vc_mswud_x64\validate"
+			OutputDirectory="vc_x64_mswud"
+			IntermediateDirectory="vc_x64_mswud\validate"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -433,8 +433,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud_x64\validate\"
-				ProgramDataBaseFileName="vc_mswud_x64\validate.pdb"
+				ObjectFile="vc_x64_mswud\validate\"
+				ProgramDataBaseFileName="vc_x64_mswud\validate.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -455,13 +455,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswud_x64\validate.exe"
+				OutputFile="vc_x64_mswud\validate.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswud_x64\validate.pdb"
+				ProgramDatabaseFile="vc_x64_mswud\validate.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -476,7 +476,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswud_x64\validate_vc9.bsc"
+				OutputFile="vc_x64_mswud\validate_vc9.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -491,8 +491,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="vc_mswu_x64"
-			IntermediateDirectory="vc_mswu_x64\validate"
+			OutputDirectory="vc_x64_mswu"
+			IntermediateDirectory="vc_x64_mswu\validate"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -524,8 +524,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu_x64\validate\"
-				ProgramDataBaseFileName="vc_mswu_x64\validate.pdb"
+				ObjectFile="vc_x64_mswu\validate\"
+				ProgramDataBaseFileName="vc_x64_mswu\validate.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -546,13 +546,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswu_x64\validate.exe"
+				OutputFile="vc_x64_mswu\validate.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswu_x64\validate.pdb"
+				ProgramDatabaseFile="vc_x64_mswu\validate.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -569,7 +569,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswu_x64\validate_vc9.bsc"
+				OutputFile="vc_x64_mswu\validate_vc9.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -584,8 +584,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Debug|x64"
-			OutputDirectory="vc_mswuddll_x64"
-			IntermediateDirectory="vc_mswuddll_x64\validate"
+			OutputDirectory="vc_x64_mswuddll"
+			IntermediateDirectory="vc_x64_mswuddll\validate"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -619,8 +619,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll_x64\validate\"
-				ProgramDataBaseFileName="vc_mswuddll_x64\validate.pdb"
+				ObjectFile="vc_x64_mswuddll\validate\"
+				ProgramDataBaseFileName="vc_x64_mswuddll\validate.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -641,13 +641,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswuddll_x64\validate.exe"
+				OutputFile="vc_x64_mswuddll\validate.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll_x64\validate.pdb"
+				ProgramDatabaseFile="vc_x64_mswuddll\validate.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 			/>
@@ -662,7 +662,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll_x64\validate_vc9.bsc"
+				OutputFile="vc_x64_mswuddll\validate_vc9.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -677,8 +677,8 @@
 		</Configuration>
 		<Configuration
 			Name="DLL Release|x64"
-			OutputDirectory="vc_mswudll_x64"
-			IntermediateDirectory="vc_mswudll_x64\validate"
+			OutputDirectory="vc_x64_mswudll"
+			IntermediateDirectory="vc_x64_mswudll\validate"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -710,8 +710,8 @@
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll_x64\validate\"
-				ProgramDataBaseFileName="vc_mswudll_x64\validate.pdb"
+				ObjectFile="vc_x64_mswudll\validate\"
+				ProgramDataBaseFileName="vc_x64_mswudll\validate.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -732,13 +732,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
-				OutputFile="vc_mswudll_x64\validate.exe"
+				OutputFile="vc_x64_mswudll\validate.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll_x64\validate.pdb"
+				ProgramDatabaseFile="vc_x64_mswudll\validate.pdb"
 				SubSystem="2"
 				TargetMachine="17"
 				OptimizeReferences="2"
@@ -755,7 +755,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll_x64\validate_vc9.bsc"
+				OutputFile="vc_x64_mswudll\validate_vc9.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -799,7 +799,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\sample.rc"
+				RelativePath="..\..\samples\sample.rc"
 				>
 			</File>
 		</Filter>

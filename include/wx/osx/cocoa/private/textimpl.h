@@ -81,6 +81,8 @@ public :
     virtual bool becomeFirstResponder(WXWidget slf, void *_cmd) wxOVERRIDE;
     virtual bool resignFirstResponder(WXWidget slf, void *_cmd) wxOVERRIDE;
 
+    virtual void EnableNewLineReplacement(bool enable) wxOVERRIDE;
+    virtual bool GetNewLineReplacement() wxOVERRIDE;
     virtual void SetInternalSelection( long from , long to );
     virtual void UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* editor);
 protected :
@@ -127,14 +129,25 @@ public:
 
     virtual bool HasOwnContextMenu() const wxOVERRIDE { return true; }
 
-    virtual void CheckSpelling(bool check) wxOVERRIDE;
+#if wxUSE_SPELLCHECK
+    virtual void CheckSpelling(const wxTextProofOptions& options) wxOVERRIDE;
+    virtual wxTextProofOptions GetCheckingOptions() const wxOVERRIDE;
+#endif // wxUSE_SPELLCHECK
     virtual void EnableAutomaticQuoteSubstitution(bool enable) wxOVERRIDE;
     virtual void EnableAutomaticDashSubstitution(bool enable) wxOVERRIDE;
+    virtual void EnableNewLineReplacement(bool enable) wxOVERRIDE;
+    virtual bool GetNewLineReplacement() wxOVERRIDE;
 
     virtual wxSize GetBestSize() const wxOVERRIDE;
     virtual void SetJustification() wxOVERRIDE;
 
     virtual void controlTextDidChange() wxOVERRIDE;
+
+    virtual bool CanUndo() const wxOVERRIDE;
+    virtual void Undo() wxOVERRIDE;
+    virtual bool CanRedo() const wxOVERRIDE;
+    virtual void Redo() wxOVERRIDE;
+    virtual void EmptyUndoBuffer() wxOVERRIDE;
 
 protected:
     void DoUpdateTextStyle();
@@ -142,6 +155,7 @@ protected:
     NSScrollView* m_scrollView;
     NSTextView* m_textView;
     bool m_useCharWrapping;
+    NSUndoManager* m_undoManager;
 };
 
 class wxNSComboBoxControl : public wxNSTextFieldControl, public wxComboWidgetImpl

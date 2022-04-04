@@ -76,11 +76,15 @@
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
 #include "wx/scopeguard.h"
+#include "wx/private/rescale.h"
 #include "wx/private/window.h"
 
-#ifdef __WINDOWS__
-    #include "wx/msw/wrapwin.h"
+#if defined(__WXOSX__)
+    // We need wxOSXGetMainScreenContentScaleFactor() declaration.
+    #include "wx/osx/core/private.h"
 #endif
+
+#include <math.h>
 
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
@@ -394,7 +398,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // does not as the user should be able to resize the window)
     //
     // note that we can't use IsTopLevel() from ctor
-    if ( size != wxDefaultSize && !wxTopLevelWindows.Find((wxWindow *)this) )
+    if ( size != wxDefaultSize && !wxTopLevelWindows.Find(this) )
         SetMinSize(size);
 
     SetName(name);
@@ -463,7 +467,7 @@ wxWindowBase::~wxWindowBase()
 
     // Just in case we've loaded a top-level window via LoadNativeDialog but
     // we weren't a dialog class
-    wxTopLevelWindows.DeleteObject((wxWindow*)this);
+    wxTopLevelWindows.DeleteObject(this);
 
     // Any additional event handlers should be popped before the window is
     // deleted as otherwise the last handler will be left with a dangling
@@ -897,18 +901,6 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
     return min;
 }
 
-wxSize wxWindowBase::DoGetBorderSize() const
-{
-    // there is one case in which we can implement it for all ports easily
-    if ( GetBorder() == wxBORDER_NONE )
-        return wxSize(0, 0);
-
-    // otherwise use the difference between the real size and the client size
-    // as a fallback: notice that this is incorrect in general as client size
-    // also doesn't take the scrollbars into account
-    return GetSize() - GetClientSize();
-}
-
 wxSize wxWindowBase::GetBestSize() const
 {
     if ( !m_windowSizer && m_bestSizeCache.IsFullySpecified() )
@@ -918,7 +910,7 @@ wxSize wxWindowBase::GetBestSize() const
     // it to be used
     wxSize size = DoGetBestClientSize();
     if ( size != wxDefaultSize )
-        size += DoGetBorderSize();
+        size += GetWindowBorderSize();
     else
         size = DoGetBestSize();
 
@@ -939,7 +931,7 @@ int wxWindowBase::GetBestHeight(int width) const
 
     return height == wxDefaultCoord
             ? GetBestSize().y
-            : height + DoGetBorderSize().y;
+            : height + GetWindowBorderSize().y;
 }
 
 int wxWindowBase::GetBestWidth(int height) const
@@ -948,7 +940,7 @@ int wxWindowBase::GetBestWidth(int height) const
 
     return width == wxDefaultCoord
             ? GetBestSize().x
-            : width + DoGetBorderSize().x;
+            : width + GetWindowBorderSize().x;
 }
 
 void wxWindowBase::SetMinSize(const wxSize& minSize)
@@ -1004,11 +996,17 @@ wxSize wxWindowBase::WindowToClientSize(const wxSize& size) const
                   size.y == -1 ? -1 : size.y - diff.y);
 }
 
-void wxWindowBase::WXSetInitialFittingClientSize(int flags)
+void wxWindowBase::WXSetInitialFittingClientSize(int flags, wxSizer* sizer)
 {
-    wxSizer* const sizer = GetSizer();
+    // Use the window sizer by default.
     if ( !sizer )
-        return;
+    {
+        sizer = GetSizer();
+
+        // If there is none, we can't compute the fitting size.
+        if ( !sizer )
+            return;
+    }
 
     const wxSize
         size = sizer->ComputeFittingClientSize(static_cast<wxWindow *>(this));
@@ -1394,7 +1392,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
     else
     {
-        wxTopLevelWindows.DeleteObject((wxWindow *)this);
+        wxTopLevelWindows.DeleteObject(this);
     }
 
     // add it to the new one
@@ -1404,7 +1402,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
     else
     {
-        wxTopLevelWindows.Append((wxWindow *)this);
+        wxTopLevelWindows.Append(static_cast<wxWindow*>(this));
     }
 
     // We need to notify window (and its subwindows) if by changing the parent
@@ -2690,9 +2688,7 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
     }
     else if ( constr )
     {
-        wxLogDebug(wxT("Constraints not satisfied for %s named '%s'."),
-                   GetClassInfo()->GetClassName(),
-                   GetName().c_str());
+        wxLogDebug(wxT("Constraints not satisfied for %s."), wxDumpWindow(this));
     }
 
     if ( recurse )
@@ -2879,7 +2875,7 @@ void wxWindowBase::OnInternalIdle()
 }
 
 // ----------------------------------------------------------------------------
-// DPI-independent pixels and dialog units translations
+// Conversions between various pixel kinds and dialog units translations
 // ----------------------------------------------------------------------------
 
 wxSize wxWindowBase::GetDPI() const
@@ -2887,7 +2883,65 @@ wxSize wxWindowBase::GetDPI() const
     return wxDisplay(static_cast<const wxWindow*>(this)).GetPPI();
 }
 
-#ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+
+// In this case logical pixels are DIPs, so we don't need to define conversion
+// to/from them (or, rather, they are already defined as trivial inline
+// functions in the header), but we do need to define conversions to/from
+// physical pixels.
+
+namespace
+{
+
+double GetContentScaleFactorFor(const wxWindowBase* w)
+{
+    if ( w )
+        return w->GetContentScaleFactor();
+
+#ifdef __WXOSX__
+    return wxOSXGetMainScreenContentScaleFactor();
+#else
+    return 1.0;
+#endif
+}
+
+} // anonymous namespace
+
+/* static */
+wxSize wxWindowBase::FromPhys(wxSize sz, const wxWindowBase* w)
+{
+    const double scale = GetContentScaleFactorFor(w);
+
+    if ( scale != 1.0 )
+    {
+        if ( sz.x != wxDefaultCoord )
+            sz.x = wxRound(sz.x / scale);
+        if ( sz.y != wxDefaultCoord )
+            sz.y = wxRound(sz.y / scale);
+    }
+
+    return sz;
+}
+
+/* static */
+wxSize wxWindowBase::ToPhys(wxSize sz, const wxWindowBase* w)
+{
+    const double scale = GetContentScaleFactorFor(w);
+
+    if ( scale != 1.0 )
+    {
+        if ( sz.x != wxDefaultCoord )
+            sz.x = wxRound(sz.x * scale);
+        if ( sz.y != wxDefaultCoord )
+            sz.y = wxRound(sz.y * scale);
+    }
+
+    return sz;
+}
+
+#else // !wxHAS_DPI_INDEPENDENT_PIXELS
+
+// In this case we have non-trivial implementations for DIP conversions only.
 
 namespace
 {
@@ -2914,12 +2968,9 @@ wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
-    const int baseline = wxDisplay::GetStdPPIValue();
+    const wxSize baseline = wxDisplay::GetStdPPI();
 
-    // Take care to not scale -1 because it has a special meaning of
-    // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, dpi.x, baseline),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, dpi.y, baseline));
+    return wxRescaleCoord(sz).From(baseline).To(dpi);
 }
 
 /* static */
@@ -2928,15 +2979,12 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
-    const int baseline = wxDisplay::GetStdPPIValue();
+    const wxSize baseline = wxDisplay::GetStdPPI();
 
-    // Take care to not scale -1 because it has a special meaning of
-    // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, baseline, dpi.x),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, baseline, dpi.y));
+    return wxRescaleCoord(sz).From(dpi).To(baseline);
 }
 
-#endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS/!wxHAS_DPI_INDEPENDENT_PIXELS
 
 // Windows' computes dialog units using average character width over upper-
 // and lower-case ASCII alphabet and not using the average character width
@@ -2972,28 +3020,14 @@ wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    // NB: wxMulDivInt32() is used, because it correctly rounds the result
-
-    wxPoint pt2 = wxDefaultPosition;
-    if (pt.x != wxDefaultCoord)
-        pt2.x = wxMulDivInt32(pt.x, 4, base.x);
-    if (pt.y != wxDefaultCoord)
-        pt2.y = wxMulDivInt32(pt.y, 8, base.y);
-
-    return pt2;
+    return wxRescaleCoord(pt).From(base).To(4, 8);
 }
 
 wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 {
     const wxSize base = GetDlgUnitBase();
 
-    wxPoint pt2 = wxDefaultPosition;
-    if (pt.x != wxDefaultCoord)
-        pt2.x = wxMulDivInt32(pt.x, base.x, 4);
-    if (pt.y != wxDefaultCoord)
-        pt2.y = wxMulDivInt32(pt.y, base.y, 8);
-
-    return pt2;
+    return wxRescaleCoord(pt).From(4, 8).To(base);
 }
 
 // ----------------------------------------------------------------------------
@@ -3378,8 +3412,7 @@ void wxWindowBase::ReleaseMouse()
         (
           wxString::Format
           (
-            "Releasing mouse in %p(%s) but it is not captured",
-            this, GetClassInfo()->GetClassName()
+            "Releasing mouse in %s but it is not captured", wxDumpWindow(this)
           )
         );
     }
@@ -3389,9 +3422,8 @@ void wxWindowBase::ReleaseMouse()
         (
           wxString::Format
           (
-            "Releasing mouse in %p(%s) but it is captured by %p(%s)",
-            this, GetClassInfo()->GetClassName(),
-            winCapture, winCapture->GetClassInfo()->GetClassName()
+            "Releasing mouse in %s but it is captured by %s",
+            wxDumpWindow(this), wxDumpWindow(winCapture)
           )
         );
     }
@@ -3425,7 +3457,7 @@ static void DoNotifyWindowAboutCaptureLost(wxWindow *win)
     {
         // windows must handle this event, otherwise the app wouldn't behave
         // correctly if it loses capture unexpectedly; see the discussion here:
-        // https://trac.wxwidgets.org/ticket/2277
+        // https://github.com/wxWidgets/wxWidgets/issues/21642
         // http://article.gmane.org/gmane.comp.lib.wxwidgets.devel/82376
         wxFAIL_MSG( wxT("window that captured the mouse didn't process wxEVT_MOUSE_CAPTURE_LOST") );
     }
@@ -3435,9 +3467,11 @@ static void DoNotifyWindowAboutCaptureLost(wxWindow *win)
 void wxWindowBase::NotifyCaptureLost()
 {
     // don't do anything if capture lost was expected, i.e. resulted from
-    // a wx call to ReleaseMouse or CaptureMouse:
-    wxRecursionGuard guard(wxMouseCapture::changing);
-    if ( guard.IsInside() )
+    // a wx call to ReleaseMouse or CaptureMouse (but note that we must not
+    // change the "changing" flag here as the user code is expected to call
+    // ReleaseMouse() from its wxMouseCaptureLostEvent handler and this
+    // shouldn't assert because the capture is already "changing")
+    if ( wxMouseCapture::changing )
         return;
 
     // if the capture was lost unexpectedly, notify every window that has
@@ -3695,6 +3729,31 @@ wxWindow* wxGetTopLevelParent(wxWindowBase *win_)
          win = win->GetParent();
 
     return win;
+}
+
+wxString wxDumpWindow(const wxWindowBase* win)
+{
+    if ( !win )
+        return wxString::FromAscii("[no window]");
+
+    wxString s = wxString::Format("%s@%p (",
+                                  win->GetClassInfo()->GetClassName(), win);
+
+    wxString label = win->GetLabel();
+    if ( label.empty() )
+        label = win->GetName();
+
+    s += wxString::Format("\"%s\"", label);
+
+    // Under MSW the HWND can be useful to find the window in Spy++ or similar
+    // program, so include it in the dump as well.
+#ifdef __WXMSW__
+    s += wxString::Format(", HWND=%p", win->GetHandle());
+#endif // __WXMSW__
+
+    s += ")";
+
+    return s;
 }
 
 #if wxUSE_ACCESSIBILITY

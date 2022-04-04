@@ -567,6 +567,30 @@ public:
     */
     virtual void SetAccel(wxAcceleratorEntry *accel);
 
+    /**
+       Add an extra accelerator for this menu item.
+
+       Additional accelerators are not shown in the item's label,
+       but still will trigger the menu command when pressed.
+
+       They can be useful to let multiple keys be used as accelerators
+       for the same command, e.g. @c WXK_ADD and @c WXK_NUMPAD_ADD.
+
+       @onlyfor{wxmsw,wxgtk}
+
+        @since 3.1.6
+    */
+    void AddExtraAccel(wxAcceleratorEntry *accel);
+
+    /**
+       Clear the extra accelerators list.
+
+       This doesn't affect the main item accelerator (if any).
+
+       @since 3.1.6
+    */
+    void ClearExtraAccels();
+
     //@}
 };
 

@@ -17,9 +17,9 @@
 
 #include "wx/ipcbase.h"
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxServerBase, wxObject)
-wxIMPLEMENT_ABSTRACT_CLASS(wxClientBase, wxObject)
-wxIMPLEMENT_ABSTRACT_CLASS(wxConnectionBase, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxServerBase, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxClientBase, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxConnectionBase, wxObject);
 
 wxConnectionBase::wxConnectionBase(void *buffer, size_t bytes)
     : m_buffer((char *)buffer),

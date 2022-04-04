@@ -40,6 +40,13 @@ public:
                              int precision,
                              int style = Style_WithThousandsSep);
 
+    // Format the given number using one of the floating point formats and
+    // ensure that the result uses the correct decimal separator.
+    // Prefer using ToString() if possible, i.e. if format is "%g" or "%.Nf"
+    // which are supported by it directly.
+    static wxString Format(const wxString& format, double val);
+
+
     // Parse a string representing a number, possibly with thousands separator.
     //
     // Return true on success and stores the result in the provided location

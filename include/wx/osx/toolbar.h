@@ -53,13 +53,13 @@ public:
 #endif
     virtual bool Realize() wxOVERRIDE;
 
-    virtual void SetToolBitmapSize(const wxSize& size) wxOVERRIDE;
     virtual wxSize GetToolSize() const wxOVERRIDE;
 
     virtual void SetRows(int nRows) wxOVERRIDE;
 
-    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
-    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
+
+    virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
+    virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
 
 #ifndef __WXOSX_IPHONE__
     // Add all the buttons
@@ -83,8 +83,8 @@ public:
 
     virtual wxToolBarToolBase *CreateTool(int id,
                                           const wxString& label,
-                                          const wxBitmap& bmpNormal,
-                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          const wxBitmapBundle& bmpNormal,
+                                          const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = NULL,
                                           const wxString& shortHelp = wxEmptyString,
@@ -113,6 +113,8 @@ protected:
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) wxOVERRIDE;
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
+
+    virtual void DoSetToolBitmapSize(const wxSize& size) wxOVERRIDE;
 
     wxDECLARE_EVENT_TABLE();
 #if wxOSX_USE_NATIVE_TOOLBAR

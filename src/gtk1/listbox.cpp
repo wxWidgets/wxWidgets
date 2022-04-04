@@ -771,7 +771,7 @@ wxString wxListBox::GetRealLabel(GList *item) const
     str = wxString( label->label );
 
 #if wxUSE_CHECKLISTBOX
-    // checklistboxes have "[±] " prepended to their lables, remove it
+    // checklistboxes have "[±] " prepended to their labels, remove it
     //
     // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk1/checklst.h
     if ( m_hasCheckBoxes )

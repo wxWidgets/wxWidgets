@@ -49,7 +49,7 @@ public:
     wxDIB(HBITMAP hbmp)
         { Init(); (void)Create(hbmp); }
 
-    // load a DIB from file (any depth is supoprted here unlike above)
+    // load a DIB from file (any depth is supported here unlike above)
     //
     // as above, use IsOk() to see if the bitmap was loaded successfully
     wxDIB(const wxString& filename)

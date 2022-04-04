@@ -228,11 +228,11 @@ int wxPalette::GetPixel(unsigned char WXUNUSED(red),
     return wxNOT_FOUND;
 }
 
-// In all wx ports, when declare GetRGB, the first parameter is "int pixel"
-// the docs said the function is used to "Returns RGB values for a given
-// palette index." And in GetRGB implementation, all port named the first
-// parameter to " int index". I don't it is whether intended, but "index"
-// is more meanning for, and to be consistent with other ports, I renamed
+// In all wx ports, when declaring GetRGB, the first parameter is "int pixel."
+// The docs said the function is used to "Returns RGB values for a given
+// palette index." And in GetRGB implementation, all ports name the first
+// parameter to "int index". I don't know whether that is intended, but "index"
+// is more meaningful, and to be consistent with other ports, I renamed
 // the first parameter from pixel to index.
 bool wxPalette::GetRGB(int index,
                        unsigned char *red,
@@ -242,7 +242,7 @@ bool wxPalette::GetRGB(int index,
     if ( !m_refData )
         return false;
 
-    if (index < 0 || index > 255)
+    if ( index < 0 || index >= GetColoursCount() )
         return false;
 
     wxList::compatibility_iterator node = M_PALETTEDATA->m_palettes.GetFirst();

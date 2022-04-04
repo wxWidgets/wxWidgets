@@ -25,107 +25,86 @@
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 #include "wx/panel.h"
+#include "wx/scopedptr.h"
 
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// the tests
 // ----------------------------------------------------------------------------
 
-class MiscGUIFuncsTestCase : public CppUnit::TestCase
-{
-public:
-    MiscGUIFuncsTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( MiscGUIFuncsTestCase );
-        CPPUNIT_TEST( DisplaySize );
-        CPPUNIT_TEST( URLDataObject );
-        CPPUNIT_TEST( ParseFileDialogFilter );
-        CPPUNIT_TEST( ClientToScreen );
-        CPPUNIT_TEST( FindWindowAtPoint );
-    CPPUNIT_TEST_SUITE_END();
-
-    void DisplaySize();
-    void URLDataObject();
-    void ParseFileDialogFilter();
-    void ClientToScreen();
-    void FindWindowAtPoint();
-
-    wxDECLARE_NO_COPY_CLASS(MiscGUIFuncsTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( MiscGUIFuncsTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MiscGUIFuncsTestCase, "MiscGUIFuncsTestCase" );
-
-void MiscGUIFuncsTestCase::DisplaySize()
+TEST_CASE("GUI::DisplaySize", "[guifuncs]")
 {
     // test that different (almost) overloads return the same results
     int w, h;
     wxDisplaySize(&w, &h);
     wxSize sz = wxGetDisplaySize();
 
-    CPPUNIT_ASSERT_EQUAL( w, sz.x );
-    CPPUNIT_ASSERT_EQUAL( h, sz.y );
+    CHECK( sz.x == w );
+    CHECK( sz.y == h );
 
     // test that passing NULL works as expected, e.g. doesn't crash
     wxDisplaySize(NULL, NULL);
     wxDisplaySize(&w, NULL);
     wxDisplaySize(NULL, &h);
 
-    CPPUNIT_ASSERT_EQUAL( w, sz.x );
-    CPPUNIT_ASSERT_EQUAL( h, sz.y );
+    CHECK( sz.x == w );
+    CHECK( sz.y == h );
 
     // test that display PPI is something reasonable
     sz = wxGetDisplayPPI();
-    CPPUNIT_ASSERT( sz.x < 1000 );
-    CPPUNIT_ASSERT( sz.y < 1000 );
+    CHECK( sz.x < 1000 );
+    CHECK( sz.y < 1000 );
 }
 
-void MiscGUIFuncsTestCase::URLDataObject()
-{
 #if wxUSE_DATAOBJ
+TEST_CASE("GUI::URLDataObject", "[guifuncs]")
+{
     // this tests for buffer overflow, see #11102
     const char * const
         url = "http://something.long.to.overwrite.plenty.memory.example.com";
     wxURLDataObject * const dobj = new wxURLDataObject(url);
-    CPPUNIT_ASSERT_EQUAL( url, dobj->GetURL() );
+    CHECK( dobj->GetURL() == url );
 
     wxClipboardLocker lockClip;
-    CPPUNIT_ASSERT( wxTheClipboard->SetData(dobj) );
+    CHECK( wxTheClipboard->SetData(dobj) );
     wxTheClipboard->Flush();
-#endif // wxUSE_DATAOBJ
 }
 
-void MiscGUIFuncsTestCase::ParseFileDialogFilter()
+TEST_CASE("GUI::DataFormatCompare", "[guifuncs][dataformat]")
+{
+    const wxDataFormat df(wxDF_TEXT);
+    CHECK( df == wxDF_TEXT );
+    CHECK( df != wxDF_INVALID );
+}
+#endif // wxUSE_DATAOBJ
+
+TEST_CASE("GUI::ParseFileDialogFilter", "[guifuncs]")
 {
     wxArrayString descs,
                   filters;
 
-    CPPUNIT_ASSERT_EQUAL
+    REQUIRE
     (
-        1,
         wxParseCommonDialogsFilter("Image files|*.jpg;*.png", descs, filters)
+        == 1
     );
 
-    CPPUNIT_ASSERT_EQUAL( "Image files", descs[0] );
-    CPPUNIT_ASSERT_EQUAL( "*.jpg;*.png", filters[0] );
+    CHECK( descs[0] == "Image files" );
+    CHECK( filters[0] == "*.jpg;*.png" );
 
-    CPPUNIT_ASSERT_EQUAL
+    REQUIRE
     (
-        2,
         wxParseCommonDialogsFilter
         (
             "All files (*.*)|*.*|Python source (*.py)|*.py",
             descs, filters
         )
+        == 2
     );
 
-    CPPUNIT_ASSERT_EQUAL( "*.*", filters[0] );
-    CPPUNIT_ASSERT_EQUAL( "*.py", filters[1] );
+    CHECK( filters[0] == "*.*" );
+    CHECK( filters[1] == "*.py" );
 
     // Test some invalid ones too.
     WX_ASSERT_FAILS_WITH_ASSERT
@@ -138,37 +117,26 @@ void MiscGUIFuncsTestCase::ParseFileDialogFilter()
     );
 }
 
-void MiscGUIFuncsTestCase::ClientToScreen()
+TEST_CASE("GUI::ClientToScreen", "[guifuncs]")
 {
     wxWindow* const tlw = wxTheApp->GetTopWindow();
-    CPPUNIT_ASSERT( tlw );
+    REQUIRE( tlw );
 
-    wxPanel* const
-        p1 = new wxPanel(tlw, wxID_ANY, wxPoint(0, 0), wxSize(100, 50));
-    wxPanel* const
-        p2 = new wxPanel(tlw, wxID_ANY, wxPoint(0, 50), wxSize(100, 50));
+    wxScopedPtr<wxPanel> const
+        p1(new wxPanel(tlw, wxID_ANY, wxPoint(0, 0), wxSize(100, 50)));
+    wxScopedPtr<wxPanel> const
+        p2(new wxPanel(tlw, wxID_ANY, wxPoint(0, 50), wxSize(100, 50)));
     wxWindow* const
-        b = new wxWindow(p2, wxID_ANY, wxPoint(10, 10), wxSize(30, 10));
+        b = new wxWindow(p2.get(), wxID_ANY, wxPoint(10, 10), wxSize(30, 10));
 
     // We need this to realize the windows created above under wxGTK.
     wxYield();
 
     const wxPoint tlwOrig = tlw->ClientToScreen(wxPoint(0, 0));
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        tlwOrig + wxPoint(0, 50),
-        p2->ClientToScreen(wxPoint(0, 0))
-    );
+    CHECK( p2->ClientToScreen(wxPoint(0, 0)) == tlwOrig + wxPoint(0, 50) );
 
-    CPPUNIT_ASSERT_EQUAL
-    (
-        tlwOrig + wxPoint(10, 60),
-        b->ClientToScreen(wxPoint(0, 0))
-    );
-
-    p1->Destroy();
-    p2->Destroy();
+    CHECK( b->ClientToScreen(wxPoint(0, 0)) == tlwOrig + wxPoint(10, 60) );
 }
 
 namespace
@@ -197,76 +165,59 @@ wxString GetLabelOfWindowAtPoint(wxWindow* parent, int x, int y)
 
 } // anonymous namespace
 
-void MiscGUIFuncsTestCase::FindWindowAtPoint()
+TEST_CASE("GUI::FindWindowAtPoint", "[guifuncs]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
-    CPPUNIT_ASSERT( parent );
+    REQUIRE( parent );
 
     // Set a label to allow distinguishing it from the other windows in the
     // assertion messages.
     parent->SetLabel("parent");
 
-    wxWindow* btn1 = new TestButton(parent, "1", wxPoint(10, 10));
-    wxWindow* btn2 = new TestButton(parent, "2", wxPoint(10, 90));
-    wxWindow* btn3 = new TestButton(btn2, "3", wxPoint(20, 20));
+    wxScopedPtr<wxWindow> btn1(new TestButton(parent, "1", wxPoint(10, 10)));
+    wxScopedPtr<wxWindow> btn2(new TestButton(parent, "2", wxPoint(10, 90)));
+
+    // No need to use wxScopedPtr<> for this one, it will be deleted by btn2.
+    wxWindow* btn3 = new TestButton(btn2.get(), "3", wxPoint(20, 20));
 
     // We need this to realize the windows created above under wxGTK.
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "No window for a point outside of the window",
-        "NONE",
-        GetLabelOfWindowAtPoint(parent, 900, 900)
-    );
+    INFO("No window for a point outside of the window");
+    CHECK( GetLabelOfWindowAtPoint(parent, 900, 900) == "NONE" );
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Point over a child control corresponds to it",
-        btn1->GetLabel(),
-        GetLabelOfWindowAtPoint(parent, 11, 11)
-    );
+    INFO( "Point over a child control corresponds to it" );
+    CHECK( GetLabelOfWindowAtPoint(parent, 11, 11) == btn1->GetLabel() );
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Point outside of any child control returns the TLW itself",
-        parent->GetLabel(),
-        GetLabelOfWindowAtPoint(parent, 5, 5)
-    );
+    INFO("Point outside of any child control returns the TLW itself");
+    CHECK( GetLabelOfWindowAtPoint(parent, 5, 5) == parent->GetLabel() );
 
     btn2->Disable();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Point over a disabled child control still corresponds to it",
-        btn2->GetLabel(),
-        GetLabelOfWindowAtPoint(parent, 11, 91)
-    );
+    INFO("Point over a disabled child control still corresponds to it");
+    CHECK( GetLabelOfWindowAtPoint(parent, 11, 91) == btn2->GetLabel() );
 
     btn2->Hide();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Point over a hidden child control doesn't take it into account",
-        parent->GetLabel(),
-        GetLabelOfWindowAtPoint(parent, 11, 91)
-    );
+    INFO("Point over a hidden child control doesn't take it into account");
+    CHECK( GetLabelOfWindowAtPoint(parent, 11, 91) == parent->GetLabel() );
 
     btn2->Show();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Point over child control corresponds to the child",
-        btn3->GetLabel(),
-        GetLabelOfWindowAtPoint(parent, 31, 111)
-    );
+    INFO("Point over child control corresponds to the child");
+    CHECK( GetLabelOfWindowAtPoint(parent, 31, 111) == btn3->GetLabel() );
 
     btn3->Disable();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
-    (
-        "Point over disabled child controls still corresponds to this child",
-        btn3->GetLabel(),
-        GetLabelOfWindowAtPoint(parent, 31, 111)
-    );
+    INFO("Point over disabled child controls still corresponds to this child");
+    CHECK( GetLabelOfWindowAtPoint(parent, 31, 111) == btn3->GetLabel() );
+}
 
-    btn1->Destroy();
-    btn2->Destroy();
-    // btn3 was already deleted when its parent was
+TEST_CASE("wxWindow::Dump", "[window]")
+{
+    CHECK_NOTHROW( wxDumpWindow(NULL) );
+
+    wxScopedPtr<wxButton>
+        button(new wxButton(wxTheApp->GetTopWindow(), wxID_ANY, "bloordyblop"));
+
+    const std::string s = wxDumpWindow(button.get()).utf8_string();
+
+    CHECK_THAT( s, Catch::Contains("wxButton") );
+    CHECK_THAT( s, Catch::Contains("bloordyblop") );
 }

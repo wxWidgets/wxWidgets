@@ -15,7 +15,7 @@
 WX_RELEASE_NODOT = 31
 COMPILER_PREFIX = vc
 OBJS = \
-	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)$(ARCH_SUFFIX)
+	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = \
 	.\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
@@ -173,6 +173,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_point.obj \
 	$(OBJS)\test_gui_region.obj \
 	$(OBJS)\test_gui_bitmap.obj \
+	$(OBJS)\test_gui_bmpbundle.obj \
 	$(OBJS)\test_gui_colour.obj \
 	$(OBJS)\test_gui_ellipsization.obj \
 	$(OBJS)\test_gui_measuring.obj \
@@ -382,173 +383,37 @@ LINK_TARGET_CPU = /MACHINE:IA64
 !if "$(TARGET_CPU)" == "x64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "17.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware_pmv2.manifest
 !endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware_pmv2.manifest
 !endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware_pmv2.manifest
 !endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
+!if "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "17.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "14.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "15.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
-!endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "16.0"
-WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
-	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware_pmv2.manifest
 !endif
 !if "$(MONOLITHIC)" == "0"
 EXTRALIBS_FOR_BASE = 
@@ -927,7 +792,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-images fr ja
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images fr ja
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -984,11 +849,15 @@ $(OBJS)\test_allheaders.exe: $(OBJS)\test_allheaders_dummy.obj  $(TEST_ALLHEADER
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (testdata.conf horse.svg) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
+data-image-sample: 
+	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 data-images: 
 	if not exist image mkdir image
-	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png paste_input_background.png paste_input_black.png paste_input_overlay_transparent_border_opaque_square.png paste_input_overlay_transparent_border_semitransparent_circle.png paste_input_overlay_transparent_border_semitransparent_square.png paste_result_background_plus_circle_plus_square.png paste_result_background_plus_overlay_transparent_border_opaque_square.png paste_result_background_plus_overlay_transparent_border_semitransparent_square.png paste_result_no_background_square_over_circle.png wx.png wx.ico toucan.png toucan_hue_0.538.png toucan_sat_-0.41.png toucan_bright_-0.259.png toucan_hsv_0.538_-0.41_-0.259.png toucan_light_46.png toucan_dis_240.png toucan_grey.png toucan_mono_255_255_255.png) do if not exist image\%f copy .\image\%f image
+	for %f in (8bpp-colorsused-large.bmp 8bpp-colorsused-negative.bmp rle4-delta-320x240.bmp rle8-delta-320x240.bmp rle8-delta-320x240-expected.bmp horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png paste_input_background.png paste_input_black.png paste_input_overlay_transparent_border_opaque_square.png paste_input_overlay_transparent_border_semitransparent_circle.png paste_input_overlay_transparent_border_semitransparent_square.png paste_result_background_plus_circle_plus_square.png paste_result_background_plus_overlay_transparent_border_opaque_square.png paste_result_background_plus_overlay_transparent_border_semitransparent_square.png paste_result_no_background_square_over_circle.png wx.png wx.ico toucan.png toucan_hue_0.538.png toucan_sat_-0.41.png toucan_bright_-0.259.png toucan_hsv_0.538_-0.41_-0.259.png toucan_light_46.png toucan_dis_240.png toucan_grey.png toucan_mono_255_255_255.png width-times-height-overflow.bmp width_height_32_bit_overflow.pgm) do if not exist image\%f copy .\image\%f image
 
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
@@ -1312,6 +1181,9 @@ $(OBJS)\test_gui_region.obj: .\geometry\region.cpp
 
 $(OBJS)\test_gui_bitmap.obj: .\graphics\bitmap.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\bitmap.cpp
+
+$(OBJS)\test_gui_bmpbundle.obj: .\graphics\bmpbundle.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\bmpbundle.cpp
 
 $(OBJS)\test_gui_colour.obj: .\graphics\colour.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\colour.cpp

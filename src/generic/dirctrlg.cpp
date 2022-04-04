@@ -51,10 +51,13 @@
     #include  "wx/osx/private.h"  // includes mac headers
 #endif
 
+#if defined(__WINDOWS__) || defined(__APPLE__)
+#include "wx/volume.h"
+#endif
+
 #ifdef __WINDOWS__
 #include <windows.h>
 #include "wx/msw/winundef.h"
-#include "wx/volume.h"
 
 // MinGW has _getdrive() and _chdrive(), Cygwin doesn't.
 #if defined(__GNUWIN32__) && !defined(__CYGWIN__)
@@ -91,15 +94,11 @@ wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 // wxGetAvailableDrives, for WINDOWS, OSX, UNIX (returns "/")
 // ----------------------------------------------------------------------------
 
-// since the macOS implementation needs objective-C this is dirdlg.mm
-#ifdef __WXOSX__
-extern size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids);
-#else
 size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
 {
-#ifdef wxHAS_FILESYSTEM_VOLUMES
+#if defined(wxHAS_FILESYSTEM_VOLUMES) || defined(__APPLE__)
 
-#if defined(__WIN32__) && wxUSE_FSVOLUME
+#if (defined(__WIN32__) || defined(__WXOSX__)) && wxUSE_FSVOLUME
     // TODO: this code (using wxFSVolumeBase) should be used for all platforms
     //       but unfortunately wxFSVolumeBase is not implemented everywhere
     const wxArrayString as = wxFSVolumeBase::GetVolumes();
@@ -164,7 +163,6 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
     wxASSERT_MSG( (paths.GetCount() == icon_ids.GetCount()), wxT("Wrong number of icons for available drives."));
     return paths.GetCount();
 }
-#endif
 
 // ----------------------------------------------------------------------------
 // wxIsDriveAvailable
@@ -573,8 +571,13 @@ void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
     wxTreeEvent changedEvent(wxEVT_DIRCTRL_SELECTIONCHANGED, GetId());
 
     changedEvent.SetEventObject(this);
-    changedEvent.SetItem(event.GetItem());
-    changedEvent.SetClientObject(m_treeCtrl->GetItemData(event.GetItem()));
+
+    const wxTreeItemId item = event.GetItem();
+    if ( item.IsOk() )
+    {
+        changedEvent.SetItem(item);
+        changedEvent.SetClientObject(m_treeCtrl->GetItemData(item));
+    }
 
     if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
         event.Veto();

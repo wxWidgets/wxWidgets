@@ -17,7 +17,6 @@
         <wx-lib>propgrid</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>../sample.rc</win32-res>
     </exe>
 
 </makefile>
