@@ -171,6 +171,9 @@ protected:
         m_isClipBoxValid = false;
     }
 
+    // Unlike the public SetWindow(), this one doesn't call InitializePalette().
+    void InitWindow(wxWindow* window);
+
     // create an uninitialized DC: this should be only used by the derived
     // classes
     wxMSWDCImpl( wxDC *owner ) : wxDCImpl( owner ) { Init(); }

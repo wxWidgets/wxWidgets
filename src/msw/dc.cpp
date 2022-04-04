@@ -470,6 +470,13 @@ WXHDC wxDC::GetHDC() const
 // wxMSWDCImpl
 // ---------------------------------------------------------------------------
 
+void wxMSWDCImpl::InitWindow(wxWindow* window)
+{
+    m_window = window;
+    if ( m_window )
+        m_contentScaleFactor = m_window->GetDPIScaleFactor();
+}
+
 wxMSWDCImpl::wxMSWDCImpl( wxDC *owner, WXHDC hDC ) :
     wxDCImpl( owner )
 {
