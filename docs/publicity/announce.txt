@@ -44,7 +44,7 @@ maximally condensed summary of the changes compared to 3.0:
 - Improvements to compile-time safety with the possibility to disable dangerous
   implicit conversions between wxString and "char*" strings.
 - Latest versions of all bundled 3rd party libraries, including all the
-  security fixed and support for WebKit 2 and GStreamer 1.7 under Unix.
+  security fixes and support for WebKit 2 and GStreamer 1.7 under Unix.
 - Revamped OpenGL support better suited to modern OpenGL (3.2+).
 - Further C++11 and later support improvements, wxWidgets can be built using
   C++20 compilers.
