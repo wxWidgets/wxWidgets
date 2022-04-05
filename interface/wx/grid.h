@@ -4539,6 +4539,8 @@ public:
         Returns @true if rows can be moved by dragging with the mouse.
 
         Rows can be moved by dragging on their labels.
+
+        @since 3.1.7
     */
     bool CanDragRowMove() const;
 
@@ -4598,6 +4600,8 @@ public:
         Disables row moving by dragging with the mouse.
 
         Equivalent to passing @false to EnableDragRowMove().
+
+        @since 3.1.7
     */
     void DisableDragRowMove();
 
@@ -4655,6 +4659,8 @@ public:
         this method is called with @a enable equal to @true in this situation,
         it returns @false without doing anything. Otherwise it returns @true to
         indicate that it was successful.
+
+        @since 3.1.7
     */
     bool EnableDragRowMove(bool enable = true);
 
@@ -4731,16 +4737,22 @@ public:
 
     /**
         Returns the row ID of the specified row position.
+
+        @since 3.1.7
     */
     int GetRowAt(int rowPos) const;
 
     /**
         Returns the position of the specified row.
+
+        @since 3.1.7
     */
     int GetRowPos(int rowID) const;
 
     /**
         Sets the position of the specified row.
+
+        @since 3.1.7
     */
     void SetRowPos(int rowID, int newPos);
 
@@ -4749,11 +4761,15 @@ public:
 
         This method takes an array containing the indices of the rows in
         their display order.
+
+        @since 3.1.7
     */
     void SetRowsOrder(const wxArrayInt& order);
 
     /**
         Resets the position of the rows to the default.
+
+        @since 3.1.7
     */
     void ResetRowPos();
 
@@ -6253,6 +6269,7 @@ public:
         rows display order without affecting the use of the row indices
         otherwise.
         This event macro corresponds to @c wxEVT_GRID_ROW_MOVE event type.
+        It is only available since wxWidgets 3.1.7.
     @event{EVT_GRID_COL_MOVE(func)}
         The user tries to change the order of the columns in the grid by
         dragging the column specified by GetCol(). This event can be vetoed to

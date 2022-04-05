@@ -2948,7 +2948,7 @@ private:
     void UpdateColumnSortingIndicator(int col);
 
     // update the grid after changing the rows or columns order (common part
-    // Set{Row,Col}Pos() and Reset{Row,Col}Pos())
+    // of Set{Row,Col}Pos() and Reset{Row,Col}Pos())
     void RefreshAfterRowPosChange();
     void RefreshAfterColPosChange();
 
@@ -2972,7 +2972,7 @@ private:
     //
     // this always returns a valid position, even if the coordinate is out of
     // bounds (in which case first/last row/column is returned)
-    int YToPos(int x, wxGridWindow *gridWindow) const;
+    int YToPos(int y, wxGridWindow *gridWindow) const;
     int XToPos(int x, wxGridWindow *gridWindow) const;
 
     // event handlers and their helpers
