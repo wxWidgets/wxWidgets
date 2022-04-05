@@ -4110,8 +4110,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                 if ( m_dragLastPos == -1 || row == m_dragMoveRow )
                 {
                     // the row didn't actually move anywhere
-                    //if ( row != -1 )
-                    //    DoRowHeaderClick(col);
                     m_rowLabelWin->Refresh();   // "unpress" the row
                 }
                 else
@@ -4142,6 +4140,14 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
                     DoEndMoveRow(pos);
                 }
+                break;
+
+            case WXGRID_CURSOR_SELECT_ROW:
+            case WXGRID_CURSOR_SELECT_CELL:
+            case WXGRID_CURSOR_RESIZE_COL:
+            case WXGRID_CURSOR_SELECT_COL:
+            case WXGRID_CURSOR_MOVE_COL:
+                // nothing to do
                 break;
         }
 
@@ -4588,10 +4594,14 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
             case WXGRID_CURSOR_SELECT_COL:
             case WXGRID_CURSOR_SELECT_CELL:
-            case WXGRID_CURSOR_RESIZE_ROW:
-            case WXGRID_CURSOR_SELECT_ROW:
                 if ( col != -1 )
                     DoColHeaderClick(col);
+                break;
+
+            case WXGRID_CURSOR_RESIZE_ROW:
+            case WXGRID_CURSOR_SELECT_ROW:
+            case WXGRID_CURSOR_MOVE_ROW:
+                // nothing to do, will not happen anyway
                 break;
         }
 
