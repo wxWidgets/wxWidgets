@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Patriccollu di Santa Maria è Sichè <Patriccollu [at] gmail [dot] com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets in Corsican\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-08 12:51+0100\n"
+"POT-Creation-Date: 2021-06-15 17:46+0200\n"
 "PO-Revision-Date: 2022-04-05 19:58+0200\n"
 "Language-Team: Patriccollu di Santa Maria è Sichè\n"
 "MIME-Version: 1.0\n"
