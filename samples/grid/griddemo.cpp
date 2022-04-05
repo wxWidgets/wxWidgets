@@ -1726,12 +1726,11 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
            << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
 
     //Indicate whether this row was moved
-    if ( ((wxGrid *)ev.GetEventObject())->GetRowPos( ev.GetRow() ) != ev.GetRow() )
-        logBuf << " *** Row moved, current position: " << ((wxGrid *)ev.GetEventObject())->GetRowPos( ev.GetRow() );
+    if ( grid->GetRowPos( ev.GetRow() ) != ev.GetRow() )
+        logBuf << " *** Row moved, current position: " << grid->GetRowPos( ev.GetRow() );
     //Indicate whether this column was moved
-    if (((wxGrid *)ev.GetEventObject())->GetColPos(ev.GetCol()) != ev.GetCol())
-        logBuf << " *** Column moved, current position: " << ((wxGrid *)ev.GetEventObject())->GetColPos(ev.GetCol());
-
+    if (grid->GetColPos(ev.GetCol()) != ev.GetCol())
+        logBuf << " *** Column moved, current position: " << grid->GetColPos(ev.GetCol());
 
     wxLogMessage( "%s", logBuf );
 
