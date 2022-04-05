@@ -3312,7 +3312,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
                 m_rowAt.Insert( pos, pos, numRows );
 
-                //Set the new rowumns' positions
+                //Set the new rows' positions
                 for ( i = pos + 1; i < (int)pos + numRows; i++ )
                 {
                     m_rowAt[i] = i;
@@ -3814,8 +3814,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg,
         int rowPos = GetRowPos( internalYToRow(top, gridWindow) );
         for ( ; rowPos < m_numRows; rowPos++ )
         {
-            int row;
-            row = GetRowAt( rowPos );
+            const int row = GetRowAt( rowPos );
 
             if ( GetRowBottom(row) <= top )
                 continue;
@@ -3901,7 +3900,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                     if ( !m_selection->IsInSelection(m_currentCellCoords) )
                         break;
 
-                    if (row >= 0 )
+                    if ( row >= 0 )
                     {
                         m_selection->ExtendCurrentBlock(
                             wxGridCellCoords(m_currentCellCoords.GetRow(), 0),
@@ -5350,7 +5349,7 @@ void wxGrid::RefreshAfterRowPosChange()
         {
             int rowID = GetRowAt( rowPos );
 
-            // Ignore the currently hidden rowumns.
+            // Ignore the currently hidden rows.
             const int height = m_rowHeights[rowID];
             if ( height > 0 )
                 rowBottom += height;
@@ -5411,7 +5410,7 @@ bool wxGrid::EnableDragRowMove( bool enable )
 
     // we use to call ResetRowPos() from here if !enable but this doesn't seem
     // right as it would mean there would be no way to "freeze" the current
-    // rowumns order by disabling moving them after putting them in the desired
+    // rows order by disabling moving them after putting them in the desired
     // order, whereas now you can always call ResetRowPos() manually if needed
     return true;
 }
