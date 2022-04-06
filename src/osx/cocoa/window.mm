@@ -684,7 +684,20 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     if(mouseChord & 2U)
                 wxevent.m_rightDown = true ;
     if(mouseChord & 4U)
+    {
+        switch ( button )
+        {
+            default:
                 wxevent.m_middleDown = true ;
+                break;
+            case 3:
+                wxevent.m_aux1Down = true ;
+                break;
+            case 4:
+                wxevent.m_aux2Down = true ;
+                break;
+        }
+    }
 
     // translate into wx types
     switch (eventType)
@@ -704,6 +717,14 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 
                 case 2 :
                     wxevent.SetEventType( clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
+                    break ;
+
+                case 3 :
+                    wxevent.SetEventType( clickCount > 1 ? wxEVT_AUX1_DCLICK : wxEVT_AUX1_DOWN ) ;
+                    break ;
+
+                case 4 :
+                    wxevent.SetEventType( clickCount > 1 ? wxEVT_AUX2_DCLICK : wxEVT_AUX2_DOWN ) ;
                     break ;
 
                 default:
@@ -726,6 +747,14 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 
                 case 2 :
                     wxevent.SetEventType( wxEVT_MIDDLE_UP ) ;
+                    break ;
+
+                case 3 :
+                    wxevent.SetEventType( wxEVT_AUX1_UP ) ;
+                    break ;
+
+                case 4 :
+                    wxevent.SetEventType( wxEVT_AUX2_UP ) ;
                     break ;
 
                 default:
@@ -1430,7 +1459,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
     // The Infinity IN-USB-2 V15 foot pedal on OS 11 produces spurious mouse
     // button events with button number = 10.
-    // We cannot do anything useful with button numbers > 2, so throw them away.
+    // We cannot do anything useful with button numbers > 4, so throw them away.
     switch ( [event type] )
     {
         case NSLeftMouseDown:
@@ -1439,7 +1468,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         case NSLeftMouseUp:
         case NSRightMouseUp:
         case NSOtherMouseUp:
-            if ( [event buttonNumber] > 2 )
+            if ( [event buttonNumber] > 4 )
                 return;
             break;
 
