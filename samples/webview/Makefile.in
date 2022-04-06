@@ -46,7 +46,7 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 3.1
-WX_VERSION = $(WX_RELEASE).6
+WX_VERSION = $(WX_RELEASE).7
 LIBDIRNAME = $(wx_top_builddir)/lib
 WEBVIEW_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -157,7 +157,7 @@ clean:
 	rm -rf webview.app
 
 distclean: clean
-	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 	$(CXX) -o $@ $(WEBVIEW_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_WEBVIEW_p) $(EXTRALIBS_WEBVIEW) $(__WXLIB_STC_p) $(EXTRALIBS_STC) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)

@@ -232,7 +232,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswuddll\wxprec_auidll.pch"
 				ObjectFile="vc_mswuddll\aui\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw316ud_aui_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw317ud_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -243,7 +243,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw316ud_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw317ud_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_dll\mswud;..\..\include"
 			/>
@@ -254,14 +254,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_dll\wxmsw31ud_core.lib ..\..\lib\vc_dll\wxbase31ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw316ud_aui_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw317ud_aui_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_dll\wxmsw31ud_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw316ud_aui_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw317ud_aui_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -323,7 +323,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswudll\wxprec_auidll.pch"
 				ObjectFile="vc_mswudll\aui\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw316u_aui_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw317u_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -334,7 +334,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw316u_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw317u_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_dll\mswu;..\..\include"
 			/>
@@ -345,14 +345,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_dll\wxmsw31u_core.lib ..\..\lib\vc_dll\wxbase31u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw316u_aui_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw317u_aui_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxmsw31u_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw316u_aui_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw317u_aui_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -586,7 +586,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_x64_mswuddll\wxprec_auidll.pch"
 				ObjectFile="vc_x64_mswuddll\aui\"
-				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxmsw316ud_aui_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxmsw317ud_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -597,7 +597,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw316ud_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw317ud_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_x64_dll\mswud;..\..\include"
 			/>
@@ -608,14 +608,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_x64_dll\wxmsw31ud_core.lib ..\..\lib\vc_x64_dll\wxbase31ud.lib"
-				OutputFile="..\..\lib\vc_x64_dll\wxmsw316ud_aui_vc_custom.dll"
+				OutputFile="..\..\lib\vc_x64_dll\wxmsw317ud_aui_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_x64_dll\wxmsw31ud_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxmsw316ud_aui_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxmsw317ud_aui_vc_custom.pdb"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -677,7 +677,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_x64_mswudll\wxprec_auidll.pch"
 				ObjectFile="vc_x64_mswudll\aui\"
-				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxmsw316u_aui_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxmsw317u_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -688,7 +688,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw316u_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw317u_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_x64_dll\mswu;..\..\include"
 			/>
@@ -699,14 +699,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_x64_dll\wxmsw31u_core.lib ..\..\lib\vc_x64_dll\wxbase31u.lib"
-				OutputFile="..\..\lib\vc_x64_dll\wxmsw316u_aui_vc_custom.dll"
+				OutputFile="..\..\lib\vc_x64_dll\wxmsw317u_aui_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_x64_dll\wxmsw31u_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxmsw316u_aui_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxmsw317u_aui_vc_custom.pdb"
 				TargetMachine="17"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

@@ -22,7 +22,7 @@
        3. Else, i.e. if there were no changes at all to API but only internal
           changes, change C:R:A to C:R+1:A
     -->
-    <set var="WX_CURRENT">6</set>
+    <set var="WX_CURRENT">7</set>
     <set var="WX_REVISION">0</set>
     <set var="WX_AGE">0</set>
 
