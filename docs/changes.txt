@@ -231,6 +231,37 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.1.7: (released 2022-??-??)
+----------------------------
+
+NOTE: This file is updated only before the release, please use
+
+    $ git log --notes=changelog --format='%N' v3.1.6..|grep .
+
+      to see all the change log entries since the last release.
+
+      To update the notes, fetch them first:
+
+    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+
+      then use the following command to update them locally
+
+    $ git notes --ref=changelog add -m 'wxPort: description.'
+
+      and finally push it to the server.
+
+    $ git push origin refs/notes/changelog:refs/notes/changelog
+
+      If this fails due to a conflict because you had forgotten to
+      run git-fetch first, you can always reset your local notes
+      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
+
+    $ git fetch origin refs/notes/changelog
+    $ git update-ref refs/notes/changelog FETCH_HEAD
+
+      and then redo "git-notes add" and git-push.
+
+
 3.1.6: (released 2022-04-04)
 ----------------------------
 
