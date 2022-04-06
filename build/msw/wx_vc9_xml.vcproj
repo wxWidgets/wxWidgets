@@ -231,7 +231,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswuddll\wxprec_xmldll.pch"
 				ObjectFile="vc_mswuddll\xml\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase316ud_xml_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase317ud_xml_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -241,7 +241,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase316ud_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase317ud_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_dll\mswud;..\..\include"
 			/>
@@ -252,14 +252,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_dll\wxbase31ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxbase316ud_xml_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase317ud_xml_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_dll\wxbase31ud_xml.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase316ud_xml_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase317ud_xml_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -322,7 +322,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswudll\wxprec_xmldll.pch"
 				ObjectFile="vc_mswudll\xml\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase316u_xml_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase317u_xml_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -332,7 +332,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase316u_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase317u_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_dll\mswu;..\..\include"
 			/>
@@ -343,14 +343,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_dll\wxbase31u.lib"
-				OutputFile="..\..\lib\vc_dll\wxbase316u_xml_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase317u_xml_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxbase31u_xml.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase316u_xml_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase317u_xml_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -583,7 +583,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_x64_mswuddll\wxprec_xmldll.pch"
 				ObjectFile="vc_x64_mswuddll\xml\"
-				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxbase316ud_xml_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxbase317ud_xml_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -593,7 +593,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase316ud_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase317ud_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_x64_dll\mswud;..\..\include"
 			/>
@@ -604,14 +604,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_x64_dll\wxbase31ud.lib"
-				OutputFile="..\..\lib\vc_x64_dll\wxbase316ud_xml_vc_custom.dll"
+				OutputFile="..\..\lib\vc_x64_dll\wxbase317ud_xml_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_x64_dll\wxbase31ud_xml.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxbase316ud_xml_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxbase317ud_xml_vc_custom.pdb"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -674,7 +674,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_x64_mswudll\wxprec_xmldll.pch"
 				ObjectFile="vc_x64_mswudll\xml\"
-				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxbase316u_xml_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_x64_dll\wxbase317u_xml_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -684,7 +684,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase316u_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase317u_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\3rdparty\pcre\src\wx;..\..\src\expat\expat\lib;..\..\lib\vc_x64_dll\mswu;..\..\include"
 			/>
@@ -695,14 +695,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib ..\..\lib\vc_x64_dll\wxbase31u.lib"
-				OutputFile="..\..\lib\vc_x64_dll\wxbase316u_xml_vc_custom.dll"
+				OutputFile="..\..\lib\vc_x64_dll\wxbase317u_xml_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_x64_dll\wxbase31u_xml.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_x64_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxbase316u_xml_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_x64_dll\wxbase317u_xml_vc_custom.pdb"
 				TargetMachine="17"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

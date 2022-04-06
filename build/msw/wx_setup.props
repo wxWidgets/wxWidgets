@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="UserMacros">
-    <wxVersionString>316</wxVersionString>
+    <wxVersionString>317</wxVersionString>
     <wxShortVersionString>31</wxShortVersionString>
     <wxToolkitPrefix>msw</wxToolkitPrefix>
     <wxCompilerPrefix>vc</wxCompilerPrefix>
