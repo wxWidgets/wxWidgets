@@ -233,7 +233,7 @@ wx_list_add_prefix(XRC_RC_FILES rc/
     variable.xpm variable.xrc
     variants.xpm variants.xrc
     throbber.gif stop.xpm
-    wxbanner.gif
+    stop_2x.xpm wxbanner.gif
     )
 wx_add_sample(xrc
     xrcdemo.cpp
