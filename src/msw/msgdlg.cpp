@@ -539,7 +539,7 @@ int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    wxWindowDisabler disableOthers(this);
+    wxWindowDisabler disableOthers(this, GetParent());
 
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
