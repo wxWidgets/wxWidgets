@@ -730,10 +730,10 @@ class WXDLLIMPEXP_CORE wxWindowDisabler
 public:
     // this ctor conditionally disables all windows: if the argument is false,
     // it doesn't do anything
-    wxWindowDisabler(bool disable = true);
+    explicit wxWindowDisabler(bool disable = true);
 
     // ctor disables all windows except winToSkip
-    wxWindowDisabler(wxWindow *winToSkip);
+    explicit wxWindowDisabler(wxWindow *winToSkip);
 
     // dtor enables back all windows disabled by the ctor
     ~wxWindowDisabler();

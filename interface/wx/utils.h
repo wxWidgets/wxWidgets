@@ -84,7 +84,7 @@ public:
 
         @since 2.9.0
     */
-    wxWindowDisabler(bool disable = true);
+    explicit wxWindowDisabler(bool disable = true);
 
     /**
         Disables all top level windows of the applications with the exception
@@ -98,7 +98,7 @@ public:
         or wxFRAME_NO_TASKBAR style when creating the window that will remain
         enabled.
     */
-    wxWindowDisabler(wxWindow* winToSkip);
+    explicit wxWindowDisabler(wxWindow* winToSkip);
 
     /**
         Reenables the windows disabled by the constructor.
