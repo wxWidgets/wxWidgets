@@ -739,8 +739,8 @@ public:
     ~wxWindowDisabler();
 
 private:
-    // disable all windows except the given one (used by both ctors)
-    void DoDisable(wxWindow *winToSkip = NULL);
+    // disable all windows not in m_windowsToSkip
+    void DoDisable();
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
     void AfterDisable(wxWindow* winToSkip);
@@ -748,7 +748,7 @@ private:
 
     wxEventLoop* m_modalEventLoop = NULL;
 #endif
-    wxVector<wxWindow*> m_winDisabled;
+    wxVector<wxWindow*> m_windowsToSkip;
     bool m_disabled;
 
     wxDECLARE_NO_COPY_CLASS(wxWindowDisabler);
