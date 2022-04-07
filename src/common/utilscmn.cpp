@@ -1526,12 +1526,14 @@ wxWindowDisabler::wxWindowDisabler(bool disable)
     }
 }
 
-wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
+wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2)
 {
     m_disabled = true;
 
     if ( winToSkip )
         m_windowsToSkip.push_back(winToSkip);
+    if ( winToSkip2 )
+        m_windowsToSkip.push_back(winToSkip2);
 
     DoDisable();
 

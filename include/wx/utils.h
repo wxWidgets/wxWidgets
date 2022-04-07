@@ -732,8 +732,8 @@ public:
     // it doesn't do anything
     explicit wxWindowDisabler(bool disable = true);
 
-    // ctor disables all windows except winToSkip
-    explicit wxWindowDisabler(wxWindow *winToSkip);
+    // ctor disables all windows except the given one(s)
+    explicit wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2 = NULL);
 
     // dtor enables back all windows disabled by the ctor
     ~wxWindowDisabler();
