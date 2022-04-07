@@ -26,6 +26,7 @@
 #include "wx/osx/core/cfref.h"
 #include "wx/osx/core/cfstring.h"
 
+#import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSLocale.h>
 
