@@ -513,6 +513,18 @@ macro(wx_lib_compile_definitions name)
     endif()
 endmacro()
 
+# wx_add_dependencies(name dep)
+# Forwards everything to add_dependencies() except for monolithic
+# build where it collects all dependencies for linking with the mono lib
+macro(wx_add_dependencies name)
+    if(wxBUILD_MONOLITHIC)
+        list(APPEND wxMONO_DEPENDENCIES ${ARGN})
+        set(wxMONO_DEPENDENCIES ${wxMONO_DEPENDENCIES} PARENT_SCOPE)
+    else()
+        add_dependencies(${name} ${ARGN})
+    endif()
+endmacro()
+
 # Set common properties for a builtin third party library
 function(wx_set_builtin_target_properties target_name)
     set(lib_unicode)

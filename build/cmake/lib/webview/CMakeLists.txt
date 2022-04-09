@@ -152,5 +152,5 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
 
     wx_install(TARGETS wxwebkit2_ext LIBRARY DESTINATION "lib/wx/${WX_WEB_EXT_VERSION}/web-extensions")
 
-    add_dependencies(wxwebview wxwebkit2_ext)
+    wx_add_dependencies(wxwebview wxwebkit2_ext)
 endif()
