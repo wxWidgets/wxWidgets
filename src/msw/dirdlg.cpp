@@ -152,7 +152,7 @@ int wxDirDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    wxWindowDisabler disableOthers(this);
+    wxWindowDisabler disableOthers(this, GetParent());
 
     wxWindow* const parent = GetParentForModalDialog();
     WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;

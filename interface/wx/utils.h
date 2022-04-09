@@ -84,7 +84,7 @@ public:
 
         @since 2.9.0
     */
-    wxWindowDisabler(bool disable = true);
+    explicit wxWindowDisabler(bool disable = true);
 
     /**
         Disables all top level windows of the applications with the exception
@@ -97,8 +97,12 @@ public:
         from happening you may want to use wxFRAME_TOOL_WINDOW, if applicable,
         or wxFRAME_NO_TASKBAR style when creating the window that will remain
         enabled.
+
+        The argument @a winToSkip2 may be used to specify another window to
+        leave enabled, if it is non-null. This parameter is only available
+        since wxWidgets 3.1.7.
     */
-    wxWindowDisabler(wxWindow* winToSkip);
+    explicit wxWindowDisabler(wxWindow* winToSkip, wxWindow* winToSkip2 = NULL);
 
     /**
         Reenables the windows disabled by the constructor.

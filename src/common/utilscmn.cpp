@@ -1517,16 +1517,32 @@ wxWindowDisabler::wxWindowDisabler(bool disable)
 {
     m_disabled = disable;
     if ( disable )
+    {
         DoDisable();
+
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+        AfterDisable(NULL);
+#endif
+    }
 }
 
-wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
+wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2)
 {
     m_disabled = true;
-    DoDisable(winToSkip);
+
+    if ( winToSkip )
+        m_windowsToSkip.push_back(winToSkip);
+    if ( winToSkip2 )
+        m_windowsToSkip.push_back(winToSkip2);
+
+    DoDisable();
+
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    AfterDisable(winToSkip);
+#endif
 }
 
-void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
+void wxWindowDisabler::DoDisable()
 {
     // remember the top level windows which were already disabled, so that we
     // don't reenable them later
@@ -1534,7 +1550,7 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();
-        if ( winTop == winToSkip )
+        if ( wxVectorContains(m_windowsToSkip, winTop) )
             continue;
 
         // we don't need to disable the hidden or already disabled windows
@@ -1544,13 +1560,9 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
         }
         else
         {
-            m_winDisabled.push_back(winTop);
+            m_windowsToSkip.push_back(winTop);
         }
     }
-
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
-    AfterDisable(winToSkip);
-#endif
 }
 
 wxWindowDisabler::~wxWindowDisabler()
@@ -1566,11 +1578,11 @@ wxWindowDisabler::~wxWindowDisabler()
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();
-        if ( !wxVectorContains(m_winDisabled, winTop) )
+        if ( !wxVectorContains(m_windowsToSkip, winTop) )
         {
             winTop->Enable();
         }
-        //else: had been already disabled, don't reenable
+        //else: we didn't disable this window, so don't reenable it neither
     }
 }
 
