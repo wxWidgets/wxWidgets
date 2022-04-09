@@ -45,6 +45,12 @@ Instructions:
 Manually check compatibility by building the widgets samples from the old tree
 and then run it using the new DLLs.
 
+## Requesting to Update the Translations
+
+Post to wx-translators@googlegroups.com to ask to update the translations
+before the release. This needs to be done some time before making it, of
+course.
+
 ## Pre-Release Steps
 
 Start by copying all the changes since the previous release to the change log
