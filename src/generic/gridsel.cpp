@@ -72,6 +72,20 @@ void wxGridSelection::EndSelecting()
     m_grid->GetEventHandler()->ProcessEvent(gridEvt);
 }
 
+void wxGridSelection::CancelSelecting()
+{
+    // It's possible that nothing was selected finally, e.g. the mouse could
+    // have been dragged around only to return to the starting cell, just don't
+    // do anything in this case.
+    if ( !IsSelection() )
+        return;
+
+    const wxGridBlockCoords& block = m_selection.back();
+    m_grid->RefreshBlock(block.GetTopLeft(), block.GetBottomRight());
+    m_selection.pop_back();
+}
+
+
 bool wxGridSelection::IsInSelection( int row, int col ) const
 {
     // Check whether the given cell is contained in one of the selected blocks.
