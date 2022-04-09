@@ -2804,9 +2804,16 @@ protected:
     // or -1 if there is no resize operation in progress.
     int     m_dragRowOrCol;
 
+    // Original row or column size when resizing; used when the user cancels
+    int     m_dragRowOrColOldSize;
+
     // true if a drag operation is in progress; when this is true,
     // m_startDragPos is valid, i.e. not wxDefaultPosition
     bool    m_isDragging;
+
+    // true if a drag operation was canceled
+    // (mouse event Dragging() might still be active until LeftUp)
+    bool    m_canceledDragging;
 
     // the position (in physical coordinates) where the user started dragging
     // the mouse or wxDefaultPosition if mouse isn't being dragged
@@ -3029,7 +3036,7 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeRowOrCol(int col);
+    void DoStartResizeRowOrCol(int col, int size);
     void DoStartMoveRow(int col);
     void DoStartMoveCol(int col);
 
