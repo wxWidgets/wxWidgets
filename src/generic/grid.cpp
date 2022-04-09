@@ -6319,7 +6319,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                         case WXGRID_CURSOR_MOVE_ROW:
                             // end row/column moving
                             m_winCapture->Refresh();
-                            EndDraggingIfNecessary();
                             m_dragLastPos = -1;
                             break;
 
@@ -6332,7 +6331,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                             else
                                 wxGridColumnOperations().SetLineSize(this,
                                     m_dragRowOrCol, m_dragRowOrColOldSize);
-                            EndDraggingIfNecessary();
                             m_dragRowOrCol = -1;
                             break;
 
@@ -6341,9 +6339,9 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                         case WXGRID_CURSOR_SELECT_COL:
                             if ( m_selection )
                                 m_selection->CancelSelecting();
-                            EndDraggingIfNecessary();
                             break;
                     }
+                    EndDraggingIfNecessary();
                     // ensure that a new drag operation is only started after a LeftUp
                     m_canceledDragging = true;
                 }
