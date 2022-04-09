@@ -13,5 +13,3 @@ wx_append_sources(RICHTEXT_FILES RICHTEXT)
 
 wx_add_library(wxrichtext ${RICHTEXT_FILES})
 wx_lib_link_libraries(wxrichtext PRIVATE wxhtml wxxml)
-
-wx_finalize_lib(wxrichtext)

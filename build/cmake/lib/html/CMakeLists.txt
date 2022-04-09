@@ -21,5 +21,3 @@ if(wxUSE_LIBMSPACK)
     wx_lib_include_directories(wxhtml ${MSPACK_INCLUDE_DIRS})
     wx_lib_link_libraries(wxhtml PRIVATE ${MSPACK_LIBRARIES})
 endif()
-
-wx_finalize_lib(wxhtml)

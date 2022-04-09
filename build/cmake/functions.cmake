@@ -432,37 +432,22 @@ macro(wx_add_library name)
             BUNDLE DESTINATION Applications/wxWidgets
             )
         wx_install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION "lib/${wxPLATFORM_LIB_DIR}/cmake")
+        wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     endif()
 endmacro()
 
 # Enable cotire for target, use optional second argument for prec. header
 macro(wx_target_enable_precomp target_name)
-    target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
-    if(${ARGC} GREATER 1 AND NOT ${ARGV1} STREQUAL "")
-        set_target_properties(${target_name} PROPERTIES
-            COTIRE_CXX_PREFIX_HEADER_INIT ${ARGV1})
-    endif()
-    set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-    cotire(${target_name})
-endmacro()
-
-# Enable precompiled headers for applications
-macro(wx_app_enable_precomp target_name)
     if(wxBUILD_PRECOMP)
-        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
+        target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
+        if(${ARGC} GREATER 1 AND NOT ${ARGV1} STREQUAL "")
+            set_target_properties(${target_name} PROPERTIES
+                COTIRE_CXX_PREFIX_HEADER_INIT ${ARGV1})
+        endif()
+        set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+        cotire(${target_name})
     elseif(MSVC)
         target_compile_definitions(${target_name} PRIVATE NOPCH)
-    endif()
-endmacro()
-
-# Enable precompiled headers for wx libraries
-macro(wx_finalize_lib target_name)
-    if(wxBUILD_PRECOMP)
-        if(TARGET ${target_name})
-            wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
-        endif()
-    elseif(MSVC)
-        wx_lib_compile_definitions(${target_name} PRIVATE NOPCH)
     endif()
 endmacro()
 
@@ -882,7 +867,7 @@ function(wx_add name group)
         set(APP_FOLDER ${group})
     endif()
     wx_set_common_target_properties(${target_name})
-    wx_app_enable_precomp(${target_name})
+    wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${APP_FOLDER}
         )

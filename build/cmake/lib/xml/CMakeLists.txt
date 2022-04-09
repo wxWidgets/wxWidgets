@@ -13,5 +13,3 @@ wx_append_sources(XML_FILES XML)
 wx_add_library(wxxml IS_BASE ${XML_FILES})
 wx_lib_link_libraries(wxxml PRIVATE ${EXPAT_LIBRARIES})
 wx_lib_include_directories(wxxml ${EXPAT_INCLUDE_DIRS})
-
-wx_finalize_lib(wxxml)

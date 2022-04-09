@@ -108,8 +108,6 @@ elseif(WXGTK)
     endif()
 endif()
 
-wx_finalize_lib(wxwebview)
-
 # webkit extension plugin
 # we can't use (all of the) macros and functions because this library should
 # always be build as a shared libary, and not included in the monolithic build.

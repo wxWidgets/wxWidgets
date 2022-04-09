@@ -35,5 +35,3 @@ if (wxUSE_WEBREQUEST_CURL)
     target_include_directories(wxnet PRIVATE ${CURL_INCLUDE_DIRS})
     wx_lib_link_libraries(wxnet PRIVATE ${CURL_LIBRARIES})
 endif()
-
-wx_finalize_lib(wxnet)

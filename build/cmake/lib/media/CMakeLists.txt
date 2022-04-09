@@ -53,5 +53,3 @@ elseif(WXGTK)
         wx_lib_link_libraries(wxmedia PUBLIC ${GSTREAMER_PLAYER_LIBRARIES})
     endif()
 endif()
-
-wx_finalize_lib(wxmedia)

@@ -73,5 +73,3 @@ if(APPLE)
 elseif(UNIX)
     wx_lib_link_libraries(wxbase PRIVATE dl)
 endif()
-
-wx_finalize_lib(wxbase)

@@ -18,5 +18,3 @@ elseif(WXGTK2)
 endif()
 
 wx_add_library(wxaui ${AUI_FILES})
-
-wx_finalize_lib(wxaui)
