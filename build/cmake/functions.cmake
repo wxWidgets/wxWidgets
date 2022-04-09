@@ -836,6 +836,7 @@ function(wx_add name group)
     elseif(group STREQUAL Tests)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/tests)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/3rdparty/catch/include)
+        target_include_directories(${target_name} PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 
     if(APP_DATA)
