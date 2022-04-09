@@ -3880,10 +3880,12 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     int row = YToRow( y );
 
     if ( m_canceledDragging )
+    {
         if ( event.LeftIsDown() )
             return;
         else
             m_canceledDragging = false;
+    }
 
     if ( event.Dragging() && (m_winCapture == rowLabelWin) )
     {
@@ -4371,11 +4373,13 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
     int col = XToCol(x);
 
-    if (m_canceledDragging)
-        if (event.LeftIsDown())
+    if ( m_canceledDragging )
+    {
+        if ( event.LeftIsDown() )
             return;
         else
             m_canceledDragging = false;
+    }
 
     if ( event.Dragging() && (m_winCapture == colLabelWin) )
     {
@@ -5185,10 +5189,12 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
     // but continuing over another one)
 
     if ( m_canceledDragging )
+    {
         if ( event.LeftIsDown() )
             return;
         else
             m_canceledDragging = false;
+    }
 
     wxGridWindow *gridWindow =
         DevicePosToGridWindow(event.GetPosition() + eventGridWindow->GetPosition());
