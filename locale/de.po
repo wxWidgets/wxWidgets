@@ -8,18 +8,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: wxWidgets 3.1.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 17:46+0200\n"
-"PO-Revision-Date: 2019-03-16 21:37+0100\n"
+"PO-Revision-Date: 2022-04-09 12:47+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: ../include/wx/defs.h:2622
 msgid "All files (*.*)|*.*"
@@ -422,9 +422,8 @@ msgstr "Dezimaltrennzeichen"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
-#, fuzzy
 msgid "Multiply"
-msgstr "Num_Mal"
+msgstr "Multipliziere"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
@@ -711,7 +710,7 @@ msgstr "strg"
 
 #: ../src/common/accelcmn.cpp:194
 msgid "num "
-msgstr ""
+msgstr "Num "
 
 #: ../src/common/accelcmn.cpp:259 ../src/common/accelcmn.cpp:358
 msgid "F"
@@ -719,7 +718,7 @@ msgstr "F"
 
 #: ../src/common/accelcmn.cpp:276 ../src/common/accelcmn.cpp:361
 msgid "KP_F"
-msgstr ""
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:279 ../src/common/accelcmn.cpp:364
 msgid "KP_"
@@ -1904,12 +1903,11 @@ msgstr " durchgestrichen"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr " dünn"
 
 #: ../src/common/fontcmn.cpp:957
-#, fuzzy
 msgid " extra light"
-msgstr " dünn"
+msgstr " sehr dünn"
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
@@ -1917,29 +1915,27 @@ msgstr " dünn"
 
 #: ../src/common/fontcmn.cpp:965
 msgid " medium"
-msgstr ""
+msgstr " mittel"
 
 #: ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid " semi bold"
-msgstr " fett"
+msgstr " halbfett"
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
 msgstr " fett"
 
 #: ../src/common/fontcmn.cpp:977
-#, fuzzy
 msgid " extra bold"
-msgstr " fett"
+msgstr " sehr fett"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
-msgstr ""
+msgstr " heavy"
 
 #: ../src/common/fontcmn.cpp:985
 msgid " extra heavy"
-msgstr ""
+msgstr " sehr schwer"
 
 #: ../src/common/fontcmn.cpp:1001
 msgid " italic"
@@ -1951,12 +1947,11 @@ msgstr "Durchstreichen"
 
 #: ../src/common/fontcmn.cpp:1154
 msgid "thin"
-msgstr ""
+msgstr "dünn"
 
 #: ../src/common/fontcmn.cpp:1167
-#, fuzzy
 msgid "extralight"
-msgstr "dünn"
+msgstr "extra dünn"
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
@@ -1968,29 +1963,27 @@ msgstr "Normal"
 
 #: ../src/common/fontcmn.cpp:1185
 msgid "medium"
-msgstr ""
+msgstr "mittel"
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
-#, fuzzy
 msgid "semibold"
-msgstr "fett"
+msgstr "halbfett"
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
 msgstr "fett"
 
 #: ../src/common/fontcmn.cpp:1205
-#, fuzzy
 msgid "extrabold"
-msgstr "fett"
+msgstr "sehr fett"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
-msgstr ""
+msgstr "schwer"
 
 #: ../src/common/fontcmn.cpp:1223
 msgid "extraheavy"
-msgstr ""
+msgstr "sehr schwer"
 
 #: ../src/common/fontcmn.cpp:1228
 msgid "italic"
@@ -2117,9 +2110,9 @@ msgid "&Customize..."
 msgstr "&Anpassen …"
 
 #: ../src/common/hyperlnkcmn.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open URL \"%s\" in the default browser"
-msgstr "Konnte die URL „%s“ nicht im voreingestellten Browser öffnen."
+msgstr "Konnte die URL „%s“ nicht im voreingestellten Browser öffnen"
 
 #: ../src/common/iconbndl.cpp:198
 #, c-format
@@ -2470,46 +2463,47 @@ msgid " (error %ld: %s)"
 msgstr " (Fehler %ld: %s)"
 
 #: ../src/common/lzmastream.cpp:121
-#, fuzzy
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "Anforderung von Farbe für OpenGL fehlgeschlagen"
+msgstr "Speicheranforderung für LZMA-Entkomprimierung fehlgeschlagen."
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
 msgstr ""
+"Die Initialisierung der LZMA Entkomprimierung ist fehlgeschlagen: "
+"unerwarteter Fehler %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
-msgstr ""
+msgstr "Eingabe ist nicht im XZ-Format"
 
 #: ../src/common/lzmastream.cpp:183
 msgid "input compressed using unknown XZ option"
-msgstr ""
+msgstr "Die Eingabe wurde mit einer unbekannten XZ-Option komprimiert"
 
 #: ../src/common/lzmastream.cpp:188
 msgid "input is corrupted"
-msgstr ""
+msgstr "Eingabe ist beschädigt"
 
 #: ../src/common/lzmastream.cpp:192
-#, fuzzy
 msgid "unknown decompression error"
-msgstr "Fehler beim Entpacken"
+msgstr "Unbekannter Fehler beim Entpacken"
 
 #: ../src/common/lzmastream.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA decompression error: %s"
-msgstr "Fehler beim Entpacken"
+msgstr "LZMA Fehler beim Entpacken: %s"
 
 #: ../src/common/lzmastream.cpp:231
-#, fuzzy
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "Anforderung von Farbe für OpenGL fehlgeschlagen"
+msgstr "Speicheranforderung für LZMA-Komprimierung fehlgeschlagen."
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
 msgstr ""
+"Die Initialisierung der LZMA-Komprimierung ist fehlgeschlagen: unerwarteter "
+"Fehler %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2517,19 +2511,19 @@ msgid "out of memory"
 msgstr "nicht genug Speicher"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
-#, fuzzy
 msgid "unknown compression error"
-msgstr "Fehler beim Komprimieren"
+msgstr "Unbekannter Fehler beim Komprimieren"
 
 #: ../src/common/lzmastream.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA compression error: %s"
-msgstr "Fehler beim Komprimieren"
+msgstr "LZMA Komprimierungsfehler: %s"
 
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
 msgstr ""
+"EIn LZMA-Komprimierungsfehler ist aufgetreten beim Leeren der Ausgabe: %s"
 
 #: ../src/common/mimecmn.cpp:221
 #, c-format
@@ -3164,22 +3158,22 @@ msgstr ""
 
 #: ../src/common/secretstore.cpp:168
 msgid "Not available for this platform"
-msgstr ""
+msgstr "Nicht verfügbar für diese Platform"
 
 #: ../src/common/secretstore.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Saving password for \"%s\" failed: %s."
-msgstr "Speichern des Passwortes für „%s/%s“ fehlgeschlagen: %s."
+msgstr "Speichern des Passwortes für „%s“ fehlgeschlagen: %s."
 
 #: ../src/common/secretstore.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Reading password for \"%s\" failed: %s."
-msgstr "Lesen des Passwortes für „%s/%s“ fehlgeschlagen: %s."
+msgstr "Lesen des Passwortes für „%s“ fehlgeschlagen: %s."
 
 #: ../src/common/secretstore.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting password for \"%s\" failed: %s."
-msgstr "Löschen des Passwortes für „%s/%s“ fehlgeschlagen: %s."
+msgstr "Löschen des Passwortes für „%s“ fehlgeschlagen: %s."
 
 #: ../src/common/selectdispatcher.cpp:255
 msgid "Failed to monitor I/O channels"
@@ -3198,7 +3192,6 @@ msgid "Cannot initialize sockets"
 msgstr "Kann Sockets nicht initialisieren"
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "&Hilfe"
@@ -3247,12 +3240,10 @@ msgid "&Cancel"
 msgstr "Ab&brechen"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
 msgstr "&CD-ROM"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
 msgstr "CD-ROM"
 
@@ -3333,14 +3324,12 @@ msgid "File"
 msgstr "Datei"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "&Find..."
-msgstr "&Suchen"
+msgstr "&Suchen..."
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "Find..."
-msgstr "Suchen"
+msgstr "Suchen..."
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
@@ -3534,14 +3523,12 @@ msgid "Remove"
 msgstr "Entfernen"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Rep&lace..."
-msgstr "&Ersetzen"
+msgstr "&Ersetzen..."
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Replace..."
-msgstr "Ersetzen"
+msgstr "Ersetzen..."
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
@@ -3556,9 +3543,8 @@ msgid "Save &As..."
 msgstr "Speichern &unter …"
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Save As..."
-msgstr "Speichern &unter …"
+msgstr "Speichern unter…"
 
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
 #: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
@@ -3708,13 +3694,12 @@ msgid "Delete selection"
 msgstr "Auswahl löschen"
 
 #: ../src/common/stockitem.cpp:267
-#, fuzzy
 msgid "Find in document"
-msgstr "Öffne HTML-Dokument"
+msgstr "Suche im Dokument"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Find and replace in document"
-msgstr ""
+msgstr "Suchen und Ersetzen im Dokument"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Paste selection"
@@ -3733,14 +3718,12 @@ msgid "Undo last action"
 msgstr "Letzte Aktion zurücknehmen"
 
 #: ../src/common/stockitem.cpp:273
-#, fuzzy
 msgid "Create new document"
-msgstr "Neues Verzeichnis anlegen"
+msgstr "Neues Dokument anlegen"
 
 #: ../src/common/stockitem.cpp:274
-#, fuzzy
 msgid "Open an existing document"
-msgstr "Öffne HTML-Dokument"
+msgstr "Öffne ein existierendes Dokument"
 
 #: ../src/common/stockitem.cpp:275
 msgid "Close current document"
@@ -3804,9 +3787,9 @@ msgid "File couldn't be loaded."
 msgstr "Datei konnte nicht geladen werden."
 
 #: ../src/common/textfile.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "Konnte Dokument aus der Datei „%s“ nicht lesen."
+msgstr "Konnte Textdatei „%s“ nicht lesen."
 
 #: ../src/common/textfile.cpp:161
 #, c-format
@@ -3877,23 +3860,23 @@ msgid "'%s' is not one of the valid strings"
 msgstr "„%s“ ist keine gültige Zeichenkette"
 
 #: ../src/common/valtext.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains invalid character(s)"
-msgstr "„%s“ enthält ungültige Zeichen"
+msgstr "„%s“ enthält ungültige(s) Zeichen"
 
 #: ../src/common/webrequest.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s (%d)"
-msgstr "Fehler: "
+msgstr "Fehler: %s (%d)"
 
 #: ../src/common/webrequest.cpp:642
 msgid "Not enough free disk space for download."
 msgstr ""
+"Nicht genügend freier Festplattenplatz für das Herunterladen vorhanden."
 
 #: ../src/common/webrequest_curl.cpp:884
-#, fuzzy
 msgid "libcurl could not be initialized"
-msgstr "Spaltenbeschreibung konnte nicht installiert werden."
+msgstr "libcurl konnte nicht initialisiert werden"
 
 #: ../src/common/wincmn.cpp:1673
 msgid "This platform does not support background transparency."
@@ -4027,6 +4010,8 @@ msgstr "Kann den zlib inflate-stream nicht reinitialisieren"
 #: ../src/common/zipstrm.cpp:1043
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
 msgstr ""
+"Fehlformatierte Zusatzinformation wird ignoriert, ZIP-Datei ist "
+"möglicherweise beschädigt"
 
 #: ../src/common/zipstrm.cpp:1522
 msgid "assuming this is a multi-part zip concatenated"
@@ -4071,10 +4056,9 @@ msgid "reading zip stream (entry %s): bad crc"
 msgstr "Beim Lesen von Zipstream (Eintrag %s): Falsche Prüfsumme"
 
 #: ../src/common/zipstrm.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
-msgstr ""
-"Fehler beim Schreiben von Zip-Eintrag „%s“: Falsche Prüfsumme oder Länge"
+msgstr "Fehler beim Schreiben des Zip-Eintrages „%s“: Datei zu groß ohne ZIP64"
 
 #: ../src/common/zipstrm.cpp:2615
 #, c-format
@@ -4234,11 +4218,11 @@ msgstr "Zu Benutzerfarben hinzufügen"
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
-msgstr ""
+msgstr "Benutzername:"
 
 #: ../src/generic/creddlgg.cpp:63
 msgid "Password:"
-msgstr ""
+msgstr "Kennwort:"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/generic/datavgen.cpp:1161
@@ -4300,7 +4284,7 @@ msgstr "Ein Fehlerbericht wurde erstellt im Verzeichnis\n"
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
-msgstr ""
+msgstr "Die folgende Debugmeldung wird erzeugt\n"
 
 #: ../src/generic/dbgrptg.cpp:322
 msgid ""
@@ -4697,6 +4681,8 @@ msgstr "Schriftart wählen"
 #: ../src/generic/grid.cpp:6091
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
+"Das Kopieren von mehr als einem ausgewählten Block in die Zwischenablage "
+"wird nicht unterstützt."
 
 #: ../src/generic/helpext.cpp:265
 #, c-format
@@ -5016,6 +5002,9 @@ msgid ""
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
+"WARNUNG: Das Benutzen der XIM-Eingabemethode wird nicht unterstützt und kann "
+"zu Problemen mit der Eingabebehandlung und zum Flackern führen. Erwägen Sie "
+"das Zurücksetzen von GTK_IM_MODULE oder das Setzen auf \"ibus\"."
 
 #: ../src/gtk/app.cpp:431
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
@@ -5031,26 +5020,28 @@ msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
+"Die Benutzung von privaten Schriftarten wird auf diesem System nicht "
+"unterstützt: Die Pango-Bibliothek ist zu alt, die Version 1.38 oder eine "
+"spätere wird dazu benötigt."
 
 #: ../src/gtk/font.cpp:562
-#, fuzzy
 msgid "Failed to create font configuration object."
-msgstr "Kann Benutzer-Konfigurationsdatei nicht aktualisieren."
+msgstr "Erzeugung des Schriftart-Konfigurationsobjektes fehlgeschlagen."
 
 #: ../src/gtk/font.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "Konnte Dokument aus der Datei „%s“ nicht lesen."
+msgstr "Konnte benutzerspezifische Schriftart „%s“ nicht hinzufügen."
 
 #: ../src/gtk/font.cpp:580
-#, fuzzy
 msgid "Failed to register font configuration using private fonts."
-msgstr "Kann Benutzer-Konfigurationsdatei nicht aktualisieren."
+msgstr ""
+"Registrierung der Schriftart-Konfiguration mit privaten Schriftarten "
+"fehlgeschlagen."
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
-#, fuzzy
 msgid "Fatal Error"
-msgstr "Nicht-behebbarer Fehler"
+msgstr "Nicht behebbarer Fehler"
 
 #: ../src/gtk/glcanvas.cpp:181
 msgid ""
@@ -5059,6 +5050,12 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"Dieses Programm ist nicht mit EGL-Unterstützung kompiliert worden, die unter "
+"Wayland benötigt wird, entweder\n"
+"installieren Sie die EGL-Bibliotheken and erzeugen sie das Programm neu oder "
+"lassen Sie es unter einem X11 Hintergrund laufen,\n"
+"indem Sie die Umgebungsvariable GDK_BACKEND=x11 setzen, bevor Sie ihr "
+"Programm starten."
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5067,6 +5064,10 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
+"wxGLCanvas wird im Moment nur auf Wayland und X11 unterstützt. Sie können "
+"das möglicherweise\n"
+"umgehen, indem Sie die Umgebungsvariable GDK_BACKEND=x11 setzen, bevor\n"
+"Sie ihr Programm starten."
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
@@ -5091,12 +5092,14 @@ msgstr "Einfügen von Text in das Steuerelement fehlgeschlagen."
 #: ../src/gtk/webview_webkit.cpp:930
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
+"Das Erhalten einer Ausgabe einer JavaScript Meldung wird mit WebKit v1 nicht "
+"unterstützt"
 
 #: ../src/gtk/webview_webkit2.cpp:1310 ../src/msw/webview_edge.cpp:881
 #: ../src/msw/webview_ie.cpp:1077 ../src/osx/webview_webkit.mm:439
 #, c-format
 msgid "Error running JavaScript: %s"
-msgstr ""
+msgstr "Fehler beim Ausführen von JavaScript: %s"
 
 #: ../src/gtk/window.cpp:5664
 msgid ""
@@ -5840,9 +5843,9 @@ msgid "Couldn't obtain folder name"
 msgstr "Verzeichnisname konnte nicht ermittelt werden"
 
 #: ../src/msw/dlmsw.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "(error %d: %s)"
-msgstr " (Fehler %ld: %s)"
+msgstr "(Fehler %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
 #: ../src/msw/imaglist.cpp:224 ../src/msw/imaglist.cpp:246
@@ -5866,9 +5869,9 @@ msgid "File dialog failed with error code %0lx."
 msgstr "Datei Dialog schlug fehl mit dem Fehlercode %0lx."
 
 #: ../src/msw/font.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "Datei konnte nicht geladen werden."
+msgstr "Schriftartdatei \"%s\" konnte nicht geladen werden"
 
 #: ../src/msw/fontdlg.cpp:170
 #, c-format
@@ -5920,6 +5923,8 @@ msgstr "Konnte OpenGL nicht initialisieren"
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
 msgstr ""
+"Der benutzerspezifische DirectWrite Schriftartlader konnte nicht registriert "
+"werden."
 
 #: ../src/msw/helpchm.cpp:53
 msgid ""
@@ -6338,33 +6343,35 @@ msgstr "Kann das Icon nicht von „%s“ laden."
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
+"Der Grad der Web Ansichtnachbildung konnte in der Registratur nicht gefunden "
+"werden"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
-msgstr ""
+msgstr "Das Setzen der Web Ansicht auf moderne Nachbildung ist fehlgeschlagen"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
+"Das Setzen der Web Ansicht auf den Grad der Standard-Nachbildung ist "
+"fehlgeschlagen"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
 msgstr ""
+"JavaScript kann nicht ohne ein gültiges HTML-Dokument ausgeführt werden"
 
 #: ../src/msw/webview_ie.cpp:1044
-#, fuzzy
 msgid "Can't get the JavaScript object"
-msgstr "Kann Thread-Priorität nicht setzen"
+msgstr "Kann das JavaScript-Objekt nicht erhalten"
 
 #: ../src/msw/webview_ie.cpp:1056
-#, fuzzy
 msgid "failed to evaluate"
-msgstr "Kann „%s“ nicht ausführen\n"
+msgstr "Auswertung fehlgeschlagen"
 
 #: ../src/msw/webview_ie.cpp:1065
-#, fuzzy
 msgid "failed to retrieve execution result"
-msgstr "Versuch den Inhalt der RAS-Fehlernachricht zu holen, fehlgeschlagen"
+msgstr "Versuch das Ergebnis der Ausführung abzurufen, fehlgeschlagen"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
@@ -6459,23 +6466,20 @@ msgid "<Any Teletype>"
 msgstr "<Beliebige Schreibmaschinen-Schrift>"
 
 #: ../src/osx/cocoa/filedlg.mm:274
-#, fuzzy
 msgid "File type:"
-msgstr "Schreibmaschine"
+msgstr "Dateityp:"
 
 #: ../src/osx/cocoa/menu.mm:281
-#, fuzzy
 msgid "Minimize"
-msgstr "Mi&nimieren"
+msgstr "Minimieren"
 
 #: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
 msgid "Zoom"
 msgstr "Vergrößern"
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Alles nach vorne bringen"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6483,9 +6487,9 @@ msgid "Failed to load sound from \"%s\" (error %d)."
 msgstr "Fehler beim Laden des Klangs von „%s“ (Fehler %d)."
 
 #: ../src/osx/fontutil.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr "Datei »%s« existiert nicht."
+msgstr "Schriftartdatei \"%s\" existiert nicht."
 
 #: ../src/osx/fontutil.cpp:89
 #, c-format
@@ -6493,6 +6497,8 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
 "\"."
 msgstr ""
+"Die Schriftartdatei \"%s\" kann nicht verwendet werden, da sie sich nicht im "
+"Schriftartenverzeichnis \"%s\" befindet."
 
 #: ../src/osx/menu_osx.cpp:441
 msgid "About..."
@@ -6525,14 +6531,12 @@ msgid "Quit %s"
 msgstr "%s beenden"
 
 #: ../src/osx/webview_webkit.mm:278
-#, fuzzy
 msgid "Printing is not supported by the system web control"
-msgstr "Gzip wird nicht von dieser zlib-Version unterstützt"
+msgstr "Drucken wird vom Web-Kontrollelement des Systems nicht unterstützt"
 
 #: ../src/osx/webview_webkit.mm:287
-#, fuzzy
 msgid "Print operation could not be initialized"
-msgstr "Spaltenbeschreibung konnte nicht installiert werden."
+msgstr "Druckoperation konnte nicht initialisiert werden"
 
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:572
@@ -6974,7 +6978,7 @@ msgstr ""
 #: ../src/propgrid/props.cpp:155
 #, c-format
 msgid "Unknown base %d. Base 10 will be used."
-msgstr ""
+msgstr "Unbekannte Basis %d. Basis 10 wird verwendet."
 
 #: ../src/propgrid/props.cpp:309
 #, c-format
@@ -8898,9 +8902,8 @@ msgid "Already dialling ISP."
 msgstr "ISP wird bereits angewählt."
 
 #: ../src/unix/dlunix.cpp:90
-#, fuzzy
 msgid "Failed to unload shared library"
-msgstr "Laden der dynamischen Bibliothek „%s“ fehlgeschlagen"
+msgstr "Entladen der dynamischen Bibliothek fehlgeschlagen"
 
 #: ../src/unix/dlunix.cpp:118
 msgid "Unknown dynamic library error"
