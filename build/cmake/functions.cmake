@@ -15,7 +15,9 @@ if(CMAKE_GENERATOR STREQUAL "Xcode")
     # include Obj-C files when using precompiled headers with Xcode
     set(COTIRE_UNITY_SOURCE_EXCLUDE_EXTENSIONS "" CACHE STRING "wxWidgets override of cotire exclude")
 endif()
-include(cotire)                        # For precompiled header handling
+if((wxBUILD_PRECOMP STREQUAL "ON" AND CMAKE_VERSION VERSION_LESS "3.16") OR (wxBUILD_PRECOMP STREQUAL "COTIRE"))
+    include(cotire) # For precompiled header handling
+endif()
 include(CMakePrintHelpers)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,
@@ -436,16 +438,22 @@ macro(wx_add_library name)
     endif()
 endmacro()
 
-# Enable cotire for target, use optional second argument for prec. header
-macro(wx_target_enable_precomp target_name)
+# Enable precompiled headers for target
+macro(wx_target_enable_precomp target_name prec_header)
     if(wxBUILD_PRECOMP)
         target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
-        if(${ARGC} GREATER 1 AND NOT ${ARGV1} STREQUAL "")
-            set_target_properties(${target_name} PROPERTIES
-                COTIRE_CXX_PREFIX_HEADER_INIT ${ARGV1})
+        if(CMAKE_VERSION VERSION_LESS "3.16" OR wxBUILD_PRECOMP STREQUAL "COTIRE")
+            set_target_properties(${target_name} PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT ${prec_header})
+            set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+            cotire(${target_name})
+        else()
+            get_target_property(target_source_files ${target_name} SOURCES)
+            list(FILTER target_source_files INCLUDE REGEX ".*(.cpp|.cxx)$")
+            list(LENGTH target_source_files target_source_count)
+            if(target_source_count GREATER_EQUAL 2)
+                target_precompile_headers(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${prec_header}>")
+            endif()
         endif()
-        set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-        cotire(${target_name})
     elseif(MSVC)
         target_compile_definitions(${target_name} PRIVATE NOPCH)
     endif()
