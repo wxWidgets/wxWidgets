@@ -2813,7 +2813,9 @@ protected:
 
     // true if a drag operation was canceled
     // (mouse event Dragging() might still be active until LeftUp)
-    bool    m_canceledDragging;
+    // m_isDragging can only be set after m_cancelledDragging is cleared.
+    // This is done when a mouse event happens with left button up.
+    bool    m_cancelledDragging;
 
     // the position (in physical coordinates) where the user started dragging
     // the mouse or wxDefaultPosition if mouse isn't being dragged

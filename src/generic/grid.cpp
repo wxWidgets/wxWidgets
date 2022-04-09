@@ -3036,7 +3036,7 @@ void wxGrid::Init()
     m_dragRowOrCol = -1;
     m_dragRowOrColOldSize = -1;
     m_isDragging = false;
-    m_canceledDragging = false;
+    m_cancelledDragging = false;
     m_startDragPos = wxDefaultPosition;
 
     m_sortCol = wxNOT_FOUND;
@@ -3866,7 +3866,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     int y;
     wxGridWindow *gridWindow = rowLabelWin->IsFrozen() ? m_frozenRowGridWin : m_gridWin;
 
-    // store position, before its modified in the next step
+    // store position, before it's modified in the next step
     int event_y = event.GetPosition().y;
     static int last_event_y;
 
@@ -3879,17 +3879,17 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     CalcGridWindowUnscrolledPosition(0, event.GetPosition().y,  NULL, &y, gridWindow);
     int row = YToRow( y );
 
-    if ( m_canceledDragging )
+    if ( m_cancelledDragging )
     {
         if ( event.LeftIsDown() )
             return;
         else
-            m_canceledDragging = false;
+            m_cancelledDragging = false;
     }
 
     if ( event.Dragging() && (m_winCapture == rowLabelWin) )
     {
-        // start auto scrolling at the edges
+        // scroll when at the edges or outside the window
         int sy = GetViewStart().y;
         int h = rowLabelWin->GetSize().y;
 
@@ -3900,8 +3900,10 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                 Scroll(wxDefaultCoord, sy - 1);
         }
         else if ( rowLabelWin->IsFrozen() && event_y >= h )
+        {
             // frozen window was left, add the height of the non-frozen window
             h += m_rowLabelWin->GetSize().y;
+        }
 
         if ( event_y < 0 && sy > 0 )
             Scroll(wxDefaultCoord, sy - 1);
@@ -4359,7 +4361,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
     int x;
     wxGridWindow *gridWindow = colLabelWin->IsFrozen() ? m_frozenColGridWin : m_gridWin;
 
-    // store position, before its modified in the next step
+    // store position, before it's modified in the next step
     int event_x = event.GetPosition().x;
     static int last_event_x;
 
@@ -4373,17 +4375,17 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
     int col = XToCol(x);
 
-    if ( m_canceledDragging )
+    if ( m_cancelledDragging )
     {
         if ( event.LeftIsDown() )
             return;
         else
-            m_canceledDragging = false;
+            m_cancelledDragging = false;
     }
 
     if ( event.Dragging() && (m_winCapture == colLabelWin) )
     {
-        // start auto scrolling at the edges
+        // scroll when at the edges or outside the window
         int sx = GetViewStart().x;
         int w = colLabelWin->GetSize().x;
 
@@ -4394,8 +4396,10 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                 Scroll(wxDefaultCoord, sx - 1);
         }
         else if ( colLabelWin->IsFrozen() && event_x >= w )
+        {
             // frozen window was left, add the height of the non-frozen window
             x += m_colLabelWin->GetSize().x;
+        }
 
         if ( event_x < 0 && sx > 0 )
             Scroll(sx - 1, wxDefaultCoord);
@@ -5188,12 +5192,12 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
     // the mouse (e.g. in the case of a dragging event started in one window,
     // but continuing over another one)
 
-    if ( m_canceledDragging )
+    if ( m_cancelledDragging )
     {
         if ( event.LeftIsDown() )
             return;
         else
-            m_canceledDragging = false;
+            m_cancelledDragging = false;
     }
 
     wxGridWindow *gridWindow =
@@ -5202,7 +5206,7 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
     if ( !gridWindow )
         gridWindow = eventGridWindow;
 
-    // store position, before its modified in the next step
+    // store position, before it's modified in the next step
     wxPoint event_pos = event.GetPosition();
     static wxPoint last_event_pos;
 
@@ -5239,7 +5243,7 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
 
     if ( isDraggingWithLeft && (m_winCapture == eventGridWindow) )
     {
-        // start auto scrolling at the edges
+        // scroll when at the edges or outside the window
         int w, h;
         eventGridWindow->GetSize(&w, &h);
         // ViewStart is scroll position in scroll units
@@ -5254,8 +5258,10 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
                 sx_new = sxy.x - 1;
         }
         else if ( eventGridWindow->IsFrozen() && event_pos.x >= w )
+        {
             // frozen window was left, add the width of the non-frozen window
             w += m_gridWin->GetSize().x;
+        }
 
         if ( event_pos.x < 0 && sxy.x > 0 )
             sx_new = sxy.x - 1;
@@ -5270,8 +5276,10 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
                 sy_new = sxy.y - 1;
         }
         else if ( eventGridWindow->IsFrozen() && event_pos.y >= h )
+        {
             // frozen window was left, add the height of the non-frozen window
             h += m_gridWin->GetSize().y;
+        }
 
         if ( event_pos.y < 0 && sxy.y > 0 )
             sy_new = sxy.y - 1;
@@ -6349,7 +6357,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     }
                     EndDraggingIfNecessary();
                     // ensure that a new drag operation is only started after a LeftUp
-                    m_canceledDragging = true;
+                    m_cancelledDragging = true;
                 }
                 else
                     ClearSelection();
