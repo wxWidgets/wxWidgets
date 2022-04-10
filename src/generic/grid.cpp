@@ -3866,7 +3866,8 @@ void CheckDoDragScroll(wxGrid *grid, wxGridSubwindow *eventGridWindow,
     wxGridSubwindow *gridWindow, wxPoint event_pos,
     bool horizontal, bool vertical)
 {
-    // scroll when at the edges or outside the window
+    // helper for Process{Row|Col}LabelMouseEvent, ProcessGridCellMouseEvent:
+    //  scroll when at the edges or outside the window
     // eventGridWindow: the window that received the mouse event
     // gridWindow: the same or the corresponding non-frozen window
     int w, h;
