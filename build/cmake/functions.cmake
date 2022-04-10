@@ -160,7 +160,8 @@ function(wx_set_common_target_properties target_name)
 endfunction()
 
 # Set common properties on wx library target
-function(wx_set_target_properties target_name is_base)
+function(wx_set_target_properties target_name)
+    cmake_parse_arguments(wxTARGET "IS_BASE;IS_PLUGIN" "" "" ${ARGN})
     if(${target_name} MATCHES "wx.*")
         string(SUBSTRING ${target_name} 2 -1 target_name_short)
     else()
@@ -169,7 +170,7 @@ function(wx_set_target_properties target_name is_base)
 
     # Set library name according to:
     # docs/contributing/about-platform-toolkit-and-library-names.md
-    if(is_base)
+    if(wxTARGET_IS_BASE)
         set(lib_toolkit base)
     else()
         set(lib_toolkit ${wxBUILD_TOOLKIT}${wxBUILD_WIDGETSET})
@@ -273,7 +274,9 @@ function(wx_set_target_properties target_name is_base)
     target_compile_definitions(${target_name} PRIVATE WXBUILDING _LIB)
     if(target_name_short STREQUAL "mono" AND wxUSE_GUI)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=1)
-    elseif(is_base OR NOT wxUSE_GUI)
+    elseif(wxTARGET_IS_PLUGIN)
+        target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=0)
+    elseif(wxTARGET_IS_BASE OR NOT wxUSE_GUI)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
     else()
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=0)
@@ -306,7 +309,7 @@ function(wx_set_target_properties target_name is_base)
             $<INSTALL_INTERFACE:include>
         )
 
-    if(wxTOOLKIT_INCLUDE_DIRS AND NOT is_base)
+    if(wxTOOLKIT_INCLUDE_DIRS AND NOT wxTARGET_IS_BASE)
         target_include_directories(${target_name}
             PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
@@ -337,7 +340,7 @@ function(wx_set_target_properties target_name is_base)
             PUBLIC ${WIN32_LIBRARIES})
     endif()
 
-    if(wxTOOLKIT_LIBRARIES AND NOT is_base)
+    if(wxTOOLKIT_LIBRARIES AND NOT wxTARGET_IS_BASE)
         target_link_libraries(${target_name}
             PUBLIC ${wxTOOLKIT_LIBRARIES})
     endif()
@@ -348,7 +351,7 @@ function(wx_set_target_properties target_name is_base)
         string(TOUPPER ${target_name_short} target_name_upper)
         if(target_name_short STREQUAL "mono")
             target_compile_definitions(${target_name} PRIVATE DLL_EXPORTS WXMAKINGDLL)
-        else()
+        elseif(NOT wxTARGET_IS_PLUGIN)
             target_compile_definitions(${target_name} PRIVATE DLL_EXPORTS WXMAKINGDLL_${target_name_upper})
         endif()
         if(NOT target_name_short STREQUAL "base")
@@ -357,12 +360,12 @@ function(wx_set_target_properties target_name is_base)
     endif()
 
     # Link common libraries
-    if(NOT target_name_short STREQUAL "mono")
+    if(NOT target_name_short STREQUAL "mono" AND NOT wxTARGET_IS_PLUGIN)
         if(NOT target_name_short STREQUAL "base")
             # All libraries except base need the base library
             target_link_libraries(${target_name} PUBLIC wxbase)
         endif()
-        if(NOT is_base AND NOT target_name_short STREQUAL "core")
+        if(NOT wxTARGET_IS_BASE AND NOT target_name_short STREQUAL "core")
             # All non base libraries except core need core
             target_link_libraries(${target_name} PUBLIC wxcore)
         endif()
@@ -417,7 +420,7 @@ macro(wx_add_library name)
 
         add_library(${name} ${wxBUILD_LIB_TYPE} ${src_files})
         add_library(wx::${name_short} ALIAS ${name})
-        wx_set_target_properties(${name} ${wxADD_LIBRARY_IS_BASE})
+        wx_set_target_properties(${name} ${ARGN})
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install

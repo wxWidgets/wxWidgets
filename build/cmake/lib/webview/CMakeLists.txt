@@ -114,7 +114,7 @@ endif()
 if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     wx_append_sources(WEBKIT2_EXT_FILES WEBVIEW_WEBKIT2_EXTENSION)
     add_library(wxwebkit2_ext SHARED ${WEBKIT2_EXT_FILES})
-    wx_set_target_properties(wxwebkit2_ext false)
+    wx_set_target_properties(wxwebkit2_ext IS_PLUGIN)
     set_target_properties(wxwebkit2_ext PROPERTIES NO_SONAME 1)
 
     # Change output name to match expected name in webview_webkit2.cpp: webkit2_ext*
