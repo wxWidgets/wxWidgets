@@ -2698,12 +2698,12 @@ TabularGridFrame::TabularGridFrame()
                                         "Allow row reordering");
     m_chkEnableRowMove->SetValue(true);
     sizerStyles->Add(m_chkEnableRowMove, wxSizerFlags().Border());
-    sizerControls->Add(sizerStyles);
 
     m_chkEnableColMove = new wxCheckBox(panel, Id_Check_EnableColMove,
                                         "Allow column re&ordering");
     m_chkEnableColMove->SetValue(true);
     sizerStyles->Add(m_chkEnableColMove, wxSizerFlags().Border());
+
     sizerControls->Add(sizerStyles);
 
     sizerControls->AddSpacer(FromDIP(10));
