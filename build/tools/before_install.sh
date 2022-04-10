@@ -22,9 +22,10 @@ case $(uname -s) in
                 # Disable some (but not all) output.
                 $SUDO apt-get -q -o=Dpkg::Use-Pty=0 "$@"
 
-                echo "-> Done with $?"
+                rc=$?
+                echo "-> Done with $rc"
 
-                return $?
+                return $rc
             }
 
             if [ "$wxUSE_ASAN" = 1 ]; then
@@ -81,13 +82,15 @@ case $(uname -s) in
 
             if ! run_apt install -y $pkg_install $dbgsym_pkgs; then
                 if [ -z "$dbgsym_pkgs" ]; then
-                    exit $?
+                    exit 1
                 fi
 
                 # Retry without dbgsym packages that currently fail to install
                 # under Ubuntu Focal (20.04).
                 echo 'Installing with dbgsym packages failed, retrying without...'
-                run_apt install -y $pkg_install
+                if ! run_apt install -y $pkg_install; then
+                    exit 1
+                fi
             else
                 touch wx_dbgsym_available
             fi
