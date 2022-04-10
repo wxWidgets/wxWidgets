@@ -2825,6 +2825,11 @@ protected:
     // setting m_isDragging to true
     wxPoint m_startDragPos;
 
+public:
+    // the position of the last mouse event
+    // used for detection of the movement direction
+    wxPoint m_lastMousePos;
+private:
     bool    m_waitForSlowClick;
 
     wxCursor m_rowResizeCursor;

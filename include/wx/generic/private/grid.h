@@ -281,6 +281,8 @@ public:
 
     wxGrid *GetOwner() { return m_owner; }
 
+    virtual bool IsFrozen() const { return false; }
+
 protected:
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
 
