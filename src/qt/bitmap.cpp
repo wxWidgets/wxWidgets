@@ -192,6 +192,11 @@ wxBitmap::wxBitmap(const wxSize& sz, int depth )
     Create(sz, depth);
 }
 
+wxBitmap::wxBitmap(int width, int height, const wxDC& dc)
+{
+    Create(width, height, dc);
+}
+
 // Create a wxBitmap from xpm data
 wxBitmap::wxBitmap(const char* const* bits)
 {

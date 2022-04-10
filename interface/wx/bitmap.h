@@ -307,6 +307,20 @@ public:
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
+        Create a bitmap compatible with the given DC, inheriting its magnification factor
+
+        @param width
+            The width of the bitmap in pixels, must be strictly positive.
+        @param height
+            The height of the bitmap in pixels, must be strictly positive.
+        @param dc
+            DC from which the scaling factor is inherited
+
+        @since 3.1.7 (previously available only in wxMSW and wxOSX ports).
+     */
+    wxBitmap(int width, int height, const wxDC& dc);
+
+    /**
         Creates a bitmap from XPM data.
 
         @beginWxPerlOnly

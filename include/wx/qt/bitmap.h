@@ -20,6 +20,7 @@ public:
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
+    wxBitmap(int width, int height, const wxDC& dc);
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
@@ -32,7 +33,7 @@ public:
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
-    virtual bool Create(int width, int height, const wxDC& WXUNUSED(dc));
+    virtual bool Create(int width, int height, const wxDC& dc);
 
     virtual int GetHeight() const wxOVERRIDE;
     virtual int GetWidth() const wxOVERRIDE;
