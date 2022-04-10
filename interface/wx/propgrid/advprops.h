@@ -250,8 +250,8 @@ public:
                                 const wxRect& rect, wxPGPaintData& paintdata );
 
 protected:
-    wxBitmap*   m_pBitmap; // final thumbnail area
-    wxImage*    m_pImage; // intermediate thumbnail area
+    wxBitmap   m_bitmap; // final thumbnail area
+    wxImage    m_image; // intermediate thumbnail area
 };
 
 
