@@ -518,9 +518,6 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
-    virtual void DoFreeze() wxOVERRIDE;
-    virtual void DoThaw() wxOVERRIDE;
-
     //
     // Event handlers
     //

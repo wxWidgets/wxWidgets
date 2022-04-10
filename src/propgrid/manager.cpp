@@ -864,22 +864,6 @@ void wxPropertyGridManager::SetExtraStyle( long exStyle )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::DoFreeze()
-{
-    m_pPropGrid->Freeze();
-    wxWindow::DoFreeze();
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGridManager::DoThaw()
-{
-    wxWindow::DoThaw();
-    m_pPropGrid->Thaw();
-}
-
-// -----------------------------------------------------------------------
-
 void wxPropertyGridManager::SetWindowStyleFlag( long style )
 {
     long oldWindowStyle = GetWindowStyleFlag();
