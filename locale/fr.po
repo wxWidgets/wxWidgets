@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 17:46+0200\n"
-"PO-Revision-Date: 2021-03-17 14:24+0100\n"
+"PO-Revision-Date: 2022-04-10 12:52+0200\n"
 "Last-Translator: Gérard DURAND <gerard-florence.durand@orange.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"plural-forms: nplurals=2; plural=n > 1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"plural-forms: nplurals=2; plural=n > 1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../include/wx/defs.h:2622
 msgid "All files (*.*)|*.*"
@@ -704,7 +704,7 @@ msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgid "num "
-msgstr ""
+msgstr "num "
 
 #: ../src/common/accelcmn.cpp:259 ../src/common/accelcmn.cpp:358
 msgid "F"
@@ -1906,7 +1906,7 @@ msgstr " barré"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr " mince"
 
 #: ../src/common/fontcmn.cpp:957
 msgid " extra light"
@@ -1930,15 +1930,15 @@ msgstr " gras"
 
 #: ../src/common/fontcmn.cpp:977
 msgid " extra bold"
-msgstr " extras gras"
+msgstr " extra gras"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
-msgstr ""
+msgstr " lourd"
 
 #: ../src/common/fontcmn.cpp:985
 msgid " extra heavy"
-msgstr ""
+msgstr " extra lourd"
 
 #: ../src/common/fontcmn.cpp:1001
 msgid " italic"
@@ -1982,11 +1982,11 @@ msgstr "extra-gras"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
-msgstr ""
+msgstr "lourd"
 
 #: ../src/common/fontcmn.cpp:1223
 msgid "extraheavy"
-msgstr ""
+msgstr "extra lourd"
 
 #: ../src/common/fontcmn.cpp:1228
 msgid "italic"
@@ -3186,7 +3186,6 @@ msgid "Cannot initialize sockets"
 msgstr "Impossible d'initialiser les sockets"
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "&Aide"
@@ -3235,14 +3234,12 @@ msgid "&Cancel"
 msgstr "&Annuler"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
-msgstr "&CD-Rom"
+msgstr "&CD-ROM"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
-msgstr "CD-Rom"
+msgstr "CD-ROM"
 
 #: ../src/common/stockitem.cpp:153
 msgid "&Clear"
@@ -4007,6 +4004,8 @@ msgstr "impossible de réinitialiser le flux de chargement de zlib"
 #: ../src/common/zipstrm.cpp:1043
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
 msgstr ""
+"Ignorant l'enregistrement mal formé de données supplémentaires, le fichier "
+"ZIP peut être corrompu"
 
 #: ../src/common/zipstrm.cpp:1522
 msgid "assuming this is a multi-part zip concatenated"
@@ -4995,6 +4994,9 @@ msgid ""
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
+"AVERTISSEMENT : l’utilisation de la méthode d’entrée XIM n’est pas prise en "
+"charge et peut entraîner des problèmes de gestion et de scintillement des "
+"entrées. Envisagez de désactiver GTK_IM_MODULE ou de définir sur « ibus »."
 
 #: ../src/gtk/app.cpp:431
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
@@ -5010,6 +5012,8 @@ msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
+"L’utilisation de polices privées n’est pas prise en charge sur ce système : "
+"la bibliothèque Pango est trop ancienne, version 1.38 ou ultérieure requise."
 
 #: ../src/gtk/font.cpp:562
 msgid "Failed to create font configuration object."
@@ -5035,6 +5039,11 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"Ce programme n’a pas été compilé avec le support EGL requis sous Wayland, "
+"donc soit\n"
+"installer les bibliothèques EGL et les reconstruire soit les exécuter sous "
+"le \"backend\" X11 en définissant\n"
+"variable d’environnement GDK_BACKEND=x11 avant de démarrer votre programme."
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5043,6 +5052,11 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
+"wxGLCanvas n’est actuellement pris en charge que sur Wayland et X11.  Vous "
+"pourrez peut-être\n"
+"contourner ce problème en définissant la variable d’environnement "
+"GDK_BACKEND=x11 avant\n"
+"de démarrer votre programme."
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
@@ -5323,7 +5337,7 @@ msgstr "(Aide)"
 #: ../src/html/helpwnd.cpp:1029
 #, c-format
 msgid "%d of %lu"
-msgstr "%d dur %lu"
+msgstr "%d sur %lu"
 
 #: ../src/html/helpwnd.cpp:1031
 #, c-format
@@ -6299,14 +6313,17 @@ msgstr "Impossible de charger l'icône depuis « %s »."
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
+"Impossible de trouver le niveau d’émulation de la vue Web dans le Registre"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
-msgstr ""
+msgstr "Impossible de définir la vue Web avec un niveau d’émulation moderne"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
+"Impossible de réinitialiser l’affichage Web avec un niveau d’émulation "
+"standard"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
@@ -8745,7 +8762,7 @@ msgstr "L'intervalle à afficher."
 
 #: ../src/richtext/richtextsymboldlg.cpp:503
 msgid "(Normal text)"
-msgstr "(Texte normale)"
+msgstr "(Texte normal)"
 
 #: ../src/richtext/richtexttabspage.cpp:110
 msgid "&Position (tenths of a mm):"
