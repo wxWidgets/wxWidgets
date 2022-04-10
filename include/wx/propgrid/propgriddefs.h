@@ -669,7 +669,7 @@ public:
     wxString GetNextToken();
 
 protected:
-    const wxString*             m_str;
+    const wxString&             m_str;
     wxString::const_iterator    m_curPos;
     wxString                    m_readyToken;
     wxUniChar                   m_delimiter;
