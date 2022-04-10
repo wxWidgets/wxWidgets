@@ -1882,7 +1882,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
         // Create the bitmap here because required size is not known in OnSetValue().
 
         // Delete the cache if required size changed
-        if ( m_bitmap.IsOk() && (m_bitmap.GetWidth() != rect.width || m_bitmap.GetHeight() != rect.height) )
+        if ( m_bitmap.IsOk() && (m_bitmap.GetSize() != rect.GetSize()) )
         {
             m_bitmap = wxNullBitmap;
         }
