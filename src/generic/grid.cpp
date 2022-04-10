@@ -4398,7 +4398,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
         else if ( colLabelWin->IsFrozen() && event_x >= w )
         {
             // frozen window was left, add the height of the non-frozen window
-            x += m_colLabelWin->GetSize().x;
+            w += m_colLabelWin->GetSize().x;
         }
 
         if ( event_x < 0 && sx > 0 )
