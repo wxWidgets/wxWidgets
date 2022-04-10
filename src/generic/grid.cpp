@@ -5265,7 +5265,7 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
 
         if ( event_pos.x < 0 && sxy.x > 0 )
             sx_new = sxy.x - 1;
-        else if ( event_pos.y >= w )
+        else if ( event_pos.x >= w )
             sx_new = sxy.x + 1;
 
         // check y direction
