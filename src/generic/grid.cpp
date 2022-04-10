@@ -3586,8 +3586,6 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             size_t pos = msg.GetCommandInt();
             int numCols = msg.GetCommandInt2();
             m_numCols -= numCols;
-            if ( m_useNativeHeader )
-                GetGridColHeader()->SetColumnCount(m_numCols);
 
             if ( !m_colAt.IsEmpty() )
             {
@@ -3619,6 +3617,9 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_colRights[i] = w;
                 }
             }
+
+            if (m_useNativeHeader)
+                GetGridColHeader()->SetColumnCount(m_numCols);
 
             UpdateCurrentCellOnRedim();
 
