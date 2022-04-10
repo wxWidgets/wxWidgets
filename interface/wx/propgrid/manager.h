@@ -421,11 +421,6 @@ public:
     bool IsAnyModified() const;
 
     /**
-        Returns @true if updating is frozen (i.e. Freeze() called but not yet Thaw() ).
-    */
-    bool IsFrozen() const;
-
-    /**
         Returns @true if any property on given page has been modified by the user.
     */
     bool IsPageModified( size_t index ) const;
