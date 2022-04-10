@@ -297,7 +297,7 @@ public:
 
 protected:
     wxBitmap   m_bitmap; // final thumbnail area
-    wxImage    m_image; // intermediate thumbnail area
+    wxImage    m_image; // original thumbnail area
 
 private:
     // Initialize m_image using the current file name.

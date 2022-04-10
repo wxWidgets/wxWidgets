@@ -251,7 +251,7 @@ public:
 
 protected:
     wxBitmap   m_bitmap; // final thumbnail area
-    wxImage    m_image; // intermediate thumbnail area
+    wxImage    m_image; // original thumbnail area
 };
 
 

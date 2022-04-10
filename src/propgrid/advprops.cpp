@@ -1876,7 +1876,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
                                          const wxRect& rect,
                                          wxPGPaintData& )
 {
-    if ( m_bitmap.IsOk() || m_image.IsOk() )
+    if ( m_image.IsOk() )
     {
         // Draw the thumbnail
         // Create the bitmap here because required size is not known in OnSetValue().
@@ -1889,11 +1889,15 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
 
         if ( !m_bitmap.IsOk() )
         {
-            m_image.Rescale( rect.width, rect.height );
-            m_bitmap = wxBitmap(m_image, dc);
+            wxImage imgScaled = m_image;
+            imgScaled.Rescale(rect.width, rect.height);
+            m_bitmap = wxBitmap(imgScaled, dc);
         }
+    }
 
-        dc.DrawBitmap( m_bitmap, rect.x, rect.y, false );
+    if ( m_bitmap.IsOk() )
+    {
+        dc.DrawBitmap(m_bitmap, rect.x, rect.y, false);
     }
     else
     {
