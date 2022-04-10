@@ -26,10 +26,6 @@ endif()
 
 wx_add_library(wxbase IS_BASE ${BASE_FILES})
 
-if(NOT wxBUILD_MONOLITHIC)
-    wx_lib_compile_definitions(wxbase PRIVATE wxUSE_BASE=1)
-endif()
-
 if(wxUSE_ZLIB)
     wx_lib_include_directories(wxbase ${ZLIB_INCLUDE_DIRS})
     wx_lib_link_libraries(wxbase PRIVATE ${ZLIB_LIBRARIES})

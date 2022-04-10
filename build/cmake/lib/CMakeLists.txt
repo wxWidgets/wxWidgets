@@ -75,7 +75,6 @@ endforeach()
 
 if(wxBUILD_MONOLITHIC)
     # Create monolithic library target
-    list(LENGTH wxMONO_SRC_FILES src_file_count)
     wx_add_library(wxmono ${wxMONO_SRC_FILES})
     foreach(vis PRIVATE PUBLIC)
         if(wxMONO_LIBS_${vis})
