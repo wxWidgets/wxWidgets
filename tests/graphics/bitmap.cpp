@@ -18,6 +18,7 @@
 #include "wx/bitmap.h"
 #include "wx/rawbmp.h"
 #include "wx/dcmemory.h"
+#include "wx/dcsvg.h"
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
@@ -1688,6 +1689,16 @@ TEST_CASE("DC::Clear", "[bitmap][dc]")
 
         CHECK_THAT(bmp, AllPixelsAre(*wxWHITE));
     }
+}
+
+TEST_CASE("Bitmap::DC", "[bitmap][dc]")
+{
+#if wxUSE_SVG
+    TempFile dummySVG("dummy.svg");
+    wxSVGFileDC dc(dummySVG.GetName());
+    wxBitmap bmp(10, 10, dc);
+    CHECK( bmp.IsOk() );
+#endif // wxUSE_SVG
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
