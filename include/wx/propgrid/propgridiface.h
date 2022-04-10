@@ -27,78 +27,65 @@ class WXDLLIMPEXP_PROPGRID wxPGPropArgCls
 public:
     wxPGPropArgCls( const wxPGProperty* property )
     {
-        m_ptr.property = const_cast<wxPGProperty*>(property);
-        m_flags = IsProperty;
+        m_property = const_cast<wxPGProperty*>(property);
+        m_isProperty = true;
     }
     wxPGPropArgCls( const wxString& str )
     {
-        m_ptr.stringName = &str;
-        m_flags = IsWxString;
+        m_name = str;
+        m_property = NULL;
+        m_isProperty = false;
     }
     wxPGPropArgCls( const wxPGPropArgCls& id )
     {
-        m_ptr = id.m_ptr;
-        m_flags = id.m_flags;
+        m_isProperty = id.m_isProperty;
+        m_property = id.m_property;
+        m_name = id.m_name;
     }
     // This is only needed for wxPython bindings.
     wxPGPropArgCls( wxString* str, bool WXUNUSED(deallocPtr) )
     {
-        m_ptr.stringName = str;
-        m_flags = IsWxString | OwnsWxString;
-    }
-    ~wxPGPropArgCls()
-    {
-        if ( m_flags & OwnsWxString )
-            delete m_ptr.stringName;
+        m_name = *str;
+        delete str; // we own this string
+        m_property = NULL;
+        m_isProperty = false;
     }
     wxPGProperty* GetPtr() const
     {
-        wxCHECK( m_flags == IsProperty, NULL );
-        return m_ptr.property;
+        wxCHECK( m_isProperty, NULL );
+        return m_property;
     }
     wxPGPropArgCls( const char* str )
     {
-        m_ptr.charName = str;
-        m_flags = IsCharPtr;
+        m_name = str;
+        m_property = NULL;
+        m_isProperty = false;
     }
     wxPGPropArgCls( const wchar_t* str )
     {
-        m_ptr.wcharName = str;
-        m_flags = IsWCharPtr;
+        m_name = str;
+        m_property = NULL;
+        m_isProperty = false;
     }
     // This constructor is required for NULL.
     wxPGPropArgCls( int )
     {
-        m_ptr.property = NULL;
-        m_flags = IsProperty;
+        m_property = NULL;
+        m_isProperty = true;
     }
     wxPGProperty* GetPtr( wxPropertyGridInterface* iface ) const;
     wxPGProperty* GetPtr( const wxPropertyGridInterface* iface ) const
     {
         return GetPtr(const_cast<wxPropertyGridInterface*>(iface));
     }
-    wxPGProperty* GetPtr0() const { return m_ptr.property; }
-    bool HasName() const { return (m_flags != IsProperty); }
-    const wxString& GetName() const { return *m_ptr.stringName; }
+    wxPGProperty* GetPtr0() const { return m_property; }
+    bool HasName() const { return !m_isProperty; }
+    const wxString& GetName() const { return m_name; }
+
 private:
-
-    enum
-    {
-        IsProperty      = 0x00,
-        IsWxString      = 0x01,
-        IsCharPtr       = 0x02,
-        IsWCharPtr      = 0x04,
-        OwnsWxString    = 0x10
-    };
-
-    union
-    {
-        wxPGProperty* property;
-        const char* charName;
-        const wchar_t* wcharName;
-        const wxString* stringName;
-    } m_ptr;
-    unsigned char m_flags;
+    bool m_isProperty;
+    wxPGProperty* m_property;
+    wxString m_name;
 };
 
 typedef const wxPGPropArgCls& wxPGPropArg;

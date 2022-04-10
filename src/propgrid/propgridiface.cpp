@@ -39,19 +39,13 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxFont, WXDLLIMPEXP_PROPGRID)
 
 wxPGProperty* wxPGPropArgCls::GetPtr( wxPropertyGridInterface* iface ) const
 {
-    if ( m_flags == IsProperty )
+    if ( m_isProperty )
     {
-        wxASSERT_MSG( m_ptr.property, wxS("invalid property ptr") );
-        return m_ptr.property;
+        wxASSERT_MSG( m_property, "invalid property ptr" );
+        return m_property;
     }
-    else if ( m_flags & IsWxString )
-        return iface->GetPropertyByNameA(*m_ptr.stringName);
-    else if ( m_flags & IsCharPtr )
-        return iface->GetPropertyByNameA(m_ptr.charName);
-    else if ( m_flags & IsWCharPtr )
-        return iface->GetPropertyByNameA(m_ptr.wcharName);
 
-    return NULL;
+    return iface->GetPropertyByNameA(m_name);
 }
 
 // -----------------------------------------------------------------------
