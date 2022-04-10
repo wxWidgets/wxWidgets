@@ -755,7 +755,14 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
     wxCHECK_MSG( dc.IsOk(), false, wxT("invalid HDC in wxBitmap::Create()") );
 
-    return DoCreate(width, height, -1, dc.GetHDC());
+    const double scale = dc.GetContentScaleFactor();
+
+    if ( !DoCreate(wxRound(width*scale), wxRound(height*scale), -1, dc.GetHDC()) )
+        return false;
+
+    GetBitmapData()->m_scaleFactor = scale;
+
+    return true;
 }
 
 bool wxBitmap::CreateWithDIPSize(const wxSize& size, double scale, int depth)
