@@ -183,7 +183,7 @@ if(wxBUILD_PRECOMP)
 endif()
 
 wx_add_library(wxstc ${STC_FILES})
-wx_lib_include_directories(wxstc PRIVATE
+wx_lib_include_directories(wxstc
     ${wxSOURCE_DIR}/src/stc/scintilla/include
     ${wxSOURCE_DIR}/src/stc/scintilla/lexlib
     ${wxSOURCE_DIR}/src/stc/scintilla/src

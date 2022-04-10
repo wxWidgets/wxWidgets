@@ -18,7 +18,7 @@ endif()
 wx_add_library(wxhtml ${HTML_FILES})
 
 if(wxUSE_LIBMSPACK)
-    wx_lib_include_directories(wxhtml PRIVATE ${MSPACK_INCLUDE_DIRS})
+    wx_lib_include_directories(wxhtml ${MSPACK_INCLUDE_DIRS})
     wx_lib_link_libraries(wxhtml PRIVATE ${MSPACK_LIBRARIES})
 endif()
 

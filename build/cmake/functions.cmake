@@ -303,7 +303,7 @@ function(wx_set_target_properties target_name is_base)
 
     if(wxTOOLKIT_INCLUDE_DIRS AND NOT is_base)
         target_include_directories(${target_name}
-            PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
+            PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 
     if (WIN32)
@@ -488,22 +488,15 @@ macro(wx_exe_link_libraries name)
     endif()
 endmacro()
 
-# wx_lib_include_directories(name [])
+# wx_lib_include_directories(name files)
 # Forwards everything to target_include_directories() except for monolithic
 # build where it collects all include paths for linking with the mono lib
 macro(wx_lib_include_directories name)
-    cmake_parse_arguments(_LIB_INCLUDE_DIRS "" "" "PUBLIC;PRIVATE" ${ARGN})
     if(wxBUILD_MONOLITHIC)
-        list(APPEND wxMONO_INCLUDE_DIRS_PUBLIC ${_LIB_INCLUDE_DIRS_PUBLIC})
-        list(APPEND wxMONO_INCLUDE_DIRS_PRIVATE ${_LIB_INCLUDE_DIRS_PRIVATE})
-        set(wxMONO_INCLUDE_DIRS_PUBLIC ${wxMONO_INCLUDE_DIRS_PUBLIC} PARENT_SCOPE)
-        set(wxMONO_INCLUDE_DIRS_PRIVATE ${wxMONO_INCLUDE_DIRS_PRIVATE} PARENT_SCOPE)
+        list(APPEND wxMONO_INCLUDE_DIRS ${ARGN})
+        set(wxMONO_INCLUDE_DIRS ${wxMONO_INCLUDE_DIRS} PARENT_SCOPE)
     else()
-        set(INCLUDE_POS)
-        if (_LIB_INCLUDE_DIRS_PRIVATE)
-            set(INCLUDE_POS BEFORE)
-        endif()
-        target_include_directories(${name};${INCLUDE_POS};${ARGN})
+        target_include_directories(${name} BEFORE PRIVATE ${ARGN})
     endif()
 endmacro()
 

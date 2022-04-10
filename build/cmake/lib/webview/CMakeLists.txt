@@ -79,9 +79,9 @@ elseif(WXMSW)
         endif()
         set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_PACKAGE_DIR} CACHE INTERNAL "" FORCE)
 
-        wx_lib_include_directories(wxwebview PRIVATE "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
+        wx_lib_include_directories(wxwebview "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
         if(NOT MSVC)
-            wx_lib_include_directories(wxwebview PRIVATE "${wxSOURCE_DIR}/include/wx/msw/wrl")
+            wx_lib_include_directories(wxwebview "${wxSOURCE_DIR}/include/wx/msw/wrl")
             if (NOT wxBUILD_MONOLITHIC)
                 target_compile_options(wxwebview PRIVATE -Wno-unknown-pragmas)
             endif()
@@ -96,14 +96,14 @@ elseif(WXMSW)
     endif()
 elseif(WXGTK)
     if(LIBSOUP_FOUND)
-        wx_lib_include_directories(wxwebview PUBLIC ${LIBSOUP_INCLUDE_DIRS})
+        wx_lib_include_directories(wxwebview ${LIBSOUP_INCLUDE_DIRS})
         wx_lib_link_libraries(wxwebview PUBLIC ${LIBSOUP_LIBRARIES})
     endif()
     if(wxUSE_WEBVIEW_WEBKIT2)
-        wx_lib_include_directories(wxwebview PUBLIC ${WEBKIT2_INCLUDE_DIR})
+        wx_lib_include_directories(wxwebview ${WEBKIT2_INCLUDE_DIR})
         wx_lib_link_libraries(wxwebview PUBLIC ${WEBKIT2_LIBRARIES})
     elseif(wxUSE_WEBVIEW_WEBKIT)
-        wx_lib_include_directories(wxwebview PUBLIC ${WEBKIT_INCLUDE_DIR})
+        wx_lib_include_directories(wxwebview ${WEBKIT_INCLUDE_DIR})
         wx_lib_link_libraries(wxwebview PUBLIC ${WEBKIT_LIBRARIES})
     endif()
 endif()
@@ -143,7 +143,7 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
         PREFIX ""
     )
 
-    target_include_directories(wxwebkit2_ext PUBLIC
+    target_include_directories(wxwebkit2_ext PRIVATE
         ${LIBSOUP_INCLUDE_DIRS}
         ${WEBKIT2_INCLUDE_DIR}
         )
