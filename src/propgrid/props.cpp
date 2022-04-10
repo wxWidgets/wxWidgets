@@ -2829,28 +2829,23 @@ bool wxArrayStringProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
 
         int res = dlg->ShowModal();
 
-        if ( res == wxID_OK && dlg->IsModified() )
-        {
-            wxVariant curValue = dlg->GetDialogValue();
-            if ( !curValue.IsNull() )
-            {
-                wxArrayString actualValue = curValue.GetArrayString();
-                wxString tempStr = ConvertArrayToString(actualValue, m_delimiter);
-            #if wxUSE_VALIDATORS
-                if ( dialogValidator.DoValidate(pg, validator,
-                                                tempStr) )
-            #endif
-                {
-                    value = actualValue;
-                    retVal = true;
-                    break;
-                }
-            }
-            else
-                break;
-        }
-        else
+        if ( res != wxID_OK || !dlg->IsModified() )
             break;
+
+        wxVariant curValue = dlg->GetDialogValue();
+        if ( curValue.IsNull() )
+            break;
+
+        wxArrayString actualValue = curValue.GetArrayString();
+#if wxUSE_VALIDATORS
+        wxString tempStr = ConvertArrayToString(actualValue, m_delimiter);
+        if ( dialogValidator.DoValidate(pg, validator, tempStr) )
+#endif
+        {
+            value = actualValue;
+            retVal = true;
+            break;
+        }
     }
 
     delete dlg;
