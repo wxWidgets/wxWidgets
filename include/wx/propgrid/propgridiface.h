@@ -433,11 +433,7 @@ public:
     // Returns value as wxVariant. To get wxObject pointer from it,
     // you will have to use WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) macro.
     // If property value is unspecified, wxNullVariant is returned.
-    wxVariant GetPropertyValue( wxPGPropArg id )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxVariant())
-        return p->GetValue();
-    }
+    wxVariant GetPropertyValue(wxPGPropArg id);
 
     wxString GetPropertyValueAsString( wxPGPropArg id ) const;
     long GetPropertyValueAsLong( wxPGPropArg id ) const;
@@ -450,58 +446,18 @@ public:
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
     double GetPropertyValueAsDouble( wxPGPropArg id ) const;
 
-#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(PGTypeName, DEFVAL) \
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
-    wxVariant value = p->GetValue(); \
-    if ( !value.IsType(PGTypeName) ) \
-    { \
-        wxPGGetFailed(p, PGTypeName); \
-        return DEFVAL; \
-    }
-
-#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(PGTypeName, DEFVAL) \
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
-    wxVariant value = p->GetValue(); \
-    if ( !value.IsType(PGTypeName) ) \
-        return DEFVAL; \
-
-    wxArrayString GetPropertyValueAsArrayString( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxPG_VARIANT_TYPE_ARRSTRING,
-                                                   wxArrayString())
-        return value.GetArrayString();
-    }
+    wxArrayString GetPropertyValueAsArrayString(wxPGPropArg id) const;
 
 #if defined(wxLongLong_t) && wxUSE_LONGLONG
-    wxLongLong_t GetPropertyValueAsLongLong( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
-        return p->GetValue().GetLongLong().GetValue();
-    }
+    wxLongLong_t GetPropertyValueAsLongLong(wxPGPropArg id) const;
 
-    wxULongLong_t GetPropertyValueAsULongLong( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
-        return p->GetValue().GetULongLong().GetValue();
-    }
+    wxULongLong_t GetPropertyValueAsULongLong(wxPGPropArg id) const;
 #endif
 
-    wxArrayInt GetPropertyValueAsArrayInt( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxArrayInt_VariantType,
-                                                   wxArrayInt())
-        wxArrayInt arr;
-        arr << value;
-        return arr;
-    }
+    wxArrayInt GetPropertyValueAsArrayInt(wxPGPropArg id) const;
 
 #if wxUSE_DATETIME
-    wxDateTime GetPropertyValueAsDateTime( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxPG_VARIANT_TYPE_DATETIME,
-                                                   wxDateTime())
-        return value.GetDateTime();
-    }
+    wxDateTime GetPropertyValueAsDateTime(wxPGPropArg id) const;
 #endif
 
     // Returns a wxVariant list containing wxVariant versions of all
