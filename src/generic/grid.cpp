@@ -3951,7 +3951,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     if ( event.Dragging() && (m_winCapture == rowLabelWin) )
     {
         // scroll when at the edges or outside the window
-        fprintf(stderr, "ProcessRowLabelMouseEvent %d  ", rowLabelWin->IsFrozen());
         CheckDoDragScroll(this, rowLabelWin, m_rowLabelWin, event_pos, false, true);
     }
 
@@ -4427,9 +4426,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
     if ( event.Dragging() && (m_winCapture == colLabelWin) )
     {
         // scroll when at the edges or outside the window
-        //CheckDoDragScroll(this, colLabelWin, m_colLabelWin, event_pos, true, false);
         CheckDoDragScroll(this, colLabelWin, GetColLabelWindow(), event_pos, true, false);
-        
     }
 
     if ( event.Dragging() )
