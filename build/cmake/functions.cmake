@@ -500,18 +500,15 @@ macro(wx_lib_include_directories name)
     endif()
 endmacro()
 
-# wx_lib_compile_definitions(name [])
+# wx_lib_compile_definitions(name defs)
 # Forwards everything to target_compile_definitions() except for monolithic
 # build where it collects all definitions for linking with the mono lib
 macro(wx_lib_compile_definitions name)
     if(wxBUILD_MONOLITHIC)
-        cmake_parse_arguments(_LIB_DEFINITIONS "" "" "PUBLIC;PRIVATE" ${ARGN})
-        list(APPEND wxMONO_DEFINITIONS_PUBLIC ${_LIB_DEFINITIONS_PUBLIC})
-        list(APPEND wxMONO_DEFINITIONS_PRIVATE ${_LIB_DEFINITIONS_PRIVATE})
-        set(wxMONO_DEFINITIONS_PUBLIC ${wxMONO_DEFINITIONS_PUBLIC} PARENT_SCOPE)
-        set(wxMONO_DEFINITIONS_PRIVATE ${wxMONO_DEFINITIONS_PRIVATE} PARENT_SCOPE)
+        list(APPEND wxMONO_DEFINITIONS ${ARGN})
+        set(wxMONO_DEFINITIONS ${wxMONO_DEFINITIONS} PARENT_SCOPE)
     else()
-        target_compile_definitions(${name};${ARGN})
+        target_compile_definitions(${name} PRIVATE ${ARGN})
     endif()
 endmacro()
 

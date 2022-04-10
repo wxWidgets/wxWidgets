@@ -164,7 +164,7 @@ target_include_directories(wxscintilla PRIVATE
     ${wxSOURCE_DIR}/src/stc/scintilla/lexlib
     ${wxSOURCE_DIR}/src/stc/scintilla/src
     )
-target_compile_definitions(wxscintilla PUBLIC
+target_compile_definitions(wxscintilla PRIVATE
     NO_CXX11_REGEX
     __WX__
     SCI_LEXER
@@ -188,7 +188,7 @@ wx_lib_include_directories(wxstc
     ${wxSOURCE_DIR}/src/stc/scintilla/lexlib
     ${wxSOURCE_DIR}/src/stc/scintilla/src
     )
-wx_lib_compile_definitions(wxstc PRIVATE
+wx_lib_compile_definitions(wxstc
     NO_CXX11_REGEX
     __WX__
     SCI_LEXER
