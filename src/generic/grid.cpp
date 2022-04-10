@@ -3473,9 +3473,6 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             int numCols = msg.GetCommandInt2();
             m_numCols += numCols;
 
-            if ( m_useNativeHeader )
-                GetGridColHeader()->SetColumnCount(m_numCols);
-
             if ( !m_colAt.IsEmpty() )
             {
                 //Shift the column IDs
@@ -3512,6 +3509,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_colRights[i] = right;
                 }
             }
+
+            // See comment for wxGRIDTABLE_NOTIFY_COLS_APPENDED case explaining
+            // why this has to be done here and not before.
+            if ( m_useNativeHeader )
+                GetGridColHeader()->SetColumnCount(m_numCols);
 
             UpdateCurrentCellOnRedim();
 
@@ -3586,8 +3588,6 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             size_t pos = msg.GetCommandInt();
             int numCols = msg.GetCommandInt2();
             m_numCols -= numCols;
-            if ( m_useNativeHeader )
-                GetGridColHeader()->SetColumnCount(m_numCols);
 
             if ( !m_colAt.IsEmpty() )
             {
@@ -3619,6 +3619,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_colRights[i] = w;
                 }
             }
+
+            // See comment for wxGRIDTABLE_NOTIFY_COLS_APPENDED case explaining
+            // why this has to be done here and not before.
+            if ( m_useNativeHeader )
+                GetGridColHeader()->SetColumnCount(m_numCols);
 
             UpdateCurrentCellOnRedim();
 
