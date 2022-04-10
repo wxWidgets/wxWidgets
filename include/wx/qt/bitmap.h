@@ -8,12 +8,7 @@
 #ifndef _WX_QT_BITMAP_H_
 #define _WX_QT_BITMAP_H_
 
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
-
-class WXDLLIMPEXP_FWD_CORE wxImage;
-class WXDLLIMPEXP_FWD_CORE wxCursor;
 class QImage;
-
 class QPixmap;
 class QBitmap;
 

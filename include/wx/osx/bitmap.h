@@ -14,15 +14,7 @@
 #include "wx/palette.h"
 
 // Bitmap
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class wxBitmapRefData ;
-class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
-class WXDLLIMPEXP_FWD_CORE wxControl;
-class WXDLLIMPEXP_FWD_CORE wxCursor;
-class WXDLLIMPEXP_FWD_CORE wxDC;
-class WXDLLIMPEXP_FWD_CORE wxIcon;
-class WXDLLIMPEXP_FWD_CORE wxImage;
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // A mask is a bitmap used for drawing bitmaps
 // Internally it is stored as a 8 bit deep memory chunk, 0 = black means the source will be drawn

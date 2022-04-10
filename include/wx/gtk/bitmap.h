@@ -14,8 +14,6 @@ typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 #endif
 typedef struct _GdkPixbuf GdkPixbuf;
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
-class WXDLLIMPEXP_FWD_CORE wxCursor;
 
 //-----------------------------------------------------------------------------
 // wxMask

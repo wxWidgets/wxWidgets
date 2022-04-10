@@ -10,13 +10,8 @@
 #ifndef __GTKBITMAPH__
 #define __GTKBITMAPH__
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
 #include "wx/palette.h"
 #include "wx/gdiobj.h"
-
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 //-----------------------------------------------------------------------------
 // classes
