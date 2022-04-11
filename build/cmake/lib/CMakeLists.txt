@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../source_groups.cmake)
-
 if(wxBUILD_MONOLITHIC)
     # Initialize variables for monolithic build
     set(wxMONO_SRC_FILES)

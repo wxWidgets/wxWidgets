@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(HTML_FILES HTML_CMN)
 
 if(WIN32 OR wxUSE_LIBMSPACK)

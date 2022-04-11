@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(QA_FILES QA)
 
 wx_add_library(wxqa ${QA_FILES})

@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(XML_FILES XML)
 wx_add_library(wxxml IS_BASE ${XML_FILES})
 wx_lib_link_libraries(wxxml PRIVATE ${EXPAT_LIBRARIES})

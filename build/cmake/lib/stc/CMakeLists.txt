@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(STC_FILES STC_CMN)
 
 if(WXOSX_COCOA)

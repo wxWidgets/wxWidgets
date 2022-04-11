@@ -157,6 +157,7 @@ function(wx_set_common_target_properties target_name)
             set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
         endif()
     endif()
+    wx_set_source_groups()
 endfunction()
 
 # Set common properties on wx library target

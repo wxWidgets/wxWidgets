@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(MEDIA_FILES MEDIA_CMN)
 
 if(WXMSW)

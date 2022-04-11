@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(BASE_FILES BASE_CMN)
 wx_append_sources(BASE_FILES BASE_AND_GUI_CMN)
 
