@@ -10,12 +10,12 @@
 include(CMakeDependentOption)
 include(CMakeParseArguments)           # For compatibility with CMake < 3.4
 include(ExternalProject)
-if(CMAKE_GENERATOR STREQUAL "Xcode")
-    # wxWidgets does not use the unity features of cotire so we can
-    # include Obj-C files when using precompiled headers with Xcode
-    set(COTIRE_UNITY_SOURCE_EXCLUDE_EXTENSIONS "" CACHE STRING "wxWidgets override of cotire exclude")
-endif()
 if((wxBUILD_PRECOMP STREQUAL "ON" AND CMAKE_VERSION VERSION_LESS "3.16") OR (wxBUILD_PRECOMP STREQUAL "COTIRE"))
+    if(CMAKE_GENERATOR STREQUAL "Xcode")
+        # wxWidgets does not use the unity features of cotire so we can
+        # include Obj-C files when using precompiled headers with Xcode
+        set(COTIRE_UNITY_SOURCE_EXCLUDE_EXTENSIONS "" CACHE STRING "wxWidgets override of cotire exclude")
+    endif()
     include(cotire) # For precompiled header handling
 endif()
 include(CMakePrintHelpers)
@@ -452,11 +452,18 @@ macro(wx_target_enable_precomp target_name prec_header)
             set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
             cotire(${target_name})
         else()
-            get_target_property(target_source_files ${target_name} SOURCES)
-            list(FILTER target_source_files INCLUDE REGEX ".*(.cpp|.cxx)$")
-            list(LENGTH target_source_files target_source_count)
-            if(target_source_count GREATER_EQUAL 2)
+            # only use pch when there is more than one source file
+            get_target_property(cpp_source_files ${target_name} SOURCES)
+            list(FILTER cpp_source_files INCLUDE REGEX ".*(\\.cpp|\\.cxx)$")
+            list(LENGTH cpp_source_files cpp_source_count)
+            if(cpp_source_count GREATER_EQUAL 2)
                 target_precompile_headers(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${prec_header}>")
+            endif()
+            get_target_property(mm_source_files ${target_name} SOURCES)
+            list(FILTER mm_source_files INCLUDE REGEX ".*\\.mm$")
+            list(LENGTH mm_source_files mm_source_count)
+            if(mm_source_count GREATER_EQUAL 2)
+                target_precompile_headers(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:OBJCXX>:${prec_header}>")
             endif()
         endif()
     elseif(MSVC)

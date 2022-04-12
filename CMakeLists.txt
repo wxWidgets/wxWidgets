@@ -88,7 +88,12 @@ set(wxSOVERSION ${wxSOVERSION_MAJOR}.${WX_AGE}.${WX_REVISION})
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
 set(wxCOPYRIGHT "2002-2022 wxWidgets")
 
-project(wxWidgets VERSION ${wxVERSION})
+set(wxLANGUAGES C CXX)
+if(APPLE AND CMAKE_VERSION GREATER_EQUAL "3.16")
+    list(APPEND wxLANGUAGES OBJCXX)
+endif()
+
+project(wxWidgets VERSION ${wxVERSION} LANGUAGES ${wxLANGUAGES})
 
 include(build/cmake/main.cmake)
 
