@@ -357,7 +357,7 @@ private:
 
     wxString DoGetInfo(LCTYPE lctype) const
     {
-        wchar_t buf[256];
+        wxChar buf[256];
         if (!::GetLocaleInfo(m_lcid, lctype, buf, WXSIZEOF(buf)))
         {
             wxLogLastError(wxT("GetLocaleInfo"));
