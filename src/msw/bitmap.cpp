@@ -856,7 +856,12 @@ bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
     wxCHECK_MSG( dc.IsOk(), false,
                     wxT("invalid HDC in wxBitmap::CreateFromImage()") );
 
-    return CreateFromImage(image, -1, dc.GetHDC());
+    if ( !CreateFromImage(image, -1, dc.GetHDC()) )
+        return false;
+
+    GetBitmapData()->m_scaleFactor = dc.GetContentScaleFactor();
+
+    return true;
 }
 
 #if wxUSE_WXDIB
