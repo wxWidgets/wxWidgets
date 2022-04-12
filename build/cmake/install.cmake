@@ -55,6 +55,8 @@ else()
     )
 endif()
 
+install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets")
+
 # uninstall target
 if(MSVC_IDE)
     set(UNINST_NAME UNINSTALL)

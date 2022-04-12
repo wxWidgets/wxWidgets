@@ -432,13 +432,12 @@ macro(wx_add_library name)
             set(runtime_dir "bin")
         endif()
         wx_install(TARGETS ${name}
-            EXPORT ${name}Targets
+            EXPORT wxWidgetsTargets
             LIBRARY DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
             ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
             RUNTIME DESTINATION "${runtime_dir}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
-        wx_install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION "lib/${wxPLATFORM_LIB_DIR}/cmake")
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     endif()
 endmacro()
@@ -587,8 +586,7 @@ function(wx_set_builtin_target_properties target_name)
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
-        wx_install(TARGETS ${name} EXPORT ${name}Targets ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}")
-        wx_install(EXPORT ${name}Targets NAMESPACE wx:: DESTINATION "lib/${wxPLATFORM_LIB_DIR}/cmake")
+        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}")
     endif()
 endfunction()
 
