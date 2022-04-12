@@ -114,6 +114,7 @@ public:
 
     // Convert from wxImage:
     wxBitmap(const wxImage& image, int depth = -1, double scale = 1.0);
+    wxBitmap(const wxImage& image, const wxDC& dc);
 
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
@@ -236,6 +237,9 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
     virtual bool DoCreate(const wxSize& sz, double scale, int depth) wxOVERRIDE;
+
+private:
+    void InitFromImage(const wxImage& image, int depth, double scale);
 };
 
 #endif // _WX_BITMAP_H_

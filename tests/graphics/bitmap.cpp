@@ -1699,12 +1699,9 @@ TEST_CASE("Bitmap::DC", "[bitmap][dc]")
     wxBitmap bmp(10, 10, dc);
     CHECK( bmp.IsOk() );
 
-    // wxBitmap ctor from wxImage and wxDC is not available in the other ports.
-#ifdef __WXMSW__
     wxImage image(10, 10);
     wxBitmap bmpFromImage(image, dc);
     CHECK( bmpFromImage.IsOk() );
-#endif // __WXMSW__
 #endif // wxUSE_SVG
 }
 
@@ -1727,7 +1724,6 @@ TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
     CHECK( bmp2.GetScaleFactor() == 2 );
     CHECK( bmp2.GetSize() == wxSize(8, 8) );
 
-#ifdef __WXMSW__
     // A compatible bitmap created from wxImage and this DC should also inherit
     // the same scale factor, but its size should be still the same as that of
     // the image.
@@ -1735,7 +1731,6 @@ TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
     wxBitmap bmp3(img, dc);
     CHECK( bmp3.GetScaleFactor() == 2 );
     CHECK( bmp3.GetSize() == wxSize(16, 16) );
-#endif // __WXMSW__
 }
 
 #endif // ports with scaled bitmaps support

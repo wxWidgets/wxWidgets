@@ -24,6 +24,7 @@ public:
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
+    wxBitmap(const wxImage& image, const wxDC& dc);
 
     // Convert from wxIcon / wxCursor
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
@@ -76,6 +77,9 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+
+private:
+    void InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale));
 
     wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };

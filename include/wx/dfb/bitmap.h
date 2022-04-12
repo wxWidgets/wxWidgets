@@ -32,7 +32,10 @@ public:
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     wxBitmap(const char* const* bits);
 #if wxUSE_IMAGE
-    wxBitmap(const wxImage& image, int depth = -1, double WXUNUSED(scale) = 1.0);
+    wxBitmap(const wxImage& image, int depth = -1, double scale = 1.0)
+        { InitFromImage(image, depth, scale); }
+    wxBitmap(const wxImage& image, const wxDC& WXUNUSED(dc))
+        { InitFromImage(image, -1, 1.0); }
 #endif
 
     bool Create(const wxIDirectFBSurfacePtr& surface);
@@ -85,6 +88,8 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+    void InitFromImage(const wxImage& image, int depth, double scale);
 
     bool CreateWithFormat(int width, int height, int dfbFormat);
 

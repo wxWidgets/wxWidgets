@@ -84,6 +84,7 @@ public:
 
 #if wxUSE_IMAGE
     wxBitmap( const wxImage& image, int depth = -1, double WXUNUSED(scale) = 1.0 ) { (void)CreateFromImage(image, depth); }
+    wxBitmap( const wxImage& image, const wxDC& WXUNUSED(dc) ) { (void)CreateFromImage(image); }
     wxImage ConvertToImage() const;
     bool CreateFromImage(const wxImage& image, int depth = -1);
 #endif // wxUSE_IMAGE
