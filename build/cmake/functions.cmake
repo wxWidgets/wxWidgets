@@ -162,7 +162,7 @@ endfunction()
 
 # Set common properties on wx library target
 function(wx_set_target_properties target_name)
-    cmake_parse_arguments(wxTARGET "IS_BASE;IS_PLUGIN" "" "" ${ARGN})
+    cmake_parse_arguments(wxTARGET "IS_BASE;IS_PLUGIN;IS_MONO" "" "" ${ARGN})
     if(${target_name} MATCHES "wx.*")
         string(SUBSTRING ${target_name} 2 -1 target_name_short)
     else()
@@ -201,7 +201,7 @@ function(wx_set_target_properties target_name)
     endif()
 
     set(lib_suffix)
-    if(NOT target_name_short STREQUAL "base" AND NOT target_name_short STREQUAL "mono")
+    if(NOT target_name_short STREQUAL "base" AND NOT wxTARGET_IS_MONO)
         # Do not append library name for base or mono library
         set(lib_suffix "_${target_name_short}")
     endif()
@@ -273,7 +273,7 @@ function(wx_set_target_properties target_name)
 
     # Set common compile definitions
     target_compile_definitions(${target_name} PRIVATE WXBUILDING)
-    if(target_name_short STREQUAL "mono" AND wxUSE_GUI)
+    if(wxTARGET_IS_MONO AND wxUSE_GUI)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=1)
     elseif(wxTARGET_IS_PLUGIN)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=0)
@@ -350,7 +350,7 @@ function(wx_set_target_properties target_name)
 
     if(wxBUILD_SHARED)
         string(TOUPPER ${target_name_short} target_name_upper)
-        if(target_name_short STREQUAL "mono")
+        if(wxTARGET_IS_MONO)
             target_compile_definitions(${target_name} PRIVATE WXMAKINGDLL)
         elseif(NOT wxTARGET_IS_PLUGIN)
             target_compile_definitions(${target_name} PRIVATE WXMAKINGDLL_${target_name_upper})
@@ -362,7 +362,7 @@ function(wx_set_target_properties target_name)
     endif()
 
     # Link common libraries
-    if(NOT target_name_short STREQUAL "mono" AND NOT wxTARGET_IS_PLUGIN)
+    if(NOT wxTARGET_IS_MONO AND NOT wxTARGET_IS_PLUGIN)
         if(NOT target_name_short STREQUAL "base")
             # All libraries except base need the base library
             target_link_libraries(${target_name} PUBLIC wxbase)
@@ -387,18 +387,18 @@ endfunction()
 set(wxLIB_TARGETS)
 
 # Add a wxWidgets library
-# wx_add_library(<target_name> [IS_BASE] <src_files>...)
+# wx_add_library(<target_name> [IS_BASE;IS_PLUGIN;IS_MONO] <src_files>...)
 # first parameter is the name of the library
-# if the second parameter is set to IS_BASE a non UI lib is created
+# the second parameter is the type of library, empty for a UI library
 # all additional parameters are source files for the library
 macro(wx_add_library name)
-    cmake_parse_arguments(wxADD_LIBRARY "IS_BASE" "" "" ${ARGN})
+    cmake_parse_arguments(wxADD_LIBRARY "IS_BASE;IS_PLUGIN;IS_MONO" "" "" ${ARGN})
     set(src_files ${wxADD_LIBRARY_UNPARSED_ARGUMENTS})
 
     list(APPEND wxLIB_TARGETS ${name})
     set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
 
-    if(wxBUILD_MONOLITHIC AND NOT ${name} STREQUAL "wxmono")
+    if(wxBUILD_MONOLITHIC AND NOT wxADD_LIBRARY_IS_MONO)
         # collect all source files for mono library
         set(wxMONO_SRC_FILES ${wxMONO_SRC_FILES} ${src_files} PARENT_SCOPE)
     else()

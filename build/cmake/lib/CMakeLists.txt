@@ -73,7 +73,7 @@ endforeach()
 
 if(wxBUILD_MONOLITHIC)
     # Create monolithic library target
-    wx_add_library(wxmono ${wxMONO_SRC_FILES})
+    wx_add_library(wxmono IS_MONO ${wxMONO_SRC_FILES})
     foreach(vis PRIVATE PUBLIC)
         if(wxMONO_LIBS_${vis})
             # Remove libs included in mono from list
