@@ -14,6 +14,10 @@ function(wx_webview_copy_webview2_loader target)
         return()
     endif()
 
+    if(NOT WXUWP OR NOT wxUSE_WEBVIEW_EDGE OR NOT TARGET ${target})
+        return()
+    endif()
+
     if(CMAKE_SIZEOF_VOID_P EQUAL 4)
         set(WEBVIEW2_ARCH x86)
     else()
@@ -31,6 +35,8 @@ wx_append_sources(WEBVIEW_FILES WEBVIEW_CMN)
 
 if(WXMSW)
     wx_append_sources(WEBVIEW_FILES WEBVIEW_MSW)
+elseif(WXUWP)
+    wx_append_sources(WEBVIEW_FILES WEBVIEW_UWP)
 elseif(WXGTK)
     if(wxUSE_WEBVIEW_WEBKIT2)
         wx_append_sources(WEBVIEW_FILES WEBVIEW2_GTK)
@@ -45,7 +51,7 @@ wx_add_library(wxwebview ${WEBVIEW_FILES})
 
 if(APPLE)
     wx_lib_link_libraries(wxwebview PUBLIC "-framework WebKit")
-elseif(WXMSW)
+elseif(WXMSW OR WXUWP)
     if(wxUSE_WEBVIEW_EDGE)
         # Update the following variables if updating WebView2 SDK
         set(WEBVIEW2_VERSION "1.0.705.50")

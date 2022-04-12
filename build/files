@@ -2205,6 +2205,26 @@ MSW_DESKTOP_HDR =
     wx/msw/ole/automtn.h
     wx/msw/ole/uuid.h
 
+
+# wxUWP
+
+UWP_LOWLEVEL_SRC =
+    src/uwp/app.cpp
+    src/uwp/window.cpp
+
+UWP_SRC =
+    src/uwp/control.cpp
+    src/uwp/frame.cpp
+    src/uwp/menu.cpp
+    src/uwp/menuitem.cpp
+UWP_HDR =
+    wx/uwp/app.h
+    wx/uwp/window.h
+    wx/uwp/menu.h
+    wx/uwp/menuitem.h
+    wx/uwp/control.h
+    wx/uwp/frame.h
+
 # wxDFB
 
 DFB_LOWLEVEL_SRC =
@@ -3046,6 +3066,13 @@ AUI_MSW_HDR =
 AUI_MSW_SRC =
     src/aui/tabartmsw.cpp
     src/aui/barartmsw.cpp
+
+AUI_UWP_HDR =
+    wx/aui/tabartuwp.h
+    wx/aui/barartuwp.h
+AUI_UWP_SRC =
+    src/aui/tabartuwp.cpp
+    src/aui/barartuwp.cpp
 
 AUI_GTK_SRC =
     src/aui/tabartgtk.cpp

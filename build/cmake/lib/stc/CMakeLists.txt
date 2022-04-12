@@ -199,4 +199,8 @@ if(WXMSW)
     wx_lib_link_libraries(wxstc PRIVATE imm32)
 endif()
 
+if(WXUWP)
+    wx_lib_link_libraries(wxstc PRIVATE imm32)
+endif()
+
 wx_finalize_lib(wxstc)

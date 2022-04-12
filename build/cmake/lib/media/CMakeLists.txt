@@ -13,6 +13,8 @@ wx_append_sources(MEDIA_FILES MEDIA_CMN)
 
 if(WXMSW)
     wx_append_sources(MEDIA_FILES MEDIA_MSW)
+elseif(WX_UWP)
+    wx_append_sources(MEDIA_FILES MEDIA_UWP)
 elseif(WXOSX_COCOA)
     wx_append_sources(MEDIA_FILES MEDIA_OSX_COCOA)
 elseif(WXOSX_IPHONE)

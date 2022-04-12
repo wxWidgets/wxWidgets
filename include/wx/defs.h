@@ -57,6 +57,7 @@
          !defined(__WXDFB__)   && \
          !defined(__WXX11__)   && \
          !defined(__WXQT__)    && \
+         !defined(__UWP__)    && \
           wxUSE_GUI
 #       ifdef __UNIX__
 #           error "No Target! You should use wx-config program for compilation flags!"

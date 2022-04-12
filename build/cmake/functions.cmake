@@ -898,6 +898,10 @@ function(wx_add name group)
         VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}"
         )
 
+    if (WXUWP)
+        set_target_properties(${target_name} PROPERTIES VS_WINRT_COMPONENT TRUE)
+    endif()
+
     if(group STREQUAL Tests)
         add_test(NAME ${target_name}
             COMMAND ${target_name}

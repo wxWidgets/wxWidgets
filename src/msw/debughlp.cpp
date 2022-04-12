@@ -24,6 +24,8 @@
 
 #include "wx/msw/debughlp.h"
 
+#if !defined(__WXUWP__)
+
 #if wxUSE_DBGHELP && wxUSE_DYNLIB_CLASS
 
 #include "wx/scopedarray.h"
@@ -1163,3 +1165,5 @@ extern "C" void DumpTI(ULONG ti)
 #endif // NDEBUG
 
 #endif // wxUSE_DBGHELP
+
+#endif // __WXUWP__

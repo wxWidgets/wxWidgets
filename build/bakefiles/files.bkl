@@ -3308,6 +3308,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="AUI_PLATFORM_HDR" hints="files">
     <if cond="TOOLKIT=='MSW'">$(AUI_MSW_HDR)</if>
 </set>
+<set var="AUI_UWP_SRC" hints="files">
+    src/aui/tabartuwp.cpp
+    src/aui/barartuwp.cpp
+</set>
+<set var="AUI_UWP_HDR" hints="files">
+    wx/aui/tabartuwp.h
+    wx/aui/barartuwp.h
+</set>
+<set var="AUI_PLATFORM_SRC" hints="files">
+    <if cond="TOOLKIT=='UWP'">$(AUI_UWP_SRC)</if>
+</set>
+<set var="AUI_PLATFORM_HDR" hints="files">
+    <if cond="TOOLKIT=='UWP'">$(AUI_UWP_HDR)</if>
+</set>
 <set var="AUI_CMN_SRC" hints="files">
     src/aui/framemanager.cpp
     src/aui/dockart.cpp
@@ -3594,6 +3608,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_SHARED_HDR) $(OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='QT'">$(QT_HDR)</if>
+        <if cond="TOOLKIT=='UWP'">$(UWP_HDR)</if>
     </set>
 
     <set var="CORE_SRC" hints="files">
