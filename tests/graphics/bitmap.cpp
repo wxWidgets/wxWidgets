@@ -1698,6 +1698,13 @@ TEST_CASE("Bitmap::DC", "[bitmap][dc]")
     wxSVGFileDC dc(dummySVG.GetName());
     wxBitmap bmp(10, 10, dc);
     CHECK( bmp.IsOk() );
+
+    // wxBitmap ctor from wxImage and wxDC is not available in the other ports.
+#ifdef __WXMSW__
+    wxImage image(10, 10);
+    wxBitmap bmpFromImage(image, dc);
+    CHECK( bmpFromImage.IsOk() );
+#endif // __WXMSW__
 #endif // wxUSE_SVG
 }
 
