@@ -50,9 +50,6 @@
     #ifdef __GNUWIN32__
         #include "wx/msw/wrapwin.h"
     #endif
-#elif (defined(__WXSTUBS__))
-    // Have to ifdef this for different environments
-    #include <io.h>
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
