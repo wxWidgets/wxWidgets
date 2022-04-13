@@ -54,11 +54,7 @@
     // Have to ifdef this for different environments
     #include <io.h>
 #elif (defined(__WXMAC__))
-#if __MSL__ < 0x6000
     int access( const char *path, int mode ) { return 0 ; }
-#else
-    int _access( const char *path, int mode ) { return 0 ; }
-#endif
     char* mktemp( char * path ) { return path ;}
     #include <stat.h>
     #include <unistd.h>

@@ -4285,12 +4285,6 @@ if test "$wx_cv_func_vsnprintf" = "yes"; then
                 [
                     #include <stdio.h>
                     #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
                 ],
                 [
                     char *buf;
@@ -4359,12 +4353,6 @@ if test "$wx_cv_func_vsscanf" = "yes"; then
                 [
                     #include <stdio.h>
                     #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
                 ],
                 [
                     const char *buf;
