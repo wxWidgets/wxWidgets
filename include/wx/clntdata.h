@@ -161,7 +161,7 @@ protected:
 
 // This class is a replacement for wxClientDataContainer, and unlike
 // wxClientDataContainer the wxSharedClientDataContainer client data is
-// copyable, so it can be copied when objects containing it are cloned.
+// copiable, so it can be copied when objects containing it are cloned.
 // Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
 // that provides storage and management of "client data.". The client data
 // is reference counted and managed by the container.
