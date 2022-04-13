@@ -64,10 +64,12 @@ public:
 
     This class is a replacement for @ref wxClientDataContainer, and unlike
     wxClientDataContainer the wxSharedClientDataContainer client data is
-    possible to copy (as a shared ptr) when instances of it are cloned.
+    copyable, so it can be copied when objects containing it are cloned.
     Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
     that provides storage and management of "client data.". The client data
-    is reference counted and managed by the container.
+    is reference counted and managed by the container. As the client data
+    is a shared object, changing the client data used by any object changes
+    it for all other objects, too.
 
     @note If your class has a Clone function and needs to store client data,
           use wxSharedClientDataContainer and not wxClientDataContainer!
@@ -76,10 +78,14 @@ public:
     @category{containers}
 
     @see wxClientDataContainer, wxClientData
+    @since 3.1.7
 */
 class wxSharedClientDataContainer
 {
 public:
+    // Provide the same functions as in wxClientDataContainer, so that objects
+    // using it and this class could be used in exactly the same way.
+
     /**
         Get the untyped client data.
     */
