@@ -161,7 +161,7 @@ protected:
 
 // This class is a replacement for wxClientDataContainer, and unlike
 // wxClientDataContainer the wxSharedClientDataContainer client data is
-// possible to copy (as a shared ptr) when instances of it are cloned.
+// copyable, so it can be copied when objects containing it are cloned.
 // Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
 // that provides storage and management of "client data.". The client data
 // is reference counted and managed by the container.
@@ -172,15 +172,17 @@ protected:
 class WXDLLIMPEXP_BASE wxSharedClientDataContainer
 {
 public:
+    // Provide the same functions as in wxClientDataContainer, so that objects
+    // using it and this class could be used in exactly the same way.
     void SetClientObject(wxClientData *data);
     wxClientData *GetClientObject() const;
     void SetClientData(void *data);
     void *GetClientData() const;
 
 protected:
-    bool HasClientDataContainer() const {return NULL != m_data.get();}
-    wxSharedPtr<wxClientDataContainer> GetClientDataContainer() const {return m_data;}
-    void SetClientDataContainer(wxSharedPtr<wxClientDataContainer> data) {m_data = data;}
+    bool HasClientDataContainer() const { return m_data.get() != NULL; }
+    wxSharedPtr<wxClientDataContainer> GetClientDataContainer() const { return m_data; }
+    void SetClientDataContainer(wxSharedPtr<wxClientDataContainer> data) { m_data = data; }
 
 private:
     //Helper function that will create m_data if it is currently NULL
