@@ -10,13 +10,8 @@
 #ifndef __GTKBITMAPH__
 #define __GTKBITMAPH__
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
 #include "wx/palette.h"
 #include "wx/gdiobj.h"
-
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 //-----------------------------------------------------------------------------
 // classes
@@ -69,10 +64,12 @@ public:
     wxBitmap() {}
     wxBitmap( int width, int height, int depth = -1 ) { Create( width, height, depth ); }
     wxBitmap( const wxSize& sz, int depth = -1 ) { Create( sz, depth ); }
+    wxBitmap( int width, int height, const wxDC& dc ) { Create(width, height, dc); }
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
     wxBitmap( const wxImage& image, int depth = -1, double WXUNUSED(scale) = 1.0 ) { (void)CreateFromImage(image, depth); }
+    wxBitmap( const wxImage& image, const wxDC& WXUNUSED(dc) ) { (void)CreateFromImage(image); }
     explicit wxBitmap(const wxCursor& cursor);
     virtual ~wxBitmap();
 

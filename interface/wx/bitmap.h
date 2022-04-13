@@ -307,6 +307,20 @@ public:
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
+        Create a bitmap compatible with the given DC, inheriting its magnification factor
+
+        @param width
+            The width of the bitmap in pixels, must be strictly positive.
+        @param height
+            The height of the bitmap in pixels, must be strictly positive.
+        @param dc
+            DC from which the scaling factor is inherited
+
+        @since 3.1.7 (previously available only in wxMSW and wxOSX ports).
+     */
+    wxBitmap(int width, int height, const wxDC& dc);
+
+    /**
         Creates a bitmap from XPM data.
 
         @beginWxPerlOnly
@@ -352,6 +366,23 @@ public:
             If this is omitted, the display depth of the screen is used.
     */
     wxBitmap(const wxImage& img, int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /**
+        Creates a bitmap compatible with the given DC from the given image.
+
+        This constructor initializes the bitmap with the data of the given
+        image, which must be valid, but inherits the scaling factor from the
+        given device context instead of simply using the default factor of 1.
+
+        @param img
+            Platform-independent wxImage object.
+        @param dc
+            DC from which the scaling factor is inherited
+
+        @since 3.1.7 (previously this constructor overload was only available
+            in wxMSW port)
+     */
+    wxBitmap(const wxImage& img, const wxDC& dc);
 
     /**
         Creates bitmap corresponding to the given cursor.

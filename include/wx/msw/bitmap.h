@@ -15,19 +15,10 @@
 #include "wx/math.h"
 #include "wx/palette.h"
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
-class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 class WXDLLIMPEXP_FWD_CORE wxBitmapRefData;
-class WXDLLIMPEXP_FWD_CORE wxControl;
-class WXDLLIMPEXP_FWD_CORE wxCursor;
-class WXDLLIMPEXP_FWD_CORE wxDC;
 #if wxUSE_WXDIB
 class WXDLLIMPEXP_FWD_CORE wxDIB;
 #endif
-class WXDLLIMPEXP_FWD_CORE wxIcon;
-class WXDLLIMPEXP_FWD_CORE wxMask;
-class WXDLLIMPEXP_FWD_CORE wxPalette;
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // What kind of transparency should a bitmap copied from an icon or cursor
 // have?

@@ -16,14 +16,11 @@
     #include "wx/image.h"
     #include "wx/colour.h"
     #include "wx/cursor.h"
+    #include "wx/dc.h"
 #endif
 
 #include "wx/math.h"
 #include "wx/rawbmp.h"
-
-#ifdef __WXGTK3__
-#include "wx/dc.h"
-#endif
 
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private.h"
@@ -593,7 +590,7 @@ static void CopyImageData(
 
 #if wxUSE_IMAGE
 #ifdef __WXGTK3__
-wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale)
 {
     wxCHECK_RET(image.IsOk(), "invalid image");
 
@@ -640,7 +637,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     }
 }
 #else
-wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale))
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale))
 {
     wxCHECK_RET(image.IsOk(), "invalid image");
 
@@ -785,6 +782,16 @@ bool wxBitmap::CreateFromImageAsPixbuf(const wxImage& image)
     return true;
 }
 #endif
+
+wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+{
+    InitFromImage(image, depth, scale);
+}
+
+wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
+{
+    InitFromImage(image, -1, dc.GetContentScaleFactor());
+}
 
 wxImage wxBitmap::ConvertToImage() const
 {

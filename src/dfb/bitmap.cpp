@@ -417,7 +417,7 @@ bool wxBitmap::CreateWithFormat(int width, int height, int dfbFormat)
 }
 
 #if wxUSE_IMAGE
-wxBitmap::wxBitmap(const wxImage& imageOrig, int depth, double WXUNUSED(scale))
+void wxBitmap::InitFromImage(const wxImage& imageOrig, int depth, double WXUNUSED(scale))
 {
     wxCHECK_RET( imageOrig.IsOk(), wxT("invalid image") );
 
