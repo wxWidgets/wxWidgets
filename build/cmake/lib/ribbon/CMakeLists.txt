@@ -7,10 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(RIBBON_FILES RIBBON)
 
 wx_add_library(wxribbon ${RIBBON_FILES})
-
-wx_finalize_lib(wxribbon)

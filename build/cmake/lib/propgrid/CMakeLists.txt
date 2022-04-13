@@ -7,10 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(PROPGRID_FILES PROPGRID)
 
 wx_add_library(wxpropgrid ${PROPGRID_FILES})
-
-wx_finalize_lib(wxpropgrid)

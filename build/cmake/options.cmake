@@ -16,7 +16,7 @@ wx_option(wxBUILD_TESTS "Build console tests (CONSOLE_ONLY) or ALL" OFF
     STRINGS CONSOLE_ONLY ALL OFF)
 wx_option(wxBUILD_DEMOS "Build demos" OFF)
 wx_option(wxBUILD_BENCHMARKS "Build benchmarks" OFF)
-wx_option(wxBUILD_PRECOMP "Use precompiled headers")
+wx_option(wxBUILD_PRECOMP "Use precompiled headers" ON STRINGS ON OFF COTIRE)
 mark_as_advanced(wxBUILD_PRECOMP)
 wx_option(wxBUILD_INSTALL "Create install/uninstall target for wxWidgets")
 wx_option(wxBUILD_COMPATIBILITY

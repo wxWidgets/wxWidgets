@@ -122,7 +122,6 @@ public:
 private:
     PokeAdviseClient *m_client;
     PokeAdviseConn *m_conn;
-    bool m_initDone;
 
     wxDECLARE_NO_COPY_CLASS(PokeAdvisePersistentConnection);
 };

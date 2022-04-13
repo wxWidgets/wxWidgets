@@ -386,6 +386,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     //
     // my_png_from_mem = wxBitmap::NewFromPNGData(cursor_png, WXSIZEOF(cursor_png));
     my_png_from_mem = wxBITMAP_PNG_FROM_DATA(cursor);
+
+    // prevent -Wunused-const-variable when compiler fails to detect its usage
+    wxUnusedVar(cursor_png);
 }
 
 MyCanvas::~MyCanvas()

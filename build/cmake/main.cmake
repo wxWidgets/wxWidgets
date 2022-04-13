@@ -10,6 +10,7 @@
 list(APPEND CMAKE_MODULE_PATH "${wxSOURCE_DIR}/build/cmake/modules")
 
 include(build/cmake/files.cmake)            # Files list
+include(build/cmake/source_groups.cmake)    # source group definitions
 include(build/cmake/functions.cmake)        # wxWidgets functions
 include(build/cmake/toolkit.cmake)          # Platform/toolkit settings
 include(build/cmake/options.cmake)          # User options
