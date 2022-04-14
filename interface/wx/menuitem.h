@@ -138,7 +138,7 @@ public:
         For example:
 
         @code
-          wxMenuItem::GetLabelfromText("&Hello\tCtrl-h");
+          wxMenuItem::GetLabelText("&Hello\tCtrl-h");
         @endcode
 
         will return just @c "Hello".
@@ -163,16 +163,16 @@ public:
     /**
         Returns the checked or unchecked bitmap.
 
-        @onlyfor{wxmsw}
+        The @c checked parameter is only available in wxMSW.
     */
-    virtual const wxBitmap& GetBitmap(bool checked = true) const;
+    virtual wxBitmap GetBitmap(bool checked = true) const;
 
     /**
-        Returns the bitmap to be used for disabled items.
+        Returns the bitmap used for disabled items.
 
         @onlyfor{wxmsw}
     */
-    virtual const wxBitmap& GetDisabledBitmap() const;
+    virtual wxBitmap GetDisabledBitmap() const;
 
     /**
         Returns the font associated with the menu item.
@@ -256,7 +256,7 @@ public:
 
         @deprecated This function is deprecated in favour of GetItemLabel().
 
-        @see GetLabelFromText()
+        @see GetItemLabel()
     */
     const wxString& GetText() const;
 
@@ -367,7 +367,7 @@ public:
 
         @onlyfor{wxmsw,wxosx,wxgtk}
     */
-    virtual void SetBitmap(const wxBitmap& bmp, bool checked = true);
+    virtual void SetBitmap(const wxBitmapBundle& bmp, bool checked = true);
 
     /**
         Sets the checked/unchecked bitmaps for the menu item.
@@ -375,15 +375,15 @@ public:
 
         @onlyfor{wxmsw}
     */
-    void SetBitmaps(const wxBitmap& checked,
-                    const wxBitmap& unchecked = wxNullBitmap);
+    void SetBitmaps(const wxBitmapBundle& checked,
+                    const wxBitmapBundle& unchecked = wxNullBitmap);
 
     /**
         Sets the to be used for disabled menu items.
 
         @onlyfor{wxmsw}
     */
-    void SetDisabledBitmap(const wxBitmap& disabled);
+    void SetDisabledBitmap(const wxBitmapBundle& disabled);
 
 
     /**
