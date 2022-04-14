@@ -561,6 +561,14 @@ TEST_CASE("wxFileName::UNC", "[filename]")
     CHECK( fn.GetVolume() == "\\\\share2" );
     CHECK( GetDOSPath(fn) == "\\path2" );
 
+    fn.SetPath("\\\\server\\volume\\path", wxPATH_DOS);
+    fn.AppendDir("subdir");
+    CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\server\\volume\\path\\subdir\\name.ext" );
+
+    // Check for a bug with normalization breaking the path (#22275).
+    fn.Normalize(wxPATH_NORM_LONG);
+    CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\server\\volume\\path\\subdir\\name.ext" );
+
 #ifdef __WINDOWS__
     // Check that doubled backslashes in the beginning of the path are not
     // misinterpreted as UNC volume when we have a drive letter in the

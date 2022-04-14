@@ -2240,8 +2240,7 @@ wxString wxFileName::GetLongPath() const
     HANDLE hFind;
 
     if ( HasVolume() )
-        pathOut = GetVolume() +
-                  GetVolumeSeparator(wxPATH_DOS) +
+        pathOut = wxGetVolumeString(GetVolume(), wxPATH_DOS) +
                   GetPathSeparator(wxPATH_DOS);
     else
         pathOut.clear();
