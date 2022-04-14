@@ -138,7 +138,7 @@ public:
         For example:
 
         @code
-          wxMenuItem::GetLabelfromText("&Hello\tCtrl-h");
+          wxMenuItem::GetLabelText("&Hello\tCtrl-h");
         @endcode
 
         will return just @c "Hello".
@@ -163,16 +163,16 @@ public:
     /**
         Returns the checked or unchecked bitmap.
 
-        @onlyfor{wxmsw}
+        The @c checked parameter is only available in wxMSW.
     */
-    virtual const wxBitmap& GetBitmap(bool checked = true) const;
+    virtual const wxBitmap GetBitmap(bool checked = true) const;
 
     /**
         Returns the bitmap to be used for disabled items.
 
         @onlyfor{wxmsw}
     */
-    virtual const wxBitmap& GetDisabledBitmap() const;
+    virtual const wxBitmap GetDisabledBitmap() const;
 
     /**
         Returns the font associated with the menu item.
@@ -256,7 +256,7 @@ public:
 
         @deprecated This function is deprecated in favour of GetItemLabel().
 
-        @see GetLabelFromText()
+        @see GetItemLabel()
     */
     const wxString& GetText() const;
 
