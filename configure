@@ -34294,17 +34294,61 @@ done
 fi
 
 
-for ac_func in snprintf vsnprintf vsscanf
-do :
-  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
-if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+
+  for wx_func in snprintf vsnprintf vsscanf
+  do
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $wx_func" >&5
+$as_echo_n "checking for $wx_func... " >&6; }
+if eval \${wx_cv_func_$wx_func+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+
+                $ac_includes_default
+
+int
+main ()
+{
+
+                #ifndef $wx_func
+                  &$wx_func;
+                #endif
+
+
+  ;
+  return 0;
+}
+
 _ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  eval wx_cv_func_$wx_func=yes
+else
+  eval wx_cv_func_$wx_func=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 fi
-done
+eval ac_res=\$wx_cv_func_$wx_func
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+
+    if eval test \$wx_cv_func_$wx_func = yes
+    then
+      cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$wx_func" | $as_tr_cpp` 1
+_ACEOF
+
+
+    else
+      :
+
+    fi
+  done
 
 
 ac_ext=cpp
@@ -34313,14 +34357,14 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-if test "$ac_cv_func_vsnprintf" = "yes"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for vsnprintf declaration" >&5
-$as_echo_n "checking for vsnprintf declaration... " >&6; }
-if ${wx_cv_func_vsnprintf_decl+:} false; then :
+if test "$wx_cv_func_vsnprintf" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if vsnprintf declaration is broken" >&5
+$as_echo_n "checking if vsnprintf declaration is broken... " >&6; }
+if ${wx_cv_func_broken_vsnprintf_decl+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
-                                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
                     #include <stdio.h>
@@ -34332,55 +34376,8 @@ main ()
 
                     char *buf;
                     va_list ap;
-                    vsnprintf(buf, 10u, "%s", ap);
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_func_vsnprintf_decl=yes
-else
-  wx_cv_func_vsnprintf_decl=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_vsnprintf_decl" >&5
-$as_echo "$wx_cv_func_vsnprintf_decl" >&6; }
-
-    if test "$wx_cv_func_vsnprintf_decl" = "yes"; then
-        $as_echo "#define HAVE_VSNPRINTF_DECL 1" >>confdefs.h
-
-
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if vsnprintf declaration is broken" >&5
-$as_echo_n "checking if vsnprintf declaration is broken... " >&6; }
-if ${wx_cv_func_broken_vsnprintf_decl+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                        #include <stdio.h>
-                        #include <stdarg.h>
-                        #ifdef __MSL__
-                        #if __MSL__ >= 0x6000
-                        namespace std {}
-                        using namespace std;
-                        #endif
-                        #endif
-
-int
-main ()
-{
-
-                        char *buf;
-                        va_list ap;
-                        const char *fmt = "%s";
-                        vsnprintf(buf, 10u, fmt, ap);
+                    const char *fmt = "%s";
+                    vsnprintf(buf, 10u, fmt, ap);
 
   ;
   return 0;
@@ -34399,61 +34396,13 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_broken_vsnprintf_decl" >&5
 $as_echo "$wx_cv_func_broken_vsnprintf_decl" >&6; }
 
-        if test "$wx_cv_func_broken_vsnprintf_decl" = "yes"; then
-            $as_echo "#define HAVE_BROKEN_VSNPRINTF_DECL 1" >>confdefs.h
-
-        fi
-    fi
-fi
-
-if test "$ac_cv_func_snprintf" = "yes"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for snprintf declaration" >&5
-$as_echo_n "checking for snprintf declaration... " >&6; }
-if ${wx_cv_func_snprintf_decl+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                    #include <stdio.h>
-                    #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
-
-int
-main ()
-{
-
-                    char *buf;
-                    snprintf(buf, 10u, "%s", "wx");
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_func_snprintf_decl=yes
-else
-  wx_cv_func_snprintf_decl=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_snprintf_decl" >&5
-$as_echo "$wx_cv_func_snprintf_decl" >&6; }
-
-    if test "$wx_cv_func_snprintf_decl" = "yes"; then
-        $as_echo "#define HAVE_SNPRINTF_DECL 1" >>confdefs.h
+    if test "$wx_cv_func_broken_vsnprintf_decl" = "yes"; then
+        $as_echo "#define HAVE_BROKEN_VSNPRINTF_DECL 1" >>confdefs.h
 
     fi
+fi
 
+if test "$wx_cv_func_snprintf" = "yes"; then
     if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
 
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if snprintf supports positional arguments" >&5
@@ -34509,10 +34458,10 @@ $as_echo "$wx_cv_func_snprintf_pos_params" >&6; }
     fi
 fi
 
-if test "$ac_cv_func_vsscanf" = "yes"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for vsscanf declaration" >&5
-$as_echo_n "checking for vsscanf declaration... " >&6; }
-if ${wx_cv_func_vsscanf_decl+:} false; then :
+if test "$wx_cv_func_vsscanf" = "yes"; then
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if vsscanf() declaration is broken" >&5
+$as_echo_n "checking if vsscanf() declaration is broken... " >&6; }
+if ${wx_cv_func_broken_vsscanf_decl+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
@@ -34521,67 +34470,14 @@ else
 
                     #include <stdio.h>
                     #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
 
 int
 main ()
 {
 
-                    char *buf;
+                    const char *buf;
                     va_list args;
                     vsscanf(buf, "%s", args);
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_func_vsscanf_decl=yes
-else
-  wx_cv_func_vsscanf_decl=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_vsscanf_decl" >&5
-$as_echo "$wx_cv_func_vsscanf_decl" >&6; }
-
-    if test "$wx_cv_func_vsscanf_decl" = "yes"; then
-        $as_echo "#define HAVE_VSSCANF_DECL 1" >>confdefs.h
-
-
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if vsscanf() declaration is broken" >&5
-$as_echo_n "checking if vsscanf() declaration is broken... " >&6; }
-if ${wx_cv_func_broken_vsscanf_decl+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                        #include <stdio.h>
-                        #include <stdarg.h>
-                        #ifdef __MSL__
-                        #if __MSL__ >= 0x6000
-                        namespace std {}
-                        using namespace std;
-                        #endif
-                        #endif
-
-int
-main ()
-{
-
-                        const char *buf;
-                        va_list args;
-                        vsscanf(buf, "%s", args);
 
   ;
   return 0;
@@ -34600,10 +34496,9 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_broken_vsscanf_decl" >&5
 $as_echo "$wx_cv_func_broken_vsscanf_decl" >&6; }
 
-        if test "$wx_cv_func_broken_vsscanf_decl" = "yes"; then
-            $as_echo "#define HAVE_BROKEN_VSSCANF_DECL 1" >>confdefs.h
+    if test "$wx_cv_func_broken_vsscanf_decl" = "yes"; then
+        $as_echo "#define HAVE_BROKEN_VSSCANF_DECL 1" >>confdefs.h
 
-        fi
     fi
 fi
 ac_ext=c

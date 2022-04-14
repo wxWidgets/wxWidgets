@@ -4272,25 +4272,15 @@ AC_CHECK_TYPES([mbstate_t],
                [],
                [#include <wchar.h>])
 
-dnl check for vsnprintf() -- a safe version of vsprintf())
-dnl
-dnl the trouble here is that on some systems (e.g. HP-UX 10) this function is
-dnl present in libc but not in the system headers and so AC_CHECK_FUNCS (which,
-dnl stupidly, provides a dummy function declaration inside its extension)
-dnl succeeds, even with C++ compiler, but the compilation of wxWidgets fails
-dnl
-dnl so we first check if the function is in the library
-dnl
-dnl FIXME: replace this mess with WX_CHECK_FUNCS()
-AC_CHECK_FUNCS(snprintf vsnprintf vsscanf)
+dnl Check for vararg functions that should be available in stdio.h
+WX_CHECK_FUNCS(snprintf vsnprintf vsscanf)
 
 AC_LANG_PUSH(C++)
-if test "$ac_cv_func_vsnprintf" = "yes"; then
-    dnl yes it is -- now check if it is in the headers
-    AC_CACHE_CHECK([for vsnprintf declaration], wx_cv_func_vsnprintf_decl,
+if test "$wx_cv_func_vsnprintf" = "yes"; then
+    dnl we know there is a vsnprintf declaration, but some old headers
+    dnl may have one taking a "char *" format instead of "const char *"
+    AC_CACHE_CHECK([if vsnprintf declaration is broken], wx_cv_func_broken_vsnprintf_decl,
         [
-            dnl our troubles are not over: HP-UX 11 prototypes vsnprintf() as
-            dnl taking "char *" and not "const char *" so test for this too
             AC_TRY_COMPILE(
                 [
                     #include <stdio.h>
@@ -4299,80 +4289,21 @@ if test "$ac_cv_func_vsnprintf" = "yes"; then
                 [
                     char *buf;
                     va_list ap;
-                    vsnprintf(buf, 10u, "%s", ap);
+                    const char *fmt = "%s";
+                    vsnprintf(buf, 10u, fmt, ap);
                 ],
-                wx_cv_func_vsnprintf_decl=yes,
-                wx_cv_func_vsnprintf_decl=no
+                wx_cv_func_broken_vsnprintf_decl=no,
+                wx_cv_func_broken_vsnprintf_decl=yes
             )
         ]
     )
 
-    if test "$wx_cv_func_vsnprintf_decl" = "yes"; then
-        AC_DEFINE(HAVE_VSNPRINTF_DECL)
-
-        dnl we know there is a vsnprintf declaration, but some old headers
-        dnl may have one taking a "char *" format instead of "const char *"
-        AC_CACHE_CHECK([if vsnprintf declaration is broken], wx_cv_func_broken_vsnprintf_decl,
-            [
-                AC_TRY_COMPILE(
-                    [
-                        #include <stdio.h>
-                        #include <stdarg.h>
-                        #ifdef __MSL__
-                        #if __MSL__ >= 0x6000
-                        namespace std {}
-                        using namespace std;
-                        #endif
-                        #endif
-                    ],
-                    [
-                        char *buf;
-                        va_list ap;
-                        const char *fmt = "%s";
-                        vsnprintf(buf, 10u, fmt, ap);
-                    ],
-                    wx_cv_func_broken_vsnprintf_decl=no,
-                    wx_cv_func_broken_vsnprintf_decl=yes
-                )
-            ]
-        )
-
-        if test "$wx_cv_func_broken_vsnprintf_decl" = "yes"; then
-            AC_DEFINE(HAVE_BROKEN_VSNPRINTF_DECL)
-        fi
+    if test "$wx_cv_func_broken_vsnprintf_decl" = "yes"; then
+        AC_DEFINE(HAVE_BROKEN_VSNPRINTF_DECL)
     fi
 fi
 
-dnl the same as above but for snprintf() now: it's not present in at least AIX
-dnl 4.2 headers
-if test "$ac_cv_func_snprintf" = "yes"; then
-    AC_CACHE_CHECK([for snprintf declaration], wx_cv_func_snprintf_decl,
-        [
-            AC_TRY_COMPILE(
-                [
-                    #include <stdio.h>
-                    #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
-                ],
-                [
-                    char *buf;
-                    snprintf(buf, 10u, "%s", "wx");
-                ],
-                wx_cv_func_snprintf_decl=yes,
-                wx_cv_func_snprintf_decl=no
-            )
-        ]
-    )
-
-    if test "$wx_cv_func_snprintf_decl" = "yes"; then
-        AC_DEFINE(HAVE_SNPRINTF_DECL)
-    fi
-
+if test "$wx_cv_func_snprintf" = "yes"; then
     if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
 
         dnl check if snprintf() has support for positional arguments
@@ -4412,66 +4343,30 @@ define HAVE_UNIX98_PRINTF as 1 in setup.h if it is available.])
     fi
 fi
 
-dnl the same as above but for vsscanf() now: it's not present in at least
-dnl Solaris 9 headers for gcc-3.4 (due to fixinclude's processing of stdio.h)
-if test "$ac_cv_func_vsscanf" = "yes"; then
-    AC_CACHE_CHECK([for vsscanf declaration], wx_cv_func_vsscanf_decl,
+if test "$wx_cv_func_vsscanf" = "yes"; then
+    dnl we know there is a vsscanf() declaration, but it can be broken by
+    dnl declaring vsscanf() as taking a non-const first argument (this
+    dnl happens at least under HP-UX 11.31, see #15638).
+    AC_CACHE_CHECK([if vsscanf() declaration is broken], wx_cv_func_broken_vsscanf_decl,
         [
             AC_TRY_COMPILE(
                 [
                     #include <stdio.h>
                     #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
                 ],
                 [
-                    char *buf;
+                    const char *buf;
                     va_list args;
                     vsscanf(buf, "%s", args);
                 ],
-                wx_cv_func_vsscanf_decl=yes,
-                wx_cv_func_vsscanf_decl=no
+                wx_cv_func_broken_vsscanf_decl=no,
+                wx_cv_func_broken_vsscanf_decl=yes
             )
         ]
     )
 
-    if test "$wx_cv_func_vsscanf_decl" = "yes"; then
-        AC_DEFINE(HAVE_VSSCANF_DECL)
-
-        dnl we know there is a vsscanf() declaration, but it can be broken by
-        dnl declaring vsscanf() as taking a non-const first argument (this
-        dnl happens at least under HP-UX 11.31, see #15638).
-        AC_CACHE_CHECK([if vsscanf() declaration is broken], wx_cv_func_broken_vsscanf_decl,
-            [
-                AC_TRY_COMPILE(
-                    [
-                        #include <stdio.h>
-                        #include <stdarg.h>
-                        #ifdef __MSL__
-                        #if __MSL__ >= 0x6000
-                        namespace std {}
-                        using namespace std;
-                        #endif
-                        #endif
-                    ],
-                    [
-                        const char *buf;
-                        va_list args;
-                        vsscanf(buf, "%s", args);
-                    ],
-                    wx_cv_func_broken_vsscanf_decl=no,
-                    wx_cv_func_broken_vsscanf_decl=yes
-                )
-            ]
-        )
-
-        if test "$wx_cv_func_broken_vsscanf_decl" = "yes"; then
-            AC_DEFINE(HAVE_BROKEN_VSSCANF_DECL)
-        fi
+    if test "$wx_cv_func_broken_vsscanf_decl" = "yes"; then
+        AC_DEFINE(HAVE_BROKEN_VSSCANF_DECL)
     fi
 fi
 AC_LANG_POP()
