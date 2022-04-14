@@ -188,6 +188,71 @@ CATCH_TRANSLATE_EXCEPTION(TestAssertFailure& e)
 
 #endif // wxDEBUG_LEVEL
 
+#if wxUSE_LOG
+
+// Custom log target used while running the tests.
+class TestLogger : public wxLog
+{
+public:
+    TestLogger()
+    {
+        // Use standard time-stamp instead of the locale-specific one and show
+        // milliseconds too.
+        wxLog::SetTimestamp("%Y-%m-%d %H:%M:%S.%l");
+    }
+
+    // This is used by TestLogEnabler to enable logging all messages.
+    static int ms_enableCount;
+
+protected:
+    virtual void DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info) wxOVERRIDE
+    {
+        // If logging was explicitly enabled, show everything on the console.
+        //
+        // Otherwise we only show trace messages as they are not given by
+        // default and can be only activated by setting WXTRACE.
+        if ( ms_enableCount || level == wxLOG_Trace )
+        {
+            wxString ts;
+            TimeStampMS(&ts, info.timestampMS);
+
+            const wxString levels[] =
+            {
+                "Fatal", "Error", "Warning",
+                "Message", "Status", "Info",
+                "Debug", "Trace", "Progress"
+            };
+            wxString prefix;
+            if ( level < WXSIZEOF(levels) )
+                prefix = levels[level];
+            else
+                prefix.Printf("Level %d", level);
+
+            m_out.Output(wxString::Format("[%s] %s: %s", ts, prefix, msg));
+        }
+    }
+
+    wxMessageOutputStderr m_out;
+};
+
+// By default, normal logging is disabled as it would interfere with the normal
+// test output.
+int TestLogger::ms_enableCount = 0;
+
+TestLogEnabler::TestLogEnabler()
+{
+    TestLogger::ms_enableCount++;
+}
+
+TestLogEnabler::~TestLogEnabler()
+{
+    TestLogger::ms_enableCount--;
+}
+
+#endif // wxUSE_LOG
+
 #if wxUSE_GUI
     typedef wxApp TestAppBase;
     typedef wxGUIAppTraits TestAppTraitsBase;
@@ -602,13 +667,7 @@ bool TestApp::ProcessEvent(wxEvent& event)
 int TestApp::RunTests()
 {
 #if wxUSE_LOG
-    // Switch off logging to avoid interfering with the tests output unless
-    // WXTRACE is set, as otherwise setting it would have no effect while
-    // running the tests.
-    if ( !wxGetEnv(wxASCII_STR("WXTRACE"), NULL) )
-        wxLog::EnableLogging(false);
-    else
-        wxLog::SetTimestamp("%Y-%m-%d %H:%M:%S.%l");
+    delete wxLog::SetActiveTarget(new TestLogger);
 #endif
 
     // Cast is needed under MSW where Catch also provides an overload taking
