@@ -545,15 +545,21 @@ TEST_CASE("wxFileName::ShortLongPath", "[filename]")
 
 #endif // __WINDOWS__
 
+// Small helper to make things slightly less verbose in the tests below.
+static wxString GetDOSPath(const wxFileName& fn)
+{
+    return fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS);
+}
+
 TEST_CASE("wxFileName::UNC", "[filename]")
 {
     wxFileName fn("//share/path/name.ext", wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\share" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path" );
+    CHECK( GetDOSPath(fn) == "\\path" );
 
     fn.Assign("\\\\share2\\path2\\name.ext", wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\share2" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path2" );
+    CHECK( GetDOSPath(fn) == "\\path2" );
 
 #ifdef __WINDOWS__
     // Check that doubled backslashes in the beginning of the path are not
@@ -574,13 +580,13 @@ TEST_CASE("wxFileName::VolumeUniqueName", "[filename]")
     wxFileName fn("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
                   wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\" );
+    CHECK( GetDOSPath(fn) == "\\" );
     CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\" );
 
     fn.Assign("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
               "Program Files\\setup.exe", wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\Program Files" );
+    CHECK( GetDOSPath(fn) == "\\Program Files" );
     CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe" );
 }
 
