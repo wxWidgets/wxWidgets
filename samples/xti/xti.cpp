@@ -277,13 +277,13 @@ public:
         // this approach would be used if the handler would not
         // be connected really in the designer, so we have to supply
         // the information
-        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty("Button") );
+        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty(wxT("Button")) );
         if ( object == but &&
-             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo("OnClick") )
+             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo(wxT("OnClick")) )
         {
             eventSink = m_frame;
             handlerInfo = m_frame->GetClassInfo()->
-                FindHandlerInfo("ButtonClickHandler");
+                FindHandlerInfo(wxT("ButtonClickHandler"));
             return true;
         }
         return false;
@@ -315,13 +315,13 @@ void RegisterFrameRTTI()
         wx_dynamic_cast( wxDynamicClassInfo *, wxClassInfo::FindClass("MyXTIFrame"));
     if ( dyninfo == NULL )
     {
-        dyninfo = new wxDynamicClassInfo("myxtiframe.h",
-                            "MyXTIFrame",
+        dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
+                            wxT("MyXTIFrame"),
                             CLASSINFO(wxFrame) );
 
         // this class has a property named "Button" and the relative handler:
-        dyninfo->AddProperty("Button", wxGetTypeInfo((wxButton**) NULL));
-        dyninfo->AddHandler("ButtonClickHandler",
+        dyninfo->AddProperty(wxT("Button"), wxGetTypeInfo((wxButton**) NULL));
+        dyninfo->AddHandler(wxT("ButtonClickHandler"),
             NULL /* no instance of the handler method */, CLASSINFO( wxEvent ) );
     }
 }
@@ -386,7 +386,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
     wxASSERT( info->Create(button, 6, Params ));
-    frameWrapper->SetProperty( "Button", wxAny( button ) );
+    frameWrapper->SetProperty( wxT("Button"), wxAny( button ) );
 
     // other controls page
 
@@ -701,10 +701,10 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
         wxStringOutputStream str;
         f.Read(str);
 
-        wxDialog dlg(this, wxID_ANY, "Generated code",
+        wxDialog dlg3(this, wxID_ANY, "Generated code",
                      wxDefaultPosition, wxDefaultSize,
                      wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE);
-        wxPanel *panel = new wxPanel(&dlg);
+        wxPanel *panel = new wxPanel(&dlg3);
         wxSizer *sz = new wxBoxSizer(wxVERTICAL);
         sz->Add(new wxTextCtrl(panel, wxID_ANY, str.GetString(),
                                wxDefaultPosition, wxDefaultSize,
@@ -712,7 +712,7 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
                 1, wxGROW|wxALL, 5);
         sz->Add(new wxButton(panel, wxID_OK), 0, wxALIGN_RIGHT|wxALL, 5);
         panel->SetSizerAndFit(sz);
-        dlg.ShowModal();
+        dlg3.ShowModal();
     }
 }
 

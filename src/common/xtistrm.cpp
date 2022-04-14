@@ -504,25 +504,25 @@ void wxObjectRuntimeReaderCallback::CreateObject(int objectID,
                                         const wxClassInfo **objectClassInfos,
                                         wxStringToAnyHashMap &WXUNUSED(metadata))
 {
-    wxObject *o;
-    o = m_data->GetObject(objectID);
+    wxObject *o1;
+    o1 = m_data->GetObject(objectID);
     for ( int i = 0; i < paramCount; ++i )
     {
         if ( objectIdValues[i] != wxInvalidObjectID )
         {
-            wxObject *o;
-            o = m_data->GetObject(objectIdValues[i]);
+            wxObject *o2;
+            o2 = m_data->GetObject(objectIdValues[i]);
             // if this is a dynamic object and we are asked for another class
             // than wxDynamicObject we cast it down manually.
-            wxDynamicObject *dyno = wx_dynamic_cast( wxDynamicObject *, o);
+            wxDynamicObject *dyno = wx_dynamic_cast( wxDynamicObject *, o2);
             if ( dyno!=NULL && (objectClassInfos[i] != dyno->GetClassInfo()) )
             {
-                o = dyno->GetSuperClassInstance();
+                o2 = dyno->GetSuperClassInstance();
             }
-            params[i] = objectClassInfos[i]->ObjectPtrToAny(o);
+            params[i] = objectClassInfos[i]->ObjectPtrToAny(o2);
         }
     }
-    classInfo->Create(o, paramCount, params);
+    classInfo->Create(o1, paramCount, params);
 }
 
 void wxObjectRuntimeReaderCallback::ConstructObject(int objectID,
@@ -533,25 +533,25 @@ void wxObjectRuntimeReaderCallback::ConstructObject(int objectID,
                                         const wxClassInfo **objectClassInfos,
                                         wxStringToAnyHashMap &WXUNUSED(metadata))
 {
-    wxObject *o;
+    wxObject *o1;
     for ( int i = 0; i < paramCount; ++i )
     {
         if ( objectIdValues[i] != wxInvalidObjectID )
         {
-            wxObject *o;
-            o = m_data->GetObject(objectIdValues[i]);
+            wxObject *o2;
+            o2 = m_data->GetObject(objectIdValues[i]);
             // if this is a dynamic object and we are asked for another class
             // than wxDynamicObject we cast it down manually.
-            wxDynamicObject *dyno = wx_dynamic_cast( wxDynamicObject *, o);
+            wxDynamicObject *dyno = wx_dynamic_cast( wxDynamicObject *, o2);
             if ( dyno!=NULL && (objectClassInfos[i] != dyno->GetClassInfo()) )
             {
-                o = dyno->GetSuperClassInstance();
+                o2 = dyno->GetSuperClassInstance();
             }
-            params[i] = objectClassInfos[i]->ObjectPtrToAny(o);
+            params[i] = objectClassInfos[i]->ObjectPtrToAny(o2);
         }
     }
-    o = classInfo->ConstructObject(paramCount, params);
-    m_data->SetObject(objectID, o);
+    o1 = classInfo->ConstructObject(paramCount, params);
+    m_data->SetObject(objectID, o1);
 }
 
 
