@@ -45,7 +45,7 @@
 
 #ifdef wxHAS_NATIVE_CALENDARCTRL
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl, "wx/calctrl.h");
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericCalendarCtrl, wxControl);
 
 #endif
 

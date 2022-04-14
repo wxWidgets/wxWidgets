@@ -446,13 +446,17 @@ private:
             { return &name::ms_classInfo; }
 
 #define wxDECLARE_DYNAMIC_CLASS(name)                       \
-    static wxObjectAllocatorAndCreator* ms_constructor;           \
+    static wxObjectAllocatorAndCreator* ms_constructor;     \
     static const wxChar * ms_constructorProperties[];       \
     static const int ms_constructorPropertiesCount;         \
     _DECLARE_DYNAMIC_CLASS(name)
 
 #define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)             \
     wxDECLARE_NO_ASSIGN_CLASS(name);                        \
+    wxDECLARE_DYNAMIC_CLASS(name)
+
+#define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(name)    \
+    wxDECLARE_NO_ASSIGN_DEF_COPY(name);                     \
     wxDECLARE_DYNAMIC_CLASS(name)
 
 #define wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)               \

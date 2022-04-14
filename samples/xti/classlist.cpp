@@ -440,7 +440,7 @@ wxString DumpHandlerInfo(const wxHandlerInfo *phdlr, int indent)
         return ind + "none";
 
     infostr << ind << "event class: " <<
-        (phdlr->GetEventClassInfo() ? phdlr->GetEventClassInfo()->GetClassName() : "none");
+        (phdlr->GetEventClassInfo() ? wxString(phdlr->GetEventClassInfo()->GetClassName()) : "none");
 
     return infostr;
 }
