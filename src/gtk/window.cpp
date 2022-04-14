@@ -1065,7 +1065,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 #ifdef HAVE_X11_XKBLIB_H
                 KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, 0, 0);
 #else
+                wxGCC_WARNING_SUPPRESS(deprecated-declarations)
                 KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
+                wxGCC_WARNING_RESTORE()
 #endif
 
                 // use the normalized, i.e. lower register, keysym if we've
