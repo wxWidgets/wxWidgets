@@ -57,8 +57,8 @@ endif()
 
 if(WXGTK)
     # Add GTK version definitions
-    foreach(gtk_version 1.2.7 2.0 2.10 2.18 2.20 3.0 3.90.0)
-        if(wxTOOLKIT_VERSION VERSION_GREATER gtk_version)
+    foreach(gtk_version 2.0 2.10 2.18 2.20 3.0 3.90.0)
+        if(wxTOOLKIT_VERSION VERSION_GREATER_EQUAL gtk_version)
             if(gtk_version EQUAL 3.90.0)
                 set(__WXGTK4__ ON)
             elseif(gtk_version EQUAL 3.0)
