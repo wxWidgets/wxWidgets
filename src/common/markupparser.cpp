@@ -294,7 +294,7 @@ bool wxMarkupParser::Parse(const wxString& text)
                     const wxString tag = ExtractUntil('>', it, end);
                     if ( tag.empty() )
                     {
-                        wxLogDebug("%s at %lu.",
+                        wxLogDebug("%s at %zu.",
                                    it == end ? "Unclosed tag starting"
                                              : "Empty tag",
                                    pos);
@@ -311,7 +311,7 @@ bool wxMarkupParser::Parse(const wxString& text)
                         if ( !err.empty() )
                         {
                             wxLogDebug("Bad attributes for \"%s\" "
-                                       "at %lu: %s.",
+                                       "at %zu: %s.",
                                        name, pos, err);
                             return false;
                         }
@@ -322,7 +322,7 @@ bool wxMarkupParser::Parse(const wxString& text)
                     {
                         if ( tags.empty() || tags.top().name != tag )
                         {
-                            wxLogDebug("Unmatched closing tag \"%s\" at %lu.",
+                            wxLogDebug("Unmatched closing tag \"%s\" at %zu.",
                                        tag, pos);
                             return false;
                         }
@@ -330,7 +330,7 @@ bool wxMarkupParser::Parse(const wxString& text)
 
                     if ( !OutputTag(tags.top(), start) )
                     {
-                        wxLogDebug("Unknown tag at %lu.", pos);
+                        wxLogDebug("Unknown tag at %zu.", pos);
                         return false;
                     }
 
@@ -340,7 +340,7 @@ bool wxMarkupParser::Parse(const wxString& text)
                 break;
 
             case '>':
-                wxLogDebug("'>' should be escaped as \"&gt\"; at %lu.",
+                wxLogDebug("'>' should be escaped as \"&gt\"; at %zu.",
                            it - text.begin());
                 break;
 
