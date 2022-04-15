@@ -24,6 +24,8 @@
     #include "wx/geometry.h"
 #endif
 
+#include "wx/display.h"
+
 //-----------------------------------------------------------------------------
 // Local functions
 //-----------------------------------------------------------------------------
@@ -485,7 +487,12 @@ wxSize wxGCDCImpl::GetPPI() const
 
     // This is the same value that wxGraphicsContext::GetDPI() returns by
     // default.
-    return wxSize(72, 72);
+    return wxDisplay::GetStdPPI();
+}
+
+double wxGCDCImpl::GetDPIScaleFactor() const
+{
+    return m_graphicContext ? m_graphicContext->GetDPIScaleFactor() : 1.0;
 }
 
 int wxGCDCImpl::GetDepth() const
