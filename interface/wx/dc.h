@@ -1551,6 +1551,14 @@ public:
     wxSize GetPPI() const;
 
     /**
+       Get the DPI scale factor. Can be used to scale coordinates and sizes
+       appropriate to the DPI of the associated wxWindow or wxDC.
+
+        @since 3.1.7
+    */
+    double GetDPIScaleFactor() const;
+
+    /**
         Gets the horizontal and vertical extent of this device context in @e device units.
         It can be used to scale graphics to fit the page.
 
