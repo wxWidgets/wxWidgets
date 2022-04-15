@@ -1891,11 +1891,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
         {
             wxImage imgScaled = m_image;
             imgScaled.Rescale(rect.width, rect.height);
-#ifdef __WXMSW__
             m_bitmap = wxBitmap(imgScaled, dc);
-#else
-            m_bitmap = wxBitmap(imgScaled);
-#endif
         }
     }
 
