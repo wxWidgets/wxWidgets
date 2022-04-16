@@ -325,7 +325,7 @@ wxWindow* wxAuiTabContainer::GetWindowFromIdx(size_t idx) const
     return m_pages[idx].window;
 }
 
-int wxAuiTabContainer::GetIdxFromWindow(wxWindow* wnd) const
+int wxAuiTabContainer::GetIdxFromWindow(const wxWindow* wnd) const
 {
     const size_t page_count = m_pages.GetCount();
     for ( size_t i = 0; i < page_count; ++i )
