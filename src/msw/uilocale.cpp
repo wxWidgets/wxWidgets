@@ -33,7 +33,7 @@
 #endif
 
 #ifndef LOCALE_NAME_MAX_LENGTH
-#define LOCALE_NAME_MAX_LENGTH   85
+    #define LOCALE_NAME_MAX_LENGTH   85
 #endif
 
 #ifndef MUI_LANGUAGE_NAME
