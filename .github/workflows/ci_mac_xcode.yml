@@ -102,4 +102,4 @@ jobs:
 
     - name: Building
       run: |
-        xcodebuild ARCHS=${{matrix.arch }} ONLY_ACTIVE_ARCH=NO clean build -project '${{github.workspace}}/${{ matrix.project }}' -scheme '${{ matrix.scheme }}' -destination '${{ matrix.destination }}'
+        xcodebuild clean build -project '${{github.workspace}}/${{ matrix.project }}' -scheme '${{ matrix.scheme }}' -destination '${{ matrix.destination }}'
