@@ -380,6 +380,7 @@ public:
     typedef void (*wxOSX_TextEventHandlerPtr)(NSView* self, SEL _cmd, NSString *event);
     typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
     typedef BOOL (*wxOSX_PerformKeyEventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
+    typedef void (*wxOSX_DoCommandBySelectorPtr)(NSView* self, SEL _cmd, SEL _sel);
     typedef BOOL (*wxOSX_FocusHandlerPtr)(NSView* self, SEL _cmd);
     typedef void (*wxOSX_DoCommandBySelectorPtr)(NSView* self, SEL _cmd, SEL _sel);
     typedef NSDragOperation (*wxOSX_DraggingEnteredOrUpdatedHandlerPtr)(NSView *self, SEL _cmd, void *sender);
