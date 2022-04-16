@@ -463,7 +463,6 @@ public:
                 {
                     wxLogLastError(wxT("GetUserDefaultLocaleName"));
                 }
-
             }
         }
         else
