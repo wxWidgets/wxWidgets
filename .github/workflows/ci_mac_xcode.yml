@@ -81,6 +81,7 @@ jobs:
           runner: macos-latest
           scheme: 'app-dynamic'
           destination: 'platform=macOS'
+          arch: x86_64
           project: samples/minimal/minimal_cocoa.xcodeproj
 
     env:
