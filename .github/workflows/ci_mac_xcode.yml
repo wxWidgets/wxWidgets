@@ -1,0 +1,118 @@
+name: Mac Xcode builds
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths-ignore:
+    - '.github/ISSUE_TEMPLATE/**'
+    - '.github/workflows/ci.yml'
+    - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw.yml'
+    - '.github/workflows/ci_msw_cross.yml'
+    - '.github/workflows/docs_update.yml'
+    - 'build/tools/appveyor*.bat'
+    - 'distrib/**'
+    - 'docs/**'
+    - 'interface/**'
+    - 'include/msvc/**'
+    - 'include/wx/dfb/**'
+    - 'include/wx/gtk/**'
+    - 'include/wx/gtk1/**'
+    - 'include/wx/motif/**'
+    - 'include/wx/msw/**'
+    - 'include/wx/x11/**'
+    - 'locale/**'
+    - 'src/dfb/**'
+    - 'src/gtk/**'
+    - 'src/gtk1/**'
+    - 'src/motif/**'
+    - 'src/msw/**'
+    - 'src/x11/**'
+    - '*.md'
+    - '*.yml'
+    - 'wxwidgets.props'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+    - '.github/ISSUE_TEMPLATE/**'
+    - '.github/workflows/ci.yml'
+    - '.github/workflows/ci_cmake.yml'
+    - '.github/workflows/ci_msw.yml'
+    - '.github/workflows/ci_msw_cross.yml'
+    - '.github/workflows/docs_update.yml'
+    - 'build/tools/appveyor*.bat'
+    - 'distrib/**'
+    - 'docs/**'
+    - 'interface/**'
+    - 'include/msvc/**'
+    - 'include/wx/dfb/**'
+    - 'include/wx/gtk/**'
+    - 'include/wx/gtk1/**'
+    - 'include/wx/motif/**'
+    - 'include/wx/msw/**'
+    - 'include/wx/x11/**'
+    - 'locale/**'
+    - 'src/dfb/**'
+    - 'src/gtk/**'
+    - 'src/gtk1/**'
+    - 'src/motif/**'
+    - 'src/msw/**'
+    - 'src/x11/**'
+    - '*.md'
+    - '*.yml'
+    - 'wxwidgets.props'
+
+jobs:
+  build-and-test:
+    defaults:
+      run:
+        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash --noprofile --norc -eo pipefail {0}
+
+    runs-on: ${{ matrix.runner }}
+
+    name: ${{ matrix.name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - name: macOS dynamic Release
+          runner: self-hosted
+          scheme: 'app-dynamic'
+          destination: 'generic/platform=macOS'
+          arch: x86_64
+          configuration: 'Release'
+          project: samples/minimal/minimal_cocoa.xcodeproj
+        - name: iOS static Debug
+          runner: macos-latest
+          scheme: 'static'
+          destination: 'generic/platform=iOS'
+          arch: x86_64
+          configuration: 'Debug'
+          project: build/osx/wxiphone.xcodeproj
+        - name: iOS Simulator static
+          runner: macos-latest
+          scheme: 'app-static'
+          destination: 'generic/platform=iOS Simulator'
+          arch: x86_64
+          configuration: 'Release'
+          project: samples/minimal/minimal_iphone.xcodeproj
+
+    env:
+      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+      NSUnbufferedIO: YES
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Build
+      run: |
+        xcodebuild clean build ONLY_ACTIVE_ARCH=NO \
+        CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
+        -project '${{github.workspace}}/${{ matrix.project }}' \
+        -scheme '${{ matrix.scheme }}' -configuration '${{ matrix.configuration}}' \
+        -destination '${{ matrix.destination }}' | xcpretty --color --simple

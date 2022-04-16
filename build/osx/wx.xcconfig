@@ -5,13 +5,13 @@
 WXPLATFORM = __WXOSX_$(WXTOOLKITUPPER)__
 PRODUCT_NAME = wx_osx_$(WXTOOLKIT)
 
-OTHER_CFLAGS = -Wall -Wno-undef -fno-strict-aliasing -fno-common -fvisibility=hidden 
-OTHER_CPLUSPLUSFLAGS = $(OTHER_CFLAGS) -fvisibility-inlines-hidden
+OTHER_CFLAGS = -Wall -Wno-undef -fno-strict-aliasing -fno-common -fvisibility=hidden
+OTHER_CPLUSPLUSFLAGS = $(OTHER_CFLAGS) -fvisibility-inlines-hidden -Wno-deprecated-declarations
 
 GCC_PREFIX_HEADER = $(WXROOT)/include/wx/wxprec.h
 GCC_PRECOMPILE_PREFIX_HEADER = YES
 HEADER_SEARCH_PATHS = "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/src/regex" "$(WXROOT)/3rdparty/pcre/src/wx"
-USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include" "$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include" "$(WXROOT)/src/zlib" "$(WXROOT)/src/jpeg" "$(WXROOT)/src/png" "$(WXROOT)/src/expat/expat/lib" "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/src/stc/scintilla/src" "$(WXROOT)/src/stc/scintilla/include" "$(WXROOT)/src/stc/scintilla/lexlib"
+USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include" "$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include" "$(WXROOT)/src/zlib" "$(WXROOT)/src/jpeg" "$(WXROOT)/src/png" "$(WXROOT)/src/expat/expat/lib" "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/src/stc/scintilla/src" "$(WXROOT)/src/stc/scintilla/include" "$(WXROOT)/src/stc/scintilla/lexlib" "$(WXROOT)/3rdparty/pcre/src/wx"
 ALWAYS_SEARCH_USER_PATHS = NO
 WX_PREPROCESSOR_DEFINITIONS = WXBUILDING $(WXPLATFORM) __WX__ _FILE_OFFSET_BITS=64 _LARGE_FILES MACOS_CLASSIC __WXMAC_XCODE__=1 SCI_LEXER NO_CXX11_REGEX WX_PRECOMP=1 wxUSE_UNICODE_UTF8=0 wxUSE_UNICODE_WCHAR=1 HAVE_CONFIG_H PNG_NO_CONFIG_H
 GCC_PREPROCESSOR_DEFINITIONS = $(WX_PREPROCESSOR_DEFINITIONS)
