@@ -83,7 +83,7 @@ jobs:
           destination: 'platform=macOS'
           arch: x86_64
           project: samples/minimal/minimal_cocoa.xcodeproj
-       - name: macOS static ARM
+        - name: macOS static ARM
           runner: self-hosted
           scheme: 'app-static'
           destination: 'platform=macOS'
