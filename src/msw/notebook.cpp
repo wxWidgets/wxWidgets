@@ -109,11 +109,6 @@ static bool HasTroubleWithNonTopTabs()
 wxBEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
     EVT_SIZE(wxNotebook::OnSize)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
-
-#if USE_NOTEBOOK_ANTIFLICKER
-    EVT_ERASE_BACKGROUND(wxNotebook::OnEraseBackground)
-    EVT_PAINT(wxNotebook::OnPaint)
-#endif // USE_NOTEBOOK_ANTIFLICKER
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -1079,6 +1074,28 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
             }
         }
     }
+}
+
+bool wxNotebook::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxNotebookBase::SetBackgroundColour(colour) )
+        return false;
+
+#if wxUSE_UXTHEME
+    UpdateBgBrush();
+#endif // wxUSE_UXTHEME
+
+#if USE_NOTEBOOK_ANTIFLICKER
+    Unbind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
+    Unbind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
+    if ( m_hasBgCol || !wxUxThemeIsActive() )
+    {
+        Bind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
+        Bind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
+    }
+#endif // USE_NOTEBOOK_ANTIFLICKER
+
+    return true;
 }
 
 #if wxUSE_UXTHEME

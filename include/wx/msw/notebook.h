@@ -122,17 +122,9 @@ public:
   // implementation only
   // -------------------
 
+  virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+
 #if wxUSE_UXTHEME
-  virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE
-  {
-      if ( !wxNotebookBase::SetBackgroundColour(colour) )
-          return false;
-
-      UpdateBgBrush();
-
-      return true;
-  }
-
   // draw child background
   virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win) wxOVERRIDE;
 
