@@ -63,8 +63,6 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnPaint(wxPaintEvent& event);
-    void OnClick(wxMouseEvent& event);
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -97,8 +95,6 @@ enum
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
-    EVT_PAINT( MyFrame::OnPaint)
-    EVT_LEFT_DOWN( MyFrame::OnClick)
 wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -181,18 +177,6 @@ MyFrame::MyFrame(const wxString& title)
 #endif // wxUSE_STATUSBAR
 }
 
-void MyFrame::OnPaint(wxPaintEvent& event)
-{
-    wxPaintDC dc(this);
-    wxRect update = GetUpdateRegion().GetBox();
-    printf("update %d,%d,%d,%d\n",update.GetX(), update.GetY(), update.GetWidth(), update.GetHeight());
-}
-
-void MyFrame::OnClick(wxMouseEvent& event)
-{
-    wxRect r( event.GetX(), event.GetY(),2,2);
-    RefreshRect(r);
-}
 
 // event handlers
 

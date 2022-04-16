@@ -36,81 +36,6 @@
 #include "canvas.h"
 
 
-// ============================================================================
-// implementations
-// ============================================================================
-
-class ImageRGBMatcher
-{
-public:
-    ImageRGBMatcher(const wxImage& image, int tolerance)
-        : m_image(image)
-        , m_tolerance(tolerance)
-    {
-    }
-
-    bool match(const wxImage& other)
-    {
-        if ( other.GetWidth() != m_image.GetWidth() )
-            return false;
-
-        if ( other.GetHeight() != m_image.GetHeight() )
-            return false;
-
-        if ( memcmp(other.GetData(), m_image.GetData(),
-                    other.GetWidth()*other.GetHeight()*3) == 0 )
-            return true;
-
-        const unsigned char* d1 = m_image.GetData();
-        const unsigned char* d2 = other.GetData();
-        for ( int x = 0; x < m_image.GetWidth(); ++x )
-        {
-            for ( int y = 0; y < m_image.GetHeight(); ++y )
-            {
-                const unsigned char diff = *d1 > * d2 ? *d1 - *d2 : *d2 - *d1;
-                if (diff > m_tolerance)
-                {
-                    m_diffDesc.Printf
-                               (
-                                    "first mismatch is at (%d, %d) which "
-                                    "has value 0x%06x instead of the "
-                                    "expected 0x%06x",
-                                    x, y, *d2, *d1
-                               );
-
-                    // Don't show all mismatches, there may be too many of them.
-                    return false;
-                }
-
-                ++d1;
-                ++d2;
-            }
-        }
-
-        // We can only get here when the images are different AND we've not exited the
-        // method from the loop. That implies the tolerance must have caused this.
-        wxASSERT_MSG(m_tolerance > 0, "Unreachable without tolerance");
-
-        return true;
-    }
-
-private:
-    const wxImage m_image;
-    const int m_tolerance;
-    mutable wxString m_diffDesc;
-};
-
-inline ImageRGBMatcher RGBSameAs(const wxImage& image)
-{
-    return ImageRGBMatcher(image, 0);
-}
-
-// Allows small differences (within given tolerance) for r, g, and b values.
-inline ImageRGBMatcher RGBSimilarTo(const wxImage& image, int tolerance)
-{
-    return ImageRGBMatcher(image, tolerance);
-}
-
 //-----------------------------------------------------------------------------
 // MyCanvas
 //-----------------------------------------------------------------------------
@@ -181,16 +106,6 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     else
     {
         my_toucan = wxBitmap(image);
-        bool result = false;
-        {
-                if( my_toucan.IsOk() )
-                {
-                    auto match = RGBSimilarTo( my_toucan.ConvertToImage() , 2 );
-                    result = match.match(image);
-                }
-
-        }
-
     }
 
     my_toucan_flipped_horiz = wxBitmap(image.Mirror(true));
