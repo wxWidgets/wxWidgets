@@ -422,8 +422,9 @@ public:
 
         if (CanUse())
         {
-            // Check for Windows version >= 10
-            // Note: Windows 8.x might be supported here as well, but Windows 7 and below definitely not
+            // Check if Windows supports preferred UI languages.
+            // Note: Windows 8.x might support them as well, but Windows 7
+            // and below definitely do not.
             if (wxGetWinVersion() >= wxWinVersion_10)
             {
                 ULONG numberOfLanguages = 0;
