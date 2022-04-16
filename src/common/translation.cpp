@@ -49,6 +49,13 @@
 #include "wx/private/threadinfo.h"
 #include "wx/uilocale.h"
 
+#ifdef __WINDOWS__
+    #include "wx/dynlib.h"
+    #include "wx/scopedarray.h"
+    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/missing.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------

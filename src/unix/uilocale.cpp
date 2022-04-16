@@ -26,12 +26,15 @@
 #include "wx/unix/private/uilocale.h"
 
 #include "wx/intl.h"
+#include "wx/tokenzr.h"
 #include "wx/utils.h"
 
 #include <locale.h>
 #ifdef HAVE_LANGINFO_H
     #include <langinfo.h>
 #endif
+
+#define TRACE_I18N wxS("i18n")
 
 namespace
 {
