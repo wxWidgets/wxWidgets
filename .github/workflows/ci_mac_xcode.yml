@@ -77,18 +77,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: macOS dynamic x86_64
+        - name: macOS dynamic
           runner: macos-latest
           scheme: 'app-dynamic'
-          destination: 'platform=macOS'
+          destination: 'generic/platform=macOS'
           arch: x86_64
           project: samples/minimal/minimal_cocoa.xcodeproj
-        - name: macOS static ARM
+        - name: iOS static
           runner: macos-latest
           scheme: 'app-static'
-          destination: 'platform=macOS'
-          arch: arm64
-          project: samples/minimal/minimal_cocoa.xcodeproj
+          destination: 'generic/platform=iOS'
+          arch: x86_64
+          project: samples/minimal/minimal_iphone.xcodeproj
+        - name: iOS Simulator static
+          runner: macos-latest
+          scheme: 'app-static'
+          destination: 'generic/platform=iOS Simulator'
+          arch: x86_64
+          project: samples/minimal/minimal_iphone.xcodeproj
 
     env:
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
@@ -102,4 +108,4 @@ jobs:
 
     - name: Building
       run: |
-        xcodebuild clean build -project '${{github.workspace}}/${{ matrix.project }}' -scheme '${{ matrix.scheme }}' -destination '${{ matrix.destination }}'
+        xcodebuild clean build ONLY_ACTIVE_ARCH=NO -project '${{github.workspace}}/${{ matrix.project }}' -scheme '${{ matrix.scheme }}' -destination '${{ matrix.destination }}'
