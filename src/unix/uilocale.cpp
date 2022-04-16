@@ -559,6 +559,32 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
 {
     wxVector<wxString> preferred;
 
+    // When the preferred UI language is determined, the LANGUAGE environment
+    // variable is the primary source of preference.
+    // http://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html
+    //
+    // The LANGUAGE variable may contain a colon separated list of language
+    // codes in the order of preference.
+    // http://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html
+    wxString languageFromEnv;
+    if (wxGetNonEmptyEnvVar("LANGUAGE", &languageFromEnv))
+    {
+        wxStringTokenizer tknzr(languageFromEnv, ":");
+        while (tknzr.HasMoreTokens())
+        {
+            const wxString tok = tknzr.GetNextToken();
+            if (const wxLanguageInfo* li = wxUILocale::FindLanguageInfo(tok))
+            {
+                preferred.push_back(li->CanonicalName);
+            }
+        }
+        if (!preferred.empty())
+            return preferred;
+        wxLogTrace(TRACE_I18N, " - LANGUAGE was set, but it didn't contain any languages recognized by the system");
+    }
+
+    wxLogTrace(TRACE_I18N, " - LANGUAGE was not set or empty, check LC_ALL, LC_MESSAGES, and LANG");
+
     // first get the string identifying the language from the environment
     wxString langFull;
     if (!wxGetNonEmptyEnvVar(wxS("LC_ALL"), &langFull) &&

@@ -514,14 +514,14 @@ const wxUILocale& wxUILocale::GetCurrent()
 
 wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
 {
-    if ( localeId.IsEmpty() )
+    if ( !localeId.IsEmpty() )
     {
-        wxFAIL_MSG( "Locale identifier must be initialized" );
-        m_impl = NULL;
-        return;
+        m_impl = wxUILocaleImpl::CreateForLocale(localeId);
     }
-
-    m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    else
+    {
+        m_impl = wxUILocaleImpl::CreateUserDefault();
+    }
 }
 
 wxUILocale::wxUILocale(const wxUILocale& loc)
@@ -634,9 +634,9 @@ int wxUILocale::GetSystemLanguage()
     size_t count = languagesDB.size();
     wxVector<wxString> preferred = wxUILocaleImpl::GetPreferredUILanguages();
 
-    for (wxVector<wxString>::const_iterator j = preferred.begin();
-        j != preferred.end();
-        ++j)
+    for ( wxVector<wxString>::const_iterator j = preferred.begin();
+          j != preferred.end();
+          ++j )
     {
         wxLocaleIdent localeId = wxLocaleIdent::FromTag(*j);
         wxString lang = localeId.GetTag(wxLOCALE_TAGTYPE_BCP47);
@@ -652,7 +652,7 @@ int wxUILocale::GetSystemLanguage()
             }
             if (pos != wxString::npos)
             {
-                if (languagesDB[ixLanguage].LocaleTag == lang)
+                if (languagesDB[ixLanguage].LocaleTag == langShort)
                 {
                     ixShort = ixLanguage;
                 }
@@ -664,8 +664,21 @@ int wxUILocale::GetSystemLanguage()
         }
     }
 
-    // no info about this language in the database
-    return wxLANGUAGE_UNKNOWN;
+    // no info about the preferred UI language in the database
+    // fall back to default locale
+    return GetSystemLocale();
+}
+
+/*static*/
+int wxUILocale::GetSystemLocale()
+{
+    // Retrieve default wxUILocale via empty wxLocaleIdent
+    wxLocaleIdent emptyLocId;
+    wxUILocale defaultLocale(emptyLocId);
+
+    // Find corresponding wxLanguageInfo
+    const wxLanguageInfo* defaultLanguage = wxUILocale::FindLanguageInfo(defaultLocale.GetLocaleId());
+    return defaultLanguage ? defaultLanguage->Language : wxLANGUAGE_UNKNOWN;
 }
 
 /* static */

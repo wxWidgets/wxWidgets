@@ -513,7 +513,7 @@ bool wxLocale::Init(int lang, int flags)
 /*static*/
 int wxLocale::GetSystemLanguage()
 {
-    return wxUILocale::GetSystemLanguage();
+    return wxUILocale::GetSystemLocale();
 }
 
 // ----------------------------------------------------------------------------
@@ -679,6 +679,8 @@ void wxLocale::AddLanguage(const wxLanguageInfo& info)
 /* static */
 const wxLanguageInfo* wxLocale::GetLanguageInfo(int lang)
 {
+    if (lang == wxLANGUAGE_DEFAULT)
+        lang = GetSystemLanguage();
     return wxUILocale::GetLanguageInfo(lang);
 }
 
