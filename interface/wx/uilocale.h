@@ -278,9 +278,25 @@ public:
     static wxString GetLanguageCanonicalName(int lang);
 
     /**
-        Tries to detect the user's default locale setting.
+        Tries to detect the user's default user interface language setting.
 
         Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
+        algorithm failed.
+
+        @note Where possible this function returns the user's preferred UI @em language.
+              This may be, and usually is, the same as the user's default locale, but it's
+              not the same thing. If retrieving the preferred UI language is not supported
+              by the operating system (for example, Windows 7 and below), the user's
+              default @em locale will be used.
+
+        @see wxTranslations::GetBestTranslation().
+    */
+    static int GetSystemLanguage();
+
+    /**
+        Tries to detect the user's default locale setting.
+
+        Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the locale-guessing
         algorithm failed.
 
         @note This function works with @em locales and returns the user's default
@@ -288,10 +304,11 @@ public:
               language, but it's not the same thing. Use wxTranslation to obtain
               @em language information.
 
+        @since 3.1.7
+
         @see wxTranslations::GetBestTranslation().
     */
-    static int GetSystemLanguage();
-};
+    static int GetSystemLocale();};
 
 /**
     Return the format to use for formatting user-visible dates.

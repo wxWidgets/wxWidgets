@@ -32,6 +32,10 @@
     #define LOCALE_NAME_USER_DEFAULT NULL
 #endif
 
+#ifndef LOCALE_NAME_MAX_LENGTH
+    #define LOCALE_NAME_MAX_LENGTH   85
+#endif
+
 #ifndef MUI_LANGUAGE_NAME
     #define MUI_LANGUAGE_NAME 8
 #endif
@@ -398,6 +402,9 @@ public:
             wxDL_INIT_FUNC(ms_, GetUserPreferredUILanguages, dllKernel32);
             if (!ms_GetUserPreferredUILanguages)
                 return false;
+            wxDL_INIT_FUNC(ms_, GetUserDefaultLocaleName, dllKernel32);
+            if (!ms_GetUserDefaultLocaleName)
+                return false;
 
             wxDL_INIT_FUNC(ms_, CompareStringEx, dllKernel32);
             if ( !ms_CompareStringEx )
@@ -415,19 +422,29 @@ public:
 
         if (CanUse())
         {
-            ULONG numberOfLanguages = 0;
-            ULONG bufferSize = 0;
-            if (ms_GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numberOfLanguages, NULL, &bufferSize))
+            // Check if Windows supports preferred UI languages.
+            // Note: Windows 8.x might support them as well, but Windows 7
+            // and below definitely do not.
+            if (wxGetWinVersion() >= wxWinVersion_10)
             {
-                wxScopedArray<WCHAR> languages(bufferSize);
-                if (ms_GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numberOfLanguages, languages.get(), &bufferSize))
+                ULONG numberOfLanguages = 0;
+                ULONG bufferSize = 0;
+                if (ms_GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numberOfLanguages, NULL, &bufferSize))
                 {
-                    WCHAR* buf = languages.get();
-                    for (unsigned k = 0; k < numberOfLanguages; ++k)
+                    wxScopedArray<WCHAR> languages(bufferSize);
+                    if (ms_GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numberOfLanguages, languages.get(), &bufferSize))
                     {
-                        const wxString language(buf);
-                        preferred.push_back(language);
-                        buf += language.length() + 1;
+                        WCHAR* buf = languages.get();
+                        for (unsigned k = 0; k < numberOfLanguages; ++k)
+                        {
+                            const wxString language(buf);
+                            preferred.push_back(language);
+                            buf += language.length() + 1;
+                        }
+                    }
+                    else
+                    {
+                        wxLogLastError(wxT("GetUserPreferredUILanguages"));
                     }
                 }
                 else
@@ -437,7 +454,16 @@ public:
             }
             else
             {
-                wxLogLastError(wxT("GetUserPreferredUILanguages"));
+                // Use the default user locale for Windows 7 resp Windows 8.x and below
+                wchar_t buf[LOCALE_NAME_MAX_LENGTH];
+                if (!ms_GetUserDefaultLocaleName(buf, LOCALE_NAME_MAX_LENGTH))
+                {
+                    preferred.push_back(buf);
+                }
+                else
+                {
+                    wxLogLastError(wxT("GetUserDefaultLocaleName"));
+                }
             }
         }
         else
@@ -724,6 +750,9 @@ private:
     typedef BOOL (WINAPI *GetUserPreferredUILanguages_t)(DWORD, ULONG*, WCHAR*, ULONG*);
     static GetUserPreferredUILanguages_t ms_GetUserPreferredUILanguages;
 
+    typedef int (WINAPI* GetUserDefaultLocaleName_t)(LPWSTR, int);
+    static GetUserDefaultLocaleName_t ms_GetUserDefaultLocaleName;
+
     // Note: we currently don't use NLSVERSIONINFO output parameter and so we
     // don't bother dealing with the different sizes of this struct under
     // different OS versions and define the function type as using "void*" to
@@ -766,6 +795,7 @@ private:
 wxUILocaleImplName::GetLocaleInfoEx_t wxUILocaleImplName::ms_GetLocaleInfoEx;
 wxUILocaleImplName::SetThreadPreferredUILanguages_t wxUILocaleImplName::ms_SetThreadPreferredUILanguages;
 wxUILocaleImplName::GetUserPreferredUILanguages_t wxUILocaleImplName::ms_GetUserPreferredUILanguages;
+wxUILocaleImplName::GetUserDefaultLocaleName_t wxUILocaleImplName::ms_GetUserDefaultLocaleName;
 wxUILocaleImplName::CompareStringEx_t wxUILocaleImplName::ms_CompareStringEx;
 
 // ----------------------------------------------------------------------------
