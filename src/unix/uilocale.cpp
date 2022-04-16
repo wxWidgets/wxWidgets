@@ -26,6 +26,7 @@
 #include "wx/unix/private/uilocale.h"
 
 #include "wx/intl.h"
+#include "wx/log.h"
 #include "wx/tokenzr.h"
 #include "wx/utils.h"
 
