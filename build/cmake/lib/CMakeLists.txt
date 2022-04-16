@@ -96,7 +96,9 @@ if(wxBUILD_MONOLITHIC)
     foreach(dep ${wxMONO_DEPENDENCIES})
         add_dependencies(wxmono ${dep})
     endforeach()
-    wx_webview_copy_webview2_loader(wxmono)
+    if(wxUSE_WEBVIEW)
+        wx_webview_copy_webview2_loader(wxmono)
+    endif()
 endif()
 
 # Propagate variable(s) to parent scope
