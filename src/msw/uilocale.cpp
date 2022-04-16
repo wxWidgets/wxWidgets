@@ -457,8 +457,7 @@ public:
                 wchar_t buf[LOCALE_NAME_MAX_LENGTH];
                 if (!ms_GetUserDefaultLocaleName(buf, LOCALE_NAME_MAX_LENGTH))
                 {
-                    const wxString language(buf);
-                    preferred.push_back(language);
+                    preferred.push_back(buf);
                 }
                 else
                 {
