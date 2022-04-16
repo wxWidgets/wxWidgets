@@ -131,7 +131,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: hendrikmuhs/ccache-action@v1.2.1
+        uses: hendrikmuhs/ccache-action@578e14bc3f06099346125f52ed0008433eccbedf
         with:
           key: ${{ matrix.name }}
 
