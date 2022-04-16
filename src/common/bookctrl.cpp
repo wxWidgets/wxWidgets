@@ -300,16 +300,39 @@ void wxBookCtrlBase::OnHelp(wxHelpEvent& event)
     // determine where does this even originate from to avoid redirecting it
     // back to the page which generated it (resulting in an infinite loop)
 
-    // notice that we have to check in the hard(er) way instead of just testing
-    // if the event object == this because the book control can have other
-    // subcontrols inside it (e.g. wxSpinButton in case of a notebook in wxUniv)
     wxWindow *source = wxStaticCast(event.GetEventObject(), wxWindow);
-    while ( source && source != this && source->GetParent() != this )
-    {
-        source = source->GetParent();
-    }
 
-    if ( source && FindPage(source) == wxNOT_FOUND )
+    // In all ports but wxUniv it's sufficient to compare the event object with
+    // the book control itself to check if the event came to it directly, but
+    // in wxUniv we may have other controls inside it (e.g. wxSpinButton inside
+    // wxNotebook), so we need more involved checks there.
+#ifdef __WXUNIVERSAL__
+    while ( source )
+    {
+        wxWindow* const parent = source->GetParent();
+        if ( parent == this )
+        {
+            if ( FindPage(source) != wxNOT_FOUND )
+            {
+                // The event comes from our own page, don't send it back to it.
+                source = NULL;
+            }
+            else
+            {
+                // Must be one of internal sub-controls such as the
+                // wxSpinButton mentioned above, consider the book control
+                // itself as the source of this event.
+                source = this;
+            }
+
+            break;
+        }
+
+        source = parent;
+    }
+#endif // __WXUNIVERSAL__
+
+    if ( source == this )
     {
         // this event is for the book control itself, redirect it to the
         // corresponding page
