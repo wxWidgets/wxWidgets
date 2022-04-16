@@ -292,7 +292,11 @@ public:
 
     virtual size_t GetPageCount() const wxOVERRIDE;
     virtual wxWindow* GetPage(size_t pageIdx) const wxOVERRIDE;
-    int GetPageIndex(wxWindow* pageWnd) const;
+    virtual int FindPage(const wxWindow* page) const wxOVERRIDE;
+
+    // This is wxAUI-specific equivalent of FindPage(), prefer to use the other
+    // function.
+    int GetPageIndex(wxWindow* pageWnd) const { return FindPage(pageWnd); }
 
     bool SetPageText(size_t page, const wxString& text) wxOVERRIDE;
     wxString GetPageText(size_t pageIdx) const wxOVERRIDE;

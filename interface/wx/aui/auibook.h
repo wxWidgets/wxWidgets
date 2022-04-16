@@ -238,6 +238,9 @@ public:
     /**
         Returns the page index for the specified window.
         If the window is not found in the notebook, wxNOT_FOUND is returned.
+
+        This is AUI-specific equivalent to wxBookCtrl::FindPage() and it is
+        recommended to use that generic method instead of this one.
     */
     int GetPageIndex(wxWindow* page_wnd) const;
 

@@ -2163,13 +2163,10 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     return true;
 }
 
-// GetPageIndex() returns the index of the page, or -1 if the
-// page could not be located in the notebook
-int wxAuiNotebook::GetPageIndex(wxWindow* page_wnd) const
+int wxAuiNotebook::FindPage(const wxWindow* page) const
 {
-    return m_tabs.GetIdxFromWindow(page_wnd);
+    return m_tabs.GetIdxFromWindow(page);
 }
-
 
 
 // SetPageText() changes the tab caption of the specified page
