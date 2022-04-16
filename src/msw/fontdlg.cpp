@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/display.h"
 #include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
@@ -129,6 +130,17 @@ int wxFontDialog::ShowModal()
     {
         flags |= CF_INITTOLOGFONTSTRUCT;
         logFont = m_fontData.m_initialFont.GetNativeFontInfo()->lf;
+
+        // The standard dialog seems to always use the default DPI for
+        // converting LOGFONT height to the value in points shown in the
+        // dialog (and this happens even when not using AutoSystemDpiAware),
+        // so we need to convert it to standard (not even system, because the
+        // dialog doesn't take it into account neither) DPI.
+        logFont.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI
+                           (
+                                m_fontData.m_initialFont.GetFractionalPointSize(),
+                                wxDisplay::GetStdPPIValue()
+                           );
     }
 
     if ( m_fontData.m_fontColour.IsOk() )
@@ -164,7 +176,37 @@ int wxFontDialog::ShowModal()
     if ( wxMSWChooseFont(&chooseFontStruct) != 0 )
     {
         wxRGBToColour(m_fontData.m_fontColour, chooseFontStruct.rgbColors);
-        m_fontData.m_chosenFont = wxFont(wxNativeFontInfo(logFont, this));
+
+        // Don't trust the LOGFONT height returned by the native dialog because
+        // it doesn't use the correct DPI.
+        //
+        // Note that we must use our parent and not this window itself, as it
+        // doesn't have any valid HWND and so its DPI can't be determined.
+        if ( parent )
+        {
+            // We can't just adjust lfHeight directly to the correct DPI here
+            // as doing this would introduce rounding problems, e.g. 8pt font
+            // corresponds to lfHeight == 11px and scaling this up for 150% DPI
+            // would result in 17px height which would then map to 8.5pt at
+            // 150% DPI and end up being rounded to 9pt, which would be wrong.
+            //
+            // So find the point size itself first:
+            const int pointSize = wxRound(wxNativeFontInfo::GetPointSizeAtPPI
+                                          (
+                                            logFont.lfHeight,
+                                            wxDisplay::GetStdPPIValue()
+                                          ));
+
+            // And then compute the pixel height that results in this point
+            // size at the actual DPI being used.
+            logFont.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI
+                               (
+                                    pointSize,
+                                    parent->GetDPI().y
+                               );
+        }
+
+        m_fontData.m_chosenFont = wxFont(wxNativeFontInfo(logFont, parent));
         m_fontData.EncodingInfo().facename = logFont.lfFaceName;
         m_fontData.EncodingInfo().charset = logFont.lfCharSet;
 
