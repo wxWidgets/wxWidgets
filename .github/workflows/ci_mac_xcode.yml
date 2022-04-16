@@ -77,11 +77,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: macOS dynamic
-          runner: macos-latest
+        - name: macOS dynamic x86_64
+          runner: self-hosted
           scheme: 'app-dynamic'
           destination: 'platform=macOS'
           arch: x86_64
+          project: samples/minimal/minimal_cocoa.xcodeproj
+       - name: macOS static ARM
+          runner: self-hosted
+          scheme: 'app-static'
+          destination: 'platform=macOS'
+          arch: arm64
           project: samples/minimal/minimal_cocoa.xcodeproj
 
     env:
@@ -96,4 +102,4 @@ jobs:
 
     - name: Building
       run: |
-        xcodebuild clean build -project '${{github.workspace}}/${{ matrix.project }}' -scheme '${{ matrix.scheme }}' -destination '${{ matrix.destination }}' | xcpretty && exit ${PIPESTATUS[0]}
+        xcodebuild ARCHS=${{matrix.arch }} ONLY_ACTIVE_ARCH=NO clean build -project '${{github.workspace}}/${{ matrix.project }}' -scheme '${{ matrix.scheme }}' -destination '${{ matrix.destination }}' | xcpretty && exit ${PIPESTATUS[0]}
