@@ -1,0 +1,1 @@
+wxMSW: Fix regression in wxFileName::Normalize(LONG) and UNC paths.
