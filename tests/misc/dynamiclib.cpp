@@ -58,12 +58,16 @@ void DynamicLibraryTestCase::Load()
 #endif
     static const wxChar *FUNC_NAME = wxT("strlen");
 
+    // Under macOS 12+ we can actually load the libc dylib even though the
+    // corresponding file doesn't exist on disk, so skip this check there.
+#ifndef __DARWIN__
     if ( !wxFileName::Exists(LIB_NAME) )
     {
         WARN("Shared library \"" << wxString(LIB_NAME) << "\" doesn't exist, "
              "skipping DynamicLibraryTestCase::Load() test.");
         return;
     }
+#endif // !__DARWIN__
 #else
     #error "don't know how to test wxDllLoader on this platform"
 #endif
