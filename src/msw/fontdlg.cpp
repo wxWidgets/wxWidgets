@@ -88,6 +88,14 @@ wxString wxFontDialog::GetTitle() const
     return m_title;
 }
 
+// Tiny wrapper calling ::ChooseFont() with system DPI awareness, as the
+// standard dialog doesn't work correctly when using per-monitor awareness.
+static BOOL wxMSWChooseFont(CHOOSEFONT* pCF)
+{
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
+    return ::ChooseFont(pCF);
+}
+
 int wxFontDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
@@ -153,9 +161,7 @@ int wxFontDialog::ShowModal()
 
     chooseFontStruct.Flags = flags;
 
-    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
-
-    if ( ChooseFont(&chooseFontStruct) != 0 )
+    if ( wxMSWChooseFont(&chooseFontStruct) != 0 )
     {
         wxRGBToColour(m_fontData.m_fontColour, chooseFontStruct.rgbColors);
         m_fontData.m_chosenFont = wxFont(wxNativeFontInfo(logFont, this));
