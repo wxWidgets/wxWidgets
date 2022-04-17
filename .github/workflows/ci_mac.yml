@@ -168,7 +168,6 @@ jobs:
     - name: Configuring
       working-directory: builddir
       run: |
-        cd $PWD/localbuild_${{ matrix.arch }}
         wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
 
         if [ -n "${{ matrix.xcode_sdk }}" ]; then
@@ -196,7 +195,6 @@ jobs:
     - name: Building
       working-directory: builddir
       run: |
-        cd $PWD/localbuild_${{ matrix.arch }}
         make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
     - name: Building tests
