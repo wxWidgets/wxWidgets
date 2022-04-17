@@ -68,6 +68,7 @@ jobs:
     defaults:
       run:
         shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
+        working-directory: builddir
 
     runs-on: ${{ matrix.runner }}
 
@@ -152,6 +153,8 @@ jobs:
       run: |
         ./build/tools/before_install.sh
         mkdir -p $PWD/localbin_${{ matrix.arch }}
+        rm -r $PWD/builddir
+        mkdir -p $PWD/builddir
 
     - name: Show build environment
       run: |
@@ -165,6 +168,7 @@ jobs:
 
     - name: Configuring
       run: |
+        cd $PWD/localbuild_${{ matrix.arch }}
         wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
 
         if [ -n "${{ matrix.xcode_sdk }}" ]; then
@@ -172,15 +176,14 @@ jobs:
           wxCONFIGURE_OPTIONS="--with-macosx-sdk=$sdk_path $wxCONFIGURE_OPTIONS"
         fi
 
-        ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
         if [ ${{ matrix.use_asan }} ]; then
           wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
           wxASAN_CXXFLAGS=$wxASAN_CFLAGS
           wxASAN_LDFLAGS="-fsanitize=address"
 
-          ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+          ../configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
         else
-          ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+          ../configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
         fi
         if [ -n "$rc" ]; then
           echo '*** Configuring failed, contents of config.log follows: ***'
@@ -192,6 +195,7 @@ jobs:
 
     - name: Building
       run: |
+        cd $PWD/localbuild_${{ matrix.arch }}
         make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
     - name: Building tests
@@ -201,9 +205,9 @@ jobs:
 
     - name: Testing
       if: matrix.skip_testing != true
-      working-directory: tests
+      working-directory: builddir/tests
       run: |
-        . ../build/tools/httpbin.sh
+        . ../../build/tools/httpbin.sh
         httpbin_launch
         export ASAN_OPTIONS=fast_unwind_on_malloc=0
         # Explicitly use bash because /bin/sh doesn't have pipefail option
@@ -215,7 +219,7 @@ jobs:
 
     - name: Testing GUI
       if: matrix.skip_testing != true
-      working-directory: tests
+      working-directory: builddir/tests
       run: |
         # We currently need to disable container overflow detection as we get
         # what seems to be a false positive in BitmapComboBoxTestCase triggered
