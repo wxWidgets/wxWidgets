@@ -58,7 +58,6 @@ inline void CheckLanguageVariant(wxLocaleIdent& locId)
 
 } // anonymous namespace
 
-
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
@@ -514,14 +513,14 @@ const wxUILocale& wxUILocale::GetCurrent()
 
 wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
 {
-    if ( !localeId.IsEmpty() )
+    if (localeId.IsEmpty())
     {
-        m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+        wxFAIL_MSG("Locale identifier must be initialized");
+        m_impl = NULL;
+        return;
     }
-    else
-    {
-        m_impl = wxUILocaleImpl::CreateUserDefault();
-    }
+
+    m_impl = wxUILocaleImpl::CreateForLocale(localeId);
 }
 
 wxUILocale::wxUILocale(const wxUILocale& loc)
@@ -672,9 +671,8 @@ int wxUILocale::GetSystemLanguage()
 /*static*/
 int wxUILocale::GetSystemLocale()
 {
-    // Retrieve default wxUILocale via empty wxLocaleIdent
-    wxLocaleIdent emptyLocId;
-    wxUILocale defaultLocale(emptyLocId);
+    // Create default wxUILocale
+    wxUILocale defaultLocale(wxUILocaleImpl::CreateUserDefault());
 
     // Find corresponding wxLanguageInfo
     const wxLanguageInfo* defaultLanguage = wxUILocale::FindLanguageInfo(defaultLocale.GetLocaleId());
