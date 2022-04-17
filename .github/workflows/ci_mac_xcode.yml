@@ -78,7 +78,7 @@ jobs:
       matrix:
         include:
         - name: macOS dynamic Release
-          runner: macos-latest
+          runner: self-hosted
           scheme: 'app-dynamic'
           destination: 'generic/platform=macOS'
           arch: x86_64
@@ -86,11 +86,11 @@ jobs:
           project: samples/minimal/minimal_cocoa.xcodeproj
         - name: iOS static Debug
           runner: macos-latest
-          scheme: 'app-static'
+          scheme: 'static'
           destination: 'generic/platform=iOS'
           arch: x86_64
           configuration: 'Debug'
-          project: samples/minimal/minimal_iphone.xcodeproj
+          project: build/osx/wxiphone.xcodeproj
         - name: iOS Simulator static
           runner: macos-latest
           scheme: 'app-static'
