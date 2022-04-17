@@ -90,7 +90,7 @@ jobs:
           destination: 'generic/platform=iOS'
           arch: x86_64
           configuration: 'Debug'
-          project: build/minimal/minimal_iphone.xcodeproj
+          project: samples/minimal/minimal_iphone.xcodeproj
         - name: iOS Simulator static
           runner: macos-latest
           scheme: 'app-static'
