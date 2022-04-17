@@ -246,5 +246,5 @@ jobs:
       if: matrix.skip_testing != true
       working-directory: builddir
       run: |
-        make -C samples/minimal -f makefile.unx clean
-        make -C samples/minimal -f makefile.unx WX_CONFIG=${{ github.workspace }}/localbin_${{ matrix.arch }}/bin/wx-config $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+        make -C ../samples/minimal -f makefile.unx clean
+        make -C ../samples/minimal -f makefile.unx WX_CONFIG=${{ github.workspace }}/localbin_${{ matrix.arch }}/bin/wx-config $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
