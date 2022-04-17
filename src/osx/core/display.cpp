@@ -188,7 +188,8 @@ static int wxOSXGetDisplayFromID( CGDirectDisplayID theID )
     {
         wxScopedArray<CGDirectDisplayID> theIDs(theCount);
         err = wxOSXGetDisplayList(theCount, theIDs.get(), &theCount);
-        wxASSERT(err == CGDisplayNoErr);
+        wxCHECK_MSG( err == CGDisplayNoErr,
+                     wxNOT_FOUND, "wxOSXGetDisplayList() failed" );
 
         for (nWhich = 0; nWhich < (int) theCount; ++nWhich)
         {
@@ -196,11 +197,8 @@ static int wxOSXGetDisplayFromID( CGDirectDisplayID theID )
                 break;
         }
 
-        if (nWhich == (int) theCount)
-        {
-            wxFAIL_MSG(wxT("Failed to find display in display list"));
-            nWhich = wxNOT_FOUND;
-        }
+        wxCHECK_MSG( nWhich != (int) theCount,
+                     wxNOT_FOUND, "Failed to find display in display list" );
     }
 
     return nWhich;
@@ -222,8 +220,8 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
     CGDirectDisplayID theID;
     CGDisplayCount theCount;
     CGDisplayErr err = CGGetDisplaysWithPoint(thePoint, 1, &theID, &theCount);
-    wxASSERT(err == CGDisplayNoErr);
-    wxUnusedVar(err); // suppress "unused" warning in non-debug builds
+    wxCHECK_MSG( err == CGDisplayNoErr,
+                 wxNOT_FOUND, "CGGetDisplaysWithPoint() failed" );
 
     if (theCount)
         return wxOSXGetDisplayFromID(theID);
@@ -248,11 +246,13 @@ int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
     CGRect r = CGRectMake(x, y, w, h);
     CGDisplayCount theCount;
     CGDisplayErr err = CGGetDisplaysWithRect(r, 0, NULL, &theCount);
-    wxASSERT(err == CGDisplayNoErr);
+    wxCHECK_MSG( err == CGDisplayNoErr,
+                 wxNOT_FOUND, "CGGetDisplaysWithRect(NULL) failed" );
 
     wxScopedArray<CGDirectDisplayID> theIDs(theCount);
     err = CGGetDisplaysWithRect(r, theCount, theIDs.get(), &theCount);
-    wxASSERT(err == CGDisplayNoErr);
+    wxCHECK_MSG( err == CGDisplayNoErr,
+                 wxNOT_FOUND, "CGGetDisplaysWithRect() failed" );
 
     const double scaleWindow = tlw->GetContentScaleFactor();
     for ( unsigned i = 0; i < theCount; ++i )
