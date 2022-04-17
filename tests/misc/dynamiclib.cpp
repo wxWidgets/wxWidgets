@@ -61,7 +61,7 @@ void DynamicLibraryTestCase::Load()
     if ( !wxFileName::Exists(LIB_NAME) )
     {
         wxLogWarning("Shared library \"%s\" doesn't exist, "
-                     "skipping DynamicLibraryTestCase::Load() test.");
+                     "skipping DynamicLibraryTestCase::Load() test.", LIB_NAME);
         return;
     }
 #else
