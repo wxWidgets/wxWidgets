@@ -151,8 +151,8 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
         *displayCount = 0;
         if ( onlineCount > 0 )
         {
-            CGDirectDisplayID *onlineDisplays = new CGDirectDisplayID[onlineCount];
-            error = CGGetOnlineDisplayList(onlineCount,onlineDisplays,&onlineCount);
+            wxScopedArray<CGDirectDisplayID> onlineDisplays(onlineCount);
+            error = CGGetOnlineDisplayList(onlineCount,onlineDisplays.get(),&onlineCount);
             if ( error == kCGErrorSuccess )
             {
                 for ( CGDisplayCount i = 0; i < onlineCount; ++i )
@@ -172,7 +172,6 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
                     }
                 }
             }
-            delete[] onlineDisplays;
         }
 
     }
@@ -187,8 +186,8 @@ static int wxOSXGetDisplayFromID( CGDirectDisplayID theID )
 
     if (err == CGDisplayNoErr && theCount > 0 )
     {
-        CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
-        err = wxOSXGetDisplayList(theCount, theIDs, &theCount);
+        wxScopedArray<CGDirectDisplayID> theIDs(theCount);
+        err = wxOSXGetDisplayList(theCount, theIDs.get(), &theCount);
         wxASSERT(err == CGDisplayNoErr);
 
         for (nWhich = 0; nWhich < (int) theCount; ++nWhich)
@@ -196,8 +195,6 @@ static int wxOSXGetDisplayFromID( CGDirectDisplayID theID )
             if (theIDs[nWhich] == theID)
                 break;
         }
-
-        delete [] theIDs;
 
         if (nWhich == (int) theCount)
         {
