@@ -66,8 +66,8 @@ httpbin_launch() {
     echo "Installing using `python3 -m pip --version`"
 
     python3 -m pip install $pip_explicit_deps httpbin --user
-    python3 -m httpbin.core 2>&1 >httpbin.log &
-    WX_TEST_WEBREQUEST_URL="http://localhost:5000"
+    python3 -m httpbin.core --port 50500 2>&1 >httpbin.log &
+    WX_TEST_WEBREQUEST_URL="http://localhost:50500"
 }
 
 httpbin_show_log() {
