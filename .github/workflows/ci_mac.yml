@@ -67,7 +67,7 @@ jobs:
   build-and-test:
     defaults:
       run:
-        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
+        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash --noprofile --norc -eo pipefail {0}
 
     runs-on: ${{ matrix.runner }}
 
