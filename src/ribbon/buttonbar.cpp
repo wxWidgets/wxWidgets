@@ -1508,6 +1508,29 @@ int wxRibbonButtonBar::GetItemId(wxRibbonButtonBarButtonBase *item) const
     return item->id;
 }
 
+wxRect wxRibbonButtonBar::GetItemRect(int button_id)const
+{
+    wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
+    size_t btn_count = layout->buttons.Count();
+    size_t btn_i;
+
+    for (btn_i = 0; btn_i < btn_count; ++btn_i)
+    {
+        wxRibbonButtonBarButtonInstance& instance = layout->buttons.Item(btn_i);
+        wxRibbonButtonBarButtonBase* button = instance.base;
+
+        if (button->id == button_id)
+        {
+            wxRibbonButtonBarButtonSizeInfo& size = button->sizes[instance.size];
+            wxRect btn_rect;
+            btn_rect.SetTopLeft(m_layout_offset + instance.position);
+            btn_rect.SetSize(size.size);
+
+            return btn_rect;
+        }
+    }
+    return wxRect();
+}
 
 bool wxRibbonButtonBarEvent::PopupMenu(wxMenu* menu)
 {

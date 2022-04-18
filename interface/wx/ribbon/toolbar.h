@@ -335,6 +335,15 @@ public:
     virtual int GetToolId(const wxRibbonToolBarToolBase* tool)const;
 
     /**
+        Returns the active item of the tool bar or NULL if there is none.
+
+        The active tool is the one being clicked.
+
+        @since 3.1.7
+    */
+    virtual wxRibbonToolBarToolBase* GetActiveTool() const;
+
+    /**
         Get any client data associated with the tool.
 
         @param tool_id
