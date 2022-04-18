@@ -3871,6 +3871,7 @@ void wxGrid::CheckDoDragScroll(wxGridSubwindow *eventGridWindow, wxGridSubwindow
 
     if ( !m_isDragging )
     {
+        // drag is just starting
         m_lastMousePos = posEvent;
         return;
     }
