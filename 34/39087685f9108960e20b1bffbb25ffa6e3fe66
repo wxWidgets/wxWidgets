@@ -1,0 +1,1 @@
+wxMSW: Fix sizes in standard font dialog in high DPI.
