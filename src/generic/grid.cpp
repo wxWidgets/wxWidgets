@@ -3868,6 +3868,13 @@ void wxGrid::CheckDoDragScroll(wxGridSubwindow *eventGridWindow, wxGridSubwindow
     //  scroll when at the edges or outside the window
     // eventGridWindow: the window that received the mouse event
     // gridWindow: the same or the corresponding non-frozen window
+
+    if ( !m_isDragging )
+    {
+        m_lastMousePos = posEvent;
+        return;
+    }
+
     int w, h;
     eventGridWindow->GetSize(&w, &h);
     // ViewStart is scroll position in scroll units
@@ -4242,6 +4249,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, rowLabelWin);
         m_dragLastPos = -1;
+        m_lastMousePos = wxDefaultPosition;
         m_isDragging = false;
     }
 
@@ -4710,6 +4718,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
         m_dragLastPos = -1;
+        m_lastMousePos = wxDefaultPosition;
         m_isDragging = false;
     }
 
@@ -4835,6 +4844,7 @@ void wxGrid::DoAfterDraggingEnd()
 
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
+    m_lastMousePos = wxDefaultPosition;
 
     m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
