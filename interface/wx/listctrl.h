@@ -1449,7 +1449,7 @@ public:
 
         @since 3.1.6
     */
-    int RemoveSortIndicator() const;
+    void RemoveSortIndicator();
 
     /**
         Returns the column that shows the sort indicator.
