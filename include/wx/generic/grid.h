@@ -100,6 +100,7 @@ class WXDLLIMPEXP_FWD_CORE wxGridCornerLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridEvent;
 class WXDLLIMPEXP_FWD_CORE wxGridRowLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridWindow;
+class WXDLLIMPEXP_FWD_CORE wxGridSubwindow;
 class WXDLLIMPEXP_FWD_CORE wxGridTypeRegistry;
 class WXDLLIMPEXP_FWD_CORE wxGridSelection;
 
@@ -2825,11 +2826,10 @@ protected:
     // setting m_isDragging to true
     wxPoint m_startDragPos;
 
-public:
     // the position of the last mouse event
     // used for detection of the movement direction
     wxPoint m_lastMousePos;
-private:
+
     bool    m_waitForSlowClick;
 
     wxCursor m_rowResizeCursor;
@@ -2973,6 +2973,13 @@ private:
 
     // release the mouse capture if it's currently captured
     void EndDraggingIfNecessary();
+
+    // helper for Process...MouseEvent to block re-triggering m_isDragging
+    bool CheckIfDragCancelled(wxMouseEvent *event);
+
+    // helper for Process...MouseEvent to scroll
+    void CheckDoDragScroll(wxGridSubwindow *eventGridWindow, wxGridSubwindow *gridWindow,
+                           wxPoint posEvent, int direction);
 
     // return true if the grid should be refreshed right now
     bool ShouldRefresh() const
