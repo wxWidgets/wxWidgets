@@ -59,13 +59,14 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
         typedef int (wxSTDCALL *wxStrlenType)(const char *);
         wxStrlenType pfnStrlen = (wxStrlenType)lib.GetSymbol(FUNC_NAME);
 
-        INFO("'" << FUNC_NAME << "' wasn't found in '" << LIB_NAME << "'");
-        CHECK( pfnStrlen );
-
         if ( pfnStrlen )
         {
             // Call the function dynamically loaded
             CHECK( pfnStrlen("foo") == 3 );
+        }
+        else
+        {
+            FAIL(FUNC_NAME << " wasn't found in " << LIB_NAME);
         }
     }
 
@@ -78,10 +79,14 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
         wxStrlenTypeAorW
             pfnStrlenAorW = (wxStrlenTypeAorW)lib.GetSymbolAorW(FUNC_NAME_AW);
 
-        INFO( "'" << FUNC_NAME_AW << "' wasn't found in '" << LIB_NAME << "'");
-        REQUIRE( pfnStrlenAorW );
-
-        CHECK( pfnStrlenAorW(wxT("foobar")) == 6 );
+        if ( pfnStrlenAorW )
+        {
+            CHECK( pfnStrlenAorW(wxT("foobar")) == 6 );
+        }
+        else
+        {
+            FAIL(FUNC_NAME_AW << " wasn't found in " << LIB_NAME);
+        }
     }
 #endif // __WINDOWS__
 }
