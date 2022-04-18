@@ -206,7 +206,18 @@ int wxFontDialog::ShowModal()
                                );
         }
 
-        m_fontData.m_chosenFont = wxFont(wxNativeFontInfo(logFont, parent));
+        wxFont f(wxNativeFontInfo(logFont, parent));
+
+        // The native dialog allows selecting only integer font sizes in
+        // points, but converting them to pixel height loses precision and so
+        // converting them back to points may result in a fractional value
+        // different from the value selected in the dialog. So ensure that we
+        // use exactly the same font size in points as what was selected in the
+        // dialog by rounding the possibly fractional value to the integer ones
+        // entered there.
+        f.SetPointSize(wxRound(f.GetFractionalPointSize()));
+
+        m_fontData.m_chosenFont = f;
         m_fontData.EncodingInfo().facename = logFont.lfFaceName;
         m_fontData.EncodingInfo().charset = logFont.lfCharSet;
 
