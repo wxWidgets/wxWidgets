@@ -13,7 +13,6 @@
 
     - Make Begin/EndBatch() the same as the generic Freeze/Thaw()
     - Review the column reordering code, it's a mess.
-    - Implement row reordering after dealing with the columns.
  */
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -5216,7 +5215,6 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
     // the window receiving the event might not be the same as the one under
     // the mouse (e.g. in the case of a dragging event started in one window,
     // but continuing over another one)
-
 
     if ( CheckIfDragCancelled(&event) )
         return;
