@@ -1079,7 +1079,7 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_gallery_button_active_background_gradient_colour = colour;
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_TOP_COLOUR:
-            m_gallery_button_background_top_brush.SetColour(colour);
+            m_gallery_button_active_background_top_brush.SetColour(colour);
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR:
             m_gallery_button_active_face_colour = colour;
