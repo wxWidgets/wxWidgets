@@ -228,12 +228,6 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
 // wxGridCellEditor
 // ----------------------------------------------------------------------------
 
-wxGridCellEditor::wxGridCellEditor()
-{
-    m_control = NULL;
-    m_attr = NULL;
-}
-
 wxGridCellEditor::~wxGridCellEditor()
 {
     Destroy();
@@ -434,9 +428,17 @@ void wxGridCellEditor::StartingClick()
 // wxGridCellTextEditor
 // ----------------------------------------------------------------------------
 
-wxGridCellTextEditor::wxGridCellTextEditor(size_t maxChars)
+wxGridCellTextEditor::wxGridCellTextEditor(const wxGridCellTextEditor& other)
+    : wxGridCellEditor(other),
+        m_maxChars(other.m_maxChars),
+        m_value(other.m_value)
 {
-    m_maxChars = maxChars;
+#if wxUSE_VALIDATORS
+    if ( other.m_validator )
+    {
+        SetValidator(*other.m_validator);
+    }
+#endif
 }
 
 void wxGridCellTextEditor::Create(wxWindow* parent,
@@ -669,21 +671,6 @@ void wxGridCellTextEditor::SetValidator(const wxValidator& validator)
 }
 #endif
 
-wxGridCellEditor *wxGridCellTextEditor::Clone() const
-{
-    wxGridCellTextEditor* editor = new wxGridCellTextEditor(m_maxChars);
-
-    editor->SetClientDataContainer(GetClientDataContainer());
-
-#if wxUSE_VALIDATORS
-    if ( m_validator )
-    {
-        editor->SetValidator(*m_validator);
-    }
-#endif
-    return editor;
-}
-
 // return the value in the text control
 wxString wxGridCellTextEditor::GetValue() const
 {
@@ -693,12 +680,6 @@ wxString wxGridCellTextEditor::GetValue() const
 // ----------------------------------------------------------------------------
 // wxGridCellNumberEditor
 // ----------------------------------------------------------------------------
-
-wxGridCellNumberEditor::wxGridCellNumberEditor(int min, int max)
-{
-    m_min = min;
-    m_max = max;
-}
 
 void wxGridCellNumberEditor::Create(wxWindow* parent,
                                     wxWindowID id,
@@ -963,25 +944,9 @@ wxString wxGridCellNumberEditor::GetValue() const
     return s;
 }
 
-wxGridCellEditor *wxGridCellNumberEditor::Clone() const
-{
-    wxGridCellNumberEditor* editor = new wxGridCellNumberEditor;
-    editor->SetClientDataContainer(GetClientDataContainer());
-    return editor;
-}
-
 // ----------------------------------------------------------------------------
 // wxGridCellFloatEditor
 // ----------------------------------------------------------------------------
-
-wxGridCellFloatEditor::wxGridCellFloatEditor(int width,
-                                             int precision,
-                                             int format)
-{
-    m_width = width;
-    m_precision = precision;
-    m_style = format;
-}
 
 void wxGridCellFloatEditor::Create(wxWindow* parent,
                                    wxWindowID id,
@@ -1221,13 +1186,6 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
     }
 
     return false;
-}
-
-wxGridCellEditor *wxGridCellFloatEditor::Clone() const
-{
-    wxGridCellFloatEditor* editor = new wxGridCellFloatEditor;
-    editor->SetClientDataContainer(GetClientDataContainer());
-    return editor;
 }
 
 #endif // wxUSE_TEXTCTRL
@@ -1495,13 +1453,6 @@ void wxGridCellBoolEditor::SetGridFromValue(int row, int col, wxGrid* grid) cons
         table->SetValue(row, col, GetStringValue());
 }
 
-wxGridCellEditor *wxGridCellBoolEditor::Clone() const
-{
-    wxGridCellBoolEditor* editor = new wxGridCellBoolEditor;
-    editor->SetClientDataContainer(GetClientDataContainer());
-    return editor;
-}
-
 #endif // wxUSE_CHECKBOX
 
 #if wxUSE_COMBOBOX
@@ -1510,15 +1461,11 @@ wxGridCellEditor *wxGridCellBoolEditor::Clone() const
 // wxGridCellChoiceEditor
 // ----------------------------------------------------------------------------
 
-wxGridCellChoiceEditor::wxGridCellChoiceEditor(const wxArrayString& choices,
-                                               bool allowOthers)
-    : m_choices(choices),
-      m_allowOthers(allowOthers) { }
-
 wxGridCellChoiceEditor::wxGridCellChoiceEditor(size_t count,
                                                const wxString choices[],
                                                bool allowOthers)
-                      : m_allowOthers(allowOthers)
+                      : wxGridCellEditor(),
+                        m_allowOthers(allowOthers)
 {
     if ( count )
     {
@@ -1528,16 +1475,6 @@ wxGridCellChoiceEditor::wxGridCellChoiceEditor(size_t count,
             m_choices.Add(choices[n]);
         }
     }
-}
-
-wxGridCellEditor *wxGridCellChoiceEditor::Clone() const
-{
-    wxGridCellChoiceEditor *editor = new wxGridCellChoiceEditor;
-    editor->m_allowOthers = m_allowOthers;
-    editor->m_choices = m_choices;
-    editor->SetClientDataContainer(GetClientDataContainer());
-
-    return editor;
 }
 
 void wxGridCellChoiceEditor::Create(wxWindow* parent,
@@ -1709,20 +1646,11 @@ void wxGridCellChoiceEditor::OnComboCloseUp(wxCommandEvent& WXUNUSED(evt))
 // "John","Fred"..."Bob" in the combo choice box
 
 wxGridCellEnumEditor::wxGridCellEnumEditor(const wxString& choices)
-                     :wxGridCellChoiceEditor()
+    : wxGridCellChoiceEditor(),
+      m_index(-1)
 {
-    m_index = -1;
-
     if (!choices.empty())
         SetParameters(choices);
-}
-
-wxGridCellEditor *wxGridCellEnumEditor::Clone() const
-{
-    wxGridCellEnumEditor *editor = new wxGridCellEnumEditor();
-    editor->m_index = m_index;
-    editor->SetClientDataContainer(GetClientDataContainer());
-    return editor;
 }
 
 void wxGridCellEnumEditor::BeginEdit(int row, int col, wxGrid* grid)
@@ -1820,13 +1748,6 @@ wxGridCellAutoWrapStringEditor::Create(wxWindow* parent,
                                     wxTE_MULTILINE | wxTE_RICH);
 }
 
-wxGridCellEditor *wxGridCellAutoWrapStringEditor::Clone() const
-{
-    wxGridCellAutoWrapStringEditor* editor = new wxGridCellAutoWrapStringEditor;
-    editor->SetClientDataContainer(GetClientDataContainer());
-    return editor;
-}
-
 #if wxUSE_DATEPICKCTRL
 
 // ----------------------------------------------------------------------------
@@ -1879,6 +1800,7 @@ struct wxGridCellDateEditorKeyHandler
 #endif // __WXGTK__
 
 wxGridCellDateEditor::wxGridCellDateEditor(const wxString& format)
+    : wxGridCellEditor()
 {
     SetParameters(format);
 }
@@ -1988,13 +1910,6 @@ void wxGridCellDateEditor::Reset()
     wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
 
     m_value = DatePicker()->GetValue();
-}
-
-wxGridCellEditor *wxGridCellDateEditor::Clone() const
-{
-    wxGridCellDateEditor* editor = new wxGridCellDateEditor(m_format);
-    editor->SetClientDataContainer(GetClientDataContainer());
-    return editor;
 }
 
 wxString wxGridCellDateEditor::GetValue() const

@@ -140,7 +140,11 @@ class wxGridDirectionOperations;
 class WXDLLIMPEXP_CORE wxGridCellWorker : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
-    wxGridCellWorker() { }
+    // default ctor
+    wxGridCellWorker() {}
+
+    // copy ctor
+    wxGridCellWorker(const wxGridCellWorker& other);
 
     // interpret renderer parameters: arbitrary string whose interpretation is
     // left to the derived classes
@@ -168,6 +172,18 @@ private:
 class WXDLLIMPEXP_CORE wxGridCellRenderer : public wxGridCellWorker
 {
 public:
+    // default ctor
+    wxGridCellRenderer()
+        : wxGridCellWorker()
+    {
+    }
+
+    // copy ctor
+    wxGridCellRenderer(const wxGridCellRenderer& other)
+        : wxGridCellWorker(other)
+    {
+    }
+
     // draw the given cell on the provided DC inside the given rectangle
     // using the style specified by the attribute and the default or selected
     // state corresponding to the isSelected value.
@@ -375,7 +391,24 @@ private:
 class WXDLLIMPEXP_CORE wxGridCellEditor : public wxGridCellWorker
 {
 public:
-    wxGridCellEditor();
+    // default ctor
+    wxGridCellEditor()
+        : wxGridCellWorker(),
+          m_control(NULL),
+          m_attr(NULL)
+    {
+    }
+
+    // copy ctor
+    wxGridCellEditor(const wxGridCellEditor& other)
+        : wxGridCellWorker(other),
+          m_control(other.m_control),
+          m_attr(other.m_attr),
+          m_colFgOld(other.m_colFgOld),
+          m_colBgOld(other.m_colBgOld),
+          m_fontOld(other.m_fontOld)
+    {
+    }
 
     bool IsCreated() const { return m_control != NULL; }
 
@@ -523,8 +556,6 @@ protected:
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
     friend class wxGridCellEditorDummyFriend;
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellEditor);
 };
 
 // Smart pointer to wxGridCellEditor, calling DecRef() on it automatically.
@@ -534,6 +565,18 @@ typedef wxObjectDataPtr<wxGridCellEditor> wxGridCellEditorPtr;
 class wxGridCellActivatableEditor : public wxGridCellEditor
 {
 public:
+    // default ctor
+    wxGridCellActivatableEditor()
+        : wxGridCellEditor()
+    {
+    }
+
+    // copy ctor
+    wxGridCellActivatableEditor(const wxGridCellActivatableEditor& other)
+        : wxGridCellEditor(other)
+    {
+    }
+
     // In this class these methods must be overridden.
     virtual wxGridActivationResult
     TryActivate(int row, int col, wxGrid* grid,

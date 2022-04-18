@@ -253,6 +253,11 @@ int wxGridColumnOperations::GetFirstLine(const wxGrid *grid, wxGridWindow *gridW
 // wxGridCellRenderer and wxGridCellEditor managing ref counting
 // ----------------------------------------------------------------------------
 
+wxGridCellWorker::wxGridCellWorker(const wxGridCellWorker& other)
+{
+    SetClientDataContainer(other.GetClientDataContainer());
+}
+
 void wxGridCellWorker::SetParameters(const wxString& WXUNUSED(params))
 {
     // nothing to do
