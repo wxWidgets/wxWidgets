@@ -296,12 +296,14 @@ public:
                                 const wxRect& rect, wxPGPaintData& paintdata ) wxOVERRIDE;
 
 protected:
-    wxBitmap   m_bitmap; // final thumbnail area
+    void SetImage(const wxImage& img);
     wxImage    m_image; // original thumbnail area
 
 private:
     // Initialize m_image using the current file name.
     void LoadImageFromFile();
+
+    wxBitmap   m_bitmap; // final thumbnail area
 };
 
 #endif
