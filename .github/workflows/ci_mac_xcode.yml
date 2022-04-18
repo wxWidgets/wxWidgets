@@ -67,7 +67,7 @@ jobs:
   build-and-test:
     defaults:
       run:
-        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
+        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash --noprofile --norc -eo pipefail {0}
 
     runs-on: ${{ matrix.runner }}
 
@@ -111,7 +111,7 @@ jobs:
 
     - name: Build
       run: |
-        set -o pipefail && xcodebuild clean build ONLY_ACTIVE_ARCH=NO \
+        xcodebuild clean build ONLY_ACTIVE_ARCH=NO \
         CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
         -project '${{github.workspace}}/${{ matrix.project }}' \
         -scheme '${{ matrix.scheme }}' -configuration '${{ matrix.configuration}}' \
