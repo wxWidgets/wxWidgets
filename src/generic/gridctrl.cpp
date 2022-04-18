@@ -264,6 +264,12 @@ wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxString& choices)
         SetParameters(choices);
 }
 
+wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other)
+    : wxGridCellStringRenderer(other)
+{
+    m_choices = wxArrayString(other.m_choices);
+}
+
 wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
                                                 wxGridCellAttr& attr,
                                                 wxDC& dc)
