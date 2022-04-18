@@ -143,6 +143,11 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     SetFont(GetFont());
 }
 
+double wxMemoryDCImpl::GetDPIScaleFactor() const
+{
+    return m_contentScaleFactor;
+}
+
 void wxMemoryDCImpl::SetFont(const wxFont& font)
 {
     // We need to adjust the font size by the ratio between the scale factor we
