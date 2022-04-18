@@ -1505,6 +1505,17 @@ public:
     void CopyAttributes(const wxDC& dc);
 
     /**
+        Returns the factor used for converting logical pixels to physical ones.
+
+        Returns the same value as wxWindow::GetContentScaleFactor() for the
+        device contexts associated with a window and the same value as
+        wxBitmap::GetScaleFactor() for the associated bitmap for wxMemoryDC.
+
+        @since 2.9.5
+     */
+    double GetContentScaleFactor() const;
+
+    /**
         Returns the depth (number of bits/pixel) of this DC.
 
         @see wxDisplayDepth()
@@ -1551,10 +1562,15 @@ public:
     wxSize GetPPI() const;
 
     /**
-       Get the DPI scale factor. Can be used to scale coordinates and sizes
-       appropriate to the DPI of the associated wxWindow or wxDC.
+       Returns the DPI scale factor.
 
-        @since 3.1.7
+       Can be used to scale coordinates and sizes appropriate to the DPI of the
+       associated wxWindow, if any.
+
+       See wxWindow::GetDPIScaleFactor() for more details about the DPI scale
+       factor and its difference with GetContentScaleFactor().
+
+       @since 3.1.7
     */
     double GetDPIScaleFactor() const;
 
