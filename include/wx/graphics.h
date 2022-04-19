@@ -739,6 +739,17 @@ public:
     // returns the resolution of the graphics context in device points per inch
     virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY) const;
 
+    wxSize FromDIP(const wxSize& sz) const;
+    wxPoint FromDIP(const wxPoint& pt) const
+    {
+        const wxSize sz = FromDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int FromDIP(int d) const
+    {
+        return FromDIP(wxSize(d, 0)).x;
+    }
+
 #if 0
     // sets the current alpha on this context
     virtual void SetAlpha( wxDouble alpha );

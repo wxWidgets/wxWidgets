@@ -36,6 +36,8 @@
 #endif
 
 #include "wx/private/textmeasure.h"
+#include "wx/private/rescale.h"
+#include "wx/display.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/dcclient.h"
@@ -602,6 +604,17 @@ void wxDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     m_signX = (xLeftRight ?  1 : -1);
     m_signY = (yBottomUp  ? -1 :  1);
     ComputeScaleAndOrigin();
+}
+
+wxSize wxDCImpl::FromDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    const wxSize dpi = GetPPI();
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(baseline).To(dpi);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
 }
 
 bool wxDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const

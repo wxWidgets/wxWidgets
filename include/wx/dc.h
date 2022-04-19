@@ -539,6 +539,8 @@ public:
 
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
+    virtual wxSize FromDIP(const wxSize& sz) const;
+
 #ifdef __WXMSW__
     // Native Windows functions using the underlying HDC don't honour GDI+
     // transformations which may be applied to it. Using this function we can
@@ -826,6 +828,16 @@ public:
 
     double GetContentScaleFactor() const
         { return m_pimpl->GetContentScaleFactor(); }
+
+    wxSize FromDIP(const wxSize& sz) const
+        { return m_pimpl->FromDIP(sz); }
+    wxPoint FromDIP(const wxPoint& pt) const
+    {
+        const wxSize sz = FromDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int FromDIP(int d) const
+        { return FromDIP(wxSize(d, 0)).x; }
 
     // Right-To-Left (RTL) modes
 

@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/private/graphics.h"
+#include "wx/private/rescale.h"
 #include "wx/display.h"
 
 //-----------------------------------------------------------------------------
@@ -639,6 +640,18 @@ void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY) const
         *dpiX = wxDisplay::GetStdPPIValue();
         *dpiY = wxDisplay::GetStdPPIValue();
     }
+}
+
+wxSize wxGraphicsContext::FromDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    wxRealPoint dpi;
+    GetDPI(&dpi.x, &dpi.y);
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(baseline).To(wxSize((int)dpi.x, (int)dpi.y));
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
 }
 
 // sets the pen
