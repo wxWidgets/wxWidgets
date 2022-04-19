@@ -490,11 +490,6 @@ wxSize wxGCDCImpl::GetPPI() const
     return wxDisplay::GetStdPPI();
 }
 
-double wxGCDCImpl::GetDPIScaleFactor() const
-{
-    return m_graphicContext ? m_graphicContext->GetDPIScaleFactor() : 1.0;
-}
-
 int wxGCDCImpl::GetDepth() const
 {
     return 32;

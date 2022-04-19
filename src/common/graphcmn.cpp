@@ -613,13 +613,6 @@ void wxGraphicsContext::SetContentScaleFactor(double contentScaleFactor)
     m_contentScaleFactor = contentScaleFactor;
 }
 
- double wxGraphicsContext::GetDPIScaleFactor() const
-{
-     wxDouble x, y;
-     GetDPI(&x, &y);
-     return x / (double)wxDisplay::GetStdPPIValue();
-}
-
 #if 0
 void wxGraphicsContext::SetAlpha( wxDouble WXUNUSED(alpha) )
 {

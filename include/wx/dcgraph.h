@@ -101,7 +101,6 @@ public:
     virtual bool CanGetTextExtent() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual wxSize GetPPI() const wxOVERRIDE;
-    virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
     virtual void SetLogicalFunction(wxRasterOperationMode function) wxOVERRIDE;
 

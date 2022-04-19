@@ -574,7 +574,7 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
     wxBrush brushHatch(*wxRED, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatch);
 
-    double scale = dc.GetDPIScaleFactor();
+    double scale = 1.0;
 
     wxPoint star[5];
     star[0] = scale * wxPoint(100, 60);
