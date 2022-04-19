@@ -580,7 +580,7 @@ public:
 
         @since 3.1.6
     */
-    void AddExtraAccel(wxAcceleratorEntry *accel);
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel);
 
     /**
        Clear the extra accelerators list.
