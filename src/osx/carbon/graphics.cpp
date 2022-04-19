@@ -1402,6 +1402,8 @@ public:
 
     virtual void Flush() wxOVERRIDE;
 
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
+
     // push the current state of the context, ie the transformation matrix on a stack
     virtual void PushState() wxOVERRIDE;
 
@@ -1756,6 +1758,28 @@ void wxMacCoreGraphicsContext::EndPage()
 void wxMacCoreGraphicsContext::Flush()
 {
     CGContextFlush(m_cgContext);
+}
+
+void wxMacCoreGraphicsContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
+{
+    if ( GetWindow() )
+    {
+        const wxSize dpi = GetWindow()->GetDPI();
+
+        if ( dpiX )
+            *dpiX = dpi.x;
+        if ( dpiY )
+            *dpiY = dpi.y;
+    }
+    else
+    {
+        // see wxWindowMac::GetDPI
+        const double dpi = GetContentScaleFactor() * 72.0;
+        if ( dpiX )
+            *dpiX = dpi;
+        if ( dpiY )
+            *dpiY = dpi;
+    }
 }
 
 bool wxMacCoreGraphicsContext::EnsureIsValid()
