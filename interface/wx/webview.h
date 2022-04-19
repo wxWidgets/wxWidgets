@@ -250,7 +250,7 @@ public:
 
         @since 3.1.5
     */
-    virtual wxVersionInfo GetVersionInfo(const wxString& backend);
+    virtual wxVersionInfo GetVersionInfo();
 };
 
 /**
