@@ -878,19 +878,24 @@ public:
     //@}
 
     /**
-        Sets the default size of each tool bitmap. The default bitmap size is 16
-        by 15 pixels.
+        Sets the default size of each tool bitmap.
 
         It is usually unnecessary to call this function, as the tools will
         always be made big enough to fit the size of the bitmaps used in them.
 
-        If you do call it, note that @a size does @e not need to be multiplied
-        by the DPI-dependent factor even under MSW, where it would normally be
-        necessary, as the toolbar adjusts this size to the current DPI
-        automatically.
+        If you do call it, it must be done before toolbar is Realize()'d.
+
+        Example of using this function to force the bitmaps to be at least
+        32 pixels wide and tall:
+        @code
+            toolbar->SetToolBitmapSize(FromDIP(wxSize(32, 32)));
+            toolbar->AddTool(wxID_NEW, "New", wxBitmapBundle::FromXXX(...));
+            ...
+            toolbar->Realize();
+        @endcode
 
         @param size
-            The size of the bitmaps in the toolbar.
+            The size of the bitmaps in the toolbar in logical pixels.
 
         @see GetToolBitmapSize(), GetToolSize()
     */

@@ -438,10 +438,12 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     toolBarBitmaps[Tool_about] = wxBitmapBundle::FromSVG(svg_data, sizeBitmap);
 #endif // wxHAS_SVG
 
-    // Note that there is no need for FromDIP() here, wxMSW will adjust the
-    // size on its own and under the other platforms there is no need for
-    // scaling the coordinates anyhow.
-    toolBar->SetToolBitmapSize(sizeBitmap);
+    // We don't have to call this function at all when using the default bitmap
+    // size (i.e. when m_smallToolbar == true), but it's harmless to do it.
+    //
+    // Note that sizeBitmap is in DIPs, so we need to use FromDIP() to scale it
+    // up for the current DPI, if necessary.
+    toolBar->SetToolBitmapSize(FromDIP(sizeBitmap));
 
     toolBar->AddTool(wxID_NEW, "New",
                      toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
