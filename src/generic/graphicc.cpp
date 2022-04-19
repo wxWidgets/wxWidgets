@@ -40,6 +40,7 @@ bool wxCairoInit();
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/vector.h"
+#include "wx/display.h"
 #ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
@@ -332,7 +333,10 @@ protected:
 class wxCairoFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
+    wxCairoFontData( wxGraphicsRenderer* renderer,
+                     const wxFont &font,
+                     const wxRealPoint& dpi,
+                     const wxColour& col );
     wxCairoFontData(wxGraphicsRenderer* renderer,
                     double sizeInPixels,
                     const wxString& facename,
@@ -507,6 +511,8 @@ public:
     virtual void PushState() wxOVERRIDE;
     virtual void PopState() wxOVERRIDE;
     virtual void Flush() wxOVERRIDE;
+
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
 
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                 wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
@@ -1124,7 +1130,7 @@ wxCairoFontData::InitFontComponents(const wxString& facename,
 }
 
 wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font,
-                         const wxColour& col )
+                                  const wxRealPoint& dpi, const wxColour& col )
     : wxGraphicsObjectRefData(renderer)
 #ifdef __WXGTK__
     , m_wxfont(font)
@@ -1132,7 +1138,14 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
 {
     InitColour(col);
 
+#ifndef __WXMAC__
+    m_size = !dpi.y
+        ? double(font.GetPixelSize().GetHeight())
+        : double(font.GetFractionalPointSize() * dpi.y / 72);
+#else
+    wxUnusedVar(dpi);
     m_size = font.GetPointSize();
+#endif
 
 #ifdef __WXMAC__
     m_font = cairo_quartz_font_face_create_for_cgfont( font.OSXGetCGFont() );
@@ -2749,6 +2762,31 @@ void wxCairoContext::Flush()
 #endif
 }
 
+void wxCairoContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
+{
+    if ( GetWindow() )
+    {
+        const wxSize dpi = GetWindow()->GetDPI();
+
+        if ( dpiX )
+            *dpiX = dpi.x;
+        if ( dpiY )
+            *dpiY = dpi.y;
+    }
+    else
+    {
+        double dpi = (double)wxDisplay::GetStdPPIValue();
+#ifndef __WXMAC__
+        dpi *= GetContentScaleFactor();
+#endif
+
+        if ( dpiX )
+            *dpiX = dpi;
+        if ( dpiY )
+            *dpiY = dpi;
+    }
+}
+
 void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
@@ -3377,13 +3415,7 @@ wxCairoRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
 
 wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    wxGraphicsFont p;
-    ENSURE_LOADED_OR_RETURN(p);
-    if ( font.IsOk() )
-    {
-        p.SetRefData(new wxCairoFontData( this , font, col ));
-    }
-    return p;
+    return CreateFontAtDPI(font, wxRealPoint(), col);
 }
 
 wxGraphicsFont
@@ -3400,10 +3432,16 @@ wxCairoRenderer::CreateFont(double sizeInPixels,
 
 wxGraphicsFont
 wxCairoRenderer::CreateFontAtDPI(const wxFont& font,
-                                 const wxRealPoint& WXUNUSED(dpi),
+                                 const wxRealPoint& dpi,
                                  const wxColour& col)
 {
-    return CreateFont(font, col);
+    wxGraphicsFont p;
+    ENSURE_LOADED_OR_RETURN(p);
+    if ( font.IsOk() )
+    {
+        p.SetRefData(new wxCairoFontData( this, font, dpi, col ));
+    }
+    return p;
 }
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
