@@ -501,7 +501,7 @@ protected:
     bool m_isShading;
     CGFunctionRef m_gradientFunction;
     CGShadingRef m_shading;
-    wxMacCoreGraphicsMatrixData* m_shadingMatrix; 
+    wxMacCoreGraphicsMatrixData* m_shadingMatrix;
 
     // information about a single gradient component
     struct GradientComponent
@@ -557,7 +557,7 @@ wxMacCoreGraphicsPenBrushDataBase::~wxMacCoreGraphicsPenBrushDataBase()
 
     if ( m_shadingMatrix )
         delete m_shadingMatrix;
-    
+
     // an eventual existing m_gradientComponents will be deallocated via the CGFunction callback
 }
 
@@ -579,9 +579,9 @@ wxMacCoreGraphicsPenBrushDataBase::CreateLinearGradientShading(
         const wxGraphicsMatrix& matrix)
 {
     m_gradientFunction = CreateGradientFunction(stops);
-    m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(), 
+    m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(),
                                       CGPointMake((CGFloat) x1, (CGFloat) y1),
-                                      CGPointMake((CGFloat) x2, (CGFloat) y2), 
+                                      CGPointMake((CGFloat) x2, (CGFloat) y2),
                                       m_gradientFunction, true, true );
     m_isShading = true;
     if ( !matrix.IsNull() )
@@ -600,9 +600,9 @@ wxMacCoreGraphicsPenBrushDataBase::CreateRadialGradientShading(
         const wxGraphicsMatrix& matrix)
 {
     m_gradientFunction = CreateGradientFunction(stops);
-    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), 
+    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(),
                                        CGPointMake((CGFloat) startX, (CGFloat) startY), 0,
-                                       CGPointMake((CGFloat) endX, (CGFloat) endY), (CGFloat) radius, 
+                                       CGPointMake((CGFloat) endX, (CGFloat) endY), (CGFloat) radius,
                                        m_gradientFunction, true, true );
     m_isShading = true;
     if ( !matrix.IsNull() )
@@ -666,7 +666,7 @@ CGFunctionRef
 wxMacCoreGraphicsPenBrushDataBase::CreateGradientFunction(const wxGraphicsGradientStops& stops)
 {
     m_gradientComponents = new GradientComponents();
-    
+
     static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, &ReleaseComponents };
     static const CGFloat input_value_range [2] = { 0, 1 };
     static const CGFloat output_value_ranges [8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
@@ -1029,12 +1029,12 @@ protected:
     wxMacCoreGraphicsColour m_cgColor;
 };
 
-wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer) : 
+wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer) :
     wxMacCoreGraphicsPenBrushDataBase( renderer )
 {
 }
 
-wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush &brush) : 
+wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush &brush) :
     wxMacCoreGraphicsPenBrushDataBase( renderer ),
     m_cgColor( brush )
 {
@@ -1089,7 +1089,7 @@ private :
 #endif
 };
 
-wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) 
+wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col)
     : wxGraphicsObjectRefData( renderer ),
       m_colour(col)
 {
@@ -2238,8 +2238,8 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     else
     {
         CGContextAddPath( m_cgContext, (CGPathRef)path.GetNativePath() );
-        CGContextStrokePath( m_cgContext );        
-    }   
+        CGContextStrokePath( m_cgContext );
+    }
 
     CheckInvariants();
 }
