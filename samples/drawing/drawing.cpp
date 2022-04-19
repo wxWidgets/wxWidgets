@@ -574,40 +574,38 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
     wxBrush brushHatch(*wxRED, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatch);
 
-    double scale = 1.0;
-
     wxPoint star[5];
-    star[0] = scale * wxPoint(100, 60);
-    star[1] = scale * wxPoint(60, 150);
-    star[2] = scale * wxPoint(160, 100);
-    star[3] = scale * wxPoint(40, 100);
-    star[4] = scale * wxPoint(140, 150);
+    star[0] = dc.FromDIP(wxPoint(100, 60));
+    star[1] = dc.FromDIP(wxPoint(60, 150));
+    star[2] = dc.FromDIP(wxPoint(160, 100));
+    star[3] = dc.FromDIP(wxPoint(40, 100));
+    star[4] = dc.FromDIP(wxPoint(140, 150));
 
     dc.DrawText("You should see two (irregular) stars below, the left one "
-                "hatched", scale * 10, scale * 10);
+                "hatched", dc.FromDIP(10), dc.FromDIP(10));
     dc.DrawText("except for the central region and the right "
-                "one entirely hatched", scale * 10, scale * 30);
-    dc.DrawText("The third star only has a hatched outline", scale * 10, scale* 50);
+                "one entirely hatched", dc.FromDIP(10), dc.FromDIP(30));
+    dc.DrawText("The third star only has a hatched outline", dc.FromDIP(10), dc.FromDIP(50));
 
-    dc.DrawPolygon(WXSIZEOF(star), star, scale * 0, scale * 30);
-    dc.DrawPolygon(WXSIZEOF(star), star, scale * 160, scale * 30, wxWINDING_RULE);
+    dc.DrawPolygon(WXSIZEOF(star), star, dc.FromDIP(0), dc.FromDIP(30));
+    dc.DrawPolygon(WXSIZEOF(star), star, dc.FromDIP(160), dc.FromDIP(30), wxWINDING_RULE);
 
     wxBrush brushHatchGreen(*wxGREEN, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatchGreen);
     wxPoint star2[10];
-    star2[0] = scale * wxPoint(0, 100);
-    star2[1] = scale * wxPoint(-59, -81);
-    star2[2] = scale * wxPoint(95, 31);
-    star2[3] = scale * wxPoint(-95, 31);
-    star2[4] = scale * wxPoint(59, -81);
-    star2[5] = scale * wxPoint(0, 80);
-    star2[6] = scale * wxPoint(-47, -64);
-    star2[7] = scale * wxPoint(76, 24);
-    star2[8] = scale * wxPoint(-76, 24);
-    star2[9] = scale * wxPoint(47, -64);
+    star2[0] = dc.FromDIP(wxPoint(0, 100));
+    star2[1] = dc.FromDIP(wxPoint(-59, -81));
+    star2[2] = dc.FromDIP(wxPoint(95, 31));
+    star2[3] = dc.FromDIP(wxPoint(-95, 31));
+    star2[4] = dc.FromDIP(wxPoint(59, -81));
+    star2[5] = dc.FromDIP(wxPoint(0, 80));
+    star2[6] = dc.FromDIP(wxPoint(-47, -64));
+    star2[7] = dc.FromDIP(wxPoint(76, 24));
+    star2[8] = dc.FromDIP(wxPoint(-76, 24));
+    star2[9] = dc.FromDIP(wxPoint(47, -64));
     int count[2] = {5, 5};
 
-    dc.DrawPolyPolygon(WXSIZEOF(count), count, star2, scale * 450, scale * 150);
+    dc.DrawPolyPolygon(WXSIZEOF(count), count, star2, dc.FromDIP(450), dc.FromDIP(150));
 }
 
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
@@ -1836,7 +1834,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 void MyCanvas::Draw(wxDC& pdc)
 {
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGCDC gdc(this);
+    wxGCDC gdc;
 
     if ( m_renderer )
     {
@@ -1896,7 +1894,10 @@ void MyCanvas::Draw(wxDC& pdc)
     }
 
     if ( m_clip )
-        dc.SetClippingRegion(100, 100, 100, 100);
+    {
+        int clipSize = dc.FromDIP(100);
+        dc.SetClippingRegion(clipSize, clipSize, clipSize, clipSize);
+    }
 
     dc.Clear();
 
@@ -1904,7 +1905,7 @@ void MyCanvas::Draw(wxDC& pdc)
     {
         dc.SetPen(*wxMEDIUM_GREY_PEN);
         for ( int i = 0; i < 200; i++ )
-            dc.DrawLine(0, i*10, i*10, 0);
+            dc.DrawLine(0, dc.FromDIP(i*10), dc.FromDIP(i*10), 0);
     }
 
     switch ( m_show )
@@ -2726,7 +2727,7 @@ void MyFrame::PrepareDC(wxDC& dc)
         dc.SetTransformMatrix(mtx);
     }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
-    dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
+    dc.SetLogicalOrigin( dc.FromDIP(m_xLogicalOrigin), dc.FromDIP(m_yLogicalOrigin) );
     dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
     dc.SetUserScale( m_xUserScale, m_yUserScale );
     dc.SetMapMode( m_mapMode );
