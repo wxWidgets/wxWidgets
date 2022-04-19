@@ -627,19 +627,12 @@ wxDouble wxGraphicsContext::GetAlpha() const
 
 void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY) const
 {
-    if ( m_window )
-    {
-        const wxSize ppi = m_window->GetDPI();
-        *dpiX = ppi.x;
-        *dpiY = ppi.y;
-    }
-    else
-    {
-        // Use some standard DPI value, it doesn't make much sense for the
-        // contexts not using any pixels anyhow.
-        *dpiX = wxDisplay::GetStdPPIValue();
-        *dpiY = wxDisplay::GetStdPPIValue();
-    }
+    const wxSize dpi = GetWindow() ? GetWindow()->GetDPI() : wxDisplay::GetStdPPI();
+
+    if (dpiX)
+        *dpiX = dpi.x;
+    if (dpiY)
+        *dpiY = dpi.y;
 }
 
 wxSize wxGraphicsContext::FromDIP(const wxSize& sz) const
