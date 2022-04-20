@@ -76,6 +76,11 @@ public:
     // Resolution in pixels per logical inch
     wxSize GetPPI() const wxOVERRIDE;
 
+    virtual wxSize FromDIP(const wxSize& sz) const wxOVERRIDE
+    {
+        return sz;
+    }
+
     virtual void ComputeScaleAndOrigin() wxOVERRIDE;
 
     void SetBackgroundMode(int WXUNUSED(mode)) wxOVERRIDE { }

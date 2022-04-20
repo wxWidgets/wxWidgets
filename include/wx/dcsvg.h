@@ -248,6 +248,11 @@ private:
 
     virtual wxSize GetPPI() const wxOVERRIDE;
 
+    virtual wxSize FromDIP(const wxSize& sz) const wxOVERRIDE
+    {
+        return sz;
+    }
+
     void Init(const wxString& filename, int width, int height,
               double dpi, const wxString& title);
 
