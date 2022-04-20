@@ -160,6 +160,11 @@ void wxGCDCImpl::SetGraphicsContext( wxGraphicsContext* ctx )
 
     if ( DoInitContext(ctx) )
     {
+        if (m_graphicContext->GetWindow())
+        {
+            m_window = m_graphicContext->GetWindow();
+        }
+
         // Reapply our attributes to the context.
         m_graphicContext->SetFont( m_font , m_textForegroundColour );
         m_graphicContext->SetPen( m_pen );
