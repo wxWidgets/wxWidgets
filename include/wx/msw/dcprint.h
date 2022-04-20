@@ -36,6 +36,13 @@ public:
 
     virtual wxRect GetPaperRect() const wxOVERRIDE;
 
+    virtual wxSize FromDIP(const wxSize& sz) const wxOVERRIDE
+    {
+        return sz;
+    }
+
+    void SetFont(const wxFont& font) wxOVERRIDE;
+
 protected:
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                               bool useMask = false) wxOVERRIDE;
