@@ -71,6 +71,15 @@ without `-DHAVE_CONFIG_H` as it works just fine without it on any ANSI C system
 
 Run `autogen.sh` to update the generated files and commit the changes.
 
+## zlib
+
+Check for the newly added public systems in `zlib.map` and update `zconf.h` to
+include if necessary -- at least with zlib 1.2.12 release this file wasn't
+updated at all in the upstream version, resulting in problems such as #22280.
+If `zconf.h` is updated, you probably already had to resolve the conflicts in
+it, as our file differs from the upstream version due to having the changes
+from [Z_PREFIX PR](https://github.com/madler/zlib/pull/323) included in it.
+
 
 Updating the main repository
 ----------------------------
