@@ -1,8 +1,8 @@
 How to update a third party library to a newer version
 ======================================================
 
-0. Introduction
----------------
+Introduction
+------------
 
 wxWidgets includes several third party libraries, i.e. libraries which are
 used by wxWidgets and distributed with it but which we don't maintain nor even
@@ -11,8 +11,8 @@ their maintainers and from time to time we need to replace the versions used
 by wxWidgets with newer versions.
 
 
-1. Submodules
--------------
+Submodules
+----------
 
 All third party libraries are managed using Git submodules. This includes
 3rdparty/catch and expat, jpeg, png, tiff and zlib subdirectories of src.
@@ -22,8 +22,8 @@ the submodule, pushing this submodule out and then committing the changes in
 the top-level repository.
 
 
-2. Updating the submodule
--------------------------
+Updating the submodule
+----------------------
 
 All submodules use `master` branch for the upstream master and `wx` for the
 version used by wxWidgets. To update the latter, just merge the appropriate
@@ -42,15 +42,15 @@ one:
     $ git push --set-upstream git@github.com:wxWidgets/libexpat.git wx
 
 
-3. Generating build files (libexpat, libtiff)
----------------------------------------------
+Generating build files (libexpat, libtiff)
+------------------------------------------
 
 We include the generated build files of libexpat and libtiff. For libexpat run
 `buildconf.sh`. For libtiff run `autogen.sh`. Commit the changes.
 
 
-4. Updating the main repository
--------------------------------
+Updating the main repository
+----------------------------
 
 If there are any changes to the source files used by the library, update the
 corresponding `build/bakefiles/$lib.bkl` file (e.g. `expat.bkl` for Expat) and
@@ -61,8 +61,8 @@ manually.
 Commit these changes and the submodule and create a PR to test them as usual.
 
 
-5. Special instructions for libpng
-----------------------------------
+Special instructions for libpng
+-------------------------------
 
 We use a special hack for libpng as we want to prefix all its symbols with
 `wx_` but don't want to use its build system which makes this easily possible
