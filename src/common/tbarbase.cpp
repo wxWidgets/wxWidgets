@@ -138,7 +138,6 @@ void wxToolBarToolBase::SetDropdownMenu(wxMenu* menu)
 
 wxToolBarBase::wxToolBarBase()
 {
-    // the list owns the pointers
     m_xMargin = m_yMargin = 0;
     m_maxRows = m_maxCols = 0;
     m_toolPacking = m_toolSeparation = 0;
@@ -441,7 +440,9 @@ void wxToolBarBase::DoSetToolBitmapSize(const wxSize& size)
 
 void wxToolBarBase::SetToolBitmapSize(const wxSize& size)
 {
-    m_requestedBitmapSize = size;
+    // We store this value in DIPs to avoid having to update it when the DPI
+    // changes.
+    m_requestedBitmapSize = ToDIP(size);
 
     DoSetToolBitmapSize(size);
 }
@@ -480,28 +481,27 @@ void wxToolBarBase::AdjustToolBitmapSize()
                                (
                                 this,
                                 bundles,
-                                sizeOrig
+                                ToDIP(sizeOrig)
                                );
 
-        // Don't do anything if it doesn't change, our current size is supposed
-        // to satisfy any constraints we might have anyhow.
-        if ( sizePreferred == sizeOrig )
-            return;
-
-        // This size is supposed to be in logical units for the platforms where
-        // they differ from physical ones, so convert it.
+        // GetConsensusSizeFor() returns physical size, but we want to operate
+        // with logical pixels as everything else is expressed in them.
         //
         // Note that this could introduce rounding problems but, in fact,
         // neither wxGTK nor wxOSX (that are the only ports where contents
         // scale factor may be different from 1) use this size at all
         // currently, so it shouldn't matter. But if/when they are modified to
         // use the size computed here, this would need to be revisited.
-        sizePreferred /= GetContentScaleFactor();
+        sizePreferred = FromPhys(sizePreferred);
 
         // Don't decrease the bitmap below the size requested by the application
         // as using larger bitmaps shouldn't shrink them to the small default
         // size.
-        sizePreferred.IncTo(m_requestedBitmapSize);
+        sizePreferred.IncTo(FromDIP(m_requestedBitmapSize));
+
+        // No need to change the bitmaps size if it doesn't really change.
+        if ( sizePreferred == sizeOrig )
+            return;
 
         // Call DoSetToolBitmapSize() and not SetToolBitmapSize() to avoid
         // changing the requested bitmap size: if we set our own adjusted size
