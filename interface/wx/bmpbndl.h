@@ -161,9 +161,11 @@ public:
     static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
 
     /**
-        Create a bundle from a icon bundle.
+        Create a bundle from an icon bundle.
 
         If @a iconBundle is invalid or empty, empty bundle is returned.
+
+        @since 3.1.7
      */
     static wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
 

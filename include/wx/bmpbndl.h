@@ -13,6 +13,7 @@
 #include "wx/bitmap.h"
 #include "wx/object.h"
 #include "wx/vector.h"
+#include "wx/iconbndl.h"
 
 class wxBitmapBundleImpl;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
