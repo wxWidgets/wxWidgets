@@ -244,7 +244,7 @@ public:
 
         @since 3.1.6
      */
-    double GetLogicalSize() const;
+    wxSize GetLogicalSize() const;
 
     /**
         Gets the width of the icon in logical pixels.

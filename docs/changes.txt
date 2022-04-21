@@ -234,6 +234,13 @@ Changes in behaviour which may result in build errors
 3.1.7: (released 2022-??-??)
 ----------------------------
 
+INCOMPATIBLE CHANGES SINCE 3.1.6:
+
+- wxImageFileProperty::m_pImage and m_pBitmap member variables were removed.
+  They were not intended for the public API. m_image variable represents
+  cached image now.
+
+
 NOTE: This file is updated only before the release, please use
 
     $ git log --notes=changelog --format='%N' v3.1.6..|grep .

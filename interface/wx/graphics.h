@@ -1156,6 +1156,14 @@ public:
     void DisableOffset();
     bool OffsetEnabled() const;
 
+    /**
+       Get the DPI scale factor. Can be used to scale coordinates and sizes
+       appropriate to the DPI of the associated wxWindow or wxDC.
+
+        @since 3.1.7
+    */
+    double GetDPIScaleFactor() const;
+
     /** @}
     */
 };

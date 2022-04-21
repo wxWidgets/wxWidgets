@@ -1,7 +1,7 @@
 Installing wxWidgets for Windows       {#plat_msw_install}
 --------------------------------
 
-This is wxWidgets for Microsoft Windows (XP, Vista, 7, 8, 10, etc)
+This is wxWidgets for Microsoft Windows (XP, Vista, 7, 8, 10, 11)
 including both 32 bit and 64 bit versions.
 
 [TOC]

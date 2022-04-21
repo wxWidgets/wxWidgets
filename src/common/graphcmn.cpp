@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/private/graphics.h"
+#include "wx/display.h"
 
 //-----------------------------------------------------------------------------
 
@@ -612,6 +613,13 @@ void wxGraphicsContext::SetContentScaleFactor(double contentScaleFactor)
     m_contentScaleFactor = contentScaleFactor;
 }
 
+ double wxGraphicsContext::GetDPIScaleFactor() const
+{
+     wxDouble x, y;
+     GetDPI(&x, &y);
+     return x / (double)wxDisplay::GetStdPPIValue();
+}
+
 #if 0
 void wxGraphicsContext::SetAlpha( wxDouble WXUNUSED(alpha) )
 {
@@ -635,8 +643,8 @@ void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY) const
     {
         // Use some standard DPI value, it doesn't make much sense for the
         // contexts not using any pixels anyhow.
-        *dpiX = 72.0;
-        *dpiY = 72.0;
+        *dpiX = wxDisplay::GetStdPPIValue();
+        *dpiY = wxDisplay::GetStdPPIValue();
     }
 }
 
@@ -908,8 +916,8 @@ wxGraphicsContext::CreateLinearGradientBrush(
     return GetRenderer()->CreateLinearGradientBrush
                           (
                             x1, y1,
-                            x2, y2, 
-                            gradientStops, 
+                            x2, y2,
+                            gradientStops,
                             matrix
                           );
 }

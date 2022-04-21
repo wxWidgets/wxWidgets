@@ -574,38 +574,40 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
     wxBrush brushHatch(*wxRED, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatch);
 
+    double scale = dc.GetDPIScaleFactor();
+
     wxPoint star[5];
-    star[0] = wxPoint(100, 60);
-    star[1] = wxPoint(60, 150);
-    star[2] = wxPoint(160, 100);
-    star[3] = wxPoint(40, 100);
-    star[4] = wxPoint(140, 150);
+    star[0] = scale * wxPoint(100, 60);
+    star[1] = scale * wxPoint(60, 150);
+    star[2] = scale * wxPoint(160, 100);
+    star[3] = scale * wxPoint(40, 100);
+    star[4] = scale * wxPoint(140, 150);
 
     dc.DrawText("You should see two (irregular) stars below, the left one "
-                "hatched", 10, 10);
+                "hatched", scale * 10, scale * 10);
     dc.DrawText("except for the central region and the right "
-                "one entirely hatched", 10, 30);
-    dc.DrawText("The third star only has a hatched outline", 10, 50);
+                "one entirely hatched", scale * 10, scale * 30);
+    dc.DrawText("The third star only has a hatched outline", scale * 10, scale* 50);
 
-    dc.DrawPolygon(WXSIZEOF(star), star, 0, 30);
-    dc.DrawPolygon(WXSIZEOF(star), star, 160, 30, wxWINDING_RULE);
+    dc.DrawPolygon(WXSIZEOF(star), star, scale * 0, scale * 30);
+    dc.DrawPolygon(WXSIZEOF(star), star, scale * 160, scale * 30, wxWINDING_RULE);
 
     wxBrush brushHatchGreen(*wxGREEN, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatchGreen);
     wxPoint star2[10];
-    star2[0] = wxPoint(0, 100);
-    star2[1] = wxPoint(-59, -81);
-    star2[2] = wxPoint(95, 31);
-    star2[3] = wxPoint(-95, 31);
-    star2[4] = wxPoint(59, -81);
-    star2[5] = wxPoint(0, 80);
-    star2[6] = wxPoint(-47, -64);
-    star2[7] = wxPoint(76, 24);
-    star2[8] = wxPoint(-76, 24);
-    star2[9] = wxPoint(47, -64);
+    star2[0] = scale * wxPoint(0, 100);
+    star2[1] = scale * wxPoint(-59, -81);
+    star2[2] = scale * wxPoint(95, 31);
+    star2[3] = scale * wxPoint(-95, 31);
+    star2[4] = scale * wxPoint(59, -81);
+    star2[5] = scale * wxPoint(0, 80);
+    star2[6] = scale * wxPoint(-47, -64);
+    star2[7] = scale * wxPoint(76, 24);
+    star2[8] = scale * wxPoint(-76, 24);
+    star2[9] = scale * wxPoint(47, -64);
     int count[2] = {5, 5};
 
-    dc.DrawPolyPolygon(WXSIZEOF(count), count, star2, 450, 150);
+    dc.DrawPolyPolygon(WXSIZEOF(count), count, star2, scale * 450, scale * 150);
 }
 
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
@@ -1655,7 +1657,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
 
         wxGraphicsPen pen = gc->CreatePen(
             wxGraphicsPenInfo(wxColour(0,0,0)).Width(6).Join(wxJOIN_BEVEL).LinearGradient(
-                gfr.x + gfr.width/2, gfr.y, 
+                gfr.x + gfr.width/2, gfr.y,
                 gfr.x + gfr.width/2, gfr.y + gfr.height,
                 stops));
         gc->SetPen(pen);
@@ -1834,7 +1836,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 void MyCanvas::Draw(wxDC& pdc)
 {
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGCDC gdc;
+    wxGCDC gdc(this);
 
     if ( m_renderer )
     {

@@ -436,9 +436,9 @@ public:
         @param button_id
             ID of the button in question.
 
-        @since 3.2.0
+        @since 3.1.7
     */
-    virtual wxRect GetItemRect(int button_id)const;
+    virtual wxRect GetItemRect(int button_id) const;
 
     /**
         Calculate button layouts and positions.

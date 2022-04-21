@@ -45,7 +45,7 @@
         bitmaps.push_back(wxBITMAP_PNG(open_48x48));
         bitmaps.push_back(wxBITMAP_PNG(open_64x64));
 
-        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromBitmaps(bitmaps));
+        toolBar->AddTool(wxID_OPEN, "Open", wxBitmapBundle::FromBitmaps(bitmaps));
     }
     @endcode
 
@@ -66,7 +66,7 @@
     having to explicitly list all the bitmaps, e.g. the code above becomes
     @code
     #ifdef wxHAS_IMAGE_RESOURCES
-        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromResources("open"));
+        toolBar->AddTool(wxID_OPEN, "Open", wxBitmapBundle::FromResources("open"));
     #else
         ... same code as shown above ...
     #endif

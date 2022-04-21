@@ -880,6 +880,7 @@ public:
 
     void SetContentScaleFactor(double contentScaleFactor);
     double GetContentScaleFactor() const { return m_contentScaleFactor; }
+    double GetDPIScaleFactor() const;
 
 #ifdef __WXMSW__
     virtual WXHDC GetNativeHDC() = 0;

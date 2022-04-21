@@ -140,7 +140,7 @@ public:
     bool TabHitTest(int x, int y, wxWindow** hit) const;
     bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
-    int GetIdxFromWindow(wxWindow* page) const;
+    int GetIdxFromWindow(const wxWindow* page) const;
     size_t GetPageCount() const;
     wxAuiNotebookPage& GetPage(size_t idx);
     const wxAuiNotebookPage& GetPage(size_t idx) const;
@@ -292,7 +292,11 @@ public:
 
     virtual size_t GetPageCount() const wxOVERRIDE;
     virtual wxWindow* GetPage(size_t pageIdx) const wxOVERRIDE;
-    int GetPageIndex(wxWindow* pageWnd) const;
+    virtual int FindPage(const wxWindow* page) const wxOVERRIDE;
+
+    // This is wxAUI-specific equivalent of FindPage(), prefer to use the other
+    // function.
+    int GetPageIndex(wxWindow* pageWnd) const { return FindPage(pageWnd); }
 
     bool SetPageText(size_t page, const wxString& text) wxOVERRIDE;
     wxString GetPageText(size_t pageIdx) const wxOVERRIDE;
