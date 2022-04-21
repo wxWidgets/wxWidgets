@@ -64,6 +64,9 @@ public:
     static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
     static wxBitmapBundle FromImage(const wxImage& image);
 
+    //Create from icon bundle.
+    static wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
+
     // It should be possible to implement SVG rasterizing without raw bitmap
     // support using wxDC::DrawSpline(), but currently we don't do it and so
     // FromSVG() is only available in the ports providing raw bitmap access.

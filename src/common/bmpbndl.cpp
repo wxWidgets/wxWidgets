@@ -357,6 +357,20 @@ wxBitmapBundle wxBitmapBundle::FromImpl(wxBitmapBundleImpl* impl)
     return wxBitmapBundle(impl);
 }
 
+/* static */
+wxBitmapBundle wxBitmapBundle::FromIconBundle(const wxIconBundle& iconBundle)
+{
+    if(!iconBundle.IsOk() || iconBundle.IsEmpty())
+        return wxBitmapBundle();
+
+    wxVector<wxBitmap> bitmaps;
+    for (int a = 0; a < iconBundle.GetIconCount(); ++a)
+    {
+        bitmaps.push_back(iconBundle.GetIconByIndex(a));
+    }
+
+    return FromBitmaps(bitmaps);
+}
 
 // MSW and MacOS have their own, actually working, version, in their platform-specific code.
 #if !defined( __WXMSW__ ) && !defined( __WXOSX__ )
