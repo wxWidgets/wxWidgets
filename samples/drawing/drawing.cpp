@@ -2000,8 +2000,8 @@ void MyCanvas::Draw(wxDC& pdc)
     {
         wxCoord x0, y0;
         dc.GetDeviceOrigin(&x0, &y0);
-        m_sizeX = dc.LogicalToDeviceX(dc.MaxX()) - x0 + 1;
-        m_sizeY = dc.LogicalToDeviceY(dc.MaxY()) - y0 + 1;
+        m_sizeX = dc.ToDIP(dc.LogicalToDeviceX(dc.MaxX()) - x0) + 1;
+        m_sizeY = dc.ToDIP(dc.LogicalToDeviceY(dc.MaxY()) - y0) + 1;
     }
 }
 
@@ -2013,7 +2013,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         PrepareDC(dc);
         m_owner->PrepareDC(dc);
 
-        wxPoint pos = dc.DeviceToLogical(event.GetPosition());
+        wxPoint pos = dc.ToDIP(dc.DeviceToLogical(event.GetPosition()));
         wxString str;
         str.Printf( "Current mouse position: %d,%d", pos.x, pos.y );
         m_owner->SetStatusText( str );
