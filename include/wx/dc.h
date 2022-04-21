@@ -541,6 +541,8 @@ public:
 
     virtual wxSize FromDIP(const wxSize& sz) const;
 
+    virtual wxSize ToDIP(const wxSize& sz) const;
+
 #ifdef __WXMSW__
     // Native Windows functions using the underlying HDC don't honour GDI+
     // transformations which may be applied to it. Using this function we can
@@ -838,6 +840,20 @@ public:
     }
     int FromDIP(int d) const
         { return FromDIP(wxSize(d, 0)).x; }
+
+    wxSize ToDIP(const wxSize & sz) const
+    {
+        return m_pimpl->ToDIP(sz);
+    }
+    wxPoint ToDIP(const wxPoint & pt) const
+    {
+        const wxSize sz = ToDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int ToDIP(int d) const
+    {
+        return ToDIP(wxSize(d, 0)).x;
+    }
 
     // Right-To-Left (RTL) modes
 

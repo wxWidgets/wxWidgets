@@ -647,6 +647,18 @@ wxSize wxGraphicsContext::FromDIP(const wxSize& sz) const
 #endif // wxHAS_DPI_INDEPENDENT_PIXELS
 }
 
+wxSize wxGraphicsContext::ToDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    wxRealPoint dpi;
+    GetDPI(&dpi.x, &dpi.y);
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(wxSize((int)dpi.x, (int)dpi.y)).To(baseline);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
 // sets the pen
 void wxGraphicsContext::SetPen( const wxGraphicsPen& pen )
 {

@@ -617,6 +617,17 @@ wxSize wxDCImpl::FromDIP(const wxSize& sz) const
 #endif // wxHAS_DPI_INDEPENDENT_PIXELS
 }
 
+wxSize wxDCImpl::ToDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    const wxSize dpi = GetPPI();
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(dpi).To(baseline);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
 bool wxDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
     wxTextMeasure tm(GetOwner(), &m_font);

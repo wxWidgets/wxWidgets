@@ -229,6 +229,11 @@ public:
         return sz;
     }
 
+    virtual wxSize ToDIP(const wxSize& sz) const wxOVERRIDE
+    {
+        return sz;
+    }
+
     void SetFont(const wxFont& font) wxOVERRIDE
     {
         wxFont scaledFont = font;

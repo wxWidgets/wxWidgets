@@ -81,6 +81,11 @@ public:
         return sz;
     }
 
+    virtual wxSize ToDIP(const wxSize& sz) const wxOVERRIDE
+    {
+        return sz;
+    }
+
     virtual void ComputeScaleAndOrigin() wxOVERRIDE;
 
     void SetBackgroundMode(int WXUNUSED(mode)) wxOVERRIDE { }
