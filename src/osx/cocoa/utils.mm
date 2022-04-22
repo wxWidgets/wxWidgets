@@ -64,6 +64,20 @@ void wxBell()
     [appleEventManager setEventHandler:self andSelector:@selector(handleQuitAppEvent:withReplyEvent:)
                          forEventClass:kCoreEventClass andEventID:kAEQuitApplication];
 
+    // avoid adding an "Enter Full Screen" menu item
+    if ( WX_IS_MACOS_AVAILABLE(10, 11) )
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSFullScreenMenuItemEverywhere"];
+    }
+
+    // avoid adding a "Show Tab Bar" menu item
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
+    if ( WX_IS_MACOS_AVAILABLE(10, 12) )
+    {
+        NSWindow.allowsAutomaticWindowTabbing = false;
+    }
+#endif
+
     wxTheApp->OSXOnWillFinishLaunching();
 }
 
