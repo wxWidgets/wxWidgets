@@ -5920,7 +5920,23 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     }
 
     menu->m_popupShown = true;
-    gtk_menu_popup(
+#if GTK_CHECK_VERSION(3,22,0)
+    GdkWindow* window = gtk_widget_get_window(m_wxwindow ? m_wxwindow : m_widget);
+    if (wxGTKImpl::IsWayland(window) && wx_is_at_least_gtk3(22))
+    {
+        if (x == -1 && y == -1)
+            gtk_menu_popup_at_pointer(GTK_MENU(menu->m_menu), NULL);
+        else
+        {
+            const GdkRectangle rect = { x, y, 1, 1 };
+            gtk_menu_popup_at_rect(GTK_MENU(menu->m_menu),
+                window, &rect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, NULL);
+        }
+    }
+    else
+#endif // GTK_CHECK_VERSION(3,22,0)
+    {
+        gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
                   NULL,           // parent menu shell
                   NULL,           // parent menu item
@@ -5929,6 +5945,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
                   0,                            // button used to activate it
                   gtk_get_current_event_time()
                 );
+    }
 
     // it is possible for gtk_menu_popup() to fail
     if (!gtk_widget_get_visible(GTK_WIDGET(menu->m_menu)))
