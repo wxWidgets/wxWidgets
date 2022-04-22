@@ -364,7 +364,7 @@ wxBitmapBundle wxBitmapBundle::FromIconBundle(const wxIconBundle& iconBundle)
         return wxBitmapBundle();
 
     wxVector<wxBitmap> bitmaps;
-    for (int a = 0; a < iconBundle.GetIconCount(); ++a)
+    for (size_t a = 0; a < iconBundle.GetIconCount(); ++a)
     {
         bitmaps.push_back(iconBundle.GetIconByIndex(a));
     }
