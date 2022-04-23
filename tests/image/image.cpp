@@ -31,6 +31,7 @@
 #include "wx/wfstream.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
+#include "wx/scopedptr.h"
 
 #include "testimage.h"
 
@@ -189,7 +190,7 @@ void ImageTestCase::LoadFromSocketStream()
             url.GetError()
         );
 
-        wxInputStream *in_stream = url.GetInputStream();
+        wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
         WX_ASSERT_MESSAGE
         (
             ("Opening URL \"%s\" failed.", testData[i].url),
@@ -206,8 +207,6 @@ void ImageTestCase::LoadFromSocketStream()
             ("Loading image from \"%s\" failed.", testData[i].url),
             img.LoadFile(*in_stream, testData[i].type)
         );
-
-        delete in_stream;
     }
 }
 
