@@ -428,7 +428,7 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
     wxGetApp().SetProcessEventFunc(func);
 }
 
-extern bool IsNetworkAvailable()
+static bool DoCheckConnection()
 {
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
@@ -453,6 +453,16 @@ extern bool IsNetworkAvailable()
     wxSocketBase::Shutdown();
 
     return online;
+}
+
+extern bool IsNetworkAvailable()
+{
+    static int s_isNetworkAvailable = -1;
+
+    if ( s_isNetworkAvailable == -1 )
+        s_isNetworkAvailable = DoCheckConnection();
+
+    return s_isNetworkAvailable == 1;
 }
 
 extern bool IsAutomaticTest()
