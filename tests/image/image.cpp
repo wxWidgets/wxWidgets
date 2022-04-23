@@ -166,8 +166,8 @@ void ImageTestCase::LoadFromSocketStream()
 {
     if (!IsNetworkAvailable())      // implemented in test.cpp
     {
-        wxLogWarning("No network connectivity; skipping the "
-                     "ImageTestCase::LoadFromSocketStream test unit.");
+        WARN("No network connectivity; skipping the "
+             "ImageTestCase::LoadFromSocketStream test unit.");
         return;
     }
 

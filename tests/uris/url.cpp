@@ -65,7 +65,7 @@ void URLTestCase::GetInputStream()
 {
     if (!IsNetworkAvailable())      // implemented in test.cpp
     {
-        wxLogWarning("No network connectivity; skipping the URLTestCase::GetInputStream test unit.");
+        WARN("No network connectivity; skipping the URLTestCase::GetInputStream test unit.");
         return;
     }
 
