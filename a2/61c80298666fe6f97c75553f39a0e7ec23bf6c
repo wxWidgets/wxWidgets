@@ -1,0 +1,1 @@
+wxGTK: Avoid GDK errors when using PopupMenu() with Wayland.
