@@ -442,9 +442,13 @@ extern bool IsNetworkAvailable()
         return false;
     }
 
+    const char* const
+        HTTP_GET = "GET / HTTP /1.1\r\nHost: www.wxwidgets.org\r\n\r\n";
+
     wxSocketClient sock;
     sock.SetTimeout(10);    // 10 secs
-    bool online = sock.Connect(addr);
+    bool online = sock.Connect(addr) &&
+                    (sock.Write(HTTP_GET, strlen(HTTP_GET)), sock.WaitForRead(1));
 
     wxSocketBase::Shutdown();
 
