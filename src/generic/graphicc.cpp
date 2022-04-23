@@ -2764,27 +2764,13 @@ void wxCairoContext::Flush()
 
 void wxCairoContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
 {
-    if ( GetWindow() )
-    {
-        const wxSize dpi = GetWindow()->GetDPI();
+    const wxSize dpi = GetWindow() ? GetWindow()->GetDPI() :
+                       (wxDisplay::GetStdPPI() * GetContentScaleFactor());
 
-        if ( dpiX )
-            *dpiX = dpi.x;
-        if ( dpiY )
-            *dpiY = dpi.y;
-    }
-    else
-    {
-        double dpi = (double)wxDisplay::GetStdPPIValue();
-#ifndef __WXMAC__
-        dpi *= GetContentScaleFactor();
-#endif
-
-        if ( dpiX )
-            *dpiX = dpi;
-        if ( dpiY )
-            *dpiY = dpi;
-    }
+    if  (dpiX )
+        *dpiX = dpi.x;
+    if ( dpiY )
+        *dpiY = dpi.y;
 }
 
 void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
