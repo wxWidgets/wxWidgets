@@ -140,50 +140,6 @@ void wxButtonCocoaImpl::SetPressedBitmap( const wxBitmapBundle& bitmap )
     }
 }
 
-void wxButtonCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &bottom) const
-{
-    left = top = right = bottom = 0;
-    NSControlSize size = NSRegularControlSize;
-    if ( [m_osxView respondsToSelector:@selector(controlSize)] )
-        size = [m_osxView controlSize];
-    else if ([m_osxView respondsToSelector:@selector(cell)])
-    {
-        id cell = [(id)m_osxView cell];
-        if ([cell respondsToSelector:@selector(controlSize)])
-            size = [cell controlSize];
-    }
-    
-    if ( [GetNSButton() bezelStyle] == NSRoundedBezelStyle )
-    {
-        switch( size )
-        {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
-            case NSControlSizeLarge:
-#endif
-            case NSRegularControlSize:
-                left = right = 6;
-                top = 4;
-                bottom = 7;
-                break;
-            case NSSmallControlSize:
-                left = right = 5;
-                top = 4;
-                bottom = 6;
-                break;
-            case NSMiniControlSize:
-                left = right = 1;
-                top = 0;
-                bottom = 1;
-                break;
-        }
-    }
-    else if ( [GetNSButton() bezelStyle] == NSSmallSquareBezelStyle )
-    {
-        left = right = 0;
-        top = bottom = 1;
-    }
-}
-
 void wxButtonCocoaImpl::SetAcceleratorFromLabel(const wxString& label)
 {
     const int accelPos = wxControl::FindAccelIndex(label);

@@ -3112,6 +3112,15 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
+void wxWidgetCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+{
+    NSEdgeInsets insets = [m_osxView alignmentRectInsets];
+    left = insets.left;
+    top = insets.top;
+    right = insets.right;
+    bottom = insets.bottom;
+}
+
 namespace
 {
     
