@@ -110,10 +110,7 @@ bool MyApp::OnInit(void)
     // Create the main frame window
     // ----------------------------
 
-    MyFrame* frame = new MyFrame((wxFrame *) NULL, "wxWidgets Printing Demo",
-                                 wxDefaultPosition, wxDefaultSize);
-    frame->SetSize(frame->FromDIP(wxSize(400, 400)));
-    frame->Centre(wxBOTH);
+    MyFrame* frame = new MyFrame("wxWidgets Printing Demo");
     frame->Show();
 
     return true;
@@ -142,15 +139,15 @@ void MyApp::Draw(wxDC&dc)
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxLIGHT_GREY_BRUSH);
 
-    dc.DrawRectangle(dc.FromDIP(0), dc.FromDIP(0), dc.FromDIP(230), dc.FromDIP(350));
-    dc.DrawLine(dc.FromDIP(0), dc.FromDIP(0), dc.FromDIP(229), dc.FromDIP(349));
-    dc.DrawLine(dc.FromDIP(229), dc.FromDIP(0), dc.FromDIP(0), dc.FromDIP(349));
+    dc.DrawRectangle(0, 0, dc.FromDIP(230), dc.FromDIP(350));
+    dc.DrawLine(0, 0, dc.FromDIP(229), dc.FromDIP(349));
+    dc.DrawLine(dc.FromDIP(229), 0, 0, dc.FromDIP(349));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.SetBrush(*wxCYAN_BRUSH);
     dc.SetPen(*wxRED_PEN);
 
-    dc.DrawRoundedRectangle(dc.FromDIP(0), dc.FromDIP(20), dc.FromDIP(200), dc.FromDIP(80), 20);
+    dc.DrawRoundedRectangle(0, dc.FromDIP(20), dc.FromDIP(200), dc.FromDIP(80), 20);
 
     dc.DrawText( "Rectangle 200 by 80", dc.FromDIP(40), dc.FromDIP(40));
 
@@ -169,10 +166,10 @@ void MyApp::Draw(wxDC&dc)
 #endif
 
     wxPoint points[5];
-    points[0].x = dc.FromDIP(0);
-    points[0].y = dc.FromDIP(0);
+    points[0].x = 0;
+    points[0].y = 0;
     points[1].x = dc.FromDIP(20);
-    points[1].y = dc.FromDIP(0);
+    points[1].y = 0;
     points[2].x = dc.FromDIP(20);
     points[2].y = dc.FromDIP(20);
     points[3].x = dc.FromDIP(10);
@@ -277,8 +274,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                    MyFrame::OnPreviewFrameModalityKind)
 wxEND_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const wxSize&size)
-        : wxFrame(frame, wxID_ANY, title, pos, size)
+MyFrame::MyFrame(const wxString& title)
+        : wxFrame(NULL, wxID_ANY, title)
 {
     m_canvas = NULL;
     m_previewModality = wxPreviewFrame_AppModal;
@@ -343,11 +340,13 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const 
     // create the canvas
     // -----------------
 
-    m_canvas = new MyCanvas(this, wxPoint(0, 0), FromDIP(wxSize(100, 100)),
-                            wxRETAINED|wxHSCROLL|wxVSCROLL);
+    m_canvas = new MyCanvas(this, wxRETAINED | wxHSCROLL | wxVSCROLL);
 
     // Give it scrollbars: the virtual canvas is 20 * 50 = 1000 pixels in each direction
     m_canvas->SetScrollbars(20, 20, 50, 50);
+
+    SetSize(FromDIP(wxSize(400, 400)));
+    Centre(wxBOTH);
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -392,7 +391,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     }
 
     wxPreviewFrame *frame =
-        new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), FromDIP(wxSize(600, 650)));
+        new wxPreviewFrame(preview, this, "Demo Print Preview", wxDefaultPosition, FromDIP(wxSize(600, 700)));
     frame->Centre(wxBOTH);
     frame->InitializeWithModality(m_previewModality);
     frame->Show();
@@ -427,7 +426,7 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
     wxPreviewFrame *frame =
-        new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), FromDIP(wxSize(600, 650)));
+        new wxPreviewFrame(preview, this, "Demo Print Preview", wxDefaultPosition, FromDIP(wxSize(600, 700)));
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show();
@@ -491,8 +490,8 @@ wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   //  EVT_PAINT(MyCanvas::OnPaint)
 wxEND_EVENT_TABLE()
 
-MyCanvas::MyCanvas(wxFrame *frame, const wxPoint&pos, const wxSize&size, long style)
-    : wxScrolledWindow(frame, wxID_ANY, pos, size, style)
+MyCanvas::MyCanvas(wxFrame *frame, long style)
+    : wxScrolledWindow(frame, wxID_ANY, wxDefaultPosition, wxDefaultSize, style)
 {
     SetBackgroundColour(*wxWHITE);
 }
