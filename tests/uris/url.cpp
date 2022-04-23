@@ -65,11 +65,12 @@ void URLTestCase::GetInputStream()
 {
     if (!IsNetworkAvailable())      // implemented in test.cpp
     {
-        wxLogWarning("No network connectivity; skipping the URLTestCase::GetInputStream test unit.");
+        WARN("No network connectivity; skipping the URLTestCase::GetInputStream test unit.");
         return;
     }
 
-    wxURL url("http://www.wxwidgets.org/assets/img/header-logo.png");
+    // This is the IP address of the real www.wxwidgets.org server.
+    wxURL url("http://173.254.92.22/assets/img/header-logo.png");
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
     wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
