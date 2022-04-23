@@ -436,7 +436,7 @@ extern bool IsNetworkAvailable()
     wxSocketBase::Initialize();
 
     wxIPV4address addr;
-    if (!addr.Hostname(wxASCII_STR("www.google.com")) || !addr.Service(wxASCII_STR("www")))
+    if (!addr.Hostname(wxASCII_STR("www.wxwidgets.org")) || !addr.Service(wxASCII_STR("www")))
     {
         wxSocketBase::Shutdown();
         return false;
