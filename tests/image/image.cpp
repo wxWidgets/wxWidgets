@@ -171,13 +171,14 @@ void ImageTestCase::LoadFromSocketStream()
         return;
     }
 
+    // These URLs use the real IP address of www.wxwidgets.org.
     struct {
         const char* url;
         wxBitmapType type;
     } testData[] =
     {
-        { "http://www.wxwidgets.org/assets/img/header-logo.png", wxBITMAP_TYPE_PNG },
-        { "http://www.wxwidgets.org/assets/ico/favicon-1.ico", wxBITMAP_TYPE_ICO }
+        { "http://173.254.92.22/assets/img/header-logo.png", wxBITMAP_TYPE_PNG },
+        { "http://173.254.92.22/assets/ico/favicon-1.ico", wxBITMAP_TYPE_ICO }
     };
 
     for (unsigned int i=0; i<WXSIZEOF(testData); i++)
