@@ -1471,8 +1471,7 @@ float wxDCImpl::GetFontPointSizeAdjustment(float dpi)
     // are ~6 times smaller when printing. Unfortunately, this bug is so severe
     // that *all* printing code has to account for it and consequently, other
     // ports need to emulate this bug too:
-    const wxSize screenPPI = wxGetDisplayPPI();
-    return float(screenPPI.y) / dpi;
+    return float(wxDisplay::GetStdPPIValue()) / dpi;
 }
 
 double wxDCImpl::GetMMToPXx() const
