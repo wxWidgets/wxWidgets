@@ -311,7 +311,6 @@ public:
         { return new wxGridCellChoiceRenderer(*this); }
 
 protected:
-    wxString GetString(const wxGrid& grid, int row, int col);
 
     wxArrayString m_choices;
 };
@@ -348,6 +347,9 @@ public:
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
         { return new wxGridCellEnumRenderer(*this); }
+
+protected:
+    wxString GetString(const wxGrid& grid, int row, int col);
 };
 
 

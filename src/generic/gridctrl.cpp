@@ -298,7 +298,15 @@ void wxGridCellChoiceRenderer::SetParameters(const wxString& params)
     }
 }
 
-wxString wxGridCellChoiceRenderer::GetString(const wxGrid& grid, int row, int col)
+
+// ----------------------------------------------------------------------------
+// wxGridCellEnumRenderer
+// ----------------------------------------------------------------------------
+// Renders a number as a textual equivalent.
+// eg data in cell is 0,1,2 ... n the cell could be rendered as "John","Fred"..."Bob"
+
+
+wxString wxGridCellEnumRenderer::GetString(const wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
     wxString text;
@@ -316,13 +324,6 @@ wxString wxGridCellChoiceRenderer::GetString(const wxGrid& grid, int row, int co
     //If we faild to parse string just show what we where given?
     return text;
 }
-
-// ----------------------------------------------------------------------------
-// wxGridCellEnumRenderer
-// ----------------------------------------------------------------------------
-// Renders a number as a textual equivalent.
-// eg data in cell is 0,1,2 ... n the cell could be rendered as "John","Fred"..."Bob"
-
 
 void wxGridCellEnumRenderer::Draw(wxGrid& grid,
                                    wxGridCellAttr& attr,
