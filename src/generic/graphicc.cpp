@@ -2254,7 +2254,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXMAC__
-    CGContextRef cgcontext = (CGContextRef)dc.GetSelectedBitmap().GetHBITMAP();
+    CGContextRef cgcontext = (CGContextRef)dc.GetGraphicsContext()->GetNativeContext();
     cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
