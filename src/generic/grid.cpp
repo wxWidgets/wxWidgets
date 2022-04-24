@@ -3953,7 +3953,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     // store position, before it's modified in the next step
     const wxPoint posEvent = event.GetPosition();
 
-    event.SetPosition(event.GetPosition() + GetGridWindowOffset(gridWindow));
+    event.SetPosition(posEvent + GetGridWindowOffset(gridWindow));
 
     // for drag, we could be moving from the window sending the event to the other
     if ( rowLabelWin->IsFrozen() && event.GetPosition().y > rowLabelWin->GetClientSize().y )
@@ -4423,7 +4423,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
     // store position, before it's modified in the next step
     const wxPoint posEvent = event.GetPosition();
 
-    event.SetPosition(event.GetPosition() + GetGridWindowOffset(gridWindow));
+    event.SetPosition(posEvent + GetGridWindowOffset(gridWindow));
 
     // for drag, we could be moving from the window sending the event to the other
     if (colLabelWin->IsFrozen() && event.GetPosition().x > colLabelWin->GetClientSize().x)
