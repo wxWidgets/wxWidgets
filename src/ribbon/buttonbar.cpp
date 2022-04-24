@@ -64,17 +64,6 @@ public:
 namespace
 {
 
-wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size)
-{
-    double scale = original.GetScaleFactor();
-    if (scale > 1.0)
-        scale = 2.0;
-
-    wxImage img(original.ConvertToImage());
-    img.Rescale(int(scale * size.GetWidth()), int(scale * size.GetHeight()), wxIMAGE_QUALITY_HIGH);
-    return wxBitmap(img, -1, scale);
-}
-
 wxBitmap MakeDisabledBitmap(const wxBitmap& original)
 {
     wxImage img(original.ConvertToImage());
