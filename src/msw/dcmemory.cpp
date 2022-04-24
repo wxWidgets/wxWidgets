@@ -145,10 +145,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
 wxSize wxMemoryDCImpl::GetPPI() const
 {
-    if ( GetWindow() )
-        return GetWindow()->GetDPI();
-    else
-        return wxDisplay::GetStdPPI() * GetContentScaleFactor();
+    return wxDisplay::GetStdPPI() * GetContentScaleFactor();
 }
 
 void wxMemoryDCImpl::SetFont(const wxFont& font)
