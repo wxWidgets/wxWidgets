@@ -7,8 +7,4 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_add_library(wxadv "${wxSOURCE_DIR}/src/common/dummy.cpp")
-
-wx_finalize_lib(wxadv)

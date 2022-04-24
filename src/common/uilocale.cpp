@@ -652,7 +652,7 @@ int wxUILocale::GetSystemLanguage()
             }
             if (pos != wxString::npos)
             {
-                if (languagesDB[ixLanguage].LocaleTag == lang)
+                if (languagesDB[ixLanguage].LocaleTag == langShort)
                 {
                     ixShort = ixLanguage;
                 }
@@ -664,8 +664,20 @@ int wxUILocale::GetSystemLanguage()
         }
     }
 
-    // no info about this language in the database
-    return wxLANGUAGE_UNKNOWN;
+    // no info about the preferred UI language in the database
+    // fall back to default locale
+    return GetSystemLocale();
+}
+
+/*static*/
+int wxUILocale::GetSystemLocale()
+{
+    // Create default wxUILocale
+    wxUILocale defaultLocale(wxUILocaleImpl::CreateUserDefault());
+
+    // Find corresponding wxLanguageInfo
+    const wxLanguageInfo* defaultLanguage = wxUILocale::FindLanguageInfo(defaultLocale.GetLocaleId());
+    return defaultLanguage ? defaultLanguage->Language : wxLANGUAGE_UNKNOWN;
 }
 
 /* static */

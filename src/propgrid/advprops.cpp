@@ -1850,17 +1850,22 @@ void wxImageFileProperty::OnSetValue()
     wxFileProperty::OnSetValue();
 
     // Delete old image
-    m_image = wxNullImage;
-    m_bitmap = wxNullBitmap;
+    SetImage(wxNullImage);
 
     LoadImageFromFile();
+}
+
+void wxImageFileProperty::SetImage(const wxImage& img)
+{
+    m_image = img;
+    m_bitmap = wxNullBitmap;
 }
 
 void wxImageFileProperty::LoadImageFromFile()
 {
     wxFileName filename = GetFileName();
 
-    // Create the image thumbnail
+    // Cache the image
     if ( filename.FileExists() )
     {
         m_image.LoadFile(filename.GetFullPath());
@@ -1891,11 +1896,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
         {
             wxImage imgScaled = m_image;
             imgScaled.Rescale(rect.width, rect.height);
-#ifdef __WSMSW__
             m_bitmap = wxBitmap(imgScaled, dc);
-#else
-            m_bitmap = wxBitmap(imgScaled);
-#endif
         }
     }
 

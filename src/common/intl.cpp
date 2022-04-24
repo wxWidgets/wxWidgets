@@ -513,7 +513,10 @@ bool wxLocale::Init(int lang, int flags)
 /*static*/
 int wxLocale::GetSystemLanguage()
 {
-    return wxUILocale::GetSystemLanguage();
+    // Despite the method name wxLocale always determines the system language
+    // based on the default user locale (and not the preferred UI language).
+    // Therefore we need to call wxUILocale::GetSystemLocale() here.
+    return wxUILocale::GetSystemLocale();
 }
 
 // ----------------------------------------------------------------------------
@@ -679,6 +682,12 @@ void wxLocale::AddLanguage(const wxLanguageInfo& info)
 /* static */
 const wxLanguageInfo* wxLocale::GetLanguageInfo(int lang)
 {
+    // We need to explicitly handle the case "lang == wxLANGUAGE_DEFAULT" here,
+    // because wxUILocale::GetLanguageInfo() determines the system language
+    // based on the the preferred UI language while wxLocale uses the default
+    // user locale for that purpose.
+    if (lang == wxLANGUAGE_DEFAULT)
+        lang = GetSystemLanguage();
     return wxUILocale::GetLanguageInfo(lang);
 }
 

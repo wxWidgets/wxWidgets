@@ -169,14 +169,14 @@ wxULongLong wxInvalidSize;
     directory. Instead initialize the wxFileName instance like this:
 
     @code
-    wxFileName dirname( "C:\mydir", "" );
+    wxFileName dirname( "C:\\mydir", "" );
     MyMethod( dirname.GetPath() );
     @endcode
 
     The same can be done using the static method wxFileName::DirName():
 
     @code
-    wxFileName dirname = wxFileName::DirName( "C:\mydir" );
+    wxFileName dirname = wxFileName::DirName( "C:\\mydir" );
     MyMethod( dirname.GetPath() );
     @endcode
 

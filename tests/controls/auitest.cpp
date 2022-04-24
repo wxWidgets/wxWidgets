@@ -151,4 +151,18 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RTTI", "[aui][rtti]")
     CHECK( wxDynamicCast(nb, wxBookCtrlBase) == book );
 }
 
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::FindPage", "[aui]")
+{
+    wxPanel *p1 = new wxPanel(nb);
+    wxPanel *p2 = new wxPanel(nb);
+    wxPanel *p3 = new wxPanel(nb);
+    REQUIRE( nb->AddPage(p1, "Page 1") );
+    REQUIRE( nb->AddPage(p2, "Page 2") );
+
+    CHECK( nb->FindPage(NULL) == wxNOT_FOUND );
+    CHECK( nb->FindPage(p1) == 0 );
+    CHECK( nb->FindPage(p2) == 1 );
+    CHECK( nb->FindPage(p3) == wxNOT_FOUND );
+}
+
 #endif

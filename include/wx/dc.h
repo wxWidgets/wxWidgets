@@ -539,6 +539,8 @@ public:
 
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
+    virtual double GetDPIScaleFactor() const { return 1.0; }
+
 #ifdef __WXMSW__
     // Native Windows functions using the underlying HDC don't honour GDI+
     // transformations which may be applied to it. Using this function we can
@@ -826,6 +828,9 @@ public:
 
     double GetContentScaleFactor() const
         { return m_pimpl->GetContentScaleFactor(); }
+
+    double GetDPIScaleFactor() const
+        { return m_pimpl->GetDPIScaleFactor(); }
 
     // Right-To-Left (RTL) modes
 

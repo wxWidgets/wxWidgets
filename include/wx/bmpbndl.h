@@ -15,6 +15,7 @@
 #include "wx/vector.h"
 
 class wxBitmapBundleImpl;
+class WXDLLIMPEXP_FWD_CORE wxIconBundle;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
@@ -63,6 +64,9 @@ public:
     // with the existing code). Returns empty bundle if bitmap is invalid.
     static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
     static wxBitmapBundle FromImage(const wxImage& image);
+
+    // Create from icon bundle.
+    static wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
 
     // It should be possible to implement SVG rasterizing without raw bitmap
     // support using wxDC::DrawSpline(), but currently we don't do it and so

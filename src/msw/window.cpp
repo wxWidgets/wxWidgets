@@ -76,6 +76,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/dpiaware.h"
 #include "wx/msw/private/keyboard.h"
 #include "wx/msw/private/paint.h"
 #include "wx/msw/private/winstyle.h"
@@ -4757,6 +4758,19 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 // ---------------------------------------------------------------------------
 // DPI
 // ---------------------------------------------------------------------------
+
+#if wxUSE_DYNLIB_CLASS
+
+namespace wxMSWImpl
+{
+
+AutoSystemDpiAware::SetThreadDpiAwarenessContext_t
+AutoSystemDpiAware::ms_pfnSetThreadDpiAwarenessContext =
+    (AutoSystemDpiAware::SetThreadDpiAwarenessContext_t)-1;
+
+} // namespace wxMSWImpl
+
+#endif // wxUSE_DYNLIB_CLASS
 
 namespace
 {

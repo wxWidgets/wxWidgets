@@ -694,7 +694,7 @@ TEST_CASE_METHOD(DataViewCtrlWithCustomModelTestCase,
         wxOPTIONS_DONT_EXPAND_ADD_LEAF_THEN_GRANCHILD,
         wxOPTIONS_EXPAND_ADD_GRANCHILD_THEN_LEAF,
         wxOPTIONS_DONT_EXPAND_ADD_GRANCHILD_THEN_LEAF
-    } options;
+    } options wxDUMMY_INITIALIZE(wxOPTIONS_EXPAND_ADD_LEAF_THEN_GRANCHILD);
 
     SECTION( "Was Expanded, Add The Leaf Then The Grandchild" )
     {

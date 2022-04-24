@@ -218,6 +218,8 @@ wx_list_add_prefix(WIDGETS_RC_FILES icons/
 wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC}
     DATA ${WIDGETS_RC_FILES} textctrl.cpp ../image/toucan.png:toucan.png
     )
+# includes needed by the native widget (like gtk.h)
+target_include_directories(widgets PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
 wx_add_sample(wizard DATA wiztest.svg wiztest2.svg DEPENDS wxUSE_WIZARDDLG)
 wx_add_sample(wrapsizer)
 

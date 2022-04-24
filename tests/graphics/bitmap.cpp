@@ -18,6 +18,7 @@
 #include "wx/bitmap.h"
 #include "wx/rawbmp.h"
 #include "wx/dcmemory.h"
+#include "wx/dcsvg.h"
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
@@ -1689,6 +1690,50 @@ TEST_CASE("DC::Clear", "[bitmap][dc]")
         CHECK_THAT(bmp, AllPixelsAre(*wxWHITE));
     }
 }
+
+TEST_CASE("Bitmap::DC", "[bitmap][dc]")
+{
+#if wxUSE_SVG
+    TempFile dummySVG("dummy.svg");
+    wxSVGFileDC dc(dummySVG.GetName());
+    wxBitmap bmp(10, 10, dc);
+    CHECK( bmp.IsOk() );
+
+    wxImage image(10, 10);
+    wxBitmap bmpFromImage(image, dc);
+    CHECK( bmpFromImage.IsOk() );
+#endif // wxUSE_SVG
+}
+
+#if defined(wxHAS_DPI_INDEPENDENT_PIXELS) || defined(__WXMSW__)
+
+TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
+{
+    // Create a bitmap with scale factor != 1.
+    wxBitmap bmp;
+    bmp.CreateWithDIPSize(8, 8, 2);
+    REQUIRE( bmp.GetScaleFactor() == 2 );
+    CHECK( bmp.GetSize() == wxSize(16, 16) );
+
+    // wxMemoryDC should use the same scale factor as the bitmap.
+    wxMemoryDC dc(bmp);
+    CHECK( dc.GetContentScaleFactor() == 2 );
+
+    // A bitmap "compatible" with this DC should also use the same scale factor.
+    wxBitmap bmp2(4, 4, dc);
+    CHECK( bmp2.GetScaleFactor() == 2 );
+    CHECK( bmp2.GetSize() == wxSize(8, 8) );
+
+    // A compatible bitmap created from wxImage and this DC should also inherit
+    // the same scale factor, but its size should be still the same as that of
+    // the image.
+    wxImage img(16, 16);
+    wxBitmap bmp3(img, dc);
+    CHECK( bmp3.GetScaleFactor() == 2 );
+    CHECK( bmp3.GetSize() == wxSize(16, 16) );
+}
+
+#endif // ports with scaled bitmaps support
 
 #if wxUSE_GRAPHICS_CONTEXT
 

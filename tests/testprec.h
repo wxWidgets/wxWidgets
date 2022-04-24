@@ -148,6 +148,25 @@ extern bool IsAutomaticTest();
 
 extern bool IsRunningUnderXVFB();
 
+#if wxUSE_LOG
+// Logging is disabled by default when running the tests, but sometimes it can
+// be helpful to see the errors in case of unexpected failure, so this class
+// re-enables logs in its scope.
+//
+// It's a counterpart to wxLogNull.
+class TestLogEnabler
+{
+public:
+    TestLogEnabler();
+    ~TestLogEnabler();
+
+private:
+    wxDECLARE_NO_COPY_CLASS(TestLogEnabler);
+};
+#else // !wxUSE_LOG
+class TestLogEnabler { };
+#endif // wxUSE_LOG/!wxUSE_LOG
+
 #if wxUSE_GUI
 
 // Return true if the UI tests are enabled, used by WXUISIM_TEST().

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 17:46+0200\n"
-"PO-Revision-Date: 2021-12-26 10:58+0530\n"
+"PO-Revision-Date: 2022-04-14 12:56+0530\n"
 "Last-Translator: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language-Team: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language: ta\n"
@@ -110,27 +110,27 @@ msgstr "அச்செடுப்பு"
 
 #: ../include/wx/richmsgdlg.h:29
 msgid "&See details"
-msgstr "விவரங்களைக் காண்க"
+msgstr "விவரங்களைக் காண்க (&S)"
 
 #: ../include/wx/richmsgdlg.h:30
 msgid "&Hide details"
-msgstr "விவரங்களை மறைத்திடுக"
+msgstr "விவரங்களை மறைத்திடுக (&H)"
 
 #: ../include/wx/richtext/richtextbuffer.h:3863
 msgid "&Box"
-msgstr "பெட்டி"
+msgstr "பெட்டி (&B)"
 
 #: ../include/wx/richtext/richtextbuffer.h:5007
 msgid "&Picture"
-msgstr "படம்"
+msgstr "படம் (&P)"
 
 #: ../include/wx/richtext/richtextbuffer.h:5957
 msgid "&Cell"
-msgstr "சிறுகட்டம்"
+msgstr "சிறுகட்டம் (&C)"
 
 #: ../include/wx/richtext/richtextbuffer.h:6066
 msgid "&Table"
-msgstr "அட்டவணை"
+msgstr "அட்டவணை (&T)"
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
@@ -151,11 +151,11 @@ msgstr "குழாய் உருவாக்கம் தோல்விய�
 
 #: ../include/wx/unix/private/displayx11.h:65
 msgid "Failed to enumerate video modes"
-msgstr "காணொளி நிலைகளை கணக்கிடுவதில் தோல்வி."
+msgstr "காணொலி நிலைகளை கணக்கிடுவதில் தோல்வி."
 
 #: ../include/wx/unix/private/displayx11.h:89
 msgid "Failed to change video mode"
-msgstr "காணொளி நிலையை மாற்றுவதில் தோல்வி"
+msgstr "காணொலி நிலையை மாற்றுவதில் தோல்வி"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
@@ -201,18 +201,18 @@ msgstr "அனைத்தையும் மூடுக"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
 msgid "&Next"
-msgstr "அடுத்தது"
+msgstr "அடுத்தது (&N)"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
 msgid "&Previous"
-msgstr "முந்தையது"
+msgstr "முந்தையது (&P)"
 
 #: ../src/aui/tabmdi.cpp:332 ../src/aui/tabmdi.cpp:348
 #: ../src/aui/tabmdi.cpp:350 ../src/generic/mdig.cpp:291
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
 #: ../src/msw/mdi.cpp:337 ../src/osx/cocoa/menu.mm:243
 msgid "&Window"
-msgstr "சாளரம்"
+msgstr "சாளரம் (&W)"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:47 ../src/common/stockitem.cpp:158
@@ -850,27 +850,27 @@ msgstr "பெயரிடப்படாத கட்டளை"
 
 #: ../src/common/cmdproc.cpp:258
 msgid "&Undo "
-msgstr "செயல் நீக்கம்"
+msgstr "செயல் நீக்கம் (&U)"
 
 #: ../src/common/cmdproc.cpp:260
 msgid "Can't &Undo "
-msgstr "செயலைநீக்க இயலவில்லை"
+msgstr "செயலைநீக்க இயலவில்லை (&U)"
 
 #: ../src/common/cmdproc.cpp:264 ../src/common/stockitem.cpp:209
 #: ../src/msw/textctrl.cpp:2896 ../src/osx/textctrl_osx.cpp:591
 #: ../src/richtext/richtextctrl.cpp:328
 msgid "&Undo"
-msgstr "செயல் நீக்கம்"
+msgstr "செயல் நீக்கம் (&U)"
 
 #: ../src/common/cmdproc.cpp:282 ../src/common/cmdproc.cpp:302
 msgid "&Redo "
-msgstr "மீள்செயல்"
+msgstr "மீள்செயல் (&R)"
 
 #: ../src/common/cmdproc.cpp:286 ../src/common/cmdproc.cpp:293
 #: ../src/common/stockitem.cpp:191 ../src/msw/textctrl.cpp:2897
 #: ../src/osx/textctrl_osx.cpp:592 ../src/richtext/richtextctrl.cpp:329
 msgid "&Redo"
-msgstr "மீள்செயல்"
+msgstr "மீள்செயல் (&R)"
 
 #: ../src/common/colourcmn.cpp:42
 #, c-format
@@ -2081,7 +2081,7 @@ msgstr "நெடுவரிசைகளை தனிப் பயனாக்�
 
 #: ../src/common/headerctrlcmn.cpp:304
 msgid "&Customize..."
-msgstr "தனிப் பயனாக்கு..."
+msgstr "தனிப் பயனாக்குக... (&C)"
 
 #: ../src/common/hyperlnkcmn.cpp:133
 #, c-format
@@ -2158,7 +2158,7 @@ msgstr "DIB படிமத்தை படிப்பதில் பிழை
 
 #: ../src/common/imagbmp.cpp:1208
 msgid "ICO: Error in reading mask DIB."
-msgstr "ICO: மூடுதிரை DIB படிப்பதில் பிழை."
+msgstr "ICO: மறைப்பு DIB படிப்பதில் பிழை."
 
 #: ../src/common/imagbmp.cpp:1267
 msgid "ICO: Image too tall for an icon."
@@ -2182,7 +2182,7 @@ msgstr "ICO: ஏற்கமுடியாத படவுரு சுட்�
 
 #: ../src/common/image.cpp:2344
 msgid "Image and mask have different sizes."
-msgstr "படிமமும் மூடுதிரையும் வெவ்வேறு அளவுகளைக் கொண்டிருக்கின்றன."
+msgstr "படிமமும் மறைப்பும் வெவ்வேறு அளவுகளைக் கொண்டிருக்கின்றன."
 
 #: ../src/common/image.cpp:2352 ../src/common/image.cpp:2393
 msgid "No unused colour in image being masked."
@@ -3070,7 +3070,7 @@ msgstr "உள்நோக்கிப் பெரிதாக்குக"
 #: ../src/common/prntbase.cpp:1625 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
-msgstr "மூடுக"
+msgstr "மூடுக (&C)"
 
 #: ../src/common/prntbase.cpp:2037
 msgid "Could not start document preview."
@@ -3156,11 +3156,11 @@ msgstr "பொருத்திகளை துவக்க நிலையா�
 #: ../src/common/stockitem.cpp:128
 msgctxt "standard Windows menu"
 msgid "&Help"
-msgstr "உதவி"
+msgstr "உதவி (&H)"
 
 #: ../src/common/stockitem.cpp:145
 msgid "&About"
-msgstr "குறித்து..."
+msgstr "குறித்து... (&A)"
 
 #: ../src/common/stockitem.cpp:145
 msgid "About"
@@ -3168,7 +3168,7 @@ msgstr "குறித்து..."
 
 #: ../src/common/stockitem.cpp:147
 msgid "&Apply"
-msgstr "இடு"
+msgstr "இடுக (&A)"
 
 #: ../src/common/stockitem.cpp:147
 msgid "Apply"
@@ -3176,11 +3176,11 @@ msgstr "இடு"
 
 #: ../src/common/stockitem.cpp:148
 msgid "&Back"
-msgstr "பின்"
+msgstr "பின் (&B)"
 
 #: ../src/common/stockitem.cpp:149
 msgid "&Bold"
-msgstr "அடர்த்தி"
+msgstr "அடர்த்தி (&B)"
 
 #: ../src/common/stockitem.cpp:149 ../src/generic/fontdlgg.cpp:329
 #: ../src/osx/carbon/fontdlg.cpp:351 ../src/richtext/richtextfontpage.cpp:355
@@ -3189,7 +3189,7 @@ msgstr "அடர்த்தி"
 
 #: ../src/common/stockitem.cpp:150
 msgid "&Bottom"
-msgstr "அடித்தளம்"
+msgstr "அடித்தளம் (&B)"
 
 #: ../src/common/stockitem.cpp:150 ../src/richtext/richtextsizepage.cpp:288
 msgid "Bottom"
@@ -3199,7 +3199,7 @@ msgstr "அடித்தளம்"
 #: ../src/generic/fontdlgg.cpp:485 ../src/generic/wizard.cpp:433
 #: ../src/osx/carbon/fontdlg.cpp:399 ../src/osx/cocoa/button.mm:200
 msgid "&Cancel"
-msgstr "விலக்குக"
+msgstr "விலக்குக (&C)"
 
 #: ../src/common/stockitem.cpp:152
 msgid "&CD-ROM"
@@ -3211,7 +3211,7 @@ msgstr "குறுந்தட்டு நினைவகம்"
 
 #: ../src/common/stockitem.cpp:153
 msgid "&Clear"
-msgstr "துடை"
+msgstr "துடை (&C)"
 
 #: ../src/common/stockitem.cpp:154 ../src/generic/dbgrptg.cpp:94
 #: ../src/generic/progdlgg.cpp:781 ../src/html/helpdlg.cpp:87
@@ -3223,7 +3223,7 @@ msgstr "மூடுக"
 
 #: ../src/common/stockitem.cpp:155
 msgid "&Convert"
-msgstr "மாற்று"
+msgstr "மாற்றுக (&C)"
 
 #: ../src/common/stockitem.cpp:155
 msgid "Convert"
@@ -3232,7 +3232,7 @@ msgstr "மாற்று"
 #: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2900
 #: ../src/osx/textctrl_osx.cpp:595 ../src/richtext/richtextctrl.cpp:332
 msgid "&Copy"
-msgstr "படியெடு"
+msgstr "படியெடுத்திடுக (&C)"
 
 #: ../src/common/stockitem.cpp:156 ../src/stc/stc_i18n.cpp:18
 msgid "Copy"
@@ -3241,7 +3241,7 @@ msgstr "படி"
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2899
 #: ../src/osx/textctrl_osx.cpp:594 ../src/richtext/richtextctrl.cpp:331
 msgid "Cu&t"
-msgstr "வெட்டுக"
+msgstr "வெட்டுக (&T)"
 
 #: ../src/common/stockitem.cpp:157 ../src/stc/stc_i18n.cpp:17
 msgid "Cut"
@@ -3251,15 +3251,15 @@ msgstr "வெட்டுக"
 #: ../src/osx/textctrl_osx.cpp:597 ../src/richtext/richtextctrl.cpp:334
 #: ../src/richtext/richtexttabspage.cpp:138
 msgid "&Delete"
-msgstr "அழி"
+msgstr "அழி (&D)"
 
 #: ../src/common/stockitem.cpp:159
 msgid "&Down"
-msgstr "கீழ்"
+msgstr "கீழ் (&D)"
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Edit"
-msgstr "தொகு"
+msgstr "தொகுத்திடுக (&E)"
 
 #: ../src/common/stockitem.cpp:160
 msgid "Edit"
@@ -3267,11 +3267,11 @@ msgstr "தொகுத்திடுக"
 
 #: ../src/common/stockitem.cpp:161
 msgid "&Execute"
-msgstr "செயற்படுத்து"
+msgstr "செயற்படுத்துக (&E)"
 
 #: ../src/common/stockitem.cpp:162
 msgid "&Quit"
-msgstr "வெளியேறுக"
+msgstr "வெளியேறுக (&Q)"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Quit"
@@ -3279,7 +3279,7 @@ msgstr "வெளியேறுக"
 
 #: ../src/common/stockitem.cpp:163
 msgid "&File"
-msgstr "கோப்பு"
+msgstr "கோப்பு (&F)"
 
 #: ../src/common/stockitem.cpp:163
 msgid "File"
@@ -3287,7 +3287,7 @@ msgstr "கோப்பு"
 
 #: ../src/common/stockitem.cpp:164
 msgid "&Find..."
-msgstr "கண்டறிக"
+msgstr "கண்டறிக (&F)"
 
 #: ../src/common/stockitem.cpp:164
 msgid "Find..."
@@ -3295,7 +3295,7 @@ msgstr "கண்டறிக"
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
-msgstr "முதல்"
+msgstr "முதல் (&F)"
 
 #: ../src/common/stockitem.cpp:165
 msgid "First"
@@ -3303,7 +3303,7 @@ msgstr "முதல்"
 
 #: ../src/common/stockitem.cpp:166
 msgid "&Floppy"
-msgstr "நெகிழ்வட்டு"
+msgstr "நெகிழ்வட்டு (&F)"
 
 #: ../src/common/stockitem.cpp:166
 msgid "Floppy"
@@ -3311,7 +3311,7 @@ msgstr "நெகிழ்வட்டு"
 
 #: ../src/common/stockitem.cpp:167
 msgid "&Forward"
-msgstr "முன்நகர்"
+msgstr "முன்நகர்த்துக (&F)"
 
 #: ../src/common/stockitem.cpp:167
 msgid "Forward"
@@ -3319,7 +3319,7 @@ msgstr "முன்நகர்"
 
 #: ../src/common/stockitem.cpp:168
 msgid "&Harddisk"
-msgstr "வன்தட்டு"
+msgstr "வன்தட்டு (&H)"
 
 #: ../src/common/stockitem.cpp:168
 msgid "Harddisk"
@@ -3329,11 +3329,11 @@ msgstr "வன்தட்டு"
 #: ../src/osx/cocoa/menu.mm:226 ../src/richtext/richtextstyledlg.cpp:299
 #: ../src/richtext/richtextsymboldlg.cpp:476
 msgid "&Help"
-msgstr "உதவி"
+msgstr "உதவி (&H)"
 
 #: ../src/common/stockitem.cpp:170
 msgid "&Home"
-msgstr "முகப்பு"
+msgstr "முகப்பு (&H)"
 
 #: ../src/common/stockitem.cpp:171
 msgid "Indent"
@@ -3341,7 +3341,7 @@ msgstr "வரித் துவக்க ஒழுங்கு"
 
 #: ../src/common/stockitem.cpp:172
 msgid "&Index"
-msgstr "சுட்டெண்"
+msgstr "சுட்டெண் (&I)"
 
 #: ../src/common/stockitem.cpp:172 ../src/html/helpwnd.cpp:513
 msgid "Index"
@@ -3349,7 +3349,7 @@ msgstr "சுட்டெண்"
 
 #: ../src/common/stockitem.cpp:173
 msgid "&Info"
-msgstr "தகவல்"
+msgstr "தகவல் (&I)"
 
 #: ../src/common/stockitem.cpp:173
 msgid "Info"
@@ -3357,7 +3357,7 @@ msgstr "தகவல்"
 
 #: ../src/common/stockitem.cpp:174
 msgid "&Italic"
-msgstr "வலப்பக்க சாய்வு"
+msgstr "வலச் சாய்வு (&I)"
 
 #: ../src/common/stockitem.cpp:174 ../src/generic/fontdlgg.cpp:325
 #: ../src/osx/carbon/fontdlg.cpp:358 ../src/richtext/richtextfontpage.cpp:351
@@ -3366,7 +3366,7 @@ msgstr "வலப்பக்க சாய்வு"
 
 #: ../src/common/stockitem.cpp:175
 msgid "&Jump to"
-msgstr "இங்கே தாவு"
+msgstr "இங்கு தாவுக (&J)"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Jump to"
@@ -3390,7 +3390,7 @@ msgstr "வலது ஒழுங்கு"
 
 #: ../src/common/stockitem.cpp:180
 msgid "&Last"
-msgstr "கடைசி"
+msgstr "கடைசி (&L)"
 
 #: ../src/common/stockitem.cpp:180
 msgid "Last"
@@ -3398,7 +3398,7 @@ msgstr "கடைசி"
 
 #: ../src/common/stockitem.cpp:181
 msgid "&Network"
-msgstr "பிணையம்"
+msgstr "பிணையம் (&N)"
 
 #: ../src/common/stockitem.cpp:181
 msgid "Network"
@@ -3406,7 +3406,7 @@ msgstr "பிணையம்"
 
 #: ../src/common/stockitem.cpp:182 ../src/richtext/richtexttabspage.cpp:132
 msgid "&New"
-msgstr "புதிது"
+msgstr "புதிது (&N)"
 
 #: ../src/common/stockitem.cpp:182
 msgid "New"
@@ -3414,16 +3414,16 @@ msgstr "புதிது"
 
 #: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:435
 msgid "&No"
-msgstr "இ&ல்லை"
+msgstr "இல்லை (&N)"
 
 #: ../src/common/stockitem.cpp:184 ../src/generic/fontdlgg.cpp:471
 #: ../src/generic/fontdlgg.cpp:478 ../src/osx/carbon/fontdlg.cpp:405
 msgid "&OK"
-msgstr "சரி"
+msgstr "சரி (&O)"
 
 #: ../src/common/stockitem.cpp:185 ../src/generic/dbgrptg.cpp:342
 msgid "&Open..."
-msgstr "திறவுக..."
+msgstr "திறவுக... (&O)"
 
 #: ../src/common/stockitem.cpp:185
 msgid "Open..."
@@ -3432,7 +3432,7 @@ msgstr "திறவுக..."
 #: ../src/common/stockitem.cpp:186 ../src/msw/textctrl.cpp:2901
 #: ../src/osx/textctrl_osx.cpp:596 ../src/richtext/richtextctrl.cpp:333
 msgid "&Paste"
-msgstr "ஒட்டு"
+msgstr "ஒட்டுக (&P)"
 
 #: ../src/common/stockitem.cpp:186 ../src/richtext/richtextctrl.cpp:3514
 #: ../src/stc/stc_i18n.cpp:19
@@ -3441,7 +3441,7 @@ msgstr "ஒட்டுக"
 
 #: ../src/common/stockitem.cpp:187
 msgid "&Preferences"
-msgstr "முன்னுரிமை விருப்பங்கள்"
+msgstr "விருப்புரிமைகள் (&P)"
 
 #: ../src/common/stockitem.cpp:187 ../src/osx/cocoa/preferences.mm:303
 msgid "Preferences"
@@ -3449,7 +3449,7 @@ msgstr "முன்னுரிமை விருப்பங்கள்"
 
 #: ../src/common/stockitem.cpp:188
 msgid "Print previe&w..."
-msgstr "அச்சு முன்தோற்றம்..."
+msgstr "அச்சு முன்தோற்றம்... (&W)"
 
 #: ../src/common/stockitem.cpp:188
 msgid "Print preview..."
@@ -3457,7 +3457,7 @@ msgstr "அச்சு முன்தோற்றம்..."
 
 #: ../src/common/stockitem.cpp:189
 msgid "&Print..."
-msgstr "அச்சிடு..."
+msgstr "அச்சிடுக... (&P)"
 
 #: ../src/common/stockitem.cpp:189
 msgid "Print..."
@@ -3466,7 +3466,7 @@ msgstr "அச்சிடுக..."
 #: ../src/common/stockitem.cpp:190 ../src/richtext/richtextctrl.cpp:338
 #: ../src/richtext/richtextctrl.cpp:5512
 msgid "&Properties"
-msgstr "பண்புகள்"
+msgstr "பண்புகள் (&P)"
 
 #: ../src/common/stockitem.cpp:190
 msgid "Properties"
@@ -3498,11 +3498,11 @@ msgstr "சேமிக்கப்பட்டதற்கு திரும�
 
 #: ../src/common/stockitem.cpp:196
 msgid "&Save"
-msgstr "சேமித்திடுக"
+msgstr "சேமித்திடுக (&S)"
 
 #: ../src/common/stockitem.cpp:197 ../src/generic/logg.cpp:509
 msgid "Save &As..."
-msgstr "இவ்வாறு சேமித்திடுக..."
+msgstr "இவ்வாறு சேமித்திடுக... (&A)"
 
 #: ../src/common/stockitem.cpp:197
 msgid "Save As..."
@@ -3511,15 +3511,15 @@ msgstr "இவ்வாறு சேமித்திடுக..."
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
 #: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
 msgid "Select &All"
-msgstr "எல்லாவற்றையும் தெரிவு செய்க"
+msgstr "அனைத்தையும் தெரிவுச் செய்க (&A)"
 
 #: ../src/common/stockitem.cpp:198 ../src/stc/stc_i18n.cpp:21
 msgid "Select All"
-msgstr "எல்லாவற்றையும் தெரிவு செய்க"
+msgstr "அனைத்தையும் தெரிவு செய்க"
 
 #: ../src/common/stockitem.cpp:199
 msgid "&Color"
-msgstr "நிறம்"
+msgstr "நிறம் (&C)"
 
 #: ../src/common/stockitem.cpp:199
 msgid "Color"
@@ -3527,7 +3527,7 @@ msgstr "நிறம்"
 
 #: ../src/common/stockitem.cpp:200
 msgid "&Font"
-msgstr "எழுத்துரு"
+msgstr "எழுத்துரு (&F)"
 
 #: ../src/common/stockitem.cpp:200 ../src/osx/carbon/fontdlg.cpp:284
 #: ../src/richtext/richtextformatdlg.cpp:337
@@ -3536,7 +3536,7 @@ msgstr "எழுத்துரு"
 
 #: ../src/common/stockitem.cpp:201
 msgid "&Ascending"
-msgstr "ஏறுமுகம்"
+msgstr "ஏறுமுகம் (&A)"
 
 #: ../src/common/stockitem.cpp:201
 msgid "Ascending"
@@ -3544,7 +3544,7 @@ msgstr "ஏறுமுகமான"
 
 #: ../src/common/stockitem.cpp:202
 msgid "&Descending"
-msgstr "இறங்குமுகம்"
+msgstr "இறங்குமுகம் (&D)"
 
 #: ../src/common/stockitem.cpp:202
 msgid "Descending"
@@ -3552,7 +3552,7 @@ msgstr "இறங்குமுகமான"
 
 #: ../src/common/stockitem.cpp:203
 msgid "&Spell Check"
-msgstr "சொல் திருத்தி"
+msgstr "சொல் திருத்தி (&S)"
 
 #: ../src/common/stockitem.cpp:203
 msgid "Spell Check"
@@ -3560,7 +3560,7 @@ msgstr "சொல் திருத்தி"
 
 #: ../src/common/stockitem.cpp:204
 msgid "&Stop"
-msgstr "நிறுத்துக"
+msgstr "நிறுத்துக (&S)"
 
 #: ../src/common/stockitem.cpp:204
 msgid "Stop"
@@ -3568,7 +3568,7 @@ msgstr "நிறுத்துக"
 
 #: ../src/common/stockitem.cpp:205 ../src/richtext/richtextfontpage.cpp:275
 msgid "&Strikethrough"
-msgstr "ஊடாகக் கோடிடுக"
+msgstr "ஊடாகக் கோடிடுக (&S)"
 
 #: ../src/common/stockitem.cpp:205
 msgid "Strikethrough"
@@ -3576,7 +3576,7 @@ msgstr "ஊடாகக் கோடிடப்பட்டது"
 
 #: ../src/common/stockitem.cpp:206
 msgid "&Top"
-msgstr "மேல்"
+msgstr "மேல் (&T)"
 
 #: ../src/common/stockitem.cpp:206 ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290
@@ -3589,7 +3589,7 @@ msgstr "அழி நீக்கம்"
 
 #: ../src/common/stockitem.cpp:208 ../src/generic/fontdlgg.cpp:441
 msgid "&Underline"
-msgstr "அடிக்கோடு"
+msgstr "அடிக்கோடு (&U)"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Underline"
@@ -3601,7 +3601,7 @@ msgstr "செயல் நீக்கம்"
 
 #: ../src/common/stockitem.cpp:210
 msgid "&Unindent"
-msgstr "வரித் துவக்க ஒழுங்கினை நீக்குக"
+msgstr "ஒழுங்கினை நீக்குக (&U)"
 
 #: ../src/common/stockitem.cpp:210
 msgid "Unindent"
@@ -3609,15 +3609,15 @@ msgstr "வரித் துவக்க ஒழுங்கை நீக்க
 
 #: ../src/common/stockitem.cpp:211
 msgid "&Up"
-msgstr "மேல்"
+msgstr "மேல் (&U)"
 
 #: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:435
 msgid "&Yes"
-msgstr "ஆ&ம்"
+msgstr "ஆம் (&Y)"
 
 #: ../src/common/stockitem.cpp:213
 msgid "&Actual Size"
-msgstr "மெய்யளவு"
+msgstr "மெய்யளவு (&A)"
 
 #: ../src/common/stockitem.cpp:213
 msgid "Actual Size"
@@ -3625,7 +3625,7 @@ msgstr "மெய்யளவு"
 
 #: ../src/common/stockitem.cpp:214
 msgid "Zoom to &Fit"
-msgstr "பொருந்துமாறு பெரிதாக்குக"
+msgstr "பொருந்துமாறு பெரிதாக்குக (&F)"
 
 #: ../src/common/stockitem.cpp:214
 msgid "Zoom to Fit"
@@ -3633,11 +3633,11 @@ msgstr "பொருந்துமாறு பெரிதாக்குக"
 
 #: ../src/common/stockitem.cpp:215
 msgid "Zoom &In"
-msgstr "உள்நோக்கிப் பெரிதாக்குக"
+msgstr "உள்நோக்கிப் பெரிதாக்குக (&I)"
 
 #: ../src/common/stockitem.cpp:216
 msgid "Zoom &Out"
-msgstr "வெளிநோக்கிப் பெரிதாக்குக"
+msgstr "வெளிநோக்கிப் பெரிதாக்குக (&O)"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Show about dialog"
@@ -3867,7 +3867,7 @@ msgstr "XPM: விகாரமான நிற விளக்கம் '%s', %
 
 #: ../src/common/xpmdecod.cpp:753
 msgid "XPM: no colors left to use for mask!"
-msgstr "XPM: மூடுதிரைக்கு பயன்படுத்த நிறம் ஏதும் விட்டுவைக்கப்படவில்லை!"
+msgstr "XPM: மறைப்புக்குப் பயன்படுத்த நிறம் ஏதும் விட்டுவைக்கப்படவில்லை!"
 
 #: ../src/common/xpmdecod.cpp:780
 #, c-format
@@ -3876,7 +3876,7 @@ msgstr "XPM: %d வரியில் அறுபட்ட படிமத் �
 
 #: ../src/common/xpmdecod.cpp:794
 msgid "XPM: Malformed pixel data!"
-msgstr "XPM: விகாரமான படவணுத் தரவு!"
+msgstr "XPM: தவறானத் தோற்றப் படவணுத் தரவு!"
 
 #: ../src/common/xti.cpp:498
 msgid "Illegal Parameter Count for Create Method"
@@ -4274,15 +4274,15 @@ msgstr "நன்றி. தங்களுக்கு ஏற்பட்டு
 
 #: ../src/generic/dbgrptg.cpp:334
 msgid "&Debug report preview:"
-msgstr "வழுநீக்க அரிக்கை முன்தோற்றம்"
+msgstr "வழுநீக்க அரிக்கை முன்தோற்றம் (&D)"
 
 #: ../src/generic/dbgrptg.cpp:340
 msgid "&View..."
-msgstr "தோற்றம்..."
+msgstr "தோற்றம்... (&V)"
 
 #: ../src/generic/dbgrptg.cpp:360
 msgid "&Notes:"
-msgstr "குறிப்புகள்"
+msgstr "குறிப்புகள் (&N)"
 
 #: ../src/generic/dbgrptg.cpp:362
 msgid ""
@@ -4346,7 +4346,7 @@ msgstr "முகப்பு அடைவிற்குச் செல்க"
 
 #: ../src/generic/dirdlgg.cpp:144
 msgid "Show &hidden directories"
-msgstr "மறைந்துள்ள அடைவுகளைக் காட்டுக"
+msgstr "மறைந்துள்ள அடைவுகளைக் காட்டுக (&H)"
 
 #: ../src/generic/dirdlgg.cpp:199
 #, c-format
@@ -4429,11 +4429,11 @@ msgstr "தேடு திசை"
 
 #: ../src/generic/fdrepdlg.cpp:176
 msgid "&Replace"
-msgstr "மாற்றமர்வு"
+msgstr "மாற்றமர்வு (&R)"
 
 #: ../src/generic/fdrepdlg.cpp:179
 msgid "Replace &all"
-msgstr "எல்லாவற்றையும் மாற்றியமைத்திடுக"
+msgstr "அனைத்தையும் மாற்றியமைத்திடுக (&A)"
 
 #: ../src/generic/filectrlg.cpp:246 ../src/generic/filectrlg.cpp:269
 msgid "<DIR>"
@@ -4485,7 +4485,7 @@ msgstr "தற்போதைய அடைவு"
 
 #: ../src/generic/filectrlg.cpp:979
 msgid "Show &hidden files"
-msgstr "மறைந்துள்ள கோப்புகளைக் காட்டுக"
+msgstr "மறைந்துள்ள கோப்புகளைக் காட்டுக (&H)"
 
 #: ../src/generic/filectrlg.cpp:1356
 msgid "Illegal file specification."
@@ -4567,7 +4567,7 @@ msgstr "இலகு"
 
 #: ../src/generic/fontdlgg.cpp:367
 msgid "&Font family:"
-msgstr "எழுத்துரு குடும்பம்:"
+msgstr "எழுத்துரு குடும்பம் (&F):"
 
 #: ../src/generic/fontdlgg.cpp:371 ../src/generic/fontdlgg.cpp:373
 msgid "The font family."
@@ -4575,7 +4575,7 @@ msgstr "எழுத்துரு குடும்பம்."
 
 #: ../src/generic/fontdlgg.cpp:378 ../src/richtext/richtextstylepage.cpp:106
 msgid "&Style:"
-msgstr "பாங்கு:"
+msgstr "பாங்கு (&S):"
 
 #: ../src/generic/fontdlgg.cpp:382 ../src/generic/fontdlgg.cpp:384
 msgid "The font style."
@@ -4583,7 +4583,7 @@ msgstr "எழுத்துரு பாங்கு."
 
 #: ../src/generic/fontdlgg.cpp:389
 msgid "&Weight:"
-msgstr "எடை:"
+msgstr "எடை (&W):"
 
 #: ../src/generic/fontdlgg.cpp:393 ../src/generic/fontdlgg.cpp:395
 msgid "The font weight."
@@ -4591,7 +4591,7 @@ msgstr "எழுத்துரு எடை."
 
 #: ../src/generic/fontdlgg.cpp:403
 msgid "C&olour:"
-msgstr "நிறம்:"
+msgstr "நிறம் (&O:)"
 
 #: ../src/generic/fontdlgg.cpp:411 ../src/generic/fontdlgg.cpp:413
 msgid "The font colour."
@@ -4599,7 +4599,7 @@ msgstr "எழுத்துரு நிறம்."
 
 #: ../src/generic/fontdlgg.cpp:419
 msgid "&Point size:"
-msgstr "குறியளவு"
+msgstr "குறியளவு (&P)"
 
 #: ../src/generic/fontdlgg.cpp:424 ../src/generic/fontdlgg.cpp:426
 #: ../src/generic/fontdlgg.cpp:430 ../src/generic/fontdlgg.cpp:432
@@ -4675,7 +4675,7 @@ msgstr "உள்ளீடுகள் காணப்படுகின்ற�
 
 #: ../src/generic/hyperlinkg.cpp:153
 msgid "&Copy URL"
-msgstr "இணைய முகவரியை படியெடு"
+msgstr "இணைய முகவரியை படியெடுத்திடுக (&C)"
 
 #: ../src/generic/infobar.cpp:81
 msgid "Hide this notification message."
@@ -4707,7 +4707,7 @@ msgstr "செயற்குறிப்பேட்டு உள்ளடக�
 
 #: ../src/generic/logg.cpp:511
 msgid "C&lear"
-msgstr "தெளிவாக்கு"
+msgstr "தெளிவாக்குக (&L)"
 
 #: ../src/generic/logg.cpp:511
 msgid "Clear the log contents"
@@ -4719,7 +4719,7 @@ msgstr "இந்த சாளரத்தை மூடுக"
 
 #: ../src/generic/logg.cpp:514
 msgid "&Log"
-msgstr "செயற்குறிப்பேடு"
+msgstr "செயற்குறிப்பேடு (&L)"
 
 #: ../src/generic/logg.cpp:570 ../src/generic/logg.cpp:973
 msgid "Can't save log contents to file."
@@ -4732,7 +4732,7 @@ msgstr "செயற்குறிப்பு '%s' கோப்பில் �
 
 #: ../src/generic/logg.cpp:679
 msgid "&Details"
-msgstr "விவரங்கள்"
+msgstr "விவரங்கள் (&D)"
 
 #: ../src/generic/logg.cpp:953
 msgid "Failed to copy dialog contents to the clipboard."
@@ -4896,7 +4896,7 @@ msgstr "அச்சுப் பொறி..."
 
 #: ../src/generic/progdlgg.cpp:249
 msgid "&Skip"
-msgstr "தவிர்க்கவும்"
+msgstr "தவிர்த்திடுக (&S)"
 
 #: ../src/generic/progdlgg.cpp:350 ../src/generic/progdlgg.cpp:629
 msgid "Unknown"
@@ -4929,23 +4929,23 @@ msgstr "தங்களுக்குத் தெரியுமா?"
 
 #: ../src/generic/tipdlg.cpp:233
 msgid "&Show tips at startup"
-msgstr "துவக்கத்தில் துணுக்குதவிகளைக் காட்டுக"
+msgstr "துவக்கத்தில் உதவிக் குறிப்புகளைக் காட்டுக (&S)"
 
 #: ../src/generic/tipdlg.cpp:237
 msgid "&Next Tip"
-msgstr "அடுத்த துணுக்குதவி"
+msgstr "அடுத்த உதவிக் குறிப்பு (&N)"
 
 #: ../src/generic/wizard.cpp:429
 msgid "&Next >"
-msgstr "அடுத்து"
+msgstr "அடுத்தது (&N)"
 
 #: ../src/generic/wizard.cpp:430
 msgid "&Finish"
-msgstr "நிறைவு செய்க"
+msgstr "நிறைவுச் செய்க (&F)"
 
 #: ../src/generic/wizard.cpp:438
 msgid "< &Back"
-msgstr "< பின்"
+msgstr "< பின் (&B)"
 
 #: ../src/gtk/aboutdlg.cpp:216
 msgid "translator-credits"
@@ -5861,19 +5861,19 @@ msgstr "%d வரிசைப்பட்டியல் கட்டுப்�
 
 #: ../src/msw/mdi.cpp:170
 msgid "&Cascade"
-msgstr "அடுத்தடுத்த நிலை"
+msgstr "தொடர்த்தாக்க நிலை (&C)"
 
 #: ../src/msw/mdi.cpp:171
 msgid "Tile &Horizontally"
-msgstr "கிடநீளமாக அமை"
+msgstr "கிடநீளமாக அமைத்திடுக (&H)"
 
 #: ../src/msw/mdi.cpp:172
 msgid "Tile &Vertically"
-msgstr "செங்குத்தாக அமை"
+msgstr "செங்குத்தாக அமைத்திடுக (&V)"
 
 #: ../src/msw/mdi.cpp:174
 msgid "&Arrange Icons"
-msgstr "படவுருக்களை ஒழுங்கமை"
+msgstr "படவுருக்களை ஒழுங்கமைத்திடுக (&A)"
 
 #: ../src/msw/mdi.cpp:621
 msgid "Failed to create MDI parent frame."
@@ -6380,7 +6380,7 @@ msgstr "பெரிதாக்கிடுக"
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr "எல்லாவற்றையும் முன்னால் கொண்டுவருக"
+msgstr "அனைத்தையும் முன்னால் கொண்டுவருக"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6891,7 +6891,7 @@ msgstr "பின்புலம்"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:160
 msgid "Background &colour:"
-msgstr "பின்புல நிறம்:"
+msgstr "பின்புல நிறம் (&C):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:162
 #: ../src/richtext/richtextbackgroundpage.cpp:164
@@ -6909,7 +6909,7 @@ msgstr "நிழல்"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:194
 msgid "Use &shadow"
-msgstr "நிழலைப் பயன்படுத்துக"
+msgstr "நிழலைப் பயன்படுத்துக (&S)"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:196
 #: ../src/richtext/richtextbackgroundpage.cpp:198
@@ -6918,7 +6918,7 @@ msgstr "ஒரு நிழலை முடுக்குகிறது."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:212
 msgid "&Horizontal offset:"
-msgstr "கிடைமட்ட எதிரிடை"
+msgstr "கிடைமட்ட எதிரிடை (&H)"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:219
 #: ../src/richtext/richtextbackgroundpage.cpp:221
@@ -7087,7 +7087,7 @@ msgstr "இம்மதிப்பிற்கான அலகுகள்."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:235
 msgid "&Vertical offset:"
-msgstr "செங்குத்து எதிரிடை"
+msgstr "செங்குத்து எதிரிடை (&V)"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:242
 #: ../src/richtext/richtextbackgroundpage.cpp:244
@@ -7110,7 +7110,7 @@ msgstr "நிழல் நிறம்."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:271
 msgid "Sh&adow spread:"
-msgstr "நிழலின் பரவல் (&A):"
+msgstr "நிழல் பரவல் (&A):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:273
 #: ../src/richtext/richtextbackgroundpage.cpp:275
@@ -7178,7 +7178,7 @@ msgstr "எல்லை"
 #: ../src/richtext/richtextsizepage.cpp:532
 #: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
-msgstr "இடது:"
+msgstr "இடது (&L):"
 
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:260
@@ -7213,7 +7213,7 @@ msgstr "எல்லைக் கோட்டின் பாங்கு."
 #: ../src/richtext/richtextsizepage.cpp:602
 #: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
-msgstr "வலது:"
+msgstr "வலது (&R:)"
 
 #: ../src/richtext/richtextborderspage.cpp:292
 #: ../src/richtext/richtextborderspage.cpp:294
@@ -7227,7 +7227,7 @@ msgstr "வலது எல்லைக்கோட்டின் அகலத�
 #: ../src/richtext/richtextsizepage.cpp:567
 #: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
-msgstr "மேல்:"
+msgstr "மேல் (&T:)"
 
 #: ../src/richtext/richtextborderspage.cpp:326
 #: ../src/richtext/richtextborderspage.cpp:328
@@ -7241,7 +7241,7 @@ msgstr "மேல் எல்லைக்கோட்டின் அகலத�
 #: ../src/richtext/richtextsizepage.cpp:637
 #: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
-msgstr "அடித்தளம்"
+msgstr "அடித்தளம் (&B)"
 
 #: ../src/richtext/richtextborderspage.cpp:360
 #: ../src/richtext/richtextborderspage.cpp:362
@@ -7251,7 +7251,7 @@ msgstr "கீழ் எல்லைக் கோட்டின் அகலத
 #: ../src/richtext/richtextborderspage.cpp:381
 #: ../src/richtext/richtextborderspage.cpp:549
 msgid "&Synchronize values"
-msgstr "மதிப்புகளை ஒத்திசைவாக்குக"
+msgstr "மதிப்புகளை ஒத்திசைவாக்குக (&S)"
 
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:385
@@ -7292,7 +7292,7 @@ msgstr "எல்லைக் கோணம்"
 
 #: ../src/richtext/richtextborderspage.cpp:575
 msgid "Corner &radius:"
-msgstr "எல்லைக் கோணத்தின் ஆரம்"
+msgstr "எல்லைக் கோணத்தின் ஆரம் (&R)"
 
 #: ../src/richtext/richtextborderspage.cpp:577
 #: ../src/richtext/richtextborderspage.cpp:579
@@ -7465,7 +7465,7 @@ msgstr "படிமம்"
 #: ../src/richtext/richtextbulletspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:210
 msgid "&Bullet style:"
-msgstr "தோட்டாப் பாங்கு"
+msgstr "தோட்டாப் பாங்கு (&B)"
 
 #: ../src/richtext/richtextbulletspage.cpp:151
 #: ../src/richtext/richtextbulletspage.cpp:153
@@ -7477,7 +7477,7 @@ msgstr "கிடைப்பில் இருக்கும் தோட்�
 #: ../src/richtext/richtextbulletspage.cpp:159
 #: ../src/richtext/richtextliststylepage.cpp:222
 msgid "Peri&od"
-msgstr "காலம்"
+msgstr "காலம் (&O)"
 
 #: ../src/richtext/richtextbulletspage.cpp:161
 #: ../src/richtext/richtextbulletspage.cpp:163
@@ -7513,7 +7513,7 @@ msgstr "வலப்பிறை வைக்கப்பட்டுள்ள�
 #: ../src/richtext/richtextbulletspage.cpp:182
 #: ../src/richtext/richtextliststylepage.cpp:245
 msgid "Bullet &Alignment:"
-msgstr "தோட்டா ஒழுங்கமைப்பு:"
+msgstr "தோட்டா ஒழுங்கமைப்பு (&A):"
 
 #: ../src/richtext/richtextbulletspage.cpp:187
 #: ../src/richtext/richtextliststylepage.cpp:250
@@ -7534,12 +7534,12 @@ msgstr "தோட்டா வரியுரு."
 #: ../src/richtext/richtextbulletspage.cpp:209
 #: ../src/richtext/richtextliststylepage.cpp:268
 msgid "&Symbol:"
-msgstr "குறியெழுத்து:"
+msgstr "குறியெழுத்து (&S):"
 
 #: ../src/richtext/richtextbulletspage.cpp:219
 #: ../src/richtext/richtextliststylepage.cpp:280
 msgid "Ch&oose..."
-msgstr "தேர்ந்தெடுக்கவும்..."
+msgstr "தேர்ந்தெடுத்திடுக... (&O)"
 
 #: ../src/richtext/richtextbulletspage.cpp:220
 #: ../src/richtext/richtextbulletspage.cpp:222
@@ -7551,7 +7551,7 @@ msgstr "ஒரு குறியெழுத்தை உலாவித் த
 #: ../src/richtext/richtextbulletspage.cpp:227
 #: ../src/richtext/richtextliststylepage.cpp:288
 msgid "Symbol &font:"
-msgstr "குறியெழுத்து எழுத்துரு:"
+msgstr "குறியெழுத்து எழுத்துரு (&F):"
 
 #: ../src/richtext/richtextbulletspage.cpp:232
 #: ../src/richtext/richtextbulletspage.cpp:234
@@ -7562,7 +7562,7 @@ msgstr "கிடைப்பிலுள்ள எழுத்துருக�
 #: ../src/richtext/richtextbulletspage.cpp:239
 #: ../src/richtext/richtextliststylepage.cpp:299
 msgid "S&tandard bullet name:"
-msgstr "நிலைத் தோட்டாவின் பெயர்:"
+msgstr "தகுதரத் தோட்டாவின் பெயர் (&T):"
 
 #: ../src/richtext/richtextbulletspage.cpp:244
 #: ../src/richtext/richtextbulletspage.cpp:246
@@ -7573,7 +7573,7 @@ msgstr "செந்தரமாக்கப்பட்ட தோட்டா�
 
 #: ../src/richtext/richtextbulletspage.cpp:251
 msgid "&Number:"
-msgstr "எண்:"
+msgstr "எண் (&N:)"
 
 #: ../src/richtext/richtextbulletspage.cpp:255
 #: ../src/richtext/richtextbulletspage.cpp:257
@@ -7685,7 +7685,7 @@ msgstr "மாற்றமர்வு"
 #: ../src/richtext/richtextfontpage.cpp:147
 #: ../src/richtext/richtextsymboldlg.cpp:397
 msgid "&Font:"
-msgstr "எழுத்துரு"
+msgstr "எழுத்துரு (&F)"
 
 #: ../src/richtext/richtextfontpage.cpp:151
 #: ../src/richtext/richtextfontpage.cpp:153
@@ -7694,7 +7694,7 @@ msgstr "எழுத்துரு பெயரைத் தட்டச்ச�
 
 #: ../src/richtext/richtextfontpage.cpp:159
 msgid "&Size:"
-msgstr "அளவு:"
+msgstr "அளவு (&S):"
 
 #: ../src/richtext/richtextfontpage.cpp:166
 #: ../src/richtext/richtextfontpage.cpp:168
@@ -7718,7 +7718,7 @@ msgstr "எழுத்துருகளை புள்ளி அளவுக�
 
 #: ../src/richtext/richtextfontpage.cpp:208
 msgid "Font st&yle:"
-msgstr "எழுத்துரு பாங்கு:"
+msgstr "எழுத்துருப் பாங்கு (&Y):"
 
 #: ../src/richtext/richtextfontpage.cpp:213
 #: ../src/richtext/richtextfontpage.cpp:215
@@ -7727,7 +7727,7 @@ msgstr "வழக்கமானது அல்லது வலப் பக்
 
 #: ../src/richtext/richtextfontpage.cpp:221
 msgid "Font &weight:"
-msgstr "எழுத்துரு எடை:"
+msgstr "எழுத்துரு எடை (&W):"
 
 #: ../src/richtext/richtextfontpage.cpp:226
 #: ../src/richtext/richtextfontpage.cpp:228
@@ -7736,7 +7736,7 @@ msgstr "வழக்கமானது அல்லது அடர்த்த�
 
 #: ../src/richtext/richtextfontpage.cpp:234
 msgid "&Underlining:"
-msgstr "அடிக்கோடு:"
+msgstr "அடிக்கோடிடல் (&U):"
 
 #: ../src/richtext/richtextfontpage.cpp:239
 #: ../src/richtext/richtextfontpage.cpp:241
@@ -7745,7 +7745,7 @@ msgstr "அடிக்கோடிடப்பட்டது அல்லத�
 
 #: ../src/richtext/richtextfontpage.cpp:249
 msgid "&Colour:"
-msgstr "நிறம்"
+msgstr "நிறம் (&C)"
 
 #: ../src/richtext/richtextfontpage.cpp:254
 #: ../src/richtext/richtextfontpage.cpp:256
@@ -7754,7 +7754,7 @@ msgstr "உரையின் நிறத்தை மாற்ற சொடு
 
 #: ../src/richtext/richtextfontpage.cpp:262
 msgid "&Bg colour:"
-msgstr "பின்புல நிறம்:"
+msgstr "பின்புல நிறம் (&B):"
 
 #: ../src/richtext/richtextfontpage.cpp:267
 #: ../src/richtext/richtextfontpage.cpp:269
@@ -7768,7 +7768,7 @@ msgstr "உரையினூடே ஒரு கோடு காட்டப்
 
 #: ../src/richtext/richtextfontpage.cpp:282
 msgid "Ca&pitals"
-msgstr "முகப்புகள்"
+msgstr "முகப்பெழுத்துகள் (&P)"
 
 #: ../src/richtext/richtextfontpage.cpp:284
 #: ../src/richtext/richtextfontpage.cpp:286
@@ -7777,7 +7777,7 @@ msgstr "உரை முகப்பெழுத்துகளில் கா�
 
 #: ../src/richtext/richtextfontpage.cpp:289
 msgid "Small C&apitals"
-msgstr "சிறு முகப்பெழுத்துகள்"
+msgstr "சிறு முகப்பெழுத்துகள் (&A)"
 
 #: ../src/richtext/richtextfontpage.cpp:291
 #: ../src/richtext/richtextfontpage.cpp:293
@@ -7786,7 +7786,7 @@ msgstr "சிறு முகப்பெழுத்துகளில் உ�
 
 #: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
-msgstr "மேலெழுத்து"
+msgstr "மேலெழுத்து (&R)"
 
 #: ../src/richtext/richtextfontpage.cpp:298
 #: ../src/richtext/richtextfontpage.cpp:300
@@ -7795,7 +7795,7 @@ msgstr "மேலெழுத்துகளில் உரை காட்ட�
 
 #: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
-msgstr "கீழெழுத்து"
+msgstr "கீழெழுத்து (&T)"
 
 #: ../src/richtext/richtextfontpage.cpp:305
 #: ../src/richtext/richtextfontpage.cpp:307
@@ -7804,7 +7804,7 @@ msgstr "கீழெழுத்துகளில் உரை காட்ட�
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr "வலமிருந்து இடம்"
+msgstr "வலமிருந்து இடமாக (&H)"
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
@@ -7813,7 +7813,7 @@ msgstr "உரையின் வரைவு வலமிருந்து இ
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr "இணைக்கோட்டை மறை"
+msgstr "இணைக்கோட்டை மறைத்திடுக (&N)"
 
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
@@ -7851,7 +7851,7 @@ msgstr "அடிக்கோடிடப்படாதது"
 
 #: ../src/richtext/richtextformatdlg.cpp:342
 msgid "Indents && Spacing"
-msgstr "வரித் துவக்க ஒழுங்கின் இடைவெளி"
+msgstr "ஒழுங்கமைவும் இடைவெளியும் (&&)"
 
 #: ../src/richtext/richtextformatdlg.cpp:347
 msgid "Tabs"
@@ -7881,12 +7881,12 @@ msgstr "நிறம்"
 #: ../src/richtext/richtextindentspage.cpp:128
 #: ../src/richtext/richtextliststylepage.cpp:319
 msgid "&Alignment"
-msgstr "ஒழுங்கமைப்பு"
+msgstr "ஒழுங்கமைப்பு (&A)"
 
 #: ../src/richtext/richtextindentspage.cpp:139
 #: ../src/richtext/richtextliststylepage.cpp:328
 msgid "&Left"
-msgstr "இடது"
+msgstr "இடது (&L)"
 
 #: ../src/richtext/richtextindentspage.cpp:141
 #: ../src/richtext/richtextindentspage.cpp:143
@@ -7898,7 +7898,7 @@ msgstr "உரையை இடப் பக்கம் ஒழுங்கமை
 #: ../src/richtext/richtextindentspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "&Right"
-msgstr "வலது"
+msgstr "வலது (&R)"
 
 #: ../src/richtext/richtextindentspage.cpp:148
 #: ../src/richtext/richtextindentspage.cpp:150
@@ -7910,7 +7910,7 @@ msgstr "உரையை வலது ஒழுங்காக்கு."
 #: ../src/richtext/richtextindentspage.cpp:153
 #: ../src/richtext/richtextliststylepage.cpp:342
 msgid "&Justified"
-msgstr "இருபுற ஒழுங்கு"
+msgstr "இருபுற ஒழுங்கு (&J)"
 
 #: ../src/richtext/richtextindentspage.cpp:155
 #: ../src/richtext/richtextindentspage.cpp:157
@@ -7922,7 +7922,7 @@ msgstr "உரையை இடதும் வலதுமாக ஒழுங்
 #: ../src/richtext/richtextindentspage.cpp:160
 #: ../src/richtext/richtextliststylepage.cpp:349
 msgid "Cen&tred"
-msgstr "நடுவாக்கப்பட்டது"
+msgstr "நடுவாக்கப்பட்டது (&T)"
 
 #: ../src/richtext/richtextindentspage.cpp:162
 #: ../src/richtext/richtextindentspage.cpp:164
@@ -7934,7 +7934,7 @@ msgstr "உரையை நடுவாக்கு"
 #: ../src/richtext/richtextindentspage.cpp:167
 #: ../src/richtext/richtextliststylepage.cpp:356
 msgid "&Indeterminate"
-msgstr "தேராதது"
+msgstr "உறுதியற்றது (&I)"
 
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
@@ -7946,7 +7946,7 @@ msgstr "தற்போதைய ஒழுங்கமைப்பு அமை�
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
 msgid "&Indentation (tenths of a mm)"
-msgstr "வரித் துவக்க ஒழுங்கு (மில்லி மீட்டரின் பத்தில் ஒரு பகுதி)"
+msgstr "வரித் துவக்க ஒழுங்கு (மில்லி மீட்டரின் பத்தில் ஒரு பகுதி) (&I)"
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -7958,7 +7958,7 @@ msgstr "இடது ஒழுங்கு."
 #: ../src/richtext/richtextindentspage.cpp:204
 #: ../src/richtext/richtextliststylepage.cpp:390
 msgid "Left (&first line):"
-msgstr "இடது (முதல் வரி):"
+msgstr "இடது (முதல் வரி) (&F):"
 
 #: ../src/richtext/richtextindentspage.cpp:208
 #: ../src/richtext/richtextindentspage.cpp:210
@@ -7976,7 +7976,7 @@ msgstr "வலது வரித் துவக்க ஒழுங்கு."
 
 #: ../src/richtext/richtextindentspage.cpp:222
 msgid "&Outline level:"
-msgstr "வெளிவரைவு நிலை"
+msgstr "வெளிவரைவு மட்டம் (&O)"
 
 #: ../src/richtext/richtextindentspage.cpp:227
 #: ../src/richtext/richtextindentspage.cpp:229
@@ -7986,11 +7986,11 @@ msgstr "வெளிவரைவின் நிலை."
 #: ../src/richtext/richtextindentspage.cpp:242
 #: ../src/richtext/richtextliststylepage.cpp:417
 msgid "&Spacing (tenths of a mm)"
-msgstr "இடைவெளி (மில்லி மீட்டரின் பத்தில் ஒரு பகுதி)"
+msgstr "இடைவெளி (மில்லி மீட்டரின் பத்தில் ஒரு பகுதி) (&S)"
 
 #: ../src/richtext/richtextindentspage.cpp:253
 msgid "&Before a paragraph:"
-msgstr "ஒரு பத்திக்கு முன்பு"
+msgstr "ஒரு பத்திக்கு முன்பு (&B)"
 
 #: ../src/richtext/richtextindentspage.cpp:257
 #: ../src/richtext/richtextindentspage.cpp:259
@@ -8001,7 +8001,7 @@ msgstr "பத்திக்கு முந்தைய இடைவெளி.
 
 #: ../src/richtext/richtextindentspage.cpp:262
 msgid "&After a paragraph:"
-msgstr "ஒரு பத்திக்குப் பிறகு"
+msgstr "ஒரு பத்திக்குப் பிறகு (&A)"
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -8011,7 +8011,7 @@ msgstr "பத்திக்கு அடுத்த இடைவெளி."
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
-msgstr "வரி இடைவெளி"
+msgstr "வரி இடைவெளி (&I)"
 
 #: ../src/richtext/richtextindentspage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:449
@@ -8077,7 +8077,7 @@ msgstr "வரி இடைவெளி."
 
 #: ../src/richtext/richtextindentspage.cpp:293
 msgid "&Page Break"
-msgstr "பக்க முறிவு"
+msgstr "பக்க முறிவு (&P)"
 
 #: ../src/richtext/richtextindentspage.cpp:295
 #: ../src/richtext/richtextindentspage.cpp:297
@@ -8091,7 +8091,7 @@ msgstr "பத்தி அமைப்புகளின் முன்தோ�
 
 #: ../src/richtext/richtextliststylepage.cpp:183
 msgid "&List level:"
-msgstr "வரிசைப் பட்டியலின் மட்டம்"
+msgstr "வரிசைப் பட்டியலின் மட்டம் (&L)"
 
 #: ../src/richtext/richtextliststylepage.cpp:187
 #: ../src/richtext/richtextliststylepage.cpp:189
@@ -8100,7 +8100,7 @@ msgstr "தொகுப்பதற்காக பட்டியலின் �
 
 #: ../src/richtext/richtextliststylepage.cpp:194
 msgid "&Font for Level..."
-msgstr "மட்டத்திற்கான எழுத்துரு:"
+msgstr "மட்டத்திற்கான எழுத்துரு (&F):"
 
 #: ../src/richtext/richtextliststylepage.cpp:195
 #: ../src/richtext/richtextliststylepage.cpp:197
@@ -8217,7 +8217,7 @@ msgstr "மிதக்கின்ற"
 
 #: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
-msgstr "மிதக்கும் நிலை:"
+msgstr "மிதக்கும் நிலை (&F):"
 
 #: ../src/richtext/richtextsizepage.cpp:253
 #: ../src/richtext/richtextsizepage.cpp:255
@@ -8230,7 +8230,7 @@ msgstr "ஒழுங்கமைப்பு"
 
 #: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
-msgstr "செங்குத்து ஒழுங்கு"
+msgstr "செங்குத்து ஒழுங்கமைப்பு (&V)"
 
 #: ../src/richtext/richtextsizepage.cpp:280
 #: ../src/richtext/richtextsizepage.cpp:282
@@ -8249,7 +8249,7 @@ msgstr "செங்குத்து ஒழுங்கமைப்பு."
 #: ../src/richtext/richtextsizepage.cpp:317
 #: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
-msgstr "அகலம்:"
+msgstr "அகலம் (&W):"
 
 #: ../src/richtext/richtextsizepage.cpp:319
 #: ../src/richtext/richtextsizepage.cpp:321
@@ -8269,7 +8269,7 @@ msgstr "பொருள் அகலத்திற்கான தொகுத�
 #: ../src/richtext/richtextsizepage.cpp:351
 #: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
-msgstr "உயரம்:"
+msgstr "உயரம் (&H):"
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
@@ -8365,7 +8365,7 @@ msgstr "நிலை"
 
 #: ../src/richtext/richtextsizepage.cpp:514
 msgid "&Position mode:"
-msgstr "இடத்தின் நிலை:"
+msgstr "இடத்தின் நிலை (&P):"
 
 #: ../src/richtext/richtextsizepage.cpp:518
 #: ../src/richtext/richtextsizepage.cpp:523
@@ -8434,11 +8434,11 @@ msgstr "கீழ் நிலைக்கான தொகுதிகள்."
 
 #: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
-msgstr "பொருளை இங்கே நகர்த்து:"
+msgstr "பொருளை இங்கு நகர்த்துக (&M):"
 
 #: ../src/richtext/richtextsizepage.cpp:675
 msgid "&Previous Paragraph"
-msgstr "முந்தைய பத்தி"
+msgstr "முந்தைய பத்தி (&P)"
 
 #: ../src/richtext/richtextsizepage.cpp:676
 #: ../src/richtext/richtextsizepage.cpp:678
@@ -8447,7 +8447,7 @@ msgstr "பொருளை முந்தைய பத்திக்கு ந
 
 #: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
-msgstr "அடுத்தப் பத்தி"
+msgstr "அடுத்தப் பத்தி (&N)"
 
 #: ../src/richtext/richtextsizepage.cpp:682
 #: ../src/richtext/richtextsizepage.cpp:684
@@ -8456,7 +8456,7 @@ msgstr "பொருளை அடுத்த பத்திக்கு நக
 
 #: ../src/richtext/richtextstyledlg.cpp:194
 msgid "&Styles:"
-msgstr "பாங்குகள்:"
+msgstr "பாங்குகள் (&S):"
 
 #: ../src/richtext/richtextstyledlg.cpp:198
 #: ../src/richtext/richtextstyledlg.cpp:200
@@ -8475,7 +8475,7 @@ msgstr "பாங்கு முன்தோற்றம்."
 
 #: ../src/richtext/richtextstyledlg.cpp:221
 msgid "New &Character Style..."
-msgstr "புது வரியுருப் பாங்கு..."
+msgstr "புது வரியுருப் பாங்கு... (&C)"
 
 #: ../src/richtext/richtextstyledlg.cpp:222
 #: ../src/richtext/richtextstyledlg.cpp:224
@@ -8484,7 +8484,7 @@ msgstr "ஒரு புது வரியுருப் பாங்கின
 
 #: ../src/richtext/richtextstyledlg.cpp:227
 msgid "New &Paragraph Style..."
-msgstr "புதுப் பத்திப் பாங்கு..."
+msgstr "புதுப் பத்திப் பாங்கு... (&P)"
 
 #: ../src/richtext/richtextstyledlg.cpp:228
 #: ../src/richtext/richtextstyledlg.cpp:230
@@ -8493,7 +8493,7 @@ msgstr "ஒரு புதுப் பத்திப் பாங்கின
 
 #: ../src/richtext/richtextstyledlg.cpp:233
 msgid "New &List Style..."
-msgstr "புது வரிசைப் பட்டியல் பாங்கு..."
+msgstr "புது வரிசைப் பட்டியல் பாங்கு... (&N)"
 
 #: ../src/richtext/richtextstyledlg.cpp:234
 #: ../src/richtext/richtextstyledlg.cpp:236
@@ -8502,7 +8502,7 @@ msgstr "ஒரு புது வரிசைப் பட்டியல் �
 
 #: ../src/richtext/richtextstyledlg.cpp:239
 msgid "New &Box Style..."
-msgstr "புது பெட்டிப் பாங்கு..."
+msgstr "புதுப் பெட்டிப் பாங்கு... (&B)"
 
 #: ../src/richtext/richtextstyledlg.cpp:240
 #: ../src/richtext/richtextstyledlg.cpp:242
@@ -8511,7 +8511,7 @@ msgstr "ஒரு புதுப் பெட்டிப் பாங்கி
 
 #: ../src/richtext/richtextstyledlg.cpp:247
 msgid "&Apply Style"
-msgstr "பாங்கினை இடு"
+msgstr "பாங்கினை இடுக (&A)"
 
 #: ../src/richtext/richtextstyledlg.cpp:248
 #: ../src/richtext/richtextstyledlg.cpp:250
@@ -8520,7 +8520,7 @@ msgstr "தெரிவு செய்யப்பட்ட பாங்கி�
 
 #: ../src/richtext/richtextstyledlg.cpp:253
 msgid "&Rename Style..."
-msgstr "பாங்கினை மறுப்பெயரிடுக"
+msgstr "பாங்கினை மறுபெயரிடுக (&R)"
 
 #: ../src/richtext/richtextstyledlg.cpp:254
 #: ../src/richtext/richtextstyledlg.cpp:256
@@ -8529,7 +8529,7 @@ msgstr "தெரிவு செய்யப்பட்டுள்ள பா�
 
 #: ../src/richtext/richtextstyledlg.cpp:259
 msgid "&Edit Style..."
-msgstr "பாங்கினைத் தொகு"
+msgstr "பாங்கினைத் தொகுத்திடுக (&E)"
 
 #: ../src/richtext/richtextstyledlg.cpp:260
 #: ../src/richtext/richtextstyledlg.cpp:262
@@ -8538,7 +8538,7 @@ msgstr "தெரிவு செய்யப்பட்டுள்ள பா�
 
 #: ../src/richtext/richtextstyledlg.cpp:265
 msgid "&Delete Style..."
-msgstr "பாங்கினை அழி"
+msgstr "பாங்கினை அழித்திடுக (&D)"
 
 #: ../src/richtext/richtextstyledlg.cpp:266
 #: ../src/richtext/richtextstyledlg.cpp:268
@@ -8552,7 +8552,7 @@ msgstr "இச்சாளரத்தை மூட சொடுக்கவு�
 
 #: ../src/richtext/richtextstyledlg.cpp:283
 msgid "&Restart numbering"
-msgstr "எண்ணை மீண்டும் துவக்குக"
+msgstr "எண்ணிடுதலை மீள்துவக்குக (&R)"
 
 #: ../src/richtext/richtextstyledlg.cpp:285
 #: ../src/richtext/richtextstyledlg.cpp:287
@@ -8582,7 +8582,7 @@ msgstr "புதுப் பாங்கு"
 #: ../src/richtext/richtextstyledlg.cpp:897
 #: ../src/richtext/richtextstyledlg.cpp:935
 msgid "Sorry, that name is taken. Please choose another."
-msgstr "மன்னிக்கவும், அந்தப் பெயர் எடுக்கப்பட்டுவிட்டது. மற்றொன்றினைத்  தேர்ந்தெடுக்கவும்."
+msgstr "பொருத்தருள்க, அந்தப் பெயர் எடுக்கப்பட்டுவிட்டது. மற்றொன்றினைத்  தேர்ந்தெடுக்கவும்."
 
 #: ../src/richtext/richtextstyledlg.cpp:650
 msgid "Enter a paragraph style name"
@@ -8595,7 +8595,7 @@ msgstr "%s பாங்கினை அழிக்க வேண்டுமா?
 
 #: ../src/richtext/richtextstyledlg.cpp:778
 msgid "Delete Style"
-msgstr "பாங்கினை அழி"
+msgstr "பாங்கினை அழித்திடுக"
 
 #: ../src/richtext/richtextstyledlg.cpp:816
 msgid "Enter a list style name"
@@ -8607,7 +8607,7 @@ msgstr "ஒரு புதுப் பாங்கின் பெயரை �
 
 #: ../src/richtext/richtextstyledlg.cpp:930
 msgid "Enter a box style name"
-msgstr "ஒரு பெட்டி பாங்கின் பெயரை உள்ளிடுக"
+msgstr "ஒரு பெட்டிப் பாங்கின் பெயரை உள்ளிடுக"
 
 #: ../src/richtext/richtextstylepage.cpp:110
 #: ../src/richtext/richtextstylepage.cpp:112
@@ -8616,7 +8616,7 @@ msgstr "பாங்கின் பெயர்."
 
 #: ../src/richtext/richtextstylepage.cpp:115
 msgid "&Based on:"
-msgstr "இதன்மேல் அமைந்தது:"
+msgstr "இதன்மேல் அமைந்தது (&B):"
 
 #: ../src/richtext/richtextstylepage.cpp:120
 #: ../src/richtext/richtextstylepage.cpp:122
@@ -8625,7 +8625,7 @@ msgstr "இப்பாங்கு அடிப்படையாகக் க�
 
 #: ../src/richtext/richtextstylepage.cpp:125
 msgid "&Next style:"
-msgstr "அடுத்தப் பாங்கு"
+msgstr "அடுத்தப் பாங்கு (&N)"
 
 #: ../src/richtext/richtextstylepage.cpp:130
 #: ../src/richtext/richtextstylepage.cpp:132
@@ -8659,7 +8659,7 @@ msgstr "குறியெழுத்தை எடுக்க வேண்ட�
 
 #: ../src/richtext/richtextsymboldlg.cpp:410
 msgid "&Subset:"
-msgstr "உட்கணம்:"
+msgstr "உட்கணம் (&S):"
 
 #: ../src/richtext/richtextsymboldlg.cpp:418
 #: ../src/richtext/richtextsymboldlg.cpp:420
@@ -8672,7 +8672,7 @@ msgstr "xxxx"
 
 #: ../src/richtext/richtextsymboldlg.cpp:436
 msgid "&Character code:"
-msgstr "வரியுருக் குறி"
+msgstr "வரியுருக்குறி (&C)"
 
 #: ../src/richtext/richtextsymboldlg.cpp:440
 #: ../src/richtext/richtextsymboldlg.cpp:442
@@ -8681,7 +8681,7 @@ msgstr "வரியுருக் குறி."
 
 #: ../src/richtext/richtextsymboldlg.cpp:448
 msgid "&From:"
-msgstr "அனுப்புநர்:"
+msgstr "அனுப்புநர் (&F):"
 
 #: ../src/richtext/richtextsymboldlg.cpp:456
 #: ../src/richtext/richtextsymboldlg.cpp:457
@@ -8696,11 +8696,11 @@ msgstr "காட்டப்பட வேண்டிய வீச்சு."
 
 #: ../src/richtext/richtextsymboldlg.cpp:503
 msgid "(Normal text)"
-msgstr "இயல்புரை"
+msgstr "(இயல்புரை)"
 
 #: ../src/richtext/richtexttabspage.cpp:110
 msgid "&Position (tenths of a mm):"
-msgstr "நிலை (மில்லி மீட்டரின் பத்தில் ஒரு பகுதி):"
+msgstr "நிலை (மில்லி மீட்டரின் பத்தில் ஒரு பகுதி) (&P):"
 
 #: ../src/richtext/richtexttabspage.cpp:114
 #: ../src/richtext/richtexttabspage.cpp:116
@@ -8723,7 +8723,7 @@ msgstr "தெரிவு செய்யப்பட்டுள்ள தத�
 
 #: ../src/richtext/richtexttabspage.cpp:144
 msgid "Delete A&ll"
-msgstr "எல்லாவற்றையும் அழி"
+msgstr "அனைத்தையும் அழித்திடுக (&L)"
 
 #: ../src/richtext/richtexttabspage.cpp:145
 #: ../src/richtext/richtexttabspage.cpp:147
@@ -8752,23 +8752,23 @@ msgstr "Win32 கருத்தோற்றம்"
 
 #: ../src/univ/themes/win32.cpp:3744
 msgid "&Restore"
-msgstr "மீட்டெடுக்கவும்"
+msgstr "மீட்டமைத்திடுக (&R)"
 
 #: ../src/univ/themes/win32.cpp:3745
 msgid "&Move"
-msgstr "நகர்த்து"
+msgstr "நகர்த்துக (&M)"
 
 #: ../src/univ/themes/win32.cpp:3747
 msgid "&Size"
-msgstr "அளவு"
+msgstr "அளவு (&S)"
 
 #: ../src/univ/themes/win32.cpp:3749
 msgid "Mi&nimize"
-msgstr "சிறிதாக்கு"
+msgstr "சிறிதாக்குக (&N)"
 
 #: ../src/univ/themes/win32.cpp:3751
 msgid "Ma&ximize"
-msgstr "உட்சபட்ச விரிவாக்கம்"
+msgstr "பெரிதாக்குக (&X)"
 
 #: ../src/unix/appunix.cpp:179
 msgid "Failed to install signal handler"
@@ -9371,7 +9371,7 @@ msgstr "%s உருவாக்கப்படுகிறது. \"%s\" தோ
 #~ msgstr "PNG-யில் மிகுதியான நிறங்கள், படிமம் சற்றே தெளிவற்று இருக்கலாம்."
 
 #~ msgid "Unable to handle native drag&drop data"
-#~ msgstr "இயல் இழு-விடு தரவினை கையாள இயலவில்லை"
+#~ msgstr "இயல் இழு-விடு தரவினை கையாள இயலவில்லை (&D)"
 
 #~ msgid "Unable to initialize Hildon program"
 #~ msgstr "Hildon நிரலை துவக்க நிலையாக்க இயலவில்லை"
@@ -9738,10 +9738,10 @@ msgstr "%s உருவாக்கப்படுகிறது. \"%s\" தோ
 #~ msgstr "கவனிக்கப்படும் பொருளைக் கொண்டுள்ள கோப்புக் கட்டகம் இறக்கப்பட்டது"
 
 #~ msgid "&Preview..."
-#~ msgstr "முன்தோற்றம்..."
+#~ msgstr "முன்தோற்றம்... (&P)"
 
 #~ msgid "&Save..."
-#~ msgstr "சேமிக்கவும்..."
+#~ msgstr "சேமித்திடுக... (&S)"
 
 #~ msgid "About "
 #~ msgstr "குறித்து..."

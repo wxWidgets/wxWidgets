@@ -207,10 +207,10 @@ bool MyApp::OnInit()
     // it unconditionally for localized programs -- or never do it at all for
     // the other ones.
     const wxLanguageInfo* const
-        langInfo = wxLocale::GetLanguageInfo(wxLANGUAGE_DEFAULT);
+        langInfo = wxUILocale::GetLanguageInfo(wxLANGUAGE_DEFAULT);
     const wxString
         langDesc = langInfo ? langInfo->Description
-                            : wxString("the default system locale");
+                            : wxString("the default system language");
 
     if ( m_setLocale == Locale_Ask )
     {

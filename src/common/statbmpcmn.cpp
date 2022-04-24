@@ -73,7 +73,7 @@ wxEND_PROPERTIES_TABLE()
 wxEMPTY_HANDLERS_TABLE(wxStaticBitmap)
 
 wxCONSTRUCTOR_5( wxStaticBitmap, wxWindow*, Parent, wxWindowID, Id, \
-                 wxBitmap, Bitmap, wxPoint, Position, wxSize, Size )
+                 wxBitmapBundle, BitmapBundle, wxPoint, Position, wxSize, Size )
 
 /*
     TODO PROPERTIES :

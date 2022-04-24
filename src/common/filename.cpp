@@ -2232,16 +2232,27 @@ wxString wxFileName::GetLongPath() const
             return pathOut;
         }
     }
+    else // GetLongPathName() failed.
+    {
+        // The error returned for non-existent UNC paths is different, to make
+        // things more interesting.
+        const DWORD err = ::GetLastError();
+        if ( err == ERROR_FILE_NOT_FOUND || err == ERROR_BAD_NETPATH )
+        {
+            // No need to try to do anything else, we're not going to be able
+            // to find a long path form of a non-existent path anyhow.
+            return path;
+        }
+    }
 
-    // Some other error occured.
+    // File exists, but some other error occurred.
     // We need to call FindFirstFile on each component in turn.
 
     WIN32_FIND_DATA findFileData;
     HANDLE hFind;
 
     if ( HasVolume() )
-        pathOut = GetVolume() +
-                  GetVolumeSeparator(wxPATH_DOS) +
+        pathOut = wxGetVolumeString(GetVolume(), wxPATH_DOS) +
                   GetPathSeparator(wxPATH_DOS);
     else
         pathOut.clear();

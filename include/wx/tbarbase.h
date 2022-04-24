@@ -465,8 +465,8 @@ public:
     int GetMaxRows() const { return m_maxRows; }
     int GetMaxCols() const { return m_maxCols; }
 
-    // get/set the size of the bitmaps used by the toolbar: should be called
-    // before adding any tools to the toolbar
+    // get/set the size of the bitmaps used by the toolbar, in logical pixels:
+    // should be called before realizing the toolbar if it's called at all
     virtual void SetToolBitmapSize(const wxSize& size);
     virtual wxSize GetToolBitmapSize() const;
 
@@ -704,13 +704,14 @@ protected:
     int m_toolPacking,
         m_toolSeparation;
 
-    // the currently used size of the toolbar bitmaps: the name is unfortunate
-    // but keep it for compatibility
+    // the currently used size of the toolbar bitmaps in logical pixels: the
+    // name is unfortunate but keep it for compatibility
     wxCoord m_defaultWidth, m_defaultHeight;
 
 private:
     // the size of the bitmaps requested by the application by calling
-    // SetToolBitmapSize()
+    // SetToolBitmapSize() expressed in DIPs because we want to keep using the
+    // same value even if the DPI changes
     wxSize m_requestedBitmapSize;
 
     wxDECLARE_EVENT_TABLE();

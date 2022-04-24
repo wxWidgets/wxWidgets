@@ -45,7 +45,7 @@
         bitmaps.push_back(wxBITMAP_PNG(open_48x48));
         bitmaps.push_back(wxBITMAP_PNG(open_64x64));
 
-        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromBitmaps(bitmaps));
+        toolBar->AddTool(wxID_OPEN, "Open", wxBitmapBundle::FromBitmaps(bitmaps));
     }
     @endcode
 
@@ -66,7 +66,7 @@
     having to explicitly list all the bitmaps, e.g. the code above becomes
     @code
     #ifdef wxHAS_IMAGE_RESOURCES
-        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromResources("open"));
+        toolBar->AddTool(wxID_OPEN, "Open", wxBitmapBundle::FromResources("open"));
     #else
         ... same code as shown above ...
     #endif
@@ -159,6 +159,15 @@ public:
         If @a bitmap is invalid, empty bundle is returned.
      */
     static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
+
+    /**
+        Create a bundle from an icon bundle.
+
+        If @a iconBundle is invalid or empty, empty bundle is returned.
+
+        @since 3.1.7
+     */
+    static wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
 
     /**
         Create a bundle from a single image.

@@ -43,7 +43,6 @@ while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 @itemdef{__WXOSX_COCOA__, macOS using Cocoa (AppKit)}
 @itemdef{__WXOSX_MAC__, macOS (Cocoa)}
 @itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
-@itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
 @itemdef{__WXX11__, wxX11 (<tt>__WXUNIVERSAL__</tt> will be also defined)}
 @itemdef{__WXWINE__, WINE (i.e. WIN32 on Unix)}

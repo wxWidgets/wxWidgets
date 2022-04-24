@@ -24,6 +24,7 @@
 #include "wx/bmpbndl.h"
 #include "wx/filename.h"
 #include "wx/icon.h"
+#include "wx/iconbndl.h"
 #include "wx/imaglist.h"
 #include "wx/window.h"
 
@@ -357,6 +358,20 @@ wxBitmapBundle wxBitmapBundle::FromImpl(wxBitmapBundleImpl* impl)
     return wxBitmapBundle(impl);
 }
 
+/* static */
+wxBitmapBundle wxBitmapBundle::FromIconBundle(const wxIconBundle& iconBundle)
+{
+    if ( !iconBundle.IsOk() || iconBundle.IsEmpty() )
+        return wxBitmapBundle();
+
+    wxVector<wxBitmap> bitmaps;
+    for ( size_t n = 0; n < iconBundle.GetIconCount(); ++n )
+    {
+        bitmaps.push_back(iconBundle.GetIconByIndex(n));
+    }
+
+    return FromBitmaps(bitmaps);
+}
 
 // MSW and MacOS have their own, actually working, version, in their platform-specific code.
 #if !defined( __WXMSW__ ) && !defined( __WXOSX__ )

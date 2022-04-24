@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(BASE_FILES BASE_CMN)
 wx_append_sources(BASE_FILES BASE_AND_GUI_CMN)
 
@@ -26,28 +24,24 @@ endif()
 
 wx_add_library(wxbase IS_BASE ${BASE_FILES})
 
-if(NOT wxBUILD_MONOLITHIC)
-    wx_lib_compile_definitions(wxbase PRIVATE wxUSE_BASE=1)
-endif()
-
 if(wxUSE_ZLIB)
-    wx_lib_include_directories(wxbase PRIVATE ${ZLIB_INCLUDE_DIRS})
+    wx_lib_include_directories(wxbase ${ZLIB_INCLUDE_DIRS})
     wx_lib_link_libraries(wxbase PRIVATE ${ZLIB_LIBRARIES})
 endif()
 if(wxUSE_REGEX)
-    wx_lib_include_directories(wxbase PRIVATE ${REGEX_INCLUDE_DIRS})
+    wx_lib_include_directories(wxbase ${REGEX_INCLUDE_DIRS})
     wx_lib_link_libraries(wxbase PRIVATE ${REGEX_LIBRARIES})
 endif()
 if(wxUSE_LIBLZMA)
-    wx_lib_include_directories(wxbase PRIVATE ${LIBLZMA_INCLUDE_DIRS})
+    wx_lib_include_directories(wxbase ${LIBLZMA_INCLUDE_DIRS})
     wx_lib_link_libraries(wxbase PRIVATE ${LIBLZMA_LIBRARIES})
 endif()
 if(UNIX AND wxUSE_SECRETSTORE)
-    wx_lib_include_directories(wxbase PRIVATE ${LIBSECRET_INCLUDE_DIRS})
+    wx_lib_include_directories(wxbase ${LIBSECRET_INCLUDE_DIRS})
     wx_lib_link_libraries(wxbase PRIVATE ${LIBSECRET_LIBRARIES})
 endif()
 if(wxUSE_LIBICONV)
-    wx_lib_include_directories(wxbase PRIVATE ${ICONV_INCLUDE_DIR})
+    wx_lib_include_directories(wxbase ${ICONV_INCLUDE_DIR})
     wx_lib_link_libraries(wxbase PRIVATE ${ICONV_LIBRARIES})
 endif()
 if(wxUSE_THREADS AND CMAKE_THREAD_LIBS_INIT)
@@ -73,5 +67,3 @@ if(APPLE)
 elseif(UNIX)
     wx_lib_link_libraries(wxbase PRIVATE dl)
 endif()
-
-wx_finalize_lib(wxbase)

@@ -67,7 +67,7 @@ jobs:
   build-and-test:
     defaults:
       run:
-        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash -l {0}
+        shell: /usr/bin/arch -arch ${{ matrix.arch }} /bin/bash --noprofile --norc -eo pipefail {0}
 
     runs-on: ${{ matrix.runner }}
 
@@ -172,7 +172,6 @@ jobs:
           wxCONFIGURE_OPTIONS="--with-macosx-sdk=$sdk_path $wxCONFIGURE_OPTIONS"
         fi
 
-        ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
         if [ ${{ matrix.use_asan }} ]; then
           wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
           wxASAN_CXXFLAGS=$wxASAN_CFLAGS

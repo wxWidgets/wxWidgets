@@ -248,4 +248,10 @@ TEST_CASE("wxComboBox::ProcessEnter", "[wxComboBox][enter]")
     TestProcessEnter(ComboBoxCreator());
 }
 
+#else
+
+#ifdef TEST_INVALID_COMBOBOX_ISEMPTY
+#error provoke failing here
+#endif
+
 #endif //wxUSE_COMBOBOX

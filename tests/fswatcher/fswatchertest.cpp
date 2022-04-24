@@ -34,27 +34,6 @@
 // local functions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_LOG
-// Logging is disabled by default when running the tests, but sometimes it can
-// be helpful to see the errors in case of unexpected failure, so this class
-// re-enables logs in its scope.
-//
-// It's a counterpart to wxLogNull.
-class LogEnabler
-{
-public:
-    LogEnabler() : m_wasEnabled(wxLog::EnableLogging(true)) { }
-    ~LogEnabler() { wxLog::EnableLogging(m_wasEnabled); }
-
-private:
-    const bool m_wasEnabled;
-
-    wxDECLARE_NO_COPY_CLASS(LogEnabler);
-};
-#else // !wxUSE_LOG
-class LogEnabler { };
-#endif // wxUSE_LOG/!wxUSE_LOG
-
 // class generating file system events
 class EventGenerator
 {
@@ -161,7 +140,7 @@ public:
         ms_watchDir.AppendDir("fswatcher_test");
         REQUIRE(!ms_watchDir.DirExists());
 
-        LogEnabler enableLogs;
+        TestLogEnabler enableLogs;
         REQUIRE(ms_watchDir.Mkdir());
 
         REQUIRE(ms_watchDir.DirExists());
@@ -176,7 +155,7 @@ public:
         // just to be really sure we know what we remove
         REQUIRE( ms_watchDir.GetDirs().Last() == "fswatcher_test" );
 
-        LogEnabler enableLogs;
+        TestLogEnabler enableLogs;
         CHECK( ms_watchDir.Rmdir(wxPATH_RMDIR_RECURSIVE) );
 
         ms_watchDir = wxFileName();

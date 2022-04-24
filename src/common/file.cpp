@@ -50,18 +50,6 @@
     #ifdef __GNUWIN32__
         #include "wx/msw/wrapwin.h"
     #endif
-#elif (defined(__WXSTUBS__))
-    // Have to ifdef this for different environments
-    #include <io.h>
-#elif (defined(__WXMAC__))
-#if __MSL__ < 0x6000
-    int access( const char *path, int mode ) { return 0 ; }
-#else
-    int _access( const char *path, int mode ) { return 0 ; }
-#endif
-    char* mktemp( char * path ) { return path ;}
-    #include <stat.h>
-    #include <unistd.h>
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX

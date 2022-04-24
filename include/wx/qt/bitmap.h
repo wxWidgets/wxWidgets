@@ -8,12 +8,7 @@
 #ifndef _WX_QT_BITMAP_H_
 #define _WX_QT_BITMAP_H_
 
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
-
-class WXDLLIMPEXP_FWD_CORE wxImage;
-class WXDLLIMPEXP_FWD_CORE wxCursor;
 class QImage;
-
 class QPixmap;
 class QBitmap;
 
@@ -25,9 +20,11 @@ public:
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
+    wxBitmap(int width, int height, const wxDC& dc);
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
+    wxBitmap(const wxImage& image, const wxDC& dc);
 
     // Convert from wxIcon / wxCursor
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
@@ -37,7 +34,7 @@ public:
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
-    virtual bool Create(int width, int height, const wxDC& WXUNUSED(dc));
+    virtual bool Create(int width, int height, const wxDC& dc);
 
     virtual int GetHeight() const wxOVERRIDE;
     virtual int GetWidth() const wxOVERRIDE;
@@ -80,6 +77,9 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+
+private:
+    void InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale));
 
     wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };

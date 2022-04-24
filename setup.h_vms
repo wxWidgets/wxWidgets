@@ -1076,15 +1076,9 @@ typedef pid_t GPid;
 #if __CRTL_VER >= 70312000
 /* Define if you have snprintf() */
 #define HAVE_SNPRINTF 1
-
-/* Define if you have snprintf() declaration in the header */
-#define HAVE_SNPRINTF_DECL 1
 #else
 /* Define if you have snprintf() */
 #undef HAVE_SNPRINTF
-
-/* Define if you have snprintf() declaration in the header */
-#undef HAVE_SNPRINTF_DECL
 #endif
 
 /* Define if you have a snprintf() which supports positional arguments
@@ -1109,15 +1103,9 @@ typedef pid_t GPid;
 #if __CRTL_VER >= 70312000
 /* Define if you have vsnprintf() */
 #define HAVE_VSNPRINTF 1
-
-/* Define if you have vsnprintf() declaration in the header */
-#define HAVE_VSNPRINTF_DECL 1
 #else
 /* Define if you have vsnprintf() */
 #undef HAVE_VSNPRINTF
-
-/* Define if you have vsnprintf() declaration in the header */
-#undef HAVE_VSNPRINTF_DECL
 #endif
 
 /* Define if you have a _broken_ vsnprintf() declaration in the header,
@@ -1130,9 +1118,6 @@ typedef pid_t GPid;
 
 /* Define if you have vsscanf() */
 #define HAVE_VSSCANF 1
-
-/* Define if you have vsscanf() declaration in the header */
-#define HAVE_VSSCANF_DECL 1
 
 /* Define if you have usleep() */
 #define HAVE_USLEEP 1

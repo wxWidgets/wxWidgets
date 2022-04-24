@@ -122,21 +122,17 @@ wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
     return panel;
 }
 
-wxPanel *CreateBigButtonPage(wxBookCtrlBase *parent)
+wxWindow *CreateFullPageText(wxBookCtrlBase *parent)
 {
-    wxPanel *panel = new wxPanel(parent);
+    wxTextCtrl *text = new wxTextCtrl(parent, wxID_ANY, "Full page text",
+                                      wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE);
 
 #if wxUSE_HELP
-    panel->SetHelpText("Panel with a maximized button");
+    text->SetHelpText("Page consisting of just a text control");
 #endif
 
-    wxButton *buttonBig = new wxButton(panel, wxID_ANY, "Maximized button");
-
-    wxBoxSizer *sizerPanel = new wxBoxSizer(wxVERTICAL);
-    sizerPanel->Add(buttonBig, 1, wxEXPAND);
-    panel->SetSizer(sizerPanel);
-
-    return panel;
+    return text;
 }
 
 wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
@@ -173,22 +169,22 @@ void CreateInitialPages(wxBookCtrlBase *parent)
 {
     // Create and add some panels to the notebook
 
-    wxPanel *panel = CreateRadioButtonsPage(parent);
-    parent->AddPage( panel, RADIOBUTTONS_PAGE_NAME, false, GetIconIndex(parent) );
+    wxWindow *page = CreateRadioButtonsPage(parent);
+    parent->AddPage( page, RADIOBUTTONS_PAGE_NAME, false, GetIconIndex(parent) );
 
-    panel = CreateVetoPage(parent);
-    parent->AddPage( panel, VETO_PAGE_NAME, false, GetIconIndex(parent) );
+    page = CreateVetoPage(parent);
+    parent->AddPage( page, VETO_PAGE_NAME, false, GetIconIndex(parent) );
 
-    panel = CreateBigButtonPage(parent);
-    parent->AddPage( panel, MAXIMIZED_BUTTON_PAGE_NAME, false, GetIconIndex(parent) );
+    page = CreateFullPageText(parent);
+    parent->AddPage( page, TEXT_PAGE_NAME, false, GetIconIndex(parent) );
 
-    panel = CreateInsertPage(parent);
-    parent->InsertPage( 0, panel, I_WAS_INSERTED_PAGE_NAME, false, GetIconIndex(parent) );
+    page = CreateInsertPage(parent);
+    parent->InsertPage( 0, page, I_WAS_INSERTED_PAGE_NAME, false, GetIconIndex(parent) );
 
     parent->SetSelection(1);
 }
 
-wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
+wxWindow *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
 {
     if ( pageName.Contains(INSERTED_PAGE_NAME) ||
             pageName.Contains(ADDED_PAGE_NAME) ||
@@ -205,8 +201,8 @@ wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
     if ( pageName == RADIOBUTTONS_PAGE_NAME )
         return CreateRadioButtonsPage(parent);
 
-    if ( pageName == MAXIMIZED_BUTTON_PAGE_NAME )
-        return CreateBigButtonPage(parent);
+    if ( pageName == TEXT_PAGE_NAME )
+        return CreateFullPageText(parent);
 
     wxFAIL_MSG( "unknown page name" );
 

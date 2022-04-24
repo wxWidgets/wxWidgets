@@ -132,6 +132,7 @@ public:
     virtual wxRibbonButtonBarButtonBase *GetItem(size_t n) const;
     virtual wxRibbonButtonBarButtonBase *GetItemById(int id) const;
     virtual int GetItemId(wxRibbonButtonBarButtonBase *button) const;
+    virtual wxRect GetItemRect(int button_id) const;
 
 
     virtual bool Realize() wxOVERRIDE;

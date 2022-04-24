@@ -755,12 +755,14 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
     wxCHECK_MSG( dc.IsOk(), false, wxT("invalid HDC in wxBitmap::Create()") );
 
-    const wxMSWDCImpl *impl = wxDynamicCast( dc.GetImpl(), wxMSWDCImpl );
+    const double scale = dc.GetContentScaleFactor();
 
-    if (impl)
-        return DoCreate(width, height, -1, impl->GetHDC());
-    else
+    if ( !DoCreate(wxRound(width*scale), wxRound(height*scale), -1, dc.GetHDC()) )
         return false;
+
+    GetBitmapData()->m_scaleFactor = scale;
+
+    return true;
 }
 
 bool wxBitmap::CreateWithDIPSize(const wxSize& size, double scale, int depth)
@@ -854,12 +856,12 @@ bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
     wxCHECK_MSG( dc.IsOk(), false,
                     wxT("invalid HDC in wxBitmap::CreateFromImage()") );
 
-    const wxMSWDCImpl *impl = wxDynamicCast( dc.GetImpl(), wxMSWDCImpl );
-
-    if (impl)
-        return CreateFromImage(image, -1, impl->GetHDC());
-    else
+    if ( !CreateFromImage(image, -1, dc.GetHDC()) )
         return false;
+
+    GetBitmapData()->m_scaleFactor = dc.GetContentScaleFactor();
+
+    return true;
 }
 
 #if wxUSE_WXDIB

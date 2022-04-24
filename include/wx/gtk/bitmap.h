@@ -14,8 +14,6 @@ typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 #endif
 typedef struct _GdkPixbuf GdkPixbuf;
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
-class WXDLLIMPEXP_FWD_CORE wxCursor;
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -70,11 +68,14 @@ public:
         { Create(width, height, depth); }
     wxBitmap( const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH )
         { Create(sz, depth); }
+    wxBitmap( int width, int height, const wxDC& dc )
+        { Create(width, height, dc); }
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
 #if wxUSE_IMAGE
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
+    wxBitmap(const wxImage& image, const wxDC& dc);
 #endif // wxUSE_IMAGE
     wxBitmap(GdkPixbuf* pixbuf, int depth = 0);
     explicit wxBitmap(const wxCursor& cursor);
@@ -147,11 +148,12 @@ public:
     bool HasAlpha() const;
 
 protected:
-#ifndef __WXGTK3__
 #if wxUSE_IMAGE
+    void InitFromImage(const wxImage& image, int depth, double scale);
+#ifndef __WXGTK3__
     bool CreateFromImage(const wxImage& image, int depth);
-#endif // wxUSE_IMAGE
 #endif
+#endif // wxUSE_IMAGE
 
     virtual wxGDIRefData* CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const wxOVERRIDE;

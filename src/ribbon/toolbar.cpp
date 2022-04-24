@@ -470,6 +470,11 @@ int wxRibbonToolBar::GetToolId(const wxRibbonToolBarToolBase* tool)const
     return tool->id;
 }
 
+wxRibbonToolBarToolBase* wxRibbonToolBar::GetActiveTool() const
+{
+    return m_active_tool == NULL ? NULL : m_active_tool;
+}
+
 wxObject* wxRibbonToolBar::GetToolClientData(int tool_id)const
 {
     wxRibbonToolBarToolBase* tool = FindById(tool_id);

@@ -159,8 +159,12 @@ public:
     ~wxUILocale();
 
     // Try to get user's (or OS's) preferred language setting.
-    // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
+    // Return wxLANGUAGE_UNKNOWN if the language-guessing algorithm failed
     static int GetSystemLanguage();
+
+    // Try to get user's (or OS's) default locale setting.
+    // Return wxLANGUAGE_UNKNOWN if the locale-guessing algorithm failed
+    static int GetSystemLocale();
 
     // Try to retrieve a list of user's (or OS's) preferred UI languages.
     // Return empty list if language-guessing algorithm failed

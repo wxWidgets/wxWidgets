@@ -430,6 +430,17 @@ public:
     virtual int GetItemId(wxRibbonButtonBarButtonBase *item) const;
 
     /**
+        Returns the items's rect with coordinates relative to the button bar's
+        parent, or a default-constructed rect if the tool is not found.
+
+        @param button_id
+            ID of the button in question.
+
+        @since 3.1.7
+    */
+    virtual wxRect GetItemRect(int button_id) const;
+
+    /**
         Calculate button layouts and positions.
 
         Must be called after buttons are added to the button bar, as otherwise

@@ -14,6 +14,7 @@
 #include <QtWidgets/QLabel>
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
     #include "wx/icon.h"
     #include "wx/image.h"
 #endif // WX_PRECOMP
@@ -192,6 +193,11 @@ wxBitmap::wxBitmap(const wxSize& sz, int depth )
     Create(sz, depth);
 }
 
+wxBitmap::wxBitmap(int width, int height, const wxDC& dc)
+{
+    Create(width, height, dc);
+}
+
 // Create a wxBitmap from xpm data
 wxBitmap::wxBitmap(const char* const* bits)
 {
@@ -204,12 +210,22 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
-wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale) )
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale) )
 {
     Qt::ImageConversionFlags flags = 0;
     if (depth == 1)
         flags = Qt::MonoOnly;
     m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image), flags));
+}
+
+wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+{
+    InitFromImage(image, depth, scale);
+}
+
+wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
+{
+    InitFromImage(image, -1, dc.GetContentScaleFactor());
 }
 
 wxBitmap::wxBitmap(const wxCursor& cursor)

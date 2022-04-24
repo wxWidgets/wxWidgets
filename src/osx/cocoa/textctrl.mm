@@ -1339,7 +1339,7 @@ void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
         [m_textView setAutomaticDashSubstitutionEnabled:enable];
 }
 
-void wxNSTextViewControl::EnableNewLineReplacement(bool enable)
+void wxNSTextViewControl::EnableNewLineReplacement(bool WXUNUSED(enable))
 {
 }
 
