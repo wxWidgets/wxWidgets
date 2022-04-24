@@ -55,7 +55,7 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellTextEditor : public wxGridCellEditor
 {
 public:
-    wxGridCellTextEditor(size_t maxChars = 0)
+    explicit wxGridCellTextEditor(size_t maxChars = 0)
         : wxGridCellEditor(),
           m_maxChars(maxChars)
     {
@@ -356,18 +356,18 @@ public:
     wxGridCellChoiceEditor(const wxArrayString& choices,
                            bool allowOthers = false)
         : wxGridCellEditor(),
-          m_choices(choices),
           m_allowOthers(allowOthers)
     {
+        m_choices = wxArrayString(choices);
     }
 
     // copy ctor
     wxGridCellChoiceEditor(const wxGridCellChoiceEditor& other)
         : wxGridCellEditor(other),
           m_value(other.m_value),
-          m_choices(other.m_choices),
           m_allowOthers(other.m_allowOthers)
     {
+        m_choices = wxArrayString(other.m_choices);
     }
 
     virtual void Create(wxWindow* parent,
@@ -462,7 +462,7 @@ public:
 class WXDLLIMPEXP_ADV wxGridCellDateEditor : public wxGridCellEditor
 {
 public:
-    wxGridCellDateEditor(const wxString& format = wxString());
+    explicit wxGridCellDateEditor(const wxString& format = wxString());
 
     // copy ctor
     wxGridCellDateEditor(const wxGridCellDateEditor& other)

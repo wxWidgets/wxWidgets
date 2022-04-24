@@ -400,15 +400,7 @@ public:
     }
 
     // copy ctor
-    wxGridCellEditor(const wxGridCellEditor& other)
-        : wxGridCellWorker(other),
-          m_control(other.m_control),
-          m_attr(other.m_attr),
-          m_colFgOld(other.m_colFgOld),
-          m_colBgOld(other.m_colBgOld),
-          m_fontOld(other.m_fontOld)
-    {
-    }
+    wxGridCellEditor(const wxGridCellEditor& other);
 
     bool IsCreated() const { return m_control != NULL; }
 

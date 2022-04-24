@@ -63,8 +63,8 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellNumberRenderer : public wxGridCellStringRenderer
 {
 public:
-    wxGridCellNumberRenderer(long minValue = LONG_MIN,
-                             long maxValue = LONG_MAX)
+    explicit wxGridCellNumberRenderer(long minValue = LONG_MIN,
+                                      long maxValue = LONG_MAX)
         : wxGridCellStringRenderer(),
           m_minValue(minValue),
           m_maxValue(maxValue)
