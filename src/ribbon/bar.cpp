@@ -733,7 +733,9 @@ wxRibbonBar::wxRibbonBar()
     m_tab_scroll_buttons_shown = false;
     m_arePanelsShown = true;
     m_help_button_hovered = false;
-
+    m_bar_hovered = false;
+    m_toggle_button_hovered = false;
+    m_ribbon_state = wxRIBBON_BAR_PINNED;
 }
 
 wxRibbonBar::wxRibbonBar(wxWindow* parent,
