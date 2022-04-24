@@ -1138,19 +1138,24 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
 {
     InitColour(col);
 
-#ifndef __WXMAC__
+#ifdef __WXMSW__
+    // Font is 72 DPI, screen is 96-based, and font needs a correction
+    // for screens with higher DPI (similar to gdi+ and d2d renderers).
     m_size = !dpi.y
-        ? double(font.GetPixelSize().GetHeight())
-        : double(font.GetFractionalPointSize() * dpi.y / 72);
+    ? double(font.GetPixelSize().GetHeight())
+    : (font.GetFractionalPointSize() * dpi.y / 72);
 #else
+    // On macOS, font and screen both are 72 DPI, and macOS font size does
+    // not need a correction for retina displays.
+    // GTK does not use m_size, but initialize it anyway and mark dpi as unused
+    // so we don't get any compiler warnings.
     wxUnusedVar(dpi);
-    m_size = font.GetPointSize();
+    m_size = font.GetFractionalPointSize() * wxDisplay::GetStdPPIValue() / 72;
+#ifdef __WXMAC__
+    m_font = cairo_quartz_font_face_create_for_cgfont(font.OSXGetCGFont());
+#endif
 #endif
 
-#ifdef __WXMAC__
-    m_font = cairo_quartz_font_face_create_for_cgfont( font.OSXGetCGFont() );
-#elif defined(__WXGTK__)
-#else
     InitFontComponents
     (
         font.GetFaceName(),
@@ -1159,7 +1164,6 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
         font.GetWeight() == wxFONTWEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD
                                               : CAIRO_FONT_WEIGHT_NORMAL
     );
-#endif
 }
 
 wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
