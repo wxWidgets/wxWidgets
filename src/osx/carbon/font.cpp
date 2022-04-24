@@ -927,6 +927,11 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
         if ( fontname.empty() )
             fontname = FamilyToFaceName(m_family);
 
+        if ( fontname == "Courier")
+            fontname = "Courier New";
+        else if ( fontname == "Times" )
+            fontname = "Times New Roman";
+
         CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, wxCFStringRef(fontname));
     }
     else
@@ -1112,8 +1117,24 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         m_encoding = (wxFontEncoding)l;
         return true;
     }
-    else if ( version == 2 )
+    else if ( version == 2 || version == 3 )
     {
+        wxFontFamily family = wxFONTFAMILY_DEFAULT;
+        wxFontStyle style = wxFONTSTYLE_NORMAL;
+
+        if ( version == 3 )
+        {
+            token = tokenizer.GetNextToken();
+            if ( !token.ToLong(&l) )
+                return false;
+            family = (wxFontFamily) l;
+
+            token = tokenizer.GetNextToken();
+            if ( !token.ToLong(&l) )
+                return false;
+            style = (wxFontStyle)l;
+        }
+
         token = tokenizer.GetNextToken();
         if ( !token.ToLong(&l) )
             return false;
@@ -1144,6 +1165,8 @@ bool wxNativeFontInfo::FromString(const wxString& s)
             m_underlined = underlined;
             m_strikethrough = strikethrough;
             m_encoding = encoding;
+            m_family = family;
+            m_style = style;
             return true;
         }
     }
@@ -1171,8 +1194,10 @@ wxString wxNativeFontInfo::ToString() const
             xml.Replace("\t",wxEmptyString,true);
             xml = xml.Mid(xml.Find("<plist"));
 
-            s.Printf("%d;%d;%d;%d;%s",
-                 2, // version
+            s.Printf("%d;%d;%d;%d;%d;%d;%s",
+                 3, // version
+                 GetFamily(),
+                 (int)GetStyle(),
                  GetUnderlined(),
                  GetStrikethrough(),
                  (int)GetEncoding(),
