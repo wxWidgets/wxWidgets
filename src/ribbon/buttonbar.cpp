@@ -92,30 +92,39 @@ public:
         barButtonSmallImageListPos = -1;
     }
 
+
     void SetBitmaps(wxRibbonBar* ribbon,
                     wxSize bitmap_size_large,
                     wxSize bitmap_size_small,
-                    wxBitmap bitmap_large,
-                    wxBitmap bitmap_large_disabled,
-                    wxBitmap bitmap_small,
-                    wxBitmap bitmap_small_disabled)
+                    const wxBitmapBundle &bundle_large,
+                    const wxBitmapBundle &bundle_large_disabled,
+                    const wxBitmapBundle &bundle_small,
+                    const wxBitmapBundle &bundle_small_disabled)
     {
+        double scale = ribbon->GetDPIScaleFactor();
+        wxSize szLarge = bitmap_size_large * scale;
+        wxSize szSmall = bitmap_size_small * scale;
+
+        wxBitmap bitmap_large = (bundle_large.IsOk()) ?
+            bundle_large.GetBitmap(szLarge) : wxNullBitmap;
+
+        wxBitmap bitmap_large_disabled = (bundle_large_disabled.IsOk()) ?
+            bundle_large_disabled.GetBitmap(szLarge): wxNullBitmap;
+
+        wxBitmap bitmap_small = (bundle_small.IsOk()) ?
+            bundle_small.GetBitmap(szSmall) : wxNullBitmap;
+
+        wxBitmap bitmap_small_disabled = (bundle_small_disabled.IsOk()) ?
+            bundle_small_disabled.GetBitmap(szSmall) : wxNullBitmap;
+
         if(!bitmap_large.IsOk())
         {
-            bitmap_large = MakeResizedBitmap(bitmap_small, bitmap_size_large);
-        }
-        else if(bitmap_large.GetLogicalSize() != bitmap_size_large)
-        {
-            bitmap_large = MakeResizedBitmap(bitmap_large, bitmap_size_large);
+            bitmap_large = bundle_small.GetBitmap(szLarge);
         }
 
         if(!bitmap_small.IsOk())
         {
-            bitmap_small = MakeResizedBitmap(bitmap_large, bitmap_size_small);
-        }
-        else if(bitmap_small.GetLogicalSize() != bitmap_size_small)
-        {
-            bitmap_small = MakeResizedBitmap(bitmap_small, bitmap_size_small);
+            bitmap_small = bundle_large.GetBitmap(szSmall);
         }
 
         if(!bitmap_large_disabled.IsOk())
@@ -130,15 +139,32 @@ public:
 
         if ( bitmap_large.IsOk() )
         {
+            bitmap_large.SetScaleFactor(scale);
+            bitmap_large_disabled.SetScaleFactor(scale);
+
+            //Behavior of ImageList is not the same on different platforms
+#ifdef __WXMSW__
+            wxImageList* const
+                buttonImageList = ribbon->GetButtonImageList(szLarge);
+#else
             wxImageList* const
                 buttonImageList = ribbon->GetButtonImageList(bitmap_size_large);
-
+#endif
             barButtonImageListPos = buttonImageList->Add(bitmap_large);
             buttonImageList->Add(bitmap_large_disabled);
         }
 
+        bitmap_small.SetScaleFactor(scale);
+        bitmap_small_disabled.SetScaleFactor(scale);
+
+        //Behavior of ImageList is not the same on different platforms
+#ifdef __WXMSW__
+        wxImageList* const
+            buttonSmallImageList = ribbon->GetButtonImageList(szSmall);
+#else
         wxImageList* const
             buttonSmallImageList = ribbon->GetButtonImageList(bitmap_size_small);
+#endif
 
         barButtonSmallImageListPos = buttonSmallImageList->Add(bitmap_small);
         buttonSmallImageList->Add(bitmap_small_disabled);
@@ -150,8 +176,15 @@ public:
                     wxBitmap& bitmap,
                     wxBitmap& bitmap_small) const
     {
+        //Behavior of ImageList is not the same on different platforms
+#ifdef __WXMSW__
+        double scale = ribbon->GetDPIScaleFactor();
+        wxImageList* buttonImageList = ribbon->GetButtonImageList(bitmap_size_large*scale);
+        wxImageList* buttonSmallImageList = ribbon->GetButtonImageList(bitmap_size_small*scale);
+#else
         wxImageList* buttonImageList = ribbon->GetButtonImageList(bitmap_size_large);
         wxImageList* buttonSmallImageList = ribbon->GetButtonImageList(bitmap_size_small);
+#endif
 
         int pos = barButtonImageListPos;
         int pos_small = barButtonSmallImageListPos;
@@ -350,7 +383,7 @@ bool wxRibbonButtonBar::Create(wxWindow* parent,
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind)
 {
@@ -361,7 +394,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddDropdownButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string)
 {
     return AddButton(button_id, label, bitmap, help_string,
@@ -371,7 +404,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddDropdownButton(
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddToggleButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string)
 {
     return AddButton(button_id, label, bitmap, help_string,
@@ -381,7 +414,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddToggleButton(
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddHybridButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string)
 {
     return AddButton(button_id, label, bitmap, help_string,
@@ -391,10 +424,10 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddHybridButton(
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small,
-                const wxBitmap& bitmap_disabled,
-                const wxBitmap& bitmap_small_disabled,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small,
+                const wxBitmapBundle& bitmap_disabled,
+                const wxBitmapBundle& bitmap_small_disabled,
                 wxRibbonButtonKind kind,
                 const wxString& help_string)
 {
@@ -406,20 +439,23 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small,
-                const wxBitmap& bitmap_disabled,
-                const wxBitmap& bitmap_small_disabled,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small,
+                const wxBitmapBundle& bitmap_disabled,
+                const wxBitmapBundle& bitmap_small_disabled,
                 wxRibbonButtonKind kind,
                 const wxString& help_string)
 {
     wxASSERT(bitmap.IsOk() || bitmap_small.IsOk());
     if(m_buttons.IsEmpty())
     {
+        bool setLarge = m_bitmap_size_large.x == 0 || m_bitmap_size_large.y == 0;
+        bool setSmall = m_bitmap_size_small.x == 0 || m_bitmap_size_small.y == 0;
+
         if(bitmap.IsOk())
         {
-            m_bitmap_size_large = bitmap.GetLogicalSize();
-            if(!bitmap_small.IsOk())
+            if(setLarge)m_bitmap_size_large = bitmap.GetPreferredLogicalSizeFor(m_ribbonBar);
+            if(!bitmap_small.IsOk() && setSmall)
             {
                 m_bitmap_size_small = m_bitmap_size_large;
                 m_bitmap_size_small *= 0.5;
@@ -427,8 +463,8 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         }
         if(bitmap_small.IsOk())
         {
-            m_bitmap_size_small = bitmap_small.GetLogicalSize();
-            if(!bitmap.IsOk())
+            if (setSmall)m_bitmap_size_small = bitmap_small.GetPreferredLogicalSizeFor(m_ribbonBar);
+            if(!bitmap.IsOk() && setLarge)
             {
                 m_bitmap_size_large = m_bitmap_size_small;
                 m_bitmap_size_large *= 2.0;
@@ -500,7 +536,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind)
 {
@@ -512,7 +548,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertDropdownButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string)
 {
     return InsertButton(pos, button_id, label, bitmap, help_string,
@@ -523,7 +559,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertToggleButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string)
 {
     return InsertButton(pos, button_id, label, bitmap, help_string,
@@ -534,7 +570,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertHybridButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string)
 {
     return InsertButton(pos, button_id, label, bitmap, help_string,
@@ -671,10 +707,10 @@ void wxRibbonButtonBar::ToggleButton(int button_id, bool checked)
 
 void wxRibbonButtonBar::SetButtonIcon(
                 int button_id,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small,
-                const wxBitmap& bitmap_disabled,
-                const wxBitmap& bitmap_small_disabled)
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small,
+                const wxBitmapBundle& bitmap_disabled,
+                const wxBitmapBundle& bitmap_small_disabled)
 {
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     if(base == NULL)
@@ -945,6 +981,7 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         base->GetBitmaps(m_ribbonBar,
                          m_bitmap_size_large, m_bitmap_size_small, bitmap,
                          bitmap_small);
+
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
             base->state | button.size, base->label, bitmap, bitmap_small);
      }
@@ -978,8 +1015,10 @@ void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
     // Create() later.
     m_ribbonBar = GetAncestorRibbonBar();
 
-    m_bitmap_size_large = wxSize(32, 32);
-    m_bitmap_size_small = wxSize(16, 16);
+    // Note: size definition before 3.1.7 was always overriden by first added button
+    // in wxRibbonButtonBar::InsertButton()
+    m_bitmap_size_large = wxSize(0, 0);
+    m_bitmap_size_small = wxSize(0, 0);
 
     wxRibbonButtonBarLayout* placeholder_layout = new wxRibbonButtonBarLayout;
     placeholder_layout->overall_size = wxSize(20, 20);
@@ -1530,6 +1569,15 @@ wxRect wxRibbonButtonBar::GetItemRect(int button_id)const
         }
     }
     return wxRect();
+}
+
+void wxRibbonButtonBar::SetButtonBitmapSize(const wxSize& large_btn, const wxSize& small_btn)
+{
+    if (m_buttons.IsEmpty())
+    {
+        m_bitmap_size_large = large_btn;
+        m_bitmap_size_small = small_btn;
+    }
 }
 
 bool wxRibbonButtonBarEvent::PopupMenu(wxMenu* menu)

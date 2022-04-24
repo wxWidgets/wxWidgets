@@ -48,7 +48,7 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
     // NB: help_string cannot be optional as that would cause the signature
@@ -58,28 +58,28 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* AddHybridButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* AddToggleButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small = wxNullBitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
-                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small = wxNullBitmap,
+                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -87,7 +87,7 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
 
@@ -95,31 +95,31 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertHybridButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertToggleButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertButton(
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small = wxNullBitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
-                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small = wxNullBitmap,
+                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -143,10 +143,10 @@ public:
 
     virtual void SetButtonIcon(
                 int button_id,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small = wxNullBitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
-                const wxBitmap& bitmap_small_disabled = wxNullBitmap);
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small = wxNullBitmap,
+                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap);
 
     virtual void SetButtonText(int button_id, const wxString& label);
     virtual void SetButtonTextMinWidth(int button_id,
@@ -156,6 +156,7 @@ public:
                 wxRibbonButtonBarButtonState min_size_class);
     virtual void SetButtonMaxSizeClass(int button_id,
                 wxRibbonButtonBarButtonState max_size_class);
+    virtual void SetButtonBitmapSize(const wxSize& large_btn, const wxSize& small_btn);
 
     virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
     virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
@@ -202,6 +203,7 @@ protected:
     wxRibbonButtonBarButtonInstance* m_active_button;
 
     wxPoint m_layout_offset;
+    // Sizes are the logical size
     wxSize m_bitmap_size_large;
     wxSize m_bitmap_size_small;
     int m_current_layout;
