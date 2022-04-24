@@ -68,6 +68,9 @@ public:
     {
         Create(parent, wxFRAME_SHAPED);
 
+        // Move to the display where it will be shown,
+        // so below calculations are based on the correct DPI.
+        Move(GetTipPoint(), wxSIZE_ALLOW_MINUS_ONE);
 
         wxBoxSizer* const sizerTitle = new wxBoxSizer(wxHORIZONTAL);
         if ( icon.IsOk() )
@@ -343,7 +346,7 @@ private:
         // The size is the vertical size and the offset is the distance from
         // edge for asymmetric tips, currently hard-coded to be the same as the
         // size.
-        const int tipSize = GetTipHeight();
+        const int tipSize = FromDIP(GetTipHeight());
         const int tipOffset = tipSize;
 
         // The horizontal position of the tip.
