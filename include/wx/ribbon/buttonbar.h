@@ -203,7 +203,6 @@ protected:
     wxRibbonButtonBarButtonInstance* m_active_button;
 
     wxPoint m_layout_offset;
-    // Sizes are the logical size
     wxSize m_bitmap_size_large;
     wxSize m_bitmap_size_small;
     int m_current_layout;
