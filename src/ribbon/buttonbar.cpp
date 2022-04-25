@@ -1562,7 +1562,7 @@ wxRect wxRibbonButtonBar::GetItemRect(int button_id)const
 
 void wxRibbonButtonBar::SetButtonBitmapSize(const wxSize& large_btn, const wxSize& small_btn)
 {
-    if (m_buttons.IsEmpty())
+    wxCHECK_RET( m_buttons.IsEmpty(), "Must be called before adding any buttons" );
     {
         m_bitmap_size_large = large_btn;
         m_bitmap_size_small = small_btn;
