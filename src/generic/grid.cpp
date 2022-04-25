@@ -6324,12 +6324,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                         case WXGRID_CURSOR_RESIZE_ROW:
                         case WXGRID_CURSOR_RESIZE_COL:
                             // reset to size from before dragging
-                            if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
-                                wxGridRowOperations().SetLineSize(this,
-                                    m_dragRowOrCol, m_dragRowOrColOldSize);
-                            else
-                                wxGridColumnOperations().SetLineSize(this,
-                                    m_dragRowOrCol, m_dragRowOrColOldSize);
+                            (m_cursorMode == WXGRID_CURSOR_RESIZE_ROW
+                                ? static_cast<const wxGridOperations&>(wxGridRowOperations())
+                                : static_cast<const wxGridOperations&>(wxGridColumnOperations())
+                            ).SetLineSize(this, m_dragRowOrCol, m_dragRowOrColOldSize);
+
                             m_dragRowOrCol = -1;
                             break;
 
