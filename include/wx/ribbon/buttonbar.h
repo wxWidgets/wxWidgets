@@ -156,7 +156,7 @@ public:
                 wxRibbonButtonBarButtonState min_size_class);
     virtual void SetButtonMaxSizeClass(int button_id,
                 wxRibbonButtonBarButtonState max_size_class);
-    virtual void SetButtonBitmapSize(const wxSize& large_btn, const wxSize& small_btn);
+    virtual void SetButtonBitmapSize(const wxSize& size_large, const wxSize& size_small);
 
     virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
     virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
