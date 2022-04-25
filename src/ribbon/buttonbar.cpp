@@ -443,7 +443,8 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
 
         if(bitmap.IsOk())
         {
-            if(setLarge)m_bitmap_size_large = bitmap.GetPreferredLogicalSizeFor(m_ribbonBar);
+            if ( setLarge )
+                m_bitmap_size_large = bitmap.GetPreferredLogicalSizeFor(m_ribbonBar);
             if(!bitmap_small.IsOk() && setSmall)
             {
                 m_bitmap_size_small = m_bitmap_size_large;
