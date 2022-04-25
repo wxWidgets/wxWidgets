@@ -300,8 +300,6 @@ public:
     {
     }
 
-    virtual bool IsFrozen() const { return false; }
-
 private:
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
@@ -331,8 +329,6 @@ public:
         : wxGridSubwindow(parent)
     {
     }
-
-    virtual bool IsFrozen() const { return false; }
 
 private:
     void OnPaint( wxPaintEvent& event );
