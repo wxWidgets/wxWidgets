@@ -6341,11 +6341,14 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                             break;
                     }
                     EndDraggingIfNecessary();
+
                     // ensure that a new drag operation is only started after a LeftUp
                     m_cancelledDragging = true;
                 }
                 else
+                {
                     ClearSelection();
+                }
                 break;
 
             case WXK_TAB:
