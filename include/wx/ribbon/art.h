@@ -19,7 +19,6 @@
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/pen.h"
-#include "wx/bitmap.h"
 #include "wx/bmpbndl.h"
 #include "wx/ribbon/bar.h"
 
