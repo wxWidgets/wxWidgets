@@ -927,6 +927,10 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
         if ( fontname.empty() )
             fontname = FamilyToFaceName(m_family);
 
+        // Courier and Times fonts used to be available everywhere and so are commonly
+        // hard-coded in the applications (even though they shouldn't be, and "teletype"
+        // or "roman" font family should be used instead), so make sure we still support
+        // them even if macOS > 12 doesn't have any fonts with these names any more.
         if ( fontname == "Courier")
             fontname = "Courier New";
         else if ( fontname == "Times" )
