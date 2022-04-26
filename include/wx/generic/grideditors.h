@@ -351,17 +351,17 @@ public:
     wxGridCellChoiceEditor(const wxArrayString& choices,
                            bool allowOthers = false)
         : wxGridCellEditor(),
+          m_choices(choices),
           m_allowOthers(allowOthers)
     {
-        m_choices = wxArrayString(choices);
     }
 
     wxGridCellChoiceEditor(const wxGridCellChoiceEditor& other)
         : wxGridCellEditor(other),
           m_value(other.m_value),
+          m_choices(other.m_choices),
           m_allowOthers(other.m_allowOthers)
     {
-        m_choices = wxArrayString(other.m_choices);
     }
 
     virtual void Create(wxWindow* parent,

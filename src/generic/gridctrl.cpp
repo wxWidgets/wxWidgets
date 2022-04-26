@@ -265,9 +265,9 @@ wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxString& choices)
 }
 
 wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other)
-    : wxGridCellStringRenderer(other)
+    : wxGridCellStringRenderer(other),
+      m_choices(other.m_choices)
 {
-    m_choices = wxArrayString(other.m_choices);
 }
 
 wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
@@ -297,7 +297,6 @@ void wxGridCellChoiceRenderer::SetParameters(const wxString& params)
         m_choices.Add(tk.GetNextToken());
     }
 }
-
 
 // ----------------------------------------------------------------------------
 // wxGridCellEnumRenderer

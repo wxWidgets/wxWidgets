@@ -230,15 +230,12 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
 
 wxGridCellEditor::wxGridCellEditor(const wxGridCellEditor& other)
     : wxGridCellWorker(other),
-      m_control(other.m_control)
+      m_control(other.m_control),
+      m_colFgOld(other.m_colFgOld),
+      m_colBgOld(other.m_colBgOld),
+      m_fontOld(other.m_fontOld)
 {
-    if ( other.m_attr != NULL )
-    {
-        m_attr = other.m_attr->Clone();
-    }
-    m_colFgOld = wxColour(other.m_colFgOld);
-    m_colBgOld = wxColour(other.m_colBgOld);
-    m_fontOld = wxFont(other.m_fontOld);
+    m_attr = other.m_attr ? other.m_attr->Clone() : NULL;
 }
 
 wxGridCellEditor::~wxGridCellEditor()
