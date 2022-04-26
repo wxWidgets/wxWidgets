@@ -140,10 +140,8 @@ class wxGridDirectionOperations;
 class WXDLLIMPEXP_CORE wxGridCellWorker : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
-    // default ctor
     wxGridCellWorker() {}
 
-    // copy ctor
     wxGridCellWorker(const wxGridCellWorker& other);
 
     // interpret renderer parameters: arbitrary string whose interpretation is
@@ -172,13 +170,11 @@ private:
 class WXDLLIMPEXP_CORE wxGridCellRenderer : public wxGridCellWorker
 {
 public:
-    // default ctor
     wxGridCellRenderer()
         : wxGridCellWorker()
     {
     }
 
-    // copy ctor
     wxGridCellRenderer(const wxGridCellRenderer& other)
         : wxGridCellWorker(other)
     {
@@ -391,7 +387,6 @@ private:
 class WXDLLIMPEXP_CORE wxGridCellEditor : public wxGridCellWorker
 {
 public:
-    // default ctor
     wxGridCellEditor()
         : wxGridCellWorker(),
           m_control(NULL),
@@ -399,7 +394,6 @@ public:
     {
     }
 
-    // copy ctor
     wxGridCellEditor(const wxGridCellEditor& other);
 
     bool IsCreated() const { return m_control != NULL; }
@@ -557,13 +551,11 @@ typedef wxObjectDataPtr<wxGridCellEditor> wxGridCellEditorPtr;
 class wxGridCellActivatableEditor : public wxGridCellEditor
 {
 public:
-    // default ctor
     wxGridCellActivatableEditor()
         : wxGridCellEditor()
     {
     }
 
-    // copy ctor
     wxGridCellActivatableEditor(const wxGridCellActivatableEditor& other)
         : wxGridCellEditor(other)
     {

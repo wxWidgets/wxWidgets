@@ -61,7 +61,6 @@ public:
     {
     }
 
-    // copy ctor
     wxGridCellTextEditor(const wxGridCellTextEditor& other);
 
     virtual void Create(wxWindow* parent,
@@ -121,7 +120,6 @@ public:
     {
     }
 
-    // copy ctor
     wxGridCellNumberEditor(const wxGridCellNumberEditor& other)
         : wxGridCellTextEditor(other),
           m_min(other.m_min),
@@ -219,7 +217,6 @@ public:
     {
     }
 
-    // copy ctor
     wxGridCellFloatEditor(const wxGridCellFloatEditor& other)
         : wxGridCellTextEditor(other),
           m_width(other.m_width),
@@ -271,13 +268,11 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
-    // default ctor
     wxGridCellBoolEditor()
         : wxGridCellEditor()
     {
     }
 
-    // copy ctor
     wxGridCellBoolEditor(const wxGridCellBoolEditor& other)
         : wxGridCellEditor(other),
           m_value(other.m_value)
@@ -361,7 +356,6 @@ public:
         m_choices = wxArrayString(choices);
     }
 
-    // copy ctor
     wxGridCellChoiceEditor(const wxGridCellChoiceEditor& other)
         : wxGridCellEditor(other),
           m_value(other.m_value),
@@ -411,7 +405,6 @@ class WXDLLIMPEXP_ADV wxGridCellEnumEditor : public wxGridCellChoiceEditor
 public:
     wxGridCellEnumEditor( const wxString& choices = wxEmptyString );
 
-    // copy ctor
     wxGridCellEnumEditor(const wxGridCellEnumEditor& other)
         : wxGridCellChoiceEditor(other),
           m_index(other.m_index)
@@ -437,13 +430,11 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
 {
 public:
-    // default ctor
     wxGridCellAutoWrapStringEditor()
         : wxGridCellTextEditor()
     {
     }
 
-    // copy ctor
     wxGridCellAutoWrapStringEditor(const wxGridCellAutoWrapStringEditor& other)
         : wxGridCellTextEditor(other)
     {
@@ -464,7 +455,6 @@ class WXDLLIMPEXP_ADV wxGridCellDateEditor : public wxGridCellEditor
 public:
     explicit wxGridCellDateEditor(const wxString& format = wxString());
 
-    // copy ctor
     wxGridCellDateEditor(const wxGridCellDateEditor& other)
         : wxGridCellEditor(other),
           m_value(other.m_value),

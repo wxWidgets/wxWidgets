@@ -23,13 +23,11 @@
 class WXDLLIMPEXP_ADV wxGridCellStringRenderer : public wxGridCellRenderer
 {
 public:
-    // default ctor
     wxGridCellStringRenderer()
         : wxGridCellRenderer()
     {
     }
 
-    // copy ctor
     wxGridCellStringRenderer(const wxGridCellStringRenderer& other)
         : wxGridCellRenderer(other)
     {
@@ -71,7 +69,6 @@ public:
     {
     }
 
-    // copy ctor
     wxGridCellNumberRenderer(const wxGridCellNumberRenderer& other)
         : wxGridCellStringRenderer(other),
           m_minValue(other.m_minValue),
@@ -116,7 +113,6 @@ public:
                             int precision = -1,
                             int format = wxGRID_FLOAT_FORMAT_DEFAULT);
 
-    // copy ctor
     wxGridCellFloatRenderer(const wxGridCellFloatRenderer& other)
         : wxGridCellStringRenderer(other),
           m_width(other.m_width),
@@ -170,13 +166,11 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellBoolRenderer : public wxGridCellRenderer
 {
 public:
-    // default ctor
     wxGridCellBoolRenderer()
         : wxGridCellRenderer()
     {
     }
 
-    // copy ctor
     wxGridCellBoolRenderer(const wxGridCellBoolRenderer& other)
         : wxGridCellRenderer(other)
     {
@@ -217,7 +211,6 @@ class WXDLLIMPEXP_ADV wxGridCellDateRenderer : public wxGridCellStringRenderer
 public:
     explicit wxGridCellDateRenderer(const wxString& outformat = wxString());
 
-    // copy ctor
     wxGridCellDateRenderer(const wxGridCellDateRenderer& other)
         : wxGridCellStringRenderer(other),
           m_oformat(other.m_oformat),
@@ -271,7 +264,6 @@ public:
     {
     }
 
-    // copy ctor
     wxGridCellDateTimeRenderer(const wxGridCellDateTimeRenderer& other)
         : wxGridCellDateRenderer(other),
           m_iformat(other.m_iformat)
@@ -297,7 +289,6 @@ class WXDLLIMPEXP_ADV wxGridCellChoiceRenderer : public wxGridCellStringRenderer
 public:
     wxGridCellChoiceRenderer( const wxString& choices = wxEmptyString );
 
-    // copy ctor
     wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other);
 
     virtual wxSize GetMaxBestSize(wxGrid& grid,
@@ -320,13 +311,11 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellEnumRenderer : public wxGridCellChoiceRenderer
 {
 public:
-    // default ctor
     wxGridCellEnumRenderer( const wxString& choices = wxEmptyString )
         : wxGridCellChoiceRenderer(choices)
     {
     }
 
-    // copy ctor
     wxGridCellEnumRenderer(const wxGridCellEnumRenderer& other)
         : wxGridCellChoiceRenderer(other)
     {
@@ -356,13 +345,11 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
 {
 public:
-    // default ctor
     wxGridCellAutoWrapStringRenderer()
         : wxGridCellStringRenderer()
     {
     }
 
-    // copy ctor
     wxGridCellAutoWrapStringRenderer(const wxGridCellAutoWrapStringRenderer& other)
         : wxGridCellStringRenderer(other)
     {
