@@ -14,7 +14,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/hashmap.h"
-#include "wx/sharedptr.h"
+#include "wx/object.h"
 
 typedef int (*wxShadowObjectMethod)(void*, void*);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
@@ -187,13 +187,18 @@ protected:
     }
 
 private:
+    class wxRefCountedClientDataContainer : public wxClientDataContainer,
+                                            public wxRefCounter
+    {
+    };
+
     // Helper function that will create m_data if it is currently NULL
     wxClientDataContainer *GetValidClientData();
 
     // m_data is shared, not deep copied, when cloned. If you make changes to
     // the data in one instance of your class, you change it for all cloned
     // instances!
-    wxSharedPtr<wxClientDataContainer> m_data;
+    wxObjectDataPtr<wxRefCountedClientDataContainer> m_data;
 };
 
 #endif // _WX_CLNTDATAH__

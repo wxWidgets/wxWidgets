@@ -96,7 +96,7 @@ wxClientDataContainer *wxSharedClientDataContainer::GetValidClientData()
 {
     if ( !HasClientDataContainer() )
     {
-        m_data = new wxClientDataContainer;
+        m_data = new wxRefCountedClientDataContainer;
     }
     return m_data.get();
 }
