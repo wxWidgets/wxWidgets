@@ -36,8 +36,8 @@ This version of wxWidgets supports the following primary platforms:
 Most popular C++ compilers are supported including but not limited to:
 
 - Microsoft Visual C++ 2005 or later (up to 2022).
-- g++ 4 or later, including MinGW/MinGW-64/TDM under Windows.
-- Clang under macOS and Linux.
+- g++ 4 or later (up to 12), including MinGW/MinGW-64/TDM under Windows.
+- Clang (up to 13).
 - Intel icc compiler.
 - Oracle (ex-Sun) CC.
 
