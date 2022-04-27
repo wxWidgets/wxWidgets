@@ -113,7 +113,7 @@ class WXDLLIMPEXP_ADV wxGridCellNumberEditor : public wxGridCellTextEditor
 public:
     // allows to specify the range - if min == max == -1, no range checking is
     // done
-    wxGridCellNumberEditor(int min = -1, int max = -1)
+    explicit wxGridCellNumberEditor(int min = -1, int max = -1)
         : wxGridCellTextEditor(),
           m_min(min),
           m_max(max)
@@ -207,9 +207,9 @@ enum wxGridCellFloatFormat
 class WXDLLIMPEXP_ADV wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
-    wxGridCellFloatEditor(int width = -1,
-                          int precision = -1,
-                          int format = wxGRID_FLOAT_FORMAT_DEFAULT)
+    explicit wxGridCellFloatEditor(int width = -1,
+                                   int precision = -1,
+                                   int format = wxGRID_FLOAT_FORMAT_DEFAULT)
         : wxGridCellTextEditor(),
           m_width(width),
           m_precision(precision),
@@ -344,11 +344,11 @@ class WXDLLIMPEXP_ADV wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
     // if !allowOthers, user can't type a string not in choices array
-    wxGridCellChoiceEditor(size_t count = 0,
-                           const wxString choices[] = NULL,
-                           bool allowOthers = false);
-    wxGridCellChoiceEditor(const wxArrayString& choices,
-                           bool allowOthers = false)
+    explicit wxGridCellChoiceEditor(size_t count = 0,
+                                    const wxString choices[] = NULL,
+                                    bool allowOthers = false);
+    explicit wxGridCellChoiceEditor(const wxArrayString& choices,
+                                    bool allowOthers = false)
         : wxGridCellEditor(),
           m_choices(choices),
           m_allowOthers(allowOthers)
@@ -402,7 +402,7 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellEnumEditor : public wxGridCellChoiceEditor
 {
 public:
-    wxGridCellEnumEditor(const wxString& choices = wxString());
+    explicit wxGridCellEnumEditor(const wxString& choices = wxString());
 
     wxGridCellEnumEditor(const wxGridCellEnumEditor& other)
         : wxGridCellChoiceEditor(other),
