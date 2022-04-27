@@ -1786,7 +1786,7 @@ public:
         @onlyfor{wxosx}
         @since 3.1.6
     */
-    virtual void OSXEnableNewLineReplacement(bool enable);
+    void OSXEnableNewLineReplacement(bool enable);
 
     //@}
 
