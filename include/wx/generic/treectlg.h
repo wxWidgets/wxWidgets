@@ -357,12 +357,12 @@ protected:
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
-private:
     void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     {
         InitVisualAttributes();
     }
 
+private:
     // (Re)initialize colours, fonts, pens, brushes used by the control using
     // the current system colours and font.
     void InitVisualAttributes();
