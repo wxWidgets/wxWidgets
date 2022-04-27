@@ -79,7 +79,7 @@ void wxSharedClientDataContainer::SetClientObject(wxClientData *data)
 
 wxClientData *wxSharedClientDataContainer::GetClientObject() const
 {
-    return HasClientDataContainer() ? GetClientDataContainer()->GetClientObject() : NULL;
+    return HasClientDataContainer() ? m_data->GetClientObject() : NULL;
 }
 
 void wxSharedClientDataContainer::SetClientData(void *data)
@@ -89,7 +89,7 @@ void wxSharedClientDataContainer::SetClientData(void *data)
 
 void *wxSharedClientDataContainer::GetClientData() const
 {
-    return HasClientDataContainer() ? GetClientDataContainer()->GetClientData() : NULL;
+    return HasClientDataContainer() ? m_data->GetClientData() : NULL;
 }
 
 wxClientDataContainer *wxSharedClientDataContainer::GetValidClientData()

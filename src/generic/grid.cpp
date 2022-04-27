@@ -255,7 +255,7 @@ int wxGridColumnOperations::GetFirstLine(const wxGrid *grid, wxGridWindow *gridW
 
 wxGridCellWorker::wxGridCellWorker(const wxGridCellWorker& other)
 {
-    SetClientDataContainer(other.GetClientDataContainer());
+    CopyClientDataContainer(other);
 }
 
 void wxGridCellWorker::SetParameters(const wxString& WXUNUSED(params))
@@ -450,7 +450,7 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
         m_editor->IncRef();
     }
 
-    attr->SetClientDataContainer(GetClientDataContainer());
+    attr->CopyClientDataContainer(*this);
 
     if ( IsReadOnly() )
         attr->SetReadOnly();
@@ -494,7 +494,7 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
     }
     if ( !HasClientDataContainer() && mergefrom->HasClientDataContainer() )
     {
-        SetClientDataContainer(mergefrom->GetClientDataContainer());
+        CopyClientDataContainer(*mergefrom);
     }
     if ( !HasReadWriteMode() && mergefrom->HasReadWriteMode() )
         SetReadOnly(mergefrom->IsReadOnly());

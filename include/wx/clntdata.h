@@ -181,8 +181,10 @@ public:
 
 protected:
     bool HasClientDataContainer() const { return m_data.get() != NULL; }
-    wxSharedPtr<wxClientDataContainer> GetClientDataContainer() const { return m_data; }
-    void SetClientDataContainer(wxSharedPtr<wxClientDataContainer> data) { m_data = data; }
+    void CopyClientDataContainer(const wxSharedClientDataContainer& other)
+    {
+        m_data = other.m_data;
+    }
 
 private:
     // Helper function that will create m_data if it is currently NULL
