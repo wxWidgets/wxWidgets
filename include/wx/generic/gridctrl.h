@@ -283,7 +283,7 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellChoiceRenderer : public wxGridCellStringRenderer
 {
 public:
-    wxGridCellChoiceRenderer( const wxString& choices = wxEmptyString );
+    wxGridCellChoiceRenderer(const wxString& choices = wxString());
 
     wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other);
 
@@ -309,7 +309,7 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellEnumRenderer : public wxGridCellChoiceRenderer
 {
 public:
-    wxGridCellEnumRenderer( const wxString& choices = wxEmptyString )
+    wxGridCellEnumRenderer(const wxString& choices = wxString())
         : wxGridCellChoiceRenderer(choices)
     {
     }

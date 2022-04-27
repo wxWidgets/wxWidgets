@@ -311,7 +311,7 @@ public:
     // set the string values returned by GetValue() for the true and false
     // states, respectively
     static void UseStringValues(const wxString& valueTrue = wxT("1"),
-                                const wxString& valueFalse = wxEmptyString);
+                                const wxString& valueFalse = wxString());
 
     // return true if the given string is equal to the string representation of
     // true value which we currently use
@@ -402,7 +402,7 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellEnumEditor : public wxGridCellChoiceEditor
 {
 public:
-    wxGridCellEnumEditor( const wxString& choices = wxEmptyString );
+    wxGridCellEnumEditor(const wxString& choices = wxString());
 
     wxGridCellEnumEditor(const wxGridCellEnumEditor& other)
         : wxGridCellChoiceEditor(other),
