@@ -1601,13 +1601,16 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
 
     wxSize size(LOWORD(rc), HIWORD(rc));
 
-    // We have to add space for the scrollbars ourselves, they're not taken
-    // into account by ListView_ApproximateViewRect(), at least not with
-    // commctrl32.dll v6.
+    // We have to account for the scrollbars ourselves, as the control itself
+    // seems to always reserve space for the horizontal scrollbar, even when it
+    // is not needed, but does not reserve space for the vertical scrollbar,
+    // even when it is used. This doesn't make any sense, but using this logic
+    // results in correct result, i.e. just enough space, in all cases.
     const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
-    if ( mswStyle & WS_HSCROLL )
-        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+    if ( !(mswStyle & WS_HSCROLL) )
+        size.y -= wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+
     if ( mswStyle & WS_VSCROLL )
         size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
 
