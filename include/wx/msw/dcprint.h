@@ -36,15 +36,9 @@ public:
 
     virtual wxRect GetPaperRect() const wxOVERRIDE;
 
-    virtual wxSize FromDIP(const wxSize& sz) const wxOVERRIDE
-    {
-        return sz;
-    }
+    virtual wxSize FromDIP(const wxSize& sz) const wxOVERRIDE;
 
-    virtual wxSize ToDIP(const wxSize& sz) const wxOVERRIDE
-    {
-        return sz;
-    }
+    virtual wxSize ToDIP(const wxSize& sz) const wxOVERRIDE;
 
     void SetFont(const wxFont& font) wxOVERRIDE;
 

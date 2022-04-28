@@ -231,6 +231,16 @@ wxRect wxPrinterDCImpl::GetPaperRect() const
     return wxRect(x, y, w, h);
 }
 
+wxSize wxPrinterDCImpl::FromDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
+wxSize wxPrinterDCImpl::ToDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
 void wxPrinterDCImpl::SetFont(const wxFont& font)
 {
     wxFont scaledFont = font;
