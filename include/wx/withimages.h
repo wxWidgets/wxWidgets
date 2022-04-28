@@ -55,10 +55,17 @@ public:
         return m_imageList ? m_imageList->GetImageCount() : 0;
     }
 
-    // Return true if we have any images at all.
+    // Return true if we are using any images.
     bool HasImages() const
     {
-        return GetImageCount() != 0;
+        // Note that the sole presence of the image list indicates that we're
+        // using images, even if it is currently empty, because images can be
+        // added to it at any moment (it's common and valid to create an image
+        // list and associate it with the control first and fill it later) and
+        // it's better to err on the side of having the images and not showing
+        // anything if there are really none than decide that we don't have any
+        // and not show those that we do have.
+        return !m_images.empty() || m_imageList;
     }
 
     // Sets the images to use.
