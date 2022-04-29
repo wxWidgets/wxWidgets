@@ -35,6 +35,7 @@
 
 #include "wx/datectrl.h"
 #include "wx/generic/datectrl.h"
+#include "wx/uilocale.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -243,7 +244,7 @@ private:
     wxString GetLocaleDateFormat() const
     {
 #if wxUSE_INTL
-        wxString fmt = wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT);
+        wxString fmt = wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT);
         if ( HasDPFlag(wxDP_SHOWCENTURY) )
             fmt.Replace("%y", "%Y");
 

@@ -39,6 +39,7 @@
 #include "wx/thread.h"
 #include "wx/vidmode.h"
 #include "wx/evtloop.h"
+#include "wx/uilocale.h"
 
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"
@@ -206,19 +207,11 @@ wxVideoMode wxAppBase::GetDisplayMode() const
 wxLayoutDirection wxAppBase::GetLayoutDirection() const
 {
 #if wxUSE_INTL
-    const wxLocale *const locale = wxGetLocale();
-    if ( locale )
-    {
-        const wxLanguageInfo *const
-            info = wxLocale::GetLanguageInfo(locale->GetLanguage());
-
-        if ( info )
-            return info->LayoutDirection;
-    }
-#endif // wxUSE_INTL
-
+    return wxUILocale::GetCurrent().GetLayoutDirection();
+#else
     // we don't know
     return wxLayout_Default;
+#endif // wxUSE_INTL
 }
 
 #if wxUSE_CMDLINE_PARSER
