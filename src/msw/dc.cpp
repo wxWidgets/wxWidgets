@@ -2147,7 +2147,7 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
     wxDCImpl::SetDeviceOrigin( x, y );
 
-    ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
+    ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
 
     m_isClipBoxValid = false;
 }
