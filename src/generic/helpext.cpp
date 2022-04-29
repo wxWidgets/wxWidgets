@@ -26,6 +26,7 @@
 #include "wx/filename.h"
 #include "wx/textfile.h"
 #include "wx/generic/helpext.h"
+#include "wx/uilocale.h"
 
 #include <stdio.h>
 #include <ctype.h>
@@ -220,10 +221,10 @@ bool wxExtHelpController::LoadFile(const wxString& file)
     // "/usr/local/myapp/help" and the current wxLocale is set to be "de", then
     // look in "/usr/local/myapp/help/de/" first and fall back to
     // "/usr/local/myapp/help" if that doesn't exist.
-    const wxLocale * const loc = wxGetLocale();
-    if ( loc )
+    wxLocaleIdent locId = wxUILocale::GetCurrent().GetLocaleId();
+    if ( !locId.IsEmpty() )
     {
-        wxString locName = loc->GetName();
+        wxString locName = locId.GetTag(wxLOCALE_TAGTYPE_POSIX);
 
         // the locale is in general of the form xx_YY.zzzz, try the full firm
         // first and then also more general ones

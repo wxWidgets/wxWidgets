@@ -27,6 +27,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/timectrl.h"
+#include "wx/uilocale.h"
 
 // This class is only compiled if there is no native version or if we
 // explicitly want to use both the native and generic one (this is useful for
@@ -85,7 +86,7 @@ public:
         // instead of zeros) too as this is the most common unsupported case in
         // practice.
 #if wxUSE_INTL
-        m_useAMPM = wxLocale::GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
+        m_useAMPM = wxUILocale::GetCurrent().GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
 #else
         m_useAMPM = false;
 #endif

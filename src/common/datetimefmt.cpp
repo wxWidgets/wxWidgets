@@ -52,6 +52,7 @@
 
 #include "wx/datetime.h"
 #include "wx/time.h"
+#include "wx/uilocale.h"
 
 // ============================================================================
 // implementation of wxDateTime
@@ -320,11 +321,11 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     wxString format = formatp;
 #ifdef __WXOSX__
     if ( format.Contains("%c") )
-        format.Replace("%c", wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT));
+        format.Replace("%c", wxUILocale::GetCurrent().GetInfo(wxLOCALE_DATE_TIME_FMT));
     if ( format.Contains("%x") )
-        format.Replace("%x", wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT));
+        format.Replace("%x", wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT));
     if ( format.Contains("%X") )
-        format.Replace("%X", wxLocale::GetInfo(wxLOCALE_TIME_FMT));
+        format.Replace("%X", wxUILocale::GetCurrent().GetInfo(wxLOCALE_TIME_FMT));
 #endif
     // we have to use our own implementation if the date is out of range of
     // strftime()
@@ -1177,7 +1178,7 @@ wxDateTime::ParseFormat(const wxString& date,
 
 #if wxUSE_INTL
                     const wxString
-                        fmtDateTime = wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT);
+                        fmtDateTime = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DATE_TIME_FMT);
                     if ( !fmtDateTime.empty() )
                         dt = ParseFormatAt(input, end, fmtDateTime);
 #endif // wxUSE_INTL
@@ -1399,8 +1400,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
 #if wxUSE_INTL
                     wxString
-                        fmtDate = wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT),
-                        fmtDateAlt = wxLocale::GetInfo(wxLOCALE_LONG_DATE_FMT);
+                        fmtDate = wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT),
+                        fmtDateAlt = wxUILocale::GetCurrent().GetInfo(wxLOCALE_LONG_DATE_FMT);
 #else // !wxUSE_INTL
                     wxString fmtDate, fmtDateAlt;
 #endif // wxUSE_INTL/!wxUSE_INTL
@@ -1449,7 +1450,7 @@ wxDateTime::ParseFormat(const wxString& date,
             case wxT('X'):       // locale default time representation
                 {
 #if wxUSE_INTL
-                    wxString fmtTime = wxLocale::GetInfo(wxLOCALE_TIME_FMT),
+                    wxString fmtTime = wxUILocale::GetCurrent().GetInfo(wxLOCALE_TIME_FMT),
                              fmtTimeAlt;
 #else // !wxUSE_INTL
                     wxString fmtTime, fmtTimeAlt;
