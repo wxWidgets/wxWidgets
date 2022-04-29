@@ -168,8 +168,8 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     wxString nameicon, namemini;
     nIndex = wxNOT_FOUND;
 #if wxUSE_INTL // try "Icon[locale name]" first
-    if ( locale )
-        nIndex = file.pIndexOf(wxT("Icon[")+locale->GetName()+wxT("]="));
+    if ( wxUILocale::GetCurrent().IsSupported() )
+        nIndex = file.pIndexOf(wxT("Icon[")+wxUILocale::GetCurrent().GetName()+wxT("]="));
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
         nIndex = file.pIndexOf( wxT("Icon=") );
