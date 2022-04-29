@@ -813,8 +813,6 @@ void wxMSWDCImpl::Clear()
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
     ::FillRect(GetHdc(), &rect, hbr);
-
-    RealizeScaleAndOrigin();
 }
 
 bool wxMSWDCImpl::DoFloodFill(wxCoord x,
