@@ -1932,7 +1932,7 @@ void GridFrame::OnVTable(wxCommandEvent& )
                                      "Size: ",
                                      "wxGridDemo question",
                                      s_sizeGrid,
-                                     0, 32000, this);
+                                     0, 10000000, this);
 
     if ( s_sizeGrid != -1 )
     {
