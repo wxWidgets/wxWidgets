@@ -438,8 +438,14 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
     wxUnusedVar(x); wxUnusedVar(y);
     wxUnusedVar(stream);
 
+    wxFAIL_MSG
+    (
+        "Embedding bitmaps in SVG is not available because "
+        "wxWidgets was built with wxUSE_BASE64 set to 0."
+    );
+
     return false;
-#endif //wxUSE_BASE64
+#endif // wxUSE_BASE64
 }
 
 // ----------------------------------------------------------
