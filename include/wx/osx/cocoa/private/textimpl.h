@@ -85,6 +85,9 @@ public :
     virtual bool GetNewLineReplacement() wxOVERRIDE;
     virtual void SetInternalSelection( long from , long to );
     virtual void UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* editor);
+
+    virtual wxSize GetBestSize() const wxOVERRIDE;
+
 protected :
     NSTextField* m_textField;
     long m_selStart;
