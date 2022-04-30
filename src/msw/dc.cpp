@@ -404,6 +404,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBrushAttrsSetter);
 };
 
+namespace
+{
+
 // this class sets the stretch blit mode to COLORONCOLOR during its lifetime
 class StretchBltModeChanger
 {
@@ -433,6 +436,8 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(StretchBltModeChanger);
 };
+
+} // anonymous namespace
 
 // ===========================================================================
 // implementation
