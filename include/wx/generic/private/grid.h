@@ -482,7 +482,7 @@ public:
     // if this object is a wxGridColumnOperations and vice versa.
     virtual wxGridOperations& Dual() const = 0;
 
-    // returns wxHORIZONTAL or wxVERTICAL
+    // returns wxHORIZONTAL or wxVERTICAL for row/col operations
     virtual int GetOrientation() const = 0;
 
     // return row/col specific cursor modes
@@ -601,7 +601,7 @@ public:
     virtual wxGridWindow *GetFrozenGrid(wxGrid* grid) const = 0;
 
 
-
+    // return the value of m_canDragRow/ColMove
     virtual bool CanDragMove(wxGrid *grid) const = 0;
 
     // call DoEndMoveRow or DoEndMoveColumn
@@ -614,7 +614,6 @@ public:
     virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event, wxGridWindow* gridWindow) const = 0;
 
 
-    
     // extend current selection block up to given row or column
     virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
         const wxMouseEvent &event,
@@ -626,6 +625,7 @@ public:
 
     // check whether the row or columns first cell is in selected
     virtual bool IsLineInSelection(wxGrid *grid, int line) const = 0;
+
 
     // sent a result with row or column and the other value -1
     virtual wxGrid::EventResult SendEvent(wxGrid *grid, wxEventType eventType,
@@ -744,13 +744,11 @@ public:
 
     virtual bool CanDragMove(wxGrid *grid) const wxOVERRIDE
         { return grid->m_canDragRowMove; }
-
     virtual void DoEndMove(wxGrid* grid, int line) const wxOVERRIDE
         { grid->DoEndMoveRow(line); }
 
     virtual bool CanDragLineSize(wxGrid *grid, int line) const wxOVERRIDE
         { return grid->CanDragRowSize(line); }
-
     virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event,
         wxGridWindow* gridWindow) const wxOVERRIDE
         { grid->DoEndDragResizeRow(event, gridWindow); }
@@ -889,17 +887,14 @@ public:
 
     virtual bool CanDragMove(wxGrid *grid) const wxOVERRIDE
         { return grid->m_canDragColMove; }
-
     virtual void DoEndMove(wxGrid* grid, int line) const wxOVERRIDE
         { grid->DoEndMoveCol(line); }
 
     virtual bool CanDragLineSize(wxGrid *grid, int line) const wxOVERRIDE
         { return grid->CanDragColSize(line); }
-
     virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event,
         wxGridWindow* gridWindow) const wxOVERRIDE
         { grid->DoEndDragResizeCol(event, gridWindow); }
-
 
     virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
         const wxMouseEvent &event,
