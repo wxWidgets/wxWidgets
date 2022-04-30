@@ -259,8 +259,7 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
         XLOG2DEV_2(x1), YLOG2DEV_2(y1),
         XLOG2DEV_2(x2), YLOG2DEV_2(y2));
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxWindowDCImpl::DoCrossHair( wxCoord x, wxCoord y )
@@ -369,8 +368,7 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
             XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
             xxc_2 - r, yyc_2 - r, 2 * r, 2 * r, alpha1, alpha2);
     }
-    CalcBoundingBox (x1, y1);
-    CalcBoundingBox (x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
@@ -414,8 +412,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
             XDrawArc ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
             XLOG2DEV_2 (x), YLOG2DEV_2 (y),wd,hd,start,end);
     }
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
@@ -555,8 +552,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
             XLOG2DEV_2 (x), YLOG2DEV_2 (y),
             wd, hd);
     }
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -715,8 +711,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
                 rw_d2, rh_d2, 180 * 64, 90 * 64);
         }
     }
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -767,8 +762,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
             XLOG2DEVREL (width) - WX_GC_CF,
             YLOG2DEVREL (height) - WX_GC_CF, 0, angle);
     }
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 
 }
 
@@ -993,8 +987,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
             }
 
         } /* Remote/local (Display*) m_display */
-        CalcBoundingBox (xdest, ydest);
-        CalcBoundingBox (xdest + width, ydest + height);
+        CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height));
 
         SetLogicalFunction(orig);
 
@@ -1154,8 +1147,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     wxCoord w, h;
     DoGetTextExtent (text, &w, &h);
-    CalcBoundingBox (x + w, y + h);
-    CalcBoundingBox (x, y);
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 }
 
 void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y,
@@ -1290,8 +1282,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
                             oldForegroundPixel);
     }
 
-    CalcBoundingBox (minx, miny);
-    CalcBoundingBox (maxx, maxy);
+    CalcBoundingBox(minx, miny, maxx, maxy);
 }
 
 bool wxWindowDCImpl::CanGetTextExtent() const

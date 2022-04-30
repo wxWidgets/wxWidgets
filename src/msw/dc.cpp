@@ -911,8 +911,7 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
         wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
     }
 
-    CalcBoundingBox(rect.left, rect.top);
-    CalcBoundingBox(rect.right, rect.bottom);
+    CalcBoundingBox(rect.left, rect.top, rect.right, rect.bottom);
 }
 
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
@@ -944,8 +943,7 @@ void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
         wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
     }
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
@@ -997,8 +995,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
         Arc(GetHdc(),xxx1,yyy1,xxx2,yyy2, xx1,yy1,xx2,yy2);
     }
 
-    CalcBoundingBox(xc - r, yc - r);
-    CalcBoundingBox(xc + r, yc + r);
+    CalcBoundingBox(xc - r, yc - r, xc + r, yc + r);
 }
 
 void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -1147,8 +1144,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     (void)Rectangle(GetHdc(), x1dev, y1dev, x2dev, y2dev);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
@@ -1179,8 +1175,7 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     (void)RoundRect(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2),
         YLOG2DEV(y2), (int) (2*XLOG2DEV(radius)), (int)( 2*YLOG2DEV(radius)));
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -1197,8 +1192,7 @@ void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 
     ::Ellipse(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 #if wxUSE_SPLINES
@@ -1331,8 +1325,7 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
     (void)Arc(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2),
               rx1, ry1, rx2, ry2);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -1356,8 +1349,7 @@ void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
         ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
     }
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + icon.GetWidth(), y + icon.GetHeight());
+    CalcBoundingBox(wxPoint(x, y), icon.GetSize());
 }
 
 void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
@@ -1401,8 +1393,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
         if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, curBmp) )
         {
-            CalcBoundingBox(x, y);
-            CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
+            CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
             return;
         }
     }
@@ -1510,8 +1501,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         ::DeleteDC( memdc );
     }
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
+    CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
 }
 
 void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
@@ -1536,11 +1526,7 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     DrawAnyText(text, x, y);
 
     // update the bounding box
-    CalcBoundingBox(x, y);
-
-    wxCoord w, h;
-    GetOwner()->GetTextExtent(text, &w, &h);
-    CalcBoundingBox(x + w, y + h);
+    CalcBoundingBox(wxPoint(x, y), GetOwner()->GetTextExtent(text));
 }
 
 void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
@@ -1633,14 +1619,12 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     // determining which of them is really topmost/leftmost/...)
 
     // "upper left" and "upper right"
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 
     // "bottom left" and "bottom right"
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 }
 
 // ---------------------------------------------------------------------------
@@ -2306,8 +2290,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         if ( AlphaBlt(this, xdest, ydest, dstWidth, dstHeight,
                       xsrc, ysrc, srcWidth, srcHeight, hdcSrc, bmpSrc) )
         {
-            CalcBoundingBox(xdest, ydest);
-            CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
+            CalcBoundingBox(wxPoint(xdest, ydest), wxSize(dstWidth, dstHeight));
             return true;
         }
     }
@@ -2595,8 +2578,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
     if ( success )
     {
-        CalcBoundingBox(xdest, ydest);
-        CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
+        CalcBoundingBox(wxPoint(xdest, ydest), wxSize(dstWidth, dstHeight));
     }
 
     return success;
@@ -2943,8 +2925,7 @@ void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
                 : GRADIENT_FILL_RECT_V
          ) )
     {
-        CalcBoundingBox(rect.GetLeft(), rect.GetBottom());
-        CalcBoundingBox(rect.GetRight(), rect.GetTop());
+        CalcBoundingBox(rect);
     }
     else
     {

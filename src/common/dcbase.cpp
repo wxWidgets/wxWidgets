@@ -637,8 +637,7 @@ void wxDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     DoDrawLine(x1, y3, x3, y2);
     DoDrawLine(x3, y2, x2, y1);
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 bool
@@ -1335,8 +1334,7 @@ void wxDC::DrawLabel(const wxString& text,
         *rectBounding = wxRect(x, y - heightText, widthText, heightText);
     }
 
-    CalcBoundingBox(x0, y0);
-    CalcBoundingBox(x0 + width0, y0 + height);
+    m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
 }
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -1394,8 +1392,8 @@ void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
 void wxDC::DrawObject(wxDrawObject* drawobject)
 {
     drawobject->Draw(*this);
-    CalcBoundingBox(drawobject->MinX(),drawobject->MinY());
-    CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
+    CalcBoundingBox(drawobject->MinX(),drawobject->MinY(),
+                    drawobject->MaxX(),drawobject->MaxY());
 }
 
 #endif  // WXWIN_COMPATIBILITY_2_8

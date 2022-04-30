@@ -353,6 +353,23 @@ public:
          m_maxY = y;
       }
     }
+
+    void CalcBoundingBox(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+    {
+        CalcBoundingBox(x1, y1);
+        CalcBoundingBox(x2, y2);
+    }
+
+    void CalcBoundingBox(const wxPoint& pt, const wxSize& sz)
+    {
+        CalcBoundingBox(pt.x, pt.y, pt.x + sz.x, pt.y + sz.y);
+    }
+
+    void CalcBoundingBox(const wxRect& rect)
+    {
+        CalcBoundingBox(rect.GetPosition(), rect.GetSize());
+    }
+
     void ResetBoundingBox()
     {
         m_isBBoxValid = false;
