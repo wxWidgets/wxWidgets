@@ -81,11 +81,15 @@ protected:
   // read/write
   bool DoReadString(const wxString& key, wxString *pStr) const wxOVERRIDE;
   bool DoReadLong(const wxString& key, long *plResult) const wxOVERRIDE;
+#if wxUSE_BASE64
   bool DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const wxOVERRIDE;
+#endif // wxUSE_BASE64
 
   bool DoWriteString(const wxString& key, const wxString& szValue) wxOVERRIDE;
   bool DoWriteLong(const wxString& key, long lValue) wxOVERRIDE;
+#if wxUSE_BASE64
   bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) wxOVERRIDE;
+#endif // wxUSE_BASE64
 
 private:
   // helpers
