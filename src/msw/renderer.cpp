@@ -103,8 +103,16 @@ protected:
     // adjusted for the given wxDC.
     static RECT ConvertToRECT(wxDC& dc, const wxRect& rect)
     {
+        // Theme API doesn't know anything about GDI+ transforms, so apply them
+        // manually.
+        wxRect rectDevice = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
+        // We also need to handle the origin offset manually as we don't use
+        // Windows support for this, see wxDC code.
+        rectDevice.Offset(dc.GetDeviceOrigin());
+
         RECT rc;
-        wxCopyRectToRECT(dc.GetImpl()->MSWApplyGDIPlusTransform(rect), rc);
+        wxCopyRectToRECT(rectDevice, rc);
         return rc;
     }
 };
