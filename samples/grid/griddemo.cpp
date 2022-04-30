@@ -1564,6 +1564,7 @@ void GridFrame::FreezeOrThaw(wxCommandEvent& ev)
     }
 
     GetMenuBar()->Enable( ID_TOGGLECOLMOVING, !grid->IsFrozen() );
+    GetMenuBar()->Enable( ID_TOGGLEROWMOVING, !grid->IsFrozen() );
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )

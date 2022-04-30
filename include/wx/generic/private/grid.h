@@ -17,6 +17,9 @@
 
 #include "wx/headerctrl.h"
 
+// for wxGridOperations
+#include "wx/generic/gridsel.h"
+
 // ----------------------------------------------------------------------------
 // array classes
 // ----------------------------------------------------------------------------
@@ -167,7 +170,7 @@ private:
 
         // as this is done by the user we should notify the main program about
         // it
-        GetOwner()->SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, idx,
+        GetOwner()->SendGridSizeEvent(wxEVT_GRID_COL_SIZE, idx,
                                       GetDummyMouseEvent());
     }
 
@@ -243,7 +246,7 @@ private:
 
     void OnBeginReorder(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoStartMoveCol(event.GetColumn());
+        GetOwner()->DoStartMoveRowOrCol(event.GetColumn());
     }
 
     void OnEndReorder(wxHeaderCtrlEvent& event)
@@ -479,6 +482,14 @@ public:
     // if this object is a wxGridColumnOperations and vice versa.
     virtual wxGridOperations& Dual() const = 0;
 
+    // returns wxHORIZONTAL or wxVERTICAL for row/col operations
+    virtual int GetOrientation() const = 0;
+
+    // return row/col specific cursor modes
+    virtual wxGrid::CursorMode GetCursorModeResize() const = 0;
+    virtual wxGrid::CursorMode GetCursorModeSelect() const = 0;
+    virtual wxGrid::CursorMode GetCursorModeMove() const = 0;
+
     // Return the total number of rows or columns.
     virtual int GetTotalNumberOfLines(const wxGrid *grid) const = 0;
 
@@ -568,6 +579,8 @@ public:
     // Set the row default height or column default width
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const = 0;
 
+    // auto size the row height or column width from the label content
+    virtual void HandleLineAutosize(wxGrid *grid, int line, const wxMouseEvent& event) const = 0;
 
     // Return the index of the line at the given position
     virtual int GetLineAt(const wxGrid *grid, int pos) const = 0;
@@ -587,6 +600,48 @@ public:
     // Get the row or column frozen grid window
     virtual wxGridWindow *GetFrozenGrid(wxGrid* grid) const = 0;
 
+
+    // return the value of m_canDragRow/ColMove
+    virtual bool CanDragMove(wxGrid *grid) const = 0;
+
+    // call DoEndMoveRow or DoEndMoveColumn
+    virtual void DoEndMove(wxGrid* grid, int line) const = 0;
+
+    // return whether the given row/column can be interactively resized
+    virtual bool CanDragLineSize(wxGrid *grid, int line) const = 0;
+
+    // call DoEndDragResizeRow or DoEndDragResizeCol
+    virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event, wxGridWindow* gridWindow) const = 0;
+
+
+    // extend current selection block up to given row or column
+    virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
+        const wxMouseEvent &event,
+        wxEventType eventType = wxEVT_GRID_RANGE_SELECTED) const = 0;
+
+    // select or de-select a row or column
+    virtual void SelectLine(wxGrid *grid, int line, wxMouseEvent &event) const = 0;
+    virtual void DeselectLine(wxGrid * grid, int line) const = 0;
+
+    // check whether the row or columns first cell is in selected
+    virtual bool IsLineInSelection(wxGrid *grid, int line) const = 0;
+
+
+    // sent a result with row or column and the other value -1
+    virtual wxGrid::EventResult SendEvent(wxGrid *grid, wxEventType eventType,
+        int line, const wxMouseEvent& event) const = 0;
+
+    // call DrawRowLabel or DrawColumnLabel
+    virtual void DrawLineLabel(wxGrid *grid, wxDC& dc, int line) const = 0;
+
+
+    // make the specified line visible by doing a minimal amount of scrolling
+    virtual void MakeLineVisible(wxGrid *grid, int line) const = 0;
+
+    // set cursor into the first visible cell of the given row or column
+    virtual void MakeLineCurrent(wxGrid *grid, int line) const = 0;
+
+
     // This class is never used polymorphically but give it a virtual dtor
     // anyhow to suppress g++ complaints about it
     virtual ~wxGridOperations() { }
@@ -596,6 +651,16 @@ class wxGridRowOperations : public wxGridOperations
 {
 public:
     virtual wxGridOperations& Dual() const wxOVERRIDE;
+
+    virtual int GetOrientation() const wxOVERRIDE
+        { return wxVERTICAL; }
+
+    virtual wxGrid::CursorMode GetCursorModeResize() const wxOVERRIDE
+        { return wxGrid::WXGRID_CURSOR_RESIZE_ROW; }
+    virtual wxGrid::CursorMode GetCursorModeSelect() const wxOVERRIDE
+        { return wxGrid::WXGRID_CURSOR_SELECT_ROW; }
+    virtual wxGrid::CursorMode GetCursorModeMove() const wxOVERRIDE
+        { return wxGrid::WXGRID_CURSOR_MOVE_ROW; }
 
     virtual int GetTotalNumberOfLines(const wxGrid *grid) const wxOVERRIDE
         { return grid->GetNumberRows(); }
@@ -655,6 +720,8 @@ public:
         { grid->SetRowSize(line, size); }
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const wxOVERRIDE
         {  grid->SetDefaultRowSize(size, resizeExisting); }
+    virtual void HandleLineAutosize(wxGrid *grid, int line, const wxMouseEvent& event) const wxOVERRIDE
+        {  grid->HandleRowAutosize(line, event); }
 
     virtual int GetLineAt(const wxGrid *grid, int pos) const wxOVERRIDE
         { return grid->GetRowAt(pos); }
@@ -674,12 +741,69 @@ public:
 
     virtual wxGridWindow *GetFrozenGrid(wxGrid* grid) const wxOVERRIDE
         { return (wxGridWindow*)grid->GetFrozenRowGridWindow(); }
+
+    virtual bool CanDragMove(wxGrid *grid) const wxOVERRIDE
+        { return grid->m_canDragRowMove; }
+    virtual void DoEndMove(wxGrid* grid, int line) const wxOVERRIDE
+        { grid->DoEndMoveRow(line); }
+
+    virtual bool CanDragLineSize(wxGrid *grid, int line) const wxOVERRIDE
+        { return grid->CanDragRowSize(line); }
+    virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event,
+        wxGridWindow* gridWindow) const wxOVERRIDE
+        { grid->DoEndDragResizeRow(event, gridWindow); }
+
+
+    virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
+        const wxMouseEvent &event,
+        wxEventType eventType = wxEVT_GRID_RANGE_SELECTED) const wxOVERRIDE
+        {
+            return grid->m_selection->ExtendCurrentBlock
+                (
+                    wxGridCellCoords(grid->m_currentCellCoords.GetRow(), 0),
+                    wxGridCellCoords(line, grid->GetNumberCols() - 1),
+                    event,
+                    eventType
+                );
+        }
+
+    virtual void SelectLine(wxGrid *grid, int line, wxMouseEvent &event) const wxOVERRIDE
+        { grid->m_selection->SelectRow(line, event); };
+    virtual void DeselectLine(wxGrid * grid, int line) const wxOVERRIDE
+        { grid->DeselectRow(line); }
+
+    virtual bool IsLineInSelection(wxGrid *grid, int line) const wxOVERRIDE
+        { return grid->m_selection->IsInSelection(line, 0); }
+
+    virtual wxGrid::EventResult SendEvent(wxGrid *grid, wxEventType eventType,
+        int line, const wxMouseEvent& event) const wxOVERRIDE
+        { return grid->SendEvent(eventType, line, -1, event ); }
+
+    virtual void DrawLineLabel(wxGrid *grid, wxDC& dc, int line) const wxOVERRIDE
+        { grid->DrawRowLabel(dc, line); }
+
+    virtual void MakeLineVisible(wxGrid *grid, int line) const wxOVERRIDE
+        { grid->MakeCellVisible(line, -1); }
+    virtual void MakeLineCurrent(wxGrid *grid, int line) const wxOVERRIDE
+        { grid->SetCurrentCell(line, grid->GetFirstFullyVisibleColumn()); }
+
 };
 
 class wxGridColumnOperations : public wxGridOperations
 {
+
 public:
     virtual wxGridOperations& Dual() const wxOVERRIDE;
+
+    virtual int GetOrientation() const wxOVERRIDE
+        { return wxHORIZONTAL; }
+
+    virtual wxGrid::CursorMode GetCursorModeResize() const wxOVERRIDE
+        { return wxGrid::WXGRID_CURSOR_RESIZE_COL; }
+    virtual wxGrid::CursorMode GetCursorModeSelect() const wxOVERRIDE
+        { return wxGrid::WXGRID_CURSOR_SELECT_COL; }
+    virtual wxGrid::CursorMode GetCursorModeMove() const wxOVERRIDE
+        { return wxGrid::WXGRID_CURSOR_MOVE_COL; }
 
     virtual int GetTotalNumberOfLines(const wxGrid *grid) const wxOVERRIDE
         { return grid->GetNumberCols(); }
@@ -739,6 +863,8 @@ public:
         { grid->SetColSize(line, size); }
     virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const wxOVERRIDE
         {  grid->SetDefaultColSize(size, resizeExisting); }
+    virtual void HandleLineAutosize(wxGrid *grid, int line, const wxMouseEvent& event) const wxOVERRIDE
+        {  grid->HandleColumnAutosize(line, event); }
 
     virtual int GetLineAt(const wxGrid *grid, int pos) const wxOVERRIDE
         { return grid->GetColAt(pos); }
@@ -758,6 +884,51 @@ public:
 
     virtual wxGridWindow *GetFrozenGrid(wxGrid* grid) const wxOVERRIDE
         { return (wxGridWindow*)grid->GetFrozenColGridWindow(); }
+
+    virtual bool CanDragMove(wxGrid *grid) const wxOVERRIDE
+        { return grid->m_canDragColMove; }
+    virtual void DoEndMove(wxGrid* grid, int line) const wxOVERRIDE
+        { grid->DoEndMoveCol(line); }
+
+    virtual bool CanDragLineSize(wxGrid *grid, int line) const wxOVERRIDE
+        { return grid->CanDragColSize(line); }
+    virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event,
+        wxGridWindow* gridWindow) const wxOVERRIDE
+        { grid->DoEndDragResizeCol(event, gridWindow); }
+
+    virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
+        const wxMouseEvent &event,
+        wxEventType eventType = wxEVT_GRID_RANGE_SELECTED) const wxOVERRIDE
+        {
+            return grid->m_selection->ExtendCurrentBlock
+                (
+                    wxGridCellCoords(0, grid->m_currentCellCoords.GetCol()),
+                    wxGridCellCoords(grid->GetNumberRows() - 1, line),
+                    event,
+                    eventType
+                );
+        }
+
+    virtual void SelectLine(wxGrid *grid, int line, wxMouseEvent &event) const wxOVERRIDE
+        { grid->m_selection->SelectCol(line, event); };
+    virtual void DeselectLine(wxGrid * grid, int line) const wxOVERRIDE
+        { grid->DeselectCol(line); }
+
+    virtual bool IsLineInSelection(wxGrid *grid, int line) const wxOVERRIDE
+        { return grid->m_selection->IsInSelection(line, 0); }
+
+    virtual wxGrid::EventResult SendEvent(wxGrid *grid, wxEventType eventType,
+        int line, const wxMouseEvent& event) const wxOVERRIDE
+        { return grid->SendEvent(eventType, -1, line, event ); }
+
+    virtual void DrawLineLabel(wxGrid *grid, wxDC& dc, int line) const wxOVERRIDE
+        { grid->DrawColLabel(dc, line); }
+
+    virtual void MakeLineVisible(wxGrid *grid, int line) const wxOVERRIDE
+        { grid->MakeCellVisible(-1, line); }
+    virtual void MakeLineCurrent(wxGrid *grid, int line) const wxOVERRIDE
+        { grid->SetCurrentCell(grid->GetFirstFullyVisibleRow(), line); }
+
 };
 
 // This class abstracts the difference between operations going forward
