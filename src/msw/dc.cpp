@@ -437,6 +437,30 @@ private:
     wxDECLARE_NO_COPY_CLASS(StretchBltModeChanger);
 };
 
+// This one changes polygon fill mode to the given one during its lifetime.
+class PolyFillModeSetter
+{
+public:
+    PolyFillModeSetter(HDC hdc, wxPolygonFillMode mode)
+        : m_hdc(hdc)
+    {
+        m_modeOld = ::SetPolyFillMode(m_hdc, mode == wxODDEVEN_RULE ? ALTERNATE
+                                                                    : WINDING);
+    }
+
+    ~PolyFillModeSetter()
+    {
+        ::SetPolyFillMode(m_hdc, m_modeOld);
+    }
+
+private:
+    const HDC m_hdc;
+
+    int m_modeOld;
+
+    wxDECLARE_NO_COPY_CLASS(PolyFillModeSetter);
+};
+
 } // anonymous namespace
 
 // ===========================================================================
@@ -1025,6 +1049,8 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
 {
     wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
+    PolyFillModeSetter polyfillModeSetter(GetHdc(), fillStyle);
+
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
@@ -1037,9 +1063,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         (void)Polygon(GetHdc(), cpoints.get(), n);
-        SetPolyFillMode(GetHdc(),prev);
     }
     else
     {
@@ -1047,9 +1071,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
         for (i = 0; i < n; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         Polygon(GetHdc(), reinterpret_cast<const POINT*>(points), n);
-        SetPolyFillMode(GetHdc(),prev);
     }
 }
 
@@ -1066,6 +1088,8 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
     for (i = cnt = 0; i < n; i++)
         cnt += count[i];
 
+    PolyFillModeSetter polyfillModeSetter(GetHdc(), fillStyle);
+
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
@@ -1077,18 +1101,14 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         (void)PolyPolygon(GetHdc(), cpoints.get(), count, n);
-        SetPolyFillMode(GetHdc(),prev);
     }
     else
     {
         for (i = 0; i < cnt; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         PolyPolygon(GetHdc(), reinterpret_cast<const POINT*>(points), count, n);
-        SetPolyFillMode(GetHdc(),prev);
     }
 }
 
