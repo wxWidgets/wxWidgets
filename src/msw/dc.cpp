@@ -37,6 +37,8 @@
 #endif
 
 #include "wx/msw/dc.h"
+
+#include "wx/scopedarray.h"
 #include "wx/sysopt.h"
 
 #ifdef wxHAS_RAW_BITMAP
@@ -621,11 +623,11 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
     if ( GetLayoutDirection() == wxLayout_RightToLeft )
     {
         DWORD bufLen = ::GetRegionData(hrgn, 0, NULL);  // Get the storage size
-        char* pDataBuf = new char[bufLen];   // Buffer for the region data
-        if ( ::GetRegionData(hrgn, bufLen, reinterpret_cast<RGNDATA*>(pDataBuf)) != bufLen )
+        wxScopedArray<char> pDataBuf(bufLen);
+        RGNDATA* const rgndata = reinterpret_cast<RGNDATA*>(pDataBuf.get());
+        if ( ::GetRegionData(hrgn, bufLen, rgndata) != bufLen )
         {
             wxLogLastError("GetRegionData");
-            delete[] pDataBuf;
             return;
         }
         int dcw, dch;
@@ -644,8 +646,7 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
         // shoulde be adjusted.
         tr.eDx = doRtlOffset ? dcw : dcw-1; // max X
         tr.eDy = 0;
-        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, reinterpret_cast<RGNDATA*>(pDataBuf));
-        delete[] pDataBuf;
+        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, rgndata);
         if ( !hRgnRTL )
         {
             wxLogLastError("ExtCreateRegion");
@@ -1022,7 +1023,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
-        POINT *cpoints = new POINT[n];
+        wxScopedArray<POINT> cpoints(n);
         int i;
         for (i = 0; i < n; i++)
         {
@@ -1032,9 +1033,8 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)Polygon(GetHdc(), cpoints, n);
+        (void)Polygon(GetHdc(), cpoints.get(), n);
         SetPolyFillMode(GetHdc(),prev);
-        delete[] cpoints;
     }
     else
     {
@@ -1064,7 +1064,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
-        POINT *cpoints = new POINT[cnt];
+        wxScopedArray<POINT> cpoints(cnt);
         for (i = 0; i < cnt; i++)
         {
             cpoints[i].x = (int)(points[i].x + xoffset);
@@ -1073,9 +1073,8 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)PolyPolygon(GetHdc(), cpoints, count, n);
+        (void)PolyPolygon(GetHdc(), cpoints.get(), count, n);
         SetPolyFillMode(GetHdc(),prev);
-        delete[] cpoints;
     }
     else
     {
@@ -1093,7 +1092,7 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
-        POINT *cpoints = new POINT[n];
+        wxScopedArray<POINT> cpoints(n);
         int i;
         for (i = 0; i < n; i++)
         {
@@ -1102,8 +1101,7 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-        (void)Polyline(GetHdc(), cpoints, n);
-        delete[] cpoints;
+        (void)Polyline(GetHdc(), cpoints.get(), n);
     }
     else
     {
@@ -1218,7 +1216,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     wxCHECK_RET( n_points >= 2 , "incomplete list of spline points?" );
 
     const size_t n_bezier_points = n_points * 3 + 1;
-    POINT *lppt = new POINT[n_bezier_points];
+    wxScopedArray<POINT> lppt(n_bezier_points);
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1;
 
@@ -1279,9 +1277,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
 
-    ::PolyBezier( GetHdc(), lppt, bezier_pos );
-
-    delete []lppt;
+    ::PolyBezier( GetHdc(), lppt.get(), bezier_pos );
 }
 #endif // wxUSE_SPLINES
 

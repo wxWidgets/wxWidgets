@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/display.h"
+#include "wx/scopedarray.h"
 
 //-----------------------------------------------------------------------------
 // Local functions
@@ -833,7 +834,7 @@ void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],
     int maxX = minX;
     int maxY = minY;
 
-    wxPoint2DDouble* pointsD = new wxPoint2DDouble[n];
+    wxScopedArray<wxPoint2DDouble> pointsD(n);
     for( int i = 0; i < n; ++i)
     {
         wxPoint p = points[i];
@@ -846,8 +847,7 @@ void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],
         else if (p.y > maxY) maxY = p.y;
     }
 
-    m_graphicContext->StrokeLines( n , pointsD);
-    delete[] pointsD;
+    m_graphicContext->StrokeLines( n , pointsD.get());
 
     CalcBoundingBox(minX + xoffset, minY + yoffset,
                     maxX + xoffset, maxY + yoffset);
@@ -915,7 +915,7 @@ void wxGCDCImpl::DoDrawPolygon( int n, const wxPoint points[],
     int maxX = minX;
     int maxY = minY;
 
-    wxPoint2DDouble* pointsD = new wxPoint2DDouble[n+(closeIt?1:0)];
+    wxScopedArray<wxPoint2DDouble> pointsD(n+(closeIt?1:0));
     for( int i = 0; i < n; ++i)
     {
         wxPoint p = points[i];
@@ -930,8 +930,7 @@ void wxGCDCImpl::DoDrawPolygon( int n, const wxPoint points[],
     if ( closeIt )
         pointsD[n] = pointsD[0];
 
-    m_graphicContext->DrawLines( n+(closeIt?1:0) , pointsD, fillStyle);
-    delete[] pointsD;
+    m_graphicContext->DrawLines( n+(closeIt?1:0) , pointsD.get(), fillStyle);
 
     CalcBoundingBox(minX + xoffset, minY + yoffset,
                     maxX + xoffset, maxY + yoffset);

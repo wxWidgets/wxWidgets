@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/scopedarray.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/object.h"
@@ -723,12 +724,12 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
 
     // GdkPoint and wxPoint have the same memory layout, so we can cast one to the other
     const GdkPoint* gpts = reinterpret_cast<const GdkPoint*>(points);
-    GdkPoint* gpts_alloc = NULL;
+    wxScopedArray<GdkPoint> gpts_alloc;
 
     if (doScale)
     {
-        gpts_alloc = new GdkPoint[n];
-        gpts = gpts_alloc;
+        gpts_alloc.reset(new GdkPoint[n]);
+        gpts = gpts_alloc.get();
     }
 
     for (int i = 0; i < n; i++)
@@ -743,8 +744,6 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
 
     if (m_gdkwindow)
         gdk_draw_lines(m_gdkwindow, m_penGC, const_cast<GdkPoint*>(gpts), n);
-
-    delete[] gpts_alloc;
 }
 
 void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
@@ -761,12 +760,12 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 
     // GdkPoint and wxPoint have the same memory layout, so we can cast one to the other
     const GdkPoint* gdkpoints = reinterpret_cast<const GdkPoint*>(points);
-    GdkPoint* gdkpoints_alloc = NULL;
+    wxScopedArray<GdkPoint> gdkpoints_alloc;
 
     if (doScale)
     {
-        gdkpoints_alloc = new GdkPoint[n];
-        gdkpoints = gdkpoints_alloc;
+        gdkpoints_alloc.reset(new GdkPoint[n]);
+        gdkpoints = gdkpoints_alloc.get();
     }
 
     int i;
@@ -810,8 +809,6 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 
         }
     }
-
-    delete[] gdkpoints_alloc;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1010,11 +1007,11 @@ ScaleMask(GdkPixmap* mask, int x, int y, int w, int h, int dst_w, int dst_h, dou
     // convert black and white pixbuf back to a mono pixmap
     const unsigned out_rowstride = (dst_w + 7) / 8;
     const size_t data_size = out_rowstride * size_t(dst_h);
-    char* data = new char[data_size];
-    char* out = data;
+    wxScopedArray<char> data(data_size);
+    char* out = data.get();
     const guchar* row = gdk_pixbuf_get_pixels(pixbuf);
     const int rowstride = gdk_pixbuf_get_rowstride(pixbuf);
-    memset(data, 0, data_size);
+    memset(data.get(), 0, data_size);
     for (int j = 0; j < dst_h; j++, row += rowstride, out += out_rowstride)
     {
         const guchar* in = row;
@@ -1023,9 +1020,7 @@ ScaleMask(GdkPixmap* mask, int x, int y, int w, int h, int dst_w, int dst_h, dou
                 out[i >> 3] |= 1 << (i & 7);
     }
     g_object_unref(pixbuf);
-    GdkPixmap* pixmap = gdk_bitmap_create_from_data(mask, data, dst_w, dst_h);
-    delete[] data;
-    return pixmap;
+    return gdk_bitmap_create_from_data(mask, data.get(), dst_w, dst_h);
 }
 
 // Make a new mask from part of a mask and a clip region.
@@ -1632,13 +1627,12 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
     if (req_dash && req_nb_dash)
     {
-        wxDash* real_req_dash = new wxDash[req_nb_dash];
+        wxScopedArray<wxDash> real_req_dash(req_nb_dash);
         if (real_req_dash)
         {
             for (int i = 0; i < req_nb_dash; i++)
                 real_req_dash[i] = req_dash[i] * width;
-            gdk_gc_set_dashes( m_penGC, 0, real_req_dash, req_nb_dash );
-            delete[] real_req_dash;
+            gdk_gc_set_dashes( m_penGC, 0, real_req_dash.get(), req_nb_dash );
         }
         else
         {

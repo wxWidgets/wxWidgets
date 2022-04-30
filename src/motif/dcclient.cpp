@@ -48,6 +48,8 @@
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/scopedarray.h"
+
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
@@ -438,7 +440,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
         if (m_autoSetting)
             SetPen (m_pen);
 
-        XPoint *xpoints = new XPoint[n];
+        wxScopedArray<XPoint> xpoints(n);
         int i;
 
         for (i = 0; i < n; i++)
@@ -446,7 +448,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
             xpoints[i].x = (short)XLOG2DEV (points[i].x + xoffset);
             xpoints[i].y = (short)YLOG2DEV (points[i].y + yoffset);
         }
-        XDrawLines ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints, n, 0);
+        XDrawLines ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints.get(), n, 0);
 
         if (m_window && m_window->GetBackingPixmap())
         {
@@ -455,9 +457,8 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
                 xpoints[i].x = (short)XLOG2DEV_2 (points[i].x + xoffset);
                 xpoints[i].y = (short)YLOG2DEV_2 (points[i].y + yoffset);
             }
-            XDrawLines ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints, n, 0);
+            XDrawLines ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints.get(), n, 0);
         }
-        delete[]xpoints;
     }
 }
 
@@ -466,8 +467,8 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 {
     wxCHECK_RET( IsOk(), "invalid dc" );
 
-    XPoint *xpoints1 = new XPoint[n + 1];
-    XPoint *xpoints2 = new XPoint[n + 1];
+    wxScopedArray<XPoint> xpoints1(n + 1);
+    wxScopedArray<XPoint> xpoints2(n + 1);
     int i;
     for (i = 0; i < n; i++)
     {
@@ -488,13 +489,13 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
     {
         SetBrush (m_brush);
         XSetFillRule ((Display*) m_display, (GC) m_gc, fillStyle == wxODDEVEN_RULE ? EvenOddRule : WindingRule);
-        XFillPolygon ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints1, n, Complex, 0);
+        XFillPolygon ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints1.get(), n, Complex, 0);
         XSetFillRule ((Display*) m_display, (GC) m_gc, EvenOddRule);    // default mode
         if (m_window && m_window->GetBackingPixmap())
         {
             XSetFillRule ((Display*) m_display,(GC) m_gcBacking,
                 fillStyle == wxODDEVEN_RULE ? EvenOddRule : WindingRule);
-            XFillPolygon ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints2, n, Complex, 0);
+            XFillPolygon ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints2.get(), n, Complex, 0);
             XSetFillRule ((Display*) m_display,(GC) m_gcBacking, EvenOddRule);    // default mode
         }
     }
@@ -503,14 +504,11 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
     {
         if (m_autoSetting)
             SetPen (m_pen);
-        XDrawLines ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints1, n + 1, 0);
+        XDrawLines ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints1.get(), n + 1, 0);
 
         if (m_window && m_window->GetBackingPixmap())
-            XDrawLines ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints2, n + 1, 0);
+            XDrawLines ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints2.get(), n + 1, 0);
     }
-
-    delete[]xpoints1;
-    delete[]xpoints2;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )

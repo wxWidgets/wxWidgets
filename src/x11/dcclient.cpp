@@ -22,6 +22,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/scopedarray.h"
 #include "wx/vector.h"
 
 #include "wx/x11/private.h"
@@ -642,7 +643,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
     if (n <= 0) return;
 
-    XPoint *xpoints = new XPoint[n];
+    wxScopedArray<XPoint> xpoints(n);
     for (int i = 0; i < n; i++)
     {
         xpoints[i].x = XLOG2DEV (points[i].x + xoffset);
@@ -650,9 +651,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
 
         CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
-    XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints, n, 0 );
-
-    delete[] xpoints;
+    XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints.get(), n, 0 );
 }
 
 void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
@@ -663,7 +662,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 
     if (n <= 0) return;
 
-    XPoint *xpoints = new XPoint[n + 1];
+    wxScopedArray<XPoint> xpoints(n + 1);
     int i;
     for (i = 0; i < n; i++)
     {
@@ -685,7 +684,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_textGC, xpoints, n, Complex, 0);
+                    (GC) m_textGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_textGC, 0, 0 );
             } else
@@ -695,7 +694,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginX % 15, m_deviceOriginY % 15 );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             } else
@@ -705,7 +704,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginX % 16, m_deviceOriginY % 16 );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             } else
@@ -716,14 +715,14 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             }
             else
             {
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
             }
         }
 
@@ -733,11 +732,9 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
             xpoints[i].x = xpoints[0].x;
             xpoints[i].y = xpoints[0].y;
 
-            XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints, n + 1, 0);
+            XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints.get(), n + 1, 0);
         }
     }
-
-    delete[] xpoints;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )

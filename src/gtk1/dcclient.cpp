@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/scopedarray.h"
 
 #include "wx/gtk1/win_gtk.h"
 #include "wx/gtk1/dcclient.h"
@@ -651,7 +652,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     if (n <= 0) return;
 
 
-    GdkPoint * const gpts = new GdkPoint[n];
+    wxScopedArray<GdkPoint> gpts(n);
     if ( !gpts )
     {
         wxFAIL_MSG( wxT("Cannot allocate PolyLine") );
@@ -669,9 +670,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
         gpts[i].y = YLOG2DEV(y);
     }
 
-    gdk_draw_lines( m_window, m_penGC, gpts, n);
-
-    delete[] gpts;
+    gdk_draw_lines( m_window, m_penGC, gpts.get(), n);
 }
 
 void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode WXUNUSED(fillStyle) )
@@ -680,7 +679,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
 
     if (n <= 0) return;
 
-    GdkPoint * const gpts = new GdkPoint[n];
+    wxScopedArray<GdkPoint> gpts(n);
 
     for (int i = 0 ; i < n ; i++)
     {
@@ -695,7 +694,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
 
     if (m_brush.GetStyle() == wxBRUSHSTYLE_SOLID)
     {
-        gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+        gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
     }
     else if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
     {
@@ -704,19 +703,19 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
             gdk_gc_set_ts_origin( m_textGC,
                                   m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                   m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-            gdk_draw_polygon( m_window, m_textGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_textGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_textGC, 0, 0 );
         } else
         if (IS_15_PIX_HATCH(m_brush.GetStyle()))
         {
             gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
         } else
         if (IS_16_PIX_HATCH(m_brush.GetStyle()))
         {
             gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
         } else
         if (m_brush.GetStyle() == wxBRUSHSTYLE_STIPPLE)
@@ -724,22 +723,20 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
             gdk_gc_set_ts_origin( m_brushGC,
                                   m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                   m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
         }
         else
         {
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
         }
     }
 
     if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
-        gdk_draw_polygon( m_window, m_penGC, FALSE, gpts, n );
+        gdk_draw_polygon( m_window, m_penGC, FALSE, gpts.get(), n );
 
     }
-
-    delete[] gpts;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1728,13 +1725,12 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
     if (req_dash && req_nb_dash)
     {
-        wxGTKDash *real_req_dash = new wxGTKDash[req_nb_dash];
+        wxScopedArray<wxGTKDash> real_req_dash(req_nb_dash);
         if (real_req_dash)
         {
             for (int i = 0; i < req_nb_dash; i++)
                 real_req_dash[i] = req_dash[i] * width;
-            gdk_gc_set_dashes( m_penGC, 0, real_req_dash, req_nb_dash );
-            delete[] real_req_dash;
+            gdk_gc_set_dashes( m_penGC, 0, real_req_dash.get(), req_nb_dash );
         }
         else
         {
