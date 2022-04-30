@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 17:46+0200\n"
+"POT-Creation-Date: 2022-04-27 19:29+0200\n"
 "PO-Revision-Date: 2015-07-18 21:39+0200\n"
 "Last-Translator: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
@@ -14,11 +14,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.2\n"
 
-#: ../include/wx/defs.h:2622
+#: ../include/wx/defs.h:2687
 msgid "All files (*.*)|*.*"
 msgstr "Agiri denak (*.*)|*.*"
 
-#: ../include/wx/defs.h:2625
+#: ../include/wx/defs.h:2690
 msgid "All files (*)|*"
 msgstr "Agiri denak (*)|*"
 
@@ -46,22 +46,20 @@ msgstr "EZ"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:184
 #: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/msgdlg.cpp:741 ../src/richtext/richtextstyledlg.cpp:293
+#: ../src/msw/msgdlg.cpp:743 ../src/richtext/richtextstyledlg.cpp:293
 msgid "OK"
 msgstr "&Ongi"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../include/wx/msgdlg.h:281 ../src/common/accelcmn.cpp:68
-#: ../src/common/stockitem.cpp:151 ../src/gtk1/fontdlg.cpp:144
-#: ../src/motif/msgdlg.cpp:196 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/progdlg.cpp:940 ../src/richtext/richtextstyledlg.cpp:296
+#: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:151
+#: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
+#: ../src/msw/msgdlg.cpp:448 ../src/msw/progdlg.cpp:940
+#: ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
 msgstr "E&zeztatu"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../include/wx/msgdlg.h:282 ../src/common/accelcmn.cpp:77
-#: ../src/common/stockitem.cpp:169 ../src/html/helpdlg.cpp:63
-#: ../src/html/helpfrm.cpp:108 ../src/osx/button_osx.cpp:39
+#: ../include/wx/msgdlg.h:282 ../src/common/stockitem.cpp:169
+#: ../src/html/helpdlg.cpp:63 ../src/html/helpfrm.cpp:108
+#: ../src/osx/button_osx.cpp:39
 msgid "Help"
 msgstr "Laguntza"
 
@@ -136,7 +134,7 @@ msgstr "&Taula"
 msgid "Object Properties"
 msgstr "Objetu Ezaugarriak"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:530
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:531
 #: ../src/html/htmprint.cpp:289
 msgid "Printing"
 msgstr "Irarkitzen"
@@ -214,525 +212,631 @@ msgstr "&Aurrekoa"
 msgid "&Window"
 msgstr "&Leihoa"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:47 ../src/common/stockitem.cpp:158
-#: ../src/richtext/richtextbuffer.cpp:8217 ../src/stc/stc_i18n.cpp:20
+#: ../src/common/accelcmn.cpp:47
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Delete"
 msgstr "Ezabatu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Del"
 msgstr "Ezab"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:49 ../src/common/stockitem.cpp:148
+#: ../src/common/accelcmn.cpp:49
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Back"
 msgstr "Atzera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Backspace"
 msgstr "Atzera"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:50 ../src/richtext/richtextsymboldlg.cpp:469
+#: ../src/common/accelcmn.cpp:50
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Insert"
 msgstr "Sartu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:51
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Ins"
 msgstr "Txert"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Enter"
 msgstr "Sartu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Return"
 msgstr "Sartu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
+#, fuzzy
+msgctxt "keyboard key"
 msgid "PageUp"
 msgstr "OrrGora"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Page Up"
 msgstr "Orrialdean Gora"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgctxt "keyboard key"
 msgid "PageDown"
 msgstr "OrrBeh"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Page Down"
 msgstr "Orrialdean Behera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
+#, fuzzy
+msgctxt "keyboard key"
 msgid "PgUp"
 msgstr "OrrGor"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:57
+#, fuzzy
+msgctxt "keyboard key"
 msgid "PgDn"
 msgstr "OrrBeh"
 
-#. TRANSLATORS: Name of keyboard key
-#. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/common/accelcmn.cpp:58 ../src/generic/datavgen.cpp:6993
-#: ../src/richtext/richtextbulletspage.cpp:186
-#: ../src/richtext/richtextbulletspage.cpp:189
-#: ../src/richtext/richtextbulletspage.cpp:190
-#: ../src/richtext/richtextliststylepage.cpp:249
-#: ../src/richtext/richtextliststylepage.cpp:252
-#: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/common/accelcmn.cpp:58
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Left"
 msgstr "Ezker"
 
-#. TRANSLATORS: Name of keyboard key
-#. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/common/accelcmn.cpp:59 ../src/generic/datavgen.cpp:6996
-#: ../src/richtext/richtextbulletspage.cpp:188
-#: ../src/richtext/richtextliststylepage.cpp:251
-#: ../src/richtext/richtextsizepage.cpp:250
+#: ../src/common/accelcmn.cpp:59
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Right"
 msgstr "Eskuin"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:60 ../src/common/stockitem.cpp:211
-#: ../src/generic/fdrepdlg.cpp:149
+#: ../src/common/accelcmn.cpp:60
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Up"
 msgstr "Gora"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:61 ../src/common/stockitem.cpp:159
-#: ../src/generic/fdrepdlg.cpp:149
+#: ../src/common/accelcmn.cpp:61
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Down"
 msgstr "Behera"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:62 ../src/common/stockitem.cpp:170
+#: ../src/common/accelcmn.cpp:62
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Home"
 msgstr "Hasiera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63
+#, fuzzy
+msgctxt "keyboard key"
 msgid "End"
 msgstr "Amaiera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Space"
 msgstr "Tartea"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Tab"
 msgstr "Tab"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Esc"
 msgstr "Irt"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Escape"
 msgstr "Irten"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:69 ../src/common/stockitem.cpp:153
+#: ../src/common/accelcmn.cpp:68
+#, fuzzy
+msgctxt "keyboard key"
+msgid "Cancel"
+msgstr "E&zeztatu"
+
+#: ../src/common/accelcmn.cpp:69
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Clear"
 msgstr "Garbitu"
 
-#. TRANSLATORS: Name of keyboard key
-#. TRANSLATORS: Keyword of system colour
-#: ../src/common/accelcmn.cpp:70 ../src/propgrid/advprops.cpp:790
+#: ../src/common/accelcmn.cpp:70
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Menu"
 msgstr "Menua"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:71
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Pause"
 msgstr "Pausatu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:72
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Capital"
 msgstr "Larria"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Select"
 msgstr "Hautatu"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:74 ../src/common/prntbase.cpp:421
-#: ../src/common/prntbase.cpp:1566 ../src/generic/prntdlgg.cpp:136
-#: ../src/generic/prntdlgg.cpp:150 ../src/gtk/print.cpp:621
-#: ../src/gtk/print.cpp:639
+#: ../src/common/accelcmn.cpp:74
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Print"
 msgstr "Irarkitu"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:75 ../src/common/stockitem.cpp:161
+#: ../src/common/accelcmn.cpp:75
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Execute"
 msgstr "Exekutatu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:76
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Snapshot"
 msgstr "Berehalakoa"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:78 ../src/common/stockitem.cpp:146
+#: ../src/common/accelcmn.cpp:77
+#, fuzzy
+msgctxt "keyboard key"
+msgid "Help"
+msgstr "Laguntza"
+
+#: ../src/common/accelcmn.cpp:78
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Add"
 msgstr "Gehitu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:79
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Separator"
 msgstr "Banantzailea"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:80
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Subtract"
 msgstr "Kenketa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:81
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Decimal"
 msgstr "Hamarrena"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
 #, fuzzy
+msgctxt "keyboard key"
 msgid "Multiply"
 msgstr "ZP_Biderketa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Divide"
 msgstr "Zatiketa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num_lock"
 msgstr "Zbk_blokeoa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Lock"
 msgstr "Zbk Blokeoa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Scroll_lock"
 msgstr "Irristari_blokeoa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Scroll Lock"
 msgstr "Irristari Blokeoa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Space"
 msgstr "ZP_Tartea"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Space"
 msgstr "Zbk Tartea"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Tab"
 msgstr "ZP_Tab"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Tab"
 msgstr "Zbk Tab"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Enter"
 msgstr "ZP_Sartu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Enter"
 msgstr "Zbk Sartu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Home"
 msgstr "ZP_Hasiera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Home"
 msgstr "Zbk Hasiera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Left"
 msgstr "ZP_Ezker"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num left"
 msgstr "Zbk ezker"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Up"
 msgstr "ZP_Gora"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Up"
 msgstr "Zbk Gora"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Right"
 msgstr "ZP_Eskuin"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Right"
 msgstr "Zbk Eskuin"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Down"
 msgstr "ZP_Behera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Down"
 msgstr "Zbk Behera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_PageUp"
 msgstr "ZP_OrrGora"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Page Up"
 msgstr "Zbk Orrian Gora"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_PageDown"
 msgstr "ZP_OrrBehera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Page Down"
 msgstr "Zbk Orrian Behera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Prior"
 msgstr "ZP_Prior"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Next"
 msgstr "ZP_Hurrengoa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_End"
 msgstr "ZP_Amaiera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num End"
 msgstr "Zbk Amaiera"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Begin"
 msgstr "ZP_Hasi"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Begin"
 msgstr "Zbk Hasi"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Insert"
 msgstr "ZP_Txertatu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Insert"
 msgstr "Zbk Txertatu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Delete"
 msgstr "ZP_Ezabatu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num Delete"
 msgstr "Zbk Ezabatu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Equal"
 msgstr "ZP_Berdin"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num ="
 msgstr "Zbk ="
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Multiply"
 msgstr "ZP_Biderketa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num *"
 msgstr "Zbk *"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Add"
 msgstr "ZP_Gehiketa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num +"
 msgstr "Zbk +"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Separator"
 msgstr "ZP_Banantzailea"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num ,"
 msgstr "Zbk ,"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Subtract"
 msgstr "ZP_Kenketa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num -"
 msgstr "Zbk -"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Decimal"
 msgstr "ZP_Hamarrena"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num ."
 msgstr "Zbk ."
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_Divide"
 msgstr "ZP_Zatiketa"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Num /"
 msgstr "Zbk /"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Windows_Left"
 msgstr "Windows_Ezker"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Windows_Right"
 msgstr "Windows_Eskuin"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Windows_Menu"
 msgstr "Windows_Menua"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Command"
 msgstr "Agindua"
 
 #: ../src/common/accelcmn.cpp:186
+#, fuzzy
+msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "ktrl"
 
 #: ../src/common/accelcmn.cpp:188
+#, fuzzy
+msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
+#, fuzzy
+msgctxt "keyboard key"
 msgid "shift"
 msgstr "aldatu"
 
 #: ../src/common/accelcmn.cpp:192
+#, fuzzy
+msgctxt "keyboard key"
 msgid "rawctrl"
 msgstr "rawktrl"
 
 #: ../src/common/accelcmn.cpp:194
+msgctxt "keyboard key"
 msgid "num "
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:259 ../src/common/accelcmn.cpp:358
+#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
+#, fuzzy
+msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
 
-#: ../src/common/accelcmn.cpp:276 ../src/common/accelcmn.cpp:361
+#: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
+msgctxt "keyboard key"
 msgid "KP_F"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:279 ../src/common/accelcmn.cpp:364
+#: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
+#, fuzzy
+msgctxt "keyboard key"
 msgid "KP_"
 msgstr "ZP_"
 
-#: ../src/common/accelcmn.cpp:282 ../src/common/accelcmn.cpp:367
+#: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
+#, fuzzy
+msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "BEREZIA"
 
-#: ../src/common/accelcmn.cpp:345 ../src/univ/themes/win32.cpp:3753
+#: ../src/common/accelcmn.cpp:343
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Alt+"
 msgstr "Alt+"
 
-#: ../src/common/accelcmn.cpp:347
+#: ../src/common/accelcmn.cpp:345
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Ctrl+"
 msgstr "Ktrl+"
 
-#: ../src/common/accelcmn.cpp:349
+#: ../src/common/accelcmn.cpp:347
+#, fuzzy
+msgctxt "keyboard key"
 msgid "Shift+"
 msgstr "Shift+"
 
-#: ../src/common/accelcmn.cpp:352
+#: ../src/common/accelcmn.cpp:350
+#, fuzzy
+msgctxt "keyboard key"
 msgid "RawCtrl+"
 msgstr "RawKtrl+"
 
@@ -857,7 +961,7 @@ msgid "Can't &Undo "
 msgstr "Ezin da De&segin"
 
 #: ../src/common/cmdproc.cpp:264 ../src/common/stockitem.cpp:209
-#: ../src/msw/textctrl.cpp:2896 ../src/osx/textctrl_osx.cpp:591
+#: ../src/msw/textctrl.cpp:2932 ../src/osx/textctrl_osx.cpp:634
 #: ../src/richtext/richtextctrl.cpp:328
 msgid "&Undo"
 msgstr "&Desegin"
@@ -867,8 +971,8 @@ msgid "&Redo "
 msgstr "&Berregin"
 
 #: ../src/common/cmdproc.cpp:286 ../src/common/cmdproc.cpp:293
-#: ../src/common/stockitem.cpp:191 ../src/msw/textctrl.cpp:2897
-#: ../src/osx/textctrl_osx.cpp:592 ../src/richtext/richtextctrl.cpp:329
+#: ../src/common/stockitem.cpp:191 ../src/msw/textctrl.cpp:2933
+#: ../src/osx/textctrl_osx.cpp:635 ../src/richtext/richtextctrl.cpp:329
 msgid "&Redo"
 msgstr "&Berregin"
 
@@ -896,118 +1000,118 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' estra '..', ezikusita."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2062 ../src/generic/datavgen.cpp:1397
+#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1400
 msgid "checked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2066 ../src/generic/datavgen.cpp:1399
+#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1402
 msgid "unchecked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2070
+#: ../src/common/datavcmn.cpp:2173
 #, fuzzy
 msgid "undetermined"
 msgstr "azpimarratua"
 
-#: ../src/common/datetimefmt.cpp:1781
+#: ../src/common/datetimefmt.cpp:1844
 msgid "today"
 msgstr "gaur"
 
-#: ../src/common/datetimefmt.cpp:1782
+#: ../src/common/datetimefmt.cpp:1845
 msgid "yesterday"
 msgstr "atzo"
 
-#: ../src/common/datetimefmt.cpp:1783
+#: ../src/common/datetimefmt.cpp:1846
 msgid "tomorrow"
 msgstr "atzo"
 
-#: ../src/common/datetimefmt.cpp:1975
+#: ../src/common/datetimefmt.cpp:2040
 msgid "first"
 msgstr "lehen"
 
-#: ../src/common/datetimefmt.cpp:1976
+#: ../src/common/datetimefmt.cpp:2041
 msgid "second"
 msgstr "bigarren"
 
-#: ../src/common/datetimefmt.cpp:1977
+#: ../src/common/datetimefmt.cpp:2042
 msgid "third"
 msgstr "hirugarren"
 
-#: ../src/common/datetimefmt.cpp:1978
+#: ../src/common/datetimefmt.cpp:2043
 msgid "fourth"
 msgstr "laugarren"
 
-#: ../src/common/datetimefmt.cpp:1979
+#: ../src/common/datetimefmt.cpp:2044
 msgid "fifth"
 msgstr "bostgarren"
 
-#: ../src/common/datetimefmt.cpp:1980
+#: ../src/common/datetimefmt.cpp:2045
 msgid "sixth"
 msgstr "seigarren"
 
-#: ../src/common/datetimefmt.cpp:1981
+#: ../src/common/datetimefmt.cpp:2046
 msgid "seventh"
 msgstr "zazpigarren"
 
-#: ../src/common/datetimefmt.cpp:1982
+#: ../src/common/datetimefmt.cpp:2047
 msgid "eighth"
 msgstr "zortzigarren"
 
-#: ../src/common/datetimefmt.cpp:1983
+#: ../src/common/datetimefmt.cpp:2048
 msgid "ninth"
 msgstr "bederatzigarren"
 
-#: ../src/common/datetimefmt.cpp:1984
+#: ../src/common/datetimefmt.cpp:2049
 msgid "tenth"
 msgstr "hamargarren"
 
-#: ../src/common/datetimefmt.cpp:1985
+#: ../src/common/datetimefmt.cpp:2050
 msgid "eleventh"
 msgstr "hamaikagarren"
 
-#: ../src/common/datetimefmt.cpp:1986
+#: ../src/common/datetimefmt.cpp:2051
 msgid "twelfth"
 msgstr "hamabigarren"
 
-#: ../src/common/datetimefmt.cpp:1987
+#: ../src/common/datetimefmt.cpp:2052
 msgid "thirteenth"
 msgstr "hamahirugarren"
 
-#: ../src/common/datetimefmt.cpp:1988
+#: ../src/common/datetimefmt.cpp:2053
 msgid "fourteenth"
 msgstr "hamalaugarren"
 
-#: ../src/common/datetimefmt.cpp:1989
+#: ../src/common/datetimefmt.cpp:2054
 msgid "fifteenth"
 msgstr "hamabostgarren"
 
-#: ../src/common/datetimefmt.cpp:1990
+#: ../src/common/datetimefmt.cpp:2055
 msgid "sixteenth"
 msgstr "hamaseigarren"
 
-#: ../src/common/datetimefmt.cpp:1991
+#: ../src/common/datetimefmt.cpp:2056
 msgid "seventeenth"
 msgstr "hemezazpigarren"
 
-#: ../src/common/datetimefmt.cpp:1992
+#: ../src/common/datetimefmt.cpp:2057
 msgid "eighteenth"
 msgstr "hemezortzigarren"
 
-#: ../src/common/datetimefmt.cpp:1993
+#: ../src/common/datetimefmt.cpp:2058
 msgid "nineteenth"
 msgstr "hemeretzigarren"
 
-#: ../src/common/datetimefmt.cpp:1994
+#: ../src/common/datetimefmt.cpp:2059
 msgid "twentieth"
 msgstr "hogeigarren"
 
-#: ../src/common/datetimefmt.cpp:2147
+#: ../src/common/datetimefmt.cpp:2217
 msgid "noon"
 msgstr "eguerdia"
 
-#: ../src/common/datetimefmt.cpp:2148
+#: ../src/common/datetimefmt.cpp:2218
 msgid "midnight"
 msgstr "gauerdia"
 
@@ -1185,7 +1289,7 @@ msgstr "Hutsegitea '%s' partekatze agiria gertatzerakoan"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Ezinezkoa '%s' ikurra aurkitzea liburutegi dinamikoan"
 
-#: ../src/common/ffile.cpp:57 ../src/common/file.cpp:228
+#: ../src/common/ffile.cpp:57 ../src/common/file.cpp:216
 #, c-format
 msgid "can't open file '%s'"
 msgstr "ezin da ireki '%s' agiria"
@@ -1226,66 +1330,66 @@ msgstr "Bilatu akatsak '%s' agirian"
 msgid "Can't find current position in file '%s'"
 msgstr "Ezin da aurkitu oraingo kokapena '%s' agirian"
 
-#: ../src/common/ffile.cpp:355 ../src/common/file.cpp:586
+#: ../src/common/ffile.cpp:354 ../src/common/file.cpp:574
 msgid "Failed to set temporary file permissions"
 msgstr "Hutsegitea aldibaterako agiri baimenak ezartzerakoan"
 
-#: ../src/common/ffile.cpp:377 ../src/common/file.cpp:608
+#: ../src/common/ffile.cpp:376 ../src/common/file.cpp:596
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "ezin da kendu '%s' agiria"
 
-#: ../src/common/ffile.cpp:382 ../src/common/file.cpp:613
+#: ../src/common/ffile.cpp:381 ../src/common/file.cpp:601
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "ezin da aldaketarik egin '%s' agirian"
 
-#: ../src/common/ffile.cpp:394 ../src/common/file.cpp:625
+#: ../src/common/ffile.cpp:393 ../src/common/file.cpp:613
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "ezin da kendu '%s' aldibaterako agiria"
 
-#: ../src/common/file.cpp:175
+#: ../src/common/file.cpp:163
 #, c-format
 msgid "can't create file '%s'"
 msgstr "ezin da '%s' agiria sortu"
 
-#: ../src/common/file.cpp:242
+#: ../src/common/file.cpp:230
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "ezin da itxi %d agiri azaltzailea "
 
-#: ../src/common/file.cpp:345
+#: ../src/common/file.cpp:333
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "ezin da irakurri %d agiri azaltzailetik"
 
-#: ../src/common/file.cpp:364
+#: ../src/common/file.cpp:352
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "ezin da idatzi %d agiri azaltzailera"
 
-#: ../src/common/file.cpp:407
+#: ../src/common/file.cpp:395
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "ezin da jaso %d agiri azaltzailea"
 
-#: ../src/common/file.cpp:449
+#: ../src/common/file.cpp:437
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "ezin da bilatu %d agiri azaltzailean"
 
-#: ../src/common/file.cpp:463
+#: ../src/common/file.cpp:451
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "ezin da bilaketa kokapenik bilatu %d agiri azaltzailean"
 
-#: ../src/common/file.cpp:492
+#: ../src/common/file.cpp:480
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "ezin da aurkitu agiri luzera %d agiri azaltzailean"
 
-#: ../src/common/file.cpp:522
+#: ../src/common/file.cpp:510
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "ezin da zehaztu agiriaren amaiera lortu den %d azaltzailean"
@@ -1457,39 +1561,39 @@ msgstr "Ezinezkoa oraingo lan zuzenbidea ezartzea"
 msgid "Files (%s)"
 msgstr "Agiriak (%s)"
 
-#: ../src/common/filename.cpp:176
+#: ../src/common/filename.cpp:183
 #, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "Hutsegitea '%s' irakurtzeko irekitzerakoan"
 
-#: ../src/common/filename.cpp:181
+#: ../src/common/filename.cpp:188
 #, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "Hutsegitea '%s' idazteko irekitzerakoan"
 
-#: ../src/common/filename.cpp:193
+#: ../src/common/filename.cpp:200
 msgid "Failed to close file handle"
 msgstr "Hutsegitea agiri kudeatzailea isterakoan"
 
-#: ../src/common/filename.cpp:1028
+#: ../src/common/filename.cpp:1033
 msgid "Failed to create a temporary file name"
 msgstr "Hutsegitea aldibaterako agiri izena sortzerakoan"
 
-#: ../src/common/filename.cpp:1063
+#: ../src/common/filename.cpp:1068
 msgid "Failed to open temporary file."
 msgstr "Hutsegitea aldibaterako agiria irekitzerakoan."
 
-#: ../src/common/filename.cpp:2713
+#: ../src/common/filename.cpp:2768
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Hutsegitea '%s'-rako agiri denborak aldatzerakoan"
 
-#: ../src/common/filename.cpp:2728
+#: ../src/common/filename.cpp:2783
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Hutsegitea '%s' agiria ikutzerakoan"
 
-#: ../src/common/filename.cpp:2809
+#: ../src/common/filename.cpp:2864
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Hutsegitea '%s'-rako agiri denborak berreskuratzerakoan"
@@ -1498,7 +1602,7 @@ msgstr "Hutsegitea '%s'-rako agiri denborak berreskuratzerakoan"
 msgid "Browse"
 msgstr "Bilatu"
 
-#: ../src/common/fldlgcmn.cpp:104 ../src/generic/filectrlg.cpp:1186
+#: ../src/common/fldlgcmn.cpp:104 ../src/generic/filectrlg.cpp:1185
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Agiri denak (%s)|%s"
@@ -2034,12 +2138,12 @@ msgstr ""
 msgid "Memory VFS already contains file '%s'!"
 msgstr "VFS oroimenak jadanik badu '%s' agiria!"
 
-#: ../src/common/fs_mem.cpp:222
+#: ../src/common/fs_mem.cpp:227
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Saiatzen '%s' agiria VFS oroimenetik kentzen, baina ez dago gertatuta!"
 
-#: ../src/common/fs_mem.cpp:256
+#: ../src/common/fs_mem.cpp:261
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "Hutsegitea '%s' irudia VFS oroimenean biltegiratzerakoan!"
@@ -2136,128 +2240,133 @@ msgstr "BMP: Ezinezkoa RGB margo mapa idaztea."
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Ezinezkoa datuak idaztea."
 
-#: ../src/common/imagbmp.cpp:528 ../src/common/imagbmp.cpp:558
-#: ../src/common/imagbmp.cpp:573
+#: ../src/common/imagbmp.cpp:533
+#, c-format
+msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
+#: ../src/common/imagbmp.cpp:589
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Ezinezkoa oroimena esleitzea."
 
-#: ../src/common/imagbmp.cpp:1066
+#: ../src/common/imagbmp.cpp:1094
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "DIB Idazburua: Irudi zabalera > 32767 pixel agiriko."
 
-#: ../src/common/imagbmp.cpp:1074
+#: ../src/common/imagbmp.cpp:1102
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "DIB Idazburua: Irudi garaiera > 32767 pixel agiriko."
 
-#: ../src/common/imagbmp.cpp:1094
+#: ../src/common/imagbmp.cpp:1122
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB Idazburua: Bit-sakonera ezezaguna agirian."
 
-#: ../src/common/imagbmp.cpp:1149
+#: ../src/common/imagbmp.cpp:1177
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB Idazburua: Kodeaketa ezezaguna agirian."
 
-#: ../src/common/imagbmp.cpp:1181
+#: ../src/common/imagbmp.cpp:1209
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB Idazburua: Kodeaketak ez du bitsakonera."
 
-#: ../src/common/imagbmp.cpp:1193
+#: ../src/common/imagbmp.cpp:1221
 msgid "Error in reading image DIB."
 msgstr "Akatsa DIB irudia irakurtzean."
 
-#: ../src/common/imagbmp.cpp:1208
+#: ../src/common/imagbmp.cpp:1236
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Akatsa DIB mozorroa irakurtzerakoan."
 
-#: ../src/common/imagbmp.cpp:1267
+#: ../src/common/imagbmp.cpp:1295
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Irudi garaiegia ikur batentzat."
 
-#: ../src/common/imagbmp.cpp:1275
+#: ../src/common/imagbmp.cpp:1303
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Irudi zabalegia ikur batentzat."
 
-#: ../src/common/imagbmp.cpp:1302 ../src/common/imagbmp.cpp:1402
-#: ../src/common/imagbmp.cpp:1417 ../src/common/imagbmp.cpp:1428
-#: ../src/common/imagbmp.cpp:1442 ../src/common/imagbmp.cpp:1490
-#: ../src/common/imagbmp.cpp:1505 ../src/common/imagbmp.cpp:1519
-#: ../src/common/imagbmp.cpp:1530
+#: ../src/common/imagbmp.cpp:1330 ../src/common/imagbmp.cpp:1430
+#: ../src/common/imagbmp.cpp:1445 ../src/common/imagbmp.cpp:1456
+#: ../src/common/imagbmp.cpp:1470 ../src/common/imagbmp.cpp:1518
+#: ../src/common/imagbmp.cpp:1533 ../src/common/imagbmp.cpp:1547
+#: ../src/common/imagbmp.cpp:1558
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Akatsa irudi agiria idazterakoan!"
 
-#: ../src/common/imagbmp.cpp:1615
+#: ../src/common/imagbmp.cpp:1643
 msgid "ICO: Invalid icon index."
 msgstr "ICO: ikur aurkibide baliogabea."
 
-#: ../src/common/image.cpp:2344
+#: ../src/common/image.cpp:2360
 msgid "Image and mask have different sizes."
 msgstr "Irudia eta mozorroak neurri ezberdinak dituzte."
 
-#: ../src/common/image.cpp:2352 ../src/common/image.cpp:2393
+#: ../src/common/image.cpp:2368 ../src/common/image.cpp:2409
 msgid "No unused colour in image being masked."
 msgstr "Ez dago erabiligabeko margorik mozorrotzen den irudian."
 
-#: ../src/common/image.cpp:2576
+#: ../src/common/image.cpp:2592
 #, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
 msgstr "Hutsegitea \"%s\" bitmapa baliabideetatik gertatzerakoan."
 
-#: ../src/common/image.cpp:2585
+#: ../src/common/image.cpp:2601
 #, c-format
 msgid "Failed to load icon \"%s\" from resources."
 msgstr "Hutsegitea \"%s\" ikurra baliabideetatik gertatzerakoan."
 
-#: ../src/common/image.cpp:2663 ../src/common/image.cpp:2682
+#: ../src/common/image.cpp:2679 ../src/common/image.cpp:2698
 #, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Hutsegita irudia \"%s\" agiritik gertatzerakoan."
 
-#: ../src/common/image.cpp:2696
+#: ../src/common/image.cpp:2712
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Ezin da irudia '%s' agirian gorde: luzepen ezezaguna."
 
-#: ../src/common/image.cpp:2804
+#: ../src/common/image.cpp:2820
 msgid "No handler found for image type."
 msgstr "Ez da kudeatzailerik aurkitu irudi motarentzat."
 
-#: ../src/common/image.cpp:2812 ../src/common/image.cpp:2935
-#: ../src/common/image.cpp:3001
+#: ../src/common/image.cpp:2828 ../src/common/image.cpp:2951
+#: ../src/common/image.cpp:3017
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Ez da irudi kudeatzailerik adierazi %d motarako."
 
-#: ../src/common/image.cpp:2822
+#: ../src/common/image.cpp:2838
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "Irudi agiria ez da %d motakoa."
 
-#: ../src/common/image.cpp:2905
+#: ../src/common/image.cpp:2921
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 "Ezin da berezgaitasunez zehaztu irudi heuskarria sarrera ez-"
 "bilagarriarentzat."
 
-#: ../src/common/image.cpp:2923
+#: ../src/common/image.cpp:2939
 msgid "Unknown image data format."
 msgstr "Irudi datu heuskarri ezezaguna"
 
-#: ../src/common/image.cpp:2944
+#: ../src/common/image.cpp:2960
 #, c-format
 msgid "This is not a %s."
 msgstr "Hau ez da %s bat."
 
-#: ../src/common/image.cpp:2967 ../src/common/image.cpp:3015
+#: ../src/common/image.cpp:2983 ../src/common/image.cpp:3031
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Ez da irudi kudeatzailerik adierazi %s motarako."
 
-#: ../src/common/image.cpp:2976
+#: ../src/common/image.cpp:2992
 #, c-format
 msgid "Image is not of type %s."
 msgstr "Irudia ez da %s motakoa."
 
-#: ../src/common/image.cpp:3458
+#: ../src/common/image.cpp:3457
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Hutsegitea \"%s\" irudi agiriaren heuskarria egiaztatzerakoan"
@@ -2406,7 +2515,7 @@ msgstr ""
 msgid "Initialization failed in post init, aborting."
 msgstr "Abiatzeak huts egin du abiostean, uzten."
 
-#: ../src/common/intl.cpp:376
+#: ../src/common/intl.cpp:393
 #, c-format
 msgid "Cannot set locale to language \"%s\"."
 msgstr "Ezin da ezarri tokikoa \"%s\" hizkuntzari."
@@ -3008,82 +3117,88 @@ msgstr "Orokorra"
 msgid "Advanced"
 msgstr "Aurreratua"
 
-#: ../src/common/prntbase.cpp:253
+#: ../src/common/prntbase.cpp:254
 msgid "Generic PostScript"
 msgstr "PostScript Generikoa"
 
-#: ../src/common/prntbase.cpp:267
+#: ../src/common/prntbase.cpp:268
 msgid "Ready"
 msgstr "Gertu"
 
-#: ../src/common/prntbase.cpp:342
+#: ../src/common/prntbase.cpp:343
 msgid "Printing Error"
 msgstr "Irarketa Akatsa"
 
-#: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:821
+#: ../src/common/prntbase.cpp:422 ../src/common/prntbase.cpp:1567
+#: ../src/generic/prntdlgg.cpp:136 ../src/generic/prntdlgg.cpp:150
+#: ../src/gtk/print.cpp:621 ../src/gtk/print.cpp:639
+msgid "Print"
+msgstr "Irarkitu"
+
+#: ../src/common/prntbase.cpp:480 ../src/generic/prntdlgg.cpp:819
 msgid "Page setup"
 msgstr "Orrialde ezarpena"
 
-#: ../src/common/prntbase.cpp:533
+#: ../src/common/prntbase.cpp:534
 msgid "Please wait while printing..."
 msgstr "Mesedez itxaron irarkitzen den bitartean..."
 
-#: ../src/common/prntbase.cpp:537
+#: ../src/common/prntbase.cpp:538
 msgid "Document:"
 msgstr "Agiria:"
 
-#: ../src/common/prntbase.cpp:540
+#: ../src/common/prntbase.cpp:541
 msgid "Progress:"
 msgstr "Garapena:"
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:542
 msgid "Preparing"
 msgstr "Gertatzen"
 
-#: ../src/common/prntbase.cpp:560
+#: ../src/common/prntbase.cpp:561
 #, c-format
 msgid "Printing page %d"
 msgstr "Orrialdea irarkitzen %d"
 
-#: ../src/common/prntbase.cpp:565
+#: ../src/common/prntbase.cpp:566
 #, c-format
 msgid "Printing page %d of %d"
 msgstr "%d orrialdea irarkitzen %d-tik..."
 
-#: ../src/common/prntbase.cpp:568
+#: ../src/common/prntbase.cpp:569
 #, c-format
 msgid " (copy %d of %d)"
 msgstr " (kopiatu %d --> %d-tik"
 
-#: ../src/common/prntbase.cpp:607
+#: ../src/common/prntbase.cpp:608
 msgid "Printing "
 msgstr "Irarkitzen"
 
-#: ../src/common/prntbase.cpp:1573
+#: ../src/common/prntbase.cpp:1574
 msgid "First page"
 msgstr "Lehen orrialdea"
 
-#: ../src/common/prntbase.cpp:1578 ../src/html/helpwnd.cpp:662
+#: ../src/common/prntbase.cpp:1579 ../src/html/helpwnd.cpp:661
 msgid "Previous page"
 msgstr "Aurreko orrialdea"
 
-#: ../src/common/prntbase.cpp:1592 ../src/html/helpwnd.cpp:663
+#: ../src/common/prntbase.cpp:1593 ../src/html/helpwnd.cpp:662
 msgid "Next page"
 msgstr "Hurrengo orrialdea"
 
-#: ../src/common/prntbase.cpp:1597
+#: ../src/common/prntbase.cpp:1598
 msgid "Last page"
 msgstr "Azken orrialdea"
 
-#: ../src/common/prntbase.cpp:1605 ../src/common/stockitem.cpp:216
+#: ../src/common/prntbase.cpp:1606 ../src/common/stockitem.cpp:216
 msgid "Zoom Out"
 msgstr "Zooma Gutxitu"
 
-#: ../src/common/prntbase.cpp:1619 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1620 ../src/common/stockitem.cpp:215
 msgid "Zoom In"
 msgstr "Zooma Handitu"
 
-#: ../src/common/prntbase.cpp:1625 ../src/common/stockitem.cpp:154
+#: ../src/common/prntbase.cpp:1626 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
 msgstr "It&xi"
@@ -3111,20 +3226,16 @@ msgstr "%d orrialde %d-tik"
 msgid "Page %d"
 msgstr "%d orrialde"
 
-#: ../src/common/regex.cpp:233
-msgid "conversion to 8-bit encoding failed"
-msgstr "hutsegitea 8-bitera bihurtzerakoan"
-
-#: ../src/common/regex.cpp:255 ../src/html/chm.cpp:348
+#: ../src/common/regex.cpp:456 ../src/html/chm.cpp:348
 msgid "unknown error"
 msgstr "akats ezezaguna"
 
-#: ../src/common/regex.cpp:307
+#: ../src/common/regex.cpp:1095
 #, c-format
 msgid "Invalid regular expression '%s': %s"
 msgstr "Adierazpen arrunt baliogabea '%s': %s"
 
-#: ../src/common/regex.cpp:428 ../src/common/regex.cpp:476
+#: ../src/common/regex.cpp:1224
 #, c-format
 msgid "Failed to find match for regular expression: %s"
 msgstr ""
@@ -3159,11 +3270,11 @@ msgstr "Hutsegitea %s \"%s\" sortzerakoan."
 msgid "Failed to monitor I/O channels"
 msgstr "Hutsegitea Sar/Irt bideak monitorizatzerakoan"
 
-#: ../src/common/sizer.cpp:2944 ../src/common/stockitem.cpp:196
+#: ../src/common/sizer.cpp:3021 ../src/common/stockitem.cpp:196
 msgid "Save"
 msgstr "Gorde"
 
-#: ../src/common/sizer.cpp:2946
+#: ../src/common/sizer.cpp:3023
 msgid "Don't Save"
 msgstr "Ez Gorde"
 
@@ -3185,6 +3296,10 @@ msgstr "&Honi buruz"
 msgid "About"
 msgstr "Honi buruz"
 
+#: ../src/common/stockitem.cpp:146
+msgid "Add"
+msgstr "Gehitu"
+
 #: ../src/common/stockitem.cpp:147
 msgid "&Apply"
 msgstr "&Ezarri"
@@ -3197,12 +3312,16 @@ msgstr "Ezarri"
 msgid "&Back"
 msgstr "&Atzera"
 
+#: ../src/common/stockitem.cpp:148
+msgid "Back"
+msgstr "Atzera"
+
 #: ../src/common/stockitem.cpp:149
 msgid "&Bold"
 msgstr "&Lodia"
 
 #: ../src/common/stockitem.cpp:149 ../src/generic/fontdlgg.cpp:329
-#: ../src/osx/carbon/fontdlg.cpp:351 ../src/richtext/richtextfontpage.cpp:355
+#: ../src/osx/carbon/fontdlg.cpp:350 ../src/richtext/richtextfontpage.cpp:355
 msgid "Bold"
 msgstr "Lodia"
 
@@ -3214,9 +3333,9 @@ msgstr "&Behean"
 msgid "Bottom"
 msgstr "Behean"
 
-#: ../src/common/stockitem.cpp:151 ../src/generic/fontdlgg.cpp:466
-#: ../src/generic/fontdlgg.cpp:485 ../src/generic/wizard.cpp:433
-#: ../src/osx/carbon/fontdlg.cpp:399 ../src/osx/cocoa/button.mm:200
+#: ../src/common/stockitem.cpp:151 ../src/generic/fontdlgg.cpp:465
+#: ../src/generic/fontdlgg.cpp:484 ../src/generic/wizard.cpp:435
+#: ../src/osx/carbon/fontdlg.cpp:398 ../src/osx/cocoa/button.mm:157
 msgid "&Cancel"
 msgstr "E&zeztatu"
 
@@ -3234,8 +3353,12 @@ msgstr "CD-Rom"
 msgid "&Clear"
 msgstr "&Garbitu"
 
+#: ../src/common/stockitem.cpp:153
+msgid "Clear"
+msgstr "Garbitu"
+
 #: ../src/common/stockitem.cpp:154 ../src/generic/dbgrptg.cpp:94
-#: ../src/generic/progdlgg.cpp:781 ../src/html/helpdlg.cpp:87
+#: ../src/generic/progdlgg.cpp:781 ../src/html/helpdlg.cpp:86
 #: ../src/msw/progdlg.cpp:211 ../src/msw/progdlg.cpp:946
 #: ../src/richtext/richtextstyledlg.cpp:273
 #: ../src/richtext/richtextsymboldlg.cpp:473
@@ -3250,8 +3373,8 @@ msgstr "&Bihurtu"
 msgid "Convert"
 msgstr "Bihurtu"
 
-#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2900
-#: ../src/osx/textctrl_osx.cpp:595 ../src/richtext/richtextctrl.cpp:332
+#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2936
+#: ../src/osx/textctrl_osx.cpp:638 ../src/richtext/richtextctrl.cpp:332
 msgid "&Copy"
 msgstr "&Kopiatu"
 
@@ -3259,8 +3382,8 @@ msgstr "&Kopiatu"
 msgid "Copy"
 msgstr "Kopiatu"
 
-#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2899
-#: ../src/osx/textctrl_osx.cpp:594 ../src/richtext/richtextctrl.cpp:331
+#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2935
+#: ../src/osx/textctrl_osx.cpp:637 ../src/richtext/richtextctrl.cpp:331
 msgid "Cu&t"
 msgstr "Eba&ki"
 
@@ -3268,15 +3391,24 @@ msgstr "Eba&ki"
 msgid "Cut"
 msgstr "Ebaki"
 
-#: ../src/common/stockitem.cpp:158 ../src/msw/textctrl.cpp:2902
-#: ../src/osx/textctrl_osx.cpp:597 ../src/richtext/richtextctrl.cpp:334
+#: ../src/common/stockitem.cpp:158 ../src/msw/textctrl.cpp:2938
+#: ../src/osx/textctrl_osx.cpp:640 ../src/richtext/richtextctrl.cpp:334
 #: ../src/richtext/richtexttabspage.cpp:138
 msgid "&Delete"
+msgstr "Ezabatu"
+
+#: ../src/common/stockitem.cpp:158 ../src/richtext/richtextbuffer.cpp:8266
+#: ../src/stc/stc_i18n.cpp:20
+msgid "Delete"
 msgstr "Ezabatu"
 
 #: ../src/common/stockitem.cpp:159
 msgid "&Down"
 msgstr "&Behera"
+
+#: ../src/common/stockitem.cpp:159 ../src/generic/fdrepdlg.cpp:149
+msgid "Down"
+msgstr "Behera"
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Edit"
@@ -3289,6 +3421,10 @@ msgstr "Editatu"
 #: ../src/common/stockitem.cpp:161
 msgid "&Execute"
 msgstr "&Ekin"
+
+#: ../src/common/stockitem.cpp:161
+msgid "Execute"
+msgstr "Exekutatu"
 
 #: ../src/common/stockitem.cpp:162
 msgid "&Quit"
@@ -3348,7 +3484,7 @@ msgstr "&Diska gogorra"
 msgid "Harddisk"
 msgstr "Diska-gogorra"
 
-#: ../src/common/stockitem.cpp:169 ../src/generic/wizard.cpp:436
+#: ../src/common/stockitem.cpp:169 ../src/generic/wizard.cpp:438
 #: ../src/osx/cocoa/menu.mm:226 ../src/richtext/richtextstyledlg.cpp:299
 #: ../src/richtext/richtextsymboldlg.cpp:476
 msgid "&Help"
@@ -3358,6 +3494,10 @@ msgstr "&Laguntza"
 msgid "&Home"
 msgstr "&Hasiera"
 
+#: ../src/common/stockitem.cpp:170
+msgid "Home"
+msgstr "Hasiera"
+
 #: ../src/common/stockitem.cpp:171
 msgid "Indent"
 msgstr "Elkarmarratxoa"
@@ -3366,7 +3506,7 @@ msgstr "Elkarmarratxoa"
 msgid "&Index"
 msgstr "&Aurkibidea"
 
-#: ../src/common/stockitem.cpp:172 ../src/html/helpwnd.cpp:513
+#: ../src/common/stockitem.cpp:172 ../src/html/helpwnd.cpp:512
 msgid "Index"
 msgstr "Aurkibidea"
 
@@ -3383,7 +3523,7 @@ msgid "&Italic"
 msgstr "&Etzana"
 
 #: ../src/common/stockitem.cpp:174 ../src/generic/fontdlgg.cpp:325
-#: ../src/osx/carbon/fontdlg.cpp:358 ../src/richtext/richtextfontpage.cpp:351
+#: ../src/osx/carbon/fontdlg.cpp:357 ../src/richtext/richtextfontpage.cpp:351
 msgid "Italic"
 msgstr "Etzana"
 
@@ -3439,8 +3579,8 @@ msgstr "Berria"
 msgid "&No"
 msgstr "&Ez"
 
-#: ../src/common/stockitem.cpp:184 ../src/generic/fontdlgg.cpp:471
-#: ../src/generic/fontdlgg.cpp:478 ../src/osx/carbon/fontdlg.cpp:405
+#: ../src/common/stockitem.cpp:184 ../src/generic/fontdlgg.cpp:470
+#: ../src/generic/fontdlgg.cpp:477 ../src/osx/carbon/fontdlg.cpp:404
 msgid "&OK"
 msgstr "&Ongi"
 
@@ -3452,8 +3592,8 @@ msgstr "&Ireki..."
 msgid "Open..."
 msgstr "Ireki..."
 
-#: ../src/common/stockitem.cpp:186 ../src/msw/textctrl.cpp:2901
-#: ../src/osx/textctrl_osx.cpp:596 ../src/richtext/richtextctrl.cpp:333
+#: ../src/common/stockitem.cpp:186 ../src/msw/textctrl.cpp:2937
+#: ../src/osx/textctrl_osx.cpp:639 ../src/richtext/richtextctrl.cpp:333
 msgid "&Paste"
 msgstr "&Itsatsi"
 
@@ -3466,7 +3606,7 @@ msgstr "Itsatsi"
 msgid "&Preferences"
 msgstr "&Hobespenak"
 
-#: ../src/common/stockitem.cpp:187 ../src/osx/cocoa/preferences.mm:303
+#: ../src/common/stockitem.cpp:187 ../src/osx/cocoa/preferences.mm:304
 msgid "Preferences"
 msgstr "Hobespenak"
 
@@ -3534,8 +3674,8 @@ msgstr "Gorde &Honela..."
 msgid "Save As..."
 msgstr "Gorde &Honela..."
 
-#: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
-#: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
+#: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2940
+#: ../src/osx/textctrl_osx.cpp:642 ../src/richtext/richtextctrl.cpp:336
 msgid "Select &All"
 msgstr "Hautatu &Denak"
 
@@ -3613,7 +3753,7 @@ msgstr "Goia"
 msgid "Undelete"
 msgstr "Desezabatu"
 
-#: ../src/common/stockitem.cpp:208 ../src/generic/fontdlgg.cpp:441
+#: ../src/common/stockitem.cpp:208 ../src/generic/fontdlgg.cpp:440
 msgid "&Underline"
 msgstr "&Azpimarratuta"
 
@@ -3636,6 +3776,10 @@ msgstr "Hertzgabe"
 #: ../src/common/stockitem.cpp:211
 msgid "&Up"
 msgstr "&Igo"
+
+#: ../src/common/stockitem.cpp:211 ../src/generic/fdrepdlg.cpp:149
+msgid "Up"
+msgstr "Gora"
 
 #: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:435
 msgid "&Yes"
@@ -3795,31 +3939,31 @@ msgstr "Hutsegitea tokiko sistema ordua lortzerakoan"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay hutsegitea."
 
-#: ../src/common/translation.cpp:1143
+#: ../src/common/translation.cpp:1025
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ez da mezu katalogo baliozkoa."
 
-#: ../src/common/translation.cpp:1168
+#: ../src/common/translation.cpp:1050
 msgid "Invalid message catalog."
 msgstr "Mezu katalogo baliogabea."
 
-#: ../src/common/translation.cpp:1227
+#: ../src/common/translation.cpp:1109
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Hutsegitea Anitz-Erak aztertzerakoan: '%s'"
 
-#: ../src/common/translation.cpp:1942
+#: ../src/common/translation.cpp:1823
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "'%s' katalogoa '%s' hemendik erabiltzen."
 
-#: ../src/common/translation.cpp:2025
+#: ../src/common/translation.cpp:1906
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' baliabidea ez da baliozko mezu katalogoa."
 
-#: ../src/common/translation.cpp:2074
+#: ../src/common/translation.cpp:1955
 msgid "Couldn't enumerate translations"
 msgstr "Ezinezkoa itzulpenak zenbatzea"
 
@@ -3860,7 +4004,7 @@ msgstr "'%s' legezkanpoko hizkiak ditu"
 msgid "Error: %s (%d)"
 msgstr "Akatsa:"
 
-#: ../src/common/webrequest.cpp:642
+#: ../src/common/webrequest.cpp:647
 msgid "Not enough free disk space for download."
 msgstr ""
 
@@ -3869,11 +4013,20 @@ msgstr ""
 msgid "libcurl could not be initialized"
 msgstr "Zutabe azalpena ezin da abiarazi."
 
-#: ../src/common/wincmn.cpp:1673
+#: ../src/common/webview.cpp:246
+msgid "RunScriptAsync not supported"
+msgstr ""
+
+#: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
+#, c-format
+msgid "Error running JavaScript: %s"
+msgstr ""
+
+#: ../src/common/wincmn.cpp:1671
 msgid "This platform does not support background transparency."
 msgstr "Plataforma honek ez dut barren gardentasuna sostengatzen."
 
-#: ../src/common/wincmn.cpp:2146
+#: ../src/common/wincmn.cpp:2144
 msgid "Could not transfer data to window"
 msgstr "Ezinezkoa datuak leihora eskualdatzea"
 
@@ -4084,7 +4237,7 @@ msgstr "Ezin da zlib hustutako jarioa abiatu."
 msgid "Can't write to deflate stream: %s"
 msgstr "Ezin da deflate jariora idatzi : %s"
 
-#: ../src/dfb/bitmap.cpp:639 ../src/dfb/bitmap.cpp:673
+#: ../src/dfb/bitmap.cpp:633 ../src/dfb/bitmap.cpp:667
 #, c-format
 msgid "No bitmap handler for type %d defined."
 msgstr "Ez da bitmap kudeatzailerik adierazi %d motarako."
@@ -4137,7 +4290,7 @@ msgid "Version "
 msgstr "Bertsioa"
 
 #: ../src/generic/aboutdlgg.cpp:137 ../src/msw/aboutdlg.cpp:61
-#: ../src/osx/menu_osx.cpp:439
+#: ../src/osx/menu_osx.cpp:491
 #, c-format
 msgid "About %s"
 msgstr "%s-ri buruz"
@@ -4176,30 +4329,30 @@ msgstr "Ez da animazio kudeatzailerik adierazi %ld motarako."
 msgid "Animation file is not of type %ld."
 msgstr "Animazio agiria ez %ld motakoa."
 
-#: ../src/generic/colrdlgg.cpp:156 ../src/gtk/colordlg.cpp:49
+#: ../src/generic/colrdlgg.cpp:155 ../src/gtk/colordlg.cpp:49
 msgid "Choose colour"
 msgstr "Hautatu margoa"
 
-#: ../src/generic/colrdlgg.cpp:359
+#: ../src/generic/colrdlgg.cpp:358
 msgid "Red:"
 msgstr ""
 
-#: ../src/generic/colrdlgg.cpp:362
+#: ../src/generic/colrdlgg.cpp:361
 #, fuzzy
 msgid "Green:"
 msgstr "Orlegia"
 
-#: ../src/generic/colrdlgg.cpp:365
+#: ../src/generic/colrdlgg.cpp:364
 #, fuzzy
 msgid "Blue:"
 msgstr "Urdina"
 
-#: ../src/generic/colrdlgg.cpp:374
+#: ../src/generic/colrdlgg.cpp:373
 #, fuzzy
 msgid "Opacity:"
 msgstr "A&rgikazitasuna:"
 
-#: ../src/generic/colrdlgg.cpp:386
+#: ../src/generic/colrdlgg.cpp:385
 msgid "Add to custom colours"
 msgstr "Gehitu egile margoetara"
 
@@ -4212,40 +4365,58 @@ msgid "Password:"
 msgstr ""
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/generic/datavgen.cpp:1161
+#: ../src/generic/datavgen.cpp:1164
 msgid "true"
 msgstr ""
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/generic/datavgen.cpp:1163
+#: ../src/generic/datavgen.cpp:1166
 #, fuzzy
 msgid "false"
 msgstr "Faltsua"
 
-#: ../src/generic/datavgen.cpp:6763
+#: ../src/generic/datavgen.cpp:6839
 #, c-format
 msgid "Row %i"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6853
+#: ../src/generic/datavgen.cpp:6929
 msgid "Collapse"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6856
+#: ../src/generic/datavgen.cpp:6932
 msgid "Expand"
 msgstr ""
 
-#: ../src/generic/datavgen.cpp:6875
+#: ../src/generic/datavgen.cpp:6951
 #, fuzzy, c-format
 msgid "%s (%d items)"
 msgstr "%s (edo %s)"
 
-#: ../src/generic/datavgen.cpp:6924
+#: ../src/generic/datavgen.cpp:7002
 #, fuzzy, c-format
 msgid "Column %u"
 msgstr "Gehitu Zutabea"
+
+#. TRANSLATORS: Keystroke for manipulating a tree control
+#: ../src/generic/datavgen.cpp:7071 ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextliststylepage.cpp:249
+#: ../src/richtext/richtextliststylepage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:249
+msgid "Left"
+msgstr "Ezker"
+
+#. TRANSLATORS: Keystroke for manipulating a tree control
+#: ../src/generic/datavgen.cpp:7074 ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/richtext/richtextliststylepage.cpp:251
+#: ../src/richtext/richtextsizepage.cpp:250
+msgid "Right"
+msgstr "Eskuin"
 
 #: ../src/generic/dbgrptg.cpp:160
 #, c-format
@@ -4320,46 +4491,46 @@ msgstr ""
 "Akats honi buruzko argibide gehigarriren bat baduzu\n"
 "jakinarazi, mesedez sartu hemen eta berari batuko zaio:"
 
-#: ../src/generic/dcpsg.cpp:1665
+#: ../src/generic/dcpsg.cpp:1634
 msgid "Cannot open file for PostScript printing!"
 msgstr "Ezin da ireki agiria PostScript irarketarako!"
 
-#: ../src/generic/dirctrlg.cpp:410
+#: ../src/generic/dirctrlg.cpp:408
 msgid "Computer"
 msgstr "Ordenagailua"
 
-#: ../src/generic/dirctrlg.cpp:412
+#: ../src/generic/dirctrlg.cpp:410
 msgid "Sections"
 msgstr "Atalak"
 
-#: ../src/generic/dirctrlg.cpp:490
+#: ../src/generic/dirctrlg.cpp:488
 msgid "Home directory"
 msgstr "Hasierako zuzenbidea"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/generic/dirctrlg.cpp:492 ../src/propgrid/advprops.cpp:783
+#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:783
 msgid "Desktop"
 msgstr "Mahigaina"
 
-#: ../src/generic/dirctrlg.cpp:536 ../src/generic/filectrlg.cpp:752
+#: ../src/generic/dirctrlg.cpp:534 ../src/generic/filectrlg.cpp:752
 msgid "Illegal directory name."
 msgstr "Legezkanpoko zuzenbide izena."
 
-#: ../src/generic/dirctrlg.cpp:536 ../src/generic/dirctrlg.cpp:554
-#: ../src/generic/dirctrlg.cpp:565 ../src/generic/dirdlgg.cpp:320
+#: ../src/generic/dirctrlg.cpp:534 ../src/generic/dirctrlg.cpp:552
+#: ../src/generic/dirctrlg.cpp:563 ../src/generic/dirdlgg.cpp:318
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:752
 #: ../src/generic/filectrlg.cpp:766 ../src/generic/filectrlg.cpp:782
-#: ../src/generic/filectrlg.cpp:1357 ../src/generic/filectrlg.cpp:1388
+#: ../src/generic/filectrlg.cpp:1356 ../src/generic/filectrlg.cpp:1387
 #: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:74
 #: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
 msgstr "Akatsa"
 
-#: ../src/generic/dirctrlg.cpp:554 ../src/generic/filectrlg.cpp:766
+#: ../src/generic/dirctrlg.cpp:552 ../src/generic/filectrlg.cpp:766
 msgid "File name exists already."
 msgstr "Agiri izena badago jadanik."
 
-#: ../src/generic/dirctrlg.cpp:565 ../src/generic/dirdlgg.cpp:320
+#: ../src/generic/dirctrlg.cpp:563 ../src/generic/dirdlgg.cpp:318
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:782
 msgid "Operation not permitted."
 msgstr "Eragiketa baimengabea."
@@ -4376,7 +4547,7 @@ msgstr "Joan hasierako zuzenbidera"
 msgid "Show &hidden directories"
 msgstr "Erakutsi e&zkutuko zuzenbideak"
 
-#: ../src/generic/dirdlgg.cpp:199
+#: ../src/generic/dirdlgg.cpp:197
 #, c-format
 msgid ""
 "The directory '%s' does not exist\n"
@@ -4385,11 +4556,11 @@ msgstr ""
 "'%s' zuzenbidea ez dago\n"
 "Orain sortu?"
 
-#: ../src/generic/dirdlgg.cpp:201
+#: ../src/generic/dirdlgg.cpp:199
 msgid "Directory does not exist"
 msgstr "Zuzenbidea ez dago"
 
-#: ../src/generic/dirdlgg.cpp:217
+#: ../src/generic/dirdlgg.cpp:215
 #, c-format
 msgid ""
 "Failed to create directory '%s'\n"
@@ -4398,19 +4569,19 @@ msgstr ""
 "Hutsegitea '%s' zuzenbidea sortzerakoan\n"
 "(Badituzu beharrezko baimenak?)"
 
-#: ../src/generic/dirdlgg.cpp:219
+#: ../src/generic/dirdlgg.cpp:217
 msgid "Error creating directory"
 msgstr "Akatsa zuzenbidea irakurtzean"
 
-#: ../src/generic/dirdlgg.cpp:284
+#: ../src/generic/dirdlgg.cpp:282
 msgid "You cannot add a new directory to this section."
 msgstr "Ezin duzu zuzenbide berririk gehitu atal honetara."
 
-#: ../src/generic/dirdlgg.cpp:285
+#: ../src/generic/dirdlgg.cpp:283
 msgid "Create directory"
 msgstr "Sortu zuzenbidea"
 
-#: ../src/generic/dirdlgg.cpp:294 ../src/generic/dirdlgg.cpp:304
+#: ../src/generic/dirdlgg.cpp:292 ../src/generic/dirdlgg.cpp:302
 #: ../src/generic/filectrlg.cpp:614 ../src/generic/filectrlg.cpp:623
 msgid "NewName"
 msgstr "Izen Berria"
@@ -4515,11 +4686,11 @@ msgstr "Oraingo zuzenbidea:"
 msgid "Show &hidden files"
 msgstr "Erakutsi &ezkutuko agiriak"
 
-#: ../src/generic/filectrlg.cpp:1356
+#: ../src/generic/filectrlg.cpp:1355
 msgid "Illegal file specification."
 msgstr "Legezkanpoko agiri zehaztapena"
 
-#: ../src/generic/filectrlg.cpp:1388
+#: ../src/generic/filectrlg.cpp:1387
 msgid "Directory doesn't exist."
 msgstr "Zuzenbidea ez dago."
 
@@ -4593,66 +4764,66 @@ msgstr "Oker"
 msgid "Light"
 msgstr "Arina"
 
-#: ../src/generic/fontdlgg.cpp:367
+#: ../src/generic/fontdlgg.cpp:366
 msgid "&Font family:"
 msgstr "&Hizki sendia:"
 
-#: ../src/generic/fontdlgg.cpp:371 ../src/generic/fontdlgg.cpp:373
+#: ../src/generic/fontdlgg.cpp:370 ../src/generic/fontdlgg.cpp:372
 msgid "The font family."
 msgstr "Hizki sendia."
 
-#: ../src/generic/fontdlgg.cpp:378 ../src/richtext/richtextstylepage.cpp:106
+#: ../src/generic/fontdlgg.cpp:377 ../src/richtext/richtextstylepage.cpp:106
 msgid "&Style:"
 msgstr "&Estiloa:"
 
-#: ../src/generic/fontdlgg.cpp:382 ../src/generic/fontdlgg.cpp:384
+#: ../src/generic/fontdlgg.cpp:381 ../src/generic/fontdlgg.cpp:383
 msgid "The font style."
 msgstr "Hizki estiloa."
 
-#: ../src/generic/fontdlgg.cpp:389
+#: ../src/generic/fontdlgg.cpp:388
 msgid "&Weight:"
 msgstr "&Zabalera:"
 
-#: ../src/generic/fontdlgg.cpp:393 ../src/generic/fontdlgg.cpp:395
+#: ../src/generic/fontdlgg.cpp:392 ../src/generic/fontdlgg.cpp:394
 msgid "The font weight."
 msgstr "Hizkiaren zabalera."
 
-#: ../src/generic/fontdlgg.cpp:403
+#: ../src/generic/fontdlgg.cpp:402
 msgid "C&olour:"
 msgstr "&Margoa:"
 
-#: ../src/generic/fontdlgg.cpp:411 ../src/generic/fontdlgg.cpp:413
+#: ../src/generic/fontdlgg.cpp:410 ../src/generic/fontdlgg.cpp:412
 msgid "The font colour."
 msgstr "Hizki margoa."
 
-#: ../src/generic/fontdlgg.cpp:419
+#: ../src/generic/fontdlgg.cpp:418
 msgid "&Point size:"
 msgstr "&Puntu neurria:"
 
-#: ../src/generic/fontdlgg.cpp:424 ../src/generic/fontdlgg.cpp:426
-#: ../src/generic/fontdlgg.cpp:430 ../src/generic/fontdlgg.cpp:432
+#: ../src/generic/fontdlgg.cpp:423 ../src/generic/fontdlgg.cpp:425
+#: ../src/generic/fontdlgg.cpp:429 ../src/generic/fontdlgg.cpp:431
 msgid "The font point size."
 msgstr "Hizkiaren puntu neurria."
 
-#: ../src/generic/fontdlgg.cpp:443 ../src/generic/fontdlgg.cpp:445
+#: ../src/generic/fontdlgg.cpp:442 ../src/generic/fontdlgg.cpp:444
 msgid "Whether the font is underlined."
 msgstr "Hizkia azpimarratuta badago."
 
-#: ../src/generic/fontdlgg.cpp:452 ../src/html/helpwnd.cpp:1220
-#: ../src/osx/carbon/fontdlg.cpp:387
+#: ../src/generic/fontdlgg.cpp:451 ../src/html/helpwnd.cpp:1219
+#: ../src/osx/carbon/fontdlg.cpp:386
 msgid "Preview:"
 msgstr "Aurreikuspena:"
 
-#: ../src/generic/fontdlgg.cpp:456 ../src/generic/fontdlgg.cpp:458
+#: ../src/generic/fontdlgg.cpp:455 ../src/generic/fontdlgg.cpp:457
 msgid "Shows the font preview."
 msgstr "Hizki aurreikuspen bat erakusten du."
 
-#: ../src/generic/fontdlgg.cpp:468 ../src/generic/fontdlgg.cpp:487
+#: ../src/generic/fontdlgg.cpp:467 ../src/generic/fontdlgg.cpp:486
 msgid "Click to cancel the font selection."
 msgstr "Klikatu hizki hautapena ezeztatzeko."
 
-#: ../src/generic/fontdlgg.cpp:473 ../src/generic/fontdlgg.cpp:475
-#: ../src/generic/fontdlgg.cpp:480 ../src/generic/fontdlgg.cpp:482
+#: ../src/generic/fontdlgg.cpp:472 ../src/generic/fontdlgg.cpp:474
+#: ../src/generic/fontdlgg.cpp:479 ../src/generic/fontdlgg.cpp:481
 msgid "Click to confirm the font selection."
 msgstr "Klikatu hizki hautapena baieztatzeko."
 
@@ -4661,7 +4832,7 @@ msgstr "Klikatu hizki hautapena baieztatzeko."
 msgid "Choose font"
 msgstr "Hautatu hizkia"
 
-#: ../src/generic/grid.cpp:6091
+#: ../src/generic/grid.cpp:6548
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
 
@@ -4724,8 +4895,8 @@ msgstr "%s Oharra"
 msgid "%s Information"
 msgstr "%s Argibideak"
 
-#: ../src/generic/logg.cpp:236 ../src/osx/menu_osx.cpp:458
-#: ../src/osx/menu_osx.cpp:466
+#: ../src/generic/logg.cpp:236 ../src/osx/menu_osx.cpp:510
+#: ../src/osx/menu_osx.cpp:518
 msgid "Application"
 msgstr "Aplikazioa"
 
@@ -4783,7 +4954,7 @@ msgstr "mezu kutxa baliogabea balioa itzultzen"
 msgid "Notice"
 msgstr "Albistea"
 
-#: ../src/generic/preferencesg.cpp:110
+#: ../src/generic/preferencesg.cpp:112
 #, c-format
 msgid "%s Preferences"
 msgstr "%s Hobespenak"
@@ -4846,77 +5017,77 @@ msgstr "Hona:"
 msgid "Copies:"
 msgstr "Kopiak:"
 
-#: ../src/generic/prntdlgg.cpp:291
+#: ../src/generic/prntdlgg.cpp:290
 msgid "PostScript file"
 msgstr "PostScript agiria"
 
-#: ../src/generic/prntdlgg.cpp:442
+#: ../src/generic/prntdlgg.cpp:441
 msgid "Print Setup"
 msgstr "Irarketa Ezarpena"
 
-#: ../src/generic/prntdlgg.cpp:486
+#: ../src/generic/prntdlgg.cpp:485
 msgid "Printer"
 msgstr "Irarkailua"
 
-#: ../src/generic/prntdlgg.cpp:503
+#: ../src/generic/prntdlgg.cpp:502
 msgid "Default printer"
 msgstr "Berezko irarkailua"
 
-#: ../src/generic/prntdlgg.cpp:595 ../src/generic/prntdlgg.cpp:794
-#: ../src/generic/prntdlgg.cpp:835 ../src/generic/prntdlgg.cpp:848
-#: ../src/generic/prntdlgg.cpp:1045 ../src/generic/prntdlgg.cpp:1050
+#: ../src/generic/prntdlgg.cpp:594 ../src/generic/prntdlgg.cpp:792
+#: ../src/generic/prntdlgg.cpp:833 ../src/generic/prntdlgg.cpp:846
+#: ../src/generic/prntdlgg.cpp:1042 ../src/generic/prntdlgg.cpp:1047
 msgid "Paper size"
 msgstr "Paper neurria"
 
-#: ../src/generic/prntdlgg.cpp:605 ../src/generic/prntdlgg.cpp:860
+#: ../src/generic/prntdlgg.cpp:604 ../src/generic/prntdlgg.cpp:858
 msgid "Portrait"
 msgstr "Argazkia"
 
-#: ../src/generic/prntdlgg.cpp:606 ../src/generic/prntdlgg.cpp:861
+#: ../src/generic/prntdlgg.cpp:605 ../src/generic/prntdlgg.cpp:859
 msgid "Landscape"
 msgstr "Etzana"
 
-#: ../src/generic/prntdlgg.cpp:608 ../src/generic/prntdlgg.cpp:862
+#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:860
 msgid "Orientation"
 msgstr "Norantza"
 
-#: ../src/generic/prntdlgg.cpp:611
+#: ../src/generic/prntdlgg.cpp:610
 msgid "Options"
 msgstr "Aukerak"
 
-#: ../src/generic/prntdlgg.cpp:614
+#: ../src/generic/prntdlgg.cpp:613
 msgid "Print in colour"
 msgstr "Irarkitu margoekin"
 
-#: ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/prntdlgg.cpp:622
 msgid "Print spooling"
 msgstr "Irarketa lerrokapena"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:625
 msgid "Printer command:"
 msgstr "Irarkailu komandoa:"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:637
 msgid "Printer options:"
 msgstr "Irarkailu aukerak:"
 
-#: ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:871
 msgid "Left margin (mm):"
 msgstr "Ezker bazterra (mm):"
 
-#: ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:872
 msgid "Top margin (mm):"
 msgstr "Goiko bazterra (mm):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:883
 msgid "Right margin (mm):"
 msgstr "Eskuin bazterra (mm):"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:884
 msgid "Bottom margin (mm):"
 msgstr "Beheko bazterra (mm):"
 
-#: ../src/generic/prntdlgg.cpp:909
+#: ../src/generic/prntdlgg.cpp:907
 msgid "Printer..."
 msgstr "Irarkailua..."
 
@@ -4933,7 +5104,7 @@ msgid "Done."
 msgstr "Eginda."
 
 #: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:182
-#: ../src/html/helpwnd.cpp:533 ../src/html/helpwnd.cpp:548
+#: ../src/html/helpwnd.cpp:532 ../src/html/helpwnd.cpp:547
 msgid "Search"
 msgstr "Bilatu"
 
@@ -4961,15 +5132,15 @@ msgstr "&Erakutsi idaztziak hasterakoan"
 msgid "&Next Tip"
 msgstr "&Hurrengo Idatzia"
 
-#: ../src/generic/wizard.cpp:429
+#: ../src/generic/wizard.cpp:431
 msgid "&Next >"
 msgstr "&Hurrengoa >"
 
-#: ../src/generic/wizard.cpp:430
+#: ../src/generic/wizard.cpp:432
 msgid "&Finish"
 msgstr "&Amaitu"
 
-#: ../src/generic/wizard.cpp:438
+#: ../src/generic/wizard.cpp:440
 msgid "< &Back"
 msgstr "< &Atzera"
 
@@ -4977,18 +5148,18 @@ msgstr "< &Atzera"
 msgid "translator-credits"
 msgstr "itzultzaileak"
 
-#: ../src/gtk/app.cpp:348
+#: ../src/gtk/app.cpp:391
 msgid ""
 "WARNING: using XIM input method is unsupported and may result in problems "
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
 
-#: ../src/gtk/app.cpp:431
+#: ../src/gtk/app.cpp:474
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "Ezinezkoa GTK+ hastea, ERAKUTSI ongi ezarrita dago?"
 
-#: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
+#: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:192
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
 msgstr "Hutsegita oraingo zuzenbidea \"%s\"-ra aldatzerakoan"
@@ -5051,7 +5222,7 @@ msgstr "Akatsa irarkitzerakoan:"
 msgid "Page Setup"
 msgstr "Orrialde Ezarpena"
 
-#: ../src/gtk/textctrl.cpp:1209
+#: ../src/gtk/textctrl.cpp:1273
 msgid "Failed to insert text in the control."
 msgstr "Hutsegitea agintean idazkia sartzerakoan."
 
@@ -5059,13 +5230,7 @@ msgstr "Hutsegitea agintean idazkia sartzerakoan."
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
 
-#: ../src/gtk/webview_webkit2.cpp:1310 ../src/msw/webview_edge.cpp:881
-#: ../src/msw/webview_ie.cpp:1077 ../src/osx/webview_webkit.mm:439
-#, c-format
-msgid "Error running JavaScript: %s"
-msgstr ""
-
-#: ../src/gtk/window.cpp:5664
+#: ../src/gtk/window.cpp:5781
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -5073,7 +5238,7 @@ msgstr ""
 "Gailu honetan ezarritako GTK+ zaharregia da ikusleiho osaketa sostengatzeko, "
 "mesedez ezarri GTK+2.12 edo berriagoa."
 
-#: ../src/gtk/window.cpp:5682
+#: ../src/gtk/window.cpp:5799
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -5081,7 +5246,7 @@ msgstr ""
 "Osaketa ez dago sostengaturik sistema honetan, mesedez gaitu ezazu zure "
 "Leiho Kudeatzailean."
 
-#: ../src/gtk/window.cpp:5693
+#: ../src/gtk/window.cpp:5810
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -5162,11 +5327,11 @@ msgstr "Ezin da '%s' aldibaterako agiria sortu"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Hutsegitea '%s' '%s'-ra ateratzerakoan."
 
-#: ../src/html/chm.cpp:806 ../src/html/chm.cpp:865
+#: ../src/html/chm.cpp:806 ../src/html/chm.cpp:863
 msgid "CHM handler currently supports only local files!"
 msgstr "CHM kudeatzaileak orain tokiko agiriak bakarrik sostengatzen ditu!"
 
-#: ../src/html/chm.cpp:829
+#: ../src/html/chm.cpp:827
 msgid "Link contained '//', converted to absolute link."
 msgstr "Loturak  '//' du, lotura osoan bihurtuta."
 
@@ -5203,32 +5368,32 @@ msgstr "Ezin da ireki HTML laguntza libuura: %s"
 msgid "Displays help as you browse the books on the left."
 msgstr "Laguntza erakusten du ezkerreko liburuetan nabigatzean."
 
-#: ../src/html/helpwnd.cpp:417 ../src/html/helpwnd.cpp:1104
-#: ../src/html/helpwnd.cpp:1740
+#: ../src/html/helpwnd.cpp:416 ../src/html/helpwnd.cpp:1103
+#: ../src/html/helpwnd.cpp:1739
 msgid "(bookmarks)"
 msgstr "(lastermarkak)"
 
-#: ../src/html/helpwnd.cpp:430
+#: ../src/html/helpwnd.cpp:429
 msgid "Add current page to bookmarks"
 msgstr "Gehitu oraingo orrialdea lastermarketara"
 
-#: ../src/html/helpwnd.cpp:431
+#: ../src/html/helpwnd.cpp:430
 msgid "Remove current page from bookmarks"
 msgstr "Kendu oraingo orrialdea lastermarketatik"
 
-#: ../src/html/helpwnd.cpp:473
+#: ../src/html/helpwnd.cpp:472
 msgid "Contents"
 msgstr "Edukiak"
 
-#: ../src/html/helpwnd.cpp:488
+#: ../src/html/helpwnd.cpp:487
 msgid "Find"
 msgstr "Bilatu"
 
-#: ../src/html/helpwnd.cpp:490
+#: ../src/html/helpwnd.cpp:489
 msgid "Show all"
 msgstr "Erakutsi denak"
 
-#: ../src/html/helpwnd.cpp:500
+#: ../src/html/helpwnd.cpp:499
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -5236,19 +5401,19 @@ msgstr ""
 "Erakutsi emandako azpikatea duten aurkibideko gai guztiak. Bilaketak hizki "
 "xehe-larriak bereizten ditu."
 
-#: ../src/html/helpwnd.cpp:501
+#: ../src/html/helpwnd.cpp:500
 msgid "Show all items in index"
 msgstr "Erakutsi gai guzitak aurkibidean"
 
-#: ../src/html/helpwnd.cpp:531
+#: ../src/html/helpwnd.cpp:530
 msgid "Case sensitive"
 msgstr "Hizki larri-xeheak"
 
-#: ../src/html/helpwnd.cpp:532
+#: ../src/html/helpwnd.cpp:531
 msgid "Whole words only"
 msgstr "Hitz osoak bakarrik"
 
-#: ../src/html/helpwnd.cpp:535
+#: ../src/html/helpwnd.cpp:534
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
 "above"
@@ -5256,147 +5421,147 @@ msgstr ""
 "Bilatu edukiak laguntza liburuan gainean idatzi duzun idazkiaren gertaera "
 "guztientzat"
 
-#: ../src/html/helpwnd.cpp:656
+#: ../src/html/helpwnd.cpp:655
 msgid "Show/hide navigation panel"
 msgstr "Erakusi/ezkutatu nabigazio panela"
 
-#: ../src/html/helpwnd.cpp:658
+#: ../src/html/helpwnd.cpp:657
 msgid "Go back"
 msgstr "Joan atzera"
 
-#: ../src/html/helpwnd.cpp:659
+#: ../src/html/helpwnd.cpp:658
 msgid "Go forward"
 msgstr "Joan aurrera"
 
-#: ../src/html/helpwnd.cpp:661
+#: ../src/html/helpwnd.cpp:660
 msgid "Go one level up in document hierarchy"
 msgstr "Joan maila bat gora agiri hierarkian"
 
-#: ../src/html/helpwnd.cpp:669 ../src/html/helpwnd.cpp:1552
+#: ../src/html/helpwnd.cpp:668 ../src/html/helpwnd.cpp:1551
 msgid "Open HTML document"
 msgstr "Ireki HTML agiria"
 
-#: ../src/html/helpwnd.cpp:673
+#: ../src/html/helpwnd.cpp:672
 msgid "Print this page"
 msgstr "Irarkitu orrialde hau"
 
-#: ../src/html/helpwnd.cpp:677
+#: ../src/html/helpwnd.cpp:676
 msgid "Display options dialog"
 msgstr "Erakutsi aukeren elkarrizketa"
 
-#: ../src/html/helpwnd.cpp:798
+#: ../src/html/helpwnd.cpp:797
 msgid "Please choose the page to display:"
 msgstr "Mesedez hautatu erakusteko orrialdea:"
 
-#: ../src/html/helpwnd.cpp:799
+#: ../src/html/helpwnd.cpp:798
 msgid "Help Topics"
 msgstr "Laguntza Gaiak"
 
-#: ../src/html/helpwnd.cpp:855
+#: ../src/html/helpwnd.cpp:854
 msgid "Searching..."
 msgstr "Bilatzen...."
 
-#: ../src/html/helpwnd.cpp:856
+#: ../src/html/helpwnd.cpp:855
 msgid "No matching page found yet"
 msgstr "Ez da bat datorren orrialderik aurkitu oraindik"
 
-#: ../src/html/helpwnd.cpp:873
+#: ../src/html/helpwnd.cpp:872
 #, c-format
 msgid "Found %i matches"
 msgstr "Aurkituta %i bat egite"
 
-#: ../src/html/helpwnd.cpp:961
+#: ../src/html/helpwnd.cpp:960
 msgid "(Help)"
 msgstr "(Laguntza)"
 
-#: ../src/html/helpwnd.cpp:1029
+#: ../src/html/helpwnd.cpp:1028
 #, c-format
 msgid "%d of %lu"
 msgstr "%d %lu-tik"
 
-#: ../src/html/helpwnd.cpp:1031
+#: ../src/html/helpwnd.cpp:1030
 #, c-format
 msgid "%lu of %lu"
 msgstr "%lu -> %lu-tik"
 
-#: ../src/html/helpwnd.cpp:1050
+#: ../src/html/helpwnd.cpp:1049
 msgid "Search in all books"
 msgstr "Bilatu liburu guztietan"
 
-#: ../src/html/helpwnd.cpp:1198
+#: ../src/html/helpwnd.cpp:1197
 msgid "Help Browser Options"
 msgstr "Laguntza Bilatzaile Aukerak"
 
-#: ../src/html/helpwnd.cpp:1203
+#: ../src/html/helpwnd.cpp:1202
 msgid "Normal font:"
 msgstr "Hizki arrunta:"
 
-#: ../src/html/helpwnd.cpp:1204
+#: ../src/html/helpwnd.cpp:1203
 msgid "Fixed font:"
 msgstr "Zuzendutako hizkia:"
 
-#: ../src/html/helpwnd.cpp:1205
+#: ../src/html/helpwnd.cpp:1204
 msgid "Font size:"
 msgstr "Hizki neurria:"
 
-#: ../src/html/helpwnd.cpp:1250
+#: ../src/html/helpwnd.cpp:1249
 msgid "font size"
 msgstr "hizki neurria"
 
-#: ../src/html/helpwnd.cpp:1261
+#: ../src/html/helpwnd.cpp:1260
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "Alde arrunta<br>eta <u>azpimarratua</u>. "
 
-#: ../src/html/helpwnd.cpp:1262
+#: ../src/html/helpwnd.cpp:1261
 msgid "<i>Italic face.</i> "
 msgstr "<i>Alde etzana.</i> "
 
-#: ../src/html/helpwnd.cpp:1263
+#: ../src/html/helpwnd.cpp:1262
 msgid "<b>Bold face.</b> "
 msgstr "<b>Alde lodia..</b> "
 
-#: ../src/html/helpwnd.cpp:1264
+#: ../src/html/helpwnd.cpp:1263
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>Alde etzan lodia.</i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1267
+#: ../src/html/helpwnd.cpp:1266
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Zuzendutako neurri aldea.<br> <b>lodia</b> <i>etzana</i> "
 
-#: ../src/html/helpwnd.cpp:1268
+#: ../src/html/helpwnd.cpp:1267
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i>lodi etzana <u>azpimarratuta</u></i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1529
+#: ../src/html/helpwnd.cpp:1528
 msgid "Help Printing"
 msgstr "Laguntza Irarketa"
 
-#: ../src/html/helpwnd.cpp:1532
+#: ../src/html/helpwnd.cpp:1531
 msgid "Cannot print empty page."
 msgstr "Ezin da irarkitu orrialde hutsa."
 
-#: ../src/html/helpwnd.cpp:1545
+#: ../src/html/helpwnd.cpp:1544
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "HTML agiriak (*.html;*.htm)|*.html;*.htm|"
 
-#: ../src/html/helpwnd.cpp:1546
+#: ../src/html/helpwnd.cpp:1545
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "Laguntza liburuak (*.htb)|*.htb|Laguntza liburuak (*.zip)|*.zip|"
 
-#: ../src/html/helpwnd.cpp:1547
+#: ../src/html/helpwnd.cpp:1546
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML Laguntza Egitasmoa (*.hhp)|*.hhp|"
 
-#: ../src/html/helpwnd.cpp:1549
+#: ../src/html/helpwnd.cpp:1548
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Konprimitutako HTML Laguntza agiria (*.chm)|*.chm|"
 
-#: ../src/html/helpwnd.cpp:1676
+#: ../src/html/helpwnd.cpp:1675
 #, c-format
 msgid "%i of %u"
 msgstr "%i -> %u-tik"
 
-#: ../src/html/helpwnd.cpp:1714
+#: ../src/html/helpwnd.cpp:1713
 #, c-format
 msgid "%u of %u"
 msgstr "%u -> %u-tik"
@@ -5535,7 +5700,7 @@ msgstr "Hutsegitea gakotik datuak lortzerakoan"
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Hutsegitea gako heuskarri sostengatuak berreskuratzearakoan"
 
-#: ../src/msw/colordlg.cpp:227
+#: ../src/msw/colordlg.cpp:229
 #, c-format
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Margo hautapen elkarrizketa hutsegitea %0lx akatsarekin."
@@ -5781,7 +5946,7 @@ msgstr "Hutsegitea bitmaparako oroimenaren %luKb-a esleitzerakoan."
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "Ezin dira '%s' zuzenbidean agirak zenbakitu"
 
-#: ../src/msw/dirdlg.cpp:287
+#: ../src/msw/dirdlg.cpp:289
 msgid "Couldn't obtain folder name"
 msgstr "Ezinezkoa agiritegi izena lortzea"
 
@@ -5791,8 +5956,8 @@ msgid "(error %d: %s)"
 msgstr " (%ld akatsa: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
-#: ../src/msw/imaglist.cpp:224 ../src/msw/imaglist.cpp:246
-#: ../src/msw/imaglist.cpp:271
+#: ../src/msw/imaglist.cpp:202 ../src/msw/imaglist.cpp:224
+#: ../src/msw/imaglist.cpp:249
 msgid "Couldn't add an image to the image list."
 msgstr "Ezinezkoa irudia gehitzea irudi zerrendara."
 
@@ -5818,7 +5983,7 @@ msgstr "Agiri elkarrizketa hutsegitea %0lx akats kodearekin."
 msgid "Font file \"%s\" couldn't be loaded"
 msgstr "Agiria ezin da gertatu."
 
-#: ../src/msw/fontdlg.cpp:170
+#: ../src/msw/fontdlg.cpp:231
 #, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "Elkarrizketa arrunt hutsegitea %0lx akats kodearekin."
@@ -5855,7 +6020,7 @@ msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
 msgstr "Core OpenGL profila ez dago sostengatuta OpenGL gidatzailean."
 
 #: ../src/msw/glcanvas.cpp:616 ../src/osx/glcanvas_osx.cpp:411
-#: ../src/unix/glegl.cpp:315 ../src/unix/glx11.cpp:559
+#: ../src/unix/glegl.cpp:318 ../src/unix/glx11.cpp:559
 #, fuzzy
 msgid "Couldn't create OpenGL context"
 msgstr "Ezinezkoa denboragailu bat sortzea"
@@ -5885,7 +6050,7 @@ msgstr "Hutsegitea MS HTML Laguntza abiatzerakoan."
 msgid "Can't delete the INI file '%s'"
 msgstr "Ezin da '%s' INI agiria ezabatu"
 
-#: ../src/msw/listctrl.cpp:933
+#: ../src/msw/listctrl.cpp:945
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Ezinezkoa %d zerrenda aginte gaiari buruzko argibideak berreskuratzea."
@@ -6160,7 +6325,7 @@ msgstr "Ezin da %d hizkimota sostengugabetik balioa esportatu."
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "\"%s\" giltzaren \"%s\" balioa ezikusten."
 
-#: ../src/msw/textctrl.cpp:534
+#: ../src/msw/textctrl.cpp:554
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -6168,41 +6333,41 @@ msgstr ""
 "Ezinezkoa aberastu edizio aginte bat sortzea, idazki arrunt agintea "
 "erabiltzen ordez. Mesedez berrezarri riched32.dll"
 
-#: ../src/msw/thread.cpp:529 ../src/unix/threadpsx.cpp:855
+#: ../src/msw/thread.cpp:530 ../src/unix/threadpsx.cpp:855
 msgid "Cannot start thread: error writing TLS."
 msgstr "Ezin da haria hasi: akatsa TLS idazterakoan."
 
-#: ../src/msw/thread.cpp:620
+#: ../src/msw/thread.cpp:621
 msgid "Can't set thread priority"
 msgstr "Ezin da hari lehentasuna ezarri"
 
-#: ../src/msw/thread.cpp:656
+#: ../src/msw/thread.cpp:657
 msgid "Can't create thread"
 msgstr "Ezin da haria sortu"
 
-#: ../src/msw/thread.cpp:675
+#: ../src/msw/thread.cpp:676
 msgid "Couldn't terminate thread"
 msgstr "Ezinezkoa haria amaitzea"
 
-#: ../src/msw/thread.cpp:785
+#: ../src/msw/thread.cpp:786
 msgid "Cannot wait for thread termination"
 msgstr "Ezin da hari amaiera itxaron"
 
-#: ../src/msw/thread.cpp:863
+#: ../src/msw/thread.cpp:864
 #, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "Ezin da %lx haria utzi"
 
-#: ../src/msw/thread.cpp:893
+#: ../src/msw/thread.cpp:894
 #, c-format
 msgid "Cannot resume thread %lx"
 msgstr "Ezin da %lx haria kendu"
 
-#: ../src/msw/thread.cpp:922
+#: ../src/msw/thread.cpp:923
 msgid "Couldn't get the current thread pointer"
 msgstr "Ezinezkoa oraingo hari puntua lortzea"
 
-#: ../src/msw/thread.cpp:1235
+#: ../src/msw/thread.cpp:1326
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -6210,7 +6375,7 @@ msgstr ""
 "Hari modulo abiarazpen hutsegitea: ezinezkoa aurkibidea esleitzea hariaren "
 "tokiko biltegian"
 
-#: ../src/msw/thread.cpp:1247
+#: ../src/msw/thread.cpp:1338
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6222,32 +6387,32 @@ msgstr ""
 msgid "Couldn't create a timer"
 msgstr "Ezinezkoa denboragailu bat sortzea"
 
-#: ../src/msw/utils.cpp:336
+#: ../src/msw/utils.cpp:360
 msgid "can't find user's HOME, using current directory."
 msgstr ""
 "ezin da aurkitu erabiltzailearen HASIERA, oraingo zuzenbidea erabiltzen."
 
-#: ../src/msw/utils.cpp:619
+#: ../src/msw/utils.cpp:661
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "Hutsegitea %d garapena hiltzerakoan"
 
-#: ../src/msw/utils.cpp:943
+#: ../src/msw/utils.cpp:985
 #, c-format
 msgid "Failed to load resource \"%s\"."
 msgstr "Hutsegitea \"%s\" baliabidea gertatzerakoan."
 
-#: ../src/msw/utils.cpp:950
+#: ../src/msw/utils.cpp:992
 #, c-format
 msgid "Failed to lock resource \"%s\"."
 msgstr "Hutsegitea \"%s\" baliabidea blokeatzerakoan."
 
-#: ../src/msw/utils.cpp:1135
+#: ../src/msw/utils.cpp:1182
 #, c-format
 msgid "build %lu"
 msgstr "%lu eraiketa"
 
-#: ../src/msw/utils.cpp:1143
+#: ../src/msw/utils.cpp:1190
 msgid ", 64-bit edition"
 msgstr ", 64-bit edizioa"
 
@@ -6299,109 +6464,104 @@ msgstr ""
 msgid "Can't get the JavaScript object"
 msgstr "Ezin da hari lehentasuna ezarri"
 
-#: ../src/msw/webview_ie.cpp:1056
+#: ../src/msw/webview_ie.cpp:1058
 #, fuzzy
 msgid "failed to evaluate"
 msgstr "Hutsegitea '%s' exekutatzerakoan\n"
-
-#: ../src/msw/webview_ie.cpp:1065
-#, fuzzy
-msgid "failed to retrieve execution result"
-msgstr "Hutsegitea RAS akats mezutik idazkia berreskuratzerakoan"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
 msgstr "Barren margoa"
 
-#: ../src/osx/carbon/fontdlg.cpp:326
+#: ../src/osx/carbon/fontdlg.cpp:325
 msgid "Font:"
 msgstr "Hizkia:"
 
-#: ../src/osx/carbon/fontdlg.cpp:336
+#: ../src/osx/carbon/fontdlg.cpp:335
 msgid "Size:"
 msgstr "Neurria:"
 
-#: ../src/osx/carbon/fontdlg.cpp:340 ../src/osx/carbon/fontdlg.cpp:342
+#: ../src/osx/carbon/fontdlg.cpp:339 ../src/osx/carbon/fontdlg.cpp:341
 msgid "The font size in points."
 msgstr "Hizki neurria puntutan."
 
-#: ../src/osx/carbon/fontdlg.cpp:345
+#: ../src/osx/carbon/fontdlg.cpp:344
 msgid "Style:"
 msgstr "Estiloa:"
 
-#: ../src/osx/carbon/fontdlg.cpp:353 ../src/osx/carbon/fontdlg.cpp:355
+#: ../src/osx/carbon/fontdlg.cpp:352 ../src/osx/carbon/fontdlg.cpp:354
 msgid "Check to make the font bold."
 msgstr "Hautatu hizkia lodi egiteko."
 
-#: ../src/osx/carbon/fontdlg.cpp:360 ../src/osx/carbon/fontdlg.cpp:362
+#: ../src/osx/carbon/fontdlg.cpp:359 ../src/osx/carbon/fontdlg.cpp:361
 msgid "Check to make the font italic."
 msgstr "Hautatu hizkia etzana egiteko."
 
 #. TRANSLATORS: Label of underlined font
-#: ../src/osx/carbon/fontdlg.cpp:367 ../src/propgrid/advprops.cpp:600
+#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:600
 #: ../src/richtext/richtextfontpage.cpp:359
 msgid "Underlined"
 msgstr "Azpimarratuta"
 
-#: ../src/osx/carbon/fontdlg.cpp:369 ../src/osx/carbon/fontdlg.cpp:371
+#: ../src/osx/carbon/fontdlg.cpp:368 ../src/osx/carbon/fontdlg.cpp:370
 msgid "Check to make the font underlined."
 msgstr "Hautatu hizkia azpimarratua egiteko."
 
-#: ../src/osx/carbon/fontdlg.cpp:377
+#: ../src/osx/carbon/fontdlg.cpp:376
 msgid "Colour:"
 msgstr "Margoa:"
 
-#: ../src/osx/carbon/fontdlg.cpp:381 ../src/osx/carbon/fontdlg.cpp:383
+#: ../src/osx/carbon/fontdlg.cpp:380 ../src/osx/carbon/fontdlg.cpp:382
 msgid "Click to change the font colour."
 msgstr "Klikatu hizki margoa aldatzeko."
 
-#: ../src/osx/carbon/fontdlg.cpp:391 ../src/osx/carbon/fontdlg.cpp:393
+#: ../src/osx/carbon/fontdlg.cpp:390 ../src/osx/carbon/fontdlg.cpp:392
 msgid "Shows a preview of the font."
 msgstr "Hizkiaren aurreikuspen bat erakusten du."
 
-#: ../src/osx/carbon/fontdlg.cpp:400 ../src/osx/carbon/fontdlg.cpp:402
+#: ../src/osx/carbon/fontdlg.cpp:399 ../src/osx/carbon/fontdlg.cpp:401
 msgid "Click to cancel changes to the font."
 msgstr "Klikatu hizkian aldaketak ezeztatzeko."
 
-#: ../src/osx/carbon/fontdlg.cpp:407 ../src/osx/carbon/fontdlg.cpp:409
+#: ../src/osx/carbon/fontdlg.cpp:406 ../src/osx/carbon/fontdlg.cpp:408
 msgid "Click to confirm changes to the font."
 msgstr "Klikatu hizkian aldaketak baieztatzeko."
 
-#: ../src/osx/carbon/fontdlg.cpp:417
+#: ../src/osx/carbon/fontdlg.cpp:416
 msgid "<Any>"
 msgstr "<Edozein>"
 
-#: ../src/osx/carbon/fontdlg.cpp:418 ../src/osx/carbon/fontdlg.cpp:623
-#: ../src/osx/carbon/fontdlg.cpp:643
+#: ../src/osx/carbon/fontdlg.cpp:417 ../src/osx/carbon/fontdlg.cpp:622
+#: ../src/osx/carbon/fontdlg.cpp:642
 msgid "<Any Roman>"
 msgstr "<Edozein Erromatar>"
 
-#: ../src/osx/carbon/fontdlg.cpp:419 ../src/osx/carbon/fontdlg.cpp:625
-#: ../src/osx/carbon/fontdlg.cpp:645
+#: ../src/osx/carbon/fontdlg.cpp:418 ../src/osx/carbon/fontdlg.cpp:624
+#: ../src/osx/carbon/fontdlg.cpp:644
 msgid "<Any Decorative>"
 msgstr "<Edozein Apaingarria>"
 
-#: ../src/osx/carbon/fontdlg.cpp:420 ../src/osx/carbon/fontdlg.cpp:627
-#: ../src/osx/carbon/fontdlg.cpp:647
+#: ../src/osx/carbon/fontdlg.cpp:419 ../src/osx/carbon/fontdlg.cpp:626
+#: ../src/osx/carbon/fontdlg.cpp:646
 msgid "<Any Modern>"
 msgstr "<Edozein Modernoa>"
 
-#: ../src/osx/carbon/fontdlg.cpp:421 ../src/osx/carbon/fontdlg.cpp:629
-#: ../src/osx/carbon/fontdlg.cpp:649
+#: ../src/osx/carbon/fontdlg.cpp:420 ../src/osx/carbon/fontdlg.cpp:628
+#: ../src/osx/carbon/fontdlg.cpp:648
 msgid "<Any Script>"
 msgstr "<Eskripten bat>"
 
-#: ../src/osx/carbon/fontdlg.cpp:422 ../src/osx/carbon/fontdlg.cpp:634
-#: ../src/osx/carbon/fontdlg.cpp:653
+#: ../src/osx/carbon/fontdlg.cpp:421 ../src/osx/carbon/fontdlg.cpp:633
+#: ../src/osx/carbon/fontdlg.cpp:652
 msgid "<Any Swiss>"
 msgstr "<Edozein Suitzar>"
 
-#: ../src/osx/carbon/fontdlg.cpp:423 ../src/osx/carbon/fontdlg.cpp:631
-#: ../src/osx/carbon/fontdlg.cpp:651
+#: ../src/osx/carbon/fontdlg.cpp:422 ../src/osx/carbon/fontdlg.cpp:630
+#: ../src/osx/carbon/fontdlg.cpp:650
 msgid "<Any Teletype>"
 msgstr "<Teletiporen bat>"
 
-#: ../src/osx/cocoa/filedlg.mm:274
+#: ../src/osx/cocoa/filedlg.mm:337
 #, fuzzy
 msgid "File type:"
 msgstr "Teletipoa"
@@ -6437,42 +6597,42 @@ msgid ""
 "\"."
 msgstr ""
 
-#: ../src/osx/menu_osx.cpp:441
+#: ../src/osx/menu_osx.cpp:493
 msgid "About..."
 msgstr "Honi buruz..."
 
-#: ../src/osx/menu_osx.cpp:449
+#: ../src/osx/menu_osx.cpp:501
 msgid "Preferences..."
 msgstr "Hobespenak..."
 
-#: ../src/osx/menu_osx.cpp:453
+#: ../src/osx/menu_osx.cpp:505
 msgid "Services"
 msgstr "Zerbitzuak"
 
-#: ../src/osx/menu_osx.cpp:458
+#: ../src/osx/menu_osx.cpp:510
 #, c-format
 msgid "Hide %s"
 msgstr "Ezkutatu %s"
 
-#: ../src/osx/menu_osx.cpp:460
+#: ../src/osx/menu_osx.cpp:512
 msgid "Hide Others"
 msgstr "Ezkutatu Besteak"
 
-#: ../src/osx/menu_osx.cpp:461
+#: ../src/osx/menu_osx.cpp:513
 msgid "Show All"
 msgstr "Erakutsi Denak"
 
-#: ../src/osx/menu_osx.cpp:466
+#: ../src/osx/menu_osx.cpp:518
 #, c-format
 msgid "Quit %s"
 msgstr "Utzi %s"
 
-#: ../src/osx/webview_webkit.mm:278
+#: ../src/osx/webview_webkit.mm:285
 #, fuzzy
 msgid "Printing is not supported by the system web control"
 msgstr "Gzip ez dago sostengaturik zlib bertsio honetarako"
 
-#: ../src/osx/webview_webkit.mm:287
+#: ../src/osx/webview_webkit.mm:294
 #, fuzzy
 msgid "Print operation could not be initialized"
 msgstr "Zutabe azalpena ezin da abiarazi."
@@ -6583,6 +6743,11 @@ msgid "InactiveCaptionText"
 msgstr "Harpen-Idazkia-Ezgaituta"
 
 #. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:790
+msgid "Menu"
+msgstr "Menua"
+
+#. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:791
 msgid "Scrollbar"
 msgstr "Irristabarra"
@@ -6690,163 +6855,191 @@ msgstr "Oria"
 msgid "White"
 msgstr "Zuria"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1653
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Default"
 msgstr "Berezkoa"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1654
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Gezia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1655
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Eskuin Gezia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1656
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Hutsik"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1657
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Idibegia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1658
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Character"
 msgstr "Hizkia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1659
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Zeharka"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1660
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Eskua"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1661
+#, fuzzy
+msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "I-Beam"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1662
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Ezker Botoia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1663
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Handitzailea"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1664
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Erdiko Botoia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1665
+#, fuzzy
+msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Sarrerarik Ez"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1666
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Margoketa Brotxa"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1667
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Bolaluma"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1668
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Ezker Puntua"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1669
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Eskuin Puntua"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1670
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Galdera Gezia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1671
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Eskuin Botoia"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1672
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Neurritzen IE-HM"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1673
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Neurritzen I-H"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1674
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Neurritzen IM-HE"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1675
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Neurritzen M-E"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1676
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Neurritzen"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1677
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Spraycan"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1678
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Itxaron"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1679
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Behatu"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1680
+#, fuzzy
+msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Itxaron Gezia"
 
-#: ../src/propgrid/advprops.cpp:2050
+#: ../src/propgrid/advprops.cpp:2052
 msgid "Make a selection:"
 msgstr "Egin hautapen bat:"
 
-#: ../src/propgrid/manager.cpp:223
+#: ../src/propgrid/manager.cpp:405
 msgid "Property"
 msgstr "Ezaugarria"
 
-#: ../src/propgrid/manager.cpp:224
+#: ../src/propgrid/manager.cpp:406
 msgid "Value"
 msgstr "Balioa"
 
-#: ../src/propgrid/manager.cpp:1527
+#: ../src/propgrid/manager.cpp:1708
 msgid "Categorized Mode"
 msgstr "Kategoriatutako Modua"
 
-#: ../src/propgrid/manager.cpp:1544
+#: ../src/propgrid/manager.cpp:1734
 msgid "Alphabetic Mode"
 msgstr "Alfabeto Moduan"
 
@@ -6866,20 +7059,20 @@ msgid "Unspecified"
 msgstr "Zehaztugabea"
 
 #. TRANSLATORS: Caption of message box displaying any property error
-#: ../src/propgrid/propgrid.cpp:3169 ../src/propgrid/propgrid.cpp:3306
+#: ../src/propgrid/propgrid.cpp:3171 ../src/propgrid/propgrid.cpp:3308
 msgid "Property Error"
 msgstr "Ezaugarri Akatsa"
 
-#: ../src/propgrid/propgrid.cpp:3283
+#: ../src/propgrid/propgrid.cpp:3285
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr "Balio okerra sartu duzu. Sakatu IRTEN edizioa ezeztatzeko."
 
-#: ../src/propgrid/propgrid.cpp:6681
+#: ../src/propgrid/propgrid.cpp:6688
 #, c-format
 msgid "Error in resource: %s"
 msgstr "Akatsa baliabidean: %s"
 
-#: ../src/propgrid/propgridiface.cpp:385
+#: ../src/propgrid/propgridiface.cpp:379
 #, c-format
 msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
@@ -6908,16 +7101,16 @@ msgstr "Balioa izan behar da %s eta %s artekoa."
 msgid "Value must be %s or less."
 msgstr "Balioa izan behar da %s edo txikiagoa."
 
-#: ../src/propgrid/props.cpp:1115
+#: ../src/propgrid/props.cpp:1114
 #, c-format
 msgid "Not %s"
 msgstr "Ez %s"
 
-#: ../src/propgrid/props.cpp:1904
+#: ../src/propgrid/props.cpp:1901
 msgid "Choose a directory:"
 msgstr "Hautatu zuzenbide bat:"
 
-#: ../src/propgrid/props.cpp:2199
+#: ../src/propgrid/props.cpp:2196
 msgid "Choose a file"
 msgstr "Hautatu agiri bat"
 
@@ -7384,117 +7577,117 @@ msgstr "Sartu"
 msgid "Outset"
 msgstr "Hasiera"
 
-#: ../src/richtext/richtextbuffer.cpp:3523
+#: ../src/richtext/richtextbuffer.cpp:3522
 msgid "Change Style"
 msgstr "Aldatu Estiloa"
 
-#: ../src/richtext/richtextbuffer.cpp:3706
+#: ../src/richtext/richtextbuffer.cpp:3705
 msgid "Change Object Style"
 msgstr "Aldatu Objetu Estiloa"
 
-#: ../src/richtext/richtextbuffer.cpp:3979
-#: ../src/richtext/richtextbuffer.cpp:8125
+#: ../src/richtext/richtextbuffer.cpp:3978
+#: ../src/richtext/richtextbuffer.cpp:8174
 msgid "Change Properties"
 msgstr "Aldatu Ezaugarriak"
 
-#: ../src/richtext/richtextbuffer.cpp:4351
+#: ../src/richtext/richtextbuffer.cpp:4350
 msgid "Change List Style"
 msgstr "Aldatu Zerrenda Estiloa"
 
-#: ../src/richtext/richtextbuffer.cpp:4524
+#: ../src/richtext/richtextbuffer.cpp:4523
 msgid "Renumber List"
 msgstr "Birzenbakitu Zerrenda"
 
-#: ../src/richtext/richtextbuffer.cpp:7818
-#: ../src/richtext/richtextbuffer.cpp:7848
-#: ../src/richtext/richtextbuffer.cpp:7890
+#: ../src/richtext/richtextbuffer.cpp:7867
+#: ../src/richtext/richtextbuffer.cpp:7897
+#: ../src/richtext/richtextbuffer.cpp:7939
 #: ../src/richtext/richtextctrl.cpp:1287 ../src/richtext/richtextctrl.cpp:1495
 msgid "Insert Text"
 msgstr "Sartu Idazkia"
 
-#: ../src/richtext/richtextbuffer.cpp:7974
-#: ../src/richtext/richtextbuffer.cpp:8934
+#: ../src/richtext/richtextbuffer.cpp:8023
+#: ../src/richtext/richtextbuffer.cpp:8983
 msgid "Insert Image"
 msgstr "Sartu Irudia"
 
-#: ../src/richtext/richtextbuffer.cpp:8021
+#: ../src/richtext/richtextbuffer.cpp:8070
 msgid "Insert Object"
 msgstr "Sartu Objetua"
 
-#: ../src/richtext/richtextbuffer.cpp:8063
+#: ../src/richtext/richtextbuffer.cpp:8112
 msgid "Insert Field"
 msgstr "Txertatu Eremua"
 
-#: ../src/richtext/richtextbuffer.cpp:8361
+#: ../src/richtext/richtextbuffer.cpp:8410
 msgid "Too many EndStyle calls!"
 msgstr "EndStyle dei gehiegi!"
 
-#: ../src/richtext/richtextbuffer.cpp:8736
+#: ../src/richtext/richtextbuffer.cpp:8785
 msgid "files"
 msgstr "agiriak"
 
-#: ../src/richtext/richtextbuffer.cpp:9337
+#: ../src/richtext/richtextbuffer.cpp:9386
 msgid "standard/circle"
 msgstr "estandarra/borobila"
 
-#: ../src/richtext/richtextbuffer.cpp:9338
+#: ../src/richtext/richtextbuffer.cpp:9387
 msgid "standard/circle-outline"
 msgstr "estandarra/borobil-ingurua"
 
-#: ../src/richtext/richtextbuffer.cpp:9339
+#: ../src/richtext/richtextbuffer.cpp:9388
 msgid "standard/square"
 msgstr "estandarra/laukia"
 
-#: ../src/richtext/richtextbuffer.cpp:9340
+#: ../src/richtext/richtextbuffer.cpp:9389
 msgid "standard/diamond"
 msgstr "estandarra/diamantea"
 
-#: ../src/richtext/richtextbuffer.cpp:9341
+#: ../src/richtext/richtextbuffer.cpp:9390
 msgid "standard/triangle"
 msgstr "estandarra/hirukia"
 
-#: ../src/richtext/richtextbuffer.cpp:9380
+#: ../src/richtext/richtextbuffer.cpp:9429
 msgid "Box Properties"
 msgstr "Kutxaren Ezaugarriak"
 
-#: ../src/richtext/richtextbuffer.cpp:9963
+#: ../src/richtext/richtextbuffer.cpp:10012
 msgid "Multiple Cell Properties"
 msgstr "Gelaxka Anitz Ezaugarriak"
 
-#: ../src/richtext/richtextbuffer.cpp:9965
+#: ../src/richtext/richtextbuffer.cpp:10014
 msgid "Cell Properties"
 msgstr "Gelaxka Ezaugarriak"
 
-#: ../src/richtext/richtextbuffer.cpp:11216
+#: ../src/richtext/richtextbuffer.cpp:11265
 msgid "Set Cell Style"
 msgstr "Ezarri Gelaxka estiloa"
 
-#: ../src/richtext/richtextbuffer.cpp:11290
+#: ../src/richtext/richtextbuffer.cpp:11339
 msgid "Delete Row"
 msgstr "Ezabatu Lerroa"
 
-#: ../src/richtext/richtextbuffer.cpp:11340
+#: ../src/richtext/richtextbuffer.cpp:11389
 msgid "Delete Column"
 msgstr "Ezabatu Zutabea"
 
-#: ../src/richtext/richtextbuffer.cpp:11391
+#: ../src/richtext/richtextbuffer.cpp:11440
 msgid "Add Row"
 msgstr "Gehitu Lerroa"
 
-#: ../src/richtext/richtextbuffer.cpp:11454
+#: ../src/richtext/richtextbuffer.cpp:11503
 msgid "Add Column"
 msgstr "Gehitu Zutabea"
 
-#: ../src/richtext/richtextbuffer.cpp:11497
+#: ../src/richtext/richtextbuffer.cpp:11546
 msgid "Table Properties"
 msgstr "Taula Ezaugarriak"
 
-#: ../src/richtext/richtextbuffer.cpp:12863
+#: ../src/richtext/richtextbuffer.cpp:12909
 msgid "Picture Properties"
 msgstr "Irudiaren Ezaugarriak"
 
-#: ../src/richtext/richtextbuffer.cpp:13133
-#: ../src/richtext/richtextbuffer.cpp:13243
+#: ../src/richtext/richtextbuffer.cpp:13179
+#: ../src/richtext/richtextbuffer.cpp:13289
 msgid "image"
 msgstr "irudia"
 
@@ -8730,6 +8923,10 @@ msgstr "Unicode"
 msgid "The range to show."
 msgstr "Erakusteko maila."
 
+#: ../src/richtext/richtextsymboldlg.cpp:469
+msgid "Insert"
+msgstr "Sartu"
+
 #: ../src/richtext/richtextsymboldlg.cpp:503
 msgid "(Normal text)"
 msgstr "(Idazki arrunta)"
@@ -8805,6 +9002,10 @@ msgstr "I&kurtu"
 #: ../src/univ/themes/win32.cpp:3751
 msgid "Ma&ximize"
 msgstr "Han&ditu"
+
+#: ../src/univ/themes/win32.cpp:3753
+msgid "Alt+"
+msgstr "Alt+"
 
 #: ../src/unix/appunix.cpp:179
 msgid "Failed to install signal handler"
@@ -9047,45 +9248,45 @@ msgstr "Hutsegitea %d hari lehentasuna ezartzerakoan."
 msgid "Failed to terminate a thread."
 msgstr "Hutsegitea hari bat amaitzerakoan."
 
-#: ../src/unix/threadpsx.cpp:1843
+#: ../src/unix/threadpsx.cpp:1875
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Hari modulo abiarazpen hutsegitea: hutsegitea hari giltza sortzerakoan"
 
-#: ../src/unix/utilsunx.cpp:303
+#: ../src/unix/utilsunx.cpp:338
 msgid "Impossible to get child process input"
 msgstr "Ezinezkoa child garapen sarrera lortu"
 
-#: ../src/unix/utilsunx.cpp:353
+#: ../src/unix/utilsunx.cpp:388
 msgid "Can't write to child process's stdin"
 msgstr "Ezin da child prozesuaren stdin idatzi"
 
-#: ../src/unix/utilsunx.cpp:613
+#: ../src/unix/utilsunx.cpp:648
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Hutsegitea '%s' exekutatzerakoan\n"
 
-#: ../src/unix/utilsunx.cpp:647
+#: ../src/unix/utilsunx.cpp:682
 msgid "Fork failed"
 msgstr "Adar hutsegitea"
 
-#: ../src/unix/utilsunx.cpp:670
+#: ../src/unix/utilsunx.cpp:705
 msgid "Failed to set process priority"
 msgstr "Hutsegitea prozesu lehentasuna ezartzerakoan"
 
-#: ../src/unix/utilsunx.cpp:681
+#: ../src/unix/utilsunx.cpp:716
 msgid "Failed to redirect child process input/output"
 msgstr "Hutsegitea child garapen sarrera/irteera berbideratzerakoan"
 
-#: ../src/unix/utilsunx.cpp:785
+#: ../src/unix/utilsunx.cpp:820
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 "Hutsegitea ez-blokeo hodia ezartzerakoan, programa blokeatu egin daiteke."
 
-#: ../src/unix/utilsunx.cpp:989
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the hostname"
 msgstr "Ezin da lortu hostalari-izena"
 
-#: ../src/unix/utilsunx.cpp:1025
+#: ../src/unix/utilsunx.cpp:1060
 msgid "Cannot get the official hostname"
 msgstr "Ezin da lortu hostalari-izen ofiziala"
 
@@ -9126,25 +9327,32 @@ msgstr "Hutsegitea \"%s\" erakustea irekitzerakoan."
 msgid "XML parsing error: '%s' at line %d"
 msgstr "XML azterketa akatsa : '%s' %d lerroan"
 
-#: ../src/xrc/xmlres.cpp:423
+#: ../src/xrc/xmlres.cpp:418
 #, c-format
 msgid "Cannot load resources from '%s'."
 msgstr "Ezin dira gertatu baliabideak '%s'-tik."
 
-#: ../src/xrc/xmlres.cpp:761
+#: ../src/xrc/xmlres.cpp:756
 #, c-format
 msgid "Cannot open resources file '%s'."
 msgstr "Ezinezkoa '%s' baliabide agiria irekitzea."
 
-#: ../src/xrc/xmlres.cpp:779
+#: ../src/xrc/xmlres.cpp:774
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "Ezin dira gertatu baliabideak '%s' agiritik."
 
-#: ../src/xrc/xmlres.cpp:2589
+#: ../src/xrc/xmlres.cpp:2744
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Hutsegitea %s \"%s\" sortzerakoan."
+
+#~ msgid "conversion to 8-bit encoding failed"
+#~ msgstr "hutsegitea 8-bitera bihurtzerakoan"
+
+#, fuzzy
+#~ msgid "failed to retrieve execution result"
+#~ msgstr "Hutsegitea RAS akats mezutik idazkia berreskuratzerakoan"
 
 #~ msgid "&Save as"
 #~ msgstr "&Gorde honela"

@@ -112,6 +112,7 @@ public:
     wxVectorGridBlockCoords& GetBlocks() { return m_selection; }
 
     void EndSelecting();
+    void CancelSelecting();
 
 private:
     void SelectBlockNoEvent(const wxGridBlockCoords& block)

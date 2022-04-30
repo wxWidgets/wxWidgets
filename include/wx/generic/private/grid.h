@@ -281,6 +281,8 @@ public:
 
     wxGrid *GetOwner() { return m_owner; }
 
+    virtual bool IsFrozen() const { return false; }
+
 protected:
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
 
@@ -297,8 +299,6 @@ public:
       : wxGridSubwindow(parent)
     {
     }
-
-    virtual bool IsFrozen() const { return false; }
 
 private:
     void OnPaint( wxPaintEvent& event );
@@ -329,8 +329,6 @@ public:
         : wxGridSubwindow(parent)
     {
     }
-
-    virtual bool IsFrozen() const { return false; }
 
 private:
     void OnPaint( wxPaintEvent& event );

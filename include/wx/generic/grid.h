@@ -100,6 +100,7 @@ class WXDLLIMPEXP_FWD_CORE wxGridCornerLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridEvent;
 class WXDLLIMPEXP_FWD_CORE wxGridRowLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridWindow;
+class WXDLLIMPEXP_FWD_CORE wxGridSubwindow;
 class WXDLLIMPEXP_FWD_CORE wxGridTypeRegistry;
 class WXDLLIMPEXP_FWD_CORE wxGridSelection;
 
@@ -2804,9 +2805,18 @@ protected:
     // or -1 if there is no resize operation in progress.
     int     m_dragRowOrCol;
 
+    // Original row or column size when resizing; used when the user cancels
+    int     m_dragRowOrColOldSize;
+
     // true if a drag operation is in progress; when this is true,
     // m_startDragPos is valid, i.e. not wxDefaultPosition
     bool    m_isDragging;
+
+    // true if a drag operation was canceled
+    // (mouse event Dragging() might still be active until LeftUp)
+    // m_isDragging can only be set after m_cancelledDragging is cleared.
+    // This is done when a mouse event happens with left button up.
+    bool    m_cancelledDragging;
 
     // the position (in physical coordinates) where the user started dragging
     // the mouse or wxDefaultPosition if mouse isn't being dragged
@@ -2815,6 +2825,10 @@ protected:
     // false because we wait until the mouse is moved some distance away before
     // setting m_isDragging to true
     wxPoint m_startDragPos;
+
+    // the position of the last mouse event
+    // used for detection of the movement direction
+    wxPoint m_lastMousePos;
 
     bool    m_waitForSlowClick;
 
@@ -2960,6 +2974,13 @@ private:
     // release the mouse capture if it's currently captured
     void EndDraggingIfNecessary();
 
+    // helper for Process...MouseEvent to block re-triggering m_isDragging
+    bool CheckIfDragCancelled(wxMouseEvent *event);
+
+    // helper for Process...MouseEvent to scroll
+    void CheckDoDragScroll(wxGridSubwindow *eventGridWindow, wxGridSubwindow *gridWindow,
+                           wxPoint posEvent, int direction);
+
     // return true if the grid should be refreshed right now
     bool ShouldRefresh() const
     {
@@ -3029,7 +3050,7 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeRowOrCol(int col);
+    void DoStartResizeRowOrCol(int col, int size);
     void DoStartMoveRow(int col);
     void DoStartMoveCol(int col);
 
