@@ -1058,8 +1058,8 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
         int i;
         for (i = 0; i < n; i++)
         {
-            cpoints[i].x = (int)(points[i].x + xoffset);
-            cpoints[i].y = (int)(points[i].y + yoffset);
+            cpoints[i].x = points[i].x + xoffset;
+            cpoints[i].y = points[i].y + yoffset;
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
@@ -1096,8 +1096,8 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
         wxScopedArray<POINT> cpoints(cnt);
         for (i = 0; i < cnt; i++)
         {
-            cpoints[i].x = (int)(points[i].x + xoffset);
-            cpoints[i].y = (int)(points[i].y + yoffset);
+            cpoints[i].x = points[i].x + xoffset;
+            cpoints[i].y = points[i].y + yoffset;
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
