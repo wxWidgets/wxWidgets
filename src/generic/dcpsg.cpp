@@ -1614,6 +1614,15 @@ wxSize wxPostScriptDCImpl::GetPPI() const
     return wxSize( DPI, DPI );
 }
 
+wxSize wxPostScriptDCImpl::FromDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
+wxSize wxPostScriptDCImpl::ToDIP(const wxSize& sz) const
+{
+    return sz;
+}
 
 bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
 {

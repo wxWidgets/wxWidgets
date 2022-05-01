@@ -160,6 +160,11 @@ void wxGCDCImpl::SetGraphicsContext( wxGraphicsContext* ctx )
 
     if ( DoInitContext(ctx) )
     {
+        if (m_graphicContext->GetWindow())
+        {
+            m_window = m_graphicContext->GetWindow();
+        }
+
         // Reapply our attributes to the context.
         m_graphicContext->SetFont( m_font , m_textForegroundColour );
         m_graphicContext->SetPen( m_pen );
@@ -488,11 +493,6 @@ wxSize wxGCDCImpl::GetPPI() const
     // This is the same value that wxGraphicsContext::GetDPI() returns by
     // default.
     return wxDisplay::GetStdPPI();
-}
-
-double wxGCDCImpl::GetDPIScaleFactor() const
-{
-    return m_graphicContext ? m_graphicContext->GetDPIScaleFactor() : 1.0;
 }
 
 int wxGCDCImpl::GetDepth() const

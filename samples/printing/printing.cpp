@@ -110,10 +110,7 @@ bool MyApp::OnInit(void)
     // Create the main frame window
     // ----------------------------
 
-    MyFrame* frame = new MyFrame((wxFrame *) NULL, "wxWidgets Printing Demo",
-                                 wxPoint(0, 0), wxSize(400, 400));
-
-    frame->Centre(wxBOTH);
+    MyFrame* frame = new MyFrame("wxWidgets Printing Demo");
     frame->Show();
 
     return true;
@@ -142,79 +139,79 @@ void MyApp::Draw(wxDC&dc)
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxLIGHT_GREY_BRUSH);
 
-    dc.DrawRectangle(0, 0, 230, 350);
-    dc.DrawLine(0, 0, 229, 349);
-    dc.DrawLine(229, 0, 0, 349);
+    dc.DrawRectangle(0, 0, dc.FromDIP(230), dc.FromDIP(350));
+    dc.DrawLine(0, 0, dc.FromDIP(229), dc.FromDIP(349));
+    dc.DrawLine(dc.FromDIP(229), 0, 0, dc.FromDIP(349));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.SetBrush(*wxCYAN_BRUSH);
     dc.SetPen(*wxRED_PEN);
 
-    dc.DrawRoundedRectangle(0, 20, 200, 80, 20);
+    dc.DrawRoundedRectangle(0, dc.FromDIP(20), dc.FromDIP(200), dc.FromDIP(80), 20);
 
-    dc.DrawText( "Rectangle 200 by 80", 40, 40);
+    dc.DrawText( "Rectangle 200 by 80", dc.FromDIP(40), dc.FromDIP(40));
 
     dc.SetPen( wxPen(*wxBLACK, 0, wxPENSTYLE_DOT_DASH) );
-    dc.DrawEllipse(50, 140, 100, 50);
+    dc.DrawEllipse(dc.FromDIP(50), dc.FromDIP(140), dc.FromDIP(100), dc.FromDIP(50));
     dc.SetPen(*wxRED_PEN);
 
-    dc.DrawText( "Test message: this is in 10 point text", 10, 180);
+    dc.DrawText( "Test message: this is in 10 point text", dc.FromDIP(10), dc.FromDIP(180));
 
-    dc.DrawRotatedText( "This\nis\na multi-line\ntext", 170, 100, -m_angle/1.5);
+    dc.DrawRotatedText( "This\nis\na multi-line\ntext", dc.FromDIP(170), dc.FromDIP(100), -m_angle/1.5);
 
 #if wxUSE_UNICODE
     const char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
-    dc.DrawText( tmp, 10, 200 );
+    dc.DrawText( tmp, dc.FromDIP(10), dc.FromDIP(200) );
 #endif
 
     wxPoint points[5];
     points[0].x = 0;
     points[0].y = 0;
-    points[1].x = 20;
+    points[1].x = dc.FromDIP(20);
     points[1].y = 0;
-    points[2].x = 20;
-    points[2].y = 20;
-    points[3].x = 10;
-    points[3].y = 20;
-    points[4].x = 10;
-    points[4].y = -20;
-    dc.DrawPolygon( 5, points, 20, 250, wxODDEVEN_RULE );
-    dc.DrawPolygon( 5, points, 50, 250, wxWINDING_RULE );
+    points[2].x = dc.FromDIP(20);
+    points[2].y = dc.FromDIP(20);
+    points[3].x = dc.FromDIP(10);
+    points[3].y = dc.FromDIP(20);
+    points[4].x = dc.FromDIP(10);
+    points[4].y = dc.FromDIP(-20);
+    dc.DrawPolygon( 5, points, dc.FromDIP(20), dc.FromDIP(250), wxODDEVEN_RULE );
+    dc.DrawPolygon( 5, points, dc.FromDIP(50), dc.FromDIP(250), wxWINDING_RULE );
 
-    dc.DrawArc( 20, 330, 40, 300, 20, 300 );
+    dc.DrawArc( dc.FromDIP(20), dc.FromDIP(330), dc.FromDIP(40), dc.FromDIP(300), dc.FromDIP(20), dc.FromDIP(300) );
     {
         wxDCBrushChanger changeBrush(dc, *wxTRANSPARENT_BRUSH);
-        dc.DrawArc( 60, 330, 80, 300, 60, 300 );
+        dc.DrawArc( dc.FromDIP(60), dc.FromDIP(330), dc.FromDIP(80), dc.FromDIP(300), dc.FromDIP(60), dc.FromDIP(300) );
     }
 
-    dc.DrawEllipticArc( 80, 250, 60, 30, 0.0, 270.0 );
+    dc.DrawEllipticArc( dc.FromDIP(80), dc.FromDIP(250), dc.FromDIP(60), dc.FromDIP(30), 0.0, 270.0 );
 
-    points[0].x = 150;
-    points[0].y = 250;
-    points[1].x = 180;
-    points[1].y = 250;
-    points[2].x = 180;
-    points[2].y = 220;
-    points[3].x = 200;
-    points[3].y = 220;
+    points[0].x = dc.FromDIP(150);
+    points[0].y = dc.FromDIP(250);
+    points[1].x = dc.FromDIP(180);
+    points[1].y = dc.FromDIP(250);
+    points[2].x = dc.FromDIP(180);
+    points[2].y = dc.FromDIP(220);
+    points[3].x = dc.FromDIP(200);
+    points[3].y = dc.FromDIP(220);
     dc.DrawSpline( 4, points );
 
     wxString str;
     int i = 0;
     str.Printf( "---- Text at angle %d ----", i );
-    dc.DrawRotatedText( str, 100, 300, i );
+    dc.DrawRotatedText( str, dc.FromDIP(100), dc.FromDIP(300), i );
 
     i = m_angle;
     str.Printf( "---- Text at angle %d ----", i );
-    dc.DrawRotatedText( str, 100, 300, i );
+    dc.DrawRotatedText( str, dc.FromDIP(100), dc.FromDIP(300), i );
 
     wxIcon my_icon = wxICON(sample);
 
-    dc.DrawIcon( my_icon, 100, 100);
+    dc.DrawIcon( my_icon, dc.FromDIP(100), dc.FromDIP(100));
 
     if (m_bitmap.IsOk())
-        dc.DrawBitmap( m_bitmap, 10, 10 );
+        dc.DrawBitmap( m_bitmap, dc.FromDIP(10), dc.FromDIP(10) );
 
 #if wxUSE_GRAPHICS_CONTEXT
     wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::CreateFromUnknownDC(dc));
@@ -225,26 +222,26 @@ void MyApp::Draw(wxDC&dc)
         gc->SetPen( *wxRED_PEN );
 
         wxGraphicsPath path = gc->CreatePath();
-        path.AddCircle( 50.0, 50.0, 50.0 );
-        path.MoveToPoint(0.0, 50.0);
-        path.AddLineToPoint(100.0, 50.0);
-        path.MoveToPoint(50.0, 0.0);
-        path.AddLineToPoint(50.0, 100.0 );
+        path.AddCircle( gc->FromDIP(50.0), gc->FromDIP(50.0), gc->FromDIP(50.0) );
+        path.MoveToPoint(gc->FromDIP(0.0), gc->FromDIP(50.0));
+        path.AddLineToPoint(gc->FromDIP(100.0), gc->FromDIP(50.0));
+        path.MoveToPoint(gc->FromDIP(50.0), gc->FromDIP(0.0));
+        path.AddLineToPoint(gc->FromDIP(50.0), gc->FromDIP(100.0) );
         path.CloseSubpath();
-        path.AddRectangle(25.0, 25.0, 50.0, 50.0);
+        path.AddRectangle(gc->FromDIP(25.0), gc->FromDIP(25.0), gc->FromDIP(50.0), gc->FromDIP(50.0));
 
         gc->StrokePath(path);
 
         // draw some text
         wxString text("Text by wxGraphicsContext");
         gc->SetFont( m_testFont, *wxBLACK );
-        gc->DrawText(text, 25.0, 60.0);
+        gc->DrawText(text, gc->FromDIP(25.0), gc->FromDIP(60.0));
 
         // draw rectangle around the text
         double w, h;
         gc->GetTextExtent(text, &w, &h);
         gc->SetPen( *wxBLACK_PEN );
-        gc->DrawRectangle(25.0, 60.0, w, h);
+        gc->DrawRectangle(gc->FromDIP(25.0), gc->FromDIP(60.0), w, h);
     }
 #endif
 
@@ -277,8 +274,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                    MyFrame::OnPreviewFrameModalityKind)
 wxEND_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const wxSize&size)
-        : wxFrame(frame, wxID_ANY, title, pos, size)
+MyFrame::MyFrame(const wxString& title)
+        : wxFrame(NULL, wxID_ANY, title)
 {
     m_canvas = NULL;
     m_previewModality = wxPreviewFrame_AppModal;
@@ -343,11 +340,13 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const 
     // create the canvas
     // -----------------
 
-    m_canvas = new MyCanvas(this, wxPoint(0, 0), wxSize(100, 100),
-                            wxRETAINED|wxHSCROLL|wxVSCROLL);
+    m_canvas = new MyCanvas(this, wxRETAINED | wxHSCROLL | wxVSCROLL);
 
     // Give it scrollbars: the virtual canvas is 20 * 50 = 1000 pixels in each direction
     m_canvas->SetScrollbars(20, 20, 50, 50);
+
+    SetSize(FromDIP(wxSize(400, 400)));
+    Centre(wxBOTH);
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -392,7 +391,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     }
 
     wxPreviewFrame *frame =
-        new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
+        new wxPreviewFrame(preview, this, "Demo Print Preview", wxDefaultPosition, FromDIP(wxSize(600, 700)));
     frame->Centre(wxBOTH);
     frame->InitializeWithModality(m_previewModality);
     frame->Show();
@@ -427,7 +426,7 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
     wxPreviewFrame *frame =
-        new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
+        new wxPreviewFrame(preview, this, "Demo Print Preview", wxDefaultPosition, FromDIP(wxSize(600, 700)));
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show();
@@ -491,8 +490,8 @@ wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   //  EVT_PAINT(MyCanvas::OnPaint)
 wxEND_EVENT_TABLE()
 
-MyCanvas::MyCanvas(wxFrame *frame, const wxPoint&pos, const wxSize&size, long style)
-    : wxScrolledWindow(frame, wxID_ANY, pos, size, style)
+MyCanvas::MyCanvas(wxFrame *frame, long style)
+    : wxScrolledWindow(frame, wxID_ANY, wxDefaultPosition, wxDefaultSize, style)
 {
     SetBackgroundColour(*wxWHITE);
 }
@@ -560,8 +559,8 @@ void MyPrintout::DrawPageOne()
 
     // We know the graphic is 230x350. If we didn't know this, we'd need to
     // calculate it.
-    wxCoord maxX = 230;
-    wxCoord maxY = 350;
+    wxCoord maxX = GetDC()->FromDIP(230);
+    wxCoord maxY = GetDC()->FromDIP(350);
 
     // This sets the user scale and origin of the DC so that the image fits
     // within the paper rectangle (but the edges could be cut off by printers

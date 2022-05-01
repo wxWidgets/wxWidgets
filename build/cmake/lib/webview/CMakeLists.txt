@@ -71,8 +71,8 @@ elseif(WXMSW)
                 EXPECTED_HASH SHA256=${WEBVIEW2_SHA256})
             file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
             execute_process(COMMAND
-                ${CMAKE_COMMAND} -E tar x ${CMAKE_BINARY_DIR}/webview2.nuget
-                WORKING_DIRECTORY ${WEBVIEW2_PACKAGE_DIR}
+                "${CMAKE_COMMAND}" -E tar x "${CMAKE_BINARY_DIR}/webview2.nuget"
+                WORKING_DIRECTORY "${WEBVIEW2_PACKAGE_DIR}"
             )
         endif()
         set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_PACKAGE_DIR} CACHE INTERNAL "" FORCE)

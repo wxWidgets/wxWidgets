@@ -29,6 +29,7 @@
 #include "wx/dynlib.h"
 #include "wx/paper.h"
 #include "wx/modalhook.h"
+#include "wx/display.h"
 
 #include "wx/gtk/private/wrapgtk.h"
 
@@ -2476,7 +2477,7 @@ void wxGtkPrintPreview::DetermineScaling()
 
     if (paper)
     {
-        const wxSize screenPPI = wxGetDisplayPPI();
+        const wxSize screenPPI = wxDisplay::GetStdPPI();
         int logPPIScreenX = screenPPI.GetWidth();
         int logPPIScreenY = screenPPI.GetHeight();
         int logPPIPrinterX = m_resolution;

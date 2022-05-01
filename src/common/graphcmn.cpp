@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/private/graphics.h"
+#include "wx/private/rescale.h"
 #include "wx/display.h"
 
 //-----------------------------------------------------------------------------
@@ -613,13 +614,6 @@ void wxGraphicsContext::SetContentScaleFactor(double contentScaleFactor)
     m_contentScaleFactor = contentScaleFactor;
 }
 
- double wxGraphicsContext::GetDPIScaleFactor() const
-{
-     wxDouble x, y;
-     GetDPI(&x, &y);
-     return x / (double)wxDisplay::GetStdPPIValue();
-}
-
 #if 0
 void wxGraphicsContext::SetAlpha( wxDouble WXUNUSED(alpha) )
 {
@@ -633,19 +627,36 @@ wxDouble wxGraphicsContext::GetAlpha() const
 
 void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY) const
 {
-    if ( m_window )
-    {
-        const wxSize ppi = m_window->GetDPI();
-        *dpiX = ppi.x;
-        *dpiY = ppi.y;
-    }
-    else
-    {
-        // Use some standard DPI value, it doesn't make much sense for the
-        // contexts not using any pixels anyhow.
-        *dpiX = wxDisplay::GetStdPPIValue();
-        *dpiY = wxDisplay::GetStdPPIValue();
-    }
+    const wxSize dpi = GetWindow() ? GetWindow()->GetDPI() : wxDisplay::GetStdPPI();
+
+    if (dpiX)
+        *dpiX = dpi.x;
+    if (dpiY)
+        *dpiY = dpi.y;
+}
+
+wxSize wxGraphicsContext::FromDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    wxRealPoint dpi;
+    GetDPI(&dpi.x, &dpi.y);
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(baseline).To(wxSize((int)dpi.x, (int)dpi.y));
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
+wxSize wxGraphicsContext::ToDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    wxRealPoint dpi;
+    GetDPI(&dpi.x, &dpi.y);
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(wxSize((int)dpi.x, (int)dpi.y)).To(baseline);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
 }
 
 // sets the pen

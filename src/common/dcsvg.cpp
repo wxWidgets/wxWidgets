@@ -580,6 +580,16 @@ wxSize wxSVGFileDCImpl::GetPPI() const
     return wxSize(wxRound(m_dpi), wxRound(m_dpi));
 }
 
+wxSize wxSVGFileDCImpl::FromDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
+wxSize wxSVGFileDCImpl::ToDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
 void wxSVGFileDCImpl::Clear()
 {
     {

@@ -539,7 +539,9 @@ public:
 
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
-    virtual double GetDPIScaleFactor() const { return 1.0; }
+    virtual wxSize FromDIP(const wxSize& sz) const;
+
+    virtual wxSize ToDIP(const wxSize& sz) const;
 
 #ifdef __WXMSW__
     // Native Windows functions using the underlying HDC don't honour GDI+
@@ -829,8 +831,29 @@ public:
     double GetContentScaleFactor() const
         { return m_pimpl->GetContentScaleFactor(); }
 
-    double GetDPIScaleFactor() const
-        { return m_pimpl->GetDPIScaleFactor(); }
+    wxSize FromDIP(const wxSize& sz) const
+        { return m_pimpl->FromDIP(sz); }
+    wxPoint FromDIP(const wxPoint& pt) const
+    {
+        const wxSize sz = FromDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int FromDIP(int d) const
+        { return FromDIP(wxSize(d, 0)).x; }
+
+    wxSize ToDIP(const wxSize & sz) const
+    {
+        return m_pimpl->ToDIP(sz);
+    }
+    wxPoint ToDIP(const wxPoint & pt) const
+    {
+        const wxSize sz = ToDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int ToDIP(int d) const
+    {
+        return ToDIP(wxSize(d, 0)).x;
+    }
 
     // Right-To-Left (RTL) modes
 

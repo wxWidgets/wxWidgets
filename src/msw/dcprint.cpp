@@ -41,6 +41,7 @@
 #endif
 
 #include "wx/printdlg.h"
+#include "wx/display.h"
 #include "wx/msw/printdlg.h"
 
 // mingw32 defines GDI_ERROR incorrectly
@@ -230,6 +231,23 @@ wxRect wxPrinterDCImpl::GetPaperRect() const
     return wxRect(x, y, w, h);
 }
 
+wxSize wxPrinterDCImpl::FromDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
+wxSize wxPrinterDCImpl::ToDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
+void wxPrinterDCImpl::SetFont(const wxFont& font)
+{
+    wxFont scaledFont = font;
+    if ( scaledFont.IsOk() )
+        scaledFont.WXAdjustToPPI(wxDisplay::GetStdPPI());
+    wxMSWDCImpl::SetFont(scaledFont);
+}
 
 #if !wxUSE_PS_PRINTING
 
