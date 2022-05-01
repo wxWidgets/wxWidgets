@@ -2745,7 +2745,6 @@ protected:
 
     wxGridTypeRegistry*    m_typeRegistry;
 
-public:
     enum CursorMode
     {
         WXGRID_CURSOR_SELECT_CELL,
@@ -2757,7 +2756,6 @@ public:
         WXGRID_CURSOR_MOVE_COL
     };
 
-protected:
     // this method not only sets m_cursorMode but also sets the correct cursor
     // for the given mode and, if captureMouse is not false releases the mouse
     // if it was captured and captures it if it must be captured
@@ -2848,7 +2846,6 @@ protected:
     void CalcWindowSizes();
     bool Redimension( wxGridTableMessage& );
 
-public:
     enum EventResult
     {
         Event_Vetoed = -1,
@@ -2857,7 +2854,6 @@ public:
         Event_CellDeleted   // Event handler deleted the cell.
     };
 
-protected:
     // Send the given grid event and returns one of the event handling results
     // defined above.
     EventResult DoSendEvent(wxGridEvent& gridEvt);
@@ -2901,6 +2897,7 @@ protected:
         { return false; }
 
     friend class WXDLLIMPEXP_FWD_CORE wxGridSelection;
+    friend class wxGridOperations;
     friend class wxGridRowOperations;
     friend class wxGridColumnOperations;
 
