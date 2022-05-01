@@ -1343,8 +1343,7 @@ void wxGtkPrinterDCImpl::DoGradientFillConcentric(const wxRect& rect, const wxCo
 
     cairo_pattern_destroy(gradient);
 
-    CalcBoundingBox(xR, yR);
-    CalcBoundingBox(xR+w, yR+h);
+    CalcBoundingBox(wxPoint(xR, yR), wxSize(w, h));
 }
 
 void wxGtkPrinterDCImpl::DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection)
@@ -1393,8 +1392,7 @@ void wxGtkPrinterDCImpl::DoGradientFillLinear(const wxRect& rect, const wxColour
 
     cairo_pattern_destroy(gradient);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x+w, y+h);
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 }
 
 bool wxGtkPrinterDCImpl::DoGetPixel(wxCoord WXUNUSED(x1),
@@ -1415,8 +1413,7 @@ void wxGtkPrinterDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
     cairo_line_to ( m_cairo, XLOG2DEV(x2), YLOG2DEV(y2) );
     cairo_stroke ( m_cairo );
 
-    CalcBoundingBox( x1, y1 );
-    CalcBoundingBox( x2, y2 );
+    CalcBoundingBox( x1, y1, x2, y2 );
 }
 
 void wxGtkPrinterDCImpl::DoCrossHair(wxCoord x, wxCoord y)
@@ -1432,8 +1429,7 @@ void wxGtkPrinterDCImpl::DoCrossHair(wxCoord x, wxCoord y)
     cairo_line_to (m_cairo, XLOG2DEVREL(w), YLOG2DEV(y));
 
     cairo_stroke (m_cairo);
-    CalcBoundingBox( 0, 0 );
-    CalcBoundingBox( w, h );
+    CalcBoundingBox( 0, 0, w, h );
 }
 
 void wxGtkPrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord xc,wxCoord yc)
@@ -1512,8 +1508,7 @@ void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
 
     cairo_restore( m_cairo );
 
-    CalcBoundingBox( x, y);
-    CalcBoundingBox( x+w, y+h );
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 }
 
 void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -1625,8 +1620,7 @@ void wxGtkPrinterDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wx
         cairo_stroke(m_cairo);
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxGtkPrinterDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
@@ -1679,8 +1673,7 @@ void wxGtkPrinterDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord wi
         cairo_stroke(m_cairo);
     }
 
-    CalcBoundingBox(x,y);
-    CalcBoundingBox(x+width,y+height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -1708,8 +1701,7 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
         cairo_stroke(m_cairo);
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 
     cairo_restore (m_cairo);
 }
@@ -1743,8 +1735,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
     cairo_move_to( m_cairo, XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1) );
     cairo_line_to( m_cairo, XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
 
-    CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
-    CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+    CalcBoundingBox( (wxCoord)x1, (wxCoord)y1, (wxCoord)x3, (wxCoord)y3 );
 
     node = node->GetNext();
     while (node)
@@ -1766,8 +1757,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
             XLOG2DEV((wxCoord)x2), YLOG2DEV((wxCoord)y2),
             XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
 
-        CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
-        CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+        CalcBoundingBox( (wxCoord)x1, (wxCoord)y1, (wxCoord)x3, (wxCoord)y3 );
 
         node = node->GetNext();
     }
@@ -1843,8 +1833,7 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     cairo_fill(m_cairo);
 #endif
 
-    CalcBoundingBox(0,0);
-    CalcBoundingBox(bw,bh);
+    CalcBoundingBox(0, 0, bw, bh);
 
     cairo_restore(m_cairo);
 }
@@ -1932,9 +1921,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
         pango_layout_set_attributes(m_layout, NULL);
     }
 
-    // Back to device units:
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + w, y + h);
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 }
 
 void wxGtkPrinterDCImpl::Clear()

@@ -37,6 +37,8 @@
 #endif
 
 #include "wx/msw/dc.h"
+
+#include "wx/scopedarray.h"
 #include "wx/sysopt.h"
 
 #ifdef wxHAS_RAW_BITMAP
@@ -402,6 +404,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBrushAttrsSetter);
 };
 
+namespace
+{
+
 // this class sets the stretch blit mode to COLORONCOLOR during its lifetime
 class StretchBltModeChanger
 {
@@ -431,6 +436,32 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(StretchBltModeChanger);
 };
+
+// This one changes polygon fill mode to the given one during its lifetime.
+class PolyFillModeSetter
+{
+public:
+    PolyFillModeSetter(HDC hdc, wxPolygonFillMode mode)
+        : m_hdc(hdc)
+    {
+        m_modeOld = ::SetPolyFillMode(m_hdc, mode == wxODDEVEN_RULE ? ALTERNATE
+                                                                    : WINDING);
+    }
+
+    ~PolyFillModeSetter()
+    {
+        ::SetPolyFillMode(m_hdc, m_modeOld);
+    }
+
+private:
+    const HDC m_hdc;
+
+    int m_modeOld;
+
+    wxDECLARE_NO_COPY_CLASS(PolyFillModeSetter);
+};
+
+} // anonymous namespace
 
 // ===========================================================================
 // implementation
@@ -621,11 +652,11 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
     if ( GetLayoutDirection() == wxLayout_RightToLeft )
     {
         DWORD bufLen = ::GetRegionData(hrgn, 0, NULL);  // Get the storage size
-        char* pDataBuf = new char[bufLen];   // Buffer for the region data
-        if ( ::GetRegionData(hrgn, bufLen, reinterpret_cast<RGNDATA*>(pDataBuf)) != bufLen )
+        wxScopedArray<char> pDataBuf(bufLen);
+        RGNDATA* const rgndata = reinterpret_cast<RGNDATA*>(pDataBuf.get());
+        if ( ::GetRegionData(hrgn, bufLen, rgndata) != bufLen )
         {
             wxLogLastError("GetRegionData");
-            delete[] pDataBuf;
             return;
         }
         int dcw, dch;
@@ -644,8 +675,7 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
         // shoulde be adjusted.
         tr.eDx = doRtlOffset ? dcw : dcw-1; // max X
         tr.eDy = 0;
-        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, reinterpret_cast<RGNDATA*>(pDataBuf));
-        delete[] pDataBuf;
+        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, rgndata);
         if ( !hRgnRTL )
         {
             wxLogLastError("ExtCreateRegion");
@@ -813,8 +843,6 @@ void wxMSWDCImpl::Clear()
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
     ::FillRect(GetHdc(), &rect, hbr);
-
-    RealizeScaleAndOrigin();
 }
 
 bool wxMSWDCImpl::DoFloodFill(wxCoord x,
@@ -913,8 +941,7 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
         wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
     }
 
-    CalcBoundingBox(rect.left, rect.top);
-    CalcBoundingBox(rect.right, rect.bottom);
+    CalcBoundingBox(rect.left, rect.top, rect.right, rect.bottom);
 }
 
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
@@ -946,8 +973,7 @@ void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
         wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
     }
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
@@ -999,8 +1025,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
         Arc(GetHdc(),xxx1,yyy1,xxx2,yyy2, xx1,yy1,xx2,yy2);
     }
 
-    CalcBoundingBox(xc - r, yc - r);
-    CalcBoundingBox(xc + r, yc + r);
+    CalcBoundingBox(xc - r, yc - r, xc + r, yc + r);
 }
 
 void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -1024,22 +1049,21 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
 {
     wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
+    PolyFillModeSetter polyfillModeSetter(GetHdc(), fillStyle);
+
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
-        POINT *cpoints = new POINT[n];
+        wxScopedArray<POINT> cpoints(n);
         int i;
         for (i = 0; i < n; i++)
         {
-            cpoints[i].x = (int)(points[i].x + xoffset);
-            cpoints[i].y = (int)(points[i].y + yoffset);
+            cpoints[i].x = points[i].x + xoffset;
+            cpoints[i].y = points[i].y + yoffset;
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)Polygon(GetHdc(), cpoints, n);
-        SetPolyFillMode(GetHdc(),prev);
-        delete[] cpoints;
+        (void)Polygon(GetHdc(), cpoints.get(), n);
     }
     else
     {
@@ -1047,9 +1071,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
         for (i = 0; i < n; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         Polygon(GetHdc(), reinterpret_cast<const POINT*>(points), n);
-        SetPolyFillMode(GetHdc(),prev);
     }
 }
 
@@ -1066,30 +1088,27 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
     for (i = cnt = 0; i < n; i++)
         cnt += count[i];
 
+    PolyFillModeSetter polyfillModeSetter(GetHdc(), fillStyle);
+
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
-        POINT *cpoints = new POINT[cnt];
+        wxScopedArray<POINT> cpoints(cnt);
         for (i = 0; i < cnt; i++)
         {
-            cpoints[i].x = (int)(points[i].x + xoffset);
-            cpoints[i].y = (int)(points[i].y + yoffset);
+            cpoints[i].x = points[i].x + xoffset;
+            cpoints[i].y = points[i].y + yoffset;
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)PolyPolygon(GetHdc(), cpoints, count, n);
-        SetPolyFillMode(GetHdc(),prev);
-        delete[] cpoints;
+        (void)PolyPolygon(GetHdc(), cpoints.get(), count, n);
     }
     else
     {
         for (i = 0; i < cnt; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         PolyPolygon(GetHdc(), reinterpret_cast<const POINT*>(points), count, n);
-        SetPolyFillMode(GetHdc(),prev);
     }
 }
 
@@ -1098,7 +1117,7 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
     {
-        POINT *cpoints = new POINT[n];
+        wxScopedArray<POINT> cpoints(n);
         int i;
         for (i = 0; i < n; i++)
         {
@@ -1107,8 +1126,7 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-        (void)Polyline(GetHdc(), cpoints, n);
-        delete[] cpoints;
+        (void)Polyline(GetHdc(), cpoints.get(), n);
     }
     else
     {
@@ -1149,8 +1167,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     (void)Rectangle(GetHdc(), x1dev, y1dev, x2dev, y2dev);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
@@ -1181,8 +1198,7 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     (void)RoundRect(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2),
         YLOG2DEV(y2), (int) (2*XLOG2DEV(radius)), (int)( 2*YLOG2DEV(radius)));
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -1199,8 +1215,7 @@ void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 
     ::Ellipse(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 #if wxUSE_SPLINES
@@ -1226,7 +1241,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     wxCHECK_RET( n_points >= 2 , "incomplete list of spline points?" );
 
     const size_t n_bezier_points = n_points * 3 + 1;
-    POINT *lppt = new POINT[n_bezier_points];
+    wxScopedArray<POINT> lppt(n_bezier_points);
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1;
 
@@ -1287,9 +1302,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
 
-    ::PolyBezier( GetHdc(), lppt, bezier_pos );
-
-    delete []lppt;
+    ::PolyBezier( GetHdc(), lppt.get(), bezier_pos );
 }
 #endif // wxUSE_SPLINES
 
@@ -1333,8 +1346,7 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
     (void)Arc(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2),
               rx1, ry1, rx2, ry2);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -1358,8 +1370,7 @@ void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
         ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
     }
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + icon.GetWidth(), y + icon.GetHeight());
+    CalcBoundingBox(wxPoint(x, y), icon.GetSize());
 }
 
 void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
@@ -1403,8 +1414,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
         if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, curBmp) )
         {
-            CalcBoundingBox(x, y);
-            CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
+            CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
             return;
         }
     }
@@ -1512,8 +1522,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         ::DeleteDC( memdc );
     }
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
+    CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
 }
 
 void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
@@ -1538,11 +1547,7 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     DrawAnyText(text, x, y);
 
     // update the bounding box
-    CalcBoundingBox(x, y);
-
-    wxCoord w, h;
-    GetOwner()->GetTextExtent(text, &w, &h);
-    CalcBoundingBox(x + w, y + h);
+    CalcBoundingBox(wxPoint(x, y), GetOwner()->GetTextExtent(text));
 }
 
 void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
@@ -1635,14 +1640,12 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     // determining which of them is really topmost/leftmost/...)
 
     // "upper left" and "upper right"
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 
     // "bottom left" and "bottom right"
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 }
 
 // ---------------------------------------------------------------------------
@@ -2147,7 +2150,7 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
     wxDCImpl::SetDeviceOrigin( x, y );
 
-    ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
+    ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
 
     m_isClipBoxValid = false;
 }
@@ -2308,8 +2311,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         if ( AlphaBlt(this, xdest, ydest, dstWidth, dstHeight,
                       xsrc, ysrc, srcWidth, srcHeight, hdcSrc, bmpSrc) )
         {
-            CalcBoundingBox(xdest, ydest);
-            CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
+            CalcBoundingBox(wxPoint(xdest, ydest), wxSize(dstWidth, dstHeight));
             return true;
         }
     }
@@ -2597,8 +2599,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
     if ( success )
     {
-        CalcBoundingBox(xdest, ydest);
-        CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
+        CalcBoundingBox(wxPoint(xdest, ydest), wxSize(dstWidth, dstHeight));
     }
 
     return success;
@@ -2940,8 +2941,7 @@ void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
                 : GRADIENT_FILL_RECT_V
          ) )
     {
-        CalcBoundingBox(rect.GetLeft(), rect.GetBottom());
-        CalcBoundingBox(rect.GetRight(), rect.GetTop());
+        CalcBoundingBox(rect);
     }
     else
     {

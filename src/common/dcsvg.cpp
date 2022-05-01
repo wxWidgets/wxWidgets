@@ -626,8 +626,7 @@ void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
     write(s);
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
@@ -857,8 +856,7 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
 
     write(s);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
@@ -941,8 +939,7 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
 
     write(s);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
@@ -1140,8 +1137,7 @@ void wxSVGFileDCImpl::DoGradientFillLinear(const wxRect& rect,
 
     write(s);
 
-    CalcBoundingBox(rect.x, rect.y);
-    CalcBoundingBox(rect.x + rect.width, rect.y + rect.height);
+    CalcBoundingBox(rect);
 }
 
 void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
@@ -1180,8 +1176,7 @@ void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
 
     write(s);
 
-    CalcBoundingBox(rect.x, rect.y);
-    CalcBoundingBox(rect.x + rect.width, rect.y + rect.height);
+    CalcBoundingBox(rect);
 }
 
 void wxSVGFileDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)

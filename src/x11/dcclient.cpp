@@ -22,6 +22,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/scopedarray.h"
 #include "wx/vector.h"
 
 #include "wx/x11/private.h"
@@ -411,8 +412,7 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
             //    (GC) m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
         }
 
-        CalcBoundingBox(x1, y1);
-        CalcBoundingBox(x2, y2);
+        CalcBoundingBox(x1, y1, x2, y2);
     }
 }
 
@@ -543,8 +543,7 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         }
     }
 
-    CalcBoundingBox (x1, y1);
-    CalcBoundingBox (x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
@@ -623,8 +622,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
         }
     }
 
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
@@ -645,7 +643,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
     if (n <= 0) return;
 
-    XPoint *xpoints = new XPoint[n];
+    wxScopedArray<XPoint> xpoints(n);
     for (int i = 0; i < n; i++)
     {
         xpoints[i].x = XLOG2DEV (points[i].x + xoffset);
@@ -653,9 +651,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
 
         CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
-    XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints, n, 0 );
-
-    delete[] xpoints;
+    XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints.get(), n, 0 );
 }
 
 void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
@@ -666,7 +662,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 
     if (n <= 0) return;
 
-    XPoint *xpoints = new XPoint[n + 1];
+    wxScopedArray<XPoint> xpoints(n + 1);
     int i;
     for (i = 0; i < n; i++)
     {
@@ -688,7 +684,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_textGC, xpoints, n, Complex, 0);
+                    (GC) m_textGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_textGC, 0, 0 );
             } else
@@ -698,7 +694,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginX % 15, m_deviceOriginY % 15 );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             } else
@@ -708,7 +704,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginX % 16, m_deviceOriginY % 16 );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             } else
@@ -719,14 +715,14 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             }
             else
             {
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
             }
         }
 
@@ -736,11 +732,9 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
             xpoints[i].x = xpoints[0].x;
             xpoints[i].y = xpoints[0].y;
 
-            XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints, n + 1, 0);
+            XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints.get(), n + 1, 0);
         }
     }
-
-    delete[] xpoints;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -819,8 +813,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
         }
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -942,8 +935,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     }
 
     // this ignores the radius
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1019,8 +1011,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
         }
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
@@ -1046,8 +1037,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + w, y + h );
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (!m_x11window) return;
 
@@ -1165,8 +1155,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + w, y + h );
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (!m_x11window) return;
 
@@ -1384,8 +1373,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
         }
     }
 
-    CalcBoundingBox( xdest, ydest );
-    CalcBoundingBox( xdest + width, ydest + height );
+    CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height));
 
     // scale/translate size and position
     wxCoord xx = XLOG2DEV(xdest);
@@ -1601,8 +1589,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     g_object_unref( G_OBJECT( layout ) );
 
-    CalcBoundingBox (x + width, y + height);
-    CalcBoundingBox (x, y);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 #else
     XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
 
@@ -1658,8 +1645,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     width = wxCoord(width / m_scaleX);
     height = wxCoord(height / m_scaleY);
 
-    CalcBoundingBox (x + width, y + height);
-    CalcBoundingBox (x, y);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 #endif
 #endif
 }
