@@ -1729,6 +1729,21 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
         CHECK_ATTR_COUNT( 0 );
     }
 
+    SECTION("Cloning")
+    {
+        CHECK_ATTR_COUNT( 0 );
+
+        m_grid->GetOrCreateCellAttrPtr(0, 0)
+            ->SetClientObject(new wxStringClientData("test"));
+        CHECK_ATTR_COUNT( 1 );
+
+        m_grid->SetAttr(0, 1, m_grid->GetOrCreateCellAttrPtr(0, 0)->Clone());
+        CHECK_ATTR_COUNT( 2 );
+
+        wxClientData* const
+            data = m_grid->GetOrCreateCellAttrPtr(0, 1)->GetClientObject();
+        CHECK( static_cast<wxStringClientData*>(data)->GetData() == "test" );
+    }
 
     // Fill the grid with attributes for next sections.
 

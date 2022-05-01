@@ -23,6 +23,16 @@
 class WXDLLIMPEXP_ADV wxGridCellStringRenderer : public wxGridCellRenderer
 {
 public:
+    wxGridCellStringRenderer()
+        : wxGridCellRenderer()
+    {
+    }
+
+    wxGridCellStringRenderer(const wxGridCellStringRenderer& other)
+        : wxGridCellRenderer(other)
+    {
+    }
+
     // draw the string
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
@@ -38,7 +48,7 @@ public:
                                int row, int col) wxOVERRIDE;
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
-        { return new wxGridCellStringRenderer; }
+        { return new wxGridCellStringRenderer(*this); }
 
 protected:
     // calc the string extent for given string/font
@@ -53,8 +63,16 @@ class WXDLLIMPEXP_ADV wxGridCellNumberRenderer : public wxGridCellStringRenderer
 public:
     explicit wxGridCellNumberRenderer(long minValue = LONG_MIN,
                                       long maxValue = LONG_MAX)
-        : m_minValue(minValue),
+        : wxGridCellStringRenderer(),
+          m_minValue(minValue),
           m_maxValue(maxValue)
+    {
+    }
+
+    wxGridCellNumberRenderer(const wxGridCellNumberRenderer& other)
+        : wxGridCellStringRenderer(other),
+          m_minValue(other.m_minValue),
+          m_maxValue(other.m_maxValue)
     {
     }
 
@@ -79,7 +97,7 @@ public:
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
-        { return new wxGridCellNumberRenderer(m_minValue, m_maxValue); }
+        { return new wxGridCellNumberRenderer(*this); }
 
 protected:
     wxString GetString(const wxGrid& grid, int row, int col);
@@ -94,6 +112,15 @@ public:
     wxGridCellFloatRenderer(int width = -1,
                             int precision = -1,
                             int format = wxGRID_FLOAT_FORMAT_DEFAULT);
+
+    wxGridCellFloatRenderer(const wxGridCellFloatRenderer& other)
+        : wxGridCellStringRenderer(other),
+          m_width(other.m_width),
+          m_precision(other.m_precision),
+          m_style(other.m_style),
+          m_format(other.m_format)
+    {
+    }
 
     // get/change formatting parameters
     int GetWidth() const { return m_width; }
@@ -120,7 +147,8 @@ public:
     // with format being one of f|e|g|E|F|G
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
-    virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
+    virtual wxGridCellRenderer *Clone() const wxOVERRIDE
+        { return new wxGridCellFloatRenderer(*this); }
 
 protected:
     wxString GetString(const wxGrid& grid, int row, int col);
@@ -138,6 +166,16 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellBoolRenderer : public wxGridCellRenderer
 {
 public:
+    wxGridCellBoolRenderer()
+        : wxGridCellRenderer()
+    {
+    }
+
+    wxGridCellBoolRenderer(const wxGridCellBoolRenderer& other)
+        : wxGridCellRenderer(other)
+    {
+    }
+
     // draw a check mark or nothing
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
@@ -157,7 +195,7 @@ public:
                                   wxDC& dc) wxOVERRIDE;
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
-        { return new wxGridCellBoolRenderer; }
+        { return new wxGridCellBoolRenderer(*this); }
 };
 
 
@@ -174,7 +212,8 @@ public:
     explicit wxGridCellDateRenderer(const wxString& outformat = wxString());
 
     wxGridCellDateRenderer(const wxGridCellDateRenderer& other)
-        : m_oformat(other.m_oformat),
+        : wxGridCellStringRenderer(other),
+          m_oformat(other.m_oformat),
           m_tz(other.m_tz)
     {
     }
@@ -196,7 +235,8 @@ public:
                                   wxGridCellAttr& attr,
                                   wxDC& dc) wxOVERRIDE;
 
-    virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
+    virtual wxGridCellRenderer *Clone() const wxOVERRIDE
+        { return new wxGridCellDateRenderer(*this); }
 
     // output strptime()-like format string
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
@@ -226,7 +266,8 @@ public:
     {
     }
 
-    virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
+    virtual wxGridCellRenderer *Clone() const wxOVERRIDE
+        { return new wxGridCellDateTimeRenderer(*this); }
 
 protected:
     virtual void
@@ -242,7 +283,9 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellChoiceRenderer : public wxGridCellStringRenderer
 {
 public:
-    wxGridCellChoiceRenderer() { }
+    explicit wxGridCellChoiceRenderer(const wxString& choices = wxString());
+
+    wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other);
 
     virtual wxSize GetMaxBestSize(wxGrid& grid,
                                   wxGridCellAttr& attr,
@@ -257,10 +300,6 @@ public:
     }
 
 protected:
-    wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other)
-        : m_choices(other.m_choices)
-    {
-    }
 
     wxArrayString m_choices;
 };
@@ -270,7 +309,15 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellEnumRenderer : public wxGridCellChoiceRenderer
 {
 public:
-    wxGridCellEnumRenderer( const wxString& choices = wxEmptyString );
+    explicit wxGridCellEnumRenderer(const wxString& choices = wxString())
+        : wxGridCellChoiceRenderer(choices)
+    {
+    }
+
+    wxGridCellEnumRenderer(const wxGridCellEnumRenderer& other)
+        : wxGridCellChoiceRenderer(other)
+    {
+    }
 
     // draw the string right aligned
     virtual void Draw(wxGrid& grid,
@@ -285,7 +332,8 @@ public:
                                wxDC& dc,
                                int row, int col) wxOVERRIDE;
 
-    virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
+    virtual wxGridCellRenderer *Clone() const wxOVERRIDE
+        { return new wxGridCellEnumRenderer(*this); }
 
 protected:
     wxString GetString(const wxGrid& grid, int row, int col);
@@ -295,7 +343,15 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
 {
 public:
-    wxGridCellAutoWrapStringRenderer() : wxGridCellStringRenderer() { }
+    wxGridCellAutoWrapStringRenderer()
+        : wxGridCellStringRenderer()
+    {
+    }
+
+    wxGridCellAutoWrapStringRenderer(const wxGridCellAutoWrapStringRenderer& other)
+        : wxGridCellStringRenderer(other)
+    {
+    }
 
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
@@ -322,7 +378,7 @@ public:
                               int height) wxOVERRIDE;
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
-        { return new wxGridCellAutoWrapStringRenderer; }
+        { return new wxGridCellAutoWrapStringRenderer(*this); }
 
 private:
     wxArrayString GetTextLines( wxGrid& grid,

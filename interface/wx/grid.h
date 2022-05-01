@@ -28,7 +28,7 @@
          wxGridCellFloatRenderer, wxGridCellNumberRenderer,
          wxGridCellStringRenderer
 */
-class wxGridCellRenderer : public wxClientDataContainer, public wxRefCounter
+class wxGridCellRenderer : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
     wxGridCellRenderer();
@@ -571,7 +571,7 @@ public:
          wxGridCellFloatEditor, wxGridCellNumberEditor,
          wxGridCellTextEditor, wxGridCellDateEditor
 */
-class wxGridCellEditor : public wxClientDataContainer, public wxRefCounter
+class wxGridCellEditor : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
     /**
@@ -1217,7 +1217,7 @@ public:
     @library{wxcore}
     @category{grid}
 */
-class wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
+class wxGridCellAttr : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
     /**
