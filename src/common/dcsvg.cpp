@@ -397,6 +397,7 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
                                        wxCoord x, wxCoord y,
                                        wxOutputStream& stream) const
 {
+#if wxUSE_BASE64
     static int sub_images = 0;
 
     if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
@@ -431,6 +432,20 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
     stream.Write(buf, strlen((const char*)buf));
 
     return stream.IsOk();
+#else
+    // to avoid compiler warnings about unused variables
+    wxUnusedVar(bmp);
+    wxUnusedVar(x); wxUnusedVar(y);
+    wxUnusedVar(stream);
+
+    wxFAIL_MSG
+    (
+        "Embedding bitmaps in SVG is not available because "
+        "wxWidgets was built with wxUSE_BASE64 set to 0."
+    );
+
+    return false;
+#endif // wxUSE_BASE64
 }
 
 // ----------------------------------------------------------

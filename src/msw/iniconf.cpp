@@ -358,6 +358,8 @@ bool wxIniConfig::DoWriteLong(const wxString& szKey, long lValue)
   return Write(szKey, wxString::Format(wxT("%ld"), lValue));
 }
 
+#if wxUSE_BASE64
+
 bool wxIniConfig::DoReadBinary(const wxString& WXUNUSED(key),
                                wxMemoryBuffer * WXUNUSED(buf)) const
 {
@@ -373,6 +375,8 @@ bool wxIniConfig::DoWriteBinary(const wxString& WXUNUSED(key),
 
     return false;
 }
+
+#endif // wxUSE_BASE64
 
 bool wxIniConfig::Flush(bool /* bCurrentOnly */)
 {
