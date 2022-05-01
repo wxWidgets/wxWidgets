@@ -1601,20 +1601,29 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
 
     wxSize size(LOWORD(rc), HIWORD(rc));
 
-    // We have to add space for the scrollbars ourselves, they're not taken
-    // into account by ListView_ApproximateViewRect(), at least not with
-    // commctrl32.dll v6.
+    // We have to account for the scrollbars ourselves, as the control itself
+    // seems to always reserve space for the horizontal scrollbar, even when it
+    // is not needed, but does not reserve space for the vertical scrollbar,
+    // even when it is used. This doesn't make any sense, but using this logic
+    // results in correct result, i.e. just enough space, in all cases.
     const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
-    if ( mswStyle & WS_HSCROLL )
-        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+    if ( !(mswStyle & WS_HSCROLL) )
+        size.y -= wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+
     if ( mswStyle & WS_VSCROLL )
         size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
 
-    // OTOH we have to subtract the size of our borders because the base class
-    // public method already adds them, but ListView_ApproximateViewRect()
-    // already takes the borders into account, so this would be superfluous.
-    return size - GetWindowBorderSize();
+    // This is a dirty hack, but while the size returned by the control does
+    // fit its contents, it results in asymmetric horizontal margins around it,
+    // with 3px on one side and just 1px on the other one. Adding these 2px
+    // makes it looks nicely symmetrical, at least under Windows 7 and 10.
+    // Vertical margins are even more asymmetric, but they're too big and not
+    // too small and it might be a bad idea to allocate size smaller than what
+    // the control thinks it needs, so leave them be.
+    size.IncBy(2, 0);
+
+    return size;
 }
 
 // ----------------------------------------------------------------------------
