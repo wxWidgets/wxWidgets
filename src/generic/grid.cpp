@@ -3678,13 +3678,12 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
 wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *gridWindow ) const
 {
-    wxRegionIterator iter( reg );
     wxRect r;
 
     wxArrayInt  rowlabels;
 
     int top, bottom;
-    while ( iter )
+    for ( wxRegionIterator iter( reg ); iter; ++iter )
     {
         r = iter.GetRect();
         r.Offset(GetGridWindowOffset(gridWindow));
@@ -3724,8 +3723,6 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
             rowlabels.Add( row );
         }
-
-        ++iter;
     }
 
     return rowlabels;
@@ -3733,13 +3730,12 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
 wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *gridWindow ) const
 {
-    wxRegionIterator iter( reg );
     wxRect r;
 
     wxArrayInt colLabels;
 
     int left, right;
-    while ( iter )
+    for ( wxRegionIterator iter( reg ); iter; ++iter )
     {
         r = iter.GetRect();
         r.Offset( GetGridWindowOffset(gridWindow) );
@@ -3779,8 +3775,6 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
             colLabels.Add( col );
         }
-
-        ++iter;
     }
 
     return colLabels;
