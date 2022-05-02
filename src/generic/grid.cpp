@@ -3708,9 +3708,11 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
         CalcGridWindowUnscrolledPosition( 0, r.GetBottom(), &dummy, &bottom, gridWindow );
 
         // find the row labels within these bounds
-        //
-        int rowPos = GetRowPos( internalYToRow(top, gridWindow) );
-        for ( ; rowPos < m_numRows; rowPos++ )
+        const int rowFirst = internalYToRow(top, gridWindow);
+        if ( rowFirst == wxNOT_FOUND )
+            continue;
+
+        for ( int rowPos = GetRowPos(rowFirst); rowPos < m_numRows; rowPos++ )
         {
             int row;
             row = GetRowAt( rowPos );
@@ -3761,8 +3763,11 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
         // find the cells within these bounds
         //
-        int colPos = GetColPos( internalXToCol(left, gridWindow) );
-        for ( ; colPos < m_numCols; colPos++ )
+        const int colFirst = internalXToCol(left, gridWindow);
+        if ( colFirst == wxNOT_FOUND )
+           continue;
+
+        for ( int colPos = GetColPos(colFirst); colPos < m_numCols; colPos++ )
         {
             int col;
             col = GetColAt( colPos );
@@ -3822,9 +3827,12 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg,
 
         // find the cells within these bounds
         //
+        const int rowFirst = internalYToRow(top, gridWindow);
+        if ( rowFirst == wxNOT_FOUND )
+            continue;
+
         wxArrayInt cols;
-        int rowPos = GetRowPos( internalYToRow(top, gridWindow) );
-        for ( ; rowPos < m_numRows; rowPos++ )
+        for ( int rowPos = GetRowPos(rowFirst); rowPos < m_numRows; rowPos++ )
         {
             const int row = GetRowAt( rowPos );
 
