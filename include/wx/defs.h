@@ -3210,25 +3210,15 @@ typedef const void* WXWidget;
     (!defined wxUSE_NO_MANIFEST || wxUSE_NO_MANIFEST == 0 ) && \
     ( defined _MSC_FULL_VER && _MSC_FULL_VER >= 140040130 )
 
-#define WX_CC_MANIFEST(cpu)                     \
+#define WX_CC_MANIFEST                          \
     "/manifestdependency:\"type='win32'         \
      name='Microsoft.Windows.Common-Controls'   \
      version='6.0.0.0'                          \
-     processorArchitecture='" cpu "'            \
+     processorArchitecture='*'                  \
      publicKeyToken='6595b64144ccf1df'          \
      language='*'\""
 
-#if defined _M_IX86
-    #pragma comment(linker, WX_CC_MANIFEST("x86"))
-#elif defined _M_X64
-    #pragma comment(linker, WX_CC_MANIFEST("amd64"))
-#elif defined _M_ARM64
-    #pragma comment(linker, WX_CC_MANIFEST("arm64"))
-#elif defined _M_IA64
-    #pragma comment(linker, WX_CC_MANIFEST("ia64"))
-#else
-    #pragma comment(linker, WX_CC_MANIFEST("*"))
-#endif
+#pragma comment(linker, WX_CC_MANIFEST)
 
 #endif /* !wxUSE_NO_MANIFEST && _MSC_FULL_VER >= 140040130 */
 

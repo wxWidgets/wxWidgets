@@ -55,7 +55,13 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellTextEditor : public wxGridCellEditor
 {
 public:
-    explicit wxGridCellTextEditor(size_t maxChars = 0);
+    explicit wxGridCellTextEditor(size_t maxChars = 0)
+        : wxGridCellEditor(),
+          m_maxChars(maxChars)
+    {
+    }
+
+    wxGridCellTextEditor(const wxGridCellTextEditor& other);
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -78,7 +84,8 @@ public:
     virtual void SetValidator(const wxValidator& validator);
 #endif
 
-    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE
+        { return new wxGridCellTextEditor(*this); }
 
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const wxOVERRIDE;
@@ -98,8 +105,6 @@ private:
     wxScopedPtr<wxValidator> m_validator;
 #endif
     wxString                 m_value;
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellTextEditor);
 };
 
 // the editor for numeric (long) data
@@ -108,7 +113,20 @@ class WXDLLIMPEXP_ADV wxGridCellNumberEditor : public wxGridCellTextEditor
 public:
     // allows to specify the range - if min == max == -1, no range checking is
     // done
-    wxGridCellNumberEditor(int min = -1, int max = -1);
+    explicit wxGridCellNumberEditor(int min = -1, int max = -1)
+        : wxGridCellTextEditor(),
+          m_min(min),
+          m_max(max)
+    {
+    }
+
+    wxGridCellNumberEditor(const wxGridCellNumberEditor& other)
+        : wxGridCellTextEditor(other),
+          m_min(other.m_min),
+          m_max(other.m_max),
+          m_value(other.m_value)
+    {
+    }
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -129,7 +147,7 @@ public:
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
     virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellNumberEditor(m_min, m_max); }
+        { return new wxGridCellNumberEditor(*this); }
 
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const wxOVERRIDE;
@@ -158,8 +176,6 @@ private:
         m_max;
 
     long m_value;
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellNumberEditor);
 };
 
 
@@ -191,9 +207,25 @@ enum wxGridCellFloatFormat
 class WXDLLIMPEXP_ADV wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
-    wxGridCellFloatEditor(int width = -1,
-                          int precision = -1,
-                          int format = wxGRID_FLOAT_FORMAT_DEFAULT);
+    explicit wxGridCellFloatEditor(int width = -1,
+                                   int precision = -1,
+                                   int format = wxGRID_FLOAT_FORMAT_DEFAULT)
+        : wxGridCellTextEditor(),
+          m_width(width),
+          m_precision(precision),
+          m_style(format)
+    {
+    }
+
+    wxGridCellFloatEditor(const wxGridCellFloatEditor& other)
+        : wxGridCellTextEditor(other),
+          m_width(other.m_width),
+          m_precision(other.m_precision),
+          m_value(other.m_value),
+          m_style(other.m_style),
+          m_format(other.m_format)
+    {
+    }
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -209,7 +241,7 @@ public:
     virtual void StartingKey(wxKeyEvent& event) wxOVERRIDE;
 
     virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellFloatEditor(m_width, m_precision); }
+        { return new wxGridCellFloatEditor(*this); }
 
     // parameters string format is "width[,precision[,format]]"
     // format to choose between f|e|g|E|G (f is used by default)
@@ -226,8 +258,6 @@ private:
 
     int m_style;
     wxString m_format;
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellFloatEditor);
 };
 
 #endif // wxUSE_TEXTCTRL
@@ -238,7 +268,16 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
-    wxGridCellBoolEditor() { }
+    wxGridCellBoolEditor()
+        : wxGridCellEditor()
+    {
+    }
+
+    wxGridCellBoolEditor(const wxGridCellBoolEditor& other)
+        : wxGridCellEditor(other),
+          m_value(other.m_value)
+    {
+    }
 
     virtual wxGridActivationResult
     TryActivate(int row, int col, wxGrid* grid,
@@ -263,7 +302,7 @@ public:
     virtual void StartingKey(wxKeyEvent& event) wxOVERRIDE;
 
     virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellBoolEditor; }
+        { return new wxGridCellBoolEditor(*this); }
 
     // added GetValue so we can get the value which is in the control, see
     // also UseStringValues()
@@ -272,7 +311,7 @@ public:
     // set the string values returned by GetValue() for the true and false
     // states, respectively
     static void UseStringValues(const wxString& valueTrue = wxT("1"),
-                                const wxString& valueFalse = wxEmptyString);
+                                const wxString& valueFalse = wxString());
 
     // return true if the given string is equal to the string representation of
     // true value which we currently use
@@ -294,8 +333,6 @@ private:
     bool m_value;
 
     static wxString ms_stringValues[2];
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellBoolEditor);
 };
 
 #endif // wxUSE_CHECKBOX
@@ -307,11 +344,24 @@ class WXDLLIMPEXP_ADV wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
     // if !allowOthers, user can't type a string not in choices array
-    wxGridCellChoiceEditor(size_t count = 0,
-                           const wxString choices[] = NULL,
-                           bool allowOthers = false);
-    wxGridCellChoiceEditor(const wxArrayString& choices,
-                           bool allowOthers = false);
+    explicit wxGridCellChoiceEditor(size_t count = 0,
+                                    const wxString choices[] = NULL,
+                                    bool allowOthers = false);
+    explicit wxGridCellChoiceEditor(const wxArrayString& choices,
+                                    bool allowOthers = false)
+        : wxGridCellEditor(),
+          m_choices(choices),
+          m_allowOthers(allowOthers)
+    {
+    }
+
+    wxGridCellChoiceEditor(const wxGridCellChoiceEditor& other)
+        : wxGridCellEditor(other),
+          m_value(other.m_value),
+          m_choices(other.m_choices),
+          m_allowOthers(other.m_allowOthers)
+    {
+    }
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -329,7 +379,8 @@ public:
     // parameters string format is "item1[,item2[...,itemN]]"
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
-    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE
+        { return new wxGridCellChoiceEditor(*this); }
 
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const wxOVERRIDE;
@@ -342,8 +393,6 @@ protected:
     wxString        m_value;
     wxArrayString   m_choices;
     bool            m_allowOthers;
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellChoiceEditor);
 };
 
 #endif // wxUSE_COMBOBOX
@@ -353,10 +402,18 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellEnumEditor : public wxGridCellChoiceEditor
 {
 public:
-    wxGridCellEnumEditor( const wxString& choices = wxEmptyString );
+    explicit wxGridCellEnumEditor(const wxString& choices = wxString());
+
+    wxGridCellEnumEditor(const wxGridCellEnumEditor& other)
+        : wxGridCellChoiceEditor(other),
+          m_index(other.m_index)
+    {
+    }
+
     virtual ~wxGridCellEnumEditor() {}
 
-    virtual wxGridCellEditor*  Clone() const wxOVERRIDE;
+    virtual wxGridCellEditor* Clone() const wxOVERRIDE
+        { return new wxGridCellEnumEditor(*this); }
 
     virtual void BeginEdit(int row, int col, wxGrid* grid) wxOVERRIDE;
     virtual bool EndEdit(int row, int col, const wxGrid* grid,
@@ -365,8 +422,6 @@ public:
 
 private:
     long m_index;
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellEnumEditor);
 };
 
 #endif // wxUSE_COMBOBOX
@@ -374,15 +429,22 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
 {
 public:
-    wxGridCellAutoWrapStringEditor() : wxGridCellTextEditor() { }
+    wxGridCellAutoWrapStringEditor()
+        : wxGridCellTextEditor()
+    {
+    }
+
+    wxGridCellAutoWrapStringEditor(const wxGridCellAutoWrapStringEditor& other)
+        : wxGridCellTextEditor(other)
+    {
+    }
+
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
                         wxEvtHandler* evtHandler) wxOVERRIDE;
 
     virtual wxGridCellEditor *Clone() const wxOVERRIDE
-        { return new wxGridCellAutoWrapStringEditor; }
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor);
+        { return new wxGridCellAutoWrapStringEditor(*this); }
 };
 
 #if wxUSE_DATEPICKCTRL
@@ -391,6 +453,13 @@ class WXDLLIMPEXP_ADV wxGridCellDateEditor : public wxGridCellEditor
 {
 public:
     explicit wxGridCellDateEditor(const wxString& format = wxString());
+
+    wxGridCellDateEditor(const wxGridCellDateEditor& other)
+        : wxGridCellEditor(other),
+          m_value(other.m_value),
+          m_format(other.m_format)
+    {
+    }
 
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
@@ -407,7 +476,8 @@ public:
 
     virtual void Reset() wxOVERRIDE;
 
-    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE
+        { return new wxGridCellDateEditor(*this); }
 
     virtual wxString GetValue() const wxOVERRIDE;
 
@@ -417,8 +487,6 @@ protected:
 private:
     wxDateTime m_value;
     wxString m_format;
-
-    wxDECLARE_NO_COPY_CLASS(wxGridCellDateEditor);
 };
 
 #endif // wxUSE_DATEPICKCTRL

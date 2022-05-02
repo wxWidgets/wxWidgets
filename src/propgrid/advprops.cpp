@@ -31,6 +31,8 @@
 
 #include "wx/odcombo.h"
 
+#include "wx/uilocale.h"
+
 // Drawing ARGB on standard DC is supported by OSX and GTK3
 #if defined(__WXOSX__) || defined(__WXGTK3__)
 #define wxPG_DC_SUPPORTS_ALPHA 1
@@ -2226,7 +2228,7 @@ wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
 {
     // This code is based on datectlg.cpp's GetLocaleDateFormat()
 #if wxUSE_INTL
-    wxString format = wxLocale::GetOSInfo(wxLOCALE_SHORT_DATE_FMT);
+    wxString format = wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT);
     if ( showCentury )
         format.Replace(wxS("%y"), wxS("%Y"));
     else

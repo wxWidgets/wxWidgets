@@ -34,6 +34,7 @@
 #include "wx/filename.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
+#include "wx/uilocale.h"
 
 // other standard headers
 #include <ctype.h>
@@ -155,9 +156,8 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     wxString nameapp;
     nIndex = wxNOT_FOUND;
 #if wxUSE_INTL // try "Name[locale name]" first
-    wxLocale *locale = wxGetLocale();
-    if ( locale )
-        nIndex = file.pIndexOf(wxT("Name[")+locale->GetName()+wxT("]="));
+    if ( wxUILocale::GetCurrent().IsSupported() )
+        nIndex = file.pIndexOf(wxT("Name[")+wxUILocale::GetCurrent().GetName()+wxT("]="));
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
         nIndex = file.pIndexOf( wxT("Name=") );
@@ -168,8 +168,8 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     wxString nameicon, namemini;
     nIndex = wxNOT_FOUND;
 #if wxUSE_INTL // try "Icon[locale name]" first
-    if ( locale )
-        nIndex = file.pIndexOf(wxT("Icon[")+locale->GetName()+wxT("]="));
+    if ( wxUILocale::GetCurrent().IsSupported() )
+        nIndex = file.pIndexOf(wxT("Icon[")+wxUILocale::GetCurrent().GetName()+wxT("]="));
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
         nIndex = file.pIndexOf( wxT("Icon=") );

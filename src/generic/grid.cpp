@@ -253,6 +253,11 @@ int wxGridColumnOperations::GetFirstLine(const wxGrid *grid, wxGridWindow *gridW
 // wxGridCellRenderer and wxGridCellEditor managing ref counting
 // ----------------------------------------------------------------------------
 
+wxGridCellWorker::wxGridCellWorker(const wxGridCellWorker& other)
+{
+    CopyClientDataContainer(other);
+}
+
 void wxGridCellWorker::SetParameters(const wxString& WXUNUSED(params))
 {
     // nothing to do
@@ -445,6 +450,8 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
         m_editor->IncRef();
     }
 
+    attr->CopyClientDataContainer(*this);
+
     if ( IsReadOnly() )
         attr->SetReadOnly();
 
@@ -484,6 +491,10 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
     {
         m_editor =  mergefrom->m_editor;
         m_editor->IncRef();
+    }
+    if ( !HasClientDataContainer() && mergefrom->HasClientDataContainer() )
+    {
+        CopyClientDataContainer(*mergefrom);
     }
     if ( !HasReadWriteMode() && mergefrom->HasReadWriteMode() )
         SetReadOnly(mergefrom->IsReadOnly());

@@ -1562,17 +1562,52 @@ public:
     wxSize GetPPI() const;
 
     /**
-       Returns the DPI scale factor.
+        Convert DPI-independent pixel values to the value in pixels appropriate
+        for the DC.
 
-       Can be used to scale coordinates and sizes appropriate to the DPI of the
-       associated wxWindow, if any.
+        See wxWindow::FromDIP(const wxSize& sz) for more info about converting
+        device independent pixel values.
 
-       See wxWindow::GetDPIScaleFactor() for more details about the DPI scale
-       factor and its difference with GetContentScaleFactor().
+        @since 3.1.7
+     */
+    wxSize FromDIP(const wxSize& sz) const;
 
-       @since 3.1.7
-    */
-    double GetDPIScaleFactor() const;
+    /// @overload
+    wxPoint FromDIP(const wxPoint& pt) const;
+
+    /**
+        Convert DPI-independent value in pixels to the value in pixels
+        appropriate for the DC.
+
+        This is the same as FromDIP(const wxSize& sz) overload, but assumes
+        that the resolution is the same in horizontal and vertical directions.
+
+        @since 3.1.7
+     */
+    int FromDIP(int d) const;
+
+    /**
+        Convert pixel values of the current DC to DPI-independent pixel values.
+
+        See wxWindow::ToDIP(const wxSize& sz) for more info about converting
+        device independent pixel values.
+
+        @since 3.1.7
+     */
+    wxSize ToDIP(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint ToDIP(const wxPoint& pt) const;
+
+    /**
+        Convert pixel values of the current DC to DPI-independent pixel values.
+
+        This is the same as ToDIP(const wxSize& sz) overload, but assumes
+        that the resolution is the same in horizontal and vertical directions.
+
+        @since 3.1.7
+     */
+    int ToDIP(int d) const;
 
     /**
         Gets the horizontal and vertical extent of this device context in @e device units.

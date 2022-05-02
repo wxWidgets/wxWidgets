@@ -38,6 +38,7 @@
 #include "wx/generic/prntdlgg.h"
 #include "wx/progdlg.h"
 #include "wx/paper.h"
+#include "wx/display.h"
 
 #include <stdlib.h>
 
@@ -312,7 +313,7 @@ void wxPostScriptPrintPreview::DetermineScaling()
     {
         int resolution = 600;  // TODO, this is correct, but get this from wxPSDC somehow
 
-        const wxSize screenPPI = wxGetDisplayPPI();
+        const wxSize screenPPI = wxDisplay::GetStdPPI();
         int logPPIScreenX = screenPPI.GetWidth();
         int logPPIScreenY = screenPPI.GetHeight();
         int logPPIPrinterX = resolution;

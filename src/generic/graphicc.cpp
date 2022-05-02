@@ -40,6 +40,7 @@ bool wxCairoInit();
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/vector.h"
+#include "wx/display.h"
 #ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
@@ -332,7 +333,10 @@ protected:
 class wxCairoFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
+    wxCairoFontData( wxGraphicsRenderer* renderer,
+                     const wxFont &font,
+                     const wxRealPoint& dpi,
+                     const wxColour& col );
     wxCairoFontData(wxGraphicsRenderer* renderer,
                     double sizeInPixels,
                     const wxString& facename,
@@ -507,6 +511,8 @@ public:
     virtual void PushState() wxOVERRIDE;
     virtual void PopState() wxOVERRIDE;
     virtual void Flush() wxOVERRIDE;
+
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
 
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                 wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
@@ -1124,7 +1130,7 @@ wxCairoFontData::InitFontComponents(const wxString& facename,
 }
 
 wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font,
-                         const wxColour& col )
+                                  const wxRealPoint& dpi, const wxColour& col )
     : wxGraphicsObjectRefData(renderer)
 #ifdef __WXGTK__
     , m_wxfont(font)
@@ -1132,12 +1138,24 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
 {
     InitColour(col);
 
-    m_size = font.GetPointSize();
-
-#ifdef __WXMAC__
-    m_font = cairo_quartz_font_face_create_for_cgfont( font.OSXGetCGFont() );
-#elif defined(__WXGTK__)
+#ifdef __WXMSW__
+    // Font is 72 DPI, screen is 96-based, and font needs a correction
+    // for screens with higher DPI (similar to gdi+ and d2d renderers).
+    m_size = !dpi.y
+    ? double(font.GetPixelSize().GetHeight())
+    : (font.GetFractionalPointSize() * dpi.y / 72);
 #else
+    // On macOS, font and screen both are 72 DPI, and macOS font size does
+    // not need a correction for retina displays.
+    // GTK does not use m_size, but initialize it anyway and mark dpi as unused
+    // so we don't get any compiler warnings.
+    wxUnusedVar(dpi);
+    m_size = font.GetFractionalPointSize() * wxDisplay::GetStdPPIValue() / 72;
+#ifdef __WXMAC__
+    m_font = cairo_quartz_font_face_create_for_cgfont(font.OSXGetCGFont());
+#endif
+#endif
+
     InitFontComponents
     (
         font.GetFaceName(),
@@ -1146,7 +1164,6 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
         font.GetWeight() == wxFONTWEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD
                                               : CAIRO_FONT_WEIGHT_NORMAL
     );
-#endif
 }
 
 wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
@@ -2237,7 +2254,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXMAC__
-    CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
+    CGContextRef cgcontext = (CGContextRef)dc.GetGraphicsContext()->GetNativeContext();
     cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
@@ -2747,6 +2764,17 @@ void wxCairoContext::Flush()
         m_qtPainter->drawImage( 0,0, *m_qtImage );
     }
 #endif
+}
+
+void wxCairoContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
+{
+    const wxSize dpi = GetWindow() ? GetWindow()->GetDPI() :
+                       (wxDisplay::GetStdPPI() * GetContentScaleFactor());
+
+    if  (dpiX )
+        *dpiX = dpi.x;
+    if ( dpiY )
+        *dpiY = dpi.y;
 }
 
 void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -3377,13 +3405,7 @@ wxCairoRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
 
 wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    wxGraphicsFont p;
-    ENSURE_LOADED_OR_RETURN(p);
-    if ( font.IsOk() )
-    {
-        p.SetRefData(new wxCairoFontData( this , font, col ));
-    }
-    return p;
+    return CreateFontAtDPI(font, wxRealPoint(), col);
 }
 
 wxGraphicsFont
@@ -3400,10 +3422,16 @@ wxCairoRenderer::CreateFont(double sizeInPixels,
 
 wxGraphicsFont
 wxCairoRenderer::CreateFontAtDPI(const wxFont& font,
-                                 const wxRealPoint& WXUNUSED(dpi),
+                                 const wxRealPoint& dpi,
                                  const wxColour& col)
 {
-    return CreateFont(font, col);
+    wxGraphicsFont p;
+    ENSURE_LOADED_OR_RETURN(p);
+    if ( font.IsOk() )
+    {
+        p.SetRefData(new wxCairoFontData( this, font, dpi, col ));
+    }
+    return p;
 }
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )

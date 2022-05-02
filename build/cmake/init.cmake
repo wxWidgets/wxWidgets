@@ -574,6 +574,14 @@ if(wxUSE_GUI)
             wx_option_force_value(wxUSE_SPELLCHECK OFF)
         endif()
     endif()
+
+    if(wxUSE_CAIRO AND NOT WXGTK)
+        find_package(Cairo)
+        if(NOT CAIRO_FOUND)
+            message(WARNING "Cairo not found, Cairo renderer won't be available")
+            wx_option_force_value(wxUSE_CAIRO OFF)
+        endif()
+    endif()
 endif()
 
 # test if precompiled headers are supported using the cotire test project

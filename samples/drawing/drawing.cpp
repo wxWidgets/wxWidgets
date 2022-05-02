@@ -125,7 +125,7 @@ public:
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
     void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
-    void GetDrawingSize(int* width, int* height) const;
+    wxSize GetDIPDrawingSize() const;
 
     void Draw(wxDC& dc);
 
@@ -175,8 +175,7 @@ private:
 #endif
     bool         m_useBuffer;
     bool         m_showBBox;
-    wxCoord      m_sizeX;
-    wxCoord      m_sizeY;
+    wxSize       m_sizeDIP;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -187,7 +186,7 @@ class MyFrame : public wxFrame
 {
 public:
     // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame(const wxString& title);
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -461,8 +460,7 @@ bool MyApp::OnInit()
 #endif
 
     // Create the main application window
-    MyFrame *frame = new MyFrame("Drawing sample",
-                                 wxDefaultPosition, wxSize(550, 840));
+    MyFrame *frame = new MyFrame("Drawing sample");
 
     // Show it
     frame->Show(true);
@@ -522,8 +520,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
 #endif
     m_useBuffer = false;
     m_showBBox = false;
-    m_sizeX = 0;
-    m_sizeY = 0;
+    m_sizeDIP = wxSize(0, 0);
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -574,40 +571,38 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
     wxBrush brushHatch(*wxRED, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatch);
 
-    double scale = dc.GetDPIScaleFactor();
-
     wxPoint star[5];
-    star[0] = scale * wxPoint(100, 60);
-    star[1] = scale * wxPoint(60, 150);
-    star[2] = scale * wxPoint(160, 100);
-    star[3] = scale * wxPoint(40, 100);
-    star[4] = scale * wxPoint(140, 150);
+    star[0] = dc.FromDIP(wxPoint(100, 60));
+    star[1] = dc.FromDIP(wxPoint(60, 150));
+    star[2] = dc.FromDIP(wxPoint(160, 100));
+    star[3] = dc.FromDIP(wxPoint(40, 100));
+    star[4] = dc.FromDIP(wxPoint(140, 150));
 
     dc.DrawText("You should see two (irregular) stars below, the left one "
-                "hatched", scale * 10, scale * 10);
+                "hatched", dc.FromDIP(10), dc.FromDIP(10));
     dc.DrawText("except for the central region and the right "
-                "one entirely hatched", scale * 10, scale * 30);
-    dc.DrawText("The third star only has a hatched outline", scale * 10, scale* 50);
+                "one entirely hatched", dc.FromDIP(10), dc.FromDIP(30));
+    dc.DrawText("The third star only has a hatched outline", dc.FromDIP(10), dc.FromDIP(50));
 
-    dc.DrawPolygon(WXSIZEOF(star), star, scale * 0, scale * 30);
-    dc.DrawPolygon(WXSIZEOF(star), star, scale * 160, scale * 30, wxWINDING_RULE);
+    dc.DrawPolygon(WXSIZEOF(star), star, 0, dc.FromDIP(30));
+    dc.DrawPolygon(WXSIZEOF(star), star, dc.FromDIP(160), dc.FromDIP(30), wxWINDING_RULE);
 
     wxBrush brushHatchGreen(*wxGREEN, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatchGreen);
     wxPoint star2[10];
-    star2[0] = scale * wxPoint(0, 100);
-    star2[1] = scale * wxPoint(-59, -81);
-    star2[2] = scale * wxPoint(95, 31);
-    star2[3] = scale * wxPoint(-95, 31);
-    star2[4] = scale * wxPoint(59, -81);
-    star2[5] = scale * wxPoint(0, 80);
-    star2[6] = scale * wxPoint(-47, -64);
-    star2[7] = scale * wxPoint(76, 24);
-    star2[8] = scale * wxPoint(-76, 24);
-    star2[9] = scale * wxPoint(47, -64);
+    star2[0] = dc.FromDIP(wxPoint(0, 100));
+    star2[1] = dc.FromDIP(wxPoint(-59, -81));
+    star2[2] = dc.FromDIP(wxPoint(95, 31));
+    star2[3] = dc.FromDIP(wxPoint(-95, 31));
+    star2[4] = dc.FromDIP(wxPoint(59, -81));
+    star2[5] = dc.FromDIP(wxPoint(0, 80));
+    star2[6] = dc.FromDIP(wxPoint(-47, -64));
+    star2[7] = dc.FromDIP(wxPoint(76, 24));
+    star2[8] = dc.FromDIP(wxPoint(-76, 24));
+    star2[9] = dc.FromDIP(wxPoint(47, -64));
     int count[2] = {5, 5};
 
-    dc.DrawPolyPolygon(WXSIZEOF(count), count, star2, scale * 450, scale * 150);
+    dc.DrawPolyPolygon(WXSIZEOF(count), count, star2, dc.FromDIP(450), dc.FromDIP(150));
 }
 
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
@@ -1810,13 +1805,9 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     }
 }
 
-void MyCanvas::GetDrawingSize(int* width, int* height) const
+wxSize MyCanvas::GetDIPDrawingSize() const
 {
-    if ( width )
-        *width = m_sizeX;
-
-    if ( height )
-        *height = m_sizeY;
+    return m_sizeDIP;
 }
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
@@ -1836,7 +1827,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 void MyCanvas::Draw(wxDC& pdc)
 {
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGCDC gdc(this);
+    wxGCDC gdc;
 
     if ( m_renderer )
     {
@@ -1896,7 +1887,10 @@ void MyCanvas::Draw(wxDC& pdc)
     }
 
     if ( m_clip )
-        dc.SetClippingRegion(100, 100, 100, 100);
+    {
+        dc.SetClippingRegion(wxPoint(dc.FromDIP(100), dc.FromDIP(100)),
+                             wxSize(dc.FromDIP(100), dc.FromDIP(100)));
+    }
 
     dc.Clear();
 
@@ -1904,7 +1898,7 @@ void MyCanvas::Draw(wxDC& pdc)
     {
         dc.SetPen(*wxMEDIUM_GREY_PEN);
         for ( int i = 0; i < 200; i++ )
-            dc.DrawLine(0, i*10, i*10, 0);
+            dc.DrawLine(0, dc.FromDIP(i*10), dc.FromDIP(i*10), 0);
     }
 
     switch ( m_show )
@@ -1999,8 +1993,8 @@ void MyCanvas::Draw(wxDC& pdc)
     {
         wxCoord x0, y0;
         dc.GetDeviceOrigin(&x0, &y0);
-        m_sizeX = dc.LogicalToDeviceX(dc.MaxX()) - x0 + 1;
-        m_sizeY = dc.LogicalToDeviceY(dc.MaxY()) - y0 + 1;
+        m_sizeDIP.x = dc.ToDIP(dc.LogicalToDeviceX(dc.MaxX()) - x0) + 1;
+        m_sizeDIP.y = dc.ToDIP(dc.LogicalToDeviceY(dc.MaxY()) - y0) + 1;
     }
 }
 
@@ -2013,8 +2007,11 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         m_owner->PrepareDC(dc);
 
         wxPoint pos = dc.DeviceToLogical(event.GetPosition());
+        wxPoint dipPos = dc.ToDIP(pos);
         wxString str;
-        str.Printf( "Current mouse position: %d,%d", pos.x, pos.y );
+        str.Printf( "Mouse position: %d,%d", pos.x, pos.y );
+        if ( pos != dipPos )
+            str += wxString::Format("; DIP position: %d,%d", dipPos.x, dipPos.y);
         m_owner->SetStatusText( str );
     }
 
@@ -2230,8 +2227,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 // frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
+MyFrame::MyFrame(const wxString& title)
+       : wxFrame(NULL, wxID_ANY, title)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -2402,6 +2399,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     m_canvas = new MyCanvas( this );
     m_canvas->SetScrollbars( 10, 10, 100, 240 );
+
+    SetSize(FromDIP(wxSize(800, 700)));
+    Center(wxBOTH);
 }
 
 // event handlers
@@ -2467,8 +2467,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() == wxID_OK)
     {
-        int width, height;
-        m_canvas->GetDrawingSize(&width, &height);
+        wxSize canvasSize = m_canvas->GetDIPDrawingSize();
         wxFileName fn(dlg.GetPath());
         wxString ext = fn.GetExt().Lower();
 #if wxUSE_SVG
@@ -2483,7 +2482,11 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
             m_canvas->UseGraphicRenderer(NULL);
 #endif
-            wxSVGFileDC svgdc(dlg.GetPath(), width, height, 72, "Drawing sample");
+            wxSVGFileDC svgdc(dlg.GetPath(),
+                              canvasSize.GetWidth(),
+                              canvasSize.GetHeight(),
+                              72,
+                              "Drawing sample");
             svgdc.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
             m_canvas->Draw(svgdc);
 #if wxUSE_GRAPHICS_CONTEXT
@@ -2517,7 +2520,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             // Change the scale temporarily to fit the drawing into the page.
             int w, h;
             psdc.GetSize(&w, &h);
-            double sc = wxMin((double)w / width, (double)h / height);
+            double sc = wxMin((double)w / canvasSize.GetWidth(), (double)h / canvasSize.GetHeight());
             m_xUserScale *= sc;
             m_yUserScale *= sc;
             psdc.StartDoc("Drawing sample");
@@ -2538,7 +2541,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_POSTSCRIPT
         {
             wxBitmap bmp;
-            bmp.CreateWithDIPSize(wxSize(width, height), GetDPIScaleFactor());
+            bmp.CreateWithDIPSize(canvasSize, GetDPIScaleFactor());
             wxMemoryDC mdc(bmp);
             mdc.SetBackground(*wxWHITE_BRUSH);
             mdc.Clear();
@@ -2726,7 +2729,7 @@ void MyFrame::PrepareDC(wxDC& dc)
         dc.SetTransformMatrix(mtx);
     }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
-    dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
+    dc.SetLogicalOrigin( dc.FromDIP(m_xLogicalOrigin), dc.FromDIP(m_yLogicalOrigin) );
     dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
     dc.SetUserScale( m_xUserScale, m_yUserScale );
     dc.SetMapMode( m_mapMode );

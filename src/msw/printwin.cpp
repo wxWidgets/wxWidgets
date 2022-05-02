@@ -46,6 +46,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/dcprint.h"
 #include "wx/msw/enhmeta.h"
+#include "wx/display.h"
 
 #include <stdlib.h>
 
@@ -310,7 +311,7 @@ bool wxWindowsPrintPreview::Print(bool interactive)
 
 void wxWindowsPrintPreview::DetermineScaling()
 {
-    const wxSize logPPIScreen = wxGetDPIofHDC(ScreenHDC());
+    const wxSize logPPIScreen = wxDisplay::GetStdPPI();
     m_previewPrintout->SetPPIScreen(logPPIScreen);
 
     // Get a device context for the currently selected printer

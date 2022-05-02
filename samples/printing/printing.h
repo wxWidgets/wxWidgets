@@ -40,7 +40,7 @@ class MyCanvas;
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame(const wxString& title);
 
     void OnAngleUp(wxCommandEvent& event);
     void OnAngleDown(wxCommandEvent& event);
@@ -73,7 +73,7 @@ private:
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas(wxFrame *frame, const wxPoint& pos, const wxSize& size, long style = wxRETAINED);
+    MyCanvas(wxFrame *frame, long style);
 
     //void OnPaint(wxPaintEvent& evt);
     virtual void OnDraw(wxDC& dc) wxOVERRIDE;

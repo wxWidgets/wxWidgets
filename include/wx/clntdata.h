@@ -14,6 +14,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/hashmap.h"
+#include "wx/object.h"
 
 typedef int (*wxShadowObjectMethod)(void*, void*);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
@@ -156,6 +157,48 @@ protected:
     // what kind of data do we have?
     wxClientDataType m_clientDataType;
 
+};
+
+// This class is a replacement for wxClientDataContainer, and unlike
+// wxClientDataContainer the wxSharedClientDataContainer client data is
+// copiable, so it can be copied when objects containing it are cloned.
+// Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
+// that provides storage and management of "client data.". The client data
+// is reference counted and managed by the container.
+//
+// NOTE:  If your class has a clone function and needs to store client data,
+//        use wxSharedClientDataContainer and not wxClientDataContainer!
+
+class WXDLLIMPEXP_BASE wxSharedClientDataContainer
+{
+public:
+    // Provide the same functions as in wxClientDataContainer, so that objects
+    // using it and this class could be used in exactly the same way.
+    void SetClientObject(wxClientData *data);
+    wxClientData *GetClientObject() const;
+    void SetClientData(void *data);
+    void *GetClientData() const;
+
+protected:
+    bool HasClientDataContainer() const { return m_data.get() != NULL; }
+    void CopyClientDataContainer(const wxSharedClientDataContainer& other)
+    {
+        m_data = other.m_data;
+    }
+
+private:
+    class wxRefCountedClientDataContainer : public wxClientDataContainer,
+                                            public wxRefCounter
+    {
+    };
+
+    // Helper function that will create m_data if it is currently NULL
+    wxClientDataContainer *GetValidClientData();
+
+    // m_data is shared, not deep copied, when cloned. If you make changes to
+    // the data in one instance of your class, you change it for all cloned
+    // instances!
+    wxObjectDataPtr<wxRefCountedClientDataContainer> m_data;
 };
 
 #endif // _WX_CLNTDATAH__
