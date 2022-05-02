@@ -5539,6 +5539,19 @@ void wxGrid::SetRowPos(int idx, int pos)
     RefreshAfterRowPosChange();
 }
 
+int wxGrid::GetRowPos(int idx) const
+{
+    wxASSERT_MSG( idx >= 0 && idx < m_numRows, "invalid row index" );
+
+    if ( m_rowAt.IsEmpty() )
+        return idx;
+
+    int pos = m_rowAt.Index(idx);
+    wxASSERT_MSG( pos != wxNOT_FOUND, "invalid row index" );
+
+    return pos;
+}
+
 void wxGrid::ResetRowPos()
 {
     m_rowAt.clear();
@@ -5629,6 +5642,19 @@ void wxGrid::SetColPos(int idx, int pos)
     wxHeaderCtrl::MoveColumnInOrderArray(m_colAt, idx, pos);
 
     RefreshAfterColPosChange();
+}
+
+int wxGrid::GetColPos(int idx) const
+{
+    wxASSERT_MSG( idx >= 0 && idx < m_numCols, "invalid column index" );
+
+    if ( m_colAt.IsEmpty() )
+        return idx;
+
+    int pos = m_colAt.Index(idx);
+    wxASSERT_MSG( pos != wxNOT_FOUND, "invalid column index" );
+
+    return pos;
 }
 
 void wxGrid::ResetColPos()

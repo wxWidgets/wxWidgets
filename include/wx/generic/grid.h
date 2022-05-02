@@ -2129,34 +2129,12 @@ public:
     // return the position at which the row with the given index is
     // displayed: notice that this is a slow operation as we don't maintain the
     // reverse mapping currently
-    int GetRowPos(int idx) const
-    {
-        wxASSERT_MSG( idx >= 0 && idx < m_numRows, "invalid row index" );
-
-        if ( m_rowAt.IsEmpty() )
-            return idx;
-
-        int pos = m_rowAt.Index(idx);
-        wxASSERT_MSG( pos != wxNOT_FOUND, "invalid row index" );
-
-        return pos;
-    }
+    int GetRowPos(int idx) const;
 
     // return the position at which the column with the given index is
     // displayed: notice that this is a slow operation as we don't maintain the
     // reverse mapping currently
-    int GetColPos(int idx) const
-    {
-        wxASSERT_MSG( idx >= 0 && idx < m_numCols, "invalid column index" );
-
-        if ( m_colAt.IsEmpty() )
-            return idx;
-
-        int pos = m_colAt.Index(idx);
-        wxASSERT_MSG( pos != wxNOT_FOUND, "invalid column index" );
-
-        return pos;
-    }
+    int GetColPos(int idx) const;
 
     // reset the rows or columns positions to the default order
     void ResetRowPos();
