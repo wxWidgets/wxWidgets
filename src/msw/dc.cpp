@@ -2200,7 +2200,44 @@ wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
     p.x = x;
     p.y = y;
     ::DPtoLP(GetHdc(), &p, 1);
-    return wxPoint(XDEV2LOG(p.x), YDEV2LOG(p.y));
+
+    wxPoint pt(p.x, p.y);
+
+    if ( m_deviceOriginX || m_deviceOriginY )
+    {
+        // Note the minus sign, we use it for convenience here as we actually
+        // need the reverse translation below.
+        const double dx = -m_deviceOriginX / m_scaleX;
+        const double dy = -m_deviceOriginY / m_scaleY;
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+        // In presence of a world transform we need to apply it to the device
+        // origin shift too as it's not taken into account by the HDC itself.
+        wxAffineMatrix2D m0 = GetTransformMatrix();
+        if ( !m0.IsIdentity() )
+        {
+            // Compute m^(-1)*T*m where T is the translation matrix.
+            wxAffineMatrix2D m = m0;
+            m.Invert();
+            m.Translate(dx, dy);
+            m.Concat(m0);
+
+            const wxPoint2DDouble dp = m.TransformPoint(pt);
+
+            // We don't use rounding here because we don't use it elsewhere.
+            pt.x = dp.m_x;
+            pt.y = dp.m_y;
+        }
+        else
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+        {
+            // In this case things can be done much simpler.
+            pt.x += dx;
+            pt.y += dy;
+        }
+    }
+
+    return pt;
 }
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
