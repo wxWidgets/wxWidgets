@@ -2196,20 +2196,20 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
-    POINT p[1];
-    p[0].x = x;
-    p[0].y = y;
-    ::DPtoLP(GetHdc(), p, WXSIZEOF(p));
-    return wxPoint(XDEV2LOG(p[0].x), YDEV2LOG(p[0].y));
+    POINT p;
+    p.x = x;
+    p.y = y;
+    ::DPtoLP(GetHdc(), &p, 1);
+    return wxPoint(XDEV2LOG(p.x), YDEV2LOG(p.y));
 }
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
-    POINT p[1];
-    p[0].x = x;
-    p[0].y = y;
-    ::LPtoDP(GetHdc(), p, WXSIZEOF(p));
-    return wxPoint(p[0].x + m_deviceOriginX, p[0].y + m_deviceOriginY);
+    POINT p;
+    p.x = x;
+    p.y = y;
+    ::LPtoDP(GetHdc(), &p, 1);
+    return wxPoint(p.x + m_deviceOriginX, p.y + m_deviceOriginY);
 }
 
 wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
