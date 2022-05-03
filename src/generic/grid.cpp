@@ -3678,13 +3678,12 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
 wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *gridWindow ) const
 {
-    wxRegionIterator iter( reg );
     wxRect r;
 
     wxArrayInt  rowlabels;
 
     int top, bottom;
-    while ( iter )
+    for ( wxRegionIterator iter( reg ); iter; ++iter )
     {
         r = iter.GetRect();
         r.Offset(GetGridWindowOffset(gridWindow));
@@ -3709,9 +3708,11 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
         CalcGridWindowUnscrolledPosition( 0, r.GetBottom(), &dummy, &bottom, gridWindow );
 
         // find the row labels within these bounds
-        //
-        int rowPos = GetRowPos( internalYToRow(top, gridWindow) );
-        for ( ; rowPos < m_numRows; rowPos++ )
+        const int rowFirst = internalYToRow(top, gridWindow);
+        if ( rowFirst == wxNOT_FOUND )
+            continue;
+
+        for ( int rowPos = GetRowPos(rowFirst); rowPos < m_numRows; rowPos++ )
         {
             int row;
             row = GetRowAt( rowPos );
@@ -3724,8 +3725,6 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
             rowlabels.Add( row );
         }
-
-        ++iter;
     }
 
     return rowlabels;
@@ -3733,13 +3732,12 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
 wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *gridWindow ) const
 {
-    wxRegionIterator iter( reg );
     wxRect r;
 
     wxArrayInt colLabels;
 
     int left, right;
-    while ( iter )
+    for ( wxRegionIterator iter( reg ); iter; ++iter )
     {
         r = iter.GetRect();
         r.Offset( GetGridWindowOffset(gridWindow) );
@@ -3765,8 +3763,11 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
         // find the cells within these bounds
         //
-        int colPos = GetColPos( internalXToCol(left, gridWindow) );
-        for ( ; colPos < m_numCols; colPos++ )
+        const int colFirst = internalXToCol(left, gridWindow);
+        if ( colFirst == wxNOT_FOUND )
+           continue;
+
+        for ( int colPos = GetColPos(colFirst); colPos < m_numCols; colPos++ )
         {
             int col;
             col = GetColAt( colPos );
@@ -3779,8 +3780,6 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
             colLabels.Add( col );
         }
-
-        ++iter;
     }
 
     return colLabels;
@@ -3828,9 +3827,12 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg,
 
         // find the cells within these bounds
         //
+        const int rowFirst = internalYToRow(top, gridWindow);
+        if ( rowFirst == wxNOT_FOUND )
+            continue;
+
         wxArrayInt cols;
-        int rowPos = GetRowPos( internalYToRow(top, gridWindow) );
-        for ( ; rowPos < m_numRows; rowPos++ )
+        for ( int rowPos = GetRowPos(rowFirst); rowPos < m_numRows; rowPos++ )
         {
             const int row = GetRowAt( rowPos );
 
@@ -5539,6 +5541,19 @@ void wxGrid::SetRowPos(int idx, int pos)
     RefreshAfterRowPosChange();
 }
 
+int wxGrid::GetRowPos(int idx) const
+{
+    wxASSERT_MSG( idx >= 0 && idx < m_numRows, "invalid row index" );
+
+    if ( m_rowAt.IsEmpty() )
+        return idx;
+
+    int pos = m_rowAt.Index(idx);
+    wxASSERT_MSG( pos != wxNOT_FOUND, "invalid row index" );
+
+    return pos;
+}
+
 void wxGrid::ResetRowPos()
 {
     m_rowAt.clear();
@@ -5629,6 +5644,19 @@ void wxGrid::SetColPos(int idx, int pos)
     wxHeaderCtrl::MoveColumnInOrderArray(m_colAt, idx, pos);
 
     RefreshAfterColPosChange();
+}
+
+int wxGrid::GetColPos(int idx) const
+{
+    wxASSERT_MSG( idx >= 0 && idx < m_numCols, "invalid column index" );
+
+    if ( m_colAt.IsEmpty() )
+        return idx;
+
+    int pos = m_colAt.Index(idx);
+    wxASSERT_MSG( pos != wxNOT_FOUND, "invalid column index" );
+
+    return pos;
 }
 
 void wxGrid::ResetColPos()
