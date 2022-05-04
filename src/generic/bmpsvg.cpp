@@ -19,22 +19,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef wxHAS_SVG
-
-// Try to help people updating their sources from Git and forgetting to
-// initialize new submodules, if possible: if you get this error, it means that
-// your source tree doesn't contain 3rdparty/nanosvg and you should initialize
-// and update the corresponding submodule.
-#ifdef __has_include
-    #if ! __has_include("../../3rdparty/nanosvg/src/nanosvg.h")
-        #error You need to run "git submodule update --init 3rdparty/nanosvg".
-        #undef wxHAS_SVG
-    #endif
-#endif // __has_include
-
-#endif // wxHAS_SVG
-
-#ifdef wxHAS_SVG
+#if defined(wxHAS_SVG) && defined(wxHAS_NANOSVG) 
 
 // Note that we have to include NanoSVG headers before including any of wx
 // headers, notably wx/unichar.h which defines global operator==() overloads
@@ -57,11 +42,9 @@
     #endif
 #endif
 
-#define NANOSVG_IMPLEMENTATION
-#define NANOSVGRAST_IMPLEMENTATION
 #define NANOSVG_ALL_COLOR_KEYWORDS
-#include "../../3rdparty/nanosvg/src/nanosvg.h"
-#include "../../3rdparty/nanosvg/src/nanosvgrast.h"
+#include <nanosvg.h>
+#include <nanosvgrast.h>
 
 #ifdef __VISUALC__
     #pragma warning(pop)

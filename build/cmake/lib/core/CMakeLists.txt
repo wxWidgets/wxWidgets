@@ -56,7 +56,7 @@ elseif(WXQT)
 endif()
 
 wx_add_library(wxcore ${CORE_SRC})
-foreach(lib JPEG PNG TIFF)
+foreach(lib JPEG PNG TIFF NANOSVG)
     if(${lib}_LIBRARIES)
         if(lib STREQUAL JPEG)
             wx_lib_include_directories(wxcore ${${lib}_INCLUDE_DIR})
@@ -65,6 +65,9 @@ foreach(lib JPEG PNG TIFF)
         endif()
 
         wx_lib_link_libraries(wxcore PRIVATE ${${lib}_LIBRARIES})
+        if(lib STREQUAL NANOSVG)
+            wx_lib_compile_definitions(wxbase PUBLIC wxHAS_NANOSVG)
+        endif()
     endif()
 endforeach()
 
