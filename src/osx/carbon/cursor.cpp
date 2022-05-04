@@ -278,7 +278,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
 #if wxOSX_USE_COCOA
-        wxFAIL_MSG( wxT("Not implemented") );
+        M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromResource( cursor_file, flags );
 #endif
     }
     else

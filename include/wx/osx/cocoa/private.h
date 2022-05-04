@@ -539,6 +539,7 @@ public:
 
 WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type );
 WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hotSpotX, float hotSpotY );
+WX_NSCursor wxMacCocoaCreateCursorFromResource(const wxString &cursor_file, wxBitmapType flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE);
 void  wxMacCocoaSetCursor( WX_NSCursor cursor );
 void  wxMacCocoaHideCursor();
 void  wxMacCocoaShowCursor();

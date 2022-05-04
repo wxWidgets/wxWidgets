@@ -615,6 +615,26 @@ void  wxMacCocoaShowCursor()
 }
 #endif
 
+WX_NSCursor wxMacCocoaCreateCursorFromResource(const wxString &cursor_file, wxBitmapType flags)
+{
+    NSString *path;
+    NSBundle *bundle = [NSBundle mainBundle];
+    if( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
+        path = [bundle pathForResource:wxCFStringRef( cursor_file ).AsNSString() ofType:@"cur"];
+    if( path )
+    {
+        NSURL *url = [NSURL fileURLWithPath:path];
+        CGImageSourceRef image = CGImageSourceCreateWithURL( (__bridge CFURLRef) url, nil );
+        NSDictionary *properties = (__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex( image, 0, nil );
+        CGFloat x = [[properties objectForKey:@"hotspotX"]floatValue];
+        CGFloat y = [[properties objectForKey:@"hotspotY"]floatValue];
+        CFBridgingRelease(image);
+        CFBridgingRelease((__bridge CFTypeRef _Nullable)(properties));
+        NSCursor *cursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:wxCFStringRef( cursor_file + ".cur" ).AsNSString()] hotSpot:NSMakePoint( x, y ) ];
+        return cursor;
+    }
+    return nil;
+}
 //---------------------------------------------------------
 // helper functions for NSString<->wxString conversion
 //---------------------------------------------------------
