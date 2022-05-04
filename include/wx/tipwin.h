@@ -12,6 +12,8 @@
 #ifndef _WX_TIPWIN_H_
 #define _WX_TIPWIN_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_TIPWINDOW
 
 #include "wx/popupwin.h"
