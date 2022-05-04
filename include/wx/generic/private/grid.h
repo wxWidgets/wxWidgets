@@ -656,11 +656,11 @@ public:
         { return wxVERTICAL; }
 
     virtual wxGrid::CursorMode GetCursorModeResize() const wxOVERRIDE
-        { return wxGrid::CursorMode::WXGRID_CURSOR_RESIZE_ROW; }
+        { return wxGrid::WXGRID_CURSOR_RESIZE_ROW; }
     virtual wxGrid::CursorMode GetCursorModeSelect() const wxOVERRIDE
-        { return wxGrid::CursorMode::WXGRID_CURSOR_SELECT_ROW; }
+        { return wxGrid::WXGRID_CURSOR_SELECT_ROW; }
     virtual wxGrid::CursorMode GetCursorModeMove() const wxOVERRIDE
-        { return wxGrid::CursorMode::WXGRID_CURSOR_MOVE_ROW; }
+        { return wxGrid::WXGRID_CURSOR_MOVE_ROW; }
 
     virtual int GetTotalNumberOfLines(const wxGrid *grid) const wxOVERRIDE
         { return grid->GetNumberRows(); }
@@ -799,11 +799,11 @@ public:
         { return wxHORIZONTAL; }
 
     virtual wxGrid::CursorMode GetCursorModeResize() const wxOVERRIDE
-        { return wxGrid::CursorMode::WXGRID_CURSOR_RESIZE_COL; }
+        { return wxGrid::WXGRID_CURSOR_RESIZE_COL; }
     virtual wxGrid::CursorMode GetCursorModeSelect() const wxOVERRIDE
-        { return wxGrid::CursorMode::WXGRID_CURSOR_SELECT_COL; }
+        { return wxGrid::WXGRID_CURSOR_SELECT_COL; }
     virtual wxGrid::CursorMode GetCursorModeMove() const wxOVERRIDE
-        { return wxGrid::CursorMode::WXGRID_CURSOR_MOVE_COL; }
+        { return wxGrid::WXGRID_CURSOR_MOVE_COL; }
 
     virtual int GetTotalNumberOfLines(const wxGrid *grid) const wxOVERRIDE
         { return grid->GetNumberCols(); }
