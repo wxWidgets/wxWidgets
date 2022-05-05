@@ -71,62 +71,14 @@ bool wxGenericImageList::Create( int width, int height, bool mask, int WXUNUSED(
 wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 {
     wxBitmap bmp(bitmap);
-    if ( m_useMask )
+
+    // If we don't have neither mask nor alpha and were asked to use a mask,
+    // create a default one.
+    if ( m_useMask && !bmp.GetMask() && !bmp.HasAlpha() )
     {
-        if ( bmp.GetMask() )
-        {
-            if ( bmp.HasAlpha() )
-            {
-                // We need to remove alpha channel for compatibility with
-                // native-based wxMSW wxImageList where stored images are not allowed
-                // to have both mask and alpha channel.
-#if wxUSE_IMAGE
-                wxImage img = bmp.ConvertToImage();
-                img.ClearAlpha();
-                bmp = wxBitmap(img, -1, bmp.GetScaleFactor());
-#endif // wxUSE_IMAGE
-            }
-        }
-        else
-        {
-            if ( bmp.HasAlpha() )
-            {
-                // Convert alpha channel to mask.
-#if wxUSE_IMAGE
-                wxImage img = bmp.ConvertToImage();
-                img.ConvertAlphaToMask();
-                bmp = wxBitmap(img, -1, bmp.GetScaleFactor());
-#endif // wxUSE_IMAGE
-            }
-            else
-            {
-                // Like for wxMSW, use the light grey from standard colour map as transparent colour.
-                wxColour col = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-                bmp.SetMask(new wxMask(bmp, col));
-            }
-        }
-    }
-    else
-    {
-        if ( bmp.GetMask() )
-        {
-            if ( bmp.HasAlpha() )
-            {
-                // TODO: It would be better to blend a mask with existing alpha values.
-                bmp.SetMask(NULL);
-            }
-            else
-            {
-                // Convert a mask to alpha values.
-#if wxUSE_IMAGE
-                wxImage img = bmp.ConvertToImage();
-                img.InitAlpha();
-                bmp = wxBitmap(img, -1, bmp.GetScaleFactor());
-#else
-                bmp.SetMask(NULL);
-#endif // wxUSE_IMAGE
-            }
-        }
+        // Like for wxMSW, use the light grey from standard colour map as transparent colour.
+        wxColour col = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+        bmp.SetMask(new wxMask(bmp, col));
     }
 
     // Ensure image size is the same as the size of the images on the image list.

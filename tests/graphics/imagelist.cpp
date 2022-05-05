@@ -20,6 +20,36 @@
 
 #include "wx/dcmemory.h"
 
+static bool HasNoRealAlpha(const wxBitmap& bmp)
+{
+    if ( !bmp.HasAlpha() )
+        return true;
+
+    // wxMSW can add a fully opaque alpha channel to the bitmaps used in the
+    // image list.
+    const wxImage img = bmp.ConvertToImage();
+    const unsigned char* p = img.GetAlpha();
+    if ( !p )
+        return true;
+
+    const unsigned char* const end = p + img.GetWidth()*img.GetHeight();
+    for ( ; p < end; ++p )
+    {
+        if ( *p != wxALPHA_OPAQUE )
+            return false;
+    }
+
+    return true;
+}
+
+static bool HasMaskOrAlpha(const wxBitmap& bmp)
+{
+    // When adding bitmaps with mask to the image list, the mask can be
+    // transformed to alpha channel internally, so check that the bitmap has
+    // either mask or alpha.
+    return bmp.HasAlpha() || bmp.GetMask();
+}
+
 // ----------------------------------------------------------------------------
 // tests
 // ----------------------------------------------------------------------------
@@ -88,24 +118,21 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         int idx = il.Add(bmpRGB);
         CHECK(il.GetImageCount() == 1);
         wxBitmap bmp1 = il.GetBitmap(idx);
-        CHECK(bmp1.HasAlpha() == false);
-        CHECK(bmp1.GetMask() != NULL);
+        CHECK(HasNoRealAlpha(bmp1));
         CHECK(bmp1.GetWidth() == 32);
         CHECK(bmp1.GetHeight() == 32);
 
         idx = il.Add(bmpRGBWithMask);
         CHECK(il.GetImageCount() == 2);
         wxBitmap bmp2 = il.GetBitmap(idx);
-        CHECK(bmp2.HasAlpha() == false);
-        CHECK(bmp2.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
 
         idx = il.Add(bmpRGB, *wxRED);
         CHECK(il.GetImageCount() == 3);
         wxBitmap bmp3 = il.GetBitmap(idx);
-        CHECK(bmp3.HasAlpha() == false);
-        CHECK(bmp3.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp3));
         CHECK(bmp3.GetWidth() == 32);
         CHECK(bmp3.GetHeight() == 32);
     }
@@ -116,24 +143,21 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         int idx = il.Add(bmpRGBA);
         CHECK(il.GetImageCount() == 1);
         wxBitmap bmp1 = il.GetBitmap(idx);
-        CHECK(bmp1.HasAlpha() == false);
-        CHECK(bmp1.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp1));
         CHECK(bmp1.GetWidth() == 32);
         CHECK(bmp1.GetHeight() == 32);
 
         idx = il.Add(bmpRGBAWithMask);
         CHECK(il.GetImageCount() == 2);
         wxBitmap bmp2 = il.GetBitmap(idx);
-        CHECK(bmp2.HasAlpha() == false);
-        CHECK(bmp2.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
 
         idx = il.Add(bmpRGBA, *wxRED);
         CHECK(il.GetImageCount() == 3);
         wxBitmap bmp3 = il.GetBitmap(idx);
-        CHECK(bmp3.HasAlpha() == false);
-        CHECK(bmp3.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp3));
         CHECK(bmp3.GetWidth() == 32);
         CHECK(bmp3.GetHeight() == 32);
     }
@@ -160,14 +184,12 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         il.Replace(idx2, bmpRGBWithMask);
 
         wxBitmap bmp1 = il.GetBitmap(idx1);
-        CHECK(bmp1.HasAlpha() == false);
-        CHECK(bmp1.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp1));
         CHECK(bmp1.GetWidth() == 32);
         CHECK(bmp1.GetHeight() == 32);
 
         wxBitmap bmp2 = il.GetBitmap(idx2);
-        CHECK(bmp2.HasAlpha() == false);
-        CHECK(bmp2.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
     }
@@ -184,14 +206,12 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         il.Replace(idx2, bmpRGBAWithMask);
 
         wxBitmap bmp1 = il.GetBitmap(idx1);
-        CHECK(bmp1.HasAlpha() == false);
-        CHECK(bmp1.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp1));
         CHECK(bmp1.GetWidth() == 32);
         CHECK(bmp1.GetHeight() == 32);
 
         wxBitmap bmp2 = il.GetBitmap(idx2);
-        CHECK(bmp2.HasAlpha() == false);
-        CHECK(bmp2.GetMask() != NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
     }
@@ -506,16 +526,14 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         idx = il.Add(bmpRGBWithMask);
         CHECK(il.GetImageCount() == 2);
         wxBitmap bmp2 = il.GetBitmap(idx);
-        CHECK(bmp2.HasAlpha() == true);
-        CHECK(bmp2.GetMask() == NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
 
         idx = il.Add(bmpRGB, *wxRED);
         CHECK(il.GetImageCount() == 3);
         wxBitmap bmp3 = il.GetBitmap(idx);
-        CHECK(bmp3.HasAlpha() == true);
-        CHECK(bmp3.GetMask() == NULL);
+        CHECK(HasMaskOrAlpha(bmp3));
         CHECK(bmp3.GetWidth() == 32);
         CHECK(bmp3.GetHeight() == 32);
     }
@@ -534,16 +552,14 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         idx = il.Add(bmpRGBAWithMask);
         CHECK(il.GetImageCount() == 2);
         wxBitmap bmp2 = il.GetBitmap(idx);
-        CHECK(bmp2.HasAlpha() == true);
-        CHECK(bmp2.GetMask() == NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
 
         idx = il.Add(bmpRGBA, *wxRED);
         CHECK(il.GetImageCount() == 3);
         wxBitmap bmp3 = il.GetBitmap(idx);
-        CHECK(bmp3.HasAlpha() == true);
-        CHECK(bmp3.GetMask() == NULL);
+        CHECK(HasMaskOrAlpha(bmp3));
         CHECK(bmp3.GetWidth() == 32);
         CHECK(bmp3.GetHeight() == 32);
     }
@@ -576,8 +592,7 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         CHECK(bmp1.GetHeight() == 32);
 
         wxBitmap bmp2 = il.GetBitmap(idx2);
-        CHECK(bmp2.HasAlpha() == true);
-        CHECK(bmp2.GetMask() == NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
     }
@@ -600,8 +615,7 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         CHECK(bmp1.GetHeight() == 32);
 
         wxBitmap bmp2 = il.GetBitmap(idx2);
-        CHECK(bmp2.HasAlpha() == true);
-        CHECK(bmp2.GetMask() == NULL);
+        CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
     }
