@@ -2129,34 +2129,12 @@ public:
     // return the position at which the row with the given index is
     // displayed: notice that this is a slow operation as we don't maintain the
     // reverse mapping currently
-    int GetRowPos(int idx) const
-    {
-        wxASSERT_MSG( idx >= 0 && idx < m_numRows, "invalid row index" );
-
-        if ( m_rowAt.IsEmpty() )
-            return idx;
-
-        int pos = m_rowAt.Index(idx);
-        wxASSERT_MSG( pos != wxNOT_FOUND, "invalid row index" );
-
-        return pos;
-    }
+    int GetRowPos(int idx) const;
 
     // return the position at which the column with the given index is
     // displayed: notice that this is a slow operation as we don't maintain the
     // reverse mapping currently
-    int GetColPos(int idx) const
-    {
-        wxASSERT_MSG( idx >= 0 && idx < m_numCols, "invalid column index" );
-
-        if ( m_colAt.IsEmpty() )
-            return idx;
-
-        int pos = m_colAt.Index(idx);
-        wxASSERT_MSG( pos != wxNOT_FOUND, "invalid column index" );
-
-        return pos;
-    }
+    int GetColPos(int idx) const;
 
     // reset the rows or columns positions to the default order
     void ResetRowPos();
@@ -2824,8 +2802,7 @@ protected:
 
     // Index of the row or column being drag-moved or -1 if there is no move
     // operation in progress.
-    int     m_dragMoveRow;
-    int     m_dragMoveCol;
+    int     m_dragMoveRowOrCol;
 
     // Last horizontal mouse position while drag-moving a column.
     int     m_dragLastPos;
@@ -2907,10 +2884,10 @@ protected:
     EventResult SendEvent(wxEventType evtType, const wxString& s = wxString())
         { return SendEvent(evtType, m_currentCellCoords, s); }
 
-    // send wxEVT_GRID_{ROW,COL}_SIZE or wxEVT_GRID_COL_AUTO_SIZE, return true
+    // send wxEVT_GRID_{ROW,COL}_SIZE or wxEVT_GRID_{ROW,COL}_AUTO_SIZE, return true
     // if the event was processed, false otherwise
     bool SendGridSizeEvent(wxEventType type,
-                           int row, int col,
+                           int rowOrCol,
                            const wxMouseEvent& mouseEv);
 
     void OnSize( wxSizeEvent& );
@@ -2928,6 +2905,7 @@ protected:
         { return false; }
 
     friend class WXDLLIMPEXP_FWD_CORE wxGridSelection;
+    friend class wxGridOperations;
     friend class wxGridRowOperations;
     friend class wxGridColumnOperations;
 
@@ -3069,19 +3047,18 @@ private:
     void ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow* gridWindow);
 
     // process mouse events in the row/column labels/corner windows
-    void ProcessRowLabelMouseEvent(wxMouseEvent& event,
-                                   wxGridRowLabelWindow* rowLabelWin);
-    void ProcessColLabelMouseEvent(wxMouseEvent& event,
-                                   wxGridColLabelWindow* colLabelWin);
+    void ProcessRowColLabelMouseEvent(const wxGridOperations &oper,
+                                   wxMouseEvent& event,
+                                   wxGridSubwindow* rowLabelWin);
     void ProcessCornerLabelMouseEvent(wxMouseEvent& event);
 
+    void HandleRowAutosize(int col, const wxMouseEvent& event);
     void HandleColumnAutosize(int col, const wxMouseEvent& event);
 
     void DoColHeaderClick(int col);
 
     void DoStartResizeRowOrCol(int col, int size);
-    void DoStartMoveRow(int col);
-    void DoStartMoveCol(int col);
+    void DoStartMoveRowOrCol(int col);
 
     // These functions should only be called when actually resizing/moving,
     // i.e. m_dragRowOrCol and m_dragMoveCol, respectively, are valid.
@@ -3508,6 +3485,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_LABEL_RIGHT_CLICK, wxGrid
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_LABEL_LEFT_DCLICK, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_LABEL_RIGHT_DCLICK, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_SIZE, wxGridSizeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_AUTO_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_RANGE_SELECTING, wxGridRangeSelectEvent );
