@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxEVT_GRID_ROW_AUTO_SIZE to wxGrid (Dietmar Schwertberger).
