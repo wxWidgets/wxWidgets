@@ -137,16 +137,36 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 // wxImageList operations
 // ----------------------------------------------------------------------------
 
-namespace
+class wxImageList::wxMSWBitmaps
 {
-void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useMask,
-                         AutoHBITMAP& hbmpRelease, AutoHBITMAP& hbmpMask, HBITMAP& hbmp)
+public:
+    wxMSWBitmaps() : hbmp(NULL) { }
+
+    // These fields are filled by GetImageListBitmaps().
+    HBITMAP hbmp;
+    AutoHBITMAP hbmpMask;
+
+private:
+    // This one is only used to delete a temporary bitmap, if necessary, and
+    // shouldn't be used otherwise, so it's private.
+    AutoHBITMAP hbmpRelease;
+
+    friend void wxImageList::GetImageListBitmaps(wxMSWBitmaps&,
+                                                 const wxBitmap&,
+                                                 const wxBitmap&);
+
+    wxDECLARE_NO_COPY_CLASS(wxMSWBitmaps);
+};
+
+void
+wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
+                                 const wxBitmap& bitmap, const wxBitmap& mask)
 {
 #if wxUSE_WXDIB && wxUSE_IMAGE
     // We can only use directly bitmaps without alpha and without mask unless
     // the image list uses masks and need to modify bitmap in all the other
     // cases, so check if this is necessary.
-    if ( bitmap.HasAlpha() || (!useMask && (mask.IsOk() || bitmap.GetMask())) )
+    if ( bitmap.HasAlpha() || (!m_useMask && (mask.IsOk() || bitmap.GetMask())) )
     {
         wxBitmap bmp(bitmap);
 
@@ -170,8 +190,8 @@ void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useM
         wxImage img = bmp.ConvertToImage();
         if ( !img.HasAlpha() )
             img.InitAlpha();
-        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-        hbmpRelease.Init(hbmp);
+        bitmaps.hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        bitmaps.hbmpRelease.Init(bitmaps.hbmp);
 
         // In any case we'll never use mask at the native image list level as
         // it's incompatible with alpha and we need to use alpha.
@@ -179,24 +199,21 @@ void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useM
     else
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
     {
-        hbmp = GetHbitmapOf(bitmap);
-        if ( useMask )
-            hbmpMask.Init(GetMaskForImage(bitmap, mask));
+        bitmaps.hbmp = GetHbitmapOf(bitmap);
+        if ( m_useMask )
+            bitmaps.hbmpMask.Init(GetMaskForImage(bitmap, mask));
     }
 }
-} // anonymous namespace
 
 // Adds a bitmap, and optionally a mask bitmap.
 // Note that wxImageList creates new bitmaps, so you may delete
 // 'bitmap' and 'mask'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 {
-    HBITMAP hbmp = NULL;
-    AutoHBITMAP hbmpRelease;
-    AutoHBITMAP hbmpMask;
-    GetImageListBitmaps(bitmap, mask, m_useMask, hbmpRelease, hbmpMask, hbmp);
+    wxMSWBitmaps bitmaps;
+    GetImageListBitmaps(bitmaps, bitmap, mask);
 
-    int index = ImageList_Add(GetHImageList(), hbmp, hbmpMask);
+    int index = ImageList_Add(GetHImageList(), bitmaps.hbmp, bitmaps.hbmpMask);
     if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
@@ -210,14 +227,12 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 // 'bitmap'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 {
-    HBITMAP hbmp = NULL;
-    AutoHBITMAP hbmpRelease;
-    AutoHBITMAP hbmpMask;
+    wxMSWBitmaps bitmaps;
     wxMask mask(bitmap, maskColour);
-    GetImageListBitmaps(bitmap, mask.GetBitmap(), m_useMask, hbmpRelease, hbmpMask, hbmp);
+    GetImageListBitmaps(bitmaps, bitmap, mask.GetBitmap());
 
     int index = ImageList_AddMasked(GetHImageList(),
-                                    hbmp,
+                                    bitmaps.hbmp,
                                     wxColourToRGB(maskColour));
     if ( index == -1 )
     {
@@ -259,12 +274,10 @@ bool wxImageList::Replace(int index,
                           const wxBitmap& bitmap,
                           const wxBitmap& mask)
 {
-    HBITMAP hbmp = NULL;
-    AutoHBITMAP hbmpRelease;
-    AutoHBITMAP hbmpMask;
-    GetImageListBitmaps(bitmap, mask, m_useMask, hbmpRelease, hbmpMask, hbmp);
+    wxMSWBitmaps bitmaps;
+    GetImageListBitmaps(bitmaps, bitmap, mask);
 
-    if ( !ImageList_Replace(GetHImageList(), index, hbmp, hbmpMask) )
+    if ( !ImageList_Replace(GetHImageList(), index, bitmaps.hbmp, bitmaps.hbmpMask) )
     {
         wxLogLastError(wxT("ImageList_Replace()"));
         return false;

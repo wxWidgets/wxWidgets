@@ -200,6 +200,14 @@ protected:
   wxSize m_size;
 
 private:
+  // Private helper used by GetImageListBitmaps().
+  class wxMSWBitmaps;
+
+  // Fills the provided output "bitmaps" object with the actual bitmaps we need
+  // to use with the native control.
+  void GetImageListBitmaps(wxMSWBitmaps& bitmaps,
+                           const wxBitmap& bitmap, const wxBitmap& mask);
+
   bool m_useMask;
 
   void Init()
