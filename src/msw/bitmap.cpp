@@ -934,40 +934,11 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     // finally also set the mask if we have one
     if ( image.HasMask() )
     {
-        const size_t len  = 2*((w+15)/16);
-        BYTE *src  = image.GetData();
-        wxScopedArray<BYTE> data(h*len);
-        memset(data.get(), 0, h*len);
-        BYTE r = image.GetMaskRed(),
-             g = image.GetMaskGreen(),
-             b = image.GetMaskBlue();
-        BYTE *dst = data.get();
-        for ( int y = 0; y < h; y++, dst += len )
-        {
-            BYTE *dstLine = dst;
-            BYTE mask = 0x80;
-            for ( int x = 0; x < w; x++, src += 3 )
-            {
-                if (src[0] != r || src[1] != g || src[2] != b)
-                    *dstLine |= mask;
-
-                if ( (mask >>= 1) == 0 )
-                {
-                    dstLine++;
-                    mask = 0x80;
-                }
-            }
-        }
-
-        hbitmap = ::CreateBitmap(w, h, 1, 1, data.get());
-        if ( !hbitmap )
-        {
-            wxLogLastError(wxT("CreateBitmap(mask)"));
-        }
+        wxMask* mask = new wxMask;
+        if ( mask->MSWCreateFromImageMask(image) )
+            SetMask(mask);
         else
-        {
-            SetMask(new wxMask((WXHBITMAP)hbitmap));
-        }
+            delete mask;
     }
 
     return true;
@@ -1698,6 +1669,50 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
     return ok;
 }
+
+#if wxUSE_IMAGE
+bool wxMask::MSWCreateFromImageMask(const wxImage& image)
+{
+    const int h = image.GetHeight();
+    const int w = image.GetWidth();
+
+    const size_t len  = 2*((w+15)/16);
+    BYTE *src  = image.GetData();
+    wxScopedArray<BYTE> data(h*len);
+    memset(data.get(), 0, h*len);
+    BYTE r = image.GetMaskRed(),
+         g = image.GetMaskGreen(),
+         b = image.GetMaskBlue();
+    BYTE *dst = data.get();
+    for ( int y = 0; y < h; y++, dst += len )
+    {
+        BYTE *dstLine = dst;
+        BYTE mask = 0x80;
+        for ( int x = 0; x < w; x++, src += 3 )
+        {
+            if (src[0] != r || src[1] != g || src[2] != b)
+                *dstLine |= mask;
+
+            if ( (mask >>= 1) == 0 )
+            {
+                dstLine++;
+                mask = 0x80;
+            }
+        }
+    }
+
+    HBITMAP hbitmap = ::CreateBitmap(w, h, 1, 1, data.get());
+    if ( !hbitmap )
+    {
+        wxLogLastError(wxT("CreateBitmap(mask)"));
+        return false;
+    }
+
+    m_maskBitmap = hbitmap;
+
+    return true;
+}
+#endif // wxUSE_IMAGE
 
 wxBitmap wxMask::GetBitmap() const
 {
