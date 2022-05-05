@@ -734,6 +734,11 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
     return TRUE;
 }
 
+bool wxSpinCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
+{
+    return TextEntryMSWShouldPreProcessMessage(msg);
+}
+
 // ----------------------------------------------------------------------------
 // size calculations
 // ----------------------------------------------------------------------------
