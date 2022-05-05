@@ -57,13 +57,16 @@
     #endif
 #endif
 
+#if !wxUSE_NANOSVG_EXTERNAL || defined(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL)
+    #define NANOSVG_IMPLEMENTATION
+    #define NANOSVGRAST_IMPLEMENTATION
+    #define NANOSVG_ALL_COLOR_KEYWORDS
+#endif
+
 #if wxUSE_NANOSVG_EXTERNAL
     #include <nanosvg.h>
     #include <nanosvgrast.h>
 #else
-    #define NANOSVG_IMPLEMENTATION
-    #define NANOSVGRAST_IMPLEMENTATION
-    #define NANOSVG_ALL_COLOR_KEYWORDS
     #include "../../3rdparty/nanosvg/src/nanosvg.h"
     #include "../../3rdparty/nanosvg/src/nanosvgrast.h"
 #endif
