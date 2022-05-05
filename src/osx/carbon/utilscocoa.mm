@@ -613,7 +613,6 @@ void  wxMacCocoaShowCursor()
 {
     [NSCursor unhide];
 }
-#endif
 
 WX_NSCursor wxMacCocoaCreateCursorFromResource(const wxString &cursor_file, wxBitmapType flags)
 {
@@ -635,6 +634,8 @@ WX_NSCursor wxMacCocoaCreateCursorFromResource(const wxString &cursor_file, wxBi
     }
     return nil;
 }
+#endif
+
 //---------------------------------------------------------
 // helper functions for NSString<->wxString conversion
 //---------------------------------------------------------
