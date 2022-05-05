@@ -35,6 +35,7 @@
     #include "wx/image.h"
 #endif
 
+#include "wx/scopedarray.h"
 #include "wx/scopedptr.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
@@ -935,12 +936,12 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     {
         const size_t len  = 2*((w+15)/16);
         BYTE *src  = image.GetData();
-        BYTE *data = new BYTE[h*len];
-        memset(data, 0, h*len);
+        wxScopedArray<BYTE> data(h*len);
+        memset(data.get(), 0, h*len);
         BYTE r = image.GetMaskRed(),
              g = image.GetMaskGreen(),
              b = image.GetMaskBlue();
-        BYTE *dst = data;
+        BYTE *dst = data.get();
         for ( int y = 0; y < h; y++, dst += len )
         {
             BYTE *dstLine = dst;
@@ -958,7 +959,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
             }
         }
 
-        hbitmap = ::CreateBitmap(w, h, 1, 1, data);
+        hbitmap = ::CreateBitmap(w, h, 1, 1, data.get());
         if ( !hbitmap )
         {
             wxLogLastError(wxT("CreateBitmap(mask)"));
@@ -967,8 +968,6 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
         {
             SetMask(new wxMask((WXHBITMAP)hbitmap));
         }
-
-        delete[] data;
     }
 
     return true;
