@@ -142,7 +142,8 @@ protected:
 
     // returns true for special keys like "Ctrl+C" that should be handled
     // by the text control
-    virtual bool MSWShouldPreProcessMessage(WXMSG* msg);
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) wxOVERRIDE
+        { return TextEntryMSWShouldPreProcessMessage(msg); }
 
     // generate spin control update event with the given value
     void SendSpinUpdate(int value);

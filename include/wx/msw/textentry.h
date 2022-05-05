@@ -12,6 +12,9 @@
 
 class wxTextAutoCompleteData; // private class used only by wxTextEntry itself
 
+// this one is also used by wxSpinCtrl
+extern bool TextEntryMSWShouldPreProcessMessage(WXMSG* msg);
+
 // ----------------------------------------------------------------------------
 // wxTextEntry: common part of wxComboBox and (single line) wxTextCtrl
 // ----------------------------------------------------------------------------
@@ -86,7 +89,8 @@ protected:
 
     // Returns false if this message shouldn't be preprocessed, but is always
     // handled by the EDIT control represented by this object itself.
-    bool MSWShouldPreProcessMessage(WXMSG* msg) const;
+    bool MSWShouldPreProcessMessage(WXMSG* msg) const
+        { return TextEntryMSWShouldPreProcessMessage(msg); }
 
     // Helper for wxTE_PROCESS_ENTER handling: activates the default button in
     // the dialog containing this control if any.

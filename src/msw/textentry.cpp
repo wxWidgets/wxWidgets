@@ -1072,7 +1072,8 @@ bool wxTextEntry::ClickDefaultButtonIfPossible()
                     wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
 }
 
-bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
+// this one is also used by wxSpinCtrl
+extern bool TextEntryMSWShouldPreProcessMessage(WXMSG* msg)
 {
     // check for our special keys here: if we don't do it and the parent frame
     // uses them as accelerators, they wouldn't work at all, so we disable
