@@ -609,6 +609,10 @@
 
 #define wxUSE_LIBTIFF       0
 
+#define wxUSE_NANOSVG       0
+
+#define wxUSE_NANOSVG_EXTERNAL 0
+
 #define wxUSE_TGA           0
 
 #define wxUSE_GIF           0
