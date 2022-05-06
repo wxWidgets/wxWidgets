@@ -249,6 +249,24 @@ int wxGridColumnOperations::GetFirstLine(const wxGrid *grid, wxGridWindow *gridW
     return grid->GetNumberFrozenCols();
 }
 
+void wxGridOperations::PrepareDCForLabels(wxGrid *grid, wxDC &dc) const
+{
+    // The grid can be scrolled in both directions and so grid->DoPrepareDC
+    // could offset the device context in both directions.
+    // For row and col labels, we want only one direction and so
+    // we reset the other direction to the original, unscrolled value.
+    wxPoint dcOriginBefore = dc.GetDeviceOrigin();
+    grid->DoPrepareDC(dc);
+    wxPoint dcOrigin = dc.GetDeviceOrigin();
+
+    if ( GetOrientation() == wxVERTICAL )
+        dcOrigin.x = dcOriginBefore.x;
+    else if ( GetOrientation() == wxHORIZONTAL )
+        dcOrigin.y = dcOriginBefore.y;
+
+    dc.SetDeviceOrigin(dcOrigin.x, dcOrigin.y);
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellWorker is an (almost) empty common base class for
 // wxGridCellRenderer and wxGridCellEditor managing ref counting
@@ -4038,27 +4056,25 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
             else if ( m_cursorMode == oper.GetCursorModeMove() )
             {
                 // determine the y or x position of the drop marker
-                int marker;
+                int markerPos;
                 if ( coord >= oper.GetLineStartPos(this, lineAt) + (oper.GetLineSize(this, lineAt) / 2) )
-                    marker = oper.GetLineEndPos(this, lineAt);
+                    markerPos = oper.GetLineEndPos(this, lineAt);
                 else
-                    marker = oper.GetLineStartPos(this, lineAt);
+                    markerPos = oper.GetLineStartPos(this, lineAt);
 
-                if ( marker != m_dragLastPos )
+                if ( markerPos != m_dragLastPos )
                 {
                     wxClientDC dc( headerWin );
-                    DoPrepareDC(dc);
+                    oper.PrepareDCForLabels(this, dc);
 
-                    wxSize clientSize = headerWin->GetClientSize();
-
-                    marker++;
+                    int markerLength = oper.Select(headerWin->GetClientSize());
 
                     // Clean up the last indicator
                     if ( m_dragLastPos >= 0 )
                     {
                         wxPen pen(headerWin->GetBackgroundColour(), 2);
                         dc.SetPen(pen);
-                        oper.DrawParallelLine(dc, 0, oper.Select(clientSize), m_dragLastPos + 1);
+                        oper.DrawParallelLine(dc, 0, markerLength, m_dragLastPos + 1);
                         dc.SetPen(wxNullPen);
 
                         int lastLine = oper.PosToLine(this, m_dragLastPos, NULL, false);
@@ -4077,10 +4093,10 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                     // Draw the marker
                     wxPen pen(*color, 2);
                     dc.SetPen(pen);
-                    oper.DrawParallelLine(dc, 0, oper.Select(clientSize), marker);
+                    oper.DrawParallelLine(dc, 0, markerLength, markerPos + 1);
                     dc.SetPen(wxNullPen);
 
-                    m_dragLastPos = marker - 1;
+                    m_dragLastPos = markerPos;
                 }
             }
         }
@@ -4116,12 +4132,14 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                 {
                     // Show button as pressed
                     wxClientDC dc( headerWin );
-                    DoPrepareDC(dc);
-                    int lineTop = oper.GetLineStartPos(this, line);
-                    int lineBottom = oper.GetLineEndPos(this, line) - 1;
+                    oper.PrepareDCForLabels(this, dc);
                     dc.SetPen( wxPen( headerWin->GetBackgroundColour(), 1 ) );
-                    oper.DrawParallelLine(dc, 0, m_rowLabelWidth-1, lineTop);
-                    dual.DrawParallelLine(dc, lineTop, lineBottom, 1);
+
+                    int lineStart = oper.GetLineStartPos(this, line);
+                    int lineEnd = oper.GetLineEndPos(this, line) - 1;
+                    int lineLength = oper.Select(headerWin->GetClientSize()) - 1;
+                    oper.DrawParallelLine(dc, 0, lineLength, lineStart);
+                    dual.DrawParallelLine(dc, lineStart, lineEnd, 1);
 
                     ChangeCursorMode(oper.GetCursorModeMove(), headerWin);
                 }

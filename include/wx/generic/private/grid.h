@@ -634,6 +634,8 @@ public:
     // call DrawRowLabel or DrawColumnLabel
     virtual void DrawLineLabel(wxGrid *grid, wxDC& dc, int line) const = 0;
 
+    // helper for Process...MouseEvent for drawing markers on label windows
+    void PrepareDCForLabels(wxGrid *grid, wxDC &dc) const;
 
     // make the specified line visible by doing a minimal amount of scrolling
     virtual void MakeLineVisible(wxGrid *grid, int line) const = 0;
