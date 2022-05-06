@@ -140,6 +140,10 @@ protected:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
+    // returns true for special keys like "Ctrl+C" that should be handled
+    // by the text control
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) wxOVERRIDE;
+
     // generate spin control update event with the given value
     void SendSpinUpdate(int value);
 
