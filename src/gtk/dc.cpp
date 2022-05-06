@@ -103,8 +103,7 @@ void wxGTKCairoDCImpl::DoDrawText(const wxString& text, int x, int y)
     int w, h;
     DoGetTextExtent(text, &w, &h);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + w, y + h);
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     const bool yInverted = m_signY < 0;
     if (xInverted || yInverted)

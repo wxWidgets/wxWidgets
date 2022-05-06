@@ -75,8 +75,8 @@ function(wx_write_config_inplace)
     endif()
     execute_process(
         COMMAND
-        ${CMAKE_COMMAND} -E ${COPY_CMD}
-        "lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
+        "${CMAKE_COMMAND}" -E ${COPY_CMD}
+        "${CMAKE_CURRENT_BINARY_DIR}/lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
         "${CMAKE_CURRENT_BINARY_DIR}/wx-config"
         )
 endfunction()

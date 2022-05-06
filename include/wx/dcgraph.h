@@ -101,7 +101,6 @@ public:
     virtual bool CanGetTextExtent() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual wxSize GetPPI() const wxOVERRIDE;
-    virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
     virtual void SetLogicalFunction(wxRasterOperationMode function) wxOVERRIDE;
 
@@ -257,6 +256,15 @@ private:
     // This method initializes m_graphicContext, m_ok and m_matrixOriginal
     // fields, returns true if the context was valid.
     bool DoInitContext(wxGraphicsContext* ctx);
+
+    // Another convenient wrapper for CalcBoundingBox().
+    // This is not an overload in order to avoid hiding the base class ones.
+    void CalcBoundingBoxForBox(const wxRect2DDouble& box)
+    {
+        CalcBoundingBox(wxRound(box.m_x), wxRound(box.m_y));
+        CalcBoundingBox(wxRound(box.m_x + box.m_width),
+                        wxRound(box.m_y + box.m_height));
+    }
 
     wxDECLARE_CLASS(wxGCDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);

@@ -22,12 +22,12 @@ public:
     wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc ); // Create compatible DC
 
     // override some base class virtuals
+    virtual wxSize GetPPI() const wxOVERRIDE;
     virtual void SetFont(const wxFont& font) wxOVERRIDE;
 
     virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
     virtual void DoGetSize(int* width, int* height) const wxOVERRIDE;
     virtual void DoSelect(const wxBitmap& bitmap) wxOVERRIDE;
-    virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
     virtual wxBitmap DoGetAsBitmap(const wxRect* subrect) const wxOVERRIDE
     { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmapOfHDC(*subrect, GetHDC() );}

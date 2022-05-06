@@ -1564,6 +1564,7 @@ void GridFrame::FreezeOrThaw(wxCommandEvent& ev)
     }
 
     GetMenuBar()->Enable( ID_TOGGLECOLMOVING, !grid->IsFrozen() );
+    GetMenuBar()->Enable( ID_TOGGLEROWMOVING, !grid->IsFrozen() );
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
@@ -1932,7 +1933,7 @@ void GridFrame::OnVTable(wxCommandEvent& )
                                      "Size: ",
                                      "wxGridDemo question",
                                      s_sizeGrid,
-                                     0, 32000, this);
+                                     0, 10000000, this);
 
     if ( s_sizeGrid != -1 )
     {

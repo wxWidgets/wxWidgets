@@ -103,3 +103,7 @@ if(wxUSE_LIBNOTIFY)
     wx_lib_include_directories(wxcore ${LIBNOTIFY_INCLUDE_DIRS})
     wx_lib_link_libraries(wxcore PUBLIC ${LIBNOTIFY_LIBRARIES})
 endif()
+if(wxUSE_CAIRO AND NOT WXGTK)
+    wx_lib_include_directories(wxcore ${CAIRO_INCLUDE_DIRS})
+    # no libs, cairo is loaded dynamically
+endif()

@@ -61,6 +61,11 @@
 // perform the translation (use -kwxTRANSLATE with xgettext!)
 #define wxTRANSLATE(str) str
 
+// another one which just marks the strings, with a context, for extraction,
+// but doesn't perform the translation (use -kwxTRANSLATE_IN_CONTEXT:1c,2 with
+// xgettext!)
+#define wxTRANSLATE_IN_CONTEXT(c, str) str
+
 // ----------------------------------------------------------------------------
 // forward decls
 // ----------------------------------------------------------------------------
@@ -345,6 +350,7 @@ inline const wxString& wxGetTranslation(const char *str1,
 #endif
 
 #define wxTRANSLATE(str) str
+#define wxTRANSLATE_IN_CONTEXT(c, str) str
 
 // NB: we use a template here in order to avoid using
 //     wxLocale::GetUntranslatedString() above, which would be required if

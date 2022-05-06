@@ -353,6 +353,23 @@ public:
          m_maxY = y;
       }
     }
+
+    void CalcBoundingBox(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+    {
+        CalcBoundingBox(x1, y1);
+        CalcBoundingBox(x2, y2);
+    }
+
+    void CalcBoundingBox(const wxPoint& pt, const wxSize& sz)
+    {
+        CalcBoundingBox(pt.x, pt.y, pt.x + sz.x, pt.y + sz.y);
+    }
+
+    void CalcBoundingBox(const wxRect& rect)
+    {
+        CalcBoundingBox(rect.GetPosition(), rect.GetSize());
+    }
+
     void ResetBoundingBox()
     {
         m_isBBoxValid = false;
@@ -539,7 +556,9 @@ public:
 
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
-    virtual double GetDPIScaleFactor() const { return 1.0; }
+    virtual wxSize FromDIP(const wxSize& sz) const;
+
+    virtual wxSize ToDIP(const wxSize& sz) const;
 
 #ifdef __WXMSW__
     // Native Windows functions using the underlying HDC don't honour GDI+
@@ -829,8 +848,29 @@ public:
     double GetContentScaleFactor() const
         { return m_pimpl->GetContentScaleFactor(); }
 
-    double GetDPIScaleFactor() const
-        { return m_pimpl->GetDPIScaleFactor(); }
+    wxSize FromDIP(const wxSize& sz) const
+        { return m_pimpl->FromDIP(sz); }
+    wxPoint FromDIP(const wxPoint& pt) const
+    {
+        const wxSize sz = FromDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int FromDIP(int d) const
+        { return FromDIP(wxSize(d, 0)).x; }
+
+    wxSize ToDIP(const wxSize & sz) const
+    {
+        return m_pimpl->ToDIP(sz);
+    }
+    wxPoint ToDIP(const wxPoint & pt) const
+    {
+        const wxSize sz = ToDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int ToDIP(int d) const
+    {
+        return ToDIP(wxSize(d, 0)).x;
+    }
 
     // Right-To-Left (RTL) modes
 

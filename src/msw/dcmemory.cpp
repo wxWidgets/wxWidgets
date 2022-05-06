@@ -143,9 +143,9 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     SetFont(GetFont());
 }
 
-double wxMemoryDCImpl::GetDPIScaleFactor() const
+wxSize wxMemoryDCImpl::GetPPI() const
 {
-    return m_contentScaleFactor;
+    return wxDisplay::GetStdPPI() * GetContentScaleFactor();
 }
 
 void wxMemoryDCImpl::SetFont(const wxFont& font)
@@ -154,7 +154,7 @@ void wxMemoryDCImpl::SetFont(const wxFont& font)
     // use and the default/global scale factor used when creating fonts.
     wxFont scaledFont = font;
     if ( scaledFont.IsOk() )
-        scaledFont.WXAdjustToPPI(wxDisplay::GetStdPPI()*m_contentScaleFactor);
+        scaledFont.WXAdjustToPPI(GetPPI());
     wxMSWDCImpl::SetFont(scaledFont);
 }
 

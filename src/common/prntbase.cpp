@@ -45,6 +45,7 @@
 #include "wx/print.h"
 #include "wx/dcprint.h"
 #include "wx/artprov.h"
+#include "wx/display.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -638,7 +639,7 @@ bool wxPrintout::SetUp(wxDC& dc)
 {
     wxCHECK_MSG( dc.IsOk(), false, "should have a valid DC to set up" );
 
-    SetPPIScreen(wxGetDisplayPPI());
+    SetPPIScreen(wxDisplay::GetStdPPI());
 
     // We need to know printer PPI. In most ports, this can be retrieved from
     // the printer DC, but in others it is computed (probably for legacy
@@ -1613,7 +1614,7 @@ void wxPreviewControlBar::CreateButtons()
         };
         int n = WXSIZEOF(choices);
 
-        m_zoomControl = new wxChoice( this, wxID_PREVIEW_ZOOM, wxDefaultPosition, wxSize(70,wxDefaultCoord), n, choices, 0 );
+        m_zoomControl = new wxChoice( this, wxID_PREVIEW_ZOOM, wxDefaultPosition, wxSize(FromDIP(70),wxDefaultCoord), n, choices, 0 );
         sizer.Add(m_zoomControl);
         SetZoomControl(m_printPreview->GetZoom());
 

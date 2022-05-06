@@ -420,8 +420,7 @@ void wxPostScriptDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    CalcBoundingBox( x1, y1 );
-    CalcBoundingBox( x2, y2 );
+    CalcBoundingBox( x1, y1, x2, y2 );
 }
 
 void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
@@ -500,8 +499,7 @@ void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
         PsPrint( "stroke\n" );
     }
 
-    CalcBoundingBox( xc-i_radius, yc-i_radius );
-    CalcBoundingBox( xc+i_radius, yc+i_radius );
+    CalcBoundingBox( xc-i_radius, yc-i_radius, xc+i_radius, yc+i_radius );
 }
 
 void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
@@ -536,8 +534,7 @@ void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x ,y );
-        CalcBoundingBox( x+w, y+h );
+        CalcBoundingBox( wxPoint(x, y), wxSize(w, h) );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -553,8 +550,7 @@ void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x ,y );
-        CalcBoundingBox( x+w, y+h );
+        CalcBoundingBox( wxPoint(x, y), wxSize(w, h) );
     }
 }
 
@@ -787,8 +783,7 @@ void wxPostScriptDCImpl::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -810,8 +805,7 @@ void wxPostScriptDCImpl::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 }
 
@@ -860,8 +854,7 @@ void wxPostScriptDCImpl::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -892,8 +885,7 @@ void wxPostScriptDCImpl::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 }
 
@@ -917,8 +909,7 @@ void wxPostScriptDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxC
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x - width, y - height );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( x - width, y - height, x + width, y + height );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -934,8 +925,7 @@ void wxPostScriptDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxC
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x - width, y - height );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( x - width, y - height, x + width, y + height );
     }
 }
 
@@ -1375,10 +1365,7 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
 
     DrawAnyText(textbuf, text_descent, size);
 
-    wxCoord w, h;
-    GetOwner()->GetMultiLineTextExtent(text, &w, &h);
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + w , y + h);
+    CalcBoundingBox(wxPoint(x, y), GetOwner()->GetMultiLineTextExtent(text));
 }
 
 void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
@@ -1423,13 +1410,11 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
     wxCoord w, h;
     GetOwner()->GetMultiLineTextExtent(text, &w, &h);
     // "upper left" and "upper right"
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
     // "bottom left" and "bottom right"
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 }
 
 void wxPostScriptDCImpl::SetBackground (const wxBrush& brush)
@@ -1614,6 +1599,15 @@ wxSize wxPostScriptDCImpl::GetPPI() const
     return wxSize( DPI, DPI );
 }
 
+wxSize wxPostScriptDCImpl::FromDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
+wxSize wxPostScriptDCImpl::ToDIP(const wxSize& sz) const
+{
+    return sz;
+}
 
 bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
 {

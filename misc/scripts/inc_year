@@ -17,13 +17,10 @@ echo "Updating dates to use $new_year instead of $old_year:"
 # Update copyright to extend to the new year.
 for f in docs/doxygen/mainpages/copyright.h docs/doxygen/regen.sh \
          interface/wx/aboutdlg.h interface/wx/generic/aboutdlgg.h \
+         src/common/utilscmn.cpp src/msw/version.rc \
          ; do
     run_sed $f "s/1992-$old_year/1992-$new_year/"
 done
-
-# Some files use later initial copyright year, for some reason...
-run_sed src/msw/version.rc "s/1993-$old_year/1993-$new_year/"
-run_sed src/common/utilscmn.cpp "s/1995-$old_year/1995-$new_year/"
 
 # And Mac files are much newer than that.
 run_sed CMakeLists.txt "s/2002-$old_year/2002-$new_year/"

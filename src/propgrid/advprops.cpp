@@ -31,6 +31,8 @@
 
 #include "wx/odcombo.h"
 
+#include "wx/uilocale.h"
+
 // Drawing ARGB on standard DC is supported by OSX and GTK3
 #if defined(__WXOSX__) || defined(__WXGTK3__)
 #define wxPG_DC_SUPPORTS_ALPHA 1
@@ -1650,34 +1652,34 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 #define NUM_CURSORS 28
 
 static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Default"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Arrow"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Right Arrow"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Blank"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Bullseye"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Character"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Cross"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Hand"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("I-Beam"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Left Button"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Magnifier"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Middle Button"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("No Entry"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Paint Brush"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Pencil"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Point Left"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Point Right"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Question Arrow"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Right Button"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing NE-SW"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing N-S"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing NW-SE"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing W-E"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Spraycan"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Wait"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Watch"),
-    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Wait Arrow"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Default"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Arrow"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Right Arrow"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Blank"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Bullseye"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Character"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Cross"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Hand"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "I-Beam"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Left Button"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Magnifier"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Middle Button"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "No Entry"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Paint Brush"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Pencil"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Point Left"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Point Right"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Question Arrow"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Right Button"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Sizing NE-SW"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Sizing N-S"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Sizing NW-SE"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Sizing W-E"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Sizing"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Spraycan"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Wait"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Watch"),
+    wxTRANSLATE_IN_CONTEXT("system cursor name", "Wait Arrow"),
     NULL
 };
 
@@ -1730,6 +1732,12 @@ wxCursorProperty::wxCursorProperty( const wxString& label, const wxString& name,
 
 wxCursorProperty::~wxCursorProperty()
 {
+}
+
+wxString wxCursorProperty::ValueToString(wxVariant& value, int argFlags) const
+{
+    return wxGetTranslation(wxEnumProperty::ValueToString(value, argFlags),
+                            wxString(), "system cursor name");
 }
 
 wxSize wxCursorProperty::OnMeasureImage( int item ) const
@@ -2220,7 +2228,7 @@ wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
 {
     // This code is based on datectlg.cpp's GetLocaleDateFormat()
 #if wxUSE_INTL
-    wxString format = wxLocale::GetOSInfo(wxLOCALE_SHORT_DATE_FMT);
+    wxString format = wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT);
     if ( showCentury )
         format.Replace(wxS("%y"), wxS("%Y"));
     else

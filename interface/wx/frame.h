@@ -26,6 +26,17 @@
     CreateToolBar() functions, manages these windows and adjusts the value returned
     by GetClientSize() to reflect the remaining size available to application windows.
 
+    If a frame is to be used as an input form, the controls should not be created as
+    its children. Instead, a wxPanel should be created as the sole child of the frame,
+    serving as the parent of the actual controls (the frame will size the panel so it
+    always fills its client area). Doing this will ensure that tabbing between the controls
+    works and the frame background has the expected colour. Moreover, as a frame is by
+    default resizable, it could be better to use wxScrolledWindow instead of wxPanel,
+    to make sure the controls are easily accessible regardless of the frame size. However,
+    please consider whether it would not be better to use wxDialog instead of wxFrame,
+    where using a panel like this is not needed and wxDialog also offers other benefits
+    such as creating specialized sizers (e.g., for buttons, with their platform-correct order).
+
     @remarks An application should normally define a wxCloseEvent handler for the
              frame to respond to system close events, for example so that related
              data and subwindows can be cleaned up.

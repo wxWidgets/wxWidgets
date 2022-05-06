@@ -265,6 +265,7 @@ class WXDLLIMPEXP_PROPGRID wxCursorProperty : public wxEnumProperty
                       int value = 0 );
     virtual ~wxCursorProperty();
 
+    virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const wxOVERRIDE;
     virtual wxSize OnMeasureImage( int item ) const wxOVERRIDE;
     virtual void OnCustomPaint( wxDC& dc,
                                 const wxRect& rect, wxPGPaintData& paintdata ) wxOVERRIDE;

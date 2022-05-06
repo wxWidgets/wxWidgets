@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/scopedarray.h"
 
 #include "wx/gtk1/win_gtk.h"
 #include "wx/gtk1/dcclient.h"
@@ -458,8 +459,7 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
         if (m_window)
             gdk_draw_line( m_window, m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
 
-        CalcBoundingBox(x1, y1);
-        CalcBoundingBox(x2, y2);
+        CalcBoundingBox(x1, y1, x2, y2);
     }
 }
 
@@ -570,8 +570,7 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
         }
     }
 
-    CalcBoundingBox (x1, y1);
-    CalcBoundingBox (x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
@@ -632,8 +631,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
             gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, start, end );
     }
 
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
@@ -654,7 +652,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     if (n <= 0) return;
 
 
-    GdkPoint * const gpts = new GdkPoint[n];
+    wxScopedArray<GdkPoint> gpts(n);
     if ( !gpts )
     {
         wxFAIL_MSG( wxT("Cannot allocate PolyLine") );
@@ -672,9 +670,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
         gpts[i].y = YLOG2DEV(y);
     }
 
-    gdk_draw_lines( m_window, m_penGC, gpts, n);
-
-    delete[] gpts;
+    gdk_draw_lines( m_window, m_penGC, gpts.get(), n);
 }
 
 void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode WXUNUSED(fillStyle) )
@@ -683,7 +679,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
 
     if (n <= 0) return;
 
-    GdkPoint * const gpts = new GdkPoint[n];
+    wxScopedArray<GdkPoint> gpts(n);
 
     for (int i = 0 ; i < n ; i++)
     {
@@ -698,7 +694,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
 
     if (m_brush.GetStyle() == wxBRUSHSTYLE_SOLID)
     {
-        gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+        gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
     }
     else if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
     {
@@ -707,19 +703,19 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
             gdk_gc_set_ts_origin( m_textGC,
                                   m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                   m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-            gdk_draw_polygon( m_window, m_textGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_textGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_textGC, 0, 0 );
         } else
         if (IS_15_PIX_HATCH(m_brush.GetStyle()))
         {
             gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
         } else
         if (IS_16_PIX_HATCH(m_brush.GetStyle()))
         {
             gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
         } else
         if (m_brush.GetStyle() == wxBRUSHSTYLE_STIPPLE)
@@ -727,22 +723,20 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffs
             gdk_gc_set_ts_origin( m_brushGC,
                                   m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                   m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
             gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
         }
         else
         {
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts.get(), n );
         }
     }
 
     if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
-        gdk_draw_polygon( m_window, m_penGC, FALSE, gpts, n );
+        gdk_draw_polygon( m_window, m_penGC, FALSE, gpts.get(), n );
 
     }
-
-    delete[] gpts;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -803,8 +797,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
             gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -926,8 +919,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     }
 
     // this ignores the radius
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -985,8 +977,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
             gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
@@ -1012,8 +1003,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + w, y + h );
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (!m_window) return;
 
@@ -1197,8 +1187,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
         }
     }
 
-    CalcBoundingBox( xdest, ydest );
-    CalcBoundingBox( xdest + width, ydest + height );
+    CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height));
 
     // scale/translate size and position
     wxCoord xx = XLOG2DEV(xdest);
@@ -1430,8 +1419,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     width = wxCoord(width / m_scaleX);
     height = wxCoord(height / m_scaleY);
-    CalcBoundingBox (x + width, y + height);
-    CalcBoundingBox (x, y);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 
@@ -1541,8 +1529,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
 #endif // 0
 
     // update the bounding box
-    CalcBoundingBox(x + minX, y + minY);
-    CalcBoundingBox(x + maxX, y + maxY);
+    CalcBoundingBox(x + minX, y + minY, x + maxX, y + maxY);
 }
 
 void wxWindowDCImpl::DoGetTextExtent(const wxString &string,
@@ -1738,13 +1725,12 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
     if (req_dash && req_nb_dash)
     {
-        wxGTKDash *real_req_dash = new wxGTKDash[req_nb_dash];
+        wxScopedArray<wxGTKDash> real_req_dash(req_nb_dash);
         if (real_req_dash)
         {
             for (int i = 0; i < req_nb_dash; i++)
                 real_req_dash[i] = req_dash[i] * width;
-            gdk_gc_set_dashes( m_penGC, 0, real_req_dash, req_nb_dash );
-            delete[] real_req_dash;
+            gdk_gc_set_dashes( m_penGC, 0, real_req_dash.get(), req_nb_dash );
         }
         else
         {

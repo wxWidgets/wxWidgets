@@ -961,7 +961,11 @@ wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 {
     // Suppress stderr from the shell to avoid outputting errors if the command
     // doesn't exist.
+#ifdef __VMS
+    FILE *f = popen(( "pipe " + cmd + " 2>/nl:").ToAscii(), "r");
+#else
     FILE *f = popen((cmd + " 2>/dev/null").ToAscii(), "r");
+#endif
     if ( !f )
     {
         // Notice that this doesn't happen simply if the command doesn't exist,
@@ -1182,13 +1186,25 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     // get OS version
     int major = -1, minor = -1, micro = -1;
+#ifdef __VMS
+    wxString release = wxGetCommandOutput(wxT("uname -v"));
+#else
     wxString release = wxGetCommandOutput(wxT("uname -r"));
+#endif
     if ( !release.empty() )
     {
+#ifdef __VMS
+        if ( wxSscanf(release.c_str(), wxT("V%d.%d-%d"), &major, &minor, &micro ) != 3 )
+#else
         if ( wxSscanf(release.c_str(), wxT("%d.%d.%d"), &major, &minor, &micro ) != 3 )
+#endif
         {
             micro = 0;
+#ifdef __VMS
+            if ( wxSscanf(release.c_str(), wxT("V%d.%d"), &major, &minor ) != 2 )
+#else
             if ( wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor ) != 2 )
+#endif
             {
                 // failed to get version string or unrecognized format
                 major = minor = micro = -1;
@@ -1216,7 +1232,11 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 
 wxString wxGetOsDescription()
 {
+#ifdef __VMS
+    return wxGetCommandOutput(wxT("uname -s -v -m"));
+#else
     return wxGetCommandOutput(wxT("uname -s -r -m"));
+#endif
 }
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)

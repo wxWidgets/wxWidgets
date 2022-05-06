@@ -25,6 +25,7 @@
     #include "wx/module.h"
 #endif
 
+#include "wx/uilocale.h"
 #include "wx/xlocale.h"
 
 #include <errno.h>
@@ -89,7 +90,7 @@ wxXLocale::wxXLocale(wxLanguage lang)
 {
     m_locale = NULL;
 
-    const wxLanguageInfo * const info = wxLocale::GetLanguageInfo(lang);
+    const wxLanguageInfo * const info = wxUILocale::GetLanguageInfo(lang);
     if ( info )
     {
         Init(info->GetLocaleName().c_str());

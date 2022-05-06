@@ -111,7 +111,7 @@ public :
     virtual void        GetPosition( int &x, int &y ) const wxOVERRIDE;
     virtual void        GetSize( int &width, int &height ) const wxOVERRIDE;
     virtual void        SetControlSize( wxWindowVariant variant ) wxOVERRIDE;
-
+    virtual void        GetLayoutInset(int &left , int &top , int &right, int &bottom) const wxOVERRIDE;
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) wxOVERRIDE;
     virtual bool        GetNeedsDisplay() const wxOVERRIDE;
 
@@ -368,7 +368,6 @@ public:
 #endif // wxUSE_MARKUP
 
     void SetPressedBitmap( const wxBitmapBundle& bitmap ) wxOVERRIDE;
-    void GetLayoutInset(int &left, int &top, int &right, int &bottom) const wxOVERRIDE;
     void SetAcceleratorFromLabel(const wxString& label);
 
     NSButton *GetNSButton() const;

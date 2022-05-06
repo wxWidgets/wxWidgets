@@ -71,29 +71,6 @@ public :
         }
     }
 
-    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const wxOVERRIDE
-    {
-        left = top = right = bottom = 0;
-        NSControlSize size = [(wxNSProgressIndicator*)m_osxView controlSize];
-
-        switch( size )
-        {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
-            case NSControlSizeLarge:
-#endif
-            case NSRegularControlSize:
-                left = right = 2;
-                top = 0;
-                bottom = 3;
-                break;
-            case NSMiniControlSize:
-            case NSSmallControlSize:
-                left = right = 1;
-                top = 0;
-                bottom = 1;
-                break;
-        }
-    }
 protected:
     void SetDeterminateMode()
     {
