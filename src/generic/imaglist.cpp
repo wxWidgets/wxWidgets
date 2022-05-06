@@ -68,12 +68,10 @@ bool wxGenericImageList::Create( int width, int height, bool mask, int WXUNUSED(
     return m_size != wxSize(0, 0);
 }
 
-namespace
-{
-wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& imgSize)
+wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 {
     wxBitmap bmp(bitmap);
-    if ( useMask )
+    if ( m_useMask )
     {
         if ( bmp.GetMask() )
         {
@@ -134,13 +132,13 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
     // Ensure image size is the same as the size of the images on the image list.
     wxBitmap bmpResized;
     const wxSize sz = bmp.GetLogicalSize();
-    if ( sz.x == imgSize.x && sz.y == imgSize.y )
+    if ( sz.x == m_size.x && sz.y == m_size.y )
     {
         bmpResized = bmp;
     }
-    else if ( sz.x > imgSize.x && sz.y > imgSize.y )
+    else if ( sz.x > m_size.x && sz.y > m_size.y )
     {
-        wxRect r(0, 0, imgSize.x, imgSize.y);
+        wxRect r(0, 0, m_size.x, m_size.y);
         bmpResized = bmp.GetSubBitmap(r);
     }
     else
@@ -149,7 +147,7 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
         wxImage img = bmp.ConvertToImage();
         // We need image with new physical size
         const double scaleFactor = bmp.GetScaleFactor();
-        wxImage imgResized = img.Size(scaleFactor * imgSize, wxPoint(0, 0), 0, 0, 0);
+        wxImage imgResized = img.Size(scaleFactor * m_size, wxPoint(0, 0), 0, 0, 0);
         bmpResized = wxBitmap(imgResized, -1, scaleFactor);
 #else
         bmpResized = bmp;
@@ -158,7 +156,6 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 
     return bmpResized;
 }
-};
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
@@ -175,7 +172,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     // ImageList_Add() does.
     if ( bitmapSize.x == m_size.x )
     {
-        m_images.push_back(GetImageListBitmap(bitmap, m_useMask, m_size));
+        m_images.push_back(GetImageListBitmap(bitmap));
     }
     else if ( bitmapSize.x > m_size.x )
     {
@@ -183,7 +180,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         for (int subIndex = 0; subIndex < numImages; subIndex++)
         {
             wxRect rect(m_size.x * subIndex, 0, m_size.x, m_size.y);
-            m_images.push_back(GetImageListBitmap(bitmap.GetSubBitmap(rect), m_useMask, m_size));
+            m_images.push_back(GetImageListBitmap(bitmap.GetSubBitmap(rect)));
         }
     }
     else
@@ -252,7 +249,7 @@ wxGenericImageList::Replace(int index,
     if ( mask.IsOk() )
         bmp.SetMask(new wxMask(mask));
 
-    m_images[index] = GetImageListBitmap(bmp, m_useMask, m_size);
+    m_images[index] = GetImageListBitmap(bmp);
 
     return true;
 }
