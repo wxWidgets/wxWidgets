@@ -734,6 +734,13 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
     return TRUE;
 }
 
+// Reuse the function defined in src/msw/textentry.cpp.
+extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg);
+
+bool wxSpinCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
+{
+    return wxMSWTextEntryShouldPreProcessMessage(msg);
+}
 
 // ----------------------------------------------------------------------------
 // size calculations

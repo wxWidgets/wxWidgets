@@ -1072,7 +1072,9 @@ bool wxTextEntry::ClickDefaultButtonIfPossible()
                     wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
 }
 
-bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
+// This function is also used by wxSpinCtrl, so make it extern to allow reusing
+// it from there.
+extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
 {
     // check for our special keys here: if we don't do it and the parent frame
     // uses them as accelerators, they wouldn't work at all, so we disable
@@ -1150,6 +1152,11 @@ bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
     }
 
     return true;
+}
+
+bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
+{
+    return wxMSWTextEntryShouldPreProcessMessage(msg);
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX
