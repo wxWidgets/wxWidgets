@@ -249,6 +249,20 @@ int wxGridColumnOperations::GetFirstLine(const wxGrid *grid, wxGridWindow *gridW
     return grid->GetNumberFrozenCols();
 }
 
+void wxGridOperations::PrepareDCForLabels(wxGrid *grid, wxDC &dc) const
+{
+    wxPoint dcOriginBefore = dc.GetDeviceOrigin();
+    grid->DoPrepareDC(dc);
+    wxPoint dcOrigin = dc.GetDeviceOrigin();
+
+    if ( GetOrientation() == wxVERTICAL )
+        dcOrigin.x = dcOriginBefore.x;
+    else if ( GetOrientation() == wxHORIZONTAL )
+        dcOrigin.y = dcOriginBefore.y;
+
+    dc.SetDeviceOrigin(dcOrigin.x, dcOrigin.y);
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellWorker is an (almost) empty common base class for
 // wxGridCellRenderer and wxGridCellEditor managing ref counting
@@ -4047,7 +4061,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                 if ( marker != m_dragLastPos )
                 {
                     wxClientDC dc( headerWin );
-                    DoPrepareDC(dc);
+                    oper.PrepareDCForLabels(this, dc);
 
                     wxSize clientSize = headerWin->GetClientSize();
 
@@ -4116,11 +4130,11 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                 {
                     // Show button as pressed
                     wxClientDC dc( headerWin );
-                    DoPrepareDC(dc);
+                    oper.PrepareDCForLabels(this, dc);
                     int lineTop = oper.GetLineStartPos(this, line);
                     int lineBottom = oper.GetLineEndPos(this, line) - 1;
                     dc.SetPen( wxPen( headerWin->GetBackgroundColour(), 1 ) );
-                    oper.DrawParallelLine(dc, 0, m_rowLabelWidth-1, lineTop);
+                    oper.DrawParallelLine(dc, 0, oper.GetLabelSize(this)-1, lineTop);
                     dual.DrawParallelLine(dc, lineTop, lineBottom, 1);
 
                     ChangeCursorMode(oper.GetCursorModeMove(), headerWin);

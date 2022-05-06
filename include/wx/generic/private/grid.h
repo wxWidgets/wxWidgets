@@ -634,6 +634,11 @@ public:
     // call DrawRowLabel or DrawColumnLabel
     virtual void DrawLineLabel(wxGrid *grid, wxDC& dc, int line) const = 0;
 
+    // return the value of GetRowLabelSize/GetColLabelSize
+    virtual int GetLabelSize(const wxGrid *grid) const = 0;
+
+    // helper for Process...MouseEvent for drawing markers on label windows
+    void PrepareDCForLabels(wxGrid *grid, wxDC &dc) const;
 
     // make the specified line visible by doing a minimal amount of scrolling
     virtual void MakeLineVisible(wxGrid *grid, int line) const = 0;
@@ -781,6 +786,8 @@ public:
 
     virtual void DrawLineLabel(wxGrid *grid, wxDC& dc, int line) const wxOVERRIDE
         { grid->DrawRowLabel(dc, line); }
+    virtual int GetLabelSize(const wxGrid *grid) const wxOVERRIDE
+        { return grid->GetRowLabelSize(); }
 
     virtual void MakeLineVisible(wxGrid *grid, int line) const wxOVERRIDE
         { grid->MakeCellVisible(line, -1); }
@@ -923,6 +930,8 @@ public:
 
     virtual void DrawLineLabel(wxGrid *grid, wxDC& dc, int line) const wxOVERRIDE
         { grid->DrawColLabel(dc, line); }
+    virtual int GetLabelSize(const wxGrid *grid) const wxOVERRIDE
+        { return grid->GetRowLabelSize(); }
 
     virtual void MakeLineVisible(wxGrid *grid, int line) const wxOVERRIDE
         { grid->MakeCellVisible(-1, line); }
