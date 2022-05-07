@@ -217,7 +217,6 @@ msgid "&Window"
 msgstr "&Вікно"
 
 #: ../src/common/accelcmn.cpp:47
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Delete"
 msgstr "Вилучити"
@@ -229,7 +228,6 @@ msgid "Del"
 msgstr "Вилучити"
 
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Back"
 msgstr "Назад"
@@ -241,7 +239,6 @@ msgid "Backspace"
 msgstr "Назад"
 
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "Вставити"
@@ -298,40 +295,34 @@ msgid "PgDn"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:58
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Left"
 msgstr "Ліворуч"
 
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "Праворуч"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "Вверх"
 
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "Донизу"
 
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "Домівка"
 
 #: ../src/common/accelcmn.cpp:63
-#, fuzzy
 msgctxt "keyboard key"
 msgid "End"
-msgstr "KP_END"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:64
 #, fuzzy
@@ -346,10 +337,9 @@ msgid "Tab"
 msgstr "Табуляції"
 
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr "Альбомна"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:67
 #, fuzzy
@@ -358,19 +348,16 @@ msgid "Escape"
 msgstr "Альбомна"
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "Скасувати"
 
 #: ../src/common/accelcmn.cpp:69
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Clear"
 msgstr "Спорожнити"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "Меню"
@@ -393,13 +380,11 @@ msgid "Select"
 msgstr "Позначене"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "Друк"
 
 #: ../src/common/accelcmn.cpp:75
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Execute"
 msgstr "Виконати"
@@ -410,13 +395,11 @@ msgid "Snapshot"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "Довідка"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "Додати"
@@ -452,10 +435,9 @@ msgid "Num_lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
@@ -468,16 +450,14 @@ msgid "Scroll Lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr "Проміжки"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr "Проміжки"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:87
 #, fuzzy
@@ -497,10 +477,9 @@ msgid "KP_Enter"
 msgstr "Друкарка"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr "Вставити"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:89
 #, fuzzy
@@ -521,10 +500,9 @@ msgid "KP_Left"
 msgstr "Ліворуч"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr "Вилучити"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:91
 #, fuzzy
@@ -562,28 +540,24 @@ msgid "Num Down"
 msgstr "Донизу"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr "Сторінки"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "Сторінка %d"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr "Донизу"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "Сторінка %d"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
@@ -603,10 +577,9 @@ msgid "KP_End"
 msgstr "KP_END"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr "Донизу"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
@@ -648,10 +621,9 @@ msgid "KP_Equal"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
@@ -659,10 +631,9 @@ msgid "KP_Multiply"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
 #, fuzzy
@@ -671,10 +642,9 @@ msgid "KP_Add"
 msgstr "KP_ADD"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
@@ -682,10 +652,9 @@ msgid "KP_Separator"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
@@ -693,22 +662,19 @@ msgid "KP_Subtract"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr "Вилучити"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
@@ -716,10 +682,9 @@ msgid "KP_Divide"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr "Домівка"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:109
 #, fuzzy
@@ -745,25 +710,21 @@ msgid "Command"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:186
-#, fuzzy
 msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "ctrl"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
-#, fuzzy
 msgctxt "keyboard key"
 msgid "shift"
 msgstr "shift"
 
 #: ../src/common/accelcmn.cpp:192
-#, fuzzy
 msgctxt "keyboard key"
 msgid "rawctrl"
 msgstr "rawctrl"
@@ -774,7 +735,6 @@ msgid "num "
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
-#, fuzzy
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
@@ -785,37 +745,31 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
-#, fuzzy
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "SPECIAL"
 
 #: ../src/common/accelcmn.cpp:343
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Alt+"
 msgstr "Alt+"
 
 #: ../src/common/accelcmn.cpp:345
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ctrl+"
 msgstr "Ctrl+"
 
 #: ../src/common/accelcmn.cpp:347
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Shift+"
 msgstr "Shift+"
 
 #: ../src/common/accelcmn.cpp:350
-#, fuzzy
 msgctxt "keyboard key"
 msgid "RawCtrl+"
 msgstr "RawCtrl+"

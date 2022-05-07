@@ -224,10 +224,9 @@ msgid "Del"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Back"
-msgstr "&عقب"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
@@ -290,10 +289,9 @@ msgid "Left"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
-msgstr " سبک"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:60
 msgctxt "keyboard key"
@@ -381,10 +379,9 @@ msgid "Snapshot"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
-msgstr "(راهنما)"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:78
 msgctxt "keyboard key"
@@ -502,10 +499,9 @@ msgid "KP_Right"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Right"
-msgstr " سبک"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"

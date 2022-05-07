@@ -214,229 +214,191 @@ msgid "&Window"
 msgstr "&विन्डो"
 
 #: ../src/common/accelcmn.cpp:47
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Delete"
 msgstr "मेटाइ देउ"
 
 #: ../src/common/accelcmn.cpp:48
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Del"
 msgstr "DEL"
 
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Back"
 msgstr "पछाडी"
 
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Backspace"
 msgstr "backspace"
 
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "घुसाउ"
 
 #: ../src/common/accelcmn.cpp:51
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ins"
 msgstr "INS"
 
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Enter"
 msgstr "enter"
 
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Return"
 msgstr "return"
 
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageUp"
 msgstr "PAGEUp"
 
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Up"
 msgstr "माथिल्लो पृष्ट"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageDown"
 msgstr "PAGEDOWN"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Down"
 msgstr "तल्लो पृष्ट"
 
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PgUp"
 msgstr "PGUP"
 
 #: ../src/common/accelcmn.cpp:57
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PgDn"
 msgstr "PGDN"
 
 #: ../src/common/accelcmn.cpp:58
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Left"
 msgstr "देब्रे"
 
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "दाहिने"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "माथि"
 
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "तल"
 
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "गृह"
 
 #: ../src/common/accelcmn.cpp:63
-#, fuzzy
 msgctxt "keyboard key"
 msgid "End"
 msgstr "अन्त"
 
 #: ../src/common/accelcmn.cpp:64
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Space"
 msgstr "space"
 
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Tab"
 msgstr "ट्याब"
 
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Esc"
 msgstr "ESC"
 
 #: ../src/common/accelcmn.cpp:67
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Escape"
 msgstr "escape"
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "रद्द गर"
 
 #: ../src/common/accelcmn.cpp:69
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Clear"
 msgstr "मेटाउ"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "मेनु"
 
 #: ../src/common/accelcmn.cpp:71
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Pause"
 msgstr "विश्राम"
 
 #: ../src/common/accelcmn.cpp:72
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Capital"
 msgstr "ठूलोवर्ण"
 
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Select"
 msgstr "चयन गर्नु"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "छाप्ने काम गर"
 
 #: ../src/common/accelcmn.cpp:75
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Execute"
 msgstr "कार्यान्वयन गर"
 
 #: ../src/common/accelcmn.cpp:76
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Snapshot"
 msgstr "परिक्षण प्रति"
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "सहयोग"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "थप"
 
 #: ../src/common/accelcmn.cpp:79
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Separator"
 msgstr "विभाजक"
 
 #: ../src/common/accelcmn.cpp:80
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Subtract"
 msgstr "घटाउ"
 
 #: ../src/common/accelcmn.cpp:81
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Decimal"
 msgstr "दशमलव"
@@ -448,343 +410,286 @@ msgid "Multiply"
 msgstr "KP_गुणन"
 
 #: ../src/common/accelcmn.cpp:83
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Divide"
 msgstr "विभाजन"
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num_lock"
 msgstr "num lock"
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
 msgstr "num lock"
 
 #: ../src/common/accelcmn.cpp:85
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Scroll_lock"
 msgstr "सार्ने चाबी"
 
 #: ../src/common/accelcmn.cpp:85
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Scroll Lock"
 msgstr "सार्ने चाबी"
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Space"
 msgstr "KP_SPACE"
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Space"
 msgstr "Num Space"
 
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Tab"
 msgstr "KP_TAB"
 
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Tab"
 msgstr "Num Tab"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Enter"
 msgstr "KP_ENTER"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
 msgstr "Num Enter"
 
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Home"
 msgstr "KP_गृह"
 
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Home"
 msgstr "Num Home"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Left"
 msgstr "KP_देब्रे"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
 msgstr "Num left"
 
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Up"
 msgstr "KP_माथि"
 
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Up"
 msgstr "Num Up"
 
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Right"
 msgstr "KP_दाहिने"
 
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Right"
 msgstr "Num Right"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Down"
 msgstr "KP_तल"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Down"
 msgstr "Num Down"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
 msgstr "KP_माथिल्लो पृष्ट"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
 msgstr "Num Page Up"
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
 msgstr "KP_तल्लो पृष्ट"
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
 msgstr "Num Page Down"
 
 #: ../src/common/accelcmn.cpp:96
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Prior"
 msgstr "KP_अघिल्लो"
 
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Next"
 msgstr "KP_अघिल्लो"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
 msgstr "KP_अन्त्य"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
 msgstr "Num End"
 
 #: ../src/common/accelcmn.cpp:99
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Begin"
 msgstr "KP_सुरु"
 
 #: ../src/common/accelcmn.cpp:99
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Begin"
 msgstr "Num Begin"
 
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Insert"
 msgstr "KP_INSERT"
 
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Insert"
 msgstr "Num Insert"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Delete"
 msgstr "KP_मेटाइ देउ"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Delete"
 msgstr "Num Delete"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Equal"
 msgstr "KP_बराबर"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
 msgstr "Num ="
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Multiply"
 msgstr "KP_गुणन"
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
 msgstr "Num *"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Add"
 msgstr "KP_थप"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
 msgstr "Num +"
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Separator"
 msgstr "KP_विभाजक"
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
 msgstr "Num ,"
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Subtract"
 msgstr "KP_घटाउ"
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
 msgstr "Num -"
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
 msgstr "KP_दशमलव"
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
 msgstr "Num ."
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Divide"
 msgstr "KP_भाग गर"
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
 msgstr "Num /"
 
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Left"
 msgstr "विन्डोज_देब्रे"
 
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Right"
 msgstr "विन्डोज_दाहिने"
 
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Menu"
 msgstr "विन्डोज_मेनु"
 
 #: ../src/common/accelcmn.cpp:112
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Command"
 msgstr "आदेश"
 
 #: ../src/common/accelcmn.cpp:186
-#, fuzzy
 msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "नियन्त्रण"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "Alt"
 
 #: ../src/common/accelcmn.cpp:190
-#, fuzzy
 msgctxt "keyboard key"
 msgid "shift"
 msgstr "shift"
 
 #: ../src/common/accelcmn.cpp:192
-#, fuzzy
 msgctxt "keyboard key"
 msgid "rawctrl"
 msgstr "rawctrl"
@@ -795,7 +700,6 @@ msgid "num "
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
-#, fuzzy
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
@@ -806,37 +710,31 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
-#, fuzzy
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "विशेष"
 
 #: ../src/common/accelcmn.cpp:343
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Alt+"
 msgstr "Alt+"
 
 #: ../src/common/accelcmn.cpp:345
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ctrl+"
 msgstr "Ctrl+"
 
 #: ../src/common/accelcmn.cpp:347
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Shift+"
 msgstr "Shift+"
 
 #: ../src/common/accelcmn.cpp:350
-#, fuzzy
 msgctxt "keyboard key"
 msgid "RawCtrl+"
 msgstr "RawCtrl+"

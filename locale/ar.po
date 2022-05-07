@@ -227,7 +227,6 @@ msgid "&Window"
 msgstr "&نافذة"
 
 #: ../src/common/accelcmn.cpp:47
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Delete"
 msgstr "حذف"
@@ -251,7 +250,6 @@ msgid "Backspace"
 msgstr "&رجوع"
 
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "إدراج"
@@ -308,31 +306,26 @@ msgid "PgDn"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:58
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Left"
 msgstr "يسار"
 
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "يمين"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
-msgstr "أ&على"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "Down"
 
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "رئيسي"
@@ -353,10 +346,9 @@ msgid "Tab"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr "طولي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:67
 #, fuzzy
@@ -365,7 +357,6 @@ msgid "Escape"
 msgstr "طولي"
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "إلغاء"
@@ -377,7 +368,6 @@ msgid "Clear"
 msgstr "&واضح"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "قائمة"
@@ -400,7 +390,6 @@ msgid "Select"
 msgstr "تحديد"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "طبع"
@@ -416,13 +405,11 @@ msgid "Snapshot"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "مساعدة"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "أضف"
@@ -458,10 +445,9 @@ msgid "Num_lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
@@ -500,10 +486,9 @@ msgid "KP_Enter"
 msgstr "طابعة"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr "إدراج"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:89
 #, fuzzy
@@ -524,10 +509,9 @@ msgid "KP_Left"
 msgstr "يسار"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr "حذف"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
@@ -564,28 +548,24 @@ msgid "Num Down"
 msgstr "Down"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr "صفحات"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "إعدادات الصفحة"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr "Down"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "Down"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
@@ -599,16 +579,14 @@ msgid "KP_Next"
 msgstr "التالي"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr "طابعة"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr "Down"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
@@ -650,10 +628,9 @@ msgid "KP_Equal"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
@@ -661,10 +638,9 @@ msgid "KP_Multiply"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
@@ -672,10 +648,9 @@ msgid "KP_Add"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
@@ -683,10 +658,9 @@ msgid "KP_Separator"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
@@ -694,22 +668,19 @@ msgid "KP_Subtract"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr "حذف"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
@@ -717,10 +688,9 @@ msgid "KP_Divide"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:109
 #, fuzzy
@@ -751,16 +721,14 @@ msgid "ctrl"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
-#, fuzzy
 msgctxt "keyboard key"
 msgid "shift"
-msgstr "Shift-"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:192
 msgctxt "keyboard key"
@@ -783,13 +751,11 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr "رئيسي"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
-#, fuzzy
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "خاص"

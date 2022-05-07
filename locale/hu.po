@@ -315,19 +315,16 @@ msgid "Right"
 msgstr "Vékony"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "Fel"
 
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "Le"
 
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "Haza"
@@ -349,10 +346,9 @@ msgid "Tab"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr "Tájkép"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:67
 #, fuzzy
@@ -361,7 +357,6 @@ msgid "Escape"
 msgstr "Tájkép"
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "Mégsem"
@@ -373,7 +368,6 @@ msgid "Clear"
 msgstr "&Törlés"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "Menu"
@@ -396,7 +390,6 @@ msgid "Select"
 msgstr "Kiválasztott"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "Nyomtatás"
@@ -412,13 +405,11 @@ msgid "Snapshot"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "Súgó"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "Add hozzá"
@@ -454,10 +445,9 @@ msgid "Num_lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
@@ -470,16 +460,14 @@ msgid "Scroll Lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr "Keresek..."
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr "Keresek..."
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
@@ -498,10 +486,9 @@ msgid "KP_Enter"
 msgstr "Nyomtató"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr "Bekezdés"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:89
 #, fuzzy
@@ -521,10 +508,9 @@ msgid "KP_Left"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr "&Törlés"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
@@ -561,28 +547,24 @@ msgid "Num Down"
 msgstr "Le"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr "Oldalak"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "%d. oldal"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr "Le"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "%d. oldal"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
@@ -596,16 +578,14 @@ msgid "KP_Next"
 msgstr "Következő "
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr "Nyomtató"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr "Le"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
@@ -647,10 +627,9 @@ msgid "KP_Equal"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
@@ -658,10 +637,9 @@ msgid "KP_Multiply"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
@@ -669,10 +647,9 @@ msgid "KP_Add"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
@@ -680,10 +657,9 @@ msgid "KP_Separator"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
@@ -691,22 +667,19 @@ msgid "KP_Subtract"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr "&Törlés"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
@@ -714,10 +687,9 @@ msgid "KP_Divide"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:109
 #, fuzzy
@@ -743,19 +715,16 @@ msgid "Command"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:186
-#, fuzzy
 msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "ctrl"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
-#, fuzzy
 msgctxt "keyboard key"
 msgid "shift"
 msgstr "eltol"
@@ -782,10 +751,9 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr "Haza"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"

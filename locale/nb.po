@@ -309,31 +309,26 @@ msgid "PgDn"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:58
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Left"
-msgstr "&Venstre"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "Høyre"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "Opp"
 
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "Ned"
 
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "Hjem"
@@ -350,10 +345,9 @@ msgid "Space"
 msgstr "Søker..."
 
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Tab"
-msgstr "&Tabell"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:66
 msgctxt "keyboard key"
@@ -361,13 +355,11 @@ msgid "Esc"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:67
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Escape"
-msgstr "Liggende"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "Avbryt"
@@ -379,7 +371,6 @@ msgid "Clear"
 msgstr "&Fjern"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "Meny"
@@ -396,22 +387,19 @@ msgid "Capital"
 msgstr "kursiv"
 
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Select"
 msgstr "Velg"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "Utskrift"
 
 #: ../src/common/accelcmn.cpp:75
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Execute"
-msgstr "&Utfør"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
@@ -419,13 +407,11 @@ msgid "Snapshot"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "Hjelp"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "Legg till"
@@ -436,7 +422,6 @@ msgid "Separator"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:80
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Subtract"
 msgstr "Trekk fra"
@@ -462,10 +447,9 @@ msgid "Num_lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
@@ -478,16 +462,14 @@ msgid "Scroll Lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr "Søker..."
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr "Søker..."
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
@@ -506,10 +488,9 @@ msgid "KP_Enter"
 msgstr "Skriver"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr "Innrykk"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:89
 #, fuzzy
@@ -524,16 +505,14 @@ msgid "Num Home"
 msgstr "Hjem"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Left"
-msgstr "&Venstre"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr "&Slett"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
@@ -570,28 +549,24 @@ msgid "Num Down"
 msgstr "Ned"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr "Sider"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "Side %d"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr "Ned"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "Side %d"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
@@ -605,16 +580,14 @@ msgid "KP_Next"
 msgstr "Neste"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr "Skriver"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr "Ned"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
@@ -656,10 +629,9 @@ msgid "KP_Equal"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
@@ -667,10 +639,9 @@ msgid "KP_Multiply"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
@@ -678,10 +649,9 @@ msgid "KP_Add"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
@@ -689,34 +659,29 @@ msgid "KP_Separator"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Subtract"
-msgstr "Trekk fra"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr "&Slett"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
@@ -724,28 +689,24 @@ msgid "KP_Divide"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Left"
-msgstr "&Vindu"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Right"
-msgstr "&Vindu"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:112
 msgctxt "keyboard key"
@@ -753,19 +714,16 @@ msgid "Command"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:186
-#, fuzzy
 msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "ctrl"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
-#, fuzzy
 msgctxt "keyboard key"
 msgid "shift"
 msgstr "shift"
@@ -792,10 +750,9 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr "Hjem"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"
@@ -808,16 +765,14 @@ msgid "Alt+"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:345
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ctrl+"
-msgstr "ctrl"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:347
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Shift+"
-msgstr "shift"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:350
 #, fuzzy

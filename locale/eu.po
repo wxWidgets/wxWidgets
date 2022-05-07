@@ -213,229 +213,191 @@ msgid "&Window"
 msgstr "&Leihoa"
 
 #: ../src/common/accelcmn.cpp:47
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Delete"
 msgstr "Ezabatu"
 
 #: ../src/common/accelcmn.cpp:48
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Del"
 msgstr "Ezab"
 
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Back"
 msgstr "Atzera"
 
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Backspace"
 msgstr "Atzera"
 
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "Sartu"
 
 #: ../src/common/accelcmn.cpp:51
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ins"
 msgstr "Txert"
 
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Enter"
 msgstr "Sartu"
 
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Return"
 msgstr "Sartu"
 
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageUp"
 msgstr "OrrGora"
 
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Up"
 msgstr "Orrialdean Gora"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageDown"
 msgstr "OrrBeh"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Down"
 msgstr "Orrialdean Behera"
 
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PgUp"
 msgstr "OrrGor"
 
 #: ../src/common/accelcmn.cpp:57
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PgDn"
 msgstr "OrrBeh"
 
 #: ../src/common/accelcmn.cpp:58
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Left"
 msgstr "Ezker"
 
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "Eskuin"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "Gora"
 
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "Behera"
 
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "Hasiera"
 
 #: ../src/common/accelcmn.cpp:63
-#, fuzzy
 msgctxt "keyboard key"
 msgid "End"
 msgstr "Amaiera"
 
 #: ../src/common/accelcmn.cpp:64
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Space"
 msgstr "Tartea"
 
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Tab"
 msgstr "Tab"
 
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Esc"
 msgstr "Irt"
 
 #: ../src/common/accelcmn.cpp:67
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Escape"
 msgstr "Irten"
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "E&zeztatu"
 
 #: ../src/common/accelcmn.cpp:69
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Clear"
 msgstr "Garbitu"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "Menua"
 
 #: ../src/common/accelcmn.cpp:71
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Pause"
 msgstr "Pausatu"
 
 #: ../src/common/accelcmn.cpp:72
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Capital"
 msgstr "Larria"
 
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Select"
 msgstr "Hautatu"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "Irarkitu"
 
 #: ../src/common/accelcmn.cpp:75
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Execute"
 msgstr "Exekutatu"
 
 #: ../src/common/accelcmn.cpp:76
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Snapshot"
 msgstr "Berehalakoa"
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "Laguntza"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "Gehitu"
 
 #: ../src/common/accelcmn.cpp:79
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Separator"
 msgstr "Banantzailea"
 
 #: ../src/common/accelcmn.cpp:80
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Subtract"
 msgstr "Kenketa"
 
 #: ../src/common/accelcmn.cpp:81
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Decimal"
 msgstr "Hamarrena"
@@ -447,343 +409,286 @@ msgid "Multiply"
 msgstr "ZP_Biderketa"
 
 #: ../src/common/accelcmn.cpp:83
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Divide"
 msgstr "Zatiketa"
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num_lock"
 msgstr "Zbk_blokeoa"
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
 msgstr "Zbk Blokeoa"
 
 #: ../src/common/accelcmn.cpp:85
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Scroll_lock"
 msgstr "Irristari_blokeoa"
 
 #: ../src/common/accelcmn.cpp:85
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Scroll Lock"
 msgstr "Irristari Blokeoa"
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Space"
 msgstr "ZP_Tartea"
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Space"
 msgstr "Zbk Tartea"
 
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Tab"
 msgstr "ZP_Tab"
 
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Tab"
 msgstr "Zbk Tab"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Enter"
 msgstr "ZP_Sartu"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
 msgstr "Zbk Sartu"
 
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Home"
 msgstr "ZP_Hasiera"
 
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Home"
 msgstr "Zbk Hasiera"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Left"
 msgstr "ZP_Ezker"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
 msgstr "Zbk ezker"
 
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Up"
 msgstr "ZP_Gora"
 
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Up"
 msgstr "Zbk Gora"
 
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Right"
 msgstr "ZP_Eskuin"
 
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Right"
 msgstr "Zbk Eskuin"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Down"
 msgstr "ZP_Behera"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Down"
 msgstr "Zbk Behera"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
 msgstr "ZP_OrrGora"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
 msgstr "Zbk Orrian Gora"
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
 msgstr "ZP_OrrBehera"
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
 msgstr "Zbk Orrian Behera"
 
 #: ../src/common/accelcmn.cpp:96
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Prior"
 msgstr "ZP_Prior"
 
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Next"
 msgstr "ZP_Hurrengoa"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
 msgstr "ZP_Amaiera"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
 msgstr "Zbk Amaiera"
 
 #: ../src/common/accelcmn.cpp:99
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Begin"
 msgstr "ZP_Hasi"
 
 #: ../src/common/accelcmn.cpp:99
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Begin"
 msgstr "Zbk Hasi"
 
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Insert"
 msgstr "ZP_Txertatu"
 
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Insert"
 msgstr "Zbk Txertatu"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Delete"
 msgstr "ZP_Ezabatu"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Delete"
 msgstr "Zbk Ezabatu"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Equal"
 msgstr "ZP_Berdin"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
 msgstr "Zbk ="
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Multiply"
 msgstr "ZP_Biderketa"
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
 msgstr "Zbk *"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Add"
 msgstr "ZP_Gehiketa"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
 msgstr "Zbk +"
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Separator"
 msgstr "ZP_Banantzailea"
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
 msgstr "Zbk ,"
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Subtract"
 msgstr "ZP_Kenketa"
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
 msgstr "Zbk -"
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
 msgstr "ZP_Hamarrena"
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
 msgstr "Zbk ."
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Divide"
 msgstr "ZP_Zatiketa"
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
 msgstr "Zbk /"
 
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Left"
 msgstr "Windows_Ezker"
 
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Right"
 msgstr "Windows_Eskuin"
 
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Menu"
 msgstr "Windows_Menua"
 
 #: ../src/common/accelcmn.cpp:112
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Command"
 msgstr "Agindua"
 
 #: ../src/common/accelcmn.cpp:186
-#, fuzzy
 msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "ktrl"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
-#, fuzzy
 msgctxt "keyboard key"
 msgid "shift"
 msgstr "aldatu"
 
 #: ../src/common/accelcmn.cpp:192
-#, fuzzy
 msgctxt "keyboard key"
 msgid "rawctrl"
 msgstr "rawktrl"
@@ -794,7 +699,6 @@ msgid "num "
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
-#, fuzzy
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
@@ -805,37 +709,31 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "ZP_"
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
-#, fuzzy
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "BEREZIA"
 
 #: ../src/common/accelcmn.cpp:343
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Alt+"
 msgstr "Alt+"
 
 #: ../src/common/accelcmn.cpp:345
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ctrl+"
 msgstr "Ktrl+"
 
 #: ../src/common/accelcmn.cpp:347
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Shift+"
 msgstr "Shift+"
 
 #: ../src/common/accelcmn.cpp:350
-#, fuzzy
 msgctxt "keyboard key"
 msgid "RawCtrl+"
 msgstr "RawKtrl+"

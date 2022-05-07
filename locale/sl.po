@@ -286,41 +286,35 @@ msgid "&Window"
 msgstr "&Okno"
 
 #: ../src/common/accelcmn.cpp:47
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Delete"
 msgstr "Izbriši"
 
 #: ../src/common/accelcmn.cpp:48
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Del"
 msgstr "Brisalka"
 
 # generic/helpwxht.cpp:157
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Back"
 msgstr "Nazaj"
 
 # generic/helpwxht.cpp:157
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Backspace"
 msgstr "Vračalka"
 
 # html/helpfrm.cpp:372
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "Vstavi"
 
 # html/helpfrm.cpp:372
 #: ../src/common/accelcmn.cpp:51
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ins"
 msgstr "Vstavljalka"
@@ -328,111 +322,94 @@ msgstr "Vstavljalka"
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Enter"
 msgstr "Vnašalka"
 
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Return"
 msgstr "Vračalka"
 
 # generic/prntdlgg.cpp:164
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageUp"
 msgstr "PrejStran"
 
 # common/prntbase.cpp:731
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Up"
 msgstr "Prejšnja stran"
 
 # html/htmlwin.cpp:216
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageDown"
 msgstr "NaslStran"
 
 # common/prntbase.cpp:731
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Down"
 msgstr "Naslednja stran"
 
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PgUp"
 msgstr "Prejšnja stran"
 
 #: ../src/common/accelcmn.cpp:57
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PgDn"
 msgstr "Naslednja stran"
 
 #: ../src/common/accelcmn.cpp:58
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Left"
 msgstr "Levo"
 
 # generic/fontdlgg.cpp:216
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "Desno"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "Navzgor"
 
 # html/htmlwin.cpp:216
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "Dol"
 
 # generic/dirdlgg.cpp:212
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "Domov"
 
 #: ../src/common/accelcmn.cpp:63
-#, fuzzy
 msgctxt "keyboard key"
 msgid "End"
 msgstr "Konec"
 
 # html/helpfrm.cpp:628
 #: ../src/common/accelcmn.cpp:64
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Space"
 msgstr "Preslednica"
 
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Tab"
 msgstr "Tabulatorka"
 
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Esc"
 msgstr "Ubežnica"
@@ -441,7 +418,6 @@ msgstr "Ubežnica"
 # generic/prntdlgg.cpp:441
 # generic/prntdlgg.cpp:637
 #: ../src/common/accelcmn.cpp:67
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Escape"
 msgstr "Ubežnica"
@@ -458,39 +434,33 @@ msgstr "Ubežnica"
 # generic/wizard.cpp:192
 # html/helpfrm.cpp:910
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "Prekliči"
 
 # generic/logg.cpp:475
 #: ../src/common/accelcmn.cpp:69
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Clear"
 msgstr "Počisti"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "Meni"
 
 #: ../src/common/accelcmn.cpp:71
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Pause"
 msgstr "Prekinitev"
 
 #: ../src/common/accelcmn.cpp:72
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Capital"
 msgstr "Velike začetnice"
 
 # generic/dirdlgg.cpp:191
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Select"
 msgstr "Izbiralka"
@@ -498,19 +468,16 @@ msgstr "Izbiralka"
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "Tiskanje"
 
 #: ../src/common/accelcmn.cpp:75
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Execute"
 msgstr "Izvedi"
 
 #: ../src/common/accelcmn.cpp:76
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Snapshot"
 msgstr "Posnetek"
@@ -520,31 +487,26 @@ msgstr "Posnetek"
 # html/helpfrm.cpp:208
 # msw/mdi.cpp:1283
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "Pomoč"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "Dodaj"
 
 #: ../src/common/accelcmn.cpp:79
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Separator"
 msgstr "Ločilo"
 
 #: ../src/common/accelcmn.cpp:80
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Subtract"
 msgstr "Odštej"
 
 #: ../src/common/accelcmn.cpp:81
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Decimal"
 msgstr "Decimalno"
@@ -556,55 +518,46 @@ msgid "Multiply"
 msgstr "ŠT_Množi"
 
 #: ../src/common/accelcmn.cpp:83
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Divide"
 msgstr "Razdeli"
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num_lock"
 msgstr "Zakl_štev"
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
 msgstr "Zaklepalka številčnice"
 
 #: ../src/common/accelcmn.cpp:85
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Scroll_lock"
 msgstr "Zakl_drs"
 
 #: ../src/common/accelcmn.cpp:85
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Scroll Lock"
 msgstr "Zaklepalka drsenja"
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Space"
 msgstr "ŠT_Preslednica"
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Space"
 msgstr "Št Preslednica"
 
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Tab"
 msgstr "ŠT_Tabulatorka"
 
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Tab"
 msgstr "Št Tabulatorka"
@@ -612,305 +565,257 @@ msgstr "Št Tabulatorka"
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Enter"
 msgstr "ŠT_Vnašalka"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
 msgstr "Št Vnašalka"
 
 # generic/dirdlgg.cpp:212
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Home"
 msgstr "ŠT_Začetek"
 
 # generic/dirdlgg.cpp:212
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Home"
 msgstr "Št Domov"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Left"
 msgstr "ŠT_Levo"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
 msgstr "Št Levo"
 
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Up"
 msgstr "ŠT_Navzgor"
 
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Up"
 msgstr "Št Navzgor"
 
 # generic/fontdlgg.cpp:216
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Right"
 msgstr "ŠT_Desno"
 
 # generic/fontdlgg.cpp:216
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Right"
 msgstr "Št Desno"
 
 # html/htmlwin.cpp:216
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Down"
 msgstr "ŠT_Navzdol"
 
 # html/htmlwin.cpp:216
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Down"
 msgstr "Št Navzdol"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
 msgstr "ŠT_Prejšnjastran"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
 msgstr "Št Prejšnja stran"
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
 msgstr "ŠT_Naslednjastran"
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
 msgstr "Št Naslednja stran"
 
 #: ../src/common/accelcmn.cpp:96
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Prior"
 msgstr "ŠT_Prejšnji"
 
 # msw/mdi.cpp:188
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Next"
 msgstr "ŠT_Naslednji"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
 msgstr "ŠT_Konec"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
 msgstr "Št Konec"
 
 #: ../src/common/accelcmn.cpp:99
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Begin"
 msgstr "ŠT_Začni"
 
 #: ../src/common/accelcmn.cpp:99
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Begin"
 msgstr "Št Začetek"
 
 # html/helpfrm.cpp:372
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Insert"
 msgstr "ŠT_Vstavljalka"
 
 # html/helpfrm.cpp:372
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Insert"
 msgstr "Št Vstavi"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Delete"
 msgstr "ŠT_Brisalka"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Delete"
 msgstr "Št Brisalka"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Equal"
 msgstr "ŠT_Enako"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
 msgstr "Št ="
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Multiply"
 msgstr "ŠT_Množi"
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
 msgstr "Št *"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Add"
 msgstr "ŠT_Dodaj"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
 msgstr "Št +"
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Separator"
 msgstr "ŠT_Ločilo"
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
 msgstr "Št ,"
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Subtract"
 msgstr "ŠT_Odštej"
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
 msgstr "Št -"
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
 msgstr "ŠT_Vejica"
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
 msgstr "Št ."
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Divide"
 msgstr "ŠT_Deli"
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
 msgstr "Št /"
 
 # msw/utils.cpp:549
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Left"
 msgstr "Windows_Levo"
 
 # msw/utils.cpp:549
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Right"
 msgstr "Windows_Desno"
 
 # msw/utils.cpp:549
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Menu"
 msgstr "Windows_Meni"
 
 #: ../src/common/accelcmn.cpp:112
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Command"
 msgstr "Ukazovalka"
 
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:186
-#, fuzzy
 msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "KRMILKA"
 
 # common/utilscmn.cpp:466
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "ALT"
 
 # common/utilscmn.cpp:468
 #: ../src/common/accelcmn.cpp:190
-#, fuzzy
 msgctxt "keyboard key"
 msgid "shift"
 msgstr "DVIGALKA"
 
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:192
-#, fuzzy
 msgctxt "keyboard key"
 msgid "rawctrl"
 msgstr "surovakrmilka"
@@ -921,7 +826,6 @@ msgid "num "
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
-#, fuzzy
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
@@ -932,40 +836,34 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "ŠT_"
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
-#, fuzzy
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "POSEBNO"
 
 #: ../src/common/accelcmn.cpp:343
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Alt+"
 msgstr "Dvigalka+"
 
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:345
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ctrl+"
 msgstr "Krmilka-"
 
 # common/utilscmn.cpp:468
 #: ../src/common/accelcmn.cpp:347
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Shift+"
 msgstr "Dvigalka-"
 
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:350
-#, fuzzy
 msgctxt "keyboard key"
 msgid "RawCtrl+"
 msgstr "SurovaKrmilka-"

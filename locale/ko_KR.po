@@ -223,7 +223,6 @@ msgid "&Window"
 msgstr "창(&W)"
 
 #: ../src/common/accelcmn.cpp:47
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Delete"
 msgstr "지우기"
@@ -247,7 +246,6 @@ msgid "Backspace"
 msgstr "뒤로(&B)"
 
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "넣기"
@@ -304,31 +302,26 @@ msgid "PgDn"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:58
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Left"
 msgstr "왼쪽"
 
 #: ../src/common/accelcmn.cpp:59
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "오른쪽"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "위로"
 
 #: ../src/common/accelcmn.cpp:61
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "아래로"
 
 #: ../src/common/accelcmn.cpp:62
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "홈"
@@ -351,10 +344,9 @@ msgid "Tab"
 msgstr "탭"
 
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr "가로 방향"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:67
 #, fuzzy
@@ -363,7 +355,6 @@ msgid "Escape"
 msgstr "가로 방향"
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "취소"
@@ -375,7 +366,6 @@ msgid "Clear"
 msgstr "비우기(&C)"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "메뉴"
@@ -398,7 +388,6 @@ msgid "Select"
 msgstr "선택"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "인쇄"
@@ -414,13 +403,11 @@ msgid "Snapshot"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:77
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "도움말"
 
 #: ../src/common/accelcmn.cpp:78
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "추가"
@@ -456,10 +443,9 @@ msgid "Num_lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:84
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
@@ -472,16 +458,14 @@ msgid "Scroll Lock"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr "간격"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:86
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr "간격"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
@@ -500,10 +484,9 @@ msgid "KP_Enter"
 msgstr "프린터"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr "넣기"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:89
 #, fuzzy
@@ -524,10 +507,9 @@ msgid "KP_Left"
 msgstr "왼쪽"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr "지우기"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
@@ -564,28 +546,24 @@ msgid "Num Down"
 msgstr "아래로"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr "페이지"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "페이지 %d"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr "아래로"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:95
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "페이지 %d"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
@@ -599,16 +577,14 @@ msgid "KP_Next"
 msgstr "다음"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr "프린터"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr "아래로"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
@@ -650,10 +626,9 @@ msgid "KP_Equal"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
@@ -661,10 +636,9 @@ msgid "KP_Multiply"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:103
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
@@ -672,10 +646,9 @@ msgid "KP_Add"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
@@ -683,10 +656,9 @@ msgid "KP_Separator"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:105
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
@@ -694,22 +666,19 @@ msgid "KP_Subtract"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:106
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr "지우기"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:107
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
@@ -717,10 +686,9 @@ msgid "KP_Divide"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:108
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:109
 #, fuzzy
@@ -751,7 +719,6 @@ msgid "ctrl"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
@@ -782,10 +749,9 @@ msgid "KP_F"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr "홈"
+msgstr ""
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"
