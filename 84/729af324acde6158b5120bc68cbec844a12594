@@ -1,0 +1,1 @@
+wxMSW: Fix handling of standard accelerators in wxSpinCtrl (Dietmar Schwertberger).
