@@ -3199,14 +3199,6 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     return FALSE;
 }
 
-// Helper for wxGtkTreeCellDataFunc() below.
-static void wxGtkTreeSetVisibleProp(GtkCellRenderer *renderer, gboolean visible)
-{
-    wxGtkValue gvalue( G_TYPE_BOOLEAN );
-    g_value_set_boolean( gvalue, visible );
-    g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
-}
-
 extern "C"
 {
 
@@ -3241,7 +3233,9 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
         visible = cell->PrepareForItem(wx_model, item, column);
     }
 
-    wxGtkTreeSetVisibleProp(renderer, visible);
+    wxGtkValue gvalue( G_TYPE_BOOLEAN );
+    g_value_set_boolean( gvalue, visible );
+    g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
 }
 
 } // extern "C"
