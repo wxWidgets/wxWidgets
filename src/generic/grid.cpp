@@ -251,6 +251,10 @@ int wxGridColumnOperations::GetFirstLine(const wxGrid *grid, wxGridWindow *gridW
 
 void wxGridOperations::PrepareDCForLabels(wxGrid *grid, wxDC &dc) const
 {
+    // The grid can be scrolled in both directions and so grid->DoPrepareDC
+    // could offset the device context in both directions.
+    // For row and col labels, we want only one direction and so
+    // we reset the other direction to the original, unscrolled value.
     wxPoint dcOriginBefore = dc.GetDeviceOrigin();
     grid->DoPrepareDC(dc);
     wxPoint dcOrigin = dc.GetDeviceOrigin();
