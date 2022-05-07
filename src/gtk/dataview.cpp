@@ -3233,25 +3233,15 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
 
-    if (!wx_model->IsVirtualListModel())
+    gboolean visible = wx_model->HasValue(item, column);
+    if ( visible )
     {
-        gboolean visible = wx_model->HasValue(item, column);
-        wxGtkTreeSetVisibleProp(renderer, visible);
+        cell->GtkSetCurrentItem(item);
 
-        if ( !visible )
-            return;
+        visible = cell->PrepareForItem(wx_model, item, column);
     }
 
-    cell->GtkSetCurrentItem(item);
-
-    if (!cell->PrepareForItem(wx_model, item, column))
-    {
-        // We don't have any value in this cell, after all, so hide it.
-        if (!wx_model->IsVirtualListModel())
-        {
-            wxGtkTreeSetVisibleProp(renderer, FALSE);
-        }
-    }
+    wxGtkTreeSetVisibleProp(renderer, visible);
 }
 
 } // extern "C"
