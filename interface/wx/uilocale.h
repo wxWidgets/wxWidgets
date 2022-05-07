@@ -116,9 +116,10 @@ public:
 
         In the simplest case, this can be used as following:
         @code
-            const wxUILocale loc(wxLocaleIdent("fr"));
+            const wxUILocale loc(wxLocaleIdent().Language("fr"));
         @endcode
-        see wxLocaleIdent description for more details.
+        see wxLocaleIdent description for more details, including other ways of
+        specifying the locale.
 
         If @a localeId is not recognized or not supported, default ("C") locale
         is used instead. Additionally, if @a localeId is empty (see
