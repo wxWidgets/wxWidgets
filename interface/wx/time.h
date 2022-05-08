@@ -13,6 +13,9 @@
 /**
     Returns the difference between UTC and local time in seconds.
 
+    This function intentionally doesn't take DST into account, i.e. the offset
+    returned is the same one independently of when the function is called.
+
     @header{wx/time.h}
  */
 int wxGetTimeZone();
