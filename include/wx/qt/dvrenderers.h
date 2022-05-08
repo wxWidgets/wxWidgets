@@ -42,6 +42,8 @@ public:
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
+
+    bool IsCompatibleVariantType(const wxString& variantType) const;
 };
 
 // ---------------------------------------------------------

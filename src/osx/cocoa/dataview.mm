@@ -2999,6 +2999,14 @@ bool wxDataViewBitmapRenderer::MacRender()
     return true;
 }
 
+bool
+wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) const
+{
+    // We can accept values of any types checked by SetValue().
+    return variantType == wxS("wxBitmap")
+            || variantType == wxS("wxIcon");
+}
+
 wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 
 // -------------------------------------

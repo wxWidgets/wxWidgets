@@ -104,6 +104,10 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+
+    virtual
+    bool IsCompatibleVariantType(const wxString& variantType) const wxOVERRIDE;
+
 #if wxUSE_ACCESSIBILITY
     virtual wxString GetAccessibleDescription() const wxOVERRIDE;
 #endif // wxUSE_ACCESSIBILITY

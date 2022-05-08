@@ -90,6 +90,9 @@ public:
     bool SetValue( const wxVariant &value ) wxOVERRIDE;
     bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
+    virtual
+    bool IsCompatibleVariantType(const wxString& variantType) const wxOVERRIDE;
+
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
 };
