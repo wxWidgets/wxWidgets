@@ -112,8 +112,7 @@ public:
     virtual wxSize GetSize() const wxOVERRIDE;
 
 private:
-    wxIcon m_icon;
-    wxBitmap m_bitmap;
+    wxBitmapBundle m_bitmapBundle;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
