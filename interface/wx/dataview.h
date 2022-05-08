@@ -2730,7 +2730,12 @@ protected:
 /**
     @class wxDataViewBitmapRenderer
 
-    This class is used by wxDataViewCtrl to render bitmap controls.
+    This class is used by wxDataViewCtrl to render bitmaps.
+
+    This renderer accepts wxVariant objects storing wxBitmap, wxIcon or
+    wxBitmapBundle inside them, with the latter being preferred as it allows
+    the renderer to automatically select the bitmap of the best matching size
+    depending on the current DPI.
 
     @library{wxcore}
     @category{dvc}
@@ -2740,6 +2745,11 @@ class wxDataViewBitmapRenderer : public wxDataViewRenderer
 public:
     /**
         Returns the wxVariant type used with this renderer.
+
+        Note that the value returned by this function has changed from
+        "wxBitmap" to "wxBitmapBundle" in wxWidgets 3.1.7, however the exact
+        value shouldn't matter, as it is only supposed to be used as the value
+        for the first constructor argument.
 
         @since 3.1.0
      */

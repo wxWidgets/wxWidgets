@@ -104,7 +104,7 @@ private:
 class WXDLLIMPEXP_ADV wxDataViewBitmapRenderer: public wxDataViewRenderer
 {
 public:
-    static wxString GetDefaultType() { return wxS("wxBitmap"); }
+    static wxString GetDefaultType() { return wxS("wxBitmapBundle"); }
 
     wxDataViewBitmapRenderer(const wxString& varianttype = GetDefaultType(),
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
