@@ -36,6 +36,71 @@
 #include "wx/osx/private.h"
 #endif
 
+#if wxUSE_VARIANT
+
+#include "wx/variant.h"
+
+// We can't use the macros from wx/variant.h because they only work for
+// wxObject-derived classes, so define our own wxVariantData.
+
+class wxBitmapBundleVariantData: public wxVariantData
+{
+public:
+    explicit wxBitmapBundleVariantData(const wxBitmapBundle& value)
+        : m_value(value)
+    {
+    }
+
+    virtual bool Eq(wxVariantData& data) const wxOVERRIDE
+    {
+        // We're only called with the objects of the same type, so the cast is
+        // safe.
+        return static_cast<wxBitmapBundleVariantData&>(data).m_value.IsSameAs(m_value);
+    }
+
+    virtual wxString GetType() const wxOVERRIDE
+    {
+        return wxASCII_STR("wxBitmapBundle");
+    }
+
+    virtual wxClassInfo* GetValueClassInfo() wxOVERRIDE
+    {
+        return NULL;
+    }
+
+    virtual wxVariantData* Clone() const wxOVERRIDE
+    {
+        return new wxBitmapBundleVariantData(m_value);
+    }
+
+    wxBitmapBundle m_value;
+
+    DECLARE_WXANY_CONVERSION()
+};
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxBitmapBundle, wxBitmapBundleVariantData)
+
+WXDLLIMPEXP_CORE
+wxBitmapBundle& operator<<(wxBitmapBundle& value, const wxVariant& variant)
+{
+    wxASSERT( variant.GetType() == wxASCII_STR("wxBitmapBundle") );
+
+    wxBitmapBundleVariantData* const
+        data = static_cast<wxBitmapBundleVariantData*>(variant.GetData());
+
+    value = data->m_value;
+    return value;
+}
+
+WXDLLIMPEXP_CORE
+wxVariant& operator<<(wxVariant& variant, const wxBitmapBundle& value)
+{
+    variant.SetData(new wxBitmapBundleVariantData(value));
+    return variant;
+}
+
+#endif // wxUSE_VARIANT
+
 // ----------------------------------------------------------------------------
 // private helpers
 // ----------------------------------------------------------------------------

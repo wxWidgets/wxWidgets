@@ -245,4 +245,19 @@ public:
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
 };
 
+// ----------------------------------------------------------------------------
+// Allow using wxBitmapBundle in wxVariant
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+
+class WXDLLIMPEXP_FWD_BASE wxVariant;
+
+WXDLLIMPEXP_CORE
+wxBitmapBundle& operator<<(wxBitmapBundle& value, const wxVariant& variant);
+WXDLLIMPEXP_CORE
+wxVariant& operator<<(wxVariant& variant, const wxBitmapBundle& value);
+
+#endif // wxUSE_VARIANT
+
 #endif // _WX_BMPBNDL_H_
