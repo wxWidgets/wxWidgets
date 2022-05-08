@@ -2065,6 +2065,19 @@ public:
     wxString GetVariantType() const;
 
     /**
+        Check if the given variant type is compatible with the type expected by
+        this renderer.
+
+        The base class implementation just compares @a variantType with the
+        value returned by GetVariantType(), but this function can be overridden
+        to accept other types that can be converted to the type needed by the
+        renderer.
+
+        @since 3.1.7
+     */
+    virtual bool IsCompatibleVariantType(const wxString& variantType) const;
+
+    /**
         Sets the alignment of the renderer's content.
         The default value of @c wxDVR_DEFAULT_ALIGNMENT indicates that the content
         should have the same alignment as the column header.

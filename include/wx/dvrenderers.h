@@ -155,6 +155,15 @@ public:
 
     wxString GetVariantType() const             { return m_variantType; }
 
+    // Check if the given variant type is compatible with the type expected by
+    // this renderer: by default, just compare it with GetVariantType(), but
+    // can be overridden to accept other types that can be converted to the
+    // type needed by the renderer.
+    virtual bool IsCompatibleVariantType(const wxString& variantType) const
+    {
+        return variantType == GetVariantType();
+    }
+
     // Prepare for rendering the value of the corresponding item in the given
     // column taken from the provided non-null model.
     //
@@ -163,8 +172,9 @@ public:
     // it and should probably be removed in the future.
     //
     // Return true if this cell is non-empty or false otherwise (and also if
-    // the model returned a value of the wrong, i.e. different from our
-    // GetVariantType(), type, in which case a debug error is also logged).
+    // the model returned a value of the wrong type, i.e. such that our
+    // IsCompatibleVariantType() returned false for it, in which case a debug
+    // error is also logged).
     bool PrepareForItem(const wxDataViewModel *model,
                         const wxDataViewItem& item,
                         unsigned column);
