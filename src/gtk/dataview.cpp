@@ -3225,13 +3225,10 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
 
-    gboolean visible = wx_model->HasValue(item, column);
-    if ( visible )
-    {
-        cell->GtkSetCurrentItem(item);
+    cell->GtkSetCurrentItem(item);
 
-        visible = cell->PrepareForItem(wx_model, item, column);
-    }
+    // Cells without values shouldn't be rendered at all.
+    const bool visible = cell->PrepareForItem(wx_model, item, column);
 
     wxGtkValue gvalue( G_TYPE_BOOLEAN );
     g_value_set_boolean( gvalue, visible );
