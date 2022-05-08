@@ -28,6 +28,9 @@
 #include "wx/osx/private/available.h"
 #include "wx/osx/private/datatransfer.h"
 #include "wx/osx/cocoa/dataview.h"
+
+#include "wx/private/bmpbndl.h"
+
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
 #include "wx/dcgraph.h"
@@ -2984,6 +2987,13 @@ bool wxDataViewBitmapRenderer::MacRender()
 {
     if (GetValue().GetType() == wxS("wxBitmap"))
     {
+        wxBitmapBundle bundle;
+        bundle << GetValue();
+        if (bundle.IsOk())
+            [GetNativeData()->GetItemCell() setObjectValue:wxOSXGetImageFromBundle(bundle)];
+    }
+    else if (GetValue().GetType() == wxS("wxBitmap"))
+    {
         wxBitmap bitmap;
         bitmap << GetValue();
         if (bitmap.IsOk())
@@ -3003,7 +3013,8 @@ bool
 wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) const
 {
     // We can accept values of any types checked by SetValue().
-    return variantType == wxS("wxBitmap")
+    return variantType == wxS("wxBitmapBundle")
+            || variantType == wxS("wxBitmap")
             || variantType == wxS("wxIcon");
 }
 

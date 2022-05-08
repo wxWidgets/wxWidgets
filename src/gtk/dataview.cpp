@@ -2569,22 +2569,32 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
 
 bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
-    wxBitmap bitmap;
-    if (value.GetType() == wxS("wxBitmap"))
+    wxBitmapBundle bitmapBundle;
+    if (value.GetType() == wxS("wxBitmapBundle"))
     {
+        bitmapBundle << value;
+    }
+    else if (value.GetType() == wxS("wxBitmap"))
+    {
+        wxBitmap bitmap;
         bitmap << value;
+        bitmapBundle = wxBitmapBundle(bitmap);
     }
     else if (value.GetType() == wxS("wxIcon"))
     {
         wxIcon icon;
         icon << value;
-        bitmap.CopyFromIcon(icon);
+        bitmapBundle = wxBitmapBundle(icon);
     }
 
 #ifdef __WXGTK3__
-    WX_CELL_RENDERER_PIXBUF(m_renderer)->Set(bitmap);
+    WX_CELL_RENDERER_PIXBUF(m_renderer)->Set(bitmapBundle);
 #else
-    g_object_set(G_OBJECT(m_renderer), "pixbuf", bitmap.IsOk() ? bitmap.GetPixbuf() : NULL, NULL);
+    g_object_set(G_OBJECT(m_renderer),
+        "pixbuf",
+        bitmapBundle.IsOk() ? bitmapBundle.GetBitmap(wxDefaultSize).GetPixbuf()
+                            : NULL,
+        NULL);
 #endif
 
     return true;
@@ -2599,7 +2609,8 @@ bool
 wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) const
 {
     // We can accept values of any types checked by SetValue().
-    return variantType == wxS("wxBitmap")
+    return variantType == wxS("wxBitmapBundle")
+            || variantType == wxS("wxBitmap")
             || variantType == wxS("wxIcon");
 }
 

@@ -1317,7 +1317,11 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
 
 bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
-    if (value.GetType() == wxT("wxBitmap"))
+    if (value.GetType() == wxT("wxBitmapBundle"))
+    {
+        m_bitmapBundle << value;
+    }
+    else if (value.GetType() == wxT("wxBitmap"))
     {
         wxBitmap bitmap;
         bitmap << value;
@@ -1346,7 +1350,8 @@ bool
 wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) const
 {
     // We can accept values of any types checked by SetValue().
-    return variantType == wxS("wxBitmap")
+    return variantType == wxS("wxBitmapBundle")
+            || variantType == wxS("wxBitmap")
             || variantType == wxS("wxIcon");
 }
 
