@@ -77,9 +77,17 @@ public:
                 int button_id,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
                 const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonButtonBarButtonBase* AddButton(
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -117,9 +125,18 @@ public:
                 int button_id,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
                 const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonButtonBarButtonBase* InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -144,9 +161,14 @@ public:
     virtual void SetButtonIcon(
                 int button_id,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
-                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap);
+                const wxBitmapBundle& bitmap_disabled = wxNullBitmap);
+
+    virtual void SetButtonIcon(
+                int button_id,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap);
 
     virtual void SetButtonText(int button_id, const wxString& label);
     virtual void SetButtonTextMinWidth(int button_id,

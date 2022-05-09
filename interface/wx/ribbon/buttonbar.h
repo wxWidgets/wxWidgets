@@ -209,6 +209,39 @@ public:
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
+    /**
+        Add a button to the button bar.
+
+        @param button_id
+            ID of the new button (used for event callbacks).
+        @param label
+            Label of the new button.
+        @param bitmap
+            Bitmap of the new button.
+        @param bitmap_disabled
+            Bitmap of the new button when it is disabled. If left as
+            null, then a bitmap will be automatically generated from @a bitmap.
+        @param kind
+            The kind of button to add.
+        @param help_string
+            The UI help string to associate with the new button.
+
+        @return An opaque pointer which can be used only with other button bar
+            methods.
+
+        @see AddDropdownButton()
+        @see AddHybridButton()
+        @see AddToggleButton()
+
+        @since 3.1.7
+    */
+    virtual wxRibbonButtonBarButtonBase* AddButton(
+        int button_id,
+        const wxString& label,
+        const wxBitmapBundle& bitmap,
+        const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
+        wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
+        const wxString& help_string = wxEmptyString);
 
     /**
         Add a button to the button bar.
@@ -218,11 +251,11 @@ public:
         @param label
             Label of the new button.
         @param bitmap
-            Large bitmap of the new button. Must be the same size as all other
+            Large bitmap of the new button. Shall be the same size as all other
             large bitmaps used on the button bar.
         @param bitmap_small
             Small bitmap of the new button. If left as null, then a small
-            bitmap will be automatically generated. Must be the same size as
+            bitmap will be automatically generated. Shall be the same size as
             all other small bitmaps used on the button bar.
         @param bitmap_disabled
             Large bitmap of the new button when it is disabled. If left as
@@ -246,10 +279,10 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
-                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -329,7 +362,45 @@ public:
         @param label
             Label of the new button.
         @param bitmap
-            Large bitmap of the new button. Must be the same size as all other
+            Bitmap of the new button.
+        @param bitmap_disabled
+            Large bitmap of the new button when it is disabled. If left as
+            null, then a bitmap will be automatically generated from @a bitmap.
+        @param kind
+            The kind of button to add.
+        @param help_string
+            The UI help string to associate with the new button.
+
+        @return An opaque pointer which can be used only with other button bar
+            methods.
+
+        @see InsertDropdownButton()
+        @see InsertHybridButton()
+        @see InsertToggleButton()
+        @see AddButton()
+
+        @since 3.1.7
+    */
+    virtual wxRibbonButtonBarButtonBase* InsertButton(
+        size_t pos,
+        int button_id,
+        const wxString& label,
+        const wxBitmapBundle& bitmap,
+        const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
+        wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
+        const wxString& help_string = wxEmptyString);
+
+    /**
+        Insert a button to the button bar at the given position.
+
+        @param pos
+            Position of the new button in the button bar.
+        @param button_id
+            ID of the new button (used for event callbacks).
+        @param label
+            Label of the new button.
+        @param bitmap
+            Large bitmap of the new button. Shall be the same size as all other
             large bitmaps used on the button bar.
         @param bitmap_small
             Small bitmap of the new button. If left as null, then a small
@@ -361,10 +432,10 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
-                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -493,11 +564,28 @@ public:
         @param button_id
             ID of the button to manipulate.
         @param bitmap
-            Large bitmap of the new button. Must be the same size as all other
+            Bitmap of the new button.
+        @param bitmap_disabled
+            Large bitmap of the new button when it is disabled.
+
+        @since 3.1.7
+    */
+    virtual void SetButtonIcon(
+                int button_id,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_disabled = wxNullBitmap);
+
+    /**
+        Changes the bitmap of an existing button.
+
+        @param button_id
+            ID of the button to manipulate.
+        @param bitmap
+            Large bitmap of the new button. Shall be the same size as all other
             large bitmaps used on the button bar.
         @param bitmap_small
             Small bitmap of the new button. If left as null, then a small
-            bitmap will be automatically generated. Must be the same size as
+            bitmap will be automatically generated. Shall be the same size as
             all other small bitmaps used on the button bar.
         @param bitmap_disabled
             Large bitmap of the new button when it is disabled. If left as
@@ -511,10 +599,10 @@ public:
     */
     virtual void SetButtonIcon(
                 int button_id,
-                const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
-                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap);
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap);
 
     /**
         Changes the label text of an existing button.
