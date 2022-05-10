@@ -20,8 +20,9 @@
 #include "wx/thread.h"
 #include "wx/dynarray.h"
 #include "wx/log.h"
+#include "wx/vector.h"
 
-WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
+typedef wxVector<wxThread*> wxArrayThread;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -123,7 +124,7 @@ TEST_CASE("Atomic::WithThreads", "[atomic]")
             delete thread;
         }
         else
-            threads.Add(thread);
+            threads.push_back(thread);
     }
 
     for ( i = 0; i < count; ++i )
