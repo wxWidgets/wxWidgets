@@ -171,9 +171,7 @@ void *AtomicTestCase::MyThread::Entry()
         {
             case AtomicTestCase::IncAndDecMixed:
                 wxAtomicInc(m_operateOn);
-                wxAtomicDec(m_operateOn);
-
-                if (m_operateOn < 0)
+                if ( wxAtomicDec(m_operateOn) < 0 )
                     ++negativeValuesSeen;
                 break;
 
