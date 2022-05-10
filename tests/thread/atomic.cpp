@@ -27,13 +27,7 @@ WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
 // constants
 // ----------------------------------------------------------------------------
 
-// number of times to run the loops: the code takes too long to run if we use
-// the bigger value with generic atomic operations implementation
-#ifdef wxHAS_ATOMIC_OPS
-    static const wxInt32 ITERATIONS_NUM = 10000000;
-#else
-    static const wxInt32 ITERATIONS_NUM = 1000;
-#endif
+static const wxInt32 ITERATIONS_NUM = 10000;
 
 // ----------------------------------------------------------------------------
 // test class
