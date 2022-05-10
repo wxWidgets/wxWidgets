@@ -77,15 +77,14 @@ TEST_CASE("Atomic::NoThread", "[atomic]")
     CHECK( int2 == -ITERATIONS_NUM );
 }
 
-TEST_CASE("Atomic::DecReturn", "[atomic]")
+TEST_CASE("Atomic::ReturnValue", "[atomic]")
 {
     wxAtomicInt i(0);
-    wxAtomicInc(i);
-    wxAtomicInc(i);
-    CHECK( i == 2 );
+    REQUIRE( wxAtomicInc(i) == 1 );
+    REQUIRE( wxAtomicInc(i) == 2 );
 
-    CHECK( wxAtomicDec(i) > 0 );
-    CHECK( wxAtomicDec(i) == 0 );
+    REQUIRE( wxAtomicDec(i) == 1 );
+    REQUIRE( wxAtomicDec(i) == 0 );
 }
 
 TEST_CASE("Atomic::WithThreads", "[atomic]")
