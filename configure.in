@@ -556,6 +556,7 @@ WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associat
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
+WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
     wx_needs_cairo_for_gc=1
@@ -2954,6 +2955,14 @@ if test "$wxUSE_EXPAT" != "no"; then
     AC_DEFINE(wxUSE_XML)
 else
     wxUSE_XML=no
+fi
+
+dnl ------------------------------------------------------------------------
+dnl Check for NanoSVG libraries
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_NANOSVG" = "yes"; then
+    AC_DEFINE(wxUSE_NANOSVG)
 fi
 
 dnl ------------------------------------------------------------------------

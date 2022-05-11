@@ -609,6 +609,10 @@
 
 #cmakedefine01 wxUSE_LIBTIFF
 
+#cmakedefine01 wxUSE_NANOSVG
+
+#cmakedefine01 wxUSE_NANOSVG_EXTERNAL
+
 #cmakedefine01 wxUSE_TGA
 
 #cmakedefine01 wxUSE_GIF

@@ -71,7 +71,7 @@ if(WXGTK)
     endforeach()
 endif()
 
-set(wxINSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" wxINSTALL_PREFIX)
 
 check_include_files("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
 

@@ -19,7 +19,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef wxHAS_SVG
+#if defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL
 
 // Try to help people updating their sources from Git and forgetting to
 // initialize new submodules, if possible: if you get this error, it means that
@@ -57,11 +57,19 @@
     #endif
 #endif
 
-#define NANOSVG_IMPLEMENTATION
-#define NANOSVGRAST_IMPLEMENTATION
-#define NANOSVG_ALL_COLOR_KEYWORDS
-#include "../../3rdparty/nanosvg/src/nanosvg.h"
-#include "../../3rdparty/nanosvg/src/nanosvgrast.h"
+#if !wxUSE_NANOSVG_EXTERNAL || defined(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL)
+    #define NANOSVG_IMPLEMENTATION
+    #define NANOSVGRAST_IMPLEMENTATION
+    #define NANOSVG_ALL_COLOR_KEYWORDS
+#endif
+
+#if wxUSE_NANOSVG_EXTERNAL
+    #include <nanosvg.h>
+    #include <nanosvgrast.h>
+#else
+    #include "../../3rdparty/nanosvg/src/nanosvg.h"
+    #include "../../3rdparty/nanosvg/src/nanosvgrast.h"
+#endif
 
 #ifdef __VISUALC__
     #pragma warning(pop)
