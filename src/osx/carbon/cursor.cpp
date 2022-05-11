@@ -17,9 +17,9 @@
     #include "wx/icon.h"
     #include "wx/image.h"
 #endif // WX_PRECOMP
-
+#include "wx/msgdlg.h"
 #include "wx/xpmdecod.h"
-
+#include "wx/stdpaths.h"
 #include "wx/osx/private.h"
 
 
@@ -278,7 +278,16 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
 #if wxOSX_USE_COCOA
-        M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromResource( cursor_file, flags );
+        wxString fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".png";
+        wxImage image( fileName, wxBITMAP_TYPE_PNG );
+        if( image.IsOk() )
+        {
+            m_refData->DecRef() ;
+            m_refData = NULL ;
+            InitFromImage( image );
+        }
+        else
+            wxMessageBox( "No PNG cursor image found in Resources" );
 #endif
     }
     else
