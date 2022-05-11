@@ -4216,12 +4216,7 @@ wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
 // Implement hashing using C++11 std::hash<>.
 // ----------------------------------------------------------------------------
 
-// Check for both compiler and standard library support for C++11: normally the
-// former implies the latter but under Mac OS X < 10.7 C++11 compiler can (and
-// even has to be) used with non-C++11 standard library, so explicitly exclude
-// this case.
-#if (__cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)) \
-        && ( (!defined __GLIBCXX__) || (__GLIBCXX__ > 20070719) )
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
 
 // Don't do this if ToStdWstring() is not available. We could work around it
 // but, presumably, if using std::wstring is undesirable, then so is using
