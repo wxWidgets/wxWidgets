@@ -45,6 +45,9 @@ protected:
                         const GLogField* fields,
                         gsize n_fields) const = 0;
 
+    // Typically called from the derived class dtor to stop using this filter.
+    void Uninstall();
+
 private:
     // The function used as glib log writer.
     static GLogWriterOutput
@@ -90,6 +93,32 @@ private:
     int m_logLevelToIgnore;
 
     wxDECLARE_NO_COPY_CLASS(LogFilterByLevel);
+};
+
+// LogFilterByMessage filters out all the messages with the specified content.
+class LogFilterByMessage : public LogFilter
+{
+public:
+    // Objects of this class are supposed to be created with literal strings as
+    // argument, so don't bother copying the string but just use the pointer.
+    explicit LogFilterByMessage(const char* message)
+        : m_message(message)
+    {
+        Install();
+    }
+
+    // Remove this filter when the object goes out of scope.
+    ~LogFilterByMessage();
+
+protected:
+    bool Filter(GLogLevelFlags WXUNUSED(log_level),
+                const GLogField* fields,
+                gsize n_fields) const wxOVERRIDE;
+
+private:
+    const char* const m_message;
+
+    wxDECLARE_NO_COPY_CLASS(LogFilterByMessage);
 };
 
 #endif // wxHAS_GLIB_LOG_WRITER

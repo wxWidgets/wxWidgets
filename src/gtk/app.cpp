@@ -222,6 +222,45 @@ void LogFilter::Install()
     ms_first = this;
 }
 
+void LogFilter::Uninstall()
+{
+    if ( !ms_installed )
+    {
+        // We don't do anything at all in this case.
+        return;
+    }
+
+    // We should be uninstalling only the currently installed filter.
+    wxASSERT( ms_first == this );
+
+    ms_first = m_next;
+}
+
+bool LogFilterByMessage::Filter(GLogLevelFlags WXUNUSED(log_level),
+                                const GLogField* fields,
+                                gsize n_fields) const
+{
+    for ( gsize n = 0; n < n_fields; ++n )
+    {
+        const GLogField& f = fields[n];
+        if ( strcmp(f.key, "MESSAGE") == 0 )
+        {
+            if ( strcmp(static_cast<const char*>(f.value), m_message) == 0 )
+            {
+                // This is the message we want to filter.
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+LogFilterByMessage::~LogFilterByMessage()
+{
+    Uninstall();
+}
+
 } // namespace wxGTKImpl
 
 /* static */
