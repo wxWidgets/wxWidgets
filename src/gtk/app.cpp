@@ -30,6 +30,7 @@
 #include "wx/msgout.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/log.h"
 
 #include "wx/gtk/mimetype.h"
 //-----------------------------------------------------------------------------
@@ -178,48 +179,65 @@ bool wxApp::DoIdle()
     return keepSource;
 }
 
-// Custom Glib log writer: setting it is only possible with glib 2.50 or later.
-#if GLIB_CHECK_VERSION(2, 50, 0)
-extern "C" {
-static GLogWriterOutput
-wx_log_writer(GLogLevelFlags   log_level,
-              const GLogField *fields,
-              gsize            n_fields,
-              gpointer         user_data)
-{
-    const wxUIntPtr log_mask = reinterpret_cast<wxUIntPtr>(user_data);
+#ifdef wxHAS_GLIB_LOG_WRITER
 
-    GLogWriterOutput result;
-    if (log_level & log_mask)
+namespace wxGTKImpl
+{
+
+bool LogFilter::ms_installed = false;
+LogFilter* LogFilter::ms_first = NULL;
+
+/* static */
+GLogWriterOutput
+LogFilter::wx_log_writer(GLogLevelFlags   log_level,
+                         const GLogField *fields,
+                         gsize            n_fields,
+                         gpointer         WXUNUSED(user_data))
+{
+    for ( const LogFilter* lf = LogFilter::ms_first; lf; lf = lf->m_next )
     {
-        result = G_LOG_WRITER_HANDLED;
+        if ( lf->Filter(log_level, fields, n_fields) )
+            return G_LOG_WRITER_HANDLED;
     }
-    else
+
+    return g_log_writer_default(log_level, fields, n_fields, NULL);
+}
+
+void LogFilter::Install()
+{
+    if ( !ms_installed )
     {
-        result = g_log_writer_default(log_level, fields, n_fields, NULL);
+        if ( glib_check_version(2, 50, 0) != 0 )
+        {
+            // No runtime support for log callback, we can't do anything.
+            return;
+        }
+
+        g_log_set_writer_func(LogFilter::wx_log_writer, NULL, NULL);
+        ms_installed = true;
     }
-    return result;
+
+    // Put this object in front of the linked list.
+    m_next = ms_first;
+    ms_first = this;
 }
-}
+
+} // namespace wxGTKImpl
 
 /* static */
 void wxApp::GTKSuppressDiagnostics(int flags)
 {
-    if (glib_check_version(2, 50, 0) == 0)
-    {
-        g_log_set_writer_func(
-            wx_log_writer,
-            (wxUIntToPtr)(flags == -1 ? G_LOG_LEVEL_MASK : flags),
-            NULL);
-    }
+    static wxGTKImpl::LogFilterByLevel s_logFilter;
+    s_logFilter.SetLevelToIgnore(flags);
+    s_logFilter.Install();
 }
-#else // glib < 2.50
+#else // !wxHAS_GLIB_LOG_WRITER
 /* static */
 void wxApp::GTKSuppressDiagnostics(int WXUNUSED(flags))
 {
     // We can't do anything here.
 }
-#endif // glib >=/< 2.50
+#endif // wxHAS_GLIB_LOG_WRITER/!wxHAS_GLIB_LOG_WRITER
 
 //-----------------------------------------------------------------------------
 // wxApp
