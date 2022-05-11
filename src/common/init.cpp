@@ -28,7 +28,7 @@
 #endif
 
 #include "wx/init.h"
-#include "wx/thread.h"
+#include "wx/atomic.h"
 
 #include "wx/scopedptr.h"
 #include "wx/except.h"
@@ -130,21 +130,20 @@ static inline void Use(void *) { }
 static struct InitData
 {
     InitData()
+        : nInitCount(0)
     {
-        nInitCount = 0;
-
 #if wxUSE_UNICODE
         argc = argcOrig = 0;
         // argv = argvOrig = NULL; -- not even really needed
 #endif // wxUSE_UNICODE
     }
 
-    // critical section protecting this struct
-    wxCRIT_SECT_DECLARE_MEMBER(csInit);
-
     // number of times wxInitialize() was called minus the number of times
     // wxUninitialize() was
-    size_t nInitCount;
+    //
+    // it is atomic to allow more than one thread to call wxInitialize() but
+    // only one of them to actually initialize the library
+    wxAtomicInt nInitCount;
 
 #if wxUSE_UNICODE
     int argc;
@@ -530,9 +529,7 @@ bool wxInitialize()
 
 bool wxInitialize(int& argc, wxChar **argv)
 {
-    wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
-
-    if ( gs_initData.nInitCount++ )
+    if ( wxAtomicInc(gs_initData.nInitCount) != 1 )
     {
         // already initialized
         return true;
@@ -544,9 +541,7 @@ bool wxInitialize(int& argc, wxChar **argv)
 #if wxUSE_UNICODE
 bool wxInitialize(int& argc, char **argv)
 {
-    wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
-
-    if ( gs_initData.nInitCount++ )
+    if ( wxAtomicInc(gs_initData.nInitCount) != 1 )
     {
         // already initialized
         return true;
@@ -558,10 +553,8 @@ bool wxInitialize(int& argc, char **argv)
 
 void wxUninitialize()
 {
-    wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
+    if ( wxAtomicDec(gs_initData.nInitCount) != 0 )
+        return;
 
-    if ( --gs_initData.nInitCount == 0 )
-    {
-        wxEntryCleanup();
-    }
+    wxEntryCleanup();
 }

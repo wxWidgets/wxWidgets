@@ -20,30 +20,22 @@
 #include "wx/thread.h"
 #include "wx/dynarray.h"
 #include "wx/log.h"
+#include "wx/vector.h"
 
-WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
+typedef wxVector<wxThread*> wxArrayThread;
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-// number of times to run the loops: the code takes too long to run if we use
-// the bigger value with generic atomic operations implementation
-#ifdef wxHAS_ATOMIC_OPS
-    static const wxInt32 ITERATIONS_NUM = 10000000;
-#else
-    static const wxInt32 ITERATIONS_NUM = 1000;
-#endif
+static const wxInt32 ITERATIONS_NUM = 10000;
 
 // ----------------------------------------------------------------------------
-// test class
+// test helper thread
 // ----------------------------------------------------------------------------
 
-class AtomicTestCase : public CppUnit::TestCase
+namespace
 {
-public:
-    AtomicTestCase() { }
-
     enum ETestType
     {
         IncAndDecMixed,
@@ -51,7 +43,6 @@ public:
         DecOnly
     };
 
-private:
     class MyThread : public wxThread
     {
     public:
@@ -65,34 +56,13 @@ private:
         wxAtomicInt &m_operateOn;
         ETestType m_testType;
     };
+} // anonymous namespace
 
-    CPPUNIT_TEST_SUITE( AtomicTestCase );
-        CPPUNIT_TEST( TestNoThread );
-        CPPUNIT_TEST( TestDecReturn );
-        CPPUNIT_TEST( TestTwoThreadsMix );
-        CPPUNIT_TEST( TestTenThreadsMix );
-        CPPUNIT_TEST( TestTwoThreadsSeparate );
-        CPPUNIT_TEST( TestTenThreadsSeparate );
-    CPPUNIT_TEST_SUITE_END();
+// ----------------------------------------------------------------------------
+// the tests themselves
+// ----------------------------------------------------------------------------
 
-    void TestNoThread();
-    void TestDecReturn();
-    void TestTenThreadsMix() { TestWithThreads(10, IncAndDecMixed); }
-    void TestTwoThreadsMix() { TestWithThreads(2, IncAndDecMixed); }
-    void TestTenThreadsSeparate() { TestWithThreads(10, IncOnly); }
-    void TestTwoThreadsSeparate() { TestWithThreads(2, IncOnly); }
-    void TestWithThreads(int count, ETestType testtype);
-
-    wxDECLARE_NO_COPY_CLASS(AtomicTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( AtomicTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( AtomicTestCase, "AtomicTestCase" );
-
-void AtomicTestCase::TestNoThread()
+TEST_CASE("Atomic::NoThread", "[atomic]")
 {
     wxAtomicInt int1 = 0,
                 int2 = 0;
@@ -103,23 +73,30 @@ void AtomicTestCase::TestNoThread()
         wxAtomicDec(int2);
     }
 
-    CPPUNIT_ASSERT( int1 == ITERATIONS_NUM );
-    CPPUNIT_ASSERT( int2 == -ITERATIONS_NUM );
+    CHECK( int1 == ITERATIONS_NUM );
+    CHECK( int2 == -ITERATIONS_NUM );
 }
 
-void AtomicTestCase::TestDecReturn()
+TEST_CASE("Atomic::ReturnValue", "[atomic]")
 {
     wxAtomicInt i(0);
-    wxAtomicInc(i);
-    wxAtomicInc(i);
-    CPPUNIT_ASSERT( i == 2 );
+    REQUIRE( wxAtomicInc(i) == 1 );
+    REQUIRE( wxAtomicInc(i) == 2 );
 
-    CPPUNIT_ASSERT( wxAtomicDec(i) > 0 );
-    CPPUNIT_ASSERT( wxAtomicDec(i) == 0 );
+    REQUIRE( wxAtomicDec(i) == 1 );
+    REQUIRE( wxAtomicDec(i) == 0 );
 }
 
-void AtomicTestCase::TestWithThreads(int count, ETestType testType)
+TEST_CASE("Atomic::WithThreads", "[atomic]")
 {
+    int count;
+    ETestType testType;
+
+    SECTION( "2 threads using inc and dec") { count =  2; testType = IncAndDecMixed; }
+    SECTION("10 threads using inc and dec") { count = 10; testType = IncAndDecMixed; }
+    SECTION( "2 threads using inc or dec" ) { count =  2; testType = IncOnly; }
+    SECTION("10 threads using inc or dec" ) { count = 10; testType = IncOnly; }
+
     wxAtomicInt    int1=0;
 
     wxArrayThread  threads;
@@ -146,7 +123,7 @@ void AtomicTestCase::TestWithThreads(int count, ETestType testType)
             delete thread;
         }
         else
-            threads.Add(thread);
+            threads.push_back(thread);
     }
 
     for ( i = 0; i < count; ++i )
@@ -158,16 +135,16 @@ void AtomicTestCase::TestWithThreads(int count, ETestType testType)
     for ( i = 0; i < count; ++i )
     {
         // each thread should return 0, else it detected some problem
-        CPPUNIT_ASSERT (threads[i]->Wait() == (wxThread::ExitCode)0);
+        CHECK (threads[i]->Wait() == (wxThread::ExitCode)0);
         delete threads[i];
     }
 
-    CPPUNIT_ASSERT( int1 == 0 );
+    CHECK( int1 == 0 );
 }
 
 // ----------------------------------------------------------------------------
 
-void *AtomicTestCase::MyThread::Entry()
+void *MyThread::Entry()
 {
     wxInt32 negativeValuesSeen = 0;
 
@@ -175,19 +152,17 @@ void *AtomicTestCase::MyThread::Entry()
     {
         switch ( m_testType )
         {
-            case AtomicTestCase::IncAndDecMixed:
+            case IncAndDecMixed:
                 wxAtomicInc(m_operateOn);
-                wxAtomicDec(m_operateOn);
-
-                if (m_operateOn < 0)
+                if ( wxAtomicDec(m_operateOn) < 0 )
                     ++negativeValuesSeen;
                 break;
 
-            case AtomicTestCase::IncOnly:
+            case IncOnly:
                 wxAtomicInc(m_operateOn);
                 break;
 
-            case AtomicTestCase::DecOnly:
+            case DecOnly:
                 wxAtomicDec(m_operateOn);
                 break;
         }
