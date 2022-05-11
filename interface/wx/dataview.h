@@ -1981,6 +1981,15 @@ class wxDataViewRenderer : public wxObject
 public:
     /**
         Constructor.
+
+        The @a varianttype parameter is the main type of wxVariant objects
+        supported by this renderer, i.e. those that can be passed to its
+        SetValue(), e.g. "string" for wxDataViewTextRenderer. The value of this
+        parameter is returned by GetVariantType().
+
+        When deriving a custom renderer, either an existing variant type or a
+        new custom one can be used, see wxVariant documentation for more
+        details.
     */
     wxDataViewRenderer(const wxString& varianttype,
                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
@@ -2061,6 +2070,11 @@ public:
 
     /**
         Returns a string with the type of the wxVariant supported by this renderer.
+
+        Note that a renderer may support more than one variant type, in which
+        case it needs to override IsCompatibleVariantType() to return @a true
+        for all types it supports. But by default only the type returned by
+        this function is supported.
     */
     wxString GetVariantType() const;
 
