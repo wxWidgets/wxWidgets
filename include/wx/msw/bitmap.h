@@ -276,6 +276,10 @@ public:
     WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
     void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
 
+#if wxUSE_IMAGE
+    bool MSWCreateFromImageMask(const wxImage& image);
+#endif // wxUSE_IMAGE
+
 protected:
     WXHBITMAP m_maskBitmap;
 
