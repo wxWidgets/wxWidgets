@@ -133,7 +133,7 @@ static void TestAssertHandler(const wxString& file,
         // so we'd just die without any useful information -- abort instead.
         abortReason << assertMessage << wxASCII_STR(" in a worker thread.");
     }
-#if __cplusplus >= 201703L || wxCHECK_VISUALC_VERSION(14)
+#if wxCHECK_CXX_STD(201703L)
     else if ( uncaught_exceptions() )
 #else
     else if ( uncaught_exception() )
