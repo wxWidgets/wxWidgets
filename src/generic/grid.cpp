@@ -3460,7 +3460,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
                 int h = 0;
                 int rowPos;
-                for ( rowPos = 0; rowPos < m_numCols; rowPos++ )
+                for ( rowPos = 0; rowPos < m_numRows; rowPos++ )
                 {
                     i = GetRowAt( rowPos );
 
