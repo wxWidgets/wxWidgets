@@ -203,14 +203,14 @@ LogFilter::wx_log_writer(GLogLevelFlags   log_level,
     return g_log_writer_default(log_level, fields, n_fields, NULL);
 }
 
-void LogFilter::Install()
+bool LogFilter::Install()
 {
     if ( !ms_installed )
     {
         if ( glib_check_version(2, 50, 0) != 0 )
         {
             // No runtime support for log callback, we can't do anything.
-            return;
+            return false;
         }
 
         g_log_set_writer_func(LogFilter::wx_log_writer, NULL, NULL);
@@ -220,6 +220,8 @@ void LogFilter::Install()
     // Put this object in front of the linked list.
     m_next = ms_first;
     ms_first = this;
+
+    return true;
 }
 
 void LogFilter::Uninstall()
@@ -248,6 +250,7 @@ bool LogFilterByMessage::Filter(GLogLevelFlags WXUNUSED(log_level),
             if ( strcmp(static_cast<const char*>(f.value), m_message) == 0 )
             {
                 // This is the message we want to filter.
+                m_warnNotFiltered = false;
                 return true;
             }
         }
@@ -259,6 +262,11 @@ bool LogFilterByMessage::Filter(GLogLevelFlags WXUNUSED(log_level),
 LogFilterByMessage::~LogFilterByMessage()
 {
     Uninstall();
+
+    if ( m_warnNotFiltered )
+    {
+        wxLogTrace("gtklog", "Message \"%s\" wasn't logged.", m_message);
+    }
 }
 
 } // namespace wxGTKImpl

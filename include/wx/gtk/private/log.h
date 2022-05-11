@@ -34,8 +34,8 @@ public:
     }
 
     // Function to call to install this filter as the active one.
-    // Does nothing if run-time glib version is too old.
-    void Install();
+    // Does nothing and just returns false if run-time glib version is too old.
+    bool Install();
 
 protected:
     // Function to override in the derived class to actually filter: return
@@ -104,10 +104,15 @@ public:
     explicit LogFilterByMessage(const char* message)
         : m_message(message)
     {
-        Install();
+        // We shouldn't warn about anything if Install() failed.
+        m_warnNotFiltered = Install();
     }
 
     // Remove this filter when the object goes out of scope.
+    //
+    // The dtor also checks if we actually filtered the message and logs a
+    // trace message with the "gtklog" mask if we didn't: this allows checking
+    // if the filter is actually being used.
     ~LogFilterByMessage();
 
 protected:
@@ -117,6 +122,8 @@ protected:
 
 private:
     const char* const m_message;
+
+    mutable bool m_warnNotFiltered;
 
     wxDECLARE_NO_COPY_CLASS(LogFilterByMessage);
 };
