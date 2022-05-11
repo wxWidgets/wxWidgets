@@ -2077,8 +2077,9 @@ DoAdjustForGrowables(int delta,
     }
 }
 
-void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minSize)
+void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& originalMinSize)
 {
+    wxSize minSize = originalMinSize;
 #if wxDEBUG_LEVEL
     // by the time this function is called, the sizer should be already fully
     // initialized and hence the number of its columns and rows is known and we
@@ -2141,6 +2142,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minSize
         // Only redo if info was actually used
         if( didAdjustMinSize )
         {
+            minSize = CalcMin();
             DoAdjustForGrowables
             (
                 sz.x - minSize.x,
