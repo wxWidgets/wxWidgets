@@ -3199,14 +3199,6 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     return FALSE;
 }
 
-// Helper for wxGtkTreeCellDataFunc() below.
-static void wxGtkTreeSetVisibleProp(GtkCellRenderer *renderer, gboolean visible)
-{
-    wxGtkValue gvalue( G_TYPE_BOOLEAN );
-    g_value_set_boolean( gvalue, visible );
-    g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
-}
-
 extern "C"
 {
 
@@ -3233,25 +3225,14 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
 
-    if (!wx_model->IsVirtualListModel())
-    {
-        gboolean visible = wx_model->HasValue(item, column);
-        wxGtkTreeSetVisibleProp(renderer, visible);
-
-        if ( !visible )
-            return;
-    }
-
     cell->GtkSetCurrentItem(item);
 
-    if (!cell->PrepareForItem(wx_model, item, column))
-    {
-        // We don't have any value in this cell, after all, so hide it.
-        if (!wx_model->IsVirtualListModel())
-        {
-            wxGtkTreeSetVisibleProp(renderer, FALSE);
-        }
-    }
+    // Cells without values shouldn't be rendered at all.
+    const bool visible = cell->PrepareForItem(wx_model, item, column);
+
+    wxGtkValue gvalue( G_TYPE_BOOLEAN );
+    g_value_set_boolean( gvalue, visible );
+    g_object_set_property( G_OBJECT(renderer), "visible", gvalue );
 }
 
 } // extern "C"
