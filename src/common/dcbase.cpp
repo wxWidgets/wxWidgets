@@ -1411,8 +1411,8 @@ void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
 void wxDC::DrawObject(wxDrawObject* drawobject)
 {
     drawobject->Draw(*this);
-    CalcBoundingBox(drawobject->MinX(),drawobject->MinY(),
-                    drawobject->MaxX(),drawobject->MaxY());
+    m_pimpl->CalcBoundingBox(drawobject->MinX(),drawobject->MinY(),
+                             drawobject->MaxX(),drawobject->MaxY());
 }
 
 #endif  // WXWIN_COMPATIBILITY_2_8
