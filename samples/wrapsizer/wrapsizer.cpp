@@ -146,6 +146,8 @@ WrapSizerFrame::WrapSizerFrame()
     // Set sizer for the panel
     m_panel->SetSizer(sizerRoot);
 
+    SetClientSize(m_panel->GetBestSize());
+
     Show();
 }
 
