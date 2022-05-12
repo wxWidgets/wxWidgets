@@ -648,24 +648,22 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
         else
         {
             // let the user choose
-            wxString *facenames = new wxString[nFacenames];
+            wxSortedArrayString facenames;
+            facenames.Alloc(nFacenames);
             int n;
             for ( n = 0; n < nFacenames; n++ )
-                facenames[n] = fontEnumerator.GetFacenames().Item(n);
+                facenames.Add(fontEnumerator.GetFacenames().Item(n));
 
             n = wxGetSingleChoiceIndex
                 (
                     "Choose a facename",
                     GetSampleTitle(),
-                    nFacenames,
                     facenames,
                     this
                 );
 
             if ( n != -1 )
                 facename = facenames[n];
-
-            delete [] facenames;
         }
 
         if ( !facename.empty() )
