@@ -1,0 +1,1 @@
+wxMSW: Fix warnings about bitwise operations with MSVC in C++20 mode.
