@@ -1517,6 +1517,26 @@ typedef double wxDouble;
 //@{
 
 /**
+    Returns @true if the compiler being used supports the given C++ version.
+
+    The @a stdver parameter uses the same values as the standard @c __cplusplus
+    macro, i.e.
+
+    - 201103L for C++11
+    - 201402L for C++14
+    - 201703L for C++17
+    - 202002L for C++20
+
+    Using this macro also works with MSVC, even when @c /Zc:__cplusplus option
+    is not used, unlike checking for the value of @c __cplusplus directly.
+
+    @since 3.1.7
+
+    @header{wx/defs.h}
+*/
+#define wxCHECK_CXX_STD(stdver)
+
+/**
     This macro can be used in a class declaration to disable the generation of
     default assignment operator.
 

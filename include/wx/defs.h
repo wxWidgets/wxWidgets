@@ -216,6 +216,24 @@
 #define __USE_W32_SOCKETS
 #endif
 
+#if defined(_MSVC_LANG)
+/*
+   We want to always use the really supported C++ standard when using MSVC
+   recent enough to define _MSVC_LANG, even if /Zc:__cplusplus option is not
+   used, but unfortunately we can't just redefine __cplusplus as _MSVC_LANG
+   because this is not allowed by the standard and, worse, doesn't work in
+   practice (it results in a warning and nothing else).
+
+   So, instead, we define a macro for testing __cplusplus which also works in
+   this case.
+*/
+    #define wxCHECK_CXX_STD(ver) (_MSVC_LANG >= (ver))
+#elif defined(__cplusplus)
+    #define wxCHECK_CXX_STD(ver) (__cplusplus >= (ver))
+#else
+    #define wxCHECK_CXX_STD(ver) 0
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  check for native bool type and TRUE/FALSE constants */
 /*  ---------------------------------------------------------------------------- */
@@ -302,7 +320,7 @@ typedef short int WXTYPE;
 
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
 
-#if __cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)
+#if wxCHECK_CXX_STD(201703L)
     #define wxFALLTHROUGH [[fallthrough]]
 #elif __cplusplus >= 201103L && defined(__has_warning) && WX_HAS_CLANG_FEATURE(cxx_attributes)
     #define wxFALLTHROUGH [[clang::fallthrough]]
@@ -1303,7 +1321,7 @@ typedef double wxDouble;
     for doing this, that do the same thing as would happen without them, but
     without the warnings.
  */
-#if defined(__cplusplus) && (__cplusplus >= 202002L)
+#if wxCHECK_CXX_STD(202002L)
     #define wxALLOW_COMBINING_ENUMS_IMPL(en1, en2)                            \
         inline int operator|(en1 v1, en2 v2)                                  \
             { return static_cast<int>(v1) | static_cast<int>(v2); }           \

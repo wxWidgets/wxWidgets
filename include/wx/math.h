@@ -59,7 +59,7 @@
     Things are simple with C++11: we have everything we need in std.
     Eventually we will only have this section and not the legacy stuff below.
  */
-#if __cplusplus >= 201103
+#if wxCHECK_CXX_STD(201103)
     #define wxFinite(x) std::isfinite(x)
     #define wxIsNaN(x) std::isnan(x)
 #else /* C++98 */
@@ -139,7 +139,7 @@ inline int wxRound(double x)
     wxASSERT_MSG(x > double(INT_MIN) - 0.5 && x < double(INT_MAX) + 0.5,
         "argument out of supported range");
 
-    #if __cplusplus >= 201103
+    #if wxCHECK_CXX_STD(201103)
         return int(std::lround(x));
     #elif defined(HAVE_ROUND) || wxCHECK_VISUALC_VERSION(12)
         return int(lround(x));
@@ -153,7 +153,7 @@ inline int wxRound(float x)
     wxASSERT_MSG(x > float(INT_MIN) && x < float(INT_MAX),
         "argument out of supported range");
 
-    #if __cplusplus >= 201103
+    #if wxCHECK_CXX_STD(201103)
         return int(std::lround(x));
     #elif defined(HAVE_ROUND) || wxCHECK_VISUALC_VERSION(12)
         return int(lroundf(x));

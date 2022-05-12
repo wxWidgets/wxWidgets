@@ -180,7 +180,7 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
     #define wxCRT_StrtoullW  _wcstoui64
 #else
     /* Both of these functions are implemented in C++11 compilers */
-    #if defined(__cplusplus) && __cplusplus >= 201103L
+    #if wxCHECK_CXX_STD(201103L)
         #ifndef HAVE_STRTOULL
             #define HAVE_STRTOULL
         #endif
