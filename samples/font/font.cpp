@@ -648,11 +648,14 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
         else
         {
             // let the user choose
-            wxSortedArrayString facenames;
+            wxArrayString facenames;
             facenames.Alloc(nFacenames);
             int n;
             for ( n = 0; n < nFacenames; n++ )
                 facenames.Add(fontEnumerator.GetFacenames().Item(n));
+
+            // it's more convenient to see the fonts in alphabetical order
+            facenames.Sort();
 
             n = wxGetSingleChoiceIndex
                 (
