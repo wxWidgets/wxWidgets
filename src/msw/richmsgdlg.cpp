@@ -37,7 +37,7 @@ int wxRichMessageDialog::ShowModal()
 
     if ( HasNativeTaskDialog() )
     {
-        wxWindowDisabler disableOthers(this, GetParent());
+        wxWindowDisabler disableOthers(this, GetParentForModalDialog());
 
         // create a task dialog
         WinStruct<TASKDIALOGCONFIG> tdc;

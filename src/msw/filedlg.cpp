@@ -430,10 +430,10 @@ int wxFileDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    wxWindowDisabler disableOthers(this, GetParent());
-
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
     WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+
+    wxWindowDisabler disableOthers(this, parent);
 
     static wxChar fileNameBuffer [ wxMAXPATH ];           // the file-name
     wxChar        titleBuffer    [ wxMAXFILE+1+wxMAXEXT ];  // the file-name, without path
