@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets in Corsican\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-27 19:29+0200\n"
-"PO-Revision-Date: 2022-04-05 19:58+0200\n"
+"PO-Revision-Date: 2022-05-13 19:16+0200\n"
 "Last-Translator: Patriccollu di Santa Maria è Sichè <https://github.com/"
 "Patriccollu/Lingua_Corsa-Infurmatica/#readme>\n"
 "Language-Team: Patriccollu di Santa Maria è Sichè\n"
@@ -115,7 +115,7 @@ msgstr "Stampa"
 
 #: ../include/wx/richmsgdlg.h:29
 msgid "&See details"
-msgstr "&Fighjà i detaglii"
+msgstr "&Vede i detaglii"
 
 #: ../include/wx/richmsgdlg.h:30
 msgid "&Hide details"
@@ -759,7 +759,7 @@ msgstr "specificà u tema à impiegà"
 
 #: ../src/common/appcmn.cpp:264
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "specificà u modu d’affissame à impiegà (i.e. 640x480-16)"
+msgstr "specificà u modu d’affissera à impiegà (i.e. 640x480-16)"
 
 #: ../src/common/appcmn.cpp:286
 #, c-format
@@ -769,7 +769,7 @@ msgstr "Tema « %s » micca accettatu."
 #: ../src/common/appcmn.cpp:303
 #, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "Specificazione di u modu d’affissame « %s » inaccettevule."
+msgstr "Specificazione di u modu d’affissera « %s » inaccettevule."
 
 #: ../src/common/cmdline.cpp:896
 #, c-format
@@ -2163,7 +2163,7 @@ msgstr "BMP : Ùn si pò micca scrive i dati."
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP : L’intestatura hà biClrUsed=%d quandu biBitCount=%d."
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -3264,12 +3264,10 @@ msgid "&Cancel"
 msgstr "&Abbandunà"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
-msgstr "&CD-ROM"
+msgstr "&CD-Rom"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
 msgstr "CD-Rom"
 
@@ -3933,7 +3931,7 @@ msgstr "Ùn si pò micca inizià « libcurl »"
 
 #: ../src/common/webview.cpp:246
 msgid "RunScriptAsync not supported"
-msgstr ""
+msgstr "RunScriptAsync ùn hè micca accettatu"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
@@ -6835,169 +6833,141 @@ msgid "White"
 msgstr "Biancu"
 
 #: ../src/propgrid/advprops.cpp:1653
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "Predefinitu"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Fleccia"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Fleccia diritta"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Biancu"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Sibula"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Caratteru"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Croce"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Manu"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "Puntatore in I"
 
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Buttone mancu"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Luppa"
 
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Buttone centrale"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Sensu interdettu"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Pinnellu à tinta"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Mina"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
-msgstr "Puntu mancu"
+msgstr "Puntu à mancu"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Puntu à dirittu"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Fleccia di dumanda"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Buttone dirittu"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Pusizione NE-SO"
 
 #: ../src/propgrid/advprops.cpp:1673
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Pusizione N-S"
 
 #: ../src/propgrid/advprops.cpp:1674
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Pusizione NO-SE"
 
 #: ../src/propgrid/advprops.cpp:1675
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Pusizione O-E"
 
 #: ../src/propgrid/advprops.cpp:1676
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Pusizione"
 
 #: ../src/propgrid/advprops.cpp:1677
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Vapurizadore"
 
 #: ../src/propgrid/advprops.cpp:1678
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Attesa"
 
 #: ../src/propgrid/advprops.cpp:1679
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Surveglianza"
 
 #: ../src/propgrid/advprops.cpp:1680
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Fleccia d’attesa"
