@@ -278,16 +278,28 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
 #if wxOSX_USE_COCOA
-        wxString fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".png";
+        wxString fileName;
+        fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".png";
         wxImage image( fileName, wxBITMAP_TYPE_PNG );
         if( image.IsOk() )
         {
+            image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX ) ;
+            image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY ) ;
             m_refData->DecRef() ;
             m_refData = NULL ;
             InitFromImage( image );
         }
         else
-            wxMessageBox( "No PNG cursor image found in Resources" );
+        {
+            fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".cur";
+            wxImage image( fileName, wxBITMAP_TYPE_CUR );
+            if( image.IsOk() )
+            {
+                InitFromImage( image );
+            }
+            else
+                wxFAIL_MSG( "No PNG cursor image found in Resources" );
+        }
 #endif
     }
     else
