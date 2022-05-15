@@ -19,11 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-
-#if wxUSE_DIRDLG
-
-#if wxUSE_OLE
-
 #include "wx/dirdlg.h"
 #include "wx/modalhook.h"
 
@@ -34,26 +29,15 @@
     #include "wx/app.h"     // for GetComCtl32Version()
 #endif
 
-#include "wx/msw/private.h"
-#include "wx/msw/wrapshl.h"
-#include "wx/msw/private/comptr.h"
-#include "wx/msw/private/cotaskmemptr.h"
-#include "wx/dynlib.h"
+#include "wx/msw/private/filedialog.h"
+
+#if wxUSE_IFILEOPENDIALOG
 
 #include <initguid.h>
 
-// IFileOpenDialog implementation needs wxDynamicLibrary for
-// run-time linking SHCreateItemFromParsingName(), available
-// only under Windows Vista and newer.
-// It also needs a compiler providing declarations and definitions
-// of interfaces available in Windows Vista.
-#if wxUSE_DYNLIB_CLASS && defined(__IFileOpenDialog_INTERFACE_DEFINED__)
-    #define wxUSE_IFILEOPENDIALOG 1
-#else
-    #define wxUSE_IFILEOPENDIALOG 0
-#endif
+#include "wx/msw/private/cotaskmemptr.h"
+#include "wx/dynlib.h"
 
-#if wxUSE_IFILEOPENDIALOG
 // IFileDialog related declarations missing from some compilers headers.
 
 #if defined(__VISUALC__)
@@ -69,6 +53,36 @@ DEFINE_GUID(IID_IShellItem,
 #endif // wxUSE_IFILEOPENDIALOG
 
 // ----------------------------------------------------------------------------
+// private functions prototypes
+// ----------------------------------------------------------------------------
+
+#if wxUSE_IFILEOPENDIALOG
+
+namespace
+{
+
+// helper functions for wxDirDialog::ShowIFileOpenDialog()
+bool InitIFileDialog(const CLSID& clsid,
+                     const wxString& message, const wxString& defaultPath,
+                     int options,
+                     wxCOMPtr<IFileDialog>& fileDialog);
+bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& paths);
+bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path);
+bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path);
+
+} // anonymous namespace
+
+#endif // #if wxUSE_IFILEOPENDIALOG
+
+// Note that parts of this file related to IFileDialog are still compiled even
+// when wxUSE_DIRDLG == 0 because they're used by wxUSE_FILEDLG too.
+#if wxUSE_DIRDLG
+
+// callback used in wxDirDialog::ShowSHBrowseForFolder()
+static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp,
+                                       LPARAM pData);
+
+// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -81,32 +95,6 @@ DEFINE_GUID(IID_IShellItem,
 // ----------------------------------------------------------------------------
 
 wxIMPLEMENT_CLASS(wxDirDialog, wxDialog);
-
-// ----------------------------------------------------------------------------
-// private functions prototypes
-// ----------------------------------------------------------------------------
-
-#if wxUSE_IFILEOPENDIALOG
-
-namespace
-{
-
-// helper functions for wxDirDialog::ShowIFileOpenDialog()
-bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
-                         int options,
-                         wxCOMPtr<IFileOpenDialog>& fileDialog);
-bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& paths);
-bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path);
-bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path);
-
-} // anonymous namespace
-
-#endif // #if wxUSE_IFILEOPENDIALOG
-
-// callback used in wxDirDialog::ShowSHBrowseForFolder()
-static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp,
-                                       LPARAM pData);
-
 
 // ============================================================================
 // implementation
@@ -259,9 +247,6 @@ int wxDirDialog::ShowSHBrowseForFolder(WXHWND owner)
 
 int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
 {
-    HRESULT hr = S_OK;
-    wxCOMPtr<IFileOpenDialog> fileDialog;
-
     // We currently always use FOS_NOCHANGEDIR even if wxDD_CHANGE_DIR was
     // specified because we change the directory ourselves in this case.
     int options = FOS_PICKFOLDERS | FOS_NOCHANGEDIR;
@@ -270,12 +255,37 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
     if ( HasFlag(wxDD_SHOW_HIDDEN) )
         options |= FOS_FORCESHOWHIDDEN;
 
-    if ( !InitIFileOpenDialog(m_message, m_path, options, fileDialog) )
+    wxMSWImpl::wxIFileDialog fileDialog;
+    return fileDialog.Show(owner, CLSID_FileOpenDialog, options,
+                           m_message, m_path, &m_paths, &m_path);
+}
+
+#endif // wxUSE_IFILEOPENDIALOG
+
+#endif // wxUSE_DIRDLG
+
+#if wxUSE_IFILEOPENDIALOG
+
+// ----------------------------------------------------------------------------
+// Helper functions used by wxDirDialog and wxFileDialog.
+// ----------------------------------------------------------------------------
+
+namespace wxMSWImpl
+{
+
+int wxIFileDialog::Show(HWND owner, const CLSID& clsid, int options,
+                        const wxString& message,
+                        const wxString& defaultValue,
+                        wxArrayString* pathsOut, wxString* pathOut)
+{
+    HRESULT hr = S_OK;
+
+    if ( !InitIFileDialog(clsid, message, defaultValue, options, m_fileDialog) )
     {
         return wxID_NONE; // Failed to initialize the dialog
     }
 
-    hr = fileDialog->Show(owner);
+    hr = m_fileDialog->Show(owner);
     if ( FAILED(hr) )
     {
         if ( hr == HRESULT_FROM_WIN32(ERROR_CANCELLED) )
@@ -289,12 +299,21 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
     }
     else if ( options & FOS_ALLOWMULTISELECT )
     {
-        if ( GetPathsFromIFileOpenDialog(fileDialog, m_paths) )
-            return wxID_OK;
+        wxCOMPtr<IFileOpenDialog> fileOpenDialog;
+        hr = m_fileDialog->QueryInterface(wxIID_PPV_ARGS(IFileOpenDialog, &fileOpenDialog));
+        if ( SUCCEEDED(hr) )
+        {
+            if ( GetPathsFromIFileOpenDialog(fileOpenDialog, *pathsOut) )
+                return wxID_OK;
+        }
+        else
+        {
+            wxLogApiError(wxS("IFileDialog::QI(IFileOpenDialog)"), hr);
+        }
     }
     else // Single selection only, path output parameter must be non-null.
     {
-        if ( GetPathFromIFileDialog(fileDialog, m_path) )
+        if ( GetPathFromIFileDialog(m_fileDialog, *pathOut) )
             return wxID_OK;
     }
 
@@ -302,6 +321,8 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
     wxLogSysError(_("Couldn't obtain folder name"), hr);
     return wxID_CANCEL;
 }
+
+} // namespace wxMSWImpl
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -311,14 +332,15 @@ namespace
 {
 
 // helper function for wxDirDialog::ShowIFileOpenDialog()
-bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
-                         int options,
-                         wxCOMPtr<IFileOpenDialog>& fileDialog)
+bool InitIFileDialog(const CLSID& clsid,
+                     const wxString& message, const wxString& defaultPath,
+                     int options,
+                     wxCOMPtr<IFileDialog>& fileDialog)
 {
     HRESULT hr = S_OK;
-    wxCOMPtr<IFileOpenDialog> dlg;
+    wxCOMPtr<IFileDialog> dlg;
 
-    hr = ::CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER,
+    hr = ::CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER,
                             wxIID_PPV_ARGS(IFileOpenDialog, &dlg));
     if ( FAILED(hr) )
     {
@@ -450,7 +472,7 @@ bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path)
     HRESULT hr = fileDialog->GetResult(&item);
     if ( FAILED(hr) )
     {
-        wxLogApiError(wxS("IFileOpenDialog::GetResult"), hr);
+        wxLogApiError(wxS("IFileDialog::GetResult"), hr);
         return false;
     }
 
@@ -482,6 +504,8 @@ bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path)
 } // anonymous namespace
 
 #endif // wxUSE_IFILEOPENDIALOG
+
+#if wxUSE_DIRDLG
 
 // callback used in wxDirDialog::ShowSHBrowseForFolder()
 static int CALLBACK
@@ -532,7 +556,5 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 
     return 0;
 }
-
-#endif // compiler/platform on which the code here compiles
 
 #endif // wxUSE_DIRDLG
