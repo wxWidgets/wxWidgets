@@ -90,7 +90,8 @@ wxIMPLEMENT_CLASS(wxDirDialog, wxDialog);
 
 // helper functions for wxDirDialog::ShowIFileOpenDialog()
 bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
-                         bool multipleSelection, bool showHidden, wxCOMPtr<IFileOpenDialog>& fileDialog);
+                         int options,
+                         wxCOMPtr<IFileOpenDialog>& fileDialog);
 bool GetPathsFromIFileOpenDialog(const wxCOMPtr<IFileOpenDialog>& fileDialog, bool multipleSelection,
                                  wxArrayString& paths);
 bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path);
@@ -256,8 +257,15 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
     HRESULT hr = S_OK;
     wxCOMPtr<IFileOpenDialog> fileDialog;
 
-    if ( !InitIFileOpenDialog(m_message, m_path, HasFlag(wxDD_MULTIPLE),
-                              HasFlag(wxDD_SHOW_HIDDEN), fileDialog) )
+    // We currently always use FOS_NOCHANGEDIR even if wxDD_CHANGE_DIR was
+    // specified because we change the directory ourselves in this case.
+    int options = FOS_PICKFOLDERS | FOS_NOCHANGEDIR;
+    if ( HasFlag(wxDD_MULTIPLE) )
+        options |= FOS_ALLOWMULTISELECT;
+    if ( HasFlag(wxDD_SHOW_HIDDEN) )
+        options |= FOS_FORCESHOWHIDDEN;
+
+    if ( !InitIFileOpenDialog(m_message, m_path, options, fileDialog) )
     {
         return wxID_NONE; // Failed to initialize the dialog
     }
@@ -296,13 +304,11 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
 
 // helper function for wxDirDialog::ShowIFileOpenDialog()
 bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
-                         bool multipleSelection, bool showHidden,
+                         int options,
                          wxCOMPtr<IFileOpenDialog>& fileDialog)
 {
     HRESULT hr = S_OK;
     wxCOMPtr<IFileOpenDialog> dlg;
-    // allow to select only a file system folder, do not change the CWD
-    long options = FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM | FOS_NOCHANGEDIR;
 
     hr = ::CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER,
                             wxIID_PPV_ARGS(IFileOpenDialog, &dlg));
@@ -312,12 +318,8 @@ bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
         return false;
     }
 
-    if ( multipleSelection )
-        options |= FOS_ALLOWMULTISELECT;
-    if ( showHidden )
-        options |= FOS_FORCESHOWHIDDEN;
-
-    hr = dlg->SetOptions(options);
+    // allow to select only a file system object
+    hr = dlg->SetOptions(options | FOS_FORCEFILESYSTEM);
     if ( FAILED(hr) )
     {
         wxLogApiError(wxS("IFileOpenDialog::SetOptions"), hr);
