@@ -389,36 +389,6 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
     return false;
 }
 
-static bool ShowCommFileDialog(OPENFILENAME *of, long style)
-{
-    DWORD errCode;
-    bool success = DoShowCommFileDialog(of, style, &errCode);
-
-    if ( !success &&
-            errCode == FNERR_INVALIDFILENAME &&
-                of->lpstrFile[0] )
-    {
-        // this can happen if the default file name is invalid, try without it
-        // now
-        of->lpstrFile[0] = wxT('\0');
-        success = DoShowCommFileDialog(of, style, &errCode);
-    }
-
-    if ( !success )
-    {
-        // common dialog failed - why?
-        if ( errCode != 0 )
-        {
-            wxLogError(_("File dialog failed with error code %0lx."), errCode);
-        }
-        //else: it was just cancelled
-
-        return false;
-    }
-
-    return true;
-}
-
 void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 {
     TempHWNDSetter set(this, hwnd);
@@ -645,8 +615,30 @@ int wxFileDialog::ShowModal()
 
     //== Execute FileDialog >>=================================================
 
-    if ( !ShowCommFileDialog(&of, m_windowStyle) )
+    DWORD errCode;
+    bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
+
+    if ( !success &&
+            errCode == FNERR_INVALIDFILENAME &&
+                of.lpstrFile[0] )
+    {
+        // this can happen if the default file name is invalid, try without it
+        // now
+        of.lpstrFile[0] = wxT('\0');
+        success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
+    }
+
+    if ( !success )
+    {
+        // common dialog failed - why?
+        if ( errCode != 0 )
+        {
+            wxLogError(_("File dialog failed with error code %0lx."), errCode);
+        }
+        //else: it was just cancelled
+
         return wxID_CANCEL;
+    }
 
     m_fileNames.Empty();
 
