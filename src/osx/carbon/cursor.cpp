@@ -295,6 +295,8 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
             wxImage image( fileName, wxBITMAP_TYPE_CUR );
             if( image.IsOk() )
             {
+                m_refData->DecRef() ;
+                m_refData = NULL ;
                 InitFromImage( image );
             }
             else
