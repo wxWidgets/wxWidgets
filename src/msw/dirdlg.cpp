@@ -62,10 +62,6 @@ namespace
 {
 
 // helper functions for wxDirDialog::ShowIFileOpenDialog()
-bool InitIFileDialog(const CLSID& clsid,
-                     const wxString& message, const wxString& defaultPath,
-                     int options,
-                     wxCOMPtr<IFileDialog>& fileDialog);
 bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& paths);
 bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path);
 bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path);
@@ -247,6 +243,14 @@ int wxDirDialog::ShowSHBrowseForFolder(WXHWND owner)
 
 int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
 {
+    wxMSWImpl::wxIFileDialog fileDialog(CLSID_FileOpenDialog);
+    if ( !fileDialog.IsOk() )
+        return wxID_NONE;
+
+    fileDialog.SetTitle(m_message);
+    if ( !m_path.empty() )
+        fileDialog.SetInitialPath(m_path);
+
     // We currently always use FOS_NOCHANGEDIR even if wxDD_CHANGE_DIR was
     // specified because we change the directory ourselves in this case.
     int options = FOS_PICKFOLDERS | FOS_NOCHANGEDIR;
@@ -255,9 +259,7 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
     if ( HasFlag(wxDD_SHOW_HIDDEN) )
         options |= FOS_FORCESHOWHIDDEN;
 
-    wxMSWImpl::wxIFileDialog fileDialog;
-    return fileDialog.Show(owner, CLSID_FileOpenDialog, options,
-                           m_message, m_path, &m_paths, &m_path);
+    return fileDialog.Show(owner, options, &m_paths, &m_path);
 }
 
 #endif // wxUSE_IFILEOPENDIALOG
@@ -273,16 +275,34 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
 namespace wxMSWImpl
 {
 
-int wxIFileDialog::Show(HWND owner, const CLSID& clsid, int options,
-                        const wxString& message,
-                        const wxString& defaultValue,
+wxIFileDialog::wxIFileDialog(const CLSID& clsid)
+{
+    HRESULT hr = ::CoCreateInstance
+                 (
+                    clsid,
+                    NULL, // no outer IUnknown
+                    CLSCTX_INPROC_SERVER,
+                    wxIID_PPV_ARGS(IFileOpenDialog, &m_fileDialog)
+                 );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxS("CoCreateInstance(CLSID_FileOpenDialog)"), hr);
+    }
+}
+
+int wxIFileDialog::Show(HWND owner, int options,
                         wxArrayString* pathsOut, wxString* pathOut)
 {
-    HRESULT hr = S_OK;
+    wxCHECK_MSG( m_fileDialog, wxID_NONE, wxS("shouldn't be called") );
 
-    if ( !InitIFileDialog(clsid, message, defaultValue, options, m_fileDialog) )
+    HRESULT hr;
+
+    // allow to select only a file system object
+    hr = m_fileDialog->SetOptions(options | FOS_FORCEFILESYSTEM);
+    if ( FAILED(hr) )
     {
-        return wxID_NONE; // Failed to initialize the dialog
+        wxLogApiError(wxS("IFileOpenDialog::SetOptions"), hr);
+        return false;
     }
 
     hr = m_fileDialog->Show(owner);
@@ -322,6 +342,59 @@ int wxIFileDialog::Show(HWND owner, const CLSID& clsid, int options,
     return wxID_CANCEL;
 }
 
+void wxIFileDialog::SetTitle(const wxString& message)
+{
+    HRESULT hr = m_fileDialog->SetTitle(message.wc_str());
+    if ( FAILED(hr) )
+    {
+        // This error is not serious, let's just log it and continue even
+        // without the title set.
+        wxLogApiError(wxS("IFileOpenDialog::SetTitle"), hr);
+    }
+}
+
+void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
+{
+    HRESULT hr;
+
+    // We need to link SHCreateItemFromParsingName() dynamically as it's
+    // not available on pre-Vista systems.
+    typedef HRESULT
+    (WINAPI *SHCreateItemFromParsingName_t)(PCWSTR,
+                                            IBindCtx*,
+                                            REFIID,
+                                            void**);
+
+    SHCreateItemFromParsingName_t pfnSHCreateItemFromParsingName = NULL;
+    wxDynamicLibrary dllShell32;
+    if ( dllShell32.Load(wxS("shell32.dll"), wxDL_VERBATIM | wxDL_QUIET) )
+    {
+        wxDL_INIT_FUNC(pfn, SHCreateItemFromParsingName, dllShell32);
+    }
+
+    if ( !pfnSHCreateItemFromParsingName )
+    {
+        wxLogLastError(wxS("SHCreateItemFromParsingName() not found"));
+        return;
+    }
+
+    wxCOMPtr<IShellItem> folder;
+    hr = pfnSHCreateItemFromParsingName(defaultPath.wc_str(),
+                                        NULL,
+                                        wxIID_PPV_ARGS(IShellItem,
+                                                       &folder));
+
+    // Failing to parse the folder name or set it is not really an error,
+    // we'll just ignore the initial directory in this case, but we should
+    // still show the dialog.
+    if ( SUCCEEDED(hr) )
+    {
+        hr = m_fileDialog->SetFolder(folder);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileOpenDialog::SetFolder"), hr);
+    }
+}
+
 } // namespace wxMSWImpl
 
 // ----------------------------------------------------------------------------
@@ -330,84 +403,6 @@ int wxIFileDialog::Show(HWND owner, const CLSID& clsid, int options,
 
 namespace
 {
-
-// helper function for wxDirDialog::ShowIFileOpenDialog()
-bool InitIFileDialog(const CLSID& clsid,
-                     const wxString& message, const wxString& defaultPath,
-                     int options,
-                     wxCOMPtr<IFileDialog>& fileDialog)
-{
-    HRESULT hr = S_OK;
-    wxCOMPtr<IFileDialog> dlg;
-
-    hr = ::CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER,
-                            wxIID_PPV_ARGS(IFileOpenDialog, &dlg));
-    if ( FAILED(hr) )
-    {
-        wxLogApiError(wxS("CoCreateInstance(CLSID_FileOpenDialog)"), hr);
-        return false;
-    }
-
-    // allow to select only a file system object
-    hr = dlg->SetOptions(options | FOS_FORCEFILESYSTEM);
-    if ( FAILED(hr) )
-    {
-        wxLogApiError(wxS("IFileOpenDialog::SetOptions"), hr);
-        return false;
-    }
-
-    hr = dlg->SetTitle(message.wc_str());
-    if ( FAILED(hr) )
-    {
-        // This error is not serious, let's just log it and continue even
-        // without the title set.
-        wxLogApiError(wxS("IFileOpenDialog::SetTitle"), hr);
-    }
-
-    // set the initial path
-    if ( !defaultPath.empty() )
-    {
-        // We need to link SHCreateItemFromParsingName() dynamically as it's
-        // not available on pre-Vista systems.
-        typedef HRESULT
-        (WINAPI *SHCreateItemFromParsingName_t)(PCWSTR,
-                                                IBindCtx*,
-                                                REFIID,
-                                                void**);
-
-        SHCreateItemFromParsingName_t pfnSHCreateItemFromParsingName = NULL;
-        wxDynamicLibrary dllShell32;
-        if ( dllShell32.Load(wxS("shell32.dll"), wxDL_VERBATIM | wxDL_QUIET) )
-        {
-            wxDL_INIT_FUNC(pfn, SHCreateItemFromParsingName, dllShell32);
-        }
-
-        if ( !pfnSHCreateItemFromParsingName )
-        {
-            wxLogLastError(wxS("SHCreateItemFromParsingName() not found"));
-            return false;
-        }
-
-        wxCOMPtr<IShellItem> folder;
-        hr = pfnSHCreateItemFromParsingName(defaultPath.wc_str(),
-                                            NULL,
-                                            wxIID_PPV_ARGS(IShellItem,
-                                                           &folder));
-
-        // Failing to parse the folder name or set it is not really an error,
-        // we'll just ignore the initial directory in this case, but we should
-        // still show the dialog.
-        if ( SUCCEEDED(hr) )
-        {
-            hr = dlg->SetFolder(folder);
-            if ( FAILED(hr) )
-                wxLogApiError(wxS("IFileOpenDialog::SetFolder"), hr);
-        }
-    }
-
-    fileDialog = dlg;
-    return true;
-}
 
 // helper function for wxDirDialog::ShowIFileOpenDialog()
 bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& paths)

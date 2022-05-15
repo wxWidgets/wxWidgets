@@ -35,10 +35,25 @@
 namespace wxMSWImpl
 {
 
+// For historical reasons, this class is defined in src/msw/dirdlg.cpp.
 class wxIFileDialog
 {
 public:
-    wxIFileDialog() { }
+    // Create the dialog of the specified type.
+    //
+    // CLSID must be either CLSID_FileOpenDialog or CLSID_FileSaveDialog.
+    //
+    // Use IsOk() to check if the dialog was created successfully.
+    explicit wxIFileDialog(const CLSID& clsid);
+
+    // If this returns false, the dialog can't be used at all.
+    bool IsOk() const { return m_fileDialog.Get() != NULL; }
+
+    // Set the dialog title.
+    void SetTitle(const wxString& title);
+
+    // Set the initial path to show in the dialog.
+    void SetInitialPath(const wxString& path);
 
     // Show the file dialog with the given parent window and options.
     //
@@ -46,19 +61,9 @@ public:
     // depending on whether FOS_ALLOWMULTISELECT is part of the options.
     //
     // The return value is wxID_OK if any paths were returned, wxID_CANCEL if the
-    // dialog was cancelled or wxID_NONE if creating it failed, in which case
-    // fileDialog is null -- otherwise it contains the pointer to the dialog which
-    // can be used to retrieve more information from it.
-    //
-    // For historical reasons, this function is defined in src/msw/dirdlg.cpp.
+    // dialog was cancelled.
     int
-    Show(HWND owner,
-         const CLSID& clsid,
-         int options,
-         const wxString& message,
-         const wxString& defaultValue,
-         wxArrayString* pathsOut,
-         wxString* pathOut);
+    Show(HWND owner, int options, wxArrayString* pathsOut, wxString* pathOut);
 
     // Behave as IFileDialog.
     IFileDialog* operator->() const { return m_fileDialog.Get(); }
