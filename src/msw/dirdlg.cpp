@@ -95,8 +95,8 @@ namespace
 bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
                          int options,
                          wxCOMPtr<IFileOpenDialog>& fileDialog);
-bool GetPathsFromIFileOpenDialog(const wxCOMPtr<IFileOpenDialog>& fileDialog, bool multipleSelection,
-                                 wxArrayString& paths);
+bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& paths);
+bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path);
 bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path);
 
 } // anonymous namespace
@@ -287,15 +287,15 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
             wxLogApiError(wxS("IFileDialog::Show"), hr);
         }
     }
-    else if ( GetPathsFromIFileOpenDialog(fileDialog, HasFlag(wxDD_MULTIPLE),
-                                          m_paths) )
+    else if ( options & FOS_ALLOWMULTISELECT )
     {
-        if ( !HasFlag(wxDD_MULTIPLE) )
-        {
-            m_path = m_paths.Last();
-        }
-
-        return wxID_OK;
+        if ( GetPathsFromIFileOpenDialog(fileDialog, m_paths) )
+            return wxID_OK;
+    }
+    else // Single selection only, path output parameter must be non-null.
+    {
+        if ( GetPathFromIFileDialog(fileDialog, m_path) )
+            return wxID_OK;
     }
 
     // Failed to show the dialog or obtain the selected folders(s)
@@ -388,72 +388,49 @@ bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
 }
 
 // helper function for wxDirDialog::ShowIFileOpenDialog()
-bool GetPathsFromIFileOpenDialog(const wxCOMPtr<IFileOpenDialog>& fileDialog, bool multipleSelection,
-                                 wxArrayString& paths)
+bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& paths)
 {
     HRESULT hr = S_OK;
     wxString path;
     wxArrayString tempPaths;
 
-    if ( multipleSelection )
+    wxCOMPtr<IShellItemArray> itemArray;
+
+    hr = fileDialog->GetResults(&itemArray);
+    if ( FAILED(hr) )
     {
-        wxCOMPtr<IShellItemArray> itemArray;
-
-        hr = fileDialog->GetResults(&itemArray);
-        if ( FAILED(hr) )
-        {
-            wxLogApiError(wxS("IShellItemArray::GetResults"), hr);
-            return false;
-        }
-
-        DWORD count = 0;
-
-        hr = itemArray->GetCount(&count);
-        if ( FAILED(hr) )
-        {
-            wxLogApiError(wxS("IShellItemArray::GetCount"), hr);
-            return false;
-        }
-
-        for ( DWORD i = 0; i < count; ++i )
-        {
-            wxCOMPtr<IShellItem> item;
-
-            hr = itemArray->GetItemAt(i, &item);
-            if ( FAILED(hr) )
-            {
-                // do not attempt to retrieve any other items
-                // and just fail
-                wxLogApiError(wxS("IShellItemArray::GetItem"), hr);
-                tempPaths.clear();
-                break;
-            }
-
-            if ( !ConvertIShellItemToPath(item, path) )
-            {
-                // again, just fail
-                tempPaths.clear();
-                break;
-            }
-
-            tempPaths.push_back(path);
-        }
-
+        wxLogApiError(wxS("IShellItemArray::GetResults"), hr);
+        return false;
     }
-    else // single selection
+
+    DWORD count = 0;
+
+    hr = itemArray->GetCount(&count);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxS("IShellItemArray::GetCount"), hr);
+        return false;
+    }
+
+    for ( DWORD i = 0; i < count; ++i )
     {
         wxCOMPtr<IShellItem> item;
 
-        hr = fileDialog->GetResult(&item);
+        hr = itemArray->GetItemAt(i, &item);
         if ( FAILED(hr) )
         {
-            wxLogApiError(wxS("IFileOpenDialog::GetResult"), hr);
-            return false;
+            // do not attempt to retrieve any other items
+            // and just fail
+            wxLogApiError(wxS("IShellItemArray::GetItem"), hr);
+            tempPaths.clear();
+            break;
         }
 
         if ( !ConvertIShellItemToPath(item, path) )
         {
-            return false;
+            // again, just fail
+            tempPaths.clear();
+            break;
         }
 
         tempPaths.push_back(path);
@@ -463,6 +440,25 @@ bool GetPathsFromIFileOpenDialog(const wxCOMPtr<IFileOpenDialog>& fileDialog, bo
         return false; // there was en error
 
     paths = tempPaths;
+    return true;
+}
+
+bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path)
+{
+    wxCOMPtr<IShellItem> item;
+
+    HRESULT hr = fileDialog->GetResult(&item);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxS("IFileOpenDialog::GetResult"), hr);
+        return false;
+    }
+
+    if ( !ConvertIShellItemToPath(item, path) )
+    {
+        return false;
+    }
+
     return true;
 }
 
