@@ -55,6 +55,10 @@ protected:
     virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE;
 
 private:
+    // The real implementation of ShowModal() using traditional common dialog
+    // functions.
+    int ShowCommFileDialog(WXHWND owner);
+
     wxArrayString m_fileNames;
 
     // remember if our SetPosition() or Centre() (which requires special

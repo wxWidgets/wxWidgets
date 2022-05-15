@@ -405,6 +405,11 @@ int wxFileDialog::ShowModal()
 
     wxWindowDisabler disableOthers(this, parent);
 
+    return ShowCommFileDialog(hWndParent);
+}
+
+int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
+{
     static wxChar fileNameBuffer [ wxMAXPATH ];           // the file-name
     wxChar        titleBuffer    [ wxMAXFILE+1+wxMAXEXT ];  // the file-name, without path
 
