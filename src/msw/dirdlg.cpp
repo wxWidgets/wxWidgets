@@ -88,6 +88,9 @@ wxIMPLEMENT_CLASS(wxDirDialog, wxDialog);
 
 #if wxUSE_IFILEOPENDIALOG
 
+namespace
+{
+
 // helper functions for wxDirDialog::ShowIFileOpenDialog()
 bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
                          int options,
@@ -95,6 +98,8 @@ bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
 bool GetPathsFromIFileOpenDialog(const wxCOMPtr<IFileOpenDialog>& fileDialog, bool multipleSelection,
                                  wxArrayString& paths);
 bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path);
+
+} // anonymous namespace
 
 #endif // #if wxUSE_IFILEOPENDIALOG
 
@@ -302,6 +307,9 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
 // private functions
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
 // helper function for wxDirDialog::ShowIFileOpenDialog()
 bool InitIFileOpenDialog(const wxString& message, const wxString& defaultPath,
                          int options,
@@ -474,6 +482,8 @@ bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path)
 
     return true;
 }
+
+} // anonymous namespace
 
 #endif // wxUSE_IFILEOPENDIALOG
 
