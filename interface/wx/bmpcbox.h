@@ -217,6 +217,6 @@ public:
     /**
         Sets the bitmap for the given item.
     */
-    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
+    virtual void SetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap);
 };
 

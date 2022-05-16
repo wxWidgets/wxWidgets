@@ -2815,7 +2815,7 @@ public:
         @param flags
             One or more flags of the ::wxDataViewColumnFlags enumeration.
     */
-    wxDataViewColumn(const wxBitmap& bitmap,
+    wxDataViewColumn(const wxBitmapBundle& bitmap,
                      wxDataViewRenderer* renderer,
                      unsigned int model_column,
                      int width = wxDVC_DEFAULT_WIDTH,
