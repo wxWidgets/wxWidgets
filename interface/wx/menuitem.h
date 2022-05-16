@@ -367,7 +367,7 @@ public:
 
         @onlyfor{wxmsw,wxosx,wxgtk}
     */
-    virtual void SetBitmap(const wxBitmap& bmp, bool checked = true);
+    virtual void SetBitmap(const wxBitmapBundle& bmp, bool checked = true);
 
     /**
         Sets the checked/unchecked bitmaps for the menu item.
@@ -375,15 +375,15 @@ public:
 
         @onlyfor{wxmsw}
     */
-    void SetBitmaps(const wxBitmap& checked,
-                    const wxBitmap& unchecked = wxNullBitmap);
+    void SetBitmaps(const wxBitmapBundle& checked,
+                    const wxBitmapBundle& unchecked = wxNullBitmap);
 
     /**
         Sets the to be used for disabled menu items.
 
         @onlyfor{wxmsw}
     */
-    void SetDisabledBitmap(const wxBitmap& disabled);
+    void SetDisabledBitmap(const wxBitmapBundle& disabled);
 
 
     /**
