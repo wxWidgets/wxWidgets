@@ -59,6 +59,10 @@ private:
     // functions.
     int ShowCommFileDialog(WXHWND owner);
 
+    // And another one using IFileDialog.
+    int ShowIFileDialog(WXHWND owner);
+
+
     wxArrayString m_fileNames;
 
     // remember if our SetPosition() or Centre() (which requires special

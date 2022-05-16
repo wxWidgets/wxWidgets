@@ -45,7 +45,9 @@
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
+
 #include "wx/msw/private/dpiaware.h"
+#include "wx/msw/private/filedialog.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -405,6 +407,21 @@ int wxFileDialog::ShowModal()
 
     wxWindowDisabler disableOthers(this, parent);
 
+    /*
+        We need to use the old style dialog in order to use a hook function
+        which allows us to position it or use custom controls in it but, if
+        possible, we prefer to use the new style one instead.
+    */
+#if wxUSE_IFILEOPENDIALOG
+    if ( !m_bMovedWindow && !HasExtraControlCreator() )
+    {
+        const int rc = ShowIFileDialog(hWndParent);
+        if ( rc != wxID_NONE )
+            return rc;
+        //else: Failed to use IFileDialog, fall back to the traditional one.
+    }
+#endif // wxUSE_IFILEOPENDIALOG
+
     return ShowCommFileDialog(hWndParent);
 }
 
@@ -698,5 +715,130 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     return wxID_OK;
 
 }
+
+#if wxUSE_IFILEOPENDIALOG
+
+int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
+{
+    // Create the dialog.
+    wxMSWImpl::wxIFileDialog
+        fileDialog(HasFlag(wxFD_SAVE) ? CLSID_FileSaveDialog
+                                      : CLSID_FileOpenDialog);
+
+    if ( !fileDialog.IsOk() )
+        return wxID_NONE;
+
+    // Configure the dialog before showing it.
+    fileDialog.SetTitle(m_message);
+
+    HRESULT hr;
+
+    wxArrayString wildDescriptions, wildFilters;
+    const UINT nWildcards = wxParseCommonDialogsFilter(m_wildCard,
+                                                       wildDescriptions,
+                                                       wildFilters);
+    if ( nWildcards )
+    {
+        wxVector<COMDLG_FILTERSPEC> filterSpecs(nWildcards);
+        for ( UINT n = 0; n < nWildcards; ++n )
+        {
+            filterSpecs[n].pszName = wildDescriptions[n].wc_str();
+            filterSpecs[n].pszSpec = wildFilters[n].wc_str();
+        }
+
+        hr = fileDialog->SetFileTypes(nWildcards, &filterSpecs[0]);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialog::SetFileTypes"), hr);
+
+        hr = fileDialog->SetFileTypeIndex(m_filterIndex + 1);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialog::SetFileTypeIndex"), hr);
+    }
+
+    if ( !m_dir.empty() )
+    {
+        fileDialog.SetInitialPath(m_dir);
+    }
+
+    if ( !m_fileName.empty() )
+    {
+        hr = fileDialog->SetFileName(m_fileName.wc_str());
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialog::SetDefaultExtension"), hr);
+    }
+
+
+    // We never set the following flags currently:
+    //
+    //  - FOS_STRICTFILETYPES
+    //  - FOS_NOVALIDATE
+    //  - FOS_CREATEPROMPT
+    //  - FOS_SHAREAWARE
+    //  - FOS_NOREADONLYRETURN
+    //  - FOS_NOTESTFILECREATE
+    //  - FOS_OKBUTTONNEEDSINTERACTION
+    //  - FOS_DONTADDTORECENT
+    //  - FOS_DEFAULTNOMINIMODE
+    //  - FOS_FORCEPREVIEWPANEON
+    //
+    // We might want to add wxFD_XXX equivalents for some of them in the future.
+    int options = 0;
+    if ( HasFlag(wxFD_OVERWRITE_PROMPT) )
+        options |= FOS_OVERWRITEPROMPT;
+    if ( !HasFlag(wxFD_CHANGE_DIR) )
+        options |= FOS_NOCHANGEDIR;
+    if ( HasFlag(wxFD_FILE_MUST_EXIST) )
+        options |= FOS_PATHMUSTEXIST | FOS_FILEMUSTEXIST;
+    if ( HasFlag(wxFD_MULTIPLE) )
+        options |= FOS_ALLOWMULTISELECT;
+    if ( HasFlag(wxFD_SHOW_HIDDEN) )
+        options |= FOS_FORCESHOWHIDDEN;
+    if ( HasFlag(wxFD_NO_FOLLOW) )
+        options |= FOS_NODEREFERENCELINKS;
+
+    // Finally do show the dialog.
+    const int rc = fileDialog.Show(hWndParent, options, &m_fileNames, &m_path);
+    if ( rc == wxID_OK )
+    {
+        UINT nFilterIndex;
+        hr = fileDialog->GetFileTypeIndex(&nFilterIndex);
+        if ( SUCCEEDED(hr) )
+        {
+            // As with the common dialog, the index is 1-based here.
+            m_filterIndex = nFilterIndex - 1;
+        }
+        else
+        {
+            wxLogApiError(wxS("IFileDialog::GetFileTypeIndex"), hr);
+
+            m_filterIndex = 0;
+        }
+
+        if ( HasFlag(wxFD_MULTIPLE) )
+        {
+            // This shouldn't the case, but check to be absolutely sure.
+            if ( !m_fileNames.empty() )
+                m_dir = wxFileName(m_fileNames[0]).GetPath();
+        }
+        else // Single selected file is in m_path.
+        {
+            // Append the extension if necessary.
+            m_path = AppendExtension(m_path, wildFilters[m_filterIndex]);
+
+            const wxFileName fn(m_path);
+            m_dir = fn.GetPath();
+            m_fileName = fn.GetFullName();
+
+            // For compatibility, our GetFilenames() must also return the same
+            // file, so put it into the array too.
+            m_fileNames.Clear();
+            m_fileNames.Add(m_fileName);
+        }
+    }
+
+    return rc;
+}
+
+#endif // wxUSE_IFILEOPENDIALOG
 
 #endif // wxUSE_FILEDLG
