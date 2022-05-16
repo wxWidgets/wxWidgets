@@ -89,7 +89,7 @@ public:
         @see Create()
     */
     wxStaticBitmap(wxWindow* parent, wxWindowID id,
-                   const wxBitmap& label,
+                   const wxBitmapBundle& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -98,7 +98,7 @@ public:
     /**
         Creation function, for two-step construction. For details see wxStaticBitmap().
     */
-    bool Create(wxWindow* parent, wxWindowID id, const wxBitmap& label,
+    bool Create(wxWindow* parent, wxWindowID id, const wxBitmapBundle& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxString& name = wxStaticBitmapNameStr);
@@ -129,7 +129,7 @@ public:
 
         @see GetBitmap()
     */
-    virtual void SetBitmap(const wxBitmap& label);
+    virtual void SetBitmap(const wxBitmapBundle& label);
 
     /**
         Sets the label to the given icon.

@@ -80,7 +80,7 @@ public:
         @see Create(), wxValidator
     */
     wxBitmapButton(wxWindow* parent, wxWindowID id,
-                   const wxBitmap& bitmap,
+                   const wxBitmapBundle& bitmap,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -92,7 +92,7 @@ public:
         For more details, see wxBitmapButton().
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
