@@ -365,24 +365,35 @@ void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
                                             REFIID,
                                             void**);
 
-    SHCreateItemFromParsingName_t pfnSHCreateItemFromParsingName = NULL;
-    wxDynamicLibrary dllShell32;
-    if ( dllShell32.Load(wxS("shell32.dll"), wxDL_VERBATIM | wxDL_QUIET) )
+    static SHCreateItemFromParsingName_t
+        s_pfnSHCreateItemFromParsingName = (SHCreateItemFromParsingName_t)-1;
+    if ( s_pfnSHCreateItemFromParsingName == (SHCreateItemFromParsingName_t)-1 )
     {
-        wxDL_INIT_FUNC(pfn, SHCreateItemFromParsingName, dllShell32);
+        wxDynamicLibrary dllShell32;
+        if ( dllShell32.Load(wxS("shell32.dll"), wxDL_VERBATIM | wxDL_QUIET) )
+        {
+            wxDL_INIT_FUNC(s_pfn, SHCreateItemFromParsingName, dllShell32);
+        }
+
+        if ( !s_pfnSHCreateItemFromParsingName )
+        {
+            wxLogLastError(wxS("SHCreateItemFromParsingName() not found"));
+        }
     }
 
-    if ( !pfnSHCreateItemFromParsingName )
+    if ( !s_pfnSHCreateItemFromParsingName )
     {
-        wxLogLastError(wxS("SHCreateItemFromParsingName() not found"));
+        // There is nothing we can do and the error was already reported.
         return;
     }
 
     wxCOMPtr<IShellItem> folder;
-    hr = pfnSHCreateItemFromParsingName(defaultPath.wc_str(),
-                                        NULL,
-                                        wxIID_PPV_ARGS(IShellItem,
-                                                       &folder));
+    hr = s_pfnSHCreateItemFromParsingName
+         (
+            defaultPath.wc_str(),
+            NULL,
+            wxIID_PPV_ARGS(IShellItem, &folder)
+         );
 
     // Failing to parse the folder name or set it is not really an error,
     // we'll just ignore the initial directory in this case, but we should
