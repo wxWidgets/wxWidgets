@@ -79,16 +79,13 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
     // (e.g. ILC_COLOR16) shows completely broken bitmaps
     flags |= ILC_COLOR32;
 
-    m_useMask = mask;
+    // we also need to always set ILC_MASK because, surprisingly, without it,
+    // completely transparent bitmaps, i.e. those with wxALPHA_TRANSPARENT
+    // value of alpha for all their pixels, don't work and appear completely
+    // black when drawn
+    flags |= ILC_MASK;
 
-    // For comctl32.dll < 6 always use masks as it doesn't support alpha.
-    //
-    // We also have to use masks when we don't have wxImage and wxDIB that are
-    // needed to handle alpha.
-#if wxUSE_WXDIB && wxUSE_IMAGE
-    if ( wxApp::GetComCtl32Version() < 600 )
-#endif
-        flags |= ILC_MASK;
+    m_useMask = mask;
 
     // Grow by 1, I guess this is reasonable behaviour most of the time
     m_hImageList = (WXHIMAGELIST) ImageList_Create(width, height, flags,
@@ -145,10 +142,20 @@ public:
     wxMSWBitmaps() : hbmp(NULL) { }
 
 #if wxUSE_WXDIB && wxUSE_IMAGE
+    void InitFromBitmap(HBITMAP hbmp_)
+    {
+        hbmp = hbmp_;
+        hbmpRelease.Init(hbmp);
+    }
+
     void InitFromImageWithAlpha(const wxImage& img)
     {
-        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-        hbmpRelease.Init(hbmp);
+        // wxBitmap normally stores alpha in pre-multiplied format but
+        // ImageList_Draw() does pre-multiplication internally so we need to undo
+        // the pre-multiplication here. Converting back and forth like this is, of
+        // course, very inefficient but it's better than wrong appearance so we do
+        // this for now until a better way can be found.
+        InitFromBitmap(wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach());
     }
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
 
@@ -168,12 +175,13 @@ void
 wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
                                  const wxBitmap& bitmap, const wxBitmap& mask)
 {
-    // This can be overwritten below if we need to modify the bitmap, but it
-    // doesn't cost anything to initialize the bitmap with this HBITMAP.
-    bitmaps.hbmp = GetHbitmapOf(bitmap);
+    wxMask maskToUse;
+    HBITMAP hbmpMask = NULL;
 
+    // Check what to do with alpha: first of all, we need to have wxImage and
+    // wxDIB available to work with it at all.
 #if wxUSE_WXDIB && wxUSE_IMAGE
-    if ( wxApp::GetComCtl32Version() >= 600 )
+    if ( bitmap.HasAlpha() )
     {
         wxBitmap bmp(bitmap);
 
@@ -184,46 +192,31 @@ wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
             bmp.SetMask(new wxMask(mask));
         }
 
-        if ( bmp.GetMask() )
+        // Alpha can be directly supported when using comctl32.dll v6.
+        if ( wxApp::GetComCtl32Version() >= 600 )
         {
-            // Get rid of the mask by converting it to alpha.
-            if ( bmp.HasAlpha() )
+            if ( bmp.GetMask() )
                 bmp.MSWBlendMaskWithAlpha();
+
+            wxImage img = bmp.ConvertToImage();
+            bitmaps.InitFromImageWithAlpha(img);
         }
-        else if ( m_useMask )
+        else // comctl32.dll v5
         {
-            // Create the mask from the default transparent colour if we have
-            // nothing else.
-            if ( !bmp.HasAlpha() )
-                bmp.SetMask(new wxMask(bmp, GetDefaultMaskColour()));
+            // We have to convert alpha to a mask.
+            wxImage img = bitmap.ConvertToImage();
+            img.ConvertAlphaToMask();
+            bitmaps.InitFromImageWithAlpha(img);
+
+            maskToUse.MSWCreateFromImageMask(img);
+            hbmpMask = maskToUse.GetMaskBitmap();
         }
-        else
-        {
-            // We actually don't have to do anything at all and can just use
-            // the original bitmap as is.
-            return;
-        }
-
-        // wxBitmap normally stores alpha in pre-multiplied format but
-        // ImageList_Draw() does pre-multiplication internally so we need to undo
-        // the pre-multiplication here. Converting back and forth like this is, of
-        // course, very inefficient but it's better than wrong appearance so we do
-        // this for now until a better way can be found.
-        wxImage img = bmp.ConvertToImage();
-        if ( !img.HasAlpha() )
-            img.InitAlpha();
-
-        bitmaps.InitFromImageWithAlpha(img);
-
-        // In any case we'll never use mask at the native image list level as
-        // it's incompatible with alpha and we need to use alpha.
     }
     else
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
     {
-        wxMask maskToUse;
-
-        HBITMAP hbmpMask = NULL;
+        // Just use the existing bitmap directly in this case.
+        bitmaps.hbmp = GetHbitmapOf(bitmap);
 
         // Always use mask if it is specified.
         if ( mask.IsOk() )
@@ -234,33 +227,17 @@ wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
         {
             hbmpMask = bitmap.GetMask()->GetMaskBitmap();
         }
-#if wxUSE_WXDIB && wxUSE_IMAGE
-        // We can also use alpha, but we have to convert it to a mask as it is
-        // not supported by this comctl32.dll version.
-        else if ( bitmap.HasAlpha() )
-        {
-            wxImage img = bitmap.ConvertToImage();
-            img.ConvertAlphaToMask();
-            bitmaps.InitFromImageWithAlpha(img);
-
-            maskToUse.MSWCreateFromImageMask(img);
-        }
-#endif // wxUSE_WXDIB && wxUSE_IMAGE
-        // We don't have neither mask nor alpha, only force creating the
-        // mask from colour if requested to do it.
         else if ( m_useMask )
         {
             maskToUse.Create(bitmap, GetDefaultMaskColour());
-        }
-
-        if ( !hbmpMask )
             hbmpMask = maskToUse.GetMaskBitmap();
-
-        if ( hbmpMask )
-        {
-            // windows mask convention is opposite to the wxWidgets one
-            bitmaps.hbmpMask.Init(wxInvertMask(hbmpMask));
         }
+    }
+
+    if ( hbmpMask )
+    {
+        // windows mask convention is opposite to the wxWidgets one
+        bitmaps.hbmpMask.Init(wxInvertMask(hbmpMask));
     }
 }
 
