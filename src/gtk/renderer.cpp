@@ -550,7 +550,7 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
                                       int flags)
 {
     DrawPushButton(win,dc,rect,flags);
-    DrawDropArrow(win,dc,rect);
+    DrawDropArrow(win,dc,rect,flags);
 }
 
 // Helper used by GetCheckBoxSize() and DrawCheckBox().
