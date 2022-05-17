@@ -26,6 +26,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/image.h"
+#include "wx/gtk/private/log.h"
 #include "wx/gtk/private/stylecontext.h"
 
 //-----------------------------------------------------------------------------
@@ -425,6 +426,12 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     wxNotebookPage *client = GetPage(page);
     if ( !client )
         return NULL;
+
+    // Suppress bogus assertion failures happening deep inside ATK (used by
+    // GTK) that can't be avoided in any other way, see #22176.
+    wxGTKImpl::LogFilterByMessage filterLog(
+        "gtk_notebook_get_tab_label: assertion 'list != NULL' failed"
+    );
 
     // we don't need to unparent the client->m_widget; GTK+ will do
     // that for us (and will throw a warning if we do it!)
