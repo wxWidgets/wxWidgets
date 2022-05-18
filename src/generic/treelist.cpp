@@ -672,7 +672,7 @@ wxTreeListModel::GetValue(wxVariant& variant,
         if ( image == wxWithImages::NO_IMAGE )
             image = node->m_imageClosed;
 
-        wxIcon icon = m_treelist->GetImage(image);
+        wxBitmapBundle icon = m_treelist->GetBitmapBundle(image);
 
         if ( m_treelist->HasFlag(wxTL_CHECKBOX) )
             variant << wxDataViewCheckIconText(node->m_text, icon,
