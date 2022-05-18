@@ -68,8 +68,6 @@ ImageListTestCase::ImageListTestCase()
                  : bmpRGB(32, 32, 24),
                    bmpMask(32, 32, 1)
 {
-    wxInitAllImageHandlers();
-
     {
         wxMemoryDC mdc(bmpRGB);
         mdc.SetBackground(*wxBLUE_BRUSH);
@@ -79,7 +77,15 @@ ImageListTestCase::ImageListTestCase()
     }
     REQUIRE(bmpRGB.IsOk());
 
-    bmpRGBA.LoadFile("image/wx.png", wxBITMAP_TYPE_PNG);
+    // Make a bitmap with some transparent and semi-transparent pixels.
+    wxImage imgWithAlpha(32, 32);
+    imgWithAlpha.SetAlpha();
+    unsigned char* const alpha = imgWithAlpha.GetAlpha();
+    for ( unsigned char* a = alpha; a < alpha + 32*32; ++a )
+        *a = wxALPHA_OPAQUE;
+    alpha[0] = wxALPHA_TRANSPARENT;
+    alpha[1] = wxALPHA_OPAQUE / 2;
+    bmpRGBA = wxBitmap(imgWithAlpha);
     REQUIRE(bmpRGBA.IsOk());
 
     {
@@ -103,7 +109,7 @@ ImageListTestCase::ImageListTestCase()
     bmpRGBAWithMask.SetMask(new wxMask(bmpMask));
     REQUIRE(bmpRGBAWithMask.IsOk());
 
-    ico.LoadFile("image/wx.ico", wxBITMAP_TYPE_ICO);
+    ico.CopyFromBitmap(bmpRGBWithMask);
     REQUIRE(ico.IsOk());
 
     REQUIRE(bmpRGB.HasAlpha() == false);
