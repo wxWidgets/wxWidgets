@@ -213,6 +213,30 @@ wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
         if ( !img.HasAlpha() )
             img.InitAlpha();
 
+        // There is a very special, but important in practice, case of fully
+        // transparent bitmaps: they're used to allow not specifying any image
+        // for some items. Unfortunately the native image list simply ignores
+        // alpha channel if it only contains 0 values, apparently considering
+        // the bitmap to be 24bpp in this case. And there doesn't seem to be
+        // any way to avoid this, i.e. tell it to really not draw anything, so
+        // we use this horrible hack to force it to take alpha into account by
+        // setting at least one pixel to a non-0 value.
+        unsigned char* alpha = img.GetAlpha();
+        unsigned char* const end = alpha + img.GetWidth()*img.GetHeight();
+        for ( ; alpha < end; ++alpha )
+        {
+            if ( *alpha != wxALPHA_TRANSPARENT )
+                break;
+        }
+
+        if ( alpha == end )
+        {
+            // We haven't found any non-transparent pixels, so make one of them
+            // (we arbitrarily choose the bottom right one) almost, but not
+            // quite, transparent.
+            alpha[-1] = 1; // As transparent as possible, but not transparent.
+        }
+
         bitmaps.InitFromImageWithAlpha(img);
 
         // In any case we'll never use mask at the native image list level as
