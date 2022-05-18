@@ -138,8 +138,8 @@ public:
               (to load a cursor from a .ico icon file) and @c wxBITMAP_TYPE_ANI
               (to load a cursor from a .ani icon file).
             - under MacOS, it defaults to @c wxBITMAP_TYPE_MACCURSOR_RESOURCE;
-              when specifying a string resource name, first 'png' and then 'cur'
-              image are searched in resources.
+              when specifying a string resource name, first a PNG and then a CUR
+              image is searched in resources.
             - under GTK, it defaults to @c wxBITMAP_TYPE_XPM.
               See the wxCursor(const wxImage& image) ctor for more info.
             - under X11, it defaults to @c wxBITMAP_TYPE_XPM.
