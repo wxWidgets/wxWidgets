@@ -116,7 +116,7 @@ bool wxBitmapComboBoxBase::OnAddBitmap(const wxBitmapBundle& bitmap)
 {
     if ( bitmap.IsOk() )
     {
-        wxSize bmpDefaultSize = bitmap.GetPreferredLogicalSizeFor(GetControl());
+        wxSize bmpDefaultSize = bitmap.GetPreferredBitmapSizeAtScale(1.0);
         int width = bmpDefaultSize.GetWidth();
         int height = bmpDefaultSize.GetHeight();
 
@@ -219,7 +219,7 @@ void wxBitmapComboBoxBase::DrawItem(wxDC& dc,
 
         // Draw the image centered
         dc.DrawBitmap(bmp,
-                      rect.x + (m_usedImgSize.x-w)/2 + imgSpacingLeft,
+                      rect.x + (win->FromDIP(m_usedImgSize.x)-w)/2 + imgSpacingLeft,
                       rect.y + (rect.height-h)/2,
                       true);
     }
@@ -234,7 +234,8 @@ wxCoord wxBitmapComboBoxBase::MeasureItem(size_t WXUNUSED(item)) const
 {
     if ( m_usedImgSize.y >= 0 )
     {
-        int imgHeightArea = m_usedImgSize.y + 2;
+        const wxWindow* win = const_cast<wxBitmapComboBoxBase*>(this)->GetControl();
+        int imgHeightArea = win->FromDIP(m_usedImgSize.y) + 2;
         return imgHeightArea > m_fontHeight ? imgHeightArea : m_fontHeight;
     }
 
