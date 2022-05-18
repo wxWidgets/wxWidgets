@@ -128,7 +128,17 @@ private:
     wxDECLARE_NO_COPY_CLASS(LogFilterByMessage);
 };
 
-#endif // wxHAS_GLIB_LOG_WRITER
+#else // !wxHAS_GLIB_LOG_WRITER
+
+// Provide stubs to avoid having to use preprocessor checks in the code using
+// these classes.
+class LogFilterByMessage
+{
+public:
+    explicit LogFilterByMessage(const char* WXUNUSED(message)) { }
+};
+
+#endif // wxHAS_GLIB_LOG_WRITER/!wxHAS_GLIB_LOG_WRITER
 
 } // namespace wxGTKImpl
 
