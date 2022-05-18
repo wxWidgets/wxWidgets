@@ -51,14 +51,25 @@ static bool HasMaskOrAlpha(const wxBitmap& bmp)
 }
 
 // ----------------------------------------------------------------------------
-// tests
+// test fixture
 // ----------------------------------------------------------------------------
 
-TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
+class ImageListTestCase
+{
+protected:
+    ImageListTestCase();
+
+    wxBitmap bmpRGB, bmpRGBA, bmpMask,
+             bmpRGBWithMask, bmpRGBAWithMask;
+    wxIcon ico;
+};
+
+ImageListTestCase::ImageListTestCase()
+                 : bmpRGB(32, 32, 24),
+                   bmpMask(32, 32, 1)
 {
     wxInitAllImageHandlers();
 
-    wxBitmap bmpRGB(32, 32, 24);
     {
         wxMemoryDC mdc(bmpRGB);
         mdc.SetBackground(*wxBLUE_BRUSH);
@@ -68,11 +79,9 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
     }
     REQUIRE(bmpRGB.IsOk());
 
-    wxBitmap bmpRGBA;
     bmpRGBA.LoadFile("image/wx.png", wxBITMAP_TYPE_PNG);
     REQUIRE(bmpRGBA.IsOk());
 
-    wxBitmap bmpMask(32, 32, 1);
     {
         wxMemoryDC mdc(bmpMask);
 #if wxUSE_GRAPHICS_CONTEXT
@@ -86,15 +95,14 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         mdc.DrawRectangle(0, 0, 16, 32);
     }
 
-    wxBitmap bmpRGBWithMask(bmpRGB);
+    bmpRGBWithMask = bmpRGB;
     bmpRGBWithMask.SetMask(new wxMask(bmpMask));
     REQUIRE(bmpRGBWithMask.IsOk());
 
-    wxBitmap bmpRGBAWithMask(bmpRGBA);
+    bmpRGBAWithMask = bmpRGBA;
     bmpRGBAWithMask.SetMask(new wxMask(bmpMask));
     REQUIRE(bmpRGBAWithMask.IsOk());
 
-    wxIcon ico;
     ico.LoadFile("image/wx.ico", wxBITMAP_TYPE_ICO);
     REQUIRE(ico.IsOk());
 
@@ -109,7 +117,15 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
 
     REQUIRE(bmpRGBAWithMask.HasAlpha() == true);
     REQUIRE(bmpRGBAWithMask.GetMask() != NULL);
+}
 
+// ----------------------------------------------------------------------------
+// tests
+// ----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(ImageListTestCase,
+                 "ImageList:WithMask", "[imagelist][withmask]")
+{
     wxImageList il(32, 32, true);
 
     SECTION("Add RGB image to list")
@@ -454,62 +470,9 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
     }
 }
 
-TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
+TEST_CASE_METHOD(ImageListTestCase,
+                 "ImageList:NoMask", "[imagelist][nomask]")
 {
-    wxInitAllImageHandlers();
-
-    wxBitmap bmpRGB(32, 32, 24);
-    {
-        wxMemoryDC mdc(bmpRGB);
-        mdc.SetBackground(*wxBLUE_BRUSH);
-        mdc.Clear();
-        mdc.SetBrush(*wxRED_BRUSH);
-        mdc.DrawRectangle(4, 4, 24, 24);
-    }
-    REQUIRE(bmpRGB.IsOk());
-
-    wxBitmap bmpRGBA;
-    bmpRGBA.LoadFile("image/wx.png", wxBITMAP_TYPE_PNG);
-    REQUIRE(bmpRGBA.IsOk());
-
-    wxBitmap bmpMask(32, 32, 1);
-    {
-        wxMemoryDC mdc(bmpMask);
-#if wxUSE_GRAPHICS_CONTEXT
-        wxGraphicsContext* gc = mdc.GetGraphicsContext();
-        if ( gc )
-            gc->SetAntialiasMode(wxANTIALIAS_NONE);
-#endif //wxUSE_GRAPHICS_CONTEXT
-        mdc.SetBackground(*wxBLACK_BRUSH);
-        mdc.Clear();
-        mdc.SetBrush(*wxWHITE_BRUSH);
-        mdc.DrawRectangle(0, 0, 16, 32);
-    }
-
-    wxBitmap bmpRGBWithMask(bmpRGB);
-    bmpRGBWithMask.SetMask(new wxMask(bmpMask));
-    REQUIRE(bmpRGBWithMask.IsOk());
-
-    wxBitmap bmpRGBAWithMask(bmpRGBA);
-    bmpRGBAWithMask.SetMask(new wxMask(bmpMask));
-    REQUIRE(bmpRGBAWithMask.IsOk());
-
-    wxIcon ico;
-    ico.LoadFile("image/wx.ico", wxBITMAP_TYPE_ICO);
-    REQUIRE(ico.IsOk());
-
-    REQUIRE(bmpRGB.HasAlpha() == false);
-    REQUIRE(bmpRGB.GetMask() == NULL);
-
-    REQUIRE(bmpRGBWithMask.HasAlpha() == false);
-    REQUIRE(bmpRGBWithMask.GetMask() != NULL);
-
-    REQUIRE(bmpRGBA.HasAlpha() == true);
-    REQUIRE(bmpRGBA.GetMask() == NULL);
-
-    REQUIRE(bmpRGBAWithMask.HasAlpha() == true);
-    REQUIRE(bmpRGBAWithMask.GetMask() != NULL);
-
     wxImageList il(32, 32, false);
 
     SECTION("Add RGB image to list")
