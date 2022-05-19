@@ -1794,8 +1794,6 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
         SetWindowStyle((GetWindowStyle() & ~wxMINIMIZE_BOX) | wxFRAME_NO_TASKBAR);
     }
 
-    Layout();
-
     m_printPreview->AdjustScrollbars(m_previewCanvas);
     m_previewCanvas->SetFocus();
     m_controlBar->SetFocus();
