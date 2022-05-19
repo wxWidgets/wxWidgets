@@ -1765,8 +1765,8 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
 
     wxBoxSizer* const sizer = new wxBoxSizer( wxVERTICAL );
 
-    sizer->Add( m_controlBar, wxSizerFlags().Expand().Border() );
-    sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
+    sizer->Add( m_controlBar, wxSizerFlags().Expand() );
+    sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand() );
 
     SetSizer( sizer );
     sizer->Fit(this);
