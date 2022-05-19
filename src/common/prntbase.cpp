@@ -936,6 +936,10 @@ wxScrolledWindow(parent, wxID_ANY, pos, size, style | wxFULL_REPAINT_ON_RESIZE, 
     SetBackgroundColour(wxSystemSettings::GetColour(colourIndex));
 
     SetScrollbars(10, 10, 100, 100);
+
+    // Use some reasonable default size for this window, roughly proportional
+    // to the paper sheet.
+    SetInitialSize(wxSize(600, 750));
 }
 
 wxPreviewCanvas::~wxPreviewCanvas()
@@ -1486,7 +1490,6 @@ public:
     ~SizerWithButtons()
     {
         m_parent->SetSizer(m_sizer);
-        m_sizer->Fit(m_parent);
     }
 
 
@@ -1766,6 +1769,7 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
 
     SetSizer( sizer );
+    sizer->Fit(this);
 
     m_modalityKind = kind;
     switch ( m_modalityKind )
