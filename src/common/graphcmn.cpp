@@ -835,6 +835,7 @@ void wxGraphicsContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPo
     path.MoveToPoint(points[0].m_x, points[0].m_y);
     for ( size_t i = 1; i < n; ++i)
         path.AddLineToPoint( points[i].m_x, points[i].m_y );
+    path.CloseSubpath();
     DrawPath( path , fillStyle);
 }
 
