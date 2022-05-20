@@ -1528,9 +1528,13 @@ public:
     // as everything else added after it will be added on the right side too.
     void AddAtEnd(wxWindow *win)
     {
+        // Ensure there is at least the same gap before the final button as
+        // between the other groups.
+        m_sizer->AddSpacer(wxRound(2*wxSizerFlags::GetDefaultBorderFractional()));
+
         m_sizer->AddStretchSpacer();
         m_sizer->Add(win,
-                     wxSizerFlags().Border(wxTOP | wxBOTTOM | wxRIGHT).Center());
+                     wxSizerFlags().Border().Center());
     }
 
     // Indicates the end of a group of buttons, a separator will be added after
