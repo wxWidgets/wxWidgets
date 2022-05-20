@@ -4245,8 +4245,9 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
 
                 // if mouse is on the near part of the target row,
                 // insert it before it, not after
-                if (coord <= oper.GetLineStartPos(this, lineAt) +
-                             oper.GetLineSize(this, lineAt) / 2 )
+                if ( posNew > 0 &&
+                     ( coord <= oper.GetLineStartPos(this, lineAt) +
+                                oper.GetLineSize(this, lineAt) / 2 ) )
                     posNew--;
 
                 oper.DoEndMove(this, posNew);
