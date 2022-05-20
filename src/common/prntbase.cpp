@@ -1500,7 +1500,7 @@ public:
         {
             m_needsSeparator = false;
 
-            m_sizer->AddSpacer(2*wxSizerFlags::GetDefaultBorder());
+            m_sizer->AddSpacer(wxRound(2*wxSizerFlags::GetDefaultBorderFractional()));
         }
 
         m_hasContents = true;
@@ -1868,7 +1868,7 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_currentPage = 1;
     m_currentZoom = 70;
     m_topMargin =
-    m_leftMargin = 2*wxSizerFlags::GetDefaultBorder();
+    m_leftMargin = wxRound(2*wxSizerFlags::GetDefaultBorderFractional());
     m_pageWidth = 0;
     m_pageHeight = 0;
     m_printingPrepared = false;
