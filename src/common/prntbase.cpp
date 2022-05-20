@@ -1771,6 +1771,13 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     SetSizer( sizer );
     sizer->Fit(this);
 
+    // We don't want to restrict shrinking the window vertically as it might be
+    // too tall (see SetInitialSize() call in wxPreviewCanvas ctor), but we do
+    // want to make it at least as wide as the control bar, as otherwise the
+    // buttons wouldn't fit, and restricting it to at least its height
+    // vertically is also quite reasonable.
+    SetSizeHints(m_controlBar->GetBestSize());
+
     m_modalityKind = kind;
     switch ( m_modalityKind )
     {
