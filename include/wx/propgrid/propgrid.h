@@ -1463,7 +1463,7 @@ protected:
     wxBitmap            *m_expandbmp, *m_collbmp;
 #endif
 
-    wxCursor            *m_cursorSizeWE;
+    wxCursor            m_cursorSizeWE;
 
     // wxWindow pointers to editor control(s).
     wxWindow            *m_wndEditor;

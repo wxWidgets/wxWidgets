@@ -438,7 +438,7 @@ void wxPropertyGrid::Init2()
 #endif
 
     m_curcursor = wxCURSOR_ARROW;
-    m_cursorSizeWE = new wxCursor( wxCURSOR_SIZEWE );
+    m_cursorSizeWE = wxCursor(wxCURSOR_SIZEWE);
 
     // adjust bitmap icon y position so they are centered
     m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
@@ -565,8 +565,6 @@ wxPropertyGrid::~wxPropertyGrid()
 
     if ( m_iFlags & wxPG_FL_CREATEDSTATE )
         delete m_pState;
-
-    delete m_cursorSizeWE;
 
 #ifndef wxPG_ICON_WIDTH
     delete m_expandbmp;
@@ -3852,12 +3850,8 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
 {
     if ( type == m_curcursor && !override ) return;
 
-    wxCursor* cursor = &wxPG_DEFAULT_CURSOR;
-
-    if ( type == wxCURSOR_SIZEWE )
-        cursor = m_cursorSizeWE;
-
-    SetCursor( *cursor );
+    wxCursor cursor = (type == wxCURSOR_SIZEWE) ? m_cursorSizeWE : wxPG_DEFAULT_CURSOR;
+    SetCursor(cursor);
 
     m_curcursor = type;
 }
