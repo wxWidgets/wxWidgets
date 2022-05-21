@@ -2801,7 +2801,7 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
                                             int splitterIndex,
                                             int flags )
 {
-    if ( ( newxpos < wxPG_DRAG_MARGIN ) )
+    if ( newxpos < wxPG_DRAG_MARGIN )
         return;
 
     if ( flags & wxPG_SPLITTER_FROM_EVENT )
@@ -4926,10 +4926,10 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                 if ( !p->IsCategory() )
                     nx -= IN_CELL_EXPANDER_BUTTON_X_ADJUST;
 
-                if ( (nx >= m_gutterWidth && nx < (m_gutterWidth+m_iconWidth)) )
+                if ( nx >= m_gutterWidth && nx < (m_gutterWidth+m_iconWidth) )
                 {
                     int y2 = y % m_lineHeight;
-                    if ( (y2 >= m_buttonSpacingY && y2 < (m_buttonSpacingY+m_iconHeight)) )
+                    if ( y2 >= m_buttonSpacingY && y2 < (m_buttonSpacingY+m_iconHeight) )
                     {
                         // On click on expander button, expand/collapse
                         if ( p->IsExpanded() )
@@ -5430,10 +5430,10 @@ void wxPropertyGrid::OnMouseEntry( wxMouseEvent &event )
         // Get real cursor position
         wxPoint pt = ScreenToClient(::wxGetMousePosition());
 
-        if ( ( pt.x <= 0 || pt.y <= 0 || pt.x >= m_width || pt.y >= m_height ) )
+        if ( pt.x <= 0 || pt.y <= 0 || pt.x >= m_width || pt.y >= m_height )
         {
             {
-                if ( (m_iFlags & wxPG_FL_MOUSE_INSIDE) )
+                if ( m_iFlags & wxPG_FL_MOUSE_INSIDE )
                 {
                     m_iFlags &= ~(wxPG_FL_MOUSE_INSIDE);
                 }
