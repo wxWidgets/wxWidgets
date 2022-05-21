@@ -56,8 +56,8 @@ case WXPRINT_PREVIEW:
     wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout);
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this,
                                                "Demo Print Preview");
-    frame->Centre(wxBOTH);
     frame->Initialize();
+    frame->Centre(wxBOTH);
     frame->Show(true);
     break;
 }

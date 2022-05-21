@@ -391,8 +391,8 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     }
 
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview");
-    frame->Centre(wxBOTH);
     frame->InitializeWithModality(m_previewModality);
+    frame->Centre(wxBOTH);
     frame->Show();
 }
 
@@ -425,8 +425,8 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview");
-    frame->Centre(wxBOTH);
     frame->Initialize();
+    frame->Centre(wxBOTH);
     frame->Show();
 }
 
