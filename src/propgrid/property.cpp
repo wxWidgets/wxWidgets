@@ -2932,7 +2932,7 @@ wxString wxPropertyCategory::GetValueAsString( int argFlags ) const
 static int DoGetTextExtent(const wxWindow* wnd, const wxString& label, const wxFont& font)
 {
     int x = 0, y = 0;
-    wnd->GetTextExtent(label, &x, &y, 0, 0, &font);
+    wnd->GetTextExtent(label, &x, &y, NULL, NULL, &font);
     return x;
 }
 

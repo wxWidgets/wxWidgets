@@ -769,7 +769,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         if ( rect.width < 0 )
         {
             wxCoord x, y;
-            pCb->GetTextExtent(text, &x, &y, 0, 0);
+            pCb->GetTextExtent(text, &x, &y);
             rect.width = cis.x + wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2 + 9 + x;
         }
 
