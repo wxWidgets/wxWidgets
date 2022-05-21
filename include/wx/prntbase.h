@@ -444,6 +444,8 @@ protected:
 private:
     void OnChar(wxKeyEvent& event);
 
+    const wxSize m_initialSize;
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxPreviewFrame);
     wxDECLARE_NO_COPY_CLASS(wxPreviewFrame);

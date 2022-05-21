@@ -1702,7 +1702,8 @@ void wxPreviewFrame::OnChar(wxKeyEvent &event)
 
 wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxWindow *parent, const wxString& title,
                                const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-wxFrame(parent, wxID_ANY, title, pos, size, style, name)
+wxFrame(parent, wxID_ANY, title, pos, size, style, name),
+    m_initialSize(size)
 {
     m_printPreview = preview;
     m_controlBar = NULL;
@@ -1773,7 +1774,15 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand() );
 
     SetSizer( sizer );
-    sizer->Fit(this);
+
+    // Respect the user-specified size, if any, but use the best appropriate
+    // size by default if none was explicitly given.
+    if ( !m_initialSize.IsFullySpecified() )
+    {
+        wxSize size = m_initialSize;
+        size.SetDefaults(sizer->ComputeFittingWindowSize(this));
+        SetSize(size);
+    }
 
     // We don't want to restrict shrinking the window vertically as it might be
     // too tall (see SetInitialSize() call in wxPreviewCanvas ctor), but we do
