@@ -4558,11 +4558,7 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
          !m_pState )
         return;
 
-    //
-    // If virtual height was changed, then recalculate editor control position(s)
-    if ( m_pState->m_vhCalcPending )
-        CorrectEditorWidgetPosY();
-
+    int h0 = m_pState->m_virtualHeight;
     m_pState->EnsureVirtualHeight();
 
     wxASSERT_LEVEL_2_MSG(
@@ -4576,6 +4572,11 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     int h = m_pState->m_virtualHeight;
     // Now adjust virtual size.
     SetVirtualSize(w, h);
+    // If virtual height was changed, then recalculate editor control position(s)
+    if ( h != h0 )
+    {
+        CorrectEditorWidgetPosY();
+    }
     if ( forceXPos != -1 )
     {
         Scroll(forceXPos, wxDefaultCoord);
