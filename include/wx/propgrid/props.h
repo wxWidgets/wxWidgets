@@ -17,14 +17,14 @@
 
 // -----------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_PROPGRID wxPGArrayEditorDialog;
-
 #include "wx/propgrid/property.h"
 
 #include "wx/filename.h"
 #include "wx/dialog.h"
 #include "wx/textctrl.h"
 #include "wx/valtext.h"
+
+class WXDLLIMPEXP_FWD_PROPGRID wxPGArrayEditorDialog;
 
 // -----------------------------------------------------------------------
 
