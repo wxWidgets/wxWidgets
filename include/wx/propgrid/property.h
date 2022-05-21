@@ -1678,7 +1678,7 @@ public:
     // based on user input.
     // This method is const since it doesn't actually modify value, but posts
     // given variant as pending value, stored in wxPropertyGrid.
-    void SetValueInEvent( wxVariant value ) const;
+    void SetValueInEvent( const wxVariant& value ) const;
 
     // Call this to set value of the property.
     // Unlike methods in wxPropertyGrid, this does not automatically update
