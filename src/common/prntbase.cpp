@@ -1780,7 +1780,7 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     // want to make it at least as wide as the control bar, as otherwise the
     // buttons wouldn't fit, and restricting it to at least its height
     // vertically is also quite reasonable.
-    SetSizeHints(m_controlBar->GetBestSize());
+    SetSizeHints(ClientToWindowSize(m_controlBar->GetBestSize()));
 
     m_modalityKind = kind;
     switch ( m_modalityKind )
