@@ -1630,13 +1630,6 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::Refresh(bool eraseBackground, const wxRect* rect )
-{
-    wxPanel::Refresh(eraseBackground, rect);
-}
-
-// -----------------------------------------------------------------------
-
 void wxPropertyGridManager::RefreshProperty( wxPGProperty* p )
 {
     wxASSERT( p->IsRoot() ||
