@@ -26,11 +26,11 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridHitTestResult
     friend class wxPropertyGridPageState;
 public:
     wxPropertyGridHitTestResult()
+        : m_property(NULL)
+        , m_column(-1)
+        , m_splitter(-1)
+        , m_splitterHitOffset(0)
     {
-        m_property = NULL;
-        m_column = -1;
-        m_splitter = -1;
-        m_splitterHitOffset = 0;
     }
 
     ~wxPropertyGridHitTestResult()

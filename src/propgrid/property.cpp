@@ -354,8 +354,8 @@ wxSize wxPGDefaultRenderer::GetImageSize( const wxPGProperty* property,
 
 wxPGCellData::wxPGCellData()
     : wxObjectRefData()
+    , m_hasValidText(false)
 {
-    m_hasValidText = false;
 }
 
 // -----------------------------------------------------------------------

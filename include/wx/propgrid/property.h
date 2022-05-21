@@ -648,12 +648,13 @@ public:
     wxPGChoiceEntry();
     wxPGChoiceEntry(const wxPGChoiceEntry& other)
         : wxPGCell(other)
+        , m_value(other.m_value)
     {
-        m_value = other.m_value;
     }
     wxPGChoiceEntry( const wxString& label,
                      int value = wxPG_INVALID_VALUE )
-        : wxPGCell(), m_value(value)
+        : wxPGCell()
+        , m_value(value)
     {
         SetText(label);
     }

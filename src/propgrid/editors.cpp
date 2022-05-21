@@ -492,11 +492,11 @@ public:
 
     wxPGDoubleClickProcessor( wxOwnerDrawnComboBox* combo, wxBoolProperty* property )
         : wxEvtHandler()
+        , m_timeLastMouseUp(0)
+        , m_combo(combo)
+        , m_property(property)
+        , m_downReceived(false)
     {
-        m_timeLastMouseUp = 0;
-        m_combo = combo;
-        m_property = property;
-        m_downReceived = false;
     }
 
 protected:
@@ -575,8 +575,8 @@ public:
 
     wxPGComboBox()
         : wxOwnerDrawnComboBox()
+        , m_dclickProcessor(NULL)
     {
-        m_dclickProcessor = NULL;
     }
 
     ~wxPGComboBox()
@@ -1482,11 +1482,11 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize )
         : wxControl(parent,id,pos,size,wxBORDER_NONE|wxWANTS_CHARS)
+        , m_state(0)
     {
         // Due to SetOwnFont stuff necessary for GTK+ 1.2, we need to have this
         SetFont( parent->GetFont() );
 
-        m_state = 0;
         SetBoxHeight(12);
         SetBackgroundStyle( wxBG_STYLE_PAINT );
     }

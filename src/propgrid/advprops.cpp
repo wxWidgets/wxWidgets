@@ -113,10 +113,9 @@ class wxPGSpinButton : public wxSpinButton
 {
 public:
     wxPGSpinButton() : wxSpinButton()
+        , m_hasCapture(false)
+        , m_spins(1)
     {
-        m_hasCapture = false;
-        m_spins = 1;
-
         Bind(wxEVT_LEFT_DOWN, &wxPGSpinButton::OnMouseLeftDown, this);
         Bind(wxEVT_LEFT_UP, &wxPGSpinButton::OnMouseLeftUp, this);
         Bind(wxEVT_MOTION, &wxPGSpinButton::OnMouseMove, this);

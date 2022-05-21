@@ -334,8 +334,8 @@ public:
 
     wxPGCommonValue( const wxString& label, wxPGCellRenderer* renderer )
         : m_label(label)
+        , m_renderer(renderer)
     {
-        m_renderer = renderer;
         renderer->IncRef();
     }
     virtual ~wxPGCommonValue()
@@ -408,9 +408,9 @@ class WXDLLIMPEXP_PROPGRID wxPGValidationInfo
     friend class wxPropertyGrid;
 public:
     wxPGValidationInfo()
+        : m_failureBehavior(0)
+        , m_isFailing(false)
     {
-        m_failureBehavior = 0;
-        m_isFailing = false;
     }
 
     ~wxPGValidationInfo()

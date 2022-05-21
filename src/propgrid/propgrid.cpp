@@ -166,7 +166,9 @@ wxPGGlobalVarsClass* wxPGGlobalVars = NULL;
 
 wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     // Prepare some shared variants
-    : m_vEmptyString(wxString())
+    : m_fontFamilyChoices(NULL)
+    , m_defaultRenderer(new wxPGDefaultRenderer())
+    , m_vEmptyString(wxString())
     , m_vZero(0L)
     , m_vMinusOne(-1L)
     , m_vTrue(true)
@@ -184,6 +186,10 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
 #if wxPG_COMPATIBILITY_1_4
     , m_strInlineHelp(wxS("InlineHelp"))
 #endif
+    , m_autoGetTranslation(false)
+    , m_offline(0)
+    , m_extraStyle(0)
+    , m_warnings(0)
 {
     wxPGProperty::sm_wxPG_LABEL = new wxString(wxPG_LABEL_STRING);
 
@@ -191,18 +197,6 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     m_boolChoices.Add(_("False"));
     /* TRANSLATORS: Name of Boolean true value */
     m_boolChoices.Add(_("True"));
-
-    m_fontFamilyChoices = NULL;
-
-    m_defaultRenderer = new wxPGDefaultRenderer();
-
-    m_autoGetTranslation = false;
-
-    m_offline = 0;
-
-    m_extraStyle = 0;
-
-    m_warnings = 0;
 }
 
 
@@ -6338,8 +6332,8 @@ void wxPropertyGridEvent::Init()
 
 wxPropertyGridEvent::wxPropertyGridEvent(wxEventType commandType, int id)
     : wxCommandEvent(commandType,id)
+    , m_property(NULL)
 {
-    m_property = NULL;
     Init();
 }
 
@@ -6347,15 +6341,15 @@ wxPropertyGridEvent::wxPropertyGridEvent(wxEventType commandType, int id)
 
 wxPropertyGridEvent::wxPropertyGridEvent(const wxPropertyGridEvent& event)
     : wxCommandEvent(event)
+    , m_property(event.m_property)
+    , m_pg(event.m_pg)
+    , m_validationInfo(event.m_validationInfo)
+    , m_canVeto(event.m_canVeto)
+    , m_wasVetoed(event.m_wasVetoed)
 {
     m_eventType = event.GetEventType();
     m_eventObject = event.m_eventObject;
-    m_pg = event.m_pg;
     OnPropertyGridSet();
-    m_property = event.m_property;
-    m_validationInfo = event.m_validationInfo;
-    m_canVeto = event.m_canVeto;
-    m_wasVetoed = event.m_wasVetoed;
 }
 
 // -----------------------------------------------------------------------
@@ -6408,9 +6402,9 @@ wxEvent* wxPropertyGridEvent::Clone() const
 // -----------------------------------------------------------------------
 
 wxPropertyGridPopulator::wxPropertyGridPopulator()
+    : m_pg(NULL)
+    , m_state(NULL)
 {
-    m_state = NULL;
-    m_pg = NULL;
     wxPGGlobalVars->m_offline++;
 }
 

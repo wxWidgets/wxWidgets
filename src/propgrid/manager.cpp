@@ -333,10 +333,10 @@ wxEND_EVENT_TABLE()
 
 wxPropertyGridPage::wxPropertyGridPage()
     : wxEvtHandler(), wxPropertyGridInterface(), wxPropertyGridPageState()
+    , m_manager(NULL)
+    , m_isDefault(false)
 {
     m_pState = this; // wxPropertyGridInterface to point to State
-    m_manager = NULL;
-    m_isDefault = false;
 }
 
 wxPropertyGridPage::~wxPropertyGridPage()
@@ -395,10 +395,10 @@ class wxPGHeaderCtrl : public wxHeaderCtrl
 {
 public:
     wxPGHeaderCtrl(wxPropertyGridManager* manager, wxWindowID id, const wxPoint& pos,
-                   const wxSize& size, long style) :
-        wxHeaderCtrl(manager, id, pos, size, style)
+                   const wxSize& size, long style)
+        : wxHeaderCtrl(manager, id, pos, size, style)
+        , m_manager(manager)
     {
-        m_manager = manager;
         EnsureColumnCount(2);
 
         // Seed titles with defaults

@@ -67,8 +67,8 @@ public:
     // Constructor.
     wxPGEditor()
         : wxObject()
+        , m_clientData(NULL)
     {
-        m_clientData = NULL;
     }
 
     // Destructor.
@@ -418,8 +418,8 @@ class WXDLLIMPEXP_PROPGRID wxPGEditorDialogAdapter : public wxObject
 public:
     wxPGEditorDialogAdapter()
         : wxObject()
+        , m_clientData(NULL)
     {
-        m_clientData = NULL;
     }
 
     virtual ~wxPGEditorDialogAdapter() { }
