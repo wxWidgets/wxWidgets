@@ -1460,7 +1460,7 @@ protected:
     virtual void DoEnable(bool enable) wxOVERRIDE;
 
 #ifndef wxPG_ICON_WIDTH
-    wxBitmap            *m_expandbmp, *m_collbmp;
+    wxBitmap            m_expandbmp, m_collbmp;
 #endif
 
     wxCursor            m_cursorSizeWE;

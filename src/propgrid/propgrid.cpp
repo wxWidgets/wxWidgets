@@ -364,8 +364,6 @@ void wxPropertyGrid::Init1()
     m_doubleBuffer = NULL;
 
 #ifndef wxPG_ICON_WIDTH
-    m_expandbmp = NULL;
-    m_collbmp = NULL;
     m_iconWidth = 11;
     m_iconHeight = 11;
 #else
@@ -428,13 +426,13 @@ void wxPropertyGrid::Init2()
 
 #ifndef wxPG_ICON_WIDTH
     // create two bitmap nodes for drawing
-    m_expandbmp = new wxBitmap(expand_xpm);
-    m_collbmp = new wxBitmap(collapse_xpm);
+    m_expandbmp = wxBitmap(expand_xpm);
+    m_collbmp = wxBitmap(collapse_xpm);
 
     // calculate average font height for bitmap centering
 
-    m_iconWidth = m_expandbmp->GetWidth();
-    m_iconHeight = m_expandbmp->GetHeight();
+    m_iconWidth = m_expandbmp.GetWidth();
+    m_iconHeight = m_expandbmp.GetHeight();
 #endif
 
     m_curcursor = wxCURSOR_ARROW;
@@ -565,11 +563,6 @@ wxPropertyGrid::~wxPropertyGrid()
 
     if ( m_iFlags & wxPG_FL_CREATEDSTATE )
         delete m_pState;
-
-#ifndef wxPG_ICON_WIDTH
-    delete m_expandbmp;
-    delete m_collbmp;
-#endif
 
     // Delete common value records
     for ( i=0; i<m_commonValues.size(); i++ )
@@ -1947,7 +1940,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
     int _y = r.y+(m_iconWidth/2);
     dc.DrawLine(r.x+2,_y,r.x+m_iconWidth-2,_y);
 #else
-    wxBitmap* bmp;
+    wxBitmap bmp;
 #endif
 
     if ( property->IsExpanded() )
@@ -1991,7 +1984,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
 #elif wxPG_ICON_WIDTH
     //
 #else
-    dc.DrawBitmap( *bmp, r.x, r.y, true );
+    dc.DrawBitmap( bmp, r.x, r.y, true );
 #endif
 }
 
