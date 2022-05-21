@@ -212,13 +212,9 @@ wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
         delete ((wxValidator*)m_arrValidators[i]);
 #endif
 
-    //
-    // Destroy value type class instances.
-    wxPGHashMapS2P::iterator vt_it;
-
     // Destroy editor class instances.
     // iterate over all the elements in the class
-    for( vt_it = m_mapEditorClasses.begin(); vt_it != m_mapEditorClasses.end(); ++vt_it )
+    for( wxPGHashMapS2P::iterator vt_it = m_mapEditorClasses.begin(); vt_it != m_mapEditorClasses.end(); ++vt_it )
     {
         delete ((wxPGEditor*)vt_it->second);
     }
@@ -881,9 +877,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
         }
 
         // Iterate through properties in-between, and select them
-        wxPropertyGridIterator it;
-
-        for ( it = GetIterator(wxPG_ITERATE_VISIBLE, startFrom);
+        for ( wxPropertyGridIterator it = GetIterator(wxPG_ITERATE_VISIBLE, startFrom);
               !it.AtEnd();
               ++it )
         {
@@ -1756,8 +1750,7 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, const wxStri
 
     bool prev_is_slash = false;
 
-    wxString::const_iterator i;
-    for ( i = src_str.begin(); i != src_str.end(); ++i )
+    for ( wxString::const_iterator i = src_str.begin(); i != src_str.end(); ++i )
     {
         wxUniChar a = *i;
 
@@ -1807,8 +1800,7 @@ wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, const wxStri
         return dst_str;
     }
 
-    wxString::const_iterator i;
-    for ( i = src_str.begin(); i != src_str.end(); ++i )
+    for ( wxString::const_iterator i = src_str.begin(); i != src_str.end(); ++i )
     {
         wxUniChar a = *i;
 
@@ -5585,14 +5577,13 @@ void wxPropertyGrid::AddActionTrigger( int action, int keycode, int modifiers )
 
 void wxPropertyGrid::ClearActionTriggers( int action )
 {
-    wxPGHashMapI2I::iterator it;
     bool didSomething;
 
     do
     {
         didSomething = false;
 
-        for ( it = m_actionTriggers.begin();
+        for (wxPGHashMapI2I::iterator it = m_actionTriggers.begin();
               it != m_actionTriggers.end();
               ++it )
         {
@@ -6428,11 +6419,8 @@ void wxPropertyGridPopulator::SetGrid( wxPropertyGrid* pg )
 
 wxPropertyGridPopulator::~wxPropertyGridPopulator()
 {
-    //
     // Free unused sets of choices
-    wxPGHashMapS2P::iterator it;
-
-    for( it = m_dictIdChoices.begin(); it != m_dictIdChoices.end(); ++it )
+    for( wxPGHashMapS2P::iterator it = m_dictIdChoices.begin(); it != m_dictIdChoices.end(); ++it )
     {
         wxPGChoicesData* data = (wxPGChoicesData*) it->second;
         data->DecRef();
@@ -6528,13 +6516,12 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
         if ( !found )
         {
             // Parse choices string
-            wxString::const_iterator it;
             wxString label;
             wxString value;
             int state = 0;
             bool labelValid = false;
 
-            for ( it = choicesString.begin(); it != choicesString.end(); ++it )
+            for (wxString::const_iterator it = choicesString.begin(); it != choicesString.end(); ++it )
             {
                 wxUniChar c = *it;
 
