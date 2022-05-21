@@ -1569,7 +1569,7 @@ public:
     // Returns position in parent's array.
     unsigned int GetIndexInParent() const
     {
-        return (unsigned int)m_arrIndex;
+        return m_arrIndex;
     }
 
     // Hides or reveals the property.

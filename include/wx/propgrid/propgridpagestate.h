@@ -485,7 +485,7 @@ public:
     // Returns true if page is visibly displayed.
     bool IsDisplayed() const;
 
-    bool IsInNonCatMode() const { return (bool)(m_properties == m_abcArray); }
+    bool IsInNonCatMode() const { return m_properties == m_abcArray; }
 
     void DoLimitPropertyEditing( wxPGProperty* p, bool limit = true )
     {
