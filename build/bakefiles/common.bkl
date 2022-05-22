@@ -825,7 +825,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <include>$(webview_additional_include_wrl)</include>
         <include>$(webview_additional_include)</include>
         <lib-path>$(webview_additional_libdirs)</lib-path>
-        <cxxflags-mingw>$(webview_edge_pragma_warning)</cxxflags-mingw>
+        <cxxflags>$(webview_edge_pragma_warning)</cxxflags>
     </template>
 
     <!-- =============================================================== -->

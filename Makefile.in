@@ -1002,7 +1002,7 @@ MONODLL_CXXFLAGS = $(__monodll_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
 	-DLINK_LEXERS $(__webview_additional_include_wrl_p) \
 	$(__webview_additional_include_p) -DwxUSE_BASE=1 -DWXMAKINGDLL $(PIC_FLAG) \
-	$(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(WX_CXXFLAGS) $(webview_edge_pragma_warning) $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJCXXFLAGS = $(__monodll_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
@@ -1150,8 +1150,8 @@ MONOLIB_CXXFLAGS = $(__monolib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
 	-DLINK_LEXERS $(__webview_additional_include_wrl_p) \
-	$(__webview_additional_include_p) -DwxUSE_BASE=1 $(WX_CXXFLAGS) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__webview_additional_include_p) -DwxUSE_BASE=1 $(WX_CXXFLAGS) \
+	$(webview_edge_pragma_warning) $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJCXXFLAGS = $(__monolib_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
@@ -1736,8 +1736,8 @@ WEBVIEWDLL_CXXFLAGS = $(__webviewdll_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING \
 	$(__webview_additional_include_wrl_p) $(__webview_additional_include_p) \
-	-DWXUSINGDLL -DWXMAKINGDLL_WEBVIEW $(PIC_FLAG) $(WX_CXXFLAGS) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-DWXUSINGDLL -DWXMAKINGDLL_WEBVIEW $(PIC_FLAG) $(WX_CXXFLAGS) \
+	$(webview_edge_pragma_warning) $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWDLL_OBJCXXFLAGS = $(__webviewdll_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
@@ -1758,7 +1758,7 @@ WEBVIEWLIB_CXXFLAGS = $(__webviewlib_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING \
 	$(__webview_additional_include_wrl_p) $(__webview_additional_include_p) \
-	$(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(WX_CXXFLAGS) $(webview_edge_pragma_warning) $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWLIB_OBJCXXFLAGS = $(__webviewlib_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
@@ -2297,6 +2297,7 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_MONOLITHIC_1@	$(EXTRALIBS_XML) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
+@COND_TOOLKIT_MSW@webview_edge_pragma_warning = -Wno-unknown-pragmas
 @COND_PLATFORM_UNIX_0@PLUGIN_VERSION0 = $(WX_VERSION_NODOT)
 @COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = $(WX_VERSION)
 @COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
