@@ -315,7 +315,7 @@ In addition to using a method of the object generating the event itself, you
 can use a method from a completely different object as an event handler:
 
 @code
-void MyFrameHandler::OnFrameExit( wxCommandEvent & )
+void MyFrameHandler::OnFrameExit(wxCommandEvent&)
 {
     // Do something useful.
 }
@@ -324,8 +324,8 @@ MyFrameHandler myFrameHandler;
 
 MyFrame::MyFrame()
 {
-      Bind( wxEVT_MENU, &MyFrameHandler::OnFrameExit,
-              &myFrameHandler, wxID_EXIT );
+      Bind(wxEVT_MENU, &MyFrameHandler::OnFrameExit,
+              &myFrameHandler, wxID_EXIT);
 }
 @endcode
 
@@ -339,14 +339,14 @@ To use an ordinary function or a static method as an event handler you would
 write something like this:
 
 @code
-void HandleExit( wxCommandEvent & )
+void HandleExit(wxCommandEvent&)
 {
     // Do something useful
 }
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_MENU, &HandleExit, wxID_EXIT );
+    Bind(wxEVT_MENU, &HandleExit, wxID_EXIT);
 }
 @endcode
 
@@ -357,7 +357,7 @@ handler:
 
 struct MyFunctor
 {
-    void operator()( wxCommandEvent & )
+    void operator()(wxCommandEvent&)
     {
         // Do something useful
     }
@@ -367,7 +367,7 @@ MyFunctor myFunctor;
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_MENU, myFunctor, wxID_EXIT );
+    Bind(wxEVT_MENU, myFunctor, wxID_EXIT);
 }
 @endcode
 
@@ -389,14 +389,14 @@ Another common example of a generic functor is boost::function<> or, since
 C++11, std::function<>:
 
 @code
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+#if wxCHECK_CXX_STD(201103L)
 using namespace std;
 using namespace std::placeholders;
 #else // Pre C++11 compiler
 using namespace boost;
 #endif
 
-void MyHandler::OnExit( wxCommandEvent & )
+void MyHandler::OnExit(wxCommandEvent&)
 {
     // Do something useful
 }
@@ -405,9 +405,9 @@ MyHandler myHandler;
 
 MyFrame::MyFrame()
 {
-    function< void ( wxCommandEvent & ) > exitHandler( bind( &MyHandler::OnExit, &myHandler, _1 ));
+    function<void (wxCommandEvent& )> exitHandler(bind(&MyHandler::OnExit, &myHandler, _1));
 
-    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
+    Bind(wxEVT_MENU, exitHandler, wxID_EXIT);
 }
 @endcode
 
@@ -416,7 +416,7 @@ With the aid of @c bind<>() you can even use methods or functions which
 don't quite have the correct signature:
 
 @code
-void MyHandler::OnExit( int exitCode, wxCommandEvent &, wxString goodByeMessage )
+void MyHandler::OnExit(int exitCode, wxCommandEvent&, wxString goodByeMessage)
 {
     // Do something useful
 }
@@ -425,10 +425,10 @@ MyHandler myHandler;
 
 MyFrame::MyFrame()
 {
-    function< void ( wxCommandEvent & ) > exitHandler(
-            bind( &MyHandler::OnExit, &myHandler, EXIT_FAILURE, _1, "Bye" ));
+    function<void (wxCommandEvent&)> exitHandler(
+            bind(&MyHandler::OnExit, &myHandler, EXIT_FAILURE, _1, "Bye"));
 
-    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
+    Bind(wxEVT_MENU, exitHandler, wxID_EXIT);
 }
 @endcode
 
@@ -477,7 +477,7 @@ doesn't count as having handled the event and the search continues):
     checking the static event table entries, so if both a dynamic and a static
     event handler match the same event, the static one is never going to be
     used unless wxEvent::Skip() is called in the dynamic one. Also note that
-    the dynamically bound handlers are searched in order of their registration
+    the dynamically bound handlers are searched in reverse order of their registration
     during program run-time, i.e. later bound handlers take priority over the
     previously bound ones.
     </li>
