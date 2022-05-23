@@ -479,7 +479,7 @@ public:
     @endEventTable
 
     @library{wxnet}
-    @category{net}
+    @category{net,events}
 
     @see wxSocketBase, wxSocketClient, wxSocketServer
 */

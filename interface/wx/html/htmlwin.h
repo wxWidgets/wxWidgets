@@ -559,7 +559,7 @@ wxEventType wxEVT_HTML_LINK_CLICKED;
     @endEventTable
 
     @library{wxhtml}
-    @category{html}
+    @category{html,events}
 */
 class wxHtmlLinkEvent : public wxCommandEvent
 {
@@ -592,7 +592,7 @@ public:
     @endEventTable
 
     @library{wxhtml}
-    @category{html}
+    @category{html,events}
 */
 class wxHtmlCellEvent : public wxCommandEvent
 {
