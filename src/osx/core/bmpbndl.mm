@@ -148,7 +148,7 @@ wxSize wxOSXImageBundleImpl::GetPreferredBitmapSizeAtScale(double scale) const
 
 wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& WXUNUSED(size))
 {
-    return wxBitmap();
+    return wxBitmap(wxOSXGetImageFromBundleImpl(this));
 }
 
 wxBitmapBundle wxOSXMakeBundleFromImage( WXImage img)
