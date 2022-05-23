@@ -1377,6 +1377,7 @@ enable_ownerdrawn
 enable_uxtheme
 enable_wxdib
 enable_webviewie
+enable_webviewedge
 enable_autoidman
 enable_largefile
 enable_gtktest
@@ -2348,6 +2349,7 @@ Optional Features:
   --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
   --enable-wxdib          use wxDIB class (Win32 only)
   --enable-webviewie      use wxWebView IE backend (Win32 only)
+  --enable-webviewedge    use wxWebView Edge backend (Win32 only)
   --enable-autoidman      use automatic ids management
   --disable-largefile     omit support for large files
   --disable-gtktest       do not try to compile and run a test GTK+ program
@@ -4142,6 +4144,7 @@ DEFAULT_wxUSE_HOTKEY=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_METAFILE=auto
 DEFAULT_wxUSE_OPENGL=auto
+DEFAULT_wxUSE_WEBVIEW_EDGE=no
 
 DEFAULT_wxUSE_UNIVERSAL_BINARY=no
 DEFAULT_wxUSE_MAC_ARCH=no
@@ -12933,6 +12936,35 @@ fi
 
 
           eval "$wx_cv_use_webviewie"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-webviewedge was given.
+if test "${enable_webviewedge+set}" = set; then :
+  enableval=$enable_webviewedge;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webviewedge='wxUSE_WEBVIEW_EDGE=yes'
+                          else
+                            wx_cv_use_webviewedge='wxUSE_WEBVIEW_EDGE=no'
+                          fi
+
+else
+
+                          wx_cv_use_webviewedge='wxUSE_WEBVIEW_EDGE=${'DEFAULT_wxUSE_WEBVIEW_EDGE":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webviewedge"
 
 
 if test "$wxUSE_MSW" != 1; then
@@ -41829,6 +41861,11 @@ $as_echo "$as_me: WARNING: WebKit not available, disabling wxWebView" >&2;}
         if test "$wxUSE_WEBVIEW_IE" = "yes"; then
                                     wxUSE_WEBVIEW="yes"
             $as_echo "#define wxUSE_WEBVIEW_IE 1" >>confdefs.h
+
+        fi
+        if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+            wxUSE_WEBVIEW="yes"
+            $as_echo "#define wxUSE_WEBVIEW_EDGE 1" >>confdefs.h
 
         fi
     fi

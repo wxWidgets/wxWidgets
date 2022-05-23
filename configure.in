@@ -354,6 +354,7 @@ DEFAULT_wxUSE_HOTKEY=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_METAFILE=auto
 DEFAULT_wxUSE_OPENGL=auto
+DEFAULT_wxUSE_WEBVIEW_EDGE=no
 
 dnl Mac/Cocoa users need to enable building universal binaries explicitly
 DEFAULT_wxUSE_UNIVERSAL_BINARY=no
@@ -1066,6 +1067,7 @@ WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls 
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
 WX_ARG_FEATURE(webviewie,   [  --enable-webviewie      use wxWebView IE backend (Win32 only)], wxUSE_WEBVIEW_IE)
+WX_ARG_FEATURE(webviewedge, [  --enable-webviewedge    use wxWebView Edge backend (Win32 only)], wxUSE_WEBVIEW_EDGE)
 
 dnl this one is not really MSW-specific but it exists mainly to be turned off
 dnl under MSW, it should be off by default on the other platforms
@@ -7522,6 +7524,10 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             dnl       too and do the right thing automatically there too.
             wxUSE_WEBVIEW="yes"
             AC_DEFINE(wxUSE_WEBVIEW_IE)
+        fi
+        if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+            wxUSE_WEBVIEW="yes"
+            AC_DEFINE(wxUSE_WEBVIEW_EDGE)
         fi
     fi
 fi

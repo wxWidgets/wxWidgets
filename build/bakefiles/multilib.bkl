@@ -176,57 +176,21 @@
     <!--                               wxWEBVIEW                          -->
     <!-- ================================================================ -->
 
-    <set var="webview_additional_include">
-        <if cond="TOOLKIT=='MSW'">$(TOP_SRCDIR)3rdparty/webview2/build/native/include</if>
-    </set>
-
-    <set var="webview_additional_include_wrl">
-        <if cond="TOOLKIT=='MSW' and IS_MSVC=='0'">$(TOP_SRCDIR)include/wx/msw/wrl</if>
-    </set>
-
-    <set var="webview_additional_libdirs_arch">
-        <if cond="TARGET_CPU=='amd64'">x64</if>
-        <if cond="TARGET_CPU=='AMD64'">x64</if>
-        <if cond="TARGET_CPU=='arm64'">arm64</if>
-        <if cond="TARGET_CPU=='ARM64'">arm64</if>
-        <if cond="TARGET_CPU=='x64'">x64</if>
-        <if cond="TARGET_CPU=='X64'">x64</if>
-        <if cond="TARGET_CPU=='x86'">x86</if>
-        <if cond="TARGET_CPU=='X86'">x86</if>
-        <if cond="TARGET_CPU==''">x86</if>
-    </set>
-
-    <set var="webview_additional_libdirs">
-        <if cond="IS_MSVC=='1' and TOOLKIT=='MSW'">$(TOP_SRCDIR)3rdparty/webview2/build/native/$(webview_additional_libdirs_arch)</if>
-    </set>
-
-    <set var="webview_edge_pragma_warning">
-        <if cond="TOOLKIT=='MSW' and IS_MSVC=='0'">-Wno-unknown-pragmas</if>
-    </set>
-
-    <dll id="webviewdll" template="wx_dll"
+    <dll id="webviewdll" template="wx_dll,webview_additional"
          cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_WEBVIEW</define>
         <sources>$(WEBVIEW_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
-        <lib-path>$(webview_additional_libdirs)</lib-path>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
-        <include>$(webview_additional_include_wrl)</include>
-        <include>$(webview_additional_include)</include>
-        <cxxflags-mingw>$(webview_edge_pragma_warning)</cxxflags-mingw>
     </dll>
 
-    <lib id="webviewlib" template="wx_lib"
+    <lib id="webviewlib" template="wx_lib,webview_additional"
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <sources>$(WEBVIEW_SRC)</sources>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
-        <include>$(webview_additional_include_wrl)</include>
-        <include>$(webview_additional_include)</include>
-        <lib-path>$(webview_additional_libdirs)</lib-path>
-        <cxxflags-mingw>$(webview_edge_pragma_warning)</cxxflags-mingw>
     </lib>
 
     <wxshortcut id="wxwebview" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>
