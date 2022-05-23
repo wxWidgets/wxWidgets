@@ -96,7 +96,7 @@ private:
 class WXDLLIMPEXP_ADV wxDataViewBitmapRenderer: public wxDataViewRenderer
 {
 public:
-    static wxString GetDefaultType() { return wxS("wxBitmap"); }
+    static wxString GetDefaultType() { return wxS("wxBitmapBundle"); }
 
     wxDataViewBitmapRenderer( const wxString &varianttype = GetDefaultType(),
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
@@ -104,6 +104,10 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+
+    virtual
+    bool IsCompatibleVariantType(const wxString& variantType) const wxOVERRIDE;
+
 #if wxUSE_ACCESSIBILITY
     virtual wxString GetAccessibleDescription() const wxOVERRIDE;
 #endif // wxUSE_ACCESSIBILITY
@@ -112,8 +116,7 @@ public:
     virtual wxSize GetSize() const wxOVERRIDE;
 
 private:
-    wxIcon m_icon;
-    wxBitmap m_bitmap;
+    wxBitmapBundle m_bitmapBundle;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);

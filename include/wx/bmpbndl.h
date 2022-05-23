@@ -108,6 +108,9 @@ public:
     // Check if bitmap bundle is non-empty.
     bool IsOk() const { return m_impl.get() != NULL; }
 
+    // Clear the bundle contents, IsOk() will return false after doing this.
+    void Clear() { m_impl.reset(NULL); }
+
     // Get the size of the bitmap represented by this bundle when using the
     // default DPI, i.e. 100% scaling. Returns invalid size for empty bundle.
     wxSize GetDefaultSize() const;
@@ -241,5 +244,20 @@ public:
     // on demand and cache it.
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
 };
+
+// ----------------------------------------------------------------------------
+// Allow using wxBitmapBundle in wxVariant
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+
+class WXDLLIMPEXP_FWD_BASE wxVariant;
+
+WXDLLIMPEXP_CORE
+wxBitmapBundle& operator<<(wxBitmapBundle& value, const wxVariant& variant);
+WXDLLIMPEXP_CORE
+wxVariant& operator<<(wxVariant& variant, const wxBitmapBundle& value);
+
+#endif // wxUSE_VARIANT
 
 #endif // _WX_BMPBNDL_H_

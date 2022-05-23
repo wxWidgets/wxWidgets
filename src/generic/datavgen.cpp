@@ -1317,18 +1317,25 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
 
 bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
-    if (value.GetType() == wxT("wxBitmap"))
+    if (value.GetType() == wxT("wxBitmapBundle"))
     {
-        m_bitmap << value;
+        m_bitmapBundle << value;
+    }
+    else if (value.GetType() == wxT("wxBitmap"))
+    {
+        wxBitmap bitmap;
+        bitmap << value;
+        m_bitmapBundle = wxBitmapBundle(bitmap);
     }
     else if (value.GetType() == wxT("wxIcon"))
     {
-        m_icon << value;
+        wxIcon icon;
+        icon << value;
+        m_bitmapBundle = wxBitmapBundle(icon);
     }
     else
     {
-        m_icon = wxNullIcon;
-        m_bitmap = wxNullBitmap;
+        m_bitmapBundle.Clear();
     }
 
     return true;
@@ -1337,6 +1344,15 @@ bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 bool wxDataViewBitmapRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
 {
     return false;
+}
+
+bool
+wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) const
+{
+    // We can accept values of any types checked by SetValue().
+    return variantType == wxS("wxBitmapBundle")
+            || variantType == wxS("wxBitmap")
+            || variantType == wxS("wxIcon");
 }
 
 #if wxUSE_ACCESSIBILITY
@@ -1348,20 +1364,20 @@ wxString wxDataViewBitmapRenderer::GetAccessibleDescription() const
 
 bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
-    if (m_bitmap.IsOk())
-        dc->DrawBitmap( m_bitmap, cell.x, cell.y, true /* use mask */ );
-    else if (m_icon.IsOk())
-        dc->DrawIcon( m_icon, cell.x, cell.y );
+    if (m_bitmapBundle.IsOk())
+    {
+        dc->DrawBitmap( m_bitmapBundle.GetBitmapFor(GetView()),
+                        cell.x, cell.y,
+                        true /* use mask */ );
+    }
 
     return true;
 }
 
 wxSize wxDataViewBitmapRenderer::GetSize() const
 {
-    if (m_bitmap.IsOk())
-        return wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
-    else if (m_icon.IsOk())
-        return wxSize( m_icon.GetWidth(), m_icon.GetHeight() );
+    if (m_bitmapBundle.IsOk())
+        return m_bitmapBundle.GetPreferredBitmapSizeFor(GetView());
 
     return GetView()->FromDIP(wxSize(wxDVC_DEFAULT_RENDERER_SIZE,
                                      wxDVC_DEFAULT_RENDERER_SIZE));

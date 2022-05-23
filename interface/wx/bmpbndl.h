@@ -289,6 +289,18 @@ public:
     static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
 
     /**
+        Clear the existing bundle contents.
+
+        After calling this function IsOk() returns @false.
+
+        This is the same as assigning a default-constructed bitmap bundle to
+        this object but slightly more explicit.
+
+        @since 3.1.7
+     */
+    void Clear();
+
+    /**
         Check if bitmap bundle is non-empty.
 
         Return @true if the bundle contains any bitmaps or @false if it is

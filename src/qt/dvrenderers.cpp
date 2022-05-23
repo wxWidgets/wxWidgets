@@ -54,6 +54,13 @@ bool wxDataViewBitmapRenderer::GetValue( wxVariant &value ) const
     return false;
 }
 
+bool
+wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) const
+{
+    return variantType == wxS("wxBitmap")
+            || variantType == wxS("wxIcon");
+}
+
 //==============================================================================
 
 wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &variantType, wxDataViewCellMode mode,
