@@ -936,6 +936,10 @@ wxScrolledWindow(parent, wxID_ANY, pos, size, style | wxFULL_REPAINT_ON_RESIZE, 
     SetBackgroundColour(wxSystemSettings::GetColour(colourIndex));
 
     SetScrollbars(10, 10, 100, 100);
+
+    // Use some reasonable default size for this window, roughly proportional
+    // to the paper sheet.
+    SetInitialSize(wxSize(600, 750));
 }
 
 wxPreviewCanvas::~wxPreviewCanvas()
@@ -1486,7 +1490,6 @@ public:
     ~SizerWithButtons()
     {
         m_parent->SetSizer(m_sizer);
-        m_sizer->Fit(m_parent);
     }
 
 
@@ -1497,7 +1500,7 @@ public:
         {
             m_needsSeparator = false;
 
-            m_sizer->AddSpacer(2*wxSizerFlags::GetDefaultBorder());
+            m_sizer->AddSpacer(wxRound(2*wxSizerFlags::GetDefaultBorderFractional()));
         }
 
         m_hasContents = true;
@@ -1525,9 +1528,13 @@ public:
     // as everything else added after it will be added on the right side too.
     void AddAtEnd(wxWindow *win)
     {
+        // Ensure there is at least the same gap before the final button as
+        // between the other groups.
+        m_sizer->AddSpacer(wxRound(2*wxSizerFlags::GetDefaultBorderFractional()));
+
         m_sizer->AddStretchSpacer();
         m_sizer->Add(win,
-                     wxSizerFlags().Border(wxTOP | wxBOTTOM | wxRIGHT).Center());
+                     wxSizerFlags().Border().Center());
     }
 
     // Indicates the end of a group of buttons, a separator will be added after
@@ -1614,7 +1621,7 @@ void wxPreviewControlBar::CreateButtons()
         };
         int n = WXSIZEOF(choices);
 
-        m_zoomControl = new wxChoice( this, wxID_PREVIEW_ZOOM, wxDefaultPosition, wxSize(FromDIP(70),wxDefaultCoord), n, choices, 0 );
+        m_zoomControl = new wxChoice( this, wxID_PREVIEW_ZOOM, wxDefaultPosition, wxDefaultSize, n, choices, 0 );
         sizer.Add(m_zoomControl);
         SetZoomControl(m_printPreview->GetZoom());
 
@@ -1695,7 +1702,8 @@ void wxPreviewFrame::OnChar(wxKeyEvent &event)
 
 wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxWindow *parent, const wxString& title,
                                const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-wxFrame(parent, wxID_ANY, title, pos, size, style, name)
+wxFrame(parent, wxID_ANY, title, pos, size, style, name),
+    m_initialSize(size)
 {
     m_printPreview = preview;
     m_controlBar = NULL;
@@ -1762,10 +1770,26 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
 
     wxBoxSizer* const sizer = new wxBoxSizer( wxVERTICAL );
 
-    sizer->Add( m_controlBar, wxSizerFlags().Expand().Border() );
-    sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
+    sizer->Add( m_controlBar, wxSizerFlags().Expand() );
+    sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand() );
 
     SetSizer( sizer );
+
+    // Respect the user-specified size, if any, but use the best appropriate
+    // size by default if none was explicitly given.
+    if ( !m_initialSize.IsFullySpecified() )
+    {
+        wxSize size = m_initialSize;
+        size.SetDefaults(sizer->ComputeFittingWindowSize(this));
+        SetSize(size);
+    }
+
+    // We don't want to restrict shrinking the window vertically as it might be
+    // too tall (see SetInitialSize() call in wxPreviewCanvas ctor), but we do
+    // want to make it at least as wide as the control bar, as otherwise the
+    // buttons wouldn't fit, and restricting it to at least its height
+    // vertically is also quite reasonable.
+    SetSizeHints(ClientToWindowSize(m_controlBar->GetBestSize()));
 
     m_modalityKind = kind;
     switch ( m_modalityKind )
@@ -1793,8 +1817,6 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
         // taskbar entry is confusing.
         SetWindowStyle((GetWindowStyle() & ~wxMINIMIZE_BOX) | wxFRAME_NO_TASKBAR);
     }
-
-    Layout();
 
     m_printPreview->AdjustScrollbars(m_previewCanvas);
     m_previewCanvas->SetFocus();
@@ -1859,7 +1881,7 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_currentPage = 1;
     m_currentZoom = 70;
     m_topMargin =
-    m_leftMargin = 2*wxSizerFlags::GetDefaultBorder();
+    m_leftMargin = wxRound(2*wxSizerFlags::GetDefaultBorderFractional());
     m_pageWidth = 0;
     m_pageHeight = 0;
     m_printingPrepared = false;

@@ -55,11 +55,9 @@ case WXPRINT_PREVIEW:
     // Pass two printout objects: for preview, and possible printing.
     wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout);
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this,
-                                               "Demo Print Preview",
-                                               wxPoint(100, 100),
-                                               wxSize(600, 650));
-    frame->Centre(wxBOTH);
+                                               "Demo Print Preview");
     frame->Initialize();
+    frame->Centre(wxBOTH);
     frame->Show(true);
     break;
 }
