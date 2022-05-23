@@ -182,7 +182,6 @@ set(TEST_GUI_DATA
     image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
     image/paste_result_no_background_square_over_circle.png
     image/wx.png
-    image/wx.ico
     image/toucan.png
     image/toucan_hue_0.538.png
     image/toucan_sat_-0.41.png
