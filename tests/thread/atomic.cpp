@@ -89,8 +89,8 @@ TEST_CASE("Atomic::ReturnValue", "[atomic]")
 
 TEST_CASE("Atomic::WithThreads", "[atomic]")
 {
-    int count;
-    ETestType testType;
+    int count wxDUMMY_INITIALIZE(0);
+    ETestType testType wxDUMMY_INITIALIZE(DecOnly);
 
     SECTION( "2 threads using inc and dec") { count =  2; testType = IncAndDecMixed; }
     SECTION("10 threads using inc and dec") { count = 10; testType = IncAndDecMixed; }
