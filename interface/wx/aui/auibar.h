@@ -12,7 +12,7 @@
     See also @ref overview_aui.
 
     @library{wxaui}
-    @category{aui}
+    @category{aui,events}
   */
 enum wxAuiToolBarStyle
 {

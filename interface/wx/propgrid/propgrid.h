@@ -1332,7 +1332,7 @@ public:
     @endEventTable
 
     @library{wxpropgrid}
-    @category{propgrid}
+    @category{propgrid,events}
 */
 class wxPropertyGridEvent : public wxCommandEvent
 {

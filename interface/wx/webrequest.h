@@ -788,7 +788,7 @@ public:
     @since 3.1.5
 
     @library{wxnet}
-    @category{net}
+    @category{net,events}
 
     @see wxWebRequest
 */
