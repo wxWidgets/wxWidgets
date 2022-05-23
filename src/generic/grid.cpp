@@ -4159,18 +4159,13 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
             {
                 if ( oper.CanDragMove(this) )
                 {
+                    ChangeCursorMode(oper.GetCursorModeMove(), headerWin);
+
                     // Show button as pressed
+                    m_dragMoveRowOrCol = line;
                     wxClientDC dc( headerWin );
                     oper.PrepareDCForLabels(this, dc);
-                    dc.SetPen( wxPen( headerWin->GetBackgroundColour(), 1 ) );
-
-                    int lineStart = oper.GetLineStartPos(this, line);
-                    int lineEnd = oper.GetLineEndPos(this, line) - 1;
-                    int lineLength = oper.Select(headerWin->GetClientSize()) - 1;
-                    oper.DrawParallelLine(dc, 0, lineLength, lineStart);
-                    dual.DrawParallelLine(dc, lineStart, lineEnd, 1);
-
-                    ChangeCursorMode(oper.GetCursorModeMove(), headerWin);
+                    oper.DrawLineLabel(this, dc, line);
                 }
                 else
                 {
@@ -4290,6 +4285,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         }
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, labelWin);
+        m_dragMoveRowOrCol = -1;
         m_dragLastPos = -1;
         m_dragLastColour = NULL;
         m_lastMousePos = wxDefaultPosition;
@@ -7100,7 +7096,21 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
                                 (gs_defaultHeaderRenderers.rowRenderer);
 
     wxRect rect(0, GetRowTop(row), m_rowLabelWidth, GetRowHeight(row));
-    rend.DrawBorder(*this, dc, rect);
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_ROW )
+    {
+        // clear the background:
+        // when called from ProcessRowColLabelMouseEvent the background is not
+        // cleared at this point
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(m_colLabelWin->GetBackgroundColour());
+        dc.DrawRectangle(rect);
+    }
+
+    // draw a border if the row is not being drag-moved
+    // (in that case it's omitted to have a 'pressed' appearance)
+    if (m_cursorMode != WXGRID_CURSOR_MOVE_ROW || row != m_dragMoveRowOrCol)
+        rend.DrawBorder(*this, dc, rect);
 
     int hAlign, vAlign;
     GetRowLabelAlignment(&hAlign, &vAlign);
@@ -7235,15 +7245,21 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     }
     else
     {
-        // It is reported that we need to erase the background to avoid display
-        // artefacts, see #12055.
+
+        if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL )
         {
+            // clear the background:
+            // when called from ProcessRowColLabelMouseEvent the background
+            // is not cleared at this point
             wxDCBrushChanger setBrush(dc, m_colLabelWin->GetBackgroundColour());
             wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
             dc.DrawRectangle(rect);
         }
 
-        rend.DrawBorder(*this, dc, rect);
+        // draw a border if the column is not being drag-moved
+        // (in that case it's omitted to have a 'pressed' appearance)
+        if (m_cursorMode != WXGRID_CURSOR_MOVE_COL || col != m_dragMoveRowOrCol)
+            rend.DrawBorder(*this, dc, rect);
     }
 
     int hAlign, vAlign;
