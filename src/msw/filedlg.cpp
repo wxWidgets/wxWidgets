@@ -146,6 +146,24 @@ void RestoreExceptionPolicy()
 } // unnamed namespace
 
 // ----------------------------------------------------------------------------
+// wxFileDialogMSWData: private data used by the dialog
+// ----------------------------------------------------------------------------
+
+struct wxFileDialogMSWData
+{
+    wxFileDialogMSWData()
+    {
+        m_bMovedWindow = false;
+        m_centreDir = 0;
+    }
+
+    // remember if our SetPosition() or Centre() (which requires special
+    // treatment) was called
+    bool m_bMovedWindow;
+    int m_centreDir;        // nothing to do if 0
+};
+
+// ----------------------------------------------------------------------------
 // hook function for moving the dialog
 // ----------------------------------------------------------------------------
 
@@ -232,14 +250,26 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 {
     // NB: all style checks are done by wxFileDialogBase::Create
 
-    m_bMovedWindow = false;
-    m_centreDir = 0;
+    m_data = NULL;
 
     // Must set to zero, otherwise the wx routines won't size the window
     // the second time you call the file dialog, because it thinks it is
     // already at the requested size.. (when centering)
     gs_rectDialog.x =
     gs_rectDialog.y = 0;
+}
+
+wxFileDialog::~wxFileDialog()
+{
+    delete m_data;
+}
+
+wxFileDialogMSWData& wxFileDialog::MSWData()
+{
+    if ( !m_data )
+        m_data = new wxFileDialogMSWData();
+
+    return *m_data;
 }
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const
@@ -297,18 +327,21 @@ void wxFileDialog::DoMoveWindow(int x, int y, int WXUNUSED(w), int WXUNUSED(h))
     }
     else // just remember that we were requested to move the window
     {
-        m_bMovedWindow = true;
+        wxFileDialogMSWData& data = MSWData();
+        data.m_bMovedWindow = true;
 
         // if Centre() had been called before, it shouldn't be taken into
         // account now
-        m_centreDir = 0;
+        data.m_centreDir = 0;
     }
 }
 
 void wxFileDialog::DoCentre(int dir)
 {
-    m_centreDir = dir;
-    m_bMovedWindow = true;
+    wxFileDialogMSWData& data = MSWData();
+
+    data.m_centreDir = dir;
+    data.m_bMovedWindow = true;
 
     // it's unnecessary to do anything else at this stage as we'll redo it in
     // MSWOnInitDone() anyhow
@@ -323,7 +356,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     // set HWND so that our DoMoveWindow() works correctly
     TempHWNDSetter set(this, (WXHWND)hFileDlg);
 
-    if ( m_centreDir )
+    if ( m_data && m_data->m_centreDir )
     {
         // now we have the real dialog size, remember it
         RECT rect;
@@ -332,7 +365,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
 
         // and position the window correctly: notice that we must use the base
         // class version as our own doesn't do anything except setting flags
-        wxFileDialogBase::DoCentre(m_centreDir);
+        wxFileDialogBase::DoCentre(m_data->m_centreDir);
     }
     else // need to just move it to the correct place
     {
@@ -413,7 +446,7 @@ int wxFileDialog::ShowModal()
         possible, we prefer to use the new style one instead.
     */
 #if wxUSE_IFILEOPENDIALOG
-    if ( !m_bMovedWindow && !HasExtraControlCreator() )
+    if ( (!m_data || !m_data->m_bMovedWindow) && !HasExtraControlCreator() )
     {
         const int rc = ShowIFileDialog(hWndParent);
         if ( rc != wxID_NONE )
@@ -451,7 +484,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
         in the upper left of the frame, it does not center
         automatically.
     */
-    if (m_bMovedWindow || HasExtraControlCreator()) // we need these flags.
+    if ((m_data && m_data->m_bMovedWindow) || HasExtraControlCreator()) // we need these flags.
     {
         ChangeExceptionPolicy();
         msw_flags |= OFN_EXPLORER|OFN_ENABLEHOOK;

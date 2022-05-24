@@ -11,6 +11,8 @@
 #ifndef _WX_FILEDLG_H_
 #define _WX_FILEDLG_H_
 
+class wxFileDialogMSWData;
+
 //-------------------------------------------------------------------------
 // wxFileDialog
 //-------------------------------------------------------------------------
@@ -27,6 +29,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxASCII_STR(wxFileDialogNameStr));
+    virtual ~wxFileDialog();
 
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
     virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE;
@@ -62,13 +65,16 @@ private:
     // And another one using IFileDialog.
     int ShowIFileDialog(WXHWND owner);
 
+    // Get the data object, allocating it if necessary.
+    struct wxFileDialogMSWData& MSWData();
+
 
     wxArrayString m_fileNames;
 
-    // remember if our SetPosition() or Centre() (which requires special
-    // treatment) was called
-    bool m_bMovedWindow;
-    int m_centreDir;        // nothing to do if 0
+    // Extra data, possibly null if not needed, use MSWData() to access it if
+    // it should be created on demand.
+    wxFileDialogMSWData* m_data;
+
 
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
     wxDECLARE_NO_COPY_CLASS(wxFileDialog);
