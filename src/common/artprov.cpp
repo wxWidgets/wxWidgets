@@ -165,8 +165,9 @@ public:
 
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
     {
-        // We have no preferred sizes.
-        return m_sizeDefault*scale;
+        // Any non-integer scaling or any downscaling will look ugly,
+        // only allow upscaling by a factor of 2.
+        return scale > 1.5 ? 2 * m_sizeDefault : m_sizeDefault;
     }
 
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
