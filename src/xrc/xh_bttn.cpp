@@ -29,7 +29,29 @@ wxButtonXmlHandler::wxButtonXmlHandler()
     XRC_ADD_STYLE(wxBU_TOP);
     XRC_ADD_STYLE(wxBU_BOTTOM);
     XRC_ADD_STYLE(wxBU_EXACTFIT);
+    XRC_ADD_STYLE(wxBU_NOTEXT);
     AddWindowStyles();
+}
+
+// Function calls the given setter with the contents of the node with the given
+// name, if present.
+//
+// If alternative parameter name is specified, it is used too.
+void
+wxButtonXmlHandler::SetBitmapIfSpecified(wxButton* button,
+                                               BitmapSetter setter,
+                                               const char* paramName,
+                                               const char* paramNameAlt)
+{
+    if ( wxXmlNode* const node = GetParamNode(paramName) )
+    {
+        (button->*setter)(GetBitmapBundle(node));
+    }
+    else if ( paramNameAlt )
+    {
+        if ( wxXmlNode* const nodeAlt = GetParamNode(paramNameAlt) )
+            (button->*setter)(GetBitmap(nodeAlt));
+    }
 }
 
 wxObject *wxButtonXmlHandler::DoCreateResource()
@@ -54,6 +76,17 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
     }
 
     SetupWindow(button);
+
+    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapPressed,
+                         "pressed", "selected");
+    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapFocus, "focus");
+    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapDisabled, "disabled");
+    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapCurrent,
+                         "current", "hover");
+
+    auto margins = GetSize("margins");
+    if (margins != wxDefaultSize)
+        button->SetBitmapMargins(margins.x, margins.y);
 
     return button;
 }

@@ -22,6 +22,13 @@ public:
     wxButtonXmlHandler();
     virtual wxObject *DoCreateResource() wxOVERRIDE;
     virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+
+    typedef void (wxButton::*BitmapSetter)(const wxBitmapBundle&);
+
+    void SetBitmapIfSpecified(wxButton* button,
+                              BitmapSetter setter,
+                              const char* paramName,
+                              const char* paramNameAlt = NULL);
 };
 
 #endif // wxUSE_XRC && wxUSE_BUTTON
