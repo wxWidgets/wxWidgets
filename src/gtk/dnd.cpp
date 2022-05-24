@@ -373,8 +373,9 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 
     wxLogTrace(TRACE_DND, wxT( "Drop target: data received event") );
 
-    /* inform the wxDropTarget about the current GtkSelectionData.
-       this is only valid for the duration of this call */
+    /* Inform the wxDropTarget about the current GtkSelectionData and GdkDragContext.
+       This is only valid for the duration of this call. */
+    drop_target->GTKSetDragContext( context );
     drop_target->GTKSetDragData( data );
 
     wxDragResult result = ConvertFromGTK(gdk_drag_context_get_selected_action(context));
@@ -394,8 +395,9 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
         gtk_drag_finish( context, FALSE, FALSE, time );
     }
 
-    /* after this, invalidate the drop_target's drag data */
+    /* after this, invalidate the drop_target's GtkSelectionData and GdkDragContext */
     drop_target->GTKSetDragData( NULL );
+    drop_target->GTKSetDragContext( NULL );
 }
 }
 
