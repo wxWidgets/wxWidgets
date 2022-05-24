@@ -736,6 +736,11 @@ wxButton =
         stdWindowProperties &
         [xrc:p="o"] element label          {_, t_text }* &
         [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"] element pressed        {_, t_bitmap }* &
+        [xrc:p="o"] element focus          {_, t_bitmap }* &
+        [xrc:p="o"] element disabled       {_, t_bitmap }* &
+        [xrc:p="o"] element current        {_, t_bitmap }* &
+        [xrc:p="o"] element margins        {_, t_size }* &
         [xrc:p="o"] element bitmapposition {_, t_direction }* &
         [xrc:p="o"] element default        {_, t_bool }*
     }

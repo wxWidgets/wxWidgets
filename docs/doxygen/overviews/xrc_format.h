@@ -907,6 +907,17 @@ Example:
     Label to display on the button (may be omitted if only the bitmap or stock ID is used).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display in the button (optional).}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{margins, @ref overview_xrcformat_type_size,
+    Set the margins between the bitmap and the text of the button.
+    This method is currently only implemented under MSW. If it is not called, a default margin is used around the bitmap. @since 3.1.7}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
     Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT).}
 @row3col{default, @ref overview_xrcformat_type_bool,
