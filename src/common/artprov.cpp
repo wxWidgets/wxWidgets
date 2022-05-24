@@ -149,12 +149,13 @@ namespace
 class wxBitmapBundleImplArt : public wxBitmapBundleImpl
 {
 public:
-    wxBitmapBundleImplArt(const wxArtID& id,
+    wxBitmapBundleImplArt(const wxBitmap& bitmap,
+                          const wxArtID& id,
                           const wxArtClient& client,
                           const wxSize& size)
         : m_artId(id),
           m_artClient(client),
-          m_sizeDefault(GetValidSize(id, client, size))
+          m_sizeDefault(GetValidSize(bitmap, size))
     {
     }
 
@@ -176,24 +177,14 @@ public:
     }
 
 private:
-    static wxSize GetValidSize(const wxArtID& id,
-                               const wxArtClient& client,
-                               const wxSize& size)
+    static wxSize GetValidSize(const wxBitmap& bitmap, const wxSize& size)
     {
         // If valid size is provided, just use it.
         if ( size != wxDefaultSize )
             return size;
 
-        // Otherwise, try to get the size we'd use without creating a bitmap
-        // immediately.
-        const wxSize sizeHint = wxArtProvider::GetSizeHint(client);
-        if ( sizeHint != wxDefaultSize )
-            return sizeHint;
-
-        // If we really have to, do create a bitmap just to get its size. Note
-        // we need the size in logical pixels here, it will be scaled later if
-        // necessary, so use GetDIPSize() and not GetSize().
-        const wxBitmap bitmap = wxArtProvider::GetBitmap(id, client);
+        // Note we need the size in logical pixels here, it will be scaled
+        // later if necessary, so use GetDIPSize() and not GetSize().
         if ( bitmap.IsOk() )
             return bitmap.GetDIPSize();
 
@@ -439,9 +430,10 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
             // lower priority one: even if this means that the bitmap will be
             // scaled, at least we'll be using the expected bitmap rather than
             // potentially using a bitmap of a different style.
-            if ( provider->CreateBitmap(id, client, size).IsOk() )
+            const wxBitmap bitmap = provider->CreateBitmap(id, client, size);
+            if ( bitmap.IsOk() )
             {
-                bitmapbundle = wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
+                bitmapbundle = wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(bitmap, id, client, size));
                 break;
             }
         }
