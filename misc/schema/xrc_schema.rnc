@@ -473,8 +473,8 @@ t_bitmap     = t_url?,
 t_font       = (
                    [xrc:p="o"] element size         {_, t_float }* &
                    [xrc:p="o"] element style        {_, ("normal" | "italic" | "slant") }* &
-                   [xrc:p="o"] element weight       {_, ("normal" | "thin" | "extralight" | "light" | 
-                                                         "medium" | "semibold" | "bold" | "extrabold" | 
+                   [xrc:p="o"] element weight       {_, ("normal" | "thin" | "extralight" | "light" |
+                                                         "medium" | "semibold" | "bold" | "extrabold" |
                                                          "heavy" | "extraheavy" | t_integer) }* &
                    [xrc:p="o"] element family       {_, ("roman" | "script" | "decorative" | "swiss" |
                                                          "modern" | "teletype") }* &
@@ -736,6 +736,11 @@ wxButton =
         stdWindowProperties &
         [xrc:p="o"] element label          {_, t_text }* &
         [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"] element pressed        {_, t_bitmap }* &
+        [xrc:p="o"] element focus          {_, t_bitmap }* &
+        [xrc:p="o"] element disabled       {_, t_bitmap }* &
+        [xrc:p="o"] element current        {_, t_bitmap }* &
+        [xrc:p="o"] element margins        {_, t_size }* &
         [xrc:p="o"] element bitmapposition {_, t_direction }* &
         [xrc:p="o"] element default        {_, t_bool }*
     }
