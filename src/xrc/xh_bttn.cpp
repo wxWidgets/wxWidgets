@@ -33,27 +33,6 @@ wxButtonXmlHandler::wxButtonXmlHandler()
     AddWindowStyles();
 }
 
-// Function calls the given setter with the contents of the node with the given
-// name, if present.
-//
-// If alternative parameter name is specified, it is used too.
-void
-wxButtonXmlHandler::SetBitmapIfSpecified(wxButton* button,
-                                               BitmapSetter setter,
-                                               const char* paramName,
-                                               const char* paramNameAlt)
-{
-    if ( wxXmlNode* const node = GetParamNode(paramName) )
-    {
-        (button->*setter)(GetBitmapBundle(node));
-    }
-    else if ( paramNameAlt )
-    {
-        if ( wxXmlNode* const nodeAlt = GetParamNode(paramNameAlt) )
-            (button->*setter)(GetBitmap(nodeAlt));
-    }
-}
-
 wxObject *wxButtonXmlHandler::DoCreateResource()
 {
    XRC_MAKE_INSTANCE(button, wxButton)
@@ -77,16 +56,22 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
 
     SetupWindow(button);
 
-    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapPressed,
-                         "pressed", "selected");
-    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapFocus, "focus");
-    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapDisabled, "disabled");
-    SetBitmapIfSpecified(button, &wxBitmapButton::SetBitmapCurrent,
-                         "current", "hover");
+    const wxXmlNode* node = GetParamNode("pressed");
+    if (node)
+        button->SetBitmapPressed(GetBitmapBundle(node));
+    node = GetParamNode("focus");
+    if (node)
+        button->SetBitmapFocus(GetBitmapBundle(node));
+    node = GetParamNode("disabled");
+    if (node)
+        button->SetBitmapDisabled(GetBitmapBundle(node));
+    node = GetParamNode("current");
+    if (node)
+        button->SetBitmapCurrent(GetBitmapBundle(node));
 
-    auto margins = GetSize("margins");
+    const wxSize margins = GetSize("margins");
     if (margins != wxDefaultSize)
-        button->SetBitmapMargins(margins.x, margins.y);
+        button->SetBitmapMargins(margins);
 
     return button;
 }
