@@ -467,6 +467,13 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
 
 void wxFileDialog::DoGetPosition(int *x, int *y) const
 {
+    // Return the actual HWND position if we have it.
+    if ( GetHwnd() )
+    {
+        wxFileDialogBase::DoGetPosition(x, y);
+        return;
+    }
+
     if ( x )
         *x = gs_rectDialog.x;
     if ( y )
@@ -475,6 +482,13 @@ void wxFileDialog::DoGetPosition(int *x, int *y) const
 
 void wxFileDialog::DoGetSize(int *width, int *height) const
 {
+    // Return the actual HWND size if we have it.
+    if ( GetHwnd() )
+    {
+        wxFileDialogBase::DoGetSize(width, height);
+        return;
+    }
+
     if ( width )
         *width = gs_rectDialog.width;
     if ( height )
