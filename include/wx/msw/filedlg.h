@@ -51,7 +51,7 @@ private:
     // called when the dialog is created
     void MSWOnInitDialogHook(WXHWND hwnd);
 
-    // called from the hook procedure on CDN_INITDONE reception
+    // called when the dialog initialization is fully done
     void MSWOnInitDone(WXHWND hDlg);
 
     // called when the currently selected file changes in the dialog

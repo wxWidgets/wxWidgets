@@ -218,7 +218,8 @@ class wxFileDialogMSWData
 public:
     explicit wxFileDialogMSWData(wxFileDialog* fileDialog)
 #if wxUSE_IFILEOPENDIALOG
-        : m_fileDialog(fileDialog)
+        : m_fileDialog(fileDialog),
+          m_typeAlreadyChanged(false)
 #endif // wxUSE_IFILEOPENDIALOG
     {
         m_bMovedWindow = false;
@@ -263,6 +264,24 @@ public:
 
     wxSTDMETHODIMP OnTypeChange(IFileDialog* pfd) wxOVERRIDE
     {
+        // There is no special notification for the dialog initialization, but
+        // this function is always called when it's shown, so use it for
+        // generating this notification as well.
+        if ( !m_typeAlreadyChanged )
+        {
+            m_typeAlreadyChanged = true;
+
+            wxCOMPtr<IOleWindow> window;
+            HRESULT hr = pfd->QueryInterface(wxIID_PPV_ARGS(IOleWindow, &window));
+            if ( SUCCEEDED(hr) )
+            {
+                HWND hwnd;
+                hr = window->GetWindow(&hwnd);
+                if ( SUCCEEDED(hr) )
+                    m_fileDialog->MSWOnInitDone(hwnd);
+            }
+        }
+
         m_fileDialog->MSWOnTypeChange(FileDialogGetFileTypeIndex(pfd));
 
         return S_OK;
@@ -272,6 +291,8 @@ public:
 
 
     wxFileDialog* const m_fileDialog;
+
+    bool m_typeAlreadyChanged;
 
     DECLARE_IUNKNOWN_METHODS;
 #endif // wxUSE_IFILEOPENDIALOG
@@ -582,11 +603,11 @@ int wxFileDialog::ShowModal()
 
     /*
         We need to use the old style dialog in order to use a hook function
-        which allows us to position it or use custom controls in it but, if
-        possible, we prefer to use the new style one instead.
+        which allows us to use custom controls in it but, if possible, we
+        prefer to use the new style one instead.
     */
 #if wxUSE_IFILEOPENDIALOG
-    if ( (!m_data || !m_data->m_bMovedWindow) && !HasExtraControlCreator() )
+    if ( !HasExtraControlCreator() )
     {
         const int rc = ShowIFileDialog(hWndParent);
         if ( rc != wxID_NONE )

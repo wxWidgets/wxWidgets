@@ -1741,6 +1741,8 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
                         wxEmptyString, wxEmptyString, wildcards,
                         wxFD_OPEN|wxFD_MULTIPLE);
 
+    dialog.Centre(wxCENTER_ON_SCREEN);
+
     if (dialog.ShowModal() == wxID_OK)
     {
         wxArrayString paths, filenames;
