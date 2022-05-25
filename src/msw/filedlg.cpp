@@ -201,7 +201,7 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
                                         pNotifyCode->lpOFN->lCustData
                                     );
 
-                    switch ( pNotifyCode->hdr.code )
+                    switch ( pNM->code )
                     {
                         case CDN_INITDONE:
                             dialog->MSWOnInitDone((WXHWND)hDlg);
