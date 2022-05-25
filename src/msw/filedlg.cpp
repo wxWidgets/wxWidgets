@@ -319,7 +319,9 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
                     switch ( pNM->code )
                     {
                         case CDN_INITDONE:
-                            dialog->MSWOnInitDone((WXHWND)hDlg);
+                            // Note the dialog is the parent window: hDlg is a
+                            // child of it when OFN_EXPLORER is used
+                            dialog->MSWOnInitDone((WXHWND)::GetParent(hDlg));
 
                             // Call selection change handler so that update
                             // handler will be called once with no selection.
@@ -502,18 +504,14 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
         return;
     }
 
-    // note the dialog is the parent window: hDlg is a child of it when
-    // OFN_EXPLORER is used
-    HWND hFileDlg = ::GetParent((HWND)hDlg);
-
     // set HWND so that our DoMoveWindow() works correctly
-    TempHWNDSetter set(this, (WXHWND)hFileDlg);
+    TempHWNDSetter set(this, hDlg);
 
     if ( m_data->m_centreDir )
     {
         // now we have the real dialog size, remember it
         RECT rect;
-        GetWindowRect(hFileDlg, &rect);
+        GetWindowRect(hDlg, &rect);
         gs_rectDialog = wxRectFromRECT(rect);
 
         // and position the window correctly: notice that we must use the base
