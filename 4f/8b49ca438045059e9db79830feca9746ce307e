@@ -1,0 +1,1 @@
+wxMSW: Fix performance regression in wxSTC redrawing (Maarten Bent).
