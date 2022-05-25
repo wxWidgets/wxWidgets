@@ -73,6 +73,9 @@ private:
     wxCOMPtr<IFileDialog> m_fileDialog;
 };
 
+// Extract the filesystem path corresponding to the given shell item.
+HRESULT GetFSPathFromShellItem(const wxCOMPtr<IShellItem>& item, wxString& path);
+
 } // namespace wxMSWImpl
 
 #endif // wxUSE_IFILEOPENDIALOG

@@ -64,7 +64,6 @@ namespace
 // helper functions for wxDirDialog::ShowIFileOpenDialog()
 bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& paths);
 bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path);
-bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path);
 
 } // anonymous namespace
 
@@ -454,7 +453,8 @@ bool GetPathsFromIFileOpenDialog(IFileOpenDialog* fileDialog, wxArrayString& pat
             break;
         }
 
-        if ( !ConvertIShellItemToPath(item, path) )
+        hr = wxMSWImpl::GetFSPathFromShellItem(item, path);
+        if ( FAILED(hr) )
         {
             // again, just fail
             tempPaths.clear();
@@ -482,7 +482,8 @@ bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path)
         return false;
     }
 
-    if ( !ConvertIShellItemToPath(item, path) )
+    hr = wxMSWImpl::GetFSPathFromShellItem(item, path);
+    if ( FAILED(hr) )
     {
         return false;
     }
@@ -490,8 +491,10 @@ bool GetPathFromIFileDialog(IFileDialog* fileDialog, wxString& path)
     return true;
 }
 
-// helper function for wxDirDialog::ShowIFileOpenDialog()
-bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path)
+} // anonymous namespace
+
+HRESULT
+wxMSWImpl::GetFSPathFromShellItem(const wxCOMPtr<IShellItem>& item, wxString& path)
 {
     wxCoTaskMemPtr<WCHAR> pOLEPath;
     const HRESULT hr = item->GetDisplayName(SIGDN_FILESYSPATH, &pOLEPath);
@@ -499,15 +502,13 @@ bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path)
     if ( FAILED(hr) )
     {
         wxLogApiError(wxS("IShellItem::GetDisplayName"), hr);
-        return false;
+        return hr;
     }
 
     path = pOLEPath;
 
-    return true;
+    return S_OK;
 }
-
-} // anonymous namespace
 
 #endif // wxUSE_IFILEOPENDIALOG
 
