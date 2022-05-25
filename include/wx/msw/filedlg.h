@@ -57,7 +57,7 @@ private:
     // called from the hook procedure on CDN_SELCHANGE.
     void MSWOnSelChange(WXHWND hDlg);
 
-    // called from the hook procedure on CDN_TYPECHANGE.
+    // called when the currently selected type of files changes in the dialog
     void MSWOnTypeChange(int nFilterIndex);
 
     // The real implementation of ShowModal() using traditional common dialog

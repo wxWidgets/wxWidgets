@@ -49,6 +49,14 @@
 #include "wx/msw/private/dpiaware.h"
 #include "wx/msw/private/filedialog.h"
 
+// Note: this must be done after including the header above, as this is where
+// wxUSE_IFILEOPENDIALOG is defined.
+#if wxUSE_IFILEOPENDIALOG
+    #include "wx/msw/wrapshl.h"
+
+    #include "wx/msw/ole/comimpl.h"
+#endif // wxUSE_IFILEOPENDIALOG
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -151,6 +159,34 @@ void RestoreExceptionPolicy()
 // wx/msw/private/filedialog.h
 // ----------------------------------------------------------------------------
 
+// Register the given event handler with the dialog during its life-time.
+class FileDialogEventsRegistrar
+{
+public:
+    // The file dialog scope must be greater than that of this object.
+    FileDialogEventsRegistrar(wxMSWImpl::wxIFileDialog& fileDialog,
+                              IFileDialogEvents& eventsHandler)
+        : m_fileDialog(fileDialog)
+    {
+        HRESULT hr = m_fileDialog->Advise(&eventsHandler, &m_cookie);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialog::Advise"), hr);
+    }
+
+    ~FileDialogEventsRegistrar()
+    {
+        HRESULT hr = m_fileDialog->Unadvise(m_cookie);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialog::Unadvise"), hr);
+    }
+
+private:
+    wxMSWImpl::wxIFileDialog& m_fileDialog;
+    DWORD m_cookie;
+
+    wxDECLARE_NO_COPY_CLASS(FileDialogEventsRegistrar);
+};
+
 // Return 1-based index of the currently selected file type.
 UINT FileDialogGetFileTypeIndex(IFileDialog* fileDialog)
 {
@@ -175,9 +211,15 @@ UINT FileDialogGetFileTypeIndex(IFileDialog* fileDialog)
 // ----------------------------------------------------------------------------
 
 class wxFileDialogMSWData
+#if wxUSE_IFILEOPENDIALOG
+    : public IFileDialogEvents
+#endif // wxUSE_IFILEOPENDIALOG
 {
 public:
-    wxFileDialogMSWData()
+    explicit wxFileDialogMSWData(wxFileDialog* fileDialog)
+#if wxUSE_IFILEOPENDIALOG
+        : m_fileDialog(fileDialog)
+#endif // wxUSE_IFILEOPENDIALOG
     {
         m_bMovedWindow = false;
         m_centreDir = 0;
@@ -192,7 +234,40 @@ public:
     // treatment) was called
     bool m_bMovedWindow;
     int m_centreDir;        // nothing to do if 0
+
+
+#if wxUSE_IFILEOPENDIALOG
+    // IFileDialogEvents
+    wxSTDMETHODIMP OnFileOk(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP OnFolderChanging(IFileDialog*, IShellItem*) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP OnFolderChange(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP OnSelectionChange(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP OnShareViolation(IFileDialog*, IShellItem*, FDE_SHAREVIOLATION_RESPONSE*) wxOVERRIDE { return E_NOTIMPL; }
+
+    wxSTDMETHODIMP OnTypeChange(IFileDialog* pfd) wxOVERRIDE
+    {
+        m_fileDialog->MSWOnTypeChange(FileDialogGetFileTypeIndex(pfd));
+
+        return S_OK;
+    }
+
+    wxSTDMETHODIMP OnOverwrite(IFileDialog*, IShellItem*, FDE_OVERWRITE_RESPONSE*) wxOVERRIDE { return E_NOTIMPL; }
+
+
+    wxFileDialog* const m_fileDialog;
+
+    DECLARE_IUNKNOWN_METHODS;
+#endif // wxUSE_IFILEOPENDIALOG
+
+    wxDECLARE_NO_COPY_CLASS(wxFileDialogMSWData);
 };
+
+BEGIN_IID_TABLE(wxFileDialogMSWData)
+    ADD_IID(Unknown)
+    ADD_IID(FileDialogEvents)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxFileDialogMSWData)
 
 // ----------------------------------------------------------------------------
 // hook function for moving the dialog
@@ -286,13 +361,25 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
 wxFileDialog::~wxFileDialog()
 {
+#if wxUSE_IFILEOPENDIALOG
+    if ( m_data )
+        m_data->Release();
+#else // !wxUSE_IFILEOPENDIALOG
     delete m_data;
+#endif // wxUSE_IFILEOPENDIALOG
 }
 
 wxFileDialogMSWData& wxFileDialog::MSWData()
 {
     if ( !m_data )
-        m_data = new wxFileDialogMSWData();
+    {
+        m_data = new wxFileDialogMSWData(this);
+
+#if wxUSE_IFILEOPENDIALOG
+        // Make sure it stays alive while we are.
+        m_data->AddRef();
+#endif // wxUSE_IFILEOPENDIALOG
+    }
 
     return *m_data;
 }
@@ -785,6 +872,11 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
 
     if ( !fileDialog.IsOk() )
         return wxID_NONE;
+
+    // Register our event handler with the dialog.
+    wxFileDialogMSWData& data = MSWData();
+
+    FileDialogEventsRegistrar registerEvents(fileDialog, data);
 
     // Configure the dialog before showing it.
     fileDialog.SetTitle(m_message);
