@@ -35,6 +35,7 @@ public:
         @param major The major version component.
         @param minor The minor version component.
         @param micro The micro version component, 0 by default.
+        @param tweak The tweak version component, 0 by default.
         @param description Free form description of this version, none by
             default.
         @param copyright Copyright string, none by default.
@@ -43,6 +44,7 @@ public:
                   int major = 0,
                   int minor = 0,
                   int micro = 0,
+                  int tweak = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString());
 
@@ -75,6 +77,13 @@ public:
     int GetMicro() const;
 
     /**
+        Get the tweak version, or build number.
+
+        @return Tweak version, or build number.
+    */
+    int GetTweak() const;
+
+    /**
         Get the string representation of this version object.
 
         This function returns the description if it is non-empty or
@@ -87,9 +96,11 @@ public:
     /**
         Get the string representation.
 
-        The micro component of the version is ignored/not used if it is 0.
+        The micro and tweak components of the version are ignored/not used if
+        they are both zero. If the tweak component is non-zero all four parts
+        will be used even if the micro componoent is zero.
 
-        @return The version string in the form "name major.minor[.micro]".
+        @return The version string in the form "name major.minor[.micro][.tweak]".
     */
     wxString GetVersionString() const;
 
