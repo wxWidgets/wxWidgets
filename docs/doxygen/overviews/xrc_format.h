@@ -470,8 +470,7 @@ and can be one of the following "sub-properties":
 @row3col{underlined, @ref overview_xrcformat_type_bool,
     Whether the font should be underlined (default: 0).}
 @row3col{strikethrough, @ref overview_xrcformat_type_bool,
-    Whether the strikethrough font should be used (default: 0). This property
-    is only supported since wxWidgets 3.1.2.}
+    Whether the strikethrough font should be used (default: 0). @since 3.1.2}
 @row3col{face, ,
     Comma-separated list of face names; the first one available is used
     (default: unspecified).}
@@ -609,7 +608,8 @@ from properties lists below.
 @row3col{tooltip, @ref overview_xrcformat_type_text,
     Tooltip to use for the control (default: not set).}
 @row3col{variant, @ref overview_xrcformat_type_string,
-    Window variant (see wxWindow::SetWindowVariant()), one of "normal", "small", "mini" or "large" (default: "normal") (new since wxWidgets 3.0.2).}
+    Window variant (see wxWindow::SetWindowVariant()), one of "normal", "small", "mini" or "large" (default: "normal")
+    @since 3.0.2}
 @row3col{font, @ref overview_xrcformat_type_font,
     Font to use for the control (default: window's default).}
 @row3col{ownfont, @ref overview_xrcformat_type_font,
@@ -828,8 +828,7 @@ Refer to the section @ref xrc_wxtoolbar for more details.
 @row3col{close, @ref overview_xrcformat_type_bool,
      If set, this is a special "Close" button using system-defined appearance,
      see wxBitmapButton::NewCloseButton(). If this property is set, @c bitmap
-     and @c style are ignored and shouldn't be used. Available since wxWidgets
-     3.1.5.}
+     and @c style are ignored and shouldn't be used. @since 3.1.5}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap to show on the button (default: none).}
 @row3col{pressed, @ref overview_xrcformat_type_bitmap,
@@ -1033,9 +1032,6 @@ The wxCommandLinkButton contains a main title-like @c label and an optional
 concatenated into a single string using a new line character between them
 (notice that the @c note part can have more new lines in it).
 
-Since wxWidgets 3.1.5 it also supports @c default and @c bitmap properties,
-just as @ref xrc_wxbutton wxButton.
-
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
@@ -1044,9 +1040,9 @@ just as @ref xrc_wxbutton wxButton.
 @row3col{note, @ref overview_xrcformat_type_text,
     Second line of text describing the action performed when the button is pressed (default: none).  }
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to display in the button (optional).}
+    Bitmap to display in the button (optional). @since 3.1.5}
 @row3col{default, @ref overview_xrcformat_type_bool,
-    Should this button be the default button in dialog (default: 0)?}
+    Should this button be the default button in dialog (default: 0)? @since 3.1.5}
 @endTable
 
 
@@ -1561,8 +1557,7 @@ wxMenuItem objects support the following properties:
      Item's accelerator (default: none).}
 @row3col{extra-accels, @ref overview_xrcformat_type_extra_accels,
      List of item's extra accelerators. Such accelerators will not be shown
-     in item's label, but still will work. (default: none).
-     This property is only supported since wxWidgets 3.1.6.}
+     in item's label, but still will work. (default: none). @since 3.1.6.}
 @row3col{radio, @ref overview_xrcformat_type_bool,
      Item's kind is wxITEM_RADIO (default: 0)?}
 @row3col{checkable, @ref overview_xrcformat_type_bool,
@@ -2073,7 +2068,7 @@ exactly one non-toplevel window as its child.
 @row3col{max, integer,
     Maximum allowed value (default: 100).}
 @row3col{inc, integer,
-    Increment (default: 1). Available since wxWidgets 3.1.6.}
+    Increment (default: 1). @since 3.1.6.}
 @endTable
 
 
@@ -2097,7 +2092,7 @@ additional property:
     The amount by which the number is changed by a single arrow press.}
 @endTable
 
-This handler was added in wxWidgets 3.1.1.
+@since  3.1.1.
 
 
 @subsubsection xrc_wxsplitterwindow wxSplitterWindow
@@ -2127,8 +2122,8 @@ child and the second one for right/bottom child window.
 @row3col{value, @ref overview_xrcformat_type_text,
     Initial value of the control (default: empty).}
 @row3col{hint, @ref overview_xrcformat_type_text,
-    Descriptive text shown in the empty control (default: "Search"). This
-    property is new since wxWidgets 3.1.1.}
+    Descriptive text shown in the empty control (default: "Search").
+    @since 3.1.1.}
 @endTable
 
 
@@ -2215,7 +2210,7 @@ to use it.
     If true, use wxTextEntry::ForceUpper() to force the control contents to be
     upper case.}
 @row3col{hint, @ref overview_xrcformat_type_text,
-    Hint shown in empty control (new since wxWidgets 3.0.1).}
+    Hint shown in empty control. @since 3.0.1}
 @endTable
 
 
@@ -2281,7 +2276,7 @@ properties:
 @row3col{toggle, @ref overview_xrcformat_type_bool,
      Item's kind is wxITEM_CHECK (default: 0)?}
 @row3col{dropdown, see below,
-     Item's kind is wxITEM_DROPDOWN (default: 0)? (only available since wxWidgets 2.9.0)}
+     Item's kind is wxITEM_DROPDOWN (default: 0)? @since 2.9.0}
 @row3col{tooltip, @ref overview_xrcformat_type_text,
     Tooltip to use for the tool (default: none).}
 @row3col{longhelp, @ref overview_xrcformat_type_text,
@@ -2289,7 +2284,7 @@ properties:
 @row3col{disabled, @ref overview_xrcformat_type_bool,
      Is the tool initially disabled (default: 0)?}
 @row3col{checked, @ref overview_xrcformat_type_bool,
-     Is the tool initially checked (default: 0)? (only available since wxWidgets 2.9.3)}
+     Is the tool initially checked (default: 0)? @since 2.9.3}
 @endTable
 
 The presence of a @c dropdown property indicates that the tool is of type
@@ -2631,7 +2626,7 @@ support the following properties:
     Label to be used for the static box around the sizer (default: empty).}
 @row3col{windowlabel, any window,
     Window to be used instead of the plain text label (default: none).
-    This property is only available since wxWidgets 3.1.1.}}
+    @since 3.1.1}
 @endTable
 
 @subsection overview_xrcformat_wxgridsizer wxGridSizer
@@ -2654,12 +2649,12 @@ support the following properties:
 @row3col{hgap, @ref overview_xrcformat_type_dimension, Horizontal gap between children (default: 0).}
 @row3col{flexibledirection, @ref overview_xrcformat_type_style,
     Flexible direction, @c wxVERTICAL, @c wxHORIZONTAL or @c wxBOTH (default).
-    This property is only available since wxWidgets 2.9.5.}
+    @since 2.9.5}
 @row3col{nonflexiblegrowmode, @ref overview_xrcformat_type_style,
     Grow mode in the non-flexible direction,
     @c wxFLEX_GROWMODE_NONE, @c wxFLEX_GROWMODE_SPECIFIED (default) or
     @c wxFLEX_GROWMODE_ALL.
-    This property is only available since wxWidgets 2.9.5.}
+    @since 2.9.5}
 @row3col{growablerows, comma-separated integers list,
     Comma-separated list of indexes of rows that are growable (none by default).
     Since wxWidgets 2.9.5 optional proportion can be appended to each number
