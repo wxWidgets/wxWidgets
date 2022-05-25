@@ -320,6 +320,10 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
                     {
                         case CDN_INITDONE:
                             dialog->MSWOnInitDone((WXHWND)hDlg);
+
+                            // Call selection change handler so that update
+                            // handler will be called once with no selection.
+                            dialog->MSWOnSelChange(wxString());
                             break;
 
                         case CDN_SELCHANGE:
@@ -520,10 +524,6 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     {
         SetPosition(gs_rectDialog.GetPosition());
     }
-
-    // Call selection change handler so that update handler will be
-    // called once with no selection.
-    MSWOnSelChange(wxString());
 }
 
 void wxFileDialog::MSWOnSelChange(const wxString& selectedFilename)
