@@ -194,12 +194,10 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
                 NMHDR* const pNM = reinterpret_cast<NMHDR*>(lParam);
                 if ( pNM->code > CDN_LAST && pNM->code <= CDN_FIRST )
                 {
-                    OFNOTIFY* const
-                        pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
+                    const OPENFILENAME&
+                        ofn = *reinterpret_cast<OFNOTIFY*>(lParam)->lpOFN;
                     wxFileDialog* const
-                        dialog = reinterpret_cast<wxFileDialog *>(
-                                        pNotifyCode->lpOFN->lCustData
-                                    );
+                        dialog = reinterpret_cast<wxFileDialog*>(ofn.lCustData);
 
                     switch ( pNM->code )
                     {
@@ -212,11 +210,7 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
                             break;
 
                         case CDN_TYPECHANGE:
-                            dialog->MSWOnTypeChange
-                                    (
-                                        (WXHWND)hDlg,
-                                        pNotifyCode->lpOFN->nFilterIndex
-                                    );
+                            dialog->MSWOnTypeChange(ofn.nFilterIndex);
                             break;
                     }
                 }
@@ -397,7 +391,7 @@ void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
     UpdateExtraControlUI();
 }
 
-void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
+void wxFileDialog::MSWOnTypeChange(int nFilterIndex)
 {
     // Filter indices are 1-based, while we want to use 0-based index, as
     // usual. However the input index can apparently also be 0 in some

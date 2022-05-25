@@ -58,7 +58,7 @@ private:
     void MSWOnSelChange(WXHWND hDlg);
 
     // called from the hook procedure on CDN_TYPECHANGE.
-    void MSWOnTypeChange(WXHWND hDlg, int nFilterIndex);
+    void MSWOnTypeChange(int nFilterIndex);
 
     // The real implementation of ShowModal() using traditional common dialog
     // functions.
