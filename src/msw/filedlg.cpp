@@ -492,6 +492,12 @@ void wxFileDialog::DoCentre(int dir)
 
 void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
 {
+    if ( !m_data || !m_data->m_bMovedWindow )
+    {
+        // We only use this to position the dialog, so nothing to do.
+        return;
+    }
+
     // note the dialog is the parent window: hDlg is a child of it when
     // OFN_EXPLORER is used
     HWND hFileDlg = ::GetParent((HWND)hDlg);
@@ -499,7 +505,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     // set HWND so that our DoMoveWindow() works correctly
     TempHWNDSetter set(this, (WXHWND)hFileDlg);
 
-    if ( m_data && m_data->m_centreDir )
+    if ( m_data->m_centreDir )
     {
         // now we have the real dialog size, remember it
         RECT rect;
