@@ -66,6 +66,7 @@ public:
     Show(HWND owner, int options, wxArrayString* pathsOut, wxString* pathOut);
 
     // Behave as IFileDialog.
+    IFileDialog* Get() const { return m_fileDialog.Get(); }
     IFileDialog* operator->() const { return m_fileDialog.Get(); }
 
 private:

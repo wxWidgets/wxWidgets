@@ -143,6 +143,31 @@ void RestoreExceptionPolicy()
 #endif // wxUSE_DYNLIB_CLASS
 }
 
+#if wxUSE_IFILEOPENDIALOG
+
+// ----------------------------------------------------------------------------
+// Various IFileDialog-related helpers: they're only used here for now, but if
+// they're ever needed in wxDirDialog too, we should put move them to
+// wx/msw/private/filedialog.h
+// ----------------------------------------------------------------------------
+
+// Return 1-based index of the currently selected file type.
+UINT FileDialogGetFileTypeIndex(IFileDialog* fileDialog)
+{
+    UINT nFilterIndex;
+    HRESULT hr = fileDialog->GetFileTypeIndex(&nFilterIndex);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxS("IFileDialog::GetFileTypeIndex"), hr);
+
+        nFilterIndex = 0;
+    }
+
+    return nFilterIndex;
+}
+
+#endif // wxUSE_IFILEOPENDIALOG
+
 } // unnamed namespace
 
 // ----------------------------------------------------------------------------
@@ -833,19 +858,11 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
     const int rc = fileDialog.Show(hWndParent, options, &m_fileNames, &m_path);
     if ( rc == wxID_OK )
     {
-        UINT nFilterIndex;
-        hr = fileDialog->GetFileTypeIndex(&nFilterIndex);
-        if ( SUCCEEDED(hr) )
-        {
-            // As with the common dialog, the index is 1-based here.
-            m_filterIndex = nFilterIndex - 1;
-        }
-        else
-        {
-            wxLogApiError(wxS("IFileDialog::GetFileTypeIndex"), hr);
-
-            m_filterIndex = 0;
-        }
+        // As with the common dialog, the index is 1-based here, but don't make
+        // it negative if we somehow failed to retrieve it at all.
+        m_filterIndex = FileDialogGetFileTypeIndex(fileDialog.Get());
+        if ( m_filterIndex > 0 )
+            m_filterIndex--;
 
         if ( HasFlag(wxFD_MULTIPLE) )
         {
