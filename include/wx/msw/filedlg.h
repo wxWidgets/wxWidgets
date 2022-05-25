@@ -34,21 +34,8 @@ public:
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
     virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE;
     virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
-    void MSWOnInitDialogHook(WXHWND hwnd);
 
     virtual int ShowModal() wxOVERRIDE;
-
-    // wxMSW-specific implementation from now on
-    // -----------------------------------------
-
-    // called from the hook procedure on CDN_INITDONE reception
-    virtual void MSWOnInitDone(WXHWND hDlg);
-
-    // called from the hook procedure on CDN_SELCHANGE.
-    void MSWOnSelChange(WXHWND hDlg);
-
-    // called from the hook procedure on CDN_TYPECHANGE.
-    void MSWOnTypeChange(WXHWND hDlg, int nFilterIndex);
 
 protected:
 
@@ -58,6 +45,21 @@ protected:
     virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE;
 
 private:
+    // Allow it to call MSWOnXXX() functions below.
+    friend class wxFileDialogMSWData;
+
+    // called when the dialog is created
+    void MSWOnInitDialogHook(WXHWND hwnd);
+
+    // called from the hook procedure on CDN_INITDONE reception
+    void MSWOnInitDone(WXHWND hDlg);
+
+    // called from the hook procedure on CDN_SELCHANGE.
+    void MSWOnSelChange(WXHWND hDlg);
+
+    // called from the hook procedure on CDN_TYPECHANGE.
+    void MSWOnTypeChange(WXHWND hDlg, int nFilterIndex);
+
     // The real implementation of ShowModal() using traditional common dialog
     // functions.
     int ShowCommFileDialog(WXHWND owner);
@@ -66,7 +68,7 @@ private:
     int ShowIFileDialog(WXHWND owner);
 
     // Get the data object, allocating it if necessary.
-    struct wxFileDialogMSWData& MSWData();
+    wxFileDialogMSWData& MSWData();
 
 
     wxArrayString m_fileNames;

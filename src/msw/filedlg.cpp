@@ -149,13 +149,19 @@ void RestoreExceptionPolicy()
 // wxFileDialogMSWData: private data used by the dialog
 // ----------------------------------------------------------------------------
 
-struct wxFileDialogMSWData
+class wxFileDialogMSWData
 {
+public:
     wxFileDialogMSWData()
     {
         m_bMovedWindow = false;
         m_centreDir = 0;
     }
+
+    // Hook function used by the common dialogs: it's a member of this class
+    // just to allow it to call the private functions of wxFileDialog.
+    static UINT_PTR APIENTRY
+    HookFunction(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
     // remember if our SetPosition() or Centre() (which requires special
     // treatment) was called
@@ -168,10 +174,10 @@ struct wxFileDialogMSWData
 // ----------------------------------------------------------------------------
 
 UINT_PTR APIENTRY
-wxFileDialogHookFunction(HWND      hDlg,
-                         UINT      iMsg,
-                         WPARAM    WXUNUSED(wParam),
-                         LPARAM    lParam)
+wxFileDialogMSWData::HookFunction(HWND      hDlg,
+                                  UINT      iMsg,
+                                  WPARAM    WXUNUSED(wParam),
+                                  LPARAM    lParam)
 {
     switch ( iMsg )
     {
@@ -590,7 +596,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     of.lpstrInitialDir   = dir.c_str();
 
     of.Flags             = msw_flags;
-    of.lpfnHook          = wxFileDialogHookFunction;
+    of.lpfnHook          = wxFileDialogMSWData::HookFunction;
     of.lCustData         = (LPARAM)this;
 
     wxArrayString wildDescriptions, wildFilters;
