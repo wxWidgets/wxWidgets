@@ -23,15 +23,21 @@ public:
                   int major = 0,
                   int minor = 0,
                   int micro = 0,
+                  int revision = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString())
-        : m_name(name)
-        , m_description(description)
-        , m_copyright(copyright)
     {
-        m_major = major;
-        m_minor = minor;
-        m_micro = micro;
+        Init(name, major, minor, micro, revision, description, copyright);
+    }
+
+    // This constructor exists for backward compatibility (before the revision
+    // part was added).
+    wxVersionInfo(const wxString& name,
+                  int major, int minor, int micro,
+                  const wxString& description,
+                  const wxString& copyright = wxString())
+    {
+        Init(name, major, minor, micro, 0, description, copyright);
     }
 
     // Default copy ctor, assignment operator and dtor are ok.
@@ -42,6 +48,7 @@ public:
     int GetMajor() const { return m_major; }
     int GetMinor() const { return m_minor; }
     int GetMicro() const { return m_micro; }
+    int GetRevision() const { return m_revision; }
 
     wxString ToString() const
     {
@@ -52,8 +59,12 @@ public:
     {
         wxString str;
         str << m_name << ' ' << GetMajor() << '.' << GetMinor();
-        if ( GetMicro() )
+        if ( GetMicro() || GetRevision() )
+        {
             str << '.' << GetMicro();
+            if ( GetRevision() )
+                str << '.' << GetRevision();
+        }
 
         return str;
     }
@@ -65,13 +76,28 @@ public:
     const wxString& GetCopyright() const { return m_copyright; }
 
 private:
+    void Init(const wxString& name,
+              int major, int minor, int micro, int revision,
+              const wxString& description,
+              const wxString& copyright)
+    {
+        m_name = name;
+        m_description = description;
+        m_copyright = copyright;
+        m_major = major;
+        m_minor = minor;
+        m_micro = micro;
+        m_revision = revision;
+    }
+
     wxString m_name,
              m_description,
              m_copyright;
 
     int m_major,
         m_minor,
-        m_micro;
+        m_micro,
+        m_revision;
 };
 
 #endif // _WX_VERSIONINFO_H_
