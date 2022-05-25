@@ -241,7 +241,24 @@ public:
     wxSTDMETHODIMP OnFileOk(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
     wxSTDMETHODIMP OnFolderChanging(IFileDialog*, IShellItem*) wxOVERRIDE { return E_NOTIMPL; }
     wxSTDMETHODIMP OnFolderChange(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
-    wxSTDMETHODIMP OnSelectionChange(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
+
+    wxSTDMETHODIMP OnSelectionChange(IFileDialog* pfd) wxOVERRIDE
+    {
+        wxCOMPtr<IShellItem> item;
+        HRESULT hr = pfd->GetCurrentSelection(&item);
+        if ( FAILED(hr) )
+            return hr;
+
+        wxString path;
+        hr = wxMSWImpl::GetFSPathFromShellItem(item, path);
+        if ( FAILED(hr) )
+            return hr;
+
+        m_fileDialog->MSWOnSelChange(path);
+
+        return S_OK;
+    }
+
     wxSTDMETHODIMP OnShareViolation(IFileDialog*, IShellItem*, FDE_SHAREVIOLATION_RESPONSE*) wxOVERRIDE { return E_NOTIMPL; }
 
     wxSTDMETHODIMP OnTypeChange(IFileDialog* pfd) wxOVERRIDE
@@ -306,7 +323,21 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
                             break;
 
                         case CDN_SELCHANGE:
-                            dialog->MSWOnSelChange((WXHWND)hDlg);
+                            {
+                                TCHAR buf[MAX_PATH];
+                                LRESULT len = SendMessage
+                                              (
+                                               ::GetParent(hDlg),
+                                               CDM_GETFILEPATH,
+                                               MAX_PATH,
+                                               reinterpret_cast<LPARAM>(buf)
+                                              );
+
+                                wxString str;
+                                if ( len )
+                                    str = buf;
+                                dialog->MSWOnSelChange(str);
+                            }
                             break;
 
                         case CDN_TYPECHANGE:
@@ -486,19 +517,12 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
 
     // Call selection change handler so that update handler will be
     // called once with no selection.
-    MSWOnSelChange(hDlg);
+    MSWOnSelChange(wxString());
 }
 
-void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
+void wxFileDialog::MSWOnSelChange(const wxString& selectedFilename)
 {
-    TCHAR buf[MAX_PATH];
-    LRESULT len = SendMessage(::GetParent(hDlg), CDM_GETFILEPATH,
-                              MAX_PATH, reinterpret_cast<LPARAM>(buf));
-
-    if ( len > 0 )
-        m_currentlySelectedFilename = buf;
-    else
-        m_currentlySelectedFilename.clear();
+    m_currentlySelectedFilename = selectedFilename;
 
     UpdateExtraControlUI();
 }

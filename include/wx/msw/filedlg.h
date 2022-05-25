@@ -54,8 +54,8 @@ private:
     // called from the hook procedure on CDN_INITDONE reception
     void MSWOnInitDone(WXHWND hDlg);
 
-    // called from the hook procedure on CDN_SELCHANGE.
-    void MSWOnSelChange(WXHWND hDlg);
+    // called when the currently selected file changes in the dialog
+    void MSWOnSelChange(const wxString& selectedFilename);
 
     // called when the currently selected type of files changes in the dialog
     void MSWOnTypeChange(int nFilterIndex);
