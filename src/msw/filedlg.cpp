@@ -52,7 +52,17 @@
 // Note: this must be done after including the header above, as this is where
 // wxUSE_IFILEOPENDIALOG is defined.
 #if wxUSE_IFILEOPENDIALOG
+    #include "wx/filedlgcustomize.h"
+    #include "wx/private/filedlgcustomize.h"
+
+    #include "wx/button.h"
+    #include "wx/checkbox.h"
+    #include "wx/stattext.h"
+    #include "wx/textctrl.h"
+
     #include "wx/msw/wrapshl.h"
+
+    #include "wx/msw/private/cotaskmemptr.h"
 #endif // wxUSE_IFILEOPENDIALOG
 
 // ----------------------------------------------------------------------------
@@ -200,6 +210,246 @@ UINT FileDialogGetFileTypeIndex(IFileDialog* fileDialog)
     return nFilterIndex;
 }
 
+// ----------------------------------------------------------------------------
+// IFileDialogCustomize-related stuff: all classes use FDC suffix
+// ----------------------------------------------------------------------------
+
+// Base class class used only to avoid template bloat: this contains all the
+// type-independent parts of wxFileDialogImplFDC.
+class wxFileDialogImplFDCBase
+{
+protected:
+    wxFileDialogImplFDCBase(IFileDialogCustomize* fdc, DWORD id)
+        : m_fdc(fdc),
+          m_id(id)
+    {
+    }
+
+    void DoUpdateState(CDCONTROLSTATEF stateBit, bool on)
+    {
+        CDCONTROLSTATEF state = CDCS_INACTIVE;
+        HRESULT hr = m_fdc->GetControlState(m_id, &state);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::GetControlState"), hr);
+
+        if ( on )
+            state |= stateBit;
+        else
+            state &= ~stateBit;
+
+        hr = m_fdc->SetControlState(m_id, state);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::SetControlState"), hr);
+    }
+
+    IFileDialogCustomize* const m_fdc;
+    const DWORD m_id;
+};
+
+// Template base class for the implementation classes below inheriting from the
+// specified Impl subclass.
+template <typename T>
+class wxFileDialogImplFDC
+    : public T,
+      protected wxFileDialogImplFDCBase
+{
+public:
+    wxFileDialogImplFDC(IFileDialogCustomize* fdc, DWORD id)
+        : wxFileDialogImplFDCBase(fdc, id)
+    {
+    }
+
+    virtual void Show(bool show) wxOVERRIDE
+    {
+        DoUpdateState(CDCS_VISIBLE, show);
+    }
+
+    virtual void Enable(bool enable) wxOVERRIDE
+    {
+        DoUpdateState(CDCS_ENABLED, enable);
+    }
+};
+
+class wxFileDialogCustomControlImplFDC
+    : public wxFileDialogImplFDC<wxFileDialogCustomControlImpl>
+{
+public:
+    // All custom controls are identified by their ID in this implementation.
+    wxFileDialogCustomControlImplFDC(IFileDialogCustomize* fdc, DWORD id)
+        : wxFileDialogImplFDC<wxFileDialogCustomControlImpl>(fdc, id)
+    {
+    }
+
+    wxDECLARE_NO_COPY_CLASS(wxFileDialogCustomControlImplFDC);
+};
+
+class wxFileDialogButtonImplFDC
+    : public wxFileDialogImplFDC<wxFileDialogButtonImpl>
+{
+public:
+    wxFileDialogButtonImplFDC(IFileDialogCustomize* fdc, DWORD id)
+        : wxFileDialogImplFDC<wxFileDialogButtonImpl>(fdc, id)
+    {
+    }
+};
+
+class wxFileDialogCheckBoxImplFDC
+    : public wxFileDialogImplFDC<wxFileDialogCheckBoxImpl>
+{
+public:
+    wxFileDialogCheckBoxImplFDC(IFileDialogCustomize* fdc, DWORD id)
+        : wxFileDialogImplFDC<wxFileDialogCheckBoxImpl>(fdc, id)
+    {
+    }
+
+    virtual bool GetValue() wxOVERRIDE
+    {
+        BOOL checked = FALSE;
+        HRESULT hr = m_fdc->GetCheckButtonState(m_id, &checked);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::GetCheckButtonState"), hr);
+
+        return checked != FALSE;
+    }
+
+    virtual void SetValue(bool value) wxOVERRIDE
+    {
+        HRESULT hr = m_fdc->SetCheckButtonState(m_id, value ? TRUE : FALSE);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::SetCheckButtonState"), hr);
+    }
+};
+
+class wxFileDialogTextCtrlImplFDC
+    : public wxFileDialogImplFDC<wxFileDialogTextCtrlImpl>
+{
+public:
+    wxFileDialogTextCtrlImplFDC(IFileDialogCustomize* fdc, DWORD id)
+        : wxFileDialogImplFDC<wxFileDialogTextCtrlImpl>(fdc, id)
+    {
+    }
+
+    virtual wxString GetValue() wxOVERRIDE
+    {
+        wxCoTaskMemPtr<WCHAR> value;
+        HRESULT hr = m_fdc->GetEditBoxText(m_id, &value);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::GetEditBoxText"), hr);
+
+        return wxString(value);
+    }
+
+    virtual void SetValue(const wxString& value) wxOVERRIDE
+    {
+        HRESULT hr = m_fdc->SetEditBoxText(m_id, value.wc_str());
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::SetEditBoxText"), hr);
+    }
+};
+
+class wxFileDialogStaticTextImplFDC
+    : public wxFileDialogImplFDC<wxFileDialogStaticTextImpl>
+{
+public:
+    wxFileDialogStaticTextImplFDC(IFileDialogCustomize* fdc, DWORD id)
+        : wxFileDialogImplFDC<wxFileDialogStaticTextImpl>(fdc, id)
+    {
+    }
+
+    virtual void SetLabelText(const wxString& text) wxOVERRIDE
+    {
+        // Prevent ampersands from being misinterpreted as mnemonics.
+        const wxString& label = wxControl::EscapeMnemonics(text);
+
+        HRESULT hr = m_fdc->SetControlLabel(m_id, label.wc_str());
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::SetControlLabel"), hr);
+    }
+};
+
+// Implementation of wxFileDialogCustomize based on IFileDialogCustomize: to
+// simplify things, this class is its own implementation pointer too.
+class wxFileDialogCustomizeFDC : public wxFileDialogCustomize,
+                                 private wxFileDialogCustomizeImpl
+{
+public:
+    // For convenience, this class has a default ctor, but it can't be really
+    // used before Initialize() is called.
+    wxFileDialogCustomizeFDC()
+        : wxFileDialogCustomize(this)
+    {
+        m_lastId = 0;
+    }
+
+    bool Initialize(IFileDialog* fileDialog)
+    {
+        HRESULT hr = fileDialog->QueryInterface
+                                 (
+                                  wxIID_PPV_ARGS(IFileDialogCustomize, &m_fdc)
+                                 );
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxS("IFileDialog::QI(IFileDialogCustomize)"), hr);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    wxFileDialogButtonImpl* AddButton(const wxString& label) wxOVERRIDE
+    {
+        HRESULT hr = m_fdc->AddPushButton(++m_lastId, label.wc_str());
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxS("IFileDialogCustomize::AddPushButton"), hr);
+            return NULL;
+        }
+
+        return new wxFileDialogButtonImplFDC(m_fdc, m_lastId);
+    }
+
+    wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) wxOVERRIDE
+    {
+        HRESULT hr = m_fdc->AddCheckButton(++m_lastId, label.wc_str(), FALSE);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxS("IFileDialogCustomize::AddCheckButton"), hr);
+            return NULL;
+        }
+
+        return new wxFileDialogCheckBoxImplFDC(m_fdc, m_lastId);
+    }
+
+    wxFileDialogTextCtrlImpl* AddTextCtrl() wxOVERRIDE
+    {
+        HRESULT hr = m_fdc->AddEditBox(++m_lastId, L"");
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxS("IFileDialogCustomize::AddEditBox"), hr);
+            return NULL;
+        }
+
+        return new wxFileDialogTextCtrlImplFDC(m_fdc, m_lastId);
+    }
+
+    wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) wxOVERRIDE
+    {
+        HRESULT hr = m_fdc->AddText(++m_lastId, label.wc_str());
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxS("IFileDialogCustomize::AddText"), hr);
+            return NULL;
+        }
+
+        return new wxFileDialogStaticTextImplFDC(m_fdc, m_lastId);
+    }
+
+private:
+    wxCOMPtr<IFileDialogCustomize> m_fdc;
+    DWORD m_lastId;
+};
+
 #endif // wxUSE_IFILEOPENDIALOG
 
 } // unnamed namespace
@@ -264,7 +514,18 @@ public:
 
 
     // IFileDialogEvents
-    wxSTDMETHODIMP OnFileOk(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
+
+    wxSTDMETHODIMP OnFileOk(IFileDialog*) wxOVERRIDE
+    {
+        // Note that we need to call this hook function from here as the
+        // controls are destroyed later and getting their values wouldn't work
+        // any more.
+        if ( m_fileDialog->m_customizeHook )
+            m_fileDialog->m_customizeHook->TransferDataFromCustomControls();
+
+        return S_OK;
+    }
+
     wxSTDMETHODIMP OnFolderChanging(IFileDialog*, IShellItem*) wxOVERRIDE { return E_NOTIMPL; }
     wxSTDMETHODIMP OnFolderChange(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
 
@@ -316,6 +577,8 @@ public:
 
 
     wxFileDialog* const m_fileDialog;
+
+    wxFileDialogCustomizeFDC m_customize;
 
     bool m_typeAlreadyChanged;
 #endif // wxUSE_IFILEOPENDIALOG
@@ -944,6 +1207,13 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
     wxFileDialogMSWData& data = MSWData();
 
     FileDialogEventsRegistrar registerEvents(fileDialog, data);
+
+    // Add custom controls, if any.
+    if ( m_customizeHook )
+    {
+        if ( data.m_customize.Initialize(fileDialog.Get()) )
+            m_customizeHook->AddCustomControls(data.m_customize);
+    }
 
     // Configure the dialog before showing it.
     fileDialog.SetTitle(m_message);

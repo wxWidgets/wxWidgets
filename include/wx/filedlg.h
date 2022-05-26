@@ -24,6 +24,8 @@
     #define wxHAS_MULTIPLE_FILEDLG_FILTERS
 #endif
 
+class WXDLLIMPEXP_FWD_CORE wxFileDialogCustomizeHook;
+
 //----------------------------------------------------------------------------
 // wxFileDialog data
 //----------------------------------------------------------------------------
@@ -127,6 +129,22 @@ public:
     virtual int GetCurrentlySelectedFilterIndex () const
         { return m_currentlySelectedFilterIndex; }
 
+
+    // A customize hook methods will be called by wxFileDialog later if this
+    // function returns true, see its documentation for details.
+    //
+    // Note that the customizeHook object must remain alive at least until
+    // ShowModal() returns.
+    //
+    // If this function returns false, it means that customizing the file
+    // dialog is not supported on this platforms.
+    virtual bool SetCustomizeHook(wxFileDialogCustomizeHook& customizeHook);
+
+
+    // Extra controls support is deprecated now as it doesn't allow to use the
+    // contemporary file dialogs under MSW, use wxFileDialogCustomize-based
+    // API above instead in the new code.
+
     // this function is called with wxFileDialog as parameter and should
     // create the window containing the extra controls we want to show in it
     typedef wxWindow *(*ExtraControlCreatorFunction)(wxWindow*);
@@ -171,6 +189,8 @@ protected:
     // selection in the control changes by the platform-specific code to
     // provide a useful implementation of GetCurrentlySelectedFilterIndex().
     int           m_currentlySelectedFilterIndex;
+
+    wxFileDialogCustomizeHook* m_customizeHook;
 
     wxWindow*     m_extraControl;
 

@@ -87,6 +87,7 @@
 
 #if wxUSE_FILEDLG
     #include "wx/filedlg.h"
+    #include "wx/filedlgcustomize.h"
 #endif // wxUSE_FILEDLG
 
 #if wxUSE_DIRDLG
@@ -507,6 +508,17 @@ bool MyApp::OnInit()
     filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC, "Sa&ve file (generic)");
 #endif // USE_FILEDLG_GENERIC
 
+    filedlg_menu->AppendSeparator();
+    filedlg_menu->AppendRadioItem(
+        DIALOGS_FILE_USE_CUSTOMIZER,
+       "Use new customization API",
+       "Use wxFileDialog::SetCustomizeHook() for file dialog customization"
+    );
+    filedlg_menu->AppendRadioItem(
+        DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR,
+       "Use old customization API",
+       "Use wxFileDialog::SetExtraControlCreator() for file dialog customization"
+    );
 #ifdef __WXOSX_COCOA__
     filedlg_menu->AppendSeparator();
     filedlg_menu->AppendCheckItem(DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,
@@ -1562,6 +1574,30 @@ void MyFrame::AddRemove(wxCommandEvent& WXUNUSED(event))
 
 #if wxUSE_FILEDLG
 
+// Simple function showing the current wxFileDialog state.
+wxString GetFileDialogStateDescription(wxFileDialogBase* dialog)
+{
+    const wxString fn = dialog->GetCurrentlySelectedFilename();
+
+    wxString msg;
+    if ( fn.empty() )
+        msg = "Nothing";
+    else if ( wxFileName::FileExists(fn) )
+        msg = "File";
+    else if ( wxFileName::DirExists(fn) )
+        msg = "Directory";
+    else
+        msg = "Something else";
+
+    msg += " selected";
+
+    const int filter = dialog->GetCurrentlySelectedFilterIndex();
+    if ( filter != wxNOT_FOUND )
+        msg += wxString::Format(" (filter=%d)", filter);
+
+    return msg;
+}
+
 // panel with custom controls for file dialog
 class MyExtraPanel : public wxPanel
 {
@@ -1590,25 +1626,8 @@ private:
         // wxGenericFileDialog, so we need to cast to the base class. In a
         // typical application, we would cast to just wxFileDialog instead.
         wxFileDialogBase* const dialog = wxStaticCast(GetParent(), wxFileDialogBase);
-        const wxString fn = dialog->GetCurrentlySelectedFilename();
 
-        wxString msg;
-        if ( fn.empty() )
-            msg = "Nothing";
-        else if ( wxFileName::FileExists(fn) )
-            msg = "File";
-        else if ( wxFileName::DirExists(fn) )
-            msg = "Directory";
-        else
-            msg = "Something else";
-
-        msg += " selected";
-
-        const int filter = dialog->GetCurrentlySelectedFilterIndex();
-        if ( filter != wxNOT_FOUND )
-            msg += wxString::Format(" (filter=%d)", filter);
-
-        event.SetText(msg);
+        event.SetText(GetFileDialogStateDescription(dialog));
     }
 
     wxString m_str;
@@ -1656,6 +1675,64 @@ static wxWindow* createMyExtraPanel(wxWindow *parent)
     return new MyExtraPanel(parent);
 }
 
+// This class does the same thing as MyExtraPanel above, but uses newer API for
+// wxFileDialog customization.
+class MyCustomizeHook : public wxFileDialogCustomizeHook
+{
+public:
+    explicit MyCustomizeHook(wxFileDialog& dialog)
+        : m_dialog(&dialog)
+    {
+    }
+
+    // Override pure virtual base class method to add our custom controls.
+    virtual void AddCustomControls(wxFileDialogCustomize& customizer) wxOVERRIDE
+    {
+        // Note: all the pointers created here cease to be valid once
+        // ShowModal() returns, TransferDataFromCustomControls() is the latest
+        // moment when they can still be used.
+        customizer.AddStaticText("Just some extra text:");
+        m_text = customizer.AddTextCtrl();
+        m_cb = customizer.AddCheckBox("Enable Custom Button");
+        m_btn = customizer.AddButton("Custom Button");
+        m_label = customizer.AddStaticText("Nothing selected");
+    }
+
+    // Override another method called whenever something changes in the dialog.
+    virtual void UpdateCustomControls() wxOVERRIDE
+    {
+        // Enable the button if and only if the checkbox is checked.
+        m_btn->Enable(m_cb->GetValue());
+
+        // Also show the current dialog state.
+        m_label->SetLabelText(GetFileDialogStateDescription(m_dialog));
+    }
+
+    // And another one called when the dialog is accepted.
+    virtual void TransferDataFromCustomControls() wxOVERRIDE
+    {
+        m_info.Printf("checkbox=%d, text=\"%s\"",
+                      m_cb->GetValue(), m_text->GetValue());
+    }
+
+
+    // This is just a helper function allowing to show the values of the custom
+    // controls.
+    wxString GetInfo() const { return m_info; }
+
+private:
+    wxFileDialog* const m_dialog;
+
+    wxFileDialogButton* m_btn;
+    wxFileDialogCheckBox* m_cb;
+    wxFileDialogTextCtrl* m_text;
+    wxFileDialogStaticText* m_label;
+
+    wxString m_info;
+
+    wxDECLARE_NO_COPY_CLASS(MyCustomizeHook);
+};
+
 void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 {
     wxFileDialog dialog
@@ -1672,14 +1749,43 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     )
                  );
 
-    dialog.SetExtraControlCreator(&createMyExtraPanel);
+    // Note: this object must remain alive until ShowModal() returns.
+    MyCustomizeHook myCustomizer(dialog);
+
+    // Normal programs would use either SetCustomizeHook() (preferred) or
+    // SetExtraControlCreator() (if its extra flexibility is really required),
+    // but, for demonstration purposes, this sample allows either one or the
+    // other.
+    const bool useExtra =
+        GetMenuBar()->IsChecked(DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR);
+    const bool hasExtra =
+        useExtra ? dialog.SetExtraControlCreator(&createMyExtraPanel)
+                 : dialog.SetCustomizeHook(myCustomizer);
+
     dialog.CentreOnParent();
     dialog.SetDirectory(wxGetHomeDir());
 
     if (dialog.ShowModal() == wxID_OK)
     {
+        wxString extraInfo;
+        if ( hasExtra )
+        {
+            if ( useExtra )
+            {
+                wxWindow * const extra = dialog.GetExtraControl();
+                extraInfo = static_cast<MyExtraPanel*>(extra)->GetInfo();
+            }
+            else
+            {
+                extraInfo = myCustomizer.GetInfo();
+            }
+        }
+        else
+        {
+            extraInfo = "<not supported>";
+        }
+
         wxString info;
-        wxWindow * const extra = dialog.GetExtraControl();
         info.Printf("Full file name: %s\n"
                     "Path: %s\n"
                     "Name: %s\n"
@@ -1687,8 +1793,7 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     dialog.GetPath(),
                     dialog.GetDirectory(),
                     dialog.GetFilename(),
-                    extra ? static_cast<MyExtraPanel*>(extra)->GetInfo()
-                          : wxString("None"));
+                    extraInfo);
         wxMessageDialog dialog2(this, info, "Selected file");
         dialog2.ShowModal();
     }

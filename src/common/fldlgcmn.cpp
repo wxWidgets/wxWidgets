@@ -24,6 +24,9 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/filedlgcustomize.h"
+#include "wx/private/filedlgcustomize.h"
+
 extern WXDLLEXPORT_DATA(const char) wxFileDialogNameStr[] = "filedlg";
 extern WXDLLEXPORT_DATA(const char) wxFileSelectorPromptStr[] = "Select a file";
 extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[] =
@@ -33,6 +36,157 @@ extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[] =
     "*"
 #endif
     ;
+
+// ============================================================================
+// File dialog customization support
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxFileDialogCustomControl and derived classes
+// ----------------------------------------------------------------------------
+
+// Everything here is trivial, but has to be defined here, where the private
+// "Impl" classes are fully declared.
+
+wxFileDialogCustomControlImpl::~wxFileDialogCustomControlImpl()
+{
+}
+
+void wxFileDialogCustomControl::Show(bool show)
+{
+    return m_impl->Show(show);
+}
+
+void wxFileDialogCustomControl::Enable(bool enable)
+{
+    return m_impl->Enable(enable);
+}
+
+wxFileDialogCustomControl::~wxFileDialogCustomControl()
+{
+    delete m_impl;
+}
+
+wxFileDialogButton::wxFileDialogButton(wxFileDialogButtonImpl* impl)
+    : wxFileDialogCustomControl(impl)
+{
+}
+
+wxFileDialogButtonImpl* wxFileDialogButton::GetImpl() const
+{
+    return static_cast<wxFileDialogButtonImpl*>(m_impl);
+}
+
+wxFileDialogCheckBox::wxFileDialogCheckBox(wxFileDialogCheckBoxImpl* impl)
+    : wxFileDialogCustomControl(impl)
+{
+}
+
+wxFileDialogCheckBoxImpl* wxFileDialogCheckBox::GetImpl() const
+{
+    return static_cast<wxFileDialogCheckBoxImpl*>(m_impl);
+}
+
+bool wxFileDialogCheckBox::GetValue() const
+{
+    return GetImpl()->GetValue();
+}
+
+void wxFileDialogCheckBox::SetValue(bool value)
+{
+    GetImpl()->SetValue(value);
+}
+
+wxFileDialogTextCtrl::wxFileDialogTextCtrl(wxFileDialogTextCtrlImpl* impl)
+    : wxFileDialogCustomControl(impl)
+{
+}
+
+wxFileDialogTextCtrlImpl* wxFileDialogTextCtrl::GetImpl() const
+{
+    return static_cast<wxFileDialogTextCtrlImpl*>(m_impl);
+}
+
+wxString wxFileDialogTextCtrl::GetValue() const
+{
+    return GetImpl()->GetValue();
+}
+
+void wxFileDialogTextCtrl::SetValue(const wxString& value)
+{
+    GetImpl()->SetValue(value);
+}
+
+wxFileDialogStaticText::wxFileDialogStaticText(wxFileDialogStaticTextImpl* impl)
+    : wxFileDialogCustomControl(impl)
+{
+}
+
+wxFileDialogStaticTextImpl* wxFileDialogStaticText::GetImpl() const
+{
+    return static_cast<wxFileDialogStaticTextImpl*>(m_impl);
+}
+
+void wxFileDialogStaticText::SetLabelText(const wxString& text)
+{
+    GetImpl()->SetLabelText(text);
+}
+
+// ----------------------------------------------------------------------------
+// wxFileDialogCustomize
+// ----------------------------------------------------------------------------
+
+wxFileDialogCustomizeHook::~wxFileDialogCustomizeHook()
+{
+}
+
+wxFileDialogCustomizeImpl::~wxFileDialogCustomizeImpl()
+{
+}
+
+wxFileDialogCustomize::~wxFileDialogCustomize()
+{
+    // For consistency with the rest of wx API, we own all the custom controls
+    // pointers and delete them when we're deleted.
+    for ( size_t n = 0; n < m_controls.size(); ++n )
+        delete m_controls[n];
+
+    // Do not delete m_impl, the derived classes use this object itself as
+    // implementation, which allows us to avoid allocating it on the heap in
+    // the first place.
+}
+
+template <typename T>
+T*
+wxFileDialogCustomize::StoreAndReturn(T* control)
+{
+    m_controls.push_back(control);
+    return control;
+}
+
+wxFileDialogButton*
+wxFileDialogCustomize::AddButton(const wxString& label)
+{
+    return StoreAndReturn(new wxFileDialogButton(m_impl->AddButton(label)));
+}
+
+wxFileDialogCheckBox*
+wxFileDialogCustomize::AddCheckBox(const wxString& label)
+{
+    return StoreAndReturn(new wxFileDialogCheckBox(m_impl->AddCheckBox(label)));
+}
+
+wxFileDialogTextCtrl*
+wxFileDialogCustomize::AddTextCtrl()
+{
+    return StoreAndReturn(new wxFileDialogTextCtrl(m_impl->AddTextCtrl()));
+}
+
+wxFileDialogStaticText*
+wxFileDialogCustomize::AddStaticText(const wxString& label)
+{
+    return StoreAndReturn(new wxFileDialogStaticText(m_impl->AddStaticText(label)));
+}
 
 //----------------------------------------------------------------------------
 // wxFileDialogBase
@@ -45,6 +199,7 @@ void wxFileDialogBase::Init()
     m_filterIndex = 0;
     m_currentlySelectedFilterIndex = wxNOT_FOUND;
     m_windowStyle = 0;
+    m_customizeHook = NULL;
     m_extraControl = NULL;
     m_extraControlCreator = NULL;
 }
@@ -163,6 +318,18 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
     return filePath + ext;
 }
 
+bool wxFileDialogBase::SetCustomizeHook(wxFileDialogCustomizeHook& customizeHook)
+{
+    if ( !SupportsExtraControl() )
+        return false;
+
+    wxASSERT_MSG( !m_extraControlCreator,
+                  "Call either SetExtraControlCreator() or SetCustomizeHook()" );
+
+    m_customizeHook = &customizeHook;
+    return true;
+}
+
 bool wxFileDialogBase::SetExtraControlCreator(ExtraControlCreatorFunction creator)
 {
     wxCHECK_MSG( !m_extraControlCreator, false,
@@ -194,6 +361,9 @@ wxSize wxFileDialogBase::GetExtraControlSize()
 
 void wxFileDialogBase::UpdateExtraControlUI()
 {
+    if ( m_customizeHook )
+        m_customizeHook->UpdateCustomControls();
+
     if ( m_extraControl )
         m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
