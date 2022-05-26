@@ -53,8 +53,6 @@
 // wxUSE_IFILEOPENDIALOG is defined.
 #if wxUSE_IFILEOPENDIALOG
     #include "wx/msw/wrapshl.h"
-
-    #include "wx/msw/ole/comimpl.h"
 #endif // wxUSE_IFILEOPENDIALOG
 
 // ----------------------------------------------------------------------------
@@ -238,6 +236,33 @@ public:
 
 
 #if wxUSE_IFILEOPENDIALOG
+    // IUnknown
+
+    wxSTDMETHODIMP QueryInterface(REFIID iid, void** ppv)
+    {
+        if ( iid == IID_IUnknown || iid == IID_IFileDialogEvents )
+        {
+            *ppv = this;
+        }
+        else
+        {
+            *ppv = NULL;
+
+            return E_NOINTERFACE;
+        }
+
+        // No need for AddRef(), we're not really reference-counted as our
+        // lifetime is determined by wxFileDialog and there should be no
+        // outside references to this object once Unadvise() is called.
+
+        return S_OK;
+    }
+
+    // Dummy implementations because we're not really ref-counted.
+    STDMETHODIMP_(ULONG) AddRef() { return 1; }
+    STDMETHODIMP_(ULONG) Release() { return 1; }
+
+
     // IFileDialogEvents
     wxSTDMETHODIMP OnFileOk(IFileDialog*) wxOVERRIDE { return E_NOTIMPL; }
     wxSTDMETHODIMP OnFolderChanging(IFileDialog*, IShellItem*) wxOVERRIDE { return E_NOTIMPL; }
@@ -293,19 +318,10 @@ public:
     wxFileDialog* const m_fileDialog;
 
     bool m_typeAlreadyChanged;
-
-    DECLARE_IUNKNOWN_METHODS;
 #endif // wxUSE_IFILEOPENDIALOG
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogMSWData);
 };
-
-BEGIN_IID_TABLE(wxFileDialogMSWData)
-    ADD_IID(Unknown)
-    ADD_IID(FileDialogEvents)
-END_IID_TABLE;
-
-IMPLEMENT_IUNKNOWN_METHODS(wxFileDialogMSWData)
 
 // ----------------------------------------------------------------------------
 // hook function for moving the dialog
@@ -419,25 +435,13 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
 wxFileDialog::~wxFileDialog()
 {
-#if wxUSE_IFILEOPENDIALOG
-    if ( m_data )
-        m_data->Release();
-#else // !wxUSE_IFILEOPENDIALOG
     delete m_data;
-#endif // wxUSE_IFILEOPENDIALOG
 }
 
 wxFileDialogMSWData& wxFileDialog::MSWData()
 {
     if ( !m_data )
-    {
         m_data = new wxFileDialogMSWData(this);
-
-#if wxUSE_IFILEOPENDIALOG
-        // Make sure it stays alive while we are.
-        m_data->AddRef();
-#endif // wxUSE_IFILEOPENDIALOG
-    }
 
     return *m_data;
 }
