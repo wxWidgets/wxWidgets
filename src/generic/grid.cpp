@@ -4515,6 +4515,9 @@ void wxGrid::CancelMouseCapture()
     // cancel operation currently in progress, whatever it is
     if ( m_winCapture )
     {
+        if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL ||
+             m_cursorMode == WXGRID_CURSOR_MOVE_ROW )
+            m_winCapture->Refresh();
         DoAfterDraggingEnd();
     }
 }
