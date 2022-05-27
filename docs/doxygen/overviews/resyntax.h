@@ -125,7 +125,7 @@ follows; some more constraints are described later, under
 
 The lookahead constraints may not contain back references (see later), and all
 parentheses within them are considered non-capturing. A RE may not end with
-"\".
+\"\\\".
 
 
 @section overview_resyntax_bracket Bracket Expressions
