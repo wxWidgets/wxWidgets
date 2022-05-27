@@ -2048,7 +2048,7 @@ protected:
     //
     // TODO: Can bitmap be implemented with wxPGCell?
     wxBitmapBundle              m_valueBitmapBundle;
-    wxBitmap                    m_valueBitmap;
+    mutable wxBitmap            m_valueBitmap;
 
     wxVariant                   m_value;
     wxPGAttributeStorage        m_attributes;

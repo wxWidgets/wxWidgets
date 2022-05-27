@@ -2817,11 +2817,11 @@ wxBitmap* wxPGProperty::GetValueImage() const
 
     wxPropertyGrid* pg = GetGrid();
     if ( pg )
-        *const_cast<wxBitmap*>(&m_valueBitmap) = m_valueBitmapBundle.GetBitmapFor(pg);
+        m_valueBitmap = m_valueBitmapBundle.GetBitmapFor(pg);
     else
-        *const_cast<wxBitmap*>(&m_valueBitmap) = m_valueBitmapBundle.GetBitmap(m_valueBitmapBundle.GetDefaultSize());
+        m_valueBitmap = m_valueBitmapBundle.GetBitmap(m_valueBitmapBundle.GetDefaultSize());
 
-    return const_cast<wxBitmap*>(&m_valueBitmap);
+    return &m_valueBitmap;
 }
 
 // -----------------------------------------------------------------------
