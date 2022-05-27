@@ -1426,14 +1426,13 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             wxASSERT( !IsCategory() );
 
             wxVariantList& list = pList->GetList();
-            wxVariantList::iterator node;
             unsigned int i = 0;
 
             //wxLogDebug(wxS(">> %s.SetValue() pList parsing"),GetName());
 
             // Children in list can be in any order, but we will give hint to
             // GetPropertyByNameWH(). This optimizes for full list parsing.
-            for ( node = list.begin(); node != list.end(); ++node )
+            for ( wxVariantList::iterator node = list.begin(); node != list.end(); ++node )
             {
                 wxVariant& childValue = *const_cast<wxVariant*>(*node);
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
@@ -2227,12 +2226,10 @@ const wxPGProperty* wxPGProperty::GetLastVisibleSubItem() const
 
 bool wxPGProperty::IsVisible() const
 {
-    const wxPGProperty* parent;
-
     if ( HasFlag(wxPG_PROP_HIDDEN) )
         return false;
 
-    for ( parent = GetParent(); parent != NULL; parent = parent->GetParent() )
+    for (const wxPGProperty* parent = GetParent(); parent != NULL; parent = parent->GetParent() )
     {
         if ( !parent->IsExpanded() || parent->HasFlag(wxPG_PROP_HIDDEN) )
             return false;
