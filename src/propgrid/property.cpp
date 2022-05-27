@@ -1115,12 +1115,7 @@ bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFla
                wxS(">> %s.StringToValue('%s')"), GetLabel(), text);
 
     wxString::const_iterator it = text.begin();
-    wxUniChar a;
-
-    if ( it != text.end() )
-        a = *it;
-    else
-        a = 0;
+    wxUniChar a = ( it != text.end() ) ? *it : 0;
 
     for ( ;; )
     {
@@ -1274,14 +1269,7 @@ bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFla
 
         it += strPosIncrement;
 
-        if ( it != text.end() )
-        {
-            a = *it;
-        }
-        else
-        {
-            a = 0;
-        }
+        a = ( it != text.end() ) ? *it : 0;
 
         pos += strPosIncrement;
     }
