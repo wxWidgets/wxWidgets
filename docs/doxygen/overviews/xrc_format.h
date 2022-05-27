@@ -298,7 +298,7 @@ the following table:
 @itemdef{ "\n", line break }
 @itemdef{ "\r", carriage return }
 @itemdef{ "\t", tab }
-@itemdef{ "\\", "\" }
+@itemdef{ \"\\\", backslash }
 @endDefList
 
 By default, the text is translated using wxLocale::GetTranslation() before
@@ -2952,10 +2952,10 @@ files with older values of @c version attribute of @c \<resource\>).
 
 @subsection overview_xrcformat_pre_v2530 Versions Before 2.5.3.0
 
-Version 2.5.3.0 introduced C-like handling of "\\" in text. In older versions,
+Version 2.5.3.0 introduced C-like handling of \"\\\\\" in text. In older versions,
 "\n", "\t" and "\r" escape sequences were replaced with respective characters
-in the same matter it's done in C, but "\\" was left intact instead of being
-replaced with single "\", as one would expect. Starting with 2.5.3.0, all of
+in the same matter as it's done in C, but \"\\\\\" was left intact instead of being
+replaced with a single \"\\\", as one would expect. Starting with 2.5.3.0, all of
 them are handled in C-like manner.
 
 
