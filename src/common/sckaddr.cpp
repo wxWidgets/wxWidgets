@@ -796,7 +796,7 @@ void wxSockAddress::Clear()
 wxSockAddressImpl& wxIPaddress::GetImpl()
 {
     if ( m_impl->GetFamily() == wxSockAddressImpl::FAMILY_UNSPEC )
-        m_impl->CreateINET();
+        DoInitImpl();
 
     return *m_impl;
 }
