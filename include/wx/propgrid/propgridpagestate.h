@@ -332,6 +332,9 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridPageState
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPage;
     friend class wxPropertyGridManager;
+    friend class wxPGProperty;
+    friend class wxFlagsProperty;
+    friend class wxPropertyGridIteratorBase;
 public:
 
     // Default constructor.
@@ -346,10 +349,6 @@ public:
     // Override this member function to add custom behaviour on property
     // deletion.
     virtual void DoDelete( wxPGProperty* item, bool doDelete = true );
-
-    wxSize DoFitColumns( bool allowGridResize = false );
-
-    wxPGProperty* DoGetItemAtY( int y ) const;
 
     // Override this member function to add custom behaviour on property
     // insertion.
@@ -421,27 +420,6 @@ public:
         return m_selection.empty()? NULL: m_selection[0];
     }
 
-    void DoSetSelection( wxPGProperty* prop )
-    {
-        m_selection.clear();
-        if ( prop )
-            m_selection.push_back(prop);
-    }
-
-    bool DoClearSelection()
-    {
-        return DoSelectProperty(NULL);
-    }
-
-    void DoRemoveFromSelection( wxPGProperty* prop );
-
-    void DoSetColumnProportion( unsigned int column, int proportion );
-
-    int DoGetColumnProportion( unsigned int column ) const
-    {
-        return m_columnProportions[column];
-    }
-
     void ResetColumnSizes( int setSplitterFlags );
 
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
@@ -451,14 +429,6 @@ public:
     wxPGProperty* GetPropertyByLabel( const wxString& name,
                                       wxPGProperty* parent = NULL ) const;
 #endif // WXWIN_COMPATIBILITY_3_0
-
-    wxVariant DoGetPropertyValues( const wxString& listname,
-                                   wxPGProperty* baseparent,
-                                   long flags ) const;
-
-    wxPGProperty* DoGetRoot() const { return m_properties; }
-
-    void DoSetPropertyName( wxPGProperty* p, const wxString& newName );
 
     // Returns combined width of margin and all the columns
     int GetVirtualWidth() const
@@ -487,18 +457,6 @@ public:
 
     bool IsInNonCatMode() const { return m_properties == m_abcArray; }
 
-    void DoLimitPropertyEditing( wxPGProperty* p, bool limit = true )
-    {
-        p->SetFlagRecursively(wxPG_PROP_NOEDITOR, limit);
-    }
-
-    bool DoSelectProperty( wxPGProperty* p, unsigned int flags = 0 );
-
-    // widthChange is non-client.
-    void OnClientWidthChange( int newWidth,
-                              int widthChange,
-                              bool fromOnResize = false );
-
     // Recalculates m_virtualHeight.
     void RecalculateVirtualHeight()
     {
@@ -507,25 +465,10 @@ public:
 
     void SetColumnCount( int colCount );
 
-    void PropagateColSizeDec( int column, int decrease, int dir );
-
-    bool DoHideProperty( wxPGProperty* p, bool hide, int flags = wxPG_RECURSE );
-
-    bool DoSetPropertyValueString( wxPGProperty* p, const wxString& value );
-
-    bool DoSetPropertyValue( wxPGProperty* p, wxVariant& value );
-
-    bool DoSetPropertyValueWxObjectPtr( wxPGProperty* p, wxObject* value );
-    void DoSetPropertyValues( const wxVariantList& list,
-                              wxPGProperty* default_category );
-
     void SetSplitterLeft( bool subProps = false );
 
     // Set virtual width for this particular page.
     void SetVirtualWidth( int width );
-
-    void DoSortChildren( wxPGProperty* p, int flags = 0 );
-    void DoSort( int flags = 0 );
 
     bool PrepareAfterItemsAdded();
 
@@ -535,24 +478,39 @@ public:
         m_vhCalcPending = true;
     }
 
-    // Base append.
-    wxPGProperty* DoAppend( wxPGProperty* property );
-
-    // Returns property by its name.
-    wxPGProperty* BaseGetPropertyByName( const wxString& name ) const;
-
-    // Called in, for example, wxPropertyGrid::Clear.
-    void DoClear();
-
-    bool DoIsPropertySelected( wxPGProperty* prop ) const;
-
-    bool DoCollapse( wxPGProperty* p );
-
-    bool DoExpand( wxPGProperty* p );
-
-    void CalculateFontAndBitmapStuff( int vspacing );
-
 protected:
+    wxSize DoFitColumns(bool allowGridResize = false);
+
+    wxPGProperty* DoGetItemAtY(int y) const;
+
+    void DoSetSelection(wxPGProperty* prop)
+    {
+        m_selection.clear();
+        if (prop)
+            m_selection.push_back(prop);
+    }
+
+    bool DoClearSelection()
+    {
+        return DoSelectProperty(NULL);
+    }
+
+    void DoRemoveFromSelection(wxPGProperty* prop);
+
+    void DoSetColumnProportion(unsigned int column, int proportion);
+
+    int DoGetColumnProportion(unsigned int column) const
+    {
+        return m_columnProportions[column];
+    }
+
+    wxVariant DoGetPropertyValues(const wxString& listname,
+        wxPGProperty* baseparent,
+        long flags) const;
+
+    wxPGProperty* DoGetRoot() const { return m_properties; }
+
+    void DoSetPropertyName(wxPGProperty* p, const wxString& newName);
 
     // Utility to check if two properties are visibly next to each other
     bool ArePropertiesAdjacent( wxPGProperty* prop1,
@@ -560,6 +518,25 @@ protected:
                                 int iterFlags = wxPG_ITERATE_VISIBLE ) const;
 
     int DoGetSplitterPosition( int splitterIndex = 0 ) const;
+
+    void DoLimitPropertyEditing(wxPGProperty* p, bool limit = true)
+    {
+        p->SetFlagRecursively(wxPG_PROP_NOEDITOR, limit);
+    }
+
+    bool DoSelectProperty(wxPGProperty* p, unsigned int flags = 0);
+
+    // Base append.
+    wxPGProperty* DoAppend(wxPGProperty* property);
+
+    // Called in, for example, wxPropertyGrid::Clear.
+    void DoClear();
+
+    bool DoIsPropertySelected(wxPGProperty* prop) const;
+
+    bool DoCollapse(wxPGProperty* p);
+
+    bool DoExpand(wxPGProperty* p);
 
     // Returns column at x coordinate (in GetGrid()->GetPanel()).
     // pSplitterHit - Give pointer to int that receives index to splitter that is at x.
@@ -588,9 +565,32 @@ protected:
     // so it won't remain in the way of the user code.
     void DoInvalidateChildrenNames(wxPGProperty* p, bool recursive);
 
+    bool DoHideProperty(wxPGProperty* p, bool hide, int flags = wxPG_RECURSE);
+
+    bool DoSetPropertyValueString(wxPGProperty* p, const wxString& value);
+
+    bool DoSetPropertyValue(wxPGProperty* p, wxVariant& value);
+
+    bool DoSetPropertyValueWxObjectPtr(wxPGProperty* p, wxObject* value);
+    void DoSetPropertyValues(const wxVariantList& list,
+                             wxPGProperty* default_category);
+
+    void DoSortChildren(wxPGProperty* p, int flags = 0);
+    void DoSort(int flags = 0);
+
+    // widthChange is non-client.
+    void OnClientWidthChange(int newWidth, int widthChange, bool fromOnResize = false);
+
     // Check if property contains given sub-category.
     bool IsChildCategory(wxPGProperty* p,
                          wxPropertyCategory* cat, bool recursive);
+
+    void PropagateColSizeDec(int column, int decrease, int dir);
+
+    void CalculateFontAndBitmapStuff(int vspacing);
+
+    // Returns property by its name.
+    wxPGProperty* BaseGetPropertyByName(const wxString& name) const;
 
     // If visible, then this is pointer to wxPropertyGrid.
     // This shall *never* be NULL to indicate that this state is not visible.

@@ -240,6 +240,10 @@ INCOMPATIBLE CHANGES SINCE 3.1.6:
   They were not intended for the public API. m_image variable represents
   cached image now.
 
+- wxPropertyGridPageState funtions intended for internal use are no longer
+  public. Corresponding functions in wxPropertyGridInterface, wxPropertyGrid,
+  wxPropertyGridPage, and wxPropertyGridManager should be used instead.
+
 
 NOTE: This file is updated only before the release, please use
 
