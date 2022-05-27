@@ -298,6 +298,10 @@ void wxPropertyGridPageState::DoClear()
 
         m_dictName.clear();
 
+        // We need to clear parent grid's m_propHover
+        if ( m_pPropGrid )
+            m_pPropGrid->m_propHover = NULL;
+
         m_currentCategory = NULL;
         m_itemsAdded = false;
 
