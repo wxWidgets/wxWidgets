@@ -1935,19 +1935,17 @@ a single wxSizer child with non-ribbon windows in it.
 @hdr3col{property, type, description}
 @row3col{value, @ref overview_xrcformat_type_text,
     Initial value of the control (default: empty).}
-@row3col{maxlength, integer,
-    Maximum length of the text entered (default: unlimited).}
 @endTable
 
-Notice that wxRichTextCtrl support in XRC is available in wxWidgets 2.9.5 and
-later only and you need to explicitly register its handler using
+Notice that you need to explicitly register the handler using
 @code
     #include <wx/xrc/xh_richtext.h>
 
-    AddHandler(new wxRichTextCtrl);
+    AddHandler(new wxRichTextCtrlXmlHandler);
 @endcode
 to use it.
 
+@since 2.9.5
 
 @subsubsection xrc_wxscrollbar wxScrollBar
 
