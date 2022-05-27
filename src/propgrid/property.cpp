@@ -2655,7 +2655,7 @@ wxVariant wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
     return wxNullVariant;
 }
 
-bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
+bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
 {
     const wxVariantList* pList = NULL;
     wxVariantList::const_iterator node;
@@ -2702,7 +2702,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
             if ( listValue && listValue->IsType(wxPG_VARIANT_TYPE_LIST) )
                 childList = listValue;
 
-            if ( !child->AreAllChildrenSpecified(const_cast<wxVariant*>(childList)) )
+            if ( !child->AreAllChildrenSpecified(childList) )
                 return false;
         }
     }
