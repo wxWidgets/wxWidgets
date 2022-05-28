@@ -937,6 +937,8 @@ No additional properties.
      Label to use for the checkbox (default: empty).}
 @row3col{checked, @ref overview_xrcformat_type_bool,
      Should the checkbox be checked initially (default: 0)?}
+@row3col{undetermined, @ref overview_xrcformat_type_bool,
+     Should a 3-state checkbox be initialized as undetermined (default: 0)?}
 @endTable
 
 
