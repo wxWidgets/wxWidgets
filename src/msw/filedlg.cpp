@@ -1022,7 +1022,9 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
         in the upper left of the frame, it does not center
         automatically.
     */
-    if ((m_data && m_data->m_bMovedWindow) || HasExtraControlCreator()) // we need these flags.
+    if ((m_data && m_data->m_bMovedWindow) ||
+            HasExtraControlCreator() ||
+                m_customizeHook)
     {
         ChangeExceptionPolicy();
         msw_flags |= OFN_EXPLORER|OFN_ENABLEHOOK;
@@ -1060,7 +1062,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;
 
     GlobalPtr hgbl;
-    if ( HasExtraControlCreator() )
+    if ( HasExtraControlCreator() || m_customizeHook )
     {
         msw_flags |= OFN_ENABLETEMPLATEHANDLE;
 
