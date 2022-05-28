@@ -194,13 +194,13 @@ protected:
 
     wxWindow*     m_extraControl;
 
-    // returns true if control is created (if it already exists returns false)
+    // create and return the extra control using the given parent
+    wxWindow* CreateExtraControlWithParent(wxWindow* parent) const;
+    // returns true if control is created, also sets m_extraControl
     bool CreateExtraControl();
     // return true if SetExtraControlCreator() was called
     bool HasExtraControlCreator() const
         { return m_extraControlCreator != NULL; }
-    // get the size of the extra control by creating and deleting it
-    wxSize GetExtraControlSize();
     // Helper function for native file dialog usage where no wx events
     // are processed.
     void UpdateExtraControlUI();

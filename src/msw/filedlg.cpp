@@ -1075,8 +1075,13 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
         lpdt->x = 0;
         lpdt->y = 0;
 
+        // create the extra control in an empty dialog just to find its size: this
+        // is not terribly efficient but we do need to know the size before
+        // creating the native dialog and this seems to be the only way
+        wxDialog dlg(NULL, wxID_ANY, wxString());
+        const wxSize extraSize = CreateExtraControlWithParent(&dlg)->GetSize();
+
         // convert the size of the extra controls to the dialog units
-        const wxSize extraSize = GetExtraControlSize();
         const LONG baseUnits = ::GetDialogBaseUnits();
         lpdt->cx = ::MulDiv(extraSize.x, 4, LOWORD(baseUnits));
         lpdt->cy = ::MulDiv(extraSize.y, 8, HIWORD(baseUnits));

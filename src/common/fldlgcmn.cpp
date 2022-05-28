@@ -368,35 +368,24 @@ bool wxFileDialogBase::SetExtraControlCreator(ExtraControlCreatorFunction creato
     return SupportsExtraControl();
 }
 
+wxWindow* wxFileDialogBase::CreateExtraControlWithParent(wxWindow* parent) const
+{
+    if ( m_extraControlCreator )
+        return (*m_extraControlCreator)(parent);
+
+    // It's not an error to call this function if there are no extra controls
+    // to create, just do nothing in this case.
+    return NULL;
+}
+
 bool wxFileDialogBase::CreateExtraControl()
 {
     // We're not supposed to be called more than once normally, but just do
     // nothing if we had already created the custom controls somehow.
-    if ( m_extraControl )
-        return true;
+    if ( !m_extraControl )
+        m_extraControl = CreateExtraControlWithParent(this);
 
-    if ( m_extraControlCreator )
-    {
-        m_extraControl = (*m_extraControlCreator)(this);
-
-        return true;
-    }
-
-    // It's not an error to call this function if there are no extra controls
-    // to create, just do nothing in this case.
-    return false;
-}
-
-wxSize wxFileDialogBase::GetExtraControlSize()
-{
-    if ( !m_extraControlCreator )
-        return wxDefaultSize;
-
-    // create the extra control in an empty dialog just to find its size: this
-    // is not terribly efficient but we do need to know the size before
-    // creating the native dialog and this seems to be the only way
-    wxDialog dlg(NULL, wxID_ANY, wxString());
-    return (*m_extraControlCreator)(&dlg)->GetSize();
+    return m_extraControl != NULL;
 }
 
 void wxFileDialogBase::UpdateExtraControlUI()
