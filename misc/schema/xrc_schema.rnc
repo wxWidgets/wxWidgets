@@ -765,7 +765,8 @@ wxCheckBox =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element checked {_, t_bool }*
+        [xrc:p="o"] element checked {_, t_bool }* &
+        [xrc:p="o"] element undetermined {_, t_bool }*
     }
 
 
