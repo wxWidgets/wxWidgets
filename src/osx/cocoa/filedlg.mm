@@ -411,12 +411,11 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
         return;
     
     wxNonOwnedWindow::Create( GetParent(), nativeWindow );
-    wxWindow* extracontrol = NULL;
-    if ( HasExtraControlCreator() )
-    {
-        CreateExtraControl();
-        extracontrol = GetExtraControl();
-    }
+
+    // This won't do anything if there are no extra controls to create and
+    // extracontrol will be NULL in this case.
+    CreateExtraControl();
+    wxWindow* const extracontrol = GetExtraControl();
 
     NSView* accView = nil;
 
