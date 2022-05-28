@@ -76,7 +76,7 @@ public:
     bool HasAlpha() const;
     WXImage GetImage() const;
 
-    void SetScaleFactor(double scale) { m_scaleFactor = scale; }
+    void SetScaleFactor(double scale);
     double GetScaleFactor() const { return m_scaleFactor; }
 
     const void *GetRawAccess() const;
@@ -367,6 +367,18 @@ WXImage wxBitmapRefData::GetImage() const
     }
 
     return m_nsImage;
+}
+
+void wxBitmapRefData::SetScaleFactor( double scale )
+{
+    wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
+
+    if ( m_scaleFactor == scale )
+        return ;
+
+    CGContextScaleCTM( m_hBitmap, 1 / GetScaleFactor(), -1 / GetScaleFactor() );
+    m_scaleFactor = scale;
+    CGContextScaleCTM( m_hBitmap, GetScaleFactor(), -GetScaleFactor() );
 }
 
 void wxBitmapRefData::UseAlpha( bool use )
