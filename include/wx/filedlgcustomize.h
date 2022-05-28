@@ -28,7 +28,7 @@ class wxFileDialogCustomizeImpl;
 // classes and also generate some (but not all) of the same events.
 
 // The base class for all wxFileDialog custom controls.
-class wxFileDialogCustomControl : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxFileDialogCustomControl : public wxEvtHandler
 {
 public:
     void Show(bool show = true);
@@ -56,7 +56,7 @@ protected:
 };
 
 // A class representing a custom button.
-class wxFileDialogButton : public wxFileDialogCustomControl
+class WXDLLIMPEXP_CORE wxFileDialogButton : public wxFileDialogCustomControl
 {
 public:
     // Ctor is only used by wxWidgets itself.
@@ -72,7 +72,7 @@ private:
 };
 
 // A class representing a custom checkbox.
-class wxFileDialogCheckBox : public wxFileDialogCustomControl
+class WXDLLIMPEXP_CORE wxFileDialogCheckBox : public wxFileDialogCustomControl
 {
 public:
     bool GetValue() const;
@@ -91,7 +91,7 @@ private:
 };
 
 // A class representing a custom text control.
-class wxFileDialogTextCtrl : public wxFileDialogCustomControl
+class WXDLLIMPEXP_CORE wxFileDialogTextCtrl : public wxFileDialogCustomControl
 {
 public:
     wxString GetValue() const;
@@ -107,7 +107,7 @@ private:
 };
 
 // A class representing a custom static text.
-class wxFileDialogStaticText : public wxFileDialogCustomControl
+class WXDLLIMPEXP_CORE wxFileDialogStaticText : public wxFileDialogCustomControl
 {
 public:
     void SetLabelText(const wxString& text);
@@ -125,7 +125,7 @@ private:
 // wxFileDialogCustomizer is used by wxFileDialogCustomizeHook
 // ----------------------------------------------------------------------------
 
-class wxFileDialogCustomize
+class WXDLLIMPEXP_CORE wxFileDialogCustomize
 {
 public:
     wxFileDialogButton* AddButton(const wxString& label);
@@ -159,7 +159,7 @@ private:
 // wxFileDialogCustomizeHook: used by wxFileDialog itself
 // ----------------------------------------------------------------------------
 
-class wxFileDialogCustomizeHook
+class WXDLLIMPEXP_CORE wxFileDialogCustomizeHook
 {
 public:
     // This method must be overridden to add custom controls to the dialog

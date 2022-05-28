@@ -21,7 +21,14 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/intl.h"
+    #include "wx/panel.h"
+    #include "wx/sizer.h"
     #include "wx/window.h"
+
+    #include "wx/button.h"
+    #include "wx/checkbox.h"
+    #include "wx/stattext.h"
+    #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
 #include "wx/filedlgcustomize.h"
@@ -217,6 +224,229 @@ wxFileDialogCustomize::AddStaticText(const wxString& label)
     return StoreAndReturn(new wxFileDialogStaticText(m_impl->AddStaticText(label)));
 }
 
+// ----------------------------------------------------------------------------
+// Generic implementation of wxFileDialogCustomize and related classes
+// ----------------------------------------------------------------------------
+
+namespace wxGenericCustomizer
+{
+
+// Template base class for the implementation classes below inheriting from the
+// specified Impl subclass.
+template <typename T>
+class ControlImplBase : public T
+{
+public:
+    explicit ControlImplBase(wxWindow* win)
+        : m_win(win)
+    {
+    }
+
+    virtual void Show(bool show) wxOVERRIDE
+    {
+        m_win->Show(show);
+    }
+
+    virtual void Enable(bool enable) wxOVERRIDE
+    {
+        m_win->Enable(enable);
+    }
+
+    // Leave it public for Panel to access.
+    wxWindow* const m_win;
+
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(ControlImplBase, T);
+};
+
+class CustomControlImpl : public ControlImplBase<wxFileDialogCustomControlImpl>
+{
+public:
+    // All custom controls are identified by their ID in this implementation.
+    explicit CustomControlImpl(wxWindow* win)
+        : ControlImplBase<wxFileDialogCustomControlImpl>(win)
+    {
+    }
+
+    wxDECLARE_NO_COPY_CLASS(CustomControlImpl);
+};
+
+class ButtonImpl : public ControlImplBase<wxFileDialogButtonImpl>
+{
+public:
+    ButtonImpl(wxWindow* parent, const wxString& label)
+        : ControlImplBase<wxFileDialogButtonImpl>
+          (
+            new wxButton(parent, wxID_ANY, label)
+          )
+    {
+    }
+};
+
+class CheckBoxImpl : public ControlImplBase<wxFileDialogCheckBoxImpl>
+{
+public:
+    CheckBoxImpl(wxWindow* parent, const wxString& label)
+        : ControlImplBase<wxFileDialogCheckBoxImpl>
+          (
+            new wxCheckBox(parent, wxID_ANY, label)
+          )
+    {
+    }
+
+    virtual bool GetValue() wxOVERRIDE
+    {
+        return GetCheckBox()->GetValue();
+    }
+
+    virtual void SetValue(bool value) wxOVERRIDE
+    {
+        GetCheckBox()->SetValue(value);
+    }
+
+private:
+    wxCheckBox* GetCheckBox() const
+    {
+        return static_cast<wxCheckBox*>(m_win);
+    }
+};
+
+class TextCtrlImpl : public ControlImplBase<wxFileDialogTextCtrlImpl>
+{
+public:
+    // The dummy argument is there just for consistency with the other classes
+    // and allows to keep the code simple even without vararg templates support.
+    explicit TextCtrlImpl(wxWindow* parent, const wxString& WXUNUSED(dummy))
+        : ControlImplBase<wxFileDialogTextCtrlImpl>
+          (
+            new wxTextCtrl(parent, wxID_ANY)
+          )
+    {
+    }
+
+    virtual wxString GetValue() wxOVERRIDE
+    {
+        return GetText()->GetValue();
+    }
+
+    virtual void SetValue(const wxString& value) wxOVERRIDE
+    {
+        // Don't use SetValue(), we don't need any extra events here.
+        return GetText()->ChangeValue(value);
+    }
+
+private:
+    wxTextCtrl* GetText() const
+    {
+        return static_cast<wxTextCtrl*>(m_win);
+    }
+};
+
+class StaticTextImpl : public ControlImplBase<wxFileDialogStaticTextImpl>
+{
+public:
+    StaticTextImpl(wxWindow* parent, const wxString& label)
+        : ControlImplBase<wxFileDialogStaticTextImpl>
+          (
+            new wxStaticText(parent, wxID_ANY, wxControl::EscapeMnemonics(label))
+          )
+    {
+    }
+
+    virtual void SetLabelText(const wxString& text) wxOVERRIDE
+    {
+        GetStaticText()->SetLabelText(text);
+    }
+
+private:
+    wxStaticText* GetStaticText() const
+    {
+        return static_cast<wxStaticText*>(m_win);
+    }
+};
+
+// Generic implementation of wxFileDialogCustomize which is also a window that
+// can be used as part of the dialog.
+class Panel : public wxPanel,
+              public wxFileDialogCustomize,
+              private wxFileDialogCustomizeImpl
+{
+public:
+    Panel(wxWindow* parent, wxFileDialogCustomizeHook& customizeHook)
+        : wxPanel(parent),
+          wxFileDialogCustomize(this),
+          m_customizeHook(customizeHook)
+    {
+        // Use a simple horizontal sizer to layout all the controls for now.
+        wxBoxSizer* const sizer = new wxBoxSizer(wxHORIZONTAL);
+        SetSizer(sizer);
+
+        // Leave a margin before the first item.
+        sizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+        // This will call our own AddXXX().
+        m_customizeHook.AddCustomControls(*this);
+
+        // Now that everything was created, resize and layout.
+        SetClientSize(sizer->ComputeFittingClientSize(this));
+        sizer->Layout();
+    }
+
+    virtual ~Panel()
+    {
+        m_customizeHook.TransferDataFromCustomControls();
+    }
+
+
+    // Implement wxFileDialogCustomizeImpl pure virtual methods.
+    wxFileDialogButtonImpl* AddButton(const wxString& label) wxOVERRIDE
+    {
+        return AddToLayoutAndReturn<ButtonImpl>(label);
+    }
+
+    wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) wxOVERRIDE
+    {
+        return AddToLayoutAndReturn<CheckBoxImpl>(label);
+    }
+
+    wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) wxOVERRIDE
+    {
+        if ( !label.empty() )
+        {
+            AddToLayout(new wxStaticText(this, wxID_ANY, label));
+        }
+
+        return AddToLayoutAndReturn<TextCtrlImpl>();
+    }
+
+    wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) wxOVERRIDE
+    {
+        return AddToLayoutAndReturn<StaticTextImpl>(label);
+    }
+
+private:
+    void AddToLayout(wxWindow* win)
+    {
+        GetSizer()->Add(win, wxSizerFlags().Center().Border(wxRIGHT));
+    }
+
+    template <typename T>
+    T* AddToLayoutAndReturn(const wxString& label = wxString())
+    {
+        T* const controlImpl = new T(this, label);
+
+        AddToLayout(controlImpl->m_win);
+
+        return controlImpl;
+    }
+
+
+    wxFileDialogCustomizeHook& m_customizeHook;
+
+    wxDECLARE_NO_COPY_CLASS(Panel);
+};
+
+} // namespace wxGenericCustomizer
+
 //----------------------------------------------------------------------------
 // wxFileDialogBase
 //----------------------------------------------------------------------------
@@ -370,6 +600,9 @@ bool wxFileDialogBase::SetExtraControlCreator(ExtraControlCreatorFunction creato
 
 wxWindow* wxFileDialogBase::CreateExtraControlWithParent(wxWindow* parent) const
 {
+    if ( m_customizeHook )
+        return new wxGenericCustomizer::Panel(parent, *m_customizeHook);
+
     if ( m_extraControlCreator )
         return (*m_extraControlCreator)(parent);
 
