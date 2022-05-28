@@ -291,6 +291,12 @@ public:
         : wxFileDialogImplFDC<wxFileDialogButtonImpl>(fdc, id)
     {
     }
+
+    virtual bool DoBind(wxEvtHandler* WXUNUSED(handler)) wxOVERRIDE
+    {
+        // We don't need to do anything special to get the events here.
+        return true;
+    }
 };
 
 class wxFileDialogCheckBoxImplFDC
@@ -317,6 +323,12 @@ public:
         HRESULT hr = m_fdc->SetCheckButtonState(m_id, value ? TRUE : FALSE);
         if ( FAILED(hr) )
             wxLogApiError(wxS("IFileDialogCustomize::SetCheckButtonState"), hr);
+    }
+
+    virtual bool DoBind(wxEvtHandler* WXUNUSED(handler)) wxOVERRIDE
+    {
+        // We don't need to do anything special to get the events here.
+        return true;
     }
 };
 

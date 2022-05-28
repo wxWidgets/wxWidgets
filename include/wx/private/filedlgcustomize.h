@@ -20,6 +20,8 @@ public:
     virtual void Show(bool show) = 0;
     virtual void Enable(bool enable) = 0;
 
+    virtual bool DoBind(wxEvtHandler* handler);
+
     virtual ~wxFileDialogCustomControlImpl();
 };
 

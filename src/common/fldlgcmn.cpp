@@ -59,6 +59,16 @@ wxFileDialogCustomControlImpl::~wxFileDialogCustomControlImpl()
 {
 }
 
+bool
+wxFileDialogCustomControlImpl::DoBind(wxEvtHandler* WXUNUSED(handler))
+{
+    // Do nothing here by default, some controls don't generate any events at
+    // all and so this function will never be called for them.
+    wxFAIL_MSG(wxS("Should be overridden if called"));
+
+    return false;
+}
+
 bool wxFileDialogCustomControl::OnDynamicBind(wxDynamicEventTableEntry& entry)
 {
     wxUnusedVar(entry); // Needed when debug is disabled.
@@ -95,7 +105,7 @@ wxFileDialogButton::wxFileDialogButton(wxFileDialogButtonImpl* impl)
 bool wxFileDialogButton::OnDynamicBind(wxDynamicEventTableEntry& entry)
 {
     if ( entry.m_eventType == wxEVT_BUTTON )
-        return true;
+        return GetImpl()->DoBind(this);
 
     return wxFileDialogCustomControl::OnDynamicBind(entry);
 }
@@ -113,7 +123,7 @@ wxFileDialogCheckBox::wxFileDialogCheckBox(wxFileDialogCheckBoxImpl* impl)
 bool wxFileDialogCheckBox::OnDynamicBind(wxDynamicEventTableEntry& entry)
 {
     if ( entry.m_eventType == wxEVT_CHECKBOX )
-        return true;
+        return GetImpl()->DoBind(this);
 
     return wxFileDialogCustomControl::OnDynamicBind(entry);
 }
@@ -279,7 +289,37 @@ public:
             new wxButton(parent, wxID_ANY, label)
           )
     {
+        m_handler = NULL;
     }
+
+    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    {
+        if ( !m_handler )
+        {
+            m_handler = handler;
+            m_win->Bind(wxEVT_BUTTON, &ButtonImpl::OnButton, this);
+        }
+
+        return true;
+    }
+
+private:
+    void OnButton(wxCommandEvent& event)
+    {
+        // Pretend that the event is coming from the custom control and not the
+        // actual wx control implementing it.
+
+        // Make a copy of the event to set the event object correctly.
+        wxCommandEvent eventCopy(event);
+        eventCopy.SetEventObject(m_handler);
+
+        m_handler->ProcessEvent(eventCopy);
+
+        // We don't need to do anything about skipping, vetoing etc as all this
+        // is not used anyhow for simple command events.
+    }
+
+    wxEvtHandler* m_handler;
 };
 
 class CheckBoxImpl : public ControlImplBase<wxFileDialogCheckBoxImpl>
@@ -291,6 +331,7 @@ public:
             new wxCheckBox(parent, wxID_ANY, label)
           )
     {
+        m_handler = NULL;
     }
 
     virtual bool GetValue() wxOVERRIDE
@@ -303,11 +344,34 @@ public:
         GetCheckBox()->SetValue(value);
     }
 
+    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    {
+        if ( !m_handler )
+        {
+            m_handler = handler;
+            m_win->Bind(wxEVT_CHECKBOX, &CheckBoxImpl::OnCheckBox, this);
+        }
+
+        return true;
+    }
+
 private:
     wxCheckBox* GetCheckBox() const
     {
         return static_cast<wxCheckBox*>(m_win);
     }
+
+    void OnCheckBox(wxCommandEvent& event)
+    {
+        // See comments in OnButton() above, they also apply here.
+
+        wxCommandEvent eventCopy(event);
+        eventCopy.SetEventObject(m_handler);
+
+        m_handler->ProcessEvent(eventCopy);
+    }
+
+    wxEvtHandler* m_handler;
 };
 
 class TextCtrlImpl : public ControlImplBase<wxFileDialogTextCtrlImpl>
