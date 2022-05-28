@@ -964,7 +964,9 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 
 void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 {
-    TempHWNDSetter set(this, hwnd);
+    // Remember the HWND so that various operations using the dialog geometry
+    // work correctly while it's shown.
+    SetHWND(hwnd);
 
     CreateExtraControl();
 }
@@ -1217,6 +1219,12 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
 
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
+
+    // When using a hook, our HWND was set from MSWOnInitDialogHook() called
+    // above, but it's not valid any longer once the dialog was destroyed, so
+    // reset it now.
+    if ( msw_flags & OFN_ENABLEHOOK )
+        SetHWND(0);
 
     if ( !success &&
             errCode == FNERR_INVALIDFILENAME &&
