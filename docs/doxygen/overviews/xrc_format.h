@@ -946,8 +946,10 @@ No additional properties.
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
      Label to use for the checkbox (default: empty).}
-@row3col{checked, @ref overview_xrcformat_type_bool,
-     Should the checkbox be checked initially (default: 0)?}
+@row3col{checked, integer,
+    Sets the initial state of the checkbox. 0 is unchecked (default),
+    1 is checked, and since wxWidgets 3.1.7, 2 sets the undetermined
+    state of a 3-state checkbox.}
 @endTable
 
 

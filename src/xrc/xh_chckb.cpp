@@ -43,7 +43,38 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
                     wxDefaultValidator,
                     GetName());
 
-    control->SetValue(GetBool( wxT("checked")));
+    switch (GetLong("checked", wxCHK_UNCHECKED))
+    {
+        case wxCHK_UNCHECKED:
+            // Nothing to do here, we could call SetValue() but the default state
+            // is unchecked anyhow.
+            break;
+
+        case wxCHK_CHECKED:
+            control->SetValue(true);
+            break;
+
+        case wxCHK_UNDETERMINED:
+            // While just trying to set it would generate an assert if wxCHK_3STATE
+            // is not set, prefer to give an error here as we have more information
+            // about the problem.
+            if ( !control->HasFlag(wxCHK_3STATE) )
+            {
+                ReportParamError("checked",
+                    "A checkbox must have wxCHK_3STATE style to use wxCHK_UNDETERMINED");
+                break;
+            }
+
+            control->Set3StateValue(wxCHK_UNDETERMINED);
+            break;
+
+        default:
+            ReportParamError("checked",
+                             wxString::Format("Unknown checkbox state: \"%s\"",
+                                              GetParamValue("checked")));
+            break;
+    }
+
     SetupWindow(control);
 
     return control;
