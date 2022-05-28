@@ -355,6 +355,9 @@ public:
     virtual void SetLabelText(const wxString& text) wxOVERRIDE
     {
         GetStaticText()->SetLabelText(text);
+
+        wxWindow* const parent = m_win->GetParent();
+        parent->GetSizer()->Fit(parent);
     }
 
 private:
