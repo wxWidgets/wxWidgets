@@ -1694,7 +1694,9 @@ public:
         customizer.AddStaticText("Just some extra text:");
         m_text = customizer.AddTextCtrl();
         m_cb = customizer.AddCheckBox("Enable Custom Button");
+        m_cb->Bind(wxEVT_CHECKBOX, &MyCustomizeHook::OnCheckBox, this);
         m_btn = customizer.AddButton("Custom Button");
+        m_btn->Bind(wxEVT_BUTTON, &MyCustomizeHook::OnButton, this);
         m_label = customizer.AddStaticText("Nothing selected");
     }
 
@@ -1721,6 +1723,17 @@ public:
     wxString GetInfo() const { return m_info; }
 
 private:
+    void OnCheckBox(wxCommandEvent& event)
+    {
+        m_btn->Enable(event.IsChecked());
+    }
+
+    void OnButton(wxCommandEvent& WXUNUSED(event))
+    {
+        wxMessageBox("Custom button pressed", "wxWidgets dialogs sample",
+                     wxOK | wxICON_INFORMATION, m_dialog);
+    }
+
     wxFileDialog* const m_dialog;
 
     wxFileDialogButton* m_btn;

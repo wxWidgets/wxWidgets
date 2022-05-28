@@ -52,6 +52,19 @@ wxFileDialogCustomControlImpl::~wxFileDialogCustomControlImpl()
 {
 }
 
+bool wxFileDialogCustomControl::OnDynamicBind(wxDynamicEventTableEntry& entry)
+{
+    wxUnusedVar(entry); // Needed when debug is disabled.
+
+    wxFAIL_MSG(wxString::Format
+              (
+                "This custom control doesn't generate the event %d.",
+                entry.m_eventType
+              ));
+
+    return false;
+}
+
 void wxFileDialogCustomControl::Show(bool show)
 {
     return m_impl->Show(show);
@@ -72,6 +85,14 @@ wxFileDialogButton::wxFileDialogButton(wxFileDialogButtonImpl* impl)
 {
 }
 
+bool wxFileDialogButton::OnDynamicBind(wxDynamicEventTableEntry& entry)
+{
+    if ( entry.m_eventType == wxEVT_BUTTON )
+        return true;
+
+    return wxFileDialogCustomControl::OnDynamicBind(entry);
+}
+
 wxFileDialogButtonImpl* wxFileDialogButton::GetImpl() const
 {
     return static_cast<wxFileDialogButtonImpl*>(m_impl);
@@ -80,6 +101,14 @@ wxFileDialogButtonImpl* wxFileDialogButton::GetImpl() const
 wxFileDialogCheckBox::wxFileDialogCheckBox(wxFileDialogCheckBoxImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
+}
+
+bool wxFileDialogCheckBox::OnDynamicBind(wxDynamicEventTableEntry& entry)
+{
+    if ( entry.m_eventType == wxEVT_CHECKBOX )
+        return true;
+
+    return wxFileDialogCustomControl::OnDynamicBind(entry);
 }
 
 wxFileDialogCheckBoxImpl* wxFileDialogCheckBox::GetImpl() const

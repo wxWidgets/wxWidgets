@@ -397,6 +397,18 @@ public:
         return true;
     }
 
+    wxFileDialogCustomControl* FindControl(DWORD id) const
+    {
+        // Currently there is 1-to-1 correspondence between IDs and the
+        // controls we create, except that we start assigning IDs with 1.
+        if ( id < 1 || id > m_controls.size() )
+            return NULL;
+
+        return m_controls[id - 1];
+    }
+
+
+    // Implement wxFileDialogCustomizeImpl pure virtual methods.
     wxFileDialogButtonImpl* AddButton(const wxString& label) wxOVERRIDE
     {
         HRESULT hr = m_fdc->AddPushButton(++m_lastId, label.wc_str());
@@ -460,7 +472,8 @@ private:
 
 class wxFileDialogMSWData
 #if wxUSE_IFILEOPENDIALOG
-    : public IFileDialogEvents
+    : public IFileDialogEvents,
+      public IFileDialogControlEvents
 #endif // wxUSE_IFILEOPENDIALOG
 {
 public:
@@ -492,7 +505,14 @@ public:
     {
         if ( iid == IID_IUnknown || iid == IID_IFileDialogEvents )
         {
-            *ppv = this;
+            // The cast is unnecessary, but do it for clarity and symmetry.
+            *ppv = static_cast<IFileDialogEvents*>(this);
+        }
+        else if ( iid == IID_IFileDialogControlEvents )
+        {
+            // Here the case is necessary to return the pointer of correct
+            // type.
+            *ppv = static_cast<IFileDialogControlEvents*>(this);
         }
         else
         {
@@ -574,6 +594,57 @@ public:
     }
 
     wxSTDMETHODIMP OnOverwrite(IFileDialog*, IShellItem*, FDE_OVERWRITE_RESPONSE*) wxOVERRIDE { return E_NOTIMPL; }
+
+
+    // IFileDialogControlEvents
+
+    wxSTDMETHODIMP
+    OnItemSelected(IFileDialogCustomize*,
+                   DWORD WXUNUSED(dwIDCtl),
+                   DWORD WXUNUSED(dwIDItem)) wxOVERRIDE
+    {
+        return S_OK;
+    }
+
+    wxSTDMETHODIMP
+    OnButtonClicked(IFileDialogCustomize*, DWORD dwIDCtl) wxOVERRIDE
+    {
+        if ( wxFileDialogCustomControl* const
+                control = m_customize.FindControl(dwIDCtl) )
+        {
+            wxCommandEvent event(wxEVT_BUTTON, dwIDCtl);
+            event.SetEventObject(control);
+
+            control->SafelyProcessEvent(event);
+        }
+
+        return S_OK;
+    }
+
+    wxSTDMETHODIMP
+    OnCheckButtonToggled(IFileDialogCustomize*,
+                         DWORD dwIDCtl,
+                         BOOL bChecked) wxOVERRIDE
+    {
+        if ( wxFileDialogCustomControl* const
+                control = m_customize.FindControl(dwIDCtl) )
+        {
+            wxCommandEvent event(wxEVT_CHECKBOX, dwIDCtl);
+            event.SetEventObject(control);
+            event.SetInt(bChecked); // This is for wxCommandEvent::IsChecked().
+
+            control->SafelyProcessEvent(event);
+        }
+
+        return S_OK;
+    }
+
+    wxSTDMETHODIMP
+    OnControlActivating(IFileDialogCustomize*,
+                        DWORD WXUNUSED(dwIDCtl)) wxOVERRIDE
+    {
+        return S_OK;
+    }
 
 
     wxFileDialog* const m_fileDialog;

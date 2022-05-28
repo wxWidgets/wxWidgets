@@ -25,10 +25,10 @@ class wxFileDialogCustomizeImpl;
 
 // All these controls support a very limited set of functions, but use the same
 // names for the things that they do support as the corresponding "normal" wx
-// classes.
+// classes and also generate some (but not all) of the same events.
 
 // The base class for all wxFileDialog custom controls.
-class wxFileDialogCustomControl
+class wxFileDialogCustomControl : public wxEvtHandler
 {
 public:
     void Show(bool show = true);
@@ -45,6 +45,11 @@ protected:
     {
     }
 
+    // By default custom controls don't generate any events, but some of them
+    // override this function to allow connecting to the selected events.
+    virtual bool OnDynamicBind(wxDynamicEventTableEntry& entry) wxOVERRIDE;
+
+
     wxFileDialogCustomControlImpl* const m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogCustomControl);
@@ -56,6 +61,9 @@ class wxFileDialogButton : public wxFileDialogCustomControl
 public:
     // Ctor is only used by wxWidgets itself.
     explicit wxFileDialogButton(wxFileDialogButtonImpl* impl);
+
+protected:
+    virtual bool OnDynamicBind(wxDynamicEventTableEntry& entry) wxOVERRIDE;
 
 private:
     wxFileDialogButtonImpl* GetImpl() const;
@@ -72,6 +80,9 @@ public:
 
     // Ctor is only used by wxWidgets itself.
     explicit wxFileDialogCheckBox(wxFileDialogCheckBoxImpl* impl);
+
+protected:
+    virtual bool OnDynamicBind(wxDynamicEventTableEntry& entry) wxOVERRIDE;
 
 private:
     wxFileDialogCheckBoxImpl* GetImpl() const;
@@ -134,12 +145,12 @@ protected:
     {
     }
 
+    wxVector<wxFileDialogCustomControl*> m_controls;
+
 private:
     template <typename T> T* StoreAndReturn(T* control);
 
     wxFileDialogCustomizeImpl* const m_impl;
-
-    wxVector<wxFileDialogCustomControl*> m_controls;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogCustomize);
 };
