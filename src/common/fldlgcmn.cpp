@@ -206,9 +206,9 @@ wxFileDialogCustomize::AddCheckBox(const wxString& label)
 }
 
 wxFileDialogTextCtrl*
-wxFileDialogCustomize::AddTextCtrl()
+wxFileDialogCustomize::AddTextCtrl(const wxString& label)
 {
-    return StoreAndReturn(new wxFileDialogTextCtrl(m_impl->AddTextCtrl()));
+    return StoreAndReturn(new wxFileDialogTextCtrl(m_impl->AddTextCtrl(label)));
 }
 
 wxFileDialogStaticText*

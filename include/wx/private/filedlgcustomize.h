@@ -58,7 +58,7 @@ class wxFileDialogCustomizeImpl
 public:
     virtual wxFileDialogButtonImpl* AddButton(const wxString& label) = 0;
     virtual wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) = 0;
-    virtual wxFileDialogTextCtrlImpl* AddTextCtrl() = 0;
+    virtual wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) = 0;
     virtual wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) = 0;
 
     virtual ~wxFileDialogCustomizeImpl();

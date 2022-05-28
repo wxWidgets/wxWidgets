@@ -378,7 +378,8 @@ public:
     wxFileDialogCustomizeFDC()
         : wxFileDialogCustomize(this)
     {
-        m_lastId = 0;
+        m_lastId =
+        m_lastAuxId = 0;
     }
 
     bool Initialize(IFileDialog* fileDialog)
@@ -433,13 +434,29 @@ public:
         return new wxFileDialogCheckBoxImplFDC(m_fdc, m_lastId);
     }
 
-    wxFileDialogTextCtrlImpl* AddTextCtrl() wxOVERRIDE
+    wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) wxOVERRIDE
     {
-        HRESULT hr = m_fdc->AddEditBox(++m_lastId, L"");
+        HRESULT hr;
+
+        if ( !label.empty() )
+        {
+            hr = m_fdc->StartVisualGroup(--m_lastAuxId, label.wc_str());
+            if ( FAILED(hr) )
+                wxLogApiError(wxS("IFileDialogCustomize::StartVisualGroup"), hr);
+        }
+
+        hr = m_fdc->AddEditBox(++m_lastId, L"");
         if ( FAILED(hr) )
         {
             wxLogApiError(wxS("IFileDialogCustomize::AddEditBox"), hr);
             return NULL;
+        }
+
+        if ( !label.empty() )
+        {
+            hr = m_fdc->EndVisualGroup();
+            if ( FAILED(hr) )
+                wxLogApiError(wxS("IFileDialogCustomize::EndVisualGroup"), hr);
         }
 
         return new wxFileDialogTextCtrlImplFDC(m_fdc, m_lastId);
@@ -459,7 +476,15 @@ public:
 
 private:
     wxCOMPtr<IFileDialogCustomize> m_fdc;
+
+    // IDs used for the custom controls returned from the public AddXXX()
+    // functions: they are positive and must be consecutive in order to allow
+    // accessing the correspond element of m_controls later, see FindControl().
     DWORD m_lastId;
+
+    // IDs used for any other controls, they're negative (which means they
+    // decrement from USHORT_MAX down).
+    DWORD m_lastAuxId;
 };
 
 #endif // wxUSE_IFILEOPENDIALOG

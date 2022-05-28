@@ -130,7 +130,7 @@ class wxFileDialogCustomize
 public:
     wxFileDialogButton* AddButton(const wxString& label);
     wxFileDialogCheckBox* AddCheckBox(const wxString& label);
-    wxFileDialogTextCtrl* AddTextCtrl();
+    wxFileDialogTextCtrl* AddTextCtrl(const wxString& label = wxString());
     wxFileDialogStaticText* AddStaticText(const wxString& label);
 
     ~wxFileDialogCustomize();

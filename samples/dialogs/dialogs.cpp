@@ -1691,8 +1691,7 @@ public:
         // Note: all the pointers created here cease to be valid once
         // ShowModal() returns, TransferDataFromCustomControls() is the latest
         // moment when they can still be used.
-        customizer.AddStaticText("Just some extra text:");
-        m_text = customizer.AddTextCtrl();
+        m_text = customizer.AddTextCtrl("Just some extra text:");
         m_cb = customizer.AddCheckBox("Enable Custom Button");
         m_cb->Bind(wxEVT_CHECKBOX, &MyCustomizeHook::OnCheckBox, this);
         m_btn = customizer.AddButton("Custom Button");
