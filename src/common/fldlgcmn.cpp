@@ -370,10 +370,21 @@ bool wxFileDialogBase::SetExtraControlCreator(ExtraControlCreatorFunction creato
 
 bool wxFileDialogBase::CreateExtraControl()
 {
-    if (!m_extraControlCreator || m_extraControl)
-        return false;
-    m_extraControl = (*m_extraControlCreator)(this);
-    return true;
+    // We're not supposed to be called more than once normally, but just do
+    // nothing if we had already created the custom controls somehow.
+    if ( m_extraControl )
+        return true;
+
+    if ( m_extraControlCreator )
+    {
+        m_extraControl = (*m_extraControlCreator)(this);
+
+        return true;
+    }
+
+    // It's not an error to call this function if there are no extra controls
+    // to create, just do nothing in this case.
+    return false;
 }
 
 wxSize wxFileDialogBase::GetExtraControlSize()
