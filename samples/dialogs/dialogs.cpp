@@ -1680,7 +1680,10 @@ static wxWindow* createMyExtraPanel(wxWindow *parent)
 class MyCustomizeHook : public wxFileDialogCustomizeHook
 {
 public:
-    explicit MyCustomizeHook(wxFileDialog& dialog)
+    // Normally we would just use wxFileDialog, but this sample allows using
+    // both the real wxFileDialog and wxGenericFileDialog, so allow passing
+    // either of them here.
+    explicit MyCustomizeHook(wxFileDialogBase& dialog)
         : m_dialog(&dialog)
     {
     }
@@ -1733,7 +1736,7 @@ private:
                      wxOK | wxICON_INFORMATION, m_dialog);
     }
 
-    wxFileDialog* const m_dialog;
+    wxFileDialogBase* const m_dialog;
 
     wxFileDialogButton* m_btn;
     wxFileDialogCheckBox* m_cb;
@@ -2005,7 +2008,8 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
                     "C++ files (*.cpp;*.h)|*.cpp;*.h"
                  );
 
-    dialog.SetExtraControlCreator(&createMyExtraPanel);
+    MyCustomizeHook myCustomizer(dialog);
+    dialog.SetCustomizeHook(myCustomizer);
     dialog.SetDirectory(wxGetHomeDir());
 
     if (dialog.ShowModal() == wxID_OK)
@@ -2013,10 +2017,12 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
         wxString info;
         info.Printf("Full file name: %s\n"
                     "Path: %s\n"
-                    "Name: %s",
+                    "Name: %s\n"
+                    "Custom window: %s",
                     dialog.GetPath(),
                     dialog.GetDirectory(),
-                    dialog.GetFilename());
+                    dialog.GetFilename(),
+                    myCustomizer.GetInfo());
         wxMessageDialog dialog2(this, info, "Selected file");
         dialog2.ShowModal();
     }
