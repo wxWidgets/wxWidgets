@@ -2090,6 +2090,8 @@ additional property:
 @beginTable
 @row3col{inc, float,
     The amount by which the number is changed by a single arrow press.}
+@row3col{digits, integer,
+    Sets the precision of the value of the spin control (default: 0). @since 3.1.7.}
 @endTable
 
 @since  3.1.1.
