@@ -6319,8 +6319,6 @@ wxPropertyGridEvent::wxPropertyGridEvent(const wxPropertyGridEvent& event)
     , m_canVeto(event.m_canVeto)
     , m_wasVetoed(event.m_wasVetoed)
 {
-    m_eventType = event.GetEventType();
-    m_eventObject = event.m_eventObject;
     OnPropertyGridSet();
 }
 
