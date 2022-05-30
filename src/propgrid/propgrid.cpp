@@ -6349,11 +6349,13 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
         // being destroyed is at the end of the array.
         wxVector<wxPropertyGridEvent*>& liveEvents = m_pg->m_liveEvents;
 
-        for ( int i = liveEvents.size()-1; i >= 0; i-- )
+        for ( wxVector<wxPropertyGridEvent*>::reverse_iterator rit = liveEvents.rbegin(); rit != liveEvents.rend(); ++rit )
         {
-            if ( liveEvents[i] == this )
+            if ( *rit == this )
             {
-                liveEvents.erase(liveEvents.begin() + i);
+                // The base iterator refers to the element that is next
+                // to the element the reverse_iterator is currently pointing to.
+                liveEvents.erase(rit.base() - 1);
                 break;
             }
         }
