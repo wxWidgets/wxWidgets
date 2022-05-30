@@ -55,12 +55,14 @@ public:
         wxCHECK( m_isProperty, NULL );
         return m_property;
     }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const char* str )
     {
         m_name = str;
         m_property = NULL;
         m_isProperty = false;
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const wchar_t* str )
     {
         m_name = str;
@@ -906,11 +908,13 @@ public:
         SetPropertyValueString( id, wxString(value) );
     }
 
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     // Sets value (char*) of a property.
     void SetPropertyValue( wxPGPropArg id, const char* value )
     {
         SetPropertyValueString( id, wxString(value) );
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
 
     // Sets value (string) of a property.
     void SetPropertyValue( wxPGPropArg id, const wxString& value )
