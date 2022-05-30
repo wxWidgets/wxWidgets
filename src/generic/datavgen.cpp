@@ -3678,6 +3678,10 @@ void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_SELECTIONWITHIN, m_owner, wxOBJID_CLIENT, wxACC_SELF);
 #endif // wxUSE_ACCESSIBILITY
 
+    // Focus event must be sent before selection event is sent
+    if (!m_hasFocus)
+        SetFocus();
+
     wxDataViewEvent le(wxEVT_DATAVIEW_SELECTION_CHANGED, m_owner, item);
     m_owner->ProcessWindowEvent(le);
 }
