@@ -752,7 +752,7 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
         if ( p->GetChildCount() &&
              ( subProps || p->IsCategory() ) )
         {
-            w = GetColumnFitWidth( dc, p, col, subProps );
+            w = GetColumnFitWidth(p, col, subProps );
 
             if ( w > maxW )
                 maxW = w;
