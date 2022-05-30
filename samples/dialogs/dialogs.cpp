@@ -1605,7 +1605,8 @@ public:
     MyExtraPanel(wxWindow *parent);
     wxString GetInfo() const
     {
-        return wxString::Format("checkbox=%d, text=\"%s\"", m_checked, m_str);
+        return wxString::Format("paper=%s, enabled=%d, text=\"%s\"",
+                                m_paperSize, m_checked, m_str);
     }
 
 private:
@@ -1613,6 +1614,16 @@ private:
     {
         m_checked = event.IsChecked();
         m_btn->Enable(m_checked);
+    }
+
+    void OnRadioButton(wxCommandEvent& event)
+    {
+        if ( event.GetEventObject() == m_radioA4 )
+            m_paperSize = "A4";
+        else if ( event.GetEventObject() == m_radioLetter )
+            m_paperSize = "Letter";
+        else
+            m_paperSize = "Unknown";
     }
 
     void OnText(wxCommandEvent& event)
@@ -1632,9 +1643,12 @@ private:
 
     wxString m_str;
     bool m_checked;
+    wxString m_paperSize;
 
     wxButton *m_btn;
     wxCheckBox *m_cb;
+    wxRadioButton *m_radioA4;
+    wxRadioButton *m_radioLetter;
     wxStaticText *m_label;
     wxTextCtrl *m_text;
 };
@@ -1648,6 +1662,11 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
     m_btn->Enable(false);
     m_cb = new wxCheckBox(this, -1, "Enable Custom Button");
     m_cb->Bind(wxEVT_CHECKBOX, &MyExtraPanel::OnCheckBox, this);
+    m_radioA4 = new wxRadioButton(this, wxID_ANY, "A4",
+                                  wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    m_radioA4->Bind(wxEVT_RADIOBUTTON, &MyExtraPanel::OnRadioButton, this);
+    m_radioLetter = new wxRadioButton(this, wxID_ANY, "Letter");
+    m_radioLetter->Bind(wxEVT_RADIOBUTTON, &MyExtraPanel::OnRadioButton, this);
     m_label = new wxStaticText(this, wxID_ANY, "Nothing selected");
     m_label->Bind(wxEVT_UPDATE_UI, &MyExtraPanel::OnUpdateLabelUI, this);
 
@@ -1660,6 +1679,8 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
                   wxSizerFlags().Centre().Border());
     sizerTop->Add(m_text, wxSizerFlags(1).Centre().Border());
     sizerTop->AddSpacer(10);
+    sizerTop->Add(m_radioA4, wxSizerFlags().Centre().Border());
+    sizerTop->Add(m_radioLetter, wxSizerFlags().Centre().Border());
     sizerTop->Add(m_cb, wxSizerFlags().Centre().Border());
     sizerTop->AddSpacer(5);
     sizerTop->Add(m_btn, wxSizerFlags().Centre().Border());
@@ -1695,6 +1716,8 @@ public:
         // ShowModal() returns, TransferDataFromCustomControls() is the latest
         // moment when they can still be used.
         m_text = customizer.AddTextCtrl("Just some extra text:");
+        m_radioA4 = customizer.AddRadioButton("A4");
+        m_radioLetter = customizer.AddRadioButton("Letter");
         m_cb = customizer.AddCheckBox("Enable Custom Button");
         m_cb->Bind(wxEVT_CHECKBOX, &MyCustomizeHook::OnCheckBox, this);
         m_btn = customizer.AddButton("Custom Button");
@@ -1715,7 +1738,8 @@ public:
     // And another one called when the dialog is accepted.
     virtual void TransferDataFromCustomControls() wxOVERRIDE
     {
-        m_info.Printf("checkbox=%d, text=\"%s\"",
+        m_info.Printf("paper=%s, enabled=%d, text=\"%s\"",
+                      m_radioA4->GetValue() ? "A4" : "Letter",
                       m_cb->GetValue(), m_text->GetValue());
     }
 
@@ -1740,6 +1764,8 @@ private:
 
     wxFileDialogButton* m_btn;
     wxFileDialogCheckBox* m_cb;
+    wxFileDialogRadioButton* m_radioA4;
+    wxFileDialogRadioButton* m_radioLetter;
     wxFileDialogTextCtrl* m_text;
     wxFileDialogStaticText* m_label;
 

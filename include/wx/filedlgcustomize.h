@@ -15,6 +15,7 @@
 class wxFileDialogCustomControlImpl;
 class wxFileDialogButtonImpl;
 class wxFileDialogCheckBoxImpl;
+class wxFileDialogRadioButtonImpl;
 class wxFileDialogTextCtrlImpl;
 class wxFileDialogStaticTextImpl;
 class wxFileDialogCustomizeImpl;
@@ -90,6 +91,25 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxFileDialogCheckBox);
 };
 
+// A class representing a custom radio button.
+class WXDLLIMPEXP_CORE wxFileDialogRadioButton : public wxFileDialogCustomControl
+{
+public:
+    bool GetValue() const;
+    void SetValue(bool value);
+
+    // Ctor is only used by wxWidgets itself.
+    explicit wxFileDialogRadioButton(wxFileDialogRadioButtonImpl* impl);
+
+protected:
+    virtual bool OnDynamicBind(wxDynamicEventTableEntry& entry) wxOVERRIDE;
+
+private:
+    wxFileDialogRadioButtonImpl* GetImpl() const;
+
+    wxDECLARE_NO_COPY_CLASS(wxFileDialogRadioButton);
+};
+
 // A class representing a custom text control.
 class WXDLLIMPEXP_CORE wxFileDialogTextCtrl : public wxFileDialogCustomControl
 {
@@ -130,6 +150,7 @@ class WXDLLIMPEXP_CORE wxFileDialogCustomize
 public:
     wxFileDialogButton* AddButton(const wxString& label);
     wxFileDialogCheckBox* AddCheckBox(const wxString& label);
+    wxFileDialogRadioButton* AddRadioButton(const wxString& label);
     wxFileDialogTextCtrl* AddTextCtrl(const wxString& label = wxString());
     wxFileDialogStaticText* AddStaticText(const wxString& label);
 

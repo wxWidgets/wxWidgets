@@ -57,6 +57,7 @@
 
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/radiobut.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
 
@@ -332,6 +333,47 @@ public:
     }
 };
 
+class wxFileDialogRadioButtonImplFDC
+    : public wxFileDialogImplFDC<wxFileDialogRadioButtonImpl>
+{
+public:
+    wxFileDialogRadioButtonImplFDC(IFileDialogCustomize* fdc, DWORD id, DWORD item)
+        : wxFileDialogImplFDC<wxFileDialogRadioButtonImpl>(fdc, id),
+          m_item(item)
+    {
+    }
+
+    virtual bool GetValue() wxOVERRIDE
+    {
+        DWORD selected = 0;
+        HRESULT hr = m_fdc->GetSelectedControlItem(m_id, &selected);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::GetSelectedControlItem"), hr);
+
+        return selected == m_item;
+    }
+
+    virtual void SetValue(bool value) wxOVERRIDE
+    {
+        // We can't implement it using the available API and this shouldn't be
+        // ever needed anyhow.
+        wxCHECK_RET( value, wxS("clearing radio buttons not supported") );
+
+        HRESULT hr = m_fdc->SetSelectedControlItem(m_id, m_item);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::SetSelectedControlItem"), hr);
+    }
+
+    virtual bool DoBind(wxEvtHandler* WXUNUSED(handler)) wxOVERRIDE
+    {
+        // We don't need to do anything special to get the events here.
+        return true;
+    }
+
+private:
+    const DWORD m_item;
+};
+
 class wxFileDialogTextCtrlImplFDC
     : public wxFileDialogImplFDC<wxFileDialogTextCtrlImpl>
 {
@@ -391,7 +433,8 @@ public:
         : wxFileDialogCustomize(this)
     {
         m_lastId =
-        m_lastAuxId = 0;
+        m_lastAuxId =
+        m_radioListId = 0;
     }
 
     bool Initialize(IFileDialog* fileDialog)
@@ -424,6 +467,8 @@ public:
     // Implement wxFileDialogCustomizeImpl pure virtual methods.
     wxFileDialogButtonImpl* AddButton(const wxString& label) wxOVERRIDE
     {
+        m_radioListId = 0;
+
         HRESULT hr = m_fdc->AddPushButton(++m_lastId, label.wc_str());
         if ( FAILED(hr) )
         {
@@ -436,6 +481,8 @@ public:
 
     wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) wxOVERRIDE
     {
+        m_radioListId = 0;
+
         HRESULT hr = m_fdc->AddCheckButton(++m_lastId, label.wc_str(), FALSE);
         if ( FAILED(hr) )
         {
@@ -446,8 +493,45 @@ public:
         return new wxFileDialogCheckBoxImplFDC(m_fdc, m_lastId);
     }
 
+    wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) wxOVERRIDE
+    {
+        HRESULT hr;
+
+        bool firstButton = false;
+        if ( !m_radioListId )
+        {
+            hr = m_fdc->AddRadioButtonList(--m_lastAuxId);
+            if ( FAILED(hr) )
+            {
+                wxLogApiError(wxS("IFileDialogCustomize::AddRadioButtonList"), hr);
+                return NULL;
+            }
+
+            m_radioListId = m_lastAuxId;
+            firstButton = true;
+        }
+
+        hr = m_fdc->AddControlItem(m_radioListId, ++m_lastId, label.wc_str());
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxS("IFileDialogCustomize::AddControlItem"), hr);
+            return NULL;
+        }
+
+        wxFileDialogRadioButtonImplFDC* const
+            impl = new wxFileDialogRadioButtonImplFDC(m_fdc, m_radioListId, m_lastId);
+
+        // Select the first button of a new radio group.
+        if ( firstButton )
+            impl->SetValue(true);
+
+        return impl;
+    }
+
     wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) wxOVERRIDE
     {
+        m_radioListId = 0;
+
         HRESULT hr;
 
         if ( !label.empty() )
@@ -476,6 +560,8 @@ public:
 
     wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) wxOVERRIDE
     {
+        m_radioListId = 0;
+
         HRESULT hr = m_fdc->AddText(++m_lastId, label.wc_str());
         if ( FAILED(hr) )
         {
@@ -497,6 +583,10 @@ private:
     // IDs used for any other controls, they're negative (which means they
     // decrement from USHORT_MAX down).
     DWORD m_lastAuxId;
+
+    // ID of the current radio button list, i.e. the one to which the next call
+    // to AddRadioButton() would add a radio button. 0 if none.
+    DWORD m_radioListId;
 };
 
 #endif // wxUSE_IFILEOPENDIALOG
@@ -638,8 +728,20 @@ public:
     wxSTDMETHODIMP
     OnItemSelected(IFileDialogCustomize*,
                    DWORD WXUNUSED(dwIDCtl),
-                   DWORD WXUNUSED(dwIDItem)) wxOVERRIDE
+                   DWORD dwIDItem) wxOVERRIDE
     {
+        // Note that we don't use dwIDCtl here because we use unique item IDs
+        // for all controls.
+        if ( wxFileDialogCustomControl* const
+                control = m_customize.FindControl(dwIDItem) )
+        {
+            wxCommandEvent event(wxEVT_RADIOBUTTON, dwIDItem);
+            event.SetEventObject(control);
+            event.SetInt(true); // Ensure IsChecked() returns true.
+
+            control->SafelyProcessEvent(event);
+        }
+
         return S_OK;
     }
 

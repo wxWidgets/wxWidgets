@@ -27,6 +27,7 @@
 
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/radiobut.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
@@ -143,6 +144,34 @@ void wxFileDialogCheckBox::SetValue(bool value)
     GetImpl()->SetValue(value);
 }
 
+wxFileDialogRadioButton::wxFileDialogRadioButton(wxFileDialogRadioButtonImpl* impl)
+    : wxFileDialogCustomControl(impl)
+{
+}
+
+bool wxFileDialogRadioButton::OnDynamicBind(wxDynamicEventTableEntry& entry)
+{
+    if ( entry.m_eventType == wxEVT_RADIOBUTTON )
+        return GetImpl()->DoBind(this);
+
+    return wxFileDialogCustomControl::OnDynamicBind(entry);
+}
+
+wxFileDialogRadioButtonImpl* wxFileDialogRadioButton::GetImpl() const
+{
+    return static_cast<wxFileDialogRadioButtonImpl*>(m_impl);
+}
+
+bool wxFileDialogRadioButton::GetValue() const
+{
+    return GetImpl()->GetValue();
+}
+
+void wxFileDialogRadioButton::SetValue(bool value)
+{
+    GetImpl()->SetValue(value);
+}
+
 wxFileDialogTextCtrl::wxFileDialogTextCtrl(wxFileDialogTextCtrlImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
@@ -220,6 +249,12 @@ wxFileDialogCheckBox*
 wxFileDialogCustomize::AddCheckBox(const wxString& label)
 {
     return StoreAndReturn(new wxFileDialogCheckBox(m_impl->AddCheckBox(label)));
+}
+
+wxFileDialogRadioButton*
+wxFileDialogCustomize::AddRadioButton(const wxString& label)
+{
+    return StoreAndReturn(new wxFileDialogRadioButton(m_impl->AddRadioButton(label)));
 }
 
 wxFileDialogTextCtrl*
@@ -374,6 +409,58 @@ private:
     wxEvtHandler* m_handler;
 };
 
+class RadioButtonImpl : public ControlImplBase<wxFileDialogRadioButtonImpl>
+{
+public:
+    RadioButtonImpl(wxWindow* parent, const wxString& label)
+        : ControlImplBase<wxFileDialogRadioButtonImpl>
+          (
+            new wxRadioButton(parent, wxID_ANY, label)
+          )
+    {
+        m_handler = NULL;
+    }
+
+    virtual bool GetValue() wxOVERRIDE
+    {
+        return GetRadioButton()->GetValue();
+    }
+
+    virtual void SetValue(bool value) wxOVERRIDE
+    {
+        GetRadioButton()->SetValue(value);
+    }
+
+    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    {
+        if ( !m_handler )
+        {
+            m_handler = handler;
+            m_win->Bind(wxEVT_RADIOBUTTON, &RadioButtonImpl::OnRadioButton, this);
+        }
+
+        return true;
+    }
+
+private:
+    wxRadioButton* GetRadioButton() const
+    {
+        return static_cast<wxRadioButton*>(m_win);
+    }
+
+    void OnRadioButton(wxCommandEvent& event)
+    {
+        // See comments in OnButton() above, they also apply here.
+
+        wxCommandEvent eventCopy(event);
+        eventCopy.SetEventObject(m_handler);
+
+        m_handler->ProcessEvent(eventCopy);
+    }
+
+    wxEvtHandler* m_handler;
+};
+
 class TextCtrlImpl : public ControlImplBase<wxFileDialogTextCtrlImpl>
 {
 public:
@@ -441,7 +528,8 @@ public:
     Panel(wxWindow* parent, wxFileDialogCustomizeHook& customizeHook)
         : wxPanel(parent),
           wxFileDialogCustomize(this),
-          m_customizeHook(customizeHook)
+          m_customizeHook(customizeHook),
+          m_lastWasRadio(false)
     {
         // Use a simple horizontal sizer to layout all the controls for now.
         wxBoxSizer* const sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -467,16 +555,36 @@ public:
     // Implement wxFileDialogCustomizeImpl pure virtual methods.
     wxFileDialogButtonImpl* AddButton(const wxString& label) wxOVERRIDE
     {
+        m_lastWasRadio = false;
+
         return AddToLayoutAndReturn<ButtonImpl>(label);
     }
 
     wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) wxOVERRIDE
     {
+        m_lastWasRadio = false;
+
         return AddToLayoutAndReturn<CheckBoxImpl>(label);
+    }
+
+    wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) wxOVERRIDE
+    {
+        RadioButtonImpl* const impl = AddToLayoutAndReturn<RadioButtonImpl>(label);
+        if ( !m_lastWasRadio )
+        {
+            // Select the first button of a new radio group.
+            impl->SetValue(true);
+
+            m_lastWasRadio = true;
+        }
+
+        return impl;
     }
 
     wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) wxOVERRIDE
     {
+        m_lastWasRadio = false;
+
         if ( !label.empty() )
         {
             AddToLayout(new wxStaticText(this, wxID_ANY, label));
@@ -487,6 +595,8 @@ public:
 
     wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) wxOVERRIDE
     {
+        m_lastWasRadio = false;
+
         return AddToLayoutAndReturn<StaticTextImpl>(label);
     }
 
@@ -508,6 +618,8 @@ private:
 
 
     wxFileDialogCustomizeHook& m_customizeHook;
+
+    bool m_lastWasRadio;
 
     wxDECLARE_NO_COPY_CLASS(Panel);
 };
