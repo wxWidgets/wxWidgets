@@ -1052,6 +1052,14 @@ concatenated into a single string using a new line character between them
     Second line of text describing the action performed when the button is pressed (default: none).  }
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display in the button (optional). @since 3.1.5}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
 @row3col{default, @ref overview_xrcformat_type_bool,
     Should this button be the default button in dialog (default: 0)? @since 3.1.5}
 @endTable
