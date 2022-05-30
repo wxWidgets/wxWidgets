@@ -417,6 +417,10 @@
 #include <wx/xtixml.h>
 #include <wx/zipstrm.h>
 #include <wx/zstream.h>
+#include <wx/propgrid/advprops.h>
+#include <wx/propgrid/editors.h>
+#include <wx/propgrid/manager.h>
+#include <wx/propgrid/propgrid.h>
 
 #if defined(__WINDOWS__)
 #include <wx/dde.h>
