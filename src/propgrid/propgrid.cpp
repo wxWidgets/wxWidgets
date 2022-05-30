@@ -1154,11 +1154,10 @@ wxSize wxPropertyGrid::DoGetBestSize() const
                     10
                    );
 
-    wxClientDC dc(const_cast<wxPropertyGrid *>(this));
     int width = m_marginWidth;
     for ( unsigned int i = 0; i < m_pState->GetColumnCount(); i++ )
     {
-        width += m_pState->GetColumnFitWidth(dc, m_pState->DoGetRoot(), i, true);
+        width += m_pState->GetColumnFitWidth(m_pState->DoGetRoot(), i, true);
     }
 
     return wxSize(width, lineHeight*numLines + 40);

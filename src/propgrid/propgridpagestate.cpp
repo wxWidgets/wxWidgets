@@ -16,7 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
+#if WXWIN_COMPATIBILITY_3_0
     #include "wx/dcclient.h"
+#endif // WXWIN_COMPATIBILITY_3_0
     #include "wx/event.h"
     #include "wx/font.h"
     #include "wx/log.h"
@@ -715,6 +717,7 @@ wxPropertyGridPageState::HitTest( const wxPoint&pt ) const
 // -----------------------------------------------------------------------
 
 // Used by SetSplitterLeft() and DotFitColumns()
+#if WXWIN_COMPATIBILITY_3_0
 int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
                                            wxPGProperty* pwc,
                                            unsigned int col,
@@ -758,7 +761,49 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
 
     return maxW;
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
+int wxPropertyGridPageState::GetColumnFitWidth(const wxPGProperty* p, unsigned int col, bool subProps) const
+{
+    const wxPropertyGrid* pg = GetGrid();
+    int maxW = 0;
+
+    for ( unsigned int i = 0; i < p->GetChildCount(); i++ )
+    {
+        int w;
+        wxPGProperty* pc = p->Item(i);
+        if ( !pc->IsCategory() )
+        {
+            wxString text;
+            pc->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)NULL);
+            int h;
+            pg->GetTextExtent(text, &w, &h);
+            if ( col == 0 )
+                w += ((pc->GetDepth() - 1) * pg->m_subgroup_extramargin);
+
+            // account for the bitmap
+            if ( col == 1 )
+                w += pc->GetImageOffset(pg->GetImageRect(pc, -1).GetWidth());
+
+            w += (wxPG_XBEFORETEXT * 2);
+
+            if ( w > maxW )
+                maxW = w;
+        }
+
+        if ( pc->GetChildCount() > 0 && (subProps || pc->IsCategory()) )
+        {
+            w = GetColumnFitWidth(pc, col, subProps);
+
+            if ( w > maxW )
+                maxW = w;
+        }
+    }
+
+    return maxW;
+}
+
+#if WXWIN_COMPATIBILITY_3_0
 int wxPropertyGridPageState::GetColumnFullWidth(const wxDC& dc, wxPGProperty* p, unsigned int col)
 {
     if ( p->IsCategory() )
@@ -776,6 +821,27 @@ int wxPropertyGridPageState::GetColumnFullWidth(const wxDC& dc, wxPGProperty* p,
         w += p->GetImageOffset(m_pPropGrid->GetImageRect(p, -1).GetWidth());
 
     w += (wxPG_XBEFORETEXT*2);
+    return w;
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+int wxPropertyGridPageState::GetColumnFullWidth(wxPGProperty* p, unsigned int col) const
+{
+    if ( p->IsCategory() )
+        return 0;
+
+    wxString text;
+    p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)NULL);
+    int w = GetGrid()->GetTextExtent(text).x;
+
+    if ( col == 0 )
+        w += p->GetDepth() * GetGrid()->m_subgroup_extramargin;
+
+    // account for the bitmap
+    if ( col == 1 )
+        w += p->GetImageOffset(GetGrid()->GetImageRect(p, -1).GetWidth());
+
+    w += (wxPG_XBEFORETEXT * 2);
     return w;
 }
 
@@ -870,10 +936,8 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
 void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
 {
     wxPropertyGrid* pg = GetGrid();
-    wxClientDC dc(pg);
-    dc.SetFont(pg->GetFont());
 
-    int maxW = GetColumnFitWidth(dc, m_properties, 0, subProps);
+    int maxW = GetColumnFitWidth(m_properties, 0, subProps);
 
     if ( maxW > 0 )
     {
@@ -887,8 +951,6 @@ void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
 wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 {
     wxPropertyGrid* pg = GetGrid();
-    wxClientDC dc(pg);
-    dc.SetFont(pg->GetFont());
 
     int marginWidth = pg->GetMarginWidth();
     int accWid = marginWidth;
@@ -896,7 +958,7 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 
     for ( unsigned int col=0; col < GetColumnCount(); col++ )
     {
-        int fitWid = GetColumnFitWidth(dc, m_properties, col, true);
+        int fitWid = GetColumnFitWidth(m_properties, col, true);
         int colMinWidth = GetColumnMinWidth(col);
         if ( fitWid < colMinWidth )
             fitWid = colMinWidth;

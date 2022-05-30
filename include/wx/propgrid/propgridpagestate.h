@@ -434,7 +434,11 @@ public:
         return m_width;
     }
 
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("call GetColumnFullWidth(wxPGProperty*, int) instead")
     int GetColumnFullWidth(const wxDC& dc, wxPGProperty* p, unsigned int col);
+#endif // WXWIN_COMPATIBILITY_3_0
+    int GetColumnFullWidth(wxPGProperty* p, unsigned int col) const;
 
     // Returns information about arbitrary position in the grid.
     // pt - Logical coordinates in the virtual grid space. Use
@@ -570,8 +574,12 @@ protected:
     // Returns minimal width for given column so that all images and texts
     // will fit entirely.
     // Used by SetSplitterLeft() and DoFitColumns().
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("call GetColumnFitWidth(wxPGProperty*, int, bool) instead")
     int GetColumnFitWidth(const wxDC& dc, wxPGProperty* pwc,
                           unsigned int col, bool subProps) const;
+#endif // WXWIN_COMPATIBILITY_3_0
+    int GetColumnFitWidth(const wxPGProperty* p, unsigned int col, bool subProps) const;
 
     void SetSplitterLeft(bool subProps = false);
 
