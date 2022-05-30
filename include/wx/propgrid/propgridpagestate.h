@@ -420,8 +420,6 @@ public:
         return m_selection.empty()? NULL: m_selection[0];
     }
 
-    void ResetColumnSizes( int setSplitterFlags );
-
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
 #if WXWIN_COMPATIBILITY_3_0
@@ -436,14 +434,6 @@ public:
         return m_width;
     }
 
-    // Returns minimal width for given column so that all images and texts
-    // will fit entirely.
-    // Used by SetSplitterLeft() and DoFitColumns().
-    int GetColumnFitWidth(const wxDC& dc,
-                          wxPGProperty* pwc,
-                          unsigned int col,
-                          bool subProps) const;
-
     int GetColumnFullWidth(const wxDC& dc, wxPGProperty* p, unsigned int col);
 
     // Returns information about arbitrary position in the grid.
@@ -456,21 +446,6 @@ public:
     bool IsDisplayed() const;
 
     bool IsInNonCatMode() const { return m_properties == m_abcArray; }
-
-    // Recalculates m_virtualHeight.
-    void RecalculateVirtualHeight()
-    {
-        m_virtualHeight = GetActualVirtualHeight();
-    }
-
-    void SetColumnCount( int colCount );
-
-    void SetSplitterLeft( bool subProps = false );
-
-    // Set virtual width for this particular page.
-    void SetVirtualWidth( int width );
-
-    bool PrepareAfterItemsAdded();
 
     // Called after virtual height needs to be recalculated.
     void VirtualHeightChanged()
@@ -591,6 +566,29 @@ protected:
 
     // Returns property by its name.
     wxPGProperty* BaseGetPropertyByName(const wxString& name) const;
+
+    // Returns minimal width for given column so that all images and texts
+    // will fit entirely.
+    // Used by SetSplitterLeft() and DoFitColumns().
+    int GetColumnFitWidth(const wxDC& dc, wxPGProperty* pwc,
+                          unsigned int col, bool subProps) const;
+
+    void SetSplitterLeft(bool subProps = false);
+
+    void SetColumnCount(int colCount);
+
+    void ResetColumnSizes(int setSplitterFlags);
+
+    bool PrepareAfterItemsAdded();
+
+    // Recalculates m_virtualHeight.
+    void RecalculateVirtualHeight()
+    {
+        m_virtualHeight = GetActualVirtualHeight();
+    }
+
+    // Set virtual width for this particular page.
+    void SetVirtualWidth(int width);
 
     // If visible, then this is pointer to wxPropertyGrid.
     // This shall *never* be NULL to indicate that this state is not visible.
