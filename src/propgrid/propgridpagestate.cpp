@@ -479,11 +479,8 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
 
 wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByName( const wxString& name ) const
 {
-    wxPGHashMapS2P::const_iterator it;
-    it = m_dictName.find(name);
-    if ( it != m_dictName.end() )
-        return (wxPGProperty*) it->second;
-    return NULL;
+    wxPGHashMapS2P::const_iterator it = m_dictName.find(name);
+    return it != m_dictName.end() ? (wxPGProperty*) it->second : NULL;
 }
 
 // -----------------------------------------------------------------------

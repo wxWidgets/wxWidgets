@@ -828,9 +828,8 @@ public:
     void SetPropertyValues( const wxVariantList& list,
                             wxPGPropArg defaultCategory = wxNullProperty )
     {
-        wxPGProperty *p;
-        if ( defaultCategory.HasName() ) p = defaultCategory.GetPtr(this);
-        else p = defaultCategory.GetPtr0();
+        wxPGProperty* p = defaultCategory.HasName() ?
+                          defaultCategory.GetPtr(this) : defaultCategory.GetPtr0();
         m_pState->DoSetPropertyValues(list, p);
     }
 
@@ -1068,9 +1067,7 @@ protected:
     // Returns page state data for given (sub) page (-1 means current page).
     virtual wxPropertyGridPageState* GetPageState( int pageIndex ) const
     {
-        if ( pageIndex <= 0 )
-            return m_pState;
-        return NULL;
+        return pageIndex <= 0 ? m_pState : NULL;
     }
 
     virtual bool DoSelectPage( int WXUNUSED(index) ) { return true; }
@@ -1094,18 +1091,13 @@ private:
     // Cannot be GetGrid() due to ambiguity issues.
     wxPropertyGrid* GetPropertyGrid()
     {
-        if ( !m_pState )
-            return NULL;
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : NULL;
     }
 
     // Cannot be GetGrid() due to ambiguity issues.
     const wxPropertyGrid* GetPropertyGrid() const
     {
-        if ( !m_pState )
-            return NULL;
-
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : NULL;
     }
 };
 
