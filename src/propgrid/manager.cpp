@@ -2072,7 +2072,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
 
         for ( size_t i = 0; i < GetPageCount(); i++ )
         {
-            int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[i]->DoGetRoot(), 0, subProps );
+            int maxW = m_pState->GetColumnFitWidth(m_arrPages[i]->DoGetRoot(), 0, subProps );
             maxW += m_pPropGrid->GetMarginWidth();
             if ( maxW > highest )
                 highest = maxW;
