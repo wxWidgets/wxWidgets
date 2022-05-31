@@ -43,11 +43,13 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
                     wxDefaultValidator,
                     GetName());
 
-    if (GetBool("checked"))
+    int state = GetLong("checked", wxCHK_UNCHECKED);
+    if (state == wxCHK_CHECKED)
         control->SetValue(true);
-    else if (GetBool("undetermined") && (GetStyle() & wxCHK_3STATE))
+    else if (state == wxCHK_UNDETERMINED)
+        // will generate a warning if wxCHK_3STATE is not set
         control->Set3StateValue(wxCHK_UNDETERMINED);
-
+        
     SetupWindow(control);
 
     return control;
