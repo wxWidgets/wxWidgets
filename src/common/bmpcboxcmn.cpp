@@ -67,7 +67,7 @@ void wxBitmapComboBoxBase::UpdateInternals()
     while ( m_bitmapbundles.size() < GetItemContainer()->GetCount() )
         m_bitmapbundles.push_back( wxBitmapBundle() );
 
-    if ( m_usedImgSize.x != -1 )
+    if ( m_usedImgSize.x != -1 && !m_bitmapbundles.empty() )
     {
         m_usedImgSize = wxBitmapBundle::GetConsensusSizeFor
                         (
