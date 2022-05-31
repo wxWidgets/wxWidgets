@@ -49,7 +49,7 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
     else if (state == wxCHK_UNDETERMINED)
         // will generate a warning if wxCHK_3STATE is not set
         control->Set3StateValue(wxCHK_UNDETERMINED);
-        
+
     SetupWindow(control);
 
     return control;
