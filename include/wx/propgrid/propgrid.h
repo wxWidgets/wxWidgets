@@ -2085,9 +2085,7 @@ public:
     // the property grid has been deleted.
     wxVariant GetPropertyValue() const
     {
-        if ( m_validationInfo )
-            return m_validationInfo->GetValue();
-        return m_value;
+        return m_validationInfo ? m_validationInfo->GetValue() : m_value;
     }
 
     // Returns value of the associated property.
@@ -2156,7 +2154,6 @@ public:
     }
 
 private:
-    void Init();
     void OnPropertyGridSet();
     wxDECLARE_DYNAMIC_CLASS(wxPropertyGridEvent);
 

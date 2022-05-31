@@ -397,8 +397,6 @@ public:
     */
     wxPGProperty* GetSelection() const;
 
-    void ResetColumnSizes( int setSplitterFlags );
-
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
     /**
@@ -406,18 +404,7 @@ public:
     */
     int GetVirtualWidth() const;
 
-    /**
-        Returns minimal width for given column so that all images and texts
-        will fit entirely.
-
-        Used by SetSplitterLeft() and DoFitColumns().
-    */
-    int GetColumnFitWidth(wxClientDC& dc,
-                          wxPGProperty* pwc,
-                          unsigned int col,
-                          bool subProps) const;
-
-    int GetColumnFullWidth(wxClientDC &dc, wxPGProperty *p, unsigned int col);
+    int GetColumnFullWidth(const wxPGProperty* p, unsigned int col) const;
 
     /**
         Returns information about arbitrary position in the grid.
@@ -435,29 +422,6 @@ public:
     inline bool IsDisplayed() const;
 
     bool IsInNonCatMode() const;
-
-    /**
-        widthChange is non-client.
-    */
-    void OnClientWidthChange( int newWidth,
-                              int widthChange,
-                              bool fromOnResize = false );
-
-    /**
-        Recalculates m_virtualHeight.
-    */
-    void RecalculateVirtualHeight();
-
-    void SetColumnCount( int colCount );
-
-    void SetSplitterLeft( bool subProps = false );
-
-    /**
-        Set virtual width for this particular page.
-    */
-    void SetVirtualWidth( int width );
-
-    bool PrepareAfterItemsAdded();
 
     /**
         Called after virtual height needs to be recalculated.

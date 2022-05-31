@@ -725,6 +725,11 @@ wxBitmapToggleButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element pressed        {_, t_bitmap }* &
+        [xrc:p="o"] element focus          {_, t_bitmap }* &
+        [xrc:p="o"] element disabled       {_, t_bitmap }* &
+        [xrc:p="o"] element current        {_, t_bitmap }* &
+        [xrc:p="o"] element margins        {_, t_size }* &
         [xrc:p="o"] element checked {_, t_bool }*
     }
 
@@ -1405,8 +1410,7 @@ wxRichTextCtrl =
         attribute class { "wxRichTextCtrl" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
-        [xrc:p="o"] element value     {_, t_text }* &
-        [xrc:p="o"] element maxlength {_, t_integer }*
+        [xrc:p="o"] element value {_, t_text }*
     }
 
 
@@ -1514,7 +1518,8 @@ wxSpinCtrlDouble =
         [xrc:p="o"] element value {_, t_float }* &
         [xrc:p="o"] element min   {_, t_float }* &
         [xrc:p="o"] element max   {_, t_float }* &
-        [xrc:p="o"] element inc   {_, t_float}*
+        [xrc:p="o"] element inc   {_, t_float}* &
+        [xrc:p="o"] element digits {_, t_integer}*
     }
 
 
@@ -1616,6 +1621,11 @@ wxToggleButton =
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="o"] element checked {_, t_bool }* &
         [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"] element pressed        {_, t_bitmap }* &
+        [xrc:p="o"] element focus          {_, t_bitmap }* &
+        [xrc:p="o"] element disabled       {_, t_bitmap }* &
+        [xrc:p="o"] element current        {_, t_bitmap }* &
+        [xrc:p="o"] element margins        {_, t_size }* &
         [xrc:p="o"] element bitmapposition {_, t_direction }*
     }
 

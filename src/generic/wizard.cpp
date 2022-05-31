@@ -904,10 +904,11 @@ void wxWizard::SetBitmap(const wxBitmapBundle& bitmap)
 
 void wxWizard::WXHandleDPIChanged(wxDPIChangedEvent& event)
 {
-    wxBitmap bmp;
     if ( m_statbmp )
     {
-        bmp = m_page->GetBitmap();
+        wxBitmap bmp;
+        if ( m_page )
+            bmp = m_page->GetBitmap();
         if ( !bmp.IsOk() )
             bmp = m_bitmap.GetBitmapFor(this);
 

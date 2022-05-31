@@ -1470,10 +1470,7 @@ public:
     // Returns editor used for given column. NULL for no editor.
     const wxPGEditor* GetColumnEditor( int column ) const
     {
-        if ( column == 1 )
-            return GetEditorClass();
-
-        return NULL;
+        return column == 1 ? GetEditorClass() : NULL;
     }
 
     // Returns common value selected for this property. -1 for none.
@@ -1776,9 +1773,7 @@ public:
     // Gets assignable version of property's validator.
     wxValidator* GetValidator() const
     {
-        if ( m_validator )
-            return m_validator;
-        return DoGetValidator();
+        return  m_validator ? m_validator : DoGetValidator();
     }
 #endif // wxUSE_VALIDATORS
 

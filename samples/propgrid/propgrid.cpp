@@ -3209,7 +3209,7 @@ wxPGProperty* GetRealRoot(wxPropertyGrid *grid)
     return property ? grid->GetFirstChild(property) : NULL;
 }
 
-void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, int width[3])
+void GetColumnWidths(wxPropertyGrid *grid, wxPGProperty *root, int width[3])
 {
     wxPropertyGridPageState *state = grid->GetState();
 
@@ -3224,9 +3224,9 @@ void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, i
     {
         wxPGProperty* p = root->Item(ii);
 
-        width[0] = wxMax(width[0], state->GetColumnFullWidth(dc, p, 0));
-        width[1] = wxMax(width[1], state->GetColumnFullWidth(dc, p, 1));
-        width[2] = wxMax(width[2], state->GetColumnFullWidth(dc, p, 2));
+        width[0] = wxMax(width[0], state->GetColumnFullWidth(p, 0));
+        width[1] = wxMax(width[1], state->GetColumnFullWidth(p, 1));
+        width[2] = wxMax(width[2], state->GetColumnFullWidth(p, 2));
     }
     for (ii = 0; ii < root->GetChildCount(); ++ii)
     {
@@ -3234,7 +3234,7 @@ void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, i
         if (p->IsExpanded())
         {
             int w[3];
-            GetColumnWidths(dc, grid, p, w);
+            GetColumnWidths(grid, p, w);
             width[0] = wxMax(width[0], w[0]);
             width[1] = wxMax(width[1], w[1]);
             width[2] = wxMax(width[2], w[2]);
@@ -3244,13 +3244,6 @@ void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, i
     width[0] = wxMax(width[0], minWidths[0]);
     width[1] = wxMax(width[1], minWidths[1]);
     width[2] = wxMax(width[2], minWidths[2]);
-}
-
-void GetColumnWidths(wxPropertyGrid *grid, wxPGProperty *root, int width[3])
-{
-    wxClientDC dc(grid);
-    dc.SetFont(grid->GetFont());
-    GetColumnWidths(dc, grid, root, width);
 }
 
 void SetMinSize(wxPropertyGrid *grid)

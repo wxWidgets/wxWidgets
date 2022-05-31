@@ -178,7 +178,7 @@ public:
     /**
         Returns the number of items.
     */
-    int GetCount() const { return m_objects.GetCount(); }
+    int GetCount() const { return static_cast<int>(m_objects.GetCount()); }
 
     wxRichTextObjectPtrArray    m_objects;
     wxArrayString               m_labels;

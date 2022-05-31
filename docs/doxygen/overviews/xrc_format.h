@@ -893,6 +893,17 @@ Example:
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Label to display on the button (default: none).}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{margins, @ref overview_xrcformat_type_size,
+    Set the margins between the bitmap and the text of the button.
+    This method is currently only implemented under MSW. If it is not called, a default margin is used around the bitmap. @since 3.1.7}
 @row3col{checked, @ref overview_xrcformat_type_bool,
      Should the button be checked/pressed initially (default: 0)?}
 @endTable
@@ -1932,19 +1943,17 @@ a single wxSizer child with non-ribbon windows in it.
 @hdr3col{property, type, description}
 @row3col{value, @ref overview_xrcformat_type_text,
     Initial value of the control (default: empty).}
-@row3col{maxlength, integer,
-    Maximum length of the text entered (default: unlimited).}
 @endTable
 
-Notice that wxRichTextCtrl support in XRC is available in wxWidgets 2.9.5 and
-later only and you need to explicitly register its handler using
+Notice that you need to explicitly register the handler using
 @code
     #include <wx/xrc/xh_richtext.h>
 
-    AddHandler(new wxRichTextCtrl);
+    AddHandler(new wxRichTextCtrlXmlHandler);
 @endcode
 to use it.
 
+@since 2.9.5
 
 @subsubsection xrc_wxscrollbar wxScrollBar
 
@@ -2092,6 +2101,8 @@ additional property:
 @beginTable
 @row3col{inc, float,
     The amount by which the number is changed by a single arrow press.}
+@row3col{digits, integer,
+    Sets the precision of the value of the spin control (default: 0). @since 3.1.7.}
 @endTable
 
 @since  3.1.1.
@@ -2231,6 +2242,17 @@ No additional properties.
      Should the button be checked/pressed initially (default: 0)?}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display in the button (optional). @since 3.1.1}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{margins, @ref overview_xrcformat_type_size,
+    Set the margins between the bitmap and the text of the button.
+    This method is currently only implemented under MSW. If it is not called, a default margin is used around the bitmap. @since 3.1.7}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
     Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT). @since 3.1.1}
 @endTable

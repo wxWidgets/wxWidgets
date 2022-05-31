@@ -1154,11 +1154,10 @@ wxSize wxPropertyGrid::DoGetBestSize() const
                     10
                    );
 
-    wxClientDC dc(const_cast<wxPropertyGrid *>(this));
     int width = m_marginWidth;
     for ( unsigned int i = 0; i < m_pState->GetColumnCount(); i++ )
     {
-        width += m_pState->GetColumnFitWidth(dc, m_pState->DoGetRoot(), i, true);
+        width += m_pState->GetColumnFitWidth(m_pState->DoGetRoot(), i, true);
     }
 
     return wxSize(width, lineHeight*numLines + 40);
@@ -6297,22 +6296,15 @@ wxDEFINE_EVENT( wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridEvent::Init()
-{
-    m_validationInfo = NULL;
-    m_column = 1;
-    m_canVeto = false;
-    m_wasVetoed = false;
-    m_pg = NULL;
-}
-
-// -----------------------------------------------------------------------
-
 wxPropertyGridEvent::wxPropertyGridEvent(wxEventType commandType, int id)
     : wxCommandEvent(commandType,id)
     , m_property(NULL)
+    , m_pg(NULL)
+    , m_validationInfo(NULL)
+    , m_column(1)
+    , m_canVeto(false)
+    , m_wasVetoed(false)
 {
-    Init();
 }
 
 // -----------------------------------------------------------------------
@@ -6322,11 +6314,10 @@ wxPropertyGridEvent::wxPropertyGridEvent(const wxPropertyGridEvent& event)
     , m_property(event.m_property)
     , m_pg(event.m_pg)
     , m_validationInfo(event.m_validationInfo)
+    , m_column(event.m_column)
     , m_canVeto(event.m_canVeto)
     , m_wasVetoed(event.m_wasVetoed)
 {
-    m_eventType = event.GetEventType();
-    m_eventObject = event.m_eventObject;
     OnPropertyGridSet();
 }
 
@@ -6357,11 +6348,13 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
         // being destroyed is at the end of the array.
         wxVector<wxPropertyGridEvent*>& liveEvents = m_pg->m_liveEvents;
 
-        for ( int i = liveEvents.size()-1; i >= 0; i-- )
+        for ( wxVector<wxPropertyGridEvent*>::reverse_iterator rit = liveEvents.rbegin(); rit != liveEvents.rend(); ++rit )
         {
-            if ( liveEvents[i] == this )
+            if ( *rit == this )
             {
-                liveEvents.erase(liveEvents.begin() + i);
+                // The base iterator refers to the element that is next
+                // to the element the reverse_iterator is currently pointing to.
+                liveEvents.erase(rit.base() - 1);
                 break;
             }
         }
