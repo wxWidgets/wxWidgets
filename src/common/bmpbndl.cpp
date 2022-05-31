@@ -408,6 +408,11 @@ wxBitmapBundle::~wxBitmapBundle()
 {
 }
 
+void wxBitmapBundle::Clear()
+{
+    m_impl.reset(NULL);
+}
+
 /* static */
 wxBitmapBundle wxBitmapBundle::FromBitmaps(const wxVector<wxBitmap>& bitmaps)
 {
