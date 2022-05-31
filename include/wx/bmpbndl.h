@@ -109,7 +109,7 @@ public:
     bool IsOk() const { return m_impl.get() != NULL; }
 
     // Clear the bundle contents, IsOk() will return false after doing this.
-    void Clear() { m_impl.reset(NULL); }
+    void Clear();
 
     // Get the size of the bitmap represented by this bundle when using the
     // default DPI, i.e. 100% scaling. Returns invalid size for empty bundle.
