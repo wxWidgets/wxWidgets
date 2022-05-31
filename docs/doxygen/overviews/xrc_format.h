@@ -1036,35 +1036,6 @@ its @c notebookpage).
 Each @c choicebookpage has exactly one non-toplevel window as its child.
 
 
-@subsubsection xrc_wxcommandlinkbutton wxCommandLinkButton
-
-The wxCommandLinkButton contains a main title-like @c label and an optional
-@c note for longer description. The main @c label and the @c note can be
-concatenated into a single string using a new line character between them
-(notice that the @c note part can have more new lines in it).
-
-@beginTable
-@hdr3col{property, type, description}
-@row3col{label, @ref overview_xrcformat_type_text,
-    First line of text on the button, typically the label of an action that
-    will be made when the button is pressed (default: empty). }
-@row3col{note, @ref overview_xrcformat_type_text,
-    Second line of text describing the action performed when the button is pressed (default: none).  }
-@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to display in the button (optional). @since 3.1.5}
-@row3col{pressed, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
-@row3col{focus, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
-@row3col{disabled, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
-@row3col{current, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
-@row3col{default, @ref overview_xrcformat_type_bool,
-    Should this button be the default button in dialog (default: 0)? @since 3.1.5}
-@endTable
-
-
 @subsubsection xrc_wxcollapsiblepane wxCollapsiblePane
 
 @beginTable
@@ -1129,6 +1100,35 @@ Example:
 @hdr3col{property, type, description}
 @row3col{value, @ref overview_xrcformat_type_string,
      Initial value in the control (default: empty).}
+@endTable
+
+
+@subsubsection xrc_wxcommandlinkbutton wxCommandLinkButton
+
+The wxCommandLinkButton contains a main title-like @c label and an optional
+@c note for longer description. The main @c label and the @c note can be
+concatenated into a single string using a new line character between them
+(notice that the @c note part can have more new lines in it).
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    First line of text on the button, typically the label of an action that
+    will be made when the button is pressed (default: empty). }
+@row3col{note, @ref overview_xrcformat_type_text,
+    Second line of text describing the action performed when the button is pressed (default: none).  }
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to display in the button (optional). @since 3.1.5}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{default, @ref overview_xrcformat_type_bool,
+    Should this button be the default button in dialog (default: 0)? @since 3.1.5}
 @endTable
 
 
