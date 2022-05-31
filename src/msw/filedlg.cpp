@@ -614,6 +614,10 @@ public:
         m_centreDir = 0;
     }
 
+    // This class is not really used polymorphically, but gcc still complains
+    // if it doesn't have a virtual dtor, so pacify it by adding one.
+    virtual ~wxFileDialogMSWData() { }
+
     // Hook function used by the common dialogs: it's a member of this class
     // just to allow it to call the private functions of wxFileDialog.
     static UINT_PTR APIENTRY
