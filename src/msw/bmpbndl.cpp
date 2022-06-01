@@ -269,17 +269,28 @@ wxBitmap wxBitmapBundleImplRC::GetBitmap(const wxSize& size)
 
         const wxSize sizeThis = sizeDef*info.scale;
 
-        // Use this bitmap if it's the first one bigger than the requested size
-        // or if it's the last item as in this case we're not going to find any
-        // bitmap bigger than the given one anyhow and we don't have any choice
-        // but to upscale the largest one we have.
-        if ( sizeThis.y >= size.y || i + 1 == m_resourceInfos.size() )
+        // Use this bitmap if it's the first one bigger than the requested size.
+        if ( sizeThis.y >= size.y )
             return AddBitmap(info, sizeThis, size);
     }
 
-    wxFAIL_MSG( wxS("unreachable") );
+    // We have to upscale some bitmap because we don't have any bitmaps larger
+    // than the requested size. Try to find one which can be upscaled using an
+    // integer factor.
+    const ResourceInfo* infoToRescale = NULL;
+    for ( size_t i = 0; i < m_resourceInfos.size(); ++i )
+    {
+        const ResourceInfo& info = m_resourceInfos[i];
 
-    return wxBitmap();
+        const double scale = size.y / sizeDef.y*info.scale;
+        if ( scale == wxRound(scale) )
+            infoToRescale = &info;
+    }
+
+    if ( !infoToRescale )
+        infoToRescale = &m_resourceInfos.back();
+
+    return AddBitmap(*infoToRescale, sizeDef*infoToRescale->scale, size);
 }
 
 // ============================================================================

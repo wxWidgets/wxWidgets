@@ -272,10 +272,14 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK_THAT( BitmapAtScale(b, 3   ), SameAs(2) );
 
     // This scale is too big to use any of the existing bitmaps, so they will
-    // be scaled, but use integer factors.
-    CHECK_THAT( BitmapAtScale(b, 3.33), SameAs(3, 2) );
+    // be scaled, but use integer factors and, importantly, scale the correct
+    // bitmap using them: we need to scale the small bitmap by a factor of 3,
+    // rather than scaling the larger bitmap by a factor of 1.5 here, but we
+    // must also scale the larger one by a factor of 2 rather than scaling the
+    // small one by a factor of 4.
+    CHECK_THAT( BitmapAtScale(b, 3.33), SameAs(3, 1) );
     CHECK_THAT( BitmapAtScale(b, 4   ), SameAs(4, 2) );
-    CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5, 2) );
+    CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5, 1) );
 
 
     // Finally check that things work as expected when we have 3 versions.
@@ -294,6 +298,10 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK_THAT( BitmapAtScale(b, 2   ), SameAs(2.0) );
     CHECK_THAT( BitmapAtScale(b, 2.5 ), SameAs(2.0) );
     CHECK_THAT( BitmapAtScale(b, 3   ), SameAs(2.0) );
+
+    CHECK_THAT( BitmapAtScale(b, 3.33), SameAs(3.0, 1.5) );
+    CHECK_THAT( BitmapAtScale(b, 4.25), SameAs(4.0, 2.0) );
+    CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5.0, 1.0) );
 }
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS

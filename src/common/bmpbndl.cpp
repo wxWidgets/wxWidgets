@@ -292,18 +292,35 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
 
     // We only get here if the requested size is larger than the size of all
     // the bitmaps we have, in which case we have no choice but to upscale one
-    // of the bitmaps, so find the largest available non-generated bitmap.
-    for ( size_t i = n; n > 0; --i )
+    // of the bitmaps, so find the largest available non-generated bitmap which
+    // can be scaled using an integer factor or, failing that, just the largest
+    // non-generated bitmap.
+    const Entry* entryToRescale = NULL;
+    const Entry* entryLastNotGen = NULL;
+    for ( size_t i = 0; i < n; ++i )
     {
-        const Entry& entry = m_entries[i - 1];
-        if ( !entry.generated )
-        {
-            const Entry entryNew(entry, size);
+        const Entry& entry = m_entries[i];
+        if ( entry.generated )
+            continue;
 
-            m_entries.push_back(entryNew);
+        entryLastNotGen = &entry;
 
-            return entryNew.bitmap;
-        }
+        const double
+            scale = static_cast<double>(size.y) / entry.bitmap.GetSize().y;
+        if ( scale == wxRound(scale) )
+            entryToRescale = &entry;
+    }
+
+    if ( !entryToRescale )
+        entryToRescale = entryLastNotGen;
+
+    if ( entryToRescale )
+    {
+        const Entry entryNew(*entryToRescale, size);
+
+        m_entries.push_back(entryNew);
+
+        return entryNew.bitmap;
     }
 
     // We should have at least one non-generated bitmap.
