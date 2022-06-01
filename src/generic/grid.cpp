@@ -7112,6 +7112,17 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     // (in that case it's omitted to have a 'pressed' appearance)
     if (m_cursorMode != WXGRID_CURSOR_MOVE_ROW || row != m_dragMoveRowOrCol)
         rend.DrawBorder(*this, dc, rect);
+    else
+    {
+#ifdef __WXGTK__
+        dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
+        dc.DrawRectangle(rect);
+#endif
+        if ( GetBorder() == wxBORDER_NONE )
+            rect.Deflate(2);
+        else
+            rect.Deflate(1);
+    }
 
     int hAlign, vAlign;
     GetRowLabelAlignment(&hAlign, &vAlign);
@@ -7261,6 +7272,17 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
         // (in that case it's omitted to have a 'pressed' appearance)
         if (m_cursorMode != WXGRID_CURSOR_MOVE_COL || col != m_dragMoveRowOrCol)
             rend.DrawBorder(*this, dc, rect);
+        else
+        {
+#ifdef __WXGTK__
+            dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
+            dc.DrawRectangle(rect);
+#endif
+            if ( GetBorder() == wxBORDER_NONE )
+                rect.Deflate(2);
+            else
+                rect.Deflate(1);
+        }
     }
 
     int hAlign, vAlign;
