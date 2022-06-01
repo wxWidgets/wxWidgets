@@ -442,7 +442,8 @@ public:
                 return GetDefaultSize()*scale;
 
                 ... otherwise, an existing bitmap of the size closest to the
-                    one above would need to be found and its size returned ...
+                    one above would need to be found and its size returned,
+                    possibly by letting DoGetPreferredSize() choose it ...
             }
 
             wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
@@ -488,6 +489,55 @@ public:
         on demand and cache it.
      */
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
+
+protected:
+    /**
+        Helper for implementing GetPreferredBitmapSizeAtScale() in the derived
+        classes.
+
+        This function implements the standard algorithm used inside wxWidgets
+        itself and tries to find the scale closest to the given one, while also
+        trying to choose one of the available scales, to avoid actually
+        rescaling the bitmaps.
+
+        Typically this function is used in the derived classes implementation,
+        e.g.
+        @code
+        class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
+        {
+        public:
+            wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+            {
+                std::vector<double> vec;
+                vec.push_back(1);
+
+                // Note that the vector must be sorted, so we must add this
+                // scale before adding 2 below.
+                if ( MyIntermediateBitmapIsAvailable() )
+                    vec.push_back(1.5);
+
+                vec.push_back(2);
+
+                return DoGetPreferredSize(scale, vec.size(), vec.data());
+            }
+
+            ...
+        };
+        @endcode
+
+        @param scale The required scale, typically the same one as passed to
+            GetPreferredBitmapSizeAtScale().
+        @param n The number of elements in @a availableScales, must be strictly
+            positive (i.e. there must always be at least one available scale).
+        @param availableScales The scales in which bitmaps are available, i.e.
+            scales such that GetBitmap() wouldn't need to scale the bitmap if
+            it were called with them. This array @e must be in sorted order,
+            with 1 being its first element.
+
+        @since 3.1.7
+     */
+    wxSize
+    DoGetPreferredSize(double scale, size_t n, const double *availableScales) const;
 };
 
 /**

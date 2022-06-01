@@ -224,6 +224,14 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 class WXDLLIMPEXP_CORE wxBitmapBundleImpl : public wxRefCounter
 {
 protected:
+    // Standard implementation of GetPreferredBitmapSizeAtScale(): choose the
+    // scale closest to the given one from the available bitmap scales.
+    //
+    // Note that scales *must* be sorted in increasing scale order and there
+    // must be at least 1 of them.
+    wxSize
+    DoGetPreferredSize(double scale, size_t n, const double *availableScales) const;
+
     virtual ~wxBitmapBundleImpl();
 
 public:
