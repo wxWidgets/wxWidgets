@@ -2804,10 +2804,10 @@ protected:
     // operation in progress.
     int     m_dragMoveRowOrCol;
 
-    // Last drag marker position while drag-moving a column.
+    // Last drag marker position while drag-moving a row or column.
     int     m_dragLastPos;
 
-    // Last drag marker colour while drag-moving a column.
+    // Last drag marker colour while drag-moving a row or column.
     const wxColour *m_dragLastColour;
 
     // Row or column (depending on m_cursorMode value) currently being resized
