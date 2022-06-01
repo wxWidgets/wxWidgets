@@ -26,6 +26,7 @@
 #include "wx/icon.h"
 #include "wx/iconbndl.h"
 #include "wx/imaglist.h"
+#include "wx/scopeguard.h"
 #include "wx/window.h"
 
 #include "wx/private/bmpbndl.h"
@@ -710,10 +711,14 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
     wxCHECK_MSG( n > 0, wxSize(), wxS("must have at least one scale") );
 
     double scaleBest = 0.0;
+    double scaleLast = 0.0;
 
     for ( size_t i = 0; i < n; ++i )
     {
         const double scaleThis = availableScales[i];
+
+        // Ensure we remember the last used scale value.
+        wxON_BLOCK_EXIT_SET(scaleLast, scaleThis);
 
         // Keep looking for the exact match which we still can hope to find
         // while the current bitmap is smaller.
@@ -740,8 +745,6 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
         // depending on which of them is closer to the target size, breaking
         // the tie in favour of the smaller size as it's arguably better to use
         // slightly smaller bitmaps than too big ones.
-        const double scaleLast = availableScales[i - 1];
-
         scaleBest = scaleThis - scaleTarget < scaleTarget - scaleLast
                         ? scaleThis
                         : scaleLast;
@@ -752,13 +755,12 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
     {
         // We only get here if the target scale is bigger than all the
         // available scales, in which case we have no choice but to use the
-        // biggest bitmap.
-        const double scaleMax = availableScales[n - 1];
+        // biggest bitmap, which corresponds to the last used scale.
 
         // But check how far is it from the requested scale: if it's more than
         // 1.5 times larger, we should still scale it, notably to ensure that
         // bitmaps of standard size are scaled when 2x DPI scaling is used.
-        if ( scaleTarget > 1.5*scaleMax )
+        if ( scaleTarget > 1.5*scaleLast )
         {
             // However scaling by non-integer scales doesn't work well at all, so
             // round it to the closest integer in this case.
@@ -766,7 +768,7 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
         }
         else // Target scale is not much greater than the biggest one we have.
         {
-            scaleBest = scaleMax;
+            scaleBest = scaleLast;
         }
     }
 
