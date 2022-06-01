@@ -69,10 +69,10 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK( b.GetPreferredBitmapSizeAtScale(1   ) == normal );
     CHECK( b.GetPreferredBitmapSizeAtScale(1.25) == normal );
     CHECK( b.GetPreferredBitmapSizeAtScale(1.4 ) == normal );
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.5 ) == normal );
 
     // Once it becomes too big, we're going to need to scale, but we should be
     // scaling by an integer factor.
-    CHECK( b.GetPreferredBitmapSizeAtScale(1.5 ) == bigger );
     CHECK( b.GetPreferredBitmapSizeAtScale(1.75) == bigger );
     CHECK( b.GetPreferredBitmapSizeAtScale(2   ) == bigger );
     CHECK( b.GetPreferredBitmapSizeAtScale(2.25) == bigger );
@@ -88,14 +88,14 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK( b.GetPreferredBitmapSizeAtScale(1   ) == normal );
     CHECK( b.GetPreferredBitmapSizeAtScale(1.25) == normal );
     CHECK( b.GetPreferredBitmapSizeAtScale(1.4 ) == normal );
-    CHECK( b.GetPreferredBitmapSizeAtScale(1.5 ) == bigger );
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.5 ) == normal );
     CHECK( b.GetPreferredBitmapSizeAtScale(1.75) == bigger );
     CHECK( b.GetPreferredBitmapSizeAtScale(2   ) == bigger );
     CHECK( b.GetPreferredBitmapSizeAtScale(2.5 ) == bigger );
+    CHECK( b.GetPreferredBitmapSizeAtScale(3   ) == bigger );
 
     // This scale is too big to use any of the existing bitmaps, so they will
     // be scaled, but use integer factors.
-    CHECK( b.GetPreferredBitmapSizeAtScale(3   ) == triple );
     CHECK( b.GetPreferredBitmapSizeAtScale(3.33) == triple );
 }
 
