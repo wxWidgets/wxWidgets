@@ -738,9 +738,18 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
         const double scaleMax = availableScales[n - 1];
 
         // But check how far is it from the requested scale: if it's more than
-        // 1.5 times smaller, we should still scale it, notably to ensure that
+        // 1.5 times larger, we should still scale it, notably to ensure that
         // bitmaps of standard size are scaled when 2x DPI scaling is used.
-        scaleBest = scaleTarget / scaleMax >= 1.5 ? scaleTarget : scaleMax;
+        if ( scaleTarget >= 1.5*scaleMax )
+        {
+            // However scaling by non-integer scales doesn't work well at all, so
+            // round it to the closest integer in this case.
+            scaleBest = wxRound(scaleTarget);
+        }
+        else // Target scale is not much greater than the biggest one we have.
+        {
+            scaleBest = scaleMax;
+        }
     }
 
     return GetDefaultSize()*scaleBest;

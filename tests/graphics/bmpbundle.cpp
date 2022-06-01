@@ -51,13 +51,36 @@ TEST_CASE("BitmapBundle::FromBitmaps", "[bmpbundle]")
 
 TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
 {
-    CHECK( wxBitmapBundle().GetPreferredBitmapSizeAtScale(1) == wxDefaultSize );
+    // Check that empty bundle doesn't have any preferred size.
+    wxBitmapBundle b;
+    CHECK( b.GetPreferredBitmapSizeAtScale(1) == wxDefaultSize );
 
     const wxSize normal(32, 32);
     const wxSize bigger(64, 64);
+    const wxSize triple(96, 96);
 
-    const wxBitmapBundle
-        b = wxBitmapBundle::FromBitmaps(wxBitmap(normal), wxBitmap(bigger));
+
+    // Then check what happens if there is only a single bitmap.
+    b = wxBitmapBundle::FromBitmap(wxBitmap(normal));
+
+    // We should avoid scaling as long as the size is close enough to the
+    // actual bitmap size.
+    CHECK( b.GetPreferredBitmapSizeAtScale(0   ) == normal );
+    CHECK( b.GetPreferredBitmapSizeAtScale(1   ) == normal );
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.25) == normal );
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.4 ) == normal );
+
+    // Once it becomes too big, we're going to need to scale, but we should be
+    // scaling by an integer factor.
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.5 ) == bigger );
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.75) == bigger );
+    CHECK( b.GetPreferredBitmapSizeAtScale(2   ) == bigger );
+    CHECK( b.GetPreferredBitmapSizeAtScale(2.25) == bigger );
+    CHECK( b.GetPreferredBitmapSizeAtScale(2.5 ) == triple );
+
+
+    // Now check what happens when there is also a double size bitmap.
+    b = wxBitmapBundle::FromBitmaps(wxBitmap(normal), wxBitmap(bigger));
 
     // Check that the existing bitmaps are used without scaling for most of the
     // typical scaling values.
@@ -71,8 +94,9 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK( b.GetPreferredBitmapSizeAtScale(2.5 ) == bigger );
 
     // This scale is too big to use any of the existing bitmaps, so they will
-    // be scaled.
-    CHECK( b.GetPreferredBitmapSizeAtScale(3   ) == 3*normal );
+    // be scaled, but use integer factors.
+    CHECK( b.GetPreferredBitmapSizeAtScale(3   ) == triple );
+    CHECK( b.GetPreferredBitmapSizeAtScale(3.33) == triple );
 }
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
