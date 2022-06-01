@@ -500,25 +500,28 @@ protected:
         trying to choose one of the available scales, to avoid actually
         rescaling the bitmaps.
 
-        Typically this function is used in the derived classes implementation,
-        e.g.
+        It relies on GetNextAvailableScale() to get information about the
+        available bitmaps, so that function must be overridden if this one is
+        used.
+
+        Typically this function is used in the derived classes implementation
+        to forward GetPreferredBitmapSizeAtScale() to it, e.g.
         @code
         class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
         {
         public:
             wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
             {
-                std::vector<double> vec;
-                vec.push_back(1);
+                return DoGetPreferredSize(scale);
+            }
 
-                // Note that the vector must be sorted, so we must add this
-                // scale before adding 2 below.
-                if ( MyIntermediateBitmapIsAvailable() )
-                    vec.push_back(1.5);
+        protected:
+            double GetNextAvailableScale(size_t& i) const wxOVERRIDE
+            {
+                const double availableScales[] = { 1, 1.5, 2, 0 };
 
-                vec.push_back(2);
-
-                return DoGetPreferredSize(scale, vec.size(), vec.data());
+                // We can rely on not being called again once we return 0.
+                return availableScales[i++];
             }
 
             ...
@@ -527,17 +530,29 @@ protected:
 
         @param scale The required scale, typically the same one as passed to
             GetPreferredBitmapSizeAtScale().
-        @param n The number of elements in @a availableScales, must be strictly
-            positive (i.e. there must always be at least one available scale).
-        @param availableScales The scales in which bitmaps are available, i.e.
-            scales such that GetBitmap() wouldn't need to scale the bitmap if
-            it were called with them. This array @e must be in sorted order,
-            with 1 being its first element.
 
         @since 3.1.7
      */
-    wxSize
-    DoGetPreferredSize(double scale, size_t n, const double *availableScales) const;
+    wxSize DoGetPreferredSize(double scale) const;
+
+    /**
+        Return information about the available bitmaps.
+
+        Overriding this function is optional and only needs to be done if
+        DoGetPreferredSize() is called. If you do override it, this function
+        must return the next available scale or 0.0 if there are no more.
+
+        The returned scales must be in ascending order and the first returned
+        scale, for the initial @a i value of 0, should be 1. The function must
+        change @a i, but the values of this index don't have to be consecutive
+        and it's only used by this function itself, the caller only initializes
+        it to 0 before the first call.
+
+        See DoGetPreferredSize() for an example of implementing this function.
+
+        @since 3.1.7
+     */
+    virtual double GetNextAvailableScale(size_t& i) const;
 };
 
 /**

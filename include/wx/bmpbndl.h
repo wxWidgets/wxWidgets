@@ -227,10 +227,19 @@ protected:
     // Standard implementation of GetPreferredBitmapSizeAtScale(): choose the
     // scale closest to the given one from the available bitmap scales.
     //
-    // Note that scales *must* be sorted in increasing scale order and there
-    // must be at least 1 of them.
-    wxSize
-    DoGetPreferredSize(double scale, size_t n, const double *availableScales) const;
+    // If this function is used, GetNextAvailableScale() must be overridden!
+    wxSize DoGetPreferredSize(double scale) const;
+
+    // Override this function if DoGetPreferredSize() is used: it can use the
+    // provided parameter as an internal index, it's guaranteed to be 0 when
+    // calling this function for the first time. When there are no more scales,
+    // return 0.
+    //
+    // This function is not pure virtual because it doesn't need to be
+    // implemented if DoGetPreferredSize() is never used, but it will assert if
+    // it's called.
+    virtual double GetNextAvailableScale(size_t& i) const;
+
 
     virtual ~wxBitmapBundleImpl();
 

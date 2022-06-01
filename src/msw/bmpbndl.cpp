@@ -144,6 +144,9 @@ public:
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
+protected:
+    virtual double GetNextAvailableScale(size_t& i) const wxOVERRIDE;
+
 private:
     // Load the bitmap from the given resource and add it m_bitmaps, after
     // rescaling it to the given size if necessary, i.e. if the needed size is
@@ -189,6 +192,11 @@ wxSize wxBitmapBundleImplRC::GetDefaultSize() const
     return m_bitmaps[0].GetSize();
 }
 
+double wxBitmapBundleImplRC::GetNextAvailableScale(size_t& i) const
+{
+    return i < m_resourceInfos.size() ? m_resourceInfos[i++].scale : 0.0;
+}
+
 wxSize wxBitmapBundleImplRC::GetPreferredBitmapSizeAtScale(double scale) const
 {
     const size_t n = m_resourceInfos.size();
@@ -198,7 +206,7 @@ wxSize wxBitmapBundleImplRC::GetPreferredBitmapSizeAtScale(double scale) const
         scales[i] = m_resourceInfos[i].scale;
     }
 
-    return DoGetPreferredSize(scale, n, &scales[0]);
+    return DoGetPreferredSize(scale);
 }
 
 wxBitmap

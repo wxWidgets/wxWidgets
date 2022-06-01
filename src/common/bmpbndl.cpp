@@ -133,6 +133,9 @@ public:
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
+protected:
+    virtual double GetNextAvailableScale(size_t& i) const wxOVERRIDE;
+
 private:
     // Struct containing bitmap itself as well as a flag indicating whether we
     // generated it by rescaling the existing bitmap or not.
@@ -236,22 +239,24 @@ wxSize wxBitmapBundleImplSet::GetDefaultSize() const
     return m_sizeDefault;
 }
 
-wxSize wxBitmapBundleImplSet::GetPreferredBitmapSizeAtScale(double scale) const
+double wxBitmapBundleImplSet::GetNextAvailableScale(size_t& i) const
 {
-    const double baseY = GetDefaultSize().y;
-
-    const size_t n = m_entries.size();
-    wxVector<double> scales;
-    scales.reserve(n);
-    for ( size_t i = 0; i < n; ++i )
+    while ( i < m_entries.size() )
     {
-        if ( m_entries[i].generated )
+        const Entry& entry = m_entries[i++];
+
+        if ( entry.generated )
             continue;
 
-        scales.push_back(m_entries[i].bitmap.GetSize().y / baseY);
+        return static_cast<double>(entry.bitmap.GetSize().y) / GetDefaultSize().y;
     }
 
-    return DoGetPreferredSize(scale, scales.size(), &scales[0]);
+    return 0.0;
+}
+
+wxSize wxBitmapBundleImplSet::GetPreferredBitmapSizeAtScale(double scale) const
+{
+    return DoGetPreferredSize(scale);
 }
 
 wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
@@ -703,19 +708,47 @@ wxBitmapBundle::CreateImageList(wxWindow* win,
 // wxBitmapBundleImpl implementation
 // ============================================================================
 
-wxSize
-wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
-                                       size_t n,
-                                       const double* availableScales) const
+double
+wxBitmapBundleImpl::GetNextAvailableScale(size_t& WXUNUSED(i)) const
 {
-    wxCHECK_MSG( n > 0, wxSize(), wxS("must have at least one scale") );
+    wxFAIL_MSG( wxS("must be overridden if called") );
 
+    return 0.0;
+}
+
+wxSize
+wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget) const
+{
     double scaleBest = 0.0;
     double scaleLast = 0.0;
 
-    for ( size_t i = 0; i < n; ++i )
+    for ( size_t i = 0;; )
     {
-        const double scaleThis = availableScales[i];
+        const double scaleThis = GetNextAvailableScale(i);
+        if ( scaleThis == 0.0 )
+        {
+            // We only get here if the target scale is bigger than all the
+            // available scales, in which case we have no choice but to use the
+            // biggest bitmap, which corresponds to the last used scale that we
+            // should have by now.
+            wxASSERT_MSG( scaleLast != 0.0, "must have some available scales" );
+
+            // But check how far is it from the requested scale: if it's more than
+            // 1.5 times larger, we should still scale it, notably to ensure that
+            // bitmaps of standard size are scaled when 2x DPI scaling is used.
+            if ( scaleTarget > 1.5*scaleLast )
+            {
+                // However scaling by non-integer scales doesn't work well at all, so
+                // round it to the closest integer in this case.
+                scaleBest = wxRound(scaleTarget);
+            }
+            else // Target scale is not much greater than the biggest one we have.
+            {
+                scaleBest = scaleLast;
+            }
+
+            break;
+        }
 
         // Ensure we remember the last used scale value.
         wxON_BLOCK_EXIT_SET(scaleLast, scaleThis);
@@ -735,7 +768,7 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
         // We've found the closest bigger bitmap.
 
         // If there is no smaller bitmap, we have no choice but to use this one.
-        if ( i == 0 )
+        if ( scaleLast == 0.0 )
         {
             scaleBest = scaleThis;
             break;
@@ -749,27 +782,6 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget,
                         ? scaleThis
                         : scaleLast;
         break;
-    }
-
-    if ( scaleBest == 0.0 )
-    {
-        // We only get here if the target scale is bigger than all the
-        // available scales, in which case we have no choice but to use the
-        // biggest bitmap, which corresponds to the last used scale.
-
-        // But check how far is it from the requested scale: if it's more than
-        // 1.5 times larger, we should still scale it, notably to ensure that
-        // bitmaps of standard size are scaled when 2x DPI scaling is used.
-        if ( scaleTarget > 1.5*scaleLast )
-        {
-            // However scaling by non-integer scales doesn't work well at all, so
-            // round it to the closest integer in this case.
-            scaleBest = wxRound(scaleTarget);
-        }
-        else // Target scale is not much greater than the biggest one we have.
-        {
-            scaleBest = scaleLast;
-        }
     }
 
     return GetDefaultSize()*scaleBest;
