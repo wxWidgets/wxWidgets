@@ -4283,13 +4283,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         {
             DoColHeaderClick(line);
         }
-
-        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, labelWin);
-        m_dragMoveRowOrCol = -1;
-        m_dragLastPos = -1;
-        m_dragLastColour = NULL;
-        m_lastMousePos = wxDefaultPosition;
-        m_isDragging = false;
+        EndDraggingIfNecessary();
     }
 
     // ------------ Right button down
@@ -4535,6 +4529,10 @@ void wxGrid::DoAfterDraggingEnd()
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
     m_lastMousePos = wxDefaultPosition;
+    // from drag moving row/col
+    m_dragMoveRowOrCol = -1;
+    m_dragLastPos = -1;
+    m_dragLastColour = NULL;
 
     m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
