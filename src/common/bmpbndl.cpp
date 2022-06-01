@@ -240,13 +240,17 @@ wxSize wxBitmapBundleImplSet::GetPreferredBitmapSizeAtScale(double scale) const
     const double baseY = GetDefaultSize().y;
 
     const size_t n = m_entries.size();
-    wxVector<double> scales(n);
+    wxVector<double> scales;
+    scales.reserve(n);
     for ( size_t i = 0; i < n; ++i )
     {
-        scales[i] = m_entries[i].bitmap.GetSize().y / baseY;
+        if ( m_entries[i].generated )
+            continue;
+
+        scales.push_back(m_entries[i].bitmap.GetSize().y / baseY);
     }
 
-    return DoGetPreferredSize(scale, n, &scales[0]);
+    return DoGetPreferredSize(scale, scales.size(), &scales[0]);
 }
 
 wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
