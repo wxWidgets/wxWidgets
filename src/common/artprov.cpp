@@ -309,7 +309,11 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
         return;
 
 #if wxUSE_IMAGE
-    if ((bmp_w <= sizeNeeded.x) && (bmp_h <= sizeNeeded.y))
+    // Allow upscaling by an integer factor: this looks not too horribly and is
+    // needed to use reasonably-sized bitmaps in the code not yet updated to
+    // use wxBitmapBundle but using custom art providers.
+    if ((bmp_w <= sizeNeeded.x) && (bmp_h <= sizeNeeded.y) &&
+            (sizeNeeded.x % bmp_w || sizeNeeded.y % bmp_h))
     {
         // the caller wants default size, which is larger than
         // the image we have; to avoid degrading it visually by
@@ -319,7 +323,7 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
         img.Resize(sizeNeeded, offset);
         bmp = wxBitmap(img);
     }
-    else // scale (down or mixed, but not up)
+    else // scale (down or mixed, but not up, or at least not by an int factor)
 #endif // wxUSE_IMAGE
     {
         wxBitmap::Rescale(bmp, sizeNeeded);
