@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-27 19:29+0200\n"
+"POT-Creation-Date: 2022-06-02 08:37+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Cătălin Răceanu <cata_sr@yahoo.com>\n"
 "Language-Team: ro.ro\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../include/wx/defs.h:2687
+#: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
 msgstr "Toate fișierele (*.*)|*.*"
 
-#: ../include/wx/defs.h:2690
+#: ../include/wx/defs.h:2708
 msgid "All files (*)|*"
 msgstr "Toate fișierele (*)|*"
 
@@ -47,14 +47,14 @@ msgid "No"
 msgstr "Nu"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:184
-#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/msgdlg.cpp:743 ../src/richtext/richtextstyledlg.cpp:293
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:449
+#: ../src/msw/msgdlg.cpp:744 ../src/richtext/richtextstyledlg.cpp:293
 msgid "OK"
 msgstr "OK"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:151
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
-#: ../src/msw/msgdlg.cpp:448 ../src/msw/progdlg.cpp:940
+#: ../src/msw/msgdlg.cpp:449 ../src/msw/progdlg.cpp:940
 #: ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
 msgstr "Anulează"
@@ -116,19 +116,19 @@ msgstr "&Vezi detalii"
 msgid "&Hide details"
 msgstr "&Ascunde detalii"
 
-#: ../include/wx/richtext/richtextbuffer.h:3863
+#: ../include/wx/richtext/richtextbuffer.h:3865
 msgid "&Box"
 msgstr "&Casetă"
 
-#: ../include/wx/richtext/richtextbuffer.h:5007
+#: ../include/wx/richtext/richtextbuffer.h:5009
 msgid "&Picture"
 msgstr "&Imagine"
 
-#: ../include/wx/richtext/richtextbuffer.h:5957
+#: ../include/wx/richtext/richtextbuffer.h:5959
 msgid "&Cell"
 msgstr "&Celulă"
 
-#: ../include/wx/richtext/richtextbuffer.h:6066
+#: ../include/wx/richtext/richtextbuffer.h:6068
 msgid "&Table"
 msgstr "&Tabela"
 
@@ -136,7 +136,7 @@ msgstr "&Tabela"
 msgid "Object Properties"
 msgstr "Proprietăți Obiect"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:531
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
 msgid "Printing"
 msgstr "Tipărește"
@@ -747,20 +747,20 @@ msgstr "afișează acest mesaj de ajutor"
 msgid "generate verbose log messages"
 msgstr "generează mesaje detaliate pentru jurnal"
 
-#: ../src/common/appcmn.cpp:250
+#: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
 msgstr "specifică tema ce va fi folosită"
 
-#: ../src/common/appcmn.cpp:264
+#: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "specifică modul de afișare (ex. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:286
+#: ../src/common/appcmn.cpp:279
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Temă nesuportată '%s'."
 
-#: ../src/common/appcmn.cpp:303
+#: ../src/common/appcmn.cpp:296
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Specificația de afișare '%s' este invalidă."
@@ -902,12 +902,12 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' are '..' în plus, sunt ignorate."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1400
+#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1416
 msgid "checked"
 msgstr "bifată"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1402
+#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1418
 msgid "unchecked"
 msgstr "debifată"
 
@@ -916,103 +916,103 @@ msgstr "debifată"
 msgid "undetermined"
 msgstr "nedeterminată"
 
-#: ../src/common/datetimefmt.cpp:1844
+#: ../src/common/datetimefmt.cpp:1845
 msgid "today"
 msgstr "astăzi"
 
-#: ../src/common/datetimefmt.cpp:1845
+#: ../src/common/datetimefmt.cpp:1846
 msgid "yesterday"
 msgstr "ieri"
 
-#: ../src/common/datetimefmt.cpp:1846
+#: ../src/common/datetimefmt.cpp:1847
 msgid "tomorrow"
 msgstr "mâine"
 
-#: ../src/common/datetimefmt.cpp:2040
+#: ../src/common/datetimefmt.cpp:2041
 msgid "first"
 msgstr "prima"
 
-#: ../src/common/datetimefmt.cpp:2041
+#: ../src/common/datetimefmt.cpp:2042
 msgid "second"
 msgstr "secundă"
 
-#: ../src/common/datetimefmt.cpp:2042
+#: ../src/common/datetimefmt.cpp:2043
 msgid "third"
 msgstr "al(a) treilea(treia)"
 
-#: ../src/common/datetimefmt.cpp:2043
+#: ../src/common/datetimefmt.cpp:2044
 msgid "fourth"
 msgstr "al(a) patrulea(patra)"
 
-#: ../src/common/datetimefmt.cpp:2044
+#: ../src/common/datetimefmt.cpp:2045
 msgid "fifth"
 msgstr "al(a) cincelea(cincea)"
 
-#: ../src/common/datetimefmt.cpp:2045
+#: ../src/common/datetimefmt.cpp:2046
 msgid "sixth"
 msgstr "al(a) șaselea(șasea)"
 
-#: ../src/common/datetimefmt.cpp:2046
+#: ../src/common/datetimefmt.cpp:2047
 msgid "seventh"
 msgstr "al(a) șaptelea(șaptea)"
 
-#: ../src/common/datetimefmt.cpp:2047
+#: ../src/common/datetimefmt.cpp:2048
 msgid "eighth"
 msgstr "al(a) optulea(opta)"
 
-#: ../src/common/datetimefmt.cpp:2048
+#: ../src/common/datetimefmt.cpp:2049
 msgid "ninth"
 msgstr "al(a) nouălea(noua)"
 
-#: ../src/common/datetimefmt.cpp:2049
+#: ../src/common/datetimefmt.cpp:2050
 msgid "tenth"
 msgstr "al(a) zecelea(zecea)"
 
-#: ../src/common/datetimefmt.cpp:2050
+#: ../src/common/datetimefmt.cpp:2051
 msgid "eleventh"
 msgstr "al(a) unsprezecelea(unsprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2051
+#: ../src/common/datetimefmt.cpp:2052
 msgid "twelfth"
 msgstr "al(a) doisprezecelea(doisprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2052
+#: ../src/common/datetimefmt.cpp:2053
 msgid "thirteenth"
 msgstr "al(a) treisprezecelea(treisprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2053
+#: ../src/common/datetimefmt.cpp:2054
 msgid "fourteenth"
 msgstr "al(a) paisprezecelea(paisprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2054
+#: ../src/common/datetimefmt.cpp:2055
 msgid "fifteenth"
 msgstr "al(a) cincisprezecealea(cincisprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2055
+#: ../src/common/datetimefmt.cpp:2056
 msgid "sixteenth"
 msgstr "al(a) șaisprezecelea(șaisprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2056
+#: ../src/common/datetimefmt.cpp:2057
 msgid "seventeenth"
 msgstr "al(a) șaptesprezecelea(șaptesprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2057
+#: ../src/common/datetimefmt.cpp:2058
 msgid "eighteenth"
 msgstr "al(a) optsprezecelea(optsprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2058
+#: ../src/common/datetimefmt.cpp:2059
 msgid "nineteenth"
 msgstr "al(a) nouăsprezecelea(nouăsprezecea)"
 
-#: ../src/common/datetimefmt.cpp:2059
+#: ../src/common/datetimefmt.cpp:2060
 msgid "twentieth"
 msgstr "al(a) douăzecelea(douăzecea)"
 
-#: ../src/common/datetimefmt.cpp:2217
+#: ../src/common/datetimefmt.cpp:2218
 msgid "noon"
 msgstr "amiază"
 
-#: ../src/common/datetimefmt.cpp:2218
+#: ../src/common/datetimefmt.cpp:2219
 msgid "midnight"
 msgstr "miezul nopții"
 
@@ -2406,7 +2406,7 @@ msgstr "TIFF: Eroare la salvarea imaginii."
 msgid "TIFF: Error writing image."
 msgstr "TIFF: Eroare la scrierea imaginii."
 
-#: ../src/common/init.cpp:193
+#: ../src/common/init.cpp:192
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2415,7 +2415,7 @@ msgstr ""
 "Argumentul %d din linia de comandă nu a putut fi convertit la Unicode și va "
 "fi ignorat."
 
-#: ../src/common/init.cpp:284
+#: ../src/common/init.cpp:283
 msgid "Initialization failed in post init, aborting."
 msgstr "Inițializare eșuată în post-init, se anulează."
 
@@ -3019,111 +3019,111 @@ msgstr "General"
 msgid "Advanced"
 msgstr "Avansat"
 
-#: ../src/common/prntbase.cpp:254
+#: ../src/common/prntbase.cpp:255
 msgid "Generic PostScript"
 msgstr "PostScript generic"
 
-#: ../src/common/prntbase.cpp:268
+#: ../src/common/prntbase.cpp:269
 msgid "Ready"
 msgstr "Gata"
 
-#: ../src/common/prntbase.cpp:343
+#: ../src/common/prntbase.cpp:344
 msgid "Printing Error"
 msgstr "Eroare de tipărire"
 
-#: ../src/common/prntbase.cpp:422 ../src/common/prntbase.cpp:1567
+#: ../src/common/prntbase.cpp:423 ../src/common/prntbase.cpp:1575
 #: ../src/generic/prntdlgg.cpp:136 ../src/generic/prntdlgg.cpp:150
-#: ../src/gtk/print.cpp:621 ../src/gtk/print.cpp:639
+#: ../src/gtk/print.cpp:622 ../src/gtk/print.cpp:640
 msgid "Print"
 msgstr "Print"
 
-#: ../src/common/prntbase.cpp:480 ../src/generic/prntdlgg.cpp:819
+#: ../src/common/prntbase.cpp:481 ../src/generic/prntdlgg.cpp:819
 msgid "Page setup"
 msgstr "Setări pagină"
 
-#: ../src/common/prntbase.cpp:534
+#: ../src/common/prntbase.cpp:535
 msgid "Please wait while printing..."
 msgstr "Așteptați cât timp se tipărește..."
 
-#: ../src/common/prntbase.cpp:538
+#: ../src/common/prntbase.cpp:539
 msgid "Document:"
 msgstr "Documentul:"
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:542
 msgid "Progress:"
 msgstr "Progres:"
 
-#: ../src/common/prntbase.cpp:542
+#: ../src/common/prntbase.cpp:543
 msgid "Preparing"
 msgstr "Pregătire"
 
-#: ../src/common/prntbase.cpp:561
+#: ../src/common/prntbase.cpp:562
 #, c-format
 msgid "Printing page %d"
 msgstr "Tipărire pagina %d"
 
-#: ../src/common/prntbase.cpp:566
+#: ../src/common/prntbase.cpp:567
 #, c-format
 msgid "Printing page %d of %d"
 msgstr "Tipărire pagina %d din %d"
 
-#: ../src/common/prntbase.cpp:569
+#: ../src/common/prntbase.cpp:570
 #, c-format
 msgid " (copy %d of %d)"
 msgstr " (copia %d din %d)"
 
-#: ../src/common/prntbase.cpp:608
+#: ../src/common/prntbase.cpp:609
 msgid "Printing "
 msgstr "Tipărire "
 
-#: ../src/common/prntbase.cpp:1574
+#: ../src/common/prntbase.cpp:1582
 msgid "First page"
 msgstr "Prima pagină"
 
-#: ../src/common/prntbase.cpp:1579 ../src/html/helpwnd.cpp:661
+#: ../src/common/prntbase.cpp:1587 ../src/html/helpwnd.cpp:661
 msgid "Previous page"
 msgstr "Pagina anterioară"
 
-#: ../src/common/prntbase.cpp:1593 ../src/html/helpwnd.cpp:662
+#: ../src/common/prntbase.cpp:1601 ../src/html/helpwnd.cpp:662
 msgid "Next page"
 msgstr "Pagina următoare"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1606
 msgid "Last page"
 msgstr "Ultima pagină"
 
-#: ../src/common/prntbase.cpp:1606 ../src/common/stockitem.cpp:216
+#: ../src/common/prntbase.cpp:1614 ../src/common/stockitem.cpp:216
 msgid "Zoom Out"
 msgstr "Micșorează"
 
-#: ../src/common/prntbase.cpp:1620 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1628 ../src/common/stockitem.cpp:215
 msgid "Zoom In"
 msgstr "Mărește"
 
-#: ../src/common/prntbase.cpp:1626 ../src/common/stockitem.cpp:154
+#: ../src/common/prntbase.cpp:1634 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
 msgstr "În&chide"
 
-#: ../src/common/prntbase.cpp:2037
+#: ../src/common/prntbase.cpp:2060
 msgid "Could not start document preview."
 msgstr "Nu a putut fi pornită previzualizarea documentului."
 
-#: ../src/common/prntbase.cpp:2037 ../src/common/prntbase.cpp:2079
-#: ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2060 ../src/common/prntbase.cpp:2102
+#: ../src/common/prntbase.cpp:2110
 msgid "Print Preview Failure"
 msgstr "Eroare la previzualizarea tipăririi"
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2102 ../src/common/prntbase.cpp:2110
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Nu este suficientă memorie pentru a crea o previzualizare."
 
-#: ../src/common/prntbase.cpp:2094
+#: ../src/common/prntbase.cpp:2117
 #, c-format
 msgid "Page %d of %d"
 msgstr "Pagina %d din %d"
 
-#: ../src/common/prntbase.cpp:2096
+#: ../src/common/prntbase.cpp:2119
 #, c-format
 msgid "Page %d"
 msgstr "Pagina %d"
@@ -3172,11 +3172,11 @@ msgstr "Ștergerea parolei pentru '%s' a eșuat: '%s'."
 msgid "Failed to monitor I/O channels"
 msgstr "A eșuat monitorizarea canalelor I/O"
 
-#: ../src/common/sizer.cpp:3021 ../src/common/stockitem.cpp:196
+#: ../src/common/sizer.cpp:3023 ../src/common/stockitem.cpp:196
 msgid "Save"
 msgstr "Salvează"
 
-#: ../src/common/sizer.cpp:3023
+#: ../src/common/sizer.cpp:3025
 msgid "Don't Save"
 msgstr "Nu salva"
 
@@ -3472,7 +3472,7 @@ msgstr "&Nou"
 msgid "New"
 msgstr "Nou"
 
-#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:436
 msgid "&No"
 msgstr "&Nu"
 
@@ -3675,7 +3675,7 @@ msgstr "S&us"
 msgid "Up"
 msgstr "Sus"
 
-#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:436
 msgid "&Yes"
 msgstr "&Da"
 
@@ -4187,7 +4187,6 @@ msgid "Version "
 msgstr "Versiunea "
 
 #: ../src/generic/aboutdlgg.cpp:137 ../src/msw/aboutdlg.cpp:61
-#: ../src/osx/menu_osx.cpp:491
 #, c-format
 msgid "About %s"
 msgstr "Despre %s"
@@ -4268,33 +4267,34 @@ msgstr "adevărat"
 msgid "false"
 msgstr "fals"
 
-#: ../src/generic/datavgen.cpp:6839
+#: ../src/generic/datavgen.cpp:6855
 #, c-format
 msgid "Row %i"
 msgstr "Rândul %i"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6929
+#: ../src/generic/datavgen.cpp:6945
 msgid "Collapse"
 msgstr "Contractă"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6932
+#: ../src/generic/datavgen.cpp:6948
 msgid "Expand"
 msgstr "Expandează"
 
-#: ../src/generic/datavgen.cpp:6951
+#: ../src/generic/datavgen.cpp:6967
 #, c-format
 msgid "%s (%d items)"
 msgstr "%s (%d elemente)"
 
-#: ../src/generic/datavgen.cpp:7002
+#: ../src/generic/datavgen.cpp:7018
 #, c-format
 msgid "Column %u"
 msgstr "Coloana %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7071 ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087
+#: ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4305,7 +4305,8 @@ msgid "Left"
 msgstr "Stânga"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7074 ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090
+#: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -4385,7 +4386,7 @@ msgstr ""
 "Dacă aveți informații adiționale cu privire la acest raport de\n"
 "defecte, introduceți-le aici și îi vor fi alăturate:"
 
-#: ../src/generic/dcpsg.cpp:1634
+#: ../src/generic/dcpsg.cpp:1628
 msgid "Cannot open file for PostScript printing!"
 msgstr "Nu se poate deschide fișierul pentru tipărire cu PostScript!"
 
@@ -4402,7 +4403,7 @@ msgid "Home directory"
 msgstr "Director acasă"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:783
+#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:784
 msgid "Desktop"
 msgstr "Spațiu de lucru"
 
@@ -4727,44 +4728,44 @@ msgstr "Clic pentru a confirma selectarea fontului."
 msgid "Choose font"
 msgstr "Alege font"
 
-#: ../src/generic/grid.cpp:6548
+#: ../src/generic/grid.cpp:6222
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
 "Copierea în clipboard a mai multor blocuri selectate nu este suportată."
 
-#: ../src/generic/helpext.cpp:265
+#: ../src/generic/helpext.cpp:266
 #, c-format
 msgid "Help directory \"%s\" not found."
 msgstr "Directorul de ajutor \"%s\" nu a fost găsit."
 
-#: ../src/generic/helpext.cpp:273
+#: ../src/generic/helpext.cpp:274
 #, c-format
 msgid "Help file \"%s\" not found."
 msgstr "Fișierul de ajutor \"%s\" nu a fost găsit."
 
-#: ../src/generic/helpext.cpp:292
+#: ../src/generic/helpext.cpp:293
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr "Linia %lu a fișierului hartă \"%s\" are sintaxa incorectă, sărită."
 
-#: ../src/generic/helpext.cpp:300
+#: ../src/generic/helpext.cpp:301
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "Nu au fost găsite asocieri valide în fișierul \"%s\"."
 
-#: ../src/generic/helpext.cpp:443
+#: ../src/generic/helpext.cpp:444
 msgid "No entries found."
 msgstr "Nu s-au găsit intrări."
 
-#: ../src/generic/helpext.cpp:452 ../src/generic/helpext.cpp:453
+#: ../src/generic/helpext.cpp:453 ../src/generic/helpext.cpp:454
 msgid "Help Index"
 msgstr "Index ajutor"
 
-#: ../src/generic/helpext.cpp:456
+#: ../src/generic/helpext.cpp:457
 msgid "Relevant entries:"
 msgstr "Intrări relevante:"
 
-#: ../src/generic/helpext.cpp:457
+#: ../src/generic/helpext.cpp:458
 msgid "Entries found"
 msgstr "Intrări găsite"
 
@@ -4791,8 +4792,7 @@ msgstr "%s Avertizare"
 msgid "%s Information"
 msgstr "%s Informație"
 
-#: ../src/generic/logg.cpp:236 ../src/osx/menu_osx.cpp:510
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/generic/logg.cpp:236
 msgid "Application"
 msgstr "Aplicație"
 
@@ -4856,16 +4856,16 @@ msgstr "Notificare"
 msgid "%s Preferences"
 msgstr "%s, Preferințe"
 
-#: ../src/generic/printps.cpp:142
+#: ../src/generic/printps.cpp:143
 msgid "Printing..."
 msgstr "Se tipărește..."
 
-#: ../src/generic/printps.cpp:159 ../src/gtk/print.cpp:1153
-#: ../src/msw/printwin.cpp:184
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1154
+#: ../src/msw/printwin.cpp:185
 msgid "Could not start printing."
 msgstr "Nu s-a putut începe tipărirea."
 
-#: ../src/generic/printps.cpp:182
+#: ../src/generic/printps.cpp:183
 #, c-format
 msgid "Printing page %d..."
 msgstr "Se tipărește pagina %d..."
@@ -5045,7 +5045,7 @@ msgstr "< Î&napoi"
 msgid "translator-credits"
 msgstr "merite de traducere"
 
-#: ../src/gtk/app.cpp:391
+#: ../src/gtk/app.cpp:456
 msgid ""
 "WARNING: using XIM input method is unsupported and may result in problems "
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
@@ -5055,7 +5055,7 @@ msgstr ""
 "în probleme de input și flickering. Considerați resetarea GTK_IM_MODULE sau "
 "setarea la \"ibus\"."
 
-#: ../src/gtk/app.cpp:474
+#: ../src/gtk/app.cpp:539
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "Nu se poate inițializa GTK+, este variabila DISPLAY setată corect?"
 
@@ -5117,15 +5117,15 @@ msgstr ""
 msgid "MDI child"
 msgstr "Copil MDI"
 
-#: ../src/gtk/print.cpp:211
+#: ../src/gtk/print.cpp:212
 msgid "Custom size"
 msgstr "Dimensiune personalizată"
 
-#: ../src/gtk/print.cpp:725
+#: ../src/gtk/print.cpp:726
 msgid "Error while printing: "
 msgstr "Eroare la tipărire: "
 
-#: ../src/gtk/print.cpp:847
+#: ../src/gtk/print.cpp:848
 msgid "Page Setup"
 msgstr "Setări pagină"
 
@@ -5867,12 +5867,12 @@ msgid "(error %d: %s)"
 msgstr "(eroarea %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
-#: ../src/msw/imaglist.cpp:202 ../src/msw/imaglist.cpp:224
-#: ../src/msw/imaglist.cpp:249
+#: ../src/msw/imaglist.cpp:302 ../src/msw/imaglist.cpp:322
+#: ../src/msw/imaglist.cpp:347
 msgid "Couldn't add an image to the image list."
 msgstr "Nu s-a putut adăuga o imagine la lista de imagini."
 
-#: ../src/msw/enhmeta.cpp:94
+#: ../src/msw/enhmeta.cpp:95
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
 msgstr ""
@@ -5894,7 +5894,7 @@ msgstr "Dialogul pentru fișiere a eșuat cu eroarea %0lx."
 msgid "Font file \"%s\" couldn't be loaded"
 msgstr "Fișierul de font \"%s\" nu a putut fi încărcat"
 
-#: ../src/msw/fontdlg.cpp:231
+#: ../src/msw/fontdlg.cpp:232
 #, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "Dialogul comun a eșuat cu eroarea %0lx."
@@ -5957,7 +5957,7 @@ msgstr ""
 msgid "Failed to initialize MS HTML Help."
 msgstr "A eșuat inițializarea sistemului de ajutor MS HTML Help."
 
-#: ../src/msw/iniconf.cpp:455
+#: ../src/msw/iniconf.cpp:459
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Nu se poate șterge fișierul INI '%s'"
@@ -6412,7 +6412,7 @@ msgid "Check to make the font italic."
 msgstr "Bifează pentru a face fontul cursiv."
 
 #. TRANSLATORS: Label of underlined font
-#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:600
+#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:601
 #: ../src/richtext/richtextfontpage.cpp:359
 msgid "Underlined"
 msgstr "Subliniat"
@@ -6510,35 +6510,60 @@ msgstr ""
 "Fișierul de font %s nu poate fi folosit pentru că nu este în directorul de "
 "fonturi \"%s\"."
 
-#: ../src/osx/menu_osx.cpp:493
+#: ../src/osx/menu_osx.cpp:491
+#, c-format
+msgctxt "macOS menu item"
+msgid "About %s"
+msgstr "Despre %s"
+
+#: ../src/osx/menu_osx.cpp:494
+msgctxt "macOS menu item"
 msgid "About..."
 msgstr "Despre..."
 
-#: ../src/osx/menu_osx.cpp:501
+#: ../src/osx/menu_osx.cpp:502
+msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "Preferințe..."
 
-#: ../src/osx/menu_osx.cpp:505
+#: ../src/osx/menu_osx.cpp:507
+msgctxt "macOS menu item"
 msgid "Services"
 msgstr "Servicii"
 
-#: ../src/osx/menu_osx.cpp:510
+#: ../src/osx/menu_osx.cpp:514
 #, c-format
+msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "Ascunde %s"
 
-#: ../src/osx/menu_osx.cpp:512
+#: ../src/osx/menu_osx.cpp:517
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Hide Application"
+msgstr "Aplicație"
+
+#: ../src/osx/menu_osx.cpp:520
+msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Ascunde Restul"
 
-#: ../src/osx/menu_osx.cpp:513
+#: ../src/osx/menu_osx.cpp:522
+msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Arată Tot"
 
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/osx/menu_osx.cpp:528
 #, c-format
+msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "Ieșire din %s"
+
+#: ../src/osx/menu_osx.cpp:531
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Quit Application"
+msgstr "Aplicație"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6549,392 +6574,392 @@ msgid "Print operation could not be initialized"
 msgstr "Operațiunea de tipărire nu a putut fi inițializată"
 
 #. TRANSLATORS: Label of font point size
-#: ../src/propgrid/advprops.cpp:572
+#: ../src/propgrid/advprops.cpp:573
 msgid "Point Size"
 msgstr "Dimensiune în puncte"
 
 #. TRANSLATORS: Label of font face name
-#: ../src/propgrid/advprops.cpp:582
+#: ../src/propgrid/advprops.cpp:583
 msgid "Face Name"
 msgstr "Nume font"
 
 #. TRANSLATORS: Label of font style
-#: ../src/propgrid/advprops.cpp:590 ../src/richtext/richtextformatdlg.cpp:332
+#: ../src/propgrid/advprops.cpp:591 ../src/richtext/richtextformatdlg.cpp:332
 msgid "Style"
 msgstr "Stil"
 
 #. TRANSLATORS: Label of font weight
-#: ../src/propgrid/advprops.cpp:595
+#: ../src/propgrid/advprops.cpp:596
 msgid "Weight"
 msgstr "Grosime"
 
 #. TRANSLATORS: Label of font family
-#: ../src/propgrid/advprops.cpp:604
+#: ../src/propgrid/advprops.cpp:605
 msgid "Family"
 msgstr "Familie"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:773
+#: ../src/propgrid/advprops.cpp:774
 msgid "AppWorkspace"
 msgstr "AppWorkspace"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:774
+#: ../src/propgrid/advprops.cpp:775
 msgid "ActiveBorder"
 msgstr "ActiveBorder"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:775
+#: ../src/propgrid/advprops.cpp:776
 msgid "ActiveCaption"
 msgstr "ActiveCaption"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:776
+#: ../src/propgrid/advprops.cpp:777
 msgid "ButtonFace"
 msgstr "ButtonFace"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:777
+#: ../src/propgrid/advprops.cpp:778
 msgid "ButtonHighlight"
 msgstr "ButtonHighlight"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:778
+#: ../src/propgrid/advprops.cpp:779
 msgid "ButtonShadow"
 msgstr "ButtonShadow"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:779
+#: ../src/propgrid/advprops.cpp:780
 msgid "ButtonText"
 msgstr "ButtonText"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:780
+#: ../src/propgrid/advprops.cpp:781
 msgid "CaptionText"
 msgstr "CaptionText"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:781
+#: ../src/propgrid/advprops.cpp:782
 msgid "ControlDark"
 msgstr "ControlDark"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:782
+#: ../src/propgrid/advprops.cpp:783
 msgid "ControlLight"
 msgstr "ControlLight"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:784
+#: ../src/propgrid/advprops.cpp:785
 msgid "GrayText"
 msgstr "GrayText"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:785
+#: ../src/propgrid/advprops.cpp:786
 msgid "Highlight"
 msgstr "Highlight"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:786
+#: ../src/propgrid/advprops.cpp:787
 msgid "HighlightText"
 msgstr "HighlightText"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:787
+#: ../src/propgrid/advprops.cpp:788
 msgid "InactiveBorder"
 msgstr "InactiveBorder"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:788
+#: ../src/propgrid/advprops.cpp:789
 msgid "InactiveCaption"
 msgstr "InactiveCaption"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:789
+#: ../src/propgrid/advprops.cpp:790
 msgid "InactiveCaptionText"
 msgstr "InactiveCaptionText"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:790
+#: ../src/propgrid/advprops.cpp:791
 msgid "Menu"
 msgstr "Meniu"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:791
+#: ../src/propgrid/advprops.cpp:792
 msgid "Scrollbar"
 msgstr "Scrollbar"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:792
+#: ../src/propgrid/advprops.cpp:793
 msgid "Tooltip"
 msgstr "Tooltip"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:793
+#: ../src/propgrid/advprops.cpp:794
 msgid "TooltipText"
 msgstr "TooltipText"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:794
+#: ../src/propgrid/advprops.cpp:795
 msgid "Window"
 msgstr "Window"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:795
+#: ../src/propgrid/advprops.cpp:796
 msgid "WindowFrame"
 msgstr "WindowFrame"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:796
+#: ../src/propgrid/advprops.cpp:797
 msgid "WindowText"
 msgstr "WindowText"
 
 #. TRANSLATORS: Custom colour choice entry
-#: ../src/propgrid/advprops.cpp:797 ../src/propgrid/advprops.cpp:1475
-#: ../src/propgrid/advprops.cpp:1518
+#: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
+#: ../src/propgrid/advprops.cpp:1519
 msgid "Custom"
 msgstr "Personalizare"
 
-#: ../src/propgrid/advprops.cpp:1500
+#: ../src/propgrid/advprops.cpp:1501
 msgid "Black"
 msgstr "Negru"
 
-#: ../src/propgrid/advprops.cpp:1501
+#: ../src/propgrid/advprops.cpp:1502
 msgid "Maroon"
 msgstr "Maroniu"
 
-#: ../src/propgrid/advprops.cpp:1502
+#: ../src/propgrid/advprops.cpp:1503
 msgid "Navy"
 msgstr "Navy"
 
-#: ../src/propgrid/advprops.cpp:1503
+#: ../src/propgrid/advprops.cpp:1504
 msgid "Purple"
 msgstr "Mov"
 
-#: ../src/propgrid/advprops.cpp:1504
+#: ../src/propgrid/advprops.cpp:1505
 msgid "Teal"
 msgstr "Bej"
 
-#: ../src/propgrid/advprops.cpp:1505
+#: ../src/propgrid/advprops.cpp:1506
 msgid "Gray"
 msgstr "Gri"
 
-#: ../src/propgrid/advprops.cpp:1506
+#: ../src/propgrid/advprops.cpp:1507
 msgid "Green"
 msgstr "Verde"
 
-#: ../src/propgrid/advprops.cpp:1507
+#: ../src/propgrid/advprops.cpp:1508
 msgid "Olive"
 msgstr "Măsliniu"
 
-#: ../src/propgrid/advprops.cpp:1508
+#: ../src/propgrid/advprops.cpp:1509
 msgid "Brown"
 msgstr "Maro"
 
-#: ../src/propgrid/advprops.cpp:1509
+#: ../src/propgrid/advprops.cpp:1510
 msgid "Blue"
 msgstr "Albastru"
 
-#: ../src/propgrid/advprops.cpp:1510
+#: ../src/propgrid/advprops.cpp:1511
 msgid "Fuchsia"
 msgstr "Fuchsia"
 
-#: ../src/propgrid/advprops.cpp:1511
+#: ../src/propgrid/advprops.cpp:1512
 msgid "Red"
 msgstr "Roșu"
 
-#: ../src/propgrid/advprops.cpp:1512
+#: ../src/propgrid/advprops.cpp:1513
 msgid "Orange"
 msgstr "Portocaliu"
 
-#: ../src/propgrid/advprops.cpp:1513
+#: ../src/propgrid/advprops.cpp:1514
 msgid "Silver"
 msgstr "Argintiu"
 
-#: ../src/propgrid/advprops.cpp:1514
+#: ../src/propgrid/advprops.cpp:1515
 msgid "Lime"
 msgstr "Lime"
 
-#: ../src/propgrid/advprops.cpp:1515
+#: ../src/propgrid/advprops.cpp:1516
 msgid "Aqua"
 msgstr "Albastru deschis"
 
-#: ../src/propgrid/advprops.cpp:1516
+#: ../src/propgrid/advprops.cpp:1517
 msgid "Yellow"
 msgstr "Galben"
 
-#: ../src/propgrid/advprops.cpp:1517
+#: ../src/propgrid/advprops.cpp:1518
 msgid "White"
 msgstr "Alb"
 
-#: ../src/propgrid/advprops.cpp:1653
+#: ../src/propgrid/advprops.cpp:1654
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "Implicit"
 
-#: ../src/propgrid/advprops.cpp:1654
+#: ../src/propgrid/advprops.cpp:1655
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Săgeată"
 
-#: ../src/propgrid/advprops.cpp:1655
+#: ../src/propgrid/advprops.cpp:1656
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Săgeată spre Dreapta"
 
-#: ../src/propgrid/advprops.cpp:1656
+#: ../src/propgrid/advprops.cpp:1657
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Gol"
 
-#: ../src/propgrid/advprops.cpp:1657
+#: ../src/propgrid/advprops.cpp:1658
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Țintă"
 
-#: ../src/propgrid/advprops.cpp:1658
+#: ../src/propgrid/advprops.cpp:1659
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Cursor"
 
-#: ../src/propgrid/advprops.cpp:1659
+#: ../src/propgrid/advprops.cpp:1660
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Cruce"
 
-#: ../src/propgrid/advprops.cpp:1660
+#: ../src/propgrid/advprops.cpp:1661
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Mână"
 
-#: ../src/propgrid/advprops.cpp:1661
+#: ../src/propgrid/advprops.cpp:1662
 #, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "I-Beam"
 
-#: ../src/propgrid/advprops.cpp:1662
+#: ../src/propgrid/advprops.cpp:1663
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Buton Stânga"
 
-#: ../src/propgrid/advprops.cpp:1663
+#: ../src/propgrid/advprops.cpp:1664
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Lupă"
 
-#: ../src/propgrid/advprops.cpp:1664
+#: ../src/propgrid/advprops.cpp:1665
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Buton Mijloc"
 
-#: ../src/propgrid/advprops.cpp:1665
+#: ../src/propgrid/advprops.cpp:1666
 #, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Fără Intrare"
 
-#: ../src/propgrid/advprops.cpp:1666
+#: ../src/propgrid/advprops.cpp:1667
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Pensulă"
 
-#: ../src/propgrid/advprops.cpp:1667
+#: ../src/propgrid/advprops.cpp:1668
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Creion"
 
-#: ../src/propgrid/advprops.cpp:1668
+#: ../src/propgrid/advprops.cpp:1669
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Punct Stânga"
 
-#: ../src/propgrid/advprops.cpp:1669
+#: ../src/propgrid/advprops.cpp:1670
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Punct Dreapta"
 
-#: ../src/propgrid/advprops.cpp:1670
+#: ../src/propgrid/advprops.cpp:1671
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Săgeată Întrebare"
 
-#: ../src/propgrid/advprops.cpp:1671
+#: ../src/propgrid/advprops.cpp:1672
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Buton Dreapta"
 
-#: ../src/propgrid/advprops.cpp:1672
+#: ../src/propgrid/advprops.cpp:1673
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Redimensionare NE-SW"
 
-#: ../src/propgrid/advprops.cpp:1673
+#: ../src/propgrid/advprops.cpp:1674
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Redimensionare N-S"
 
-#: ../src/propgrid/advprops.cpp:1674
+#: ../src/propgrid/advprops.cpp:1675
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Redimensionare NW-SE"
 
-#: ../src/propgrid/advprops.cpp:1675
+#: ../src/propgrid/advprops.cpp:1676
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Redimensionare W-E"
 
-#: ../src/propgrid/advprops.cpp:1676
+#: ../src/propgrid/advprops.cpp:1677
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Redimensionare"
 
-#: ../src/propgrid/advprops.cpp:1677
+#: ../src/propgrid/advprops.cpp:1678
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Tub Spray"
 
-#: ../src/propgrid/advprops.cpp:1678
+#: ../src/propgrid/advprops.cpp:1679
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Așteptare"
 
-#: ../src/propgrid/advprops.cpp:1679
+#: ../src/propgrid/advprops.cpp:1680
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Urmărire"
 
-#: ../src/propgrid/advprops.cpp:1680
+#: ../src/propgrid/advprops.cpp:1681
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Săgeată Așteptare"
 
-#: ../src/propgrid/advprops.cpp:2052
+#: ../src/propgrid/advprops.cpp:2053
 msgid "Make a selection:"
 msgstr "Selectează:"
 
@@ -6946,40 +6971,40 @@ msgstr "Proprietate"
 msgid "Value"
 msgstr "Valoare"
 
-#: ../src/propgrid/manager.cpp:1708
+#: ../src/propgrid/manager.cpp:1701
 msgid "Categorized Mode"
 msgstr "După categorie"
 
-#: ../src/propgrid/manager.cpp:1734
+#: ../src/propgrid/manager.cpp:1727
 msgid "Alphabetic Mode"
 msgstr "După  alfabet"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/propgrid/propgrid.cpp:191
+#: ../src/propgrid/propgrid.cpp:197
 msgid "False"
 msgstr "Fals"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/propgrid/propgrid.cpp:193
+#: ../src/propgrid/propgrid.cpp:199
 msgid "True"
 msgstr "Adevărat"
 
 #. TRANSLATORS: Text  displayed for unspecified value
-#: ../src/propgrid/propgrid.cpp:393
+#: ../src/propgrid/propgrid.cpp:381
 msgid "Unspecified"
 msgstr "Nespecificat"
 
 #. TRANSLATORS: Caption of message box displaying any property error
-#: ../src/propgrid/propgrid.cpp:3171 ../src/propgrid/propgrid.cpp:3308
+#: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3284
 msgid "Property Error"
 msgstr "Proprietate Eronata"
 
-#: ../src/propgrid/propgrid.cpp:3285
+#: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 "Ați introdus o valoare incorectă. Apăsati ESC pentru anularea editării."
 
-#: ../src/propgrid/propgrid.cpp:6688
+#: ../src/propgrid/propgrid.cpp:6650
 #, c-format
 msgid "Error in resource: %s"
 msgstr "Eroare în resurse: %s"
@@ -9201,11 +9226,11 @@ msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 "A eșuat setarea unui canal (pipe) non-blocant, programul poate fi suspendat."
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1028
 msgid "Cannot get the hostname"
 msgstr "Nu se poate obține numele mașinii gazdă"
 
-#: ../src/unix/utilsunx.cpp:1060
+#: ../src/unix/utilsunx.cpp:1064
 msgid "Cannot get the official hostname"
 msgstr "Nu se poate obține numele oficial al mașinii gazdă"
 

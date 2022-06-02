@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-27 19:29+0200\n"
+"POT-Creation-Date: 2022-06-02 08:37+0200\n"
 "PO-Revision-Date: 2022-02-03 09:12+0800\n"
 "Last-Translator: James Pan <bojaypan@mail.ru>\n"
 "Language-Team: wxWidgets tranlators <wx-translators@wxwidgets.org>\n"
@@ -20,11 +20,11 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../include/wx/defs.h:2687
+#: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
 msgstr "所有文件 (*.*)|*.*"
 
-#: ../include/wx/defs.h:2690
+#: ../include/wx/defs.h:2708
 msgid "All files (*)|*"
 msgstr "所有文件 (*)|*"
 
@@ -51,14 +51,14 @@ msgid "No"
 msgstr "否"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:184
-#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/msgdlg.cpp:743 ../src/richtext/richtextstyledlg.cpp:293
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:449
+#: ../src/msw/msgdlg.cpp:744 ../src/richtext/richtextstyledlg.cpp:293
 msgid "OK"
 msgstr "确认"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:151
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
-#: ../src/msw/msgdlg.cpp:448 ../src/msw/progdlg.cpp:940
+#: ../src/msw/msgdlg.cpp:449 ../src/msw/progdlg.cpp:940
 #: ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
 msgstr "取消"
@@ -120,19 +120,19 @@ msgstr "查看细节(&S)"
 msgid "&Hide details"
 msgstr "隐藏细节(&H)"
 
-#: ../include/wx/richtext/richtextbuffer.h:3863
+#: ../include/wx/richtext/richtextbuffer.h:3865
 msgid "&Box"
 msgstr "框(&B)"
 
-#: ../include/wx/richtext/richtextbuffer.h:5007
+#: ../include/wx/richtext/richtextbuffer.h:5009
 msgid "&Picture"
 msgstr "图片(&P)"
 
-#: ../include/wx/richtext/richtextbuffer.h:5957
+#: ../include/wx/richtext/richtextbuffer.h:5959
 msgid "&Cell"
 msgstr "单元格(&C)"
 
-#: ../include/wx/richtext/richtextbuffer.h:6066
+#: ../include/wx/richtext/richtextbuffer.h:6068
 msgid "&Table"
 msgstr "表格(&T)"
 
@@ -140,7 +140,7 @@ msgstr "表格(&T)"
 msgid "Object Properties"
 msgstr "对象属性"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:531
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
 msgid "Printing"
 msgstr "正在打印"
@@ -751,20 +751,20 @@ msgstr "显示帮助信息"
 msgid "generate verbose log messages"
 msgstr "生成详细的日志信息"
 
-#: ../src/common/appcmn.cpp:250
+#: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
 msgstr "指定使用的主题"
 
-#: ../src/common/appcmn.cpp:264
+#: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "指定使用的显示模式 (例如: 640x480-16位色)"
 
-#: ../src/common/appcmn.cpp:286
+#: ../src/common/appcmn.cpp:279
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "不支持的主题 '%s'。"
 
-#: ../src/common/appcmn.cpp:303
+#: ../src/common/appcmn.cpp:296
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "无效的显示模式 '%s'。"
@@ -901,12 +901,12 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' 有额外的 '..'，忽略之。"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1400
+#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1416
 msgid "checked"
 msgstr "已检查"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1402
+#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1418
 msgid "unchecked"
 msgstr "未检查"
 
@@ -915,103 +915,103 @@ msgstr "未检查"
 msgid "undetermined"
 msgstr "未定"
 
-#: ../src/common/datetimefmt.cpp:1844
+#: ../src/common/datetimefmt.cpp:1845
 msgid "today"
 msgstr "今天"
 
-#: ../src/common/datetimefmt.cpp:1845
+#: ../src/common/datetimefmt.cpp:1846
 msgid "yesterday"
 msgstr "昨天"
 
-#: ../src/common/datetimefmt.cpp:1846
+#: ../src/common/datetimefmt.cpp:1847
 msgid "tomorrow"
 msgstr "明天"
 
-#: ../src/common/datetimefmt.cpp:2040
+#: ../src/common/datetimefmt.cpp:2041
 msgid "first"
 msgstr "第一"
 
-#: ../src/common/datetimefmt.cpp:2041
+#: ../src/common/datetimefmt.cpp:2042
 msgid "second"
 msgstr "第二"
 
-#: ../src/common/datetimefmt.cpp:2042
+#: ../src/common/datetimefmt.cpp:2043
 msgid "third"
 msgstr "第三"
 
-#: ../src/common/datetimefmt.cpp:2043
+#: ../src/common/datetimefmt.cpp:2044
 msgid "fourth"
 msgstr "第四"
 
-#: ../src/common/datetimefmt.cpp:2044
+#: ../src/common/datetimefmt.cpp:2045
 msgid "fifth"
 msgstr "第五"
 
-#: ../src/common/datetimefmt.cpp:2045
+#: ../src/common/datetimefmt.cpp:2046
 msgid "sixth"
 msgstr "第六"
 
-#: ../src/common/datetimefmt.cpp:2046
+#: ../src/common/datetimefmt.cpp:2047
 msgid "seventh"
 msgstr "第七"
 
-#: ../src/common/datetimefmt.cpp:2047
+#: ../src/common/datetimefmt.cpp:2048
 msgid "eighth"
 msgstr "第八"
 
-#: ../src/common/datetimefmt.cpp:2048
+#: ../src/common/datetimefmt.cpp:2049
 msgid "ninth"
 msgstr "第九"
 
-#: ../src/common/datetimefmt.cpp:2049
+#: ../src/common/datetimefmt.cpp:2050
 msgid "tenth"
 msgstr "第十"
 
-#: ../src/common/datetimefmt.cpp:2050
+#: ../src/common/datetimefmt.cpp:2051
 msgid "eleventh"
 msgstr "第十一"
 
-#: ../src/common/datetimefmt.cpp:2051
+#: ../src/common/datetimefmt.cpp:2052
 msgid "twelfth"
 msgstr "第十二"
 
-#: ../src/common/datetimefmt.cpp:2052
+#: ../src/common/datetimefmt.cpp:2053
 msgid "thirteenth"
 msgstr "第十三"
 
-#: ../src/common/datetimefmt.cpp:2053
+#: ../src/common/datetimefmt.cpp:2054
 msgid "fourteenth"
 msgstr "第十四"
 
-#: ../src/common/datetimefmt.cpp:2054
+#: ../src/common/datetimefmt.cpp:2055
 msgid "fifteenth"
 msgstr "第十五"
 
-#: ../src/common/datetimefmt.cpp:2055
+#: ../src/common/datetimefmt.cpp:2056
 msgid "sixteenth"
 msgstr "第十六"
 
-#: ../src/common/datetimefmt.cpp:2056
+#: ../src/common/datetimefmt.cpp:2057
 msgid "seventeenth"
 msgstr "第十七"
 
-#: ../src/common/datetimefmt.cpp:2057
+#: ../src/common/datetimefmt.cpp:2058
 msgid "eighteenth"
 msgstr "第十八"
 
-#: ../src/common/datetimefmt.cpp:2058
+#: ../src/common/datetimefmt.cpp:2059
 msgid "nineteenth"
 msgstr "第十九"
 
-#: ../src/common/datetimefmt.cpp:2059
+#: ../src/common/datetimefmt.cpp:2060
 msgid "twentieth"
 msgstr "第二十"
 
-#: ../src/common/datetimefmt.cpp:2217
+#: ../src/common/datetimefmt.cpp:2218
 msgid "noon"
 msgstr "中午"
 
-#: ../src/common/datetimefmt.cpp:2218
+#: ../src/common/datetimefmt.cpp:2219
 msgid "midnight"
 msgstr "午夜"
 
@@ -2384,14 +2384,14 @@ msgstr "TIFF: 保存图像错误。"
 msgid "TIFF: Error writing image."
 msgstr "TIFF: 写图像错误。"
 
-#: ../src/common/init.cpp:193
+#: ../src/common/init.cpp:192
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
 "ignored."
 msgstr "命令行参数 %d 无法被转化成Unicode编码，其将被忽略。"
 
-#: ../src/common/init.cpp:284
+#: ../src/common/init.cpp:283
 msgid "Initialization failed in post init, aborting."
 msgstr "在后初始化阶段出错，退出..."
 
@@ -2991,111 +2991,111 @@ msgstr "通用"
 msgid "Advanced"
 msgstr "高级"
 
-#: ../src/common/prntbase.cpp:254
+#: ../src/common/prntbase.cpp:255
 msgid "Generic PostScript"
 msgstr "普通PostScript"
 
-#: ../src/common/prntbase.cpp:268
+#: ../src/common/prntbase.cpp:269
 msgid "Ready"
 msgstr "就绪"
 
-#: ../src/common/prntbase.cpp:343
+#: ../src/common/prntbase.cpp:344
 msgid "Printing Error"
 msgstr "打印出错"
 
-#: ../src/common/prntbase.cpp:422 ../src/common/prntbase.cpp:1567
+#: ../src/common/prntbase.cpp:423 ../src/common/prntbase.cpp:1575
 #: ../src/generic/prntdlgg.cpp:136 ../src/generic/prntdlgg.cpp:150
-#: ../src/gtk/print.cpp:621 ../src/gtk/print.cpp:639
+#: ../src/gtk/print.cpp:622 ../src/gtk/print.cpp:640
 msgid "Print"
 msgstr "打印"
 
-#: ../src/common/prntbase.cpp:480 ../src/generic/prntdlgg.cpp:819
+#: ../src/common/prntbase.cpp:481 ../src/generic/prntdlgg.cpp:819
 msgid "Page setup"
 msgstr "页面设置"
 
-#: ../src/common/prntbase.cpp:534
+#: ../src/common/prntbase.cpp:535
 msgid "Please wait while printing..."
 msgstr "打印，请等待..."
 
-#: ../src/common/prntbase.cpp:538
+#: ../src/common/prntbase.cpp:539
 msgid "Document:"
 msgstr "文档："
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:542
 msgid "Progress:"
 msgstr "进度:"
 
-#: ../src/common/prntbase.cpp:542
+#: ../src/common/prntbase.cpp:543
 msgid "Preparing"
 msgstr "准备中"
 
-#: ../src/common/prntbase.cpp:561
+#: ../src/common/prntbase.cpp:562
 #, c-format
 msgid "Printing page %d"
 msgstr "正在打印页 %d"
 
-#: ../src/common/prntbase.cpp:566
+#: ../src/common/prntbase.cpp:567
 #, c-format
 msgid "Printing page %d of %d"
 msgstr "正在打印 %d 页其中 %d"
 
-#: ../src/common/prntbase.cpp:569
+#: ../src/common/prntbase.cpp:570
 #, c-format
 msgid " (copy %d of %d)"
 msgstr " (复制 %d / %d)"
 
-#: ../src/common/prntbase.cpp:608
+#: ../src/common/prntbase.cpp:609
 msgid "Printing "
 msgstr "正在打印 "
 
-#: ../src/common/prntbase.cpp:1574
+#: ../src/common/prntbase.cpp:1582
 msgid "First page"
 msgstr "第一页"
 
-#: ../src/common/prntbase.cpp:1579 ../src/html/helpwnd.cpp:661
+#: ../src/common/prntbase.cpp:1587 ../src/html/helpwnd.cpp:661
 msgid "Previous page"
 msgstr "前页"
 
-#: ../src/common/prntbase.cpp:1593 ../src/html/helpwnd.cpp:662
+#: ../src/common/prntbase.cpp:1601 ../src/html/helpwnd.cpp:662
 msgid "Next page"
 msgstr "下一页"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1606
 msgid "Last page"
 msgstr "最后一页"
 
-#: ../src/common/prntbase.cpp:1606 ../src/common/stockitem.cpp:216
+#: ../src/common/prntbase.cpp:1614 ../src/common/stockitem.cpp:216
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: ../src/common/prntbase.cpp:1620 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1628 ../src/common/stockitem.cpp:215
 msgid "Zoom In"
 msgstr "放大"
 
-#: ../src/common/prntbase.cpp:1626 ../src/common/stockitem.cpp:154
+#: ../src/common/prntbase.cpp:1634 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
 msgstr "关闭(&C)"
 
-#: ../src/common/prntbase.cpp:2037
+#: ../src/common/prntbase.cpp:2060
 msgid "Could not start document preview."
 msgstr "无法启动文档预览。"
 
-#: ../src/common/prntbase.cpp:2037 ../src/common/prntbase.cpp:2079
-#: ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2060 ../src/common/prntbase.cpp:2102
+#: ../src/common/prntbase.cpp:2110
 msgid "Print Preview Failure"
 msgstr "打印预览失败"
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2102 ../src/common/prntbase.cpp:2110
 msgid "Sorry, not enough memory to create a preview."
 msgstr "对不起，没有足够内存创建预览。"
 
-#: ../src/common/prntbase.cpp:2094
+#: ../src/common/prntbase.cpp:2117
 #, c-format
 msgid "Page %d of %d"
 msgstr "页 %d / %d"
 
-#: ../src/common/prntbase.cpp:2096
+#: ../src/common/prntbase.cpp:2119
 #, c-format
 msgid "Page %d"
 msgstr "页 %d"
@@ -3142,11 +3142,11 @@ msgstr "删除“%s”的密码失败：%s。"
 msgid "Failed to monitor I/O channels"
 msgstr "无法检测I/O通道"
 
-#: ../src/common/sizer.cpp:3021 ../src/common/stockitem.cpp:196
+#: ../src/common/sizer.cpp:3023 ../src/common/stockitem.cpp:196
 msgid "Save"
 msgstr "保存"
 
-#: ../src/common/sizer.cpp:3023
+#: ../src/common/sizer.cpp:3025
 msgid "Don't Save"
 msgstr "不保存"
 
@@ -3442,7 +3442,7 @@ msgstr "新建(&N)"
 msgid "New"
 msgstr "新建"
 
-#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:436
 msgid "&No"
 msgstr "否(&N)"
 
@@ -3645,7 +3645,7 @@ msgstr "向上(&U)"
 msgid "Up"
 msgstr "Up"
 
-#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:436
 msgid "&Yes"
 msgstr "是(&Y)"
 
@@ -4151,7 +4151,6 @@ msgid "Version "
 msgstr "版本 "
 
 #: ../src/generic/aboutdlgg.cpp:137 ../src/msw/aboutdlg.cpp:61
-#: ../src/osx/menu_osx.cpp:491
 #, c-format
 msgid "About %s"
 msgstr "关于 %s"
@@ -4232,33 +4231,34 @@ msgstr "true"
 msgid "false"
 msgstr "false"
 
-#: ../src/generic/datavgen.cpp:6839
+#: ../src/generic/datavgen.cpp:6855
 #, c-format
 msgid "Row %i"
 msgstr "第 %i 行"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6929
+#: ../src/generic/datavgen.cpp:6945
 msgid "Collapse"
 msgstr "折叠"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6932
+#: ../src/generic/datavgen.cpp:6948
 msgid "Expand"
 msgstr "扩展"
 
-#: ../src/generic/datavgen.cpp:6951
+#: ../src/generic/datavgen.cpp:6967
 #, c-format
 msgid "%s (%d items)"
 msgstr "%s（%d 项）"
 
-#: ../src/generic/datavgen.cpp:7002
+#: ../src/generic/datavgen.cpp:7018
 #, c-format
 msgid "Column %u"
 msgstr "列 %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7071 ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087
+#: ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4269,7 +4269,8 @@ msgid "Left"
 msgstr "左"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7074 ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090
+#: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -4346,7 +4347,7 @@ msgstr ""
 "如果您有任何与此错误报告有关的信息, \n"
 "请在此输入，它将会被加到错误报告中:"
 
-#: ../src/generic/dcpsg.cpp:1634
+#: ../src/generic/dcpsg.cpp:1628
 msgid "Cannot open file for PostScript printing!"
 msgstr "无法打开文件进行 PostScript 打印！"
 
@@ -4363,7 +4364,7 @@ msgid "Home directory"
 msgstr "Home 目录"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:783
+#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:784
 msgid "Desktop"
 msgstr "桌面"
 
@@ -4686,43 +4687,43 @@ msgstr "点击确认字体选择。"
 msgid "Choose font"
 msgstr "选择字体"
 
-#: ../src/generic/grid.cpp:6548
+#: ../src/generic/grid.cpp:6222
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr "不支持将多个选定块复制到剪贴板。"
 
-#: ../src/generic/helpext.cpp:265
+#: ../src/generic/helpext.cpp:266
 #, c-format
 msgid "Help directory \"%s\" not found."
 msgstr "找不到帮助目录 \"%s\"。"
 
-#: ../src/generic/helpext.cpp:273
+#: ../src/generic/helpext.cpp:274
 #, c-format
 msgid "Help file \"%s\" not found."
 msgstr "找不到帮助文件 \"%s\"。"
 
-#: ../src/generic/helpext.cpp:292
+#: ../src/generic/helpext.cpp:293
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr "行 %lu 的map文件 \"%s\" 有无效语法，跳过。"
 
-#: ../src/generic/helpext.cpp:300
+#: ../src/generic/helpext.cpp:301
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "文件 \"%s\" 中无有效映射。"
 
-#: ../src/generic/helpext.cpp:443
+#: ../src/generic/helpext.cpp:444
 msgid "No entries found."
 msgstr "没找到条目。"
 
-#: ../src/generic/helpext.cpp:452 ../src/generic/helpext.cpp:453
+#: ../src/generic/helpext.cpp:453 ../src/generic/helpext.cpp:454
 msgid "Help Index"
 msgstr "帮助索引"
 
-#: ../src/generic/helpext.cpp:456
+#: ../src/generic/helpext.cpp:457
 msgid "Relevant entries:"
 msgstr "相关条目:"
 
-#: ../src/generic/helpext.cpp:457
+#: ../src/generic/helpext.cpp:458
 msgid "Entries found"
 msgstr "找到的条目"
 
@@ -4749,8 +4750,7 @@ msgstr "%s 警告"
 msgid "%s Information"
 msgstr "%s 信息"
 
-#: ../src/generic/logg.cpp:236 ../src/osx/menu_osx.cpp:510
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/generic/logg.cpp:236
 msgid "Application"
 msgstr "应用程序"
 
@@ -4813,16 +4813,16 @@ msgstr "注意"
 msgid "%s Preferences"
 msgstr "%s 偏好设置"
 
-#: ../src/generic/printps.cpp:142
+#: ../src/generic/printps.cpp:143
 msgid "Printing..."
 msgstr "打印..."
 
-#: ../src/generic/printps.cpp:159 ../src/gtk/print.cpp:1153
-#: ../src/msw/printwin.cpp:184
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1154
+#: ../src/msw/printwin.cpp:185
 msgid "Could not start printing."
 msgstr "无法启动打印。"
 
-#: ../src/generic/printps.cpp:182
+#: ../src/generic/printps.cpp:183
 #, c-format
 msgid "Printing page %d..."
 msgstr "正在打印页 %d..."
@@ -5002,7 +5002,7 @@ msgstr "< 返回(&B)"
 msgid "translator-credits"
 msgstr "翻译人员"
 
-#: ../src/gtk/app.cpp:391
+#: ../src/gtk/app.cpp:456
 msgid ""
 "WARNING: using XIM input method is unsupported and may result in problems "
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
@@ -5011,7 +5011,7 @@ msgstr ""
 "警告：不支持使用 XIM 输入法，可能会导致输入处理和闪烁问题。 考虑取消设置 "
 "GTK_IM_MODULE 或设置为“ibus”。"
 
-#: ../src/gtk/app.cpp:474
+#: ../src/gtk/app.cpp:539
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "无法初始化 GTK+，DISPLAY 是否已正确设置？"
 
@@ -5069,15 +5069,15 @@ msgstr ""
 msgid "MDI child"
 msgstr "MDI 子窗口"
 
-#: ../src/gtk/print.cpp:211
+#: ../src/gtk/print.cpp:212
 msgid "Custom size"
 msgstr "自定义大小"
 
-#: ../src/gtk/print.cpp:725
+#: ../src/gtk/print.cpp:726
 msgid "Error while printing: "
 msgstr "打印时出错: "
 
-#: ../src/gtk/print.cpp:847
+#: ../src/gtk/print.cpp:848
 msgid "Page Setup"
 msgstr "页面设置"
 
@@ -5794,12 +5794,12 @@ msgid "(error %d: %s)"
 msgstr "(错误 %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
-#: ../src/msw/imaglist.cpp:202 ../src/msw/imaglist.cpp:224
-#: ../src/msw/imaglist.cpp:249
+#: ../src/msw/imaglist.cpp:302 ../src/msw/imaglist.cpp:322
+#: ../src/msw/imaglist.cpp:347
 msgid "Couldn't add an image to the image list."
 msgstr "无法把图像加到图象列表。"
 
-#: ../src/msw/enhmeta.cpp:94
+#: ../src/msw/enhmeta.cpp:95
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
 msgstr "无法从文件 \"%s\" 读取元文件。"
@@ -5819,7 +5819,7 @@ msgstr "文件对话框错误，错误码：%0lx。"
 msgid "Font file \"%s\" couldn't be loaded"
 msgstr "无法加载字体文件“%s”"
 
-#: ../src/msw/fontdlg.cpp:231
+#: ../src/msw/fontdlg.cpp:232
 #, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "公共对话框错误，错误码 %0lx。"
@@ -5877,7 +5877,7 @@ msgstr "MS HTML帮助功能不存在，因为此机器上没有安装 MS HTML �
 msgid "Failed to initialize MS HTML Help."
 msgstr "无法初始化 MS HTML 帮助。"
 
-#: ../src/msw/iniconf.cpp:455
+#: ../src/msw/iniconf.cpp:459
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "无法删除 INI 文件 '%s'"
@@ -6320,7 +6320,7 @@ msgid "Check to make the font italic."
 msgstr "勾选设置为斜体。"
 
 #. TRANSLATORS: Label of underlined font
-#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:600
+#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:601
 #: ../src/richtext/richtextfontpage.cpp:359
 msgid "Underlined"
 msgstr "下划线"
@@ -6416,35 +6416,60 @@ msgid ""
 "\"."
 msgstr "无法使用字体文件“%s”，因为它不在字体目录“%s”内。"
 
-#: ../src/osx/menu_osx.cpp:493
+#: ../src/osx/menu_osx.cpp:491
+#, c-format
+msgctxt "macOS menu item"
+msgid "About %s"
+msgstr "关于 %s"
+
+#: ../src/osx/menu_osx.cpp:494
+msgctxt "macOS menu item"
 msgid "About..."
 msgstr "关于..."
 
-#: ../src/osx/menu_osx.cpp:501
+#: ../src/osx/menu_osx.cpp:502
+msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "偏好设置..."
 
-#: ../src/osx/menu_osx.cpp:505
+#: ../src/osx/menu_osx.cpp:507
+msgctxt "macOS menu item"
 msgid "Services"
 msgstr "服务"
 
-#: ../src/osx/menu_osx.cpp:510
+#: ../src/osx/menu_osx.cpp:514
 #, c-format
+msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "隐藏 %s"
 
-#: ../src/osx/menu_osx.cpp:512
+#: ../src/osx/menu_osx.cpp:517
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Hide Application"
+msgstr "应用程序"
+
+#: ../src/osx/menu_osx.cpp:520
+msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "隐藏其他"
 
-#: ../src/osx/menu_osx.cpp:513
+#: ../src/osx/menu_osx.cpp:522
+msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "显示全部"
 
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/osx/menu_osx.cpp:528
 #, c-format
+msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "退出 %s"
+
+#: ../src/osx/menu_osx.cpp:531
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Quit Application"
+msgstr "应用程序"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6455,392 +6480,392 @@ msgid "Print operation could not be initialized"
 msgstr "无法初始化打印操作"
 
 #. TRANSLATORS: Label of font point size
-#: ../src/propgrid/advprops.cpp:572
+#: ../src/propgrid/advprops.cpp:573
 msgid "Point Size"
 msgstr "字体大小(磅值)"
 
 #. TRANSLATORS: Label of font face name
-#: ../src/propgrid/advprops.cpp:582
+#: ../src/propgrid/advprops.cpp:583
 msgid "Face Name"
 msgstr "字体名称"
 
 #. TRANSLATORS: Label of font style
-#: ../src/propgrid/advprops.cpp:590 ../src/richtext/richtextformatdlg.cpp:332
+#: ../src/propgrid/advprops.cpp:591 ../src/richtext/richtextformatdlg.cpp:332
 msgid "Style"
 msgstr "样式"
 
 #. TRANSLATORS: Label of font weight
-#: ../src/propgrid/advprops.cpp:595
+#: ../src/propgrid/advprops.cpp:596
 msgid "Weight"
 msgstr "字体粗细"
 
 #. TRANSLATORS: Label of font family
-#: ../src/propgrid/advprops.cpp:604
+#: ../src/propgrid/advprops.cpp:605
 msgid "Family"
 msgstr "系列(&F)"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:773
+#: ../src/propgrid/advprops.cpp:774
 msgid "AppWorkspace"
 msgstr "应用工作区"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:774
+#: ../src/propgrid/advprops.cpp:775
 msgid "ActiveBorder"
 msgstr "活动边框"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:775
+#: ../src/propgrid/advprops.cpp:776
 msgid "ActiveCaption"
 msgstr "主动字幕"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:776
+#: ../src/propgrid/advprops.cpp:777
 msgid "ButtonFace"
 msgstr "按钮面"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:777
+#: ../src/propgrid/advprops.cpp:778
 msgid "ButtonHighlight"
 msgstr "按钮反白"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:778
+#: ../src/propgrid/advprops.cpp:779
 msgid "ButtonShadow"
 msgstr "按钮阴影"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:779
+#: ../src/propgrid/advprops.cpp:780
 msgid "ButtonText"
 msgstr "按钮文字"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:780
+#: ../src/propgrid/advprops.cpp:781
 msgid "CaptionText"
 msgstr "标题文字"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:781
+#: ../src/propgrid/advprops.cpp:782
 msgid "ControlDark"
 msgstr "控制暗度"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:782
+#: ../src/propgrid/advprops.cpp:783
 msgid "ControlLight"
 msgstr "控制亮度"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:784
+#: ../src/propgrid/advprops.cpp:785
 msgid "GrayText"
 msgstr "灰阶文字"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:785
+#: ../src/propgrid/advprops.cpp:786
 msgid "Highlight"
 msgstr "反白"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:786
+#: ../src/propgrid/advprops.cpp:787
 msgid "HighlightText"
 msgstr "反白文字"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:787
+#: ../src/propgrid/advprops.cpp:788
 msgid "InactiveBorder"
 msgstr "待用边框"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:788
+#: ../src/propgrid/advprops.cpp:789
 msgid "InactiveCaption"
 msgstr "待用标题"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:789
+#: ../src/propgrid/advprops.cpp:790
 msgid "InactiveCaptionText"
 msgstr "待用标题文字"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:790
+#: ../src/propgrid/advprops.cpp:791
 msgid "Menu"
 msgstr "菜单"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:791
+#: ../src/propgrid/advprops.cpp:792
 msgid "Scrollbar"
 msgstr "滚动条"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:792
+#: ../src/propgrid/advprops.cpp:793
 msgid "Tooltip"
 msgstr "工具提示"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:793
+#: ../src/propgrid/advprops.cpp:794
 msgid "TooltipText"
 msgstr "工具提示文字"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:794
+#: ../src/propgrid/advprops.cpp:795
 msgid "Window"
 msgstr "视窗(&W)"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:795
+#: ../src/propgrid/advprops.cpp:796
 msgid "WindowFrame"
 msgstr "窗框(&W)"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:796
+#: ../src/propgrid/advprops.cpp:797
 msgid "WindowText"
 msgstr "视窗文字(&W)"
 
 #. TRANSLATORS: Custom colour choice entry
-#: ../src/propgrid/advprops.cpp:797 ../src/propgrid/advprops.cpp:1475
-#: ../src/propgrid/advprops.cpp:1518
+#: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
+#: ../src/propgrid/advprops.cpp:1519
 msgid "Custom"
 msgstr "自选"
 
-#: ../src/propgrid/advprops.cpp:1500
+#: ../src/propgrid/advprops.cpp:1501
 msgid "Black"
 msgstr "黑色"
 
-#: ../src/propgrid/advprops.cpp:1501
+#: ../src/propgrid/advprops.cpp:1502
 msgid "Maroon"
 msgstr "栗色"
 
-#: ../src/propgrid/advprops.cpp:1502
+#: ../src/propgrid/advprops.cpp:1503
 msgid "Navy"
 msgstr "海军蓝"
 
-#: ../src/propgrid/advprops.cpp:1503
+#: ../src/propgrid/advprops.cpp:1504
 msgid "Purple"
 msgstr "紫色"
 
-#: ../src/propgrid/advprops.cpp:1504
+#: ../src/propgrid/advprops.cpp:1505
 msgid "Teal"
 msgstr "蓝绿色"
 
-#: ../src/propgrid/advprops.cpp:1505
+#: ../src/propgrid/advprops.cpp:1506
 msgid "Gray"
 msgstr "灰色"
 
-#: ../src/propgrid/advprops.cpp:1506
+#: ../src/propgrid/advprops.cpp:1507
 msgid "Green"
 msgstr "绿色"
 
-#: ../src/propgrid/advprops.cpp:1507
+#: ../src/propgrid/advprops.cpp:1508
 msgid "Olive"
 msgstr "橄榄色"
 
-#: ../src/propgrid/advprops.cpp:1508
+#: ../src/propgrid/advprops.cpp:1509
 msgid "Brown"
 msgstr "咖啡色"
 
-#: ../src/propgrid/advprops.cpp:1509
+#: ../src/propgrid/advprops.cpp:1510
 msgid "Blue"
 msgstr "蓝色"
 
-#: ../src/propgrid/advprops.cpp:1510
+#: ../src/propgrid/advprops.cpp:1511
 msgid "Fuchsia"
 msgstr "紫红色"
 
-#: ../src/propgrid/advprops.cpp:1511
+#: ../src/propgrid/advprops.cpp:1512
 msgid "Red"
 msgstr "红色"
 
-#: ../src/propgrid/advprops.cpp:1512
+#: ../src/propgrid/advprops.cpp:1513
 msgid "Orange"
 msgstr "橘色"
 
-#: ../src/propgrid/advprops.cpp:1513
+#: ../src/propgrid/advprops.cpp:1514
 msgid "Silver"
 msgstr "银色"
 
-#: ../src/propgrid/advprops.cpp:1514
+#: ../src/propgrid/advprops.cpp:1515
 msgid "Lime"
 msgstr "莱姆色"
 
-#: ../src/propgrid/advprops.cpp:1515
+#: ../src/propgrid/advprops.cpp:1516
 msgid "Aqua"
 msgstr "海蓝色"
 
-#: ../src/propgrid/advprops.cpp:1516
+#: ../src/propgrid/advprops.cpp:1517
 msgid "Yellow"
 msgstr "黄色"
 
-#: ../src/propgrid/advprops.cpp:1517
+#: ../src/propgrid/advprops.cpp:1518
 msgid "White"
 msgstr "百色"
 
-#: ../src/propgrid/advprops.cpp:1653
+#: ../src/propgrid/advprops.cpp:1654
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "默认"
 
-#: ../src/propgrid/advprops.cpp:1654
+#: ../src/propgrid/advprops.cpp:1655
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "箭头"
 
-#: ../src/propgrid/advprops.cpp:1655
+#: ../src/propgrid/advprops.cpp:1656
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "右箭头"
 
-#: ../src/propgrid/advprops.cpp:1656
+#: ../src/propgrid/advprops.cpp:1657
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "空"
 
-#: ../src/propgrid/advprops.cpp:1657
+#: ../src/propgrid/advprops.cpp:1658
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "靶心"
 
-#: ../src/propgrid/advprops.cpp:1658
+#: ../src/propgrid/advprops.cpp:1659
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "字符编码"
 
-#: ../src/propgrid/advprops.cpp:1659
+#: ../src/propgrid/advprops.cpp:1660
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "交叉"
 
-#: ../src/propgrid/advprops.cpp:1660
+#: ../src/propgrid/advprops.cpp:1661
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "手"
 
-#: ../src/propgrid/advprops.cpp:1661
+#: ../src/propgrid/advprops.cpp:1662
 #, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "工字梁"
 
-#: ../src/propgrid/advprops.cpp:1662
+#: ../src/propgrid/advprops.cpp:1663
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "左键"
 
-#: ../src/propgrid/advprops.cpp:1663
+#: ../src/propgrid/advprops.cpp:1664
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "放大镜"
 
-#: ../src/propgrid/advprops.cpp:1664
+#: ../src/propgrid/advprops.cpp:1665
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "中间按钮"
 
-#: ../src/propgrid/advprops.cpp:1665
+#: ../src/propgrid/advprops.cpp:1666
 #, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "无项目"
 
-#: ../src/propgrid/advprops.cpp:1666
+#: ../src/propgrid/advprops.cpp:1667
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "油漆刷"
 
-#: ../src/propgrid/advprops.cpp:1667
+#: ../src/propgrid/advprops.cpp:1668
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "铅笔"
 
-#: ../src/propgrid/advprops.cpp:1668
+#: ../src/propgrid/advprops.cpp:1669
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "向左对齐"
 
-#: ../src/propgrid/advprops.cpp:1669
+#: ../src/propgrid/advprops.cpp:1670
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "向右对齐"
 
-#: ../src/propgrid/advprops.cpp:1670
+#: ../src/propgrid/advprops.cpp:1671
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "问题箭头"
 
-#: ../src/propgrid/advprops.cpp:1671
+#: ../src/propgrid/advprops.cpp:1672
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "右键"
 
-#: ../src/propgrid/advprops.cpp:1672
+#: ../src/propgrid/advprops.cpp:1673
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "尺寸 NE-SW"
 
-#: ../src/propgrid/advprops.cpp:1673
+#: ../src/propgrid/advprops.cpp:1674
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "尺寸 N-S"
 
-#: ../src/propgrid/advprops.cpp:1674
+#: ../src/propgrid/advprops.cpp:1675
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "尺寸 NW-SE"
 
-#: ../src/propgrid/advprops.cpp:1675
+#: ../src/propgrid/advprops.cpp:1676
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "尺寸 W-S"
 
-#: ../src/propgrid/advprops.cpp:1676
+#: ../src/propgrid/advprops.cpp:1677
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "尺寸"
 
-#: ../src/propgrid/advprops.cpp:1677
+#: ../src/propgrid/advprops.cpp:1678
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "喷雾罐"
 
-#: ../src/propgrid/advprops.cpp:1678
+#: ../src/propgrid/advprops.cpp:1679
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "等待"
 
-#: ../src/propgrid/advprops.cpp:1679
+#: ../src/propgrid/advprops.cpp:1680
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "看管"
 
-#: ../src/propgrid/advprops.cpp:1680
+#: ../src/propgrid/advprops.cpp:1681
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "等待箭头"
 
-#: ../src/propgrid/advprops.cpp:2052
+#: ../src/propgrid/advprops.cpp:2053
 msgid "Make a selection:"
 msgstr "请选择:"
 
@@ -6852,39 +6877,39 @@ msgstr "属性"
 msgid "Value"
 msgstr "值"
 
-#: ../src/propgrid/manager.cpp:1708
+#: ../src/propgrid/manager.cpp:1701
 msgid "Categorized Mode"
 msgstr "分类模式"
 
-#: ../src/propgrid/manager.cpp:1734
+#: ../src/propgrid/manager.cpp:1727
 msgid "Alphabetic Mode"
 msgstr "字母顺序模式"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/propgrid/propgrid.cpp:191
+#: ../src/propgrid/propgrid.cpp:197
 msgid "False"
 msgstr "False"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/propgrid/propgrid.cpp:193
+#: ../src/propgrid/propgrid.cpp:199
 msgid "True"
 msgstr "True"
 
 #. TRANSLATORS: Text  displayed for unspecified value
-#: ../src/propgrid/propgrid.cpp:393
+#: ../src/propgrid/propgrid.cpp:381
 msgid "Unspecified"
 msgstr "未指定"
 
 #. TRANSLATORS: Caption of message box displaying any property error
-#: ../src/propgrid/propgrid.cpp:3171 ../src/propgrid/propgrid.cpp:3308
+#: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3284
 msgid "Property Error"
 msgstr "属性错误"
 
-#: ../src/propgrid/propgrid.cpp:3285
+#: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr "你输入了无效值。按 ESC 取消编辑。"
 
-#: ../src/propgrid/propgrid.cpp:6688
+#: ../src/propgrid/propgrid.cpp:6650
 #, c-format
 msgid "Error in resource: %s"
 msgstr "资源错误: %s"
@@ -9092,11 +9117,11 @@ msgstr "无法重定向子过程输入/输出"
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr "无法设置非闭塞通道，程序可能挂起。"
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1028
 msgid "Cannot get the hostname"
 msgstr "无法获得主机名"
 
-#: ../src/unix/utilsunx.cpp:1060
+#: ../src/unix/utilsunx.cpp:1064
 msgid "Cannot get the official hostname"
 msgstr "无法获得正式的主机名"
 

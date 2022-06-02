@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-27 19:29+0200\n"
+"POT-Creation-Date: 2022-06-02 08:37+0200\n"
 "PO-Revision-Date: 2015-05-09 20:03+0545\n"
 "Last-Translator: drishtibachak@gmail.com\n"
 "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
@@ -15,11 +15,11 @@ msgstr ""
 "X-Generator: Poedit 1.7.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../include/wx/defs.h:2687
+#: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
 msgstr "सबै फाइलहरू(*.*)|*.*"
 
-#: ../include/wx/defs.h:2690
+#: ../include/wx/defs.h:2708
 msgid "All files (*)|*"
 msgstr "सबै फाइलहरू(*)|*"
 
@@ -46,14 +46,14 @@ msgid "No"
 msgstr "होइन"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:184
-#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/msgdlg.cpp:743 ../src/richtext/richtextstyledlg.cpp:293
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:449
+#: ../src/msw/msgdlg.cpp:744 ../src/richtext/richtextstyledlg.cpp:293
 msgid "OK"
 msgstr "ठीक"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:151
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
-#: ../src/msw/msgdlg.cpp:448 ../src/msw/progdlg.cpp:940
+#: ../src/msw/msgdlg.cpp:449 ../src/msw/progdlg.cpp:940
 #: ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
 msgstr "रद्द गर"
@@ -115,19 +115,19 @@ msgstr "&विस्तृत अवलोकन"
 msgid "&Hide details"
 msgstr "विस्तृत &लुकाउ "
 
-#: ../include/wx/richtext/richtextbuffer.h:3863
+#: ../include/wx/richtext/richtextbuffer.h:3865
 msgid "&Box"
 msgstr "&बाकस"
 
-#: ../include/wx/richtext/richtextbuffer.h:5007
+#: ../include/wx/richtext/richtextbuffer.h:5009
 msgid "&Picture"
 msgstr "&चीत्र"
 
-#: ../include/wx/richtext/richtextbuffer.h:5957
+#: ../include/wx/richtext/richtextbuffer.h:5959
 msgid "&Cell"
 msgstr "&कोशिका"
 
-#: ../include/wx/richtext/richtextbuffer.h:6066
+#: ../include/wx/richtext/richtextbuffer.h:6068
 msgid "&Table"
 msgstr "&तालिका"
 
@@ -135,7 +135,7 @@ msgstr "&तालिका"
 msgid "Object Properties"
 msgstr "वस्तु गुणहरू"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:531
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
 msgid "Printing"
 msgstr "छाप्ने काम हुँदैछ ।"
@@ -747,20 +747,20 @@ msgstr "यो सहयोग सन्देश देखाउ "
 msgid "generate verbose log messages"
 msgstr "लामो सन्देशहरू उत्पादन गर्छ ।"
 
-#: ../src/common/appcmn.cpp:250
+#: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
 msgstr "प्रयोगका लागि theme तोक्नु होला ।"
 
-#: ../src/common/appcmn.cpp:264
+#: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "प्रयोगका लागि दृश्यक मुद्रा तोक्नु होला (e.g. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:286
+#: ../src/common/appcmn.cpp:279
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "असमर्थित theme '%s'"
 
-#: ../src/common/appcmn.cpp:303
+#: ../src/common/appcmn.cpp:296
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "नमिल्दो दृश्य मुद्रा मानक '%s'"
@@ -897,12 +897,12 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' मा अतिरिक्त '..' रहेछ, बेवास्ता गर्नु होस् ।"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1400
+#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1416
 msgid "checked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1402
+#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1418
 msgid "unchecked"
 msgstr ""
 
@@ -912,103 +912,103 @@ msgstr ""
 msgid "undetermined"
 msgstr "अधोरेखाङ्कित"
 
-#: ../src/common/datetimefmt.cpp:1844
+#: ../src/common/datetimefmt.cpp:1845
 msgid "today"
 msgstr "आज"
 
-#: ../src/common/datetimefmt.cpp:1845
+#: ../src/common/datetimefmt.cpp:1846
 msgid "yesterday"
 msgstr "हिजो"
 
-#: ../src/common/datetimefmt.cpp:1846
+#: ../src/common/datetimefmt.cpp:1847
 msgid "tomorrow"
 msgstr "भोलि"
 
-#: ../src/common/datetimefmt.cpp:2040
+#: ../src/common/datetimefmt.cpp:2041
 msgid "first"
 msgstr "प्रथम"
 
-#: ../src/common/datetimefmt.cpp:2041
+#: ../src/common/datetimefmt.cpp:2042
 msgid "second"
 msgstr "दोस्रो"
 
-#: ../src/common/datetimefmt.cpp:2042
+#: ../src/common/datetimefmt.cpp:2043
 msgid "third"
 msgstr "तेस्रो"
 
-#: ../src/common/datetimefmt.cpp:2043
+#: ../src/common/datetimefmt.cpp:2044
 msgid "fourth"
 msgstr "चौथो"
 
-#: ../src/common/datetimefmt.cpp:2044
+#: ../src/common/datetimefmt.cpp:2045
 msgid "fifth"
 msgstr "पाछौं"
 
-#: ../src/common/datetimefmt.cpp:2045
+#: ../src/common/datetimefmt.cpp:2046
 msgid "sixth"
 msgstr "छैठौँ"
 
-#: ../src/common/datetimefmt.cpp:2046
+#: ../src/common/datetimefmt.cpp:2047
 msgid "seventh"
 msgstr "सातौं"
 
-#: ../src/common/datetimefmt.cpp:2047
+#: ../src/common/datetimefmt.cpp:2048
 msgid "eighth"
 msgstr "आठौं"
 
-#: ../src/common/datetimefmt.cpp:2048
+#: ../src/common/datetimefmt.cpp:2049
 msgid "ninth"
 msgstr "नवौं"
 
-#: ../src/common/datetimefmt.cpp:2049
+#: ../src/common/datetimefmt.cpp:2050
 msgid "tenth"
 msgstr "दसौं"
 
-#: ../src/common/datetimefmt.cpp:2050
+#: ../src/common/datetimefmt.cpp:2051
 msgid "eleventh"
 msgstr "एघारौं"
 
-#: ../src/common/datetimefmt.cpp:2051
+#: ../src/common/datetimefmt.cpp:2052
 msgid "twelfth"
 msgstr "बाह्रौं"
 
-#: ../src/common/datetimefmt.cpp:2052
+#: ../src/common/datetimefmt.cpp:2053
 msgid "thirteenth"
 msgstr "तेह्रौं"
 
-#: ../src/common/datetimefmt.cpp:2053
+#: ../src/common/datetimefmt.cpp:2054
 msgid "fourteenth"
 msgstr "चौधौं "
 
-#: ../src/common/datetimefmt.cpp:2054
+#: ../src/common/datetimefmt.cpp:2055
 msgid "fifteenth"
 msgstr "पन्ध्रौं"
 
-#: ../src/common/datetimefmt.cpp:2055
+#: ../src/common/datetimefmt.cpp:2056
 msgid "sixteenth"
 msgstr "सोह्रौं"
 
-#: ../src/common/datetimefmt.cpp:2056
+#: ../src/common/datetimefmt.cpp:2057
 msgid "seventeenth"
 msgstr "सत्रौं"
 
-#: ../src/common/datetimefmt.cpp:2057
+#: ../src/common/datetimefmt.cpp:2058
 msgid "eighteenth"
 msgstr "अठारौं"
 
-#: ../src/common/datetimefmt.cpp:2058
+#: ../src/common/datetimefmt.cpp:2059
 msgid "nineteenth"
 msgstr "उन्नाइसौं"
 
-#: ../src/common/datetimefmt.cpp:2059
+#: ../src/common/datetimefmt.cpp:2060
 msgid "twentieth"
 msgstr "बीसौं"
 
-#: ../src/common/datetimefmt.cpp:2217
+#: ../src/common/datetimefmt.cpp:2218
 msgid "noon"
 msgstr "मध्यान्न"
 
-#: ../src/common/datetimefmt.cpp:2218
+#: ../src/common/datetimefmt.cpp:2219
 msgid "midnight"
 msgstr "मध्य रात"
 
@@ -2390,14 +2390,14 @@ msgstr "TIFF: तस्विर बचतमा गल्ती "
 msgid "TIFF: Error writing image."
 msgstr "TIFF: तस्विर लेखाइमा गल्ती "
 
-#: ../src/common/init.cpp:193
+#: ../src/common/init.cpp:192
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
 "ignored."
 msgstr "आदेश लाइन argument %d लाई युनिकोडमा फेर्न नसकि एकोले बेवास्ता गरियो ।"
 
-#: ../src/common/init.cpp:284
+#: ../src/common/init.cpp:283
 msgid "Initialization failed in post init, aborting."
 msgstr "post init मा सुरुवात असफल भयो, त्यसैले तुहिधै छ"
 
@@ -3003,111 +3003,111 @@ msgstr "&सामान्य"
 msgid "Advanced"
 msgstr "समृद्ध"
 
-#: ../src/common/prntbase.cpp:254
+#: ../src/common/prntbase.cpp:255
 msgid "Generic PostScript"
 msgstr "Generic PostScript"
 
-#: ../src/common/prntbase.cpp:268
+#: ../src/common/prntbase.cpp:269
 msgid "Ready"
 msgstr "तयार"
 
-#: ../src/common/prntbase.cpp:343
+#: ../src/common/prntbase.cpp:344
 msgid "Printing Error"
 msgstr "छपाइमा गल्ती"
 
-#: ../src/common/prntbase.cpp:422 ../src/common/prntbase.cpp:1567
+#: ../src/common/prntbase.cpp:423 ../src/common/prntbase.cpp:1575
 #: ../src/generic/prntdlgg.cpp:136 ../src/generic/prntdlgg.cpp:150
-#: ../src/gtk/print.cpp:621 ../src/gtk/print.cpp:639
+#: ../src/gtk/print.cpp:622 ../src/gtk/print.cpp:640
 msgid "Print"
 msgstr "छाप्ने काम गर"
 
-#: ../src/common/prntbase.cpp:480 ../src/generic/prntdlgg.cpp:819
+#: ../src/common/prntbase.cpp:481 ../src/generic/prntdlgg.cpp:819
 msgid "Page setup"
 msgstr "पृष्ट मिलाउ"
 
-#: ../src/common/prntbase.cpp:534
+#: ../src/common/prntbase.cpp:535
 msgid "Please wait while printing..."
 msgstr "कृपया पर्खनु होस् है छाप्ने काम हुँदैछ ।"
 
-#: ../src/common/prntbase.cpp:538
+#: ../src/common/prntbase.cpp:539
 msgid "Document:"
 msgstr "कागजात"
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:542
 msgid "Progress:"
 msgstr "प्रगति"
 
-#: ../src/common/prntbase.cpp:542
+#: ../src/common/prntbase.cpp:543
 msgid "Preparing"
 msgstr "तयारी हुदैछ ।"
 
-#: ../src/common/prntbase.cpp:561
+#: ../src/common/prntbase.cpp:562
 #, fuzzy, c-format
 msgid "Printing page %d"
 msgstr "पृष्ट %d.. छापिँदै छ ।"
 
-#: ../src/common/prntbase.cpp:566
+#: ../src/common/prntbase.cpp:567
 #, c-format
 msgid "Printing page %d of %d"
 msgstr "पृष्ट %d बट्टा %d छापिँदै छ ।"
 
-#: ../src/common/prntbase.cpp:569
+#: ../src/common/prntbase.cpp:570
 #, c-format
 msgid " (copy %d of %d)"
 msgstr "%d बट्टा %d को नक्कल"
 
-#: ../src/common/prntbase.cpp:608
+#: ../src/common/prntbase.cpp:609
 msgid "Printing "
 msgstr "छाप्ने काम हुँदैछ ।"
 
-#: ../src/common/prntbase.cpp:1574
+#: ../src/common/prntbase.cpp:1582
 msgid "First page"
 msgstr "प्रथम पृष्ट"
 
-#: ../src/common/prntbase.cpp:1579 ../src/html/helpwnd.cpp:661
+#: ../src/common/prntbase.cpp:1587 ../src/html/helpwnd.cpp:661
 msgid "Previous page"
 msgstr "पछिल्लो पृष्ट"
 
-#: ../src/common/prntbase.cpp:1593 ../src/html/helpwnd.cpp:662
+#: ../src/common/prntbase.cpp:1601 ../src/html/helpwnd.cpp:662
 msgid "Next page"
 msgstr "अघिल्लो पृष्ट"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1606
 msgid "Last page"
 msgstr "अन्तिम पृष्ट"
 
-#: ../src/common/prntbase.cpp:1606 ../src/common/stockitem.cpp:216
+#: ../src/common/prntbase.cpp:1614 ../src/common/stockitem.cpp:216
 msgid "Zoom Out"
 msgstr "सानो पार"
 
-#: ../src/common/prntbase.cpp:1620 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1628 ../src/common/stockitem.cpp:215
 msgid "Zoom In"
 msgstr "ठूलो पार"
 
-#: ../src/common/prntbase.cpp:1626 ../src/common/stockitem.cpp:154
+#: ../src/common/prntbase.cpp:1634 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
 msgstr "&बन्द गर"
 
-#: ../src/common/prntbase.cpp:2037
+#: ../src/common/prntbase.cpp:2060
 msgid "Could not start document preview."
 msgstr "कागजातको चेहरा सुरु गर्न सकिएन"
 
-#: ../src/common/prntbase.cpp:2037 ../src/common/prntbase.cpp:2079
-#: ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2060 ../src/common/prntbase.cpp:2102
+#: ../src/common/prntbase.cpp:2110
 msgid "Print Preview Failure"
 msgstr "छापिने चेहरा देखाउन सकिएन"
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2102 ../src/common/prntbase.cpp:2110
 msgid "Sorry, not enough memory to create a preview."
 msgstr "माफ गर्नु होस्, चेहरा सिर्जना गर्न यथेष्ट भण्डार छैन ।"
 
-#: ../src/common/prntbase.cpp:2094
+#: ../src/common/prntbase.cpp:2117
 #, c-format
 msgid "Page %d of %d"
 msgstr "पृष्ट %d बट्टा %d"
 
-#: ../src/common/prntbase.cpp:2096
+#: ../src/common/prntbase.cpp:2119
 #, c-format
 msgid "Page %d"
 msgstr "पृष्ट %d"
@@ -3154,11 +3154,11 @@ msgstr "'%s' लाई '%s' मा खिच्ने काम असफल भ
 msgid "Failed to monitor I/O channels"
 msgstr "लगानी/प्रतिफल मार्ग अनुगमन गर्न सकिएन ।"
 
-#: ../src/common/sizer.cpp:3021 ../src/common/stockitem.cpp:196
+#: ../src/common/sizer.cpp:3023 ../src/common/stockitem.cpp:196
 msgid "Save"
 msgstr "बचत गर"
 
-#: ../src/common/sizer.cpp:3023
+#: ../src/common/sizer.cpp:3025
 msgid "Don't Save"
 msgstr "बचत नगर"
 
@@ -3459,7 +3459,7 @@ msgstr "&नया"
 msgid "New"
 msgstr "नया"
 
-#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:436
 msgid "&No"
 msgstr "&होइन"
 
@@ -3665,7 +3665,7 @@ msgstr "&माथि"
 msgid "Up"
 msgstr "माथि"
 
-#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:436
 msgid "&Yes"
 msgstr "&हो"
 
@@ -4174,7 +4174,6 @@ msgid "Version "
 msgstr "संस्करण"
 
 #: ../src/generic/aboutdlgg.cpp:137 ../src/msw/aboutdlg.cpp:61
-#: ../src/osx/menu_osx.cpp:491
 #, c-format
 msgid "About %s"
 msgstr "%s को बारेमा"
@@ -4258,33 +4257,34 @@ msgstr ""
 msgid "false"
 msgstr "असत्य"
 
-#: ../src/generic/datavgen.cpp:6839
+#: ../src/generic/datavgen.cpp:6855
 #, c-format
 msgid "Row %i"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6929
+#: ../src/generic/datavgen.cpp:6945
 msgid "Collapse"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6932
+#: ../src/generic/datavgen.cpp:6948
 msgid "Expand"
 msgstr ""
 
-#: ../src/generic/datavgen.cpp:6951
+#: ../src/generic/datavgen.cpp:6967
 #, fuzzy, c-format
 msgid "%s (%d items)"
 msgstr "%s (अथवा %s)"
 
-#: ../src/generic/datavgen.cpp:7002
+#: ../src/generic/datavgen.cpp:7018
 #, fuzzy, c-format
 msgid "Column %u"
 msgstr "महल थप"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7071 ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087
+#: ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4295,7 +4295,8 @@ msgid "Left"
 msgstr "देब्रे"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7074 ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090
+#: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -4373,7 +4374,7 @@ msgstr ""
 "यदि तपाइसित यो उडुस सित सम्बन्धित कुनै थप जानकारी छ भने \n"
 "खबर दिनुहोस्, कृपया यसलाई यहाँ प्रविष्टी गरेमा यहाँ जोडिने छ:"
 
-#: ../src/generic/dcpsg.cpp:1634
+#: ../src/generic/dcpsg.cpp:1628
 msgid "Cannot open file for PostScript printing!"
 msgstr "PostScript प्रिन्टिङ गर्न फाइल खोल्न सकिँदैन ।"
 
@@ -4390,7 +4391,7 @@ msgid "Home directory"
 msgstr "गृह घर्रा"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:783
+#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:784
 msgid "Desktop"
 msgstr "डेस्कटप"
 
@@ -4715,43 +4716,43 @@ msgstr "वरणाकृतिको चयन यकिन गर्न क�
 msgid "Choose font"
 msgstr "वरणाकृति छान्नु होस्"
 
-#: ../src/generic/grid.cpp:6548
+#: ../src/generic/grid.cpp:6222
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
 
-#: ../src/generic/helpext.cpp:265
+#: ../src/generic/helpext.cpp:266
 #, c-format
 msgid "Help directory \"%s\" not found."
 msgstr "सहयोग घर्रा \"%s\" पाइ एन ।"
 
-#: ../src/generic/helpext.cpp:273
+#: ../src/generic/helpext.cpp:274
 #, c-format
 msgid "Help file \"%s\" not found."
 msgstr "सहयोग फाइल \"%s\" पाइ एन ।"
 
-#: ../src/generic/helpext.cpp:292
+#: ../src/generic/helpext.cpp:293
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr "लाइन %lu मा (नक्सा फाइल \"%s\" ) नमिल्दो लेखाइ छ, फड्को मारेर जाउ"
 
-#: ../src/generic/helpext.cpp:300
+#: ../src/generic/helpext.cpp:301
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "फाइल \"%s\" मा वैध रङ्गिन नक्सा पाइ एन ।"
 
-#: ../src/generic/helpext.cpp:443
+#: ../src/generic/helpext.cpp:444
 msgid "No entries found."
 msgstr "कुनै प्रविष्टि पाइ एन"
 
-#: ../src/generic/helpext.cpp:452 ../src/generic/helpext.cpp:453
+#: ../src/generic/helpext.cpp:453 ../src/generic/helpext.cpp:454
 msgid "Help Index"
 msgstr "सहयोग अनुक्रमणिका"
 
-#: ../src/generic/helpext.cpp:456
+#: ../src/generic/helpext.cpp:457
 msgid "Relevant entries:"
 msgstr "सन्दर्भित प्रविष्टि:"
 
-#: ../src/generic/helpext.cpp:457
+#: ../src/generic/helpext.cpp:458
 msgid "Entries found"
 msgstr "प्रविष्टि पाइयो"
 
@@ -4778,8 +4779,7 @@ msgstr "%s चेतावनी"
 msgid "%s Information"
 msgstr "%s सूचना"
 
-#: ../src/generic/logg.cpp:236 ../src/osx/menu_osx.cpp:510
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/generic/logg.cpp:236
 msgid "Application"
 msgstr "अनुप्रयोग"
 
@@ -4842,16 +4842,16 @@ msgstr "सूचना"
 msgid "%s Preferences"
 msgstr " %s प्राथमिकताहरू "
 
-#: ../src/generic/printps.cpp:142
+#: ../src/generic/printps.cpp:143
 msgid "Printing..."
 msgstr "छाप्ने काम दुदै च.."
 
-#: ../src/generic/printps.cpp:159 ../src/gtk/print.cpp:1153
-#: ../src/msw/printwin.cpp:184
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1154
+#: ../src/msw/printwin.cpp:185
 msgid "Could not start printing."
 msgstr "प्रिन्टिङ सुरु गर्न सकिएन"
 
-#: ../src/generic/printps.cpp:182
+#: ../src/generic/printps.cpp:183
 #, c-format
 msgid "Printing page %d..."
 msgstr "पृष्ट %d.. छापिँदै छ ।"
@@ -5031,14 +5031,14 @@ msgstr "< &पछाडि"
 msgid "translator-credits"
 msgstr "अणुवादकन-श्रेय"
 
-#: ../src/gtk/app.cpp:391
+#: ../src/gtk/app.cpp:456
 msgid ""
 "WARNING: using XIM input method is unsupported and may result in problems "
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
 
-#: ../src/gtk/app.cpp:474
+#: ../src/gtk/app.cpp:539
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "GTK+ लाई सुरुवात गर्न सकिएन, के दृश्यक त राम्ररी मिलाएको छ ?"
 
@@ -5093,15 +5093,15 @@ msgstr ""
 msgid "MDI child"
 msgstr "MDI शिशु"
 
-#: ../src/gtk/print.cpp:211
+#: ../src/gtk/print.cpp:212
 msgid "Custom size"
 msgstr "चल्तीको आकार"
 
-#: ../src/gtk/print.cpp:725
+#: ../src/gtk/print.cpp:726
 msgid "Error while printing: "
 msgstr "प्रिन्टिङ गर्दा गल्ती भयो : "
 
-#: ../src/gtk/print.cpp:847
+#: ../src/gtk/print.cpp:848
 msgid "Page Setup"
 msgstr "पृष्ट मिलाउ"
 
@@ -5834,12 +5834,12 @@ msgid "(error %d: %s)"
 msgstr " (गल्ती %ld: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
-#: ../src/msw/imaglist.cpp:202 ../src/msw/imaglist.cpp:224
-#: ../src/msw/imaglist.cpp:249
+#: ../src/msw/imaglist.cpp:302 ../src/msw/imaglist.cpp:322
+#: ../src/msw/imaglist.cpp:347
 msgid "Couldn't add an image to the image list."
 msgstr "तस्विर सुचीमा तस्विर थप्न सकिएन"
 
-#: ../src/msw/enhmeta.cpp:94
+#: ../src/msw/enhmeta.cpp:95
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
 msgstr "फाइल \"%s\" बाट metafile तस्विर वहन गर्न सकिएन "
@@ -5859,7 +5859,7 @@ msgstr "फाइल पाटी गल्ती कोड %0lx ले अस�
 msgid "Font file \"%s\" couldn't be loaded"
 msgstr "फाइल वहन गर्न सकिएन ।"
 
-#: ../src/msw/fontdlg.cpp:231
+#: ../src/msw/fontdlg.cpp:232
 #, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "गल्ती कोड %0lx ले गर्दा साझा पातो असफल भयो ।"
@@ -5921,7 +5921,7 @@ msgstr ""
 msgid "Failed to initialize MS HTML Help."
 msgstr "MS HTML सहयोग सुरु गर्न सकिएन ।"
 
-#: ../src/msw/iniconf.cpp:455
+#: ../src/msw/iniconf.cpp:459
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "INI फाइल '%s' लाई मेटाउन सकिँदैन ।"
@@ -6366,7 +6366,7 @@ msgid "Check to make the font italic."
 msgstr "वरणाकृति डल्केको बनाउने हो भने टिक लगाउ"
 
 #. TRANSLATORS: Label of underlined font
-#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:600
+#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:601
 #: ../src/richtext/richtextfontpage.cpp:359
 msgid "Underlined"
 msgstr "अधोरेखाङ्कित"
@@ -6465,35 +6465,60 @@ msgid ""
 "\"."
 msgstr ""
 
-#: ../src/osx/menu_osx.cpp:493
+#: ../src/osx/menu_osx.cpp:491
+#, c-format
+msgctxt "macOS menu item"
+msgid "About %s"
+msgstr "%s को बारेमा"
+
+#: ../src/osx/menu_osx.cpp:494
+msgctxt "macOS menu item"
 msgid "About..."
 msgstr "बारेमा"
 
-#: ../src/osx/menu_osx.cpp:501
+#: ../src/osx/menu_osx.cpp:502
+msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "प्राथमिकताहरू.."
 
-#: ../src/osx/menu_osx.cpp:505
+#: ../src/osx/menu_osx.cpp:507
+msgctxt "macOS menu item"
 msgid "Services"
 msgstr "सेवा"
 
-#: ../src/osx/menu_osx.cpp:510
+#: ../src/osx/menu_osx.cpp:514
 #, c-format
+msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "%s लुकाउ "
 
-#: ../src/osx/menu_osx.cpp:512
+#: ../src/osx/menu_osx.cpp:517
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Hide Application"
+msgstr "अनुप्रयोग"
+
+#: ../src/osx/menu_osx.cpp:520
+msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "अरूलाई पनि लुकाउ "
 
-#: ../src/osx/menu_osx.cpp:513
+#: ../src/osx/menu_osx.cpp:522
+msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "सबै देखाउ "
 
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/osx/menu_osx.cpp:528
 #, c-format
+msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "%s लाई त्यागि देउ "
+
+#: ../src/osx/menu_osx.cpp:531
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Quit Application"
+msgstr "अनुप्रयोग"
 
 #: ../src/osx/webview_webkit.mm:285
 #, fuzzy
@@ -6506,392 +6531,392 @@ msgid "Print operation could not be initialized"
 msgstr "महलको बयान सुरु भएन"
 
 #. TRANSLATORS: Label of font point size
-#: ../src/propgrid/advprops.cpp:572
+#: ../src/propgrid/advprops.cpp:573
 msgid "Point Size"
 msgstr "थोप्लोको आकार"
 
 #. TRANSLATORS: Label of font face name
-#: ../src/propgrid/advprops.cpp:582
+#: ../src/propgrid/advprops.cpp:583
 msgid "Face Name"
 msgstr "अनुहारको नाम"
 
 #. TRANSLATORS: Label of font style
-#: ../src/propgrid/advprops.cpp:590 ../src/richtext/richtextformatdlg.cpp:332
+#: ../src/propgrid/advprops.cpp:591 ../src/richtext/richtextformatdlg.cpp:332
 msgid "Style"
 msgstr "शैली"
 
 #. TRANSLATORS: Label of font weight
-#: ../src/propgrid/advprops.cpp:595
+#: ../src/propgrid/advprops.cpp:596
 msgid "Weight"
 msgstr "भार"
 
 #. TRANSLATORS: Label of font family
-#: ../src/propgrid/advprops.cpp:604
+#: ../src/propgrid/advprops.cpp:605
 msgid "Family"
 msgstr "परिवार"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:773
+#: ../src/propgrid/advprops.cpp:774
 msgid "AppWorkspace"
 msgstr "एपकार्यस्थल"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:774
+#: ../src/propgrid/advprops.cpp:775
 msgid "ActiveBorder"
 msgstr "सक्रिय सिमाना"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:775
+#: ../src/propgrid/advprops.cpp:776
 msgid "ActiveCaption"
 msgstr "सक्रिय शिर्षक"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:776
+#: ../src/propgrid/advprops.cpp:777
 msgid "ButtonFace"
 msgstr "टाँकचेहरा"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:777
+#: ../src/propgrid/advprops.cpp:778
 msgid "ButtonHighlight"
 msgstr "उज्यालोटाक"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:778
+#: ../src/propgrid/advprops.cpp:779
 msgid "ButtonShadow"
 msgstr "विम्वटाँक"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:779
+#: ../src/propgrid/advprops.cpp:780
 msgid "ButtonText"
 msgstr "टाँकपाठ"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:780
+#: ../src/propgrid/advprops.cpp:781
 msgid "CaptionText"
 msgstr "शिर्षकपाठ"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:781
+#: ../src/propgrid/advprops.cpp:782
 msgid "ControlDark"
 msgstr "अध्यारोनियन्त्रण"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:782
+#: ../src/propgrid/advprops.cpp:783
 msgid "ControlLight"
 msgstr "उज्यालोनियन्त्रण"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:784
+#: ../src/propgrid/advprops.cpp:785
 msgid "GrayText"
 msgstr "खैरोपाठ"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:785
+#: ../src/propgrid/advprops.cpp:786
 msgid "Highlight"
 msgstr "प्रकासीकरण"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:786
+#: ../src/propgrid/advprops.cpp:787
 msgid "HighlightText"
 msgstr "प्रकासयुक्त पाठ"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:787
+#: ../src/propgrid/advprops.cpp:788
 msgid "InactiveBorder"
 msgstr "निस्क्रिय सिमाना"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:788
+#: ../src/propgrid/advprops.cpp:789
 msgid "InactiveCaption"
 msgstr "निस्क्रियशिर्षक"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:789
+#: ../src/propgrid/advprops.cpp:790
 msgid "InactiveCaptionText"
 msgstr "निस्क्रियशिर्षकपाठ"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:790
+#: ../src/propgrid/advprops.cpp:791
 msgid "Menu"
 msgstr "मेनु"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:791
+#: ../src/propgrid/advprops.cpp:792
 msgid "Scrollbar"
 msgstr "घिसार्नेपट्टी"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:792
+#: ../src/propgrid/advprops.cpp:793
 msgid "Tooltip"
 msgstr "औजारपट्टी"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:793
+#: ../src/propgrid/advprops.cpp:794
 msgid "TooltipText"
 msgstr "औजारपट्टीपाठ"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:794
+#: ../src/propgrid/advprops.cpp:795
 msgid "Window"
 msgstr "सन्झ्याल"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:795
+#: ../src/propgrid/advprops.cpp:796
 msgid "WindowFrame"
 msgstr "विन्डोफ्रेम"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:796
+#: ../src/propgrid/advprops.cpp:797
 msgid "WindowText"
 msgstr "विन्डोपाठ"
 
 #. TRANSLATORS: Custom colour choice entry
-#: ../src/propgrid/advprops.cpp:797 ../src/propgrid/advprops.cpp:1475
-#: ../src/propgrid/advprops.cpp:1518
+#: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
+#: ../src/propgrid/advprops.cpp:1519
 msgid "Custom"
 msgstr "प्रचलित"
 
-#: ../src/propgrid/advprops.cpp:1500
+#: ../src/propgrid/advprops.cpp:1501
 msgid "Black"
 msgstr "कालो"
 
-#: ../src/propgrid/advprops.cpp:1501
+#: ../src/propgrid/advprops.cpp:1502
 msgid "Maroon"
 msgstr "गम्भिर"
 
-#: ../src/propgrid/advprops.cpp:1502
+#: ../src/propgrid/advprops.cpp:1503
 msgid "Navy"
 msgstr "समुन्द्री नीलो"
 
-#: ../src/propgrid/advprops.cpp:1503
+#: ../src/propgrid/advprops.cpp:1504
 msgid "Purple"
 msgstr "बैजनी"
 
-#: ../src/propgrid/advprops.cpp:1504
+#: ../src/propgrid/advprops.cpp:1505
 msgid "Teal"
 msgstr "गाढा नीलो"
 
-#: ../src/propgrid/advprops.cpp:1505
+#: ../src/propgrid/advprops.cpp:1506
 msgid "Gray"
 msgstr "खैरो"
 
-#: ../src/propgrid/advprops.cpp:1506
+#: ../src/propgrid/advprops.cpp:1507
 msgid "Green"
 msgstr "हरियो"
 
-#: ../src/propgrid/advprops.cpp:1507
+#: ../src/propgrid/advprops.cpp:1508
 msgid "Olive"
 msgstr "जैतुन"
 
-#: ../src/propgrid/advprops.cpp:1508
+#: ../src/propgrid/advprops.cpp:1509
 msgid "Brown"
 msgstr "खैरो"
 
-#: ../src/propgrid/advprops.cpp:1509
+#: ../src/propgrid/advprops.cpp:1510
 msgid "Blue"
 msgstr "नीलो"
 
-#: ../src/propgrid/advprops.cpp:1510
+#: ../src/propgrid/advprops.cpp:1511
 msgid "Fuchsia"
 msgstr "अबिरे"
 
-#: ../src/propgrid/advprops.cpp:1511
+#: ../src/propgrid/advprops.cpp:1512
 msgid "Red"
 msgstr "रातो"
 
-#: ../src/propgrid/advprops.cpp:1512
+#: ../src/propgrid/advprops.cpp:1513
 msgid "Orange"
 msgstr "सुन्तला"
 
-#: ../src/propgrid/advprops.cpp:1513
+#: ../src/propgrid/advprops.cpp:1514
 msgid "Silver"
 msgstr "चाँदी"
 
-#: ../src/propgrid/advprops.cpp:1514
+#: ../src/propgrid/advprops.cpp:1515
 msgid "Lime"
 msgstr "कागती"
 
-#: ../src/propgrid/advprops.cpp:1515
+#: ../src/propgrid/advprops.cpp:1516
 msgid "Aqua"
 msgstr "पानी रङ्ग"
 
-#: ../src/propgrid/advprops.cpp:1516
+#: ../src/propgrid/advprops.cpp:1517
 msgid "Yellow"
 msgstr "पहेँलो"
 
-#: ../src/propgrid/advprops.cpp:1517
+#: ../src/propgrid/advprops.cpp:1518
 msgid "White"
 msgstr "सेतो"
 
-#: ../src/propgrid/advprops.cpp:1653
+#: ../src/propgrid/advprops.cpp:1654
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "निर्धारित"
 
-#: ../src/propgrid/advprops.cpp:1654
+#: ../src/propgrid/advprops.cpp:1655
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "वाण"
 
-#: ../src/propgrid/advprops.cpp:1655
+#: ../src/propgrid/advprops.cpp:1656
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "दायाँ वाण"
 
-#: ../src/propgrid/advprops.cpp:1656
+#: ../src/propgrid/advprops.cpp:1657
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "रित्तो"
 
-#: ../src/propgrid/advprops.cpp:1657
+#: ../src/propgrid/advprops.cpp:1658
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Bullseye"
 
-#: ../src/propgrid/advprops.cpp:1658
+#: ../src/propgrid/advprops.cpp:1659
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "वर्ण"
 
-#: ../src/propgrid/advprops.cpp:1659
+#: ../src/propgrid/advprops.cpp:1660
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "क्रस"
 
-#: ../src/propgrid/advprops.cpp:1660
+#: ../src/propgrid/advprops.cpp:1661
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "हात"
 
-#: ../src/propgrid/advprops.cpp:1661
+#: ../src/propgrid/advprops.cpp:1662
 #, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "i-बलो"
 
-#: ../src/propgrid/advprops.cpp:1662
+#: ../src/propgrid/advprops.cpp:1663
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "वाञाँ टाँक"
 
-#: ../src/propgrid/advprops.cpp:1663
+#: ../src/propgrid/advprops.cpp:1664
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "अभिबर्धक"
 
-#: ../src/propgrid/advprops.cpp:1664
+#: ../src/propgrid/advprops.cpp:1665
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "मध्य टाँक"
 
-#: ../src/propgrid/advprops.cpp:1665
+#: ../src/propgrid/advprops.cpp:1666
 #, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "प्रविष्टि हिन "
 
-#: ../src/propgrid/advprops.cpp:1666
+#: ../src/propgrid/advprops.cpp:1667
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "पोत्ने बुरुस"
 
-#: ../src/propgrid/advprops.cpp:1667
+#: ../src/propgrid/advprops.cpp:1668
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "पेन्सिल"
 
-#: ../src/propgrid/advprops.cpp:1668
+#: ../src/propgrid/advprops.cpp:1669
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "थोप्लो वायाँ"
 
-#: ../src/propgrid/advprops.cpp:1669
+#: ../src/propgrid/advprops.cpp:1670
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "थोप्लो दाया"
 
-#: ../src/propgrid/advprops.cpp:1670
+#: ../src/propgrid/advprops.cpp:1671
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "जिज्ञासा वाण"
 
-#: ../src/propgrid/advprops.cpp:1671
+#: ../src/propgrid/advprops.cpp:1672
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "दायाँ टाँक"
 
-#: ../src/propgrid/advprops.cpp:1672
+#: ../src/propgrid/advprops.cpp:1673
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "पूउ-पद तर्फ आकारकरण"
 
-#: ../src/propgrid/advprops.cpp:1673
+#: ../src/propgrid/advprops.cpp:1674
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "उ-द तर्फ आकारकरण"
 
-#: ../src/propgrid/advprops.cpp:1674
+#: ../src/propgrid/advprops.cpp:1675
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "उप-दपू तर्फ आकारकरण"
 
-#: ../src/propgrid/advprops.cpp:1675
+#: ../src/propgrid/advprops.cpp:1676
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "पूप तर्फ आकारकरण"
 
-#: ../src/propgrid/advprops.cpp:1676
+#: ../src/propgrid/advprops.cpp:1677
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "आकारकरण"
 
-#: ../src/propgrid/advprops.cpp:1677
+#: ../src/propgrid/advprops.cpp:1678
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Spraycan"
 
-#: ../src/propgrid/advprops.cpp:1678
+#: ../src/propgrid/advprops.cpp:1679
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "प्रतिक्षा"
 
-#: ../src/propgrid/advprops.cpp:1679
+#: ../src/propgrid/advprops.cpp:1680
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "घडी"
 
-#: ../src/propgrid/advprops.cpp:1680
+#: ../src/propgrid/advprops.cpp:1681
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "प्रतिक्षा वाण"
 
-#: ../src/propgrid/advprops.cpp:2052
+#: ../src/propgrid/advprops.cpp:2053
 msgid "Make a selection:"
 msgstr "चयन गर"
 
@@ -6903,39 +6928,39 @@ msgstr "गुण"
 msgid "Value"
 msgstr "मान"
 
-#: ../src/propgrid/manager.cpp:1708
+#: ../src/propgrid/manager.cpp:1701
 msgid "Categorized Mode"
 msgstr "निर्दिष्ट मुद्रा"
 
-#: ../src/propgrid/manager.cpp:1734
+#: ../src/propgrid/manager.cpp:1727
 msgid "Alphabetic Mode"
 msgstr "वर्णीय मुद्रा"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/propgrid/propgrid.cpp:191
+#: ../src/propgrid/propgrid.cpp:197
 msgid "False"
 msgstr "असत्य"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/propgrid/propgrid.cpp:193
+#: ../src/propgrid/propgrid.cpp:199
 msgid "True"
 msgstr "True"
 
 #. TRANSLATORS: Text  displayed for unspecified value
-#: ../src/propgrid/propgrid.cpp:393
+#: ../src/propgrid/propgrid.cpp:381
 msgid "Unspecified"
 msgstr "नतोकिएको"
 
 #. TRANSLATORS: Caption of message box displaying any property error
-#: ../src/propgrid/propgrid.cpp:3171 ../src/propgrid/propgrid.cpp:3308
+#: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3284
 msgid "Property Error"
 msgstr "गुणको गल्ती"
 
-#: ../src/propgrid/propgrid.cpp:3285
+#: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr "तपाइले गल्ती मान राख्नु भयो । सम्पादनलाई रद्द गर्न ESC दबाउनु होस् ।"
 
-#: ../src/propgrid/propgrid.cpp:6688
+#: ../src/propgrid/propgrid.cpp:6650
 #, c-format
 msgid "Error in resource: %s"
 msgstr "श्रोतमा गल्ती: : %s"
@@ -9158,11 +9183,11 @@ msgstr "बाल प्रक्रिया लगानी/प्रतिफ
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr "न टालिएको पाइप जडान गर्न सकिएन, कार्यक्रम निष्क्रिय हुन सक्छ ।"
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1028
 msgid "Cannot get the hostname"
 msgstr "सत्कार कर्ताको नाम पाउन सकिँदैन ।"
 
-#: ../src/unix/utilsunx.cpp:1060
+#: ../src/unix/utilsunx.cpp:1064
 msgid "Cannot get the official hostname"
 msgstr "अतिरिक्त सत्कार कर्ताको नाम पाउन सकिँदैन ।"
 

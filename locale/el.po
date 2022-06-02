@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-27 19:29+0200\n"
+"POT-Creation-Date: 2022-06-02 08:37+0200\n"
 "PO-Revision-Date: 2005-02-16 09:03+0200\n"
 "Last-Translator: InterZone <info@interzone.gr>\n"
 "Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>, Nassos Yiannopoulos "
@@ -12,11 +12,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../include/wx/defs.h:2687
+#: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
 msgstr "Όλα τα αρχεία (*.*)|*.*"
 
-#: ../include/wx/defs.h:2690
+#: ../include/wx/defs.h:2708
 msgid "All files (*)|*"
 msgstr "Όλα τα αρχεία (*)|*"
 
@@ -46,14 +46,14 @@ msgid "No"
 msgstr "Όχι"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:184
-#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/msgdlg.cpp:743 ../src/richtext/richtextstyledlg.cpp:293
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:449
+#: ../src/msw/msgdlg.cpp:744 ../src/richtext/richtextstyledlg.cpp:293
 msgid "OK"
 msgstr "OK"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:151
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
-#: ../src/msw/msgdlg.cpp:448 ../src/msw/progdlg.cpp:940
+#: ../src/msw/msgdlg.cpp:449 ../src/msw/progdlg.cpp:940
 #: ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
 msgstr "Ακυρο"
@@ -120,21 +120,21 @@ msgstr "&Λεπτομέρειες"
 msgid "&Hide details"
 msgstr "&Λεπτομέρειες"
 
-#: ../include/wx/richtext/richtextbuffer.h:3863
+#: ../include/wx/richtext/richtextbuffer.h:3865
 #, fuzzy
 msgid "&Box"
 msgstr "&Έντονο"
 
-#: ../include/wx/richtext/richtextbuffer.h:5007
+#: ../include/wx/richtext/richtextbuffer.h:5009
 msgid "&Picture"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:5957
+#: ../include/wx/richtext/richtextbuffer.h:5959
 #, fuzzy
 msgid "&Cell"
 msgstr "&Ακυρο"
 
-#: ../include/wx/richtext/richtextbuffer.h:6066
+#: ../include/wx/richtext/richtextbuffer.h:6068
 msgid "&Table"
 msgstr ""
 
@@ -143,7 +143,7 @@ msgstr ""
 msgid "Object Properties"
 msgstr "&Ιδιότητες"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:531
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
 #, fuzzy
 msgid "Printing"
@@ -792,21 +792,21 @@ msgstr "εμφάνιση αυτού του μηνύματος βοηθείας"
 msgid "generate verbose log messages"
 msgstr "δημιουργία αναλυτικών (verbose) μηνυμάτων καταγραφής (log)"
 
-#: ../src/common/appcmn.cpp:250
+#: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
 msgstr "καθορίστε το θέμα που θα χρησιμοποιηθεί"
 
-#: ../src/common/appcmn.cpp:264
+#: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr ""
 "διευκρινήστε τον τρόπο απεικόνισης που θα χρησιμοποιηθεί (π.χ. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:286
+#: ../src/common/appcmn.cpp:279
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Το θέμα '%s' δεν υποστηρίζεται."
 
-#: ../src/common/appcmn.cpp:303
+#: ../src/common/appcmn.cpp:296
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr ""
@@ -947,12 +947,12 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' περιέχει επιπλέον '..', αγνοήθηκαν."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1400
+#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1416
 msgid "checked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1402
+#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1418
 msgid "unchecked"
 msgstr ""
 
@@ -962,103 +962,103 @@ msgstr ""
 msgid "undetermined"
 msgstr "υπογεγραμμένο"
 
-#: ../src/common/datetimefmt.cpp:1844
+#: ../src/common/datetimefmt.cpp:1845
 msgid "today"
 msgstr "σήμερα"
 
-#: ../src/common/datetimefmt.cpp:1845
+#: ../src/common/datetimefmt.cpp:1846
 msgid "yesterday"
 msgstr "χθες"
 
-#: ../src/common/datetimefmt.cpp:1846
+#: ../src/common/datetimefmt.cpp:1847
 msgid "tomorrow"
 msgstr "αύριο"
 
-#: ../src/common/datetimefmt.cpp:2040
+#: ../src/common/datetimefmt.cpp:2041
 msgid "first"
 msgstr "πρώτο"
 
-#: ../src/common/datetimefmt.cpp:2041
+#: ../src/common/datetimefmt.cpp:2042
 msgid "second"
 msgstr "δεύτερο"
 
-#: ../src/common/datetimefmt.cpp:2042
+#: ../src/common/datetimefmt.cpp:2043
 msgid "third"
 msgstr "τρίτο"
 
-#: ../src/common/datetimefmt.cpp:2043
+#: ../src/common/datetimefmt.cpp:2044
 msgid "fourth"
 msgstr "τέταρτο"
 
-#: ../src/common/datetimefmt.cpp:2044
+#: ../src/common/datetimefmt.cpp:2045
 msgid "fifth"
 msgstr "πέμπτο"
 
-#: ../src/common/datetimefmt.cpp:2045
+#: ../src/common/datetimefmt.cpp:2046
 msgid "sixth"
 msgstr "έκτο"
 
-#: ../src/common/datetimefmt.cpp:2046
+#: ../src/common/datetimefmt.cpp:2047
 msgid "seventh"
 msgstr "έβδομο"
 
-#: ../src/common/datetimefmt.cpp:2047
+#: ../src/common/datetimefmt.cpp:2048
 msgid "eighth"
 msgstr "όγδοο"
 
-#: ../src/common/datetimefmt.cpp:2048
+#: ../src/common/datetimefmt.cpp:2049
 msgid "ninth"
 msgstr "ένατο"
 
-#: ../src/common/datetimefmt.cpp:2049
+#: ../src/common/datetimefmt.cpp:2050
 msgid "tenth"
 msgstr "δέκατο"
 
-#: ../src/common/datetimefmt.cpp:2050
+#: ../src/common/datetimefmt.cpp:2051
 msgid "eleventh"
 msgstr "έβδομο"
 
-#: ../src/common/datetimefmt.cpp:2051
+#: ../src/common/datetimefmt.cpp:2052
 msgid "twelfth"
 msgstr "δωδέκατο"
 
-#: ../src/common/datetimefmt.cpp:2052
+#: ../src/common/datetimefmt.cpp:2053
 msgid "thirteenth"
 msgstr "δέκατο τρίτο"
 
-#: ../src/common/datetimefmt.cpp:2053
+#: ../src/common/datetimefmt.cpp:2054
 msgid "fourteenth"
 msgstr "δέκατο τέταρτο"
 
-#: ../src/common/datetimefmt.cpp:2054
+#: ../src/common/datetimefmt.cpp:2055
 msgid "fifteenth"
 msgstr "δέκατο-πέμπτο"
 
-#: ../src/common/datetimefmt.cpp:2055
+#: ../src/common/datetimefmt.cpp:2056
 msgid "sixteenth"
 msgstr "δέκατο έκτο"
 
-#: ../src/common/datetimefmt.cpp:2056
+#: ../src/common/datetimefmt.cpp:2057
 msgid "seventeenth"
 msgstr "δέκατο-έβδομο"
 
-#: ../src/common/datetimefmt.cpp:2057
+#: ../src/common/datetimefmt.cpp:2058
 msgid "eighteenth"
 msgstr "δέκατο όγδοο"
 
-#: ../src/common/datetimefmt.cpp:2058
+#: ../src/common/datetimefmt.cpp:2059
 msgid "nineteenth"
 msgstr "δέκατο ένατο"
 
-#: ../src/common/datetimefmt.cpp:2059
+#: ../src/common/datetimefmt.cpp:2060
 msgid "twentieth"
 msgstr "εικοστό"
 
-#: ../src/common/datetimefmt.cpp:2217
+#: ../src/common/datetimefmt.cpp:2218
 msgid "noon"
 msgstr "μεσημέρι"
 
-#: ../src/common/datetimefmt.cpp:2218
+#: ../src/common/datetimefmt.cpp:2219
 msgid "midnight"
 msgstr "μεσάνυκτα"
 
@@ -2492,14 +2492,14 @@ msgstr "TIFF: Λάθος κατά την αποθήκευση εικόνας."
 msgid "TIFF: Error writing image."
 msgstr "TIFF: Λάθος κατα την εγγραφή εικόνας."
 
-#: ../src/common/init.cpp:193
+#: ../src/common/init.cpp:192
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
 "ignored."
 msgstr ""
 
-#: ../src/common/init.cpp:284
+#: ../src/common/init.cpp:283
 msgid "Initialization failed in post init, aborting."
 msgstr ""
 
@@ -3152,116 +3152,116 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:254
+#: ../src/common/prntbase.cpp:255
 msgid "Generic PostScript"
 msgstr "Γενικό PostScript"
 
-#: ../src/common/prntbase.cpp:268
+#: ../src/common/prntbase.cpp:269
 msgid "Ready"
 msgstr "Έτοιμο"
 
-#: ../src/common/prntbase.cpp:343
+#: ../src/common/prntbase.cpp:344
 msgid "Printing Error"
 msgstr "Σφάλμα Εκτύπωσης"
 
-#: ../src/common/prntbase.cpp:422 ../src/common/prntbase.cpp:1567
+#: ../src/common/prntbase.cpp:423 ../src/common/prntbase.cpp:1575
 #: ../src/generic/prntdlgg.cpp:136 ../src/generic/prntdlgg.cpp:150
-#: ../src/gtk/print.cpp:621 ../src/gtk/print.cpp:639
+#: ../src/gtk/print.cpp:622 ../src/gtk/print.cpp:640
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: ../src/common/prntbase.cpp:480 ../src/generic/prntdlgg.cpp:819
+#: ../src/common/prntbase.cpp:481 ../src/generic/prntdlgg.cpp:819
 msgid "Page setup"
 msgstr "Ρύθμιση(setup) Σελίδας"
 
-#: ../src/common/prntbase.cpp:534
+#: ../src/common/prntbase.cpp:535
 #, fuzzy
 msgid "Please wait while printing..."
 msgstr "Παρακαλώ περιμένετε όσο διαρκεί η εκτύπωση\n"
 
-#: ../src/common/prntbase.cpp:538
+#: ../src/common/prntbase.cpp:539
 msgid "Document:"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:542
 msgid "Progress:"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:542
+#: ../src/common/prntbase.cpp:543
 msgid "Preparing"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:561
+#: ../src/common/prntbase.cpp:562
 #, fuzzy, c-format
 msgid "Printing page %d"
 msgstr "Γίνεται εκτύπωση σελίδας %d..."
 
-#: ../src/common/prntbase.cpp:566
+#: ../src/common/prntbase.cpp:567
 #, fuzzy, c-format
 msgid "Printing page %d of %d"
 msgstr "Γίνεται εκτύπωση σελίδας %d..."
 
-#: ../src/common/prntbase.cpp:569
+#: ../src/common/prntbase.cpp:570
 #, fuzzy, c-format
 msgid " (copy %d of %d)"
 msgstr "Σελίδα %d από %d"
 
-#: ../src/common/prntbase.cpp:608
+#: ../src/common/prntbase.cpp:609
 msgid "Printing "
 msgstr "Γίνεται εκτύπωση του "
 
-#: ../src/common/prntbase.cpp:1574
+#: ../src/common/prntbase.cpp:1582
 #, fuzzy
 msgid "First page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/common/prntbase.cpp:1579 ../src/html/helpwnd.cpp:661
+#: ../src/common/prntbase.cpp:1587 ../src/html/helpwnd.cpp:661
 msgid "Previous page"
 msgstr "Προηγούμενη σελίδα"
 
-#: ../src/common/prntbase.cpp:1593 ../src/html/helpwnd.cpp:662
+#: ../src/common/prntbase.cpp:1601 ../src/html/helpwnd.cpp:662
 msgid "Next page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1606
 #, fuzzy
 msgid "Last page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/common/prntbase.cpp:1606 ../src/common/stockitem.cpp:216
+#: ../src/common/prntbase.cpp:1614 ../src/common/stockitem.cpp:216
 #, fuzzy
 msgid "Zoom Out"
 msgstr "&Ελάττωση ζουμ"
 
-#: ../src/common/prntbase.cpp:1620 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1628 ../src/common/stockitem.cpp:215
 #, fuzzy
 msgid "Zoom In"
 msgstr "&Αύξηση ζουμ"
 
-#: ../src/common/prntbase.cpp:1626 ../src/common/stockitem.cpp:154
+#: ../src/common/prntbase.cpp:1634 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
 msgstr "&Κλείσιμο"
 
-#: ../src/common/prntbase.cpp:2037
+#: ../src/common/prntbase.cpp:2060
 msgid "Could not start document preview."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της προεπισκόπησης εγγράφου."
 
-#: ../src/common/prntbase.cpp:2037 ../src/common/prntbase.cpp:2079
-#: ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2060 ../src/common/prntbase.cpp:2102
+#: ../src/common/prntbase.cpp:2110
 msgid "Print Preview Failure"
 msgstr "Αποτυχία Προεπισκόπησης Εκτύπωσης"
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2102 ../src/common/prntbase.cpp:2110
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Συγγνώμη, δεν υπάρχει αρκετή μνήμη για την δημιουργία προεπισκόπησης."
 
-#: ../src/common/prntbase.cpp:2094
+#: ../src/common/prntbase.cpp:2117
 #, c-format
 msgid "Page %d of %d"
 msgstr "Σελίδα %d από %d"
 
-#: ../src/common/prntbase.cpp:2096
+#: ../src/common/prntbase.cpp:2119
 #, c-format
 msgid "Page %d"
 msgstr "Σελίδα %d"
@@ -3311,11 +3311,11 @@ msgstr "Η εξαγωγή του '%s' στο '%s' απέτυχε"
 msgid "Failed to monitor I/O channels"
 msgstr ""
 
-#: ../src/common/sizer.cpp:3021 ../src/common/stockitem.cpp:196
+#: ../src/common/sizer.cpp:3023 ../src/common/stockitem.cpp:196
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: ../src/common/sizer.cpp:3023
+#: ../src/common/sizer.cpp:3025
 msgid "Don't Save"
 msgstr ""
 
@@ -3636,7 +3636,7 @@ msgstr "&Νέο"
 msgid "New"
 msgstr "&Νέο"
 
-#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:436
 msgid "&No"
 msgstr "&Όχι"
 
@@ -3862,7 +3862,7 @@ msgstr "&Επάνω"
 msgid "Up"
 msgstr "Επάνω"
 
-#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:436
 msgid "&Yes"
 msgstr "&Ναι"
 
@@ -4389,7 +4389,6 @@ msgid "Version "
 msgstr "Δικαιώματα"
 
 #: ../src/generic/aboutdlgg.cpp:137 ../src/msw/aboutdlg.cpp:61
-#: ../src/osx/menu_osx.cpp:491
 #, fuzzy, c-format
 msgid "About %s"
 msgstr "&Περί..."
@@ -4472,33 +4471,34 @@ msgstr ""
 msgid "false"
 msgstr "Αρχείο"
 
-#: ../src/generic/datavgen.cpp:6839
+#: ../src/generic/datavgen.cpp:6855
 #, c-format
 msgid "Row %i"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6929
+#: ../src/generic/datavgen.cpp:6945
 msgid "Collapse"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6932
+#: ../src/generic/datavgen.cpp:6948
 msgid "Expand"
 msgstr ""
 
-#: ../src/generic/datavgen.cpp:6951
+#: ../src/generic/datavgen.cpp:6967
 #, fuzzy, c-format
 msgid "%s (%d items)"
 msgstr "%s (ή %s)"
 
-#: ../src/generic/datavgen.cpp:7002
+#: ../src/generic/datavgen.cpp:7018
 #, c-format
 msgid "Column %u"
 msgstr ""
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7071 ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087
+#: ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4509,7 +4509,8 @@ msgid "Left"
 msgstr ""
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7074 ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090
+#: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 #, fuzzy
@@ -4583,7 +4584,7 @@ msgid ""
 "report, please enter it here and it will be joined to it:"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1634
+#: ../src/generic/dcpsg.cpp:1628
 msgid "Cannot open file for PostScript printing!"
 msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου για εκτύπωση PostScript!"
 
@@ -4600,7 +4601,7 @@ msgid "Home directory"
 msgstr "Αρχικός κατάλογος"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:783
+#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:784
 msgid "Desktop"
 msgstr ""
 
@@ -4927,43 +4928,43 @@ msgstr "Κάνετε κλικ για να επιβεβαιώσετε την επ
 msgid "Choose font"
 msgstr "Επιλέξτε γραμματοσειρά"
 
-#: ../src/generic/grid.cpp:6548
+#: ../src/generic/grid.cpp:6222
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
 
-#: ../src/generic/helpext.cpp:265
+#: ../src/generic/helpext.cpp:266
 #, c-format
 msgid "Help directory \"%s\" not found."
 msgstr ""
 
-#: ../src/generic/helpext.cpp:273
+#: ../src/generic/helpext.cpp:274
 #, fuzzy, c-format
 msgid "Help file \"%s\" not found."
 msgstr "αρχείο καταλόγου για την περιοχή (domain) '%s' δεν βρέθηκε."
 
-#: ../src/generic/helpext.cpp:292
+#: ../src/generic/helpext.cpp:293
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr ""
 
-#: ../src/generic/helpext.cpp:300
+#: ../src/generic/helpext.cpp:301
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
 
-#: ../src/generic/helpext.cpp:443
+#: ../src/generic/helpext.cpp:444
 msgid "No entries found."
 msgstr "Δεν βρέθηκαν εισαγωγές(entries)."
 
-#: ../src/generic/helpext.cpp:452 ../src/generic/helpext.cpp:453
+#: ../src/generic/helpext.cpp:453 ../src/generic/helpext.cpp:454
 msgid "Help Index"
 msgstr "Ευρετήριο Βοηθείας"
 
-#: ../src/generic/helpext.cpp:456
+#: ../src/generic/helpext.cpp:457
 msgid "Relevant entries:"
 msgstr "Σχετικές εγγραφές:"
 
-#: ../src/generic/helpext.cpp:457
+#: ../src/generic/helpext.cpp:458
 msgid "Entries found"
 msgstr "Εισαγωγές(entries) βρέθηκαν"
 
@@ -4991,8 +4992,7 @@ msgstr "%s Προειδοποίηση"
 msgid "%s Information"
 msgstr "%s Πληροφορίες"
 
-#: ../src/generic/logg.cpp:236 ../src/osx/menu_osx.cpp:510
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/generic/logg.cpp:236
 #, fuzzy
 msgid "Application"
 msgstr "Τμήματα"
@@ -5062,16 +5062,16 @@ msgstr "&Όχι"
 msgid "%s Preferences"
 msgstr "&Προτιμήσεις"
 
-#: ../src/generic/printps.cpp:142
+#: ../src/generic/printps.cpp:143
 msgid "Printing..."
 msgstr "Γίνεται εκτύπωση..."
 
-#: ../src/generic/printps.cpp:159 ../src/gtk/print.cpp:1153
-#: ../src/msw/printwin.cpp:184
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1154
+#: ../src/msw/printwin.cpp:185
 msgid "Could not start printing."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/generic/printps.cpp:182
+#: ../src/generic/printps.cpp:183
 #, c-format
 msgid "Printing page %d..."
 msgstr "Γίνεται εκτύπωση σελίδας %d..."
@@ -5253,14 +5253,14 @@ msgstr "< &Πίσω"
 msgid "translator-credits"
 msgstr ""
 
-#: ../src/gtk/app.cpp:391
+#: ../src/gtk/app.cpp:456
 msgid ""
 "WARNING: using XIM input method is unsupported and may result in problems "
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
 
-#: ../src/gtk/app.cpp:474
+#: ../src/gtk/app.cpp:539
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr ""
 
@@ -5315,17 +5315,17 @@ msgstr ""
 msgid "MDI child"
 msgstr "MDI παιδί"
 
-#: ../src/gtk/print.cpp:211
+#: ../src/gtk/print.cpp:212
 #, fuzzy
 msgid "Custom size"
 msgstr "μέγεθος γραμματοσειράς"
 
-#: ../src/gtk/print.cpp:725
+#: ../src/gtk/print.cpp:726
 #, fuzzy
 msgid "Error while printing: "
 msgstr "Σφάλμα κατά την αναμονή στη σημαφόρο"
 
-#: ../src/gtk/print.cpp:847
+#: ../src/gtk/print.cpp:848
 msgid "Page Setup"
 msgstr "Οργάνωση(setup) Σελίδας"
 
@@ -6087,12 +6087,12 @@ msgid "(error %d: %s)"
 msgstr " (σφάλμα %ld: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
-#: ../src/msw/imaglist.cpp:202 ../src/msw/imaglist.cpp:224
-#: ../src/msw/imaglist.cpp:249
+#: ../src/msw/imaglist.cpp:302 ../src/msw/imaglist.cpp:322
+#: ../src/msw/imaglist.cpp:347
 msgid "Couldn't add an image to the image list."
 msgstr "Δεν ήταν δυνατή η προσθήκη μιας εικόνας στην λίστα εικόνων."
 
-#: ../src/msw/enhmeta.cpp:94
+#: ../src/msw/enhmeta.cpp:95
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
 msgstr "Αποτυχία φόρτωσης της μετα-εικόνας από το αρχείο '%s'."
@@ -6114,7 +6114,7 @@ msgstr "Η εκτέλεση της εντολής '%s' απέτυχε με σφ�
 msgid "Font file \"%s\" couldn't be loaded"
 msgstr "Το αρχείο δεν μπόρεσε να φορτωθεί."
 
-#: ../src/msw/fontdlg.cpp:231
+#: ../src/msw/fontdlg.cpp:232
 #, fuzzy, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε με σφάλμα: %ul"
@@ -6179,7 +6179,7 @@ msgstr ""
 msgid "Failed to initialize MS HTML Help."
 msgstr "Αποτυχία στην αρχικοποίηση του MS HTML Help."
 
-#: ../src/msw/iniconf.cpp:455
+#: ../src/msw/iniconf.cpp:459
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Δεν είναι δυνατή η διαγραφή του αρχείου INI '%s'"
@@ -6652,7 +6652,7 @@ msgid "Check to make the font italic."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
 #. TRANSLATORS: Label of underlined font
-#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:600
+#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:601
 #: ../src/richtext/richtextfontpage.cpp:359
 #, fuzzy
 msgid "Underlined"
@@ -6763,38 +6763,63 @@ msgid ""
 "\"."
 msgstr ""
 
-#: ../src/osx/menu_osx.cpp:493
+#: ../src/osx/menu_osx.cpp:491
+#, fuzzy, c-format
+msgctxt "macOS menu item"
+msgid "About %s"
+msgstr "&Περί..."
+
+#: ../src/osx/menu_osx.cpp:494
 #, fuzzy
+msgctxt "macOS menu item"
 msgid "About..."
 msgstr "&Περί"
 
-#: ../src/osx/menu_osx.cpp:501
+#: ../src/osx/menu_osx.cpp:502
 #, fuzzy
+msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "&Προτιμήσεις"
 
-#: ../src/osx/menu_osx.cpp:505
+#: ../src/osx/menu_osx.cpp:507
+msgctxt "macOS menu item"
 msgid "Services"
 msgstr ""
 
-#: ../src/osx/menu_osx.cpp:510
+#: ../src/osx/menu_osx.cpp:514
 #, fuzzy, c-format
+msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "Βοήθεια: %s"
 
-#: ../src/osx/menu_osx.cpp:512
+#: ../src/osx/menu_osx.cpp:517
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Hide Application"
+msgstr "Τμήματα"
+
+#: ../src/osx/menu_osx.cpp:520
+msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr ""
 
-#: ../src/osx/menu_osx.cpp:513
+#: ../src/osx/menu_osx.cpp:522
 #, fuzzy
+msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Εμφάνιση όλων"
 
-#: ../src/osx/menu_osx.cpp:518
+#: ../src/osx/menu_osx.cpp:528
 #, fuzzy, c-format
+msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "Έ&ξοδος"
+
+#: ../src/osx/menu_osx.cpp:531
+#, fuzzy
+msgctxt "macOS menu item"
+msgid "Quit Application"
+msgstr "Τμήματα"
 
 #: ../src/osx/webview_webkit.mm:285
 #, fuzzy
@@ -6807,385 +6832,385 @@ msgid "Print operation could not be initialized"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση απεικόνησης."
 
 #. TRANSLATORS: Label of font point size
-#: ../src/propgrid/advprops.cpp:572
+#: ../src/propgrid/advprops.cpp:573
 #, fuzzy
 msgid "Point Size"
 msgstr "Μέγεθος κουκίδας:"
 
 #. TRANSLATORS: Label of font face name
-#: ../src/propgrid/advprops.cpp:582
+#: ../src/propgrid/advprops.cpp:583
 #, fuzzy
 msgid "Face Name"
 msgstr "ΝέοΌνομα"
 
 #. TRANSLATORS: Label of font style
-#: ../src/propgrid/advprops.cpp:590 ../src/richtext/richtextformatdlg.cpp:332
+#: ../src/propgrid/advprops.cpp:591 ../src/richtext/richtextformatdlg.cpp:332
 #, fuzzy
 msgid "Style"
 msgstr "&Στυλ:"
 
 #. TRANSLATORS: Label of font weight
-#: ../src/propgrid/advprops.cpp:595
+#: ../src/propgrid/advprops.cpp:596
 #, fuzzy
 msgid "Weight"
 msgstr "&Βάρος:"
 
 #. TRANSLATORS: Label of font family
-#: ../src/propgrid/advprops.cpp:604
+#: ../src/propgrid/advprops.cpp:605
 #, fuzzy
 msgid "Family"
 msgstr "Οικογένεια γραμματοσειράς:"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:773
+#: ../src/propgrid/advprops.cpp:774
 msgid "AppWorkspace"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:774
+#: ../src/propgrid/advprops.cpp:775
 #, fuzzy
 msgid "ActiveBorder"
 msgstr "Μοντέρνο"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:775
+#: ../src/propgrid/advprops.cpp:776
 msgid "ActiveCaption"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:776
+#: ../src/propgrid/advprops.cpp:777
 msgid "ButtonFace"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:777
+#: ../src/propgrid/advprops.cpp:778
 msgid "ButtonHighlight"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:778
+#: ../src/propgrid/advprops.cpp:779
 msgid "ButtonShadow"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:779
+#: ../src/propgrid/advprops.cpp:780
 msgid "ButtonText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:780
+#: ../src/propgrid/advprops.cpp:781
 msgid "CaptionText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:781
+#: ../src/propgrid/advprops.cpp:782
 msgid "ControlDark"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:782
+#: ../src/propgrid/advprops.cpp:783
 msgid "ControlLight"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:784
+#: ../src/propgrid/advprops.cpp:785
 msgid "GrayText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:785
+#: ../src/propgrid/advprops.cpp:786
 #, fuzzy
 msgid "Highlight"
 msgstr "απαλό(light)"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:786
+#: ../src/propgrid/advprops.cpp:787
 msgid "HighlightText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:787
+#: ../src/propgrid/advprops.cpp:788
 #, fuzzy
 msgid "InactiveBorder"
 msgstr "Μοντέρνο"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:788
+#: ../src/propgrid/advprops.cpp:789
 msgid "InactiveCaption"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:789
+#: ../src/propgrid/advprops.cpp:790
 msgid "InactiveCaptionText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:790
+#: ../src/propgrid/advprops.cpp:791
 msgid "Menu"
 msgstr "Μενού"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:791
+#: ../src/propgrid/advprops.cpp:792
 msgid "Scrollbar"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:792
+#: ../src/propgrid/advprops.cpp:793
 msgid "Tooltip"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:793
+#: ../src/propgrid/advprops.cpp:794
 msgid "TooltipText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:794
+#: ../src/propgrid/advprops.cpp:795
 #, fuzzy
 msgid "Window"
 msgstr "&Παράθυρο"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:795
+#: ../src/propgrid/advprops.cpp:796
 #, fuzzy
 msgid "WindowFrame"
 msgstr "&Παράθυρο"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:796
+#: ../src/propgrid/advprops.cpp:797
 #, fuzzy
 msgid "WindowText"
 msgstr "&Παράθυρο"
 
 #. TRANSLATORS: Custom colour choice entry
-#: ../src/propgrid/advprops.cpp:797 ../src/propgrid/advprops.cpp:1475
-#: ../src/propgrid/advprops.cpp:1518
+#: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
+#: ../src/propgrid/advprops.cpp:1519
 #, fuzzy
 msgid "Custom"
 msgstr "μέγεθος γραμματοσειράς"
 
-#: ../src/propgrid/advprops.cpp:1500
+#: ../src/propgrid/advprops.cpp:1501
 msgid "Black"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1501
+#: ../src/propgrid/advprops.cpp:1502
 msgid "Maroon"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1502
+#: ../src/propgrid/advprops.cpp:1503
 msgid "Navy"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1503
+#: ../src/propgrid/advprops.cpp:1504
 msgid "Purple"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1504
+#: ../src/propgrid/advprops.cpp:1505
 msgid "Teal"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1505
+#: ../src/propgrid/advprops.cpp:1506
 msgid "Gray"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1506
+#: ../src/propgrid/advprops.cpp:1507
 msgid "Green"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1507
+#: ../src/propgrid/advprops.cpp:1508
 msgid "Olive"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1508
+#: ../src/propgrid/advprops.cpp:1509
 msgid "Brown"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1509
+#: ../src/propgrid/advprops.cpp:1510
 msgid "Blue"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1510
+#: ../src/propgrid/advprops.cpp:1511
 msgid "Fuchsia"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1511
+#: ../src/propgrid/advprops.cpp:1512
 #, fuzzy
 msgid "Red"
 msgstr "&Επανάληψη"
 
-#: ../src/propgrid/advprops.cpp:1512
+#: ../src/propgrid/advprops.cpp:1513
 msgid "Orange"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1513
+#: ../src/propgrid/advprops.cpp:1514
 msgid "Silver"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1514
+#: ../src/propgrid/advprops.cpp:1515
 msgid "Lime"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1515
+#: ../src/propgrid/advprops.cpp:1516
 msgid "Aqua"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1516
+#: ../src/propgrid/advprops.cpp:1517
 msgid "Yellow"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1517
+#: ../src/propgrid/advprops.cpp:1518
 msgid "White"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1653
+#: ../src/propgrid/advprops.cpp:1654
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "προκαθορισμένο"
 
-#: ../src/propgrid/advprops.cpp:1654
+#: ../src/propgrid/advprops.cpp:1655
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "αύριο"
 
-#: ../src/propgrid/advprops.cpp:1655
+#: ../src/propgrid/advprops.cpp:1656
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Απαλό(light)"
 
-#: ../src/propgrid/advprops.cpp:1656
+#: ../src/propgrid/advprops.cpp:1657
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1657
+#: ../src/propgrid/advprops.cpp:1658
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1658
+#: ../src/propgrid/advprops.cpp:1659
 msgctxt "system cursor name"
 msgid "Character"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1659
+#: ../src/propgrid/advprops.cpp:1660
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1660
+#: ../src/propgrid/advprops.cpp:1661
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1661
+#: ../src/propgrid/advprops.cpp:1662
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1662
+#: ../src/propgrid/advprops.cpp:1663
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1663
+#: ../src/propgrid/advprops.cpp:1664
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1664
+#: ../src/propgrid/advprops.cpp:1665
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1665
+#: ../src/propgrid/advprops.cpp:1666
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1666
+#: ../src/propgrid/advprops.cpp:1667
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1667
+#: ../src/propgrid/advprops.cpp:1668
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1668
+#: ../src/propgrid/advprops.cpp:1669
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Μέγεθος κουκίδας:"
 
-#: ../src/propgrid/advprops.cpp:1669
+#: ../src/propgrid/advprops.cpp:1670
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Στοίχιση Δεξιά"
 
-#: ../src/propgrid/advprops.cpp:1670
+#: ../src/propgrid/advprops.cpp:1671
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Ερώτημα"
 
-#: ../src/propgrid/advprops.cpp:1671
+#: ../src/propgrid/advprops.cpp:1672
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Απαλό(light)"
 
-#: ../src/propgrid/advprops.cpp:1672
+#: ../src/propgrid/advprops.cpp:1673
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1673
+#: ../src/propgrid/advprops.cpp:1674
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1674
+#: ../src/propgrid/advprops.cpp:1675
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1675
+#: ../src/propgrid/advprops.cpp:1676
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1676
+#: ../src/propgrid/advprops.cpp:1677
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1677
+#: ../src/propgrid/advprops.cpp:1678
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1678
+#: ../src/propgrid/advprops.cpp:1679
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1679
+#: ../src/propgrid/advprops.cpp:1680
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1680
+#: ../src/propgrid/advprops.cpp:1681
 #, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Απαλό(light)"
 
-#: ../src/propgrid/advprops.cpp:2052
+#: ../src/propgrid/advprops.cpp:2053
 #, fuzzy
 msgid "Make a selection:"
 msgstr "Τμήματα"
@@ -7199,42 +7224,42 @@ msgstr "&Ιδιότητες"
 msgid "Value"
 msgstr ""
 
-#: ../src/propgrid/manager.cpp:1708
+#: ../src/propgrid/manager.cpp:1701
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/propgrid/manager.cpp:1734
+#: ../src/propgrid/manager.cpp:1727
 msgid "Alphabetic Mode"
 msgstr ""
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/propgrid/propgrid.cpp:191
+#: ../src/propgrid/propgrid.cpp:197
 #, fuzzy
 msgid "False"
 msgstr "Αρχείο"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/propgrid/propgrid.cpp:193
+#: ../src/propgrid/propgrid.cpp:199
 msgid "True"
 msgstr ""
 
 #. TRANSLATORS: Text  displayed for unspecified value
-#: ../src/propgrid/propgrid.cpp:393
+#: ../src/propgrid/propgrid.cpp:381
 #, fuzzy
 msgid "Unspecified"
 msgstr "Ευθυγραμμισμένα"
 
 #. TRANSLATORS: Caption of message box displaying any property error
-#: ../src/propgrid/propgrid.cpp:3171 ../src/propgrid/propgrid.cpp:3308
+#: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3284
 #, fuzzy
 msgid "Property Error"
 msgstr "Σφάλμα Εκτύπωσης"
 
-#: ../src/propgrid/propgrid.cpp:3285
+#: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 
-#: ../src/propgrid/propgrid.cpp:6688
+#: ../src/propgrid/propgrid.cpp:6650
 #, c-format
 msgid "Error in resource: %s"
 msgstr ""
@@ -9632,11 +9657,11 @@ msgstr ""
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1028
 msgid "Cannot get the hostname"
 msgstr "Δεν είναι δυνατή η ανάγνωση του ονόματος διακομιστή(hostname)"
 
-#: ../src/unix/utilsunx.cpp:1060
+#: ../src/unix/utilsunx.cpp:1064
 msgid "Cannot get the official hostname"
 msgstr ""
 "Δεν είναι δυνατή η ανάγνωση του επισήμου ονόματος διακομιστή(official "
