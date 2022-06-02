@@ -298,41 +298,14 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
 
     // We only get here if the requested size is larger than the size of all
     // the bitmaps we have, in which case we have no choice but to upscale one
-    // of the bitmaps, so find the largest available non-generated bitmap which
-    // can be scaled using an integer factor or, failing that, just the largest
-    // non-generated bitmap.
-    const Entry* entryToRescale = NULL;
-    const Entry* entryLastNotGen = NULL;
-    for ( size_t i = 0; i < n; ++i )
-    {
-        const Entry& entry = m_entries[i];
-        if ( entry.generated )
-            continue;
+    // of the bitmaps, so find the most appropriate one for doing it.
+    const size_t i = GetIndexToUpscale(size);
 
-        entryLastNotGen = &entry;
+    const Entry entryNew(m_entries[i], size);
 
-        const double
-            scale = static_cast<double>(size.y) / entry.bitmap.GetSize().y;
-        if ( scale == wxRound(scale) )
-            entryToRescale = &entry;
-    }
+    m_entries.push_back(entryNew);
 
-    if ( !entryToRescale )
-        entryToRescale = entryLastNotGen;
-
-    if ( entryToRescale )
-    {
-        const Entry entryNew(*entryToRescale, size);
-
-        m_entries.push_back(entryNew);
-
-        return entryNew.bitmap;
-    }
-
-    // We should have at least one non-generated bitmap.
-    wxFAIL_MSG( wxS("unreachable") );
-
-    return wxBitmap();
+    return entryNew.bitmap;
 }
 
 #ifdef __WXOSX__
@@ -785,6 +758,30 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget) const
     }
 
     return GetDefaultSize()*scaleBest;
+}
+
+size_t wxBitmapBundleImpl::GetIndexToUpscale(const wxSize& size) const
+{
+    // Our best hope is to find a scale dividing the given one evenly.
+    size_t indexBest = (size_t)-1;
+
+    // In the worst case, we will use the largest index, as it should hopefully
+    // result in the least bad results.
+    size_t indexLast = 0;
+
+    const wxSize sizeDef = GetDefaultSize();
+    for ( size_t i = 0;; indexLast = i)
+    {
+        const double scaleThis = GetNextAvailableScale(i);
+        if ( scaleThis == 0.0 )
+            break;
+
+        const double scale = size.y / (sizeDef.y*scaleThis);
+        if (wxRound(scale) == scale)
+            indexBest = indexLast;
+    }
+
+    return indexBest != (size_t)-1 ? indexBest : indexLast;
 }
 
 wxBitmapBundleImpl::~wxBitmapBundleImpl()

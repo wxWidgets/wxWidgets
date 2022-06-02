@@ -285,20 +285,11 @@ wxBitmap wxBitmapBundleImplRC::GetBitmap(const wxSize& size)
     // We have to upscale some bitmap because we don't have any bitmaps larger
     // than the requested size. Try to find one which can be upscaled using an
     // integer factor.
-    const ResourceInfo* infoToRescale = NULL;
-    for ( size_t i = 0; i < m_resourceInfos.size(); ++i )
-    {
-        const ResourceInfo& info = m_resourceInfos[i];
+    const size_t i = GetIndexToUpscale(size);
 
-        const double scale = size.y / sizeDef.y*info.scale;
-        if ( scale == wxRound(scale) )
-            infoToRescale = &info;
-    }
+    const ResourceInfo& info = m_resourceInfos[i];
 
-    if ( !infoToRescale )
-        infoToRescale = &m_resourceInfos.back();
-
-    return AddBitmap(*infoToRescale, sizeDef*infoToRescale->scale, size);
+    return AddBitmap(info, sizeDef*info.scale, size);
 }
 
 // ============================================================================

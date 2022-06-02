@@ -505,14 +505,40 @@ protected:
         used.
 
         Typically this function is used in the derived classes implementation
-        to forward GetPreferredBitmapSizeAtScale() to it, e.g.
+        to forward GetPreferredBitmapSizeAtScale() to it and when this is done,
+        GetBitmap() may also use GetIndexToUpscale() to choose the bitmap to
+        upscale if necessary:
         @code
         class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
         {
         public:
+            wxSize GetDefaultSize() const
+            {
+                return wxSize(32, 32);
+            }
+
             wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
             {
                 return DoGetPreferredSize(scale);
+            }
+
+            wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+            {
+                // For consistency with GetNextAvailableScale(), we must have
+                // bitmap variants for 32, 48 and 64px sizes.
+                const wxSize availableSizes[] = { 32, 48, 64 };
+                if ( size.y <= 64 )
+                {
+                    ... get the bitmap from somewhere ...
+                }
+                else
+                {
+                    size_t n = GetIndexToUpscale(size);
+                    bitmap = ... get bitmap for availableSizes[n] ...;
+                    wxBitmap::Rescale(bitmap, size);
+                }
+
+                return bitmap;
             }
 
         protected:
@@ -536,11 +562,25 @@ protected:
     wxSize DoGetPreferredSize(double scale) const;
 
     /**
+        Return the index of the available scale most suitable to be upscaled to
+        the given size.
+
+        See DoGetPreferredSize() for an example of using this function.
+
+        @param size The required size, typically the same one as passed to
+            GetBitmap()
+
+        @since 3.1.7
+     */
+    size_t GetIndexToUpscale(const wxSize& size) const;
+
+    /**
         Return information about the available bitmaps.
 
         Overriding this function is optional and only needs to be done if
-        DoGetPreferredSize() is called. If you do override it, this function
-        must return the next available scale or 0.0 if there are no more.
+        either DoGetPreferredSize() or GetIndexToUpscale() are called. If you
+        do override it, this function must return the next available scale or
+        0.0 if there are no more.
 
         The returned scales must be in ascending order and the first returned
         scale, for the initial @a i value of 0, should be 1. The function must
