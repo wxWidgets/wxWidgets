@@ -154,7 +154,7 @@ public:
                           const wxSize& size)
         : m_artId(id),
           m_artClient(client),
-          m_sizeDefault(GetValidSize(id, client, size))
+          m_sizeDefault(size)
     {
     }
 
@@ -165,8 +165,8 @@ public:
 
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
     {
-        // We have no preferred sizes.
-        return m_sizeDefault*scale;
+        // Use the standard logic for integer-factor upscaling.
+        return DoGetPreferredSize(scale);
     }
 
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
@@ -174,33 +174,20 @@ public:
         return wxArtProvider::GetBitmap(m_artId, m_artClient, size);
     }
 
-private:
-    static wxSize GetValidSize(const wxArtID& id,
-                               const wxArtClient& client,
-                               const wxSize& size)
+protected:
+    virtual double GetNextAvailableScale(size_t& i) const wxOVERRIDE
     {
-        // If valid size is provided, just use it.
-        if ( size != wxDefaultSize )
-            return size;
-
-        // Otherwise, try to get the size we'd use without creating a bitmap
-        // immediately.
-        const wxSize sizeHint = wxArtProvider::GetSizeHint(client);
-        if ( sizeHint != wxDefaultSize )
-            return sizeHint;
-
-        // If we really have to, do create a bitmap just to get its size. Note
-        // we need the size in logical pixels here, it will be scaled later if
-        // necessary, so use GetDIPSize() and not GetSize().
-        const wxBitmap bitmap = wxArtProvider::GetBitmap(id, client);
-        if ( bitmap.IsOk() )
-            return bitmap.GetDIPSize();
-
-        // We really need some default size, so just return this hardcoded
-        // value if all else fails -- what else can we do.
-        return wxSize(16, 16);
+        // Unfortunately we don't know what bitmap sizes are available here as
+        // there is simply nothing in wxArtProvider API that returns this (and
+        // adding something to the API doesn't make sense as all this is only
+        // used for compatibility with the existing custom art providers -- new
+        // ones should just override CreateBitmapBundle() directly), so we only
+        // return the original bitmap size, but hope that perhaps the provider
+        // will have a x2 version too, when our GetBitmap() is called.
+        return i++ ? 0.0 : 1.0;
     }
 
+private:
     const wxArtID m_artId;
     const wxArtClient m_artClient;
     const wxSize m_sizeDefault;
@@ -438,9 +425,12 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
             // lower priority one: even if this means that the bitmap will be
             // scaled, at least we'll be using the expected bitmap rather than
             // potentially using a bitmap of a different style.
-            if ( provider->CreateBitmap(id, client, size).IsOk() )
+            const wxBitmap& bitmap = provider->CreateBitmap(id, client, size);
+            if ( bitmap.IsOk() )
             {
-                bitmapbundle = wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
+                bitmapbundle = wxBitmapBundle::FromImpl(
+                        new wxBitmapBundleImplArt(id, client, bitmap.GetSize())
+                    );
                 break;
             }
         }
