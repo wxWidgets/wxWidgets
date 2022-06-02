@@ -711,9 +711,42 @@ wxBitmapBundleImpl::DoGetPreferredSize(double scaleTarget) const
             // bitmaps of standard size are scaled when 2x DPI scaling is used.
             if ( scaleTarget > 1.5*scaleLast )
             {
-                // However scaling by non-integer scales doesn't work well at all, so
-                // round it to the closest integer in this case.
-                scaleBest = wxRound(scaleTarget);
+                // However scaling by non-integer scales doesn't work well at
+                // all, so try to find a bitmap that we may rescale by an
+                // integer factor.
+                //
+                // Note that this is similar to GetIndexToUpscale(), but we
+                // don't want to fall back on the largest bitmap here, so we
+                // can't reuse it.
+                //
+                // Also, while we reenter GetNextAvailableScale() here, it
+                // doesn't matter because we're not going to continue using it
+                // in the outer loop any more.
+                for ( i = 0;; )
+                {
+                    const double scale = GetNextAvailableScale(i);
+                    if ( scale == 0.0 )
+                        break;
+
+                    const double factor = scaleTarget / scale;
+                    if ( wxRound(factor) == factor )
+                    {
+                        scaleBest = scaleTarget;
+
+                        // We don't need to keep going: if there is a bigger
+                        // bitmap which can be scaled using an integer factor
+                        // to the target scale, our GetIndexToUpscale() will
+                        // find it, we don't need to do it here.
+                        break;
+                    }
+                }
+
+                // If none of the bitmaps can be upscaled by an integer factor,
+                // round the target scale itself, as we can be sure to be able
+                // to scale at least the base bitmap to it using an integer
+                // factor then.
+                if ( scaleBest == 0.0 )
+                    scaleBest = wxRound(scaleTarget);
             }
             else // Target scale is not much greater than the biggest one we have.
             {

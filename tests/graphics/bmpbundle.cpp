@@ -301,6 +301,7 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
 
     CHECK_THAT( BitmapAtScale(b, 3.33), SameAs(3.0, 1.5) );
     CHECK_THAT( BitmapAtScale(b, 4.25), SameAs(4.0, 2.0) );
+    CHECK_THAT( BitmapAtScale(b, 4.50), SameAs(4.5, 1.5) );
     CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5.0, 1.0) );
 }
 
