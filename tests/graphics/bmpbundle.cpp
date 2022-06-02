@@ -50,6 +50,15 @@ TEST_CASE("BitmapBundle::FromBitmaps", "[bmpbundle]")
     CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
 }
 
+TEST_CASE("BitmapBundle::GetBitmap", "[bmpbundle]")
+{
+    const wxBitmapBundle b = wxBitmapBundle::FromBitmap(wxBitmap(16, 16));
+
+    CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
+    CHECK( b.GetBitmap(wxSize(32, 32)).GetSize() == wxSize(32, 32) );
+    CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
+}
+
 // Helper functions for the test below.
 namespace
 {
