@@ -203,16 +203,6 @@ protected:
                                   const wxSize& size) wxOVERRIDE;
 };
 
-static wxBitmap CreateFromStdIcon(const char *iconName,
-                                  const wxArtClient& client)
-{
-    wxIcon icon(iconName);
-    wxBitmap bmp;
-    bmp.CopyFromIcon(icon);
-
-    return bmp;
-}
-
 wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
                                             const wxArtClient& client,
                                             const wxSize& size)
@@ -284,7 +274,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
             name = "wxICON_QUESTION";
 
         if ( name )
-            return CreateFromStdIcon(name, client);
+            return wxIcon(name);
     }
 
     // for anything else, fall back to generic provider:
