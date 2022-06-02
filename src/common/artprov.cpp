@@ -428,8 +428,16 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
             const wxBitmap& bitmap = provider->CreateBitmap(id, client, size);
             if ( bitmap.IsOk() )
             {
+                // The returned bitmap bundle must have the requested default
+                // size if it is provided, but if not, use the size of the
+                // bitmap, which may be different from this size.
                 bitmapbundle = wxBitmapBundle::FromImpl(
-                        new wxBitmapBundleImplArt(id, client, bitmap.GetSize())
+                        new wxBitmapBundleImplArt(
+                                id,
+                                client,
+                                size.IsFullySpecified() ? size
+                                                        : bitmap.GetSize()
+                            )
                     );
                 break;
             }
