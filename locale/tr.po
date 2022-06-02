@@ -6463,31 +6463,28 @@ msgstr ""
 "kullanılamaz."
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
 msgstr "%s Hakkında"
 
 #: ../src/osx/menu_osx.cpp:494
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
 msgstr "Hakkında..."
 
 #: ../src/osx/menu_osx.cpp:502
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "Ayarlar..."
 
 #: ../src/osx/menu_osx.cpp:507
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Services"
 msgstr "Hizmetler"
 
 #: ../src/osx/menu_osx.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "%s gizle"
@@ -6499,19 +6496,17 @@ msgid "Hide Application"
 msgstr "Uygulama"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Diğerlerini gizle"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Tümünü görüntüle"
 
 #: ../src/osx/menu_osx.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "%s uygulamasından çıkın"

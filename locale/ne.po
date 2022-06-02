@@ -6466,31 +6466,28 @@ msgid ""
 msgstr ""
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
 msgstr "%s को बारेमा"
 
 #: ../src/osx/menu_osx.cpp:494
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
 msgstr "बारेमा"
 
 #: ../src/osx/menu_osx.cpp:502
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "प्राथमिकताहरू.."
 
 #: ../src/osx/menu_osx.cpp:507
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Services"
 msgstr "सेवा"
 
 #: ../src/osx/menu_osx.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "%s लुकाउ "
@@ -6502,19 +6499,17 @@ msgid "Hide Application"
 msgstr "अनुप्रयोग"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "अरूलाई पनि लुकाउ "
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "सबै देखाउ "
 
 #: ../src/osx/menu_osx.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "%s लाई त्यागि देउ "

@@ -6491,31 +6491,28 @@ msgid ""
 msgstr ""
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
 msgstr "O aplikácii %s"
 
 #: ../src/osx/menu_osx.cpp:494
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
 msgstr "&O aplikácii..."
 
 #: ../src/osx/menu_osx.cpp:502
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "Predvoľby..."
 
 #: ../src/osx/menu_osx.cpp:507
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Services"
 msgstr "Služby"
 
 #: ../src/osx/menu_osx.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "Skryť %s"
@@ -6527,19 +6524,17 @@ msgid "Hide Application"
 msgstr "Aplikácia"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Skryť ostatné"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Zobraziť všetko"
 
 #: ../src/osx/menu_osx.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "Ukončiť %s"

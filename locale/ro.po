@@ -6511,31 +6511,28 @@ msgstr ""
 "fonturi \"%s\"."
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
 msgstr "Despre %s"
 
 #: ../src/osx/menu_osx.cpp:494
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
 msgstr "Despre..."
 
 #: ../src/osx/menu_osx.cpp:502
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "Preferințe..."
 
 #: ../src/osx/menu_osx.cpp:507
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Services"
 msgstr "Servicii"
 
 #: ../src/osx/menu_osx.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "Ascunde %s"
@@ -6547,19 +6544,17 @@ msgid "Hide Application"
 msgstr "Aplicație"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Ascunde Restul"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Arată Tot"
 
 #: ../src/osx/menu_osx.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "Ieșire din %s"

@@ -6687,7 +6687,6 @@ msgid "Preferences..."
 msgstr "&Innstillinger"
 
 #: ../src/osx/menu_osx.cpp:507
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Services"
 msgstr "Tjenester"
@@ -6705,7 +6704,6 @@ msgid "Hide Application"
 msgstr "Seksjoner"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Skjul andre"

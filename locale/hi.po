@@ -6675,10 +6675,9 @@ msgid "Hide Application"
 msgstr "चयन"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr "सहायता: %s"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:522
 #, fuzzy

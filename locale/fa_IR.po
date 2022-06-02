@@ -6374,22 +6374,20 @@ msgid ""
 msgstr ""
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
-msgstr "&در باره"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:494
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
-msgstr "&در باره"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:502
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Preferences..."
-msgstr "%s Preferences"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:507
 msgctxt "macOS menu item"

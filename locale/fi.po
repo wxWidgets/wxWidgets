@@ -6613,7 +6613,7 @@ msgid ""
 msgstr ""
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
 msgstr "Tietoja ohjelmasta %s"
@@ -6648,7 +6648,6 @@ msgid "Hide Application"
 msgstr "Valinta"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Piilota muut"

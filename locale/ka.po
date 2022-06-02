@@ -6363,16 +6363,15 @@ msgid ""
 msgstr ""
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
-msgstr "შეს&ახებ"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:494
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
-msgstr "შეს&ახებ"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:502
 msgctxt "macOS menu item"

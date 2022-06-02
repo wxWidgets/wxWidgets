@@ -6799,10 +6799,9 @@ msgid "Hide Application"
 msgstr "Τμήματα"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr "Βοήθεια: %s"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:522
 #, fuzzy

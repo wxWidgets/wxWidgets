@@ -6575,7 +6575,7 @@ msgid ""
 msgstr ""
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
 msgstr "%s 정보"
@@ -6610,10 +6610,9 @@ msgid "Hide Application"
 msgstr "선택"
 
 #: ../src/osx/menu_osx.cpp:520
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr "도움말: %s"
+msgstr ""
 
 #: ../src/osx/menu_osx.cpp:522
 #, fuzzy
