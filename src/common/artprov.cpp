@@ -309,7 +309,7 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
         return;
 
 #if wxUSE_IMAGE
-    if ((bmp_h <= sizeNeeded.x) && (bmp_w <= sizeNeeded.y))
+    if ((bmp_w <= sizeNeeded.x) && (bmp_h <= sizeNeeded.y))
     {
         // the caller wants default size, which is larger than
         // the image we have; to avoid degrading it visually by
