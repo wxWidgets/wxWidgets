@@ -210,18 +210,6 @@ static wxBitmap CreateFromStdIcon(const char *iconName,
     wxBitmap bmp;
     bmp.CopyFromIcon(icon);
 
-    // The standard native message box icons are in message box size (32x32).
-    // If they are requested in any size other than the default or message
-    // box size, they must be rescaled first.
-    if ( client != wxART_MESSAGE_BOX && client != wxART_OTHER )
-    {
-        const wxSize size = wxArtProvider::GetNativeSizeHint(client);
-        if ( size != wxDefaultSize )
-        {
-            wxBitmap::Rescale(bmp, size);
-        }
-    }
-
     return bmp;
 }
 
@@ -251,14 +239,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
             bitmap = MSWGetBitmapFromIconLocation(sii.szPath, sii.iIcon,
                                                   sizeNeeded);
             if ( bitmap.IsOk() )
-            {
-                if ( bitmap.GetSize() != sizeNeeded )
-                {
-                    wxBitmap::Rescale(bitmap, sizeNeeded);
-                }
-
                 return bitmap;
-            }
         }
     }
 #endif // wxHAS_SHGetStockIconInfo

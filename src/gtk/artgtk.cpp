@@ -306,22 +306,7 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
     if (stocksize == GTK_ICON_SIZE_INVALID)
         stocksize = GTK_ICON_SIZE_BUTTON;
 
-    GdkPixbuf *pixbuf = CreateGtkIcon(stockid.utf8_str(), stocksize, size);
-
-    if (pixbuf && size != wxDefaultSize &&
-        (size.x != gdk_pixbuf_get_width(pixbuf) ||
-         size.y != gdk_pixbuf_get_height(pixbuf)))
-    {
-        GdkPixbuf *p2 = gdk_pixbuf_scale_simple(pixbuf, size.x, size.y,
-                                                GDK_INTERP_BILINEAR);
-        if (p2)
-        {
-            g_object_unref (pixbuf);
-            pixbuf = p2;
-        }
-    }
-
-    return wxBitmap(pixbuf);
+    return wxBitmap(CreateGtkIcon(stockid.utf8_str(), stocksize, size));
 }
 
 wxIconBundle
