@@ -94,7 +94,9 @@ const char wxFileSelectorDefaultWildcardStr[];
     }
     @endcode
 
-    @remarks
+
+    @section filedialog_filters Wildcard Filters
+
     All implementations of the wxFileDialog provide a wildcard filter. Typing a filename
     containing wildcards (*, ?) in the filename text item, and clicking on Ok, will
     result in only those files matching the pattern being displayed.
@@ -103,13 +105,9 @@ const char wxFileSelectorDefaultWildcardStr[];
     @code
          "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png"
     @endcode
-    It must be noted that wildcard support in the native Motif file dialog is quite
-    limited: only one file type is supported, and it is displayed without the
-    descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both
-    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif" and "Image files|*.bmp;*.gif"
-    are errors.
+
     On Mac macOS in the open file dialog the filter choice box is not shown by default.
-    Instead all given wildcards are appplied at the same time: So in the above
+    Instead all given wildcards are applied at the same time: So in the above
     example all bmp, gif and png files are displayed. To enforce the
     display of the filter choice set the corresponding wxSystemOptions before calling
     the file open dialog:
