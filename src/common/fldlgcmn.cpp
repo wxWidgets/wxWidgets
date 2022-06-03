@@ -27,6 +27,7 @@
 
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/choice.h"
     #include "wx/radiobut.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
@@ -172,6 +173,34 @@ void wxFileDialogRadioButton::SetValue(bool value)
     GetImpl()->SetValue(value);
 }
 
+wxFileDialogChoice::wxFileDialogChoice(wxFileDialogChoiceImpl* impl)
+    : wxFileDialogCustomControl(impl)
+{
+}
+
+bool wxFileDialogChoice::OnDynamicBind(wxDynamicEventTableEntry& entry)
+{
+    if ( entry.m_eventType == wxEVT_CHOICE )
+        return GetImpl()->DoBind(this);
+
+    return wxFileDialogCustomControl::OnDynamicBind(entry);
+}
+
+wxFileDialogChoiceImpl* wxFileDialogChoice::GetImpl() const
+{
+    return static_cast<wxFileDialogChoiceImpl*>(m_impl);
+}
+
+int wxFileDialogChoice::GetSelection() const
+{
+    return GetImpl()->GetSelection();
+}
+
+void wxFileDialogChoice::SetSelection(int n)
+{
+    GetImpl()->SetSelection(n);
+}
+
 wxFileDialogTextCtrl::wxFileDialogTextCtrl(wxFileDialogTextCtrlImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
@@ -255,6 +284,12 @@ wxFileDialogRadioButton*
 wxFileDialogCustomize::AddRadioButton(const wxString& label)
 {
     return StoreAndReturn(new wxFileDialogRadioButton(m_impl->AddRadioButton(label)));
+}
+
+wxFileDialogChoice*
+wxFileDialogCustomize::AddChoice(size_t n, const wxString* strings)
+{
+    return StoreAndReturn(new wxFileDialogChoice(m_impl->AddChoice(n, strings)));
 }
 
 wxFileDialogTextCtrl*
@@ -461,6 +496,60 @@ private:
     wxEvtHandler* m_handler;
 };
 
+class ChoiceImpl : public ControlImplBase<wxFileDialogChoiceImpl>
+{
+public:
+    ChoiceImpl(wxWindow* parent, size_t n, const wxString* strings)
+        : ControlImplBase<wxFileDialogChoiceImpl>
+          (
+            new wxChoice(parent, wxID_ANY,
+                         wxDefaultPosition, wxDefaultSize,
+                         n, strings)
+          )
+    {
+        m_handler = NULL;
+    }
+
+    virtual int GetSelection() wxOVERRIDE
+    {
+        return GetChoice()->GetSelection();
+    }
+
+    virtual void SetSelection(int selection) wxOVERRIDE
+    {
+        GetChoice()->SetSelection(selection);
+    }
+
+    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    {
+        if ( !m_handler )
+        {
+            m_handler = handler;
+            m_win->Bind(wxEVT_CHOICE, &ChoiceImpl::OnChoice, this);
+        }
+
+        return true;
+    }
+
+private:
+    wxChoice* GetChoice() const
+    {
+        return static_cast<wxChoice*>(m_win);
+    }
+
+    void OnChoice(wxCommandEvent& event)
+    {
+        // See comments in OnButton() above, they also apply here.
+
+        wxCommandEvent eventCopy(event);
+        eventCopy.SetEventObject(m_handler);
+
+        m_handler->ProcessEvent(eventCopy);
+    }
+
+    wxEvtHandler* m_handler;
+};
+
 class TextCtrlImpl : public ControlImplBase<wxFileDialogTextCtrlImpl>
 {
 public:
@@ -580,6 +669,20 @@ public:
 
         return impl;
     }
+
+    wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) wxOVERRIDE
+    {
+        m_lastWasRadio = false;
+
+        // TODO-C++11: Can't use AddToLayoutAndReturn() here easily without
+        // variadic templates.
+        ChoiceImpl* const impl = new ChoiceImpl(this, n, strings);
+
+        AddToLayout(impl->m_win);
+
+        return impl;
+    }
+
 
     wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) wxOVERRIDE
     {

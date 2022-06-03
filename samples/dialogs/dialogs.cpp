@@ -1598,6 +1598,18 @@ wxString GetFileDialogStateDescription(wxFileDialogBase* dialog)
     return msg;
 }
 
+// Another helper translating demo combobox selection.
+wxString GetFileDialogPaperSize(int selection)
+{
+    switch ( selection )
+    {
+        case -1: return "<none>";
+        case  0: return "A4";
+        case  1: return "Letter";
+        default: return "INVALID";
+    }
+}
+
 // panel with custom controls for file dialog
 class MyExtraPanel : public wxPanel
 {
@@ -1605,8 +1617,8 @@ public:
     MyExtraPanel(wxWindow *parent);
     wxString GetInfo() const
     {
-        return wxString::Format("paper=%s, enabled=%d, text=\"%s\"",
-                                m_paperOrient, m_checked, m_str);
+        return wxString::Format("paper=%s (%s), enabled=%d, text=\"%s\"",
+                                m_paperSize, m_paperOrient, m_checked, m_str);
     }
 
 private:
@@ -1626,6 +1638,11 @@ private:
             m_paperOrient = "unknown";
     }
 
+    void OnChoice(wxCommandEvent& event)
+    {
+        m_paperSize = GetFileDialogPaperSize(event.GetSelection());
+    }
+
     void OnText(wxCommandEvent& event)
     {
         m_str = event.GetString();
@@ -1643,6 +1660,7 @@ private:
 
     wxString m_str;
     bool m_checked;
+    wxString m_paperSize;
     wxString m_paperOrient;
 
     wxButton *m_btn;
@@ -1662,6 +1680,10 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
     m_btn->Enable(false);
     m_cb = new wxCheckBox(this, -1, "Enable Custom Button");
     m_cb->Bind(wxEVT_CHECKBOX, &MyExtraPanel::OnCheckBox, this);
+    wxChoice* choiceSize = new wxChoice(this, wxID_ANY);
+    choiceSize->Append("A4");
+    choiceSize->Append("Letter");
+    choiceSize->Bind(wxEVT_CHOICE, &MyExtraPanel::OnChoice, this);
     m_radioPortrait = new wxRadioButton(this, wxID_ANY, "&Portrait",
                                   wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
     m_radioPortrait->Bind(wxEVT_RADIOBUTTON, &MyExtraPanel::OnRadioButton, this);
@@ -1679,6 +1701,7 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
                   wxSizerFlags().Centre().Border());
     sizerTop->Add(m_text, wxSizerFlags(1).Centre().Border());
     sizerTop->AddSpacer(10);
+    sizerTop->Add(choiceSize, wxSizerFlags().Centre().Border(wxRIGHT));
     sizerTop->Add(m_radioPortrait, wxSizerFlags().Centre().Border());
     sizerTop->Add(m_radioLandscape, wxSizerFlags().Centre().Border());
     sizerTop->Add(m_cb, wxSizerFlags().Centre().Border());
@@ -1716,6 +1739,8 @@ public:
         // ShowModal() returns, TransferDataFromCustomControls() is the latest
         // moment when they can still be used.
         m_text = customizer.AddTextCtrl("Just some extra text:");
+        const wxString sizes[] = { "A4", "Letter" };
+        m_choiceSize = customizer.AddChoice(WXSIZEOF(sizes), sizes);
         m_radioPortrait = customizer.AddRadioButton("&Portrait");
         m_radioLandscape = customizer.AddRadioButton("&Landscape");
         m_cb = customizer.AddCheckBox("Enable Custom Button");
@@ -1745,7 +1770,8 @@ public:
     // And another one called when the dialog is accepted.
     virtual void TransferDataFromCustomControls() wxOVERRIDE
     {
-        m_info.Printf("paper=%s, enabled=%d, text=\"%s\"",
+        m_info.Printf("paper=%s (%s), enabled=%d, text=\"%s\"",
+                      GetFileDialogPaperSize(m_choiceSize->GetSelection()),
                       m_radioPortrait->GetValue() ? "portrait" : "landscape",
                       m_cb->GetValue(), m_text->GetValue());
     }
@@ -1771,6 +1797,7 @@ private:
 
     wxFileDialogButton* m_btn;
     wxFileDialogCheckBox* m_cb;
+    wxFileDialogChoice* m_choiceSize;
     wxFileDialogRadioButton* m_radioPortrait;
     wxFileDialogRadioButton* m_radioLandscape;
     wxFileDialogTextCtrl* m_text;

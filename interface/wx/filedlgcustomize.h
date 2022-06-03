@@ -110,6 +110,32 @@ public:
 };
 
 /**
+    Represents a custom read-only combobox inside wxFileDialog.
+
+    Objects of this class can only be created by
+    wxFileDialogCustomize::AddChoice().
+
+    It is possible to bind to wxEVT_CHOICE events on this object, which
+    will be generated when the selection in the combobox changes.
+
+    See wxFileDialogCustomControl for more information.
+
+    @since 3.1.7
+ */
+class wxFileDialogChoice : public wxFileDialogCustomControl
+{
+public:
+    /// Return the index of the selected item, possibly wxNOT_FOUND.
+    int GetSelection() const;
+
+    /// Set the selection to the item with the given index.
+    ///
+    /// Using @c wxNOT_FOUND for @a n is not supported, once a selection is
+    /// made it cannot be undone.
+    void SetSelection(int n);
+};
+
+/**
     Represents a custom text control inside wxFileDialog.
 
     Objects of this class can only be created by
@@ -202,6 +228,21 @@ public:
         AddStaticText() with an empty label can be used to separate them.
      */
     wxFileDialogRadioButton* AddRadioButton(const wxString& label);
+
+    /**
+        Add a read-only combobox with the specified contents.
+
+        The combobox doesn't have any initial selection, i.e.
+        wxFileDialogChoice::GetSelection() returns @c wxNOT_FOUND, if some item
+        must be selected, use wxFileDialogChoice::SetSelection() explicitly to
+        do it.
+
+        @param n The number of strings, must be positive, as there is no way to
+            add more strings later and creating an empty combobox is not very
+            useful.
+        @param strings A non-@NULL pointer to an array of @a n strings.
+     */
+    wxFileDialogChoice* AddChoice(size_t n, const wxString* strings);
 
     /**
         Add a text control with an optional label preceding it.

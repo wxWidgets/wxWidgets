@@ -45,6 +45,13 @@ public:
     virtual void SetValue(bool value) = 0;
 };
 
+class wxFileDialogChoiceImpl : public wxFileDialogCustomControlImpl
+{
+public:
+    virtual int GetSelection() = 0;
+    virtual void SetSelection(int n) = 0;
+};
+
 class wxFileDialogTextCtrlImpl : public wxFileDialogCustomControlImpl
 {
 public:
@@ -68,6 +75,7 @@ public:
     virtual wxFileDialogButtonImpl* AddButton(const wxString& label) = 0;
     virtual wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) = 0;
     virtual wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) = 0;
+    virtual wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) = 0;
     virtual wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) = 0;
     virtual wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) = 0;
 

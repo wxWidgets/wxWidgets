@@ -57,6 +57,7 @@
 
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/choice.h"
     #include "wx/radiobut.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
@@ -374,6 +375,54 @@ private:
     const DWORD m_item;
 };
 
+class wxFileDialogChoiceImplFDC
+    : public wxFileDialogImplFDC<wxFileDialogChoiceImpl>
+{
+public:
+    wxFileDialogChoiceImplFDC(IFileDialogCustomize* fdc, DWORD id, DWORD item)
+        : wxFileDialogImplFDC<wxFileDialogChoiceImpl>(fdc, id),
+          m_firstItem(item)
+    {
+    }
+
+    virtual int GetSelection() wxOVERRIDE
+    {
+        DWORD selected = 0;
+        HRESULT hr = m_fdc->GetSelectedControlItem(m_id, &selected);
+        if ( hr == E_FAIL )
+        {
+            // This seems to be returned if there is no selection.
+            return -1;
+        }
+
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::GetSelectedControlItem"), hr);
+
+        // See m_firstItem comment for the explanation of subtraction order.
+        return m_firstItem - selected;
+    }
+
+    virtual void SetSelection(int n) wxOVERRIDE
+    {
+        // As above, see m_firstItem comment.
+        HRESULT hr = m_fdc->SetSelectedControlItem(m_id, m_firstItem - n);
+        if ( FAILED(hr) )
+            wxLogApiError(wxS("IFileDialogCustomize::SetSelectedControlItem"), hr);
+    }
+
+    virtual bool DoBind(wxEvtHandler* WXUNUSED(handler)) wxOVERRIDE
+    {
+        // We don't need to do anything special to get the events here.
+        return true;
+    }
+
+private:
+    // The ID of the first item of the combobox. The subsequent items are
+    // consecutive numbers _smaller_ than this one, because auxiliary IDs are
+    // assigned in decreasing order by decrementing them.
+    const DWORD m_firstItem;
+};
+
 class wxFileDialogTextCtrlImplFDC
     : public wxFileDialogImplFDC<wxFileDialogTextCtrlImpl>
 {
@@ -528,6 +577,33 @@ public:
         return impl;
     }
 
+    wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) wxOVERRIDE
+    {
+        HRESULT hr = m_fdc->AddComboBox(++m_lastId);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxS("IFileDialogCustomize::AddComboBox"), hr);
+            return NULL;
+        }
+
+        // We pass the ID of the first control that will be added to the
+        // combobox as the ctor argument.
+        wxScopedPtr<wxFileDialogChoiceImplFDC>
+            impl(new wxFileDialogChoiceImplFDC(m_fdc, m_lastId, m_lastAuxId - 1));
+
+        for ( size_t i = 0; i < n; ++i )
+        {
+            hr = m_fdc->AddControlItem(m_lastId, --m_lastAuxId, strings[i].wc_str());
+            if ( FAILED(hr) )
+            {
+                wxLogApiError(wxS("IFileDialogCustomize::AddControlItem"), hr);
+                return NULL;
+            }
+        }
+
+        return impl.release();
+    }
+
     wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) wxOVERRIDE
     {
         m_radioListId = 0;
@@ -582,6 +658,12 @@ private:
 
     // IDs used for any other controls, they're negative (which means they
     // decrement from USHORT_MAX down).
+    //
+    // Note that auxiliary IDs are sometimes used for the main control, at
+    // native level, as with the radio buttons, that are represented by
+    // separate controls at wx level, and sometimes for the control elements,
+    // such as for the combobox, which itself uses a normal ID, as it
+    // corresponds to the wx level control.
     DWORD m_lastAuxId;
 
     // ID of the current radio button list, i.e. the one to which the next call
