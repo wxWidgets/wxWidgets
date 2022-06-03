@@ -119,6 +119,33 @@ const char wxFileSelectorDefaultWildcardStr[];
     matching all file types. The files which does not match the currently selected
     file type are greyed out and are not selectable.
 
+
+    @section filedialog_customize Dialog Customization
+
+    Uniquely among the other standard dialogs, wxFileDialog can be customized
+    by adding extra controls to it. Moreover, there are two ways to do it: the
+    first one is to define a callback function and use SetExtraControlCreator()
+    to tell the dialog to call it, while the second one requires defining a
+    class inheriting from wxFileDialogCustomizeHook and implementing its
+    virtual functions, notably wxFileDialogCustomizeHook::AddCustomControls()
+    where the extra controls have to be created, and finally calling
+    SetCustomizeHook() with this custom hook object.
+
+    The first approach is somewhat simpler and more flexible, as it allows to
+    create any kind of custom controls, but is not supported by the "new style"
+    (where "new" means used since Windows Vista, i.e. circa 2007) file dialogs
+    under MSW. Because of this, calling SetExtraControlCreator() in wxMSW
+    forces the use of old style (Windows XP) dialogs, that may look out of
+    place. The second approach is implemented by the MSW dialogs natively and
+    doesn't suffer from this limitation, so its use is recommended, especially
+    if the few simple control types supported by it (see wxFileDialogCustomize
+    for more information about the supported controls) are sufficient for your
+    needs.
+
+    Both of the approaches to the dialog customization are demonstrated in the
+    @ref page_samples_dialogs, please check it for more details.
+
+
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}
            Equivalent to @c wxFD_OPEN.
@@ -321,6 +348,27 @@ public:
     virtual wxString GetWildcard() const;
 
     /**
+        Set the hook to be used for customizing the dialog contents.
+
+        This function can be called before calling ShowModal() to specify that
+        the dialog contents should be customized using the provided hook. See
+        wxFileDialogCustomizeHook documentation and @ref page_samples_dialogs
+        for the examples of using it.
+
+        @note In order to define a custom hook object, @c wx/filedlgcustomize.h
+            must be included in addition to the usual @c wx/filedlg.h header.
+
+        @param customizeHook The hook object that will be used by the dialog.
+            This object must remain valid at least until ShowModal() returns.
+
+        @return @true if the hook was successfully set or @false if customizing
+            the file dialog is not supported by the current platform.
+
+        @since 3.1.7
+     */
+    bool SetCustomizeHook(wxFileDialogCustomizeHook& customizeHook);
+
+    /**
         Sets the default directory.
     */
     virtual void SetDirectory(const wxString& directory);
@@ -340,6 +388,11 @@ public:
 
         The @c creator function should take pointer to parent window (file dialog)
         and should return a window allocated with operator new.
+
+        @note Using SetExtraControlCreator() in wxMSW forces the use of "old
+            style" (Windows XP-like) file dialogs, instead of the newer
+            (Vista-like) ones and is not recommended for this reason. Prefer to
+            use SetCustomizeHook() instead.
 
         @since 2.9.0
     */
