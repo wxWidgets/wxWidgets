@@ -285,6 +285,24 @@ XRC format has been updated to allow specifying wxBitmapBundle with
 multiple bitmaps or a single SVG image can be used.
 
 
+Adapting Existing Code To High DPI  {#high_dpi_existing_code}
+==================================
+
+Generally speaking, adding support for high DPI to the existing wxWidgets
+programs involves doing at least the following:
+
+1. Not using any hard-coded pixel values outside of `FromDIP()` (note that
+   this does _not_ apply to XRC).
+2. Using wxBitmapBundle containing at least 2 (normal and high DPI) bitmaps
+   instead of wxBitmap and wxImageList when setting bitmaps.
+3. Updating any custom art providers to override
+   wxArtProvider::CreateBitmapBundle() (and, of course, return multiple bitmaps
+   from it) instead of wxArtProvider::CreateBitmap().
+4. Removing any calls to wxToolBar::SetToolBitmapSize() or, equivalently,
+   `<bitmapsize>` attributes from the XRC, as this forces unwanted scaling.
+
+
+
 Platform-Specific Build Issues      {#high_dpi_platform_specific}
 ==============================
 
