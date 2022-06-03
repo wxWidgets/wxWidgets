@@ -1731,6 +1731,13 @@ public:
         // Enable the button if and only if the checkbox is checked.
         m_btn->Enable(m_cb->GetValue());
 
+        // Enable radio buttons only if a file is selected.
+        bool hasFile = wxFileName::FileExists(
+                            m_dialog->GetCurrentlySelectedFilename()
+                        );
+        m_radioA4->Enable(hasFile);
+        m_radioLetter->Enable(hasFile);
+
         // Also show the current dialog state.
         m_label->SetLabelText(GetFileDialogStateDescription(m_dialog));
     }
