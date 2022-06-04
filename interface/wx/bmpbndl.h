@@ -442,7 +442,8 @@ public:
                 return GetDefaultSize()*scale;
 
                 ... otherwise, an existing bitmap of the size closest to the
-                    one above would need to be found and its size returned ...
+                    one above would need to be found and its size returned,
+                    possibly by letting DoGetPreferredSize() choose it ...
             }
 
             wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
@@ -488,6 +489,110 @@ public:
         on demand and cache it.
      */
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
+
+protected:
+    /**
+        Helper for implementing GetPreferredBitmapSizeAtScale() in the derived
+        classes.
+
+        This function implements the standard algorithm used inside wxWidgets
+        itself and tries to find the scale closest to the given one, while also
+        trying to choose one of the available scales, to avoid actually
+        rescaling the bitmaps.
+
+        It relies on GetNextAvailableScale() to get information about the
+        available bitmaps, so that function must be overridden if this one is
+        used.
+
+        Typically this function is used in the derived classes implementation
+        to forward GetPreferredBitmapSizeAtScale() to it and when this is done,
+        GetBitmap() may also use GetIndexToUpscale() to choose the bitmap to
+        upscale if necessary:
+        @code
+        class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
+        {
+        public:
+            wxSize GetDefaultSize() const
+            {
+                return wxSize(32, 32);
+            }
+
+            wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+            {
+                return DoGetPreferredSize(scale);
+            }
+
+            wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+            {
+                // For consistency with GetNextAvailableScale(), we must have
+                // bitmap variants for 32, 48 and 64px sizes.
+                const wxSize availableSizes[] = { 32, 48, 64 };
+                if ( size.y <= 64 )
+                {
+                    ... get the bitmap from somewhere ...
+                }
+                else
+                {
+                    size_t n = GetIndexToUpscale(size);
+                    bitmap = ... get bitmap for availableSizes[n] ...;
+                    wxBitmap::Rescale(bitmap, size);
+                }
+
+                return bitmap;
+            }
+
+        protected:
+            double GetNextAvailableScale(size_t& i) const wxOVERRIDE
+            {
+                const double availableScales[] = { 1, 1.5, 2, 0 };
+
+                // We can rely on not being called again once we return 0.
+                return availableScales[i++];
+            }
+
+            ...
+        };
+        @endcode
+
+        @param scale The required scale, typically the same one as passed to
+            GetPreferredBitmapSizeAtScale().
+
+        @since 3.1.7
+     */
+    wxSize DoGetPreferredSize(double scale) const;
+
+    /**
+        Return the index of the available scale most suitable to be upscaled to
+        the given size.
+
+        See DoGetPreferredSize() for an example of using this function.
+
+        @param size The required size, typically the same one as passed to
+            GetBitmap()
+
+        @since 3.1.7
+     */
+    size_t GetIndexToUpscale(const wxSize& size) const;
+
+    /**
+        Return information about the available bitmaps.
+
+        Overriding this function is optional and only needs to be done if
+        either DoGetPreferredSize() or GetIndexToUpscale() are called. If you
+        do override it, this function must return the next available scale or
+        0.0 if there are no more.
+
+        The returned scales must be in ascending order and the first returned
+        scale, for the initial @a i value of 0, should be 1. The function must
+        change @a i, but the values of this index don't have to be consecutive
+        and it's only used by this function itself, the caller only initializes
+        it to 0 before the first call.
+
+        See DoGetPreferredSize() for an example of implementing this function.
+
+        @since 3.1.7
+     */
+    virtual double GetNextAvailableScale(size_t& i) const;
 };
 
 /**

@@ -224,6 +224,29 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 class WXDLLIMPEXP_CORE wxBitmapBundleImpl : public wxRefCounter
 {
 protected:
+    // Standard implementation of GetPreferredBitmapSizeAtScale(): choose the
+    // scale closest to the given one from the available bitmap scales.
+    //
+    // If this function is used, GetNextAvailableScale() must be overridden!
+    wxSize DoGetPreferredSize(double scale) const;
+
+    // Helper for implementing GetBitmap(): if we need to upscale a bitmap,
+    // uses GetNextAvailableScale() to find the index of the best bitmap to
+    // use, where "best" is defined as "using scale which is a divisor of the
+    // given one", as upscaling by an integer factor is strongly preferable.
+    size_t GetIndexToUpscale(const wxSize& size) const;
+
+    // Override this function if DoGetPreferredSize() or GetIndexToUpscale() is
+    // used: it can use the provided parameter as an internal index, it's
+    // guaranteed to be 0 when calling this function for the first time. When
+    // there are no more scales, return 0.
+    //
+    // This function is not pure virtual because it doesn't need to be
+    // implemented if DoGetPreferredSize() is never used, but it will assert if
+    // it's called.
+    virtual double GetNextAvailableScale(size_t& i) const;
+
+
     virtual ~wxBitmapBundleImpl();
 
 public:
