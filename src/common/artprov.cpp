@@ -149,12 +149,19 @@ namespace
 class wxBitmapBundleImplArt : public wxBitmapBundleImpl
 {
 public:
-    wxBitmapBundleImplArt(const wxArtID& id,
+    wxBitmapBundleImplArt(const wxBitmap& bitmap,
+                          const wxArtID& id,
                           const wxArtClient& client,
-                          const wxSize& size)
+                          const wxSize& sizeRequested)
         : m_artId(id),
           m_artClient(client),
-          m_sizeDefault(size)
+          // The bitmap bundle must have the requested size if it was
+          // specified, but if it wasn't just use the (scale-independent)
+          // bitmap size.
+          m_sizeDefault(sizeRequested.IsFullySpecified()
+                            ? sizeRequested
+                            : bitmap.GetDIPSize()),
+          m_bitmapScale(bitmap.GetScaleFactor())
     {
     }
 
@@ -182,15 +189,16 @@ protected:
         // adding something to the API doesn't make sense as all this is only
         // used for compatibility with the existing custom art providers -- new
         // ones should just override CreateBitmapBundle() directly), so we only
-        // return the original bitmap size, but hope that perhaps the provider
-        // will have a x2 version too, when our GetBitmap() is called.
-        return i++ ? 0.0 : 1.0;
+        // return the original bitmap scale, but hope that perhaps the provider
+        // will have other (e.g. x2) scales too, when our GetBitmap() is called.
+        return i++ ? 0.0 : m_bitmapScale;
     }
 
 private:
     const wxArtID m_artId;
     const wxArtClient m_artClient;
     const wxSize m_sizeDefault;
+    const double m_bitmapScale;
 
     wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplArt);
 };
@@ -432,16 +440,8 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
             const wxBitmap& bitmap = provider->CreateBitmap(id, client, size);
             if ( bitmap.IsOk() )
             {
-                // The returned bitmap bundle must have the requested default
-                // size if it is provided, but if not, use the size of the
-                // bitmap, which may be different from this size.
                 bitmapbundle = wxBitmapBundle::FromImpl(
-                        new wxBitmapBundleImplArt(
-                                id,
-                                client,
-                                size.IsFullySpecified() ? size
-                                                        : bitmap.GetSize()
-                            )
+                        new wxBitmapBundleImplArt(bitmap, id, client, size)
                     );
                 break;
             }
