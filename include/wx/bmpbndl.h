@@ -152,7 +152,11 @@ public:
     // Implementation only from now on.
 
     // Get the bitmap size preferred by the majority of the elements of the
-    // bundles at the scale appropriate for the given scale.
+    // bundles at the given scale or the scale appropriate for the given window.
+    static wxSize
+    GetConsensusSizeFor(double scale,
+                        const wxVector<wxBitmapBundle>& bundles,
+                        const wxSize& sizeDefault);
     static wxSize
     GetConsensusSizeFor(wxWindow* win,
                         const wxVector<wxBitmapBundle>& bundles,

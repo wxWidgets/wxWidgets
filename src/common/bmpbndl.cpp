@@ -596,7 +596,15 @@ wxBitmapBundle::GetConsensusSizeFor(wxWindow* win,
                                     const wxVector<wxBitmapBundle>& bundles,
                                     const wxSize& sizeDefault)
 {
-    const double scale = win->GetDPIScaleFactor();
+    return GetConsensusSizeFor(win->GetDPIScaleFactor(), bundles, sizeDefault);
+}
+
+/* static */
+wxSize
+wxBitmapBundle::GetConsensusSizeFor(double scale,
+                                    const wxVector<wxBitmapBundle>& bundles,
+                                    const wxSize& sizeDefault)
+{
     const wxSize sizeIdeal = sizeDefault*scale;
 
     // We want to use preferred bitmap size, but the preferred sizes can be
