@@ -1862,8 +1862,7 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDou
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc )
     : wxGraphicsContext(renderer, dc.GetWindow())
 {
-    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-    HDC hdc = (HDC) msw->GetHDC();
+    HDC hdc = (HDC) dc.GetHDC();
     wxSize sz = dc.GetSize();
 
     Init(new Graphics(hdc), sz.x, sz.y);
