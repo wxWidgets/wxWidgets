@@ -7118,10 +7118,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
         dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
         dc.DrawRectangle(rect);
 #endif
-        if ( GetBorder() == wxBORDER_NONE )
-            rect.Deflate(2);
-        else
-            rect.Deflate(1);
+        rect.Deflate(GetBorder() == wxBORDER_NONE ? 2 : 1);
     }
 
     int hAlign, vAlign;
@@ -7278,10 +7275,7 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
             dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
             dc.DrawRectangle(rect);
 #endif
-            if ( GetBorder() == wxBORDER_NONE )
-                rect.Deflate(2);
-            else
-                rect.Deflate(1);
+            rect.Deflate(GetBorder() == wxBORDER_NONE ? 2 : 1);
         }
     }
 
