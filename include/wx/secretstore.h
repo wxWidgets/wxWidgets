@@ -170,6 +170,8 @@ private:
 
 #else // !wxUSE_SECRETSTORE
 
+#include "wx/utils.h"
+
 // Provide stand in for wxSecretValue allowing to use it without having #if
 // wxUSE_SECRETSTORE checks everywhere. Unlike the real version, this class
 // doesn't provide any added security.
@@ -211,7 +213,7 @@ public:
         return m_data;
     }
 
-    static void Wipe(size_t size, void *data) { memset(data, 0, size); }
+    static void Wipe(size_t size, void *data) { wxSecureZeroMemory(data, size); }
     static void WipeString(wxString& str)
     {
         str.assign(str.length(), '*');

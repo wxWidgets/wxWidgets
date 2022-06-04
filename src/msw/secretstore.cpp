@@ -140,12 +140,6 @@ wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data)
 }
 
 /* static */
-void wxSecretValue::Wipe(size_t size, void *data)
-{
-    ::SecureZeroMemory(data, size);
-}
-
-/* static */
 wxSecretStore wxSecretStore::GetDefault()
 {
     // There is only a single store under Windows anyhow.
