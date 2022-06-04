@@ -7114,10 +7114,9 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
         rend.DrawBorder(*this, dc, rect);
     else
     {
-#ifdef __WXGTK__
+        // just highlight the current row
         dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
         dc.DrawRectangle(rect);
-#endif
         rect.Deflate(GetBorder() == wxBORDER_NONE ? 2 : 1);
     }
 
@@ -7271,10 +7270,9 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
             rend.DrawBorder(*this, dc, rect);
         else
         {
-#ifdef __WXGTK__
+            // just highlight the current column
             dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
             dc.DrawRectangle(rect);
-#endif
             rect.Deflate(GetBorder() == wxBORDER_NONE ? 2 : 1);
         }
     }
