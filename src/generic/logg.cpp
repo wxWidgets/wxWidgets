@@ -488,6 +488,9 @@ wxEND_EVENT_TABLE()
 wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTitle)
           : wxFrame(pParent, wxID_ANY, szTitle)
 {
+    // We don't want our parent frame getting any events from us.
+    SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+
     m_log = log;
 
     m_pTextCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
