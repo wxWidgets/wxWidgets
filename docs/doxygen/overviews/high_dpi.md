@@ -299,7 +299,8 @@ programs involves doing at least the following:
    wxArtProvider::CreateBitmapBundle() (and, of course, return multiple bitmaps
    from it) instead of wxArtProvider::CreateBitmap().
 4. Removing any calls to wxToolBar::SetToolBitmapSize() or, equivalently,
-   `<bitmapsize>` attributes from the XRC, as this forces unwanted scaling.
+   `<bitmapsize>` attributes from the XRC, as this overrides the best size
+   determination and may result in suboptimal appearance.
 
 
 
