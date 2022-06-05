@@ -197,7 +197,7 @@ bool wxListBox::Create(wxWindow *parent,
 wxListBox::~wxListBox()
 {
     // call this just to free the client data -- and avoid leaking memory
-    DoClear();
+    Clear();
 
     if ( IsSorted() )
         delete m_strings.sorted;
