@@ -475,7 +475,7 @@ TEST_CASE("BitmapBundle::GetConsensusSize", "[bmpbundle]")
 
         int GetConsensusSize(double scale) const
         {
-            return wxBitmapBundle::GetConsensusSizeFor(scale, vec, wxSize()).y;
+            return wxBitmapBundle::GetConsensusSizeFor(scale, vec).y;
         }
     } bundles;
 

@@ -154,13 +154,9 @@ public:
     // Get the bitmap size preferred by the majority of the elements of the
     // bundles at the given scale or the scale appropriate for the given window.
     static wxSize
-    GetConsensusSizeFor(double scale,
-                        const wxVector<wxBitmapBundle>& bundles,
-                        const wxSize& sizeDefault);
+    GetConsensusSizeFor(double scale, const wxVector<wxBitmapBundle>& bundles);
     static wxSize
-    GetConsensusSizeFor(wxWindow* win,
-                        const wxVector<wxBitmapBundle>& bundles,
-                        const wxSize& sizeDefault);
+    GetConsensusSizeFor(wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
 
     // Create wxImageList and fill it with the images from the given bundles in
     // the sizes appropriate for the DPI scaling used for the specified window.

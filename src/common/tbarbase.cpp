@@ -493,12 +493,8 @@ void wxToolBarBase::AdjustToolBitmapSize()
     }
     else // Determine the best size to use from the bitmaps we have.
     {
-        wxSize sizePreferred = wxBitmapBundle::GetConsensusSizeFor
-                               (
-                                this,
-                                bundles,
-                                ToDIP(sizeOrig)
-                               );
+        const wxSize
+            sizePreferred = wxBitmapBundle::GetConsensusSizeFor(this, bundles);
 
         // GetConsensusSizeFor() returns physical size, but we want to operate
         // with logical pixels as everything else is expressed in them.
