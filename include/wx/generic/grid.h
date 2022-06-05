@@ -2804,8 +2804,11 @@ protected:
     // operation in progress.
     int     m_dragMoveRowOrCol;
 
-    // Last horizontal mouse position while drag-moving a column.
+    // Last drag marker position while drag-moving a row or column.
     int     m_dragLastPos;
+
+    // Last drag marker colour while drag-moving a row or column.
+    const wxColour *m_dragLastColour;
 
     // Row or column (depending on m_cursorMode value) currently being resized
     // or -1 if there is no resize operation in progress.
@@ -2987,6 +2990,10 @@ private:
     // helper for Process...MouseEvent to scroll
     void CheckDoDragScroll(wxGridSubwindow *eventGridWindow, wxGridSubwindow *gridWindow,
                            wxPoint posEvent, int direction);
+
+    // helper for Process...LabelMouseEvent to check whether a drag operation
+    // would end at the source line, i.e. have no effect
+    bool CheckIfAtDragSourceLine(const wxGridOperations &oper, int coord);
 
     // return true if the grid should be refreshed right now
     bool ShouldRefresh() const

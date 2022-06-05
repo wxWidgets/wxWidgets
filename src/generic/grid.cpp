@@ -3061,6 +3061,7 @@ void wxGrid::Init()
     m_canDragCell = false;
     m_dragMoveRowOrCol = -1;
     m_dragLastPos  = -1;
+    m_dragLastColour  = NULL;
     m_dragRowOrCol = -1;
     m_dragRowOrColOldSize = -1;
     m_isDragging = false;
@@ -3981,6 +3982,33 @@ bool wxGrid::CheckIfDragCancelled(wxMouseEvent *event)
     return false;
 }
 
+bool wxGrid::CheckIfAtDragSourceLine(const wxGridOperations &oper, int coord)
+{
+    // check whether coord on the dragged line or at max half of a line away
+    // (the sizes of the lines before/after can be 0, if they are hidden)
+    int minCoord = oper.GetLineStartPos(this, m_dragMoveRowOrCol);
+    int maxCoord = minCoord + oper.GetLineSize(this, m_dragMoveRowOrCol);
+
+    int lineBefore = oper.GetLineBefore(this, m_dragMoveRowOrCol);
+    if ( lineBefore == -1 && coord < maxCoord )
+        return true;
+    if ( lineBefore != -1 )
+        minCoord -= oper.GetLineSize(this, lineBefore) / 2;
+
+    int posAfter = oper.GetLinePos(this, m_dragMoveRowOrCol) + 1;
+    int lineAfter = posAfter < oper.GetTotalNumberOfLines(this) ?
+                        oper.GetLineAt(this, posAfter) : -1;
+
+    if ( lineAfter == -1 && coord >= minCoord )
+        return true;
+    if ( lineAfter != -1 )
+        maxCoord += oper.GetLineSize(this, lineAfter) / 2;
+
+    if ( coord >= minCoord && coord < maxCoord )
+        return true;
+    return false;
+}
+
 void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouseEvent& event, wxGridSubwindow* labelWin )
 {
     const wxGridOperations &dual = oper.Dual();
@@ -4062,15 +4090,22 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                 else
                     markerPos = oper.GetLineStartPos(this, lineAt);
 
-                if ( markerPos != m_dragLastPos )
+                const wxColour *markerColour;
+                // Moving to the same place? Draw a grey marker.
+                if ( CheckIfAtDragSourceLine(oper, coord) )
+                    markerColour = wxLIGHT_GREY;
+                else
+                    markerColour = wxBLUE;
+
+                if ( markerPos != m_dragLastPos || markerColour != m_dragLastColour )
                 {
                     wxClientDC dc( headerWin );
                     oper.PrepareDCForLabels(this, dc);
 
                     int markerLength = oper.Select(headerWin->GetClientSize());
 
-                    // Clean up the last indicator
-                    if ( m_dragLastPos >= 0 )
+                    // Clean up the last indicator if position has changed
+                    if ( m_dragLastPos >= 0 && markerPos != m_dragLastPos )
                     {
                         wxPen pen(headerWin->GetBackgroundColour(), 2);
                         dc.SetPen(pen);
@@ -4083,20 +4118,14 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                             oper.DrawLineLabel(this, dc, lastLine);
                     }
 
-                    const wxColour *color;
-                    // Moving to the same place? Don't draw a marker
-                    if ( lineAt == m_dragMoveRowOrCol )
-                        color = wxLIGHT_GREY;
-                    else
-                        color = wxBLUE;
-
                     // Draw the marker
-                    wxPen pen(*color, 2);
+                    wxPen pen(*markerColour, 2);
                     dc.SetPen(pen);
                     oper.DrawParallelLine(dc, 0, markerLength, markerPos + 1);
                     dc.SetPen(wxNullPen);
 
                     m_dragLastPos = markerPos;
+                    m_dragLastColour = markerColour;
                 }
             }
         }
@@ -4130,18 +4159,13 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
             {
                 if ( oper.CanDragMove(this) )
                 {
+                    ChangeCursorMode(oper.GetCursorModeMove(), headerWin);
+
                     // Show button as pressed
+                    m_dragMoveRowOrCol = line;
                     wxClientDC dc( headerWin );
                     oper.PrepareDCForLabels(this, dc);
-                    dc.SetPen( wxPen( headerWin->GetBackgroundColour(), 1 ) );
-
-                    int lineStart = oper.GetLineStartPos(this, line);
-                    int lineEnd = oper.GetLineEndPos(this, line) - 1;
-                    int lineLength = oper.Select(headerWin->GetClientSize()) - 1;
-                    oper.DrawParallelLine(dc, 0, lineLength, lineStart);
-                    dual.DrawParallelLine(dc, lineStart, lineEnd, 1);
-
-                    ChangeCursorMode(oper.GetCursorModeMove(), headerWin);
+                    oper.DrawLineLabel(this, dc, line);
                 }
                 else
                 {
@@ -4226,7 +4250,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         }
         else if ( m_cursorMode == oper.GetCursorModeMove() )
         {
-            if ( m_dragLastPos == -1 || line == m_dragMoveRowOrCol )
+            if ( CheckIfAtDragSourceLine(oper, coord) )
             {
                 // the line didn't actually move anywhere, "unpress" the label
                 if ( oper.GetOrientation() == wxVERTICAL && line != -1 )
@@ -4259,11 +4283,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         {
             DoColHeaderClick(line);
         }
-
-        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, labelWin);
-        m_dragLastPos = -1;
-        m_lastMousePos = wxDefaultPosition;
-        m_isDragging = false;
+        EndDraggingIfNecessary();
     }
 
     // ------------ Right button down
@@ -4489,6 +4509,9 @@ void wxGrid::CancelMouseCapture()
     // cancel operation currently in progress, whatever it is
     if ( m_winCapture )
     {
+        if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL ||
+             m_cursorMode == WXGRID_CURSOR_MOVE_ROW )
+            m_winCapture->Refresh();
         DoAfterDraggingEnd();
     }
 }
@@ -4506,6 +4529,10 @@ void wxGrid::DoAfterDraggingEnd()
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
     m_lastMousePos = wxDefaultPosition;
+    // from drag moving row/col
+    m_dragMoveRowOrCol = -1;
+    m_dragLastPos = -1;
+    m_dragLastColour = NULL;
 
     m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
@@ -5998,6 +6025,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                             // end row/column moving
                             m_winCapture->Refresh();
                             m_dragLastPos = -1;
+                            m_dragLastColour = NULL;
                             break;
 
                         case WXGRID_CURSOR_RESIZE_ROW:
@@ -7069,7 +7097,28 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
                                 (gs_defaultHeaderRenderers.rowRenderer);
 
     wxRect rect(0, GetRowTop(row), m_rowLabelWidth, GetRowHeight(row));
-    rend.DrawBorder(*this, dc, rect);
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_ROW )
+    {
+        // clear the background:
+        // when called from ProcessRowColLabelMouseEvent the background is not
+        // cleared at this point
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(m_colLabelWin->GetBackgroundColour());
+        dc.DrawRectangle(rect);
+    }
+
+    // draw a border if the row is not being drag-moved
+    // (in that case it's omitted to have a 'pressed' appearance)
+    if (m_cursorMode != WXGRID_CURSOR_MOVE_ROW || row != m_dragMoveRowOrCol)
+        rend.DrawBorder(*this, dc, rect);
+    else
+    {
+        // just highlight the current row
+        dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
+        dc.DrawRectangle(rect);
+        rect.Deflate(GetBorder() == wxBORDER_NONE ? 2 : 1);
+    }
 
     int hAlign, vAlign;
     GetRowLabelAlignment(&hAlign, &vAlign);
@@ -7204,15 +7253,28 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     }
     else
     {
-        // It is reported that we need to erase the background to avoid display
-        // artefacts, see #12055.
+
+        if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL )
         {
+            // clear the background:
+            // when called from ProcessRowColLabelMouseEvent the background
+            // is not cleared at this point
             wxDCBrushChanger setBrush(dc, m_colLabelWin->GetBackgroundColour());
             wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
             dc.DrawRectangle(rect);
         }
 
-        rend.DrawBorder(*this, dc, rect);
+        // draw a border if the column is not being drag-moved
+        // (in that case it's omitted to have a 'pressed' appearance)
+        if (m_cursorMode != WXGRID_CURSOR_MOVE_COL || col != m_dragMoveRowOrCol)
+            rend.DrawBorder(*this, dc, rect);
+        else
+        {
+            // just highlight the current column
+            dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
+            dc.DrawRectangle(rect);
+            rect.Deflate(GetBorder() == wxBORDER_NONE ? 2 : 1);
+        }
     }
 
     int hAlign, vAlign;
