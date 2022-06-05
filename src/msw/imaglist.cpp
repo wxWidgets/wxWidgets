@@ -328,26 +328,11 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 // Adds a bitmap and mask from an icon.
 int wxImageList::Add(const wxIcon& icon)
 {
-    // ComCtl32 prior 6.0 doesn't support images with alpha
-    // channel so if we have 32-bit icon with transparency
-    // we need to add it as a wxBitmap via dedicated method
-    // where alpha channel will be converted to the mask.
-    if ( wxApp::GetComCtl32Version() < 600 )
-    {
-        wxBitmap bmp(icon);
-        if ( bmp.HasAlpha() )
-        {
-            return Add(bmp);
-        }
-    }
-
-    int index = ImageList_AddIcon(GetHImageList(), GetHiconOf(icon));
-    if ( index == -1 )
-    {
-        wxLogError(_("Couldn't add an image to the image list."));
-    }
-
-    return index;
+    // We don't use ImageList_AddIcon() here as this only works for icons with
+    // masks when using ILC_MASK, which we usually don't do, so reuse the
+    // bitmap function instead -- even if it's slightly less efficient due to
+    // extra conversions, it's simpler than handling all the various cases here.
+    return Add(wxBitmap(icon));
 }
 
 // Replaces a bitmap, optionally passing a mask bitmap.
@@ -372,26 +357,9 @@ bool wxImageList::Replace(int index,
 // Replaces a bitmap and mask from an icon.
 bool wxImageList::Replace(int i, const wxIcon& icon)
 {
-    // ComCtl32 prior 6.0 doesn't support images with alpha
-    // channel so if we have 32-bit icon with transparency
-    // we need to replace it as a wxBitmap via dedicated method
-    // where alpha channel will be converted to the mask.
-    if ( wxApp::GetComCtl32Version() < 600 )
-    {
-        wxBitmap bmp(icon);
-        if ( bmp.HasAlpha() )
-        {
-            return Replace(i, bmp);
-        }
-    }
-
-    bool ok = ImageList_ReplaceIcon(GetHImageList(), i, GetHiconOf(icon)) != -1;
-    if ( !ok )
-    {
-        wxLogLastError(wxT("ImageList_ReplaceIcon()"));
-    }
-
-    return ok;
+    // Same as in Add() above, just reuse the existing function for simplicity
+    // even if it means an extra conversion.
+    return Replace(i, wxBitmap(icon));
 }
 
 // Removes the image at the given index.

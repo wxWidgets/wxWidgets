@@ -304,6 +304,30 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 }
 #endif // WXWIN_COMPATIBILITY_3_0
 
+#if wxUSE_IMAGE
+
+namespace
+{
+
+bool CanUpscaleByInt(int w, int h, const wxSize& sizeNeeded)
+{
+    return !(sizeNeeded.x % w) && !(sizeNeeded.y % h);
+}
+
+void ExtendBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
+{
+    const wxSize size = bmp.GetSize();
+
+    wxPoint offset((sizeNeeded.x - size.x)/2, (sizeNeeded.y - size.y)/2);
+    wxImage img = bmp.ConvertToImage();
+    img.Resize(sizeNeeded, offset);
+    bmp = wxBitmap(img);
+}
+
+} // anonymous namespace
+
+#endif // wxUSE_IMAGE
+
 void
 wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
 {
@@ -317,25 +341,42 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
         return;
 
 #if wxUSE_IMAGE
-    // Allow upscaling by an integer factor: this looks not too horribly and is
-    // needed to use reasonably-sized bitmaps in the code not yet updated to
-    // use wxBitmapBundle but using custom art providers.
-    if ((bmp_w <= sizeNeeded.x) && (bmp_h <= sizeNeeded.y) &&
-            (sizeNeeded.x % bmp_w || sizeNeeded.y % bmp_h))
+    // Check if we need to increase or decrease the image size (mixed case is
+    // handled as decreasing).
+    if ((bmp_w <= sizeNeeded.x) && (bmp_h <= sizeNeeded.y))
     {
+        // Allow upscaling by an integer factor: this looks not too horribly and is
+        // needed to use reasonably-sized bitmaps in the code not yet updated to
+        // use wxBitmapBundle but using custom art providers.
+        bool shouldUpscale = CanUpscaleByInt(bmp_w, bmp_h, sizeNeeded);
+
+        // And account for the common case of 16x15 bitmaps used for many wxMSW
+        // images: those can be resized to 16x16 and then upscaled if possible
+        // (and if 16x16 is the required size, there is no need to upscale, so
+        // don't handle this sub-case specially at all).
+        if (!shouldUpscale && bmp_w == 16 && bmp_h == 15 && sizeNeeded.y != 16)
+        {
+            // If we can't upscale it with its current height, perhaps we can
+            // if we resize it to 16 first?
+            if (CanUpscaleByInt(bmp_w, 16, sizeNeeded))
+            {
+                ExtendBitmap(bmp, wxSize(16, 16));
+                shouldUpscale = true;
+            }
+        }
+
         // the caller wants default size, which is larger than
         // the image we have; to avoid degrading it visually by
         // scaling it up, paste it into transparent image instead:
-        wxPoint offset((sizeNeeded.x - bmp_w)/2, (sizeNeeded.y - bmp_h)/2);
-        wxImage img = bmp.ConvertToImage();
-        img.Resize(sizeNeeded, offset);
-        bmp = wxBitmap(img);
+        if (!shouldUpscale)
+        {
+            ExtendBitmap(bmp, sizeNeeded);
+            return;
+        }
     }
-    else // scale (down or mixed, but not up, or at least not by an int factor)
 #endif // wxUSE_IMAGE
-    {
-        wxBitmap::Rescale(bmp, sizeNeeded);
-    }
+
+    wxBitmap::Rescale(bmp, sizeNeeded);
 }
 
 /*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
