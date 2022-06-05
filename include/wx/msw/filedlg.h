@@ -11,6 +11,8 @@
 #ifndef _WX_FILEDLG_H_
 #define _WX_FILEDLG_H_
 
+class wxFileDialogMSWData;
+
 //-------------------------------------------------------------------------
 // wxFileDialog
 //-------------------------------------------------------------------------
@@ -27,25 +29,13 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxASCII_STR(wxFileDialogNameStr));
+    virtual ~wxFileDialog();
 
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
     virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE;
     virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
-    void MSWOnInitDialogHook(WXHWND hwnd);
 
     virtual int ShowModal() wxOVERRIDE;
-
-    // wxMSW-specific implementation from now on
-    // -----------------------------------------
-
-    // called from the hook procedure on CDN_INITDONE reception
-    virtual void MSWOnInitDone(WXHWND hDlg);
-
-    // called from the hook procedure on CDN_SELCHANGE.
-    void MSWOnSelChange(WXHWND hDlg);
-
-    // called from the hook procedure on CDN_TYPECHANGE.
-    void MSWOnTypeChange(WXHWND hDlg, int nFilterIndex);
 
 protected:
 
@@ -55,12 +45,38 @@ protected:
     virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE;
 
 private:
+    // Allow it to call MSWOnXXX() functions below.
+    friend class wxFileDialogMSWData;
+
+    // called when the dialog is created
+    void MSWOnInitDialogHook(WXHWND hwnd);
+
+    // called when the dialog initialization is fully done
+    void MSWOnInitDone(WXHWND hDlg);
+
+    // called when the currently selected file changes in the dialog
+    void MSWOnSelChange(const wxString& selectedFilename);
+
+    // called when the currently selected type of files changes in the dialog
+    void MSWOnTypeChange(int nFilterIndex);
+
+    // The real implementation of ShowModal() using traditional common dialog
+    // functions.
+    int ShowCommFileDialog(WXHWND owner);
+
+    // And another one using IFileDialog.
+    int ShowIFileDialog(WXHWND owner);
+
+    // Get the data object, allocating it if necessary.
+    wxFileDialogMSWData& MSWData();
+
+
     wxArrayString m_fileNames;
 
-    // remember if our SetPosition() or Centre() (which requires special
-    // treatment) was called
-    bool m_bMovedWindow;
-    int m_centreDir;        // nothing to do if 0
+    // Extra data, possibly null if not needed, use MSWData() to access it if
+    // it should be created on demand.
+    wxFileDialogMSWData* m_data;
+
 
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
     wxDECLARE_NO_COPY_CLASS(wxFileDialog);

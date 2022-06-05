@@ -301,7 +301,17 @@ int wxGenericFileDialog::ShowModal()
 
     m_filectrl->SetDirectory(m_dir);
 
-    return wxDialog::ShowModal();
+    const int rc = wxDialog::ShowModal();
+
+    // Destroy the extra controls before ShowModal() returns for consistency
+    // with the native implementations.
+    if (m_extraControl)
+    {
+        m_extraControl->Destroy();
+        m_extraControl = NULL;
+    }
+
+    return rc;
 }
 
 bool wxGenericFileDialog::Show( bool show )
@@ -402,6 +412,8 @@ void wxGenericFileDialog::OnUpdateButtonsUI(wxUpdateUIEvent& event)
     // wxFileCtrl ctor itself can generate idle events, so we need this test
     if ( m_filectrl )
         event.Enable( !IsTopMostDir(m_filectrl->GetShownDirectory()) );
+
+    UpdateExtraControlUI();
 }
 
 #ifdef wxHAS_GENERIC_FILEDIALOG
