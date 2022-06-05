@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-04-09 20:21-0300\n"
+"PO-Revision-Date: 2022-06-04 15:03-0300\n"
 "Last-Translator: Felipe <felipefplzx@gmail.com>\n"
 "Language-Team: Felipe <felipefplzx@gmail.com>\n"
 "Language: pt_BR\n"
@@ -222,6 +222,7 @@ msgid "Delete"
 msgstr "Apagar"
 
 #: ../src/common/accelcmn.cpp:48
+#| msgid "Del"
 msgctxt "keyboard key"
 msgid "Del"
 msgstr "Del"
@@ -237,16 +238,19 @@ msgid "Backspace"
 msgstr "Backspace"
 
 #: ../src/common/accelcmn.cpp:50
+#| msgid "Insert"
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "Insert"
 
 #: ../src/common/accelcmn.cpp:51
+#| msgid "Ins"
 msgctxt "keyboard key"
 msgid "Ins"
 msgstr "Ins"
 
 #: ../src/common/accelcmn.cpp:52
+#| msgid "Enter"
 msgctxt "keyboard key"
 msgid "Enter"
 msgstr "Enter"
@@ -257,31 +261,37 @@ msgid "Return"
 msgstr "Retornar"
 
 #: ../src/common/accelcmn.cpp:54
+#| msgid "PageUp"
 msgctxt "keyboard key"
 msgid "PageUp"
 msgstr "PageUp"
 
 #: ../src/common/accelcmn.cpp:54
+#| msgid "Page Up"
 msgctxt "keyboard key"
 msgid "Page Up"
 msgstr "Page Up"
 
 #: ../src/common/accelcmn.cpp:55
+#| msgid "PageDown"
 msgctxt "keyboard key"
 msgid "PageDown"
 msgstr "PageDown"
 
 #: ../src/common/accelcmn.cpp:55
+#| msgid "Page Down"
 msgctxt "keyboard key"
 msgid "Page Down"
 msgstr "Page Down"
 
 #: ../src/common/accelcmn.cpp:56
+#| msgid "PgUp"
 msgctxt "keyboard key"
 msgid "PgUp"
 msgstr "PgUp"
 
 #: ../src/common/accelcmn.cpp:57
+#| msgid "PgDn"
 msgctxt "keyboard key"
 msgid "PgDn"
 msgstr "PgDn"
@@ -307,11 +317,13 @@ msgid "Down"
 msgstr "Pra baixo"
 
 #: ../src/common/accelcmn.cpp:62
+#| msgid "Home"
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "Home"
 
 #: ../src/common/accelcmn.cpp:63
+#| msgid "End"
 msgctxt "keyboard key"
 msgid "End"
 msgstr "End"
@@ -324,9 +336,10 @@ msgstr "Barra de Espaço"
 #: ../src/common/accelcmn.cpp:65
 msgctxt "keyboard key"
 msgid "Tab"
-msgstr "Aba"
+msgstr "Tab"
 
 #: ../src/common/accelcmn.cpp:66
+#| msgid "Esc"
 msgctxt "keyboard key"
 msgid "Esc"
 msgstr "Esc"
@@ -334,7 +347,7 @@ msgstr "Esc"
 #: ../src/common/accelcmn.cpp:67
 msgctxt "keyboard key"
 msgid "Escape"
-msgstr "Esc"
+msgstr "Escape"
 
 #: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
@@ -379,7 +392,7 @@ msgstr "Executar"
 #: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
 msgid "Snapshot"
-msgstr "Fotografia"
+msgstr "Snapshot"
 
 #: ../src/common/accelcmn.cpp:77
 msgctxt "keyboard key"
@@ -417,21 +430,25 @@ msgid "Divide"
 msgstr "Dividir"
 
 #: ../src/common/accelcmn.cpp:84
+#| msgid "Num_lock"
 msgctxt "keyboard key"
 msgid "Num_lock"
 msgstr "Num_lock"
 
 #: ../src/common/accelcmn.cpp:84
+#| msgid "Num Lock"
 msgctxt "keyboard key"
 msgid "Num Lock"
 msgstr "Num Lock"
 
 #: ../src/common/accelcmn.cpp:85
+#| msgid "Scroll_lock"
 msgctxt "keyboard key"
 msgid "Scroll_lock"
 msgstr "Scroll_lock"
 
 #: ../src/common/accelcmn.cpp:85
+#| msgid "Scroll Lock"
 msgctxt "keyboard key"
 msgid "Scroll Lock"
 msgstr "Scroll Lock"
@@ -439,7 +456,7 @@ msgstr "Scroll Lock"
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr "KP_Brra de Espaço"
+msgstr "KP_Barra de Espaço"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
@@ -447,31 +464,37 @@ msgid "Num Space"
 msgstr "Num Barra de Espaço"
 
 #: ../src/common/accelcmn.cpp:87
+#| msgid "KP_Tab"
 msgctxt "keyboard key"
 msgid "KP_Tab"
-msgstr "KP_Aba"
+msgstr "KP_Tab"
 
 #: ../src/common/accelcmn.cpp:87
+#| msgid "Num Tab"
 msgctxt "keyboard key"
 msgid "Num Tab"
-msgstr "Num Aba"
+msgstr "Num Tab"
 
 #: ../src/common/accelcmn.cpp:88
+#| msgid "KP_Enter"
 msgctxt "keyboard key"
 msgid "KP_Enter"
 msgstr "KP_Enter"
 
 #: ../src/common/accelcmn.cpp:88
+#| msgid "Num Enter"
 msgctxt "keyboard key"
 msgid "Num Enter"
 msgstr "Num Enter"
 
 #: ../src/common/accelcmn.cpp:89
+#| msgid "KP_Home"
 msgctxt "keyboard key"
 msgid "KP_Home"
 msgstr "KP_Home"
 
 #: ../src/common/accelcmn.cpp:89
+#| msgid "Num Home"
 msgctxt "keyboard key"
 msgid "Num Home"
 msgstr "Num Home"
@@ -517,21 +540,25 @@ msgid "Num Down"
 msgstr "Num Pra Baixo"
 
 #: ../src/common/accelcmn.cpp:94
+#| msgid "KP_PageUp"
 msgctxt "keyboard key"
 msgid "KP_PageUp"
 msgstr "KP_PageUp"
 
 #: ../src/common/accelcmn.cpp:94
+#| msgid "Num Page Up"
 msgctxt "keyboard key"
 msgid "Num Page Up"
 msgstr "Num Page Up"
 
 #: ../src/common/accelcmn.cpp:95
+#| msgid "KP_PageDown"
 msgctxt "keyboard key"
 msgid "KP_PageDown"
 msgstr "KP_PageDown"
 
 #: ../src/common/accelcmn.cpp:95
+#| msgid "Num Page Down"
 msgctxt "keyboard key"
 msgid "Num Page Down"
 msgstr "Num Page Down"
@@ -547,11 +574,13 @@ msgid "KP_Next"
 msgstr "KP_Próximo"
 
 #: ../src/common/accelcmn.cpp:98
+#| msgid "KP_End"
 msgctxt "keyboard key"
 msgid "KP_End"
 msgstr "KP_End"
 
 #: ../src/common/accelcmn.cpp:98
+#| msgid "Num End"
 msgctxt "keyboard key"
 msgid "Num End"
 msgstr "Num End"
@@ -567,11 +596,13 @@ msgid "Num Begin"
 msgstr "Num Começar"
 
 #: ../src/common/accelcmn.cpp:100
+#| msgid "KP_Insert"
 msgctxt "keyboard key"
 msgid "KP_Insert"
 msgstr "KP_Insert"
 
 #: ../src/common/accelcmn.cpp:100
+#| msgid "Num Insert"
 msgctxt "keyboard key"
 msgid "Num Insert"
 msgstr "Num Insert"
@@ -592,6 +623,7 @@ msgid "KP_Equal"
 msgstr "KP_Igual"
 
 #: ../src/common/accelcmn.cpp:102
+#| msgid "Num ="
 msgctxt "keyboard key"
 msgid "Num ="
 msgstr "Num ="
@@ -602,6 +634,7 @@ msgid "KP_Multiply"
 msgstr "KP_Multiplicar"
 
 #: ../src/common/accelcmn.cpp:103
+#| msgid "Num *"
 msgctxt "keyboard key"
 msgid "Num *"
 msgstr "Num *"
@@ -612,6 +645,7 @@ msgid "KP_Add"
 msgstr "KP_Adicionar"
 
 #: ../src/common/accelcmn.cpp:104
+#| msgid "Num +"
 msgctxt "keyboard key"
 msgid "Num +"
 msgstr "Num +"
@@ -622,6 +656,7 @@ msgid "KP_Separator"
 msgstr "KP_Separador"
 
 #: ../src/common/accelcmn.cpp:105
+#| msgid "Num ,"
 msgctxt "keyboard key"
 msgid "Num ,"
 msgstr "Num ,"
@@ -632,6 +667,7 @@ msgid "KP_Subtract"
 msgstr "KP_Subtrair"
 
 #: ../src/common/accelcmn.cpp:106
+#| msgid "Num -"
 msgctxt "keyboard key"
 msgid "Num -"
 msgstr "Num -"
@@ -642,6 +678,7 @@ msgid "KP_Decimal"
 msgstr "KP_Decimal"
 
 #: ../src/common/accelcmn.cpp:107
+#| msgid "Num ."
 msgctxt "keyboard key"
 msgid "Num ."
 msgstr "Num ."
@@ -652,6 +689,7 @@ msgid "KP_Divide"
 msgstr "KP_Dividir"
 
 #: ../src/common/accelcmn.cpp:108
+#| msgid "Num /"
 msgctxt "keyboard key"
 msgid "Num /"
 msgstr "Num /"
@@ -677,41 +715,49 @@ msgid "Command"
 msgstr "Comando"
 
 #: ../src/common/accelcmn.cpp:186
+#| msgid "ctrl"
 msgctxt "keyboard key"
 msgid "ctrl"
 msgstr "ctrl"
 
 #: ../src/common/accelcmn.cpp:188
+#| msgid "alt"
 msgctxt "keyboard key"
 msgid "alt"
 msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
+#| msgid "shift"
 msgctxt "keyboard key"
 msgid "shift"
 msgstr "shift"
 
 #: ../src/common/accelcmn.cpp:192
+#| msgid "rawctrl"
 msgctxt "keyboard key"
 msgid "rawctrl"
 msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
+#| msgid "num "
 msgctxt "keyboard key"
 msgid "num "
 msgstr "num "
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
+#| msgid "F"
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
 
 #: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
+#| msgid "KP_F"
 msgctxt "keyboard key"
 msgid "KP_F"
 msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
+#| msgid "KP_"
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
@@ -722,21 +768,25 @@ msgid "SPECIAL"
 msgstr "ESPECIAL"
 
 #: ../src/common/accelcmn.cpp:343
+#| msgid "Alt+"
 msgctxt "keyboard key"
 msgid "Alt+"
 msgstr "Alt+"
 
 #: ../src/common/accelcmn.cpp:345
+#| msgid "Ctrl+"
 msgctxt "keyboard key"
 msgid "Ctrl+"
 msgstr "Ctrl+"
 
 #: ../src/common/accelcmn.cpp:347
+#| msgid "Shift+"
 msgctxt "keyboard key"
 msgid "Shift+"
 msgstr "Shift+"
 
 #: ../src/common/accelcmn.cpp:350
+#| msgid "RawCtrl+"
 msgctxt "keyboard key"
 msgid "RawCtrl+"
 msgstr "RawCtrl+"
@@ -2140,7 +2190,7 @@ msgstr "BMP: Não consegue gravar os dados."
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP: o cabeçalho tem biClrUsed=%d quando o biBitCount=%d."
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -3900,9 +3950,9 @@ msgid "libcurl could not be initialized"
 msgstr "O libcurl não pôde ser inicializado"
 
 #: ../src/common/webview.cpp:246
-#, fuzzy
+#| msgid "String conversions not supported"
 msgid "RunScriptAsync not supported"
-msgstr "Conversï¿½es de string nï¿½o suportadas"
+msgstr "O RunScriptAsync não é suportado"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
@@ -4287,8 +4337,7 @@ msgid "Column %u"
 msgstr "Coluna %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7087
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4299,8 +4348,7 @@ msgid "Left"
 msgstr "Esquerda"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7090
-#: ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -6526,15 +6574,14 @@ msgid "Hide %s"
 msgstr "Esconder %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Aplicativo"
+msgstr "Esconder Aplicativo"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr "Esconder Outros"
+msgstr "Esconder os Outros"
 
 #: ../src/osx/menu_osx.cpp:522
 msgctxt "macOS menu item"
@@ -6548,10 +6595,9 @@ msgid "Quit %s"
 msgstr "Sair %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Aplicativo"
+msgstr "Sair do Aplicativo"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6780,169 +6826,142 @@ msgid "White"
 msgstr "Branco"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "Padrão"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Seta"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
-msgstr "Seta a Direita"
+msgstr "Seta da Direita"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Em branco"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Bullseye"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Caractere"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Cruz"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Mão"
 
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
+#| msgid "I-Beam"
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "I-Beam"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Botão Esquerdo"
 
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Lupa"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Botão do Meio"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Nenhuma Entrada"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Pincel do Paint"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Lápis"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Ponto a Esquerda"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Ponto a Direita"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Seta da Pergunta"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Botão Direito"
 
 #: ../src/propgrid/advprops.cpp:1673
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Dimensionamento NE-SO"
 
 #: ../src/propgrid/advprops.cpp:1674
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Dimensionamento N-S"
 
 #: ../src/propgrid/advprops.cpp:1675
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Dimensionamento NO-SE"
 
 #: ../src/propgrid/advprops.cpp:1676
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Dimensionamento O-L"
 
 #: ../src/propgrid/advprops.cpp:1677
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Dimensionamento"
 
 #: ../src/propgrid/advprops.cpp:1678
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Lata de spray"
 
 #: ../src/propgrid/advprops.cpp:1679
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Aguardar"
 
 #: ../src/propgrid/advprops.cpp:1680
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Observar"
 
 #: ../src/propgrid/advprops.cpp:1681
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Aguardar a Seta"
@@ -9284,24 +9303,31 @@ msgstr "Falhou em criar %s \"%s\"."
 #~ msgid "&Save as"
 #~ msgstr "&Salvar como"
 
+#, c-format
 #~ msgid "'%s' doesn't consist only of valid characters"
 #~ msgstr "'%s' não consiste apenas de caracteres válidos"
 
+#, c-format
 #~ msgid "'%s' should be numeric."
 #~ msgstr "'%s' deve ser numérico."
 
+#, c-format
 #~ msgid "'%s' should only contain ASCII characters."
 #~ msgstr "'%s' deve conter apenas caracteres ASCII."
 
+#, c-format
 #~ msgid "'%s' should only contain alphabetic characters."
 #~ msgstr "'%s' deve conter apenas caracteres alfabéticos."
 
+#, c-format
 #~ msgid "'%s' should only contain alphabetic or numeric characters."
 #~ msgstr "'%s' deve conter apenas caracteres alfabéticos ou numéricos."
 
+#, c-format
 #~ msgid "'%s' should only contain digits."
 #~ msgstr "'%s' deve conter apenas dígitos."
 
+#, c-format
 #~ msgid "Can't create window of class %s"
 #~ msgstr "Não consegue criar a janela da classe %s"
 
@@ -9314,12 +9340,14 @@ msgstr "Falhou em criar %s \"%s\"."
 #~ msgid "Couldn't init the context on the overlay window"
 #~ msgstr "Não pôde inicializar o contexto na janela do overlay"
 
+#, c-format
 #~ msgid "Failed to convert file \"%s\" to Unicode."
 #~ msgstr "Falhou em converter o arquivo \"%s\" para o Unicode."
 
 #~ msgid "Failed to set text in the text control."
 #~ msgstr "Falhou em definir o texto no controle de texto."
 
+#, c-format
 #~ msgid "Invalid GTK+ command line option, use \"%s --help\""
 #~ msgstr "Opção da linha de comando do GTK+ inválida, use \"%s --help\""
 
@@ -9347,6 +9375,7 @@ msgstr "Falhou em criar %s \"%s\"."
 #~ msgid "You cannot Init an overlay twice"
 #~ msgstr "Você não pode iniciar um overlay duas vezes"
 
+#, c-format
 #~ msgid "locale '%s' cannot be set."
 #~ msgstr "o idioma '%s' não pode ser definido."
 
