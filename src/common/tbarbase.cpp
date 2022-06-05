@@ -475,14 +475,26 @@ void wxToolBarBase::AdjustToolBitmapSize()
             bundles.push_back(bmp);
     }
 
-    if ( !bundles.empty() )
+    if ( bundles.empty() )
+        return;
+
+    wxSize sizeNeeded;
+
+    if ( m_requestedBitmapSize != wxSize(0, 0) )
     {
-        wxSize sizePreferred = wxBitmapBundle::GetConsensusSizeFor
-                               (
-                                this,
-                                bundles,
-                                ToDIP(sizeOrig)
-                               );
+        // If we have a fixed requested bitmap size, use it, but scale it by
+        // integer factor only, as otherwise we'd force fractional (and hence
+        // ugly looking) scaling here whenever fractional DPI scaling is used.
+
+        // We want to round 1.5 down to 1, but 1.75 up to 2.
+        int scaleFactorRoundedDown =
+            static_cast<int>(ceil(2*GetDPIScaleFactor())) / 2;
+        sizeNeeded = m_requestedBitmapSize*scaleFactorRoundedDown;
+    }
+    else // Determine the best size to use from the bitmaps we have.
+    {
+        const wxSize
+            sizePreferred = wxBitmapBundle::GetConsensusSizeFor(this, bundles);
 
         // GetConsensusSizeFor() returns physical size, but we want to operate
         // with logical pixels as everything else is expressed in them.
@@ -492,22 +504,17 @@ void wxToolBarBase::AdjustToolBitmapSize()
         // scale factor may be different from 1) use this size at all
         // currently, so it shouldn't matter. But if/when they are modified to
         // use the size computed here, this would need to be revisited.
-        sizePreferred = FromPhys(sizePreferred);
+        sizeNeeded = FromPhys(sizePreferred);
+    }
 
-        // Don't decrease the bitmap below the size requested by the application
-        // as using larger bitmaps shouldn't shrink them to the small default
-        // size.
-        sizePreferred.IncTo(FromDIP(m_requestedBitmapSize));
-
-        // No need to change the bitmaps size if it doesn't really change.
-        if ( sizePreferred == sizeOrig )
-            return;
-
+    // No need to change the bitmaps size if it doesn't really change.
+    if ( sizeNeeded != sizeOrig )
+    {
         // Call DoSetToolBitmapSize() and not SetToolBitmapSize() to avoid
         // changing the requested bitmap size: if we set our own adjusted size
         // as the preferred one, we wouldn't decrease it later even if we ought
         // to, as when moving from a monitor with higher DPI to a lower-DPI one.
-        DoSetToolBitmapSize(sizePreferred);
+        DoSetToolBitmapSize(sizeNeeded);
     }
 }
 

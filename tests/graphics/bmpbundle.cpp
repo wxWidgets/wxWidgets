@@ -460,3 +460,34 @@ TEST_CASE("BitmapBundle::Scale", "[bmpbundle][scale]")
 }
 
 #endif // ports with scaled bitmaps support
+
+TEST_CASE("BitmapBundle::GetConsensusSize", "[bmpbundle]")
+{
+    // Just a trivial helper to make writing the tests below simpler.
+    struct Bundles
+    {
+        wxVector<wxBitmapBundle> vec;
+
+        void Add(int size)
+        {
+            vec.push_back(wxBitmapBundle::FromBitmap(wxSize(size, size)));
+        }
+
+        int GetConsensusSize(double scale) const
+        {
+            return wxBitmapBundle::GetConsensusSizeFor(scale, vec).y;
+        }
+    } bundles;
+
+    // When there is a tie, a larger size is chosen by default.
+    bundles.Add(16);
+    bundles.Add(24);
+    CHECK( bundles.GetConsensusSize(2) == 48 );
+
+    // Breaking the tie results in the smaller size winning now.
+    bundles.Add(16);
+    CHECK( bundles.GetConsensusSize(2) == 32 );
+
+    // Integer scaling factors should be preferred.
+    CHECK( bundles.GetConsensusSize(1.5) == 16 );
+}
