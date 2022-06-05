@@ -32,33 +32,31 @@ installation instructions.
 
 
 
-Changes since 3.1.5
+Changes since 3.1.6
 -------------------
 
-In almost a year since the previous release, there have been more than 1700
-commits from 82 unique contributors (41 with multiple contributions), so it is
-impossible to summarize all the changes in this document without making it too
-long, please see the fuller changelog at
+This release, coming only two months after the previous one, mostly
+contains bug fixes and incremental improvements in preparation for 3.2.0
+major release. There is still quite a number of them, with more than 500
+commits from 37 unique contributors, but the most important changes are:
+
+- CMake build system improvements (better precompiled headers support).
+- New wxFileDialog customization API working with IFileDialog in wxMSW.
+- Many updated translations and new wxTRANSLATE_IN_CONTEXT().
+- Fixes for bad interactions with new macOS 12 features in wxOSX.
+- Several previously missing attributes added to multiple XRC handlers.
+- Row reordering by dragging and UI enhancements in wxGrid.
+- Ability to suppress selected (or all) GTK warning messages in wxGTK.
+- And many, many bugs fixes, including for the regressions in 3.1.6.
+
+Please see
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.7/docs/changes.txt
 
-for more details, but here are some of the most important changes:
-
-- New wxBitmapBundle class allowing to provide art work for both normal and
-  high DPI in a simple way.
-- New wxUILocale class replacing the old (but still available) wxLocale, but
-  not suffering from its multiple problems and providing more functionality.
-- Support for using native spell-checking in wxTextCtrl.
-- Support for undo/redo in wxTextCtrl in wxOSX.
-- Better drag-and-drop implementation in wxOSX.
-- Fixes for important bugs in wxDataViewCtrl under all platforms.
-- Many improvements and bug fixes for Wayland support in wxGTK.
-- Support for the latest OS versions (Windows 11, macOS 12) and compilers (MSVS
-  2022, gcc 12, clang 13).
-- Project bug tracker has been moved to GitHub Issues.
+for more details.
 
 Notice that in spite of all the changes, this release remains almost completely
-compatible with 3.1.5 at the API level, so upgrading to it if you're already
+compatible with 3.1.6 at the API level, so upgrading to it if you're already
 using wxWidgets 3 should be straightforward.
 
 
@@ -74,17 +72,17 @@ maximally condensed summary:
   MSVS, with wxwidgets.props file, and OS versions as well as an
   entirely new CMake build system.
 - Support for native dark mode under macOS 10.14 Mojave and later and
-  support for macOS 11 and later on ARM hardware.
+  support for macOS 11 and later on ARM hardware and macOS 12 support.
+- High DPI support with the new, but almost perfectly backwards-
+  compatible, API based on wxBitmapBundle, including per-monitor DPI and
+  dynamic DPI changes.
 - New features: HTTPS and HTTP/2 support with wxWebRequest and friends;
   support for freezing rows/columns in wxGrid; mouse gesture events
   (GSoC 2017 project); non-integer font sizes and arbitrary font weights
   in wxFont; fractional pen widths in wxGraphicsContext; arbitrary label
-  windows in wxStaticBox; markup in wxDataViewCtrl items text; better
-  support for high DPI monitors and per-monitor DPI, notably the
-  addition of wxBitmapBundle, and dynamic DPI changes support under MSW;
-  support for ZIP 64 files; LZMA compression; much improved
-  accessibility support under MSW; new Edge-based wxWebView
-  implementation.
+  windows in wxStaticBox; markup in wxDataViewCtrl items text; support
+  for ZIP 64 files; LZMA compression; much improved accessibility
+  support under MSW; new Edge-based wxWebView implementation.
 - New classes: wxActivityIndicator, wxAddRemoveCtrl, wxAppProgressIndicator,
   wxBitmapBundle, wxNativeWindow, wxPersistentComboBox,
   wxPowerResourceBlocker, wxSecretStore, wxTempFFile and many new
@@ -112,7 +110,7 @@ This version of wxWidgets supports the following primary platforms:
 
 * Windows XP, Vista, 7, 8, 10 and 11 (32/64 bits).
 * Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-* macOS (10.10 or newer) using Cocoa
+* macOS (10.10 or newer) using Cocoa (x86-64 or ARM).
 
 There is some support for the following platforms:
 
@@ -196,4 +194,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, April 2022
+The wxWidgets Team, June 2022
