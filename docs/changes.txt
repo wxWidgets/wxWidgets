@@ -240,7 +240,7 @@ INCOMPATIBLE CHANGES SINCE 3.1.6:
   They were not intended for the public API. m_image variable represents
   cached image now.
 
-- wxPropertyGridPageState funtions intended for internal use are no longer
+- wxPropertyGridPageState functions intended for internal use are no longer
   public. Corresponding functions in wxPropertyGridInterface, wxPropertyGrid,
   wxPropertyGridPage, and wxPropertyGridManager should be used instead.
 
@@ -253,7 +253,7 @@ All:
 
 All (GUI):
 
-- Further improvements to bitmap rescaling logic in high DPI.
+- Further improve bitmap rescaling logic in high DPI.
 - Add wxEVT_GRID_ROW_AUTO_SIZE to wxGrid (Dietmar Schwertberger).
 - Add possibility to drag-move wxGrid rows too (Dietmar Schwertberger).
 - Improve UI of several mouse operations in wxGrid (Dietmar Schwertberger).
@@ -264,7 +264,7 @@ All (GUI):
 - Allow getting current ribbon tool rectangle (Uwe Runtemund).
 - Allow sharing client data in wxGrid-related classes (Frode Roxrud Gill).
 - Fix font sizes in wxSVGFileDC (Maarten Bent).
-- Fix layout of wxWrapSizer in a wxFlexGridSizer (Antti Nietosvaara).
+- Fix layout of wxWrapSizer in wxFlexGridSizer (Antti Nietosvaara).
 - Fix wxRichToolTipPopup appearance in high DPI (Maarten Bent).
 
 wxGTK:
@@ -274,11 +274,11 @@ wxGTK:
 
 wxMSW:
 
-- Provide new IFileDialog-baed customization API.
+- Provide new IFileDialog-based customization API.
 - Fix handling of standard accelerators in wxSpinCtrl (Dietmar Schwertberger).
 - Fix infinite recursion in wxAuiNotebook::OnHelp().
-- Fix performance regression in wxSTC redrawing  (Maarten Bent).
-- Fix regression in wxFileName::Normalize(LONG) and UNC paths.
+- Fix performance regression in wxSTC redrawing (Maarten Bent).
+- Fix regression in wxFileName::Normalize(wxPATH_NORM_LONG) and UNC paths.
 - Fix sizes in the standard font dialog in high DPI.
 - Fix warnings about bitwise operations with MSVC in C++20 mode.
 
