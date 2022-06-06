@@ -2833,31 +2833,6 @@ typedef HIShapeRef WXHRGN;
 
 #if defined(__WXMAC__)
 
-/* Definitions of 32-bit/64-bit types
- * These are typedef'd exactly the same way in newer OS X headers so
- * redefinition when real headers are included should not be a problem.  If
- * it is, the types are being defined wrongly here.
- * The purpose of these types is so they can be used from public wx headers.
- * and also because the older (pre-Leopard) headers don't define them.
- */
-
-/* NOTE: We don't pollute namespace with CGFLOAT_MIN/MAX/IS_DOUBLE macros
- * since they are unlikely to be needed in a public header.
- */
-#if defined(__LP64__) && __LP64__
-    typedef double CGFloat;
-#else
-    typedef float CGFloat;
-#endif
-
-#if (defined(__LP64__) && __LP64__) || (defined(NS_BUILD_32_LIKE_64) && NS_BUILD_32_LIKE_64)
-typedef long NSInteger;
-typedef unsigned long NSUInteger;
-#else
-typedef int NSInteger;
-typedef unsigned int NSUInteger;
-#endif
-
 /* Objective-C type declarations.
  * These are to be used in public headers in lieu of NSSomething* because
  * Objective-C class names are not available in C/C++ code.
