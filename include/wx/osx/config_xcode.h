@@ -71,15 +71,9 @@
 #define SIZEOF_WCHAR_T 4
 #define SIZEOF_SHORT 2
 #define SIZEOF_INT 4
-#ifdef __LP64__
 #define SIZEOF_VOID_P 8
 #define SIZEOF_LONG 8
 #define SIZEOF_SIZE_T 8
-#else
-#define SIZEOF_VOID_P 4
-#define SIZEOF_LONG 4
-#define SIZEOF_SIZE_T 4
-#endif
 #define SIZEOF_LONG_LONG 8
 #define wxSIZE_T_IS_ULONG 1
 #define wxWCHAR_T_IS_REAL_TYPE 1
