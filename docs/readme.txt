@@ -68,7 +68,7 @@ improvements and even more bug fixes to list them all, but here is the
 maximally condensed summary:
 
 - Build system improvements: support for new compilers (up to MSVS 2022,
-  g++ 11, clang 13) with an even simpler way of using wxWidgets from
+  g++ 12, clang 14) with an even simpler way of using wxWidgets from
   MSVS, with wxwidgets.props file, and OS versions as well as an
   entirely new CMake build system.
 - Support for native dark mode under macOS 10.14 Mojave and later and
