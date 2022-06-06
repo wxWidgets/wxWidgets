@@ -936,6 +936,7 @@ void wxNonOwnedWindowCocoaImpl::SetUpForModalParent()
 void wxNonOwnedWindowCocoaImpl::ShowWithoutActivating()
 {
     SetUpForModalParent();
+    [m_macWindow setHidesOnDeactivate:YES];
     [m_macWindow orderFront:nil];
     [[m_macWindow contentView] setNeedsDisplay: YES];
 }
