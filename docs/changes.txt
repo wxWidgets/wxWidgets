@@ -231,7 +231,7 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.1.7: (released 2022-??-??)
+3.1.7: (released 2022-06-06)
 ----------------------------
 
 INCOMPATIBLE CHANGES SINCE 3.1.6:
@@ -245,32 +245,54 @@ INCOMPATIBLE CHANGES SINCE 3.1.6:
   wxPropertyGridPage, and wxPropertyGridManager should be used instead.
 
 
-NOTE: This file is updated only before the release, please use
+All:
 
-    $ git log --notes=changelog --format='%N' v3.1.6..|grep .
+- Improvements to CMake, notably better PCH support.
+- Add wxTRANSLATE_IN_CONTEXT() (Lauri Nurmi).
+- Fix wxIPV6address initialization.
 
-      to see all the change log entries since the last release.
+All (GUI):
 
-      To update the notes, fetch them first:
+- Further improvements to bitmap rescaling logic in high DPI.
+- Add wxEVT_GRID_ROW_AUTO_SIZE to wxGrid (Dietmar Schwertberger).
+- Add possibility to drag-move wxGrid rows too (Dietmar Schwertberger).
+- Improve UI of several mouse operations in wxGrid (Dietmar Schwertberger).
+- Add support for 3rd wxCheckBox state to XRC (Randalphwa).
+- Add support for more wxBitmap attributes to XRC (Randalphwa).
+- Add support for wxSpinCtrl digits attributes to XRC (Randalphwa).
+- Add wxBitmapBundle::FromIconBundle() (Uwe Runtemund).
+- Allow getting current ribbon tool rectangle (Uwe Runtemund).
+- Allow sharing client data in wxGrid-related classes (Frode Roxrud Gill).
+- Fix font sizes in wxSVGFileDC (Maarten Bent).
+- Fix layout of wxWrapSizer in a wxFlexGridSizer (Antti Nietosvaara).
+- Fix wxRichToolTipPopup appearance in high DPI (Maarten Bent).
 
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+wxGTK:
 
-      then use the following command to update them locally
+- Avoid GDK errors when using PopupMenu() with Wayland.
+- Fix drag and drop in generic wxDataViewCtrl (Konstantin Matveyev).
 
-    $ git notes --ref=changelog add -m 'wxPort: description.'
+wxMSW:
 
-      and finally push it to the server.
+- Provide new IFileDialog-baed customization API.
+- Fix handling of standard accelerators in wxSpinCtrl (Dietmar Schwertberger).
+- Fix infinite recursion in wxAuiNotebook::OnHelp().
+- Fix performance regression in wxSTC redrawing  (Maarten Bent).
+- Fix regression in wxFileName::Normalize(LONG) and UNC paths.
+- Fix sizes in the standard font dialog in high DPI.
+- Fix warnings about bitwise operations with MSVC in C++20 mode.
 
-    $ git push origin refs/notes/changelog:refs/notes/changelog
+wxOSX:
 
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
+- Fix disappearing dialogs when using Spaces.
+- Suppress menu items automatically added by macOS 12.
+- Allow user input in wxPopupTransientWindow.
+- Don't touch existing libraries in make install (Lauri Nurmi).
+- Generate events for 4th and 5th mouse buttons (Lauri Nurmi).
 
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
+wxUniv:
 
-      and then redo "git-notes add" and git-push.
+- Fix client data memory leak in wxListBox (Kvaz1r).
 
 
 3.1.6: (released 2022-04-04)
