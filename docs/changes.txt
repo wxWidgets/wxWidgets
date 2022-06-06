@@ -286,6 +286,7 @@ wxOSX:
 
 - Fix disappearing dialogs when using Spaces.
 - Suppress menu items automatically added by macOS 12.
+- Allow user input in wxPopupTransientWindow.
 - Don't touch existing libraries in make install (Lauri Nurmi).
 - Generate events for 4th and 5th mouse buttons (Lauri Nurmi).
 
