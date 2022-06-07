@@ -1724,6 +1724,15 @@ wxSize wxNSTextFieldControl::GetBestSize() const
         [m_textField setFrame:former];
         sz.x = (int)ceil(best.size.width);
         sz.y = (int)ceil(best.size.height);
+
+        if ( [m_textField isBezeled] || [m_textField isBordered] )
+        {
+            // since this will be added again in DoGetSizeFromTextSize
+            // subtract it now
+            static const int TEXTCTRL_BORDER_SIZE = 5;
+            sz.y -= TEXTCTRL_BORDER_SIZE;
+            sz.x -= TEXTCTRL_BORDER_SIZE;
+        }
     }
 
     return sz;
