@@ -2349,7 +2349,7 @@ void wxListMainWindow::SendNotify( size_t line,
 
     // provide information about the (first column of the) item in the event if
     // we have a valid item and any columns at all
-    if ( line != (size_t)-1 && GetColumnCount() )
+    if ( line != (size_t)-1 && GetListCtrl()->GetColumnCount() )
     {
         GetLine(line)->GetItem( 0, le.m_item );
     }
@@ -5353,7 +5353,9 @@ int wxGenericListCtrl::GetItemCount() const
 
 int wxGenericListCtrl::GetColumnCount() const
 {
-    return m_mainWin->GetColumnCount();
+    if ( !HasFlag(wxLC_LIST) )
+        return m_mainWin->GetColumnCount();
+    return 1;
 }
 
 void wxGenericListCtrl::SetItemSpacing( int spacing, bool isSmall )
