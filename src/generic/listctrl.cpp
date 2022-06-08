@@ -2331,8 +2331,10 @@ void wxListMainWindow::SendNotify( size_t line,
                                    wxEventType command,
                                    const wxPoint& point )
 {
-    wxListEvent le( command, GetParent()->GetId() );
-    le.SetEventObject( GetParent() );
+    wxGenericListCtrl* const listctrl = GetListCtrl();
+
+    wxListEvent le( command, listctrl->GetId() );
+    le.SetEventObject( listctrl );
 
     le.m_item.m_itemId =
     le.m_itemIndex = line;
@@ -2349,12 +2351,12 @@ void wxListMainWindow::SendNotify( size_t line,
 
     // provide information about the (first column of the) item in the event if
     // we have a valid item and any columns at all
-    if ( line != (size_t)-1 && GetListCtrl()->GetColumnCount() )
+    if ( line != (size_t)-1 && listctrl->GetColumnCount() )
     {
         GetLine(line)->GetItem( 0, le.m_item );
     }
 
-    GetParent()->GetEventHandler()->ProcessEvent( le );
+    listctrl->GetEventHandler()->ProcessEvent( le );
 }
 
 bool wxListMainWindow::ChangeCurrentWithoutEvent(size_t current)
