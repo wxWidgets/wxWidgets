@@ -1065,9 +1065,8 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     wxInt32 hdrSize;
     if ( IsBmp )
     {
-        wxInt8 bbuf[4];
         // read the header off the .BMP format file
-        if ( !stream.ReadAll(bbuf, 2) ||
+        if ( !stream.ReadAll(&aWord, 2) ||
              !stream.ReadAll(dbuf, 16) )
             return false;
 
