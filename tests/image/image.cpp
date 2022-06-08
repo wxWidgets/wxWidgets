@@ -159,7 +159,11 @@ void ImageTestCase::LoadFromFile()
 {
     wxImage img;
     for (unsigned int i=0; i<WXSIZEOF(g_testfiles); i++)
-        CHECK(img.LoadFile(g_testfiles[i].file));
+    {
+        const wxString file(g_testfiles[i].file);
+        INFO("Loading " << file);
+        CHECK(img.LoadFile(file));
+    }
 }
 
 void ImageTestCase::LoadFromSocketStream()
@@ -1333,6 +1337,7 @@ static void CompareBMPImage(const wxString& file1, const wxString& file2)
     wxImage image2(file2);
     REQUIRE( image2.IsOk() );
 
+    INFO("Comparing " << file1 << " and " << file2);
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
 }
 
