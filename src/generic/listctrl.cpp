@@ -4908,6 +4908,10 @@ void wxGenericListCtrl::Init()
 
 wxGenericListCtrl::~wxGenericListCtrl()
 {
+    // Don't wait until the base class does it because our subwindows expect
+    // their parent window to be a wxListCtrl, but this won't be the case any
+    // more when we get to the base class dtor (it will be only a wxWindow).
+    DestroyChildren();
 }
 
 void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
