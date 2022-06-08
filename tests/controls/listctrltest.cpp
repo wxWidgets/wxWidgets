@@ -148,12 +148,24 @@ void ListCtrlTestCase::ColumnCount()
     m_list->InsertColumn(1, "Column 1");
     CHECK(m_list->GetColumnCount() == 2);
 
-    // Recreate the control in wxLC_LIST mode to check the count there as well.
+    // Recreate the control in other modes to check the count there as well.
     delete m_list;
     m_list = new wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
                             wxDefaultPosition, wxDefaultSize,
                             wxLC_LIST);
     CHECK(m_list->GetColumnCount() == 1);
+
+    delete m_list;
+    m_list = new wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxLC_ICON);
+    CHECK(m_list->GetColumnCount() == 0);
+
+    delete m_list;
+    m_list = new wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxLC_SMALL_ICON);
+    CHECK(m_list->GetColumnCount() == 0);
 }
 
 #if wxUSE_UIACTIONSIMULATOR

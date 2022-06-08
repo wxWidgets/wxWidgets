@@ -5355,9 +5355,11 @@ int wxGenericListCtrl::GetItemCount() const
 
 int wxGenericListCtrl::GetColumnCount() const
 {
-    if ( !HasFlag(wxLC_LIST) )
-        return m_mainWin->GetColumnCount();
-    return 1;
+    // wxLC_LIST is special as we want to return 1 for it, for compatibility
+    // with the native wxMSW version and not the real number of columns, which
+    // is 0. For the other non-wxLC_REPORT modes returning 0 is fine, however,
+    // as wxMSW does it too.
+    return HasFlag(wxLC_LIST) ? 1 : m_mainWin->GetColumnCount();
 }
 
 void wxGenericListCtrl::SetItemSpacing( int spacing, bool isSmall )
