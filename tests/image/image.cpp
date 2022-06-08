@@ -164,6 +164,8 @@ void ImageTestCase::LoadFromFile()
         INFO("Loading " << file);
         CHECK(img.LoadFile(file));
     }
+
+    CHECK(img.LoadFile("image/bitfields.bmp", wxBITMAP_TYPE_BMP));
 }
 
 void ImageTestCase::LoadFromSocketStream()

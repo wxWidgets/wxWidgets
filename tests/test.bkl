@@ -351,6 +351,7 @@
         <srcdir>$(SRCDIR)/image</srcdir>
         <dstdir>image</dstdir>
         <files>
+            bitfields.bmp
             8bpp-colorsused-large.bmp
             8bpp-colorsused-negative.bmp
             rle4-delta-320x240.bmp
