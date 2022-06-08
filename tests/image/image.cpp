@@ -2326,6 +2326,28 @@ TEST_CASE("wxImage::SizeLimits", "[image]")
 #endif // SIZEOF_VOID_P == 8
 }
 
+// This can be used to test loading an arbitrary image file by setting the
+// environment variable WX_TEST_IMAGE_PATH to point to it.
+TEST_CASE("wxImage::LoadPath", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_IMAGE_PATH", &path) );
+
+    TestLogEnabler enableLogs;
+
+    wxInitAllImageHandlers();
+
+    wxImage image;
+    REQUIRE( image.LoadFile(path) );
+
+    WARN("Image "
+            << image.GetWidth()
+            << "*"
+            << image.GetHeight()
+            << (image.HasAlpha() ? " with alpha" : "")
+            << " loaded");
+}
+
 /*
     TODO: add lots of more tests to wxImage functions
 */
