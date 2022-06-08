@@ -1155,7 +1155,13 @@ No additional properties.
 
 @subsubsection xrc_wxdatepickerctrl wxDatePickerCtrl
 
-No additional properties.
+@beginTable
+@hdr3col{property, type, description}
+@row3col{null-text, @ref overview_xrcformat_type_string,
+    Set the text to show when there is no valid value (default: empty).
+    Only used if the control has wxDP_ALLOWNONE style.
+    Currently implemented on MSW, ignored elsewhere. @since 3.1.5.}
+@endTable
 
 
 @subsubsection xrc_wxdialog wxDialog
@@ -2215,7 +2221,7 @@ later only and you need to explicitly register its handler using
 @code
     #include <wx/xrc/xh_styledtextctrl.h>
 
-    AddHandler(new wxStyledTextCtrl);
+    AddHandler(new wxStyledTextCtrlXmlHandler);
 @endcode
 to use it.
 
