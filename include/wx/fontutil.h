@@ -171,10 +171,10 @@ public:
     wxString GetPostScriptName() const;
     bool SetPostScriptName(const wxString& postScriptName);
 
-    static CGFloat GetCTWeight( CTFontRef font );
-    static CGFloat GetCTWeight( CTFontDescriptorRef font );
-    static CGFloat GetCTwidth( CTFontDescriptorRef font );
-    static CGFloat GetCTSlant( CTFontDescriptorRef font );
+    static double GetCTWeight( CTFontRef font );
+    static double GetCTWeight( CTFontDescriptorRef font );
+    static double GetCTwidth( CTFontDescriptorRef font );
+    static double GetCTSlant( CTFontDescriptorRef font );
 
     CTFontDescriptorRef GetCTFontDescriptor() const;
     
@@ -182,10 +182,10 @@ public:
 private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values
     // for better roundtrip fidelity
-    CGFloat       m_ctWeight;
-    CGFloat       m_ctWidth;
+    double        m_ctWeight;
+    double        m_ctWidth;
     wxFontStyle   m_style;
-    CGFloat       m_ctSize;
+    double        m_ctSize;
     wxFontFamily  m_family;
 
     wxString      m_familyName;
