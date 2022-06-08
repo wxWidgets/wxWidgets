@@ -508,8 +508,8 @@ struct BMPPalette
 bool LoadBMPData(wxImage * image, int width, int height,
                              int bpp, int ncolors, int comp,
                              wxFileOffset bmpOffset, wxInputStream& stream,
-                             bool verbose, bool IsBmp, bool hasPalette,
-                             int colEntrySize = 4)
+                             bool verbose, bool IsBmp,
+                             int paletteEntrySize = 0)
 {
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
     int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
@@ -611,9 +611,9 @@ bool LoadBMPData(wxImage * image, int width, int height,
 #endif // wxUSE_PALETTE
         for (int j = 0; j < ncolors; j++)
         {
-            if (hasPalette)
+            if (paletteEntrySize)
             {
-                if ( !stream.ReadAll(bbuf, colEntrySize) )
+                if ( !stream.ReadAll(bbuf, paletteEntrySize) )
                     return false;
 
                 cmap[j].b = bbuf[0];
@@ -1219,8 +1219,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
     //read DIB; this is the BMP image or the XOR part of an icon image
     if ( !LoadBMPData(image, width, height, bpp, ncolors, comp, offset, stream,
-                    verbose, IsBmp, true,
-                    usesV1 ? 3 : 4) )
+                    verbose, IsBmp, usesV1 ? 3 : 4) )
     {
         if (verbose)
         {
@@ -1235,7 +1234,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         //there is no palette, so we will create one
         wxImage mask;
         if ( !LoadBMPData(&mask, width, height, 1, 2, BI_RGB, offset, stream,
-                        verbose, IsBmp, false) )
+                        verbose, IsBmp) )
         {
             if (verbose)
             {
