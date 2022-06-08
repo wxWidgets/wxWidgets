@@ -494,6 +494,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 }
 
 
+namespace
+{
+
 struct BMPPalette
 {
     static void Free(BMPPalette* pal) { delete [] pal; }
@@ -501,11 +504,12 @@ struct BMPPalette
     unsigned char r, g, b;
 };
 
-bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
+// Read the data in BMP format into the given image.
+bool LoadBMPData(wxImage * image, int width, int height,
                              int bpp, int ncolors, int comp,
                              wxFileOffset bmpOffset, wxInputStream& stream,
                              bool verbose, bool IsBmp, bool hasPalette,
-                             int colEntrySize)
+                             int colEntrySize = 4)
 {
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
     int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
@@ -1027,6 +1031,8 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
 }
 
+} // anonymous namespace
+
 bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                            bool verbose, bool IsBmp)
 {
@@ -1212,7 +1218,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     //read DIB; this is the BMP image or the XOR part of an icon image
-    if ( !DoLoadDib(image, width, height, bpp, ncolors, comp, offset, stream,
+    if ( !LoadBMPData(image, width, height, bpp, ncolors, comp, offset, stream,
                     verbose, IsBmp, true,
                     usesV1 ? 3 : 4) )
     {
@@ -1228,7 +1234,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         //read Icon mask which is monochrome
         //there is no palette, so we will create one
         wxImage mask;
-        if ( !DoLoadDib(&mask, width, height, 1, 2, BI_RGB, offset, stream,
+        if ( !LoadBMPData(&mask, width, height, 1, 2, BI_RGB, offset, stream,
                         verbose, IsBmp, false) )
         {
             if (verbose)
