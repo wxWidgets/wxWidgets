@@ -29,7 +29,6 @@
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
-#include "wx/scopeguard.h"
 #include "wx/scopedarray.h"
 #include "wx/scopedptr.h"
 #include "wx/anidecod.h"
@@ -499,25 +498,16 @@ namespace
 
 struct BMPPalette
 {
-    static void Free(BMPPalette* pal) { delete [] pal; }
-
     unsigned char r, g, b;
 };
 
 struct BMPDesc
 {
-    BMPDesc()
-    {
-        // All the other fields must be always initialized by the caller, but
-        // this one is optional, so initialize it ourselves.
-        paletteEntrySize = 0;
-    }
-
     int width, height, bpp, ncolors;
 
     int comp; // BI_RGB, BI_RLE4, BI_RLE8 or BI_BITFIELDS only supported
 
-    int paletteEntrySize; // 0 means unused, otherwise 3 or 4
+    wxScopedArray<BMPPalette> paletteData;
 };
 
 // Read the data in BMP format into the given image.
@@ -539,43 +529,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     wxUint8         aByte;
     wxUint16        aWord;
 
-    // allocate space for palette if needed:
-    BMPPalette *cmap;
-
-    if ( bpp <= 8 )
-    {
-        // The bit depth is 8bpp, 4bpp, or 1bpp, which means that ncolors is
-        // the size of a palette.  The largest useful palette is 256 since
-        // anything larger couldn't be referenced by a pixel.  Since ncolors
-        // comes from the file, which could be corrupt or malicious, reject
-        // any bitmaps that have a dubious palette size.
-        if ( ncolors < 0 || 256 < ncolors )
-        {
-            if ( verbose )
-            {
-                wxLogError(
-                    _("BMP: header has biClrUsed=%d when biBitCount=%d."),
-                    ncolors, bpp);
-            }
-            return false;
-        }
-
-        cmap = new BMPPalette[ncolors];
-        if ( !cmap )
-        {
-            if (verbose)
-            {
-                wxLogError(_("BMP: Couldn't allocate memory."));
-            }
-            return false;
-        }
-    }
-    else // no palette
-    {
-        cmap = NULL;
-    }
-
-    wxON_BLOCK_EXIT1(&BMPPalette::Free, cmap);
+    BMPPalette cmapMono[2];
+    BMPPalette* cmap = NULL;
 
     bool isUpsideDown = true;
 
@@ -623,38 +578,30 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     // Reading the palette, if it exists:
     if ( bpp < 16 && ncolors != 0 )
     {
+        // Use the data from the bitmap header if we have it.
+        cmap = desc.paletteData.get();
+        if ( !cmap )
+        {
+            // Otherwise allocate it here to use when reading ICO file mask: in
+            // this case we have just 2 colours, black and white.
+            cmap = cmapMono;
+
+            cmap[0].r = cmap[0].g = cmap[0].b = 0;
+            cmap[1].r = cmap[1].g = cmap[1].b = 255;
+        }
+
 #if wxUSE_PALETTE
         wxScopedArray<unsigned char>
              r(ncolors),
              g(ncolors),
              b(ncolors);
-#endif // wxUSE_PALETTE
+
         for (int j = 0; j < ncolors; j++)
         {
-            if (desc.paletteEntrySize)
-            {
-                if ( !stream.ReadAll(bbuf, desc.paletteEntrySize) )
-                    return false;
-
-                cmap[j].b = bbuf[0];
-                cmap[j].g = bbuf[1];
-                cmap[j].r = bbuf[2];
-            }
-            else
-            {
-                //used in reading .ico file mask
-                cmap[j].r =
-                cmap[j].g =
-                cmap[j].b = ( j ? 255 : 0 );
-            }
-#if wxUSE_PALETTE
             r[j] = cmap[j].r;
             g[j] = cmap[j].g;
             b[j] = cmap[j].b;
-#endif // wxUSE_PALETTE
         }
-
-#if wxUSE_PALETTE
         // Set the palette for the wxImage
         image->SetPalette(wxPalette(ncolors, r.get(), g.get(), b.get()));
 #endif // wxUSE_PALETTE
@@ -1100,8 +1047,6 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
         desc.width = wxINT16_SWAP_ON_BE((short)buf[0]);
         desc.height = wxINT16_SWAP_ON_BE((short)buf[1]);
-
-        desc.paletteEntrySize = 3;
     }
     else // We have at least BITMAPINFOHEADER
     {
@@ -1110,8 +1055,6 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
         desc.width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
         desc.height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
-
-        desc.paletteEntrySize = 4;
     }
     if ( !IsBmp) desc.height /= 2; // for icons divide by 2
 
@@ -1251,6 +1194,16 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
             return false;
 
         desc.ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
+        if ( desc.ncolors < 0 || 256 < desc.ncolors )
+        {
+            if ( verbose )
+            {
+                wxLogError(
+                    _("BMP: header has biClrUsed=%d when biBitCount=%d."),
+                    desc.ncolors, desc.bpp);
+            }
+            return false;
+        }
 
         // We've read BITMAPINFOHEADER data but for BITMAPV4HEADER or BITMAPV5HEADER
         // we have to forward stream position to after the actual bitmap header.
@@ -1264,8 +1217,37 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                 return false;
         }
     }
-    if (desc.ncolors == 0)
+
+    // We must have a palette for 1bpp, 4bpp and 8bpp bitmaps.
+    if (desc.ncolors == 0 && desc.bpp < 16)
         desc.ncolors = 1 << desc.bpp;
+
+    // Now read the palette data, which follows the header, if we have it.
+    if ( desc.ncolors )
+    {
+        const int paletteEntrySize = usesV1 ? 3 : 4;
+
+        const int paletteSize = paletteEntrySize*desc.ncolors;
+
+        wxScopedArray<unsigned char> paletteData(paletteSize);
+        unsigned char* data = paletteData.get();
+        if ( !stream.ReadAll(data, paletteSize) )
+            return false;
+
+        // Copy it into the format the existing code uses: this could probably
+        // be optimized to avoid copying, but palette size is small enough for
+        // an extra copy not to really matter.
+        desc.paletteData.reset(new BMPPalette[paletteSize]);
+        for ( int n = 0; n < desc.ncolors; ++n, data += paletteEntrySize )
+        {
+            BMPPalette& entry = desc.paletteData[n];
+
+            // This is not a typo: entries are actually in BGR order.
+            entry.b = data[0];
+            entry.g = data[1];
+            entry.r = data[2];
+        }
+    }
 
     //read DIB; this is the BMP image or the XOR part of an icon image
     if ( !LoadBMPData(image, desc, offset, stream, verbose, IsBmp) )
