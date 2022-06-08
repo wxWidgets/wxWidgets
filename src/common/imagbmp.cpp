@@ -1205,14 +1205,28 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         if ( !stream.ReadAll(dbuf, 4 * 4) )
             return false;
 
+        // Sanity check: encoding must be consistent with the depth.
+        bool mismatch = false;
+
         desc.comp = wxINT32_SWAP_ON_BE((int)dbuf[0]);
         switch ( desc.comp )
         {
             case BI_RGB:
+                break;
+
             case BI_RLE4:
+                if ( desc.bpp != 4 )
+                    mismatch = true;
+                break;
+
             case BI_RLE8:
+                if ( desc.bpp != 8 )
+                    mismatch = true;
+                break;
+
             case BI_BITFIELDS:
-                // OK.
+                if ( desc.bpp != 16 && desc.bpp != 32 )
+                    mismatch = true;
                 break;
 
             default:
@@ -1221,6 +1235,15 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                     wxLogError( _("DIB Header: Unknown encoding in file.") );
                 }
                 return false;
+        }
+
+        if ( mismatch )
+        {
+            if (verbose)
+            {
+                wxLogError( _("DIB Header: Encoding doesn't match bitdepth.") );
+            }
+            return false;
         }
 
         if ( !stream.ReadAll(dbuf, 4 * 2) )
@@ -1243,17 +1266,6 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
     if (desc.ncolors == 0)
         desc.ncolors = 1 << desc.bpp;
-    /* some more sanity checks */
-    if (((desc.comp == BI_RLE4) && (desc.bpp != 4)) ||
-        ((desc.comp == BI_RLE8) && (desc.bpp != 8)) ||
-        ((desc.comp == BI_BITFIELDS) && (desc.bpp != 16 && desc.bpp != 32)))
-    {
-        if (verbose)
-        {
-            wxLogError( _("DIB Header: Encoding doesn't match bitdepth.") );
-        }
-        return false;
-    }
 
     //read DIB; this is the BMP image or the XOR part of an icon image
     if ( !LoadBMPData(image, desc, offset, stream, verbose, IsBmp) )
