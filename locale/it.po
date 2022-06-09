@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1 -revised 01.08.2017 by bovirus\n"
+"Project-Id-Version: wxWidgets revised 07.06.2022 by bovirus\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-04-05 14:12+0200\n"
+"PO-Revision-Date: 2022-06-07 09:53+0200\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@googlegroups.com>\n"
 "Language: it\n"
@@ -2147,7 +2147,7 @@ msgstr "BMP: Impossibile scrivere i dati."
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP: l'intestazione ha biClrUsed=%d quando biBitCount=%d."
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -3908,9 +3908,8 @@ msgid "libcurl could not be initialized"
 msgstr "libcurl non può essere inizializzato"
 
 #: ../src/common/webview.cpp:246
-#, fuzzy
 msgid "RunScriptAsync not supported"
-msgstr "Conversione in stringa non supportata"
+msgstr "RunScriptAsync non supportata"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
@@ -4298,8 +4297,7 @@ msgid "Column %u"
 msgstr "Colonna %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7087
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4310,8 +4308,7 @@ msgid "Left"
 msgstr "Sinistra"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7090
-#: ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -6568,10 +6565,9 @@ msgid "Hide %s"
 msgstr "Nascondi %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Applicazione"
+msgstr "Nascondi applicazione"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
@@ -6590,10 +6586,9 @@ msgid "Quit %s"
 msgstr "Esci da %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Applicazione"
+msgstr "Esci dall'applicazione"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6822,172 +6817,144 @@ msgid "White"
 msgstr "Bianco"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "Predefinito"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Freccia"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Freccia destra"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Vuoto"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
-msgstr "Stile punto elenco"
+msgstr "Occhio di bue"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Carattere"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Incrocio"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Mano"
 
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "I-Beam"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Pulsante sinistro"
 
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Ingrandimento"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Pulsante centrale"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Nessun elemento"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Pennello"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
-msgstr "Penna"
+msgstr "Matita"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
-msgstr "Allinea a sinistra"
+msgstr "Punto a sinistra"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
-msgstr "Allinea a destra"
+msgstr "Punta a destra"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
-msgstr "Freccaid omanda"
+msgstr "Freccia domanda"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Pulsante destro"
 
 #: ../src/propgrid/advprops.cpp:1673
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Posizionamento NE-SO"
 
 #: ../src/propgrid/advprops.cpp:1674
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Posizionamento N-S"
 
 #: ../src/propgrid/advprops.cpp:1675
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Posizionamento NO-SE"
 
 #: ../src/propgrid/advprops.cpp:1676
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Posizionamento O-E"
 
 #: ../src/propgrid/advprops.cpp:1677
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Posizionamento"
 
 #: ../src/propgrid/advprops.cpp:1678
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Bombola spray"
 
 #: ../src/propgrid/advprops.cpp:1679
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Attendi"
 
 #: ../src/propgrid/advprops.cpp:1680
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
-msgstr "Monitorizza"
+msgstr "Monitora"
 
 #: ../src/propgrid/advprops.cpp:1681
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
-msgstr "Attendi freccia"
+msgstr "Freccia attesa"
 
 #: ../src/propgrid/advprops.cpp:2053
 msgid "Make a selection:"
