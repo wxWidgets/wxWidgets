@@ -741,6 +741,14 @@ wxAuiPaneInfo objects have the following properties:
 
 @subsubsection xrc_wxauinotebook wxAuiNotebook
 
+@beginTable
+@hdr3col{property, type, description}
+@row3col{art-provider, @ref overview_xrcformat_type_string,
+    One of @c default for wxAuiDefaultTabArt or @c simple for wxAuiSimpleTabArt
+    (default: @c default).
+    @since 3.2.0}
+@endTable
+
 A wxAuiNotebook can have one or more child objects of the @c notebookpage
 pseudo-class.
 @c notebookpage objects have the following properties:
