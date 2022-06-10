@@ -159,7 +159,13 @@ void ImageTestCase::LoadFromFile()
 {
     wxImage img;
     for (unsigned int i=0; i<WXSIZEOF(g_testfiles); i++)
-        CHECK(img.LoadFile(g_testfiles[i].file));
+    {
+        const wxString file(g_testfiles[i].file);
+        INFO("Loading " << file);
+        CHECK(img.LoadFile(file));
+    }
+
+    CHECK(img.LoadFile("image/bitfields.bmp", wxBITMAP_TYPE_BMP));
 }
 
 void ImageTestCase::LoadFromSocketStream()
@@ -1333,6 +1339,7 @@ static void CompareBMPImage(const wxString& file1, const wxString& file2)
     wxImage image2(file2);
     REQUIRE( image2.IsOk() );
 
+    INFO("Comparing " << file1 << " and " << file2);
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
 }
 
@@ -2324,6 +2331,28 @@ TEST_CASE("wxImage::SizeLimits", "[image]")
     CHECK( image.GetWidth() == 100000 );
     CHECK( image.GetHeight() == 1 );
 #endif // SIZEOF_VOID_P == 8
+}
+
+// This can be used to test loading an arbitrary image file by setting the
+// environment variable WX_TEST_IMAGE_PATH to point to it.
+TEST_CASE("wxImage::LoadPath", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_IMAGE_PATH", &path) );
+
+    TestLogEnabler enableLogs;
+
+    wxInitAllImageHandlers();
+
+    wxImage image;
+    REQUIRE( image.LoadFile(path) );
+
+    WARN("Image "
+            << image.GetWidth()
+            << "*"
+            << image.GetHeight()
+            << (image.HasAlpha() ? " with alpha" : "")
+            << " loaded");
 }
 
 /*

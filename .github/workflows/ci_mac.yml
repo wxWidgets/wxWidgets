@@ -222,7 +222,7 @@ jobs:
         # used by std::vector<>::insert().
         export ASAN_OPTIONS='fast_unwind_on_malloc=0 detect_container_overflow=0'
         # Exclude tests that are currently known to fail
-        wx_tests_selection='~[valnum] ~wxPersistTLW ~wxPersistDVC ~wxTopLevel::Show ~wxFont::Weight ~wxFont::NativeFontInfo ~WebView ~RadioButton::Single ~RadioButton::Focus ~wxHtmlPrintout::Pagination ~wxTextCtrl::GetBestSize ~TextCtrlTestCase ~ClippingBoxTestCase::wxClientDC ~wxExecute::RedirectUTF8 ~Ellipsization::NormalCase ~SpinCtrl::* ~SpinCtrlDouble::* ~NotebookTestCase ~SettingsTestCase ~XRC::LoadURL ~Window::Show ~ModalDialogsTestCase ~Button::Click ~Button::Disabled ~wxDVC::GetItemRect ~wxDVC::AppendTextColumn ~Grid::KeyboardSelection ~Grid::CellClick ~Grid::ReorderedColumnsCellClick ~Grid::CellSelect ~wxStyledTextCtrl::AutoComp ~EvtLoopTestCase ~EventPropagationTestCase'
+        wx_tests_selection='~[.] ~[valnum] ~wxPersistTLW ~wxPersistDVC ~wxTopLevel::Show ~wxFont::Weight ~wxFont::NativeFontInfo ~WebView ~RadioButton::Single ~RadioButton::Focus ~wxHtmlPrintout::Pagination ~wxTextCtrl::GetBestSize ~TextCtrlTestCase ~ClippingBoxTestCase::wxClientDC ~wxExecute::RedirectUTF8 ~Ellipsization::NormalCase ~SpinCtrl::* ~SpinCtrlDouble::* ~NotebookTestCase ~SettingsTestCase ~Window::Show ~ModalDialogsTestCase ~Button::Click ~Button::Disabled ~wxDVC::GetItemRect ~wxDVC::AppendTextColumn ~Grid::KeyboardSelection ~Grid::CellClick ~Grid::ReorderedColumnsCellClick ~Grid::CellSelect ~wxStyledTextCtrl::AutoComp ~EvtLoopTestCase ~EventPropagationTestCase'
         ./test_gui $wx_tests_selection
 
     - name: Building samples

@@ -29,7 +29,6 @@
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
-#include "wx/scopeguard.h"
 #include "wx/scopedarray.h"
 #include "wx/scopedptr.h"
 #include "wx/anidecod.h"
@@ -494,64 +493,47 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 }
 
 
+namespace
+{
+
 struct BMPPalette
 {
-    static void Free(BMPPalette* pal) { delete [] pal; }
-
     unsigned char r, g, b;
 };
 
-bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
-                             int bpp, int ncolors, int comp,
-                             wxFileOffset bmpOffset, wxInputStream& stream,
-                             bool verbose, bool IsBmp, bool hasPalette,
-                             int colEntrySize)
+struct BMPDesc
 {
+    int width, height, bpp, ncolors;
+
+    int comp; // BI_RGB, BI_RLE4, BI_RLE8 or BI_BITFIELDS only supported
+
+    wxScopedArray<BMPPalette> paletteData;
+
+    int rmask, gmask, bmask, amask;
+};
+
+// Read the data in BMP format into the given image.
+//
+// The stream must be positioned at the start of the palette data for the
+// bitmaps using palettes or at the start of the bitmap data otherwise.
+bool LoadBMPData(wxImage * image, const BMPDesc& desc,
+                 wxInputStream& stream, bool verbose)
+{
+    const int width = desc.width;
+    int height = desc.height;
+
+    const int bpp = desc.bpp;
+    const int ncolors = desc.ncolors;
+
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
     int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
     int             rbits = 0, gbits = 0, bbits = 0;
-    wxInt32         dbuf[4];
     wxInt8          bbuf[4];
     wxUint8         aByte;
     wxUint16        aWord;
 
-    // allocate space for palette if needed:
-    BMPPalette *cmap;
-
-    if ( bpp <= 8 )
-    {
-        // The bit depth is 8bpp, 4bpp, or 1bpp, which means that ncolors is
-        // the size of a palette.  The largest useful palette is 256 since
-        // anything larger couldn't be referenced by a pixel.  Since ncolors
-        // comes from the file, which could be corrupt or malicious, reject
-        // any bitmaps that have a dubious palette size.
-        if ( ncolors < 0 || 256 < ncolors )
-        {
-            if ( verbose )
-            {
-                wxLogError(
-                    _("BMP: header has biClrUsed=%d when biBitCount=%d."),
-                    ncolors, bpp);
-            }
-            return false;
-        }
-
-        cmap = new BMPPalette[ncolors];
-        if ( !cmap )
-        {
-            if (verbose)
-            {
-                wxLogError(_("BMP: Couldn't allocate memory."));
-            }
-            return false;
-        }
-    }
-    else // no palette
-    {
-        cmap = NULL;
-    }
-
-    wxON_BLOCK_EXIT1(&BMPPalette::Free, cmap);
+    BMPPalette cmapMono[2];
+    BMPPalette* cmap = NULL;
 
     bool isUpsideDown = true;
 
@@ -599,53 +581,44 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     // Reading the palette, if it exists:
     if ( bpp < 16 && ncolors != 0 )
     {
+        // Use the data from the bitmap header if we have it.
+        cmap = desc.paletteData.get();
+        if ( !cmap )
+        {
+            // Otherwise allocate it here to use when reading ICO file mask: in
+            // this case we have just 2 colours, black and white.
+            cmap = cmapMono;
+
+            cmap[0].r = cmap[0].g = cmap[0].b = 0;
+            cmap[1].r = cmap[1].g = cmap[1].b = 255;
+        }
+
 #if wxUSE_PALETTE
         wxScopedArray<unsigned char>
              r(ncolors),
              g(ncolors),
              b(ncolors);
-#endif // wxUSE_PALETTE
+
         for (int j = 0; j < ncolors; j++)
         {
-            if (hasPalette)
-            {
-                if ( !stream.ReadAll(bbuf, colEntrySize) )
-                    return false;
-
-                cmap[j].b = bbuf[0];
-                cmap[j].g = bbuf[1];
-                cmap[j].r = bbuf[2];
-            }
-            else
-            {
-                //used in reading .ico file mask
-                cmap[j].r =
-                cmap[j].g =
-                cmap[j].b = ( j ? 255 : 0 );
-            }
-#if wxUSE_PALETTE
             r[j] = cmap[j].r;
             g[j] = cmap[j].g;
             b[j] = cmap[j].b;
-#endif // wxUSE_PALETTE
         }
-
-#if wxUSE_PALETTE
         // Set the palette for the wxImage
         image->SetPalette(wxPalette(ncolors, r.get(), g.get(), b.get()));
 #endif // wxUSE_PALETTE
     }
     else if ( bpp == 16 || bpp == 32 )
     {
-        if ( comp == BI_BITFIELDS )
+        if ( desc.comp == BI_BITFIELDS )
         {
             int bit;
-            if ( !stream.ReadAll(dbuf, 4 * 3) )
-                return false;
 
-            rmask = wxINT32_SWAP_ON_BE(dbuf[0]);
-            gmask = wxINT32_SWAP_ON_BE(dbuf[1]);
-            bmask = wxINT32_SWAP_ON_BE(dbuf[2]);
+            rmask = desc.rmask;
+            gmask = desc.gmask;
+            bmask = desc.bmask;
+
             // find shift amount (Least significant bit of mask)
             for (bit = bpp-1; bit>=0; bit--)
             {
@@ -699,22 +672,10 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     /*
      * Reading the image data
      */
-    if ( IsBmp )
-    {
-        // NOTE: seeking a positive amount in wxFromCurrent mode allows us to
-        //       load even non-seekable streams (see wxInputStream::SeekI docs)!
-        const wxFileOffset pos = stream.TellI();
-        if ( pos == wxInvalidOffset ||
-             (bmpOffset > pos &&
-              stream.SeekI(bmpOffset - pos, wxFromCurrent) == wxInvalidOffset) )
-            return false;
-        //else: icon, just carry on
-    }
-
     unsigned char *data = ptr;
 
     /* set the whole image to the background color */
-    if ( bpp < 16 && (comp == BI_RLE4 || comp == BI_RLE8) )
+    if ( bpp < 16 && (desc.comp == BI_RLE4 || desc.comp == BI_RLE8) )
     {
         for (int i = 0; i < width * height; i++)
         {
@@ -762,7 +723,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 }
                 else if ( bpp == 4 )
                 {
-                    if ( comp == BI_RLE4 )
+                    if ( desc.comp == BI_RLE4 )
                     {
                         wxUint8 first;
                         first = aByte;
@@ -866,7 +827,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 }
                 else if ( bpp == 8 )
                 {
-                    if ( comp == BI_RLE8 )
+                    if ( desc.comp == BI_RLE8 )
                     {
                         unsigned char first;
                         first = aByte;
@@ -1006,7 +967,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 column++;
             }
         }
-        while ( (linepos < linesize) && (comp != BI_RLE8) && (comp != BI_RLE4) )
+        while ( (linepos < linesize) && (desc.comp != BI_RLE8) && (desc.comp != BI_RLE4) )
         {
             ++linepos;
             if ( !stream.ReadAll(&aByte, 1) )
@@ -1027,6 +988,8 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
 }
 
+} // anonymous namespace
+
 bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                            bool verbose, bool IsBmp)
 {
@@ -1039,9 +1002,8 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     wxInt32 hdrSize;
     if ( IsBmp )
     {
-        wxInt8 bbuf[4];
         // read the header off the .BMP format file
-        if ( !stream.ReadAll(bbuf, 2) ||
+        if ( !stream.ReadAll(&aWord, 2) ||
              !stream.ReadAll(dbuf, 16) )
             return false;
 
@@ -1056,7 +1018,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         if ( !stream.ReadAll(dbuf, 4) )
             return false;
 
-        offset = wxInvalidOffset; // not used in loading ICO/CUR DIBs
+        offset = 0; // not used in loading ICO/CUR DIBs
         hdrSize = wxINT32_SWAP_ON_BE(dbuf[0]);
     }
 
@@ -1066,28 +1028,27 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     // correction or ICC profiles, so it doesn't matter much to us).
     const bool usesV1 = hdrSize == 12;
 
-    int width;
-    int height;
+    BMPDesc desc;
     if ( usesV1 )
     {
         wxInt16 buf[2];
         if ( !stream.ReadAll(buf, sizeof(buf)) )
             return false;
 
-        width = wxINT16_SWAP_ON_BE((short)buf[0]);
-        height = wxINT16_SWAP_ON_BE((short)buf[1]);
+        desc.width = wxINT16_SWAP_ON_BE((short)buf[0]);
+        desc.height = wxINT16_SWAP_ON_BE((short)buf[1]);
     }
     else // We have at least BITMAPINFOHEADER
     {
         if ( !stream.ReadAll(dbuf, 4 * 2) )
             return false;
 
-        width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
-        height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
+        desc.width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
+        desc.height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
     }
-    if ( !IsBmp) height /= 2; // for icons divide by 2
+    if ( !IsBmp) desc.height /= 2; // for icons divide by 2
 
-    if ( width > 32767 )
+    if ( desc.width > 32767 )
     {
         if (verbose)
         {
@@ -1095,7 +1056,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         }
         return false;
     }
-    if ( height > 32767 )
+    if ( desc.height > 32767 )
     {
         if (verbose)
         {
@@ -1114,14 +1075,24 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     if ( !stream.ReadAll(&aWord, 2) )
         return false;
 
-    int bpp = wxUINT16_SWAP_ON_BE((int)aWord);
-    if ( bpp != 1 && bpp != 4 && bpp != 8 && bpp != 16 && bpp != 24 && bpp != 32 )
+    desc.bpp = wxUINT16_SWAP_ON_BE((int)aWord);
+    switch ( desc.bpp )
     {
-        if (verbose)
-        {
-            wxLogError( _("DIB Header: Unknown bitdepth in file.") );
-        }
-        return false;
+        case 1:
+        case 4:
+        case 8:
+        case 16:
+        case 24:
+        case 32:
+            // OK
+            break;
+
+        default:
+            if (verbose)
+            {
+                wxLogError( _("DIB Header: Unknown bitdepth in file.") );
+            }
+            return false;
     }
 
     class Resolution
@@ -1154,67 +1125,154 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         int m_x, m_y;
         bool m_valid;
     } res;
-    int comp;
-    int ncolors;
 
     if ( usesV1 )
     {
         // The only possible format is BI_RGB and colours count is not used.
-        comp = BI_RGB;
-        ncolors = 0;
+        desc.comp = BI_RGB;
+        desc.ncolors = 0;
     }
     else // We have at least BITMAPINFOHEADER
     {
         if ( !stream.ReadAll(dbuf, 4 * 4) )
             return false;
 
-        comp = wxINT32_SWAP_ON_BE((int)dbuf[0]);
-        if ( comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 &&
-             comp != BI_BITFIELDS )
+        // Sanity check: encoding must be consistent with the depth.
+        bool mismatch = false;
+
+        desc.comp = wxINT32_SWAP_ON_BE((int)dbuf[0]);
+        switch ( desc.comp )
+        {
+            case BI_RGB:
+                break;
+
+            case BI_RLE4:
+                if ( desc.bpp != 4 )
+                    mismatch = true;
+                break;
+
+            case BI_RLE8:
+                if ( desc.bpp != 8 )
+                    mismatch = true;
+                break;
+
+            case BI_BITFIELDS:
+                if ( desc.bpp != 16 && desc.bpp != 32 )
+                    mismatch = true;
+                break;
+
+            default:
+                if (verbose)
+                {
+                    wxLogError( _("DIB Header: Unknown encoding in file.") );
+                }
+                return false;
+        }
+
+        if ( mismatch )
         {
             if (verbose)
             {
-                wxLogError( _("DIB Header: Unknown encoding in file.") );
+                wxLogError( _("DIB Header: Encoding doesn't match bitdepth.") );
             }
             return false;
         }
 
+        res.Init(dbuf[2]/100, dbuf[3]/100);
+
         if ( !stream.ReadAll(dbuf, 4 * 2) )
             return false;
 
-        ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
-        res.Init(dbuf[2]/100, dbuf[3]/100);
+        desc.ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
+        if ( desc.ncolors < 0 || 256 < desc.ncolors )
+        {
+            if ( verbose )
+            {
+                wxLogError(
+                    _("BMP: header has biClrUsed=%d when biBitCount=%d."),
+                    desc.ncolors, desc.bpp);
+            }
+            return false;
+        }
 
-        // We've read BITMAPINFOHEADER data but for BITMAPV4HEADER or BITMAPV5HEADER
-        // we have to forward stream position to after the actual bitmap header.
+        // We've read all BITMAPINFOHEADER data so far, but we may have to
+        // forward the stream to after the actual bitmap header as there could
+        // be more BITMAPV4HEADER or BITMAPV5HEADER fields following.
         //
         // Note: hardcode its size as struct BITMAPINFOHEADER is not defined on
         // non-MSW platforms.
-        const wxInt32 sizeBITMAPINFOHEADER = 40;
-        if ( hdrSize > sizeBITMAPINFOHEADER )
+        wxInt32 hdrBytesRead = 40 /* sizeof(BITMAPINFOHEADER) */;
+
+        if ( desc.comp == BI_BITFIELDS )
         {
-            if ( stream.SeekI(hdrSize - sizeBITMAPINFOHEADER, wxFromCurrent) == wxInvalidOffset )
+            // Read the mask values from the header.
+            if ( !stream.ReadAll(dbuf, 4 * 4) )
+                return false;
+
+            hdrBytesRead += 4 * 4;
+
+            desc.rmask = wxINT32_SWAP_ON_BE(dbuf[0]);
+            desc.gmask = wxINT32_SWAP_ON_BE(dbuf[1]);
+            desc.bmask = wxINT32_SWAP_ON_BE(dbuf[2]);
+            desc.amask = wxINT32_SWAP_ON_BE(dbuf[3]);
+        }
+
+        // Now that we've read everything we needed from the header, advance
+        // past it.
+        if ( hdrSize > hdrBytesRead )
+        {
+            if ( stream.SeekI(hdrSize - hdrBytesRead, wxFromCurrent) == wxInvalidOffset )
                 return false;
         }
     }
-    if (ncolors == 0)
-        ncolors = 1 << bpp;
-    /* some more sanity checks */
-    if (((comp == BI_RLE4) && (bpp != 4)) ||
-        ((comp == BI_RLE8) && (bpp != 8)) ||
-        ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
+
+    // We must have read the header entirely by now and we also read the 14
+    // bytes preceding it: "BM" signature and 3 other DWORDs.
+    wxFileOffset bytesRead = 14 + hdrSize;
+
+    // We must have a palette for 1bpp, 4bpp and 8bpp bitmaps.
+    if (desc.ncolors == 0 && desc.bpp < 16)
+        desc.ncolors = 1 << desc.bpp;
+
+    // Now read the palette data, which follows the header, if we have it.
+    if ( desc.ncolors )
     {
-        if (verbose)
+        const int paletteEntrySize = usesV1 ? 3 : 4;
+
+        const int paletteSize = paletteEntrySize*desc.ncolors;
+
+        wxScopedArray<unsigned char> paletteData(paletteSize);
+        unsigned char* data = paletteData.get();
+        if ( !stream.ReadAll(data, paletteSize) )
+            return false;
+
+        bytesRead += paletteSize;
+
+        // Copy it into the format the existing code uses: this could probably
+        // be optimized to avoid copying, but palette size is small enough for
+        // an extra copy not to really matter.
+        desc.paletteData.reset(new BMPPalette[paletteSize]);
+        for ( int n = 0; n < desc.ncolors; ++n, data += paletteEntrySize )
         {
-            wxLogError( _("DIB Header: Encoding doesn't match bitdepth.") );
+            BMPPalette& entry = desc.paletteData[n];
+
+            // This is not a typo: entries are actually in BGR order.
+            entry.b = data[0];
+            entry.g = data[1];
+            entry.r = data[2];
         }
-        return false;
+    }
+
+    // We may have a gap between the palette and start of the pixel data, skip
+    // it if necessary.
+    if ( bytesRead < offset )
+    {
+        if ( stream.SeekI(offset - bytesRead, wxFromCurrent) == wxInvalidOffset )
+            return false;
     }
 
     //read DIB; this is the BMP image or the XOR part of an icon image
-    if ( !DoLoadDib(image, width, height, bpp, ncolors, comp, offset, stream,
-                    verbose, IsBmp, true,
-                    usesV1 ? 3 : 4) )
+    if ( !LoadBMPData(image, desc, stream, verbose) )
     {
         if (verbose)
         {
@@ -1226,10 +1284,16 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     if ( !IsBmp )
     {
         //read Icon mask which is monochrome
+        BMPDesc descMask;
+        descMask.width = desc.width;
+        descMask.height = desc.height;
+        descMask.bpp = 1;
+        descMask.ncolors = 2;
+        descMask.comp = BI_RGB;
+
         //there is no palette, so we will create one
         wxImage mask;
-        if ( !DoLoadDib(&mask, width, height, 1, 2, BI_RGB, offset, stream,
-                        verbose, IsBmp, false) )
+        if ( !LoadBMPData(&mask, descMask, stream, verbose) )
         {
             if (verbose)
             {

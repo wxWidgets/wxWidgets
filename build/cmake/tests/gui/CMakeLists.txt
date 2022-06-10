@@ -145,6 +145,7 @@ set(TEST_GUI_DATA
     horse.tga
     horse.tif
     horse.xpm
+    image/bitfields.bmp
     image/8bpp-colorsused-large.bmp
     image/8bpp-colorsused-negative.bmp
     image/rle4-delta-320x240.bmp
