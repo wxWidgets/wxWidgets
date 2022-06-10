@@ -3588,9 +3588,9 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_GETOBJECT:
             {
                 //WPARAM dwFlags = (WPARAM) (DWORD) wParam;
-                LPARAM dwObjId = (LPARAM) (DWORD) lParam;
+                DWORD dwObjId = lParam;
 
-                if (dwObjId == (LPARAM)OBJID_CLIENT && GetOrCreateAccessible())
+                if (dwObjId == (DWORD)OBJID_CLIENT && GetOrCreateAccessible())
                 {
                     processed = true;
                     rc.result = LresultFromObject(IID_IAccessible, wParam, (IUnknown*) GetAccessible()->GetIAccessible());
