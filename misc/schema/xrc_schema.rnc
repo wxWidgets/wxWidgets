@@ -580,6 +580,7 @@ wxAuiNotebook =
         attribute class { "wxAuiNotebook" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
+        [xrc:p="o"] element art-provider {_, ("default" | "simple") }* &
         (wxAuiNotebook_notebookpage | objectRef)*
     }
 

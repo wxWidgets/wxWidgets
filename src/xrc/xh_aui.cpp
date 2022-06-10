@@ -275,6 +275,14 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
                     GetSize(),
                     GetStyle(wxS("style")));
 
+        wxString provider = GetText("art-provider", false);
+        if (provider == "default" || provider.IsEmpty())
+            anb->SetArtProvider(new wxAuiDefaultTabArt);
+        else if (provider.CmpNoCase("simple") == 0)
+            anb->SetArtProvider(new wxAuiSimpleTabArt);
+        else
+            ReportError("invalid wxAuiNotebook art provider");
+
         SetupWindow(anb);
 
         wxAuiNotebook *old_par = m_notebook;
