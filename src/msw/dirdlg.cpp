@@ -281,7 +281,7 @@ wxIFileDialog::wxIFileDialog(const CLSID& clsid)
                     clsid,
                     NULL, // no outer IUnknown
                     CLSCTX_INPROC_SERVER,
-                    wxIID_PPV_ARGS(IFileOpenDialog, &m_fileDialog)
+                    wxIID_PPV_ARGS(IFileDialog, &m_fileDialog)
                  );
     if ( FAILED(hr) )
     {
@@ -300,7 +300,7 @@ int wxIFileDialog::Show(HWND owner, int options,
     hr = m_fileDialog->SetOptions(options | FOS_FORCEFILESYSTEM);
     if ( FAILED(hr) )
     {
-        wxLogApiError(wxS("IFileOpenDialog::SetOptions"), hr);
+        wxLogApiError(wxS("IFileDialog::SetOptions"), hr);
         return false;
     }
 
@@ -348,7 +348,7 @@ void wxIFileDialog::SetTitle(const wxString& message)
     {
         // This error is not serious, let's just log it and continue even
         // without the title set.
-        wxLogApiError(wxS("IFileOpenDialog::SetTitle"), hr);
+        wxLogApiError(wxS("IFileDialog::SetTitle"), hr);
     }
 }
 
@@ -401,7 +401,7 @@ void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
     {
         hr = m_fileDialog->SetFolder(folder);
         if ( FAILED(hr) )
-            wxLogApiError(wxS("IFileOpenDialog::SetFolder"), hr);
+            wxLogApiError(wxS("IFileDialog::SetFolder"), hr);
     }
 }
 
