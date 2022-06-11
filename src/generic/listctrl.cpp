@@ -4226,14 +4226,15 @@ void wxListMainWindow::RecalculatePositions()
             );
         }
     }
-
-    m_dirty = false;
 }
 
 void wxListMainWindow::RecalculatePositionsAndRefresh()
 {
     RecalculatePositions();
 
+    // Whether the window was dirty or not before, it won't be any longer after
+    // the next refresh.
+    m_dirty = false;
     Refresh();
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
