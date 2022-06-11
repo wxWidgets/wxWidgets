@@ -4063,6 +4063,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/creddlgg.h \
 	wx/creddlg.h \
 	wx/bmpbndl.h \
+	wx/filedlgcustomize.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	wx/mediactrl.h \

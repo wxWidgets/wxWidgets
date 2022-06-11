@@ -3741,6 +3741,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\filedlgcustomize.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\filehistory.h"
 				>
 			</File>

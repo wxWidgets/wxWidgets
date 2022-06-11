@@ -1518,6 +1518,7 @@
     <ClInclude Include="..\..\include\wx\dcbuffer.h" />
     <ClInclude Include="..\..\include\wx\creddlg.h" />
     <ClInclude Include="..\..\include\wx\generic\creddlgg.h" />
+    <ClInclude Include="..\..\include\wx\filedlgcustomize.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
