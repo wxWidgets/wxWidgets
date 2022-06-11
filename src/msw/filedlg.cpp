@@ -753,8 +753,7 @@ public:
         // Note that we need to call this hook function from here as the
         // controls are destroyed later and getting their values wouldn't work
         // any more.
-        if ( m_fileDialog->m_customizeHook )
-            m_fileDialog->m_customizeHook->TransferDataFromCustomControls();
+        m_fileDialog->MSWOnFileOK();
 
         return S_OK;
     }
@@ -944,6 +943,10 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
 
                         case CDN_TYPECHANGE:
                             dialog->MSWOnTypeChange(ofn.nFilterIndex);
+                            break;
+
+                        case CDN_FILEOK:
+                            dialog->MSWOnFileOK();
                             break;
                     }
                 }
@@ -1137,6 +1140,28 @@ void wxFileDialog::MSWOnTypeChange(int nFilterIndex)
     m_currentlySelectedFilterIndex = nFilterIndex ? nFilterIndex - 1 : 0;
 
     UpdateExtraControlUI();
+}
+
+void wxFileDialog::MSWOnFileOK()
+{
+    if ( m_customizeHook )
+    {
+        if ( m_extraControl )
+        {
+            // If we've created the old style extra controls even though we're
+            // using the customize hook, we must delete them now, to ensure
+            // that TransferDataFromCustomControls() called from the extra
+            // controls panel destructor is called while the controls still
+            // exist.
+            DestroyExtraControl();
+        }
+        else // This is the normal case, when using IFileDialog.
+        {
+            // Just call TransferDataFromCustomControls() directly, it won't be
+            // called from anywhere else.
+            m_customizeHook->TransferDataFromCustomControls();
+        }
+    }
 }
 
 // helper used below in ShowCommFileDialog(): style is used to determine

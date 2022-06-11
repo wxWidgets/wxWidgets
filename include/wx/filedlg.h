@@ -198,6 +198,8 @@ protected:
     wxWindow* CreateExtraControlWithParent(wxWindow* parent) const;
     // returns true if control is created, also sets m_extraControl
     bool CreateExtraControl();
+    // destroy m_extraControl and reset it to NULL
+    void DestroyExtraControl();
     // return true if SetExtraControlCreator() was called
     bool HasExtraControlCreator() const
         { return m_extraControlCreator != NULL; }
