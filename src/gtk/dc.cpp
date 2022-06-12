@@ -310,7 +310,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     const double bmpScale = bitmap.IsOk() ? bitmap.GetScaleFactor() : 1.0;
 
     cairo_scale(cr, dstWidth / (sx * srcWidth * bmpScale), dstHeight / (sy * srcHeight * bmpScale));
-    cairo_set_source_surface(cr, surfaceSrc, -xsrc_dev, -ysrc_dev);
+    cairo_set_source_surface(cr, surfaceSrc, -xsrc_dev * bmpScale, -ysrc_dev * bmpScale);
     const wxRasterOperationMode rop_save = m_logicalFunction;
     SetLogicalFunction(rop);
     cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);
@@ -333,7 +333,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
         if (ysrcMask != -1)
             ysrcMask_dev = source->LogicalToDeviceY(ysrcMask);
         cairo_clip(cr);
-        cairo_mask_surface(cr, maskSurf, -xsrcMask_dev, -ysrcMask_dev);
+        cairo_mask_surface(cr, maskSurf, -xsrcMask_dev * bmpScale, -ysrcMask_dev * bmpScale);
     }
     else
     {
