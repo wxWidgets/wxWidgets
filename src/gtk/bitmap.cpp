@@ -1053,11 +1053,18 @@ static cairo_surface_t* GetSubSurface(cairo_surface_t* surface, const wxRect& re
 }
 #endif
 
-wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
+wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect_) const
 {
     wxBitmap ret;
 
     wxCHECK_MSG(IsOk(), ret, wxT("invalid bitmap"));
+
+#ifdef __WXGTK3__
+    double scale = M_BMPDATA->m_scaleFactor;
+    wxRect rect(rect_.x*scale, rect_.y*scale, rect_.width*scale, rect_.height*scale);
+#else
+    wxRect rect(rect_);
+#endif
 
     const int w = rect.width;
     const int h = rect.height;
