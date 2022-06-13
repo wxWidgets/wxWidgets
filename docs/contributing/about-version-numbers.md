@@ -16,7 +16,6 @@ instructions there.
 Here is the list of files that need to be updated:
 
 	build/bakefiles/version.bkl {C:R:A}          [NOT UPDATED AUTOMATICALLY]
-	build/bakefiles/wxpresets/presets/wx.bkl     [NOT UPDATED AUTOMATICALLY, not-micro]
 	configure.in
 	build/osx/wxvers.xcconfig
 	docs/changes.txt

@@ -1,9 +1,9 @@
-wxWidgets 3.1.7 Release Notes
+wxWidgets 3.2.0 Release Notes
 =============================
 
-Welcome to the latest development release of wxWidgets, a free and open source
-cross-platform C++ framework for writing advanced GUI applications using native
-controls.
+Welcome to the new stable release of wxWidgets, a free and open source
+cross-platform C++ framework for writing advanced GUI applications using
+native controls.
 
 wxWidgets allows you to write native-looking GUI applications for all the major
 desktop platforms and also helps with abstracting the differences in the non-GUI
@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.1.7/
+* https://docs.wxwidgets.org/3.2.0/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
@@ -25,54 +25,28 @@ download from:
 
 or, for a more more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.7/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.0/
 
-Please see https://docs.wxwidgets.org/3.1.7/overview_install.html for full
+Please see https://docs.wxwidgets.org/3.2.0/overview_install.html for full
 installation instructions.
 
-
-
-Changes since 3.1.6
--------------------
-
-This release, coming only two months after the previous one, mostly
-contains bug fixes and incremental improvements in preparation for 3.2.0
-major release. There is still quite a number of them, with more than 500
-commits from 37 unique contributors, but the most important changes are:
-
-- CMake build system improvements (better precompiled headers support).
-- New wxFileDialog customization API working with IFileDialog in wxMSW.
-- Many updated translations and new wxTRANSLATE_IN_CONTEXT().
-- Fixes for bad interactions with new macOS 12 features in wxOSX.
-- Several previously missing attributes added to multiple XRC handlers.
-- Row reordering by dragging and UI enhancements in wxGrid.
-- Ability to suppress selected (or all) GTK warning messages in wxGTK.
-- And many, many bugs fixes, including for the regressions in 3.1.6.
-
-Please see
-
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.7/docs/changes.txt
-
-for more details.
-
-Notice that in spite of all the changes, this release remains almost completely
-compatible with 3.1.6 at the API level, so upgrading to it if you're already
-using wxWidgets 3 should be straightforward.
 
 
 Changes since 3.0
 -----------------
 
-Compared to the stable 3.0.x series, this version brings too many
-improvements and even more bug fixes to list them all, but here is the
-maximally condensed summary:
+This release is a culmination of many years of development since the
+last stable 3.0 release. It contains more than 15,000 commits from more
+than 400 unique contributors (including more than 200 with multiple
+contributions) and has too many improvements to list them all here, but
+here is a maximally condensed summary of the most important ones:
 
 - Build system improvements: support for new compilers (up to MSVS 2022,
   g++ 12, clang 14) with an even simpler way of using wxWidgets from
   MSVS, with wxwidgets.props file, and OS versions as well as an
   entirely new CMake build system.
-- Support for native dark mode under macOS 10.14 Mojave and later and
-  support for macOS 11 and later on ARM hardware and macOS 12 support.
+- Support for native dark mode under macOS 10.14 and later, support for
+  ARM hardware and macOS versions up to 13.
 - High DPI support with the new, but almost perfectly backwards-
   compatible, API based on wxBitmapBundle, including per-monitor DPI and
   dynamic DPI changes.
@@ -98,12 +72,16 @@ maximally condensed summary:
 - Revamped OpenGL support better suited to modern OpenGL (3.2+).
 - Further C++11 and later support improvements, wxWidgets can be built using
   C++20 compilers.
-- A lot of bug fixes, especially in wxGTK3 and wxOSX/Cocoa ports.
 - New experimental wxQt port.
+- Many, many bug fixes.
 
 
+Note that in spite of all these changes, wxWidgets 3.2 is almost fully
+compatible with wxWidgets 3.0 and updating the existing applications to
+use it shouldn't require much effort.
 
-Platforms Supported
+
+Supported Platforms
 -------------------
 
 This version of wxWidgets supports the following primary platforms:
@@ -194,4 +172,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, June 2022
+The wxWidgets Team, July 2022
