@@ -232,6 +232,31 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.2.0: (released 2022-07-07)
+----------------------------
+
+All (GUI):
+
+- Make loading bitmaps using BI_BITFIELDS work again.
+- Fix wxGenericListCtrl::GetColumnCount() for wxLC_LIST (Kvaz1r).
+- Fix refresh after calling wxGenericListCtrl::EnsureVisible() (taler21).
+
+wxGTK:
+
+- Fix TAB navigation in wxSimplebook (Adrian Lopez).
+
+wxMSW:
+
+- Fix wxDC::DrawRoundedRectangle() regression.
+
+wxOSX:
+
+- Fix regression in wxTextCtrl best size calculation.
+- Fix activation of applications using LSUIElement == true.
+- Fix AUI sash appearance in dark mode (alilie).
+- Recognize macOS 12 in wxGetOsDescription() (Tobias Taschner).
+
+
 3.1.7: (released 2022-06-06)
 ----------------------------
 
