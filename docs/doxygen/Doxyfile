@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 3.1.7
+PROJECT_NUMBER         = 3.2.0
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
@@ -371,7 +371,7 @@ HTML_INDEX_NUM_ENTRIES = 100
 #---------------------------------------------------------------------------
 
 GENERATE_DOCSET        = $(GENERATE_DOCSET)
-DOCSET_FEEDNAME        = "wxWidgets 3.1"
+DOCSET_FEEDNAME        = "wxWidgets 3.2"
 DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx31
 DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
 DOCSET_PUBLISHER_NAME  = wxWidgets
