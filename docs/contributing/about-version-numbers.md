@@ -25,6 +25,7 @@ Here is the list of files that need to be updated:
 	include/wx/version.h
 	include/wx/osx/config_xcode.h
 	samples/minimal/Info_cocoa.plist
+	samples/minimal/CMakeListst.txt [major/minor only]
 
 Do not forget to rebake everything after updating version.bkl!
 
