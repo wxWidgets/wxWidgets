@@ -41,7 +41,7 @@ public:
                     const wxBitmapBundle& bmpUnchecked = wxBitmapBundle());
     void SetBitmap(const wxBitmapBundle& bmp) { SetBitmaps(bmp); }
     wxBitmap GetBitmap(bool checked = true) const
-      { return GetBitmapFromBundle(checked ? m_bmpChecked : m_bmpUnchecked); }
+      { return GetBitmapFromBundle(checked ? m_bitmap : m_bmpUnchecked); }
 
     void SetDisabledBitmap( const wxBitmapBundle& bmpDisabled )
       { m_bmpDisabled = bmpDisabled; }
@@ -93,7 +93,7 @@ protected:
     void UpdateAccelInfo();
 
     // the bitmaps (may be invalid, then they're not used)
-    wxBitmapBundle m_bmpChecked,
+    wxBitmapBundle m_bitmap,
                    m_bmpUnchecked,
                    m_bmpDisabled;
 

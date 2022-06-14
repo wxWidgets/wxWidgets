@@ -1616,7 +1616,7 @@ void wxMenuItem::SetCheckable(bool checkable)
 void wxMenuItem::SetBitmaps(const wxBitmapBundle& bmpChecked,
                             const wxBitmapBundle& bmpUnchecked)
 {
-    m_bmpChecked = bmpChecked;
+    m_bitmap = bmpChecked;
     m_bmpUnchecked = bmpUnchecked;
 
     NotifyMenu();

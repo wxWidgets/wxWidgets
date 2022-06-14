@@ -139,7 +139,7 @@ private:
     int MSGetMenuItemPos() const;
 
     // item bitmaps
-    wxBitmapBundle m_bmpChecked,     // bitmap to put near the item
+    wxBitmapBundle m_bitmap,     // bitmap to put near the item
                    m_bmpUnchecked;   // (checked is used also for 'uncheckable' items)
 #if wxUSE_OWNER_DRAWN
     wxBitmapBundle m_bmpDisabled;
