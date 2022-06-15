@@ -91,7 +91,8 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
 
     if (win->m_miniTitle && !win->GetTitle().empty())
     {
-        dc.SetFont( *wxSMALL_FONT );
+        const wxFont* smallFont = wxSMALL_FONT;
+        dc.SetFont( *smallFont );
 
         wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
         dc.SetBrush( brush );
@@ -99,7 +100,7 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
         dc.DrawRectangle( win->m_miniEdge-1,
                           win->m_miniEdge-1,
                           win->m_width - (2*(win->m_miniEdge-1)),
-                          15  );
+                          wxWindow::FromDIP(smallFont->GetPixelSize().y, win) );
 
         const wxColour textColor = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         dc.SetTextForeground(textColor);
@@ -323,10 +324,12 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
+    wxFrame::Create( parent, id, title, pos, size, style, name );
+
     m_isDragMove = false;
     m_miniTitle = 0;
     if (style & wxCAPTION)
-        m_miniTitle = 16;
+        m_miniTitle = wxWindow::FromDIP(wxSMALL_FONT->GetPixelSize().y, this);
 
     if (style & wxRESIZE_BORDER)
         m_miniEdge = 4;
@@ -340,8 +343,6 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         m_minWidth = minWidth;
     if (m_minHeight < minHeight)
         m_minHeight = minHeight;
-
-    wxFrame::Create( parent, id, title, pos, size, style, name );
 
     // Use a GtkEventBox for the title and borders. Using m_widget for this
     // almost works, except that setting the resize cursor has no effect.
