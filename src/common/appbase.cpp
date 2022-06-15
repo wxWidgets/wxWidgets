@@ -256,6 +256,11 @@ wxEventLoopBase *wxAppConsoleBase::CreateMainLoop()
 
 void wxAppConsoleBase::CleanUp()
 {
+#if wxUSE_CONFIG
+    // Delete the global wxConfig object, if any, and reset it.
+    delete wxConfigBase::Set(NULL);
+#endif // wxUSE_CONFIG
+
     wxDELETE(m_mainLoop);
 }
 
@@ -309,9 +314,8 @@ int wxAppConsoleBase::OnExit()
     DeletePendingObjects();
 
 #if wxUSE_CONFIG
-    // delete the config object if any (don't use Get() here, but Set()
-    // because Get() could create a new config object)
-    delete wxConfigBase::Set(NULL);
+    // Ensure we won't create it on demand any more if we hadn't done it yet.
+    wxConfigBase::DontCreateOnDemand();
 #endif // wxUSE_CONFIG
 
     return 0;
