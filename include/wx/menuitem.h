@@ -118,6 +118,10 @@ public:
     // bitmap-related functions
 
     virtual void SetBitmap(const wxBitmapBundle& bmp);
+    wxBitmapBundle GetBitmapBundle() const { return m_bitmap; }
+
+    // This method only exists for compatibility, prefer using
+    // GetBitmapBundle() in the new code.
     virtual wxBitmap GetBitmap() const;
 
 #if wxUSE_ACCEL

@@ -162,6 +162,9 @@ public:
 
     /**
         Returns the item bitmap.
+
+        This method exists only for compatibility, please use GetBitmapBundle()
+        in the new code.
     */
     wxBitmap GetBitmap() const;
 
@@ -171,6 +174,18 @@ public:
         This overload only exists in wxMSW, avoid using it in portable code.
     */
     wxBitmap GetBitmap(bool checked) const;
+
+    /**
+        Returns the bitmap bundle containing the bitmap used for this item.
+
+        The returned bundle is invalid, i.e. empty, if no bitmap is associated
+        with the item.
+
+        @see SetBitmap()
+
+        @since 3.2.0
+    */
+    wxBitmapBundle GetBitmapBundle() const;
 
     /**
         Returns the bitmap used for disabled items.
