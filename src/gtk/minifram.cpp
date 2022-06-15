@@ -92,6 +92,7 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
     if (win->m_miniTitle && !win->GetTitle().empty())
     {
         const wxFont* smallFont = wxSMALL_FONT;
+        int height = wxWindow::FromDIP(smallFont->GetPixelSize().y, win) + 4;
         dc.SetFont( *smallFont );
 
         wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
@@ -100,16 +101,20 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
         dc.DrawRectangle( win->m_miniEdge-1,
                           win->m_miniEdge-1,
                           win->m_width - (2*(win->m_miniEdge-1)),
-                          wxWindow::FromDIP(smallFont->GetPixelSize().y, win) );
+                          height );
 
         const wxColour textColor = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         dc.SetTextForeground(textColor);
-        dc.DrawText( win->GetTitle(), 6, 4 );
+        dc.DrawText( win->GetTitle(), 6, 2 );
 
         if (style & wxCLOSE_BOX)
         {
             dc.SetTextBackground(textColor);
-            dc.DrawBitmap( win->m_closeButton, win->m_width-18, 3, true );
+            dc.DrawBitmap(
+                    win->m_closeButton,
+                    win->m_width-18,
+                    win->m_miniEdge - 1 + (height - 16) / 2,
+                    true );
         }
     }
 
@@ -329,7 +334,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     m_isDragMove = false;
     m_miniTitle = 0;
     if (style & wxCAPTION)
-        m_miniTitle = wxWindow::FromDIP(wxSMALL_FONT->GetPixelSize().y, this);
+        m_miniTitle = wxWindow::FromDIP(wxSMALL_FONT->GetPixelSize().y, this) + 4;
 
     if (style & wxRESIZE_BORDER)
         m_miniEdge = 4;
