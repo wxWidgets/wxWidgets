@@ -2368,8 +2368,6 @@ static void wxYieldForCommandsOnly()
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
-    menu->SetupBitmaps();
-
     wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
@@ -2450,7 +2448,16 @@ wxWindowMSW::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu)
 {
     wxMenuEvent event(evtType, menu && !menu->IsAttached() ? wxID_ANY : 0, menu);
 
-    return wxMenu::ProcessMenuEvent(menu, event, this);
+    const bool processed = wxMenu::ProcessMenuEvent(menu, event, this);
+
+    if ( menu && evtType == wxEVT_MENU_OPEN )
+    {
+        // Do this after possibly executing the user-defined wxEVT_MENU_OPEN
+        // handler which could have modified the bitmaps.
+        menu->SetupBitmaps();
+    }
+
+    return processed;
 }
 
 bool wxWindowMSW::HandleMenuPopup(wxEventType evtType, WXHMENU hMenu)
