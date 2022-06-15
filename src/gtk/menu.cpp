@@ -756,21 +756,6 @@ void wxMenuItem::ClearExtraAccels()
 
 #endif // wxUSE_ACCEL
 
-void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
-{
-    if (m_kind == wxITEM_NORMAL)
-        m_bitmap = bitmap;
-    else
-    {
-        wxFAIL_MSG("only normal menu items can have bitmaps");
-    }
-}
-
-wxBitmap wxMenuItem::GetBitmap() const
-{
-    return GetBitmapFromBundle(m_bitmap);
-}
-
 void wxMenuItem::SetupBitmaps(wxWindow *win)
 {
 #ifndef __WXGTK4__
