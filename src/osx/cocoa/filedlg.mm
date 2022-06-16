@@ -627,13 +627,13 @@ int wxFileDialog::ShowModal()
 
 void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
+    NSSavePanel* const sPanel = static_cast<NSSavePanel*>(panel);
+
     const bool wasAccepted = returnCode == NSModalResponseOK;
     if (HasFlag(wxFD_SAVE))
     {
         if (wasAccepted)
         {
-            NSSavePanel* sPanel = (NSSavePanel*)panel;
-
             NSString* unsafePath = [NSString stringWithUTF8String:[[sPanel URL] fileSystemRepresentation]];
             m_path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
             m_fileName = wxFileNameFromPath(m_path);
@@ -646,7 +646,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     }
     else
     {
-        NSOpenPanel* oPanel = (NSOpenPanel*)panel;
+        NSOpenPanel* const oPanel = static_cast<NSOpenPanel*>(sPanel);
         if (wasAccepted)
         {
             bool isFirst = true;
@@ -687,7 +687,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
     
-    [(NSSavePanel*) panel setAccessoryView:nil];
+    [sPanel setAccessoryView:nil];
 }
 
 #endif // wxUSE_FILEDLG
