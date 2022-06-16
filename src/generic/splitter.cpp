@@ -625,6 +625,12 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
 
 #if defined(__WXGTK3__)
     wxClientDC dc(this);
+
+    // In the ports with wxGraphicsContext-based wxDC, such as wxGTK3 or wxOSX,
+    // wxINVERT only works for inverting the background when using white
+    // foreground (note that this code is not used anyhow for __WXMAC__ due to
+    // always using live-resizing there, see IsLive()).
+    dc.SetPen(*wxWHITE_PEN);
 #else
     // We need to use wxScreenDC and not wxClientDC at least for wxMSW where
     // drawing in this window itself would be hidden by its children windows,
@@ -632,10 +638,12 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     wxScreenDC dc;
     ClientToScreen(&x1, &y1);
     ClientToScreen(&x2, &y2);
+
+    dc.SetPen(*m_sashTrackerPen);
 #endif
 
     dc.SetLogicalFunction(wxINVERT);
-    dc.SetPen(*m_sashTrackerPen);
+
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.DrawLine(x1, y1, x2, y2);
