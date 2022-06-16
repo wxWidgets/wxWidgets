@@ -145,7 +145,7 @@ public:
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
 
-    bool HasAlpha() const;
+    bool HasAlpha() const wxOVERRIDE;
 
 protected:
 #if wxUSE_IMAGE

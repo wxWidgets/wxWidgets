@@ -180,10 +180,8 @@ public:
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
 
-    // these functions are internal and shouldn't be used, they risk to
-    // disappear in the future
-    bool HasAlpha() const;
-    void UseAlpha(bool use = true);
+    bool HasAlpha() const wxOVERRIDE;
+    bool UseAlpha(bool use = true) wxOVERRIDE;
 
     // returns the 'native' implementation, a GWorldPtr for the content and one for the mask
     WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;

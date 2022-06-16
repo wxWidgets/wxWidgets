@@ -250,6 +250,12 @@ public:
     virtual void SetPalette(const wxPalette& palette) = 0;
 #endif // wxUSE_PALETTE
 
+    // Alpha support for 32bpp bitmaps: check if it's used, request that it be
+    // used or not.
+    virtual bool HasAlpha() const;
+    virtual bool UseAlpha(bool use = true);
+    void ResetAlpha() { UseAlpha(false); }
+
     // copies the contents and mask of the given (colour) icon to the bitmap
     bool CopyFromIcon(const wxIcon& icon);
 
