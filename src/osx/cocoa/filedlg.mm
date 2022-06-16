@@ -650,7 +650,6 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
         NSOpenPanel* oPanel = (NSOpenPanel*)panel;
         if (returnCode == NSModalResponseOK )
         {
-            panel = oPanel;
             result = wxID_OK;
 
             bool isFirst = true;
