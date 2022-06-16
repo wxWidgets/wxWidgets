@@ -356,7 +356,7 @@ wxUILocaleImplUnix::GetName() const
 wxLocaleIdent
 wxUILocaleImplUnix::GetLocaleId() const
 {
-    return m_locId;
+    return wxLocaleIdent::FromTag(GetName());
 }
 
 #ifdef HAVE_LANGINFO_H
