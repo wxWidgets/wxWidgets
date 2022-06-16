@@ -333,6 +333,8 @@ int wxFileDialog::ShowModal()
 
     if (m_fileName.empty())
         return wxID_CANCEL;
-    else
-        return wxID_OK;
+
+    TransferDataFromExtraControl();
+
+    return wxID_OK;
 }

@@ -370,6 +370,8 @@ void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
         str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
     m_dir = wxString::FromUTF8(str);
 
+    TransferDataFromExtraControl();
+
     EndDialog(wxID_OK);
 }
 
