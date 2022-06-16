@@ -675,6 +675,8 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_filterIndex = m_filterChoice->GetSelection();
         else
             m_filterIndex = GetMatchingFilterExtension(m_fileName);
+
+        TransferDataFromExtraControl();
     }
 
     SetReturnCode(wasAccepted ? wxID_OK : wxID_CANCEL);

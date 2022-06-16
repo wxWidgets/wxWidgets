@@ -366,6 +366,8 @@ void wxGenericFileDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
         return;
     }
 
+    TransferDataFromExtraControl();
+
     EndModal(wxID_OK);
 }
 

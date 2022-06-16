@@ -206,6 +206,9 @@ protected:
     // Helper function for native file dialog usage where no wx events
     // are processed.
     void UpdateExtraControlUI();
+    // Helper function simply transferring data from custom controls if they
+    // are used -- must be called if the dialog was accepted.
+    void TransferDataFromExtraControl();
 
 private:
     ExtraControlCreatorFunction m_extraControlCreator;
