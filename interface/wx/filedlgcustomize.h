@@ -331,6 +331,7 @@ public:
         // This object may be destroyed before the dialog, but must remain
         // alive until ShowModal() returns.
         EncryptHook customizeHook;
+        dialog.SetCustomizeHook(customHook);
 
         if ( dialog.ShowModal() == wxID_OK )
         {

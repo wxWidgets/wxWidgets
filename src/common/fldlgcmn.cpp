@@ -903,6 +903,15 @@ bool wxFileDialogBase::CreateExtraControl()
     return m_extraControl != NULL;
 }
 
+void wxFileDialogBase::DestroyExtraControl()
+{
+    if ( m_extraControl )
+    {
+        m_extraControl->Destroy();
+        m_extraControl = NULL;
+    }
+}
+
 void wxFileDialogBase::UpdateExtraControlUI()
 {
     if ( m_customizeHook )
