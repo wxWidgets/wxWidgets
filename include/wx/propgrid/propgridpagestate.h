@@ -125,7 +125,7 @@ wxPG_ITERATOR_MASK_OP_PARENT = wxPG_ITERATOR_FLAGS_ALL,
 
 // Combines all flags needed to iterate through visible properties
 // (ie. hidden properties and children of collapsed parents are skipped).
-wxPG_ITERATE_VISIBLE = wxPG_ITERATE_PROPERTIES |
+wxPG_ITERATE_VISIBLE = static_cast<int>(wxPG_ITERATE_PROPERTIES) |
                        wxPG_PROP_CATEGORY |
                        wxPG_IT_CHILDREN(wxPG_PROP_AGGREGATE),
 
