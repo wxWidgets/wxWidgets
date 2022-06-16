@@ -2043,6 +2043,7 @@ wxGridBagSizer =
                                                      "wxFLEX_GROWMODE_ALL") }* &
         [xrc:p="o"] element growablerows        {_, t_list_of_numbers_with_weights }* &
         [xrc:p="o"] element growablecols        {_, t_list_of_numbers_with_weights }* &
+        [xrc:p="o"] element empty_cellsize      {_, t_size }* &
         (wxSizerGB_item | objectRef)*
     }
 

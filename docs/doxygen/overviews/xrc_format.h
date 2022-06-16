@@ -2733,6 +2733,9 @@ support the following properties:
     optionally the proportion can be appended after each number
     separated by a @c :
     (default: none).}
+@row3col{empty_cellsize, @ref overview_xrcformat_type_size,
+    Size used for cells in the grid with no item. (default: @c wxDefaultSize).
+    @since 3.2.0}
 @endTable
 
 @subsection overview_xrcformat_wxwrapsizer wxWrapSizer
