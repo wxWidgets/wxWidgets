@@ -2056,6 +2056,9 @@ bool wxMacCoreGraphicsContext::DoSetCompositionMode(wxCompositionMode op)
             case wxCOMPOSITION_ADD:
                 mode = kCGBlendModePlusLighter ;
                 break;
+            case wxCOMPOSITION_DIFF:
+                mode = kCGBlendModeDifference ;
+                break;
             default:
                 return false;
         }

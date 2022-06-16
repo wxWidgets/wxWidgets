@@ -68,7 +68,8 @@ enum wxCompositionMode
     wxCOMPOSITION_XOR, /* R = S*(1 - Da) + D*(1 - Sa) */
 
     // mathematical compositions
-    wxCOMPOSITION_ADD /* R = S + D */
+    wxCOMPOSITION_ADD, /* R = S + D */
+    wxCOMPOSITION_DIFF /* R = abs(S - D) */
 };
 
 enum wxGradientType
