@@ -91,9 +91,8 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
 
     if (win->m_miniTitle && !win->GetTitle().empty())
     {
-        const wxFont* smallFont = wxSMALL_FONT;
-        int height = wxWindow::FromDIP(smallFont->GetPixelSize().y, win) + 4;
-        dc.SetFont( *smallFont );
+        dc.SetFont( *wxSMALL_FONT );
+        int height = wxMax(dc.GetTextExtent("X").y, 16);
 
         wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
         dc.SetBrush( brush );
@@ -333,8 +332,11 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     m_isDragMove = false;
     m_miniTitle = 0;
-    if (style & wxCAPTION)
-        m_miniTitle = wxWindow::FromDIP(wxSMALL_FONT->GetPixelSize().y, this) + 4;
+    if (style & wxCAPTION) {
+        wxClientDC dc(this);
+        dc.SetFont(*wxSMALL_FONT);
+        m_miniTitle = wxMax(dc.GetTextExtent("X").y, 16);
+    }
 
     if (style & wxRESIZE_BORDER)
         m_miniEdge = 4;
