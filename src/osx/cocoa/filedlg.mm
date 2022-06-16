@@ -638,10 +638,6 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
             m_fileName = wxFileNameFromPath(m_path);
             m_dir = wxPathOnly( m_path );
-            if (m_filterChoice)
-                m_filterIndex = m_filterChoice->GetSelection();
-            else
-                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
     }
     else
@@ -664,11 +660,6 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
                     isFirst = false;
                 }
             }
-
-            if (m_filterChoice)
-                 m_filterIndex = m_filterChoice->GetSelection();
-            else
-                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
         if ( m_delegate )
         {
@@ -677,6 +668,15 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_delegate = nil;
         }
     }
+
+    if (wasAccepted)
+    {
+        if (m_filterChoice)
+            m_filterIndex = m_filterChoice->GetSelection();
+        else
+            m_filterIndex = GetMatchingFilterExtension(m_fileName);
+    }
+
     SetReturnCode(wasAccepted ? wxID_OK : wxID_CANCEL);
     
     // workaround for sandboxed app, see above, must be executed before window modal handler
