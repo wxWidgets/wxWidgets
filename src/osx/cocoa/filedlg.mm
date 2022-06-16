@@ -627,13 +627,12 @@ int wxFileDialog::ShowModal()
 
 void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
-    int result = wxID_CANCEL;
+    const bool wasAccepted = returnCode == NSModalResponseOK;
     if (HasFlag(wxFD_SAVE))
     {
-        if (returnCode == NSModalResponseOK )
+        if (wasAccepted)
         {
             NSSavePanel* sPanel = (NSSavePanel*)panel;
-            result = wxID_OK;
 
             NSString* unsafePath = [NSString stringWithUTF8String:[[sPanel URL] fileSystemRepresentation]];
             m_path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
@@ -648,10 +647,8 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     else
     {
         NSOpenPanel* oPanel = (NSOpenPanel*)panel;
-        if (returnCode == NSModalResponseOK )
+        if (wasAccepted)
         {
-            result = wxID_OK;
-
             bool isFirst = true;
             for (NSURL* filename in [oPanel URLs])
             {
@@ -680,7 +677,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_delegate = nil;
         }
     }
-    SetReturnCode(result);
+    SetReturnCode(wasAccepted ? wxID_OK : wxID_CANCEL);
     
     // workaround for sandboxed app, see above, must be executed before window modal handler
     // because there this instance will be deleted
