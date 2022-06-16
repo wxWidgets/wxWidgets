@@ -1734,7 +1734,18 @@ wxWizard =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="o"] element title  {_, t_text }* &
+        [xrc:p="o"] element border   {_, t_integer }* &
         [xrc:p="o"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element bmp_placement {_, ("wxWIZARD_VALIGN_TOP" |
+                                                "wxWIZARD_VALIGN_CENTRE" |
+                                                "wxWIZARD_VALIGN_BOTTOM" |
+                                                "wxWIZARD_VALIGN_CENTRE" |
+                                                "wxWIZARD_HALIGN_LEFT" |
+                                                "wxWIZARD_HALIGN_CENTRE" |
+                                                "wxWIZARD_HALIGN_RIGHT" |
+                                                "wxWIZARD_TILE") }* &
+        [xrc:p="o"] element bmp_minwidth {_, t_integer }* &
+        [xrc:p="o"] element bmp_bg_clr   {_, t_colour }* &
         (wxWizardPage_any | objectRef)*
     }
 
