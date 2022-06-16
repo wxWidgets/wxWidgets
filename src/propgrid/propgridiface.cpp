@@ -334,11 +334,9 @@ void wxPropertyGridInterface::ClearModifiedStatus()
 {
     unsigned int pageIndex = 0;
 
-    for (;;)
+    wxPropertyGridPageState* page;
+    while ( (page = GetPageState(pageIndex)) != NULL )
     {
-        wxPropertyGridPageState* page = GetPageState(pageIndex);
-        if ( !page ) break;
-
         page->DoGetRoot()->SetFlagRecursively(wxPG_PROP_MODIFIED, false);
         page->m_anyModified = false;
 
@@ -446,11 +444,9 @@ void wxPropertyGridInterface::SetPropertyAttributeAll( const wxString& attrName,
 {
     unsigned int pageIndex = 0;
 
-    for (;;)
+    wxPropertyGridPageState* page;
+    while ( (page = GetPageState(pageIndex)) != NULL )
     {
-        wxPropertyGridPageState* page = GetPageState(pageIndex);
-        if ( !page ) break;
-
         DoSetPropertyAttribute(page->DoGetRoot(), attrName, value, wxPG_RECURSE);
 
         pageIndex++;
@@ -590,10 +586,9 @@ void wxPropertyGridInterface::Sort( int flags )
 
     unsigned int pageIndex = 0;
 
-    for (;;)
+    wxPropertyGridPageState* page;
+    while( (page = GetPageState(pageIndex)) != NULL )
     {
-        wxPropertyGridPageState* page = GetPageState(pageIndex);
-        if ( !page ) break;
         page->DoSort(flags);
         pageIndex++;
     }
@@ -933,12 +928,12 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
     //
     // Save state on page basis
     wxVector<wxPropertyGridPageState*> pageStates;
-    for (int pageIndex = 0; ; pageIndex++)
+    unsigned int pageIndex = 0;
+    wxPropertyGridPageState* page;
+    while ( (page = GetPageState(pageIndex)) != NULL )
     {
-        wxPropertyGridPageState* page = GetPageState(pageIndex);
-        if ( !page ) break;
-
         pageStates.push_back(page);
+        pageIndex++;
     }
 
     for (wxVector<wxPropertyGridPageState*>::const_iterator it_ps = pageStates.begin();
@@ -1176,12 +1171,11 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
     // Force recalculation of virtual heights of all pages
     // (may be needed on unclean source string).
     pageIndex = 0;
-    wxPropertyGridPageState* pageState = GetPageState(pageIndex);
-    while ( pageState )
+    wxPropertyGridPageState* pageState;
+    while ( (pageState = GetPageState(pageIndex)) != NULL )
     {
         pageState->VirtualHeightChanged();
-        pageIndex += 1;
-        pageState = GetPageState(pageIndex);
+        pageIndex++;
     }
 
     pg->Thaw();
