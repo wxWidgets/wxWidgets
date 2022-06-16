@@ -257,7 +257,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     {
         wxSize cellsize = GetSize(wxT("empty_cellsize"));
         if (cellsize != wxDefaultSize)
-            wxDynamicCast(sizer, wxGridBagSizer)->SetEmptyCellSize(cellsize);
+            static_cast<wxGridBagSizer*>(sizer)->SetEmptyCellSize(cellsize);
     }
 
     wxObject* parent = m_parent;
