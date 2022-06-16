@@ -607,7 +607,6 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     int w, h;
     GetClientSize(&w, &h);
 
-    wxScreenDC dc;
     int x1, y1;
     int x2, y2;
 
@@ -624,8 +623,16 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
         x2 = w-2;
     }
 
+#if defined(__WXGTK3__)
+    wxClientDC dc(this);
+#else
+    // We need to use wxScreenDC and not wxClientDC at least for wxMSW where
+    // drawing in this window itself would be hidden by its children windows,
+    // that cover it almost entirely.
+    wxScreenDC dc;
     ClientToScreen(&x1, &y1);
     ClientToScreen(&x2, &y2);
+#endif
 
     dc.SetLogicalFunction(wxINVERT);
     dc.SetPen(*m_sashTrackerPen);
