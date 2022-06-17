@@ -338,7 +338,7 @@ wxUILocaleImplUnix::Use()
 
         wxSetlocaleTryAll(LC_ALL, locIdAlt);
     }
-    
+
 #ifdef HAVE_LANGINFO_H
     // In case of the system default locale the codeset can not be
     // determined properly in the constructor, because the default
