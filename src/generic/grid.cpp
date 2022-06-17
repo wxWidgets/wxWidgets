@@ -273,6 +273,7 @@ void wxGridOperations::PrepareDCForLabels(wxGrid *grid, wxDC &dc) const
 // ----------------------------------------------------------------------------
 
 wxGridCellWorker::wxGridCellWorker(const wxGridCellWorker& other)
+    : wxRefCounter()
 {
     CopyClientDataContainer(other);
 }
