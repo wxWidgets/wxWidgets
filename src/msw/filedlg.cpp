@@ -692,6 +692,8 @@ public:
           m_typeAlreadyChanged(false)
 #endif // wxUSE_IFILEOPENDIALOG
     {
+        wxUnusedVar(fileDialog);
+
         m_bMovedWindow = false;
         m_centreDir = 0;
     }
