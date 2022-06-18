@@ -280,7 +280,9 @@ public:
     // needed by the implementation, and so now overriding them is unnecessary
     // as they're never called, but they're still preserved to avoid breaking
     // the existing code using "override" with them in the derived classes.
+    wxDEPRECATED_MSG("Use wxDataViewCtrl::GetColumnCount() and don't override")
     virtual unsigned int GetColumnCount() const { return 0; }
+    wxDEPRECATED_MSG("Don't override this function, is is not needed any more")
     virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const
     {
         return wxString();
