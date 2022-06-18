@@ -22,7 +22,9 @@ endif()
 
 if(WIN32_MSVC_NAMING)
     # Generator expression to not create different Debug and Release directories
-    set(GEN_EXPR_DIR_FIX "$<1:/>")
+    set(GEN_EXPR_DIR "$<1:/>")
+else()
+    set(GEN_EXPR_DIR "/")
 endif()
 
 # This function adds a list of headers to a variable while prepending
@@ -96,9 +98,9 @@ function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
 
     set_target_properties(${target_name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
         )
 
     if(wxBUILD_PIC)
@@ -425,9 +427,9 @@ macro(wx_add_library name)
         endif()
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets
-            LIBRARY DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-            ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-            RUNTIME DESTINATION "${runtime_dir}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+            LIBRARY DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+            ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+            RUNTIME DESTINATION "${runtime_dir}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
@@ -550,7 +552,7 @@ function(wx_set_builtin_target_properties target_name)
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
-        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}")
+        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}")
     endif()
 endfunction()
 
