@@ -161,16 +161,6 @@ public:
 
     // Overridden wxDataViewModel methods.
 
-    unsigned int GetColumnCount() const wxOVERRIDE
-    {
-        return 1;
-    }
-
-    wxString GetColumnType(unsigned int WXUNUSED(col)) const wxOVERRIDE
-    {
-        return "string";
-    }
-
     void GetValue(wxVariant &variant, const wxDataViewItem &item,
                   unsigned int WXUNUSED(col)) const wxOVERRIDE
     {

@@ -150,19 +150,6 @@ public:
 
     // implementation of base class virtuals to define model
 
-    virtual unsigned int GetColumnCount() const wxOVERRIDE
-    {
-        return 6;
-    }
-
-    virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE
-    {
-        if (col == 2)
-            return "long";
-
-        return "string";
-    }
-
     virtual void GetValue( wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) const wxOVERRIDE;
     virtual bool SetValue( const wxVariant &variant,
@@ -213,8 +200,7 @@ public:
         Col_EditableText,
         Col_Date,
         Col_TextWithAttr,
-        Col_Custom,
-        Col_Max
+        Col_Custom
     };
 
     MyListModel(int modelFlags);
@@ -228,19 +214,6 @@ public:
 
 
     // implementation of base class virtuals to define model
-
-    virtual unsigned int GetColumnCount() const wxOVERRIDE
-    {
-        return Col_Max;
-    }
-
-    virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE
-    {
-        if (col == Col_ToggleIconText)
-            return wxDataViewCheckIconTextRenderer::GetDefaultType();
-
-        return "string";
-    }
 
     virtual void GetValueByRow( wxVariant &variant,
                                 unsigned int row, unsigned int col ) const wxOVERRIDE;
@@ -294,8 +267,6 @@ public:
     }
 
     // Implement base class pure virtual methods.
-    unsigned GetColumnCount() const wxOVERRIDE { return 1; }
-    wxString GetColumnType(unsigned) const wxOVERRIDE { return "string"; }
     unsigned GetCount() const wxOVERRIDE { return m_strings.size(); }
     void GetValueByRow(wxVariant& val, unsigned row, unsigned) const wxOVERRIDE
     {

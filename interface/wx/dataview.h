@@ -15,8 +15,7 @@
     All other models derive from it and must implement its pure virtual functions
     in order to define a complete data model. In detail, you need to override
     wxDataViewModel::IsContainer, wxDataViewModel::GetParent, wxDataViewModel::GetChildren,
-    wxDataViewModel::GetColumnCount, wxDataViewModel::GetColumnType and
-    wxDataViewModel::GetValue in order to define the data model which acts as an
+    and wxDataViewModel::GetValue in order to define the data model which acts as an
     interface between your actual data and the wxDataViewCtrl.
 
     Note that wxDataViewModel does not define the position or index of any item
@@ -245,19 +244,6 @@ public:
     */
     virtual unsigned int GetChildren(const wxDataViewItem& item,
                                      wxDataViewItemArray& children) const = 0;
-
-    /**
-        Override this to indicate the number of columns in the model.
-    */
-    virtual unsigned int GetColumnCount() const = 0;
-
-    /**
-        Override this to indicate what type of data is stored in the
-        column specified by @a col.
-
-        This should return a string indicating the type of data as reported by wxVariant.
-    */
-    virtual wxString GetColumnType(unsigned int col) const = 0;
 
     /**
         Override this to indicate which wxDataViewItem representing the parent
@@ -3550,16 +3536,6 @@ public:
         @since 2.9.4
     */
     wxUIntPtr GetItemData(const wxDataViewItem& item) const;
-
-    /**
-        Overridden from wxDataViewModel
-    */
-    virtual unsigned int GetColumnCount() const;
-
-    /**
-        Overridden from wxDataViewModel
-    */
-    virtual wxString GetColumnType( unsigned int col ) const;
 
     /**
         Sets the client data associated with the item.
