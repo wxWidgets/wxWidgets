@@ -752,9 +752,14 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
     // to the entry description in the language database.
     // The locale string may have the form "language[_region][.codeset]".
     // We ignore the "codeset" part here.
+    wxString myLocale = locale;
+    if (myLocale.IsSameAs("C", false) || myLocale.IsSameAs("POSIX", false))
+    {
+        myLocale = "en_US";
+    }
     wxString region;
-    wxString languageOnly = locale.BeforeFirst('.').BeforeFirst('_', &region);
-    wxString language= languageOnly;
+    wxString languageOnly = myLocale.BeforeFirst('.').BeforeFirst('_', &region);
+    wxString language = languageOnly;
     if (!region.empty())
     {
         // Construct description consisting of language and region
@@ -769,7 +774,7 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
     {
         const wxLanguageInfo* info = &languagesDB[i];
 
-        if (wxStricmp(locale, info->CanonicalName) == 0 ||
+        if (wxStricmp(myLocale, info->CanonicalName) == 0 ||
             wxStricmp(language, info->Description) == 0)
         {
             // exact match, stop searching
@@ -777,7 +782,7 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
             break;
         }
 
-        if (wxStricmp(locale, info->CanonicalName.BeforeFirst(wxS('_'))) == 0 ||
+        if (wxStricmp(myLocale, info->CanonicalName.BeforeFirst(wxS('_'))) == 0 ||
             wxStricmp(languageOnly, info->Description) == 0)
         {
             // a match -- but maybe we'll find an exact one later, so continue
@@ -804,6 +809,10 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
 
     const wxLanguageInfo* infoRet = NULL;
     wxString localeTag = locId.GetTag(wxLOCALE_TAGTYPE_BCP47);
+    if (locId.GetLanguage().IsSameAs("C", false) || locId.GetLanguage().IsSameAs("POSIX", false))
+    {
+        localeTag = "en-US";
+    }
 
     const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
     const size_t count = languagesDB.size();
