@@ -87,7 +87,7 @@ private:
 
     wxLocaleIdent m_locId;
     wxString m_codeset;
-    wxString m_nameDefault;
+    wxString m_name;
 
 #ifdef HAVE_LOCALE_T
     // Only null for the default locale.
@@ -292,29 +292,49 @@ wxUILocaleImplUnix::wxUILocaleImplUnix(wxLocaleIdent locId
                   , m_locale(loc)
 #endif // HAVE_LOCALE_T
 {
-#ifdef HAVE_LANGINFO_H
-    m_codeset = GetLangInfo(CODESET);
-#else
     m_codeset = "";
-#endif // HAVE_LANGINFO_H
-    m_nameDefault = m_locId.GetName();
-    if (m_nameDefault.empty())
+    m_name = m_locId.GetName();
+#ifdef HAVE_LANGINFO_H
+#ifdef HAVE_LOCALE_T
+    locale_t tempLoc = m_locale;
+    if (!tempLoc)
     {
-        // Determine name of user default locale
-        // Save current locale
-        char* locCurrent = setlocale(LC_ALL, NULL);
-        char* locSaved = locCurrent ? strdup(locCurrent) : NULL;
-        // Set system default locale and retrieve its name
-        char* rv = setlocale(LC_ALL, "");
-        if (rv)
-            m_nameDefault = wxString::FromUTF8(rv);
-        // Restore current locale
-        if ( locSaved )
-        {
-            setlocale(LC_ALL, locSaved);
-            free(locSaved);
-        }
+        if (m_name.empty())
+            tempLoc = newlocale(LC_ALL_MASK, "", NULL);
+        else
+            tempLoc = TryCreateLocale(m_locId);
     }
+    if (tempLoc)
+    {
+        const char *rv = nl_langinfo_l(_NL_LOCALE_NAME(LC_CTYPE), tempLoc);
+        if (rv)
+            m_name = wxString::FromUTF8(rv);
+        rv = nl_langinfo_l(CODESET, tempLoc);
+        if (rv)
+            m_codeset = wxString::FromUTF8(rv);
+        if (!m_locale)
+          freelocale(tempLoc);
+    }
+#else // !HAVE_LOCALE_T
+    const char* tempLoc = NULL;
+    char* oldLocale = strdup(setlocale(LC_ALL, NULL));
+    if (m_name.empty())
+        tempLoc = setlocale(LC_ALL, "");
+    else
+        tempLoc = wxSetlocale(LC_ALL, m_name);
+    const char *rv = nl_langinfo(_NL_LOCALE_NAME(LC_CTYPE));
+    if (rv)
+        m_name = wxString::FromUTF8(rv);
+    rv = nl_langinfo(CODESET);
+    if (rv)
+        m_codeset = wxString::FromUTF8(rv);
+    if ( oldLocale )
+    {
+        setlocale(LC_ALL, oldLocale);
+        free(oldLocale);
+    }
+#endif
+#endif // HAVE_LANGINFO_H
 }
 
 wxUILocaleImplUnix::~wxUILocaleImplUnix()
@@ -357,25 +377,12 @@ wxUILocaleImplUnix::Use()
 
         wxSetlocaleTryAll(LC_ALL, locIdAlt);
     }
-
-#ifdef HAVE_LANGINFO_H
-    // In case of the system default locale the codeset can not be
-    // determined properly in the constructor, because the default
-    // locale is actually not set yet.
-    // Therefore we have to do it here (again).
-    m_codeset = GetLangInfo(CODESET);
-#endif
 }
 
 wxString
 wxUILocaleImplUnix::GetName() const
 {
-    wxString name = m_locId.GetName();
-    if (name.empty())
-    {
-        name = m_nameDefault;
-    }
-    return name;
+    return m_name;
 }
 
 wxLocaleIdent
