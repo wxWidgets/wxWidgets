@@ -1,6 +1,28 @@
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+# determine target from compiler, platform and library type
+if(WIN32 AND NOT CYGWIN AND NOT MSYS)
+    if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+        set(wxCOMPILER_PREFIX "vc")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
+        set(wxCOMPILER_PREFIX "gcc")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+        set(wxCOMPILER_PREFIX "clang")
+    endif()
+
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(wxARCH_SUFFIX "_x64")
+    endif()
+
+    # use wxWidgets_USE_STATIC to force static libraries, otherwise shared is searched first
+    if(NOT wxWidgets_USE_STATIC AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_dll/@PROJECT_NAME@Targets.cmake")
+        set(wxPLATFORM_LIB_DIR "/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_dll")
+    elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_lib/@PROJECT_NAME@Targets.cmake")
+        set(wxPLATFORM_LIB_DIR "/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_lib")
+    endif()
+endif()
+
+include("${CMAKE_CURRENT_LIST_DIR}${wxPLATFORM_LIB_DIR}/@PROJECT_NAME@Targets.cmake")
 
 macro(wx_inherit_property source dest name)
     # property name without _<CONFIG>

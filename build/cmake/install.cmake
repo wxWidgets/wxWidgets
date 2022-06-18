@@ -48,7 +48,7 @@ else()
     )
 endif()
 
-install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets")
+install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets/${wxPLATFORM_LIB_DIR}")
 
 # find_package config file
 include(CMakePackageConfigHelpers)
@@ -59,10 +59,14 @@ if(CMAKE_VERSION VERSION_LESS "3.11")
 else()
     set(versionCompat SameMinorVersion)
 endif()
+if(WIN32_MSVC_NAMING AND NOT CMAKE_VERSION VERSION_LESS "3.14")
+    set(archCompat ARCH_INDEPENDENT)
+endif()
 
 write_basic_package_version_file(
     "${versionConfig}"
     COMPATIBILITY ${versionCompat}
+    ${archCompat}
 )
 configure_package_config_file(
     "${wxSOURCE_DIR}/build/cmake/wxWidgetsConfig.cmake.in"
