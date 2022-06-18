@@ -50,6 +50,30 @@ endif()
 
 install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets")
 
+# find_package config file
+include(CMakePackageConfigHelpers)
+set(versionConfig "${wxOUTPUT_DIR}/wxWidgetsConfigVersion.cmake")
+set(projectConfig "${wxOUTPUT_DIR}/wxWidgetsConfig.cmake")
+if(CMAKE_VERSION VERSION_LESS "3.11")
+    set(versionCompat SameMajorVersion)
+else()
+    set(versionCompat SameMinorVersion)
+endif()
+
+write_basic_package_version_file(
+    "${versionConfig}"
+    COMPATIBILITY ${versionCompat}
+)
+configure_package_config_file(
+    "${wxSOURCE_DIR}/build/cmake/wxWidgetsConfig.cmake.in"
+    "${projectConfig}"
+    INSTALL_DESTINATION "lib/cmake/wxWidgets"
+)
+install(
+    FILES "${projectConfig}" "${versionConfig}"
+    DESTINATION "lib/cmake/wxWidgets"
+)
+
 # uninstall target
 if(MSVC_IDE)
     set(UNINST_NAME UNINSTALL)
