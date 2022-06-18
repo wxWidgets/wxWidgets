@@ -87,6 +87,7 @@ private:
 
     wxLocaleIdent m_locId;
     wxString m_codeset;
+    wxString m_nameDefault;
 
 #ifdef HAVE_LOCALE_T
     // Only null for the default locale.
@@ -296,6 +297,24 @@ wxUILocaleImplUnix::wxUILocaleImplUnix(wxLocaleIdent locId
 #else
     m_codeset = "";
 #endif // HAVE_LANGINFO_H
+    m_nameDefault = m_locId.GetName();
+    if (m_nameDefault.empty())
+    {
+        // Determine name of user default locale
+        // Save current locale
+        char* locCurrent = setlocale(LC_ALL, NULL);
+        char* locSaved = locCurrent ? strdup(locCurrent) : NULL;
+        // Set system default locale and retrieve its name
+        char* rv = setlocale(LC_ALL, "");
+        if (rv)
+            m_nameDefault = wxString::FromUTF8(rv);
+        // Restore current locale
+        if ( locSaved )
+        {
+            setlocale(LC_ALL, locSaved);
+            free(locSaved);
+        }
+    }
 }
 
 wxUILocaleImplUnix::~wxUILocaleImplUnix()
@@ -354,9 +373,7 @@ wxUILocaleImplUnix::GetName() const
     wxString name = m_locId.GetName();
     if (name.empty())
     {
-        char* rv = setlocale(LC_ALL, NULL);
-        if (rv)
-            name = wxString::FromUTF8(rv);
+        name = m_nameDefault;
     }
     return name;
 }
@@ -604,7 +621,7 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
         !wxGetNonEmptyEnvVar(wxS("LANG"), &langFull))
     {
         // no language specified, treat it as English
-        preferred.push_back("en-US");
+        preferred.push_back("en_US");
         return preferred;
     }
 
