@@ -12,20 +12,13 @@ if(NOT wxBUILD_INSTALL)
 endif()
 
 install(CODE "message(STATUS \"Installing: Headers...\")")
-if(WIN32_MSVC_NAMING)
+install(
+    DIRECTORY "${wxSOURCE_DIR}/include/wx"
+    DESTINATION "${wxINSTALL_INCLUDE_DIR}")
+if(MSVC)
     install(
-        DIRECTORY "${wxSOURCE_DIR}/include/wx"
-        DESTINATION "include")
-    if(MSVC)
-        install(
-            DIRECTORY "${wxSOURCE_DIR}/include/msvc"
-            DESTINATION "include")
-    endif()
-else()
-    wx_get_flavour(lib_flavour "-")
-    install(
-        DIRECTORY "${wxSOURCE_DIR}/include/wx"
-        DESTINATION "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
+        DIRECTORY "${wxSOURCE_DIR}/include/msvc"
+        DESTINATION "${wxINSTALL_INCLUDE_DIR}")
 endif()
 
 # setup header and wx-config

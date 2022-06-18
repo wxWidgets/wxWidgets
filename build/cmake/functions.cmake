@@ -20,12 +20,6 @@ else()
     set(WIN32_MSVC_NAMING 0)
 endif()
 
-if(WIN32_MSVC_NAMING)
-    # Generator expression to not create different Debug and Release directories
-    set(GEN_EXPR_DIR "$<1:/>")
-else()
-    set(GEN_EXPR_DIR "/")
-endif()
 
 # This function adds a list of headers to a variable while prepending
 # include/ to the path
@@ -92,6 +86,16 @@ macro(wx_get_flavour flavour prefix)
         set(${flavour})
     endif()
 endmacro()
+
+if(WIN32_MSVC_NAMING)
+    # Generator expression to not create different Debug and Release directories
+    set(GEN_EXPR_DIR "$<1:/>")
+    set(wxINSTALL_INCLUDE_DIR "include")
+else()
+    set(GEN_EXPR_DIR "/")
+    wx_get_flavour(lib_flavour "-")
+    set(wxINSTALL_INCLUDE_DIR "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
+endif()
 
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
@@ -301,7 +305,7 @@ function(wx_set_target_properties target_name)
             $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
             $<BUILD_INTERFACE:${wxSOURCE_DIR}/include>
             $<INSTALL_INTERFACE:lib/${wxSETUP_HEADER_REL}>
-            $<INSTALL_INTERFACE:include>
+            $<INSTALL_INTERFACE:${wxINSTALL_INCLUDE_DIR}>
         )
 
     if(wxTOOLKIT_INCLUDE_DIRS AND NOT wxTARGET_IS_BASE)
