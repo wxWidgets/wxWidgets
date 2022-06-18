@@ -752,7 +752,7 @@ wxgtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
     if ( wxtree_model->stamp == 0 )
         return 0;
 
-    return wxtree_model->internal->GetDataViewModel()->GetColumnCount();
+    return wxtree_model->internal->GetOwner()->GetColumnCount();
 }
 
 static GType
