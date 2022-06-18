@@ -119,7 +119,7 @@ const wxString wxId2Gtk[] = {
     ART(wxART_FIND_AND_REPLACE, GTK_STOCK_FIND_AND_REPLACE, "edit-find-replace")
     ART(wxART_FULL_SCREEN,      GTK_STOCK_FULLSCREEN, "view-fullscreen")
     ART(wxART_REFRESH,          GTK_STOCK_REFRESH, "gtk-refresh")
-    ART(wxART_STOP,             GTK_STOCK_REFRESH, "gtk-stop")
+    ART(wxART_STOP,             GTK_STOCK_STOP, "gtk-stop")
 
     ART(wxART_EDIT,             "accessories-text-editor", "accessories-text-editor")
 };
