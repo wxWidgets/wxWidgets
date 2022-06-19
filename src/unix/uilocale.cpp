@@ -349,8 +349,6 @@ wxUILocaleImplUnix::Use()
 void
 wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
 {
-    m_name = m_locId.GetName();
-
     // We need to temporarily switch the locale, do it using extended locale
     // support if available as this doesn't affect any other threads or by
     // changing the global locale otherwise because we don't have any other
@@ -363,7 +361,14 @@ wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
     TempDefautLocaleSetter setDefautLocale(LC_CTYPE);
 #endif
 
+#ifdef _NL_LOCALE_NAME
     m_name = GetLangInfo(_NL_LOCALE_NAME(LC_CTYPE));
+#else
+    // This won't work for the default or "C" locale, but we can't really get
+    // its name without nl_langinfo() support for this.
+    m_name = m_locId.GetName();
+#endif
+
     m_codeset = GetLangInfo(CODESET);
 #endif // HAVE_LANGINFO_H
 }
