@@ -22,7 +22,8 @@
     - wxNO_OP
     - wxCLEAR
     - wxXOR
-    and, in particular, do @em not support the commonly used @c wxINVERT.
+    and only support the commonly used @c wxINVERT when the source colour is
+    white (as it is implemented using wxCOMPOSITION_DIFF composition mode).
 */
 enum wxRasterOperationMode
 {

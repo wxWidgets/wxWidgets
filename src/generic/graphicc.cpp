@@ -3086,6 +3086,9 @@ bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
         case wxCOMPOSITION_ADD:
             cop = CAIRO_OPERATOR_ADD;
             break;
+        case wxCOMPOSITION_DIFF:
+            cop = CAIRO_OPERATOR_DIFFERENCE;
+            break;
         default:
             return false;
     }
