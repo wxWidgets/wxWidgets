@@ -470,9 +470,20 @@ wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
 #ifdef _NL_LOCALE_NAME
     m_name = GetLangInfo(_NL_LOCALE_NAME(LC_CTYPE));
 #else
-    // This won't work for the default or "C" locale, but we can't really get
-    // its name without nl_langinfo() support for this.
     m_name = m_locId.GetName();
+    if ( m_name.empty() )
+    {
+        // This must be the default locale.
+        wxString locName,
+                 modifier;
+        if ( !GetLocaleFromEnvironment(locName, modifier) )
+        {
+            // This is the default locale if nothing is specified.
+            locName = "en_US";
+        }
+
+        m_name = locName + modifier;
+    }
 #endif
 
     m_codeset = GetLangInfo(CODESET);
