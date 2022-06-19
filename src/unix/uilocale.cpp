@@ -99,8 +99,9 @@ private:
     mutable wxString m_name;
 
 #ifdef HAVE_LOCALE_T
-    // Only null for the default or "C" locale.
-    locale_t m_locale;
+    // Initially null for the default or "C" locale, may be changed later by
+    // InitLocaleNameAndCodeset() even for them.
+    mutable locale_t m_locale;
 #endif // HAVE_LOCALE_T
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplUnix);
@@ -349,46 +350,21 @@ void
 wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
 {
     m_name = m_locId.GetName();
+
+    // We need to temporarily switch the locale, do it using extended locale
+    // support if available as this doesn't affect any other threads or by
+    // changing the global locale otherwise because we don't have any other
+    // choice.
 #ifdef HAVE_LANGINFO_H
 #ifdef HAVE_LOCALE_T
-    locale_t tempLoc = m_locale;
-    if (!tempLoc)
-    {
-        if (m_name.empty())
-            tempLoc = newlocale(LC_ALL_MASK, "", NULL);
-        else
-            tempLoc = TryCreateLocale(m_locId);
-    }
-    if (tempLoc)
-    {
-        const char *rv = nl_langinfo_l(_NL_LOCALE_NAME(LC_CTYPE), tempLoc);
-        if (rv)
-            m_name = wxString::FromUTF8(rv);
-        rv = nl_langinfo_l(CODESET, tempLoc);
-        if (rv)
-            m_codeset = wxString::FromUTF8(rv);
-        if (!m_locale)
-          freelocale(tempLoc);
-    }
+    if ( !m_locale )
+        m_locale = TryCreateLocale(m_locId);
 #else // !HAVE_LOCALE_T
-    const char* tempLoc = NULL;
-    char* oldLocale = strdup(setlocale(LC_ALL, NULL));
-    if (m_name.empty())
-        tempLoc = setlocale(LC_ALL, "");
-    else
-        tempLoc = wxSetlocale(LC_ALL, m_name);
-    const char *rv = nl_langinfo(_NL_LOCALE_NAME(LC_CTYPE));
-    if (rv)
-        m_name = wxString::FromUTF8(rv);
-    rv = nl_langinfo(CODESET);
-    if (rv)
-        m_codeset = wxString::FromUTF8(rv);
-    if ( oldLocale )
-    {
-        setlocale(LC_ALL, oldLocale);
-        free(oldLocale);
-    }
+    TempDefautLocaleSetter setDefautLocale(LC_CTYPE);
 #endif
+
+    m_name = GetLangInfo(_NL_LOCALE_NAME(LC_CTYPE));
+    m_codeset = GetLangInfo(CODESET);
 #endif // HAVE_LANGINFO_H
 }
 
