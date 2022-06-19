@@ -99,7 +99,7 @@ private:
     mutable wxString m_name;
 
 #ifdef HAVE_LOCALE_T
-    // Only null for the default locale.
+    // Only null for the default or "C" locale.
     locale_t m_locale;
 #endif // HAVE_LOCALE_T
 
