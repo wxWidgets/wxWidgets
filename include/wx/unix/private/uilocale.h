@@ -41,11 +41,12 @@ namespace
 class TempLocaleSetter
 {
 public:
-    explicit TempLocaleSetter(int localeCategory, const wxString& localeId = "")
-        : m_localeCategory(localeCategory), m_localeId(localeId),
+    explicit TempLocaleSetter(int localeCategory,
+                              const wxString& localeId = wxString())
+        : m_localeCategory(localeCategory),
           m_localeOrig(strdup(setlocale(localeCategory, NULL)))
     {
-        setlocale(localeCategory, m_localeId.mb_str());
+        setlocale(localeCategory, localeId.mb_str());
     }
 
     ~TempLocaleSetter()
@@ -56,7 +57,6 @@ public:
 
 private:
     const int m_localeCategory;
-    wxString m_localeId;
     char* const m_localeOrig;
 
     wxDECLARE_NO_COPY_CLASS(TempLocaleSetter);
