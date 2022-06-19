@@ -2350,24 +2350,16 @@ void wxDataViewListStore::AppendColumn( const wxString &varianttype )
     m_cols.Add( varianttype );
 }
 
-unsigned int wxDataViewListStore::GetColumnCount() const
-{
-    return m_cols.GetCount();
-}
-
 unsigned int wxDataViewListStore::GetItemCount() const
 {
     return m_data.size();
 }
 
-wxString wxDataViewListStore::GetColumnType( unsigned int pos ) const
-{
-    return m_cols[pos];
-}
-
 void wxDataViewListStore::AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data )
 {
-    wxCHECK_RET( values.size() == GetColumnCount(), "wrong number of values" );
+    wxCHECK_RET( m_data.empty() || values.size() == m_data[0]->m_values.size(),
+                 "wrong number of values" );
+
     wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
     line->m_values = values;
     m_data.push_back( line );
@@ -2377,7 +2369,9 @@ void wxDataViewListStore::AppendItem( const wxVector<wxVariant> &values, wxUIntP
 
 void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data )
 {
-    wxCHECK_RET( values.size() == GetColumnCount(), "wrong number of values" );
+    wxCHECK_RET( m_data.empty() || values.size() == m_data[0]->m_values.size(),
+                 "wrong number of values" );
+
     wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
     line->m_values = values;
     m_data.insert( m_data.begin(), line );
@@ -2388,7 +2382,9 @@ void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxUInt
 void wxDataViewListStore::InsertItem(  unsigned int row, const wxVector<wxVariant> &values,
                                        wxUIntPtr data )
 {
-    wxCHECK_RET( values.size() == GetColumnCount(), "wrong number of values" );
+    wxCHECK_RET( m_data.empty() || values.size() == m_data[0]->m_values.size(),
+                 "wrong number of values" );
+
     wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
     line->m_values = values;
     m_data.insert( m_data.begin()+row, line );
@@ -2536,7 +2532,7 @@ wxDataViewColumn *wxDataViewListCtrl::AppendTextColumn( const wxString &label,
 
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewTextRenderer( wxT("string"), mode ),
-        GetStore()->GetColumnCount()-1, width, align, flags );
+        GetColumnCount(), width, align, flags );
 
     wxDataViewCtrl::AppendColumn( ret );
 
@@ -2550,7 +2546,7 @@ wxDataViewColumn *wxDataViewListCtrl::AppendToggleColumn( const wxString &label,
 
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewToggleRenderer( wxT("bool"), mode ),
-        GetStore()->GetColumnCount()-1, width, align, flags );
+        GetColumnCount(), width, align, flags );
 
     return wxDataViewCtrl::AppendColumn( ret ) ? ret : NULL;
 }
@@ -2562,7 +2558,7 @@ wxDataViewColumn *wxDataViewListCtrl::AppendProgressColumn( const wxString &labe
 
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode ),
-        GetStore()->GetColumnCount()-1, width, align, flags );
+        GetColumnCount(), width, align, flags );
 
     return wxDataViewCtrl::AppendColumn( ret ) ? ret : NULL;
 }
@@ -2574,7 +2570,7 @@ wxDataViewColumn *wxDataViewListCtrl::AppendIconTextColumn( const wxString &labe
 
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode ),
-        GetStore()->GetColumnCount()-1, width, align, flags );
+        GetColumnCount(), width, align, flags );
 
     return wxDataViewCtrl::AppendColumn( ret ) ? ret : NULL;
 }
