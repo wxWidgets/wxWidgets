@@ -38,17 +38,17 @@ wxString wxGetDateFormatOnly(const wxString& fmt);
 namespace
 {
 
-class TempDefautLocaleSetter
+class TempLocaleSetter
 {
 public:
-    explicit TempDefautLocaleSetter(int localeCategory, const wxString& localeId = "")
+    explicit TempLocaleSetter(int localeCategory, const wxString& localeId = "")
         : m_localeCategory(localeCategory), m_localeId(localeId),
           m_localeOrig(strdup(setlocale(localeCategory, NULL)))
     {
         setlocale(localeCategory, m_localeId.mb_str());
     }
 
-    ~TempDefautLocaleSetter()
+    ~TempLocaleSetter()
     {
         setlocale(m_localeCategory, m_localeOrig);
         free(m_localeOrig);
@@ -59,7 +59,7 @@ private:
     wxString m_localeId;
     char* const m_localeOrig;
 
-    wxDECLARE_NO_COPY_CLASS(TempDefautLocaleSetter);
+    wxDECLARE_NO_COPY_CLASS(TempLocaleSetter);
 };
 
 } // anonymous namespace

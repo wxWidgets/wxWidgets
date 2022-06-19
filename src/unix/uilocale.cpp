@@ -352,7 +352,7 @@ wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
     // If extended locale support is not available, we need to temporarily
     // switch the global locale to the one we use.
 #ifndef HAVE_LOCALE_T
-    TempDefautLocaleSetter setDefautLocale(LC_CTYPE, m_locId.GetName());
+    TempLocaleSetter setThisLocale(LC_CTYPE, m_locId.GetName());
 #endif
 
 #ifdef _NL_LOCALE_NAME
@@ -401,7 +401,7 @@ wxUILocaleImplUnix::GetLangInfo(nl_item item) const
     if ( m_locale )
         return nl_langinfo_l(item, m_locale);
 #else
-    TempDefautLocaleSetter setDefautLocale(LC_CTYPE, m_locId.GetName());
+    TempLocaleSetter setThisLocale(LC_CTYPE, m_locId.GetName());
 #endif // HAVE_LOCALE_T
 
     return nl_langinfo(item);

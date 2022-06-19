@@ -554,7 +554,7 @@ wxString wxLocale::GetSystemEncodingName()
     // GNU libc provides current character set this way (this conforms
     // to Unix98)
     {
-        TempDefautLocaleSetter setDefautLocale(LC_CTYPE);
+        TempLocaleSetter setDefautLocale(LC_CTYPE);
 
         encname = wxString::FromAscii(nl_langinfo(CODESET));
     }
