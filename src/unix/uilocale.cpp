@@ -54,7 +54,8 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
 class wxUILocaleImplUnix : public wxUILocaleImpl
 {
 public:
-    // If "loc" is non-NULL, this object takes ownership of it and will free it.
+    // If "loc" is non-NULL, this object takes ownership of it and will free it,
+    // otherwise it creates its own locale_t corresponding to locId.
     explicit wxUILocaleImplUnix(wxLocaleIdent locId
 #ifdef HAVE_LOCALE_T
                                , locale_t loc = NULL
@@ -99,9 +100,7 @@ private:
     mutable wxString m_name;
 
 #ifdef HAVE_LOCALE_T
-    // Initially null for the default or "C" locale, may be changed later by
-    // InitLocaleNameAndCodeset() even for them.
-    mutable locale_t m_locale;
+    const locale_t m_locale;
 #endif // HAVE_LOCALE_T
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplUnix);
@@ -299,7 +298,7 @@ wxUILocaleImplUnix::wxUILocaleImplUnix(wxLocaleIdent locId
                                       )
                   : m_locId(locId)
 #ifdef HAVE_LOCALE_T
-                  , m_locale(loc)
+                  , m_locale(loc ? loc : TryCreateLocale(locId))
 #endif // HAVE_LOCALE_T
 {
 }
@@ -349,15 +348,10 @@ wxUILocaleImplUnix::Use()
 void
 wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
 {
-    // We need to temporarily switch the locale, do it using extended locale
-    // support if available as this doesn't affect any other threads or by
-    // changing the global locale otherwise because we don't have any other
-    // choice.
 #ifdef HAVE_LANGINFO_H
-#ifdef HAVE_LOCALE_T
-    if ( !m_locale )
-        m_locale = TryCreateLocale(m_locId);
-#else // !HAVE_LOCALE_T
+    // If extended locale support is not available, we need to temporarily
+    // switch the global locale to the one we use.
+#ifndef HAVE_LOCALE_T
     TempDefautLocaleSetter setDefautLocale(LC_CTYPE);
 #endif
 
