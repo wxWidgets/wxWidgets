@@ -20,6 +20,11 @@
 
 #if wxUSE_INTL
 
+#include <locale.h>
+#ifdef HAVE_LANGINFO_H
+    #include <langinfo.h>
+#endif
+
 #include "wx/uilocale.h"
 #include "wx/private/uilocale.h"
 
@@ -29,11 +34,6 @@
 #include "wx/log.h"
 #include "wx/tokenzr.h"
 #include "wx/utils.h"
-
-#include <locale.h>
-#ifdef HAVE_LANGINFO_H
-    #include <langinfo.h>
-#endif
 
 #define TRACE_I18N wxS("i18n")
 
