@@ -85,9 +85,18 @@ private:
                                nl_item nlEnglish) const;
 #endif // HAVE_LANGINFO_H
 
+    void InitLocaleNameAndCodeset() const;
+
+    const wxString& GetCodeSet() const;
+
+
     wxLocaleIdent m_locId;
-    wxString m_codeset;
-    wxString m_name;
+
+    // Both m_codeset and m_name are initialized on demand, so GetCodeSet() and
+    // GetName() must always be used to access them instead of using them
+    // directly.
+    mutable wxString m_codeset;
+    mutable wxString m_name;
 
 #ifdef HAVE_LOCALE_T
     // Only null for the default locale.
@@ -292,49 +301,6 @@ wxUILocaleImplUnix::wxUILocaleImplUnix(wxLocaleIdent locId
                   , m_locale(loc)
 #endif // HAVE_LOCALE_T
 {
-    m_codeset = "";
-    m_name = m_locId.GetName();
-#ifdef HAVE_LANGINFO_H
-#ifdef HAVE_LOCALE_T
-    locale_t tempLoc = m_locale;
-    if (!tempLoc)
-    {
-        if (m_name.empty())
-            tempLoc = newlocale(LC_ALL_MASK, "", NULL);
-        else
-            tempLoc = TryCreateLocale(m_locId);
-    }
-    if (tempLoc)
-    {
-        const char *rv = nl_langinfo_l(_NL_LOCALE_NAME(LC_CTYPE), tempLoc);
-        if (rv)
-            m_name = wxString::FromUTF8(rv);
-        rv = nl_langinfo_l(CODESET, tempLoc);
-        if (rv)
-            m_codeset = wxString::FromUTF8(rv);
-        if (!m_locale)
-          freelocale(tempLoc);
-    }
-#else // !HAVE_LOCALE_T
-    const char* tempLoc = NULL;
-    char* oldLocale = strdup(setlocale(LC_ALL, NULL));
-    if (m_name.empty())
-        tempLoc = setlocale(LC_ALL, "");
-    else
-        tempLoc = wxSetlocale(LC_ALL, m_name);
-    const char *rv = nl_langinfo(_NL_LOCALE_NAME(LC_CTYPE));
-    if (rv)
-        m_name = wxString::FromUTF8(rv);
-    rv = nl_langinfo(CODESET);
-    if (rv)
-        m_codeset = wxString::FromUTF8(rv);
-    if ( oldLocale )
-    {
-        setlocale(LC_ALL, oldLocale);
-        free(oldLocale);
-    }
-#endif
-#endif // HAVE_LANGINFO_H
 }
 
 wxUILocaleImplUnix::~wxUILocaleImplUnix()
@@ -379,10 +345,69 @@ wxUILocaleImplUnix::Use()
     }
 }
 
+void
+wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
+{
+    m_name = m_locId.GetName();
+#ifdef HAVE_LANGINFO_H
+#ifdef HAVE_LOCALE_T
+    locale_t tempLoc = m_locale;
+    if (!tempLoc)
+    {
+        if (m_name.empty())
+            tempLoc = newlocale(LC_ALL_MASK, "", NULL);
+        else
+            tempLoc = TryCreateLocale(m_locId);
+    }
+    if (tempLoc)
+    {
+        const char *rv = nl_langinfo_l(_NL_LOCALE_NAME(LC_CTYPE), tempLoc);
+        if (rv)
+            m_name = wxString::FromUTF8(rv);
+        rv = nl_langinfo_l(CODESET, tempLoc);
+        if (rv)
+            m_codeset = wxString::FromUTF8(rv);
+        if (!m_locale)
+          freelocale(tempLoc);
+    }
+#else // !HAVE_LOCALE_T
+    const char* tempLoc = NULL;
+    char* oldLocale = strdup(setlocale(LC_ALL, NULL));
+    if (m_name.empty())
+        tempLoc = setlocale(LC_ALL, "");
+    else
+        tempLoc = wxSetlocale(LC_ALL, m_name);
+    const char *rv = nl_langinfo(_NL_LOCALE_NAME(LC_CTYPE));
+    if (rv)
+        m_name = wxString::FromUTF8(rv);
+    rv = nl_langinfo(CODESET);
+    if (rv)
+        m_codeset = wxString::FromUTF8(rv);
+    if ( oldLocale )
+    {
+        setlocale(LC_ALL, oldLocale);
+        free(oldLocale);
+    }
+#endif
+#endif // HAVE_LANGINFO_H
+}
+
 wxString
 wxUILocaleImplUnix::GetName() const
 {
+    if ( m_name.empty() )
+        InitLocaleNameAndCodeset();
+
     return m_name;
+}
+
+const wxString&
+wxUILocaleImplUnix::GetCodeSet() const
+{
+    if ( m_codeset.empty() )
+        InitLocaleNameAndCodeset();
+
+    return m_codeset;
 }
 
 wxLocaleIdent
@@ -427,7 +452,7 @@ wxUILocaleImplUnix::GetFormOfLangInfo(wxLocaleForm form,
 
     wxCHECK_MSG( item != RADIXCHAR, wxString(), "unknown wxLocaleForm" );
 
-    return wxString(GetLangInfo(item), wxCSConv(m_codeset));
+    return wxString(GetLangInfo(item), wxCSConv(GetCodeSet()));
 }
 
 #endif // HAVE_LANGINFO_H
