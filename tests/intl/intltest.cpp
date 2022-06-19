@@ -233,6 +233,8 @@ void IntlTestCase::IsAvailable()
 
 TEST_CASE("wxLocale::Default", "[locale]")
 {
+    CHECK( wxLocale::IsAvailable(wxLANGUAGE_DEFAULT) );
+
     wxLocale loc;
 
     REQUIRE( loc.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
