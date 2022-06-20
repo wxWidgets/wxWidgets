@@ -15,7 +15,6 @@ include(build/cmake/functions.cmake)        # wxWidgets functions
 include(build/cmake/toolkit.cmake)          # Platform/toolkit settings
 include(build/cmake/options.cmake)          # User options
 include(build/cmake/init.cmake)             # Init various global build vars
-include(build/cmake/install.cmake)          # Install target support
 include(build/cmake/pch.cmake)              # Precompiled header support
 
 add_subdirectory(build/cmake/lib libs)
@@ -51,6 +50,9 @@ if(NOT MSVC)
     # Write wx-config
     include(build/cmake/config.cmake)
 endif()
+
+# Install target support
+include(build/cmake/install.cmake)
 
 # Determine minimum required OS at runtime
 set(wxREQUIRED_OS_DESC "${CMAKE_SYSTEM_NAME} ${CMAKE_SYSTEM_PROCESSOR}")
