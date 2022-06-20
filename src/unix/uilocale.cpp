@@ -567,6 +567,8 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 #ifdef MON_THOUSANDS_SEP
             if ( cat == wxLOCALE_CAT_MONEY )
                 return GetLangInfo(MON_THOUSANDS_SEP);
+#else
+            wxUnusedVar(cat);
 #endif
             return GetLangInfo(THOUSEP);
 
@@ -574,6 +576,8 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 #ifdef MON_DECIMAL_POINT
             if ( cat == wxLOCALE_CAT_MONEY )
                 return GetLangInfo(MON_DECIMAL_POINT);
+#else
+            wxUnusedVar(cat);
 #endif
 
             return GetLangInfo(RADIXCHAR);
@@ -646,6 +650,8 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     }
     return str;
 #else // !HAVE_LANGINFO_H
+    wxUnusedVar(name);
+    wxUnusedVar(form);
     // If HAVE_LANGINFO_H is not available, we could use our own language database
     // to retrieve the requested information.
     // For now, just return an empty string.
