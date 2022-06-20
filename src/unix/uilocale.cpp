@@ -614,6 +614,8 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
+#if defined(_NL_ADDRESS_LANG_NAME) && defined(_NL_IDENTIFICATION_LANGUAGE) && \
+    defined(_NL_ADDRESS_COUNTRY_NAME) && defined(_NL_IDENTIFICATION_TERRITORY)
             {
                 str = GetFormOfLangInfo(form,
                                         _NL_ADDRESS_LANG_NAME,
@@ -627,18 +629,23 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str << " (" << strCtry << ")";
                 }
             }
+#endif
             break;
 
         case wxLOCALE_NAME_LANGUAGE:
+#if defined(_NL_ADDRESS_LANG_NAME) && defined(_NL_IDENTIFICATION_LANGUAGE)
             str = GetFormOfLangInfo(form,
                                     _NL_ADDRESS_LANG_NAME,
                                     _NL_IDENTIFICATION_LANGUAGE);
+#endif
             break;
 
         case wxLOCALE_NAME_COUNTRY:
+#if defined(_NL_ADDRESS_COUNTRY_NAME) && defined(_NL_IDENTIFICATION_TERRITORY)
             str = GetFormOfLangInfo(form,
                                     _NL_ADDRESS_COUNTRY_NAME,
                                     _NL_IDENTIFICATION_TERRITORY);
+#endif
             break;
 
         default:
