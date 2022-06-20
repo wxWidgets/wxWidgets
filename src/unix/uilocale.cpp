@@ -629,6 +629,8 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str << " (" << strCtry << ")";
                 }
             }
+#else
+            wxUnusedVar(form);
 #endif
             break;
 
@@ -645,6 +647,8 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
             str = GetFormOfLangInfo(form,
                                     _NL_ADDRESS_COUNTRY_NAME,
                                     _NL_IDENTIFICATION_TERRITORY);
+#else
+            wxUnusedVar(form);
 #endif
             break;
 
@@ -653,6 +657,8 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     }
     return str;
 #else // !HAVE_LANGINFO_H
+    wxUnusedVar(name);
+    wxUnusedVar(form);
     // If HAVE_LANGINFO_H is not available, we could use our own language database
     // to retrieve the requested information.
     // For now, just return an empty string.
