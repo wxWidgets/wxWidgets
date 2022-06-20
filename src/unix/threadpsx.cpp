@@ -1703,6 +1703,7 @@ bool wxThread::SetNameForCurrent(const wxString &name)
 
     return pthread_setname_np(pthread_self(), truncatedName) == 0;
 #else
+    wxUnusedVar(name);
     wxLogDebug("No implementation for wxThread::SetName() on this OS.");
     return false;
 #endif
