@@ -3087,8 +3087,14 @@ bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
             cop = CAIRO_OPERATOR_ADD;
             break;
         case wxCOMPOSITION_DIFF:
-            cop = CAIRO_OPERATOR_DIFFERENCE;
-            break;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+            if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 12, 0) )
+            {
+                cop = CAIRO_OPERATOR_DIFFERENCE;
+                break;
+            }
+            wxFALLTHROUGH;
+#endif // Cairo 1.10
         default:
             return false;
     }
