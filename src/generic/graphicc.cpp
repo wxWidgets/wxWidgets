@@ -3087,8 +3087,8 @@ bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
             cop = CAIRO_OPERATOR_ADD;
             break;
         case wxCOMPOSITION_DIFF:
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-            if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 12, 0) )
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+            if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0) )
             {
                 cop = CAIRO_OPERATOR_DIFFERENCE;
                 break;
