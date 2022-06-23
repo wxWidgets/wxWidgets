@@ -270,11 +270,8 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         return false;
     }
 
-    if ( newDPI != m_activeDPI )
-    {
-        MSWUpdateOnDPIChange(m_activeDPI, newDPI);
-        m_activeDPI = newDPI;
-    }
+    MSWUpdateOnDPIChange(m_activeDPI, newDPI);
+    m_activeDPI = newDPI;
 
     SetSize(newRect);
 
