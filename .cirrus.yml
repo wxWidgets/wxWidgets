@@ -44,12 +44,8 @@ task:
     make -k -C tests $wxBUILD_ARGS
 
   test_script: |
-    pkg install -q -y py38-pip py38-setuptools
-
-    . ./build/tools/httpbin.sh
-    httpbin_launch
     cd tests
-    ./test
+    WX_TEST_WEBREQUEST_URL="0" ./test
 
   build_samples_script: |
     make -k -C samples $wxBUILD_ARGS
