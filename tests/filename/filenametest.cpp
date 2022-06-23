@@ -488,6 +488,16 @@ TEST_CASE("wxFileName::Replace", "[filename]")
     );
 
     CHECK( fn.GetFullPath(wxPATH_UNIX) == "~/test1/test2/test3/some file" );
+
+    // Check that home directory appearing in the middle of the path doesn't
+    // get replaced (this only works under Unix where there are no volumes).
+#ifdef __UNIX__
+    wxFileName fn2(homedir + "/subdir" + homedir + "/subsubdir", "filename");
+    INFO("fn2=" << fn2.GetFullPath());
+
+    fn2.ReplaceHomeDir();
+    CHECK( fn2.GetFullPath() == "~/subdir" + homedir + "/subsubdir/filename" );
+#endif // __UNIX__
 }
 
 TEST_CASE("wxFileName::GetHumanReadable", "[filename]")
