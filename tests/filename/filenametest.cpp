@@ -466,7 +466,16 @@ TEST_CASE("wxFileName::Replace", "[filename]")
 
     // now test ReplaceHomeDir
 
-    wxFileName fn = wxFileName::DirName(wxGetHomeDir());
+    const wxString& homedir = wxGetHomeDir();
+    if ( homedir == "/" )
+    {
+        // These tests assume that HOME is a non-root directory, but this may
+        // not be the case.
+        WARN("Skipping wxFileName::ReplaceHomeDir() tests because HOME=/");
+        return;
+    }
+
+    wxFileName fn = wxFileName::DirName(homedir);
     fn.AppendDir("test1");
     fn.AppendDir("test2");
     fn.AppendDir("test3");
