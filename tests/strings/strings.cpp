@@ -17,6 +17,8 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+#include "wx/private/localeset.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -196,6 +198,10 @@ void StringTestCase::Format()
 void StringTestCase::FormatUnicode()
 {
 #if wxUSE_UNICODE
+    // At least under FreeBSD vsnprintf(), used by wxString::Format(), doesn't
+    // work with Unicode strings unless a UTF-8 locale is used, so set it.
+    wxLocaleSetter loc("C.UTF-8");
+
     const char *UNICODE_STR = "Iestat\xC4\xAB %i%i";
     //const char *UNICODE_STR = "Iestat\xCC\x84 %i%i";
 
