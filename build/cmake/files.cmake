@@ -1736,6 +1736,7 @@ set(MSW_SRC
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/generic/activityindicator.cpp
+    src/msw/darkmode.cpp
 )
 
 set(MSW_HDR
