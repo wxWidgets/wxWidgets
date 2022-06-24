@@ -270,10 +270,27 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         return false;
     }
 
-    MSWUpdateOnDPIChange(m_activeDPI, newDPI);
+    // Update the window decoration size to the new DPI: this seems to be the
+    // call with the least amount of side effects that is sufficient to do it
+    // and we need to do this in order for the size calculations, either in the
+    // user-defined wxEVT_DPI_CHANGED handler or in our own GetBestSize() call
+    // below, to work correctly.
+    ::SetWindowPos(GetHwnd(),
+                   0, 0, 0, 0, 0,
+                   SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW |
+                   SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING |
+                   SWP_FRAMECHANGED);
+
+    const bool processed = MSWUpdateOnDPIChange(m_activeDPI, newDPI);
     m_activeDPI = newDPI;
 
-    SetSize(newRect);
+    // The best size doesn't scale exactly with the DPI, so while the new
+    // size is usually a decent guess, it's typically not exactly correct.
+    // We can't always do much better, but at least ensure that the window
+    // is still big enough to show its contents.
+    wxSize newSize = newRect.GetSize();
+    newSize.IncTo(GetBestSize());
+    SetSize(wxRect(newRect.GetPosition(), newSize));
 
     Refresh();
 
