@@ -284,13 +284,18 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
     const bool processed = MSWUpdateOnDPIChange(m_activeDPI, newDPI);
     m_activeDPI = newDPI;
 
-    // The best size doesn't scale exactly with the DPI, so while the new
-    // size is usually a decent guess, it's typically not exactly correct.
-    // We can't always do much better, but at least ensure that the window
-    // is still big enough to show its contents.
-    wxSize newSize = newRect.GetSize();
-    newSize.IncTo(GetBestSize());
-    SetSize(wxRect(newRect.GetPosition(), newSize));
+    // We consider that if the event was processed, the application resized the
+    // window on its own already, but otherwise do it ourselves.
+    if ( !processed )
+    {
+        // The best size doesn't scale exactly with the DPI, so while the new
+        // size is usually a decent guess, it's typically not exactly correct.
+        // We can't always do much better, but at least ensure that the window
+        // is still big enough to show its contents.
+        wxSize newSize = newRect.GetSize();
+        newSize.IncTo(GetBestSize());
+        SetSize(wxRect(newRect.GetPosition(), newSize));
+    }
 
     Refresh();
 

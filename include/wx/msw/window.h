@@ -597,7 +597,9 @@ public:
     // Called from WM_DPICHANGED handler for all windows to let them update
     // any sizes and fonts used internally when the DPI changes and generate
     // wxDPIChangedEvent to let the user code do the same thing as well.
-    void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
+    //
+    // Return true if the event was processed, false otherwise.
+    bool MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
 
 protected:
     virtual void WXAdjustFontToOwnPPI(wxFont& font) const wxOVERRIDE;
