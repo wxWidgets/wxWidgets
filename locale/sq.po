@@ -1,10 +1,10 @@
-# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004-2006.
+# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004, 2006, 2019, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-06-24 14:26+0300\n"
+"PO-Revision-Date: 2022-06-25 11:38+0300\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: <wx-translators@wxwidgets.org>\n"
 "Language: sq\n"
@@ -5981,7 +5981,6 @@ msgid "Failed to initialize OpenGL"
 msgstr "S’u arrit të gatitej OpeGL-i"
 
 #: ../src/msw/graphicsd2d.cpp:605
-#, fuzzy
 msgid "Could not register custom DirectWrite font loader."
 msgstr "S’u regjistrua dot ngarkues shkronjash vetjake DirectWrite."
 
@@ -6927,27 +6926,27 @@ msgstr "Butoni Djathtas"
 #: ../src/propgrid/advprops.cpp:1673
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "Ripërmasim VL-JP"
 
 #: ../src/propgrid/advprops.cpp:1674
 msgctxt "system cursor name"
 msgid "Sizing N-S"
-msgstr ""
+msgstr "Ripërmasim V-J"
 
 #: ../src/propgrid/advprops.cpp:1675
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "Ripërmasim VP-JL"
 
 #: ../src/propgrid/advprops.cpp:1676
 msgctxt "system cursor name"
 msgid "Sizing W-E"
-msgstr ""
+msgstr "Ripërmasim P-L"
 
 #: ../src/propgrid/advprops.cpp:1677
 msgctxt "system cursor name"
 msgid "Sizing"
-msgstr ""
+msgstr "Ripërmasim"
 
 #: ../src/propgrid/advprops.cpp:1678
 msgctxt "system cursor name"
