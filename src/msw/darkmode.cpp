@@ -195,30 +195,35 @@ bool wxApp::MSWEnableDarkMode(int flags)
 namespace wxMSWDarkMode
 {
 
-void EnableForTLW(HWND hwnd)
+bool ShouldUseDarkMode()
 {
     switch ( gs_appMode )
     {
         case AppMode_Default:
-            // Nothing to do, dark mode support not enabled.
-            return;
+            // Dark mode support not enabled, don't try using dark mode.
+            return false;
 
         case AppMode_AllowDark:
-            if ( !wxMSWImpl::ShouldAppsUseDarkMode() )
-            {
-                // Dark mode is not enabled globally.
-                return;
-            }
-            break;
+            // Follow the global setting.
+            return wxMSWImpl::ShouldAppsUseDarkMode();
 
         case AppMode_ForceDark:
-            // Enable dark mode below.
-            break;
+            return true;
 
         case AppMode_ForceLight:
-            // Nothing to do, dark mode is off by default anyhow.
-            return;
+            return false;
     }
+
+    wxFAIL_MSG( "unreachable" );
+
+    return false;
+}
+
+void EnableForTLW(HWND hwnd)
+{
+    // Nothing to do, dark mode support not enabled or dark mode is not used.
+    if ( !ShouldUseDarkMode() )
+        return;
 
     BOOL useDarkMode = TRUE;
     HRESULT hr = wxDarkModeModule::GetDwmSetWindowAttribute()
