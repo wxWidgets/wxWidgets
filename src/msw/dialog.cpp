@@ -36,6 +36,8 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
+
 #include "wx/evtloop.h"
 #include "wx/scopedptr.h"
 
@@ -235,6 +237,8 @@ void wxDialog::CreateGripper()
                                     wxGetInstance(),
                                     nullptr
                                );
+
+        wxMSWDarkMode::AllowForWindow((HWND)m_hGripper);
     }
 }
 
