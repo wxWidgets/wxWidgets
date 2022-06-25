@@ -38,8 +38,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/dynlib.h"
+#include "wx/module.h"
 
 static const char* TRACE_DARKMODE = "msw-darkmode";
+
+#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 
 namespace
 {
@@ -111,6 +114,55 @@ bool InitDarkMode()
 } // namespace wxMSWImpl
 
 // ----------------------------------------------------------------------------
+// Module keeping dark mode-related data
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// This function is documented, but we still load it dynamically to avoid
+// having to link with dwmapi.lib.
+typedef HRESULT
+(WINAPI *DwmSetWindowAttribute_t)(HWND, DWORD, const void*, DWORD);
+
+} // anonymous namespace
+
+class wxDarkModeModule : public wxModule
+{
+public:
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override
+    {
+        ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
+        ms_dllDWM.Unload();
+    }
+
+    static DwmSetWindowAttribute_t GetDwmSetWindowAttribute()
+    {
+        if ( ms_pfnDwmSetWindowAttribute == (DwmSetWindowAttribute_t)-1 )
+        {
+            ms_dllDWM.Load(wxS("dwmapi.dll"), wxDL_VERBATIM | wxDL_QUIET);
+            wxDL_INIT_FUNC(ms_pfn, DwmSetWindowAttribute, ms_dllDWM);
+        }
+
+        return ms_pfnDwmSetWindowAttribute;
+    }
+
+private:
+    static wxDynamicLibrary ms_dllDWM;
+    static DwmSetWindowAttribute_t ms_pfnDwmSetWindowAttribute;
+
+    wxDECLARE_DYNAMIC_CLASS(wxDarkModeModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxDarkModeModule, wxModule);
+
+wxDynamicLibrary wxDarkModeModule::ms_dllDWM;
+
+DwmSetWindowAttribute_t
+wxDarkModeModule::ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
+
+// ----------------------------------------------------------------------------
 // Public API
 // ----------------------------------------------------------------------------
 
@@ -136,11 +188,66 @@ bool wxApp::MSWEnableDarkMode(int flags)
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// Supporting functions for the rest of wxMSW code
+// ----------------------------------------------------------------------------
+
+namespace wxMSWDarkMode
+{
+
+void EnableForTLW(HWND hwnd)
+{
+    switch ( gs_appMode )
+    {
+        case AppMode_Default:
+            // Nothing to do, dark mode support not enabled.
+            return;
+
+        case AppMode_AllowDark:
+            if ( !wxMSWImpl::ShouldAppsUseDarkMode() )
+            {
+                // Dark mode is not enabled globally.
+                return;
+            }
+            break;
+
+        case AppMode_ForceDark:
+            // Enable dark mode below.
+            break;
+
+        case AppMode_ForceLight:
+            // Nothing to do, dark mode is off by default anyhow.
+            return;
+    }
+
+    BOOL useDarkMode = TRUE;
+    HRESULT hr = wxDarkModeModule::GetDwmSetWindowAttribute()
+                 (
+                    hwnd,
+                    DWMWA_USE_IMMERSIVE_DARK_MODE,
+                    &useDarkMode,
+                    sizeof(useDarkMode)
+                 );
+    if ( FAILED(hr) )
+        wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
+}
+
+} // namespace wxMSWDarkMode
+
 #else // !wxUSE_DARK_MODE
 
 bool wxApp::MSWEnableDarkMode(int WXUNUSED(flags))
 {
     return false;
 }
+
+namespace wxMSWDarkMode
+{
+
+void EnableForTLW(HWND WXUNUSED(hwnd))
+{
+}
+
+} // namespace wxMSWDarkMode
 
 #endif // wxUSE_DARK_MODE/!wxUSE_DARK_MODE
