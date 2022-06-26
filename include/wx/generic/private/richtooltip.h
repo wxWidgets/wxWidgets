@@ -10,7 +10,7 @@
 #ifndef _WX_GENERIC_PRIVATE_RICHTOOLTIP_H_
 #define _WX_GENERIC_PRIVATE_RICHTOOLTIP_H_
 
-#include "wx/icon.h"
+#include "wx/bmpbndl.h"
 #include "wx/colour.h"
 
 // ----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ public:
 
     virtual void SetBackgroundColour(const wxColour& col,
                                      const wxColour& colEnd) wxOVERRIDE;
-    virtual void SetCustomIcon(const wxIcon& icon) wxOVERRIDE;
+    virtual void SetCustomIcon(const wxBitmapBundle& icon) wxOVERRIDE;
     virtual void SetStandardIcon(int icon) wxOVERRIDE;
     virtual void SetTimeout(unsigned milliseconds,
                             unsigned millisecondsDelay = 0) wxOVERRIDE;
@@ -48,7 +48,7 @@ protected:
              m_message;
 
 private:
-    wxIcon m_icon;
+    wxBitmapBundle m_icon;
 
     wxColour m_colStart,
              m_colEnd;

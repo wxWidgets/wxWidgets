@@ -48,7 +48,7 @@ void wxRichToolTip::SetIcon(int icon)
     m_impl->SetStandardIcon(icon);
 }
 
-void wxRichToolTip::SetIcon(const wxIcon& icon)
+void wxRichToolTip::SetIcon(const wxBitmapBundle& icon)
 {
     m_impl->SetCustomIcon(icon);
 }

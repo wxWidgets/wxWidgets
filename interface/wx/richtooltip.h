@@ -128,7 +128,7 @@ public:
      */
     //@{
     void SetIcon(int icon = wxICON_INFORMATION);
-    void SetIcon(const wxIcon& icon);
+    void SetIcon(const wxBitmapBundle& icon);
     //@}
 
     /**
