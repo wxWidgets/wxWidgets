@@ -3446,9 +3446,6 @@ public:
     <a href="https://docs.microsoft.com/en-us/windows/desktop/sbscs/application-manifests">"Application Manifests" documentation</a>
     for more details).
 
-    @note Per-monitor DPI support is an experimental feature that is still in
-    development. It might not work correctly for some controls.
-
     @beginEventTable{wxDPIChangedEvent}
     @event{EVT_DPI_CHANGED(func)}
         Process a @c wxEVT_DPI_CHANGED event.
