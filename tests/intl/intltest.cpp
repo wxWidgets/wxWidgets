@@ -182,6 +182,10 @@ void IntlTestCase::DateTimeFmtFrench()
 #endif
     static const char *FRENCH_LONG_DATE_FMT = "%a %d %b %Y";
     static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %H:%M:%S";
+#elif defined(__FREEBSD__)
+    static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
+    static const char *FRENCH_LONG_DATE_FMT = "%a %e %b %Y";
+    static const char *FRENCH_DATE_TIME_FMT = "%a %e %b %X %Y";
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
