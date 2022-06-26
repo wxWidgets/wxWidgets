@@ -16,6 +16,9 @@ namespace wxMSWDarkMode
 // Enable dark mode for the given TLW if appropriate.
 void EnableForTLW(HWND hwnd);
 
+// Set dark theme for the given (child) window if appropriate.
+void AllowForWindow(HWND hwnd);
+
 } // namespace wxMSWDarkMode
 
 #endif // _WX_MSW_PRIVATE_DARKMODE_H_

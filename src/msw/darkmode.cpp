@@ -40,6 +40,8 @@
 #include "wx/dynlib.h"
 #include "wx/module.h"
 
+#include "wx/msw/uxtheme.h"
+
 static const char* TRACE_DARKMODE = "msw-darkmode";
 
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
@@ -84,6 +86,7 @@ namespace wxMSWImpl
 // Global pointers of the functions we use: they're not only undocumented, but
 // don't appear in the SDK headers at all.
 BOOL (WINAPI *ShouldAppsUseDarkMode)() = nullptr;
+BOOL (WINAPI *AllowDarkModeForWindow)(HWND hwnd, BOOL allow) = nullptr;
 DWORD (WINAPI *SetPreferredAppMode)(DWORD) = nullptr;
 
 bool InitDarkMode()
@@ -102,13 +105,9 @@ bool InitDarkMode()
 
     // These functions are not only undocumented but are not even exported by
     // name, and have to be resolved using their ordinals.
-    if ( !TryLoadByOrd(ShouldAppsUseDarkMode, dllUxTheme, 132) )
-        return false;
-
-    if ( !TryLoadByOrd(SetPreferredAppMode, dllUxTheme, 135) )
-        return false;
-
-    return true;
+    return TryLoadByOrd(ShouldAppsUseDarkMode, dllUxTheme, 132) &&
+           TryLoadByOrd(AllowDarkModeForWindow, dllUxTheme, 133) &&
+           TryLoadByOrd(SetPreferredAppMode, dllUxTheme, 135);
 }
 
 } // namespace wxMSWImpl
@@ -235,6 +234,20 @@ void EnableForTLW(HWND hwnd)
                  );
     if ( FAILED(hr) )
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
+
+    wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE);
+}
+
+void AllowForWindow(HWND hwnd)
+{
+    if ( ShouldUseDarkMode() )
+    {
+        // Using "DARK_EXPLORER" theme works as well, but is subtly different
+        // and it seems better to use the explicit (even if undocumented) API
+        // provided for this instead of relying on this special theme name.
+        wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE);
+        ::SetWindowTheme(hwnd, L"EXPLORER", nullptr);
+    }
 }
 
 } // namespace wxMSWDarkMode
@@ -250,6 +263,10 @@ namespace wxMSWDarkMode
 {
 
 void EnableForTLW(HWND WXUNUSED(hwnd))
+{
+}
+
+void AllowForWindow(HWND WXUNUSED(hwnd))
 {
 }
 

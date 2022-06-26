@@ -40,6 +40,7 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
 #include "wx/msw/ownerdrawnbutton.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 // ----------------------------------------------------------------------------
@@ -136,6 +137,8 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     {
         return false;
     }
+
+    wxMSWDarkMode::AllowForWindow(m_hWnd);
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
