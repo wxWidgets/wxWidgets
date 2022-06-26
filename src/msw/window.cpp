@@ -4983,7 +4983,7 @@ static void UpdateSizerOnDPIChange(wxSizer* sizer, wxSize oldDPI, wxSize newDPI)
     }
 }
 
-void
+bool
 wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 {
     // update min and max size if necessary
@@ -5011,13 +5011,16 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
         // dpi-changed event.
         if ( childWin && !childWin->IsTopLevel() )
         {
+            // We ignore the child return value here because we don't do
+            // anything differently depending on whether the event was
+            // processed or not anyhow here.
             childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
         }
     }
 
     wxDPIChangedEvent event(oldDPI, newDPI);
     event.SetEventObject(this);
-    HandleWindowEvent(event);
+    return HandleWindowEvent(event);
 }
 
 // ---------------------------------------------------------------------------
