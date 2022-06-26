@@ -20,6 +20,8 @@
 #include "wx/intl.h"
 #include "wx/uilocale.h"
 
+#include "wx/private/glibc.h"
+
 #if wxUSE_INTL
 
 // ----------------------------------------------------------------------------
@@ -175,7 +177,7 @@ void IntlTestCase::DateTimeFmtFrench()
 #ifdef __GLIBC__
     // Versions of glibc up to 2.7 wrongly used periods for French locale
     // separator.
-#if __GLIBC__ > 2 || __GLIBC_MINOR__ >= 8
+#if wxCHECK_GLIBC_VERSION(2, 8)
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
 #else
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
