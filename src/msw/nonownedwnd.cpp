@@ -292,9 +292,15 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         // size is usually a decent guess, it's typically not exactly correct.
         // We can't always do much better, but at least ensure that the window
         // is still big enough to show its contents.
-        wxSize newSize = newRect.GetSize();
-        newSize.IncTo(GetBestSize());
-        SetSize(wxRect(newRect.GetPosition(), newSize));
+        wxSize diff = GetBestSize() - newRect.GetSize();
+        diff.IncTo(wxSize(0, 0));
+
+        // Use wxRect::Inflate() to ensure that the center of the (possibly)
+        // bigger rectangle is at the same position as the center of the
+        // proposed one, to prevent moving the window back to the old display
+        // from which it might have been just moved to this one, as doing this
+        // would result in an infinite stream of WM_DPICHANGED messages.
+        SetSize(newRect.Inflate(diff.x, diff.y));
     }
 
     Refresh();
