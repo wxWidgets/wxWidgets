@@ -127,6 +127,18 @@ public:
     wxBitmapBundle(const wxImage& image);
 
     /**
+        Conversion constructor from XPM data.
+
+        This constructor overload exists only for compatibility with the
+        existing code passing XPM data (e.g. @c foo_xpm after including @c
+        foo.xpm) directly to the functions expecting a bitmap. Don't use it in
+        the new code, as it is likely to be deprecated in the future.
+
+        @since 3.2.0
+     */
+    wxBitmapBundle(const char* const* xpm);
+
+    /**
         Copy constructor creates a copy of another bundle.
      */
     wxBitmapBundle(const wxBitmapBundle& other);
