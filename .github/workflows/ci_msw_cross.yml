@@ -49,6 +49,9 @@ on:
       - '*.yml'
       - 'wxwidgets.props'
 
+permissions:
+  contents: read
+
 jobs:
   msw-cross-build:
     # Set up this job to run in a Debian Sid container because it has recent
