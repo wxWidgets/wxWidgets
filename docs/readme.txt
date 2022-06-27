@@ -1,9 +1,9 @@
-wxWidgets 3.2.0 Release Notes
+wxWidgets 3.2.0-rc1 Release Notes
 =============================
 
-Welcome to the new stable release of wxWidgets, a free and open source
-cross-platform C++ framework for writing advanced GUI applications using
-native controls.
+Welcome to the release candidate of the new stable release of wxWidgets,
+a free and open source cross-platform C++ framework for writing
+advanced GUI applications using native controls.
 
 wxWidgets allows you to write native-looking GUI applications for all the major
 desktop platforms and also helps with abstracting the differences in the non-GUI
@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.2.0/
+* https://docs.wxwidgets.org/3.2.0-rc1/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
@@ -25,9 +25,9 @@ download from:
 
 or, for a more more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.0/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.0-rc1/
 
-Please see https://docs.wxwidgets.org/3.2.0/overview_install.html for full
+Please see https://docs.wxwidgets.org/3.2.0-rc1/overview_install.html for full
 installation instructions.
 
 
