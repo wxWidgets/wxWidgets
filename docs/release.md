@@ -19,14 +19,14 @@ Finally, Microsoft Windows users may download [Setup.exe file](https://github.co
 
 To verify your download please use the following SHA-1 checksums:
 
-    0000000000000000000000000000000000000000  wxMSW-3.2.0-rc1-Setup.exe
-    0000000000000000000000000000000000000000  wxWidgets-3.2.0-rc1-docs-chm.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.2.0-rc1-docs-html.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.2.0-rc1-docs-html.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.2.0-rc1-headers.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.2.0-rc1.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.2.0-rc1.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.2.0-rc1.zip
+    3bf43d93f110482901c65340c0a52d08a063e23c  wxMSW-3.2.0-rc1-Setup.exe
+    b926e515b5efc2a7b6d066b52f9b4a8ddffa51f8  wxWidgets-3.2.0-rc1-docs-chm.zip
+    e94efa2bff9b2468f9aa91e8915bffc13a6f0d0c  wxWidgets-3.2.0-rc1-docs-html.tar.bz2
+    45b84d1d45494493175fcd45023b4a480193a2dd  wxWidgets-3.2.0-rc1-docs-html.zip
+    582dc5962d09eeeb730404c2c34924f7782871a5  wxWidgets-3.2.0-rc1-headers.7z
+    137f58d72d2426a08cfb9813be344096538e9263  wxWidgets-3.2.0-rc1.7z
+    cd631f8f48dd78c41582c0bbd83145ce887b9469  wxWidgets-3.2.0-rc1.tar.bz2
+    ce20f7c01bb315846631db65e899d06008bb5bf3  wxWidgets-3.2.0-rc1.zip
 
 ## Binaries
 
