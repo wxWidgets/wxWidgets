@@ -45,6 +45,9 @@ on:
       - '*.md'
       - '*.yml'
 
+permissions:
+  contents: read
+
 jobs:
   msw-msvs:
     runs-on: windows-${{ matrix.vsversion }}

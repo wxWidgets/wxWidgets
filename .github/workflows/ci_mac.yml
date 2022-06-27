@@ -63,6 +63,9 @@ on:
     - '*.yml'
     - 'wxwidgets.props'
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     defaults:
