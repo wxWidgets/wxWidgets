@@ -38,6 +38,25 @@
 
     This happens automatically when wxMemoryDC object goes out of scope.
 
+    Note that the scaling factor of the bitmap determines the scaling factor
+    used by this device context, so when using a memory device context as a
+    back buffer for a window, you should typically create the bitmap using the
+    same scale factor as used by the window, e.g.
+    @code
+    void MyWindow::OnPaint(wxPaintEvent&)
+    {
+        wxBitmap bmp;
+        bmp.CreateWithDIPSize(GetClientSize(), GetDPIScaleFactor());
+        {
+            wxMemoryDC memdc(bmp);
+            ... use memdc to draw on the bitmap ...
+        }
+
+        wxPaintDC dc(this);
+        dc.DrawBitmap(bmp, wxPoint(0, 0));
+    }
+    @endcode
+
     @library{wxcore}
     @category{dc}
 
