@@ -45,6 +45,12 @@ public:
     // wxBitmapBundle.
     wxBitmapBundle(const wxImage& image);
 
+    // And another one from XPM data, as it's relatively common to pass it to
+    // various functions that take wxBitmapBundle in the existing code. It is
+    // not formally deprecated, but should be avoided in any new code and can
+    // become deprecated in the future.
+    wxBitmapBundle(const char* const* xpm);
+
     // Default copy ctor and assignment operator and dtor would be ok, but need
     // to be defined out of line, where wxBitmapBundleImpl is fully declared.
 

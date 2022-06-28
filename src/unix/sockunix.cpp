@@ -32,9 +32,7 @@
 #  define WX_SOCKLEN_T unsigned int
 #else
 #  ifdef __GLIBC__
-#    if __GLIBC__ == 2
-#      define WX_SOCKLEN_T socklen_t
-#    endif
+#    define WX_SOCKLEN_T socklen_t
 #  elif defined(__WXMAC__)
 #    define WX_SOCKLEN_T socklen_t
 #  else

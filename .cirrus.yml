@@ -1,0 +1,62 @@
+# Continuous integration tasks running on Cirrus CI.
+#
+# This is currently used for testing under FreeBSD, which is not available at
+# the other CI providers used by wx.
+
+env:
+  CCACHE_SIZE: 1G
+  CCACHE_DIR: /tmp/ccache
+
+task:
+  name: Cirrus CI / FreeBSD 13 wxGTK 3
+  freebsd_instance:
+    image_family: freebsd-13-0
+
+  before_script: |
+    echo LD_LIBRARY_PATH=`pwd`/lib >> $CIRRUS_ENV
+
+    wxPROC_COUNT=`./build/tools/proc_count.sh`
+    echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $CIRRUS_ENV
+
+    ./build/tools/before_install.sh
+
+    pkg install -q -y ccache git
+    echo "PATH=/usr/local/libexec/ccache:$PATH" >> $CIRRUS_ENV
+
+  # Rather than getting all submodules, get just the ones we need, as we can
+  # use system libraries instead of the other ones.
+  update_submodues_script: |
+    git submodule update --init 3rdparty/catch 3rdparty/nanosvg
+
+  ccache_cache:
+    folder: /tmp/ccache
+
+  # We need to pass flags so that libraries under /usr/local are found, because
+  # configure doesn't look for them there by default (it ought to always use
+  # pkg-config instead, but it currently doesn't do this neither).
+  configure_script: |
+    ./configure --disable-optimise --disable-debug_info CXXFLAGS=-Werror CPPFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib
+
+  build_library_script: |
+    make -k $wxBUILD_ARGS
+
+  build_tests_script: |
+    make -k -C tests $wxBUILD_ARGS
+
+  test_script: |
+    cd tests
+    WX_TEST_WEBREQUEST_URL="0" ./test
+
+  build_samples_script: |
+    make -k -C samples $wxBUILD_ARGS
+
+  # Building sample requires GNU make, so install it just for this.
+  install_script: |
+    make install
+    pkg install -q -y gmake
+    gmake -C samples/minimal -f makefile.unx clean
+    gmake -C samples/minimal -f makefile.unx $wxBUILD_ARGS
+
+  # Show cache statistics for information.
+  end_script: |
+    ccache -s

@@ -232,22 +232,37 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.0: (released 2022-07-07)
-----------------------------
+3.2.0-rc1: (released 2022-06-27)
+--------------------------------
+
+All:
+
+- Build fixes for Unix systems using older Cairo or glibc versions.
+- Fix wxFileName::ReplaceHomeDir() when HOME=="/".
+- Fix wxLocale::IsAvailable(wxLANGUAGE_DEFAULT) regression.
+- Provide CMake config file for the library.
 
 All (GUI):
 
 - Make loading bitmaps using BI_BITFIELDS work again.
 - Fix wxGenericListCtrl::GetColumnCount() for wxLC_LIST (Kvaz1r).
 - Fix refresh after calling wxGenericListCtrl::EnsureVisible() (taler21).
+- Add wxMenuItem::GetBitmapBundle().
+- Support additional wxWizard properties in XRC (Randalphwa).
 
 wxGTK:
 
+- Fix wxDC::Blit() and wxBitmap::GetSubBitmap() with HiDPI bitmaps.
 - Fix TAB navigation in wxSimplebook (Adrian Lopez).
+- Support wxINVERT logical operation on wxDC with white source colour.
+- Don't assert in wxGtkImage (used in e.g. wxToolBar) when bitmap is missing.
 
 wxMSW:
 
-- Fix wxDC::DrawRoundedRectangle() regression.
+- Fix wxDC::DrawRoundedRectangle() and wxImageList::Draw() regressions.
+- Fix wrong results of wxWebResponse::GetHeader() and GetURL().
+- Fix creating wxBitmap of depth 32 but without real alpha.
+- Improve top level window resizing on DPI change and allow overriding it.
 
 wxOSX:
 

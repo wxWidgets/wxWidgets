@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-02-03 09:12+0800\n"
+"PO-Revision-Date: 2022-06-25 14:04-0700\n"
 "Last-Translator: James Pan <bojaypan@mail.ru>\n"
 "Language-Team: wxWidgets tranlators <wx-translators@wxwidgets.org>\n"
 "Language: zh_CN\n"
@@ -321,7 +321,7 @@ msgstr "末页"
 #: ../src/common/accelcmn.cpp:64
 msgctxt "keyboard key"
 msgid "Space"
-msgstr "空"
+msgstr "空格"
 
 #: ../src/common/accelcmn.cpp:65
 msgctxt "keyboard key"
@@ -1050,11 +1050,11 @@ msgstr "无法生成调试报告。"
 #, c-format
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
-msgstr "处理调试报告失败, 文件被保存在目录 \"%s\" 中."
+msgstr "处理调试报告失败, 文件被保存在目录 \"%s\" 中。"
 
 #: ../src/common/debugrpt.cpp:574
 msgid "A debug report has been generated. It can be found in"
-msgstr "产生了一份调试报告, 位于"
+msgstr "产生了一份调试报告。 位于"
 
 #: ../src/common/debugrpt.cpp:577
 msgid "And includes the following files:\n"
@@ -1070,7 +1070,7 @@ msgstr ""
 
 #: ../src/common/debugrpt.cpp:730
 msgid "Failed to execute curl, please install it in PATH."
-msgstr "无法执行curl，请在PATH变量所指的目录中安装curl。"
+msgstr "无法执行 curl，请在 PATH 变量所指的目录中安装它。"
 
 #: ../src/common/debugrpt.cpp:743
 #, c-format
@@ -1200,7 +1200,7 @@ msgstr "无法关闭文件 '%s'"
 #: ../src/common/ffile.cpp:107 ../src/common/ffile.cpp:132
 #, c-format
 msgid "Read error on file '%s'"
-msgstr "读文件 '%s'出错"
+msgstr "读文件 '%s' 出错"
 
 #: ../src/common/ffile.cpp:149
 #, c-format
@@ -1358,7 +1358,7 @@ msgstr "无法更新用户配置文件。"
 
 #: ../src/common/fileconf.cpp:1029
 msgid "Error saving user configuration data."
-msgstr "保存用户配置数据错误."
+msgstr "保存用户配置数据错误。"
 
 #: ../src/common/fileconf.cpp:1141
 #, c-format
@@ -1378,7 +1378,7 @@ msgstr "忽略对只读键 '%s' 的修改。"
 #: ../src/common/fileconf.cpp:1946
 #, c-format
 msgid "trailing backslash ignored in '%s'"
-msgstr "'%s'尾部的斜线将被忽略"
+msgstr "'%s' 尾部的斜线将被忽略"
 
 #: ../src/common/fileconf.cpp:1981
 #, c-format
@@ -2071,7 +2071,7 @@ msgstr "无法为 OpenGL 分配颜色"
 
 #: ../src/common/headerctrlcmn.cpp:57
 msgid "Please select the columns to show and define their order:"
-msgstr "请选择列并显示和定义它们的顺序:"
+msgstr "请选择列并显示和定义它们的顺序："
 
 #: ../src/common/headerctrlcmn.cpp:58
 msgid "Customize Columns"
@@ -2128,7 +2128,7 @@ msgstr "BMP: 无法写数据。"
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP: 当 biBitCount=%d 时，文件头为 biClrUsed=%d。"
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -3019,7 +3019,7 @@ msgstr "打印，请等待..."
 
 #: ../src/common/prntbase.cpp:539
 msgid "Document:"
-msgstr "文档："
+msgstr "文档:"
 
 #: ../src/common/prntbase.cpp:542
 msgid "Progress:"
@@ -3874,9 +3874,8 @@ msgid "libcurl could not be initialized"
 msgstr "libcurl 无法初始化"
 
 #: ../src/common/webview.cpp:246
-#, fuzzy
 msgid "RunScriptAsync not supported"
-msgstr "不支持字符串装换"
+msgstr "不支持 RunScriptAsync"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
@@ -3970,7 +3969,7 @@ msgstr "传递一个未知对象给 GetObject"
 
 #: ../src/common/xtixml.cpp:231
 msgid "Forward hrefs are not supported"
-msgstr "不支持传递hrefs"
+msgstr "不支持传递 hrefs"
 
 #: ../src/common/xtixml.cpp:249
 #, c-format
@@ -4249,7 +4248,7 @@ msgstr "扩展"
 #: ../src/generic/datavgen.cpp:6967
 #, c-format
 msgid "%s (%d items)"
-msgstr "%s（%d 项）"
+msgstr "%s (%d 项)"
 
 #: ../src/generic/datavgen.cpp:7018
 #, c-format
@@ -4257,8 +4256,7 @@ msgid "Column %u"
 msgstr "列 %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7087
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4269,8 +4267,7 @@ msgid "Left"
 msgstr "左"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7090
-#: ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -4401,7 +4398,7 @@ msgstr "进入 home 目录"
 
 #: ../src/generic/dirdlgg.cpp:144
 msgid "Show &hidden directories"
-msgstr "显示隐藏目录(&H)"
+msgstr "显示隐藏目录 (&h)"
 
 #: ../src/generic/dirdlgg.cpp:197
 #, c-format
@@ -4484,11 +4481,11 @@ msgstr "搜索方向"
 
 #: ../src/generic/fdrepdlg.cpp:176
 msgid "&Replace"
-msgstr "替换(&R)"
+msgstr "替换 (&R)"
 
 #: ../src/generic/fdrepdlg.cpp:179
 msgid "Replace &all"
-msgstr "全部替换(&a)"
+msgstr "全部替换 (&a)"
 
 #: ../src/generic/filectrlg.cpp:246 ../src/generic/filectrlg.cpp:269
 msgid "<DIR>"
@@ -4531,7 +4528,7 @@ msgstr "允许"
 
 #: ../src/generic/filectrlg.cpp:429
 msgid "Attributes"
-msgstr "属性(Attributes)"
+msgstr "属性"
 
 #: ../src/generic/filectrlg.cpp:936
 msgid "Current directory:"
@@ -4539,7 +4536,7 @@ msgstr "当前目录:"
 
 #: ../src/generic/filectrlg.cpp:979
 msgid "Show &hidden files"
-msgstr "显示隐藏文件(&H)"
+msgstr "显示隐藏文件 (&h)"
 
 #: ../src/generic/filectrlg.cpp:1355
 msgid "Illegal file specification."
@@ -4597,7 +4594,7 @@ msgstr "现代"
 
 #: ../src/generic/fontdlgg.cpp:321
 msgid "Script"
-msgstr "Script"
+msgstr "手写"
 
 #: ../src/generic/fontdlgg.cpp:322
 msgid "Swiss"
@@ -4605,7 +4602,7 @@ msgstr "瑞士"
 
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Teletype"
-msgstr "电传打字机"
+msgstr "打字"
 
 #: ../src/generic/fontdlgg.cpp:324 ../src/generic/fontdlgg.cpp:327
 msgid "Normal"
@@ -4621,7 +4618,7 @@ msgstr "细"
 
 #: ../src/generic/fontdlgg.cpp:366
 msgid "&Font family:"
-msgstr "字体(&F):"
+msgstr "字体 (&F):"
 
 #: ../src/generic/fontdlgg.cpp:370 ../src/generic/fontdlgg.cpp:372
 msgid "The font family."
@@ -4637,7 +4634,7 @@ msgstr "字体样式。"
 
 #: ../src/generic/fontdlgg.cpp:388
 msgid "&Weight:"
-msgstr "字体粗细(&W):"
+msgstr "字体粗细 (&W):"
 
 #: ../src/generic/fontdlgg.cpp:392 ../src/generic/fontdlgg.cpp:394
 msgid "The font weight."
@@ -4645,7 +4642,7 @@ msgstr "字体粗细。"
 
 #: ../src/generic/fontdlgg.cpp:402
 msgid "C&olour:"
-msgstr "颜色(&o):"
+msgstr "颜色 (&o):"
 
 #: ../src/generic/fontdlgg.cpp:410 ../src/generic/fontdlgg.cpp:412
 msgid "The font colour."
@@ -4653,7 +4650,7 @@ msgstr "字体颜色。"
 
 #: ../src/generic/fontdlgg.cpp:418
 msgid "&Point size:"
-msgstr "字体大小(&P):"
+msgstr "字体大小 (&P):"
 
 #: ../src/generic/fontdlgg.cpp:423 ../src/generic/fontdlgg.cpp:425
 #: ../src/generic/fontdlgg.cpp:429 ../src/generic/fontdlgg.cpp:431
@@ -4729,7 +4726,7 @@ msgstr "找到的条目"
 
 #: ../src/generic/hyperlinkg.cpp:153
 msgid "&Copy URL"
-msgstr "复制 URL(&C)"
+msgstr "复制 URL (&C)"
 
 #: ../src/generic/infobar.cpp:81
 msgid "Hide this notification message."
@@ -4760,7 +4757,7 @@ msgstr "把日志内容保存到文件"
 
 #: ../src/generic/logg.cpp:511
 msgid "C&lear"
-msgstr "清除(&L)"
+msgstr "清除 (&l)"
 
 #: ../src/generic/logg.cpp:511
 msgid "Clear the log contents"
@@ -4772,7 +4769,7 @@ msgstr "关闭此窗口"
 
 #: ../src/generic/logg.cpp:514
 msgid "&Log"
-msgstr "日志(&L)"
+msgstr "日志 (&L)"
 
 #: ../src/generic/logg.cpp:570 ../src/generic/logg.cpp:973
 msgid "Can't save log contents to file."
@@ -4785,7 +4782,7 @@ msgstr "日志保存到文件 '%s'。"
 
 #: ../src/generic/logg.cpp:679
 msgid "&Details"
-msgstr "细节(&D)"
+msgstr "细节 (&D)"
 
 #: ../src/generic/logg.cpp:953
 msgid "Failed to copy dialog contents to the clipboard."
@@ -4873,7 +4870,7 @@ msgstr "份数:"
 
 #: ../src/generic/prntdlgg.cpp:290
 msgid "PostScript file"
-msgstr "PostScript文件"
+msgstr "PostScript 文件"
 
 #: ../src/generic/prntdlgg.cpp:441
 msgid "Print Setup"
@@ -4947,7 +4944,7 @@ msgstr "打印机..."
 
 #: ../src/generic/progdlgg.cpp:249
 msgid "&Skip"
-msgstr "跳过(&S)"
+msgstr "跳过 (&S)"
 
 #: ../src/generic/progdlgg.cpp:350 ../src/generic/progdlgg.cpp:629
 msgid "Unknown"
@@ -4980,23 +4977,23 @@ msgstr "你知道吗..."
 
 #: ../src/generic/tipdlg.cpp:233
 msgid "&Show tips at startup"
-msgstr "启动时显示技巧(&S)"
+msgstr "启动时显示技巧 (&S)"
 
 #: ../src/generic/tipdlg.cpp:237
 msgid "&Next Tip"
-msgstr "下一技巧(&N)"
+msgstr "下一技巧 (&N)"
 
 #: ../src/generic/wizard.cpp:431
 msgid "&Next >"
-msgstr "下一个(&N) >"
+msgstr "下一个 (&N) >"
 
 #: ../src/generic/wizard.cpp:432
 msgid "&Finish"
-msgstr "完成(&F)"
+msgstr "完成 (&F)"
 
 #: ../src/generic/wizard.cpp:440
 msgid "< &Back"
-msgstr "< 返回(&B)"
+msgstr "< 返回 (&B)"
 
 #: ../src/gtk/aboutdlg.cpp:216
 msgid "translator-credits"
@@ -5250,7 +5247,7 @@ msgstr "显示全部"
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
-msgstr "显示包含给定子串的所有索引项. 搜索是大小写无关的."
+msgstr "显示包含给定子串的所有索引项. 搜索是大小写无关的。"
 
 #: ../src/html/helpwnd.cpp:500
 msgid "Show all items in index"
@@ -5359,23 +5356,23 @@ msgstr "字体大小"
 
 #: ../src/html/helpwnd.cpp:1260
 msgid "Normal face<br>and <u>underlined</u>. "
-msgstr "正常字体<br> 且 <u>带下划线</u>。 "
+msgstr "正常字体<br>且<u>带下划线</u>。 "
 
 #: ../src/html/helpwnd.cpp:1261
 msgid "<i>Italic face.</i> "
-msgstr "<i>斜体.</i> "
+msgstr "<i>斜体。</i> "
 
 #: ../src/html/helpwnd.cpp:1262
 msgid "<b>Bold face.</b> "
-msgstr "<b>粗体.</b> "
+msgstr "<b>粗体。</b> "
 
 #: ../src/html/helpwnd.cpp:1263
 msgid "<b><i>Bold italic face.</i></b><br>"
-msgstr "<b><i>粗斜体.</i></b><br>"
+msgstr "<b><i>粗斜体。</i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1266
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr "固定字体. <br> <b>粗体</b> <i>斜体</i> "
+msgstr "固定字体。<br> <b>粗体</b> <i>斜体</i> "
 
 #: ../src/html/helpwnd.cpp:1267
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
@@ -5413,7 +5410,7 @@ msgstr "%i / %u"
 #: ../src/html/helpwnd.cpp:1713
 #, c-format
 msgid "%u of %u"
-msgstr "%u 的 %u"
+msgstr "%u / %u"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format
@@ -5445,7 +5442,7 @@ msgstr "HTML 锚 %s 不存在。"
 #: ../src/html/htmlwin.cpp:1020
 #, c-format
 msgid "Copied to clipboard:\"%s\""
-msgstr "已复制到剪贴板:\"%s\""
+msgstr "已复制到剪贴板: \"%s\""
 
 #: ../src/html/htmprint.cpp:267
 msgid ""
@@ -5843,7 +5840,7 @@ msgstr "当前不支持监视单独文件的更改。"
 #: ../src/msw/fswatcher.cpp:165
 #, c-format
 msgid "Unable to set up watch for '%s'"
-msgstr "无法为 '%s' 设置 watch"
+msgstr "无法为 '%s' 设置监视"
 
 #: ../src/msw/fswatcher.cpp:475
 #, c-format
@@ -6305,7 +6302,7 @@ msgstr "大小:"
 
 #: ../src/osx/carbon/fontdlg.cpp:339 ../src/osx/carbon/fontdlg.cpp:341
 msgid "The font size in points."
-msgstr "字体大小(磅值)"
+msgstr "字体大小以磅值计。"
 
 #: ../src/osx/carbon/fontdlg.cpp:344
 msgid "Style:"
@@ -6356,32 +6353,32 @@ msgstr "<任意>"
 #: ../src/osx/carbon/fontdlg.cpp:417 ../src/osx/carbon/fontdlg.cpp:622
 #: ../src/osx/carbon/fontdlg.cpp:642
 msgid "<Any Roman>"
-msgstr "<任意 Roman>"
+msgstr "<任意罗马>"
 
 #: ../src/osx/carbon/fontdlg.cpp:418 ../src/osx/carbon/fontdlg.cpp:624
 #: ../src/osx/carbon/fontdlg.cpp:644
 msgid "<Any Decorative>"
-msgstr "<任意 Decorative>"
+msgstr "<任意修饰>"
 
 #: ../src/osx/carbon/fontdlg.cpp:419 ../src/osx/carbon/fontdlg.cpp:626
 #: ../src/osx/carbon/fontdlg.cpp:646
 msgid "<Any Modern>"
-msgstr "<任意 Modern>"
+msgstr "<任意现代>"
 
 #: ../src/osx/carbon/fontdlg.cpp:420 ../src/osx/carbon/fontdlg.cpp:628
 #: ../src/osx/carbon/fontdlg.cpp:648
 msgid "<Any Script>"
-msgstr "<任意 Script>"
+msgstr "<任意手写>"
 
 #: ../src/osx/carbon/fontdlg.cpp:421 ../src/osx/carbon/fontdlg.cpp:633
 #: ../src/osx/carbon/fontdlg.cpp:652
 msgid "<Any Swiss>"
-msgstr "<任意 Swiss>"
+msgstr "<任意瑞士>"
 
 #: ../src/osx/carbon/fontdlg.cpp:422 ../src/osx/carbon/fontdlg.cpp:630
 #: ../src/osx/carbon/fontdlg.cpp:650
 msgid "<Any Teletype>"
-msgstr "<任意 Teletype>"
+msgstr "<任意打字>"
 
 #: ../src/osx/cocoa/filedlg.mm:337
 msgid "File type:"
@@ -6402,7 +6399,7 @@ msgstr "最上层显示"
 #: ../src/osx/core/sound.cpp:143
 #, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "无法从“%s”加载声音（错误 %d）。"
+msgstr "无法从“%s”加载声音 (错误 %d)。"
 
 #: ../src/osx/fontutil.cpp:81
 #, c-format
@@ -6412,8 +6409,8 @@ msgstr "字体文件“%s”不存在。"
 #: ../src/osx/fontutil.cpp:89
 #, c-format
 msgid ""
-"Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
-"\"."
+"Font file \"%s\" cannot be used as it is not inside the font directory "
+"\"%s\"."
 msgstr "无法使用字体文件“%s”，因为它不在字体目录“%s”内。"
 
 #: ../src/osx/menu_osx.cpp:491
@@ -6444,10 +6441,9 @@ msgid "Hide %s"
 msgstr "隐藏 %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "应用程序"
+msgstr "隐藏应用程序"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
@@ -6466,10 +6462,9 @@ msgid "Quit %s"
 msgstr "退出 %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "应用程序"
+msgstr "退出应用程序"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6502,7 +6497,7 @@ msgstr "字体粗细"
 #. TRANSLATORS: Label of font family
 #: ../src/propgrid/advprops.cpp:605
 msgid "Family"
-msgstr "系列(&F)"
+msgstr "系列"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:774
@@ -6607,17 +6602,17 @@ msgstr "工具提示文字"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:795
 msgid "Window"
-msgstr "视窗(&W)"
+msgstr "视窗"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:796
 msgid "WindowFrame"
-msgstr "窗框(&W)"
+msgstr "窗框"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:797
 msgid "WindowText"
-msgstr "视窗文字(&W)"
+msgstr "视窗文字"
 
 #. TRANSLATORS: Custom colour choice entry
 #: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
@@ -6695,172 +6690,144 @@ msgstr "黄色"
 
 #: ../src/propgrid/advprops.cpp:1518
 msgid "White"
-msgstr "百色"
+msgstr "白色"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "默认"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "箭头"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "右箭头"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
-msgstr "空"
+msgstr "空白"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "靶心"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
-msgstr "字符编码"
+msgstr "字符"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
-msgstr "交叉"
+msgstr "十字"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "手"
 
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
-msgstr "工字梁"
+msgstr "工字"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "左键"
 
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "放大镜"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
-msgstr "中间按钮"
+msgstr "中键"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
-msgstr "无项目"
+msgstr "禁止入内"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "油漆刷"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "铅笔"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
-msgstr "向左对齐"
+msgstr "向左指"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
-msgstr "向右对齐"
+msgstr "向右指"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "问题箭头"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "右键"
 
 #: ../src/propgrid/advprops.cpp:1673
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
-msgstr "尺寸 NE-SW"
+msgstr "缩放 (东北至西南)"
 
 #: ../src/propgrid/advprops.cpp:1674
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
-msgstr "尺寸 N-S"
+msgstr "缩放 (南至北)"
 
 #: ../src/propgrid/advprops.cpp:1675
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
-msgstr "尺寸 NW-SE"
+msgstr "缩放 (东南至西北)"
 
 #: ../src/propgrid/advprops.cpp:1676
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
-msgstr "尺寸 W-S"
+msgstr "缩放 (东至西)"
 
 #: ../src/propgrid/advprops.cpp:1677
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
-msgstr "尺寸"
+msgstr "缩放"
 
 #: ../src/propgrid/advprops.cpp:1678
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
-msgstr "喷雾罐"
+msgstr "喷漆"
 
 #: ../src/propgrid/advprops.cpp:1679
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "等待"
 
 #: ../src/propgrid/advprops.cpp:1680
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
-msgstr "看管"
+msgstr "计时"
 
 #: ../src/propgrid/advprops.cpp:1681
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "等待箭头"
@@ -6919,7 +6886,7 @@ msgstr "资源错误: %s"
 msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
-msgstr "类型操作“%s”失败：标记为“%s”的属性属于“%s”类型，而不是“%s”类型。"
+msgstr "类型操作“%s”失败: 标记为“%s”的属性属于“%s”类型，而不是“%s”类型。"
 
 #: ../src/propgrid/props.cpp:155
 #, c-format
@@ -6961,7 +6928,7 @@ msgstr "背景"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:160
 msgid "Background &colour:"
-msgstr "背景颜色(&c):"
+msgstr "背景颜色 (&c):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:162
 #: ../src/richtext/richtextbackgroundpage.cpp:164
@@ -6979,7 +6946,7 @@ msgstr "阴影"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:194
 msgid "Use &shadow"
-msgstr "用(&S)"
+msgstr "使用阴影 (&s)"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:196
 #: ../src/richtext/richtextbackgroundpage.cpp:198
@@ -6988,7 +6955,7 @@ msgstr "启用阴影。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:212
 msgid "&Horizontal offset:"
-msgstr "水平偏移(&H)："
+msgstr "水平偏移 (&H):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:219
 #: ../src/richtext/richtextbackgroundpage.cpp:221
@@ -7157,7 +7124,7 @@ msgstr "此值的单位。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:235
 msgid "&Vertical offset:"
-msgstr "垂直偏移(&V):"
+msgstr "垂直偏移 (&V):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:242
 #: ../src/richtext/richtextbackgroundpage.cpp:244
@@ -7166,7 +7133,7 @@ msgstr "垂直偏移。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:258
 msgid "Shadow c&olour:"
-msgstr "阴影颜色(&O)："
+msgstr "阴影颜色 (&o)："
 
 #: ../src/richtext/richtextbackgroundpage.cpp:260
 #: ../src/richtext/richtextbackgroundpage.cpp:262
@@ -7180,7 +7147,7 @@ msgstr "阴影颜色。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:271
 msgid "Sh&adow spread:"
-msgstr "阴影扩散(&A)："
+msgstr "阴影扩散 (&a):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:273
 #: ../src/richtext/richtextbackgroundpage.cpp:275
@@ -7194,7 +7161,7 @@ msgstr "阴影扩散。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:298
 msgid "&Blur distance:"
-msgstr "模糊距离(&A)："
+msgstr "模糊距离 (&B):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:300
 #: ../src/richtext/richtextbackgroundpage.cpp:302
@@ -7208,7 +7175,7 @@ msgstr "阴影模糊距离。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:325
 msgid "Opaci&ty:"
-msgstr "不透明度(&T):"
+msgstr "不透明度 (&t):"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:327
 #: ../src/richtext/richtextbackgroundpage.cpp:329
@@ -7248,7 +7215,7 @@ msgstr "边框"
 #: ../src/richtext/richtextsizepage.cpp:532
 #: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
-msgstr "左(&L):"
+msgstr "左 (&L):"
 
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:260
@@ -7283,7 +7250,7 @@ msgstr "边框线样式。"
 #: ../src/richtext/richtextsizepage.cpp:602
 #: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
-msgstr "右(&R):"
+msgstr "右 (&R):"
 
 #: ../src/richtext/richtextborderspage.cpp:292
 #: ../src/richtext/richtextborderspage.cpp:294
@@ -7297,7 +7264,7 @@ msgstr "右边框单位。"
 #: ../src/richtext/richtextsizepage.cpp:567
 #: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
-msgstr "顶端(&T):"
+msgstr "顶端 (&T):"
 
 #: ../src/richtext/richtextborderspage.cpp:326
 #: ../src/richtext/richtextborderspage.cpp:328
@@ -7311,7 +7278,7 @@ msgstr "上边框单位。"
 #: ../src/richtext/richtextsizepage.cpp:637
 #: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
-msgstr "底端(&B):"
+msgstr "底端 (&B):"
 
 #: ../src/richtext/richtextborderspage.cpp:360
 #: ../src/richtext/richtextborderspage.cpp:362
@@ -7321,7 +7288,7 @@ msgstr "下边框单位。"
 #: ../src/richtext/richtextborderspage.cpp:381
 #: ../src/richtext/richtextborderspage.cpp:549
 msgid "&Synchronize values"
-msgstr "同步值(&S)"
+msgstr "同步值 (&S)"
 
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:385
@@ -7362,7 +7329,7 @@ msgstr "角"
 
 #: ../src/richtext/richtextborderspage.cpp:575
 msgid "Corner &radius:"
-msgstr "角&半径:"
+msgstr "角半径 (&r):"
 
 #: ../src/richtext/richtextborderspage.cpp:577
 #: ../src/richtext/richtextborderspage.cpp:579
@@ -7460,7 +7427,7 @@ msgstr "插入范围"
 
 #: ../src/richtext/richtextbuffer.cpp:8410
 msgid "Too many EndStyle calls!"
-msgstr "呼叫 EndStyle 太多次！"
+msgstr "调用 EndStyle 太多次！"
 
 #: ../src/richtext/richtextbuffer.cpp:8785
 msgid "files"
@@ -7534,7 +7501,7 @@ msgstr "图片"
 #: ../src/richtext/richtextbulletspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:210
 msgid "&Bullet style:"
-msgstr "项目符号样式(&B):"
+msgstr "项目符号样式 (&B):"
 
 #: ../src/richtext/richtextbulletspage.cpp:151
 #: ../src/richtext/richtextbulletspage.cpp:153
@@ -7546,7 +7513,7 @@ msgstr "可用的项目符号样式。"
 #: ../src/richtext/richtextbulletspage.cpp:159
 #: ../src/richtext/richtextliststylepage.cpp:222
 msgid "Peri&od"
-msgstr "时期(&O)"
+msgstr "周期 (&o)"
 
 #: ../src/richtext/richtextbulletspage.cpp:161
 #: ../src/richtext/richtextbulletspage.cpp:163
@@ -7582,7 +7549,7 @@ msgstr "勾选以加上右括号。"
 #: ../src/richtext/richtextbulletspage.cpp:182
 #: ../src/richtext/richtextliststylepage.cpp:245
 msgid "Bullet &Alignment:"
-msgstr "项目符号对齐(&A):"
+msgstr "项目符号对齐 (&A):"
 
 #: ../src/richtext/richtextbulletspage.cpp:187
 #: ../src/richtext/richtextliststylepage.cpp:250
@@ -7603,12 +7570,12 @@ msgstr "项目符号字符。"
 #: ../src/richtext/richtextbulletspage.cpp:209
 #: ../src/richtext/richtextliststylepage.cpp:268
 msgid "&Symbol:"
-msgstr "符号(&S):"
+msgstr "符号 (&S):"
 
 #: ../src/richtext/richtextbulletspage.cpp:219
 #: ../src/richtext/richtextliststylepage.cpp:280
 msgid "Ch&oose..."
-msgstr "选择(&o)..."
+msgstr "选择 (&o)..."
 
 #: ../src/richtext/richtextbulletspage.cpp:220
 #: ../src/richtext/richtextbulletspage.cpp:222
@@ -7620,7 +7587,7 @@ msgstr "点击浏览该符号。"
 #: ../src/richtext/richtextbulletspage.cpp:227
 #: ../src/richtext/richtextliststylepage.cpp:288
 msgid "Symbol &font:"
-msgstr "符号样式(&F)"
+msgstr "符号样式 (&f)"
 
 #: ../src/richtext/richtextbulletspage.cpp:232
 #: ../src/richtext/richtextbulletspage.cpp:234
@@ -7631,7 +7598,7 @@ msgstr "可用字体。"
 #: ../src/richtext/richtextbulletspage.cpp:239
 #: ../src/richtext/richtextliststylepage.cpp:299
 msgid "S&tandard bullet name:"
-msgstr "标准项目符号名称(&T)"
+msgstr "标准项目符号名称 (&t):"
 
 #: ../src/richtext/richtextbulletspage.cpp:244
 #: ../src/richtext/richtextbulletspage.cpp:246
@@ -7642,7 +7609,7 @@ msgstr "标准项目符号名称。"
 
 #: ../src/richtext/richtextbulletspage.cpp:251
 msgid "&Number:"
-msgstr "编号(&N):"
+msgstr "编号 (&N):"
 
 #: ../src/richtext/richtextbulletspage.cpp:255
 #: ../src/richtext/richtextbulletspage.cpp:257
@@ -7754,7 +7721,7 @@ msgstr "替换"
 #: ../src/richtext/richtextfontpage.cpp:147
 #: ../src/richtext/richtextsymboldlg.cpp:397
 msgid "&Font:"
-msgstr "字体(&F):"
+msgstr "字体 (&F):"
 
 #: ../src/richtext/richtextfontpage.cpp:151
 #: ../src/richtext/richtextfontpage.cpp:153
@@ -7763,7 +7730,7 @@ msgstr "输入字体名称。"
 
 #: ../src/richtext/richtextfontpage.cpp:159
 msgid "&Size:"
-msgstr "大小(&S):"
+msgstr "大小 (&S):"
 
 #: ../src/richtext/richtextfontpage.cpp:166
 #: ../src/richtext/richtextfontpage.cpp:168
@@ -7796,7 +7763,7 @@ msgstr "选择是否斜体。"
 
 #: ../src/richtext/richtextfontpage.cpp:221
 msgid "Font &weight:"
-msgstr "字体粗细(&w):"
+msgstr "字体粗细 (&w):"
 
 #: ../src/richtext/richtextfontpage.cpp:226
 #: ../src/richtext/richtextfontpage.cpp:228
@@ -7805,7 +7772,7 @@ msgstr "选择是否粗体。"
 
 #: ../src/richtext/richtextfontpage.cpp:234
 msgid "&Underlining:"
-msgstr "下划线(&U)"
+msgstr "下划线 (&U)"
 
 #: ../src/richtext/richtextfontpage.cpp:239
 #: ../src/richtext/richtextfontpage.cpp:241
@@ -7814,7 +7781,7 @@ msgstr "选择是否下划线。"
 
 #: ../src/richtext/richtextfontpage.cpp:249
 msgid "&Colour:"
-msgstr "颜色(&C):"
+msgstr "颜色 (&C):"
 
 #: ../src/richtext/richtextfontpage.cpp:254
 #: ../src/richtext/richtextfontpage.cpp:256
@@ -7823,7 +7790,7 @@ msgstr "点击修改字体颜色。"
 
 #: ../src/richtext/richtextfontpage.cpp:262
 msgid "&Bg colour:"
-msgstr "背景颜色(&B):"
+msgstr "背景颜色 (&B):"
 
 #: ../src/richtext/richtextfontpage.cpp:267
 #: ../src/richtext/richtextfontpage.cpp:269
@@ -7837,7 +7804,7 @@ msgstr "勾选加删除线。"
 
 #: ../src/richtext/richtextfontpage.cpp:282
 msgid "Ca&pitals"
-msgstr "大写(&P)"
+msgstr "大写 (&p)"
 
 #: ../src/richtext/richtextfontpage.cpp:284
 #: ../src/richtext/richtextfontpage.cpp:286
@@ -7846,7 +7813,7 @@ msgstr "勾选显示为大写。"
 
 #: ../src/richtext/richtextfontpage.cpp:289
 msgid "Small C&apitals"
-msgstr "小型大写(&P)"
+msgstr "小型大写 (&a)"
 
 #: ../src/richtext/richtextfontpage.cpp:291
 #: ../src/richtext/richtextfontpage.cpp:293
@@ -7855,7 +7822,7 @@ msgstr "选中以小写字母显示文本。"
 
 #: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
-msgstr "上标(&R)"
+msgstr "上标 (&r)"
 
 #: ../src/richtext/richtextfontpage.cpp:298
 #: ../src/richtext/richtextfontpage.cpp:300
@@ -7864,7 +7831,7 @@ msgstr "勾选显示为上标。"
 
 #: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
-msgstr "下标(&T)"
+msgstr "下标 (&t)"
 
 #: ../src/richtext/richtextfontpage.cpp:305
 #: ../src/richtext/richtextfontpage.cpp:307
@@ -7882,7 +7849,7 @@ msgstr "勾选使用从右到左文字布局。"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr "抑制断字 (&N)"
+msgstr "抑制断字 (&n)"
 
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
@@ -7950,12 +7917,12 @@ msgstr "颜色"
 #: ../src/richtext/richtextindentspage.cpp:128
 #: ../src/richtext/richtextliststylepage.cpp:319
 msgid "&Alignment"
-msgstr "对齐(&A)"
+msgstr "对齐 (&A)"
 
 #: ../src/richtext/richtextindentspage.cpp:139
 #: ../src/richtext/richtextliststylepage.cpp:328
 msgid "&Left"
-msgstr "左(&L)"
+msgstr "左 (&L)"
 
 #: ../src/richtext/richtextindentspage.cpp:141
 #: ../src/richtext/richtextindentspage.cpp:143
@@ -7967,7 +7934,7 @@ msgstr "文字左对齐。"
 #: ../src/richtext/richtextindentspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "&Right"
-msgstr "右(&R)"
+msgstr "右 (&R)"
 
 #: ../src/richtext/richtextindentspage.cpp:148
 #: ../src/richtext/richtextindentspage.cpp:150
@@ -7979,7 +7946,7 @@ msgstr "文本右对齐。"
 #: ../src/richtext/richtextindentspage.cpp:153
 #: ../src/richtext/richtextliststylepage.cpp:342
 msgid "&Justified"
-msgstr "分散对齐(&J)"
+msgstr "分散对齐 (&J)"
 
 #: ../src/richtext/richtextindentspage.cpp:155
 #: ../src/richtext/richtextindentspage.cpp:157
@@ -7991,7 +7958,7 @@ msgstr "文本左右对齐。"
 #: ../src/richtext/richtextindentspage.cpp:160
 #: ../src/richtext/richtextliststylepage.cpp:349
 msgid "Cen&tred"
-msgstr "居中(&t)"
+msgstr "居中 (&t)"
 
 #: ../src/richtext/richtextindentspage.cpp:162
 #: ../src/richtext/richtextindentspage.cpp:164
@@ -8003,7 +7970,7 @@ msgstr "文字居中。"
 #: ../src/richtext/richtextindentspage.cpp:167
 #: ../src/richtext/richtextliststylepage.cpp:356
 msgid "&Indeterminate"
-msgstr "未定义(&I)"
+msgstr "未定义 (&I)"
 
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
@@ -8015,7 +7982,7 @@ msgstr "使用当前的对齐设置。"
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
 msgid "&Indentation (tenths of a mm)"
-msgstr "缩进(&I) (十分之一毫米)"
+msgstr "缩进 (十分之一毫米) (&I)"
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -8027,7 +7994,7 @@ msgstr "左缩进。"
 #: ../src/richtext/richtextindentspage.cpp:204
 #: ../src/richtext/richtextliststylepage.cpp:390
 msgid "Left (&first line):"
-msgstr "左(第一行)(&F):"
+msgstr "左 (第一行) (&f):"
 
 #: ../src/richtext/richtextindentspage.cpp:208
 #: ../src/richtext/richtextindentspage.cpp:210
@@ -8045,7 +8012,7 @@ msgstr "右侧缩进。"
 
 #: ../src/richtext/richtextindentspage.cpp:222
 msgid "&Outline level:"
-msgstr "大纲层级(&O):"
+msgstr "大纲层级 (&O):"
 
 #: ../src/richtext/richtextindentspage.cpp:227
 #: ../src/richtext/richtextindentspage.cpp:229
@@ -8055,11 +8022,11 @@ msgstr "大纲层级。"
 #: ../src/richtext/richtextindentspage.cpp:242
 #: ../src/richtext/richtextliststylepage.cpp:417
 msgid "&Spacing (tenths of a mm)"
-msgstr "间距(&S) (十分之一毫米)"
+msgstr "间距 (十分之一毫米) (&S)"
 
 #: ../src/richtext/richtextindentspage.cpp:253
 msgid "&Before a paragraph:"
-msgstr "段落之前(&B):"
+msgstr "段落之前 (&B):"
 
 #: ../src/richtext/richtextindentspage.cpp:257
 #: ../src/richtext/richtextindentspage.cpp:259
@@ -8070,7 +8037,7 @@ msgstr "段落之前的间距。"
 
 #: ../src/richtext/richtextindentspage.cpp:262
 msgid "&After a paragraph:"
-msgstr "段落之后(&A):"
+msgstr "段落之后 (&A):"
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -8080,7 +8047,7 @@ msgstr "段落之后的间距。"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
-msgstr "行距(&I):"
+msgstr "行距 (&i):"
 
 #: ../src/richtext/richtextindentspage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:449
@@ -8146,7 +8113,7 @@ msgstr "行距。"
 
 #: ../src/richtext/richtextindentspage.cpp:293
 msgid "&Page Break"
-msgstr "断页符号(&P)"
+msgstr "断页符号 (&P)"
 
 #: ../src/richtext/richtextindentspage.cpp:295
 #: ../src/richtext/richtextindentspage.cpp:297
@@ -8160,7 +8127,7 @@ msgstr "预览段落设置。"
 
 #: ../src/richtext/richtextliststylepage.cpp:183
 msgid "&List level:"
-msgstr "列表层级(&L):"
+msgstr "列表层级 (&L):"
 
 #: ../src/richtext/richtextliststylepage.cpp:187
 #: ../src/richtext/richtextliststylepage.cpp:189
@@ -8169,7 +8136,7 @@ msgstr "选择并辨析列表层级。"
 
 #: ../src/richtext/richtextliststylepage.cpp:194
 msgid "&Font for Level..."
-msgstr "层级字体(&F)..."
+msgstr "层级字体 (&F)..."
 
 #: ../src/richtext/richtextliststylepage.cpp:195
 #: ../src/richtext/richtextliststylepage.cpp:197
@@ -8286,7 +8253,7 @@ msgstr "浮动"
 
 #: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
-msgstr "浮动模式(&F):"
+msgstr "浮动模式 (&F):"
 
 #: ../src/richtext/richtextsizepage.cpp:253
 #: ../src/richtext/richtextsizepage.cpp:255
@@ -8299,7 +8266,7 @@ msgstr "对齐"
 
 #: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
-msgstr "垂直对齐(&V)"
+msgstr "垂直对齐 (&V)"
 
 #: ../src/richtext/richtextsizepage.cpp:280
 #: ../src/richtext/richtextsizepage.cpp:282
@@ -8318,7 +8285,7 @@ msgstr "垂直对齐。"
 #: ../src/richtext/richtextsizepage.cpp:317
 #: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
-msgstr "宽度(&W):"
+msgstr "宽度 (&W):"
 
 #: ../src/richtext/richtextsizepage.cpp:319
 #: ../src/richtext/richtextsizepage.cpp:321
@@ -8338,7 +8305,7 @@ msgstr "对象宽度单位。"
 #: ../src/richtext/richtextsizepage.cpp:351
 #: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
-msgstr "高度(&H):"
+msgstr "高度 (&H):"
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
@@ -8434,7 +8401,7 @@ msgstr "位置"
 
 #: ../src/richtext/richtextsizepage.cpp:514
 msgid "&Position mode:"
-msgstr "位置(&P)"
+msgstr "位置模式 (&P)"
 
 #: ../src/richtext/richtextsizepage.cpp:518
 #: ../src/richtext/richtextsizepage.cpp:523
@@ -8503,11 +8470,11 @@ msgstr "下位置单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
-msgstr "移动对象至(&M):"
+msgstr "移动对象至 (&M):"
 
 #: ../src/richtext/richtextsizepage.cpp:675
 msgid "&Previous Paragraph"
-msgstr "前一段落(&P)"
+msgstr "前一段落 (&P)"
 
 #: ../src/richtext/richtextsizepage.cpp:676
 #: ../src/richtext/richtextsizepage.cpp:678
@@ -8516,7 +8483,7 @@ msgstr "将对象移至前一段落。"
 
 #: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
-msgstr "下一段落(&N)"
+msgstr "下一段落 (&N)"
 
 #: ../src/richtext/richtextsizepage.cpp:682
 #: ../src/richtext/richtextsizepage.cpp:684
@@ -8525,7 +8492,7 @@ msgstr "将对象移至下一段落。"
 
 #: ../src/richtext/richtextstyledlg.cpp:194
 msgid "&Styles:"
-msgstr "样式(&S):"
+msgstr "样式 (&S):"
 
 #: ../src/richtext/richtextstyledlg.cpp:198
 #: ../src/richtext/richtextstyledlg.cpp:200
@@ -8580,7 +8547,7 @@ msgstr "点击新增方块样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:247
 msgid "&Apply Style"
-msgstr "应用样式(&A)"
+msgstr "应用样式 (&A)"
 
 #: ../src/richtext/richtextstyledlg.cpp:248
 #: ../src/richtext/richtextstyledlg.cpp:250
@@ -8589,7 +8556,7 @@ msgstr "点击应用所选样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:253
 msgid "&Rename Style..."
-msgstr "重命名样式(&R)..."
+msgstr "重命名样式 (&R)..."
 
 #: ../src/richtext/richtextstyledlg.cpp:254
 #: ../src/richtext/richtextstyledlg.cpp:256
@@ -8598,7 +8565,7 @@ msgstr "点击重命名所选样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:259
 msgid "&Edit Style..."
-msgstr "编辑样式(&E)..."
+msgstr "编辑样式 (&E)..."
 
 #: ../src/richtext/richtextstyledlg.cpp:260
 #: ../src/richtext/richtextstyledlg.cpp:262
@@ -8607,7 +8574,7 @@ msgstr "点击编辑所选样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:265
 msgid "&Delete Style..."
-msgstr "删除样式(&D)..."
+msgstr "删除样式 (&D)..."
 
 #: ../src/richtext/richtextstyledlg.cpp:266
 #: ../src/richtext/richtextstyledlg.cpp:268
@@ -8621,7 +8588,7 @@ msgstr "点击关闭此窗口。"
 
 #: ../src/richtext/richtextstyledlg.cpp:283
 msgid "&Restart numbering"
-msgstr "重新编号(&R)"
+msgstr "重新编号 (&R)"
 
 #: ../src/richtext/richtextstyledlg.cpp:285
 #: ../src/richtext/richtextstyledlg.cpp:287
@@ -8660,7 +8627,7 @@ msgstr "输入段落样式名称"
 #: ../src/richtext/richtextstyledlg.cpp:778
 #, c-format
 msgid "Delete style %s?"
-msgstr "删除样式 %s?"
+msgstr "删除样式 %s？"
 
 #: ../src/richtext/richtextstyledlg.cpp:778
 msgid "Delete Style"
@@ -8685,7 +8652,7 @@ msgstr "样式名称。"
 
 #: ../src/richtext/richtextstylepage.cpp:115
 msgid "&Based on:"
-msgstr "基于(&B):"
+msgstr "基于 (&B):"
 
 #: ../src/richtext/richtextstylepage.cpp:120
 #: ../src/richtext/richtextstylepage.cpp:122
@@ -8694,7 +8661,7 @@ msgstr "此样式的基础样式。"
 
 #: ../src/richtext/richtextstylepage.cpp:125
 msgid "&Next style:"
-msgstr "下一个样式(&N):"
+msgstr "下一个样式 (&N):"
 
 #: ../src/richtext/richtextstylepage.cpp:130
 #: ../src/richtext/richtextstylepage.cpp:132
@@ -8728,12 +8695,12 @@ msgstr "符号使用该字体。"
 
 #: ../src/richtext/richtextsymboldlg.cpp:410
 msgid "&Subset:"
-msgstr "子集(&S):"
+msgstr "子集 (&S):"
 
 #: ../src/richtext/richtextsymboldlg.cpp:418
 #: ../src/richtext/richtextsymboldlg.cpp:420
 msgid "Shows a Unicode subset."
-msgstr "显示Unicode子集。"
+msgstr "显示 Unicode 子集。"
 
 #: ../src/richtext/richtextsymboldlg.cpp:431
 msgid "xxxx"
@@ -8741,7 +8708,7 @@ msgstr "xxxx"
 
 #: ../src/richtext/richtextsymboldlg.cpp:436
 msgid "&Character code:"
-msgstr "字符编码(&C):"
+msgstr "字符编码 (&C):"
 
 #: ../src/richtext/richtextsymboldlg.cpp:440
 #: ../src/richtext/richtextsymboldlg.cpp:442
@@ -8750,7 +8717,7 @@ msgstr "字符编码。"
 
 #: ../src/richtext/richtextsymboldlg.cpp:448
 msgid "&From:"
-msgstr "从(&F):"
+msgstr "从 (&F):"
 
 #: ../src/richtext/richtextsymboldlg.cpp:456
 #: ../src/richtext/richtextsymboldlg.cpp:457
@@ -8773,7 +8740,7 @@ msgstr "(正常字体)"
 
 #: ../src/richtext/richtexttabspage.cpp:110
 msgid "&Position (tenths of a mm):"
-msgstr "位置(&P) (十分之一毫米)"
+msgstr "位置 (十分之一毫米) (&P)"
 
 #: ../src/richtext/richtexttabspage.cpp:114
 #: ../src/richtext/richtexttabspage.cpp:116
@@ -8796,7 +8763,7 @@ msgstr "点击删除所选标签位置。"
 
 #: ../src/richtext/richtexttabspage.cpp:144
 msgid "Delete A&ll"
-msgstr "删除全部(&l)"
+msgstr "删除全部 (&l)"
 
 #: ../src/richtext/richtexttabspage.cpp:145
 #: ../src/richtext/richtexttabspage.cpp:147
@@ -8825,23 +8792,23 @@ msgstr "Win32 主题"
 
 #: ../src/univ/themes/win32.cpp:3744
 msgid "&Restore"
-msgstr "复原(&R)"
+msgstr "复原 (&R)"
 
 #: ../src/univ/themes/win32.cpp:3745
 msgid "&Move"
-msgstr "移动(&M)"
+msgstr "移动 (&M)"
 
 #: ../src/univ/themes/win32.cpp:3747
 msgid "&Size"
-msgstr "大小(&S)"
+msgstr "大小 (&S)"
 
 #: ../src/univ/themes/win32.cpp:3749
 msgid "Mi&nimize"
-msgstr "最小化(&n)"
+msgstr "最小化 (&n)"
 
 #: ../src/univ/themes/win32.cpp:3751
 msgid "Ma&ximize"
-msgstr "最大化(&x)"
+msgstr "最大化 (&x)"
 
 #: ../src/univ/themes/win32.cpp:3753
 msgid "Alt+"
@@ -8901,17 +8868,17 @@ msgstr "无法关闭 inotify 实例"
 
 #: ../src/unix/fswatcher_inotify.cpp:106
 msgid "Unable to add inotify watch"
-msgstr "无法添加 inotify watch"
+msgstr "无法添加 inotify 监视"
 
 #: ../src/unix/fswatcher_inotify.cpp:138
 #, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr "无法删除 inotify watch %i"
+msgstr "无法删除 inotify 监视 %i"
 
 #: ../src/unix/fswatcher_inotify.cpp:271
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
-msgstr "“%s”的意外事件：没有匹配的监视描述符。"
+msgstr "“%s”的意外事件: 没有匹配的监视描述符。"
 
 #: ../src/unix/fswatcher_inotify.cpp:320
 #, c-format
@@ -8936,11 +8903,11 @@ msgstr "关闭 kqueue 实例时发生错误"
 
 #: ../src/unix/fswatcher_kqueue.cpp:153
 msgid "Unable to add kqueue watch"
-msgstr "无法添加 kqueue watch"
+msgstr "无法添加 kqueue 监视"
 
 #: ../src/unix/fswatcher_kqueue.cpp:170
 msgid "Unable to remove kqueue watch"
-msgstr "无法删除 kqueue watch"
+msgstr "无法删除 kqueue 监视"
 
 #: ../src/unix/fswatcher_kqueue.cpp:202
 msgid "Unable to get events from kqueue"
@@ -8949,7 +8916,7 @@ msgstr "无法从 kqueue 中获取事件"
 #: ../src/unix/mediactrl.cpp:967
 #, c-format
 msgid "Media playback error: %s"
-msgstr "媒体回放错误：%s"
+msgstr "媒体回放错误: %s"
 
 #: ../src/unix/mediactrl.cpp:1234
 #, c-format
@@ -9341,8 +9308,8 @@ msgstr "创建 %s“%s”失败。"
 #~ msgstr "数据渲染器无法渲染该值; 类型为:"
 
 #~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension \"%s"
-#~ "\" ?\n"
+#~ "Do you want to overwrite the command used to %s files with extension "
+#~ "\"%s\" ?\n"
 #~ "Current value is \n"
 #~ "%s, \n"
 #~ "New value is \n"

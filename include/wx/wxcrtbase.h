@@ -594,7 +594,7 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
 #define wxCRT_IsxdigitW(c)  iswxdigit(c)
 
 #ifdef __GLIBC__
-    #if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
+    #if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
         /* /usr/include/wctype.h incorrectly declares translations */
         /* tables which provokes tons of compile-time warnings -- try */
         /* to correct this */
