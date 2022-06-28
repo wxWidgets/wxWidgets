@@ -76,13 +76,11 @@ public:
     wxMemoryDC(wxBitmap& bitmap);
 
     /**
-        Works exactly like SelectObjectAsSource() but this is the function you
-        should use when you select a bitmap because you want to modify it, e.g.
-        drawing on this DC.
+        Allow using this device context object to modify the given bitmap
+        contents.
 
-        Using SelectObjectAsSource() when modifying the bitmap may incur some
-        problems related to wxBitmap being a reference counted object (see
-        @ref overview_refcount).
+        Note that if you need to only use the existing bitmap contents instead
+        of modifying it, you should use SelectObjectAsSource() instead.
 
         Before using the updated bitmap data, make sure to select it out of
         context first either by selecting ::wxNullBitmap into the device
@@ -91,22 +89,25 @@ public:
         If the bitmap is already selected in this device context, nothing is
         done. If it is selected in another context, the function asserts and
         drawing on the bitmap won't work correctly.
-
-        @see wxDC::DrawBitmap()
     */
     void SelectObject(wxBitmap& bitmap);
 
     /**
         Selects the given bitmap into the device context, to use as the memory
-        bitmap. Selecting the bitmap into a memory DC allows you to draw into
-        the DC (and therefore the bitmap) and also to use wxDC::Blit() to copy
-        the bitmap to a window. For this purpose, you may find wxDC::DrawIcon()
-        easier to use instead.
+        bitmap.
+
+        Selecting the bitmap as source into a memory DC allows you to copy its
+        contents to another device context using wxDC::Blit(). Note that using
+        wxDC::DrawBitmap() or wxDC::DrawIcon() is a simpler way to do the same
+        thing.
+
+        @note Modifying a bitmap selected only as a source may not work
+        correctly and can notably modify the other bitmaps sharing the same
+        data due to the use of reference counting (see @ref overview_refcount).
 
         If the argument is ::wxNullBitmap (or some other uninitialised wxBitmap)
-        the current bitmap is selected out of the device context, and the
-        original bitmap restored, allowing the current bitmap to be destroyed
-        safely.
+        the current bitmap is selected out of the device context, allowing the
+        current bitmap to be destroyed safely.
     */
     void SelectObjectAsSource(const wxBitmap& bitmap);
 
