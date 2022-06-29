@@ -202,9 +202,10 @@ wxObject *wxAuiToolBarXmlHandler::DoCreateResource()
         toolbar->SetName(GetName());
         SetupWindow(toolbar);
 
-        m_toolSize = GetSize(wxS("bitmapsize"));
+        // See comment for the same code in the wxToolBar XRC handler.
+        m_toolSize = GetPairInts(wxS("bitmapsize"));
         if (!(m_toolSize == wxDefaultSize))
-            toolbar->SetToolBitmapSize(m_toolSize);
+            toolbar->SetToolBitmapSize(toolbar->FromDIP(m_toolSize));
         wxSize margins = GetSize(wxS("margins"));
         if (!(margins == wxDefaultSize))
             toolbar->SetMargins(margins.x, margins.y);

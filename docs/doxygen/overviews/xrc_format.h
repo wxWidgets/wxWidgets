@@ -2283,8 +2283,11 @@ No additional properties.
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{bitmapsize, @ref overview_xrcformat_type_size,
-    Size of toolbar bitmaps (default: not set).}
+@row3col{bitmapsize, @ref overview_xrcformat_type_pair_ints,
+    Size of toolbar bitmaps in pixels. Note that these are physical pixels, as
+    they typically correspond to the size of available bitmaps, and @e not
+    DIPs, i.e. not depending on the current DPI value. In particular, "d" suffix
+    is invalid and cannot be used here (default: not set).}
 @row3col{margins, @ref overview_xrcformat_type_size,
     Margins (default: platform default).}
 @row3col{packing, integer,
