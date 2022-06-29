@@ -250,6 +250,12 @@ protected:
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer);
 
 
+    // Stub virtual functions for forward binary compatibility. DO NOT USE.
+    virtual void* WXReservedTextEntry1(void*);
+    virtual void* WXReservedTextEntry2(void*);
+    virtual void* WXReservedTextEntry3(void*);
+
+
     // class which should be used to temporarily disable text change events
     //
     // if suppress argument in ctor is false, nothing is done

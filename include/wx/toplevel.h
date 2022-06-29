@@ -349,6 +349,11 @@ protected:
     static int WidthDefault(int w) { return w == wxDefaultCoord ? GetDefaultSize().x : w; }
     static int HeightDefault(int h) { return h == wxDefaultCoord ? GetDefaultSize().y : h; }
 
+    // Stub virtual functions for forward binary compatibility. DO NOT USE.
+    virtual void* WXReservedTLW1(void*);
+    virtual void* WXReservedTLW2(void*);
+    virtual void* WXReservedTLW3(void*);
+
 
     // the frame icon
     wxIconBundle m_icons;

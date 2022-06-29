@@ -4079,6 +4079,10 @@ protected:
     // Search tracker objects for event connection with this sink
     wxEventConnectionRef *FindRefInTrackerList(wxEvtHandler *handler);
 
+    // Stub virtual functions for forward binary compatibility. DO NOT USE.
+    virtual void* WXReservedEvtHandler1(void*);
+    virtual void* WXReservedEvtHandler2(void*);
+
 private:
     // pass the event to wxTheApp instance, called from TryAfter()
     bool DoTryApp(wxEvent& event);

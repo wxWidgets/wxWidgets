@@ -191,6 +191,10 @@ wxTextEntryBase::~wxTextEntryBase()
     delete m_hintData;
 }
 
+void* wxTextEntryBase::WXReservedTextEntry1(void*) { return NULL; }
+void* wxTextEntryBase::WXReservedTextEntry2(void*) { return NULL; }
+void* wxTextEntryBase::WXReservedTextEntry3(void*) { return NULL; }
+
 // ----------------------------------------------------------------------------
 // text accessors
 // ----------------------------------------------------------------------------

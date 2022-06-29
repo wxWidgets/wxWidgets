@@ -210,6 +210,10 @@ protected:
     // are used -- must be called if the dialog was accepted.
     void TransferDataFromExtraControl();
 
+    // Stub virtual functions for forward binary compatibility. DO NOT USE.
+    virtual void* WXReservedFileDialog1(void*);
+    virtual void* WXReservedFileDialog2(void*);
+
 private:
     ExtraControlCreatorFunction m_extraControlCreator;
 

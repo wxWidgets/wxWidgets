@@ -4162,3 +4162,6 @@ wxWindowBase::AdjustForLayoutDirection(wxCoord x,
 }
 
 
+void* wxWindowBase::WXReservedWindow1(void*) { return NULL; }
+void* wxWindowBase::WXReservedWindow2(void*) { return NULL; }
+void* wxWindowBase::WXReservedWindow3(void*) { return NULL; }

@@ -537,6 +537,10 @@ protected:
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
+    // Stub virtual functions for forward binary compatibility. DO NOT USE.
+    virtual void* WXReservedApp1(void*);
+    virtual void* WXReservedApp2(void*);
+
     // the application object is a singleton anyhow, there is no sense in
     // copying it
     wxDECLARE_NO_COPY_CLASS(wxAppConsoleBase);
