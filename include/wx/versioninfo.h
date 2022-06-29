@@ -26,14 +26,8 @@ public:
                   int tweak = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString())
-        : m_name(name)
-        , m_description(description)
-        , m_copyright(copyright)
-        , m_major(major)
-        , m_minor(minor)
-        , m_micro(micro)
-        , m_tweak(tweak)
     {
+        Init(name, major, minor, micro, tweak, description, copyright);
     }
 
     // This constructor exists for backward compatibility (before the tweak
@@ -41,8 +35,8 @@ public:
     wxVersionInfo(const wxString& name, int major, int minor, int micro,
                   const wxString& description,
                   const wxString& copyright = wxString())
-        : wxVersionInfo(name, major, minor, micro, 0, description, copyright)
     {
+        Init(name, major, minor, micro, 0, description, copyright);
     }
 
     // Default copy ctor, assignment operator and dtor are ok.
@@ -77,6 +71,20 @@ public:
 
     bool HasCopyright() const { return !m_copyright.empty(); }
     const wxString& GetCopyright() const { return m_copyright; }
+
+private:
+    void Init(const wxString& name, int major, int minor, int micro,
+              int tweak, const wxString& description,
+              const wxString& copyright)
+    {
+        m_name = name;
+        m_description = description;
+        m_copyright = copyright;
+        m_major = major;
+        m_minor = minor;
+        m_micro = micro;
+        m_tweak = tweak;
+    }
 
 private:
     wxString m_name,
