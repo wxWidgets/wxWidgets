@@ -14,7 +14,7 @@
 
 #include "wx/dynlib.h"
 
-#ifdef __UNIX__
+#ifndef __WINDOWS__
     #include "wx/filename.h"
     #include "wx/log.h"
 #endif
@@ -28,7 +28,8 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
 #if defined(__WINDOWS__)
     static const char* const LIB_NAME = "kernel32.dll";
     static const char* const FUNC_NAME = "lstrlenA";
-#elif defined(__DARWIN__)
+#else // !__WINDOWS__
+#if defined(__DARWIN__)
     static const char* const LIB_NAME = "/usr/lib/libc.dylib";
 #elif defined(__LINUX__)
     #ifdef __x86_64__
@@ -52,6 +53,7 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
         return;
     }
 #endif // !__DARWIN__
+#endif // __WINDOWS__/!__WINDOWS__
 
     wxDynamicLibrary lib(LIB_NAME);
     REQUIRE( lib.IsLoaded() );
