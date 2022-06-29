@@ -60,8 +60,15 @@ httpbin_launch() {
     # However don't upgrade to a version which is too new because then
     # it may not support Python version that we actually have (this one
     # still works with 3.4, 20.0.1 is the last one to support 3.5).
-    python3 -m pip install --user --upgrade pip==19.1.1
-    python3 -m pip install --user wheel
+    case "$dist_codename" in
+        jammy)
+            # pip is newer than 19.1 already, don't "upgrade" it.
+            ;;
+
+        *)
+            python3 -m pip install --user --upgrade pip==19.1.1
+            python3 -m pip install --user wheel
+    esac
 
     echo "Installing using `python3 -m pip --version`"
 
