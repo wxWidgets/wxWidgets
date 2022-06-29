@@ -56,55 +56,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 18.04 wxGTK 2
-            runner: ubuntu-18.04
-            gtk_version: 2
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 2 UTF-8
-            runner: ubuntu-18.04
-            gtk_version: 2
-            configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK3 static
-            runner: ubuntu-18.04
-            configure_flags: --disable-shared
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 STL
-            runner: ubuntu-18.04
-            configure_flags: --enable-cxx11 --enable-stl --disable-compat30
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 with clang
-            runner: ubuntu-18.04
-            compiler: clang
-            configure_flags: --disable-sys-libs
-            use_xvfb: true
-          - name: Ubuntu 20.04 wxGTK ANSI
-            runner: ubuntu-20.04
-            configure_flags: --disable-unicode
-            skip_samples: true
           - name: Ubuntu 22.04 wxGTK with ASAN
             runner: ubuntu-22.04
             configure_flags: --disable-compat30 --disable-sys-libs --disable-webview
             skip_samples: true
             use_asan: true
             use_xvfb: true
-          - name: Ubuntu 18.04 wxX11
-            runner: ubuntu-18.04
-            configure_flags: --with-x11 --enable-pch --disable-stc
-            skip_samples: true
-          - name: Ubuntu 18.04 wxDFB
-            runner: ubuntu-18.04
-            configure_flags: --with-directfb --enable-pch --disable-stc
-            skip_samples: true
-            allow_warnings: true
-          - name: Ubuntu 18.04 wxMotif
-            runner: ubuntu-18.04
-            configure_flags: --with-motif --enable-pch --disable-stc
-            skip_samples: true
-          - name: Ubuntu 18.04 wxQt
-            runner: ubuntu-18.04
-            configure_flags: --with-qt --enable-pch --without-opengl
-            skip_samples: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
