@@ -198,12 +198,17 @@ protected:
     wxWindow* CreateExtraControlWithParent(wxWindow* parent) const;
     // returns true if control is created, also sets m_extraControl
     bool CreateExtraControl();
+    // destroy m_extraControl and reset it to NULL
+    void DestroyExtraControl();
     // return true if SetExtraControlCreator() was called
     bool HasExtraControlCreator() const
         { return m_extraControlCreator != NULL; }
     // Helper function for native file dialog usage where no wx events
     // are processed.
     void UpdateExtraControlUI();
+    // Helper function simply transferring data from custom controls if they
+    // are used -- must be called if the dialog was accepted.
+    void TransferDataFromExtraControl();
 
 private:
     ExtraControlCreatorFunction m_extraControlCreator;

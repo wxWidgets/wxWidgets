@@ -13,7 +13,7 @@ rem Check if architecture is present
 if "%2" == "" goto :NOPARAMS
 
 rem Define compiler's bin directory
-if "%1" == "1120" (
+if "%1" == "1210" (
     set COMPBINDIR=G:\msys64\mingw%2\bin
 ) else (
     set COMPBINDIR=G:\MinGW%1-%2\bin

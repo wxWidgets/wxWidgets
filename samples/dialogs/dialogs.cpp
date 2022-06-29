@@ -2009,10 +2009,42 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 
     dialog.SetFilterIndex(1);
 
+    // This tests the (even more simplified) example from the docs.
+    class EncryptHook : public wxFileDialogCustomizeHook
+    {
+    public:
+        EncryptHook()
+            : m_encrypt(false)
+        {
+        }
+
+        void AddCustomControls(wxFileDialogCustomize& customizer) wxOVERRIDE
+        {
+            m_checkbox = customizer.AddCheckBox("Encrypt");
+        }
+
+        void TransferDataFromCustomControls() wxOVERRIDE
+        {
+            m_encrypt = m_checkbox->GetValue();
+        }
+
+        bool Encrypt() const { return m_encrypt; }
+
+    private:
+        wxFileDialogCheckBox* m_checkbox;
+
+        bool m_encrypt;
+    };
+
+    EncryptHook customHook;
+    dialog.SetCustomizeHook(customHook);
+
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxLogMessage("%s, filter %d",
-                     dialog.GetPath(), dialog.GetFilterIndex());
+        wxLogMessage("%s, filter %d%s",
+                     dialog.GetPath(),
+                     dialog.GetFilterIndex(),
+                     customHook.Encrypt() ? ", encrypt" : "");
     }
 }
 

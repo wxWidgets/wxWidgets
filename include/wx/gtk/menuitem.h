@@ -29,8 +29,6 @@ public:
     virtual void Enable( bool enable = true ) wxOVERRIDE;
     virtual void Check( bool check = true ) wxOVERRIDE;
     virtual bool IsChecked() const wxOVERRIDE;
-    virtual void SetBitmap(const wxBitmapBundle& bitmap);
-    virtual wxBitmap GetBitmap() const;
     void SetupBitmaps(wxWindow *win);
 
 #if wxUSE_ACCEL
@@ -60,7 +58,6 @@ public:
 #endif
 
 private:
-    wxBitmapBundle m_bitmap; // Bitmap for menuitem, if any
     GtkWidget *m_menuItem;  // GtkMenuItem
 
     wxDECLARE_DYNAMIC_CLASS(wxMenuItem);

@@ -14,6 +14,7 @@
 
 #if wxUSE_BOOKCTRL
 
+#include "wx/containr.h"
 #include "wx/vector.h"
 
 // ----------------------------------------------------------------------------
@@ -22,7 +23,7 @@
 
 // NB: This class doesn't use DLL export declaration as it's fully inline.
 
-class wxSimplebook : public wxBookCtrlBase
+class wxSimplebook : public wxNavigationEnabled<wxBookCtrlBase>
 {
 public:
     wxSimplebook()
@@ -36,8 +37,8 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxEmptyString)
-        : wxBookCtrlBase(parent, winid, pos, size, style | wxBK_TOP, name)
     {
+        wxBookCtrlBase::Create(parent, winid, pos, size, style | wxBK_TOP, name);
         Init();
     }
 

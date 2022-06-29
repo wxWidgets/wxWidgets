@@ -270,13 +270,38 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         return false;
     }
 
-    if ( newDPI != m_activeDPI )
-    {
-        MSWUpdateOnDPIChange(m_activeDPI, newDPI);
-        m_activeDPI = newDPI;
-    }
+    // Update the window decoration size to the new DPI: this seems to be the
+    // call with the least amount of side effects that is sufficient to do it
+    // and we need to do this in order for the size calculations, either in the
+    // user-defined wxEVT_DPI_CHANGED handler or in our own GetBestSize() call
+    // below, to work correctly.
+    ::SetWindowPos(GetHwnd(),
+                   0, 0, 0, 0, 0,
+                   SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW |
+                   SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING |
+                   SWP_FRAMECHANGED);
 
-    SetSize(newRect);
+    const bool processed = MSWUpdateOnDPIChange(m_activeDPI, newDPI);
+    m_activeDPI = newDPI;
+
+    // We consider that if the event was processed, the application resized the
+    // window on its own already, but otherwise do it ourselves.
+    if ( !processed )
+    {
+        // The best size doesn't scale exactly with the DPI, so while the new
+        // size is usually a decent guess, it's typically not exactly correct.
+        // We can't always do much better, but at least ensure that the window
+        // is still big enough to show its contents.
+        wxSize diff = GetBestSize() - newRect.GetSize();
+        diff.IncTo(wxSize(0, 0));
+
+        // Use wxRect::Inflate() to ensure that the center of the (possibly)
+        // bigger rectangle is at the same position as the center of the
+        // proposed one, to prevent moving the window back to the old display
+        // from which it might have been just moved to this one, as doing this
+        // would result in an infinite stream of WM_DPICHANGED messages.
+        SetSize(newRect.Inflate(diff.x, diff.y));
+    }
 
     Refresh();
 

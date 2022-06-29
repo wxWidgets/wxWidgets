@@ -35,12 +35,6 @@ public:
     virtual void SetItemLabel(const wxString& label);
     virtual void Enable(bool enable = true);
     virtual void Check(bool check = true);
-    // included SetBitmap and GetBitmap as copied from the GTK include file
-    // I'm not sure if this works but it silences the linker in the
-    // menu sample.
-    //     JJ
-    virtual void SetBitmap(const wxBitmapBundle& bitmap) { m_bitmap = bitmap; }
-    virtual wxBitmap GetBitmap() const { return GetBitmapFromBundle(m_bitmap); }
 
     // implementation from now on
     void CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMenu,
@@ -59,7 +53,6 @@ private:
     WXWidget    m_buttonWidget;
     wxMenuBar*  m_menuBar;
     wxMenu*     m_topMenu;        // Top-level menu e.g. popup-menu
-    wxBitmapBundle  m_bitmap; // Bitmap for menuitem, if any
 
     wxDECLARE_DYNAMIC_CLASS(wxMenuItem);
 };

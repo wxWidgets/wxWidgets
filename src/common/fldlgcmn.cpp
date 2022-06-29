@@ -617,7 +617,6 @@ public:
     Panel(wxWindow* parent, wxFileDialogCustomizeHook& customizeHook)
         : wxPanel(parent),
           wxFileDialogCustomize(this),
-          m_customizeHook(customizeHook),
           m_lastWasRadio(false)
     {
         // Use a simple horizontal sizer to layout all the controls for now.
@@ -628,16 +627,11 @@ public:
         sizer->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
         // This will call our own AddXXX().
-        m_customizeHook.AddCustomControls(*this);
+        customizeHook.AddCustomControls(*this);
 
         // Now that everything was created, resize and layout.
         SetClientSize(sizer->ComputeFittingClientSize(this));
         sizer->Layout();
-    }
-
-    virtual ~Panel()
-    {
-        m_customizeHook.TransferDataFromCustomControls();
     }
 
 
@@ -719,8 +713,6 @@ private:
         return controlImpl;
     }
 
-
-    wxFileDialogCustomizeHook& m_customizeHook;
 
     bool m_lastWasRadio;
 
@@ -903,6 +895,15 @@ bool wxFileDialogBase::CreateExtraControl()
     return m_extraControl != NULL;
 }
 
+void wxFileDialogBase::DestroyExtraControl()
+{
+    if ( m_extraControl )
+    {
+        m_extraControl->Destroy();
+        m_extraControl = NULL;
+    }
+}
+
 void wxFileDialogBase::UpdateExtraControlUI()
 {
     if ( m_customizeHook )
@@ -910,6 +911,12 @@ void wxFileDialogBase::UpdateExtraControlUI()
 
     if ( m_extraControl )
         m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+}
+
+void wxFileDialogBase::TransferDataFromExtraControl()
+{
+    if ( m_customizeHook )
+        m_customizeHook->TransferDataFromCustomControls();
 }
 
 void wxFileDialogBase::SetPath(const wxString& path)

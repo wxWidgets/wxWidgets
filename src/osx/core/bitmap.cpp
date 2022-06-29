@@ -2069,11 +2069,13 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(dataBase))
     GetBitmapData()->EndRawAccess() ;
 }
 
-void wxBitmap::UseAlpha(bool use )
+bool wxBitmap::UseAlpha(bool use)
 {
     // remember that we are using alpha channel:
     // we'll need to create a proper mask in UngetRawData()
     GetBitmapData()->UseAlpha( use );
+
+    return true;
 }
 
 void wxBitmap::SetSelectedInto(wxDC *dc)

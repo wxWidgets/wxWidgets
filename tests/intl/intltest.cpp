@@ -20,6 +20,8 @@
 #include "wx/intl.h"
 #include "wx/uilocale.h"
 
+#include "wx/private/glibc.h"
+
 #if wxUSE_INTL
 
 // ----------------------------------------------------------------------------
@@ -175,13 +177,17 @@ void IntlTestCase::DateTimeFmtFrench()
 #ifdef __GLIBC__
     // Versions of glibc up to 2.7 wrongly used periods for French locale
     // separator.
-#if __GLIBC__ > 2 || __GLIBC_MINOR__ >= 8
+#if wxCHECK_GLIBC_VERSION(2, 8)
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
 #else
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
 #endif
     static const char *FRENCH_LONG_DATE_FMT = "%a %d %b %Y";
     static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %H:%M:%S";
+#elif defined(__FREEBSD__)
+    static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
+    static const char *FRENCH_LONG_DATE_FMT = "%a %e %b %Y";
+    static const char *FRENCH_DATE_TIME_FMT = "%a %e %b %X %Y";
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
@@ -233,6 +239,8 @@ void IntlTestCase::IsAvailable()
 
 TEST_CASE("wxLocale::Default", "[locale]")
 {
+    CHECK( wxLocale::IsAvailable(wxLANGUAGE_DEFAULT) );
+
     wxLocale loc;
 
     REQUIRE( loc.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );

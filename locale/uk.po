@@ -1,22 +1,22 @@
 # translation of wxstd.pot to Ukrainian
 # This file is distributed under the same license as the wxWidgets package.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011, 2012, 2013, 2014.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007-2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2014-02-21 19:09+0200\n"
+"PO-Revision-Date: 2022-06-23 21:03+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
@@ -222,10 +222,9 @@ msgid "Delete"
 msgstr "Вилучити"
 
 #: ../src/common/accelcmn.cpp:48
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Del"
-msgstr "Вилучити"
+msgstr "Del"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
@@ -233,86 +232,79 @@ msgid "Back"
 msgstr "Назад"
 
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Backspace"
-msgstr "Назад"
+msgstr "Backspace"
 
 #: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
 msgid "Insert"
-msgstr "Вставити"
+msgstr "Insert"
 
 #: ../src/common/accelcmn.cpp:51
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ins"
-msgstr "Вкладка"
+msgstr "Ins"
 
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Enter"
-msgstr "Друкарка"
+msgstr "Enter"
 
 #: ../src/common/accelcmn.cpp:53
 msgctxt "keyboard key"
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageUp"
-msgstr "Сторінки"
+msgstr "PageUp"
 
 #: ../src/common/accelcmn.cpp:54
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Up"
-msgstr "Сторінка %d"
+msgstr "На сторінку вгору"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageDown"
-msgstr "Донизу"
+msgstr "PageDown"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Down"
-msgstr "Сторінка %d"
+msgstr "На сторінку вниз"
 
 #: ../src/common/accelcmn.cpp:56
 msgctxt "keyboard key"
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../src/common/accelcmn.cpp:57
 msgctxt "keyboard key"
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../src/common/accelcmn.cpp:58
 msgctxt "keyboard key"
 msgid "Left"
-msgstr "Ліворуч"
+msgstr "←"
 
 #: ../src/common/accelcmn.cpp:59
 msgctxt "keyboard key"
 msgid "Right"
-msgstr "Праворуч"
+msgstr "→"
 
 #: ../src/common/accelcmn.cpp:60
 msgctxt "keyboard key"
 msgid "Up"
-msgstr "Вверх"
+msgstr "↑"
 
 #: ../src/common/accelcmn.cpp:61
 msgctxt "keyboard key"
 msgid "Down"
-msgstr "Донизу"
+msgstr "↓"
 
 #: ../src/common/accelcmn.cpp:62
 msgctxt "keyboard key"
@@ -322,30 +314,27 @@ msgstr "Домівка"
 #: ../src/common/accelcmn.cpp:63
 msgctxt "keyboard key"
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../src/common/accelcmn.cpp:64
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Space"
-msgstr "Проміжки"
+msgstr "Пробіл"
 
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Tab"
-msgstr "Табуляції"
+msgstr "Tab"
 
 #: ../src/common/accelcmn.cpp:66
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../src/common/accelcmn.cpp:67
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Escape"
-msgstr "Альбомна"
+msgstr "Escape"
 
 #: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
@@ -365,19 +354,17 @@ msgstr "Меню"
 #: ../src/common/accelcmn.cpp:71
 msgctxt "keyboard key"
 msgid "Pause"
-msgstr ""
+msgstr "Призупинити"
 
 #: ../src/common/accelcmn.cpp:72
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Capital"
-msgstr "Пр&описні"
+msgstr "Великі"
 
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Select"
-msgstr "Позначене"
+msgstr "Вибрати"
 
 #: ../src/common/accelcmn.cpp:74
 msgctxt "keyboard key"
@@ -392,7 +379,7 @@ msgstr "Виконати"
 #: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
 msgid "Snapshot"
-msgstr ""
+msgstr "Знімок"
 
 #: ../src/common/accelcmn.cpp:77
 msgctxt "keyboard key"
@@ -407,307 +394,287 @@ msgstr "Додати"
 #: ../src/common/accelcmn.cpp:79
 msgctxt "keyboard key"
 msgid "Separator"
-msgstr ""
+msgstr "Роздільник"
 
 #: ../src/common/accelcmn.cpp:80
 msgctxt "keyboard key"
 msgid "Subtract"
-msgstr ""
+msgstr "Віднімання"
 
 #: ../src/common/accelcmn.cpp:81
 msgctxt "keyboard key"
 msgid "Decimal"
-msgstr ""
+msgstr "Десяткове"
 
 #: ../src/common/accelcmn.cpp:82
 msgctxt "keyboard key"
 msgid "Multiply"
-msgstr ""
+msgstr "Множення"
 
 #: ../src/common/accelcmn.cpp:83
 msgctxt "keyboard key"
 msgid "Divide"
-msgstr ""
+msgstr "Ділення"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Num_lock"
-msgstr ""
+msgstr "Num_lock"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr ""
+msgstr "Num Lock"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Scroll_lock"
-msgstr ""
+msgstr "Scroll_lock"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Scroll Lock"
-msgstr ""
+msgstr "Scroll Lock"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr ""
+msgstr "KP_Space"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr ""
+msgstr "Цифр. пробіл"
 
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Tab"
-msgstr "KP_TAB"
+msgstr "KP_Tab"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "Num Tab"
-msgstr ""
+msgstr "Цифр. Tab"
 
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Enter"
-msgstr "Друкарка"
+msgstr "KP_Enter"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr ""
+msgstr "Цифр. Enter"
 
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Home"
-msgstr "Домівка"
+msgstr "KP_Home"
 
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Home"
-msgstr "Домівка"
+msgstr "Цифр. Home"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Left"
-msgstr "Ліворуч"
+msgstr "KP_Left"
 
 #: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr ""
+msgstr "Цифр. ліворуч"
 
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Up"
-msgstr "KP_UP"
+msgstr "KP_Up"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "Num Up"
-msgstr ""
+msgstr "Цифр. вгору"
 
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Right"
-msgstr "Праворуч"
+msgstr "KP_Right"
 
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Right"
-msgstr "Праворуч"
+msgstr "Цифр. праворуч"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Down"
-msgstr "Донизу"
+msgstr "KP_Down"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Down"
-msgstr "Донизу"
+msgstr "Цифр. донизу"
 
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr ""
+msgstr "KP_PageUp"
 
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr ""
+msgstr "Цифр. Page Up"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr ""
+msgstr "KP_PageDown"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr ""
+msgstr "Цифр. Page Down"
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Next"
-msgstr "Далі"
+msgstr "KP_Next"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr "KP_END"
+msgstr "KP_End"
 
 #: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr ""
+msgstr "Цифр. End"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "Num Begin"
-msgstr ""
+msgstr "Цифр. Begin"
 
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Insert"
-msgstr "Вставити"
+msgstr "KP_Insert"
 
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Insert"
-msgstr "Вставити"
+msgstr "Цифр. Insert"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Delete"
-msgstr "Вилучити"
+msgstr "KP_Delete"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Delete"
-msgstr "Вилучити"
+msgstr "Цифр. Delete"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "KP_Equal"
-msgstr ""
+msgstr "KP_Equal"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr ""
+msgstr "Цифр. ="
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "KP_Multiply"
-msgstr ""
+msgstr "KP_Multiply"
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr ""
+msgstr "Цифр. *"
 
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Add"
-msgstr "KP_ADD"
+msgstr "KP_Add"
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr ""
+msgstr "Цифр. +"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "KP_Separator"
-msgstr ""
+msgstr "KP_Separator"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr ""
+msgstr "Цифр. ,"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "KP_Subtract"
-msgstr ""
+msgstr "KP_Subtract"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr ""
+msgstr "Цифр. -"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr ""
+msgstr "KP_Decimal"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr ""
+msgstr "Цифр. ."
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "KP_Divide"
-msgstr ""
+msgstr "KP_Divide"
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr ""
+msgstr "Цифр. /"
 
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Left"
-msgstr "Windows 7"
+msgstr "Windows_Left"
 
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Right"
-msgstr "Windows Vista"
+msgstr "Windows_Right"
 
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr "Меню_Windows"
 
 #: ../src/common/accelcmn.cpp:112
 msgctxt "keyboard key"
 msgid "Command"
-msgstr ""
+msgstr "Команда"
 
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
@@ -732,7 +699,7 @@ msgstr "rawctrl"
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"
 msgid "num "
-msgstr ""
+msgstr "num "
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
 msgctxt "keyboard key"
@@ -742,7 +709,7 @@ msgstr "F"
 #: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "KP_F"
-msgstr ""
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
 msgctxt "keyboard key"
@@ -936,18 +903,17 @@ msgstr "«%s» містить додаткові «..», проігнорова�
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1416
 msgid "checked"
-msgstr ""
+msgstr "позначено"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1418
 msgid "unchecked"
-msgstr ""
+msgstr "не позначено"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2173
-#, fuzzy
 msgid "undetermined"
-msgstr "підкреслене"
+msgstr "не визначено"
 
 #: ../src/common/datetimefmt.cpp:1845
 msgid "today"
@@ -1352,29 +1318,29 @@ msgid "Failed to read config options."
 msgstr "Не вдалося прочитати параметри налаштування."
 
 #: ../src/common/fileconf.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s': unexpected character %c at line %zu."
-msgstr "файл «%s»: несподіваний символ %c у рядку %d."
+msgstr "файл «%s»: несподіваний символ %c у рядку %zu."
 
 #: ../src/common/fileconf.cpp:579
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: '%s' ignored after group header."
-msgstr "файл «%s», рядок %d: «%s» проігноровано після заголовку групи."
+msgstr "файл «%s», рядок %zu: «%s» проігноровано після заголовка групи."
 
 #: ../src/common/fileconf.cpp:608
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: '=' expected."
-msgstr "файл «%s», рядок %d: очікувалося '='."
+msgstr "файл «%s», рядок %zu: мало бути «=»."
 
 #: ../src/common/fileconf.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: value for immutable key '%s' ignored."
-msgstr "файл «%s», рядок %d: значення незмінного ключа «%s» проігноровано."
+msgstr "файл «%s», рядок %zu: значення незмінного ключа «%s» проігноровано."
 
 #: ../src/common/fileconf.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: key '%s' was first found at line %d."
-msgstr "файл «%s», рядок %d: ключ «%s» був вже знайдено у рядку %d."
+msgstr "файл «%s», рядок %zu: ключ «%s» уперше було знайдено у рядку %d."
 
 #: ../src/common/fileconf.cpp:934
 #, c-format
@@ -1438,9 +1404,9 @@ msgid "Impossible to overwrite the file '%s'"
 msgstr "Не вдалося переписати файл «%s»"
 
 #: ../src/common/filefn.cpp:939
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying the file '%s' to '%s'."
-msgstr "Помилка копіювання файла «%s» в «%s»."
+msgstr "Помилка копіювання файла з «%s» до «%s»."
 
 #: ../src/common/filefn.cpp:987
 #, c-format
@@ -1923,42 +1889,39 @@ msgstr " перекреслення"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr " тонкий"
 
 #: ../src/common/fontcmn.cpp:957
-#, fuzzy
 msgid " extra light"
-msgstr " легкий"
+msgstr " дуже світлий"
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
-msgstr " легкий"
+msgstr " світлий"
 
 #: ../src/common/fontcmn.cpp:965
 msgid " medium"
-msgstr ""
+msgstr "середній"
 
 #: ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid " semi bold"
-msgstr " жирний"
+msgstr "напівжирний"
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
 msgstr " жирний"
 
 #: ../src/common/fontcmn.cpp:977
-#, fuzzy
 msgid " extra bold"
-msgstr " жирний"
+msgstr " дуже жирний"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
-msgstr ""
+msgstr " щільний"
 
 #: ../src/common/fontcmn.cpp:985
 msgid " extra heavy"
-msgstr ""
+msgstr " дуже щільний"
 
 #: ../src/common/fontcmn.cpp:1001
 msgid " italic"
@@ -1970,16 +1933,15 @@ msgstr "перекреслення"
 
 #: ../src/common/fontcmn.cpp:1154
 msgid "thin"
-msgstr ""
+msgstr "тонкий"
 
 #: ../src/common/fontcmn.cpp:1167
-#, fuzzy
 msgid "extralight"
-msgstr "легкий"
+msgstr "надсвітлий"
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
-msgstr "легкий"
+msgstr "світлий"
 
 #: ../src/common/fontcmn.cpp:1180 ../src/richtext/richtextstyles.cpp:776
 msgid "normal"
@@ -1987,29 +1949,27 @@ msgstr "звичайний"
 
 #: ../src/common/fontcmn.cpp:1185
 msgid "medium"
-msgstr ""
+msgstr "середній"
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
-#, fuzzy
 msgid "semibold"
-msgstr "жирний"
+msgstr "напівжирний"
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
 msgstr "жирний"
 
 #: ../src/common/fontcmn.cpp:1205
-#, fuzzy
 msgid "extrabold"
-msgstr "жирний"
+msgstr "наджирний"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
-msgstr ""
+msgstr "щільний"
 
 #: ../src/common/fontcmn.cpp:1223
 msgid "extraheavy"
-msgstr ""
+msgstr "надщільний"
 
 #: ../src/common/fontcmn.cpp:1228
 msgid "italic"
@@ -2130,9 +2090,9 @@ msgid "&Customize..."
 msgstr "&Налаштувати…"
 
 #: ../src/common/hyperlnkcmn.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open URL \"%s\" in the default browser"
-msgstr "Не вдалося відкрити адресу «%s» у типовому переглядачі."
+msgstr "Не вдалося відкрити адресу «%s» у типовому переглядачі"
 
 #: ../src/common/iconbndl.cpp:198
 #, c-format
@@ -2145,9 +2105,9 @@ msgid "Failed to load image %d from stream."
 msgstr "Не вдалося завантажити зображення %d з потоку даних."
 
 #: ../src/common/iconbndl.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr "Не вдалося завантажити піктограму «%s» з ресурсів."
+msgstr "Не вдалося завантажити піктограми з ресурсу «%s»."
 
 #: ../src/common/imagbmp.cpp:97
 msgid "BMP: Couldn't save invalid image."
@@ -2176,7 +2136,7 @@ msgstr "BMP: Не можу записати дані."
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP: у заголовку вказано biClrUsed=%d, а biBitCount=%d."
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -2467,20 +2427,22 @@ msgid "The previous message repeated once."
 msgstr "Попереднє повідомлення повторено один раз."
 
 #: ../src/common/log.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "Попереднє повідомлення повторено %lu раз."
-msgstr[1] "Попереднє повідомлення повторено %lu рази."
-msgstr[2] "Попереднє повідомлення повторено %lu разів."
+msgstr[0] "Попереднє повідомлення повторено %u раз."
+msgstr[1] "Попереднє повідомлення повторено %u рази."
+msgstr[2] "Попереднє повідомлення повторено %u разів."
+msgstr[3] "Попереднє повідомлення повторено %u раз."
 
 #: ../src/common/log.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] "Останні повторені повідомлення («%s», %lu раз) не було виведено"
-msgstr[1] "Останні повторені повідомлення («%s», %lu рази) не було виведено"
-msgstr[2] "Останні повторені повідомлення («%s», %lu разів) не було виведено"
+msgstr[0] "Останні повторені повідомлення («%s», %u раз) не було виведено"
+msgstr[1] "Останні повторені повідомлення («%s», %u рази) не було виведено"
+msgstr[2] "Останні повторені повідомлення («%s», %u разів) не було виведено"
+msgstr[3] "Останні повторені повідомлення («%s», %u раз) не було виведено"
 
 #: ../src/common/log.cpp:443
 #, c-format
@@ -2488,46 +2450,44 @@ msgid " (error %ld: %s)"
 msgstr " (помилка %ld: %s)"
 
 #: ../src/common/lzmastream.cpp:121
-#, fuzzy
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "Не вдалося виділити колір для OpenGL"
+msgstr "Не вдалося отримати область пам'яті для розпаковування LZMA."
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
 msgstr ""
+"Не вдалося ініціалізувати розпаковування LZMA: неочікувана помилка %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
-msgstr ""
+msgstr "вхідні дані записано не у форматі XZ"
 
 #: ../src/common/lzmastream.cpp:183
 msgid "input compressed using unknown XZ option"
-msgstr ""
+msgstr "вхідні дані стиснуто за допомогою невідомого параметра XZ"
 
 #: ../src/common/lzmastream.cpp:188
 msgid "input is corrupted"
-msgstr ""
+msgstr "вхідні дані пошкоджено"
 
 #: ../src/common/lzmastream.cpp:192
-#, fuzzy
 msgid "unknown decompression error"
-msgstr "помилка розпакування"
+msgstr "невідома помилка розпакування"
 
 #: ../src/common/lzmastream.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA decompression error: %s"
-msgstr "помилка розпакування"
+msgstr "Помилка розпакування LZMA: %s"
 
 #: ../src/common/lzmastream.cpp:231
-#, fuzzy
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "Не вдалося виділити колір для OpenGL"
+msgstr "Не вдалося отримати пам'ять для пакування LZMA."
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr ""
+msgstr "Не вдалося ініціалізувати стискання LZMA: неочікувана помилка %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2535,19 +2495,18 @@ msgid "out of memory"
 msgstr "нестача пам'яті"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
-#, fuzzy
 msgid "unknown compression error"
-msgstr "помилка стиснення"
+msgstr "невідома помилка пакування"
 
 #: ../src/common/lzmastream.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA compression error: %s"
-msgstr "помилка стиснення"
+msgstr "Помилка пакування LZMA: %s"
 
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
-msgstr ""
+msgstr "Помилка стискання LZMA при скиданні виведених даних: %s"
 
 #: ../src/common/mimecmn.cpp:221
 #, c-format
@@ -3092,9 +3051,9 @@ msgid "Preparing"
 msgstr "Приготування"
 
 #: ../src/common/prntbase.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d"
-msgstr "Друк сторінки %d…"
+msgstr "Друкуємо сторінку %d"
 
 #: ../src/common/prntbase.cpp:567
 #, c-format
@@ -3184,22 +3143,22 @@ msgstr ""
 
 #: ../src/common/secretstore.cpp:168
 msgid "Not available for this platform"
-msgstr ""
+msgstr "Є недоступним для цієї платформи"
 
 #: ../src/common/secretstore.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Saving password for \"%s\" failed: %s."
-msgstr "Розпакування «%s» до «%s» закінчилося з помилкою."
+msgstr "Не вдалося зберегти пароль для «%s»: %s."
 
 #: ../src/common/secretstore.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Reading password for \"%s\" failed: %s."
-msgstr "Розпакування «%s» до «%s» закінчилося з помилкою."
+msgstr "Не вдалося прочитати пароль для «%s»: %s."
 
 #: ../src/common/secretstore.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting password for \"%s\" failed: %s."
-msgstr "Розпакування «%s» до «%s» закінчилося з помилкою."
+msgstr "Не вдалося вилучити пароль для «%s»: %s."
 
 #: ../src/common/selectdispatcher.cpp:255
 msgid "Failed to monitor I/O channels"
@@ -3218,7 +3177,6 @@ msgid "Cannot initialize sockets"
 msgstr "Не вдалося ініціювати сокети"
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "&Довідка"
@@ -3275,12 +3233,10 @@ msgid "&Cancel"
 msgstr "&Скасувати"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
 msgstr "&CD-ROM"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
 msgstr "CD-ROM"
 
@@ -3378,14 +3334,12 @@ msgid "File"
 msgstr "Файл"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "&Find..."
-msgstr "&Знайти"
+msgstr "З&найти…"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "Find..."
-msgstr "Знайти"
+msgstr "Знайти…"
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
@@ -3583,14 +3537,12 @@ msgid "Remove"
 msgstr "Вилучити"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Rep&lace..."
-msgstr "&Замінити"
+msgstr "Замі&нити…"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Replace..."
-msgstr "Замінити"
+msgstr "Замінити…"
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
@@ -3605,9 +3557,8 @@ msgid "Save &As..."
 msgstr "Зберегти &як..."
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Save As..."
-msgstr "Зберегти &як..."
+msgstr "Зберегти як…"
 
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2940
 #: ../src/osx/textctrl_osx.cpp:642 ../src/richtext/richtextctrl.cpp:336
@@ -3761,13 +3712,12 @@ msgid "Delete selection"
 msgstr "Вилучити позначене"
 
 #: ../src/common/stockitem.cpp:267
-#, fuzzy
 msgid "Find in document"
-msgstr "Відкрити документ HTML"
+msgstr "Знайти у документі"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Find and replace in document"
-msgstr ""
+msgstr "Знайти і замінити у документі"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Paste selection"
@@ -3786,14 +3736,12 @@ msgid "Undo last action"
 msgstr "Скасувати останню дію"
 
 #: ../src/common/stockitem.cpp:273
-#, fuzzy
 msgid "Create new document"
-msgstr "Створити новий каталог"
+msgstr "Створити новий документ"
 
 #: ../src/common/stockitem.cpp:274
-#, fuzzy
 msgid "Open an existing document"
-msgstr "Відкрити документ HTML"
+msgstr "Відкрити наявний документ"
 
 #: ../src/common/stockitem.cpp:275
 msgid "Close current document"
@@ -3857,9 +3805,9 @@ msgid "File couldn't be loaded."
 msgstr "Файл не можна завантажити."
 
 #: ../src/common/textfile.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "Не вдалося прочитати документ з файла «%s»."
+msgstr "Не вдалося прочитати текстовий файл «%s»."
 
 #: ../src/common/textfile.cpp:161
 #, c-format
@@ -3930,32 +3878,31 @@ msgid "'%s' is not one of the valid strings"
 msgstr "«%s» немає серед коректних рядків"
 
 #: ../src/common/valtext.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains invalid character(s)"
 msgstr "«%s» містить некоректні символи"
 
 #: ../src/common/webrequest.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s (%d)"
-msgstr "Помилка: "
+msgstr "Помилка: %s (%d)"
 
 #: ../src/common/webrequest.cpp:647
 msgid "Not enough free disk space for download."
-msgstr ""
+msgstr "Недостатньо вільного місця для отримання даних."
 
 #: ../src/common/webrequest_curl.cpp:884
-#, fuzzy
 msgid "libcurl could not be initialized"
-msgstr "Не вдалося ініціалізувати опис стовпчика."
+msgstr "Не вдалося ініціалізувати libcurl"
 
 #: ../src/common/webview.cpp:246
 msgid "RunScriptAsync not supported"
-msgstr ""
+msgstr "Підтримки RunScriptAsync не передбачено"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
 msgid "Error running JavaScript: %s"
-msgstr ""
+msgstr "Помилка під час спроби запустити JavaScript: %s"
 
 #: ../src/common/wincmn.cpp:1671
 msgid "This platform does not support background transparency."
@@ -4092,6 +4039,8 @@ msgstr "неможливо переініціювати потік розпак�
 #: ../src/common/zipstrm.cpp:1043
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
 msgstr ""
+"Ігноруємо помилково форматований зайвий запис даних, файл ZIP може бути"
+" пошкоджено"
 
 #: ../src/common/zipstrm.cpp:1522
 msgid "assuming this is a multi-part zip concatenated"
@@ -4119,7 +4068,7 @@ msgstr "некоректний відступ для входу у zip-файл�
 
 #: ../src/common/zipstrm.cpp:2055
 msgid "stored file length not in Zip header"
-msgstr "довжина запакованого файл не у заголовку Zip"
+msgstr "довжина запакованого файла не у заголовку Zip"
 
 #: ../src/common/zipstrm.cpp:2069 ../src/common/zipstrm.cpp:2390
 msgid "unsupported Zip compression method"
@@ -4136,10 +4085,9 @@ msgid "reading zip stream (entry %s): bad crc"
 msgstr "читання потоку zip (елемент %s): помилкова контрольна сума"
 
 #: ../src/common/zipstrm.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
-msgstr ""
-"помилка запису елемента zip «%s»: помилкова контрольна сума або довжина"
+msgstr "помилка запису елемента zip «%s»: файл є надто великим без ZIP64"
 
 #: ../src/common/zipstrm.cpp:2615
 #, c-format
@@ -4277,21 +4225,19 @@ msgstr "Оберіть колір"
 
 #: ../src/generic/colrdlgg.cpp:358
 msgid "Red:"
-msgstr ""
+msgstr "Червоний:"
 
 #: ../src/generic/colrdlgg.cpp:361
-#, fuzzy
 msgid "Green:"
-msgstr "Грецька, Mac"
+msgstr "Зелений:"
 
 #: ../src/generic/colrdlgg.cpp:364
-#, fuzzy
 msgid "Blue:"
-msgstr "Синій"
+msgstr "Синій:"
 
 #: ../src/generic/colrdlgg.cpp:373
 msgid "Opacity:"
-msgstr ""
+msgstr "Непрозорість:"
 
 #: ../src/generic/colrdlgg.cpp:385
 msgid "Add to custom colours"
@@ -4299,47 +4245,46 @@ msgstr "Додати до створених кольорів "
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
-msgstr ""
+msgstr "Користувач:"
 
 #: ../src/generic/creddlgg.cpp:63
 msgid "Password:"
-msgstr ""
+msgstr "Пароль:"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/generic/datavgen.cpp:1164
 msgid "true"
-msgstr ""
+msgstr "істина"
 
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/generic/datavgen.cpp:1166
-#, fuzzy
 msgid "false"
-msgstr "Ні"
+msgstr "хибність"
 
 #: ../src/generic/datavgen.cpp:6855
 #, c-format
 msgid "Row %i"
-msgstr ""
+msgstr "Рядок %i"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6945
 msgid "Collapse"
-msgstr ""
+msgstr "Згорнути"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6948
 msgid "Expand"
-msgstr ""
+msgstr "Розгорнути"
 
 #: ../src/generic/datavgen.cpp:6967
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%d items)"
-msgstr "%s (або %s)"
+msgstr "%s (%d елемент)"
 
 #: ../src/generic/datavgen.cpp:7018
-#, fuzzy, c-format
+#, c-format
 msgid "Column %u"
-msgstr "Додати стовпчик"
+msgstr "Стовпчик %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
 #: ../src/generic/datavgen.cpp:7087
@@ -4386,7 +4331,7 @@ msgstr "Звіт про помилку сформовано у теці\n"
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
-msgstr ""
+msgstr "Буде створено вказаний нижче діагностичний звіт\n"
 
 #: ../src/generic/dbgrptg.cpp:322
 msgid ""
@@ -4596,6 +4541,7 @@ msgid_plural "%ld bytes"
 msgstr[0] "%ld байт"
 msgstr[1] "%ld байт"
 msgstr[2] "%ld байт"
+msgstr[3] "%ld байт"
 
 #: ../src/generic/filectrlg.cpp:420
 msgid "Name"
@@ -4779,6 +4725,8 @@ msgstr "Виберіть шрифт"
 #: ../src/generic/grid.cpp:6222
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
+"Підтримки копіювання декількох позначених блоків до буфера обміну даними не"
+" передбачено."
 
 #: ../src/generic/helpext.cpp:266
 #, c-format
@@ -5097,6 +5045,10 @@ msgid ""
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
+"УВАГА! Підтримки використання способу введення XIM не передбачено."
+" Використання цього способу введення може призвести до проблем із обробкою"
+" вхідних даних і блимання. Спробуйте скасувати встановлення GTK_IM_MODULE"
+" або встановіть спосіб введення «ibus»."
 
 #: ../src/gtk/app.cpp:539
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
@@ -5104,33 +5056,34 @@ msgstr ""
 "Не вдалося ініціалізувати GTK+, чи правильно встановлено змінну DISPLAY?"
 
 #: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "Не вдалося створити теку «%s»"
+msgstr "Не вдалося змінити поточний каталог на «%s»"
 
 #: ../src/gtk/font.cpp:552
 msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
+"У цій системі не можна користуватися приватними шрифтами: бібліотека Pango є"
+" надто старою, потрібна версія 1.38 або новіша."
 
 #: ../src/gtk/font.cpp:562
-#, fuzzy
 msgid "Failed to create font configuration object."
-msgstr "Не вдалося оновити файл налаштування."
+msgstr "Не вдалося створити об'єкт налаштовування шрифтів."
 
 #: ../src/gtk/font.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "Не вдалося прочитати документ з файла «%s»."
+msgstr "Не вдалося додати нетиповий шрифт «%s»."
 
 #: ../src/gtk/font.cpp:580
-#, fuzzy
 msgid "Failed to register font configuration using private fonts."
-msgstr "Не вдалося оновити файл налаштування."
+msgstr ""
+"Не вдалося зареєструвати налаштування шрифтів з використанням приватних"
+" шрифтів."
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
-#, fuzzy
 msgid "Fatal Error"
 msgstr "Критична помилка"
 
@@ -5141,6 +5094,11 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"Цю програму не було зібрано з підтримкою EGL, яка потрібна у Wayland; або\n"
+"встановіть бібліотеки EGL і повторно зберіть пакунок, або запустіть програму"
+" під керуванням модуля X11,\n"
+"встановивши значення змінної середовища GDK_BACKEND=x11 перед запуском вашої"
+" програми."
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5149,6 +5107,10 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
+"Підтримку wxGLCanvas у поточній версії передбачено лише у Wayland та X11. Ви"
+" можете обійти цю проблему\n"
+"встановленням значення змінної середовища GDK_BACKEND=x11 перед запуском\n"
+"вашої програми."
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
@@ -5173,6 +5135,8 @@ msgstr "Не вдалося додати текст до контрола."
 #: ../src/gtk/webview_webkit.cpp:930
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
+"При використанні WebKit 1 не передбачено підтримки отримання виведених"
+" скриптом JavaScript даних"
 
 #: ../src/gtk/window.cpp:5781
 msgid ""
@@ -5501,14 +5465,14 @@ msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Стиснутий файл довідки HTML (*.chm)|*.chm|"
 
 #: ../src/html/helpwnd.cpp:1675
-#, fuzzy, c-format
+#, c-format
 msgid "%i of %u"
-msgstr "%i з %i"
+msgstr "%i з %u"
 
 #: ../src/html/helpwnd.cpp:1713
-#, fuzzy, c-format
+#, c-format
 msgid "%u of %u"
-msgstr "%lu з %lu"
+msgstr "%u з %u"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format
@@ -5780,7 +5744,8 @@ msgstr "внутрішня помилка у DDEML."
 
 #: ../src/msw/dde.cpp:1232
 msgid "a request to end an advise transaction has timed out."
-msgstr "строк виконання запиту щодо завершення дії з надання поради вичерпано."
+msgstr ""
+"строк виконання запиту щодо завершення дії з надання поради вичерпано."
 
 #: ../src/msw/dde.cpp:1235
 msgid ""
@@ -5853,7 +5818,8 @@ msgstr "Оберіть інтернет провайдера"
 
 #: ../src/msw/dialup.cpp:758
 msgid "Please choose which ISP do you want to connect to"
-msgstr "Будь ласка, виберіть надавача послуг інтернету, з яким слід з’єднатися"
+msgstr ""
+"Будь ласка, виберіть надавача послуг інтернету, з яким слід з’єднатися"
 
 #: ../src/msw/dialup.cpp:791
 msgid "Failed to connect: missing username/password."
@@ -5897,9 +5863,9 @@ msgid "Couldn't obtain folder name"
 msgstr "Не вдалося отримати назву теки"
 
 #: ../src/msw/dlmsw.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "(error %d: %s)"
-msgstr " (помилка %ld: %s)"
+msgstr "(помилка %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
 #: ../src/msw/imaglist.cpp:302 ../src/msw/imaglist.cpp:322
@@ -5924,9 +5890,9 @@ msgid "File dialog failed with error code %0lx."
 msgstr "Помилка діалогового вікна роботи з файлами з кодом %0lx."
 
 #: ../src/msw/font.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "Файл не можна завантажити."
+msgstr "Не вдалося завантажити файл шрифту «%s»"
 
 #: ../src/msw/fontdlg.cpp:232
 #, c-format
@@ -5961,15 +5927,14 @@ msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "Спостереження за змінами у каталозі «%s», якого не існує, неможливе."
 
 #: ../src/msw/glcanvas.cpp:592 ../src/unix/glx11.cpp:513
-#, fuzzy
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
-msgstr "Core-profile OpenGL не підтримується драйвером OpenGL."
+msgstr ""
+"У драйвері OpenGL  не передбачено підтримки OpenGL 3.0 або пізнішої версії."
 
 #: ../src/msw/glcanvas.cpp:616 ../src/osx/glcanvas_osx.cpp:411
 #: ../src/unix/glegl.cpp:318 ../src/unix/glx11.cpp:559
-#, fuzzy
 msgid "Couldn't create OpenGL context"
-msgstr "Не вдалося створити таймер"
+msgstr "Не вдалося створити контекст OpenGL"
 
 #: ../src/msw/glcanvas.cpp:1376
 msgid "Failed to initialize OpenGL"
@@ -5977,7 +5942,7 @@ msgstr "Не вдалося ініціалізувати OpenGL"
 
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
-msgstr ""
+msgstr "Не вдалося зареєструвати нетиповий завантажувач шрифтів DirectWrite."
 
 #: ../src/msw/helpchm.cpp:53
 msgid ""
@@ -6121,9 +6086,9 @@ msgid "Skip"
 msgstr "Пропустити"
 
 #: ../src/msw/registry.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "unknown (%lu)"
-msgstr "невідомий"
+msgstr "невідомий (%lu)"
 
 #: ../src/msw/registry.cpp:407
 #, c-format
@@ -6226,17 +6191,17 @@ msgstr "Не вдалося встановити значення «%s»"
 #: ../src/msw/registry.cpp:905 ../src/msw/registry.cpp:954
 #, c-format
 msgid "Registry value \"%s\" is not numeric (but of type %s)"
-msgstr ""
+msgstr "Значення реєстру «%s» не є числовим (а належить до типу %s)"
 
 #: ../src/msw/registry.cpp:990
 #, c-format
 msgid "Registry value \"%s\" is not binary (but of type %s)"
-msgstr ""
+msgstr "Значення реєстру «%s» не є двійковим (а належить до типу %s)"
 
 #: ../src/msw/registry.cpp:1039
 #, c-format
 msgid "Registry value \"%s\" is not text (but of type %s)"
-msgstr ""
+msgstr "Значення реєстру «%s» не є текстовим (а належить до типу %s)"
 
 #: ../src/msw/registry.cpp:1100
 #, c-format
@@ -6257,7 +6222,8 @@ msgstr "Не вдалося підрахувати підключі ключа �
 #, c-format
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
-msgstr "Експорт ключа реєстру: файл «%s» вже існує, його не буде перезаписано."
+msgstr ""
+"Експорт ключа реєстру: файл «%s» вже існує, його не буде перезаписано."
 
 #: ../src/msw/registry.cpp:1426
 #, c-format
@@ -6391,28 +6357,31 @@ msgstr "Не вдалося завантажити піктограму з «%s�
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
+"Не вдалося знайти рівень емуляції для перегляду сторінок інтернету у регістрі"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
 msgstr ""
+"Не вдалося встановити для перегляду сторінок інтернету сучасний рівень"
+" емуляції"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
+"Не вдалося відновити для перегляду сторінок інтернету стандартний рівень"
+" емуляції"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
-msgstr ""
+msgstr "Неможливо запустити скрипт JavaScript без коректного документа HTML"
 
 #: ../src/msw/webview_ie.cpp:1044
-#, fuzzy
 msgid "Can't get the JavaScript object"
-msgstr "Не вдалося встановити пріоритет нитки"
+msgstr "Не вдалося отримати об'єкт JavaScript"
 
 #: ../src/msw/webview_ie.cpp:1058
-#, fuzzy
 msgid "failed to evaluate"
-msgstr "Не вдалося виконати «%s»\n"
+msgstr "не вдалося обчислити"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
@@ -6507,33 +6476,30 @@ msgid "<Any Teletype>"
 msgstr "<Будь-який машинописний>"
 
 #: ../src/osx/cocoa/filedlg.mm:337
-#, fuzzy
 msgid "File type:"
-msgstr "Телетайп"
+msgstr "Тип файлів:"
 
 #: ../src/osx/cocoa/menu.mm:281
-#, fuzzy
 msgid "Minimize"
-msgstr "З&меншити"
+msgstr "Мінімізувати"
 
 #: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
 msgid "Zoom"
-msgstr "Збільшити"
+msgstr "Масштаб"
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Пересунути все на передній план"
 
 #: ../src/osx/core/sound.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "Не вдалося завантажити ресурс «%s»."
+msgstr "Не вдалося завантажити звукові дані з «%s» (помилка %d)."
 
 #: ../src/osx/fontutil.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr "Файл %s не присутній."
+msgstr "Файла шрифту «%s» не існує."
 
 #: ../src/osx/fontutil.cpp:89
 #, c-format
@@ -6541,6 +6507,8 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
 "\"."
 msgstr ""
+"Файлом шрифту «%s» неможливо скористатися, оскільки він не зберігається у"
+" каталозі шрифтів «%s»."
 
 #: ../src/osx/menu_osx.cpp:491
 #, c-format
@@ -6570,10 +6538,9 @@ msgid "Hide %s"
 msgstr "Сховати %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Програма"
+msgstr "Приховати програму"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
@@ -6592,20 +6559,17 @@ msgid "Quit %s"
 msgstr "Вийти з %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Програма"
+msgstr "Вийти з програми"
 
 #: ../src/osx/webview_webkit.mm:285
-#, fuzzy
 msgid "Printing is not supported by the system web control"
-msgstr "Gzip не підтримується цією версією zlib"
+msgstr "Загальносистемним вебкеруванням не передбачено підтримки друку"
 
 #: ../src/osx/webview_webkit.mm:294
-#, fuzzy
 msgid "Print operation could not be initialized"
-msgstr "Не вдалося ініціалізувати опис стовпчика."
+msgstr "Не вдалося ініціалізувати дію з друку"
 
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:573
@@ -6639,14 +6603,13 @@ msgstr "РобочаОбластьДодатків"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:775
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "Рамка"
+msgstr "АктивнаРамка"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:776
 msgid "ActiveCaption"
-msgstr ""
+msgstr "АктивнийЗаголовок"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:777
@@ -6676,12 +6639,12 @@ msgstr "ТекстЗаголовка"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:782
 msgid "ControlDark"
-msgstr ""
+msgstr "КонтрольТемний"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:783
 msgid "ControlLight"
-msgstr ""
+msgstr "КонтрольСвітлий"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:785
@@ -6690,31 +6653,28 @@ msgstr "СірийТекст"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:786
-#, fuzzy
 msgid "Highlight"
-msgstr "легкий"
+msgstr "Підсвічування"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:787
-#, fuzzy
 msgid "HighlightText"
-msgstr "Текст вирівняний праворуч."
+msgstr "ПідсвічуванняТексту"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:788
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "Рамка"
+msgstr "НеактивнаРамка"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:789
 msgid "InactiveCaption"
-msgstr ""
+msgstr "НеактивнийЗаголовок"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:790
 msgid "InactiveCaptionText"
-msgstr ""
+msgstr "ТекстНеактивногоЗаголовка"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:791
@@ -6724,42 +6684,38 @@ msgstr "Меню"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:792
 msgid "Scrollbar"
-msgstr ""
+msgstr "СмужкаГортання"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:793
 msgid "Tooltip"
-msgstr ""
+msgstr "Підказка"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:794
 msgid "TooltipText"
-msgstr ""
+msgstr "ТекстПідказки"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:795
-#, fuzzy
 msgid "Window"
-msgstr "&Вікно"
+msgstr "Вікно"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:796
-#, fuzzy
 msgid "WindowFrame"
-msgstr "&Вікно"
+msgstr "РамкаВікна"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:797
-#, fuzzy
 msgid "WindowText"
-msgstr "&Вікно"
+msgstr "ТекстВікна"
 
 #. TRANSLATORS: Custom colour choice entry
 #: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
 #: ../src/propgrid/advprops.cpp:1519
-#, fuzzy
 msgid "Custom"
-msgstr "Нетиповий розмір"
+msgstr "Нетиповий"
 
 #: ../src/propgrid/advprops.cpp:1501
 msgid "Black"
@@ -6771,7 +6727,7 @@ msgstr "Брунато-малиновий"
 
 #: ../src/propgrid/advprops.cpp:1503
 msgid "Navy"
-msgstr ""
+msgstr "Темно-синій"
 
 #: ../src/propgrid/advprops.cpp:1504
 msgid "Purple"
@@ -6786,18 +6742,16 @@ msgid "Gray"
 msgstr "Сірий"
 
 #: ../src/propgrid/advprops.cpp:1507
-#, fuzzy
 msgid "Green"
-msgstr "Грецька, Mac"
+msgstr "Зелений"
 
 #: ../src/propgrid/advprops.cpp:1508
 msgid "Olive"
 msgstr "Оливковий"
 
 #: ../src/propgrid/advprops.cpp:1509
-#, fuzzy
 msgid "Brown"
-msgstr "Навігація"
+msgstr "Коричневий"
 
 #: ../src/propgrid/advprops.cpp:1510
 msgid "Blue"
@@ -6808,9 +6762,8 @@ msgid "Fuchsia"
 msgstr "Фуксія"
 
 #: ../src/propgrid/advprops.cpp:1512
-#, fuzzy
 msgid "Red"
-msgstr "Повторити"
+msgstr "Червоний"
 
 #: ../src/propgrid/advprops.cpp:1513
 msgid "Orange"
@@ -6837,48 +6790,41 @@ msgid "White"
 msgstr "Білий"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
-msgstr "типовий"
+msgstr "Типовий"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Стрілка"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
-msgstr "Праворуч"
+msgstr "Стрілка праворуч"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Порожній"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
-msgstr "Стиль позначки"
+msgstr "Центр мішені"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
-msgstr "Код &символу:"
+msgstr "Символ"
 
 #: ../src/propgrid/advprops.cpp:1660
 msgctxt "system cursor name"
 msgid "Cross"
-msgstr ""
+msgstr "Хрест"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Рука"
@@ -6886,109 +6832,102 @@ msgstr "Рука"
 #: ../src/propgrid/advprops.cpp:1662
 msgctxt "system cursor name"
 msgid "I-Beam"
-msgstr ""
+msgstr "I-подібний"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
-msgstr "Середня Кнопка"
+msgstr "Ліва кнопка"
 
 #: ../src/propgrid/advprops.cpp:1664
 msgctxt "system cursor name"
 msgid "Magnifier"
-msgstr ""
+msgstr "Лупа"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
-msgstr "Середня Кнопка"
+msgstr "Середня кнопка"
 
 #: ../src/propgrid/advprops.cpp:1666
 msgctxt "system cursor name"
 msgid "No Entry"
-msgstr ""
+msgstr "Вхід заборонено"
 
 #: ../src/propgrid/advprops.cpp:1667
 msgctxt "system cursor name"
 msgid "Paint Brush"
-msgstr ""
+msgstr "Кінчик пензля"
 
 #: ../src/propgrid/advprops.cpp:1668
 msgctxt "system cursor name"
 msgid "Pencil"
-msgstr ""
+msgstr "Олівець"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
-msgstr "Розмір точки"
+msgstr "Вказівник ліворуч"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
-msgstr "Вирівняти праворуч"
+msgstr "Вказівник праворуч"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
-msgstr "Питання"
+msgstr "Стрілка зі знаком питання"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
-msgstr "Середня Кнопка"
+msgstr "Права кнопка"
 
 #: ../src/propgrid/advprops.cpp:1673
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "Розмірний ПнСх-ПдЗх"
 
 #: ../src/propgrid/advprops.cpp:1674
 msgctxt "system cursor name"
 msgid "Sizing N-S"
-msgstr ""
+msgstr "Розмірний Пн-Пд"
 
 #: ../src/propgrid/advprops.cpp:1675
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "Розмірний ПнЗх-ПдСх"
 
 #: ../src/propgrid/advprops.cpp:1676
 msgctxt "system cursor name"
 msgid "Sizing W-E"
-msgstr ""
+msgstr "Розмірний Зх-Сх"
 
 #: ../src/propgrid/advprops.cpp:1677
 msgctxt "system cursor name"
 msgid "Sizing"
-msgstr ""
+msgstr "Зміна розміру"
 
 #: ../src/propgrid/advprops.cpp:1678
 msgctxt "system cursor name"
 msgid "Spraycan"
-msgstr ""
+msgstr "Пульверизатор"
 
 #: ../src/propgrid/advprops.cpp:1679
 msgctxt "system cursor name"
 msgid "Wait"
-msgstr ""
+msgstr "Очікування"
 
 #: ../src/propgrid/advprops.cpp:1680
 msgctxt "system cursor name"
 msgid "Watch"
-msgstr ""
+msgstr "Спостереження"
 
 #: ../src/propgrid/advprops.cpp:1681
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
-msgstr "Праворуч"
+msgstr "Стрілка очікування"
 
 #: ../src/propgrid/advprops.cpp:2053
 msgid "Make a selection:"
@@ -7052,7 +6991,7 @@ msgstr ""
 #: ../src/propgrid/props.cpp:155
 #, c-format
 msgid "Unknown base %d. Base 10 will be used."
-msgstr ""
+msgstr "Невідома основа числення %d. Буде використано основу числення 10."
 
 #: ../src/propgrid/props.cpp:309
 #, c-format
@@ -7103,28 +7042,25 @@ msgstr "Колір тла."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:179
 msgid "Shadow"
-msgstr ""
+msgstr "Тінь"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:194
 msgid "Use &shadow"
-msgstr ""
+msgstr "&Тінь"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:196
 #: ../src/richtext/richtextbackgroundpage.cpp:198
-#, fuzzy
 msgid "Enables a shadow."
-msgstr "Вмикає колір тла."
+msgstr "Вмикає тінь."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:212
-#, fuzzy
 msgid "&Horizontal offset:"
-msgstr "&Вертикальний відступ:"
+msgstr "&Горизонтальний зсув:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:219
 #: ../src/richtext/richtextbackgroundpage.cpp:221
-#, fuzzy
 msgid "The horizontal offset."
-msgstr "Увімкнути вертикальний відступ."
+msgstr "Горизонтальний зсув."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:225
 #: ../src/richtext/richtextbackgroundpage.cpp:228
@@ -7283,52 +7219,45 @@ msgstr "пт"
 #: ../src/richtext/richtextbackgroundpage.cpp:295
 #: ../src/richtext/richtextbackgroundpage.cpp:320
 #: ../src/richtext/richtextbackgroundpage.cpp:322
-#, fuzzy
 msgid "Units for this value."
-msgstr "Одиниці виміру лівого поля."
+msgstr "Одиниці виміру цього значення."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:235
-#, fuzzy
 msgid "&Vertical offset:"
-msgstr "&Вертикальний відступ:"
+msgstr "&Вертикальний зсув:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:242
 #: ../src/richtext/richtextbackgroundpage.cpp:244
-#, fuzzy
 msgid "The vertical offset."
-msgstr "Увімкнути вертикальний відступ."
+msgstr "Вертикальний зсув."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:258
-#, fuzzy
 msgid "Shadow c&olour:"
-msgstr "Оберіть колір"
+msgstr "Ко&лір тіні:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:260
 #: ../src/richtext/richtextbackgroundpage.cpp:262
-#, fuzzy
 msgid "Enables the shadow colour."
-msgstr "Вмикає колір тла."
+msgstr "Вмикає колір тіні."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:266
 #: ../src/richtext/richtextbackgroundpage.cpp:268
-#, fuzzy
 msgid "The shadow colour."
-msgstr "Колір шрифту."
+msgstr "Колір тіні."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:271
 msgid "Sh&adow spread:"
-msgstr ""
+msgstr "По&ширення тіні:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:273
 #: ../src/richtext/richtextbackgroundpage.cpp:275
-#, fuzzy
 msgid "Enables the shadow spread."
-msgstr "Увімкнути значення ширини."
+msgstr "Вмикає поширення тіні."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:282
 #: ../src/richtext/richtextbackgroundpage.cpp:284
 msgid "The shadow spread."
-msgstr ""
+msgstr "Поширення тіні."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:298
 msgid "&Blur distance:"
@@ -7336,29 +7265,27 @@ msgstr "Відстань &розмиття"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:300
 #: ../src/richtext/richtextbackgroundpage.cpp:302
-#, fuzzy
 msgid "Enables the blur distance."
-msgstr "Увімкнути значення ширини."
+msgstr "Вмикає відстань розмиття."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:309
 #: ../src/richtext/richtextbackgroundpage.cpp:311
 msgid "The shadow blur distance."
-msgstr ""
+msgstr "Відстань розмиття тіні."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:325
 msgid "Opaci&ty:"
-msgstr ""
+msgstr "Н&епрозорість:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:327
 #: ../src/richtext/richtextbackgroundpage.cpp:329
-#, fuzzy
 msgid "Enables the shadow opacity."
-msgstr "Увімкнути значення ширини."
+msgstr "Вмикає непрозорість тіні."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:336
 #: ../src/richtext/richtextbackgroundpage.cpp:338
 msgid "The shadow opacity."
-msgstr ""
+msgstr "Непрозорість тіні."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:341
 #: ../src/richtext/richtextsizepage.cpp:340
@@ -8997,9 +8924,8 @@ msgid "Already dialling ISP."
 msgstr "Вже дзвонимо ISP."
 
 #: ../src/unix/dlunix.cpp:90
-#, fuzzy
 msgid "Failed to unload shared library"
-msgstr "Не вдалося завантажити динамічну бібліотеку «%s»"
+msgstr "Не вдалося вивантажити бібліотеку спільного використання"
 
 #: ../src/unix/dlunix.cpp:118
 msgid "Unknown dynamic library error"
@@ -9047,9 +8973,9 @@ msgid "Unable to add inotify watch"
 msgstr "Не вдалося додати спостереження inotify"
 
 #: ../src/unix/fswatcher_inotify.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr "Не вдалося вилучити спостереження inotify"
+msgstr "Не вдалося вилучити спостереження inotify %i"
 
 #: ../src/unix/fswatcher_inotify.cpp:271
 #, c-format
@@ -9327,9 +9253,9 @@ msgid "Cannot load resources from file '%s'."
 msgstr "Не вдалося завантажити ресурси з файла «%s»."
 
 #: ../src/xrc/xmlres.cpp:2744
-#, fuzzy, c-format
+#, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "Розпакування «%s» до «%s» закінчилося з помилкою."
+msgstr "Не вдалося створити %s «%s»."
 
 #~ msgid "conversion to 8-bit encoding failed"
 #~ msgstr "перетворення у 8-бітове кодування зазнало невдачі"

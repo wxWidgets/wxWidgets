@@ -358,6 +358,11 @@ wxBitmapBundle::wxBitmapBundle(const wxImage& image)
 {
 }
 
+wxBitmapBundle::wxBitmapBundle(const char* const* xpm)
+    : m_impl(new wxBitmapBundleImplSet(wxBitmap(xpm)))
+{
+}
+
 wxBitmapBundle::wxBitmapBundle(const wxBitmapBundle& other)
     : m_impl(other.m_impl)
 {

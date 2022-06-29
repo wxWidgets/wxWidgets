@@ -16,6 +16,7 @@
 #include "wx/defs.h"
 
 #include <CoreFoundation/CoreFoundation.h>
+#include <CoreGraphics/CoreGraphics.h>      // At least for CGFloat
 
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/cfdataref.h"
@@ -68,9 +69,7 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 
 #if wxUSE_GUI
 
-#if wxOSX_USE_IPHONE
-#include <CoreGraphics/CoreGraphics.h>
-#else
+#if !wxOSX_USE_IPHONE
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 

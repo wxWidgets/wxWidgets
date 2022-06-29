@@ -404,7 +404,7 @@ public:
     */
     int GetVirtualWidth() const;
 
-    int GetColumnFullWidth(const wxPGProperty* p, unsigned int col) const;
+    int GetColumnFullWidth(wxPGProperty* p, unsigned int col) const;
 
     /**
         Returns information about arbitrary position in the grid.

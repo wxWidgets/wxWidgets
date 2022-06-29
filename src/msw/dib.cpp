@@ -760,6 +760,13 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
                     *dst++ = src[2];
                     *dst++ = src[1];
                     *dst++ = src[0];
+
+                    // If source has no alpha, but the DIB does have it, we
+                    // need to still fill it, even if there is no real
+                    // transparency.
+                    if ( dstDepth == 32 )
+                        *dst++ = wxALPHA_OPAQUE;
+
                     src += 3;
                 }
             }

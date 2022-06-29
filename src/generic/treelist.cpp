@@ -364,8 +364,6 @@ public:
 
 
     // Implement the base class pure virtual methods.
-    virtual unsigned GetColumnCount() const wxOVERRIDE;
-    virtual wxString GetColumnType(unsigned col) const wxOVERRIDE;
     virtual void GetValue(wxVariant& variant,
                           const wxDataViewItem& item,
                           unsigned col) const wxOVERRIDE;
@@ -634,25 +632,6 @@ void wxTreeListModel::CheckItem(Node* item, wxCheckBoxState checkedState)
     item->m_checkedState = checkedState;
 
     ItemChanged(ToDVI(item));
-}
-
-unsigned wxTreeListModel::GetColumnCount() const
-{
-    return m_numColumns;
-}
-
-wxString wxTreeListModel::GetColumnType(unsigned col) const
-{
-    if ( col == 0 )
-    {
-        return m_treelist->HasFlag(wxTL_CHECKBOX)
-                    ? wxDataViewCheckIconTextRenderer::GetDefaultType()
-                    : wxDataViewIconTextRenderer::GetDefaultType();
-    }
-    else // All the other columns contain just text.
-    {
-        return wxS("string");
-    }
 }
 
 void
@@ -1086,7 +1065,7 @@ wxTreeListCtrl::GetItemText(wxTreeListItem item, unsigned col) const
     // reference to return so we use a static variable that exists just for the
     // purpose of this check -- and so we put it in its own scope so that it's
     // never even created during normal program execution.
-    if ( !m_model || col >= m_model->GetColumnCount() )
+    if ( !m_model || col >= GetColumnCount() )
     {
         static wxString s_empty;
 
@@ -1094,7 +1073,7 @@ wxTreeListCtrl::GetItemText(wxTreeListItem item, unsigned col) const
         {
             wxFAIL_MSG( "Must create first" );
         }
-        else if ( col >= m_model->GetColumnCount() )
+        else if ( col >= GetColumnCount() )
         {
             wxFAIL_MSG( "Invalid column index" );
         }
@@ -1111,7 +1090,7 @@ wxTreeListCtrl::SetItemText(wxTreeListItem item,
                             const wxString& text)
 {
     wxCHECK_RET( m_model, "Must create first" );
-    wxCHECK_RET( col < m_model->GetColumnCount(), "Invalid column index" );
+    wxCHECK_RET( col < GetColumnCount(), "Invalid column index" );
 
     m_model->SetItemText(item, col, text);
 }

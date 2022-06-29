@@ -130,11 +130,16 @@ static gboolean wxGtkImageDraw(GtkWidget* widget, GdkEventExpose* event)
 #endif
     const wxBitmap bitmap(image->m_provider->Get(scale));
 
-#ifndef __WXGTK3__
-    // We rely on GTK to draw default disabled images
     if (!bitmap.IsOk())
+    {
+#ifdef __WXGTK3__
+        // Missing bitmap, just do the default
+        return wxGtkImageParentClass->draw(widget, cr);
+#else
+        // We rely on GTK to draw default disabled images
         return wxGtkImageParentClass->expose_event(widget, event);
 #endif
+    }
 
     GtkAllocation alloc;
     gtk_widget_get_allocation(widget, &alloc);

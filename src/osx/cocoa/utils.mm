@@ -81,14 +81,17 @@ void wxBell()
     [NSApp stop:nil];
     wxTheApp->OSXOnDidFinishLaunching();
 
-    // We need to activate the application manually if it's not part of a
-    // bundle, otherwise not only it won't come to the foreground, but under
-    // recent macOS versions (10.15+), its menus simply won't work at all.
+    // We may need to activate the application manually in a couple of cases.
     //
     // Note that we have not one but two methods to opt out from this behaviour
     // for compatibility.
     if ( !wxApp::sm_isEmbedded && wxTheApp && wxTheApp->OSXIsGUIApplication() )
     {
+        bool activate = false;
+
+        // If the application is not bundled, we need to do it as otherwise not
+        // only it won't come to the foreground, but under recent macOS
+        // versions (10.15+), its menus simply won't work at all.
         CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
         CFStringRef path = CFURLCopyFileSystemPath ( url , kCFURLPOSIXPathStyle ) ;
         CFRelease( url ) ;
@@ -96,8 +99,19 @@ void wxBell()
         if ( !app.EndsWith(".app") )
         {
             [NSApp setActivationPolicy: NSApplicationActivationPolicyRegular];
-            [NSApp activateIgnoringOtherApps: YES];
+            activate = true;
         }
+        else if ( [NSApp activationPolicy] == NSApplicationActivationPolicyAccessory )
+        {
+            // This happens when the application has LSUIElement set in its
+            // Info.plist, which prevents Launch Services from activating it,
+            // meaning that it's not going to get any events unless we activate
+            // it ourselves (see #16156).
+            activate = true;
+        }
+
+        if ( activate )
+            [NSApp activateIgnoringOtherApps: YES];
     }
 }
 

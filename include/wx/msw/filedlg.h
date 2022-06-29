@@ -60,6 +60,9 @@ private:
     // called when the currently selected type of files changes in the dialog
     void MSWOnTypeChange(int nFilterIndex);
 
+    // called when the dialog is accepted, i.e. a file is chosen in it
+    void MSWOnFileOK();
+
     // The real implementation of ShowModal() using traditional common dialog
     // functions.
     int ShowCommFileDialog(WXHWND owner);
