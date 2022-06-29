@@ -14,7 +14,7 @@
 
 #include "wx/dynlib.h"
 
-#ifdef __UNIX__
+#ifndef __WINDOWS__
     #include "wx/filename.h"
     #include "wx/log.h"
 #endif
@@ -28,12 +28,18 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
 #if defined(__WINDOWS__)
     static const char* const LIB_NAME = "kernel32.dll";
     static const char* const FUNC_NAME = "lstrlenA";
-#elif defined(__UNIX__)
-#ifdef __DARWIN__
+#else // !__WINDOWS__
+#if defined(__DARWIN__)
     static const char* const LIB_NAME = "/usr/lib/libc.dylib";
+#elif defined(__LINUX__)
+    #ifdef __x86_64__
+        static const char* const LIB_NAME = "/lib/x86_64-linux-gnu/libc.so.6";
+    #else
+        static const char* const LIB_NAME = "/lib/libc.so.6";
+    #endif
 #else
-    // weird: using just libc.so does *not* work!
-    static const char* const LIB_NAME = "/lib/libc.so.6";
+    // Try some generic fallback.
+    static const char* const LIB_NAME = "/usr/lib/libc.so";
 #endif
     static const char* const FUNC_NAME = "strlen";
 
@@ -47,9 +53,7 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
         return;
     }
 #endif // !__DARWIN__
-#else
-    #error "don't know how to test wxDllLoader on this platform"
-#endif
+#endif // __WINDOWS__/!__WINDOWS__
 
     wxDynamicLibrary lib(LIB_NAME);
     REQUIRE( lib.IsLoaded() );

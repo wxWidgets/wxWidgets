@@ -232,8 +232,8 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.0-rc1: (released 2022-06-27)
---------------------------------
+3.2.0: (released 2022-07-07)
+----------------------------
 
 All:
 
@@ -241,6 +241,7 @@ All:
 - Fix wxFileName::ReplaceHomeDir() when HOME=="/".
 - Fix wxLocale::IsAvailable(wxLANGUAGE_DEFAULT) regression.
 - Provide CMake config file for the library.
+- Add a 'revision' component to wxVersionInfo (Ronny Krüger).
 
 All (GUI):
 
@@ -256,6 +257,9 @@ wxGTK:
 - Fix TAB navigation in wxSimplebook (Adrian Lopez).
 - Support wxINVERT logical operation on wxDC with white source colour.
 - Don't assert in wxGtkImage (used in e.g. wxToolBar) when bitmap is missing.
+- Fix wxListBox selection colors with non-default background (alilie).
+- Fix wxCURSOR_SIZING with Wayland.
+- Recognize modern versions of GNOME in GetDesktopEnvironment() (Ulrich Telle).
 
 wxMSW:
 
