@@ -1500,6 +1500,9 @@ public:
             - Background brush
             - Layout direction
 
+        Note that the scaling factor is not considered to be an attribute of
+        wxDC and is @e not copied by this function.
+
         @param dc
             A valid (i.e. its IsOk() must return @true) source device context.
      */
