@@ -196,6 +196,9 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
         { wxART_REFRESH,            BITMAP_DATA(view_refresh)               },
         { wxART_STOP,               BITMAP_DATA(process_stop)               },
 
+        // Note: when adding elements here, try to also add the corresponding
+        //       icon to src/gtk/artgtk.cpp as the GTK art provider is supposed
+        //       to have all the icons the Tango provider has, see configure.in.
     };
 
     #undef BITMAP_DATA

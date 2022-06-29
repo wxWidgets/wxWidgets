@@ -1,9 +1,9 @@
-wxWidgets 3.1.7 Release Notes
+wxWidgets 3.2.0-rc1 Release Notes
 =============================
 
-Welcome to the latest development release of wxWidgets, a free and open source
-cross-platform C++ framework for writing advanced GUI applications using native
-controls.
+Welcome to the release candidate of the new stable release of wxWidgets,
+a free and open source cross-platform C++ framework for writing
+advanced GUI applications using native controls.
 
 wxWidgets allows you to write native-looking GUI applications for all the major
 desktop platforms and also helps with abstracting the differences in the non-GUI
@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.1.7/
+* https://docs.wxwidgets.org/3.2.0-rc1/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
@@ -25,66 +25,38 @@ download from:
 
 or, for a more more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.7/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.0-rc1/
 
-Please see https://docs.wxwidgets.org/3.1.7/overview_install.html for full
+Please see https://docs.wxwidgets.org/3.2.0-rc1/overview_install.html for full
 installation instructions.
 
-
-
-Changes since 3.1.5
--------------------
-
-In almost a year since the previous release, there have been more than 1700
-commits from 82 unique contributors (41 with multiple contributions), so it is
-impossible to summarize all the changes in this document without making it too
-long, please see the fuller changelog at
-
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.7/docs/changes.txt
-
-for more details, but here are some of the most important changes:
-
-- New wxBitmapBundle class allowing to provide art work for both normal and
-  high DPI in a simple way.
-- New wxUILocale class replacing the old (but still available) wxLocale, but
-  not suffering from its multiple problems and providing more functionality.
-- Support for using native spell-checking in wxTextCtrl.
-- Support for undo/redo in wxTextCtrl in wxOSX.
-- Better drag-and-drop implementation in wxOSX.
-- Fixes for important bugs in wxDataViewCtrl under all platforms.
-- Many improvements and bug fixes for Wayland support in wxGTK.
-- Support for the latest OS versions (Windows 11, macOS 12) and compilers (MSVS
-  2022, gcc 12, clang 13).
-- Project bug tracker has been moved to GitHub Issues.
-
-Notice that in spite of all the changes, this release remains almost completely
-compatible with 3.1.5 at the API level, so upgrading to it if you're already
-using wxWidgets 3 should be straightforward.
 
 
 Changes since 3.0
 -----------------
 
-Compared to the stable 3.0.x series, this version brings too many
-improvements and even more bug fixes to list them all, but here is the
-maximally condensed summary:
+This release is a culmination of many years of development since the
+last stable 3.0 release. It contains more than 15,000 commits from more
+than 400 unique contributors (including more than 200 with multiple
+contributions) and has too many improvements to list them all here, but
+here is a maximally condensed summary of the most important ones:
 
 - Build system improvements: support for new compilers (up to MSVS 2022,
-  g++ 11, clang 13) with an even simpler way of using wxWidgets from
+  g++ 12, clang 14) with an even simpler way of using wxWidgets from
   MSVS, with wxwidgets.props file, and OS versions as well as an
   entirely new CMake build system.
-- Support for native dark mode under macOS 10.14 Mojave and later and
-  support for macOS 11 and later on ARM hardware.
+- Support for native dark mode under macOS 10.14 and later, support for
+  ARM hardware and macOS versions up to 13.
+- High DPI support with the new, but almost perfectly backwards-
+  compatible, API based on wxBitmapBundle, including per-monitor DPI and
+  dynamic DPI changes.
 - New features: HTTPS and HTTP/2 support with wxWebRequest and friends;
   support for freezing rows/columns in wxGrid; mouse gesture events
   (GSoC 2017 project); non-integer font sizes and arbitrary font weights
   in wxFont; fractional pen widths in wxGraphicsContext; arbitrary label
-  windows in wxStaticBox; markup in wxDataViewCtrl items text; better
-  support for high DPI monitors and per-monitor DPI, notably the
-  addition of wxBitmapBundle, and dynamic DPI changes support under MSW;
-  support for ZIP 64 files; LZMA compression; much improved
-  accessibility support under MSW; new Edge-based wxWebView
-  implementation.
+  windows in wxStaticBox; markup in wxDataViewCtrl items text; support
+  for ZIP 64 files; LZMA compression; much improved accessibility
+  support under MSW; new Edge-based wxWebView implementation.
 - New classes: wxActivityIndicator, wxAddRemoveCtrl, wxAppProgressIndicator,
   wxBitmapBundle, wxNativeWindow, wxPersistentComboBox,
   wxPowerResourceBlocker, wxSecretStore, wxTempFFile and many new
@@ -100,19 +72,23 @@ maximally condensed summary:
 - Revamped OpenGL support better suited to modern OpenGL (3.2+).
 - Further C++11 and later support improvements, wxWidgets can be built using
   C++20 compilers.
-- A lot of bug fixes, especially in wxGTK3 and wxOSX/Cocoa ports.
 - New experimental wxQt port.
+- Many, many bug fixes.
 
 
+Note that in spite of all these changes, wxWidgets 3.2 is almost fully
+compatible with wxWidgets 3.0 and updating the existing applications to
+use it shouldn't require much effort.
 
-Platforms Supported
+
+Supported Platforms
 -------------------
 
 This version of wxWidgets supports the following primary platforms:
 
 * Windows XP, Vista, 7, 8, 10 and 11 (32/64 bits).
 * Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-* macOS (10.10 or newer) using Cocoa
+* macOS (10.10 or newer) using Cocoa (x86-64 or ARM).
 
 There is some support for the following platforms:
 
@@ -196,4 +172,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, April 2022
+The wxWidgets Team, July 2022

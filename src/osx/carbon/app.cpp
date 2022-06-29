@@ -828,13 +828,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
-#ifdef __LP64__
         // TODO new implementation using TextInputSources
-#else
-        UInt32 state = 0;
-        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey | shiftKey | optionKey))) | keycode, &state);
-        keychar = short(keyInfo & charCodeMask);
-#endif
     }
 
     long keyval = wxMacTranslateKey(keychar, keycode) ;

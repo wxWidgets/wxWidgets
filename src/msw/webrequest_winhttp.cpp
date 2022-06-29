@@ -152,7 +152,15 @@ static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel
         WINHTTP_NO_HEADER_INDEX);
     if ( ::GetLastError() == ERROR_INSUFFICIENT_BUFFER )
     {
-        wxWCharBuffer resBuf(bufferLen);
+        // Buffer length is in bytes, including the terminating (wide) NUL, but
+        // wxWCharBuffer needs the size in characters and adds NUL itself.
+        if ( !bufferLen || (bufferLen % sizeof(wchar_t)) )
+        {
+            wxLogDebug("Unexpected size of header %s: %lu", pwszName, bufferLen);
+            return wxString();
+        }
+
+        wxWCharBuffer resBuf(bufferLen / sizeof(wchar_t) - 1);
         if ( wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName,
                                    resBuf.data(), &bufferLen,
                                    WINHTTP_NO_HEADER_INDEX) )
@@ -171,7 +179,14 @@ static wxString wxWinHTTPQueryOptionString(HINTERNET hInternet, DWORD dwOption)
     wxWinHTTP::WinHttpQueryOption(hInternet, dwOption, NULL, &bufferLen);
     if ( ::GetLastError() == ERROR_INSUFFICIENT_BUFFER )
     {
-        wxWCharBuffer resBuf(bufferLen);
+        // Same as above: convert length in bytes into size in characters.
+        if ( !bufferLen || (bufferLen % sizeof(wchar_t)) )
+        {
+            wxLogDebug("Unexpected size of option %lu: %lu", dwOption, bufferLen);
+            return wxString();
+        }
+
+        wxWCharBuffer resBuf(bufferLen / sizeof(wchar_t) - 1);
         if ( wxWinHTTP::WinHttpQueryOption(hInternet, dwOption, resBuf.data(), &bufferLen) )
             result.assign(resBuf);
     }

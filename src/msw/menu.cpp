@@ -305,19 +305,6 @@ bool wxMenu::MSWGetRadioGroupRange(int pos, int *start, int *end) const
     return m_radioData && m_radioData->GetGroupRange(pos, start, end);
 }
 
-#if wxUSE_MENUBAR
-void wxMenu::Attach(wxMenuBarBase* menubar)
-{
-    wxMenuBase::Attach(menubar);
-
-    if (menubar->IsAttached())
-    {
-        // menubar is already attached, we need to call SetupBitmaps
-        SetupBitmaps();
-    }
-}
-#endif
-
 void wxMenu::SetupBitmaps()
 {
     for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
@@ -611,14 +598,6 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // if we're already attached to the menubar, we must update it
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
-        if ( pItem->IsSubMenu() )
-        {
-            pItem->GetSubMenu()->SetupBitmaps();
-        }
-        if ( !pItem->IsSeparator() )
-        {
-            pItem->SetupBitmaps();
-        }
         GetMenuBar()->Refresh();
     }
 
@@ -1259,14 +1238,6 @@ void wxMenuBar::RebuildAccelTable()
 
 #endif // wxUSE_ACCEL
 
-void wxMenuBar::SetupBitmaps()
-{
-    for ( wxMenuList::const_iterator it = m_menus.begin(); it != m_menus.end(); ++it )
-    {
-        (*it)->SetupBitmaps();
-    }
-}
-
 void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
@@ -1274,10 +1245,6 @@ void wxMenuBar::Attach(wxFrame *frame)
 #if wxUSE_ACCEL
     RebuildAccelTable();
 #endif // wxUSE_ACCEL
-
-    SetupBitmaps();
-
-    frame->Bind(wxEVT_DPI_CHANGED, &wxMenuBar::OnDPIChanged, this);
 }
 
 void wxMenuBar::Detach()

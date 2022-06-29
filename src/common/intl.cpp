@@ -553,11 +553,11 @@ wxString wxLocale::GetSystemEncodingName()
 #if defined(HAVE_LANGINFO_H) && defined(CODESET)
     // GNU libc provides current character set this way (this conforms
     // to Unix98)
-    char* oldLocale = strdup(setlocale(LC_CTYPE, NULL));
-    setlocale(LC_CTYPE, "");
-    encname = wxString::FromAscii(nl_langinfo(CODESET));
-    setlocale(LC_CTYPE, oldLocale);
-    free(oldLocale);
+    {
+        TempLocaleSetter setDefautLocale(LC_CTYPE);
+
+        encname = wxString::FromAscii(nl_langinfo(CODESET));
+    }
 
     if (encname.empty())
 #endif // HAVE_LANGINFO_H

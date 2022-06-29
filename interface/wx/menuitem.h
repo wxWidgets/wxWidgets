@@ -161,11 +161,31 @@ public:
     wxColour& GetBackgroundColour() const;
 
     /**
+        Returns the item bitmap.
+
+        This method exists only for compatibility, please use GetBitmapBundle()
+        in the new code.
+    */
+    wxBitmap GetBitmap() const;
+
+    /**
         Returns the checked or unchecked bitmap.
 
-        The @c checked parameter is only available in wxMSW.
+        This overload only exists in wxMSW, avoid using it in portable code.
     */
-    virtual wxBitmap GetBitmap(bool checked = true) const;
+    wxBitmap GetBitmap(bool checked) const;
+
+    /**
+        Returns the bitmap bundle containing the bitmap used for this item.
+
+        The returned bundle is invalid, i.e. empty, if no bitmap is associated
+        with the item.
+
+        @see SetBitmap()
+
+        @since 3.2.0
+    */
+    wxBitmapBundle GetBitmapBundle() const;
 
     /**
         Returns the bitmap used for disabled items.
@@ -351,23 +371,26 @@ public:
     /**
         Sets the bitmap for the menu item.
 
-        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if
-        @a checked is @true (default value) or SetBitmaps(wxNullBitmap, bmp)
-        otherwise.
-
-        SetBitmap() must be called before the item is appended to the menu,
-        i.e. appending the item without a bitmap and setting one later is not
-        guaranteed to work. But the bitmap can be changed or reset later if it
-        had been set up initially.
-
         Notice that GTK+ uses a global setting called @c gtk-menu-images to
         determine if the images should be shown in the menus at all. If it is
         off (which is the case in e.g. Gnome 2.28 by default), no images will
         be shown, consistently with the native behaviour.
-
-        @onlyfor{wxmsw,wxosx,wxgtk}
     */
-    virtual void SetBitmap(const wxBitmapBundle& bmp, bool checked = true);
+    void SetBitmap(const wxBitmapBundle& bmp);
+
+    /**
+        Sets the checked or unchecked bitmap for the menu item.
+
+        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if
+        @a checked is @true or SetBitmaps(wxNullBitmap, bmp) otherwise.
+
+        Note that different bitmaps for checked and unchecked item states are
+        not supported in most ports, while setting just a single bitmap using
+        the overload above is supported in all of them.
+
+        @onlyfor{wxmsw}
+    */
+    void SetBitmap(const wxBitmapBundle& bmp, bool checked);
 
     /**
         Sets the checked/unchecked bitmaps for the menu item.

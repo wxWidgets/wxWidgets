@@ -752,12 +752,12 @@ wxgtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
     if ( wxtree_model->stamp == 0 )
         return 0;
 
-    return wxtree_model->internal->GetDataViewModel()->GetColumnCount();
+    return wxtree_model->internal->GetOwner()->GetColumnCount();
 }
 
 static GType
 wxgtk_tree_model_get_column_type (GtkTreeModel *tree_model,
-                                  gint          index)
+                                  gint          WXUNUSED(index))
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), G_TYPE_INVALID);
@@ -765,19 +765,7 @@ wxgtk_tree_model_get_column_type (GtkTreeModel *tree_model,
     if ( wxtree_model->stamp == 0 )
         return G_TYPE_INVALID;
 
-    GType gtype = G_TYPE_INVALID;
-
-    wxString wxtype = wxtree_model->internal->GetDataViewModel()->GetColumnType( (unsigned int) index );
-
-    if (wxtype == wxT("string"))
-        gtype = G_TYPE_STRING;
-    else
-    {
-        gtype = G_TYPE_POINTER;
-        // wxFAIL_MSG( wxT("non-string columns not supported for searching yet") );
-    }
-
-    return gtype;
+    return G_TYPE_STRING;
 }
 
 static gboolean
@@ -824,20 +812,12 @@ wxgtk_tree_model_get_value (GtkTreeModel *tree_model,
         return;
 
     wxDataViewModel *model = wxtree_model->internal->GetDataViewModel();
-    wxString mtype = model->GetColumnType( (unsigned int) column );
-    if (mtype == wxT("string"))
-    {
-        wxVariant variant;
-        g_value_init( value, G_TYPE_STRING );
-        wxDataViewItem item( (void*) iter->user_data );
-        model->GetValue( variant, item, (unsigned int) column );
+    wxVariant variant;
+    g_value_init( value, G_TYPE_STRING );
+    wxDataViewItem item( (void*) iter->user_data );
+    model->GetValue( variant, item, (unsigned int) column );
 
-        g_value_set_string( value, variant.GetString().utf8_str() );
-    }
-    else
-    {
-        wxFAIL_MSG( wxT("non-string columns not supported yet") );
-    }
+    g_value_set_string( value, variant.GetString().utf8_str() );
 }
 
 static gboolean

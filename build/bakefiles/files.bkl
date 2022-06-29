@@ -1310,6 +1310,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/creddlgg.h
     wx/creddlg.h
     wx/bmpbndl.h
+    wx/filedlgcustomize.h
 </set>
 
 <!-- ====================================================================== -->

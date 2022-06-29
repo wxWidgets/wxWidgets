@@ -14,7 +14,7 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
@@ -2146,7 +2146,7 @@ msgstr "BMP: Nu au putut fi scrise datele."
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP: antetul are biClrUsed=%d când biBitCount=%d."
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -3905,7 +3905,7 @@ msgstr "libcurl nu a putut fi inițializat"
 
 #: ../src/common/webview.cpp:246
 msgid "RunScriptAsync not supported"
-msgstr ""
+msgstr "RunScriptAsync nu este suportat"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
@@ -6538,10 +6538,9 @@ msgid "Hide %s"
 msgstr "Ascunde %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Aplicație"
+msgstr "Ascunde Aplicația"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
@@ -6557,13 +6556,12 @@ msgstr "Arată Tot"
 #, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
-msgstr "Ieșire din %s"
+msgstr "Părăsește %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Aplicație"
+msgstr "Părăsește Aplicația"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6792,169 +6790,141 @@ msgid "White"
 msgstr "Alb"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "Implicit"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Săgeată"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
-msgstr "Săgeată spre Dreapta"
+msgstr "Săgeată Dreapta"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Gol"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Țintă"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Cursor"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Cruce"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Mână"
 
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "I-Beam"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Buton Stânga"
 
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Lupă"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Buton Mijloc"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
-msgstr "Fără Intrare"
+msgstr "Nicio Intrare"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Pensulă"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Creion"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Punct Stânga"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Punct Dreapta"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Săgeată Întrebare"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Buton Dreapta"
 
 #: ../src/propgrid/advprops.cpp:1673
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
-msgstr "Redimensionare NE-SW"
+msgstr "Redimensionare NE-SV"
 
 #: ../src/propgrid/advprops.cpp:1674
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Redimensionare N-S"
 
 #: ../src/propgrid/advprops.cpp:1675
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
-msgstr "Redimensionare NW-SE"
+msgstr "Redimensionare NV-SE"
 
 #: ../src/propgrid/advprops.cpp:1676
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
-msgstr "Redimensionare W-E"
+msgstr "Redimensionare V-E"
 
 #: ../src/propgrid/advprops.cpp:1677
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Redimensionare"
 
 #: ../src/propgrid/advprops.cpp:1678
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Tub Spray"
 
 #: ../src/propgrid/advprops.cpp:1679
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Așteptare"
 
 #: ../src/propgrid/advprops.cpp:1680
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Urmărire"
 
 #: ../src/propgrid/advprops.cpp:1681
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Săgeată Așteptare"

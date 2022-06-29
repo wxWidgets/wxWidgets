@@ -48,9 +48,6 @@ public:
     void RemoveHiddenItems();
 #endif // wxUSE_ACCEL
 
-    virtual void SetBitmap(const wxBitmapBundle& bitmap) ;
-    virtual wxBitmap GetBitmap() const;
-
 
     // Implementation only from now on.
 
@@ -62,8 +59,6 @@ public:
     wxMenuItemImpl* GetPeer() { return m_peer; }
 private:
     void UncheckRadio() ;
-
-    wxBitmapBundle m_bitmap; // Bitmap for menuitem, if any
 
     wxMenuItemImpl* m_peer;
 

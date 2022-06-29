@@ -741,6 +741,14 @@ wxAuiPaneInfo objects have the following properties:
 
 @subsubsection xrc_wxauinotebook wxAuiNotebook
 
+@beginTable
+@hdr3col{property, type, description}
+@row3col{art-provider, @ref overview_xrcformat_type_string,
+    One of @c default for wxAuiDefaultTabArt or @c simple for wxAuiSimpleTabArt
+    (default: @c default).
+    @since 3.2.0}
+@endTable
+
 A wxAuiNotebook can have one or more child objects of the @c notebookpage
 pseudo-class.
 @c notebookpage objects have the following properties:
@@ -1155,7 +1163,13 @@ No additional properties.
 
 @subsubsection xrc_wxdatepickerctrl wxDatePickerCtrl
 
-No additional properties.
+@beginTable
+@hdr3col{property, type, description}
+@row3col{null-text, @ref overview_xrcformat_type_string,
+    Set the text to show when there is no valid value (default: empty).
+    Only used if the control has wxDP_ALLOWNONE style.
+    Currently implemented on MSW, ignored elsewhere. @since 3.1.5.}
+@endTable
 
 
 @subsubsection xrc_wxdialog wxDialog
@@ -2215,7 +2229,7 @@ later only and you need to explicitly register its handler using
 @code
     #include <wx/xrc/xh_styledtextctrl.h>
 
-    AddHandler(new wxStyledTextCtrl);
+    AddHandler(new wxStyledTextCtrlXmlHandler);
 @endcode
 to use it.
 
@@ -2503,6 +2517,22 @@ corresponds to the following tree of labels:
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display on the left side of the wizard (default: none).}
+@row3col{border, integer, Sets width of border around page area. (default: 0).
+    @since 3.2.0}
+@row3col{bitmap-placement, @ref overview_xrcformat_type_style,
+    Sets the flags indicating how the wizard or page bitmap should be expanded
+    and positioned to fit the page height. By default, placement is 0
+    (no expansion is done). See wxWizard::SetBitmapPlacement()
+    @since 3.2.0}
+@row3col{bitmap-minwidth, integer,
+    Sets the minimum width for the bitmap that will be constructed to contain
+    the actual wizard or page bitmap if a non-zero bitmap placement flag has
+    been set.
+    @since 3.2.0}
+@row3col{bitmap-bg, @ref overview_xrcformat_type_colour,
+    Sets the colour that should be used to fill the area not taken up by the
+    wizard or page bitmap, if a non-zero bitmap placement flag has been set.
+    @since 3.2.0}
 @endTable
 
 A wizard object can have one or more child objects of the wxWizardPage or
@@ -2719,6 +2749,9 @@ support the following properties:
     optionally the proportion can be appended after each number
     separated by a @c :
     (default: none).}
+@row3col{empty_cellsize, @ref overview_xrcformat_type_size,
+    Size used for cells in the grid with no item. (default: @c wxDefaultSize).
+    @since 3.2.0}
 @endTable
 
 @subsection overview_xrcformat_wxwrapsizer wxWrapSizer

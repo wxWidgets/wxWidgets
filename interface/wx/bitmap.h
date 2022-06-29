@@ -774,6 +774,16 @@ public:
     virtual int GetWidth() const;
 
     /**
+        Returns true if the bitmap has an alpha channel.
+
+        Note that the fact that a bitmap has an alpha channel doesn't
+        necessarily mean that it has any transparency, as all of its pixels
+        could be using wxALPHA_OPAQUE value. To actually examine the alpha
+        values, the bitmap can be converted to wxImage.
+     */
+    bool HasAlpha() const;
+
+    /**
         Adds the standard bitmap format handlers, which, depending on wxWidgets
         configuration, can be handlers for Windows bitmap, Windows bitmap resource,
         and XPM.
@@ -878,6 +888,13 @@ public:
     static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
 
     /**
+        Remove alpha channel from the bitmap.
+
+        This is the same as calling UseAlpha() with @false argument.
+     */
+    void ResetAlpha();
+
+    /**
         Saves a bitmap in the named file.
 
         @param name
@@ -971,6 +988,24 @@ public:
             Bitmap width in pixels.
     */
     virtual void SetWidth(int width);
+
+    /**
+        Enable or disable use of alpha channel in this bitmap.
+
+        This function is only useful for 32bpp bitmaps and changes their format
+        to use, or not use, the fourth byte of the pixel data for the alpha
+        channel.
+
+        It currently is only implemented in wxMSW and wxOSX and simply always
+        returns @false under the other platforms.
+
+        @return @true if the operation succeeded, @false otherwise, e.g. when
+            trying to enable alpha channel support for a non-32bpp bitmap or if
+            this operation is simply not supported by the current platform.
+
+        @see HasAlpha(), ResetAlpha()
+     */
+    bool UseAlpha(bool use = true);
 };
 
 /**

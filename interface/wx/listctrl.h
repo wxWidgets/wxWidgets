@@ -566,6 +566,11 @@ public:
 
     /**
         Returns the number of columns.
+
+        The control can have multiple columns only in wxLC_REPORT mode. In
+        wxLC_LIST mode this function returns 1, as a list is still considered
+        to have a (single) column. In wxLC_SMALL_ICON and wxLC_ICON modes, it
+        returns 0 as there are no columns at all.
     */
     int GetColumnCount() const;
 

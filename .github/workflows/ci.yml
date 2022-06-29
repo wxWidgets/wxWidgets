@@ -45,6 +45,9 @@ on:
       - '*.yml'
       - 'wxwidgets.props'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.runner }}

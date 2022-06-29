@@ -16,8 +16,8 @@
 
 #include "wx/colour.h"
 
+class WXDLLIMPEXP_FWD_CORE wxBitmapBundle;
 class WXDLLIMPEXP_FWD_CORE wxFont;
-class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 class wxRichToolTipImpl;
@@ -68,7 +68,7 @@ public:
     // warning/error ones (the question icon doesn't make sense for a tooltip)
     // or a custom icon.
     void SetIcon(int icon = wxICON_INFORMATION);
-    void SetIcon(const wxIcon& icon);
+    void SetIcon(const wxBitmapBundle& icon);
 
     // Set timeout after which the tooltip should disappear, in milliseconds.
     // By default the tooltip is hidden after system-dependent interval of time

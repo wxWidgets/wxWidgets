@@ -15,17 +15,17 @@ instructions there.
 
 Here is the list of files that need to be updated:
 
-	build/bakefiles/version.bkl {C:R:A}          [NOT UPDATED AUTOMATICALLY]
-	build/bakefiles/wxpresets/presets/wx.bkl     [NOT UPDATED AUTOMATICALLY, not-micro]
-	configure.in
-	build/osx/wxvers.xcconfig
-	docs/changes.txt
-	docs/readme.txt (date needs manual editing)  [NOT UPDATED AUTOMATICALLY]
-	docs/doxygen/Doxyfile (PROJECT_NUMBER and DOCSET_FEEDNAME)
-	docs/doxygen/mainpages/manual.h (just date)  [NOT UPDATED AUTOMATICALLY]
-	include/wx/version.h
-	include/wx/osx/config_xcode.h
-	samples/minimal/Info_cocoa.plist
+- build/bakefiles/version.bkl {C:R:A}          [NOT UPDATED AUTOMATICALLY]
+- configure.in
+- build/osx/wxvers.xcconfig
+- docs/changes.txt
+- docs/readme.txt (date needs manual editing)  [NOT UPDATED AUTOMATICALLY]
+- docs/doxygen/Doxyfile (PROJECT_NUMBER and DOCSET_FEEDNAME)
+- docs/doxygen/mainpages/manual.h (just date)  [NOT UPDATED AUTOMATICALLY]
+- include/wx/version.h
+- include/wx/osx/config_xcode.h
+- samples/minimal/Info_cocoa.plist
+- samples/minimal/CMakeListst.txt [major/minor only]
 
 Do not forget to rebake everything after updating version.bkl!
 

@@ -5,7 +5,7 @@ case `uname` in
         wxPROC_COUNT=`nproc`
         ;;
 
-    Darwin)
+    Darwin|FreeBSD)
         wxPROC_COUNT=`sysctl -n hw.ncpu`
         ;;
 

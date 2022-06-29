@@ -427,6 +427,12 @@ bool wxImageList::Draw(int index,
     if ( flags & wxIMAGELIST_DRAW_FOCUSED )
         style |= ILD_FOCUS;
 
+    // We need to handle the origin offset manually as we don't use Windows
+    // support for this, see wxDC code.
+    const wxPoint origin = dc.GetDeviceOrigin();
+    x += origin.x;
+    y += origin.y;
+
     bool ok = ImageList_Draw(GetHImageList(), index, hDC, x, y, style) != 0;
     if ( !ok )
     {

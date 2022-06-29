@@ -1608,10 +1608,20 @@ bool wxFileName::ReplaceHomeDir(wxPathFormat format)
     if (homedir.empty())
         return false;
 
+    // Avoid replacing the leading "/" with "~", this would result in an
+    // invalid path, if nothing else
+    if (homedir == '/')
+        return true; // but it is not an error, so don't return false
+
     wxString stringForm = GetPath(wxPATH_GET_VOLUME, format);
         // do not touch the file name and the extension
 
-    stringForm.Replace(homedir, "~");
+    wxString rest;
+    if ( stringForm.StartsWith(homedir, &rest) )
+    {
+        stringForm = "~";
+        stringForm += rest;
+    }
 
     // Now assign ourselves the modified path:
     Assign(stringForm, GetFullName(), format);

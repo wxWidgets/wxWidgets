@@ -12,7 +12,7 @@
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 31
+WX_RELEASE_NODOT = 32
 COMPILER_PREFIX = vc
 OBJS = \
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -439,7 +439,7 @@ data:
 
 data_doc: 
 	if not exist $(OBJS)\doc mkdir $(OBJS)\doc
-	for %f in (aindex.html down.gif dxxgifs.tex HIER.html icon1.gif icon2.gif index.html logo.gif USE_HELP.html wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm) do if not exist $(OBJS)\doc\%f copy .\doc\%f $(OBJS)\doc
+	for %f in (aindex.html down.gif dxxgifs.tex HIER.html icon1.gif icon2.gif index.html logo.gif wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm) do if not exist $(OBJS)\doc\%f copy .\doc\%f $(OBJS)\doc
 
 $(OBJS)\help_sample.res: .\..\..\samples\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  $(__TARGET_CPU_COMPFLAG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1)  /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc

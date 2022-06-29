@@ -692,6 +692,8 @@ public:
           m_typeAlreadyChanged(false)
 #endif // wxUSE_IFILEOPENDIALOG
     {
+        wxUnusedVar(fileDialog);
+
         m_bMovedWindow = false;
         m_centreDir = 0;
     }
@@ -753,8 +755,7 @@ public:
         // Note that we need to call this hook function from here as the
         // controls are destroyed later and getting their values wouldn't work
         // any more.
-        if ( m_fileDialog->m_customizeHook )
-            m_fileDialog->m_customizeHook->TransferDataFromCustomControls();
+        m_fileDialog->MSWOnFileOK();
 
         return S_OK;
     }
@@ -944,6 +945,10 @@ wxFileDialogMSWData::HookFunction(HWND      hDlg,
 
                         case CDN_TYPECHANGE:
                             dialog->MSWOnTypeChange(ofn.nFilterIndex);
+                            break;
+
+                        case CDN_FILEOK:
+                            dialog->MSWOnFileOK();
                             break;
                     }
                 }
@@ -1137,6 +1142,11 @@ void wxFileDialog::MSWOnTypeChange(int nFilterIndex)
     m_currentlySelectedFilterIndex = nFilterIndex ? nFilterIndex - 1 : 0;
 
     UpdateExtraControlUI();
+}
+
+void wxFileDialog::MSWOnFileOK()
+{
+    TransferDataFromExtraControl();
 }
 
 // helper used below in ShowCommFileDialog(): style is used to determine

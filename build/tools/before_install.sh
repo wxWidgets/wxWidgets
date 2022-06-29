@@ -97,6 +97,10 @@ case $(uname -s) in
         fi
         ;;
 
+    FreeBSD)
+        pkg install -q -y gspell gstreamer1 gtk3 jpeg-turbo libnotify libsecret mesa-libs pkgconf png tiff webkit2-gtk3
+        ;;
+
     Darwin)
         ;;
 esac

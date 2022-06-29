@@ -20,6 +20,7 @@
 
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/object.h"
+#include "wx/gtk/private/backend.h"
 
 GdkWindow* wxGetTopLevelGDK();
 
@@ -272,6 +273,14 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
     }
 
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+#ifdef __WXGTK3__
+    // Cursor themes don't have "sizing"
+    if (gdk_cur == GDK_SIZING && !wxGTKImpl::IsX11(display))
+    {
+        M_CURSORDATA->m_cursor = gdk_cursor_new_from_name(display, "move");
+        return;
+    }
+#endif
     M_CURSORDATA->m_cursor = gdk_cursor_new_for_display(display, gdk_cur);
 }
 

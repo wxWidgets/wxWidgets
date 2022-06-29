@@ -30,10 +30,12 @@ endif()
 project(minimal)
 
 # Request the required wxWidgets libs
-find_package(wxWidgets 3.1 COMPONENTS core base REQUIRED)
+find_package(wxWidgets 3.2 COMPONENTS core base REQUIRED CONFIG)
 
 # Include the wxWidgets use file to initialize various settings
-include(${wxWidgets_USE_FILE})
+if(wxWidgets_USE_FILE)
+    include(${wxWidgets_USE_FILE})
+endif()
 
 # Define a variable containing a list of source files for the project
 set(SRC_FILES

@@ -253,6 +253,13 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     m_isInside = true;
     m_isGBS = (m_class == wxT("wxGridBagSizer"));
 
+    if (m_isGBS)
+    {
+        wxSize cellsize = GetSize(wxT("empty_cellsize"));
+        if (cellsize != wxDefaultSize)
+            static_cast<wxGridBagSizer*>(sizer)->SetEmptyCellSize(cellsize);
+    }
+
     wxObject* parent = m_parent;
 #if wxUSE_STATBOX
     // wxStaticBoxSizer's child controls should be parented by the box itself,

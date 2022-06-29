@@ -37,7 +37,7 @@ if(wxUSE_XRC)
             set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
         endif()
 
-        install(CODE "execute_process( \
+        wx_install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E create_symlink \
             ${CMAKE_INSTALL_PREFIX}/bin/${wxrc_output_name}${EXE_SUFFIX} \
             ${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX} \

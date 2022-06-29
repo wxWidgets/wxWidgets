@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/xrc/xh_toolb.cpp
+// Name:        src/xrc/xh_auitoolb.cpp
 // Purpose:     XRC resource for wxAuiToolBar
 // Author:      Vaclav Slavik
 // Created:     2000/08/11
@@ -31,6 +31,7 @@ wxAuiToolBarXmlHandler::wxAuiToolBarXmlHandler()
     , m_isInside(false)
     , m_toolbar(NULL)
 {
+    XRC_ADD_STYLE(wxAUI_TB_DEFAULT_STYLE);
     XRC_ADD_STYLE(wxAUI_TB_TEXT);
     XRC_ADD_STYLE(wxAUI_TB_NO_TOOLTIPS);
     XRC_ADD_STYLE(wxAUI_TB_NO_AUTORESIZE);

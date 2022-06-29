@@ -627,32 +627,24 @@ int wxFileDialog::ShowModal()
 
 void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
-    int result = wxID_CANCEL;
+    NSSavePanel* const sPanel = static_cast<NSSavePanel*>(panel);
+
+    const bool wasAccepted = returnCode == NSModalResponseOK;
     if (HasFlag(wxFD_SAVE))
     {
-        if (returnCode == NSModalResponseOK )
+        if (wasAccepted)
         {
-            NSSavePanel* sPanel = (NSSavePanel*)panel;
-            result = wxID_OK;
-
             NSString* unsafePath = [NSString stringWithUTF8String:[[sPanel URL] fileSystemRepresentation]];
             m_path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
             m_fileName = wxFileNameFromPath(m_path);
             m_dir = wxPathOnly( m_path );
-            if (m_filterChoice)
-                m_filterIndex = m_filterChoice->GetSelection();
-            else
-                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
     }
     else
     {
-        NSOpenPanel* oPanel = (NSOpenPanel*)panel;
-        if (returnCode == NSModalResponseOK )
+        NSOpenPanel* const oPanel = static_cast<NSOpenPanel*>(sPanel);
+        if (wasAccepted)
         {
-            panel = oPanel;
-            result = wxID_OK;
-
             bool isFirst = true;
             for (NSURL* filename in [oPanel URLs])
             {
@@ -668,11 +660,6 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
                     isFirst = false;
                 }
             }
-
-            if (m_filterChoice)
-                 m_filterIndex = m_filterChoice->GetSelection();
-            else
-                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
         if ( m_delegate )
         {
@@ -681,7 +668,18 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_delegate = nil;
         }
     }
-    SetReturnCode(result);
+
+    if (wasAccepted)
+    {
+        if (m_filterChoice)
+            m_filterIndex = m_filterChoice->GetSelection();
+        else
+            m_filterIndex = GetMatchingFilterExtension(m_fileName);
+
+        TransferDataFromExtraControl();
+    }
+
+    SetReturnCode(wasAccepted ? wxID_OK : wxID_CANCEL);
     
     // workaround for sandboxed app, see above, must be executed before window modal handler
     // because there this instance will be deleted
@@ -691,7 +689,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
     
-    [(NSSavePanel*) panel setAccessoryView:nil];
+    [sPanel setAccessoryView:nil];
 }
 
 #endif // wxUSE_FILEDLG

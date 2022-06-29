@@ -580,6 +580,7 @@ wxAuiNotebook =
         attribute class { "wxAuiNotebook" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
+        [xrc:p="o"] element art-provider {_, ("default" | "simple") }* &
         (wxAuiNotebook_notebookpage | objectRef)*
     }
 
@@ -1733,7 +1734,18 @@ wxWizard =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="o"] element title  {_, t_text }* &
+        [xrc:p="o"] element border   {_, t_integer }* &
         [xrc:p="o"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element bitmap-placement {_, ("wxWIZARD_VALIGN_TOP" |
+                                                  "wxWIZARD_VALIGN_CENTRE" |
+                                                  "wxWIZARD_VALIGN_BOTTOM" |
+                                                  "wxWIZARD_VALIGN_CENTRE" |
+                                                  "wxWIZARD_HALIGN_LEFT" |
+                                                  "wxWIZARD_HALIGN_CENTRE" |
+                                                  "wxWIZARD_HALIGN_RIGHT" |
+                                                  "wxWIZARD_TILE") }* &
+        [xrc:p="o"] element bitmap-minwidth {_, t_integer }* &
+        [xrc:p="o"] element bitmap-bg   {_, t_colour }* &
         (wxWizardPage_any | objectRef)*
     }
 
@@ -2042,6 +2054,7 @@ wxGridBagSizer =
                                                      "wxFLEX_GROWMODE_ALL") }* &
         [xrc:p="o"] element growablerows        {_, t_list_of_numbers_with_weights }* &
         [xrc:p="o"] element growablecols        {_, t_list_of_numbers_with_weights }* &
+        [xrc:p="o"] element empty_cellsize      {_, t_size }* &
         (wxSizerGB_item | objectRef)*
     }
 
