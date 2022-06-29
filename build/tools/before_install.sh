@@ -28,8 +28,8 @@ case $(uname -s) in
                 return $rc
             }
 
+            codename=$(lsb_release --codename --short)
             if [ "$wxUSE_ASAN" = 1 ]; then
-                codename=$(lsb_release --codename --short)
                 # Enable the `-dbgsym` repositories.
                 echo "deb http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
                 deb http://ddebs.ubuntu.com ${codename}-updates main restricted universe multiverse" | \
@@ -61,6 +61,18 @@ case $(uname -s) in
                             ;;
                         *)  echo 'Please specify wxGTK_VERSION explicitly.' >&2
                             exit 1
+                            ;;
+                    esac
+
+                    case "$codename" in
+                        jammy)
+                            # Under Ubuntu 22.04 installing libgstreamer1.0-dev
+                            # fails because it depends on libunwind-dev which
+                            # is not going to be installed because it conflicts
+                            # with the pre-installed (in GitHub Actions
+                            # environment) libc++-dev, so we need to install it
+                            # directly to avoid errors later.
+                            extra_deps="$extra_deps libunwind-dev"
                             ;;
                     esac
 
