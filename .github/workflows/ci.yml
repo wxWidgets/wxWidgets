@@ -45,6 +45,15 @@ on:
       - '*.yml'
       - 'wxwidgets.props'
 
+# Also allow triggering this workflow manually with tmate debugging.
+on:
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Run the build with debug ssh shell'
+        required: false
+        default: true
+
 permissions:
   contents: read
 
@@ -72,6 +81,7 @@ jobs:
     steps:
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3.11
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
 
       - name: Checkout
         uses: actions/checkout@v2
