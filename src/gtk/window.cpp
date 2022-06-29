@@ -5698,7 +5698,12 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
             const wxColour fg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
             const wxColour bg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
             g_string_append_printf(css, "%s{color:%s;background:%s}",
-                isGTK3_20 ? "selection" : "*:selected",
+                "selection",
+                wxGtkString(gdk_rgba_to_string(fg_sel)).c_str(),
+                wxGtkString(gdk_rgba_to_string(bg_sel)).c_str());
+
+            g_string_append_printf(css, "%s{color:%s;background:%s}",
+                "*:selected",
                 wxGtkString(gdk_rgba_to_string(fg_sel)).c_str(),
                 wxGtkString(gdk_rgba_to_string(bg_sel)).c_str());
 
