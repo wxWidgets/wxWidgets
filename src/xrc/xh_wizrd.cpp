@@ -46,6 +46,15 @@ wxWizardXmlHandler::wxWizardXmlHandler() : wxXmlResourceHandler()
 
     XRC_ADD_STYLE(wxWIZARD_EX_HELPBUTTON);
     AddWindowStyles();
+
+    // bitmap placement flags
+    XRC_ADD_STYLE(wxWIZARD_VALIGN_TOP);
+    XRC_ADD_STYLE(wxWIZARD_VALIGN_CENTRE);
+    XRC_ADD_STYLE(wxWIZARD_VALIGN_BOTTOM);
+    XRC_ADD_STYLE(wxWIZARD_HALIGN_LEFT);
+    XRC_ADD_STYLE(wxWIZARD_HALIGN_CENTRE);
+    XRC_ADD_STYLE(wxWIZARD_HALIGN_RIGHT);
+    XRC_ADD_STYLE(wxWIZARD_TILE);
 }
 
 wxObject *wxWizardXmlHandler::DoCreateResource()
@@ -63,6 +72,27 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
                     GetBitmapBundle(),
                     GetPosition(),
                     GetStyle(wxT("style"), wxDEFAULT_DIALOG_STYLE));
+
+        int border = GetLong("border", -1);
+        if (border > 0)
+            wiz->SetBorder(border);
+
+        int placement = GetStyle("bitmap-placement", 0);
+        if (placement > 0)
+        {
+            wiz->SetBitmapPlacement(placement);
+
+            // The following two options are only valid if "bmp_placement" has been set
+
+            int min_width = GetLong("bitmap-minwidth", -1);
+            if (min_width > 0)
+                wiz->SetMinimumBitmapWidth(min_width);
+
+            wxColor clr = GetColour("bitmap-bg");
+            if (clr.IsOk())
+                wiz->SetBitmapBackgroundColour(clr);
+        }
+
         SetupWindow(wiz);
 
         wxWizard *old = m_wizard;

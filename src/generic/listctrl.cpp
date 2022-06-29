@@ -2331,8 +2331,10 @@ void wxListMainWindow::SendNotify( size_t line,
                                    wxEventType command,
                                    const wxPoint& point )
 {
-    wxListEvent le( command, GetParent()->GetId() );
-    le.SetEventObject( GetParent() );
+    wxGenericListCtrl* const listctrl = GetListCtrl();
+
+    wxListEvent le( command, listctrl->GetId() );
+    le.SetEventObject( listctrl );
 
     le.m_item.m_itemId =
     le.m_itemIndex = line;
@@ -2349,12 +2351,12 @@ void wxListMainWindow::SendNotify( size_t line,
 
     // provide information about the (first column of the) item in the event if
     // we have a valid item and any columns at all
-    if ( line != (size_t)-1 && GetColumnCount() )
+    if ( line != (size_t)-1 && listctrl->GetColumnCount() )
     {
         GetLine(line)->GetItem( 0, le.m_item );
     }
 
-    GetParent()->GetEventHandler()->ProcessEvent( le );
+    listctrl->GetEventHandler()->ProcessEvent( le );
 }
 
 bool wxListMainWindow::ChangeCurrentWithoutEvent(size_t current)
@@ -4224,14 +4226,15 @@ void wxListMainWindow::RecalculatePositions()
             );
         }
     }
-
-    m_dirty = false;
 }
 
 void wxListMainWindow::RecalculatePositionsAndRefresh()
 {
     RecalculatePositions();
 
+    // Whether the window was dirty or not before, it won't be any longer after
+    // the next refresh.
+    m_dirty = false;
     Refresh();
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
@@ -4906,6 +4909,10 @@ void wxGenericListCtrl::Init()
 
 wxGenericListCtrl::~wxGenericListCtrl()
 {
+    // Don't wait until the base class does it because our subwindows expect
+    // their parent window to be a wxListCtrl, but this won't be the case any
+    // more when we get to the base class dtor (it will be only a wxWindow).
+    DestroyChildren();
 }
 
 void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
@@ -5353,7 +5360,11 @@ int wxGenericListCtrl::GetItemCount() const
 
 int wxGenericListCtrl::GetColumnCount() const
 {
-    return m_mainWin->GetColumnCount();
+    // wxLC_LIST is special as we want to return 1 for it, for compatibility
+    // with the native wxMSW version and not the real number of columns, which
+    // is 0. For the other non-wxLC_REPORT modes returning 0 is fine, however,
+    // as wxMSW does it too.
+    return HasFlag(wxLC_LIST) ? 1 : m_mainWin->GetColumnCount();
 }
 
 void wxGenericListCtrl::SetItemSpacing( int spacing, bool isSmall )

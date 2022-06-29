@@ -265,7 +265,7 @@ public:
     // -----------------
 
     virtual unsigned int GetCount() const wxOVERRIDE
-        { return m_items.GetCount(); }
+        { return static_cast<unsigned int>(m_items.GetCount()); }
 
     virtual wxString GetString(unsigned int n) const wxOVERRIDE;
 

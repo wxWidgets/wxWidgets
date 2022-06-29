@@ -149,12 +149,19 @@ namespace
 class wxBitmapBundleImplArt : public wxBitmapBundleImpl
 {
 public:
-    wxBitmapBundleImplArt(const wxArtID& id,
+    wxBitmapBundleImplArt(const wxBitmap& bitmap,
+                          const wxArtID& id,
                           const wxArtClient& client,
-                          const wxSize& size)
+                          const wxSize& sizeRequested)
         : m_artId(id),
           m_artClient(client),
-          m_sizeDefault(GetValidSize(id, client, size))
+          // The bitmap bundle must have the requested size if it was
+          // specified, but if it wasn't just use the (scale-independent)
+          // bitmap size.
+          m_sizeDefault(sizeRequested.IsFullySpecified()
+                            ? sizeRequested
+                            : bitmap.GetDIPSize()),
+          m_bitmapScale(bitmap.GetScaleFactor())
     {
     }
 
@@ -165,8 +172,8 @@ public:
 
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
     {
-        // We have no preferred sizes.
-        return m_sizeDefault*scale;
+        // Use the standard logic for integer-factor upscaling.
+        return DoGetPreferredSize(scale);
     }
 
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
@@ -174,36 +181,24 @@ public:
         return wxArtProvider::GetBitmap(m_artId, m_artClient, size);
     }
 
-private:
-    static wxSize GetValidSize(const wxArtID& id,
-                               const wxArtClient& client,
-                               const wxSize& size)
+protected:
+    virtual double GetNextAvailableScale(size_t& i) const wxOVERRIDE
     {
-        // If valid size is provided, just use it.
-        if ( size != wxDefaultSize )
-            return size;
-
-        // Otherwise, try to get the size we'd use without creating a bitmap
-        // immediately.
-        const wxSize sizeHint = wxArtProvider::GetSizeHint(client);
-        if ( sizeHint != wxDefaultSize )
-            return sizeHint;
-
-        // If we really have to, do create a bitmap just to get its size. Note
-        // we need the size in logical pixels here, it will be scaled later if
-        // necessary, so use GetDIPSize() and not GetSize().
-        const wxBitmap bitmap = wxArtProvider::GetBitmap(id, client);
-        if ( bitmap.IsOk() )
-            return bitmap.GetDIPSize();
-
-        // We really need some default size, so just return this hardcoded
-        // value if all else fails -- what else can we do.
-        return wxSize(16, 16);
+        // Unfortunately we don't know what bitmap sizes are available here as
+        // there is simply nothing in wxArtProvider API that returns this (and
+        // adding something to the API doesn't make sense as all this is only
+        // used for compatibility with the existing custom art providers -- new
+        // ones should just override CreateBitmapBundle() directly), so we only
+        // return the original bitmap scale, but hope that perhaps the provider
+        // will have other (e.g. x2) scales too, when our GetBitmap() is called.
+        return i++ ? 0.0 : m_bitmapScale;
     }
 
+private:
     const wxArtID m_artId;
     const wxArtClient m_artClient;
     const wxSize m_sizeDefault;
+    const double m_bitmapScale;
 
     wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplArt);
 };
@@ -309,6 +304,30 @@ void wxArtProvider::RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 }
 #endif // WXWIN_COMPATIBILITY_3_0
 
+#if wxUSE_IMAGE
+
+namespace
+{
+
+bool CanUpscaleByInt(int w, int h, const wxSize& sizeNeeded)
+{
+    return !(sizeNeeded.x % w) && !(sizeNeeded.y % h);
+}
+
+void ExtendBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
+{
+    const wxSize size = bmp.GetSize();
+
+    wxPoint offset((sizeNeeded.x - size.x)/2, (sizeNeeded.y - size.y)/2);
+    wxImage img = bmp.ConvertToImage();
+    img.Resize(sizeNeeded, offset);
+    bmp = wxBitmap(img);
+}
+
+} // anonymous namespace
+
+#endif // wxUSE_IMAGE
+
 void
 wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
 {
@@ -322,21 +341,42 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
         return;
 
 #if wxUSE_IMAGE
-    if ((bmp_h <= sizeNeeded.x) && (bmp_w <= sizeNeeded.y))
+    // Check if we need to increase or decrease the image size (mixed case is
+    // handled as decreasing).
+    if ((bmp_w <= sizeNeeded.x) && (bmp_h <= sizeNeeded.y))
     {
+        // Allow upscaling by an integer factor: this looks not too horribly and is
+        // needed to use reasonably-sized bitmaps in the code not yet updated to
+        // use wxBitmapBundle but using custom art providers.
+        bool shouldUpscale = CanUpscaleByInt(bmp_w, bmp_h, sizeNeeded);
+
+        // And account for the common case of 16x15 bitmaps used for many wxMSW
+        // images: those can be resized to 16x16 and then upscaled if possible
+        // (and if 16x16 is the required size, there is no need to upscale, so
+        // don't handle this sub-case specially at all).
+        if (!shouldUpscale && bmp_w == 16 && bmp_h == 15 && sizeNeeded.y != 16)
+        {
+            // If we can't upscale it with its current height, perhaps we can
+            // if we resize it to 16 first?
+            if (CanUpscaleByInt(bmp_w, 16, sizeNeeded))
+            {
+                ExtendBitmap(bmp, wxSize(16, 16));
+                shouldUpscale = true;
+            }
+        }
+
         // the caller wants default size, which is larger than
         // the image we have; to avoid degrading it visually by
         // scaling it up, paste it into transparent image instead:
-        wxPoint offset((sizeNeeded.x - bmp_w)/2, (sizeNeeded.y - bmp_h)/2);
-        wxImage img = bmp.ConvertToImage();
-        img.Resize(sizeNeeded, offset);
-        bmp = wxBitmap(img);
+        if (!shouldUpscale)
+        {
+            ExtendBitmap(bmp, sizeNeeded);
+            return;
+        }
     }
-    else // scale (down or mixed, but not up)
 #endif // wxUSE_IMAGE
-    {
-        wxBitmap::Rescale(bmp, sizeNeeded);
-    }
+
+    wxBitmap::Rescale(bmp, sizeNeeded);
 }
 
 /*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
@@ -438,9 +478,12 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
             // lower priority one: even if this means that the bitmap will be
             // scaled, at least we'll be using the expected bitmap rather than
             // potentially using a bitmap of a different style.
-            if ( provider->CreateBitmap(id, client, size).IsOk() )
+            const wxBitmap& bitmap = provider->CreateBitmap(id, client, size);
+            if ( bitmap.IsOk() )
             {
-                bitmapbundle = wxBitmapBundle::FromImpl(new wxBitmapBundleImplArt(id, client, size));
+                bitmapbundle = wxBitmapBundle::FromImpl(
+                        new wxBitmapBundleImplArt(bitmap, id, client, size)
+                    );
                 break;
             }
         }

@@ -870,11 +870,6 @@ wxAcceleratorEntry *wxMenuItem::GetAccel() const
 
 #endif // wxUSE_ACCEL
 
-wxBitmap wxMenuItem::GetBitmap() const
-{
-   return GetBitmapFromBundle(m_bitmap);
-}
-
 void wxMenuItem::Check( bool check )
 {
     wxCHECK_RET( m_menuItem, wxT("invalid menu item") );

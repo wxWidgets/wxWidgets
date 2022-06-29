@@ -321,12 +321,7 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     m_focus = winFocus ? winFocus : this;
     m_focus->SetFocus();
 
-#if defined( __WXMAC__) && wxOSX_USE_COCOA_OR_CARBON
-    // MSW doesn't allow to set focus to the popup window, but we need to
-    // subclass the window which has the focus, and not winFocus passed in or
-    // otherwise everything else breaks down
-    m_focus = FindFocus();
-#elif defined(__WXGTK__)
+#if defined(__WXGTK__)
     // GTK+ catches the activate events from the popup
     // window, not the focus events from the child window
     m_focus = this;

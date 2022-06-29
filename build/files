@@ -1017,6 +1017,7 @@ GUI_CMN_HDR =
     wx/fdrepdlg.h
     wx/filectrl.h
     wx/filedlg.h
+    wx/filedlgcustomize.h
     wx/filehistory.h
     wx/filepicker.h
     wx/fmappriv.h

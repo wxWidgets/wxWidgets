@@ -351,6 +351,7 @@
         <srcdir>$(SRCDIR)/image</srcdir>
         <dstdir>image</dstdir>
         <files>
+            bitfields.bmp
             8bpp-colorsused-large.bmp
             8bpp-colorsused-negative.bmp
             rle4-delta-320x240.bmp
@@ -392,7 +393,6 @@
             paste_result_no_background_square_over_circle.png
 
             wx.png
-            wx.ico
 
             toucan.png
             toucan_hue_0.538.png

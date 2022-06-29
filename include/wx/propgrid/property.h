@@ -1470,10 +1470,7 @@ public:
     // Returns editor used for given column. NULL for no editor.
     const wxPGEditor* GetColumnEditor( int column ) const
     {
-        if ( column == 1 )
-            return GetEditorClass();
-
-        return NULL;
+        return column == 1 ? GetEditorClass() : NULL;
     }
 
     // Returns common value selected for this property. -1 for none.
@@ -1527,7 +1524,7 @@ public:
     // Determines, recursively, if all children are not unspecified.
     // pendingList - Assumes members in this wxVariant list as pending
     //   replacement values.
-    bool AreAllChildrenSpecified( wxVariant* pendingList = NULL ) const;
+    bool AreAllChildrenSpecified( const wxVariant* pendingList = NULL ) const;
 
     // Updates composed values of parent non-category properties, recursively.
     // Returns topmost property updated.
@@ -1776,9 +1773,7 @@ public:
     // Gets assignable version of property's validator.
     wxValidator* GetValidator() const
     {
-        if ( m_validator )
-            return m_validator;
-        return DoGetValidator();
+        return  m_validator ? m_validator : DoGetValidator();
     }
 #endif // wxUSE_VALIDATORS
 
@@ -2048,7 +2043,7 @@ protected:
     //
     // TODO: Can bitmap be implemented with wxPGCell?
     wxBitmapBundle              m_valueBitmapBundle;
-    wxBitmap                    m_valueBitmap;
+    mutable wxBitmap            m_valueBitmap;
 
     wxVariant                   m_value;
     wxPGAttributeStorage        m_attributes;

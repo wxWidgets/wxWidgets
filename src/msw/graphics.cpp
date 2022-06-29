@@ -1862,9 +1862,35 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDou
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc )
     : wxGraphicsContext(renderer, dc.GetWindow())
 {
-    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-    HDC hdc = (HDC) msw->GetHDC();
+    HDC hdc = (HDC) dc.GetHDC();
     wxSize sz = dc.GetSize();
+
+    // We don't set HDC origin at MSW level in wxDC because this limits it to
+    // 2^27 range and we prefer to handle it ourselves to allow using the full
+    // 2^32 range of int coordinates, but we need to let GDI+ know about the
+    // origin shift. It would seem that using TranslateTransform() should be
+    // the right way to do it, but using it results in drawing artifacts when
+    // scrolling (see #22480), so we temporarily set the origin instead: this
+    // won't work for the shifts beyond 2^27 GDI range, but is better than
+    // nothing.
+    class TempSetViewportOrg
+    {
+    public:
+        TempSetViewportOrg(HDC hdc, const wxPoint& origin)
+            : m_hdc(hdc)
+        {
+            ::SetViewportOrgEx(m_hdc, origin.x, origin.y, &m_originPrev);
+        }
+
+        ~TempSetViewportOrg()
+        {
+            ::SetViewportOrgEx(m_hdc, m_originPrev.x, m_originPrev.y, NULL);
+        }
+
+    private:
+        const HDC m_hdc;
+        POINT m_originPrev;
+    } tempSetViewportOrg(hdc, dc.GetDeviceOrigin());
 
     Init(new Graphics(hdc), sz.x, sz.y);
 }

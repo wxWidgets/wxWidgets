@@ -424,25 +424,16 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     wxUnusedVar(window);
     wxUnusedVar(orientation);
 
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14) && wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() < 128 )
-    {
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(m_sashBrush);
-        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
-    }
-    else
-    {
-        HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
-        CGContextRef cgContext ;
-        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
-        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext() ;
+    HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
+    CGContextRef cgContext ;
+    wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+    cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext() ;
 
-        HIThemeSplitterDrawInfo drawInfo ;
-        drawInfo.version = 0 ;
-        drawInfo.state = kThemeStateActive ;
-        drawInfo.adornment = kHIThemeSplitterAdornmentNone ;
-        HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
-    }
+    HIThemeSplitterDrawInfo drawInfo ;
+    drawInfo.version = 0 ;
+    drawInfo.state = kThemeStateActive ;
+    drawInfo.adornment = kHIThemeSplitterAdornmentMetal ;
+    HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
 
 #elif defined(__WXGTK__)
     // clear out the rectangle first

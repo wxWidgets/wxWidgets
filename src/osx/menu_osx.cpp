@@ -488,9 +488,10 @@ static wxMenu *CreateAppleMenu()
     {
         wxString aboutLabel;
         if ( wxTheApp )
-            aboutLabel.Printf(_("About %s"), wxTheApp->GetAppDisplayName());
+            aboutLabel.Printf(wxGETTEXT_IN_CONTEXT("macOS menu item", "About %s"),
+                              wxTheApp->GetAppDisplayName());
         else
-            aboutLabel = _("About...");
+            aboutLabel = wxGETTEXT_IN_CONTEXT("macOS menu item", "About...");
         appleMenu->Append( wxApp::s_macAboutMenuItemId, aboutLabel);
         appleMenu->AppendSeparator();
     }
@@ -498,30 +499,36 @@ static wxMenu *CreateAppleMenu()
     if ( wxApp::s_macPreferencesMenuItemId != wxID_NONE )
     {
         appleMenu->Append( wxApp::s_macPreferencesMenuItemId,
-                           _("Preferences...") + "\tCtrl+," );
+                           wxGETTEXT_IN_CONTEXT("macOS menu item", "Preferences...")
+                           + "\tCtrl+," );
         appleMenu->AppendSeparator();
     }
 
-    appleMenu->Append(wxID_OSX_SERVICES, _("Services"), new wxMenu());
+    appleMenu->Append(wxID_OSX_SERVICES, wxGETTEXT_IN_CONTEXT("macOS menu item", "Services"),
+                      new wxMenu());
     appleMenu->AppendSeparator();
 
     // standard menu items, handled in wxMenu::HandleCommandProcess(), see above:
     wxString hideLabel;
     if ( wxTheApp )
-        hideLabel = wxString::Format(_("Hide %s"), wxTheApp->GetAppDisplayName());
+        hideLabel = wxString::Format(wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide %s"),
+                                     wxTheApp->GetAppDisplayName());
     else
-        hideLabel = _("Hide Application");
+        hideLabel = wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide Application");
     appleMenu->Append( wxID_OSX_HIDE, hideLabel + "\tCtrl+H" );
-    appleMenu->Append( wxID_OSX_HIDEOTHERS, _("Hide Others")+"\tAlt+Ctrl+H" );
-    appleMenu->Append( wxID_OSX_SHOWALL, _("Show All") );
+    appleMenu->Append( wxID_OSX_HIDEOTHERS,
+                       wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide Others")+"\tAlt+Ctrl+H" );
+    appleMenu->Append( wxID_OSX_SHOWALL,
+                       wxGETTEXT_IN_CONTEXT("macOS menu item", "Show All") );
     appleMenu->AppendSeparator();
     
     // Do always add "Quit" item unconditionally however, it can't be disabled.
     wxString quitLabel;
     if ( wxTheApp )
-        quitLabel = wxString::Format(_("Quit %s"), wxTheApp->GetAppDisplayName());
+        quitLabel = wxString::Format(wxGETTEXT_IN_CONTEXT("macOS menu item", "Quit %s"),
+                                     wxTheApp->GetAppDisplayName());
     else
-        quitLabel = _("Quit Application");
+        quitLabel = wxGETTEXT_IN_CONTEXT("macOS menu item", "Quit Application");
     appleMenu->Append( wxApp::s_macExitMenuItemId, quitLabel + "\tCtrl+Q" );
 
     return appleMenu;

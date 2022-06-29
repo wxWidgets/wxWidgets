@@ -196,11 +196,6 @@ class WXDLLIMPEXP_CORE wxDataViewModel: public wxRefCounter
 public:
     wxDataViewModel();
 
-    virtual unsigned int GetColumnCount() const = 0;
-
-    // return type as reported by wxVariant
-    virtual wxString GetColumnType( unsigned int col ) const = 0;
-
     // get value into a wxVariant
     virtual void GetValue( wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) const = 0;
@@ -280,6 +275,18 @@ public:
     // internal
     virtual bool IsListModel() const { return false; }
     virtual bool IsVirtualListModel() const { return false; }
+
+    // deprecated: these methods used to be pure virtual but they're not really
+    // needed by the implementation, and so now overriding them is unnecessary
+    // as they're never called, but they're still preserved to avoid breaking
+    // the existing code using "override" with them in the derived classes.
+    wxDEPRECATED_MSG("Use wxDataViewCtrl::GetColumnCount() and don't override")
+    virtual unsigned int GetColumnCount() const { return 0; }
+    wxDEPRECATED_MSG("Don't override this function, is is not needed any more")
+    virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const
+    {
+        return wxString();
+    }
 
 protected:
     // Dtor is protected because the objects of this class must not be deleted,
@@ -1112,10 +1119,6 @@ public:
 
     // override base virtuals
 
-    virtual unsigned int GetColumnCount() const wxOVERRIDE;
-
-    virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE;
-
     virtual void GetValueByRow( wxVariant &value,
                            unsigned int row, unsigned int col ) const wxOVERRIDE;
 
@@ -1384,10 +1387,6 @@ public:
 
     virtual bool HasDefaultCompare() const wxOVERRIDE
         { return true; }
-    virtual unsigned int GetColumnCount() const wxOVERRIDE
-        { return 1; }
-    virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const wxOVERRIDE
-        { return wxT("wxDataViewIconText"); }
 
     wxDataViewTreeStoreNode *FindNode( const wxDataViewItem &item ) const;
     wxDataViewTreeStoreContainerNode *FindContainerNode( const wxDataViewItem &item ) const;

@@ -24,7 +24,9 @@ wxRichTextCtrlXmlHandler::wxRichTextCtrlXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxTE_PROCESS_TAB);
     XRC_ADD_STYLE(wxTE_MULTILINE);
     XRC_ADD_STYLE(wxTE_READONLY);
-    XRC_ADD_STYLE(wxTE_AUTO_URL);
+
+    XRC_ADD_STYLE(wxRE_CENTRE_CARET);
+    XRC_ADD_STYLE(wxRE_READONLY);
 
     AddWindowStyles();
 }
@@ -42,9 +44,6 @@ wxObject *wxRichTextCtrlXmlHandler::DoCreateResource()
                  GetName());
 
     SetupWindow(text);
-
-    if (HasParam(wxT("maxlength")))
-        text->SetMaxLength(GetLong(wxT("maxlength")));
 
     return text;
 }

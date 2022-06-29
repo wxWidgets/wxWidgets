@@ -309,6 +309,9 @@ class wxPropertyGridPageState
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPage;
     friend class wxPropertyGridManager;
+    friend class wxPGProperty;
+    friend class wxFlagsProperty;
+    friend class wxPropertyGridIteratorBase;
 public:
 
     /**
@@ -331,10 +334,6 @@ public:
         deletion.
     */
     virtual void DoDelete( wxPGProperty* item, bool doDelete = true );
-
-    wxSize DoFitColumns( bool allowGridResize = false );
-
-    wxPGProperty* DoGetItemAtY( int y ) const;
 
     /**
         Override this member function to add custom behaviour on property
@@ -398,45 +397,14 @@ public:
     */
     wxPGProperty* GetSelection() const;
 
-    void DoSetSelection( wxPGProperty* prop );
-
-    bool DoClearSelection();
-
-    void DoRemoveFromSelection( wxPGProperty* prop );
-
-    void DoSetColumnProportion( unsigned int column, int proportion );
-
-    int DoGetColumnProportion( unsigned int column ) const;
-
-    void ResetColumnSizes( int setSplitterFlags );
-
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
-
-    wxVariant DoGetPropertyValues( const wxString& listname,
-                                   wxPGProperty* baseparent,
-                                   long flags ) const;
-
-    wxPGProperty* DoGetRoot() const;
-
-    void DoSetPropertyName( wxPGProperty* p, const wxString& newName );
 
     /**
         Returns combined width of margin and all the columns.
     */
     int GetVirtualWidth() const;
 
-    /**
-        Returns minimal width for given column so that all images and texts
-        will fit entirely.
-
-        Used by SetSplitterLeft() and DoFitColumns().
-    */
-    int GetColumnFitWidth(wxClientDC& dc,
-                          wxPGProperty* pwc,
-                          unsigned int col,
-                          bool subProps) const;
-
-    int GetColumnFullWidth(wxClientDC &dc, wxPGProperty *p, unsigned int col);
+    int GetColumnFullWidth(wxPGProperty* p, unsigned int col) const;
 
     /**
         Returns information about arbitrary position in the grid.
@@ -455,73 +423,8 @@ public:
 
     bool IsInNonCatMode() const;
 
-    void DoLimitPropertyEditing( wxPGProperty* p, bool limit = true );
-
-    bool DoSelectProperty( wxPGProperty* p, unsigned int flags = 0 );
-
-    /**
-        widthChange is non-client.
-    */
-    void OnClientWidthChange( int newWidth,
-                              int widthChange,
-                              bool fromOnResize = false );
-
-    /**
-        Recalculates m_virtualHeight.
-    */
-    void RecalculateVirtualHeight();
-
-    void SetColumnCount( int colCount );
-
-    void PropagateColSizeDec( int column, int decrease, int dir );
-
-    bool DoHideProperty( wxPGProperty* p, bool hide, int flags = wxPG_RECURSE );
-
-    bool DoSetPropertyValueString( wxPGProperty* p, const wxString& value );
-
-    bool DoSetPropertyValue( wxPGProperty* p, wxVariant& value );
-
-    bool DoSetPropertyValueWxObjectPtr( wxPGProperty* p, wxObject* value );
-    void DoSetPropertyValues( const wxVariantList& list,
-                              wxPGProperty* default_category );
-
-    void SetSplitterLeft( bool subProps = false );
-
-    /**
-        Set virtual width for this particular page.
-    */
-    void SetVirtualWidth( int width );
-
-    void DoSortChildren( wxPGProperty* p, int flags = 0 );
-    void DoSort( int flags = 0 );
-
-    bool PrepareAfterItemsAdded();
-
     /**
         Called after virtual height needs to be recalculated.
     */
     void VirtualHeightChanged();
-
-    /**
-        Base append.
-    */
-    wxPGProperty* DoAppend( wxPGProperty* property );
-
-    /**
-        Returns property by its name.
-    */
-    wxPGProperty* BaseGetPropertyByName( const wxString& name ) const;
-
-    /**
-        Called in, for example, wxPropertyGrid::Clear.
-    */
-    void DoClear();
-
-    bool DoIsPropertySelected( wxPGProperty* prop ) const;
-
-    bool DoCollapse( wxPGProperty* p );
-
-    bool DoExpand( wxPGProperty* p );
-
-    void CalculateFontAndBitmapStuff( int vspacing );
 };

@@ -936,6 +936,7 @@ void wxNonOwnedWindowCocoaImpl::SetUpForModalParent()
 void wxNonOwnedWindowCocoaImpl::ShowWithoutActivating()
 {
     SetUpForModalParent();
+    [m_macWindow setHidesOnDeactivate:YES];
     [m_macWindow orderFront:nil];
     [[m_macWindow contentView] setNeedsDisplay: YES];
 }
@@ -956,7 +957,10 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
                 {
                     NSWindow* parentNSWindow = [parentView window];
                     if ( parentNSWindow ) {
-                        [parentNSWindow addChildWindow:m_macWindow ordered:NSWindowAbove];
+                        // we used to call [parentNSWindow addChildWindow:m_macWindow here
+                        // but this lead to problems with Spaces (modal windows disappeared
+                        // when dragged to a different space)
+
                         // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
                         // to be in NSModalPanelWindowLevel and not NSFloatingWindowLevel to stay
                         // above the parent.

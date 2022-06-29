@@ -293,13 +293,12 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
     wxMemoryDC* mdc = surface
         ? new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc)
         : new wxMemoryDC();
-    mdc->GetImpl()->SetWindow(GETWIN(winid));
     hdc = mdc;
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
-    bitmap = new wxBitmap();
-    bitmap->CreateWithDIPSize(width, height,(GETWIN(winid))->GetContentScaleFactor());
+    bitmap = new wxBitmap(GETWIN(winid)->ToPhys(wxSize(width, height)));
+    bitmap->SetScaleFactor(GETWIN(winid)->GetDPIScaleFactor());
     mdc->SelectObject(*bitmap);
 }
 

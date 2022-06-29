@@ -116,11 +116,11 @@ if NOT "%SKIPINSTALL%"=="1" (
     echo.
     echo --- Test installed library
     echo.
-    set WXWIN=%WX_INSTALL_PATH%
+    set wxWidgets_DIR=%WX_INSTALL_PATH%
     mkdir build_cmake_install_test
     pushd build_cmake_install_test
     echo --- Configure minimal sample
-    cmake -G "%GENERATOR%" ..\samples\minimal
+    cmake -G "%GENERATOR%" -DCMAKE_CONFIGURATION_TYPES=%CONFIGURATION% ..\samples\minimal
     if ERRORLEVEL 1 goto error
     echo --- Building minimal sample with installed library
     cmake --build . --config %CONFIGURATION% -- %CMAKE_LOGGER%

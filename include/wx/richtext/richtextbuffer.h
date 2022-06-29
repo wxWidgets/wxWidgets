@@ -368,7 +368,8 @@ public:
     /**
         Constructor taking value and units flag.
     */
-    wxTextAttrDimension(int value, wxTextAttrUnits units = wxTEXT_ATTR_UNITS_TENTHS_MM) { m_value = value; m_flags = units|wxTEXT_ATTR_VALUE_VALID; }
+    wxTextAttrDimension(int value, wxTextAttrUnits units = wxTEXT_ATTR_UNITS_TENTHS_MM) { m_value = value;
+        m_flags = static_cast<wxTextAttrDimensionFlags>(units | wxTEXT_ATTR_VALUE_VALID); }
 
     /**
         Resets the dimension value and flags.
@@ -426,7 +427,8 @@ public:
     /**
         Sets the integer value and units.
     */
-    void SetValue(int value, wxTextAttrUnits units) { m_value = value; m_flags = units | wxTEXT_ATTR_VALUE_VALID; }
+    void SetValue(int value, wxTextAttrUnits units) { m_value = value;
+        m_flags = static_cast<wxTextAttrDimensionFlags>(units | wxTEXT_ATTR_VALUE_VALID); }
 
     /**
         Sets the dimension.

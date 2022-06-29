@@ -717,7 +717,11 @@ struct wxPixelDataOut<wxBitmap>
                 {
                     wxByte mask = static_cast<wxByte>(1 << m_bit);
                     wxByte value = static_cast<wxByte>(b << m_bit);
-                    (*m_ptr &= ~mask) |= value;
+                    wxByte& val_m_ptr = *m_ptr;
+
+                    val_m_ptr = static_cast<wxByte>(val_m_ptr & ~mask);
+                    val_m_ptr |= value;
+
                     return *this;
                 }
                 operator bool() const

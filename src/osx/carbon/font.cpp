@@ -1075,14 +1075,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
             return false;
         if ( d < 0 )
             return false;
-#ifdef __LP64__
-        // CGFloat is just double in this case.
         m_ctSize = d;
-#else // !__LP64__
-        if ( d > FLT_MAX )
-            return false;
-        m_ctSize = static_cast<CGFloat>(d);
-#endif // __LP64__/!__LP64__
 
         token = tokenizer.GetNextToken();
         if ( !token.ToLong(&l) )

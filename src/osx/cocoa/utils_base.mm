@@ -77,17 +77,6 @@ wxString wxGetOsDescription()
     {
         switch (minorVer)
         {
-            case 7:
-                osName = "Lion";
-                // 10.7 was the last version where the "Mac" prefix was used
-                osBrand = "Mac OS X";
-                break;
-            case 8:
-                osName = "Mountain Lion";
-                break;
-            case 9:
-                osName = "Mavericks";
-                break;
             case 10:
                 osName = "Yosemite";
                 break;
@@ -117,6 +106,9 @@ wxString wxGetOsDescription()
                 break;
             case 12:
                 osName = "Monterey";
+                break;
+            case 13:
+                osName = "Ventura";
                 break;
         }
     }

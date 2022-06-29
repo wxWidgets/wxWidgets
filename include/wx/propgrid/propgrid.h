@@ -1313,7 +1313,7 @@ public:
 
     // Returns true if given event is from first of an array of buttons
     // (as can be in case when wxPGMultiButton is used).
-    bool IsMainButtonEvent( const wxEvent& event )
+    bool IsMainButtonEvent( const wxEvent& event ) const
     {
         return (event.GetEventType() == wxEVT_BUTTON)
                     && (m_wndSecId == event.GetId());
@@ -1839,7 +1839,7 @@ protected:
         return KeyEventToActions(event, NULL);
     }
 
-    void ImprovedClientToScreen( int* px, int* py );
+    void ImprovedClientToScreen( int* px, int* py ) const;
 
     // Called by focus event handlers. newFocused is the window that becomes
     // focused.
@@ -2085,9 +2085,7 @@ public:
     // the property grid has been deleted.
     wxVariant GetPropertyValue() const
     {
-        if ( m_validationInfo )
-            return m_validationInfo->GetValue();
-        return m_value;
+        return m_validationInfo ? m_validationInfo->GetValue() : m_value;
     }
 
     // Returns value of the associated property.
@@ -2156,7 +2154,6 @@ public:
     }
 
 private:
-    void Init();
     void OnPropertyGridSet();
     wxDECLARE_DYNAMIC_CLASS(wxPropertyGridEvent);
 

@@ -882,11 +882,15 @@ public:
 
         It is usually unnecessary to call this function, as the tools will
         always be made big enough to fit the size of the bitmaps used in them.
+        Moreover, calling it forces wxToolBar to scale its images in high DPI
+        using the provided size, instead of letting wxBitmapBundle used for the
+        tool bitmaps determine the best suitable bitmap size, which may result
+        in suboptimal appearance.
 
         If you do call it, it must be done before toolbar is Realize()'d.
 
         Example of using this function to force the bitmaps to be at least
-        32 pixels wide and tall:
+        32 pixels wide and tall (at normal DPI):
         @code
             toolbar->SetToolBitmapSize(FromDIP(wxSize(32, 32)));
             toolbar->AddTool(wxID_NEW, "New", wxBitmapBundle::FromXXX(...));

@@ -1053,15 +1053,22 @@ static cairo_surface_t* GetSubSurface(cairo_surface_t* surface, const wxRect& re
 }
 #endif
 
-wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
+wxBitmap wxBitmap::GetSubBitmap(const wxRect& r) const
 {
     wxBitmap ret;
 
     wxCHECK_MSG(IsOk(), ret, wxT("invalid bitmap"));
 
+    const wxBitmapRefData* bmpData = M_BMPDATA;
+#ifdef __WXGTK3__
+    const double s = bmpData->m_scaleFactor;
+    const wxRect rect(int(r.x * s), int(r.y * s), int(r.width * s), int(r.height * s));
+#else
+    const wxRect& rect = r;
+#endif
+
     const int w = rect.width;
     const int h = rect.height;
-    const wxBitmapRefData* bmpData = M_BMPDATA;
 
     wxCHECK_MSG(rect.x >= 0 && rect.y >= 0 &&
                 rect.x + w <= bmpData->m_width &&
@@ -1414,7 +1421,18 @@ void wxBitmap::Draw(cairo_t* cr, int x, int y, bool useMask, const wxColour* fg,
     if (useMask && bmpData->m_mask)
         mask = *bmpData->m_mask;
     if (mask)
-        cairo_mask_surface(cr, mask, x, y);
+    {
+        cairo_pattern_t* pattern = cairo_pattern_create_for_surface(mask);
+        cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
+        if (x || y)
+        {
+            cairo_matrix_t matrix;
+            cairo_matrix_init_translate(&matrix, -x, -y);
+            cairo_pattern_set_matrix(pattern, &matrix);
+        }
+        cairo_mask(cr, pattern);
+        cairo_pattern_destroy(pattern);
+    }
     else
         cairo_paint(cr);
 }

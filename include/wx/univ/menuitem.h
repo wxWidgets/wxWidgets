@@ -39,9 +39,11 @@ public:
     // hopefully
     void SetBitmaps(const wxBitmapBundle& bmpChecked,
                     const wxBitmapBundle& bmpUnchecked = wxBitmapBundle());
-    void SetBitmap(const wxBitmapBundle& bmp) { SetBitmaps(bmp); }
-    wxBitmap GetBitmap(bool checked = true) const
-      { return GetBitmapFromBundle(checked ? m_bmpChecked : m_bmpUnchecked); }
+    virtual void SetBitmap(const wxBitmapBundle& bmp) wxOVERRIDE { SetBitmaps(bmp); }
+    wxBitmap GetBitmap(bool checked) const
+      { return GetBitmapFromBundle(checked ? m_bitmap : m_bmpUnchecked); }
+    virtual wxBitmap GetBitmap() const wxOVERRIDE
+      { return GetBitmap(true); }
 
     void SetDisabledBitmap( const wxBitmapBundle& bmpDisabled )
       { m_bmpDisabled = bmpDisabled; }
@@ -93,8 +95,7 @@ protected:
     void UpdateAccelInfo();
 
     // the bitmaps (may be invalid, then they're not used)
-    wxBitmapBundle m_bmpChecked,
-                   m_bmpUnchecked,
+    wxBitmapBundle m_bmpUnchecked,
                    m_bmpDisabled;
 
     // the positions of the first and last items of the radio group this item

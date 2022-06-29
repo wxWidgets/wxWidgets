@@ -22,11 +22,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxCommandLinkButtonXmlHandler, wxXmlResourceHandler);
 wxCommandLinkButtonXmlHandler::wxCommandLinkButtonXmlHandler()
     : wxXmlResourceHandler()
 {
-    XRC_ADD_STYLE(wxBU_LEFT);
-    XRC_ADD_STYLE(wxBU_RIGHT);
-    XRC_ADD_STYLE(wxBU_TOP);
-    XRC_ADD_STYLE(wxBU_BOTTOM);
-    XRC_ADD_STYLE(wxBU_EXACTFIT);
     AddWindowStyles();
 }
 
@@ -53,6 +48,19 @@ wxObject *wxCommandLinkButtonXmlHandler::DoCreateResource()
     }
 
     SetupWindow(button);
+
+    const wxXmlNode* node = GetParamNode("pressed");
+    if (node)
+        button->SetBitmapPressed(GetBitmapBundle(node));
+    node = GetParamNode("focus");
+    if (node)
+        button->SetBitmapFocus(GetBitmapBundle(node));
+    node = GetParamNode("disabled");
+    if (node)
+        button->SetBitmapDisabled(GetBitmapBundle(node));
+    node = GetParamNode("current");
+    if (node)
+        button->SetBitmapCurrent(GetBitmapBundle(node));
 
     return button;
 }

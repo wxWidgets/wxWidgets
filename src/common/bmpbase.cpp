@@ -264,6 +264,26 @@ wxSize wxBitmapBase::GetLogicalSize() const
 
 #endif // wxHAS_DPI_INDEPENDENT_PIXELS/!wxHAS_DPI_INDEPENDENT_PIXELS
 
+// ----------------------------------------------------------------------------
+// Alpha support
+// ----------------------------------------------------------------------------
+
+bool wxBitmapBase::HasAlpha() const
+{
+    // We assume that only 32bpp bitmaps use alpha (which is always true) and
+    // that all 32bpp bitmaps do use it (which is not necessarily always the
+    // case, but the ports where it isn't need to override this function to
+    // deal with it as we can't do it here).
+    return GetDepth() == 32;
+}
+
+bool wxBitmapBase::UseAlpha(bool WXUNUSED(use))
+{
+    // This function is not implemented in the case class, we don't have any
+    // generic way to make a bitmap use, or prevent it from using, alpha.
+    return false;
+}
+
 #endif // wxUSE_BITMAP_BASE
 
 // ----------------------------------------------------------------------------

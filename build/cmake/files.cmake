@@ -1213,6 +1213,7 @@ set(GUI_CMN_HDR
     wx/generic/creddlgg.h
     wx/generic/animate.h
     wx/bmpbndl.h
+    wx/filedlgcustomize.h
 )
 
 set(UNIX_SRC

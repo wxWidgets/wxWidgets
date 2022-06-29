@@ -344,6 +344,16 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 }
 #endif
 
+void wxMenuItemBase::SetBitmap(const wxBitmapBundle& bmp)
+{
+    m_bitmap = bmp;
+}
+
+wxBitmap wxMenuItemBase::GetBitmap() const
+{
+    return GetBitmapFromBundle(m_bitmap);
+}
+
 wxBitmap wxMenuItemBase::GetBitmapFromBundle(const wxBitmapBundle& bundle) const
 {
     wxBitmap bmp;

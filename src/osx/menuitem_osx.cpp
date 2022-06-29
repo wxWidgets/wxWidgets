@@ -70,16 +70,6 @@ wxMenuItem::~wxMenuItem()
 // change item state
 // -----------------
 
-void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
-{
-      m_bitmap = bitmap;
-}
-
-wxBitmap wxMenuItem::GetBitmap() const
-{
-    return GetBitmapFromBundle(m_bitmap);
-}
-
 void wxMenuItem::Enable(bool bDoEnable)
 {
     if (( m_isEnabled != bDoEnable

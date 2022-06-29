@@ -521,9 +521,6 @@ void MyListModel::GetValueByRow( wxVariant &variant,
                     variant = wxString::Format("%d", row % 100);
             }
             break;
-
-        case Col_Max:
-            wxFAIL_MSG( "invalid column" );
     }
 }
 
@@ -589,9 +586,6 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
                     return false;
             }
             break;
-
-        case Col_Max:
-            wxFAIL_MSG( "invalid column" );
     }
 
     return true;
@@ -635,9 +629,6 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
         case Col_Custom:
             m_customColValues[row] = variant.GetString();
             break;
-
-        case Col_Max:
-            wxFAIL_MSG( "invalid column" );
     }
 
     return false;

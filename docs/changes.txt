@@ -155,7 +155,8 @@ Changes in behaviour which may result in build errors
 - "webview" library is not included in `wx-config --libs` output any more, you
   need to request it explicitly, e.g. `wx-config --libs std,webview`.
 
-- wxMSW now requires linking with uxtheme.lib, shlwapi.lib and version.lib.
+- wxMSW now requires linking with a few more system libraries: oleacc.lib,
+  shlwapi.lib, uxtheme.lib and version.lib.
   This is done automatically in most cases, but if you use a static build of
   the library with a non-MSVC compiler such as MinGW and do not use wx-config,
   then you will need to add these libraries to your make or project files
@@ -231,7 +232,47 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.1.7: (released 2022-??-??)
+3.2.0-rc1: (released 2022-06-27)
+--------------------------------
+
+All:
+
+- Build fixes for Unix systems using older Cairo or glibc versions.
+- Fix wxFileName::ReplaceHomeDir() when HOME=="/".
+- Fix wxLocale::IsAvailable(wxLANGUAGE_DEFAULT) regression.
+- Provide CMake config file for the library.
+
+All (GUI):
+
+- Make loading bitmaps using BI_BITFIELDS work again.
+- Fix wxGenericListCtrl::GetColumnCount() for wxLC_LIST (Kvaz1r).
+- Fix refresh after calling wxGenericListCtrl::EnsureVisible() (taler21).
+- Add wxMenuItem::GetBitmapBundle().
+- Support additional wxWizard properties in XRC (Randalphwa).
+
+wxGTK:
+
+- Fix wxDC::Blit() and wxBitmap::GetSubBitmap() with HiDPI bitmaps.
+- Fix TAB navigation in wxSimplebook (Adrian Lopez).
+- Support wxINVERT logical operation on wxDC with white source colour.
+- Don't assert in wxGtkImage (used in e.g. wxToolBar) when bitmap is missing.
+
+wxMSW:
+
+- Fix wxDC::DrawRoundedRectangle() and wxImageList::Draw() regressions.
+- Fix wrong results of wxWebResponse::GetHeader() and GetURL().
+- Fix creating wxBitmap of depth 32 but without real alpha.
+- Improve top level window resizing on DPI change and allow overriding it.
+
+wxOSX:
+
+- Fix regression in wxTextCtrl best size calculation.
+- Fix activation of applications using LSUIElement == true.
+- Fix AUI sash appearance in dark mode (alilie).
+- Recognize macOS 12 in wxGetOsDescription() (Tobias Taschner).
+
+
+3.1.7: (released 2022-06-06)
 ----------------------------
 
 INCOMPATIBLE CHANGES SINCE 3.1.6:
@@ -240,33 +281,59 @@ INCOMPATIBLE CHANGES SINCE 3.1.6:
   They were not intended for the public API. m_image variable represents
   cached image now.
 
+- wxPropertyGridPageState functions intended for internal use are no longer
+  public. Corresponding functions in wxPropertyGridInterface, wxPropertyGrid,
+  wxPropertyGridPage, and wxPropertyGridManager should be used instead.
 
-NOTE: This file is updated only before the release, please use
 
-    $ git log --notes=changelog --format='%N' v3.1.6..|grep .
+All:
 
-      to see all the change log entries since the last release.
+- Improvements to CMake, notably better PCH support.
+- Add wxTRANSLATE_IN_CONTEXT() (Lauri Nurmi).
+- Fix wxIPV6address initialization.
 
-      To update the notes, fetch them first:
+All (GUI):
 
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+- Further improve bitmap rescaling logic in high DPI.
+- Add wxEVT_GRID_ROW_AUTO_SIZE to wxGrid (Dietmar Schwertberger).
+- Add possibility to drag-move wxGrid rows too (Dietmar Schwertberger).
+- Improve UI of several mouse operations in wxGrid (Dietmar Schwertberger).
+- Add support for 3rd wxCheckBox state to XRC (Randalphwa).
+- Add support for more wxBitmap attributes to XRC (Randalphwa).
+- Add support for wxSpinCtrl digits attributes to XRC (Randalphwa).
+- Add wxBitmapBundle::FromIconBundle() (Uwe Runtemund).
+- Allow getting current ribbon tool rectangle (Uwe Runtemund).
+- Allow sharing client data in wxGrid-related classes (Frode Roxrud Gill).
+- Fix font sizes in wxSVGFileDC (Maarten Bent).
+- Fix layout of wxWrapSizer in wxFlexGridSizer (Antti Nietosvaara).
+- Fix wxRichToolTipPopup appearance in high DPI (Maarten Bent).
 
-      then use the following command to update them locally
+wxGTK:
 
-    $ git notes --ref=changelog add -m 'wxPort: description.'
+- Avoid GDK errors when using PopupMenu() with Wayland.
+- Fix drag and drop in generic wxDataViewCtrl (Konstantin Matveyev).
 
-      and finally push it to the server.
+wxMSW:
 
-    $ git push origin refs/notes/changelog:refs/notes/changelog
+- Provide new IFileDialog-based customization API.
+- Fix handling of standard accelerators in wxSpinCtrl (Dietmar Schwertberger).
+- Fix infinite recursion in wxAuiNotebook::OnHelp().
+- Fix performance regression in wxSTC redrawing (Maarten Bent).
+- Fix regression in wxFileName::Normalize(wxPATH_NORM_LONG) and UNC paths.
+- Fix sizes in the standard font dialog in high DPI.
+- Fix warnings about bitwise operations with MSVC in C++20 mode.
 
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
+wxOSX:
 
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
+- Fix disappearing dialogs when using Spaces.
+- Suppress menu items automatically added by macOS 12.
+- Allow user input in wxPopupTransientWindow.
+- Don't touch existing libraries in make install (Lauri Nurmi).
+- Generate events for 4th and 5th mouse buttons (Lauri Nurmi).
 
-      and then redo "git-notes add" and git-push.
+wxUniv:
+
+- Fix client data memory leak in wxListBox (Kvaz1r).
 
 
 3.1.6: (released 2022-04-04)

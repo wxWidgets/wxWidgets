@@ -488,8 +488,6 @@ wxRendererGTK::DrawDropArrow(wxWindow*,
                              const wxRect& rect,
                              int flags)
 {
-    GtkWidget *button = wxGTKPrivate::GetButtonWidget();
-
     // If we give WX_PIZZA(win->m_wxwindow)->bin_window as
     // a window for gtk_paint_xxx function, then it won't
     // work for wxMemoryDC. So that is why we assume wxDC
@@ -517,14 +515,18 @@ wxRendererGTK::DrawDropArrow(wxWindow*,
     cairo_t* cr = wxGetGTKDrawable(dc);
     if (cr)
     {
-        gtk_widget_set_state_flags(button, stateTypeToFlags[state], true);
-        GtkStyleContext* sc = gtk_widget_get_style_context(button);
+        wxGtkStyleContext sc(dc.GetContentScaleFactor());
+        sc.AddButton();
+        gtk_style_context_set_state(sc, stateTypeToFlags[state]);
         gtk_render_arrow(sc, cr, G_PI, x, y, size);
     }
 #else
     GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
+
+    GtkWidget* button = wxGTKPrivate::GetButtonWidget();
+
     // draw arrow on button
     gtk_paint_arrow
     (

@@ -439,11 +439,7 @@ private:
 - (NSToolbarItem*) toolbar:(NSToolbar*) toolbar itemForItemIdentifier:(NSString*) itemIdentifier willBeInsertedIntoToolbar:(BOOL) flag
 {
     wxUnusedVar(toolbar);
-#ifdef __LP64__
     wxToolBarTool* tool = (wxToolBarTool*) [itemIdentifier longLongValue];
-#else
-    wxToolBarTool* tool = (wxToolBarTool*) [itemIdentifier intValue];
-#endif
     if ( tool )
     {
         wxNSToolbarItem* item = (wxNSToolbarItem*) tool->GetToolbarItemRef();

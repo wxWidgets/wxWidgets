@@ -1485,10 +1485,10 @@ public:
         , m_state(0)
     {
         // Due to SetOwnFont stuff necessary for GTK+ 1.2, we need to have this
-        SetFont( parent->GetFont() );
+        wxControl::SetFont( parent->GetFont() );
 
         SetBoxHeight(12);
-        SetBackgroundStyle( wxBG_STYLE_PAINT );
+        wxControl::SetBackgroundStyle( wxBG_STYLE_PAINT );
     }
 
     virtual ~wxSimpleCheckBox();

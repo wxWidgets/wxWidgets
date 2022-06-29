@@ -144,6 +144,9 @@ public:
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
     virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
 
+protected:
+    virtual double GetNextAvailableScale(size_t& i) const wxOVERRIDE;
+
 private:
     // Load the bitmap from the given resource and add it m_bitmaps, after
     // rescaling it to the given size if necessary, i.e. if the needed size is
@@ -189,50 +192,21 @@ wxSize wxBitmapBundleImplRC::GetDefaultSize() const
     return m_bitmaps[0].GetSize();
 }
 
+double wxBitmapBundleImplRC::GetNextAvailableScale(size_t& i) const
+{
+    return i < m_resourceInfos.size() ? m_resourceInfos[i++].scale : 0.0;
+}
+
 wxSize wxBitmapBundleImplRC::GetPreferredBitmapSizeAtScale(double scale) const
 {
-    // Optimistically assume we're going to use this exact scale by default.
-    double scalePreferred = scale;
-
-    for ( size_t i = 0; ; ++i )
+    const size_t n = m_resourceInfos.size();
+    wxVector<double> scales(n);
+    for ( size_t i = 0; i < n; ++i )
     {
-        if ( i == m_resourceInfos.size() )
-        {
-            // The requested scale is bigger than anything we have, so use the
-            // biggest available one.
-            scalePreferred = m_resourceInfos[i - 1].scale;
-            break;
-        }
-
-        const double scaleThis = m_resourceInfos[i].scale;
-
-        // Keep looking for the exact match which we still can hope to find
-        // while the current scale is smaller.
-        if ( scaleThis < scale )
-            continue;
-
-        // If we've found the exact match, just use it.
-        if ( scaleThis == scale )
-            break;
-
-        // We've found the closest bigger scale.
-
-        // If there is no smaller one, we have no choice but to use this one.
-        if ( i == 0 )
-            break;
-
-        // Decide whether we should use this one or the previous smaller one
-        // depending on which of them is closer to the target scale, breaking
-        // the tie in favour of the bigger one.
-        const double scaleLast = m_resourceInfos[i - 1].scale;
-
-        scalePreferred = scaleThis - scale <= scale - scaleLast
-                            ? scaleThis
-                            : scaleLast;
-        break;
+        scales[i] = m_resourceInfos[i].scale;
     }
 
-    return GetDefaultSize()*scalePreferred;
+    return DoGetPreferredSize(scale);
 }
 
 wxBitmap
@@ -303,17 +277,19 @@ wxBitmap wxBitmapBundleImplRC::GetBitmap(const wxSize& size)
 
         const wxSize sizeThis = sizeDef*info.scale;
 
-        // Use this bitmap if it's the first one bigger than the requested size
-        // or if it's the last item as in this case we're not going to find any
-        // bitmap bigger than the given one anyhow and we don't have any choice
-        // but to upscale the largest one we have.
-        if ( sizeThis.y >= size.y || i + 1 == m_resourceInfos.size() )
+        // Use this bitmap if it's the first one bigger than the requested size.
+        if ( sizeThis.y >= size.y )
             return AddBitmap(info, sizeThis, size);
     }
 
-    wxFAIL_MSG( wxS("unreachable") );
+    // We have to upscale some bitmap because we don't have any bitmaps larger
+    // than the requested size. Try to find one which can be upscaled using an
+    // integer factor.
+    const size_t i = GetIndexToUpscale(size);
 
-    return wxBitmap();
+    const ResourceInfo& info = m_resourceInfos[i];
+
+    return AddBitmap(info, sizeDef*info.scale, size);
 }
 
 // ============================================================================

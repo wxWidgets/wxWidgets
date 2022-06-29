@@ -55,12 +55,14 @@ public:
         wxCHECK( m_isProperty, NULL );
         return m_property;
     }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const char* str )
     {
         m_name = str;
         m_property = NULL;
         m_isProperty = false;
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const wchar_t* str )
     {
         m_name = str;
@@ -826,9 +828,8 @@ public:
     void SetPropertyValues( const wxVariantList& list,
                             wxPGPropArg defaultCategory = wxNullProperty )
     {
-        wxPGProperty *p;
-        if ( defaultCategory.HasName() ) p = defaultCategory.GetPtr(this);
-        else p = defaultCategory.GetPtr0();
+        wxPGProperty* p = defaultCategory.HasName() ?
+                          defaultCategory.GetPtr(this) : defaultCategory.GetPtr0();
         m_pState->DoSetPropertyValues(list, p);
     }
 
@@ -906,11 +907,13 @@ public:
         SetPropertyValueString( id, wxString(value) );
     }
 
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     // Sets value (char*) of a property.
     void SetPropertyValue( wxPGPropArg id, const char* value )
     {
         SetPropertyValueString( id, wxString(value) );
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
 
     // Sets value (string) of a property.
     void SetPropertyValue( wxPGPropArg id, const wxString& value )
@@ -1064,9 +1067,7 @@ protected:
     // Returns page state data for given (sub) page (-1 means current page).
     virtual wxPropertyGridPageState* GetPageState( int pageIndex ) const
     {
-        if ( pageIndex <= 0 )
-            return m_pState;
-        return NULL;
+        return pageIndex <= 0 ? m_pState : NULL;
     }
 
     virtual bool DoSelectPage( int WXUNUSED(index) ) { return true; }
@@ -1090,18 +1091,13 @@ private:
     // Cannot be GetGrid() due to ambiguity issues.
     wxPropertyGrid* GetPropertyGrid()
     {
-        if ( !m_pState )
-            return NULL;
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : NULL;
     }
 
     // Cannot be GetGrid() due to ambiguity issues.
     const wxPropertyGrid* GetPropertyGrid() const
     {
-        if ( !m_pState )
-            return NULL;
-
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : NULL;
     }
 };
 

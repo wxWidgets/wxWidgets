@@ -115,6 +115,15 @@ public:
     void SetHelp(const wxString& str);
     const wxString& GetHelp() const { return m_help; }
 
+    // bitmap-related functions
+
+    virtual void SetBitmap(const wxBitmapBundle& bmp);
+    wxBitmapBundle GetBitmapBundle() const { return m_bitmap; }
+
+    // This method only exists for compatibility, prefer using
+    // GetBitmapBundle() in the new code.
+    virtual wxBitmap GetBitmap() const;
+
 #if wxUSE_ACCEL
     // extract the accelerator from the given menu string, return NULL if none
     // found
@@ -175,6 +184,7 @@ protected:
                  *m_subMenu;        // our sub menu or NULL
     wxString      m_text,           // label of the item
                   m_help;           // the help string for the item
+    wxBitmapBundle m_bitmap;        // item bitmap, may be invalid
     wxItemKind    m_kind;           // separator/normal/check/radio item?
     bool          m_isChecked;      // is checked?
     bool          m_isEnabled;      // is enabled?

@@ -413,7 +413,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
               it.Next() )
         {
             wxPGProperty* p = it.GetProperty();
-            if ( (p->GetParent() != p->GetParentState()->DoGetRoot() && !p->GetParent()->IsExpanded()) )
+            if ( (p->GetParent() != p->GetGrid()->GetRoot() && !p->GetParent()->IsExpanded()) )
                 RT_FAILURE_MSG(wxString::Format("'%s' had collapsed parent (only visible properties expected)",p->GetLabel()))
             else if ( p->HasFlag(wxPG_PROP_HIDDEN) )
                 RT_FAILURE_MSG(wxString::Format("'%s' was hidden (only visible properties expected)",p->GetLabel()))
