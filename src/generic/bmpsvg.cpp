@@ -102,10 +102,11 @@ class wxBitmapBundleImplSVG : public wxBitmapBundleImpl
 {
 public:
     // Ctor must be passed a valid NSVGimage and takes ownership of it.
-    wxBitmapBundleImplSVG(NSVGimage* svgImage, const wxSize& sizeDef)
+    wxBitmapBundleImplSVG(NSVGimage* svgImage, const wxSize& sizeDef, unsigned post)
         : m_svgImage(svgImage),
           m_svgRasterizer(nsvgCreateRasterizer()),
-          m_sizeDef(sizeDef)
+          m_sizeDef(sizeDef),
+          m_post(post)
     {
     }
 
@@ -126,6 +127,8 @@ private:
     NSVGrasterizer* const m_svgRasterizer;
 
     const wxSize m_sizeDef;
+
+    unsigned m_post;
 
     // Cache the last used bitmap (may be invalid if not used yet).
     //
@@ -161,6 +164,37 @@ wxBitmap wxBitmapBundleImplSVG::GetBitmap(const wxSize& size)
     if ( !m_cachedBitmap.IsOk() || m_cachedBitmap.GetSize() != size )
     {
         m_cachedBitmap = DoRasterize(size);
+        // If post-processing was selected on the factory calls
+        if (m_post != wxBitmapBundle::FromSVGNoPost)
+        {
+            // Access the raw data if the bitmap has an alpha channel
+            wxAlphaPixelData data(m_cachedBitmap);
+            if (data)
+            {
+                wxAlphaPixelData::Iterator ptr(data);
+                // Go through all the bitmap data
+                for (int i = m_cachedBitmap.GetWidth() * m_cachedBitmap.GetHeight(); i > 0; i--, ++ptr)
+                {
+                    unsigned char r = ptr.Red();
+                    unsigned char g = ptr.Green();
+                    unsigned char b = ptr.Blue();
+                    // If selected, invert just the greys on the bitmap. The idea is that the picture
+                    // on the bitmap will have a monochromatic outline, which will be inverted, while
+                    // keeping the colours intact.
+                    if (m_post & wxBitmapBundle::FromSVGInvertGreys)
+                    {
+                        if ((r == g) && (g == b))
+                        {
+                            ptr.Red() = 255 - r;
+                            ptr.Green() = 255 - g;
+                            ptr.Blue() = 255 - b;
+                        }
+                    }
+                    // If selected, dim the colours by tweaking the alpha channel to 33.3%
+                    if (m_post & wxBitmapBundle::FromSVGDim) ptr.Alpha() = ptr.Alpha() / 3;
+                }
+            }
+        }
     }
 
     return m_cachedBitmap;
@@ -209,7 +243,7 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
 }
 
 /* static */
-wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
+wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef, unsigned post)
 {
     NSVGimage* const svgImage = nsvgParse(data, "px", 96);
     if ( !svgImage )
@@ -224,28 +258,28 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
         return wxBitmapBundle();
     }
 
-    return wxBitmapBundle(new wxBitmapBundleImplSVG(svgImage, sizeDef));
+    return wxBitmapBundle(new wxBitmapBundleImplSVG(svgImage, sizeDef, post));
 }
 
 /* static */
-wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef)
+wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef, unsigned post)
 {
     wxCharBuffer copy(data);
 
-    return FromSVG(copy.data(), sizeDef);
+    return FromSVG(copy.data(), sizeDef, post);
 }
 
 /* static */
-wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef)
+wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef, unsigned post)
 {
     wxCharBuffer copy(len);
     memcpy(copy.data(), data, len);
 
-    return FromSVG(copy.data(), sizeDef);
+    return FromSVG(copy.data(), sizeDef, post);
 }
 
 /* static */
-wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
+wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef, unsigned post)
 {
     // There is nsvgParseFromFile(), but it doesn't work with Unicode filenames
     // under MSW and does exactly the same thing that we do here in any case,
@@ -266,7 +300,7 @@ wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& s
             wxCharBuffer buf(len);
             char* const ptr = buf.data();
             if ( file.Read(ptr, len) == len )
-                return wxBitmapBundle::FromSVG(ptr, sizeDef);
+                return wxBitmapBundle::FromSVG(ptr, sizeDef, post);
         }
     }
 #endif // !wxNO_SVG_FILE

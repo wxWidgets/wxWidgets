@@ -265,11 +265,31 @@ public:
         @param sizeDef The default size to return from GetDefaultSize() for
             this bundle. As SVG images usually don't have any natural
             default size, it should be provided when creating the bundle.
+        @param post The post-processing to apply to all images generated
+            from this bundle. This parameter allows the generation of images
+            of different styles from the same SVG data. The allowed flags are:
+
+            wxBitmapBundle::FromSVGNoPost - No post-processing applied.
+
+            wxBitmapBundle::FromSVGDimmed - Generate images with 33% of the
+            original alpha channel. These images can be used to represent
+            dimmed icons.
+
+            wxBitmapBundle::FromSVGInvertGreys - Generate images with inverted
+            grey pixels, preserving pixels with any other colours. These grey
+            pixels should be used to draw the outline of the image. For a colour
+            to be considered grey its red, green and blue components must have
+            the same numerical value.
+            These images can be used as icons on dark mode interfaces, if used
+            with a dark outline on the SVG.
      */
-    static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     /// @overload
-    static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
+
+    /// @overload
+    static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     /**
         Create a bundle from the SVG image loaded from the given file.
@@ -282,8 +302,25 @@ public:
             not an URL.
         @param sizeDef The default size to return from GetDefaultSize() for
             this bundle.
+        @param post The post-processing to apply to all images generated
+            from this bundle. This parameter allows the generation of images
+            of different styles from the same SVG data. The allowed flags are:
+
+            wxBitmapBundle::FromSVGNoPost - No post-processing applied.
+
+            wxBitmapBundle::FromSVGDimmed - Generate images with 33% of the
+            original alpha channel. These images can be used to represent
+            dimmed icons.
+
+            wxBitmapBundle::FromSVGInvertGreys - Generate images with inverted
+            grey pixels, preserving pixels with any other colours. These grey
+            pixels should be used to draw the outline of the image. For a colour
+            to be considered grey its red, green and blue components must have
+            the same numerical value.
+            These images can be used as icons on dark mode interfaces, if used
+            with a dark outline on the SVG.
      */
-    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     /**
         Create a bundle from the SVG image loaded from an application resource.
@@ -295,10 +332,27 @@ public:
             the "Resources" subdirectory of the application bundle.
         @param sizeDef The default size to return from GetDefaultSize() for
             this bundle.
+        @param post The post-processing to apply to all images generated
+            from this bundle. This parameter allows the generation of images
+            of different styles from the same SVG data. The allowed flags are:
+
+            wxBitmapBundle::FromSVGNoPost - No post-processing applied.
+
+            wxBitmapBundle::FromSVGDimmed - Generate images with 33% of the
+            original alpha channel. These images can be used to represent
+            dimmed icons.
+
+            wxBitmapBundle::FromSVGInvertGreys - Generate images with inverted
+            grey pixels, preserving pixels with any other colours. These grey
+            pixels should be used to draw the outline of the image. For a colour
+            to be considered grey its red, green and blue components must have
+            the same numerical value.
+            These images can be used as icons on dark mode interfaces, if used
+            with a dark outline on the SVG.
 
         @see FromResources(), FromSVGFile()
      */
-    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     /**
         Clear the existing bundle contents.

@@ -78,25 +78,29 @@ public:
     // support using wxDC::DrawSpline(), but currently we don't do it and so
     // FromSVG() is only available in the ports providing raw bitmap access.
 #ifdef wxHAS_SVG
+    // Enumeration to select the postprocessing done to SVG-based bundles
+    static const unsigned FromSVGNoPost = 0;
+    static const unsigned FromSVGInvertGreys = 1;
+    static const unsigned FromSVGDim = 2;
     // Create from the SVG data (data is supposed to be in UTF-8 encoding).
     // Notice that the data here is non-const because it can be temporarily
     // modified while parsing it.
-    static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     // This overload currently makes a copy of the data.
-    static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     // This overload works for data not terminated with 0
-    static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     // Load SVG image from the given file (must be a local file, not an URL).
-    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 
     // Create from SVG image stored as an application resource.
     // On Windows, name must be a resource with RT_RCDATA type.
     // On MacOS, name must be a file with an extension "svg" placed in the
     // "Resources" subdirectory of the application bundle.
-    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
+    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef, unsigned post = FromSVGNoPost);
 #endif // wxHAS_SVG
 
     // Create from the resources: all existing versions of the bitmap of the
