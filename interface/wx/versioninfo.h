@@ -35,7 +35,8 @@ public:
         @param major The major version component.
         @param minor The minor version component.
         @param micro The micro version component, 0 by default.
-        @param tweak The tweak version component, 0 by default.
+        @param revision The revision version component, 0 by default (this parameter
+               is available since wxWidgets 3.2.0).
         @param description Free form description of this version, none by
             default.
         @param copyright Copyright string, none by default.
@@ -44,7 +45,7 @@ public:
                   int major = 0,
                   int minor = 0,
                   int micro = 0,
-                  int tweak = 0,
+                  int revision = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString());
 
@@ -77,11 +78,12 @@ public:
     int GetMicro() const;
 
     /**
-        Get the tweak version, or build number.
+        Get the revision version, or build number.
 
-        @return Tweak version, or build number.
+        @return Revision version, or build number.
+        @since 3.2.0
     */
-    int GetTweak() const;
+    int GetRevision() const;
 
     /**
         Get the string representation of this version object.
@@ -96,11 +98,11 @@ public:
     /**
         Get the string representation.
 
-        The micro and tweak components of the version are ignored/not used if
-        they are both zero. If the tweak component is non-zero all four parts
-        will be used even if the micro componoent is zero.
+        The micro and revision components of the version are ignored/not used
+        if they are both zero. If the revision component is non-zero all four
+        parts will be used even if the micro componoent is zero.
 
-        @return The version string in the form "name major.minor[.micro][.tweak]".
+        @return The version string in the form "name major.minor[.micro][.revision]".
     */
     wxString GetVersionString() const;
 

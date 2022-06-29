@@ -61,7 +61,7 @@ wxVersionInfo wxWebViewFactoryIE::GetVersionInfo()
     long major = 0,
          minor = 0,
          micro = 0,
-         tweak = 0;
+         revision = 0;
     wxStringTokenizer tk(value, ". ");
     // Ignore the return value because if the version component is missing
     // or invalid (i.e. non-numeric), the only thing we can do is to ignore
@@ -69,8 +69,8 @@ wxVersionInfo wxWebViewFactoryIE::GetVersionInfo()
     tk.GetNextToken().ToLong(&major);
     tk.GetNextToken().ToLong(&minor);
     tk.GetNextToken().ToLong(&micro);
-    tk.GetNextToken().ToLong(&tweak);
-    return wxVersionInfo("Internet Explorer", major, minor, micro, tweak);
+    tk.GetNextToken().ToLong(&revision);
+    return wxVersionInfo("Internet Explorer", major, minor, micro, revision);
 }
 
 //Convenience function for error conversion

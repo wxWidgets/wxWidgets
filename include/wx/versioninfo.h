@@ -23,14 +23,14 @@ public:
                   int major = 0,
                   int minor = 0,
                   int micro = 0,
-                  int tweak = 0,
+                  int revision = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString())
     {
-        Init(name, major, minor, micro, tweak, description, copyright);
+        Init(name, major, minor, micro, revision, description, copyright);
     }
 
-    // This constructor exists for backward compatibility (before the tweak
+    // This constructor exists for backward compatibility (before the revision
     // part was added).
     wxVersionInfo(const wxString& name, int major, int minor, int micro,
                   const wxString& description,
@@ -47,7 +47,7 @@ public:
     int GetMajor() const { return m_major; }
     int GetMinor() const { return m_minor; }
     int GetMicro() const { return m_micro; }
-    int GetTweak() const { return m_tweak; }
+    int GetRevision() const { return m_revision; }
 
     wxString ToString() const
     {
@@ -58,10 +58,10 @@ public:
     {
         wxString str;
         str << m_name << ' ' << GetMajor() << '.' << GetMinor();
-        if ( GetMicro() || GetTweak())
+        if ( GetMicro() || GetRevision())
             str << '.' << GetMicro();
-        if ( GetTweak() )
-            str << '.' << GetTweak();
+        if ( GetRevision() )
+            str << '.' << GetRevision();
 
         return str;
     }
@@ -74,7 +74,7 @@ public:
 
 private:
     void Init(const wxString& name, int major, int minor, int micro,
-              int tweak, const wxString& description,
+              int revision, const wxString& description,
               const wxString& copyright)
     {
         m_name = name;
@@ -83,7 +83,7 @@ private:
         m_major = major;
         m_minor = minor;
         m_micro = micro;
-        m_tweak = tweak;
+        m_revision = revision;
     }
 
 private:
@@ -94,7 +94,7 @@ private:
     int m_major,
         m_minor,
         m_micro,
-        m_tweak;
+        m_revision;
 };
 
 #endif // _WX_VERSIONINFO_H_
