@@ -172,6 +172,11 @@ public:
     virtual wxString GetAssertStackTrace();
 #endif // wxUSE_STACKWALKER
 
+protected:
+    // Stub virtual functions for forward binary compatibility. DO NOT USE.
+    virtual void* WXReservedAppTraits1(void*);
+    virtual void* WXReservedAppTraits2(void*);
+
 private:
     static wxSocketManager *ms_manager;
 };

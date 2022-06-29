@@ -897,6 +897,9 @@ void wxAppConsoleBase::SetCLocale()
     wxSetlocale(LC_ALL, "");
 }
 
+void* wxAppConsoleBase::WXReservedApp1(void*) { return NULL; }
+void* wxAppConsoleBase::WXReservedApp2(void*) { return NULL; }
+
 // ============================================================================
 // other classes implementations
 // ============================================================================
@@ -1089,6 +1092,8 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 }
 #endif // wxUSE_STACKWALKER
 
+void* wxAppTraitsBase::WXReservedAppTraits1(void*) { return NULL; }
+void* wxAppTraitsBase::WXReservedAppTraits2(void*) { return NULL; }
 
 // ============================================================================
 // global functions implementation

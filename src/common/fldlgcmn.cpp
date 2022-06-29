@@ -969,6 +969,9 @@ void wxFileDialogBase::SetFilterIndexFromExt(const wxString& ext)
     }
 }
 
+void* wxFileDialogBase::WXReservedFileDialog1(void*) { return NULL; }
+void* wxFileDialogBase::WXReservedFileDialog2(void*) { return NULL; }
+
 //----------------------------------------------------------------------------
 // wxFileDialog convenience functions
 //----------------------------------------------------------------------------

@@ -1999,6 +1999,12 @@ protected:
     // wxMouseCaptureLostEvent to windows on capture stack.
     static void NotifyCaptureLost();
 
+
+    // Stub virtual functions for forward binary compatibility. DO NOT USE.
+    virtual void* WXReservedWindow1(void*);
+    virtual void* WXReservedWindow2(void*);
+    virtual void* WXReservedWindow3(void*);
+
 private:
     // recursively call our own and our children DoEnable() when the
     // enabled/disabled status changed because a parent window had been

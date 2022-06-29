@@ -505,3 +505,7 @@ void wxTopLevelWindowBase::RequestUserAttention(int WXUNUSED(flags))
     // it's probably better than do nothing, isn't it?
     Raise();
 }
+
+void* wxTopLevelWindowBase::WXReservedTLW1(void*) { return NULL; }
+void* wxTopLevelWindowBase::WXReservedTLW2(void*) { return NULL; }
+void* wxTopLevelWindowBase::WXReservedTLW3(void*) { return NULL; }

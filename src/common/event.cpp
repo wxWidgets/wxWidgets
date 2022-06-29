@@ -2014,6 +2014,9 @@ void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
     }
 }
 
+void* wxEvtHandler::WXReservedEvtHandler1(void*) { return NULL; }
+void* wxEvtHandler::WXReservedEvtHandler2(void*) { return NULL; }
+
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
