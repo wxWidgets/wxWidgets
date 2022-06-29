@@ -193,9 +193,13 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                          GetName());
         SetupWindow(toolbar);
 
-        m_toolSize = GetSize(wxT("bitmapsize"));
+        // This will be used as GetBitmapBundle() parameter, which should be in
+        // physical pixels, independent of the DPI, so don't use GetSize() here
+        // which would scale it by the current DPI and, instead, just use
+        // FromDIP() ourselves manually when passing it to SetToolBitmapSize().
+        m_toolSize = GetPairInts(wxT("bitmapsize"));
         if (!(m_toolSize == wxDefaultSize))
-            toolbar->SetToolBitmapSize(m_toolSize);
+            toolbar->SetToolBitmapSize(toolbar->FromDIP(m_toolSize));
         wxSize margins = GetSize(wxT("margins"));
         if (!(margins == wxDefaultSize))
             toolbar->SetMargins(margins.x, margins.y);
