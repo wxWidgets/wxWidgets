@@ -45,8 +45,7 @@ on:
       - '*.yml'
       - 'wxwidgets.props'
 
-# Also allow triggering this workflow manually with tmate debugging.
-on:
+  # Also allow triggering this workflow manually with tmate debugging.
   workflow_dispatch:
     inputs:
       debug_enabled:
