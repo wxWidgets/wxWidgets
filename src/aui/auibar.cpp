@@ -1661,6 +1661,25 @@ void wxAuiToolBar::SetToolBitmap(int tool_id, const wxBitmapBundle& bitmap)
     }
 }
 
+wxBitmap wxAuiToolBar::GetToolDisabledBitmap(int tool_id) const
+{
+    wxAuiToolBarItem* tool = FindTool(tool_id);
+    wxASSERT_MSG(tool, wxT("can't find tool in toolbar item array"));
+    if (!tool)
+        return wxNullBitmap;
+
+    return tool->m_disabledBitmap.GetBitmapFor(this);
+}
+
+void wxAuiToolBar::SetToolDisabledBitmap(int tool_id, const wxBitmapBundle& bitmap)
+{
+    wxAuiToolBarItem* tool = FindTool(tool_id);
+    if (tool)
+    {
+        tool->m_disabledBitmap = bitmap;
+    }
+}
+
 wxString wxAuiToolBar::GetToolShortHelp(int tool_id) const
 {
     wxAuiToolBarItem* tool = FindTool(tool_id);

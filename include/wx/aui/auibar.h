@@ -603,6 +603,9 @@ public:
     wxBitmap GetToolBitmap(int toolId) const;
     void SetToolBitmap(int toolId, const wxBitmapBundle& bitmap);
 
+    wxBitmap GetToolDisabledBitmap(int toolId) const;
+    void SetToolDisabledBitmap(int toolId, const wxBitmapBundle& bitmap);
+
     wxString GetToolShortHelp(int toolId) const;
     void SetToolShortHelp(int toolId, const wxString& helpString);
 
