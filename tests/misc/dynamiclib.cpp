@@ -15,8 +15,8 @@
 #include "wx/dynlib.h"
 
 #ifndef __WINDOWS__
+    #include "wx/dir.h"
     #include "wx/filename.h"
-    #include "wx/log.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -37,9 +37,10 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
     #else
         static const char* const LIB_NAME = "/lib/libc.so.6";
     #endif
+#elif defined(__FreeBSD__)
+    static const char* const LIB_NAME = "/lib/libc.so.7";
 #else
-    // Try some generic fallback.
-    static const char* const LIB_NAME = "/usr/lib/libc.so";
+    static const char* const LIB_NAME = "/unknown/libc/location";
 #endif
     static const char* const FUNC_NAME = "strlen";
 
@@ -50,6 +51,15 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
     {
         WARN("Shared library \"" << LIB_NAME << "\" doesn't exist, "
              "skipping DynamicLibraryTestCase::Load() test.");
+
+        wxArrayString paths;
+        wxDir::GetAllFiles("/lib", &paths, "libc.*", wxDIR_FILES);
+        wxDir::GetAllFiles("/usr/lib", &paths, "libc.*", wxDIR_FILES);
+        if ( !paths.empty() )
+        {
+            WARN("Possible candidates:\n" << wxJoin(paths, '\n'));
+        }
+
         return;
     }
 #endif // !__DARWIN__
