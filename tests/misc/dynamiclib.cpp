@@ -16,7 +16,6 @@
 
 #ifndef __WINDOWS__
     #include "wx/filename.h"
-    #include "wx/log.h"
 #endif
 
 // ----------------------------------------------------------------------------
