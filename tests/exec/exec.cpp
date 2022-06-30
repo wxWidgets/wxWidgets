@@ -30,7 +30,7 @@
 #ifdef __UNIX__
     #define COMMAND "echo hi"
     #define COMMAND_STDERR "cat nonexistentfile"
-    #define ASYNC_COMMAND "xclock"
+    #define ASYNC_COMMAND "sleep 86400"
     #define SHELL_COMMAND "echo hi from shell>/dev/null"
     #define COMMAND_NO_OUTPUT "echo -n"
 #elif defined(__WINDOWS__)
