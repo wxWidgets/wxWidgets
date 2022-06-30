@@ -37,6 +37,8 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
     #else
         static const char* const LIB_NAME = "/lib/libc.so.6";
     #endif
+#elif defined(__FreeBSD__)
+    static const char* const LIB_NAME = "/lib/libc.so.7";
 #else
     static const char* const LIB_NAME = "/unknown/libc/location";
 #endif
