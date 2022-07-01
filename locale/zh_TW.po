@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-06-17 20:52+0800\n"
-"Last-Translator: James P <gag247@mail.ru>\n"
+"PO-Revision-Date: 2022-07-01 02:46+0800\n"
+"Last-Translator: James Pan <bojaypan@mail.ru>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -36,11 +36,11 @@ msgstr "耗用時間："
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Estimated time:"
-msgstr "估計時間："
+msgstr "預計時間："
 
 #: ../include/wx/generic/progdlgg.h:87
 msgid "Remaining time:"
-msgstr "餘下時間："
+msgstr "剩餘時間："
 
 #: ../include/wx/msgdlg.h:278 ../src/common/stockitem.cpp:212
 #: ../src/motif/msgdlg.cpp:196
@@ -96,7 +96,7 @@ msgstr "無法將處理常式與 I/O 完成的通訊埠關聯"
 
 #: ../include/wx/msw/private/fswatcher.h:148
 msgid "Unexpectedly new I/O completion port was created"
-msgstr "非預期地創建了新的 I/O 完成通訊埠"
+msgstr "異常地創建了新的 I/O 完成通訊埠"
 
 #: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
@@ -180,7 +180,7 @@ msgstr "調用 SetProperty 時未帶有效的 setter"
 
 #: ../include/wx/xtiprop.h:184
 msgid "GetProperty called w/o valid getter"
-msgstr "調用 GetProperty 時未帶有效的getter"
+msgstr "調用 GetProperty 時未帶有效的 getter"
 
 #: ../include/wx/xtiprop.h:193
 msgid "AddToPropertyCollection called w/o valid adder"
@@ -208,7 +208,7 @@ msgstr "全部關閉"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
 msgid "&Next"
-msgstr "下一步(&N)"
+msgstr "下一個(&N)"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
 msgid "&Previous"
@@ -234,12 +234,12 @@ msgstr "刪除"
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
 msgid "Back"
-msgstr "退格"
+msgstr "退位"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
 msgid "Backspace"
-msgstr "退格"
+msgstr "退位"
 
 #: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
@@ -259,37 +259,37 @@ msgstr "輸入"
 #: ../src/common/accelcmn.cpp:53
 msgctxt "keyboard key"
 msgid "Return"
-msgstr "輸入"
+msgstr "換行"
 
 #: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "PageUp"
-msgstr "上一頁"
+msgstr "上頁"
 
 #: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "Page Up"
-msgstr "上一頁"
+msgstr "上頁"
 
 #: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "PageDown"
-msgstr "下一頁"
+msgstr "下頁"
 
 #: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "Page Down"
-msgstr "下一頁"
+msgstr "下頁"
 
 #: ../src/common/accelcmn.cpp:56
 msgctxt "keyboard key"
 msgid "PgUp"
-msgstr "上一頁"
+msgstr "上頁"
 
 #: ../src/common/accelcmn.cpp:57
 msgctxt "keyboard key"
 msgid "PgDn"
-msgstr "下一頁"
+msgstr "下頁"
 
 #: ../src/common/accelcmn.cpp:58
 msgctxt "keyboard key"
@@ -329,17 +329,17 @@ msgstr "空格"
 #: ../src/common/accelcmn.cpp:65
 msgctxt "keyboard key"
 msgid "Tab"
-msgstr "下個定位點"
+msgstr "跳格"
 
 #: ../src/common/accelcmn.cpp:66
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr "退出"
+msgstr "跳離"
 
 #: ../src/common/accelcmn.cpp:67
 msgctxt "keyboard key"
 msgid "Escape"
-msgstr "退出"
+msgstr "跳離"
 
 #: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
@@ -384,7 +384,7 @@ msgstr "執行"
 #: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
 msgid "Snapshot"
-msgstr "螢幕截圖"
+msgstr "快照"
 
 #: ../src/common/accelcmn.cpp:77
 msgctxt "keyboard key"
@@ -414,12 +414,12 @@ msgstr "小數點"
 #: ../src/common/accelcmn.cpp:82
 msgctxt "keyboard key"
 msgid "Multiply"
-msgstr "乘號鍵"
+msgstr "乘號"
 
 #: ../src/common/accelcmn.cpp:83
 msgctxt "keyboard key"
 msgid "Divide"
-msgstr "除號鍵"
+msgstr "除號"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
@@ -444,7 +444,7 @@ msgstr "捲動鎖定"
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr "鍵盤_空白"
+msgstr "字元鍵_空白"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
@@ -454,17 +454,17 @@ msgstr "數字鍵 空白"
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "KP_Tab"
-msgstr "鍵盤_下個定位點"
+msgstr "字元鍵_跳格"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "Num Tab"
-msgstr "數字鍵 下個定位點"
+msgstr "數字鍵 跳格"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "KP_Enter"
-msgstr "鍵盤_確認"
+msgstr "字元鍵_確認"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
@@ -474,7 +474,7 @@ msgstr "數字鍵 確認"
 #: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "KP_Home"
-msgstr "鍵盤_行頭"
+msgstr "編輯鍵_行頭"
 
 #: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
@@ -484,7 +484,7 @@ msgstr "數字鍵 行頭"
 #: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "KP_Left"
-msgstr "鍵盤_左"
+msgstr "編輯鍵_左"
 
 #: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
@@ -494,7 +494,7 @@ msgstr "數字鍵 左"
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "KP_Up"
-msgstr "鍵盤_上"
+msgstr "編輯鍵_上"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
@@ -504,7 +504,7 @@ msgstr "數字鍵 上"
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "KP_Right"
-msgstr "鍵盤_右"
+msgstr "編輯鍵_右"
 
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
@@ -514,7 +514,7 @@ msgstr "數字鍵 右"
 #: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
 msgid "KP_Down"
-msgstr "鍵盤_下"
+msgstr "編輯鍵_下"
 
 #: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
@@ -524,37 +524,37 @@ msgstr "數字鍵 下"
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr "鍵盤_上一頁"
+msgstr "編輯鍵_上頁"
 
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "數字鍵 上一頁"
+msgstr "數字鍵 上頁"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr "鍵盤_下一頁"
+msgstr "編輯鍵_下頁"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "數字鍵 下一頁"
+msgstr "數字鍵 下頁"
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "KP_Prior"
-msgstr "鍵盤_前一頁"
+msgstr "編輯鍵_前一個"
 
 #: ../src/common/accelcmn.cpp:97
 msgctxt "keyboard key"
 msgid "KP_Next"
-msgstr "鍵盤_後一頁"
+msgstr "編輯鍵_下一個"
 
 #: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr "鍵盤_行末"
+msgstr "編輯鍵_行末"
 
 #: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
@@ -564,7 +564,7 @@ msgstr "數字鍵 行末"
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "KP_Begin"
-msgstr "欠盤_行首"
+msgstr "編輯鍵_行首"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
@@ -574,7 +574,7 @@ msgstr "數字鍵 行首"
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "KP_Insert"
-msgstr "鍵盤_插入"
+msgstr "編輯鍵_插入"
 
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
@@ -584,17 +584,17 @@ msgstr "數字鍵 插入"
 #: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "KP_Delete"
-msgstr "鍵盤_刪除"
+msgstr "編輯鍵_刪除"
 
 #: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "Num Delete"
-msgstr "數字鍵 刪除"
+msgstr "編輯鍵鍵 刪除"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "KP_Equal"
-msgstr "鍵盤_等號"
+msgstr "字元鍵_等號"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
@@ -604,7 +604,7 @@ msgstr "數字鍵 ="
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "KP_Multiply"
-msgstr "鍵盤_乘號"
+msgstr "字元鍵_乘號"
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
@@ -614,7 +614,7 @@ msgstr "數字鍵 *"
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "KP_Add"
-msgstr "鍵盤_加號"
+msgstr "字元鍵_加號"
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
@@ -624,7 +624,7 @@ msgstr "數字鍵 +"
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "KP_Separator"
-msgstr "鍵盤_分隔字元"
+msgstr "字元鍵_分隔字元"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
@@ -634,7 +634,7 @@ msgstr "數字鍵 ,"
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "KP_Subtract"
-msgstr "鍵盤_減號"
+msgstr "字元鍵_減號"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
@@ -644,7 +644,7 @@ msgstr "數字鍵 -"
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr "鍵盤_小數點"
+msgstr "字元鍵_小數點"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
@@ -654,7 +654,7 @@ msgstr "數字鍵 ."
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "KP_Divide"
-msgstr "鍵盤_除號"
+msgstr "字元鍵_除號"
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
@@ -684,27 +684,27 @@ msgstr "指令"
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
 msgid "ctrl"
-msgstr "ctrl"
+msgstr "控制鍵"
 
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
 msgid "alt"
-msgstr "alt"
+msgstr "轉換鍵"
 
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
 msgid "shift"
-msgstr "shift"
+msgstr "移位鍵"
 
 #: ../src/common/accelcmn.cpp:192
 msgctxt "keyboard key"
 msgid "rawctrl"
-msgstr "rawctrl"
+msgstr "raw ctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"
 msgid "num "
-msgstr "num "
+msgstr "數字鍵 "
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
 msgctxt "keyboard key"
@@ -714,17 +714,17 @@ msgstr "F"
 #: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "KP_F"
-msgstr "鍵盤_F"
+msgstr "功能鍵_F"
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr "鍵盤_"
+msgstr "字元鍵_"
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"
 msgid "SPECIAL"
-msgstr "SPECIAL"
+msgstr "特殊鍵"
 
 #: ../src/common/accelcmn.cpp:343
 msgctxt "keyboard key"
@@ -748,7 +748,7 @@ msgstr "RawCtrl+"
 
 #: ../src/common/appbase.cpp:774
 msgid "show this help message"
-msgstr "顯示這個說明訊息"
+msgstr "顯示說明訊息"
 
 #: ../src/common/appbase.cpp:784
 msgid "generate verbose log messages"
@@ -770,12 +770,12 @@ msgstr "不支援的視覺主題 '%s'。"
 #: ../src/common/appcmn.cpp:296
 #, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "顯示模式規格 '%s' 無效。"
+msgstr "無效的顯示模式規格 '%s'。"
 
 #: ../src/common/cmdline.cpp:896
 #, c-format
 msgid "Option '%s' can't be negated"
-msgstr "'%s' 選項無法取消"
+msgstr "選項'%s' 無法取消"
 
 #: ../src/common/cmdline.cpp:910
 #, c-format
@@ -795,7 +795,7 @@ msgstr "'%s' 選項後出現異常的字元。"
 #: ../src/common/cmdline.cpp:1060
 #, c-format
 msgid "Option '%s' requires a value."
-msgstr "選項 ’%s’ 須有1 個值。"
+msgstr "選項 ’%s’ 須有一個值。"
 
 #: ../src/common/cmdline.cpp:1079
 #, c-format
@@ -856,7 +856,7 @@ msgstr "日期"
 #: ../src/common/cmdproc.cpp:255 ../src/common/cmdproc.cpp:281
 #: ../src/common/cmdproc.cpp:301
 msgid "Unnamed command"
-msgstr "未命名指令"
+msgstr "未命名的指令"
 
 #: ../src/common/cmdproc.cpp:258
 msgid "&Undo "
@@ -1008,7 +1008,7 @@ msgstr "第十九"
 
 #: ../src/common/datetimefmt.cpp:2060
 msgid "twentieth"
-msgstr "第二十"
+msgstr "第廿十"
 
 #: ../src/common/datetimefmt.cpp:2218
 msgid "noon"
@@ -1021,7 +1021,7 @@ msgstr "午夜"
 #: ../src/common/debugrpt.cpp:210
 #, c-format
 msgid "Failed to create directory \"%s\""
-msgstr "無法創建 ”%s” 目錄"
+msgstr "無法創建 ”%s” 目錄。"
 
 #: ../src/common/debugrpt.cpp:211
 msgid "Debug report couldn't be created."
@@ -1030,12 +1030,12 @@ msgstr "無法創建偵錯報告。"
 #: ../src/common/debugrpt.cpp:228
 #, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "無法移除偵錯報告檔案 “%s”"
+msgstr "無法移除偵錯報告檔案 “%s”。"
 
 #: ../src/common/debugrpt.cpp:240
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "無法清理偵錯報告目錄 “%s”"
+msgstr "無法清理偵錯報告目錄 “%s”。"
 
 #: ../src/common/debugrpt.cpp:515
 msgid "process context description"
@@ -1137,7 +1137,7 @@ msgstr "預覽列印"
 #: ../src/common/docview.cpp:1477
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
-msgstr "無法確定 ’%s’ 檔案的格式。"
+msgstr "無法確定 ’%s’ 檔案格式。"
 
 #: ../src/common/docview.cpp:1618
 #, c-format
@@ -1178,12 +1178,12 @@ msgstr "選擇文件檢視"
 
 #: ../src/common/docview.cpp:1975
 msgid "Views"
-msgstr "瀏覽數"
+msgstr "檢視"
 
 #: ../src/common/dynlib.cpp:86
 #, c-format
 msgid "Failed to load shared library '%s'"
-msgstr "無法載入 ‘%s’ 共享函式庫"
+msgstr "無法載入‘%s’共享函式庫"
 
 #: ../src/common/dynlib.cpp:110
 #, c-format
@@ -1287,12 +1287,12 @@ msgstr "無法獲得檔案描述符 %d 的定位位置"
 #: ../src/common/file.cpp:480
 #, c-format
 msgid "can't find length of file on file descriptor %d"
-msgstr "無法獲得檔案描述符 %d 的檔案的長度"
+msgstr "無法獲得檔案描述符 %d 的檔案長度"
 
 #: ../src/common/file.cpp:510
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
-msgstr "無法確定檔案結束是否已觸及描述符 %d 的範圍"
+msgstr "無法確定檔案是否已達描述符 %d 的檔尾"
 
 #: ../src/common/fileconf.cpp:314
 #, c-format
@@ -1320,7 +1320,7 @@ msgstr "無法讀取組態選項。"
 #: ../src/common/fileconf.cpp:543
 #, c-format
 msgid "file '%s': unexpected character %c at line %zu."
-msgstr "檔案 '%s'： 突發字元 %c 存在於第 %zu 列。"
+msgstr "檔案 '%s'： 異常字元 %c 存在於第 %zu 列。"
 
 #: ../src/common/fileconf.cpp:579
 #, c-format
@@ -1386,7 +1386,7 @@ msgstr "忽略 %s’ 裡的結尾反斜線"
 #: ../src/common/fileconf.cpp:1981
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
-msgstr "異常的 “ 出現在 %d 於 '%s' 裡面。"
+msgstr "異常狀況位於 %d 出現'%s' 。"
 
 #: ../src/common/filefn.cpp:905
 #, c-format
@@ -2304,15 +2304,15 @@ msgstr "PCX：這不是 PCX 檔案。"
 
 #: ../src/common/imagpcx.cpp:455
 msgid "PCX: image format unsupported"
-msgstr "PCX：影像格式不支援。"
+msgstr "PCX：影像格式不支援"
 
 #: ../src/common/imagpcx.cpp:456 ../src/common/imagpcx.cpp:479
 msgid "PCX: couldn't allocate memory"
-msgstr "PCX：無法分配記憶體。"
+msgstr "PCX：無法分配記憶體"
 
 #: ../src/common/imagpcx.cpp:457
 msgid "PCX: version number too low"
-msgstr "PCX：版本號碼太舊。"
+msgstr "PCX：版本號碼太舊"
 
 #: ../src/common/imagpcx.cpp:458 ../src/common/imagpcx.cpp:480
 msgid "PCX: unknown error !!!"
@@ -2320,7 +2320,7 @@ msgstr "PCX：未知錯誤！"
 
 #: ../src/common/imagpcx.cpp:478
 msgid "PCX: invalid image"
-msgstr "PCX：無效的影像。"
+msgstr "PCX：無效的影像"
 
 #: ../src/common/imagpng.cpp:383
 #, c-format
@@ -5075,7 +5075,7 @@ msgstr ""
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
-msgstr "MDI child"
+msgstr "媒體相依介面子表單"
 
 #: ../src/gtk/print.cpp:212
 msgid "Custom size"
@@ -5095,7 +5095,7 @@ msgstr "無法於控制元件插入文字。"
 
 #: ../src/gtk/webview_webkit.cpp:930
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
-msgstr "WebKit v1 不支援取得 JavaScript 文稿輸出"
+msgstr "WebKit v1 不支援擷取 JavaScript 程序檔輸出"
 
 #: ../src/gtk/window.cpp:5781
 msgid ""
