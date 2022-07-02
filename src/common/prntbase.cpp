@@ -2136,7 +2136,7 @@ bool wxPrintPreviewBase::DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc)
 
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxBLACK_BRUSH);
-    dc.DrawRectangle(paperRect.x + shadowOffset, paperRect.y + paperRect.height + 1,
+    dc.DrawRectangle(paperRect.x + shadowOffset, paperRect.y + paperRect.height,
         paperRect.width, shadowOffset);
 
     dc.DrawRectangle(paperRect.x + paperRect.width, paperRect.y + shadowOffset,
@@ -2145,8 +2145,8 @@ bool wxPrintPreviewBase::DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc)
     // Draw blank page allowing for 1-pixel border AROUND the actual paper
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxWHITE_BRUSH);
-    dc.DrawRectangle(paperRect.x - 2, paperRect.y - 1,
-        paperRect.width + 3, paperRect.height + 2);
+    dc.DrawRectangle(paperRect.x - 1, paperRect.y - 1,
+        paperRect.width + 2, paperRect.height + 2);
 
     return true;
 }
