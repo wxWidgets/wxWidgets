@@ -50,6 +50,7 @@ jobs:
                 ':!configure' \
                 ':!descrip.mms' \
                 ':!install-sh' \
+                ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
                 ':!**/Info*.plist*' \
