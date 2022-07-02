@@ -353,14 +353,11 @@ IGNORE_PREFIX          = wx
 GENERATE_HTML          = $(GENERATE_HTML)
 HTML_OUTPUT            = $(WX_HTML_OUTPUT_DIR)
 HTML_FILE_EXTENSION    = .html
-HTML_HEADER            = custom_header.html
+HTML_HEADER            = $(HTML_HEADER)
 HTML_FOOTER            = custom_footer.html
 HTML_STYLESHEET        =
-HTML_EXTRA_STYLESHEET  = doxygen-awesome-css/doxygen-awesome.css \
-                         extra_stylesheet.css
-HTML_EXTRA_FILES       = doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js \
-                         doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js \
-                         wxwidgets.js
+HTML_EXTRA_STYLESHEET  = $(CUSTOM_THEME_CSS) extra_stylesheet.css
+HTML_EXTRA_FILES       = $(CUSTOM_THEME_JS1) $(CUSTOM_THEME_JS2) wxwidgets.js
 HTML_COLORSTYLE_HUE    = 220 # Default: 220
 HTML_COLORSTYLE_SAT    = 255 # Default: 100
 HTML_COLORSTYLE_GAMMA  = 100 # Default: 80
@@ -572,7 +569,7 @@ CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
 GRAPHICAL_HIERARCHY    = NO # TODO: Default: YES
 DIRECTORY_GRAPH        = NO # Default: YES
-DOT_IMAGE_FORMAT       = svg
+DOT_IMAGE_FORMAT       = $(DOT_IMAGE_FORMAT)
 INTERACTIVE_SVG        = NO
 DOT_PATH               =
 DOTFILE_DIRS           =

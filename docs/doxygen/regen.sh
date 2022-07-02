@@ -62,6 +62,14 @@ mkdir -p $WX_HTML_OUTPUT_DIR/generic
 # custom aliases
 cp images/generic/*png $WX_HTML_OUTPUT_DIR/generic
 
+# These values are always used here, the corresponding options only exist in
+# order to allow not using them when generating CHM in regen.bat.
+export DOT_IMAGE_FORMAT='svg'
+export HTML_HEADER='custom_header.html'
+export CUSTOM_THEME_CSS='doxygen-awesome-css/doxygen-awesome.css'
+export CUSTOM_THEME_JS1='doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js'
+export CUSTOM_THEME_JS2='doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js'
+
 # Defaults for settings controlled by this script
 export GENERATE_DOCSET="NO"
 export GENERATE_HTML="NO"
