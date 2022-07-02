@@ -41,11 +41,9 @@ fi
 # Still allow using incompatible version if explicitly requested.
 if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     doxygen_version=`$DOXYGEN --version`
-    # Note: remove the hack for Doxygen 1.8.19 below when changing this to a
-    # later version.
-    doxygen_version_required=1.8.17
+    doxygen_version_required=1.9.1
     if [[ $doxygen_version != $doxygen_version_required ]]; then
-        echo "Doxygen version $doxygen_version is not supported."
+        echo "Doxygen version $doxygen_version is not officially supported."
         echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
         exit 1
     fi
