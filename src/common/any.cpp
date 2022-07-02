@@ -165,7 +165,7 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
             if ( ll > wxINT32_MAX || ll < wxINT32_MIN )
                 *variant = wxLongLong(ll);
             else
-                *variant = (long) wxLongLong(ll).GetLo();
+                *variant = static_cast<long>(ll);
         }
         else
         {
