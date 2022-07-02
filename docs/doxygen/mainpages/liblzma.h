@@ -124,7 +124,7 @@ inside the @c ClCompile tag as well as add @c liblzma.lib to the @c
 AdditionalDependencies tag under @c Link itself. The result should look like
 the following, assuming liblzma sources are in c:\\src\\liblzma:
 
-@code
+@code{.unparsed}
   <ItemDefinitionGroup>
     <ClCompile>
       ... any existing lines here ...
