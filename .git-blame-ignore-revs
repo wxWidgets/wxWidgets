@@ -22,6 +22,9 @@ f58ea625968953ca93585ea7f93dcc07ad032d8f
 # Remove all lines containing cvs/svn "$Id$" keyword.
 3f66f6a5b3583b02c34854556eb83e3a808524ce
 
+# No changes, just removed hard tabs and trailing white space., 2009-08-21)
+03647350fc7cd141953c72e0284e928847d30f44
+
 # Globally replace _T() with wxT()., 2009-07-23
 9a83f860948059b0273b5cc6d9e43fadad3ebfca
 
