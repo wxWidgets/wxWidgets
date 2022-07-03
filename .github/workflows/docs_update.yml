@@ -3,14 +3,14 @@ name: Update Documentation
 on:
   push:
     branches:
-      - master
+      - 3.2
     paths:
       - '.github/workflows/docs_update.yml'
       - 'docs/**'
       - 'interface/**'
   pull_request:
     branches:
-      - master
+      - 3.2
     paths:
       - '.github/workflows/docs_update.yml'
       - 'docs/**'

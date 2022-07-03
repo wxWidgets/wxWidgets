@@ -4,7 +4,7 @@ name: MSW builds
 on:
   push:
     branches:
-      - master
+      - 3.2
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'
@@ -25,7 +25,7 @@ on:
       - '*.yml'
   pull_request:
     branches:
-      - master
+      - 3.2
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'

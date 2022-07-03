@@ -4,7 +4,7 @@ name: MSW cross-builds
 on:
   push:
     branches:
-      - master
+      - 3.2
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'
@@ -27,7 +27,7 @@ on:
       - 'wxwidgets.props'
   pull_request:
     branches:
-      - master
+      - 3.2
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'

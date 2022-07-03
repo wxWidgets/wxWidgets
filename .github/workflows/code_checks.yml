@@ -4,10 +4,10 @@ name: Code Checks
 on:
   push:
     branches:
-      - master
+      - 3.2
   pull_request:
     branches:
-      - master
+      - 3.2
 
 permissions:
   contents: read

@@ -3,6 +3,7 @@ version: '{build}'
 branches:
   only:
   - master
+  - 3.2
   - WX_3_0_BRANCH
 
 skip_commits:
