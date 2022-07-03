@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-03-26 16:47+0100\n"
+"PO-Revision-Date: 2022-07-03 20:43+0200\n"
 "Last-Translator: Andriy Byelikov\n"
 "Language-Team: <wx-translators@wxwidgets.org>\n"
 "Language: ca\n"
@@ -704,12 +704,12 @@ msgstr "F"
 #: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "KP_F"
-msgstr ""
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr "BN_"
+msgstr "KP_"
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"
@@ -1893,42 +1893,39 @@ msgstr " ratllat"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr " prima"
 
 #: ../src/common/fontcmn.cpp:957
-#, fuzzy
 msgid " extra light"
-msgstr " prima"
+msgstr " extra lleugera"
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
-msgstr " prima"
+msgstr " lleugera"
 
 #: ../src/common/fontcmn.cpp:965
 msgid " medium"
-msgstr ""
+msgstr " mitjana"
 
 #: ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid " semi bold"
-msgstr " negreta"
+msgstr " semi negreta"
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
 msgstr " negreta"
 
 #: ../src/common/fontcmn.cpp:977
-#, fuzzy
 msgid " extra bold"
-msgstr " negreta"
+msgstr " extra negreta"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
-msgstr ""
+msgstr " pesada"
 
 #: ../src/common/fontcmn.cpp:985
 msgid " extra heavy"
-msgstr ""
+msgstr " extra pesada"
 
 #: ../src/common/fontcmn.cpp:1001
 msgid " italic"
@@ -1940,16 +1937,15 @@ msgstr "ratllat"
 
 #: ../src/common/fontcmn.cpp:1154
 msgid "thin"
-msgstr ""
+msgstr "prima"
 
 #: ../src/common/fontcmn.cpp:1167
-#, fuzzy
 msgid "extralight"
-msgstr "prima"
+msgstr "extralleugera"
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
-msgstr "prima"
+msgstr "lleugera"
 
 #: ../src/common/fontcmn.cpp:1180 ../src/richtext/richtextstyles.cpp:776
 msgid "normal"
@@ -1957,29 +1953,27 @@ msgstr "normal"
 
 #: ../src/common/fontcmn.cpp:1185
 msgid "medium"
-msgstr ""
+msgstr "mitjana"
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
-#, fuzzy
 msgid "semibold"
-msgstr "negreta"
+msgstr "seminegreta"
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
 msgstr "negreta"
 
 #: ../src/common/fontcmn.cpp:1205
-#, fuzzy
 msgid "extrabold"
-msgstr "negreta"
+msgstr "extranegreta"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
-msgstr ""
+msgstr "pesada"
 
 #: ../src/common/fontcmn.cpp:1223
 msgid "extraheavy"
-msgstr ""
+msgstr "extrapesada"
 
 #: ../src/common/fontcmn.cpp:1228
 msgid "italic"
@@ -2152,7 +2146,7 @@ msgstr "BMP: No s'han pogut escriure les dades."
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP: capçalera té biClrUsed=%d quan biBitCount=%d."
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -3911,7 +3905,7 @@ msgstr "no s'ha pogut inicialitzar libcurl"
 
 #: ../src/common/webview.cpp:246
 msgid "RunScriptAsync not supported"
-msgstr ""
+msgstr "RunScriptAsync no suportat"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
@@ -4303,8 +4297,7 @@ msgid "Column %u"
 msgstr "Columna %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7087
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4315,8 +4308,7 @@ msgid "Left"
 msgstr "Esquerra"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7090
-#: ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -6533,8 +6525,8 @@ msgstr "El fitxer de tipus de lletra \"%s\" no existeix."
 #: ../src/osx/fontutil.cpp:89
 #, c-format
 msgid ""
-"Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
-"\"."
+"Font file \"%s\" cannot be used as it is not inside the font directory "
+"\"%s\"."
 msgstr ""
 "El fitxer de tipus de lletra \"%s\" no es pot utilitzar ja que no es troba "
 "dins el directori de tipus de lletra \"%s\"."
@@ -6567,10 +6559,9 @@ msgid "Hide %s"
 msgstr "Amaga %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Aplicació"
+msgstr "Amaga l'aplicació"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
@@ -6589,10 +6580,9 @@ msgid "Quit %s"
 msgstr "Surt de %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Aplicació"
+msgstr "Surt de l'aplicació"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6821,169 +6811,141 @@ msgid "White"
 msgstr "Blanc"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
-msgstr "Per defecte"
+msgstr "Predeterminat"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Fletxa"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
-msgstr "Fletxa a la dreta"
+msgstr "Fletxa dreta"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Buit"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Diana"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Caràcter"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Creu"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Mà"
 
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
-msgstr "Forma d'I"
+msgstr "Perfil en I"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Botó esquerre"
 
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Lupa"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Botó del mig"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Sense entrada"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Pinzell"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Llapis"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Apunta a l'esquerra"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Apunta a la dreta"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Fletxa amb interrogació"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Botó dret"
 
 #: ../src/propgrid/advprops.cpp:1673
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Redimensionament NE-SO"
 
 #: ../src/propgrid/advprops.cpp:1674
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Redimensionament N-S"
 
 #: ../src/propgrid/advprops.cpp:1675
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Redimensionament NO-SE"
 
 #: ../src/propgrid/advprops.cpp:1676
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Redimensionament O-E"
 
 #: ../src/propgrid/advprops.cpp:1677
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Redimensionament"
 
 #: ../src/propgrid/advprops.cpp:1678
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
-msgstr "Aerosol"
+msgstr "Esprai"
 
 #: ../src/propgrid/advprops.cpp:1679
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Espera"
 
 #: ../src/propgrid/advprops.cpp:1680
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Rellotge"
 
 #: ../src/propgrid/advprops.cpp:1681
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Fletxa d'espera"
@@ -9464,8 +9426,8 @@ msgstr "No s'ha pogut crear %s \"%s\"."
 #~ msgstr "No s'ha pogut iniciar la impressió"
 
 #~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension \"%s"
-#~ "\" ?\n"
+#~ "Do you want to overwrite the command used to %s files with extension "
+#~ "\"%s\" ?\n"
 #~ "Current value is \n"
 #~ "%s, \n"
 #~ "New value is \n"
