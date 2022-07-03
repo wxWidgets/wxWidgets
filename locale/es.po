@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-05-10 17:39+0200\n"
+"PO-Revision-Date: 2022-06-29 09:27+0200\n"
 "Last-Translator: Miguel Giménez <tecnico@solener.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
@@ -4292,8 +4292,7 @@ msgid "Column %u"
 msgstr "Columna %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7087
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4304,8 +4303,7 @@ msgid "Left"
 msgstr "Izquierda"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7090
-#: ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -5040,7 +5038,7 @@ msgstr "< &Atrás"
 
 #: ../src/gtk/aboutdlg.cpp:216
 msgid "translator-credits"
-msgstr "traductor-créditos"
+msgstr "Andriy Byelikov https://github.com/andriybyelikov"
 
 #: ../src/gtk/app.cpp:456
 msgid ""
@@ -6497,8 +6495,8 @@ msgstr "El archivo de fuente \"%s\" no existe."
 #: ../src/osx/fontutil.cpp:89
 #, c-format
 msgid ""
-"Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
-"\"."
+"Font file \"%s\" cannot be used as it is not inside the font directory "
+"\"%s\"."
 msgstr ""
 "No se puede usar el archivo de fuente \"%s\" porque no está en la carpeta de "
 "fuentes \"%s\"."
@@ -6531,10 +6529,9 @@ msgid "Hide %s"
 msgstr "Ocultar %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Aplicación"
+msgstr "Ocultar aplicación"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
@@ -6550,13 +6547,12 @@ msgstr "Mostrar todo"
 #, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
-msgstr "Salir %s"
+msgstr "Salir de %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Aplicación"
+msgstr "Salir de la aplicación"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
