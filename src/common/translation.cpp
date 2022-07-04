@@ -1887,12 +1887,28 @@ wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
     size_t mo_size = 0;
 
     const wxString resname = wxString::Format("%s_%s", domain, lang);
+    // Replace non-alphanumeric characters with `_`
+    wxString resname_safe = resname;
+    for ( wxString::iterator it = resname_safe.begin(); it != resname_safe.end(); ++it )
+    {
+        if ( !( (*it >= (wxChar) 'A' && *it <= (wxChar) 'Z') ||
+                (*it >= (wxChar) 'a' && *it <= (wxChar) 'z') ||
+                (*it >= (wxChar) '0' && *it <= (wxChar) '9') ||
+                *it == (wxChar) '_') )
+        {
+                *it = (wxChar) '_';
+        }
+    }
 
     if ( !wxLoadUserResource(&mo_data, &mo_size,
                              resname,
                              GetResourceType().t_str(),
                              GetModule()) )
-        return NULL;
+        if ( !wxLoadUserResource(&mo_data, &mo_size,
+                                resname_safe,
+                                GetResourceType().t_str(),
+                                GetModule()) )
+            return NULL;
 
     wxLogTrace(TRACE_I18N,
                "Using catalog from Windows resource \"%s\".", resname);

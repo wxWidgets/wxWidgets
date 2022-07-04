@@ -368,13 +368,15 @@ public:
     Translations are stored in resources as compiled MO files, with type
     set to "MOFILE" (unless you override GetResourceType()) and name
     consisting of the domain, followed by underscore, followed by language
-    identification. For example, the relevant part of .rc file would look
-    like this:
+    identification. Non-alphanumeric characters in language identification
+    should be replaced by '_'. For example, the relevant part of .rc file
+    would look like this:
 
     @code
-    myapp_de     MOFILE   "catalogs/de/myapp.mo"
-    myapp_fr     MOFILE   "catalogs/fr/myapp.mo"
-    myapp_en_GB  MOFILE   "catalogs/en_GB/myapp.mo"
+    myapp_de        MOFILE  "catalogs/de/myapp.mo"
+    myapp_fr        MOFILE  "catalogs/fr/myapp.mo"
+    myapp_en_GB     MOFILE  "catalogs/en_GB/myapp.mo"
+    myapp_sr_latin  MOFILE  "catalogs/sr@latin/myapp.mo"
     @endcode
 
     This class is only available on Windows.
