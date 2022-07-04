@@ -1886,7 +1886,17 @@ wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
     const void *mo_data = NULL;
     size_t mo_size = 0;
 
-    const wxString resname = wxString::Format("%s_%s", domain, lang);
+    // Language may contain non-alphabetic characters that are not allowed in the
+    // resource names that must be valid identifiers, so sanitize the language
+    // before using it as part of the resource name.
+    wxString lang_sanitized = lang;
+    for ( wxString::iterator it = lang_sanitized.begin(); it != lang_sanitized.end(); ++it )
+    {
+        const wxChar c = *it;
+        if ( !((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) )
+            *it = '_';
+    }
+    const wxString resname = wxString::Format("%s_%s", domain, lang_sanitized);
 
     if ( !wxLoadUserResource(&mo_data, &mo_size,
                              resname,
