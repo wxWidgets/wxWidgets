@@ -87,7 +87,7 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
 #ifdef __WINDOWS__
     SECTION("A/W")
     {
-        static const wxChar *FUNC_NAME_AW = wxT("lstrlen");
+        static const char* const FUNC_NAME_AW = "lstrlen";
 
         typedef int (wxSTDCALL *wxStrlenTypeAorW)(const wxChar *);
         wxStrlenTypeAorW
