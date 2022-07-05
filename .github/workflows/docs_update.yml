@@ -53,7 +53,7 @@ jobs:
           fi
 
       - name: Upload
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/3.2'
         working-directory: docs/doxygen
         env:
           DOCS_WEBSITE_KEY: ${{secrets.DOCS_WEBSITE_KEY}}
@@ -63,5 +63,5 @@ jobs:
           echo "$DOCS_WEBSITE_KEY" > "$HOME/.ssh/docs_website_key"
           chmod 600 "$HOME/.ssh/docs_website_key"
           echo "$DOCS_WEBSITE_SSH_CONFIG" > "$HOME/.ssh/config"
-          rsync --checksum --compress --delete --out-format='%n' --recursive out/html/ wxdocs:public_html/latest/ \
+          rsync --checksum --compress --delete --out-format='%n' --recursive out/html/ wxdocs:public_html/3.2/ \
             2> >(grep -v "Warning: Permanently added" 1>&2)
