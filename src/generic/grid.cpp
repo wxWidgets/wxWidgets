@@ -3245,8 +3245,8 @@ wxSize wxGrid::GetSizeAvailableForScrollTarget(const wxSize& size)
 {
     wxPoint offset = GetGridWindowOffset(m_gridWin);
     wxSize sizeGridWin(size);
-    sizeGridWin.x -= m_rowLabelWidth - offset.x;
-    sizeGridWin.y -= m_colLabelHeight - offset.y;
+    sizeGridWin.x -= m_rowLabelWidth + offset.x;
+    sizeGridWin.y -= m_colLabelHeight + offset.y;
 
     return sizeGridWin;
 }
