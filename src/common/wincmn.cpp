@@ -358,6 +358,7 @@ wxWindowBase::wxWindowBase()
     m_isBeingDeleted = false;
 
     m_freezeCount = 0;
+    m_priv = NULL;
 }
 
 // common part of window creation process

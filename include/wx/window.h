@@ -2032,6 +2032,10 @@ private:
     // (i.e. not being updated) if it is positive
     unsigned int m_freezeCount;
 
+public:
+    struct Private;
+    Private* m_priv;
+
     wxDECLARE_ABSTRACT_CLASS(wxWindowBase);
     wxDECLARE_NO_COPY_CLASS(wxWindowBase);
     wxDECLARE_EVENT_TABLE();
