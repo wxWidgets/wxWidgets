@@ -851,7 +851,7 @@ public:
     virtual bool RemoveScriptMessageHandler(const wxString& name);
 
     /**
-        Injects the specified script into the webpage’s content.
+        Injects the specified script into the webpage's content.
 
         @param javascript The javascript code to add.
         @param injectionTime Specifies when the script will be executed.
