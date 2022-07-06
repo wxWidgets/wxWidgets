@@ -19,14 +19,14 @@ Finally, Microsoft Windows users may download [Setup.exe file](https://github.co
 
 To verify your download please use the following SHA-1 checksums:
 
-    61c8d41d7142e312901d40552b950b9c4451ea08  wxMSW-3.2.0-Setup.exe
-    bcda760f2453553a1fabe93e8f7a272cc50ed00f  wxWidgets-3.2.0-docs-chm.zip
-    c10a021b5631a75be6d3c4ccee038fc8c0eb5493  wxWidgets-3.2.0-docs-html.tar.bz2
-    7b0bc05c9397ff7a4ff834bee9e49879bdb0b770  wxWidgets-3.2.0-docs-html.zip
-    440e446989e081c5b03b4daa3133e7a107f4407e  wxWidgets-3.2.0-headers.7z
-    e253da0075101c26548650118a2d606e0599dab5  wxWidgets-3.2.0.7z
-    6d9dbb2ccb8733c4ed1269abb12d84e69c93990e  wxWidgets-3.2.0.tar.bz2
-    9fdbb4216bacd493809212c19dbb3cb7d02bd77f  wxWidgets-3.2.0.zip
+    a1ff476367a888a86e70c93584f729f06b0f9f7f  wxMSW-3.2.0-Setup.exe
+    f9010fd81b8a0013e50c6e0edce8b31a580fe7e1  wxWidgets-3.2.0-docs-chm.zip
+    b16a086e11af67163d066d47a1a11935b2f4fbfe  wxWidgets-3.2.0-docs-html.tar.bz2
+    969beb10a9301f311f27c0fd90b770bbe8da9b04  wxWidgets-3.2.0-docs-html.zip
+    f4ae6a0d74ac79b3d6189ea9d512b342afce39c7  wxWidgets-3.2.0-headers.7z
+    ffa02d8d6c7d1e13d445bb3c59260e2b1df0a489  wxWidgets-3.2.0.7z
+    b50cfd49d2c8ce7870e28d11cb7810784eab2faf  wxWidgets-3.2.0.tar.bz2
+    1c35ed0acf1c2991ce1de6a27e587cf3d0072e3c  wxWidgets-3.2.0.zip
 
 ## Binaries
 
