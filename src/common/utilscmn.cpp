@@ -1412,6 +1412,12 @@ wxVersionInfo wxGetLibraryVersionInfo()
                "none",
 #endif
                wxDEBUG_LEVEL,
+               // As explained in the comment near these macros definitions,
+               // ccache has special logic for detecting the use of __DATE__
+               // and __TIME__ macros, which doesn't apply to our own versions
+               // of them, hence this comment is needed just to mention the
+               // standard macro names and to ensure that ccache does _not_
+               // cache the results of compiling this file.
                __TDATE__,
                __TTIME__,
                wxPlatformInfo::Get().GetToolkitMajorVersion(),

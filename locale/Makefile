@@ -34,6 +34,7 @@ wxstd.pot:
 	touch $@
 	find ../include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
 	find ../src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
+	find ../src -name "*.mm" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
 
 allpo: force-update
 	@-for t in $(WX_LINGUAS_UPDATE); do $(MAKE) $$t.po; done
