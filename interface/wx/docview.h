@@ -1472,10 +1472,12 @@ public:
         case since wxWidgets 2.9.0.
 
         Returning @false from this function prevents the document from closing.
-        The default implementation does this if the document is modified and
-        the user didn't confirm discarding the modifications to it.
-
-        Return @true to allow the document to be closed.
+        Note that there is no need to ask the user if the changes to the
+        document should be saved, as this was already checked by
+        OnSaveModified() by the time this function is called, if necessary, and
+        so, typically, this function should always return @true to allow the
+        document to be closed, as leaving it open after asking the user about
+        saving the changes would be confusing.
     */
     virtual bool OnCloseDocument();
 
