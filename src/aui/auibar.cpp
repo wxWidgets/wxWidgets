@@ -132,8 +132,6 @@ wxBitmap wxAuiToolBarItem::GetCurrentBitmapFor(wxWindow* wnd) const
 
 wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
 {
-    UpdateColoursFromSystem();
-
     m_flags = 0;
     m_textOrientation = wxAUI_TBTOOL_TEXT_BOTTOM;
 
@@ -953,6 +951,7 @@ void wxAuiToolBar::SetArtProvider(wxAuiToolBarArt* art)
     if (m_art)
     {
         SetArtFlags();
+        m_art->UpdateColoursFromSystem();
         m_art->SetTextOrientation(m_toolTextOrientation);
     }
 }
