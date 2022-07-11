@@ -343,7 +343,13 @@ public:
                          const wxAuiToolBarItemArray& items) = 0;
 
     // Provide opportunity for subclasses to recalculate colours
-    virtual void UpdateColoursFromSystem() {}
+    virtual void UpdateGDIObjectsColoursFromSystem() {}
+    virtual void UpdateBitmapColoursFromSystem() {}
+    virtual void UpdateColoursFromSystem()
+    {
+        UpdateGDIObjectsColoursFromSystem();
+        UpdateBitmapColoursFromSystem();
+    }
 
 };
 
@@ -430,7 +436,8 @@ public:
     virtual int ShowDropDown(wxWindow* wnd,
                              const wxAuiToolBarItemArray& items) wxOVERRIDE;
 
-    virtual void UpdateColoursFromSystem() wxOVERRIDE;
+    virtual void UpdateGDIObjectsColoursFromSystem() wxOVERRIDE;
+    virtual void UpdateBitmapColoursFromSystem() wxOVERRIDE;
 
 protected:
 

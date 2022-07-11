@@ -155,7 +155,7 @@ wxAuiToolBarArt* wxAuiGenericToolBarArt::Clone()
     return static_cast<wxAuiToolBarArt*>(new wxAuiGenericToolBarArt);
 }
 
-void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
+void wxAuiGenericToolBarArt::UpdateGDIObjectsColoursFromSystem()
 {
     m_baseColour = GetBaseColor();
     m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
@@ -166,7 +166,10 @@ void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
     m_gripperPen1 = wxPen(darker5Colour, pen_width);
     m_gripperPen2 = wxPen(darker3Colour, pen_width);
     m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
+}
 
+void wxAuiGenericToolBarArt::UpdateBitmapColoursFromSystem()
+{
     // Note: update the bitmaps here as they depend on the system colours too.
 
     // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
