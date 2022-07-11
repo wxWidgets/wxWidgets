@@ -40,6 +40,7 @@
 WX_DEFINE_OBJARRAY(wxAuiToolBarItemArray)
 
 
+wxDEFINE_EVENT( wxEVT_AUITOOLBAR_TOOL_BUTTON, wxAuiToolBarEvent );
 wxDEFINE_EVENT( wxEVT_AUITOOLBAR_TOOL_DROPDOWN, wxAuiToolBarEvent );
 wxDEFINE_EVENT( wxEVT_AUITOOLBAR_OVERFLOW_CLICK, wxAuiToolBarEvent );
 wxDEFINE_EVENT( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEvent );
@@ -2703,7 +2704,6 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
             wxCommandEvent e(wxEVT_MENU, m_actionItem->m_toolId);
             e.SetEventObject(this);
-            e.SetExtraLong(m_droppedItem ? 1 : 0);
 
             if (hitItem->m_kind == wxITEM_CHECK || hitItem->m_kind == wxITEM_RADIO)
             {
@@ -2725,6 +2725,15 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
             if (HasCapture()) ReleaseMouse();
 
             GetEventHandler()->ProcessEvent(e);
+
+            // Fire a complementary event to identify the state of the tool on
+            // button click
+            wxAuiToolBarEvent ce(wxEVT_AUITOOLBAR_TOOL_BUTTON, m_actionItem->m_toolId);
+            ce.SetEventObject(this);
+            ce.SetToolId(m_actionItem->m_toolId);
+            ce.SetClickPoint(wxPoint(evt.GetX(), evt.GetY()));
+            ce.SetButtonClickedAfterDropDown(m_droppedItem ? 1 : 0);
+            GetEventHandler()->ProcessEvent(ce);
 
             // Ensure hovered item is really ok, as mouse may have moved during
             // event processing

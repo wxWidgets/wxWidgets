@@ -62,6 +62,13 @@ enum wxAuiToolBarToolTextOrientation
     wxAUI_TBTOOL_TEXT_BOTTOM = 3
 };
 
+enum wxAuiToolBarDropDownDisplay
+{
+    wxAUI_TBTOOL_DROPDOWN_NORMAL = 0,
+    wxAUI_TBTOOL_DROPDOWN_ARROW_ONLY = 1,
+    wxAUI_TBTOOL_DROPDOWN_ICON_ONLY = 2,
+};
+
 
 // aui toolbar event class
 
@@ -79,6 +86,9 @@ public:
     }
     wxEvent *Clone() const wxOVERRIDE { return new wxAuiToolBarEvent(*this); }
 
+    bool IsButtonClickedAfterDropDown() const  { return m_buttonClickedAfterDropDown; }
+    void SetButtonClickedAfterDropDown(bool c) { m_buttonClickedAfterDropDown = c;    }
+
     bool IsDropDownClicked() const  { return m_isDropdownClicked; }
     void SetDropDownClicked(bool c) { m_isDropdownClicked = c;    }
 
@@ -92,7 +102,7 @@ public:
     void SetToolId(int toolId) { m_toolId = toolId; }
 
 private:
-
+    bool m_buttonClickedAfterDropDown;
     bool m_isDropdownClicked;
     wxPoint m_clickPt;
     wxRect m_rect;
@@ -722,6 +732,7 @@ private:
 
 #ifndef SWIG
 
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUITOOLBAR_TOOL_BUTTON, wxAuiToolBarEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUITOOLBAR_TOOL_DROPDOWN, wxAuiToolBarEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUITOOLBAR_OVERFLOW_CLICK, wxAuiToolBarEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEvent );
@@ -733,6 +744,8 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 #define wxAuiToolBarEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxAuiToolBarEventFunction, func)
 
+#define EVT_AUITOOLBAR_TOOL_BUTTON(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_AUITOOLBAR_TOOL_BUTTON, winid, wxAuiToolBarEventHandler(fn))
 #define EVT_AUITOOLBAR_TOOL_DROPDOWN(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_AUITOOLBAR_TOOL_DROPDOWN, winid, wxAuiToolBarEventHandler(fn))
 #define EVT_AUITOOLBAR_OVERFLOW_CLICK(winid, fn) \
@@ -747,6 +760,7 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 #else
 
 // wxpython/swig event work
+%constant wxEventType wxEVT_AUITOOLBAR_TOOL_BUTTON;
 %constant wxEventType wxEVT_AUITOOLBAR_TOOL_DROPDOWN;
 %constant wxEventType wxEVT_AUITOOLBAR_OVERFLOW_CLICK;
 %constant wxEventType wxEVT_AUITOOLBAR_RIGHT_CLICK;
@@ -754,6 +768,7 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 %constant wxEventType wxEVT_AUITOOLBAR_BEGIN_DRAG;
 
 %pythoncode {
+    EVT_AUITOOLBAR_TOOL_BUTTON = wx.PyEventBinder( wxEVT_AUITOOLBAR_TOOL_BUTTON, 1 )
     EVT_AUITOOLBAR_TOOL_DROPDOWN = wx.PyEventBinder( wxEVT_AUITOOLBAR_TOOL_DROPDOWN, 1 )
     EVT_AUITOOLBAR_OVERFLOW_CLICK = wx.PyEventBinder( wxEVT_AUITOOLBAR_OVERFLOW_CLICK, 1 )
     EVT_AUITOOLBAR_RIGHT_CLICK = wx.PyEventBinder( wxEVT_AUITOOLBAR_RIGHT_CLICK, 1 )
@@ -763,6 +778,7 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 #endif  // SWIG
 
 // old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_AUITOOLBAR_TOOL_BUTTON      wxEVT_AUITOOLBAR_TOOL_BUTTON
 #define wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN    wxEVT_AUITOOLBAR_TOOL_DROPDOWN
 #define wxEVT_COMMAND_AUITOOLBAR_OVERFLOW_CLICK   wxEVT_AUITOOLBAR_OVERFLOW_CLICK
 #define wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK      wxEVT_AUITOOLBAR_RIGHT_CLICK
