@@ -16,6 +16,7 @@
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxLogFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 // ----------------------------------------------------------------------------
 // the following log targets are only compiled in if the we're compiling the
@@ -124,6 +125,10 @@ public:
     void Show(bool bShow = true);
         // retrieve the pointer to the frame
     wxFrame *GetFrame() const;
+
+    void AddLevelToColourMapping(wxLogLevel level, const wxColour& clr);
+    void RemoveLevelToColourMapping(wxLogLevel level);
+    void ClearLevelToColourMapping();
 
     // overridables
         // called if the user closes the window interactively, will not be

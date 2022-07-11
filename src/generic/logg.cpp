@@ -429,6 +429,8 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
 
 #if wxUSE_LOGWINDOW
 
+WX_DECLARE_HASH_MAP(wxLogLevel, wxColour, wxIntegerHash, wxIntegerEqual, wxLevelToColourMap);
+
 // log frame class
 // ---------------
 class wxLogFrame : public wxFrame
@@ -450,11 +452,23 @@ public:
     void OnClear(wxCommandEvent& event);
 
     // do show the message in the text control
-    void ShowLogMessage(const wxString& message)
+    void ShowLogMessage(wxLogLevel level, const wxString& message)
     {
+        wxLevelToColourMap::iterator iter = m_levelColourMap.find(level);
+        if (iter != m_levelColourMap.end())
+        {
+            m_pTextCtrl->SetDefaultStyle(wxTextAttr(iter->second));
+        }
+        else
+        {
+            m_pTextCtrl->SetDefaultStyle(wxTextAttr());
+        }
         m_pTextCtrl->AppendText(message + wxS('\n'));
     }
 
+    void AddLevelToColourMapping(wxLogLevel level, const wxColour& clr);
+    void RemoveLevelToColourMapping(wxLogLevel level);
+    void ClearLevelToColourMapping();
 private:
     // use standard ids for our commands!
     enum
@@ -469,6 +483,7 @@ private:
 
     wxTextCtrl  *m_pTextCtrl;
     wxLogWindow *m_log;
+    wxLevelToColourMap m_levelColourMap;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxLogFrame);
@@ -588,6 +603,21 @@ wxLogFrame::~wxLogFrame()
     m_log->OnFrameDelete(this);
 }
 
+void wxLogFrame::AddLevelToColourMapping(wxLogLevel level, const wxColour& clr)
+{
+    m_levelColourMap[level] = clr;
+}
+
+void wxLogFrame::RemoveLevelToColourMapping(wxLogLevel level)
+{
+    m_levelColourMap.erase(level);
+}
+
+void wxLogFrame::ClearLevelToColourMapping()
+{
+    m_levelColourMap.clear();
+}
+
 // wxLogWindow
 // -----------
 
@@ -627,12 +657,27 @@ void wxLogWindow::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
     if ( level == wxLOG_Trace )
         return;
 
-    m_pLogFrame->ShowLogMessage(msg);
+    m_pLogFrame->ShowLogMessage(level, msg);
 }
 
 wxFrame *wxLogWindow::GetFrame() const
 {
     return m_pLogFrame;
+}
+
+void wxLogWindow::AddLevelToColourMapping(wxLogLevel level, const wxColour& clr)
+{
+    m_pLogFrame->AddLevelToColourMapping(level, clr);
+}
+
+void wxLogWindow::RemoveLevelToColourMapping(wxLogLevel level)
+{
+    m_pLogFrame->RemoveLevelToColourMapping(level);
+}
+
+void wxLogWindow::ClearLevelToColourMapping()
+{
+    m_pLogFrame->ClearLevelToColourMapping();
 }
 
 bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))
