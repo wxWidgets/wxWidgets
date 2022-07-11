@@ -116,16 +116,18 @@ wxBitmap wxAuiToolBarItem::GetCurrentBitmapFor(wxWindow* wnd) const
 {
     // We suppose that we don't have disabled bitmap if we don't have the
     // normal one neither.
-    if ( !m_bitmap.IsOk() )
+    if (!m_bitmap.IsOk())
         return wxNullBitmap;
 
-    if ( m_state & wxAUI_BUTTON_STATE_DISABLED )
+    if (m_state & wxAUI_BUTTON_STATE_DISABLED)
     {
-        if ( m_disabledBitmap.IsOk() )
+        if (m_disabledBitmap.IsOk())
             return m_disabledBitmap.GetBitmapFor(wnd);
 
         return m_bitmap.GetBitmapFor(wnd).ConvertToDisabled();
     }
+    if ((m_state & wxAUI_BUTTON_STATE_HOVER) && (m_hoverBitmap.IsOk()))
+        return m_hoverBitmap.GetBitmapFor(wnd);
 
     return m_bitmap.GetBitmapFor(wnd);
 }
