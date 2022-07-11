@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-07-09 10:49+0800\n"
+"PO-Revision-Date: 2022-07-11 10:47+0800\n"
 "Last-Translator: James Pan <bojaypan@mail.ru>\n"
 "Language-Team: wxWidgets tranlators <wx-translators@wxwidgets.org>\n"
 "Language: zh_CN\n"
@@ -2129,7 +2129,7 @@ msgstr "BMP：无法写数据。"
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr "BMP：当 biBitCount=%d 时，表头則為 biClrUsed=%d。"
+msgstr "BMP：当 biBitCount=%d 时，表头则为 biClrUsed=%d。"
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -2411,13 +2411,13 @@ msgstr "警语： "
 
 #: ../src/common/log.cpp:292
 msgid "The previous message repeated once."
-msgstr "前則消息重复一次。"
+msgstr "前则消息已重复一次。"
 
 #: ../src/common/log.cpp:299
 #, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "前則消息已重复 %u 次。"
+msgstr[0] "前则消息已重复 %u 次。"
 
 #: ../src/common/log.cpp:327
 #, c-format
@@ -7331,7 +7331,7 @@ msgstr "角"
 
 #: ../src/richtext/richtextborderspage.cpp:575
 msgid "Corner &radius:"
-msgstr "角&半径："
+msgstr "角半径(&r)："
 
 #: ../src/richtext/richtextborderspage.cpp:577
 #: ../src/richtext/richtextborderspage.cpp:579
@@ -7851,7 +7851,7 @@ msgstr "勾选使用从右到左文字布局。"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr "抑制断字"
+msgstr "抑制断字(&n)"
 
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
