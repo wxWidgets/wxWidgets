@@ -66,7 +66,7 @@ enum wxAuiToolBarDropDownDisplay
 {
     wxAUI_TBTOOL_DROPDOWN_NORMAL = 0,
     wxAUI_TBTOOL_DROPDOWN_ARROW_ONLY = 1,
-    wxAUI_TBTOOL_DROPDOWN_ICON_ONLY = 2,
+    wxAUI_TBTOOL_DROPDOWN_BUTTON_ONLY = 2,
 };
 
 
@@ -127,6 +127,7 @@ public:
         m_toolId = 0;
         m_kind = wxITEM_NORMAL;
         m_state = 0;  // normal, enabled
+        m_show = wxAUI_TBTOOL_DROPDOWN_NORMAL;
         m_proportion = 0;
         m_active = true;
         m_dropDown = true;
@@ -150,6 +151,7 @@ public:
         m_toolId = c.m_toolId;
         m_kind = c.m_kind;
         m_state = c.m_state;
+        m_show = c.m_show;
         m_proportion = c.m_proportion;
         m_active = c.m_active;
         m_dropDown = c.m_dropDown;
@@ -236,27 +238,31 @@ public:
         return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO;
     }
 
+    void SetButtonDropDownVisibility(wxAuiToolBarDropDownDisplay l) { m_show = l; }
+    wxAuiToolBarDropDownDisplay GetButtonDropDownVisibility() const { return m_show; }
+
 private:
 
-    wxWindow* m_window;          // item's associated window
-    wxString m_label;            // label displayed on the item
-    wxBitmapBundle m_bitmap;     // item's bitmap
-    wxBitmapBundle m_disabledBitmap;  // item's disabled bitmap
-    wxBitmapBundle m_hoverBitmap;     // item's hover bitmap
-    wxString m_shortHelp;       // short help (for tooltip)
-    wxString m_longHelp;        // long help (for status bar)
-    wxSizerItem* m_sizerItem;   // sizer item
-    wxSize m_minSize;           // item's minimum size
-    int m_spacerPixels;         // size of a spacer
-    int m_toolId;                // item's id
-    int m_kind;                  // item's kind
-    int m_state;                 // state
-    int m_proportion;            // proportion
-    bool m_active;               // true if the item is currently active
-    bool m_dropDown;             // true if the item has a dropdown button
-    bool m_sticky;               // overrides button states if true (always active)
-    long m_userData;            // user-specified data
-    int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
+    wxWindow* m_window;                 // item's associated window
+    wxString m_label;                   // label displayed on the item
+    wxBitmapBundle m_bitmap;            // item's bitmap
+    wxBitmapBundle m_disabledBitmap;    // item's disabled bitmap
+    wxBitmapBundle m_hoverBitmap;       // item's hover bitmap
+    wxString m_shortHelp;               // short help (for tooltip)
+    wxString m_longHelp;                // long help (for status bar)
+    wxSizerItem* m_sizerItem;           // sizer item
+    wxSize m_minSize;                   // item's minimum size
+    int m_spacerPixels;                 // size of a spacer
+    int m_toolId;                       // item's id
+    int m_kind;                         // item's kind
+    int m_state;                        // state
+    wxAuiToolBarDropDownDisplay m_show; // which parts of a button with dropdown to show; ignore otherwise
+    int m_proportion;                   // proportion
+    bool m_active;                      // true if the item is currently active
+    bool m_dropDown;                    // true if the item has a dropdown button
+    bool m_sticky;                      // overrides button states if true (always active)
+    long m_userData;                    // user-specified data
+    int m_alignment;                    // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
 };
 
 #ifndef SWIG

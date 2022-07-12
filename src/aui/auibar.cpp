@@ -120,7 +120,8 @@ wxBitmap wxAuiToolBarItem::GetCurrentBitmapFor(wxWindow* wnd) const
     if (!m_bitmap.IsOk())
         return wxNullBitmap;
 
-    if (m_state & wxAUI_BUTTON_STATE_DISABLED)
+    if ((m_state & wxAUI_BUTTON_STATE_DISABLED) || ((m_show == wxAUI_TBTOOL_DROPDOWN_ARROW_ONLY) &&
+        (m_state & wxAUI_BUTTON_STATE_HOVER)))
     {
         if (m_disabledBitmap.IsOk())
             return m_disabledBitmap.GetBitmapFor(wnd);
@@ -483,7 +484,8 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
         return;
 
     wxBitmapBundle dropbmp;
-    if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
+    if ((item.GetState() & wxAUI_BUTTON_STATE_DISABLED) ||
+        (item.GetButtonDropDownVisibility() == wxAUI_TBTOOL_DROPDOWN_BUTTON_ONLY))
     {
         dropbmp = m_disabledButtonDropDownBmp;
     }
@@ -2643,6 +2645,18 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         const bool dropDownHit = m_actionItem->m_dropDown &&
                                  mouse_x >= (rect.x+rect.width-dropdownWidth) &&
                                  mouse_x < (rect.x+rect.width);
+        // If the click was on an area of a drop down button tool that is masked by the
+        // 'm_show' variable abort the processing, as if the tool is disabled.
+        if ((m_actionItem->m_kind == wxITEM_NORMAL) && (m_actionItem->m_dropDown))
+        {
+            if ((dropDownHit && (m_actionItem->m_show == wxAUI_TBTOOL_DROPDOWN_BUTTON_ONLY)) ||
+                (!dropDownHit && (m_actionItem->m_show == wxAUI_TBTOOL_DROPDOWN_ARROW_ONLY)))
+            {
+                m_actionPos = wxPoint(-1,-1);
+                m_actionItem = NULL;
+                return;
+            }
+        }
         e.SetDropDownClicked(dropDownHit);
 
         e.SetClickPoint(evt.GetPosition());
