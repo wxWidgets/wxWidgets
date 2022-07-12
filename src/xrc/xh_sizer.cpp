@@ -350,8 +350,18 @@ wxSizer*  wxSizerXmlHandler::Handle_wxStaticBoxSizer()
             return NULL;
         }
 
+        wxSizer* const old_par = m_parentSizer;
+        const bool old_ins = m_isInside;
+
+        m_parentSizer = NULL;
+        m_isInside = false;
+
         wxObject* const item = CreateResFromNode(n, m_parent, NULL);
         wxWindow* const wndLabel = wxDynamicCast(item, wxWindow);
+
+        m_parentSizer = old_par;
+        m_isInside = old_ins;
+
         if ( !wndLabel )
         {
             ReportError(n, "windowlabel child must be a window");
