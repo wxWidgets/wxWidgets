@@ -22,7 +22,11 @@
     #include "wx/app.h"
 #endif
 
-#include "wx/accel.h"
+#if wxUSE_ACCEL
+    #include "wx/accel.h"
+    #include "wx/scopedptr.h"
+#endif // wxUSE_ACCEL
+
 #include "wx/stockitem.h"
 
 #include "wx/gtk/private.h"
