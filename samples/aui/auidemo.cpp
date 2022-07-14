@@ -166,7 +166,7 @@ private:
     void OnPaneClose(wxAuiManagerEvent& evt);
 
     void OnToolClicked(wxCommandEvent& evt);
-    void OnToolFromPanelClicked(wxCommandEvent& evt);
+    void OnToolFromPanelClicked(wxAuiToolBarEvent& evt);
     void OnDropDownPanelItem(wxAuiToolBarEvent& evt);
 private:
 
@@ -663,7 +663,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_DropDownToolbarItem, MyFrame::OnToolClicked)
     EVT_MENU(ID_SampleItem+27, MyFrame::OnToolClicked)
     EVT_MENU(ID_SampleItem+28, MyFrame::OnToolClicked)
-    EVT_MENU(ID_DropDownPanelItem, MyFrame::OnToolFromPanelClicked)
+    EVT_AUITOOLBAR_TOOL_BUTTON(ID_DropDownPanelItem, MyFrame::OnToolFromPanelClicked)
     EVT_MENU(ID_SampleItem+29, MyFrame::OnToolClicked)
     EVT_MENU(ID_SampleItem+30, MyFrame::OnToolClicked)
     EVT_MENU(ID_SampleItem+31, MyFrame::OnToolClicked)
@@ -1602,9 +1602,9 @@ void MyFrame::OnToolClicked(wxCommandEvent& evt)
     wxMessageBox(_("Tool clicked"), _("Click test"), wxOK, this);
 }
 
-void MyFrame::OnToolFromPanelClicked(wxCommandEvent& evt)
+void MyFrame::OnToolFromPanelClicked(wxAuiToolBarEvent& evt)
 {
-    if (evt.GetExtraLong() == 1)
+    if (evt.IsButtonClickedAfterDropDown())
     {
         wxSpinCtrl * spin = static_cast<wxSpinCtrl *>(pulse_quant->FindWindow(ID_SpinControl));
         if (spin)
