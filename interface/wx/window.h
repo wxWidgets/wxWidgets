@@ -1638,6 +1638,10 @@ public:
         the border or title bar have when trying to fit the window around panel
         items, for example.
 
+        Note that special value of -1 which can be used in some other functions
+        to preserve the existing size is @e not supported for @a width and @a
+        height here, i.e. they both must be valid, positive integers.
+
         @see @ref overview_windowsizing
     */
     void SetClientSize(int width, int height);
