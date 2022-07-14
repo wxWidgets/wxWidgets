@@ -781,8 +781,11 @@ int wxAuiGenericToolBarArt::ShowDropDown(wxWindow* wnd,
 
             wxMenuItem* m =  new wxMenuItem(&menuPopup, item.GetId(), text, item.GetShortHelp());
 
-            m->SetBitmap(item.GetBitmapBundle().GetBitmapFor(wnd));
+            bool enabled = !(item.GetState() & wxAUI_BUTTON_STATE_DISABLED);
+            if (enabled) m->SetBitmap(item.GetBitmapBundle().GetBitmapFor(wnd));
+            else m->SetBitmap(item.GetDisabledBitmapBundle().GetBitmapFor(wnd));
             menuPopup.Append(m);
+            m->Enable(enabled);
             items_added++;
         }
         else if (item.GetKind() == wxITEM_SEPARATOR)
