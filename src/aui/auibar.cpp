@@ -136,6 +136,8 @@ wxBitmap wxAuiToolBarItem::GetCurrentBitmapFor(wxWindow* wnd) const
 
 wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
 {
+    UpdateGDIObjectsColoursFromSystem();
+
     m_flags = 0;
     m_textOrientation = wxAUI_TBTOOL_TEXT_BOTTOM;
 
@@ -872,6 +874,7 @@ void wxAuiToolBar::Init()
     m_overflowVisible = false;
     m_overflowState = 0;
     m_orientation = wxHORIZONTAL;
+    m_art->UpdateColoursFromSystem();
 }
 
 bool wxAuiToolBar::Create(wxWindow* parent,
