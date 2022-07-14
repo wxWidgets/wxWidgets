@@ -188,6 +188,12 @@ public:
     // part of the parent document and not a disk file as usual.
     bool IsChildDocument() const { return m_documentParent != NULL; }
 
+    // Ask the user if the document should be saved if it's modified and save
+    // it if necessary.
+    //
+    // Returns false if the user cancelled closing or if saving failed.
+    bool CanClose();
+
 protected:
     wxList                m_documentViews;
     wxString              m_documentFile;

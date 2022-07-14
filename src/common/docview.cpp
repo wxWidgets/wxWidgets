@@ -144,15 +144,14 @@ wxDocument::~wxDocument()
     //DeleteAllViews();
 }
 
-bool wxDocument::Close()
+bool wxDocument::CanClose()
 {
     if ( !OnSaveModified() )
         return false;
 
     // When the parent document closes, its children must be closed as well as
-    // they can't exist without the parent.
+    // they can't exist without the parent, so ask them too.
 
-    // As usual, first check if all children can be closed.
     DocsList::const_iterator it = m_childDocuments.begin();
     for ( DocsList::const_iterator end = m_childDocuments.end(); it != end; ++it )
     {
@@ -162,6 +161,15 @@ bool wxDocument::Close()
             return false;
         }
     }
+
+    return true;
+}
+
+bool wxDocument::Close()
+{
+    // First check if this document itself and all its children can be closed.
+    if ( !CanClose() )
+        return false;
 
     // Now that they all did, do close them: as m_childDocuments is modified as
     // we iterate over it, don't use the usual for-style iteration here.
@@ -996,12 +1004,12 @@ wxDocManager::~wxDocManager()
 // closes the specified document
 bool wxDocManager::CloseDocument(wxDocument* doc, bool force)
 {
-    if ( !doc->Close() && !force )
+    if ( !doc->CanClose() && !force )
         return false;
 
     // To really force the document to close, we must ensure that it isn't
     // modified, otherwise it would ask the user about whether it should be
-    // destroyed (again, it had been already done by Close() above) and might
+    // destroyed (again, it had been already done by CanClose() above) and might
     // not destroy it at all, while we must do it here.
     doc->Modify(false);
 
