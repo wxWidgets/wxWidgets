@@ -64,9 +64,10 @@ enum wxAuiToolBarToolTextOrientation
 
 enum wxAuiToolBarDropDownDisplay
 {
-    wxAUI_TBTOOL_DROPDOWN_NORMAL = 0,
-    wxAUI_TBTOOL_DROPDOWN_ARROW_ONLY = 1,
-    wxAUI_TBTOOL_DROPDOWN_BUTTON_ONLY = 2,
+    wxAUI_TBTOOL_DROPDOWN_SHOW_NONE = 0,
+    wxAUI_TBTOOL_DROPDOWN_SHOW_ARROW_ONLY = 1,
+    wxAUI_TBTOOL_DROPDOWN_SHOW_BUTTON_ONLY = 2,
+    wxAUI_TBTOOL_DROPDOWN_SHOW_NORMAL = 3,
 };
 
 
@@ -127,7 +128,7 @@ public:
         m_toolId = 0;
         m_kind = wxITEM_NORMAL;
         m_state = 0;  // normal, enabled
-        m_show = wxAUI_TBTOOL_DROPDOWN_NORMAL;
+        m_show = wxAUI_TBTOOL_DROPDOWN_SHOW_NORMAL;
         m_proportion = 0;
         m_active = true;
         m_dropDown = true;
