@@ -527,26 +527,34 @@ bool wxDocument::OnSaveModified()
 {
     if ( IsModified() )
     {
-        switch ( wxMessageBox
-                 (
-                    wxString::Format
-                    (
-                     _("Do you want to save changes to %s?"),
-                     GetUserReadableName()
-                    ),
-                    wxTheApp->GetAppDisplayName(),
-                    wxYES_NO | wxCANCEL | wxICON_QUESTION | wxCENTRE,
-                    GetDocumentWindow()
-                 ) )
+        wxMessageDialog dialogSave
+            (
+                GetDocumentWindow(),
+                wxString::Format
+                (
+                    _("Do you want to save changes to %s?"),
+                    GetUserReadableName()
+                ),
+                wxTheApp->GetAppDisplayName(),
+                wxYES_NO | wxCANCEL | wxICON_QUESTION | wxCENTRE
+            );
+        dialogSave.SetYesNoCancelLabels
+            (
+                _("&Save"),
+                _("&Discard changes"),
+                _("Do&n't close")
+            );
+
+        switch ( dialogSave.ShowModal() )
         {
-            case wxNO:
+            case wxID_NO:
                 Modify(false);
                 break;
 
-            case wxYES:
+            case wxID_YES:
                 return Save();
 
-            case wxCANCEL:
+            case wxID_CANCEL:
                 return false;
         }
     }
