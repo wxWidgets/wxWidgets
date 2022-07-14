@@ -1545,6 +1545,19 @@ public:
     virtual bool OnSaveModified();
 
     /**
+        This function is called when a document is forced to close.
+
+        The default implementation asks the user whether to save the changes
+        but, unlike OnSaveModified(), does not allow to cancel closing.
+
+        The document is force closed when wxDocManager::CloseDocument() is
+        called with its @c force argument set to @true.
+
+        @since 3.3.0
+     */
+    virtual void OnSaveBeforeForceClose();
+
+    /**
         Removes the view from the document's list of views.
 
         If the view was really removed, also calls OnChangedViewList().

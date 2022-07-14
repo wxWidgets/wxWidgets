@@ -117,6 +117,10 @@ public:
     // modified to false)
     virtual bool OnSaveModified();
 
+    // Similar to OnSaveModified() but doesn't allow the user to prevent the
+    // document from closing as it will be closed unconditionally.
+    virtual void OnSaveBeforeForceClose();
+
     // if you override, remember to call the default
     // implementation (wxDocument::OnChangeFilename)
     virtual void OnChangeFilename(bool notifyViews);

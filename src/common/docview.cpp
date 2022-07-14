@@ -554,6 +554,50 @@ bool wxDocument::OnSaveModified()
     return true;
 }
 
+void wxDocument::OnSaveBeforeForceClose()
+{
+    if ( !IsModified() )
+        return;
+
+    wxMessageDialog dialogSave
+        (
+            GetDocumentWindow(),
+            wxString::Format
+            (
+                _("Do you want to save changes to %s before closing it?"),
+                GetUserReadableName()
+            ),
+            wxTheApp->GetAppDisplayName(),
+            wxYES_NO | wxICON_QUESTION | wxCENTRE
+        );
+    dialogSave.SetExtendedMessage(_("The document must be closed."));
+    dialogSave.SetYesNoLabels(_("&Save"), _("&Discard changes"));
+
+    if ( dialogSave.ShowModal() == wxID_YES )
+    {
+        while ( !Save() )
+        {
+            wxMessageDialog dialogRetry
+                (
+                    GetDocumentWindow(),
+                    wxString::Format
+                    (
+                        _("Saving %s failed, would you like to retry?"),
+                        GetUserReadableName()
+                    ),
+                    wxTheApp->GetAppDisplayName(),
+                    wxYES_NO | wxICON_ERROR | wxCENTRE
+                );
+            dialogRetry.SetYesNoLabels(_("Retry"), _("Discard changes"));
+
+            if ( dialogRetry.ShowModal() != wxID_YES )
+                break;
+        }
+    }
+
+    Modify(false);
+}
+
 bool wxDocument::Draw(wxDC& WXUNUSED(context))
 {
     return true;
@@ -1004,14 +1048,19 @@ wxDocManager::~wxDocManager()
 // closes the specified document
 bool wxDocManager::CloseDocument(wxDocument* doc, bool force)
 {
-    if ( !doc->CanClose() && !force )
-        return false;
+    if ( force )
+    {
+        // We need to close, but at least ask the user if the document should
+        // be saved before doing it.
+        doc->OnSaveBeforeForceClose();
+    }
+    else // Allow the user to cancel closing too.
+    {
+        if ( !doc->CanClose() )
+            return false;
+    }
 
-    // To really force the document to close, we must ensure that it isn't
-    // modified, otherwise it would ask the user about whether it should be
-    // destroyed (again, it had been already done by CanClose() above) and might
-    // not destroy it at all, while we must do it here.
-    doc->Modify(false);
+    // Note that by now the document is certain not to be modified any longer.
 
     // Implicitly deletes the document when
     // the last view is deleted
