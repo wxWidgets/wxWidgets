@@ -2617,6 +2617,14 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
                     wxCommandEvent event(wxEVT_MENU, res);
                     event.SetEventObject(this);
                     GetEventHandler()->ProcessEvent(event);
+
+                    // Fire the complementary event that happen on LeftUp
+                    wxAuiToolBarEvent ce(wxEVT_AUITOOLBAR_TOOL_BUTTON, m_actionItem->m_toolId);
+                    ce.SetEventObject(this);
+                    ce.SetToolId(m_actionItem->m_toolId);
+                    ce.SetClickPoint(wxPoint(evt.GetX(), evt.GetY()));
+                    ce.SetButtonClickedAfterDropDown(0);
+                    GetEventHandler()->ProcessEvent(ce);
                 }
             }
 
