@@ -43,7 +43,7 @@ if(wxUSE_XRC)
             ${CMAKE_CURRENT_BINARY_DIR}/bin/wxrc${EXE_SUFFIX} \
             )"
         )
-        wx_install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxrc${EXE_SUFFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+        wx_install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bin/wxrc${EXE_SUFFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
     endif()
 endif()
 

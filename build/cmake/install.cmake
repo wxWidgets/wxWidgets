@@ -46,7 +46,7 @@ else()
         ${CMAKE_CURRENT_BINARY_DIR}/bin/wx-config \
         )"
     )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wx-config DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bin/wx-config DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
 
 install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets/${wxPLATFORM_LIB_DIR}")
