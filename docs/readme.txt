@@ -1,7 +1,7 @@
-wxWidgets 3.2.0 Release Notes
+wxWidgets 3.3.0 Release Notes
 =============================
 
-Welcome to the new stable release of wxWidgets, a free and open source
+Welcome to the latest release of wxWidgets, a free and open source
 cross-platform C++ framework for writing advanced GUI applications using
 native controls.
 
@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.2.0/
+* https://docs.wxwidgets.org/3.3.0/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
@@ -25,59 +25,20 @@ download from:
 
 or, for a more more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.0/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.3.0/
 
-Please see https://docs.wxwidgets.org/3.2.0/overview_install.html for full
+Please see https://docs.wxwidgets.org/3.3.0/overview_install.html for full
 installation instructions.
 
 
 
-Changes since 3.0
+Changes since 3.2
 -----------------
 
-This release is a culmination of many years of development since the
-last stable 3.0 release. It contains more than 15,000 commits from more
-than 400 unique contributors (including more than 200 with multiple
-contributions) and has too many improvements to list them all here, but
-here is a maximally condensed summary of the most important ones:
+- TODO
 
-- Build system improvements: support for new compilers (up to MSVS 2022,
-  g++ 12, clang 14) with an even simpler way of using wxWidgets from
-  MSVS, with wxwidgets.props file, and OS versions as well as an
-  entirely new CMake build system.
-- Support for native dark mode under macOS 10.14 and later, support for
-  ARM hardware and macOS versions up to 13.
-- High DPI support with the new, but almost perfectly backwards-
-  compatible, API based on wxBitmapBundle, including per-monitor DPI and
-  dynamic DPI changes.
-- New features: HTTPS and HTTP/2 support with wxWebRequest and friends;
-  support for freezing rows/columns in wxGrid; mouse gesture events
-  (GSoC 2017 project); non-integer font sizes and arbitrary font weights
-  in wxFont; fractional pen widths in wxGraphicsContext; arbitrary label
-  windows in wxStaticBox; markup in wxDataViewCtrl items text; support
-  for ZIP 64 files; LZMA compression; much improved accessibility
-  support under MSW; new Edge-based wxWebView implementation.
-- New classes: wxActivityIndicator, wxAddRemoveCtrl, wxAppProgressIndicator,
-  wxBitmapBundle, wxNativeWindow, wxPersistentComboBox,
-  wxPowerResourceBlocker, wxSecretStore, wxTempFFile and many new
-  features in the existing classes.
-- New XRC handlers for all the new and some of the existing classes.
-- Significant improvements to: wxBusyInfo, wxDataViewCtrl, wxDirDialog, wxGrid,
-  wxNotificationMessage, wxSpinCtrl, wxStaticBox, wxStyledTextCtrl,
-  wxUIActionSimulator.
-- Improvements to compile-time safety with the possibility to disable dangerous
-  implicit conversions between wxString and "char*" strings.
-- Latest versions of all bundled 3rd party libraries, including all the
-  security fixes and support for WebKit 2 and GStreamer 1.7 under Unix.
-- Revamped OpenGL support better suited to modern OpenGL (3.2+).
-- Further C++11 and later support improvements, wxWidgets can be built using
-  C++20 compilers.
-- New experimental wxQt port.
-- Many, many bug fixes.
-
-
-Note that in spite of all these changes, wxWidgets 3.2 is almost fully
-compatible with wxWidgets 3.0 and updating the existing applications to
+Note that in spite of all these changes, wxWidgets 3.3 is almost fully
+compatible with wxWidgets 3.2 and updating the existing applications to
 use it shouldn't require much effort.
 
 
