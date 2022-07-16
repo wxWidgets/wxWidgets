@@ -40,10 +40,10 @@ if(wxUSE_XRC)
         wx_install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E create_symlink \
             ${CMAKE_INSTALL_PREFIX}/bin/${wxrc_output_name}${EXE_SUFFIX} \
-            ${CMAKE_CURRENT_BINARY_DIR}/bin/wxrc${EXE_SUFFIX} \
+            ${CMAKE_CURRENT_BINARY_DIR}/wxrc${EXE_SUFFIX} \
             )"
         )
-        wx_install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bin/wxrc${EXE_SUFFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+        wx_install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxrc${EXE_SUFFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
     endif()
 endif()
 
