@@ -80,7 +80,7 @@ static bool IsLive(wxSplitterWindow* wnd)
     return true; // Mac can't paint outside paint event - always need live mode
 #else
     // wxClientDC doesn't work with Wayland neither, so check if we're using it.
-    #if defined(__WXGTK3__)
+    #if defined(__WXGTK3__) && defined(__UNIX__)
         switch ( wxGetDisplayInfo().type )
         {
             case wxDisplayNone:
