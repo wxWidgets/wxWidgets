@@ -43,9 +43,10 @@ else()
     install(CODE "execute_process( \
         COMMAND ${CMAKE_COMMAND} -E create_symlink \
         ${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID} \
-        ${CMAKE_INSTALL_PREFIX}/bin/wx-config \
+        ${CMAKE_CURRENT_BINARY_DIR}/bin/wx-config \
         )"
     )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wx-config DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
 
 install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets/${wxPLATFORM_LIB_DIR}")
