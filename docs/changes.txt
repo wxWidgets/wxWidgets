@@ -242,6 +242,7 @@ All (GUI):
 wxGTK:
 
 - Fix build with --disable-intl (#22626).
+- Fix build under MSW (Tim Stahlhut, #22633).
 
 wxOSX:
 
