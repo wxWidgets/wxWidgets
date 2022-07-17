@@ -33,6 +33,7 @@ public:
 
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
     virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE;
+    virtual bool AddShortcut(const wxString& directory, int flags = 0) wxOVERRIDE;
     virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
 
     virtual int ShowModal() wxOVERRIDE;

@@ -437,6 +437,27 @@ void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
     }
 }
 
+void wxIFileDialog::AddPlace(const wxString& path, FDAP fdap)
+{
+    wxCOMPtr<IShellItem> place;
+
+    HRESULT hr = InitShellItemFromPath(place, path);
+
+    // Don't bother with doing anything else if we couldn't parse the path
+    // (debug message about failing to do it was already logged).
+    if ( FAILED(hr) )
+        return;
+
+    hr = m_fileDialog->AddPlace(place, fdap);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError
+        (
+            wxString::Format(wxS("IFileDialog::AddPlace(\"%s\")"), path), hr
+        );
+    }
+}
+
 } // namespace wxMSWImpl
 
 // ----------------------------------------------------------------------------

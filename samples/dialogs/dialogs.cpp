@@ -1824,6 +1824,14 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     )
                  );
 
+    // For demonstration purposes, add wxWidgets directories to the sidebar.
+    wxString wxdir;
+    if ( wxGetEnv("WXWIN", &wxdir) )
+    {
+        dialog.AddShortcut(wxdir + "/src", wxFD_SHORTCUT_BOTTOM);
+        dialog.AddShortcut(wxdir + "/include", wxFD_SHORTCUT_TOP);
+    }
+
     // Note: this object must remain alive until ShowModal() returns.
     MyCustomizeHook myCustomizer(dialog);
 

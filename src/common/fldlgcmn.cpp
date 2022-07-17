@@ -851,6 +851,13 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
     return filePath + ext;
 }
 
+bool wxFileDialogBase::AddShortcut(const wxString& WXUNUSED(directory),
+                                   int WXUNUSED(flags))
+{
+    // Not implemented by default.
+    return false;
+}
+
 bool wxFileDialogBase::SetCustomizeHook(wxFileDialogCustomizeHook& customizeHook)
 {
     if ( !SupportsExtraControl() )
