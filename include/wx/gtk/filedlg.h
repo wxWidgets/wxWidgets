@@ -55,6 +55,7 @@ public:
 
     virtual int ShowModal() wxOVERRIDE;
 
+    virtual bool AddShortcut(const wxString& directory, int flags = 0) wxOVERRIDE;
     virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
 
     // Implementation only.
