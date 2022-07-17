@@ -44,7 +44,7 @@ wx_top_builddir = @wx_top_builddir@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 3.2
+WX_RELEASE = 3.3
 WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 RICHTEXT_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \

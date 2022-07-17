@@ -82,7 +82,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_aui.lib  wxmsw32ud_ribbon.lib  wxmsw32ud_xrc.lib  wxmsw32ud_html.lib  wxmsw32ud_core.lib  wxbase32ud_xml.lib  wxbase32ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_aui.lib  wxmsw33ud_ribbon.lib  wxmsw33ud_xrc.lib  wxmsw33ud_html.lib  wxmsw33ud_core.lib  wxbase33ud_xml.lib  wxbase33ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswud\xrcdemo.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -173,7 +173,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_aui.lib  wxmsw32u_ribbon.lib  wxmsw32u_xrc.lib  wxmsw32u_html.lib  wxmsw32u_core.lib  wxbase32u_xml.lib  wxbase32u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_aui.lib  wxmsw33u_ribbon.lib  wxmsw33u_xrc.lib  wxmsw33u_html.lib  wxmsw33u_core.lib  wxbase33u_xml.lib  wxbase33u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswu\xrcdemo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -268,7 +268,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_aui.lib  wxmsw32ud_ribbon.lib  wxmsw32ud_xrc.lib  wxmsw32ud_html.lib  wxmsw32ud_core.lib  wxbase32ud_xml.lib  wxbase32ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_aui.lib  wxmsw33ud_ribbon.lib  wxmsw33ud_xrc.lib  wxmsw33ud_html.lib  wxmsw33ud_core.lib  wxbase33ud_xml.lib  wxbase33ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswuddll\xrcdemo.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -359,7 +359,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_aui.lib  wxmsw32u_ribbon.lib  wxmsw32u_xrc.lib  wxmsw32u_html.lib  wxmsw32u_core.lib  wxbase32u_xml.lib  wxbase32u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_aui.lib  wxmsw33u_ribbon.lib  wxmsw33u_xrc.lib  wxmsw33u_html.lib  wxmsw33u_core.lib  wxbase33u_xml.lib  wxbase33u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswudll\xrcdemo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -454,7 +454,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_aui.lib  wxmsw32ud_ribbon.lib  wxmsw32ud_xrc.lib  wxmsw32ud_html.lib  wxmsw32ud_core.lib  wxbase32ud_xml.lib  wxbase32ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_aui.lib  wxmsw33ud_ribbon.lib  wxmsw33ud_xrc.lib  wxmsw33ud_html.lib  wxmsw33ud_core.lib  wxbase33ud_xml.lib  wxbase33ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswud\xrcdemo.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -545,7 +545,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_aui.lib  wxmsw32u_ribbon.lib  wxmsw32u_xrc.lib  wxmsw32u_html.lib  wxmsw32u_core.lib  wxbase32u_xml.lib  wxbase32u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_aui.lib  wxmsw33u_ribbon.lib  wxmsw33u_xrc.lib  wxmsw33u_html.lib  wxmsw33u_core.lib  wxbase33u_xml.lib  wxbase33u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswu\xrcdemo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -640,7 +640,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_aui.lib  wxmsw32ud_ribbon.lib  wxmsw32ud_xrc.lib  wxmsw32ud_html.lib  wxmsw32ud_core.lib  wxbase32ud_xml.lib  wxbase32ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_aui.lib  wxmsw33ud_ribbon.lib  wxmsw33ud_xrc.lib  wxmsw33ud_html.lib  wxmsw33ud_core.lib  wxbase33ud_xml.lib  wxbase33ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswuddll\xrcdemo.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -731,7 +731,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_aui.lib  wxmsw32u_ribbon.lib  wxmsw32u_xrc.lib  wxmsw32u_html.lib  wxmsw32u_core.lib  wxbase32u_xml.lib  wxbase32u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_aui.lib  wxmsw33u_ribbon.lib  wxmsw33u_xrc.lib  wxmsw33u_html.lib  wxmsw33u_core.lib  wxbase33u_xml.lib  wxbase33u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswudll\xrcdemo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

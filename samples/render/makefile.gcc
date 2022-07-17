@@ -13,7 +13,8 @@ include ../../build/msw/config.gcc
 ### Variables: ###
 
 CPPDEPS = -MT$@ -MF$@.d -MD -MP
-WX_RELEASE_NODOT = 32
+WX_RELEASE_NODOT = 33
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 COMPILER_PREFIX = gcc
 OBJS = \
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -116,7 +117,7 @@ __DLLFLAG_p_1 = --define WXUSINGDLL
 endif
 ifeq ($(SHARED),1)
 __renddll___depname = \
-	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll
+	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG = -O0
@@ -231,7 +232,7 @@ clean:
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\render.exe del $(OBJS)\render.exe
-	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll
+	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll
 
 $(OBJS)\render.exe: $(RENDER_OBJECTS) $(OBJS)\render_sample_rc.o
 	$(foreach f,$(subst \,/,$(RENDER_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
@@ -240,7 +241,7 @@ $(OBJS)\render.exe: $(RENDER_OBJECTS) $(OBJS)\render_sample_rc.o
 	@-del $@.rsp
 
 ifeq ($(SHARED),1)
-$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll: $(RENDDLL_OBJECTS)
+$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll: $(RENDDLL_OBJECTS)
 	$(CXX) $(LINK_MODULE_FLAGS) -fPIC -o $@ $(RENDDLL_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
 endif
 
