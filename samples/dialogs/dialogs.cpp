@@ -1828,7 +1828,11 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
     wxString wxdir;
     if ( wxGetEnv("WXWIN", &wxdir) )
     {
-        dialog.AddShortcut(wxdir + "/src", wxFD_SHORTCUT_BOTTOM);
+        dialog.AddShortcut(wxdir + "/src");
+
+        // By default shortcuts are added at the bottom, but we can override
+        // this in the ports that support it (currently only wxMSW) and add a
+        // shortcut added later at the top instead.
         dialog.AddShortcut(wxdir + "/include", wxFD_SHORTCUT_TOP);
     }
 
