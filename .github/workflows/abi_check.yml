@@ -1,0 +1,97 @@
+# CI workflow to check wxWidgets ABI stability.
+name: ABI check
+
+on:
+  push:
+    branches:
+      - 3.2
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+  pull_request:
+    branches:
+      - 3.2
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    name: ABI check
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Install CCache
+        uses: hendrikmuhs/ccache-action@578e14bc3f06099346125f52ed0008433eccbedf
+        with:
+          key: ubuntu-22.04-default
+
+      - name: Set up build environment
+        run: |
+          echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
+
+          wxPROC_COUNT=`./build/tools/proc_count.sh`
+          echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
+
+          echo "PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
+
+          wxGTK_VERSION=3 ./build/tools/before_install.sh
+          sudo apt-get -q -o=Dpkg::Use-Pty=0 install abigail-tools
+
+      - name: Configuring
+        run: |
+          ./configure --enable-debug || rc=$?
+
+          if [ -n "$rc" ]; then
+            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat config.log
+            echo '-----------------------------------------------------------'
+            exit $rc
+          fi
+
+      - name: Building
+        run: |
+          make $wxBUILD_ARGS
+
+      - name: Check ABI
+        run: |
+          ./build/elfabi/check_all.sh
