@@ -73,6 +73,9 @@ private:
     wxCOMPtr<IFileDialog> m_fileDialog;
 };
 
+// Initialize an IShellItem object with the given path.
+HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path);
+
 // Extract the filesystem path corresponding to the given shell item.
 HRESULT GetFSPathFromShellItem(const wxCOMPtr<IShellItem>& item, wxString& path);
 

@@ -352,7 +352,7 @@ void wxIFileDialog::SetTitle(const wxString& message)
     }
 }
 
-void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
+HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path)
 {
     HRESULT hr;
 
@@ -383,20 +383,27 @@ void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
     if ( !s_pfnSHCreateItemFromParsingName )
     {
         // There is nothing we can do and the error was already reported.
-        return;
+        return E_FAIL;
     }
 
-    wxCOMPtr<IShellItem> folder;
     hr = s_pfnSHCreateItemFromParsingName
          (
-            defaultPath.wc_str(),
+            path.wc_str(),
             NULL,
-            wxIID_PPV_ARGS(IShellItem, &folder)
+            wxIID_PPV_ARGS(IShellItem, &item)
          );
 
-    // Failing to parse the folder name or set it is not really an error,
-    // we'll just ignore the initial directory in this case, but we should
-    // still show the dialog.
+    return hr;
+}
+
+void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
+{
+    wxCOMPtr<IShellItem> folder;
+
+    HRESULT hr = InitShellItemFromPath(folder, defaultPath);
+
+    // Failing to parse the folder name is not really an error, e.g. it might
+    // not exist, so we'll just ignore the initial directory in this case.
     if ( SUCCEEDED(hr) )
     {
         hr = m_fileDialog->SetFolder(folder);
