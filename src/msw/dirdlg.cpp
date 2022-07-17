@@ -386,9 +386,25 @@ HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path)
         return E_FAIL;
     }
 
+    // SHCreateItemFromParsingName() doesn't support slashes, so if the path
+    // uses them, replace them with the backslashes.
+    wxString pathBS;
+    const wxString* pathWithoutSlashes;
+    if ( path.find('/') != wxString::npos )
+    {
+        pathBS = path;
+        pathBS.Replace("/", "\\", true);
+
+        pathWithoutSlashes = &pathBS;
+    }
+    else // Just use the original path without copying.
+    {
+        pathWithoutSlashes = &path;
+    }
+
     hr = s_pfnSHCreateItemFromParsingName
          (
-            path.wc_str(),
+            pathWithoutSlashes->wc_str(),
             NULL,
             wxIID_PPV_ARGS(IShellItem, &item)
          );
@@ -396,7 +412,8 @@ HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path)
     {
         wxLogApiError
         (
-            wxString::Format(wxS("SHCreateItemFromParsingName(\"%s\")"), path),
+            wxString::Format(wxS("SHCreateItemFromParsingName(\"%s\")"),
+                             *pathWithoutSlashes),
             hr
         );
     }
