@@ -184,7 +184,7 @@ void MyApp::DecorateSplashScreen(wxBitmap& bmp)
     // create a copyright notice that uses the year that this file was compiled
     wxString year(__DATE__);
     wxString copyrightLabel = wxString::Format("%s%s wxWidgets. %s",
-        wxString::FromUTF8("\xc2\xa9"), year.Mid(year.Length() - 4),
+        wxString::FromUTF8("\xc2\xa9"), year.Mid(year.length() - 4),
         "All rights reserved.");
 
     // draw the (white) labels inside of our orange box (at the bottom of the splashscreen)

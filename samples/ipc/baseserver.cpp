@@ -255,7 +255,7 @@ MyConnection::OnRequest(const wxString& topic,
         m_sRequestDate = wxDateTime::Now().FormatTime() +
                             " " + wxDateTime::Now().FormatDate();
         data = m_sRequestDate.c_str();
-        *size = m_sRequestDate.Length() + 1;
+        *size = m_sRequestDate.length() + 1;
     }
     else if (item == "bytes[3]")
     {
