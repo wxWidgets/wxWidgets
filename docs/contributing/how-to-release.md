@@ -21,24 +21,27 @@ Add the missing installed folder locations of any executables to your Path.
 For the stable (even) releases only, check that binary compatibility hasn't
 been broken since the last stable release.
 
-### Checking under Unix systems using `abi-compliance-checker` tool.
+### Checking under Unix systems using `libabigail`.
 
 Instructions:
 
-1. Get [the tool](https://lvc.github.io/abi-compliance-checker/).
-1. Build the old (vX.Y.Z-1) library with `-g -Og` options, i.e. configure it
-   with `--enable-debug` and `CXXFLAGS=-Og CFLAFS=-Og`. For convenience, let's
-   assume it's built in "$old" subdirectory.
+1. Get [the tools](https://sourceware.org/libabigail/). Under Debian and
+   derived systems `apt install abigail-tools` can be used.
+1. Build the old (vX.Y.Z-1) library with `-g` option, i.e. configure it
+   with `--enable-debug`. For convenience, let's assume it's built in "$old"
+   subdirectory.
 1. Build the new (vX.Y.Z) library with the same options in "$new".
 1. Create directories for temporary files containing the ABI dumps for the old
    and new libraries: `mkdir -p ../compat/{$old,$new}`.
-1. Run abi-dumper on all libraries: `for l in $old/lib/*.so; do abi-dumper $l
-   -lver $old -o ../compat/$old/$(basename $l).dump; done` and the same thing with
+1. Run `abidw` on all libraries: `for l in $old/lib/*.so; do abidw $l
+   --out-file ../compat/$old/$(basename $l).abi; done` and the same thing with
    the new libraries.
-1. Run abi-compliance-checker on each pair of produced dumps to generate HTML
-   reports: `for l in 3.0.2/*dump; do abi-compliance-checker -l $(basename $l
-   .dump) -old $l -new 3.0.3/$(basename $l); done`.
-1. Examine these reports, paying attention to the problem summary.
+1. Run `abidiff` on each pair of produced dumps to generate HTML
+   reports: `for l in $old/*.abi; do abidiff $l -new $new/$(basename $l); done`.
+1. If everything is good, update the ABI files in `$old` with the `$new` ones.
+
+See also `build/elfabi/check_all.sh` which checks the ABI of the newly built
+libraries and is simpler to use if there is no need to update the ABI files.
 
 ### Checking under MSW systems.
 
