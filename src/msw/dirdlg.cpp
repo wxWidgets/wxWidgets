@@ -392,6 +392,14 @@ HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path)
             NULL,
             wxIID_PPV_ARGS(IShellItem, &item)
          );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError
+        (
+            wxString::Format(wxS("SHCreateItemFromParsingName(\"%s\")"), path),
+            hr
+        );
+    }
 
     return hr;
 }
