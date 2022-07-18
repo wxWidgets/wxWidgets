@@ -863,7 +863,7 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
     // 1. week day (optional)
     // if there is a week day present, it must be separated
     // by a comma at position [3].
-    if ( date.Length() > 3 && date[3] == ',' )
+    if ( date.length() > 3 && date[3] == ',' )
     {
         const wxDateTime::WeekDay
             wd = GetWeekDayFromName(p, pEnd, Name_Abbr, DateLang_English);

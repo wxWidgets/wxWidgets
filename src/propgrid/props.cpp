@@ -92,7 +92,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
     // If string is password and value is for visual purposes,
     // then return asterisks instead the actual string.
     if ( (m_flags & wxPG_PROP_PASSWORD) && !(argFlags & (wxPG_FULL_VALUE|wxPG_EDITABLE_VALUE)) )
-        return wxString(wxS('*'), s.Length());
+        return wxString(wxS('*'), s.length());
 
     return s;
 }

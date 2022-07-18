@@ -747,7 +747,7 @@ void wxFileListCtrl::OnListEndLabelEdit( wxListEvent &event )
     if ((event.GetLabel().empty()) ||
         (event.GetLabel() == wxT(".")) ||
         (event.GetLabel() == wxT("..")) ||
-        (event.GetLabel().First( wxFILE_SEP_PATH ) != wxNOT_FOUND))
+        (event.GetLabel().Find( wxFILE_SEP_PATH ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
         dialog.ShowModal();

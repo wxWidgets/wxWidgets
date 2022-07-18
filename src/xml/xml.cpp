@@ -1097,7 +1097,7 @@ bool OutputNode(wxOutputStream& stream,
         case wxXML_TEXT_NODE:
             if (node->GetNoConversion())
             {
-                stream.Write(node->GetContent().c_str(), node->GetContent().Length());
+                stream.Write(node->GetContent().c_str(), node->GetContent().length());
                 rc = true;
             }
             else
