@@ -510,7 +510,7 @@ bool wxRichTextPlainText::ExportXML(wxOutputStream& stream, int indent, wxRichTe
     int i;
     int last = 0;
     const wxString& text = GetText();
-    int len = (int) text.Length();
+    int len = (int) text.length();
 
     if (len == 0)
     {
@@ -624,7 +624,7 @@ bool wxRichTextPlainText::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* han
     int i;
     int last = 0;
     const wxString& text = GetText();
-    int len = (int) text.Length();
+    int len = (int) text.length();
 
     if (len == 0)
     {

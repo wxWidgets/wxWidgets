@@ -1281,7 +1281,7 @@ bool wxGCDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& width
 {
     wxCHECK_MSG( m_graphicContext, false, wxT("wxGCDC(cg)::DoGetPartialTextExtents - invalid DC") );
     widths.Clear();
-    widths.Add(0,text.Length());
+    widths.Add(0,text.length());
     if ( text.IsEmpty() )
         return true;
 

@@ -367,7 +367,7 @@ static wxString MakeCorrectPath(const wxString& path)
             if (j >= 0 && r.GetChar(j) != wxT(':'))
             {
                 for (j = j - 1; j >= 0 && r.GetChar(j) != wxT('/') && r.GetChar(j) != wxT(':'); j--) {}
-                r.Remove(j + 1);
+                r.Truncate(j + 1);
             }
         }
     }
@@ -417,7 +417,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
             {
                 if (m_Path[(unsigned int) i] == wxT(':'))
                 {
-                    m_Path.Remove(i+1);
+                    m_Path.Truncate(i+1);
                     break;
                 }
             }
@@ -426,7 +426,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
         }
         else
         {
-            m_Path.Remove(pathpos+1);
+            m_Path.Truncate(pathpos+1);
         }
     }
 }

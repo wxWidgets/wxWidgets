@@ -399,7 +399,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
         if (! showAll)
         {
             compA = k;
-            compA.LowerCase();
+            compA.MakeLower();
         }
 
         while (node)
@@ -410,7 +410,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
             bool testTarget = ! compB.empty();
             if (testTarget && ! showAll)
             {
-                compB.LowerCase();
+                compB.MakeLower();
                 testTarget = compB.Contains(compA);
             }
 
