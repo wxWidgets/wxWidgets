@@ -1438,6 +1438,7 @@ void MyPanel::DoMoveToEndOfText()
 
 void MyPanel::DoGetWindowCoordinates()
 {
+#if wxUSE_LOG
     wxTextCtrl * const text = GetFocusedText();
 
     const wxPoint pt0 = text->PositionToCoords(0);
@@ -1446,6 +1447,7 @@ void MyPanel::DoGetWindowCoordinates()
               "(" << ptCur.x << ", "  << ptCur.y << "), "
               "first position coordinates: "
               "(" << pt0.x << ", "  << pt0.y << ")\n";
+#endif // wxUSE_LOG
 }
 
 void MyPanel::DoMoveToEndOfEntry()
