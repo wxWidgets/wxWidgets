@@ -251,6 +251,13 @@ public:
         function by adding two custom shortcuts corresponding to the
         subdirectories of @c WXWIN environment variable if it is defined.
 
+        @note In wxMSW, the shortcuts appear in a separate section called
+            "Application Links" by default. To change the title of this
+            section, the application can specify a value of the @c
+            FileDescription field of the version information structure in its
+            resource file -- if present, this string will be used as the
+            section title.
+
         @param directory The full path to the directory, which should exist.
         @param flags Can be set to @c wxFD_SHORTCUT_BOTTOM (which is also the
             default behaviour) to add the shortcut after the existing ones,
