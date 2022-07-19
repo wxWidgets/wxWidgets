@@ -1851,8 +1851,12 @@ public:
 
         @param table Pointer to the grid table
         @param id One of wxGridTableRequest enum elements.
-        @param comInt1 Position after which the rows are inserted/deleted
-        @param comInt2 Number of rows to be inserted/deleted
+        @param comInt1 For the insert/delete messages, position after which the
+            rows or columns are inserted/deleted. For the append messages, the
+            number of rows or columns that were appended.
+        @param comInt2 For the insert/deleted messages, number of rows or
+            columns to be inserted/deleted. For the append messages, this
+            parameter is not used.
     */
     wxGridTableMessage(wxGridTableBase *table, int id, int comInt1 = -1, int comInt2 = -1);
 
