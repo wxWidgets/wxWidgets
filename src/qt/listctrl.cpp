@@ -428,7 +428,7 @@ public:
 
         QVector<int> roles;
 
-        if ( (info.m_mask & wxLIST_MASK_TEXT) && !info.GetText().IsNull() )
+        if ( (info.m_mask & wxLIST_MASK_TEXT) && !info.GetText().empty() )
         {
             columnItem.m_label =  wxQtConvertString(info.GetText());
             roles.push_back(Qt::DisplayRole);
