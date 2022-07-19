@@ -85,7 +85,11 @@
 // different platforms and even different versions of the same system (Solaris
 // 7 and 8): if you want to test for this, don't forget that the problems only
 // appear if the large files support is enabled
-#ifdef HAVE_STATFS
+#if defined(HAVE_STATVFS)
+    #include <sys/statvfs.h>
+
+    #define wxStatfs statvfs
+#elif defined(HAVE_STATFS)
     #ifdef __BSD__
         #include <sys/param.h>
         #include <sys/mount.h>
@@ -99,13 +103,9 @@
         // some systems lack statfs() prototype in the system headers (AIX 4)
         extern "C" int statfs(const char *path, struct statfs *buf);
     #endif
-#elif defined(HAVE_STATVFS)
-    #include <sys/statvfs.h>
+#endif // HAVE_STATVFS/HAVE_STATFS
 
-    #define wxStatfs statvfs
-#endif // HAVE_STATFS/HAVE_STATVFS
-
-#if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
+#if defined(HAVE_STATVFS) || defined(HAVE_STATFS)
     // WX_STATFS_T is detected by configure
     #define wxStatfs_t WX_STATFS_T
 #endif
@@ -1342,11 +1342,11 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 
     // under Solaris we also have to use f_frsize field instead of f_bsize
     // which is in general a multiple of f_frsize
-#ifdef HAVE_STATFS
-    wxDiskspaceSize_t blockSize = fs.f_bsize;
-#else // HAVE_STATVFS
+#ifdef HAVE_STATVFS
     wxDiskspaceSize_t blockSize = fs.f_frsize;
-#endif // HAVE_STATFS/HAVE_STATVFS
+#else // HAVE_STATFS
+    wxDiskspaceSize_t blockSize = fs.f_bsize;
+#endif // HAVE_STATVFS/HAVE_STATFS
 
     if ( pTotal )
     {

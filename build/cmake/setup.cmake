@@ -320,9 +320,11 @@ if(UNIX)
         l += fs.f_blocks;
         l += fs.f_bavail;"
         HAVE_STATVFS)
-    if(HAVE_STATFS)
-        set(WX_STATFS_T "struct statfs")
-        wx_check_cxx_source_compiles("
+    if(HAVE_STATVFS)
+      set(WX_STATFS_T "struct statvfs")
+    elseif(HAVE_STATFS)
+      set(WX_STATFS_T "struct statfs")
+      wx_check_cxx_source_compiles("
             return 0; }
             #if defined(__BSD__)
             #include <sys/param.h>
@@ -334,11 +336,7 @@ if(UNIX)
             int foo() {
             struct statfs fs;
             statfs(\"/\", &fs);"
-            HAVE_STATFS_DECL)
-    else()
-        if(HAVE_STATVFS)
-            set(WX_STATFS_T "struct statvfs")
-        endif()
+        HAVE_STATFS_DECL)
     endif()
 
     if(NOT HAVE_STATFS AND NOT HAVE_STATVFS)
