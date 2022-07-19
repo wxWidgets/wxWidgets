@@ -43,7 +43,7 @@ else()
     install(CODE "execute_process( \
         COMMAND ${CMAKE_COMMAND} -E create_symlink \
         \"${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID}\" \
-        \"${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
+        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
         )"
     )
 endif()
