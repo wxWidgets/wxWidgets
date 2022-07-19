@@ -795,6 +795,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
     // nothing to add to ping command
 #elif defined(__AIX__) || \
       defined (__BSD__) || \
+      defined (__NetBSD__) || \
       defined(__LINUX__) || \
       defined(__OSF__) || \
       defined(__SGI__) || \
