@@ -243,7 +243,7 @@ wxGTK:
 
 - Fix build with --disable-intl (#22626).
 - Fix build under MSW (Tim Stahlhut, #22633).
-- Fix statvfs() detection in CMake build under NetBSD (Thomas Klausner, #22643).
+- Fix CMake build under NetBSD (Thomas Klausner, #22643, #22644).
 
 wxOSX:
 
