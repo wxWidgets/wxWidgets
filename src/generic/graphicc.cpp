@@ -2985,7 +2985,7 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     while (i++ < len)
         widths.Add(PANGO_PIXELS(w));
 #else
-    for (size_t i = 0; i < text.Length(); i++)
+    for (size_t i = 0; i < text.length(); i++)
     {
         const wxCharBuffer data = text.SubString(0, i).utf8_str();
 

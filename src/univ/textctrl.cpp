@@ -2540,7 +2540,7 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
 {
     // if the existing value in the text control is too long,
     // then it is clipped to the newly imposed limit.
-    if ( m_value.Length() > len )
+    if ( m_value.length() > len )
     {
         // block the wxEVT_TEXT event temporaryly
         // otherwise Remove will generate a wxEVT_TEXT event
