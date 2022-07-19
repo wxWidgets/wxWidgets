@@ -3391,6 +3391,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_ROWS_APPENDED:
         {
             int numRows = msg.GetCommandInt();
+            wxASSERT_MSG( msg.GetCommandInt2() == -1, "Ignored when appending" );
+
             int oldNumRows = m_numRows;
             m_numRows += numRows;
 
@@ -3567,6 +3569,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_COLS_APPENDED:
         {
             int numCols = msg.GetCommandInt();
+            wxASSERT_MSG( msg.GetCommandInt2() == -1, "Ignored when appending" );
+
             int oldNumCols = m_numCols;
             m_numCols += numCols;
 
