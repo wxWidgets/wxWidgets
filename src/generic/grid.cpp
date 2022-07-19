@@ -3476,11 +3476,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
-                m_selection->UpdateRows( pos, -((int)numRows) );
+                m_selection->UpdateRows( pos, -numRows );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider)
             {
-                attrProvider->UpdateAttrRows( pos, -((int)numRows) );
+                attrProvider->UpdateAttrRows( pos, -numRows );
 
 // ifdef'd out following patch from Paul Gammans
 #if 0
@@ -3665,11 +3665,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
-                m_selection->UpdateCols( pos, -((int)numCols) );
+                m_selection->UpdateCols( pos, -numCols );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider)
             {
-                attrProvider->UpdateAttrCols( pos, -((int)numCols) );
+                attrProvider->UpdateAttrCols( pos, -numCols );
 
 // ifdef'd out following patch from Paul Gammans
 #if 0
