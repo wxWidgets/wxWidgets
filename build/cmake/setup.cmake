@@ -290,27 +290,23 @@ if(UNIX)
     wx_check_funcs(mkstemp mktemp)
 
     # get the library function to use for wxGetDiskSpace(): it is statfs() under
-    # Linux and *BSD and statvfs() under Solaris
+    # Linux and *BSD and statvfs() under Solaris and NetBSD
     wx_check_c_source_compiles("
         return 0; }
-        #if defined(__BSD__)
-        #include <sys/param.h>
-        #include <sys/mount.h>
-        #else
-        #include <sys/vfs.h>
-        #endif
+        #include <sys/statvfs.h>
 
         int foo() {
         long l;
-        struct statfs fs;
-        statfs(\"/\", &fs);
+        struct statvfs fs;
+        statvfs(\"/\", &fs);
         l = fs.f_bsize;
         l += fs.f_blocks;
         l += fs.f_bavail;"
-        HAVE_STATFS)
-    if(HAVE_STATFS)
-        set(WX_STATFS_T "struct statfs")
-        wx_check_cxx_source_compiles("
+        HAVE_STATVFS)
+    if(HAVE_STATVFS)
+        set(WX_STATFS_T "struct statvfs")
+    else()
+        wx_check_c_source_compiles("
             return 0; }
             #if defined(__BSD__)
             #include <sys/param.h>
@@ -320,13 +316,28 @@ if(UNIX)
             #endif
 
             int foo() {
+            long l;
             struct statfs fs;
-            statfs(\"/\", &fs);"
-            HAVE_STATFS_DECL)
-    else()
-        # TODO: implement statvfs checks
-        if(HAVE_STATVFS)
-            set(WX_STATFS_T statvfs_t)
+            statfs(\"/\", &fs);
+            l = fs.f_bsize;
+            l += fs.f_blocks;
+            l += fs.f_bavail;"
+            HAVE_STATFS)
+        if(HAVE_STATFS)
+            set(WX_STATFS_T "struct statfs")
+            wx_check_cxx_source_compiles("
+                return 0; }
+                #if defined(__BSD__)
+                #include <sys/param.h>
+                #include <sys/mount.h>
+                #else
+                #include <sys/vfs.h>
+                #endif
+
+                int foo() {
+                struct statfs fs;
+                statfs(\"/\", &fs);"
+                HAVE_STATFS_DECL)
         endif()
     endif()
 
