@@ -99,13 +99,11 @@
         // some systems lack statfs() prototype in the system headers (AIX 4)
         extern "C" int statfs(const char *path, struct statfs *buf);
     #endif
-#endif // HAVE_STATFS
-
-#ifdef HAVE_STATVFS
+#elif defined(HAVE_STATVFS)
     #include <sys/statvfs.h>
 
     #define wxStatfs statvfs
-#endif // HAVE_STATVFS
+#endif // HAVE_STATFS/HAVE_STATVFS
 
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // WX_STATFS_T is detected by configure
@@ -1344,11 +1342,11 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 
     // under Solaris we also have to use f_frsize field instead of f_bsize
     // which is in general a multiple of f_frsize
-#ifdef HAVE_STATVFS
-    wxDiskspaceSize_t blockSize = fs.f_frsize;
-#else // HAVE_STATFS
+#ifdef HAVE_STATFS
     wxDiskspaceSize_t blockSize = fs.f_bsize;
-#endif // HAVE_STATVFS/HAVE_STATFS
+#else // HAVE_STATVFS
+    wxDiskspaceSize_t blockSize = fs.f_frsize;
+#endif // HAVE_STATFS/HAVE_STATVFS
 
     if ( pTotal )
     {
