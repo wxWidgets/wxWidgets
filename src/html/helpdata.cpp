@@ -891,7 +891,7 @@ void wxHtmlSearchEngine::LookFor(const wxString& keyword, bool case_sensitive, b
     m_Keyword = keyword;
 
     if (!m_CaseSensitive)
-        m_Keyword.LowerCase();
+        m_Keyword.MakeLower();
 }
 
 
@@ -937,7 +937,7 @@ bool wxHtmlSearchEngine::Scan(const wxFSFile& file)
     wxString bufStr = filter.ReadFile(file);
 
     if (!m_CaseSensitive)
-        bufStr.LowerCase();
+        bufStr.MakeLower();
 
     {   // remove html tags
         wxString bufStrCopy;

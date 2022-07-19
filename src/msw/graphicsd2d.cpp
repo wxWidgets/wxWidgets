@@ -3239,11 +3239,11 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
         // The length of the font name must not exceed LF_FACESIZE TCHARs,
         // including the terminating NULL.
         wxString name = font.GetFaceName().Mid(0, WXSIZEOF(logfont.lfFaceName)-1);
-        for (unsigned int i = 0; i < name.Length(); ++i)
+        for (unsigned int i = 0; i < name.length(); ++i)
         {
             logfont.lfFaceName[i] = name.GetChar(i);
         }
-        logfont.lfFaceName[name.Length()] = L'\0';
+        logfont.lfFaceName[name.length()] = L'\0';
     }
 
     wxCOMPtr<IDWriteFontFamily> fontFamily;
@@ -3860,7 +3860,7 @@ public:
 
     static void GetPartialTextExtents(wxD2DFontData* fontData, const wxString& text, wxArrayDouble& widths)
     {
-        for (unsigned int i = 0; i < text.Length(); ++i)
+        for (unsigned int i = 0; i < text.length(); ++i)
         {
             wxDouble width;
             GetTextExtent(fontData, text.SubString(0, i), &width, NULL, NULL, NULL);

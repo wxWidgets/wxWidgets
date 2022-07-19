@@ -161,7 +161,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     wxCHECK_MSG( parent, NULL, wxT("must have valid parent for a control") );
 
     wxString str(wxGetWindowClass(hWnd));
-    str.UpperCase();
+    str.MakeUpper();
 
     long id = wxGetWindowId(hWnd);
     long style = GetWindowLong((HWND) hWnd, GWL_STYLE);

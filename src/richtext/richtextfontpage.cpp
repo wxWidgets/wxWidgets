@@ -934,7 +934,7 @@ void wxRichTextFontPage::OnFaceTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) 
             size_t i;
             for (i = 0; i < arr.GetCount(); i++)
             {
-                if (arr[i].Mid(0, facename.Length()).Lower() == facename.Lower())
+                if (arr[i].Mid(0, facename.length()).Lower() == facename.Lower())
                 {
                     m_faceListBox->ScrollToRow(i);
                     break;

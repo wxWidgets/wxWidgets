@@ -479,7 +479,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         }
 
         int part1 = s->GetFromCell()==this ? s->GetFromCharacterPos() : 0;
-        int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.Length();
+        int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.length();
 
         if ( part1 > 0 )
         {
@@ -581,7 +581,7 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
         if ( s->AreFromToCharacterPosSet() )
         {
             const int part1 = s->GetFromCell()==this ? s->GetFromCharacterPos() : 0;
-            const int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.Length();
+            const int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.length();
             if ( part1 == part2 )
                 return wxEmptyString;
             return GetPartAsText(part1, part2);

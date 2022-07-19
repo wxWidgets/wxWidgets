@@ -767,7 +767,7 @@ SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
             m_pTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 
             hr = pDWriteFactory->CreateTextLayout(extentTest.wc_str(),
-                extentTest.Length(), m_pTextFormat, FLT_MAX, FLT_MAX,
+                extentTest.length(), m_pTextFormat, FLT_MAX, FLT_MAX,
                 &pTextLayout);
         }
 
@@ -791,7 +791,7 @@ SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
             m_ascent = lineMetrics[0].baseline;
             m_descent = lineMetrics[0].height - lineMetrics[0].baseline;
             m_internalLeading = lineMetrics[0].height - emHeight;
-            m_averageCharWidth = textmetrics.width/extentTest.Length();
+            m_averageCharWidth = textmetrics.width/extentTest.length();
 
             switch ( fp.extraFontFlag & wxSTC_EFF_QUALITY_MASK )
             {
@@ -1525,7 +1525,7 @@ XYPOSITION SurfaceD2D::WidthText(Font &font_, const char *s, int len)
         DWRITE_TEXT_METRICS textMetrics = {0,0,0,0,0,0,0,0,0};
 
         HRESULT hr = m_pDWriteFactory->CreateTextLayout(tbuf.wc_str(),
-            tbuf.Length(), m_pTextFormat, FLT_MAX, FLT_MAX, &pTextLayout);
+            tbuf.length(), m_pTextFormat, FLT_MAX, FLT_MAX, &pTextLayout);
 
         if ( SUCCEEDED(hr) )
         {
@@ -1546,10 +1546,10 @@ void SurfaceD2D::MeasureWidths(Font &font_, const char *s, int len,
     int fit = 0;
     wxString tbuf = stc2wx(s,len);
     wxVector<FLOAT> poses;
-    poses.reserve(tbuf.Length());
-    poses.resize(tbuf.Length());
+    poses.reserve(tbuf.length());
+    poses.resize(tbuf.length());
 
-    fit = tbuf.Length();
+    fit = tbuf.length();
     const int clusters = 1000;
     DWRITE_CLUSTER_METRICS clusterMetrics[clusters];
     UINT32 count = 0;
@@ -1560,7 +1560,7 @@ void SurfaceD2D::MeasureWidths(Font &font_, const char *s, int len,
         wxCOMPtr<IDWriteTextLayout> pTextLayout;
 
         HRESULT hr = m_pDWriteFactory->CreateTextLayout(tbuf.wc_str(),
-            tbuf.Length(), m_pTextFormat, FLT_MAX, FLT_MAX, &pTextLayout);
+            tbuf.length(), m_pTextFormat, FLT_MAX, FLT_MAX, &pTextLayout);
         if ( !SUCCEEDED(hr) )
             return;
 
@@ -1583,7 +1583,7 @@ void SurfaceD2D::MeasureWidths(Font &font_, const char *s, int len,
             }
             position += clusterMetrics[ci].width;
         }
-        PLATFORM_ASSERT(ti == tbuf.Length());
+        PLATFORM_ASSERT(ti == tbuf.length());
     }
     if (m_unicodeMode)
     {
@@ -1628,7 +1628,7 @@ void SurfaceD2D::MeasureWidths(Font &font_, const char *s, int len,
     {
         const size_t buflen = static_cast<size_t>(len);
         // One character per position
-        PLATFORM_ASSERT(buflen == tbuf.Length());
+        PLATFORM_ASSERT(buflen == tbuf.length());
         for ( size_t kk=0; kk<buflen; kk++ )
         {
             positions[kk] = poses[kk];
@@ -1808,7 +1808,7 @@ void SurfaceD2D::DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
                 D2D1_ANTIALIAS_MODE_ALIASED);
         }
 
-        hr = m_pDWriteFactory->CreateTextLayout(tbuf.wc_str(), tbuf.Length(),
+        hr = m_pDWriteFactory->CreateTextLayout(tbuf.wc_str(), tbuf.length(),
             m_pTextFormat, rc.Width(), rc.Height(), &pTextLayout);
 
         if ( SUCCEEDED(hr) )

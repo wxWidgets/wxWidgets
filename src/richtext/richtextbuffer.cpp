@@ -4750,7 +4750,7 @@ bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* 
                     int pos = text.Find(wxT('.'), true);
                     if (pos != wxNOT_FOUND)
                     {
-                        text = text.Mid(0, text.Length() - pos - 1);
+                        text = text.Mid(0, text.length() - pos - 1);
                     }
                     else
                         text.clear();
@@ -6831,7 +6831,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
         const wxString* pWholeString = &m_text;
         if (context.HasVirtualText(this))
         {
-            if (context.GetVirtualText(this, stringWhole) && stringWhole.Length() == m_text.Length())
+            if (context.GetVirtualText(this, stringWhole) && stringWhole.length() == m_text.length())
                 pWholeString = &stringWhole;
         }
 
@@ -6852,7 +6852,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
         stringWhole = m_text;
         if (context.HasVirtualText(this))
         {
-            if (!context.GetVirtualText(this, stringWhole) || stringWhole.Length() != m_text.Length())
+            if (!context.GetVirtualText(this, stringWhole) || stringWhole.length() != m_text.length())
                 stringWhole = m_text;
         }
 
@@ -7264,7 +7264,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
         const wxString* pWholeString = &m_text;
         if (context.HasVirtualText(this))
         {
-            if (context.GetVirtualText(this, stringWhole) && stringWhole.Length() == m_text.Length())
+            if (context.GetVirtualText(this, stringWhole) && stringWhole.length() == m_text.length())
                 pWholeString = &stringWhole;
         }
 
@@ -7535,7 +7535,7 @@ bool wxRichTextPlainText::CanSplit(wxRichTextDrawingContext& context) const
     // If this object has any virtual attributes at all, whether for the whole object
     // or individual ones, we should try splitting it by calling Split.
     // Must be more than one character in order to be able to split.
-    return m_text.Length() > 1 && context.HasVirtualAttributes(const_cast<wxRichTextPlainText*>(this));
+    return m_text.length() > 1 && context.HasVirtualAttributes(const_cast<wxRichTextPlainText*>(this));
 }
 
 wxRichTextObject* wxRichTextPlainText::Split(wxRichTextDrawingContext& context)
@@ -7558,7 +7558,7 @@ wxRichTextObject* wxRichTextPlainText::Split(wxRichTextDrawingContext& context)
 
                 // We will gather up runs of text with the same virtual attributes
 
-                int len = m_text.Length();
+                int len = m_text.length();
                 int i = 0;
 
                 // runStart and runEnd represent the accumulated run with a consistent attribute
@@ -8955,9 +8955,9 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 wxString text(data.GetText());
 #ifdef __WXMSW__
                 wxString text2;
-                text2.Alloc(text.Length()+1);
+                text2.Alloc(text.length()+1);
                 size_t i;
-                for (i = 0; i < text.Length(); i++)
+                for (i = 0; i < text.length(); i++)
                 {
                     wxChar ch = text[i];
                     if (ch != wxT('\r'))
@@ -8969,7 +8969,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 container->InsertTextWithUndo(this, position+1, text2, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
                 if (GetRichTextCtrl())
-                    GetRichTextCtrl()->ShowPosition(position + text2.Length());
+                    GetRichTextCtrl()->ShowPosition(position + text2.length());
 
                 success = true;
             }
