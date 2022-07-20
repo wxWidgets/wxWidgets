@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 All (GUI):
 
 - Fix grid window scrollbars when freezing part of the grid (#22602).
+- Avoid warnings with wxStaticText flags in C++20 (David Connet, #22656).
 
 wxGTK:
 
