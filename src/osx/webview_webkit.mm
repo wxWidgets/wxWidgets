@@ -169,16 +169,15 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     // Implement javascript fullscreen interface with user script and message handler
     AddUserScript("\
         document.__wxToggleFullscreen = function (elem) { \
-            document.fullscreenElement = elem; \
+            document.webkitFullscreenElement = elem; \
             window.webkit.messageHandlers.__wxfullscreen.postMessage((elem) ? 1: 0); \
-            document.dispatchEvent(new Event('fullscreenchange')); \
+            document.dispatchEvent(new Event('webkitfullscreenchange')); \
+            if (document.onwebkitfullscreenchange) document.onwebkitfullscreenchange(); \
         }; \
-        Element.prototype.requestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
-        Element.prototype.webkitRequestFullscreen = Element.prototype.requestFullscreen; \
-        document.exitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
-        document.webkitExitFullscreen = document.exitFullscreen; \
-        document.onfullscreenchange = null; \
-        document.fullscreenEnabled = true; \
+        Element.prototype.webkitRequestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
+        document.webkitExitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
+        document.onwebkitfullscreenchange = null; \
+        document.webkitFullscreenEnabled = true; \
     ");
     [m_webView.configuration.userContentController addScriptMessageHandler:
         [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:@"__wxfullscreen"];
