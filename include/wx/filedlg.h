@@ -56,6 +56,13 @@ enum
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
+// Flags for wxFileDialog::AddShortcut().
+enum
+{
+    wxFD_SHORTCUT_TOP       = 0x0001,
+    wxFD_SHORTCUT_BOTTOM    = 0x0002
+};
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileDialogNameStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileSelectorPromptStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileSelectorDefaultWildcardStr[];
@@ -128,6 +135,11 @@ public:
 
     virtual int GetCurrentlySelectedFilterIndex () const
         { return m_currentlySelectedFilterIndex; }
+
+
+    // Add a shortcut to the given directory in the sidebar containing such
+    // shortcuts if supported.
+    virtual bool AddShortcut(const wxString& directory, int flags = 0);
 
 
     // A customize hook methods will be called by wxFileDialog later if this

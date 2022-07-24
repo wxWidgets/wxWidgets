@@ -352,7 +352,7 @@ void wxIFileDialog::SetTitle(const wxString& message)
     }
 }
 
-void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
+HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path)
 {
     HRESULT hr;
 
@@ -383,25 +383,78 @@ void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
     if ( !s_pfnSHCreateItemFromParsingName )
     {
         // There is nothing we can do and the error was already reported.
-        return;
+        return E_FAIL;
     }
 
-    wxCOMPtr<IShellItem> folder;
+    // SHCreateItemFromParsingName() doesn't support slashes, so if the path
+    // uses them, replace them with the backslashes.
+    wxString pathBS;
+    const wxString* pathWithoutSlashes;
+    if ( path.find('/') != wxString::npos )
+    {
+        pathBS = path;
+        pathBS.Replace("/", "\\", true);
+
+        pathWithoutSlashes = &pathBS;
+    }
+    else // Just use the original path without copying.
+    {
+        pathWithoutSlashes = &path;
+    }
+
     hr = s_pfnSHCreateItemFromParsingName
          (
-            defaultPath.wc_str(),
+            pathWithoutSlashes->wc_str(),
             NULL,
-            wxIID_PPV_ARGS(IShellItem, &folder)
+            wxIID_PPV_ARGS(IShellItem, &item)
          );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError
+        (
+            wxString::Format(wxS("SHCreateItemFromParsingName(\"%s\")"),
+                             *pathWithoutSlashes),
+            hr
+        );
+    }
 
-    // Failing to parse the folder name or set it is not really an error,
-    // we'll just ignore the initial directory in this case, but we should
-    // still show the dialog.
+    return hr;
+}
+
+void wxIFileDialog::SetInitialPath(const wxString& defaultPath)
+{
+    wxCOMPtr<IShellItem> folder;
+
+    HRESULT hr = InitShellItemFromPath(folder, defaultPath);
+
+    // Failing to parse the folder name is not really an error, e.g. it might
+    // not exist, so we'll just ignore the initial directory in this case.
     if ( SUCCEEDED(hr) )
     {
         hr = m_fileDialog->SetFolder(folder);
         if ( FAILED(hr) )
             wxLogApiError(wxS("IFileDialog::SetFolder"), hr);
+    }
+}
+
+void wxIFileDialog::AddPlace(const wxString& path, FDAP fdap)
+{
+    wxCOMPtr<IShellItem> place;
+
+    HRESULT hr = InitShellItemFromPath(place, path);
+
+    // Don't bother with doing anything else if we couldn't parse the path
+    // (debug message about failing to do it was already logged).
+    if ( FAILED(hr) )
+        return;
+
+    hr = m_fileDialog->AddPlace(place, fdap);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError
+        (
+            wxString::Format(wxS("IFileDialog::AddPlace(\"%s\")"), path), hr
+        );
     }
 }
 

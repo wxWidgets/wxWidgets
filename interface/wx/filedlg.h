@@ -233,6 +233,46 @@ public:
     virtual ~wxFileDialog();
 
     /**
+        Add a directory to the list of shortcuts shown in the dialog.
+
+        File dialogs on many platforms display a fixed list of directories
+        which can be easily selected by the user. This function allows to add
+        an application-defined directory to this list, which can be convenient
+        for the programs that use specific directories for their files instead
+        of the default user document directory (see wxStandardPaths).
+
+        Currently this function is only implemented in wxMSW and wxGTK and does
+        nothing under the other platforms. Moreover, in wxMSW this function is
+        incompatible with the use of SetExtraControlCreator(), if you need to
+        use this function and customize the dialog contents, please use the
+        newer SetCustomizeHook() instead.
+
+        The @ref page_samples_dialogs "dialogs sample" shows the use of this
+        function by adding two custom shortcuts corresponding to the
+        subdirectories of @c WXWIN environment variable if it is defined.
+
+        @note In wxMSW, the shortcuts appear in a separate section called
+            "Application Links" by default. To change the title of this
+            section, the application can specify a value of the @c
+            FileDescription field of the version information structure in its
+            resource file -- if present, this string will be used as the
+            section title.
+
+        @param directory The full path to the directory, which should exist.
+        @param flags Can be set to @c wxFD_SHORTCUT_BOTTOM (which is also the
+            default behaviour) to add the shortcut after the existing ones,
+            or @c wxFD_SHORTCUT_TOP to add it before them. Support for the
+            latter flag is only available in wxMSW, in wxGTK the shortcuts are
+            always added to the bottom of the list.
+        @return @true on success or @false if shortcut couldn't be added, e.g.
+            because this functionality is not available on the current
+            platform.
+
+        @since 3.3.0
+     */
+    bool AddShortcut(const wxString& directory, int flags = 0);
+
+    /**
         Returns the path of the file currently selected in dialog.
 
         Notice that this file is not necessarily going to be accepted by the
