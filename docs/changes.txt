@@ -247,6 +247,7 @@ wxGTK:
 wxOSX:
 
 - Fix wxrc installation with "make install" (Mark Harfouche, #22620).
+- Improve wxWebView full screen support (Tobias Taschner, #22637).
 
 
 3.2.0: (released 2022-07-07)

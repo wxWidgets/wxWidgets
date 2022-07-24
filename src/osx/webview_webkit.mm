@@ -169,16 +169,35 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     // Implement javascript fullscreen interface with user script and message handler
     AddUserScript("\
         document.__wxToggleFullscreen = function (elem) { \
-            document.fullscreenElement = elem; \
+            if (!document.__wxStylesAdded) { \
+                function createClass(name,rules) { \
+                    var style= document.createElement('style'); style.type = 'text/css'; \
+                    document.getElementsByTagName('head')[0].appendChild(style); \
+                    style.sheet.addRule(name, rules); \
+                } \
+                createClass(\"body.wxfullscreen\", \"padding: 0; margin: 0; height: 100%;\"); \
+                createClass(\".wxfullscreen\", \"position: fixed; overflow: hidden; z-index: 1000; left: 0; top: 0; bottom: 0; right: 0;\"); \
+                createClass(\".wxfullscreenelem\", \"width: 100% !important; height: 100% !important; padding-top: 0 !important;\"); \
+                document.__wxStylesAdded = true; \
+            } \
+            if (elem) { \
+                elem.classList.add(\"wxfullscreen\"); \
+                elem.classList.add(\"wxfullscreenelem\"); \
+                document.body.classList.add(\"wxfullscreen\"); \
+            } else if (document.webkitFullscreenElement) { \
+                document.webkitFullscreenElement.classList.remove(\"wxfullscreen\"); \
+                document.webkitFullscreenElement.classList.remove(\"wxfullscreenelem\"); \
+                document.body.classList.remove(\"wxfullscreen\"); \
+            } \
+            document.webkitFullscreenElement = elem; \
             window.webkit.messageHandlers.__wxfullscreen.postMessage((elem) ? 1: 0); \
-            document.dispatchEvent(new Event('fullscreenchange')); \
+            document.dispatchEvent(new Event('webkitfullscreenchange')); \
+            if (document.onwebkitfullscreenchange) document.onwebkitfullscreenchange(); \
         }; \
-        Element.prototype.requestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
-        Element.prototype.webkitRequestFullscreen = Element.prototype.requestFullscreen; \
-        document.exitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
-        document.webkitExitFullscreen = document.exitFullscreen; \
-        document.onfullscreenchange = null; \
-        document.fullscreenEnabled = true; \
+        Element.prototype.webkitRequestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
+        document.webkitExitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
+        document.onwebkitfullscreenchange = null; \
+        document.webkitFullscreenEnabled = true; \
     ");
     [m_webView.configuration.userContentController addScriptMessageHandler:
         [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:@"__wxfullscreen"];
