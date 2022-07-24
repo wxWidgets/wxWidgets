@@ -4532,35 +4532,77 @@ fi
 dnl check for the function for temp files creation
 AC_CHECK_FUNCS(mkstemp mktemp, break)
 
-dnl get the library function to use for wxGetDiskSpace(): it is statfs() under
-dnl Linux and *BSD and statvfs() under Solaris
-AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
+dnl get the library function to use for wxGetDiskSpace(): prefer POSIX
+dnl statvfs() if it exists, but fall back to Linux/BSD-specific statfs() if
+dnl necessary.
+AC_CACHE_CHECK(for statvfs, wx_cv_func_statvfs,
     AC_TRY_COMPILE(
         [
-             #if defined(__BSD__)
-             #include <sys/param.h>
-             #include <sys/mount.h>
-             #else
-             #include <sys/vfs.h>
-             #endif
+            #include <stddef.h>
+            #include <sys/statvfs.h>
         ],
         [
-             long l;
-             struct statfs fs;
-             statfs("/", &fs);
-             l = fs.f_bsize;
-             l += fs.f_blocks;
-             l += fs.f_bavail;
+            statvfs("/", NULL);
         ],
-         wx_cv_func_statfs=yes,
-         wx_cv_func_statfs=no
+        wx_cv_func_statvfs=yes,
+        wx_cv_func_statvfs=no
     )
 )
 
-if test "$wx_cv_func_statfs" = "yes"; then
-    dnl check whether we have its dcelaration too: some systems (AIX 4) lack it
-    AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl,
+if test "$wx_cv_func_statvfs" = "yes"; then
+    dnl we also have to check whether we should use statvfs_t (works under
+    dnl Solaris 8, doesn't work under Solaris 7) or "struct statvfs" (vice
+    dnl versa) as the argument for statvfs in 64 bit off_t mode (in 32 bit
+    dnl mode both work fine)
+    dnl
+    dnl for this check C++ compiler has to be used as passing incompatible
+    dnl pointers is just a warning and not an error in C
+    AC_CACHE_CHECK(for statvfs argument type, wx_cv_type_statvfs_t,
         AC_LANG_PUSH(C++)
+        AC_TRY_COMPILE(
+            [
+                #include <sys/statvfs.h>
+            ],
+            [
+                long l;
+                statvfs_t fs;
+                statvfs("/", &fs);
+                l = fs.f_bsize;
+                l += fs.f_blocks;
+                l += fs.f_bavail;
+            ],
+            wx_cv_type_statvfs_t=statvfs_t,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <sys/statvfs.h>
+                    ],
+                    [
+                        long l;
+                        struct statvfs fs;
+                        statvfs("/", &fs);
+                        l = fs.f_bsize;
+                        l += fs.f_blocks;
+                        l += fs.f_bavail;
+                    ],
+                    wx_cv_type_statvfs_t="struct statvfs",
+                    wx_cv_type_statvfs_t="unknown"
+                )
+            ]
+        )
+        AC_LANG_POP()
+    )
+
+    if test "$wx_cv_type_statvfs_t" != "unknown"; then
+        AC_DEFINE(HAVE_STATVFS)
+    fi
+else
+    dnl set it for the test below
+    wx_cv_type_statvfs_t="unknown"
+fi
+
+if test "$wx_cv_type_statvfs_t" = "unknown"; then
+    AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
         AC_TRY_COMPILE(
             [
                  #if defined(__BSD__)
@@ -4571,86 +4613,47 @@ if test "$wx_cv_func_statfs" = "yes"; then
                  #endif
             ],
             [
-                struct statfs fs;
-                statfs("", &fs);
+                 long l;
+                 struct statfs fs;
+                 statfs("/", &fs);
+                 l = fs.f_bsize;
+                 l += fs.f_blocks;
+                 l += fs.f_bavail;
             ],
-            wx_cv_func_statfs_decl=yes,
-            wx_cv_func_statfs_decl=no
-        )
-        AC_LANG_POP()
-    )
-
-    if test "$wx_cv_func_statfs_decl" = "yes"; then
-        AC_DEFINE(HAVE_STATFS_DECL)
-    fi
-
-    wx_cv_type_statvfs_t="struct statfs"
-    AC_DEFINE(HAVE_STATFS)
-else
-    AC_CACHE_CHECK(for statvfs, wx_cv_func_statvfs,
-        AC_TRY_COMPILE(
-            [
-                #include <stddef.h>
-                #include <sys/statvfs.h>
-            ],
-            [
-                statvfs("/", NULL);
-            ],
-            wx_cv_func_statvfs=yes,
-            wx_cv_func_statvfs=no
+             wx_cv_func_statfs=yes,
+             wx_cv_func_statfs=no
         )
     )
 
-    if test "$wx_cv_func_statvfs" = "yes"; then
-        dnl we also have to check whether we should use statvfs_t (works under
-        dnl Solaris 8, doesn't work under Solaris 7) or "struct statvfs" (vice
-        dnl versa) as the argument for statvfs in 64 bit off_t mode (in 32 bit
-        dnl mode both work fine)
-        dnl
-        dnl for this check C++ compiler has to be used as passing incompatible
-        dnl pointers is just a warning and not an error in C
-        AC_CACHE_CHECK(for statvfs argument type, wx_cv_type_statvfs_t,
+    if test "$wx_cv_func_statfs" = "yes"; then
+        dnl check whether we have its dcelaration too: some systems (AIX 4) lack it
+        AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl,
             AC_LANG_PUSH(C++)
             AC_TRY_COMPILE(
                 [
-                    #include <sys/statvfs.h>
+                     #if defined(__BSD__)
+                     #include <sys/param.h>
+                     #include <sys/mount.h>
+                     #else
+                     #include <sys/vfs.h>
+                     #endif
                 ],
                 [
-                    long l;
-                    statvfs_t fs;
-                    statvfs("/", &fs);
-                    l = fs.f_bsize;
-                    l += fs.f_blocks;
-                    l += fs.f_bavail;
+                    struct statfs fs;
+                    statfs("", &fs);
                 ],
-                wx_cv_type_statvfs_t=statvfs_t,
-                [
-                    AC_TRY_COMPILE(
-                        [
-                            #include <sys/statvfs.h>
-                        ],
-                        [
-                            long l;
-                            struct statvfs fs;
-                            statvfs("/", &fs);
-                            l = fs.f_bsize;
-                            l += fs.f_blocks;
-                            l += fs.f_bavail;
-                        ],
-                        wx_cv_type_statvfs_t="struct statvfs",
-                        wx_cv_type_statvfs_t="unknown"
-                    )
-                ]
+                wx_cv_func_statfs_decl=yes,
+                wx_cv_func_statfs_decl=no
             )
             AC_LANG_POP()
         )
 
-        if test "$wx_cv_type_statvfs_t" != "unknown"; then
-            AC_DEFINE(HAVE_STATVFS)
+        if test "$wx_cv_func_statfs_decl" = "yes"; then
+            AC_DEFINE(HAVE_STATFS_DECL)
         fi
-    else
-        dnl set it for the test below
-        wx_cv_type_statvfs_t="unknown"
+
+        wx_cv_type_statvfs_t="struct statfs"
+        AC_DEFINE(HAVE_STATFS)
     fi
 fi
 
