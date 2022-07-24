@@ -121,9 +121,9 @@
 
 #define PACKAGE_BUGREPORT "wx-dev@googlegroups.com"
 #define PACKAGE_NAME "wxWidgets"
-#define PACKAGE_STRING "wxWidgets 3.2.0"
+#define PACKAGE_STRING "wxWidgets 3.3.0"
 #define PACKAGE_TARNAME "wxwidgets"
-#define PACKAGE_VERSION "3.2.0"
+#define PACKAGE_VERSION "3.3.0"
 
 // for jpeg
 

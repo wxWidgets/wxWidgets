@@ -83,7 +83,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_webview.lib  wxmsw32ud_stc.lib imm32.lib wxmsw32ud_core.lib  wxbase32ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_webview.lib  wxmsw33ud_stc.lib imm32.lib wxmsw33ud_core.lib  wxbase33ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswud\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -177,7 +177,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_webview.lib  wxmsw32u_stc.lib imm32.lib wxmsw32u_core.lib  wxbase32u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_webview.lib  wxmsw33u_stc.lib imm32.lib wxmsw33u_core.lib  wxbase33u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswu\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -276,7 +276,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_webview.lib  wxmsw32ud_stc.lib imm32.lib wxmsw32ud_core.lib  wxbase32ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_webview.lib  wxmsw33ud_stc.lib imm32.lib wxmsw33ud_core.lib  wxbase33ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswuddll\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -370,7 +370,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_webview.lib  wxmsw32u_stc.lib imm32.lib wxmsw32u_core.lib  wxbase32u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_webview.lib  wxmsw33u_stc.lib imm32.lib wxmsw33u_core.lib  wxbase33u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_mswudll\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -469,7 +469,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_webview.lib  wxmsw32ud_stc.lib imm32.lib wxmsw32ud_core.lib  wxbase32ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_webview.lib  wxmsw33ud_stc.lib imm32.lib wxmsw33ud_core.lib  wxbase33ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswud\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -563,7 +563,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_webview.lib  wxmsw32u_stc.lib imm32.lib wxmsw32u_core.lib  wxbase32u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_webview.lib  wxmsw33u_stc.lib imm32.lib wxmsw33u_core.lib  wxbase33u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswu\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -662,7 +662,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32ud_webview.lib  wxmsw32ud_stc.lib imm32.lib wxmsw32ud_core.lib  wxbase32ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33ud_webview.lib  wxmsw33ud_stc.lib imm32.lib wxmsw33ud_core.lib  wxbase33ud.lib  wxscintillad.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswuddll\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -756,7 +756,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw32u_webview.lib  wxmsw32u_stc.lib imm32.lib wxmsw32u_core.lib  wxbase32u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
+				AdditionalDependencies="wxmsw33u_webview.lib  wxmsw33u_stc.lib imm32.lib wxmsw33u_core.lib  wxbase33u.lib  wxscintilla.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib"
 				OutputFile="vc_x64_mswudll\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
