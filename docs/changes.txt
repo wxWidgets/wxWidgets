@@ -243,6 +243,7 @@ All (GUI):
 - Fix AUI floating pane position when dragging (Konstantin S. Matveyev, #22533).
 - Add wxStyledTextCtrl support to XRC schema file.
 - Fix script parsing in wxLocaleIdent (Ulrich Telle).
+- Make generic wxListCtrl separator lines more visible in dark themes (#22664).
 
 wxGTK:
 
