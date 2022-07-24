@@ -18,6 +18,10 @@ Changes in behaviour which may result in build errors
 3.3.0: (released 2022-??-??)
 ----------------------------
 
+NOTE: In addition to the note below, also incorporate (either by
+      copy or by reference) all the changes in the 3.2 branch (i.e.
+      everything in this file after 3.2.0 in that branch).
+
 NOTE: This file is updated only before the release, please use
 
     $ git log --notes=changelog --format='%N' v3.2.0..|grep .
