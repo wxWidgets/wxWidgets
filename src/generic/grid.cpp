@@ -3330,8 +3330,14 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
     {
         case wxGRIDTABLE_NOTIFY_ROWS_INSERTED:
         {
-            size_t pos = msg.GetCommandInt();
+            int pos = msg.GetCommandInt();
+            wxCHECK_MSG( pos >= 0 && pos <= m_numRows, false,
+                         "Invalid row insertion position" );
+
             int numRows = msg.GetCommandInt2();
+            wxCHECK_MSG( numRows >= 0, false,
+                         "Invalid number of rows inserted" );
+
             m_numRows += numRows;
 
             if ( !m_rowAt.IsEmpty() )
@@ -3339,14 +3345,14 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 //Shift the row IDs
                 for ( i = 0; i < m_numRows - numRows; i++ )
                 {
-                    if ( m_rowAt[i] >= (int)pos )
+                    if ( m_rowAt[i] >= pos )
                         m_rowAt[i] += numRows;
                 }
 
                 m_rowAt.Insert( pos, pos, numRows );
 
                 //Set the new rows' positions
-                for ( i = pos + 1; i < (int)pos + numRows; i++ )
+                for ( i = pos + 1; i < pos + numRows; i++ )
                 {
                     m_rowAt[i] = i;
                 }
@@ -3391,6 +3397,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_ROWS_APPENDED:
         {
             int numRows = msg.GetCommandInt();
+            wxCHECK_MSG( numRows >= 0, false,
+                         "Invalid number of rows appended" );
+
+            wxASSERT_MSG( msg.GetCommandInt2() == -1, "Ignored when appending" );
+
             int oldNumRows = m_numRows;
             m_numRows += numRows;
 
@@ -3436,8 +3447,14 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
         case wxGRIDTABLE_NOTIFY_ROWS_DELETED:
         {
-            size_t pos = msg.GetCommandInt();
+            int pos = msg.GetCommandInt();
+            wxCHECK_MSG( pos >= 0 && pos <= m_numRows, false,
+                         "Invalid row deletion position" );
+
             int numRows = msg.GetCommandInt2();
+            wxCHECK_MSG( numRows >= 0 && pos + numRows <= m_numRows, false,
+                         "Wrong number of rows being deleted" );
+
             m_numRows -= numRows;
 
             if ( !m_rowAt.IsEmpty() )
@@ -3474,11 +3491,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
-                m_selection->UpdateRows( pos, -((int)numRows) );
+                m_selection->UpdateRows( pos, -numRows );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider)
             {
-                attrProvider->UpdateAttrRows( pos, -((int)numRows) );
+                attrProvider->UpdateAttrRows( pos, -numRows );
 
 // ifdef'd out following patch from Paul Gammans
 #if 0
@@ -3502,8 +3519,14 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
         case wxGRIDTABLE_NOTIFY_COLS_INSERTED:
         {
-            size_t pos = msg.GetCommandInt();
+            int pos = msg.GetCommandInt();
+            wxCHECK_MSG( pos >= 0 && pos <= m_numCols, false,
+                         "Invalid column insertion position" );
+
             int numCols = msg.GetCommandInt2();
+            wxCHECK_MSG( numCols >= 0, false,
+                         "Invalid number of columns inserted" );
+
             m_numCols += numCols;
 
             if ( !m_colAt.IsEmpty() )
@@ -3511,14 +3534,14 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 //Shift the column IDs
                 for ( i = 0; i < m_numCols - numCols; i++ )
                 {
-                    if ( m_colAt[i] >= (int)pos )
+                    if ( m_colAt[i] >= pos )
                         m_colAt[i] += numCols;
                 }
 
                 m_colAt.Insert( pos, pos, numCols );
 
                 //Set the new columns' positions
-                for ( i = pos + 1; i < (int)pos + numCols; i++ )
+                for ( i = pos + 1; i < pos + numCols; i++ )
                 {
                     m_colAt[i] = i;
                 }
@@ -3567,6 +3590,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_COLS_APPENDED:
         {
             int numCols = msg.GetCommandInt();
+            wxCHECK_MSG( numCols >= 0, false,
+                         "Invalid number of columns appended" );
+
+            wxASSERT_MSG( msg.GetCommandInt2() == -1, "Ignored when appending" );
+
             int oldNumCols = m_numCols;
             m_numCols += numCols;
 
@@ -3618,8 +3646,14 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
         case wxGRIDTABLE_NOTIFY_COLS_DELETED:
         {
-            size_t pos = msg.GetCommandInt();
+            int pos = msg.GetCommandInt();
+            wxCHECK_MSG( pos >= 0 && pos <= m_numCols, false,
+                         "Invalid column deletion position" );
+
             int numCols = msg.GetCommandInt2();
+            wxCHECK_MSG( numCols >= 0 && pos + numCols <= m_numCols, false,
+                         "Wrong number of columns being deleted" );
+
             m_numCols -= numCols;
 
             if ( !m_colAt.IsEmpty() )
@@ -3661,11 +3695,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
-                m_selection->UpdateCols( pos, -((int)numCols) );
+                m_selection->UpdateCols( pos, -numCols );
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider)
             {
-                attrProvider->UpdateAttrCols( pos, -((int)numCols) );
+                attrProvider->UpdateAttrCols( pos, -numCols );
 
 // ifdef'd out following patch from Paul Gammans
 #if 0
