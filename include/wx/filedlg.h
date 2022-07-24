@@ -56,6 +56,17 @@ enum
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
+#if wxABI_VERSION >= 30201
+
+// Flags for wxFileDialog::AddShortcut().
+enum
+{
+    wxFD_SHORTCUT_TOP       = 0x0001,
+    wxFD_SHORTCUT_BOTTOM    = 0x0002
+};
+
+#endif // wxABI_VERSION >= 3.2.1
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileDialogNameStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileSelectorPromptStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileSelectorDefaultWildcardStr[];
@@ -129,6 +140,14 @@ public:
     virtual int GetCurrentlySelectedFilterIndex () const
         { return m_currentlySelectedFilterIndex; }
 
+
+#if defined(__WXUNIVERSAL__) || !(defined(__WXMSW__) || defined(__WXGTK20__))
+#if wxABI_VERSION >= 30201
+    // Add a shortcut to the given directory in the sidebar containing such
+    // shortcuts if supported.
+    bool AddShortcut(const wxString& directory, int flags = 0);
+#endif // wxABI_VERSION >= 3.2.1
+#endif // Platforms without native implementation.
 
     // A customize hook methods will be called by wxFileDialog later if this
     // function returns true, see its documentation for details.

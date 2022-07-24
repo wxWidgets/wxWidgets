@@ -237,6 +237,7 @@ Changes in behaviour which may result in build errors
 
 All (GUI):
 
+- Add wxFileDialog::AddShortcut() (#22543).
 - Fix grid window scrollbars when freezing part of the grid (#22602).
 - Avoid warnings with wxStaticText flags in C++20 (David Connet, #22656).
 - Fix AUI floating pane position when dragging (Konstantin S. Matveyev, #22533).

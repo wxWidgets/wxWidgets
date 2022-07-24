@@ -55,6 +55,9 @@ public:
     // Set the initial path to show in the dialog.
     void SetInitialPath(const wxString& path);
 
+    // Add a shortcut.
+    void AddPlace(const wxString& path, FDAP fdap);
+
     // Show the file dialog with the given parent window and options.
     //
     // Returns the selected path, or paths, in the provided output parameters,
@@ -72,6 +75,9 @@ public:
 private:
     wxCOMPtr<IFileDialog> m_fileDialog;
 };
+
+// Initialize an IShellItem object with the given path.
+HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path);
 
 // Extract the filesystem path corresponding to the given shell item.
 HRESULT GetFSPathFromShellItem(const wxCOMPtr<IShellItem>& item, wxString& path);
