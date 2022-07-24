@@ -3001,18 +3001,31 @@ dnl ------------------------------------------------------------------------
 dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
-if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
-    PKG_CHECK_MODULES(LIBCURL, [libcurl],
-        [
-            wxUSE_LIBCURL=yes
-            CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
-            LIBS="$LIBCURL_LIBS $LIBS"
-        ],
-        [
+if test "$wxUSE_WEBREQUEST" = "yes"; then
+    if test "$wxUSE_LIBCURL" = "builtin"; then
+        dnl When using --disable-sys-libs, we typically want to disable
+        dnl dependencies on the libraries that are not part of "the
+        dnl platform" and under macOS libcurl is definitely not part of the
+        dnl system -- but under Linux it arguably is, so handle this case
+        dnl appropriately.
+        if test "$USE_DARWIN" = 1; then
             wxUSE_LIBCURL=no
-            AC_MSG_RESULT([not found])
-        ]
-    )
+        fi
+    fi
+
+    if test "$wxUSE_LIBCURL" != "no"; then
+        PKG_CHECK_MODULES(LIBCURL, [libcurl],
+            [
+                wxUSE_LIBCURL=yes
+                CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+                LIBS="$LIBCURL_LIBS $LIBS"
+            ],
+            [
+                wxUSE_LIBCURL=no
+                AC_MSG_RESULT([not found])
+            ]
+        )
+    fi
 fi
 
 dnl ----------------------------------------------------------------
