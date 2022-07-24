@@ -33,6 +33,9 @@ public:
 
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
     virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE;
+#if wxABI_VERSION >= 30201
+    bool AddShortcut(const wxString& directory, int flags = 0);
+#endif // wxABI_VERSION >= 3.2.1
     virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
 
     virtual int ShowModal() wxOVERRIDE;

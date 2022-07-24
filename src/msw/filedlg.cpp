@@ -714,6 +714,20 @@ public:
 
 
 #if wxUSE_IFILEOPENDIALOG
+    // Store the extra shortcut directories and their flags.
+    struct ShortcutData
+    {
+        ShortcutData(const wxString& path_, int flags_)
+            : path(path_), flags(flags_)
+        {
+        }
+
+        wxString path;
+        int flags;
+    };
+    wxVector<ShortcutData> m_customShortcuts;
+
+
     // IUnknown
 
     wxSTDMETHODIMP QueryInterface(REFIID iid, void** ppv)
@@ -1181,6 +1195,28 @@ void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
     CreateExtraControl();
 }
 
+bool wxFileDialog::AddShortcut(const wxString& directory, int flags)
+{
+#if wxUSE_IFILEOPENDIALOG
+    if ( !HasExtraControlCreator() )
+    {
+        MSWData().m_customShortcuts.push_back(
+            wxFileDialogMSWData::ShortcutData(directory, flags)
+        );
+
+        return true;
+    }
+    else
+    {
+        // It could be surprising if AddShortcut() silently didn't work, so
+        // warn the developer about this incompatibility.
+        wxFAIL_MSG("Can't use both AddShortcut() and SetExtraControlCreator()");
+    }
+#endif // wxUSE_IFILEOPENDIALOG
+
+    return false;
+}
+
 int wxFileDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
@@ -1575,6 +1611,23 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
             wxLogApiError(wxS("IFileDialog::SetDefaultExtension"), hr);
     }
 
+
+    for ( wxVector<wxFileDialogMSWData::ShortcutData>::const_iterator
+            it = data.m_customShortcuts.begin();
+            it != data.m_customShortcuts.end();
+            ++it )
+    {
+        FDAP fdap = FDAP_BOTTOM;
+        if ( it->flags & wxFD_SHORTCUT_TOP )
+        {
+            wxASSERT_MSG( !(it->flags & wxFD_SHORTCUT_BOTTOM),
+                          wxS("Can't use both wxFD_SHORTCUT_TOP and BOTTOM") );
+
+            fdap = FDAP_TOP;
+        }
+
+        fileDialog.AddPlace(it->path, fdap);
+    }
 
     // We never set the following flags currently:
     //
