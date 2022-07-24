@@ -27421,7 +27421,14 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
 fi
 
 
-if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
+if test "$wxUSE_WEBREQUEST" = "yes"; then
+    if test "$wxUSE_LIBCURL" = "builtin"; then
+                                                if test "$USE_DARWIN" = 1; then
+            wxUSE_LIBCURL=no
+        fi
+    fi
+
+    if test "$wxUSE_LIBCURL" != "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCURL" >&5
@@ -27482,15 +27489,15 @@ fi
 	echo "$LIBCURL_PKG_ERRORS" >&5
 
 
-            wxUSE_LIBCURL=no
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+                wxUSE_LIBCURL=no
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
 
 
 elif test $pkg_failed = untried; then
 
-            wxUSE_LIBCURL=no
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+                wxUSE_LIBCURL=no
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
 
 
@@ -27500,11 +27507,12 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-            wxUSE_LIBCURL=yes
-            CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
-            LIBS="$LIBCURL_LIBS $LIBS"
+                wxUSE_LIBCURL=yes
+                CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+                LIBS="$LIBCURL_LIBS $LIBS"
 
 fi
+    fi
 fi
 
 
