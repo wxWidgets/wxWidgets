@@ -232,6 +232,22 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.2.1: (released 2022-??-??)
+----------------------------
+
+All (GUI):
+
+- Fix grid window scrollbars when freezing part of the grid (#22602).
+
+wxGTK:
+
+- Fix build with --disable-intl (#22626).
+
+wxOSX:
+
+- Fix wxrc installation with "make install" (Mark Harfouche, #22620).
+
+
 3.2.0: (released 2022-07-07)
 ----------------------------
 
