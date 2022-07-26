@@ -184,7 +184,7 @@ void wxFileData::ReadData()
     wxStructStat buff;
 
 #if defined(__UNIX__) && !defined(__VMS)
-    const bool hasStat = lstat( m_filePath.fn_str(), &buff ) == 0;
+    const bool hasStat = wxLstat( m_filePath, &buff ) == 0;
     if ( hasStat )
         m_type |= S_ISLNK(buff.st_mode) ? is_link : 0;
 #else // no lstat()
