@@ -11,8 +11,8 @@ executors:
 commands:
   git-checkout:
     steps:
-      - run: wget -nc -O - https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.0/wxWidgets-3.2.0.tar.bz2 > ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2
-      - run: bzip2 ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2 -cd | tar xvf -
+      - run: wget -nc -O - https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.0/wxWidgets-3.2.0.tar.bz2 > wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2
+      - run: bzip2 wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2 -cd | tar xvf -
       - run: wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/master.tar.gz | gzip -cd - | tar xvf - ; mv *-master/.circleci *-master/debian .
   build-n-publish-debian:
     steps:
