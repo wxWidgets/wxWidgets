@@ -3,7 +3,7 @@ Section: libs
 Priority: optional
 Build-Depends-Indep: doxygen,
                      graphviz,
-Build-Depends: debhelper-compat (= 13),
+Build-Depends: debhelper-compat (>= 11),
                dpkg-dev (>= 1.16.1~),
                g++ (>= 4:5.2),
                gettext,
