@@ -15,7 +15,7 @@ commands:
       - run: wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/master.tar.gz | gzip -cd - | tar xvf - ; mv *-master/.circleci *-master/debian .
   build-n-publish-debian:
     steps:
-      - run: sudo apt-get -y install debhelper
+      - run: sudo apt-get -y install debhelper-compat
       - run: chmod a+x .circleci/*.sh
       - run:
           command: |
