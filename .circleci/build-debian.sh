@@ -57,6 +57,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     doxygen                                \
     graphviz                               \
     meson                                  \
+    debhelper-compat                       \
     bc                                     \
     bison                                  \
     flex                                   \
