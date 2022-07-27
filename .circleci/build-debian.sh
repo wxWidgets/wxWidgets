@@ -21,7 +21,7 @@ if [ "$EMU" = "on" ]; then
   fi
 fi
 
-WORK_DIR=$(pwd):/ci-source
+WORK_DIR=$(pwd)/..:/ci-source
 
 docker run --privileged --cap-add=ALL --security-opt="seccomp=unconfined" -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IMAGE /bin/bash
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
@@ -118,7 +118,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
 docker exec --privileged -ti $DOCKER_CONTAINER_ID ldconfig
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd work; dpkg-buildpackage -uc -us -j8; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
+    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source/work; dpkg-buildpackage -uc -us -j8; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
 find dist -name \*.\*$EXT
 
