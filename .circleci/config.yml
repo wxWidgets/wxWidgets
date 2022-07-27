@@ -18,14 +18,14 @@ commands:
   build-n-publish-debian:
     steps:
       - run: sudo apt-get -y install debhelper-compat
-      - run: chmod a+x .circleci/*.sh
+      - run: cd work && chmod a+x .circleci/*.sh
       - run:
           command: |
-            .circleci/build-debian.sh
+            cd work && .circleci/build-debian.sh
           no_output_timeout: 30m
       - cloudsmith/ensure-api-key
       - cloudsmith/install-cli
-      - run: .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}/${PKG_RELEASE}
+      - run: cd work && .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}/${PKG_RELEASE}
   do-all:
     steps:
       - git-checkout
