@@ -14,18 +14,18 @@ commands:
       - run: mkdir work
       - run: cd work && wget -nc -O - https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.0/wxWidgets-3.2.0.tar.bz2 > ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2
       - run: cd work && bzip2 < ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2 -cd | tar xvf -; shopt -s dotglob; mv wxWidgets-3.2.0/* .; rmdir wxWidgets-3.2.0
-      - run: cd work && wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/master.tar.gz | gzip -cd - | tar xvf - ; mv *-master/.circleci *-master/debian .
+      - run: cd work && wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/master.tar.gz | gzip -cd - | tar xvf - ; mv *-master/debian .; mv *-master/.circleci ..
   build-n-publish-debian:
     steps:
       - run: sudo apt-get -y install debhelper-compat
-      - run: cd work && chmod a+x .circleci/*.sh
+      - run: chmod a+x .circleci/*.sh
       - run:
           command: |
-            cd work && .circleci/build-debian.sh
+            .circleci/build-debian.sh
           no_output_timeout: 30m
       - cloudsmith/ensure-api-key
       - cloudsmith/install-cli
-      - run: cd work && .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}/${PKG_RELEASE}
+      - run: .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}/${PKG_RELEASE}
   do-all:
     steps:
       - git-checkout
