@@ -5,6 +5,7 @@ orbs:
 executors:
   boot-linux:
     machine:
+      resource_class: large
       enabled: true
       image: ubuntu-2004:202104-01
 commands:
