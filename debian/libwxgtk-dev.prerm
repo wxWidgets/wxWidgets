@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-update-alternatives --remove wx-config /usr/lib/=MA/wx/config/gtk2-unicode-=V
-
-#DEBHELPER#

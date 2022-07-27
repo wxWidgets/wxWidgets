@@ -1,0 +1,38 @@
+Description: Suppress error about mismatching C++ ABI version
+ In practice, the differences between recent ABI versions don't seem to be
+ incompatible since they apparently only affect obscure corner cases.  So
+ suppress this error so we don't have to rebuild the entire wx world in one
+ go.
+Author: Olly Betts <olly@survex.com>
+Forwarded: no
+Last-Update: 2022-07-18
+
+--- a/src/common/appbase.cpp
++++ b/src/common/appbase.cpp
+@@ -847,6 +847,26 @@
+         wxString prog = wxString::FromAscii(optionsSignature);
+         wxString progName = wxString::FromAscii(componentName);
+ 
++	int l_off = lib.Find("compiler with C++ ABI ");
++	int p_off = prog.Find("compiler with C++ ABI ");
++	if (l_off != wxNOT_FOUND && p_off != wxNOT_FOUND) {
++	    int space;
++	    space = lib.find(',', l_off + 22);
++	    lib.erase(l_off, space - l_off);
++	    space = prog.find(',', p_off + 22);
++	    prog.erase(p_off, space - p_off);
++	    if (lib == prog) {
++		// The only difference is the ABI version, which apparently only
++		// affect obscure cases.  We used to warn here, so at least
++		// there was an indication of what's up if there is a problem
++		// due to ABI incompatibilities, but wxLogWarning() can result
++		// in a pop up dialog with some applications, which is just too
++		// intrusive, so just quietly ignore instead.
++		//wxLogWarning(msg.c_str());
++		return false;
++	    }
++	}
++
+         wxLogFatalError(wxT("Mismatch between the program and library build versions detected.\nThe library used %s,\nand %s used %s."),
+                         lib, progName, prog);
+ 

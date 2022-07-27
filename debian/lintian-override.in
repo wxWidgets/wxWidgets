@@ -1,6 +1,0 @@
-libwxbase=SOV: package-name-doesnt-match-sonames
-libwxgtk=SOV: package-name-doesnt-match-sonames
-libwxgtk-media=SOV: package-name-doesnt-match-sonames
-libwxgtk=SOG3V: package-name-doesnt-match-sonames
-libwxgtk-media=SOG3V: package-name-doesnt-match-sonames
-libwxgtk-webview=SOG3V: package-name-doesnt-match-sonames

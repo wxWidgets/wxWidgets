@@ -3,56 +3,40 @@ wxWidgets for Debian
 
 The following packages are built from the wxWidgets source:
 
-libwxbase3.1-<N>	    wxBase runtime shared libraries
-libwxbase3.1-dev	    extra files required for building wxBase apps
+GUI toolkit-independent packages:
+---------------------------------
 
-libwxgtk3.1-<N>		    wxGTK runtime shared libraries
-libwxgtk3.1-dev		    extra files required for building wxGTK apps
+libwxbase3.2-<N>	      wxBase runtime shared libraries
 
-libwxgtk-media3.1-<N>	    wxGTK runtime shared libraries for wxMediaCtrl
-			    - these are in a separate package as they pull
-			    in a lot of large dependencies
-libwxgtk-media3.1-dev	    extra files required for building wxGTK apps using
-			    wxMediaCtrl
+wx-common		      common helper files and support applications.
+wx3.2-headers		      common header files for building wxWidgets apps
+wx3.2-examples 		      wxWidgets demos and samples (source)
+wx3.2-i18n		      message catalogs for native language support
 
-wx-common		    common helper files and support applications.
-wx3.1-headers		    common header files for building wxWidgets apps
-wx3.1-examples 		    wxWidgets demos and samples (source)
-wx3.1-i18n		    message catalogs for native language support
+GTK3-specific packages:
+-----------------------
+
+libwxgtk3.2-<N>               wxGTK runtime shared libraries
+libwxgtk3.2-dev	      	      extra files required for building wxGTK apps
+
+libwxgtk-media3.2-<N>  	      wxGTK runtime shared libraries for wxMediaCtrl
+			      - these are in a separate package as they pull
+			      in a lot of large dependencies
+libwxgtk-media3.2-dev         extra files required for building wxGTK apps
+			      using wxMediaCtrl
+
+libwxgtk-webview3.2-<N>       wxGTK runtime shared libraries for wxWebView
+			      - these are in a separate package as they pull
+			      in a lot of large dependencies
+libwxgtk-webview3.2-dev       extra files required for building wxGTK apps
+			      using wxWebView
+
 
 	Note that static libraries are no longer supplied in these
 	packages.  Please read, or have understood:
-	http://people.redhat.com/drepper/no_static_linking.html
+	https://akkadia.org/drepper/no_static_linking.html
 	among others before reporting this as a bug.
 
-Notable changes from the wxwidgets2.8 packages
-----------------------------------------------
 
-In the wxwidgets2.8 packaging, there were -dbg packages which contained
-binaries built with __WXDEBUG__ and -g.  Upstream now enable __WXDEBUG__ by
-default, so initially the 3.1 -dbg packages just contain detached debugging
-symbols, and they're now gone completely (replaced by dbgsym packages for
-the debugging symbols).
-
-For more information on the upstream __WXDEBUG__ changes since 2.8, please see:
-
-	  http://docs.wxwidgets.org/3.0.0/overview_debugging.html
-
-Cross-compiling with mingw32
-----------------------------
-
-The following binary packages can be built from the source package with the
-mingw32 cross compiler, but are not distributed as a part of the main Debian
-distribution.
-
-Please do *not* file bug reports for these packages to the Debian BTS.  But do
-feel free to email me personally if you find problems and/or have patches to
-fix them.
-
-libwxmsw-dev		mingw32-cross wxMSW libs.
-wx-headers-msw		extra headers needed for wxMSW.
-
-You can build these extra packages using the binary-cross target in debian/rules.
-
- -- Olly Betts <olly@survex.com>  Thu, 28 Sep 2017 20:53:22 +0000
+ -- Scott Talbert <swt@techie.net>  Sat, 09 Jul 2022 15:02:38 -0400
 

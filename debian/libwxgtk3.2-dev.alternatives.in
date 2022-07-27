@@ -1,0 +1,4 @@
+Name: wx-config
+Link: /usr/bin/wx-config
+Alternative: /usr/lib/@DEB_HOST_MULTIARCH@/wx/config/gtk3-unicode-3.2
+Priority: 329
