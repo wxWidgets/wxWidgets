@@ -21,7 +21,7 @@ if [ "$EMU" = "on" ]; then
   fi
 fi
 
-WORK_DIR=$(pwd)/..:/ci-source
+WORK_DIR=$(pwd):/ci-source
 
 docker run --privileged --cap-add=ALL --security-opt="seccomp=unconfined" -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IMAGE /bin/bash
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
