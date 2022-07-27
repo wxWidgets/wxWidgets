@@ -34,7 +34,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install apt-transpo
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
 #  "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/setup/config.deb.txt?distro=${PKG_DISTRO}&codename=${PKG_RELEASE}' -O- | tee -a /etc/apt/sources.list"
 
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get upgrade
+#docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get upgrade
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev devscripts equivs pkg-config apt-utils fakeroot
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-dev autoconf dh-exec cmake gettext git-core \
     libgtk-3-dev                           \
