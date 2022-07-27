@@ -13,7 +13,7 @@ commands:
     steps:
       - run: mkdir work
       - run: cd work && wget -nc -O - https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.0/wxWidgets-3.2.0.tar.bz2 > ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2
-      - run: cd work && bzip2 < ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2 -cd | tar xvf -; mv wxWidgets-3.2.0/* .; rmdir wxWidgets-3.2.0
+      - run: cd work && bzip2 < ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2 -cd | tar xvf -; shopt -s dotglob; mv wxWidgets-3.2.0/* .; rmdir wxWidgets-3.2.0
       - run: cd work && wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/master.tar.gz | gzip -cd - | tar xvf - ; mv *-master/.circleci *-master/debian .
   build-n-publish-debian:
     steps:
