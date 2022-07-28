@@ -66,23 +66,23 @@ jobs:
     steps:
       - do-all
   build-debian-bullseye-arm64:
-    executor: boot-linux
+    executor: boot-linux-arm
     environment:
       - DOCKER_IMAGE=arm64v8/debian:bullseye
       - CONTAINER_DISTRO=debian:bullseye
       - PKG_RELEASE=bullseye
       - PKG_DISTRO=debian
-      - EMU=on
+      - EMU=off
     steps:
       - do-all
   build-debian-bullseye-arm32:
-    executor: boot-linux
+    executor: boot-linux-arm
     environment:
       - DOCKER_IMAGE=arm32v7/debian:bullseye
       - CONTAINER_DISTRO=debian:bullseye
       - PKG_RELEASE=bullseye
       - PKG_DISTRO=debian
-      - EMU=on
+      - EMU=off
     steps:
       - do-all
   build-debian-bullseye-amd64:
