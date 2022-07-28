@@ -48,6 +48,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     libsm-dev                              \
     libexpat1-dev                          \
     libxt-dev                              \
+    libcurl4-openssl-dev                   \
     libgstreamer1.0-dev                    \
     libgstreamer-plugins-base1.0-dev       \
     libgstreamer-plugins-bad1.0-dev        \
