@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Add move ctor and assignment to wxString (Pavel Tyunin, #23224).
+- Update Georgian translations (NorwayFun, #22673).
 
 All (GUI):
 
