@@ -1,8 +1,0 @@
-WXTOOLKIT = iphone
-WXTOOLKITUPPER = IPHONE
-
-#include "wx.xcconfig"
-
-ARCHS = $(ARCHS_STANDARD)
-SDKROOT = iphoneos
-TARGETED_DEVICE_FAMILY = 1,2
