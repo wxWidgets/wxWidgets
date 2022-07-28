@@ -122,7 +122,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID ldconfig
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source/work; dpkg-buildpackage -uc -us -j8; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
-find dist -name \*.\*$EXT
+find work/dist -name \*.\*$EXT
 
 echo "Stopping"
 docker ps -a
