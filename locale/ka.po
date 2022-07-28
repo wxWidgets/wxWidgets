@@ -1,72 +1,75 @@
 # Georgian translations for wxWidgets
-# Copyright (C) 1999, 2003 wxWidgets
+# Copyright (C) 2022 wxWidgets
 # This file is distributed under the same license as the wxWidgets package.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2020-10-18 23:11+0300\n"
-"Last-Translator: Aiet Kolkhi <aiet@gmx.net>\n"
-"Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
+"PO-Revision-Date: 2022-07-28 15:08+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
-msgstr ""
+msgstr "ყველა ფაილი (*.*)|*.*"
 
 #: ../include/wx/defs.h:2708
 msgid "All files (*)|*"
-msgstr ""
+msgstr "ყველა ფაილი(*)|*"
 
 #: ../include/wx/generic/progdlgg.h:85
 msgid "Elapsed time:"
-msgstr ""
+msgstr "გასული დრო:"
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Estimated time:"
-msgstr ""
+msgstr "დაახლოებით დრო:"
 
 #: ../include/wx/generic/progdlgg.h:87
 msgid "Remaining time:"
-msgstr ""
+msgstr "დარჩენილი დრო:"
 
 #: ../include/wx/msgdlg.h:278 ../src/common/stockitem.cpp:212
 #: ../src/motif/msgdlg.cpp:196
 msgid "Yes"
-msgstr ""
+msgstr "დიახ"
 
 #: ../include/wx/msgdlg.h:279 ../src/common/stockitem.cpp:183
 #: ../src/motif/msgdlg.cpp:196
 msgid "No"
-msgstr ""
+msgstr "არა"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:184
 #: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:449
 #: ../src/msw/msgdlg.cpp:744 ../src/richtext/richtextstyledlg.cpp:293
 msgid "OK"
-msgstr ""
+msgstr "კარგი"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:151
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
 #: ../src/msw/msgdlg.cpp:449 ../src/msw/progdlg.cpp:940
 #: ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
-msgstr ""
+msgstr "გაუქმება"
 
 #: ../include/wx/msgdlg.h:282 ../src/common/stockitem.cpp:169
 #: ../src/html/helpdlg.cpp:63 ../src/html/helpfrm.cpp:108
 #: ../src/osx/button_osx.cpp:39
 msgid "Help"
-msgstr ""
+msgstr "დახმარება"
 
 #: ../include/wx/msw/ole/oleutils.h:51
 msgid "Cannot initialize OLE"
-msgstr ""
+msgstr "OLE-ის ინიციალიზაციის შეცდომა"
 
 #: ../include/wx/msw/private/fswatcher.h:48
 #, c-format
@@ -105,56 +108,56 @@ msgstr ""
 #: ../include/wx/prntbase.h:267 ../include/wx/richtext/richtextprint.h:109
 #: ../src/common/docview.cpp:2137
 msgid "Printout"
-msgstr ""
+msgstr "გამობეჭდვა"
 
 #: ../include/wx/richmsgdlg.h:29
 msgid "&See details"
-msgstr ""
+msgstr "&დეტალების ჩვენება"
 
 #: ../include/wx/richmsgdlg.h:30
 msgid "&Hide details"
-msgstr ""
+msgstr "&დეტალების დამალვა"
 
 #: ../include/wx/richtext/richtextbuffer.h:3865
 msgid "&Box"
-msgstr ""
+msgstr "&ყუთი"
 
 #: ../include/wx/richtext/richtextbuffer.h:5009
 msgid "&Picture"
-msgstr ""
+msgstr "&სურათი"
 
 #: ../include/wx/richtext/richtextbuffer.h:5959
 msgid "&Cell"
-msgstr ""
+msgstr "&უჯრედი"
 
 #: ../include/wx/richtext/richtextbuffer.h:6068
 msgid "&Table"
-msgstr ""
+msgstr "&ცხრილი"
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
-msgstr ""
+msgstr "ობიექტის თვისებები"
 
 #: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
 msgid "Printing"
-msgstr ""
+msgstr "დაბეჭდვა"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
 msgid "Symbols"
-msgstr ""
+msgstr "სიმბოლოები"
 
 #: ../include/wx/unix/pipe.h:47
 msgid "Pipe creation failed"
-msgstr ""
+msgstr "ფაიფის შექმნის შეცდოამ"
 
 #: ../include/wx/unix/private/displayx11.h:65
 msgid "Failed to enumerate video modes"
-msgstr ""
+msgstr "შესაძლო ვიდეორეჟიმების სიის შეცდომა"
 
 #: ../include/wx/unix/private/displayx11.h:89
 msgid "Failed to change video mode"
-msgstr ""
+msgstr "ვიდეორეჟიმის შექმნის შეცდომა"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
@@ -192,563 +195,563 @@ msgstr ""
 
 #: ../src/aui/tabmdi.cpp:106 ../src/generic/mdig.cpp:94
 msgid "Cl&ose"
-msgstr ""
+msgstr "&დახურვა"
 
 #: ../src/aui/tabmdi.cpp:107 ../src/generic/mdig.cpp:95
 msgid "Close All"
-msgstr ""
+msgstr "ყველას დახურვა"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
 msgid "&Next"
-msgstr ""
+msgstr "&შემდეგი"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
 msgid "&Previous"
-msgstr ""
+msgstr "&წინა"
 
 #: ../src/aui/tabmdi.cpp:332 ../src/aui/tabmdi.cpp:348
 #: ../src/aui/tabmdi.cpp:350 ../src/generic/mdig.cpp:291
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
 #: ../src/msw/mdi.cpp:337 ../src/osx/cocoa/menu.mm:243
 msgid "&Window"
-msgstr ""
+msgstr "&ფანჯარა"
 
 #: ../src/common/accelcmn.cpp:47
 msgctxt "keyboard key"
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: ../src/common/accelcmn.cpp:48
 msgctxt "keyboard key"
 msgid "Del"
-msgstr ""
+msgstr "Del"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
 msgid "Back"
-msgstr ""
+msgstr "უკან"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 #: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
 msgid "Insert"
-msgstr ""
+msgstr "ჩასმა"
 
 #: ../src/common/accelcmn.cpp:51
 msgctxt "keyboard key"
 msgid "Ins"
-msgstr ""
+msgstr "Ins"
 
 #: ../src/common/accelcmn.cpp:52
 msgctxt "keyboard key"
 msgid "Enter"
-msgstr ""
+msgstr "Enter"
 
 #: ../src/common/accelcmn.cpp:53
 msgctxt "keyboard key"
 msgid "Return"
-msgstr ""
+msgstr "Enter"
 
 #: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "PageUp"
-msgstr ""
+msgstr "PageUp"
 
 #: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "Page Up"
-msgstr ""
+msgstr "ღილაკი Page Up"
 
 #: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "PageDown"
-msgstr ""
+msgstr "PageDown"
 
 #: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "Page Down"
-msgstr ""
+msgstr "ღილაკი Page Down"
 
 #: ../src/common/accelcmn.cpp:56
 msgctxt "keyboard key"
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../src/common/accelcmn.cpp:57
 msgctxt "keyboard key"
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../src/common/accelcmn.cpp:58
 msgctxt "keyboard key"
 msgid "Left"
-msgstr ""
+msgstr "მარცხნივ"
 
 #: ../src/common/accelcmn.cpp:59
 msgctxt "keyboard key"
 msgid "Right"
-msgstr ""
+msgstr "მარჯვნივ"
 
 #: ../src/common/accelcmn.cpp:60
 msgctxt "keyboard key"
 msgid "Up"
-msgstr ""
+msgstr "მაღლა"
 
 #: ../src/common/accelcmn.cpp:61
 msgctxt "keyboard key"
 msgid "Down"
-msgstr ""
+msgstr "დაბლა"
 
 #: ../src/common/accelcmn.cpp:62
 msgctxt "keyboard key"
 msgid "Home"
-msgstr ""
+msgstr "საწყისი"
 
 #: ../src/common/accelcmn.cpp:63
 msgctxt "keyboard key"
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../src/common/accelcmn.cpp:64
 msgctxt "keyboard key"
 msgid "Space"
-msgstr ""
+msgstr "გამოტოვება"
 
 #: ../src/common/accelcmn.cpp:65
 msgctxt "keyboard key"
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../src/common/accelcmn.cpp:66
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../src/common/accelcmn.cpp:67
 msgctxt "keyboard key"
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
 msgid "Cancel"
-msgstr ""
+msgstr "გაუქმება"
 
 #: ../src/common/accelcmn.cpp:69
 msgctxt "keyboard key"
 msgid "Clear"
-msgstr ""
+msgstr "გაწმენდა"
 
 #: ../src/common/accelcmn.cpp:70
 msgctxt "keyboard key"
 msgid "Menu"
-msgstr ""
+msgstr "მენიუ"
 
 #: ../src/common/accelcmn.cpp:71
 msgctxt "keyboard key"
 msgid "Pause"
-msgstr ""
+msgstr "შეჩერება"
 
 #: ../src/common/accelcmn.cpp:72
 msgctxt "keyboard key"
 msgid "Capital"
-msgstr ""
+msgstr "Capital"
 
 #: ../src/common/accelcmn.cpp:73
 msgctxt "keyboard key"
 msgid "Select"
-msgstr ""
+msgstr "Select"
 
 #: ../src/common/accelcmn.cpp:74
 msgctxt "keyboard key"
 msgid "Print"
-msgstr ""
+msgstr "დაბეჭდვა"
 
 #: ../src/common/accelcmn.cpp:75
 msgctxt "keyboard key"
 msgid "Execute"
-msgstr ""
+msgstr "გაშვება"
 
 #: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
 msgid "Snapshot"
-msgstr ""
+msgstr "სწრაფი ასლი"
 
 #: ../src/common/accelcmn.cpp:77
 msgctxt "keyboard key"
 msgid "Help"
-msgstr ""
+msgstr "დახმარება"
 
 #: ../src/common/accelcmn.cpp:78
 msgctxt "keyboard key"
 msgid "Add"
-msgstr ""
+msgstr "Add"
 
 #: ../src/common/accelcmn.cpp:79
 msgctxt "keyboard key"
 msgid "Separator"
-msgstr ""
+msgstr "გამყოფი"
 
 #: ../src/common/accelcmn.cpp:80
 msgctxt "keyboard key"
 msgid "Subtract"
-msgstr ""
+msgstr "გამოკლება"
 
 #: ../src/common/accelcmn.cpp:81
 msgctxt "keyboard key"
 msgid "Decimal"
-msgstr ""
+msgstr "ათობითი"
 
 #: ../src/common/accelcmn.cpp:82
 msgctxt "keyboard key"
 msgid "Multiply"
-msgstr ""
+msgstr "გამრავლება"
 
 #: ../src/common/accelcmn.cpp:83
 msgctxt "keyboard key"
 msgid "Divide"
-msgstr ""
+msgstr "გაყოფა"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Num_lock"
-msgstr ""
+msgstr "Num_lock"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr ""
+msgstr "Num Lock"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Scroll_lock"
-msgstr ""
+msgstr "Scroll_lock"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Scroll Lock"
-msgstr ""
+msgstr "Scroll Lock"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr ""
+msgstr "KP_Space"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr ""
+msgstr "Num Space"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "Num Tab"
-msgstr ""
+msgstr "Num Tab"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "KP_Enter"
-msgstr ""
+msgstr "KP_Enter"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr ""
+msgstr "Num Enter"
 
 #: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "KP_Home"
-msgstr ""
+msgstr "სახლი"
 
 #: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "Num Home"
-msgstr ""
+msgstr "Num Home"
 
 #: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "KP_Left"
-msgstr ""
+msgstr "მარცხენა"
 
 #: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr ""
+msgstr "Num left"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "KP_Up"
-msgstr ""
+msgstr "KP_Up"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "Num Up"
-msgstr ""
+msgstr "Num Up"
 
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "KP_Right"
-msgstr ""
+msgstr "KP_Right"
 
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "Num Right"
-msgstr ""
+msgstr "Num Right"
 
 #: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
 msgid "KP_Down"
-msgstr ""
+msgstr "KP_Down"
 
 #: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
 msgid "Num Down"
-msgstr ""
+msgstr "Num Down"
 
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr ""
+msgstr "KP_PageUp"
 
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr ""
+msgstr "Num Page Up"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr ""
+msgstr "KP_PageDown"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr ""
+msgstr "Num Page Down"
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../src/common/accelcmn.cpp:97
 msgctxt "keyboard key"
 msgid "KP_Next"
-msgstr ""
+msgstr "KP_Next"
 
 #: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr ""
+msgstr "Num End"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "Num Begin"
-msgstr ""
+msgstr "Num Begin"
 
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "Num Insert"
-msgstr ""
+msgstr "Num Insert"
 
 #: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "KP_Delete"
-msgstr ""
+msgstr "წაშლა"
 
 #: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "Num Delete"
-msgstr ""
+msgstr "Num Delete"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "KP_Equal"
-msgstr ""
+msgstr "KP_Equal"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr ""
+msgstr "Num ="
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "KP_Multiply"
-msgstr ""
+msgstr "KP_Multiply"
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr ""
+msgstr "Num *"
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "KP_Add"
-msgstr ""
+msgstr "KP_Add"
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr ""
+msgstr "Num +"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "KP_Separator"
-msgstr ""
+msgstr "KP_Separator"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr ""
+msgstr "Num ,"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "KP_Subtract"
-msgstr ""
+msgstr "KP_Subtract"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr ""
+msgstr "Num -"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr ""
+msgstr "KP_Decimal"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr ""
+msgstr "Num ."
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "KP_Divide"
-msgstr ""
+msgstr "KP_Divide"
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr ""
+msgstr "Num /"
 
 #: ../src/common/accelcmn.cpp:109
 msgctxt "keyboard key"
 msgid "Windows_Left"
-msgstr ""
+msgstr "Windows_Left"
 
 #: ../src/common/accelcmn.cpp:110
 msgctxt "keyboard key"
 msgid "Windows_Right"
-msgstr ""
+msgstr "Windows_Right"
 
 #: ../src/common/accelcmn.cpp:111
 msgctxt "keyboard key"
 msgid "Windows_Menu"
-msgstr ""
+msgstr "Windows_Menu"
 
 #: ../src/common/accelcmn.cpp:112
 msgctxt "keyboard key"
 msgid "Command"
-msgstr ""
+msgstr "ბრძანება"
 
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
 msgid "ctrl"
-msgstr ""
+msgstr "ctrl"
 
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
 msgid "alt"
-msgstr ""
+msgstr "alt"
 
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
 msgid "shift"
-msgstr ""
+msgstr "shift"
 
 #: ../src/common/accelcmn.cpp:192
 msgctxt "keyboard key"
 msgid "rawctrl"
-msgstr ""
+msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"
 msgid "num "
-msgstr ""
+msgstr "num "
 
 #: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
 msgctxt "keyboard key"
 msgid "F"
-msgstr ""
+msgstr "პ"
 
 #: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "KP_F"
-msgstr ""
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr ""
+msgstr "KP_"
 
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"
 msgid "SPECIAL"
-msgstr ""
+msgstr "SPECIAL"
 
 #: ../src/common/accelcmn.cpp:343
 msgctxt "keyboard key"
 msgid "Alt+"
-msgstr ""
+msgstr "Alt+"
 
 #: ../src/common/accelcmn.cpp:345
 msgctxt "keyboard key"
 msgid "Ctrl+"
-msgstr ""
+msgstr "Ctrl+"
 
 #: ../src/common/accelcmn.cpp:347
 msgctxt "keyboard key"
 msgid "Shift+"
-msgstr ""
+msgstr "Shift+"
 
 #: ../src/common/accelcmn.cpp:350
 msgctxt "keyboard key"
 msgid "RawCtrl+"
-msgstr ""
+msgstr "RawCtrl+"
 
 #: ../src/common/appbase.cpp:774
 msgid "show this help message"
-msgstr ""
+msgstr "დახმარების ამ შეტყობინების ჩვენება"
 
 #: ../src/common/appbase.cpp:784
 msgid "generate verbose log messages"
-msgstr ""
+msgstr "დამატებითი შეტყობინებების გენერაცია"
 
 #: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
-msgstr ""
+msgstr "მიუთითეთ გამოსაყენებელი თემა"
 
 #: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
@@ -757,7 +760,7 @@ msgstr ""
 #: ../src/common/appcmn.cpp:279
 #, c-format
 msgid "Unsupported theme '%s'."
-msgstr ""
+msgstr "მხარდაუჭერელი თემა '%s'."
 
 #: ../src/common/appcmn.cpp:296
 #, c-format
@@ -772,12 +775,12 @@ msgstr ""
 #: ../src/common/cmdline.cpp:910
 #, c-format
 msgid "Unknown long option '%s'"
-msgstr ""
+msgstr "უცნობი გრძელი პარამეტრი %s"
 
 #: ../src/common/cmdline.cpp:925 ../src/common/cmdline.cpp:947
 #, c-format
 msgid "Unknown option '%s'"
-msgstr ""
+msgstr "უცნობი პარამეტრი %s"
 
 #: ../src/common/cmdline.cpp:1025
 #, c-format
@@ -812,7 +815,7 @@ msgstr ""
 #: ../src/common/cmdline.cpp:1217
 #, c-format
 msgid "%s (or %s)"
-msgstr ""
+msgstr "%s (ან %s)"
 
 #: ../src/common/cmdline.cpp:1228
 #, c-format
@@ -827,52 +830,52 @@ msgstr ""
 #: ../src/common/cmdline.cpp:1322
 #, c-format
 msgid "Usage: %s"
-msgstr ""
+msgstr "გამოყენება: %s\\"
 
 #: ../src/common/cmdline.cpp:1483
 msgid "str"
-msgstr ""
+msgstr "სტრ"
 
 #: ../src/common/cmdline.cpp:1487
 msgid "num"
-msgstr ""
+msgstr "რიცხვ"
 
 #: ../src/common/cmdline.cpp:1491
 msgid "double"
-msgstr ""
+msgstr "ორმაგი"
 
 #: ../src/common/cmdline.cpp:1495
 msgid "date"
-msgstr ""
+msgstr "თარიღი"
 
 #: ../src/common/cmdproc.cpp:255 ../src/common/cmdproc.cpp:281
 #: ../src/common/cmdproc.cpp:301
 msgid "Unnamed command"
-msgstr ""
+msgstr "სახელო ბრძანება"
 
 #: ../src/common/cmdproc.cpp:258
 msgid "&Undo "
-msgstr ""
+msgstr "&დაბრუნება "
 
 #: ../src/common/cmdproc.cpp:260
 msgid "Can't &Undo "
-msgstr ""
+msgstr "&დაბრუნება შეუძლებელია "
 
 #: ../src/common/cmdproc.cpp:264 ../src/common/stockitem.cpp:209
 #: ../src/msw/textctrl.cpp:2932 ../src/osx/textctrl_osx.cpp:634
 #: ../src/richtext/richtextctrl.cpp:328
 msgid "&Undo"
-msgstr ""
+msgstr "&დაბრუნება"
 
 #: ../src/common/cmdproc.cpp:282 ../src/common/cmdproc.cpp:302
 msgid "&Redo "
-msgstr ""
+msgstr "&გამეორება "
 
 #: ../src/common/cmdproc.cpp:286 ../src/common/cmdproc.cpp:293
 #: ../src/common/stockitem.cpp:191 ../src/msw/textctrl.cpp:2933
 #: ../src/osx/textctrl_osx.cpp:635 ../src/richtext/richtextctrl.cpp:329
 msgid "&Redo"
-msgstr ""
+msgstr "&გამეორება"
 
 #: ../src/common/colourcmn.cpp:42
 #, c-format
@@ -912,108 +915,108 @@ msgstr ""
 
 #: ../src/common/datetimefmt.cpp:1845
 msgid "today"
-msgstr ""
+msgstr "დღეს"
 
 #: ../src/common/datetimefmt.cpp:1846
 msgid "yesterday"
-msgstr ""
+msgstr "გუშინ"
 
 #: ../src/common/datetimefmt.cpp:1847
 msgid "tomorrow"
-msgstr ""
+msgstr "ხვალ"
 
 #: ../src/common/datetimefmt.cpp:2041
 msgid "first"
-msgstr ""
+msgstr "პირველი"
 
 #: ../src/common/datetimefmt.cpp:2042
 msgid "second"
-msgstr ""
+msgstr "წამი"
 
 #: ../src/common/datetimefmt.cpp:2043
 msgid "third"
-msgstr ""
+msgstr "მესამე"
 
 #: ../src/common/datetimefmt.cpp:2044
 msgid "fourth"
-msgstr ""
+msgstr "მეოთხე"
 
 #: ../src/common/datetimefmt.cpp:2045
 msgid "fifth"
-msgstr ""
+msgstr "მეხუთე"
 
 #: ../src/common/datetimefmt.cpp:2046
 msgid "sixth"
-msgstr ""
+msgstr "მეექვსე"
 
 #: ../src/common/datetimefmt.cpp:2047
 msgid "seventh"
-msgstr ""
+msgstr "მეშვიდე"
 
 #: ../src/common/datetimefmt.cpp:2048
 msgid "eighth"
-msgstr ""
+msgstr "მერვე"
 
 #: ../src/common/datetimefmt.cpp:2049
 msgid "ninth"
-msgstr ""
+msgstr "მეცხრე"
 
 #: ../src/common/datetimefmt.cpp:2050
 msgid "tenth"
-msgstr ""
+msgstr "მეათე"
 
 #: ../src/common/datetimefmt.cpp:2051
 msgid "eleventh"
-msgstr ""
+msgstr "მეთერთმეტე"
 
 #: ../src/common/datetimefmt.cpp:2052
 msgid "twelfth"
-msgstr ""
+msgstr "მეთორმეტე"
 
 #: ../src/common/datetimefmt.cpp:2053
 msgid "thirteenth"
-msgstr ""
+msgstr "მეცამეტე"
 
 #: ../src/common/datetimefmt.cpp:2054
 msgid "fourteenth"
-msgstr ""
+msgstr "მეთოთხმეტე"
 
 #: ../src/common/datetimefmt.cpp:2055
 msgid "fifteenth"
-msgstr ""
+msgstr "მეთხუთმეტე"
 
 #: ../src/common/datetimefmt.cpp:2056
 msgid "sixteenth"
-msgstr ""
+msgstr "მეთექვსმეტე"
 
 #: ../src/common/datetimefmt.cpp:2057
 msgid "seventeenth"
-msgstr ""
+msgstr "მეჩვიდმეტე"
 
 #: ../src/common/datetimefmt.cpp:2058
 msgid "eighteenth"
-msgstr ""
+msgstr "მეთვრამეტე"
 
 #: ../src/common/datetimefmt.cpp:2059
 msgid "nineteenth"
-msgstr ""
+msgstr "მეცხრამეტე"
 
 #: ../src/common/datetimefmt.cpp:2060
 msgid "twentieth"
-msgstr ""
+msgstr "მეოცე"
 
 #: ../src/common/datetimefmt.cpp:2218
 msgid "noon"
-msgstr ""
+msgstr "საღამო"
 
 #: ../src/common/datetimefmt.cpp:2219
 msgid "midnight"
-msgstr ""
+msgstr "შუაღამე"
 
 #: ../src/common/debugrpt.cpp:210
 #, c-format
 msgid "Failed to create directory \"%s\""
-msgstr ""
+msgstr "საქაღალდის შექმნის შეცდომა: %s"
 
 #: ../src/common/debugrpt.cpp:211
 msgid "Debug report couldn't be created."
@@ -1072,7 +1075,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:359
 msgid "Save As"
-msgstr ""
+msgstr "შენახვა, როგორც"
 
 #: ../src/common/docview.cpp:450
 msgid "Discard changes and reload the last saved version?"
@@ -1080,7 +1083,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:502
 msgid "unnamed"
-msgstr ""
+msgstr "უსახელო"
 
 #: ../src/common/docview.cpp:526
 #, c-format
@@ -1120,7 +1123,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1262
 msgid "Print Preview"
-msgstr ""
+msgstr "დასაბეჭდის გადახედვა"
 
 #: ../src/common/docview.cpp:1477
 #, c-format
@@ -1130,19 +1133,19 @@ msgstr ""
 #: ../src/common/docview.cpp:1618
 #, c-format
 msgid "unnamed%d"
-msgstr ""
+msgstr "უსახელო%d"
 
 #: ../src/common/docview.cpp:1636
 msgid " - "
-msgstr ""
+msgstr " - "
 
 #: ../src/common/docview.cpp:1767 ../src/common/docview.cpp:1820
 msgid "Open File"
-msgstr ""
+msgstr "ფაილის გახსნა"
 
 #: ../src/common/docview.cpp:1783
 msgid "File error"
-msgstr ""
+msgstr "ფაილის შეცდომა"
 
 #: ../src/common/docview.cpp:1785
 msgid "Sorry, could not open this file."
@@ -1158,7 +1161,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1901
 msgid "Templates"
-msgstr ""
+msgstr "ნიმუშები"
 
 #: ../src/common/docview.cpp:1974
 msgid "Select a document view"
@@ -1166,7 +1169,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1975
 msgid "Views"
-msgstr ""
+msgstr "ხედები"
 
 #: ../src/common/dynlib.cpp:86
 #, c-format
@@ -1444,7 +1447,7 @@ msgstr ""
 #: ../src/common/filefn.cpp:1480
 #, c-format
 msgid "Files (%s)"
-msgstr ""
+msgstr "ფაილები (%s)"
 
 #: ../src/common/filename.cpp:183
 #, c-format
@@ -1485,155 +1488,155 @@ msgstr ""
 
 #: ../src/common/filepickercmn.cpp:40 ../src/common/filepickercmn.cpp:41
 msgid "Browse"
-msgstr ""
+msgstr "დათვალიერება"
 
 #: ../src/common/fldlgcmn.cpp:104 ../src/generic/filectrlg.cpp:1185
 #, c-format
 msgid "All files (%s)|%s"
-msgstr ""
+msgstr "ყველა ფაილი (%s)|%s"
 
 #: ../src/common/fldlgcmn.cpp:121
 #, c-format
 msgid "%s files (%s)|%s"
-msgstr ""
+msgstr "%s ფაილი (%s)|%s"
 
 #: ../src/common/fldlgcmn.cpp:343
 #, c-format
 msgid "Load %s file"
-msgstr ""
+msgstr "%s ფაილის ჩატვირთვა"
 
 #: ../src/common/fldlgcmn.cpp:345
 #, c-format
 msgid "Save %s file"
-msgstr ""
+msgstr "%s ფაილის შენახვა"
 
 #: ../src/common/fmapbase.cpp:145
 msgid "Western European (ISO-8859-1)"
-msgstr ""
+msgstr "დასავლეთ ევროპული (ISO-8859-1)"
 
 #: ../src/common/fmapbase.cpp:146
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "ცენტრალურ-ევროპული (ISO-8859-2)"
 
 #: ../src/common/fmapbase.cpp:147
 msgid "Esperanto (ISO-8859-3)"
-msgstr ""
+msgstr "ესპერანტო (ISO-8859-3)"
 
 #: ../src/common/fmapbase.cpp:148
 msgid "Baltic (old) (ISO-8859-4)"
-msgstr ""
+msgstr "ბალტიური (ძველი) (ISO-8859-4)"
 
 #: ../src/common/fmapbase.cpp:149
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "კირილიცა (ISO-8859-5)"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "არაბული (ISO-8859-6)"
 
 #: ../src/common/fmapbase.cpp:151
 msgid "Greek (ISO-8859-7)"
-msgstr ""
+msgstr "ბერძნული (ISO-8859-7)"
 
 #: ../src/common/fmapbase.cpp:152
 msgid "Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "ივრითი (ISO-8859-8)"
 
 #: ../src/common/fmapbase.cpp:153
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "თურქული (ISO-8859-9)"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Nordic (ISO-8859-10)"
-msgstr ""
+msgstr "სკანდინავიური (ISO-8859-10)"
 
 #: ../src/common/fmapbase.cpp:155
 msgid "Thai (ISO-8859-11)"
-msgstr ""
+msgstr "ტაილანდური (ISO-8859-11)"
 
 #: ../src/common/fmapbase.cpp:156
 msgid "Indian (ISO-8859-12)"
-msgstr ""
+msgstr "ინდური (ISO-8859-12)"
 
 #: ../src/common/fmapbase.cpp:157
 msgid "Baltic (ISO-8859-13)"
-msgstr ""
+msgstr "ბალტიკური (ISO-8859-13)"
 
 #: ../src/common/fmapbase.cpp:158
 msgid "Celtic (ISO-8859-14)"
-msgstr ""
+msgstr "კელტური (ISO-8859-14)"
 
 #: ../src/common/fmapbase.cpp:159
 msgid "Western European with Euro (ISO-8859-15)"
-msgstr ""
+msgstr "დასავლეთ ევროპული, ევროთი (ISO-8859-15)"
 
 #: ../src/common/fmapbase.cpp:160
 msgid "KOI8-R"
-msgstr ""
+msgstr "KOI8-R"
 
 #: ../src/common/fmapbase.cpp:161
 msgid "KOI8-U"
-msgstr ""
+msgstr "KOI8-U"
 
 #: ../src/common/fmapbase.cpp:162
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
-msgstr ""
+msgstr "Windows/DOS OEM კირილიცა (CP 866)"
 
 #: ../src/common/fmapbase.cpp:163
 msgid "Windows Thai (CP 874)"
-msgstr ""
+msgstr "Windows ტაილანდური (CP 874)"
 
 #: ../src/common/fmapbase.cpp:164
 msgid "Windows Japanese (CP 932) or Shift-JIS"
-msgstr ""
+msgstr "Windows იაპონური (CP 932) or Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:165
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
-msgstr ""
+msgstr "Windows გამარტივებული ჩინური (CP 936) or GB-2312"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Korean (CP 949)"
-msgstr ""
+msgstr "Windows კორეული (CP 949)"
 
 #: ../src/common/fmapbase.cpp:167
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
-msgstr ""
+msgstr "Windows ჩინური ტრადიციული (CP 950) or Big-5"
 
 #: ../src/common/fmapbase.cpp:168
 msgid "Windows Central European (CP 1250)"
-msgstr ""
+msgstr "Windows ცენტრალური ევროპული (CP 1250)"
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Cyrillic (CP 1251)"
-msgstr ""
+msgstr "Windows კირილიცა (CP 1251)"
 
 #: ../src/common/fmapbase.cpp:170
 msgid "Windows Western European (CP 1252)"
-msgstr ""
+msgstr "Windows დასავლეთ ევროპული (CP 1252)"
 
 #: ../src/common/fmapbase.cpp:171
 msgid "Windows Greek (CP 1253)"
-msgstr ""
+msgstr "Windows ბერძნული (CP 1253)"
 
 #: ../src/common/fmapbase.cpp:172
 msgid "Windows Turkish (CP 1254)"
-msgstr ""
+msgstr "Windows თურქული (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:173
 msgid "Windows Hebrew (CP 1255)"
-msgstr ""
+msgstr "Windows ივრითი (CP 1255)"
 
 #: ../src/common/fmapbase.cpp:174
 msgid "Windows Arabic (CP 1256)"
-msgstr ""
+msgstr "Windows არაბული (CP 1256)"
 
 #: ../src/common/fmapbase.cpp:175
 msgid "Windows Baltic (CP 1257)"
-msgstr ""
+msgstr "Windows ბალტიური (CP 1257)"
 
 #: ../src/common/fmapbase.cpp:176
 msgid "Windows Vietnamese (CP 1258)"
-msgstr ""
+msgstr "Windows ვიეტნამური (CP 1258)"
 
 #: ../src/common/fmapbase.cpp:177
 msgid "Windows Johab (CP 1361)"
@@ -1645,15 +1648,15 @@ msgstr ""
 
 #: ../src/common/fmapbase.cpp:179
 msgid "Unicode 7 bit (UTF-7)"
-msgstr ""
+msgstr "7-ბიტიანი უნიკოდი (UTF-7)"
 
 #: ../src/common/fmapbase.cpp:180
 msgid "Unicode 8 bit (UTF-8)"
-msgstr ""
+msgstr "8-ბიტიანი უნიკოდი (UTF-8)"
 
 #: ../src/common/fmapbase.cpp:182 ../src/common/fmapbase.cpp:188
 msgid "Unicode 16 bit (UTF-16)"
-msgstr ""
+msgstr "16-ბიტიანი უნიკოდი (UTF-16)"
 
 #: ../src/common/fmapbase.cpp:183
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
@@ -1661,7 +1664,7 @@ msgstr ""
 
 #: ../src/common/fmapbase.cpp:184 ../src/common/fmapbase.cpp:190
 msgid "Unicode 32 bit (UTF-32)"
-msgstr ""
+msgstr "32-ბიტიანი უნიკოდი (UTF-32)"
 
 #: ../src/common/fmapbase.cpp:185
 msgid "Unicode 32 bit Little Endian (UTF-32LE)"
@@ -1681,289 +1684,289 @@ msgstr ""
 
 #: ../src/common/fmapbase.cpp:193
 msgid "US-ASCII"
-msgstr ""
+msgstr "US-ASCII"
 
 #: ../src/common/fmapbase.cpp:194
 msgid "ISO-2022-JP"
-msgstr ""
+msgstr "ISO-2022-JP"
 
 #: ../src/common/fmapbase.cpp:196
 msgid "MacRoman"
-msgstr ""
+msgstr "MacRoman"
 
 #: ../src/common/fmapbase.cpp:197
 msgid "MacJapanese"
-msgstr ""
+msgstr "MacJapanese"
 
 #: ../src/common/fmapbase.cpp:198
 msgid "MacChineseTrad"
-msgstr ""
+msgstr "MacChineseTrad"
 
 #: ../src/common/fmapbase.cpp:199
 msgid "MacKorean"
-msgstr ""
+msgstr "MacKorean"
 
 #: ../src/common/fmapbase.cpp:200
 msgid "MacArabic"
-msgstr ""
+msgstr "MacArabic"
 
 #: ../src/common/fmapbase.cpp:201
 msgid "MacHebrew"
-msgstr ""
+msgstr "MacHebrew"
 
 #: ../src/common/fmapbase.cpp:202
 msgid "MacGreek"
-msgstr ""
+msgstr "MacGreek"
 
 #: ../src/common/fmapbase.cpp:203
 msgid "MacCyrillic"
-msgstr ""
+msgstr "MacCyrillic"
 
 #: ../src/common/fmapbase.cpp:204
 msgid "MacDevanagari"
-msgstr ""
+msgstr "MacDevanagari"
 
 #: ../src/common/fmapbase.cpp:205
 msgid "MacGurmukhi"
-msgstr ""
+msgstr "MacGurmukhi"
 
 #: ../src/common/fmapbase.cpp:206
 msgid "MacGujarati"
-msgstr ""
+msgstr "MacGujarati"
 
 #: ../src/common/fmapbase.cpp:207
 msgid "MacOriya"
-msgstr ""
+msgstr "MacOriya"
 
 #: ../src/common/fmapbase.cpp:208
 msgid "MacBengali"
-msgstr ""
+msgstr "MacBengali"
 
 #: ../src/common/fmapbase.cpp:209
 msgid "MacTamil"
-msgstr ""
+msgstr "MacTamil"
 
 #: ../src/common/fmapbase.cpp:210
 msgid "MacTelugu"
-msgstr ""
+msgstr "MacTelugu"
 
 #: ../src/common/fmapbase.cpp:211
 msgid "MacKannada"
-msgstr ""
+msgstr "MacKannada"
 
 #: ../src/common/fmapbase.cpp:212
 msgid "MacMalayalam"
-msgstr ""
+msgstr "MacMalayalam"
 
 #: ../src/common/fmapbase.cpp:213
 msgid "MacSinhalese"
-msgstr ""
+msgstr "MacSinhalese"
 
 #: ../src/common/fmapbase.cpp:214
 msgid "MacBurmese"
-msgstr ""
+msgstr "MacBurmese"
 
 #: ../src/common/fmapbase.cpp:215
 msgid "MacKhmer"
-msgstr ""
+msgstr "MacKhmer"
 
 #: ../src/common/fmapbase.cpp:216
 msgid "MacThai"
-msgstr ""
+msgstr "MacThai"
 
 #: ../src/common/fmapbase.cpp:217
 msgid "MacLaotian"
-msgstr ""
+msgstr "MacLaotian"
 
 #: ../src/common/fmapbase.cpp:218
 msgid "MacGeorgian"
-msgstr ""
+msgstr "MacGeorgian"
 
 #: ../src/common/fmapbase.cpp:219
 msgid "MacArmenian"
-msgstr ""
+msgstr "MacArmenian"
 
 #: ../src/common/fmapbase.cpp:220
 msgid "MacChineseSimp"
-msgstr ""
+msgstr "MacChineseSimp"
 
 #: ../src/common/fmapbase.cpp:221
 msgid "MacTibetan"
-msgstr ""
+msgstr "MacTibetan"
 
 #: ../src/common/fmapbase.cpp:222
 msgid "MacMongolian"
-msgstr ""
+msgstr "MacMongolian"
 
 #: ../src/common/fmapbase.cpp:223
 msgid "MacEthiopic"
-msgstr ""
+msgstr "MacEthiopic"
 
 #: ../src/common/fmapbase.cpp:224
 msgid "MacCentralEurRoman"
-msgstr ""
+msgstr "MacCentralEurRoman"
 
 #: ../src/common/fmapbase.cpp:225
 msgid "MacVietnamese"
-msgstr ""
+msgstr "MacVietnamese"
 
 #: ../src/common/fmapbase.cpp:226
 msgid "MacExtArabic"
-msgstr ""
+msgstr "MacExtArabic"
 
 #: ../src/common/fmapbase.cpp:227
 msgid "MacSymbol"
-msgstr ""
+msgstr "MacSymbol"
 
 #: ../src/common/fmapbase.cpp:228
 msgid "MacDingbats"
-msgstr ""
+msgstr "MacDingbats"
 
 #: ../src/common/fmapbase.cpp:229
 msgid "MacTurkish"
-msgstr ""
+msgstr "MacTurkish"
 
 #: ../src/common/fmapbase.cpp:230
 msgid "MacCroatian"
-msgstr ""
+msgstr "MacCroatian"
 
 #: ../src/common/fmapbase.cpp:231
 msgid "MacIcelandic"
-msgstr ""
+msgstr "MacIcelandic"
 
 #: ../src/common/fmapbase.cpp:232
 msgid "MacRomanian"
-msgstr ""
+msgstr "MacRomanian"
 
 #: ../src/common/fmapbase.cpp:233
 msgid "MacCeltic"
-msgstr ""
+msgstr "MacCeltic"
 
 #: ../src/common/fmapbase.cpp:234
 msgid "MacGaelic"
-msgstr ""
+msgstr "MacGaelic"
 
 #: ../src/common/fmapbase.cpp:235
 msgid "MacKeyboardGlyphs"
-msgstr ""
+msgstr "MacKeyboardGlyphs"
 
 #: ../src/common/fmapbase.cpp:792
 msgid "Default encoding"
-msgstr ""
+msgstr "ნაგულისხმები კოდირება"
 
 #: ../src/common/fmapbase.cpp:806
 #, c-format
 msgid "Unknown encoding (%d)"
-msgstr ""
+msgstr "უცნობი კოდირება (%d)"
 
 #: ../src/common/fmapbase.cpp:816 ../src/richtext/richtextstyles.cpp:777
 msgid "default"
-msgstr ""
+msgstr "ნაგულისხმები"
 
 #: ../src/common/fmapbase.cpp:830
 #, c-format
 msgid "unknown-%d"
-msgstr ""
+msgstr "უცნობი-%d"
 
 #: ../src/common/fontcmn.cpp:935 ../src/common/fontcmn.cpp:1141
 msgid "underlined"
-msgstr ""
+msgstr "ხაზგასმული"
 
 #: ../src/common/fontcmn.cpp:940
 msgid " strikethrough"
-msgstr ""
+msgstr " ხაზგადასმული"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr " თხელი"
 
 #: ../src/common/fontcmn.cpp:957
 msgid " extra light"
-msgstr ""
+msgstr " ძალიან თხელი"
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
-msgstr ""
+msgstr " მსუბუქი"
 
 #: ../src/common/fontcmn.cpp:965
 msgid " medium"
-msgstr ""
+msgstr " საშუალო"
 
 #: ../src/common/fontcmn.cpp:969
 msgid " semi bold"
-msgstr ""
+msgstr " ნახევრად სქელი"
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
-msgstr ""
+msgstr " სქელი"
 
 #: ../src/common/fontcmn.cpp:977
 msgid " extra bold"
-msgstr ""
+msgstr " ძალიან სქელი"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
-msgstr ""
+msgstr " მძიმე"
 
 #: ../src/common/fontcmn.cpp:985
 msgid " extra heavy"
-msgstr ""
+msgstr " ძალიან მძიმე"
 
 #: ../src/common/fontcmn.cpp:1001
 msgid " italic"
-msgstr ""
+msgstr " დახრილი"
 
 #: ../src/common/fontcmn.cpp:1145
 msgid "strikethrough"
-msgstr ""
+msgstr "ხაზგადასმული"
 
 #: ../src/common/fontcmn.cpp:1154
 msgid "thin"
-msgstr ""
+msgstr "თხელი"
 
 #: ../src/common/fontcmn.cpp:1167
 msgid "extralight"
-msgstr ""
+msgstr "ძალიან თხელი"
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
-msgstr ""
+msgstr "ღია"
 
 #: ../src/common/fontcmn.cpp:1180 ../src/richtext/richtextstyles.cpp:776
 msgid "normal"
-msgstr ""
+msgstr "ნორმალური"
 
 #: ../src/common/fontcmn.cpp:1185
 msgid "medium"
-msgstr ""
+msgstr "საშუალო"
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
 msgid "semibold"
-msgstr ""
+msgstr "ნახევრად სქელი"
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
-msgstr ""
+msgstr "სქელი"
 
 #: ../src/common/fontcmn.cpp:1205
 msgid "extrabold"
-msgstr ""
+msgstr "ძალიან სქელი"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
-msgstr ""
+msgstr "მძიმე"
 
 #: ../src/common/fontcmn.cpp:1223
 msgid "extraheavy"
-msgstr ""
+msgstr "ძალიან მძიმე"
 
 #: ../src/common/fontcmn.cpp:1228
 msgid "italic"
-msgstr ""
+msgstr "დახრილი"
 
 #: ../src/common/fontmap.cpp:196
 msgid ": unknown charset"
-msgstr ""
+msgstr ": უცნობი კოდირება"
 
 #: ../src/common/fontmap.cpp:200
 #, c-format
@@ -1984,7 +1987,7 @@ msgstr ""
 
 #: ../src/common/fontmap.cpp:410
 msgid ": unknown encoding"
-msgstr ""
+msgstr ": უცნობი კოდირება"
 
 #: ../src/common/fontmap.cpp:418
 #, c-format
@@ -2029,11 +2032,11 @@ msgstr ""
 
 #: ../src/common/ftp.cpp:400 ../src/richtext/richtextsymboldlg.cpp:455
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: ../src/common/ftp.cpp:400
 msgid "binary"
-msgstr ""
+msgstr "ბინარული"
 
 #: ../src/common/ftp.cpp:608
 msgid "The FTP server doesn't support the PORT command."
@@ -2058,11 +2061,11 @@ msgstr ""
 
 #: ../src/common/headerctrlcmn.cpp:58
 msgid "Customize Columns"
-msgstr ""
+msgstr "სვეტების მორგება"
 
 #: ../src/common/headerctrlcmn.cpp:304
 msgid "&Customize..."
-msgstr ""
+msgstr "&მორგება..."
 
 #: ../src/common/hyperlnkcmn.cpp:133
 #, c-format
@@ -2259,11 +2262,11 @@ msgstr ""
 
 #: ../src/common/imagiff.cpp:742
 msgid "IFF: not enough memory."
-msgstr ""
+msgstr "IFF: არასაკმარისი მეხსიერება."
 
 #: ../src/common/imagiff.cpp:745
 msgid "IFF: unknown error!!!"
-msgstr ""
+msgstr "IFF: უცნობი შეცდომა!!!"
 
 #: ../src/common/imagiff.cpp:755
 msgid "IFF: data stream seems to be truncated."
@@ -2275,7 +2278,7 @@ msgstr ""
 
 #: ../src/common/imagjpeg.cpp:437
 msgid "JPEG: Couldn't save image."
-msgstr ""
+msgstr "JPEG: გამოსახულების შენახვის შეცდომა."
 
 #: ../src/common/imagpcx.cpp:441
 msgid "PCX: this is not a PCX file."
@@ -2283,23 +2286,23 @@ msgstr ""
 
 #: ../src/common/imagpcx.cpp:455
 msgid "PCX: image format unsupported"
-msgstr ""
+msgstr "PCX: გამოსახულების მხარდაუჭერელი ფორმატი"
 
 #: ../src/common/imagpcx.cpp:456 ../src/common/imagpcx.cpp:479
 msgid "PCX: couldn't allocate memory"
-msgstr ""
+msgstr "PCX: მეხსიერების გამოყოფის შეცდომა"
 
 #: ../src/common/imagpcx.cpp:457
 msgid "PCX: version number too low"
-msgstr ""
+msgstr "PCX: ვერსია ძალიან დაბალია"
 
 #: ../src/common/imagpcx.cpp:458 ../src/common/imagpcx.cpp:480
 msgid "PCX: unknown error !!!"
-msgstr ""
+msgstr "PCX: უცნობი შეცდომა !!!"
 
 #: ../src/common/imagpcx.cpp:478
 msgid "PCX: invalid image"
-msgstr ""
+msgstr "PCX: არასწორი გამოსახულება"
 
 #: ../src/common/imagpng.cpp:383
 #, c-format
@@ -2385,11 +2388,11 @@ msgstr ""
 
 #: ../src/common/log.cpp:240
 msgid "Error: "
-msgstr ""
+msgstr "შეცდომა: "
 
 #: ../src/common/log.cpp:244
 msgid "Warning: "
-msgstr ""
+msgstr "გაფრთხილება: "
 
 #: ../src/common/log.cpp:292
 msgid "The previous message repeated once."
@@ -2456,7 +2459,7 @@ msgstr ""
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
 msgid "out of memory"
-msgstr ""
+msgstr "არასაკმარისი მეხსიერება"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
 msgid "unknown compression error"
@@ -2494,7 +2497,7 @@ msgstr ""
 
 #: ../src/common/msgout.cpp:121
 msgid "Message"
-msgstr ""
+msgstr "შეტყობინება"
 
 #: ../src/common/paper.cpp:92
 msgid "Letter, 8 1/2 x 11 in"
@@ -2970,11 +2973,11 @@ msgstr ""
 
 #: ../src/common/preferencescmn.cpp:37
 msgid "General"
-msgstr ""
+msgstr "ზოგადი"
 
 #: ../src/common/preferencescmn.cpp:40
 msgid "Advanced"
-msgstr ""
+msgstr "დაწინაურებული"
 
 #: ../src/common/prntbase.cpp:255
 msgid "Generic PostScript"
@@ -2982,7 +2985,7 @@ msgstr ""
 
 #: ../src/common/prntbase.cpp:269
 msgid "Ready"
-msgstr ""
+msgstr "მზადაა"
 
 #: ../src/common/prntbase.cpp:344
 msgid "Printing Error"
@@ -2992,11 +2995,11 @@ msgstr ""
 #: ../src/generic/prntdlgg.cpp:136 ../src/generic/prntdlgg.cpp:150
 #: ../src/gtk/print.cpp:622 ../src/gtk/print.cpp:640
 msgid "Print"
-msgstr ""
+msgstr "დაბეჭდვა"
 
 #: ../src/common/prntbase.cpp:481 ../src/generic/prntdlgg.cpp:819
 msgid "Page setup"
-msgstr ""
+msgstr "გვერდის პარამეტრები"
 
 #: ../src/common/prntbase.cpp:535
 msgid "Please wait while printing..."
@@ -3004,15 +3007,15 @@ msgstr ""
 
 #: ../src/common/prntbase.cpp:539
 msgid "Document:"
-msgstr ""
+msgstr "დოკუმენტი:"
 
 #: ../src/common/prntbase.cpp:542
 msgid "Progress:"
-msgstr ""
+msgstr "მიმდინარეობა:"
 
 #: ../src/common/prntbase.cpp:543
 msgid "Preparing"
-msgstr ""
+msgstr "მომზადება"
 
 #: ../src/common/prntbase.cpp:562
 #, c-format
@@ -3031,36 +3034,36 @@ msgstr ""
 
 #: ../src/common/prntbase.cpp:609
 msgid "Printing "
-msgstr ""
+msgstr "დაბეჭდვა "
 
 #: ../src/common/prntbase.cpp:1582
 msgid "First page"
-msgstr ""
+msgstr "პირველი გვერდი"
 
 #: ../src/common/prntbase.cpp:1587 ../src/html/helpwnd.cpp:661
 msgid "Previous page"
-msgstr ""
+msgstr "წინა გვერდი"
 
 #: ../src/common/prntbase.cpp:1601 ../src/html/helpwnd.cpp:662
 msgid "Next page"
-msgstr ""
+msgstr "შემდეგი გვერდი"
 
 #: ../src/common/prntbase.cpp:1606
 msgid "Last page"
-msgstr ""
+msgstr "ბოლო გვერდი"
 
 #: ../src/common/prntbase.cpp:1614 ../src/common/stockitem.cpp:216
 msgid "Zoom Out"
-msgstr ""
+msgstr "და_პატარავება"
 
 #: ../src/common/prntbase.cpp:1628 ../src/common/stockitem.cpp:215
 msgid "Zoom In"
-msgstr ""
+msgstr "გა_დიდება"
 
 #: ../src/common/prntbase.cpp:1634 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
-msgstr ""
+msgstr "დაკე&ტვა"
 
 #: ../src/common/prntbase.cpp:2060
 msgid "Could not start document preview."
@@ -3083,11 +3086,11 @@ msgstr ""
 #: ../src/common/prntbase.cpp:2119
 #, c-format
 msgid "Page %d"
-msgstr ""
+msgstr "%d გვერდი"
 
 #: ../src/common/regex.cpp:456 ../src/html/chm.cpp:348
 msgid "unknown error"
-msgstr ""
+msgstr "უცნობი შეცდომა"
 
 #: ../src/common/regex.cpp:1095
 #, c-format
@@ -3129,11 +3132,11 @@ msgstr ""
 
 #: ../src/common/sizer.cpp:3023 ../src/common/stockitem.cpp:196
 msgid "Save"
-msgstr ""
+msgstr "შენახვა"
 
 #: ../src/common/sizer.cpp:3025
 msgid "Don't Save"
-msgstr ""
+msgstr "არ შეინახო"
 
 #: ../src/common/socket.cpp:850
 msgid "Cannot initialize sockets"
@@ -3142,74 +3145,74 @@ msgstr ""
 #: ../src/common/stockitem.cpp:128
 msgctxt "standard Windows menu"
 msgid "&Help"
-msgstr ""
+msgstr "&დახმარება"
 
 #: ../src/common/stockitem.cpp:145
 msgid "&About"
-msgstr "შეს&ახებ"
+msgstr "შ&ესახებ"
 
 #: ../src/common/stockitem.cpp:145
 msgid "About"
-msgstr ""
+msgstr "შესახებ"
 
 #: ../src/common/stockitem.cpp:146
 msgid "Add"
-msgstr ""
+msgstr "დამატება"
 
 #: ../src/common/stockitem.cpp:147
 msgid "&Apply"
-msgstr ""
+msgstr "გამოყენება"
 
 #: ../src/common/stockitem.cpp:147
 msgid "Apply"
-msgstr ""
+msgstr "გამოყენება"
 
 #: ../src/common/stockitem.cpp:148
 msgid "&Back"
-msgstr ""
+msgstr "&უკან"
 
 #: ../src/common/stockitem.cpp:148
 msgid "Back"
-msgstr ""
+msgstr "უკან"
 
 #: ../src/common/stockitem.cpp:149
 msgid "&Bold"
-msgstr ""
+msgstr "&სქელი"
 
 #: ../src/common/stockitem.cpp:149 ../src/generic/fontdlgg.cpp:329
 #: ../src/osx/carbon/fontdlg.cpp:350 ../src/richtext/richtextfontpage.cpp:355
 msgid "Bold"
-msgstr ""
+msgstr "მუქი"
 
 #: ../src/common/stockitem.cpp:150
 msgid "&Bottom"
-msgstr ""
+msgstr "ქ&ვედა"
 
 #: ../src/common/stockitem.cpp:150 ../src/richtext/richtextsizepage.cpp:288
 msgid "Bottom"
-msgstr ""
+msgstr "ქვემოთ"
 
 #: ../src/common/stockitem.cpp:151 ../src/generic/fontdlgg.cpp:465
 #: ../src/generic/fontdlgg.cpp:484 ../src/generic/wizard.cpp:435
 #: ../src/osx/carbon/fontdlg.cpp:398 ../src/osx/cocoa/button.mm:157
 msgid "&Cancel"
-msgstr ""
+msgstr "&შეწყვეტა"
 
 #: ../src/common/stockitem.cpp:152
 msgid "&CD-ROM"
-msgstr ""
+msgstr "&CD-ROM"
 
 #: ../src/common/stockitem.cpp:152
 msgid "CD-ROM"
-msgstr ""
+msgstr "CD-ROM"
 
 #: ../src/common/stockitem.cpp:153
 msgid "&Clear"
-msgstr ""
+msgstr "&გასუფთავება"
 
 #: ../src/common/stockitem.cpp:153
 msgid "Clear"
-msgstr ""
+msgstr "გაწმენდა"
 
 #: ../src/common/stockitem.cpp:154 ../src/generic/dbgrptg.cpp:94
 #: ../src/generic/progdlgg.cpp:781 ../src/html/helpdlg.cpp:86
@@ -3217,179 +3220,179 @@ msgstr ""
 #: ../src/richtext/richtextstyledlg.cpp:273
 #: ../src/richtext/richtextsymboldlg.cpp:473
 msgid "Close"
-msgstr ""
+msgstr "დახურვა"
 
 #: ../src/common/stockitem.cpp:155
 msgid "&Convert"
-msgstr ""
+msgstr "&გარდაქმნა"
 
 #: ../src/common/stockitem.cpp:155
 msgid "Convert"
-msgstr ""
+msgstr "გარდაქმნა"
 
 #: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2936
 #: ../src/osx/textctrl_osx.cpp:638 ../src/richtext/richtextctrl.cpp:332
 msgid "&Copy"
-msgstr ""
+msgstr "&კოპირება"
 
 #: ../src/common/stockitem.cpp:156 ../src/stc/stc_i18n.cpp:18
 msgid "Copy"
-msgstr ""
+msgstr "დააკოპირე"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2935
 #: ../src/osx/textctrl_osx.cpp:637 ../src/richtext/richtextctrl.cpp:331
 msgid "Cu&t"
-msgstr ""
+msgstr "ამ&ოჭრა"
 
 #: ../src/common/stockitem.cpp:157 ../src/stc/stc_i18n.cpp:17
 msgid "Cut"
-msgstr ""
+msgstr "ამოჭრა"
 
 #: ../src/common/stockitem.cpp:158 ../src/msw/textctrl.cpp:2938
 #: ../src/osx/textctrl_osx.cpp:640 ../src/richtext/richtextctrl.cpp:334
 #: ../src/richtext/richtexttabspage.cpp:138
 msgid "&Delete"
-msgstr ""
+msgstr "&წაშლა"
 
 #: ../src/common/stockitem.cpp:158 ../src/richtext/richtextbuffer.cpp:8266
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
-msgstr ""
+msgstr "წაშლა"
 
 #: ../src/common/stockitem.cpp:159
 msgid "&Down"
-msgstr ""
+msgstr "&ქვემოთ"
 
 #: ../src/common/stockitem.cpp:159 ../src/generic/fdrepdlg.cpp:149
 msgid "Down"
-msgstr ""
+msgstr "დაბლა"
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Edit"
-msgstr ""
+msgstr "&რედაქტირება"
 
 #: ../src/common/stockitem.cpp:160
 msgid "Edit"
-msgstr ""
+msgstr "ჩასწორება"
 
 #: ../src/common/stockitem.cpp:161
 msgid "&Execute"
-msgstr ""
+msgstr "&შესრულება"
 
 #: ../src/common/stockitem.cpp:161
 msgid "Execute"
-msgstr ""
+msgstr "გაშვება"
 
 #: ../src/common/stockitem.cpp:162
 msgid "&Quit"
-msgstr ""
+msgstr "&გასვლა"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Quit"
-msgstr ""
+msgstr "გასვლა"
 
 #: ../src/common/stockitem.cpp:163
 msgid "&File"
-msgstr "&ფაილი"
+msgstr "ფაილი"
 
 #: ../src/common/stockitem.cpp:163
 msgid "File"
-msgstr ""
+msgstr "ფაილი"
 
 #: ../src/common/stockitem.cpp:164
 msgid "&Find..."
-msgstr ""
+msgstr "&პოვნა..."
 
 #: ../src/common/stockitem.cpp:164
 msgid "Find..."
-msgstr ""
+msgstr "მოძებნა…"
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
-msgstr ""
+msgstr "&პირველი"
 
 #: ../src/common/stockitem.cpp:165
 msgid "First"
-msgstr ""
+msgstr "პირველი"
 
 #: ../src/common/stockitem.cpp:166
 msgid "&Floppy"
-msgstr ""
+msgstr "&დისკეტა"
 
 #: ../src/common/stockitem.cpp:166
 msgid "Floppy"
-msgstr ""
+msgstr "დისკეტა"
 
 #: ../src/common/stockitem.cpp:167
 msgid "&Forward"
-msgstr ""
+msgstr "&წინ"
 
 #: ../src/common/stockitem.cpp:167
 msgid "Forward"
-msgstr ""
+msgstr "წინ"
 
 #: ../src/common/stockitem.cpp:168
 msgid "&Harddisk"
-msgstr ""
+msgstr "&მყარიდისკი"
 
 #: ../src/common/stockitem.cpp:168
 msgid "Harddisk"
-msgstr ""
+msgstr "მყარიდისკი"
 
 #: ../src/common/stockitem.cpp:169 ../src/generic/wizard.cpp:438
 #: ../src/osx/cocoa/menu.mm:226 ../src/richtext/richtextstyledlg.cpp:299
 #: ../src/richtext/richtextsymboldlg.cpp:476
 msgid "&Help"
-msgstr ""
+msgstr "&დახმარება"
 
 #: ../src/common/stockitem.cpp:170
 msgid "&Home"
-msgstr ""
+msgstr "&სახლი"
 
 #: ../src/common/stockitem.cpp:170
 msgid "Home"
-msgstr ""
+msgstr "საწყისი"
 
 #: ../src/common/stockitem.cpp:171
 msgid "Indent"
-msgstr ""
+msgstr "შეწევა"
 
 #: ../src/common/stockitem.cpp:172
 msgid "&Index"
-msgstr ""
+msgstr "&ინდექსი"
 
 #: ../src/common/stockitem.cpp:172 ../src/html/helpwnd.cpp:512
 msgid "Index"
-msgstr ""
+msgstr "ინდექსი"
 
 #: ../src/common/stockitem.cpp:173
 msgid "&Info"
-msgstr ""
+msgstr "&ინფო"
 
 #: ../src/common/stockitem.cpp:173
 msgid "Info"
-msgstr ""
+msgstr "ინფორმაცია"
 
 #: ../src/common/stockitem.cpp:174
 msgid "&Italic"
-msgstr ""
+msgstr "&დახრილი"
 
 #: ../src/common/stockitem.cpp:174 ../src/generic/fontdlgg.cpp:325
 #: ../src/osx/carbon/fontdlg.cpp:357 ../src/richtext/richtextfontpage.cpp:351
 msgid "Italic"
-msgstr ""
+msgstr "დახრილი"
 
 #: ../src/common/stockitem.cpp:175
 msgid "&Jump to"
-msgstr ""
+msgstr "&გადასვლა"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Jump to"
-msgstr ""
+msgstr "გადასვლა"
 
 #: ../src/common/stockitem.cpp:176
 msgid "Centered"
-msgstr ""
+msgstr "შუაზე გასწორებული"
 
 #: ../src/common/stockitem.cpp:177
 msgid "Justified"
@@ -3397,70 +3400,70 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:178
 msgid "Align Left"
-msgstr ""
+msgstr "მარცხნივ სწორება"
 
 #: ../src/common/stockitem.cpp:179
 msgid "Align Right"
-msgstr ""
+msgstr "მარჯვნივ სწორება"
 
 #: ../src/common/stockitem.cpp:180
 msgid "&Last"
-msgstr ""
+msgstr "&ბოლო"
 
 #: ../src/common/stockitem.cpp:180
 msgid "Last"
-msgstr ""
+msgstr "ბოლო"
 
 #: ../src/common/stockitem.cpp:181
 msgid "&Network"
-msgstr ""
+msgstr "&ქსელი"
 
 #: ../src/common/stockitem.cpp:181
 msgid "Network"
-msgstr ""
+msgstr "ქსელი"
 
 #: ../src/common/stockitem.cpp:182 ../src/richtext/richtexttabspage.cpp:132
 msgid "&New"
-msgstr ""
+msgstr "&ახალი"
 
 #: ../src/common/stockitem.cpp:182
 msgid "New"
-msgstr ""
+msgstr "&ახალი"
 
 #: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:436
 msgid "&No"
-msgstr ""
+msgstr "&არა"
 
 #: ../src/common/stockitem.cpp:184 ../src/generic/fontdlgg.cpp:470
 #: ../src/generic/fontdlgg.cpp:477 ../src/osx/carbon/fontdlg.cpp:404
 msgid "&OK"
-msgstr ""
+msgstr "&OK"
 
 #: ../src/common/stockitem.cpp:185 ../src/generic/dbgrptg.cpp:342
 msgid "&Open..."
-msgstr ""
+msgstr "&გახსნა..."
 
 #: ../src/common/stockitem.cpp:185
 msgid "Open..."
-msgstr ""
+msgstr "გახსნა..."
 
 #: ../src/common/stockitem.cpp:186 ../src/msw/textctrl.cpp:2937
 #: ../src/osx/textctrl_osx.cpp:639 ../src/richtext/richtextctrl.cpp:333
 msgid "&Paste"
-msgstr ""
+msgstr "&ჩასმა"
 
 #: ../src/common/stockitem.cpp:186 ../src/richtext/richtextctrl.cpp:3514
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
-msgstr ""
+msgstr "ჩასმა"
 
 #: ../src/common/stockitem.cpp:187
 msgid "&Preferences"
-msgstr ""
+msgstr "&გამართვა"
 
 #: ../src/common/stockitem.cpp:187 ../src/osx/cocoa/preferences.mm:304
 msgid "Preferences"
-msgstr ""
+msgstr "მორგება"
 
 #: ../src/common/stockitem.cpp:188
 msgid "Print previe&w..."
@@ -3472,147 +3475,147 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:189
 msgid "&Print..."
-msgstr ""
+msgstr "&ამობეჭდვა..."
 
 #: ../src/common/stockitem.cpp:189
 msgid "Print..."
-msgstr ""
+msgstr "დაბეჭდვა..."
 
 #: ../src/common/stockitem.cpp:190 ../src/richtext/richtextctrl.cpp:338
 #: ../src/richtext/richtextctrl.cpp:5512
 msgid "&Properties"
-msgstr ""
+msgstr "&თვისებები"
 
 #: ../src/common/stockitem.cpp:190
 msgid "Properties"
-msgstr ""
+msgstr "პარამეტრები"
 
 #: ../src/common/stockitem.cpp:191 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
-msgstr ""
+msgstr "ბრძანების აღდგენა"
 
 #: ../src/common/stockitem.cpp:192
 msgid "Refresh"
-msgstr ""
+msgstr "განახლება"
 
 #: ../src/common/stockitem.cpp:193
 msgid "Remove"
-msgstr ""
+msgstr "მოცილება"
 
 #: ../src/common/stockitem.cpp:194
 msgid "Rep&lace..."
-msgstr ""
+msgstr "&ჩანაცვლება..."
 
 #: ../src/common/stockitem.cpp:194
 msgid "Replace..."
-msgstr ""
+msgstr "ჩანაცვლება..."
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
-msgstr ""
+msgstr "შენახულზე დაბრუნება"
 
 #: ../src/common/stockitem.cpp:196
 msgid "&Save"
-msgstr ""
+msgstr "&შენახვა"
 
 #: ../src/common/stockitem.cpp:197 ../src/generic/logg.cpp:509
 msgid "Save &As..."
-msgstr ""
+msgstr "შეინახვა &როგორც..."
 
 #: ../src/common/stockitem.cpp:197
 msgid "Save As..."
-msgstr ""
+msgstr "შენახვა, როგორც..."
 
 #: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2940
 #: ../src/osx/textctrl_osx.cpp:642 ../src/richtext/richtextctrl.cpp:336
 msgid "Select &All"
-msgstr ""
+msgstr "ყველაფრის &მონიშვნა"
 
 #: ../src/common/stockitem.cpp:198 ../src/stc/stc_i18n.cpp:21
 msgid "Select All"
-msgstr ""
+msgstr "ყველაფრის მონიშვნა"
 
 #: ../src/common/stockitem.cpp:199
 msgid "&Color"
-msgstr ""
+msgstr "&ფერი"
 
 #: ../src/common/stockitem.cpp:199
 msgid "Color"
-msgstr ""
+msgstr "ფერი"
 
 #: ../src/common/stockitem.cpp:200
 msgid "&Font"
-msgstr ""
+msgstr "&ფონტი"
 
 #: ../src/common/stockitem.cpp:200 ../src/osx/carbon/fontdlg.cpp:284
 #: ../src/richtext/richtextformatdlg.cpp:337
 msgid "Font"
-msgstr ""
+msgstr "ფონტი"
 
 #: ../src/common/stockitem.cpp:201
 msgid "&Ascending"
-msgstr ""
+msgstr "&აღმავალი"
 
 #: ../src/common/stockitem.cpp:201
 msgid "Ascending"
-msgstr ""
+msgstr "ზრდის მიხედვით"
 
 #: ../src/common/stockitem.cpp:202
 msgid "&Descending"
-msgstr ""
+msgstr "&დაღმავალი"
 
 #: ../src/common/stockitem.cpp:202
 msgid "Descending"
-msgstr ""
+msgstr "Დაღმავალი"
 
 #: ../src/common/stockitem.cpp:203
 msgid "&Spell Check"
-msgstr ""
+msgstr "&მართლწერის შემოწმება"
 
 #: ../src/common/stockitem.cpp:203
 msgid "Spell Check"
-msgstr ""
+msgstr "მართლწერის შემოწმება"
 
 #: ../src/common/stockitem.cpp:204
 msgid "&Stop"
-msgstr ""
+msgstr "გაჩერება"
 
 #: ../src/common/stockitem.cpp:204
 msgid "Stop"
-msgstr ""
+msgstr "შეჩერება"
 
 #: ../src/common/stockitem.cpp:205 ../src/richtext/richtextfontpage.cpp:275
 msgid "&Strikethrough"
-msgstr ""
+msgstr "&ხაზგადასმული"
 
 #: ../src/common/stockitem.cpp:205
 msgid "Strikethrough"
-msgstr ""
+msgstr "ხაზგადასმული"
 
 #: ../src/common/stockitem.cpp:206
 msgid "&Top"
-msgstr ""
+msgstr "&ზედა"
 
 #: ../src/common/stockitem.cpp:206 ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290
 msgid "Top"
-msgstr ""
+msgstr "თავში"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Undelete"
-msgstr ""
+msgstr "წაშლის გაუქმება"
 
 #: ../src/common/stockitem.cpp:208 ../src/generic/fontdlgg.cpp:440
 msgid "&Underline"
-msgstr ""
+msgstr "&ხაზგასმა"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Underline"
-msgstr ""
+msgstr "ხაზგასმული"
 
 #: ../src/common/stockitem.cpp:209 ../src/stc/stc_i18n.cpp:15
 msgid "Undo"
-msgstr ""
+msgstr "დაბრუნება"
 
 #: ../src/common/stockitem.cpp:210
 msgid "&Unindent"
@@ -3624,23 +3627,23 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:211
 msgid "&Up"
-msgstr ""
+msgstr "&მაღლა"
 
 #: ../src/common/stockitem.cpp:211 ../src/generic/fdrepdlg.cpp:149
 msgid "Up"
-msgstr ""
+msgstr "მაღლა"
 
 #: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:436
 msgid "&Yes"
-msgstr ""
+msgstr "&დიახ"
 
 #: ../src/common/stockitem.cpp:213
 msgid "&Actual Size"
-msgstr ""
+msgstr "&რეალური ზომა"
 
 #: ../src/common/stockitem.cpp:213
 msgid "Actual Size"
-msgstr ""
+msgstr "რეალური ზომა"
 
 #: ../src/common/stockitem.cpp:214
 msgid "Zoom to &Fit"
@@ -3648,15 +3651,15 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:214
 msgid "Zoom to Fit"
-msgstr ""
+msgstr "გადიდება მოსარგებად"
 
 #: ../src/common/stockitem.cpp:215
 msgid "Zoom &In"
-msgstr ""
+msgstr "გადიდება"
 
 #: ../src/common/stockitem.cpp:216
 msgid "Zoom &Out"
-msgstr ""
+msgstr "გადიდება"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Show about dialog"
@@ -3664,11 +3667,11 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:264
 msgid "Copy selection"
-msgstr ""
+msgstr "მონიშნულის კოპირება"
 
 #: ../src/common/stockitem.cpp:265
 msgid "Cut selection"
-msgstr ""
+msgstr "მონიშნულის ამოჭრა"
 
 #: ../src/common/stockitem.cpp:266
 msgid "Delete selection"
@@ -3696,15 +3699,15 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:272
 msgid "Undo last action"
-msgstr ""
+msgstr "ბოლო ბრძანების გაუქმება"
 
 #: ../src/common/stockitem.cpp:273
 msgid "Create new document"
-msgstr ""
+msgstr "ახალი დოკუმენტის შექმნა"
 
 #: ../src/common/stockitem.cpp:274
 msgid "Open an existing document"
-msgstr ""
+msgstr "უკვე არსებული დოკუმენტის გახსნა"
 
 #: ../src/common/stockitem.cpp:275
 msgid "Close current document"
@@ -3747,7 +3750,7 @@ msgstr ""
 
 #: ../src/common/tarstrm.cpp:1037
 msgid "unexpected end of file"
-msgstr ""
+msgstr "ფაილის მოულოდნელი დასასრული"
 
 #: ../src/common/tarstrm.cpp:1311
 #, c-format
@@ -3959,7 +3962,7 @@ msgstr ""
 #: ../src/common/xtixml.cpp:249
 #, c-format
 msgid "unknown class %s"
-msgstr ""
+msgstr "უცნობი კლასი: %s"
 
 #: ../src/common/xtixml.cpp:255
 msgid "objects cannot have XML Text Nodes"
@@ -4005,7 +4008,7 @@ msgstr ""
 
 #: ../src/common/zipstrm.cpp:1688
 msgid "invalid zip file"
-msgstr ""
+msgstr "არასწორი zip ფაილი"
 
 #: ../src/common/zipstrm.cpp:1747
 msgid "can't find central directory in zip"
@@ -4132,20 +4135,20 @@ msgstr ""
 
 #: ../src/generic/aboutdlgg.cpp:125 ../src/osx/cocoa/aboutdlg.mm:83
 msgid "Version "
-msgstr ""
+msgstr "ვერსია "
 
 #: ../src/generic/aboutdlgg.cpp:137 ../src/msw/aboutdlg.cpp:61
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "%s-ის შესახებ"
 
 #: ../src/generic/aboutdlgg.cpp:170
 msgid "License"
-msgstr ""
+msgstr "ლიცენზია"
 
 #: ../src/generic/aboutdlgg.cpp:173
 msgid "Developers"
-msgstr ""
+msgstr "პროგრამისტები"
 
 #: ../src/generic/aboutdlgg.cpp:177
 msgid "Documentation writers"
@@ -4153,11 +4156,11 @@ msgstr ""
 
 #: ../src/generic/aboutdlgg.cpp:181
 msgid "Artists"
-msgstr ""
+msgstr "შემსრულებლები"
 
 #: ../src/generic/aboutdlgg.cpp:185
 msgid "Translators"
-msgstr ""
+msgstr "მთარგმნელები"
 
 #: ../src/generic/animateg.cpp:125
 msgid "No handler found for animation type."
@@ -4175,23 +4178,23 @@ msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:155 ../src/gtk/colordlg.cpp:49
 msgid "Choose colour"
-msgstr ""
+msgstr "აირჩიეთ ფერი"
 
 #: ../src/generic/colrdlgg.cpp:358
 msgid "Red:"
-msgstr ""
+msgstr "წითელი:"
 
 #: ../src/generic/colrdlgg.cpp:361
 msgid "Green:"
-msgstr ""
+msgstr "მწვანე:"
 
 #: ../src/generic/colrdlgg.cpp:364
 msgid "Blue:"
-msgstr ""
+msgstr "ლურჯი:"
 
 #: ../src/generic/colrdlgg.cpp:373
 msgid "Opacity:"
-msgstr ""
+msgstr "გაუმჭვირვალობა:"
 
 #: ../src/generic/colrdlgg.cpp:385
 msgid "Add to custom colours"
@@ -4199,50 +4202,49 @@ msgstr ""
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
-msgstr ""
+msgstr "მომხმარებელი:"
 
 #: ../src/generic/creddlgg.cpp:63
 msgid "Password:"
-msgstr ""
+msgstr "პაროლი:"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/generic/datavgen.cpp:1164
 msgid "true"
-msgstr ""
+msgstr "სიმართლე"
 
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/generic/datavgen.cpp:1166
 msgid "false"
-msgstr ""
+msgstr "მცდარი"
 
 #: ../src/generic/datavgen.cpp:6855
 #, c-format
 msgid "Row %i"
-msgstr ""
+msgstr "მწკრივი %i"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6945
 msgid "Collapse"
-msgstr ""
+msgstr "აკეცვა"
 
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6948
 msgid "Expand"
-msgstr ""
+msgstr "გაფართოება"
 
 #: ../src/generic/datavgen.cpp:6967
 #, c-format
 msgid "%s (%d items)"
-msgstr ""
+msgstr "%s (%d ჩანაწერი)"
 
 #: ../src/generic/datavgen.cpp:7018
 #, c-format
 msgid "Column %u"
-msgstr ""
+msgstr "სვეტი %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7087
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4250,20 +4252,19 @@ msgstr ""
 #: ../src/richtext/richtextliststylepage.cpp:253
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
-msgstr ""
+msgstr "მარცხნივ"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7090
-#: ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
-msgstr ""
+msgstr "მარჯვნივ"
 
 #: ../src/generic/dbgrptg.cpp:160
 #, c-format
 msgid "Open file \"%s\""
-msgstr ""
+msgstr "ფაილის გახსნა; \"%s\""
 
 #: ../src/generic/dbgrptg.cpp:171
 #, c-format
@@ -4312,11 +4313,11 @@ msgstr ""
 
 #: ../src/generic/dbgrptg.cpp:340
 msgid "&View..."
-msgstr ""
+msgstr "&ნახვა..."
 
 #: ../src/generic/dbgrptg.cpp:360
 msgid "&Notes:"
-msgstr ""
+msgstr "&შენიშვნები:"
 
 #: ../src/generic/dbgrptg.cpp:362
 msgid ""
@@ -4330,20 +4331,20 @@ msgstr ""
 
 #: ../src/generic/dirctrlg.cpp:408
 msgid "Computer"
-msgstr ""
+msgstr "კომპიუტერი"
 
 #: ../src/generic/dirctrlg.cpp:410
 msgid "Sections"
-msgstr ""
+msgstr "სექციები"
 
 #: ../src/generic/dirctrlg.cpp:488
 msgid "Home directory"
-msgstr ""
+msgstr "საწყისი საქაღალდე"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:784
 msgid "Desktop"
-msgstr ""
+msgstr "სამუშაო მაგიდა"
 
 #: ../src/generic/dirctrlg.cpp:534 ../src/generic/filectrlg.cpp:752
 msgid "Illegal directory name."
@@ -4357,7 +4358,7 @@ msgstr ""
 #: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:74
 #: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
-msgstr ""
+msgstr "შეცდომა"
 
 #: ../src/generic/dirctrlg.cpp:552 ../src/generic/filectrlg.cpp:766
 msgid "File name exists already."
@@ -4400,7 +4401,7 @@ msgstr ""
 
 #: ../src/generic/dirdlgg.cpp:217
 msgid "Error creating directory"
-msgstr ""
+msgstr "საქაღალდის შექმნის შეცდომა"
 
 #: ../src/generic/dirdlgg.cpp:282
 msgid "You cannot add a new directory to this section."
@@ -4408,112 +4409,112 @@ msgstr ""
 
 #: ../src/generic/dirdlgg.cpp:283
 msgid "Create directory"
-msgstr ""
+msgstr "საქაღალდის შექმნა"
 
 #: ../src/generic/dirdlgg.cpp:292 ../src/generic/dirdlgg.cpp:302
 #: ../src/generic/filectrlg.cpp:614 ../src/generic/filectrlg.cpp:623
 msgid "NewName"
-msgstr ""
+msgstr "ახალი სახელი"
 
 #: ../src/generic/editlbox.cpp:131
 msgid "Edit item"
-msgstr ""
+msgstr "ჩანაწერის ჩასწორება"
 
 #: ../src/generic/editlbox.cpp:139
 msgid "New item"
-msgstr ""
+msgstr "ახალი ჩანაწერი"
 
 #: ../src/generic/editlbox.cpp:147
 msgid "Delete item"
-msgstr ""
+msgstr "ჩანაწერის წაშლა"
 
 #: ../src/generic/editlbox.cpp:155
 msgid "Move up"
-msgstr ""
+msgstr "აწევა"
 
 #: ../src/generic/editlbox.cpp:160
 msgid "Move down"
-msgstr ""
+msgstr "ქვემოთ ჩამოწევა"
 
 #: ../src/generic/fdrepdlg.cpp:109
 msgid "Search for:"
-msgstr ""
+msgstr "ძებნა:"
 
 #: ../src/generic/fdrepdlg.cpp:121
 msgid "Replace with:"
-msgstr ""
+msgstr "ჩანაცვლება:"
 
 #: ../src/generic/fdrepdlg.cpp:141
 msgid "Whole word"
-msgstr ""
+msgstr "მთლიანი სიტყვა"
 
 #: ../src/generic/fdrepdlg.cpp:144
 msgid "Match case"
-msgstr ""
+msgstr "დიდი და პატარა ასოების სხვაობა"
 
 #: ../src/generic/fdrepdlg.cpp:157
 msgid "Search direction"
-msgstr ""
+msgstr "ძებნის მიმართულება"
 
 #: ../src/generic/fdrepdlg.cpp:176
 msgid "&Replace"
-msgstr ""
+msgstr "ჩანაცვლება"
 
 #: ../src/generic/fdrepdlg.cpp:179
 msgid "Replace &all"
-msgstr ""
+msgstr "ყველას &ჩანაცვლება"
 
 #: ../src/generic/filectrlg.cpp:246 ../src/generic/filectrlg.cpp:269
 msgid "<DIR>"
-msgstr ""
+msgstr "<სქღლდ>"
 
 #: ../src/generic/filectrlg.cpp:248 ../src/generic/filectrlg.cpp:271
 msgid "<LINK>"
-msgstr ""
+msgstr "<ბმული>"
 
 #: ../src/generic/filectrlg.cpp:250 ../src/generic/filectrlg.cpp:273
 msgid "<DRIVE>"
-msgstr ""
+msgstr "<დისკი>"
 
 #: ../src/generic/filectrlg.cpp:275
 #, c-format
 msgid "%ld byte"
 msgid_plural "%ld bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%ld ბაიტი"
+msgstr[1] "%ld ბაიტი"
 
 #: ../src/generic/filectrlg.cpp:420
 msgid "Name"
-msgstr ""
+msgstr "სახელი"
 
 #: ../src/generic/filectrlg.cpp:421 ../src/richtext/richtextformatdlg.cpp:362
 #: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
-msgstr ""
+msgstr "ზომა"
 
 #: ../src/generic/filectrlg.cpp:422
 msgid "Type"
-msgstr ""
+msgstr "ტიპი"
 
 #: ../src/generic/filectrlg.cpp:423
 msgid "Modified"
-msgstr ""
+msgstr "შეცვლილია"
 
 #: ../src/generic/filectrlg.cpp:426
 msgid "Permissions"
-msgstr ""
+msgstr "წვდომები"
 
 #: ../src/generic/filectrlg.cpp:429
 msgid "Attributes"
-msgstr ""
+msgstr "ატრიბუტები"
 
 #: ../src/generic/filectrlg.cpp:936
 msgid "Current directory:"
-msgstr ""
+msgstr "მიმდინარე საქაღალდე:"
 
 #: ../src/generic/filectrlg.cpp:979
 msgid "Show &hidden files"
-msgstr ""
+msgstr "დამალული &ფაილების ჩვენება"
 
 #: ../src/generic/filectrlg.cpp:1355
 msgid "Illegal file specification."
@@ -4533,119 +4534,119 @@ msgstr ""
 
 #: ../src/generic/filedlgg.cpp:202
 msgid "Go to parent directory"
-msgstr ""
+msgstr "ზედა საქაღალდეზე გადასვლა"
 
 #: ../src/generic/filedlgg.cpp:343 ../src/gtk/filedlg.cpp:57
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
-msgstr ""
+msgstr "ფაილი %s უკვე არსებობს. გნებავთ გადავაწერო?"
 
 #: ../src/generic/filedlgg.cpp:346 ../src/gtk/filedlg.cpp:60
 msgid "Confirm"
-msgstr ""
+msgstr "დადასტურება"
 
 #: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:73
 msgid "Please choose an existing file."
-msgstr ""
+msgstr "გთხოვთ აირჩიოთ არსებული ფაილი."
 
 #: ../src/generic/filepickerg.cpp:63
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: ../src/generic/fontdlgg.cpp:79 ../src/osx/carbon/fontdlg.cpp:150
 #: ../src/richtext/richtextformatdlg.cpp:521
 msgid "ABCDEFGabcdefg12345"
-msgstr ""
+msgstr "ABCDEFGabcdefg12345"
 
 #: ../src/generic/fontdlgg.cpp:318
 msgid "Roman"
-msgstr ""
+msgstr "რომანული"
 
 #: ../src/generic/fontdlgg.cpp:319
 msgid "Decorative"
-msgstr ""
+msgstr "დეკორატიული"
 
 #: ../src/generic/fontdlgg.cpp:320
 msgid "Modern"
-msgstr ""
+msgstr "თანამედროვე"
 
 #: ../src/generic/fontdlgg.cpp:321
 msgid "Script"
-msgstr ""
+msgstr "სკრიპტი"
 
 #: ../src/generic/fontdlgg.cpp:322
 msgid "Swiss"
-msgstr ""
+msgstr "შვეიცარიული"
 
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Teletype"
-msgstr ""
+msgstr "ტელეტაიპი"
 
 #: ../src/generic/fontdlgg.cpp:324 ../src/generic/fontdlgg.cpp:327
 msgid "Normal"
-msgstr ""
+msgstr "ნორმალური"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Slant"
-msgstr ""
+msgstr "დაცერება"
 
 #: ../src/generic/fontdlgg.cpp:328
 msgid "Light"
-msgstr ""
+msgstr "ღია"
 
 #: ../src/generic/fontdlgg.cpp:366
 msgid "&Font family:"
-msgstr ""
+msgstr "&ფონტის ოჯახი:"
 
 #: ../src/generic/fontdlgg.cpp:370 ../src/generic/fontdlgg.cpp:372
 msgid "The font family."
-msgstr ""
+msgstr "ფონტის ოჯახი."
 
 #: ../src/generic/fontdlgg.cpp:377 ../src/richtext/richtextstylepage.cpp:106
 msgid "&Style:"
-msgstr ""
+msgstr "&სტილი:"
 
 #: ../src/generic/fontdlgg.cpp:381 ../src/generic/fontdlgg.cpp:383
 msgid "The font style."
-msgstr ""
+msgstr "ფონტის სტილი."
 
 #: ../src/generic/fontdlgg.cpp:388
 msgid "&Weight:"
-msgstr ""
+msgstr "&წონა:"
 
 #: ../src/generic/fontdlgg.cpp:392 ../src/generic/fontdlgg.cpp:394
 msgid "The font weight."
-msgstr ""
+msgstr "ფონტის წონა."
 
 #: ../src/generic/fontdlgg.cpp:402
 msgid "C&olour:"
-msgstr ""
+msgstr "&ფერი:"
 
 #: ../src/generic/fontdlgg.cpp:410 ../src/generic/fontdlgg.cpp:412
 msgid "The font colour."
-msgstr ""
+msgstr "ფონტის ფერი."
 
 #: ../src/generic/fontdlgg.cpp:418
 msgid "&Point size:"
-msgstr ""
+msgstr "წერტილის &ზომა:"
 
 #: ../src/generic/fontdlgg.cpp:423 ../src/generic/fontdlgg.cpp:425
 #: ../src/generic/fontdlgg.cpp:429 ../src/generic/fontdlgg.cpp:431
 msgid "The font point size."
-msgstr ""
+msgstr "ფონტის წერტილის ზომა."
 
 #: ../src/generic/fontdlgg.cpp:442 ../src/generic/fontdlgg.cpp:444
 msgid "Whether the font is underlined."
-msgstr ""
+msgstr "არის თუ არა ფონტი ხასგაზმული."
 
 #: ../src/generic/fontdlgg.cpp:451 ../src/html/helpwnd.cpp:1219
 #: ../src/osx/carbon/fontdlg.cpp:386
 msgid "Preview:"
-msgstr ""
+msgstr "წინასწარი ნახვა:"
 
 #: ../src/generic/fontdlgg.cpp:455 ../src/generic/fontdlgg.cpp:457
 msgid "Shows the font preview."
-msgstr ""
+msgstr "ფონტის გადახედვის ჩვენება."
 
 #: ../src/generic/fontdlgg.cpp:467 ../src/generic/fontdlgg.cpp:486
 msgid "Click to cancel the font selection."
@@ -4659,7 +4660,7 @@ msgstr ""
 #: ../src/generic/fontpickerg.cpp:47 ../src/gtk/fontdlg.cpp:77
 #: ../src/gtk1/fontdlg.cpp:125
 msgid "Choose font"
-msgstr ""
+msgstr "აირჩიეთ ფონტი"
 
 #: ../src/generic/grid.cpp:6222
 msgid "Copying more than one selected block to clipboard is not supported."
@@ -4687,23 +4688,23 @@ msgstr ""
 
 #: ../src/generic/helpext.cpp:444
 msgid "No entries found."
-msgstr ""
+msgstr "ჩანაწერების გარეშე."
 
 #: ../src/generic/helpext.cpp:453 ../src/generic/helpext.cpp:454
 msgid "Help Index"
-msgstr ""
+msgstr "დახმარების ინდექსი"
 
 #: ../src/generic/helpext.cpp:457
 msgid "Relevant entries:"
-msgstr ""
+msgstr "შესაბამისი ჩანაწერები:"
 
 #: ../src/generic/helpext.cpp:458
 msgid "Entries found"
-msgstr ""
+msgstr "ნაპოვნი ჩანაწერები"
 
 #: ../src/generic/hyperlinkg.cpp:153
 msgid "&Copy URL"
-msgstr ""
+msgstr "&URL-ის კოპირება"
 
 #: ../src/generic/infobar.cpp:81
 msgid "Hide this notification message."
@@ -4712,41 +4713,41 @@ msgstr ""
 #: ../src/generic/logg.cpp:221
 #, c-format
 msgid "%s Error"
-msgstr ""
+msgstr "%s: შეცდომა"
 
 #: ../src/generic/logg.cpp:225
 #, c-format
 msgid "%s Warning"
-msgstr ""
+msgstr "%s: გაფრთხილება"
 
 #: ../src/generic/logg.cpp:233
 #, c-format
 msgid "%s Information"
-msgstr ""
+msgstr "%s ინფორმაცია"
 
 #: ../src/generic/logg.cpp:236
 msgid "Application"
-msgstr ""
+msgstr "აპლიკაცია"
 
 #: ../src/generic/logg.cpp:509
 msgid "Save log contents to file"
-msgstr ""
+msgstr "ჟურნალის შემცველობის ფაილში ჩაწერა"
 
 #: ../src/generic/logg.cpp:511
 msgid "C&lear"
-msgstr ""
+msgstr "გასუ&ფთავება"
 
 #: ../src/generic/logg.cpp:511
 msgid "Clear the log contents"
-msgstr ""
+msgstr "ჟურნალის შემცველობის გასუფთავება"
 
 #: ../src/generic/logg.cpp:513
 msgid "Close this window"
-msgstr ""
+msgstr "ამ ფანჯრის დახურვა"
 
 #: ../src/generic/logg.cpp:514
 msgid "&Log"
-msgstr ""
+msgstr "&ჟურნალი"
 
 #: ../src/generic/logg.cpp:570 ../src/generic/logg.cpp:973
 msgid "Can't save log contents to file."
@@ -4759,7 +4760,7 @@ msgstr ""
 
 #: ../src/generic/logg.cpp:679
 msgid "&Details"
-msgstr ""
+msgstr "&დეტალები"
 
 #: ../src/generic/logg.cpp:953
 msgid "Failed to copy dialog contents to the clipboard."
@@ -4772,7 +4773,7 @@ msgstr ""
 
 #: ../src/generic/logg.cpp:1013
 msgid "Question"
-msgstr ""
+msgstr "კითხვა"
 
 #: ../src/generic/logg.cpp:1027
 msgid "invalid message box return value"
@@ -4780,16 +4781,16 @@ msgstr ""
 
 #: ../src/generic/notifmsgg.cpp:129
 msgid "Notice"
-msgstr ""
+msgstr "გაფრთხილება"
 
 #: ../src/generic/preferencesg.cpp:112
 #, c-format
 msgid "%s Preferences"
-msgstr ""
+msgstr "%s მორგება"
 
 #: ../src/generic/printps.cpp:143
 msgid "Printing..."
-msgstr ""
+msgstr "დაბეჭდვა..."
 
 #: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1154
 #: ../src/msw/printwin.cpp:185
@@ -4799,19 +4800,19 @@ msgstr ""
 #: ../src/generic/printps.cpp:183
 #, c-format
 msgid "Printing page %d..."
-msgstr ""
+msgstr "იბეჭდება გვერდი %d..."
 
 #: ../src/generic/prntdlgg.cpp:173
 msgid "Printer options"
-msgstr ""
+msgstr "პრინტერის მორგება"
 
 #: ../src/generic/prntdlgg.cpp:178
 msgid "Print to File"
-msgstr ""
+msgstr "ფაილში ბეჭდვა"
 
 #: ../src/generic/prntdlgg.cpp:181
 msgid "Setup..."
-msgstr ""
+msgstr "მორგება..."
 
 #: ../src/generic/prntdlgg.cpp:189
 msgid "Printer:"
@@ -4819,15 +4820,15 @@ msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:197
 msgid "Status:"
-msgstr ""
+msgstr "მდგომარეობა:"
 
 #: ../src/generic/prntdlgg.cpp:208
 msgid "All"
-msgstr ""
+msgstr "ყველა"
 
 #: ../src/generic/prntdlgg.cpp:209
 msgid "Pages"
-msgstr ""
+msgstr "გვერდი"
 
 #: ../src/generic/prntdlgg.cpp:217
 msgid "Print Range"
@@ -4835,7 +4836,7 @@ msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:231
 msgid "From:"
-msgstr ""
+msgstr "ვისგან:"
 
 #: ../src/generic/prntdlgg.cpp:235
 msgid "To:"
@@ -4843,7 +4844,7 @@ msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:240
 msgid "Copies:"
-msgstr ""
+msgstr "ასლები:"
 
 #: ../src/generic/prntdlgg.cpp:290
 msgid "PostScript file"
@@ -4855,7 +4856,7 @@ msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:485
 msgid "Printer"
-msgstr ""
+msgstr "პრინტერი"
 
 #: ../src/generic/prntdlgg.cpp:502
 msgid "Default printer"
@@ -4865,19 +4866,19 @@ msgstr ""
 #: ../src/generic/prntdlgg.cpp:833 ../src/generic/prntdlgg.cpp:846
 #: ../src/generic/prntdlgg.cpp:1042 ../src/generic/prntdlgg.cpp:1047
 msgid "Paper size"
-msgstr ""
+msgstr "გვერდის ზომა"
 
 #: ../src/generic/prntdlgg.cpp:604 ../src/generic/prntdlgg.cpp:858
 msgid "Portrait"
-msgstr ""
+msgstr "პორტრეტი"
 
 #: ../src/generic/prntdlgg.cpp:605 ../src/generic/prntdlgg.cpp:859
 msgid "Landscape"
-msgstr ""
+msgstr "ლანდშაფტი"
 
 #: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:860
 msgid "Orientation"
-msgstr ""
+msgstr "ორიენტაცია"
 
 #: ../src/generic/prntdlgg.cpp:610
 msgid "Options"
@@ -4917,24 +4918,24 @@ msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:907
 msgid "Printer..."
-msgstr ""
+msgstr "პრინტერი..."
 
 #: ../src/generic/progdlgg.cpp:249
 msgid "&Skip"
-msgstr ""
+msgstr "გამო&ტოვება"
 
 #: ../src/generic/progdlgg.cpp:350 ../src/generic/progdlgg.cpp:629
 msgid "Unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: ../src/generic/progdlgg.cpp:454 ../src/msw/progdlg.cpp:535
 msgid "Done."
-msgstr ""
+msgstr "მზადაა."
 
 #: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:182
 #: ../src/html/helpwnd.cpp:532 ../src/html/helpwnd.cpp:547
 msgid "Search"
-msgstr ""
+msgstr "_ძებნა"
 
 #: ../src/generic/tabg.cpp:1045
 msgid "Could not find tab for id"
@@ -4946,11 +4947,11 @@ msgstr ""
 
 #: ../src/generic/tipdlg.cpp:198
 msgid "Tip of the Day"
-msgstr ""
+msgstr "დღის მინიშნება"
 
 #: ../src/generic/tipdlg.cpp:208
 msgid "Did you know..."
-msgstr ""
+msgstr "იცოდით, რომ..."
 
 #: ../src/generic/tipdlg.cpp:233
 msgid "&Show tips at startup"
@@ -4962,19 +4963,19 @@ msgstr ""
 
 #: ../src/generic/wizard.cpp:431
 msgid "&Next >"
-msgstr ""
+msgstr "&შემდეგი >"
 
 #: ../src/generic/wizard.cpp:432
 msgid "&Finish"
-msgstr ""
+msgstr "&დასრულება"
 
 #: ../src/generic/wizard.cpp:440
 msgid "< &Back"
-msgstr ""
+msgstr "< &უკან"
 
 #: ../src/gtk/aboutdlg.cpp:216
 msgid "translator-credits"
-msgstr ""
+msgstr "თემური დოღონაძე"
 
 #: ../src/gtk/app.cpp:456
 msgid ""
@@ -5013,7 +5014,7 @@ msgstr ""
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
 msgid "Fatal Error"
-msgstr ""
+msgstr "ფატალური შეცდომა"
 
 #: ../src/gtk/glcanvas.cpp:181
 msgid ""
@@ -5037,7 +5038,7 @@ msgstr ""
 
 #: ../src/gtk/print.cpp:212
 msgid "Custom size"
-msgstr ""
+msgstr "მორგებული ზომა"
 
 #: ../src/gtk/print.cpp:726
 msgid "Error while printing: "
@@ -5045,7 +5046,7 @@ msgstr ""
 
 #: ../src/gtk/print.cpp:848
 msgid "Page Setup"
-msgstr ""
+msgstr "გვერდის მორგება"
 
 #: ../src/gtk/textctrl.cpp:1273
 msgid "Failed to insert text in the control."
@@ -5089,7 +5090,7 @@ msgstr ""
 
 #: ../src/html/chm.cpp:324
 msgid "no error"
-msgstr ""
+msgstr "შეცდომის გარეშე"
 
 #: ../src/html/chm.cpp:326
 msgid "bad arguments to library function"
@@ -5101,19 +5102,19 @@ msgstr ""
 
 #: ../src/html/chm.cpp:330
 msgid "read error"
-msgstr ""
+msgstr "წაკითხვის შეცდომა"
 
 #: ../src/html/chm.cpp:332
 msgid "write error"
-msgstr ""
+msgstr "ჩაწერის შეცდომა"
 
 #: ../src/html/chm.cpp:334
 msgid "seek error"
-msgstr ""
+msgstr "ძიების შეცდომა"
 
 #: ../src/html/chm.cpp:338
 msgid "bad signature"
-msgstr ""
+msgstr "არასწორი ხელმოწერა"
 
 #: ../src/html/chm.cpp:340
 msgid "error in data format"
@@ -5121,25 +5122,25 @@ msgstr ""
 
 #: ../src/html/chm.cpp:342
 msgid "checksum error"
-msgstr ""
+msgstr "საკონტროლო ჯამის შეცდომა"
 
 #: ../src/html/chm.cpp:344
 msgid "compression error"
-msgstr ""
+msgstr "შეკუმშვის შეცდომა"
 
 #: ../src/html/chm.cpp:346
 msgid "decompression error"
-msgstr ""
+msgstr "გაშლის შეცომა"
 
 #: ../src/html/chm.cpp:437
 #, c-format
 msgid "Could not locate file '%s'."
-msgstr ""
+msgstr "ფაილის (\"%s\") მოძებნა შეუძლებელია."
 
 #: ../src/html/chm.cpp:711
 #, c-format
 msgid "Could not create temporary file '%s'"
-msgstr ""
+msgstr "დროებითი ფაილის შექმნის შეცდომა (%s)"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -5157,12 +5158,12 @@ msgstr ""
 #: ../src/html/helpctrl.cpp:59
 #, c-format
 msgid "Help: %s"
-msgstr ""
+msgstr "დახმარება: %s"
 
 #: ../src/html/helpctrl.cpp:155
 #, c-format
 msgid "Adding book %s"
-msgstr ""
+msgstr "მისამართების წიგნი %s"
 
 #: ../src/html/helpdata.cpp:296
 #, c-format
@@ -5176,7 +5177,7 @@ msgstr ""
 
 #: ../src/html/helpdata.cpp:650
 msgid "noname"
-msgstr ""
+msgstr "უსახელო"
 
 #: ../src/html/helpdata.cpp:660
 #, c-format
@@ -5190,7 +5191,7 @@ msgstr ""
 #: ../src/html/helpwnd.cpp:416 ../src/html/helpwnd.cpp:1103
 #: ../src/html/helpwnd.cpp:1739
 msgid "(bookmarks)"
-msgstr ""
+msgstr "(სანიშნები)"
 
 #: ../src/html/helpwnd.cpp:429
 msgid "Add current page to bookmarks"
@@ -5202,15 +5203,15 @@ msgstr ""
 
 #: ../src/html/helpwnd.cpp:472
 msgid "Contents"
-msgstr ""
+msgstr "შიგთავსი"
 
 #: ../src/html/helpwnd.cpp:487
 msgid "Find"
-msgstr ""
+msgstr "ძიება"
 
 #: ../src/html/helpwnd.cpp:489
 msgid "Show all"
-msgstr ""
+msgstr "ყველას ჩვენება"
 
 #: ../src/html/helpwnd.cpp:499
 msgid ""
@@ -5224,11 +5225,11 @@ msgstr ""
 
 #: ../src/html/helpwnd.cpp:530
 msgid "Case sensitive"
-msgstr ""
+msgstr "დიდი და პატარა ასოების განსხვავება"
 
 #: ../src/html/helpwnd.cpp:531
 msgid "Whole words only"
-msgstr ""
+msgstr "მხოლოდ მთლიანი სიტყვები"
 
 #: ../src/html/helpwnd.cpp:534
 msgid ""
@@ -5242,11 +5243,11 @@ msgstr ""
 
 #: ../src/html/helpwnd.cpp:657
 msgid "Go back"
-msgstr ""
+msgstr "უკან დაბრუნება"
 
 #: ../src/html/helpwnd.cpp:658
 msgid "Go forward"
-msgstr ""
+msgstr "წინ გადასვლა"
 
 #: ../src/html/helpwnd.cpp:660
 msgid "Go one level up in document hierarchy"
@@ -5254,11 +5255,11 @@ msgstr ""
 
 #: ../src/html/helpwnd.cpp:668 ../src/html/helpwnd.cpp:1551
 msgid "Open HTML document"
-msgstr ""
+msgstr "HTML დოკუმენტის გახსნა"
 
 #: ../src/html/helpwnd.cpp:672
 msgid "Print this page"
-msgstr ""
+msgstr "ამ გვერდის დაბეჭდვა"
 
 #: ../src/html/helpwnd.cpp:676
 msgid "Display options dialog"
@@ -5274,7 +5275,7 @@ msgstr ""
 
 #: ../src/html/helpwnd.cpp:854
 msgid "Searching..."
-msgstr ""
+msgstr "ძებნა..."
 
 #: ../src/html/helpwnd.cpp:855
 msgid "No matching page found yet"
@@ -5309,19 +5310,19 @@ msgstr ""
 
 #: ../src/html/helpwnd.cpp:1202
 msgid "Normal font:"
-msgstr ""
+msgstr "ნორმალური ფონტი:"
 
 #: ../src/html/helpwnd.cpp:1203
 msgid "Fixed font:"
-msgstr ""
+msgstr "ფიქსირებული ფონტი:"
 
 #: ../src/html/helpwnd.cpp:1204
 msgid "Font size:"
-msgstr ""
+msgstr "ფონტის ზომა:"
 
 #: ../src/html/helpwnd.cpp:1249
 msgid "font size"
-msgstr ""
+msgstr "ფონტის ზომა"
 
 #: ../src/html/helpwnd.cpp:1260
 msgid "Normal face<br>and <u>underlined</u>. "
@@ -5379,7 +5380,7 @@ msgstr ""
 #: ../src/html/helpwnd.cpp:1713
 #, c-format
 msgid "%u of %u"
-msgstr ""
+msgstr "%u %u-დან"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format
@@ -5388,7 +5389,7 @@ msgstr ""
 
 #: ../src/html/htmlwin.cpp:569
 msgid "Connecting..."
-msgstr ""
+msgstr "დაკავშირება…"
 
 #: ../src/html/htmlwin.cpp:586
 #, c-format
@@ -5397,11 +5398,11 @@ msgstr ""
 
 #: ../src/html/htmlwin.cpp:600
 msgid "Loading : "
-msgstr ""
+msgstr "ჩატვირთვა : "
 
 #: ../src/html/htmlwin.cpp:643
 msgid "Done"
-msgstr ""
+msgstr "დასრულდა"
 
 #: ../src/html/htmlwin.cpp:691
 #, c-format
@@ -5459,19 +5460,19 @@ msgstr ""
 
 #: ../src/motif/filedlg.cpp:218
 msgid "Filter"
-msgstr ""
+msgstr "ფილტრი"
 
 #: ../src/motif/filedlg.cpp:219
 msgid "Directories"
-msgstr ""
+msgstr "საქაღალდეები"
 
 #: ../src/motif/filedlg.cpp:220
 msgid "Files"
-msgstr ""
+msgstr "ფაილები"
 
 #: ../src/motif/filedlg.cpp:220
 msgid "Selection"
-msgstr ""
+msgstr "მონიშნული"
 
 #: ../src/msw/clipbrd.cpp:89
 msgid "Failed to open the clipboard."
@@ -5741,7 +5742,7 @@ msgstr ""
 #: ../src/msw/dlmsw.cpp:167
 #, c-format
 msgid "(error %d: %s)"
-msgstr ""
+msgstr "(შეცდომა %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
 #: ../src/msw/imaglist.cpp:302 ../src/msw/imaglist.cpp:322
@@ -5807,11 +5808,11 @@ msgstr ""
 #: ../src/msw/glcanvas.cpp:616 ../src/osx/glcanvas_osx.cpp:411
 #: ../src/unix/glegl.cpp:318 ../src/unix/glx11.cpp:559
 msgid "Couldn't create OpenGL context"
-msgstr ""
+msgstr "OpenGL-ის კონტექსტის შექმნის შეცდომა"
 
 #: ../src/msw/glcanvas.cpp:1376
 msgid "Failed to initialize OpenGL"
-msgstr ""
+msgstr "OpenGL-ის ინიციალიზაციის შექმნის შეცდომა"
 
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
@@ -5892,7 +5893,7 @@ msgstr ""
 
 #: ../src/msw/ole/automtn.cpp:638
 msgid "Unknown exception"
-msgstr ""
+msgstr "უცნობი შეცდომა"
 
 #: ../src/msw/ole/automtn.cpp:643
 msgid "Method or property not found."
@@ -5935,7 +5936,7 @@ msgstr ""
 #: ../src/msw/ole/automtn.cpp:679
 #, c-format
 msgid "Unknown error %08x"
-msgstr ""
+msgstr "უცნობი შეცდომა %08x"
 
 #: ../src/msw/ole/automtn.cpp:683
 #, c-format
@@ -5954,12 +5955,12 @@ msgstr ""
 
 #: ../src/msw/progdlg.cpp:1088
 msgid "Skip"
-msgstr ""
+msgstr "გამოტოვება"
 
 #: ../src/msw/registry.cpp:139
 #, c-format
 msgid "unknown (%lu)"
-msgstr ""
+msgstr "უცნობი (%lu)"
 
 #: ../src/msw/registry.cpp:407
 #, c-format
@@ -6239,15 +6240,15 @@ msgstr ""
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
-msgstr ""
+msgstr "ფონის ფერი"
 
 #: ../src/osx/carbon/fontdlg.cpp:325
 msgid "Font:"
-msgstr ""
+msgstr "ფონტი:"
 
 #: ../src/osx/carbon/fontdlg.cpp:335
 msgid "Size:"
-msgstr ""
+msgstr "ზომა:"
 
 #: ../src/osx/carbon/fontdlg.cpp:339 ../src/osx/carbon/fontdlg.cpp:341
 msgid "The font size in points."
@@ -6255,7 +6256,7 @@ msgstr ""
 
 #: ../src/osx/carbon/fontdlg.cpp:344
 msgid "Style:"
-msgstr ""
+msgstr "სტილი:"
 
 #: ../src/osx/carbon/fontdlg.cpp:352 ../src/osx/carbon/fontdlg.cpp:354
 msgid "Check to make the font bold."
@@ -6269,7 +6270,7 @@ msgstr ""
 #: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:601
 #: ../src/richtext/richtextfontpage.cpp:359
 msgid "Underlined"
-msgstr ""
+msgstr "ხაზგასმული"
 
 #: ../src/osx/carbon/fontdlg.cpp:368 ../src/osx/carbon/fontdlg.cpp:370
 msgid "Check to make the font underlined."
@@ -6277,7 +6278,7 @@ msgstr ""
 
 #: ../src/osx/carbon/fontdlg.cpp:376
 msgid "Colour:"
-msgstr ""
+msgstr "ფერი:"
 
 #: ../src/osx/carbon/fontdlg.cpp:380 ../src/osx/carbon/fontdlg.cpp:382
 msgid "Click to change the font colour."
@@ -6331,19 +6332,19 @@ msgstr ""
 
 #: ../src/osx/cocoa/filedlg.mm:337
 msgid "File type:"
-msgstr ""
+msgstr "ფაილის ტიპი:"
 
 #: ../src/osx/cocoa/menu.mm:281
 msgid "Minimize"
-msgstr ""
+msgstr "ჩაკეცვა"
 
 #: ../src/osx/cocoa/menu.mm:286
 msgid "Zoom"
-msgstr ""
+msgstr "გადიდება"
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr ""
+msgstr "ყველას წინ გამოტანა"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6366,54 +6367,54 @@ msgstr ""
 #, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
-msgstr ""
+msgstr "%s-ის შესახებ"
 
 #: ../src/osx/menu_osx.cpp:494
 msgctxt "macOS menu item"
 msgid "About..."
-msgstr ""
+msgstr "შესახებ..."
 
 #: ../src/osx/menu_osx.cpp:502
 msgctxt "macOS menu item"
 msgid "Preferences..."
-msgstr ""
+msgstr "მორგება..."
 
 #: ../src/osx/menu_osx.cpp:507
 msgctxt "macOS menu item"
 msgid "Services"
-msgstr ""
+msgstr "სერვისები"
 
 #: ../src/osx/menu_osx.cpp:514
 #, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
-msgstr ""
+msgstr "%s-ის დამალვა"
 
 #: ../src/osx/menu_osx.cpp:517
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr ""
+msgstr "აპლიკაციის დამალვა"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr ""
+msgstr "სხვების დამალვა"
 
 #: ../src/osx/menu_osx.cpp:522
 msgctxt "macOS menu item"
 msgid "Show All"
-msgstr ""
+msgstr "ყველას ჩვენება"
 
 #: ../src/osx/menu_osx.cpp:528
 #, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
-msgstr ""
+msgstr "%s-დან გასვლა"
 
 #: ../src/osx/menu_osx.cpp:531
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr ""
+msgstr "აპლიკაციიდან გასვლა"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6426,27 +6427,27 @@ msgstr ""
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:573
 msgid "Point Size"
-msgstr ""
+msgstr "წერტილის ზომა"
 
 #. TRANSLATORS: Label of font face name
 #: ../src/propgrid/advprops.cpp:583
 msgid "Face Name"
-msgstr ""
+msgstr "ფონტის სახის სახელი"
 
 #. TRANSLATORS: Label of font style
 #: ../src/propgrid/advprops.cpp:591 ../src/richtext/richtextformatdlg.cpp:332
 msgid "Style"
-msgstr ""
+msgstr "სტილი"
 
 #. TRANSLATORS: Label of font weight
 #: ../src/propgrid/advprops.cpp:596
 msgid "Weight"
-msgstr ""
+msgstr "სიმძიმე"
 
 #. TRANSLATORS: Label of font family
 #: ../src/propgrid/advprops.cpp:605
 msgid "Family"
-msgstr ""
+msgstr "ოჯახი"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:774
@@ -6506,7 +6507,7 @@ msgstr ""
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:786
 msgid "Highlight"
-msgstr ""
+msgstr "მოუნიშნავის გაბუნდოვნება"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:787
@@ -6531,7 +6532,7 @@ msgstr ""
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:791
 msgid "Menu"
-msgstr ""
+msgstr "მენიუ"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:792
@@ -6541,7 +6542,7 @@ msgstr ""
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:793
 msgid "Tooltip"
-msgstr ""
+msgstr "მინიშნება"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:794
@@ -6551,7 +6552,7 @@ msgstr ""
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:795
 msgid "Window"
-msgstr ""
+msgstr "ფანჯარა"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:796
@@ -6567,11 +6568,11 @@ msgstr ""
 #: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
 #: ../src/propgrid/advprops.cpp:1519
 msgid "Custom"
-msgstr ""
+msgstr "განსხვავებული"
 
 #: ../src/propgrid/advprops.cpp:1501
 msgid "Black"
-msgstr ""
+msgstr "შავი"
 
 #: ../src/propgrid/advprops.cpp:1502
 msgid "Maroon"
@@ -6583,7 +6584,7 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1504
 msgid "Purple"
-msgstr ""
+msgstr "იისფერი"
 
 #: ../src/propgrid/advprops.cpp:1505
 msgid "Teal"
@@ -6591,11 +6592,11 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1506
 msgid "Gray"
-msgstr ""
+msgstr "ნაცრისფერი"
 
 #: ../src/propgrid/advprops.cpp:1507
 msgid "Green"
-msgstr ""
+msgstr "მწვანე"
 
 #: ../src/propgrid/advprops.cpp:1508
 msgid "Olive"
@@ -6603,11 +6604,11 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1509
 msgid "Brown"
-msgstr ""
+msgstr "ყავისფერი"
 
 #: ../src/propgrid/advprops.cpp:1510
 msgid "Blue"
-msgstr ""
+msgstr "ლურჯი"
 
 #: ../src/propgrid/advprops.cpp:1511
 msgid "Fuchsia"
@@ -6615,15 +6616,15 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1512
 msgid "Red"
-msgstr ""
+msgstr "წითელი"
 
 #: ../src/propgrid/advprops.cpp:1513
 msgid "Orange"
-msgstr ""
+msgstr "ნარინჯისფერი"
 
 #: ../src/propgrid/advprops.cpp:1514
 msgid "Silver"
-msgstr ""
+msgstr "ვერცხლი"
 
 #: ../src/propgrid/advprops.cpp:1515
 msgid "Lime"
@@ -6635,71 +6636,71 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1517
 msgid "Yellow"
-msgstr ""
+msgstr "ყვითელი"
 
 #: ../src/propgrid/advprops.cpp:1518
 msgid "White"
-msgstr ""
+msgstr "თეთრი"
 
 #: ../src/propgrid/advprops.cpp:1654
 msgctxt "system cursor name"
 msgid "Default"
-msgstr ""
+msgstr "ნაგულისხმები"
 
 #: ../src/propgrid/advprops.cpp:1655
 msgctxt "system cursor name"
 msgid "Arrow"
-msgstr ""
+msgstr "ისარი"
 
 #: ../src/propgrid/advprops.cpp:1656
 msgctxt "system cursor name"
 msgid "Right Arrow"
-msgstr ""
+msgstr "ისარი მარჯვნივ"
 
 #: ../src/propgrid/advprops.cpp:1657
 msgctxt "system cursor name"
 msgid "Blank"
-msgstr ""
+msgstr "სუფთა"
 
 #: ../src/propgrid/advprops.cpp:1658
 msgctxt "system cursor name"
 msgid "Bullseye"
-msgstr ""
+msgstr "სამიზნე"
 
 #: ../src/propgrid/advprops.cpp:1659
 msgctxt "system cursor name"
 msgid "Character"
-msgstr ""
+msgstr "სიმბოლო"
 
 #: ../src/propgrid/advprops.cpp:1660
 msgctxt "system cursor name"
 msgid "Cross"
-msgstr ""
+msgstr "ჯვარი"
 
 #: ../src/propgrid/advprops.cpp:1661
 msgctxt "system cursor name"
 msgid "Hand"
-msgstr ""
+msgstr "ხელი"
 
 #: ../src/propgrid/advprops.cpp:1662
 msgctxt "system cursor name"
 msgid "I-Beam"
-msgstr ""
+msgstr "I-Beam"
 
 #: ../src/propgrid/advprops.cpp:1663
 msgctxt "system cursor name"
 msgid "Left Button"
-msgstr ""
+msgstr "მარცხენა ღილაკი"
 
 #: ../src/propgrid/advprops.cpp:1664
 msgctxt "system cursor name"
 msgid "Magnifier"
-msgstr ""
+msgstr "გამადიდებელი"
 
 #: ../src/propgrid/advprops.cpp:1665
 msgctxt "system cursor name"
 msgid "Middle Button"
-msgstr ""
+msgstr "შუა ღილაკი"
 
 #: ../src/propgrid/advprops.cpp:1666
 msgctxt "system cursor name"
@@ -6714,7 +6715,7 @@ msgstr ""
 #: ../src/propgrid/advprops.cpp:1668
 msgctxt "system cursor name"
 msgid "Pencil"
-msgstr ""
+msgstr "ფანქარი"
 
 #: ../src/propgrid/advprops.cpp:1669
 msgctxt "system cursor name"
@@ -6734,7 +6735,7 @@ msgstr ""
 #: ../src/propgrid/advprops.cpp:1672
 msgctxt "system cursor name"
 msgid "Right Button"
-msgstr ""
+msgstr "მარჯვენა ღილაკი"
 
 #: ../src/propgrid/advprops.cpp:1673
 msgctxt "system cursor name"
@@ -6769,7 +6770,7 @@ msgstr ""
 #: ../src/propgrid/advprops.cpp:1679
 msgctxt "system cursor name"
 msgid "Wait"
-msgstr ""
+msgstr "მოცდა"
 
 #: ../src/propgrid/advprops.cpp:1680
 msgctxt "system cursor name"
@@ -6787,11 +6788,11 @@ msgstr ""
 
 #: ../src/propgrid/manager.cpp:405
 msgid "Property"
-msgstr ""
+msgstr "პარამეტრი"
 
 #: ../src/propgrid/manager.cpp:406
 msgid "Value"
-msgstr ""
+msgstr "მნიშვნელობა"
 
 #: ../src/propgrid/manager.cpp:1701
 msgid "Categorized Mode"
@@ -6804,17 +6805,17 @@ msgstr ""
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/propgrid/propgrid.cpp:197
 msgid "False"
-msgstr ""
+msgstr "მცდარი"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/propgrid/propgrid.cpp:199
 msgid "True"
-msgstr ""
+msgstr "ჭეშმარიტი"
 
 #. TRANSLATORS: Text  displayed for unspecified value
 #: ../src/propgrid/propgrid.cpp:381
 msgid "Unspecified"
-msgstr ""
+msgstr "მიუთითებელი"
 
 #. TRANSLATORS: Caption of message box displaying any property error
 #: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3284
@@ -6860,42 +6861,42 @@ msgstr ""
 #: ../src/propgrid/props.cpp:1114
 #, c-format
 msgid "Not %s"
-msgstr ""
+msgstr "არა %s"
 
 #: ../src/propgrid/props.cpp:1901
 msgid "Choose a directory:"
-msgstr ""
+msgstr "აირჩიეთ საქაღალდე:"
 
 #: ../src/propgrid/props.cpp:2196
 msgid "Choose a file"
-msgstr ""
+msgstr "ფაილის არჩევა"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:148
 #: ../src/richtext/richtextformatdlg.cpp:377
 msgid "Background"
-msgstr ""
+msgstr "ფონი"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:160
 msgid "Background &colour:"
-msgstr ""
+msgstr "&ფონის ფერი:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:162
 #: ../src/richtext/richtextbackgroundpage.cpp:164
 msgid "Enables a background colour."
-msgstr ""
+msgstr "ჩართავს ფონის ფერს."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:168
 #: ../src/richtext/richtextbackgroundpage.cpp:170
 msgid "The background colour."
-msgstr ""
+msgstr "ფონის ფერი."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:179
 msgid "Shadow"
-msgstr ""
+msgstr "ჩრდილი"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:194
 msgid "Use &shadow"
-msgstr ""
+msgstr "&ჩრდილის გამოოყენება"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:196
 #: ../src/richtext/richtextbackgroundpage.cpp:198
@@ -7006,7 +7007,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:662
 #: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:226
 #: ../src/richtext/richtextbackgroundpage.cpp:249
@@ -7040,7 +7041,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:625
 #: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
-msgstr ""
+msgstr "სმ"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:227
 #: ../src/richtext/richtextbackgroundpage.cpp:250
@@ -7058,7 +7059,7 @@ msgstr ""
 #: ../src/richtext/richtextfontpage.cpp:177
 #: ../src/richtext/richtextfontpage.cpp:180
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:230
 #: ../src/richtext/richtextbackgroundpage.cpp:232
@@ -7148,12 +7149,12 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/richtext/richtextborderspage.cpp:230
 #: ../src/richtext/richtextborderspage.cpp:388
 msgid "Border"
-msgstr ""
+msgstr "საზღვარი"
 
 #: ../src/richtext/richtextborderspage.cpp:243
 #: ../src/richtext/richtextborderspage.cpp:411
@@ -7164,7 +7165,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:532
 #: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
-msgstr ""
+msgstr "&მარცხენა:"
 
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:260
@@ -7199,7 +7200,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:602
 #: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
-msgstr ""
+msgstr "&მარჯვენა:"
 
 #: ../src/richtext/richtextborderspage.cpp:292
 #: ../src/richtext/richtextborderspage.cpp:294
@@ -7213,7 +7214,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:567
 #: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
-msgstr ""
+msgstr "&ზედა:"
 
 #: ../src/richtext/richtextborderspage.cpp:326
 #: ../src/richtext/richtextborderspage.cpp:328
@@ -7227,7 +7228,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:637
 #: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
-msgstr ""
+msgstr "&ქვედა:"
 
 #: ../src/richtext/richtextborderspage.cpp:360
 #: ../src/richtext/richtextborderspage.cpp:362
@@ -7249,7 +7250,7 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:398
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Outline"
-msgstr ""
+msgstr "კონტური"
 
 #: ../src/richtext/richtextborderspage.cpp:426
 #: ../src/richtext/richtextborderspage.cpp:428
@@ -7274,7 +7275,7 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:566
 #: ../src/richtext/richtextborderspage.cpp:601
 msgid "Corner"
-msgstr ""
+msgstr "კუთხე"
 
 #: ../src/richtext/richtextborderspage.cpp:575
 msgid "Corner &radius:"
@@ -7299,11 +7300,11 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:248
 #: ../src/richtext/richtextsizepage.cpp:252
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: ../src/richtext/richtextborderspage.cpp:611
 msgid "Solid"
-msgstr ""
+msgstr "მყარი"
 
 #: ../src/richtext/richtextborderspage.cpp:612
 msgid "Dotted"
@@ -7311,11 +7312,11 @@ msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:613
 msgid "Dashed"
-msgstr ""
+msgstr "ტირეებით"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Double"
-msgstr ""
+msgstr "ორმაგი"
 
 #: ../src/richtext/richtextborderspage.cpp:615
 msgid "Groove"
@@ -7327,7 +7328,7 @@ msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:617
 msgid "Inset"
-msgstr ""
+msgstr "ჩასმა"
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Outset"
@@ -7335,20 +7336,20 @@ msgstr ""
 
 #: ../src/richtext/richtextbuffer.cpp:3522
 msgid "Change Style"
-msgstr ""
+msgstr "სტილის შეცვლა"
 
 #: ../src/richtext/richtextbuffer.cpp:3705
 msgid "Change Object Style"
-msgstr ""
+msgstr "ობიექტის სტილის შეცვლა"
 
 #: ../src/richtext/richtextbuffer.cpp:3978
 #: ../src/richtext/richtextbuffer.cpp:8174
 msgid "Change Properties"
-msgstr ""
+msgstr "თვისებების შეცვლა"
 
 #: ../src/richtext/richtextbuffer.cpp:4350
 msgid "Change List Style"
-msgstr ""
+msgstr "სიის სტილის შეცვლა"
 
 #: ../src/richtext/richtextbuffer.cpp:4523
 msgid "Renumber List"
@@ -7359,20 +7360,20 @@ msgstr ""
 #: ../src/richtext/richtextbuffer.cpp:7939
 #: ../src/richtext/richtextctrl.cpp:1287 ../src/richtext/richtextctrl.cpp:1495
 msgid "Insert Text"
-msgstr ""
+msgstr "ტექსტის ჩასმა"
 
 #: ../src/richtext/richtextbuffer.cpp:8023
 #: ../src/richtext/richtextbuffer.cpp:8983
 msgid "Insert Image"
-msgstr ""
+msgstr "გამოსახულების დამატება"
 
 #: ../src/richtext/richtextbuffer.cpp:8070
 msgid "Insert Object"
-msgstr ""
+msgstr "ობიექტის ჩასმა"
 
 #: ../src/richtext/richtextbuffer.cpp:8112
 msgid "Insert Field"
-msgstr ""
+msgstr "ველის ჩასმა"
 
 #: ../src/richtext/richtextbuffer.cpp:8410
 msgid "Too many EndStyle calls!"
@@ -7380,7 +7381,7 @@ msgstr ""
 
 #: ../src/richtext/richtextbuffer.cpp:8785
 msgid "files"
-msgstr ""
+msgstr "ფაილები"
 
 #: ../src/richtext/richtextbuffer.cpp:9386
 msgid "standard/circle"
@@ -7412,11 +7413,11 @@ msgstr ""
 
 #: ../src/richtext/richtextbuffer.cpp:10014
 msgid "Cell Properties"
-msgstr ""
+msgstr "უჯრედის თვისებები"
 
 #: ../src/richtext/richtextbuffer.cpp:11265
 msgid "Set Cell Style"
-msgstr ""
+msgstr "უჯრედის სტილის დაყენება"
 
 #: ../src/richtext/richtextbuffer.cpp:11339
 msgid "Delete Row"
@@ -7445,7 +7446,7 @@ msgstr ""
 #: ../src/richtext/richtextbuffer.cpp:13179
 #: ../src/richtext/richtextbuffer.cpp:13289
 msgid "image"
-msgstr ""
+msgstr "გამოსახულება"
 
 #: ../src/richtext/richtextbulletspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:210
@@ -7474,7 +7475,7 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:166
 #: ../src/richtext/richtextliststylepage.cpp:229
 msgid "(*)"
-msgstr ""
+msgstr "(*)"
 
 #: ../src/richtext/richtextbulletspage.cpp:168
 #: ../src/richtext/richtextbulletspage.cpp:170
@@ -7486,7 +7487,7 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:173
 #: ../src/richtext/richtextliststylepage.cpp:236
 msgid "*)"
-msgstr ""
+msgstr "*)"
 
 #: ../src/richtext/richtextbulletspage.cpp:175
 #: ../src/richtext/richtextbulletspage.cpp:177
@@ -7503,7 +7504,7 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:187
 #: ../src/richtext/richtextliststylepage.cpp:250
 msgid "Centre"
-msgstr ""
+msgstr "ცენტრი"
 
 #: ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextbulletspage.cpp:193
@@ -7580,7 +7581,7 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:274
 #: ../src/richtext/richtextliststylepage.cpp:482
 msgid "Arabic"
-msgstr ""
+msgstr "არაბული"
 
 #: ../src/richtext/richtextbulletspage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:483
@@ -7610,7 +7611,7 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:280
 #: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Symbol"
-msgstr ""
+msgstr "სიმბოლო"
 
 #: ../src/richtext/richtextbulletspage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:489
@@ -7620,40 +7621,40 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Standard"
-msgstr ""
+msgstr "სტანდარტული"
 
 #: ../src/richtext/richtextbulletspage.cpp:284
 #: ../src/richtext/richtextliststylepage.cpp:492
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: ../src/richtext/richtextbulletspage.cpp:285
 #: ../src/richtext/richtextliststylepage.cpp:493
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: ../src/richtext/richtextbulletspage.cpp:286
 #: ../src/richtext/richtextliststylepage.cpp:494
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: ../src/richtext/richtextbulletspage.cpp:287
 #: ../src/richtext/richtextliststylepage.cpp:495
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: ../src/richtext/richtextbulletspage.cpp:288
 #: ../src/richtext/richtextliststylepage.cpp:496
 msgid "~"
-msgstr ""
+msgstr "~"
 
 #: ../src/richtext/richtextctrl.cpp:864
 msgid "Drag"
-msgstr ""
+msgstr "გადათრევა"
 
 #: ../src/richtext/richtextctrl.cpp:1346 ../src/richtext/richtextctrl.cpp:1585
 msgid "Delete Text"
-msgstr ""
+msgstr "ტექსტის წაშლა"
 
 #: ../src/richtext/richtextctrl.cpp:1563
 msgid "Remove Bullet"
@@ -7665,45 +7666,45 @@ msgstr ""
 
 #: ../src/richtext/richtextctrl.cpp:3674
 msgid "Replace"
-msgstr ""
+msgstr "ჩანაცვლება"
 
 #: ../src/richtext/richtextfontpage.cpp:147
 #: ../src/richtext/richtextsymboldlg.cpp:397
 msgid "&Font:"
-msgstr ""
+msgstr "&ფონტი:"
 
 #: ../src/richtext/richtextfontpage.cpp:151
 #: ../src/richtext/richtextfontpage.cpp:153
 msgid "Type a font name."
-msgstr ""
+msgstr "აკრიფეთ ფონტის სახელი."
 
 #: ../src/richtext/richtextfontpage.cpp:159
 msgid "&Size:"
-msgstr ""
+msgstr "&ზომა:"
 
 #: ../src/richtext/richtextfontpage.cpp:166
 #: ../src/richtext/richtextfontpage.cpp:168
 msgid "Type a size in points."
-msgstr ""
+msgstr "აკრიფეთ ზომა, წერტილებში."
 
 #: ../src/richtext/richtextfontpage.cpp:181
 #: ../src/richtext/richtextfontpage.cpp:183
 msgid "The font size units, points or pixels."
-msgstr ""
+msgstr "ფონტის ზომის ერთეული. წერტილები თუ პიქსელები."
 
 #: ../src/richtext/richtextfontpage.cpp:190
 #: ../src/richtext/richtextfontpage.cpp:192
 msgid "Lists the available fonts."
-msgstr ""
+msgstr "ხელმისაწვდომი ფონტბის სია."
 
 #: ../src/richtext/richtextfontpage.cpp:197
 #: ../src/richtext/richtextfontpage.cpp:199
 msgid "Lists font sizes in points."
-msgstr ""
+msgstr "ფონტის ხელმისაწვდომი ზომების სია, წერტილებში."
 
 #: ../src/richtext/richtextfontpage.cpp:208
 msgid "Font st&yle:"
-msgstr ""
+msgstr "ფონტის &სტილი:"
 
 #: ../src/richtext/richtextfontpage.cpp:213
 #: ../src/richtext/richtextfontpage.cpp:215
@@ -7712,7 +7713,7 @@ msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:221
 msgid "Font &weight:"
-msgstr ""
+msgstr "ფონტის &წონა:"
 
 #: ../src/richtext/richtextfontpage.cpp:226
 #: ../src/richtext/richtextfontpage.cpp:228
@@ -7828,7 +7829,7 @@ msgstr ""
 #: ../src/richtext/richtextfontpage.cpp:350
 #: ../src/richtext/richtextfontpage.cpp:354
 msgid "Regular"
-msgstr ""
+msgstr "ჩვეულებრივი"
 
 #: ../src/richtext/richtextfontpage.cpp:358
 msgid "Not underlined"
@@ -7840,11 +7841,11 @@ msgstr ""
 
 #: ../src/richtext/richtextformatdlg.cpp:347
 msgid "Tabs"
-msgstr ""
+msgstr "დაფები"
 
 #: ../src/richtext/richtextformatdlg.cpp:352
 msgid "Bullets"
-msgstr ""
+msgstr "ტყვიები"
 
 #: ../src/richtext/richtextformatdlg.cpp:357
 msgid "List Style"
@@ -7853,11 +7854,11 @@ msgstr ""
 #: ../src/richtext/richtextformatdlg.cpp:367
 #: ../src/richtext/richtextmarginspage.cpp:171
 msgid "Margins"
-msgstr ""
+msgstr "გვერდის ველები"
 
 #: ../src/richtext/richtextformatdlg.cpp:372
 msgid "Borders"
-msgstr ""
+msgstr "საზღვრები"
 
 #: ../src/richtext/richtextformatdlg.cpp:768
 msgid "Colour"
@@ -7871,7 +7872,7 @@ msgstr ""
 #: ../src/richtext/richtextindentspage.cpp:139
 #: ../src/richtext/richtextliststylepage.cpp:328
 msgid "&Left"
-msgstr ""
+msgstr "მარ&ცხნივ"
 
 #: ../src/richtext/richtextindentspage.cpp:141
 #: ../src/richtext/richtextindentspage.cpp:143
@@ -7883,7 +7884,7 @@ msgstr ""
 #: ../src/richtext/richtextindentspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "&Right"
-msgstr ""
+msgstr "მარ&ჯვნივ"
 
 #: ../src/richtext/richtextindentspage.cpp:148
 #: ../src/richtext/richtextindentspage.cpp:150
@@ -8001,57 +8002,57 @@ msgstr ""
 #: ../src/richtext/richtextindentspage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:449
 msgid "Single"
-msgstr ""
+msgstr "ერთი"
 
 #: ../src/richtext/richtextindentspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:450
 msgid "1.1"
-msgstr ""
+msgstr "1.1"
 
 #: ../src/richtext/richtextindentspage.cpp:277
 #: ../src/richtext/richtextliststylepage.cpp:451
 msgid "1.2"
-msgstr ""
+msgstr "1.2"
 
 #: ../src/richtext/richtextindentspage.cpp:278
 #: ../src/richtext/richtextliststylepage.cpp:452
 msgid "1.3"
-msgstr ""
+msgstr "1.3"
 
 #: ../src/richtext/richtextindentspage.cpp:279
 #: ../src/richtext/richtextliststylepage.cpp:453
 msgid "1.4"
-msgstr ""
+msgstr "1.4"
 
 #: ../src/richtext/richtextindentspage.cpp:280
 #: ../src/richtext/richtextliststylepage.cpp:454
 msgid "1.5"
-msgstr ""
+msgstr "1.5"
 
 #: ../src/richtext/richtextindentspage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:455
 msgid "1.6"
-msgstr ""
+msgstr "1.6"
 
 #: ../src/richtext/richtextindentspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:456
 msgid "1.7"
-msgstr ""
+msgstr "1.7"
 
 #: ../src/richtext/richtextindentspage.cpp:283
 #: ../src/richtext/richtextliststylepage.cpp:457
 msgid "1.8"
-msgstr ""
+msgstr "1.8"
 
 #: ../src/richtext/richtextindentspage.cpp:284
 #: ../src/richtext/richtextliststylepage.cpp:458
 msgid "1.9"
-msgstr ""
+msgstr "1.9"
 
 #: ../src/richtext/richtextindentspage.cpp:285
 #: ../src/richtext/richtextliststylepage.cpp:459
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: ../src/richtext/richtextindentspage.cpp:288
 #: ../src/richtext/richtextindentspage.cpp:290
@@ -8110,7 +8111,7 @@ msgstr ""
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
-msgstr ""
+msgstr "დაშორება"
 
 #: ../src/richtext/richtextmarginspage.cpp:194
 #: ../src/richtext/richtextmarginspage.cpp:196
@@ -8211,7 +8212,7 @@ msgstr ""
 
 #: ../src/richtext/richtextsizepage.cpp:266
 msgid "Alignment"
-msgstr ""
+msgstr "სწორება"
 
 #: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
@@ -8234,7 +8235,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:317
 #: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
-msgstr ""
+msgstr "&სიგანე:"
 
 #: ../src/richtext/richtextsizepage.cpp:319
 #: ../src/richtext/richtextsizepage.cpp:321
@@ -8254,7 +8255,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:351
 #: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
-msgstr ""
+msgstr "&სიმაღლე:"
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
@@ -8346,7 +8347,7 @@ msgstr ""
 
 #: ../src/richtext/richtextsizepage.cpp:496
 msgid "Position"
-msgstr ""
+msgstr "მდებარეობა"
 
 #: ../src/richtext/richtextsizepage.cpp:514
 msgid "&Position mode:"
@@ -8355,7 +8356,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:518
 #: ../src/richtext/richtextsizepage.cpp:523
 msgid "Static"
-msgstr ""
+msgstr "სტატიკური"
 
 #: ../src/richtext/richtextsizepage.cpp:519
 msgid "Relative"
@@ -8363,11 +8364,11 @@ msgstr ""
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
-msgstr ""
+msgstr "აბსოლუტური"
 
 #: ../src/richtext/richtextsizepage.cpp:521
 msgid "Fixed"
-msgstr ""
+msgstr "ფიქსირებული"
 
 #: ../src/richtext/richtextsizepage.cpp:534
 #: ../src/richtext/richtextsizepage.cpp:536
@@ -8451,7 +8452,7 @@ msgstr ""
 #: ../src/richtext/richtextstyledlg.cpp:206
 #: ../src/richtext/richtextstyledlg.cpp:218
 msgid " "
-msgstr ""
+msgstr " "
 
 #: ../src/richtext/richtextstyledlg.cpp:210
 #: ../src/richtext/richtextstyledlg.cpp:212
@@ -8653,7 +8654,7 @@ msgstr ""
 
 #: ../src/richtext/richtextsymboldlg.cpp:431
 msgid "xxxx"
-msgstr ""
+msgstr "xxxx"
 
 #: ../src/richtext/richtextsymboldlg.cpp:436
 msgid "&Character code:"
@@ -8672,7 +8673,7 @@ msgstr ""
 #: ../src/richtext/richtextsymboldlg.cpp:457
 #: ../src/richtext/richtextsymboldlg.cpp:458
 msgid "Unicode"
-msgstr ""
+msgstr "უნიკოდი"
 
 #: ../src/richtext/richtextsymboldlg.cpp:459
 #: ../src/richtext/richtextsymboldlg.cpp:461
@@ -8681,7 +8682,7 @@ msgstr ""
 
 #: ../src/richtext/richtextsymboldlg.cpp:469
 msgid "Insert"
-msgstr ""
+msgstr "ჩასმა"
 
 #: ../src/richtext/richtextsymboldlg.cpp:503
 msgid "(Normal text)"
@@ -8712,7 +8713,7 @@ msgstr ""
 
 #: ../src/richtext/richtexttabspage.cpp:144
 msgid "Delete A&ll"
-msgstr ""
+msgstr "ყვე&ლაფრის წაშლა"
 
 #: ../src/richtext/richtexttabspage.cpp:145
 #: ../src/richtext/richtexttabspage.cpp:147
@@ -8725,7 +8726,7 @@ msgstr ""
 
 #: ../src/univ/themes/gtk.cpp:522
 msgid "GTK+ theme"
-msgstr ""
+msgstr "GTK+-ის თემა"
 
 #: ../src/univ/themes/metal.cpp:165
 msgid "Metal theme"
@@ -8741,27 +8742,27 @@ msgstr ""
 
 #: ../src/univ/themes/win32.cpp:3744
 msgid "&Restore"
-msgstr ""
+msgstr "ა&ღდგენა"
 
 #: ../src/univ/themes/win32.cpp:3745
 msgid "&Move"
-msgstr ""
+msgstr "&გადატანა"
 
 #: ../src/univ/themes/win32.cpp:3747
 msgid "&Size"
-msgstr ""
+msgstr "&ზომა"
 
 #: ../src/univ/themes/win32.cpp:3749
 msgid "Mi&nimize"
-msgstr ""
+msgstr "&ჩაკეცვა"
 
 #: ../src/univ/themes/win32.cpp:3751
 msgid "Ma&ximize"
-msgstr ""
+msgstr "&აკეცვა"
 
 #: ../src/univ/themes/win32.cpp:3753
 msgid "Alt+"
-msgstr ""
+msgstr "Alt+"
 
 #: ../src/unix/appunix.cpp:179
 msgid "Failed to install signal handler"
@@ -8942,7 +8943,7 @@ msgstr ""
 
 #: ../src/unix/sound.cpp:78
 msgid "No sound"
-msgstr ""
+msgstr "ხმის გარეშე"
 
 #: ../src/unix/sound.cpp:365
 msgid "Unable to play sound asynchronously."
