@@ -113,6 +113,8 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     libxcomposite1                         \
     gir1.2-gtk-3.0                         \
     gtk-update-icon-cache                  \
+    libsecret-1-dev                        \
+    libgspell-1-dev                        \
     xsltproc
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID ldconfig
