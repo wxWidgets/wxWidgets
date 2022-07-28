@@ -4,7 +4,7 @@ EXT=$1
 REPO=$2
 DISTRO=$3
 
-for pkg_file in dist/*.$EXT; do
+for pkg_file in work/dist/*.$EXT; do
   cloudsmith push $EXT $REPO/$DISTRO $pkg_file
   RESULT=$?
   if [ $RESULT -eq 144 ]; then
