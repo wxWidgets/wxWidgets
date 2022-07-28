@@ -30,7 +30,7 @@ commands:
           no_output_timeout: 30m
       - cloudsmith/ensure-api-key
       - cloudsmith/install-cli
-      - run: .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}/${PKG_RELEASE}
+#      - run: .circleci/publish-cloudsmith.sh deb wxwidgets-projects/wxwidgets-repo ${PKG_DISTRO}/${PKG_RELEASE}
   do-all:
     steps:
       - git-checkout
@@ -95,38 +95,32 @@ jobs:
     steps:
       - do-all
   build-raspbian-buster-arm32:
-    executor: boot-linux
+    executor: boot-linux-arm
     environment:
       - DOCKER_IMAGE=arm32v7/debian:buster
       - CONTAINER_DISTRO=debian:buster
       - PKG_RELEASE=buster
       - PKG_DISTRO=raspbian
-      - EMU=on
+      - EMU=off
     steps:
       - do-all
   build-raspbian-buster-arm64:
-    executor: boot-linux
+    executor: boot-linux-arm
     environment:
       - DOCKER_IMAGE=arm64v8/debian:buster
       - CONTAINER_DISTRO=debian:buster
       - PKG_RELEASE=buster
       - PKG_DISTRO=raspbian
-      - EMU=on
+      - EMU=off
     steps:
       - do-all
 workflows:
   version: 2
   build_all:
     jobs:
-      - build-debian-buster-arm32
-      - build-debian-buster-arm64
-#      - build-debian-bullseye-arm64
-#      - build-debian-bullseye-arm32
-#      - build-debian-bullseye-amd64
+      - build-debian-bullseye-arm32
+      - build-debian-bullseye-arm64
+      - build-debian-bullseye-amd64
+#      - build-debian-buster-arm32
+#      - build-debian-buster-arm64
 #      - build-debian-buster-amd64
-#      - build-raspbian-buster-arm32
-#      - build-raspbian-buster-arm64
-#      - build-debian-bullseye-arm64
-#      - build-debian-bullseye-arm32
-#      - build-debian-bullseye-amd64
-
